@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -80,6 +80,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return ret;
 		}
 
+		public static IPerson CreatePersonWithSchedulePublishedToDate(DateOnly dateOnly)
+		{
+			var ret = CreatePerson();
+			ret.SetId(Guid.NewGuid());
+			ret.WorkflowControlSet = new WorkflowControlSet
+				{
+					SchedulePublishedToDate = dateOnly
+				};
+			return ret;
+		}
+
         public static IPerson CreatePersonWithGuid(string firstName, string lastName)
         {
             var ret = CreatePerson(firstName, lastName);
@@ -125,11 +136,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
         public static IPerson CreatePersonWithPersonPeriod(IPerson person, DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod)
         {
-            
-            IPersonPeriod pPeriod = new PersonPeriod(personPeriodStart,
-                                                    PersonContractFactory.CreatePersonContract(),
-                                                     new Team());
-            foreach (ISkill skill in skillsInPersonPeriod)
+	        IPersonPeriod pPeriod = person.Period(personPeriodStart);
+	        if (pPeriod == null)
+	        {
+		        pPeriod = new PersonPeriod(personPeriodStart,
+		                         PersonContractFactory.CreatePersonContract(),
+		                         new Team());
+		        person.AddPersonPeriod(pPeriod);
+	        }
+	        foreach (ISkill skill in skillsInPersonPeriod)
             {
                 IPersonSkill pSkill = new PersonSkill(skill, new Percent(1)) {Active = true};
             	if(skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
@@ -142,11 +157,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                 }
 				else
 				{
-					pPeriod.AddPersonSkill(pSkill);
+					person.AddSkill(pSkill,pPeriod);
 				}
                 
             }
-            person.AddPersonPeriod(pPeriod);
             return person;
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -25,7 +26,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var ret = new List<IBusinessRuleResponse>();
 			foreach (var scheduleDay in scheduleDays)
 			{
-				foreach (var assignment in scheduleDay.PersonAssignmentCollectionDoNotUse())
+				var assignment = scheduleDay.PersonAssignment();
+				if (assignment != null)
 				{
 					var assignmentPeriod = assignment.Period;
 					var dateOnly = assignment.Date;

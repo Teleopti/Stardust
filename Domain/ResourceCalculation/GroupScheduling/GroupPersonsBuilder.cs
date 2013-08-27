@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 {
 	public class GroupPersonsBuilder : IGroupPersonsBuilder
 	{
-		private IList<IPerson> _selectedPersons;
+		private IEnumerable<IPerson> _selectedPersons;
 		private readonly ISchedulingResultStateHolder _resultStateHolder;
         
 		private readonly IGroupPersonFactory _groupPersonFactory;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 		    _groupPagePerDateHolder = groupPagePerDateHolder;
 		}
 
-		public IList<IGroupPerson> BuildListOfGroupPersons(DateOnly dateOnly, IList<IPerson> selectedPersons, bool checkShiftCategoryConsistency, ISchedulingOptions schedulingOptions)
+		public IList<IGroupPerson> BuildListOfGroupPersons(DateOnly dateOnly, IEnumerable<IPerson> selectedPersons, bool checkShiftCategoryConsistency, ISchedulingOptions schedulingOptions)
 		{
             _selectedPersons = selectedPersons;
 			var pageOnDate = _groupPagePerDateHolder.GroupPersonGroupPagePerDate.GetGroupPageByDate(dateOnly);

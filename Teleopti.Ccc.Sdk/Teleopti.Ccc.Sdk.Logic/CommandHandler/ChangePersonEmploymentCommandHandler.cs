@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
                 if (existPersonPeriod != null)
                 {
-                    affectedId = updateExistingPersonPeriod(command, existPersonPeriod, uow);
+                    affectedId = updateExistingPersonPeriod(command, person, existPersonPeriod, uow);
                 }
                 else
                 {
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var personSkillPeriodDtos = _personSkillPeriodAssembler.DomainEntityToDto(lastPersonPeriod);
                 resetExternalLogOns(command.ExternalLogOn ?? externalLogOnDtos, newPersonPeriod);
                 resetPersonSkills(command.PersonSkillPeriodCollection ??
-                                  new List<PersonSkillPeriodDto> {personSkillPeriodDtos}, newPersonPeriod);
+                                  new List<PersonSkillPeriodDto> {personSkillPeriodDtos}, person, newPersonPeriod);
 
                 newPersonPeriod.Note = string.IsNullOrEmpty(command.Note) ? lastPersonPeriod.Note : command.Note;
             }
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 newPersonPeriod = createPersonPeriod(command);
                 if (command.ExternalLogOn != null) resetExternalLogOns(command.ExternalLogOn, newPersonPeriod);
                 if (command.PersonSkillPeriodCollection != null)
-                    resetPersonSkills(command.PersonSkillPeriodCollection, newPersonPeriod);
+                    resetPersonSkills(command.PersonSkillPeriodCollection, person, newPersonPeriod);
                 if (!string.IsNullOrEmpty(command.Note)) newPersonPeriod.Note = command.Note;
             }
             if (newPersonPeriod == null) throw new FaultException("Create person period error.");
@@ -113,12 +113,12 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             return newPersonPeriod.Id;
         }
 
-        private Guid? updateExistingPersonPeriod(ChangePersonEmploymentCommandDto command, IPersonPeriod existPersonPeriod,
+        private Guid? updateExistingPersonPeriod(ChangePersonEmploymentCommandDto command, IPerson person, IPersonPeriod existPersonPeriod,
                                                  IUnitOfWork uow)
         {
             if (command.Team != null)
             {
-                existPersonPeriod.Team = _teamRepository.Get(command.Team.Id.GetValueOrDefault());
+				person.ChangeTeam(_teamRepository.Get(command.Team.Id.GetValueOrDefault()), existPersonPeriod);
                 checkBusinessUnitConsistency(existPersonPeriod.Team.Site);
             }
             if (command.PersonContract != null)
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             }
             if (command.PersonSkillPeriodCollection != null)
             {
-                resetPersonSkills(command.PersonSkillPeriodCollection, existPersonPeriod);
+                resetPersonSkills(command.PersonSkillPeriodCollection, person, existPersonPeriod);
             }
             if (!string.IsNullOrEmpty(command.Note))
                 existPersonPeriod.Note = command.Note;
@@ -174,9 +174,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             return new PersonContract(contract, partTimePercentage, contractSchedule);
         }
 
-        private void resetPersonSkills(IEnumerable<PersonSkillPeriodDto> personSkillPeriodDtos, IPersonPeriod personPeriod)
+        private void resetPersonSkills(IEnumerable<PersonSkillPeriodDto> personSkillPeriodDtos, IPerson person, IPersonPeriod personPeriod)
         {
-            personPeriod.ResetPersonSkill();
+			person.ResetPersonSkills(personPeriod);
             foreach (var personSkills in from personSkillPeriodDto in personSkillPeriodDtos
                                          select personSkillPeriodDto.SkillCollection.Distinct())
             {
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                     {
                         var skill = _skillRepository.Load(s);
                         checkBusinessUnitConsistency(skill);
-                        personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+                        person.AddSkill(new PersonSkill(skill, new Percent(1)){Active = true},personPeriod);
                     });
             }
         }

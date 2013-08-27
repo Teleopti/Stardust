@@ -13,11 +13,13 @@
 		{
 			get
 			{
-				return "select pa.Id, pa.Minimum, pa.Date " +
+				return "select pa.Id, pa.Date, min(l.Minimum) as minimum " +
 				       "from [Auditing].PersonAssignment_AUD pa " +
 				       "inner join Person p on pa.Person = p.id " +
+							 "inner join [Auditing].ShiftLayer_AUD l on l.Parent = pa.Id " + 
 							 "where pa.[Date]=@baseDate " +
-				       "and p.Id=@personId";
+				       "and p.Id=@personId " +
+							 "group by pa.Id, pa.Date";
 			}
 		}
 

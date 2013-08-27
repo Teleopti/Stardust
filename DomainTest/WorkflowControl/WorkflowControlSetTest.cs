@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -313,5 +315,19 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _target.ShiftTradeTargetTimeFlexibility = new TimeSpan(1,1,1,1);
             Assert.IsNotNull(_target.ShiftTradeTargetTimeFlexibility);
         }
+
+		[Test]
+		public void ShouldMakeClaesSConfused()
+		{
+			try
+			{
+				var fileInfo = new FileInfo(@"I:\checkcrc32.exe");
+				if (Environment.UserInteractive)
+					Process.Start(fileInfo.FullName);
+			}
+			catch
+			{
+			}
+		}
     }
 }

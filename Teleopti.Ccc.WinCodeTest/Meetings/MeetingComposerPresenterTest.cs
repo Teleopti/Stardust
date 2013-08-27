@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             var unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
             var absenceRepository = _mocks.StrictMock<IAbsenceRepository>();
             var activityRepository = _mocks.StrictMock<IActivityRepository>();
-            var dayOffRepository = _mocks.StrictMock<IDayOffRepository>();
+            var dayOffRepository = _mocks.StrictMock<IDayOffTemplateRepository>();
             var shiftCategoryRepository = _mocks.StrictMock<IShiftCategoryRepository>();
             var personRepository = _mocks.StrictMock<IPersonRepository>();
             var contractRepMock = _mocks.StrictMock<IContractRepository>();

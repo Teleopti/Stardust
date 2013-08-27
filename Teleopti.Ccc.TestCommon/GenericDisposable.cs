@@ -2,7 +2,6 @@ using System;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 	public class GenericDisposable : IDisposable
 	{
 		private Action _disposeAction;
@@ -12,7 +11,6 @@ namespace Teleopti.Ccc.TestCommon
 			_disposeAction = disposeAction;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 		public void Dispose()
 		{
 			_disposeAction.Invoke();

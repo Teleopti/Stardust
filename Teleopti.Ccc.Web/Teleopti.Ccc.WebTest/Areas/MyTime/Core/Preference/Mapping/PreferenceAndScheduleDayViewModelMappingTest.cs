@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -85,8 +86,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapDayOffViewModel()
 		{
-			var dayOff = new PersonDayOff(new Person(), new Scenario(" "), new DayOffTemplate(new Description("DO")), DateOnly.Today);
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.DayOff, dayOff);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.DayOff,
+			                                                    PersonAssignmentFactory.CreateAssignmentWithDayOff(
+				                                                    new Scenario(" "), new Person(), DateOnly.Today,
+				                                                    new DayOffTemplate(new Description("DO"))));
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
 
@@ -194,7 +197,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapDayOffStyleClassName()
 		{
 			var stubs = new StubFactory();
-			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today, SchedulePartView.DayOff, stubs.PersonDayOffStub());
+			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today, SchedulePartView.DayOff, PersonAssignmentFactory.CreateAssignmentWithDayOff());
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
 
@@ -206,7 +209,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapContractDayOffStyleClassName()
 		{
 			var stubs = new StubFactory();
-			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today, SchedulePartView.ContractDayOff, stubs.PersonDayOffStub());
+			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today, SchedulePartView.ContractDayOff, PersonAssignmentFactory.CreateAssignmentWithDayOff());
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
 
@@ -275,8 +278,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today);
 			personAssignment.Stub(x => x.PersonalLayers()).Return(new List<IPersonalShiftLayer>{activityLayer});
-			var assignments = new ReadOnlyCollection<IPersonAssignment>(new[] { personAssignment });
-			scheduleDay.Stub(x => x.PersonAssignmentCollectionDoNotUse()).Return(assignments);
+			scheduleDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
 

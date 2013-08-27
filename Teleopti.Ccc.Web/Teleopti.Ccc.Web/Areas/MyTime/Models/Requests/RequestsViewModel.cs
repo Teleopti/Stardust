@@ -42,5 +42,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public int DateToYear { get; set; }
 		public int DateToMonth { get; set; }
 		public int DateToDayOfMonth { get; set; }
+		public bool IsReferred { get; set; }
 	}
 }

@@ -120,8 +120,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
         	var handler = Validate;
             if (handler != null)
             {
-                IAsyncResult result = handler.BeginInvoke(dataItem, style, rowIndex, inSaveMode, null, null);
-                handler.EndInvoke(result);
+                handler.Invoke(dataItem, style, rowIndex, inSaveMode);
             }
         }
     }

@@ -26,6 +26,9 @@
         </ul>
     </div>
 </div>
+<div id="Student-availability-edit-form" class="well well-small clearfix" data-bind="visible: AddAvailabilityFormVisible">
+    @Html.Partial("AddStudentAvailabilityPartial")
+</div>
 <div id="StudentAvailability-period" class="alert alert-info">
 	@if (Model.StudentAvailabilityPeriod == null)
 	{
@@ -37,14 +40,14 @@
 		@String.Format("{0} : {1}", Resources.IsOpen, Model.StudentAvailabilityPeriod.OpenPeriod)
 	}
 </div>
-<div id="StudentAvailability-body" class="body-calendarview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
+<div id="StudentAvailability-body" class="clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
     <style>
         @foreach (var style in Model.Styles)
         {
             @String.Format(".calendarview-week li.{0} div.day-content{{border-left-color: #{1}; border-right-color: #{1};}}\n", style.Name, style.ColorHex)
         }
         </style>
-    <div id="StudentAvailability-body-inner" class="body-calendarview-inner clearfix">
+    <div id="StudentAvailability-body-inner" class="well clearfix pd0">
         <ul class="weekdays">
             @foreach (var weekDayName in Model.WeekDayHeaders)
             {
@@ -53,7 +56,7 @@
         </ul>
         @foreach (var week in Model.Weeks)
         {
-            <ul class="calendarview-week">
+            <ul class="calendarview-week" onselectstart="return false;">
                 <li>
                     <div>
                         <span>@week.Summary.MinWorkTime</span>
@@ -65,14 +68,14 @@
                     <li data-mytime-editable="@day.Editable" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-bind="css: {editable: Editable, 'non-editable': !Editable()}">
                         <div>
                             <div class="day-header">
-                                <span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
+                                <span class="floatleft badge day-header-left day-header-text">@day.Header.DayDescription</span><span class="floatright badge day-header-right day-header-text">@day.Header.DayNumber</span>
                             </div>
                             <div class="day-content pdt10">
                                 <img class="loading-small-gray-blue" data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
                                 <!-- ko if: AjaxError().length > 0 -->
                                 <h2 class="error" data-bind="text: AjaxError"></h2>
                                 <!-- /ko -->
-                                <div class="fullwidth mt15" data-bind="text: AvailableTimeSpan">
+                                <div class="fullwidth mt15 day-content-text" data-bind="text: AvailableTimeSpan">
                                 </div>
                             </div>
                         </div>
@@ -82,55 +85,3 @@
         }
     </div>
 </div>
-
-				@{
-					var times = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0))
-					            let value = Html.AttributeEncode(TimeHelper.TimeOfDayFromTimeSpan(t))
-					            let text = TimeHelper.TimeOfDayFromTimeSpan(t)
-					            select new Option
-						            {
-							            Value = value,
-							            Text = text
-						            };
-					var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0))
-					                  let value = Html.AttributeEncode(TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture))
-					                  let text = TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture)
-					                  select new Option
-						                  {
-							                  Value = value,
-							                  Text = text
-						                  };
-				}
-<div id="Student-availability-edit-form" class="displaynone">
-						<div>
-							<div class="time-limitation-label icon leftarrow"></div>
-						
-							<select id="Student-availability-start-time" class="time-input" data-bind="combobox: StartTime" title="@Resources.StartTime">
-								<option value="">&nbsp;</option>
-								@foreach (var timeSpan in times)
-								{
-									<option value="@timeSpan.Value">@timeSpan.Text</option>
-								}
-							</select>
-						</div>
-						<div>
-							<div class="time-limitation-label icon rightarrow"></div>
-						
-							<select id="Student-availability-end-time" class="time-input" data-bind="combobox: EndTime" title="@Resources.EndTime">
-								<option value="">&nbsp;</option>
-								@foreach (var timeSpan in times)
-								{
-									<option value="@timeSpan.Value">@timeSpan.Text</option>
-								}
-							</select>
-							<input type="checkbox" id="Student-availability-end-time-next-day" class="student-availability-next-day-checkbox" data-bind="checked: NextDay" title="@Resources.NextDay" />
-						</div>
-						<div class="mt5">
-							<button id="Student-availability-reset" class="btn" data-bind="click: reset">@Resources.Reset</button>
-							<button id="Student-availability-apply" class="btn btn-primary" data-bind="click: Teleopti.MyTimeWeb.StudentAvailability.SetStudentAvailability">@Resources.Apply</button>
-						</div>
-						<div>
-							<div id="Student-availability-apply-error" class="error floatleft" data-bind="html: ValidationError"></div>
-							<div class="clearboth"></div>
-						</div>
-					</div>

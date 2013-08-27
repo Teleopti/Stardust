@@ -14,7 +14,7 @@ using Rhino.Mocks;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), TestFixture]
+	[TestFixture]
 	public class AgentRestrictionsDetailEffectiveRestrictionExtractorTest
 	{
 		private AgentRestrictionsDetailEffectiveRestrictionExtractor _effectiveRestrictionExtractor;
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_scheduleDateTimePeriod = new ScheduleDateTimePeriod(_dateTimePeriod);
 			_scheduleDictionary = new ScheduleDictionaryForTest(_scenario, _scheduleDateTimePeriod, _dictionary);
 			_periodTarget = TimeSpan.FromHours(40);
-			
+			TimeZoneGuard.Instance.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, null, null, _dateTimePeriod, _periodTarget);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void ShouldSetTotalRestrictionForPreferredAbsence()
 		{
 			var dateOnly = new DateOnly(_dateTime);
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			}	
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void ShouldExtractFullDayAbsence()
 		{
 			var dateOnly = new DateOnly(_dateTime);
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		}
 
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void ShouldExtractDayOff()
 		{
 			var dateOnly = new DateOnly(_dateTime);
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			var dayOff = new DayOffTemplate(new Description("test"));
 			dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));
 			dayOff.Anchor = TimeSpan.FromHours(12);
-			var personDayOff = new PersonDayOff(_person, _scenario, dayOff, new DateOnly(_dateTime));
+			var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(_dateTime), dayOff);
 			part.Add(personDayOff);
 			var period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_dateTime.AddDays(-10)));
 			_person.AddPersonPeriod(period);
@@ -188,8 +188,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, _preferenceCellData, dateOnly, _dateTimePeriod, _periodTarget);
 			}
 
-			Assert.AreEqual(part.PersonDayOffCollection()[0].DayOff.Description.Name, _preferenceCellData.DisplayName);
-			Assert.AreEqual(part.PersonDayOffCollection()[0].DayOff.Description.ShortName, _preferenceCellData.DisplayShortName);
+			Assert.AreEqual(part.PersonAssignment().DayOff().Description.Name, _preferenceCellData.DisplayName);
+			Assert.AreEqual(part.PersonAssignment().DayOff().Description.ShortName, _preferenceCellData.DisplayShortName);
 			Assert.IsTrue(_preferenceCellData.HasDayOff);
 			Assert.AreEqual(TimeHelper.GetLongHourMinuteTimeString(dayOff.TargetLength, TeleoptiPrincipal.Current.Regional.Culture), _preferenceCellData.ShiftLengthScheduledShift);
 		}

@@ -29,15 +29,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             IList<IShiftTradeRequest> shiftTradeRequests = ExtractPeriodAndPersons(personRequests);
             if (shiftTradeRequests.Count == 0 || !_period.HasValue || _persons.Count == 0) return;
 
-            LoadScheduleDictionary();
+            LoadScheduleDictionary(_period.Value);
             _isInBatchMode = true;
         }
 
-        private void LoadScheduleDictionary()
+        private void LoadScheduleDictionary(DateTimePeriod period)
         {
+					var longPeriod = new DateOnlyPeriod(new DateOnly(period.StartDateTime.AddDays(-1)),
+																		new DateOnly(period.EndDateTime.AddDays(1)));
             _scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(_persons),new ScheduleDictionaryLoadOptions(false, false),
-                                                           _period.GetValueOrDefault(new DateTimePeriod()).ChangeEndTime
-                                                               (TimeSpan.FromHours(25)), _scenarioRepository.Current());
+                                                           longPeriod, _scenarioRepository.Current());
         }
 
         public void EndBatch()
@@ -82,7 +83,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                 IList<IShiftTradeRequest> shiftTradeRequests =
                     ExtractPeriodAndPersons(new List<IPersonRequest> {(IPersonRequest) shiftTradeRequest.Parent});
                 if (shiftTradeRequests.Count == 0 || !_period.HasValue || _persons.Count == 0) return;
-                LoadScheduleDictionary();
+								LoadScheduleDictionary(_period.Value);
             }
             VerifyShiftTradeIsUnchanged(_scheduleDictionary, shiftTradeRequest, _authorization);
         }

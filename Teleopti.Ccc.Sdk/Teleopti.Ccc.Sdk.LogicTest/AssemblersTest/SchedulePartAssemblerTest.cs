@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         private MockRepository mocks;
         private IScheduleDataAssembler<IPersonAssignment, PersonAssignmentDto> assignmentAssembler;
         private IScheduleDataAssembler<IPersonAbsence, PersonAbsenceDto> absenceAssembler;
-        private IScheduleDataAssembler<IPersonDayOff, PersonDayOffDto> dayOffAssembler;
+				private IScheduleDataAssembler<IPersonAssignment, PersonDayOffDto> dayOffAssembler;
         private IScheduleDataAssembler<IPersonMeeting, PersonMeetingDto> personMeetingAssembler;
     	private ISdkProjectionServiceFactory sdkProjectionServiceFactory;
         private IScheduleDataAssembler<IPreferenceDay, PreferenceRestrictionDto> _preferenceRestrictionAssembler;
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			scenarioRepository = mocks.StrictMock<ICurrentScenario>();
             assignmentAssembler = mocks.DynamicMock<IScheduleDataAssembler<IPersonAssignment, PersonAssignmentDto>>();
             absenceAssembler = mocks.DynamicMock<IScheduleDataAssembler<IPersonAbsence, PersonAbsenceDto>>();
-            dayOffAssembler = mocks.DynamicMock<IScheduleDataAssembler<IPersonDayOff, PersonDayOffDto>>();
+            dayOffAssembler = mocks.DynamicMock<IScheduleDataAssembler<IPersonAssignment, PersonDayOffDto>>();
             personMeetingAssembler = mocks.DynamicMock<IScheduleDataAssembler<IPersonMeeting, PersonMeetingDto>>();
             _preferenceRestrictionAssembler =
                 mocks.DynamicMock<IScheduleDataAssembler<IPreferenceDay, PreferenceRestrictionDto>>();
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			  target.TimeZone = (TimeZoneInfo.Utc);
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void PayrollSpecialProjection()
 		{
 			target = new SchedulePartAssembler(scenarioRepository, assignmentAssembler, absenceAssembler, dayOffAssembler,
@@ -98,7 +97,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			using (mocks.Record())
 			{
 				//why do I need to do this? Totally unneeded for what I want to test. mockeri, mockera...
-				Expect.Call(assignmentAssembler.DomainEntitiesToDtos(new[]{ass})).Return(new[]{new PersonAssignmentDto()});
+				Expect.Call(assignmentAssembler.DomainEntityToDto(ass)).Return(new PersonAssignmentDto());
 				Expect.Call(absenceAssembler.DomainEntitiesToDtos(null)).Return(new List<PersonAbsenceDto>()).IgnoreArguments();
 				Expect.Call(personMeetingAssembler.DomainEntitiesToDtos(null)).Return(new List<PersonMeetingDto>()).IgnoreArguments();
 			}
@@ -134,19 +133,18 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             IScheduleDay part = mocks.StrictMock<IScheduleDay>();
             var assResult = Enumerable.Empty<IPersonAssignment>();
             IPersonAbsence absResult = mocks.StrictMock<IPersonAbsence>();
-            IPersonDayOff dayOffResult = mocks.StrictMock<IPersonDayOff>();
-            //IPreferenceDay prefDay = mocks.StrictMock<IPreferenceDay>();
             IStudentAvailabilityDay studentDay = mocks.StrictMock<IStudentAvailabilityDay>();
       
             using(mocks.Record())
             {
                 Expect.Call(personRepository.Load(dto.PersonId)).Return(person);
-                Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null)).Return(dic);
+                Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).Return(dic);
                 LastCall.Constraints(new[]
                                          {
                                              Is.Matching<IPersonProvider>(t => t.GetPersons().Contains(person)),
                                              Is.Matching<IScheduleDictionaryLoadOptions>(t => t.LoadNotes.Equals(false) && t.LoadRestrictions.Equals(true)),
-                                             Is.Equal(new DateTimePeriod(date.Date.AddDays(-1).ToUniversalTime(), date.Date.AddDays(2).ToUniversalTime())),
+																						 //is depending on timezone
+                                             Is.Anything(),
                                              Is.Null()
                                          });
                 Expect.Call(dic[person]).Return(range);
@@ -155,21 +153,14 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 								Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfo.Utc));
                 Expect.Call(part.SignificantPart()).Return(SchedulePartView.FullDayAbsence);
                 part.Clear<IPersonAssignment>();
-                part.Clear<IPersonDayOff>();
-                //part.Clear<IPreferenceDay>();
                 part.Clear<IStudentAvailabilityDay>();
                 part.DeleteFullDayAbsence(part);
                 Expect.Call(assignmentAssembler.DtosToDomainEntities(dto.PersonAssignmentCollection)).Return(assResult);
                 Expect.Call(absenceAssembler.DtosToDomainEntities(dto.PersonAbsenceCollection)).Return(new []{absResult});
-                Expect.Call(dayOffAssembler.DtoToDomainEntity(dto.PersonDayOff)).Return(dayOffResult);
-                //Expect.Call(_preferenceRestrictionAssembler.DtoToDomainEntity(dto.PreferenceRestriction)).Return(
-                //    prefDay);
                 Expect.Call(_studentDayAssembler.DtoToDomainEntity(dto.StudentAvailabilityDay)).Return(
                     studentDay);
 
                 part.Add(absResult);
-                part.Add(dayOffResult);
-                //part.Add(prefDay);
                 part.Add(studentDay);
 
                 Expect.Call(scenarioRepository.Current()).Return(null).Repeat.AtLeastOnce();
@@ -195,7 +186,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             using (mocks.Record())
             {
                 Expect.Call(personRepository.Load(dto.PersonId)).Return(person);
-                Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null)).Return(dic);
+								Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).Return(dic);
                 LastCall.IgnoreArguments(); //tested in another test
                 Expect.Call(dic[person]).Return(range);
                 Expect.Call(range.ScheduledDay(date)).Return(part);
@@ -203,8 +194,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                 Expect.Call(part.Person).Return(person).Repeat.Any();
 								Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfo.Utc));
                 part.Clear<IPersonAssignment>();
-                part.Clear<IPersonDayOff>();
-                //part.Clear<IPreferenceDay>();
                 part.Clear<IStudentAvailabilityDay>();
                 part.DeleteAbsence(false);
                 Expect.Call(assignmentAssembler.DtosToDomainEntities(dto.PersonAssignmentCollection)).Return(assResult);
@@ -238,14 +227,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             IEnumerable<IPersistableScheduleData> restriction = new List<IPersistableScheduleData>().ToArray();
             Expect.Call(part.PersonAbsenceCollection()).Return(
                 new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
-            Expect.Call(part.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-            Expect.Call(part.PersonDayOffCollection()).Return(
-                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
+            Expect.Call(part.PersonAssignment()).Return(null);
             Expect.Call(part.PersistableScheduleDataCollection()).Return(restriction).Repeat.Twice();
             
-            Expect.Call(assignmentAssembler.DomainEntitiesToDtos(new List<IPersonAssignment>())).Return(
-                new List<PersonAssignmentDto>());
             Expect.Call(absenceAssembler.DomainEntitiesToDtos(new List<IPersonAbsence>())).Return(
                 new List<PersonAbsenceDto>());
 
@@ -276,12 +260,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
             Expect.Call(part.PersonAbsenceCollection()).Return(
                 new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
-            Expect.Call(part.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>{assResult}));
-            Expect.Call(part.PersonDayOffCollection()).Return(
-                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
-            Expect.Call(assignmentAssembler.DomainEntitiesToDtos(new List<IPersonAssignment>{assResult})).Return(
-                new List<PersonAssignmentDto>{personAssignmentDto});
+            Expect.Call(part.PersonAssignment()).Return(assResult);
+            Expect.Call(assignmentAssembler.DomainEntityToDto(assResult)).Return(personAssignmentDto);
             Expect.Call(absenceAssembler.DomainEntitiesToDtos(new List<IPersonAbsence>())).Return(
                 new List<PersonAbsenceDto>());
 
@@ -313,12 +293,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
             Expect.Call(part.PersonAbsenceCollection()).Return(
                 new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>{personAbsence}));
-            Expect.Call(part.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-            Expect.Call(part.PersonDayOffCollection()).Return(
-                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
-            Expect.Call(assignmentAssembler.DomainEntitiesToDtos(new List<IPersonAssignment>())).Return(
-                new List<PersonAssignmentDto>());
+            Expect.Call(part.PersonAssignment()).Return(null);
             Expect.Call(absenceAssembler.DomainEntitiesToDtos(new List<IPersonAbsence>{personAbsence})).Return(
                 new List<PersonAbsenceDto>{personAbsenceDto});
 
@@ -369,7 +344,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         [Test]
         public void VerifyDoToDtoWithPersonDayOff()
         {
-            IPersonDayOff personDayOff = mocks.StrictMock<IPersonDayOff>();
+            var personDayOff = mocks.StrictMock<IPersonAssignment>();
             IScheduleDay part = mocks.StrictMock<IScheduleDay>();
             PrepareSchedulePartForDoToDto(part);
             IEnumerable<IPersistableScheduleData> resstrictions = new List<IPersistableScheduleData>().ToArray();
@@ -377,12 +352,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
             Expect.Call(part.PersonAbsenceCollection()).Return(
                 new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
-            Expect.Call(part.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-            Expect.Call(part.PersonDayOffCollection()).Return(
-                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>{personDayOff}));
-            Expect.Call(assignmentAssembler.DomainEntitiesToDtos(new List<IPersonAssignment>())).Return(
-                new List<PersonAssignmentDto>());
+	        Expect.Call(part.PersonAssignment()).Return(personDayOff);
             Expect.Call(absenceAssembler.DomainEntitiesToDtos(new List<IPersonAbsence>())).Return(
                 new List<PersonAbsenceDto>());
             Expect.Call(dayOffAssembler.DomainEntityToDto(personDayOff)).Return(personDayOffDto);
@@ -406,7 +376,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         [Test]
         public void VerifyDtoWithRestrictions()
         {
-            IPersonDayOff personDayOff = mocks.StrictMock<IPersonDayOff>();
+            var personDayOff = mocks.StrictMock<IPersonAssignment>();
             IScheduleDay part = mocks.StrictMock<IScheduleDay>();
             PrepareSchedulePartForDoToDto(part);
             PreferenceRestriction preference = new PreferenceRestriction();
@@ -417,12 +387,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             PreferenceRestrictionDto preferenceRestrictionDto = new PreferenceRestrictionDto();
             Expect.Call(part.PersonAbsenceCollection()).Return(
                 new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
-            Expect.Call(part.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-            Expect.Call(part.PersonDayOffCollection()).Return(
-                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { personDayOff }));
-            Expect.Call(assignmentAssembler.DomainEntitiesToDtos(new List<IPersonAssignment>())).Return(
-                new List<PersonAssignmentDto>());
+	        Expect.Call(part.PersonAssignment()).Return(personDayOff);
+            Expect.Call(assignmentAssembler.DomainEntityToDto(personDayOff)).Return(new PersonAssignmentDto());
             Expect.Call(absenceAssembler.DomainEntitiesToDtos(new List<IPersonAbsence>())).Return(
                 new List<PersonAbsenceDto>());
             Expect.Call(dayOffAssembler.DomainEntityToDto(personDayOff)).Return(personDayOffDto);
@@ -474,7 +440,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             
             using (mocks.Record())
             {
-                Expect.Call(assignmentAssembler.DomainEntitiesToDtos(new[] { scheduleDay.PersonAssignmentCollectionDoNotUse()[0] })).Return(new[] { new PersonAssignmentDto() }).Repeat.AtLeastOnce();
+                Expect.Call(assignmentAssembler.DomainEntityToDto(scheduleDay.PersonAssignment())).Return(new PersonAssignmentDto()).Repeat.AtLeastOnce();
                 Expect.Call(absenceAssembler.DomainEntitiesToDtos(null)).Return(new List<PersonAbsenceDto>()).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(personMeetingAssembler.DomainEntitiesToDtos(null)).Return(new List<PersonMeetingDto>()).IgnoreArguments().Repeat.AtLeastOnce();
             }

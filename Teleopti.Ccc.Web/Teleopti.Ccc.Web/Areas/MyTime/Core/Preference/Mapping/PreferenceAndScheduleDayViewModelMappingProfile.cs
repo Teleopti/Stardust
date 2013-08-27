@@ -33,7 +33,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 						           : s.PersonRestrictionCollection().OfType<IPreferenceDay>().SingleOrDefault()))
 				.ForMember(s => s.DayOff,
 				           o =>
-				           o.MapFrom(s => s.PersonDayOffCollection() == null ? null : s.PersonDayOffCollection().SingleOrDefault()))
+				           o.MapFrom(s => s.HasDayOff() ? 
+											s.PersonAssignment(false).DayOff() : 
+											null))
 				.ForMember(s => s.Absence, o => o.MapFrom(s => (s.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence ||
 				                                                s.SignificantPartForDisplay() == SchedulePartView.ContractDayOff) &&
 				                                               s.PersonAbsenceCollection() != null
@@ -90,15 +92,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					}))
 				.ForMember(d => d.PersonalShifts, o => o.ResolveUsing(s =>
 					{
-						var assignments = s.PersonAssignmentCollectionDoNotUse();
-						if (assignments.Count > 0)
+						var assignment = s.PersonAssignment();
+						if (assignment != null)
 						{
-							return (from personAssignment in assignments
-							        from layer in personAssignment.PersonalLayers()
+							return (from layer in assignment.PersonalLayers()
 							        select new PersonalShiftViewModel
 								        {
 									        Subject =
-										        layer.Payload.ConfidentialDescription(personAssignment.Person, s.DateOnlyAsPeriod.DateOnly).Name,
+														layer.Payload.ConfidentialDescription(assignment.Person, s.DateOnlyAsPeriod.DateOnly).Name,
 									        TimeSpan =
 												ScheduleDayStringVisualizer.ToLocalStartEndTimeString(layer.Period, _userTimeZone.TimeZone(), CultureInfo.CurrentCulture)
 								        }).ToList();
@@ -107,8 +108,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					}))
 				;
 
-			CreateMap<IPersonDayOff, DayOffDayViewModel>()
-				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.DayOff.Description.Name))
+			CreateMap<IDayOff, DayOffDayViewModel>()
+				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.Description.Name))
 				;
 
 			CreateMap<IPersonAbsence, AbsenceDayViewModel>()
@@ -116,9 +117,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				;
 
 			CreateMap<IScheduleDay, PersonAssignmentDayViewModel>()
-				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.PersonAssignment().ShiftCategory.Description.Name))
+				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.PersonAssignment(false).ShiftCategory.Description.Name))
 				.ForMember(d => d.ContractTime, o => o.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(_projectionProvider.Projection(s).ContractTime(), CultureInfo.CurrentUICulture)))
-				.ForMember(d => d.TimeSpan, o => o.MapFrom(s => s.PersonAssignment().Period.TimePeriod(s.TimeZone).ToShortTimeString()))
+				.ForMember(d => d.TimeSpan, o => o.MapFrom(s => s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).ToShortTimeString()))
 				.ForMember(d => d.ContractTimeMinutes, o => o.MapFrom(s => _projectionProvider.Projection(s).ContractTime().TotalMinutes));
 		}
 	}

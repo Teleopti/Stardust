@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting
@@ -7,12 +6,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
     [TestFixture]
     public class OpenForWorkTest
     {
-        private IOpenForWork _target;
+        private OpenForWork _target;
         
         [SetUp]
         public void Setup()
         {
-            _target = new OpenForWork {IsOpen = true, IsOpenForIncomingWork = true};
+            _target = new OpenForWork(true, true);
         }
 
         [Test]
@@ -28,15 +27,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             var openForWork = new OpenForWork();
             Assert.That(_target.Equals(openForWork), Is.False);
 
-            var openForWork1 = new OpenForWork { IsOpen = true, IsOpenForIncomingWork = true };
+            var openForWork1 = new OpenForWork(true, true);
             Assert.That(_target.Equals(openForWork1), Is.True);
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ShouldDetectNullValue()
         {
-            Assert.That(_target.Equals(null), Is.True);
+            Assert.That(_target.Equals(null), Is.False);
         }
     }
 }

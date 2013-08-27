@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DBManager
 					//patch
 					if (!_loginExist && !(_isSrvSecurityAdmin))
 					{
-						throw new Exception("The login does not exist or wrong password supplied. You don't have the permission to create/alter login (securityadmin)!");
+						throw new Exception(string.Format(CultureInfo.CurrentCulture, "The login '{0}' does not exist or wrong password supplied, and You don't have the permission to create/alter the login.", _commandLineArgument.appUserName));
 					}
 
                     //Same sql login for admin and end user?
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.DBManager
                     }
 
                     //Try create or re-create login
-					if (_commandLineArgument.PermissionMode && SafeMode)
+					if (_commandLineArgument.PermissionMode && SafeMode && _isSrvSecurityAdmin)
                     {
                         CreateLogin(_commandLineArgument.appUserName, _commandLineArgument.appUserPwd, _commandLineArgument.isWindowsGroupName);
                     }

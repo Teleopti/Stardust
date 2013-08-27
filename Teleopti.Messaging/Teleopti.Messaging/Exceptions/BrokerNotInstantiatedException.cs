@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Messaging.Exceptions
 {

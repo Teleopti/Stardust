@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.Win.Payroll.Overtime
 			// 
 			// textBoxName
 			// 
+			this.textBoxName.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxName.Location = new System.Drawing.Point(145, 59);
 			this.textBoxName.MaxLength = 50;
 			this.textBoxName.Name = "textBoxName";
@@ -113,8 +114,9 @@ namespace Teleopti.Ccc.Win.Payroll.Overtime
 			// 
 			// textBoxShortName
 			// 
+			this.textBoxShortName.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxShortName.Location = new System.Drawing.Point(145, 85);
-			this.textBoxShortName.MaxLength = 25;
+			this.textBoxShortName.MaxLength = 2;
 			this.textBoxShortName.Name = "textBoxShortName";
 			this.textBoxShortName.OverflowIndicatorToolTipText = null;
 			this.textBoxShortName.Size = new System.Drawing.Size(141, 20);
@@ -149,9 +151,11 @@ namespace Teleopti.Ccc.Win.Payroll.Overtime
 			this.textBoxMultiplicatorValue.Name = "textBoxMultiplicatorValue";
 			this.textBoxMultiplicatorValue.Size = new System.Drawing.Size(141, 20);
 			this.textBoxMultiplicatorValue.TabIndex = 5;
+			this.textBoxMultiplicatorValue.Text = "0";
 			// 
 			// textBoxExportCode
 			// 
+			this.textBoxExportCode.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxExportCode.Location = new System.Drawing.Point(145, 193);
 			this.textBoxExportCode.MaxLength = 25;
 			this.textBoxExportCode.Name = "textBoxExportCode";

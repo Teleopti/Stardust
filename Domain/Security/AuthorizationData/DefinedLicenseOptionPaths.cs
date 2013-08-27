@@ -27,6 +27,7 @@
 		public const string TeleoptiCccMobileReports = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/MobileReports";
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 		public const string TeleoptiCccSmsLink = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/SMSLink";
+		public const string TeleoptiCccCalendarLink = DefinedLicenseSchemaCodes.TeleoptiCccSchema + "/CalendarLink";
         /// <summary>
         /// Constant string for Freemium base option
         /// </summary>

@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Expect.Call(_repositoryFactory.CreateShiftCategoryRepository(_uow)).Return(shiftCategoryRepository);
             Expect.Call(shiftCategoryRepository.FindAll()).Return(new List<IShiftCategory>());
 
-            var dayOffRepository = _mocks.StrictMock<IDayOffRepository>();
+            var dayOffRepository = _mocks.StrictMock<IDayOffTemplateRepository>();
             Expect.Call(_repositoryFactory.CreateDayOffRepository(_uow)).Return(dayOffRepository);
             Expect.Call(dayOffRepository.LoadAll()).Return(new List<IDayOffTemplate>());
         }

@@ -78,8 +78,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var onlyShiftsWhenUnderstaffed = optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = false;
             IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(selectedDays));
-			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-			var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedDays, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedDays, currentPersonTimeZone));
+			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(selectedDays);
 			IList<IScheduleMatrixPro> matrixListForWorkShiftOptimization = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
 			IList<IScheduleMatrixPro> matrixListForDayOffOptimization = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
 			IList<IScheduleMatrixPro> matrixListForIntradayOptimization = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);

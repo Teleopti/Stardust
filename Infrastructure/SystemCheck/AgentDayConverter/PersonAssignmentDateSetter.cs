@@ -6,9 +6,9 @@
 		{
 			get
 			{
-				return "select COUNT(*) as cnt from dbo.PersonAssignment " +
-							 "where [Date]=@baseDate " +
-				       "and Person=@personId";
+				return "select COUNT(*) as cnt from dbo.PersonAssignment pa " +
+							 "where pa.[Date]=@baseDate " +
+				       "and pa.Person=@personId";
 			}
 		}
 
@@ -16,11 +16,13 @@
 		{
 			get
 			{
-				return "select pa.Id, pa.Minimum, pa.Date " +
+				return "select pa.Id, pa.Date, min(l.Minimum) as minimum " +
 				       "from dbo.PersonAssignment pa " +
 				       "inner join Person p on pa.Person = p.id " +
+							 "inner join ShiftLayer l on l.Parent = pa.Id " + 
 							 "where pa.[Date]=@baseDate " +
-				       "and p.Id=@personId";
+				       "and p.Id=@personId " +
+				       "group by pa.Id, pa.Date";
 			}
 		}
 

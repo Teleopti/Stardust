@@ -10,7 +10,6 @@ using Teleopti.Ccc.DatabaseConverter.EntityMapper;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -260,9 +259,9 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         {
             IPerson newAgent = _simpleAgentMapper.Map(_oldAgent);
             Assert.AreEqual(_oldAgent.PeriodCollection[0].SkillCollection[0].PeriodSkill.Name,
-                            newAgent.PersonPeriodCollection.First().PersonSkillCollection[0].Skill.Name);
+                            newAgent.PersonPeriodCollection.First().PersonSkillCollection.First().Skill.Name);
             Assert.AreEqual(_oldAgent.PeriodCollection[0].SkillCollection[0].Level.Value,
-                            newAgent.PersonPeriodCollection.First().PersonSkillCollection[0].SkillPercentage.Value);
+                            newAgent.PersonPeriodCollection.First().PersonSkillCollection.First().SkillPercentage.Value);
         }
 
         [Test]
@@ -277,7 +276,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         public void DoNotMapDeletedSkill()
         {
             IPerson newAgent = _simpleAgentMapper.Map(_oldAgent);
-            Assert.AreEqual(1, newAgent.PersonPeriodCollection.First().PersonSkillCollection.Count);
+            Assert.AreEqual(1, newAgent.PersonPeriodCollection.First().PersonSkillCollection.Count());
         }
 
 

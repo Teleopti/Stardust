@@ -25,6 +25,9 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactory;
@@ -74,6 +77,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 		private static void registerSettingsTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<PersonPersister>().As<IPersonPersister>().SingleInstance();
+			builder.RegisterType<SettingsPermissionViewModelFactory>().As<ISettingsPermissionViewModelFactory>();
+			builder.RegisterType<CalendarLinkSettingsPersisterAndProvider>().As<ICalendarLinkSettingsPersisterAndProvider>().SingleInstance();
+			builder.RegisterType<CalendarLinkIdGenerator>().As<ICalendarLinkIdGenerator>().SingleInstance();
+			builder.RegisterType<CalendarLinkGenerator>().As<ICalendarLinkGenerator>().SingleInstance();
+			builder.RegisterType<CalendarLinkViewModelFactory>().As<ICalendarLinkViewModelFactory>().SingleInstance();
 		}
 
 		private static void registerRequestsType(ContainerBuilder builder)

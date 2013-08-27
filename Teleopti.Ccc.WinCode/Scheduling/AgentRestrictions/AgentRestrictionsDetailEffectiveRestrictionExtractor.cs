@@ -109,32 +109,31 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			preferenceCellData.DisplayColor = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.ConfidentialDisplayColor(scheduleDay.Person,scheduleDay.DateOnlyAsPeriod.DateOnly);
 			preferenceCellData.HasFullDayAbsence = true;
 			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(),TeleoptiPrincipal.Current.Regional.Culture);
-			preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).ToShortTimeString(TeleoptiPrincipal.Current.Regional.Culture);
+			preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TimeZoneGuard.Instance.TimeZone).ToShortTimeString(TeleoptiPrincipal.Current.Regional.Culture);
 
             return totalRestriction;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		private IEffectiveRestriction ExtractOnDayOff(IScheduleDay scheduleDay, IPreferenceCellData preferenceCellData)
 		{
 			var startTimeLimitation = new StartTimeLimitation(null, null);
 			var endTimeLimitation = new EndTimeLimitation(null, null);
 			var workTimeLimitation = new WorkTimeLimitation(null, null);
-			var dayOffTemplate = new DayOffTemplate(scheduleDay.PersonDayOffCollection()[0].DayOff.Description);
-			dayOffTemplate.SetTargetAndFlexibility(scheduleDay.PersonDayOffCollection()[0].DayOff.TargetLength, scheduleDay.PersonDayOffCollection()[0].DayOff.Flexibility);
+			var dayOff = scheduleDay.PersonAssignment().DayOff();
+			var dayOffTemplate = new DayOffTemplate(dayOff.Description);
+			dayOffTemplate.SetTargetAndFlexibility(dayOff.TargetLength, dayOff.Flexibility);
 
 			IEffectiveRestriction totalRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),new WorkTimeLimitation(), null, null, null,new List<IActivityRestriction>());
 
 			totalRestriction = totalRestriction.Combine(new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, null, dayOffTemplate, null, new List<IActivityRestriction>()));
-			preferenceCellData.DisplayName = scheduleDay.PersonDayOffCollection()[0].DayOff.Description.Name;
-			preferenceCellData.DisplayShortName = scheduleDay.PersonDayOffCollection()[0].DayOff.Description.ShortName;
+			preferenceCellData.DisplayName = dayOff.Description.Name;
+			preferenceCellData.DisplayShortName = dayOff.Description.ShortName;
 			preferenceCellData.HasDayOff = true;
 			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(dayOffTemplate.TargetLength, TeleoptiPrincipal.Current.Regional.Culture);
 			
 			return totalRestriction;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private IEffectiveRestriction ExtractOnMainShift(IScheduleDay scheduleDay, IPreferenceCellData preferenceCellData)
 		{
 			IEffectiveRestriction totalRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
@@ -142,7 +141,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			var timePeriod = projection.Period();
 			if (timePeriod == null) return null;
 			var dateTimePeriod = timePeriod.Value;
-			var zone = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
+			var zone = TimeZoneGuard.Instance.TimeZone;
 			var viewLocalTime = TimeZoneHelper.ConvertFromUtc(dateTimePeriod.StartDateTime, zone);
 			var viewLocalEndTime = TimeZoneHelper.ConvertFromUtc(dateTimePeriod.EndDateTime, zone);
 			var startTimeLimitation = new StartTimeLimitation(viewLocalTime.TimeOfDay, viewLocalTime.TimeOfDay);
@@ -161,7 +160,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			preferenceCellData.DisplayColor = assignment.ShiftCategory.DisplayColor;
 			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), TeleoptiPrincipal.Current.Regional.Culture);
 			var period = projection.Period();
-			if (period != null) preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).ToShortTimeString(TeleoptiPrincipal.Current.Regional.Culture);
+			if (period != null) preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TimeZoneGuard.Instance.TimeZone).ToShortTimeString(TeleoptiPrincipal.Current.Regional.Culture);
 
 			return totalRestriction;
 		}

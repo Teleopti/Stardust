@@ -41,19 +41,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				auditSession.CreateQuery().ForHistoryOf<PersonAssignment, Revision>()
 				.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
 				.AddModifiedByIfNotNull(modifiedBy)
-				.Add(AuditEntity.Property("Period.period.Minimum").Lt(scheduledPeriodAgentTimeZone.EndDateTime))
-				.Add(AuditEntity.Property("Period.period.Maximum").Gt(scheduledPeriodAgentTimeZone.StartDateTime))
+				.Add(AuditEntity.Property("Date").Between(scheduledPeriod.StartDate, scheduledPeriod.EndDate))
 				.Add(AuditEntity.Property("Person").In(agentsBatch))
 				.Results()
 				.ForEach(assRev => retTemp.Add(createAssignmentAuditingData(assRev)));
-
-				auditSession.CreateQuery().ForHistoryOf<PersonDayOff, Revision>()
-					.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
-					.AddModifiedByIfNotNull(modifiedBy)
-					.Add(AuditEntity.Property("DayOff.Anchor").Between(scheduledPeriodAgentTimeZone.StartDateTime, scheduledPeriodAgentTimeZone.EndDateTime))
-					.Add(AuditEntity.Property("Person").In(agentsBatch))
-					.Results()
-					.ForEach(dayOffRev => retTemp.Add(createDayOffAuditingData(dayOffRev)));
 
 				auditSession.CreateQuery().ForHistoryOf<PersonAbsence, Revision>()
 					.Add(AuditEntity.RevisionProperty("ModifiedAt").Between(changedPeriodAgentTimeZone.StartDateTime, changedPeriodAgentTimeZone.EndDateTime))
@@ -89,30 +80,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 			var period = auditedAssignment.Entity.Period;
 
-			if (period.Equals(PersonAssignment.UndefinedPeriod))
-			{
-				ret.ScheduleStart = DateTime.MinValue;
-				ret.ScheduleEnd = DateTime.MinValue;
-			}
-			else
-			{
-				ret.ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, _regional.TimeZone);
-				ret.ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, _regional.TimeZone);
-			}
+			ret.ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(period.StartDateTime, _regional.TimeZone);
+			ret.ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(period.EndDateTime, _regional.TimeZone);
 
-			return ret;
-		}
-
-		private ScheduleAuditingReportData createDayOffAuditingData(IRevisionEntityInfo<PersonDayOff, Revision> auditedDayOff)
-		{
-			var ret = new ScheduleAuditingReportData
-			{
-				ShiftType = Resources.AuditingReportDayOff,
-				Detail = auditedDayOff.Entity.DayOff.Description.Name,
-				ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(auditedDayOff.Entity.Period.StartDateTime, _regional.TimeZone),
-				ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(auditedDayOff.Entity.Period.EndDateTime, _regional.TimeZone)
-			};
-			addCommonScheduleData(ret, auditedDayOff.Entity, auditedDayOff.RevisionEntity, auditedDayOff.Operation);
 			return ret;
 		}
 

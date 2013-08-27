@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
@@ -211,12 +212,12 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			                 		Date = DateOnly.Today,
 			                 		ScheduleDay =
 			                 			new StubFactory().ScheduleDayStub(DateTime.Now.Date, SchedulePartView.DayOff,
-			                 			                                  new StubFactory().PersonDayOffStub())
+																															PersonAssignmentFactory.CreateAssignmentWithDayOff())
 			                 	};
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
-			result.Summary.Title.Should().Be.EqualTo(domainData.ScheduleDay.PersonDayOffCollection().Single().DayOff.Description.Name);
+			result.Summary.Title.Should().Be.EqualTo(domainData.ScheduleDay.PersonAssignment().DayOff().Description.Name);
 			result.Summary.StyleClassName.Should().Contain(StyleClasses.DayOff);
 			result.Summary.StyleClassName.Should().Contain(StyleClasses.Striped);
 		}
@@ -363,6 +364,19 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
 			result.IsCurrentWeek.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapDateFormatForUser()
+		{
+			IPerson person = new Person();
+			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+
+			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(new WeekScheduleDomainData());
+
+			var expectedFormat = person.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+			result.DatePickerFormat.Should().Be.EqualTo(expectedFormat);
 		}
 	}
 }

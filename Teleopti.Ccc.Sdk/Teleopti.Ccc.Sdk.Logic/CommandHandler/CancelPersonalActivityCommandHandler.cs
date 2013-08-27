@@ -3,7 +3,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -44,23 +43,20 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var scenario = getDesiredScenario(command);
 				var dateTimePeriod = _dateTimePeriodAssembler.DtoToDomainEntity(command.Period);
 				var startDate = new DateOnly(command.Date.DateTime);
-				var timeZone = person.PermissionInformation.DefaultTimeZone();
 
 				var scheduleDictionary =
 					_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
 						new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false),
-						new DateOnlyPeriod(startDate, startDate.AddDays(1)).ToDateTimePeriod(timeZone), scenario);
+						new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
 
 				var scheduleRange = scheduleDictionary[person];
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
 				var scheduleDay = scheduleRange.ScheduledDay(startDate);
-				var personAssignmentCollection = scheduleDay.PersonAssignmentCollectionDoNotUse();
-
-				foreach (var personAssignment in personAssignmentCollection)
+				var personAssignment = scheduleDay.PersonAssignment();
+				if (personAssignment != null)
 				{
-					cancelPersonalActivity(personAssignment, dateTimePeriod);
+					cancelPersonalActivity(personAssignment, dateTimePeriod);					
 				}
-
 				_saveSchedulePartService.Save(scheduleDay, rules);
 				using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
 				{

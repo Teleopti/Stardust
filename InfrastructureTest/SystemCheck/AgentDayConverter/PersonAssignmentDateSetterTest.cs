@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
-using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -10,9 +8,9 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 {
@@ -122,18 +120,12 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var s = fetchSession(uow);
+				var s = uow.FetchSession();
 				s.CreateQuery("update Activity set IsDeleted=1").ExecuteUpdate();
 				s.CreateQuery("update ShiftCategory set IsDeleted=1").ExecuteUpdate();
 				s.CreateQuery("update Scenario set IsDeleted=1").ExecuteUpdate();
 				uow.PersistAll();
 			}
-		}
-
-		private static ISession fetchSession(IUnitOfWork uow)
-		{
-			return (ISession)typeof(NHibernateUnitOfWork).GetProperty("Session", BindingFlags.Instance | BindingFlags.NonPublic)
-															.GetValue(uow, null);
 		}
 	}
 }

@@ -22,6 +22,15 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
         self.selectedUiCulture = ko.observable();
         self.selectedCulture = ko.observable();
 
+        self.CalendarSharingActive = ko.observable(false);
+	    self.CalendarUrl = ko.observable();
+	    self.ActivateCalendarSharing = function() {
+	        _setCalendarLinkStatus(true);
+	    };
+	    self.DeactivateCalendarSharing = function() {
+	    	_setCalendarLinkStatus(false);
+	    };
+
         self.selectedUiCulture.subscribe(function(newValue) {
             if (!self.avoidReload)
                 _selectorChanged(newValue, "Settings/UpdateUiCulture");
@@ -42,29 +51,20 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
         ko.applyBindings(vm, $('#page')[0]);
     };
 
-    function _partialInit() {
-        vm = new settingsViewModel();
-        _loadCultures();
-        _bindData();
-	}
-
 	function _loadCultures() {
-	    ajax.Ajax({
+		return ajax.Ajax({
 	        url: "Settings/Cultures",
 	        dataType: "json",
 	        type: "GET",
 	        global: false,
 	        cache: false,
 	        success: function (data, textStatus, jqXHR) {
-	            vm.cultures(data.Cultures);
+	        	vm.cultures(data.Cultures);
 	            vm.avoidReload = true;
 	            vm.selectedUiCulture(data.ChoosenUiCulture.id);
 	            vm.selectedCulture(data.ChoosenCulture.id);
 	            vm.avoidReload = false;
 		        vm.culturesLoaded(true);
-	        },
-	        error: function(e) {
-	            //console.log(e);
 	        }
 	    });
 	}
@@ -86,17 +86,55 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 			}
 		});
 	}
+	
+	function _getCalendarLinkStatus() {
+		if ($(".share-my-calendar").length == 0)
+			return null;
+		return ajax.Ajax({
+			url: "Settings/CalendarLinkStatus",
+			contentType: 'application/json; charset=utf-8',
+			dataType: "json",
+			type: "GET",
+			success: function (data, textStatus, jqXHR) {
+				vm.CalendarSharingActive(data.IsActive);
+				vm.CalendarUrl(data.Url);
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+			}
+		});
+	}
+    
+	function _setCalendarLinkStatus(isActive) {
+	    ajax.Ajax({
+	    	url: "Settings/SetCalendarLinkStatus",
+	    	contentType: 'application/json; charset=utf-8',
+	    	dataType: "json",
+	        type: "POST",
+	        data: JSON.stringify({IsActive: isActive}),
+	        success: function (data, textStatus, jqXHR) {
+	        	vm.CalendarSharingActive(data.IsActive);
+	        	vm.CalendarUrl(data.Url);
+	        },
+	        error: function (jqXHR, textStatus, errorThrown) {
+	            Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+	        }
+	    });
+	}
 
 	return {
 		Init: function () {
 			_init();
 		},
 		PartialInit: function (readyForInteraction, completelyLoaded) {
-
-		    $('#Test-Picker').select2();
-		    _partialInit();
-		    readyForInteraction();
-		    completelyLoaded();
+			$('#Test-Picker').select2();
+		    vm = new settingsViewModel();
+		    $.when(_loadCultures(), _getCalendarLinkStatus())
+				.done(function () {
+					readyForInteraction();
+					completelyLoaded();
+				});
+		    _bindData();
 		}
 	};
 })(jQuery);
@@ -184,9 +222,9 @@ Teleopti.MyTimeWeb.Password = (function ($) {
     }
 
     return {
-        Init: function () {
+    	Init: function () {
             _init();
-        },
+    	},
         PartialInit: function (readyForInteraction, completelyLoaded) {
             _partialInit();
             readyForInteraction();

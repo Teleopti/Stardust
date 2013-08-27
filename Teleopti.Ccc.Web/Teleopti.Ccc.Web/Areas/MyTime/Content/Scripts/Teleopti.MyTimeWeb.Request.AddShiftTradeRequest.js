@@ -3,7 +3,7 @@
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
-/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
+/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
 /// <reference path="~/Content/moment/moment.js" />
 
@@ -201,8 +201,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 	function _init() {
 		var elementToBind = $('#Request-add-shift-trade')[0];
-		if (_hasPermission(elementToBind)) {
-		    if ((vm || '') == '') {
+		if (elementToBind !== undefined) {
+		    if ((vm || '') == '' || !ko.dataFor(elementToBind)) {
 		    	vm = new shiftTradeViewModel(_saveNewShiftTrade);
 		    	ko.applyBindings(vm, elementToBind);
 
@@ -210,7 +210,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		    }
 		}
 	}
-
 
 	function _setWeekStart(vm) {
 		ajax.Ajax({
@@ -229,10 +228,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
 			}
 		});
-	}
-	
-	function _hasPermission(element) {
-		return element!==undefined;
 	}
 
 	function _saveNewShiftTrade(viewModel) {

@@ -45,14 +45,19 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\CassiniDev\AnyCPU build\CassiniDev4-lib.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Logging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="Coypu">
       <HintPath>..\..\packages\Coypu.0.16.3\lib\net40\Coypu.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\packages\log4net.1.2.11\lib\net40-full\log4net.dll</HintPath>
+      <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.4.5.7\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json.5.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -96,12 +101,22 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\UserLogonDetailsStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionException.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsControlExtensions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsJQueryExtensions.cs" />
     <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuBrowserInteractions.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionsImplementationHelper.cs" />
+    <Compile Include="Bindings\Generic\MyTime\SettingsPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\MyTime\ShareLinkPageStepDefinitions.cs" />
+    <Compile Include="CalendarShare.feature.cs">
+      <DependentUpon>CalendarShare.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Data\Setups\Generic\CalendarLinkConfigurable.cs" />
     <Compile Include="PerformanceTool\PerformanceView.feature.cs">
       <DependentUpon>PerformanceView.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -111,6 +126,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AddFullDayAbsence.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Anywhere\ViewStaffingMetrics.feature.cs">
+      <DependentUpon>ViewStaffingMetrics.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Anywhere\RemoveAbsence.feature.cs">
       <DependentUpon>RemoveAbsence.feature</DependentUpon>
@@ -140,11 +160,14 @@
     <Compile Include="Bindings\Generic\AbsenceStepDefinitions.cs" />
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\ForecastStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\ForecastConfigurable.cs" />
     <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsOverloadExtensions.cs" />
     <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuBrowserActivator.cs" />
     <Compile Include="Core\BrowserDriver\CoypuImpl\SeleniumExceptionCatcher.cs" />
     <Compile Include="Core\BrowserDriver\IBrowserInteractions.cs" />
+    <Compile Include="Bindings\Generic\SkillStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\IExceptionCatcher.cs" />
     <Compile Include="Core\BrowserDriver\JavascriptEncodingExtensions.cs" />
     <Compile Include="Core\BrowserDriver\WatiNIE\WatiNIEBrowserInteractions.cs" />
@@ -180,6 +203,7 @@
     </Compile>
     <Compile Include="Data\Setups\Generic\PersonAbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonDayOffConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\SkillConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\TeamConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\StudentAvailabilityPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\CreateName.cs" />
@@ -600,9 +624,17 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="CalendarShare.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>CalendarShare.feature.cs</LastGenOutput>
+    </None>
     <None Include="PerformanceTool\PerformanceView.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PerformanceView.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\ViewStaffingMetrics.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ViewStaffingMetrics.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\RemoveAbsence.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

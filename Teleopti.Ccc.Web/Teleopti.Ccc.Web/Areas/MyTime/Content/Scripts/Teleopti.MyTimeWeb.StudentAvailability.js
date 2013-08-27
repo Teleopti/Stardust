@@ -19,7 +19,6 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var dayViewModels = {};
-	var studentAvailabilityToolTip = null;
 	var editFormViewModel = null;
     var vm = null;
 
@@ -150,50 +149,17 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	function _initToolbarButtons() {
 		var editButton = $('#Availability-edit-button');
 		var template = $('#Student-availability-edit-form');
+		var showMeridian = $('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true';
 
-		editFormViewModel = new Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel();
+		editFormViewModel = new Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel(ajax, showMeridian);
 
-		editButton.click(function (e) { e.preventDefault(); });
-		studentAvailabilityToolTip = $('<div/>')
-	        .qtip({
-	            id: "edit-student-availability",
-	            content: {
-	                text: template,
-	                title: {
-	                    text: '&nbsp;',
-	                    button: 'Close'
-	                }
-	            },
-	            position: {
-	                target: editButton,
-	                my: "left top",
-	                at: "left bottom",
-	                adjust: {
-	                    x: 11,
-	                    y: 0
-	                }
-	            },
-	            show: {
-	                target: editButton,
-	                event: 'mousedown'
-	            },
-	            hide: {
-	                target: editButton,
-	                event: 'mousedown'
-	            },
-	            style: {
-	                def: false,
-	                classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
-	                tip: {
-	                    corner: "top left"
-	                }
-	            },
-	            events: {
-	                render: function() {
-	                    ko.applyBindings(editFormViewModel, template[0]);
-	                }
-	            }
-	        });
+		editButton.click(function (e) {
+		    editFormViewModel.ToggleAddAvailabilityFormVisible();
+		     e.preventDefault();
+		});
+
+		ko.applyBindings(editFormViewModel, template[0]);
+
 		editButton.removeAttr('disabled');
 
 		var deleteButton = $('#Availability-delete-button');
@@ -264,13 +230,13 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 			if (!$('#StudentAvailability-body').length) {
 				return;
 			}
-			_initToolbarButtons();
 			_initPeriodSelection();
+			_initToolbarButtons();
 			_initViewModels();
 			_activateSelectable();
 		},
 		StudentAvailabilityPartialDispose: function () {
-			studentAvailabilityToolTip.qtip('toggle', false);
+			//studentAvailabilityToolTip.qtip('toggle', false);
 			ajax.AbortAll();
 			_cleanBindings();
 		},

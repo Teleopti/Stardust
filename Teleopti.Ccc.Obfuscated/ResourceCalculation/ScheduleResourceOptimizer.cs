@@ -12,24 +12,22 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
     /// </summary>
     public class ScheduleResourceOptimizer
     {
-        private readonly ISkillSkillStaffPeriodExtendedDictionary _skillStaffPeriods;
+	    private readonly IResourceCalculationDataContainer _relevantProjections;
+	    private readonly ISkillSkillStaffPeriodExtendedDictionary _skillStaffPeriods;
         private readonly IAffectedPersonSkillService _personSkillService;
         private readonly IActivityDivider _activityDivider;
-        private ICollection<IVisualLayerCollection> _projections;
         private readonly IList<IActivity> _distinctActivities;
 
         private const double _quotient = 1d; // the outer quotient: default = 1
         private const int _maximumIteration = 50; // the maximum number of iterations
         
-        public ScheduleResourceOptimizer(IEnumerable<IVisualLayerCollection> relevantProjections, 
+        public ScheduleResourceOptimizer(IResourceCalculationDataContainer relevantProjections, 
             ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods, 
             IAffectedPersonSkillService personSkillService, 
             bool clearSkillStaffPeriods, IActivityDivider activityDivider)
         {
-            //should not be called from constructor!
-            setProjections(relevantProjections);
-
-            _skillStaffPeriods = relevantSkillStaffPeriods;
+	        _relevantProjections = relevantProjections;
+	        _skillStaffPeriods = relevantSkillStaffPeriods;
             _personSkillService = personSkillService;
             _activityDivider = activityDivider;
             _distinctActivities = getDistinctActivities();
@@ -88,39 +86,11 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             }
         }
 
-        private void setProjections(IEnumerable<IVisualLayerCollection> relevantProjections)
-        {
-            _projections = new List<IVisualLayerCollection>();
-            foreach (var projection in relevantProjections)
-            {
-                if (projection.HasLayers && hasActivityLayer(projection))
-                {
-                    _projections.Add(projection);   
-                }
-            }
-        }
-
-        //move to visuallayercollection
-        private static bool hasActivityLayer(IVisualLayerCollection layerCollection)
-        {
-            foreach (IVisualLayer visualLayer in layerCollection)
-            {
-                if (visualLayer.Payload is IActivity)
-                    return true;
-            }
-            return false;
-        }
-
         private void optimizeActivityPeriod(IActivity currentActivity, DateTimePeriod completeIntervalPeriod, bool useOccupancyAdjustment)
         {
-            DateTimePeriod completeIntervalPeriodMinusOneTick = completeIntervalPeriod.ChangeEndTime(TimeSpan.FromTicks(-1));
-            var filteredVisualLayers = createFilteredVisualLayerColl(completeIntervalPeriodMinusOneTick);
-            if (filteredVisualLayers.Count == 0)
-                return;
-
             IDividedActivityData dividedActivityData = _activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService,
-                                                                  currentActivity, filteredVisualLayers,
-                                                                  completeIntervalPeriodMinusOneTick);
+                                                                  currentActivity, _relevantProjections,
+                                                                  completeIntervalPeriod);
 
             IEnumerable<ISkill> relevantSkills = dividedActivityData.TargetDemands.Keys;
             IDictionary<ISkill, ISkillStaffPeriod> relevantSkillStaffPeriods =
@@ -132,7 +102,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 {
                     //Do nothing here until occupancy works
                     //var occCalculator =
-                    //    new OccupancyCalculator(relevantSkillStaffPeriods, dividedActivityData.RelativePersonSkillResources);
+                    //    new OccupancyCalculator(relevantSkillStaffPeriods, dividedActivityData.RelativeKeyedSkillResourceResources);
                     //occCalculator.AdjustOccupancy();
                 }
 
@@ -160,25 +130,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 optimizedActivityData.RelativePersonSkillResourcesSum.TryGetValue(skillPair.Key, out loggedOn);
                 staffPeriod.Payload.CalculatedLoggedOn = loggedOn;
             }
-        }
-
-        private IList<IFilteredVisualLayerCollection> createFilteredVisualLayerColl(DateTimePeriod periodToCalculate)
-        {
-			IList<IFilteredVisualLayerCollection> ret = new List<IFilteredVisualLayerCollection>();
-            foreach (var projection in _projections)
-            {
-                var period = projection.Period();
-                if (!period.HasValue) continue;
-                if (!period.Value.Intersect(periodToCalculate)) continue;
-
-                var coll = projection.FilterLayers(periodToCalculate);
-                if(coll.HasLayers)
-                {
-                    ret.Add(coll);                    
-                }
-            }
-
-            return ret;
         }
 
         private void clearSkillStaffPeriods()

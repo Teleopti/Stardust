@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		public void DataSourceExceptionShouldBeThrownIfZombiedTransactionWhenCommit()
 		{
 			var tempUow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
-			grabSessionPropertyFromUow(tempUow).Connection.Close();
+			tempUow.FetchSession().Connection.Close();
 			Assert.Throws<DataSourceException>(() => tempUow.PersistAll());				
 		}
 
@@ -88,7 +89,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		public void DataSourceExceptionShouldNotBeThrownIfZombiedTransactionWhenDisposing()
 		{
 			var tempUow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
-			grabSessionPropertyFromUow(tempUow).Connection.Close();
+			tempUow.FetchSession().Connection.Close();
 			tempUow.Dispose(); //implicit rollback
 		}
 
@@ -102,19 +103,11 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 
 		}
 
-		private ISession grabSessionPropertyFromUow(IUnitOfWork uow)
-		{
-			return (ISession) UnitOfWork.GetType()
-				.GetProperty("Session", BindingFlags.Instance | BindingFlags.NonPublic)
-				.GetValue(uow, null);
-		}
-
 		private ISession grabSessionFieldFromUow(IUnitOfWork uow)
 		{
 			return (ISession)UnitOfWork.GetType()
 				.GetField("_session", BindingFlags.Instance | BindingFlags.NonPublic)
 				.GetValue(uow);
 		}
-
 	}
 }

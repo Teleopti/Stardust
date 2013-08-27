@@ -29,9 +29,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 			var revisionIds = new HashSet<long>();
 			var dateTime = convertFromDateOnly(agent, dateOnly);
-			findRevisionsForAssignment(agent, dateTime, maxResult).ForEach(revId => revisionIds.Add(revId));
+			findRevisionsForAssignment(agent, dateOnly, maxResult).ForEach(revId => revisionIds.Add(revId));
 			findRevisionsForAbsence(agent, dateTime, maxResult).ForEach(revId => revisionIds.Add(revId));
-			findRevisionsForDayOff(agent, dateTime, maxResult).ForEach(revId => revisionIds.Add(revId));
 			return loadRevisions(revisionIds, maxResult);
 		}
 
@@ -39,19 +38,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 		{
 			var ret = new List<IPersistableScheduleData>();
 			var dateTime = convertFromDateOnly(agent, dateOnly);
-			findAssignment(agent, dateTime, revision).ForEach(ret.Add);
+			findAssignment(agent, dateOnly, revision).ForEach(ret.Add);
 			findAbsence(agent, dateTime, revision).ForEach(ret.Add);
-			findDayOff(agent, dateTime, revision).ForEach(ret.Add);
 			return ret;
-		}
-
-		private IEnumerable<PersonDayOff> findDayOff(IPerson agent, DateTimePeriod dateTimePeriod, IRevision revision)
-		{
-			return session().Auditer().CreateQuery()
-				.ForEntitiesAtRevision<PersonDayOff>(revision.Id)
-				.Add(AuditEntity.Property("Person").Eq(agent))
-				.Add(AuditEntity.Property("DayOff.Anchor").Between(dateTimePeriod.StartDateTime, dateTimePeriod.EndDateTime))
-				.Results();
 		}
 
 		private IEnumerable<PersonAbsence> findAbsence(IPerson agent, DateTimePeriod dateTimePeriod, IRevision revision)
@@ -64,24 +53,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				.Results();
 		}
 
-		private IEnumerable<PersonAssignment> findAssignment(IPerson agent, DateTimePeriod dateTimePeriod, IRevision revision)
+		private IEnumerable<PersonAssignment> findAssignment(IPerson agent, DateOnly dateOnly, IRevision revision)
 		{
 			return session().Auditer().CreateQuery()
 				.ForEntitiesAtRevision<PersonAssignment>(revision.Id)
 				.Add(AuditEntity.Property("Person").Eq(agent))
-				.Add(AuditEntity.Property("Period.period.Minimum").Lt(dateTimePeriod.EndDateTime))
-				.Add(AuditEntity.Property("Period.period.Maximum").Gt(dateTimePeriod.StartDateTime))
+				.Add(AuditEntity.Property("Date").Eq(dateOnly))
 				.Results();
 		}
 
-		private IEnumerable<long> findRevisionsForAssignment(IPerson agent, DateTimePeriod dateTimePeriod, int maxSize)
+		private IEnumerable<long> findRevisionsForAssignment(IPerson agent, DateOnly dateOnly, int maxSize)
 		{
 			return session().Auditer().CreateQuery()
 				.ForRevisionsOfEntity(typeof (PersonAssignment), false, true)
 				.AddProjection(AuditEntity.RevisionNumber())
 				.Add(AuditEntity.Property("Person").Eq(agent))
-				.Add(AuditEntity.Property("Period.period.Minimum").Lt(dateTimePeriod.EndDateTime))
-				.Add(AuditEntity.Property("Period.period.Maximum").Gt(dateTimePeriod.StartDateTime))
+				.Add(AuditEntity.Property("Date").Eq(dateOnly))
 				.AddOrder(AuditEntity.RevisionNumber().Desc())
 				.SetMaxResults(maxSize)
 				.GetResultList<long>();
@@ -99,19 +86,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				.SetMaxResults(maxSize)
 				.GetResultList<long>();
 		}
-
-		private IEnumerable<long> findRevisionsForDayOff(IPerson agent, DateTimePeriod dateTimePeriod, int maxSize)
-		{
-			return session().Auditer().CreateQuery()
-				.ForRevisionsOfEntity(typeof (PersonDayOff), false, true)
-				.AddProjection(AuditEntity.RevisionNumber())
-				.Add(AuditEntity.Property("Person").Eq(agent))
-				.Add(AuditEntity.Property("DayOff.Anchor").Between(dateTimePeriod.StartDateTime, dateTimePeriod.EndDateTime))
-				.AddOrder(AuditEntity.RevisionNumber().Desc())
-				.SetMaxResults(maxSize)
-				.GetResultList<long>();
-		}
-
 
 		private IEnumerable<IRevision> loadRevisions(IEnumerable<long> ids, int maxSize)
 		{

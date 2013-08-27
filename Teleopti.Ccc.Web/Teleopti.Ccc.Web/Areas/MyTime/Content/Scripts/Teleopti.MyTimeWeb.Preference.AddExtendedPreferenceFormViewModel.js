@@ -34,7 +34,9 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	this.ValidationError = ko.observable();
 	this.IsPreferenceInputVisible = ko.observable(true);
 	this.ShowMeridian = ko.observable(showMeridian);
-    this.IsTimeInputVisible = ko.observable(true);
+	this.IsTimeInputVisible = ko.observable(true);
+	this.NextDayMin = ko.observable(false);
+	this.NextDayMax = ko.observable(false);
 
     this.IsPreferenceInputVisibleToggle = function() {
         self.IsPreferenceInputVisible(!self.IsPreferenceInputVisible());
@@ -100,12 +102,14 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	    return isEnabled;
 	});
     
-	this.LatestEndTimeNextDayToggle = function () {
-	    self.LatestEndTimeNextDay(!self.LatestEndTimeNextDay());
-	};
-	this.EarliestEndTimeNextDayToggle = function () {
-	    self.EarliestEndTimeNextDay(!self.EarliestEndTimeNextDay());
-	};
+	this.LatestEndTimeNextDayToggle = ko.computed(function () {
+	    self.LatestEndTimeNextDay(self.NextDayMax());
+	    return self.NextDayMax();
+	});
+	this.EarliestEndTimeNextDayToggle = ko.computed(function () {
+	    self.EarliestEndTimeNextDay(self.NextDayMin());
+	    return self.NextDayMin();
+	});
     
 	this.IsSaveAsNewTemplateToggle = function () {
 	    self.IsSaveAsNewTemplate(!self.IsSaveAsNewTemplate());

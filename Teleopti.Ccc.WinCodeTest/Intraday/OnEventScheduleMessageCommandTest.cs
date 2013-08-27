@@ -199,35 +199,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		}
 
 		[Test]
-		public void VerifyOnEventScheduleDataMessageHandlerDayOff()
-		{
-			Guid idFromBroker = Guid.NewGuid();
-			IUnitOfWork unitOfWork = mocks.StrictMock<IUnitOfWork>();
-			IScheduleDictionary scheduleDictionary = mocks.StrictMock<IScheduleDictionary>();
-			IPersonDayOffRepository personDayOffRepository = mocks.StrictMock<IPersonDayOffRepository>();
-
-			setupCommonStuffForUpdatesFromBroker(unitOfWork, scheduleDictionary);
-
-			Expect.Call(_repositoryFactory.CreatePersonDayOffRepository(unitOfWork)).Return(
-				personDayOffRepository);
-			Expect.Call(scheduleDictionary.UpdateFromBroker(personDayOffRepository, idFromBroker)).Return(null);
-
-			CommonStateHolder commonStateHolder = new CommonStateHolder();
-			Expect.Call(_schedulerStateHolder.CommonStateHolder).Return(commonStateHolder);
-			Expect.Call(() => unitOfWork.Reassociate(commonStateHolder.DayOffs));
-			Expect.Call(_schedulingResultLoader.Contracts).Return(new List<IContract>());
-			Expect.Call(_schedulingResultLoader.ContractSchedules).Return(new List<IContractSchedule>());
-			Expect.Call(() => _view.ReloadScheduleDayInEditor(_person));
-
-			mocks.ReplayAll();
-
-			target.Execute(new EventMessage { InterfaceType = typeof(IPersonDayOff), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Insert, ReferenceObjectId = _person.Id.GetValueOrDefault() });
-
-			mocks.VerifyAll();
-		}
-
-
-		[Test]
 		public void VerifyOnEventScheduleDataMessageHandler()
 		{
 			Guid idFromBroker = Guid.NewGuid();

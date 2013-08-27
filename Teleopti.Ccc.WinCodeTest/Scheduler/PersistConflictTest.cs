@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var assPer = new Person { Name = new Name("roger", "moore") };
             var changedByPer = new Person { Name = new Name("hubba", "bubba") };
 
-            var ass = PersonDayOffFactory.CreatePersonDayOff(assPer, new Scenario("ffsdf"), new DateOnly(2000,1,2), new DayOffTemplate(new Description()));
+						var ass = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("ffsdf"), assPer, new DateOnly(2000, 1, 2), new DayOffTemplate(new Description()));
             ReflectionHelper.SetUpdatedBy(ass, changedByPer);
             conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(ass, null), ass.EntityClone(), eventMessage, removeMessage));
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var oneModelRow = model.Data.First();
             Assert.AreEqual("roger moore", oneModelRow.Name);
             Assert.AreEqual(new DateOnly(2000, 1, 1), oneModelRow.Date);
-            Assert.AreEqual(UserTexts.Resources.DayOff, oneModelRow.ConflictType);
+            Assert.AreEqual(UserTexts.Resources.Shift, oneModelRow.ConflictType);
             Assert.AreEqual("hubba bubba", oneModelRow.LastModifiedName);
         }
 
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyUndoClientChangesWhenModified()
         {
-            var pDayOff = PersonDayOffFactory.CreatePersonDayOff();
+            var pDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff();
             var dbData = pDayOff.EntityClone();
             conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(pDayOff, pDayOff.EntityClone()), dbData, eventMessage, removeMessage));
             ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, pDayOff);
@@ -208,13 +208,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             using(mocks.Record())
             {
                 Expect.Call(schedDic[pDayOff.Person]).Return(range);
-                range.UnsafeSnapshotUpdate(conflicts.First().DatabaseVersion, true);
+                range.SolveConflictBecauseOfExternalUpdate(conflicts.First().DatabaseVersion, true);
                 forgetAboutDebugAssertsOnMock(0);
                 view.CloseForm(true);
             }
             using(mocks.Playback())
             {
-                target.OnUndoClientChanges();
+                target.OnDiscardMyChanges();
             }
             Assert.AreEqual(0, eventMessages.Count);
             Assert.AreEqual(2, modifiedData.Count);
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyUndoClientChangesWhenDeletedInDatabase()
         {
-            var pDayOff = PersonDayOffFactory.CreatePersonDayOff();
+					var pDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff();
             pDayOff.SetId(Guid.NewGuid());
             conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(pDayOff, pDayOff.EntityClone()), null, eventMessage, removeMessage));
             ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, pDayOff);
@@ -233,13 +233,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             using (mocks.Record())
             {
                 Expect.Call(schedDic[pDayOff.Person]).Return(range);
-                range.UnsafeSnapshotDelete(conflicts.First().ClientVersion.OriginalItem.Id.Value, true);
+                range.SolveConflictBecauseOfExternalDeletion(conflicts.First().ClientVersion.OriginalItem.Id.Value, true);
                 forgetAboutDebugAssertsOnMock(0);
                 view.CloseForm(true);
             }
             using (mocks.Playback())
             {
-                target.OnUndoClientChanges();
+                target.OnDiscardMyChanges();
             }
             Assert.AreEqual(0, eventMessages.Count);
             Assert.AreEqual(1, modifiedData.Count);
@@ -249,8 +249,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyOverwriteServerChangesWhenModified()
         {
-            var dataOrg = (PersonDayOff)PersonDayOffFactory.CreatePersonDayOff();
-            var dataCurrent = (PersonDayOff)dataOrg.EntityClone();
+					var dataOrg = PersonAssignmentFactory.CreateAssignmentWithDayOff();
+            var dataCurrent = dataOrg.EntityClone();
             var dataDb = dataCurrent.EntityClone();
 
             conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(dataOrg, dataCurrent), dataDb, eventMessage, removeMessage));
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             using (mocks.Record())
             {
                 Expect.Call(schedDic[dataOrg.Person]).Return(range);
-                range.UnsafeSnapshotUpdate(dataDb, false);
+                range.SolveConflictBecauseOfExternalUpdate(dataDb, false);
                 forgetAboutDebugAssertsOnMock(1);
                 view.CloseForm(true);
             }
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyOverwriteServerChangesWhenDeletedOnClient()
         {
-            var dataOrg = (PersonDayOff)PersonDayOffFactory.CreatePersonDayOff();
+					var dataOrg = PersonAssignmentFactory.CreateAssignmentWithDayOff();
             var dataDb = dataOrg.EntityClone();
 
             conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(dataOrg, null), dataDb, eventMessage, removeMessage));
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             using (mocks.Record())
             {
                 Expect.Call(schedDic[dataOrg.Person]).Return(range);
-                range.UnsafeSnapshotUpdate(dataDb, false);
+                range.SolveConflictBecauseOfExternalUpdate(dataDb, false);
                 forgetAboutDebugAssertsOnMock(1);
                 view.CloseForm(true);
             }
@@ -299,9 +299,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyOverwriteServerChangesWhenDeletedOnDatabase()
         {
-            var dataOrg = (PersonDayOff)PersonDayOffFactory.CreatePersonDayOff();
-            ((IEntity)dataOrg).SetId(Guid.NewGuid());
-            var dataCurrent = (PersonDayOff)dataOrg.EntityClone();
+					var dataOrg = PersonAssignmentFactory.CreateAssignmentWithDayOff();
+            dataOrg.SetId(Guid.NewGuid());
+            var dataCurrent = dataOrg.EntityClone();
 
             conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(dataOrg, dataCurrent), null, eventMessage, removeMessage));
             ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, dataOrg);
@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             using (mocks.Record())
             {
                 Expect.Call(schedDic[dataOrg.Person]).Return(range);
-                range.UnsafeSnapshotDelete(dataOrg.Id.Value, false);
+                range.SolveConflictBecauseOfExternalDeletion(dataOrg.Id.Value, false);
                 forgetAboutDebugAssertsOnMock(1);
                 view.CloseForm(true);
             }
@@ -333,8 +333,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             {
                 target.OnCancel();
             }
-            CollectionAssert.IsEmpty(model.ModifiedData);
+            CollectionAssert.IsEmpty(model.ModifiedDataResult);
         }
+
         [Test, SetCulture("sv-SE")]
         public void VerifyOnQueryCellInfo()
         {

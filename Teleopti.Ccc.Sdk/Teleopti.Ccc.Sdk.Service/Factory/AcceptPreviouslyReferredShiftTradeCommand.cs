@@ -63,15 +63,13 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             }
             if (_serviceBusSender.EnsureBus())
             {
-                var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
-                _serviceBusSender.Send(new NewShiftTradeRequestCreated
-	                {
-		                BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
-		                Datasource = identity.DataSource.Application.Name,
-		                Timestamp = DateTime.UtcNow,
-		                PersonRequestId =
-			                _personRequestDto.Id.GetValueOrDefault(Guid.Empty)
-	                });
+	            var message = new NewShiftTradeRequestCreated
+		            {
+			            PersonRequestId =
+				            _personRequestDto.Id.GetValueOrDefault(Guid.Empty)
+		            };
+				message.SetMessageDetail();
+                _serviceBusSender.Send(message);
             }
         }
     }

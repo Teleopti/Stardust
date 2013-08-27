@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public IEnumerable<TimeLineViewModel> TimeLine { get; set; }
 		public bool AsmPermission { get; set; }
 		public bool IsCurrentWeek { get; set; }
+		public string DatePickerFormat { get; set; }
 	}
 
 	public class RequestPermission

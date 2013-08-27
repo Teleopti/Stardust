@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -49,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			
 			
 			scheduleDictionary.Stub(x => x[_person]).Return(_scheduleRange);
-			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null))
+			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null))
 							  .IgnoreArguments()
 							  .Return(scheduleDictionary);
 		}
@@ -57,7 +54,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldRaiseFullDayAbsenceAddedEvent()
 		{
-			var currentDataSource = new FakeCurrentDatasource("datasource");
 			var currentScenario = new FakeCurrentScenario();
 			_previousDay.Stub(x => x.Period)
 					   .Return(new DateOnlyPeriod(_previousDate, _previousDate).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
@@ -70,10 +66,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				};
 			_scheduleRange.Stub(
 				x => x.ScheduledDayCollection(new DateOnlyPeriod(new DateOnly(_dateTime).AddDays(-1), new DateOnly(_dateTime)))).Return(_scheduleDays);
-			_previousDay.Stub(x => x.PersonAssignmentCollectionDoNotUse())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			_firstDay.Stub(x => x.PersonAssignmentCollectionDoNotUse())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
+			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(null);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -83,13 +77,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				EndDate = new DateTime(2013, 3, 25),
 			};
 
-			var target = new AddFullDayAbsenceCommandHandler(currentDataSource, currentScenario, _personRepository,
+			var target = new AddFullDayAbsenceCommandHandler(currentScenario, _personRepository,
 															 _absenceRepository, _personAbsenceRepository, _scheduleRepository);
 			target.Handle(command);
 
 			var @event = _personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
-			@event.Datasource.Should().Be("datasource");
-			@event.BusinessUnitId.Should().Be(currentScenario.Current().BusinessUnit.Id.Value);
 			@event.AbsenceId.Should().Be(_absenceRepository.Single().Id.Value);
 			@event.PersonId.Should().Be(_personRepository.Single().Id.Value);
 			@event.ScenarioId.Should().Be(currentScenario.Current().Id.Value);
@@ -111,10 +103,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				};
 			_scheduleRange.Stub(
 				x => x.ScheduledDayCollection(new DateOnlyPeriod(new DateOnly(_dateTime).AddDays(-1), new DateOnly(_dateTime)))).Return(_scheduleDays);
-			_previousDay.Stub(x => x.PersonAssignmentCollectionDoNotUse())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			_firstDay.Stub(x => x.PersonAssignmentCollectionDoNotUse())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
+			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(null);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -124,8 +114,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				EndDate = new DateTime(2013, 3, 25),
 			};
 
-			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentDatasource(), new FakeCurrentScenario(),
-															 _personRepository, _absenceRepository, _personAbsenceRepository, _scheduleRepository);
+			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentScenario(), _personRepository, _absenceRepository,
+			                                                 _personAbsenceRepository, _scheduleRepository);
 			target.Handle(command);
 
 			var personAbsence = _personAbsenceRepository.Single();
@@ -152,10 +142,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				};
 			_scheduleRange.Stub(
 				x => x.ScheduledDayCollection(new DateOnlyPeriod(new DateOnly(_dateTime).AddDays(-1), new DateOnly(_dateTime)))).Return(_scheduleDays);
-			_previousDay.Stub(x => x.PersonAssignmentCollectionDoNotUse())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			_firstDay.Stub(x => x.PersonAssignmentCollectionDoNotUse())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
+			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(null);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -165,8 +153,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				EndDate = new DateTime(2013, 3, 25),
 			};
 
-			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentDatasource(), new FakeCurrentScenario(),
-															 _personRepository, _absenceRepository, _personAbsenceRepository, _scheduleRepository);
+			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentScenario(), _personRepository, _absenceRepository, _personAbsenceRepository, _scheduleRepository);
 			target.Handle(command);
 
 			var personAbsence = _personAbsenceRepository.Single();
@@ -200,11 +187,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var assignmentPeriod = new DateTimePeriod(assignmentStart, assignmentEnd);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assignmentPeriod);
 
-			var personAssignmentsList = new List<IPersonAssignment> { personAssignment };
-			var readOnlyCollection = new ReadOnlyCollection<IPersonAssignment>(personAssignmentsList);
-			_previousDay.Stub(x => x.PersonAssignmentCollectionDoNotUse()).Return(readOnlyCollection);
-			_firstDay.Stub(x => x.PersonAssignmentCollectionDoNotUse())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
+			_previousDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(null);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -214,9 +198,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				EndDate = new DateTime(2013, 3, 25),
 			};
 
-			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentDatasource(), new FakeCurrentScenario(),
-															 _personRepository, _absenceRepository, _personAbsenceRepository,
-															 _scheduleRepository);
+			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentScenario(), _personRepository, _absenceRepository,
+			                                                 _personAbsenceRepository, _scheduleRepository);
 			target.Handle(command);
 
 			var personAbsence = _personAbsenceRepository.Single();
@@ -250,11 +233,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var assignmentPeriod = new DateTimePeriod(assignmentStart, assignmentEnd);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assignmentPeriod);
 
-			var personAssignmentsList = new List<IPersonAssignment> { personAssignment };
-			var readOnlyCollection = new ReadOnlyCollection<IPersonAssignment>(personAssignmentsList);
-			_previousDay.Stub(x => x.PersonAssignmentCollectionDoNotUse())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			_firstDay.Stub(x => x.PersonAssignmentCollectionDoNotUse()).Return(readOnlyCollection);
+			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -264,9 +244,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				EndDate = new DateTime(2013, 3, 25),
 			};
 
-			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentDatasource(), new FakeCurrentScenario(),
-															 _personRepository, _absenceRepository, _personAbsenceRepository,
-															 _scheduleRepository);
+			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentScenario(), _personRepository, _absenceRepository,
+			                                                 _personAbsenceRepository, _scheduleRepository);
 			target.Handle(command);
 
 			var personAbsence = _personAbsenceRepository.Single();
@@ -299,11 +278,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var assignmentPeriod = new DateTimePeriod(assignmentStart, assignmentEnd);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assignmentPeriod);
 
-			var personAssignmentsList = new List<IPersonAssignment> { personAssignment };
-			var readOnlyCollection = new ReadOnlyCollection<IPersonAssignment>(personAssignmentsList);
-			_previousDay.Stub(x => x.PersonAssignmentCollectionDoNotUse())
-							.Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			_firstDay.Stub(x => x.PersonAssignmentCollectionDoNotUse()).Return(readOnlyCollection);
+			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -313,9 +289,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				EndDate = new DateTime(2013, 3, 25),
 			};
 
-			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentDatasource(), new FakeCurrentScenario(),
-															 _personRepository, _absenceRepository, _personAbsenceRepository,
-															 _scheduleRepository);
+			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentScenario(), _personRepository, _absenceRepository,
+			                                                 _personAbsenceRepository, _scheduleRepository);
 			target.Handle(command);
 
 			var personAbsence = _personAbsenceRepository.Single();
@@ -355,9 +330,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assignmentPeriod);
 			var personAssignmentOnSecondDay = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, new DateTimePeriod(assignmentStart.AddDays(1), assignmentEnd.AddDays(1).AddHours(2)));
 
-			_previousDay.Stub(x => x.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			_firstDay.Stub(x => x.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> {personAssignment}));
-			secondDay.Stub(x => x.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> {personAssignmentOnSecondDay}));
+			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
+			secondDay.Stub(x => x.PersonAssignment()).Return(personAssignmentOnSecondDay);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -367,9 +342,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				EndDate = new DateTime(2013, 3, 26),
 			};
 
-			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentDatasource(), new FakeCurrentScenario(),
-															 _personRepository, _absenceRepository, _personAbsenceRepository,
-															 _scheduleRepository);
+			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentScenario(), _personRepository, _absenceRepository,
+			                                                 _personAbsenceRepository, _scheduleRepository);
 			target.Handle(command);
 
 			var personAbsence = _personAbsenceRepository.Single();
@@ -408,9 +382,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var assignmentPeriod = new DateTimePeriod(assignmentStart, assignmentEnd);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assignmentPeriod);
 
-			_previousDay.Stub(x => x.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			_firstDay.Stub(x => x.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAssignment }));
-			secondDay.Stub(x => x.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
+			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
+			secondDay.Stub(x => x.PersonAssignment()).Return(null);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -420,9 +394,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				EndDate = new DateTime(2013, 3, 26),
 			};
 
-			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentDatasource(), new FakeCurrentScenario(),
-															 _personRepository, _absenceRepository, _personAbsenceRepository,
-															 _scheduleRepository);
+			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentScenario(), _personRepository, _absenceRepository,
+			                                                 _personAbsenceRepository, _scheduleRepository);
 			target.Handle(command);
 
 			var personAbsence = _personAbsenceRepository.Single();
@@ -461,9 +434,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var assignmentPeriod = new DateTimePeriod(assignmentStart, assignmentEnd);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assignmentPeriod);
 
-			_previousDay.Stub(x => x.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			_firstDay.Stub(x => x.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-			secondDay.Stub(x => x.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> {personAssignment}));
+			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(null);
+			secondDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -473,9 +446,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				EndDate = new DateTime(2013, 3, 26),
 			};
 
-			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentDatasource(), new FakeCurrentScenario(),
-															 _personRepository, _absenceRepository, _personAbsenceRepository,
-															 _scheduleRepository);
+			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentScenario(), _personRepository, _absenceRepository,
+			                                                 _personAbsenceRepository, _scheduleRepository);
 			target.Handle(command);
 
 			var personAbsence = _personAbsenceRepository.Single();

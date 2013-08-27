@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Transformer
@@ -44,21 +45,19 @@ namespace Teleopti.Analytics.Etl.Transformer
             if (schedulePart == null)
                 return dataRow;
 
-			IPersonDayOff personDayOff = extractDayOff(schedulePart);
+			var personDayOff = extractDayOff(schedulePart);
 
-            dataRow["date"] = personDayOff.DayOff.Anchor.Date;
-            dataRow["start_interval_id"] = new IntervalBase(personDayOff.DayOff.Anchor, intervalsPerDay).Id;
+            dataRow["date"] = personDayOff.Anchor.Date;
+            dataRow["start_interval_id"] = new IntervalBase(personDayOff.Anchor, intervalsPerDay).Id;
             dataRow["person_code"] = schedulePart.Person.Id;
             dataRow["scenario_code"] = schedulePart.Scenario.Id;
-            dataRow["starttime"] = personDayOff.DayOff.Anchor;
+            dataRow["starttime"] = personDayOff.Anchor;
             dataRow["day_off_code"] = DBNull.Value;
-            //dataRow["day_off_name"] = "CountDayOff"; //Get from domain
-            dataRow["day_off_name"] = personDayOff.DayOff.Description.Name; //Get from domain
-            dataRow["day_off_shortname"] = personDayOff.DayOff.Description.ShortName; //Get from domain
+            dataRow["day_off_name"] = personDayOff.Description.Name; //Get from domain
+            dataRow["day_off_shortname"] = personDayOff.Description.ShortName; //Get from domain
             dataRow["day_count"] = 1;
-            dataRow["business_unit_code"] = personDayOff.BusinessUnit.Id;
-            //dataRow["datasource_id"] = 1;
-			dataRow["datasource_update_date"] = RaptorTransformerHelper.GetUpdatedDate(personDayOff);
+            dataRow["business_unit_code"] = schedulePart.Scenario.BusinessUnit.Id;
+			dataRow["datasource_update_date"] = RaptorTransformerHelper.GetUpdatedDate(schedulePart.PersonAssignment());
 
             return dataRow;
         }
@@ -75,19 +74,18 @@ namespace Teleopti.Analytics.Etl.Transformer
             return false;
         }
 
-		private static IPersonDayOff extractDayOff(IScheduleDay scheduleDay)
+		private static IDayOff extractDayOff(IScheduleDay scheduleDay)
 		{
 			if(scheduleDay.SignificantPart() == SchedulePartView.ContractDayOff)
 			{
 				IDayOffTemplate template = new DayOffTemplate(new Description("ContractDayOff", "CD"));
 				template.Anchor = TimeSpan.FromHours(12);
-				IPersonDayOff dayOff = new PersonDayOff(scheduleDay.Person, scheduleDay.Scenario, template,
-				                                        scheduleDay.DateOnlyAsPeriod.DateOnly);
-				RaptorTransformerHelper.SetUpdatedOn(dayOff, new DateTime(2059, 12, 31));
-				return dayOff;
+				var tempAss = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, scheduleDay.DateOnlyAsPeriod.DateOnly);
+				tempAss.SetDayOff(template);
+				return tempAss.DayOff();
 			}
 
-			return scheduleDay.PersonDayOffCollection()[0];
+			return scheduleDay.PersonAssignment().DayOff();
 		}
     }
 }

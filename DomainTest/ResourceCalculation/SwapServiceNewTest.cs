@@ -4,12 +4,12 @@ using System.Data;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [SetUp]
         public void Setup()
         {
-             var timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
+             var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time");
             _mocks = new MockRepository();
             _scenario = new Scenario("hej");
             _dic = _mocks.StrictMock<IScheduleDictionary>();
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
             _dictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period));
-            IList<IPersonAssignment> assignments = new List<IPersonAssignment> {_p1D1.PersonAssignmentCollectionDoNotUse()[0]};
+            IList<IPersonAssignment> assignments = new List<IPersonAssignment> {_p1D1.PersonAssignment()};
         	((ScheduleRange)_dictionary[_person1]).AddRange(assignments);
             assignments = new List<IPersonAssignment>();
             ((ScheduleRange)_dictionary[_person2]).AddRange(assignments);
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var retList = service.Swap(_dictionary);
 
             Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
-            Assert.AreEqual(0, retList[0].PersonAssignmentCollectionDoNotUse().Count);
+						Assert.AreEqual(0, retList[0].PersonAssignment().MainLayers().Count());
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -160,15 +160,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_list = new List<IScheduleDay>();
 
-			_p1D1.Add(PersonDayOffFactory.CreatePersonDayOff(_person1, _scenario, new DateOnly(_d1.StartDateTime), TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12)));
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person1, new DateOnly(_d1.StartDateTime), TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12));
+			_p1D1.Add(dayOff);
 			
 			_list.Add(_p1D1);
 			_list.Add(_p2D1);
 
 			var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
 			_dictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period));
-			IList<IPersonDayOff> personDayOffs = new List<IPersonDayOff> {_p1D1.PersonDayOffCollection()[0]};
-			((ScheduleRange)_dictionary[_person1]).AddRange(personDayOffs);
+			((ScheduleRange)_dictionary[_person1]).Add(dayOff);
 			
 			IList<IPersonAssignment> personAssignments = new List<IPersonAssignment>();
 			((ScheduleRange)_dictionary[_person2]).AddRange(personAssignments);
@@ -176,8 +176,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var service = new SwapServiceNew();
 			service.Init(_list);
 			Assert.AreEqual("kalle", _list[0].Person.Name.LastName);
-			Assert.AreEqual(1, _list[0].PersonDayOffCollection().Count());
-
+			Assert.IsNotNull(_list[0].PersonAssignment().DayOff());
+		
 			using (_mocks.Record())
 			{
 				_mocks.BackToRecord(_dic);
@@ -187,8 +187,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var retList = service.Swap(_dictionary);
 
 			Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
-			Assert.AreEqual(0, retList[0].PersonDayOffCollection().Count);
-			Assert.AreEqual(1, retList[1].PersonDayOffCollection().Count);		
+			retList[0].HasDayOff().Should().Be.False();
+			retList[1].HasDayOff().Should().Be.True();		
 		}
 
         [Test, ExpectedException(typeof(ConstraintException))]
@@ -213,9 +213,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _dictionary = 
                 new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
                                        new DifferenceEntityCollectionService<IPersistableScheduleData>());
-            IList<IPersonAssignment> assignments = new List<IPersonAssignment> {_p1D1.PersonAssignmentCollectionDoNotUse()[0]};
+            IList<IPersonAssignment> assignments = new List<IPersonAssignment> {_p1D1.PersonAssignment()};
         	((ScheduleRange)_dictionary[_person1]).AddRange(assignments);
-            assignments = new List<IPersonAssignment> {_p2D1.PersonAssignmentCollectionDoNotUse()[0]};
+            assignments = new List<IPersonAssignment> {_p2D1.PersonAssignment()};
         	((ScheduleRange)_dictionary[_person2]).AddRange(assignments);
 
         }

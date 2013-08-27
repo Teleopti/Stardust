@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 
 
                 _p1D3 = ExtractedSchedule.CreateScheduleDay(_dictionary, _person1, new DateOnly(2009, 2, 3));
-                _p1D3.Add(PersonDayOffFactory.CreatePersonDayOff(_person1, _scenario, theFirstDate, dOff));
+								_p1D3.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person1, theFirstDate, dOff));
 
                 _p2D3 = ExtractedSchedule.CreateScheduleDay(_dictionary, _person2, new DateOnly(2009, 2, 3));
 				_p2D3.AddMainShift(EditableShiftFactory.CreateEditorShift(activity, _d3, category));
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
         public void ShouldNotReturnSlotOutsideWorkTime()
         {
             var wholePeriod = new DateTimePeriod(new DateTime(2009, 2, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2009, 2, 1, 17, 0, 0, DateTimeKind.Utc));
@@ -304,10 +304,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             var personAss = _mocks.StrictMock<IPersonAssignment>();
             Expect.Call(_dictionary[_person1]).Return(_range1);
             Expect.Call(_range1.ScheduledDay(dateOnly)).Return(day);
-            Expect.Call(day.PersonDayOffCollection()).Return(
-                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
-            Expect.Call(day.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> {personAss})).Repeat.Twice();
+            Expect.Call(day.HasDayOff()).Return(false);
+            Expect.Call(day.PersonAssignment()).Return(personAss).Repeat.Twice();
             Expect.Call(day.ProjectionService()).Return(projService);
             Expect.Call(projService.CreateProjection()).Return(layerCollection);
         	Expect.Call(layerCollection.FilterLayers<IAbsence>()).Return(filteredLayerCollection);
@@ -321,7 +319,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             _mocks.VerifyAll();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
         public void ShouldNotReturnSlotOutsideWorkTimeNotAllowMeeting()
         {
             var wholePeriod = new DateTimePeriod(new DateTime(2009, 2, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2009, 2, 1, 17, 0, 0, DateTimeKind.Utc));
@@ -351,10 +349,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             var personAss = _mocks.StrictMock<IPersonAssignment>();
             Expect.Call(_dictionary[_person1]).Return(_range1);
             Expect.Call(_range1.ScheduledDay(dateOnly)).Return(day);
-            Expect.Call(day.PersonDayOffCollection()).Return(
-                new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
-            Expect.Call(day.PersonAssignmentCollectionDoNotUse()).Return(
-                new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAss })).Repeat.Twice();
+            Expect.Call(day.HasDayOff()).Return(false);
+            Expect.Call(day.PersonAssignment()).Return(personAss).Repeat.Twice();
             Expect.Call(day.ProjectionService()).Return(projService);
             Expect.Call(projService.CreateProjection()).Return(layerCollection);
             Expect.Call(layerCollection.FilterLayers<IAbsence>()).Return(filteredLayerCollection);

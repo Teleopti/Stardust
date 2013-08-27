@@ -11417,6 +11417,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Please select at least one of the options "Same shift category", "Same start time" or "Same shift" in Block Optimization.</value>
     <comment>Block optimization</comment>
   </data>
+  <data name="HourShort" xml:space="preserve">
+    <value>h</value>
+    <comment>Hour in short description</comment>
+  </data>
   <data name="ConfirmRemoval" xml:space="preserve">
     <value>Confirm removal</value>
     <comment>Confirm removal</comment>
@@ -11663,5 +11667,28 @@ Reduce the complexity to use these shifts.</value>
   <data name="ResUnfulfilled" xml:space="preserve">
     <value>Unfulfilled</value>
     <comment>Unfulfilled</comment>
+  </data>
+  <data name="SwitchToViewPointOfSelectedAgent" xml:space="preserve">
+    <value>Switch to View Point of Selected Agent</value>
+  </data>
+  <data name="ShareCalendar" xml:space="preserve">
+    <value>Share Calendar</value>
+    <comment>Share Calendar</comment>
+  </data>
+  <data name="ShareMyCalendar" xml:space="preserve">
+    <value>Share my calendar</value>
+    <comment>Share my calendar</comment>
+  </data>
+  <data name="Revoke" xml:space="preserve">
+    <value>Revoke</value>
+    <comment>Revoke sharing my calendar</comment>
+  </data>
+  <data name="ShareMyCalendarHint" xml:space="preserve">
+    <value>Copy/Paste following URL, and add this URL to Outlook or Google calendar, etc.</value>
+    <comment>Copy/Paste following URL, and add this URL to Outlook or Google calendar, etc.</comment>
+  </data>
+  <data name="SendAgain" xml:space="preserve">
+    <value>Send again</value>
+    <comment>Send again (ie. shifttrade)</comment>
   </data>
 </root>

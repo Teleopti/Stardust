@@ -600,16 +600,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             ITaskOwner taskOwnerMock = mocks.StrictMock<ITaskOwner>();
 
-            bool value = false;
-            //Expect.Call(taskOwnerMock.IsClosed).Return(value).Repeat.Once();
-            Expect.Call(taskOwnerMock.OpenForWork).Return(new OpenForWork(){IsOpen = false , IsOpenForIncomingWork = false}).Repeat.Twice();
+            Expect.Call(taskOwnerMock.OpenForWork).Return(new OpenForWork());
 
             mocks.ReplayAll();
 
             target.TaskOwner = taskOwnerMock;
 
-            //Assert.AreEqual(value, target.IsClosed);
-            Assert.AreEqual(value, target.OpenForWork.IsOpen);
+            Assert.IsFalse(target.OpenForWork.IsOpen);
         }
 
         /// <summary>
@@ -624,14 +621,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             ITaskOwner taskOwnerMock = mocks.StrictMock<ITaskOwner>();
 
-            bool value = false;
-            Expect.Call(taskOwnerMock.IsLocked).Return(value).Repeat.Once();
+            Expect.Call(taskOwnerMock.IsLocked).Return(false).Repeat.Once();
 
             mocks.ReplayAll();
 
             target.TaskOwner = taskOwnerMock;
 
-            Assert.AreEqual(value, target.IsLocked);
+            Assert.IsFalse(target.IsLocked);
         }
 
         /// <summary>

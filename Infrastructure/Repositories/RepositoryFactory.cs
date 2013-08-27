@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -66,20 +67,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public IPersonAbsenceAccountRepository CreatePersonAbsenceAccountRepository(IUnitOfWork unitOfWork)
         {
             return new PersonAbsenceAccountRepository(unitOfWork);
-        }
-
-        /// <summary>
-        /// Creates the person day off repository.
-        /// </summary>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2009-08-27
-        /// </remarks>
-        public IPersonDayOffRepository CreatePersonDayOffRepository(IUnitOfWork unitOfWork)
-        {
-            return new PersonDayOffRepository(unitOfWork);
         }
 
         /// <summary>
@@ -282,9 +269,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new RtaStateGroupRepository(unitOfWork);
         }
 
-        public IDayOffRepository CreateDayOffRepository(IUnitOfWork unitOfWork)
+        public IDayOffTemplateRepository CreateDayOffRepository(IUnitOfWork unitOfWork)
         {
-            return new DayOffRepository(unitOfWork);
+            return new DayOffTemplateRepository(unitOfWork);
         }
 
         public IMeetingRepository CreateMeetingRepository(IUnitOfWork unitOfWork)
@@ -422,9 +409,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new RequestHistoryReadOnlyRepository(unitOfWork);
         }
 
-        public IAgentDayScheduleTagRepository CreateAgentDayScheduleTagRepository(IUnitOfWork unitOfWork)
+	    public IAgentDayScheduleTagRepository CreateAgentDayScheduleTagRepository(IUnitOfWork unitOfWork)
         {
             return new AgentDayScheduleTagRepository(unitOfWork);
         }
+
+		public IPersonScheduleDayReadModelFinder CreatePersonScheduleDayReadModelFinder(IUnitOfWork unitOfWork)
+		{
+			return new PersonScheduleDayReadModelFinder(unitOfWork);
+		}
+
+	    public IPersonalSettingDataRepository CreatePersonalSettingDataRepository(IUnitOfWork unitOfWork)
+	    {
+			return new PersonalSettingDataRepository(unitOfWork);
+	    }
     }
 }

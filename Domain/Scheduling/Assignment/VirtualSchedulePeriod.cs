@@ -168,27 +168,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public TimeSpan AverageWorkTimePerDay
 		{
-			get
-			{
-				if (!IsValid)
-					return new TimeSpan();
-                if (_schedulePeriod.IsPeriodTimeOverride)
-					{
-						double periodTime = _schedulePeriod.PeriodTime.Value.TotalMinutes; //PeriodTime will NOT be null, as we check for PeriodTimeOverride
-						int schedulePeriodWorkdays = SchedulePeriodWorkdays();
-						double periodMinutes = periodTime / schedulePeriodWorkdays;
-						return TimeSpan.FromMinutes(periodMinutes);
-					}
-					if (_schedulePeriod.IsAverageWorkTimePerDayOverride)
-						return _schedulePeriod.AverageWorkTimePerDay;
-				return _personContract.AverageWorkTimePerDay;
-			}
+		    get
+		    {
+		        if (!IsValid)
+		            return TimeSpan.Zero;
+		        if (_schedulePeriod.IsPeriodTimeOverride)
+		        {
+		            double periodTime = _schedulePeriod.PeriodTime.Value.TotalMinutes;
+		                //PeriodTime will NOT be null, as we check for PeriodTimeOverride
+		            int schedulePeriodWorkdays = this.schedulePeriodWorkdays();
+		            double periodMinutes = 0;
+		            if (schedulePeriodWorkdays > 0)
+		            {
+		                periodMinutes = periodTime/schedulePeriodWorkdays;
+		            }
+		            return TimeSpan.FromMinutes(periodMinutes);
+		        }
+		        if (_schedulePeriod.IsAverageWorkTimePerDayOverride)
+		            return _schedulePeriod.AverageWorkTimePerDay;
+		        return _personContract.AverageWorkTimePerDay;
+		    }
 		}
 
 		public TimeSpan PeriodTarget()
 		{
 			if (!IsValid)
-				return new TimeSpan();
+                return TimeSpan.Zero;
 
 			int workDays = Workdays();
 			double minutes = Math.Round(AverageWorkTimePerDay.TotalMinutes * workDays, 0);
@@ -230,7 +235,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return workDays;
         }
 
-		public int SchedulePeriodWorkdays()
+        private int schedulePeriodWorkdays()
 		{
 			DateOnlyPeriod? totalPeriod = SchedulePeriodPeriod();
 			if (!totalPeriod.HasValue)

@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Messages.Denormalize;
 
@@ -27,17 +28,14 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				throw new FaultException("The outgoing queue for the service bus is not available. Cannot continue with the denormalizer.");
 			}
 
-			var identity = (ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity;
 			var message = new ScheduleChangedEvent
 			              	{
-			              		BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
-			              		Datasource = identity.DataSource.Application.Name,
-			              		Timestamp = DateTime.UtcNow,
 			              		StartDateTime = DateTime.SpecifyKind(command.StartDateTime, DateTimeKind.Utc),
 			              		EndDateTime = DateTime.SpecifyKind(command.EndDateTime, DateTimeKind.Utc),
 			              		ScenarioId = command.ScenarioId,
 			              		PersonId = command.PersonId
 			              	};
+			message.SetMessageDetail();
 
 			_busSender.Send(message);
 

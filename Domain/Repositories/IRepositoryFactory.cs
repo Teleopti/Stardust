@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -48,17 +49,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// <param name="unitOfWork">The unit of work.</param>
         /// <returns></returns>
         IPersonAbsenceAccountRepository CreatePersonAbsenceAccountRepository(IUnitOfWork unitOfWork);
-
-        /// <summary>
-        /// Creates the person day off repository.
-        /// </summary>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2009-08-27
-        /// </remarks>
-        IPersonDayOffRepository CreatePersonDayOffRepository(IUnitOfWork unitOfWork);
 
         /// <summary>
         /// Creates the scenario repository.
@@ -271,7 +261,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// Created by: Madhuranga Pinnagoda
         /// Created date: 2008-11-25
         /// </remarks>
-        IDayOffRepository CreateDayOffRepository(IUnitOfWork unitOfWork);
+        IDayOffTemplateRepository CreateDayOffRepository(IUnitOfWork unitOfWork);
 
         /// <summary>
         /// Creates the meeting repository.
@@ -489,6 +479,8 @@ namespace Teleopti.Ccc.Domain.Repositories
         ILicenseStatusRepository CreateLicenseStatusRepository(IUnitOfWork unitOfWork);
         ILicenseRepository CreateLicenseRepository(IUnitOfWork unitOfWork);
         IRequestHistoryReadOnlyRepository CreateRequestHistoryReadOnlyRepository(IStatelessUnitOfWork unitOfWork);
+	IPersonScheduleDayReadModelFinder CreatePersonScheduleDayReadModelFinder(IUnitOfWork unitOfWork);
         IOvertimeAvailabilityRepository CreateOvertimeAvailabilityRepository(IUnitOfWork unitOfWork);
+	IPersonalSettingDataRepository CreatePersonalSettingDataRepository(IUnitOfWork unitOfWork);
     }
 }

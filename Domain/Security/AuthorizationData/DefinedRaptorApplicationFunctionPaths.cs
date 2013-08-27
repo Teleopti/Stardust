@@ -112,6 +112,7 @@
 		public const string AgentScheduleMessenger = "Raptor/MyTimeWeb/AgentScheduleMessenger";
 		public const string ExtendedPreferencesWeb = "Raptor/MyTimeWeb/ExtendedPreferences";
 		public const string ShiftTradeRequestsWeb = "Raptor/MyTimeWeb/ShiftTradeRequests";
+		public const string ShareCalendar = "Raptor/MyTimeWeb/ShareCalendar";
 
 		// Anywhere
 		public const string SchedulesAnywhere = "Raptor/Anywhere/Schedules";

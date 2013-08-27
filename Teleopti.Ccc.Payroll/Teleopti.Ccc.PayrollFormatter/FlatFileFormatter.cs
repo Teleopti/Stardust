@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.PayrollFormatter
             var documentElement = navigator.SelectSingleNode("//" + documentFormat.Element);
 
             var memoryStream = new MemoryStream();
-            StreamWriter streamWriter = new StreamWriter(memoryStream, documentFormat.Encoding);
+            var streamWriter = new StreamWriter(memoryStream, documentFormat.Encoding);
 
             if (documentFormat.HeaderEnabled)
             {
@@ -23,14 +23,14 @@ namespace Teleopti.Ccc.PayrollFormatter
             var itemElements = documentElement.SelectDescendants(documentFormat.ItemsElement, string.Empty, false);
             while (itemElements.MoveNext())
             {
-                StringBuilder rowBuilder = new StringBuilder();
+                var rowBuilder = new StringBuilder();
                 foreach (var item in documentFormat.Items)
                 {
                     var itemNode = itemElements.Current.SelectSingleNode("./" + item.Element);
                     if (documentFormat.DocumentFormatType == DocumentFormatType.Csv && rowBuilder.Length > 0)
                         rowBuilder.Append(documentFormat.ItemSeparator);
 
-                    string formattedNodeValue = FormatNodeValue(item, itemNode == null ? string.Empty : itemNode.Value);
+                    var formattedNodeValue = FormatNodeValue(item, itemNode == null ? string.Empty : itemNode.Value);
                     rowBuilder.Append(formattedNodeValue);
                 }
 

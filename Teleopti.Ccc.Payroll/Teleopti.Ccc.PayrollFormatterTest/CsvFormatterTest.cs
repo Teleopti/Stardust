@@ -19,17 +19,18 @@ namespace Teleopti.Ccc.PayrollFormatterTest
         [Test]
         public void VerifyBasicCsvExport()
         {
-            XmlDocument document = new XmlDocument();
+            var document = new XmlDocument();
             document.Load("BasicCsvExport.xml");
 
-            DocumentFormat format = DocumentFormat.LoadFromXml(document);
-            Stream result = target.Format(document, format);
+            var format = DocumentFormat.LoadFromXml(document);
+            var result = target.Format(document, format);
             result.Position = 0;
 
-            StreamReader streamReader = new StreamReader(result, format.Encoding);
-            string content = streamReader.ReadToEnd();
+            var streamReader = new StreamReader(result, format.Encoding);
+            var content = streamReader.ReadToEnd();
+	        var fileContent = File.ReadAllText("BasicCsvExportResult.txt").Replace("\r", "");
 
-            Assert.AreEqual(File.ReadAllText("BasicCsvExportResult.txt").Replace("\r",""),content);
+            Assert.AreEqual(fileContent,content);
             Assert.AreEqual("txt",target.FileSuffix);
         }
     }

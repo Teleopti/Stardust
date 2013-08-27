@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public Div MeetingAndPersonalShiftIndicationForDate(DateTime date)
 		{
-			return CalendarCellForDate(date).Div(QuicklyFind.ByClass("meeting-small")).EventualGet();
+			return CalendarCellForDate(date).Div(QuicklyFind.ByClass("icon-user")).EventualGet();
 		}
 
 		public Div MeetingAndPersonalShiftTooltipForDate(DateTime date)

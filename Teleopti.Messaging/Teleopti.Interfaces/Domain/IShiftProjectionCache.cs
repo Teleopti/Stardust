@@ -73,7 +73,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="personAssignments">The person assignments.</param>
         /// <returns></returns>
         bool PersonalShiftsAndMeetingsAreInWorkTime(ReadOnlyCollection<IPersonMeeting> meetings,
-                                                    ReadOnlyCollection<IPersonAssignment> personAssignments);
+                                                    IPersonAssignment personAssignment);
 
         /// <summary>
         /// Get the Shift Category Justice Value for the day in the week.

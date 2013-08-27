@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
     [TestFixture]
     public class SerializationHelperTest
     {
-        //[Ignore("Henry, Roger. Varför skulle inte detta funka nu då")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         [Test] 
         public void VerifySerializeXml()
@@ -20,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
             Assert.IsNotEmpty(xml);
         }
 
-        //[Ignore("Henry, Roger. Varför skulle inte detta funka nu då")]
         [Test] 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void VerifyDeserializeXml()
@@ -36,11 +34,11 @@ namespace Teleopti.Ccc.DomainTest.Helper
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void VerifySerializeAndDeserializeBinary()
         {
-            TimeZoneInfo TimeZoneInfo = (TimeZoneInfo.Utc);
+            TimeZoneInfo TimeZoneInfo = TimeZoneInfo.Utc;
             byte[] serializedValue = SerializationHelper.SerializeAsBinary(TimeZoneInfo);
             Assert.Greater(serializedValue.Length,0);
-            TimeZoneInfo = SerializationHelper.Deserialize<TimeZoneInfo>(serializedValue);
-            Assert.AreEqual(TimeZoneInfo.Utc.Id, TimeZoneInfo.Utc.Id);
+            var timeZoneInfo = SerializationHelper.Deserialize<TimeZoneInfo>(serializedValue);
+            Assert.AreEqual(TimeZoneInfo.Utc.Id, timeZoneInfo.Id);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible", Justification = "This should only be used for this test!")]
