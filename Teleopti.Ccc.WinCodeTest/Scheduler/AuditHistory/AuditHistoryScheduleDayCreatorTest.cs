@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -23,7 +24,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
         private DateTimePeriod _rangePeriod;
         private IPersonAbsence _abs;
         private IPersonAssignment _ass1;
-        private IPersonDayOff _pDayOff;
         private IPersonMeeting _personMeeting;
         private IScenario _scenario;
         private IScheduleDictionary _dic;
@@ -74,16 +74,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
 			DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
 			dayOff.Anchor = TimeSpan.FromHours(12);
 			dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
-			
-			_pDayOff = new PersonDayOff(_parameters.Person, _parameters.Scenario,
-										dayOff, new DateOnly(_parameters.Period.StartDateTime.Date));
-
-            _currentScheduleDay.Add(_pDayOff);
 
             _newData = new List<IPersistableScheduleData>();
             _newData.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_parameters.Scenario, _parameters.Person,_parameters.Period));	
             _newData.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario, _parameters.Period));
-            _newData.Add(PersonDayOffFactory.CreatePersonDayOff(_person, _scenario, new DateOnly(2000, 1, 1), new DayOffTemplate(new Description("Hej"))));
         }
 
         [Test]
@@ -99,8 +93,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
                 result = _target.Create(_currentScheduleDay, new List<IPersistableScheduleData>());
             }
 
-            Assert.AreEqual(0, result.PersonAssignmentCollectionDoNotUse().Count);
-            Assert.AreEqual(1, _currentScheduleDay.PersonAssignmentCollectionDoNotUse().Count);
+	        result.PersonAssignment().Should().Be.Null();
+					_currentScheduleDay.PersonAssignment().Should().Not.Be.Null();
         }
 
         [Test]
@@ -120,22 +114,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
             Assert.AreEqual(1, _currentScheduleDay.PersonAbsenceCollection().Count);
         }
 
-        [Test]
-        public void ShouldEmptyDaysOff()
-        {
-            using (_mocks.Record())
-            {
-
-            }
-            IScheduleDay result;
-            using (_mocks.Playback())
-            {
-                result = _target.Create(_currentScheduleDay, new List<IPersistableScheduleData>());
-            }
-
-            Assert.AreEqual(0, result.PersonDayOffCollection().Count);
-            Assert.AreEqual(1, _currentScheduleDay.PersonDayOffCollection().Count);
-        }
 
         [Test]
         public void ShouldAddNewPersonAssignments()
@@ -150,7 +128,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
                 result = _target.Create(_currentScheduleDay, _newData);
             }
 
-            Assert.AreEqual(1, result.PersonAssignmentCollectionDoNotUse().Count);
+						result.PersonAssignment().Should().Not.Be.Null();
         }
 
 		[Test]
@@ -192,21 +170,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
             Assert.AreEqual(1, result.PersonAbsenceCollection().Count);
         }
 
-        [Test]
-        public void ShouldAddNewDaysOff()
-        {
-            using (_mocks.Record())
-            {
-
-            }
-            IScheduleDay result;
-            using (_mocks.Playback())
-            {
-                result = _target.Create(_currentScheduleDay, _newData);
-            }
-
-            Assert.AreEqual(1, result.PersonDayOffCollection().Count);
-        }
 
 		[Test]
 		public void ShouldSkipDataStartingOutsideCurrentDay()
@@ -215,7 +178,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
 			_newData.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_parameters.Scenario, _parameters.Person, _parameters.Period.ChangeStartTime(TimeSpan.FromDays(-1))));
 
 			var result = _target.Create(_currentScheduleDay, _newData);
-			Assert.AreEqual(0, result.PersonAssignmentCollectionDoNotUse().Count);
+			result.PersonAssignment().Should().Be.Null();
 		}	
     }
 }

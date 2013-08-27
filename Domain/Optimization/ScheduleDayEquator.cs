@@ -36,10 +36,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private bool checkMainShiftEqual(IScheduleDay original, IScheduleDay current)
         {
-            if (original.PersonDayOffCollection().Count > 0 && current.PersonDayOffCollection().Count == 0)
+					//mycket märkligt här... gör bara som det var förrut. fattar inte.
+	        var originalHasDayOff = original.HasDayOff();
+	        var currentHasDayOff = current.HasDayOff();
+            if (originalHasDayOff && !currentHasDayOff)
                 return true;
 
-            if (original.PersonDayOffCollection().Count > 0 && current.PersonDayOffCollection().Count > 0)
+            if (originalHasDayOff && currentHasDayOff)
                 return true;
 
             if (original.SignificantPart() == SchedulePartView.MainShift && current.SignificantPart() == SchedulePartView.DayOff)
@@ -117,10 +120,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 ILayer<IActivity> originalLayer = original.LayerCollection[layerIndex];
                 ILayer<IActivity> currentLayer = current.LayerCollection[layerIndex];
-                //if (!originalLayer.Period.StartDateTime.TimeOfDay.Equals(currentLayer.Period.StartDateTime.TimeOfDay))
-                //    return false;
-                //if (!originalLayer.Period.EndDateTime.TimeOfDay.Equals(currentLayer.Period.EndDateTime.TimeOfDay))
-                //    return false;
                 if (!originalLayer.Payload.Equals(currentLayer.Payload))
                     return false;
             }
@@ -137,13 +136,17 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (original.SignificantPart() == SchedulePartView.DayOff && current.SignificantPart() == SchedulePartView.DayOff)
                 return true;
 
-            if (original.PersonDayOffCollection().Count > 0 && current.PersonDayOffCollection().Count > 0)
+						//mycket märkligt här... gör bara som det var förrut. fattar inte.
+						var originalHasDayOff = original.HasDayOff();
+						var currentHasDayOff = current.HasDayOff();
+
+            if (originalHasDayOff && currentHasDayOff)
                 return true;
 
-            if (original.PersonDayOffCollection().Count == 0 && current.PersonDayOffCollection().Count == 0)
+            if (!originalHasDayOff && !currentHasDayOff)
                 return true;
 
-            if (original.PersonDayOffCollection().Count > 0 && current.PersonDayOffCollection().Count == 0)
+            if (originalHasDayOff && !currentHasDayOff)
                 return true;
 
             return false;

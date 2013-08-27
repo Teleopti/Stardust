@@ -240,8 +240,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 {
                     foreach (var dictionary in content)
                     {
-                        if(utcPeriod.Contains(dictionary.Key))
-                            skillStaffPeriods.Add(dictionary.Value);
+	                    if (dictionary.Key.EndDateTime <= utcPeriod.StartDateTime) continue;
+	                    if (dictionary.Key.StartDateTime >= utcPeriod.EndDateTime) continue;
+
+                        skillStaffPeriods.Add(dictionary.Value);
                     }
                 }
             }
@@ -260,8 +262,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					var newDictionary = new SkillStaffPeriodDictionary(skill);
 					foreach (var dictionary in content)
 					{
-						if (utcPeriod.Contains(dictionary.Key))
-							newDictionary.Add(dictionary.Key, dictionary.Value);
+						if (dictionary.Key.EndDateTime <= utcPeriod.StartDateTime) continue;
+						if (dictionary.Key.StartDateTime >= utcPeriod.EndDateTime) continue;
+						
+						newDictionary.Add(dictionary.Key, dictionary.Value);
 					}
 					if(newDictionary.Count > 0 )
 						skillStaffPeriods.Add(skill, newDictionary);
@@ -359,12 +363,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     	}
 
     	private static IList<ISkillStaffPeriod> SortedPeriods(IEnumerable<ISkillStaffPeriod> periodsToSort)
-        {
-            var temp = from p in periodsToSort
-                       orderby p.Period.StartDateTime
-                       select p;
-            IList<ISkillStaffPeriod> sortedPeriods = temp.ToList();
-            return sortedPeriods;
+    	{
+    		return periodsToSort.OrderBy(p => p.Period.StartDateTime).ToList();
         }
 
         private static void HandleAggregate(KeyValuePair<DateTimePeriod, IList<ISkillStaffPeriod>> keyValuePair, IAggregateSkillStaffPeriod aggregate, ISkillStaffPeriod staffPeriod, IAggregateSkillStaffPeriod asAgg)

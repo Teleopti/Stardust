@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<CurrentUnitOfWork>().As<ICurrentUnitOfWork>().SingleInstance();
 			builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
-			builder.RegisterType<RunSql>().As<IRunSql>().SingleInstance();
 
 			builder.RegisterType<CurrentDataSource>().As<ICurrentDataSource>().SingleInstance();
 			builder.Register(c => c.Resolve<ICurrentDataSource>().Current())

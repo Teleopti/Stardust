@@ -23,16 +23,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             var timelineSpan = new DateDateTimePeriodDictionary();
             DateTime start = schedulePart.Period.StartDateTimeLocal(schedulePart.TimeZone).Date.AddHours(8);
             DateTime end = schedulePart.Period.StartDateTimeLocal(schedulePart.TimeZone).Date.AddHours(17);
+	        IPersonAssignment personAssignment;
 
             switch (schedulePart.SignificantPartForDisplay())
             {
                 case SchedulePartView.MainShift:
-                    var personAssignmentCollection = schedulePart.PersonAssignmentCollectionDoNotUse();
-                    if (personAssignmentCollection.Count > 0)
-                    {
-                        start = personAssignmentCollection.Min(p => p.Period.StartDateTimeLocal(schedulePart.TimeZone));
-                        end = personAssignmentCollection.Max(p => p.Period.EndDateTimeLocal(schedulePart.TimeZone));
-                    }
+                    personAssignment = schedulePart.PersonAssignment();
+		            start = personAssignment.Period.StartDateTimeLocal(schedulePart.TimeZone);
+		            end = personAssignment.Period.EndDateTimeLocal(schedulePart.TimeZone);
                     break;
 				case SchedulePartView.ContractDayOff:
                 case SchedulePartView.FullDayAbsence:
@@ -44,9 +42,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     }
                     break;
                 case SchedulePartView.PersonalShift:
-                    var layer = (from personAssignment in schedulePart.PersonAssignmentCollectionDoNotUse()
-                                          from l in personAssignment.PersonalLayers()
-                                          select l).FirstOrDefault();
+					personAssignment = schedulePart.PersonAssignment();
+		            var layer = personAssignment.PersonalLayers().FirstOrDefault();
                     if (layer != null)
                     {
                         start = layer.Period.StartDateTimeLocal(schedulePart.TimeZone);

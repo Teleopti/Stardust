@@ -142,25 +142,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
             ChangeOpenHours(openHours);
         }
 
-        /// <summary>
-        /// Gets a value indicating whether [_is closed].
-        /// </summary>
-        /// <value><c>true</c> if [_is closed]; otherwise, <c>false</c>.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-01-23
-        /// </remarks>
-        //private bool _isClosed
-        private IOpenForWork _isClosed
+        private OpenForWork _isClosed
         {
             get
             {
-                var open = new OpenForWork()
-                {
-                    IsOpen = !(_openHourList.Count == 0 || (_openHourList.Count == 1 && _openHourList[0].SpanningTime() == TimeSpan.Zero)),
-                };
-                open.IsOpenForIncomingWork = open.IsOpen || IsEmailWorkload;
-                return open;
+	            var isOpen =
+		            !(_openHourList.Count == 0 ||
+		              (_openHourList.Count == 1 && _openHourList[0].SpanningTime() == TimeSpan.Zero));
+
+				return new OpenForWork(isOpen,isOpen || IsEmailWorkload);
             }
         }
 
@@ -407,16 +397,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this instance is closed.
-        /// </summary>
-        /// <value><c>true</c> if this instance is closed; otherwise, <c>false</c>.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 11/28/2007
-        /// </remarks>
-        //public virtual bool IsClosed
-        public virtual IOpenForWork OpenForWork
+        public virtual OpenForWork OpenForWork
         {
             get { return _isClosed; }
         }

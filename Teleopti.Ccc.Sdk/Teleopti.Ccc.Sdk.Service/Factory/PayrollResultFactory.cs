@@ -31,18 +31,15 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
             if (_serviceBusSender.EnsureBus())
             {
-                var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
                 var message = new RunPayrollExport
                                   {
-                                      BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
-                                      Datasource = identity.DataSource.Application.Name,
-                                      Timestamp = DateTime.UtcNow,
                                       PayrollExportId = payrollExport.Id.GetValueOrDefault(Guid.Empty),
                                       OwnerPersonId = ((IUnsafePerson)TeleoptiPrincipal.Current).Person.Id.GetValueOrDefault(Guid.Empty),
                                       ExportPeriod = new DateOnlyPeriod(new DateOnly(payrollExport.DatePeriod.StartDate.DateTime), new DateOnly(payrollExport.DatePeriod.EndDate.DateTime)),
                                       PayrollExportFormatId = payrollExport.PayrollFormat.FormatId,
                                       PayrollResultId = payrollResultId
                                   };
+				message.SetMessageDetail();
                 if (payrollExport.ExportPersonCollection == null || payrollExport.ExportPersonCollection.Count==0)
                 {
                     message.ExportPersonIdCollection =

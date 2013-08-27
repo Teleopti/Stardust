@@ -266,9 +266,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
         	var startTimeLimitation = new StartTimeLimitation(null, null);
             var endTimeLimitation = new EndTimeLimitation(null, null);
             var workTimeLimitation = new WorkTimeLimitation(null, null);
-            IDayOffTemplate dayOffTemplate =
-                new DayOffTemplate(schedulePart.PersonDayOffCollection()[0].DayOff.Description);
-            dayOffTemplate.SetTargetAndFlexibility(schedulePart.PersonDayOffCollection()[0].DayOff.TargetLength, schedulePart.PersonDayOffCollection()[0].DayOff.Flexibility);
+	        var dayOff = schedulePart.PersonAssignment().DayOff();
+            IDayOffTemplate dayOffTemplate = new DayOffTemplate(dayOff.Description);
+            dayOffTemplate.SetTargetAndFlexibility(dayOff.TargetLength, dayOff.Flexibility);
 
             IEffectiveRestriction totalRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
                                                                               new WorkTimeLimitation(), null, null, null,
@@ -277,8 +277,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
             totalRestriction =
                 totalRestriction.Combine(new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, null,
                                                                   dayOffTemplate, null, new List<IActivityRestriction>()));
-            cellData.DisplayName = schedulePart.PersonDayOffCollection()[0].DayOff.Description.Name;
-            cellData.DisplayShortName = schedulePart.PersonDayOffCollection()[0].DayOff.Description.ShortName;
+            cellData.DisplayName = dayOff.Description.Name;
+            cellData.DisplayShortName = dayOff.Description.ShortName;
             cellData.HasDayOff = true;
             cellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(dayOffTemplate.TargetLength, CurrentCultureInfo());
             return totalRestriction;

@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [Test]
         public void VerifyProperties()
         {
-            Assert.AreEqual(2, target.PersonCollection.Count);
             Assert.AreEqual(period, target.VisiblePeriod);
             Assert.AreSame(calc, target.RangeToLoadCalculator);
         }
@@ -43,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         public void VerifyConstructorWithNoPerson()
         {
             target = new ScheduleDateTimePeriod(period);
-            Assert.AreEqual(0, target.PersonCollection.Count);
             Assert.AreEqual(period, target.VisiblePeriod);
             Assert.AreEqual(period, target.LoadedPeriod());
             Assert.IsInstanceOf<SchedulerRangeToLoadCalculator>(target.RangeToLoadCalculator);
@@ -54,7 +52,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         public void VerifyDefaultConstructor()
         {
             target = new ScheduleDateTimePeriod(period, persons);
-            Assert.AreEqual(2, target.PersonCollection.Count);
             Assert.AreEqual(period, target.VisiblePeriod);
             Assert.AreEqual(period, target.LoadedPeriod());
             Assert.IsInstanceOf<SchedulerRangeToLoadCalculator>(target.RangeToLoadCalculator);

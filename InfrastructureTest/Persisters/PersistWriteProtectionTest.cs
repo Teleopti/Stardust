@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 {
 	public class PersistWriteProtectionTest : ScheduleScreenPersisterIntegrationTest
 	{
-		protected override IPersistableScheduleData MakeScheduleData()
+		protected override IPersistableScheduleData SetupScheduleData()
 		{
 			return new Note(Person, FirstDayDateOnly, Scenario, "sdf");
 		}

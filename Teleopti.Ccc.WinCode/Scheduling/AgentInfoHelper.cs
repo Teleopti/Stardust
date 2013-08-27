@@ -25,8 +25,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private TimeSpan _currentContractTime;
         private TimeSpan _currentWorkTime;
         private TimeSpan _currentPaidTime;
-        //private TimeSpan _currentOvertime;
-        //private TimeSpan _currentShiftAllowanceTime;
         private int _currentOccupiedSlots;
         private DateOnlyPeriod? _period;
         private IVirtualSchedulePeriod _schedulePeriod;
@@ -111,11 +109,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             get { return _currentPaidTime; }
         }
-
-        //public TimeSpan CurrentOvertime
-        //{
-        //    get { return _currentOvertime; }
-        //}
 
         public int CurrentOccupiedSlots
         {
@@ -226,11 +219,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             get { return new Percent(1 -  _mustHavesFulfillment.Value); }
         }
 
-        //public TimeSpan CurrentShiftAllowanceTime
-        //{
-        //    get { return _currentShiftAllowanceTime; }
-        //}
-
         public void SchedulePeriodData()
         {
             if (SchedulePeriod == null)
@@ -311,22 +299,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     if (!_timePerDefinitionSet.ContainsKey(key))
                         _timePerDefinitionSet.Add(multiplicatorLayer.MultiplicatorDefinitionSet.Name, TimeSpan.Zero);
                     _timePerDefinitionSet[key] = _timePerDefinitionSet[key].Add(multiplicatorLayer.Period.ElapsedTime());
-                    //if(multiplicatorLayer.MultiplicatorDefinitionSet.MultiplicatorType == MultiplicatorType.Overtime)
-                    //    _currentOvertime = CurrentOvertime.Add(multiplicatorLayer.Period.ElapsedTime());
-                    //if (multiplicatorLayer.MultiplicatorDefinitionSet.MultiplicatorType == MultiplicatorType.OBTime)
-                    //    _currentShiftAllowanceTime = CurrentShiftAllowanceTime.Add(multiplicatorLayer.Period.ElapsedTime());
                 }
-                //IDictionary<string, TimeSpan> timePerDefToday = res.TimePerDefinitionSet();
-                //foreach (var multiplicatorDefinitionSetName in timePerDefToday.Keys)
-                //{
-                //    if (!_timePerDefinitionSet.ContainsKey(multiplicatorDefinitionSetName))
-                //        _timePerDefinitionSet.Add(multiplicatorDefinitionSetName, TimeSpan.Zero);
-
-                //    _timePerDefinitionSet[multiplicatorDefinitionSetName] =
-                //        _timePerDefinitionSet[multiplicatorDefinitionSetName].Add(
-                //            timePerDefToday[multiplicatorDefinitionSetName]);
-
-                //}
 
                 if (schedulePart.IsScheduled())
                     _currentOccupiedSlots = _currentOccupiedSlots + 1;

@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							eventScheduleDay.Label = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
 							break;
 						case SchedulePartView.DayOff:
-							eventScheduleDay.Label = scheduleDay.PersonDayOffCollection()[0].DayOff.Description.ShortName;
+							eventScheduleDay.Label = scheduleDay.PersonAssignment().DayOff().Description.ShortName;
 							break;
 						case SchedulePartView.None:
 							eventScheduleDay.Label = "";
@@ -75,6 +75,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					{
 						var description = layer.DisplayDescription();
 						var contractTime = projection.ContractTime(layer.Period);
+						var requiresSeat = false;
+						var activity = layer.Payload.UnderlyingPayload as IActivity;
+						if (activity != null)
+						{
+							requiresSeat = activity.RequiresSeat;
+						}
 
 						eventScheduleDay.Layers.Add(new ProjectionChangedEventLayer
 							{
@@ -83,6 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 								ContractTime = contractTime,
 								PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
 								IsAbsence = layer.Payload.UnderlyingPayload is IAbsence,
+								RequiresSeat = requiresSeat,
 								DisplayColor = layer.DisplayColor().ToArgb(),
 								WorkTime = layer.WorkTime(),
 								StartDateTime = layer.Period.StartDateTime,

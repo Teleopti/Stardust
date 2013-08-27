@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_period = new DateOnlyPeriod(new DateOnly(2012, 1, 1), new DateOnly(2012, 1, 1));
 			_personSkill1 = new PersonSkill(_phoneSkill1, new Percent(1));
 			_personSkill2 = new PersonSkill(_mailSkill, new Percent(1));
-			_personSkill2.Active = false;
+			((IPersonSkillModify)_personSkill2).Active = false;
 			_personSkills1 = new List<IPersonSkill> { _personSkill1, _personSkill2 };
 
 			using (_mock.Record())

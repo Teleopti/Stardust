@@ -100,8 +100,9 @@
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
@@ -123,7 +124,24 @@
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\CannotSendDelayedMessages.cs" />
     <Compile Include="ApplicationLayer\Event.cs" />
+    <Compile Include="ApplicationLayer\Events\ActivityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonDeletedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonPeriodAddedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonPeriodDetail.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonPeriodRemovedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonPeriodStartDateChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonReactivatedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonSkillActivatedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonSkillAddedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonSkillDeactivatedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonSkillDetail.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonSkillProficiencyChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonSkillRemovedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonSkillResetEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonTeamChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonTerminatedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\ScheduledResourcesChangedEvent.cs" />
     <Compile Include="ApplicationLayer\IEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IEventsPublisher.cs" />
     <Compile Include="ApplicationLayer\IgnoreDelayedMessages.cs" />
@@ -146,9 +164,23 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\PersonScheduleDayReadModel.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\PersonScheduleDayReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\PersonScheduleDayReadModelsCreator.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonReactivatedHandler.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonTerminatedHandler.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonDeletedHandler.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonPeriodAddedHandler.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonPeriodRemovedHandler.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonPeriodStartDateChangedHandler.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillProficiencyChangedHandler.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillDeactivatedHandler.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillActivatedHandler.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillRemovedHandler.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesActivityChangedHandler.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesChangedHandler.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillAddedHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\DoNotNotifySmsLink.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\IDoNotifySmsLink.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\IScheduleDayReadModelsCreator.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\ProjectionChangedEventLayerExtensions.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\ScheduleDayReadModel.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\ScheduleDayReadModelComparer.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\ScheduleDayReadModelHandler.cs" />
@@ -211,6 +243,7 @@
     <Compile Include="Common\LayersExtensions.cs" />
     <Compile Include="Common\ListAggregator.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
+    <Compile Include="Common\SpecificBusinessUnit.cs" />
     <Compile Include="Common\TrueFalseRandomizer.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinder.cs" />
     <Compile Include="Common\DateTimePeriodPerStartTimeSorter.cs" />
@@ -293,6 +326,7 @@
     <Compile Include="Helper\NoFormatting.cs" />
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />
+    <Compile Include="Infrastructure\MessageFilterManager.cs" />
     <Compile Include="Optimization\DataExtractorValuesForMatrixes.cs" />
     <Compile Include="Optimization\TeamBlock\OptimizationOverLimitByRestrictionDeciderFactory.cs" />
     <Compile Include="Optimization\TeamBlock\ScheduleMatrixOriginalStateContainerFactory.cs" />
@@ -301,7 +335,6 @@
     <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\IntradayDecisionMakerComponents.cs" />
-    <Compile Include="Optimization\MatrixMultipleShiftsLocker.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizationResourceHelper.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToAdd.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToRemove.cs" />
@@ -438,6 +471,7 @@
     <Compile Include="Repositories\IPersonAbsenceAccountRepository.cs" />
     <Compile Include="Repositories\IPersonalSettingDataRepository.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\IScheduleDayReadModelRepository.cs" />
+    <Compile Include="Repositories\IScheduledResourcesReadModelStorage.cs" />
     <Compile Include="Repositories\IScheduleHistoryReport.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\IScheduleProjectionReadOnlyRepository.cs" />
     <Compile Include="Repositories\IScheduleTagRepository.cs" />
@@ -445,6 +479,8 @@
     <Compile Include="Repositories\IWebReportRepository.cs" />
     <Compile Include="Repositories\Paging.cs" />
     <Compile Include="Repositories\PagingDetail.cs" />
+    <Compile Include="ResourceCalculation\ActivitySkillCombinationFromStorage.cs" />
+    <Compile Include="ResourceCalculation\ActivitySkillsCombination.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinder.cs" />
     <Compile Include="ResourceCalculation\BestGroupValueExtractorThreadFactory.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecification.cs" />
@@ -462,23 +498,32 @@
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonShiftCategoryConsistentChecker.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\PossibleCombinationsOfStartEndCategoryCreator.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\RuleSetBagForGroupPerson.cs" />
+    <Compile Include="ResourceCalculation\IPersonSkillProvider.cs" />
     <Compile Include="ResourceCalculation\ISwapAndModifyService.cs" />
     <Compile Include="ResourceCalculation\ISwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\OptimizerActivitiesPreferences.cs" />
     <Compile Include="Optimization\SkillExtractorForGroupOfPeople.cs" />
+    <Compile Include="ResourceCalculation\PeriodResource.cs" />
+    <Compile Include="ResourceCalculation\PeriodResourceDetail.cs" />
     <Compile Include="ResourceCalculation\PersonalShiftMeetingTimeChecker.cs" />
+    <Compile Include="ResourceCalculation\PersonSkillProvider.cs" />
     <Compile Include="ResourceCalculation\PossibleCombinationsOfStartEndCategoryRunner.cs" />
     <Compile Include="ResourceCalculation\PossibleStartEndCategory.cs" />
+    <Compile Include="ResourceCalculation\ResourceCalculationDataContainer.cs" />
+    <Compile Include="ResourceCalculation\ResourceCalculationDataContainerFromStorage.cs" />
+    <Compile Include="ResourceCalculation\ResourcesForCombinationFromStorage.cs" />
+    <Compile Include="ResourceCalculation\ResourcesFromStorage.cs" />
     <Compile Include="ResourceCalculation\ShiftCategoryPeriodValueExtractorThread.cs" />
-    <Compile Include="ResourceCalculation\SingleSkillCalculator.cs" />
     <Compile Include="ResourceCalculation\SingleSkillDictionary.cs" />
-    <Compile Include="ResourceCalculation\SingleSkillLoadedDecider.cs" />
-    <Compile Include="ResourceCalculation\SingleSkillMaxSeatCalculator.cs" />
+    <Compile Include="ResourceCalculation\SkillEfficienciesFromStorage.cs" />
+    <Compile Include="ResourceCalculation\SkillKeyResource.cs" />
     <Compile Include="ResourceCalculation\SwapRawService.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedActivityChecker.cs" />
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryChecker.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
+    <Compile Include="Scheduling\Assignment\DayOff.cs" />
+    <Compile Include="ResourceCalculation\TransformResourcesFromStorageCommand.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayer.cs" />
     <Compile Include="Scheduling\Assignment\EditableShift.cs" />
@@ -516,6 +561,7 @@
     <Compile Include="Scheduling\Assignment\ScheduleDayStringVisualizer.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessManager.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodSplitChecker.cs" />
+    <Compile Include="Scheduling\ResourceCalculateSkillCommand.cs" />
     <Compile Include="Scheduling\DayOffScheduling\AdvanceDaysOffSchedulingService.cs" />
     <Compile Include="Scheduling\DayOffScheduling\BestSpotForAddingDayOffFinder.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffScheduler.cs" />
@@ -530,6 +576,7 @@
     <Compile Include="Scheduling\DeletedDescription.cs" />
     <Compile Include="Scheduling\EmptyScheduleDayChangeCallback.cs" />
     <Compile Include="ApplicationLayer\Events\FullDayAbsenceAddedEvent.cs" />
+    <Compile Include="Scheduling\ISkillLoaderDecider.cs" />
     <Compile Include="Scheduling\LoadScheduleByPersonSpecification.cs" />
     <Compile Include="Scheduling\LoadSchedulesForRequestWithoutResourceCalculation.cs" />
     <Compile Include="Scheduling\Meetings\AllLayersAreInWorkTimeSpecification.cs" />
@@ -820,7 +867,6 @@
     <Compile Include="Scheduling\Rules\NewBusinessRuleCollection.cs" />
     <Compile Include="Scheduling\Rules\NewDayOffRule.cs" />
     <Compile Include="Scheduling\Rules\NewLegalStateRule.cs" />
-    <Compile Include="Scheduling\Rules\NewMaxOneDayOffRule.cs" />
     <Compile Include="Scheduling\Rules\NewMaxWeekWorkTimeRule.cs" />
     <Compile Include="Scheduling\Rules\NewNightlyRestRule.cs" />
     <Compile Include="Scheduling\Rules\NewPersonAccountRule.cs" />
@@ -856,7 +902,6 @@
     <Compile Include="Scheduling\SeatLimitation\SkillVisualLayerCollectionDictionaryCreator.cs" />
     <Compile Include="Scheduling\SeatLimitation\SkillVisualLayerCollectionDictionary.cs" />
     <Compile Include="Scheduling\SeatLimitation\SeatImpactOnPeriodForProjection.cs" />
-    <Compile Include="Scheduling\SeatLimitation\SeatLimitationWorkShiftCalculator.cs" />
     <Compile Include="Scheduling\ShiftCreator\EndTimeLimiter.cs" />
     <Compile Include="Scheduling\ShiftCreator\OperatorLimiter.cs" />
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionEntityService.cs" />
@@ -943,6 +988,7 @@
     <Compile Include="Scheduling\TimeLayer\MultiplicatorDefinitionSet.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorLayer.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorProjectionService.cs" />
+    <Compile Include="Scheduling\TimeZoneGuard.cs" />
     <Compile Include="Scheduling\WorkShiftWorkTime.cs" />
     <Compile Include="Scheduling\WorkTimeMinMax.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxCalculator.cs" />
@@ -977,7 +1023,9 @@
     <Compile Include="Security\Authentication\IWindowsUserProvider.cs" />
     <Compile Include="Security\Authentication\LoggedOnUser.cs" />
     <Compile Include="Security\Authentication\LogonLogger.cs" />
+    <Compile Include="Security\Authentication\SpecificTimeZone.cs" />
     <Compile Include="Security\Authentication\UserTimeZone.cs" />
+    <Compile Include="Security\Authentication\UtcTimeZone.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettings.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccCalendarLinkLicenseOption.cs" />
@@ -1080,7 +1128,7 @@
     <Compile Include="RealTimeAdherence\RtaStateGroup.cs" />
     <Compile Include="Repositories\IContractRepository.cs" />
     <Compile Include="Repositories\IContractScheduleRepository.cs" />
-    <Compile Include="Repositories\IDayOffRepository.cs" />
+    <Compile Include="Repositories\IDayOffTemplateRepository.cs" />
     <Compile Include="Repositories\IPersonRequestRepository.cs" />
     <Compile Include="Repositories\IPersonRotationRepository.cs" />
     <Compile Include="Repositories\IQueueSourceRepository.cs" />
@@ -1221,7 +1269,7 @@
     <Compile Include="ResourceCalculation\ActivityDivider.cs" />
     <Compile Include="ResourceCalculation\ScheduleProjectionExtractor.cs" />
     <Compile Include="ResourceCalculation\DividedActivityData.cs" />
-    <Compile Include="ResourceCalculation\PersonSkillDictionary.cs" />
+    <Compile Include="ResourceCalculation\KeyedSkillResourceDictionary.cs" />
     <Compile Include="ResourceCalculation\SkillCollectionKey.cs" />
     <Compile Include="Scheduling\AbsenceSorter.cs" />
     <Compile Include="Scheduling\Rules\NightlyRestRule.cs" />
@@ -1283,7 +1331,6 @@
     <Compile Include="Security\AuthorizationEntities\SystemRole.cs" />
     <Compile Include="Security\AuthorizationEntities\PermissionInformation.cs" />
     <Compile Include="Repositories\IPersonAvailabilityRepository.cs" />
-    <Compile Include="Repositories\IPersonDayOffRepository.cs" />
     <Compile Include="Repositories\IPersonRepository.cs" />
     <Compile Include="Repositories\IRepositoryFactory.cs" />
     <Compile Include="Repositories\IScenarioRepository.cs" />
@@ -1291,7 +1338,6 @@
     <Compile Include="Scheduling\Absence.cs" />
     <Compile Include="Scheduling\AbsenceLayer.cs" />
     <Compile Include="Scheduling\Assignment\AssignmentBelongsToAgentSpecification.cs" />
-    <Compile Include="Scheduling\PersonDayOff.cs" />
     <Compile Include="Scheduling\Assignment\AssignmentLength.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignmentRestrictionSet.cs" />
     <Compile Include="Scheduling\WorkShift.cs" />
@@ -1428,9 +1474,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forecasting\QueueSource.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Scheduling\PersonDayOff.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Common\Contract.hbm.xml">

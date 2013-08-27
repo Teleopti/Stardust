@@ -18,12 +18,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public PersistConflictView(IScheduleDictionary scheduleDictionary,
 								IEnumerable<IPersistConflict> conflicts,
-								ICollection<IPersistableScheduleData> modifiedData)
+								ICollection<IPersistableScheduleData> modifiedDataResult)
 		{
 			InitializeComponent();
 			if (!DesignMode)
 				SetTexts();
-			var model = new PersistConflictModel(scheduleDictionary, conflicts, modifiedData);
+			var model = new PersistConflictModel(scheduleDictionary, conflicts, modifiedDataResult);
 			_presenter = new PersistConflictPresenter(this, model);
 		}
 
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void btnUndo_Click(object sender, EventArgs e)
 		{
-			_presenter.OnUndoClientChanges();
+			_presenter.OnDiscardMyChanges();
 		}
 
 		private void btnOverWrite_Click(object sender, EventArgs e)

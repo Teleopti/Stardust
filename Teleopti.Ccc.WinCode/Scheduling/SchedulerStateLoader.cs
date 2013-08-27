@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ILazyLoadingManager _lazyManager;
 		private readonly IRepositoryFactory _repositoryFactory;
+		private readonly IPersonSkillProvider _personSkillProvider = new PersonSkillProvider();
 		private BackgroundWorker _backgroundWorker;
 
 		public SchedulerStateLoader(ISchedulerStateHolder stateHolder)
@@ -238,8 +239,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			using (PerformanceOutput.ForOperation("Loading schedule data"))
 			{
 				var service =
-					new SchedulingResultService(_schedulerState.SchedulingResultState, _schedulerState.SchedulingResultState.Skills, new SingleSkillCalculator(), false, new SingleSkillDictionary());
-				service.SchedulingResult(_schedulerState.RequestedPeriod.Period(), new List<IVisualLayerCollection>(), new List<IVisualLayerCollection>());
+					new SchedulingResultService(_schedulerState.SchedulingResultState, _schedulerState.SchedulingResultState.Skills, false, _personSkillProvider);
+				service.SchedulingResult(_schedulerState.RequestedPeriod.Period(), true);
 			}
 		}
 	}

@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var scheduleDictionary =
 					_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
 						new PersonProvider(new[] {person}), new ScheduleDictionaryLoadOptions(false, false),
-						new DateOnlyPeriod(startDate, endDate).ToDateTimePeriod(timeZone), scenario);
+						new DateOnlyPeriod(startDate, endDate), scenario);
 
 				var scheduleRange = scheduleDictionary[person];
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);

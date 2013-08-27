@@ -13,9 +13,7 @@
 		<AgentPortalWebCreator>"$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\AgentPortalWeb.bat"</AgentPortalWebCreator>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
-		<NCoverAssemblies>Teleopti.Ccc.Web;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter</NCoverAssemblies>
 		<DoCodeAnalysis>false</DoCodeAnalysis>
-
 		<RunWebBehaviorTests>true</RunWebBehaviorTests>
 		
 		<vs2020ide>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe</vs2020ide>
@@ -33,6 +31,8 @@
 		<AzureMasterConn>SQLCMD -Stcp:$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -dmaster</AzureMasterConn>
 		<DBManagerAzure>-S$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -T -C -L$(AzureDbLogin):$(AzureDbPwd)</DBManagerAzure>
 		<DatabasePath>"$(CCNetWorkingDirectory)\database"</DatabasePath>
+		
+		<NDependTransferDataPath>C:\NDepend\NDependXmlToDb\NDependXmlToDb.exe</NDependTransferDataPath>
 	</PropertyGroup>
 
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
@@ -52,20 +52,25 @@
 				<Format>Xml</Format>
 				<OutputPath>$(CCNetWorkingDirectory)\symbolmodule.xml</OutputPath>
 			</Report>
-			<!-- <Report>
-				<ReportType>SymbolModuleNamespaceClass</ReportType>
-				<Format>Xml</Format>
-				<OutputPath>$(CCNetWorkingDirectory)\SymbolModuleNamespaceClass.xml</OutputPath>
-			</Report>-->
 		</CoverageReports>
 		<MinimumCoverage>
 			<Threshold>
 				<CoverageMetric>SymbolCoverage</CoverageMetric>
 				<Type>Assembly</Type>
-				<Value>95</Value>
+				<Value>0</Value>
 				<Pattern>.*</Pattern>
 			</Threshold>
 		</MinimumCoverage>
+		<SatisfactoryCoverage>
+			<Threshold>
+				<CoverageMetric>SymbolCoverage</CoverageMetric>
+				<Value>0</Value>
+			</Threshold>
+			<Threshold>
+				<CoverageMetric>BranchCoverage</CoverageMetric>
+				<Value>0</Value>
+			</Threshold>
+		</SatisfactoryCoverage>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -75,7 +80,7 @@
 		<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
 	</ItemGroup>
 
-	<Target Name="BuildAndTest" DependsOnTargets="ScriptTest;FxCop">
+	<Target Name="BuildAndTest" DependsOnTargets="ScriptTest;FxCop;NDepend;CopyNDependStatisticsToDatabase">
 		<Message Importance="high" Text="BuildAndTest finished" />
 	</Target>
 	
@@ -350,8 +355,10 @@
 			CoverageFile="$(CCNetWorkingDirectory)\NcoverResult\%(filename).ncov"
 			WorkingDirectory="$(CCNetWorkingDirectory)"
 			RegisterProfiler="true"
-			ExcludeTypes="Teleopti.Ccc.Web.MvcApplication"
-			IncludeAssemblies="$(NCoverAssemblies)"
+			IncludeAssemblies="Teleopti.*"
+			ExcludeAssemblies=".*Test"
+			ExcludeFiles=".*.Designer.cs"
+			OnlyAssembliesWithSource="true"
 			/>
 	</Target>
 	
@@ -363,14 +370,36 @@
 				OutputPath="$(CCNetWorkingDirectory)"
 				OutputReport="$(CoverageReports)"
 				CoverageDataPaths="$(CCNetWorkingDirectory)\NcoverResult\*.ncov"
-				MinimumCoverage="$(MinimumCoverage)"
-				MaxFailedToShow="50"
+				MinimumCoverage="0"
+				SatisfactoryCoverage="$(SatisfactoryCoverage)"
+				MaxFailedToShow="150"
 				ReportInvalidFiles="true">
 		</NCoverReporting>
 
 		<Message Importance="high" Text="NCoverReporting finished." />
-	</Target>
+	</Target> 
 	
+	<Target Name="NDepend" Condition="'$(CCNetProject)' == 'RaptorMain'" DependsOnTargets="Compile" >
+    <PropertyGroup>
+      <NDPath>C:\NDepend\NDepend.console.exe</NDPath>
+      <NDProject>$(CCNetWorkingDirectory)\ccc.ndproj</NDProject>
+	  <NDOut>$(CCNetWorkingDirectory)\..\Artifacts\buildlogs\Ndepend</NDOut>
+    </PropertyGroup>
+	<Message Importance="high" Text="Running NDepend with $(NDPath) on  $(NDProject) out = $(NDOut)" />
+    <Exec
+      Command='"$(NDPath)" "$(NDProject)" /OutDir "$(NDOut)"'/>
+  </Target>
+	<Target Name="CopyNDependStatisticsToDatabase" Condition="'$(CCNetProject)' == 'RaptorMain'" DependsOnTargets="NDepend">
+		<PropertyGroup>
+			<RevisionOutput>$(CCNetWorkingDirectory)\..\Artifacts\buildlogs\Ndepend\Revision.txt</RevisionOutput>
+			<NDependOutput>$(CCNetWorkingDirectory)\..\Artifacts\buildlogs\Ndepend\\</NDependOutput>
+			<NCoverOutput>$(CCNetWorkingDirectory)\\</NCoverOutput>
+		</PropertyGroup>
+		<Message Importance="high" Text="Copying data from xml to database" />
+		<Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\GetRevision.bat&quot; &quot;$(RevisionOutput)&quot;"/>
+		<Exec Command="&quot;$(NDependTransferDataPath)&quot; &quot;$(NDependOutput)&quot; &quot;$(NDependOutput)&quot; &quot;$(NCoverOutput)&quot;"/>
+	</Target>
+  
 	<Target Name="FxCop" DependsOnTargets="NCoverReporting">
 		<Message Importance="high" Text="Running FxCop target..." />
 		<CreateItem Include="$(CCNetWorkingDirectory)\**\*.codeanalysislog.xml">

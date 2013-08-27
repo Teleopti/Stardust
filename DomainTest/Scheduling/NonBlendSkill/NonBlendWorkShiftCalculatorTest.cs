@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		private INonBlendSkillImpactOnPeriodForProjection _nonBlendImpactOnPeriodForProjection;
 		private IWorkShiftCalculator _workShiftCalculator;
 	    private IActivity _activity;
+		private IPersonSkillProvider _personSkillProvider;
 
 		[SetUp]
 		public void Setup()
@@ -32,7 +34,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			_person.Period(new DateOnly()).PersonNonBlendSkillCollection.Add(new PersonSkill(_skill, new Percent(1)));
             _nonBlendImpactOnPeriodForProjection = _mocks.StrictMock<INonBlendSkillImpactOnPeriodForProjection>();
 			_workShiftCalculator = _mocks.StrictMock<IWorkShiftCalculator>();
-            _target = new NonBlendWorkShiftCalculator(_nonBlendImpactOnPeriodForProjection, _workShiftCalculator);
+			_personSkillProvider = new PersonSkillProvider();
+            _target = new NonBlendWorkShiftCalculator(_nonBlendImpactOnPeriodForProjection, _workShiftCalculator, _personSkillProvider);
 		}
 
 		[Test]
@@ -53,8 +56,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			using (_mocks.Record())
 			{
 				Expect.Call(visualLayerCollection.Period()).Return(dateTimePeriod).Repeat.AtLeastOnce();
-                //Expect.Call(_nonBlendImpactOnPeriodForProjection.SkillStaffPeriodDate(skillStaffPeriod1, _person)).Return(new DateOnly());
-                //Expect.Call(_nonBlendImpactOnPeriodForProjection.CheckPersonSkill(_skill, _person, new DateOnly())).Return(true);
                 Expect.Call(_nonBlendImpactOnPeriodForProjection.CalculatePeriod(skillStaffPeriod1, visualLayerCollection, _activity)).
 					Return(1).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftCalculator.CalculateShiftValueForPeriod(0, 0, 0, 0)).IgnoreArguments().Return(1).Repeat.AtLeastOnce();
@@ -66,9 +67,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			{
 				result = _target.CalculateShiftValue(_person, visualLayerCollection, dic, WorkShiftLengthHintOption.Free, false, false);
 			}
-            Assert.That(result, Is.Not.Null);
-            if(result.HasValue)
-                Assert.That(result.Value, Is.EqualTo(1));
+            Assert.IsTrue(result.HasValue);
+            Assert.That(result.Value, Is.EqualTo(1));
 		}
 
         [Test]

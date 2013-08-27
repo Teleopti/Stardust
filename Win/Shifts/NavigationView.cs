@@ -355,6 +355,7 @@ namespace Teleopti.Ccc.Win.Shifts
         private void defaultTreeViewAfterSelect(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
+            ExplorerView.ExitEditMode();
             loadSelectedRuleSets();
             Refresh(this, EventArgs.Empty);
             ExplorerPresenter.Model.SetSelectedView(_currentView);
@@ -617,6 +618,7 @@ namespace Teleopti.Ccc.Win.Shifts
 			callback.RuleSetToComplex += callbackRuleSetToComplex;
 	        using (var status = new ShiftGenerationStatus(callback))
 	        {
+                ExplorerView.RefreshActivityGridView();
 				ExplorerPresenter.View.SetViewEnabled(false);
 			    status.ShowDelayed(this);
 			    ExplorerPresenter.Model.SetFilteredRuleSetCollection(

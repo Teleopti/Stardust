@@ -30,8 +30,8 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// <returns></returns>
 		public string[] Routes()
 		{
-			var dataSources = new[] { DataSource, null};
-			var businessUnits = new[] { BusinessUnitId, Guid.Empty.ToString()};
+			var dataSources = new[] { DataSource};
+			var businessUnits = new[] { BusinessUnitId};
 			var domainTypes = new[] { DomainType };
 			var domainIds = new[] { DomainId, null };
 			var domainReferenceIds = new[] { DomainReferenceId, null };

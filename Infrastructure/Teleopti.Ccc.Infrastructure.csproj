@@ -98,8 +98,9 @@
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -263,6 +264,10 @@
     <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelPersister.cs" />
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
+    <Compile Include="Repositories\ScheduledResourcesReadModelStorage.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\RemoveEmptyAssignments.cs" />
+    <Compile Include="UnitOfWork\EventExtensions.cs" />
+    <Compile Include="UnitOfWork\TeamOrSiteChangedMessageSender.cs" />
     <Compile Include="Util\CompressionExtensions.cs" />
     <Compile Include="Repositories\CurrentUnitOfWorkExtensions.cs" />
     <Compile Include="Repositories\EtlReadModelRepository.cs" />
@@ -297,6 +302,7 @@
     <Compile Include="Repositories\MasterActivityRepository.cs" />
     <Compile Include="Repositories\ExtendedPreferenceTemplateRepository.cs" />
     <Compile Include="Repositories\ScheduleTagRepository.cs" />
+    <Compile Include="Repositories\SkillLoaderDecider.cs" />
     <Compile Include="Repositories\UserDetailRepository.cs" />
     <Compile Include="Repositories\NoteRepository.cs" />
     <Compile Include="Repositories\PersonAbsenceAccountRepository.cs" />
@@ -321,7 +327,7 @@
     <Compile Include="Repositories\PersonalSettingDataRepository.cs" />
     <Compile Include="Repositories\SettingDataRepository.cs" />
     <Compile Include="Repositories\StateGroupActivityAlarmRepository.cs" />
-    <Compile Include="Repositories\DayOffRepository.cs" />
+    <Compile Include="Repositories\DayOffTemplateRepository.cs" />
     <Compile Include="Repositories\RtaStateGroupRepository.cs" />
     <Compile Include="Repositories\ForecastProcessReportRepository.cs" />
     <Compile Include="Repositories\GeneralRepository.cs" />
@@ -355,7 +361,6 @@
     <Compile Include="Repositories\ApplicationFunctionRepository.cs" />
     <Compile Include="Repositories\ApplicationRoleRepository.cs" />
     <Compile Include="Repositories\BusinessUnitRepository.cs" />
-    <Compile Include="Repositories\PersonDayOffRepository.cs" />
     <Compile Include="Repositories\AvailabilityRepository.cs" />
     <Compile Include="Repositories\PersonAvailabilityRepository.cs" />
     <Compile Include="Repositories\ContractRepository.cs" />
@@ -387,22 +392,16 @@
     <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentAuditDateSetter.cs" />
     <Compile Include="SystemCheck\SystemCheckerValidator.cs" />
     <Compile Include="UnitOfWork\CurrentUnitOfWork.cs" />
-    <Compile Include="UnitOfWork\DenormalizationQueueEventsPublisher.cs" />
-    <Compile Include="UnitOfWork\DenormalizerContext.cs" />
     <Compile Include="UnitOfWork\FixedCurrentUnitOfWork.cs" />
     <Compile Include="UnitOfWork\EventsPackageMessage.cs" />
     <Compile Include="UnitOfWork\EventsMessageSender.cs" />
     <Compile Include="UnitOfWork\GroupPageChangedMessageSender.cs" />
-    <Compile Include="UnitOfWork\IRunSql.cs" />
-    <Compile Include="UnitOfWork\ISaveToDenormalizationQueue.cs" />
-    <Compile Include="UnitOfWork\ISqlQuery.cs" />
     <Compile Include="UnitOfWork\MeetingMessageSender.cs" />
     <Compile Include="UnitOfWork\DataSource.cs" />
     <Compile Include="UnitOfWork\DataSourcesFactory.cs" />
     <Compile Include="UnitOfWork\DisableFilterScope.cs" />
     <Compile Include="UnitOfWork\DisabledFilterCounter.cs" />
     <Compile Include="UnitOfWork\IMessageSender.cs" />
-    <Compile Include="UnitOfWork\ISendDenormalizeNotification.cs" />
     <Compile Include="UnitOfWork\NHibernateFilterManager.cs" />
     <Compile Include="UnitOfWork\IDataSourcesFactory.cs" />
     <Compile Include="UnitOfWork\NHibernateSessionRelatedData.cs" />
@@ -413,10 +412,7 @@
     <Compile Include="UnitOfWork\PersonChangedMessageSender.cs" />
     <Compile Include="UnitOfWork\PersonPeriodChangedMessageSender.cs" />
     <Compile Include="UnitOfWork\QueryFilter.cs" />
-    <Compile Include="UnitOfWork\RunSql.cs" />
-    <Compile Include="UnitOfWork\SaveToDenormalizationQueue.cs" />
     <Compile Include="UnitOfWork\ScheduleMessageSender.cs" />
-    <Compile Include="UnitOfWork\SqlQuery.cs" />
     <Compile Include="UnitOfWork\TransactionCallback.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\CurrentUnitOfWorkFactory.cs" />

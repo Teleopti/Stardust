@@ -1,6 +1,5 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
+﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
@@ -15,7 +14,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
     var ajax = new Teleopti.MyTimeWeb.Ajax();
     var pageViewModel;
 
-    function RequestItemViewModel() {
+    function RequestItemViewModel(requestPageViewModel) {
 
         var self = this;
 
@@ -35,12 +34,14 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         self.CanDelete = ko.observable(true);
         self.StatusClass = ko.observable();
         self.DetailItem = undefined;
-
+        self.parent = requestPageViewModel;
+	   
         self.Type = ko.computed(function () {
             var payload = (self.RequestPayload() != '') ? ', ' + self.RequestPayload() : '';
             return self.RequestType() + payload;
         });
-
+	    self.isReferred = ko.observable(false);
+	    self.isCreatedByUser = ko.observable(false);
         self.ShowDetails = function (viewmodel, event) {
             if (self.IsSelected()) {
                 self.IsSelected(false);
@@ -59,10 +60,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                     },
                     success: function(data) {
                         self.DetailItem = Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data);
-                        self.DetailItem.AddRequestCallback = function () {
-                            self.IsSelected(false);
-                            self.DetailItem = undefined;
-                        };
+                        self.DetailItem.AddRequestCallback = self.successUpdatingRequest;
                         self.IsSelected(true);
                     }
                 });
@@ -70,11 +68,19 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                 self.IsSelected(true);
             }
         };
+        self.successUpdatingRequest = function(data) {
+            self.IsSelected(false);
+            self.DetailItem = undefined;
+            self.parent.AddRequest(data, false);
+        };
 
         self.ToggleMouseOver = function () {
             self.IsMouseOver(!self.IsMouseOver());
         };
 
+	    self.isValid = function() {
+		   return (!(self.isReferred() && !self.isCreatedByUser()));
+	    };
     }
 
     function RequestPageViewModel(readyForInteraction, completelyLoaded) {
@@ -92,22 +98,24 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         });
 
         self.Requests = ko.observableArray();
-        
+	    
         self.MoreToLoad = ko.observable(false);
 
         self.isLoadingRequests = ko.observable(true);
         
         self.ShowRequests = function (data) {
             ko.utils.arrayForEach(data, function (item) {
-                var vm = new RequestItemViewModel();
-                vm.Initialize(item,false);
+                var vm = new RequestItemViewModel(self);
+                vm.Initialize(item, false);
                 self.Requests.push(vm);
             });
         };
 
         self.ColumnRequests = ko.computed(function() {
-            var list = self.Requests();
-
+            //var list = self.Requests();
+        	var list = ko.utils.arrayFilter(self.Requests(), function (request) {
+        		return request.isValid();
+        	});
             var result = [];
             var index = 0;
             ko.utils.arrayForEach(list, function(i) {
@@ -121,8 +129,15 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
             return result;
         });
 
+        ko.eventAggregator.subscribe(function (cancelRequestMessage) {
+        	 ko.utils.arrayFirst(self.Requests(), function (r) {
+	        	 if (r.Id() === cancelRequestMessage.id) {
+	        	 	self.Delete(r);
+	        	 }
+        	 });
+        }, null, 'cancel_request');
+	    
         self.Delete = function (requestItemViewModel) {
-
             var url = requestItemViewModel.Link();
             ajax.Ajax({
                 url: url,
@@ -147,7 +162,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                 self.Requests.remove(selectedViewModel);
             }
             else {
-                selectedViewModel = new RequestItemViewModel();
+                selectedViewModel = new RequestItemViewModel(self);
                 selectedViewModel.Initialize(request);
             }
 
@@ -227,6 +242,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
             self.StatusClass(_classFromStatus(data));
             self.RequestPayload(data.Payload);
             self.CanDelete(data.Link.Methods.indexOf("DELETE") != -1);
+	        self.isCreatedByUser(data.IsCreatedByUser);
+	        self.isReferred(data.IsReferred);
             if (data.TypeEnum == 2 && !data.IsCreatedByUser) self.CanDelete(false);
         }
     });
@@ -256,7 +273,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         var element = $('#Requests-data-binding-area')[0];
         if (element) ko.cleanNode(element);
 
-        element = $('#Request-add-section')[0];
+        element = $('#Request-add-data-binding-area')[0];
         if (element) ko.cleanNode(element);
 
         Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.Dispose();

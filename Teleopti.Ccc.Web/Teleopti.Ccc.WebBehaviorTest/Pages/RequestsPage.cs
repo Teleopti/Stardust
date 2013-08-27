@@ -67,9 +67,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Deny-shift-trade")]
 		public Button DenyShiftTradeButton { get; set; }
-		
-		[FindBy(Id = "I-am-a-shifttrade")]
-		public Div IamAShiftTrade { get; set; }
 
 		[FindBy(Class = "request-detail-title")]
 		public Div RequestDetailTitle { get; set; }

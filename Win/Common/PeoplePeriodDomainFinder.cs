@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Teleopti.Ccc.Win.PeopleAdmin;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Syncfusion.Windows.Forms.Grid;
 using System.Globalization;
@@ -13,37 +8,22 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common
 {
-	/// <summary>
-	/// Represetns the People doamin finder
-	/// </summary>
-	/// <remarks>
-	/// Created By: madhurangap
-	/// Created Date: 10-07-2008
-	/// </remarks>
 	public class PeoplePeriodDomainFinder : IDomainFinder
 	{
-        private FilteredPeopleHolder _filteredPeopleHolder;
-		
-        #region Methods - Instance Memeber
+        private readonly FilteredPeopleHolder _filteredPeopleHolder;
 
-        #region Constructor
-
-        public PeoplePeriodDomainFinder(FilteredPeopleHolder filteredPeopleHolder)
+		public PeoplePeriodDomainFinder(FilteredPeopleHolder filteredPeopleHolder)
         {
             _filteredPeopleHolder = filteredPeopleHolder;
         }
-        
-        #endregion
 
-        #region Methods - Instance Member - PeopleDomainFinder Members
-
-        /// <summary>
+		/// <summary>
 		/// Finds the people data that meets the search criteria given,
 		///  and fills the search results to the given grid
 		/// </summary>
 		/// <param name="grid">Grid to display the search data</param>
 		/// <param name="searchCriteria">Search criteria</param>
-        public void Find(Syncfusion.Windows.Forms.Grid.GridControl grid, SearchCriteria searchCriteria)
+        public void Find(GridControl grid, SearchCriteria searchCriteria)
         {
             IList<IPerson> collection = _filteredPeopleHolder.FilteredPersonCollection;
             IList<IPerson> sortedList = (from person in collection
@@ -53,14 +33,9 @@ namespace Teleopti.Ccc.Win.Common
             for (int index = 0; index < sortedList.Count; index++)
             {
                 IPerson person = sortedList[index];
-                bool isExistsInFilteredList = false;
+	            bool isExistsInFilteredList = collection.Contains(person);
 
-                if (collection.Contains(person))
-                {
-                    isExistsInFilteredList = true;
-                }
-
-                if (isExistsInFilteredList)
+	            if (isExistsInFilteredList)
                 {
                     bool isItemFound = Find(searchCriteria, person);
 
@@ -84,10 +59,6 @@ namespace Teleopti.Ccc.Win.Common
                 }
             }
         }
-
-	    #endregion
-
-        # region New Implementation
 
         private static void FillGrid(GridControl grid, string fullName)
         {
@@ -176,7 +147,7 @@ namespace Teleopti.Ccc.Win.Common
             return isFound;
         }
 
-        private static string GetSkills(IList<IPersonSkill> personSkillCollection)
+        private static string GetSkills(IEnumerable<IPersonSkill> personSkillCollection)
         {
             StringBuilder personSkillString = new StringBuilder();
 
@@ -227,9 +198,5 @@ namespace Teleopti.Ccc.Win.Common
 
             return ruleSetString;
         }
-
-	    #endregion
-
-        #endregion
-    }
+	}
 }

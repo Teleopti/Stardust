@@ -23,7 +23,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         [SetUp]
         public void Setup()
         {
-            _target = new SchedulePreferenceTransformer(96);
+            _target = new SchedulePreferenceTransformer();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -75,64 +75,9 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         }
 
         [Test]
-        public void VerifyPreferenceExist()
-        {
-            IPreferenceRestriction preference = new PreferenceRestriction();
-
-            // Day off
-            preference.DayOffTemplate = new DayOffTemplate(new Description("DayOff"));
-            Assert.IsTrue(_target.CheckIfPreferenceIsValid(preference));
-
-            // Shift category
-            preference = new PreferenceRestriction();
-            preference.ShiftCategory = new ShiftCategory("SC");
-            Assert.IsTrue(_target.CheckIfPreferenceIsValid(preference));
-
-            // Start time early
-            preference = new PreferenceRestriction();
-            preference.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(1, 0, 0), null);
-            Assert.IsTrue(_target.CheckIfPreferenceIsValid(preference));
-
-            // Start time late
-            preference = new PreferenceRestriction();
-            preference.StartTimeLimitation = new StartTimeLimitation(null, new TimeSpan(23,0,0));
-            Assert.IsTrue(_target.CheckIfPreferenceIsValid(preference));
-
-            // End time early
-            preference = new PreferenceRestriction();
-				preference.EndTimeLimitation = new EndTimeLimitation(new TimeSpan(1, 0, 0), null);
-            Assert.IsTrue(_target.CheckIfPreferenceIsValid(preference));
-
-            // End time late
-            preference = new PreferenceRestriction();
-				preference.EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(23, 0, 0));
-            Assert.IsTrue(_target.CheckIfPreferenceIsValid(preference));
-
-            // Work time min
-            preference = new PreferenceRestriction();
-				preference.WorkTimeLimitation = new WorkTimeLimitation(new TimeSpan(1, 0, 0), null);
-            Assert.IsTrue(_target.CheckIfPreferenceIsValid(preference));
-
-            // Work time max
-            preference = new PreferenceRestriction();
-				preference.WorkTimeLimitation = new WorkTimeLimitation(null, new TimeSpan(23, 0, 0));
-            Assert.IsTrue(_target.CheckIfPreferenceIsValid(preference));
-
-			//Activity
-			preference = new PreferenceRestriction();
-			IActivity activity = new Activity("activity");
-			IActivityRestriction activityRestriction = new ActivityRestriction(activity);
-			preference.AddActivityRestriction(activityRestriction);
-			Assert.IsTrue(_target.CheckIfPreferenceIsValid(preference));
-        }
-
-        [Test]
         public void VerifyNoPreferencesExist()
         {
             IPreferenceRestriction preference = null;
-            Assert.IsFalse(_target.CheckIfPreferenceIsValid(preference));
-
-            preference = new PreferenceRestriction();
             Assert.IsFalse(_target.CheckIfPreferenceIsValid(preference));
         }
     }

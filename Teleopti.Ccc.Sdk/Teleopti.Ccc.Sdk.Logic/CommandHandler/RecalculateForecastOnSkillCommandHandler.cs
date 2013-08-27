@@ -4,6 +4,7 @@ using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Messages.General;
 
@@ -29,16 +30,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
         	var principal = TeleoptiPrincipal.Current;
 			var person = ((IUnsafePerson)principal).Person;
-			var identity = (ITeleoptiIdentity)principal.Identity;
             var message = new RecalculateForecastOnSkillMessageCollection
                 {	
 					MessageCollection = new Collection<RecalculateForecastOnSkillMessage>(),
-					BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
-					Datasource = identity.DataSource.Application.Name,
-					Timestamp = DateTime.UtcNow,
 					ScenarioId = command.ScenarioId,
 					OwnerPersonId = person.Id.GetValueOrDefault()
 				};
+	        message.SetMessageDetail();
             foreach (var model in command.WorkloadOnSkillSelectionDtos)
             {
                 message.MessageCollection.Add(

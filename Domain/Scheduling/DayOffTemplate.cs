@@ -104,23 +104,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
             get { return _isDeleted; }
         }
 
-        /// <summary>
-        /// Initializes a new instance of DayOff class by setting the passed in <see cref="Description"/>.
-        /// </summary>
-        /// <param name="description">The description</param>
         public DayOffTemplate(Description description)
         {
             _description = description;
         }
 
-        /// <summary>
-        /// Initializes a new instance of DayOff class
-        /// </summary>
-        /// <remarks>
-        /// Created by: shirang
-        /// Created date: 2008-10-28
-        /// </remarks>
-        protected DayOffTemplate()
+        public DayOffTemplate()
         {
         }
 

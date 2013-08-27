@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		public void ShouldMapHasDayOffUnderAbsence()
 		{
 			var persons = new[] { new Person() };
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, persons.Single(),SchedulePartView.ContractDayOff, PersonDayOffFactory.CreatePersonDayOff(), null, null, null);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, persons.Single(),SchedulePartView.ContractDayOff, PersonAssignmentFactory.CreateAssignmentWithDayOff(), null, null);
 
 			personProvider.Stub(x => x.GetPermittedPersonsForGroup(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.ViewSchedules)).Return(persons);
 			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });

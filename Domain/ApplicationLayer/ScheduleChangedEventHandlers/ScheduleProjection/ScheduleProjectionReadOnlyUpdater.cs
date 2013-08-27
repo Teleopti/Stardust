@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
 	public class ScheduleProjectionReadOnlyUpdater : 
-		IHandleEvent<ProjectionChangedEvent>, 
+		IHandleEvent<ScheduledResourcesChangedEvent>, 
 		IHandleEvent<ProjectionChangedEventForScheduleProjection>
 	{
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Handle(ProjectionChangedEvent @event)
+		public void Handle(ScheduledResourcesChangedEvent @event)
 		{
 			createReadModel(@event);
 		}

@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 																						return null;
 																					if (s.Projection.DayOff == null)
 																						return null;
-																					return s.Projection.DayOff.DayOff.Description.Name;
+																					return s.Projection.DayOff.Description.Name;
 																				}))
 				.ForMember(d => d.Layers, o => o.ResolveUsing(s =>
 																		{

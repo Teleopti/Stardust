@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
         private void MakeTarget()
         {
-            _target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleDataRefresher(null, null), new MeetingRefresher(null), new PersonRequestRefresher(_personRequestUpdater));
+            _target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleDataRefresher(null, null, null, null), new MeetingRefresher(null), new PersonRequestRefresher(_personRequestUpdater));
         }
 
         [Test]

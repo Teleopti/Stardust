@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -35,9 +36,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             CreateSiteTeamCollection();
 
             _personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly1);
-            _personPeriod.AddPersonSkill(PersonSkill1);
-            _personPeriod.AddPersonSkill(PersonSkill2);
-
+            
             _personPeriod.RuleSetBag = new RuleSetBag();
 
         	_personPeriod.BudgetGroup = new BudgetGroup();
@@ -47,6 +46,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _personPeriod.AddExternalLogOn(ExternalLogOn3);
 
             _person.AddPersonPeriod(_personPeriod);
+	        _person.AddSkill(PersonSkill1, _personPeriod);
+			_person.AddSkill(PersonSkill2, _personPeriod);
+
+			_person.ChangeTeam(TeamBlue,_personPeriod);
 
             _target = EntityConverter.ConvertToOther<IPersonPeriod, PersonPeriodChildModel>(_personPeriod);
             _target.SetPersonSkillCollection(PersonSkillCollection);
@@ -75,7 +78,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         {
             Assert.IsNotEmpty(_target.FullName);
             Assert.IsNotNull(_target.PeriodDate);
-            Assert.IsNotNull(_target.Team);
+            Assert.IsNotNull(_target.SiteTeam);
             Assert.IsNotNull(_target.Contract);
             Assert.IsNotNull(_target.ContractSchedule);
             Assert.IsNotNull(_target.PersonContract);
@@ -122,14 +125,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.AreEqual(note, _target.Note);
 
         }
-        [Test]
-        public void VerifyTeamCanSet()
-        {
-            ITeam team1 = TeamFactory.CreateSimpleTeam();
-            _target.Team = team1;
-
-            Assert.AreEqual(team1, _target.Team);
-        }
 
         [Test]
         public void VerifyRuleSetBag()
@@ -138,7 +133,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _target.RuleSetBag = ruleSetBag;
 
             Assert.AreEqual(ruleSetBag, _target.RuleSetBag);
-
         }
 
 		[Test]
@@ -148,7 +142,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			_target.BudgetGroup = budgetGroup;
 
 			Assert.AreEqual(budgetGroup, _target.BudgetGroup);
-
 		}
 
         [Test]
@@ -205,9 +198,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
          
             Assert.AreEqual("_skill1, _skill2", _target.PersonSkills);
 
-            Assert.AreEqual(2, currentPeriod.PersonSkillCollection.Count);
+            Assert.AreEqual(2, currentPeriod.PersonSkillCollection.Count());
             _target.PersonSkills = Skill3.Name;
-            Assert.AreEqual(1, currentPeriod.PersonSkillCollection.Count);
+            Assert.AreEqual(1, currentPeriod.PersonSkillCollection.Count());
             Assert.AreEqual("_skill3", _target.PersonSkills);
         }
 
@@ -228,7 +221,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifySiteTeamCanGetAndSet()
         {
-            _target.Team = TeamBlue;
+            _target.SiteTeam = SiteTeam1;
             Assert.AreEqual(BLUESITE + "/" + BLUETEAM, _target.SiteTeam.Description);
 
             _target.SiteTeam = SiteTeam2;

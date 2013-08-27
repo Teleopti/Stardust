@@ -150,16 +150,6 @@ namespace Teleopti.Interfaces.Domain
 				ReadOnlyCollection<IPersonAssignment> PersonAssignmentCollectionDoNotUse();
 
 				/// <summary>
-				/// Gets a list of cloned person day offs.
-				/// </summary>
-				/// <returns></returns>
-				/// <remarks>
-				/// Created by: rogerkr
-				/// Created date: 2008-05-23
-				/// </remarks>
-				ReadOnlyCollection<IPersonDayOff> PersonDayOffCollection();
-
-				/// <summary>
 				/// Get a list of cloned personMeetings
 				/// </summary>
 				ReadOnlyCollection<IPersonMeeting> PersonMeetingCollection();
@@ -211,12 +201,6 @@ namespace Teleopti.Interfaces.Domain
 				/// Created date: 2010-12-02
 				/// </remarks>
 				ReadOnlyCollection<IPublicNote> PublicNoteCollection();
-
-				///<summary>
-				/// Returns the person assignment to use for view if more than one assignment 
-				/// can not be viewed at the time.
-				///</summary>
-				IPersonAssignment PersonAssignment();
 
 				/// <summary>
 				/// Gets the business rule response collection.
@@ -401,6 +385,14 @@ namespace Teleopti.Interfaces.Domain
 				/// Created date: 2010-12-02
 				/// </remarks>
 				void DeletePublicNote();
+
+	    bool HasDayOff();
+
+			///<summary>
+			/// Returns the person assignment to use for view if more than one assignment 
+			/// can not be viewed at the time.
+			///</summary>
+	    IPersonAssignment PersonAssignment(bool createIfNotExists = false);
     }
 
 }

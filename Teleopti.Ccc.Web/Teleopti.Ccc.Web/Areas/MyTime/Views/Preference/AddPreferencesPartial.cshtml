@@ -87,18 +87,14 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                             <input type="text" class="preference-end-time-min input-small" data-bind="timepicker: EarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
                             <span class="add-on"><i class="icon-time"></i></span>
                         </div>
-                        <button class="preference-end-time-min-next-day btn btn-mini" data-toggle="button" data-bind="click: EarliestEndTimeNextDayToggle, enable: EarliestEndTimeNextDayToggleEnabled" title="@Resources.NextDay">
-                            <i class="icon-adjust" data-bind="css: EarliestEndTimeNextDayClass"></i>
-                        </button>    
+                        <input type="checkbox" class="preference-end-time-min-next-day" data-bind="checked: NextDayMin, enable: EarliestEndTimeNextDayToggleEnabled" title="@Resources.NextDay" />  
                     </td>
                     <td>
                         <div class="input-append bootstrap-timepicker" title="@Resources.LatestEndTime">
                             <input type="text" class="preference-end-time-max input-small" data-bind="timepicker: LatestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
                             <span class="add-on"><i class="icon-time"></i></span>
                         </div>
-                        <button class="preference-end-time-max-next-day btn btn-mini" data-toggle="button" data-bind="click: LatestEndTimeNextDayToggle, enable: LatestEndTimeNextDayToggleEnabled" title="@Resources.NextDay">
-                            <i class="icon-adjust" data-bind="css: LatestEndTimeNextDayClass"></i>
-                        </button>
+                        <input type="checkbox" class="preference-end-time-max-next-day" data-bind="checked: NextDayMax, enable: LatestEndTimeNextDayToggleEnabled" title="@Resources.NextDay" />  
                     </td>
                 </tr>
                 <tr class="form-inline" data-bind="if: IsTimeInputVisible">

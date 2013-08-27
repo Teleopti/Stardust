@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
@@ -50,14 +51,12 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 if (enabled)
                 {
                     //Call RSB!
-                    var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
-                    _serviceBusSender.Send(new NewAbsenceRequestCreated
-	                    {
-		                    BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
-		                    Datasource = identity.DataSource.Application.Name,
-		                    Timestamp = DateTime.UtcNow,
-		                    PersonRequestId = result.Id.GetValueOrDefault(Guid.Empty)
-	                    });
+                    var message = new NewAbsenceRequestCreated
+		                {
+			                PersonRequestId = result.Id.GetValueOrDefault(Guid.Empty)
+		                };
+	                message.SetMessageDetail();
+                    _serviceBusSender.Send(message);
                 }
             }
 			command.Result = new CommandResultDto { AffectedId = result.Id, AffectedItems = 1 };

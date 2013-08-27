@@ -1226,7 +1226,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				// This is not working now I presume (SelectedSchedules is probably not correct)
 				foreach (IScheduleDay schedulePart in _scheduleView.SelectedSchedules())
 				{
-					if (schedulePart.PersonDayOffCollection().Count == 0)
+					if (!schedulePart.HasDayOff())
 					{
 						IEditableShift selectedShift = _scheduleOptimizerHelper.PrepareAndChooseBestShift(schedulePart, schedulingOptions, finderService);
 						if (selectedShift != null)
@@ -1401,24 +1401,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 							SchedulerState.Schedules[SchedulerState.FilteredPersonDictionary.ElementAt(0).Value].
 								ScheduledDay(new DateOnly(DateTime.MinValue.AddDays(1))).Clone();
 						var selectedSchedules = _scheduleView.SelectedSchedules();
-						if (selectedSchedules.Count() == 0)
+						if (!selectedSchedules.Any())
 							return;
 
-						var sortedList = (from d in ScheduleViewBase.AllSelectedDates(selectedSchedules)
-										  orderby d.Date
-										  select d).ToList();
+						var sortedList = selectedSchedules.Select(s => s.DateOnlyAsPeriod.DateOnly).OrderBy(d => d.Date);
 
 						var first = sortedList.FirstOrDefault();
 						var last = sortedList.LastOrDefault();
-						var period = new DateOnlyPeriod(first, last).ToDateTimePeriod(_schedulerState.TimeZoneInfo);
-						var addDayOffDialog = _scheduleView.CreateAddDayOffViewModel(displayList, _schedulerState.TimeZoneInfo, period);
+						var period = new DateTimePeriod(DateTime.SpecifyKind(TimeZoneHelper.ConvertFromUtc(first, TimeZoneGuard.Instance.TimeZone), DateTimeKind.Utc),
+						                                DateTime.SpecifyKind(TimeZoneHelper.ConvertFromUtc(last, TimeZoneGuard.Instance.TimeZone), DateTimeKind.Utc));
+						var addDayOffDialog = _scheduleView.CreateAddDayOffViewModel(displayList, TimeZoneGuard.Instance.TimeZone, period);
 
 						if (!addDayOffDialog.Result)
 							return;
 
 						var dayOffTemplate = addDayOffDialog.SelectedItem;
-						var personDayOff = new PersonDayOff(clone.Person, _schedulerState.RequestedScenario, dayOffTemplate, new DateOnly().AddDays(1), clone.TimeZone);
-						clone.Add(personDayOff);
+						clone.PersonAssignment(true).SetDayOff(dayOffTemplate);
 						_scheduleView.Presenter.ClipHandlerSchedule.Clear();
 						_scheduleView.Presenter.ClipHandlerSchedule.AddClip(1, 1, clone);
 						_externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetData("PersistableScheduleData", new int()));
@@ -2088,6 +2086,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemViewHistory.Enabled = false;
 			if (_scenario.DefaultScenario)
 				toolStripMenuItemViewHistory.Enabled = _isAuditingSchedules;
+
+			toolStripMenuItemSwitchToViewPointOfSelectedAgent.Enabled = _scheduleView.SelectedSchedules().Count > 0;
+
+			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
+			{
+				downItem.Checked = (TimeZoneGuard.Instance.TimeZone.Equals(downItem.Tag));
+			}
 		}
 
 		private static bool hasFunctionPermissionForTeams(IEnumerable<ITeam> teams, string functionPath)
@@ -3636,11 +3641,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			schedulingOptions.UseShiftCategoryLimitations = false;
 			var scheduleDays = argument.ScheduleDays;
 
-			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-			var selectedPeriod =
-				new DateOnlyPeriod(
-					OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone),
-					OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
+			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
 
 			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _container.Resolve<IMatrixListFactory>().CreateMatrixList(scheduleDays, selectedPeriod);
 			if (matrixesOfSelectedScheduleDays.Count == 0)
@@ -3727,7 +3728,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void _backgroundWorkerOptimization_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			//statusStripButtonShowOptimizationProgress.Visible = false;
 			if (Disposing)
 				return;
 			if (_undoRedo.InUndoRedo)
@@ -3736,10 +3736,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (rethrowBackgroundException(e))
 				return;
 
-			//Next line will start work on another background thread.
-			//No code after next line please.
 			RecalculateResources();
-			//afterBackgroundWorkersCompleted(false);
 		}
 
 		private void _backgroundWorkerOptimization_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -3776,11 +3773,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripStatusLabelStatus.Text = statusText;
 			_grid.Invalidate();
 			refreshSummarySkillIfActive();
-			_skillIntradayGridControl.RefreshGrid();
-			_skillDayGridControl.RefreshGrid();
-			_skillWeekGridControl.RefreshGrid();
-			_skillMonthGridControl.RefreshGrid();
-			_skillFullPeriodGridControl.RefreshGrid();
+			_skillIntradayGridControl.Invalidate(true);
+			_skillDayGridControl.Invalidate(true);
+			_skillWeekGridControl.Invalidate(true);
+			_skillMonthGridControl.Invalidate(true);
+			_skillFullPeriodGridControl.Invalidate(true);
 			refreshChart();
 			statusStrip1.Refresh();
 			Application.DoEvents();
@@ -3797,11 +3794,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					_grid.Invalidate();
 					refreshSummarySkillIfActive();
-					_skillIntradayGridControl.RefreshGrid();
-					_skillDayGridControl.RefreshGrid();
-					_skillWeekGridControl.RefreshGrid();
-					_skillMonthGridControl.RefreshGrid();
-					_skillFullPeriodGridControl.RefreshGrid();
+					_skillIntradayGridControl.Invalidate(true);
+					_skillDayGridControl.Invalidate(true);
+					_skillWeekGridControl.Invalidate(true);
+					_skillMonthGridControl.Invalidate(true);
+					_skillFullPeriodGridControl.Invalidate(true);
 					refreshChart();
 					_scheduleCounter = 0;
 				}
@@ -3828,11 +3825,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_grid.Cursor = Cursors.Default;
 				_grid.Enabled = true;
 				_grid.Cursor = Cursors.Default;
-				_skillIntradayGridControl.RefreshGrid();
-				_skillDayGridControl.RefreshGrid();
-				_skillWeekGridControl.RefreshGrid();
-				_skillMonthGridControl.RefreshGrid();
-				_skillFullPeriodGridControl.RefreshGrid();
+				_skillIntradayGridControl.Invalidate(true);
+				_skillDayGridControl.Invalidate(true);
+				_skillWeekGridControl.Invalidate(true);
+				_skillMonthGridControl.Invalidate(true);
+				_skillFullPeriodGridControl.Invalidate(true);
 				refreshChart();
 
 				if (_scheduleView != null)
@@ -3888,10 +3885,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (lastCalculationState)
 				_optimizationHelperWin.ResourceCalculateAllDays(e, null, true);
 			var selectedSchedules = options.ScheduleDays;
-			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-			var selectedPeriod =
-				new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedSchedules, currentPersonTimeZone),
-				                   OptimizerHelperHelper.GetEndDateInSelectedDays(selectedSchedules, currentPersonTimeZone));
+			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(selectedSchedules);
 			var scheduleMatrixOriginalStateContainers = _scheduleOptimizerHelper.CreateScheduleMatrixOriginalStateContainers(selectedSchedules, selectedPeriod);
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
 			DateOnlyPeriod groupPagePeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
@@ -4097,12 +4091,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         	_singleSkillDictionary = _container.Resolve<ISingleSkillDictionary>();
 			_singleSkillDictionary.Create(SchedulerState.SchedulingResultState.PersonsInOrganization.ToList(), SchedulerState.RequestedPeriod.DateOnlyPeriod);
 
-            _optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _singleSkillDictionary);
+            _optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, new PersonSkillProvider());
 			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container);
 
 			_groupDayOffOptimizerHelper = new GroupDayOffOptimizerHelper(_container);
-			//_blockOptimizerHelper = new BlockOptimizerHelper(_container, _scheduleOptimizerHelper);
-
+			
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation)
 				backgroundWorkerLoadData.ReportProgress(1, Resources.CalculatingResourcesDotDotDot);
 			_optimizationHelperWin.ResourceCalculateAllDays(e, backgroundWorkerLoadData, true);
@@ -4470,26 +4463,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 				Cursor = Cursors.WaitCursor;
 				using (PerformanceOutput.ForOperation("Persisting changes"))
 				{
-					using (new DenormalizerContext(new SendDenormalizeNotificationToSdk(_container.Resolve<ISendCommandToSdk>())))
+					_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
+					var result = _persister.TryPersist(_schedulerState.Schedules, _modifiedWriteProtections,
+					                                   _schedulerState.PersonRequests, _schedulerState.Schedules.ModifiedPersonAccounts);
+					if (result.ScheduleDictionaryConflicts != null && result.ScheduleDictionaryConflicts.Any())
 					{
-						_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
-						var result = _persister.TryPersist(_schedulerState.Schedules, _modifiedWriteProtections, _schedulerState.PersonRequests, _schedulerState.Schedules.ModifiedPersonAccounts);
-						if (result.ScheduleDictionaryConflicts != null && result.ScheduleDictionaryConflicts.Any())
-						{
-							var conflictHandlingResult = handleConflicts(result.ScheduleDictionaryConflicts);
-							if (conflictHandlingResult.DialogResult == DialogResult.OK)
-								showPleaseSaveAgainDialog();
-							return;
-						}
-						if (!result.Saved)
-						{
-							appologizeAndClose();
-							return;
-						}
-						if (_personAbsenceAccountPersistValidationBusinessRuleResponses.Any())
-						{
-							BusinessRuleResponseDialog.ShowDialogFromWinForms(_personAbsenceAccountPersistValidationBusinessRuleResponses);
-						}
+						var conflictHandlingResult = handleConflicts(result.ScheduleDictionaryConflicts);
+						if (conflictHandlingResult.DialogResult == DialogResult.OK)
+							showPleaseSaveAgainDialog();
+						return;
+					}
+					if (!result.Saved)
+					{
+						appologizeAndClose();
+						return;
+					}
+					if (_personAbsenceAccountPersistValidationBusinessRuleResponses.Any())
+					{
+						BusinessRuleResponseDialog.ShowDialogFromWinForms(_personAbsenceAccountPersistValidationBusinessRuleResponses);
 					}
 				}
 				_undoRedo.Clear();
@@ -5340,7 +5331,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void updateSelectionInfo(IList<IScheduleDay> selectedSchedules)
 		{
-			var updater = new UpdateSelectionInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag);
+			var updater = new UpdateSelectionInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag, toolStripStatusLabelTimeZone);
 			updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfo);
 		}
 
@@ -6339,7 +6330,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void setupContextMenuAvailTimeZones()
 		{
-			_schedulerState.TimeZoneInfo = TeleoptiPrincipal.Current.Regional.TimeZone;
+			TimeZoneGuard.Instance.TimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+			_schedulerState.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
 			toolStripMenuItemLoggedOnUserTimeZone.Tag = _schedulerState.TimeZoneInfo;
 			wpfShiftEditor1.SetTimeZone(_schedulerState.TimeZoneInfo);
 			IList<TimeZoneInfo> otherList = new List<TimeZoneInfo> { _schedulerState.TimeZoneInfo };
@@ -6428,19 +6420,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private ConflictHandlingResult handleConflicts(IEnumerable<IPersistableScheduleData> refreshedEntities, IEnumerable<IPersistConflict> conflicts)
 		{
-			List<IPersistableScheduleData> changedEntitiesBuffer;
+			List<IPersistableScheduleData> modifiedDataFromConflictResolution;
 			if (refreshedEntities == null)
-				changedEntitiesBuffer = new List<IPersistableScheduleData>();
+				modifiedDataFromConflictResolution = new List<IPersistableScheduleData>();
 			else
-				changedEntitiesBuffer = new List<IPersistableScheduleData>(refreshedEntities);
+				modifiedDataFromConflictResolution = new List<IPersistableScheduleData>(refreshedEntities);
 
 			var result = new ConflictHandlingResult { ConflictsFound = false, DialogResult = DialogResult.None };
 			result.ConflictsFound = conflicts.Any();
 			if (result.ConflictsFound)
-				result.DialogResult = showPersistConflictView(changedEntitiesBuffer, conflicts);
+				result.DialogResult = showPersistConflictView(modifiedDataFromConflictResolution, conflicts);
 
 			_undoRedo.Clear(); //see if this can be removed later... Should undo/redo work after refresh?
-			foreach (var data in changedEntitiesBuffer)
+			foreach (var data in modifiedDataFromConflictResolution)
 			{
 				_schedulerState.MarkDateToBeRecalculated(new DateOnly(data.Period.StartDateTimeLocal(_schedulerState.TimeZoneInfo)));
 				_personsToValidate.Add(data.Person);
@@ -6448,10 +6440,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return result;
 		}
 
-		private DialogResult showPersistConflictView(List<IPersistableScheduleData> modifiedData, IEnumerable<IPersistConflict> conflicts)
+		private DialogResult showPersistConflictView(List<IPersistableScheduleData> modifiedDataResult, IEnumerable<IPersistConflict> conflicts)
 		{
 			DialogResult dialogResult;
-			using (var conflictForm = new PersistConflictView(_schedulerState.Schedules, conflicts, modifiedData))
+			using (var conflictForm = new PersistConflictView(_schedulerState.Schedules, conflicts, modifiedDataResult))
 			{
 				conflictForm.ShowDialog();
 				dialogResult = conflictForm.DialogResult;
@@ -6714,21 +6706,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (e.Button != MouseButtons.Left) return;
 			var item = (ToolStripMenuItem)sender;
-			_schedulerState.TimeZoneInfo = (TimeZoneInfo)item.Tag;
-			wpfShiftEditor1.SetTimeZone(_schedulerState.TimeZoneInfo);
+			TimeZoneGuard.Instance.TimeZone = (TimeZoneInfo) item.Tag;
+			_schedulerState.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
+			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.TimeZone);
 			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
 			{
-				downItem.Checked = (_schedulerState.TimeZoneInfo == downItem.Tag);
+				downItem.Checked = (TimeZoneGuard.Instance.TimeZone.Equals(downItem.Tag));
 			}
 			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
 			{
 				prepareAgentRestrictionView(null, _scheduleView, new List<IPerson>(_scheduleView.AllSelectedPersons()));
 			}
+			_scheduleView.SetSelectedDateLocal(_dateNavigateControl.SelectedDate);
 			_grid.Invalidate();
 			_grid.Refresh();
 			updateSelectionInfo(_scheduleView.SelectedSchedules());
 			updateShiftEditor();
 			drawSkillGrid();
+			reloadChart();
 		}
 
 		private void ToolStripMenuItemStartAscMouseUp(object sender, MouseEventArgs e)
@@ -7114,6 +7109,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//preparation for future pbi
 		}
 
+		private void toolStripMenuItemSwitchViewPointToTimeZoneOfSelectedAgent_Click(object sender, EventArgs e)
+		{
+			var scheduleDay = _scheduleView.SelectedSchedules().First();
+			TimeZoneGuard.Instance.TimeZone = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
+			_schedulerState.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
+			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.TimeZone);
+			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
+			{
+				downItem.Checked = (TimeZoneGuard.Instance.TimeZone.Equals(downItem.Tag));
+			}
+			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
+			{
+				prepareAgentRestrictionView(null, _scheduleView, new List<IPerson>(_scheduleView.AllSelectedPersons()));
+			}
+			_scheduleView.SetSelectedDateLocal(_dateNavigateControl.SelectedDate);
+			_grid.Invalidate();
+			_grid.Refresh();
+			updateSelectionInfo(_scheduleView.SelectedSchedules());
+			updateShiftEditor();
+			drawSkillGrid();
+			reloadChart();
+		}
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 

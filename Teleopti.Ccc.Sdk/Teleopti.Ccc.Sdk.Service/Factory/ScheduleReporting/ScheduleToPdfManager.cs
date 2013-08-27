@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory.ScheduleReporting
 
                     case SchedulePartView.DayOff:
                         IPdfScheduleTemplate dayOff = new PdfScheduleDayOff(_scheduleColumnWidth,
-                                                                            part.PersonDayOffCollection()[0], timeZoneInfo, rtl, culture);
+                                                                            part.PersonAssignment(), timeZoneInfo, rtl, culture);
                         weekList.Add(dayOff);
                         break;
 

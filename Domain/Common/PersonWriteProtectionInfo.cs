@@ -98,5 +98,10 @@ namespace Teleopti.Ccc.Domain.Common
         {
             get { return _createdOn; }
         }
+
+		public override int GetHashCode()
+		{
+			return base.GetHashCode() ^ 543;
+		}
     }
 }

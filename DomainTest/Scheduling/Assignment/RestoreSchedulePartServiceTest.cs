@@ -16,10 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private IScheduleDay _source;
         private IPersonAssignment _personAssignment;
         private IPersonAbsence _personAbsence;
-        private IPersonDayOff _personDayOff;
-        private ReadOnlyCollection<IPersonAssignment> _personAssignments;
         private ReadOnlyCollection<IPersonAbsence> _personAbsences;
-        private ReadOnlyCollection<IPersonDayOff> _personDayOffs;
         private MockRepository _mocks;
         
         [SetUp]
@@ -30,10 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _source = _mocks.StrictMock<IScheduleDay>();
             _personAssignment = _mocks.StrictMock<IPersonAssignment>();
             _personAbsence = _mocks.StrictMock<IPersonAbsence>();
-            _personDayOff = _mocks.StrictMock<IPersonDayOff>();
-            _personAssignments = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>{_personAssignment});
             _personAbsences = new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence> { _personAbsence });
-            _personDayOffs = new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { _personDayOff });
             _rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
             _target = new RestoreSchedulePartService(_rollbackService, _destination, _source);
         }
@@ -46,19 +40,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Expect.Call(() => _destination.Clear<IPersonAssignment>());
             	Expect.Call(_destination.PersonAbsenceCollection()).Return(
             		new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
-                Expect.Call(() => _destination.Clear<IPersonDayOff>());
 
-                Expect.Call(_source.PersonAssignmentCollectionDoNotUse()).Return(_personAssignments);
+                Expect.Call(_source.PersonAssignment()).Return(_personAssignment);
                 Expect.Call(_source.PersonAbsenceCollection()).Return(_personAbsences);
-                Expect.Call(_source.PersonDayOffCollection()).Return(_personDayOffs);
 
                 Expect.Call(_personAssignment.NoneEntityClone()).Return(_personAssignment);
                 Expect.Call(_personAbsence.NoneEntityClone()).Return(_personAbsence);
-                Expect.Call(_personDayOff.NoneEntityClone()).Return(_personDayOff);
 
                 Expect.Call(() =>_destination.Add(_personAssignment));
                 Expect.Call(() => _destination.Add(_personAbsence));
-                Expect.Call(() => _destination.Add(_personDayOff));
 
                 Expect.Call(() => _rollbackService.Modify(_destination));
             }

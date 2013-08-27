@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
@@ -36,14 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Pages.Pages.CurrentOkButton.OkButton.EventualClick();
 		}
-
-
-		[When(@"I click the Cancel button")]
-		public void WhenIClickTheCancelButton()
-		{
-			Pages.Pages.CurrentCancelButton.CancelButton.EventualClick();
-		}
-
+		
 		[Then(@"I should see an error message")]
 		public void ThenIShouldSeeAnErrorMessage()
 		{
@@ -53,15 +47,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should see a symbol at the top of the schedule for date '(.*)'")]
 		public void ThenIShouldSeeASymbolAtTheTopOfTheScheduleForDate(DateTime date)
 		{
-			var textRequest = Pages.Pages.WeekSchedulePage.RequestForDate(date);
-			EventualAssert.That(() => textRequest.DisplayVisible(), Is.True);
+			var formattedDate = date.ToString(CultureInfo.GetCultureInfo("sv-SE").DateTimeFormat.ShortDatePattern);
+			Browser.Interactions.AssertVisibleUsingJQuery(string.Format("ul.weekview-day[data-mytime-date={0}] li .text-request", formattedDate));
 		}
 
 		[Then(@"I should not see a symbol at the top of the schedule for date '(.*)'")]
 		public void ThenIShouldNotSeeASymbolAtTheTopOfTheScheduleForDate(DateTime date)
 		{
-			var textRequestSymbol = Pages.Pages.WeekSchedulePage.RequestForDate(date);
-			EventualAssert.That(() => textRequestSymbol.DisplayHidden(), Is.True);
+			var formattedDate = date.ToString(CultureInfo.GetCultureInfo("sv-SE").DateTimeFormat.ShortDatePattern);
+			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format("ul.weekview-day[data-mytime-date={0}] li .text-request", formattedDate));
 		}
 
 		[Then(@"I should see an indication that no agents that can go on holiday for date '(.*)'")]

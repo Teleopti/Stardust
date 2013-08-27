@@ -51,7 +51,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			var subStep = _mock.DynamicMock<IEtlDayOffSubStep>();
 			var scenario = new Scenario("scenario") {DefaultScenario = true};
 
-			Expect.Call(jobParameters.IntervalsPerDay).Return(96);
 			Expect.Call(stateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> { scenario });
 			
 			Expect.Call(jobParameters.StateHolder).Return(stateHolder);
@@ -85,7 +84,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			var jobParameters = _mock.DynamicMock<IJobParameters>();
 			var stateHolder = _mock.DynamicMock<ICommonStateHolder>();
 			
-			Expect.Call(jobParameters.IntervalsPerDay).Return(96);
 			Expect.Call(jobParameters.StateHolder).Return(stateHolder);
 			Expect.Call(stateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> { new Scenario("scenario") { DefaultScenario = false } });
 			_mock.ReplayAll();

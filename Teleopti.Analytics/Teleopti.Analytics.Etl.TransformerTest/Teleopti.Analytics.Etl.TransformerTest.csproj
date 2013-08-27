@@ -117,6 +117,7 @@
     <Compile Include="OvertimeTransformerTest.cs" />
     <Compile Include="PmPermissionExtractorTest.cs" />
     <Compile Include="RequestTransformTest.cs" />
+    <Compile Include="SchedulePreferenceTransformerHelperTest.cs" />
     <Compile Include="ScheduleThreading\ContractDataRowFactoryTest.cs" />
     <Compile Include="ScheduleThreading\ScheduleDataRowCollectionFactoryTest.cs" />
     <Compile Include="SkillTransformerTest.cs" />

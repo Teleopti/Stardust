@@ -152,5 +152,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			var viewmodel = _requestsViewModelFactory.CreateShiftTradeRequestSwapDetails(id);
 			return Json(viewmodel, JsonRequestBehavior.AllowGet);
 		}
+
+		[UnitOfWorkAction]
+		[HttpPostOrPut]
+		public JsonResult ReSendShiftTrade(Guid id)
+		{
+			var model = _respondToShiftTrade.OkByMe(id);
+			model.Status = Resources.WaitingThreeDots;
+			return Json(model);
+		}
 	}
 }

@@ -51,8 +51,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var part1 = scheduleDictionary[person1].ScheduledDay(dateOnly);
 				var part2 = scheduleDictionary[person2].ScheduledDay(dateOnly);
 
-				//if(part1.PersonAbsenceCollection().Any() || part2.PersonAbsenceCollection().Any())
-				//    continue;
 
 				if(lockedDates.Contains(dateOnly))
 					continue;
@@ -61,14 +59,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				modifiedParts.AddRange(SwapParts(scheduleDictionary, selectedSchedules));
 
-				foreach (var assignment in part1.PersonAssignmentCollectionDoNotUse())
+				var ass1 = part1.PersonAssignment();
+				if (ass1 != null)
 				{
-					assignment.CheckRestrictions();
+					ass1.CheckRestrictions();
 				}
 
-				foreach (var assignment in part2.PersonAssignmentCollectionDoNotUse())
+				var ass2 = part1.PersonAssignment();
+				if (ass2 != null)
 				{
-					assignment.CheckRestrictions();
+					ass2.CheckRestrictions();
 				}
 			}
 

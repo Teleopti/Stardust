@@ -297,18 +297,18 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
                         break;
 
                     case SchedulePartView.DayOff:
-                		var assignments = part.PersonAssignmentCollectionDoNotUse();
-                        if (assignments.Count > 0 && assignments[0].OvertimeLayers().Any() && details == ScheduleReportDetail.All)
+                		var assignment = part.PersonAssignment();
+						if (assignment != null && assignment.OvertimeLayers().Any() && details == ScheduleReportDetail.All)
                         {
                             schedule = new PdfScheduleDayOffOvertime(_scheduleColumnWidth,
-                                                                 part, part.PersonDayOffCollection()[0],
+                                                                 part, part.PersonAssignment(),
                                                                  timeZoneInfo, rtl, details, culture);
                             weekList.Add(schedule);
                         }
                         else
                         {
                             IPdfScheduleTemplate dayOff = new PdfScheduleDayOff(_scheduleColumnWidth,
-                                                                     part.PersonDayOffCollection()[0], timeZoneInfo, rtl, culture);
+                                                                     part.PersonAssignment(), timeZoneInfo, rtl, culture);
                             weekList.Add(dayOff);
                         }
                         break;

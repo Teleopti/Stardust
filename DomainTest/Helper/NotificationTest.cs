@@ -67,33 +67,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			routes.Should().Contain("datasource/" + target.BusinessUnitId + "/type/ref/" + target.DomainReferenceId);
 			routes.Should().Contain("datasource/" + target.BusinessUnitId + "/type/id/" + target.DomainId);
 		}
-
-		[Test]
-		public void ShouldRouteToEmptyDataSource()
-		{
-			var routes = target.Routes();
-			routes.Should().Contain("/" + target.BusinessUnitId + "/type");
-			routes.Should().Contain("/" + target.BusinessUnitId + "/type/ref/" + target.DomainReferenceId);
-			routes.Should().Contain("/" + target.BusinessUnitId + "/type/id/" + target.DomainId);
-		}
-
-		[Test]
-		public void ShouldRouteToEmptyBusinessUnit()
-		{
-			var routes = target.Routes();
-			routes.Should().Contain("datasource/" + Guid.Empty.ToString() + "/type");
-			routes.Should().Contain("datasource/" + Guid.Empty.ToString() + "/type/ref/" + target.DomainReferenceId);
-			routes.Should().Contain("datasource/" + Guid.Empty.ToString() + "/type/id/" + target.DomainId);
-		}
-
-		[Test]
-		public void ShouldRouteToEmptyBusinessUnitAndDataSource()
-		{
-			var routes = target.Routes();
-			routes.Should().Contain("/" + Guid.Empty.ToString() + "/type");
-			routes.Should().Contain("/" + Guid.Empty.ToString() + "/type/ref/" + target.DomainReferenceId);
-			routes.Should().Contain("/" + Guid.Empty.ToString() + "/type/id/" + target.DomainId);
-		}
 	}
 
 	[TestFixture]

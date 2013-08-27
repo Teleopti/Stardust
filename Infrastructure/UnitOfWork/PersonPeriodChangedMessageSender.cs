@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
@@ -10,7 +11,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
     public class PersonPeriodChangedMessageSender :IMessageSender
     {
-        private readonly IEnumerable<Type> _triggerInterfaces = new List<Type>
+	    private readonly IServiceBusSender _serviceBusSender;
+
+	    private readonly IEnumerable<Type> _triggerInterfaces = new List<Type>
 		                                                        	{
 		                                                        		typeof (ITeam),
 		                                                        		typeof (ISite),
@@ -19,22 +22,19 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                                        		typeof (IPartTimePercentage),
 		                                                        		typeof (IRuleSetBag),
 		                                                        		typeof (ISkill),
-		                                                        		typeof (IPersonWriteProtectionInfo)
+		                                                        		typeof (IPerson)
 		                                                        	};
 
-    	private readonly ISendDenormalizeNotification _sendDenormalizeNotification;
-    	private readonly ISaveToDenormalizationQueue _saveToDenormalizationQueue;
-
-        public PersonPeriodChangedMessageSender(ISendDenormalizeNotification sendDenormalizeNotification, ISaveToDenormalizationQueue saveToDenormalizationQueue)
+        public PersonPeriodChangedMessageSender(IServiceBusSender serviceBusSender)
 		{
-			_sendDenormalizeNotification = sendDenormalizeNotification;
-			_saveToDenormalizationQueue = saveToDenormalizationQueue;
+	        _serviceBusSender = serviceBusSender;
 		}
 
     	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
-        {
-			var atLeastOneMessage = false;
+		{
+			if (!_serviceBusSender.EnsureBus()) return;
+
             var affectedInterfaces = from r in modifiedRoots
                                      from i in r.Root.GetType().GetInterfaces()
                                      select i;
@@ -48,12 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                     
                     var message = new PersonPeriodChangedMessage();
 					message.SetPersonIdCollection(idsAsString);
-                    _saveToDenormalizationQueue.Execute(message);
-					atLeastOneMessage = true;
-				}
-				if (atLeastOneMessage)
-				{
-					_sendDenormalizeNotification.Notify();
+                    _serviceBusSender.Send(message);
 				}
             }
         }

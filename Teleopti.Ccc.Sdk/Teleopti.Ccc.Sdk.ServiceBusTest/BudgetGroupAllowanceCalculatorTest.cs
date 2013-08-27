@@ -205,9 +205,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		[Test]
 		public void CheckHeadCount_NoBudgetGroup()
 		{
-			var personPeriod = MockRepository.GenerateMock<PersonPeriod>();
-			
-			_person.AddPersonPeriod(personPeriod);
+			_person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly()));
 			_person.SetId(Guid.NewGuid());
 			
 			_absenceRequest.Expect(a => a.Person).Return(_person).Repeat.Any();
