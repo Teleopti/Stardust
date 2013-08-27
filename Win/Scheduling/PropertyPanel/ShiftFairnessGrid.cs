@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Teleopti.Ccc.Win.Common;
+﻿using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Ccc.Win.Forecasting.Forms;
-using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
-    public class ShiftFairnessGrid : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext, IShiftFairnessGrid
+    public class ShiftFairnessGrid : TeleoptiGridControl, IShiftFairnessGrid
     {
 	    private readonly IDistributionInformationExtractor _model;
 	    private readonly ShiftFairnessGridPresenter _presenter;
 
 		public ShiftFairnessGrid(IDistributionInformationExtractor model)
 		{
+			base.Initialize();
 			_model = model;
 			_presenter = new ShiftFairnessGridPresenter(this);
 			initializeComponent();
@@ -24,32 +20,16 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 		private void initializeComponent()
 		{
-			//ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
-
 			ResetVolatileData();
 
 			QueryColCount += shiftFairnessGridQueryColCount;
 			QueryRowCount += shiftFairnessGridQueryRowCount;
 			QueryCellInfo += shiftFairnessGridQueryCellInfo;
-			QueryColWidth += shiftFairnessGridQueryColWidth;
-			
 
-			((System.ComponentModel.ISupportInitialize)(this)).EndInit();
-			ResumeLayout(false);
+			ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
 		}
 
-		void shiftFairnessGridQueryColWidth(object sender, Syncfusion.Windows.Forms.Grid.GridRowColSizeEventArgs e)
-		{
-			if (e.Index == 0)
-				e.Size = 50;
-			else
-				e.Size = 120;
-
-			e.Handled = true;
-		}
-
-		
-		void shiftFairnessGridQueryCellInfo(object sender, Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs e)
+		void shiftFairnessGridQueryCellInfo(object sender,GridQueryCellInfoEventArgs e)
 		{
 			if (e.ColIndex < 0 || e.RowIndex < 0) return;
 			if (e.ColIndex == 0 && e.RowIndex == 0) return;
@@ -96,54 +76,23 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				{
 					e.Style.CellValue = _presenter.CalculateTotalStandardDeviation(_model.GetShiftFairness());
 				}
+
+				e.Style.ReadOnly = true;
 			}
 
 			e.Handled = true;
 		}
 
-		void shiftFairnessGridQueryRowCount(object sender, Syncfusion.Windows.Forms.Grid.GridRowColCountEventArgs e)
+		void shiftFairnessGridQueryRowCount(object sender,GridRowColCountEventArgs e)
 		{
 			e.Count = _model.ShiftCategories.Count + 1;
 			e.Handled = true;
 		}
 
-		void shiftFairnessGridQueryColCount(object sender, Syncfusion.Windows.Forms.Grid.GridRowColCountEventArgs e)
+		void shiftFairnessGridQueryColCount(object sender, GridRowColCountEventArgs e)
 		{
 			e.Count = 4;
 			e.Handled = true;
 		}
-
-        public bool HasColumns { get; private set; }
-        public void RefreshGrid()
-        {
-            throw new NotImplementedException();
-        }
-
-        public AbstractDetailView Owner { get; set; }
-        public void GoToDate(DateTime theDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public DateTime GetLocalCurrentDate(int column)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDictionary<int, GridRow> EnabledChartGridRows { get; private set; }
-        public ReadOnlyCollection<GridRow> AllGridRows { get; private set; }
-        public int MainHeaderRow { get; private set; }
-        public IList<GridRow> EnabledChartGridRowsMicke65()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetRowVisibility(string key, bool enabled)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool HasHelp { get; private set; }
-        public string HelpId { get; private set; }
     }
 }
