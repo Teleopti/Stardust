@@ -1,3 +1,4 @@
+using System.Linq;
 using TechTalk.SpecFlow;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
@@ -26,12 +27,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
 		{
 			if (value == null)
 			{
-				if (ScenarioContext.Current.ContainsKey(key))
-					ScenarioContext.Current.Remove(key);
+				if (context.ContainsKey(key))
+					context.Remove(key);
 			}
 			else
-				ScenarioContext.Current[key] = value;
+				context[key] = value;
 			return value;
+		}
+
+		public static bool IsTaggedWith(this ScenarioContext context, string tag)
+		{
+			if (FeatureContext.Current.FeatureInfo.Tags.Any(s => s == tag))
+				return true;
+			if (context.ScenarioInfo.Tags.Any(s => s == tag))
+				return true;
+			return false;
 		}
 	}
 }
