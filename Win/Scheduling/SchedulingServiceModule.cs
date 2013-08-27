@@ -22,6 +22,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.Win.Commands;
+using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -222,6 +223,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			registerTeamBlockDayOffOptimizerService(builder);
 			registerTeamBlockIntradayOptimizerService(builder);
 			registerTeamBlockSchedulingService(builder);
+
+            builder.RegisterType<ScheduleDayListFactory>().As<IScheduleDayListFactory>();
         }
 
 		private static void registerTeamBlockCommon(ContainerBuilder builder)

@@ -106,6 +106,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private DockingManager _dockingManager;
 		private FormAgentInfo _agentInfo;
 		private AgentInfoControl _agentInfoControl;
+        private ShiftDistributionAnalysisControl _shiftDistributionAnalysisControl;
+        private ShiftFairnessAnalysisControl _shiftFairnessAnalysisControl;
 		private ScheduleViewBase _scheduleView;
 		private RequestView _requestView;
 		private ResourceOptimizationHelperWin _optimizationHelperWin;
@@ -193,6 +195,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public IList<IWorkflowControlSet> WorkflowControlSets { get; private set; }
 		private DateTimePeriod _selectedPeriod;
 	    private bool isWindowLoaded = false;
+        private IScheduleDayListFactory _scheduleDayListFactory;
 
 		#region enums
 		private enum ZoomLevel
@@ -526,7 +529,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				TypedParameter.From(scheduleDictionaryBatchingPersister),
 				TypedParameter.From<IOwnMessageQueue>(_schedulerMessageBrokerHandler)
 				);
-
+            
+            _scheduleDayListFactory = _container.Resolve<IScheduleDayListFactory>();
 		}
 
 		private void loadSchedulingScreenSettings()
@@ -2453,7 +2457,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void _backgroundWorkerResourceCalculator_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			if (Disposing)
+            updateDistrbutionInformation();
+
+            if (Disposing)
 				return;
 
 			_backgroundWorkerRunning = false;
@@ -2477,9 +2483,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			validatePersons();
-		}
+        }
 
-		private void _backgroundWorkerResourceCalculator_ProgressChanged(object sender, ProgressChangedEventArgs e)
+	    private void updateDistrbutionInformation()
+	    {
+            var allSchedules = _scheduleDayListFactory.CreatScheduleDayList();
+	        var updateSelectionForShiftDistribution = new UpdateSelectionForShiftDistribution();
+            updateSelectionForShiftDistribution.Update(allSchedules,_scheduleView,_shiftDistributionAnalysisControl ,_shiftFairnessAnalysisControl  );
+	    }
+
+	    private void _backgroundWorkerResourceCalculator_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			if (Disposing)
 				return;
@@ -4788,22 +4801,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _container, _groupPagesProvider);
 			_agentInfoControl.Dock = DockStyle.Fill;
 			agentInfoTab.Controls.Add(_agentInfoControl);
-
-			var scheduleDayListFactory = new ScheduleDayListFactory(_schedulerState);
-			var allSchedules = scheduleDayListFactory.CreatScheduleDayList();
-			var shiftCategoryDistributionExtractor = new DistributionInformationExtractor(allSchedules);
-
+            
             var shiftCategoryTab = ColorHelper.CreateTabPage("Shift Category Analysis", "Shift Category Analysis");
 			_tabInfoPanels.TabPages.Add(shiftCategoryTab);
-            var shiftDistributionAnalysisControl = new ShiftDistributionAnalysisControl(shiftCategoryDistributionExtractor);
-            shiftDistributionAnalysisControl.Dock = DockStyle.Fill;
-            shiftCategoryTab.Controls.Add(shiftDistributionAnalysisControl);
-			
+            _shiftDistributionAnalysisControl = new ShiftDistributionAnalysisControl();
+            _shiftDistributionAnalysisControl.Dock = DockStyle.Fill;
+            shiftCategoryTab.Controls.Add(_shiftDistributionAnalysisControl);
+
             var shiftFairnessTab = ColorHelper.CreateTabPage("Shift Fairness Analysis", "Shift Fairness Analysis");
             _tabInfoPanels.TabPages.Add(shiftFairnessTab);
-            var shiftFairnessAnalysisControl = new ShiftFairnessAnalysisControl(shiftCategoryDistributionExtractor, _schedulerState);
-            shiftFairnessAnalysisControl.Dock = DockStyle.Fill;
-            shiftFairnessTab.Controls.Add(shiftFairnessAnalysisControl);
+            _shiftFairnessAnalysisControl = new ShiftFairnessAnalysisControl(_schedulerState);
+            _shiftFairnessAnalysisControl.Dock = DockStyle.Fill;
+            shiftFairnessTab.Controls.Add(_shiftFairnessAnalysisControl);
+
+		    updateDistrbutionInformation();
 		}
 
 		private PersonsFilterView _cachedPersonsFilterView;
@@ -5374,7 +5385,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void updateSelectionInfo(IList<IScheduleDay> selectedSchedules)
 		{
-			var updater = new UpdateSelectionInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag, toolStripStatusLabelTimeZone);
+			var updater = new UpdateSelectionForAgentInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag, toolStripStatusLabelTimeZone);
 			updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfo, _agentInfoControl);
 		}
 
@@ -6585,7 +6596,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		private DateTime _lastclickLabels;
-		private void toolStripButtonShowTexts_Click(object sender, EventArgs e)
+	    
+
+
+	    private void toolStripButtonShowTexts_Click(object sender, EventArgs e)
 		{
 			// fix for bug in syncfusion that shoots click event twice on buttons in quick access
 			if (_lastclickLabels.AddSeconds(1) > DateTime.Now) return;

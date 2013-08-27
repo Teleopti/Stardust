@@ -19,35 +19,30 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		private IDistributionInformationExtractor _model;
 		private ShiftDistributionGridPresenter _presenter;
 
-        public ShiftDistributionGrid(IDistributionInformationExtractor model)
+        public ShiftDistributionGrid()
         {
-            
-	        _model = model;
-			_presenter = new ShiftDistributionGridPresenter(this,_model.GetShiftDistribution());
+            base.Initialize();
+	        
+        }
+
+        public void UpdateModel(IDistributionInformationExtractor model)
+        {
+            RefreshGrid();
+            _model = model;
+            _presenter = new ShiftDistributionGridPresenter(this, _model.GetShiftDistribution());
             initializeComponent();
+            
         }
 
         private void initializeComponent()
         {
-            ResetVolatileData();
+            
             QueryColCount += shiftPerAgentGridQueryColCount;
             QueryRowCount += shiftPerAgentGridQueryRowCount;
             QueryCellInfo += shiftPerAgentGridQueryCellInfo;
-            QueryColWidth += shiftPerAgentGridQueryColWidth;
 
-            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
-            ResumeLayout(false);
+            ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);	
         }
-
-	    private void shiftPerAgentGridQueryColWidth(object sender, GridRowColSizeEventArgs e)
-	    {
-            if (e.Index == 0)
-                e.Size = 100;
-            else
-                e.Size = 50;
-
-            e.Handled = true;
-	    }
 
 	    void shiftPerAgentGridQueryCellInfo(object sender, Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs e)
         {
@@ -96,7 +91,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         public bool HasColumns { get; private set; }
         public void RefreshGrid()
         {
-            throw new NotImplementedException();
+            ResetVolatileData();
         }
 
         public AbstractDetailView Owner { get; set; }

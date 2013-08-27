@@ -7,20 +7,26 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
     public class ShiftFairnessGrid : TeleoptiGridControl, IShiftFairnessGrid
     {
-	    private readonly IDistributionInformationExtractor _model;
-	    private readonly ShiftFairnessGridPresenter _presenter;
+	    private IDistributionInformationExtractor _model;
+	    private ShiftFairnessGridPresenter _presenter;
 
-		public ShiftFairnessGrid(IDistributionInformationExtractor model)
+		public ShiftFairnessGrid()
 		{
 			base.Initialize();
-			_model = model;
-			_presenter = new ShiftFairnessGridPresenter(this);
-			initializeComponent();
+			
 		}
+
+        public void UpdateModel(IDistributionInformationExtractor distributionInformationExtractor)
+        {
+            ResetVolatileData();
+            _model = distributionInformationExtractor;
+            _presenter = new ShiftFairnessGridPresenter(this);
+            initializeComponent();
+        }
 
 		private void initializeComponent()
 		{
-			ResetVolatileData();
+			
 
 			QueryColCount += shiftFairnessGridQueryColCount;
 			QueryRowCount += shiftFairnessGridQueryRowCount;
@@ -94,5 +100,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			e.Count = 4;
 			e.Handled = true;
 		}
+
+        
     }
 }

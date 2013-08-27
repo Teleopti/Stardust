@@ -9,13 +9,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
-	public class UpdateSelectionInfo
+	public class UpdateSelectionForAgentInfo
 	{
 		private readonly ToolStripStatusLabel _statusLabelContractTime;
 		private readonly ToolStripStatusLabel _statusLabelTag;
 		private readonly ToolStripStatusLabel _statusLabelTimeZone;
 
-		public UpdateSelectionInfo(ToolStripStatusLabel statusLabelContractTime, ToolStripStatusLabel statusLabelTag, ToolStripStatusLabel statusLabelTimeZone)
+		public UpdateSelectionForAgentInfo(ToolStripStatusLabel statusLabelContractTime, ToolStripStatusLabel statusLabelTag, ToolStripStatusLabel statusLabelTimeZone)
 		{
 			_statusLabelContractTime = statusLabelContractTime;
 			_statusLabelTag = statusLabelTag;

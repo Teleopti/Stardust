@@ -11,15 +11,21 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
     public class ShiftDistributionAnalysisControl : BaseUserControl
     {
         private TableLayoutPanel shiftDistributiontableLayoutPanel;
-	    private IDistributionInformationExtractor _model;
-        
-        public ShiftDistributionAnalysisControl(IDistributionInformationExtractor distributionInformationExtractor)
+	    //private IDistributionInformationExtractor _model;
+        private ShiftDistributionGrid _shiftDistributionGrid;
+
+        public ShiftDistributionAnalysisControl()
         {
             InitializeComponent();
-	        _model = distributionInformationExtractor;
-            var shiftDistributionGrid = new ShiftDistributionGrid(_model);
-            shiftDistributionGrid.Dock = DockStyle.Fill;
-            shiftDistributiontableLayoutPanel.Controls.Add(shiftDistributionGrid,0,0);
+	        //_model = distributionInformationExtractor;
+            _shiftDistributionGrid = new ShiftDistributionGrid();
+            _shiftDistributionGrid.Dock = DockStyle.Fill;
+            shiftDistributiontableLayoutPanel.Controls.Add(_shiftDistributionGrid,0,0);
+        }
+
+        public void UpdateModel(IDistributionInformationExtractor model)
+        {
+            _shiftDistributionGrid.UpdateModel(model );
         }
 
         private void InitializeComponent()

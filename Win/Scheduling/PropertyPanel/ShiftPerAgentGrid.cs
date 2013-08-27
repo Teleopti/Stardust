@@ -8,23 +8,29 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
     public class ShiftPerAgentGrid : TeleoptiGridControl, IShiftPerAgentGrid
     {
-	    private readonly IDistributionInformationExtractor _model;
-	    private readonly ShiftPerAgentGridPresenter _presenter;
+	    private  IDistributionInformationExtractor _model;
+	    private  ShiftPerAgentGridPresenter _presenter;
 	    private readonly ISchedulerStateHolder _schedulerState;
 
-		public ShiftPerAgentGrid(IDistributionInformationExtractor model, ISchedulerStateHolder schedulerState)
+		public ShiftPerAgentGrid(ISchedulerStateHolder schedulerState)
 		{
 			base.Initialize();
-			_model = model;
+			
 			_schedulerState = schedulerState;
-			_presenter = new ShiftPerAgentGridPresenter(this);
-
-			initializeComponent();
+			
 		}
+
+        public void UpdateModel(IDistributionInformationExtractor distributionInformationExtractor)
+        {
+            ResetVolatileData();
+            _model = distributionInformationExtractor;
+            _presenter = new ShiftPerAgentGridPresenter(this);
+
+            initializeComponent();
+        }
 
 		private void initializeComponent()
 		{
-			ResetVolatileData();
 
 			QueryColCount += shiftPerAgentGridQueryColCount;
 			QueryRowCount += shiftPerAgentGridQueryRowCount;
@@ -74,5 +80,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			e.Count = _model.ShiftCategories.Count;
 			e.Handled = true;
 		}
+
+        
     }
 }

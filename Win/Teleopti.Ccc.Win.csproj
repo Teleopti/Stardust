@@ -1314,6 +1314,7 @@
     <Compile Include="Scheduling\PropertyPanel\ShiftPerAgentGrid.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Scheduling\PropertyPanel\UpdateSelectionForShiftDistribution.cs" />
     <Compile Include="Scheduling\QuickAccessState.cs" />
     <Compile Include="Scheduling\SchedulerRibbonHelper.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControl.cs">
@@ -1501,7 +1502,7 @@
     </Compile>
     <Compile Include="Scheduling\Swapper.cs" />
     <Compile Include="Scheduling\TagsMenuLoader.cs" />
-    <Compile Include="Scheduling\PropertyPanel\UpdateSelectionInfo.cs" />
+    <Compile Include="Scheduling\PropertyPanel\UpdateSelectionForAgentInfo.cs" />
     <Compile Include="Scheduling\VirtualSkillHelper.cs" />
     <Compile Include="SearchPersonView.cs">
       <SubType>UserControl</SubType>

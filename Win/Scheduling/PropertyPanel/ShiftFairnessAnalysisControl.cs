@@ -11,18 +11,26 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         private Label label2;
         private Label label3;
         private TableLayoutPanel shiftFairnessTableLayoutPanel;
-	    private readonly IDistributionInformationExtractor _model;
+	    private IDistributionInformationExtractor _model;
+        private ShiftFairnessGrid _shiftFairnessGrid;
+        private ShiftPerAgentGrid _shiftPerAgentGrid;
 
-        public ShiftFairnessAnalysisControl(IDistributionInformationExtractor distributionInformationExtractor, ISchedulerStateHolder schedulerState)
+        public ShiftFairnessAnalysisControl( ISchedulerStateHolder schedulerState)
         {
             initializeComponent();
-	        _model = distributionInformationExtractor;
-            var shiftFairnessGrid = new ShiftFairnessGrid(_model);
-            var shiftPerAgentGrid = new ShiftPerAgentGrid(_model, schedulerState);
-            shiftFairnessGrid.Dock = DockStyle.Fill;
-            shiftPerAgentGrid.Dock = DockStyle.Fill;
-            shiftFairnessTableLayoutPanel.Controls.Add(shiftFairnessGrid,0,3);
-            shiftFairnessTableLayoutPanel.Controls.Add(shiftPerAgentGrid, 0, 5);
+            _shiftFairnessGrid = new ShiftFairnessGrid();
+            _shiftPerAgentGrid = new ShiftPerAgentGrid(schedulerState);
+            _shiftFairnessGrid.Dock = DockStyle.Fill;
+            _shiftPerAgentGrid.Dock = DockStyle.Fill;
+            shiftFairnessTableLayoutPanel.Controls.Add(_shiftFairnessGrid,0,3);
+            shiftFairnessTableLayoutPanel.Controls.Add(_shiftPerAgentGrid, 0, 5);
+        }
+
+        public void UpdateModel(IDistributionInformationExtractor distributionInformationExtractor)
+        {
+            _model = distributionInformationExtractor;
+            _shiftFairnessGrid.UpdateModel(_model);
+            _shiftPerAgentGrid.UpdateModel(_model);
         }
 
         private void initializeComponent()
