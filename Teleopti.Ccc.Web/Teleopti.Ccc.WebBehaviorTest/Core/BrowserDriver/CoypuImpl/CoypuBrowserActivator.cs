@@ -28,9 +28,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 					Timeout = timeout,
 					Driver = typeof(ChromeWebDriverWithNewProfile),
 					//Driver = typeof(SeleniumWebDriver),
+					//Driver = typeof(SeleniumWebDriver),
 					//Browser = Coypu.Drivers.Browser.InternetExplorer,
 					//Browser = Coypu.Drivers.Browser.Firefox,
 					//Browser = Coypu.Drivers.Browser.Chrome
+					//Browser = Coypu.Drivers.Browser.PhantomJS
 				};
 			// to get chrome to be fast, disable automatic detection of proxy settings. odd, but it works:
 			// http://stackoverflow.com/questions/16179808/chromedriver-is-extremely-slow-on-a-specific-machine-using-selenium-grid-and-ne
