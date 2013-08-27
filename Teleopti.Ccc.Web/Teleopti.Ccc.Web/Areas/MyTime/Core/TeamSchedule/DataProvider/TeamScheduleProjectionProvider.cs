@@ -22,11 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 			if (projection != null && projection.HasLayers)
 				return MakeProjection(projection);
 
-			var dayOffs = scheduleDay.PersonDayOffCollection();
-
-			var hasDayOffs = dayOffs != null && dayOffs.Count > 0;
-
-			if (hasDayOffs)
+			if (scheduleDay.HasDayOff())
 				return MakeDayOffProjection(scheduleDay);
 
 			return MakeEmptyProjection(scheduleDay);
@@ -43,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 
 		private static ITeamScheduleProjection MakeDayOffProjection(IScheduleDay scheduleDay)
 				       			{
-			var dayOff = scheduleDay.PersonDayOffCollection().First();
+			var dayOff = scheduleDay.PersonAssignment().DayOff();
 			return new TeamScheduleProjection
 			       	{
 			       		Layers = new ITeamScheduleLayer[] {},

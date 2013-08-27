@@ -8,28 +8,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
     public static class ScheduleDayStringVisualizer
     {
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static string GetToolTipPersonalAssignments(IScheduleDay scheduleDay, TimeZoneInfo timeZoneInfo, IFormatProvider cultureInfo)
         {
             StringBuilder sb = new StringBuilder();
 
-            IList<IPersonAssignment> asses = scheduleDay.PersonAssignmentCollectionDoNotUse();
+            var ass = scheduleDay.PersonAssignment();
             IList<IPersonMeeting> meetings = scheduleDay.PersonMeetingCollection();
-            if (asses.Count > 0 || meetings.Count > 0)
+            if (ass != null || meetings.Count > 0)
             {
-	            foreach (var pa in asses)
-	            {
-		            sb.AppendFormat(" - {0}: ", UserTexts.Resources.PersonalShift);
-		            foreach (var personalLayer in pa.PersonalLayers())
-		            {
-			            sb.AppendLine();
-			            sb.Append("    ");
-			            sb.Append(
-				            personalLayer.Payload.ConfidentialDescription(pa.Person, scheduleDay.DateOnlyAsPeriod.DateOnly).Name);
-			            sb.Append(": ");
-			            sb.Append(ToLocalStartEndTimeString(personalLayer.Period, timeZoneInfo, cultureInfo));
-		            }
-	            }
+							if (ass != null)
+							{
+								sb.AppendFormat(" - {0}: ", UserTexts.Resources.PersonalShift);
+								foreach (var personalLayer in ass.PersonalLayers())
+								{
+									sb.AppendLine();
+									sb.Append("    ");
+									sb.Append(
+										personalLayer.Payload.ConfidentialDescription(ass.Person, scheduleDay.DateOnlyAsPeriod.DateOnly).Name);
+									sb.Append(": ");
+									sb.Append(ToLocalStartEndTimeString(personalLayer.Period, timeZoneInfo, cultureInfo));
+								}
+							}
 
 	            foreach (IPersonMeeting personMeeting in meetings)
                 {

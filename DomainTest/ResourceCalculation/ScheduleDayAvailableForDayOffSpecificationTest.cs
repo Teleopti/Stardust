@@ -31,15 +31,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldReturnTrueIfNoDayOffOrAbsenceOrAssignmentOrMeeting()
 		{
-
-			var dayOffCollection = new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>());
 			var absenceCollection = new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>());
-			var assCollection = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>());
 			var meetingCollection = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>());
 
-			Expect.Call(_part.PersonDayOffCollection()).Return(dayOffCollection).Repeat.AtLeastOnce();
 			Expect.Call(_part.PersonAbsenceCollection()).Return(absenceCollection).Repeat.AtLeastOnce();
-			Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(assCollection).Repeat.AtLeastOnce();
+			Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
 			Expect.Call(_part.PersonMeetingCollection()).Return(meetingCollection).Repeat.AtLeastOnce();
 
 			_mocks.ReplayAll();

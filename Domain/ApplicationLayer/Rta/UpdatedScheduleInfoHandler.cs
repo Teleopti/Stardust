@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				return;
 			}
 
-			_serviceBus.DelaySend(((DateTime)startTime), new PersonActivityStarting
+			_serviceBus.DelaySend(startTime.Value, new PersonActivityStarting
 				{
 				Datasource = message.Datasource,
 				BusinessUnitId = message.BusinessUnitId,
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				return;
 			}
 
-			_serviceBus.DelaySend(((DateTime)startTime), new PersonActivityStarting
+			_serviceBus.DelaySend(startTime.Value, new PersonActivityStarting
 				{
 					Datasource = message.Datasource,
 					BusinessUnitId = message.BusinessUnitId,

@@ -298,7 +298,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IWorkflowControlSet workflowControlSet = new WorkflowControlSet("d");
 			workflowControlSet.SchedulePublishedToDate = new DateTime(2100, 1, 1); 
 			
-			_target.Person.WorkflowControlSet = workflowControlSet;
+			_person.WorkflowControlSet = workflowControlSet;
+			_target = new scheduleExposingInternalCollections(_dic, _parameters);
 
 			using (_mocks.Record())
 			{
@@ -396,15 +397,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     IPersonAssignment ass1 = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
                     IPersonAbsence abs1 = createPersonAbsence(new DateTimePeriod(2000, 1, 1, 2000, 1, 4));
                     IPersonAbsence abs2 = createPersonAbsence(new DateTimePeriod(2000, 1, 2, 2000, 1, 4));
-                    IPersonDayOff dayOff1 = createPersonDayOff(new DateTime(2000, 1, 2));
-                    IPersonDayOff dayOff2 = createPersonDayOff(new DateTime(2000, 1, 3));
 			IPersonMeeting personMeeting = createPersonMeeting(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
 
                     _target.Add(ass1);
                     _target.Add(abs1);
                     _target.Add(abs2);
-                    _target.Add(dayOff1);
-                    _target.Add(dayOff2);
                     _target.Add(personMeeting);
 
                     IScheduleDay day1 = _target.ScheduledDay(new DateOnly(2000, 1, 2));
@@ -414,8 +411,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																		day1.PersonAssignmentCollectionDoNotUse()[0].MainLayers().First().Period);
                     Assert.AreEqual(2, day1.PersonAbsenceCollection().Count);
                     Assert.AreEqual(2, day2.PersonAbsenceCollection().Count);
-                    Assert.AreEqual(dayOff1.DayOff.Anchor, day1.PersonDayOffCollection()[0].DayOff.Anchor);
-                    Assert.AreEqual(dayOff2.DayOff.Anchor, day2.PersonDayOffCollection()[0].DayOff.Anchor);
                     Assert.AreEqual(personMeeting.Period, day1.PersonMeetingCollection()[0].Period);
                     Assert.IsInstanceOf<ScheduleProjectionService>(day1.ProjectionService());
 
@@ -759,16 +754,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			return ret;
 		}
 
-		private IPersonDayOff createPersonDayOff(DateTime period)
-		{
-			DateTime date = DateTime.SpecifyKind(period, DateTimeKind.Utc);
-
-			IDayOffTemplate dOff = DayOffFactory.CreateDayOff(new Description("test"));
-			dOff.Anchor = TimeSpan.FromHours(3);
-			dOff.SetTargetAndFlexibility(TimeSpan.FromHours(35), TimeSpan.FromHours(1));
-			return PersonDayOffFactory.CreatePersonDayOff(_person, _scenario, new DateOnly(date.Date), dOff);
-		}
-
 		private IPersonMeeting createPersonMeeting(DateTimePeriod period)
 		{
 			MeetingPerson meetingPerson = new MeetingPerson(_person, true);
@@ -793,8 +778,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			public IList<IPersonAbsence> PersonAbsences { get { return new List<IPersonAbsence>(ScheduleDataInternalCollection().OfType<IPersonAbsence>()); } }
 
 			public IList<IPersonAssignment> PersonAssignments { get { return new List<IPersonAssignment>(ScheduleDataInternalCollection().OfType<IPersonAssignment>()); } }
-
-			public IList<IPersonDayOff> PersonDayOffs { get { return new List<IPersonDayOff>(ScheduleDataInternalCollection().OfType<IPersonDayOff>()); } }
 
 			public IList<IPersonMeeting> PersonMeetings { get { return new List<IPersonMeeting>(ScheduleDataInternalCollection().OfType<IPersonMeeting>()); } }
 		}
@@ -832,30 +815,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
                 _target.Remove(pAbs);
                 Assert.AreEqual(0, _target.PersonAbsences.Count);
-            }
-		}
-
-		[Test]
-		public void CanAddAndRemoveDayOff()
-		{
-			fullPermission(true);
-			_mocks.ReplayAll();
-
-            using (new CustomAuthorizationContext(_principalAuthorization))
-            {
-                IDayOffTemplate dOff = DayOffFactory.CreateDayOff(new Description("test"));
-                dOff.Anchor = TimeSpan.FromHours(3);
-                dOff.SetTargetAndFlexibility(TimeSpan.FromHours(5), TimeSpan.FromHours(1));
-                IPersonDayOff dayOff = PersonDayOffFactory.CreatePersonDayOff(_person, _scenario,
-                                                                              new DateOnly(2000, 1, 5), dOff);
-
-                _target.Add(dayOff);
-                ICollection<IPersonDayOff> coll = _target.PersonDayOffs;
-                Assert.AreEqual(1, coll.Count);
-                Assert.IsTrue(coll.Contains(dayOff));
-
-                _target.Remove(dayOff);
-                Assert.AreEqual(0, _target.PersonDayOffs.Count);
             }
 		}
 
@@ -967,19 +926,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 IList<IPersonAbsence> pAbses = new List<IPersonAbsence>();
                 pAbses.Add(createPersonAbsence(new DateTimePeriod(2000, 2, 2, 2000, 2, 3)));
                 pAbses.Add(createPersonAbsence(new DateTimePeriod(2000, 2, 4, 2000, 2, 5)));
-                IList<IPersonDayOff> dayOffs = new List<IPersonDayOff>();
-                dayOffs.Add(createPersonDayOff(new DateTime(2000, 6, 1)));
-                dayOffs.Add(createPersonDayOff(new DateTime(2000, 6, 2)));
                 IList<IPersonMeeting> personMeetings = new List<IPersonMeeting>();
                 personMeetings.Add(createPersonMeeting(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
                 personMeetings.Add(createPersonMeeting(new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
                 _target.AddRange(pAsses);
                 _target.AddRange(pAbses);
-                _target.AddRange(dayOffs);
                 _target.AddRange(personMeetings);
                 Assert.AreEqual(2, _target.PersonAbsences.Count);
                 Assert.AreEqual(2, _target.PersonAssignments.Count);
-                Assert.AreEqual(2, _target.PersonDayOffs.Count);
                 Assert.AreEqual(2, _target.PersonMeetings.Count);
             }
 		}
@@ -1003,11 +957,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                                               new AbsenceLayer(AbsenceFactory.CreateAbsence("abs"), _parameters.Period)));
                 _target.Add(pAss);
 
-                IDayOffTemplate dOff = DayOffFactory.CreateDayOff(new Description("test"));
-                dOff.Anchor = TimeSpan.Zero;
-                dOff.SetTargetAndFlexibility(TimeSpan.Zero, TimeSpan.FromHours(1));
-                _target.Add(new PersonDayOff(_person, _scenario, dOff, new DateOnly(2000, 1, 1)));
-
 
                 IPersonMeeting meeting = createPersonMeeting(new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 
@@ -1016,11 +965,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 ScheduleRange clone = (ScheduleRange) _target.Clone();
                 var part = clone.ScheduledDay(new DateOnly(2000, 1, 1));
 
-                Assert.AreEqual(1, part.PersonDayOffCollection().Count);
                 Assert.AreEqual(1, part.PersistableScheduleDataCollection().OfType<IPersonAbsence>().Count());
                 Assert.AreEqual(1, part.PersonAssignmentCollectionDoNotUse().Count);
                 Assert.AreEqual(1, part.PersonMeetingCollection().Count);
-                //Assert.AreEqual(1, part.PersonAssignmentConflictCollection.Count);
             }
 		}
 		#endregion

@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
             Expect.Call(_refreshedDerivedFromScheduleDataEntity.Id).Return(_refreshedDerivedFromScheduleDataEntityId).Repeat.Any();
 
             _refreshedDerivedFromScheduleDataMessage = _mocks.Stub<IEventMessage>();
-            _refreshedDerivedFromScheduleDataMessage.InterfaceType = typeof(IPersonDayOff);
+            _refreshedDerivedFromScheduleDataMessage.InterfaceType = typeof(IPersonAssignment);
             _refreshedDerivedFromScheduleDataMessage.DomainObjectId = _refreshedDerivedFromScheduleDataEntityId;
             _refreshedDerivedFromScheduleDataMessage.DomainUpdateType = DomainUpdateType.Update;
             _messages = new List<IEventMessage>

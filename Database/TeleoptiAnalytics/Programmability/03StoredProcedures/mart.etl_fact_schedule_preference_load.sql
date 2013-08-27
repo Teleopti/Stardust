@@ -16,6 +16,7 @@ GO
 --				2011-09-27 Fix start/end times = 0
 --				2012-11-25 #19854 - PBI to add Shortname for DayOff.
 --				2013-04-29 Added absence_id and must_haves in load KJ
+--				2013-08-14 Change to use local agent date (instead of UTC)
 -- Interface:	smalldatetime, with only datepart! No time allowed
 -- =============================================
 --exec mart.etl_fact_schedule_preference_load '2009-02-01','2009-02-17'
@@ -29,21 +30,6 @@ AS
 
 DECLARE @start_date_id	INT
 DECLARE @end_date_id	INT
-
---Declare
-DECLARE @max_start_date smalldatetime
-DECLARE @min_start_date smalldatetime
-
---init
-SELECT  
-	@max_start_date= max(restriction_date),
-	@min_start_date= min(restriction_date)
-FROM
-	Stage.stg_schedule_preference
---select * from v_stg_schedule_preference
---Reset @start_date, @end_date to 
-SET	@start_date = CASE WHEN @min_start_date > @start_date THEN @min_start_date ELSE @start_date END
-SET	@end_date	= CASE WHEN @max_start_date < @end_date THEN @max_start_date ELSE @end_date	END
 
 --There must not be any timevalue on the interface values, since that will mess things up around midnight!
 --Consider: DECLARE @end_date smalldatetime;SET @end_date = '2006-01-31 23:59:30';SELECT @end_date
@@ -60,24 +46,6 @@ SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHE
 DELETE FROM mart.fact_schedule_preference
 WHERE date_id between @start_date_id AND @end_date_id
 AND business_unit_id = @business_unit_id
-
-
-/*
-DELETE FROM mart.fact_schedule_preference
-WHERE date_id between @start_date_id AND @end_date_id
-	AND business_unit_id = 
-	(
-		SELECT DISTINCT
-			bu.business_unit_id
-		FROM 
-			Stage.stg_schedule_preference s
-		INNER JOIN
-			mart.dim_business_unit bu
-		ON
-			s.business_unit_code = bu.business_unit_code
-	)
-*/
---DELETE FROM mart.fact_schedule_preference WHERE date_id between @start_date_id AND @end_date_id
 
 -----------------------------------------------------------------------------------
 -- Insert rows
@@ -111,8 +79,8 @@ INSERT INTO mart.fact_schedule_preference
 
 SELECT DISTINCT
 	date_id						= dsd.date_id, 
-	interval_id					= di.interval_id, 
-	person_id					= dp.person_id, 
+	interval_id					= 0, --we keep the column
+	person_id					= p.person_id, 
 	scenario_id					= ds.scenario_id, 
 	preference_type_id			= CASE 
 										--Shift Category (standard) Preference
@@ -129,7 +97,7 @@ SELECT DISTINCT
 	preferences_requested	= 1, 
 	preferences_fulfilled	= f.preference_fulfilled, --kolla hur vi gör här
 	preferences_unfulfilled	= f.preference_unfulfilled,  --kolla hur vi gör här
-	business_unit_id			= dp.business_unit_id, 
+	business_unit_id			= p.business_unit_id, 
 	datasource_id				= f.datasource_id, 
 	datasource_update_date		= f.datasource_update_date, 
 	must_haves					= ISNULL(must_have,0),
@@ -138,19 +106,15 @@ FROM
 	(
 		SELECT * FROM Stage.stg_schedule_preference WHERE convert(smalldatetime,floor(convert(decimal(18,8),restriction_date ))) between @start_date AND @end_date
 	) AS f
-JOIN
-	mart.dim_person		dp
-ON
-	f.person_code		=			dp.person_code	AND
-	f.restriction_date		BETWEEN		dp.valid_from_date	AND dp.valid_to_date  --Is person valid in this range
+INNER JOIN mart.dim_person p
+	on p.person_code = f.person_code
+INNER JOIN mart.DimPersonLocalized(@start_date,@end_date)		dp
+	ON	dp.person_id = p.person_id
+	AND	f.restriction_date		BETWEEN		dp.valid_from_date_local	AND dp.valid_to_date_local --Is person valid in this range
 LEFT JOIN
 	mart.dim_date		dsd
 ON
 	f.restriction_date	= dsd.date_date
-LEFT JOIN				--kommer denna att ta bort sen och bli dateonly i agentens tidszon???
-	mart.dim_interval	di
-ON
-	f.interval_id = di.interval_id  --Fix By David: start_interval_id => interval_id
 LEFT JOIN
 	mart.dim_scenario	ds
 ON
@@ -162,7 +126,7 @@ ON
 INNER JOIN 
 	mart.dim_business_unit bu
 ON
-	dp.business_unit_code = bu.business_unit_code
+	p.business_unit_code = bu.business_unit_code
 LEFT JOIN				--vi kör tills vidare på day_off_name som "primary key"
 	mart.dim_day_off ddo
 ON
@@ -171,10 +135,5 @@ LEFT JOIN
 	mart.dim_absence ab
 ON
 	f.absence_code = ab.absence_code
-
---LEFT JOIN				--behöver inte denna om de sätts hårt
---	dim_preference_type dpt
---ON
---	dpt.preference_type_name=f.preference_type_name
 
 GO

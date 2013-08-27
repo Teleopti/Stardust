@@ -90,8 +90,8 @@ namespace Teleopti.Ccc.WinCodeTest
                 Expect.Call(_schedulePart.Period).Return(DateTimeFactory.CreateDateTimePeriod(_date, 0)).Repeat.Any();
                 Expect.Call(() => _schedulePart.CreateAndAddAbsence(null)).IgnoreArguments().Repeat.Once();
                 Expect.Call(scheduleDictionary[_person]).Return(_scheduleRange).Repeat.Times(2);
-                Expect.Call(_schedulePart.PersonAssignmentCollectionDoNotUse())
-                      .Return(readOnlyCollection);
+				Expect.Call(_schedulePart.PersonAssignment())
+					  .Return(readOnlyCollection[0]);
                 Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2012, 07, 16))).Return(_schedulePart);
                 Expect.Call(_schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
                 Expect.Call(_schedulePresenterBase.ModifySchedulePart(_selectedSchedules)).Return(false);
@@ -121,8 +121,7 @@ namespace Teleopti.Ccc.WinCodeTest
                 Expect.Call(_schedulePart.Period).Return(DateTimeFactory.CreateDateTimePeriod(_date, 0)).Repeat.Any();
                 Expect.Call(() => _schedulePart.CreateAndAddAbsence(null)).IgnoreArguments().Repeat.Once();
                 Expect.Call(scheduleDictionary[_person]).Return(_scheduleRange).Repeat.Times(2);
-                Expect.Call(_schedulePart.PersonAssignmentCollectionDoNotUse())
-                      .Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
+                Expect.Call(_schedulePart.PersonAssignment()).Return(null);
                 Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2012, 07, 16))).Return(_schedulePart);
                 Expect.Call(_schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
                 Expect.Call(_schedulePresenterBase.ModifySchedulePart(_selectedSchedules)).Return(false);
@@ -153,8 +152,8 @@ namespace Teleopti.Ccc.WinCodeTest
 				Expect.Call(scheduleDictionary[_person]).Return(_scheduleRange).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2012, 07, 16))).Return(_schedulePart);
 				Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2012, 07, 17))).Return(_schedulePart2);
-                Expect.Call(_schedulePart.PersonAssignmentCollectionDoNotUse())
-                      .Return(readOnlyCollection);
+                Expect.Call(_schedulePart.PersonAssignment())
+                      .Return(readOnlyCollection[0]);
 				Expect.Call(_schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 				Expect.Call(() => ((IValidateScheduleRange)_scheduleRange).ValidateBusinessRules(null)).IgnoreArguments();
 				_schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
@@ -185,8 +184,8 @@ namespace Teleopti.Ccc.WinCodeTest
 				Expect.Call(_schedulePart.Period).Return(DateTimeFactory.CreateDateTimePeriod(_date, 0)).Repeat.Any();
 				Expect.Call(scheduleDictionary[_person]).Return(_scheduleRange);
 				Expect.Call(_scheduleRange.ScheduledDay(dateOnly)).Return(_schedulePart);
-                Expect.Call(_schedulePart.PersonAssignmentCollectionDoNotUse())
-                      .Return(readOnlyCollection);
+                Expect.Call(_schedulePart.PersonAssignment())
+                      .Return(readOnlyCollection[0]);
 				Expect.Call(_schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 				_schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 			}
@@ -218,8 +217,8 @@ namespace Teleopti.Ccc.WinCodeTest
 				Expect.Call(scheduleDictionary[_person]).Return(_scheduleRange);
 				Expect.Call(_scheduleRange.ScheduledDay(dateOnly)).Return(_schedulePart);
 				Expect.Call(_schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
-                Expect.Call(_schedulePart.PersonAssignmentCollectionDoNotUse())
-                      .Return(readOnlyCollection);
+                Expect.Call(_schedulePart.PersonAssignment())
+                      .Return(readOnlyCollection[0]);
 				_schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 			}
 			using (_mocks.Playback())
@@ -253,8 +252,8 @@ namespace Teleopti.Ccc.WinCodeTest
 				Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2012, 07, 16))).Return(_schedulePart);
 				Expect.Call(_schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 				Expect.Call(() => ((IValidateScheduleRange)_scheduleRange).ValidateBusinessRules(null)).IgnoreArguments();
-                Expect.Call(_schedulePart.PersonAssignmentCollectionDoNotUse())
-                      .Return(readOnlyCollection);
+                Expect.Call(_schedulePart.PersonAssignment())
+                      .Return(readOnlyCollection[0]);
 				_schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 			}
 			using (_mocks.Playback())

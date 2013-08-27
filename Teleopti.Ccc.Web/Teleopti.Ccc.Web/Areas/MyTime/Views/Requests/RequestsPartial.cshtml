@@ -6,6 +6,21 @@
 @{
 	Layout = null;
 }
+<script>
+    $(function () {
+        Teleopti.MyTimeWeb.Request.RequestDetail.PrepareForViewModel(
+            {
+                defaultStartTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0))',
+                defaultEndTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0))',
+                defaultFulldayStartTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0))',
+                defaultFulldayEndTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))',
+                todayYear: '@CultureInfo.CurrentCulture.Calendar.GetYear(DateTime.Today)',
+                todayMonth: '@CultureInfo.CurrentCulture.Calendar.GetMonth(DateTime.Today)',
+                todayDay: '@CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(DateTime.Today)'
+            }
+        );
+    });
+</script>
 <script type="text/html" id="request-detail-not-set">
 	<div></div>
 </script>
@@ -26,13 +41,6 @@
 	@Html.Partial("AddNewRequestDetailView")
 </script>
 
-<div class="displaynone" id="Request-detail-default-start-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0))</div>
-<div class="displaynone" id="Request-detail-default-end-time" >@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0))</div>
-<div class="displaynone" id="Request-detail-default-fullday-start-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0))</div>
-<div class="displaynone" id="Request-detail-default-fullday-end-time" >@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))</div>
-<input id="Request-detail-today-year" type="hidden" value="@CultureInfo.CurrentCulture.Calendar.GetYear(DateTime.Today)"/>
-<input id="Request-detail-today-month" type="hidden" value="@CultureInfo.CurrentCulture.Calendar.GetMonth(DateTime.Today)"/>
-<input id="Request-detail-today-day" type="hidden" value="@CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(DateTime.Today)"/>
 <input id="Request-detail-datepicker-format" type="hidden" value="@Model.DatePickerFormat"/>
 
 <div class="navbar">
@@ -40,25 +48,35 @@
 		<ul class="nav">
             @if (Model.RequestPermission.TextRequestPermission)
             {
-                <li><a href="#" class="text-request-add" data-bind="click: Teleopti.MyTimeWeb.Request.RequestDetail.AddTextRequestClick"><i class="icon-plus"></i>&nbsp;@Resources.TextRequest</a></li>
+                <li data-bind="css: { active: addTextRequestActive }">
+                    <a href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="icon-plus"></i>&nbsp;@Resources.TextRequest</a>
+                </li>
             } 
             @if (Model.RequestPermission.AbsenceRequestPermission)
             {
-                <li><a href="#" class="absence-request-add" data-bind="click: Teleopti.MyTimeWeb.Request.RequestDetail.AddAbsenceRequestClick"><i class="icon-plus"></i>&nbsp;@Resources.AbsenceRequest</a></li>
+                <li data-bind="css: { active: addAbsenceRequestActive }">
+                    <a href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="icon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+                </li>
             }
             @if (Model.RequestPermission.ShiftTradeRequestPermission)
             {
-                <li><a href="#" class="shifttrade-request-add" data-bind="click: Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeWindow"><i class="icon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a></li>
+                <li data-bind="css: { active: addShiftTradeRequestActive }">
+                    <a href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="icon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+                </li>
             }
 		</ul>
 	</div>
 </div>
 <div id="Requests-body-inner" class="request-body-inner relative">
 	@Html.Partial("NewShiftTradeRequest")
-    <div id="Request-add-section" class="well well-small" data-bind="visible: IsNewInProgress">
-		<div data-bind="template : Template">
-		</div>
-	</div>
+    <div>
+        <div id="Request-add-data-binding-area" data-bind="with: requestViewModel">
+            <div id="Request-add-section" class="well well-small clearfix">
+                <div data-bind="template: Template">
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="Requests-data-binding-area" >
         <div class="alert alert-block" data-bind="visible: Requests().length == 0 && !isLoadingRequests(), hideWhenFadedOut: true" id="Requests-no-requests-found">
             @Resources.NoRequestsFound

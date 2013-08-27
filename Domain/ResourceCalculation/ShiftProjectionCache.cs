@@ -118,9 +118,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public DayOfWeek DayOfWeek { get { return _dayOfWeek; } }
 
-        public bool PersonalShiftsAndMeetingsAreInWorkTime(ReadOnlyCollection<IPersonMeeting> meetings, ReadOnlyCollection<IPersonAssignment> personAssignments)
+        public bool PersonalShiftsAndMeetingsAreInWorkTime(ReadOnlyCollection<IPersonMeeting> meetings, IPersonAssignment personAssignment)
         {
-            if (meetings.Count == 0 && personAssignments.Count == 0)
+            if (meetings.Count == 0 && personAssignment == null)
             {
                 return true;
             }
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (meetings.Count > 0 && !_personalShiftMeetingTimeChecker.CheckTimeMeeting(_mainShift, mainShiftProjection, meetings))
 				return false;
 
-			if (personAssignments.Count > 0 && !_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(_mainShift, mainShiftProjection, personAssignments))
+			if (personAssignment != null && !_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(_mainShift, mainShiftProjection, personAssignment))
 				return false;
 
             return true;

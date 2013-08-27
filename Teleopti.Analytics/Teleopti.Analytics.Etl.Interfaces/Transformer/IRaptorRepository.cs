@@ -63,18 +63,18 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         /// </remarks>
         int PersistSchedulePreferences(DataTable dataTable);
 
-        /// <summary>
-        /// Fills the fact schedule preference mart.
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <param name="defaultTimeZone">The default time zone.</param>
-        /// <param name="businessUnit"></param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Henryg
-        /// Created date: 2009-11-27
-        /// </remarks>
-        int FillFactSchedulePreferenceMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
+	    /// <summary>
+	    /// Fills the fact schedule preference mart.
+	    /// </summary>
+	    /// <param name="period">The period.</param>
+	    /// <param name="defaultTimeZone">The default time zone.</param>
+	    /// <param name="businessUnit"></param>
+	    /// <returns></returns>
+	    /// <remarks>
+	    /// Created by: Henryg
+	    /// Created date: 2009-11-27
+	    /// </remarks>
+	    int FillFactSchedulePreferenceMart(DateOnlyPeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
 
         //Queue stats
         int FillDimQueueDataMart(int dataSourceId, IBusinessUnit businessUnit);

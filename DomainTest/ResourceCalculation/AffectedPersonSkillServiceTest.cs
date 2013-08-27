@@ -104,9 +104,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _validSkills.Add(validSkill2);
             IPerson person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(1900, 1, 1), new List<ISkill> { validSkill });
             IPersonPeriod pPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000,1,11));
-            pPeriod2.AddPersonSkill(new PersonSkill(validSkill2, new Percent(1)){Active = true});
-            person.AddPersonPeriod(pPeriod2);
-
+			person.AddPersonPeriod(pPeriod2);
+			person.AddSkill(new PersonSkill(validSkill2, new Percent(1)) { Active = true },pPeriod2);
+            
             ICollection<IPersonSkill> validPersonSkill = _target.Execute(person, act, new DateOnly(2000, 1, 20));
             Assert.AreEqual(1, validPersonSkill.Count);
             Assert.AreSame(validSkill2, validPersonSkill.First().Skill);

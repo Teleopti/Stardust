@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IScheduleMatrixOriginalStateContainer _workShiftContainer2;
 		private IScheduleMatrixPro _matrix1;
 		private IScheduleMatrixPro _matrix2;
-		private ISingleSkillDictionary _singleSkillDictionary;
+		private IPersonSkillProvider _personSkillProvider;
 
 
 		[SetUp]
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			IOptimizationPreferences optimizerPreferences = new OptimizationPreferences();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-			_singleSkillDictionary = new SingleSkillDictionary();
+			_personSkillProvider = new PersonSkillProvider();
 			_target = new MoveTimeOptimizerCreator(_scheduleMatrixOriginalStateContainerList,
 												   _workShiftOriginalStateContainerList,
 												   _decisionMaker,
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   optimizerPreferences,
 												   _rollbackService,
 												   _schedulingResultStateHolder,
-												   _singleSkillDictionary);
+												   _personSkillProvider, new CurrentTeleoptiPrincipal());
 		}
 
 		[Test]

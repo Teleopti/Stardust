@@ -1,22 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 
 namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 {
-
     /// <summary>
     /// Represents the default license schema of Raptor and makes the licence data available.
     /// </summary>
     public class LicenseSchema
     {
-        private string _enabledLicenseSchemaCode;
-        private ReadOnlyCollection<LicenseOption> _licenseOptions = DefinedLicenseDataFactory.CreateDefinedLicenseOptions();
-
-        #region Interface
-
-        #region Singleton for the active schema
+	    private readonly ReadOnlyCollection<LicenseOption> _licenseOptions = DefinedLicenseDataFactory.CreateDefinedLicenseOptions();
 
         private static LicenseSchema _activeLicenseSchema;
 
@@ -26,28 +20,20 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// <value>The instance.</value>
         public static LicenseSchema ActiveLicenseSchema
         {
-            get
-            {
-                 if (_activeLicenseSchema == null)
-                    _activeLicenseSchema = DefinedLicenseDataFactory.CreateActiveLicenseSchema();
-                return _activeLicenseSchema;
+            get {
+	            return _activeLicenseSchema ??
+	                   (_activeLicenseSchema = DefinedLicenseDataFactory.CreateActiveLicenseSchema());
             }
-            set { _activeLicenseSchema = value; }
+	        set { _activeLicenseSchema = value; }
         }
 
-        #endregion
+	    /// <summary>
+	    /// Gets or sets the enabled licence schema.
+	    /// </summary>
+	    /// <value>The enabled licence schema.</value>
+	    public string EnabledLicenseSchema { get; set; }
 
-        /// <summary>
-        /// Gets or sets the enabled licence schema.
-        /// </summary>
-        /// <value>The enabled licence schema.</value>
-        public string EnabledLicenseSchema
-        {
-            get { return _enabledLicenseSchemaCode; }
-            set { _enabledLicenseSchemaCode = value; }
-        }
-
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the defined license options.
         /// </summary>
         /// <value>The defined license options.</value>
@@ -68,13 +54,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         {
             get
             {
-                IList<LicenseOption> enabledLicenseOptions = new List<LicenseOption>();
-                foreach (LicenseOption licenseOption in _licenseOptions)
-                {
-                    if (licenseOption.Enabled)
-                        enabledLicenseOptions.Add(licenseOption);
-                }
-                return new ReadOnlyCollection<LicenseOption>(enabledLicenseOptions);
+                IList<LicenseOption> enabledLicenseOptions = _licenseOptions.Where(licenseOption => licenseOption.Enabled).ToList();
+	            return new ReadOnlyCollection<LicenseOption>(enabledLicenseOptions);
             }
         }
 
@@ -87,12 +68,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         {
             get
             {
-                IList<string> enabledLicenceOptionPaths = new List<string>();
-                foreach (LicenseOption licenseOption in EnabledLicenseOptions)
-                {
-                    enabledLicenceOptionPaths.Add(licenseOption.LicenseOptionPath);
-                }
-                return enabledLicenceOptionPaths;
+	            return EnabledLicenseOptions.Select(licenseOption => licenseOption.LicenseOptionPath).ToList();
             }
         }
 
@@ -117,8 +93,5 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
                     licenseOption.Enabled = true;
             }
         }
-
-        #endregion
-
     }
 }

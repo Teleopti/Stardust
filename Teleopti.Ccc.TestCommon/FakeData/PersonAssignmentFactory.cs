@@ -216,21 +216,23 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
             // Person Periods
             IPersonPeriod ppPerson1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
-            ppPerson1.AddPersonSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneA"], 2));
-            ppPerson1.AddPersonSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1));
-            ppPerson1.AddPersonSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["OfficeA"], 1));
-            ppPerson1.AddPersonSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["OfficeB"], 1));
-            container.ContainedPersons["Person1"].AddPersonPeriod(ppPerson1);
+			container.ContainedPersons["Person1"].AddPersonPeriod(ppPerson1);
+			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneA"], 2),ppPerson1);
+			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1),ppPerson1);
+			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["OfficeA"], 1),ppPerson1);
+			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["OfficeB"], 1),ppPerson1);
             IPersonPeriod ppPerson2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
-            ppPerson2.AddPersonSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneA"], 1));
-            ppPerson2.AddPersonSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1));
-            container.ContainedPersons["Person2"].AddPersonPeriod(ppPerson2);
+			container.ContainedPersons["Person2"].AddPersonPeriod(ppPerson2);
+	        container.ContainedPersons["Person2"].AddSkill(
+		        PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneA"], 1), ppPerson2);
+	        container.ContainedPersons["Person2"].AddSkill(
+		        PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1), ppPerson2);
             IPersonPeriod ppPerson3 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
             container.ContainedPersons["Person3"].AddPersonPeriod(ppPerson3);
             IPersonPeriod ppPerson4 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
-            ppPerson4.AddPersonSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1));
-            container.ContainedPersons["Person4"].AddPersonPeriod(ppPerson4);
-
+			container.ContainedPersons["Person4"].AddPersonPeriod(ppPerson4);
+			container.ContainedPersons["Person4"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1),ppPerson4);
+            
             // create list
             var scheduleRange = ExtractedSchedule.CreateScheduleDay(dic, container.ContainedPersons["Person1"], new DateOnly(2008,1,2));
             scheduleRange.Add(assignment1);
@@ -270,11 +272,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         private static void CreateActivitiesAndAddToContainer(PersonAssignmentListContainer container)
         {
             // CreateProjection activities
-            IActivity acPhone = ActivityFactory.CreateActivity("Phone");
-            IActivity acOffice = ActivityFactory.CreateActivity("Office", Color.Yellow);
+			IActivity acPhone = ActivityFactory.CreateActivity("Phone", Color.DarkGreen);
+			IActivity acOffice = ActivityFactory.CreateActivity("Office", Color.Yellow);
             IActivity acBreak = ActivityFactory.CreateActivity("Break", Color.Red);
             IActivity acLunch = ActivityFactory.CreateActivity("Lunch", Color.Red);
-            container.ContainedActivities.Add(acPhone.Description.Name, acPhone);
+			acPhone.SetId(Guid.NewGuid());
+			acOffice.SetId(Guid.NewGuid());
+			acBreak.SetId(Guid.NewGuid());
+			acLunch.SetId(Guid.NewGuid());
+			container.ContainedActivities.Add(acPhone.Description.Name, acPhone);
             container.ContainedActivities.Add(acOffice.Description.Name, acOffice);
             container.ContainedActivities.Add(acBreak.Description.Name, acBreak);
             container.ContainedActivities.Add(acLunch.Description.Name, acLunch);
@@ -302,18 +308,23 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             ISkill skPhoneA = SkillFactory.CreateSkill("PhoneA");
             skPhoneA.Activity = container.ContainedActivities["Phone"];
             skPhoneA.TimeZone = timeZone;
+			skPhoneA.SetId(Guid.NewGuid());
             ISkill skPhoneB = SkillFactory.CreateSkill("PhoneB");
             skPhoneB.Activity = container.ContainedActivities["Phone"];
             skPhoneB.TimeZone = timeZone;
+			skPhoneB.SetId(Guid.NewGuid());
             ISkill skPhoneC = SkillFactory.CreateSkill("PhoneC");
             skPhoneC.Activity = container.ContainedActivities["Phone"];
             skPhoneC.TimeZone = timeZone;
+			skPhoneC.SetId(Guid.NewGuid());
             ISkill skOfficeA = SkillFactory.CreateSkill("OfficeA");
             skOfficeA.Activity = container.ContainedActivities["Office"];
             skOfficeA.TimeZone = timeZone;
+			skOfficeA.SetId(Guid.NewGuid());
             ISkill skOfficeB = SkillFactory.CreateSkill("OfficeB");
             skOfficeB.Activity = container.ContainedActivities["Office"];
             skOfficeB.TimeZone = timeZone;
+			skOfficeB.SetId(Guid.NewGuid());
             container.AllSkills.Add(skPhoneA);
             container.AllSkills.Add(skPhoneB);
             container.AllSkills.Add(skPhoneC);
@@ -367,6 +378,27 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				ret.AddOvertimeLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(7)), multi);
 				ret.AddOvertimeLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(8)), multi);
 				return ret;
+			}
+
+			public static IPersonAssignment CreateAssignmentWithDayOff(IScenario scenario, IPerson person, DateOnly date, TimeSpan length, TimeSpan flexibility, TimeSpan anchor)
+			{
+				var ass = new PersonAssignment(person, scenario, date);
+				var dayOffTemplate = DayOffFactory.CreateDayOff(new Description("test"));
+				dayOffTemplate.Anchor = anchor;
+				dayOffTemplate.SetTargetAndFlexibility(length, flexibility);
+				ass.SetDayOff(dayOffTemplate);
+				return ass;
+			}
+
+			public static IPersonAssignment CreateAssignmentWithDayOff(IScenario scenario, IPerson person, DateOnly date, IDayOffTemplate template)
+			{
+				var ass = new PersonAssignment(person, scenario, date);
+				ass.SetDayOff(template);
+				return ass;
+			}
+			public static IPersonAssignment CreateAssignmentWithDayOff()
+			{
+				return CreateAssignmentWithDayOff(new Scenario(" "), new Person(), new DateOnly(2000, 1, 1), new DayOffTemplate(new Description("for", "test")));
 			}
     }
 

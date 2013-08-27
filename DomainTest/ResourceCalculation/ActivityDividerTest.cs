@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -18,14 +17,28 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private DateTimePeriod _inPeriod;
         private PersonAssignmentListContainer _testContainer;
         private ISkillSkillStaffPeriodExtendedDictionary _skillStaffPeriods;
+	    private IPersonSkillProvider _personSkillProvider;
+		private IResourceCalculationDataContainerWithSingleOperation _resources;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _inPeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 10, 00, 00, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 15, 00, DateTimeKind.Utc));
             
             _testContainer = PersonAssignmentFactory.CreatePersonAssignmentListForActivityDividerTest();
             _skillStaffPeriods = SkillDayFactory.CreateSkillDaysForActivityDividerTest(_testContainer.ContainedSkills);
+			_personSkillProvider = new PersonSkillProvider();
+
+			_resources = new ResourceCalculationDataContainer(_personSkillProvider);
+			var layers = _testContainer.TestVisualLayerCollection();
+			foreach (var layer in layers)
+			{
+				foreach (var resourceLayer in layer.ToResourceLayers(15))
+				{
+					_resources.AddResources(layer.Person, new DateOnly(2008, 1, 1), resourceLayer);
+				}
+			}
+
             _target = new ActivityDivider();
 			
         }
@@ -41,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             DateOnlyPeriod datePeriod = new DateOnlyPeriod(new DateOnly(_inPeriod.StartDateTime), new DateOnly(_inPeriod.EndDateTime));
             IDividedActivityData dividedActivity = 
-                _target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(datePeriod, _testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _testContainer.TestFilteredVisualLayerCollection(), _inPeriod);
+                _target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(datePeriod, _testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
 
             VerifyPersonSkillResourcesData(dividedActivity);
 
@@ -75,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             mocks.ReplayAll();
 
-			_target.DivideActivity(skillStaffPeriods, new AffectedPersonSkillService(datePeriod, _testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _testContainer.TestFilteredVisualLayerCollection(), _inPeriod);
+			_target.DivideActivity(skillStaffPeriods, new AffectedPersonSkillService(datePeriod, _testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
         }
 
         [Test]
@@ -86,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _target = new ActivityDivider();
 
             IDividedActivityData result =
-				_target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(datePeriod, _testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _testContainer.TestFilteredVisualLayerCollection(), _inPeriod);
+				_target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(datePeriod, _testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
             Assert.AreEqual(3, result.TargetDemands.Count);
         }
 
@@ -98,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             dictionary.Clear();
             _target = new ActivityDivider();
             IDividedActivityData result =
-				_target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(datePeriod, _testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _testContainer.TestFilteredVisualLayerCollection(), _inPeriod);
+				_target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(datePeriod, _testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
             Assert.AreEqual(2, result.TargetDemands.Count);
         }
 
@@ -116,11 +129,19 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			dictionary.Clear();
 			_target = new ActivityDivider();
 
-			IList<IFilteredVisualLayerCollection> layerCollection = _testContainer.TestFilteredVisualLayerCollectionWithSamePerson();
-			Assert.AreSame(layerCollection[0].Person, layerCollection[1].Person); // check that the two collection has the same person
+			_resources.Clear();
+			var layers = _testContainer.TestFilteredVisualLayerCollectionWithSamePerson();
+			foreach (var layer in layers)
+			{
+				foreach (var resourceLayer in layer.ToResourceLayers(15))
+				{
+					_resources.AddResources(layer.Person, new DateOnly(2008, 1, 1), resourceLayer);
+				}
+			}
+
 
 			IDividedActivityData result =
-				_target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(datePeriod, _testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], layerCollection, _inPeriod);
+				_target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(datePeriod, _testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
 			Assert.AreEqual(2, result.TargetDemands.Count);
 		}
 
@@ -133,79 +154,129 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(10, targetDemands[_testContainer.ContainedSkills["PhoneB"]]);
         }
 
-        private void VerifyPersonResourcesData(IDividedActivityData dividedActivity)
-        {
-            IDictionary<IPerson, double> personResources = dividedActivity.PersonResources;
-            Assert.IsNotNull(personResources);
-            Assert.AreEqual(3, personResources.Count);
-            Assert.AreEqual(5, personResources[_testContainer.ContainedPersons["Person1"]]);
-            Assert.AreEqual(15, personResources[_testContainer.ContainedPersons["Person2"]]);
-            Assert.AreEqual(10, personResources[_testContainer.ContainedPersons["Person4"]]);
+	    private void VerifyPersonResourcesData(IDividedActivityData dividedActivity)
+		{
+			var person1 =
+				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
+									.Key;
+			var person2 =
+				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person2"], new DateOnly(2008, 1, 1))
+									.Key;
+			var person4 =
+				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person4"], new DateOnly(2008, 1, 1))
+									.Key;
+
+		    IDictionary<string, double> personResources = dividedActivity.PersonResources;
+		    Assert.IsNotNull(personResources);
+		    Assert.AreEqual(3, personResources.Count);
+		    Assert.AreEqual(5, personResources[person1]);
+		    Assert.AreEqual(15, personResources[person2]);
+            Assert.AreEqual(10, personResources[person4]);
         }
 
         private void VerifyRelativePersonResourcesData(IDividedActivityData dividedActivity)
-        {
+		{
+			var person1 =
+				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
+									.Key;
+			var person2 =
+				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person2"], new DateOnly(2008, 1, 1))
+									.Key;
+			var person4 =
+				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person4"], new DateOnly(2008, 1, 1))
+									.Key;
+
             // Person Relative Resources (TRAFF)
-            IDictionary<IPerson, double> personResources = dividedActivity.RelativePersonResources;
+            IDictionary<string, double> personResources = dividedActivity.RelativePersonResources;
             Assert.IsNotNull(personResources);
             Assert.AreEqual(3, personResources.Count);
-            Assert.AreEqual(0.3333, personResources[_testContainer.ContainedPersons["Person1"]], 0.0001);
-            Assert.AreEqual(1, personResources[_testContainer.ContainedPersons["Person2"]], 0.0001);
-            Assert.AreEqual(0.6666, personResources[_testContainer.ContainedPersons["Person4"]], 0.0001);
+            Assert.AreEqual(0.3333, personResources[person1], 0.0001);
+            Assert.AreEqual(1, personResources[person2], 0.0001);
+            Assert.AreEqual(0.6666, personResources[person4], 0.0001);
         }
 
         private void VerifyRelativePersonSkillResourcesSumData(IDividedActivityData dividedActivity)
         {
             IDictionary<ISkill, double> personLoggedOnSumma = dividedActivity.RelativePersonSkillResourcesSum;
             Assert.IsNotNull(personLoggedOnSumma);
-            Assert.AreEqual(2, personLoggedOnSumma.Count);
+            Assert.AreEqual(4, personLoggedOnSumma.Count);
             Assert.AreEqual(1.3333, personLoggedOnSumma[_testContainer.ContainedSkills["PhoneA"]], 0.0001);
             Assert.AreEqual(1.9999, personLoggedOnSumma[_testContainer.ContainedSkills["PhoneB"]], 0.0001);
         }
 
         private void VerifyPersonSkillEfficienciesData(IDividedActivityData dividedActivity)
-        {
-            PersonSkillDictionary skillEfficiencyMatrix = dividedActivity.PersonSkillEfficiencies;
-            Assert.IsNotNull(skillEfficiencyMatrix);
-            Assert.AreEqual(3, skillEfficiencyMatrix.Count);
-            Assert.AreEqual(2, skillEfficiencyMatrix[_testContainer.ContainedPersons["Person1"]].Count);
-            Assert.AreEqual(2, skillEfficiencyMatrix[_testContainer.ContainedPersons["Person1"]][_testContainer.ContainedSkills["PhoneA"]]);
-            Assert.AreEqual(1, skillEfficiencyMatrix[_testContainer.ContainedPersons["Person1"]][_testContainer.ContainedSkills["PhoneB"]]);
-            Assert.AreEqual(2, skillEfficiencyMatrix[_testContainer.ContainedPersons["Person2"]].Count);
-            Assert.AreEqual(1, skillEfficiencyMatrix[_testContainer.ContainedPersons["Person2"]][_testContainer.ContainedSkills["PhoneA"]]);
-            Assert.AreEqual(1, skillEfficiencyMatrix[_testContainer.ContainedPersons["Person2"]][_testContainer.ContainedSkills["PhoneB"]]);
-            Assert.AreEqual(1, skillEfficiencyMatrix[_testContainer.ContainedPersons["Person4"]].Count);
-            Assert.AreEqual(1, skillEfficiencyMatrix[_testContainer.ContainedPersons["Person4"]][_testContainer.ContainedSkills["PhoneB"]]);
+		{
+			var person1 =
+				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
+									.Key;
+			var person2 =
+				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person2"], new DateOnly(2008, 1, 1))
+									.Key;
+			var person4 =
+				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person4"], new DateOnly(2008, 1, 1))
+									.Key;
+
+            KeyedSkillResourceDictionary skillResourceEfficiencyMatrix = dividedActivity.KeyedSkillResourceEfficiencies;
+            Assert.IsNotNull(skillResourceEfficiencyMatrix);
+            Assert.AreEqual(3, skillResourceEfficiencyMatrix.Count);
+            Assert.AreEqual(4, skillResourceEfficiencyMatrix[person1].Count);
+            Assert.AreEqual(2, skillResourceEfficiencyMatrix[person1][_testContainer.ContainedSkills["PhoneA"]]);
+            Assert.AreEqual(1, skillResourceEfficiencyMatrix[person1][_testContainer.ContainedSkills["PhoneB"]]);
+            Assert.AreEqual(2, skillResourceEfficiencyMatrix[person2].Count);
+            Assert.AreEqual(1, skillResourceEfficiencyMatrix[person2][_testContainer.ContainedSkills["PhoneA"]]);
+            Assert.AreEqual(1, skillResourceEfficiencyMatrix[person2][_testContainer.ContainedSkills["PhoneB"]]);
+            Assert.AreEqual(1, skillResourceEfficiencyMatrix[person4].Count);
+            Assert.AreEqual(1, skillResourceEfficiencyMatrix[person4][_testContainer.ContainedSkills["PhoneB"]]);
         }
 
         private void VerifyRelativePersonSkillResourcesData(IDividedActivityData dividedActivity)
-        {
-            PersonSkillDictionary resourceMatrix = dividedActivity.RelativePersonSkillResources;
+		{
+			var person1 =
+				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
+									.Key;
+			var person2 =
+				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person2"], new DateOnly(2008, 1, 1))
+									.Key;
+			var person4 =
+				_personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person4"], new DateOnly(2008, 1, 1))
+									.Key;
+
+            KeyedSkillResourceDictionary resourceMatrix = dividedActivity.RelativeKeyedSkillResourceResources;
             Assert.IsNotNull(resourceMatrix);
             Assert.AreEqual(3, resourceMatrix.Count);
-            Assert.AreEqual(2, resourceMatrix[_testContainer.ContainedPersons["Person1"]].Count);
-            Assert.AreEqual(0.3333, resourceMatrix[_testContainer.ContainedPersons["Person1"]][_testContainer.ContainedSkills["PhoneA"]], 0.001d);
-            Assert.AreEqual(0.3333, resourceMatrix[_testContainer.ContainedPersons["Person1"]][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
-            Assert.AreEqual(2, resourceMatrix[_testContainer.ContainedPersons["Person2"]].Count);
-            Assert.AreEqual(1, resourceMatrix[_testContainer.ContainedPersons["Person2"]][_testContainer.ContainedSkills["PhoneA"]], 0.001d);
-            Assert.AreEqual(1, resourceMatrix[_testContainer.ContainedPersons["Person2"]][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
-            Assert.AreEqual(1, resourceMatrix[_testContainer.ContainedPersons["Person4"]].Count);
-            Assert.AreEqual(0.6666, resourceMatrix[_testContainer.ContainedPersons["Person4"]][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
+            Assert.AreEqual(4, resourceMatrix[person1].Count);
+            Assert.AreEqual(0.3333, resourceMatrix[person1][_testContainer.ContainedSkills["PhoneA"]], 0.001d);
+            Assert.AreEqual(0.3333, resourceMatrix[person1][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
+            Assert.AreEqual(2, resourceMatrix[person2].Count);
+            Assert.AreEqual(1, resourceMatrix[person2][_testContainer.ContainedSkills["PhoneA"]], 0.001d);
+            Assert.AreEqual(1, resourceMatrix[person2][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
+            Assert.AreEqual(1, resourceMatrix[person4].Count);
+            Assert.AreEqual(0.6666, resourceMatrix[person4][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
         }
 
         private void VerifyPersonSkillResourcesData(IDividedActivityData dividedActivity)
         {
-            PersonSkillDictionary resourceMatrix = dividedActivity.WeightedRelativePersonSkillResources;
+	        var person1 =
+		        _personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
+		                            .Key;
+	        var person2 =
+		        _personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person2"], new DateOnly(2008, 1, 1))
+		                            .Key;
+			var person4 =
+		        _personSkillProvider.SkillsOnPersonDate(_testContainer.ContainedPersons["Person4"], new DateOnly(2008, 1, 1))
+		                            .Key;
+
+            KeyedSkillResourceDictionary resourceMatrix = dividedActivity.WeightedRelativeKeyedSkillResourceResources;
             Assert.IsNotNull(resourceMatrix);
             Assert.AreEqual(3, resourceMatrix.Count);
-            Assert.AreEqual(2, resourceMatrix[_testContainer.ContainedPersons["Person1"]].Count);
-            Assert.AreEqual(0.3333, resourceMatrix[_testContainer.ContainedPersons["Person1"]][_testContainer.ContainedSkills["PhoneA"]], 0.001d);
-            Assert.AreEqual(0.3333, resourceMatrix[_testContainer.ContainedPersons["Person1"]][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
-            Assert.AreEqual(2, resourceMatrix[_testContainer.ContainedPersons["Person2"]].Count);
-            Assert.AreEqual(1, resourceMatrix[_testContainer.ContainedPersons["Person2"]][_testContainer.ContainedSkills["PhoneA"]], 0.001d);
-            Assert.AreEqual(1, resourceMatrix[_testContainer.ContainedPersons["Person2"]][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
-            Assert.AreEqual(1, resourceMatrix[_testContainer.ContainedPersons["Person4"]].Count);
-            Assert.AreEqual(0.6666, resourceMatrix[_testContainer.ContainedPersons["Person4"]][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
+            Assert.AreEqual(4, resourceMatrix[person1].Count);
+            Assert.AreEqual(0.3333, resourceMatrix[person1][_testContainer.ContainedSkills["PhoneA"]], 0.001d);
+            Assert.AreEqual(0.3333, resourceMatrix[person1][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
+            Assert.AreEqual(2, resourceMatrix[person2].Count);
+            Assert.AreEqual(1, resourceMatrix[person2][_testContainer.ContainedSkills["PhoneA"]], 0.001d);
+            Assert.AreEqual(1, resourceMatrix[person2][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
+            Assert.AreEqual(1, resourceMatrix[person4].Count);
+            Assert.AreEqual(0.6666, resourceMatrix[person4][_testContainer.ContainedSkills["PhoneB"]], 0.001d);
         }
     }
 }

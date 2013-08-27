@@ -15,11 +15,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 	{
 	    private readonly INonBlendSkillImpactOnPeriodForProjection _nonBlendSkillImpactOnPeriodForProjection;
 		private readonly IWorkShiftCalculator _workShiftCalculator;
+		private readonly IPersonSkillProvider _personSkillProvider;
 
-		public NonBlendWorkShiftCalculator(INonBlendSkillImpactOnPeriodForProjection nonBlendSkillImpactOnPeriodForProjection, IWorkShiftCalculator workShiftCalculator)
+		public NonBlendWorkShiftCalculator(INonBlendSkillImpactOnPeriodForProjection nonBlendSkillImpactOnPeriodForProjection, IWorkShiftCalculator workShiftCalculator, IPersonSkillProvider personSkillProvider)
         {
         	_nonBlendSkillImpactOnPeriodForProjection = nonBlendSkillImpactOnPeriodForProjection;
 			_workShiftCalculator = workShiftCalculator;
+			_personSkillProvider = personSkillProvider;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -31,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 				return 0;
 
 			double result = 0;
+	        
 			foreach (KeyValuePair<ISkill, ISkillStaffPeriodDictionary> skillStaffPeriodDictionaryKeyValue in skillStaffPeriods)
 			{
 				ISkill skill = skillStaffPeriodDictionaryKeyValue.Key;

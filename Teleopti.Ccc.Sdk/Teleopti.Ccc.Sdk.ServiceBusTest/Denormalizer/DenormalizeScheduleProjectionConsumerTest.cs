@@ -4,12 +4,10 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 {
@@ -41,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			}
 			using (mocks.Playback())
 			{
-				target.Handle(new ProjectionChangedEvent
+				target.Handle(new ScheduledResourcesChangedEvent
 				               	{
 				               		IsDefaultScenario = true,
 				               		PersonId = person.Id.GetValueOrDefault(),
@@ -105,7 +103,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			}
 			using (mocks.Playback())
 			{
-				target.Handle(new ProjectionChangedEvent
+				target.Handle(new ScheduledResourcesChangedEvent
 				               	{
 				               		IsDefaultScenario = true,
 				               		PersonId = person.Id.GetValueOrDefault(),
@@ -138,7 +136,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			}
 			using (mocks.Playback())
 			{
-				target.Handle(new ProjectionChangedEvent
+				target.Handle(new ScheduledResourcesChangedEvent
 				               	{
 				               		IsDefaultScenario = false,
 				               		PersonId = person.Id.GetValueOrDefault(),
@@ -160,8 +158,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		[Test]
 		public void ShouldSendUpdatedScheduleDay()
 		{
-			var _serviceBus = MockRepository.GenerateMock<IPublishEventsFromEventHandlers>();
-			target = new ScheduleProjectionReadOnlyUpdater(scheduleProjectionReadOnlyRepository, _serviceBus);
+			var serviceBus = MockRepository.GenerateMock<IPublishEventsFromEventHandlers>();
+			target = new ScheduleProjectionReadOnlyUpdater(scheduleProjectionReadOnlyRepository, serviceBus);
 			var guid = Guid.NewGuid();
 			var person = PersonFactory.CreatePerson();
 			person.SetId(guid);
@@ -170,7 +168,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var closestPeriod = new DateTimePeriod(utcNow.AddMinutes(-5), utcNow.AddMinutes(5));
 			var notClosestPeriod = new DateTimePeriod(utcNow.AddMinutes(5), utcNow.AddMinutes(10));
 
-			var message = new ProjectionChangedEvent
+			var message = new ScheduledResourcesChangedEvent
 				{
 					IsDefaultScenario = true,
 					Datasource = "DataSource",
@@ -203,7 +201,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			target.Handle(message);
 
-			_serviceBus.AssertWasCalled(s => s.Publish(new ScheduleProjectionReadOnlyChanged
+			serviceBus.AssertWasCalled(s => s.Publish(new ScheduleProjectionReadOnlyChanged
 				{
 					Datasource = message.Datasource,
 					BusinessUnitId = message.BusinessUnitId,

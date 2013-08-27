@@ -145,8 +145,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 return UserTexts.Resources.Shift;
             if (conflict is IPersonAbsence)
                 return UserTexts.Resources.Absence; 
-            if (conflict is IPersonDayOff)
-                return UserTexts.Resources.DayOff;
             if (conflict is INote)
                 return UserTexts.Resources.Note;
             if (conflict is IStudentAvailabilityDay)

@@ -150,8 +150,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
            
             foreach (var day in wl.TemplateWeekCollection)
             {
-                day.Value.OpenForWork.IsOpen = true;
-                day.Value.OpenForWork.IsOpenForIncomingWork = true;
+                day.Value.MakeOpen24Hours();
             }
 
             skill.AddWorkload(wl);

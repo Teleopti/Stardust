@@ -51,10 +51,14 @@ namespace Teleopti.Interfaces.Domain
 	    /// <summary>
 		/// Publish the ScheduleChangedEvent
 		/// </summary>
-		void ScheduleChanged(string dataSource);
+		void ScheduleChanged();
 
 		bool RemoveLayer(IShiftLayer layer);
 	    void AddPersonalLayer(IActivity activity, DateTimePeriod period);
 	    void AddOvertimeLayer(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet);
+	    IDayOff DayOff();
+	    void SetDayOff(IDayOffTemplate template);
+	    void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination);
+	    bool AssignedWithDayOff(IDayOffTemplate template);
     }
 }

@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                 return false;
             }
 			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(members, dateOnly, schedulingOptions, scheduleDictionary);
-			foreach (var person in members.GetRandom(members.Count, true))
+			foreach (var person in members.GetRandom(members.Count(), true))
 			{
 				IScheduleDay scheduleDay = scheduleDictionary[person].ScheduledDay(dateOnly);
 
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 		}
 
 		private bool ScheduleThePersonOnDay(DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions, 
-			IList<IPerson> members, IList<IScheduleMatrixPro> matrixList, IPossibleStartEndCategory possibleStartEndCategory, 
+			IEnumerable<IPerson> members, IList<IScheduleMatrixPro> matrixList, IPossibleStartEndCategory possibleStartEndCategory, 
 			ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			var scheduleDictionary = _resultStateHolder.Schedules;

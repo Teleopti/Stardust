@@ -1226,7 +1226,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				// This is not working now I presume (SelectedSchedules is probably not correct)
 				foreach (IScheduleDay schedulePart in _scheduleView.SelectedSchedules())
 				{
-					if (schedulePart.PersonDayOffCollection().Count == 0)
+					if (!schedulePart.HasDayOff())
 					{
 						IEditableShift selectedShift = _scheduleOptimizerHelper.PrepareAndChooseBestShift(schedulePart, schedulingOptions, finderService);
 						if (selectedShift != null)
@@ -1401,12 +1401,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 							SchedulerState.Schedules[SchedulerState.FilteredPersonDictionary.ElementAt(0).Value].
 								ScheduledDay(new DateOnly(DateTime.MinValue.AddDays(1))).Clone();
 						var selectedSchedules = _scheduleView.SelectedSchedules();
-						if (selectedSchedules.Count() == 0)
+						if (!selectedSchedules.Any())
 							return;
 
-						var sortedList = (from d in ScheduleViewBase.AllSelectedUtcDates(selectedSchedules)
-										  orderby d.Date
-										  select d).ToList();
+						var sortedList = selectedSchedules.Select(s => s.DateOnlyAsPeriod.DateOnly).OrderBy(d => d.Date);
 
 						var first = sortedList.FirstOrDefault();
 						var last = sortedList.LastOrDefault();
@@ -1418,8 +1416,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 							return;
 
 						var dayOffTemplate = addDayOffDialog.SelectedItem;
-						var personDayOff = new PersonDayOff(clone.Person, _schedulerState.RequestedScenario, dayOffTemplate, new DateOnly().AddDays(1), clone.TimeZone);
-						clone.Add(personDayOff);
+						clone.PersonAssignment(true).SetDayOff(dayOffTemplate);
 						_scheduleView.Presenter.ClipHandlerSchedule.Clear();
 						_scheduleView.Presenter.ClipHandlerSchedule.AddClip(1, 1, clone);
 						_externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetData("PersistableScheduleData", new int()));
@@ -3731,7 +3728,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void _backgroundWorkerOptimization_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			//statusStripButtonShowOptimizationProgress.Visible = false;
 			if (Disposing)
 				return;
 			if (_undoRedo.InUndoRedo)
@@ -3740,10 +3736,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (rethrowBackgroundException(e))
 				return;
 
-			//Next line will start work on another background thread.
-			//No code after next line please.
 			RecalculateResources();
-			//afterBackgroundWorkersCompleted(false);
 		}
 
 		private void _backgroundWorkerOptimization_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -3780,11 +3773,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripStatusLabelStatus.Text = statusText;
 			_grid.Invalidate();
 			refreshSummarySkillIfActive();
-			_skillIntradayGridControl.RefreshGrid();
-			_skillDayGridControl.RefreshGrid();
-			_skillWeekGridControl.RefreshGrid();
-			_skillMonthGridControl.RefreshGrid();
-			_skillFullPeriodGridControl.RefreshGrid();
+			_skillIntradayGridControl.Invalidate(true);
+			_skillDayGridControl.Invalidate(true);
+			_skillWeekGridControl.Invalidate(true);
+			_skillMonthGridControl.Invalidate(true);
+			_skillFullPeriodGridControl.Invalidate(true);
 			refreshChart();
 			statusStrip1.Refresh();
 			Application.DoEvents();
@@ -3801,11 +3794,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					_grid.Invalidate();
 					refreshSummarySkillIfActive();
-					_skillIntradayGridControl.RefreshGrid();
-					_skillDayGridControl.RefreshGrid();
-					_skillWeekGridControl.RefreshGrid();
-					_skillMonthGridControl.RefreshGrid();
-					_skillFullPeriodGridControl.RefreshGrid();
+					_skillIntradayGridControl.Invalidate(true);
+					_skillDayGridControl.Invalidate(true);
+					_skillWeekGridControl.Invalidate(true);
+					_skillMonthGridControl.Invalidate(true);
+					_skillFullPeriodGridControl.Invalidate(true);
 					refreshChart();
 					_scheduleCounter = 0;
 				}
@@ -3832,11 +3825,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_grid.Cursor = Cursors.Default;
 				_grid.Enabled = true;
 				_grid.Cursor = Cursors.Default;
-				_skillIntradayGridControl.RefreshGrid();
-				_skillDayGridControl.RefreshGrid();
-				_skillWeekGridControl.RefreshGrid();
-				_skillMonthGridControl.RefreshGrid();
-				_skillFullPeriodGridControl.RefreshGrid();
+				_skillIntradayGridControl.Invalidate(true);
+				_skillDayGridControl.Invalidate(true);
+				_skillWeekGridControl.Invalidate(true);
+				_skillMonthGridControl.Invalidate(true);
+				_skillFullPeriodGridControl.Invalidate(true);
 				refreshChart();
 
 				if (_scheduleView != null)
@@ -4098,12 +4091,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         	_singleSkillDictionary = _container.Resolve<ISingleSkillDictionary>();
 			_singleSkillDictionary.Create(SchedulerState.SchedulingResultState.PersonsInOrganization.ToList(), SchedulerState.RequestedPeriod.DateOnlyPeriod);
 
-            _optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _singleSkillDictionary);
+            _optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, new PersonSkillProvider());
 			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container);
 
 			_groupDayOffOptimizerHelper = new GroupDayOffOptimizerHelper(_container);
-			//_blockOptimizerHelper = new BlockOptimizerHelper(_container, _scheduleOptimizerHelper);
-
+			
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation)
 				backgroundWorkerLoadData.ReportProgress(1, Resources.CalculatingResourcesDotDotDot);
 			_optimizationHelperWin.ResourceCalculateAllDays(e, backgroundWorkerLoadData, true);
@@ -4471,26 +4463,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 				Cursor = Cursors.WaitCursor;
 				using (PerformanceOutput.ForOperation("Persisting changes"))
 				{
-					using (new DenormalizerContext(new SendDenormalizeNotificationToSdk(_container.Resolve<ISendCommandToSdk>())))
+					_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
+					var result = _persister.TryPersist(_schedulerState.Schedules, _modifiedWriteProtections,
+					                                   _schedulerState.PersonRequests, _schedulerState.Schedules.ModifiedPersonAccounts);
+					if (result.ScheduleDictionaryConflicts != null && result.ScheduleDictionaryConflicts.Any())
 					{
-						_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
-						var result = _persister.TryPersist(_schedulerState.Schedules, _modifiedWriteProtections, _schedulerState.PersonRequests, _schedulerState.Schedules.ModifiedPersonAccounts);
-						if (result.ScheduleDictionaryConflicts != null && result.ScheduleDictionaryConflicts.Any())
-						{
-							var conflictHandlingResult = handleConflicts(result.ScheduleDictionaryConflicts);
-							if (conflictHandlingResult.DialogResult == DialogResult.OK)
-								showPleaseSaveAgainDialog();
-							return;
-						}
-						if (!result.Saved)
-						{
-							appologizeAndClose();
-							return;
-						}
-						if (_personAbsenceAccountPersistValidationBusinessRuleResponses.Any())
-						{
-							BusinessRuleResponseDialog.ShowDialogFromWinForms(_personAbsenceAccountPersistValidationBusinessRuleResponses);
-						}
+						var conflictHandlingResult = handleConflicts(result.ScheduleDictionaryConflicts);
+						if (conflictHandlingResult.DialogResult == DialogResult.OK)
+							showPleaseSaveAgainDialog();
+						return;
+					}
+					if (!result.Saved)
+					{
+						appologizeAndClose();
+						return;
+					}
+					if (_personAbsenceAccountPersistValidationBusinessRuleResponses.Any())
+					{
+						BusinessRuleResponseDialog.ShowDialogFromWinForms(_personAbsenceAccountPersistValidationBusinessRuleResponses);
 					}
 				}
 				_undoRedo.Clear();

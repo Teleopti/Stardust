@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Composites;
 
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {

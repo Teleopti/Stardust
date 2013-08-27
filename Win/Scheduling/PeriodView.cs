@@ -47,19 +47,19 @@ namespace Teleopti.Ccc.Win.Scheduling
                     var significantPart = scheduleRange.SignificantPartForDisplay();
 
                     if(significantPart == SchedulePartView.MainShift)
-                        DrawAssignmentFromSchedule(e, scheduleRange);
+                        drawAssignmentFromSchedule(e, scheduleRange);
                     if(significantPart == SchedulePartView.FullDayAbsence)
-                        DrawAbsenceFromSchedule(e, scheduleRange);
+                        drawAbsenceFromSchedule(e, scheduleRange);
 					if (significantPart == SchedulePartView.ContractDayOff)
-						DrawAbsenceAndDayOff(e, scheduleRange);
+						drawAbsenceAndDayOff(e, scheduleRange);
                     if(significantPart == SchedulePartView.DayOff)
-                        DrawDayOffFromSchedule(e, scheduleRange);
+                        drawDayOffFromSchedule(e, scheduleRange);
                     AddMarkersToCell(e, scheduleRange, significantPart);
                 }
             }
         }
 
-    	private void DrawAbsenceAndDayOff(GridDrawCellEventArgs e, IScheduleDay scheduleDay)
+    	private void drawAbsenceAndDayOff(GridDrawCellEventArgs e, IScheduleDay scheduleDay)
     	{
 			IAbsence absence = SignificantAbsence(scheduleDay);
 			String shortName = absence.ConfidentialDescription(scheduleDay.Person,scheduleDay.DateOnlyAsPeriod.DateOnly).ShortName;
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
     	}
 
-        private void DrawAssignmentFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
+        private void drawAssignmentFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
         {
             IPersonAssignment pa = scheduleRange.PersonAssignment();
 
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-		private void DrawAbsenceFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleDay)
+		private void drawAbsenceFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleDay)
 		{
 			IAbsence absence = SignificantAbsence(scheduleDay);
 			String shortName = absence.ConfidentialDescription(scheduleDay.Person,scheduleDay.DateOnlyAsPeriod.DateOnly).ShortName;
@@ -115,18 +115,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-        private void DrawDayOffFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleRange)
+        private void drawDayOffFromSchedule(GridDrawCellEventArgs e, IScheduleDay scheduleDay)
         {
-            var personDayOffs = scheduleRange.PersonDayOffCollection();
-            if (personDayOffs.Count == 0) return;
+            if (!scheduleDay.HasDayOff()) 
+				return;
 
-            IPersonDayOff personDayOff = personDayOffs[0];
+            IDayOff dayOff = scheduleDay.PersonAssignment().DayOff();
             Rectangle rect = new Rectangle(e.Bounds.X + 4, e.Bounds.Y + 4, e.Bounds.Width - 8, e.Bounds.Height - 8);
-            string shortName = personDayOff.DayOff.Description.ShortName;
+            string shortName = dayOff.Description.ShortName;
             SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
             Point point = new Point(e.Bounds.X - (int)stringWidth.Width / 2 + e.Bounds.Width / 2, e.Bounds.Y - (int)stringWidth.Height / 2 + e.Bounds.Height / 2);
 
-            using (HatchBrush brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, personDayOff.DayOff.DisplayColor, Color.LightGray))
+            using (HatchBrush brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, dayOff.DisplayColor, Color.LightGray))
             {
                 e.Graphics.FillRectangle(brush, rect);
                 e.Graphics.DrawString(shortName, CellFontBig, Brushes.Black, point);

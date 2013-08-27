@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var meeting = _mocks.StrictMock<IPersonMeeting>();
 			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { meeting });
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
-			_personAssignments = new List<IPersonAssignment> {_personAssignment};
 
 			var currentDate = new DateTime(2013, 3, 1, 0, 0, 0, DateTimeKind.Utc);
 			var phone = ActivityFactory.CreateActivity("phone");
@@ -78,14 +77,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part);
 				Expect.Call(_part.PersonMeetingCollection()).Return(meetings).Repeat.AtLeastOnce();
-				Expect.Call(_part.PersonAssignment()).Return(_personAssignment);
-				Expect.Call(_part.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(_personAssignments));
+				Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
 				Expect.Call(_personAssignment.PersonalLayers()).Return(new []{new PersonalShiftLayer(new Activity("sdf"), period)}).Repeat.AtLeastOnce();
 				Expect.Call(meeting.Period).Return(period2).Repeat.AtLeastOnce();
 				Expect.Call(c1.MainShiftProjection).Return(layerCollection1).Repeat.AtLeastOnce();
 				Expect.Call(c1.PersonalShiftsAndMeetingsAreInWorkTime(new ReadOnlyCollection<IPersonMeeting>(meetings),
-																	  new ReadOnlyCollection<IPersonAssignment>(
-																		  _personAssignments))).Return(true);
+																	  _personAssignment)).Return(true);
 			}
 
 			using (_mocks.Playback())

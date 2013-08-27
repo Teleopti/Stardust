@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         private NewBusinessRuleCollection()
         {
             //put mandatory here
-            Add(new NewMaxOneDayOffRule());
 					Add(new DataPartOfAgentDay());
         }
 

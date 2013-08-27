@@ -70,20 +70,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// Creates the person day off repository.
-        /// </summary>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2009-08-27
-        /// </remarks>
-        public IPersonDayOffRepository CreatePersonDayOffRepository(IUnitOfWork unitOfWork)
-        {
-            return new PersonDayOffRepository(unitOfWork);
-        }
-
-        /// <summary>
         /// Creates the scenario repository.
         /// </summary>
         /// <param name="unitOfWork">The uow.</param>
@@ -283,9 +269,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new RtaStateGroupRepository(unitOfWork);
         }
 
-        public IDayOffRepository CreateDayOffRepository(IUnitOfWork unitOfWork)
+        public IDayOffTemplateRepository CreateDayOffRepository(IUnitOfWork unitOfWork)
         {
-            return new DayOffRepository(unitOfWork);
+            return new DayOffTemplateRepository(unitOfWork);
         }
 
         public IMeetingRepository CreateMeetingRepository(IUnitOfWork unitOfWork)

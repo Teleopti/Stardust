@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Rhino.ServiceBus;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;

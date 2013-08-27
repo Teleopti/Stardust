@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -24,33 +23,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         private ISkillStaffPeriod _stPeriod6;
         private ISkillStaffPeriod _stPeriod7;
 
-
-
         [SetUp]
         public void Setup()
         {
             _skill = SkillFactory.CreateSkill("testSkill");
             _task = new Task(100, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(20));
             _mocks = new MockRepository();
-        }
-
-        [Test]
-        public void VerifyForecastedHoursAndForecastedTime()
-        {
-            _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-            DateOnly startDateLocal;
-            IList<ISkillDay> skillDays = GetBaseData(_skill, out startDateLocal);
-
-            foreach (SkillStaffPeriod dataPeriod in skillDays[0].SkillStaffPeriodCollection)
-            {
-                SkillStaffPeriodFactory.InjectForecastedIncomingDemand(dataPeriod, 4d);
-            }
-
-            double value = SkillStaffPeriodHelper.ForecastedHours(skillDays[0].SkillStaffPeriodCollection).Value;
-            Assert.AreEqual(96, value);
-
-            value = SkillStaffPeriodHelper.ForecastedTime(skillDays[0].SkillStaffPeriodCollection).Value.TotalHours;
-            Assert.AreEqual(96, value);
         }
 
         [Test]
@@ -70,29 +48,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
             value = SkillStaffPeriodHelper.ScheduledTime(skillDays[0].SkillStaffPeriodCollection).Value.TotalHours;
             Assert.AreEqual(48, value);
-        }
-
-        [Test]
-        public void VerifyIntradayMinMaxBoostedAbsoluteDifferenceList()
-        {
-            List<ISkillStaffPeriod> periodlist = GetPeriodlist();
-            using (_mocks.Playback())
-            {
-                CalculateStaff(periodlist);
-                _stPeriod2.SetCalculatedResource65(8);
-                SkillPersonData skillPersonData = new SkillPersonData(1, 4);
-                _stPeriod1.Payload.SkillPersonData = skillPersonData;
-                _stPeriod2.Payload.SkillPersonData = skillPersonData;
-                _stPeriod2.Payload.CalculatedLoggedOn = 8;
-                IList<double> ret = SkillStaffPeriodHelper.IntradayMinMaxBoostedAbsoluteDifference(periodlist);
-                Assert.AreEqual(7, ret.Count);
-                Assert.AreEqual(((_stPeriod1.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads(false) * 10000) +
-                            _stPeriod1.AbsoluteDifference) * _stPeriod1.Period.ElapsedTime().TotalHours, ret[0]);
-                Assert.AreEqual(((_stPeriod2.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads(false) * 10000) +
-                            _stPeriod2.AbsoluteDifference) * _stPeriod2.Period.ElapsedTime().TotalHours, ret[1]);
-                Assert.AreEqual(((_stPeriod3.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads(false) * 10000) +
-                            _stPeriod3.AbsoluteDifference) * _stPeriod3.Period.ElapsedTime().TotalHours, ret[2]);
-            }
         }
 
         [Test]
@@ -480,62 +435,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.IsNull(SkillStaffPeriodHelper.AbsoluteDifferenceIncoming(periods));
             Assert.IsNull(SkillStaffPeriodHelper.RelativeDifferenceIncoming(periods));
             Assert.IsNotNull(SkillStaffPeriodHelper.EstimatedServiceLevel(periods));
-            
-        }
-
-        [Test]
-        public void VerifyPersonSkillListWhenNoPersonPeriod()
-        {
-            IPerson person =  _mocks.StrictMock<IPerson>();
-            DateOnly theDate = new DateOnly(2008, 12, 1);
-            IPermissionInformation permissionInformation = _mocks.StrictMock<IPermissionInformation>();
-            TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-           using (_mocks.Record())
-           {
-               Expect.Call(person.Period(theDate)).Repeat.Once().Return(null);
-               Expect.Call(person.PermissionInformation).Return(permissionInformation).Repeat.Any();
-               Expect.Call(permissionInformation.DefaultTimeZone()).Return(timeZoneInfo);
-           }
-            using (_mocks.Playback())
-            {
-                IList<ISkill> skills = SkillStaffPeriodHelper.PersonActiveSkillOnDay(person, theDate);
-                Assert.AreEqual(0,skills.Count);
-            }
-
-            
-        }
-        [Test]
-        public void VerifyPersonSkillList()
-        {
-            IPerson person = _mocks.StrictMock<IPerson>();
-            DateOnly theDate = new DateOnly(2008, 12, 1);
-            IPersonPeriod period = _mocks.StrictMock<IPersonPeriod>();
-            IPersonSkill skill1 = PersonSkillFactory.CreatePersonSkill("s1", 1);
-            IPersonSkill skill2 = PersonSkillFactory.CreatePersonSkill("s2", 1);
-            IPermissionInformation permissionInformation = _mocks.StrictMock<IPermissionInformation>();
-            TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-
-            IList<IPersonSkill> personSkills = new List<IPersonSkill>(){skill1,skill2};
-            using (_mocks.Record())
-            {
-                Expect.Call(person.Period(theDate)).Repeat.Once().Return(period);
-                Expect.Call(period.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
-                Expect.Call(person.PermissionInformation).Return(permissionInformation).Repeat.Any();
-                Expect.Call(permissionInformation.DefaultTimeZone()).Return(timeZoneInfo);
-            }
-            using (_mocks.Playback())
-            {
-                IList<ISkill> skills = SkillStaffPeriodHelper.PersonActiveSkillOnDay(person, theDate);
-                Assert.AreEqual(2, skills.Count);
-            }
-        }
-
-        //Coverage test?!?!? /Peter
-        [Test]
-        public void VerifyReturnsNullIfSkillStaffListIsEmpty()
-        {
-            double? v = SkillStaffPeriodHelper.CalculateRelativeRootMeanSquare(new List<ISkillStaffPeriod>(), false, false, false);
-            Assert.AreEqual(null,v);
         }
     }
 }

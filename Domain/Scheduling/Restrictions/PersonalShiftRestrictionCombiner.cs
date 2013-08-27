@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
@@ -15,7 +14,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_combiner = combiner;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public IEffectiveRestriction Combine(IScheduleDay scheduleDay, IEffectiveRestriction effectiveRestriction)
 		{
 			if (scheduleDay == null)
@@ -24,18 +22,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			if (effectiveRestriction == null)
 				return null;
 
-			var assignments = scheduleDay.PersonAssignmentCollectionDoNotUse();
+			var assignment = scheduleDay.PersonAssignment();
 
-			if (assignments.IsEmpty())
+			if (assignment == null)
 				return effectiveRestriction;
 
 			var person = scheduleDay.Person;
 			var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 
-			var periods = from a in assignments
-			              from l in a.PersonalLayers()
-			              select l.Period
-				;
+			var periods = from l in assignment.PersonalLayers()
+			              select l.Period;
 
 			var asEffectiveRestrictions = from p in periods
 										  select new EffectiveRestriction(
