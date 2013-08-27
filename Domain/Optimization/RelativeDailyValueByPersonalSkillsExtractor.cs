@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         // todo: move to extractor methods
         private IList<double> GetIntradayRelativePersonnelDeficits(DateOnly scheduleDay)
         {
-            IList<ISkill> personsActiveSkills = ExtractPersonalSkillList(scheduleDay);
+            IEnumerable<ISkill> personsActiveSkills = ExtractPersonalSkillList(scheduleDay);
 
             DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
                scheduleDay.Date, scheduleDay.Date.AddDays(1),
@@ -114,16 +114,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             return skillStaffPeriods.Select(s => s.RelativeDifference).ToList();
         }
 
-        //todo: move to extractor methods
-        private IList<ISkill> ExtractPersonalSkillList(DateOnly scheduleDate)
+        private IEnumerable<ISkill> ExtractPersonalSkillList(DateOnly scheduleDate)
         {
-            IList<IPersonSkill> personalSkills = _scheduleMatrix.Person.Period(scheduleDate).PersonSkillCollection;
-            IList<ISkill> skillList = new List<ISkill>();
-            foreach (IPersonSkill personalSkill in personalSkills)
-            {
-                skillList.Add(personalSkill.Skill);
-            }
-            return skillList;
+            return _scheduleMatrix.Person.Period(scheduleDate).PersonSkillCollection.Select(s => s.Skill).ToList();
         }
     }
 }

@@ -41,14 +41,14 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
                 PersonPeriodFactory.CreatePersonPeriod(date1, personContract, businessUnitGraph.SiteCollection[0].TeamCollection[0]);
             personPeriod.SetId(Guid.NewGuid());
 
+			person.AddPersonPeriod(personPeriod); //what happens when overlapping periods
+
             IPersonSkill skill = PersonSkillFactory.CreatePersonSkill("MySkill", 1);
             skill.Skill.SetId(Guid.NewGuid());
-            personPeriod.AddPersonSkill(skill);
+            person.AddSkill(skill,personPeriod);
 
             IExternalLogOn login = ExternalLogOnFactory.CreateExternalLogOn();
             personPeriod.AddExternalLogOn(login);
-
-            person.AddPersonPeriod(personPeriod); //what happens when overlapping periods
 
             DateOnly date2 = new DateOnly(2007, 2, 1);
             personPeriod = PersonPeriodFactory.CreatePersonPeriod(date2, personContract, businessUnitGraph.SiteCollection[1].TeamCollection[0]);

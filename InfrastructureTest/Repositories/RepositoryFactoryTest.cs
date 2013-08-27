@@ -118,13 +118,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        public void VerifyCreatePersonDayOffRepository()
-        {
-            mocks.ReplayAll();
-            Assert.IsNotNull(new RepositoryFactory().CreatePersonDayOffRepository(uow));
-        }
-
-        [Test]
         public void VerifyCreateScenarioRepository()
         {
             mocks.ReplayAll();

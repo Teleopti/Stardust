@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 	{
 		public  IGroupPerson CreateGroupPerson(IList<IPerson> persons, DateOnly dateOnly,string name, Guid? guid)
 		{
-
 			return new GroupPerson(persons, dateOnly, name, guid);
 		}
 	}

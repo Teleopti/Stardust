@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var absence = new AbsenceRepository(uow).LoadAll().Single(abs => abs.Description.Name.Equals(Name));
 
 			var personAbsence = new PersonAbsence(Scenario);
-			personAbsence.AddExplicitAbsence(TestData.DataSource.DataSourceName, user, absence, StartTime, EndTime);
+			personAbsence.AddExplicitAbsence(user, absence, StartTime, EndTime);
 
 			var repository = new PersonAbsenceRepository(uow);
 			repository.Add(personAbsence);

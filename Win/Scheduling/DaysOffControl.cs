@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        public IDayOffRepository Repository { get; private set; }
+        public IDayOffTemplateRepository Repository { get; private set; }
 
         public IUnitOfWork UnitOfWork { get; private set; }
 
@@ -382,7 +382,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             UnitOfWork = value;
 
             // Creates a new repository.
-            Repository = new DayOffRepository(UnitOfWork);
+            Repository = new DayOffTemplateRepository(UnitOfWork);
         }
 
         public void Persist()

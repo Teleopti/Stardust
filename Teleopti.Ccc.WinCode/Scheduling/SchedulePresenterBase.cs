@@ -566,7 +566,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             {
                 schedulePart.Clear<IPersonAbsence>();
                 schedulePart.Clear<IPersonAssignment>();
-                schedulePart.Clear<IPersonDayOff>();
                 schedulePart.BusinessRuleResponseCollection.Clear();
             }
         }
@@ -625,7 +624,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             var rulesToRun = _schedulerState.SchedulingResultState.GetRulesToRun();
             foreach (IScheduleDay part in scheduleParts)
             {
-                foreach (IPersonAssignment assignment in part.PersonAssignmentCollectionDoNotUse())
+	            IPersonAssignment assignment = part.PersonAssignment();
+				if (assignment != null)
                 {
                     assignment.CheckRestrictions();
                 }
@@ -738,7 +738,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             try
             {
-                foreach (IPersonAssignment assignment in LastUnsavedSchedulePart.PersonAssignmentCollectionDoNotUse())
+				IPersonAssignment assignment = LastUnsavedSchedulePart.PersonAssignment();
+				if (assignment != null)
                 {
                     assignment.CheckRestrictions();
                 }

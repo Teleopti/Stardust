@@ -5,8 +5,8 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
-using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -160,13 +160,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         public void VerifyRootWithoutDeleteSentToMessageBroker()
         {
             var person = PersonFactory.CreatePerson("Person1");
-            var dayOff = DayOffFactory.CreateDayOff();
             var scenario = ScenarioFactory.CreateScenarioAggregate();
             new PersonRepository(UnitOfWork).Add(person);
-            new DayOffRepository(UnitOfWork).Add(dayOff);
             new ScenarioRepository(UnitOfWork).Add(scenario);
             UnitOfWork.PersistAll();
-            IPersonDayOff obj = new PersonDayOff(person, scenario, dayOff, new DateOnly(2010,1,1));
+            var obj = new PersonAssignment(person, scenario, new DateOnly(2010,1,1));
             
             IEventMessage mess1 = mocks.StrictMock<IEventMessage>();
             IEventMessage mess2 = mocks.StrictMock<IEventMessage>();
@@ -179,13 +177,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 using (mocks.Ordered())
                 {
                     Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(new DateTime(2010, 1, 1), new DateTime(2010, 1, 1).AddTicks(1), Guid.Empty, person.Id.Value, typeof(Person), obj.Id.Value, obj.GetType(), DomainUpdateType.Insert))
+                    Expect.Call(messBroker.CreateEventMessage(new DateTime(2010, 1, 1), new DateTime(2010, 1, 2), Guid.Empty, person.Id.Value, typeof(Person), obj.Id.Value, obj.GetType(), DomainUpdateType.Insert))
                                         .Return(mess1);
 					messBroker.SendEventMessages(null, Guid.Empty, null);
 					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1 }));
 
                     Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(new DateTime(2010, 1, 1), new DateTime(2010, 1, 1).AddTicks(1), Guid.Empty, person.Id.Value, typeof(Person), obj.Id.Value, obj.GetType(), DomainUpdateType.Delete))
+                    Expect.Call(messBroker.CreateEventMessage(new DateTime(2010, 1, 1), new DateTime(2010, 1, 2), Guid.Empty, person.Id.Value, typeof(Person), obj.Id.Value, obj.GetType(), DomainUpdateType.Delete))
                                         .Return(mess2);
 					messBroker.SendEventMessages(null, Guid.Empty, null);
 					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess2 }));
@@ -202,7 +200,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             }
 
             //clean up
-            new DayOffRepository(UnitOfWork).Remove(dayOff);
             new PersonRepository(UnitOfWork).Remove(person);
             new ScenarioRepository(UnitOfWork).Remove(scenario);
             UnitOfWork.PersistAll();

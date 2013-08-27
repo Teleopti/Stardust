@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -15,11 +16,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     {
 
         ScheduleProjectionExtractor _target;
+	    private MockRepository _mocks;
+	    private IPersonSkillProvider _personSkillProvider;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
-            _target = new ScheduleProjectionExtractor();
+	        _mocks = new MockRepository();
+		    _personSkillProvider = _mocks.DynamicMock<IPersonSkillProvider>();
+            _target = new ScheduleProjectionExtractor(_personSkillProvider, 15);
         }
 
         [Test]
@@ -35,26 +40,29 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var period = new DateTimePeriod(2000, 6, 1, 2000, 7, 1);
             IPersonAssignment pAss =
                 PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, p1,period);
-
-            DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
-            
-            dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(3), TimeSpan.FromHours(1));
-            dayOff.Anchor = new TimeSpan();
-            PersonDayOff dOff = new PersonDayOff(p1, scenario, dayOff, new DateOnly(2000, 1, 2));
+  
             
             IPersonAbsence pAbs =
                 PersonAbsenceFactory.CreatePersonAbsence(p2, scenario,
                                                          new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
             ((ScheduleRange)dic[pAss.Person]).Add(pAss);
-            ((ScheduleRange)dic[dOff.Person]).Add(dOff);
             ((ScheduleRange)dic[pAbs.Person]).Add(pAbs);
 
-            var retList = _target.CreateRelevantProjectionList(dic);
-            Assert.AreEqual(1, retList.Count);
+	        using (_mocks.Record())
+	        {
+		        Expect.Call(_personSkillProvider.SkillsOnPersonDate(p1, new DateOnly()))
+		              .IgnoreArguments()
+		              .Return(new SkillCombination("key", new ISkill[] {}, new DateOnlyPeriod(),
+		                                           new Dictionary<Guid, double>()));
+	        }
+	        using (_mocks.Playback())
+	        {
+		        var retList = _target.CreateRelevantProjectionList(dic);
+		        Assert.IsTrue(retList.HasItems());
 
-            retList = _target.CreateRelevantProjectionList(dic, period);
-            Assert.AreEqual(1, retList.Count);      
-
+		        retList = _target.CreateRelevantProjectionList(dic, period);
+		        Assert.IsTrue(retList.HasItems());
+	        }
         }
 
     }

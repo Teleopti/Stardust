@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Budgeting;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -22,7 +21,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         private readonly CommonNameDescriptionSetting _commonNameDescription;
         private readonly IList<IPersonSkill> _personSkillCollection;
         private readonly IList<SiteTeamModel> _siteTeamAdapterCollection;
-        private SiteTeamModel _siteTeamModel;
         private readonly ExternalLogOnParser _externalLogOnParser;
     	private readonly PersonSkillStringParser _personSkillStringParser;
 
@@ -42,20 +40,12 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets or sets the grid control.
         /// </summary>
         /// <value>The grid control.</value>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2008-06-01
-        /// </remarks>
         public GridControl GridControl { get; set; }
 
         /// <summary>
         /// Gets the parent.
         /// </summary>
         /// <value>The parent.</value>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2008-06-01
-        /// </remarks>
         public IPerson Parent
         {
             get { return _containedEntity; }
@@ -65,18 +55,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets the full name.
         /// </summary>
         /// <value>The full name.</value>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2008-05-20
-        /// </remarks>
         public string FullName
         {
             get
             {
-            	if (_commonNameDescription == null)
-                    return _containedEntity.Name.ToString();
-            	
-				return _commonNameDescription.BuildCommonNameDescription(_containedEntity);
+	            return _commonNameDescription == null ? _containedEntity.Name.ToString() : _commonNameDescription.BuildCommonNameDescription(_containedEntity);
             }
         }
 
@@ -84,58 +67,21 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets or sets the period date.
         /// </summary>
         /// <value>The period date.</value>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2008-05-20
-        /// </remarks>
         public DateOnly? PeriodDate
         {
             get
             {
-                if (_currentPeriod != null)
-                {
-                    return _currentPeriod.StartDate;
-                }
-                return null;
+	            return _currentPeriod == null ? (DateOnly?) null : _currentPeriod.StartDate;
             }
-            set
+	        set
             {
+				if (_currentPeriod == null) return;
+				if (!value.HasValue) return;
+
                 if (value != _currentPeriod.StartDate)
                 {
-                    if (_currentPeriod != null)
-                    {
-                        if (!value.HasValue) return;
-                        if (_currentPeriod != null && !_containedEntity.IsOkToAddPersonPeriod(value.Value))
-                        {
-                            PeriodDate = value.Value.AddDays(1);
-                            return;
-                        }
-                    }
-                    _containedEntity.DeletePersonPeriod(_currentPeriod);
-                    _currentPeriod.StartDate = value.GetValueOrDefault();
-                    _containedEntity.AddPersonPeriod(_currentPeriod);
+	                Parent.ChangePersonPeriodStartDate(value.Value, _currentPeriod);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the current team.
-        /// </summary>
-        /// <value>The current team.</value>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2008-05-20
-        /// </remarks>
-        public ITeam Team
-        {
-            get
-            {
-                if (_currentPeriod != null) return _currentPeriod.Team;
-                return null;
-            }
-            set
-            {
-                if (_currentPeriod != null) _currentPeriod.Team = value;
             }
         }
 
@@ -143,10 +89,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets or sets the current person contract.
         /// </summary>
         /// <value>The current person contract.</value>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2008-05-20
-        /// </remarks>
         public IPersonContract PersonContract
         {
             get
@@ -164,10 +106,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets or sets the current part time percentage.
         /// </summary>
         /// <value>The current part time percentage.</value>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2008-05-20
-        /// </remarks>
         public IPartTimePercentage PartTimePercentage
         {
             get
@@ -191,10 +129,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets or sets the current rule set bag.
         /// </summary>
         /// <value>The current rule set bag.</value>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-06-27
-        /// </remarks>
         public IRuleSetBag RuleSetBag
         {
             get
@@ -216,10 +150,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets or sets the current contract.
         /// </summary>
         /// <value>The current contract.</value>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2008-05-20
-        /// </remarks>
         public IContract Contract
         {
             get
@@ -243,10 +173,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets or sets the current contract schedule.
         /// </summary>
         /// <value>The current contract schedule.</value>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2008-05-20
-        /// </remarks>
         public IContractSchedule ContractSchedule
         {
             get
@@ -270,10 +196,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets or sets a value indicating whether [expand state].
         /// </summary>
         /// <value><c>true</c> if [expand state]; otherwise, <c>false</c>.</value>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-06-15
-        /// </remarks>
         public bool ExpandState
         {
             get { return _expandState; }
@@ -284,10 +206,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets or sets the person skills.
         /// </summary>
         /// <value>The person skills.</value>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-05-27
-        /// </remarks>
         public string PersonSkills
         {
             get
@@ -298,7 +216,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             {
                 if (_currentPeriod != null)
                 {
-                    _currentPeriod.ResetPersonSkill();
+                    Parent.ResetPersonSkills(_currentPeriod);
                     SetPersonSkills(value);
                 }
             }
@@ -308,17 +226,13 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Sets the person skills.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2008-05-30
-        /// </remarks>
         private void SetPersonSkills(string value)
         {
             if (_currentPeriod == null) return;
         	var personSkills = _personSkillStringParser.Parse(value);
         	foreach (var personSkill in personSkills)
         	{
-        		_currentPeriod.AddPersonSkill(personSkill);
+        		Parent.AddSkill(personSkill,_currentPeriod);
         	}
         }
 
@@ -326,10 +240,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets the person skills.
         /// </summary>
         /// <returns></returns>
-        /// <remarks>
-        /// Created by: Madhuranga Pinnagoda
-        /// Created date: 2008-05-30
-        /// </remarks>
         private string GetPersonSkills()
         {
             if (_currentPeriod != null)
@@ -363,13 +273,8 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// </summary>
         /// <param name="selectedDate">The selected date.</param>
         /// <returns></returns>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-06-12
-        /// </remarks>
         public IPersonPeriod GetCurrentPersonPeriodByDate(DateOnly selectedDate)
         {
-            //_currentPeriod = _containedEntity.Period(selectedDate.);
             _currentPeriod = _containedEntity.Period(selectedDate);
             return _currentPeriod;
         }
@@ -378,10 +283,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets a value indicating whether this instance can gray.
         /// </summary>
         /// <value><c>true</c> if this instance can gray; otherwise, <c>false</c>.</value>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-07-07
-        /// </remarks>
         public bool CanGray
         {
             get
@@ -399,10 +300,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets the period count.
         /// </summary>
         /// <value>The period count.</value>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-07-07
-        /// </remarks>
         public int PeriodCount
         {
             get
@@ -417,10 +314,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets or sets the person external log on names.
         /// </summary>
         /// <value>The person external log on names.</value>
-        /// <remarks>
-        /// Created by: Muhamad Risath
-        /// Created date: 2008-08-14
-        /// </remarks>
         public string ExternalLogOnNames
         {
             get
@@ -447,34 +340,24 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets or sets the site team adapter.
         /// </summary>
         /// <value>The site team adapter.</value>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-10-07
-        /// </remarks>
         public SiteTeamModel SiteTeam
         {
             get
             {
                 if (_currentPeriod != null)
                 {
-                    List<SiteTeamModel> siteTeamAdapterCollection =
-                                                  _siteTeamAdapterCollection.Where(s => s.Team ==
-                                                  _currentPeriod.Team &&
-                                                  s.Site == _currentPeriod.Team.Site).ToList();
-
-                    if (!siteTeamAdapterCollection.IsEmpty())
-                    {
-                        _siteTeamModel = siteTeamAdapterCollection.First();
-                    }
+	                return
+		                _siteTeamAdapterCollection.FirstOrDefault(
+			                s => s.Team == _currentPeriod.Team && s.Site == _currentPeriod.Team.Site);
                 }
-                return _siteTeamModel;
+                return null;
             }
             set
             {
 				if (value != null && _currentPeriod != null)
-                {
-                    _currentPeriod.Team = value.Team;
-                }
+				{
+					Parent.ChangeTeam(value.Team, _currentPeriod);
+				}
             }
         }
 
@@ -482,10 +365,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets or sets the note.
         /// </summary>
         /// <value>The note.</value>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-10-13
-        /// </remarks>
         public String Note
         {
             get
@@ -508,10 +387,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// <summary>
         /// Resets the can bold property of child adapters.
         /// </summary>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-10-31
-        /// </remarks>
         public void ResetCanBoldPropertyOfChildAdapters()
         {
             if (GridControl != null)
@@ -535,22 +410,16 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
     	{
 			get
 			{
-				if (_currentPeriod != null)
-				{
-					return _currentPeriod.BudgetGroup;
-				}
-				return NullBudgetGroup;
+				return _currentPeriod != null ? _currentPeriod.BudgetGroup : NullBudgetGroup;
 			}
-			set
+    		set
 			{
-				if (_currentPeriod != null)
+				if (_currentPeriod == null) return;
+				if (value==NullBudgetGroup)
 				{
-					if (value==NullBudgetGroup)
-					{
-						value = null;
-					}
-					_currentPeriod.BudgetGroup = value;
+					value = null;
 				}
+				_currentPeriod.BudgetGroup = value;
 			}
     	}
     }

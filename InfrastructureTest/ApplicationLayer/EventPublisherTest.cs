@@ -53,17 +53,4 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			handler.AssertWasCalled(x => x.Handle(@event));
 		}
 	}
-
-	public class TestEvent : Event
-	{
-	}
-
-	public class TestEventTwo : Event
-	{
-	}
-
-	public interface ITestHandler : IHandleEvent<TestEvent>, IHandleEvent<TestEventTwo>
-	{
-	}
-
 }

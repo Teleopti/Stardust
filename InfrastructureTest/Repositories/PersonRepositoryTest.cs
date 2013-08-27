@@ -20,11 +20,9 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -306,12 +304,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPersonPeriod personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
 												personContract,
 												team);
-			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.44)));
-			personPeriod.AddPersonSkill(new PersonSkill(skill2, new Percent(0.54)));
-			personPeriod.RuleSetBag = rsBag;
 			personToTest.AddPersonPeriod(personPeriod);
-
-			personPeriod.BudgetGroup = new BudgetGroup(){Name = "BG", TimeZone = personToTest.PermissionInformation.DefaultTimeZone()};
+			personToTest.AddSkill(new PersonSkill(skill, new Percent(0.44)),personPeriod);
+			personToTest.AddSkill(new PersonSkill(skill2, new Percent(0.54)),personPeriod);
+			personPeriod.RuleSetBag = rsBag;
+			
+			personPeriod.BudgetGroup = new BudgetGroup{Name = "BG", TimeZone = personToTest.PermissionInformation.DefaultTimeZone()};
 	   
 			PersistAndRemoveFromUnitOfWork(personContract.Contract);
 			PersistAndRemoveFromUnitOfWork(personContract.ContractSchedule);
@@ -328,7 +326,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var personPeriodLoaded = personLoaded.PersonPeriodCollection.Single();
 			//asserts
 			Assert.AreEqual(personPeriod.StartDate, personPeriodLoaded.StartDate);
-			Assert.AreEqual(2, personPeriodLoaded.PersonSkillCollection.Count);
+			Assert.AreEqual(2, personPeriodLoaded.PersonSkillCollection.Count());
 			Assert.AreEqual("for test", personPeriodLoaded.RuleSetBag.Description.Name);
 			Assert.AreEqual(personPeriod.BudgetGroup, personPeriodLoaded.BudgetGroup);
 		}
@@ -408,11 +406,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPersonPeriod personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
 												personContract,
 												team);
-			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.44)));
-			personPeriod.AddPersonSkill(new PersonSkill(skill2, new Percent(0.54)));
+			userOk.AddPersonPeriod(personPeriod);
+			userOk.AddSkill(new PersonSkill(skill, new Percent(0.44)),personPeriod);
+			userOk.AddSkill(new PersonSkill(skill2, new Percent(0.54)),personPeriod);
 			personPeriod.RuleSetBag = rsBag;
-            userOk.AddPersonPeriod(personPeriod);
-
+            
             personPeriod.BudgetGroup = new BudgetGroup() { Name = "BG", TimeZone = userOk.PermissionInformation.DefaultTimeZone() };
 	   
 			PersistAndRemoveFromUnitOfWork(personContract.Contract);
@@ -766,7 +764,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			IPerson validPerson = PersonFactory.CreatePerson("valid");
 			validPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 2, 3), createPersonContract(), team));
-			validPerson.PersonPeriodCollection.First().AddPersonSkill(new PersonSkill(skillWithValidDays, new Percent(1)));
+			validPerson.AddSkill(new PersonSkill(skillWithValidDays, new Percent(1)), validPerson.PersonPeriodCollection.First());
 			PersistAndRemoveFromUnitOfWork(validPerson);
 
 			Assert.AreEqual(1, target.PeopleSkillMatrix(scenOk, new DateTimePeriod(2000, 1, 1, 2001, 1, 1)).Count());
@@ -816,22 +814,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			team.Description = new Description("sdf");
 			PersistAndRemoveFromUnitOfWork(team);
 
-			IPerson validPerson = PersonFactory.CreatePerson("valid");
-			validPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2000,2,3), createPersonContract(),team));
-			validPerson.PersonPeriodCollection.First().AddPersonSkill(new PersonSkill(skillWithValidDays, new Percent(1)));
-			validPerson.PersonPeriodCollection.First().AddPersonSkill(new PersonSkill(skillWithNonValidDays, new Percent(1)));
+			var validPerson = PersonFactory.CreatePerson("valid");
+			var validPersonPeriod = new PersonPeriod(new DateOnly(2000, 2, 3), createPersonContract(), team);
+			validPerson.AddPersonPeriod(validPersonPeriod);
+			validPerson.AddSkill(new PersonSkill(skillWithValidDays, new Percent(1)),validPersonPeriod);
+			validPerson.AddSkill(new PersonSkill(skillWithNonValidDays, new Percent(1)),validPersonPeriod);
 
-			IPerson nonValidPerson1 = PersonFactory.CreatePerson("no1");
-			nonValidPerson1.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 2, 3), createPersonContract(), team));
-			nonValidPerson1.PersonPeriodCollection.First().AddPersonSkill(new PersonSkill(deletedSkill, new Percent(2)));
+			var nonValidPerson1 = PersonFactory.CreatePerson("no1");
+			var nonValidPersonPeriod1 = new PersonPeriod(new DateOnly(2000, 2, 3), createPersonContract(), team);
+			nonValidPerson1.AddPersonPeriod(nonValidPersonPeriod1);
+			nonValidPerson1.AddSkill(new PersonSkill(deletedSkill, new Percent(2)),nonValidPersonPeriod1);
 
-			IPerson nonValidPerson2 = PersonFactory.CreatePerson("no2");
-			nonValidPerson2.AddPersonPeriod(new PersonPeriod(new DateOnly(2006, 2, 3), createPersonContract(), team));
-			nonValidPerson2.PersonPeriodCollection.First().AddPersonSkill(new PersonSkill(skillWithValidDays, new Percent(2)));
+			var nonValidPerson2 = PersonFactory.CreatePerson("no2");
+			var nonValidPersonPeriod2 = new PersonPeriod(new DateOnly(2006, 2, 3), createPersonContract(), team);
+			nonValidPerson2.AddPersonPeriod(nonValidPersonPeriod2);
+			nonValidPerson2.AddSkill(new PersonSkill(skillWithValidDays, new Percent(2)),nonValidPersonPeriod2);
 
-			IPerson nonValidPerson3 = PersonFactory.CreatePerson("no3");
-			nonValidPerson3.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 2, 3), createPersonContract(), team));
-			nonValidPerson3.PersonPeriodCollection.First().AddPersonSkill(new PersonSkill(skillWithNonValidDays, new Percent(2)));
+			var nonValidPerson3 = PersonFactory.CreatePerson("no3");
+			var nonValidPersonPeriod3 = new PersonPeriod(new DateOnly(2000, 2, 3), createPersonContract(), team);
+			nonValidPerson3.AddPersonPeriod(nonValidPersonPeriod3);
+			nonValidPerson3.AddSkill(new PersonSkill(skillWithNonValidDays, new Percent(2)), nonValidPersonPeriod3);
 
 			PersistAndRemoveFromUnitOfWork(validPerson);
 			PersistAndRemoveFromUnitOfWork(nonValidPerson1);
@@ -890,22 +892,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			IPerson validPerson1 = PersonFactory.CreatePerson("valid1");
 			IPersonPeriod period = new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(), team);
-			period.AddPersonSkill(new PersonSkill(skillWithValidDays2, new Percent(1)));
 			validPerson1.AddPersonPeriod(period);
+			validPerson1.AddSkill(new PersonSkill(skillWithValidDays2, new Percent(1)), period);
 			period = new PersonPeriod(new DateOnly(2000, 1, 4), createPersonContract(), team);
-			period.AddPersonSkill(new PersonSkill(skillWithValidDays1, new Percent(1)));
-			validPerson1.AddPersonPeriod(period);
+			validPerson1.AddPersonPeriod(period); 
+			validPerson1.AddSkill(new PersonSkill(skillWithValidDays1, new Percent(1)),period);
 
 			IPerson validPerson2 = PersonFactory.CreatePerson("valid2");
 			period = new PersonPeriod(new DateOnly(2000, 1, 4), createPersonContract(), team);
-			period.AddPersonSkill(new PersonSkill(skillWithValidDays1, new Percent(1)));
 			validPerson2.AddPersonPeriod(period);
+			validPerson2.AddSkill(new PersonSkill(skillWithValidDays1, new Percent(1)), period);
 			
 			IPerson nonValidPerson1 = PersonFactory.CreatePerson("no1");
 			period = new PersonPeriod(new DateOnly(2000, 1, 4), createPersonContract(), team);
-			period.AddPersonSkill(new PersonSkill(skillWithValidDays2, new Percent(1)));
 			nonValidPerson1.AddPersonPeriod(period);
-
+			nonValidPerson1.AddSkill(new PersonSkill(skillWithValidDays2, new Percent(1)),period);
+			
 			PersistAndRemoveFromUnitOfWork(validPerson1);
 			PersistAndRemoveFromUnitOfWork(validPerson2);
 			PersistAndRemoveFromUnitOfWork(nonValidPerson1);

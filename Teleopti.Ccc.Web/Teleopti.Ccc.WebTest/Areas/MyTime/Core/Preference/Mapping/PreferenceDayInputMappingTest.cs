@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	{
 		private ILoggedOnUser loggedOnUser;
 		private IShiftCategoryRepository shiftCategoryRepository;
-		private IDayOffRepository dayOffRepository;
+		private IDayOffTemplateRepository dayOffRepository;
 		private IAbsenceRepository absenceRepository;
 		private IActivityRepository activityRepository;
 
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			shiftCategoryRepository = MockRepository.GenerateMock<IShiftCategoryRepository>();
-			dayOffRepository = MockRepository.GenerateMock<IDayOffRepository>();
+			dayOffRepository = MockRepository.GenerateMock<IDayOffTemplateRepository>();
 			absenceRepository = MockRepository.GenerateMock<IAbsenceRepository>();
 			activityRepository = MockRepository.GenerateMock<IActivityRepository>();
 

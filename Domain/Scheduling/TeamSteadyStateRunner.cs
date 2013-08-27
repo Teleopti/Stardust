@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 				if(!groupPerson.Id.HasValue) throw new ArgumentNullException("groupPerson");
 				var steadyState = true;
-				var firstPerson = groupPerson.GroupMembers[0];
+				var firstPerson = groupPerson.GroupMembers.First();
 				var firstPersonvirtualSchedulePeriod = firstPerson.VirtualSchedulePeriod(dateOnly);
 				var firstPersonScheduleMatrixPro = GetScheduleMatrixPro(firstPersonvirtualSchedulePeriod);
 

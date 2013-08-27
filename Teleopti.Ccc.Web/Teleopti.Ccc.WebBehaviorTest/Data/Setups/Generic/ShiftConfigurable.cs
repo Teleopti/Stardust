@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -88,7 +87,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 
 			// simply publish the schedule changed event so that the read model is updated
-			assignment.ScheduleChanged(TestData.DataSource.DataSourceName);
+			assignment.ScheduleChanged();
 
 			assignmentRepository.Add(assignment);
 		}

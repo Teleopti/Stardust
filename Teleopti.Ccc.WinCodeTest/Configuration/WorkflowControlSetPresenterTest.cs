@@ -1471,7 +1471,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             var absenceRepository = mocks.StrictMock<IAbsenceRepository>();
             var activityRepository = mocks.StrictMock<IActivityRepository>();
             var categoryRepository = mocks.StrictMock<IShiftCategoryRepository>();
-            var dayOffRepository = mocks.StrictMock<IDayOffRepository>();
+            var dayOffRepository = mocks.StrictMock<IDayOffTemplateRepository>();
             var skillRepository = mocks.StrictMock<ISkillRepository>();
 
             Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);

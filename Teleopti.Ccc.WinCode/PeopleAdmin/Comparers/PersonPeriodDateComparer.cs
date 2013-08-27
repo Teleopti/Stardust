@@ -1,22 +1,12 @@
-﻿#region Imports
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
-
-#endregion
 
 namespace Teleopti.Ccc.WinCode.PeopleAdmin.Comparers
 {
 	/// <summary>
 	/// Compares the period date of the person period data.
 	/// </summary>
-	/// <remarks>
-	/// Created By: madhurangap
-	/// Created Date: 23-07-2008
-	/// </remarks>
 	public class PersonPeriodDateComparer : IComparer<PersonPeriodModel>
 	{
 		#region IComparer<PersonPeriodModel> Members
@@ -46,7 +36,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Comparers
             else
             {
                 // compares the teminal date of the y with the teminal date of y
-                result = DateTime.Compare((DateTime)x.PeriodDate, (DateTime)y.PeriodDate);
+                result = DateTime.Compare(x.PeriodDate.Value.Date,y.PeriodDate.Value.Date);
             }
 
             return result;

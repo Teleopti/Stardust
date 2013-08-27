@@ -126,19 +126,5 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
             return returnList;
         }
-
-        internal void SaveSchedulePart(SchedulePartDto schedulePartDto)
-        {
-            using (new MessageBrokerSendEnabler())
-            {
-                using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
-                {
-                    var schedulePart = _scheduleDayAssembler.DtoToDomainEntity(schedulePartDto);
-                    _saveSchedulePartService.Save(schedulePart,NewBusinessRuleCollection.Minimum());
-
-                    uow.PersistAll();
-                }
-            }
-        }
     }
 }

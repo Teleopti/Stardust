@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 	    private TimeZoneInfo _timeZoneInfo;
 	    private PublishedScheduleDataFactory _publishedScheduleDataFactory;
 
-
         [SetUp]
         public void Setup()
         {
@@ -39,11 +38,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 	        PublishedScheduleData data = null;
             using (_mocks.Record())
             {
-				data = _publishedScheduleDataFactory.CreateMockedWithSwedishTimeZone();
+				data = _publishedScheduleDataFactory.CreateMockedWithSwedishTimeZone(_period);
             }
             using (_mocks.Playback())
             {
-				_target = new SchedulePublishedSpecificationForAbsence(null, _viewReason, _period);
+				_target = new SchedulePublishedSpecificationForAbsence(null, _viewReason);
 				Assert.IsFalse(_target.IsSatisfiedBy(data));
             }
         }
@@ -55,11 +54,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			PublishedScheduleData data = null;
 			using (_mocks.Record())
 			{
-				data = _publishedScheduleDataFactory.CreateMockedNonAbsenceTypeData();
+				data = _publishedScheduleDataFactory.CreateMockedNonAbsenceTypeData(_period);
 			}
 			using (_mocks.Playback())
 			{
-				_target = new SchedulePublishedSpecificationForAbsence(null, _viewReason, _period);
+				_target = new SchedulePublishedSpecificationForAbsence(null, _viewReason);
 				Assert.IsFalse(_target.IsSatisfiedBy(data));
 			}
 		}
@@ -71,11 +70,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			using (_mocks.Record())
 			{
 				SetOuterPreferencePeriod();
-				data = _publishedScheduleDataFactory.CreateMockedWithSwedishTimeZone();
+				data = _publishedScheduleDataFactory.CreateMockedWithSwedishTimeZone(_period);
 			}
 			using (_mocks.Playback())
 			{
-				_target = new SchedulePublishedSpecificationForAbsence(_workflowControlSet, _viewReason, _period);
+				_target = new SchedulePublishedSpecificationForAbsence(_workflowControlSet, _viewReason);
 				Assert.IsFalse(_target.IsSatisfiedBy(data));
 			}
         }
@@ -89,13 +88,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			using (_mocks.Record())
 			{
 				SetInnerPreferencePeriod();
-				data = _publishedScheduleDataFactory.CreateMockedWithSwedishTimeZone();
+				data = _publishedScheduleDataFactory.CreateMockedWithSwedishTimeZone(_period);
 				Expect.Call(_publishedScheduleDataFactory.MockedScheduleData.Period)
 					.Return(absencePeriodInPreferencePeriod).Repeat.Any();
 			}
 			using (_mocks.Playback())
 			{
-				_target = new SchedulePublishedSpecificationForAbsence(_workflowControlSet, _viewReason, _period);
+				_target = new SchedulePublishedSpecificationForAbsence(_workflowControlSet, _viewReason);
 				Assert.IsTrue(_target.IsSatisfiedBy(data));
 			}
 		}
@@ -112,13 +111,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			using (_mocks.Record())
 			{
 				SetInnerPreferencePeriod();
-				data = _publishedScheduleDataFactory.CreateMockedWithSwedishTimeZone();
+				data = _publishedScheduleDataFactory.CreateMockedWithSwedishTimeZone(_period);
 				Expect.Call(_publishedScheduleDataFactory.MockedScheduleData.Period)
 					.Return(absencePeriodStartBeforePreferencePeriod).Repeat.Any();
 			}
 			using (_mocks.Playback())
 			{
-				_target = new SchedulePublishedSpecificationForAbsence(_workflowControlSet, _viewReason, _period);
+				_target = new SchedulePublishedSpecificationForAbsence(_workflowControlSet, _viewReason);
 				Assert.IsTrue(_target.IsSatisfiedBy(data));
 			}
 		}
@@ -135,13 +134,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			using (_mocks.Record())
 			{
 				SetInnerPreferencePeriod();
-				data = _publishedScheduleDataFactory.CreateMockedWithSwedishTimeZone();
+				data = _publishedScheduleDataFactory.CreateMockedWithSwedishTimeZone(_period);
 				Expect.Call(_publishedScheduleDataFactory.MockedScheduleData.Period)
 					.Return(absencePeriodEndAfterPreferencePeriod).Repeat.Any();
 			}
 			using (_mocks.Playback())
 			{
-				_target = new SchedulePublishedSpecificationForAbsence(_workflowControlSet, _viewReason, _period);
+				_target = new SchedulePublishedSpecificationForAbsence(_workflowControlSet, _viewReason);
 				Assert.IsTrue(_target.IsSatisfiedBy(data));
 			}
 		}
@@ -178,25 +177,25 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			_mocker = mocker;
 		}
 
-		public PublishedScheduleData CreateMocked(TimeZoneInfo timeZoneInfo)
+		public PublishedScheduleData CreateMocked(TimeZoneInfo timeZoneInfo, IDateOnlyAsDateTimePeriod period)
 		{
 			MockedScheduleData = _mocker.Stub<IPersonAbsence>();
 			TimeZoneInfo = timeZoneInfo;
-			return new PublishedScheduleData(MockedScheduleData, TimeZoneInfo);
+			return new PublishedScheduleData(period,  MockedScheduleData, TimeZoneInfo);
 			
 		}
 
-		public PublishedScheduleData CreateMockedNonAbsenceTypeData()
+		public PublishedScheduleData CreateMockedNonAbsenceTypeData(IDateOnlyAsDateTimePeriod period)
 		{
 			MockedScheduleData = _mocker.Stub<IScheduleData>();
 			TimeZoneInfo = TimeZoneInfoFactory.StockholmTimeZoneInfo();
-			return new PublishedScheduleData(MockedScheduleData, TimeZoneInfo);
+			return new PublishedScheduleData(period, MockedScheduleData, TimeZoneInfo);
 
 		}
 
-		public PublishedScheduleData CreateMockedWithSwedishTimeZone()
+		public PublishedScheduleData CreateMockedWithSwedishTimeZone(IDateOnlyAsDateTimePeriod period)
 		{
-			return CreateMocked(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+			return CreateMocked(TimeZoneInfoFactory.StockholmTimeZoneInfo(), period);
 		}
 	}
 }

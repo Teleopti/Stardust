@@ -51,17 +51,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         IPersonAbsenceAccountRepository CreatePersonAbsenceAccountRepository(IUnitOfWork unitOfWork);
 
         /// <summary>
-        /// Creates the person day off repository.
-        /// </summary>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2009-08-27
-        /// </remarks>
-        IPersonDayOffRepository CreatePersonDayOffRepository(IUnitOfWork unitOfWork);
-
-        /// <summary>
         /// Creates the scenario repository.
         /// </summary>
         /// <param name="unitOfWork">The uow.</param>
@@ -272,7 +261,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// Created by: Madhuranga Pinnagoda
         /// Created date: 2008-11-25
         /// </remarks>
-        IDayOffRepository CreateDayOffRepository(IUnitOfWork unitOfWork);
+        IDayOffTemplateRepository CreateDayOffRepository(IUnitOfWork unitOfWork);
 
         /// <summary>
         /// Creates the meeting repository.

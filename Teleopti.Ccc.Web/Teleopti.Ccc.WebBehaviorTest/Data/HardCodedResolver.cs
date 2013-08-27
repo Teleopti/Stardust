@@ -4,7 +4,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -24,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			if (type == typeof(IEnumerable<IHandleEvent<PersonAbsenceAddedEvent>>))
 				return MakeScheduleChangedHandler();
 			if (type == typeof(IEnumerable<IHandleEvent<ProjectionChangedEvent>>))
-				return new[]
+				return new IHandleEvent<ProjectionChangedEvent>[]
 					{
 						new PersonScheduleDayReadModelHandler(
 							new PersonScheduleDayReadModelsCreator(
@@ -34,9 +36,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 								CurrentUnitOfWork.Make(),
 								new DoNotSend(),
 								new CurrentDataSource(new CurrentIdentity()))
-							)
+							),
+                            new ScheduledResourcesChangedHandler(new PersonRepository(CurrentUnitOfWork.Make()), new SkillRepository(CurrentUnitOfWork.Make()), new ScheduleProjectionReadOnlyRepository(CurrentUnitOfWork.Make()), new ScheduledResourcesReadModelStorage(CurrentUnitOfWork.Make()), new PersonSkillProvider(), new EventPublisher(this))
 					};
-				throw new Exception("Cannot resolve type " + type + "! Add it manually or consider using autofac!");
+            Console.WriteLine("Cannot resolve type {0}! Add it manually or consider using autofac!", type);
+		    return null;
 		}
 
 		private object MakeScheduleChangedHandler()

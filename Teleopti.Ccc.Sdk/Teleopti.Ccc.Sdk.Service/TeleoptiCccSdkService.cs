@@ -1497,10 +1497,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 		public void SaveSchedulePart(SchedulePartDto schedulePartDto)
 		{
-            using (var inner = _lifetimeScope.BeginLifetimeScope())
-            {
-                _factoryProvider.CreateScheduleFactory(inner).SaveSchedulePart(schedulePartDto);
-            }
+			throw new FaultException("Method SaveSchedulePart is no longer available. Please use newer commands to change schedule data instead!");
 		}
 
 		#endregion

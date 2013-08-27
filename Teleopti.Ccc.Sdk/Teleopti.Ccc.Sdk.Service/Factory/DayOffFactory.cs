@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 IRepositoryFactory repositoryFactory = new RepositoryFactory();
-                IDayOffRepository repository = repositoryFactory.CreateDayOffRepository(unitOfWork);
+                IDayOffTemplateRepository repository = repositoryFactory.CreateDayOffRepository(unitOfWork);
 
                 IList<IDayOffTemplate> daysOffList;
                 if (loadOptionDto.LoadDeleted)

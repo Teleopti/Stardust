@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(EventsPackageMessage message)
 		{
-			_bus.Send(message.Events);
+			_bus.Send(message.Events.ToArray());
 		}
 	}
 }

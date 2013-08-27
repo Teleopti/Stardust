@@ -1,6 +1,6 @@
 using System;
 using System.Globalization;
-using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Interfaces.Domain;
@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 	{
 
 		private readonly int _weekday;
-		public IDayOffTemplate DayOffTemplate = TestData.DayOffTemplate;
+		public readonly IDayOffTemplate DayOffTemplate = TestData.DayOffTemplate;
 
-		public IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
+		public readonly IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 
 		public DayOffScheduled(int weekday)
 		{
@@ -24,9 +24,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var date = new DateOnly(DateHelper.GetFirstDateInWeek(DateTime.Now.Date, cultureInfo).AddDays(_weekday - 1));
-			var dayOff = new PersonDayOff(user, Scenario, DayOffTemplate, date);
-			var dayOffRepository = new DayOffRepository(uow);
-			dayOffRepository.Add(dayOff);
+			var ass = new PersonAssignment(user, Scenario, date);
+			ass.SetDayOff(DayOffTemplate);
+			var personAssignmentRepository = new PersonAssignmentRepository(uow);
+			personAssignmentRepository.Add(ass);
 		}
 	}
 }

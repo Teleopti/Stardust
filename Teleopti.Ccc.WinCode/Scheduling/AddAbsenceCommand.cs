@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Data;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					select a;
 
 			var fallbackDefaultHours =
-				new SetupDateTimePeriodDefaultLocalHoursForAbsence(selectedSchedules[0]);
+				new SetupDateTimePeriodDefaultLocalHoursForAbsence(selectedSchedules[0], new CurrentTeleoptiPrincipal());
 			var periodFromSchedules = new SetupDateTimePeriodToSchedulesIfTheyExist(selectedSchedules, fallbackDefaultHours);
 			ISetupDateTimePeriod periodSetup = new SetupDateTimePeriodToDefaultPeriod(DefaultPeriod, periodFromSchedules);
 
@@ -142,8 +143,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             if (selectedSchedules.Count > 0)
             {
-                if (selectedSchedules.First().PersonAssignmentCollectionDoNotUse().Count > 0)
-                    startDate = selectedSchedules.First().PersonAssignmentCollectionDoNotUse().First().Period.StartDateTime;
+	            IPersonAssignment personAssignment = selectedSchedules.First().PersonAssignment();
+                if (personAssignment != null)
+					startDate = personAssignment.Period.StartDateTime;
                 else
                     startDate = selectedSchedules.First().Period.StartDateTime;
 
@@ -152,7 +154,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             foreach (var scheduleDay in selectedSchedules)
             {
-                var personAssignments = scheduleDay.PersonAssignmentCollectionDoNotUse();
+                IList<IPersonAssignment> personAssignments = new List<IPersonAssignment>();
+	            IPersonAssignment assignment = scheduleDay.PersonAssignment();
+	            if (assignment != null && !scheduleDay.HasDayOff() && assignment.MainLayers().Any())
+	            {
+					personAssignments.Add(assignment);
+	            }
 
                 foreach (var personAssignment in personAssignments)
                 {
@@ -170,7 +177,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     }
                 }
 
-                if (personAssignments.Count < 1)
+                if (personAssignments.Count < 1 || scheduleDay.HasDayOff() || !scheduleDay.PersonAssignment(true).MainLayers().Any())
                 {
                     var personAssignmentEndDateTime = scheduleDay.Period.EndDateTime.AddMinutes(-1);
                     var personAssignmentStartDateTime = scheduleDay.Period.StartDateTime;
@@ -197,7 +204,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             foreach (var selectedSchedule in selectedSchedules)
             {
-                var personAssignments = selectedSchedule.PersonAssignmentCollectionDoNotUse();
+	            IPersonAssignment assignment = selectedSchedule.PersonAssignment();
+                var personAssignments = new List<IPersonAssignment>();
+	            if (assignment != null)
+	            {
+		            personAssignments.Add(assignment);
+	            }
 
                 foreach (var personAssignment in personAssignments)
                 {

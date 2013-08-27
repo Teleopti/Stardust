@@ -17,15 +17,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 	{
 		private readonly IWorkflowControlSet _workflowControlSet;
 		private readonly ScheduleVisibleReasons _scheduleVisibleReasons;
-		private readonly IDateOnlyAsDateTimePeriod _schedulingDate;
 
 		public SchedulePublishedSpecificationForAbsence(IWorkflowControlSet workflowControlSet,
-		                                                ScheduleVisibleReasons scheduleVisibleReasons,
-														IDateOnlyAsDateTimePeriod schedulingDate)
+		                                                ScheduleVisibleReasons scheduleVisibleReasons)
 		{
 			_workflowControlSet = workflowControlSet;
 			_scheduleVisibleReasons = scheduleVisibleReasons;
-			_schedulingDate = schedulingDate;
 		}
 
 		public override bool IsSatisfiedBy(PublishedScheduleData obj)
@@ -33,7 +30,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			if (_workflowControlSet == null) return false;
 			if (obj.ScheduleData is IPersonAbsence)
 			{
-				if (_workflowControlSet.PreferencePeriod.StartDate > _schedulingDate.DateOnly)
+				if (_workflowControlSet.PreferencePeriod.StartDate > obj.SchedulingDate.DateOnly)
 					return false;
 				if ((_scheduleVisibleReasons & ScheduleVisibleReasons.Preference) == ScheduleVisibleReasons.Preference)
 				{
@@ -51,13 +48,16 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 	public class PublishedScheduleData
 	{
 		public PublishedScheduleData(
+			IDateOnlyAsDateTimePeriod schedulingDate,
 			IScheduleData scheduleData, 
 			TimeZoneInfo timeZoneInfo)
 		{
+			SchedulingDate = schedulingDate;
 			ScheduleData = scheduleData;
 			TimeZoneInfo = timeZoneInfo;
 		}
 
+		public IDateOnlyAsDateTimePeriod SchedulingDate { get; private set; }
 		public IScheduleData ScheduleData { get; private set; }
 		public TimeZoneInfo TimeZoneInfo { get; private set; }
 	}

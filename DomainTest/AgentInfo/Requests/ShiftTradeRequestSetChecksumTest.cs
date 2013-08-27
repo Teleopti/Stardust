@@ -71,10 +71,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
                 AtLeastOnce();
             Expect.Call(_scheduleRangePerson2.ScheduledDay(new DateOnly(2009, 9, 21))).Return(_schedulePart2).Repeat.
                 AtLeastOnce();
-            Expect.Call(_schedulePart1.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment1 })).Repeat.AtLeastOnce();
-            Expect.Call(_schedulePart2.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment2 })).Repeat.AtLeastOnce();
-            Expect.Call(_schedulePart1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
-            Expect.Call(_schedulePart2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
+            Expect.Call(_schedulePart1.PersonAssignment()).Return(_personAssignment1).Repeat.AtLeastOnce();
+            Expect.Call(_schedulePart2.PersonAssignment()).Return(_personAssignment2).Repeat.AtLeastOnce();
 
             _mockRepository.ReplayAll();
             Assert.AreEqual(0,((IShiftTradeRequest)_personRequest2.Request).ShiftTradeSwapDetails[0].ChecksumFrom);

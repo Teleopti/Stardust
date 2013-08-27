@@ -1,17 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 {
-	public interface ISignificantChangeChecker
-	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Date")]
-		INotificationMessage SignificantChangeNotificationMessage(DateOnly date, IPerson person, ScheduleDayReadModel newReadModel);
-	}
-
 	public class SignificantChangeChecker : ISignificantChangeChecker
 	{
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
@@ -29,17 +23,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			var ret = new NotificationMessage();
 			var lang = person.PermissionInformation.UICulture();
 			var endDate = DateOnly.Today.AddDays(14);
+			DateTime? publishedToDate = null;
 
 			var wfc = person.WorkflowControlSet;
-			if (wfc != null && wfc.SchedulePublishedToDate.HasValue && wfc.SchedulePublishedToDate.Value < DateOnly.Today)
+			if (wfc != null)
+			{
+				publishedToDate = wfc.SchedulePublishedToDate;
+			}
+
+			if (publishedToDate.HasValue && publishedToDate.Value < DateOnly.Today)
 				return ret;
 
-			if (wfc != null && wfc.SchedulePublishedToDate.HasValue && wfc.SchedulePublishedToDate.Value < endDate)
-				endDate = new DateOnly(wfc.SchedulePublishedToDate.Value.Date);
+			if (publishedToDate.HasValue && publishedToDate.Value < endDate)
+				endDate = new DateOnly(publishedToDate.Value);
 
 			var period = new DateOnlyPeriod(DateOnly.Today, endDate);
 			if (!period.Contains(date)) return ret;
-
 
 			var oldReadModels = _scheduleDayReadModelRepository.ReadModelsOnPerson(date, date, person.Id.GetValueOrDefault());
 
@@ -52,11 +51,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			if (ret.Messages.Count == 0)
 				return ret;
 
-			var subject = UserTexts.Resources.ResourceManager.GetString("YourWorkingHoursHaveChanged", lang);
-			if (string.IsNullOrEmpty(subject))
-				subject = UserTexts.Resources.ResourceManager.GetString("YourWorkingHoursHaveChanged");
-
-			ret.Subject = subject;
+			ret.Subject = UserTexts.Resources.ResourceManager.GetString("YourWorkingHoursHaveChanged", lang);
 			return ret;
 		}
 	}

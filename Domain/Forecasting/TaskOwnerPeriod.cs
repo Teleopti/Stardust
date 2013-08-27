@@ -748,25 +748,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _isDirty = true;
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this instance is closed.
-        /// </summary>
-        /// <value><c>true</c> if this instance is closed; otherwise, <c>false</c>.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-01-25
-        /// </remarks>
-        public virtual IOpenForWork OpenForWork
+        public virtual OpenForWork OpenForWork
         {
-            //get { return _taskOwnerDayCollection.All(wd => wd.IsClosed); }
             get
             {
-                return new OpenForWork()
-                {
-                    IsOpenForIncomingWork =
-                        _taskOwnerDayCollection.Any(wd => wd.OpenForWork.IsOpenForIncomingWork),
-                    IsOpen = _taskOwnerDayCollection.Any(wd => wd.OpenForWork.IsOpen)
-                };
+	            return new OpenForWork(_taskOwnerDayCollection.Any(wd => wd.OpenForWork.IsOpen),
+	                                   _taskOwnerDayCollection.Any(wd => wd.OpenForWork.IsOpenForIncomingWork));
             }
         }
 
