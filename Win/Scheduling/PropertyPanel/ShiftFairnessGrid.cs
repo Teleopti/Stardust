@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
     public class ShiftFairnessGrid : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext, IShiftFairnessGrid
     {
 	    private readonly IDistributionInformationExtractor _model;
-	    private ShiftFairnessGridPresenter _presenter;
+	    private readonly ShiftFairnessGridPresenter _presenter;
 
 		public ShiftFairnessGrid(IDistributionInformationExtractor model)
 		{
@@ -81,7 +81,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 			if (e.ColIndex > 0 && e.RowIndex > 0)
 			{
-				//e.Style.CellValue = e.RowIndex.ToString() + " " + e.ColIndex.ToString();
 				var shiftCategory = this[e.RowIndex, 0].Tag as IShiftCategory;
 
 				foreach (var shiftFairness in _model.GetShiftFairness())
@@ -97,7 +96,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 				if (e.ColIndex == 4 && e.RowIndex == _model.ShiftCategories.Count + 1)
 				{
-					e.Style.CellValue = "Total";
+					e.Style.CellValue = _presenter.CalculateTotalStandardDeviation(_model.GetShiftFairness());
 				}
 			}
 

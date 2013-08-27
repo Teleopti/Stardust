@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
@@ -54,7 +52,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			e.Handled = true;
 		}
 
-	    void shiftPerAgentGridQueryCellInfo(object sender, Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs e)
+	    void shiftPerAgentGridQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
 		{
 			if (e.ColIndex < 0 || e.RowIndex < 0) return;
 			if (e.ColIndex == 0 && e.RowIndex == 0) return;
@@ -77,20 +75,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			{
 				var person = this[e.RowIndex, 0].Tag as IPerson;
 				var shiftCategory = this[0, e.ColIndex].Tag as IShiftCategory;
-
-				e.Style.CellValue = 0;
-
-				foreach (var shiftCategoryPerAgent in _model.GetShiftCategoryPerAgent())
-				{
-					if (shiftCategoryPerAgent.Person.Equals(person))
-					{
-						if (shiftCategoryPerAgent.ShiftCategory.Equals(shiftCategory))
-						{
-							e.Style.CellValue = shiftCategoryPerAgent.Count;
-							break;
-						}
-					}
-				}
+				e.Style.CellValue = _presenter.ShiftCategoryCount(person, shiftCategory, _model.GetShiftCategoryPerAgent());
 			}
 
 			e.Handled = true;
