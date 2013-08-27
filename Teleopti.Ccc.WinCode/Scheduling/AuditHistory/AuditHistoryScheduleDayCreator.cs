@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
@@ -15,13 +14,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AuditHistory
         public IScheduleDay Create(IScheduleDay currentScheduleDay,  IEnumerable<IPersistableScheduleData> newData)
         {
             var resultingDay = (ExtractedSchedule)currentScheduleDay.Clone();
-            foreach (var personAssignment in currentScheduleDay.PersonAssignmentCollectionDoNotUse())
-            {
-                resultingDay.RemovePersonAssignment(personAssignment);
-            }
+	        var personAssignment = currentScheduleDay.PersonAssignment();
+					if (personAssignment != null)
+					{
+						resultingDay.RemovePersonAssignment(personAssignment);
+					}
             foreach (var persistableScheduleData in currentScheduleDay.PersistableScheduleDataCollection())
             {
-                if(persistableScheduleData is IPersonAbsence || persistableScheduleData is IPersonDayOff)
+                if(persistableScheduleData is IPersonAbsence)
                     resultingDay.Remove(persistableScheduleData);
             }
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AuditHistory
 				}
 				if(persistableScheduleData.Period.ToDateOnlyPeriod(currentScheduleDay.TimeZone).StartDate != currentScheduleDay.DateOnlyAsPeriod.DateOnly)
 					continue;
-                if(persistableScheduleData is IPersonDayOff || persistableScheduleData is IPersonAssignment)
+                if(persistableScheduleData is IPersonAssignment)
                     resultingDay.Add(persistableScheduleData);
             }
 

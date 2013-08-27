@@ -265,28 +265,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                             "Maximum should be 1 hour");
         }
 
-		//[Test]
-		//public void VerifyStartChangesWhenSelectingStartTimeFromSelectableTimeSpans()
-		//{
-		//    var t = _target.SelectableStartTimes.GetItemAt(10).ToString();
-		//    Assert.AreNotEqual(_target.StartDateTimeAsLocal.ToShortTimeString(), t);
-		//    Assert.IsTrue(_target.SelectableStartTimes.MoveCurrentTo(t), "make sure we can select");
-		//    var dateTimeStartTime = new DateTime(1901, 1, 1, _target.StartTimeAsLocalTimeSpan.Hours, _target.StartTimeAsLocalTimeSpan.Minutes,
-		//                            _target.StartTimeAsLocalTimeSpan.Minutes);
-		//    Assert.AreEqual(dateTimeStartTime.ToShortTimeString(), t);
-		//}
-
-		//[Test]
-		//public void VerifyStartChangesWhenSelectingEndTimeFromSelectableTimeSpans()
-		//{
-		//    var t = _target.SelectableEndTimes.GetItemAt(14).ToString();
-		//    Assert.AreNotEqual(_target.EndDateTimeAsLocal.ToShortTimeString(), t);
-		//    Assert.IsTrue(_target.SelectableEndTimes.MoveCurrentTo(t), "make sure we can select");
-		//    var dateTimeEndTime = new DateTime(1901, 1, 1, _target.EndTimeAsLocalTimeSpan.Hours, _target.EndTimeAsLocalTimeSpan.Minutes,
-		//                            _target.EndTimeAsLocalTimeSpan.Minutes);
-		//    Assert.AreEqual(dateTimeEndTime.ToShortTimeString(), t);
-		//}
-
         [Test]
         public void VerifyPreSelectableMinimum()
         {

@@ -74,7 +74,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				{
 					TextRequestPermission = _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests),
 					AbsenceRequestPermission = _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb),
-				}));
+				}))
+				.ForMember(d => d.DatePickerFormat, o => o.ResolveUsing(s => _loggedOnUser.Invoke().CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern))
+				;
 
 			CreateMap<WeekScheduleDayDomainData, DayViewModel>()
 				.ForMember(d => d.Date, c => c.MapFrom(s => s.Date.ToShortDateString()))
@@ -151,7 +153,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				;
 
 			CreateMap<WeekScheduleDayDomainData, PersonDayOffPeriodViewModel>()
-				.ForMember(d => d.Title, c => c.MapFrom(s => s.ScheduleDay.PersonDayOffCollection().First().DayOff.Description.Name))
+				.ForMember(d => d.Title, c => c.MapFrom(s => s.ScheduleDay.PersonAssignment(false).DayOff().Description.Name))
 				.ForMember(d => d.Summary, c => c.Ignore())
 				.ForMember(d => d.Meeting, c => c.Ignore())
 				.ForMember(d => d.TimeSpan, c => c.Ignore())
@@ -162,11 +164,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				;
 
 			CreateMap<WeekScheduleDayDomainData, PersonAssignmentPeriodViewModel>()
-				.ForMember(d => d.Title, c => c.MapFrom(s => s.ScheduleDay.PersonAssignment().ShiftCategory.Description.Name))
+				.ForMember(d => d.Title, c => c.MapFrom(s => s.ScheduleDay.PersonAssignment(false).ShiftCategory.Description.Name))
 				.ForMember(d => d.Summary, c => c.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(s.Projection.ContractTime(), CultureInfo.CurrentUICulture)))
 				.ForMember(d => d.Meeting, c => c.Ignore())
-				.ForMember(d => d.TimeSpan, c => c.MapFrom(s => s.ScheduleDay.PersonAssignment().Period.TimePeriod(s.ScheduleDay.TimeZone).ToShortTimeString()))
-				.ForMember(d => d.StyleClassName, c => c.MapFrom(s => s.ScheduleDay.PersonAssignment().ShiftCategory.DisplayColor.ToStyleClass()))
+				.ForMember(d => d.TimeSpan, c => c.MapFrom(s => s.ScheduleDay.PersonAssignment(false).Period.TimePeriod(s.ScheduleDay.TimeZone).ToShortTimeString()))
+				.ForMember(d => d.StyleClassName, c => c.MapFrom(s => s.ScheduleDay.PersonAssignment(false).ShiftCategory.DisplayColor.ToStyleClass()))
 				.ForMember(d => d.StartPositionPercentage, c => c.Ignore())
 				.ForMember(d => d.EndPositionPercentage, c => c.Ignore())
 				.ForMember(d => d.Color, c => c.Ignore())

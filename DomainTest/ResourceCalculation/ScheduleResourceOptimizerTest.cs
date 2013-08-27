@@ -22,8 +22,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IAffectedPersonSkillService _personSkillService;
         private MockRepository _mocks;
         private IActivityDivider _activityDivider;
+	    private IPersonSkillProvider _personSkillProvider;
+		private IResourceCalculationDataContainerWithSingleOperation _resources;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -34,7 +36,19 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _personSkillService = new AffectedPersonSkillService(datePeriod, _personAssignmentListContainer.AllSkills);
             _skillStaffPeriods = SkillDayFactory.CreateSkillDaysForActivityDividerTest(_personAssignmentListContainer.ContainedSkills);
             _activityDivider = _mocks.StrictMock<IActivityDivider>();
-            _target = new ScheduleResourceOptimizer(_personAssignmentListContainer.TestVisualLayerCollection(), _skillStaffPeriods, _personSkillService, true, _activityDivider);
+			_personSkillProvider = new PersonSkillProvider();
+
+			_resources = new ResourceCalculationDataContainer(_personSkillProvider);
+			var layers = _personAssignmentListContainer.TestVisualLayerCollection();
+			foreach (var layer in layers)
+			{
+				foreach (var resourceLayer in layer.ToResourceLayers(15))
+				{
+					_resources.AddResources(layer.Person, new DateOnly(2008, 1, 1), resourceLayer);
+				}
+			}
+
+            _target = new ScheduleResourceOptimizer(_resources, _skillStaffPeriods, _personSkillService, true, _activityDivider);
         }
 
         [Test]
@@ -43,21 +57,25 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             var activityDivider = new ActivityDivider();
             IDividedActivityData dividedActivityData =
-                activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService, _personAssignmentListContainer.ContainedActivities["Phone"], _personAssignmentListContainer.TestFilteredVisualLayerCollection(), _inPeriod);
+                activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService, _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
             var furnessDataConverter = new FurnessDataConverter(dividedActivityData);
             IFurnessData furnessData = furnessDataConverter.ConvertDividedActivityToFurnessData();
             _furnessEvaluator = new FurnessEvaluator(furnessData);
             _furnessEvaluator.Evaluate(1, 8);
             _optimizedDivideActivity = furnessDataConverter.ConvertFurnessDataBackToActivity();
+
+			var person1 =
+				_personSkillProvider.SkillsOnPersonDate(_personAssignmentListContainer.ContainedPersons["Person1"], new DateOnly(2008, 1, 1))
+									.Key;
             
             // Iteration
             Assert.AreEqual(5, _furnessEvaluator.InnerIteration);
 
-            // WeightedRelativePersonSkillResources
-            PersonSkillDictionary resourceMatrix = _optimizedDivideActivity.WeightedRelativePersonSkillResources;
+            // WeightedRelativeKeyedSkillResourceResources
+            KeyedSkillResourceDictionary resourceMatrix = _optimizedDivideActivity.WeightedRelativeKeyedSkillResourceResources;
             Assert.IsNotNull(resourceMatrix);
             Assert.AreEqual(3, resourceMatrix.Count);
-            Assert.AreEqual(2, resourceMatrix[_personAssignmentListContainer.ContainedPersons["Person1"]].Count);
+            Assert.AreEqual(4, resourceMatrix[person1].Count);
 
             Assert.AreEqual(12.49, _optimizedDivideActivity.WeightedRelativePersonSkillResourcesSum[_personAssignmentListContainer.ContainedSkills["PhoneA"]], 0.1);
             Assert.AreEqual(20, _optimizedDivideActivity.WeightedRelativePersonSkillResourcesSum[_personAssignmentListContainer.ContainedSkills["PhoneB"]], 0.1);
@@ -68,11 +86,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var activityDivider = new ActivityDivider();
             IDividedActivityData dividedActivityData =
-                activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService, _personAssignmentListContainer.ContainedActivities["Phone"], _personAssignmentListContainer.TestFilteredVisualLayerCollection(), _inPeriod);
+                activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService, _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
 
             Expect.Call(_activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService,
                                                         _personAssignmentListContainer.ContainedActivities["Phone"],
-                                                        _personAssignmentListContainer.TestFilteredVisualLayerCollection(),
+                                                        _resources,
                                                         _inPeriod)).Return(dividedActivityData).IgnoreArguments().Repeat.AtLeastOnce();
             _mocks.ReplayAll();
             _target.Optimize(_inPeriod, false);
@@ -92,11 +110,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             var activityDivider = new ActivityDivider();
             IDividedActivityData dividedActivityData =
-                activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService, _personAssignmentListContainer.ContainedActivities["Phone"], _personAssignmentListContainer.TestFilteredVisualLayerCollection(), _inPeriod);
+                activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService, _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);
 
             Expect.Call(_activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService,
                                                         _personAssignmentListContainer.ContainedActivities["Phone"],
-                                                        _personAssignmentListContainer.TestFilteredVisualLayerCollection(),
+                                                        _resources,
                                                         _inPeriod)).Return(dividedActivityData).IgnoreArguments().Repeat.AtLeastOnce();
             _mocks.ReplayAll();
             _target.Optimize(_inPeriod, false);

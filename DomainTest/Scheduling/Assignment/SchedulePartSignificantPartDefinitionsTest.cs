@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
@@ -52,18 +53,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyHasDayOffDefinition()
         {
-            //Definition: PersonDayOffCollection > 0
-            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-            IList<IPersonDayOff> pDayOffs = new List<IPersonDayOff>
-                                                {
-                                                    new PersonDayOff(_person, _scenario, new DayOff(),
-                                                                     new DateOnly(2001, 1, 1), timeZoneInfo)
-                                                };
-
             using (_mocker.Record())
             {
-                Expect.Call(_mockedPart.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(pDayOffs));
-                Expect.Call(_mockedPart.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
+                Expect.Call(_mockedPart.HasDayOff()).Return(true);
+                Expect.Call(_mockedPart.HasDayOff()).Return(false);
                 
             }
 
@@ -210,13 +203,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void VerifyHasAssignmentDefinition()
         {
-            //Definition: PersonAssignmentCollection() > 0
-					IList<IPersonAssignment> personAssignments = new List<IPersonAssignment> { new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1)) };
-
             using (_mocker.Record())
             {
-                Expect.Call(_mockedPart.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
-                Expect.Call(_mockedPart.PersonAssignmentCollectionDoNotUse()).Return(new ReadOnlyCollection<IPersonAssignment>(personAssignments));
+                Expect.Call(_mockedPart.PersonAssignment()).Return(null);
+								Expect.Call(_mockedPart.PersonAssignment()).Return(new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1)));
             }
 
             using (_mocker.Playback())
@@ -332,8 +322,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Expect.Call(visualLayer.Payload).Return(absence).Repeat.AtLeastOnce();
 				Expect.Call(visualLayerCollection.HasLayers).Return(true).Repeat.AtLeastOnce();
 				Expect.Call(_hasContractDayOffDefinition.IsDayOff(_mockedPart)).Return(true);
-				Expect.Call(_mockedPart.PersonDayOffCollection()).Return(
-					new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
+				Expect.Call(_mockedPart.HasDayOff()).Return(false);
 			}
 
 			using (_mocker.Playback())

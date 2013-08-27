@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (period.HasValue)
             {
                 var meetings = schedulePart.PersonMeetingCollection();
-                var personalAssignments = schedulePart.PersonAssignmentCollectionDoNotUse();
+                var personalAssignment = schedulePart.PersonAssignment();
                 int cntBefore = shiftList.Count;
                 IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
                 foreach (IShiftProjectionCache t in shiftList)
@@ -397,7 +397,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     if (!proj.MainShiftProjection.Period().HasValue) continue;
                     DateTimePeriod virtualPeriod = proj.MainShiftProjection.Period().Value;
 
-                    if (virtualPeriod.Contains(period.Value) && t.PersonalShiftsAndMeetingsAreInWorkTime(meetings, personalAssignments))
+                    if (virtualPeriod.Contains(period.Value) && t.PersonalShiftsAndMeetingsAreInWorkTime(meetings, personalAssignment))
                     {
                         workShiftsWithinPeriod.Add(proj);
                     }
@@ -456,11 +456,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					if (possibleStartEndCategory.EndTime == shift.WorkShiftEndTime)
 						finalShiftList.Add(shift);
-					//if (possibleStartEndCategory.EndTime == new TimeSpan(1, 15, 0))
-					//    return new List<IShiftProjectionCache>();
 				}
 
-            	//finalShiftList.AddRange(shiftList.Where(shift => possibleStartEndCategory.StartTime == shift.WorkShiftStartTime && possibleStartEndCategory.EndTime  == shift.WorkShiftEndTime ));   
             }
             else if (schedulingOptions.UseGroupSchedulingCommonStart)
             {
@@ -520,17 +517,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             var filteredList = new List<IShiftProjectionCache>();
             var meetings = part.PersonMeetingCollection();
-            var personAssignments = part.PersonAssignmentCollectionDoNotUse();
+            var personAssignment = part.PersonAssignment();
             var cnt = shiftList.Count;
 
-	        if (meetings.Count == 0 && personAssignments.Count == 0)
+	        if (meetings.Count == 0 && personAssignment==null)
 		        return shiftList;
 
             foreach (var shift in shiftList)
             {
                 if (shift.MainShiftProjection.Any(x => !((VisualLayer) x).HighestPriorityActivity.AllowOverwrite &&
-                                                       isActivityIntersectedWithMeetingOrPersonalShift(
-                                                           personAssignments, meetings, x)))
+                                                       isActivityIntersectedWithMeetingOrPersonalShift(personAssignment, meetings, x)))
                     continue;
                 filteredList.Add(shift);
             }
@@ -540,17 +536,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return filteredList;
         }
 
-        private static bool isActivityIntersectedWithMeetingOrPersonalShift(IEnumerable<IPersonAssignment> personAssignments,
+        private static bool isActivityIntersectedWithMeetingOrPersonalShift(IPersonAssignment personAssignment,
                                                                             IEnumerable<IPersonMeeting> meetings, IVisualLayer layer)
         {
             if (meetings.Any(x => x.Period.Intersect(layer.Period)))
                 return true;
 
-            foreach (var personAssignment in personAssignments)
-            {
-                if (personAssignment.PersonalLayers().Any(l => l.Period.Intersect(layer.Period)))
-                    return true;
-            }
+					if (personAssignment != null)
+					{
+						if (personAssignment.PersonalLayers().Any(l => l.Period.Intersect(layer.Period)))
+							return true;
+					}
+
             return false;
         }
     }

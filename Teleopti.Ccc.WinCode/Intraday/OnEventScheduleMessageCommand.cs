@@ -93,13 +93,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
                     _view.ReloadScheduleDayInEditor(person);
                     return;
                 }
-                if (message.InterfaceType.IsAssignableFrom(typeof(IPersonDayOff)))
-                {
-                    uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.DayOffs);
-                    _schedulingResultLoader.SchedulerState.Schedules.UpdateFromBroker(_repositoryFactory.CreatePersonDayOffRepository(uow), message.DomainObjectId);
-                    _view.ReloadScheduleDayInEditor(person);
-                    return;
-                }
                 if (message.InterfaceType.IsAssignableFrom(typeof(IPersonAbsence)))
                 {
                     associateRoootsForPersonAbsence(uow);

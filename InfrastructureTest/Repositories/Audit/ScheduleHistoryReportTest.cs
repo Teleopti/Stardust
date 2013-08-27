@@ -77,30 +77,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		}
 
 		[Test]
-		public void ShouldFindInsertedPersonDayOffWithCorrectParameters()
-		{
-			var expected = new ScheduleAuditingReportData
-			{
-				AuditType = Resources.AuditingReportInsert,
-				ShiftType = Resources.AuditingReportDayOff,
-				Detail = PersonDayOff.DayOff.Description.Name,
-				ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonDayOff.UpdatedOn.Value, regional.TimeZone),
-				ModifiedBy = PersonDayOff.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
-				ScheduledAgent = PersonDayOff.Person.Name.ToString(NameOrderOption.FirstNameLastName),
-				ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(PersonDayOff.Period.EndDateTime, regional.TimeZone),
-				ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(PersonDayOff.Period.StartDateTime, regional.TimeZone)
-			};
-
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var res = target.Report(new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-								  PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local),
-								  new List<IPerson> { PersonAssignment.Person });
-				res.Any(dayOff => consideredEqual(dayOff, expected)).Should().Be.True();
-			}
-		}
-
-		[Test]
 		public void ShouldFindDeletedPersonAbsenceWithCorrectParameters()
 		{
 			var expected = new ScheduleAuditingReportData
@@ -171,8 +147,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				AuditType = Resources.AuditingReportDeleted,
 				ShiftType = Resources.AuditingReportShift,
-				ScheduleEnd = DateTime.MinValue,
-				ScheduleStart = DateTime.MinValue,
+				ScheduleStart = TimeZoneHelper.ConvertFromUtc(PersonAssignment.Date, regional.TimeZone),
+				ScheduleEnd = TimeZoneHelper.ConvertFromUtc(PersonAssignment.Date.AddDays(1), regional.TimeZone),
 				Detail = string.Empty,
 				ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value, regional.TimeZone),
 				ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
@@ -248,8 +224,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value, regional.TimeZone),
 				ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
 				ScheduledAgent = PersonAssignment.Person.Name.ToString(NameOrderOption.FirstNameLastName),
-				ScheduleEnd = DateTime.MinValue,
-				ScheduleStart = DateTime.MinValue,
+				ScheduleStart = TimeZoneHelper.ConvertFromUtc(PersonAssignment.Date, regional.TimeZone),
+				ScheduleEnd = TimeZoneHelper.ConvertFromUtc(PersonAssignment.Date.AddDays(1), regional.TimeZone)
 			};
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())

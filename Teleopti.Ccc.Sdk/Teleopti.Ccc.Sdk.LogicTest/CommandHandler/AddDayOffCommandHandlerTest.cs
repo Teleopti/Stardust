@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     [TestFixture]
     public class AddDayOffCommandHandlerTest
     {
-        private IDayOffRepository _dayOffRepository;
+        private IDayOffTemplateRepository _dayOffRepository;
         private IScheduleRepository _scheduleRepository;
         private IPersonRepository _personRepository;
         private IScenarioRepository _scenarioRepository;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         public  void Setup()
         {
             _mock = new MockRepository();
-            _dayOffRepository = _mock.StrictMock<IDayOffRepository>();
+            _dayOffRepository = _mock.StrictMock<IDayOffTemplateRepository>();
             _scheduleRepository = _mock.StrictMock<IScheduleRepository>();
             _personRepository = _mock.StrictMock<IPersonRepository>();
             _scenarioRepository = _mock.StrictMock<IScenarioRepository>();
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Playback())
             {
                 _target.Handle(_addAbsenceCommandDto);
-                scheduleDay.PersonDayOffCollection().Count.Should().Be.EqualTo(1);
+                scheduleDay.HasDayOff().Should().Be.True();
             }
         }
 
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				_addAbsenceCommandDto.ScenarioId = scenarioId;
 				_target.Handle(_addAbsenceCommandDto);
-				scheduleDay.PersonDayOffCollection().Count.Should().Be.EqualTo(1);
+				scheduleDay.HasDayOff().Should().Be.True();
 			}
 		}
     }

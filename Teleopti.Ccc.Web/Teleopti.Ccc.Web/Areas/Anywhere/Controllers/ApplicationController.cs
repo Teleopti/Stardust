@@ -53,16 +53,20 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.AddFullDayAbsence,
 					UserTexts.Resources.Apply,
 					UserTexts.Resources.InvalidEndDate,
+					UserTexts.Resources.Forecasted,
+					UserTexts.Resources.Scheduled,
+					UserTexts.Resources.Difference,
+					UserTexts.Resources.ESL,
+					UserTexts.Resources.HourShort,
 					UserTexts.Resources.Remove,
 					UserTexts.Resources.ConfirmRemoval,
-
-					FixedDateFormat = DateAndTimeFormatExtensions.FixedDateFormat,
-					FixedDateTimeFormat = DateAndTimeFormatExtensions.FixedDateTimeFormat,
-					FixedTimeFormat = DateAndTimeFormatExtensions.FixedTimeFormat,
-
-					FixedDateFormatForMoment = DateAndTimeFormatExtensions.FixedDateFormatForMoment,
-					FixedDateTimeFormatForMoment = DateAndTimeFormatExtensions.FixedDateTimeFormatForMoment,
-					FixedTimeFormatForMoment = DateAndTimeFormatExtensions.FixedTimeFormatForMoment,
+					
+					DateAndTimeFormatExtensions.FixedDateFormat,
+					DateAndTimeFormatExtensions.FixedDateTimeFormat,
+					DateAndTimeFormatExtensions.FixedTimeFormat,
+					DateAndTimeFormatExtensions.FixedDateFormatForMoment,
+					DateAndTimeFormatExtensions.FixedDateTimeFormatForMoment,
+					DateAndTimeFormatExtensions.FixedTimeFormatForMoment,
 
 					DateFormat = DateAndTimeFormatExtensions.DateFormat(),
 					DateTimeFormat = DateAndTimeFormatExtensions.DateTimeFormat(),

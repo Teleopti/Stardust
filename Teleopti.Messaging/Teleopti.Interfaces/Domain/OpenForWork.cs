@@ -10,9 +10,18 @@ namespace Teleopti.Interfaces.Domain
     /// Created date: 2012-02-28
     /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2218:OverrideGetHashCodeOnOverridingEquals")]
-    public class OpenForWork : IOpenForWork
+    public struct OpenForWork : IEquatable<OpenForWork>
     {
-        /// <summary>
+	    private readonly bool _isOpen;
+	    private readonly bool _isOpenForIncomingWork;
+
+	    public OpenForWork(bool isOpen, bool isOpenForIncomingWork)
+		{
+			_isOpen = isOpen;
+			_isOpenForIncomingWork = isOpenForIncomingWork;
+		}
+
+	    /// <summary>
         /// Gets or sets that the day is open, Here we consider only open working hours.
         /// </summary>
         /// <value> ture = open working hours or day is open. false= close working hours or day is closed.</value>
@@ -20,9 +29,12 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: talham
         /// Created date: 2012-02-28
         /// </remarks>
-        public bool IsOpen { get; set; }
+        public bool IsOpen
+	    {
+		    get { return _isOpen; }
+	    }
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets that the day is open for incoming work such as Email, Fax anything other than telephony.
         /// </summary>
         /// <value> ture = open for incoming work. false= close for incoming work.</value>
@@ -30,26 +42,27 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: talham
         /// Created date: 2012-02-28
         /// </remarks>
-        public bool IsOpenForIncomingWork { get; set; }
+        public bool IsOpenForIncomingWork
+	    {
+		    get { return _isOpenForIncomingWork; }
+	    }
 
+	    public bool Equals(OpenForWork other)
+	    {
+		    return other._isOpen == IsOpen &&
+		           other._isOpenForIncomingWork == _isOpenForIncomingWork;
+	    }
 
-        /// <summary>
-        /// Compare object Instances..
-        /// </summary>
-        /// <remarks>
-        /// Created by: talham
-        /// Created date: 2012-02-28
-        /// </remarks>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-        public override bool Equals(object obj)
-        {
-            var open = obj as OpenForWork;
-            if(open == null)
-                throw new ArgumentException("Input parameter should be instance of OpenForWork");
-            return open.IsOpen == IsOpen && open.IsOpenForIncomingWork == IsOpenForIncomingWork;
-        }
+		public override bool Equals(object obj)
+		{
+			if (obj is OpenForWork)
+			{
+				return Equals((OpenForWork) obj);
+			}
+			return false;
+		}
 
-        /// <summary>
+	    /// <summary>
         /// Overrides GetHashCode function.
         /// </summary>
         /// <remarks>
@@ -58,9 +71,29 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public override int GetHashCode()
         {
-            // ReSharper disable BaseObjectGetHashCodeCallInGetHashCode
-            return base.GetHashCode();
-            // ReSharper restore BaseObjectGetHashCodeCallInGetHashCode
+            return 317 ^ _isOpen.GetHashCode() ^ _isOpenForIncomingWork.GetHashCode();
         }
+
+		/// <summary>
+		/// Operator ==.
+		/// </summary>
+		/// <param name="per1">The per1.</param>
+		/// <param name="per2">The per2.</param>
+		/// <returns></returns>
+		public static bool operator ==(OpenForWork per1, OpenForWork per2)
+		{
+			return per1.Equals(per2);
+		}
+
+		/// <summary>
+		/// Operator !=.
+		/// </summary>
+		/// <param name="per1">The per1.</param>
+		/// <param name="per2">The per2.</param>
+		/// <returns></returns>
+		public static bool operator !=(OpenForWork per1, OpenForWork per2)
+		{
+			return !per1.Equals(per2);
+		}
     }
 }

@@ -109,20 +109,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         private static double getSumWorkTime(PersonWeek personWeek, IScheduleRange currentSchedules)
         {
             double ctrTime = 0;
-            foreach (var day in personWeek.Week.DayCollection())
+			foreach (var schedule in currentSchedules.ScheduledDayCollection(personWeek.Week))
             {
-                var schedule = currentSchedules.ScheduledDay(day);
                 ctrTime += schedule.ProjectionService().CreateProjection().WorkTime().TotalMinutes;
             }
 
             return ctrTime;
         }
+
         private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message, Type type)
         {
             var dop = new DateOnlyPeriod(dateOnly, dateOnly);
             DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-            var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
-            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dateOnlyPeriod)
+            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop)
                                                  {Overridden = !_haltModify};
             return response;
         }

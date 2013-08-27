@@ -12,18 +12,20 @@ namespace Teleopti.Analytics.Etl.Transformer
         private readonly IList<ISkillStaffPeriod> _skillStaffPeriodCollection;
         private Dictionary<IScheduleForecastSkillKey, IScheduleForecastSkill> _scheduleForecastSkillDictionary;
         private readonly int _intervalsPerDay;
+	    private readonly DateTimePeriod _period;
 
-        private ScheduleForecastSkillResourceCalculation()
+	    private ScheduleForecastSkillResourceCalculation()
         {
 
         }
 
-        public ScheduleForecastSkillResourceCalculation(IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary, ISchedulingResultService schedulingResultService, IList<ISkillStaffPeriod> skillStaffPeriodCollection, int intervalsPerDay)
+        public ScheduleForecastSkillResourceCalculation(IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary, ISchedulingResultService schedulingResultService, IList<ISkillStaffPeriod> skillStaffPeriodCollection, int intervalsPerDay, DateTimePeriod period)
             : this()
         {
             _skillDaysDictionary = skillDaysDictionary;
             _intervalsPerDay = intervalsPerDay;
-            _schedulingResultService = schedulingResultService;
+	        _period = period;
+	        _schedulingResultService = schedulingResultService;
             _skillStaffPeriodCollection = skillStaffPeriodCollection;
         }
 
@@ -48,13 +50,7 @@ namespace Teleopti.Analytics.Etl.Transformer
                 skillStaffPeriod.Payload.UseShrinkage = useShrinkage;
             }
 
-            //var splitPeriod = _period.WholeDayCollection();
-            //foreach (var dateTimePeriod in splitPeriod)
-            //{
-            //    _schedulingResultService.SchedulingResult(dateTimePeriod);
-            //}
-            //_schedulingResultService.SchedulingResult(_period);
-            _schedulingResultService.SchedulingResult();
+            _schedulingResultService.SchedulingResult(_period);
 
             collectResourceData(_skillDaysDictionary, useShrinkage, insertDateTime);
         }

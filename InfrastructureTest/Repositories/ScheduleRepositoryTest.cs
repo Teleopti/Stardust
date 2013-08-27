@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     {
         private IPersonAbsenceRepository _absRep;
         private IPersonAssignmentRepository _assRep;
-        private IPersonDayOffRepository _dayOffRep;
         private IMeetingRepository _meetingRepository;
         private INoteRepository _notesRepository;
         private IPublicNoteRepository _publicNoteRepository;
@@ -41,7 +40,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private IOvertimeAvailabilityRepository _overtimeAvailabilityRepository;
         private ICollection<IPersonAssignment> _assignments;
         private ICollection<IPersonAbsence> _absences;
-        private ICollection<IPersonDayOff> _dayOffs;
         private ICollection<IMeeting> _meetings;
         private IUnitOfWork _unitOfWork;
         private IRepositoryFactory _repositoryFactory;
@@ -87,7 +85,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             _assignments = new List<IPersonAssignment>();
             _absences = new List<IPersonAbsence>();
-            _dayOffs = new List<IPersonDayOff>();
             _meetings = new List<IMeeting>();
 
             _prefDays = new List<IPreferenceDay>();
@@ -107,7 +104,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             _absRep = _mocks.StrictMock<IPersonAbsenceRepository>();
             _assRep = _mocks.StrictMock<IPersonAssignmentRepository>();
-            _dayOffRep = _mocks.StrictMock<IPersonDayOffRepository>();
             _availabilityRep = _mocks.StrictMock<IPersonAvailabilityRepository>();
             _rotationRep = _mocks.StrictMock<IPersonRotationRepository>();
             _prefDayRep = _mocks.StrictMock<IPreferenceDayRepository>();
@@ -124,7 +120,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             Expect.Call(_repositoryFactory.CreatePersonAbsenceRepository(_unitOfWork)).Return(_absRep).Repeat.Any();
             Expect.Call(_repositoryFactory.CreatePersonAssignmentRepository(_unitOfWork)).Return(_assRep).Repeat.Any();
-            Expect.Call(_repositoryFactory.CreatePersonDayOffRepository(_unitOfWork)).Return(_dayOffRep).Repeat.Any();
             Expect.Call(_repositoryFactory.CreatePersonAvailabilityRepository(_unitOfWork)).Return(_availabilityRep).Repeat.Any();
             Expect.Call(_repositoryFactory.CreatePersonRotationRepository(_unitOfWork)).Return(_rotationRep).Repeat.Any();
             Expect.Call(_repositoryFactory.CreatePreferenceDayRepository(_unitOfWork)).Return(_prefDayRep).Repeat.Any();
@@ -161,7 +156,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPersonAssignment pAss2 = AddPersonAssignment(per2, period);
 
             IPersonAbsence pAbs = AddAbsence(per1);
-            IPersonDayOff pDayOff = AddDayOff(per1);
 
             AddMeeting(per1);
             AddPreference(per1);
@@ -180,7 +174,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(2, retDic.Count);
             Assert.IsTrue(retDic[per1].Contains(pAss1));
             Assert.IsTrue(retDic[per2].Contains(pAss2));
-            Assert.IsTrue(retDic[per1].Contains(pDayOff));
             Assert.IsTrue(retDic[per1].Contains(pAbs));
             Assert.IsTrue(retDic[per1].Contains(_prefDays[0]));
             Assert.IsTrue(retDic[per1].Contains(_notes[0]));
@@ -220,18 +213,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             return pAbs;
         }
 
-        private IPersonDayOff AddDayOff(IPerson person)
-        {
-            DayOffTemplate dOff = new DayOffTemplate(new Description("test"));
-            dOff.Anchor = TimeSpan.FromHours(3);
-            dOff.SetTargetAndFlexibility(TimeSpan.FromHours(3), TimeSpan.Zero);
-
-            IPersonDayOff pDayOff = PersonDayOffFactory.CreatePersonDayOff(person, _scenario, new DateOnly(2000, 1, 3), dOff);
-            _dayOffs.Add(pDayOff);
-            
-            return pDayOff;
-        }
-
         [Test]
         public void VerifyCanLoadBasedOnPersonsAndPeriodAndScenario()
         {
@@ -253,7 +234,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var pAss1 = AddPersonAssignment(person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
             var pAss2 = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
             var pAbs = AddAbsence(person1);
-            var pDayOff = AddDayOff(person2);
 
             AddMeeting(person1);
             AddPreference(person1);
@@ -274,7 +254,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(retDic[person1].Contains(pAbs));
             Assert.IsTrue(retDic[person1].Contains(_prefDays[0]));
             Assert.IsTrue(retDic[person1].Contains(_notes[0]));
-            Assert.IsTrue(retDic[person2].Contains(pDayOff));
             Assert.IsTrue(retDic[person3].Contains(pAss2));
             Assert.IsTrue(retDic[person1].Contains(_agentDayScheduleTags[0]));
 
@@ -289,8 +268,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 .Return(_absences);
 						Expect.Call(_assRep.Find(peopleInOrganization, _longDateOnlyPeriod, _scenario))
                 .Return(_assignments);
-            Expect.Call(_dayOffRep.Find(peopleInOrganization, _longPeriod, _scenario))
-                .Return(_dayOffs);
             Expect.Call(_meetingRepository.Find(peopleInOrganization, _longDateOnlyPeriod, _scenario))
                 .Return(_meetings);
             Expect.Call(_notesRepository.Find(_longDateOnlyPeriod, peopleInOrganization, _scenario))
@@ -375,8 +352,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 .Return(_absences);
 						Expect.Call(_assRep.Find(visiblePeople, _searchPeriod, _scenario))
                 .Return(_assignments);
-            Expect.Call(_dayOffRep.Find(visiblePeople, longPeriod, _scenario))
-                .Return(_dayOffs);
             Expect.Call(_meetingRepository.Find(visiblePeople, _searchPeriod, _scenario))
                 .Return(_meetings);
 						Expect.Call(_notesRepository.Find(_searchPeriod, visiblePeople, _scenario))
@@ -480,8 +455,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 .Return(_absences);
 						Expect.Call(_assRep.Find(_longDateOnlyPeriod, _scenario))
                 .Return(_assignments);
-            Expect.Call(_dayOffRep.Find(_longPeriod, _scenario))
-                .Return(_dayOffs);
             Expect.Call(_meetingRepository.Find(_longPeriod, _scenario))
                 .Return(_meetings);
             Expect.Call(_rotationRep.LoadPersonRotationsWithHierarchyData(null, DateTime.MinValue))
@@ -549,10 +522,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 				Expect.Call(_absRep.Find(people, period3, _scenario, absenceToLookFor)).Return(_absences);
                 Expect.Call(_assRep.Find(people, longPeriod1, _scenario)).Return(_assignments);
-                Expect.Call(_dayOffRep.Find(people, period1, _scenario)).Return(_dayOffs);
                 Expect.Call(_meetingRepository.Find(people, new DateOnlyPeriod(2000,1,31,2000,4,11), _scenario)).Return(_meetings);
 								Expect.Call(_assRep.Find(people, longPeriod2, _scenario)).Return(new List<IPersonAssignment>());
-                Expect.Call(_dayOffRep.Find(people, period2, _scenario)).Return(_dayOffs);
             }
             using (_mocks.Playback())
             {
@@ -586,11 +557,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 				Expect.Call(_absRep.Find(people, period3, _scenario, absenceToLookFor)).Return(_absences);
 				Expect.Call(_assRep.Find(people, longPeriod1, _scenario)).Return(_assignments);
-                Expect.Call(_dayOffRep.Find(people, period1, _scenario)).Return(_dayOffs);
                 Expect.Call(_meetingRepository.Find(people, new DateOnlyPeriod(2000,1,31,2001,4,11), _scenario)).Return(_meetings);
 
 								Expect.Call(_assRep.Find(people, longPeriod2, _scenario)).Return(new List<IPersonAssignment>());
-                Expect.Call(_dayOffRep.Find(people, period2, _scenario)).Return(_dayOffs);
             }
             using (_mocks.Playback())
             {
@@ -635,22 +604,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             using(_mocks.Playback())
             {
                 Assert.AreSame(ret, _target.LoadScheduleDataAggregate(typeof (IPersonAssignment), g));
-            }
-        }
-
-        [Test]
-        public void VerifyLoadScheduleDataAggregatePersonDayOff()
-        {
-            var g = Guid.NewGuid();
-            var ret = PersonDayOffFactory.CreatePersonDayOff();
-            using (_mocks.Record())
-            {
-                Expect.Call(_dayOffRep.LoadAggregate(g))
-                    .Return(ret);
-            }
-            using (_mocks.Playback())
-            {
-                Assert.AreSame(ret, _target.LoadScheduleDataAggregate(typeof(IPersonDayOff), g));
             }
         }
 

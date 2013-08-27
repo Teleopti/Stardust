@@ -6,9 +6,9 @@
 		{
 			get
 			{
-				return "select COUNT(*) as cnt from dbo.PersonAssignment " +
-							 "where [Date]=@baseDate " +
-				       "and Person=@personId";
+				return "select COUNT(*) as cnt from dbo.PersonAssignment pa " +
+							 "where pa.[Date]=@baseDate " +
+				       "and pa.Person=@personId";
 			}
 		}
 

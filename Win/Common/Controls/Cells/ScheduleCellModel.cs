@@ -166,10 +166,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             if (scheduleDisplayRow.ScheduleDay.SignificantPart() == SchedulePartView.DayOff)
             {
 
-                var personDayOffs = scheduleDisplayRow.ScheduleDay.PersonDayOffCollection();
-                if (personDayOffs.Count == 0) return;
-
-                IPersonDayOff personDayOff = personDayOffs[0];
+				IDayOff personDayOff = scheduleDisplayRow.ScheduleDay.PersonAssignment().DayOff();
 
                 var start = timePeriod.StartDateTime;
                 var end = timePeriod.EndDateTime;
@@ -181,7 +178,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                 var rect = GetLayerRectangle(pixelConverter, period, clientRectangle);
                 rect.Inflate(0, -4);
 
-                var shortName = personDayOff.DayOff.Description.ShortName;
+                var shortName = personDayOff.Description.ShortName;
                 var stringMeasure = g.MeasureString(shortName, Grid.Font);
                 var x = (int)(rect.Width / 2 - stringMeasure.Width / 2 + rect.Left);
                 var y = (int)(rect.Height / 2 - stringMeasure.Height / 2 + rect.Top);
@@ -192,7 +189,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                 {
                     var rect2 = rect;
                     rect2.Inflate(1, 1);
-                    using (var brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, personDayOff.DayOff.DisplayColor, Color.LightGray))
+                    using (var brush = new HatchBrush(HatchStyle.LightUpwardDiagonal, personDayOff.DisplayColor, Color.LightGray))
                     {
                         g.FillRectangle(brush, rect);
                         g.DrawString(shortName, Grid.Font, Brushes.Black, point);

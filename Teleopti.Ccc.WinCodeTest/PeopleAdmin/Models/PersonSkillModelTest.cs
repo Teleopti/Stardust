@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
@@ -19,6 +20,8 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _target = new PersonSkillModel();
 
             _personSkill = PersonSkillFactory.CreatePersonSkill("Skill1", 1);
+	        var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), Enumerable.Empty<ISkill>());
+	        person.AddSkill(_personSkill, person.PersonPeriodCollection[0]);
             _target.ContainedEntity = _personSkill;
         }
 
@@ -59,11 +62,11 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 		public void ShouldNotSaveLessThanOneOrMoreThan999()
 		{
 			_target.Proficiency = 10;
-			Assert.That(_personSkill.SkillPercentage, Is.EqualTo(new Percent(0.1)));
+			Assert.That(_target.Proficiency, Is.EqualTo(10));
 			_target.Proficiency = 1000;
-			Assert.That(_personSkill.SkillPercentage, Is.EqualTo(new Percent(0.1)));
+			Assert.That(_target.Proficiency, Is.EqualTo(10));
 			_target.Proficiency = 0;
-			Assert.That(_personSkill.SkillPercentage, Is.EqualTo(new Percent(0.1)));
+			Assert.That(_target.Proficiency, Is.EqualTo(10));
 		}
 
 		[Test]

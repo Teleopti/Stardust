@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     	{
     		var reader = new ConfigurationReaderFactory();
     		var configurationReader = reader.Reader();
-			configurationReader.ReadConfiguration(new MessageSenderCreator(() => Container.Resolve<IServiceBus>()));
+			configurationReader.ReadConfiguration(new MessageSenderCreator(new InternalServiceBusSender(()=>Container.Resolve<IServiceBus>())));
     	}
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]

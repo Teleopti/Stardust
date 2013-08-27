@@ -1,6 +1,7 @@
 
 
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (blockInfo == null)
 				return null;
 
-			var teamInfoForBlockPeriod = _teamInfoFactory.CreateTeamInfo(teamInfo.GroupPerson.GroupMembers[0], blockInfo.BlockPeriod, allPersonMatrixList);
+			var teamInfoForBlockPeriod = _teamInfoFactory.CreateTeamInfo(teamInfo.GroupPerson.GroupMembers.First(), blockInfo.BlockPeriod, allPersonMatrixList);
 			if (teamInfoForBlockPeriod == null)
 			{
 				return null;

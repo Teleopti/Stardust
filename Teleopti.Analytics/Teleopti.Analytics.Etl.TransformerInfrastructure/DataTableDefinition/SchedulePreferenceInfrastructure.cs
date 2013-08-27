@@ -11,7 +11,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition
             table.Columns.Add("person_restriction_code", typeof(Guid));
             table.Columns.Add("restriction_date", typeof(DateTime));
             table.Columns.Add("person_code", typeof(Guid));
-            table.Columns.Add("interval_id", typeof(int));
             table.Columns.Add("scenario_code", typeof(Guid));
             table.Columns.Add("shift_category_code", typeof(Guid));
             table.Columns.Add("day_off_code", typeof(Guid));

@@ -96,23 +96,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			InParameter.NotNull("scheduleDay", scheduleDay);
 			InParameter.NotNull("tempDay", tempDay);
 
-			if (scheduleDay.PersonAssignmentCollectionDoNotUse().Any())
+			var personAssignment = scheduleDay.PersonAssignment();
+			if (personAssignment != null)
 			{
-				var personAssignment = scheduleDay.PersonAssignment();
 				if (personAssignment.ShiftCategory != null)
 				{
 					tempDay.AddMainShift(scheduleDay.GetEditorShift());
 					hasSwapData = true;
 				}
+				if (personAssignment.DayOff() != null)
+				{
+					personAssignment.SetThisAssignmentsDayOffOn(tempDay.PersonAssignment(true));
+					hasSwapData = true;
+				}
 			}
-
-			var dayOffCollection = scheduleDay.PersonDayOffCollection();
-			if (dayOffCollection.Count > 0)
-			{
-				tempDay.Add(dayOffCollection[0].NoneEntityClone());
-				hasSwapData = true;
-			}
-
+			
 			return hasSwapData;
 		}	
 	}

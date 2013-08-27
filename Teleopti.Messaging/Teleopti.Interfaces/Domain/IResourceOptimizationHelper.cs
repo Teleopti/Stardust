@@ -33,7 +33,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="toRemove">To remove.</param>
 		/// <param name="toAdd">To add.</param>
     	void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks,
-								   IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd);
+								   IEnumerable<IScheduleDay> toRemove, IEnumerable<IScheduleDay> toAdd);
 
     	/// <summary>
     	/// Creates the skill skill staff dictionary on skills.
@@ -45,5 +45,8 @@ namespace Teleopti.Interfaces.Domain
     	ISkillSkillStaffPeriodExtendedDictionary CreateSkillSkillStaffDictionaryOnSkills(
     		ISkillSkillStaffPeriodExtendedDictionary skillStaffPeriodDictionary, IList<ISkill> skills,
     		DateTimePeriod keyPeriod);
+
+	    void ResourceCalculateDate(IResourceCalculationDataContainer relevantProjections,
+	                                               DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks);
     }
 }

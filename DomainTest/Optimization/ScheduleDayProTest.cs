@@ -60,28 +60,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
-        public void VerifyLocalDateTimePeriod()
-        {
-            DateTimePeriod wholePeriod = new DateTimePeriod(1999, 12, 15, 2000, 01, 14);
-            IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(wholePeriod);
-            IScenario scenario = new Scenario("Scenario");
-            var scheduleDictionary = new ScheduleDictionaryForTest(scenario, scheduleDateTimePeriod, new Dictionary<IPerson, IScheduleRange>());
-
-            DateTimePeriod dayPeriod = new DateTimePeriod(2000, 01, 01, 2000, 01, 10);
-            IScheduleParameters parameters = new ScheduleParameters(scenario, _person, dayPeriod);
-            IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters);
-
-            scheduleDictionary.AddTestItem(_person, range);
-
-            _stateHolder.Schedules = scheduleDictionary;
-
-            DateTimePeriod result = _target.LocalDateTimePeriod();
-
-            Assert.AreEqual(new DateTime(1999, 12, 31, 23, 0, 0), result.StartDateTime);
-            Assert.AreEqual(new DateTime(2000, 01, 01, 23, 0, 0), result.EndDateTime);
-        }
-
-        [Test]
         public void VerifyDaySchedulePart()
         {
             DateTimePeriod wholePeriod = new DateTimePeriod(1999, 12, 15, 2000, 01, 14);

@@ -6,11 +6,9 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -113,8 +111,101 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				                                 : activityPeriod.EndDateTime;
 	        return ((DateTime)nextActivityDateTime).ToLocalTime();
         }
-        
-        public int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate)
+
+		public IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnly date, Guid personId, Guid scenarioId)
+		{
+			var uow = _currentUnitOfWork.Current();
+
+			return ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
+				"SELECT PayloadId,StartDateTime,EndDateTime,WorkTime,Name,ShortName,DisplayColor,PayrollCode,ContractTime FROM ReadModel.ScheduleProjectionReadOnly WHERE ScenarioId=:ScenarioId AND PersonId=:PersonId AND BelongsToDate=:Date")
+										.SetGuid("ScenarioId", scenarioId)
+										.SetGuid("PersonId", personId)
+										.SetDateTime("Date", date)
+                                        .SetResultTransformer(new AliasToBeanResultTransformer(typeof(IntermediateProjectionChangedEventLayer)))
+                                        .List<IntermediateProjectionChangedEventLayer>().Select(t => t.ToLayer());
+	    }
+
+        private class IntermediateProjectionChangedEventLayer
+        {
+            /// <summary>
+            /// The payload id
+            /// </summary>
+            public Guid PayloadId { get; set; }
+            /// <summary>
+            /// The layer start time
+            /// </summary>
+            public DateTime StartDateTime { get; set; }
+            /// <summary>
+            /// The layer end time
+            /// </summary>
+            public DateTime EndDateTime { get; set; }
+            /// <summary>
+            /// The layer work time
+            /// </summary>
+            public long WorkTime { get; set; }
+            /// <summary>
+            /// The layer contract time
+            /// </summary>
+            public long ContractTime { get; set; }
+            /// <summary>
+            /// The name of the payload
+            /// </summary>
+            public string Name { get; set; }
+            /// <summary>
+            /// The short name of the payload
+            /// </summary>
+            public string ShortName { get; set; }
+            /// <summary>
+            /// The payroll code of the payload
+            /// </summary>
+            public string PayrollCode { get; set; }
+            /// <summary>
+            /// The display color of the payload
+            /// </summary>
+            public int DisplayColor { get; set; }
+            /// <summary>
+            /// Is this absence
+            /// </summary>
+            public bool IsAbsence { get; set; }
+            /// <summary>
+            /// Requires seat
+            /// </summary>
+            public bool RequiresSeat { get; set; }
+
+            public ProjectionChangedEventLayer ToLayer()
+            {
+                return new ProjectionChangedEventLayer
+                    {
+                        ContractTime = TimeSpan.FromTicks(ContractTime),
+                        WorkTime = TimeSpan.FromTicks(WorkTime),
+                        DisplayColor = DisplayColor,
+                        EndDateTime = DateTime.SpecifyKind(EndDateTime,DateTimeKind.Utc),
+                        IsAbsence = IsAbsence,
+                        Name = Name,
+                        PayloadId = PayloadId,
+                        PayrollCode = PayrollCode,
+                        RequiresSeat = RequiresSeat,
+                        ShortName = ShortName,
+                        StartDateTime = DateTime.SpecifyKind(StartDateTime,DateTimeKind.Utc)
+                    };
+            }
+        }
+
+		public IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnlyPeriod datePeriod, Guid personId, Guid scenarioId)
+		{
+			var uow = _currentUnitOfWork.Current();
+
+			return ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
+                "SELECT PayloadId,StartDateTime,EndDateTime,WorkTime,Name,ShortName,DisplayColor,PayrollCode,ContractTime FROM ReadModel.ScheduleProjectionReadOnly WHERE ScenarioId=:ScenarioId AND PersonId=:PersonId AND BelongsToDate>=:DateFrom AND BelongsToDate<=:DateTo")
+										.SetGuid("ScenarioId", scenarioId)
+										.SetGuid("PersonId", personId)
+										.SetDateTime("DateFrom", datePeriod.StartDate)
+										.SetDateTime("DateTo", datePeriod.EndDate)
+										.SetResultTransformer(new AliasToBeanResultTransformer(typeof(IntermediateProjectionChangedEventLayer)))
+										.List<IntermediateProjectionChangedEventLayer>().Select(t => t.ToLayer());
+		}
+
+	    public int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate)
         {
             var uow = _currentUnitOfWork.Current();
 
@@ -154,15 +245,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	}
 
-    public class ActivityPeriod
-    {
-	public DateTime StartDateTime { get; set; }
-        public DateTime EndDateTime { get; set; }
-          
-        
-    }
+	public class ActivityPeriod
+	{
+		public DateTime StartDateTime { get; set; }
+		public DateTime EndDateTime { get; set; }
+	}
 
-    public class AbsenceRequestInfo
+	public class AbsenceRequestInfo
     {
         public int NumberOfRequests { get; set; }
         public DateTime BelongsToDate { get; set; }

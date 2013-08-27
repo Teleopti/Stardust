@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -443,8 +442,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DayOffTemplate dOff = new DayOffTemplate(new Description("test"));
 			dOff.Anchor = TimeSpan.FromHours(12);
 			dOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(1));
-			PersonDayOff dayOff1 = new PersonDayOff(scheduleDay.Person, scheduleDay.Scenario, dOff, new DateOnly(2000, 1, 1));
-			scheduleDay.Add(dayOff1);
+			scheduleDay.PersonAssignment(true).SetDayOff(dOff);
 
 			IVisualLayerCollection projection = target.CreateProjection();
 			Assert.AreEqual(0, projection.Count());
@@ -591,7 +589,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario, createPeriod(-100, 100));
 			abs.Layer.Payload.InContractTime = true;
-			var dayOff = PersonDayOffFactory.CreatePersonDayOff(scheduleDay.Person, scheduleDay.Scenario, scheduleDay.DateOnlyAsPeriod.DateOnly, new DayOffTemplate(new Description("sdf")));
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scheduleDay.Scenario, scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, new DayOffTemplate(new Description("sdf")));
 			scheduleDay.Add(abs);
 			scheduleDay.Add(dayOff);
 			addPeriodAndContractToPerson(true);
@@ -659,7 +657,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario, createPeriod(-100, 100));
 			abs.Layer.Payload.InContractTime = true;
-			var dayOff = PersonDayOffFactory.CreatePersonDayOff(scheduleDay.Person, scheduleDay.Scenario, scheduleDay.DateOnlyAsPeriod.DateOnly, new DayOffTemplate(new Description("sdf")));
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scheduleDay.Scenario, scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, new DayOffTemplate(new Description("sdf")));
 			scheduleDay.Add(abs);
 			scheduleDay.Add(dayOff);
 			addPeriodAndContractToPerson(false);
@@ -672,7 +670,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario, createPeriod(-100, 100));
 			abs.Layer.Payload.InContractTime = true;
-			var dayOff = PersonDayOffFactory.CreatePersonDayOff(scheduleDay.Person, scheduleDay.Scenario, scheduleDay.DateOnlyAsPeriod.DateOnly, new DayOffTemplate(new Description("sdf")));
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scheduleDay.Scenario, scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, new DayOffTemplate(new Description("sdf")));
 			scheduleDay.Add(abs);
 			scheduleDay.Add(dayOff);
 			addPeriodAndContractToPerson(true);
@@ -685,7 +683,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var abs = PersonAbsenceFactory.CreatePersonAbsence(scheduleDay.Person, scheduleDay.Scenario, createPeriod(-100, 100));
 			abs.Layer.Payload.InContractTime = true;
-			var dayOff = PersonDayOffFactory.CreatePersonDayOff(scheduleDay.Person, scheduleDay.Scenario, scheduleDay.DateOnlyAsPeriod.DateOnly, new DayOffTemplate(new Description("sdf")));
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scheduleDay.Scenario, scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, new DayOffTemplate(new Description("sdf")));
 			scheduleDay.Add(abs);
 			scheduleDay.Add(dayOff);
 			addPeriodAndContractToPerson(false);

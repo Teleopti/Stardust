@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.DatabaseConverter;
 using Teleopti.Ccc.DatabaseConverter.EntityMapper;
 using Teleopti.Ccc.DatabaseConverterTest.Helpers;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
@@ -77,8 +78,14 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             _agDay.AgentDayAssignment.SetAssigned(_agdFactory.Absence("Day Off", "DO", true),
                                                   new global::Domain.SchedType(-1, "Web", true, false, false));
             AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, (TimeZoneInfo.Utc));
+			ObjectPairCollection<global::Domain.Absence, IDayOffTemplate> dayOffPairList = new ObjectPairCollection<global::Domain.Absence, IDayOffTemplate>();
+
+			dayOffPairList.Add(_agDay.AgentDayAssignment.Assigned.AssignedAbsence, new DayOffTemplate(new Description("test DO")));
+			mappedObjectPair.DayOff = dayOffPairList;
+
             IPersonAssignment newAgAss = agAssMapper.Map(_agDay);
-            Assert.IsNull(newAgAss);
+            Assert.IsNotNull(newAgAss);
+			Assert.AreEqual("test DO", newAgAss.DayOff().Description.Name);
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             }
             using (_mockRepository.Playback())
             {
-                _target = new SetupDateTimePeriodDefaultLocalHoursForAbsence(_scheduleDay);
+                _target = new SetupDateTimePeriodDefaultLocalHoursForAbsence(_scheduleDay, new CurrentTeleoptiPrincipal());
                 DateTimePeriod expect = new DateTimePeriod(expectedStartTime, expectedEndTime);
                 Assert.AreEqual(expect, _target.Period);
             }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -67,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 		[Test]
 		public void ShouldIgnoreInactiveSkills()
 		{
-			_person2.PersonPeriodCollection[0].PersonSkillCollection[1].Active = false;
+			_person2.DeactivateSkill(_skill2,_person2.PersonPeriodCollection[0]);
 
 			IGroupPage groupPage = _target.CreateGroupPage(_skills, _groupPageOptions);
 

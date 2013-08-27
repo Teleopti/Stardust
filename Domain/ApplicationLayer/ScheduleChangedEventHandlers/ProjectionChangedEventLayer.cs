@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 	/// </summary>
 	public class ProjectionChangedEventLayer
 	{
-		/// <summary>
+        /// <summary>
 		/// The payload id
 		/// </summary>
 		public Guid PayloadId { get; set; }
@@ -47,6 +47,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		/// Is this absence
 		/// </summary>
 		public bool IsAbsence { get; set; }
+		/// <summary>
+		/// Requires seat
+		/// </summary>
+		public bool RequiresSeat { get; set; }
 		/// <summary>
 		/// Is this absence confidential
 		/// </summary>

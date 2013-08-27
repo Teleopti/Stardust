@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -15,12 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public IEnumerable<IPerson> ExtractPersons()
         {
-            HashSet<IPerson> uniquePersons = new HashSet<IPerson>();
-            foreach (IScheduleDay scheduleDay in _scheduleDays)
-            {
-                uniquePersons.Add(scheduleDay.Person);
-            }
-            return new List<IPerson>(uniquePersons);
+	        return _scheduleDays.Select(s => s.Person).Distinct().ToList();
         }
     }
 }
