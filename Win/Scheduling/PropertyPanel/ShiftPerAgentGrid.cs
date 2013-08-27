@@ -35,8 +35,21 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			QueryColCount += shiftPerAgentGridQueryColCount;
 			QueryRowCount += shiftPerAgentGridQueryRowCount;
 			QueryCellInfo += shiftPerAgentGridQueryCellInfo;
+			CellDoubleClick += shiftPerAgentGridCellDoubleClick;
 
 			ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);	
+		}
+
+		void shiftPerAgentGridCellDoubleClick(object sender, GridCellClickEventArgs e)
+		{
+			if (e.RowIndex == 0)
+			{
+				BeginUpdate();
+				_presenter.Sort(e.ColIndex);
+				EndUpdate();
+
+				Refresh();
+			}
 		}
 
 	    void shiftPerAgentGridQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
@@ -54,8 +67,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 			if (e.ColIndex == 0 && e.RowIndex > 0)
 			{
-				e.Style.CellValue = _schedulerState.CommonAgentName(_model.PersonInvolved[e.RowIndex - 1]);
-				e.Style.Tag = _model.PersonInvolved[e.RowIndex - 1];
+				e.Style.CellValue = _schedulerState.CommonAgentName(_presenter.SortedPersonInvolved()[e.RowIndex - 1]);
+				//e.Style.CellValue = _schedulerState.CommonAgentName(_model.PersonInvolved[e.RowIndex - 1]);
+				e.Style.Tag = _presenter.SortedPersonInvolved()[e.RowIndex - 1];
+				//e.Style.Tag = _model.PersonInvolved[e.RowIndex - 1];
 			}
 
 			if (e.ColIndex > 0 && e.RowIndex > 0)
@@ -81,6 +96,14 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			e.Handled = true;
 		}
 
-        
+	    public IDistributionInformationExtractor ExtractorModel
+	    {
+			get { return _model; }
+	    }
+
+	    public ISchedulerStateHolder SchedulerState
+	    {
+			get { return _schedulerState; }
+	    }
     }
 }
