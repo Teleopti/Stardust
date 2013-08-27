@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		public ShiftFairnessGrid()
 		{
 			base.Initialize();
+			_presenter = new ShiftFairnessGridPresenter(this);
 			
 		}
 
@@ -20,8 +21,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             ResetVolatileData();
             _model = distributionInformationExtractor;
-            _presenter = new ShiftFairnessGridPresenter(this);
+            //_presenter = new ShiftFairnessGridPresenter(this);
             initializeComponent();
+
+			_presenter.ReSort();
         }
 
 		private void initializeComponent()

@@ -34,6 +34,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 					select shiftCategoryPerAgent.Count).FirstOrDefault();
 		}
 
+		public void ReSort()
+		{
+			_sortAscending = !_sortAscending;
+			Sort(_sortColumn);
+		}
+
 		public void Sort(int colIndex)
 		{
 			if (colIndex == _sortColumn)

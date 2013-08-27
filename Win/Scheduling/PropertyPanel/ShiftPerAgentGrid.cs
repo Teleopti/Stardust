@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		public ShiftPerAgentGrid(ISchedulerStateHolder schedulerState)
 		{
 			base.Initialize();
-			
+
+			_presenter = new ShiftPerAgentGridPresenter(this);
 			_schedulerState = schedulerState;
 			
 		}
@@ -24,9 +25,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             ResetVolatileData();
             _model = distributionInformationExtractor;
-            _presenter = new ShiftPerAgentGridPresenter(this);
-
+            //_presenter = new ShiftPerAgentGridPresenter(this);
             initializeComponent();
+
+			_presenter.ReSort();
         }
 
 		private void initializeComponent()

@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		{
 			_view = view;
 			_sortedShiftCategories = null;
+			_sortColumn = 0;
 		}
 
 
@@ -27,6 +28,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		{
 			var total = fairnessList.Sum(shiftFairness => shiftFairness.StandardDeviationValue);
 			return total;
+		}
+
+		public void ReSort()
+		{
+			_sortAscending = !_sortAscending;
+			Sort(_sortColumn);
 		}
 
 		public void Sort(int colIndex)
