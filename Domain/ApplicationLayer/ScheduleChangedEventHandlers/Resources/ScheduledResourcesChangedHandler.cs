@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IScheduleProjectionReadOnlyRepository _readModelFinder;
-		private readonly IScheduledResourcesReadModelStorage _scheduledResourcesReadModelStorage;
+		private readonly IScheduledResourcesReadModelPersister _scheduledResourcesReadModelStorage;
 		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly IPublishEventsFromEventHandlers _bus;
 		private int configurableIntervalLength = 15;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (ScheduledResourcesChangedHandler));
 
-		public ScheduledResourcesChangedHandler(IPersonRepository personRepository, ISkillRepository skillRepository, IScheduleProjectionReadOnlyRepository readModelFinder, IScheduledResourcesReadModelStorage scheduledResourcesReadModelStorage, IPersonSkillProvider personSkillProvider, IPublishEventsFromEventHandlers bus)
+		public ScheduledResourcesChangedHandler(IPersonRepository personRepository, ISkillRepository skillRepository, IScheduleProjectionReadOnlyRepository readModelFinder, IScheduledResourcesReadModelPersister scheduledResourcesReadModelStorage, IPersonSkillProvider personSkillProvider, IPublishEventsFromEventHandlers bus)
 		{
 			_personRepository = personRepository;
 			_skillRepository = skillRepository;

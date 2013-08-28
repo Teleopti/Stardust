@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 {
 	public class ScheduledResourcesPersonSkillProficiencyChangedHandler : IHandleEvent<PersonSkillProficiencyChangedEvent>
 	{
-		private readonly IScheduledResourcesReadModelStorage _scheduledResourcesReadModelStorage;
+		private readonly IScheduledResourcesReadModelPersister _scheduledResourcesReadModelStorage;
 		private readonly IScheduleProjectionReadOnlyRepository _readModelFinder;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private int configurableIntervalLength = 15;
 
-		public ScheduledResourcesPersonSkillProficiencyChangedHandler(IScheduledResourcesReadModelStorage scheduledResourcesReadModelStorage, IScheduleProjectionReadOnlyRepository readModelFinder, ISkillRepository skillRepository, IScenarioRepository scenarioRepository)
+		public ScheduledResourcesPersonSkillProficiencyChangedHandler(IScheduledResourcesReadModelPersister scheduledResourcesReadModelStorage, IScheduleProjectionReadOnlyRepository readModelFinder, ISkillRepository skillRepository, IScenarioRepository scenarioRepository)
 		{
 			_scheduledResourcesReadModelStorage = scheduledResourcesReadModelStorage;
 			_readModelFinder = readModelFinder;

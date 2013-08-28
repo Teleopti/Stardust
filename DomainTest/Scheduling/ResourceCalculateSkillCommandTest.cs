@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         private ISkillDayLoadHelper _skillDayLoadHelper;
         private ISkillRepository _skillRepository;
         private IWorkloadRepository _workloadRepository;
-	    private IScheduledResourcesReadModelStorage _storage;
+	    private IScheduledResourcesReadModelReader _storage;
 
 	    [SetUp]
         public void Setup()
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _skillDayLoadHelper = _mocks.DynamicMock<ISkillDayLoadHelper>();
             _skillRepository = _mocks.DynamicMock<ISkillRepository>();
             _workloadRepository = _mocks.DynamicMock<IWorkloadRepository>();
-            _storage = _mocks.DynamicMock<IScheduledResourcesReadModelStorage>();
+			_storage = _mocks.DynamicMock<IScheduledResourcesReadModelReader>();
             _target = new ResourceCalculateSkillCommand(_skillRepository, _workloadRepository, _storage, _schedulingResultStateHolder, _skillLoadDecider, _skillDayLoadHelper);
         }
 

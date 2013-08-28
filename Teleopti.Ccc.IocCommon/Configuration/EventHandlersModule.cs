@@ -27,7 +27,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonScheduleDayReadModelPersister>().As<IPersonScheduleDayReadModelPersister>().SingleInstance();
 			builder.RegisterType<PersonScheduleDayReadModelFinder>().As<IPersonScheduleDayReadModelFinder>().SingleInstance();
 			builder.RegisterType<ScheduledResourcesReadModelStorage>()
-			       .As<IScheduledResourcesReadModelStorage>().SingleInstance();
+				   .As<IScheduledResourcesReadModelPersister>()
+				   .As<IScheduledResourcesReadModelReader>()
+				   .SingleInstance();
 		}
 	}
 

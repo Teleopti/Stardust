@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 	public class ScheduledResourcesChangedHandlerTest
 	{
 		private ScheduledResourcesChangedHandler _target;
-		private IScheduledResourcesReadModelStorage _storage;
+		private IScheduledResourcesReadModelPersister _storage;
 		private IPersonRepository _personRepository;
 		private ISkillRepository _skillRepository;
 		private IScheduleProjectionReadOnlyRepository _scheduleProjectionRepository;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[SetUp]
 		public void Setup()
 		{
-			_storage = MockRepository.GenerateMock<IScheduledResourcesReadModelStorage>();
+			_storage = MockRepository.GenerateMock<IScheduledResourcesReadModelPersister>();
 			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			_bus = MockRepository.GenerateMock<IPublishEventsFromEventHandlers>();
