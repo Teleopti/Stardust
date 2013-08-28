@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -59,7 +61,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         public bool IsEnabled
         {
             get { return _isEnabled; }
-            set { _isEnabled = value; }
+            set
+            {
+                _isEnabled = value;
+                OnPropertyChanged("IsEnabled");
+            }
         }
 
         public void Load(IScheduleDay schedulePart)
@@ -82,6 +88,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
             else
             {
+                IsEnabled = false;
                 NotesIsAltered = false;
                 PublicNotesIsAltered = false;
             	_schedulePart = null;
@@ -219,6 +226,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         internal void ReadDataFromSchedulepart()
         {
             if (_schedulePart == null) return;
+
+            IsEnabled =
+                PrincipalAuthorization.Instance()
+                                      .IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment,
+                                                   _schedulePart.DateOnlyAsPeriod.DateOnly, _schedulePart.Person) &&
+                _schedulePart.FullAccess;
 
             INote note = _schedulePart.NoteCollection().FirstOrDefault();
             IPublicNote publicNote = _schedulePart.PublicNoteCollection().FirstOrDefault();
