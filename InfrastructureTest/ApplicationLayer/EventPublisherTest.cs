@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
@@ -52,5 +54,21 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 
 			handler.AssertWasCalled(x => x.Handle(@event));
 		}
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+        public void ShouldSetContextDetails()
+        {
+            var handler = MockRepository.GenerateMock<IHandleEvent<TestDomainEvent>>();
+            var resolver = MockRepository.GenerateMock<IResolve>();
+            resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestDomainEvent>>))).Return(new[] { handler });
+            var target = new EventPublisher(resolver);
+            var @event = new TestDomainEvent();
+
+            target.Publish(@event);
+
+            handler.AssertWasCalled(x => x.Handle(@event));
+            @event.Datasource.Should().Not.Be.Empty();
+            @event.BusinessUnitId.Should().Not.Be.EqualTo(Guid.Empty);
+        }
 	}
 }
