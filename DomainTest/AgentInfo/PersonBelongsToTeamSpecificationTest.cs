@@ -21,28 +21,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         private ITeam _okTeam = TeamFactory.CreateSimpleTeam("OKTeam");
         private ITeam _notOkTeam = TeamFactory.CreateSimpleTeam("NotOKTeam");
 
-        [Test]
-        public void VerifyVerifyAgentBelongsToTeamSpecificationFindsCorrectDateTime()
-        {
-            IPerson okAgent = PersonFactory.CreatePerson();
-            IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2007, 01, 31), _okTeam);
-            okAgent.AddPersonPeriod(personPeriod);
-
-            PersonBelongsToTeamSpecification spec = new PersonBelongsToTeamSpecification(_dateInQuestion, _okTeam);
-            Assert.IsTrue(spec.IsSatisfiedBy(okAgent));
-        }
-
-        [Test]
-        public void VerifyVerifyAgentBelongsToTeamSpecificationFindsCorrectDateTimeWithTeamList()
-        {
-            IPerson okAgent = PersonFactory.CreatePerson();
-            IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2007, 01, 31), _okTeam);
-            okAgent.AddPersonPeriod(personPeriod);
-
-            PersonBelongsToTeamSpecification spec = new PersonBelongsToTeamSpecification(_dateInQuestion, new List<ITeam> { _okTeam, _notOkTeam });
-            Assert.IsTrue(spec.IsSatisfiedBy(okAgent));
-        }
-
         /// <summary>
         /// Verifies the agent belongs to team specification finds correct team period.
         /// </summary>
