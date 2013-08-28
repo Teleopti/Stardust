@@ -1457,7 +1457,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.CreateAndAddOvertime(activity, period, definitionSet);
 			Assert.AreEqual(1, _target.PersonAssignment().OvertimeLayers().Count());
 			_target.DeleteOvertime();
-			Assert.AreEqual(0, _target.PersonAssignmentCollectionDoNotUse().Count);
+			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse().Count);
 		}
 		
 		[Test]
@@ -1648,7 +1648,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			if ((!options.MainShift && !part.PersonAssignment().MainLayers().Any()))
 				return false;
 
-			if ((!options.Overtime && !part.PersonAssignment().OvertimeLayers().Any()))
+			if ((!options.Overtime && !options.MainShift && !part.PersonAssignment().OvertimeLayers().Any()))
 				return false;
 
 			if ((!options.PersonalShift && !part.PersonAssignment().PersonalLayers().Any()))

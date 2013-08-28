@@ -511,28 +511,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
         }
 
-        public void DeleteOvertime()
-        {
-            IList<IPersonAssignment> personAssToRemoveList = new List<IPersonAssignment>();
+	    public void DeleteOvertime()
+	    {
+		    IPersonAssignment highAss = PersonAssignment();
 
-            foreach (IPersonAssignment assignment in PersonAssignmentCollectionDoNotUse())
-            {
-							assignment.ClearOvertimeLayers();
+		    if (highAss != null)
+			    highAss.ClearOvertimeLayers();
+	    }
 
-								if (!assignment.PersonalLayers().Any() && assignment.ShiftCategory == null)
-                    personAssToRemoveList.Add(assignment);
-            }
-
-            foreach (IPersonAssignment pAss in personAssToRemoveList)
-                Remove(pAss);
-        }
-
-		public void DeleteMainShift(IScheduleDay source)
+	    public void DeleteMainShift(IScheduleDay source)
 		{
 			IPersonAssignment highAss = PersonAssignment();
 
 			if (highAss != null)
+			{
 				highAss.ClearMainLayers();
+				highAss.ClearOvertimeLayers();
+			}
+				
 		}
 
 	    public TimeSpan CalculatePeriodOffset(DateTimePeriod sourcePeriod)
@@ -644,9 +640,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             IPersonAssignment ass = PersonAssignment();
             if (ass != null)
-            {
                 ass.ClearPersonalLayers();
-            }
         }
 
         private void mergePersonalStuff(IScheduleDay source)
