@@ -68,6 +68,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<VirtualSchedulePeriodProvider>().As<IVirtualSchedulePeriodProvider>();
 			builder.RegisterType<DefaultDateCalculator>().As<IDefaultDateCalculator>();
 			builder.RegisterType<UrlHelperProvider>().As<IUrlHelper>().SingleInstance();
+			builder.Register(c => SignalRConfiguration.ActionScheduler).As<IActionScheduler>();
+			builder.RegisterType<SubscriptionFiller>().As<IBeforeSubscribe>();
 			builder.RegisterType<MessageBrokerHub>();
 			builder.RegisterType<IpAddressResolver>().As<IIpAddressResolver>();
 			

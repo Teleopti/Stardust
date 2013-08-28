@@ -234,5 +234,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Assert.AreEqual(4, ret.Count());
             }
         }
+
+	    [Test]
+	    public void ShouldNotCrash_EmptyVirtualScheduleFromScheduleDay()
+	    {
+		    var scheduleDays = new List<IScheduleDay>();
+		    var rangeClones = new Dictionary<IPerson, IScheduleRange>();
+
+		    _virtualSchedulePeriodExtractor.Expect(v => v.CreateVirtualSchedulePeriodsFromScheduleDays(null))
+		                                   .IgnoreArguments()
+		                                   .Return(new List<IVirtualSchedulePeriod>());
+		    _weeksFromScheduleDaysExtractor.Expect(w => w.CreateWeeksFromScheduleDaysExtractor(null))
+		                                   .IgnoreArguments()
+		                                   .Return(new List<PersonWeek>());
+		    _mocks.ReplayAll();
+
+		    Assert.DoesNotThrow(() => _target.Validate(rangeClones, scheduleDays));
+		    _mocks.VerifyAll();
+	    }
     }
 }

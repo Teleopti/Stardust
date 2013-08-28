@@ -208,13 +208,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             using(mocks.Record())
             {
                 Expect.Call(schedDic[pDayOff.Person]).Return(range);
-                range.UnsafeSnapshotUpdate(conflicts.First().DatabaseVersion, true);
+                range.SolveConflictBecauseOfExternalUpdate(conflicts.First().DatabaseVersion, true);
                 forgetAboutDebugAssertsOnMock(0);
                 view.CloseForm(true);
             }
             using(mocks.Playback())
             {
-                target.OnUndoClientChanges();
+                target.OnDiscardMyChanges();
             }
             Assert.AreEqual(0, eventMessages.Count);
             Assert.AreEqual(2, modifiedData.Count);
@@ -233,13 +233,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             using (mocks.Record())
             {
                 Expect.Call(schedDic[pDayOff.Person]).Return(range);
-                range.UnsafeSnapshotDelete(conflicts.First().ClientVersion.OriginalItem.Id.Value, true);
+                range.SolveConflictBecauseOfExternalDeletion(conflicts.First().ClientVersion.OriginalItem.Id.Value, true);
                 forgetAboutDebugAssertsOnMock(0);
                 view.CloseForm(true);
             }
             using (mocks.Playback())
             {
-                target.OnUndoClientChanges();
+                target.OnDiscardMyChanges();
             }
             Assert.AreEqual(0, eventMessages.Count);
             Assert.AreEqual(1, modifiedData.Count);
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             using (mocks.Record())
             {
                 Expect.Call(schedDic[dataOrg.Person]).Return(range);
-                range.UnsafeSnapshotUpdate(dataDb, false);
+                range.SolveConflictBecauseOfExternalUpdate(dataDb, false);
                 forgetAboutDebugAssertsOnMock(1);
                 view.CloseForm(true);
             }
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             using (mocks.Record())
             {
                 Expect.Call(schedDic[dataOrg.Person]).Return(range);
-                range.UnsafeSnapshotUpdate(dataDb, false);
+                range.SolveConflictBecauseOfExternalUpdate(dataDb, false);
                 forgetAboutDebugAssertsOnMock(1);
                 view.CloseForm(true);
             }
@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             using (mocks.Record())
             {
                 Expect.Call(schedDic[dataOrg.Person]).Return(range);
-                range.UnsafeSnapshotDelete(dataOrg.Id.Value, false);
+                range.SolveConflictBecauseOfExternalDeletion(dataOrg.Id.Value, false);
                 forgetAboutDebugAssertsOnMock(1);
                 view.CloseForm(true);
             }
@@ -333,8 +333,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             {
                 target.OnCancel();
             }
-            CollectionAssert.IsEmpty(model.ModifiedData);
+            CollectionAssert.IsEmpty(model.ModifiedDataResult);
         }
+
         [Test, SetCulture("sv-SE")]
         public void VerifyOnQueryCellInfo()
         {

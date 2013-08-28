@@ -63,8 +63,6 @@ define([
             };
             
             var applicableAddNotification = function (notification) {
-                if (notification.DomainUpdateType != 0) //Not insert
-                    return false;
                 if (self.RemoveCommandSent)
                     return false;
                 if (self.PersonId != notification.DomainReferenceId)
@@ -73,7 +71,7 @@ define([
             };
 
             this.NotifyPersonAbsenceChanged = function (notification) {
-                if (applicableAddNotification(notification)){
+                if (applicableAddNotification(notification)) {
                     var personAbsenceId = notification.DomainId;
                     self.RemoveCommandSent = true;
                     self.SendRemoveCommand(personAbsenceId);

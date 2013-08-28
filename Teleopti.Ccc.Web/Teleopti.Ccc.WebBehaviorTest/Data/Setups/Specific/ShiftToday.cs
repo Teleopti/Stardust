@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 {
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 		protected override DateTime ApplyDate(CultureInfo cultureInfo)
 		{
-			return DateTime.Now.Date;
+			return DateOnlyForBehaviorTests.TestToday.Date;
 		}
 	}
 }

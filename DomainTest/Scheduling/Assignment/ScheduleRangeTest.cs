@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
                     var clientData = (PersonAssignment) data.EntityClone();
                     clientData.SetVersion(63);
-                    _target.UnsafeSnapshotUpdate(clientData, false);
+                    _target.SolveConflictBecauseOfExternalUpdate(clientData, false);
 
                     Assert.AreEqual(63, _target.PersonAssignments.First().Version);
                 }
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     var clientData =
                         (PersonAssignment) createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
                     clientData.SetVersion(63);
-                    _target.UnsafeSnapshotUpdate(clientData, false);
+                    _target.SolveConflictBecauseOfExternalUpdate(clientData, false);
 
                     Assert.AreEqual(0, _target.PersonAssignments.Count);
                 }
@@ -709,7 +709,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 range.Owner.TakeSnapshot();
                 range.Remove(ass);
 
-                Assert.AreEqual(ass, range.UnsafeSnapshotDelete(id, includeCurrent));
+                Assert.AreEqual(ass, range.SolveConflictBecauseOfExternalDeletion(id, includeCurrent));
                 Assert.AreEqual(0, range.PersonAssignments.Count);
                 Assert.AreEqual(0, range.Owner.DifferenceSinceSnapshot().Count());
             }

@@ -1,9 +1,8 @@
 using System;
-using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -41,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			new RuleSetBagRepository(uow).Add(TheRuleSetBag);
 
 			uow.Reassociate(user);
-			user.PersonPeriods(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today)).FirstOrDefault().RuleSetBag = TheRuleSetBag;
+			user.Period(DateOnlyForBehaviorTests.TestToday).RuleSetBag = TheRuleSetBag;
 		}
 	}
 

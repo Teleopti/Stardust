@@ -76,15 +76,6 @@ BEGIN
 	INNER JOIN Dubplicates d
 	ON sl.Id = d.Id;
 
-	--remove assignments without shifts
-	delete from PersonAssignment
-	where id in 
-	(
-	select pa.id from personassignment pa
-	left outer join ShiftLayer sl on pa.Id=sl.Parent
-	where not exists(select 1 from ShiftLayer where Parent=pa.Id)
-	)
-
 	--And finally add Unique constraint
 	ALTER TABLE [dbo].[PersonAssignment] ADD  CONSTRAINT [UQ_PersonAssignment_Date_Scenario_Person] UNIQUE NONCLUSTERED 
 	(

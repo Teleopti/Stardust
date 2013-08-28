@@ -124,7 +124,23 @@
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\CannotSendDelayedMessages.cs" />
     <Compile Include="ApplicationLayer\Event.cs" />
+    <Compile Include="ApplicationLayer\Events\ActivityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonDeletedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonPeriodAddedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonPeriodDetail.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonPeriodRemovedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonPeriodStartDateChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonReactivatedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonSkillActivatedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonSkillAddedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonSkillDeactivatedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonSkillDetail.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonSkillProficiencyChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonSkillRemovedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonSkillResetEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonTeamChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonTerminatedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduledResourcesChangedEvent.cs" />
     <Compile Include="ApplicationLayer\IEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IEventsPublisher.cs" />
@@ -227,6 +243,7 @@
     <Compile Include="Common\LayersExtensions.cs" />
     <Compile Include="Common\ListAggregator.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
+    <Compile Include="Common\SpecificBusinessUnit.cs" />
     <Compile Include="Common\TrueFalseRandomizer.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinder.cs" />
     <Compile Include="Common\DateTimePeriodPerStartTimeSorter.cs" />
@@ -606,13 +623,9 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestStatusCheckerWithScheduleDictionary.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeSwapDetail.cs" />
     <Compile Include="AgentInfo\Requests\TextRequest.cs" />
-    <Compile Include="AgentInfo\TeamBelongsToSiteSpecification.cs" />
     <Compile Include="AgentInfo\ExternalLogOn.cs" />
-    <Compile Include="AgentInfo\PersonBelongsToAnyBusinessUnitSpecification.cs" />
     <Compile Include="AgentInfo\Requests\Request.cs" />
-    <Compile Include="AgentInfo\PersonBelongsToBusinessUnitSpecification.cs" />
     <Compile Include="AgentInfo\PersonBelongsToRoleSpecification.cs" />
-    <Compile Include="AgentInfo\PersonBelongsToSiteSpecification.cs" />
     <Compile Include="AgentInfo\PersonBelongsToTeamSpecification.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1006,7 +1019,9 @@
     <Compile Include="Security\Authentication\IWindowsUserProvider.cs" />
     <Compile Include="Security\Authentication\LoggedOnUser.cs" />
     <Compile Include="Security\Authentication\LogonLogger.cs" />
+    <Compile Include="Security\Authentication\SpecificTimeZone.cs" />
     <Compile Include="Security\Authentication\UserTimeZone.cs" />
+    <Compile Include="Security\Authentication\UtcTimeZone.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettings.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccCalendarLinkLicenseOption.cs" />

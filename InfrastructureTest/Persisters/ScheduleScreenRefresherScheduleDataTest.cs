@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -99,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
         private void MakeTarget()
         {
-            _target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleDataRefresher(_scheduleRepository, _scheduleDataUpdater), new MeetingRefresher(null), new PersonRequestRefresher(null));
+			_target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleDataRefresher(_scheduleRepository, MockRepository.GenerateMock<IPersonAssignmentRepository>(), MockRepository.GenerateMock<IPersonRepository>(), _scheduleDataUpdater), new MeetingRefresher(null), new PersonRequestRefresher(null));
         }
 
         [Test]

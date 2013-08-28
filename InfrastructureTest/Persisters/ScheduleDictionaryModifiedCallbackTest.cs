@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 			target.Callback(scheduleRange, modifiedEntities, new IPersistableScheduleData[] { }, new IPersistableScheduleData[] { });
 
-			scheduleRange.AssertWasCalled(x => x.UnsafeSnapshotUpdate(modifiedEntity, true));
+			scheduleRange.AssertWasCalled(x => x.SolveConflictBecauseOfExternalUpdate(modifiedEntity, true));
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 			target.Callback(scheduleRange, new IPersistableScheduleData[] { }, addedEntities, new IPersistableScheduleData[] { });
 
-			scheduleRange.AssertWasCalled(x => x.UnsafeSnapshotUpdate(addedEntity, true));
+			scheduleRange.AssertWasCalled(x => x.SolveConflictBecauseOfExternalUpdate(addedEntity, true));
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
