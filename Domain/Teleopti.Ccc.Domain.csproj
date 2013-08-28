@@ -475,7 +475,6 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\IScheduleDayReadModelRepository.cs" />
     <Compile Include="Repositories\IScheduledResourcesReadModelReader.cs" />
     <Compile Include="Repositories\IScheduledResourcesReadModelPersister.cs" />
-    <Compile Include="Repositories\IScheduledResourcesReadModelUpdater.cs" />
     <Compile Include="Repositories\IScheduleHistoryReport.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\IScheduleProjectionReadOnlyRepository.cs" />
     <Compile Include="Repositories\IScheduleTagRepository.cs" />
