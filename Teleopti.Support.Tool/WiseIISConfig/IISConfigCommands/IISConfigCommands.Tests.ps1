@@ -30,6 +30,8 @@ $password = "m8kemew0rk"
 $secstr = New-Object -TypeName System.Security.SecureString
 $password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)}
 $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $domain\$username, $secstr
+$computerName=(get-childitem -path env:computername).Value
+$global:version = 'main'
 
 function TearDown {
 	Describe "Tear down previous test"{
@@ -71,13 +73,30 @@ function Setup-PreReqs {
 			Test-Path "$workingFolder" | Should Be $True
 		}
 		
+        It "Should find the right version from the config file"{
+            $serverConfigFile = '\\hebe\Installation\PBImsi\Kanbox\testservers.config'
+            # initialize the xml object
+            $serverConfig = New-Object XML
+            # load the config file as an xml object
+            $serverConfig.Load($serverConfigFile)
+            # iterate over the settings
+            foreach($testServer in $serverConfig.configuration.servers.add)
+            {
+                if ($testServer.name -eq  $computerName)
+                {$global:version =  $testServer.version}
+                
+            }
+
+            Write-Host 'version: ' $global:version
+        }
+
 		It "should copy latest .zip-file from build server"{
-			$zipFile = Copy-ZippedMsi -workingFolder "$workingFolder"
+			$zipFile = Copy-ZippedMsi -workingFolder "$workingFolder" -version "$global:version"
 			Test-Path $zipFile | Should Be $True
 		}
 
 		It "should unzip file into MSI"{
-			$zipFile = Copy-ZippedMsi -workingFolder "$workingFolder"
+			$zipFile = Copy-ZippedMsi -workingFolder "$workingFolder" -version "$global:version"
 			$zipFile = Get-Item $zipFile
 
 			$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
@@ -109,8 +128,8 @@ function Setup-PreReqs {
 function Test-InstallationSQLLogin {
 	Describe "Installation test - SQL DB Login"{  
 
-		It "should install latest MSI from Hebe"{
-			$zipFile = Copy-ZippedMsi -workingFolder "$workingFolder"
+		It "should install correct MSI from Hebe"{
+			$zipFile = Copy-ZippedMsi -workingFolder "$workingFolder" -version "$global:version"
 			$zipFile = Get-Item $zipFile
 			$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
 
@@ -122,7 +141,7 @@ function Test-InstallationSQLLogin {
 			[array]$ArgArray = @($MsiFile, "PesterTest-DbSQL", "dummmyUser","dummmyPwd")
 		  
 			Install-TeleoptiCCCServer -BatchFile "$BatchFile" -ArgArray $ArgArray
-			$computerName=(get-childitem -path env:computername).Value
+			
 			$temp = Check-HttpStatus -url "http://hydra/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred
 			$temp | Should be $True
 		}

@@ -368,20 +368,20 @@ namespace Teleopti.Interfaces.Domain
             if (ret.Length > 3)
                 return false;
 
-            int seconds = 0;
-            int minutes = 0;
-            int hours = 0;
+            double seconds = 0;
+            var minutes = 0;
+            var hours = 0;
             if (timeFormatsType == TimeFormatsType.HoursMinutesSeconds)
             {
                 if (ret.Length == 3)
                 {
                     if (!int.TryParse(ret[0], out hours))
                         return false;
-                    if (!int.TryParse(ret[2], out seconds))
-                        return false;
                     if (!int.TryParse(ret[1], out minutes))
                         return false;
-                    if (!CheckMinutesSeconds(minutes, seconds))
+					if (!double.TryParse(ret[2], out seconds))
+						return false;
+                    if (!CheckMinutesSeconds(minutes, (int)Math.Abs(seconds)))
                         return false;
                 }
 

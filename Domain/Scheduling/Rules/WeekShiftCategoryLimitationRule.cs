@@ -45,10 +45,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 _virtualSchedulePeriodExtractor.CreateVirtualSchedulePeriodsFromScheduleDays(scheduleDaysList);
             var personWeeks = _weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(scheduleDaysList).ToList();
             var schedulePeriods = virtualSchedulePeriods as IVirtualSchedulePeriod[] ?? virtualSchedulePeriods.ToArray();
-            var anyPerson = schedulePeriods.First().Person;
-            IScheduleRange currentSchedules = rangeClones[anyPerson];
-            var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
-            var oldResponseCount = oldResponses.Count();
+			
+            IPerson anyPerson = null;
+			IScheduleRange currentSchedules = null;
+			IList<IBusinessRuleResponse> oldResponses = null;
+	        int oldResponseCount = 0;
+			if (schedulePeriods.Any())
+	        {
+		        anyPerson = schedulePeriods.First().Person;
+		        currentSchedules = rangeClones[anyPerson];
+		        oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
+				oldResponseCount = oldResponses.Count();
+	        }
+
             foreach (IVirtualSchedulePeriod schedulePeriod in schedulePeriods)
             {
                 if (schedulePeriod.IsValid)
@@ -63,7 +72,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                             for (int i = oldResponses.Count - 1; i >= 0; i--)
                             {
                                 var response = oldResponses[i];
-                                if (response.TypeOfRule == typeof(WeekShiftCategoryLimitationRule) && response.Period.Equals(period) && response.Person.Equals(anyPerson))
+	                            if (response.TypeOfRule == typeof (WeekShiftCategoryLimitationRule) &&
+	                                response.Period.Equals(period) && response.Person.Equals(anyPerson))
                                     oldResponses.RemoveAt(i);
                             }
                         }

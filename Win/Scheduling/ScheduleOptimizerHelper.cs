@@ -347,55 +347,56 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public IEditableShift PrepareAndChooseBestShift(IScheduleDay schedulePart,
-            ISchedulingOptions schedulingOptions,
-            IWorkShiftFinderService finderService)
-        {
-            if (schedulePart == null) throw new ArgumentNullException("schedulePart");
-            if (schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
-            if (finderService == null) throw new ArgumentNullException("finderService");
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")
+	    ]
+	    public IEditableShift PrepareAndChooseBestShift(IScheduleDay schedulePart,
+	                                                    ISchedulingOptions schedulingOptions,
+	                                                    IWorkShiftFinderService finderService)
+	    {
+		    if (schedulePart == null)
+			    throw new ArgumentNullException("schedulePart");
+		    if (schedulingOptions == null)
+			    throw new ArgumentNullException("schedulingOptions");
+		    if (finderService == null)
+			    throw new ArgumentNullException("finderService");
 
-            DateTime scheduleDayUtc = schedulePart.Period.StartDateTime;
-            TimeZoneInfo timeZoneInfo = schedulePart.Person.PermissionInformation.DefaultTimeZone();
-            var scheduleDateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(scheduleDayUtc, timeZoneInfo).Date);
-            IPersonPeriod personPeriod = schedulePart.Person.Period(scheduleDateOnlyPerson);
-            if (personPeriod != null)
-            {
-                //only fixed staff will be scheduled this way
-                if (personPeriod.PersonContract.Contract.EmploymentType != EmploymentType.HourlyStaff)
-                    //no person assignment
-                    //if (schedulePart.PersonAssignmentCollection().Count == 0)
-                    if (PreSchedulingStatusChecker.CheckAssignments(schedulePart))
-                        //no day off
-                        if (!schedulePart.HasDayOff())
-                        {
-                            DateTime schedulingTime = DateTime.Now;
-                            IWorkShiftCalculationResultHolder cache;
-                            using (PerformanceOutput.ForOperation("Finding the best shift"))
-                            {
-                                IScheduleMatrixPro matrix = _scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(
-                                        new List<IScheduleDay> { schedulePart })[0];
+		    DateTime scheduleDayUtc = schedulePart.Period.StartDateTime;
+		    TimeZoneInfo timeZoneInfo = schedulePart.Person.PermissionInformation.DefaultTimeZone();
+		    var scheduleDateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(scheduleDayUtc, timeZoneInfo).Date);
+		    IPersonPeriod personPeriod = schedulePart.Person.Period(scheduleDateOnlyPerson);
+		    if (personPeriod != null)
+		    {
+			    //only fixed staff will be scheduled this way
+			    if (personPeriod.PersonContract.Contract.EmploymentType != EmploymentType.HourlyStaff)
+				    if (!schedulePart.IsScheduled())
+				    {
+					    DateTime schedulingTime = DateTime.Now;
+					    IWorkShiftCalculationResultHolder cache;
+					    using (PerformanceOutput.ForOperation("Finding the best shift"))
+					    {
+						    IScheduleMatrixPro matrix = _scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(
+							    new List<IScheduleDay> {schedulePart})[0];
 
-                            	var effectiveRestrictionCreator = _container.Resolve<IEffectiveRestrictionCreator>();
-                            	var effectiveRestriction = effectiveRestrictionCreator.GetEffectiveRestriction(
-                            		schedulePart, schedulingOptions);
-                                cache = finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction, null);
-                            }
-                            var result = finderService.FinderResult;
-                            _allResults.AddResults(new List<IWorkShiftFinderResult> { result }, schedulingTime);
+						    var effectiveRestrictionCreator = _container.Resolve<IEffectiveRestrictionCreator>();
+						    var effectiveRestriction = effectiveRestrictionCreator.GetEffectiveRestriction(
+							    schedulePart, schedulingOptions);
+						    cache = finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction, null);
+					    }
+					    var result = finderService.FinderResult;
+					    _allResults.AddResults(new List<IWorkShiftFinderResult> {result}, schedulingTime);
 
-                            if (cache == null)
-                                return null;
+					    if (cache == null)
+						    return null;
 
-                            result.Successful = true;
-                            return cache.ShiftProjection.TheMainShift;
-                        }
-            }
-            return null;
-        }
+					    result.Successful = true;
+					    return cache.ShiftProjection.TheMainShift;
+				    }
+		    }
+		    return null;
+	    }
 
-        public IWorkShiftFinderResultHolder WorkShiftFinderResultHolder
+
+	    public IWorkShiftFinderResultHolder WorkShiftFinderResultHolder
         {
             get { return _allResults; }
         }
