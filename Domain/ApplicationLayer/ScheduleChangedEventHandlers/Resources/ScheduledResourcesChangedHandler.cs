@@ -98,14 +98,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 		}
 	}
 
-	//Other cases to handle:
-	//- Person terminated -
-	//- Person reactivated -
-	//- Person deleted -
-	//- Person period date changes -
-	//- Person period added -
-	//- Person period removed -
-	//- Person period skill changes
-	//- Person team changes
-	//- Team site changes -
 }
