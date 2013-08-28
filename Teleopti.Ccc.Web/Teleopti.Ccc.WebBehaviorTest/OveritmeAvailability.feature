@@ -64,7 +64,7 @@ Scenario: Default overtime availability on shift
 	| Start time | 18:00 |
 	| End time   | 19:00 |
 @ignore
-Scenario: Default overtime availability on exsiting overtime availability
+Scenario: Default overtime availability on existing overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
 	| Field      | Value      |
