@@ -68,7 +68,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreSame(testScenario, target.Scenario);
 			Assert.AreEqual(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, target.FunctionPath);
 			target.MainLayers().Should().Be.Empty();
+			target.OvertimeLayers().Should().Be.Empty();
+			target.PersonalLayers().Should().Be.Empty();
 			target.ShiftCategory.Should().Be.Null();
+			target.DayOff().Should().Be.Null();
 			Assert.IsNull(target.CreatedBy);
 			Assert.IsNull(target.UpdatedBy);
 			Assert.IsNull(target.CreatedOn);
@@ -533,6 +536,25 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			target.AssignedWithDayOff(null)
 						.Should().Be.True();
+		}
+
+		[Test]
+		public void ClearShouldRemoveEverything()
+		{
+			var activity = ActivityFactory.CreateActivity("hej");
+			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			target.AddOvertimeLayer(activity, period, null);
+			target.AddPersonalLayer(activity, period);
+			target.SetMainShiftLayers(new List<IMainShiftLayer> {new MainShiftLayer(activity, period)},
+			                          ShiftCategoryFactory.CreateShiftCategory("cat"));
+			target.Clear();
+			target.OvertimeLayers().Should().Be.Empty();
+			target.PersonalLayers().Should().Be.Empty();
+			target.MainLayers().Should().Be.Empty();
+
+			target.SetDayOff(DayOffFactory.CreateDayOff());
+			target.Clear();
+			target.DayOff().Should().Be.Null();
 		}
 	}
 }

@@ -33,6 +33,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 		}
 
+		public virtual void Clear()
+		{
+			ClearMainLayers();
+			ClearOvertimeLayers();
+			ClearPersonalLayers();
+			SetDayOff(null);
+		}
+
 		public virtual DateOnly Date { get; protected set; }
 
 		public virtual DateTimePeriod Period

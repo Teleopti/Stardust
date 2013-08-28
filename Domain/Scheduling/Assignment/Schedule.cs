@@ -144,23 +144,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
         }
 
-        public void RemovePersonAssignment(IScheduleData persistableScheduleData)
-        {
-            lock (lockObject)
-            {
-                var pAss = persistableScheduleData as IPersonAssignment;
-
-                if(pAss != null)
-                    _scheduleDataCollection.Remove(persistableScheduleData);         
-            }
-        }
-
         public bool Contains(IScheduleData scheduleData)
         {
             return ScheduleDataInternalCollection().Contains(scheduleData);
         }
-
-
 
         /// <summary>
         /// Returns the total period of all IScheduledata, even if its not in the projection
