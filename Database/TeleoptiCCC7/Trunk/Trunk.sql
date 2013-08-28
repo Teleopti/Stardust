@@ -1140,3 +1140,12 @@ GO
 
 ALTER TABLE [ReadModel].[ScheduledResources] ADD  CONSTRAINT [DF_ScheduledResources_Heads]  DEFAULT ((0)) FOR [Heads]
 GO
+
+
+----------------  
+--Name: Robin Karlsson
+--Date: 2013-08-28
+--Desc: Truncate read model for projected layers to force load of scheduled resources
+---------------- 
+TRUNCATE TABLE [ReadModel].[ScheduleProjectionReadOnly]
+GO
