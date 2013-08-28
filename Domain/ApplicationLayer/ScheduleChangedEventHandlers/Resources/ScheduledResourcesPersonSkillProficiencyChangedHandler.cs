@@ -33,36 +33,41 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 			var oldResources = oldSchedule.ToResourceLayers(configurableIntervalLength);
 			var skillsBefore = @event.SkillsBefore.Where(s => s.Active).ToList();
 
-			if (skillsBefore.Count > 0)
-			{
-				var combinationBefore =
-					new SkillCombination(SkillCombination.ToKey(skillsBefore.Select(s => s.SkillId)),
-					                     new ISkill[] {}, period,
-					                     skillsBefore.Where(s => s.Proficiency != 1d)
-					                                 .ToDictionary(k => k.SkillId, v => v.Proficiency));
-				foreach (var resourceLayer in oldResources)
+			_scheduledResourcesReadModelStorage.Update(@event.Datasource, @event.BusinessUnitId, storage =>
 				{
-					_scheduledResourcesReadModelStorage.RemoveResource(resourceLayer, combinationBefore);
-				}
-			}
 
-			var personSkill = skillsBefore.First(s => s.SkillId == @event.SkillId);
-			skillsBefore.Remove(personSkill);
-			skillsBefore.Add(new PersonSkillDetail
-				{
-					Active = personSkill.Active,
-					Proficiency = @event.ProficiencyAfter,
-					SkillId = @event.SkillId
+					if (skillsBefore.Count > 0)
+					{
+						var combinationBefore =
+							new SkillCombination(SkillCombination.ToKey(skillsBefore.Select(s => s.SkillId)),
+							                     new ISkill[] {}, period,
+							                     skillsBefore.Where(s => s.Proficiency != 1d)
+							                                 .ToDictionary(k => k.SkillId, v => v.Proficiency));
+						foreach (var resourceLayer in oldResources)
+						{
+							storage.RemoveResource(resourceLayer, combinationBefore);
+						}
+					}
+
+					var personSkill = skillsBefore.First(s => s.SkillId == @event.SkillId);
+					skillsBefore.Remove(personSkill);
+					skillsBefore.Add(new PersonSkillDetail
+						{
+							Active = personSkill.Active,
+							Proficiency = @event.ProficiencyAfter,
+							SkillId = @event.SkillId
+						});
+					var combinationAfter =
+						new SkillCombination(SkillCombination.ToKey(skillsBefore.Select(s => s.SkillId)),
+						                     new ISkill[] {}, period,
+						                     skillsBefore.Where(s => s.Proficiency != 1d)
+						                                 .ToDictionary(k => k.SkillId, v => v.Proficiency));
+					foreach (var resourceLayer in oldResources)
+					{
+						storage.AddResource(resourceLayer, combinationAfter);
+					}
+
 				});
-			var combinationAfter =
-				new SkillCombination(SkillCombination.ToKey(skillsBefore.Select(s => s.SkillId)),
-									 new ISkill[] { }, period, 
-									 skillsBefore.Where(s => s.Proficiency != 1d)
-										   .ToDictionary(k => k.SkillId, v => v.Proficiency));
-			foreach (var resourceLayer in oldResources)
-			{
-				_scheduledResourcesReadModelStorage.AddResource(resourceLayer, combinationAfter);
-			}
 		}
 
 	}

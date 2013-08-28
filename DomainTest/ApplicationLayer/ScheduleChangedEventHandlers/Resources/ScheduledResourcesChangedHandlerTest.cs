@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -6,10 +7,12 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.Resources
 {
@@ -22,6 +25,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		private ISkillRepository _skillRepository;
 		private IScheduleProjectionReadOnlyRepository _scheduleProjectionRepository;
 		private IPublishEventsFromEventHandlers _bus;
+		private ControllableEventSyncronization _eventSyncronization;
+		private IMessageBrokerSender _messageBroker;
 		private ISkill _skill;
 		private IPerson _person;
 		
@@ -38,12 +43,59 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			_bus = MockRepository.GenerateMock<IPublishEventsFromEventHandlers>();
 			_scheduleProjectionRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
+			_eventSyncronization = new ControllableEventSyncronization();
+			_messageBroker = MockRepository.GenerateMock<IMessageBrokerSender>();
+
 			_skill = SkillFactory.CreateSkill("Phone");
 			_skill.Activity.SetId(Guid.NewGuid());
 			_skill.SetId(Guid.NewGuid());
 			_person = PersonFactory.CreatePersonWithPersonPeriod(_date, new[] {_skill});
 
-			_target = new ScheduledResourcesChangedHandler(_personRepository, _skillRepository, _scheduleProjectionRepository, new ScheduledResourcesReadModelUpdater(_storage), new PersonSkillProvider(), _bus);
+			_target = new ScheduledResourcesChangedHandler(_personRepository, _skillRepository, _scheduleProjectionRepository, new ScheduledResourcesReadModelUpdater(_storage, _messageBroker, _eventSyncronization), new PersonSkillProvider(), _bus);
+		}
+
+		[Test]
+		public void ShouldSendASingleBrokerMessageWhenDone()
+		{
+			_personRepository.Stub(x => x.Get(_personId)).Return(_person);
+			_scheduleProjectionRepository.Stub(x => x.ForPerson(_date, _personId, _scenarioId))
+							 .Return(new ProjectionChangedEventLayer[] { });
+
+			var period = new DateTimePeriod(_period.StartDateTime, _period.StartDateTime.AddHours(1));
+
+			var @event = new ProjectionChangedEvent
+				{
+					BusinessUnitId = Guid.NewGuid(),
+					Datasource = "datasource",
+					PersonId = _personId,
+					ScenarioId = _scenarioId,
+					ScheduleDays =
+						new[]
+							{
+								new ProjectionChangedEventScheduleDay
+									{
+										Date = _date,
+										Layers = new[]
+											{
+												new ProjectionChangedEventLayer
+													{
+														PayloadId = _skill.Activity.Id.GetValueOrDefault(),
+														StartDateTime = period.StartDateTime,
+														EndDateTime = period.EndDateTime,
+														RequiresSeat = false
+													}
+											}
+									}
+							}
+				};
+
+			_target.Handle(@event);
+
+			_messageBroker.AssertWasNotCalled(x => x.SendEventMessage("datasource", @event.BusinessUnitId, period.StartDateTime, period.EndDateTime, Guid.Empty, Guid.Empty, typeof(IScheduledResourcesReadModel), DomainUpdateType.NotApplicable, null), o => o.Repeat.Times(0));
+
+			_eventSyncronization.RunNow();
+
+			_messageBroker.AssertWasCalled(x => x.SendEventMessage("datasource", @event.BusinessUnitId, period.StartDateTime, period.EndDateTime, Guid.Empty, Guid.Empty, typeof(IScheduledResourcesReadModel), DomainUpdateType.NotApplicable, null), o => o.Repeat.Once());
 		}
 
 		[Test]
@@ -228,5 +280,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			_bus.AssertWasCalled(x => x.Publish(new ScheduledResourcesChangedEvent()), o => o.IgnoreArguments());
 		}
+
 	}
+
 }

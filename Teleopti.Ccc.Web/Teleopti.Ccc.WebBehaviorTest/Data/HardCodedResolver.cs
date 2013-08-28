@@ -42,8 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 							new SkillRepository(CurrentUnitOfWork.Make()),
 							new ScheduleProjectionReadOnlyRepository(CurrentUnitOfWork.Make()),
 							new ScheduledResourcesReadModelUpdater(
-								new ScheduledResourcesReadModelStorage(CurrentUnitOfWork.Make())
-								),
+								new ScheduledResourcesReadModelStorage(CurrentUnitOfWork.Make()), TODO, TODO),
 							new PersonSkillProvider(),
 							new EventPublisher(this))
 					};

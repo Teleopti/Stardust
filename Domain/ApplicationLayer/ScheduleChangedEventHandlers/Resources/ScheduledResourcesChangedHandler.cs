@@ -38,28 +38,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 				return;
 			}
 
-			configurableIntervalLength = _skillRepository.MinimumResolution();
-			foreach (var scheduleDay in @event.ScheduleDays)
-			{
-				var date = new DateOnly(scheduleDay.Date);
-				var combination = _personSkillProvider.SkillsOnPersonDate(person, date);
-
-				if (!@event.IsInitialLoad)
+			_scheduledResourcesReadModelStorage.Update(@event.Datasource, @event.BusinessUnitId, storage =>
 				{
-					var oldSchedule = _readModelFinder.ForPerson(date, @event.PersonId, @event.ScenarioId);
-					var oldResources = oldSchedule.ToResourceLayers(configurableIntervalLength);
-					foreach (var resourceLayer in oldResources)
+
+					configurableIntervalLength = _skillRepository.MinimumResolution();
+					foreach (var scheduleDay in @event.ScheduleDays)
 					{
-						_scheduledResourcesReadModelStorage.RemoveResource(resourceLayer, combination);
-					}
-				}
+						var date = new DateOnly(scheduleDay.Date);
+						var combination = _personSkillProvider.SkillsOnPersonDate(person, date);
 
-				var resources = scheduleDay.Layers.ToResourceLayers(configurableIntervalLength);
-				foreach (var resourceLayer in resources)
-				{
-					_scheduledResourcesReadModelStorage.AddResource(resourceLayer, combination);
-				}
-			}
+						if (!@event.IsInitialLoad)
+						{
+							var oldSchedule = _readModelFinder.ForPerson(date, @event.PersonId, @event.ScenarioId);
+							var oldResources = oldSchedule.ToResourceLayers(configurableIntervalLength);
+							foreach (var resourceLayer in oldResources)
+							{
+								storage.RemoveResource(resourceLayer, combination);
+							}
+						}
+
+						var resources = scheduleDay.Layers.ToResourceLayers(configurableIntervalLength);
+						foreach (var resourceLayer in resources)
+						{
+							storage.AddResource(resourceLayer, combination);
+						}
+					}
+
+				});
 
 			_bus.Publish(new ScheduledResourcesChangedEvent
 				{

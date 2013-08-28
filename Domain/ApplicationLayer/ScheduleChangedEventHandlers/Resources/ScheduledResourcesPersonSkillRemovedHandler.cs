@@ -35,34 +35,39 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 			var oldResources = oldSchedule.ToResourceLayers(configurableIntervalLength);
 			var skillsBefore = @event.SkillsBefore.Where(s => s.Active).ToList();
 
-			if (skillsBefore.Count > 0)
-			{
-				var combinationBefore =
-					new SkillCombination(SkillCombination.ToKey(skillsBefore.Select(s => s.SkillId)),
-					                     new ISkill[] {}, period,
-					                     skillsBefore.Where(s => s.Proficiency != 1d)
-					                                 .ToDictionary(k => k.SkillId, v => v.Proficiency));
-				foreach (var resourceLayer in oldResources)
+			_scheduledResourcesReadModelStorage.Update(@event.Datasource, @event.BusinessUnitId, storage =>
 				{
-					_scheduledResourcesReadModelStorage.RemoveResource(resourceLayer, combinationBefore);
-				}
-			}
 
-			var foundskillDetail = skillsBefore.FirstOrDefault(s => s.SkillId == @event.SkillId);
-			skillsBefore.Remove(foundskillDetail);
+					if (skillsBefore.Count > 0)
+					{
+						var combinationBefore =
+							new SkillCombination(SkillCombination.ToKey(skillsBefore.Select(s => s.SkillId)),
+							                     new ISkill[] {}, period,
+							                     skillsBefore.Where(s => s.Proficiency != 1d)
+							                                 .ToDictionary(k => k.SkillId, v => v.Proficiency));
+						foreach (var resourceLayer in oldResources)
+						{
+							storage.RemoveResource(resourceLayer, combinationBefore);
+						}
+					}
 
-			if (skillsBefore.Count > 0)
-			{
-				var combinationAfter =
-					new SkillCombination(SkillCombination.ToKey(skillsBefore.Select(s => s.SkillId)),
-					                     new ISkill[] {}, period,
-					                     skillsBefore.Where(s => s.Proficiency != 1d)
-					                                 .ToDictionary(k => k.SkillId, v => v.Proficiency));
-				foreach (var resourceLayer in oldResources)
-				{
-					_scheduledResourcesReadModelStorage.AddResource(resourceLayer, combinationAfter);
-				}
-			}
+					var foundskillDetail = skillsBefore.FirstOrDefault(s => s.SkillId == @event.SkillId);
+					skillsBefore.Remove(foundskillDetail);
+
+					if (skillsBefore.Count > 0)
+					{
+						var combinationAfter =
+							new SkillCombination(SkillCombination.ToKey(skillsBefore.Select(s => s.SkillId)),
+							                     new ISkill[] {}, period,
+							                     skillsBefore.Where(s => s.Proficiency != 1d)
+							                                 .ToDictionary(k => k.SkillId, v => v.Proficiency));
+						foreach (var resourceLayer in oldResources)
+						{
+							storage.AddResource(resourceLayer, combinationAfter);
+						}
+					}
+
+				});
 		}
 
 	}
