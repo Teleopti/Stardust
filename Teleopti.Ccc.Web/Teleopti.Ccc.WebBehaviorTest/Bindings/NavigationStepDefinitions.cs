@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
@@ -137,7 +138,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void GivenIAmViewingTeamScheduleForTomorrow()
 		{
 			TestControllerMethods.LogonWithReadModelsUpdated();
-			Navigation.GotoTeamSchedule(DateTime.Today.AddDays(1));
+			Navigation.GotoTeamSchedule(DateOnlyForBehaviorTests.TestToday.Date.AddDays(1));
 		}
 
 		[When(@"I view team schedule for '(.*)'")]
