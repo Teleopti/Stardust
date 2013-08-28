@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 {
 	public class ScheduledResourcesPersonTerminatedHandler : IHandleEvent<PersonTerminatedEvent>
 	{
-		private readonly IScheduledResourcesReadModelPersister _scheduledResourcesReadModelStorage;
+		private readonly IScheduledResourcesReadModelUpdater _scheduledResourcesReadModelStorage;
 		private readonly IScheduleProjectionReadOnlyRepository _readModelFinder;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private int configurableIntervalLength = 15;
 
-		public ScheduledResourcesPersonTerminatedHandler(IScheduledResourcesReadModelPersister scheduledResourcesReadModelStorage, IScheduleProjectionReadOnlyRepository readModelFinder, ISkillRepository skillRepository, IScenarioRepository scenarioRepository)
+		public ScheduledResourcesPersonTerminatedHandler(IScheduledResourcesReadModelUpdater scheduledResourcesReadModelStorage, IScheduleProjectionReadOnlyRepository readModelFinder, ISkillRepository skillRepository, IScenarioRepository scenarioRepository)
 		{
 			_scheduledResourcesReadModelStorage = scheduledResourcesReadModelStorage;
 			_readModelFinder = readModelFinder;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 														 .ToDictionary(k => k.SkillId, v => v.Proficiency));
 					foreach (var resourceLayer in oldResources)
 					{
-						removeResourceFromInterval(resourceLayer, combinationBefore);
+						_scheduledResourcesReadModelStorage.RemoveResource(resourceLayer, combinationBefore);
 					}
 				}
 			}
@@ -66,33 +66,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 														 .ToDictionary(k => k.SkillId, v => v.Proficiency));
 					foreach (var resourceLayer in oldResources)
 					{
-						addResourceToInterval(resourceLayer, combinationBefore);
+						_scheduledResourcesReadModelStorage.AddResource(resourceLayer, combinationBefore);
 					}
 				}
 			}
 		}
 
-		private void addResourceToInterval(ResourceLayer resourceLayer, SkillCombination combination)
-		{
-			var resourceId = _scheduledResourcesReadModelStorage.AddResources(resourceLayer.PayloadId, resourceLayer.RequiresSeat,
-															 combination.Key, resourceLayer.Period,
-															 resourceLayer.Resource, 1);
-			foreach (var skillEfficiency in combination.SkillEfficiencies)
-			{
-				_scheduledResourcesReadModelStorage.AddSkillEfficiency(resourceId, skillEfficiency.Key, skillEfficiency.Value);
-			}
-		}
-
-		private void removeResourceFromInterval(ResourceLayer resourceLayer, SkillCombination combination)
-		{
-			var resourceId = _scheduledResourcesReadModelStorage.RemoveResources(resourceLayer.PayloadId, combination.Key,
-																resourceLayer.Period, resourceLayer.Resource, 1);
-			if (!resourceId.HasValue) return;
-
-			foreach (var skillEfficiency in combination.SkillEfficiencies)
-			{
-				_scheduledResourcesReadModelStorage.RemoveSkillEfficiency(resourceId.Value, skillEfficiency.Key, skillEfficiency.Value);
-			}
-		}
 	}
 }

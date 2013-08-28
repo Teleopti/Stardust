@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 {
 	public class ScheduledResourcesPersonDeletedHandler : IHandleEvent<PersonDeletedEvent>
 	{
-		private readonly IScheduledResourcesReadModelPersister _scheduledResourcesReadModelStorage;
+		private readonly IScheduledResourcesReadModelUpdater _scheduledResourcesReadModelStorage;
 		private readonly IScheduleProjectionReadOnlyRepository _readModelFinder;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private int configurableIntervalLength = 15;
 
-		public ScheduledResourcesPersonDeletedHandler(IScheduledResourcesReadModelPersister scheduledResourcesReadModelStorage, IScheduleProjectionReadOnlyRepository readModelFinder, ISkillRepository skillRepository, IScenarioRepository scenarioRepository)
+		public ScheduledResourcesPersonDeletedHandler(IScheduledResourcesReadModelUpdater scheduledResourcesReadModelStorage, IScheduleProjectionReadOnlyRepository readModelFinder, ISkillRepository skillRepository, IScenarioRepository scenarioRepository)
 		{
 			_scheduledResourcesReadModelStorage = scheduledResourcesReadModelStorage;
 			_readModelFinder = readModelFinder;
@@ -45,22 +45,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 														 .ToDictionary(k => k.SkillId, v => v.Proficiency));
 					foreach (var resourceLayer in oldResources)
 					{
-						removeResourceFromInterval(resourceLayer, combinationBefore);
+						_scheduledResourcesReadModelStorage.RemoveResource(resourceLayer, combinationBefore);
 					}
 				}
 			}
 		}
 
-		private void removeResourceFromInterval(ResourceLayer resourceLayer, SkillCombination combination)
-		{
-			var resourceId = _scheduledResourcesReadModelStorage.RemoveResources(resourceLayer.PayloadId, combination.Key,
-																resourceLayer.Period, resourceLayer.Resource, 1);
-			if (!resourceId.HasValue) return;
-
-			foreach (var skillEfficiency in combination.SkillEfficiencies)
-			{
-				_scheduledResourcesReadModelStorage.RemoveSkillEfficiency(resourceId.Value, skillEfficiency.Key, skillEfficiency.Value);
-			}
-		}
 	}
 }

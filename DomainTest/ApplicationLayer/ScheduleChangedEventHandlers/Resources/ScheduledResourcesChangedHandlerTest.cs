@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_skill.SetId(Guid.NewGuid());
 			_person = PersonFactory.CreatePersonWithPersonPeriod(_date, new[] {_skill});
 
-			_target = new ScheduledResourcesChangedHandler(_personRepository, _skillRepository, _scheduleProjectionRepository, _storage, new PersonSkillProvider(), _bus);
+			_target = new ScheduledResourcesChangedHandler(_personRepository, _skillRepository, _scheduleProjectionRepository, new ScheduledResourcesReadModelUpdater(_storage), new PersonSkillProvider(), _bus);
 		}
 
 		[Test]

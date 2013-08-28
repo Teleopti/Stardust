@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_skill = SkillFactory.CreateSkill("Skill1");
 			_skill.SetId(Guid.NewGuid());
 			_scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
-			_target = new ScheduledResourcesPersonSkillRemovedHandler(_storage, _readModelFinder, _skillRepository, _scenarioRepository);
+			_target = new ScheduledResourcesPersonSkillRemovedHandler(new ScheduledResourcesReadModelUpdater(_storage), _readModelFinder, _skillRepository, _scenarioRepository);
 		}
 
 		[Test]
