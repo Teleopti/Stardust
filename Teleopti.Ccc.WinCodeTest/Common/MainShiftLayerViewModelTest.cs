@@ -251,12 +251,12 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
-		public void UpdatePeriod_WhenCalled_ShouldCallReplaceActivityOnObserver()
+		public void UpdatePeriod_WhenCalled_ShouldCallUpdateAllMovedLayersOnObserver()
 		{
 			var layerObserver = MockRepository.GenerateStrictMock<ILayerViewModelObserver>();
 
 			_target = new MainShiftLayerViewModel(layerObserver, _layerWithPayload, null, null, null);
-			layerObserver.Expect(l => l.ReplaceActivity(_target, _layerWithPayload, _target.SchedulePart));
+			layerObserver.Expect(l => l.UpdateAllMovedLayers());
 
 			_target.IsChanged = true;
 			_target.UpdatePeriod();

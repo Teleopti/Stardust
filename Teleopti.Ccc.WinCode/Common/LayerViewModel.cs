@@ -63,6 +63,12 @@ namespace Teleopti.Ccc.WinCode.Common
 			}
 		}
 
+		public void UpdateModel()
+		{
+			Replace();
+			IsChanged = false;
+		}
+
 		public bool IsSelected
 		{
 			get { return _isSelected; }
@@ -234,7 +240,10 @@ namespace Teleopti.Ccc.WinCode.Common
 		{
 			if (IsChanged)
 			{
-				Replace();
+				if (ParentObservingCollection != null)
+				{
+					ParentObservingCollection.UpdateAllMovedLayers();
+				}
 				if (_part != null)
 				{
 					new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
@@ -301,7 +310,6 @@ namespace Teleopti.Ccc.WinCode.Common
 				MoveLayer(t);
 				IsChanged = true;
 			}
-
 		}
 		public void EndTimeChanged(FrameworkElement parent, double change)
 		{
@@ -319,6 +327,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		public void MoveLayer(TimeSpan span)
 		{
+			IsChanged = true;
 			if (ParentObservingCollection != null)
 			{
 				ParentObservingCollection.MoveAllLayers(this, span);

@@ -6475,6 +6475,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			try
 			{
 				refreshEntitiesUsingMessageBroker();
+				_schedulerState.Schedules.ForEach(p => p.Value.ForceRecalculationOfContractTimeAndDaysOff());
 				RecalculateResources();
 			}
 			catch (DataSourceException dataSourceException)

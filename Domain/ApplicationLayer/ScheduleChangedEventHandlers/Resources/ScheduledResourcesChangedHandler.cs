@@ -8,7 +8,7 @@ using log4net;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources
 {
-	public class ScheduledResourcesChangedHandler : IHandleEvent<ProjectionChangedEvent>
+	public class ScheduledResourcesChangedHandler : IHandleEvent<ProjectionChangedEvent>, IHandleEvent<ProjectionChangedEventForScheduleProjection>
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillRepository _skillRepository;
@@ -29,7 +29,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 			_bus = bus;
 		}
 
+		public void Handle(ProjectionChangedEventForScheduleProjection @event)
+		{
+			createReadModel(@event);
+		}
+
 		public void Handle(ProjectionChangedEvent @event)
+		{
+			createReadModel(@event);
+		}
+
+		private void createReadModel(ProjectionChangedEventBase @event)
 		{
 			var person = _personRepository.Get(@event.PersonId);
 			if (person == null)

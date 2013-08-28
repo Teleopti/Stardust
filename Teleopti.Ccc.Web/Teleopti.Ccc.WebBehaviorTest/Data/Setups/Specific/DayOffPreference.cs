@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 		protected override DateTime ApplyDate(CultureInfo cultureInfo)
 		{
-			return DateHelper.GetFirstDateInWeek(DateTime.Now.Date, cultureInfo);
+			return DateHelper.GetFirstDateInWeek(DateOnlyForBehaviorTests.TestToday.Date, cultureInfo);
 		}
 	}
 }

@@ -25,25 +25,97 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    public bool IsBlockInSteadyState(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions)
         {
             if (teamBlockInfo == null || schedulingOptions == null) return false ;
-            //if (schedulingOptions == null ) throw new ArgumentNullException("schedulingOptions");
             var dayList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
             if (dayList.Count > 0)
             {
                 var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dayList[0]).ToList();
                 if (matrixList.Any())
                 {
-                    var sampleScheduleDay = matrixList[0].GetScheduleDayByKey(dayList[0]).DaySchedulePart();
+                    var sampleScheduleDay = getValidSampleDay(matrixList[0],dayList);
+                    if (sampleScheduleDay == null) return true;
                     if (schedulingOptions.UseTeamBlockSameStartTime)
                         return verifySameStartTime(teamBlockInfo, dayList, sampleScheduleDay);
                     if (schedulingOptions.UseTeamBlockSameShift)
                         return verifySameShift(teamBlockInfo, dayList, sampleScheduleDay);
+                    if(schedulingOptions.UseTeamBlockSameEndTime )
+                        return verifySameEndTime(teamBlockInfo, dayList, sampleScheduleDay);
+                    if(schedulingOptions.UseTeamBlockSameShiftCategory  )
+                        return verifySameShiftCategory(teamBlockInfo, dayList, sampleScheduleDay);
                 }
             }
             
             return true;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        private IScheduleDay getValidSampleDay(IScheduleMatrixPro matrix, IList<DateOnly> dayList)
+        {
+            foreach (var dateOnly in dayList)
+            {
+                var scheduleDay = matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
+                if (isValidScheduleDay(scheduleDay  ))
+                    return scheduleDay;
+            }
+            return null;
+        }
+
+        private static bool isValidScheduleDay(IScheduleDay scheduleDay)
+        {
+            return scheduleDay.IsScheduled() && (scheduleDay.SignificantPart() != SchedulePartView.DayOff) &&
+                   (scheduleDay.SignificantPart() != SchedulePartView.ContractDayOff) &&
+                   (scheduleDay.SignificantPart() != SchedulePartView.FullDayAbsence) &&
+                   (scheduleDay.SignificantPart() != SchedulePartView.Absence);
+        }
+
+        private bool verifySameShiftCategory(ITeamBlockInfo teamBlockInfo, IList<DateOnly> dayList, IScheduleDay sampleScheduleDay)
+        {
+            var sampleShiftCategory = getShiftCategory(sampleScheduleDay);
+            if (sampleShiftCategory != null)
+            {
+                foreach (var day in dayList)
+                    foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(day))
+                    {
+                        var scheduleDay = matrix.GetScheduleDayByKey(day).DaySchedulePart();
+                        if (isValidScheduleDay(scheduleDay))
+                        {
+                            var shiftCategory = getShiftCategory(scheduleDay);
+                            if (shiftCategory != null)
+                            {
+                                if (shiftCategory!=sampleShiftCategory)
+                                    return false;
+                            }
+
+                        }
+
+                    }
+            }
+            return true;
+        }
+        
+        private bool verifySameEndTime(ITeamBlockInfo teamBlockInfo, IList<DateOnly> dayList, IScheduleDay sampleScheduleDay)
+        {
+            var dateTimePeriod = getShiftPeriod(sampleScheduleDay.GetEditorShift());
+            if (dateTimePeriod.HasValue)
+            {
+                var sampleEndTime = dateTimePeriod.Value.EndDateTimeLocal(sampleScheduleDay.TimeZone);
+                foreach (var day in dayList)
+                    foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(day))
+                    {
+                        var scheduleDay = matrix.GetScheduleDayByKey(day).DaySchedulePart();
+                        if (isValidScheduleDay(scheduleDay ))
+                        {
+                            var endDateTime = getEndTimeLocal(scheduleDay);
+                            if (endDateTime != DateTime.MinValue && endDateTime.TimeOfDay != sampleEndTime.TimeOfDay)
+                                return false;
+
+                        }
+
+                    }
+            }
+
+            return true;
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool IsBlockScheduled(ITeamBlockInfo teamBlockInfo)
         {
             foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
@@ -53,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return true;
         }
 
-        private static bool verifySameStartTime(ITeamBlockInfo teamBlockInfo, IEnumerable<DateOnly> dayList, IScheduleDay sampleScheduleDay)
+        private bool verifySameStartTime(ITeamBlockInfo teamBlockInfo, IEnumerable<DateOnly> dayList, IScheduleDay sampleScheduleDay)
         {
             var dateTimePeriod = getShiftPeriod(sampleScheduleDay.GetEditorShift());
             if (dateTimePeriod.HasValue)
@@ -63,10 +135,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                     foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(day))
                     {
                         var scheduleDay = matrix.GetScheduleDayByKey(day).DaySchedulePart();
-                        if (scheduleDay.IsScheduled() && (scheduleDay.SignificantPart() != SchedulePartView.DayOff) && (scheduleDay.SignificantPart() != SchedulePartView.ContractDayOff) && (scheduleDay.SignificantPart() != SchedulePartView.FullDayAbsence) && (scheduleDay.SignificantPart() != SchedulePartView.Absence ))
+                        if (isValidScheduleDay(scheduleDay))
                         {
                             var startDateTime = getStartTimeLocal(scheduleDay);
-                            //VERIFY IT FROM MICKE
                             if (startDateTime != DateTime.MinValue && startDateTime.TimeOfDay != sampleStartTime.TimeOfDay)
                                 return false;
                             
@@ -78,12 +149,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return true;
         }
 
-        private static DateTime getStartTimeLocal(IScheduleDay scheduleDay)
+        private DateTime getStartTimeLocal(IScheduleDay scheduleDay)
         {
             var dateTimePeriod = getShiftPeriod(scheduleDay.GetEditorShift());
             if (dateTimePeriod.HasValue)
             {
                 return dateTimePeriod.Value.StartDateTimeLocal(scheduleDay.TimeZone);
+            }
+            return DateTime.MinValue ;
+        }
+        
+        private DateTime getEndTimeLocal(IScheduleDay scheduleDay)
+        {
+            var dateTimePeriod = getShiftPeriod(scheduleDay.GetEditorShift());
+            if (dateTimePeriod.HasValue)
+            {
+                return dateTimePeriod.Value.EndDateTimeLocal(scheduleDay.TimeZone);
             }
             return DateTime.MinValue ;
         }
@@ -94,6 +175,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             {
 				return editableShift.ProjectionService().CreateProjection().Period();
             }
+            return null;
+        }
+
+        private static IShiftCategory getShiftCategory(IScheduleDay sampleScheduleDay)
+        {
+            var personAssignment = sampleScheduleDay.PersonAssignment();
+            if (personAssignment != null && personAssignment.ShiftCategory != null)
+                return personAssignment.ShiftCategory;    
             return null;
         }
 

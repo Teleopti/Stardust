@@ -12,15 +12,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         private readonly IList<ITeam> _teamCollection;
         private readonly DateOnlyPeriod _dateOnlyPeriod;
         
-		public PersonBelongsToTeamSpecification(DateOnly dateOnly, ITeam team) : this(new DateOnlyPeriod(dateOnly,dateOnly), team)
-		{
-		}
-
-		public PersonBelongsToTeamSpecification(DateOnly dateOnly, IEnumerable<ITeam> teams)
-			: this(new DateOnlyPeriod(dateOnly, dateOnly), teams)
-		{
-		}
-
         public PersonBelongsToTeamSpecification(DateOnlyPeriod period, ITeam team) : this(period,new []{team})
         {
         }

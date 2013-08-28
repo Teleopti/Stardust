@@ -174,6 +174,44 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		}
 
 		[Test]
+		public void ShouldAddNewResourceForInitialLoadOfProjectedSchedule()
+		{
+			_personRepository.Stub(x => x.Get(_personId)).Return(_person);
+			_skillRepository.Stub(x => x.MinimumResolution()).Return(15);
+			_storage.Stub(x => x.AddResources(_skill.Activity.Id.GetValueOrDefault(), false, _skill.Id.ToString(), _period, 1, 1))
+					.Return(153);
+			_scheduleProjectionRepository.Stub(x => x.ForPerson(_date, _personId, _scenarioId))
+										 .Return(new ProjectionChangedEventLayer[] { });
+
+			_target.Handle(new ProjectionChangedEventForScheduleProjection
+			{
+				IsInitialLoad = true,
+				PersonId = _personId,
+				ScenarioId = _scenarioId,
+				ScheduleDays =
+					new[]
+							{
+								new ProjectionChangedEventScheduleDay
+									{
+										Date = _date,
+										Layers = new[]
+											{
+												new ProjectionChangedEventLayer
+						                             {
+							                             PayloadId = _skill.Activity.Id.GetValueOrDefault(),
+							                             StartDateTime = _period.StartDateTime,
+							                             EndDateTime = _period.EndDateTime,
+							                             RequiresSeat = false
+						                             }
+											}
+									}
+							}
+			});
+
+			_bus.AssertWasCalled(x => x.Publish(new ScheduledResourcesChangedEvent()), o => o.IgnoreArguments());
+		}
+
+		[Test]
 		public void ShouldAddNewResource()
 		{
 			_personRepository.Stub(x => x.Get(_personId)).Return(_person);

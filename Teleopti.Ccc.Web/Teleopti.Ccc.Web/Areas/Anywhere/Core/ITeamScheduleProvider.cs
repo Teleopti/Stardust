@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	public interface ITeamScheduleProvider
 	{
-		IEnumerable<PersonScheduleDayReadModel> TeamSchedule(Guid teamId, DateTime date);
+		IEnumerable<Shift> TeamSchedule(Guid teamId, DateTime date);
 	}
 }

@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 							CustomerName = _licenseActivator.CustomerName,
 							ShowChangePassword = showChangePassword(),
 							HasAsmPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
-							ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.PMDesignator == "PM"
+							ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t")
 						};
 		}
 

@@ -20,11 +20,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             foreach (IPerson person in _persons)
             { 
-                IList<IPersonPeriod> periodsToday =  person.PersonPeriods(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
-                if(periodsToday.Count == 0)
-                    continue;
-                IPersonPeriod currentPeriod = periodsToday[0];
-                foreach (IPersonSkill personSkill in currentPeriod.PersonSkillCollection)
+                var periodToday =  person.Period(DateOnly.Today);
+                if(periodToday == null) continue;
+
+                foreach (IPersonSkill personSkill in periodToday.PersonSkillCollection)
                     extractedSkills.Add(personSkill.Skill);
             }
             return extractedSkills.ToList();

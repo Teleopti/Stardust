@@ -628,13 +628,9 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestStatusCheckerWithScheduleDictionary.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeSwapDetail.cs" />
     <Compile Include="AgentInfo\Requests\TextRequest.cs" />
-    <Compile Include="AgentInfo\TeamBelongsToSiteSpecification.cs" />
     <Compile Include="AgentInfo\ExternalLogOn.cs" />
-    <Compile Include="AgentInfo\PersonBelongsToAnyBusinessUnitSpecification.cs" />
     <Compile Include="AgentInfo\Requests\Request.cs" />
-    <Compile Include="AgentInfo\PersonBelongsToBusinessUnitSpecification.cs" />
     <Compile Include="AgentInfo\PersonBelongsToRoleSpecification.cs" />
-    <Compile Include="AgentInfo\PersonBelongsToSiteSpecification.cs" />
     <Compile Include="AgentInfo\PersonBelongsToTeamSpecification.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -972,6 +968,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetToShiftsGenerator.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ShiftCategoryRestrictionShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetSkillActivityChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TimeLimitsRestrictionShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ValidDateTimePeriodShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\WorkTimeLimitationShiftFilter.cs" />
