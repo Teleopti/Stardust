@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 Expect.Call(_absenceRequest.Period).Return(shortPeriod()).Repeat.AtLeastOnce();
                 Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(new List<IBudgetDay> { budgetDay });
                 Expect.Call(budgetDay.Allowance).Return(2d);
-                Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Once();
+                Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Times(2);
                 Expect.Call(budgetDay.IsClosed).Return(false);
                 Expect.Call(budgetDay.FulltimeEquivalentHours).Return(8d);
                 Expect.Call(_scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null)).IgnoreArguments().
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             }
             using (_mocks.Playback())
             {
-                Assert.IsTrue(_target.IsSatisfiedBy(_absenceRequest));
+                Assert.IsTrue(_target.IsSatisfied(_absenceRequest).IsValid);
             }
         }
 
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_absenceRequest.Period).Return(longPeriod()).Repeat.AtLeastOnce();
                 Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(new List<IBudgetDay>{budgetDay});
-                Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Twice();
+                Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Times(4);
                 Expect.Call(budgetDay.Allowance).Return(2d);
                 Expect.Call(budgetDay.IsClosed).Return(false);
                 Expect.Call(budgetDay.FulltimeEquivalentHours).Return(8d);
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             }
             using (_mocks.Playback())
             {
-                Assert.IsFalse(_target.IsSatisfiedBy(_absenceRequest));
+                Assert.IsFalse(_target.IsSatisfied(_absenceRequest).IsValid);
             }
         }
 
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             }
             using (_mocks.Playback())
             {
-                Assert.IsFalse(_target.IsSatisfiedBy(_absenceRequest));
+                Assert.IsFalse(_target.IsSatisfied(_absenceRequest).IsValid);
             }
         }
 
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             }
             using (_mocks.Playback())
             {
-                Assert.IsFalse(_target.IsSatisfiedBy(_absenceRequest));
+                Assert.IsFalse(_target.IsSatisfied(_absenceRequest).IsValid);
             }
         }
 

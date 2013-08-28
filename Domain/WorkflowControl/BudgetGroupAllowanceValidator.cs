@@ -17,12 +17,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
         public IValidatedRequest Validate(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
         {
-            var validatedRequest = new ValidatedRequest();
-            validatedRequest.IsValid = requiredForHandlingAbsenceRequest.BudgetGroupAllowanceSpecification.IsSatisfiedBy(absenceRequest);
-            validatedRequest.ValidationErrors = string.Empty;
-
-            if(!validatedRequest.IsValid)
-                validatedRequest.ValidationErrors = requiredForHandlingAbsenceRequest.BudgetGroupAllowanceCalculator.CheckBudgetGroup(absenceRequest);
+            var validatedRequest = requiredForHandlingAbsenceRequest.BudgetGroupAllowanceSpecification.IsSatisfied(absenceRequest);
 
             return validatedRequest;
         }
