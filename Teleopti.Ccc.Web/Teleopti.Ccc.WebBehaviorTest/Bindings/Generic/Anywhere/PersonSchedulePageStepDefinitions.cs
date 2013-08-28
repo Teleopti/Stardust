@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}'][style*='background-color: {2}']",
 				              shiftLayer.StartTime,
 				              shiftLayer.LengthMinutes(),
-				              ColorNameToCss(shiftLayer.Color)));
+				               ColorNameToCss(shiftLayer.Color)));
 		}
 
 		[Then(@"I should not see a shift layer with")]
@@ -51,13 +51,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertNotExists(
 				".shift",
 				string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}'][style*='background-color: {2}']",
-							  shiftLayer.StartTime,
-							  shiftLayer.LengthMinutes(),
-							  ColorNameToCss(shiftLayer.Color)));
+				              shiftLayer.StartTime,
+				              shiftLayer.LengthMinutes(),
+				              ColorNameToCss(shiftLayer.Color)));
 		}
 
-		private static string ColorNameToCss(string colorName)
+		public static string ColorNameToCss(string colorName)
 		{
+			if (colorName.StartsWith("gray"))
+				return "gray";
 			var color = System.Drawing.Color.FromName(colorName);
 			return string.Format("rgb({0}, {1}, {2})", color.R, color.G, color.B);
 		}

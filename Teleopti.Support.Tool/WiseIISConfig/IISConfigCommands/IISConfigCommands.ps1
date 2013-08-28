@@ -207,11 +207,12 @@ function UnZip-File(){
 
 function Copy-ZippedMsi{
     param(
-        $workingFolder
+        $workingFolder,
+        $version
     )
-    $scrFolder='\\hebe\Installation\PBImsi\Kanbox\BuildMSI-main'
+    $scrFolder='\\hebe\Installation\PBImsi\Kanbox\BuildMSI-' + $version
     $destFolder=$workingFolder
-
+    Write-Host 'source: ' $scrFolder
     $zipFileName = Get-ChildItem $scrFolder -filter "*.zip" | Select-Object -First 1
     
     if (!(Test-Path "$destFolder\$zipFileName")) {
@@ -278,20 +279,7 @@ function Install-TeleoptiCCCServer
 	Start-Process -FilePath $temp -NoNewWindow -Wait -RedirectStandardOutput stdout.log -RedirectStandardError stderr.log
 }
 
-function Copy-ZippedMsi{
-    param(
-        $workingFolder
-    )
-    $scrFolder='\\hebe\Installation\PBImsi\Kanbox\BuildMSI-main'
-    $destFolder=$workingFolder
 
-    $zipFileName = Get-ChildItem $scrFolder -filter "*.zip" | Select-Object -First 1
-    
-    if (!(Test-Path "$destFolder\$zipFileName")) {
-        Copy-Item "$scrFolder\$zipFileName" "$destFolder"
-    }
-    return @("$destFolder\$zipFileName")
-}
 
 function Add-UserToLocalGroup{
      Param(

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
@@ -21,6 +20,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Interfaces.Domain;
@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			TestData.WorkflowControlSetPublished = new WorkflowControlSet("Published 100 days")
 			                        {
-			                            SchedulePublishedToDate = DateOnly.Today.AddDays(100)
+			                            SchedulePublishedToDate = DateOnlyForBehaviorTests.TestToday.AddDays(100)
 			                        };
 
 			TestData.WorkflowControlSetPublishedUntilWednesday = new WorkflowControlSet("Published until wednesday")
@@ -364,30 +364,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			TestData.WorkflowControlSetStudentAvailabilityOpen = new WorkflowControlSet("Published 100 days, SA open")
 			                         	{
-			                         		SchedulePublishedToDate = DateOnly.Today.AddDays(100),
-											StudentAvailabilityInputPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
-											StudentAvailabilityPeriod = new DateOnlyPeriod(DateOnly.Today.AddDays(-100), DateOnly.Today.AddDays(100))
+			                         		SchedulePublishedToDate = DateOnlyForBehaviorTests.TestToday.AddDays(100),
+											StudentAvailabilityInputPeriod = new DateOnlyPeriod(DateOnlyForBehaviorTests.TestToday, DateOnlyForBehaviorTests.TestToday.AddDays(1)),
+											StudentAvailabilityPeriod = new DateOnlyPeriod(DateOnlyForBehaviorTests.TestToday.AddDays(-100), DateOnlyForBehaviorTests.TestToday.AddDays(100))
 			                         	};
 
 			TestData.WorkflowControlSetStudentAvailabilityClosed = new WorkflowControlSet("Published 100 days, SA closed")
 			                    {
-			                        SchedulePublishedToDate = DateOnly.Today.AddDays(100),
-									StudentAvailabilityInputPeriod = new DateOnlyPeriod(DateOnly.Today.AddDays(-1), DateOnly.Today.AddDays(-1)),
-									StudentAvailabilityPeriod = new DateOnlyPeriod(DateOnly.Today.AddDays(-100), DateOnly.Today.AddDays(100))
+			                        SchedulePublishedToDate = DateOnlyForBehaviorTests.TestToday.AddDays(100),
+									StudentAvailabilityInputPeriod = new DateOnlyPeriod(DateOnlyForBehaviorTests.TestToday.AddDays(-1), DateOnlyForBehaviorTests.TestToday.AddDays(-1)),
+									StudentAvailabilityPeriod = new DateOnlyPeriod(DateOnlyForBehaviorTests.TestToday.AddDays(-100), DateOnlyForBehaviorTests.TestToday.AddDays(100))
 								};
 
 			TestData.WorkflowControlSetPreferenceOpen = new WorkflowControlSet("Published 100 days, Preference open")
 			{
-				SchedulePublishedToDate = DateOnly.Today.AddDays(100),
-				PreferenceInputPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
-				PreferencePeriod = new DateOnlyPeriod(DateOnly.Today.AddDays(-100), DateOnly.Today.AddDays(100))
+				SchedulePublishedToDate = DateOnlyForBehaviorTests.TestToday.AddDays(100),
+				PreferenceInputPeriod = new DateOnlyPeriod(DateOnlyForBehaviorTests.TestToday, DateOnlyForBehaviorTests.TestToday.AddDays(1)),
+				PreferencePeriod = new DateOnlyPeriod(DateOnlyForBehaviorTests.TestToday.AddDays(-100), DateOnlyForBehaviorTests.TestToday.AddDays(100))
 			};
 
 			TestData.WorkflowControlSetPreferenceOpenWithAllowedPreferences = new WorkflowControlSet("Published 100 days, Pref. open, Allow std.pref.")
 			{
-				SchedulePublishedToDate = DateOnly.Today.AddDays(100),
-				PreferenceInputPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
-				PreferencePeriod = new DateOnlyPeriod(DateOnly.Today.AddDays(-100), DateOnly.Today.AddDays(100))
+				SchedulePublishedToDate = DateOnlyForBehaviorTests.TestToday.AddDays(100),
+				PreferenceInputPeriod = new DateOnlyPeriod(DateOnlyForBehaviorTests.TestToday, DateOnlyForBehaviorTests.TestToday.AddDays(1)),
+				PreferencePeriod = new DateOnlyPeriod(DateOnlyForBehaviorTests.TestToday.AddDays(-100), DateOnlyForBehaviorTests.TestToday.AddDays(100))
 			};
 			TestData.WorkflowControlSetPreferenceOpenWithAllowedPreferences.AddAllowedPreferenceShiftCategory(TestData.ShiftCategory);
 			TestData.WorkflowControlSetPreferenceOpenWithAllowedPreferences.AddAllowedPreferenceDayOff(TestData.DayOffTemplate);
@@ -395,25 +395,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			TestData.WorkflowControlSetStudentAvailabilityOpenNextMonth = new WorkflowControlSet("Published 100 days, SA open next month")
 			        {
-			            SchedulePublishedToDate = DateOnly.Today.AddDays(100),
-			            StudentAvailabilityInputPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
-			            StudentAvailabilityPeriod = new DateOnlyPeriod(DateOnly.Today.AddDays(30), DateOnly.Today.AddDays(60))
+			            SchedulePublishedToDate = DateOnlyForBehaviorTests.TestToday.AddDays(100),
+			            StudentAvailabilityInputPeriod = new DateOnlyPeriod(DateOnlyForBehaviorTests.TestToday, DateOnlyForBehaviorTests.TestToday.AddDays(1)),
+			            StudentAvailabilityPeriod = new DateOnlyPeriod(DateOnlyForBehaviorTests.TestToday.AddDays(30), DateOnlyForBehaviorTests.TestToday.AddDays(60))
 			        };
 
 			TestData.WorkflowControlSetExisting = new WorkflowControlSet("Simple existing wcs");
 
 			TestData.WorkflowControlSetPreferencesOpenNextMonth = new WorkflowControlSet("Published 100 days, Preference open next month")
 			{
-				SchedulePublishedToDate = DateOnly.Today.AddDays(100),
-				PreferenceInputPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
-				PreferencePeriod = new DateOnlyPeriod(DateOnly.Today.AddDays(30), DateOnly.Today.AddDays(60))
+				SchedulePublishedToDate = DateOnlyForBehaviorTests.TestToday.AddDays(100),
+				PreferenceInputPeriod = new DateOnlyPeriod(DateOnlyForBehaviorTests.TestToday, DateOnlyForBehaviorTests.TestToday.AddDays(1)),
+				PreferencePeriod = new DateOnlyPeriod(DateOnlyForBehaviorTests.TestToday.AddDays(30), DateOnlyForBehaviorTests.TestToday.AddDays(60))
 			};
 
 			TestData.WorkflowControlSetPreferenceClosed = new WorkflowControlSet("Published 100 days, preference period closed")
 			{
-				SchedulePublishedToDate = DateOnly.Today.AddDays(100),
-				PreferenceInputPeriod = new DateOnlyPeriod(DateOnly.Today.AddDays(-1), DateOnly.Today.AddDays(-1)),
-				PreferencePeriod = new DateOnlyPeriod(DateOnly.Today.AddDays(-100), DateOnly.Today.AddDays(100))
+				SchedulePublishedToDate = DateOnlyForBehaviorTests.TestToday.AddDays(100),
+				PreferenceInputPeriod = new DateOnlyPeriod(DateOnlyForBehaviorTests.TestToday.AddDays(-2), DateOnlyForBehaviorTests.TestToday.AddDays(-2)),
+				PreferencePeriod = new DateOnlyPeriod(DateOnlyForBehaviorTests.TestToday.AddDays(-100), DateOnlyForBehaviorTests.TestToday.AddDays(100))
 			};
 
 			var workflowControlSetRepository = new WorkflowControlSetRepository(unitOfWork);
@@ -434,7 +434,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static DateTime findWednesdayOfCurrentWeek()
 		{
-			var currentDay = DateHelper.GetFirstDateInWeek(DateOnly.Today.Date, CultureInfo.CurrentCulture);
+			var currentDay = DateHelper.GetFirstDateInWeek(DateOnlyForBehaviorTests.TestToday.Date, CultureInfo.CurrentCulture);
 			while (true)
 			{
 				if (currentDay.DayOfWeek == DayOfWeek.Wednesday) break;
@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static DateTime FirstDayOfCurrentWeek(CultureInfo culture)
 		{
-			return DateHelper.GetFirstDateInWeek(DateTime.Now.Date, culture);
+			return DateHelper.GetFirstDateInWeek(DateOnlyForBehaviorTests.TestToday.Date, culture);
 		}
 
 		public static DateTime LastDayOfCurrentWeek(CultureInfo culture)
@@ -468,7 +468,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static DateTime ThirdDayOfOtherThanCurrentWeekInCurrentMonth(CultureInfo culture)
 		{
-			return ThirdDayOfNextWeek(culture).Month != DateTime.Now.Month ? ThirdDayOfPreviousWeek(culture) : ThirdDayOfNextWeek(culture);
+            return ThirdDayOfNextWeek(culture).Month != DateOnlyForBehaviorTests.TestToday.Date.Month ? ThirdDayOfPreviousWeek(culture) : ThirdDayOfNextWeek(culture);
 		}
 
 		public static DateTime FirstDayOfPreviousWeek(CultureInfo culture)
@@ -483,7 +483,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static DateTime FirstDayOfAnyWeekInCurrentMonth(CultureInfo culture)
 		{
-			return FirstDayOfCurrentWeek(culture).Month == DateTime.Now.Month ? FirstDayOfCurrentWeek(culture) : FirstDayOfNextWeek(culture);
+            return FirstDayOfCurrentWeek(culture).Month == DateOnlyForBehaviorTests.TestToday.Date.Month ? FirstDayOfCurrentWeek(culture) : FirstDayOfNextWeek(culture);
 		}
 
 	}

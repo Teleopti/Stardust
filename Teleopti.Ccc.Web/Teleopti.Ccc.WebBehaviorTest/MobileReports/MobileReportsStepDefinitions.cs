@@ -6,6 +6,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages.jQuery;
 using Teleopti.Interfaces.Domain;
@@ -72,14 +73,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[Then(@"I should see a report for next date")]
 		public void ThenIShouldSeeAReportForNextDate()
 		{
-			var expected = DateOnly.Today.AddDays(1).ToShortDateString(UserFactory.User().Culture);
+			var expected = DateOnlyForBehaviorTests.TestToday.AddDays(1).ToShortDateString(UserFactory.User().Culture);
 			Browser.Interactions.AssertFirstContains("#report-view-date-nav-current", expected);
 		}
 
 		[Then(@"I should see a report for previous date")]
 		public void ThenIShouldSeeAReportForPreviousDate()
 		{
-			var expected = DateOnly.Today.AddDays(-1).ToShortDateString(UserFactory.User().Culture);
+			var expected = DateOnlyForBehaviorTests.TestToday.AddDays(-1).ToShortDateString(UserFactory.User().Culture);
 			Browser.Interactions.AssertFirstContains("#report-view-date-nav-current", expected);
 		}
 
@@ -104,7 +105,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[Then(@"I should see ReportSettings with default value")]
 		public void ThenIShouldSeeReportSettingsWithDefaultValue()
 		{
-			Browser.Interactions.AssertInputValueUsingJQuery("#sel-date", DateOnly.Today.AddDays(-1).ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery("#sel-date", DateOnlyForBehaviorTests.TestToday.AddDays(-1).ToShortDateString(UserFactory.User().Culture));
 			Browser.Interactions.AssertFirstContains("#sel-skill-menu", Resources.All);
 			Browser.Interactions.AssertExists("#report-settings-type-graph:checked");
 			Browser.Interactions.AssertExists("#report-settings-type-table:not(:checked)");
@@ -185,7 +186,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		public void WhenIClickNextDate()
 		{
 			// before click next date, make sure current is today
-			var expected = DateOnly.Today.ToShortDateString(UserFactory.User().Culture);
+			var expected = DateOnlyForBehaviorTests.TestToday.ToShortDateString(UserFactory.User().Culture);
 			Browser.Interactions.AssertFirstContains("#report-view-date-nav-current", expected);
 			Browser.Interactions.Click("#report-view-date-nav-next");
 		}
@@ -193,9 +194,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[When(@"I click on any date")]
 		public void WhenIClickOnAnyDate()
 		{
-			_clickedDateInDatePicker = DateOnly.Today.AddDays(2);
-			if (_clickedDateInDatePicker.Month != DateOnly.Today.Month)
-				_clickedDateInDatePicker = DateOnly.Today.AddDays(-2);
+            _clickedDateInDatePicker = DateOnlyForBehaviorTests.TestToday.AddDays(2);
+            if (_clickedDateInDatePicker.Month != DateOnlyForBehaviorTests.TestToday.Month)
+                _clickedDateInDatePicker = DateOnlyForBehaviorTests.TestToday.AddDays(-2);
 			Browser.Interactions.ClickContaining(".ui-datebox-griddate.ui-btn-up-d", _clickedDateInDatePicker.Day.ToString());
 		}
 
@@ -203,7 +204,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		public void WhenIClickPreviousDate()
 		{
 			// before click previous date, make sure current is today
-			var expected = DateOnly.Today.ToShortDateString(UserFactory.User().Culture);
+            var expected = DateOnlyForBehaviorTests.TestToday.ToShortDateString(UserFactory.User().Culture);
 			Browser.Interactions.AssertFirstContains("#report-view-date-nav-current", expected);
 			Browser.Interactions.Click("#report-view-date-nav-prev");
 		}
@@ -251,7 +252,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[When(@"I select date today")]
 		public void WhenISelectDateToday()
 		{
-			var date = DateOnly.Today;
+			var date = DateOnlyForBehaviorTests.TestToday;
 			var dateString = date.ToShortDateString(UserFactory.User().Culture);
 			// this cant be correct. trigger an avent named datebox?!
 			new JQueryExpression()

@@ -168,3 +168,4 @@ Scenario: View unpublished schedule when permitted
 	| End time       | 2013-08-10 17:00 |
 	When I view schedules for '2013-08-10'
 	Then I should see 'Pierre Baldi' with schedule
+

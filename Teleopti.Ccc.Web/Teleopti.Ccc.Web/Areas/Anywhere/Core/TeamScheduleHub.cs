@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Dynamic;
-using System.Linq;
 using Microsoft.AspNet.SignalR.Hubs;
-using Newtonsoft.Json;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 
@@ -26,8 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		private void pushSchedule(dynamic target, Guid teamId, DateTime date)
 		{
-			target.incomingTeamSchedule(
-				_teamScheduleProvider.TeamSchedule(teamId, date).Select(s => JsonConvert.DeserializeObject<ExpandoObject>(s.Shift)));
+			target.incomingTeamSchedule(_teamScheduleProvider.TeamSchedule(teamId, date));
 		}
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			Date = DateHelper.GetFirstDateInWeek(DateTime.Now.Date, cultureInfo);
+			Date = DateHelper.GetFirstDateInWeek(DateOnlyForBehaviorTests.TestToday.Date, cultureInfo);
 			StartTime = TimeSpan.FromHours(7);
 			EndTime = TimeSpan.FromHours(18);
 

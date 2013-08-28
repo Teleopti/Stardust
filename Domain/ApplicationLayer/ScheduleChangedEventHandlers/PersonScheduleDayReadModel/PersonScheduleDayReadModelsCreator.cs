@@ -58,7 +58,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 						Title = layer.Name,
 						Start = layer.StartDateTime,
 						End = layer.EndDateTime,
-						Minutes = (int)layer.EndDateTime.Subtract(layer.StartDateTime).TotalMinutes
+						Minutes = (int)layer.EndDateTime.Subtract(layer.StartDateTime).TotalMinutes,
+						IsAbsenceConfidential = layer.IsAbsenceConfidential
 					});
 				}
 
