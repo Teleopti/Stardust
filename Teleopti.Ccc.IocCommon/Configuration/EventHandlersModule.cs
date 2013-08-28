@@ -3,9 +3,11 @@ using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -19,6 +21,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			       .As(t => t.GetInterfaces().Where(i => i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)))
 				;
 
+			builder.RegisterType<UnitOfWorkTransactionEventSyncronization>().As<IEventSyncronization>().SingleInstance();
+
 			builder.RegisterType<ProjectionChangedEventBuilder>().As<IProjectionChangedEventBuilder>().SingleInstance();
 			builder.RegisterType<ScheduleDayReadModelsCreator>().As<IScheduleDayReadModelsCreator>().SingleInstance();
 			builder.RegisterType<PersonScheduleDayReadModelsCreator>().As<IPersonScheduleDayReadModelsCreator>().SingleInstance();
@@ -30,6 +34,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				   .As<IScheduledResourcesReadModelPersister>()
 				   .As<IScheduledResourcesReadModelReader>()
 				   .SingleInstance();
+
+			builder.RegisterType<ScheduledResourcesReadModelUpdater>().As<IScheduledResourcesReadModelUpdater>().SingleInstance();
 		}
 	}
 

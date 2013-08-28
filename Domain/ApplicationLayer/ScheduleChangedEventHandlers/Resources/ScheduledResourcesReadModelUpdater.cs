@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -8,26 +6,6 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources
 {
-	public interface IEventSyncronization
-	{
-		void WhenDone(Action done);
-	}
-
-	public class ControllableEventSyncronization : IEventSyncronization
-	{
-		private readonly IList<Action> _actionsWhenDone = new List<Action>();
-
-		public void WhenDone(Action done)
-		{
-			_actionsWhenDone.Add(done);
-		}
-
-		public void RunNow()
-		{
-			_actionsWhenDone.ForEach(a => a.Invoke());
-		}
-	}
-
 	public class ScheduledResourcesReadModelUpdater :
 		IScheduledResourcesReadModelUpdater
 	{
