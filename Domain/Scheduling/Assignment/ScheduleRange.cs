@@ -110,16 +110,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         protected override bool CheckPermission(IScheduleData persistableScheduleData)
         {
-            //IList<IApplicationRole> roles =
-            //    ((IUnsafePerson) TeleoptiPrincipal.Current).Person.PermissionInformation.ApplicationRoleCollection;
-            //foreach (var applicationRole in roles)
-            //{
-            //    if (applicationRole.BuiltIn)
-            //        return true;
-            //}
-
             var hasPermission = false;
-            //var zone = Person.PermissionInformation.DefaultTimeZone();
             foreach (var availablePeriod in AvailablePeriods())
             {
                 if (persistableScheduleData.BelongsToPeriod(availablePeriod))
@@ -128,16 +119,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     break;
                 }
             }
-
-            //foreach (var date in AvailableDates)
-            //{
-            //    var dateAndPeriod = new DateOnlyAsDateTimePeriod(date, zone);
-            //    if (persistableScheduleData.BelongsToPeriod(dateAndPeriod))
-            //    {
-            //        hasPermission = true;
-            //        break;
-            //    }
-            //}
 
             if (!hasPermission)
             {
