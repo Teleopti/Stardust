@@ -611,6 +611,39 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			replaceService.VerifyAllExpectations();
 		}
 
+		[Test]
+		public void MoveAllLayers_WhenMultipleLayersHasBeenMoved_ShouldReplaceAllLayersThatHasBeenMoved()
+		{
+			var replaceService = MockRepository.GenerateStrictMock<IReplaceLayerInSchedule>();
+
+			target = new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), replaceService);
+
+			IScheduleDay part = _partFactory.CreatePartWithMainShiftWithDifferentActivities();
+			target.AddFromSchedulePart(part);
+
+			var firstViewModel = target.First();
+			var secondViewModel = target.Skip(1).First();
+
+			var firstModel = part.PersonAssignment().MainLayers().First(l => l.Period == firstViewModel.Period);
+			var secondModel = part.PersonAssignment().MainLayers().First(l => l.Period == secondViewModel.Period);
+			var firstPeriod = firstModel.Period;
+			var secondPeriod = secondModel.Period;
+
+			var firstPayload = firstModel.Payload;
+			var secondPayload = secondModel.Payload;
+
+			firstViewModel.CanMoveAll = true;
+			secondViewModel.CanMoveAll = true;
+			firstViewModel.MoveLayer(TimeSpan.Zero);
+
+			replaceService.Expect(r => r.Replace(part, firstModel, firstPayload, firstPeriod));
+			replaceService.Expect(r => r.Replace(part, secondModel, secondPayload, secondPeriod));
+
+			firstViewModel.UpdatePeriod();
+
+			replaceService.VerifyAllExpectations();
+		}
+
         private IScheduleDay createPart(IPerson person, DateOnly dateOnly)
         {
             IScheduleDictionary dictionaryNotUsed = new ScheduleDictionaryForTest(ScenarioFactory.CreateScenarioAggregate(),
