@@ -4,6 +4,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I input absence request values with (\S*)")]
 		public void WhenIInputAbsenceRequestValuesWith(string name)
 		{
-			WhenIInputAbsenceRequestValuesWithForDate(name, DateTime.Today);
+			WhenIInputAbsenceRequestValuesWithForDate(name, DateOnlyForBehaviorTests.TestToday.Date);
 		}
 
 		[When(@"I input absence request values with '(.*)' for date '(.*)'")]

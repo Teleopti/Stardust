@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
@@ -196,7 +197,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheStartTimeBoundryTo(string earliest, string latest)
 		{
 			var expected = GetExpectedTimesString(earliest, latest);
-			EventualAssert.That(() => _page.CalendarCellDataForDate(DateOnly.Today, "possible-start-times").InnerHtml, Is.StringMatching(expected));
+			EventualAssert.That(() => _page.CalendarCellDataForDate(DateOnlyForBehaviorTests.TestToday, "possible-start-times").InnerHtml, Is.StringMatching(expected));
 		}
 
 		[Then(@"I should see the end time boundry (.*) to (.*)")]
@@ -204,7 +205,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var expected = GetExpectedTimesString(earliest, latest);
 
-			EventualAssert.That(() => _page.CalendarCellDataForDate(DateOnly.Today, "possible-end-times").InnerHtml, Is.StringMatching(expected));
+			EventualAssert.That(() => _page.CalendarCellDataForDate(DateOnlyForBehaviorTests.TestToday, "possible-end-times").InnerHtml, Is.StringMatching(expected));
 		}
 
 		[Then(@"I should see the contract time boundry (\d+) to (\d+)")]
@@ -213,13 +214,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var culture = UserFactory.User().Person.PermissionInformation.Culture();
 			var expected = GetExpectedContractTimesString(earliest, latest, culture);
 
-			EventualAssert.That(() => _page.CalendarCellDataForDate(DateOnly.Today, "possible-contract-times").InnerHtml, Is.StringMatching(expected));
+			EventualAssert.That(() => _page.CalendarCellDataForDate(DateOnlyForBehaviorTests.TestToday, "possible-contract-times").InnerHtml, Is.StringMatching(expected));
 		}
 
 		[Then(@"I should see that there are no available shifts")]
 		public void ThenIShouldSeeThatThereAreNoAvailableShifts()
 		{
-			var cell = _page.CalendarCellForDate(DateOnly.Today);
+			var cell = _page.CalendarCellForDate(DateOnlyForBehaviorTests.TestToday);
 			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(Resources.NoAvailableShifts));
 		}
 

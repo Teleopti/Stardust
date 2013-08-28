@@ -17,16 +17,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			setValuesFromIdentity(@event,identity);
 		}
 
-		public static List<Event> SetMessageDetail(this IEnumerable<IEvent> @event)
+		public static void SetMessageDetail(this IEvent @event)
 		{
-			var domainEvents = @event.OfType<IRaptorDomainMessageInfo>();
-			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
-
-			foreach (var message in domainEvents)
-			{
-				setValuesFromIdentity(message, identity);
-			}
-			return @event.OfType<Event>().ToList();
+			var domainEvents = @event as IRaptorDomainMessageInfo;
+            if (domainEvents!=null)
+                domainEvents.SetMessageDetail();
 		}
 
 		private static void setValuesFromIdentity(IRaptorDomainMessageInfo message, ITeleoptiIdentity identity)

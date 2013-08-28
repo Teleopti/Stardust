@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			pushMessageDialogueJsonObject.Append("Message: 'My message', ");
 			pushMessageDialogueJsonObject.Append("Message: 'My message', ");
 			pushMessageDialogueJsonObject.Append("Sender: 'My sender', ");
-			pushMessageDialogueJsonObject.AppendFormat(CultureInfo.InvariantCulture, "Date: '{0} {1}', ", DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString());
+            pushMessageDialogueJsonObject.AppendFormat(CultureInfo.InvariantCulture, "Date: '{0} {1}', ", DateOnlyForBehaviorTests.TestToday.ToShortDateString(), DateTime.Now.ToShortTimeString());
 			pushMessageDialogueJsonObject.Append("IsRead: 'false'}; ");
 			pushMessageDialogueJsonObject.Append("Teleopti.MyTimeWeb.AsmMessageList.AddNewMessageAtTop(messageItem);");
 

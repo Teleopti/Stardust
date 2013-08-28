@@ -471,12 +471,8 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestTest.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeSwapDetailTest.cs" />
     <Compile Include="AgentInfo\Requests\TextRequestTest.cs" />
-    <Compile Include="AgentInfo\TeamBelongsToSiteSpecificationTest.cs" />
     <Compile Include="AgentInfo\ExternalLogOnTest.cs" />
-    <Compile Include="AgentInfo\PersonBelongsToAnyBusinessUnitSpecificationTest.cs" />
-    <Compile Include="AgentInfo\PersonBelongsToBusinessUnitSpecificationTest.cs" />
     <Compile Include="AgentInfo\PersonBelongsToRoleSpecificationTest.cs" />
-    <Compile Include="AgentInfo\PersonBelongsToSiteSpecificationTest.cs" />
     <Compile Include="AgentInfo\PersonBelongsToTeamSpecificationTest.cs" />
     <Compile Include="AgentInfo\PersonContractTest.cs" />
     <Compile Include="AgentInfo\Requests\PersonRequestTest.cs" />

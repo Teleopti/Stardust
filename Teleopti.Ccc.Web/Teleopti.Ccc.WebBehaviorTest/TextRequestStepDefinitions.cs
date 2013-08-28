@@ -5,7 +5,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			TypeSubject("The cake is a.. Cake!");
 			TypeMessage("A message. A very very very short message. Or maybe not.");
-			var date = DateTime.Today;
+			var date = DateOnlyForBehaviorTests.TestToday.Date;
 			var time = date.AddHours(12);
 			SetValuesForDateAndTime(date, time, date, time.AddHours(1));
 		}
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the request form with today's date as default")]
 		public void ThenIShouldSeeTheRequestFormWithTodaySDateAsDefault()
 		{
-			var today = DateTime.Today;
+			var today = DateOnlyForBehaviorTests.TestToday.Date;
 
 			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-datefrom", today.ToShortDateString(UserFactory.User().Culture));
 			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-dateto", today.ToShortDateString(UserFactory.User().Culture));
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
         {
 			TypeSubject("The cake is a.. Cake!");
 			TypeMessage(new string('t', 2002));
-			SetValuesForDateAndTime(DateTime.Today, DateTime.Now.AddHours(1), DateTime.Today, DateTime.Today.AddHours(2));
+            SetValuesForDateAndTime(DateOnlyForBehaviorTests.TestToday.Date, DateOnlyForBehaviorTests.TestToday.Date, DateOnlyForBehaviorTests.TestToday.Date, DateOnlyForBehaviorTests.TestToday.Date.AddHours(2));
         }
 
 		[When(@"I input too long subject request values")]
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			TypeSubject("01234567890123456789012345678901234567890123456789012345678901234567890123456789#");
 			TypeMessage("A message. A very very very short message. Or maybe not.");
-			SetValuesForDateAndTime(DateTime.Today, DateTime.Now.AddHours(1), DateTime.Today, DateTime.Today.AddHours(2));
+            SetValuesForDateAndTime(DateOnlyForBehaviorTests.TestToday.Date, DateOnlyForBehaviorTests.TestToday.Date, DateOnlyForBehaviorTests.TestToday.Date, DateOnlyForBehaviorTests.TestToday.Date.AddHours(2));
 		}
 
 		private void TypeSubject(string text)
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I input later start time than end time")]
 		public void WhenIInputLaterStartTimeThanEndTime()
 		{
-			SetValuesForDateAndTime(DateTime.Today.AddDays(1), DateTime.Today, DateTime.Today, DateTime.Today.AddHours(-2));
+			SetValuesForDateAndTime(DateOnlyForBehaviorTests.TestToday.Date.AddDays(1), DateOnlyForBehaviorTests.TestToday.Date, DateOnlyForBehaviorTests.TestToday.Date, DateOnlyForBehaviorTests.TestToday.Date.AddHours(-2));
 		}
 		
 		private void EnableTimePickersByUncheckingFullDayCheckbox()

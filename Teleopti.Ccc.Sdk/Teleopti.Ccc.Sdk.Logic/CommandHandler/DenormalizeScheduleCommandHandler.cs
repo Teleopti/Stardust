@@ -2,12 +2,10 @@
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Interfaces.Messages.Denormalize;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
@@ -35,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			              		ScenarioId = command.ScenarioId,
 			              		PersonId = command.PersonId
 			              	};
-			message.SetMessageDetail();
+			((IEvent)message).SetMessageDetail();
 
 			_busSender.Send(message);
 
