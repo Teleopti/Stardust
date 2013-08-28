@@ -36,7 +36,9 @@
 <script type="text/html" id="add-new-request-detail-template">  
 	@Html.Partial("~/Areas/MyTime/Views/Requests/AddNewRequestDetailView.cshtml")
 </script>
-
+<script type="text/html" id="add-overtime-availability-template">
+    @Html.Partial("AddOvertimeAvailabilityPartial")
+</script>
 <input id="Request-detail-datepicker-format" type="hidden" data-bind="value: datePickerFormat"/>
 
 <div class="navbar">
@@ -58,12 +60,15 @@
     </div>
 </div>
 <ul class="nav nav-pills" data-bind="visible: showAddRequestToolbar">
-    <li data-bind="visible: textPermission, css: {active: textRequestActive}">
-        <a class="text-request-add" href="#" data-bind="click: textRequestActivate"><i class="icon-plus"></i>&nbsp;@Resources.TextRequest</a>
-    </li>
-    <li data-bind="visible: absenceRequestPermission, css: { active: absenceRequestActive }">
-        <a class="absence-request-add" href="#" data-bind="click: absenceRequestActivate"><i class="icon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
-    </li>
+	<li data-bind="visible: overtimeAvailabilityPermission, css: { active: overtimeAvailabilityActive }">
+		<a class="overtime-availability-add" href="#" data-bind="click: overtimeAvailabilityActivate"><i class="icon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
+	</li>
+	<li data-bind="visible: textPermission, css: {active: textRequestActive}">
+		<a class="text-request-add" href="#" data-bind="click: textRequestActivate"><i class="icon-plus"></i>&nbsp;@Resources.TextRequest</a>
+	</li>
+	<li data-bind="visible: absenceRequestPermission, css: { active: absenceRequestActive }">
+		<a class="absence-request-add" href="#" data-bind="click: absenceRequestActivate"><i class="icon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+	</li>
 </ul>
 <div data-bind="with: requestViewModel">
     <div id="Request-add-section" class="well well-small clearfix">
