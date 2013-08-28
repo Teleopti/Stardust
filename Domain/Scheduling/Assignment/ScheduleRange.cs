@@ -409,5 +409,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
             return _shiftCategoryFairnessHolder;
         }
+
+		public void ForceRecalculationOfContractTimeAndDaysOff()
+		{
+			CalculatedContractTimeHolder = null;
+			CalculatedScheduleDaysOff = null;
+		}
     }
 }
