@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			target.Do(() => { executed++; });
 			target.Start();
 
+            Assert.That(() => executed, Is.EqualTo(1).After(500, 1));
 			Assert.That(() => executed, Is.EqualTo(2).After(1000, 1));
 		}
 
@@ -73,9 +74,18 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			var executed = false;
 			var target = new ActionThrottle(100);
 
-			target.Do(() => { });
-			target.Do(() => { });
-			target.Do(() => { executed = true; });
+			target.Do(() =>
+			    {
+			        
+			    });
+			target.Do(() =>
+			    {
+			        
+			    });
+			target.Do(() =>
+			    {
+			        executed = true;
+			    });
 			target.Start();
 			target.Dispose();
 			Thread.Sleep(50);
