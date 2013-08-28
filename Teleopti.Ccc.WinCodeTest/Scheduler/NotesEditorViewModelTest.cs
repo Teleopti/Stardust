@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common.Commands;
 using Teleopti.Ccc.WinCodeTest.Common.Commands;
@@ -22,17 +26,21 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private MockRepository _mockRep;
         private INote _note;
         private IPublicNote _publicNote;
+        private readonly DateOnly _noteDate = new DateOnly(2010, 4, 1);
+        private IDateOnlyAsDateTimePeriod _period;
+        private IPerson _person;
 
         [SetUp]
         public void Setup()
         {
             _mockRep = new MockRepository();
             _part = _mockRep.StrictMock<IScheduleDay>();
-            IPerson person = PersonFactory.CreatePerson("Kalle");
-            var noteDate = new DateOnly(2010, 4, 1);
+            _person = PersonFactory.CreatePerson("Kalle");
+            
             IScenario scenario = ScenarioFactory.CreateScenarioAggregate("Default", true);
-            _note = new Note(person, noteDate, scenario, "note");
-            _publicNote = new PublicNote(person, noteDate, scenario, "public note");
+            _note = new Note(_person, _noteDate, scenario, "note");
+            _period = new DateOnlyAsDateTimePeriod(_noteDate, TimeZoneInfo.Utc);
+            _publicNote = new PublicNote(_person, _noteDate, scenario, "public note");
             _model1 = null;
             _model2 = null;
             _model3 = null;
@@ -47,6 +55,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_part.PublicNoteCollection()).Return(new ReadOnlyCollection<IPublicNote>(new List<IPublicNote>())).Repeat.Once();
                 Expect.Call(_part.NoteCollection()).Return(new ReadOnlyCollection<INote>(new List<INote> { _note })).Repeat.Once();
                 Expect.Call(_part.PublicNoteCollection()).Return(new ReadOnlyCollection<IPublicNote>(new List<IPublicNote> { _publicNote })).Repeat.Once();
+                Expect.Call(_part.DateOnlyAsPeriod).Return(_period).Repeat.AtLeastOnce();
+                Expect.Call(_part.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_part.FullAccess).Return(true).Repeat.AtLeastOnce();
             }
 
             using (_mockRep.Playback())
@@ -80,6 +91,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_part.PublicNoteCollection()).Return(new ReadOnlyCollection<IPublicNote>(new List<IPublicNote>())).Repeat.Once();
                 Expect.Call(_part.NoteCollection()).Return(new ReadOnlyCollection<INote>(new List<INote> { _note })).Repeat.Once();
                 Expect.Call(_part.PublicNoteCollection()).Return(new ReadOnlyCollection<IPublicNote>(new List<IPublicNote> { _publicNote })).Repeat.Once();
+                Expect.Call(_part.DateOnlyAsPeriod).Return(_period).Repeat.AtLeastOnce();
+                Expect.Call(_part.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_part.FullAccess).Return(true).Repeat.AtLeastOnce();
             }
 
             using (_mockRep.Playback())
@@ -95,12 +109,35 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             }
 
             Assert.IsNotNull(_model1.SchedulePart);
+            Assert.IsTrue(_model1.IsEnabled);
             Assert.IsNull(_model2.SchedulePart);
+            Assert.IsFalse(_model2.IsEnabled);
             Assert.IsNotNullOrEmpty(_model3.ScheduleNote);
             Assert.IsNotNullOrEmpty(_model3.PublicScheduleNote);
-
+            Assert.IsTrue(_model3.IsEnabled);
         }
 
+        [Test]
+        public void ShouldHandleNoAccessToPeriod()
+        {
+            using (_mockRep.Record())
+            {
+                Expect.Call(_part.DateOnlyAsPeriod).Return(_period).Repeat.AtLeastOnce();
+                Expect.Call(_part.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_part.NoteCollection()).Return(new ReadOnlyCollection<INote>(new List<INote>())).Repeat.Once();
+                Expect.Call(_part.PublicNoteCollection()).Return(new ReadOnlyCollection<IPublicNote>(new List<IPublicNote>())).Repeat.Once();
+            }
+
+            using (_mockRep.Playback())
+            {
+                using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+                {
+                    _model1 = new NotesEditorViewModel(null);
+                    _model1.Load(_part);
+                }
+                _model1.IsEnabled.Should().Be.False();
+            }
+        }
         [Test]
         public void VerifyScheduleNote()
         {
@@ -108,6 +145,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             {
                 Expect.Call(_part.NoteCollection()).Return(new ReadOnlyCollection<INote>(new List<INote> { _note })).Repeat.Twice();
                 Expect.Call(_part.PublicNoteCollection()).Return(new ReadOnlyCollection<IPublicNote>(new List<IPublicNote> { _publicNote })).Repeat.Twice();
+                Expect.Call(_part.DateOnlyAsPeriod).Return(_period).Repeat.AtLeastOnce();
+                Expect.Call(_part.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_part.FullAccess).Return(true);
             }
 
             using (_mockRep.Playback())
@@ -134,6 +174,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(() => _part.CreateAndAddNote("newNote")).Repeat.Once();
                 Expect.Call(_part.PublicNoteCollection()).Return(new ReadOnlyCollection<IPublicNote>(new List<IPublicNote>())).Repeat.Twice();
                 Expect.Call(() => _part.CreateAndAddPublicNote("newPublicNote")).Repeat.Once();
+                Expect.Call(_part.DateOnlyAsPeriod).Return(_period).Repeat.AtLeastOnce();
+                Expect.Call(_part.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_part.FullAccess).Return(true);
             }
 
             using (_mockRep.Playback())
@@ -157,6 +200,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_part.DeleteNote).Repeat.Once();
                 Expect.Call(_part.NoteCollection()).Return(new ReadOnlyCollection<INote>(new List<INote> { _note })).Repeat.Twice();
                 Expect.Call(_part.PublicNoteCollection()).Return(new ReadOnlyCollection<IPublicNote>(new List<IPublicNote>()));
+                Expect.Call(_part.DateOnlyAsPeriod).Return(_period).Repeat.AtLeastOnce();
+                Expect.Call(_part.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_part.FullAccess).Return(true);
             }
 
             using (_mockRep.Playback())
@@ -204,6 +250,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_part.DeleteNote).Repeat.Once();
                 Expect.Call(_part.NoteCollection()).Return(new ReadOnlyCollection<INote>(new List<INote> { _note })).Repeat.Twice();
                 Expect.Call(_part.PublicNoteCollection()).Return(new ReadOnlyCollection<IPublicNote>(new List<IPublicNote>()));
+                Expect.Call(_part.DateOnlyAsPeriod).Return(_period).Repeat.AtLeastOnce();
+                Expect.Call(_part.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_part.FullAccess).Return(true);
             }
 
             using (_mockRep.Playback())
@@ -230,6 +279,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_part.DeletePublicNote).Repeat.Once();
                 Expect.Call(_part.NoteCollection()).Return(new ReadOnlyCollection<INote>(new List<INote>()));
                 Expect.Call(_part.PublicNoteCollection()).Return(new ReadOnlyCollection<IPublicNote>(new List<IPublicNote> {_publicNote})).Repeat.Twice();
+                Expect.Call(_part.DateOnlyAsPeriod).Return(_period).Repeat.AtLeastOnce();
+                Expect.Call(_part.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_part.FullAccess).Return(true);
             }
 
             using (_mockRep.Playback())
@@ -263,6 +315,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             {
                 Expect.Call(_part.NoteCollection()).Return(new ReadOnlyCollection<INote>(new List<INote>()));
                 Expect.Call(_part.PublicNoteCollection()).Return(new ReadOnlyCollection<IPublicNote>(new List<IPublicNote> {_publicNote}));
+                Expect.Call(_part.DateOnlyAsPeriod).Return(_period).Repeat.AtLeastOnce();
+                Expect.Call(_part.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_part.FullAccess).Return(true);
             }
 
 			 using (_mockRep.Playback())

@@ -109,13 +109,13 @@ namespace Teleopti.Ccc.Win.Optimization
 			Preferences.GroupPageOnTeam = (IGroupPageLight)comboBoxGroupPageOnTeams.SelectedItem;
 			Preferences.FairnessValue = (double)trackBar1.Value / 100;
 			Preferences.GroupPageOnCompareWith = (IGroupPageLight)comboBoxGroupPageOnCompareWith.SelectedItem;
-            Preferences.UseTeamBlockOption = checkBoxTeamBlockPerBlockScheduling.Checked;
+            Preferences.UseTeamBlockOption = checkBoxBlock.Checked;
             getTeamBlockPerDataToSave();
         }
 
         private void setDataToControls()
         {
-            checkBoxTeamBlockPerBlockScheduling.Checked = Preferences.UseTeamBlockOption;
+            checkBoxBlock.Checked = Preferences.UseTeamBlockOption;
 			checkBoxTeams.Checked = Preferences.UseTeams;
         	checkBoxKeepWeekEndsTogether.Checked = Preferences.KeepSameDaysOffInTeam;
         	checkBoxCommonCategory.Checked = Preferences.UseGroupSchedulingCommonCategory;
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Win.Optimization
                 comboBoxGroupPageOnCompareWith.SelectedIndex = 0;
 
             checkBoxTeams.Checked = Preferences.UseTeams;
-            checkBoxTeamBlockPerBlockScheduling.Checked = Preferences.UseTeamBlockOption;
+            checkBoxBlock.Checked = Preferences.UseTeamBlockOption;
             setTeamBlockPerData();
         }
 
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
 		public bool ValidateDefaultValuesForBlock()
 		{
-			if (checkBoxTeamBlockPerBlockScheduling.Checked)
+			if (checkBoxBlock.Checked)
 			{
 				if (!(checkBoxTeamBlockSameShift.Checked || checkBoxSameStartTime.Checked || checkBoxTeamBlockSameShiftCategory.Checked))
 				{
@@ -196,10 +196,10 @@ namespace Teleopti.Ccc.Win.Optimization
 
         private void checkBoxTeamBlockPerBlockScheduling_CheckedChanged(object sender, EventArgs e)
         {
-            checkBoxTeamBlockSameShiftCategory.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
-            checkBoxSameStartTime.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
-            comboBoxTeamBlockType.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
-	        checkBoxTeamBlockSameShift.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
+            checkBoxTeamBlockSameShiftCategory.Enabled = checkBoxBlock.Checked;
+            checkBoxSameStartTime.Enabled = checkBoxBlock.Checked;
+            comboBoxTeamBlockType.Enabled = checkBoxBlock.Checked;
+	        checkBoxTeamBlockSameShift.Enabled = checkBoxBlock.Checked;
         }
 
         private void setTeamBlockPerData()
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.Win.Optimization
                 Preferences.BlockFinderTypeForAdvanceOptimization  =  BlockFinderType.BetweenDayOff ;
             else if((string) comboBoxTeamBlockType.SelectedValue == BlockFinderType.SchedulePeriod.ToString( ) )
                 Preferences.BlockFinderTypeForAdvanceOptimization = BlockFinderType.SchedulePeriod;
-			if (!checkBoxTeamBlockPerBlockScheduling.Checked)
+			if (!checkBoxTeams.Checked)
 				Preferences.GroupPageOnTeamBlockPer = _singleAgentEntry;
 			else
 				Preferences.GroupPageOnTeamBlockPer = (IGroupPageLight)comboBoxGroupPageOnTeams.SelectedItem;

@@ -726,6 +726,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _target.Snapshot.Snapshot.Should().Not.Be.SameInstanceAs(snapshotBefore);
         }
 
+		[Test]
+		public void ShouldReset_CalculatedContractTimeAndDaysOff()
+		{
+			_target.CalculatedContractTimeHolder = new TimeSpan(10,10,10,10);
+			_target.CalculatedScheduleDaysOff = 8;
+
+			_target.ForceRecalculationOfContractTimeAndDaysOff();
+
+			_target.CalculatedContractTimeHolder.Should().Be.EqualTo(null);
+			_target.CalculatedScheduleDaysOff.Should().Be.EqualTo(null);
+		}
+
 		private static void setShiftCategoryJusticeValues(IShiftCategory shiftCategory, int value)
 		{
 			shiftCategory.DayOfWeekJusticeValues[DayOfWeek.Monday] = value;
