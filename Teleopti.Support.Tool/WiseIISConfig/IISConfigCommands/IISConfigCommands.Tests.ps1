@@ -138,7 +138,7 @@ function Test-InstallationSQLLogin {
 			
 			$BatchFile = $here + "\..\..\..\ccnet\SilentInstall\server\SilentInstall.bat"
 			
-			[array]$ArgArray = @($MsiFile, "PesterTest-DbSQL", "dummmyUser","dummmyPwd")
+			[array]$ArgArray = @($MsiFile, $computerName, "dummmyUser","dummmyPwd")
 		  
 			Install-TeleoptiCCCServer -BatchFile "$BatchFile" -ArgArray $ArgArray
 			
