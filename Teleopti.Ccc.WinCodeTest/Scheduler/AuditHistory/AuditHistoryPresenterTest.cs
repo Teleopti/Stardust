@@ -249,13 +249,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
         [Test]
         public void ShouldReturnDoubleFontHeightOnRowIndexGreaterThan0()
         {
-            Assert.AreEqual(10, _presenter.GridQueryRowHeight(1, 10, 5));       
+            Assert.AreEqual(10, _presenter.GridQueryRowHeight(1, 10, 5,2));       
         }
 
         [Test]
         public void ShouldReturnInHeightWhenRowIndexEqualsZero()
         {
-            Assert.AreEqual(5, _presenter.GridQueryRowHeight(0, 5, 5));   
+            Assert.AreEqual(5, _presenter.GridQueryRowHeight(0, 5, 5,2));   
         }
 
         [Test]

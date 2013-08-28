@@ -81,7 +81,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         void GridQueryRowHeight(object sender, GridRowColSizeEventArgs e)
         {
-            e.Size = _presenter.GridQueryRowHeight(e.Index, 28, grid.Font.Height);
+            var txt = grid[e.Index, 0].FormattedText;
+            if (!string.IsNullOrEmpty(txt))
+            {
+                txt = txt.Substring(0, txt.IndexOf("\n",StringComparison.InvariantCulture));
+            }
+            var rows = Math.Ceiling(txt.Length/(25.0)) +1;
+            e.Size = _presenter.GridQueryRowHeight(e.Index, 28, grid.Font.Height, (int)rows);
             e.Handled = true;
         }
 
