@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public dynamic Shift { get; set; }
 		public IEnumerable<IAbsence> Absences { get; set; }
 		public IEnumerable<IPersonAbsence> PersonAbsences { get; set; }
+		public bool HasViewConfidentialPermission { get; set; }
 	}
 }

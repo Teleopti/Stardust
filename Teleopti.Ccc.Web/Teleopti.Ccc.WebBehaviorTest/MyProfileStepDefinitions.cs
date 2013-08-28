@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			Navigation.GotoTeamSchedule();
 			Browser.Interactions.AssertExists(string.Format(@"div:[data-mytime-periodselection*=""""Display"": ""{0}""""]",
-			                                                DateTime.Today.ToShortDateString()));
+			                                                DateOnlyForBehaviorTests.TestToday.Date.ToShortDateString()));
 		}
 
 

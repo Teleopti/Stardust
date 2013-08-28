@@ -5,4 +5,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 	public class TestEvent : Event
 	{
 	}
+
+    public class TestDomainEvent : RaptorDomainEvent
+    {
+    }
 }

@@ -126,6 +126,14 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			target.CreatePortalViewModel().ShowMeridian.Should().Be.False();
 		}
 
+		[Test, SetCulture("en-GB")]
+		public void ShouldShowMeridianWhenBritishCulture()
+		{
+			var target = CreateTarget(MockRepository.GenerateMock<IPermissionProvider>());
+
+			target.CreatePortalViewModel().ShowMeridian.Should().Be.False();
+		}
+
 		private static PortalViewModelFactory CreateTarget(IPermissionProvider permissionProvider)
 		{
 			return new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>()); 

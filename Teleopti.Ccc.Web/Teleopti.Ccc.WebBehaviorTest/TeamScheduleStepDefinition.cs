@@ -7,6 +7,7 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
@@ -110,7 +111,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see tomorrow")]
 		public void ThenIShouldSeeTheNextDay()
 		{
-			AssertShowingDay(DateOnly.Today.AddDays(1));
+			AssertShowingDay(DateOnlyForBehaviorTests.TestToday.AddDays(1));
 		}
 
 		[Then(@"I should see date '(.*)'")]
@@ -123,7 +124,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the previous day")]
 		public void ThenIShouldSeeThePreviousDay()
 		{
-			AssertShowingDay(DateOnly.Today.AddDays(-1));
+			AssertShowingDay(DateOnlyForBehaviorTests.TestToday.AddDays(-1));
 		}
 
 		private void AssertShowingDay(DateOnly date)

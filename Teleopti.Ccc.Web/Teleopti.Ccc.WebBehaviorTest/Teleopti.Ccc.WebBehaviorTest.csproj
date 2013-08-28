@@ -92,6 +92,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="Anywhere\ViewConfidentialAbsence.feature.cs">
+      <DependentUpon>ViewConfidentialAbsence.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\UserLogonDetailsStepDefinitions.cs" />
@@ -608,6 +613,10 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Anywhere\ViewConfidentialAbsence.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ViewConfidentialAbsence.feature.cs</LastGenOutput>
+    </None>
     <None Include="CalendarShare.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>CalendarShare.feature.cs</LastGenOutput>

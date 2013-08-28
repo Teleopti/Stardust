@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_workShiftRuleSet = new WorkShiftRuleSet(_workShiftTemplateGenerator);
 			_ruleSetBag.AddRuleSet(_workShiftRuleSet);
 
-			_person1.PersonPeriods(new DateOnlyPeriod(_dateOnly, _dateOnly))[0].RuleSetBag = _ruleSetBag;
-			_person2.PersonPeriods(new DateOnlyPeriod(_dateOnly, _dateOnly))[0].RuleSetBag = _ruleSetBag;
+			_person1.Period(_dateOnly).RuleSetBag = _ruleSetBag;
+			_person2.Period(_dateOnly).RuleSetBag = _ruleSetBag;
 			_groupPerson1 = new GroupPerson(new List<IPerson> { _person1, _person2 }, _dateOnly, "groupPerson1", _guid);	
 			var dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(30));
 			
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public void ShouldSetTeamSteadyStateToFalseWhenPersonPeriodValueDiffers()
 		{
 			var timePeriod = new TimePeriod();
-			var personPeriod = _person1.PersonPeriods(new DateOnlyPeriod(_dateOnly, _dateOnly))[0];
+			var personPeriod = _person1.Period(_dateOnly);
 			var partTimePercentage = new PartTimePercentage("partTimePercentage");
 			partTimePercentage.SetId(Guid.NewGuid());
 			personPeriod.PersonContract.PartTimePercentage = partTimePercentage;

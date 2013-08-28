@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			_person = user;
 			_cultureInfo = cultureInfo;
 
-			var createdDate = DateHelper.GetFirstDateInWeek(DateTime.Now.Date, cultureInfo);
+			var createdDate = DateHelper.GetFirstDateInWeek(DateOnlyForBehaviorTests.TestToday.Date, cultureInfo);
 			createdDate = createdDate.AddDays(CreatedWeeksAgo * 7 * -1);
 			TheSchedulePeriod = new Domain.Scheduling.Assignment.SchedulePeriod(
 				new DateOnly(createdDate),
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			user.AddSchedulePeriod(TheSchedulePeriod);
 		}
 
-		public DateTime FirstDateInVirtualSchedulePeriod() { return DateHelper.GetFirstDateInWeek(DateTime.Now.Date, _cultureInfo); }
+		public DateTime FirstDateInVirtualSchedulePeriod() { return DateHelper.GetFirstDateInWeek(DateOnlyForBehaviorTests.TestToday.Date, _cultureInfo); }
 		public DateTime LastDateInVirtualSchedulePeriod() { return FirstDateInVirtualSchedulePeriod().AddDays(7 * VirtualSchedulePeriodWeeks).AddDays(-1); }
 
 		public DateTime FirstDayOfDisplayedPeriod() { return DateHelper.GetFirstDateInWeek(FirstDateInVirtualSchedulePeriod(), _cultureInfo).AddDays(-7); }

@@ -51,5 +51,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		/// Requires seat
 		/// </summary>
 		public bool RequiresSeat { get; set; }
+		/// <summary>
+		/// Is this absence confidential
+		/// </summary>
+		public bool IsAbsenceConfidential { get; set; }
 	}
 }

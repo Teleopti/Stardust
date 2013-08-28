@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
@@ -20,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IWorkShiftFinderResult _finderResult;
         private readonly DateOnly _scheduleDateOnly = new DateOnly(2009,2,2);
         private IPerson _person;
-        private TimeZoneInfo _TimeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo;
         private IVirtualSchedulePeriod _schedulePeriod;
         private IPersonPeriod _personPeriod;
 
@@ -35,11 +32,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _person = _mocks.StrictMock<IPerson>();
             _finderResult = new WorkShiftFinderResult(_person, _scheduleDateOnly);
             TimeZoneInfo zone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
-            _TimeZoneInfo = (zone);
+            _timeZoneInfo = (zone);
             _personPeriod = _mocks.StrictMock<IPersonPeriod>();
             _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 
-            var p = new DateOnlyAsDateTimePeriod(_scheduleDateOnly, _TimeZoneInfo);
+            var p = new DateOnlyAsDateTimePeriod(_scheduleDateOnly, _timeZoneInfo);
             Expect.Call(_part.DateOnlyAsPeriod).Return(p).Repeat.Any();
             Expect.Call(_part.Person).Return(_person).Repeat.AtLeastOnce();
         }
@@ -128,57 +125,24 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         }
 
         [Test]
-        public void PersonAssignmentsCheckWithNoPersonAssignmentReturnsTrue()
-        {
-            using (_mocks.Record())
-            {
-                Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
-            }
-
-            bool ret = PreSchedulingStatusChecker.CheckAssignments(_part);
-            Assert.IsTrue(ret);
-        }
-
-        [Test]
-        public void PersonAssignmentsCheckWithNoMainReturnsTrue()
-        {
-            var personAssignment = _mocks.StrictMock<IPersonAssignment>();
-
-            using (_mocks.Record())
-            {
-							Expect.Call(_part.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
-                Expect.Call(personAssignment.ShiftCategory).Return(null);
-                Expect.Call(personAssignment.PersonalLayers()).Return(new[]{MockRepository.GenerateMock<IPersonalShiftLayer>()});
-            }
-            
-             bool ret = PreSchedulingStatusChecker.CheckAssignments(_part);
-             Assert.IsTrue(ret);
-        }
-
-        [Test]
         public void PersonAssignmentsCheckWithMainReturnsFalse()
         {
             var personContract = _mocks.StrictMock<IPersonContract>();
             var contract = _mocks.StrictMock<IContract>();
 
-            var personAssignment = _mocks.StrictMock<IPersonAssignment>();
+	        using (_mocks.Record())
+	        {
+		        Expect.Call(_person.VirtualSchedulePeriod(_scheduleDateOnly)).Return(_schedulePeriod);
+		        Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.Twice();
+		        Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod());
+		        Expect.Call(_person.Period(_scheduleDateOnly)).Return(_personPeriod);
+		        Expect.Call(_personPeriod.PersonContract).Return(personContract);
+		        Expect.Call(personContract.Contract).Return(contract);
+		        Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
+		        Expect.Call(_part.IsScheduled()).Return(true);
+	        }
 
-            using (_mocks.Record())
-            {
-                Expect.Call(_person.VirtualSchedulePeriod(_scheduleDateOnly)).Return(_schedulePeriod);
-				Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.Twice();
-                Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod());
-                Expect.Call(_person.Period(_scheduleDateOnly)).Return(_personPeriod);
-                Expect.Call(_personPeriod.PersonContract).Return(personContract);
-                Expect.Call(personContract.Contract).Return(contract);
-                Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
-
-								Expect.Call(_part.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
-                Expect.Call(personAssignment.ShiftCategory).Return(new ShiftCategory("dummy"));
-                Expect.Call(personAssignment.PersonalLayers()).Return(new[]{MockRepository.GenerateMock<IPersonalShiftLayer>()});
-            }
-
-			var ret = _target.CheckStatus(_part, _finderResult, _schedulingOptions);
+	        var ret = _target.CheckStatus(_part, _finderResult, _schedulingOptions);
             Assert.IsFalse(ret);
         }
 
@@ -198,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(personContract.Contract).Return(contract);
                 Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
                 Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
-                Expect.Call(_part.HasDayOff()).Return(true);
+                Expect.Call(_part.IsScheduled()).Return(true);
             }
 
 			var ret = _target.CheckStatus(_part, _finderResult, _schedulingOptions);
@@ -221,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(personContract.Contract).Return(contract);
                 Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
                 Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
-								Expect.Call(_part.HasDayOff()).Return(false);
+				Expect.Call(_part.IsScheduled()).Return(false);
                 Expect.Call(_personPeriod.RuleSetBag).Return(null);
             }
 
@@ -244,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(personContract.Contract).Return(contract);
                 Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
                 Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
-								Expect.Call(_part.HasDayOff()).Return(false);
+				Expect.Call(_part.IsScheduled()).Return(false);
                 Expect.Call(_personPeriod.RuleSetBag).Return(ruleSetBag);
             }
 
