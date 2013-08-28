@@ -796,3 +796,15 @@ End personal drop down menu
   .select2-drop{
     z-index: 9999999999999 !important;
 }
+.user-name-link {
+	white-space: nowrap;
+}
+
+.user-name {
+	max-width: 200px;
+	margin: 0;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	float: none;
+	display: inline-block;
+}
