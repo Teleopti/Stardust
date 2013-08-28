@@ -1081,6 +1081,7 @@
     <Compile Include="Security\RegExpSpecification.cs" />
     <Compile Include="Security\UserDetail.cs" />
     <Compile Include="Specification\All.cs" />
+    <Compile Include="Specification\PersonRequestSpecification.cs" />
     <Compile Include="SystemSetting\GlobalSettingData.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSetting.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSettingCalculationMethod.cs" />
