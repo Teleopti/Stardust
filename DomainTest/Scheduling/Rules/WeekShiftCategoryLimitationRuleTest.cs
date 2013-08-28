@@ -4,7 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
@@ -234,5 +236,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Assert.AreEqual(4, ret.Count());
             }
         }
+
+	    [Test]
+	    public void ShouldNotCrash_EmptyVirtualScheduleFromScheduleDay()
+	    {
+		    var scheduleDays = new List<IScheduleDay>();
+		    var rangeClones = new Dictionary<IPerson, IScheduleRange>();
+
+		    _virtualSchedulePeriodExtractor.Expect(v => v.CreateVirtualSchedulePeriodsFromScheduleDays(null))
+		                                   .IgnoreArguments()
+		                                   .Return(new List<IVirtualSchedulePeriod>());
+		    _weeksFromScheduleDaysExtractor.Expect(w => w.CreateWeeksFromScheduleDaysExtractor(null))
+		                                   .IgnoreArguments()
+		                                   .Return(new List<PersonWeek>());
+		    _mocks.ReplayAll();
+
+		    Assert.DoesNotThrow(() => _target.Validate(rangeClones, scheduleDays));
+		    _mocks.VerifyAll();
+	    }
     }
 }
