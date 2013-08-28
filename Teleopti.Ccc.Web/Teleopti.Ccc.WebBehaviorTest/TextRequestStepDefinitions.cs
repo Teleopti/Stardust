@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[When(@"I click send request button")]
+		[When(@"I click submit button")]
 		public void WhenIClickSendRequestButton()
 		{
 			Browser.Interactions.Click(".request-new-send");

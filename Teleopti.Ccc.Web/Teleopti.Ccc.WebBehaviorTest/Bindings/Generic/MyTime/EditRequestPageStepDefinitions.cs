@@ -42,6 +42,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists("#Request-add-section");
 		}
 
+		[When(@"I click to add overtime availabililty")]
+		public void WhenIClickToAddOvertimeAvailabililty()
+		{
+			Browser.Interactions.Click(".overtime-availability-add");
+			Browser.Interactions.AssertExists("#Request-add-section");
+		}
+
 		[When(@"I unchecked the full day checkbox")]
 		public void WhenIUncheckedTheFullDayCheckbox()
 		{
@@ -121,6 +128,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldNotSeeTheAddAbsenceButton()
 		{
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".absence-request-add");
+		}
+
+		[Then(@"I should not see add overtime availabililty button")]
+		public void ThenIShouldNotSeeAddOvertimeAvailabililtyButton()
+		{
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".overtime-availability-add");
 		}
 
 		[Then(@"I should see that request at position '(.*)' in the list was denied with reason '(.*)'")]
