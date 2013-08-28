@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 	public class ScheduledResourcesPersonSkillProficiencyChangedHandlerTest
 	{
 		private ScheduledResourcesPersonSkillProficiencyChangedHandler _target;
-		private IScheduledResourcesReadModelStorage _storage;
+		private IScheduledResourcesReadModelPersister _storage;
 		private readonly Guid _activityId = Guid.NewGuid();
 		private readonly Guid _personId = Guid.NewGuid();
 		private ISkill _skill;
@@ -30,14 +30,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[SetUp]
 		public void Setup()
 		{
-			_storage = MockRepository.GenerateMock<IScheduledResourcesReadModelStorage>();
+			_storage = MockRepository.GenerateMock<IScheduledResourcesReadModelPersister>();
 			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			_scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 			_readModelFinder = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
 			_skill = SkillFactory.CreateSkill("Skill1");
 			_skill.SetId(Guid.NewGuid());
 			_scenario = ScenarioFactory.CreateScenarioWithId("Default", true);
-			_target = new ScheduledResourcesPersonSkillProficiencyChangedHandler(_storage, _readModelFinder, _skillRepository, _scenarioRepository);
+			_target = new ScheduledResourcesPersonSkillProficiencyChangedHandler(new ScheduledResourcesReadModelUpdater(_storage, null, new ControllableEventSyncronization()), _readModelFinder, _skillRepository, _scenarioRepository);
 		}
 
 		[Test]

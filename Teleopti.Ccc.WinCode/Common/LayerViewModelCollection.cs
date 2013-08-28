@@ -37,9 +37,10 @@ namespace Teleopti.Ccc.WinCode.Common
 	    private IEventAggregator _eventAggregator;
         private readonly ICreateLayerViewModelService _createLayerViewModelService;
         private ObservableCollection<LayerGroupViewModel> _groups = new ObservableCollection<LayerGroupViewModel>();
+	    private IList<ILayerViewModel> _layersThatShouldBeUpdated = new List<ILayerViewModel>();
 
 
-		public LayerViewModelCollection(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, IRemoveLayerFromSchedule removeService, IReplaceLayerInSchedule replaceService)
+	    public LayerViewModelCollection(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, IRemoveLayerFromSchedule removeService, IReplaceLayerInSchedule replaceService)
         {
             _eventAggregator = eventAggregator;
             _createLayerViewModelService = createLayerViewModelService;
@@ -227,9 +228,23 @@ namespace Teleopti.Ccc.WinCode.Common
 
         public void MoveAllLayers(ILayerViewModel sender, TimeSpan timeSpanToMove)
         {
+			if (!_layersThatShouldBeUpdated.Contains(sender))
+			{
+				_layersThatShouldBeUpdated.Add(sender);
+			}
             foreach (ILayerViewModel model in this.Where(l => l.CanMoveAll))
             {
-                if ((model.ShouldBeIncludedInGroupMove(sender)) && (model != sender)) model.Period = model.Period.MovePeriod(timeSpanToMove);
+                if ((model.ShouldBeIncludedInGroupMove(sender)))
+                {
+					if (!_layersThatShouldBeUpdated.Contains(model))
+					{
+						_layersThatShouldBeUpdated.Add(model);
+					}
+	                if (model != sender)
+	                {
+		                model.Period = model.Period.MovePeriod(timeSpanToMove);
+	                }
+                }
             }
         }
 
@@ -273,6 +288,13 @@ namespace Teleopti.Ccc.WinCode.Common
 				_replaceService.Replace(scheduleDay, layer, sender.Payload as IAbsence, sender.Period);
 	    }
 
-	   
+	    public void UpdateAllMovedLayers()
+	    {
+		    foreach (var layerViewModel in _layersThatShouldBeUpdated)
+		    {
+			    layerViewModel.UpdateModel();
+		    }
+			_layersThatShouldBeUpdated.Clear();
+	    }
     }
 }

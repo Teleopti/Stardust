@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AuditHistory
     {
         IAuditHistoryModel Model { get; }
         void GridQueryCellInfo(object sender, GridQueryCellInfoEventArgs e);
-        int GridQueryRowHeight(int index, int height, int fontHeight);
+        int GridQueryRowHeight(int index, int height, int fontHeight, int rows);
         int GridQueryColWidth(int index, int size);
         int GridQueryColCount();
         int GridQueryRowCount();
@@ -73,10 +73,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AuditHistory
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "fontHeight*2")]
-        public int GridQueryRowHeight(int index, int height, int fontHeight)
+        public int GridQueryRowHeight(int index, int height, int fontHeight, int rows)
         {
             if (index > 0)
-                return fontHeight * 2;
+                return fontHeight * rows;
 
             return height;
         }

@@ -19,9 +19,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IWorkloadRepository _workloadRepository;
-		private readonly IScheduledResourcesReadModelStorage _storage;
+		private readonly IScheduledResourcesReadModelReader _storage;
 
-		public ResourceCalculateSkillCommand(ISkillRepository skillRepository, IWorkloadRepository workloadRepository, IScheduledResourcesReadModelStorage storage, ISchedulingResultStateHolder schedulingResultStateHolder, ISkillLoaderDecider skillLoaderDecider, ISkillDayLoadHelper skillDayLoadHelper)
+		public ResourceCalculateSkillCommand(ISkillRepository skillRepository, IWorkloadRepository workloadRepository, IScheduledResourcesReadModelReader storage, ISchedulingResultStateHolder schedulingResultStateHolder, ISkillLoaderDecider skillLoaderDecider, ISkillDayLoadHelper skillDayLoadHelper)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_skillLoaderDecider = skillLoaderDecider;

@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IScheduleProjectionReadOnlyRepository _readModelFinder;
-		private readonly IScheduledResourcesReadModelStorage _scheduledResourcesReadModelStorage;
+		private readonly IScheduledResourcesReadModelUpdater _scheduledResourcesReadModelStorage;
 		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly IPublishEventsFromEventHandlers _bus;
 		private int configurableIntervalLength = 15;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (ScheduledResourcesChangedHandler));
 
-		public ScheduledResourcesChangedHandler(IPersonRepository personRepository, ISkillRepository skillRepository, IScheduleProjectionReadOnlyRepository readModelFinder, IScheduledResourcesReadModelStorage scheduledResourcesReadModelStorage, IPersonSkillProvider personSkillProvider, IPublishEventsFromEventHandlers bus)
+		public ScheduledResourcesChangedHandler(IPersonRepository personRepository, ISkillRepository skillRepository, IScheduleProjectionReadOnlyRepository readModelFinder, IScheduledResourcesReadModelUpdater scheduledResourcesReadModelStorage, IPersonSkillProvider personSkillProvider, IPublishEventsFromEventHandlers bus)
 		{
 			_personRepository = personRepository;
 			_skillRepository = skillRepository;
@@ -48,28 +48,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 				return;
 			}
 
-			configurableIntervalLength = _skillRepository.MinimumResolution();
-			foreach (var scheduleDay in @event.ScheduleDays)
-			{
-				var date = new DateOnly(scheduleDay.Date);
-				var combination = _personSkillProvider.SkillsOnPersonDate(person, date);
-
-				if (!@event.IsInitialLoad)
+			_scheduledResourcesReadModelStorage.Update(@event.Datasource, @event.BusinessUnitId, storage =>
 				{
-					var oldSchedule = _readModelFinder.ForPerson(date, @event.PersonId, @event.ScenarioId);
-					var oldResources = oldSchedule.ToResourceLayers(configurableIntervalLength);
-					foreach (var resourceLayer in oldResources)
+
+					configurableIntervalLength = _skillRepository.MinimumResolution();
+					foreach (var scheduleDay in @event.ScheduleDays)
 					{
-						removeResourceFromInterval(resourceLayer, combination);
-					}
-				}
+						var date = new DateOnly(scheduleDay.Date);
+						var combination = _personSkillProvider.SkillsOnPersonDate(person, date);
 
-				var resources = scheduleDay.Layers.ToResourceLayers(configurableIntervalLength);
-				foreach (var resourceLayer in resources)
-				{
-					addResourceToInterval(resourceLayer, combination);
-				}
-			}
+						if (!@event.IsInitialLoad)
+						{
+							var oldSchedule = _readModelFinder.ForPerson(date, @event.PersonId, @event.ScenarioId);
+							var oldResources = oldSchedule.ToResourceLayers(configurableIntervalLength);
+							foreach (var resourceLayer in oldResources)
+							{
+								storage.RemoveResource(resourceLayer, combination);
+							}
+						}
+
+						var resources = scheduleDay.Layers.ToResourceLayers(configurableIntervalLength);
+						foreach (var resourceLayer in resources)
+						{
+							storage.AddResource(resourceLayer, combination);
+						}
+					}
+
+				});
 
 			_bus.Publish(new ScheduledResourcesChangedEvent
 				{
@@ -84,38 +89,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 				});
 		}
 
-		private void addResourceToInterval(ResourceLayer resourceLayer, SkillCombination combination)
-		{
-			var resourceId = _scheduledResourcesReadModelStorage.AddResources(resourceLayer.PayloadId, resourceLayer.RequiresSeat,
-			                                                 combination.Key, resourceLayer.Period,
-			                                                 resourceLayer.Resource, 1);
-			foreach (var skillEfficiency in combination.SkillEfficiencies)
-			{
-				_scheduledResourcesReadModelStorage.AddSkillEfficiency(resourceId,skillEfficiency.Key,skillEfficiency.Value);
-			}
-		}
-
-		private void removeResourceFromInterval(ResourceLayer resourceLayer, SkillCombination combination)
-		{
-			var resourceId = _scheduledResourcesReadModelStorage.RemoveResources(resourceLayer.PayloadId, combination.Key,
-			                                                    resourceLayer.Period, resourceLayer.Resource, 1);
-			if (!resourceId.HasValue) return;
-
-			foreach (var skillEfficiency in combination.SkillEfficiencies)
-			{
-				_scheduledResourcesReadModelStorage.RemoveSkillEfficiency(resourceId.Value, skillEfficiency.Key, skillEfficiency.Value);
-			}
-		}
 	}
-
-	//Other cases to handle:
-	//- Person terminated -
-	//- Person reactivated -
-	//- Person deleted -
-	//- Person period date changes -
-	//- Person period added -
-	//- Person period removed -
-	//- Person period skill changes
-	//- Person team changes
-	//- Team site changes -
 }

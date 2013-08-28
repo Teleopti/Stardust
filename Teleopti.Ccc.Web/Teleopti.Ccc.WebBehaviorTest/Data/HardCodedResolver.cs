@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				return MakeScheduleChangedHandler();
 			if (type == typeof(IEnumerable<IHandleEvent<PersonAbsenceAddedEvent>>))
 				return MakeScheduleChangedHandler();
-			if (type == typeof(IEnumerable<IHandleEvent<ProjectionChangedEvent>>))
+			if (type == typeof (IEnumerable<IHandleEvent<ProjectionChangedEvent>>))
 				return new IHandleEvent<ProjectionChangedEvent>[]
 					{
 						new PersonScheduleDayReadModelHandler(
@@ -37,7 +37,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 								new DoNotSend(),
 								new CurrentDataSource(new CurrentIdentity()))
 							),
-                            new ScheduledResourcesChangedHandler(new PersonRepository(CurrentUnitOfWork.Make()), new SkillRepository(CurrentUnitOfWork.Make()), new ScheduleProjectionReadOnlyRepository(CurrentUnitOfWork.Make()), new ScheduledResourcesReadModelStorage(CurrentUnitOfWork.Make()), new PersonSkillProvider(), new EventPublisher(this))
+						new ScheduledResourcesChangedHandler(
+							new PersonRepository(CurrentUnitOfWork.Make()),
+							new SkillRepository(CurrentUnitOfWork.Make()),
+							new ScheduleProjectionReadOnlyRepository(CurrentUnitOfWork.Make()),
+							new ScheduledResourcesReadModelUpdater(
+								new ScheduledResourcesReadModelStorage(
+									CurrentUnitOfWork.Make()), 
+									new DoNotSend(), 
+									new ControllableEventSyncronization()),
+							new PersonSkillProvider(),
+							new EventPublisher(this))
 					};
             Console.WriteLine("Cannot resolve type {0}! Add it manually or consider using autofac!", type);
 		    return null;
