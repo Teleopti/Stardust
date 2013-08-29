@@ -13,6 +13,16 @@ SET NOCOUNT ON
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PersonDayOff]') AND type in (N'U'))
 BEGIN
 
+
+--debug
+--reset DayOff
+/* exec DayOffConverter
+select * from PersonDayOff
+DELETE FROM personAssignment WHERE ShiftCategory IS null
+UPDATE personAssignment SET DayOffTemplate = null WHERE DayOffTemplate IS not null
+
+*/
+
 	--temp table used
 	CREATE TABLE #personTeam(Person uniqueidentifier,Team uniqueidentifier,StartDate DateTime, OrderIndex int)
 	CREATE CLUSTERED INDEX IX_Person ON #personTeam	([Person])
@@ -22,28 +32,21 @@ BEGIN
 	ON #LastKnownBusinessUnit ([Person]) INCLUDE ([BusinessUnit])
 
 	CREATE TABLE #DayOffTemplateSameName(Id uniqueidentifier, CreatedOn datetime, Name nvarchar(50), BusinessUnit uniqueidentifier, ValidToDate datetime)
-	/*
-	ALTER TABLE #DayOffTemplateSameName ADD CONSTRAINT [UQ_DayOffTemplateSameName] UNIQUE CLUSTERED 
-	(
-		[CreatedOn] ASC,
-		[Name] ASC,
-		[BusinessUnit] ASC
-	)
-	*/
-
 	--declare
-	DECLARE @DayOffToConvert int
+	DECLARE @Assert int
 	DECLARE @PersonsMultipleBu int
 	DECLARE @PersonsWithoutBu int
 	DECLARE @superUser uniqueidentifier
 	DECLARE @Converted int
+	DECLARE @ThisStep int
 
 	--init
-	SET @DayOffToConvert=0
+	SET @Assert=0
 	SET @PersonsMultipleBu=0
 	SET @PersonsWithoutBu=0
 	SET @superUser='3f0886ab-7b25-4e95-856a-0d726edc2a67'
 	SET @Converted=0
+	SET @ThisStep=0
 
 	--Reset any previous conversion of DayOff
 	UPDATE dbo.PersonAssignment
@@ -54,13 +57,13 @@ BEGIN
 	WHERE ShiftCategory IS NULL
 
 	--get the number of dayOff to convert
-	select @DayOffToConvert = count(person) from (
+	select @Assert = count(person) from (
 		select distinct Person, Scenario,convert(datetime,floor(convert(decimal(18,8),anchor))) as 'Date'
 		from dbo.PersonDayOff
 		group by Person, Scenario,convert(datetime,floor(convert(decimal(18,8),anchor)))
 	) a
 	PRINT '----'
-	PRINT 'Total number of DayOff to be converted: ' + +cast(@DayOffToConvert as nvarchar(10))
+	PRINT 'Total number of DayOff to be converted: ' + +cast(@Assert as nvarchar(10))
 	PRINT '----'
 
 	--Check which BU a person belongs to
@@ -171,7 +174,9 @@ BEGIN
 		and dot.BusinessUnit = pdo.Businessunit
 		and pa.Date between dot.CreatedOn and dot.ValidToDate
 	
-	SELECT @Converted = @Converted+@@ROWCOUNT
+		SELECT @ThisStep=@@ROWCOUNT
+		PRINT 'Step 1) - Add DayOff where Assignment already existed and we also have valid DayOffTemplate: ' + cast(@ThisStep as nvarchar(10))
+		SELECT @Converted = @Converted + @ThisStep
 
 	--Catch up all personAssignment we didn't get a hit by last update
 	--If we can't find a matching Template period, just connect them to the "current" DayOffTemplate with correct Name and BU
@@ -191,48 +196,52 @@ BEGIN
 		and dot.ValidToDate='2059-12-31'
 	where pa.DayOffTemplate is null
 
-	SELECT @Converted = @Converted+@@ROWCOUNT
+		SELECT @ThisStep=@@ROWCOUNT
+		PRINT 'Step 2) - Add DayOff where Assignment already existed but Date is "before" DayOffTemplate was created: ' + cast(@ThisStep as nvarchar(10))
+		SELECT @Converted = @Converted + @ThisStep
 
 	-- Insert new DayOff with no aligned Assignments (by Date)
-	-- Assume the Template so use is the last=current.
+	-- Assume the Template to use is the last=current.
+	-- #24439 - handle duplicate rows
 	--3) 129040
-	INSERT INTO [dbo].[PersonAssignment]
-	SELECT DISTINCT
-	[Id]			= newid(),
-	[Version]		= 1,
-	[CreatedBy]		= pdo.CreatedBy,
-	[UpdatedBy]		= pdo.UpdatedBy,
-	[CreatedOn]		= pdo.CreatedOn,
-	[UpdatedOn]		= pdo.UpdatedOn,
-	[Person]		= pdo.Person,
-	[Scenario]		= pdo.scenario,
-	[BusinessUnit]	= pdo.BusinessUnit,
-	[Date]			= convert(datetime,floor(convert(decimal(18,8),pdo.anchor))),
-	[ShiftCategory]	= NULL,
-	[DayOffTemplate]= dot.Id
-	from dbo.PersonDayOff pdo
-	inner join #DayOffTemplateSameName dot
-		on pdo.Name = dot.Name collate database_default
-		and dot.BusinessUnit = pdo.Businessunit
-		and dot.ValidToDate='2059-12-31'
-	WHERE NOT EXISTS (
-		select 1 from dbo.PersonAssignment pa
-		where pa.Person = pdo.Person
-		and pa.Date = convert(datetime,floor(convert(decimal(18,8),pdo.anchor)))
-	)
+		INSERT INTO [dbo].[PersonAssignment]
+		SELECT DISTINCT
+		newid(),
+		[Version]		= 1,
+		[CreatedBy]		= cast(max(cast(pdo.CreatedBy AS BINARY(16)))as uniqueidentifier),
+		[UpdatedBy]		= cast(max(cast(pdo.UpdatedBy AS BINARY(16)))as uniqueidentifier),
+		[CreatedOn]		= max(pdo.CreatedOn),
+		[UpdatedOn]		= max(pdo.UpdatedOn),
+		[Person]		= pdo.Person,
+		[Scenario]		= pdo.scenario,
+		[BusinessUnit]	= cast(max(cast(pdo.BusinessUnit AS BINARY(16)))as uniqueidentifier),
+		[Date]			= convert(datetime,floor(convert(decimal(18,8),pdo.anchor))),
+		[ShiftCategory]	= NULL,
+		[DayOffTemplate]= cast(max(cast(dot.Id AS BINARY(16)))as uniqueidentifier)
+ 
+		from dbo.PersonDayOff pdo
+		inner join #DayOffTemplateSameName dot
+			on pdo.Name = dot.Name collate database_default
+			and dot.BusinessUnit = pdo.Businessunit
+			and dot.ValidToDate='2059-12-31'
+		WHERE NOT EXISTS (
+			select 1 from dbo.PersonAssignment pa
+			where pa.Person = pdo.Person
+			and pa.Date = convert(datetime,floor(convert(decimal(18,8),pdo.anchor)))
+		)
+		GROUP BY pdo.Person,pdo.scenario,convert(datetime,floor(convert(decimal(18,8),pdo.anchor)))
 
-	SELECT @Converted = @Converted+@@ROWCOUNT
-	
-
+		SELECT @ThisStep=@@ROWCOUNT
+		PRINT 'Step 3) - new Days off, no existing Assignment on this Date: ' + cast(@ThisStep as nvarchar(10))
+		SELECT @Converted = @Converted + @ThisStep
 
 	--====================
 	--END
-	PRINT 'Converted DayOff :' + +cast(@Converted as nvarchar(10))
---	SELECT * FROM #DayOffTemplateSameName
-	SELECT @DayOffToConvert as 'Assert',@Converted as 'Test'
+	PRINT 'Converted DayOff :' + cast(@Converted as nvarchar(10))
+	SELECT @Assert as 'Assert',@Converted as 'Test'
 	RETURN 0
 	--====================
-
+	
 	--4) 
 	--recreate "historic" Templates no longer to find
 	INSERT INTO [dbo].[DayOffTemplate]
@@ -310,6 +319,5 @@ BEGIN
 		end
 	end
 END
-
 GO
 --EXEC [dbo].[DayOffConverter]
