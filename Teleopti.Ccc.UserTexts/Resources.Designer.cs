@@ -5131,7 +5131,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change Requests.
+        ///   Looks up a localized string similar to Text Requests.
         /// </summary>
         public static string CreateTextRequest {
             get {
@@ -15121,7 +15121,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Online reports.
+        ///   Looks up a localized string similar to Real time reports.
         /// </summary>
         public static string OnlineReports {
             get {
