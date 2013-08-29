@@ -227,6 +227,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(()=>_page.Requests,Is.Empty);
 		}
 
+		[Then(@"I should see that request at position '(.*)' is processing")]
+		public void ThenIShouldSeeThatRequestAtPositionIsProcessing(int position)
+		{
+			Browser.Interactions.AssertFirstContains(".request-body:nth-child("+position+") .label" , Resources.ProcessingDotDotDot);			
+		}
+
+
+
 
 	}
 }

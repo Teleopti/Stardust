@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var id = Guid.NewGuid();
 			var resultData = new RequestViewModel();
 			var shiftTradePersister = MockRepository.GenerateStrictMock<IRespondToShiftTrade>();
-			shiftTradePersister.Expect(a => a.OkByMe(id)).Return(resultData);
+			shiftTradePersister.Expect(a => a.ResendReffered(id)).Return(resultData);
 
 			using (var target = new RequestsController(null, null, null, null, shiftTradePersister))
 			{

@@ -70,6 +70,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 		}
 
+		public RequestViewModel ResendReffered(Guid requestId)
+		{
+			return OkByMe(requestId);
+		}
+
 		private void persistWithBus(IPersonRequest personRequest)
 		{
 			if (_serviceBusSender.EnsureBus())

@@ -532,7 +532,8 @@ Scenario: Resend referred shifttrade
 	And I am viewing requests
 	When I click on the request at position '1' in the list
 	And I click on shifttrade resend button
-	Then I should see a indication that the request is pending
+	Then I should see that request at position '1' is processing
+	And I should not see resend shifttrade button
 
 Scenario: Cancel referred shifttrade 
 	Given I have the role 'Full access to mytime'
