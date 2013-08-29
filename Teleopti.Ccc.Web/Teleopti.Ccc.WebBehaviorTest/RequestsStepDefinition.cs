@@ -208,19 +208,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.ClickContaining(".btn-danger", Resources.Cancel);
 		}
 
-
-		[Then(@"I should not see cancel shifttrade button")]
-		public void ThenIShouldSeeCancelShifttradeButton()
-		{
-			Browser.Interactions.AssertFirstNotContains(".btn-danger", Resources.Cancel);
-		}
-
-		[Then(@"I should not see resend shifttrade button")]
-		public void ThenIShouldNotSeeResendShifttradeButton()
-		{
-			Browser.Interactions.AssertFirstNotContains(".btn-primary", Resources.SendAgain);
-		}
-
 		[Then(@"I should not see any requests")]
 		public void ThenIShouldNotSeeAnyRequests()
 		{
@@ -233,8 +220,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.AssertFirstContains(".request-body:nth-child("+position+") .label" , Resources.ProcessingDotDotDot);			
 		}
 
+		[Then(@"I should not see resend shifttrade button for request at position '(.*)'")]
+		public void ThenIShouldNotSeeResendShifttradeButtonForRequestAtPosition(int position)
+		{
+			Browser.Interactions.AssertNotExists(".request:nth-child(" + position + ")", ".request:nth-child(" + position + ") .btn[data-bind*='reSend']");
 
-
+		}
 
 	}
 }
