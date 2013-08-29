@@ -26,13 +26,16 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             ResetVolatileData();
             _model = distributionInformationExtractor;
             //_presenter = new ShiftPerAgentGridPresenter(this);
-            initializeComponent();
-
 			_presenter.ReSort();
+            initializeComponent();	
         }
 
 		private void initializeComponent()
 		{
+			QueryColCount -= shiftPerAgentGridQueryColCount;
+			QueryRowCount -= shiftPerAgentGridQueryRowCount;
+			QueryCellInfo -= shiftPerAgentGridQueryCellInfo;
+			CellDoubleClick -= shiftPerAgentGridCellDoubleClick;
 
 			QueryColCount += shiftPerAgentGridQueryColCount;
 			QueryRowCount += shiftPerAgentGridQueryRowCount;

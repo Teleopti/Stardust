@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
 		public void ReSort()
 		{
+			_sortedPersonInvolved = _view.ExtractorModel.PersonInvolved;
 			_sortAscending = !_sortAscending;
 			Sort(_sortColumn);
 		}

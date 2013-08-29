@@ -13,23 +13,28 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		public ShiftFairnessGrid()
 		{
 			base.Initialize();
-			_presenter = new ShiftFairnessGridPresenter(this);
-			
+			_presenter = new ShiftFairnessGridPresenter(this);	
 		}
 
         public void UpdateModel(IDistributionInformationExtractor distributionInformationExtractor)
         {
-            ResetVolatileData();
+            //ResetVolatileData();
             _model = distributionInformationExtractor;
             //_presenter = new ShiftFairnessGridPresenter(this);
+			_presenter.ReSort();
             initializeComponent();
 
-			_presenter.ReSort();
+			//_presenter.ReSort();
         }
 
 		private void initializeComponent()
 		{
-			
+			ResetVolatileData();
+
+			QueryColCount -= shiftFairnessGridQueryColCount;
+			QueryRowCount -= shiftFairnessGridQueryRowCount;
+			QueryCellInfo -= shiftFairnessGridQueryCellInfo;
+			CellDoubleClick -= shiftFairnessGridCellDoubleClick;
 
 			QueryColCount += shiftFairnessGridQueryColCount;
 			QueryRowCount += shiftFairnessGridQueryRowCount;
