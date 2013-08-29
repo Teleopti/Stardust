@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			builder.RegisterType<DatabaseConnectionStringHandler>().As<IDatabaseConnectionStringHandler>();
 			builder.RegisterType<DatabaseConnectionFactory>().As<IDatabaseConnectionFactory>();
+			builder.RegisterType<RtaBatchHandler>().As<IRtaBatchHandler>();
 			//mark activityalarms and stategroups to be cached
 			_cacheBuilder
 				.For<ActualAgentDataHandler>()

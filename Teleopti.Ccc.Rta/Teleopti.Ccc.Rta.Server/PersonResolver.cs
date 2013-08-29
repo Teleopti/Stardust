@@ -19,11 +19,13 @@ namespace Teleopti.Ccc.Rta.Server
         private readonly ILog _loggingSvc;
         private readonly Cache _cache;
 
-        public PersonResolver(IDatabaseConnectionFactory databaseConnectionFactory, string connectionStringDataStore) : this(databaseConnectionFactory,connectionStringDataStore,LogManager.GetLogger(typeof(PersonResolver)))
+	    public PersonResolver(IDatabaseConnectionFactory databaseConnectionFactory, string connectionStringDataStore)
+		    : this(databaseConnectionFactory, connectionStringDataStore, LogManager.GetLogger(typeof (PersonResolver)))
         {
         }
 
-        protected PersonResolver(IDatabaseConnectionFactory databaseConnectionFactory, string connectionStringDataStore, ILog loggingSvc)
+	    protected PersonResolver(IDatabaseConnectionFactory databaseConnectionFactory, string connectionStringDataStore,
+	                             ILog loggingSvc)
         {
             _databaseConnectionFactory = databaseConnectionFactory;
             _connectionStringDataStore = connectionStringDataStore;
