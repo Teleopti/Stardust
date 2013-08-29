@@ -32,7 +32,7 @@ $password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)}
 $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $domain\$username, $secstr
 $computerName=(get-childitem -path env:computername).Value
 $global:version = 'main'
-
+$global:batName = 'PesterTest-DbSQL'
 function TearDown {
 	Describe "Tear down previous test"{
 		[string] $path = Get-UninstallRegPath -MsiKey "$CccServerMsiKey"
@@ -83,7 +83,10 @@ function Setup-PreReqs {
             foreach($testServer in $serverConfig.configuration.servers.add)
             {
                 if ($testServer.name -eq  $computerName)
-                {$global:version =  $testServer.version}
+                {
+                    $global:version =  $testServer.version
+                    $global:batName =  $testServer.batname   
+                }
                 
             }
 
@@ -138,7 +141,7 @@ function Test-InstallationSQLLogin {
 			
 			$BatchFile = $here + "\..\..\..\ccnet\SilentInstall\server\SilentInstall.bat"
 			
-			[array]$ArgArray = @($MsiFile, $computerName, "dummmyUser","dummmyPwd")
+			[array]$ArgArray = @($MsiFile, $global:batName, "dummmyUser","dummmyPwd")
 		  
 			Install-TeleoptiCCCServer -BatchFile "$BatchFile" -ArgArray $ArgArray
 			

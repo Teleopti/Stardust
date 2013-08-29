@@ -181,6 +181,7 @@ Function Uninstall-ByRegPath(){
 				throw "The MSI failed to get uninstalled. MSIEXEC.exe returned an exit code of $ExitCode."
 				} 
 			}
+            Remove-Item -Path HKLM:\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings
 		}
 
 		catch [Exception] {
@@ -221,6 +222,7 @@ function Copy-ZippedMsi{
     return @("$destFolder\$zipFileName")
 }
 
+
 function destroy-WorkingFolder{
     param(
         $workingFolder
@@ -237,6 +239,10 @@ function create-WorkingFolder{
     )
 	if (!(Test-Path "$workingFolder")) {
 		& mkdir "$workingFolder"
+        $Acl = Get-Acl "$workingFolder"
+        $Ar = New-Object  system.security.accesscontrol.filesystemaccessrule("TOPTINET\TfsIntegration","FullControl","Allow")
+        $Acl.SetAccessRule($Ar)
+        Set-Acl "$workingFolder" $Acl
 	}
 }
 
