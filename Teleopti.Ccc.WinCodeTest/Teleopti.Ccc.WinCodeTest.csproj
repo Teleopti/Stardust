@@ -521,6 +521,7 @@
     <Compile Include="Presentation\ReportUserSelectorAuditingModelTest.cs" />
     <Compile Include="Presentation\ReportUserSelectorAuditingPresenterTest.cs" />
     <Compile Include="Presentation\ShiftCategoryLimitationViewPresenterTest.cs" />
+    <Compile Include="Scheduler\AbsenceMergerTest.cs" />
     <Compile Include="Scheduler\AddAbsenceViewModelTest.cs" />
     <Compile Include="Scheduler\AddActivityViewModelTest.cs" />
     <Compile Include="Scheduler\AddDayOffViewModelTest.cs" />
