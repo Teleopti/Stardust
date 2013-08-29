@@ -141,6 +141,7 @@
     <Compile Include="PersonStateHolder.cs" />
     <Compile Include="RealTimeContainerInstaller.cs" />
     <Compile Include="RtaAgentState.cs" />
+    <Compile Include="RtaBatchHandler.cs" />
     <Compile Include="RtaDataHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RtaFactory.cs" />
