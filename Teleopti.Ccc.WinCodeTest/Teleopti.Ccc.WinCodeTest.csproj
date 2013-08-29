@@ -494,7 +494,6 @@
     <Compile Include="PeopleAdmin\PersonFinderPreviousCommandTest.cs" />
     <Compile Include="PeopleAdmin\PersonFinderSettingsTest.cs" />
     <Compile Include="PeopleAdmin\PersonSkillStringParserTest.cs" />
-    <Compile Include="PeopleAdmin\PersonTimeZonePresenterTest.cs" />
     <Compile Include="PeopleAdmin\SameUserCredentialOnOtherCheckerTest.cs" />
     <Compile Include="PeopleAdmin\SendInstantMessageCommandTest.cs" />
     <Compile Include="PeopleAdmin\SendInstantMessageEnableCommandTest.cs" />
