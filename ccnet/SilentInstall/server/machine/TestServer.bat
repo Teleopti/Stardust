@@ -3,7 +3,7 @@
 ::hard coded for each environment
 ::=====================
 SET INSTALLDIR=C:\Program Files (x86)\Teleopti\
-SET DBServerInstance=ccc\ares
+SET DBServerInstance=tcp:ARES\CCC
 SET AppServer=%COMPUTERNAME%
 SET DB_ANALYTICS=%COMPUTERNAME%_TeleoptiAnalytics
 SET DB_CCC7=%COMPUTERNAME%_TeleoptiCCC7

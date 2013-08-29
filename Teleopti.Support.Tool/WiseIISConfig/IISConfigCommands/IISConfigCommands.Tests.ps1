@@ -145,7 +145,7 @@ function Test-InstallationSQLLogin {
 		  
 			Install-TeleoptiCCCServer -BatchFile "$BatchFile" -ArgArray $ArgArray
 			
-			$temp = Check-HttpStatus -url "http://hydra/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred
+			$temp = Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred
 			$temp | Should be $True
 		}
 	}
@@ -181,7 +181,7 @@ function Test-SitesAndServicesOk {
 		It "should start SDK" {
 			start-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
 			$computerName=(get-childitem -path env:computername).Value
-			$temp = Check-HttpStatus -url "http://hydra/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred
+			$temp = Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred
 			$temp | Should be $True
 		}
 		
@@ -196,13 +196,13 @@ function Test-SitesAndServicesOk {
 			# $enabled | Should Be "False"
 		# }
 
-		It "Nhib file should exist and contain SQL Auth connection string" {
-			$nhibFile = "C:\Program Files (x86)\Teleopti\TeleoptiCCC\SDK\TeleoptiCCC7.nhib.xml"
-			$computerName=(get-childitem -path env:computername).Value
-			$connectionString="Data Source=$computerName;User Id=TeleoptiDemoUser;Password=TeleoptiDemoPwd2;initial Catalog=TeleoptiCCC7_Demo;Current Language=us_english"
-			$nhibFile | Should Exist
-			$nhibFile | Should Contain "$connectionString"
-		}
+		#It "Nhib file should exist and contain SQL Auth connection string" {
+		#	$nhibFile = "C:\Program Files (x86)\Teleopti\TeleoptiCCC\SDK\TeleoptiCCC7.nhib.xml"
+		#	$computerName=(get-childitem -path env:computername).Value
+		#	$connectionString="Data Source=$computerName;User Id=TeleoptiDemoUser;Password=TeleoptiDemoPwd2;initial Catalog=TeleoptiCCC7_Demo;Current Language=us_english"
+		#	$nhibFile | Should Exist
+		#	$nhibFile | Should Contain "$connectionString"
+		#}
 		
 		It "should have a ETL Service running" {
         $serviceName="TeleoptiETLService"
