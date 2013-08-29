@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_publisher = publisher;
 		}
 
-		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void Execute(IMessageBrokerIdentifier messageBrokerIdentifier, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var withEvents = modifiedRoots.Select(m => m.Root).OfType<IAggregateRootWithEvents>();
 			if (!withEvents.Any()) return;
@@ -22,5 +22,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var events = withEvents.SelectMany(e => e.PopAllEvents()).ToArray();
 			_publisher.Publish(events);
 		}
+
 	}
 }

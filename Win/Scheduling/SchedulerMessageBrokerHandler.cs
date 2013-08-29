@@ -18,17 +18,17 @@ using Teleopti.Messaging.Events;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	public class SchedulerMessageBrokerHandler : IMessageBrokerModule, IDisposable, IOwnMessageQueue, IReassociateData, IUpdateScheduleDataFromMessages, IUpdateMeetingsFromMessages, IUpdatePersonRequestsFromMessages
+	public class SchedulerMessageBrokerHandler : IMessageBrokerIdentifier, IDisposable, IOwnMessageQueue, IReassociateData, IUpdateScheduleDataFromMessages, IUpdateMeetingsFromMessages, IUpdatePersonRequestsFromMessages
 	{
 		private SchedulingScreen _owner;
 		private readonly IScheduleScreenRefresher _scheduleScreenRefresher;
-		private readonly Guid _moduleId = Guid.NewGuid();
+		private readonly Guid _instanceId = Guid.NewGuid();
 		private static readonly ILog Log = LogManager.GetLogger(typeof(SchedulerMessageBrokerHandler));
 		private readonly IList<IEventMessage> _messageQueue = new List<IEventMessage>();
 
-		public Guid ModuleId
+		public Guid InstanceId
 		{
-			get { return _moduleId; }
+			get { return _instanceId; }
 		}
 
 		public SchedulerMessageBrokerHandler(SchedulingScreen owner, ILifetimeScope container)
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_owner.IsDisposed)
 				return;
-			if (e.Message.ModuleId == ModuleId)
+			if (e.Message.ModuleId == InstanceId)
 				return;
 			if (_owner.InvokeRequired)
 			{
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				if (_owner.IsDisposed) return;
 				Log.Debug("Message broker - catched event");
-				if (eventMessage.ModuleId != ModuleId)
+				if (eventMessage.ModuleId != InstanceId)
 				{
 					deleteMeetingOnEvent(eventMessage);
 					if (eventMessage.DomainUpdateType != DomainUpdateType.Delete)
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				if (_owner.IsDisposed) return;
 				Log.Debug("Message broker - catched event");
-				if (eventMessage.ModuleId != ModuleId)
+				if (eventMessage.ModuleId != InstanceId)
 				{
 					var deletedRequest = deleteOnEventRequest(eventMessage);
 					var onRequestDeletedFromBroker = RequestDeletedFromBroker;

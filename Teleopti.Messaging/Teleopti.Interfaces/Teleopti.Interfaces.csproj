@@ -733,7 +733,7 @@
     <Compile Include="Domain\WorkTime.cs" />
     <Compile Include="Domain\WorkTimeDirective.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Infrastructure\IMessageBrokerModule.cs" />
+    <Compile Include="Infrastructure\IMessageBrokerIdentifier.cs" />
     <Compile Include="Infrastructure\ISessionData.cs" />
     <Compile Include="Infrastructure\IStatelessUnitOfWork.cs" />
     <Compile Include="Infrastructure\IUnitOfWork.cs" />

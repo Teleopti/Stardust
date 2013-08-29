@@ -10,7 +10,7 @@ namespace Teleopti.Interfaces.Infrastructure
     /// Created by: rogerkr
     /// Created date: 2008-07-01
     /// </remarks>
-    public interface IMessageBrokerModule
+    public interface IMessageBrokerIdentifier
     {
         /// <summary>
         /// Gets the module id.
@@ -21,6 +21,6 @@ namespace Teleopti.Interfaces.Infrastructure
         /// Created by: rogerkr
         /// Created date: 2008-07-01
         /// </remarks>
-        Guid ModuleId { get; }
+        Guid InstanceId { get; }
     }
 }

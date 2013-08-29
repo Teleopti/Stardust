@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         {
             IEventMessage eventMessage = _mocks.StrictMock<IEventMessage>();
             Expect.Call(_view.InvokeRequired).Return(false);
-            Expect.Call(eventMessage.ModuleId).Return(_target.ModuleId);
+            Expect.Call(eventMessage.ModuleId).Return(_target.InstanceId);
             _mocks.ReplayAll();
             _target.OnEventForecastDataMessageHandler(null, new EventMessageArgs(eventMessage));
             _mocks.VerifyAll();
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         {
             IEventMessage eventMessage = _mocks.StrictMock<IEventMessage>();
             Expect.Call(_view.InvokeRequired).Return(false);
-            Expect.Call(eventMessage.ModuleId).Return(_target.ModuleId);
+            Expect.Call(eventMessage.ModuleId).Return(_target.InstanceId);
             _mocks.ReplayAll();
             _target.OnEventScheduleMessageHandler(null, new EventMessageArgs(eventMessage));
             _mocks.VerifyAll();
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         public void VerifyOnEventExternalAgentStateMessageHandlerSameModuleId()
         {
             IEventMessage eventMessage = _mocks.StrictMock<IEventMessage>();
-            Expect.Call(eventMessage.ModuleId).Return(_target.ModuleId);
+            Expect.Call(eventMessage.ModuleId).Return(_target.InstanceId);
             _mocks.ReplayAll();
             _target.OnEventActualAgentStateMessageHandler(null, new EventMessageArgs(eventMessage));
             _mocks.VerifyAll();
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         {
             IEventMessage eventMessage = _mocks.StrictMock<IEventMessage>();
             Expect.Call(_view.InvokeRequired).Return(false);
-            Expect.Call(eventMessage.ModuleId).Return(_target.ModuleId);
+            Expect.Call(eventMessage.ModuleId).Return(_target.InstanceId);
             _mocks.ReplayAll();
             _target.OnEventStatisticMessageHandler(null, new EventMessageArgs(eventMessage));
             _mocks.VerifyAll();
@@ -668,7 +668,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             Assert.IsTrue(string.IsNullOrEmpty(_target.ChartIntradayDescription));
             Assert.AreEqual(_period.StartDate, _target.IntradayDate);
             Assert.IsNotNull(_target.RtaStateHolder);
-            Assert.AreNotEqual(Guid.Empty, _target.ModuleId);
+            Assert.AreNotEqual(Guid.Empty, _target.InstanceId);
             Assert.IsTrue(_target.RealTimeAdherenceEnabled);
             Assert.IsTrue(_target.EarlyWarningEnabled);
         }

@@ -494,7 +494,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			//todo: move more of this stuff to ioc
 			var scheduleDictionaryBatchingPersister = _container.Resolve<IScheduleDictionaryBatchPersister>(
-				TypedParameter.From<IMessageBrokerModule>(_schedulerMessageBrokerHandler),
+				TypedParameter.From<IMessageBrokerIdentifier>(_schedulerMessageBrokerHandler),
 				TypedParameter.From<IReassociateData>(_schedulerMessageBrokerHandler)
 				);
 			_persister = _container.Resolve<IScheduleScreenPersister>(
@@ -517,7 +517,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 																		   }
 																	   }
 																   })),
-				TypedParameter.From<IMessageBrokerModule>(_schedulerMessageBrokerHandler),
+				TypedParameter.From<IMessageBrokerIdentifier>(_schedulerMessageBrokerHandler),
 				TypedParameter.From(scheduleDictionaryBatchingPersister),
 				TypedParameter.From<IOwnMessageQueue>(_schedulerMessageBrokerHandler)
 				);

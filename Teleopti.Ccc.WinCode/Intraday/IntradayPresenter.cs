@@ -25,7 +25,7 @@ using System.Windows.Forms;
 
 namespace Teleopti.Ccc.WinCode.Intraday
 {
-    public class IntradayPresenter : IMessageBrokerModule, IDisposable
+    public class IntradayPresenter : IMessageBrokerIdentifier, IDisposable
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(IntradayPresenter));
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private DateOnly _intradayDate;
         private IRtaStateHolder _rtaStateHolder;
         private IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly Guid _moduleId = Guid.NewGuid();
+        private readonly Guid _instanceId = Guid.NewGuid();
         private readonly bool _realTimeAdherenceEnabled;
         private readonly bool _earlyWarningEnabled;
         private readonly IEventAggregator _eventAggregator;
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void OnEventActualAgentStateMessageHandler(object sender, EventMessageArgs e)
         {
-            if (e.Message.ModuleId == _moduleId) return;
+            if (e.Message.ModuleId == _instanceId) return;
 
             ThreadPool.QueueUserWorkItem(handleIncomingExternalEvent, e.Message.DomainObject);
         }
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             }
             else
             {
-                if (e.Message.ModuleId == _moduleId) return;
+                if (e.Message.ModuleId == _instanceId) return;
 
                 try
                 {
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             }
             else
             {
-                if (e.Message.ModuleId == _moduleId) return;
+                if (e.Message.ModuleId == _instanceId) return;
 
                 try
                 {
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             }
             else
             {
-                if (e.Message.ModuleId == _moduleId) return;
+                if (e.Message.ModuleId == _instanceId) return;
 
                 try
                 {
@@ -408,9 +408,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
             return false;
         }
 
-        public Guid ModuleId
+        public Guid InstanceId
         {
-            get { return _moduleId; }
+            get { return _instanceId; }
         }
 
         public bool HistoryOnly
