@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Rta.Server;
 
 namespace Teleopti.Ccc.Rta.ServerTest
@@ -11,7 +12,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		private const string loggedOutCode = "LOGGED_OFF";
 
 		string _authenticationKey;
-		string _userCode;
 		string _stateCode;
 		string _stateDescription;
 		bool _isLoggedOn;
@@ -28,12 +28,13 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		private RtaAgentState _endOfState2;
 		private RtaAgentState? _processedState;
 		private RtaProcessMissingAgents _target;
+		private IRtaBatchHandler _batchHandler;
+		private List<string> _allUsersOnDataSource;
 
 		[SetUp]
 		public void Setup()
 		{
 			_authenticationKey = "aa";
-			_userCode = "u1";
 			_stateCode = "AUX1";
 			_stateDescription = "Phone";
 			_isLoggedOn = true;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_timestamp2 = new DateTime(2001, 1, 1, 8, 0, 2);
 			_timestamp3 = new DateTime(2001, 1, 1, 8, 0, 3);
 			_platformTypeId = "Cisco";
-			_sourceId = "xxx";
+			_sourceId = "123";
 			_batchId1 = new DateTime(2001, 1, 1, 8, 1, 0);
 			_batchId2 = new DateTime(2001, 1, 1, 8, 2, 0);
 			_processedState = null;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_agentState1 = new RtaAgentState()
 				               {
 					               AuthenticationKey = _authenticationKey,
-					               UserCode = _userCode,
+					               UserCode = "user1",
 					               StateCode = _stateCode,
 					               StateDescription = _stateDescription,
 					               IsLoggedOn = _isLoggedOn,
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_agentState2 = new RtaAgentState()
 				               {
 					               AuthenticationKey = _authenticationKey,
-					               UserCode = _userCode,
+					               UserCode = "user2",
 					               StateCode = _stateCode,
 					               StateDescription = _stateDescription,
 					               IsLoggedOn = _isLoggedOn,
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_endOfState1 = new RtaAgentState()
 				               {
 					               AuthenticationKey = _authenticationKey,
-					               UserCode = String.Empty,
+					               UserCode = string.Empty,
 					               StateCode = _stateCode,
 					               StateDescription = _stateDescription,
 					               IsLoggedOn = _isLoggedOn,
@@ -91,7 +92,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_endOfState2 = new RtaAgentState()
 				               {
 					               AuthenticationKey = _authenticationKey,
-					               UserCode = String.Empty,
+					               UserCode = string.Empty,
 					               StateCode = _stateCode,
 					               StateDescription = _stateDescription,
 					               IsLoggedOn = _isLoggedOn,
@@ -101,29 +102,26 @@ namespace Teleopti.Ccc.Rta.ServerTest
 					               BatchId = _batchId2,
 					               IsSnapshot = true,
 				               };
-
-
-			_target = new RtaProcessMissingAgents(loggedOutCode, (a) =>
-				                                                     {
-					                                                     _processedState = a;
-				                                                     });
-		}
-
-		[Test]
-		public void Check_WhenNotMissingFromNextBatch_ShouldNotProcessAnyAgents()
-		{
-			_target.Check(_agentState1);
-			_target.Check(_endOfState1);
-			_target.Check(_agentState2);
-			_target.Check(_endOfState2);
-
-			Assert.That(_processedState, Is.Null);
+			_batchHandler = MockRepository.GenerateMock<IRtaBatchHandler>();
+			_allUsersOnDataSource = new List<string>();
+			_target = new RtaProcessMissingAgents(loggedOutCode, a =>
+				{
+					_processedState = a;
+				}, _batchHandler);
 		}
 
 		[Test]
 		public void Check_WhenAgentOnlyExistsInFirstBatch_ShouldProcessMissingAgentAsLoggedOut()
 		{
 			makeAgentStateOnlyIncluededInFirstbatch();
+
+
+			_allUsersOnDataSource.AddRange(new[]
+				{
+					_agentState1.UserCode,
+					_agentState2.UserCode
+				});
+			_batchHandler.Expect(b => b.PeopleOnDataSource(123)).Return(_allUsersOnDataSource);
 
 			_target.Check(_agentState1);
 			_target.Check(_endOfState1);
@@ -140,6 +138,13 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void Check_WhenAgentOnlyExistsInFirstBatch_ShouldSetTheTimeStampToTheNextBatchId()
 		{
 			makeAgentStateOnlyIncluededInFirstbatch();
+			
+			_allUsersOnDataSource.AddRange(new[]
+				{
+					_agentState1.UserCode,
+					_agentState2.UserCode
+				});
+			_batchHandler.Expect(b => b.PeopleOnDataSource(123)).Return(_allUsersOnDataSource);
 
 			_target.Check(_agentState1);
 			_target.Check(_endOfState1);
@@ -155,13 +160,21 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		{
 			makeAgentStateOnlyIncluededInFirstbatch();
 
+
+			_allUsersOnDataSource.AddRange(new[]
+				{
+					_agentState1.UserCode,
+					_agentState2.UserCode
+				});
+			_batchHandler.Expect(b => b.PeopleOnDataSource(123)).Return(_allUsersOnDataSource);
+
 			_target.Check(_agentState1);
 			_target.Check(_endOfState1);
 			_target.Check(_agentState2);
 			_target.Check(_agentState2);
 			_target.Check(_agentState2);
 
-			Assert.That(_processedState, Is.Null, "Processed should have been called, second batch is not finished");
+			Assert.That(_processedState, Is.Not.Null, "Processed should have been called, second batch is not finished");
 
 			_target.Check(_endOfState2);
 
@@ -172,29 +185,39 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void Check_WhenThereAreManyMissingAgentsInFirstBatchThatExistsInSecondBatch_ShouldProcessAllAgentsMissingInFirstBatch()
 		{
 			makeAgentStateOnlyIncluededInFirstbatch();
+
+			var tempState = new RtaAgentState
+				{
+					AuthenticationKey = _agentState1.AuthenticationKey,
+					UserCode = _agentState1.UserCode + "something else",
+					StateCode = _agentState1.StateCode,
+					StateDescription = _agentState1.StateDescription,
+					IsLoggedOn = _isLoggedOn,
+					Timestamp = _timestamp3,
+					PlatformTypeId = _agentState1.PlatformTypeId,
+					SourceId = _agentState1.SourceId,
+					BatchId = _batchId1,
+					IsSnapshot = true
+				};
+			_allUsersOnDataSource.AddRange(new[]
+				{
+					_agentState1.UserCode,
+					_agentState2.UserCode,
+					tempState.UserCode
+				});
+			_batchHandler.Expect(b => b.PeopleOnDataSource(123)).Return(_allUsersOnDataSource);
+
+			
 			var processedAgents = new List<RtaAgentState>();
-			var target = new RtaProcessMissingAgents(loggedOutCode, (a) => processedAgents.Add(a));
+			var target = new RtaProcessMissingAgents(loggedOutCode, processedAgents.Add, _batchHandler);
 
 			target.Check(_agentState1);
-			target.Check(new RtaAgentState()
-				             {
-					             AuthenticationKey = _agentState1.AuthenticationKey,
-					             UserCode = _agentState1.UserCode + "something else",
-					             StateCode = _agentState1.StateCode,
-					             StateDescription = _agentState1.StateDescription,
-					             IsLoggedOn = _isLoggedOn,
-					             Timestamp = _timestamp3,
-					             PlatformTypeId = _agentState1.PlatformTypeId,
-					             SourceId = _agentState1.SourceId,
-					             BatchId = _batchId1,
-					             IsSnapshot = true
-				             });
-
+			target.Check(tempState);
 			target.Check(_endOfState1);
 			target.Check(_agentState2);
 			target.Check(_endOfState2);
 
-			Assert.That(processedAgents.Count, Is.EqualTo(2));
+			Assert.That(processedAgents.Count, Is.EqualTo(3));
 		}
 
 		[Test]
@@ -202,20 +225,30 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		{
 			makeAgentStateOnlyIncluededInFirstbatch();
 
+			var tempState = new RtaAgentState
+				{
+					AuthenticationKey = _agentState1.AuthenticationKey + "gdhaj",
+					UserCode = _agentState1.UserCode + "askldjasd sdasd",
+					StateDescription = _agentState1.StateDescription + "ajksnda asd",
+					IsLoggedOn = _isLoggedOn,
+					Timestamp = _timestamp3,
+					PlatformTypeId = _agentState1.PlatformTypeId + "ASKLd asldkaj sd",
+					SourceId = _agentState1.SourceId + "askldas dlas dljkasd",
+					BatchId = _batchId2,
+					IsSnapshot = true,
+				};
+
+			_allUsersOnDataSource.AddRange(new[]
+				{
+					_agentState1.UserCode,
+					tempState.UserCode
+				});
+
+			_batchHandler.Expect(b => b.PeopleOnDataSource(123)).Return(_allUsersOnDataSource);
+
 			_target.Check(_agentState1);
 			_target.Check(_endOfState1);
-			_target.Check(new RtaAgentState()
-				              {
-					              AuthenticationKey = _agentState1.AuthenticationKey + "gdhaj",
-					              UserCode = _agentState1.UserCode + "askldjasd sdasd",
-					              StateDescription = _agentState1.StateDescription + "ajksnda asd",
-					              IsLoggedOn = _isLoggedOn,
-					              Timestamp = _timestamp3,
-					              PlatformTypeId = _agentState1.PlatformTypeId + "ASKLd asldkaj sd",
-					              SourceId = _agentState1.SourceId + "askldas dlas dljkasd",
-					              BatchId = _batchId2,
-					              IsSnapshot = true,
-				              });
+			_target.Check(tempState);
 			_target.Check(_endOfState2);
 
 
@@ -234,42 +267,13 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_agentState1.IsSnapshot = false;
 			makeAgentStateOnlyIncluededInFirstbatch();
 
-			_target.Check(_agentState1);
-			_target.Check(_endOfState1);
-			_target.Check(_agentState2);
-			_target.Check(_endOfState2);
-
-			Assert.That(_processedState, Is.Null);
-		}
-
-		[Test]
-		public void Check_WhenNotLogegdOn_ShouldNotProcessAgent()
-		{
-			_agentState1.IsLoggedOn = false;
-			makeAgentStateOnlyIncluededInFirstbatch();
+			_batchHandler.Expect(b => b.PeopleOnDataSource(123)).Return(new List<string>());
 
 			_target.Check(_agentState1);
 			_target.Check(_endOfState1);
-			_target.Check(_agentState2);
-			_target.Check(_endOfState2);
-
+			
 			Assert.That(_processedState, Is.Null);
 		}
-
-		[Test]
-		public void Check_WhenAlreadyLoggedOff_ShouldNotProcessAgent()
-		{
-			makeAgentStateOnlyIncluededInFirstbatch();
-			_agentState1.IsLoggedOn = false;
-
-			_target.Check(_agentState1);
-			_target.Check(_endOfState1);
-			_target.Check(_agentState2);
-			_target.Check(_endOfState2);
-
-			Assert.That(_processedState, Is.Null);
-		}
-
 
 		#region helpers
 
