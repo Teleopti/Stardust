@@ -211,7 +211,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             const string query = @"select sum(NumberOfRequests) as NumberOfRequests, BelongsToDate
                                     from (
-	                                        select COUNT(*) NumberOfRequests, sp.BelongsToDate 
+
+                                            select COUNT(*) NumberOfRequests, t.BelongsToDate 
+	                                        from (
+	                                        SELECT distinct sp.*
 	                                        from Absence a
 	                                        inner join ReadModel.ScheduleProjectionReadOnly sp 
 	                                        on a.Id = sp.PayloadId
@@ -221,16 +224,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                             on pp.Parent = p.Id
 	                                        and pp.BudgetGroup = :budgetGroupId
 	                                        and sp.BelongsToDate = :currentDate 
-	                                        group by sp.BelongsToDate
+	                                        ) t
+	                                        group by t.BelongsToDate
 	                                        union all
-	                                        select 0 as 'NumberOfRequests', :currentDate as 'BelongsToDate'
+	                                        select 0 as 'NumberOfRequests',:currentDate as 'BelongsToDate'
 	                                    ) a
                                     group by BelongsToDate";
 
             var queryResult = ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(query)
                                                           .SetDateTime("currentDate", currentDate)
                                                           .SetGuid("budgetGroupId", budgetGroupId)
-                                                          .SetResultTransformer(Transformers.AliasToBean(typeof (AbsenceRequestInfo)))
+                                                          .SetResultTransformer(Transformers.AliasToBean(typeof(AbsenceRequestInfo)))
                                                           .List<AbsenceRequestInfo>();
             int numberOfHeadCounts = 0;
 
