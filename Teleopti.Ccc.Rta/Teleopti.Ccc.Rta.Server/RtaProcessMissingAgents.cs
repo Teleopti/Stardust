@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
@@ -10,23 +11,25 @@ namespace Teleopti.Ccc.Rta.Server
 	{
 		private readonly string _loggedOutCode;
 		private readonly ProcessWhenMissing _processAgentState;
-		private HashSet<RtaAgentState> _lastBatch = new HashSet<RtaAgentState>();
-		private HashSet<RtaAgentState> _currentBatch = new HashSet<RtaAgentState>();
+		private readonly IRtaBatchHandler _batchHandler;
+		private readonly HashSet<RtaAgentState> _currentBatch = new HashSet<RtaAgentState>();
 		private DateTime _currentBatchId;
 		private bool _firstInBatch = true;
 		private readonly ISpecification<RtaAgentState> _isLast = new isLastInBatch();
 
 		public delegate void ProcessWhenMissing(RtaAgentState agentState);
 
-		public RtaProcessMissingAgents(string loggedOutCode, ProcessWhenMissing processAgentState)
+		public RtaProcessMissingAgents(string loggedOutCode, ProcessWhenMissing processAgentState, IRtaBatchHandler batchHandler)
 		{
 			_loggedOutCode = loggedOutCode;
 			_processAgentState = processAgentState;
+			_batchHandler = batchHandler;
 		}
 
-		public void Check(RtaAgentState rtaAgentState)
+		public int Check(RtaAgentState rtaAgentState)
 		{
-			if (!rtaAgentState.IsSnapshot || !rtaAgentState.IsLoggedOn) return;
+			if (!rtaAgentState.IsSnapshot || !rtaAgentState.IsLoggedOn) 
+				return 0;
 
 			if (_firstInBatch)
 			{
@@ -36,45 +39,39 @@ namespace Teleopti.Ccc.Rta.Server
 
 			if (_isLast.IsSatisfiedBy(rtaAgentState))
 			{
+				int dataSourceId;
+				if (!int.TryParse(rtaAgentState.SourceId, out dataSourceId))
+					return 0;
 
-				var usersInLastBatch = from a in _lastBatch
-				                       select a.UserCode;
+				var allUsersOnDataSource = _batchHandler.PeopleOnDataSource(dataSourceId);
+				var usersInCurrentBatch1 = _currentBatch.Select(a => a.UserCode).ToList();
+				var missingUsers =
+					allUsersOnDataSource.Except(usersInCurrentBatch1)
+											   .Select(a => new RtaAgentState
+												   {
+													   AuthenticationKey = rtaAgentState.AuthenticationKey,
+													   BatchId = _currentBatchId,
+													   IsLoggedOn = false,
+													   IsSnapshot = rtaAgentState.IsSnapshot,
+													   PlatformTypeId = rtaAgentState.PlatformTypeId,
+													   SourceId = dataSourceId.ToString(CultureInfo.InvariantCulture),
+													   StateCode = _loggedOutCode,
+													   StateDescription = rtaAgentState.StateDescription,
+													   Timestamp = _currentBatchId,
+													   UserCode = a
+												   })
+												   .ToList();
 
-				var usersInCurrentBatch = from a in _currentBatch
-				                          select a.UserCode;
+				missingUsers.ForEach(u => _processAgentState(u));
 
-				var onlyInLastBatch = usersInLastBatch.Except(usersInCurrentBatch);
-
-				var usersToCheck = from a in _lastBatch
-				                   where onlyInLastBatch.Contains(a.UserCode)
-				                   select new RtaAgentState()
-					                          {
-						                          AuthenticationKey = a.AuthenticationKey,
-						                          UserCode = a.UserCode,
-						                          StateCode = _loggedOutCode,
-						                          StateDescription = a.StateDescription,
-						                          IsLoggedOn = false,
-						                          Timestamp = _currentBatchId,
-						                          PlatformTypeId = a.PlatformTypeId,
-						                          SourceId = a.SourceId,
-						                          BatchId = _currentBatchId,
-						                          IsSnapshot = a.IsSnapshot
-					                          };
-
-				foreach (var agentState in usersToCheck)
-				{
-					_processAgentState(agentState);
-				}
-
-				_lastBatch = new HashSet<RtaAgentState>(_currentBatch);
 				_currentBatch.Clear();
 				_firstInBatch = true;
-
 			}
 			else
 			{
 				_currentBatch.Add(rtaAgentState);
 			}
+			return 1;
 		}
 
 		private class isLastInBatch : Specification<RtaAgentState>
