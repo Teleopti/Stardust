@@ -109,8 +109,10 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 							   new List<Type> {typeof (IScheduleChangedInDefaultScenario)});
 			aggregateRoots.Add(typeof (IPersonScheduleDayReadModel),
 							   new List<Type> {typeof (IPersonScheduleDayReadModel)});
+			aggregateRoots.Add(typeof (IScheduleChangedEvent), new List<Type> {typeof (IScheduleChangedEvent)});
 
 			aggregateRoots.Add(typeof (Person), new List<Type> {typeof (IPerson)});
+			aggregateRoots.Add(typeof (Scenario), new List<Type> {typeof (IScenario)});
 
 			aggregateRoots.Add(typeof (Skill), new List<Type> {typeof (IForecastData)});
 			aggregateRoots.Add(typeof (Workload), new List<Type> {typeof (IForecastData)});

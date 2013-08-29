@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
@@ -19,6 +19,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             Assert.IsTrue(filterManager.FilterDictionary.Keys.Contains(typeof(IJobResultProgress)));
             Assert.AreEqual(1, filterManager.FilterDictionary[typeof(IJobResultProgress)].Count);
             Assert.AreEqual(1, filterManager.FilterDictionary[typeof(IScheduleChangedInDefaultScenario)].Count);
+            Assert.AreEqual(1, filterManager.FilterDictionary[typeof(IScheduleChangedEvent)].Count);
+            Assert.AreEqual(1, filterManager.FilterDictionary[typeof(Scenario)].Count);
         }
     }
 }
