@@ -1117,12 +1117,6 @@
     <Compile Include="PeopleAdmin\Views\PersonFinderView.Designer.cs">
       <DependentUpon>PersonFinderView.cs</DependentUpon>
     </Compile>
-    <Compile Include="PeopleAdmin\Views\PersonTimeZoneView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PeopleAdmin\Views\PersonTimeZoneView.Designer.cs">
-      <DependentUpon>PersonTimeZoneView.cs</DependentUpon>
-    </Compile>
     <Compile Include="PeopleAdmin\Views\UserCredentialConflicts.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2574,9 +2568,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PeopleAdmin\Views\PersonFinderView.resx">
       <DependentUpon>PersonFinderView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PeopleAdmin\Views\PersonTimeZoneView.resx">
-      <DependentUpon>PersonTimeZoneView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PeopleAdmin\Views\UserCredentialConflicts.resx">
       <DependentUpon>UserCredentialConflicts.cs</DependentUpon>

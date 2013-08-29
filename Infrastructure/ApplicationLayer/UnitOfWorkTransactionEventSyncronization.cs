@@ -1,0 +1,21 @@
+using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Interfaces.Infrastructure;
+
+namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
+{
+	public class UnitOfWorkTransactionEventSyncronization : IEventSyncronization
+	{
+		private readonly ICurrentUnitOfWork _unitOfWork;
+
+		public UnitOfWorkTransactionEventSyncronization(ICurrentUnitOfWork unitOfWork)
+		{
+			_unitOfWork = unitOfWork;
+		}
+
+		public void WhenDone(Action done)
+		{
+			_unitOfWork.Current().AfterSuccessfulTx(done);
+		}
+	}
+}

@@ -194,12 +194,12 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
-		public void UpdatePeriod_WhenCalled_ShouldCallReplaceAbsenceOnObserver()
+		public void UpdatePeriod_WhenCalled_ShouldCallUpdateAllMovedLayersOnObserver()
 		{
 			var layerObserver = MockRepository.GenerateStrictMock<ILayerViewModelObserver>();
 
 			_target = new AbsenceLayerViewModel(layerObserver, _layerWithPayload, new EventAggregator());
-			layerObserver.Expect(l => l.ReplaceAbsence(_target, _layerWithPayload, _target.SchedulePart));
+			layerObserver.Expect(l => l.UpdateAllMovedLayers());
 
 			_target.IsChanged = true;
 			_target.UpdatePeriod();

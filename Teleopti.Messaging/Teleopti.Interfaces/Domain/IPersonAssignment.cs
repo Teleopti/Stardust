@@ -37,6 +37,8 @@ namespace Teleopti.Interfaces.Domain
 
 	    void ClearOvertimeLayers();
 
+	    void Clear();
+
 			/// <summary>
 			/// The date
 			/// </summary>

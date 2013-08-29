@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Assert.AreEqual(new DateTime(2011, 1, 2, 11, 0, 0, DateTimeKind.Utc), _scheduleDayTwoPersonOne.PersonAssignment().Period.StartDateTime);
 				Assert.AreEqual(new DateTime(2011, 1, 3, 8, 0, 0, DateTimeKind.Utc), _scheduleDayOnePersonTwo.PersonAssignment().Period.StartDateTime);
 				Assert.AreEqual(new DateTime(2011, 1, 4, 9, 0, 0, DateTimeKind.Utc), _scheduleDayTwoPersonTwo.PersonAssignment().Period.StartDateTime);
-				Assert.AreEqual(0, _scheduleDayThreePersonOne.PersistableScheduleDataCollection().Count());
+				Assert.AreEqual(1, _scheduleDayThreePersonOne.PersistableScheduleDataCollection().Count());
 				Assert.IsNotNull(_scheduleDayThreePersonTwo.PersonAssignment().DayOff());
 			}
 		}

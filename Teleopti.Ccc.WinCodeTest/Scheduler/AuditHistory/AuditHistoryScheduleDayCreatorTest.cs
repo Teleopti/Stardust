@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
         }
 
         [Test]
-        public void ShouldEmptyPersonAssignments()
+        public void ShouldNotEmptyPersonAssignments()
         {
             using(_mocks.Record())
             {
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
                 result = _target.Create(_currentScheduleDay, new List<IPersistableScheduleData>());
             }
 
-	        result.PersonAssignment().Should().Be.Null();
+	        result.PersonAssignment().Should().Not.Be.Null();
 					_currentScheduleDay.PersonAssignment().Should().Not.Be.Null();
         }
 
@@ -115,21 +116,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
         }
 
 
-        [Test]
-        public void ShouldAddNewPersonAssignments()
-        {
-            using (_mocks.Record())
-            {
-
-            }
-            IScheduleDay result;
-            using (_mocks.Playback())
-            {
-                result = _target.Create(_currentScheduleDay, _newData);
-            }
-
-						result.PersonAssignment().Should().Not.Be.Null();
-        }
+       
 
 		[Test]
 		public void ShouldAddNewPersonAbsencesSpanOverSeveralDays()
@@ -178,7 +165,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
 			_newData.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_parameters.Scenario, _parameters.Person, _parameters.Period.ChangeStartTime(TimeSpan.FromDays(-1))));
 
 			var result = _target.Create(_currentScheduleDay, _newData);
-			result.PersonAssignment().Should().Be.Null();
+			Assert.IsFalse(result.PersonAssignment(true).MainLayers().Any());
 		}	
     }
 }

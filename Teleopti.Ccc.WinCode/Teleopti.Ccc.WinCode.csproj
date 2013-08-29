@@ -437,7 +437,6 @@
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodSeasonalityComparer.cs" />
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodTimeOverrideComparer.cs" />
     <Compile Include="PeopleAdmin\DayOfWeekDisplay.cs" />
-    <Compile Include="PeopleAdmin\IPersonTimeZoneView.cs" />
     <Compile Include="PeopleAdmin\IScheduleNavigator.cs" />
     <Compile Include="PeopleAdmin\IPersonFinderView.cs" />
     <Compile Include="PeopleAdmin\Models\PersonFinderModel.cs" />
@@ -451,7 +450,6 @@
     <Compile Include="PeopleAdmin\Commands\PersonFinderPreviousCommand.cs" />
     <Compile Include="PeopleAdmin\PersonFinderSettings.cs" />
     <Compile Include="PeopleAdmin\PersonSkillStringParser.cs" />
-    <Compile Include="PeopleAdmin\PersonTimeZonePresenter.cs" />
     <Compile Include="PeopleAdmin\SameUserCredentialOnOtherChecker.cs" />
     <Compile Include="Permissions\Commands\LoadRolesAndPersonsOnDataRangeLightCommand.cs" />
     <Compile Include="Permissions\Commands\LoadRolesAndPersonsOnDataLightCommand.cs" />
