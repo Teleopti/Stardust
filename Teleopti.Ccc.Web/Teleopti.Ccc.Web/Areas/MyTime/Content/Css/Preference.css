@@ -49,6 +49,7 @@
 	font-weight: bold;
 	height: 14px;
 	margin-bottom: 10px;
+	width: 120px;
 }
 .extended-part-no-title {
 	height: 14px;
@@ -123,6 +124,7 @@
 	height: 13px;
 	padding-left: 6px;
 	text-indent: 12px;
+	
 }
 .time-limitation.icon.leftarrow,
 .time-limitation.icon.rightarrow,

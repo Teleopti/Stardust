@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		
 		public Div ExtendedPreferenceForDate(DateTime date)
 		{
-			return Document.Div("qtip-extended-" + date.ToString("yyyy-MM-dd"));
+			return Document.Div(QuicklyFind.ByClass("tooltip-inner")).EventualGet();
 		}
 
 		public Div MeetingAndPersonalShiftForDate(DateTime date)
