@@ -202,7 +202,14 @@ function UnZip-File(){
         $shellApplication = new-object -com shell.application
         $zipPackage = $shellApplication.NameSpace($zipfilename)
         $destinationFolder = $shellApplication.NameSpace($destination)
-        $destinationFolder.CopyHere($zipPackage.Items(),20)
+        #this does not work as tfsintergration
+        #$destinationFolder.CopyHere($zipPackage.Items(),20)
+
+        #trying this instead
+        $CMD = 'C:\Program Files\7-zip\7z'
+        $arg1 = 'e'
+        $arg2 = '-o' + $destination
+        & $CMD $arg1 $arg2 $zipfilename
     }
 } 
 
