@@ -52,6 +52,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void Listen(DateTimePeriod period)
 		{
+			// add new message listener here
+			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(OnEventMessage,
+			                                                                                          _owner.SchedulerState.RequestedScenario.Id.GetValueOrDefault(), typeof (Scenario), typeof (IScheduleChangedEvent),
+			                                                                                          period.StartDateTime,
+			                                                                                          period.EndDateTime);
 			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(OnEventMessage,
 																					   typeof(IPersistableScheduleData),
 																					   period.StartDateTime,
