@@ -1655,7 +1655,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(testList[0].OptionalColumnValueCollection.Count,Is.EqualTo(1));
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldNotBeAbleToAlterTimeZoneInDb()
 		{
 			//need to run stuff infrastructure\systemcheck\agentdayconverter instead! roger, micke & david knows more!
