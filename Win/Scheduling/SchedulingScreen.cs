@@ -108,6 +108,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private AgentInfoControl _agentInfoControl;
         private ShiftDistributionAnalysisControl _shiftDistributionAnalysisControl;
         private ShiftFairnessAnalysisControl _shiftFairnessAnalysisControl;
+	    private ShiftPerAgentControl _shiftPerAgentControl; 
 		private ScheduleViewBase _scheduleView;
 		private RequestView _requestView;
 		private ResourceOptimizationHelperWin _optimizationHelperWin;
@@ -2489,7 +2490,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    {
             var allSchedules = _scheduleDayListFactory.CreatScheduleDayList();
 	        var updateSelectionForShiftDistribution = new UpdateSelectionForShiftDistribution();
-            updateSelectionForShiftDistribution.Update(allSchedules,_scheduleView,_shiftDistributionAnalysisControl ,_shiftFairnessAnalysisControl  );
+            updateSelectionForShiftDistribution.Update(allSchedules,_scheduleView,_shiftDistributionAnalysisControl ,_shiftFairnessAnalysisControl,_shiftPerAgentControl   );
 	    }
 
 	    private void _backgroundWorkerResourceCalculator_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -4808,11 +4809,18 @@ namespace Teleopti.Ccc.Win.Scheduling
             _shiftDistributionAnalysisControl.Dock = DockStyle.Fill;
             shiftCategoryTab.Controls.Add(_shiftDistributionAnalysisControl);
 
+            var shiftperAgentTab = ColorHelper.CreateTabPage("Shift Fairness Per Agent", "Shift Fairness Per Agent");
+            _tabInfoPanels.TabPages.Add(shiftperAgentTab);
+            _shiftPerAgentControl = new ShiftPerAgentControl(_schedulerState) {Dock = DockStyle.Fill};
+            shiftperAgentTab.Controls.Add(_shiftPerAgentControl);
+
             var shiftFairnessTab = ColorHelper.CreateTabPage("Shift Fairness Analysis", "Shift Fairness Analysis");
             _tabInfoPanels.TabPages.Add(shiftFairnessTab);
             _shiftFairnessAnalysisControl = new ShiftFairnessAnalysisControl(_schedulerState);
             _shiftFairnessAnalysisControl.Dock = DockStyle.Fill;
             shiftFairnessTab.Controls.Add(_shiftFairnessAnalysisControl);
+
+            
 
 		    updateDistrbutionInformation();
 		}

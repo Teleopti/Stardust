@@ -1311,6 +1311,9 @@
     <Compile Include="Scheduling\PropertyPanel\ShiftFairnessGrid.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftPerAgentControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Scheduling\PropertyPanel\ShiftPerAgentGrid.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -2685,6 +2688,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftFairnessAnalysisControl.resx">
       <DependentUpon>ShiftFairnessAnalysisControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftPerAgentControl.resx">
+      <DependentUpon>ShiftPerAgentControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\RequestHistoryView.resx">
       <DependentUpon>RequestHistoryView.cs</DependentUpon>

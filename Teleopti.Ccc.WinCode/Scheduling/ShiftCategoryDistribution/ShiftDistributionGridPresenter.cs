@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
 	public class ShiftDistributionGridPresenter
 	{
-		private IShiftDistributionGrid _view;
+		private readonly IShiftDistributionGrid _view;
         private int _sortColumn;
         private bool _sortAscending;
 	    private readonly IList<ShiftDistribution> _shiftDistributionList;
