@@ -1,6 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -96,9 +98,14 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Insert);
+			serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
+			var messageBrokerIdentifier = new FakeMessageBrokerIdentifier {InstanceId = Guid.NewGuid()};
 
-			var messageBrokerIdentifier = new FakeMessageBrokerIdentifier();
-			target.Execute(messageBrokerIdentifier, new[] { rootChangeInfo });
+			target.Execute(messageBrokerIdentifier, new[] {rootChangeInfo});
+
+			serviceBusSender.AssertWasCalled(x => x.Send(Arg<object>.Matches(e => 
+				((ScheduleChangedEvent) e).ScopeIdentifier == messageBrokerIdentifier.InstanceId
+				)));
 		}
 	}
 

@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		public DateTime EndDateTime { get; set; }
 		public Guid ScenarioId { get; set; }
 		public Guid PersonId { get; set; }
+		public Guid ScopeIdentifier { get; set; }
 		public bool SkipDelete { get; set; }
 	}
 }
