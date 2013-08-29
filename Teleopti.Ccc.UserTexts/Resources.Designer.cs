@@ -15923,6 +15923,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overtime Availability.
+        /// </summary>
+        public static string OvertimeAvailabilityWeb {
+            get {
+                return ResourceManager.GetString("OvertimeAvailabilityWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overtime:.
         /// </summary>
         public static string OvertimeColon {

@@ -11691,4 +11691,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Send again</value>
     <comment>Send again (ie. shifttrade)</comment>
   </data>
+  <data name="OvertimeAvailabilityWeb" xml:space="preserve">
+    <value>Overtime Availability</value>
+    <comment>Overtime Availability used on mytime web</comment>
+  </data>
 </root>

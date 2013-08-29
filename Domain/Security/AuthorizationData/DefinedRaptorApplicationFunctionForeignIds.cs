@@ -6,7 +6,7 @@
     /// <remarks>
     /// Structure of a key: Unique Id
     /// Must be unique. Do NOT USE the Unique Id even of a deleted function to avoid conflict. 
-    /// Use a higher number than the current maximum Unique Id which is 0088 currently.  
+    /// Use a higher number than the current maximum Unique Id which is 0089 currently.  
     /// </remarks>
     public static class DefinedRaptorApplicationFunctionForeignIds
     {
@@ -115,7 +115,7 @@
 		public const string ShiftTradeRequestsWeb = "0083";
 		public const string ViewAllGroupPages = "0084";
 		public const string ShareCalendar = "0088";
-
+		public const string OvertimeAvailabilityWeb = "0089";
 
 		// Mobile Reports
 		public const string MobileReports = "0074";
@@ -123,6 +123,5 @@
 		// Anywhere
 		public const string Anywhere = "0080";
 		public const string SchedulesAnywhere = "0081";
-
     }
 }
