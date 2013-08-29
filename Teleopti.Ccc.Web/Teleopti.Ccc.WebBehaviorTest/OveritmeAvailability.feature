@@ -37,7 +37,7 @@ Background:
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2013-08-19 |
-@ignore
+
 Scenario: Cannot add overtime availability if no permission
 	Given I have the role 'No access to overtime availability'
 	And I view my week schedule for date '2013-08-20'
