@@ -175,6 +175,7 @@
     <Compile Include="Domain\IRestrictionCombiner.cs" />
     <Compile Include="Domain\IRevision.cs" />
     <Compile Include="Domain\IRuleSetProjectionService.cs" />
+    <Compile Include="Domain\IScheduleChangedEvent.cs" />
     <Compile Include="Domain\IScheduleDayAvailabilityRestrictionExtractor.cs" />
     <Compile Include="Domain\IScheduleDayChangeCallback.cs" />
     <Compile Include="Domain\IScheduleDayPreferenceRestrictionExtractor.cs" />
