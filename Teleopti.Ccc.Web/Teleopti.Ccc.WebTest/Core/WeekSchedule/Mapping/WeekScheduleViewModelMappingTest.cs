@@ -355,6 +355,21 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		}
 
 		[Test]
+		public void ShouldMapOvertimeAvailabilityPermission()
+		{
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb)).
+				Return(true);
+			var domainData = new WeekScheduleDomainData
+			{
+				Days = new WeekScheduleDayDomainData[] { }
+			};
+
+			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
+
+			result.RequestPermission.OvertimeAvailabilityPermission.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldMapIsCurrentWeek()
 		{
 			var domainData = new WeekScheduleDomainData()

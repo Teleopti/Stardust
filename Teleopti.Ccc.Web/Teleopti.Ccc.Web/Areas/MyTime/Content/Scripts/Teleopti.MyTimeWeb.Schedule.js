@@ -206,7 +206,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	    Initialize: function (data) {
 		    var self = this;
 		    self.absenceRequestPermission(data.RequestPermission.AbsenceRequestPermission);
-		    self.overtimeAvailabilityPermission(true);
+		    self.overtimeAvailabilityPermission(data.RequestPermission.OvertimeAvailabilityPermission);
 			self.textPermission(data.RequestPermission.TextRequestPermission);
 			self.periodSelection(JSON.stringify(data.PeriodSelection));
 			self.asmPermission(data.AsmPermission);
