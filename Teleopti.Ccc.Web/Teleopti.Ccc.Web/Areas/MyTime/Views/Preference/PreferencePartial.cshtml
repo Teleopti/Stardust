@@ -139,21 +139,9 @@
                                         </div>
                                         <div class="preference-text" data-bind="text: Preference, attr: {title: Preference}"/>
                                         <div class="preference-indicator">
-                                            <div class="extended-indication" style="display: none" data-bind="visible: Extended">&raquo;</div>
-                                            <div class="extended-panel" style="display: none">
-                                                <div class="extended-part">
-                                                    <div class="extended-part-title" data-bind="text: ExtendedTitle"></div>
-                                                    <div class="time-limitation arrow-icon icon-step-backward" data-bind="text: StartTimeLimitation"></div>
-                                                    <div class="time-limitation arrow-icon icon-step-forward" data-bind="text: EndTimeLimitation"></div>
-                                                    <div class="time-limitation arrow-icon icon-resize-horizontal" data-bind="text: WorkTimeLimitation"></div>
-                                                </div>
-                                                <div class="extended-part">
-                                                    <div class="extended-part-title" data-bind="text: Activity"></div>
-                                                    <div class="time-limitation arrow-icon icon-step-backward" data-bind="text: ActivityStartTimeLimitation"></div>
-                                                    <div class="time-limitation arrow-icon icon-step-forward" data-bind="text: ActivityEndTimeLimitation"></div>
-                                                    <div class="time-limitation arrow-icon icon-resize-horizontal" data-bind="text: ActivityTimeLimitation"></div>
-                                                </div>
-                                            </div>
+				                            <!-- ko if: Extended -->
+                                                <div class="extended-indication" style="display: none" data-bind="visible: Extended, tooltip: { title: tooltipText, html: true }">&raquo;</div>
+                                            <!-- /ko -->
                                         </div>
                                         <div class="preference-indicator">
                                             <!-- ko if: HasPersonalShiftsOrMeetings -->
