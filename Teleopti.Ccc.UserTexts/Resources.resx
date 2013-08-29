@@ -5169,7 +5169,7 @@ Availability</value>
     <comment>Function CreateShiftTradeRequest</comment>
   </data>
   <data name="CreateTextRequest" xml:space="preserve">
-    <value>Change Requests</value>
+    <value>Text Requests</value>
     <comment>Function CreateTextRequest</comment>
   </data>
   <data name="OpenScorecard" xml:space="preserve">
@@ -8593,7 +8593,7 @@ Period: {3}</value>
     <value>Scheduling result</value>
   </data>
   <data name="OnlineReports" xml:space="preserve">
-    <value>Online reports</value>
+    <value>Real time reports</value>
     <comment>Online reports application function</comment>
   </data>
   <data name="ScheduledTimePerActivityReport" xml:space="preserve">
@@ -11548,23 +11548,23 @@ Reduce the complexity to use these shifts.</value>
     <value>Zoom</value>
     <comment>Report Viewer Toolbar</comment>
   </data>
-	<data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
     <value>Connection to database timed out, try to limit your search conditions.</value>
     <comment>Connection to database timed out, try to limit your search conditions.</comment>
   </data>
-	<data name="ResFulfilled" xml:space="preserve">
+  <data name="ResFulfilled" xml:space="preserve">
     <value>Fulfilled</value>
     <comment>Fulfilled</comment>
   </data>
-	<data name="ResFulfillmentPercent" xml:space="preserve">
+  <data name="ResFulfillmentPercent" xml:space="preserve">
     <value>Fulfillment (%)</value>
     <comment>Fulfillment (%)</comment>
   </data>
-	<data name="ResMustHaves" xml:space="preserve">
+  <data name="ResMustHaves" xml:space="preserve">
     <value>Must Haves</value>
     <comment>Must Haves</comment>
   </data>
-	<data name="ResUnfulfilled" xml:space="preserve">
+  <data name="ResUnfulfilled" xml:space="preserve">
     <value>Unfulfilled</value>
     <comment>Unfulfilled</comment>
   </data>
