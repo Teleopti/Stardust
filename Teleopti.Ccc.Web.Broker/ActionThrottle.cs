@@ -11,8 +11,8 @@ namespace Teleopti.Ccc.Web.Broker
 		private readonly BlockingCollection<Action> actions = new BlockingCollection<Action>();
 		private readonly int actionDelay;
 		private readonly CancellationTokenSource cancellation = new CancellationTokenSource();
-		
-		public readonly ILog Logger = LogManager.GetLogger(typeof(ActionThrottle));
+
+	    private readonly ILog Logger = LogManager.GetLogger(typeof(ActionThrottle));
 
 		public ActionThrottle(int actionsPerSecond)
 		{
@@ -31,39 +31,21 @@ namespace Teleopti.Ccc.Web.Broker
 		            while (!cancellation.Token.IsCancellationRequested)
 		            {
 		                Action item;
-		                if (actions.TryTake(out item, -1, cancellation.Token))
+		                if (!actions.TryTake(out item, -1, cancellation.Token)) continue;
+		                try
 		                {
 		                    item();
-		                    TaskEx.Delay(actionDelay, cancellation.Token).Wait(cancellation.Token);
 		                }
+		                catch (Exception exception)
+		                {
+		                    Logger.Error("Error while executing action.",exception);
+		                }
+		                TaskEx.Delay(actionDelay, cancellation.Token).Wait(cancellation.Token);
 		            }
 		        },
 		                          cancellation.Token,
 		                          TaskCreationOptions.LongRunning,
 		                          TaskScheduler.Default);
-		    /*
-		    Task task = null;
-		    Task currentTask = null;
-		    foreach (var action in actions.GetConsumingEnumerable(cancellation.Token))
-		    {
-		        var currentAction = action;
-                if (currentTask==null)
-                {
-                    task = new Task(action);
-                    currentTask = task;
-                }
-                else
-                {
-                    currentTask = currentTask.ContinueWith(_ => currentAction(), cancellation.Token);
-                }
-                currentTask.ContinueWith(t => Logger.Error(t.Exception.GetBaseException()), cancellation.Token,
-		                                 TaskContinuationOptions.OnlyOnFaulted, TaskScheduler.Default);
-		        currentTask = currentTask.ContinueWith(_ => TaskEx.Delay(actionDelay, cancellation.Token));
-		    }
-
-            if (task!=null)
-                task.Start();
-             */
 		}
 
 		public void Dispose()
@@ -102,13 +84,6 @@ namespace Teleopti.Ccc.Web.Broker
                 });
 
             timer.Change(dueTimeMs, -1);
-            return tcs.Task;
-        }
-
-        public static Task FinishedTask()
-        {
-            var tcs = new TaskCompletionSource<object>();
-            tcs.SetResult(null);
             return tcs.Task;
         }
 
