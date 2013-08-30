@@ -3849,10 +3849,6 @@ Columns</value>
     <value>Modify assignment</value>
     <comment>Modify assignment</comment>
   </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>Modify day off</value>
-    <comment>Modify day off</comment>
-  </data>
   <data name="ModifyMainShift" xml:space="preserve">
     <value>Modify main shift</value>
     <comment>Modify main shift</comment>

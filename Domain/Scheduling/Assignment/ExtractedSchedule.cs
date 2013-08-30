@@ -360,10 +360,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private void mergeDayOff(IScheduleDay source)
         {
             var authorization = PrincipalAuthorization.Instance();
-            if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff))
-                return;
-
-            if (PersonAssignment()!=null && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
+			if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
                 return;
 
             if (!PersonAbsenceCollection().IsEmpty() && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
@@ -564,8 +561,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 if (SignificantPart() == SchedulePartView.DayOff)
                 {
-                    if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff))
-                        return;
 
 									DeleteDayOff();
                 }
@@ -733,7 +728,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
                 return;
 
-            if(SignificantPart() == SchedulePartView.DayOff && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff))
+            if(SignificantPart() == SchedulePartView.DayOff)
                 return;
 
 					var newLayer = new MainShiftLayer(activity, period);
