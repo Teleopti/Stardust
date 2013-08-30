@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
     public class ShiftFairnessGrid : TeleoptiGridControl, IShiftFairnessGrid
     {
 	    private IDistributionInformationExtractor _model;
-	    private ShiftFairnessGridPresenter _presenter;
+	    private readonly ShiftFairnessGridPresenter _presenter;
 
 		public ShiftFairnessGrid()
 		{
@@ -18,13 +18,9 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
         public void UpdateModel(IDistributionInformationExtractor distributionInformationExtractor)
         {
-            //ResetVolatileData();
             _model = distributionInformationExtractor;
-            //_presenter = new ShiftFairnessGridPresenter(this);
 			_presenter.ReSort();
             initializeComponent();
-
-			//_presenter.ReSort();
         }
 
 		private void initializeComponent()
@@ -75,8 +71,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			{
 				if (e.RowIndex < _model.ShiftCategories.Count + 1)
 				{
-					//e.Style.CellValue = _model.ShiftCategories[e.RowIndex - 1].Description.Name;
-					//e.Style.Tag = _model.ShiftCategories[e.RowIndex - 1];
 					e.Style.CellValue = _presenter.SortedShiftCategories()[e.RowIndex - 1].Description.Name;
 					e.Style.Tag = _presenter.SortedShiftCategories()[e.RowIndex - 1];
 				}
@@ -129,6 +123,17 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			get { return _model; }
 		}
 
-        
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				QueryColCount -= shiftFairnessGridQueryColCount;
+				QueryRowCount -= shiftFairnessGridQueryRowCount;
+				QueryCellInfo -= shiftFairnessGridQueryCellInfo;
+				CellDoubleClick -= shiftFairnessGridCellDoubleClick;
+			}
+
+			base.Dispose(disposing);
+		}
     }
 }

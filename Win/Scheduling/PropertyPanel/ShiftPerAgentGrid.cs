@@ -9,13 +9,12 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
     public class ShiftPerAgentGrid : TeleoptiGridControl, IShiftPerAgentGrid
     {
 	    private  IDistributionInformationExtractor _model;
-	    private  ShiftPerAgentGridPresenter _presenter;
+	    private readonly ShiftPerAgentGridPresenter _presenter;
 	    private readonly ISchedulerStateHolder _schedulerState;
 
 		public ShiftPerAgentGrid(ISchedulerStateHolder schedulerState)
 		{
 			base.Initialize();
-
 			_presenter = new ShiftPerAgentGridPresenter(this);
 			_schedulerState = schedulerState;
 			
@@ -23,15 +22,15 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
         public void UpdateModel(IDistributionInformationExtractor distributionInformationExtractor)
         {
-            ResetVolatileData();
             _model = distributionInformationExtractor;
-            //_presenter = new ShiftPerAgentGridPresenter(this);
 			_presenter.ReSort();
             initializeComponent();	
         }
 
 		private void initializeComponent()
 		{
+			ResetVolatileData();
+
 			QueryColCount -= shiftPerAgentGridQueryColCount;
 			QueryRowCount -= shiftPerAgentGridQueryRowCount;
 			QueryCellInfo -= shiftPerAgentGridQueryCellInfo;
@@ -73,9 +72,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			if (e.ColIndex == 0 && e.RowIndex > 0)
 			{
 				e.Style.CellValue = _schedulerState.CommonAgentName(_presenter.SortedPersonInvolved()[e.RowIndex - 1]);
-				//e.Style.CellValue = _schedulerState.CommonAgentName(_model.PersonInvolved[e.RowIndex - 1]);
 				e.Style.Tag = _presenter.SortedPersonInvolved()[e.RowIndex - 1];
-				//e.Style.Tag = _model.PersonInvolved[e.RowIndex - 1];
 			}
 
 			if (e.ColIndex > 0 && e.RowIndex > 0)
@@ -110,5 +107,18 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 	    {
 			get { return _schedulerState; }
 	    }
+
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				QueryColCount -= shiftPerAgentGridQueryColCount;
+				QueryRowCount -= shiftPerAgentGridQueryRowCount;
+				QueryCellInfo -= shiftPerAgentGridQueryCellInfo;
+				CellDoubleClick -= shiftPerAgentGridCellDoubleClick;	
+			}
+
+			base.Dispose(disposing);
+		}
     }
 }
