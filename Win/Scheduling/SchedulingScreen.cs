@@ -5737,7 +5737,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_dateNavigateControl.SelectedDateChanged -= dateNavigateControlSelectedDateChanged;
 			if (_schedulerMessageBrokerHandler != null)
 			{
-				_schedulerMessageBrokerHandler.StopListen();
 				_schedulerMessageBrokerHandler.RequestDeletedFromBroker -= _schedulerMessageBrokerHandler_RequestDeletedFromBroker;
 				_schedulerMessageBrokerHandler.SchedulesUpdatedFromBroker -= _schedulerMessageBrokerHandler_SchedulesUpdatedFromBroker;
 

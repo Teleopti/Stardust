@@ -1157,3 +1157,24 @@ GO
 ---------------- 
 TRUNCATE TABLE [ReadModel].[ScheduleProjectionReadOnly]
 GO
+
+----------------  
+--Name: tamasb
+--Date: 2013-08-30  
+--Desc: Delete the following application function: ModifyPersionDayOff
+----------------  
+	
+DECLARE @FunctionCode as varchar(255)
+DECLARE @ForeignId as varchar(255)
+
+--modify the following application function
+SELECT @ForeignId = '0013' -- Foreign id of the function
+SELECT @FunctionCode = 'ModifyPersionDayOff' -- Name of the function
+
+UPDATE ApplicationFunction
+SET IsDeleted=1
+WHERE ForeignSource='Raptor' 
+	AND ForeignId Like(@ForeignId + '%') 
+	AND FunctionCode=@FunctionCode 
+
+GO
