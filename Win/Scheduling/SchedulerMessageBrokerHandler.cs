@@ -272,11 +272,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void Dispose()
 		{
-			dispose(true);
+			Disposing(true);
 			GC.SuppressFinalize(this);
 		}
 
-		protected virtual void dispose(bool disposing)
+		protected virtual void Disposing(bool disposing)
 		{
 			if (disposing)
 			{
