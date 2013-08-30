@@ -13,24 +13,24 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         private TableLayoutPanel shiftFairnessTableLayoutPanel;
 	    private IDistributionInformationExtractor _model;
         private ShiftFairnessGrid _shiftFairnessGrid;
-        private ShiftPerAgentGrid _shiftPerAgentGrid;
+        //private ShiftPerAgentGrid _shiftPerAgentGrid;
 
         public ShiftFairnessAnalysisControl( ISchedulerStateHolder schedulerState)
         {
             initializeComponent();
             _shiftFairnessGrid = new ShiftFairnessGrid();
-            _shiftPerAgentGrid = new ShiftPerAgentGrid(schedulerState);
+            //_shiftPerAgentGrid = new ShiftPerAgentGrid(schedulerState);
             _shiftFairnessGrid.Dock = DockStyle.Fill;
-            _shiftPerAgentGrid.Dock = DockStyle.Fill;
+            //_shiftPerAgentGrid.Dock = DockStyle.Fill;
             shiftFairnessTableLayoutPanel.Controls.Add(_shiftFairnessGrid,0,3);
-            shiftFairnessTableLayoutPanel.Controls.Add(_shiftPerAgentGrid, 0, 5);
+            //shiftFairnessTableLayoutPanel.Controls.Add(_shiftPerAgentGrid, 0, 5);
         }
 
         public void UpdateModel(IDistributionInformationExtractor distributionInformationExtractor)
         {
             _model = distributionInformationExtractor;
             _shiftFairnessGrid.UpdateModel(_model);
-            _shiftPerAgentGrid.UpdateModel(_model);
+            //_shiftPerAgentGrid.UpdateModel(_model);
         }
 
         private void initializeComponent()
@@ -82,12 +82,12 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             // 
             // label3
             // 
-            label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(3, 94);
-            label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(121, 13);
-			label3.TabIndex = 2;
-            label3.Text = UserTexts.Resources.PerAgent;
+            //label3.AutoSize = true;
+            //label3.Location = new System.Drawing.Point(3, 94);
+            //label3.Name = "label3";
+            //label3.Size = new System.Drawing.Size(121, 13);
+            //label3.TabIndex = 2;
+            //label3.Text = UserTexts.Resources.PerAgent;
             // 
             // ShiftFairnessAnalysisControl
             // 
