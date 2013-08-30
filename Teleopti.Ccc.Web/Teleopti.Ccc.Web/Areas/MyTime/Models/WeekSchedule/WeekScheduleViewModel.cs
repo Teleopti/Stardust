@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public SpecialDateState State { get; set; }
 		public HeaderViewModel Header { get; set; }
 		public NoteViewModel Note { get; set; }
+		public OvertimeAvailabilityViewModel OvertimeAvailabililty { get; set; }
 		public PeriodViewModel Summary { get; set; }
 		public IEnumerable<PeriodViewModel> Periods { get; set; }
 		public int Allowance { get; set; }
@@ -67,6 +68,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		{
 			get { return Note != null && !string.IsNullOrWhiteSpace(Note.Message); }
 		}
+	}
+
+	public class OvertimeAvailabilityViewModel
+	{
+		public bool HasOvertimeAvailability { get; set; }
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
 	}
 
 	public class NoteViewModel

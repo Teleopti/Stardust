@@ -85,7 +85,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	    self.textRequestActive = ko.observable(false);
 	    self.absenceRequestActive = ko.observable(false);
 	    self.overtimeAvailabilityActive = ko.observable(false);
-	    self.initialRequestDate = null;
+	    self.initialRequestDay = null;
 
 	    self.showAddRequestToolbar = ko.computed(function() {
 		    return (self.requestViewModel() || '') != '';
@@ -147,8 +147,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	            return;
 	        }
 	        self.setRequestViewModel();
-	        self.requestViewModel().DateFrom(moment(self.initialRequestDate));
-	        self.requestViewModel().DateTo(moment(self.initialRequestDate));
+	        self.requestViewModel().DateFrom(moment(self.initialRequestDay.date()));
+	        self.requestViewModel().DateTo(moment(self.initialRequestDay.date()));
 	        self.requestViewModel().AddTextRequest(false);
 	    };
 	    
@@ -157,8 +157,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	            return;
 	        }
 	        self.setRequestViewModel();
-	        self.requestViewModel().DateFrom(moment(self.initialRequestDate));
-	        self.requestViewModel().DateTo(moment(self.initialRequestDate));
+	        self.requestViewModel().DateFrom(moment(self.initialRequestDay.date()));
+	        self.requestViewModel().DateTo(moment(self.initialRequestDay.date()));
 	        self.requestViewModel().AddAbsenceRequest(false);
 	    };
 
@@ -167,14 +167,20 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return;
 			}
 			self.setOvertimeAvailabilityViewModel();
-			self.requestViewModel().DateFrom(moment(self.initialRequestDate));
-			self.requestViewModel().DateTo(moment(self.initialRequestDate));
+			self.requestViewModel().DateFrom(moment(self.initialRequestDay.date()));
+			self.requestViewModel().DateTo(moment(self.initialRequestDay.date()));
+			if (self.requestViewModel().LoadData) {
+				self.requestViewModel().LoadData(self.initialRequestDay);
+			}
 		};
 
 	    self.showAddRequestForm = function (day) {
-	        self.initialRequestDate = day.date();
-
+	        self.initialRequestDay = day;
+		    
 	        if ((self.requestViewModel() || '') != '') {
+	        	if (self.requestViewModel().LoadData) {
+	        		self.requestViewModel().LoadData(day);
+	        	}
 	            self.requestViewModel().DateFrom(moment(day.date()));
 	            self.requestViewModel().DateTo(moment(day.date()));
 	            return;
@@ -264,6 +270,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.allowance = ko.observable(day.Allowance);
 		self.absenceAgents = ko.observable(day.AbsenceAgents);
 		self.fullTimeEquivalent = ko.observable(day.FulltimeEquivalent);
+		self.overtimeAvailability = ko.observable(day.OvertimeAvailabililty);
 
 		self.basedOnAllowanceChance = function (options) {
 			var percent;
