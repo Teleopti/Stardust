@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
         {
             _messageQueueUpdater.ReassociateDataWithAllPeople();
 
-            var scheduleDataMessages = QueryMessagesByType<IPersistableScheduleData>(messageQueue);
+            var scheduleDataMessages = QueryMessagesByType<IPersistableScheduleData>(messageQueue).Concat(QueryMessagesByType<IScheduleChangedEvent>(messageQueue));
             _scheduleDataRefresher.Refresh(scheduleDictionary, messageQueue, scheduleDataMessages, refreshedEntitiesBuffer, conflictsBuffer);
 
             var meetingMessages = QueryMessagesByType<IMeeting>(messageQueue);
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 
         private static IEnumerable<IEventMessage> QueryMessagesByType<T>(IEnumerable<IEventMessage> messageQueue)
         {
-            return (from m in messageQueue where typeof(T).IsAssignableFrom(m.InterfaceType) select m).ToArray();
+            return messageQueue.Where(m => typeof(T).IsAssignableFrom(m.InterfaceType)).ToArray();
         }
     }
 }
