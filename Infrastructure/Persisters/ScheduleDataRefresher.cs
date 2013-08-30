@@ -54,7 +54,9 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 	                                InterfaceType = typeof (IPersonAssignment),
 	                                DomainUpdateType = DomainUpdateType.Delete,
 	                                DomainObjectId = myPersonAssignment.Id.GetValueOrDefault(),
-	                                ReferenceObjectId = eventMessage.DomainObjectId
+	                                ReferenceObjectId = eventMessage.DomainObjectId,
+                                    EventStartDate = myPersonAssignment.Date,
+                                    EventEndDate = myPersonAssignment.Date
 	                            };
 	                        newList.Add(deleteMessage);
 	                    }
@@ -67,7 +69,9 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 	                                InterfaceType = typeof (IPersonAssignment),
 	                                DomainUpdateType = DomainUpdateType.Insert,
 	                                DomainObjectId = databaseAssignment.Id.GetValueOrDefault(),
-	                                ReferenceObjectId = eventMessage.DomainObjectId
+	                                ReferenceObjectId = eventMessage.DomainObjectId,
+                                    EventStartDate = databaseAssignment.Date,
+                                    EventEndDate = databaseAssignment.Date
 	                            };
 	                        newList.Add(insertMessage);
 	                    }
@@ -80,11 +84,14 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 	                                InterfaceType = typeof (IPersonAssignment),
 	                                DomainUpdateType = DomainUpdateType.Update,
 	                                DomainObjectId = databaseAssignment.Id.GetValueOrDefault(),
-	                                ReferenceObjectId = eventMessage.DomainObjectId
+	                                ReferenceObjectId = eventMessage.DomainObjectId,
+                                    EventStartDate = databaseAssignment.Date,
+                                    EventEndDate = databaseAssignment.Date
 	                            };
 	                        newList.Add(updateMessage);
 	                    }
-	                }
+                    }
+                    messageQueue.Remove(eventMessage);
 	            }
 	            else
 	            {
