@@ -61,8 +61,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                                               JobId = jobId,
                                       Period = period
                                   };
-	            message.SetMessageDetail();
-                foreach (var multisiteSkillSelection in command.MultisiteSkillSelection)
+	            foreach (var multisiteSkillSelection in command.MultisiteSkillSelection)
                 {
                     var selection = new MultisiteSkillSelection();
                     selection.MultisiteSkillId = multisiteSkillSelection.MultisiteSkill.Id.GetValueOrDefault();
