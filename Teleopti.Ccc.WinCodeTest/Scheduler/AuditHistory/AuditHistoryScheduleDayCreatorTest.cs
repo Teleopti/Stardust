@@ -156,16 +156,5 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
 
             Assert.AreEqual(1, result.PersonAbsenceCollection().Count);
         }
-
-
-		[Test]
-		public void ShouldSkipDataStartingOutsideCurrentDay()
-		{
-			_newData.Clear();
-			_newData.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_parameters.Scenario, _parameters.Person, _parameters.Period.ChangeStartTime(TimeSpan.FromDays(-1))));
-
-			var result = _target.Create(_currentScheduleDay, _newData);
-			Assert.IsFalse(result.PersonAssignment(true).MainLayers().Any());
-		}	
     }
 }

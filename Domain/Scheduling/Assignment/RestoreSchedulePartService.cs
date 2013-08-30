@@ -1,47 +1,38 @@
-﻿using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-    public interface IRestoreSchedulePartService
+    public class RestoreSchedulePartService
     {
-        void Restore();
-    }
 
-    public class RestoreSchedulePartService : IRestoreSchedulePartService
-    {
-        private readonly ISchedulePartModifyAndRollbackService _rollbackService;
-        private readonly IScheduleDay _destination;
-        private readonly IScheduleDay _source;
-
-        public RestoreSchedulePartService(ISchedulePartModifyAndRollbackService rollbackService, IScheduleDay destination, IScheduleDay source)
+				public void Restore(IScheduleDay current, IScheduleDay historical)
         {
-            _rollbackService = rollbackService;
-            _destination = destination;
-            _source = source;
-        }
+	        var currAss = current.PersonAssignment();
+					current.Clear<IPersonAssignment>();
+					current.Clear<IPersonAbsence>();
 
-        public void Restore()
-        {
-            _destination.Clear<IPersonAssignment>();
-        	IList<IPersonAbsence> toDelete = _destination.PersonAbsenceCollection();
-        	foreach (var personAbsence in toDelete)
-        	{
-        		_destination.Remove(personAbsence);
-        	}
 
-	        var personAssignment = _source.PersonAssignment();
-					if (personAssignment != null)
+					//needs some love and refactoring///
+	        var historyAssignment = historical.PersonAssignment();
+					if (historyAssignment != null)
 					{
-						_destination.Add(personAssignment.NoneEntityClone());
+						//wants deep cloning of layers etc
+						var historyClone = historyAssignment.NoneEntityClone();
+						if (currAss != null)
+						{
+							//need to set the old id, making update instead of insert
+							historyClone.SetId(currAss.Id);
+							historyClone.SetVersion(currAss.Version.Value);
+						}
+						current.Add(historyClone);
 					}
+					////////////////////////////////////
 
-            foreach (var personAbsence in _source.PersonAbsenceCollection())
+
+					foreach (var personAbsence in historical.PersonAbsenceCollection())
             {
-                _destination.Add(personAbsence.NoneEntityClone());
+                current.Add(personAbsence.NoneEntityClone());
             }
-
-            _rollbackService.Modify(_destination);   
         }
     }
 }

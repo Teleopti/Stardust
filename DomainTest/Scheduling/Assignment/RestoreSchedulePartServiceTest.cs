@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Rhino.Mocks;
 using NUnit.Framework;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
@@ -10,53 +11,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
     [TestFixture]
     public class RestoreSchedulePartServiceTest
     {
-        private RestoreSchedulePartService _target;
-        private ISchedulePartModifyAndRollbackService _rollbackService;
-        private IScheduleDay _destination;
-        private IScheduleDay _source;
-        private IPersonAssignment _personAssignment;
-        private IPersonAbsence _personAbsence;
-        private ReadOnlyCollection<IPersonAbsence> _personAbsences;
-        private MockRepository _mocks;
-        
-        [SetUp]
-        public void Setup()
-        {
-            _mocks = new MockRepository();
-            _destination = _mocks.StrictMock<IScheduleDay>();
-            _source = _mocks.StrictMock<IScheduleDay>();
-            _personAssignment = _mocks.StrictMock<IPersonAssignment>();
-            _personAbsence = _mocks.StrictMock<IPersonAbsence>();
-            _personAbsences = new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence> { _personAbsence });
-            _rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-            _target = new RestoreSchedulePartService(_rollbackService, _destination, _source);
-        }
-
         [Test]
-        public void ShouldRestore()
+        public void ShouldRestoreAssignmentAndKeepIdAndVersionFromCurrent()
         {
-            using (_mocks.Record())
-            {
-                Expect.Call(() => _destination.Clear<IPersonAssignment>());
-            	Expect.Call(_destination.PersonAbsenceCollection()).Return(
-            		new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
+					var current = ScheduleDayFactory.Create(new DateOnly(2000, 1, 1));
+					var historical = (IScheduleDay)current.Clone();
+					var target = new RestoreSchedulePartService();
+					var currentAss = PersonAssignmentFactory.CreateAssignmentWithDayOff(current.Scenario, current.Person, current.DateOnlyAsPeriod.DateOnly, new DayOffTemplate());
+					currentAss.SetId(Guid.NewGuid());
+					currentAss.SetVersion(12);
+					var historicalAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(historical.Scenario, historical.Person, new DateTimePeriod(2000,1,1,2000,1,2));
+					historicalAss.SetId(Guid.NewGuid());
+					historicalAss.SetVersion(123);
+					current.Add(currentAss);
+					historical.Add(historicalAss);
 
-                Expect.Call(_source.PersonAssignment()).Return(_personAssignment);
-                Expect.Call(_source.PersonAbsenceCollection()).Return(_personAbsences);
+					target.Restore(current, historical);
 
-                Expect.Call(_personAssignment.NoneEntityClone()).Return(_personAssignment);
-                Expect.Call(_personAbsence.NoneEntityClone()).Return(_personAbsence);
-
-                Expect.Call(() =>_destination.Add(_personAssignment));
-                Expect.Call(() => _destination.Add(_personAbsence));
-
-                Expect.Call(() => _rollbackService.Modify(_destination));
-            }
-
-            using(_mocks.Playback())
-            {
-                _target.Restore();
-            }
+	        current.PersonAssignment().Id.Should().Be.EqualTo(currentAss.Id);
+	        current.PersonAssignment().Version.Should().Be.EqualTo(currentAss.Version);
+	        current.PersonAssignment().DayOff().Should().Be.Null();
         }
     }
 }

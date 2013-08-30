@@ -6882,8 +6882,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (auditHistoryView.DialogResult != DialogResult.OK || auditHistoryView.SelectedScheduleDay == null ||
 					isLocked) return;
 				var schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(SchedulerState.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState), new ScheduleTagSetter(_defaultScheduleTag));
-				var restoreSchedulePartService = new RestoreSchedulePartService(schedulePartModifyAndRollbackService, selected, auditHistoryView.SelectedScheduleDay);
-				restoreSchedulePartService.Restore();
+				var restoreSchedulePartService = new RestoreSchedulePartService();
+				restoreSchedulePartService.Restore(selected, auditHistoryView.SelectedScheduleDay);
+				schedulePartModifyAndRollbackService.Modify(selected);
 				updateShiftEditor();
 			}
 		}
