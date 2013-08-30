@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 																					   typeof(IPersonRequest));
 		}
 
-		public void StopListen()
+		private void stopListen()
 		{
 			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.UnregisterEventSubscription(OnEventMessage);
 		}
@@ -272,40 +272,30 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void Dispose()
 		{
-			Dispose(true);
+			dispose(true);
 			GC.SuppressFinalize(this);
 		}
 
-		/// <summary>
-		/// Virtual dispose method
-		/// </summary>
-		/// <param name="disposing">
-		/// If set to <c>true</c>, explicitly called.
-		/// If set to <c>false</c>, implicitly called from finalizer.
-		/// </param>
-		private void Dispose(bool disposing)
+		protected virtual void dispose(bool disposing)
 		{
 			if (disposing)
 			{
 				ReleaseManagedResources();
 			}
 			ReleaseUnmanagedResources();
+
 		}
 
-		/// <summary>
-		/// Releases the unmanaged resources.
-		/// </summary>
 		protected virtual void ReleaseUnmanagedResources()
 		{
 		}
 
-		/// <summary>
-		/// Releases the managed resources.
-		/// </summary>
 		protected virtual void ReleaseManagedResources()
 		{
+			stopListen();
 			_owner = null;
 		}
+
 		#endregion
 
 		public void NotifyMessageQueueSize()
