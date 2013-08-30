@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void CreateDataSource()
 		{
-			TestData.DataSource = DataSourceHelper.CreateDataSource(new[] { new EventsMessageSender(new SyncEventsPublisher(new EventPublisher(new HardCodedResolver()))) });
+			TestData.DataSource = DataSourceHelper.CreateDataSource(new[] { new EventsMessageSender(new SyncEventsPublisher(new EventPublisher(new HardCodedResolver(),new CurrentIdentity()))) });
 		}
 
 		public static void SetupFakeState()

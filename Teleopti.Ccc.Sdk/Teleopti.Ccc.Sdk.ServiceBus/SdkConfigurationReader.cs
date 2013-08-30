@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private static readonly ILog Logger = LogManager.GetLogger(typeof(SdkConfigurationReader));
         private static readonly object LockObject = new object();
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "NHibernate"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "NHibernate"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public void ReadConfiguration(MessageSenderCreator creator)
         {
@@ -75,13 +76,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	public class InternalServiceBusSender : IServiceBusSender
 	{
 		private readonly Func<IServiceBus> _serviceBus;
-
-		public InternalServiceBusSender(Func<IServiceBus> serviceBus)
+        private readonly Func<ICurrentIdentity> _currentIdentity;
+        
+		public InternalServiceBusSender(Func<IServiceBus> serviceBus, Func<ICurrentIdentity> currentIdentity)
 		{
-			_serviceBus = serviceBus;
+		    _serviceBus = serviceBus;
+		    _currentIdentity = currentIdentity;
 		}
 
-		public void Dispose()
+	    public void Dispose()
 		{
 		}
 
@@ -90,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             var raptorDomainMessage = message as IRaptorDomainMessageInfo;
             if (raptorDomainMessage != null)
             {
-                raptorDomainMessage.SetMessageDetail();
+                raptorDomainMessage.SetMessageDetail(_currentIdentity());
             }
 
 			_serviceBus().Send(message);
