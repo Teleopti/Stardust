@@ -26,6 +26,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 		}
 
 		[Test]
+		public void ShouldReturnColCount()
+		{
+			Assert.AreEqual(4, _target.ColCount);
+		}
+
+		[Test]
 		public void ShouldCalculateTotalStandardDeviation()
 		{
 			var shiftCategory1 = new ShiftCategory("shiftCategory1");
@@ -93,6 +99,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 				Assert.AreEqual(_target.SortedShiftCategories()[1].Description, shiftCategory2.Description);
 
 				_target.Sort(4);
+				Assert.AreEqual(_target.SortedShiftCategories()[0].Description, shiftCategory2.Description);
+				Assert.AreEqual(_target.SortedShiftCategories()[1].Description, shiftCategory1.Description);
+
+				_target.ReSort();
 				Assert.AreEqual(_target.SortedShiftCategories()[0].Description, shiftCategory2.Description);
 				Assert.AreEqual(_target.SortedShiftCategories()[1].Description, shiftCategory1.Description);
 			}	

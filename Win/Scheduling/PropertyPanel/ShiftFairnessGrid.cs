@@ -54,20 +54,20 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 		void shiftFairnessGridQueryCellInfo(object sender,GridQueryCellInfoEventArgs e)
 		{
-			if (e.ColIndex < 0 || e.RowIndex < 0) return;
-			if (e.ColIndex == 0 && e.RowIndex == 0) return;
-			if (e.ColIndex > 4) return;
+			if (e.ColIndex < (int)ShiftFairnessGridColumns.ShiftCategory || e.RowIndex < 0) return;
+			if (e.ColIndex == (int)ShiftFairnessGridColumns.ShiftCategory && e.RowIndex == 0) return;
+			if (e.ColIndex > (int)ShiftFairnessGridColumns.StandardDeviationValue) return;
 			if (e.RowIndex > _model.ShiftCategories.Count + 1) return;
 
-			if (e.ColIndex > 0 && e.RowIndex == 0)
+			if (e.ColIndex > (int)ShiftFairnessGridColumns.ShiftCategory && e.RowIndex == 0)
 			{
-				if (e.ColIndex == 1) e.Style.CellValue = UserTexts.Resources.Min;
-				if (e.ColIndex == 2) e.Style.CellValue = UserTexts.Resources.Max;
-				if (e.ColIndex == 3) e.Style.CellValue = UserTexts.Resources.Average;
-				if (e.ColIndex == 4) e.Style.CellValue = UserTexts.Resources.StandardDeviation;
+				if (e.ColIndex == (int)ShiftFairnessGridColumns.MinimumValue) e.Style.CellValue = UserTexts.Resources.Min;
+				if (e.ColIndex == (int)ShiftFairnessGridColumns.MaximumValue) e.Style.CellValue = UserTexts.Resources.Max;
+				if (e.ColIndex == (int)ShiftFairnessGridColumns.AverageValue) e.Style.CellValue = UserTexts.Resources.Average;
+				if (e.ColIndex == (int)ShiftFairnessGridColumns.StandardDeviationValue) e.Style.CellValue = UserTexts.Resources.StandardDeviation;
 			}
 
-			if (e.ColIndex == 0 && e.RowIndex > 0)
+			if (e.ColIndex == (int)ShiftFairnessGridColumns.ShiftCategory && e.RowIndex > 0)
 			{
 				if (e.RowIndex < _model.ShiftCategories.Count + 1)
 				{
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				}
 			}
 
-			if (e.ColIndex > 0 && e.RowIndex > 0)
+			if (e.ColIndex > (int)ShiftFairnessGridColumns.ShiftCategory && e.RowIndex > 0)
 			{
 				var shiftCategory = this[e.RowIndex, 0].Tag as IShiftCategory;
 
@@ -88,14 +88,14 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				{
 					if (shiftFairness.ShiftCategory.Equals(shiftCategory))
 					{
-						if (e.ColIndex == 1) e.Style.CellValue = shiftFairness.MinimumValue;
-						if (e.ColIndex == 2) e.Style.CellValue = shiftFairness.MaximumValue;
-						if (e.ColIndex == 3) e.Style.CellValue = shiftFairness.AverageValue;
-						if (e.ColIndex == 4) e.Style.CellValue = shiftFairness.StandardDeviationValue;
+						if (e.ColIndex == (int)ShiftFairnessGridColumns.MinimumValue) e.Style.CellValue = shiftFairness.MinimumValue;
+						if (e.ColIndex == (int)ShiftFairnessGridColumns.MaximumValue) e.Style.CellValue = shiftFairness.MaximumValue;
+						if (e.ColIndex == (int)ShiftFairnessGridColumns.AverageValue) e.Style.CellValue = shiftFairness.AverageValue;
+						if (e.ColIndex == (int)ShiftFairnessGridColumns.StandardDeviationValue) e.Style.CellValue = shiftFairness.StandardDeviationValue;
 					}
 				}
 
-				if (e.ColIndex == 4 && e.RowIndex == _model.ShiftCategories.Count + 1)
+				if (e.ColIndex == (int)ShiftFairnessGridColumns.StandardDeviationValue && e.RowIndex == _model.ShiftCategories.Count + 1)
 				{
 					e.Style.CellValue = _presenter.CalculateTotalStandardDeviation(_model.GetShiftFairness());
 				}
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 		void shiftFairnessGridQueryColCount(object sender, GridRowColCountEventArgs e)
 		{
-			e.Count = 4;
+			e.Count = _presenter.ColCount;
 			e.Handled = true;
 		}
 
