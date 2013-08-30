@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Win.Common;
+﻿using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common.Controls;
-using Teleopti.Ccc.Win.Forecasting.Forms;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Interfaces.Domain;
 
@@ -57,7 +48,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         }
 
         private void shiftPerAgentGridQueryCellInfo(object sender,
-                                                    Syncfusion.Windows.Forms.Grid.GridQueryCellInfoEventArgs e)
+                                                    GridQueryCellInfoEventArgs e)
         {
             if (e.ColIndex < 0 || e.RowIndex < 0) return;
             if (e.ColIndex == 0 && e.RowIndex == 0) return;
@@ -90,14 +81,14 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         }
 
         private void shiftPerAgentGridQueryRowCount(object sender,
-                                                    Syncfusion.Windows.Forms.Grid.GridRowColCountEventArgs e)
+                                                    GridRowColCountEventArgs e)
         {
             e.Count = _model.Dates.Count;
             e.Handled = true;
         }
 
         private void shiftPerAgentGridQueryColCount(object sender,
-                                                    Syncfusion.Windows.Forms.Grid.GridRowColCountEventArgs e)
+                                                    GridRowColCountEventArgs e)
         {
             e.Count = _model.ShiftCategories.Count;
             e.Handled = true;

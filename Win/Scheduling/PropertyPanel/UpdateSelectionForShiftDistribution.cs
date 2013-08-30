@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
     public class UpdateSelectionForShiftDistribution
     {
         public void Update(IList<IScheduleDay> allSchedules, ScheduleViewBase scheduleView, 
-                            ShiftDistributionAnalysisControl shiftDistributionAnalysisControl, 
+                            ShiftDistributionControl shiftDistributionControl, 
             ShiftFairnessAnalysisControl shiftFairnessAnalysisControl, ShiftPerAgentControl shiftPerAgentControl)
         {
             if (scheduleView != null)
             {
                 var shiftCategoryDistributionExtractor = new DistributionInformationExtractor(allSchedules);
-                shiftDistributionAnalysisControl.UpdateModel(shiftCategoryDistributionExtractor );
+                shiftDistributionControl.UpdateModel(shiftCategoryDistributionExtractor );
                 shiftFairnessAnalysisControl.UpdateModel(shiftCategoryDistributionExtractor );
                 shiftPerAgentControl.UpdateModel(shiftCategoryDistributionExtractor);
             }

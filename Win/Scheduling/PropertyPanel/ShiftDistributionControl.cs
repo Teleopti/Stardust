@@ -8,18 +8,15 @@ using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 
 namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
-    public class ShiftDistributionAnalysisControl : BaseUserControl
+    public class ShiftDistributionControl : BaseUserControl
     {
         private TableLayoutPanel shiftDistributiontableLayoutPanel;
-	    //private IDistributionInformationExtractor _model;
         private readonly ShiftDistributionGrid _shiftDistributionGrid;
 
-        public ShiftDistributionAnalysisControl()
+        public ShiftDistributionControl()
         {
-            InitializeComponent();
-	        //_model = distributionInformationExtractor;
-            _shiftDistributionGrid = new ShiftDistributionGrid();
-            _shiftDistributionGrid.Dock = DockStyle.Fill;
+            initializeComponent();
+            _shiftDistributionGrid = new ShiftDistributionGrid {Dock = DockStyle.Fill};
             shiftDistributiontableLayoutPanel.Controls.Add(_shiftDistributionGrid,0,1);
         }
 
@@ -28,7 +25,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             _shiftDistributionGrid.UpdateModel(model );
         }
 
-        private void InitializeComponent()
+        private void initializeComponent()
         {
             this.shiftDistributiontableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.SuspendLayout();
@@ -47,10 +44,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             this.shiftDistributiontableLayoutPanel.Size = new System.Drawing.Size(150, 150);
             this.shiftDistributiontableLayoutPanel.TabIndex = 0;
             // 
-            // ShiftDistributionAnalysisControl
+            // ShiftDistributionControl
             // 
             this.Controls.Add(this.shiftDistributiontableLayoutPanel);
-            this.Name = "ShiftDistributionAnalysisControl";
+            this.Name = "ShiftDistributionControl";
             this.ResumeLayout(false);
 
         }

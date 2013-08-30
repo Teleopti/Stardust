@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private DockingManager _dockingManager;
 		private FormAgentInfo _agentInfo;
 		private AgentInfoControl _agentInfoControl;
-        private ShiftDistributionAnalysisControl _shiftDistributionAnalysisControl;
+        private ShiftDistributionControl _shiftDistributionControl;
         private ShiftFairnessAnalysisControl _shiftFairnessAnalysisControl;
 	    private ShiftPerAgentControl _shiftPerAgentControl; 
 		private ScheduleViewBase _scheduleView;
@@ -2490,7 +2490,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    {
             var allSchedules = _scheduleDayListFactory.CreatScheduleDayList();
 	        var updateSelectionForShiftDistribution = new UpdateSelectionForShiftDistribution();
-            updateSelectionForShiftDistribution.Update(allSchedules,_scheduleView,_shiftDistributionAnalysisControl ,_shiftFairnessAnalysisControl,_shiftPerAgentControl   );
+            updateSelectionForShiftDistribution.Update(allSchedules,_scheduleView,_shiftDistributionControl ,_shiftFairnessAnalysisControl,_shiftPerAgentControl   );
 	    }
 
 	    private void _backgroundWorkerResourceCalculator_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -4805,9 +4805,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             var shiftCategoryTab = ColorHelper.CreateTabPage("Shift Distribution", "Shift Distribution");
 			_tabInfoPanels.TabPages.Add(shiftCategoryTab);
-            _shiftDistributionAnalysisControl = new ShiftDistributionAnalysisControl();
-            _shiftDistributionAnalysisControl.Dock = DockStyle.Fill;
-            shiftCategoryTab.Controls.Add(_shiftDistributionAnalysisControl);
+            _shiftDistributionControl = new ShiftDistributionControl();
+            _shiftDistributionControl.Dock = DockStyle.Fill;
+            shiftCategoryTab.Controls.Add(_shiftDistributionControl);
 
             var shiftperAgentTab = ColorHelper.CreateTabPage("Shift Fairness Per Agent", "Shift Fairness Per Agent");
             _tabInfoPanels.TabPages.Add(shiftperAgentTab);

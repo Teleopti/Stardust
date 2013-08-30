@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 	    private ShiftDistribution _shiftDistribution2;
 	    private IShiftCategory _morning;
 	    private ShiftCategory _late;
-	    //private IPerson _person;
 	    private DateOnly _today;
 	    private DateOnly _tomorrow;
 	    private IDistributionInformationExtractor _extractor;

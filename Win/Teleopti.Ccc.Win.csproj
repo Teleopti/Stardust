@@ -1299,7 +1299,7 @@
     <Compile Include="Scheduling\PermissionEditControl.cs" />
     <Compile Include="Scheduling\PermissionEditRestrictionControl.cs" />
     <Compile Include="Scheduling\PropertyPanel\ScheduleDayListFactory.cs" />
-    <Compile Include="Scheduling\PropertyPanel\ShiftDistributionAnalysisControl.cs">
+    <Compile Include="Scheduling\PropertyPanel\ShiftDistributionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Scheduling\PropertyPanel\ShiftDistributionGrid.cs">
@@ -2683,8 +2683,8 @@
     <EmbeddedResource Include="Scheduling\PersonsFilterView.resx">
       <DependentUpon>PersonsFilterView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftDistributionAnalysisControl.resx">
-      <DependentUpon>ShiftDistributionAnalysisControl.cs</DependentUpon>
+    <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftDistributionControl.resx">
+      <DependentUpon>ShiftDistributionControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftFairnessAnalysisControl.resx">
       <DependentUpon>ShiftFairnessAnalysisControl.cs</DependentUpon>

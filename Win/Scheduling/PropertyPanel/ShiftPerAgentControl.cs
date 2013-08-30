@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+﻿using System.Windows.Forms;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
@@ -12,7 +7,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
     public class ShiftPerAgentControl : BaseUserControl
     {
-        //Label lblPerAgent =  new Label();
         private readonly ShiftPerAgentGrid  _shiftPerAgentGrid ;
         private TableLayoutPanel tableLayoutPanelPerAgent;
 
@@ -20,7 +14,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             initializeComponent();
             _shiftPerAgentGrid = new ShiftPerAgentGrid(schedulerState) {Dock = DockStyle.Fill};
-            //tableLayoutPanelPerAgent.Controls.Add(lblPerAgent , 0, 0);
             tableLayoutPanelPerAgent.Controls.Add(_shiftPerAgentGrid, 0, 1);
             
         }
@@ -55,12 +48,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             this.Name = "ShiftPerAgentControl";
             this.ResumeLayout(false);
 
-            //lblPerAgent.AutoSize = true;
-            //lblPerAgent.Location = new System.Drawing.Point(3, 94);
-            //lblPerAgent.Name = "lblPerAgent";
-            //lblPerAgent.Size = new System.Drawing.Size(121, 13);
-            //lblPerAgent.TabIndex = 2;
-            //lblPerAgent.Text = UserTexts.Resources.PerAgent;
+
 
         }
 
