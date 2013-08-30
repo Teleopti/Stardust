@@ -1655,24 +1655,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(testList[0].OptionalColumnValueCollection.Count,Is.EqualTo(1));
 		}
 
-		[Test, Ignore]
-		public void ShouldNotBeAbleToAlterTimeZoneInDb()
-		{
-			//need to run stuff infrastructure\systemcheck\agentdayconverter instead! roger, micke & david knows more!
-
-			var pRep = new PersonRepository(UnitOfWork);
-			var snubbe = new Person();
-			snubbe.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			PersistAndRemoveFromUnitOfWork(snubbe);
-
-			var loadedSnubbe = pRep.Get(snubbe.Id.Value);
-			loadedSnubbe.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
-			PersistAndRemoveFromUnitOfWork(loadedSnubbe);
-
-			pRep.Get(snubbe.Id.Value).PermissionInformation.DefaultTimeZone()
-			    .Should().Be.EqualTo(TimeZoneInfo.Utc);
-		}
-
 		[Test]
 		public void ShouldSaveLoginAttempt()
 		{
