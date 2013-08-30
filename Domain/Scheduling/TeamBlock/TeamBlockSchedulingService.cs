@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    private readonly ITeamInfoFactory _teamInfoFactory;
 	    private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 	    private readonly ITeamBlockScheduler _teamBlockScheduler;
-        private readonly IBlockSteadyStateValidator _blockSteadyStateValidator;
+        private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 	    private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 	    private readonly ISchedulingOptions _schedulingOptions;
 	    private bool _cancelMe;
@@ -27,12 +27,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         private readonly ITeamBlockMaxSeatChecker  _teamBlockMaxSeat;
 
         public TeamBlockSchedulingService
-		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockScheduler teamBlockScheduler, IBlockSteadyStateValidator blockSteadyStateValidator, ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, List<IWorkShiftFinderResult> advanceSchedulingResults, ITeamBlockMaxSeatChecker teamBlockMaxSeat)
+		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockScheduler teamBlockScheduler, ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator, ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, List<IWorkShiftFinderResult> advanceSchedulingResults, ITeamBlockMaxSeatChecker teamBlockMaxSeat)
 	    {
 		    _teamInfoFactory = teamInfoFactory;
 		    _teamBlockInfoFactory = teamBlockInfoFactory;
 		    _teamBlockScheduler = teamBlockScheduler;
-	        _blockSteadyStateValidator = blockSteadyStateValidator;
+	        _teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 		    _safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
             _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
             _advanceSchedulingResults = advanceSchedulingResults;
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                     if (TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, datePointer)) continue;
 
 					
-                    if (_blockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, _schedulingOptions))
+                    if (_teamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, _schedulingOptions))
                     {
                         schedulePartModifyAndRollbackService.ClearModificationCollection();
                         if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions,
