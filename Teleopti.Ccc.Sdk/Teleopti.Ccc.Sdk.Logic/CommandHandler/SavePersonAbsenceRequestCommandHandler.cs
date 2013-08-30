@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		                {
 			                PersonRequestId = result.Id.GetValueOrDefault(Guid.Empty)
 		                };
-	                message.SetMessageDetail();
                     _serviceBusSender.Send(message);
                 }
             }

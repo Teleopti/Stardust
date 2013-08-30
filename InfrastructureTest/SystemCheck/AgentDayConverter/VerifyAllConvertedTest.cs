@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.PersistAll();
 			UnitOfWork.Clear();
 
-			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(AgentDayConverters.DateOfUnconvertedSchedule);
+			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(PersonAssignmentDateSetter.DateOfUnconvertedSchedule);
 			UnitOfWork.Clear();
 
 			Assert.Throws<NotSupportedException>(() =>
@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 						conn.Open();
 						using (var tran = conn.BeginTransaction())
 						{
-							var target = new dontFixDates();
+							var target = new PersonAssignmentDateSetter();
+							target.InjectCheckSqlStatementForTest("select 1");
 							target.Execute(tran, pa.Person.Id.Value, TimeZoneInfo.Utc);
 							tran.Commit();
 						}
@@ -69,14 +70,6 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 				s.CreateQuery("update ShiftCategory set IsDeleted=1").ExecuteUpdate();
 				s.CreateQuery("update Scenario set IsDeleted=1").ExecuteUpdate();
 				uow.PersistAll();
-			}
-		}
-
-		private class dontFixDates : PersonAssignmentDateSetter
-		{
-			protected override string NumberOfNotConvertedCommand
-			{
-				get { return "select 1"; }
 			}
 		}
 	}

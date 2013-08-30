@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                                       PayrollExportFormatId = payrollExport.PayrollFormat.FormatId,
                                       PayrollResultId = payrollResultId
                                   };
-				message.SetMessageDetail();
                 if (payrollExport.ExportPersonCollection == null || payrollExport.ExportPersonCollection.Count==0)
                 {
                     message.ExportPersonIdCollection =

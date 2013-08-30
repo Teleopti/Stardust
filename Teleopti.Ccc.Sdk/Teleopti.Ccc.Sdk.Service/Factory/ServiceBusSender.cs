@@ -8,6 +8,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Autofac;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using log4net;
 using Rhino.ServiceBus;
@@ -63,14 +64,15 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		{
             var bus = _customHost.Resolve<IOnewayBus>();
 
-			if (Logger.IsDebugEnabled)
+            var raptorDomainMessage = message as IRaptorDomainMessageInfo;
+            raptorDomainMessage.SetMessageDetail();
+			
+            if (Logger.IsDebugEnabled)
 			{
-				var raptorDomainMessage = message as RaptorDomainMessage;
 				var identity = "<unknown>";
 				var datasource = "<unknown>";
 				if (raptorDomainMessage != null)
 				{
-					identity = raptorDomainMessage.Identity.ToString();
 					datasource = raptorDomainMessage.Datasource;
 				}
 				Logger.Debug(string.Format(CultureInfo.InvariantCulture,
