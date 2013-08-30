@@ -167,6 +167,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return;
 			}
 			self.setOvertimeAvailabilityViewModel();
+			self.requestViewModel().DateFrom(moment(self.initialRequestDate));
+			self.requestViewModel().DateTo(moment(self.initialRequestDate));
 		};
 
 	    self.showAddRequestForm = function (day) {
@@ -178,7 +180,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	            return;
 	        }
 
-	        self.textRequestActivate();
+	        self.overtimeAvailabilityActivate();
 	    };
 	    
         self.setRequestViewModel = function()
@@ -199,6 +201,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	        self.requestViewModel(null);
 	        self.textRequestActive(false);
 	        self.absenceRequestActive(false);
+	        self.overtimeAvailabilityActive(false);
 	    };
 	};
 

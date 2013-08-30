@@ -10,13 +10,16 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 	var self = this;
 	
 	this.Template = "add-overtime-availability-template";
-	
+
+	this.DateFrom = ko.observable(moment().startOf('day'));
+	this.DateTo = ko.observable(moment().startOf('day'));
 	this.StartTime = ko.observable('');
 	this.EndTime = ko.observable('');
 	this.NextDay = ko.observable(false);
 
 	this.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
-	
+	this.DateFormat = $('#Request-detail-datepicker-format').val().toUpperCase();
+
 	this.ValidationError = ko.observable();
 	
 	this.ShowError = ko.computed(function () {
