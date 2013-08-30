@@ -1,6 +1,7 @@
-﻿using System.Windows.Forms;
+﻿using System.Drawing;
+using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 
 namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
@@ -12,14 +13,22 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         private TableLayoutPanel shiftFairnessTableLayoutPanel;
 	    private IDistributionInformationExtractor _model;
         private readonly ShiftFairnessGrid _shiftFairnessGrid;
+	    private readonly PerShiftCategoryChart _chart;
+	    private readonly ComboBoxAdv _comboBoxShiftCategory;
 
         public ShiftFairnessAnalysisControl()
         {
             initializeComponent();
+			_chart = new PerShiftCategoryChart();
+			_chart.Dock = DockStyle.Fill;
             _shiftFairnessGrid = new ShiftFairnessGrid();
             _shiftFairnessGrid.Dock = DockStyle.Fill;
-            shiftFairnessTableLayoutPanel.Controls.Add(_shiftFairnessGrid,0,3);   
-		}
+			_comboBoxShiftCategory = new ComboBoxAdv();
+		
+			shiftFairnessTableLayoutPanel.Controls.Add(_comboBoxShiftCategory, 0, 1);
+			shiftFairnessTableLayoutPanel.Controls.Add(_chart,0,2);
+            shiftFairnessTableLayoutPanel.Controls.Add(_shiftFairnessGrid,0,4);
+        }
 
         public void UpdateModel(IDistributionInformationExtractor distributionInformationExtractor)
         {
@@ -44,8 +53,11 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             shiftFairnessTableLayoutPanel.Dock = DockStyle.Fill;
             shiftFairnessTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             shiftFairnessTableLayoutPanel.Name = "shiftFairnessTableLayoutPanel";
-			shiftFairnessTableLayoutPanel.RowCount = 4; 
+			shiftFairnessTableLayoutPanel.RowCount = 5; 
             shiftFairnessTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+
+			shiftFairnessTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+
             shiftFairnessTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
 			shiftFairnessTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             shiftFairnessTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
