@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -7,6 +8,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 	public interface IShiftFairnessGrid
 	{
 		IDistributionInformationExtractor ExtractorModel { get; }
+	}
+
+	public enum ShiftFairnessGridColumns
+	{
+		ShiftCategory = 0,
+		MinimumValue = 1,
+		MaximumValue = 2,
+		AverageValue = 3,
+		StandardDeviationValue = 4
 	}
 
 	public class ShiftFairnessGridPresenter
@@ -23,6 +33,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			_sortColumn = 0;
 		}
 
+		public int ColCount
+		{
+			get { return Enum.GetValues(typeof(ShiftFairnessGridColumns)).Cast<Int32>().Last(); }
+		}
 
 		public double CalculateTotalStandardDeviation(IList<ShiftFairness> fairnessList)
 		{
@@ -49,7 +63,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			var model = _view.ExtractorModel;
 			var shiftFairness = model.GetShiftFairness();
 
-			if (colIndex == 0)
+			if (colIndex == (int)ShiftFairnessGridColumns.ShiftCategory)
 			{
 				if (_sortAscending)
 				{
@@ -69,28 +83,28 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			{
 				if (_sortAscending)
 				{
-					if (_sortColumn == 1)
+					if (_sortColumn == (int)ShiftFairnessGridColumns.MinimumValue)
 					{
 						_sortedShiftCategories = (from ShiftFairness s in shiftFairness
 												 orderby s.MinimumValue ascending 
 												 select s.ShiftCategory).ToList();	
 					}
 
-					if (_sortColumn == 2)
+					if (_sortColumn == (int)ShiftFairnessGridColumns.MaximumValue)
 					{
 						_sortedShiftCategories = (from ShiftFairness s in shiftFairness
 												  orderby s.MaximumValue ascending
 												  select s.ShiftCategory).ToList();	
 					}
 
-					if (_sortColumn == 3)
+					if (_sortColumn == (int)ShiftFairnessGridColumns.AverageValue)
 					{
 						_sortedShiftCategories = (from ShiftFairness s in shiftFairness
 												  orderby s.AverageValue ascending
 												  select s.ShiftCategory).ToList();	
 					}
 
-					if (_sortColumn == 4)
+					if (_sortColumn == (int)ShiftFairnessGridColumns.StandardDeviationValue)
 					{
 						_sortedShiftCategories = (from ShiftFairness s in shiftFairness
 												  orderby s.StandardDeviationValue ascending
@@ -99,28 +113,28 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 				}
 				else
 				{
-					if (_sortColumn == 1)
+					if (_sortColumn == (int)ShiftFairnessGridColumns.MinimumValue)
 					{
 						_sortedShiftCategories = (from ShiftFairness s in shiftFairness
 												  orderby s.MinimumValue descending 
 												  select s.ShiftCategory).ToList();
 					}
 
-					if (_sortColumn == 2)
+					if (_sortColumn == (int)ShiftFairnessGridColumns.MaximumValue)
 					{
 						_sortedShiftCategories = (from ShiftFairness s in shiftFairness
 												  orderby s.MaximumValue descending
 												  select s.ShiftCategory).ToList();
 					}
 
-					if (_sortColumn == 3)
+					if (_sortColumn == (int)ShiftFairnessGridColumns.AverageValue)
 					{
 						_sortedShiftCategories = (from ShiftFairness s in shiftFairness
 												  orderby s.AverageValue descending
 												  select s.ShiftCategory).ToList();
 					}
 
-					if (_sortColumn == 4)
+					if (_sortColumn == (int)ShiftFairnessGridColumns.StandardDeviationValue)
 					{
 						_sortedShiftCategories = (from ShiftFairness s in shiftFairness
 												  orderby s.StandardDeviationValue descending

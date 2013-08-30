@@ -93,6 +93,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 				_target.Sort(1);
 				Assert.AreEqual(_target.SortedPersonInvolved()[0].Id, otherPerson.Id);
 				Assert.AreEqual(_target.SortedPersonInvolved()[1].Id, _person.Id);
+
+				_target.ReSort();
+				Assert.AreEqual(_target.SortedPersonInvolved()[0].Id, otherPerson.Id);
+				Assert.AreEqual(_target.SortedPersonInvolved()[1].Id, _person.Id);
 			}
 		}
 	}
