@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					ScenarioId = command.ScenarioId,
 					OwnerPersonId = person.Id.GetValueOrDefault()
 				};
-	        message.SetMessageDetail();
             foreach (var model in command.WorkloadOnSkillSelectionDtos)
             {
                 message.MessageCollection.Add(

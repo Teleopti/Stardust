@@ -190,6 +190,7 @@ Scenario: Replace extended preference
 	| Activity time minimum       | 0:30 |
 	| Activity time maximum       | 1:00 |
 	And I click the apply extended preferences button
+	And I click the add extended preference button
 	And I click the extended preference indication on '2012-09-05'
 	Then I should see extended preference with
 	| Field                       | Value      |

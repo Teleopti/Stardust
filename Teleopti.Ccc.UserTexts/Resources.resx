@@ -5169,7 +5169,7 @@ Availability</value>
     <comment>Function CreateShiftTradeRequest</comment>
   </data>
   <data name="CreateTextRequest" xml:space="preserve">
-    <value>Change Requests</value>
+    <value>Text Requests</value>
     <comment>Function CreateTextRequest</comment>
   </data>
   <data name="OpenScorecard" xml:space="preserve">
@@ -8589,7 +8589,7 @@ Period: {3}</value>
     <value>Scheduling result</value>
   </data>
   <data name="OnlineReports" xml:space="preserve">
-    <value>Online reports</value>
+    <value>Real time reports</value>
     <comment>Online reports application function</comment>
   </data>
   <data name="ScheduledTimePerActivityReport" xml:space="preserve">

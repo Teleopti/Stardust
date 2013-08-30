@@ -21,30 +21,50 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 		return typeof (value) == 'string' && value.length > 0;
 	};
 
-	this.Date = "";
+	self.Date = "";
 
-	this.HasPreference = true;
-	this.IsLoading = ko.observable(false);
-	this.Preference = ko.observable();
-	this.MustHave = ko.observable();
-	this.Extended = ko.observable();
-	this.ExtendedTitle = ko.observable();
-	this.StartTimeLimitation = ko.observable();
-	this.EndTimeLimitation = ko.observable();
-	this.WorkTimeLimitation = ko.observable();
-	this.Activity = ko.observable();
-	this.ActivityStartTimeLimitation = ko.observable();
-	this.ActivityEndTimeLimitation = ko.observable();
-	this.ActivityTimeLimitation = ko.observable();
-	this.Color = ko.observable();
-	this.AjaxError = ko.observable('');
+	self.HasPreference = true;
+	self.IsLoading = ko.observable(false);
+	self.Preference = ko.observable();
+	self.MustHave = ko.observable();
+	self.Extended = ko.observable();
+	self.ExtendedTitle = ko.observable();
+	self.StartTimeLimitation = ko.observable();
+	self.EndTimeLimitation = ko.observable();
+	self.WorkTimeLimitation = ko.observable();
+	self.Activity = ko.observable();
+	self.ActivityStartTimeLimitation = ko.observable();
+	self.ActivityEndTimeLimitation = ko.observable();
+	self.ActivityTimeLimitation = ko.observable();
+	self.Color = ko.observable();
+	self.AjaxError = ko.observable('');
 
-	this.DayOff = ko.observable('');
-	this.Absence = ko.observable('');
-	this.PersonAssignmentShiftCategory = ko.observable('');
-	this.PersonAssignmentTimeSpan = ko.observable('');
-	this.PersonAssignmentContractTime = ko.observable('');
-	this.ContractTimeMinutes = ko.observable(0);
+	self.DayOff = ko.observable('');
+	self.Absence = ko.observable('');
+	self.PersonAssignmentShiftCategory = ko.observable('');
+	self.PersonAssignmentTimeSpan = ko.observable('');
+	self.PersonAssignmentContractTime = ko.observable('');
+	self.ContractTimeMinutes = ko.observable(0);
+	self.tooltipText = ko.computed(function () {
+	    var text = '';
+	    if (self.Extended()) {
+	        
+	        text = '<div class="icon-white time-limitation arrow-icon icon-step-backward">{0}</div><div class="icon-white time-limitation arrow-icon icon-step-forward">{1}</div><div class="icon-white time-limitation arrow-icon icon-resize-horizontal">{2}</div><div class="extended-part-title">{3}</div><div class="icon-white time-limitation arrow-icon icon-step-backward">{4}</div><div class="icon-white time-limitation arrow-icon icon-step-forward">{5}</div><div class="icon-white time-limitation arrow-icon icon-resize-horizontal">{6}</div>'
+	            .format($('<div/>').text(self.StartTimeLimitation()).html(),
+	                $('<div/>').text(self.EndTimeLimitation()).html(),
+	                $('<div/>').text(self.WorkTimeLimitation()).html(),
+	                $('<div/>').text(self.Activity()).html(),
+	                $('<div/>').text(self.ActivityStartTimeLimitation() ? self.ActivityStartTimeLimitation() : '-').html(),
+	                $('<div/>').text(self.ActivityEndTimeLimitation() ? self.ActivityEndTimeLimitation() : '-').html(),
+	                $('<div/>').text(self.ActivityTimeLimitation() ? self.ActivityTimeLimitation() : '-').html());
+	        
+	    } else {
+	        text = self.StartTimeLimitation();
+	    }
+
+	    return '<div class="extended-part-title">{0}</div>{1}'.format(self.ExtendedTitle(), text);
+	    
+	});
 
     this.HasDayOff = ko.computed(function() {
         return self.DayOff() != '';
@@ -121,6 +141,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 		self.ActivityStartTimeLimitation(data.ActivityStartTimeLimitation);
 		self.ActivityEndTimeLimitation(data.ActivityEndTimeLimitation);
 		self.ActivityTimeLimitation(data.ActivityTimeLimitation);
+		
 	};
 
 	this.ReadDayOff = function (data) {

@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly ITeamDayOffModifier _teamDayOffModifier;
-		private readonly IBlockSteadyStateValidator _teamBlockSteadyStateValidator;
+		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			ITeamDayOffModifier teamDayOffModifier,
-			IBlockSteadyStateValidator teamBlockSteadyStateValidator,
+			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockClearer teamBlockClearer,
 			ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_teamDayOffModifier = teamDayOffModifier;
-			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
+			_teamTeamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 			_teamBlockClearer = teamBlockClearer;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 																							singleAgentTeam,
 																							allPersonMatrixList);
 				if (teamBlockInfo == null) continue;
-				if (!_teamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, schedulingOptions))
+				if (!_teamTeamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, schedulingOptions))
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 
 				bool success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod, selectedPersons);

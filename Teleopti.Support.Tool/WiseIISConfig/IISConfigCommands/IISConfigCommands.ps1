@@ -181,6 +181,7 @@ Function Uninstall-ByRegPath(){
 				throw "The MSI failed to get uninstalled. MSIEXEC.exe returned an exit code of $ExitCode."
 				} 
 			}
+            Remove-Item -Path HKLM:\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings
 		}
 
 		catch [Exception] {
@@ -201,7 +202,14 @@ function UnZip-File(){
         $shellApplication = new-object -com shell.application
         $zipPackage = $shellApplication.NameSpace($zipfilename)
         $destinationFolder = $shellApplication.NameSpace($destination)
-        $destinationFolder.CopyHere($zipPackage.Items(),20)
+        #this does not work as tfsintergration
+        #$destinationFolder.CopyHere($zipPackage.Items(),20)
+
+        #trying this instead
+        $CMD = 'C:\Program Files\7-zip\7z'
+        $arg1 = 'e'
+        $arg2 = '-o' + $destination
+        & $CMD $arg1 $arg2 $zipfilename
     }
 } 
 
@@ -221,6 +229,7 @@ function Copy-ZippedMsi{
     return @("$destFolder\$zipFileName")
 }
 
+
 function destroy-WorkingFolder{
     param(
         $workingFolder
@@ -237,6 +246,10 @@ function create-WorkingFolder{
     )
 	if (!(Test-Path "$workingFolder")) {
 		& mkdir "$workingFolder"
+        $Acl = Get-Acl "$workingFolder"
+        $Ar = New-Object  system.security.accesscontrol.filesystemaccessrule("TOPTINET\TfsIntegration","FullControl","Allow")
+        $Acl.SetAccessRule($Ar)
+        Set-Acl "$workingFolder" $Acl
 	}
 }
 

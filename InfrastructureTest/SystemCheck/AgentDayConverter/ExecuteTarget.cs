@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 {
 	public static class ExecuteTarget
 	{
-		public static void ExecuteConverterAndWrapInTransaction(this IPersonAssignmentConverter converter, Guid personId, TimeZoneInfo timeZone)
+		public static void ExecutePersonAssignmentSetterAndWrapInTransaction(this PersonAssignmentDateSetter converter, Guid personId, TimeZoneInfo timeZone)
 		{
 			using (var conn = new SqlConnection(UnitOfWorkFactory.Current.ConnectionString))
 			{

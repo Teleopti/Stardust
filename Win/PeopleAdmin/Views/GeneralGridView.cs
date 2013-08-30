@@ -61,8 +61,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		private ToolStripMenuItem _addNewPersonMenuItem;
 		private ToolStripMenuItem _addNewPersonFromClipboardMenuItem;
 		private ToolStripMenuItem _deleteSelectedPeopleMenuItem;
-		private ToolStripMenuItem _timeZoneMenuItem;
-
 		private IList<IPerson> _currentSelectedPersons;
 
 
@@ -182,10 +180,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_uiCultureColumn.ColumnComparer = new PeopleAdminCultureComparer();
 			_gridColumns.Add(_uiCultureColumn);
 
-			//_timeZoneColumn = new DropDownColumn<PersonGeneralModel, TimeZoneInfo>("TimeZoneInformation", Resources.TimeZone,
-			//																		TimeZoneInfo.GetSystemTimeZones(), "DisplayName");
+			_timeZoneColumn = new DropDownColumn<PersonGeneralModel, TimeZoneInfo>("TimeZoneInformation", Resources.TimeZone,
+																					TimeZoneInfo.GetSystemTimeZones(), "DisplayName");
 
-			_timeZoneColumn = new ReadOnlyTextColumn<PersonGeneralModel>("TimeZoneInformation", Resources.TimeZone);
 			_timeZoneColumn.CellDisplayChanged += columnCellDisplayChanged;
 			_timeZoneColumn.CellChanged += columnCellChanged;
 			// Sets the comparer for the sorting
@@ -425,31 +422,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			//_deleteSelectedPeopleMenuItem.ShortcutKeys = Keys.Delete;
 			Grid.ContextMenuStrip.Items.Add(_deleteSelectedPeopleMenuItem);
 
-			_timeZoneMenuItem = new ToolStripMenuItem(Resources.TimeZone);
-			_timeZoneMenuItem.Click += timeZoneMenuItemClick;
-			Grid.ContextMenuStrip.Items.Add(_timeZoneMenuItem);
-
-		}
-
-		void timeZoneMenuItemClick(object sender, EventArgs e)
-		{
-			var selected = GetSelectedPersons();
-			using (var view = new PersonTimeZoneView(selected))
-			{
-				view.ShowDialog();
-
-				foreach (var person in view.AffectedPersons())
-				{
-					person.PermissionInformation.SetDefaultTimeZone(view.SelectedTimeZone());
-				}
-
-				Grid.Invalidate();
-			}
-		}
-
-		public void OnToolStripTimeZoneButtonClick()
-		{
-			timeZoneMenuItemClick(null, null);	
 		}
 
 		internal override void PrepareView()

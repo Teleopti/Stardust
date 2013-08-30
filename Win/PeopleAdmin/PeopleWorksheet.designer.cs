@@ -54,7 +54,6 @@
 			this.toolStripMenuItemSortAsc = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemSortDesc = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripButtonClosePreviousPeriod = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonTimeZone = new System.Windows.Forms.ToolStripButton();
 			this.toolStripTabItem2 = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
 			this.toolStripEx1 = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripButtonContract = new System.Windows.Forms.ToolStripButton();
@@ -405,8 +404,7 @@
 			this.toolStripExEditing.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonFind,
             this.toolStripDropDownButtonSort,
-            this.toolStripButtonClosePreviousPeriod,
-            this.toolStripButtonTimeZone});
+            this.toolStripButtonClosePreviousPeriod});
 			this.toolStripExEditing.Location = new System.Drawing.Point(933, 1);
 			this.toolStripExEditing.Name = "toolStripExEditing";
 			this.toolStripExEditing.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Managed;
@@ -485,22 +483,6 @@
 			this.ribbonControlWorksheet.SetUseInQuickAccessMenu(this.toolStripButtonClosePreviousPeriod, false);
 			this.toolStripButtonClosePreviousPeriod.Click += new System.EventHandler(this.ToolStripButtonClosePreviousPeriodClick);
 			// 
-			// toolStripButtonTimeZone
-			// 
-			this.ribbonControlWorksheet.SetDescription(this.toolStripButtonTimeZone, "");
-			this.toolStripButtonTimeZone.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_SkillTime;
-			this.toolStripButtonTimeZone.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-			this.toolStripButtonTimeZone.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonTimeZone.Name = "toolStripButtonTimeZone";
-			this.SetShortcut(this.toolStripButtonTimeZone, System.Windows.Forms.Keys.None);
-			this.toolStripButtonTimeZone.Size = new System.Drawing.Size(75, 51);
-			this.toolStripButtonTimeZone.Text = "xxTimeZone";
-			this.toolStripButtonTimeZone.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-			this.toolStripButtonTimeZone.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-			this.ribbonControlWorksheet.SetUseInCustomQuickAccessDialog(this.toolStripButtonTimeZone, true);
-			this.ribbonControlWorksheet.SetUseInQuickAccessMenu(this.toolStripButtonTimeZone, false);
-			this.toolStripButtonTimeZone.Click += new System.EventHandler(this.toolStripButtonTimeZoneClick);
-			// 
 			// toolStripTabItem2
 			// 
 			this.ribbonControlWorksheet.SetDescription(this.toolStripTabItem2, "");
@@ -536,7 +518,7 @@
 			this.toolStripEx1.Location = new System.Drawing.Point(0, 1);
 			this.toolStripEx1.Name = "toolStripEx1";
 			this.toolStripEx1.ShowLauncher = false;
-			this.toolStripEx1.Size = new System.Drawing.Size(490, 0);
+			this.toolStripEx1.Size = new System.Drawing.Size(490, 88);
 			this.toolStripEx1.TabIndex = 0;
 			this.toolStripEx1.Text = "xxOptions";
 			this.ribbonControlWorksheet.SetUseInCustomQuickAccessDialog(this.toolStripEx1, true);
@@ -550,7 +532,7 @@
 			this.toolStripButtonContract.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonContract.Name = "toolStripButtonContract";
 			this.SetShortcut(this.toolStripButtonContract, System.Windows.Forms.Keys.None);
-			this.toolStripButtonContract.Size = new System.Drawing.Size(67, 0);
+			this.toolStripButtonContract.Size = new System.Drawing.Size(67, 68);
 			this.toolStripButtonContract.Text = "xxContract";
 			this.toolStripButtonContract.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonContract.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -567,7 +549,7 @@
 			this.toolStripButtonContractSchedule.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonContractSchedule.Name = "toolStripButtonContractSchedule";
 			this.SetShortcut(this.toolStripButtonContractSchedule, System.Windows.Forms.Keys.None);
-			this.toolStripButtonContractSchedule.Size = new System.Drawing.Size(115, 0);
+			this.toolStripButtonContractSchedule.Size = new System.Drawing.Size(115, 68);
 			this.toolStripButtonContractSchedule.Text = "xxContractSchedule";
 			this.toolStripButtonContractSchedule.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonContractSchedule.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -583,7 +565,7 @@
 			this.toolStripButtonPartTimePercentage.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonPartTimePercentage.Name = "toolStripButtonPartTimePercentage";
 			this.SetShortcut(this.toolStripButtonPartTimePercentage, System.Windows.Forms.Keys.None);
-			this.toolStripButtonPartTimePercentage.Size = new System.Drawing.Size(128, 0);
+			this.toolStripButtonPartTimePercentage.Size = new System.Drawing.Size(128, 68);
 			this.toolStripButtonPartTimePercentage.Text = "xxPartTimePercentage";
 			this.toolStripButtonPartTimePercentage.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonPartTimePercentage.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -921,8 +903,7 @@
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Label externalFilteringLabel;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.ToolStripButton toolStripButtonClosePreviousPeriod;
-		private System.Windows.Forms.ToolStripButton toolStripButtonTimeZone;
+		private System.Windows.Forms.ToolStripButton toolStripButtonClosePreviousPeriod;
 
     }
 }

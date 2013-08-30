@@ -91,6 +91,10 @@ namespace Teleopti.Ccc.WinCode.Common
 				if (_isChanged != value)
 				{
 					_isChanged = value;
+					if (_isChanged)
+					{
+						ParentObservingCollection.ShouldBeUpdated(this);
+					}
 					SendPropertyChanged("IsChanged");
 				}
 			}

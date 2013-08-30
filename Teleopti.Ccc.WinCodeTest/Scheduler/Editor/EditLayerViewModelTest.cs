@@ -1,6 +1,7 @@
 ﻿using System.Windows.Data;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             _activity = new Activity("test");
             _period = new DateTimePeriod(2001,1,1,2001,1,2);
             _layer = new MainShiftLayer(_activity, _period);
-            _layerViewModel = new ModelForTest(_layer);
+            _layerViewModel = new ModelForTest(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layer);
             _target = new EditLayerViewModel();
         }
 
@@ -180,7 +181,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
 
         private class ModelForTest : MainShiftLayerViewModel
         {
-            public ModelForTest(IMainShiftLayer layer) : base(null, layer, null,new EventAggregator(), new MoveLayerVertical())
+            public ModelForTest(ILayerViewModelObserver observer, IMainShiftLayer layer) : base(observer, layer, null,new EventAggregator(), new MoveLayerVertical())
             {
                 MovePermitted = true;
             }

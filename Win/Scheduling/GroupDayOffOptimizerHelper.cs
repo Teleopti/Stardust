@@ -439,7 +439,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				groupPagePerDateHolder.GroupPersonGroupPagePerDate =
 					_container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(dates,
 																				   groupPageDataProvider,
-																				   schedulingOptions.GroupOnGroupPage,
+																				   schedulingOptions.GroupOnGroupPageForTeamBlockPer ,
 																				   true);
 			}
 			IGroupPersonFactory groupPersonFactory = new GroupPersonFactory();
@@ -505,7 +505,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<IDayOffOptimizationDecisionMakerFactory>(),
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamDayOffModifier>(),
-					_container.Resolve<IBlockSteadyStateValidator>(),
+					_container.Resolve<ITeamBlockSteadyStateValidator>(),
 					teamBlockCleaner,
                     teamBlockRestrictionOverLimitValidator, _container.Resolve<ITeamBlockMaxSeatChecker >()
 					);

@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 									new DoNotSend(), 
 									new ControllableEventSyncronization()),
 							new PersonSkillProvider(),
-							new EventPublisher(this))
+							new EventPublisher(this,new CurrentIdentity()))
 					};
             Console.WriteLine("Cannot resolve type {0}! Add it manually or consider using autofac!", type);
 		    return null;
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			return new[]
 				{
 					new ScheduleChangedHandler(
-						new EventPublisher(this),
+						new EventPublisher(this,new CurrentIdentity()),
 						new ScenarioRepository(CurrentUnitOfWork.Make()),
 						new PersonRepository(CurrentUnitOfWork.Make()),
 						new ScheduleRepository(CurrentUnitOfWork.Make()),
