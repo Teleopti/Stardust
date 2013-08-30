@@ -75,6 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public bool HasOvertimeAvailability { get; set; }
 		public string StartTime { get; set; }
 		public string EndTime { get; set; }
+		public bool NextDay { get; set; }
 	}
 
 	public class NoteViewModel

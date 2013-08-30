@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -10,6 +11,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -176,6 +178,26 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
 			result.Note.Message.Should().Be.EqualTo(publicNote.GetScheduleNote(new NoFormatting()));
+		}
+
+		[Test]
+		public void ShouldMapOvertimeAvailability()
+		{
+			var domainData = new WeekScheduleDayDomainData { Date = DateOnly.Today };
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date);
+			var overtimeAvailability = new OvertimeAvailability(new Person(), DateOnly.Today, new TimeSpan(1, 1, 1),
+			                                                    new TimeSpan(1, 2, 2, 2));
+			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
+			           .Return(
+				           new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability> {overtimeAvailability}));
+			domainData.ScheduleDay = scheduleDay;
+
+			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
+
+			result.OvertimeAvailabililty.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(overtimeAvailability.StartTime.Value, CultureInfo.CurrentCulture));
+			result.OvertimeAvailabililty.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(overtimeAvailability.EndTime.Value, CultureInfo.CurrentCulture));
+			result.OvertimeAvailabililty.NextDay.Should().Be.EqualTo(true);
+			result.OvertimeAvailabililty.HasOvertimeAvailability.Should().Be.EqualTo(true);
 		}
 
 		[Test]

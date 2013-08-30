@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						}	
 						return mappingEngine.Map<WeekScheduleDayDomainData, PeriodViewModel>(s);
 					}))
-					.ForMember(d=>d.OvertimeAvailabililty, o=>o.MapFrom(s=>s.ScheduleDay.OvertimeAvailablityCollection()))
+				.ForMember(d=>d.OvertimeAvailabililty, o=>o.MapFrom(s=>s.ScheduleDay.OvertimeAvailablityCollection()))
 				;
 
 			CreateMap<IEnumerable<IPublicNote>, NoteViewModel>()
@@ -149,6 +149,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						   o => o.MapFrom(s => s.FirstOrDefault() != null ? TimeHelper.TimeOfDayFromTimeSpan(s.FirstOrDefault().StartTime.Value, CultureInfo.CurrentCulture) : null))
 				.ForMember(d => d.EndTime,
 						   o => o.MapFrom(s => s.FirstOrDefault() != null ? TimeHelper.TimeOfDayFromTimeSpan(s.FirstOrDefault().EndTime.Value, CultureInfo.CurrentCulture) : null))
+				.ForMember(d => d.NextDay, o => o.MapFrom(s => s.FirstOrDefault() != null ? s.FirstOrDefault().EndTime.Value.Days > 0 : false))
 				;
 
 			CreateMap<WeekScheduleDayDomainData, PeriodViewModel>()
