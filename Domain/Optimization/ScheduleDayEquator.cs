@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         bool MainShiftEquals(IScheduleDay original, IScheduleDay current);
 		bool MainShiftEquals(IEditableShift original, IEditableShift current);
-		bool MainShiftEqualsWithoutPeriod(IEditableShift original, IEditableShift current);
         bool DayOffEquals(IScheduleDay original, IScheduleDay current);
 		bool MainShiftBasicEquals(IEditableShift original, IEditableShift current);
     }
@@ -109,22 +108,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			return true;
 		}
-
-		public bool MainShiftEqualsWithoutPeriod(IEditableShift original, IEditableShift current)
-        {
-            if (original.ShiftCategory.Id != current.ShiftCategory.Id)
-                return false;
-            if (original.LayerCollection.Count != current.LayerCollection.Count)
-                return false;
-            for (int layerIndex = 0; layerIndex < original.LayerCollection.Count; layerIndex++)
-            {
-                ILayer<IActivity> originalLayer = original.LayerCollection[layerIndex];
-                ILayer<IActivity> currentLayer = current.LayerCollection[layerIndex];
-                if (!originalLayer.Payload.Equals(currentLayer.Payload))
-                    return false;
-            }
-            return true;
-        }
 
         private static bool activityEquals(ILayer<IActivity> original, ILayer<IActivity> current)
         {
