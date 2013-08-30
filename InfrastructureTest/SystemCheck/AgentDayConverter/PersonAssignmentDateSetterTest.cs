@@ -30,10 +30,10 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.PersistAll();
 			UnitOfWork.Clear();
 
-			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(AgentDayConverters.DateOfUnconvertedSchedule);
+			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(PersonAssignmentDateSetter.DateOfUnconvertedSchedule);
 			UnitOfWork.Clear();
 
-			new PersonAssignmentDateSetter().ExecuteConverterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
+			new PersonAssignmentDateSetter().ExecutePersonAssignmentSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
 
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(expected);
 		}
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.PersistAll();
 			UnitOfWork.Clear();
 
-			new PersonAssignmentDateSetter().ExecuteConverterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
+			new PersonAssignmentDateSetter().ExecutePersonAssignmentSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
 
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(expected);
 		}
@@ -67,9 +67,9 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.PersistAll();
 			UnitOfWork.Clear();
 
-			new PersonAssignmentDateSetter().ExecuteConverterAndWrapInTransaction(Guid.NewGuid(), TimeZoneInfo.Utc);
+			new PersonAssignmentDateSetter().ExecutePersonAssignmentSetterAndWrapInTransaction(Guid.NewGuid(), TimeZoneInfo.Utc);
 
-			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(AgentDayConverters.DateOfUnconvertedSchedule);
+			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(PersonAssignmentDateSetter.DateOfUnconvertedSchedule);
 		}
 
 		[Test]
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.PersistAll();
 			UnitOfWork.Clear();
 
-			new PersonAssignmentDateSetter().ExecuteConverterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
+			new PersonAssignmentDateSetter().ExecutePersonAssignmentSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
 
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(new DateOnly(2000, 1, 2));
 		}
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.Clear();
 
 			var versionBefore = pa.Version;
-			new PersonAssignmentDateSetter().ExecuteConverterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
+			new PersonAssignmentDateSetter().ExecutePersonAssignmentSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
 			new PersonAssignmentRepository(UnitOfWork).Get(pa.Id.Value).Version
 			                                          .Should().Be.EqualTo(versionBefore + 1);
 		}
