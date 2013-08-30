@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						}	
 						return mappingEngine.Map<WeekScheduleDayDomainData, PeriodViewModel>(s);
 					}))
-				.ForMember(d=>d.OvertimeAvailabililty, o=>o.MapFrom(s=>s.ScheduleDay.OvertimeAvailablityCollection()))
+				.ForMember(d => d.OvertimeAvailabililty, o => o.MapFrom(s => s.ScheduleDay))
 				;
 
 			CreateMap<IEnumerable<IPublicNote>, NoteViewModel>()
@@ -143,13 +143,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 					}))
 				;
 
-			CreateMap<IEnumerable<IOvertimeAvailability>, OvertimeAvailabilityViewModel>()
-				.ForMember(d => d.HasOvertimeAvailability, o => o.MapFrom(s => s.FirstOrDefault() != null))
+			CreateMap<IScheduleDay, OvertimeAvailabilityViewModel>()
+				.ForMember(d => d.HasOvertimeAvailability, o => o.MapFrom(s => s.OvertimeAvailablityCollection().FirstOrDefault() != null))
 				.ForMember(d => d.StartTime,
-						   o => o.MapFrom(s => s.FirstOrDefault() != null ? TimeHelper.TimeOfDayFromTimeSpan(s.FirstOrDefault().StartTime.Value, CultureInfo.CurrentCulture) : null))
+						   o => o.MapFrom(s => s.OvertimeAvailablityCollection().FirstOrDefault() != null ? TimeHelper.TimeOfDayFromTimeSpan(s.OvertimeAvailablityCollection().FirstOrDefault().StartTime.Value, CultureInfo.CurrentCulture) : null))
 				.ForMember(d => d.EndTime,
-						   o => o.MapFrom(s => s.FirstOrDefault() != null ? TimeHelper.TimeOfDayFromTimeSpan(s.FirstOrDefault().EndTime.Value, CultureInfo.CurrentCulture) : null))
-				.ForMember(d => d.NextDay, o => o.MapFrom(s => s.FirstOrDefault() != null ? s.FirstOrDefault().EndTime.Value.Days > 0 : false))
+						   o => o.MapFrom(s => s.OvertimeAvailablityCollection().FirstOrDefault() != null ? TimeHelper.TimeOfDayFromTimeSpan(s.OvertimeAvailablityCollection().FirstOrDefault().EndTime.Value, CultureInfo.CurrentCulture) : null))
+				.ForMember(d => d.NextDay, o => o.MapFrom(s => s.OvertimeAvailablityCollection().FirstOrDefault() != null && s.OvertimeAvailablityCollection().FirstOrDefault().EndTime.Value.Days > 0))
+				.ForMember(d => d.DefaultStartTime, o => o.MapFrom(
+					s => s.SignificantPartForDisplay() == SchedulePartView.MainShift
+						? TimeHelper.TimeOfDayFromTimeSpan(s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).EndTime, CultureInfo.CurrentCulture)
+						: TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0))))
+				.ForMember(d => d.DefaultEndTime, o => o.MapFrom(
+					s => s.SignificantPartForDisplay() == SchedulePartView.MainShift
+						? TimeHelper.TimeOfDayFromTimeSpan(s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).EndTime.Add(new TimeSpan(1, 0, 0)), CultureInfo.CurrentCulture)
+						: TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0))))
+				.ForMember(d => d.DefaultNextDay, o => o.MapFrom(
+					s => s.SignificantPartForDisplay() == SchedulePartView.MainShift && s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).EndTime.Add(new TimeSpan(1, 0, 0)).Days > 0))
 				;
 
 			CreateMap<WeekScheduleDayDomainData, PeriodViewModel>()
