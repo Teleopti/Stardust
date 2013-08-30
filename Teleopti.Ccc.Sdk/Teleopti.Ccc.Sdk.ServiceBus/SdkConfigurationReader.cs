@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Interfaces.Messages;
 using log4net;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -86,6 +87,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		public void Send(object message)
 		{
+            var raptorDomainMessage = message as IRaptorDomainMessageInfo;
+            if (raptorDomainMessage != null)
+            {
+                raptorDomainMessage.SetMessageDetail();
+            }
+
 			_serviceBus().Send(message);
 		}
 
