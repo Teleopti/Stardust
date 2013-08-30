@@ -16,7 +16,6 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 ##============
 
 #Add IIS admin module
-Set-ExecutionPolicy Unrestricted
 Load-SnapIn -ModuleName "WebAdministration"
 
 $Ntml = "Ntlm"
