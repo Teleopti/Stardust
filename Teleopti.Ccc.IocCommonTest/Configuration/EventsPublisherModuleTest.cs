@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon.Configuration;
 
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule<LocalServiceBusEventsPublisherModule>();
+            containerBuilder.RegisterType<CurrentIdentity>().As<ICurrentIdentity>();
 			var container = containerBuilder.Build();
 			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
 			container.Resolve<IEventPublisher>().Should().Be.OfType<EventPublisher>();
@@ -26,6 +28,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule<LocalInMemoryEventsPublisherModule>();
+		    containerBuilder.RegisterType<CurrentIdentity>().As<ICurrentIdentity>();
 			var container = containerBuilder.Build();
 			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
 			container.Resolve<IEventPublisher>().Should().Be.OfType<EventPublisher>();
