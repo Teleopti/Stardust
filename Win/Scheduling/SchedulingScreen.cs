@@ -4802,8 +4802,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _container, _groupPagesProvider);
 			_agentInfoControl.Dock = DockStyle.Fill;
 			agentInfoTab.Controls.Add(_agentInfoControl);
-            
-            var shiftCategoryTab = ColorHelper.CreateTabPage("Shift Category Analysis", "Shift Category Analysis");
+
+            var shiftCategoryTab = ColorHelper.CreateTabPage("Shift Distribution", "Shift Distribution");
 			_tabInfoPanels.TabPages.Add(shiftCategoryTab);
             _shiftDistributionAnalysisControl = new ShiftDistributionAnalysisControl();
             _shiftDistributionAnalysisControl.Dock = DockStyle.Fill;

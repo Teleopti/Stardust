@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
     public class ShiftPerAgentControl : BaseUserControl
     {
-        Label lblPerAgent =  new Label();
+        //Label lblPerAgent =  new Label();
         private readonly ShiftPerAgentGrid  _shiftPerAgentGrid ;
         private TableLayoutPanel tableLayoutPanelPerAgent;
 
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             initializeComponent();
             _shiftPerAgentGrid = new ShiftPerAgentGrid(schedulerState) {Dock = DockStyle.Fill};
-            tableLayoutPanelPerAgent.Controls.Add(lblPerAgent , 0, 0);
+            //tableLayoutPanelPerAgent.Controls.Add(lblPerAgent , 0, 0);
             tableLayoutPanelPerAgent.Controls.Add(_shiftPerAgentGrid, 0, 1);
             
         }
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             this.tableLayoutPanelPerAgent.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanelPerAgent.Name = "tableLayoutPanelPerAgent";
             this.tableLayoutPanelPerAgent.RowCount = 2;
-            this.tableLayoutPanelPerAgent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanelPerAgent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
             this.tableLayoutPanelPerAgent.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelPerAgent.Size = new System.Drawing.Size(150, 150);
             this.tableLayoutPanelPerAgent.TabIndex = 0;
@@ -55,12 +55,12 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             this.Name = "ShiftPerAgentControl";
             this.ResumeLayout(false);
 
-            lblPerAgent.AutoSize = true;
-            lblPerAgent.Location = new System.Drawing.Point(3, 94);
-            lblPerAgent.Name = "lblPerAgent";
-            lblPerAgent.Size = new System.Drawing.Size(121, 13);
-            lblPerAgent.TabIndex = 2;
-            lblPerAgent.Text = UserTexts.Resources.PerAgent;
+            //lblPerAgent.AutoSize = true;
+            //lblPerAgent.Location = new System.Drawing.Point(3, 94);
+            //lblPerAgent.Name = "lblPerAgent";
+            //lblPerAgent.Size = new System.Drawing.Size(121, 13);
+            //lblPerAgent.TabIndex = 2;
+            //lblPerAgent.Text = UserTexts.Resources.PerAgent;
 
         }
 
