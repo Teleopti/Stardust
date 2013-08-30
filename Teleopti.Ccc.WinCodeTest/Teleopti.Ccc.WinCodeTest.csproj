@@ -573,6 +573,7 @@
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityCreatorTest.cs" />
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityPersonFilterTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\DistributionInformationExtractorTest.cs" />
+    <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftCategoryDistributionExtensionsTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftCategoryPerAgentCalculatorTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftDistributionCalculatorTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftDistributionGridPresenterTest.cs" />

@@ -56,39 +56,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			if (colIndex == 0)
 			{
 				var schedulerState = _view.SchedulerState;
-
-				if (_sortAscending)
-				{
-					_sortedPersonInvolved = (from IPerson p in model.PersonInvolved
-											 orderby schedulerState.CommonAgentName(p) ascending 
-											 select p).ToList();
-				}
-				else
-				{
-					_sortedPersonInvolved = (from IPerson p in model.PersonInvolved
-											 orderby schedulerState.CommonAgentName(p) descending 
-											 select p).ToList();
-				}
+				_sortedPersonInvolved = model.PersonInvolved.OrderByWithDirection(schedulerState.CommonAgentName, !_sortAscending).ToList();
 			}
 
 			else
 			{
 				var shiftCategory = model.ShiftCategories[_sortColumn - 1];
 
-				if (_sortAscending)
-				{
-					_sortedPersonInvolved = (from ShiftCategoryPerAgent s in shiftCategoryPerAgent
-					                         orderby s.Count ascending
-					                         where s.ShiftCategory.Equals(shiftCategory)
-					                         select s.Person).ToList();
-				}
-				else
-				{
-					_sortedPersonInvolved = (from ShiftCategoryPerAgent s in shiftCategoryPerAgent
-					                         orderby s.Count descending
-					                         where s.ShiftCategory.Equals(shiftCategory)
-					                         select s.Person).ToList();
-				}
+				_sortedPersonInvolved = shiftCategoryPerAgent.OrderByWithDirection(s => s.Count, !_sortAscending).Where(s=> s.ShiftCategory.Equals(shiftCategory)).Select(s => s.Person).ToList();
 
 				foreach (var person in model.PersonInvolved)
 				{

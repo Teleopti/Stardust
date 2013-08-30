@@ -55,100 +55,32 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		{
 			if (colIndex == _sortColumn) 
 				_sortAscending = !_sortAscending;
-			else
+			else 
 				_sortAscending = true;
 
 			_sortColumn = colIndex;
-
 			var model = _view.ExtractorModel;
 			var shiftFairness = model.GetShiftFairness();
 
-			if (colIndex == (int)ShiftFairnessGridColumns.ShiftCategory)
-			{
-				if (_sortAscending)
-				{
-					_sortedShiftCategories = (from IShiftCategory s in model.ShiftCategories
-											 orderby s.Description.Name  ascending
-											 select s).ToList();
-				}
-				else
-				{
-					_sortedShiftCategories = (from IShiftCategory s in model.ShiftCategories
-											  orderby s.Description.Name descending 
-											  select s).ToList();
-				}
-			}
-
+			if (colIndex == (int)ShiftFairnessGridColumns.ShiftCategory) _sortedShiftCategories = model.ShiftCategories.OrderByWithDirection(s => s.Description.Name, !_sortAscending).ToList();
 			else
 			{
-				if (_sortAscending)
-				{
-					if (_sortColumn == (int)ShiftFairnessGridColumns.MinimumValue)
-					{
-						_sortedShiftCategories = (from ShiftFairness s in shiftFairness
-												 orderby s.MinimumValue ascending 
-												 select s.ShiftCategory).ToList();	
-					}
-
-					if (_sortColumn == (int)ShiftFairnessGridColumns.MaximumValue)
-					{
-						_sortedShiftCategories = (from ShiftFairness s in shiftFairness
-												  orderby s.MaximumValue ascending
-												  select s.ShiftCategory).ToList();	
-					}
-
-					if (_sortColumn == (int)ShiftFairnessGridColumns.AverageValue)
-					{
-						_sortedShiftCategories = (from ShiftFairness s in shiftFairness
-												  orderby s.AverageValue ascending
-												  select s.ShiftCategory).ToList();	
-					}
-
-					if (_sortColumn == (int)ShiftFairnessGridColumns.StandardDeviationValue)
-					{
-						_sortedShiftCategories = (from ShiftFairness s in shiftFairness
-												  orderby s.StandardDeviationValue ascending
-												  select s.ShiftCategory).ToList();	
-					}
-				}
-				else
-				{
-					if (_sortColumn == (int)ShiftFairnessGridColumns.MinimumValue)
-					{
-						_sortedShiftCategories = (from ShiftFairness s in shiftFairness
-												  orderby s.MinimumValue descending 
-												  select s.ShiftCategory).ToList();
-					}
-
-					if (_sortColumn == (int)ShiftFairnessGridColumns.MaximumValue)
-					{
-						_sortedShiftCategories = (from ShiftFairness s in shiftFairness
-												  orderby s.MaximumValue descending
-												  select s.ShiftCategory).ToList();
-					}
-
-					if (_sortColumn == (int)ShiftFairnessGridColumns.AverageValue)
-					{
-						_sortedShiftCategories = (from ShiftFairness s in shiftFairness
-												  orderby s.AverageValue descending
-												  select s.ShiftCategory).ToList();
-					}
-
-					if (_sortColumn == (int)ShiftFairnessGridColumns.StandardDeviationValue)
-					{
-						_sortedShiftCategories = (from ShiftFairness s in shiftFairness
-												  orderby s.StandardDeviationValue descending
-												  select s.ShiftCategory).ToList();
-					}	
-				}
-
+				if (_sortColumn == (int) ShiftFairnessGridColumns.MinimumValue) 
+					_sortedShiftCategories = shiftFairness.OrderByWithDirection(s => s.MinimumValue, !_sortAscending).Select(s => s.ShiftCategory).ToList();
+				if (_sortColumn == (int)ShiftFairnessGridColumns.MaximumValue) 
+					_sortedShiftCategories = shiftFairness.OrderByWithDirection(s => s.MaximumValue, !_sortAscending).Select(s => s.ShiftCategory).ToList();
+				if (_sortColumn == (int)ShiftFairnessGridColumns.AverageValue) 
+					_sortedShiftCategories = shiftFairness.OrderByWithDirection(s => s.AverageValue, !_sortAscending).Select(s => s.ShiftCategory).ToList();
+				if (_sortColumn == (int)ShiftFairnessGridColumns.StandardDeviationValue) 
+					_sortedShiftCategories = shiftFairness.OrderByWithDirection(s => s.StandardDeviationValue, !_sortAscending).Select(s => s.ShiftCategory).ToList();
+				
 				foreach (var shiftCategory in model.ShiftCategories)
 				{
 					if (_sortedShiftCategories != null && !_sortedShiftCategories.Contains(shiftCategory))
 					{
-						if (_sortAscending)
+						if (_sortAscending) 
 							_sortedShiftCategories.Insert(0, shiftCategory);
-						else
+						else 
 							_sortedShiftCategories.Add(shiftCategory);
 					}
 				}
