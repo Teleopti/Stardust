@@ -20,5 +20,6 @@ namespace Teleopti.Ccc.WinCode.Common
 		void ReplaceAbsence(ILayerViewModel sender, ILayer<IAbsence> layer, IScheduleDay scheduleDay);
 
 	    void UpdateAllMovedLayers();
+	    void ShouldBeUpdated(ILayerViewModel layerViewModel);
     }
 }
