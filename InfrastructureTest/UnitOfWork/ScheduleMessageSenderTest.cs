@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
 
-			target.Execute(null, new[] {rootChangeInfo});
+			target.Execute(new FakeMessageBrokerIdentifier(), new[] {rootChangeInfo});
 
 			serviceBusSender.AssertWasCalled(x => x.Send(null), o => o.IgnoreArguments());
 		}
