@@ -185,6 +185,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public IList<IWorkflowControlSet> WorkflowControlSets { get; private set; }
 		private DateTimePeriod _selectedPeriod;
 	    private bool isWindowLoaded = false;
+		private ScheduleTimeType _scheduleTimeType;
 
 		#region enums
 		private enum ZoomLevel
@@ -259,6 +260,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			schedulerSplitters1.MultipleHostControl3.AddItem(Resources.Note, notesEditor);
 			toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = false;
 			toolStripSpinningProgressControl1.Visible = true;
+			_scheduleTimeType = ScheduleTimeType.ContractTime;
+			toolStripMenuItemContractTime.Tag = ScheduleTimeType.ContractTime;
+			toolStripMenuItemWorkTime.Tag = ScheduleTimeType.WorkTime;
+			toolStripMenuItemPaidTime.Tag = ScheduleTimeType.PaidTime;
+			toolStripMenuItemOverTime.Tag = ScheduleTimeType.OverTime;
 			if (!DesignMode) SetTexts();
 			if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
 				Icon = Properties.Resources.scheduler;
@@ -5321,7 +5327,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void updateSelectionInfo(IList<IScheduleDay> selectedSchedules)
 		{
 			var updater = new UpdateSelectionInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag);
-			updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfo);
+			updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfo, _scheduleTimeType);
 		}
 
 		private void deleteInMainGrid(PasteOptions deleteOptions)
@@ -7107,11 +7113,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			drawSkillGrid();
 		}
 
-		private void toolStripButtonFilterStudentAvailability_Click(object sender, EventArgs e)
-		{
-			//preparation for future pbi
-		}
-
 		private void toolStripMenuItemSwitchViewPointToTimeZoneOfSelectedAgent_Click(object sender, EventArgs e)
 		{
 			var scheduleDay = _scheduleView.SelectedSchedules().First();
@@ -7134,6 +7135,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			updateShiftEditor();
 			drawSkillGrid();
 			reloadChart();
+		}
+
+		private void toolStripMenuItemContractTime_Click(object sender, EventArgs e)
+		{
+			ToolStripMenuItem item = (ToolStripMenuItem)sender;
+			_scheduleTimeType = (ScheduleTimeType)item.Tag;
+			updateSelectionInfo(_scheduleView.SelectedSchedules());
 		}
 	}
 }
