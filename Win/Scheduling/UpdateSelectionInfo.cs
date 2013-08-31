@@ -13,13 +13,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 	{
 		private readonly ToolStripStatusLabel _statusLabelContractTime;
 		private readonly ToolStripStatusLabel _statusLabelTag;
-		private readonly ToolStripStatusLabel _statusLabelTimeZone;
 
-		public UpdateSelectionInfo(ToolStripStatusLabel statusLabelContractTime, ToolStripStatusLabel statusLabelTag, ToolStripStatusLabel statusLabelTimeZone)
+		public UpdateSelectionInfo(ToolStripStatusLabel statusLabelContractTime, ToolStripStatusLabel statusLabelTag)
 		{
 			_statusLabelContractTime = statusLabelContractTime;
 			_statusLabelTag = statusLabelTag;
-			_statusLabelTimeZone = statusLabelTimeZone;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.ToolStripItem.set_Text(System.String)")]
@@ -75,11 +73,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				_statusLabelTag.Text = string.Concat(Resources.ScheduleTagColon, " ", selectedTagsText);
 
-				var firstSelected = selectedSchedules.FirstOrDefault();
-				if (firstSelected != null)
-				{
-					_statusLabelTimeZone.Text = string.Concat(firstSelected.Person.Name, Resources.Colon, firstSelected.Person.PermissionInformation.DefaultTimeZone().DisplayName);
-				}
 			}	
 		}
 	}
