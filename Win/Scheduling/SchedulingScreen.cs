@@ -302,7 +302,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//Actions
 			setAllToolStripItemsToLongestWidth(toolStripPanelItemAssignments);
 			//Views
-			setAllToolStripItemsToLongestWidth(toolStripPanelItemViews);
 			setAllToolStripItemsToLongestWidth(toolStripPanelItemViews2);
 			//Edit
 			setAllToolStripItemsToLongestWidth(_editControl.PanelItem);
@@ -320,7 +319,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//Actions
 			toggleRibbonTexts(toolStripPanelItemAssignments.Items);
 			//Views
-			toggleRibbonTexts(toolStripPanelItemViews.Items);
 			toggleRibbonTexts(toolStripPanelItemViews2.Items);
 			//Edit
 			toggleRibbonTexts(_editControl.PanelItem.Items);
@@ -4927,12 +4925,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_currentZoomLevel == ZoomLevel.Level6)
 				reloadRequestView();
 
-			foreach (ToolStripItem item in toolStripPanelItemViews.Items)
-			{
-				var t = item as ToolStripButton;
-				if (t != null)
-					t.Checked = ((ZoomLevel)t.Tag == level) ? true : false;
-			}
 			foreach (ToolStripItem item in toolStripPanelItemViews2.Items)
 			{
 				var t = item as ToolStripButton;
