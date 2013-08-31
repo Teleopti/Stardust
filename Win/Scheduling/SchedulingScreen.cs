@@ -4690,7 +4690,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			toolStripButtonDayView.Tag = ZoomLevel.Level1;
 			toolStripButtonWeekView.Tag = ZoomLevel.Level2;
-            toolStripButtonFilterAgentsOld.Tag = ZoomLevel.Level3;
 			toolStripButtonPeriodView.Tag = ZoomLevel.Level4;
 			toolStripButtonSummaryView.Tag = ZoomLevel.Level5;
 			toolStripButtonRequestView.Tag = ZoomLevel.Level6;
