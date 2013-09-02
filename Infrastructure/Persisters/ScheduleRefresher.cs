@@ -43,12 +43,19 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
                 {
                     var myPersonAssignment = myVersionOfPersonAssignments[dateOnly];
                     var messagePersonAssignment = result.FirstOrDefault(d => d.Date == dateOnly);
-                    var myVersionOfEntity = myChanges.FindItemByOriginalId(eventMessage.DomainObjectId);
 
-                    if (myVersionOfEntity.HasValue)
+                    
+	                DifferenceCollectionItem<IPersistableScheduleData> myVersionOfEntity = (from d in myChanges
+	                                     let pa = d.CurrentItem as IPersonAssignment
+	                                     where
+	                                         pa != null &&
+	                                         pa.Equals(messagePersonAssignment)
+	                                     select d).SingleOrDefault();
+
+                    if (!myVersionOfEntity.IsEmpty())
                     {
                         _scheduleDataUpdater.FillReloadedScheduleData(messagePersonAssignment);
-                        var state = new PersistConflictMessageState(myVersionOfEntity.Value, messagePersonAssignment,
+                        var state = new PersistConflictMessageState(myVersionOfEntity, messagePersonAssignment,
                                                                     eventMessage, m => RemoveFromQueue(messageQueue, m));
                         conflictsBuffer.Add(state);
                         continue;
