@@ -56,7 +56,7 @@ function TearDown {
         #changed to test only, Throws on CCCRELEASED even if it is there???	
 		It "should throw exeption when http URL does not exist" {
 			$computerName=(get-childitem -path env:computername).Value
-			$httpStatus=Check-HttpStatus -url "http://$computerName/TeleoptiCCC/"
+			$httpStatus=Check-HttpStatus -url "http://$computerName/TeleoptiCCC/index.html"
             $httpStatus  | Should Be $True
 		}
 		

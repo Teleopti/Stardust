@@ -246,10 +246,11 @@ function create-WorkingFolder{
     )
 	if (!(Test-Path "$workingFolder")) {
 		& mkdir "$workingFolder"
-        $Acl = Get-Acl "$workingFolder"
-        $Ar = New-Object  system.security.accesscontrol.filesystemaccessrule("TOPTINET\TfsIntegration","FullControl","Allow")
-        $Acl.SetAccessRule($Ar)
-        Set-Acl "$workingFolder" $Acl
+        #try when problem to unzip
+        #$Acl = Get-Acl "$workingFolder"
+        #$Ar = New-Object  system.security.accesscontrol.filesystemaccessrule("TOPTINET\TfsIntegration","FullControl","Allow")
+        #$Acl.SetAccessRule($Ar)
+        #Set-Acl "$workingFolder" $Acl
 	}
 }
 
@@ -264,7 +265,7 @@ function Check-HttpStatus {
 	$req.Method = "GET"
 
 	[net.httpWebResponse] $res = $req.getResponse()
-
+    Write-Host 'httpStatus: ' $res.StatusCode
 	if ($res.StatusCode -ge "200") {
 		return $true
 	}
