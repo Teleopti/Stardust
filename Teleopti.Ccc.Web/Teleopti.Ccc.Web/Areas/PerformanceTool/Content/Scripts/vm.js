@@ -2,11 +2,13 @@
 define([
         'knockout',
         'moment',
-        'scenario-addremovefulldayabsence'
+        'scenario-addremovefulldayabsence',
+        'scenario-resourcecalculationaddremovefulldayabsence'
 ], function (
     ko,
     moment,
-    AddRemoveFullDayAbsenceScenarioViewModel
+    AddRemoveFullDayAbsenceScenarioViewModel,
+    ResourceCalculationAddRemoveFullDayAbsenceScenarioViewModel
 	) {
 
 
@@ -14,7 +16,8 @@ define([
 
         var self = this;
         
-        this.Scenarios = [new AddRemoveFullDayAbsenceScenarioViewModel()];
+        this.Scenarios = [new AddRemoveFullDayAbsenceScenarioViewModel(), new ResourceCalculationAddRemoveFullDayAbsenceScenarioViewModel()];
+        this.ScenarioName = ko.observable();
         this.Scenario = ko.observable();
         this.Configuration = ko.observable();
         this.ConfigurationLoading = ko.observable(false);
@@ -37,16 +40,24 @@ define([
             return true;
         });
         
-        this.Scenario.subscribe(function () {
+        this.ScenarioName.subscribe(function () {
             self.ConfigurationLoading(true);
-            self.Scenario().LoadDefaultConfiguration(function (data) {
-                self.Configuration(JSON.stringify(data, null, 4));
-                self.ConfigurationLoading(false);
-            });
+            
+            for (var i = 0; i < self.Scenarios.length; i++) {
+                if (self.ScenarioName() == self.Scenarios[i].Name) {
+                    self.Scenario(self.Scenarios[i]);
+                    self.Configuration(''); //just for now
+                    self.Scenario().LoadDefaultConfiguration(function (data) {
+                        self.Configuration(JSON.stringify(data, null, 4));
+                        self.ConfigurationLoading(false);
+                    });
+                    break;
+                }
+            }
+            
         });
 
         this.Configuration.subscribe(function () {
-            
             try {
                 var configuration = JSON.parse(self.Configuration());
             } catch (e) {
@@ -79,6 +90,7 @@ define([
             if (configurationError)
                 return configurationError;
             var scenario = self.Scenario();
+            
             if (scenario && scenario.IterationsExpected())
                 return "Run " + scenario.IterationsExpected() + " scenarios";
             return "Dont click me yet please";
