@@ -6,7 +6,7 @@
 /// <reference path="Teleopti.MyTimeWeb.Request.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
 
-Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAvailabilityViewModel() {
+Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAvailabilityViewModel(ajax) {
 	var self = this;
 	
 	this.Template = "add-overtime-availability-template";
@@ -36,8 +36,16 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 		self.ValidationError(undefined);
 	};
 
-	this.SetOvertimeAvailability = function() {
-
+	this.SetOvertimeAvailability = function () {
+		ajax.Ajax({
+			url: "Schedule/OvertimeAvailability",
+			dataType: "json",
+			data: { Date: self.DateFrom().format('YYYY-MM-DD'), StartTime: self.StartTime(), EndTime: self.EndTime() },
+			type: 'POST',
+			success: function (data, textStatus, jqXHR) {
+				var a = 1;
+			}
+		});
 	};
 
 	this.LoadData = function(day) {

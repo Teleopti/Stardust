@@ -199,7 +199,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
         };
 		
         self.setOvertimeAvailabilityViewModel = function () {
-	        var model = new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel();
+	        var model = new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(ajax);
 	        self.requestViewModel(model);
         };
 
