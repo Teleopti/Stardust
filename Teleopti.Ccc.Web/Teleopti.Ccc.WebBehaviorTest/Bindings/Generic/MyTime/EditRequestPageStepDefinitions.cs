@@ -3,7 +3,9 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
@@ -102,6 +104,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see add overtime availability form with")]
 		public void ThenIShouldSeeAddOvertimeAvailabilityFormWith(Table table)
 		{
+			var item = table.CreateInstance<OvertimeAvailabilityViewModel>();
 			ScenarioContext.Current.Pending();
 		}
 

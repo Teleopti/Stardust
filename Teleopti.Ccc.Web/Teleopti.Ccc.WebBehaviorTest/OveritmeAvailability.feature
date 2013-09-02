@@ -56,10 +56,11 @@ Scenario: Default overtime availability values on shift
 	When I click on the day summary for date '2013-08-20'
 	And I click to add overtime availability
 	Then I should see add overtime availability form with
-	| Field      | Value |
-	# Do we need to show the date which I am applying to?
-	| Start time | 18:00 |
-	| End time   | 19:00 |
+	| Field      | Value      |
+	| Start date | 2013-08-20 |
+	| End date   | 2013-08-20 |
+	| Start time | 18:00      |
+	| End time   | 19:00      |
 @ignore
 Scenario: Default overtime availability values on empty day
 	Given I have the role 'Access to overtime availability'
@@ -67,9 +68,11 @@ Scenario: Default overtime availability values on empty day
 	When I click on the day summary for date '2013-08-20'
 	And I click to add overtime availability
 	Then I should see add overtime availability form with
-	| Field      | Value |
-	| Start time | 08:00 |
-	| End time   | 17:00 |
+	| Field      | Value      |
+	| Start date | 2013-08-20 |
+	| End date   | 2013-08-20 |
+	| Start time | 08:00      |
+	| End time   | 17:00      |
 @ignore
 Scenario: Default overtime availability values on absence
 	Given I have the role 'Access to overtime availability'
@@ -82,9 +85,11 @@ Scenario: Default overtime availability values on absence
 	When I click on the day summary for date '2013-08-20'
 	And I click to add overtime availability
 	Then I should see add overtime availability form with
-	| Field      | Value |
-	| Start time | 08:00 |
-	| End time   | 17:00 |
+	| Field      | Value      |
+	| Start date | 2013-08-20 |
+	| End date   | 2013-08-20 |
+	| Start time | 08:00      |
+	| End time   | 17:00      |
 @ignore
 Scenario: Default overtime availability values on dayoff
 	Given I have the role 'Access to overtime availability'
@@ -96,9 +101,11 @@ Scenario: Default overtime availability values on dayoff
 	When I click on the day summary for date '2013-08-20'
 	And I click to add overtime availability
 	Then I should see add overtime availability form with
-	| Field      | Value |
-	| Start time | 08:00 |
-	| End time   | 17:00 |
+	| Field      | Value      |
+	| Start date | 2013-08-20 |
+	| End date   | 2013-08-20 |
+	| Start time | 08:00      |
+	| End time   | 17:00      |
 @ignore
 Scenario: Submit overtime availability
 	Given I have the role 'Access to overtime availability'
