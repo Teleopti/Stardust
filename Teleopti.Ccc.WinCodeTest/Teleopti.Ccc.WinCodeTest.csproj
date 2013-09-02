@@ -645,10 +645,6 @@
     <Compile Include="Scheduler\RestrictionSummary\SingleAgentRestrictionModelTest.cs" />
     <Compile Include="Scheduler\RestrictionSummary\SingleAgentRestrictionPresenterTest.cs" />
     <Compile Include="Scheduler\RestrictionSummary\WeekHeaderCellDataTest.cs" />
-    <Compile Include="Scheduler\Restriction\Commands\AddPreferenceRestrictionCommandModelTest.cs" />
-    <Compile Include="Scheduler\Restriction\Commands\AddStudentAvailabilityCommandModelTest.cs" />
-    <Compile Include="Scheduler\Restriction\LimitationViewModelTest.cs" />
-    <Compile Include="Scheduler\Restriction\WorkTimeLimitationAdapterTest.cs" />
     <Compile Include="Scheduler\ScheduleNavigatorPresenterTest.cs" />
     <Compile Include="Scheduler\SchedulerStateLoaderTest.cs" />
     <Compile Include="Scheduler\ScheduleSortingCommands\SchedulerSortCommandMapperTest.cs" />
@@ -792,8 +788,6 @@
     <Compile Include="Scheduler\PeriodPresenterTest.cs" />
     <Compile Include="Scheduler\DetailPresenterTest.cs" />
     <Compile Include="Scheduler\OverviewPresenterTest.cs" />
-    <Compile Include="Scheduler\Restriction\RestrictionEditorViewModelTest.cs" />
-    <Compile Include="Scheduler\Restriction\RestrictionViewModelTest.cs" />
     <Compile Include="Scheduler\WeekPresenterTest.cs" />
     <Compile Include="Scheduler\DateTimePeriodViewModelTest.cs" />
     <Compile Include="Scheduler\DayPresenterTest.cs" />

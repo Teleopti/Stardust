@@ -2,7 +2,6 @@
 using Teleopti.Ccc.WinCode.Common.Interop;
 using Teleopti.Ccc.WpfControls.Controls.Editor;
 using Teleopti.Ccc.WpfControls.Controls.Notes;
-using Teleopti.Ccc.WpfControls.Controls.Restriction;
 
 namespace Teleopti.Ccc.WpfControls.Common.Interop
 {
@@ -59,17 +58,6 @@ namespace Teleopti.Ccc.WpfControls.Common.Interop
                         {
                             agentName = wpfShiftEditor.SchedulePart.Person.Name + " " +
 										wpfShiftEditor.SchedulePart.DateOnlyAsPeriod.DateOnly.ToShortDateString();
-                            SplitAndUpdate(itemHostViewModel, agentName);
-                        }
-                }
-                else if (itemHostViewModel.ModelContent is RestrictionEditor)
-                {
-                    var restrictionEditor = current.ModelContent as RestrictionEditor;
-                    if (restrictionEditor != null)
-                        if (restrictionEditor.SchedulePart != null)
-                        {
-                            agentName = restrictionEditor.SchedulePart.Person.Name + " " +
-										restrictionEditor.SchedulePart.DateOnlyAsPeriod.DateOnly.ToShortDateString();
                             SplitAndUpdate(itemHostViewModel, agentName);
                         }
                 }
