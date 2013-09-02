@@ -76,10 +76,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public string StartTime { get; set; }
 		public string EndTime { get; set; }
 		public bool NextDay { get; set; }
-
-		public string DefaultStartTime { get; set; }
-		public string DefaultEndTime { get; set; }
-		public bool DefaultNextDay { get; set; }
 	}
 
 	public class NoteViewModel

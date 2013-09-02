@@ -144,22 +144,36 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				;
 
 			CreateMap<IScheduleDay, OvertimeAvailabilityViewModel>()
-				.ForMember(d => d.HasOvertimeAvailability, o => o.MapFrom(s => s.OvertimeAvailablityCollection().FirstOrDefault() != null))
-				.ForMember(d => d.StartTime,
-						   o => o.MapFrom(s => s.OvertimeAvailablityCollection().FirstOrDefault() != null ? TimeHelper.TimeOfDayFromTimeSpan(s.OvertimeAvailablityCollection().FirstOrDefault().StartTime.Value, CultureInfo.CurrentCulture) : null))
-				.ForMember(d => d.EndTime,
-						   o => o.MapFrom(s => s.OvertimeAvailablityCollection().FirstOrDefault() != null ? TimeHelper.TimeOfDayFromTimeSpan(s.OvertimeAvailablityCollection().FirstOrDefault().EndTime.Value, CultureInfo.CurrentCulture) : null))
-				.ForMember(d => d.NextDay, o => o.MapFrom(s => s.OvertimeAvailablityCollection().FirstOrDefault() != null && s.OvertimeAvailablityCollection().FirstOrDefault().EndTime.Value.Days > 0))
-				.ForMember(d => d.DefaultStartTime, o => o.MapFrom(
-					s => s.SignificantPartForDisplay() == SchedulePartView.MainShift
-						? TimeHelper.TimeOfDayFromTimeSpan(s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).EndTime, CultureInfo.CurrentCulture)
-						: TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0))))
-				.ForMember(d => d.DefaultEndTime, o => o.MapFrom(
-					s => s.SignificantPartForDisplay() == SchedulePartView.MainShift
-						? TimeHelper.TimeOfDayFromTimeSpan(s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).EndTime.Add(new TimeSpan(1, 0, 0)), CultureInfo.CurrentCulture)
-						: TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0))))
-				.ForMember(d => d.DefaultNextDay, o => o.MapFrom(
-					s => s.SignificantPartForDisplay() == SchedulePartView.MainShift && s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).EndTime.Add(new TimeSpan(1, 0, 0)).Days > 0))
+				.ForMember(d => d.HasOvertimeAvailability,
+						   o => o.MapFrom(s => s.OvertimeAvailablityCollection() != null && s.OvertimeAvailablityCollection().FirstOrDefault() != null))
+				.ForMember(d => d.StartTime, o => o.ResolveUsing(s =>
+					{
+						if (s.OvertimeAvailablityCollection() != null && s.OvertimeAvailablityCollection().FirstOrDefault() != null)
+							return TimeHelper.TimeOfDayFromTimeSpan(s.OvertimeAvailablityCollection().FirstOrDefault().StartTime.Value,
+							                                        CultureInfo.CurrentCulture);
+						return s.SignificantPartForDisplay() == SchedulePartView.MainShift
+							       ? TimeHelper.TimeOfDayFromTimeSpan(s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).EndTime,
+							                                          CultureInfo.CurrentCulture)
+							       : TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0));
+					}))
+				.ForMember(d => d.EndTime, o => o.ResolveUsing(s =>
+					{
+						if (s.OvertimeAvailablityCollection() != null && s.OvertimeAvailablityCollection().FirstOrDefault() != null)
+							return TimeHelper.TimeOfDayFromTimeSpan(s.OvertimeAvailablityCollection().FirstOrDefault().EndTime.Value,
+							                                        CultureInfo.CurrentCulture);
+						return s.SignificantPartForDisplay() == SchedulePartView.MainShift
+							       ? TimeHelper.TimeOfDayFromTimeSpan(
+								       s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).EndTime.Add(new TimeSpan(1, 0, 0)),
+								       CultureInfo.CurrentCulture)
+							       : TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0));
+					}))
+				.ForMember(d => d.NextDay, o => o.ResolveUsing(s =>
+					{
+						if (s.OvertimeAvailablityCollection() != null && s.OvertimeAvailablityCollection().FirstOrDefault() != null)
+							return s.OvertimeAvailablityCollection().FirstOrDefault().EndTime.Value.Days > 0;
+						return s.SignificantPartForDisplay() == SchedulePartView.MainShift &&
+						       s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).EndTime.Add(new TimeSpan(1, 0, 0)).Days > 0;
+					}))
 				;
 
 			CreateMap<WeekScheduleDayDomainData, PeriodViewModel>()

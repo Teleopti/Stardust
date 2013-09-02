@@ -11,7 +11,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon;
@@ -206,19 +205,14 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		{
 			var domainData = new WeekScheduleDayDomainData { Date = DateOnly.Today };
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date);
-			var overtimeAvailability = new OvertimeAvailability(new Person(), DateOnly.Today, new TimeSpan(1, 1, 1),
-																new TimeSpan(1, 2, 2, 2));
-			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
-					   .Return(
-						   new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability> { overtimeAvailability }));
 			scheduleDay.Stub(x => x.SignificantPartForDisplay()).Return(SchedulePartView.DayOff);
 			domainData.ScheduleDay = scheduleDay;
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
-			result.OvertimeAvailabililty.DefaultStartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0), CultureInfo.CurrentCulture));
-			result.OvertimeAvailabililty.DefaultEndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0), CultureInfo.CurrentCulture));
-			result.OvertimeAvailabililty.DefaultNextDay.Should().Be.EqualTo(false);
+			result.OvertimeAvailabililty.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0), CultureInfo.CurrentCulture));
+			result.OvertimeAvailabililty.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0), CultureInfo.CurrentCulture));
+			result.OvertimeAvailabililty.NextDay.Should().Be.EqualTo(false);
 		}
 
 		[Test]
@@ -231,17 +225,12 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			personAssignment.Stub(x => x.Period).Return(new DateTimePeriod(startTime, endTime));
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date, new Person(), SchedulePartView.MainShift,
 			                                                    personAssignment);
-			var overtimeAvailability = new OvertimeAvailability(new Person(), DateOnly.Today, new TimeSpan(1, 1, 1),
-																new TimeSpan(1, 2, 2, 2));
-			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
-					   .Return(
-						   new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability> { overtimeAvailability }));
 			domainData.ScheduleDay = scheduleDay;
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
-			result.OvertimeAvailabililty.DefaultStartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(endTime.AddHours(2).TimeOfDay, CultureInfo.CurrentCulture));
-			result.OvertimeAvailabililty.DefaultEndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(endTime.AddHours(3).TimeOfDay, CultureInfo.CurrentCulture));
+			result.OvertimeAvailabililty.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(endTime.AddHours(2).TimeOfDay, CultureInfo.CurrentCulture));
+			result.OvertimeAvailabililty.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(endTime.AddHours(3).TimeOfDay, CultureInfo.CurrentCulture));
 		}
 
 		[Test]
