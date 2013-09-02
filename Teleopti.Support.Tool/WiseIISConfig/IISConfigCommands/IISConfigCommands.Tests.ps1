@@ -37,6 +37,15 @@ function TearDown {
 	Describe "Tear down previous test"{
 		[string] $path = Get-UninstallRegPath -MsiKey "$CccServerMsiKey"
 		
+
+        #changed to test only, Throws on CCCRELEASED even if it is there???	
+        #and moved we can't test after uninstall
+		It "should throw exeption when http URL does not exist" {
+			$computerName=(get-childitem -path env:computername).Value
+			$httpStatus=Check-HttpStatus -url "http://$computerName/TeleoptiCCC/index.html"
+            $httpStatus  | Should Be $True
+		}
+
 		It "should uninstall product"{
 			[bool] $isInstalled = Check-ProductIsInstalled -DisplayName "$displayName"
 			if ($isInstalled) {
@@ -53,12 +62,6 @@ function TearDown {
 			$httpStatus | Should Be $True
 		}
 		
-        #changed to test only, Throws on CCCRELEASED even if it is there???	
-		It "should throw exeption when http URL does not exist" {
-			$computerName=(get-childitem -path env:computername).Value
-			$httpStatus=Check-HttpStatus -url "http://$computerName/TeleoptiCCC/index.html"
-            $httpStatus  | Should Be $True
-		}
 		
 		It "Should destroy working folder" {
 			destroy-WorkingFolder -workingFolder "$workingFolder"
