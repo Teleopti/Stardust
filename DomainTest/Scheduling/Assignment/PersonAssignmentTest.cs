@@ -34,13 +34,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void AtLeastOneMainShiftLayerMustBeSet()
-		{
-			Assert.Throws<ArgumentOutOfRangeException>(() => 
-				target.SetMainShiftLayers(new IMainShiftLayer[0], new ShiftCategory("foo")));
-		}
-
-		[Test]
 		public void VerifyBelongsToScenario()
 		{
 			Assert.IsTrue(target.BelongsToScenario(target.Scenario));
@@ -555,6 +548,51 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.SetDayOff(DayOffFactory.CreateDayOff());
 			target.Clear();
 			target.DayOff().Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldClearIfFillWithDataIsEmpty()
+		{
+			var activity = ActivityFactory.CreateActivity("hej");
+			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			target.AddOvertimeLayer(activity, period, null);
+			target.AddPersonalLayer(activity, period);
+			target.SetMainShiftLayers(new List<IMainShiftLayer> { new MainShiftLayer(activity, period) },
+																ShiftCategoryFactory.CreateShiftCategory("cat"));
+			target.FillWithDataFrom(new PersonAssignment(target.Person, target.Scenario, target.Date));
+			target.OvertimeLayers().Should().Be.Empty();
+			target.PersonalLayers().Should().Be.Empty();
+			target.MainLayers().Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldFillWithData()
+		{
+			var newAss = new PersonAssignment(target.Person, target.Scenario, target.Date);
+			var activity = ActivityFactory.CreateActivity("hej");
+			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			newAss.AddOvertimeLayer(activity, period, null);
+			newAss.AddPersonalLayer(activity, period);
+			newAss.SetMainShiftLayers(new List<IMainShiftLayer> { new MainShiftLayer(activity, period) },
+																ShiftCategoryFactory.CreateShiftCategory("cat"));
+			newAss.SetDayOff(new DayOffTemplate());
+			target.FillWithDataFrom(newAss);
+			target.OvertimeLayers().Should().Not.Be.Empty();
+			target.PersonalLayers().Should().Not.Be.Empty();
+			target.MainLayers().Should().Not.Be.Empty();
+			target.DayOff().Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldKeepIdAndVersionCallingFillWithData()
+		{
+			var id = Guid.NewGuid();
+			var version = 123;
+			target.SetId(id);
+			target.SetVersion(version);
+			target.FillWithDataFrom(new PersonAssignment(target.Person, target.Scenario, target.Date));
+			target.Id.Should().Be.EqualTo(id);
+			target.Version.Should().Be.EqualTo(version);
 		}
 	}
 }

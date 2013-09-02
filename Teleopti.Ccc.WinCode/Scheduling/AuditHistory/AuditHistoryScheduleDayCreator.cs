@@ -1,24 +1,33 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.AuditHistory
 {
     public interface IAuditHistoryScheduleDayCreator
     {
-        IScheduleDay Create(IScheduleDay currentScheduleDay,  IEnumerable<IPersistableScheduleData> newData);
+        void Apply(IScheduleDay currentScheduleDay,  IEnumerable<IPersistableScheduleData> newData);
     }
 
     public class AuditHistoryScheduleDayCreator : IAuditHistoryScheduleDayCreator
     {
-        public IScheduleDay Create(IScheduleDay currentScheduleDay,  IEnumerable<IPersistableScheduleData> newData)
+        public void Apply(IScheduleDay currentScheduleDay,  IEnumerable<IPersistableScheduleData> newData)
         {
-					var resultingDay = (IScheduleDay)currentScheduleDay.Clone();
-					resultingDay.Clear<IPersonAssignment>();
-					resultingDay.Clear<IPersonAbsence>();
-					newData.ForEach(resultingDay.Add);
-	        return resultingDay;
+					currentScheduleDay.Clear<IPersonAbsence>();
+					var resultingAss = currentScheduleDay.PersonAssignment(true);
+					resultingAss.Clear();
+
+	        foreach (var scheduleData in newData)
+	        {
+		        var newAss = scheduleData as IPersonAssignment;
+						if (newAss != null)
+						{
+							resultingAss.FillWithDataFrom(newAss);
+						}
+						else
+						{
+							currentScheduleDay.Add(scheduleData.CreateTransient());
+						}
+	        }
         }
     }
 }
