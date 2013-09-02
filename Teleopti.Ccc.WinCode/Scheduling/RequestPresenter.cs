@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     public class RequestPresenter : IRequestPresenter
     {
         private readonly IPersonRequestCheckAuthorization _authorization;
+        private static IDictionary<Guid, IPerson> _filteredPersonDictionary;
         
         private IUndoRedoContainer _undoRedo;
 
@@ -22,6 +23,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             _authorization = authorization;
         }
 
+
+        public static void InitializeFileteredPersonDictionary(IDictionary<Guid, IPerson> filteredPersonDictionary)
+        {
+            _filteredPersonDictionary = filteredPersonDictionary;
+        }
         /// <summary>
         /// Filter list from specified expression
         /// </summary>
@@ -41,7 +47,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 
         private static IList<PersonRequestViewModel> searchText(IEnumerable<PersonRequestViewModel> data,
-                                                 IList<string> filterExpression)
+                                                 IList<string> filterExpression
+                                                 )
         {
             var filteredRequest = new List<PersonRequestViewModel>();
 
@@ -70,13 +77,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             var personRequestStartDate = element.PersonRequest.Request.Period.StartDateTime;
             var personRequestEndDate = element.PersonRequest.Request.Period.EndDateTime;
 
-            if (requestedDate.Contains(filterText))
+            var isInFilteredPersonList = _filteredPersonDictionary.ContainsKey(element.PersonRequest.Person.Id.GetValueOrDefault());
+
+            if (requestedDate.Contains(filterText) && isInFilteredPersonList)
                 return true;
 
-            if (foundDateTextIfAny(personRequestStartDate, personRequestEndDate, filterText))
+            if (foundDateTextIfAny(personRequestStartDate, personRequestEndDate, filterText) && isInFilteredPersonList)
                 return true;
 
-            if (foundTextInRequestIfAny(filterText, element))
+            if (foundTextInRequestIfAny(filterText, element) && isInFilteredPersonList)
                 return true;
 
             return false;

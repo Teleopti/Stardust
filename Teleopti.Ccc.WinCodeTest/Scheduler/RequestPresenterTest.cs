@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IPerson _person3;
         private IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
         private TimeZoneInfo _TimeZoneInfo;
+        private IDictionary<Guid, IPerson> filteredPersons;
 
         [SetUp]
         public void Setup()
@@ -102,6 +104,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _requestViewAdapters.Add(_request1);
             _requestViewAdapters.Add(_request2);
             _requestViewAdapters.Add(_request3);
+
+
+            filteredPersons = new Dictionary<Guid, IPerson>();
+            filteredPersons.Add(_request1.PersonRequest.Person.Id.GetValueOrDefault(), _request1.PersonRequest.Person);
         }
 
         [Test]
@@ -122,7 +128,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             var filterExpression = new List<string>();
             filterExpression.Add("A");
-
+            RequestPresenter.InitializeFileteredPersonDictionary(filteredPersons);
             var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filterExpression);
             Assert.AreEqual(list.Count, 3);
         }
@@ -132,7 +138,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             var filerExpression = new List<string>();
             filerExpression.Add("NOT FOUND");
-
+            RequestPresenter.InitializeFileteredPersonDictionary(filteredPersons);
             var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filerExpression);
             Assert.AreEqual(list.Count, 0);
         }
@@ -143,7 +149,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var filerExpression = new List<string>();
             var year = DateTime.Now.Year.ToString();
             filerExpression.Add(year);
-
+            RequestPresenter.InitializeFileteredPersonDictionary(filteredPersons);
             var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filerExpression);
             Assert.AreEqual(list.Count, 3);
         }
@@ -167,7 +173,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             var filerExpression = new List<string>();
             filerExpression.Add("Request2");
-
+            RequestPresenter.InitializeFileteredPersonDictionary(filteredPersons);
             var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filerExpression);
             Assert.AreEqual(list.Count, 1);
         }
@@ -178,7 +184,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var filerExpression = new List<string>();
             var month = DateTime.Now.AddDays(7).Month;
             filerExpression.Add(month.ToString());
-
+            RequestPresenter.InitializeFileteredPersonDictionary(filteredPersons);
             var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filerExpression);
             Assert.AreEqual(list.Count, 3);
         }
@@ -187,8 +193,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void ShouldReturnRequestsOfTypeAbsence()
         {
             var filerExpression = new List<string>();
-           filerExpression.Add("Absence");
-
+            filerExpression.Add("Absence");
+            RequestPresenter.InitializeFileteredPersonDictionary(filteredPersons);
             var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filerExpression);
             Assert.AreEqual(list.Count, 3);
         }
@@ -198,7 +204,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             var filerExpression = new List<string>();
             filerExpression.Add("abs");
-
+            RequestPresenter.InitializeFileteredPersonDictionary(filteredPersons);
             var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filerExpression);
             Assert.AreEqual(list.Count, 3);
         }
@@ -419,7 +425,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void ShouldNotCrashWhen_NullSubject()
 		{
 			_requestViewAdapters.First().PersonRequest.Subject = null;
-			RequestPresenter.FilterAdapters(_requestViewAdapters, new List<string> {"StringThatDoesNotExistInLists"});
+            RequestPresenter.InitializeFileteredPersonDictionary(filteredPersons);
+            RequestPresenter.FilterAdapters(_requestViewAdapters, new List<string> {"StringThatDoesNotExistInLists"});
 		}
 
         #region Undo/redo tests
