@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -109,6 +110,8 @@ namespace Teleopti.Ccc.Domain.Infrastructure
                                new List<Type> {typeof (IScheduleChangedInDefaultScenario)});
             aggregateRoots.Add(typeof (IPersonScheduleDayReadModel),
                                new List<Type> {typeof (IPersonScheduleDayReadModel)});
+	        aggregateRoots.Add(typeof (IScheduledResourcesReadModel),
+	                           new List<Type> {typeof (IScheduledResourcesReadModel)});
 
             aggregateRoots.Add(typeof (Person), new List<Type> {typeof (IPerson)});
 
