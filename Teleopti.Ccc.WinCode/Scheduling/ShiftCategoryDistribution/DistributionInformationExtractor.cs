@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
         IList<ShiftDistribution> GetShiftDistribution();
         IList<ShiftCategoryPerAgent> GetShiftCategoryPerAgent();
         IList<ShiftFairness> GetShiftFairness();
+        Dictionary<int, int> GetShiftCategoryFrequency(IShiftCategory shiftCategory);
     }
 
     public class DistributionInformationExtractor : IDistributionInformationExtractor
@@ -53,5 +54,19 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
             return ShiftFairnessCalculator.GetShiftFairness(_shiftCategoryPerAgentList);
         }
 
+        public Dictionary<int, int> GetShiftCategoryFrequency(IShiftCategory shiftCategory)
+        {
+            var result = new Dictionary<int, int>();
+            var shiftCategoriesPerAgent = GetShiftCategoryPerAgent();
+            foreach (var item in shiftCategoriesPerAgent.Where(i=>i.ShiftCategory == shiftCategory ))
+            {
+                if (result.ContainsKey(item.Count))
+                    result[item.Count]++;
+                else
+                    result.Add(item.Count ,1);
+                
+            }
+            return result;
+        }
     }
 }

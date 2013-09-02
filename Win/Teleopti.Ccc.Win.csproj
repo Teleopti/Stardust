@@ -1301,6 +1301,9 @@
     <Compile Include="Scheduling\PropertyPanel\PerShiftCategoryChart.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Scheduling\PropertyPanel\PerShiftCategoryChartControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Scheduling\PropertyPanel\ScheduleDayListFactory.cs" />
     <Compile Include="Scheduling\PropertyPanel\ShiftDistributionControl.cs">
       <SubType>UserControl</SubType>
@@ -2685,6 +2688,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PersonsFilterView.resx">
       <DependentUpon>PersonsFilterView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PropertyPanel\PerShiftCategoryChartControl.resx">
+      <DependentUpon>PerShiftCategoryChartControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftDistributionControl.resx">
       <DependentUpon>ShiftDistributionControl.cs</DependentUpon>
