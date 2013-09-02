@@ -1,7 +1,6 @@
 ﻿using System.Windows.Input;
 using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Scheduling.Editor;
-using Teleopti.Ccc.WinCode.Scheduling.Restriction.Commands;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
 {
@@ -37,14 +36,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             Assert.AreEqual(_command.Text, UserTexts.Resources.AddMainLayer);
         }
 
-        [Test]
-        public void VerifyUpdateAllRestrictionsCommand()
-        {
-            _command = RestrictionEditorRoutedCommands.UpdateAllRestrictions;
-            Assert.AreEqual(_command.Text, UserTexts.Resources.Update);
-        }
-
-        
         [Test]
         public void VerifyAddActivityWithPeriodCommand()
         {
