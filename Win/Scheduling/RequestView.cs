@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private bool _needReload;
         private readonly IPersonRequestCheckAuthorization _authorization;
         private bool _needUpdate;
+        
 
 
         public RequestView(FrameworkElement handlePersonRequestView, ISchedulerStateHolder schedulerStateHolder, IUndoRedoContainer container, IDictionary<IPerson, IPersonAccountCollection> allAccountPersonCollection,IEventAggregator eventAggregator)
@@ -39,6 +40,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(schedulerStateHolder.Schedules,_authorization);
             _model = new HandlePersonRequestViewModel(schedulerStateHolder.RequestedPeriod.Period(), schedulerStateHolder.AllPermittedPersons, _container, allAccountPersonCollection, _eventAggregator, _authorization, schedulerStateHolder.TimeZoneInfo);
             CreatePersonRequestViewModels(schedulerStateHolder, handlePersonRequestView);
+            
             InitObservableListEvents();
         }
 
@@ -63,10 +65,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             _model.UpdatePersonRequestViewModels();
         }
 
-        public void FilterGrid(IList<string> filterWords)
+        public void FilterGrid(IList<string> filterWords, IDictionary<Guid, IPerson> filteredPersonDictionary)
         {
 			var allModels = (IList<PersonRequestViewModel>)_model.PersonRequestViewModels.SourceCollection;
-			var modelsToShow = RequestPresenter.FilterAdapters(allModels, filterWords);
+            RequestPresenter.InitializeFileteredPersonDictionary(filteredPersonDictionary);
+            var modelsToShow = RequestPresenter.FilterAdapters(allModels, filterWords);
 			_source = RequestPresenter.FilterAdapters(modelsToShow, filterWords);
 			_model.ShowOnly(_source);
 	        foreach (var model in allModels)
