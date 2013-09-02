@@ -32,6 +32,9 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 
             var instance = _container.Resolve<IScheduleScreenRefresher>(
                 TypedParameter.From(mocks.Stub<IOwnMessageQueue>()),
+                TypedParameter.From(_container.Resolve<IScheduleRefresher>(
+                    TypedParameter.From(mocks.Stub<IUpdateScheduleDataFromMessages>())
+                    )),
                 TypedParameter.From(_container.Resolve<IScheduleDataRefresher>(
                     TypedParameter.From(mocks.Stub<IUpdateScheduleDataFromMessages>())
                     )),
