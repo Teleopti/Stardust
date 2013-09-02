@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			_mocks.ReplayAll();
 
-			_target = new MainShiftLayerViewModel(null, _layerWithPayload, null, null, null);
+			_target = new MainShiftLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, null, null, null);
 			_testRunner = new CrossThreadTestRunner();
 		}
 
@@ -253,15 +253,14 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void UpdatePeriod_WhenCalled_ShouldCallUpdateAllMovedLayersOnObserver()
 		{
-			var layerObserver = MockRepository.GenerateStrictMock<ILayerViewModelObserver>();
+			var layerObserver = MockRepository.GenerateMock<ILayerViewModelObserver>();
 
 			_target = new MainShiftLayerViewModel(layerObserver, _layerWithPayload, null, null, null);
-			layerObserver.Expect(l => l.UpdateAllMovedLayers());
-
+			
 			_target.IsChanged = true;
 			_target.UpdatePeriod();
 
-			layerObserver.VerifyAllExpectations();
+            layerObserver.AssertWasCalled(l => l.UpdateAllMovedLayers());
 		}
 
 		[Test]

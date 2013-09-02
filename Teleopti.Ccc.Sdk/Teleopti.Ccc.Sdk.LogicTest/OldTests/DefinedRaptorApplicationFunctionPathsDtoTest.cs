@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
             _target.ModifyPersonAbsence = DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence;
             Assert.AreEqual(_target.ModifyPersonAbsence, DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence);
 
-            _target.ModifyPersonDayOff = DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff;
-            Assert.AreEqual(_target.ModifyPersonDayOff, DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff);
+			_target.ModifyPersonDayOff = DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment;
+			Assert.AreEqual(_target.ModifyPersonDayOff, DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
 
             _target.ModifyPersonAssignment = DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment;
             Assert.AreEqual(_target.ModifyPersonAssignment, DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);

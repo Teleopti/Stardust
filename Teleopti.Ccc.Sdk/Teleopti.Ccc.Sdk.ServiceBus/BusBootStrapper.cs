@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     	{
     		var reader = new ConfigurationReaderFactory();
     		var configurationReader = reader.Reader();
-			configurationReader.ReadConfiguration(new MessageSenderCreator(new InternalServiceBusSender(()=>Container.Resolve<IServiceBus>())));
+			configurationReader.ReadConfiguration(new MessageSenderCreator(new InternalServiceBusSender(()=>Container.Resolve<IServiceBus>(),()=>Container.Resolve<ICurrentIdentity>())));
     	}
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]

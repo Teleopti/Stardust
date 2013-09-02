@@ -119,20 +119,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(LazyLoadingManager.IsInitialized(result[0].CreatedBy));
         }
 
-        [Test, Explicit("Roger! Vad gör jag för fel? /Robin")]
-        public void EntityCloneShouldNotMakeEntityDirtyAfterMerge()
-        {
-            IWorkflowControlSet org = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(org);
-
-            //Just a pre-req check to verify that the uow isn't dirty
-            Assert.IsFalse(UnitOfWork.IsDirty());
-            var clone = org.EntityClone();
-            UnitOfWork.Merge(clone);
-
-            Assert.IsFalse(UnitOfWork.IsDirty());
-        }
-
         [Test]
         public void VerifyAllowedPreferenceActivity()
         {
