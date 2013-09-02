@@ -103,6 +103,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				return currentAss;
 			}
 
+	    public IScheduleDay ReFetch()
+	    {
+		    return Owner[Person].ReFetch(this);
+	    }
+
 	    public ReadOnlyCollection<IPersonAbsence> PersonAbsenceCollection()
         {
             return PersonAbsenceCollection(false);

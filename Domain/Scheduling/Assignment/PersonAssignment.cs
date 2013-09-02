@@ -136,8 +136,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			//todo: make sure not reusing layer from another assignment...
 			//* either do a check here or 
 			//* don't expose and accept IMainShiftACtivityLayerNew but another type
-
-			InParameter.ListCannotBeEmpty("activityLayers", activityLayers);
 			//clear or new list?
 			ClearMainLayers();
 			activityLayers.ForEach(layer =>
@@ -330,6 +328,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (_dayOffTemplate == null)
 				return template == null;
 			return _dayOffTemplate.Equals(template);
+		}
+
+		public virtual void FillWithDataFrom(IPersonAssignment personAssignmentSource)
+		{
+			Clear();
+			personAssignmentSource.SetThisAssignmentsDayOffOn(this);
+
+			var mainLayers = new List<IMainShiftLayer>();
+			foreach (var mainLayer in personAssignmentSource.MainLayers())
+			{
+				mainLayers.Add(new MainShiftLayer(mainLayer.Payload, mainLayer.Period));
+			}
+			SetMainShiftLayers(mainLayers, personAssignmentSource.ShiftCategory);
+			foreach (var personalLayer in personAssignmentSource.PersonalLayers())
+			{
+				AddPersonalLayer(personalLayer.Payload, personalLayer.Period);
+			}
+			foreach (var overtimeLayer in personAssignmentSource.OvertimeLayers())
+			{
+				AddOvertimeLayer(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
+			}
 		}
 
 		#region Equals

@@ -418,7 +418,6 @@
     <Compile Include="Scheduling\Assignment\ProjectionIntersectingPeriodMergerTest.cs" />
     <Compile Include="Scheduling\Assignment\ProjectionMidnightSplitterMergerTest.cs" />
     <Compile Include="Scheduling\Assignment\RangeProjectionServiceTest.cs" />
-    <Compile Include="Scheduling\Assignment\RestoreSchedulePartServiceTest.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePartStringVisualizerTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessManagerTest.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodSplitCheckerTest.cs" />

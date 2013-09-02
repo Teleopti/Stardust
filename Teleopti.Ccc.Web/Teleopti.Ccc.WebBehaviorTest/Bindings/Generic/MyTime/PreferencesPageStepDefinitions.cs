@@ -390,7 +390,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I input new template name '(.*)'")]
 		public void WhenIInputNewTemplateName(string name)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Template-name-input", name);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".preference-template-name", name);
 		}
 
 		[When(@"I click save template button")]
