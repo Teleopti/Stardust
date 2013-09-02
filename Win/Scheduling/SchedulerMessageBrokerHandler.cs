@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Autofac;
 using log4net;
 using Teleopti.Ccc.Domain.Common;
@@ -36,6 +35,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			_scheduleScreenRefresher = container.Resolve<IScheduleScreenRefresher>(
 				TypedParameter.From<IOwnMessageQueue>(this),
+				TypedParameter.From(container.Resolve<IScheduleRefresher>(
+					TypedParameter.From<IUpdateScheduleDataFromMessages>(this)
+					)),
 				TypedParameter.From(container.Resolve<IScheduleDataRefresher>(
 					TypedParameter.From<IUpdateScheduleDataFromMessages>(this)
 					)),
@@ -116,11 +118,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			       	{
 			       		new IAggregateRoot[] {_owner.SchedulerState.RequestedScenario},
 			       		personsToReassociate,
-			       		_owner.MultiplicatorDefinitionSet.Cast<IAggregateRoot>(),
-			       		_owner.SchedulerState.CommonStateHolder.Absences.Cast<IAggregateRoot>(),
-			       		_owner.SchedulerState.CommonStateHolder.DayOffs.Cast<IAggregateRoot>(),
-			       		_owner.SchedulerState.CommonStateHolder.Activities.Cast<IAggregateRoot>(),
-			       		_owner.SchedulerState.CommonStateHolder.ShiftCategories.Cast<IAggregateRoot>()
+			       		_owner.MultiplicatorDefinitionSet,
+			       		_owner.SchedulerState.CommonStateHolder.Absences,
+			       		_owner.SchedulerState.CommonStateHolder.DayOffs,
+			       		_owner.SchedulerState.CommonStateHolder.Activities,
+			       		_owner.SchedulerState.CommonStateHolder.ShiftCategories
 			       	};
 		}
 
