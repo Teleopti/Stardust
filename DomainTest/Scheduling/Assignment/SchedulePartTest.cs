@@ -574,7 +574,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Expect.Call(authorization.IsPermitted("")).IgnoreArguments().Return(false);
 				Expect.Call(authorization.IsPermitted("")).IgnoreArguments().Return(true);
 				Expect.Call(authorization.IsPermitted("")).IgnoreArguments().Return(true);
-				Expect.Call(authorization.IsPermitted("")).IgnoreArguments().Return(true);
 			}
             using (_mocks.Playback())
             {
@@ -667,7 +666,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			using (_mocks.Record())
 			{
 				Expect.Call(authorization.IsPermitted("")).IgnoreArguments().Return(true);
-				Expect.Call(authorization.IsPermitted("")).IgnoreArguments().Return(false);
 			}
             using (_mocks.Playback())
             {
@@ -1320,9 +1318,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			PersonFactory.AddDefinitionSetToPerson(person, definitionSet);
 
 		    var scheduleDay = ExtractedSchedule.CreateScheduleDay(dic, person , new DateOnly(2000, 1, 1));
-			scheduleDay.CreateAndAddDayOff(DayOffFactory.CreateDayOff());
-			scheduleDay.CreateAndAddAbsence(new AbsenceLayer(new Absence(), period));
+			
 			scheduleDay.CreateAndAddActivity(activity, period, new ShiftCategory("hej"));
+			scheduleDay.CreateAndAddAbsence(new AbsenceLayer(new Absence(), period));
+			scheduleDay.CreateAndAddDayOff(DayOffFactory.CreateDayOff());
 			scheduleDay.CreateAndAddPersonalActivity(activity, period);
 			scheduleDay.CreateAndAddOvertime(activity, period, definitionSet);
 			scheduleDay.CreateAndAddNote("note");

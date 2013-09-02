@@ -804,8 +804,9 @@ End personal drop down menu
 }
 
 .user-name {
-	max-width: 180px;
+	max-width: 100px;
 	text-overflow: ellipsis;
+	vertical-align: bottom;
 	overflow: hidden;
 	float: none;
 	display: inline-block;

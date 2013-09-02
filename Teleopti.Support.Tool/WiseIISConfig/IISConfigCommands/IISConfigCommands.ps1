@@ -246,10 +246,6 @@ function create-WorkingFolder{
     )
 	if (!(Test-Path "$workingFolder")) {
 		& mkdir "$workingFolder"
-        $Acl = Get-Acl "$workingFolder"
-        $Ar = New-Object  system.security.accesscontrol.filesystemaccessrule("TOPTINET\TfsIntegration","FullControl","Allow")
-        $Acl.SetAccessRule($Ar)
-        Set-Acl "$workingFolder" $Acl
 	}
 }
 
@@ -262,9 +258,9 @@ function Check-HttpStatus {
 	[net.httpWebRequest] $req = [net.webRequest]::create($url)
     $req.Credentials = $credentials;
 	$req.Method = "GET"
-
+    Write-Host 'Check-HttpStatus: ' $url
 	[net.httpWebResponse] $res = $req.getResponse()
-
+    
 	if ($res.StatusCode -ge "200") {
 		return $true
 	}

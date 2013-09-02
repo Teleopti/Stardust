@@ -73,8 +73,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public ComboBox ExtendedPreferenceActivityTimeMaximum;
 		[FindBy(Id = "Template-save")]
 		public Div TemplateSaveDiv;
-		[FindBy(Id = "Template-name-input")]
-		public TextField TemplateNameTextField;
 
 		[FindBy(Id = "Preference-extended-error")]
 		public Div ExtendedPreferencePanelError { get; set; }

@@ -28,9 +28,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 											authorization.IsPermitted(
 												DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment) ||
 											authorization.IsPermitted(
-												DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence) ||
-											authorization.IsPermitted(
-												DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff));
+												DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence));
 
 				_editControl.SetSpecialItemState(EditAction.New, ClipboardItems.Shift.ToString(),
 												 authorization.IsPermitted(
@@ -40,7 +38,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 													 DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence));
 				_editControl.SetSpecialItemState(EditAction.New, ClipboardItems.DayOff.ToString(),
 												 authorization.IsPermitted(
-													 DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff));
+													 DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
 				_editControl.SetSpecialItemState(EditAction.New, ClipboardItems.PersonalShift.ToString(),
 												 authorization.IsPermitted(
 													 DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
@@ -52,9 +50,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 											authorization.IsPermitted(
 												DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment) ||
 											authorization.IsPermitted(
-												DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence) ||
-											authorization.IsPermitted(
-												DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff));
+												DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence));
 			}		
 		}
 	}

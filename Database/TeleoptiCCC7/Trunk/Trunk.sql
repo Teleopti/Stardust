@@ -1169,7 +1169,7 @@ DECLARE @ForeignId as varchar(255)
 
 --modify the following application function
 SELECT @ForeignId = '0013' -- Foreign id of the function
-SELECT @FunctionCode = 'ModifyPersionDayOff' -- Name of the function
+SELECT @FunctionCode = 'ModifyDayOff' -- Name of the function
 
 UPDATE ApplicationFunction
 SET IsDeleted=1
