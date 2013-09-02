@@ -16,6 +16,9 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 	this.StartTime = ko.observable('');
 	this.EndTime = ko.observable('');
 	this.NextDay = ko.observable(false);
+	this.DateToForDisplay = ko.computed(function () {
+		return self.NextDay() ? self.DateFrom().clone().add('d', 1) : self.DateFrom().clone();
+	});
 
 	this.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
 	this.DateFormat = $('#Request-detail-datepicker-format').val().toUpperCase();
