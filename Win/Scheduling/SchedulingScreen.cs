@@ -759,7 +759,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (e.KeyCode == Keys.Enter && toolStripTextBoxFilter.Focused)
 			{
-				_requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' '));
+                _requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' '), SchedulerState.FilteredPersonDictionary);
 				e.Handled = true;
 				e.SuppressKeyPress = true;
 			}
@@ -6247,7 +6247,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripButtonFindRequestOnClick(object sender, EventArgs eventArgs)
 		{
-			_requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' '));
+			_requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' '), SchedulerState.FilteredPersonDictionary);
 		}
 		
 		private void toolStripButtonEditNote_Click(object sender, EventArgs e)
