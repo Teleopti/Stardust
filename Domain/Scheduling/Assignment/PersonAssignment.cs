@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -308,22 +307,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				AddMainLayer(mainLayer.Payload, mainLayer.Period);
 			}
-		}
-
-		//will be removed
-		public virtual void SetMainShiftLayers(IEnumerable<IMainShiftLayer> activityLayers, IShiftCategory shiftCategory)
-		{
-			//todo: make sure not reusing layer from another assignment...
-			//* either do a check here or 
-			//* don't expose and accept IMainShiftACtivityLayerNew but another type
-			//clear or new list?
-			ClearMainLayers();
-			activityLayers.ForEach(layer =>
-			{
-				layer.SetParent(this);
-				_shiftLayers.Add(layer);
-			});
-			ShiftCategory = shiftCategory;
 		}
 
 		public virtual IDayOff DayOff()

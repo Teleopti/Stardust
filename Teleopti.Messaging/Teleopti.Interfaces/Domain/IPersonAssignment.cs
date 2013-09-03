@@ -21,9 +21,6 @@ namespace Teleopti.Interfaces.Domain
                                             ICloneableEntity<IPersonAssignment>,
 											IEquatable<IPersonAssignment>
     {
-			void SetMainShiftLayers(IEnumerable<IMainShiftLayer> activityLayers, IShiftCategory shiftCategory);
-
-
         /// <summary>
         /// Clears the personal shift.
         /// </summary>
