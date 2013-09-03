@@ -2,13 +2,11 @@
 define([
         'knockout',
         'moment',
-        'addremovefulldayabsence-PersonScheduleDayReadModel/scenario',
-        'addremovefulldayabsence-ScheduledResourcesReadModel/scenario'
+        'addremovefulldayabsence/scenario'
 ], function (
     ko,
     moment,
-    AddRemoveFullDayAbsencePersonScheduleDayReadModelScenario,
-    AddRemoveFullDayAbsenceScheduledResourcesReadModelScenario
+    AddRemoveFullDayAbsenceScenario
 	) {
 
 
@@ -17,8 +15,8 @@ define([
         var self = this;
         
         this.Scenarios = [
-            new AddRemoveFullDayAbsencePersonScheduleDayReadModelScenario(),
-            new AddRemoveFullDayAbsenceScheduledResourcesReadModelScenario()
+            new AddRemoveFullDayAbsenceScenario("PersonScheduleDayReadModel"),
+            new AddRemoveFullDayAbsenceScenario("ScheduledResourcesReadModel")
         ];
         this.ScenarioName = ko.observable();
         this.Configuration = ko.observable();

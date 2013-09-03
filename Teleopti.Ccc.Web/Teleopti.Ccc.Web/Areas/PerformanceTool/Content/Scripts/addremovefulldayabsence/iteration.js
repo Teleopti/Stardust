@@ -16,7 +16,7 @@ define([
                 self.RemoveCommandCompletedPromise = $.Deferred();
                 self.AllCommandsCompletedPromise = $.when(self.AddCommandCompletedPromise, self.RemoveCommandCompletedPromise);
                 self.RemoveCommandSent = false;
-                self.PersonScheduleDayReadModelUpdatedCount = 0;
+                self.ReadModelUpdatedCount = 0;
                 self.SendAddCommand();
             };
             
@@ -34,8 +34,8 @@ define([
                         PersonId: self.PersonId
                     }),
                     error: function() {
-                        data.PersonScheduleDayReadModelUpdateFailed();
-                        data.PersonScheduleDayReadModelUpdateFailed();
+                        data.ReadModelUpdateFailed();
+                        data.ReadModelUpdateFailed();
                         self.RemoveCommandCompletedPromise.resolve();
                         self.RemoveCommandSent = true;
                     },
@@ -54,7 +54,7 @@ define([
                     cache: false,
                     data: JSON.stringify({ PersonAbsenceId: personAbsenceId }),
                     error: function() {
-                        data.PersonScheduleDayReadModelUpdateFailed();
+                        data.ReadModelUpdateFailed();
                     },
                     complete: function() {
                         self.RemoveCommandCompletedPromise.resolve();
@@ -80,10 +80,11 @@ define([
                 return false;
             };
 
-            this.NotifyPersonScheduleDayReadModelChanged = function (notification) {
-                if (self.PersonScheduleDayReadModelUpdatedCount < 2 && self.PersonId == notification.DomainReferenceId) {
-                    self.PersonScheduleDayReadModelUpdatedCount++;
-                    data.PersonScheduleDayReadModelUpdated();
+            this.NotifyReadModelChanged = function (notification) {
+                if (self.ReadModelUpdatedCount < 2 &&
+                    (notification.DomainType == "IScheduledResourcesReadModel" || self.PersonId == notification.DomainReferenceId)) {
+                    self.ReadModelUpdatedCount++;
+                    data.ReadModelUpdated();
                     return true;
                 }
                 return false;
