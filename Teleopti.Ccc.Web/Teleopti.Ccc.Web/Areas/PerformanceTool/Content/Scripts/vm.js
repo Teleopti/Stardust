@@ -53,7 +53,7 @@ define([
         
         this.Scenario.subscribe(function () {
             self.ConfigurationLoading(true);
-            self.Scenario().Configuration.LoadDefaultConfiguration(function (data) {
+            self.Scenario().LoadDefaultConfiguration(function (data) {
                 self.Configuration(JSON.stringify(data, null, 4));
                 self.ConfigurationLoading(false);
             });
