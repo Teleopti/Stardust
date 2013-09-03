@@ -96,5 +96,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 3, null, null);
             Assert.AreEqual(0, skillIntervalData.MinMaxBoostFactor);
         }
+
+		[Test]
+		public void ZeroMinOrMaxStaffMeansNull()
+		{
+			var skillIntervalData = new SkillIntervalData(_dtp, 3.5, 3, 3, 0, 0);
+			Assert.IsNull(skillIntervalData.MaximumHeads);
+			Assert.IsNull(skillIntervalData.MinimumHeads);
+		}
 	}
 }

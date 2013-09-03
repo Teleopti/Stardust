@@ -92,69 +92,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             }
         }
-
-        [Test]
-        public void ShouldReturnNullIfMinStaffingIs0()
-        {
-            _skillStaffPeriodList = new List<ISkillStaffPeriod> { _skillStaffPeriod1};
-            var dateTime = new DateTimePeriod();
-            var skillPersonData1 = new SkillPersonData(0, 10);
-            using (_mock.Record())
-            {
-                Expect.Call(_skillStaffPeriod1.Period).Return(dateTime);
-                Expect.Call(_skillStaffPeriod1.FStaff).Return(10).Repeat.Twice();
-                Expect.Call(_skillStaffPeriod1.CalculatedResource).Return(5);
-                Expect.Call(_skillStaffPeriod1.Payload).Return(_payload1).Repeat.AtLeastOnce();
-                Expect.Call(_payload1.SkillPersonData).Return(skillPersonData1).Repeat.AtLeastOnce();
-                Expect.Call(_payload1.CalculatedLoggedOn).Return(1);
-
-            }
-            using (_mock.Playback())
-            {
-                var returnList = _target.MapSkillIntervalData(_skillStaffPeriodList);
-                Assert.AreEqual(returnList.Count, 1);
-
-                Assert.That(returnList[0].Period, Is.EqualTo(dateTime));
-                Assert.That(returnList[0].ForecastedDemand, Is.EqualTo(10));
-                Assert.That(returnList[0].CurrentDemand, Is.EqualTo(5));
-                Assert.IsNull(returnList[0].MinimumHeads);
-                Assert.That(returnList[0].MaximumHeads, Is.EqualTo(10));
-                Assert.That(returnList[0].CurrentHeads, Is.EqualTo(1));
-
-
-            }
-        }
-
-        [Test]
-        public void ShouldReturnNullIfMaxStaffingIs0()
-        {
-            _skillStaffPeriodList = new List<ISkillStaffPeriod> { _skillStaffPeriod1 };
-            var dateTime = new DateTimePeriod();
-            var skillPersonData1 = new SkillPersonData(0, 0);
-            using (_mock.Record())
-            {
-                Expect.Call(_skillStaffPeriod1.Period).Return(dateTime);
-                Expect.Call(_skillStaffPeriod1.FStaff).Return(10).Repeat.Twice();
-                Expect.Call(_skillStaffPeriod1.CalculatedResource).Return(5);
-                Expect.Call(_skillStaffPeriod1.Payload).Return(_payload1).Repeat.AtLeastOnce();
-                Expect.Call(_payload1.SkillPersonData).Return(skillPersonData1).Repeat.AtLeastOnce();
-                Expect.Call(_payload1.CalculatedLoggedOn).Return(1);
-
-            }
-            using (_mock.Playback())
-            {
-                var returnList = _target.MapSkillIntervalData(_skillStaffPeriodList);
-                Assert.AreEqual(returnList.Count, 1);
-
-                Assert.That(returnList[0].Period, Is.EqualTo(dateTime));
-                Assert.That(returnList[0].ForecastedDemand, Is.EqualTo(10));
-                Assert.That(returnList[0].CurrentDemand, Is.EqualTo(5));
-                Assert.IsNull(returnList[0].MinimumHeads);
-                Assert.IsNull(returnList[0].MaximumHeads);
-                Assert.That(returnList[0].CurrentHeads, Is.EqualTo(1));
-                
-            }
-        }
     }
 
     

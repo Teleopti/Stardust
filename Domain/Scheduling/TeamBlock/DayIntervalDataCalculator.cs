@@ -50,8 +50,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					{
 						forecastedDemands.Add(dataInInteral.ForecastedDemand);
 						currentDemands.Add(dataInInteral.CurrentDemand);
-                        if (dataInInteral.MinimumHeads.HasValue ) minimumStaff.Add(dataInInteral.MinimumHeads.Value );
-                        if (dataInInteral.MaximumHeads.HasValue ) maximumStaff.Add(dataInInteral.MaximumHeads.Value );
+                        if (dataInInteral.MinimumHeads.HasValue ) 
+							minimumStaff.Add(dataInInteral.MinimumHeads.Value );
+                        if (dataInInteral.MaximumHeads.HasValue ) 
+							maximumStaff.Add(dataInInteral.MaximumHeads.Value );
                         calculatedLoggedOnStaff.Add(dataInInteral.CurrentHeads);
 
 					}

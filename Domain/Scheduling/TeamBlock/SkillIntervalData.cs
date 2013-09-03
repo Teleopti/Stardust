@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ForecastedDemand = forecastedDemand;
 			CurrentDemand = currentDemand;
 			CurrentHeads = currentHeads;
-			MinimumHeads = minimumHeads;
-			MaximumHeads = maximumHeads;
+			MinimumHeads = minimumHeads.HasValue && minimumHeads.Value < 0.001 ? null : minimumHeads;
+			MaximumHeads = maximumHeads.HasValue && maximumHeads.Value < 0.001 ? null : maximumHeads;
             MinMaxBoostFactor = calculateMinMaxBoostFactor();
 		}
 

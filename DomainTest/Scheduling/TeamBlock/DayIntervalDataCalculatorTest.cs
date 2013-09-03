@@ -43,11 +43,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_intervalDataCalculator.Calculate(new List<double>{5, 10, 3})).Return(5);
 				Expect.Call(_intervalDataCalculator.Calculate(new List<double>{4})).Return(4);
 				Expect.Call(_intervalDataCalculator.Calculate(new List<double>{2})).Return(2);
-                Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0, 0,0 })).Return(0);
-                Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0, 0, 0 })).Return(0);
-                Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0, 0, 0 })).Return(0);
-                Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0 })).Return(0);
-                Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0 })).Return(0);
+				Expect.Call(_intervalDataCalculator.Calculate(new List<double>())).Return(0);
+				Expect.Call(_intervalDataCalculator.Calculate(new List<double>())).Return(0);
+				Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0, 0, 0 })).Return(0);
+				Expect.Call(_intervalDataCalculator.Calculate(new List<double>())).Return(0);
+				Expect.Call(_intervalDataCalculator.Calculate(new List<double>())).Return(0);
                 Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0 })).Return(0);
 			}
 
@@ -77,8 +77,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Expect.Call(_intervalDataCalculator.Calculate(new List<double>{10})).Return(10);
 				Expect.Call(_intervalDataCalculator.Calculate(new List<double>{5})).Return(5);
-                Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0 })).Return(0);
-                Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0 })).Return(0);
+				Expect.Call(_intervalDataCalculator.Calculate(new List<double>())).Return(0);
+				Expect.Call(_intervalDataCalculator.Calculate(new List<double>())).Return(0);
                 Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0 })).Return(0);
 			}
 
@@ -107,8 +107,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Expect.Call(_intervalDataCalculator.Calculate(new List<double>{10, 10})).Return(10);
 				Expect.Call(_intervalDataCalculator.Calculate(new List<double>{5, 5})).Return(5);
-                Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0, 0 })).Return(0);
-                Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0, 0 })).Return(0);
+				Expect.Call(_intervalDataCalculator.Calculate(new List<double>())).Return(0);
+				Expect.Call(_intervalDataCalculator.Calculate(new List<double>())).Return(0);
                 Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0, 0 })).Return(0);
 			}
 
@@ -136,8 +136,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Expect.Call(_intervalDataCalculator.Calculate(new List<double>{10, 10})).Return(10);
 				Expect.Call(_intervalDataCalculator.Calculate(new List<double>{5, 5})).Return(5);
-                Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0, 0 })).Return(0);
-                Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0, 0 })).Return(0);
+				Expect.Call(_intervalDataCalculator.Calculate(new List<double>())).Return(0);
+				Expect.Call(_intervalDataCalculator.Calculate(new List<double>())).Return(0);
                 Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0, 0 })).Return(0);
 			}
 
@@ -155,18 +155,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var dayIntervalData = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
             var baseDate = DateTime.SpecifyKind(SkillDayTemplate.BaseDate, DateTimeKind.Utc);
 
-            var skillIntervalDataForDay1 = new SkillIntervalData(new DateTimePeriod(baseDate.AddHours(1), baseDate.AddHours(1).AddMinutes(15)), 10, 5, 5, 0, 0);
+            var skillIntervalDataForDay1 = new SkillIntervalData(new DateTimePeriod(baseDate.AddHours(1), baseDate.AddHours(1).AddMinutes(15)), 10, 5, 5, 1, 1);
             dayIntervalData.Add(new DateOnly(2013, 1, 1), new List<ISkillIntervalData> { skillIntervalDataForDay1 });
 
-            var skillIntervalDataForDay2 = new SkillIntervalData(new DateTimePeriod(baseDate.AddDays(1).AddHours(1), baseDate.AddDays(1).AddHours(1).AddMinutes(15)), 10, 5, 5, 0, 0);
+            var skillIntervalDataForDay2 = new SkillIntervalData(new DateTimePeriod(baseDate.AddDays(1).AddHours(1), baseDate.AddDays(1).AddHours(1).AddMinutes(15)), 10, 5, 5, 1, 1);
             dayIntervalData.Add(new DateOnly(2013, 1, 2), new List<ISkillIntervalData> { skillIntervalDataForDay2 });
 
             using (_mocks.Record())
             {
                 Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 10, 10 })).Return(10);
                 Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 5, 5 })).Return(5);
-                Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0, 0 })).Return(0) ;
-                Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0, 0 })).Return(0);
+                Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 1, 1 })).Return(1) ;
+                Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 1, 1 })).Return(1);
                 Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 5, 5 })).Return(5);
             }
 
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 10, 10 })).Return(10);
                 Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 5, 5 })).Return(5);
                 Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 7, 8 })).Return(7.5);
-                Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 0, 0 })).Return(0);
+	            Expect.Call(_intervalDataCalculator.Calculate(new List<double>())).Return(0);
                 Expect.Call(_intervalDataCalculator.Calculate(new List<double> { 5, 5 })).Return(5);
             }
 
