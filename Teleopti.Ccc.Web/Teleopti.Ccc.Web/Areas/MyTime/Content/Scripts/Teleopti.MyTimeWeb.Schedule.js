@@ -169,8 +169,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.setOvertimeAvailabilityViewModel();
 			self.requestViewModel().DateFrom(moment(self.initialRequestDay.date()));
 			self.requestViewModel().DateTo(moment(self.initialRequestDay.date()));
-			if (self.requestViewModel().LoadData) {
-				self.requestViewModel().LoadData(self.initialRequestDay);
+			if (self.requestViewModel().LoadRequestData) {
+				self.requestViewModel().LoadRequestData(self.initialRequestDay);
 			}
 		};
 
@@ -178,8 +178,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	        self.initialRequestDay = day;
 		    
 	        if ((self.requestViewModel() || '') != '') {
-	        	if (self.requestViewModel().LoadData) {
-	        		self.requestViewModel().LoadData(day);
+	        	if (self.requestViewModel().LoadRequestData) {
+	        		self.requestViewModel().LoadRequestData(self.initialRequestDay);
 	        	}
 	            self.requestViewModel().DateFrom(moment(day.date()));
 	            self.requestViewModel().DateTo(moment(day.date()));
@@ -203,9 +203,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
         };
 		
         self.setOvertimeAvailabilityViewModel = function () {
-	        var model = new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(ajax);
+        	var model = new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(ajax, _displayOvertimeAvailability);
 	        self.requestViewModel(model);
         };
+		
+        function _displayOvertimeAvailability(overtimeAvailability) {
+        	self.initialRequestDay.overtimeAvailability(overtimeAvailability);
+        }
 
 	    self.CancelAddingNewRequest = function() {
 	        self.requestViewModel(null);
@@ -567,8 +571,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		        model.AddRequestCallback = _displayRequest;
 		        return model;
 		    };
-		    
-		    vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests);
+
+			var addOvertimeAvailabilityViewModel = function() {
+			};
+
+			vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, addOvertimeAvailabilityViewModel, _navigateToRequests);
 			ko.applyBindings(vm, $('#page')[0]);
 		},
 		LoadAndBindData: function () {

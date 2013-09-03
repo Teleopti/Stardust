@@ -123,7 +123,7 @@
 						</div>
 					</div> 
 				</div>
-				<div class="text-request floatright" data-bind="if: overtimeAvailability().HasOvertimeAvailability, attr: { title: textOvertimeAvailabilityText }">
+				<div class="overtime-availability-symbol floatright" data-bind="visible: overtimeAvailability().HasOvertimeAvailability, attr: { title: textOvertimeAvailabilityText }">
 					<i class="icon-time ir floatright" />
 				</div>
 				<!-- ko if: hasNote -->

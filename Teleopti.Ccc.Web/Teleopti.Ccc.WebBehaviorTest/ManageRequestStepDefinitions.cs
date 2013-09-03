@@ -8,7 +8,6 @@ using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Interfaces.Domain;
@@ -48,8 +47,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var startTimeSpan = new TimeSpan(st[0], st[1], 0);
 			int[] end = overtimeAvailability.EndTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
 			var endTimeSpan = new TimeSpan(end[0], end[1], 0);
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .overtime-availability-end-time", TimeHelper.TimeOfDayFromTimeSpan(startTimeSpan, UserFactory.User().Culture));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .overtime-availability-start-time", TimeHelper.TimeOfDayFromTimeSpan(startTimeSpan, UserFactory.User().Culture));
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .overtime-availability-end-time", TimeHelper.TimeOfDayFromTimeSpan(endTimeSpan, UserFactory.User().Culture));
+			if (overtimeAvailability.EndTimeNextDay)
+				Browser.Interactions.Click(".overtime-availability-next-day");
 		}
 
 

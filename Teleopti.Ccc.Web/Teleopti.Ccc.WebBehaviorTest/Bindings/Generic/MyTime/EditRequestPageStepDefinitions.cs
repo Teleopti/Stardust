@@ -185,4 +185,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public string EndTime { get; set; }
 		public bool EndTimeNextDay { get; set; }
 	}
+
+	public class OvertimeAvailabilityTooltip
+	{
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
+	}
 }
