@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Win.Common;
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             initializeComponent();
             _chart = new PerShiftCategoryChart {Dock = DockStyle.Fill};
+			
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
             tableLayoutPanel1.Controls.Add(_comboBoxShiftCategory,0,1);
             //tableLayoutPanel1.Controls.Add(label2, 0, 2);
@@ -69,6 +71,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             if (selectedShiftCategory == null) return;
             _chart.Series.Clear();
             var chartSeries = new ChartSeries(selectedShiftCategory.Description.Name);
+	        chartSeries.Style.Interior = new BrushInfo(selectedShiftCategory.DisplayColor);
             _chart.Model.Series.Add(chartSeries );
             Dictionary<int, int> frequency = _model.GetShiftCategoryFrequency(selectedShiftCategory);
             foreach (var item in frequency)
