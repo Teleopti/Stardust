@@ -1,7 +1,8 @@
 ﻿using System;
 using Rhino.ServiceBus;
-using Teleopti.Ccc.Domain.ApplicationRtaQueue;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Messages.Rta;
 using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
