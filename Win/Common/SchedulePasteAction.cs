@@ -165,6 +165,7 @@ namespace Teleopti.Ccc.Win.Common
                     tempPart.Clear<IPersonAssignment>();
                     tempPart.Clear<IPersonDayOff>();
                     tempPart.Clear<IStudentAvailabilityDay>();
+	                ((ExtractedSchedule) tempPart).ServiceForSignificantPartForDisplay = null;
 
                     if (((IList<IRestrictionBase>)tempPart.RestrictionCollection()).Count > 0)
                         destination.Merge(tempPart, false);
@@ -177,6 +178,7 @@ namespace Teleopti.Ccc.Win.Common
                     tempPart.Clear<IPersonAssignment>();
                     tempPart.Clear<IPersonDayOff>();
                     tempPart.Clear<IPreferenceDay>();
+					((ExtractedSchedule)tempPart).ServiceForSignificantPartForDisplay = null;
 
                     if (((IList<IRestrictionBase>)tempPart.RestrictionCollection()).Count > 0)
                         destination.Merge(tempPart, false);
