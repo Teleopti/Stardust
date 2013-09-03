@@ -76,6 +76,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).Any(div => div.IsDisplayed() && div.Text.Trim() == agentName), Is.True);
 		}
 
+		[Then(@"I should see a possible schedule trade with '(.*)'")]
+		public void ThenIShouldSeeAPossibleScheduleTradeWith(string name)
+		{
+			Browser.Interactions.AssertAnyContains(".shift-trade-agent-name", name);
+		}
+
+		[Then(@"I should not see a possible schedule trade with '(.*)'")]
+		public void ThenIShouldNotSeeAPossibleScheduleTradeWith(string name)
+		{
+			Browser.Interactions.AssertNotExists(".shift-trade-agent-name", name);//Fel... Pushat lite mitt i kodningen. /Maria
+		}
 
 		[Then(@"I should see a possible schedule trade with")]
 		public void ThenIShouldSeeAPossibleScheduleTradeWith(Table table)

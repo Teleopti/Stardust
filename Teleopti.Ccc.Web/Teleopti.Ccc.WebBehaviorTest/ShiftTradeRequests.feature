@@ -618,9 +618,125 @@ Scenario: Do not show resend and cancelbuttons to sender when shifttrade is not 
 	And I am viewing requests
 	When I click on the request at position '1' in the list
 	Then I should not see resend shifttrade button for request at position '1'
+
+#Lägg in som default att other agent är i mitt team!
 	
+Scenario: Do not show possible shift trades if other agent is in other team
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent is in another team than mine
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And OtherAgent have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 08:00 |
+	| EndTime               | 2030-01-01 18:00 |
+	| Shift category		| Day	           |
+	And Current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I should not see a possible schedule trade with
+	| Field			| Value |
+	| Start time	| 08:00 |
+	| End time		| 18:00 |
 
+#Scenario för när man klickat i att shift trades utanför team ska visas
 
+Scenario: Do not show shifts with other starttime and endtime than desired
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And Ashley Andeen have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 08:00 |
+	| EndTime               | 2030-01-01 18:00 |
+	| Shift category		| Day	           |
+	And Current time is '2029-12-27'
+	And I input shift trade filtering fields with
+	| Field                       | Value |
+	| Start time		          | 10:30 |
+	| End time			          | 16:30 |
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I should not see a possible schedule trade with
+	| Field			| Value |
+	| Start time	| 08:00 |
+	| End time		| 18:00 |
+
+Scenario: Show possible shifts with desired starttime and endtime
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And Ashley Andeen have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 08:00 |
+	| EndTime               | 2030-01-01 18:00 |
+	| Shift category		| Day	           |
+	And Current time is '2029-12-27'
+	And I input shift trade filtering fields with
+	| Field                       | Value |
+	| Start time		          | 08:00 |
+	| End time			          | 18:00 |
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I should see a possible schedule trade with
+	| Field			| Value |
+	| Start time	| 08:00 |
+	| End time		| 18:00 |
+	
+Scenario: Show possible shift trades where agents name is the same as the filtered 
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And Ashley Andeen have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 08:00 |
+	| EndTime               | 2030-01-01 18:00 |
+	| Shift category		| Day	           |
+	And Current time is '2029-12-27'
+	#And I input shift trade filtering fields with
+	#| Field                       | Value			|
+	#| Name				          | Ashley Andeen	|
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I should see a possible schedule trade with 'Ashley Andeen'
+
+Scenario: Do not show possible shift trades where agent has other name than the filtered 
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And Ashley Andeen have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 08:00 |
+	| EndTime               | 2030-01-01 18:00 |
+	| Shift category		| Day	           |
+	And Current time is '2029-12-27'
+	#And I input shift trade filtering fields with
+	#| Field                       | Value			|
+	#| Name				          | John Smith		|
+	When I view Add Shift Trade Request for date '2030-01-01'
+	#Then I should not see a possible schedule trade with 'Ashley Andeen'
+	Then I should not see a possible schedule trade with 'OtherAgent'
 
 
 
