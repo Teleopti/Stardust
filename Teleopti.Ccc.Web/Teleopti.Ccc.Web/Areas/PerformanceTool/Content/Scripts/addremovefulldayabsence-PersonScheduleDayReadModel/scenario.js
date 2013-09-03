@@ -2,7 +2,7 @@
 define([
         'knockout',
         'progressitem-count',
-        'scenario-resourcescalculationaddremovefulldayabsence-iteration',
+        'addremovefulldayabsence-PersonScheduleDayReadModel/iteration',
         'result',
         'messagebroker',
         'addremovefulldayabsence-configuration'
@@ -20,32 +20,37 @@ define([
 
             var self = this;
 
-            var progressItemScheduledResourcesReadModel = new ProgressItemCountViewModel("ScheduledResourcesReadModel");
+            var progressItemPersonScheduleDayReadModel = new ProgressItemCountViewModel("PersonScheduleDayReadModel");
 
-            this.Name = "Resource calculation - add and remove full day absence";
+            this.Name = "Add and remove full day absence -> PersonScheduleDayReadModel";
             
             this.ProgressItems = [
-                progressItemScheduledResourcesReadModel
+                progressItemPersonScheduleDayReadModel
             ];
-            
+
             this.Configuration = new ConfigurationViewModel();
-            
+
             var iterations = [];
             
             this.IterationsExpected = ko.observable();
 
+            var startPromise = messagebroker.start();
+            var personScheduleDayReadModelSubscription;
+            var personAbsenceSubscription;
+            var result;
+
             this.ConfigurationChanged = function (configuration) {
                 var startDate = moment(configuration.DateRange.From);
                 var endDate = moment(configuration.DateRange.To);
-                var numberOfDays = endDate.diff(startDate, 'days') +1;
+                var numberOfDays = endDate.diff(startDate, 'days') + 1;
                 var personIds = configuration.PersonIds;
 
                 iterations = [];
-                
+
                 for (var i = 0; i < personIds.length; i++) {
                     var personId = personIds[i];
                     var date = startDate.clone().subtract('days', 1);
-                    
+
                     for (var j = 0; j < numberOfDays; j++) {
                         date.add('days', 1);
 
@@ -53,65 +58,60 @@ define([
                             AbsenceId: configuration.AbsenceId,
                             PersonId: personId,
                             Date: date.clone(),
-                            ScheduledResourcesReadModelUpdated: function () {
-                                progressItemScheduledResourcesReadModel.Success();
+                            PersonScheduleDayReadModelUpdated: function () {
+                                progressItemPersonScheduleDayReadModel.Success();
                                 calculateRunDone();
                             },
-                            ScheduledResourcesReadModelUpdateFailed: function () {
-                                progressItemScheduledResourcesReadModel.Failure();
+                            PersonScheduleDayReadModelUpdateFailed: function () {
+                                progressItemPersonScheduleDayReadModel.Failure();
                                 calculateRunDone();
                             }
                         }));
 
                         if (iterations.length > 2000) {
                             self.IterationsExpected(undefined);
-                            progressItemScheduledResourcesReadModel.Target(undefined);
+                            progressItemPersonScheduleDayReadModel.Target(undefined);
                             throw "Too many combinations";
                         }
 
                     }
                 }
-                
+
                 self.IterationsExpected(iterations.length);
-                progressItemScheduledResourcesReadModel.Target(iterations.length * 2);
+                progressItemPersonScheduleDayReadModel.Target(iterations.length * 2);
             };
 
-            var startPromise = messagebroker.start();
-            var scheduledResourcesReadModelSubscription;
-            var persistableScheduleDataSubscription;
-            var result;
-
             var calculateRunDone = function () {
-                var calculatedInterationsDone = progressItemScheduledResourcesReadModel.Count() / 2;
+                var calculatedInterationsDone = progressItemPersonScheduleDayReadModel.Count() / 2;
                 if (calculatedInterationsDone > result.IterationsDone()) {
                     result.IterationsDone(calculatedInterationsDone);
                     if (result.IterationsDone() >= self.IterationsExpected()) {
                         result.RunDone(true);
                         result = null;
-                        messagebroker.unsubscribe(scheduledResourcesReadModelSubscription);
-                        scheduledResourcesReadModelSubscription = null;
+                        messagebroker.unsubscribe(personScheduleDayReadModelSubscription);
+                        personScheduleDayReadModelSubscription = null;
                     }
                 }
             };
             
             this.Run = function () {
                 
-                progressItemScheduledResourcesReadModel.Reset();
+                progressItemPersonScheduleDayReadModel.Reset();
                 result = new ResultViewModel();
 
                 startPromise.done(function () {
                     
-                    scheduledResourcesReadModelSubscription = messagebroker.subscribe({
-                        domainType: 'IScheduledResourcesReadModel',
+                    personScheduleDayReadModelSubscription = messagebroker.subscribe({
+                        domainType: 'IPersonScheduleDayReadModel',
                         callback: function (notification) {
                             $.each(iterations, function (i, e) {
-                                if (e.NotifyScheduledResourcesReadModelChanged(notification))
+                                if (e.NotifyPersonScheduleDayReadModelChanged(notification))
                                     return false;
                             });
                         }
                     });
                     
-                    persistableScheduleDataSubscription = messagebroker.subscribe({
+                    personAbsenceSubscription = messagebroker.subscribe({
                         domainType: 'IPersistableScheduleData',
                         callback: function (notification) {
                             
@@ -120,8 +120,8 @@ define([
                                 $.each(iterations, function(i, e) {
                                     if (e.NotifyPersonAbsenceChanged(notification)) {
                                         if (e == iterations[iterations.length - 1]) {
-                                            messagebroker.unsubscribe(persistableScheduleDataSubscription);
-                                            persistableScheduleDataSubscription = null;
+                                            messagebroker.unsubscribe(personAbsenceSubscription);
+                                            personAbsenceSubscription = null;
                                         }
                                         return false;
                                     }
@@ -131,8 +131,8 @@ define([
                     });
 
                     $.when(
-                        scheduledResourcesReadModelSubscription.promise,
-                        persistableScheduleDataSubscription.promise
+                        personScheduleDayReadModelSubscription.promise,
+                        personAbsenceSubscription.promise
                     ).done(function() {
 
                         $.each(iterations, function(i, e) {
