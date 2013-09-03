@@ -122,7 +122,7 @@ Scenario: Submit overtime availability
 	| Field      | Value    |
 	| Start time | 16:30    |
 	| End time   | 03:00 +1 |
-@ignore
+
 Scenario: Cancel adding overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I view my week schedule for date '2013-08-20'
@@ -135,7 +135,7 @@ Scenario: Cancel adding overtime availability
 	| End time next day | true  |
 	And I click the cancel button
 	Then I should not see an overtime availability symbol for date '2013-08-20'
-@ignore
+
 Scenario: Add invalid overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I view my week schedule for date '2013-08-20'
@@ -146,7 +146,7 @@ Scenario: Add invalid overtime availability
 	| Start time | 13:30 |
 	| End time   | 11:00 |
 	And I click submit button
-	Then I should see texts describing my errors
+	Then I should see the 'overtime availability error' 'Start time'
 	And I should not see an overtime availability symbol for date '2013-08-20'
 
 

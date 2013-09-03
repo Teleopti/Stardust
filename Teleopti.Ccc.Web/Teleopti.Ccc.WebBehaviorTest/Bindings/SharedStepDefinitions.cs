@@ -70,6 +70,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format("ul.weekview-day[data-mytime-date={0}] li .text-request", formattedDate));
 		}
 
+		[Then(@"I should not see an overtime availability symbol for date '(.*)'")]
+		public void ThenIShouldNotSeeAnOvertimeAvailabilitySymbolForDate(DateTime date)
+		{
+			var formattedDate = date.ToString(CultureInfo.GetCultureInfo("sv-SE").DateTimeFormat.ShortDatePattern);
+			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format("ul.weekview-day[data-mytime-date={0}] li .overtime-availability-symbol", formattedDate));
+		}
+
 		[Then(@"I should see an indication that no agents that can go on holiday for date '(.*)'")]
 		public void ThenIShouldSeeAnIndicationThatNoAgentsThatCanGoOnHolidayForDate(DateTime date)
 		{

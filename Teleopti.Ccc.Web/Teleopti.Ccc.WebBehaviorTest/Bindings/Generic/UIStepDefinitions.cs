@@ -69,5 +69,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Browser.Interactions.AssertFirstContains("." + cssClass.Name, text.Text);
 		}
 
+		[Then(@"I should see the '(.*)' '(.*)'")]
+		public void ThenIShouldSeeTheMessageWithQuote(CssClass cssClass, LocalizedText text)
+		{
+			Browser.Interactions.AssertFirstContains("." + cssClass.Name, text.Text);
+		}
+
 	}
 }

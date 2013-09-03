@@ -119,13 +119,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 												TimeHelper.TimeOfDayFromTimeSpan(endTimeSpan, UserFactory.User().Culture));
 		}
 
-		[Then(@"I should not see an overtime availability symbol for date '(.*)'")]
-		public void ThenIShouldNotSeeAnOvertimeAvailabilitySymbolForDate(string p0)
-		{
-			ScenarioContext.Current.Pending();
-		}
-
-
 		[Then(@"I should see the request form with '(.*)' as default date")]
 		public void ThenIShouldSeeTheTextRequestFormWithAsDefaultDate(DateTime date)
 		{
