@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         private void updateChart()
         {
             IShiftCategory selectedShiftCategory = null;
+            _chart.Series.Clear();
             var tempList =
                 _model.ShiftCategories.Where(
                     shiftCategory => shiftCategory.Description.Name.Equals(_comboBoxShiftCategory.SelectedItem)).ToArray();
@@ -63,16 +64,37 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             {
                 selectedShiftCategory = tempList.FirstOrDefault();
             }
-            if (selectedShiftCategory == null) return;
-            _chart.Series.Clear();
-            var chartSeries = new ChartSeries(selectedShiftCategory.Description.Name);
-	        chartSeries.Style.Interior = new BrushInfo(selectedShiftCategory.DisplayColor);
-            _chart.Model.Series.Add(chartSeries );
-            Dictionary<int, int> frequency = _model.GetShiftCategoryFrequency(selectedShiftCategory);
-            foreach (var item in frequency)
+            else
             {
-                chartSeries.Points.Add(item.Key, item.Value);
+                assignValuesToChart(null);
             }
+            if (selectedShiftCategory == null) return;
+
+            assignValuesToChart(selectedShiftCategory);
+        }
+
+        private void assignValuesToChart(IShiftCategory selectedShiftCategory)
+        {
+            if (selectedShiftCategory == null)
+            {
+                var chartSeriesTemp = new ChartSeries("");
+                _chart.Model.Series.Add(chartSeriesTemp);
+                chartSeriesTemp.Points.Add(0, 0);
+                _chart.ShowLegend = false;
+            }
+            else
+            {
+                _chart.ShowLegend = true;
+                var chartSeries = new ChartSeries(selectedShiftCategory.Description.Name);
+                chartSeries.Style.Interior = new BrushInfo(selectedShiftCategory.DisplayColor);
+                _chart.Model.Series.Add(chartSeries);
+                Dictionary<int, int> frequency = _model.GetShiftCategoryFrequency(selectedShiftCategory);
+                foreach (var item in frequency)
+                {
+                    chartSeries.Points.Add(item.Key, item.Value);
+                }
+            }
+            
         }
 
         private void initializeComponent()
