@@ -251,13 +251,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mock.Playback())
             {
                 var result = _target.AggregateSkillIntervalData(_multipleSkillIntervalDataList);
-                Assert.AreEqual(result.Count, 6);
-                Assert.IsTrue(verifyResult(result[0].MinimumHeads,7));
-                Assert.IsTrue(verifyResult(result[1].MinimumHeads,6));
-                Assert.IsTrue(verifyResult(result[2].MinimumHeads,5));
-                Assert.IsTrue(verifyResult(result[3].MinimumHeads,7));
-                Assert.IsTrue(verifyResult(result[4].MinimumHeads,5));
-                Assert.IsTrue(verifyResult(result[5].MinimumHeads,1));
+                Assert.AreEqual(6, result.Count);
+                Assert.AreEqual(7, result[0].MinimumHeads.GetValueOrDefault());
+				Assert.AreEqual(6, result[1].MinimumHeads.GetValueOrDefault());
+                Assert.IsFalse(result[2].MinimumHeads.HasValue);
+				Assert.IsFalse(result[3].MinimumHeads.HasValue);
+				Assert.AreEqual(5, result[4].MinimumHeads.GetValueOrDefault());
+				Assert.AreEqual(1, result[5].MinimumHeads.GetValueOrDefault());
                 
 
             }
@@ -292,26 +292,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mock.Playback())
             {
                 var result = _target.AggregateSkillIntervalData(_multipleSkillIntervalDataList);
-                Assert.AreEqual(result.Count, 6);
-                Assert.IsTrue(verifyResult(result[0].MaximumHeads, 7));
-                Assert.IsTrue(verifyResult(result[1].MaximumHeads, 6));
-                Assert.IsTrue(verifyResult(result[2].MaximumHeads, 5));
-                Assert.IsTrue(verifyResult(result[3].MaximumHeads, 7));
-                Assert.IsTrue(verifyResult(result[4].MaximumHeads, 5));
-                Assert.IsTrue(verifyResult(result[5].MaximumHeads, 1));
-
-
+                Assert.AreEqual(6, result.Count);
+                Assert.AreEqual(7, result[0].MaximumHeads.GetValueOrDefault());
+                Assert.AreEqual(6, result[1].MaximumHeads.GetValueOrDefault());
+                Assert.IsFalse(result[2].MaximumHeads.HasValue);
+                Assert.IsFalse(result[3].MaximumHeads.HasValue);
+				Assert.AreEqual(5, result[4].MaximumHeads.GetValueOrDefault());
+				Assert.AreEqual(1, result[5].MaximumHeads.GetValueOrDefault());
             }
         }
-
-        private static bool verifyResult(double? valueToVerify, double resultValue)
-        {
-            if (!valueToVerify.HasValue) return false;
-            if (valueToVerify.Value == resultValue)
-                return true;
-            return false;
-        }
-
        
         [Test]
         public void ShouldAggregateSkillIntervalDataWithDemands()
@@ -437,7 +426,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
             //for skill A
-            _skillAIntervalData1 = new SkillIntervalData(new DateTimePeriod(startDateTime, startDateTime.AddMinutes(15)), 10, 5, 2, 0, 0); //bosted value should b -3
+            _skillAIntervalData1 = new SkillIntervalData(new DateTimePeriod(startDateTime, startDateTime.AddMinutes(15)), 10, 5, 3, 0, 1); //bosted value should b -3
             _skillAIntervalData2 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(15), startDateTime.AddMinutes(30)), 10, 5, 1, 2, 4); //bosted value should b 1
             _skillAIntervalData3 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(30), startDateTime.AddMinutes(45)), 20, 15, 4, 2, 4); //bosted value should b -1
             _skillAIntervalData4 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(45), startDateTime.AddMinutes(60)), 20, 15, 0, 2, 4); //bosted value should b 2
@@ -455,7 +444,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             //for skill c
             var skillCIntervalData1 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(30), startDateTime.AddMinutes(45)), 10, 5, 0, null, null);//bosted value should b 0
-            var skillCIntervalData2 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(45), startDateTime.AddMinutes(60)), 20, 15, 0, 0, 0);//bosted value should b -1
+            var skillCIntervalData2 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(45), startDateTime.AddMinutes(60)), 20, 15, 1, 0, 1);//bosted value should b -1
             var skillCIntervalData3 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(60), startDateTime.AddMinutes(75)), 10, 5, 0, 2, 4);//bosted value should b 2
             var skillCIntervalData4 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(75), startDateTime.AddMinutes(90)), 20, 15, 1, 2, 2);//bosted value should b 1
 
@@ -466,17 +455,29 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mock.Playback())
             {
                 var result = _target.AggregateSkillIntervalData(_multipleSkillIntervalDataList);
-                Assert.AreEqual(result.Count, 6);
-                Assert.AreEqual(result[0].MinMaxBoostFactor , -3);
-				Assert.AreEqual(result[1].MinMaxBoostFactor, 1);
-				Assert.AreEqual(result[2].MinMaxBoostFactor, -2);
-				Assert.AreEqual(result[3].MinMaxBoostFactor, 0);
-				Assert.AreEqual(result[4].MinMaxBoostFactor, 0);
-				Assert.AreEqual(result[5].MinMaxBoostFactor, 3);
+                Assert.AreEqual(6, result.Count);
+                Assert.AreEqual(-3, result[0].MinMaxBoostFactor);
+				Assert.AreEqual(1, result[1].MinMaxBoostFactor);
+				Assert.AreEqual(-3, result[2].MinMaxBoostFactor);
+				Assert.AreEqual(-1, result[3].MinMaxBoostFactor);
+				Assert.AreEqual(0, result[4].MinMaxBoostFactor);
+				Assert.AreEqual(3, result[5].MinMaxBoostFactor);
             }
         }
 
-
+		[Test]
+		public void VerifyTheExcelSheet()
+		{
+			var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
+			
+			_skillAIntervalData1 = new SkillIntervalData(new DateTimePeriod(startDateTime, startDateTime.AddMinutes(15)), 0, 0, 1, 2, 4);
+			_skillAIntervalData2 = new SkillIntervalData(new DateTimePeriod(startDateTime, startDateTime.AddMinutes(15)), 0, 0, 6, null, 5);
+			var result = _target.AggregateTwoIntervals(_skillAIntervalData1, _skillAIntervalData2);
+			Assert.AreEqual(-1, result.MinMaxBoostFactor);
+			_skillAIntervalData3 = new SkillIntervalData(new DateTimePeriod(startDateTime, startDateTime.AddMinutes(15)), 0, 0, 1, 2, 2);
+			result = _target.AggregateTwoIntervals(result, _skillAIntervalData3);
+			Assert.AreEqual(0, result.MinMaxBoostFactor);
+		}
     }
 
 
