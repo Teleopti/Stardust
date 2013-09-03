@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			{
 				var personAssignmentRepository = new PersonAssignmentRepository(unitOfWork);
 				var personAssignment = new PersonAssignment(Person, Scenario, date);
-				personAssignment.SetMainShiftLayers(new[] { new MainShiftLayer(Activity, FirstDayDateTimePeriod) }, ShiftCategory);
+				personAssignment.AddMainLayer(Activity, FirstDayDateTimePeriod);
 				personAssignmentRepository.Add(personAssignment);
 
 				unitOfWork.PersistAll();
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			if (ScheduleData != null)
 				throw new Exception("You'v already created a schedule data, and I can only handle 1, unless you modify me");
 			var personAssignment = new PersonAssignment(Person, Scenario, date);
-			personAssignment.SetMainShiftLayers(new[] { new MainShiftLayer(Activity, new DateTimePeriod(date, date.AddDays(1))) }, ShiftCategory);
+			personAssignment.AddMainLayer(Activity, new DateTimePeriod(date, date.AddDays(1)));
 
 			
 			var scheduleDay = ScheduleDictionary[Person].ScheduledDay(date);
