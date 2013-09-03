@@ -47,7 +47,7 @@ define([
                 if (self.ScenarioName() == self.Scenarios[i].Name) {
                     self.Scenario(self.Scenarios[i]);
                     self.Configuration(''); //just for now
-                    self.Scenario().LoadDefaultConfiguration(function (data) {
+                    self.Scenario().Configuration.LoadDefaultConfiguration(function (data) {
                         self.Configuration(JSON.stringify(data, null, 4));
                         self.ConfigurationLoading(false);
                     });

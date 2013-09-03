@@ -4,13 +4,15 @@ define([
         'progressitem-count',
         'scenario-addremovefulldayabsence-iteration',
         'result',
-        'messagebroker'
+        'messagebroker',
+        'addremovefulldayabsence-configuration'
     ], function(
         ko,
         ProgressItemCountViewModel,
         Iteration,
         ResultViewModel,
-        messagebroker
+        messagebroker,
+        ConfigurationViewModel
     ) {
         
 
@@ -21,60 +23,34 @@ define([
             var progressItemPersonScheduleDayReadModel = new ProgressItemCountViewModel("PersonScheduleDayReadModel");
 
             this.Name = "Add and remove full day absence";
+            
             this.ProgressItems = [
                 progressItemPersonScheduleDayReadModel
             ];
 
-            this.LoadDefaultConfiguration = function (callback) {
-
-                var absenceId;
-                var personId;
-                
-                var promise1 = $.ajax({
-                    url: 'Configuration/GetAAbsenceId',
-                    success: function (data, textStatus, jqXHR) {
-                        absenceId = data;
-                    }
-                });
-
-                var promise2 = $.ajax({
-                    url: 'Configuration/GetAPersonId',
-                    success: function (data, textStatus, jqXHR) {
-                        personId = data;
-                    }
-                });
-
-                $.when(promise1, promise2).done(function () {
-                    var date = moment().format('YYYY-MM-DD');
-                    callback({
-                        AbsenceId: absenceId,
-                        PersonIds: [
-                            personId
-                        ],
-                        DateRange: {
-                            From: date,
-                            To: date
-                        }
-                    });
-                });
-            };
+            this.Configuration = new ConfigurationViewModel();
 
             var iterations = [];
             
             this.IterationsExpected = ko.observable();
 
-            this.ConfigurationChanged = function(configuration) {
+            var startPromise = messagebroker.start();
+            var personScheduleDayReadModelSubscription;
+            var personAbsenceSubscription;
+            var result;
+
+            this.ConfigurationChanged = function (configuration) {
                 var startDate = moment(configuration.DateRange.From);
                 var endDate = moment(configuration.DateRange.To);
-                var numberOfDays = endDate.diff(startDate, 'days') +1;
+                var numberOfDays = endDate.diff(startDate, 'days') + 1;
                 var personIds = configuration.PersonIds;
 
                 iterations = [];
-                
+
                 for (var i = 0; i < personIds.length; i++) {
                     var personId = personIds[i];
                     var date = startDate.clone().subtract('days', 1);
-                    
+
                     for (var j = 0; j < numberOfDays; j++) {
                         date.add('days', 1);
 
@@ -100,15 +76,10 @@ define([
 
                     }
                 }
-                
+
                 self.IterationsExpected(iterations.length);
                 progressItemPersonScheduleDayReadModel.Target(iterations.length * 2);
             };
-
-            var startPromise = messagebroker.start();
-            var personScheduleDayReadModelSubscription;
-            var personAbsenceSubscription;
-            var result;
 
             var calculateRunDone = function () {
                 var calculatedInterationsDone = progressItemPersonScheduleDayReadModel.Count() / 2;
