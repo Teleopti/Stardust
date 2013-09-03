@@ -106,10 +106,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			_helper.EventualAssert(() => _browser.Element(Find.BySelector(selector)).Text, Is.StringContaining(text), _helper.AssertFirstContainsMessage(selector, text));
 		}
 
-		public void AssertFirstInnerHtmlContains(string selector, string text)
+		public void AssertFirstOuterHtmlContains(string selector, string text)
 		{
 			validateSelector(selector);
-			_helper.EventualAssert(() => _browser.Element(Find.BySelector(selector)).InnerHtml, Is.StringContaining(text), _helper.AssertFirstContainsMessage(selector, text));
+			_helper.EventualAssert(() => _browser.Element(Find.BySelector(selector)).OuterHtml, Is.StringContaining(text), _helper.AssertFirstContainsMessage(selector, text));
 		}
 
 		public void AssertFirstNotContains(string selector, string text)
