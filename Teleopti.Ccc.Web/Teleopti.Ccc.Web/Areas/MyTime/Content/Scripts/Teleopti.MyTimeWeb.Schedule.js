@@ -186,7 +186,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	            return;
 	        }
 
-	        self.overtimeAvailabilityActivate();
+	        if (self.overtimeAvailabilityPermission() === true) {
+		        self.overtimeAvailabilityActivate();
+	        } else {
+		        self.textRequestActivate();
+	        }
 	    };
 	    
         self.setRequestViewModel = function()
