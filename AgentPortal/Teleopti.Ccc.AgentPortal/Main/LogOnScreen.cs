@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.ServiceModel;
 using System.Threading;
-using System.Web.Services.Protocols;
 using System.Windows.Forms;
 using Teleopti.Ccc.AgentPortal.Helper;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
@@ -176,7 +177,8 @@ namespace Teleopti.Ccc.AgentPortal.Main
             if (_choosenDataSource == null) return;
             AuthenticationMessageHeader.DataSource = _choosenDataSource.Name;
             AuthenticationMessageHeader.UseWindowsIdentity = false;
-
+            _choosenDataSource.Client = "MYTIME";
+            _choosenDataSource.IpAddress = ipAdress();
             var resultDto =
                 SdkServiceHelper.LogOnServiceClient.LogOnApplicationUser(_logOnDetails.UserName, _logOnDetails.Password,
                                                                          _choosenDataSource);
@@ -187,6 +189,18 @@ namespace Teleopti.Ccc.AgentPortal.Main
             }
 
             _dataSourceLogonable = resultDto.Successful;
+        }
+
+        private string ipAdress()
+        {
+            var ips = Dns.GetHostEntry(Dns.GetHostName());
+            var ip = "";
+            foreach (var adress in ips.AddressList)
+            {
+                if (adress.AddressFamily == AddressFamily.InterNetwork)
+                    ip = adress.ToString();
+            }
+            return ip;
         }
 
         private void buttonDataSourcesListOK_Click(object sender, EventArgs e)
@@ -368,6 +382,8 @@ namespace Teleopti.Ccc.AgentPortal.Main
             else if (_logonableWindowsDataSources.Count == 0 && _availableApplicationDataSources.Count == 1)
             {
                 _choosenDataSource = _availableApplicationDataSources[0];
+                _choosenDataSource.Client = "MYTIME";
+                _choosenDataSource.IpAddress = ipAdress();
                 ApplicationLogOn();
                 ChooseBusinessUnit();
             }
@@ -475,7 +491,8 @@ namespace Teleopti.Ccc.AgentPortal.Main
                 AuthenticationMessageHeader.Password = string.Empty;
                 AuthenticationMessageHeader.BusinessUnit = Guid.Empty;
                 AuthenticationMessageHeader.UseWindowsIdentity = true;
-
+                _choosenDataSource.Client = "MYTIME";
+                _choosenDataSource.IpAddress = ipAdress();
                 var resultDto =
                     SdkServiceHelper.LogOnServiceClient.LogOnWindowsUser(
                         _choosenDataSource);
