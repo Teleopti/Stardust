@@ -119,6 +119,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 												TimeHelper.TimeOfDayFromTimeSpan(endTimeSpan, UserFactory.User().Culture));
 		}
 
+		[Then(@"I should not see an overtime availability symbol for date '(.*)'")]
+		public void ThenIShouldNotSeeAnOvertimeAvailabilitySymbolForDate(string p0)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+
 		[Then(@"I should see the request form with '(.*)' as default date")]
 		public void ThenIShouldSeeTheTextRequestFormWithAsDefaultDate(DateTime date)
 		{
@@ -167,14 +174,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.AssertInputValueUsingJQuery("#Schedule-addRequest-subject-input", subject);
 		}
+	}
 
-		public class OvertimeAvailabilityViewModel
-		{
-			public DateTime StartDate { get; set; }
-			public DateTime EndDate { get; set; }
+	public class OvertimeAvailabilityViewModel
+	{
+		public DateTime StartDate { get; set; }
+		public DateTime EndDate { get; set; }
 
-			public string StartTime { get; set; }
-			public string EndTime { get; set; }
-		}
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
+		public bool EndTimeNextDay { get; set; }
 	}
 }

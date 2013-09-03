@@ -123,6 +123,9 @@
 						</div>
 					</div> 
 				</div>
+				<div class="floatright" data-bind="if: overtimeAvailability().HasOvertimeAvailability, attr: { title: textOvertimeAvailabilityText }">
+					<i class="icon-time ir floatright" />
+				</div>
 				<!-- ko if: hasNote -->
 				<div class="icon comment-day ir floatright" data-bind="attr: {'tooltip-text': noteMessage}">
 				</div>

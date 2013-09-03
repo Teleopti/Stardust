@@ -305,6 +305,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.textRequestText = ko.computed(function () {
 			return parent.userTexts.xRequests.format(self.textRequestCount());
 		});
+		
+		self.textOvertimeAvailabilityText = ko.computed(function () {
+			return self.overtimeAvailability().StartTime + " - " + self.overtimeAvailability().EndTime + (self.overtimeAvailability().NextDay ? ' +1' : '');
+		});
 
 		self.classForDaySummary = ko.computed(function () {
 			var showRequestClass = self.textRequestPermission() ? 'show-request ' : '';

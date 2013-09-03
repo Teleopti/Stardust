@@ -43,7 +43,7 @@ Scenario: Cannot add overtime availability if no permission
 	And I view my week schedule for date '2013-08-20'
 	When I click on the day summary for date '2013-08-20'
 	Then I should not see add overtime availability button
-@ignore
+
 Scenario: Default overtime availability values on shift
 	Given I have the role 'Access to overtime availability'
 	And I have a shift with
@@ -61,7 +61,7 @@ Scenario: Default overtime availability values on shift
 	| End date   | 2013-08-20 |
 	| Start time | 18:00      |
 	| End time   | 19:00      |
-@ignore
+
 Scenario: Default overtime availability values on empty day
 	Given I have the role 'Access to overtime availability'
 	And I view my week schedule for date '2013-08-20'
@@ -73,7 +73,7 @@ Scenario: Default overtime availability values on empty day
 	| End date   | 2013-08-20 |
 	| Start time | 08:00      |
 	| End time   | 17:00      |
-@ignore
+
 Scenario: Default overtime availability values on absence
 	Given I have the role 'Access to overtime availability'
 	And I has an absence with
@@ -90,7 +90,7 @@ Scenario: Default overtime availability values on absence
 	| End date   | 2013-08-20 |
 	| Start time | 08:00      |
 	| End time   | 17:00      |
-@ignore
+
 Scenario: Default overtime availability values on dayoff
 	Given I have the role 'Access to overtime availability'
 	And 'I' have a day off with
@@ -113,9 +113,10 @@ Scenario: Submit overtime availability
 	When I click on the day summary for date '2013-08-20'
 	And I click to add overtime availability
 	And I input overtime availability with
-	| Field      | Value    |
-	| Start time | 16:30    |
-	| End time   | 03:00 +1 |
+	| Field             | Value |
+	| Start time        | 16:30 |
+	| End time          | 03:00 |
+	| End time next day | true  |
 	And I click submit button
 	Then I should see an overtime availability symbol for date '2013-08-20' with tooltip
 	| Field      | Value    |
@@ -128,9 +129,10 @@ Scenario: Cancel adding overtime availability
 	When I click on the day summary for date '2013-08-20'
 	And I click to add overtime availability
 	And I input overtime availability with
-	| Field      | Value    |
-	| Start time | 16:30    |
-	| End time   | 03:00 +1 |
+	| Field             | Value |
+	| Start time        | 16:30 |
+	| End time          | 03:00 |
+	| End time next day | true  |
 	And I click the cancel button
 	Then I should not see an overtime availability symbol for date '2013-08-20'
 @ignore
