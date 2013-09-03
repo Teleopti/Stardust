@@ -13,6 +13,9 @@ Background:
 	| Schedule published to date       | 2040-06-24                                |
 	| Shift Trade sliding period start | 1                                         |
 	| Shift Trade sliding period end   | 30                                        |
+	And there is a team with
+	| Field | Value			|
+	| Name  | Other team    |
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
@@ -24,6 +27,10 @@ Background:
 	And OtherAgent has a person period with
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
+	And OtherAgentNotInMyTeam has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team		 | Other team |
 	And there are shift categories
 	| Name  |
 	| Day   |

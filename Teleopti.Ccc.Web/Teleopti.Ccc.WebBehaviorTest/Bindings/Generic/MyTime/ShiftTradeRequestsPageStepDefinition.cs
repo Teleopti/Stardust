@@ -97,6 +97,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers[0].Title, Contains.Substring(expectedTimes));
 		}
 
+		[Then(@"I should not see a possible schedule trade with")]
+		public void ThenIShouldNotSeeAPossibleScheduleTradeWith(Table table)
+		{
+			Browser.Interactions.AssertNotExists(".shift-trade-my-schedule-row", ".shift-trade-person-schedule-row");
+		}
+
 		[Then(@"the selected date should be '(.*)'")]
 		public void ThenTheSelectedDateShouldBe(DateTime date)
 		{

@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			Contract = GlobalDataContext.Data().Data<CommonContract>().Contract.Description.Name;
 			PartTimePercentage = GlobalDataContext.Data().Data<CommonPartTimePercentage>().PartTimePercentage.Description.Name;
 			ContractSchedule = GlobalDataContext.Data().Data<CommonContractSchedule>().ContractSchedule.Description.Name;
-			Team = GlobalDataContext.Data().Data<CommonTeam>().Team.Description.Name;
+			if (Team == null)
+				Team = GlobalDataContext.Data().Data<CommonTeam>().Team.Description.Name;
 		}
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
