@@ -6458,6 +6458,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripButtonFilterAgents_Click(object sender, EventArgs e)
 		{
 			showFilterDialog();
+			updateDistrbutionInformation();
 		}
 
 		private class ConflictHandlingResult
@@ -7168,6 +7169,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_requestView != null)
 				_requestView.FilterPersons(_schedulerState.FilteredPersonDictionary.Select(kvp => kvp.Key));
 			drawSkillGrid();
+
+			updateDistrbutionInformation();
 		}
 
 		private void toolStripButtonFilterStudentAvailability_Click(object sender, EventArgs e)
