@@ -32,65 +32,37 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
                 var person = _personRepository.Load(eventMessage.DomainObjectId);
                 var period = new DateOnlyPeriod(new DateOnly(eventMessage.EventStartDate).AddDays(-1),
                                                 new DateOnly(eventMessage.EventEndDate).AddDays(1));
-                var messagePersonAssignments = _personAssignmentRepository.Find(new[]
-                    {
-                        person
-                    }, period, scheduleDictionary.Scenario);
-                var messagePersonAbsences = _personAbsenceRepository.Find(new[] {person},
-                                                                          new DateTimePeriod(
-                                                                              DateTime.SpecifyKind(
-                                                                                  eventMessage.EventStartDate,
-                                                                                  DateTimeKind.Utc),
-                                                                              DateTime.SpecifyKind(
-                                                                                  eventMessage.EventEndDate,
-                                                                                  DateTimeKind.Utc)),
-                                                                          scheduleDictionary.Scenario);
+                var messagePersonAssignments = _personAssignmentRepository.Find(new[] { person }, period, scheduleDictionary.Scenario);
+                var messagePersonAbsences = _personAbsenceRepository.Find(new[] {person}, new DateTimePeriod(DateTime.SpecifyKind(eventMessage.EventStartDate,DateTimeKind.Utc),DateTime.SpecifyKind(eventMessage.EventEndDate,DateTimeKind.Utc)),scheduleDictionary.Scenario);
 
-                var days = period.DayCollection();
                 var scheduleDays = scheduleDictionary[person].ScheduledDayCollection(period);
-                var myVersionOfPersonAssignments = scheduleDays.ToDictionary(k => k.DateOnlyAsPeriod.DateOnly, v => v.PersonAssignment());
+                var myVersionOfPersonAssignments =
+                    scheduleDays.Select(s => s.PersonAssignment()).Where(p => p != null && p.Id.HasValue);
                 var myVersionOfPersonAbsences = scheduleDays.SelectMany(s => s.PersonAbsenceCollection(true)).Where(a => a.Id.HasValue).Distinct();
-                
+
+                var personAssignmentDictionary =
+                    new Dictionary<DateOnly, Tuple<IPersistableScheduleData, IPersistableScheduleData>>();
+                AddItemsToVersionDictionary(personAssignmentDictionary, k => ((IPersonAssignment) k).Date,
+                                            myVersionOfPersonAssignments,
+                                            (t, i) =>
+                                            new Tuple<IPersistableScheduleData, IPersistableScheduleData>(i, t.Item2));
+                AddItemsToVersionDictionary(personAssignmentDictionary, k => ((IPersonAssignment)k).Date,
+                                            messagePersonAssignments,
+                                            (t, i) =>
+                                            new Tuple<IPersistableScheduleData, IPersistableScheduleData>(t.Item1, i));
+
                 var personAbsenceDictionary =
                     new Dictionary<Guid, Tuple<IPersistableScheduleData, IPersistableScheduleData>>();
-
-                foreach (var myVersionOfPersonAbsence in myVersionOfPersonAbsences)
-                {
-                    Tuple<IPersistableScheduleData, IPersistableScheduleData> foundItems;
-                    if (
-                        !personAbsenceDictionary.TryGetValue(myVersionOfPersonAbsence.Id.GetValueOrDefault(),
-                                                             out foundItems))
-                    {
-                        foundItems = new Tuple<IPersistableScheduleData, IPersistableScheduleData>(myVersionOfPersonAbsence, null);
-                        personAbsenceDictionary.Add(myVersionOfPersonAbsence.Id.GetValueOrDefault(),
-                                                    foundItems);
-                    }
-                    else
-                    {
-                        personAbsenceDictionary[myVersionOfPersonAbsence.Id.GetValueOrDefault()] =
-                            new Tuple<IPersistableScheduleData, IPersistableScheduleData>(myVersionOfPersonAbsence,
-                                                                                          foundItems.Item2);
-                    }
-                }
-
-                foreach (var messageVersionOfPersonAbsence in messagePersonAbsences)
-                {
-                    Tuple<IPersistableScheduleData, IPersistableScheduleData> foundItems;
-                    if (
-                        !personAbsenceDictionary.TryGetValue(messageVersionOfPersonAbsence.Id.GetValueOrDefault(),
-                                                             out foundItems))
-                    {
-                        foundItems = new Tuple<IPersistableScheduleData, IPersistableScheduleData>(null, messageVersionOfPersonAbsence);
-                        personAbsenceDictionary.Add(messageVersionOfPersonAbsence.Id.GetValueOrDefault(),
-                                                    foundItems);
-                    }
-                    else
-                    {
-                        personAbsenceDictionary[messageVersionOfPersonAbsence.Id.GetValueOrDefault()] =
-                            new Tuple<IPersistableScheduleData, IPersistableScheduleData>(foundItems.Item1,
-                                                                                          messageVersionOfPersonAbsence);
-                    }
-                }
+                AddItemsToVersionDictionary(personAbsenceDictionary, p => p.Id.GetValueOrDefault(),
+                                                 myVersionOfPersonAbsences,
+                                                 (t, i) => new Tuple
+                                                               <IPersistableScheduleData, IPersistableScheduleData>(
+                                                               i, t.Item2));
+                AddItemsToVersionDictionary(personAbsenceDictionary, p => p.Id.GetValueOrDefault(),
+                                                 messagePersonAbsences,
+                                                 (t, i) => new Tuple
+                                                               <IPersistableScheduleData, IPersistableScheduleData>(
+                                                               t.Item1, i));
 
                 foreach (var personAbsence in personAbsenceDictionary)
                 {
@@ -105,13 +77,12 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
                     }
 
                     IPersistableScheduleData messageVersionOfEntity = null;
-                    if (personAbsence.Value.Item2 == null)
+                    if (personAbsence.Value.IsDelete())
                     {
                         messageVersionOfEntity = scheduleDictionary.DeleteFromBroker(personAbsence.Key);
                     }
-                    if (personAbsence.Value.Item1 == null ||
-                        (personAbsence.Value.Item1 != null && personAbsence.Value.Item2 != null &&
-                         personAbsence.Value.Item1.Version < personAbsence.Value.Item2.Version))
+                    if (personAbsence.Value.IsUpdate() ||
+                        personAbsence.Value.IsInsert())
                     {
                         var updatedItem = personAbsence.Value.Item2;
                         messageVersionOfEntity =
@@ -123,65 +94,66 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
                         refreshedEntitiesBuffer.Add(messageVersionOfEntity);
                 }
 
-                foreach (var dateOnly in days)
+                foreach (var personAssignment in personAssignmentDictionary)
                 {
-                    var myPersonAssignment = myVersionOfPersonAssignments[dateOnly];
-                    var messagePersonAssignment = messagePersonAssignments.FirstOrDefault(d => d.Date == dateOnly);
-
-                    
 	                DifferenceCollectionItem<IPersistableScheduleData> myVersionOfEntity = (from d in myChanges
 	                                     let pa = d.CurrentItem as IPersonAssignment
 	                                     where
 	                                         pa != null &&
-	                                         pa.Equals(messagePersonAssignment)
+	                                         pa.Equals(personAssignment.Value.Item2)
 	                                     select d).SingleOrDefault();
 
                     if (!myVersionOfEntity.IsEmpty())
                     {
-                        _scheduleDataUpdater.FillReloadedScheduleData(messagePersonAssignment);
-                        var state = new PersistConflictMessageState(myVersionOfEntity, messagePersonAssignment,
+                        _scheduleDataUpdater.FillReloadedScheduleData(personAssignment.Value.Item2);
+                        var state = new PersistConflictMessageState(myVersionOfEntity, personAssignment.Value.Item2,
                                                                     eventMessage, m => RemoveFromQueue(messageQueue, m));
                         conflictsBuffer.Add(state);
                         continue;
                     }
 
                     IPersistableScheduleData messageVersionOfEntity = null;
-                    if (isDeletedByMessage(messagePersonAssignment, myPersonAssignment))
+                    if (personAssignment.Value.IsDelete())
                     {
-                        messageVersionOfEntity = scheduleDictionary.DeleteFromBroker(eventMessage.DomainObjectId);
+                        messageVersionOfEntity = scheduleDictionary.DeleteFromBroker(personAssignment.Value.Item1.Id.GetValueOrDefault());
                     }
-                    if (isInsertedByMessage(messagePersonAssignment, myPersonAssignment) ||
-                        isUpdatedByMessage(messagePersonAssignment, myPersonAssignment))
+                    if (personAssignment.Value.IsUpdate() ||
+                        personAssignment.Value.IsInsert())
                     {
-                        messageVersionOfEntity = scheduleDictionary.UpdateFromBroker(new ScheduleEntityLoader(() => messagePersonAssignment), eventMessage.DomainObjectId);
+                        var updatedItem = personAssignment.Value.Item2;
+                        messageVersionOfEntity =
+                            scheduleDictionary.UpdateFromBroker(
+                                new ScheduleEntityLoader(() => updatedItem), personAssignment.Value.Item2.Id.GetValueOrDefault());
                     }
-                    
+
                     if (messageVersionOfEntity != null)
                         refreshedEntitiesBuffer.Add(messageVersionOfEntity);
                 }
+
                 messageQueue.Remove(eventMessage);
             }
 
             _scheduleDataUpdater.NotifyMessageQueueSize();
         }
 
-        private static bool isUpdatedByMessage(IPersonAssignment messagePersonAssignment, IPersonAssignment myPersonAssignment)
+        private void AddItemsToVersionDictionary<TKey, TVersionedItem>(
+            IDictionary<TKey, Tuple<TVersionedItem, TVersionedItem>> versionDictionary, Func<TVersionedItem,TKey> keyCreator,
+            IEnumerable<TVersionedItem> items,
+            Func<Tuple<TVersionedItem, TVersionedItem>, TVersionedItem, Tuple<TVersionedItem, TVersionedItem>> addItem)
         {
-            return messagePersonAssignment != null && myPersonAssignment != null &&
-                   messagePersonAssignment.Id == myPersonAssignment.Id &&
-                   messagePersonAssignment.Version > myPersonAssignment.Version;
-        }
-
-        private static bool isInsertedByMessage(IPersonAssignment messagePersonAssignment, IPersonAssignment myPersonAssignment)
-        {
-            return messagePersonAssignment != null &&
-                   ((myPersonAssignment != null && messagePersonAssignment.Id != myPersonAssignment.Id) ||
-                    (myPersonAssignment == null));
-        }
-
-        private static bool isDeletedByMessage(IPersonAssignment databaseAssignment, IPersonAssignment myPersonAssignment)
-        {
-            return databaseAssignment == null && myPersonAssignment != null && myPersonAssignment.Id.HasValue;
+            foreach (var versionedItem in items)
+            {
+                var key = keyCreator(versionedItem);
+                Tuple<TVersionedItem, TVersionedItem> foundItems;
+                if (!versionDictionary.TryGetValue(key, out foundItems))
+                {
+                    versionDictionary.Add(key, addItem(new Tuple<TVersionedItem, TVersionedItem>(default(TVersionedItem),default(TVersionedItem)),versionedItem));
+                }
+                else
+                {
+                    versionDictionary[key] = addItem(foundItems, versionedItem);
+                }
+            }
         }
 
         private class ScheduleEntityLoader : ILoadAggregateById<IPersistableScheduleData>
@@ -203,6 +175,25 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
         {
             messageQueue.Remove(m);
             _scheduleDataUpdater.NotifyMessageQueueSize();
+        }
+    }
+
+    internal static class VersionTupleExtensions
+    {
+        internal static bool IsDelete(this Tuple<IPersistableScheduleData, IPersistableScheduleData> versionTuple)
+        {
+            return versionTuple.Item2 == null;
+        }
+
+        internal static bool IsUpdate(this Tuple<IPersistableScheduleData, IPersistableScheduleData> versionTuple)
+        {
+            return (versionTuple.Item1 != null && versionTuple.Item2 != null &&
+                    versionTuple.Item1.Version < versionTuple.Item2.Version);
+        }
+
+        internal static bool IsInsert(this Tuple<IPersistableScheduleData, IPersistableScheduleData> versionTuple)
+        {
+            return versionTuple.Item1 == null;
         }
     }
 }
