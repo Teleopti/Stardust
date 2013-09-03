@@ -542,46 +542,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         private void mergeMainShift(IScheduleDay source, bool ignoreTimeZoneChanges)
         {
-			var sourceMainShift = source.GetEditorShift();
-			if (sourceMainShift == null)
-				return;
+					var sourceAssignment = source.PersonAssignment();
+					if (sourceAssignment == null)
+						return;
 
-            var workingCopyOfMainShift = sourceMainShift.NoneEntityClone();
-			workingCopyOfMainShift.LayerCollection.Clear();
+					var periodOffsetCalculator = new PeriodOffsetCalculator();
+					var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, source.Period);
 
-            var sourceShiftPeriod = source.Period;
-            if (workingCopyOfMainShift.LayerCollection.Period().HasValue)
-                sourceShiftPeriod = workingCopyOfMainShift.LayerCollection.Period().Value;
-            IPeriodOffsetCalculator periodOffsetCalculator = new PeriodOffsetCalculator();
-            TimeSpan periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, sourceShiftPeriod);
-			foreach (var layer in sourceMainShift.LayerCollection)
-			{
-				var newLayer = new EditorActivityLayer(layer.Payload, layer.Period.MovePeriod(periodOffset));
-				workingCopyOfMainShift.LayerCollection.Add(newLayer);
-			}
-	
-            DateTimePeriod period = source.Period.MovePeriod(periodOffset);
+					var workingCopyOfAssignment = sourceAssignment.NoneEntityClone();
+					workingCopyOfAssignment.Clear();
+					workingCopyOfAssignment.SetShiftCategory(sourceAssignment.ShiftCategory);
+					foreach (var layer in sourceAssignment.MainLayers())
+					{
+						workingCopyOfAssignment.AddMainLayer(layer.Payload, layer.Period.MovePeriod(periodOffset));
+					}
 
-            if (PersonAssignmentCollectionDoNotUse().Count == 0)
-            {
-                if (SignificantPart() == SchedulePartView.DayOff)
-                {
+					var period = source.Period.MovePeriod(periodOffset);
+					if (PersonAssignment()==null && SignificantPart() == SchedulePartView.DayOff)
+					{
+						DeleteDayOff();
+					}
 
-									DeleteDayOff();
-                }
-
-                IPersonAssignment ass = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-                new EditableShiftMapper().SetMainShiftLayers(ass, workingCopyOfMainShift);
-                Add(ass);
-            }
-            else
-            {
-                IPersonAssignment destAss = PersonAssignment();
-				new EditableShiftMapper().SetMainShiftLayers(destAss, workingCopyOfMainShift);
-            }
-
-            SplitAbsences(period);
-            updateDateOnlyAsPeriod(workingCopyOfMainShift);
+	        var currentAssignment = PersonAssignment(true);
+					currentAssignment.SetMainLayersAndShiftCategoryFrom(workingCopyOfAssignment);
+					SplitAbsences(period);
+					updateDateOnlyAsPeriod(workingCopyOfAssignment);
         }
 
         /// <summary>
@@ -591,16 +576,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         /// we also check the property even if the ignoretimechanges is false. 
         /// </summary>
         /// <param name="mainShift"></param>
-        private void updateDateOnlyAsPeriod(IEditableShift mainShift)
-        {
-            DateTimePeriod? mainShiftPeriod = mainShift.LayerCollection.Period();
-            if(mainShiftPeriod.HasValue)
-            {
-                DateTime dateTime = mainShiftPeriod.Value.StartDateTime;
-                DateTime localDateTime = TimeZoneHelper.ConvertFromUtc(dateTime, Person.PermissionInformation.DefaultTimeZone());
-                DateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(localDateTime.Date), Person.PermissionInformation.DefaultTimeZone());
-            }
-        }
+				private void updateDateOnlyAsPeriod(IPersonAssignment mainShift)
+				{
+					if (mainShift.MainLayers().Any())
+					{
+						DateTimePeriod mainShiftPeriod = mainShift.Period;
+						DateTime dateTime = mainShiftPeriod.StartDateTime;
+						DateTime localDateTime = TimeZoneHelper.ConvertFromUtc(dateTime, Person.PermissionInformation.DefaultTimeZone());
+						DateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(localDateTime.Date), Person.PermissionInformation.DefaultTimeZone());
+					}
+				}
+
 
         public void SplitAbsences(DateTimePeriod period)
         {
@@ -736,30 +722,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if(SignificantPart() == SchedulePartView.DayOff)
                 return;
 
-					var newLayer = new MainShiftLayer(activity, period);
 					var ass = PersonAssignment();
 					if (ass != null && 
 						(DateOnlyAsPeriod.Period().Contains(period.StartDateTime) || ass.Period.Intersect(period) || ass.Period.AdjacentTo(period))) //should not start before day I presume? Fix later - will be handled inside PersonAssignment/AgentDay instead...
 				{
+					ass.AddMainLayer(activity, period);
 					if (ass.ShiftCategory == null)
 					{
-						ass.SetMainShiftLayers(new[] { newLayer }, shiftCategory);
-					}
-					else
-					{
-						//introduce AddLayer on PersonAssignment instead?
-						//rk: Micke and I have talked about this... 
-						// Maybe remove SetMainShiftLayers and use Add/RemoveLayer instead.
-						var oldLayers = ass.MainLayers().ToList();
-						oldLayers.Add(newLayer);
-						ass.SetMainShiftLayers(oldLayers, shiftCategory);
+						ass.SetShiftCategory(shiftCategory);
 					}
 					return;
 				}
 
 			//TODO create inparameters to check on if to create new personassignment
 			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-			newPersonAssignment.SetMainShiftLayers(new[] { newLayer }, shiftCategory);
+					newPersonAssignment.AddMainLayer(activity, period);
+					newPersonAssignment.SetShiftCategory(shiftCategory);
 			Add(newPersonAssignment);
 
 			SplitAbsences(Period);
@@ -800,17 +778,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			Add(newPersonAssignment);
 		}
 
+			//will be removed
         public void AddMainShift(IEditableShift mainShift)
         {
-            IPersonAssignment currentAss = PersonAssignment();
-            if (currentAss == null)
-            {
-                currentAss = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-				Add(currentAss);
-            }
+            IPersonAssignment currentAss = PersonAssignment(true);
 
 			new EditableShiftMapper().SetMainShiftLayers(currentAss, mainShift);
         }
+
+			public void AddMainShift(IPersonAssignment mainShiftSource)
+			{
+				var currentAss = PersonAssignment(true);
+				currentAss.SetMainLayersAndShiftCategoryFrom(mainShiftSource);
+			}
 
         #endregion Methods
 

@@ -131,22 +131,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return _shiftLayers; }
 		}
 
-		public virtual void SetMainShiftLayers(IEnumerable<IMainShiftLayer> activityLayers, IShiftCategory shiftCategory)
-		{
-			//todo: make sure not reusing layer from another assignment...
-			//* either do a check here or 
-			//* don't expose and accept IMainShiftACtivityLayerNew but another type
-			//clear or new list?
-			ClearMainLayers();
-			activityLayers.ForEach(layer =>
-			{
-				layer.SetParent(this);
-				_shiftLayers.Add(layer);
-			});
-			ShiftCategory = shiftCategory;
-		}
-
-
 		public virtual IPerson Person
 		{
 			get { return _person; }
@@ -304,6 +288,44 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_shiftLayers.Add(layer);
 		}
 
+		public virtual void AddMainLayer(IActivity activity, DateTimePeriod period)
+		{
+			var layer = new MainShiftLayer(activity, period);
+			layer.SetParent(this);
+			_shiftLayers.Add(layer);
+		}
+
+		public virtual void SetShiftCategory(IShiftCategory shiftCategory)
+		{
+			_shiftCategory = shiftCategory;
+		}
+
+		public virtual void SetMainLayersAndShiftCategoryFrom(IPersonAssignment assignment)
+		{
+			ClearMainLayers();
+			SetShiftCategory(assignment.ShiftCategory);
+			foreach (var mainLayer in assignment.MainLayers())
+			{
+				AddMainLayer(mainLayer.Payload, mainLayer.Period);
+			}
+		}
+
+		//will be removed
+		public virtual void SetMainShiftLayers(IEnumerable<IMainShiftLayer> activityLayers, IShiftCategory shiftCategory)
+		{
+			//todo: make sure not reusing layer from another assignment...
+			//* either do a check here or 
+			//* don't expose and accept IMainShiftACtivityLayerNew but another type
+			//clear or new list?
+			ClearMainLayers();
+			activityLayers.ForEach(layer =>
+			{
+				layer.SetParent(this);
+				_shiftLayers.Add(layer);
+			});
+			ShiftCategory = shiftCategory;
+		}
+
 		public virtual IDayOff DayOff()
 		{
 			if (_dayOffTemplate == null)
@@ -334,13 +356,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			Clear();
 			personAssignmentSource.SetThisAssignmentsDayOffOn(this);
-
-			var mainLayers = new List<IMainShiftLayer>();
+			SetShiftCategory(personAssignmentSource.ShiftCategory);
 			foreach (var mainLayer in personAssignmentSource.MainLayers())
 			{
-				mainLayers.Add(new MainShiftLayer(mainLayer.Payload, mainLayer.Period));
+				AddMainLayer(mainLayer.Payload, mainLayer.Period);
 			}
-			SetMainShiftLayers(mainLayers, personAssignmentSource.ShiftCategory);
 			foreach (var personalLayer in personAssignmentSource.PersonalLayers())
 			{
 				AddPersonalLayer(personalLayer.Payload, personalLayer.Period);

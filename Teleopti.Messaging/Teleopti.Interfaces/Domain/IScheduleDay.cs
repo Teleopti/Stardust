@@ -395,6 +395,7 @@ namespace Teleopti.Interfaces.Domain
 	    IPersonAssignment PersonAssignment(bool createIfNotExists = false);
 
 	    IScheduleDay ReFetch();
+	    void AddMainShift(IPersonAssignment mainShiftSource);
     }
 
 }

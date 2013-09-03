@@ -20,10 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			 var pa = new PersonAssignment(scheduleOk.Person, scheduleOk.Scenario, new DateOnly(2000, 1, 1));
 			 var start = new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc);
 			 var end = new DateTime(2000, 1, 1, 17, 0, 0, DateTimeKind.Utc);
-			 pa.SetMainShiftLayers(new[]
-				 {
-					 new MainShiftLayer(new Activity("d"), new DateTimePeriod(start, end))
-				 }, new ShiftCategory("sd"));
+			 pa.AddMainLayer(new Activity("d"), new DateTimePeriod(start, end));
 			 scheduleOk.Add(pa);
 
 			 new DataPartOfAgentDay()
@@ -44,10 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 					                         scheduleDataTooEarly.Person, new DateOnlyPeriod(dateOnly, dateOnly));
 
 			var pa = new PersonAssignment(scheduleDataTooEarly.Person, scheduleDataTooEarly.Scenario, dateOnly);
-			pa.SetMainShiftLayers(new[]
-				 {
-					 new MainShiftLayer(new Activity("d"), assignmentPeriod)
-				 }, new ShiftCategory("sd"));
+			pa.AddMainLayer(new Activity("d"), assignmentPeriod);
 			scheduleDataTooEarly.Add(pa);
 
 			new DataPartOfAgentDay()
@@ -68,10 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 					                         scheduleDataTooEarly.Person, new DateOnlyPeriod(dateOnly, dateOnly));
 
 			var pa = new PersonAssignment(scheduleDataTooEarly.Person, scheduleDataTooEarly.Scenario, dateOnly);
-			pa.SetMainShiftLayers(new[]
-				 {
-					 new MainShiftLayer(new Activity("d"), assignmentPeriod)
-				 }, new ShiftCategory("sd"));
+			pa.AddMainLayer(new Activity("d"), assignmentPeriod);
 			scheduleDataTooEarly.Add(pa);
 
 			new DataPartOfAgentDay()
@@ -102,10 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				                         scheduleDataTooEarly.Person, new DateOnlyPeriod(dateOnly, dateOnly));
 
 			var pa = new PersonAssignment(scheduleDataTooEarly.Person, scheduleDataTooEarly.Scenario, dateOnly);
-			pa.SetMainShiftLayers(new[]
-				 {
-					 new MainShiftLayer(new Activity("d"), assignmentPeriod)
-				 }, new ShiftCategory("sd"));
+			pa.AddMainLayer(new Activity("d"), assignmentPeriod);
 			var pa2 = pa.EntityClone();
 			scheduleDataTooEarly.Add(pa2);
 

@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				if (personAssignment.ShiftCategory != null)
 				{
-					tempDay.AddMainShift(scheduleDay.GetEditorShift());
+					tempDay.AddMainShift(scheduleDay.PersonAssignment());
 					hasSwapData = true;
 				}
 				if (personAssignment.DayOff() != null)

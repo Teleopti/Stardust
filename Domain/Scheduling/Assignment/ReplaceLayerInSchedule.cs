@@ -25,7 +25,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						var newLayers = new List<IMainShiftLayer>(ass.MainLayers());
 						newLayers.Remove(layer);
 						newLayers.Insert(indexOfLayer, new MainShiftLayer(newActivity, newPeriod));
-						ass.SetMainShiftLayers(newLayers, ass.ShiftCategory);
+						ass.ClearMainLayers();
+						foreach (var newLayer in newLayers)
+						{
+							ass.AddMainLayer(newLayer.Payload, newLayer.Period);
+						}
 						return;
 					}
 				}

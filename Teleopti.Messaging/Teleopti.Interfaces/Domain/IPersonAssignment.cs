@@ -63,5 +63,8 @@ namespace Teleopti.Interfaces.Domain
 	    void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination);
 	    bool AssignedWithDayOff(IDayOffTemplate template);
 	    void FillWithDataFrom(IPersonAssignment newAss);
+	    void AddMainLayer(IActivity activity, DateTimePeriod period);
+	    void SetShiftCategory(IShiftCategory shiftCategory);
+	    void SetMainLayersAndShiftCategoryFrom(IPersonAssignment assignment);
     }
 }
