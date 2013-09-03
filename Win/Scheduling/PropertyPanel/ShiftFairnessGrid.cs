@@ -90,11 +90,19 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				{
 					if (shiftFairness.ShiftCategory.Equals(shiftCategory))
 					{
-						e.Style.CellType = "NumericReadOnlyCell";
+						e.Style.CellType = "IntegerReadOnlyCell";
 						if (e.ColIndex == (int)ShiftFairnessGridColumns.MinimumValue) e.Style.CellValue = shiftFairness.MinimumValue;
 						if (e.ColIndex == (int)ShiftFairnessGridColumns.MaximumValue) e.Style.CellValue = shiftFairness.MaximumValue;
-						if (e.ColIndex == (int)ShiftFairnessGridColumns.AverageValue) e.Style.CellValue = shiftFairness.AverageValue;
-						if (e.ColIndex == (int)ShiftFairnessGridColumns.StandardDeviationValue) e.Style.CellValue = shiftFairness.StandardDeviationValue;
+						if (e.ColIndex == (int) ShiftFairnessGridColumns.AverageValue)
+						{
+							e.Style.CellType = "NumericReadOnlyCell";
+							e.Style.CellValue = shiftFairness.AverageValue;
+						}
+						if (e.ColIndex == (int) ShiftFairnessGridColumns.StandardDeviationValue)
+						{
+							e.Style.CellType = "NumericReadOnlyCell";
+							e.Style.CellValue = shiftFairness.StandardDeviationValue;
+						}
 					}
 				}
 
@@ -110,11 +118,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 						e.Style.CellType = "IgnoreCellModel";
 					}
 				}
-
-				//if (e.ColIndex == (int)ShiftFairnessGridColumns.StandardDeviationValue && e.RowIndex == _model.ShiftCategories.Count + 1)
-				//{
-				//	e.Style.CellValue = _presenter.CalculateTotalStandardDeviation(_model.GetShiftFairness());
-				//}
 			}
 
 			e.Handled = true;

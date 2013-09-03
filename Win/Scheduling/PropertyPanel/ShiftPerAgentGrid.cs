@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			{
 				var person = this[e.RowIndex, 0].Tag as IPerson;
 				var shiftCategory = this[0, e.ColIndex].Tag as IShiftCategory;
-				e.Style.CellType = "NumericReadOnlyCell";
+				e.Style.CellType = "IntegerReadOnlyCell";
 				e.Style.CellValue = _presenter.ShiftCategoryCount(person, shiftCategory, _model.GetShiftCategoryPerAgent());
 			}
 
