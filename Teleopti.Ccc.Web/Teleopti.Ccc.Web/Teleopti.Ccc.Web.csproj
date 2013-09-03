@@ -699,6 +699,7 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\addremovefulldayabsence-configuration.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\addremovefulldayabsence-ScheduledResourcesReadModel\iteration.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\addremovefulldayabsence-ScheduledResourcesReadModel\scenario.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\addremovefulldayabsence-PersonScheduleDayReadModel\iteration.js" />
