@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -42,19 +43,27 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         public AuthenticationResultDto LogOnWindows(DataSourceDto dataSource)
         {
             AuthenticationResultDto authenticationResultDto = new AuthenticationResultDto {Successful = false};
+            DataSourceContainer dataSourceContainer = null;
             try
             {
                 var dataSourceContainers = DataSourceContainers();
-                var dataSourceContainer =
+                dataSourceContainer =
                     dataSourceContainers.FirstOrDefault(d => d.DataSource.Application.Name == dataSource.Name &&
-                                                             d.AuthenticationTypeOption == AuthenticationTypeOption.Windows);
+                                                             d.AuthenticationTypeOption ==
+                                                             AuthenticationTypeOption.Windows);
 
                 if (dataSourceContainer != null)
                 {
                     IEnumerable<IBusinessUnit> buList =
                         dataSourceContainer.AvailableBusinessUnitProvider.AvailableBusinessUnits();
                     authenticationResultDto.Successful = true;
-					buList.ForEach(unit => authenticationResultDto.BusinessUnitCollection.Add(new BusinessUnitDto { Id = unit.Id, Name = unit.Name}));
+                    buList.ForEach(
+                        unit =>
+                        authenticationResultDto.BusinessUnitCollection.Add(new BusinessUnitDto
+                            {
+                                Id = unit.Id,
+                                Name = unit.Name
+                            }));
                 }
             }
             catch
@@ -62,6 +71,10 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                 authenticationResultDto.HasMessage = true;
                 authenticationResultDto.Message = UserTexts.Resources.LogOnFailedInvalidUserNameOrPassword;
             }
+
+            if (!string.IsNullOrEmpty(dataSource.Client) && dataSourceContainer != null)
+                saveLogonAttempt(authenticationResultDto, dataSourceContainer, dataSource.Client, dataSource.IpAddress);
+            
             return authenticationResultDto;
         }
 
@@ -131,7 +144,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             var dataSourceContainer =
                 dataSourceContainers.FirstOrDefault(d => d.DataSource.Application.Name == dataSource.Name &&
                                                          d.AuthenticationTypeOption == AuthenticationTypeOption.Application);
-
+            
             AuthenticationResultDto resultDto;
             if (dataSourceContainer != null)
             {
@@ -143,6 +156,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                         dataSourceContainer.AvailableBusinessUnitProvider.AvailableBusinessUnits();
 					buList.ForEach(unit => resultDto.BusinessUnitCollection.Add(new BusinessUnitDto { Id = unit.Id, Name = unit.Name }));
                 }
+                if (! string.IsNullOrEmpty(dataSource.Client))
+                    saveLogonAttempt(resultDto, dataSourceContainer, dataSource.Client, dataSource.IpAddress);
             }
             else
             {
@@ -153,8 +168,23 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                                     Message = UserTexts.Resources.NoAvailableDataSourcesHasBeenFound
                                 };
             }
-
+            
             return resultDto;
+        }
+
+        private void saveLogonAttempt(AuthenticationResultDto resultDto, DataSourceContainer dataSourceContainer, string client, string ipAddress)
+        {
+            var logonLogger = new LogonLogger(dataSourceContainer.RepositoryFactory);
+            var model = new LoginAttemptModel
+            {
+                ClientIp = ipAddress,
+                Client = client,
+                UserCredentials = dataSourceContainer.LogOnName,
+                Provider = dataSourceContainer.AuthenticationTypeOption.ToString(),
+                Result = resultDto.Successful ? "LogonSuccess" : "LogonFailed"
+            };
+            if (dataSourceContainer.User != null) model.PersonId = dataSourceContainer.User.Id;
+            logonLogger.SaveLogonAttempt(model, dataSourceContainer.DataSource.Application);
         }
     }
 }
