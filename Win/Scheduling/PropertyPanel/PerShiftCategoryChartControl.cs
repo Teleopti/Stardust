@@ -34,11 +34,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             tableLayoutPanel1.Controls.Add(_chart, 0, 2);
         }
 
-        private void perShiftCategoryChartControlLoad(object sender, EventArgs e)
-        {
-            
-        }
-
         private void selectedIndexChanged(object sender, EventArgs e)
         {
            
@@ -110,7 +105,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             // 
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "PerShiftCategoryChartControl";
-            this.Load += new System.EventHandler(this.perShiftCategoryChartControlLoad);
             this.ResumeLayout(false);
 
             // 

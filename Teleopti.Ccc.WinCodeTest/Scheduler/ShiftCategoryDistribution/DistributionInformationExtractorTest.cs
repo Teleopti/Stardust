@@ -34,34 +34,152 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             _scheduleDay1 = _mock.StrictMock<IScheduleDay>();
             _scheduleDay2 = _mock.StrictMock<IScheduleDay>();
             _scheduleDay3 = _mock.StrictMock<IScheduleDay>();
-            _scheduleDays = new List<IScheduleDay>(){_scheduleDay1,_scheduleDay2,_scheduleDay3};
-            
+            _scheduleDays = new List<IScheduleDay>{_scheduleDay1,_scheduleDay2,_scheduleDay3};
+        }
+
+        [Test]
+        public void TestGetShiftFairness()
+        {
+            var person1 = PersonFactory.CreatePerson("person1");
+            var person2 = PersonFactory.CreatePerson("person2");
+            using (_mock.Record())
+            {
+                scheduleDayExpect(_scheduleDay1, _morning, person1);
+                scheduleDayExpect(_scheduleDay2, _day, person1);
+                scheduleDayExpect(_scheduleDay3, _morning, person2);
+            }
+            using (_mock.Playback())
+            {
+                _target = new DistributionInformationExtractor(_scheduleDays);
+            }
+            var result = _target.GetShiftFairness() ;
+            Assert.AreEqual(result.Count(), 2);
+        }
+
+        [Test]
+        public void TestGetShiftCategoryPerAgent()
+        {
+            var person1 = PersonFactory.CreatePerson("person1");
+            var person2 = PersonFactory.CreatePerson("person2");
+            using (_mock.Record())
+            {
+                scheduleDayExpect(_scheduleDay1, _morning, person1);
+                scheduleDayExpect(_scheduleDay2, _day, person1);
+                scheduleDayExpect(_scheduleDay3, _morning, person2);
+            }
+            using (_mock.Playback())
+            {
+                _target = new DistributionInformationExtractor(_scheduleDays);
+            }
+            var result = _target.GetShiftCategoryPerAgent() ;
+            Assert.AreEqual(result.Count(), 3);
+        }
+        
+        [Test]
+        public void TestGetShiftDistribution()
+        {
+            var person1 = PersonFactory.CreatePerson("person1");
+            var person2 = PersonFactory.CreatePerson("person2");
+            using (_mock.Record())
+            {
+                scheduleDayExpect(_scheduleDay1, _morning, person1);
+                scheduleDayExpect(_scheduleDay2, _day, person1);
+                scheduleDayExpect(_scheduleDay3, _morning, person2);
+            }
+            using (_mock.Playback())
+            {
+                _target = new DistributionInformationExtractor(_scheduleDays);
+            }
+            var result = _target.GetShiftDistribution();
+            Assert.AreEqual(result.Count(), 2);
+        }
+
+        [Test]
+        public void TestPersonInvolvedList()
+        {
+            var person1 = PersonFactory.CreatePerson("person1");
+            var person2 = PersonFactory.CreatePerson("person2");
+            using (_mock.Record())
+            {
+                scheduleDayExpect(_scheduleDay1, _morning, person1);
+                scheduleDayExpect(_scheduleDay2, _day, person1);
+                scheduleDayExpect(_scheduleDay3, _morning, person2);
+            }
+            using (_mock.Playback())
+            {
+                _target = new DistributionInformationExtractor(_scheduleDays);
+            }
+            var result = _target.PersonInvolved.OrderBy(s=>s.Name.FirstName).ToArray();
+            Assert.AreEqual(result.Count(), 2);
+            Assert.AreEqual(result[0] ,person1 );
+            Assert.AreEqual(result[1] ,person2 );
+        }
+
+        [Test]
+        public void TestDatesList()
+        {
+            var person1 = PersonFactory.CreatePerson("person1");
+            using (_mock.Record())
+            {
+                scheduleDayExpect(_scheduleDay1, _morning, person1);
+                scheduleDayExpect(_scheduleDay2, _day, person1);
+                scheduleDayExpect(_scheduleDay3, _morning, person1);
+            }
+            using (_mock.Playback())
+            {
+                _target = new DistributionInformationExtractor(_scheduleDays);
+            }
+            var result = _target.Dates.OrderBy(s=>s.Date ).ToArray();
+            Assert.AreEqual(result.Count(), 1);
+        }
+
+        [Test]
+        public void TestShiftCategoryList()
+        {
+            var person1 = PersonFactory.CreatePerson("person1");
+            using (_mock.Record())
+            {
+                scheduleDayExpect(_scheduleDay1, _morning, person1);
+                scheduleDayExpect(_scheduleDay2, _day, person1);
+                scheduleDayExpect(_scheduleDay3, _morning, person1);
+            }
+            using (_mock.Playback())
+            {
+                _target = new DistributionInformationExtractor(_scheduleDays);
+            }
+            var result = _target.ShiftCategories.OrderBy(s=>s.Description.Name ).ToArray() ;
+            Assert.AreEqual(result.Count(), 2);
+            Assert.AreEqual(result[0], _day );
+            Assert.AreEqual(result[1], _morning );
         }
 
         [Test]
         public void TestShiftCategoryFrequency()
         {
-            _target = new DistributionInformationExtractor(_scheduleDays);
-
+            var person1 = PersonFactory.CreatePerson("person1");
             using (_mock.Record())
             {
-                scheduleDayExpect(_scheduleDay1);
-                scheduleDayExpect(_scheduleDay2);
-                scheduleDayExpect(_scheduleDay3);
+                scheduleDayExpect(_scheduleDay1, _morning, person1);
+                scheduleDayExpect(_scheduleDay2,_day,person1);
+                scheduleDayExpect(_scheduleDay3,_morning,person1 );
             }
-
-            //var result = _target.GetShiftCategoryFrequency(_morning );
-
+            using (_mock.Playback())
+            {
+                _target = new DistributionInformationExtractor(_scheduleDays);
+            }
+            var result = _target.GetShiftCategoryFrequency(_morning );
+            Assert.AreEqual(result.Count(), 1);
+            Assert.AreEqual(result.Keys.First( ), 2);
+            Assert.AreEqual(result.Values.First( ), 1);
         }
-
-        private void scheduleDayExpect(IScheduleDay scheduleDay)
+        
+        private void scheduleDayExpect(IScheduleDay scheduleDay,IShiftCategory shiftCategory,IPerson person  )
         {
-            IPersonAssignment personAssignment = _mock.StrictMock<IPersonAssignment>();
-            IPerson person = PersonFactory.CreatePerson("person1");
+            var personAssignment = _mock.StrictMock<IPersonAssignment>();
             IDateOnlyAsDateTimePeriod dateOnlyPeriod = new DateOnlyAsDateTimePeriod(DateOnly.Today ,TimeZoneInfo.Utc );
 
             Expect.Call(scheduleDay.PersonAssignment()).Return(personAssignment);
-            Expect.Call(personAssignment.ShiftCategory).Return(_morning);
+            Expect.Call(personAssignment.ShiftCategory).Return(shiftCategory).Repeat.Twice();
             Expect.Call(scheduleDay.Person).Return(person);
             Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(dateOnlyPeriod);
 
