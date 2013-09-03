@@ -39,6 +39,8 @@ namespace Teleopti.Ccc.Rta.TestApplication
                 var platformTypeId = sendSettings.PlatformId;
                 var clientHandler = new ClientHandler(connectionProperties);
                 clientHandler.StartLogClient();
+	            var stopwatch = new System.Diagnostics.Stopwatch();
+				stopwatch.Start();
                 while (sendSettings.RemainingCount > 0)
                 {
                     var statesForTest = sendSettings.Read();
@@ -79,8 +81,8 @@ namespace Teleopti.Ccc.Rta.TestApplication
                     }
                 }
                 clientHandler.StopLogClient();
-
-                Console.WriteLine("Done with sending {0} rows of RTA data.", sendCount);
+				stopwatch.Stop();
+                Console.WriteLine("Done with sending {0} rows of RTA data. Elapsed time equals: {1}", sendCount, stopwatch.Elapsed);
                 Console.WriteLine("Press Y to send again or any other key to exit.");
                 var info = Console.ReadKey();
                 keepRunning = (info.Key == ConsoleKey.Y);
