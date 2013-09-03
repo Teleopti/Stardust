@@ -21,7 +21,6 @@ define([
             new AddRemoveFullDayAbsenceScheduledResourcesReadModelScenario()
         ];
         this.ScenarioName = ko.observable();
-        this.Scenario = ko.observable();
         this.Configuration = ko.observable();
         this.ConfigurationLoading = ko.observable(false);
 
@@ -42,22 +41,22 @@ define([
                 return false;
             return true;
         });
-        
-        this.ScenarioName.subscribe(function () {
-            self.ConfigurationLoading(true);
-            
+
+        this.Scenario = ko.computed(function() {
+            var selectedName = self.ScenarioName();
             for (var i = 0; i < self.Scenarios.length; i++) {
-                if (self.ScenarioName() == self.Scenarios[i].Name) {
-                    self.Scenario(self.Scenarios[i]);
-                    self.Configuration(''); //just for now
-                    self.Scenario().Configuration.LoadDefaultConfiguration(function (data) {
-                        self.Configuration(JSON.stringify(data, null, 4));
-                        self.ConfigurationLoading(false);
-                    });
-                    break;
-                }
+                var scenario = self.Scenarios[i];
+                if (selectedName == scenario.Name)
+                    return scenario;
             }
-            
+        });
+        
+        this.Scenario.subscribe(function () {
+            self.ConfigurationLoading(true);
+            self.Scenario().LoadDefaultConfiguration(function (data) {
+                self.Configuration(JSON.stringify(data, null, 4));
+                self.ConfigurationLoading(false);
+            });
         });
 
         this.Configuration.subscribe(function () {
