@@ -1,5 +1,7 @@
 ﻿using System.Collections.Specialized;
 using System.Web.Mvc;
+using System.Web.Routing;
+using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -10,6 +12,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
@@ -88,6 +91,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				var model = target.OvertimeAvailability(input).Data as OvertimeAvailabilityViewModel;
 				model.Should().Be.SameInstanceAs(overtimeAvailabilityViewModel);
 			}
+		}
+
+		[Test]
+		public void ShouldHandleModelErrorInPersistPreferenceInput()
+		{
+			var overtimeAvailabilityPersister = MockRepository.GenerateMock<IOvertimeAvailabilityPersister>();
+			var response = MockRepository.GenerateStub<FakeHttpResponse>();
+			var input = new OvertimeAvailabilityInput();
+
+			var target = new ScheduleController(null, null, null, overtimeAvailabilityPersister);
+			var context = new FakeHttpContext("/");
+			context.SetResponse(response);
+			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
+			target.ModelState.AddModelError("Error", "Error");
+
+			var result = target.OvertimeAvailability(input);
+			var data = result.Data as ModelStateResult;
+			data.Errors.Should().Contain("Error");
 		}
 	}
 }

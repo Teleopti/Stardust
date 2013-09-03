@@ -43,12 +43,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIInputOvertimeAvailabilityWith(Table table)
 		{
 			var overtimeAvailability = table.CreateInstance<OvertimeAvailabilityViewModel>();
-			int[] st = overtimeAvailability.StartTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
-			var startTimeSpan = new TimeSpan(st[0], st[1], 0);
-			int[] end = overtimeAvailability.EndTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
-			var endTimeSpan = new TimeSpan(end[0], end[1], 0);
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .overtime-availability-start-time", TimeHelper.TimeOfDayFromTimeSpan(startTimeSpan, UserFactory.User().Culture));
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .overtime-availability-end-time", TimeHelper.TimeOfDayFromTimeSpan(endTimeSpan, UserFactory.User().Culture));
+			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .overtime-availability-start-time').timepicker('setTime', '{0}');", overtimeAvailability.StartTime));
+			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .overtime-availability-end-time').timepicker('setTime', '{0}');", overtimeAvailability.EndTime));
 			if (overtimeAvailability.EndTimeNextDay)
 				Browser.Interactions.Click(".overtime-availability-next-day");
 		}

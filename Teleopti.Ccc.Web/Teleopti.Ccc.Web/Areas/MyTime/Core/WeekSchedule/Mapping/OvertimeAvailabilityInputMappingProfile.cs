@@ -40,7 +40,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				if (destination == null)
 				{
 					var person = _loggedOnUser.Invoke().CurrentUser();
-					destination = new OvertimeAvailability(person, source.Date, source.StartTime.ToTimeSpan(), source.EndTime.ToTimeSpan());
+					destination = new OvertimeAvailability(person, source.Date, source.StartTime.ToTimeSpan(),
+					                                       source.EndTimeNextDay
+						                                       ? source.EndTime.Time.Add(new TimeSpan(1, 0, 0, 0))
+						                                       : source.EndTime.ToTimeSpan());
 				}
 				else
 				{

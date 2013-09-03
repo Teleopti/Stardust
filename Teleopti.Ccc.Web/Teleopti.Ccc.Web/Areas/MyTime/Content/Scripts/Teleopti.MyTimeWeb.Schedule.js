@@ -209,6 +209,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		
         function _displayOvertimeAvailability(overtimeAvailability) {
         	self.initialRequestDay.overtimeAvailability(overtimeAvailability);
+	        self.CancelAddingNewRequest();
         }
 
 	    self.CancelAddingNewRequest = function() {

@@ -23,10 +23,10 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 	this.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
 	this.DateFormat = $('#Request-detail-datepicker-format').val().toUpperCase();
 
-	this.ValidationError = ko.observable();
+	this.ErrorMessage = ko.observable('');
 	
 	this.ShowError = ko.computed(function () {
-		return self.ValidationError() !== undefined && self.ValidationError() !== '';
+		return self.ErrorMessage() !== undefined && self.ErrorMessage() !== '';
 	});
 	
 	this.Reset = function () {
@@ -40,11 +40,19 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 		ajax.Ajax({
 			url: "Schedule/OvertimeAvailability",
 			dataType: "json",
-			data: { Date: self.DateFrom().format('YYYY-MM-DD'), StartTime: self.StartTime(), EndTime: self.EndTime() },
+			data: { Date: self.DateFrom().format('YYYY-MM-DD'), StartTime: self.StartTime(), EndTime: self.EndTime(), EndTimeNextDay: self.NextDay() },
 			type: 'POST',
 			success: function (data, textStatus, jqXHR) {
 				displayOvertimeAvailability(data);
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+			if (jqXHR.status == 400) {
+				var data = $.parseJSON(jqXHR.responseText);
+				self.ErrorMessage(data.Errors.join('</br>'));
+				return;
 			}
+			Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+		}
 		});
 	};
 

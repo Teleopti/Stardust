@@ -44,7 +44,7 @@
 	</tr>
 </table>
 <div data-bind="if: ShowError">
-	<div class="overtime-availability-error-panel alert alert-danger" data-bind="html: ValidationError" />   
+	<div class="overtime-availability-error alert alert-danger" data-bind="html: ErrorMessage" />   
 </div>
 <div class="pull-right">
 	<button class="request-new-cancel btn" data-bind="click: $parent.CancelAddingNewRequest">@Resources.Cancel</button>

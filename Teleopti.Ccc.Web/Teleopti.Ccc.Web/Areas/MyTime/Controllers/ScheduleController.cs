@@ -4,6 +4,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -63,6 +64,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpPost]
 		public JsonResult OvertimeAvailability(OvertimeAvailabilityInput input)
 		{
+			if (!ModelState.IsValid)
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return ModelState.ToJson();
+			}
 			return Json(_overtimeAvailabilityPersister.Persist(input), JsonRequestBehavior.AllowGet);
 		}
 	}
