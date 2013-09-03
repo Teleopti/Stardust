@@ -71,6 +71,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             {
                 var date = (DateOnly) this[e.RowIndex, 0].Tag;
                 var shiftCategory = this[0, e.ColIndex].Tag as IShiftCategory;
+				e.Style.CellType = "NumericReadOnlyCell";
 
                 var count = _presenter.ShiftCategoryCount(date, shiftCategory);
                 if (count.HasValue)
