@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -77,38 +76,34 @@ namespace Teleopti.Messaging.SignalR
 	                                                          Guid domainObjectId, Type domainObjectType,
 	                                                          DomainUpdateType updateType, byte[] domainObject)
         {
-            IList<Type> types;
-            if (FilterManager.FilterDictionary.TryGetValue(domainObjectType, out types))
-            {
-                var referenceObjectTypeString = (referenceObjectType == null)
-                                                    ? null
-                                                    : FilterManager.LookupType(referenceObjectType);
-                var eventStartDateString = Subscription.DateToString(eventStartDate);
-                var eventEndDateString = Subscription.DateToString(eventEndDate);
-                var moduleIdString = Subscription.IdToString(moduleId);
-                var domainObjectIdString = Subscription.IdToString(domainObjectId);
-                var domainQualifiedTypeString = types[0].AssemblyQualifiedName;
-                var domainReferenceIdString = Subscription.IdToString(referenceObjectId);
+	        if (FilterManager.HasType(domainObjectType))
+	        {
+	            var referenceObjectTypeString = (referenceObjectType == null)
+	                                                ? null
+	                                                : FilterManager.LookupTypeToSend(referenceObjectType);
+	            var eventStartDateString = Subscription.DateToString(eventStartDate);
+	            var eventEndDateString = Subscription.DateToString(eventEndDate);
+	            var moduleIdString = Subscription.IdToString(moduleId);
+	            var domainObjectIdString = Subscription.IdToString(domainObjectId);
+	            var domainQualifiedTypeString = FilterManager.LookupTypeToSend(domainObjectType);
+	            var domainReferenceIdString = Subscription.IdToString(referenceObjectId);
 	            var domainObjectString = (domainObject != null) ? Convert.ToBase64String(domainObject) : null;
-                foreach (var type in types)
-                {
-                    yield return new Notification
-                                     {
-                                         StartDate = eventStartDateString,
-                                         EndDate = eventEndDateString,
-                                         DomainId = domainObjectIdString,
-                                         DomainType = type.Name,
-                                         DomainQualifiedType = domainQualifiedTypeString,
-                                         DomainReferenceId = domainReferenceIdString,
-                                         DomainReferenceType = referenceObjectTypeString,
-                                         ModuleId = moduleIdString,
-                                         DomainUpdateType = (int) updateType,
-                                         DataSource = dataSource,
-                                         BusinessUnitId = businessUnitId,
-                                         BinaryData = domainObjectString
-                                     };
-                }
-            }
+	            yield return new Notification
+	                {
+	                    StartDate = eventStartDateString,
+	                    EndDate = eventEndDateString,
+	                    DomainId = domainObjectIdString,
+	                    DomainType = FilterManager.LookupType(domainObjectType).Name,
+	                    DomainQualifiedType = domainQualifiedTypeString,
+	                    DomainReferenceId = domainReferenceIdString,
+	                    DomainReferenceType = referenceObjectTypeString,
+	                    ModuleId = moduleIdString,
+	                    DomainUpdateType = (int) updateType,
+	                    DataSource = dataSource,
+	                    BusinessUnitId = businessUnitId,
+	                    BinaryData = domainObjectString
+	                };
+	        }
         }
 
 	    public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
