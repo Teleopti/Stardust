@@ -6,16 +6,17 @@ using System.Web.Caching;
 using Teleopti.Ccc.Rta.Interfaces;
 using log4net;
 
-namespace Teleopti.Ccc.Rta.Server
+namespace Teleopti.Ccc.Rta.Server.Resolvers
 {
     public interface IStateResolver
     {
 		bool HaveStateCodeChanged(Guid personId, string newStateCode, DateTime receivedTime);
+	    void UpdateCacheForPerson(Guid personId, PersonStateHolder state);
     }
 
     public class StateResolver : IStateResolver
     {
-        private const string CacheKey = "StateCache";
+        private const string cacheKey = "StateCache";
         private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
         private readonly string _connectionStringDataStore;
         private readonly ILog _loggingSvc;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public bool HaveStateCodeChanged(Guid personId, string newStateCode, DateTime receivedTime)
         {
-			var dictionary = (ConcurrentDictionary<Guid, PersonStateHolder>)_cache.Get(CacheKey) ?? Initialize();
+			var dictionary = (ConcurrentDictionary<Guid, PersonStateHolder>)_cache.Get(cacheKey) ?? initialize();
 			PersonStateHolder cachedStateHolder;
 			var newStateHolder = new PersonStateHolder(newStateCode, receivedTime);
 
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.Rta.Server
         	return false;
         }
 
-		private ConcurrentDictionary<Guid, PersonStateHolder> Initialize()
+		private ConcurrentDictionary<Guid, PersonStateHolder> initialize()
         {
             _loggingSvc.Info("Loading new data into state cache");
 			var dictionary = new ConcurrentDictionary<Guid, PersonStateHolder>();
@@ -77,16 +78,21 @@ namespace Teleopti.Ccc.Rta.Server
                 }
                 if (reader != null) reader.Close();
             }
-            _cache.Add(CacheKey, dictionary, null, DateTime.Now.AddMinutes(5), Cache.NoSlidingExpiration,
-                       CacheItemPriority.Default, OnRemoveCallback);
+            _cache.Add(cacheKey, dictionary, null, DateTime.Now.AddMinutes(5), Cache.NoSlidingExpiration,
+                       CacheItemPriority.Default, onRemoveCallback);
             _loggingSvc.Info("Done loading data into cache");
             return dictionary;
         }
 
-        private void OnRemoveCallback(string key, object value, CacheItemRemovedReason reason)
+		public void UpdateCacheForPerson(Guid personId, PersonStateHolder state)
+		{
+			((ConcurrentDictionary<Guid, PersonStateHolder>)_cache[cacheKey])[personId] = state;
+		}
+
+        private void onRemoveCallback(string key, object value, CacheItemRemovedReason reason)
         {
             _loggingSvc.Info("Statecache cleared");
-            Initialize();
+            initialize();
         }
     }
 }

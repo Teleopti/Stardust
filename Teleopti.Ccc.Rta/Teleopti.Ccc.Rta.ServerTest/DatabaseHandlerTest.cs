@@ -13,9 +13,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Rta.ServerTest
 {
 	[TestFixture]
-	public class ActualAgentDataHandlerTest
+	public class DatabaseHandlerTest
 	{
-		private ActualAgentDataHandler _target;
+		private DatabaseHandler _target;
 
 		private MockRepository _mock;
 		private IDatabaseConnectionFactory _connectionFactory;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_mock = new MockRepository();
 			_connectionFactory = _mock.StrictMock<IDatabaseConnectionFactory>();
 			_stringHandler = _mock.StrictMock<IDatabaseConnectionStringHandler>();
-			_target = new ActualAgentDataHandler(_connectionFactory, _stringHandler);
+			_target = new DatabaseHandler(_connectionFactory, _stringHandler);
 
 			_connection = _mock.StrictMock<IDbConnection>();
 			_command = _mock.StrictMock<IDbCommand>();
@@ -110,6 +110,14 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_reader.Expect(r => r.GetOrdinal("NextStart")).Return(12);
 			_reader.Expect(r => r.GetDateTime(12)).Return(_dateTime);
 
+			_reader.Expect(r => r.GetOrdinal("BatchId")).Return(13).Repeat.Twice();
+			_reader.Expect(r => r.IsDBNull(13)).Return(false);
+			_reader.Expect(r => r.GetDateTime(13)).Return(_dateTime);
+
+			_reader.Expect(r => r.GetOrdinal("OriginalDataSourceId")).Return(14).Repeat.Twice();
+			_reader.Expect(r => r.IsDBNull(14)).Return(false);
+			_reader.Expect(r => r.GetString(14)).Return("1");
+			
 			_reader.Expect(r => r.Dispose());
 			_connection.Expect(c => c.Dispose());
 			_mock.ReplayAll();
@@ -215,6 +223,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_reader.Expect(r => r.GetInt64(6)).Return(123456789);
 			_reader.Expect(r => r.GetOrdinal("Name")).Return(7);
 			_reader.Expect(r => r.GetString(7)).Return("name");
+			_reader.Expect(r => r.GetOrdinal("IsLogOutState")).Return(8);
+			_reader.Expect(r => r.GetBoolean(8)).Return(true);
 			_reader.Expect(r => r.Read()).Return(false);
 			_reader.Expect(r => r.Close());
 			_connection.Expect(c => c.Dispose());

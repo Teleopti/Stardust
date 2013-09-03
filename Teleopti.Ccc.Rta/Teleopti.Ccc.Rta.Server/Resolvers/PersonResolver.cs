@@ -9,8 +9,13 @@ using System.Web.Caching;
 using log4net;
 using Teleopti.Ccc.Rta.Interfaces;
 
-namespace Teleopti.Ccc.Rta.Server
+namespace Teleopti.Ccc.Rta.Server.Resolvers
 {
+	public interface IPersonResolver
+	{
+		bool TryResolveId(int dataSourceId, string logOn, out IEnumerable<PersonWithBusinessUnit> personId);
+	}
+
     public class PersonResolver : IPersonResolver
     {
     	private const string CacheKey = "PeopleCache";
@@ -110,7 +115,7 @@ namespace Teleopti.Ccc.Rta.Server
         }
     }
 
-	public class PersonWithBusinessUnit
+	public struct PersonWithBusinessUnit
 	{
 		public Guid PersonId { get; set; }
 		public Guid BusinessUnitId { get; set; }

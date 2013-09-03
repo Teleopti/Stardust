@@ -3,10 +3,10 @@ using System.Data;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Rta.Interfaces;
-using Teleopti.Ccc.Rta.Server;
+using Teleopti.Ccc.Rta.Server.Resolvers;
 using log4net;
 
-namespace Teleopti.Ccc.Rta.ServerTest
+namespace Teleopti.Ccc.Rta.ServerTest.Resolvers
 {
 	[TestFixture]
 	public class StateResolverTest

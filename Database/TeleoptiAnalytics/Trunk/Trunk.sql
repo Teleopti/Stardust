@@ -147,3 +147,16 @@ INCLUDE ([person_id],
 [datasource_update_date])
 GO
 
+
+----------------  
+--Name: Erik S
+--Date: 2013-08-30
+--Desc: Update handling of RTA batch, adding info to ActualAgentState to make it stateless
+-----------------
+IF NOT EXISTS (SELECT * FROM sys.columns WHERE (Name = N'ReceivedTime' OR Name = N'OriginalDataSourceId' OR name = N'BusinessUnit') AND OBJECT_ID = OBJECT_ID(N'ActualAgentState'))
+BEGIN
+	TRUNCATE TABLE [RTA].[ActualAgentState]
+	ALTER TABLE [RTA].[ActualAgentState]
+	ADD [BatchId] [datetime] NULL,
+		[OriginalDataSourceId] [nvarchar](50) NOT NULL
+END
