@@ -854,7 +854,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 					var coherentChecker = new TeamSteadyStateCoherentChecker();
 					var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-					var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper, new EditableShiftMapper());
+					var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
 					var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
 					var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
                 	var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
@@ -925,7 +925,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState, _container.Resolve<IGroupPersonFactory>(), _container.Resolve<IGroupPagePerDateHolder>());
 			var coherentChecker = new TeamSteadyStateCoherentChecker();
 			var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-			var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper, new EditableShiftMapper());
+			var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
 			var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
 			
             fixedStaffSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
