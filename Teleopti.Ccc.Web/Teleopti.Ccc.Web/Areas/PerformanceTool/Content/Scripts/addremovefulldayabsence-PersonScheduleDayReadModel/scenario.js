@@ -5,7 +5,7 @@ define([
         'addremovefulldayabsence-PersonScheduleDayReadModel/iteration',
         'result',
         'messagebroker',
-        'addremovefulldayabsence-configuration'
+        'scenario-shared/configuration'
     ], function(
         ko,
         ProgressItemCountViewModel,

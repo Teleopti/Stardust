@@ -5,8 +5,8 @@ define([
         'addremovefulldayabsence-ScheduledResourcesReadModel/iteration',
         'result',
         'messagebroker',
-        'addremovefulldayabsence-configuration'
-    ], function(
+        'scenario-shared/configuration'
+], function (
         ko,
         ProgressItemCountViewModel,
         Iteration,
