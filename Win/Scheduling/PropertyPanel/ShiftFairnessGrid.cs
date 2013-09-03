@@ -1,5 +1,6 @@
 ﻿using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common.Controls;
+using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Interfaces.Domain;
 
@@ -13,6 +14,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		public ShiftFairnessGrid()
 		{
 			base.Initialize();
+			if (!CellModels.ContainsKey("IgnoreCellModel")) CellModels.Add("IgnoreCellModel", new IgnoreCellModel(Model));
 			_presenter = new ShiftFairnessGridPresenter(this);	
 		}
 
@@ -88,6 +90,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				{
 					if (shiftFairness.ShiftCategory.Equals(shiftCategory))
 					{
+						e.Style.CellType = "NumericReadOnlyCell";
 						if (e.ColIndex == (int)ShiftFairnessGridColumns.MinimumValue) e.Style.CellValue = shiftFairness.MinimumValue;
 						if (e.ColIndex == (int)ShiftFairnessGridColumns.MaximumValue) e.Style.CellValue = shiftFairness.MaximumValue;
 						if (e.ColIndex == (int)ShiftFairnessGridColumns.AverageValue) e.Style.CellValue = shiftFairness.AverageValue;
@@ -95,12 +98,23 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 					}
 				}
 
-				if (e.ColIndex == (int)ShiftFairnessGridColumns.StandardDeviationValue && e.RowIndex == _model.ShiftCategories.Count + 1)
+				if (e.RowIndex == _model.ShiftCategories.Count + 1)
 				{
-					e.Style.CellValue = _presenter.CalculateTotalStandardDeviation(_model.GetShiftFairness());
+					if (e.ColIndex == (int) ShiftFairnessGridColumns.StandardDeviationValue)
+					{
+						e.Style.CellType = "NumericReadOnlyCell";
+						e.Style.CellValue = _presenter.CalculateTotalStandardDeviation(_model.GetShiftFairness());	
+					}
+					else
+					{
+						e.Style.CellType = "IgnoreCellModel";
+					}
 				}
 
-				e.Style.ReadOnly = true;
+				//if (e.ColIndex == (int)ShiftFairnessGridColumns.StandardDeviationValue && e.RowIndex == _model.ShiftCategories.Count + 1)
+				//{
+				//	e.Style.CellValue = _presenter.CalculateTotalStandardDeviation(_model.GetShiftFairness());
+				//}
 			}
 
 			e.Handled = true;
