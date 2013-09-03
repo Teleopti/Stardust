@@ -1,4 +1,4 @@
-﻿Feature: Shift Trade Requests
+﻿Feature: Shift Trade Request Add
 	In order to avoid unwanted scheduled shifts
 	As an agent
 	I want to be able to trade shifts with other agents
@@ -151,7 +151,7 @@ Scenario: Time line should cover all scheduled shifts
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see the time line hours span from '6' to '18'
 
-Scenario: When clicking an agent i shift trade list, the other agent's should be hidden
+Scenario: When clicking an agent in shift trade list, the other agent's should be hidden
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -288,350 +288,19 @@ Scenario: Show my scheduled day off
 	When I view Add Shift Trade Request for date '2030-01-04'
 	Then I should see my scheduled day off 'DayOff'
 	And I should see the time line hours span from '8' to '17'
-
-Scenario: Close details when approving shift trade request
-	Given I have the role 'Full access to mytime'
-	And I have received a shift trade request
-	| Field    | Value         |
-	| From       | Ashley Andeen	|
-	| Pending  | True          |
-	And I am viewing requests
-	When I click on the request at position '1' in the list
-	And I click the Approve button on the shift request
-	Then  Details should be closed
-
-Scenario: Can not approve or deny shift trade request created by me
-	Given I have the role 'Full access to mytime'
-	And I have created a shift trade request
-	| Field    | Value         |
-	| To       | Ashley Andeen	|
-	| DateTo   | 2030-01-01    |
-	| DateFrom | 2030-01-01    |
-	| Pending  | True          |
-	And I am viewing requests
-	When I click on the request at position '1' in the list
-	Then I should not see the approve button
-	And I should not see the deny button
-
-Scenario: Deny shift trade request
-	Given I have the role 'Full access to mytime'
-	And I have received a shift trade request
-	| Field   | Value  |
-	| From    | Ashley |
-	| Pending | True   |
-	And I am viewing requests
-	When I click on the request at position '1' in the list
-	And I click the Deny button on the shift request
-	Then Details should be closed
-
-Scenario: Should not be able to delete received shift trade request
-	Given I am an agent
-	And I have received a shift trade request
-	| Field		| Value		|
-	| From		| Ashley	|
-	When I view requests
-	Then I should not see a delete button on the request
-
-Scenario: Show name of sender of a received shifttrade
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen has a person period with
-	| Field      | Value      |
-	| Start date | 2012-06-18 |
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 06:00 |
-	| EndTime               | 2030-01-01 16:00 |
-	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 12:00 |
-	| EndTime               | 2030-01-01 22:00 |
-	| Shift category			| Day	           |
-	And I have received a shift trade request
-	| Field    | Value         |
-	| From     | Ashley Andeen	|
-	| DateTo   | 2030-01-01    |
-	| DateFrom | 2030-01-01    |
-	| Pending | True          |
-	And I am viewing requests
-	When I click on the request at position '1' in the list
-	Then I should see 'Ashley Andeen' as the sender of the request
-
-Scenario: Show name of the person of a shifttrade that I have created
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen has a person period with
-	| Field      | Value      |
-	| Start date | 2012-06-18 |
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 06:00 |
-	| EndTime               | 2030-01-01 16:00 |
-	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 12:00 |
-	| EndTime               | 2030-01-01 22:00 |
-	| Shift category		| Day	           |
-	And I have created a shift trade request
-	| Field    | Value			|
-	| To       | Ashley Andeen	|
-	| DateTo   | 2030-01-01		|
-	| DateFrom | 2030-01-01		|
-	| Pending  | True			|
-	And I am viewing requests
-	When I click on the request at position '1' in the list
-	Then I should see 'Ashley Andeen' as the receiver of the request
-
-Scenario: Show schedules of the shift trade 
-Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen has a person period with
-	| Field      | Value      |
-	| Start date | 2012-06-18 |
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 06:00 |
-	| EndTime               | 2030-01-01 16:00 |
-	| Shift category        | Day              |
-	| Lunch3HoursAfterStart | True             |
-	And Ashley Andeen have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 12:00 |
-	| EndTime               | 2030-01-01 22:00 |
-	| Shift category			| Day	           |
-	And I have created a shift trade request
-	| Field    | Value         |
-	| To       | Ashley Andeen	|
-	| DateTo   | 2030-01-01    |
-	| DateFrom | 2030-01-01    |
-	| Pending  | True          |
-	And I am viewing requests
-	When I click on the request at position '1' in the list
-	Then I should see details with a schedule from
-	| Field			| Value |
-	| Start time	| 06:00 |
-	| End time		| 16:00 |
-	And I should see details with a schedule to
-	| Field			| Value |
-	| Start time	| 12:00 |
-	| End time		| 22:00 |
-
-Scenario: Show day off in a shifttrade
-	Given I have the role 'Full access to mytime'
-	And there is a dayoff with
-	| Field | Value  |
-	| Name  | DayOff |
-	And there is a dayoff with
-	| Field | Value		|
-	| Name  | VacationButWithAReallyLongName |
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And 'I' have a day off with
-	| Field | Value      |
-	| Name  | DayOff     |
-	| Date  | 2030-01-04 |
-	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen has a person period with
-	| Field      | Value      |
-	| Start date | 2012-06-18 |
-	And 'Ashley Andeen' have a day off with
-	| Field | Value      |
-	| Name  | VacationButWithAReallyLongName |
-	| Date  | 2030-01-04 |
-	And I have created a shift trade request
-	| Field    | Value			|
-	| To       | Ashley Andeen	|
-	| DateTo   | 2030-01-04		|
-	| DateFrom | 2030-01-04		|
-	| Pending  | True			|
-	And I am viewing requests
-	When I click on the request at position '1' in the list
-	Then I should see my details scheduled day off 'DayOff'
-	And I should see other details scheduled day off 'VacationButWithAReallyLongName'
-
-Scenario: Show subject of the shift trade in shifttrade details
-Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen has a person period with
-	| Field      | Value      |
-	| Start date | 2012-06-18 |
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 06:00 |
-	| EndTime               | 2030-01-01 16:00 |
-	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 12:00 |
-	| EndTime               | 2030-01-01 22:00 |
-	| Shift category			| Day	           |
-	And I have created a shift trade request
-	| Field		| Value						|
-	| To			| Ashley Andeen			|
-	| DateTo		| 2030-01-01				|
-	| DateFrom	| 2030-01-01				|
-	| Pending	| True						|
-	| Pending	| True						|
-	| Subject	| Swap with me	|
-	| Message	| CornercaseMessageWithAReallyReallyLongWordThatWillProbablyNeverHappenInTheRealWorldButItCausedATestIssueSoWePutItHereForTesting	|
-	And I am viewing requests
-	When I click on the request at position '1' in the list
-	Then I should see details with subject 'Swap with me'
-	And I should see details with message 'CornercaseMessageWithAReallyReallyLongWordThatWillProbablyNeverHappenInTheRealWorldButItCausedATestIssueSoWePutItHereForTesting'
-
-Scenario: Show information that we dont show schedules in a shifttrade that isnt pending
-	Given I have the role 'Full access to mytime'
-	And I have created a shift trade request
-	| Field			| Value		|
-	| IsPending		| False		|
-	And I am viewing requests
-	When I click on the request at position '1' in the list
-	Then I should see details with message that tells the user that the status of the shifttrade is new
-	And I should not see timelines
-
-Scenario: Can not approve or deny shift trade request that is already approved
-	Given I have the role 'Full access to mytime'
-	And I have received a shift trade request
-	| Field			| Value         |
-	| From			| Ashley Andeen	|
-	| Approved		| True          |
-	And I am viewing requests
-	When I click on the request at position '1' in the list
-	Then I should not see the approve button
-	And I should not see the deny button
-
-Scenario: Resend referred shifttrade 
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen has a person period with
-	| Field      | Value      |
-	| Start date | 2012-06-18 |
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 06:00 |
-	| EndTime               | 2030-01-01 16:00 |
-	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 12:00 |
-	| EndTime               | 2030-01-01 22:00 |
-	| Shift category		| Day	           |
-	And I have created a shift trade request
-	| Field				| Value				|
-	| To				| Ashley Andeen		|
-	| DateTo			| 2030-01-01		|
-	| DateFrom			| 2030-01-01		|
-	| IsPending			| True				|
-	| HasBeenReferred	| True				|
-	And I am viewing requests
-	When I click on the request at position '1' in the list
-	And I click on shifttrade resend button
-	Then I should see that request at position '1' is processing
-	And I should not see resend shifttrade button for request at position '1'
-
-Scenario: Cancel referred shifttrade 
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen has a person period with
-	| Field      | Value      |
-	| Start date | 2012-06-18 |
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 06:00 |
-	| EndTime               | 2030-01-01 16:00 |
-	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 12:00 |
-	| EndTime               | 2030-01-01 22:00 |
-	| Shift category			| Day	           |
-	And I have created a shift trade request
-	| Field				| Value         |
-	| To				| Ashley Andeen	|
-	| DateTo			| 2030-01-01    |
-	| DateFrom			| 2030-01-01    |
-	| Pending			| True          |
-	| HasBeenReferred	| True          |
-	And I am viewing requests
-	When I click on the request at position '1' in the list
-	And I click on shifttrade cancel button
-	Then I should not see any requests
-
-Scenario: Do not show rerred shifttrade to reciever
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen has a person period with
-	| Field      | Value      |
-	| Start date | 2012-06-18 |
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 06:00 |
-	| EndTime               | 2030-01-01 16:00 |
-	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 12:00 |
-	| EndTime               | 2030-01-01 22:00 |
-	| Shift category			| Day	           |
-	And I have received a shift trade request
-	| Field				| Value         |
-	| From				| Ashley Andeen	|
-	| DateTo			| 2030-01-01    |
-	| DateFrom			| 2030-01-01    |
-	| Pending			| True          |
-	| HasBeenReferred	| True          |
-	And I am viewing requests
-	Then I should not see any requests
-
-Scenario: Do not show resend and cancelbuttons to sender when shifttrade is not referred
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen has a person period with
-	| Field      | Value      |
-	| Start date | 2012-06-18 |
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 06:00 |
-	| EndTime               | 2030-01-01 16:00 |
-	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 12:00 |
-	| EndTime               | 2030-01-01 22:00 |
-	| Shift category			| Day	           |
-	And I have created a shift trade request
-	| Field				| Value         |
-	| To				| Ashley Andeen	|
-	| DateTo			| 2030-01-01    |
-	| DateFrom			| 2030-01-01    |
-	| Pending			| True          |
-	| HasBeenReferred	| False         |
-	And I am viewing requests
-	When I click on the request at position '1' in the list
-	Then I should not see resend shifttrade button for request at position '1'
-
+	 
 #Lägg in som default att other agent är i mitt team!
 	
 Scenario: Do not show possible shift trades if other agent is in other team
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And OtherAgent is in another team than mine
+	And OtherAgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And OtherAgentNotInMyTeam have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -643,8 +312,43 @@ Scenario: Do not show possible shift trades if other agent is in other team
 	| Start time	| 08:00 |
 	| End time		| 18:00 |
 
+Scenario: Paging possible shifts
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have '40' possible shift trades for date '2030-01-01'
+	And Current time is '2029-12-27'
+	And I view Add Shift Trade Request for date '2030-01-01'
+	And I can see '30' possible shift trades
+	When I scroll down to the bottom of the shift trade section
+	Then I can see '40' possible shift trades
+
+Scenario: Sort possible shift trades by starttime
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent2 have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And OtherAgent have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 09:00 |
+	| EndTime               | 2030-01-01 18:00 |
+	| Shift category		| Day	           |
+	And OtherAgent2 have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 08:00 |
+	| EndTime               | 2030-01-01 18:00 |
+	| Shift category		| Day	           |
+	And Current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I should see 'OtherAgent2' first in the list
+
 #Scenario för när man klickat i att shift trades utanför team ska visas
 
+@ignore
 Scenario: Do not show shifts with other starttime and endtime than desired
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -669,7 +373,8 @@ Scenario: Do not show shifts with other starttime and endtime than desired
 	| Field			| Value |
 	| Start time	| 08:00 |
 	| End time		| 18:00 |
-
+	
+@ignore
 Scenario: Show possible shifts with desired starttime and endtime
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -695,6 +400,7 @@ Scenario: Show possible shifts with desired starttime and endtime
 	| Start time	| 08:00 |
 	| End time		| 18:00 |
 	
+@ignore
 Scenario: Show possible shift trades where agents name is the same as the filtered 
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -715,7 +421,8 @@ Scenario: Show possible shift trades where agents name is the same as the filter
 	#| Name				          | Ashley Andeen	|
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see a possible schedule trade with 'Ashley Andeen'
-
+	
+@ignore
 Scenario: Do not show possible shift trades where agent has other name than the filtered 
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
