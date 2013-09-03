@@ -10,11 +10,11 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Rta.ServerTest
 {
 	[TestFixture]
-	public class ActualAgentHandlerTest
+	public class ActualAgentAssemblerTest
 	{
 		private MockRepository _mock;
-		private IActualAgentDataHandler _dataHandler;
-		private IActualAgentHandler _target;
+		private IDatabaseHandler _dataHandler;
+		private IActualAgentAssembler _target;
 
 		private RtaAlarmLight _rtaAlarmLight;
 		private ConcurrentDictionary<Guid, List<RtaAlarmLight>> _activityAlarms;
@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void Setup()
 		{
 			_mock = new MockRepository();
-			_dataHandler = MockRepository.GenerateMock<IActualAgentDataHandler>();
-			_target = new ActualAgentHandler(_dataHandler, null);
+			_dataHandler = MockRepository.GenerateMock<IDatabaseHandler>();
+			_target = new ActualAgentAssembler(_dataHandler, null);
 
 			_stateCode = "AUX2";
 			_platformTypeId = Guid.NewGuid();
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			            .Return(_activityAlarms);
 			_mock.ReplayAll();
 
-			var result = _target.GetAndSaveState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan());
+			var result = _target.GetAndSaveState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan(), new DateTime(), "");
 			Assert.That(result.AlarmName, Is.EqualTo(alarmLight.Name));
 			Assert.That(result.StateStart, Is.EqualTo(currentLayer.StartDateTime));
 			Assert.That(result.Scheduled, Is.EqualTo(currentLayer.Name));
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataHandler.Expect(s => s.ActivityAlarms()).Return(_activityAlarms);
 			_mock.ReplayAll();
 
-			var result = _target.GetAndSaveState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan());
+			var result = _target.GetAndSaveState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan(), new DateTime(), "");
 			Assert.IsNull(result);
 			_mock.VerifyAll();
 			resetEvent.Dispose();
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataHandler.Expect(d => d.ActivityAlarms()).Return(_activityAlarms);
 
 			_mock.ReplayAll();
-			var result = _target.GetAlarm(_platformTypeId, _stateCode, _scheduleLayer, _businessUnitId, rtaStateGroupLight.StateGroupId);
+			var result = _target.GetAlarm(_platformTypeId, _stateCode, _scheduleLayer, rtaStateGroupLight.StateGroupId);
 			_mock.VerifyAll();
 			Assert.That(result, Is.EqualTo(_rtaAlarmLight));
 		}
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataHandler.Expect(d => d.ActivityAlarms()).Return(_activityAlarms);
 
 			_mock.ReplayAll();
-			var result = _target.GetAlarm(_platformTypeId, _stateCode, null, _businessUnitId, Guid.Empty);
+			var result = _target.GetAlarm(_platformTypeId, _stateCode, null, Guid.Empty);
 			_mock.VerifyAll();
 			Assert.That(result, Is.Null);
 		}
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataHandler.Expect(d => d.ActivityAlarms()).Return(_activityAlarms);
 
 			_mock.ReplayAll();
-			var result = _target.GetAlarm(_platformTypeId, _stateCode, _scheduleLayer, _businessUnitId, Guid.Empty);
+			var result = _target.GetAlarm(_platformTypeId, _stateCode, _scheduleLayer, Guid.Empty);
 			_mock.VerifyAll();
 			Assert.That(result, Is.Null);
 		}
@@ -443,9 +443,9 @@ namespace Teleopti.Ccc.Rta.ServerTest
 						.Return(_activityAlarms);
 			_mock.ReplayAll();
 
-			_target.GetAndSaveState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan());
+			_target.GetAndSaveState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan(), new DateTime(), "");
 			Thread.Sleep(6000);
-			_target.GetAndSaveState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan());
+			_target.GetAndSaveState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan(), new DateTime(), "");
 			_mock.VerifyAll();
 			_dataHandler.AssertWasCalled(s => s.AddOrUpdate(new List<IActualAgentState>()), o => o.IgnoreArguments());
 		}

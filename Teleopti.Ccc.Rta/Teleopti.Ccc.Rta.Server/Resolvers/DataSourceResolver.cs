@@ -6,8 +6,13 @@ using System.Web.Caching;
 using log4net;
 using Teleopti.Ccc.Rta.Interfaces;
 
-namespace Teleopti.Ccc.Rta.Server
+namespace Teleopti.Ccc.Rta.Server.Resolvers
 {
+	public interface IDataSourceResolver
+	{
+		bool TryResolveId(string sourceId, out int dataSourceId);
+	}
+
     public class DataSourceResolver : IDataSourceResolver
     {
     	private const string CacheKey = "DataSourceCache";
