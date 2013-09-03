@@ -392,6 +392,62 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 				}
 			}
 		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldAdjustFullDayAbsencesToCoverShiftEndNextDay()
+		{
+			var normalBehavior = new NormalPasteBehavior();
+			var part = mockRep.StrictMock<IScheduleDay>();
+			var destination = mockRep.StrictMock<IScheduleDay>();
+			var personAssignment = mockRep.StrictMock<IPersonAssignment>();
+			IList<IPersistableScheduleData> persistableScheduleData = new List<IPersistableScheduleData>();
+			var person = PersonFactory.CreatePerson("Person");
+			var scenario = new Scenario("scenario");
+			var absencePeriod = new DateTimePeriod(new DateTime(2000,1,1,8,0,0,DateTimeKind.Utc), new DateTime(2000,1,1,16,0,0,DateTimeKind.Utc));
+			var destinationPeriod = new DateTimePeriod(new DateTime(2000,1,1,0,0,0,DateTimeKind.Utc), new DateTime(2000,1,1,23,59,0,DateTimeKind.Utc));
+			var assignmentPeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 22, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 2, 6, 0, 0, DateTimeKind.Utc));
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, absencePeriod);
+			persistableScheduleData.Add(personAbsence);
+			var dateOnlyAsDateTimePeriod = mockRep.StrictMock<IDateOnlyAsDateTimePeriod>();
+			var mainShift = mockRep.StrictMock<IMainShift>();
+
+			using (var gridControl = new GridControl())
+			{
+				var range = GridRangeInfo.Cells(1, 1, 1, 1);
+				gridControl.SetRowHeight(0, 100, 5);
+				gridControl.SetColWidth(0, 100, 5);
+				var handler = new ClipHandler<IScheduleDay>();
+
+				var rangeList = new GridRangeInfoList();
+				rangeList.Add(range);
+				var pasteAction = mockRep.StrictMock<IGridPasteAction<IScheduleDay>>();
+				handler.AddClip(0, 0, part);
+				var clip = handler.ClipList[0];
+
+				using (mockRep.Record())
+				{
+					Expect.Call(part.SignificantPart()).Return(SchedulePartView.FullDayAbsence).Repeat.AtLeastOnce();
+					Expect.Call(part.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>())).Repeat.AtLeastOnce();
+					Expect.Call(pasteAction.PasteBehavior).Return(normalBehavior);
+					Expect.Call(part.AssignmentHighZOrder()).Return(personAssignment).Repeat.AtLeastOnce();
+					Expect.Call(() => part.Remove(personAssignment)).Repeat.AtLeastOnce();
+
+					Expect.Call(pasteAction.Paste(gridControl, clip, 1, 1)).Return(destination);
+					Expect.Call(destination.PersistableScheduleDataCollection()).Return(persistableScheduleData);
+					Expect.Call(destination.AssignmentHighZOrder()).Return(personAssignment).Repeat.AtLeastOnce();
+					Expect.Call(destination.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
+					Expect.Call(dateOnlyAsDateTimePeriod.Period()).Return(destinationPeriod);
+					Expect.Call(personAssignment.Period).Return(assignmentPeriod).Repeat.AtLeastOnce();
+					Expect.Call(personAssignment.MainShift).Return(mainShift);
+				}
+
+				using (mockRep.Playback())
+				{
+					pasteAction.PasteBehavior.DoPaste(gridControl, handler, pasteAction, rangeList);
+					Assert.AreEqual(personAbsence.Period, assignmentPeriod);
+				}
+			}	
+		}
     }
 
 

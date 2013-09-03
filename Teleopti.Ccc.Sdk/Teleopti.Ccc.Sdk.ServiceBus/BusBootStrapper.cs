@@ -6,7 +6,6 @@ using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.MessageModules;
 using Rhino.ServiceBus.Sagas.Persisters;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;

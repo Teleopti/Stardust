@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationRtaQueue;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Rta;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 {
