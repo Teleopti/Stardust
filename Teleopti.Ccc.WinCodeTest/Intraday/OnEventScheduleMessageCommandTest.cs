@@ -118,25 +118,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
                 }
 
                 [Test]
-                public void ShouldDeleteMeetingFromDictionary()
-                {
-                    var idFromBroker = Guid.NewGuid();
-                    var scheduleDictionary = mocks.StrictMock<IScheduleDictionary>();
-
-                    _schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
-
-                    Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder);
-                    Expect.Call(()=>scheduleDictionary.DeleteMeetingFromBroker(idFromBroker));
-                    Expect.Call(_view.DrawSkillGrid);
-
-                    mocks.ReplayAll();
-
-                    target.Execute(new EventMessage { InterfaceType = typeof(IMeetingChangedEntity), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Delete, ReferenceObjectId = _person.Id.GetValueOrDefault() });
-
-                    mocks.VerifyAll();
-                }
-
-                [Test]
                 public void VerifyOnEventScheduleDataMessageHandlerMeeting()
                 {
                     Guid idFromBroker = Guid.NewGuid();
