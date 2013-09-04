@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	{
 		private const string exMessageLayerNotFound = "Layer {0} not found when doing a replace of layer!";
 
-
 		//this can be done MUCH simpler when we have one list of layers and no shifts....
 		//should work against a PersonAssignment (aka AgentDay) and not IScheduleDay
 		public void Replace(IScheduleDay scheduleDay, ILayer<IActivity> layerToRemove, IActivity newActivity, DateTimePeriod newPeriod)

@@ -105,5 +105,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				                   .Single()
 				                   .DefinitionSet);
 		}
+
+		[Test]
+		public void ShouldKeepAssignmentInstance()
+		{
+			var target = new ReplaceLayerInSchedule();
+			var scheduleDay = new SchedulePartFactoryForDomain().AddMainShiftLayer().CreatePart();
+			var orgAss = scheduleDay.PersonAssignment();
+			var newPayload = new Activity("d");
+			var newPeriod = new DateTimePeriod();
+			var orgLayerCollection = scheduleDay.PersonAssignment().MainLayers();
+
+			target.Replace(scheduleDay, orgLayerCollection.First(), newPayload, newPeriod);
+
+			scheduleDay.PersonAssignment().Should().Be.SameInstanceAs(orgAss);
+		}
 	}
 }
