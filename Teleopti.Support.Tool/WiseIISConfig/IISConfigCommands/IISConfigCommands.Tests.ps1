@@ -31,19 +31,35 @@ $secstr = New-Object -TypeName System.Security.SecureString
 $password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)}
 $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $domain\$username, $secstr
 $computerName=(get-childitem -path env:computername).Value
+$global:zipFile
+$global:MsiFile
 $global:version = 'main'
 $global:batName = 'PesterTest-DbSQL'
+$global:Server = ''
+$global:Db = ''
+$global:resetToBaseline="False"
+
 function TearDown {
 	Describe "Tear down previous test"{
 		[string] $path = Get-UninstallRegPath -MsiKey "$CccServerMsiKey"
 		
 
-        #changed to test only, Throws on CCCRELEASED even if it is there???	
-        #and moved we can't test after uninstall
-		It "should throw exeption when http URL does not exist" {
-			$computerName=(get-childitem -path env:computername).Value
-			$httpStatus=Check-HttpStatus -url "http://$computerName/TeleoptiCCC/index.html"
-            $httpStatus  | Should Be $True
+        #stop system
+    	It "should stop ETL Service" {
+        $serviceName="TeleoptiETLService"
+        Stop-MyService -ServiceName "$serviceName"
+		Check-ServiceIsRunning "$serviceName" | Should Be $False
+		}
+
+		It "should stop Service Bus" {
+        $serviceName="TeleoptiServiceBus"
+        Stop-MyService -ServiceName "$serviceName"
+		Check-ServiceIsRunning "$serviceName" | Should Be $False
+		}
+        
+		It "should stop the SDK" {
+			stop-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
+			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred}  | Should Throw
 		}
 
 		It "should uninstall product"{
@@ -55,13 +71,17 @@ function TearDown {
 			$isInstalled = Check-ProductIsInstalled -DisplayName "$displayName"
 			$isInstalled | Should Be $False
 		}
-
-		It "should have a default web site" {
+        
+        It "should have a default web site" {
 			$computerName=(get-childitem -path env:computername).Value
 			$httpStatus=Check-HttpStatus -url "http://$computerName/"
 			$httpStatus | Should Be $True
 		}
-		
+			
+		It "should throw exeption when http URL does not exist" {
+			$computerName=(get-childitem -path env:computername).Value
+			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/"}  | Should Throw
+		}
 		
 		It "Should destroy working folder" {
 			destroy-WorkingFolder -workingFolder "$workingFolder"
@@ -90,24 +110,27 @@ function Setup-PreReqs {
                 if ($testServer.name -eq  $computerName)
                 {
                     $global:version =  $testServer.version
-                    $global:batName =  $testServer.batname   
+                    $global:batName =  $testServer.batname
+                    $global:Server =  $testServer.DBServerInstance
+                    $global:Db = $testServer.DB
+                    $global:resetToBaseline = $testServer.resetToBaseline
                 }
                 
             }
 
             Write-Host 'version: ' $global:version
+            Write-Host 'restToBaseline: '$global:resetToBaseline
         }
 
 		It "should copy latest .zip-file from build server"{
-			$zipFile = Copy-ZippedMsi -workingFolder "$workingFolder" -version "$global:version"
-			Test-Path $zipFile | Should Be $True
+			$global:zipFile = Copy-ZippedMsi -workingFolder "$workingFolder" -version "$global:version"
+			Test-Path $global:zipFile | Should Be $True
 		}
 
 		It "should unzip file into MSI"{
-			$zipFile = Copy-ZippedMsi -workingFolder "$workingFolder" -version "$global:version"
-			$zipFile = Get-Item $zipFile
+			$zipFile = Get-Item $global:zipFile
 
-			$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
+			$global:MsiFile = $zipFile.fullname -replace ".zip", ".msi"
 			UnZip-File -zipfilename $zipFile.fullname -destination $zipFile.DirectoryName
 		}
 		
@@ -133,16 +156,19 @@ function Setup-PreReqs {
 	}
 }
 
+
 function Test-InstallationSQLLogin {
 	Describe "Installation test - SQL DB Login"{  
 
-		It "should install correct MSI from Hebe"{
-			$zipFile = Copy-ZippedMsi -workingFolder "$workingFolder" -version "$global:version"
-			$zipFile = Get-Item $zipFile
-			$MsiFile = $zipFile.fullname -replace ".zip", ".msi"
+        It "should restore db to baseline if set in config" {
+            if($global:resetToBaseline -eq "True")
+                {restoreToBaseline -computerName $computerName}
+        }
 
+		It "should install correct MSI from Hebe"{
+			
 			#add double quotes
-			$MsiFile = '"' + $MsiFile + '"'
+			$global:MsiFile = '"' + $global:MsiFile + '"'
 			
 			$BatchFile = $here + "\..\..\..\ccnet\SilentInstall\server\SilentInstall.bat"
 			
@@ -159,33 +185,13 @@ function Test-InstallationSQLLogin {
 function Test-SitesAndServicesOk {
 	Describe "Run common test on services and web site config"{
 
-        #stop system
-    	It "should stop ETL Service" {
-        $serviceName="TeleoptiETLService"
-        Stop-MyService -ServiceName "$serviceName"
-		Check-ServiceIsRunning "$serviceName" | Should Be $False
-		}
-
-		It "should stop Service Bus" {
-        $serviceName="TeleoptiServiceBus"
-        Stop-MyService -ServiceName "$serviceName"
-		Check-ServiceIsRunning "$serviceName" | Should Be $False
-		}
-        
-		It "should stop the SDK" {
-			stop-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
-            
-			$computerName=(get-childitem -path env:computername).Value
-			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred}  | Should Throw
-		}
-        
         #add Lic
         Add-CccLicenseToDemo
 
         #start system
 		It "should start SDK" {
 			start-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
-			$computerName=(get-childitem -path env:computername).Value
+			
 			$temp = Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred
 			$temp | Should be $True
 		}
@@ -225,10 +231,19 @@ function Test-SitesAndServicesOk {
 
 function Add-CccLicenseToDemo
 {
-    $dir = Split-Path $MyInvocation.ScriptName
-    $batchFile = "$dir\Add-CccLicenseToDemo.bat"
+    if($global:Server -ne '')
+    {
+        $LicFile="$here\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
+        $xmlString = [IO.File]::ReadAllText($LicFile)
+        insert-License -Server "$global:Server" -Db "$global:Db" -xmlString $xmlString
     
-    & "$BatchFile"
+    }
+    else
+    {
+        $dir = Split-Path $MyInvocation.ScriptName
+        $batchFile = "$dir\Add-CccLicenseToDemo.bat"
+        & "$BatchFile"
+    }
 }
 
 #Main
