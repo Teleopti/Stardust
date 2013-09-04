@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		IPersistableScheduleData DeleteScheduleData(IEventMessage eventMessage);
 		IPersistableScheduleData UpdateInsertScheduleData(IEventMessage eventMessage);
 		void FillReloadedScheduleData(IPersistableScheduleData databaseVersionOfEntity);
-		void NotifyMessageQueueSize();
+		void NotifyMessageQueueSizeChange();
 	}
 }

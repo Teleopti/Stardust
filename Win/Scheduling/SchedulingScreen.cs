@@ -4573,7 +4573,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			ribbonControlAdv1.Cursor = Cursors.Default;
 			updateRibbon(ControlType.SchedulerGridMain);
 			//av nån #%¤#¤%#¤% anledning tänds alla knappar i toggleQuick... ovan. Måste explicit tända/släcka igen.
-			_schedulerMessageBrokerHandler.NotifyMessageQueueSize();
+			_schedulerMessageBrokerHandler.NotifyMessageQueueSizeChange();
 			disableButtonsIfTeamLeaderMode();
 		}
 

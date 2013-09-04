@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 		#endregion
 
-		public void NotifyMessageQueueSize()
+		public void NotifyMessageQueueSizeChange()
 		{
 			_owner.SizeOfMessageBrokerQueue(_messageQueue.Count);
 		}

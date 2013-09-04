@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
             var personRequestMessages = QueryMessagesByType<IPersonRequest>(messageQueue);
             _personRequestRefresher.Refresh(messageQueue, personRequestMessages);
 
-            _messageQueueUpdater.NotifyMessageQueueSize();
+            _messageQueueUpdater.NotifyMessageQueueSizeChange();
         }
 
         private static IEnumerable<IEventMessage> QueryMessagesByType<T>(IEnumerable<IEventMessage> messageQueue)

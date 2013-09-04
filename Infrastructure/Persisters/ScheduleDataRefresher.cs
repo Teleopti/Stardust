@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 	    private void RemoveFromQueue(ICollection<IEventMessage> messageQueue, IEventMessage m) 
 		{
             messageQueue.Remove(m);
-            _scheduleDataUpdater.NotifyMessageQueueSize();
+            _scheduleDataUpdater.NotifyMessageQueueSizeChange();
         }
     }
 }

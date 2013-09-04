@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
         private void MakeTarget()
         {
-            _target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleRefresher(MockRepository.GenerateMock<IPersonAssignmentRepository>(), MockRepository.GenerateMock<IPersonAbsenceRepository>(), MockRepository.GenerateMock<IPersonRepository>(), _scheduleDataUpdater), new ScheduleDataRefresher(_scheduleRepository, _scheduleDataUpdater), new MeetingRefresher(null), new PersonRequestRefresher(null));
+            _target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleRefresher(MockRepository.GenerateMock<IPersonRepository>(), _scheduleDataUpdater, MockRepository.GenerateMock<IPersonAssignmentRepository>(), MockRepository.GenerateMock<IPersonAbsenceRepository>()), new ScheduleDataRefresher(_scheduleRepository, _scheduleDataUpdater), new MeetingRefresher(null), new PersonRequestRefresher(null));
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
         [Test]
         public void ShouldAlwaysReportSizeOfMessageBrokerQueue()
         {
-            Expect.Call(() => _messageQueueUpdater.NotifyMessageQueueSize());
+            Expect.Call(() => _messageQueueUpdater.NotifyMessageQueueSizeChange());
 
             _mocks.ReplayAll();
 

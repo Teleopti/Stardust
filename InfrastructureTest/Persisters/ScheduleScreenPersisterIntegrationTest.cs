@@ -22,7 +22,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters 
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public abstract class ScheduleScreenPersisterIntegrationTest : DatabaseTestWithoutTransaction, IOwnMessageQueue, IReassociateData
 	{
 		private IClearReferredShiftTradeRequests _clearReferredShiftTradeRequests;
@@ -315,7 +314,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 		protected abstract IEnumerable<IAggregateRoot> TestDataToReassociate();
 
-		public void NotifyMessageQueueSize()
+		public void NotifyMessageQueueSizeChange()
 		{
 			throw new NotImplementedException();
 		}
