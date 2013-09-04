@@ -1,6 +1,6 @@
 SET NOCOUNT ON
 PRINT '-----------------------'
-PRINT 'Release 360 will re-design the schedule/shift tables and convert a lot of data.'
+PRINT 'Release 386 will re-design the schedule/shift tables and convert a lot of data.'
 PRINT 'This will need some extra time to finish. Please be patient'
 PRINT 'Start time: ' + CONVERT(VARCHAR(24),GETDATE(),113)
 PRINT '-----------------------'
