@@ -25,34 +25,29 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
         private void initializeComponent()
         {
-            this.tableLayoutPanelPerAgent = new System.Windows.Forms.TableLayoutPanel();
-            this.SuspendLayout();
+            tableLayoutPanelPerAgent = new TableLayoutPanel();
+            SuspendLayout();
             // 
             // tableLayoutPanelPerAgent
             // 
-            this.tableLayoutPanelPerAgent.ColumnCount = 1;
-            this.tableLayoutPanelPerAgent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelPerAgent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanelPerAgent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelPerAgent.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanelPerAgent.Name = "tableLayoutPanelPerAgent";
-            this.tableLayoutPanelPerAgent.RowCount = 2;
-            this.tableLayoutPanelPerAgent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
-            this.tableLayoutPanelPerAgent.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelPerAgent.Size = new System.Drawing.Size(150, 150);
-            this.tableLayoutPanelPerAgent.TabIndex = 0;
+            tableLayoutPanelPerAgent.ColumnCount = 1;
+            tableLayoutPanelPerAgent.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanelPerAgent.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
+            tableLayoutPanelPerAgent.Dock = DockStyle.Fill;
+            tableLayoutPanelPerAgent.Location = new System.Drawing.Point(0, 0);
+            tableLayoutPanelPerAgent.Name = "tableLayoutPanelPerAgent";
+            tableLayoutPanelPerAgent.RowCount = 2;
+            tableLayoutPanelPerAgent.RowStyles.Add(new RowStyle(SizeType.Absolute, 21F));
+            tableLayoutPanelPerAgent.RowStyles.Add(new RowStyle());
+            tableLayoutPanelPerAgent.Size = new System.Drawing.Size(150, 150);
+            tableLayoutPanelPerAgent.TabIndex = 0;
             // 
             // ShiftPerAgentControl
             // 
-            this.Controls.Add(this.tableLayoutPanelPerAgent);
-            this.Name = "ShiftPerAgentControl";
-            this.ResumeLayout(false);
-
-
-
-        }
-
-        
+            Controls.Add(tableLayoutPanelPerAgent);
+            Name = "ShiftPerAgentControl";
+            ResumeLayout(false);
+        }    
     }
 }
 

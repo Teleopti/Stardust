@@ -18,22 +18,14 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         private readonly PerShiftCategoryChart _chart;
         private ComboBoxAdv _comboBoxShiftCategory;
         private Label label1;
-        //private Label label2;
+       
         
-        
-
         public PerShiftCategoryChartControl()
         {
             initializeComponent();
-            _chart = new PerShiftCategoryChart {Dock = DockStyle.Fill};
-			_chart.Dock = DockStyle.Fill;
-	        _chart.PrimaryXAxis.ForceZero = true;
-			_chart.PrimaryYAxis.ForceZero = true;
-			//_chart.PrimaryXAxis.Range.Min = 0;
-			//_chart.PrimaryYAxis.Range.Min = 0;
+            _chart = new PerShiftCategoryChart();
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
             tableLayoutPanel1.Controls.Add(_comboBoxShiftCategory,0,1);
-            //tableLayoutPanel1.Controls.Add(label2, 0, 2);
             tableLayoutPanel1.Controls.Add(_chart, 0, 2);
         }
 
@@ -104,36 +96,31 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         private void initializeComponent()
         {
             label1 = new Label();
-            //label2 = new Label();
             _comboBoxShiftCategory = new ComboBoxAdv();
-            //_comboBoxShiftCategory.Left = 400;
 			_comboBoxShiftCategory.Margin = new Padding(33, 3, 3, 3);
-            _comboBoxShiftCategory.SelectedIndexChanged += new EventHandler(selectedIndexChanged);
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.SuspendLayout();
+            _comboBoxShiftCategory.SelectedIndexChanged += selectedIndexChanged;
+            tableLayoutPanel1 = new TableLayoutPanel();
+            SuspendLayout();
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            //this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(SizeType.Absolute, 25F));
-            //this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(150, 150);
-            this.tableLayoutPanel1.TabIndex = 0;
+            tableLayoutPanel1.ColumnCount = 1;
+			tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
+            tableLayoutPanel1.RowCount = 3;
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+			tableLayoutPanel1.Size = new System.Drawing.Size(150, 150);
+            tableLayoutPanel1.TabIndex = 0;
             // 
             // PerShiftCategoryChartControl
             // 
-            this.Controls.Add(this.tableLayoutPanel1);
-            this.Name = "PerShiftCategoryChartControl";
-            this.ResumeLayout(false);
-
+            Controls.Add(tableLayoutPanel1);
+            Name = "PerShiftCategoryChartControl";
+            ResumeLayout(false);
             // 
             // label1
             // 
@@ -144,18 +131,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             label1.TabIndex = 0;
             label1.Text = UserTexts.Resources.PerShiftCategory;
 	        label1.Margin = new Padding(30, 3, 3, 3);
-	        // 
-	        // label2
-	        // 
-	        //label2.AutoSize = true;
-	        //label2.Location = new System.Drawing.Point(3, 47);
-	        //label2.Name = "label2";
-	        //label2.Size = new System.Drawing.Size(77, 13);
-	        //label2.TabIndex = 1;
-	        //label2.Text = UserTexts.Resources.OverView;
-
-        }
-
-        
+        }     
     }
 }

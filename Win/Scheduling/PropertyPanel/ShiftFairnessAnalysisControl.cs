@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
-using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 
@@ -17,8 +16,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         public ShiftFairnessAnalysisControl()
         {
             initializeComponent();
-            _perShiftCategoryChartControl = new PerShiftCategoryChartControl() {Dock = DockStyle.Fill};
-            _shiftFairnessGrid = new ShiftFairnessGrid {Dock = DockStyle.Fill};
+            _perShiftCategoryChartControl = new PerShiftCategoryChartControl {Dock = DockStyle.Fill};
+	        _shiftFairnessGrid = new ShiftFairnessGrid {Dock = DockStyle.Fill};
 
             shiftFairnessTableLayoutPanel.Controls.Add(_perShiftCategoryChartControl, 0, 0);
             shiftFairnessTableLayoutPanel.Controls.Add(_shiftFairnessGrid,0,2);
@@ -42,21 +41,22 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             shiftFairnessTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             shiftFairnessTableLayoutPanel.Controls.Add(label2, 0, 1);
             shiftFairnessTableLayoutPanel.Dock = DockStyle.Fill;
-            shiftFairnessTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            shiftFairnessTableLayoutPanel.Location = new Point(0, 0);
             shiftFairnessTableLayoutPanel.Name = "shiftFairnessTableLayoutPanel";
 			shiftFairnessTableLayoutPanel.RowCount = 3; 
 
             shiftFairnessTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 40F));
 			shiftFairnessTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             shiftFairnessTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 60F));
-            shiftFairnessTableLayoutPanel.Size = new System.Drawing.Size(150, 150);
+            shiftFairnessTableLayoutPanel.Size = new Size(150, 150);
             shiftFairnessTableLayoutPanel.TabIndex = 1;
-            //// label2
-            //// 
+            //
+			// label2
+            // 
 			label2.AutoSize = true;
-			label2.Location = new System.Drawing.Point(3, 47);
+			label2.Location = new Point(3, 47);
 			label2.Name = "label2";
-			label2.Size = new System.Drawing.Size(77, 13);
+			label2.Size = new Size(77, 13);
 			label2.TabIndex = 1;
 			label2.Text = UserTexts.Resources.OverView;
             // 

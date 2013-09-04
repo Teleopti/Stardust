@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 
@@ -27,29 +23,28 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
         private void initializeComponent()
         {
-            this.shiftDistributiontableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.SuspendLayout();
+            shiftDistributiontableLayoutPanel = new TableLayoutPanel();
+            SuspendLayout();
             // 
             // shiftDistributiontableLayoutPanel
             // 
-            this.shiftDistributiontableLayoutPanel.ColumnCount = 1;
-            this.shiftDistributiontableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.shiftDistributiontableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.shiftDistributiontableLayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this.shiftDistributiontableLayoutPanel.Name = "shiftDistributiontableLayoutPanel";
-            this.shiftDistributiontableLayoutPanel.RowCount = 2;
-            this.shiftDistributiontableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.shiftDistributiontableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.shiftDistributiontableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.shiftDistributiontableLayoutPanel.Size = new System.Drawing.Size(150, 150);
-            this.shiftDistributiontableLayoutPanel.TabIndex = 0;
+            shiftDistributiontableLayoutPanel.ColumnCount = 1;
+            shiftDistributiontableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            shiftDistributiontableLayoutPanel.Dock = DockStyle.Fill;
+            shiftDistributiontableLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            shiftDistributiontableLayoutPanel.Name = "shiftDistributiontableLayoutPanel";
+            shiftDistributiontableLayoutPanel.RowCount = 2;
+            shiftDistributiontableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            shiftDistributiontableLayoutPanel.RowStyles.Add(new RowStyle());
+            shiftDistributiontableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            shiftDistributiontableLayoutPanel.Size = new System.Drawing.Size(150, 150);
+            shiftDistributiontableLayoutPanel.TabIndex = 0;
             // 
             // ShiftDistributionControl
             // 
-            this.Controls.Add(this.shiftDistributiontableLayoutPanel);
-            this.Name = "ShiftDistributionControl";
-            this.ResumeLayout(false);
-
+            Controls.Add(shiftDistributiontableLayoutPanel);
+            Name = "ShiftDistributionControl";
+            ResumeLayout(false);
         }
     }
 }

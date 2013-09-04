@@ -28,14 +28,14 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			if (scheduleView != null)
 			{
 				IDictionary<IPerson, IScheduleRange> personDic = new Dictionary<IPerson, IScheduleRange>();
-				HashSet<DateOnly> dateList = new HashSet<DateOnly>();
-				TimeSpan totalTime = TimeSpan.Zero;
+				var dateList = new HashSet<DateOnly>();
+				var totalTime = TimeSpan.Zero;
 
 				var selectedTags = new List<IScheduleTag>();
 
-				foreach (IScheduleDay scheduleDay in selectedSchedules)
+				foreach (var scheduleDay in selectedSchedules)
 				{
-					IProjectionService projSvc = scheduleDay.ProjectionService();
+					var projSvc = scheduleDay.ProjectionService();
 					totalTime += projSvc.CreateProjection().ContractTime();
 
 					dateList.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
