@@ -72,6 +72,31 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulingScreen.RecalculateResources();
 		}
 
+        private List<DateOnly> getLockedDates(IEnumerable<DateOnly> dates, List<IPerson> personList)
+        {
+            var lockedDates = new List<DateOnly>();
+            foreach (var day in dates)
+            {
+                var dateOnly = extractDateIfLocked(day, personList[0]);
+                if (dateOnly != DateOnly.MinValue && !lockedDates.Contains(dateOnly))
+                    lockedDates.Add(dateOnly);
+                dateOnly = extractDateIfLocked(day, personList[1]);
+                if (dateOnly != DateOnly.MinValue && !lockedDates.Contains(dateOnly))
+                    lockedDates.Add(dateOnly);
+            }
+            return lockedDates;
+        }
+
+        private DateOnly extractDateIfLocked(DateOnly dateOnly, IPerson person)
+        {
+            var scheduleDay = _schedulerState.Schedules[person].ScheduledDay(dateOnly);
+
+            var lockDictionary = _gridlockManager.Gridlocks(scheduleDay);
+            if (lockDictionary != null && lockDictionary.Count != 0)
+                return scheduleDay.DateOnlyAsPeriod.DateOnly;
+            return DateOnly.MinValue;
+        }
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.IFormatProvider,System.String,System.Object[])"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public void SwapSelectedSchedules(IHandleBusinessRuleResponse handleBusinessRuleResponse, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder)
 		{
@@ -93,7 +118,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				INewBusinessRuleCollection newRules = _schedulerState.SchedulingResultState.GetRulesToRun();
 				try
 				{
-					lstBusinessRuleResponse = swapAndModifyServiceNew.Swap(personList[0], personList[1], dates, _scheduleView.LockedDates(_gridlockManager), _schedulerState.Schedules, newRules, new ScheduleTagSetter(_defaultScheduleTag));
+                    lstBusinessRuleResponse = swapAndModifyServiceNew.Swap(personList[0], personList[1], dates, getLockedDates(dates, personList), _schedulerState.Schedules, newRules, new ScheduleTagSetter(_defaultScheduleTag));
 				}
 				catch (ValidationException ex)
 				{
@@ -114,7 +139,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (lstBusinessRuleResponseToOverride.Any())
 				{
 					lstBusinessRuleResponseToOverride.ForEach(newRules.Remove);
-					lstBusinessRuleResponse = swapAndModifyServiceNew.Swap(personList[0], personList[1], dates, _scheduleView.LockedDates(_gridlockManager), _schedulerState.Schedules, newRules, new ScheduleTagSetter(_defaultScheduleTag));
+                    lstBusinessRuleResponse = swapAndModifyServiceNew.Swap(personList[0], personList[1], dates, getLockedDates(dates,personList ), _schedulerState.Schedules, newRules, new ScheduleTagSetter(_defaultScheduleTag));
 					lstBusinessRuleResponseToOverride = new List<IBusinessRuleResponse>();
 					foreach (var response in lstBusinessRuleResponse)
 					{
