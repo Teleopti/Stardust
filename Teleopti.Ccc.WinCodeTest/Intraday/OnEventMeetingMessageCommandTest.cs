@@ -58,5 +58,18 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			scheduleDictionary.AssertWasCalled(x => x.DeleteMeetingFromBroker(idFromBroker));
 		}
+
+		[Test]
+		public void ShouldUpdateMeetingInDictionary()
+		{
+			var idFromBroker = Guid.NewGuid();
+			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			_schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
+
+			target.Execute(new EventMessage { InterfaceType = typeof(IMeetingChangedEntity), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Update, ReferenceObjectId = _person.Id.GetValueOrDefault() });
+
+			scheduleDictionary.Stub(x => x.DeleteMeetingFromBroker(idFromBroker));
+			scheduleDictionary.Stub(x => x.MeetingUpdateFromBroker(Arg<IMeetingRepository>.Is.Anything, Arg<Guid>.Is.Equal(idFromBroker)));
+		}
 	}
 }

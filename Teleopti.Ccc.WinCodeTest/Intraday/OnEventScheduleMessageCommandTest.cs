@@ -117,35 +117,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
                     mocks.VerifyAll();
                 }
 
-                [Test]
-                public void VerifyOnEventScheduleDataMessageHandlerMeeting()
-                {
-                    Guid idFromBroker = Guid.NewGuid();
-                    IUnitOfWork _unitOfWork = mocks.StrictMock<IUnitOfWork>();
-                    IScheduleDictionary scheduleDictionary = mocks.StrictMock<IScheduleDictionary>();
-                    IMeetingRepository meetingRepository = mocks.StrictMock<IMeetingRepository>();
-
-                    setupCommonStuffForUpdatesFromBroker(_unitOfWork, scheduleDictionary);
-
-                    Expect.Call(_repositoryFactory.CreateMeetingRepository(_unitOfWork)).Return(
-                        meetingRepository);
-                    Expect.Call(()=>scheduleDictionary.DeleteMeetingFromBroker(idFromBroker));
-                    Expect.Call(()=>scheduleDictionary.MeetingUpdateFromBroker(meetingRepository, idFromBroker));
-
-                    CommonStateHolder commonStateHolder = new CommonStateHolder();
-                    Expect.Call(_schedulerStateHolder.CommonStateHolder).Return(commonStateHolder).Repeat.Twice();
-                    Expect.Call(() => _unitOfWork.Reassociate(commonStateHolder.Activities));
-                    Expect.Call(() => _unitOfWork.Reassociate(commonStateHolder.ShiftCategories));
-                    Expect.Call(_schedulingResultLoader.Contracts).Return(new List<IContract>());
-                    Expect.Call(_schedulingResultLoader.ContractSchedules).Return(new List<IContractSchedule>());
-                    Expect.Call(() => _view.ReloadScheduleDayInEditor(_person));
-
-                    mocks.ReplayAll();
-
-                    target.Execute(new EventMessage { InterfaceType = typeof(IMeetingChangedEntity), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Update, ReferenceObjectId = _person.Id.GetValueOrDefault() });
-
-                    mocks.VerifyAll();
-                }
         
                 [Test]
                 public void VerifyOnEventScheduleDataMessageHandler()
