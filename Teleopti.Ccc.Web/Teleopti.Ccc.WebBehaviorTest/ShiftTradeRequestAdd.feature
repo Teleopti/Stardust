@@ -4,18 +4,19 @@
 	I want to be able to trade shifts with other agents
 
 Background:
-	Given there is a role with
-	| Field                    | Value                 |
-	| Name                     | Full access to mytime |
+	Given there is a team with
+	| Field | Value			|
+	| Name  | Other team    |
+	And there is a role with
+	| Field        | Value                 |
+	| Name         | Full access to mytime |
+	| AccessToTeam | Other team            |
 	And there is a workflow control set with
 	| Field                            | Value                                     |
 	| Name                             | Trade from tomorrow until 30 days forward |
 	| Schedule published to date       | 2040-06-24                                |
 	| Shift Trade sliding period start | 1                                         |
 	| Shift Trade sliding period end   | 30                                        |
-	And there is a team with
-	| Field | Value			|
-	| Name  | Other team    |
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
