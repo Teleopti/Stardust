@@ -10,11 +10,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	// im all for keeping it stupid (in the same manner as an .IgnoreArguments()) until smartness is required
 	public class FakePersonAssignmentRepository : IPersonAssignmentRepository
 	{
-		private readonly IPersonAssignment _personAssignment;
+		private readonly IList<IPersonAssignment> _personAssignments = new List<IPersonAssignment>();
+
+		public FakePersonAssignmentRepository()
+		{
+			
+		}
 
 		public FakePersonAssignmentRepository(IPersonAssignment personAssignment)
 		{
-			_personAssignment = personAssignment;
+			_personAssignments.Add(personAssignment);
 		}
 
 		public void Add(IPersonAssignment entity)
@@ -53,6 +58,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
+
 		public IPersonAssignment LoadAggregate(Guid id)
 		{
 			throw new NotImplementedException();
@@ -60,12 +66,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
 		{
-			return new Collection<IPersonAssignment>(new List<IPersonAssignment>(new[] {_personAssignment}));
+			return new Collection<IPersonAssignment>(_personAssignments);
 		}
 
 		public ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario)
 		{
-			return new Collection<IPersonAssignment>(new List<IPersonAssignment>(new[] { _personAssignment }));
+			return new Collection<IPersonAssignment>(_personAssignments);
 		}
 	}
 }

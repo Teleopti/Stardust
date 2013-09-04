@@ -37,5 +37,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			scheduleDictionary[person].ScheduledDay(new DateOnly(2013, 9, 4)).PersonAssignment().Should().Be.EqualTo(personAssignment);
 		}
 
+		[Test]
+		public void ShouldDeleteAssignmentFromDictionary()
+		{
+			var period = new DateTimePeriod(2013, 9, 4, 2013, 9, 5);
+			var person = PersonFactory.CreatePersonWithId();
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person, new DateOnly(2013, 9, 4));
+			var target = new ScheduleRefresher(
+				new FakePersonRepository(person),
+				null,
+				new FakePersonAssignmentRepository(),
+				MockRepository.GenerateMock<IPersonAbsenceRepository>()
+				);
+			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(personAssignment.Scenario, period, personAssignment);
+			var messages = new[] {new EventMessage
+				{
+					InterfaceType = typeof (IScheduleChangedEvent), 
+					DomainObjectId = person.Id.Value, 
+					EventStartDate = period.StartDateTime, 
+					EventEndDate = period.EndDateTime
+				}};
+			scheduleDictionary[person].ScheduledDay(new DateOnly(2013, 9, 4)).PersonAssignment().Should().Be.EqualTo(personAssignment);
+
+			target.Refresh(scheduleDictionary, null, messages, null, null);
+
+			scheduleDictionary[person].ScheduledDay(new DateOnly(2013, 9, 4)).PersonAssignment().Should().Be.Null();
+		}
 	}
 }

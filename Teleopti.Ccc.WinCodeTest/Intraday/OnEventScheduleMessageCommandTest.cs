@@ -69,34 +69,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _view.AssertWasCalled(x => x.ReloadScheduleDayInEditor(_person));
 		}
         /*
-                [Test]
-                public void VerifyOnEventScheduleDataMessageHandlerAssignment()
-                {
-                    var idFromBroker = Guid.NewGuid();
-                    var _unitOfWork = mocks.StrictMock<IUnitOfWork>();
-                    var scheduleDictionary = mocks.StrictMock<IScheduleDictionary>();
-                    var personAssignmentRepository = mocks.StrictMock<IPersonAssignmentRepository>();
-
-                    setupCommonStuffForUpdatesFromBroker(_unitOfWork, scheduleDictionary);
-
-                    Expect.Call(_repositoryFactory.CreatePersonAssignmentRepository(_unitOfWork)).Return(
-                        personAssignmentRepository);
-                    Expect.Call(scheduleDictionary.UpdateFromBroker(personAssignmentRepository, idFromBroker)).Return(null);
-
-                    CommonStateHolder commonStateHolder = new CommonStateHolder();
-                    Expect.Call(_schedulerStateHolder.CommonStateHolder).Return(commonStateHolder).Repeat.Twice();
-                    Expect.Call(() => _unitOfWork.Reassociate(commonStateHolder.Activities));
-                    Expect.Call(() => _unitOfWork.Reassociate(commonStateHolder.ShiftCategories));
-                    Expect.Call(_schedulingResultLoader.Contracts).Return(new List<IContract>());
-                    Expect.Call(_schedulingResultLoader.ContractSchedules).Return(new List<IContractSchedule>());
-                    Expect.Call(() => _view.ReloadScheduleDayInEditor(_person));
-
-                    mocks.ReplayAll();
-
-                    target.Execute(new EventMessage { InterfaceType = typeof(IPersonAssignment), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Insert, ReferenceObjectId = _person.Id.GetValueOrDefault()});
-
-                    mocks.VerifyAll();
-                }
 
                 [Test]
                 public void ShouldDeleteAssignmentFromDictionary()
