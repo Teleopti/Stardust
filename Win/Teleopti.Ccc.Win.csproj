@@ -1302,6 +1302,7 @@
     <Compile Include="Scheduling\PermissionEditRestrictionControl.cs" />
     <Compile Include="Scheduling\QuickAccessState.cs" />
     <Compile Include="Scheduling\SchedulerRibbonHelper.cs" />
+    <Compile Include="Scheduling\ScheduleTimeType.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControl.cs">
       <SubType>Component</SubType>
     </Compile>

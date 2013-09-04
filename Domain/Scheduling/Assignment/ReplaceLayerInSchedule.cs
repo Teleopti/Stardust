@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	{
 		private const string exMessageLayerNotFound = "Layer {0} not found when doing a replace of layer!";
 
-
 		//this can be done MUCH simpler when we have one list of layers and no shifts....
 		//should work against a PersonAssignment (aka AgentDay) and not IScheduleDay
 		public void Replace(IScheduleDay scheduleDay, ILayer<IActivity> layerToRemove, IActivity newActivity, DateTimePeriod newPeriod)
@@ -25,7 +24,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						var newLayers = new List<IMainShiftLayer>(ass.MainLayers());
 						newLayers.Remove(layer);
 						newLayers.Insert(indexOfLayer, new MainShiftLayer(newActivity, newPeriod));
-						ass.SetMainShiftLayers(newLayers, ass.ShiftCategory);
+						ass.ClearMainLayers();
+						foreach (var newLayer in newLayers)
+						{
+							ass.AddMainLayer(newLayer.Payload, newLayer.Period);
+						}
 						return;
 					}
 				}
@@ -65,16 +68,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void Replace(IScheduleDay scheduleDay, ILayer<IAbsence> layerToRemove, IAbsence newAbsence, DateTimePeriod newPeriod)
 		{
-			foreach (var personAbsence in scheduleDay.PersonAbsenceCollection())
+			foreach (var personAbsence in scheduleDay.PersonAbsenceCollection()
+																	.Where(personAbsence => personAbsence.Layer.Equals(layerToRemove)))
 			{
-				if (personAbsence.Layer.Equals(layerToRemove))
-				{
-					//behövs nån form av orderindex på personabsence kommas ihåg?
-					scheduleDay.Remove(personAbsence);
-					scheduleDay.Add(new PersonAbsence(personAbsence.Person, personAbsence.Scenario,
-																						new AbsenceLayer(newAbsence, newPeriod)));
-					return;
-				}
+				personAbsence.ReplaceLayer(newAbsence, newPeriod);
+				return;
 			}
 			throw new ArgumentException(string.Format(CultureInfo.CurrentUICulture, exMessageLayerNotFound, layerToRemove));
 		}

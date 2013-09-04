@@ -86,5 +86,20 @@ namespace Teleopti.Interfaces.Domain
 		/// 
 		/// </summary>
 		TimeSpan TimeInState { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		DateTime? BatchId { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		string OriginalDataSourceId { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		Guid BusinessUnit { get; set; }
 	}
 }

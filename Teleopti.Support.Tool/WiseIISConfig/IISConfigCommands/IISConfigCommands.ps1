@@ -246,10 +246,6 @@ function create-WorkingFolder{
     )
 	if (!(Test-Path "$workingFolder")) {
 		& mkdir "$workingFolder"
-        $Acl = Get-Acl "$workingFolder"
-        $Ar = New-Object  system.security.accesscontrol.filesystemaccessrule("TOPTINET\TfsIntegration","FullControl","Allow")
-        $Acl.SetAccessRule($Ar)
-        Set-Acl "$workingFolder" $Acl
 	}
 }
 
@@ -262,9 +258,9 @@ function Check-HttpStatus {
 	[net.httpWebRequest] $req = [net.webRequest]::create($url)
     $req.Credentials = $credentials;
 	$req.Method = "GET"
-
+    Write-Host 'Check-HttpStatus: ' $url
 	[net.httpWebResponse] $res = $req.getResponse()
-
+    
 	if ($res.StatusCode -ge "200") {
 		return $true
 	}
@@ -397,4 +393,66 @@ function start-AppPool{
     param($PoolName)
             Invoke-AppCmd Start Apppool "$PoolName"
 			Invoke-AppCmd Set Apppool "$PoolName" /autoStart:true
+}
+
+function restoreToBaseline
+{
+    param($computerName,
+            $spContent)
+$stringDrop = "IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RestoreToBaseline]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[RestoreToBaseline]"
+$con = New-Object System.Data.SqlClient.SqlConnection
+$con.ConnectionString = "Server=$Server;Database=master;Integrated Security=true"
+$con.Open()
+
+# Create SqlCommand object, define command text, and set the connection
+$cmd = New-Object System.Data.SqlClient.SqlCommand
+$cmd.Connection = $con
+$cmd.CommandTimeout = 0
+#the sp
+$cmd.CommandText = $stringDrop
+$cmd.ExecuteNonQuery()
+
+$cmd.CommandText = $spContent
+$cmd.ExecuteNonQuery()
+#and run it
+$cmd.CommandText = "RestoreToBaseline '$computerName'" 
+$cmd.ExecuteNonQuery()
+
+
+}
+ 
+function insert-License{
+    param($Server,
+            $Db,
+            $xmlString)
+# Create SqlConnection object, define connection string, and open connection
+$con = New-Object System.Data.SqlClient.SqlConnection
+$con.ConnectionString = "Server=$Server;Database=$Db;Integrated Security=true"
+$con.Open()
+
+# Create SqlCommand object, define command text, and set the connection
+$cmd = New-Object System.Data.SqlClient.SqlCommand
+$cmd.Connection = $con
+$cmd.CommandText = "DELETE FROM License"
+$cmd.ExecuteNonQuery()
+
+$cmd.CommandText = "INSERT INTO License
+  (Id, Version, CreatedBy, UpdatedBy, CreatedOn, UpdatedOn, XmlString)
+  VALUES (@Id, @Version, @CreatedBy, @UpdatedBy, @CreatedOn, @UpdatedOn, @XmlString)"
+
+$superUser = "3f0886ab-7b25-4e95-856a-0d726edc2a67"
+$now = Get-Date
+
+# Add parameters to pass values to the INSERT statement
+$cmd.Parameters.AddWithValue("@Id", [guid]::NewGuid()) | Out-Null
+$cmd.Parameters.AddWithValue("@Version", 1) | Out-Null
+$cmd.Parameters.AddWithValue("@CreatedBy", $superUser) | Out-Null
+$cmd.Parameters.AddWithValue("@UpdatedBy", $superUser) | Out-Null
+$cmd.Parameters.AddWithValue("@CreatedOn", $now) | Out-Null
+$cmd.Parameters.AddWithValue("@UpdatedOn", $now) | Out-Null
+$cmd.Parameters.AddWithValue("@XmlString", $xmlString) | Out-Null
+# Execute INSERT statement
+$RowsInserted = $cmd.ExecuteNonQuery()
+Write-Host 'Inserted License: ' $RowsInserted
 }

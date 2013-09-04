@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_clipboardControl.SetButtonDropDownItemState(ClipboardAction.Cut, ClipboardItems.DayOff.ToString(),
 				                                             authorization.IsPermitted(
 				                                             	DefinedRaptorApplicationFunctionPaths.
-				                                             		ModifyPersonDayOff));
+																	ModifyPersonAssignment));
 				_clipboardControl.SetButtonDropDownItemState(ClipboardAction.Cut,
 				                                             ClipboardItems.PersonalShift.ToString(),
 				                                             authorization.IsPermitted(
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				                                             ClipboardItems.DayOff.ToString(),
 				                                             authorization.IsPermitted(
 				                                             	DefinedRaptorApplicationFunctionPaths.
-				                                             		ModifyPersonDayOff));
+																	ModifyPersonAssignment));
 				_clipboardControl.SetButtonDropDownItemState(ClipboardAction.Paste,
 				                                             ClipboardItems.PersonalShift.ToString(),
 				                                             authorization.IsPermitted(

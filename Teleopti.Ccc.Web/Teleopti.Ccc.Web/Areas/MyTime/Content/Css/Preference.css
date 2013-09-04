@@ -234,3 +234,33 @@ div.qtip-content {
 .select2-item-height li hr {
 	height: 5px;
 }
+
+.width130 {
+	width: 130px;
+}
+
+.width10 {
+	width: 10px;
+}
+
+.preference-template-name {
+	width: 280px;
+}
+
+.preference-template-list {
+	width: 295px;
+}
+
+#Preference-Picker {
+	width: 295px;
+}
+
+#Preference-extended-activity-Picker {
+	width: 272px;
+}
+
+.td-vertical-divider {
+	border-right: 1px solid #E0D9D9; 
+	border-left: 1px solid #ffffff; 
+	padding: 0px !important;
+}

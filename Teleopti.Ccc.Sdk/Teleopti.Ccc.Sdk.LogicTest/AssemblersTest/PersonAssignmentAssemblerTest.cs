@@ -171,10 +171,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             ass.SetId(Guid.NewGuid());
 					ass.AddOvertimeLayer(act, new DateTimePeriod(1803, 1, 1, 1803, 1, 2), definitionSet);
             ass.OvertimeLayers().First().SetId(Guid.NewGuid());
-					ass.SetMainShiftLayers(new[]
-						{
-							new MainShiftLayer(act,new DateTimePeriod(1900, 1, 1, 1900, 1, 2))
-						}, sCat);
+						ass.AddMainLayer(act, new DateTimePeriod(1900, 1, 1, 1900, 1, 2));
+					ass.SetShiftCategory(sCat);
 						ass.AddPersonalLayer(act, new DateTimePeriod(1800, 1, 1, 1800, 1, 2));
 					ass.MainLayers().Single().SetId(Guid.NewGuid());
 					ass.PersonalLayers().Single().SetId(Guid.NewGuid());

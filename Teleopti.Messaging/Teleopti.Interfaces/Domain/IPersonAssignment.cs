@@ -21,9 +21,6 @@ namespace Teleopti.Interfaces.Domain
                                             ICloneableEntity<IPersonAssignment>,
 											IEquatable<IPersonAssignment>
     {
-			void SetMainShiftLayers(IEnumerable<IMainShiftLayer> activityLayers, IShiftCategory shiftCategory);
-
-
         /// <summary>
         /// Clears the personal shift.
         /// </summary>
@@ -62,5 +59,9 @@ namespace Teleopti.Interfaces.Domain
 	    void SetDayOff(IDayOffTemplate template);
 	    void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination);
 	    bool AssignedWithDayOff(IDayOffTemplate template);
+	    void FillWithDataFrom(IPersonAssignment newAss);
+	    void AddMainLayer(IActivity activity, DateTimePeriod period);
+	    void SetShiftCategory(IShiftCategory shiftCategory);
+	    void SetMainLayersAndShiftCategoryFrom(IPersonAssignment assignment);
     }
 }

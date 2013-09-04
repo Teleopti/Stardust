@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Net.Sockets;
+using Teleopti.Ccc.Rta.Server.Resolvers;
+using Teleopti.Interfaces.Domain;
 using log4net;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -12,7 +15,7 @@ namespace Teleopti.Ccc.Rta.Server
 {
 	public class RtaDataHandler : IRtaDataHandler
 	{
-		private readonly IActualAgentHandler _agentHandler;
+		private readonly IActualAgentAssembler _agentAssembler;
 		private readonly IMessageSender _messageSender;
 		private readonly string _connectionStringDataStore;
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
@@ -52,7 +55,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public RtaDataHandler(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
 		                      IDatabaseConnectionFactory databaseConnectionFactory, IDataSourceResolver dataSourceResolver,
-		                      IPersonResolver personResolver, IStateResolver stateResolver, IActualAgentHandler agentHandler)
+		                      IPersonResolver personResolver, IStateResolver stateResolver, IActualAgentAssembler agentAssembler)
 		{
 			_loggingSvc = loggingSvc;
 			_messageSender = messageSender;
@@ -60,7 +63,7 @@ namespace Teleopti.Ccc.Rta.Server
 			_databaseConnectionFactory = databaseConnectionFactory;
 			_dataSourceResolver = dataSourceResolver;
 			_personResolver = personResolver;
-			_agentHandler = agentHandler;
+			_agentAssembler = agentAssembler;
 			_stateResolver = stateResolver;
 
 			if (_messageSender == null) return;
@@ -78,13 +81,13 @@ namespace Teleopti.Ccc.Rta.Server
 		}
 
 
-		public RtaDataHandler(IActualAgentHandler agentHandler)
+		public RtaDataHandler(IActualAgentAssembler agentAssembler)
 			: this(
 				LogManager.GetLogger(typeof (RtaDataHandler)),
 				MessageSenderFactory.CreateMessageSender(ConfigurationManager.AppSettings["MessageBroker"]),
 				ConfigurationManager.AppSettings["DataStore"], new DatabaseConnectionFactory(), null, null, null, null)
 		{
-			_agentHandler = agentHandler;
+			_agentAssembler = agentAssembler;
 
 			_dataSourceResolver = new DataSourceResolver(_databaseConnectionFactory, _connectionStringDataStore);
 			_personResolver = new PersonResolver(_databaseConnectionFactory, _connectionStringDataStore);
@@ -115,8 +118,9 @@ namespace Teleopti.Ccc.Rta.Server
 					_loggingSvc.Error("No connection information avaiable in configuration file.");
 					return;
 				}
-				_agentHandler.InvalidateReadModelCache(personId);
-				var agentState = _agentHandler.CheckSchedule(personId, businessUnitId, timestamp);
+				_agentAssembler.InvalidateReadModelCache(personId);
+				var agentState = _agentAssembler.CheckSchedule(personId, businessUnitId, timestamp);
+
 				if (agentState == null)
 				{
 					_loggingSvc.InfoFormat("Schedule for {0} has not changed", personId);
@@ -147,12 +151,14 @@ namespace Teleopti.Ccc.Rta.Server
 
 		// Probably a WaitHandle object isnt a best choice, but same applies to QueueUserWorkItem method.
 		// An alternative using Tasks should be looked at instead.
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"
-			)]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public void ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp,
 		                           Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
 		{
 			int dataSourceId;
+			var batch = isSnapshot
+						  ? batchId
+						  : (DateTime?) null;
 
 			if (string.IsNullOrEmpty(_connectionStringDataStore))
 			{
@@ -167,6 +173,13 @@ namespace Teleopti.Ccc.Rta.Server
 				return;
 			}
 
+			if (isSnapshot && string.IsNullOrEmpty(logOn))
+			{
+				_loggingSvc.InfoFormat("Last of batch detected, initializing hanling for batch id: {0}, source id: {1}", batchId, sourceId);
+				handleLastOfBatch(batchId, sourceId);
+				return;
+			}
+
 			IEnumerable<PersonWithBusinessUnit> personWithBusinessUnits;
 			if (!_personResolver.TryResolveId(dataSourceId, logOn, out personWithBusinessUnits))
 			{
@@ -175,32 +188,44 @@ namespace Teleopti.Ccc.Rta.Server
 					dataSourceId, logOn);
 				return;
 			}
-			
+
+			foreach (var personWithBusinessUnit in personWithBusinessUnits)
+			{
+				_loggingSvc.InfoFormat("ACD-Logon: {0} is connected to PersonId: {1}", logOn, personWithBusinessUnit.PersonId);
+				if (!_stateResolver.HaveStateCodeChanged(personWithBusinessUnit.PersonId, stateCode, timestamp))
+				{
+					_loggingSvc.InfoFormat("Person {0} is already in state {1}", personWithBusinessUnit.PersonId, stateCode);
+					continue;
+				}
+				var agentState = _agentAssembler.GetAndSaveState(personWithBusinessUnit.PersonId,
+				                                                 personWithBusinessUnit.BusinessUnitId,
+				                                                 platformTypeId, stateCode,
+				                                                 timestamp, timeInState,
+																 batch, sourceId);
+				sendRtaState(agentState);
+			}
+		}
+
+		private void handleLastOfBatch(DateTime batchId, string sourceId)
+		{
+			var missingAgents = _agentAssembler.GetAndSaveStateForMissingAgent(batchId, sourceId);
+			foreach (var agent in missingAgents)
+				sendRtaState(agent);
+		}
+
+		private void sendRtaState(IActualAgentState agentState)
+		{
 			try
 			{
-				foreach (var personWithBusinessUnit in personWithBusinessUnits)
+				if (agentState == null)
 				{
-					_loggingSvc.InfoFormat("ACD-Logon: {0} is connected to PersonId: {1}", logOn, personWithBusinessUnit.PersonId);
-					if (!_stateResolver.HaveStateCodeChanged(personWithBusinessUnit.PersonId, stateCode, timestamp))
-					{
-						_loggingSvc.InfoFormat("Person {0} is already in state {1}", personWithBusinessUnit.PersonId, stateCode);
-						continue;
-					}
-
-
-					var agentState = _agentHandler.GetAndSaveState(personWithBusinessUnit.PersonId,
-					                                               personWithBusinessUnit.BusinessUnitId,
-					                                               platformTypeId, stateCode,
-					                                               timestamp, timeInState);
-					if (agentState == null)
-					{
-						_loggingSvc.WarnFormat("Could not get state for Person {0}", personWithBusinessUnit.PersonId);
-						continue;
-					}
-					_loggingSvc.InfoFormat("Sending AgentState: {0} through Message Broker", agentState);
-					if (_messageSender.IsAlive)
-						_messageSender.SendRtaData(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId, agentState);
+					_loggingSvc.WarnFormat("Could not get state for Person");
+					return;
 				}
+				_stateResolver.UpdateCacheForPerson(agentState.PersonId, new PersonStateHolder(agentState.StateCode, agentState.ReceivedTime));
+				_loggingSvc.InfoFormat("Sending AgentState: {0} through Message Broker", agentState);
+				if (_messageSender.IsAlive)
+					_messageSender.SendRtaData(agentState.PersonId, agentState.BusinessUnit, agentState);
 			}
 			catch (SocketException exception)
 			{

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.ServiceModel;
+using Teleopti.Interfaces.Domain;
 using log4net;
 using log4net.Config;
 using Teleopti.Ccc.Rta.Interfaces;
@@ -16,27 +18,18 @@ namespace Teleopti.Ccc.Rta.WebService
         private readonly string _authenticationKey;
         private readonly object _lockObject = new object();
         private const string logOutStateCode = "LOGGED-OFF";
-        private static readonly ILog Log = LogManager.GetLogger(typeof (TeleoptiRtaService));
-	    private readonly RtaProcessMissingAgents _processMissingAgents;
+        private static readonly ILog Log = LogManager.GetLogger(typeof (TeleoptiRtaService));	
 
-        public TeleoptiRtaService()
+	    public TeleoptiRtaService()
         {
             XmlConfigurator.Configure();
-            
 
             Log.Info("The real time adherence service is now started");
-            string authenticationKey = ConfigurationManager.AppSettings["AuthenticationKey"];
-            if (string.IsNullOrEmpty(authenticationKey)) authenticationKey = "!#¤atAbgT%";
+            var authenticationKey = ConfigurationManager.AppSettings["AuthenticationKey"];
+            if (string.IsNullOrEmpty(authenticationKey)) 
+				authenticationKey = "!#¤atAbgT%";
             _authenticationKey = authenticationKey;
-			_processMissingAgents = new RtaProcessMissingAgents(logOutStateCode, processRtaAgentState, new RtaBatchHandler(new DatabaseConnectionFactory()));
         }
-
-		private void processRtaAgentState(RtaAgentState rtaAgentState)
-		{
-			processExternalUserState(new Guid(), rtaAgentState.UserCode, rtaAgentState.StateCode, rtaAgentState.StateDescription,
-			                         rtaAgentState.IsLoggedOn, 0, rtaAgentState.Timestamp, rtaAgentState.PlatformTypeId,
-			                         rtaAgentState.SourceId, rtaAgentState.BatchId, rtaAgentState.IsSnapshot);
-		}
 
         private void InitializeClientHandler()
         {
@@ -47,22 +40,9 @@ namespace Teleopti.Ccc.Rta.WebService
 	                                     string stateDescription, bool isLoggedOn, int secondsInState, DateTime timestamp,
 	                                     string platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
         {
-            Guid messageId = Guid.NewGuid();
+            var messageId = Guid.NewGuid();
 
 			verifyAuthenticationKey(authenticationKey, messageId);
-			_processMissingAgents.Check(new RtaAgentState
-				                            {
-												AuthenticationKey = authenticationKey,
-												UserCode = userCode,
-												StateCode = stateCode,
-												StateDescription = stateDescription,
-												IsLoggedOn = isLoggedOn,
-												Timestamp = timestamp,
-												PlatformTypeId = platformTypeId,
-												SourceId = sourceId,
-												BatchId = batchId,
-												IsSnapshot = isSnapshot
-				                            });
 	        return processExternalUserState(messageId, userCode, stateCode, stateDescription, isLoggedOn, secondsInState,
 	                                        timestamp, platformTypeId, sourceId, batchId, isSnapshot);
         }
@@ -159,7 +139,7 @@ namespace Teleopti.Ccc.Rta.WebService
 	    public int SaveBatchExternalUserState(string authenticationKey, string platformTypeId, string sourceId,
 	                                          ICollection<ExternalUserState> externalUserStateBatch)
     	{
-			Guid messageId = Guid.NewGuid();
+			var messageId = Guid.NewGuid();
 
 			verifyAuthenticationKey(authenticationKey, messageId);
 
@@ -167,26 +147,13 @@ namespace Teleopti.Ccc.Rta.WebService
 
     		var result = 0;
 
-			foreach (var externalUserState in externalUserStateBatch)
+			foreach (var user in externalUserStateBatch)
 			{
-				var processResult = _processMissingAgents.Check(new RtaAgentState
-					{
-						AuthenticationKey = authenticationKey,
-						PlatformTypeId = platformTypeId,
-						SourceId = sourceId,
-						UserCode = externalUserState.UserCode,
-						BatchId = externalUserState.BatchId,
-						StateDescription = externalUserState.StateDescription,
-						IsLoggedOn = externalUserState.IsLoggedOn,
-						IsSnapshot = externalUserState.IsSnapshot,
-						StateCode = externalUserState.StateCode,
-						Timestamp = externalUserState.Timestamp
-					});
-			
+				var processResult = SaveExternalUserState(authenticationKey, user.UserCode, user.StateCode, user.StateDescription,
+				                                          user.IsLoggedOn, user.SecondsInState, user.Timestamp, platformTypeId,
+				                                          sourceId, user.BatchId, user.IsSnapshot);
 				if (processResult < result || result == 0)
-				{
 					result = processResult;
-				}
 			}
 
     		return result;
