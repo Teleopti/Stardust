@@ -189,6 +189,16 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         }
 
         [Test]
+        public void VerifyOnEventMeetingMessageHandlerInvokeRequired()
+        {
+            _view.Stub(x => x.InvokeRequired).Return(true);
+
+            _target.OnEventMeetingMessageHandler(null, new EventMessageArgs(new EventMessage()));
+
+            _view.AssertWasCalled(x => x.BeginInvoke(new Action<object, EventMessageArgs>(_target.OnEventMeetingMessageHandler), new object(), new object()), o => o.IgnoreArguments());
+        }
+
+        [Test]
         public void VerifyOnEventStatisticMessageHandlerInvokeRequired()
         {
             IEventMessage eventMessage = MockRepository.GenerateMock<IEventMessage>();
@@ -211,6 +221,18 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _target.OnEventForecastDataMessageHandler(null, new EventMessageArgs(eventMessage));
 
             _forecastCommand.AssertWasNotCalled(x => x.Execute(eventMessage));
+        }
+
+        [Test]
+        public void VerifyOnEventMeetingMessageHandlerSameModuleId()
+        {
+            IEventMessage eventMessage = MockRepository.GenerateMock<IEventMessage>();
+            _view.Stub(x => x.InvokeRequired).Return(false);
+            eventMessage.Stub(x => x.ModuleId).Return(_target.InstanceId);
+
+            _target.OnEventMeetingMessageHandler(null, new EventMessageArgs(eventMessage));
+
+            _meetingCommand.AssertWasNotCalled(x => x.Execute(eventMessage));
         }
 
         [Test]
@@ -257,9 +279,26 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
             _forecastCommand.AssertWasCalled(x => x.Execute(message));
         }
-		
+
         [Test]
-        public void VerifyOnEventScheduleDataMessageHandlerAssignment()
+        public void VerifyOnEventMeetingMessageHandler()
+        {
+            var message = new EventMessage
+            {
+                InterfaceType = typeof(IMeetingChangedEntity),
+                DomainObjectId = Guid.NewGuid(),
+                DomainUpdateType = DomainUpdateType.NotApplicable
+            };
+
+            _view.Stub(x => x.InvokeRequired).Return(false);
+
+            _target.OnEventMeetingMessageHandler(null, new EventMessageArgs(message));
+
+            _meetingCommand.AssertWasCalled(x => x.Execute(message));
+        }
+
+        [Test]
+        public void VerifyOnEventScheduleDataMessageHandler()
         {
             var message = new EventMessage
             {
