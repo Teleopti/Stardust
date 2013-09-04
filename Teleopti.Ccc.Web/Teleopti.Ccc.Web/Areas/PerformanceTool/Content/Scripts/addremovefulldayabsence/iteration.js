@@ -81,15 +81,13 @@ define([
             };
 
             this.NotifyReadModelChanged = function (notification) {
-                if (self.ReadModelUpdatedCount < 2 &&
-                    (notification.DomainType == "IScheduledResourcesReadModel" || self.PersonId == notification.DomainReferenceId)) {
+                if (self.ReadModelUpdatedCount < 2 && data.IsApplicableNotification(notification)) {
                     self.ReadModelUpdatedCount++;
                     data.ReadModelUpdated();
                     return true;
                 }
                 return false;
             };
-
         };
 
     });

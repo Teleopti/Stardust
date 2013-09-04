@@ -14,7 +14,7 @@ define([
     ) {
         
 
-        return function(readModelName) {
+        return function(readModelName, isApplicableReadModelNotification) {
 
             var self = this;
 
@@ -36,7 +36,6 @@ define([
             var result;
 
             this.LoadDefaultConfiguration = function (callback) {
-
                 var absenceId;
                 var personId;
 
@@ -76,11 +75,11 @@ define([
                 var personIds = configuration.PersonIds;
 
                 iterations = [];
-
+                
                 for (var i = 0; i < personIds.length; i++) {
                     var personId = personIds[i];
                     var date = startDate.clone().subtract('days', 1);
-
+                    
                     for (var j = 0; j < numberOfDays; j++) {
                         date.add('days', 1);
 
@@ -88,22 +87,22 @@ define([
                             AbsenceId: configuration.AbsenceId,
                             PersonId: personId,
                             Date: date.clone(),
-                            ReadModelUpdated: function () {
+                            ReadModelUpdated: function() {
                                 progressItemReadModel.Success();
                                 calculateRunDone();
                             },
-                            ReadModelUpdateFailed: function () {
+                            ReadModelUpdateFailed: function() {
                                 progressItemReadModel.Failure();
                                 calculateRunDone();
-                            }
+                            },
+                            IsApplicableNotification: isApplicableReadModelNotification
                         }));
-
+                        
                         if (iterations.length > 2000) {
                             self.IterationsExpected(undefined);
                             progressItemReadModel.Target(undefined);
                             throw "Too many combinations";
                         }
-
                     }
                 }
 
