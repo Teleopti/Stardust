@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Infrastructure
     {
         private static readonly object _lockObject = new object();
         private static MessageFilterManager _messageFilterManager;
-        private IDictionary<Type, IList<Type>> _aggregateRoots;
+        private readonly IDictionary<Type, IList<Type>> _aggregateRoots;
         private readonly ReaderWriterLock _readerWriterLock = new ReaderWriterLock();
         private int _timeOut = 20;
 
@@ -52,18 +52,28 @@ namespace Teleopti.Ccc.Domain.Infrastructure
             }
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public IDictionary<Type, IList<Type>> FilterDictionary
+        public bool HasType(Type type)
         {
-            get { return _aggregateRoots; }
+            return _aggregateRoots.ContainsKey(type);
+        }
+
+        public string LookupTypeToSend(Type domainObjectType)
+        {
+            return lookupType(domainObjectType, list => list[list.Count - 1]).AssemblyQualifiedName;
+        }
+
+        public Type LookupType(Type domainObjectType)
+        {
+            return lookupType(domainObjectType, list => list[0]);
         }
 
         /// <summary>
         /// Looks up type.
         /// </summary>
         /// <param name="domainObjectType">Type of the domain object.</param>
+        /// <param name="typeFinder"></param>
         /// <returns></returns>
-        public string LookupType(Type domainObjectType)
+        private Type lookupType(Type domainObjectType, Func<IList<Type>, Type> typeFinder)
         {
             try
             {
@@ -71,9 +81,9 @@ namespace Teleopti.Ccc.Domain.Infrastructure
                 try
                 {
                     IList<Type> foundTypes;
-                    if (_aggregateRoots.TryGetValue(domainObjectType,out foundTypes))
+                    if (_aggregateRoots.TryGetValue(domainObjectType, out foundTypes))
                     {
-                        return foundTypes[0].AssemblyQualifiedName;
+                        return typeFinder(foundTypes);
                     }
                 }
                 finally
@@ -86,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Infrastructure
             {
                 // The reader lock request timed out.
                 Interlocked.Increment(ref _timeOut);
-                LookupType(domainObjectType);
+                lookupType(domainObjectType, typeFinder);
             }
             throw new DomainObjectNotInFilterException("Cannot find type " + domainObjectType.AssemblyQualifiedName);
         }
@@ -117,13 +127,13 @@ namespace Teleopti.Ccc.Domain.Infrastructure
             aggregateRoots.Add(typeof (SkillDay), new List<Type> {typeof (IForecastData)});
             aggregateRoots.Add(typeof (MultisiteDay), new List<Type> {typeof (IForecastData)});
 
-            aggregateRoots.Add(typeof (Note), new List<Type> {typeof (IPersistableScheduleData)});
-            aggregateRoots.Add(typeof (AgentDayScheduleTag), new List<Type> {typeof (IPersistableScheduleData)});
-            aggregateRoots.Add(typeof (PersonAssignment), new List<Type> {typeof (IPersistableScheduleData)});
-            aggregateRoots.Add(typeof (PersonAbsence), new List<Type> {typeof (IPersistableScheduleData)});
-            aggregateRoots.Add(typeof (PublicNote), new List<Type> {typeof (IPersistableScheduleData)});
-            aggregateRoots.Add(typeof (PreferenceDay), new List<Type> {typeof (IPersistableScheduleData)});
-            aggregateRoots.Add(typeof (StudentAvailabilityDay), new List<Type> {typeof (IPersistableScheduleData)});
+            aggregateRoots.Add(typeof(Note), new List<Type> { typeof(IPersistableScheduleData), typeof(INote) });
+            aggregateRoots.Add(typeof(AgentDayScheduleTag), new List<Type> { typeof(IPersistableScheduleData), typeof(IAgentDayScheduleTag) });
+            aggregateRoots.Add(typeof (PersonAssignment), new List<Type> {typeof (IPersistableScheduleData),typeof(IPersonAssignment)});
+            aggregateRoots.Add(typeof (PersonAbsence), new List<Type> {typeof (IPersistableScheduleData),typeof(IPersonAbsence)});
+            aggregateRoots.Add(typeof(PublicNote), new List<Type> { typeof(IPersistableScheduleData), typeof(IPublicNote) });
+            aggregateRoots.Add(typeof(PreferenceDay), new List<Type> { typeof(IPersistableScheduleData), typeof(IPreferenceDay) });
+            aggregateRoots.Add(typeof(StudentAvailabilityDay), new List<Type> { typeof(IPersistableScheduleData), typeof(IStudentAvailabilityDay) });
 
             aggregateRoots.Add(typeof (Multiplicator), new List<Type> {typeof (IMultiplicator)});
             aggregateRoots.Add(typeof (MultiplicatorDefinitionSet),

@@ -142,6 +142,21 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// 
 		/// </summary>
+		public string OriginalDataSourceId { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public DateTime? BatchId { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public Guid BusinessUnit { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
 		public bool Equals(IActualAgentState other)
 		{
 			return other != null && GetHashCode().Equals(other.GetHashCode());

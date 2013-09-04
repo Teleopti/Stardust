@@ -188,16 +188,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTime start = new DateTime(2001, 1, 1, 11, 0, 0, DateTimeKind.Utc);
 			DateTime end = start.AddHours(1);
 			IActivity activity = new Activity("act");
-			IShiftCategory shiftCategory = new ShiftCategory("shiftCategory");
 
 			DateTimePeriod expected = new DateTimePeriod(start, end);
 			DateTimePeriod mainShiftPeriod = new DateTimePeriod(start, end);
 
-			target.SetMainShiftLayers(new[]
-				{
-					new MainShiftLayer(activity, mainShiftPeriod)
-				}, shiftCategory);
-
+			target.AddMainLayer(activity, mainShiftPeriod);
+		
 			Assert.AreEqual(expected, target.Period);
 		}
 
@@ -214,10 +210,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTimePeriod personalShiftPeriod = mainShiftPeriod.ChangeStartTime(TimeSpan.FromHours(-1)).ChangeEndTime(TimeSpan.FromHours(1));
 
 			target.AddPersonalLayer(activity, personalShiftPeriod);
-			target.SetMainShiftLayers(new[]
-				{
-					new MainShiftLayer(activity, mainShiftPeriod) 
-				}, shiftCategory);
+			target.AddMainLayer(activity, mainShiftPeriod);
 
 			Assert.AreEqual(personalShiftPeriod, target.Period);
 		}
@@ -319,10 +312,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var mainShiftActivity = ActivityFactory.CreateActivity("mainshift");
 			var persShiftActivity = ActivityFactory.CreateActivity("persShfit");
-			target.SetMainShiftLayers(new[]
-				{
-					new MainShiftLayer(mainShiftActivity, new DateTimePeriod(2000, 1, 1, 2010, 1, 1))
-				}, new ShiftCategory("sdf"));
+			target.AddMainLayer(mainShiftActivity, new DateTimePeriod(2000, 1, 1, 2010, 1, 1));
 			target.AddPersonalLayer(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
 			IProjectionService svc = target.ProjectionService();
 			svc.CreateProjection();
@@ -351,10 +341,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var personalShiftEnd = new DateTime(2000, 1, 1, 18, 0, 0, DateTimeKind.Utc);
 			var personalShiftPeriod = new DateTimePeriod(personalShiftStart, personalShiftEnd);
 
-			target.SetMainShiftLayers(new []
-				{
-					new MainShiftLayer(mainShiftActivity, mainShiftPeriod) 
-				}, new ShiftCategory("hej"));
+			target.AddMainLayer(mainShiftActivity, mainShiftPeriod);
 
 			target.AddPersonalLayer(personalShiftActivity, personalShiftPeriod);
 
@@ -426,7 +413,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			PersonFactory.AddDefinitionSetToPerson(testPerson, defSet);
 			var act = new Activity("sdf");
 			target.AddOvertimeLayer(act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
-			target.SetMainShiftLayers(new[] { new MainShiftLayer(act, new DateTimePeriod(2000, 1, 5, 2000, 1, 6))}, new ShiftCategory("d"));
+			target.AddMainLayer(act, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
 
 			Assert.AreEqual(2, target.ProjectionService().CreateProjection().Count());
 
@@ -439,11 +426,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var start = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 			var act = new Activity("d");
-			target.SetMainShiftLayers(new[]
-				{
-					new MainShiftLayer(act, new DateTimePeriod(start.AddHours(1), start.AddHours(2))), 
-					new MainShiftLayer(act, new DateTimePeriod(start.AddHours(6), start.AddHours(7))), 
-				}, new ShiftCategory("d"));
+			target.AddMainLayer(act, new DateTimePeriod(start.AddHours(1), start.AddHours(2)));
+			target.AddMainLayer(act, new DateTimePeriod(start.AddHours(6), start.AddHours(7)));
 
 			target.AddPersonalLayer(act, new DateTimePeriod(start.AddHours(3), start.AddHours(4)));
 			target.ProjectionService().CreateProjection()
@@ -538,12 +522,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
 			target.AddOvertimeLayer(activity, period, null);
 			target.AddPersonalLayer(activity, period);
-			target.SetMainShiftLayers(new List<IMainShiftLayer> {new MainShiftLayer(activity, period)},
-			                          ShiftCategoryFactory.CreateShiftCategory("cat"));
+			target.AddMainLayer(activity, period);
+			target.SetShiftCategory(ShiftCategoryFactory.CreateShiftCategory("cat"));
 			target.Clear();
 			target.OvertimeLayers().Should().Be.Empty();
 			target.PersonalLayers().Should().Be.Empty();
 			target.MainLayers().Should().Be.Empty();
+			target.ShiftCategory.Should().Be.Null();
 
 			target.SetDayOff(DayOffFactory.CreateDayOff());
 			target.Clear();
@@ -557,8 +542,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
 			target.AddOvertimeLayer(activity, period, null);
 			target.AddPersonalLayer(activity, period);
-			target.SetMainShiftLayers(new List<IMainShiftLayer> { new MainShiftLayer(activity, period) },
-																ShiftCategoryFactory.CreateShiftCategory("cat"));
+			target.AddMainLayer(activity, period);
 			target.FillWithDataFrom(new PersonAssignment(target.Person, target.Scenario, target.Date));
 			target.OvertimeLayers().Should().Be.Empty();
 			target.PersonalLayers().Should().Be.Empty();
@@ -573,8 +557,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
 			newAss.AddOvertimeLayer(activity, period, null);
 			newAss.AddPersonalLayer(activity, period);
-			newAss.SetMainShiftLayers(new List<IMainShiftLayer> { new MainShiftLayer(activity, period) },
-																ShiftCategoryFactory.CreateShiftCategory("cat"));
+			newAss.AddMainLayer(activity, period);
 			newAss.SetDayOff(new DayOffTemplate());
 			target.FillWithDataFrom(newAss);
 			target.OvertimeLayers().Should().Not.Be.Empty();

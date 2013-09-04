@@ -18,7 +18,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var indexOfMainShiftLayer = msLayer.OrderIndex;
 				oldLayers.Remove(msLayer);
 				oldLayers.Insert(indexOfMainShiftLayer-1, msLayer);
-				personAssignment.SetMainShiftLayers(oldLayers, personAssignment.ShiftCategory);
+				personAssignment.ClearMainLayers();
+				foreach (var shiftLayer in oldLayers)
+				{
+					personAssignment.AddMainLayer(shiftLayer.Payload, shiftLayer.Period);
+				}
 				return;
 			}
 
@@ -63,7 +67,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var indexOfMainShiftLayer = msLayer.OrderIndex;
 				oldLayers.Remove(msLayer);
 				oldLayers.Insert(indexOfMainShiftLayer + 1, msLayer);
-				personAssignment.SetMainShiftLayers(oldLayers, personAssignment.ShiftCategory);
+				personAssignment.ClearMainLayers();
+				foreach (var newPersonalLayer in oldLayers)
+				{
+					personAssignment.AddMainLayer(newPersonalLayer.Payload, newPersonalLayer.Period);
+				}
 				return;
 			}
 

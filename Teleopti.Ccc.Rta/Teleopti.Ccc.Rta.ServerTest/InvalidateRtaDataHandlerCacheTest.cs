@@ -15,30 +15,30 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		 public static void ShouldInvalidate()
 		 {
 			 var mbCacheFactory = MockRepository.GenerateMock<IMbCacheFactory>();
-			 var dataHandler = MockRepository.GenerateMock<IActualAgentDataHandler>();
+			 var dataHandler = MockRepository.GenerateMock<IDatabaseHandler>();
 			 var personId = Guid.NewGuid();
 			 var timeStamp = DateTime.Now;
-			 var target = new actualAgentHandlerForTest(dataHandler, mbCacheFactory);
+			 var target = new actualAgentAssemblerForTest(dataHandler, mbCacheFactory);
 			 
 
 			 target.InvalidateReadModelCache(personId);
 
 			 mbCacheFactory.AssertWasCalled(
 				 x =>
-				 x.Invalidate(target.ExposeActualAgentDataHandler,
+				 x.Invalidate(target.ExposeDatabaseHandler,
 				              y => y.CurrentLayerAndNext(timeStamp, new List<ScheduleLayer>()), true),
 				 o => o.IgnoreArguments());
 		 }
 
-		private class actualAgentHandlerForTest : ActualAgentHandler
+		private class actualAgentAssemblerForTest : ActualAgentAssembler
 		{
-			public actualAgentHandlerForTest(IActualAgentDataHandler actualAgentDataHandler, IMbCacheFactory mbCacheFactory) : base(actualAgentDataHandler, mbCacheFactory)
+			public actualAgentAssemblerForTest(IDatabaseHandler databaseHandler, IMbCacheFactory mbCacheFactory) : base(databaseHandler, mbCacheFactory)
 			{
 			}
 
-			public IActualAgentDataHandler ExposeActualAgentDataHandler
+			public IDatabaseHandler ExposeDatabaseHandler
 			{
-				get { return ActualAgentDataHandler; }
+				get { return DatabaseHandler; }
 			}
 		}
 	}

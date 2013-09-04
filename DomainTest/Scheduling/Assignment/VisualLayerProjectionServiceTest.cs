@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			PersonFactory.AddDefinitionSetToPerson(person, defSet);
 			IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignment(person, ScenarioFactory.CreateScenarioAggregate());
 			IActivity act = ActivityFactory.CreateActivity("the one");
-			ass.SetMainShiftLayers(new[]{new MainShiftLayer(act, createPeriod(10,19))}, new ShiftCategory("cat"));
+			ass.AddMainLayer(act, createPeriod(10,19));
 			ass.AddOvertimeLayer(act, createPeriod(16, 17), defSet);
 			
 			IVisualLayerCollection res = ass.ProjectionService().CreateProjection();
@@ -396,11 +396,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			IPersonAssignment personAss = PersonAssignmentFactory.CreatePersonAssignment(person,scenario);
 			personAss.AddPersonalLayer(act3, period3);
-			personAss.SetMainShiftLayers(new[]
-				{
-					new MainShiftLayer(act1, period1), 
-					new MainShiftLayer(act2, period2)
-				}, new ShiftCategory("test"));
+			personAss.AddMainLayer(act1, period1);
+			personAss.AddMainLayer(act2, period2);
 			IPersonAbsence personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, period4, absence);
 
 			var day =

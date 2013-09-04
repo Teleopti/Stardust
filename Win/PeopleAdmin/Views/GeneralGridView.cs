@@ -664,7 +664,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				}
 			}
 
-			Grid.Model.SelectedRanges.AddRange(ranges.ToArray());
+            ranges.ForEach(Grid.Selections.Add);
 		}
 
 		public void ConfigureGridForDynamicColumns()

@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 
 	    public AuthenticationResult LogOn(string windowsLogOnName)
         {
-            AuthenticationResult result = new AuthenticationResult{Successful = false,HasMessage = false};
+            var result = new AuthenticationResult{Successful = false,HasMessage = false};
             using (var unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork())
             {
                 var userNameParts = windowsLogOnName.Split('\\');

@@ -66,7 +66,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
             Assert.IsNull(Session.Get<PersonAssignment>(schedData.Id));
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         [Test]
         public void VerifyAddScheduleDictionaryWhenChanged()
         {
@@ -81,7 +80,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 					PersistAndRemoveFromUnitOfWork(act);
 
             var schedDataModified = schedData.EntityClone();
-						schedDataModified.SetMainShiftLayers(new[] { new MainShiftLayer(act, schedData.Period) }, cat);
+	        schedDataModified.AddMainLayer(act, schedData.Period);
+					schedDataModified.SetShiftCategory(cat);
             
             diffColl.Add(new DifferenceCollectionItem<IPersistableScheduleData>(schedData, schedDataModified));
 

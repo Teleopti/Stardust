@@ -530,6 +530,7 @@
     <Compile Include="Presentation\IReportSettingsScheduleTimeVersusTargetTimeView.cs" />
     <Compile Include="Presentation\ReportSettingsScheduleTimeVersusTargetTimePresenter.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimePerActivity.cs" />
+    <Compile Include="Scheduling\AbsenceMerger.cs" />
     <Compile Include="Scheduling\AgentPreferenceAddCommand.cs" />
     <Compile Include="Scheduling\AgentPreferenceCanCreateResult.cs" />
     <Compile Include="Scheduling\AgentPreferenceData.cs" />

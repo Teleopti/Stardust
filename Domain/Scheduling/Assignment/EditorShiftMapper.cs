@@ -26,17 +26,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			 return retShift;
 		 }
 
+		//should be removed
 		public void SetMainShiftLayers(IPersonAssignment personassignment, IEditableShift editableShift)
 		{
 			InParameter.NotNull("personassignment", personassignment);
 			InParameter.NotNull("editableShift", editableShift);
 
-			var layerList = new List<IMainShiftLayer>();
+			personassignment.ClearMainLayers();
 			foreach (var layer in editableShift.LayerCollection)
 			{
-				layerList.Add(new MainShiftLayer(layer.Payload, layer.Period));
+				personassignment.AddMainLayer(layer.Payload, layer.Period);
 			}
-			personassignment.SetMainShiftLayers(layerList, editableShift.ShiftCategory);
+			personassignment.SetShiftCategory(editableShift.ShiftCategory);
 		}
 	}
 }

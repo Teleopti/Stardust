@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 				var coherentChecker = new TeamSteadyStateCoherentChecker();
 				var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-				var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper, new EditableShiftMapper());
+				var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
 				var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
 				var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
             	var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			var coherentChecker = new TeamSteadyStateCoherentChecker();
 			var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-			var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper, new EditableShiftMapper());
+			var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
 			var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
 
             service.ReportProgress += resourceOptimizerPersonOptimized;
@@ -727,7 +727,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         	var coherentChecker = new TeamSteadyStateCoherentChecker();
         	var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
         	var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
-        	var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper, new EditableShiftMapper());
+        	var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
 			
 
 			var dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(_stateHolder);

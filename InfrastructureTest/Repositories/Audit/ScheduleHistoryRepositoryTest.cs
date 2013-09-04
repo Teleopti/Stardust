@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Criterion;
 using NHibernate.Envers;
 using NUnit.Framework;
@@ -48,9 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				var layers = new List<IMainShiftLayer>(PersonAssignment.MainLayers());
-				layers.Add((IMainShiftLayer) layers[0].NoneEntityClone());
-				PersonAssignment.SetMainShiftLayers(layers, PersonAssignment.ShiftCategory);
+				PersonAssignment.AddMainLayer(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period);
 				uow.PersistAll();
 			}
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
