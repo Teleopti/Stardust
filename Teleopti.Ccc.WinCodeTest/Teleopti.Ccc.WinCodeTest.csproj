@@ -476,6 +476,7 @@
     <Compile Include="Payroll\PayrollHelperTest.cs" />
     <Compile Include="Payroll\VisualizePresenterTest.cs" />
     <Compile Include="Payroll\VisualPayloadInfoTest.cs" />
+    <Compile Include="PeopleAdmin\AddPersonEnableCommandTest.cs" />
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodMustHavePreferenceComparerTest.cs" />
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodSeasonalityComparerTest.cs" />
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodExtraComparerTest.cs" />
