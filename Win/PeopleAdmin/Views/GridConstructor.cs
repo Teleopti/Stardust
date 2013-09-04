@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
     public class GridConstructor : Component
     {
-        private FilteredPeopleHolder _filteredPeopleHolder;
+        private readonly FilteredPeopleHolder _filteredPeopleHolder;
 
         public GridConstructor(FilteredPeopleHolder filteredPeopleHolder)
         {
