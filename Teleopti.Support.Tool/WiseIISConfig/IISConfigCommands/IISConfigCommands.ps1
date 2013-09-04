@@ -394,3 +394,55 @@ function start-AppPool{
             Invoke-AppCmd Start Apppool "$PoolName"
 			Invoke-AppCmd Set Apppool "$PoolName" /autoStart:true
 }
+
+function restoreToBaseline
+{
+    param($computerName)
+
+$con = New-Object System.Data.SqlClient.SqlConnection
+$con.ConnectionString = "Server=$Server;Database=master;Integrated Security=true"
+$con.Open()
+
+# Create SqlCommand object, define command text, and set the connection
+$cmd = New-Object System.Data.SqlClient.SqlCommand
+$cmd.Connection = $con
+$cmd.CommandText = "RestoreToBaseline '$computerName'" 
+$cmd.CommandTimeout = 0
+$cmd.ExecuteNonQuery()
+
+}
+ 
+function insert-License{
+    param($Server,
+            $Db,
+            $xmlString)
+# Create SqlConnection object, define connection string, and open connection
+$con = New-Object System.Data.SqlClient.SqlConnection
+$con.ConnectionString = "Server=$Server;Database=$Db;Integrated Security=true"
+$con.Open()
+
+# Create SqlCommand object, define command text, and set the connection
+$cmd = New-Object System.Data.SqlClient.SqlCommand
+$cmd.Connection = $con
+$cmd.CommandText = "DELETE FROM License"
+$cmd.ExecuteNonQuery()
+
+$cmd.CommandText = "INSERT INTO License
+  (Id, Version, CreatedBy, UpdatedBy, CreatedOn, UpdatedOn, XmlString)
+  VALUES (@Id, @Version, @CreatedBy, @UpdatedBy, @CreatedOn, @UpdatedOn, @XmlString)"
+
+$superUser = "3f0886ab-7b25-4e95-856a-0d726edc2a67"
+$now = Get-Date
+
+# Add parameters to pass values to the INSERT statement
+$cmd.Parameters.AddWithValue("@Id", [guid]::NewGuid()) | Out-Null
+$cmd.Parameters.AddWithValue("@Version", 1) | Out-Null
+$cmd.Parameters.AddWithValue("@CreatedBy", $superUser) | Out-Null
+$cmd.Parameters.AddWithValue("@UpdatedBy", $superUser) | Out-Null
+$cmd.Parameters.AddWithValue("@CreatedOn", $now) | Out-Null
+$cmd.Parameters.AddWithValue("@UpdatedOn", $now) | Out-Null
+$cmd.Parameters.AddWithValue("@XmlString", $xmlString) | Out-Null
+# Execute INSERT statement
+$RowsInserted = $cmd.ExecuteNonQuery()
+Write-Host 'Inserted License: ' $RowsInserted
+}
