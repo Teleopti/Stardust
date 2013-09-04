@@ -397,8 +397,10 @@ function start-AppPool{
 
 function restoreToBaseline
 {
-    param($computerName)
-
+    param($computerName,
+            $spContent)
+$stringDrop = "IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RestoreToBaseline]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[RestoreToBaseline]"
 $con = New-Object System.Data.SqlClient.SqlConnection
 $con.ConnectionString = "Server=$Server;Database=master;Integrated Security=true"
 $con.Open()
@@ -406,9 +408,17 @@ $con.Open()
 # Create SqlCommand object, define command text, and set the connection
 $cmd = New-Object System.Data.SqlClient.SqlCommand
 $cmd.Connection = $con
-$cmd.CommandText = "RestoreToBaseline '$computerName'" 
 $cmd.CommandTimeout = 0
+#the sp
+$cmd.CommandText = $stringDrop
 $cmd.ExecuteNonQuery()
+
+$cmd.CommandText = $spContent
+$cmd.ExecuteNonQuery()
+#and run it
+$cmd.CommandText = "RestoreToBaseline '$computerName'" 
+$cmd.ExecuteNonQuery()
+
 
 }
  

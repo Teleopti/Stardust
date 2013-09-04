@@ -162,7 +162,10 @@ function Test-InstallationSQLLogin {
 
         It "should restore db to baseline if set in config" {
             if($global:resetToBaseline -eq "True")
-                {restoreToBaseline -computerName $computerName}
+                {
+                    $spFile="$here\RestoreToBaseline.sql"
+                    $spContent = [IO.File]::ReadAllText($spFile)
+                    restoreToBaseline -computerName $computerName -spContent $spContent}
         }
 
 		It "should install correct MSI from Hebe"{
@@ -176,8 +179,6 @@ function Test-InstallationSQLLogin {
 		  
 			Install-TeleoptiCCCServer -BatchFile "$BatchFile" -ArgArray $ArgArray
 			
-			$temp = Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred
-			$temp | Should be $True
 		}
 	}
 }
