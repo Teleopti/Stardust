@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Win.Intraday
                     LazyLoadingManager.Initialize(changeInfo.UpdatedBy);
             }
 
-            public void NotifyMessageQueueSize()
+            public void NotifyMessageQueueSizeChange()
             {
             }
         }
