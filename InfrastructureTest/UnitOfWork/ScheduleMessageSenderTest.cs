@@ -4,6 +4,8 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -49,6 +51,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, null);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Insert);
 
+            serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
+
 			target.Execute(null, new[] {rootChangeInfo});
 
 			serviceBusSender.AssertWasNotCalled(x => x.Send(null), o => o.IgnoreArguments());
@@ -59,6 +63,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			var person = PersonFactory.CreatePerson();
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(person, DomainUpdateType.Insert);
+
+            serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
 
 			target.Execute(null, new[] {rootChangeInfo});
 			
@@ -73,6 +79,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var note = new Note(person, DateOnly.Today, scenario, "my note");
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(note, DomainUpdateType.Insert);
 
+            serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
+
 			target.Execute(null, new[] {rootChangeInfo});
 
 			serviceBusSender.AssertWasNotCalled(x => x.Send(null), o => o.IgnoreArguments());
@@ -86,10 +94,27 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var note = new PublicNote(person, DateOnly.Today, scenario, "my note");
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(note, DomainUpdateType.Insert);
 
+            serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
+
 			target.Execute(null, new[] {rootChangeInfo});
 
 			serviceBusSender.AssertWasNotCalled(x => x.Send(null), o => o.IgnoreArguments());
 		}
+
+        [Test]
+        public void ShouldNotSendNotificationForScheduleDayTag()
+        {
+            var person = PersonFactory.CreatePerson();
+            var scenario = ScenarioFactory.CreateScenarioAggregate();
+            var agentDayScheduleTag = new AgentDayScheduleTag(person, DateOnly.Today, scenario, new ScheduleTag());
+            IRootChangeInfo rootChangeInfo = new RootChangeInfo(agentDayScheduleTag, DomainUpdateType.Insert);
+
+            serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
+
+            target.Execute(null, new[] { rootChangeInfo });
+
+            serviceBusSender.AssertWasNotCalled(x => x.Send(null), o => o.IgnoreArguments());
+        }
 
 		[Test]
 		public void ShouldSendMessageBrokerIdentifierWithEvent()

@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         private IntradayPresenter _target;
         private readonly DateOnlyPeriod _period = new DateOnlyPeriod(new DateOnly(2013, 1, 1), new DateOnly(2013, 1, 2));
         private readonly DateOnlyPeriod _periodNow = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
-        private MockRepository _mocks;
         private IList<IPerson> _persons;
         private IIntradayView _view;
         private IMessageBroker _messageBroker;
@@ -57,68 +56,57 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
         {
-            _mocks = new MockRepository();
             _eventAggregator = new EventAggregator();
-            _view = _mocks.DynamicMock<IIntradayView>();
+            _view = MockRepository.GenerateMock<IIntradayView>();
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             _persons = new List<IPerson> { PersonFactory.CreatePerson() };
-            _schedulingResultLoader = _mocks.DynamicMock<ISchedulingResultLoader>();
-            _messageBroker = _mocks.StrictMock<IMessageBroker>();
-            _rtaStateHolder = _mocks.DynamicMock<IRtaStateHolder>();
-            _unitOfWorkFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
-            _repositoryFactory = _mocks.DynamicMock<IRepositoryFactory>();
-            _scheduleDictionarySaver = _mocks.DynamicMock<IScheduleDictionarySaver>();
-            _scheduleRepository = _mocks.DynamicMock<IScheduleRepository>();
+            _schedulingResultLoader = MockRepository.GenerateMock<ISchedulingResultLoader>();
+            _messageBroker = MockRepository.GenerateMock<IMessageBroker>();
+            _rtaStateHolder = MockRepository.GenerateMock<IRtaStateHolder>();
+            _unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+            _repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
+            _scheduleDictionarySaver = MockRepository.GenerateMock<IScheduleDictionarySaver>();
+            _scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
             _schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.Current.Regional.TimeZone), _persons);
-			_statisticRepository = _mocks.DynamicMock<IStatisticRepository>();
+			_statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
 
-            _scheduleCommand = _mocks.DynamicMock<OnEventScheduleMessageCommand>();
-            _meetingCommand = _mocks.DynamicMock<OnEventMeetingMessageCommand>();
-            _forecastCommand = _mocks.DynamicMock<OnEventForecastDataMessageCommand>();
-            _statisticCommand = _mocks.DynamicMock<OnEventStatisticMessageCommand>();
-            _loadStatisticCommand = _mocks.DynamicMock<LoadStatisticsAndActualHeadsCommand>((IStatisticRepository)null);
+            _scheduleCommand = MockRepository.GenerateMock<OnEventScheduleMessageCommand>();
+            _meetingCommand = MockRepository.GenerateMock<OnEventMeetingMessageCommand>();
+            _forecastCommand = MockRepository.GenerateMock<OnEventForecastDataMessageCommand>();
+            _statisticCommand = MockRepository.GenerateMock<OnEventStatisticMessageCommand>();
+            _loadStatisticCommand = MockRepository.GenerateMock<LoadStatisticsAndActualHeadsCommand>((IStatisticRepository)null);
 
-            Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder).Repeat.AtLeastOnce();
+            _schedulingResultLoader.Stub(x => x.SchedulerState).Return(_schedulerStateHolder);
 
-            _mocks.Replay(_schedulingResultLoader);
             _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker,
                                             _rtaStateHolder, _eventAggregator,
                                             _scheduleDictionarySaver, _scheduleRepository, _unitOfWorkFactory,
                                             _repositoryFactory, _statisticCommand, _forecastCommand,
                                             _scheduleCommand, _meetingCommand, _loadStatisticCommand);
-
-            _mocks.Verify(_schedulingResultLoader);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyHandlesDateIfTodayIsIncludedInSelection()
         {
-            _mocks.BackToRecord(_schedulingResultLoader);
-            Expect.Call(_schedulingResultLoader.SchedulerState).Return(new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_periodNow, TeleoptiPrincipal.Current.Regional.TimeZone), _persons)).Repeat.AtLeastOnce();
+            _schedulingResultLoader = MockRepository.GenerateMock<ISchedulingResultLoader>();
+            _schedulingResultLoader.Stub(x => x.SchedulerState).Return(new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_periodNow, TeleoptiPrincipal.Current.Regional.TimeZone), _persons)).Repeat.AtLeastOnce();
 
-            _mocks.Replay(_schedulingResultLoader);
             _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder, _eventAggregator,
                                             _scheduleDictionarySaver, _scheduleRepository, _unitOfWorkFactory,
                                             _repositoryFactory, _statisticCommand, _forecastCommand,
                                             _scheduleCommand, _meetingCommand, _loadStatisticCommand);
+
             Assert.AreEqual(DateOnly.Today, _target.IntradayDate);
             Assert.IsFalse(_target.HistoryOnly);
-            _mocks.Verify(_schedulingResultLoader);
         }
 
         [Test]
         public void VerifyMultiplicatorDefinitionSetsCanBeRead()
         {
-            _mocks.BackToRecord(_schedulingResultLoader);
-
             var multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
-            Expect.Call(_schedulingResultLoader.MultiplicatorDefinitionSets).Return(multiplicatorDefinitionSets);
-
-            _mocks.Replay(_schedulingResultLoader);
+            _schedulingResultLoader.Stub(x => x.MultiplicatorDefinitionSets).Return(multiplicatorDefinitionSets);
 
             Assert.AreEqual(multiplicatorDefinitionSets, _target.MultiplicatorDefinitionSets);
-
-            _mocks.Verify(_schedulingResultLoader);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -126,8 +114,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         {
             var period = _schedulerStateHolder.RequestedPeriod.Period();
             var smallPeriod = new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(15));
-            var skill = _mocks.StrictMock<ISkill>();
-            var skillDay = _mocks.DynamicMock<ISkillDay>();
+            var skill = MockRepository.GenerateMock<ISkill>();
+            var skillDay = MockRepository.GenerateMock<ISkillDay>();
 
             ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(smallPeriod, new Task(),
                                                                        ServiceAgreement.DefaultValues());
@@ -141,22 +129,18 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			skillStaffPeriod2.SetSkillDay(skillDay);
 			skillStaffPeriod3.SetSkillDay(skillDay);
 
-            Expect.Call(skill.Name).Return("SkillTest").Repeat.AtLeastOnce();
-            Expect.Call(skillDay.SkillStaffPeriodCollection).Return(
+            skill.Stub(x => x.Name).Return("SkillTest");
+            skillDay.Stub(x => x.SkillStaffPeriodCollection).Return(
                 new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { skillStaffPeriod1, skillStaffPeriod2, skillStaffPeriod3 }));
 
             _schedulerStateHolder.SchedulingResultState.Skills.Add(skill);
             _schedulerStateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>();
             _schedulerStateHolder.SchedulingResultState.SkillDays.Add(skill, new List<ISkillDay> { skillDay });
 
-            Expect.Call(_view.SelectedSkill).Return(skill);
+            _view.Stub(x => x.SelectedSkill).Return(skill);
 
-            _mocks.BackToRecord(_schedulingResultLoader);
-            Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder).Repeat.AtLeastOnce();
-
-            _mocks.ReplayAll();
             IList<ISkillStaffPeriod> skillStaffPeriods = _target.PrepareSkillIntradayCollection();
-            _mocks.VerifyAll();
+            
             Assert.AreEqual(string.Format(CultureInfo.CurrentCulture, "SkillTest - {0}", _target.IntradayDate.ToShortDateString()), _target.ChartIntradayDescription);
             Assert.AreEqual(2, skillStaffPeriods.Count);
         }
@@ -164,111 +148,124 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         [Test]
         public void VerifyPrepareSkillIntradayCollectionWithNotContainedSkill()
         {
-            ISkill skill = _mocks.StrictMock<ISkill>();
+            ISkill skill = MockRepository.GenerateMock<ISkill>();
             _schedulerStateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>();
-            Expect.Call(_view.SelectedSkill).Return(skill);
-
-            _mocks.BackToRecord(_schedulingResultLoader);
-            Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder);
-
-            _mocks.ReplayAll();
+            
+            _view.Stub(x => x.SelectedSkill).Return(skill);
+            
             IList<ISkillStaffPeriod> skillStaffPeriods = _target.PrepareSkillIntradayCollection();
-            _mocks.VerifyAll();
             Assert.AreEqual(0, skillStaffPeriods.Count);
         }
 
         [Test]
         public void VerifyOnEventStatisticMessageHandler()
         {
-            IEventMessage eventMessage = _mocks.StrictMock<IEventMessage>();
-            using (_mocks.Record())
-            {
-                Expect.Call(_view.InvokeRequired).Return(false);
-                Expect.Call(eventMessage.ModuleId).Return(Guid.Empty);
-                Expect.Call(() => _statisticCommand.Execute(eventMessage));
-            }
+            IEventMessage eventMessage = MockRepository.GenerateMock<IEventMessage>();
 
-            using (_mocks.Playback())
-            {
-                _target.OnEventStatisticMessageHandler(null, new EventMessageArgs(eventMessage));
-            }
+            _view.Stub(x => x.InvokeRequired).Return(false);
+            
+            _target.OnEventStatisticMessageHandler(null, new EventMessageArgs(eventMessage));
+            _statisticCommand.AssertWasCalled(x => x.Execute(eventMessage));
         }
 
         [Test]
         public void VerifyOnEventForecastDataMessageHandlerInvokeRequired()
         {
-            IAsyncResult result = _mocks.StrictMock<IAsyncResult>();
-            Expect.Call(_view.InvokeRequired).Return(true);
-            Expect.Call(_view.BeginInvoke(new Action<object, EventMessageArgs>(_target.OnEventForecastDataMessageHandler), new object[] { })).IgnoreArguments().Return(result);
-            _mocks.ReplayAll();
+            _view.Stub(x => x.InvokeRequired).Return(true);
+            
             _target.OnEventForecastDataMessageHandler(null, new EventMessageArgs(new EventMessage()));
-            _mocks.VerifyAll();
+
+            _view.AssertWasCalled(x => x.BeginInvoke(new Action<object, EventMessageArgs>(_target.OnEventForecastDataMessageHandler), new object[] {}), o => o.IgnoreArguments());
         }
 
         [Test]
         public void VerifyOnEventScheduleMessageHandlerInvokeRequired()
         {
-            IAsyncResult result = _mocks.StrictMock<IAsyncResult>();
-            Expect.Call(_view.InvokeRequired).Return(true);
-            Expect.Call(_view.BeginInvoke(new Action<object, EventMessageArgs>(_target.OnEventScheduleMessageHandler), new object(), new object())).IgnoreArguments().Return(result);
-            _mocks.ReplayAll();
+            _view.Stub(x => x.InvokeRequired).Return(true);
+            
             _target.OnEventScheduleMessageHandler(null, new EventMessageArgs(new EventMessage()));
-            _mocks.VerifyAll();
+
+            _view.AssertWasCalled(x => x.BeginInvoke(new Action<object, EventMessageArgs>(_target.OnEventScheduleMessageHandler), new object(), new object()), o => o.IgnoreArguments());
+        }
+
+        [Test]
+        public void VerifyOnEventMeetingMessageHandlerInvokeRequired()
+        {
+            _view.Stub(x => x.InvokeRequired).Return(true);
+
+            _target.OnEventMeetingMessageHandler(null, new EventMessageArgs(new EventMessage()));
+
+            _view.AssertWasCalled(x => x.BeginInvoke(new Action<object, EventMessageArgs>(_target.OnEventMeetingMessageHandler), new object(), new object()), o => o.IgnoreArguments());
         }
 
         [Test]
         public void VerifyOnEventStatisticMessageHandlerInvokeRequired()
         {
-            IAsyncResult result = _mocks.StrictMock<IAsyncResult>();
-            IEventMessage eventMessage = _mocks.StrictMock<IEventMessage>();
-            Expect.Call(_view.InvokeRequired).Return(true);
-            Expect.Call(_view.BeginInvoke(new EventHandler<EventMessageArgs>(_target.OnEventStatisticMessageHandler), new object[] { })).IgnoreArguments().Return(result);
-            _mocks.ReplayAll();
+            IEventMessage eventMessage = MockRepository.GenerateMock<IEventMessage>();
+            
+            _view.Stub(x => x.InvokeRequired).Return(true);
+            
             _target.OnEventStatisticMessageHandler(null, new EventMessageArgs(eventMessage));
-            _mocks.VerifyAll();
+
+            _view.AssertWasCalled(x => x.BeginInvoke(new EventHandler<EventMessageArgs>(_target.OnEventStatisticMessageHandler), new object[] { }), o => o.IgnoreArguments());
         }
 
         [Test]
         public void VerifyOnEventForecastDataMessageHandlerSameModuleId()
         {
-            IEventMessage eventMessage = _mocks.StrictMock<IEventMessage>();
-            Expect.Call(_view.InvokeRequired).Return(false);
-            Expect.Call(eventMessage.ModuleId).Return(_target.InstanceId);
-            _mocks.ReplayAll();
+            IEventMessage eventMessage = MockRepository.GenerateMock<IEventMessage>();
+            
+            _view.Stub(x => x.InvokeRequired).Return(false);
+            eventMessage.Stub(x => x.ModuleId).Return(_target.InstanceId);
+
             _target.OnEventForecastDataMessageHandler(null, new EventMessageArgs(eventMessage));
-            _mocks.VerifyAll();
+
+            _forecastCommand.AssertWasNotCalled(x => x.Execute(eventMessage));
+        }
+
+        [Test]
+        public void VerifyOnEventMeetingMessageHandlerSameModuleId()
+        {
+            IEventMessage eventMessage = MockRepository.GenerateMock<IEventMessage>();
+            _view.Stub(x => x.InvokeRequired).Return(false);
+            eventMessage.Stub(x => x.ModuleId).Return(_target.InstanceId);
+
+            _target.OnEventMeetingMessageHandler(null, new EventMessageArgs(eventMessage));
+
+            _meetingCommand.AssertWasNotCalled(x => x.Execute(eventMessage));
         }
 
         [Test]
         public void VerifyOnEventScheduleMessageHandlerSameModuleId()
         {
-            IEventMessage eventMessage = _mocks.StrictMock<IEventMessage>();
-            Expect.Call(_view.InvokeRequired).Return(false);
-            Expect.Call(eventMessage.ModuleId).Return(_target.InstanceId);
-            _mocks.ReplayAll();
+            IEventMessage eventMessage = MockRepository.GenerateMock<IEventMessage>();
+            _view.Stub(x => x.InvokeRequired).Return(false);
+            eventMessage.Stub(x => x.ModuleId).Return(_target.InstanceId);
+
             _target.OnEventScheduleMessageHandler(null, new EventMessageArgs(eventMessage));
-            _mocks.VerifyAll();
+
+            _scheduleCommand.AssertWasNotCalled(x => x.Execute(eventMessage));
         }
 
         [Test]
         public void VerifyOnEventExternalAgentStateMessageHandlerSameModuleId()
         {
-            IEventMessage eventMessage = _mocks.StrictMock<IEventMessage>();
-            Expect.Call(eventMessage.ModuleId).Return(_target.InstanceId);
-            _mocks.ReplayAll();
+            IEventMessage eventMessage = MockRepository.GenerateMock<IEventMessage>();
+            eventMessage.Stub(x => x.ModuleId).Return(_target.InstanceId);
+
             _target.OnEventActualAgentStateMessageHandler(null, new EventMessageArgs(eventMessage));
-            _mocks.VerifyAll();
         }
 
         [Test]
         public void VerifyOnEventStatisticMessageHandlerSameModuleId()
         {
-            IEventMessage eventMessage = _mocks.StrictMock<IEventMessage>();
-            Expect.Call(_view.InvokeRequired).Return(false);
-            Expect.Call(eventMessage.ModuleId).Return(_target.InstanceId);
-            _mocks.ReplayAll();
+            IEventMessage eventMessage = MockRepository.GenerateMock<IEventMessage>();
+            _view.Stub(x => x.InvokeRequired).Return(false);
+            eventMessage.Stub(x => x.ModuleId).Return(_target.InstanceId);
+
             _target.OnEventStatisticMessageHandler(null, new EventMessageArgs(eventMessage));
-            _mocks.VerifyAll();
+
+            _statisticCommand.AssertWasNotCalled(x => x.Execute(eventMessage));
         }
 
         [Test]
@@ -276,141 +273,96 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         {
             var message = new EventMessage();
 
-            Expect.Call(_view.InvokeRequired).Return(false);
-            Expect.Call(() => _forecastCommand.Execute(message));
-
-            _mocks.ReplayAll();
+            _view.Stub(x => x.InvokeRequired).Return(false);
+            
             _target.OnEventForecastDataMessageHandler(null, new EventMessageArgs(message));
 
-            _mocks.VerifyAll();
+            _forecastCommand.AssertWasCalled(x => x.Execute(message));
         }
-		
+
         [Test]
-        public void VerifyOnEventScheduleDataMessageHandlerAssignment()
+        public void VerifyOnEventMeetingMessageHandler()
         {
             var message = new EventMessage
             {
-                InterfaceType = typeof(IPersonAssignment),
+                InterfaceType = typeof(IMeetingChangedEntity),
                 DomainObjectId = Guid.NewGuid(),
-                DomainUpdateType = DomainUpdateType.Insert
+                DomainUpdateType = DomainUpdateType.NotApplicable
             };
 
-            Expect.Call(_view.InvokeRequired).Return(false);
-            Expect.Call(() => _scheduleCommand.Execute(message));
+            _view.Stub(x => x.InvokeRequired).Return(false);
 
-            _mocks.ReplayAll();
+            _target.OnEventMeetingMessageHandler(null, new EventMessageArgs(message));
 
-            _target.OnEventScheduleMessageHandler(null, new EventMessageArgs(message));
-
-            _mocks.VerifyAll();
+            _meetingCommand.AssertWasCalled(x => x.Execute(message));
         }
 
         [Test]
-        public void VerifyOnEventScheduleDataMessageHandlerDeleteAssignment()
+        public void VerifyOnEventScheduleDataMessageHandler()
         {
-            var idFromBroker = Guid.NewGuid();
             var message = new EventMessage
             {
-                InterfaceType = typeof(IPersonAssignment),
-                DomainObjectId = idFromBroker,
-                DomainUpdateType = DomainUpdateType.Delete
+                InterfaceType = typeof(IScheduleChangedEvent),
+                DomainObjectId = Guid.NewGuid(),
+                DomainUpdateType = DomainUpdateType.NotApplicable
             };
 
-            Expect.Call(_view.InvokeRequired).Return(false);
-            Expect.Call(() => _scheduleCommand.Execute(message));
-
-            _mocks.ReplayAll();
+            _view.Stub(x => x.InvokeRequired).Return(false);
+            
             _target.OnEventScheduleMessageHandler(null, new EventMessageArgs(message));
-
-            _mocks.VerifyAll();
+            
+            _scheduleCommand.AssertWasCalled(x => x.Execute(message));
         }
 
-		[Test]
+        [Test]
         public void VerifyOnLoadWithMoreThanOneHundredPeople()
         {
-			_mocks.BackToRecord(_schedulingResultLoader);
-            var uow = _mocks.DynamicMock<IUnitOfWork>();
+            var uow = MockRepository.GenerateMock<IUnitOfWork>();
 
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.AtLeastOnce();
-			Expect.Call(() => _schedulingResultLoader.LoadWithIntradayData(uow)).Repeat.AtLeastOnce();
+            var agentState = new ActualAgentState();
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 
-            CreateRtaStateHolderExpectation();
-			CreateRealTimeAdherenceInitializeExpectation();
+            _rtaStateHolder.Stub(r => r.ActualAgentStates)
+                           .Return(new Dictionary<Guid, IActualAgentState> {{Guid.NewGuid(), agentState}});
+            _repositoryFactory.Stub(x => x.CreateStatisticRepository())
+                              .Return(_statisticRepository);
+            _statisticRepository.Stub(x => x.LoadActualAgentState(null)).Return(new List<IActualAgentState> {agentState});
 
-			_rtaStateHolder.Expect(r => r.ActualAgentStates)
-			               .Return(new Dictionary<Guid, IActualAgentState> {{Guid.NewGuid(), new ActualAgentState()}}).IgnoreArguments();
-			Expect.Call(() => _messageBroker.RegisterEventSubscription(MyEventHandler, null)).IgnoreArguments().Repeat.Twice();
-        	Expect.Call(
-        		() => _messageBroker.RegisterEventSubscription(MyEventHandler, null, DateTime.UtcNow, DateTime.UtcNow)).
-				IgnoreArguments().Repeat.Times(3);
-
-			_mocks.ReplayAll();
-
-			Enumerable.Range(0, 101)
-					 .ForEach(_ => _schedulerStateHolder.FilteredAgentsDictionary.Add(Guid.NewGuid(), _persons[0]));
-
-		    _schedulerStateHolder.RequestedPeriod =
-		        new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-2), DateOnly.Today.AddDays(2)),
-		                                           TimeZoneInfo.Utc);
-            _target.Initialize();
-
-            _mocks.VerifyAll();
-            Assert.AreEqual(_rtaStateHolder, _target.RtaStateHolder);
-        }
-
-        [Test]
-        public void VerifyOnLoad()
-        {
-            _mocks.BackToRecord(_schedulingResultLoader);
-            var uow = _mocks.DynamicMock<IUnitOfWork>();
-
-            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.AtLeastOnce();
-            Expect.Call(() => _schedulingResultLoader.LoadWithIntradayData(uow)).Repeat.AtLeastOnce();
-
-            CreateRtaStateHolderExpectation();
-            CreateRealTimeAdherenceInitializeExpectation();
-
-            _rtaStateHolder.Expect(r => r.ActualAgentStates)
-                           .Return(new Dictionary<Guid, IActualAgentState> { { Guid.NewGuid(), new ActualAgentState() } }).IgnoreArguments();
-            Expect.Call(() => _messageBroker.RegisterEventSubscription(MyEventHandler, null)).IgnoreArguments().Repeat.Twice();
-            Expect.Call(
-                () => _messageBroker.RegisterEventSubscription(MyEventHandler, null, DateTime.UtcNow, DateTime.UtcNow)).
-                IgnoreArguments().Repeat.Twice();
-            Expect.Call(
-                () => _messageBroker.RegisterEventSubscription(MyEventHandler, Guid.Empty, null, DateTime.UtcNow, DateTime.UtcNow)).
-                IgnoreArguments();
-
-            _mocks.ReplayAll();
+            Enumerable.Range(0, 101)
+                      .ForEach(_ => _schedulerStateHolder.FilteredAgentsDictionary.Add(Guid.NewGuid(), _persons[0]));
 
             _schedulerStateHolder.RequestedPeriod =
                 new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-2), DateOnly.Today.AddDays(2)),
                                                    TimeZoneInfo.Utc);
             _target.Initialize();
 
-            _mocks.VerifyAll();
             Assert.AreEqual(_rtaStateHolder, _target.RtaStateHolder);
+            _schedulingResultLoader.AssertWasCalled(x => x.LoadWithIntradayData(uow));
+            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, null), o=> o.IgnoreArguments().Repeat.Twice());
+            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, Guid.Empty, typeof(Scenario), null, DateTime.UtcNow, DateTime.UtcNow), o => o.IgnoreArguments());
+            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, null, DateTime.UtcNow, DateTime.UtcNow), o => o.IgnoreArguments().Repeat.Times(2));
         }
 
-		private void CreateRealTimeAdherenceInitializeExpectation()
-		{
-			var actualAgentState = new ActualAgentState();
-			var actualAgentList = new List<IActualAgentState> { actualAgentState };
+        [Test]
+        public void VerifyOnLoad()
+        {
+            var uow = MockRepository.GenerateMock<IUnitOfWork>();
+            var agentState = new ActualAgentState();
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+            
+            _rtaStateHolder.Stub(r => r.ActualAgentStates)
+                           .Return(new Dictionary<Guid, IActualAgentState> { { Guid.NewGuid(), agentState } });
+            _repositoryFactory.Stub(x => x.CreateStatisticRepository())
+                              .Return(_statisticRepository);
+            _statisticRepository.Stub(x => x.LoadActualAgentState(null)).Return(new List<IActualAgentState>{agentState});
+            _schedulerStateHolder.RequestedPeriod =
+                new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-2), DateOnly.Today.AddDays(2)),
+                                                   TimeZoneInfo.Utc);
+            _target.Initialize();
 
-			Expect.Call(_repositoryFactory.CreateStatisticRepository()).Return(_statisticRepository).Repeat.Any();
-			Expect.Call(_statisticRepository.LoadActualAgentState(_persons)).IgnoreArguments().Return(actualAgentList);
-			Expect.Call(() => _rtaStateHolder.SetActualAgentState(actualAgentState));
-		}
-
-		private void CreateRtaStateHolderExpectation()
-		{
-			Expect.Call(_rtaStateHolder.Initialize);
-			_schedulerStateHolder.FilteredAgentsDictionary.Add(Guid.Empty, _persons.First());
-			Expect.Call(_target.SchedulerStateHolder).IgnoreArguments().Return(_schedulerStateHolder);
-			Expect.Call(() => _rtaStateHolder.SetFilteredPersons(_schedulerStateHolder.FilteredPersonDictionary.Values))
-				.IgnoreArguments();
-			Expect.Call(_rtaStateHolder.VerifyDefaultStateGroupExists);
-			
-		}
+            Assert.AreEqual(_rtaStateHolder, _target.RtaStateHolder);
+            _schedulingResultLoader.AssertWasCalled(x => x.LoadWithIntradayData(uow));
+        }
 
 		private static void MyEventHandler(object sender, EventMessageArgs e)
 		{
@@ -419,26 +371,14 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void VerifyOnLoadWithoutRtaEnabled()
 		{
-			_mocks.BackToRecord(_schedulingResultLoader);
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			var authorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 
-			var uow = _mocks.DynamicMock<IUnitOfWork>();
-			var authorization = _mocks.StrictMock<IPrincipalAuthorization>();
-
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.AtLeastOnce();
-			Expect.Call(() => _schedulingResultLoader.LoadWithIntradayData(uow)).Repeat.AtLeastOnce();
-			Expect.Call(_rtaStateHolder.Initialize);
-			Expect.Call(_target.SchedulerStateHolder).IgnoreArguments().Return(_schedulerStateHolder);
-			Expect.Call(() => _rtaStateHolder.SetFilteredPersons(_schedulerStateHolder.FilteredPersonDictionary.Values))
-				.IgnoreArguments();
-			Expect.Call(() => _messageBroker.RegisterEventSubscription(MyEventHandler, null)).IgnoreArguments().Repeat.Twice();
-			Expect.Call(
-				() => _messageBroker.RegisterEventSubscription(MyEventHandler, null, DateTime.UtcNow, DateTime.UtcNow)).
-				IgnoreArguments().Repeat.Twice();
-
-			Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning)).Return(true);
-			Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayRealTimeAdherence)).Return(false);
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 			
-			_mocks.ReplayAll();
+			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning)).Return(true);
+			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayRealTimeAdherence)).Return(false);
+			
 			using (new CustomAuthorizationContext(authorization))
 			{
 				_target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder,
@@ -446,112 +386,62 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 												_statisticCommand, _forecastCommand, _scheduleCommand, _meetingCommand, _loadStatisticCommand);
 				_target.Initialize();
 			}
-			_mocks.VerifyAll();
 
 			Assert.AreEqual(_rtaStateHolder, _target.RtaStateHolder);
-		}
+            _schedulingResultLoader.AssertWasCalled(x => x.LoadWithIntradayData(uow));
+            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, null), o => o.IgnoreArguments().Repeat.Twice());
+            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, Guid.Empty, typeof(Scenario), null, DateTime.UtcNow, DateTime.UtcNow), o => o.IgnoreArguments());
+            _messageBroker.AssertWasCalled(x => x.RegisterEventSubscription(MyEventHandler, null, DateTime.UtcNow, DateTime.UtcNow), o => o.IgnoreArguments());
+        }
 
         [Test]
         public void VerifySave()
         {
-            IUnitOfWork uow = _mocks.StrictMock<IUnitOfWork>();
-            IScheduleDictionary scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+            IUnitOfWork uow = MockRepository.GenerateMock<IUnitOfWork>();
+            IScheduleDictionary scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
             _schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
-            _mocks.BackToRecord(_schedulingResultLoader);
-            Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder).Repeat.Any();
 
-            using (_mocks.Ordered())
-            {
-                Expect.Call(_view.UpdateFromEditor);
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+            uow.Expect(x => x.PersistAll(_target)).Return(new List<IRootChangeInfo>()).Repeat.Once();
+            uow.Expect(x => x.PersistAll(_target)).Throw(new OptimisticLockException());
 
-                CreateBasicExpectationForSave(uow, scheduleDictionary);
-
-                Expect.Call(uow.PersistAll(_target)).Return(new List<IRootChangeInfo>());
-                Expect.Call(uow.Dispose);
-                Expect.Call(() => _view.UpdateShiftEditor(new List<IScheduleDay>()));
-                Expect.Call(_view.DisableSave);
-                Expect.Call(_view.UpdateFromEditor);
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
-                CreateBasicExpectationForSave(uow, scheduleDictionary);
-                Expect.Call(uow.PersistAll(_target)).Throw(new OptimisticLockException());
-                Expect.Call(uow.Dispose);
-                Expect.Call(() => _view.ShowInformationMessage("", "")).IgnoreArguments();
-
-                Expect.Call(() => _view.ToggleSchedulePartModified(false));
-
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
-                Expect.Call(() => _schedulingResultLoader.ReloadScheduleData(uow));
-                Expect.Call(uow.Dispose);
-                Expect.Call(_view.RefreshRealTimeScheduleControls);
-                Expect.Call(() => _view.ToggleSchedulePartModified(true));
-
-                Expect.Call(_view.DrawSkillGrid);
-                Expect.Call(() => _view.UpdateShiftEditor(new List<IScheduleDay>()));
-                Expect.Call(_view.DisableSave);
-            }
-
-            _mocks.ReplayAll();
             _target.Save();
             _target.Save();
 
-            _mocks.VerifyAll();
+            _schedulingResultLoader.AssertWasCalled(x => x.ReloadScheduleData(uow));
+            _view.AssertWasCalled(x => x.RefreshRealTimeScheduleControls());
+            _view.AssertWasCalled(x => x.ToggleSchedulePartModified(true));
+
+            _view.AssertWasCalled(x => x.DrawSkillGrid());
+            _view.AssertWasCalled(x => x.UpdateShiftEditor(new List<IScheduleDay>()));
+            _view.AssertWasCalled(x => x.DisableSave());
         }
 
         [Test]
         public void VerifyCheckIfUserWantsToSaveUnsavedData()
         {
-            IUnitOfWork uow = _mocks.StrictMock<IUnitOfWork>();
-            IScheduleDictionary scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+            IUnitOfWork uow = MockRepository.GenerateMock<IUnitOfWork>();
+            IScheduleDictionary scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
             _schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
             var differenceCollection = new DifferenceCollection<IPersistableScheduleData>();
 
-            _mocks.BackToRecord(_schedulingResultLoader);
-            Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder).Repeat.Any();
-            using (_mocks.Ordered())
-            {
-                Expect.Call(scheduleDictionary.DifferenceSinceSnapshot()).Return(differenceCollection);
-                Expect.Call(scheduleDictionary.DifferenceSinceSnapshot()).Return(differenceCollection);
-                Expect.Call(_view.ShowConfirmationMessage("", "")).IgnoreArguments().Return(DialogResult.Cancel);
-                Expect.Call(scheduleDictionary.DifferenceSinceSnapshot()).Return(differenceCollection);
-                Expect.Call(_view.ShowConfirmationMessage("", "")).IgnoreArguments().Return(DialogResult.No);
-                Expect.Call(scheduleDictionary.DifferenceSinceSnapshot()).Return(differenceCollection);
-                Expect.Call(_view.ShowConfirmationMessage("", "")).IgnoreArguments().Return(DialogResult.Yes);
-                Expect.Call(_view.UpdateFromEditor);
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
-                CreateBasicExpectationForSave(uow, scheduleDictionary);
-                Expect.Call(uow.PersistAll(_target)).Return(new List<IRootChangeInfo>());
-                Expect.Call(uow.Dispose);
-                Expect.Call(() => _view.UpdateShiftEditor(new List<IScheduleDay>()));
-                Expect.Call(_view.DisableSave);
-            }
+            scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(differenceCollection).Repeat.Once();
+            scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(differenceCollection).Repeat.Once();
+            _view.Stub(x => x.ShowConfirmationMessage("", "")).IgnoreArguments().Return(DialogResult.Cancel).Repeat.Once();
+            scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(differenceCollection).Repeat.Once();
+            _view.Stub(x => x.ShowConfirmationMessage("", "")).IgnoreArguments().Return(DialogResult.No).Repeat.Once();
+            scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(differenceCollection).Repeat.Once();
+            _view.Stub(x => x.ShowConfirmationMessage("", "")).IgnoreArguments().Return(DialogResult.Yes).Repeat.Once();
+            _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow).Repeat.Once();
+            uow.Stub(x => x.PersistAll(_target)).Return(new List<IRootChangeInfo>()).Repeat.Once();
 
-            _mocks.ReplayAll();
             Assert.IsFalse(_target.CheckIfUserWantsToSaveUnsavedData());
             differenceCollection.Add(new DifferenceCollectionItem<IPersistableScheduleData>());
             Assert.IsTrue(_target.CheckIfUserWantsToSaveUnsavedData());
             Assert.IsFalse(_target.CheckIfUserWantsToSaveUnsavedData());
             Assert.IsFalse(_target.CheckIfUserWantsToSaveUnsavedData());
-
-            _mocks.VerifyAll();
-        }
-
-        private void CreateBasicExpectationForSave(IUnitOfWork uow, IScheduleDictionary scheduleDictionary)
-        {
-            var changes = new DifferenceCollection<IPersistableScheduleData>();
-
-            Expect.Call(() => uow.Reassociate(_schedulerStateHolder.CommonStateHolder.Activities));
-            Expect.Call(() => uow.Reassociate(_schedulerStateHolder.CommonStateHolder.Absences));
-            Expect.Call(() => uow.Reassociate(_schedulerStateHolder.CommonStateHolder.ShiftCategories));
-
-            Expect.Call(() => uow.Reassociate(new List<IPerson>()));
-
-            var multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
-            Expect.Call(_schedulingResultLoader.MultiplicatorDefinitionSets).Return(multiplicatorDefinitionSets);
-            Expect.Call(() => uow.Reassociate(multiplicatorDefinitionSets));
-
-            Expect.Call(scheduleDictionary.DifferenceSinceSnapshot()).Return(changes);
-            Expect.Call(_scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository, changes)).Return(null);
+            _view.AssertWasCalled(x => x.UpdateShiftEditor(new List<IScheduleDay>()));
+            _view.AssertWasCalled(x => x.DisableSave());
         }
 
         [Test]
@@ -571,16 +461,10 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         [Test]
         public void VerifyCanSetIntradayDate()
         {
-            using (_mocks.Record())
-            {
-                _view.DrawSkillGrid();
-                LastCall.Repeat.Once();
-            }
-            using (_mocks.Playback())
-            {
-                _target.IntradayDate = _period.EndDate;
-            }
+            _target.IntradayDate = _period.EndDate;
+            
             Assert.AreEqual(_period.EndDate, _target.IntradayDate);
+            _view.AssertWasCalled(x => x.DrawSkillGrid());
         }
 
         [Test]
@@ -594,15 +478,13 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         public void VerifyCanGetAgentStateViewAdapterCollection()
         {
             var stategroups = new ReadOnlyCollection<IRtaStateGroup>(new List<IRtaStateGroup> { new RtaStateGroup("test", true, true) });
-            var model = _mocks.DynamicMock<IDayLayerViewModel>();
-            Expect.Call(_rtaStateHolder.RtaStateGroups).Return(stategroups);
-            _mocks.ReplayAll();
+            var model = MockRepository.GenerateMock<IDayLayerViewModel>();
+            _rtaStateHolder.Stub(x => x.RtaStateGroups).Return(stategroups);
             string test = "";
             foreach (var adaper in _target.CreateAgentStateViewAdapterCollection(model))
             {
                 test = adaper.StateGroup.Name;
             }
-            _mocks.VerifyAll();
             Assert.AreEqual("test", test);
         }
 
@@ -625,7 +507,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             if (disposing)
             {
                 ReleaseManagedResources();
-
             }
             ReleaseUnmanagedResources();
         }
@@ -642,15 +523,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         /// </summary>
         protected virtual void ReleaseManagedResources()
         {
-			_mocks.BackToRecord(_messageBroker);
-			_mocks.BackToRecord(_rtaStateHolder);
-			_messageBroker.UnregisterEventSubscription(_target.OnEventForecastDataMessageHandler);
-			LastCall.IgnoreArguments().Repeat.Any();
-			_mocks.Replay(_rtaStateHolder);
-			_mocks.Replay(_messageBroker);
-			_target.Dispose();
-			_mocks.Verify(_messageBroker);
-			_mocks.Verify(_rtaStateHolder);
         }
     }
 }
