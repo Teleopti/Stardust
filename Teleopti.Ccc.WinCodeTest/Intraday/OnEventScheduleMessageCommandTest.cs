@@ -68,55 +68,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
             _view.AssertWasCalled(x => x.ReloadScheduleDayInEditor(_person));
 		}
-        /*
-
-                [Test]
-                public void ShouldDeleteAssignmentFromDictionary()
-                {
-                    var idFromBroker = Guid.NewGuid();
-                    var scheduleDictionary = mocks.StrictMock<IScheduleDictionary>();
-			
-                    _schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
-
-                    Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder);
-                    Expect.Call(scheduleDictionary.DeleteFromBroker(idFromBroker)).Return(null);
-                    Expect.Call(_view.DrawSkillGrid);
-
-                    mocks.ReplayAll();
-
-                    target.Execute(new EventMessage { InterfaceType = typeof(IPersonAssignment), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Delete, ReferenceObjectId = _person.Id.GetValueOrDefault()});
-
-                    mocks.VerifyAll();
-                }
-
-        
-                [Test]
-                public void VerifyOnEventScheduleDataMessageHandler()
-                {
-                    Guid idFromBroker = Guid.NewGuid();
-                    IUnitOfWork unitOfWork = mocks.StrictMock<IUnitOfWork>();
-                    IScheduleDictionary scheduleDictionary = mocks.StrictMock<IScheduleDictionary>();
-                    IPersonAbsenceRepository personAbsenceRepository = mocks.StrictMock<IPersonAbsenceRepository>();
-
-                    setupCommonStuffForUpdatesFromBroker(unitOfWork, scheduleDictionary);
-
-                    Expect.Call(_repositoryFactory.CreatePersonAbsenceRepository(unitOfWork)).Return(
-                        personAbsenceRepository);
-                    Expect.Call(scheduleDictionary.UpdateFromBroker(personAbsenceRepository, idFromBroker)).Return(null);
-
-                    CommonStateHolder commonStateHolder = new CommonStateHolder();
-                    Expect.Call(_schedulerStateHolder.CommonStateHolder).Return(commonStateHolder);
-                    Expect.Call(() => unitOfWork.Reassociate(commonStateHolder.Absences));
-                    Expect.Call(_schedulingResultLoader.Contracts).Return(new List<IContract>());
-                    Expect.Call(_schedulingResultLoader.ContractSchedules).Return(new List<IContractSchedule>());
-                    Expect.Call(() => _view.ReloadScheduleDayInEditor(_person));
-
-                    mocks.ReplayAll();
-
-                    target.Execute(new EventMessage { InterfaceType = typeof(IPersonAbsence), DomainObjectId = idFromBroker, DomainUpdateType = DomainUpdateType.Insert, ReferenceObjectId = _person.Id.GetValueOrDefault() });
-
-                    mocks.VerifyAll();
-                }*/
 
     }
 }
