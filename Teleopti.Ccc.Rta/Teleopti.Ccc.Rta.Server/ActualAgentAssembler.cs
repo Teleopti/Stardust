@@ -105,7 +105,6 @@ namespace Teleopti.Ccc.Rta.Server
 				var state = agentState;
 				state.State = "";
 				state.StateCode = "LOGGED-OFF";
-				state.StateId = Guid.Empty;
 				state.StateStart = batchId;
 				state.AlarmId = Guid.Empty;
 				state.AlarmName = "";
@@ -134,7 +133,7 @@ namespace Teleopti.Ccc.Rta.Server
 							continue;
 						}
 
-						state.StateCode = loggedOutState.StateGroupName;
+						state.State = loggedOutState.StateGroupName;
 						state.StateId = loggedOutState.StateGroupId;
 						state.StateStart = batchId;
 						state.AlarmName = loggedOutState.Name;
