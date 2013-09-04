@@ -558,11 +558,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			newAss.AddOvertimeLayer(activity, period, null);
 			newAss.AddPersonalLayer(activity, period);
 			newAss.AddMainLayer(activity, period);
-			newAss.SetDayOff(new DayOffTemplate());
 			target.FillWithDataFrom(newAss);
 			target.OvertimeLayers().Should().Not.Be.Empty();
 			target.PersonalLayers().Should().Not.Be.Empty();
 			target.MainLayers().Should().Not.Be.Empty();
+		}
+
+		[Test]
+		public void ShouldFillWithDayOff()
+		{
+			var newAss = new PersonAssignment(target.Person, target.Scenario, target.Date);
+			newAss.SetDayOff(new DayOffTemplate());
+			var activity = ActivityFactory.CreateActivity("hej");
+			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+			newAss.AddOvertimeLayer(activity, period, null);
+			newAss.AddPersonalLayer(activity, period);
+			target.FillWithDataFrom(newAss);
+			target.OvertimeLayers().Should().Not.Be.Empty();
+			target.PersonalLayers().Should().Not.Be.Empty();
 			target.DayOff().Should().Not.Be.Null();
 		}
 
@@ -570,12 +583,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void ShouldKeepIdAndVersionCallingFillWithData()
 		{
 			var id = Guid.NewGuid();
-			var version = 123;
+			const int version = 123;
 			target.SetId(id);
 			target.SetVersion(version);
 			target.FillWithDataFrom(new PersonAssignment(target.Person, target.Scenario, target.Date));
 			target.Id.Should().Be.EqualTo(id);
 			target.Version.Should().Be.EqualTo(version);
+		}
+
+		[Test]
+		public void ShouldClearMainLayersWhenSettingDayoff()
+		{
+			target.AddMainLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			target.SetDayOff(new DayOffTemplate());
+			target.MainLayers().Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldRemoveDayoffWhenAddingMainLayer()
+		{
+			target.SetDayOff(new DayOffTemplate());
+			target.AddMainLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			target.DayOff().Should().Be.Null();
 		}
 	}
 }

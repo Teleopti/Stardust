@@ -292,6 +292,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var layer = new MainShiftLayer(activity, period);
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
+			SetDayOff(null);
 		}
 
 		public virtual void SetShiftCategory(IShiftCategory shiftCategory)
@@ -320,6 +321,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void SetDayOff(IDayOffTemplate template)
 		{
+			if (template != null)
+			{
+				ClearMainLayers();				
+			}
 			_dayOffTemplate = template;
 		}
 
