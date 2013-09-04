@@ -39,6 +39,8 @@ namespace Teleopti.Interfaces.Domain
         /// Get/set last change
         /// </summary>
         DateTime? LastChange { get; set; }
+
+	    void ReplaceLayer(IAbsence newAbsence, DateTimePeriod newPeriod);
     }
 
 }
