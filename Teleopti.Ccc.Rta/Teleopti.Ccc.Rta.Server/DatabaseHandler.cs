@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Rta.Server
 								NextStart = reader.GetDateTime(reader.GetOrdinal("NextStart")),
 								BatchId = !reader.IsDBNull(reader.GetOrdinal("BatchId"))
 									          ? reader.GetDateTime(reader.GetOrdinal("BatchId"))
-									          : SqlDateTime.MinValue.Value,
+									          : (DateTime?) null,
 								OriginalDataSourceId = !reader.IsDBNull(reader.GetOrdinal("OriginalDataSourceId"))
 									                       ? reader.GetString(reader.GetOrdinal("OriginalDataSourceId"))
 									                       : ""
