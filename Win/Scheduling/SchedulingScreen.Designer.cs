@@ -70,7 +70,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripSpinningProgressControl1 = new Teleopti.Ccc.Win.Common.Controls.SpinningProgress.ToolStripSpinningProgressControl();
 			this.toolStripStatusLabelStatus = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
-			this.toolStripStatusLabelTimeZone = new Syncfusion.Windows.Forms.Tools.ToolStripSplitButtonEx();
 			this.toolStripStatusLabelScheduleTag = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripStatusLabelContractTime = new System.Windows.Forms.ToolStripSplitButton();
 			this.toolStripMenuItemContractTime = new System.Windows.Forms.ToolStripMenuItem();
@@ -328,6 +327,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExFilterDays = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.xxShowLastNumberOfDays = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripComboBoxExFilterDays = new Syncfusion.Windows.Forms.Tools.ToolStripComboBoxEx();
+			this.toolStripStatusLabelTimeZone = new System.Windows.Forms.ToolStripStatusLabel();
 			this.statusStrip1.SuspendLayout();
 			this.contextMenuViews.SuspendLayout();
 			this.contextMenuStripResultView.SuspendLayout();
@@ -373,13 +373,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// toolStripSpinningProgressControl1
 			// 
 			this.toolStripSpinningProgressControl1.ActiveSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(146)))), ((int)(((byte)(33)))));
-			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = true;
+			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = false;
 			this.toolStripSpinningProgressControl1.InactiveSegmentColor = System.Drawing.Color.Silver;
 			this.toolStripSpinningProgressControl1.Name = "ToolStripSpinningProgress";
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(20, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 3;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 10;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripStatusLabelStatus.AutoSize = false;
 			this.toolStripStatusLabelStatus.Name = "toolStripStatusLabelStatus";
 			this.SetShortcut(this.toolStripStatusLabelStatus, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelStatus.Size = new System.Drawing.Size(932, 21);
+			this.toolStripStatusLabelStatus.Size = new System.Drawing.Size(991, 21);
 			this.toolStripStatusLabelStatus.Spring = true;
 			this.toolStripStatusLabelStatus.Text = "Ready";
 			this.toolStripStatusLabelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -399,25 +399,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.toolStripProgressBar1, System.Windows.Forms.Keys.None);
 			this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 20);
 			// 
-			// toolStripStatusLabelTimeZone
-			// 
-			this.toolStripStatusLabelTimeZone.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripStatusLabelTimeZone.Image = ((System.Drawing.Image)(resources.GetObject("toolStripStatusLabelTimeZone.Image")));
-			this.toolStripStatusLabelTimeZone.Name = "toolStripStatusLabelTimeZone";
-			this.SetShortcut(this.toolStripStatusLabelTimeZone, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelTimeZone.Size = new System.Drawing.Size(139, 24);
-			this.toolStripStatusLabelTimeZone.Text = "xxViewPointTimeZone";
-			this.toolStripStatusLabelTimeZone.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.toolStripStatusLabelTimeZone.Visible = false;
-			// 
 			// toolStripStatusLabelScheduleTag
 			// 
-			this.toolStripStatusLabelScheduleTag.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
-			this.toolStripStatusLabelScheduleTag.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenInner;
+			this.toolStripStatusLabelScheduleTag.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right)));
+			this.toolStripStatusLabelScheduleTag.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
 			this.toolStripStatusLabelScheduleTag.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripStatusLabelScheduleTag.Name = "toolStripStatusLabelScheduleTag";
 			this.SetShortcut(this.toolStripStatusLabelScheduleTag, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelScheduleTag.Size = new System.Drawing.Size(4, 21);
+			this.toolStripStatusLabelScheduleTag.Size = new System.Drawing.Size(53, 21);
+			this.toolStripStatusLabelScheduleTag.Text = "fgsdgsd";
 			this.toolStripStatusLabelScheduleTag.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// toolStripStatusLabelContractTime
@@ -3319,6 +3309,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripComboBoxExFilterDays.ToolTipText = "xxFilterNumberOfDaysBackInTime";
 			this.toolStripComboBoxExFilterDays.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxExFilterDays_SelectedIndexChanged);
 			// 
+			// toolStripStatusLabelTimeZone
+			// 
+			this.toolStripStatusLabelTimeZone.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
+			this.toolStripStatusLabelTimeZone.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripStatusLabelTimeZone.Image = ((System.Drawing.Image)(resources.GetObject("toolStripStatusLabelTimeZone.Image")));
+			this.toolStripStatusLabelTimeZone.Name = "toolStripStatusLabelTimeZone";
+			this.SetShortcut(this.toolStripStatusLabelTimeZone, System.Windows.Forms.Keys.None);
+			this.toolStripStatusLabelTimeZone.Size = new System.Drawing.Size(0, 21);
+			this.toolStripStatusLabelTimeZone.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.toolStripStatusLabelTimeZone.Visible = false;
+			// 
 			// SchedulingScreen
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3647,12 +3648,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ToolStripButton toolStripButtonFilterAgents;
 		private ToolStripButton toolStripButtonFilterOvertimeAvailability;
 		private ToolStripButton toolStripButtonFilterStudentAvailability;
-		private Syncfusion.Windows.Forms.Tools.ToolStripSplitButtonEx toolStripStatusLabelTimeZone;
 		private ToolStripSplitButton toolStripStatusLabelContractTime;
 		private ToolStripMenuItem toolStripMenuItemContractTime;
 		private ToolStripMenuItem toolStripMenuItemWorkTime;
 		private ToolStripMenuItem toolStripMenuItemPaidTime;
 		private ToolStripMenuItem toolStripMenuItemOverTime;
+		private ToolStripStatusLabel toolStripStatusLabelTimeZone;
         
         
     }
