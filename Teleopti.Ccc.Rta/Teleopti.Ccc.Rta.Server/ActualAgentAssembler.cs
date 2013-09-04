@@ -103,44 +103,56 @@ namespace Teleopti.Ccc.Rta.Server
 			foreach (var agentState in missingAgentStates)
 			{
 				var state = agentState;
-				List<RtaAlarmLight> alarmList;
-				if (!activityAlarms.TryGetValue(state.ScheduledId, out alarmList))
-				{
-					LoggingSvc.InfoFormat("Could not find any alarms connected to this activity id: {0}", state.ScheduledId);
-					continue;
-				}
-
-				var loggedOutState = alarmList.FirstOrDefault(a => a.IsLogOutState);
-				if (loggedOutState == null)
-				{
-					LoggingSvc.InfoFormat("Could not find any alarm that is set to logged out");
-					continue;
-				}
-
-				if (state.StateId == loggedOutState.StateGroupId)
-				{
-					LoggingSvc.InfoFormat("Agent {0} is already in logged out state {1}", agentState.PersonId, state.StateId);
-					continue;
-				}
-
-				state.State = loggedOutState.StateGroupName;
-				state.StateId = loggedOutState.StateGroupId;
+				state.State = "";
+				state.StateCode = "LOGGED-OFF";
+				state.StateId = Guid.Empty;
 				state.StateStart = batchId;
-
-				state.AlarmName = loggedOutState.Name;
-				state.AlarmId = loggedOutState.AlarmTypeId;
-				state.Color = loggedOutState.DisplayColor;
-				state.AlarmStart = batchId.AddTicks(loggedOutState.ThresholdTime);
-				state.StaffingEffect = loggedOutState.StaffingEffect;
+				state.AlarmId = Guid.Empty;
+				state.AlarmName = "";
+				state.Color = 0;
+				state.AlarmStart = batchId;
+				state.StaffingEffect = 0;
 				state.ReceivedTime = batchId;
 				state.BatchId = batchId;
 				state.OriginalDataSourceId = sourceId;
+
+				List<RtaAlarmLight> alarmList;
+				if (!activityAlarms.TryGetValue(state.ScheduledId, out alarmList))
+					LoggingSvc.InfoFormat("Could not find any alarms connected to this activity id: {0}", state.ScheduledId);
+
+				else
+				{
+					var loggedOutState = alarmList.FirstOrDefault(a => a.IsLogOutState);
+					if (loggedOutState == null)
+						LoggingSvc.InfoFormat("Could not find any alarm that is set to logged out");
+
+					else
+					{
+						if (state.StateId == loggedOutState.StateGroupId)
+						{
+							LoggingSvc.InfoFormat("Agent {0} is already in logged out state {1}", agentState.PersonId, state.StateId);
+							continue;
+						}
+
+						state.StateCode = loggedOutState.StateGroupName;
+						state.StateId = loggedOutState.StateGroupId;
+						state.StateStart = batchId;
+						state.AlarmName = loggedOutState.Name;
+						state.AlarmId = loggedOutState.AlarmTypeId;
+						state.Color = loggedOutState.DisplayColor;
+						state.AlarmStart = batchId.AddTicks(loggedOutState.ThresholdTime);
+						state.StaffingEffect = loggedOutState.StaffingEffect;
+						state.ReceivedTime = batchId;
+						state.BatchId = batchId;
+						state.OriginalDataSourceId = sourceId;
+					}
+				}
 
 				BatchedAgents.AddOrUpdate(state.PersonId, state, (guid, oldState) => state);
 				agentsToSendOverMessageBroker.Add(state);
 			}
 			LoggingSvc.InfoFormat("Saving {0} agents to database", BatchedAgents.Count);
-			lock(LockObject)
+			lock (LockObject)
 				saveToDataStore(BatchedAgents.Values);
 
 			LoggingSvc.InfoFormat("Found {0} agents to send over message broker", agentsToSendOverMessageBroker.Count);

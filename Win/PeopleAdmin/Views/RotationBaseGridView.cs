@@ -1634,8 +1634,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				}
 			}
 
-			Grid.CurrentCellInfo = new GridCurrentCellInfo(null, null, 0, 0);
-			Grid.Model.SelectedRanges.AddRange(ranges.ToArray());
+            ranges.ForEach(Grid.Selections.Add);
 		}
 
 		private void ChildGridCopyHelper(int index, IList<TAdapterChild> adapterChildCollection)
