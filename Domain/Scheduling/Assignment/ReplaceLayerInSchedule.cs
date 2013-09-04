@@ -68,16 +68,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void Replace(IScheduleDay scheduleDay, ILayer<IAbsence> layerToRemove, IAbsence newAbsence, DateTimePeriod newPeriod)
 		{
-			foreach (var personAbsence in scheduleDay.PersonAbsenceCollection())
+			foreach (var personAbsence in scheduleDay.PersonAbsenceCollection()
+																	.Where(personAbsence => personAbsence.Layer.Equals(layerToRemove)))
 			{
-				if (personAbsence.Layer.Equals(layerToRemove))
-				{
-					//behövs nån form av orderindex på personabsence kommas ihåg?
-					scheduleDay.Remove(personAbsence);
-					scheduleDay.Add(new PersonAbsence(personAbsence.Person, personAbsence.Scenario,
-																						new AbsenceLayer(newAbsence, newPeriod)));
-					return;
-				}
+				personAbsence.ReplaceLayer(newAbsence, newPeriod);
+				return;
 			}
 			throw new ArgumentException(string.Format(CultureInfo.CurrentUICulture, exMessageLayerNotFound, layerToRemove));
 		}

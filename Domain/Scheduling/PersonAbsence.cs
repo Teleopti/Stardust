@@ -224,6 +224,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
             set { _lastChange = value; }
         }
 
+	    public virtual void ReplaceLayer(IAbsence newAbsence, DateTimePeriod newPeriod)
+	    {
+		    _layer = new AbsenceLayer(newAbsence, newPeriod);
+	    }
+
 	    #region ICloneableEntity<PersonAbsence> Members
 
         /// <summary>
