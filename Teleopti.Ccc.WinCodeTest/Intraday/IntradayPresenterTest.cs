@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         private OnEventForecastDataMessageCommand _forecastCommand;
         private OnEventStatisticMessageCommand _statisticCommand;
         private LoadStatisticsAndActualHeadsCommand _loadStatisticCommand;
+        private OnEventMeetingMessageCommand _meetingCommand;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
@@ -72,6 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			_statisticRepository = _mocks.DynamicMock<IStatisticRepository>();
 
             _scheduleCommand = _mocks.DynamicMock<OnEventScheduleMessageCommand>();
+            _meetingCommand = _mocks.DynamicMock<OnEventMeetingMessageCommand>();
             _forecastCommand = _mocks.DynamicMock<OnEventForecastDataMessageCommand>();
             _statisticCommand = _mocks.DynamicMock<OnEventStatisticMessageCommand>();
             _loadStatisticCommand = _mocks.DynamicMock<LoadStatisticsAndActualHeadsCommand>((IStatisticRepository)null);
@@ -83,7 +85,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
                                             _rtaStateHolder, _eventAggregator,
                                             _scheduleDictionarySaver, _scheduleRepository, _unitOfWorkFactory,
                                             _repositoryFactory, _statisticCommand, _forecastCommand,
-                                            _scheduleCommand, _loadStatisticCommand);
+                                            _scheduleCommand, _meetingCommand, _loadStatisticCommand);
 
             _mocks.Verify(_schedulingResultLoader);
         }
@@ -98,7 +100,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder, _eventAggregator,
                                             _scheduleDictionarySaver, _scheduleRepository, _unitOfWorkFactory,
                                             _repositoryFactory, _statisticCommand, _forecastCommand,
-                                            _scheduleCommand, _loadStatisticCommand);
+                                            _scheduleCommand, _meetingCommand, _loadStatisticCommand);
             Assert.AreEqual(DateOnly.Today, _target.IntradayDate);
             Assert.IsFalse(_target.HistoryOnly);
             _mocks.Verify(_schedulingResultLoader);
@@ -323,69 +325,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _mocks.VerifyAll();
         }
 
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        //[Test] 
-		//public void VerifyOnEventExternalAgentStateMessageHandler()
-        //{
-        //    var uow = mocks.DynamicMock<IUnitOfWork>();
-        //    var eventMessage = mocks.StrictMock<IEventMessage>();
-        //    var authorization = mocks.StrictMock<IPrincipalAuthorization>();
-        //    var stateHolder = new SchedulerStateHolder(_scenario,
-        //                                               new DateOnlyPeriodAsDateTimePeriod(_periodNow,
-        //                                                                                  TeleoptiPrincipal.Current.Regional.
-        //                                                                                    TimeZone), _persons);
-        //    var period = stateHolder.RequestedPeriod.Period();
-
-        //    //IExternalAgentState externalAgentState = new ExternalAgentState("001", "AUX2", TimeSpan.Zero, DateTime.MinValue, Guid.NewGuid(), 1, DateTime.UtcNow, false);
-        //    //byte[] data = new ExternalAgentStateEncoder().Encode(externalAgentState);
-        //    //mocks.BackToRecord(_schedulingResultLoader);
-        //    createRealTimeAdherenceInitializeExpectation();
-        //    createRtaStateHolderExpectation();
-
-        //    Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.AtLeastOnce();
-
-        //    Expect.Call(()=>_messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null)).IgnoreArguments().Repeat.Times(3);
-        //    Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null, period.StartDateTime,
-        //                                                            period.EndDateTime)).IgnoreArguments().Repeat.Times(3);
-        //    Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, Guid.Empty, typeof(IActualAgentState), period.StartDateTime,
-        //                                                            period.EndDateTime)).IgnoreArguments().Repeat.Times(3);
-
-        //    //Expect.Call(_repositoryFactory.CreateStatisticRepository()).Return(_statisticRepository);
-
-        //    //Expect.Call(_statisticRepository.LoadRtaAgentStates(
-        //    //    _schedulerStateHolder.RequestedPeriod.Period(), _rtaStateHolder.ExternalLogOnPersons)).IgnoreArguments().Repeat.Twice().
-        //    //    Return(new Collection<IExternalAgentState>());
-
-        //    Expect.Call(eventMessage.ModuleId).Return(Guid.Empty);
-        //    //Expect.Call(_rtaStateHolder.FilteredPersons).Return(new List<IPerson>());
-        //    //Expect.Call(eventMessage.DomainObject).Return(data);
-
-        //    Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning)).Return(true);
-        //    Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayRealTimeAdherence)).Return(true);
-        //    //Expect.Call(_schedulingResultLoader.SchedulerState).Return(stateHolder).Repeat.AtLeastOnce();
-        //    //Expect.Call(()=>_schedulingResultLoader.LoadWithIntradayData(uow));
-
-
-
-        //    mocks.ReplayAll();
-        //    using (new CustomAuthorizationContext(authorization))
-        //    {
-        //        _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder,
-        //                                        _eventAggregator, null, null, _unitOfWorkFactory, _repositoryFactory,
-        //                                        _statisticCommand, _forecastCommand, _scheduleCommand, _loadStatisticCommand);
-        //        _target.Initialize();
-        //        bool updateMessageReceived = false;
-        //        _target.ExternalAgentStateReceived += (x, y) =>
-        //                                                  {
-        //                                                      updateMessageReceived = true;
-        //                                                  };
-        //        _target.OnEventActualAgentStateMessageHandler(null, new EventMessageArgs(eventMessage));
-
-        //        Assert.That(() => updateMessageReceived, Is.True.After(10000, 10));
-        //    }
-        //    mocks.VerifyAll();
-        //}
-		
 		[Test]
         public void VerifyOnLoadWithMoreThanOneHundredPeople()
         {
@@ -406,9 +345,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 				IgnoreArguments().Repeat.Times(3);
 
 			_mocks.ReplayAll();
-
-			//Enumerable.Range(0, 101)
-			//		  .ForEach(_ => _schedulerStateHolder.FilteredPersonDictionary.Add(Guid.NewGuid(), _persons[0]));
 
 			Enumerable.Range(0, 101)
 					 .ForEach(_ => _schedulerStateHolder.FilteredAgentsDictionary.Add(Guid.NewGuid(), _persons[0]));
@@ -468,7 +404,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		private void CreateRtaStateHolderExpectation()
 		{
 			Expect.Call(_rtaStateHolder.Initialize);
-			//_schedulerStateHolder.FilteredPersonDictionary.Add(Guid.Empty, _persons.First());
 			_schedulerStateHolder.FilteredAgentsDictionary.Add(Guid.Empty, _persons.First());
 			Expect.Call(_target.SchedulerStateHolder).IgnoreArguments().Return(_schedulerStateHolder);
 			Expect.Call(() => _rtaStateHolder.SetFilteredPersons(_schedulerStateHolder.FilteredPersonDictionary.Values))
@@ -508,53 +443,13 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			{
 				_target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder,
 												_eventAggregator, null, null, _unitOfWorkFactory, _repositoryFactory,
-												_statisticCommand, _forecastCommand, _scheduleCommand, _loadStatisticCommand);
+												_statisticCommand, _forecastCommand, _scheduleCommand, _meetingCommand, _loadStatisticCommand);
 				_target.Initialize();
 			}
 			_mocks.VerifyAll();
 
 			Assert.AreEqual(_rtaStateHolder, _target.RtaStateHolder);
 		}
-
-        //[Test] And this
-        //public void VerifyOnLoadWithPersons()
-        //{
-        //    mocks.BackToRecord(_schedulingResultLoader);
-
-        //    var uow = mocks.DynamicMock<IUnitOfWork>();
-        //    var period = _schedulerStateHolder.RequestedPeriod.Period();
-        //    var actualAgentState = new ActualAgentState();
-        //    var actualAgentList = new List<IActualAgentState> { actualAgentState };
-
-        //    createRealTimeAdherenceInitializeExpectation();
-        //    createRtaStateHolderExpectation();
-
-        //    Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.AtLeastOnce();
-
-        //    Expect.Call(() => _schedulingResultLoader.LoadWithIntradayData(uow)).Repeat.AtLeastOnce();
-
-        //    Expect.Call(() => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, typeof (IStatisticTask)))
-        //        .
-        //        IgnoreArguments().Repeat.Times(2);
-        //    Expect.Call(
-        //        () => _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, null, period.StartDateTime,
-        //                                                       period.EndDateTime)).IgnoreArguments().Repeat.Times(3);
-
-        //    Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder).Repeat.AtLeastOnce();
-        //    Expect.Call(_statisticRepository.LoadActualAgentState(new List<IPerson>())).IgnoreArguments().Return(
-        //        new List<IActualAgentState>());
-        //    // Expected #0, Actual #1 error:
-        //    Expect.Call(_statisticRepository.LoadRtaAgentStates(
-        //        period, new List<ExternalLogOnPerson>())).IgnoreArguments().Return(new List<IExternalAgentState>());
-
-        //    mocks.ReplayAll();
-
-        //    _target.Initialize();
-
-        //    mocks.VerifyAll();
-
-        //    Assert.IsTrue(_schedulerStateHolder.AllPermittedPersons.Contains(_persons[0]));
-        //}
 
         [Test]
         public void VerifySave()
@@ -750,9 +645,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			_mocks.BackToRecord(_messageBroker);
 			_mocks.BackToRecord(_rtaStateHolder);
 			_messageBroker.UnregisterEventSubscription(_target.OnEventForecastDataMessageHandler);
-			//_messageBroker.UnregisterEventSubscription(_target.OnEventScheduleMessageHandler);
-			//_messageBroker.UnregisterEventSubscription(_target.OnEventStatisticMessageHandler);
-			//_messageBroker.UnregisterEventSubscription(_target.OnEventActualAgentStateMessageHandler);
 			LastCall.IgnoreArguments().Repeat.Any();
 			_mocks.Replay(_rtaStateHolder);
 			_mocks.Replay(_messageBroker);

@@ -418,6 +418,7 @@
     <Compile Include="Intraday\DayLayerModelComparer.cs" />
     <Compile Include="Intraday\DispatcherWrapper.cs" />
     <Compile Include="Intraday\LoadStatisticsAndActualHeadsCommand.cs" />
+    <Compile Include="Intraday\OnEventMeetingMessageCommand.cs" />
     <Compile Include="Intraday\OpenIntradayTodayCommand.cs" />
     <Compile Include="Intraday\ReforecastModel.cs" />
     <Compile Include="Intraday\ReforecastWizardPages.cs" />

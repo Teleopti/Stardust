@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.Common;
 using log4net;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private readonly OnEventStatisticMessageCommand _onEventStatisticMessageCommand;
         private readonly OnEventForecastDataMessageCommand _onEventForecastDataMessageCommand;
         private readonly OnEventScheduleMessageCommand _onEventScheduleMessageCommand;
+        private readonly OnEventMeetingMessageCommand _onEventMeetingMessageCommand;
         private readonly LoadStatisticsAndActualHeadsCommand _loadStatisticsAndActualHeadsCommand;
         private readonly Queue<MessageForRetryCommand> _messageForRetryQueue = new Queue<MessageForRetryCommand>();
 
@@ -61,6 +63,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             OnEventStatisticMessageCommand onEventStatisticMessageCommand,
             OnEventForecastDataMessageCommand onEventForecastDataMessageCommand,
             OnEventScheduleMessageCommand onEventScheduleMessageCommand,
+            OnEventMeetingMessageCommand onEventMeetingMessageCommand,
             LoadStatisticsAndActualHeadsCommand loadStatisticsAndActualHeadsCommand)
         {
             _eventAggregator = eventAggregator;
@@ -69,6 +72,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _onEventStatisticMessageCommand = onEventStatisticMessageCommand;
             _onEventForecastDataMessageCommand = onEventForecastDataMessageCommand;
             _onEventScheduleMessageCommand = onEventScheduleMessageCommand;
+            _onEventMeetingMessageCommand = onEventMeetingMessageCommand;
             _loadStatisticsAndActualHeadsCommand = loadStatisticsAndActualHeadsCommand;
             _repositoryFactory = repositoryFactory;
             _messageBroker = messageBroker;
@@ -108,10 +112,12 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _messageBroker.RegisterEventSubscription(OnEventStatisticMessageHandler,
                                                     typeof(IStatisticTask));
             _messageBroker.RegisterEventSubscription(OnEventScheduleMessageHandler,
-                                                    typeof(IPersistableScheduleData),
+                                                    SchedulerStateHolder.RequestedScenario.Id.GetValueOrDefault(),
+                                                    typeof(Scenario),
+                                                    typeof(IScheduleChangedEvent),
                                                     period.StartDateTime,
                                                     period.EndDateTime);
-        	_messageBroker.RegisterEventSubscription(OnEventScheduleMessageHandler,
+        	_messageBroker.RegisterEventSubscription(OnEventMeetingMessageHandler,
         	                                         typeof (IMeetingChangedEntity));
             _messageBroker.RegisterEventSubscription(OnEventForecastDataMessageHandler,
                                                     typeof(IForecastData),
@@ -224,6 +230,29 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 catch (DataSourceException)
                 {
                     _messageForRetryQueue.Enqueue(new MessageForRetryCommand(_onEventScheduleMessageCommand,
+                                                                             e.Message));
+                    _view.ShowBackgroundDataSourceError();
+                }
+            }
+        }
+
+        public void OnEventMeetingMessageHandler(object sender, EventMessageArgs e)
+        {
+            if (_view.InvokeRequired)
+            {
+                _view.BeginInvoke(new Action<object, EventMessageArgs>(OnEventMeetingMessageHandler), sender, e);
+            }
+            else
+            {
+                if (e.Message.ModuleId == _instanceId) return;
+
+                try
+                {
+                    _onEventMeetingMessageCommand.Execute(e.Message);
+                }
+                catch (DataSourceException)
+                {
+                    _messageForRetryQueue.Enqueue(new MessageForRetryCommand(_onEventMeetingMessageCommand,
                                                                              e.Message));
                     _view.ShowBackgroundDataSourceError();
                 }
