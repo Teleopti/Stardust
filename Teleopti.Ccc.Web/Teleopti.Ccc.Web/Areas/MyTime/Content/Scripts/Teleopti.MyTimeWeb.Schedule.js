@@ -573,10 +573,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		        return model;
 		    };
 
-			var addOvertimeAvailabilityViewModel = function() {
-			};
-
-			vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, addOvertimeAvailabilityViewModel, _navigateToRequests);
+			vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests);
 			ko.applyBindings(vm, $('#page')[0]);
 		},
 		LoadAndBindData: function () {
