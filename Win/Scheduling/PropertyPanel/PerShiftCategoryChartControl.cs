@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Chart;
@@ -15,8 +14,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
     class PerShiftCategoryChartControl : BaseUserControl
     {
         private IDistributionInformationExtractor _model;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private PerShiftCategoryChart _chart;
+        private TableLayoutPanel tableLayoutPanel1;
+        private readonly PerShiftCategoryChart _chart;
         private ComboBoxAdv _comboBoxShiftCategory;
         private Label label1;
         //private Label label2;
@@ -27,7 +26,11 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             initializeComponent();
             _chart = new PerShiftCategoryChart {Dock = DockStyle.Fill};
-			
+			_chart.Dock = DockStyle.Fill;
+	        _chart.PrimaryXAxis.ForceZero = true;
+			_chart.PrimaryYAxis.ForceZero = true;
+			//_chart.PrimaryXAxis.Range.Min = 0;
+			//_chart.PrimaryYAxis.Range.Min = 0;
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
             tableLayoutPanel1.Controls.Add(_comboBoxShiftCategory,0,1);
             //tableLayoutPanel1.Controls.Add(label2, 0, 2);
@@ -77,14 +80,16 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             if (selectedShiftCategory == null)
             {
-                var chartSeriesTemp = new ChartSeries("");
+	            _chart.ShowLegend = true;
+                var chartSeriesTemp = new ChartSeries(UserTexts.Resources.NoDataAvailable);
+	            chartSeriesTemp.Style.Interior = new BrushInfo(_chart.BackColor);
                 _chart.Model.Series.Add(chartSeriesTemp);
                 chartSeriesTemp.Points.Add(0, 0);
-                _chart.ShowLegend = false;
+				_chart.LegendAlignment = ChartAlignment.Center;
             }
             else
             {
-                _chart.ShowLegend = true;
+				_chart.ShowLegend = false;
                 var chartSeries = new ChartSeries(selectedShiftCategory.Description.Name);
                 chartSeries.Style.Interior = new BrushInfo(selectedShiftCategory.DisplayColor);
                 _chart.Model.Series.Add(chartSeries);
@@ -93,8 +98,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                 {
                     chartSeries.Points.Add(item.Key, item.Value);
                 }
-            }
-            
+            }    
         }
 
         private void initializeComponent()
@@ -102,7 +106,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             label1 = new Label();
             //label2 = new Label();
             _comboBoxShiftCategory = new ComboBoxAdv();
-            _comboBoxShiftCategory.Left = 400;
+            //_comboBoxShiftCategory.Left = 400;
+			_comboBoxShiftCategory.Margin = new Padding(33, 3, 3, 3);
             _comboBoxShiftCategory.SelectedIndexChanged += new EventHandler(selectedIndexChanged);
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.SuspendLayout();
@@ -110,16 +115,16 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            //this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(SizeType.Percent, 100F));
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(SizeType.Absolute, 25F));
             //this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(150, 150);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -138,15 +143,16 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             label1.Size = new System.Drawing.Size(96, 13);
             label1.TabIndex = 0;
             label1.Text = UserTexts.Resources.PerShiftCategory;
-            // 
-            // label2
-            // 
-			//label2.AutoSize = true;
-			//label2.Location = new System.Drawing.Point(3, 47);
-			//label2.Name = "label2";
-			//label2.Size = new System.Drawing.Size(77, 13);
-			//label2.TabIndex = 1;
-			//label2.Text = UserTexts.Resources.OverView;
+	        label1.Margin = new Padding(30, 3, 3, 3);
+	        // 
+	        // label2
+	        // 
+	        //label2.AutoSize = true;
+	        //label2.Location = new System.Drawing.Point(3, 47);
+	        //label2.Name = "label2";
+	        //label2.Size = new System.Drawing.Size(77, 13);
+	        //label2.TabIndex = 1;
+	        //label2.Text = UserTexts.Resources.OverView;
 
         }
 
