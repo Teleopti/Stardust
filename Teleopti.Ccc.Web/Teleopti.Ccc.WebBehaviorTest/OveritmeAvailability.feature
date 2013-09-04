@@ -156,33 +156,40 @@ Scenario: Add invalid overtime availability
 Scenario: Default overtime availability values on existing overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
-	| Field      | Value      |
-	| Date       | 2013-08-20 |
-	| Start time | 16:30      |
-	| End time   | 03:00 +1   |
+	| Field             | Value      |
+	| Date              | 2013-08-20 |
+	| Start time        | 16:30      |
+	| End time          | 03:00      |
+	| End time next day | true       |
 	And I view my week schedule for date '2013-08-20'
 	When I click on the day summary for date '2013-08-20'
 	And I click to add overtime availability
 	Then I should see add overtime availability form with
-	| Field      | Value    |
-	| Start time | 16:30    |
-	| End time   | 03:00 +1 |
+	| Field             | Value      |
+	| Field             | Value      |
+	| Start date        | 2013-08-20 |
+	| End date          | 2013-08-21 |
+	| Start time        | 16:30      |
+	| End time          | 03:00      |
+	| End time next day | true       |
 
 @ignore
 Scenario: Replace overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
-	| Field      | Value      |
-	| Date       | 2013-08-20 |
-	| Start time | 16:30      |
-	| End time   | 03:00 +1   |
+	| Field             | Value      |
+	| Date              | 2013-08-20 |
+	| Start time        | 16:30      |
+	| End time          | 03:00      |
+	| End time next day | true       |
 	And I view my week schedule for date '2013-08-20'
 	When I click on the day summary for date '2013-08-20'
 	And I click to add overtime availability
 	And I input overtime availability with
-	| Field      | Value    |
-	| Start time | 15:30    |
-	| End time   | 02:00 +1 |
+	| Field             | Value |
+	| Start time        | 15:30 |
+	| End time          | 02:00 |
+	| End time next day | true  |
 	And I click submit button
 	Then I should see an overtime availability symbol for date '2013-08-20' with tooltip
 	| Field      | Value    |

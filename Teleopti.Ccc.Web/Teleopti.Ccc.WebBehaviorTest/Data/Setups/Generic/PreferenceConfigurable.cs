@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WebBehaviorTest.Bindings;
-using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			if (EndTimeMaximum.HasValue)
 			{
-				restriction.EndTimeLimitation=new EndTimeLimitation(null, EndTimeMaximum.Value.TimeOfDay);
+				restriction.EndTimeLimitation = new EndTimeLimitation(null, EndTimeMaximum.Value.TimeOfDay);
 			}
 			if (ShiftCategory != null)
 			{

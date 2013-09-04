@@ -100,23 +100,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see add overtime availability form with")]
 		public void ThenIShouldSeeAddOvertimeAvailabilityFormWith(Table table)
 		{
-			var overtimeAvailability = table.CreateInstance<OvertimeAvailabilityViewModel>();
+			var overtimeAvailability = table.CreateInstance<OvertimeAvailabilityFields>();
 			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .overtime-availability-start-date",
 			                                                 overtimeAvailability.StartDate.ToShortDateString(
 				                                                 UserFactory.User().Culture));
-			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .overtime-availability-start-date",
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .overtime-availability-end-date",
 															 overtimeAvailability.EndDate.ToShortDateString(
 																 UserFactory.User().Culture));
 
-			int[] st = overtimeAvailability.StartTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
+			var st = overtimeAvailability.StartTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
 			var startTimeSpan = new TimeSpan(st[0], st[1], 0);
-			int[] end = overtimeAvailability.EndTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
+			var end = overtimeAvailability.EndTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
 			var endTimeSpan = new TimeSpan(end[0], end[1], 0);
 
 			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .overtime-availability-start-time",
 												TimeHelper.TimeOfDayFromTimeSpan(startTimeSpan, UserFactory.User().Culture));
 			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .overtime-availability-end-time",
 												TimeHelper.TimeOfDayFromTimeSpan(endTimeSpan, UserFactory.User().Culture));
+			Browser.Interactions.AssertExistsUsingJQuery(overtimeAvailability.EndTimeNextDay
+				                                             ? ".overtime-availability-next-day:checked"
+				                                             : ".overtime-availability-next-day:not(:checked)");
 		}
 
 		[Then(@"I should see the request form with '(.*)' as default date")]
@@ -167,21 +170,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.AssertInputValueUsingJQuery("#Schedule-addRequest-subject-input", subject);
 		}
-	}
-
-	public class OvertimeAvailabilityViewModel
-	{
-		public DateTime StartDate { get; set; }
-		public DateTime EndDate { get; set; }
-
-		public string StartTime { get; set; }
-		public string EndTime { get; set; }
-		public bool EndTimeNextDay { get; set; }
-	}
-
-	public class OvertimeAvailabilityTooltip
-	{
-		public string StartTime { get; set; }
-		public string EndTime { get; set; }
 	}
 }

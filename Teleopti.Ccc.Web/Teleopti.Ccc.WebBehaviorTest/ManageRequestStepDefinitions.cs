@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime;
+using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -42,13 +40,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I input overtime availability with")]
 		public void WhenIInputOvertimeAvailabilityWith(Table table)
 		{
-			var overtimeAvailability = table.CreateInstance<OvertimeAvailabilityViewModel>();
+			var overtimeAvailability = table.CreateInstance<OvertimeAvailabilityFields>();
 			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .overtime-availability-start-time').timepicker('setTime', '{0}');", overtimeAvailability.StartTime));
 			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .overtime-availability-end-time').timepicker('setTime', '{0}');", overtimeAvailability.EndTime));
 			if (overtimeAvailability.EndTimeNextDay)
 				Browser.Interactions.Click(".overtime-availability-next-day");
 		}
-
 
 		[Then(@"I should see the text request in the list")]
 		public void ThenIShouldSeeTheTextRequestInTheList()

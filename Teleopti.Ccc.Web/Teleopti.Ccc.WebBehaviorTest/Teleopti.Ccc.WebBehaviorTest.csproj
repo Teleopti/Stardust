@@ -98,6 +98,8 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\OvertimeAvailabilityConfigurable.cs" />
+    <Compile Include="Bindings\Generic\OvertimeAvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\UserLogonDetailsStepDefinitions.cs" />
     <Compile Include="OveritmeAvailability.feature.cs">
