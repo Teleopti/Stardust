@@ -38,10 +38,8 @@ CREATE TABLE #fact_schedule_day_off_count (
 	scenario_code uniqueidentifier,
 	)
 
---Get BU id
+--Get scenario_id
 DECLARE @scenario_id int 
-DECLARE @business_unit_id int
-SELECT @business_unit_id = business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code
 SELECT @scenario_id = scenario_id FROM mart.dim_scenario WHERE scenario_code= @scenario_code
 
 --delete days changed from mart.fact_schedule_day_count (new, updated or deleted)
@@ -65,7 +63,6 @@ INNER JOIN mart.fact_schedule_day_count fs
 INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC utc
 	ON utc.shift_startdate_id = fs.date_id
 	AND utc.person_id = fs.person_id
-WHERE stg.business_unit_code = @business_unit_code
 
 -- special delete if something is left, a shift over midninght for example
 DELETE fs
@@ -89,7 +86,6 @@ INNER JOIN mart.fact_schedule_day_count fs
 	AND fs.date_id = dsd.date_id
 	AND fs.start_interval_id = stg.interval_id
 	AND ds.scenario_id = fs.scenario_id
-	WHERE fs.business_unit_id = @business_unit_id
 
 ----------------------------------------------------------------------------------
 -- Insert shift_category_count rows
@@ -129,7 +125,6 @@ INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC stg
 	ON f.shift_startdate_id = stg.shift_startdate_id
 	AND f.person_id = stg.person_id
 	AND f.scenario_id = @scenario_id 
-	AND f.business_unit_id  = @business_unit_id
 WHERE shift_category_id<>-1
 GROUP BY f.shift_startdate_id,f.shift_startinterval_id,f.person_id,f.scenario_id,f.business_unit_id,f.datasource_id
 
