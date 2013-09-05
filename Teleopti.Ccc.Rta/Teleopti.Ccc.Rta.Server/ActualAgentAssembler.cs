@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -18,24 +17,20 @@ namespace Teleopti.Ccc.Rta.Server
 	{
 		RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid state);
 
-		IActualAgentState GetAndSaveState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode,
-		                                  DateTime timestamp,
-		                                  TimeSpan timeInState,
-		                                  DateTime? batchId, string originalSourceId);
+		IActualAgentState GetAgentState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode,
+		                                DateTime timestamp,
+		                                TimeSpan timeInState,
+		                                DateTime? batchId, string originalSourceId);
 
-		IActualAgentState CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp);
-		void FlushMemoryToDatabase();
-		IEnumerable<IActualAgentState> GetAndSaveStateForMissingAgent(DateTime batchId, string sourceId);
+		IEnumerable<IActualAgentState> GetAgentStatesForMissingAgents(DateTime batchId, string sourceId);
+		IActualAgentState GetAgentStateForScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp);
 	}
 
 	public class ActualAgentAssembler : IActualAgentAssembler
 	{
 		private readonly IDatabaseHandler _databaseHandler;
 		private readonly IMbCacheFactory _mbCacheFactory;
-		private static readonly ConcurrentDictionary<Guid, IActualAgentState> BatchedAgents = new ConcurrentDictionary<Guid, IActualAgentState>();
-		private static readonly object LockObject = new object();
-		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IActualAgentAssembler));
-		private static DateTime _lastSave = DateTime.UtcNow;
+		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof (IActualAgentAssembler));
 
 		public ActualAgentAssembler(IDatabaseHandler databaseHandler, IMbCacheFactory mbCacheFactory)
 		{
@@ -48,7 +43,7 @@ namespace Teleopti.Ccc.Rta.Server
 			get { return _databaseHandler; }
 		}
 
-		public IActualAgentState CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp)
+		public IActualAgentState GetAgentStateForScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
 			var platformId = Guid.Empty;
 			var stateCode = string.Empty;
@@ -65,8 +60,8 @@ namespace Teleopti.Ccc.Rta.Server
 			var previousState = DatabaseHandler.LoadOldState(personId);
 
 			if (previousState == null)
-				return createAndSaveState(scheduleLayers, null, personId, platformId, stateCode, timestamp, new TimeSpan(0),
-										  businessUnitId, null, originalSourceId);
+				return buildAgentState(scheduleLayers, null, personId, platformId, stateCode, timestamp, new TimeSpan(0),
+				                       businessUnitId, null, originalSourceId);
 
 			if (scheduleLayers[0] != null && haveScheduleChanged(scheduleLayers[0], previousState))
 			{
@@ -79,15 +74,12 @@ namespace Teleopti.Ccc.Rta.Server
 			originalSourceId = previousState.OriginalDataSourceId;
 			var batchId = previousState.BatchId;
 
-			return createAndSaveState(scheduleLayers, previousState, personId, platformId, stateCode, timestamp, new TimeSpan(0),
-									  businessUnitId, batchId, originalSourceId);
+			return buildAgentState(scheduleLayers, previousState, personId, platformId, stateCode, timestamp, new TimeSpan(0),
+			                       businessUnitId, batchId, originalSourceId);
 		}
 
-		public IEnumerable<IActualAgentState> GetAndSaveStateForMissingAgent(DateTime batchId, string sourceId)
+		public IEnumerable<IActualAgentState> GetAgentStatesForMissingAgents(DateTime batchId, string sourceId)
 		{
-			LoggingSvc.InfoFormat("Flushing cached agent states to database");
-			FlushMemoryToDatabase();
-
 			LoggingSvc.InfoFormat("Getting missing agent states from from batch: {0}, sourceId: {1}", batchId, sourceId);
 			var missingAgentStates = DatabaseHandler.GetMissingAgentStatesFromBatch(batchId, sourceId);
 			if (!missingAgentStates.Any())
@@ -98,7 +90,7 @@ namespace Teleopti.Ccc.Rta.Server
 			LoggingSvc.InfoFormat("Found {0} missing agents", missingAgentStates.Count);
 
 			var activityAlarms = DatabaseHandler.ActivityAlarms();
-			var agentsToSendOverMessageBroker = new List<IActualAgentState>();
+			var updatedAgents = new List<IActualAgentState>();
 			foreach (var agentState in missingAgentStates)
 			{
 				var state = agentState;
@@ -149,19 +141,15 @@ namespace Teleopti.Ccc.Rta.Server
 						state.OriginalDataSourceId = sourceId;
 					}
 				}
-
-				BatchedAgents.AddOrUpdate(state.PersonId, state, (guid, oldState) => state);
-				agentsToSendOverMessageBroker.Add(state);
+				updatedAgents.Add(state);
 			}
-			LoggingSvc.InfoFormat("Saving {0} agents to database", BatchedAgents.Count);
-			FlushMemoryToDatabase();
-
-			LoggingSvc.InfoFormat("Found {0} agents to send over message broker", agentsToSendOverMessageBroker.Count);
-			return agentsToSendOverMessageBroker;
+			LoggingSvc.InfoFormat("Found {0} agents to send over message broker", updatedAgents.Count);
+			return updatedAgents;
 		}
 
-		public IActualAgentState GetAndSaveState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode, DateTime timestamp,
-			TimeSpan timeInState, DateTime? batchId, string originalSourceId)
+		public IActualAgentState GetAgentState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode,
+		                                       DateTime timestamp,
+		                                       TimeSpan timeInState, DateTime? batchId, string originalSourceId)
 		{
 			LoggingSvc.InfoFormat("Getting readmodel for person: {0}", personId);
 			var readModelLayers = DatabaseHandler.GetReadModel(personId);
@@ -172,12 +160,15 @@ namespace Teleopti.Ccc.Rta.Server
 
 			var scheduleLayers = DatabaseHandler.CurrentLayerAndNext(timestamp, readModelLayers);
 			var previousState = DatabaseHandler.LoadOldState(personId);
-			return createAndSaveState(scheduleLayers, previousState, personId, platformTypeId, stateCode, timestamp, timeInState, businessUnitId, batchId, originalSourceId);
+			return buildAgentState(scheduleLayers, previousState, personId, platformTypeId, stateCode, timestamp, timeInState,
+			                       businessUnitId, batchId, originalSourceId);
 		}
 
 
-		private IActualAgentState createAndSaveState(IList<ScheduleLayer> scheduleLayers, IActualAgentState previousState, Guid personId, Guid platformTypeId,
-			string stateCode, DateTime timestamp, TimeSpan timeInState, Guid businessUnitId, DateTime? batchId, string originalSourceId)
+		private IActualAgentState buildAgentState(IList<ScheduleLayer> scheduleLayers, IActualAgentState previousState,
+		                                          Guid personId, Guid platformTypeId,
+		                                          string stateCode, DateTime timestamp, TimeSpan timeInState,
+		                                          Guid businessUnitId, DateTime? batchId, string originalSourceId)
 		{
 			RtaAlarmLight foundAlarm;
 			var scheduleLayer = scheduleLayers.FirstOrDefault();
@@ -187,16 +178,16 @@ namespace Teleopti.Ccc.Rta.Server
 			LoggingSvc.InfoFormat("Starting to build ActualAgentState for personId: {0}", personId);
 
 			var newState = new ActualAgentState
-			{
-				PersonId = personId,
-				StateCode = stateCode,
-				AlarmStart = timestamp,
-				PlatformTypeId = platformTypeId,
-				ReceivedTime = timestamp,
-				StateStart = DateTime.UtcNow,
-				OriginalDataSourceId = originalSourceId,
-				BusinessUnit = businessUnitId
-			};
+				{
+					PersonId = personId,
+					StateCode = stateCode,
+					AlarmStart = timestamp,
+					PlatformTypeId = platformTypeId,
+					ReceivedTime = timestamp,
+					StateStart = DateTime.UtcNow,
+					OriginalDataSourceId = originalSourceId,
+					BusinessUnit = businessUnitId
+				};
 
 			if (batchId.HasValue)
 				newState.BatchId = batchId.Value;
@@ -243,54 +234,22 @@ namespace Teleopti.Ccc.Rta.Server
 			//if same don't send it (could happen often in batchmode)
 			if (previousState != null && newState.Equals(previousState))
 			{
-				LoggingSvc.InfoFormat("The new state is equal to the old state for person {0}, will not send or save", newState.PersonId);
+				LoggingSvc.InfoFormat("The new state is equal to the old state for person {0}, will not send or save",
+				                      newState.PersonId);
 				return null;
 			}
 
 			LoggingSvc.InfoFormat("ActualAgentState cache - Adding/updating state: {0}", newState);
-			BatchedAgents.AddOrUpdate(personId, newState, (guid, oldState) => newState);
 
-			var utcNow = DateTime.UtcNow;
-			if (utcNow.Subtract(_lastSave) >= new TimeSpan(0, 0, 5))
-				lock (LockObject)
-					if (utcNow.Subtract(_lastSave) >= new TimeSpan(0, 0, 5))
-						saveToDataStore(BatchedAgents.Values);
-			
 			return newState;
-		}
-		
-		public void FlushMemoryToDatabase()
-		{
-			lock (LockObject)
-				saveToDataStore(BatchedAgents.Values);
-		}
-		
-		private void saveToDataStore(IEnumerable<IActualAgentState> states)
-		{
-			var actualAgentStates = states as List<IActualAgentState> ?? states.ToList();
-			LoggingSvc.InfoFormat("Saving {0} states to db.", actualAgentStates.Count);
-
-			DatabaseHandler.AddOrUpdate(actualAgentStates);
-			
-			_lastSave = DateTime.UtcNow;
-			foreach (var agentState in actualAgentStates)
-			{
-				IActualAgentState outAgentState;
-				if (BatchedAgents.TryGetValue(agentState.PersonId, out outAgentState)
-				    && agentState.ReceivedTime >= outAgentState.ReceivedTime)
-				{
-					LoggingSvc.InfoFormat("ActualAgentState cache - Removing state: {0}", outAgentState);
-					BatchedAgents.TryRemove(agentState.PersonId, out outAgentState);
-				}
-			}
 		}
 
 		public RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid state)
 		{
 			LoggingSvc.InfoFormat("Getting alarm for PlatformId: {0}, StateCode: {1}", platformTypeId, stateCode);
 			LoggingSvc.Info("Loading activity alarms.");
-		    var activityAlarms = DatabaseHandler.ActivityAlarms();
-		    var localPayloadId = payloadId(layer);
+			var activityAlarms = DatabaseHandler.ActivityAlarms();
+			var localPayloadId = payloadId(layer);
 			List<RtaAlarmLight> list;
 
 			if (activityAlarms.TryGetValue(localPayloadId, out list))
@@ -299,11 +258,14 @@ namespace Teleopti.Ccc.Rta.Server
 				if (alarm != null)
 					LoggingSvc.InfoFormat("Found alarm: {1}, alarmId: {0}", alarm.AlarmTypeId, alarm.Name);
 				else
-					LoggingSvc.InfoFormat("Could not find alarm (no matching stategroupid) for PlatformId: {0}, StateCode: {1}", platformTypeId, stateCode);
+					LoggingSvc.InfoFormat("Could not find alarm (no matching stategroupid) for PlatformId: {0}, StateCode: {1}",
+					                      platformTypeId, stateCode);
 				return alarm;
 			}
-			
-			LoggingSvc.InfoFormat("Could not find alarm (no matching schedulelayer payloadId)  for PlatformId: {0}, StateCode: {1}", platformTypeId, stateCode);
+
+			LoggingSvc.InfoFormat(
+				"Could not find alarm (no matching schedulelayer payloadId)  for PlatformId: {0}, StateCode: {1}", platformTypeId,
+				stateCode);
 			return null;
 		}
 
@@ -331,7 +293,8 @@ namespace Teleopti.Ccc.Rta.Server
 				invalidateStateGroupCache();
 			}
 
-			LoggingSvc.WarnFormat("Could not find StateGroup for PlatformId: {0}, StateCode: {1}, BU: {2}", platformTypeId, stateCode, businessUnitId);
+			LoggingSvc.WarnFormat("Could not find StateGroup for PlatformId: {0}, StateCode: {1}, BU: {2}", platformTypeId,
+			                      stateCode, businessUnitId);
 			return null;
 		}
 
@@ -342,9 +305,9 @@ namespace Teleopti.Ccc.Rta.Server
 
 		private static bool haveScheduleChanged(ScheduleLayer layer, IActualAgentState oldState)
 		{
-			return layer.PayloadId == oldState.ScheduledId 
-				&& layer.StartDateTime == oldState.StateStart 
-				&& layer.EndDateTime == oldState.NextStart;
+			return layer.PayloadId == oldState.ScheduledId
+			       && layer.StartDateTime == oldState.StateStart
+			       && layer.EndDateTime == oldState.NextStart;
 		}
 
 		public void InvalidateReadModelCache(Guid personId)
