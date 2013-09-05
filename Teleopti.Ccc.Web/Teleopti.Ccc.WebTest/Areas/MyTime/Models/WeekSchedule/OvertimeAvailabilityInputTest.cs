@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.WeekSchedule
 			var result = input.Validate(null).ToArray();
 
 			result.Count().Should().Be(1);
-			result.First().ErrorMessage.Should().Be(string.Format(Resources.InvalidTimeValue, Resources.StartTime));
+			result.First().ErrorMessage.Should().Be(string.Format(Resources.InvalidTimeValue, Resources.EndTime));
 		}
 
 		[Test]
