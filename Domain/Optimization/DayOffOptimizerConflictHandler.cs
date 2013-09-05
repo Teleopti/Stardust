@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					return true;
 
                 _rollbackService.Rollback();
-            	_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+                _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, _rollbackService.ModificationCollection.ToArray());
             }
 
             var scheduleDayAfter = _scheduleMatrixPro.GetScheduleDayByKey(dateOnly.AddDays(1));
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 if (!result)
                 {
 					_rollbackService.Rollback();
-					_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+                    _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, _rollbackService.ModificationCollection.ToArray());
                 }    
             }
 

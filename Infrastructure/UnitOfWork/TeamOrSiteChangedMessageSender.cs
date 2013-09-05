@@ -23,9 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_serviceBusSender = serviceBusSender;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void Execute(IMessageBrokerIdentifier messageBrokerIdentifier, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			if (!_serviceBusSender.EnsureBus()) return;
 

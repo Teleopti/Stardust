@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.Common;
 using log4net;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -25,7 +26,7 @@ using System.Windows.Forms;
 
 namespace Teleopti.Ccc.WinCode.Intraday
 {
-    public class IntradayPresenter : IMessageBrokerModule, IDisposable
+    public class IntradayPresenter : IMessageBrokerIdentifier, IDisposable
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(IntradayPresenter));
 
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private DateOnly _intradayDate;
         private IRtaStateHolder _rtaStateHolder;
         private IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly Guid _moduleId = Guid.NewGuid();
+        private readonly Guid _instanceId = Guid.NewGuid();
         private readonly bool _realTimeAdherenceEnabled;
         private readonly bool _earlyWarningEnabled;
         private readonly IEventAggregator _eventAggregator;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private readonly OnEventStatisticMessageCommand _onEventStatisticMessageCommand;
         private readonly OnEventForecastDataMessageCommand _onEventForecastDataMessageCommand;
         private readonly OnEventScheduleMessageCommand _onEventScheduleMessageCommand;
+        private readonly OnEventMeetingMessageCommand _onEventMeetingMessageCommand;
         private readonly LoadStatisticsAndActualHeadsCommand _loadStatisticsAndActualHeadsCommand;
         private readonly Queue<MessageForRetryCommand> _messageForRetryQueue = new Queue<MessageForRetryCommand>();
 
@@ -61,6 +63,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             OnEventStatisticMessageCommand onEventStatisticMessageCommand,
             OnEventForecastDataMessageCommand onEventForecastDataMessageCommand,
             OnEventScheduleMessageCommand onEventScheduleMessageCommand,
+            OnEventMeetingMessageCommand onEventMeetingMessageCommand,
             LoadStatisticsAndActualHeadsCommand loadStatisticsAndActualHeadsCommand)
         {
             _eventAggregator = eventAggregator;
@@ -69,6 +72,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _onEventStatisticMessageCommand = onEventStatisticMessageCommand;
             _onEventForecastDataMessageCommand = onEventForecastDataMessageCommand;
             _onEventScheduleMessageCommand = onEventScheduleMessageCommand;
+            _onEventMeetingMessageCommand = onEventMeetingMessageCommand;
             _loadStatisticsAndActualHeadsCommand = loadStatisticsAndActualHeadsCommand;
             _repositoryFactory = repositoryFactory;
             _messageBroker = messageBroker;
@@ -108,10 +112,12 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _messageBroker.RegisterEventSubscription(OnEventStatisticMessageHandler,
                                                     typeof(IStatisticTask));
             _messageBroker.RegisterEventSubscription(OnEventScheduleMessageHandler,
-                                                    typeof(IPersistableScheduleData),
+                                                    SchedulerStateHolder.RequestedScenario.Id.GetValueOrDefault(),
+                                                    typeof(Scenario),
+                                                    typeof(IScheduleChangedEvent),
                                                     period.StartDateTime,
                                                     period.EndDateTime);
-        	_messageBroker.RegisterEventSubscription(OnEventScheduleMessageHandler,
+        	_messageBroker.RegisterEventSubscription(OnEventMeetingMessageHandler,
         	                                         typeof (IMeetingChangedEntity));
             _messageBroker.RegisterEventSubscription(OnEventForecastDataMessageHandler,
                                                     typeof(IForecastData),
@@ -143,7 +149,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void OnEventActualAgentStateMessageHandler(object sender, EventMessageArgs e)
         {
-            if (e.Message.ModuleId == _moduleId) return;
+            if (e.Message.ModuleId == _instanceId) return;
 
             ThreadPool.QueueUserWorkItem(handleIncomingExternalEvent, e.Message.DomainObject);
         }
@@ -193,7 +199,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             }
             else
             {
-                if (e.Message.ModuleId == _moduleId) return;
+                if (e.Message.ModuleId == _instanceId) return;
 
                 try
                 {
@@ -215,7 +221,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             }
             else
             {
-                if (e.Message.ModuleId == _moduleId) return;
+                if (e.Message.ModuleId == _instanceId) return;
 
                 try
                 {
@@ -224,6 +230,29 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 catch (DataSourceException)
                 {
                     _messageForRetryQueue.Enqueue(new MessageForRetryCommand(_onEventScheduleMessageCommand,
+                                                                             e.Message));
+                    _view.ShowBackgroundDataSourceError();
+                }
+            }
+        }
+
+        public void OnEventMeetingMessageHandler(object sender, EventMessageArgs e)
+        {
+            if (_view.InvokeRequired)
+            {
+                _view.BeginInvoke(new Action<object, EventMessageArgs>(OnEventMeetingMessageHandler), sender, e);
+            }
+            else
+            {
+                if (e.Message.ModuleId == _instanceId) return;
+
+                try
+                {
+                    _onEventMeetingMessageCommand.Execute(e.Message);
+                }
+                catch (DataSourceException)
+                {
+                    _messageForRetryQueue.Enqueue(new MessageForRetryCommand(_onEventMeetingMessageCommand,
                                                                              e.Message));
                     _view.ShowBackgroundDataSourceError();
                 }
@@ -245,7 +274,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             }
             else
             {
-                if (e.Message.ModuleId == _moduleId) return;
+                if (e.Message.ModuleId == _instanceId) return;
 
                 try
                 {
@@ -408,9 +437,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
             return false;
         }
 
-        public Guid ModuleId
+        public Guid InstanceId
         {
-            get { return _moduleId; }
+            get { return _instanceId; }
         }
 
         public bool HistoryOnly

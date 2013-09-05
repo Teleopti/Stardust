@@ -12,14 +12,6 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		/// <param name="scheduleDateOnly">The schedule date only.</param>
 		/// <param name="workShiftProjectionPeriod">The work shift projection period.</param>
-		/// <returns></returns>
-		bool CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod);
-
-		/// <summary>
-		/// Calculates if needed.
-		/// </summary>
-		/// <param name="scheduleDateOnly">The schedule date only.</param>
-		/// <param name="workShiftProjectionPeriod">The work shift projection period.</param>
 		/// <param name="addedSchedules">The added schedules.</param>
 		/// <returns></returns>
 		bool CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod,

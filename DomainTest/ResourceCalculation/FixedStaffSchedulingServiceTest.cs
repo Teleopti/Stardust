@@ -87,7 +87,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			var schedules = _mocks.StrictMock<IScheduleDictionary>();
 			var range = _mocks.StrictMock<IScheduleRange>();
-            
+            var skills = new List<ISkill> { SkillFactory.CreateSkill("Phone") };
+		    
 			var virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 
 			//int dayOffsNow;
@@ -123,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 					_effectiveRestriction).Repeat.Any();
             Expect.Call(_scheduleService.FinderResults).Return(
                 new ReadOnlyCollection<IWorkShiftFinderResult>(new List<IWorkShiftFinderResult>()));
-			Expect.Call(_schedulingResultStateHolder.Skills).Return(new List<ISkill> {SkillFactory.CreateSkill("Phone")});
+		    Expect.Call(_schedulingResultStateHolder.Skills).Return(skills).Repeat.AtLeastOnce();
 #pragma warning disable 612,618
 			Expect.Call(()=>schedules.ExtractAllScheduleData(null)).IgnoreArguments();
 #pragma warning restore 612,618
@@ -149,6 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var person = _mocks.StrictMock<IPerson>();
 			var schedules = _mocks.StrictMock<IScheduleDictionary>();
 			var range = _mocks.StrictMock<IScheduleRange>();
+            var skills = new List<ISkill> { SkillFactory.CreateSkill("Phone") };
 		    
 			var virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 
@@ -175,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(part1, _schedulingOptions)).Return(_effectiveRestriction);
             Expect.Call(_scheduleService.FinderResults).Return(
                 new ReadOnlyCollection<IWorkShiftFinderResult>(new List<IWorkShiftFinderResult>()));
-			Expect.Call(_schedulingResultStateHolder.Skills).Return(new List<ISkill> {SkillFactory.CreateSkill("Phone")});
+		    Expect.Call(_schedulingResultStateHolder.Skills).Return(skills).Repeat.AtLeastOnce();
 #pragma warning disable 612,618
 			Expect.Call(() => schedules.ExtractAllScheduleData(null)).IgnoreArguments();
 #pragma warning restore 612,618

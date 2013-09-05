@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Collection
@@ -24,6 +25,16 @@ namespace Teleopti.Ccc.Domain.Collection
                     return collectionItem;
             }
             return null;
+        }
+
+        public DifferenceCollectionItem<T>? FindItemByMatchingOriginal(T match)
+        {
+            return (from e in this
+                    where
+                        e.OriginalItem != null &&
+                        e.OriginalItem.Equals(match)
+                    select (DifferenceCollectionItem<T>?) e
+                   ).FirstOrDefault();
         }
     }
 }

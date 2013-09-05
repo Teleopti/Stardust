@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		private readonly IPersonAbsenceAccountRefresher _personAbsenceAccountRefresher;
 		private readonly IPersonAbsenceAccountValidator _personAbsenceAccountValidator;
 		private readonly IScheduleDictionaryConflictCollector _scheduleDictionaryConflictCollector;
-		private readonly IMessageBrokerModule _messageBrokerModule;
+		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
 		private readonly IScheduleDictionaryBatchPersister _scheduleDictionaryBatchPersister;
 		private readonly IOwnMessageQueue _messageQueueUpdater;
 
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		                                       IPersonAbsenceAccountRefresher personAbsenceAccountRefresher,
 		                                       IPersonAbsenceAccountValidator personAbsenceAccountValidator,
 		                                       IScheduleDictionaryConflictCollector scheduleDictionaryConflictCollector,
-		                                       IMessageBrokerModule messageBrokerModule,
+		                                       IMessageBrokerIdentifier messageBrokerIdentifier,
 												IScheduleDictionaryBatchPersister scheduleDictionaryBatchPersister,
 												IOwnMessageQueue messageQueueUpdater)
 		{
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			_personAbsenceAccountRefresher = personAbsenceAccountRefresher;
 			_personAbsenceAccountValidator = personAbsenceAccountValidator;
 			_scheduleDictionaryConflictCollector = scheduleDictionaryConflictCollector;
-			_messageBrokerModule = messageBrokerModule;
+			_messageBrokerIdentifier = messageBrokerIdentifier;
         	_scheduleDictionaryBatchPersister = scheduleDictionaryBatchPersister;
         	_messageQueueUpdater = messageQueueUpdater;
 		}
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			using (var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				_writeProtectionRepository.AddRange(personWriteProtectionInfos);
-				unitOfWork.PersistAll(_messageBrokerModule);
+				unitOfWork.PersistAll(_messageBrokerIdentifier);
 				personWriteProtectionInfos.Clear();
 			}
 		}
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			using (var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				_personRequestPersister.MarkForPersist(_personRequestRepository, personRequests);
-				unitOfWork.PersistAll(_messageBrokerModule);
+				unitOfWork.PersistAll(_messageBrokerIdentifier);
 			}
 		}
 
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 					_messageQueueUpdater.ReassociateDataWithAllPeople();
 					RefreshConflictedPersonAbsenceAccounts(unitOfWork, refreshPersonAbsenceAccounts);
 					_personAbsenceAccountRepository.AddRange(personAbsenceAccounts);
-					unitOfWork.PersistAll(_messageBrokerModule);
+					unitOfWork.PersistAll(_messageBrokerIdentifier);
 					personAbsenceAccounts.Clear();
 				}
 			} 

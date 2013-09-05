@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			using(_mocks.Playback())
 			{
-				Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
+                Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod(), new List<IScheduleDay>(), new List<IScheduleDay>()));
 				Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod(), new List<IScheduleDay>(), new List<IScheduleDay>()));
 			}
 		}
@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			using (_mocks.Playback())
 			{
-				Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
-				Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly().AddDays(7), new DateTimePeriod()));
+                Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod(), new List<IScheduleDay>(), new List<IScheduleDay>()));
+                Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly().AddDays(7), new DateTimePeriod(), new List<IScheduleDay>(), new List<IScheduleDay>()));
 			}
 		}
 
@@ -66,8 +66,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			using (_mocks.Playback())
 			{
-				Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
-				Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
+                Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod(), new List<IScheduleDay>(), new List<IScheduleDay>()));
+                Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod(), new List<IScheduleDay>(), new List<IScheduleDay>()));
 			}
 		}
 
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			using (_mocks.Playback())
 			{
-				Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), dp));
+                Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), dp, new List<IScheduleDay>(), new List<IScheduleDay>()));
 			}
 		}
 
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			using (_mocks.Playback())
 			{
-				Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), dp));
+                Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), dp, new List<IScheduleDay>(), new List<IScheduleDay>()));
 			}
 		}
 	}

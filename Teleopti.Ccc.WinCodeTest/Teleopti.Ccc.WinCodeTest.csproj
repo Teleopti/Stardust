@@ -397,6 +397,7 @@
     <Compile Include="Intraday\DayLayerModelComparerTest.cs" />
     <Compile Include="Intraday\IntradayMainModelTest.cs" />
     <Compile Include="Intraday\LoadStatisticsAndActualHeadsCommandTest.cs" />
+    <Compile Include="Intraday\OnEventMeetingMessageCommandTest.cs" />
     <Compile Include="Intraday\OnEventScheduleMessageCommandTest.cs" />
     <Compile Include="Intraday\DayLayerModelTest.cs" />
     <Compile Include="Intraday\DispatcherWrapperTest.cs" />

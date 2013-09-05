@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -119,14 +120,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<DateOnly> daysToRecalculate = _decider.DecideDates(scheduleDayAfter, scheduleDayBefore);
             foreach (var dateToRecalculate in daysToRecalculate)
             {
-                _resourceCalculateDelayer.CalculateIfNeeded(dateToRecalculate, null);
+                _resourceCalculateDelayer.CalculateIfNeeded(dateToRecalculate, null, new List<IScheduleDay>(), new List<IScheduleDay>());
             }
 
             matrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
             if (!tryScheduleDay(dateOnly, schedulingOptions, lenghtHint))
-
             {
-                _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+                _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, new List<IScheduleDay>(), new List<IScheduleDay>());
                 return false;
             }
 
@@ -168,9 +168,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             scheduleDayAfter =
                 (IScheduleDay) _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
             IList<DateOnly> days = _decider.DecideDates(scheduleDayAfter, scheduleDayBefore);
+
+            var changes = _rollbackService.ModificationCollection.ToList();
             foreach (var date in days)
             {
-                _resourceCalculateDelayer.CalculateIfNeeded(date, null);
+                _resourceCalculateDelayer.CalculateIfNeeded(date, null, changes);
+                changes.Clear();
             }
         }
 

@@ -89,7 +89,12 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			                            into g
 			                            select new {g.Key, Values = g.ToList()}).ToDictionary(k => k.Key, v => v.Values);
 
-			var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _schedulingResultStateHolder.Skills.Min(s => s.DefaultResolution));
+		    var minutesPerInterval = 15;
+            if (_schedulingResultStateHolder.Skills.Count > 0)
+            {
+                minutesPerInterval = _schedulingResultStateHolder.Skills.Min(s => s.DefaultResolution);
+            }
+			var extractor = new ScheduleProjectionExtractor(_personSkillProvider, minutesPerInterval);
 			var resources = extractor.CreateRelevantProjectionList(_schedulingResultStateHolder.Schedules);
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
