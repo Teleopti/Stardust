@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		{
 			var result = new List<ValidationResult>();
 			if (IsInvalid(StartTime, EndTime))
-				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.StartTime)));
+				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.EndTime)));
 			return result;
 		}
 

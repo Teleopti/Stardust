@@ -129,7 +129,7 @@ Scenario: Add invalid overtime availability
 	| Start time | 13:30 |
 	| End time   | 11:00 |
 	And I click submit button
-	Then I should see the 'overtime availability error' 'Start time'
+	Then I should see the 'overtime availability error' 'End time'
 	And I should not see an overtime availability symbol for date '2013-08-20'
 
 
