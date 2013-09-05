@@ -113,17 +113,5 @@ namespace Teleopti.Interfaces.Domain
         /// </returns>
         DateOnlyPeriod Period();
 
-        /// <summary>
-        /// Calculates the used.
-        /// </summary>
-        /// <param name="repository">The repository.</param>
-        /// <param name="loadedSchedule">The loaded schedule.</param>
-        /// <param name="scenario">The scenario.</param>
-        /// <param name="projectionServiceForPersonAccount">The projection service for person account.</param>
-        /// <remarks>
-        /// Created by: HenryG
-        /// Created date: 2010-04-19
-        /// </remarks>
-        void CalculateUsed(IScheduleRepository repository, ISchedule loadedSchedule, IScenario scenario,IPersonAccountProjectionService projectionServiceForPersonAccount);
     }
 }
