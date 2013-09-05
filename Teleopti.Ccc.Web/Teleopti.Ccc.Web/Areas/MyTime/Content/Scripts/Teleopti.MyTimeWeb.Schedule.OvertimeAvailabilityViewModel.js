@@ -11,6 +11,7 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 	
 	this.Template = "add-overtime-availability-template";
 
+	this.HasOvertimeAvailability = ko.observable(false);
 	this.DateFrom = ko.observable(moment().startOf('day'));
 	this.DateTo = ko.observable(moment().startOf('day'));
 	this.StartTime = ko.observable('');
@@ -28,13 +29,6 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 	this.ShowError = ko.computed(function () {
 		return self.ErrorMessage() !== undefined && self.ErrorMessage() !== '';
 	});
-	
-	this.Reset = function () {
-		self.StartTime('');
-		self.EndTime('');
-		self.NextDay(false);
-		self.ValidationError(undefined);
-	};
 
 	this.SetOvertimeAvailability = function () {
 		ajax.Ajax({
@@ -57,9 +51,10 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 	};
 
 	this.LoadRequestData = function(day) {
-			self.StartTime(day.overtimeAvailability().StartTime);
-			self.EndTime(day.overtimeAvailability().EndTime);
-			self.NextDay(day.overtimeAvailability().NextDay);
+		self.StartTime(day.overtimeAvailability().StartTime);
+		self.EndTime(day.overtimeAvailability().EndTime);
+		self.NextDay(day.overtimeAvailability().NextDay);
+		self.HasOvertimeAvailability(day.overtimeAvailability().HasOvertimeAvailability);
 	};
 
 };
