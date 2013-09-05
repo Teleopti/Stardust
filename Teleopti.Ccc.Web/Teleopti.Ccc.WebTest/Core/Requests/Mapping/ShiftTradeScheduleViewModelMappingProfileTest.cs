@@ -9,14 +9,12 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
@@ -257,6 +255,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapMinutesSinceTimeLineStartSetWhenOnlyMySchedule()
 		{
 			var startDate = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = new DateOnly(startDate) };
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(startDate, _person);
 
 			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(new DateOnly(startDate))).Return(scheduleDay);
@@ -265,7 +264,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                {
 		                                                    _scheduleFactory.VisualLayerStub(new DateTimePeriod(startDate, startDate.AddHours(3)))
 		                                                }));
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(startDate));
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 			result.MySchedule.MinutesSinceTimeLineStart.Should().Be.EqualTo(15);
 		}
 
@@ -273,6 +272,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapMyScheduleTextNextToMyScheduledShift()
 		{
 			var startDate = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = new DateOnly(startDate) };
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(startDate, _person);
 
 			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(new DateOnly(startDate))).Return(scheduleDay);
@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                {
 		                                                    _scheduleFactory.VisualLayerStub(new DateTimePeriod(startDate, startDate.AddHours(3)))
 		                                                }));
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(startDate));
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 			result.MySchedule.Name.Should().Be.EqualTo(UserTexts.Resources.MySchedule);
 		}
 
@@ -293,13 +293,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var buddyStartDate = new DateTime(2000, 1, 1, 9, 30, 0, DateTimeKind.Utc);
 			var myScheduleDay = _scheduleFactory.ScheduleDayStub(myStartDate, _person);
 			var buddyScheduleDay = _scheduleFactory.ScheduleDayStub(buddyStartDate, buddy);
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = new DateOnly(myStartDate) };
 
 			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(new DateOnly(myStartDate))).Return(myScheduleDay);
 			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(new DateOnly(buddyStartDate), new List<IPerson>{buddy})).Return(new List<IScheduleDay>
 			                                                                                                                  	{
 			                                                                                                                  		buddyScheduleDay
 			                                                                                                                  	});
-			_possibleShiftTradePersonsProvider.Expect(x => x.RetrievePersons(new DateOnly(buddyStartDate))).Return(new List<IPerson> { buddy });
+			_possibleShiftTradePersonsProvider.Expect(x => x.RetrievePersons(data)).Return(new List<IPerson> { buddy });
 
 			_projectionProvider.Expect(p => p.Projection(myScheduleDay)).Return(_scheduleFactory.ProjectionStub(new[]
 		                                                {
@@ -309,7 +310,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                {
 		                                                    _scheduleFactory.VisualLayerStub(new DateTimePeriod(buddyStartDate, buddyStartDate.AddHours(3)), buddy)
 		                                                }));
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(myStartDate));
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 			result.MySchedule.MinutesSinceTimeLineStart.Should().Be.EqualTo(45);
 			result.PossibleTradePersons.First().MinutesSinceTimeLineStart.Should().Be.EqualTo(15);
 		}
@@ -318,6 +319,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapMyScheduledDayStartTime()
 		{
 			var startDate = new DateTime(2000, 1, 1, 8, 15, 0, DateTimeKind.Utc);
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = new DateOnly(startDate) };
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(startDate, _person);
 
 			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(new DateOnly(startDate))).Return(scheduleDay);
@@ -326,7 +328,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                {
 		                                                    _scheduleFactory.VisualLayerStub(new DateTimePeriod(startDate, startDate.AddHours(3)))
 		                                                }));
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(startDate));
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 
 			var expectedDate = TimeZoneHelper.ConvertFromUtc(startDate, _person.PermissionInformation.DefaultTimeZone());
 			result.MySchedule.ScheduleLayers.First().Title.Should().Contain(expectedDate.ToString("HH:mm"));
@@ -336,6 +338,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapMyScheduledDayEndTime()
 		{
 			var endDate = new DateTime(2000, 1, 1, 11, 15, 0, DateTimeKind.Utc);
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = new DateOnly(endDate) };
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(endDate, _person);
 
 			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(new DateOnly(endDate))).Return(scheduleDay);
@@ -345,7 +348,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                    _scheduleFactory.VisualLayerStub(new DateTimePeriod(endDate.AddHours(-3), endDate))
 		                                                }));
 
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(endDate));
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 
 			var expectedDate = TimeZoneHelper.ConvertFromUtc(endDate, _person.PermissionInformation.DefaultTimeZone());
 			result.MySchedule.ScheduleLayers.First().Title.Should().Contain(expectedDate.ToString("HH:mm"));
@@ -355,6 +358,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapMyScheduledDayLength()
 		{
 			var layerPeriod = new DateTimePeriod(new DateTime(2013, 1, 1, 8, 15, 0, DateTimeKind.Utc), new DateTime(2013, 1, 1, 20, 15, 0, DateTimeKind.Utc));
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = new DateOnly(layerPeriod.StartDateTime) };
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(new DateTime(), _person);
 
 			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(new DateOnly(layerPeriod.StartDateTime))).Return(scheduleDay);
@@ -364,7 +368,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                    _scheduleFactory.VisualLayerStub(layerPeriod)
 		                                                }));
 
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(layerPeriod.StartDateTime));
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 
 			result.MySchedule.ScheduleLayers.First().LengthInMinutes.Should().Be.EqualTo(layerPeriod.ElapsedTime().TotalMinutes);
 		}
@@ -375,6 +379,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_userCulture.Expect(c => c.GetCulture()).Return(CultureInfo.GetCultureInfo("sv-SE"));
 
 			var date = new DateOnly(2000, 1, 1);
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = new DateOnly(date) };
 			var layerPeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc));
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(new DateTime(), _person);
 
@@ -386,7 +391,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                    _scheduleFactory.VisualLayerStub(layerPeriod)
 		                                                }));
 
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(date);
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 
 			result.MySchedule.ScheduleLayers.First().Title.Should().Be.EqualTo("11:00-14:00");
 		}
@@ -397,6 +402,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_userCulture.Expect(c => c.GetCulture()).Return(CultureInfo.GetCultureInfo("en-US")).Repeat.Any();
 
 			var date = new DateOnly(2000, 1, 1);
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = new DateOnly(date) };
 			var layerPeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc));
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(new DateTime(), _person);
 
@@ -408,7 +414,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                    _scheduleFactory.VisualLayerStub(layerPeriod)
 		                                                }));
 
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(date);
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 
 			result.MySchedule.ScheduleLayers.First().Title.Should().Be.EqualTo("11:00 AM-2:00 PM");
 		}
@@ -425,8 +431,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                {
 		                                                    _scheduleFactory.VisualLayerStub(activtyName)
 		                                                }));
-
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly());
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = new DateOnly() };
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 
 			result.MySchedule.ScheduleLayers.First().Payload.Should().Be.EqualTo(activtyName);
 		}
@@ -443,8 +449,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                {
 		                                                    _scheduleFactory.VisualLayerStub(activtyColor)
 		                                                }));
-
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly());
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = new DateOnly() };
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 
 			result.MySchedule.ScheduleLayers.First().Color.Should().Be.EqualTo(ColorTranslator.ToHtml(activtyColor));
 		}
@@ -464,7 +470,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                    _scheduleFactory.VisualLayerStub(layerPeriod2)
 		                                                }));
 
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly());
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = new DateOnly() };
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 
 			var expectedValue = layerPeriod2.StartDateTime.Subtract(layerPeriod1.StartDateTime).TotalMinutes;
 			result.MySchedule.ScheduleLayers.Last().ElapsedMinutesSinceShiftStart.Should().Be.EqualTo(expectedValue);
@@ -481,7 +488,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(Arg<DateOnly>.Is.Anything, Arg<IEnumerable<IPerson>>.Is.Anything)).Return(new List<IScheduleDay>());
 			_projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(_scheduleFactory.ProjectionStub());
 
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(DateOnly.Today);
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today };
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 
 			result.MySchedule.ScheduleLayers.Count().Should().Be.EqualTo(1);
 			result.MySchedule.DayOffText.Should().Be.EqualTo(theDayOff.Description.Name);
@@ -507,7 +515,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                    _scheduleFactory.VisualLayerStub(period, _person)
 		                                                }));
 
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(DateOnly.Today);
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today };
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 
 			result.MySchedule.HasUnderlyingDayOff.Should().Be.True();
 		}
@@ -517,6 +526,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var possibleTradePersonLayerPeriod = new DateTimePeriod(new DateTime(2013, 1, 1, 12, 0, 0, DateTimeKind.Utc),
 														   new DateTime(2013, 1, 1, 21, 40, 0, DateTimeKind.Utc));
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = new DateOnly(possibleTradePersonLayerPeriod.StartDateTime) };
 			var possibleTradePersons = new List<IPerson> {_person};
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(new DateTime(), _person);
 
@@ -527,9 +537,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                {
 		                                                    _scheduleFactory.VisualLayerStub(possibleTradePersonLayerPeriod, _person)
 		                                                }));
-			_possibleShiftTradePersonsProvider.Expect(x => x.RetrievePersons(Arg<DateOnly>.Is.Anything)).Return(possibleTradePersons);
+			_possibleShiftTradePersonsProvider.Expect(x => x.RetrievePersons(Arg<ShiftTradeScheduleViewModelData>.Is.Anything)).Return(possibleTradePersons);
 
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(possibleTradePersonLayerPeriod.StartDateTime));
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 			result.PossibleTradePersons.First().Name.Should().Be.EqualTo(_person.Name.ToString());
 			result.PossibleTradePersons.First().ScheduleLayers.Count().Should().Be.EqualTo(1);
 		}
@@ -541,6 +551,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_person.SetId(personId);
 			var possibleTradePersonLayerPeriod = new DateTimePeriod(new DateTime(2013, 1, 1, 12, 0, 0, DateTimeKind.Utc),
 												 new DateTime(2013, 1, 1, 21, 40, 0, DateTimeKind.Utc));
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = new DateOnly(possibleTradePersonLayerPeriod.StartDateTime) };
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(new DateTime(), _person);
 			var possibleTradePersons = new List<IPerson> { _person };
 
@@ -551,9 +562,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                {
 		                                                    _scheduleFactory.VisualLayerStub(possibleTradePersonLayerPeriod, _person)
 		                                                }));
-			_possibleShiftTradePersonsProvider.Expect(x => x.RetrievePersons(Arg<DateOnly>.Is.Anything)).Return(possibleTradePersons);
+			_possibleShiftTradePersonsProvider.Expect(x => x.RetrievePersons(Arg<ShiftTradeScheduleViewModelData>.Is.Anything)).Return(possibleTradePersons);
 
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(possibleTradePersonLayerPeriod.StartDateTime));
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 			result.PossibleTradePersons.First().PersonId.Should().Be.EqualTo(personId);
 		}
 
@@ -564,6 +575,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 														   new DateTime(2013, 1, 1, 15, 40, 0, DateTimeKind.Utc));
 			var myScheduleLayerPeriod = new DateTimePeriod(new DateTime(2013, 1, 1, 11, 5, 0, DateTimeKind.Utc),
 														   new DateTime(2013, 1, 1, 14, 0, 0, DateTimeKind.Utc));
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = new DateOnly(possibleTradePersonLayerPeriod.StartDateTime) };
+
 			var possibleTradePerson = new Person { Name = new Name("Trade", "Victim") };
 			var possibleTradePersons = new[] {possibleTradePerson};
 
@@ -582,9 +595,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                {
 		                                                    _scheduleFactory.VisualLayerStub(possibleTradePersonLayerPeriod, possibleTradePerson)
 		                                                }));
-			_possibleShiftTradePersonsProvider.Expect(x => x.RetrievePersons(new DateOnly(possibleTradePersonLayerPeriod.StartDateTime))).Return(possibleTradePersons);
+			_possibleShiftTradePersonsProvider.Expect(x => x.RetrievePersons(data)).Return(possibleTradePersons);
 
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(possibleTradePersonLayerPeriod.StartDateTime));
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 			
 			result.TimeLineHours.Count().Should().Be.EqualTo(6);
 
@@ -615,7 +628,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			_projectionProvider.Stub(p => p.Projection(day)).Return(_scheduleFactory.ProjectionStub());
 
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(DateOnly.Today);
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today };
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 
 			result.TimeLineHours.Count().Should().Be.EqualTo(11);
 			result.TimeLineHours.First().HourText.Should().Be.Empty();
@@ -629,6 +643,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapPossibleTradePersonsDayOff()
 		{
 			var date = DateOnly.Today;
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today };
 			var possibleTradePerson = new Person { Name = new Name("Trade", "Victim") };
 			var possibleTradePersons = new[] {possibleTradePerson};
 			var theDayOff = new DayOffTemplate(new Description("a day off"));
@@ -640,9 +655,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(date, possibleTradePersons)).Return(new List<IScheduleDay> { tradeVictimDay });
 			_projectionProvider.Expect(p => p.Projection(myDay)).Return(_scheduleFactory.ProjectionStub());
 			_projectionProvider.Expect(p => p.Projection(tradeVictimDay)).Return(_scheduleFactory.ProjectionStub());
-			_possibleShiftTradePersonsProvider.Expect(x => x.RetrievePersons(Arg<DateOnly>.Is.Anything)).Return(possibleTradePersons);
+			_possibleShiftTradePersonsProvider.Expect(x => x.RetrievePersons(Arg<ShiftTradeScheduleViewModelData>.Is.Anything)).Return(possibleTradePersons);
 
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(date);
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 
 			result.PossibleTradePersons.Count().Should().Be.EqualTo(1);
 			result.PossibleTradePersons.First().MinutesSinceTimeLineStart.Should().Be.EqualTo(15);
@@ -670,9 +685,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                {
 		                                                    _scheduleFactory.VisualLayerStub(possibleTradePersonLayerPeriod, tradeVictimDay.Person)
 		                                                }));
-			_possibleShiftTradePersonsProvider.Expect(x => x.RetrievePersons(Arg<DateOnly>.Is.Anything)).Return(new List<IPerson> { tradeVictimDay.Person });
+			_possibleShiftTradePersonsProvider.Expect(x => x.RetrievePersons(Arg<ShiftTradeScheduleViewModelData>.Is.Anything)).Return(new List<IPerson> { tradeVictimDay.Person });
 
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(DateOnly.Today);
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today };
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 
 			var expectedTimeLineLingth = possibleTradePersonLayerPeriod.EndDateTime.Subtract(possibleTradePersonLayerPeriod.StartDateTime).TotalMinutes;
 			expectedTimeLineLingth += 30;
@@ -685,15 +701,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var tradeVictim = new Person { Name = new Name("Trade", "Victim") };
 			tradeVictim.SetId(Guid.NewGuid());
 			var date = new DateOnly(2000, 1, 1);
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = new DateOnly(date) };
 			var myDay = _scheduleFactory.ScheduleDayStub(date, tradeVictim);
 			var tradeVictims = new[] {tradeVictim};
 
 			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(date)).Return(myDay);
 			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(date, tradeVictims)).Return(new List<IScheduleDay>());
-			_possibleShiftTradePersonsProvider.Expect(x => x.RetrievePersons(date)).Return(tradeVictims);
+			_possibleShiftTradePersonsProvider.Expect(x => x.RetrievePersons(data)).Return(tradeVictims);
 			_projectionProvider.Expect(p => p.Projection(myDay)).Return(_scheduleFactory.ProjectionStub());
 
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(date).PossibleTradePersons.FirstOrDefault(model => model.PersonId == tradeVictim.Id);
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data).PossibleTradePersons.FirstOrDefault(model => model.PersonId == tradeVictim.Id);
 			result.Should().Not.Be.Null();
 		}
 
@@ -701,6 +718,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapTradeVictimAbsenceWithUnderlyingDayOff()
 		{
 			var date = DateOnly.Today;
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = new DateOnly(date) };
 			var tradeVictim = new Person { Name = new Name("Trade", "Victim") };
 			var tradeVictims = new[] {tradeVictim};
 			var period = new DateTimePeriod(new DateTime(2013, 1, 1, 8, 0, 0, DateTimeKind.Utc),
@@ -715,9 +733,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                {
 		                                                    _scheduleFactory.VisualLayerStub(period, tradeVictim)
 		                                                }));
-			_possibleShiftTradePersonsProvider.Expect(x => x.RetrievePersons(date)).Return(tradeVictims);
+			_possibleShiftTradePersonsProvider.Expect(x => x.RetrievePersons(data)).Return(tradeVictims);
 
-			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(date);
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 
 			result.PossibleTradePersons.First().HasUnderlyingDayOff.Should().Be.True();
 		}

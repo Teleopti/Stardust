@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
@@ -41,6 +42,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var validAgent = new Person();
 			var invalidAgent = new Person();
 			var date = new DateOnly(2000, 1, 1);
+			var data = new ShiftTradeScheduleViewModelData {ShiftTradeDate = date};
+
 			personRepository.Expect(rep => rep.FindPossibleShiftTrades(currentUser)).Return(new List<IPerson>{validAgent, invalidAgent});
 			permissionProvider.Expect(c => c.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, validAgent)).Return(true);
 			permissionProvider.Expect(c => c.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, invalidAgent)).Return(true);
@@ -51,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			shiftTradeValidator.Expect(val => val.Validate(resultPersonInvalid)).Return(new ShiftTradeRequestValidationResult(false));
 			shiftTradeValidator.Expect(val => val.Validate(resultPersonValid)).Return(new ShiftTradeRequestValidationResult(true));
 
-			target.RetrievePersons(date).Should().Have.SameValuesAs(validAgent);
+			target.RetrievePersons(data).Should().Have.SameValuesAs(validAgent);
 		}
 
 		[Test]
@@ -60,6 +63,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var validAgent = new Person();
 			var invalidAgent = new Person();
 			var date = new DateOnly(2000, 1, 1);
+			var data = new ShiftTradeScheduleViewModelData {ShiftTradeDate = date};
 			personRepository.Expect(rep => rep.FindPossibleShiftTrades(currentUser)).Return(new List<IPerson> { validAgent, invalidAgent });
 			permissionProvider.Expect(c => c.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, validAgent)).Return(true);
 			permissionProvider.Expect(c => c.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, invalidAgent)).Return(false);
@@ -70,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			shiftTradeValidator.Expect(val => val.Validate(resultPersonInvalid)).Return(new ShiftTradeRequestValidationResult(true));
 			shiftTradeValidator.Expect(val => val.Validate(resultPersonValid)).Return(new ShiftTradeRequestValidationResult(true));
 
-			target.RetrievePersons(date).Should().Have.SameValuesAs(validAgent);
+			target.RetrievePersons(data).Should().Have.SameValuesAs(validAgent);
 		}
 	}
 }

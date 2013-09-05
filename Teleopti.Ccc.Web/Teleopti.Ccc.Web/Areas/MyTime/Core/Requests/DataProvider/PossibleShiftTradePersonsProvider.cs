@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
@@ -26,13 +27,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_permissionProvider = permissionProvider;
 		}
 
-		public IEnumerable<IPerson> RetrievePersons(DateOnly dateOnly)
+		public IEnumerable<IPerson> RetrievePersons(ShiftTradeScheduleViewModelData shiftTradeArguments)
 		{
 			var me = _loggedOnUser.CurrentUser();
 
 			return _personRepository.FindPossibleShiftTrades(me)
-				.Where(person => _permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, dateOnly, person) &&
-							_shiftTradeValidator.Validate(new ShiftTradeAvailableCheckItem(dateOnly, me, person)).Value);
+				.Where(person => _permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, shiftTradeArguments.ShiftTradeDate, person) &&
+							_shiftTradeValidator.Validate(new ShiftTradeAvailableCheckItem(shiftTradeArguments.ShiftTradeDate, me, person)).Value);
 		}
 	}
 }
