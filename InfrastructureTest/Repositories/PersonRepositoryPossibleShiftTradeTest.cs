@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			target = new PersonRepository(UnitOfWork);
 			wcs = new WorkflowControlSet("hej");
 			PersistAndRemoveFromUnitOfWork(wcs);
-			myself = createValidPerson();
+			myself = createPersonInMyTeam();
 			PersistAndRemoveFromUnitOfWork(myself);
 		}
 
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldNotFetchPersonWithNoWorkflowControlSet()
 		{
-			var p = createValidPerson();
+			var p = createPersonInMyTeam();
 			p.WorkflowControlSet = null;
 			PersistAndRemoveFromUnitOfWork(p);
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldFetchValidPerson()
 		{
-			var valid = createValidPerson();
+			var valid = createPersonInMyTeam();
 			PersistAndRemoveFromUnitOfWork(valid);
 
 			target.FindPossibleShiftTrades(myself)
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			const int noOfPersons = 10;
 			for (var i = 0; i < noOfPersons; i++)
 			{
-				PersistAndRemoveFromUnitOfWork(createValidPerson());
+				PersistAndRemoveFromUnitOfWork(createPersonInMyTeam());
 			}
 
 			var firstFetch = target.FindPossibleShiftTrades(myself);
@@ -75,7 +75,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.Fail("No randomness of possible shift trades");
 		}
 
-		private IPerson createValidPerson()
+		[Test]
+		public void ShouldFetchOnlyPersonsFromMyTeam()
+		{
+			var myTeamPerson = createPersonInMyTeam();
+			var otherTeamPerson = createPersonInOtherTeam();
+		}
+
+		private IPerson createPersonInMyTeam()
 		{
 			var person = new Person();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
