@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.Restriction.Commands
@@ -29,9 +28,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction.Commands
             if (CanExecute())
             {
                 _scheduleDay.DeleteStudentAvailabilityRestriction();
-                var studentAvailabilityDay = _overtimeAvailabilityCreator.Create(_scheduleDay, _startTime, _endTime);
-                if (studentAvailabilityDay != null)
-                    _scheduleDay.Add(studentAvailabilityDay);
+                var overtimeAvailability = _overtimeAvailabilityCreator.Create(_scheduleDay, _startTime, _endTime);
+                if (overtimeAvailability != null)
+                    _scheduleDay.Add(overtimeAvailability);
             }		
         }
 
