@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using MbCache.Core;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 using log4net;
 
@@ -115,6 +114,10 @@ namespace Teleopti.Ccc.Rta.Server
 				state.BatchId = batchId;
 				state.OriginalDataSourceId = sourceId;
 
+				var rtaStateGroup = resolveStateGroupId(state.PlatformTypeId, "LOGGED-OFF", state.BusinessUnit);
+				if (rtaStateGroup != null)
+					state.State = rtaStateGroup.StateGroupName;
+
 				List<RtaAlarmLight> alarmList;
 				if (!activityAlarms.TryGetValue(state.ScheduledId, out alarmList))
 					LoggingSvc.InfoFormat("Could not find any alarms connected to this activity id: {0}", state.ScheduledId);
@@ -151,8 +154,7 @@ namespace Teleopti.Ccc.Rta.Server
 				agentsToSendOverMessageBroker.Add(state);
 			}
 			LoggingSvc.InfoFormat("Saving {0} agents to database", BatchedAgents.Count);
-			lock (LockObject)
-				saveToDataStore(BatchedAgents.Values);
+			FlushMemoryToDatabase();
 
 			LoggingSvc.InfoFormat("Found {0} agents to send over message broker", agentsToSendOverMessageBroker.Count);
 			return agentsToSendOverMessageBroker;
