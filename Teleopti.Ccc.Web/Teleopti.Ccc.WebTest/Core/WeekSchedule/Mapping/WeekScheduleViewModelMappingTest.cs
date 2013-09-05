@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			result.OvertimeAvailabililty.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(overtimeAvailability.StartTime.Value, CultureInfo.CurrentCulture));
 			result.OvertimeAvailabililty.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(overtimeAvailability.EndTime.Value, CultureInfo.CurrentCulture));
-			result.OvertimeAvailabililty.NextDay.Should().Be.EqualTo(true);
+			result.OvertimeAvailabililty.EndTimeNextDay.Should().Be.EqualTo(true);
 			result.OvertimeAvailabililty.HasOvertimeAvailability.Should().Be.EqualTo(true);
 		}
 
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			result.OvertimeAvailabililty.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0), CultureInfo.CurrentCulture));
 			result.OvertimeAvailabililty.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0), CultureInfo.CurrentCulture));
-			result.OvertimeAvailabililty.NextDay.Should().Be.EqualTo(false);
+			result.OvertimeAvailabililty.EndTimeNextDay.Should().Be.EqualTo(false);
 		}
 
 		[Test]
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			result.OvertimeAvailabililty.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0), CultureInfo.CurrentCulture));
 			result.OvertimeAvailabililty.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0), CultureInfo.CurrentCulture));
-			result.OvertimeAvailabililty.NextDay.Should().Be.EqualTo(false);
+			result.OvertimeAvailabililty.EndTimeNextDay.Should().Be.EqualTo(false);
 		}
 
 		[Test]

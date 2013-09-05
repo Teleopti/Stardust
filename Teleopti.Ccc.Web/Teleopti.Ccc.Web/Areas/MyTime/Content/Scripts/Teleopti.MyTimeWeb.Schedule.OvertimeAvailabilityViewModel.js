@@ -3,8 +3,6 @@
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Request.js"/>
-/// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
 
 Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAvailabilityViewModel(ajax, displayOvertimeAvailability) {
 	var self = this;
@@ -16,9 +14,9 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 	this.DateTo = ko.observable(moment().startOf('day'));
 	this.StartTime = ko.observable('');
 	this.EndTime = ko.observable('');
-	this.NextDay = ko.observable(false);
+	this.EndTimeNextDay = ko.observable(false);
 	this.DateToForDisplay = ko.computed(function () {
-		return self.NextDay() ? self.DateFrom().clone().add('d', 1) : self.DateFrom().clone();
+		return self.EndTimeNextDay() ? self.DateFrom().clone().add('d', 1) : self.DateFrom().clone();
 	});
 
 	this.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
@@ -34,7 +32,7 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 		ajax.Ajax({
 			url: "Schedule/OvertimeAvailability",
 			dataType: "json",
-			data: { Date: self.DateFrom().format('YYYY-MM-DD'), StartTime: self.StartTime(), EndTime: self.EndTime(), EndTimeNextDay: self.NextDay() },
+			data: { Date: self.DateFrom().format('YYYY-MM-DD'), StartTime: self.StartTime(), EndTime: self.EndTime(), EndTimeNextDay: self.EndTimeNextDay() },
 			type: 'POST',
 			success: function (data, textStatus, jqXHR) {
 				displayOvertimeAvailability(data);
@@ -53,7 +51,7 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 	this.LoadRequestData = function(day) {
 		self.StartTime(day.overtimeAvailability().StartTime);
 		self.EndTime(day.overtimeAvailability().EndTime);
-		self.NextDay(day.overtimeAvailability().NextDay);
+		self.EndTimeNextDay(day.overtimeAvailability().EndTimeNextDay);
 		self.HasOvertimeAvailability(day.overtimeAvailability().HasOvertimeAvailability);
 	};
 

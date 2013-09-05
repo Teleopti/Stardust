@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.Mapping
 				                                                                                          new TimeSpan(5, 0, 0),
 				                                                                                          new TimeSpan(25, 0, 0)));
 
-			result.NextDay.Should().Be.EqualTo(true);
+			result.EndTimeNextDay.Should().Be.EqualTo(true);
 		}
 	}
 }
