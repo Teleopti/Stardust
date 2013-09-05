@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -98,6 +96,58 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 				Assert.AreEqual(_target.SortedPersonInvolved()[0].Id, otherPerson.Id);
 				Assert.AreEqual(_target.SortedPersonInvolved()[1].Id, _person.Id);
 			}
+		}
+
+		[Test]
+		public void ShouldAddPersonsWithNoShiftCategoryPerAgentToSortedList()
+		{
+			var otherPerson = PersonFactory.CreatePerson("other");
+			otherPerson.SetId(Guid.NewGuid());
+			var shiftCategory = new ShiftCategory("shiftCategory");
+			var shiftCategoryPerAgent1 = new ShiftCategoryPerAgent(_person, shiftCategory, 1);
+			var shiftCategoryPerAgentList = new List<ShiftCategoryPerAgent> { shiftCategoryPerAgent1 };
+			var personInvolved = new List<IPerson> { _person, otherPerson };
+
+			using (_mock.Record())
+			{
+				Expect.Call(_view.ExtractorModel).Return(_extractor).Repeat.AtLeastOnce();
+				Expect.Call(_extractor.GetShiftCategoryPerAgent()).Return(shiftCategoryPerAgentList).Repeat.AtLeastOnce();
+				Expect.Call(_extractor.PersonInvolved).Return(personInvolved).Repeat.AtLeastOnce();
+				Expect.Call(_extractor.ShiftCategories).Return(new List<IShiftCategory> { shiftCategory }).Repeat.AtLeastOnce();
+			}
+			using (_mock.Playback())
+			{
+				_target.Sort(1);
+				Assert.AreEqual(_target.SortedPersonInvolved()[0].Id, otherPerson.Id);
+				Assert.AreEqual(_target.SortedPersonInvolved()[1].Id, _person.Id);
+
+				_target.Sort(1);
+				Assert.AreEqual(_target.SortedPersonInvolved()[0].Id, _person.Id);
+				Assert.AreEqual(_target.SortedPersonInvolved()[1].Id, otherPerson.Id);
+			}	
+		}
+
+		[Test]
+		public void ShouldNotSortIfSortColumnDontExist()
+		{
+			var otherPerson = PersonFactory.CreatePerson("other");
+			otherPerson.SetId(Guid.NewGuid());
+			var personInvolved = new List<IPerson> { _person, otherPerson };
+
+			using (_mock.Record())
+			{
+				Expect.Call(_view.ExtractorModel).Return(_extractor).Repeat.Twice();
+				Expect.Call(_extractor.GetShiftCategoryPerAgent()).Return(new List<ShiftCategoryPerAgent>());
+				Expect.Call(_extractor.PersonInvolved).Return(personInvolved);
+				Expect.Call(_extractor.ShiftCategories).Return(new List<IShiftCategory>());
+
+			}
+			using (_mock.Playback())
+			{
+				_target.Sort(1);
+				Assert.AreEqual(_target.SortedPersonInvolved()[0].Id, _person.Id);
+				Assert.AreEqual(_target.SortedPersonInvolved()[1].Id, otherPerson.Id);
+			}	
 		}
 	}
 }
