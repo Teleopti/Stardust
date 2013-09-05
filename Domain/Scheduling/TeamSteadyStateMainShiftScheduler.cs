@@ -111,10 +111,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
             if (daysToRecalculate.Count > 0)
             {
-                _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true, new List<IScheduleDay>(), daysToRecalculate);
+                _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
                 var period = daysToRecalculate[0].Period;
                 if (period.StartDateTime.Date != period.EndDateTime.Date)
-                    _resourceOptimizationHelper.ResourceCalculateDate(dateOnly.AddDays(1), true, true, new List<IScheduleDay>(), daysToRecalculate);
+                    _resourceOptimizationHelper.ResourceCalculateDate(dateOnly.AddDays(1), true, true);
             }
 
             return true;

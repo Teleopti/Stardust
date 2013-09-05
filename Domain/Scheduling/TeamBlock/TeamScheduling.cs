@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -42,11 +41,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return;
 
 			var agentTimeZone = person.PermissionInformation.DefaultTimeZone();
-			var modifyedDay = assignShiftProjection(shiftProjectionCache, agentTimeZone, scheduleDay, dateOnly);
+			assignShiftProjection(shiftProjectionCache, agentTimeZone, scheduleDay, dateOnly);
 			OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
 			_resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
-			                                            shiftProjectionCache.WorkShiftProjectionPeriod,
-														new List<IScheduleDay> { modifyedDay });
+			                                            shiftProjectionCache.WorkShiftProjectionPeriod);
 		}
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -59,14 +57,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 		}
 
-        private IScheduleDay assignShiftProjection(IShiftProjectionCache shiftProjectionCache, TimeZoneInfo agentTimeZone,
-													IScheduleDay destinationScheduleDay, DateOnly day)
+        private void assignShiftProjection(IShiftProjectionCache shiftProjectionCache, TimeZoneInfo agentTimeZone, IScheduleDay destinationScheduleDay, DateOnly day)
         {
 			shiftProjectionCache.SetDate(day, agentTimeZone);
 			destinationScheduleDay.AddMainShift(shiftProjectionCache.TheMainShift);
 
             _schedulePartModifyAndRollbackService.Modify(destinationScheduleDay);
-	        return destinationScheduleDay;
         }
     }
 }

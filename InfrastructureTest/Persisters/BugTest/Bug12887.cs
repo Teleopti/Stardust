@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 
 			var personAssignment = scheduleDay.PersonAssignment();
 			personAssignment.AddMainLayer(personAssignment.MainLayers().First().Payload, FirstDayDateTimePeriod);	
-			ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+			ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 		}
 
 		protected override IEnumerable<IAggregateRoot> TestDataToReassociate()

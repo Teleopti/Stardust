@@ -796,7 +796,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public void Restore(IScheduleDay previousState)
         {
-            Owner.Modify(ScheduleModifier.UndoRedo, previousState, null, new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+            Owner.Modify(ScheduleModifier.UndoRedo, previousState, null, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
         }
 
         public IMemento CreateMemento()

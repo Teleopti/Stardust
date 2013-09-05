@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 _rollbackService.Rollback();
                 changed.CurrentSchedule =
                     _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateToBeRemoved).DaySchedulePart();
-                _resourceCalculateDelayer.CalculateIfNeeded(dateToBeRemoved, null, _rollbackService.ModificationCollection.ToArray(), new List<IScheduleDay>());
+                _resourceCalculateDelayer.CalculateIfNeeded(dateToBeRemoved, null);
                 lockDay(dateToBeRemoved);
                 return true;
             }
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 _rollbackService.Rollback();
                 changed.CurrentSchedule =
                     _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateToBeRemoved).DaySchedulePart();
-                _resourceCalculateDelayer.CalculateIfNeeded(dateToBeRemoved, null, _rollbackService.ModificationCollection.ToArray(), new List<IScheduleDay>());
+                _resourceCalculateDelayer.CalculateIfNeeded(dateToBeRemoved, null);
                 lockDay(dateToBeRemoved);
                 return false;
             }
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				foreach (var schedDay in days)
 				{
 					var dateOnly = schedDay.DateOnlyAsPeriod.DateOnly;
-                    resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, _rollbackService.ModificationCollection.ToArray());
+                    resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
 				}
                 lockDay(day);
                 return false;

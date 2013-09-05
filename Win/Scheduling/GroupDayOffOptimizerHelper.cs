@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
                     runIntradayOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
 
-				var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new EmptyScheduleDayChangeCallback(), tagSetter);
+				var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new ResourceCalculationOnlyScheduleDayChangeCallback(), tagSetter);
 				if (optimizerPreferences.General.OptimizationStepFairness)
 					runFairness(selectedPersons, selectedDays, rollbackService, optimizerPreferences);
             }
