@@ -41,18 +41,18 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         }
 
         /// <summary>
-        /// Set this to save logon attempts.
+        /// Set this and IpAddress to save logon attempts.
         /// </summary>
-        [DataMember]
+        [DataMember(IsRequired = false, Order = 1)]
         public string Client
         {
             get; set;
         }
 
         /// <summary>
-        /// Set this to save logon attempts.
+        /// Set this and Client to save logon attempts.
         /// </summary>
-        [DataMember]
+        [DataMember(IsRequired = false, Order = 2)]
         public string IpAddress { get; set; }
     }
 }
