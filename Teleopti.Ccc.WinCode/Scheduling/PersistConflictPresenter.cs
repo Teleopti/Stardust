@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				if (databaseVersion == null)
                 {
 					var scheduleRange = ((ScheduleRange)_model.ScheduleDictionary[originalVersion.Person]);
-					scheduleRange.SolveConflictBecauseOfExternalDeletion(originalVersion.Id.Value, discardMyChanges); 
+					scheduleRange.SolveConflictBecauseOfExternalDeletion(originalVersion.Id.GetValueOrDefault(), discardMyChanges); 
                 }
                 else
                 {

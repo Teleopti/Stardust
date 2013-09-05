@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         private OnEventStatisticMessageCommand statisticCommand;
         private OnEventScheduleMessageCommand scheduleCommand;
         private OnEventForecastDataMessageCommand forecastCommand;
+        private OnEventMeetingMessageCommand meetingCommand;
 
         [SetUp]
         public void Setup()
@@ -36,8 +37,9 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             statisticCommand = mocks.StrictMock<OnEventStatisticMessageCommand>();
 			forecastCommand = mocks.StrictMock < OnEventForecastDataMessageCommand>();
 			scheduleCommand = mocks.StrictMock < OnEventScheduleMessageCommand>();
+			meetingCommand = mocks.StrictMock < OnEventMeetingMessageCommand>();
             target = new IntradayPresenter(view, schedulingResultLoader, null, null, null, null, null, unitOfWorkFactory,
-                                           null,statisticCommand,forecastCommand,scheduleCommand, null);
+                                           null,statisticCommand,forecastCommand,scheduleCommand, meetingCommand, null);
         }
 
         [Test]

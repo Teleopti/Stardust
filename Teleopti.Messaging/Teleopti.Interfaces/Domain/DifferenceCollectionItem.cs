@@ -87,6 +87,12 @@ namespace Teleopti.Interfaces.Domain
             get { return _currentItem; }
         }
 
+        public bool IsEmpty()
+        {
+            return _currentItem == null &&
+                   _originalItem == null;
+        }
+
         #region Equals stuff
 
         /// <summary>

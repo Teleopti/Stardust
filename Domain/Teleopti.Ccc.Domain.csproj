@@ -181,6 +181,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesChangedHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillAddedHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesReadModelUpdater.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedNotifier.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\DoNotNotifySmsLink.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\IDoNotifySmsLink.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\IScheduleDayReadModelsCreator.cs" />

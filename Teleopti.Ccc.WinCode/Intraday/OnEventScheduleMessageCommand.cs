@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using log4net;
-using Teleopti.Ccc.Domain.Repositories;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -15,19 +15,17 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
     public class OnEventScheduleMessageCommand : IMessageHandlerCommand
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(OnEventScheduleMessageCommand));
-
         private readonly IIntradayView _view;
         private readonly ISchedulingResultLoader _schedulingResultLoader;
 	    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IRepositoryFactory _repositoryFactory;
+        private readonly IScheduleRefresher _scheduleRefresher;
 
-        public OnEventScheduleMessageCommand(IIntradayView view, ISchedulingResultLoader schedulingResultLoader, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory) : this()
+        public OnEventScheduleMessageCommand(IIntradayView view, ISchedulingResultLoader schedulingResultLoader, IUnitOfWorkFactory unitOfWorkFactory, IScheduleRefresher scheduleRefresher) : this()
         {
             _view = view;
             _schedulingResultLoader = schedulingResultLoader;
 	        _unitOfWorkFactory = unitOfWorkFactory;
-            _repositoryFactory = repositoryFactory;
+            _scheduleRefresher = scheduleRefresher;
         }
 
 		protected OnEventScheduleMessageCommand()
@@ -35,93 +33,30 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		}
 
         public virtual void Execute(IEventMessage eventMessage)
-		{
-			var person =
-				_schedulingResultLoader.SchedulerState.SchedulingResultState.PersonsInOrganization.FirstOrDefault(
-					p => p.Id == eventMessage.ReferenceObjectId);
-			if (person == null)
-			{
-				Logger.Info("Person with id " + eventMessage.ReferenceObjectId + " was not found in memory.");
-				return;
-			}
-
-            if (eventMessage.DomainUpdateType == DomainUpdateType.Delete)
-            {
-                deleteOnEvent(eventMessage);
-            }
-            else
-            {
-                updateInsertOnEvent(eventMessage,person);
-            }
-
-            _schedulingResultLoader.InitializeScheduleData();
-            _view.DrawSkillGrid();
-        }
-
-
-        private void deleteOnEvent(IEventMessage message)
         {
-            if (Logger.IsInfoEnabled)
-                Logger.Info("Message broker - Removing " + message.DomainObjectType + " [" + message.DomainObjectId + "]");
+            var conflicts = new Collection<PersistConflictMessageState>();
+            var refreshedEntitiesBuffer = new Collection<IPersistableScheduleData>();
 
-				if (message.InterfaceType.IsAssignableFrom(typeof(IMeetingChangedEntity)))
-			{
-				_schedulingResultLoader.SchedulerState.Schedules.DeleteMeetingFromBroker(message.DomainObjectId);
-			}
-			else
-			{
-				_schedulingResultLoader.SchedulerState.Schedules.DeleteFromBroker(message.DomainObjectId);
-			}
-        }
-
-        private void updateInsertOnEvent(IEventMessage message, IPerson person)
-        {
             using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                if (Logger.IsInfoEnabled)
-                    Logger.Info("Message broker - Updating " + message.DomainObjectType + " [" + message.DomainObjectId + "]");
-
                 uow.Reassociate(_schedulingResultLoader.Contracts);
                 uow.Reassociate(_schedulingResultLoader.ContractSchedules);
                 uow.Reassociate(_schedulingResultLoader.SchedulerState.RequestedScenario);
                 uow.Reassociate(_schedulingResultLoader.SchedulerState.SchedulingResultState.PersonsInOrganization);
+                uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.Absences);
+                uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.Activities);
+                uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.ShiftCategories);
 
-                if (message.InterfaceType.IsAssignableFrom(typeof(IPersonAssignment)))
-                {
-                    associateRootsForPersonAssignment(uow);
-                    _schedulingResultLoader.SchedulerState.Schedules.UpdateFromBroker(_repositoryFactory.CreatePersonAssignmentRepository(uow), message.DomainObjectId);
-                    _view.ReloadScheduleDayInEditor(person);
-                    return;
-                }
-                if (message.InterfaceType.IsAssignableFrom(typeof(IPersonAbsence)))
-                {
-                    associateRoootsForPersonAbsence(uow);
-                    _schedulingResultLoader.SchedulerState.Schedules.UpdateFromBroker(_repositoryFactory.CreatePersonAbsenceRepository(uow), message.DomainObjectId);
-                    _view.ReloadScheduleDayInEditor(person);
-                    return;
-                }
-					 if (message.InterfaceType.IsAssignableFrom(typeof(IMeetingChangedEntity)))
-				{
-					deleteOnEvent(message);
-					associateRootsForPersonAssignment(uow);
-					_schedulingResultLoader.SchedulerState.Schedules.MeetingUpdateFromBroker(_repositoryFactory.CreateMeetingRepository(uow), message.DomainObjectId);
-					_view.ReloadScheduleDayInEditor(person);
-					return;
-				}
+                _scheduleRefresher.Refresh(_schedulingResultLoader.SchedulerState.Schedules, new List<IEventMessage>(), new[] {eventMessage}, refreshedEntitiesBuffer, conflicts);
 
-                Logger.Warn("Message broker - Got a message of an unknown IScheduleData type: " + message.DomainObjectType);
+                if (refreshedEntitiesBuffer.Count > 0)
+                {
+                    _view.ReloadScheduleDayInEditor(refreshedEntitiesBuffer[0].Person);
+                }
             }
-        }
 
-        private void associateRoootsForPersonAbsence(IUnitOfWork uow)
-        {
-            uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.Absences);
-        }
-
-        private void associateRootsForPersonAssignment(IUnitOfWork uow)
-        {
-            uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.Activities);
-            uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.ShiftCategories);
+            _schedulingResultLoader.InitializeScheduleData();
+            _view.DrawSkillGrid();
         }
     }
 }

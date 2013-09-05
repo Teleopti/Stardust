@@ -147,6 +147,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillAddedHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesActivityChangedHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesChangedHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedNotifierTest.cs" />
     <Compile Include="ApplicationLayer\SyncEventsPublisherTest.cs" />
     <Compile Include="ApplicationLayer\TestWriteSideRepository.cs" />
     <Compile Include="Auditing\AuditSettingTest.cs" />

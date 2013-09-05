@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         {
             MessageFilterManager filterManager = MessageFilterManager.Instance;
             Assert.IsTrue(filterManager.HasType(typeof(IStatisticTask)));
-            Assert.AreEqual(filterManager.LookupType(typeof(PublicNote)), typeof(IPersistableScheduleData));
+            Assert.AreEqual(filterManager.LookupType(typeof(PublicNote)),typeof(IPersistableScheduleData));
             Assert.AreEqual(filterManager.LookupTypeToSend(typeof(PublicNote)), typeof(IPublicNote).AssemblyQualifiedName);
         }
     }

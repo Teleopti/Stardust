@@ -10,17 +10,17 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly IScheduleDictionarySaver _scheduleDictionarySaver;
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceCollectionService;
-		private readonly IMessageBrokerModule _messageBrokerModule;
+		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
 		private readonly IReassociateData _reassociateData;
 		private readonly IScheduleDictionaryModifiedCallback _callback;
 
-		public ScheduleDictionaryBatchPersister(ICurrentUnitOfWorkFactory uowFactory, IScheduleRepository scheduleRepository, IScheduleDictionarySaver scheduleDictionarySaver, IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService, IMessageBrokerModule messageBrokerModule, IReassociateData reassociateData, IScheduleDictionaryModifiedCallback callback)
+		public ScheduleDictionaryBatchPersister(ICurrentUnitOfWorkFactory uowFactory, IScheduleRepository scheduleRepository, IScheduleDictionarySaver scheduleDictionarySaver, IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService, IMessageBrokerIdentifier messageBrokerIdentifier, IReassociateData reassociateData, IScheduleDictionaryModifiedCallback callback)
 		{
 			_uowFactory = uowFactory;
 			_scheduleRepository = scheduleRepository;
 			_scheduleDictionarySaver = scheduleDictionarySaver;
 			_differenceCollectionService = differenceCollectionService;
-			_messageBrokerModule = messageBrokerModule;
+			_messageBrokerIdentifier = messageBrokerIdentifier;
 			_reassociateData = reassociateData;
 			_callback = callback;
 		}
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 				using (var uow = makeUnitOfWork(uowFactory, scheduleRange))
 				{
 					var result = _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository, diff);
-					uow.PersistAll(_messageBrokerModule);
+					uow.PersistAll(_messageBrokerIdentifier);
 					if (_callback != null)
 						_callback.Callback(scheduleRange, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
 				}

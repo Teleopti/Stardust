@@ -33,14 +33,14 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
             var mocks = new MockRepository();
 
         	var scheduleDictionaryBatchingPersister = _container.Resolve<IScheduleDictionaryBatchPersister>(
-        		TypedParameter.From(mocks.Stub<IMessageBrokerModule>()),
+        		TypedParameter.From(mocks.Stub<IMessageBrokerIdentifier>()),
 				TypedParameter.From(mocks.Stub<IReassociateData>())
         		);
             var instance = _container.Resolve<IScheduleScreenPersister>(
                 TypedParameter.From(mocks.Stub<IPersonRequestPersister>()),
                 TypedParameter.From(mocks.Stub<IPersonAbsenceAccountRefresher>()),
                 TypedParameter.From(mocks.Stub<IPersonAbsenceAccountValidator>()),
-				TypedParameter.From(mocks.Stub<IMessageBrokerModule>()),
+				TypedParameter.From(mocks.Stub<IMessageBrokerIdentifier>()),
 				TypedParameter.From(mocks.Stub<IOwnMessageQueue>()),
                 TypedParameter.From(scheduleDictionaryBatchingPersister)
                 ); 
@@ -54,12 +54,12 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			 var mocks = new MockRepository();
 
 			 var instance1 = _container.Resolve<IScheduleDictionaryBatchPersister>(
-				TypedParameter.From(mocks.Stub<IMessageBrokerModule>()),
+				TypedParameter.From(mocks.Stub<IMessageBrokerIdentifier>()),
 				TypedParameter.From(mocks.Stub<IReassociateData>())
 				);
 
 			 var instance2 = _container.Resolve<IScheduleDictionaryBatchPersister>(
-				TypedParameter.From(mocks.Stub<IMessageBrokerModule>()),
+				TypedParameter.From(mocks.Stub<IMessageBrokerIdentifier>()),
 				TypedParameter.From(mocks.Stub<IReassociateData>())
 				);
 
