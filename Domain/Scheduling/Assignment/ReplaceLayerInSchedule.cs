@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
@@ -10,60 +9,85 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	{
 		private const string exMessageLayerNotFound = "Layer {0} not found when doing a replace of layer!";
 
-		//this can be done MUCH simpler when we have one list of layers and no shifts....
-		//should work against a PersonAssignment (aka AgentDay) and not IScheduleDay
 		public void Replace(IScheduleDay scheduleDay, ILayer<IActivity> layerToRemove, IActivity newActivity, DateTimePeriod newPeriod)
 		{
-			foreach (var ass in scheduleDay.PersonAssignmentCollectionDoNotUse())
+			var ass = scheduleDay.PersonAssignment();
+			if (ass != null)
 			{
-				foreach (var layer in ass.MainLayers())
+				if (tryReplaceMainLayer(ass, layerToRemove, newActivity, newPeriod) ||
+				    tryReplacePersonalLayer(ass, layerToRemove, newActivity, newPeriod) ||
+				    tryReplaceOvertimeLayer(ass, layerToRemove, newActivity, newPeriod))
 				{
-					if (layer.Equals(layerToRemove))
-					{
-						var indexOfLayer = layer.OrderIndex;
-						var newLayers = new List<IMainShiftLayer>(ass.MainLayers());
-						newLayers.Remove(layer);
-						newLayers.Insert(indexOfLayer, new MainShiftLayer(newActivity, newPeriod));
-						ass.ClearMainLayers();
-						foreach (var newLayer in newLayers)
-						{
-							ass.AddMainLayer(newLayer.Payload, newLayer.Period);
-						}
-						return;
-					}
-				}
-
-				var layerAsPersonal = layerToRemove as IPersonalShiftLayer;
-				if (layerAsPersonal != null)
-				{
-					var personalLayers = ass.PersonalLayers().ToList();
-					var indexOfLayer = personalLayers.IndexOf(layerAsPersonal);
-					personalLayers.RemoveAt(indexOfLayer);
-					personalLayers.Insert(indexOfLayer, new PersonalShiftLayer(newActivity, newPeriod));
-					ass.ClearPersonalLayers();
-					foreach (var personalLayer in personalLayers)
-					{
-						ass.AddPersonalLayer(personalLayer.Payload, personalLayer.Period);
-					}
-					return;
-				}
-
-				var layerAsOvertime = layerToRemove as IOvertimeShiftLayer;
-				if (layerAsOvertime != null)
-				{
-					var overtimeLayers = ass.OvertimeLayers().ToList();
-					var indexOfLayer = layerAsOvertime.OrderIndex;
-					overtimeLayers.RemoveAt(indexOfLayer);
-					overtimeLayers.Insert(indexOfLayer, new OvertimeShiftLayer(newActivity, newPeriod, layerAsOvertime.DefinitionSet));
-					ass.ClearOvertimeLayers();
-					foreach (var overtimeLayer in overtimeLayers)
-					{
-						ass.AddOvertimeLayer(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
-					}
 					return;
 				}
 			}
 			throw new ArgumentException(string.Format(CultureInfo.CurrentUICulture, exMessageLayerNotFound, layerToRemove));
+		}
+
+		private static bool tryReplaceMainLayer(IPersonAssignment assignment, ILayer<IActivity> layerToRemove, IActivity newActivity, DateTimePeriod newPeriod)
+		{
+			var layerAsMain = layerToRemove as IMainShiftLayer;
+			if (layerAsMain != null)
+			{
+				var mainLayers = assignment.MainLayers().ToList();
+				var indexOfLayer = mainLayers.IndexOf(layerAsMain);
+				if (indexOfLayer > -1)
+				{
+					mainLayers.RemoveAt(indexOfLayer);
+					mainLayers.Insert(indexOfLayer, new MainShiftLayer(newActivity, newPeriod));
+					assignment.ClearMainLayers();
+					foreach (var mainLayer in mainLayers)
+					{
+						assignment.AddMainLayer(mainLayer.Payload, mainLayer.Period);
+					}
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private static bool tryReplacePersonalLayer(IPersonAssignment assignment, ILayer<IActivity> layerToRemove, IActivity newActivity, DateTimePeriod newPeriod)
+		{
+			var layerAsPersonal = layerToRemove as IPersonalShiftLayer;
+			if (layerAsPersonal != null)
+			{
+				var mainLayers = assignment.PersonalLayers().ToList();
+				var indexOfLayer = mainLayers.IndexOf(layerAsPersonal);
+				if (indexOfLayer > -1)
+				{
+					mainLayers.RemoveAt(indexOfLayer);
+					mainLayers.Insert(indexOfLayer, new PersonalShiftLayer(newActivity, newPeriod));
+					assignment.ClearPersonalLayers();
+					foreach (var layer in mainLayers)
+					{
+						assignment.AddPersonalLayer(layer.Payload, layer.Period);
+					}
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private static bool tryReplaceOvertimeLayer(IPersonAssignment assignment, ILayer<IActivity> layerToRemove, IActivity newActivity, DateTimePeriod newPeriod)
+		{
+			var layerAsOvertime = layerToRemove as IOvertimeShiftLayer;
+			if (layerAsOvertime != null)
+			{
+				var overtimeLayers = assignment.OvertimeLayers().ToList();
+				var indexOfLayer = overtimeLayers.IndexOf(layerAsOvertime);
+				if (indexOfLayer > -1)
+				{
+					overtimeLayers.RemoveAt(indexOfLayer);
+					overtimeLayers.Insert(indexOfLayer, new OvertimeShiftLayer(newActivity, newPeriod, layerAsOvertime.DefinitionSet));
+					assignment.ClearOvertimeLayers();
+					foreach (var layer in overtimeLayers)
+					{
+						assignment.AddOvertimeLayer(layer.Payload, layer.Period, layer.DefinitionSet);
+					}
+					return true;
+				}
+			}
+			return false;
 		}
 
 		public void Replace(IScheduleDay scheduleDay, ILayer<IAbsence> layerToRemove, IAbsence newAbsence, DateTimePeriod newPeriod)
