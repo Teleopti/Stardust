@@ -316,7 +316,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 		
 		self.textOvertimeAvailabilityText = ko.computed(function () {
-			return self.overtimeAvailability().StartTime + " - " + self.overtimeAvailability().EndTime + (self.overtimeAvailability().NextDay ? ' +1' : '');
+			return self.overtimeAvailability().StartTime + " - " + self.overtimeAvailability().EndTime;
 		});
 
 		self.classForDaySummary = ko.computed(function () {
