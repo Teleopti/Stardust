@@ -2,8 +2,6 @@ using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.WinCode.Events;
-using Teleopti.Ccc.WinCode.Scheduling.Editor;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
@@ -49,7 +47,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 	    public override bool CanMoveUp
 	    {
-				get { return _moveLayer!=null && _layer.OrderIndex > 0; }
+				get { return _moveLayer!=null && _assignment.MainLayers().ToList().IndexOf(_layer) > 0; }
 	    }
 
 	    public override bool CanMoveDown
