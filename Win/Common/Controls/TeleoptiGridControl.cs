@@ -377,7 +377,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
         private GridCellModelBase initializePercentWithNegativeCell()
         {
             PercentCellModel cellModel = new PercentCellModel(Model);
-            cellModel.NumberOfDecimals = 0;
+            cellModel.NumberOfDecimals = 1;
             cellModel.MinMax = new MinMax<double>(-1.0d, 10.0d);
             return cellModel;
         }

@@ -4,11 +4,9 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.DomainTest.Helper;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.PersonalAccount
 {
@@ -43,6 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.PersonalAccount
 
             Expect.Call(_parent.AccountCollection()).Return(accounts);
             Expect.Call(newerAccountWithSameDate.StartDate).Return(_startDate);
+			Expect.Call(_parent.Person).Return(PersonFactory.CreatePerson());
 
             _mocks.ReplayAll();
 
