@@ -177,11 +177,11 @@ ON
 JOIN
 	mart.dim_absence da ON
 	da.absence_code = stg.absence_code
-LEFT JOIN
+INNER JOIN
 	mart.dim_date dsd
 ON
 	stg.date = dsd.date_date
-LEFT JOIN
+INNER JOIN
 	mart.dim_interval	di
 ON
 	stg.start_interval_id = di.interval_id
@@ -213,11 +213,11 @@ JOIN
 	mart.dim_day_off dd ON
 	stg.day_off_name = dd.day_off_name AND
 	dd.business_unit_id = dp.business_unit_id
-LEFT JOIN
+INNER JOIN
 	mart.dim_date dsd
 ON
 	stg.date = dsd.date_date
-LEFT JOIN
+INNER JOIN
 	mart.dim_interval	di
 ON
 	stg.start_interval_id = di.interval_id
@@ -281,9 +281,9 @@ ON
 INNER JOIN mart.dim_day_off dd
 	ON stg.day_off_name = dd.day_off_name
 	AND dd.business_unit_id = dp.business_unit_id
-LEFT JOIN mart.dim_date dsd
+INNER JOIN mart.dim_date dsd
 	ON stg.date = dsd.date_date
-LEFT JOIN mart.dim_interval	di
+INNER JOIN mart.dim_interval	di
 	ON stg.start_interval_id = di.interval_id
 LEFT JOIN mart.dim_scenario	ds
 	ON stg.scenario_code = ds.scenario_code
