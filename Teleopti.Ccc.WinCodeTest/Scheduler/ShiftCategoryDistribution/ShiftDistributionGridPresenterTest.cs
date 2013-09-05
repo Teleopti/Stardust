@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
         }
 
         [Test]
-        public void ShouldSort()
+        public void ShouldSortAndReSort()
         {
             var dates = new List<DateOnly> { _today, _tomorrow };
 
@@ -89,7 +89,33 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
                 _target.Sort(1);
                 Assert.AreEqual(_target.SortedDates()[0], _today);
                 Assert.AreEqual(_target.SortedDates()[1], _tomorrow);
+
+                _target.ReSort();
+                Assert.AreEqual(_target.SortedDates()[0], _today);
+                Assert.AreEqual(_target.SortedDates()[1], _tomorrow);
             }
         }
+
+        [Test]
+        public void TestSortedDates()
+        {
+            var dates = new List<DateOnly> { _tomorrow, _today };
+
+            using (_mock.Record())
+            {
+                Expect.Call(_view.ExtractorModel).Return(_extractor).Repeat.AtLeastOnce();
+                Expect.Call(_extractor.Dates).Return(dates).Repeat.AtLeastOnce();
+            }
+            using (_mock.Playback())
+            {
+                var sortedDates =  _target.SortedDates() ;
+                Assert.AreEqual(sortedDates[0], _today);
+                Assert.AreEqual(sortedDates[1], _tomorrow);
+
+                
+            }
+        }
+
+        
 	}
 }

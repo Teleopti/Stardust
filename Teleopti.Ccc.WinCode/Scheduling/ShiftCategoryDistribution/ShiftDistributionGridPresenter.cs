@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
         public IList<DateOnly > SortedDates()
         {
-            if (_sortedDates == null) _sortedDates = _view.ExtractorModel.Dates  ;
+            if (_sortedDates == null) _sortedDates = _view.ExtractorModel.Dates.OrderBy(d=>d.Date).ToList()   ;
             return _sortedDates;
         }
 
