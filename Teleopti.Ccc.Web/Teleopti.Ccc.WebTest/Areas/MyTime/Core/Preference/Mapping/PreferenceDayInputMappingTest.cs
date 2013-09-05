@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
@@ -10,9 +9,9 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
-using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
@@ -20,29 +19,26 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	[TestFixture]
 	public class OvertimeAvailabilityInputMappingTest
 	{
-		//[SetUp]
-		//public void Setup()
-		//{
-		//	Mapper.Reset();
-		//	Mapper.Initialize(
-		//		c =>
-		//		{
-		//			c.ConstructServicesUsing(t =>
-		//				new PreferenceDayInputMappingProfile.PreferenceDayInputToPreferenceDay(
-		//					() => Mapper.Engine,
-		//					() => loggedOnUser
-		//				));
-		//			c.AddProfile(
-		//				new PreferenceDayInputMappingProfile(
-		//					shiftCategoryRepository,
-		//					dayOffRepository,
-		//					absenceRepository,
-		//					activityRepository,
-		//					new Lazy<IMappingEngine>(() => Mapper.Engine))
-		//				);
-		//		}
-		//		);
-		//}
+		private ILoggedOnUser loggedOnUser;
+		[SetUp]
+		public void Setup()
+		{
+			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			Mapper.Reset();
+			Mapper.Initialize(
+				c =>
+				{
+					c.ConstructServicesUsing(t =>
+						new OvertimeAvailabilityInputMappingProfile.OvertimeAvailabilityInputToOvertimeAvailability(
+							() => Mapper.Engine,
+							() => loggedOnUser
+						));
+					c.AddProfile(
+						new OvertimeAvailabilityInputMappingProfile()
+						);
+				}
+				);
+		}
 
 		[Test]
 		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }

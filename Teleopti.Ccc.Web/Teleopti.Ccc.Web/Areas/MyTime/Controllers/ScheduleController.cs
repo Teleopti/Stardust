@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
@@ -62,6 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPost]
+		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb)]
 		public JsonResult OvertimeAvailability(OvertimeAvailabilityInput input)
 		{
 			if (!ModelState.IsValid)

@@ -152,7 +152,6 @@ Scenario: Add invalid overtime availability
 
 
 #followings belong to the change overtime availability pbi
-@ignore
 Scenario: Default overtime availability values on existing overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
