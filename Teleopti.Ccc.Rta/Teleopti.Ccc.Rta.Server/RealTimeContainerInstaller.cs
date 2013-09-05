@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Rta.Server
 									});
 			builder.RegisterType<ActualAgentAssembler>().As<IActualAgentAssembler>();
 			builder.RegisterType<RtaDataHandler>().As<IRtaDataHandler>();
+			builder.RegisterType<ActualAgentStateCache>().As<IActualAgentStateCache>().SingleInstance();
 		}
 	}
 }

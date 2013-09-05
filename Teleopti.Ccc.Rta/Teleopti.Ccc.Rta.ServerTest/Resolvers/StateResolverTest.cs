@@ -3,6 +3,7 @@ using System.Data;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Rta.Interfaces;
+using Teleopti.Ccc.Rta.Server;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using log4net;
 
@@ -66,6 +67,8 @@ namespace Teleopti.Ccc.Rta.ServerTest.Resolvers
 			Assert.That(_target.HaveStateCodeChanged(Guid.NewGuid(), "OFF", dateTime), Is.True);
 			Assert.That(_target.HaveStateCodeChanged(personId, "OFF", dateTime.AddMilliseconds(100)), Is.True);
 			Assert.That(_target.HaveStateCodeChanged(personId, "OFF", dateTime.AddMilliseconds(100)), Is.False);
+			_target.UpdateCacheForPerson(personId, new PersonStateHolder("AUX3", dateTime.AddMilliseconds(200)));
+			Assert.That(_target.HaveStateCodeChanged(personId, "AUX3", dateTime.AddMilliseconds(200)), Is.False);
 			_mock.VerifyAll();
 		}
 	}

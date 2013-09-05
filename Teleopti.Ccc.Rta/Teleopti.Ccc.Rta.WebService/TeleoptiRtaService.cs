@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.ServiceModel;
-using Teleopti.Interfaces.Domain;
+using System.Timers;
 using log4net;
 using log4net.Config;
 using Teleopti.Ccc.Rta.Interfaces;
@@ -18,11 +17,15 @@ namespace Teleopti.Ccc.Rta.WebService
         private readonly string _authenticationKey;
         private readonly object _lockObject = new object();
         private const string logOutStateCode = "LOGGED-OFF";
-        private static readonly ILog Log = LogManager.GetLogger(typeof (TeleoptiRtaService));	
+        private static readonly ILog Log = LogManager.GetLogger(typeof (TeleoptiRtaService));
+		
+		//private static Timer _flushTimer;
+		//private ElapsedEventHandler _flushRtaStateCache;
 
-	    public TeleoptiRtaService()
+	    public TeleoptiRtaService(IRtaDataHandler rtaDataHandler)
         {
-            XmlConfigurator.Configure();
+		    _rtaDataHandler = rtaDataHandler;
+
 
             Log.Info("The real time adherence service is now started");
             var authenticationKey = ConfigurationManager.AppSettings["AuthenticationKey"];
@@ -31,10 +34,25 @@ namespace Teleopti.Ccc.Rta.WebService
             _authenticationKey = authenticationKey;
         }
 
-        private void InitializeClientHandler()
-        {
-            _rtaDataHandler = RtaFactory.DataHandler;
-        }
+		//private void InitializeClientHandler()
+		//{
+		//	_rtaDataHandler = RtaFactory.DataHandler;
+		//	initializeFlushTimer();
+		//}
+
+		//private void initializeFlushTimer()
+		//{
+		//	if (_flushTimer != null) return;
+		//	_flushRtaStateCache = delegate
+		//		{
+		//			if (_rtaDataHandler != null && _rtaDataHandler.IsAlive)
+		//				_rtaDataHandler.FlushCacheToDatabase();
+		//		};
+
+		//	_flushTimer = new Timer(5000);
+		//	_flushTimer.Elapsed += _flushRtaStateCache;
+		//	_flushTimer.Start();
+		//}
 
 	    public int SaveExternalUserState(string authenticationKey, string userCode, string stateCode,
 	                                     string stateDescription, bool isLoggedOn, int secondsInState, DateTime timestamp,
@@ -108,13 +126,8 @@ namespace Teleopti.Ccc.Rta.WebService
 			}
     		lock (_lockObject)
     		{
-    			if (_rtaDataHandler == null || !_rtaDataHandler.IsAlive) 
-					InitializeClientHandler();
-    			if (_rtaDataHandler != null)
-    			{
-    				_rtaDataHandler.ProcessRtaData(userCode.Trim(), stateCode, TimeSpan.FromSeconds(secondsInState), timestamp,
-    				                               parsedPlatformTypeId, sourceId, batchId, isSnapshot);
-    			}
+    			_rtaDataHandler.ProcessRtaData(userCode.Trim(), stateCode, TimeSpan.FromSeconds(secondsInState), timestamp,
+    			                               parsedPlatformTypeId, sourceId, batchId, isSnapshot);
     		}
 			if (Log.IsInfoEnabled)
 			{
@@ -166,10 +179,7 @@ namespace Teleopti.Ccc.Rta.WebService
 				businessUnitId, timestamp);
 			lock (_lockObject)
 			{
-				if (_rtaDataHandler == null || !_rtaDataHandler.IsAlive)
-					InitializeClientHandler();
-				if (_rtaDataHandler != null)
-					_rtaDataHandler.ProcessScheduleUpdate(personId, businessUnitId, timestamp);
+				_rtaDataHandler.ProcessScheduleUpdate(personId, businessUnitId, timestamp);
 			}
 		}
 
@@ -194,8 +204,7 @@ namespace Teleopti.Ccc.Rta.WebService
         {
             if (disposing)
             {
-                if (_rtaDataHandler != null &&
-                _rtaDataHandler.IsAlive)
+                if (_rtaDataHandler != null && _rtaDataHandler.IsAlive)
                 {
                     _rtaDataHandler = null;
                 }

@@ -24,12 +24,17 @@ namespace Teleopti.Ccc.Rta.Server
 		private readonly IPersonResolver _personResolver;
 		private readonly IStateResolver _stateResolver;
 
+		private static IActualAgentStateCache _stateCache;
+
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
 			MessageId = "1")]
 		protected RtaDataHandler(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
-		                         IDatabaseConnectionFactory databaseConnectionFactory, IDataSourceResolver dataSourceResolver,
+		                         IDatabaseConnectionFactory databaseConnectionFactory,
+		                         IDataSourceResolver dataSourceResolver,
 		                         IPersonResolver personResolver,
-		                         IStateResolver stateResolver)
+		                         IStateResolver stateResolver,
+		                         IActualAgentStateCache stateCache)
 		{
 			_loggingSvc = loggingSvc;
 			_messageSender = messageSender;
@@ -38,6 +43,7 @@ namespace Teleopti.Ccc.Rta.Server
 			_dataSourceResolver = dataSourceResolver;
 			_personResolver = personResolver;
 			_stateResolver = stateResolver;
+			_stateCache = stateCache;
 
 			if (_messageSender == null) return;
 
@@ -54,8 +60,12 @@ namespace Teleopti.Ccc.Rta.Server
 		}
 
 		public RtaDataHandler(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
-		                      IDatabaseConnectionFactory databaseConnectionFactory, IDataSourceResolver dataSourceResolver,
-		                      IPersonResolver personResolver, IStateResolver stateResolver, IActualAgentAssembler agentAssembler)
+		                      IDatabaseConnectionFactory databaseConnectionFactory,
+		                      IDataSourceResolver dataSourceResolver,
+		                      IPersonResolver personResolver,
+		                      IStateResolver stateResolver,
+		                      IActualAgentAssembler agentAssembler,
+		                      IActualAgentStateCache stateCache)
 		{
 			_loggingSvc = loggingSvc;
 			_messageSender = messageSender;
@@ -64,6 +74,7 @@ namespace Teleopti.Ccc.Rta.Server
 			_dataSourceResolver = dataSourceResolver;
 			_personResolver = personResolver;
 			_agentAssembler = agentAssembler;
+			_stateCache = stateCache;
 			_stateResolver = stateResolver;
 
 			if (_messageSender == null) return;
@@ -81,17 +92,18 @@ namespace Teleopti.Ccc.Rta.Server
 		}
 
 
-		public RtaDataHandler(IActualAgentAssembler agentAssembler)
+		public RtaDataHandler(IActualAgentAssembler agentAssembler, IActualAgentStateCache stateCache)
 			: this(
 				LogManager.GetLogger(typeof (RtaDataHandler)),
 				MessageSenderFactory.CreateMessageSender(ConfigurationManager.AppSettings["MessageBroker"]),
-				ConfigurationManager.AppSettings["DataStore"], new DatabaseConnectionFactory(), null, null, null, null)
+				ConfigurationManager.AppSettings["DataStore"], new DatabaseConnectionFactory(), null, null, null, null, null)
 		{
 			_agentAssembler = agentAssembler;
 
 			_dataSourceResolver = new DataSourceResolver(_databaseConnectionFactory, _connectionStringDataStore);
 			_personResolver = new PersonResolver(_databaseConnectionFactory, _connectionStringDataStore);
 			_stateResolver = new StateResolver(_databaseConnectionFactory, _connectionStringDataStore);
+			_stateCache = stateCache;
 
 			if (_messageSender == null) return;
 
@@ -107,8 +119,9 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"
-			)]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"),
+		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"
+			 )]
 		public void ProcessScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
 			try
@@ -119,13 +132,15 @@ namespace Teleopti.Ccc.Rta.Server
 					return;
 				}
 				_agentAssembler.InvalidateReadModelCache(personId);
-				var agentState = _agentAssembler.CheckSchedule(personId, businessUnitId, timestamp);
+				var agentState = _agentAssembler.GetAgentStateForScheduleUpdate(personId, businessUnitId, timestamp);
 
 				if (agentState == null)
 				{
 					_loggingSvc.InfoFormat("Schedule for {0} has not changed", personId);
 					return;
 				}
+
+				_stateCache.AddAgentStateToCache(agentState);
 
 				_loggingSvc.InfoFormat("Trying to send object {0} through Message Broker", agentState);
 				_messageSender.SendRtaData(personId, businessUnitId, agentState);
@@ -149,16 +164,23 @@ namespace Teleopti.Ccc.Rta.Server
 			get { return _messageSender.IsAlive; }
 		}
 
+		public void FlushCacheToDatabase()
+		{
+			_stateCache.FlushCacheToDatabase();
+		}
+
 		// Probably a WaitHandle object isnt a best choice, but same applies to QueueUserWorkItem method.
 		// An alternative using Tasks should be looked at instead.
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"),
+		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"
+			 )]
 		public void ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp,
 		                           Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
 		{
 			int dataSourceId;
 			var batch = isSnapshot
-						  ? batchId
-						  : (DateTime?) null;
+				            ? batchId
+				            : (DateTime?) null;
 
 			if (string.IsNullOrEmpty(_connectionStringDataStore))
 			{
@@ -175,7 +197,8 @@ namespace Teleopti.Ccc.Rta.Server
 
 			if (isSnapshot && string.IsNullOrEmpty(logOn))
 			{
-				_loggingSvc.InfoFormat("Last of batch detected, initializing hanling for batch id: {0}, source id: {1}", batchId, sourceId);
+				_loggingSvc.InfoFormat("Last of batch detected, initializing hanling for batch id: {0}, source id: {1}", batchId,
+				                       sourceId);
 				handleLastOfBatch(batchId, sourceId);
 				return;
 			}
@@ -197,32 +220,41 @@ namespace Teleopti.Ccc.Rta.Server
 					_loggingSvc.InfoFormat("Person {0} is already in state {1}", personWithBusinessUnit.PersonId, stateCode);
 					continue;
 				}
-				var agentState = _agentAssembler.GetAndSaveState(personWithBusinessUnit.PersonId,
-				                                                 personWithBusinessUnit.BusinessUnitId,
-				                                                 platformTypeId, stateCode,
-				                                                 timestamp, timeInState,
-																 batch, sourceId);
+				var agentState = _agentAssembler.GetAgentState(personWithBusinessUnit.PersonId,
+				                                               personWithBusinessUnit.BusinessUnitId,
+				                                               platformTypeId, stateCode,
+				                                               timestamp, timeInState,
+				                                               batch, sourceId);
+				if (agentState == null)
+				{
+					_loggingSvc.WarnFormat(
+						"Could not get state for Person: {0}, Business unit: {1}, PlatformTypeId: {2}, StateCode: {3}, Timestamp: {4}, Time in state: {5}, Batch {6}, SourceId{7}",
+						personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId, platformTypeId, stateCode, timestamp,
+						batchId, sourceId);
+					continue;
+				}
+				_stateCache.AddAgentStateToCache(agentState);
 				sendRtaState(agentState);
 			}
 		}
 
 		private void handleLastOfBatch(DateTime batchId, string sourceId)
 		{
-			var missingAgents = _agentAssembler.GetAndSaveStateForMissingAgent(batchId, sourceId);
-			foreach (var agent in missingAgents)
+			_stateCache.FlushCacheToDatabase();
+			var missingAgents = _agentAssembler.GetAgentStatesForMissingAgents(batchId, sourceId);
+			foreach (var agent in missingAgents.Where(agent => agent != null))
+			{
+				_stateCache.AddAgentStateToCache(agent);
 				sendRtaState(agent);
+			}
 		}
 
 		private void sendRtaState(IActualAgentState agentState)
 		{
 			try
 			{
-				if (agentState == null)
-				{
-					_loggingSvc.WarnFormat("Could not get state for Person");
-					return;
-				}
-				_stateResolver.UpdateCacheForPerson(agentState.PersonId, new PersonStateHolder(agentState.StateCode, agentState.ReceivedTime));
+				_stateResolver.UpdateCacheForPerson(agentState.PersonId,
+				                                    new PersonStateHolder(agentState.StateCode, agentState.ReceivedTime));
 				_loggingSvc.InfoFormat("Sending AgentState: {0} through Message Broker", agentState);
 				if (_messageSender.IsAlive)
 					_messageSender.SendRtaData(agentState.PersonId, agentState.BusinessUnit, agentState);
