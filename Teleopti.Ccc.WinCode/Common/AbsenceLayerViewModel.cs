@@ -28,12 +28,8 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             get
             {
-                return OrderIndexBase;
+                return 400;
             }
-        }
-        protected override int OrderIndexBase
-        {
-            get { return 400; }
         }
 
         public override bool IsMovePermitted()
