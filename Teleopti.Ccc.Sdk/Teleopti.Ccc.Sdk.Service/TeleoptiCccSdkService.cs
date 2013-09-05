@@ -1843,18 +1843,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				IRepositoryFactory repositoryFactory = new RepositoryFactory();
 				var accRep = repositoryFactory.CreatePersonAbsenceAccountRepository(unitOfWork);
 				var perRep = repositoryFactory.CreatePersonRepository(unitOfWork);
-				//var absRep = repositoryFactory.CreatePersonAbsenceRepository(unitOfWork);
 				IPerson loadedPerson = perRep.Load(person.Id.GetValueOrDefault(Guid.Empty));
 				var accounts = accRep.Find(loadedPerson);
 				foreach (IPersonAbsenceAccount personAbsenceAccount in accounts)
 				{
 					IAccount personAccount = personAbsenceAccount.Find(new DateOnly(containingDate.DateTime));
 					if (personAccount == null) continue;
-
-					//var accountPeriod = personAccount.Period().ToDateTimePeriod(loadedPerson.PermissionInformation.DefaultTimeZone());
-					//var personAbsences = absRep.Find(accountPeriod);
-					
-					
 					PersonAccountAssembler timeAssembler = new PersonAccountAssembler();
 					result.Add(timeAssembler.DomainEntityToDto(personAccount));
 				}

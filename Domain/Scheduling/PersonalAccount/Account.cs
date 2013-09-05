@@ -78,17 +78,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
             CalculateUsed(repository, loadedSchedule, scenario, new PersonAccountProjectionService(this, loadedSchedule));
         }
 
-        //TODO make private
-        public virtual void CalculateUsed(IScheduleRepository repository, ISchedule loadedSchedule, IScenario scenario,IPersonAccountProjectionService projectionServiceForPersonAccount)
-        {
-            IList<IScheduleDay> scheduleDays = projectionServiceForPersonAccount.CreateProjection(repository, scenario);
-            _usedInScheduler = TimeSpan.Zero;
-            _usedOutsideScheduler = null;
-            TimeSpan result = Owner.Absence.Tracker.TrackForReset(Owner.Absence, scheduleDays);
-            LatestCalculatedBalance = result;
-            //CalculateBalanceIn();
-        }
-
         public virtual DateOnlyPeriod Period()
         {
             return new DateOnlyPeriod(StartDate, endDate());
@@ -107,12 +96,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 
         }
 
-        ////TODO make private
-        //public virtual void CalculateBalanceIn()
-        //{
-        //    var previousAccount = FindPreviousPersonAccount();
-        //    BalanceIn = previousAccount != null ? previousAccount.BalanceOut : TimeSpan.Zero;
-        //}
+		public virtual void CalculateUsed(IScheduleRepository repository, ISchedule loadedSchedule, IScenario scenario, IPersonAccountProjectionService projectionServiceForPersonAccount)
+		{
+			IList<IScheduleDay> scheduleDays = projectionServiceForPersonAccount.CreateProjection(repository, scenario);
+			_usedInScheduler = TimeSpan.Zero;
+			_usedOutsideScheduler = null;
+			TimeSpan result = Owner.Absence.Tracker.TrackForReset(Owner.Absence, scheduleDays);
+			LatestCalculatedBalance = result;
+		}
 
         public virtual IAccount FindEarliestPersonAccount()
         {
@@ -162,6 +153,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
                     }
                 }
             }
+	        if (Owner != null && Owner.Person.TerminalDate.HasValue)
+	        {
+		        var terminateDate = Owner.Person.TerminalDate.Value;
+		        if (terminateDate < endDate)
+			        endDate = terminateDate;
+	        }
+
             return new DateOnly(endDate);
         }
 
