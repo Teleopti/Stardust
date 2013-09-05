@@ -2,6 +2,8 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -115,6 +117,36 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			res[0].Period.Should().Be.EqualTo(middleLayer.Period);
 			res[1].Period.Should().Be.EqualTo(firstLayer.Period);
 			res[2].Period.Should().Be.EqualTo(lastLayer.Period);
+		}
+
+		[Test]
+		public void ShouldMoveUpPersonalLayerWhenOtherLayerIsAbove()
+		{
+			var activityToLookFor = new Activity("d");
+			var target = new MoveLayerVertical();
+			var ass = new PersonAssignment(new Person(), new Scenario("sd"), new DateOnly(2000, 1, 1));
+			ass.AddMainLayer(new Activity("d"), new DateTimePeriod());
+			ass.AddPersonalLayer(activityToLookFor, new DateTimePeriod());
+			ass.AddPersonalLayer(new Activity("d"), new DateTimePeriod());
+
+			target.MoveUp(ass, ass.PersonalLayers().Last());
+
+			ass.PersonalLayers().Last().Payload.Should().Be.SameInstanceAs(activityToLookFor);
+		}
+
+		[Test]
+		public void ShouldMoveDownOvertimeLayerWhenOtherLayerIsAbove()
+		{
+			var activityToLookFor = new Activity("d");
+			var target = new MoveLayerVertical();
+			var ass = new PersonAssignment(new Person(), new Scenario("sd"), new DateOnly(2000, 1, 1));
+			ass.AddMainLayer(new Activity("d"), new DateTimePeriod());
+			ass.AddOvertimeLayer(activityToLookFor, new DateTimePeriod(),null);
+			ass.AddOvertimeLayer(new Activity("d"), new DateTimePeriod(), null);
+
+			target.MoveDown(ass, ass.OvertimeLayers().First());
+
+			ass.OvertimeLayers().Last().Payload.Should().Be.SameInstanceAs(activityToLookFor);
 		}
 	}
 }

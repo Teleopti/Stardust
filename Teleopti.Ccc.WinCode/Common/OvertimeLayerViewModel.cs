@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 	    public override bool CanMoveUp
 	    {
-				get { return _moveLayerVertical != null && _layer.OrderIndex > 0; }
+				get { return _moveLayerVertical != null && _assignment != null && _assignment.OvertimeLayers().ToList().IndexOf(_layer) > 0; ; }
 	    }
 
 	    public override bool CanMoveDown
