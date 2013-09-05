@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.ToolStripItem.set_Text(System.String)")]
-		public void Update(IList<IScheduleDay> selectedSchedules, IScheduleViewBase scheduleView, ISchedulerStateHolder schedulerStateHolder, FormAgentInfo agentInfo, AgentInfoControl agentInfoControl)
+		public void Update(IList<IScheduleDay> selectedSchedules, IScheduleViewBase scheduleView, ISchedulerStateHolder schedulerStateHolder, AgentInfoControl agentInfoControl)
 		{
 			if (scheduleView != null)
 			{
@@ -47,9 +47,9 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 						selectedTags.Add(scheduleDay.ScheduleTag());
 				}
 
-				if (agentInfo != null)
-					agentInfo.UpdateData(personDic, dateList, schedulerStateHolder.SchedulingResultState,
-										  schedulerStateHolder.SchedulingResultState.AllPersonAccounts);
+                //if (agentInfo != null)
+                //    agentInfo.UpdateData(personDic, dateList, schedulerStateHolder.SchedulingResultState,
+                //                          schedulerStateHolder.SchedulingResultState.AllPersonAccounts);
 				if (agentInfoControl != null)
 					agentInfoControl.UpdateData(personDic, dateList, schedulerStateHolder.SchedulingResultState,
 										  schedulerStateHolder.SchedulingResultState.AllPersonAccounts);

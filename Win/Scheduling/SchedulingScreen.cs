@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly SkillResultHighlightGridControl _skillResultHighlightGridControl;
 		private DateOnly _currentIntraDayDate;
 		private DockingManager _dockingManager;
-		private FormAgentInfo _agentInfo;
+		//private FormAgentInfo _agentInfo;
 		private AgentInfoControl _agentInfoControl;
         private ShiftDistributionControl _shiftDistributionControl;
         private ShiftFairnessAnalysisControl _shiftFairnessAnalysisControl;
@@ -1067,8 +1067,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 					Log.Error("An error occurred when trying to save settings on closing scheduler.", dataSourceException);
 				}
 
-				if (_agentInfo != null)
-					_agentInfo.Close();
 			}
 
 			Cursor.Current = Cursors.Default;
@@ -1188,30 +1186,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			save();
 		}
 
-		private void toolStripButtonAgentInfo_Click(object sender, EventArgs e)
-		{
-			if (_scheduleView == null)
-				return;
-			if (_agentInfo == null)
-			{
-				_agentInfo = new FormAgentInfo(_workShiftWorkTime, _container, _groupPagesProvider);
-				_agentInfo.FormClosed += _agentInfo_FormClosed;
-				_agentInfo.Show(this);
-			}
-			else
-			{
-				if (_agentInfo.WindowState.Equals(FormWindowState.Minimized))
-					_agentInfo.WindowState = FormWindowState.Normal;
-			}
-
-			updateSelectionInfo(_scheduleView.SelectedSchedules());
-		}
-
-		private void _agentInfo_FormClosed(object sender, FormClosedEventArgs e)
-		{
-			_agentInfo = null;
-		}
-
+		
 		private void changeRequestStatus(IHandlePersonRequestCommand command, IList<PersonRequestViewModel> requestViewAdapters)
 		{
 			_requestPresenter.ApproveOrDeny(requestViewAdapters, command, string.Empty);
@@ -3412,28 +3387,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region Docking
 
-		private void dockStateChanged(object sender, DockStateChangeEventArgs arg)
-		{
-			if (_dockingManager.IsFloating(_agentInfo))
-			{
-				var dhost = _agentInfo.Parent as DockHost;
-				if (dhost != null)
-				{
-					var frmfloat = dhost.ParentForm as FloatingForm;
-					if (frmfloat != null)
-					{
-						frmfloat.Opacity = 1.0;
-					}
-				}
-			}
-		}
+        
 
 		private void dockVisibilityChanged(object sender, DockVisibilityChangedEventArgs arg)
 		{
 			arg.Control.Dispose();
 			Controls.Remove(arg.Control);
-			_agentInfo = null;
-		}
+        }
 
 		#endregion
 
@@ -4862,7 +4822,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				_schedulerState.FilterPersons(scheduleFilterView.SelectedAgentGuids());
 
-				//toolStripButtonFilterAgents.Checked = scheduleFilterView.SelectedAgentGuids().Count != SchedulerState.AllPermittedPersons.Count;
 				toolStripButtonFilterAgents.Checked = SchedulerState.AgentFilter();
 
 				if (_scheduleView != null)
@@ -5361,7 +5320,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_dockingManager.CloseEnabled = true;
 			var button = new Syncfusion.Windows.Forms.Tools.CaptionButton(CaptionButtonType.Close);
 			_dockingManager.CaptionButtons.Add(button);
-			_dockingManager.DockStateChanged += dockStateChanged;
+			//_dockingManager.DockStateChanged += dockStateChanged;
 			_dockingManager.DockVisibilityChanged += dockVisibilityChanged;
 		}
 
@@ -5395,7 +5354,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void updateSelectionInfo(IList<IScheduleDay> selectedSchedules)
 		{
 			var updater = new UpdateSelectionForAgentInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag, toolStripStatusLabelTimeZone);
-			updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfo, _agentInfoControl);
+			updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfoControl);
 		}
 
 		private void deleteInMainGrid(PasteOptions deleteOptions)
@@ -6287,7 +6246,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				if (_dockingManager != null)
 				{
-					_dockingManager.DockStateChanged -= dockStateChanged;
+					//_dockingManager.DockStateChanged -= dockStateChanged;
 					_dockingManager.DockVisibilityChanged -= dockVisibilityChanged;
 				}
 				Dispose(true);
