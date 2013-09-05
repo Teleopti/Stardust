@@ -11697,4 +11697,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="PerShiftCategory" xml:space="preserve">
     <value>Per Shift Category</value>
   </data>
+  <data name="AnalysisInfo" xml:space="preserve">
+    <value>Analysis Info</value>
+    <comment>Use for the property panel shown on scheduling screen</comment>
+  </data>
 </root>

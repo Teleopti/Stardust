@@ -819,5 +819,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				updatePersonInfo(_selectedPerson);
 			}
 		}
+
+        public void SetDefaultSelectedTab()
+        {
+            tabControlAgentInfo.SelectedIndex  = 0;
+        }
     }
 }
