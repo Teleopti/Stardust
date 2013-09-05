@@ -131,7 +131,33 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						}	
 						return mappingEngine.Map<WeekScheduleDayDomainData, PeriodViewModel>(s);
 					}))
-				.ForMember(d => d.OvertimeAvailabililty, o => o.MapFrom(s => s.ScheduleDay))
+				.ForMember(d => d.OvertimeAvailabililty, o => o.ResolveUsing(s =>
+					{
+						if (s.ScheduleDay.OvertimeAvailablityCollection() != null &&
+						    s.ScheduleDay.OvertimeAvailablityCollection().FirstOrDefault() != null)
+							return s.ScheduleDay.OvertimeAvailablityCollection().FirstOrDefault();
+						if (s.ScheduleDay.SignificantPartForDisplay() == SchedulePartView.DayOff ||
+						    s.ScheduleDay.SignificantPartForDisplay() == SchedulePartView.ContractDayOff ||
+						    s.ScheduleDay.SignificantPartForDisplay() == SchedulePartView.None)
+						{
+							return new OvertimeAvailabilityViewModel
+								{
+									HasOvertimeAvailability = false,
+									StartTime = TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0)),
+									EndTime = TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0)),
+									NextDay = false
+								};
+						}
+						return new OvertimeAvailabilityViewModel
+							{
+								HasOvertimeAvailability = false,
+								StartTime = TimeHelper.TimeOfDayFromTimeSpan(
+									s.ScheduleDay.PersonAssignment().Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime, CultureInfo.CurrentCulture),
+								EndTime = TimeHelper.TimeOfDayFromTimeSpan(
+									s.ScheduleDay.PersonAssignment().Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime.Add(new TimeSpan(1, 0, 0)), CultureInfo.CurrentCulture),
+								NextDay = s.ScheduleDay.PersonAssignment().Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime.Add(new TimeSpan(1, 0, 0)).Days > 0
+							};
+					}))
 				;
 
 			CreateMap<IEnumerable<IPublicNote>, NoteViewModel>()
@@ -142,46 +168,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						return publicNote != null ? publicNote.GetScheduleNote(new NoFormatting()) : string.Empty;
 					}))
 				;
-
-			CreateMap<IScheduleDay, OvertimeAvailabilityViewModel>()
-				.ForMember(d => d.HasOvertimeAvailability,
-						   o => o.MapFrom(s => s.OvertimeAvailablityCollection() != null && s.OvertimeAvailablityCollection().FirstOrDefault() != null))
-				.ForMember(d => d.StartTime, o => o.ResolveUsing(s =>
-					{
-						if (s.OvertimeAvailablityCollection() != null && s.OvertimeAvailablityCollection().FirstOrDefault() != null)
-							return TimeHelper.TimeOfDayFromTimeSpan(s.OvertimeAvailablityCollection().FirstOrDefault().StartTime.Value,
-							                                        CultureInfo.CurrentCulture);
-						return s.SignificantPartForDisplay() == SchedulePartView.DayOff ||
-						       s.SignificantPartForDisplay() == SchedulePartView.ContractDayOff ||
-							   s.SignificantPartForDisplay() == SchedulePartView.None
-							       ? TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0))
-							       : TimeHelper.TimeOfDayFromTimeSpan(s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).EndTime,
-							                                          CultureInfo.CurrentCulture);
-					}))
-				.ForMember(d => d.EndTime, o => o.ResolveUsing(s =>
-					{
-						if (s.OvertimeAvailablityCollection() != null && s.OvertimeAvailablityCollection().FirstOrDefault() != null)
-							return TimeHelper.TimeOfDayFromTimeSpan(s.OvertimeAvailablityCollection().FirstOrDefault().EndTime.Value,
-							                                        CultureInfo.CurrentCulture);
-						return s.SignificantPartForDisplay() == SchedulePartView.DayOff ||
-							   s.SignificantPartForDisplay() == SchedulePartView.ContractDayOff ||
-							   s.SignificantPartForDisplay() == SchedulePartView.None
-							       ? TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0))
-							       : TimeHelper.TimeOfDayFromTimeSpan(
-								       s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).EndTime.Add(new TimeSpan(1, 0, 0)),
-								       CultureInfo.CurrentCulture);
-					}))
-				.ForMember(d => d.NextDay, o => o.ResolveUsing(s =>
-					{
-						if (s.OvertimeAvailablityCollection() != null && s.OvertimeAvailablityCollection().FirstOrDefault() != null)
-							return s.OvertimeAvailablityCollection().FirstOrDefault().EndTime.Value.Days > 0;
-						return s.SignificantPartForDisplay() != SchedulePartView.DayOff &&
-						       s.SignificantPartForDisplay() != SchedulePartView.ContractDayOff &&
-							   s.SignificantPartForDisplay() == SchedulePartView.None &&
-						       s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).EndTime.Add(new TimeSpan(1, 0, 0)).Days > 0;
-					}))
-				;
-
+			
 			CreateMap<WeekScheduleDayDomainData, PeriodViewModel>()
 				.ForMember(d => d.Title, c => c.Ignore())
 				.ForMember(d => d.Summary, c => c.Ignore())

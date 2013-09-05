@@ -62,6 +62,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 													() => loggedOnUser
  			                  		             	));
 			                  		c.AddProfile(new CommonViewModelMappingProfile());
+									c.AddProfile(new OvertimeAvailabilityViewModelMappingProfile());
 			                  	});
 		}
 

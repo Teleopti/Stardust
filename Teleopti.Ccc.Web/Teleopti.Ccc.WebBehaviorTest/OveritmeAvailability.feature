@@ -89,7 +89,7 @@ Scenario: Default overtime availability values on dayoff
 	| End date   | 2013-08-20 |
 	| Start time | 08:00      |
 	| End time   | 17:00      |
-@ignore
+
 Scenario: Submit overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I view my week schedule for date '2013-08-20'
@@ -155,7 +155,6 @@ Scenario: Default overtime availability values on existing overtime availability
 	| End time          | 03:00      |
 	| End time next day | true       |
 
-@ignore
 Scenario: Replace overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
@@ -170,13 +169,12 @@ Scenario: Replace overtime availability
 	And I input overtime availability with
 	| Field             | Value |
 	| Start time        | 15:30 |
-	| End time          | 02:00 |
-	| End time next day | true  |
+	| End time          | 23:45 |
 	And I click submit button
 	Then I should see an overtime availability symbol for date '2013-08-20' with tooltip
-	| Field      | Value    |
-	| Start time | 15:30    |
-	| End time   | 02:00 +1 |
+	| Field      | Value |
+	| Start time | 15:30 |
+	| End time   | 23:45 |
 
 #followings belong to the delete overtime availability pbi
 @ignore
