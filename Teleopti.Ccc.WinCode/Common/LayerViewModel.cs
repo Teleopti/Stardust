@@ -264,16 +264,6 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		public abstract int VisualOrderIndex { get; }
 
-		//public virtual int VisualOrderIndex
-		//{
-		//	get
-		//	{
-		//		if (this is MeetingLayerViewModel)
-		//			return OrderIndexBase + 1;
-		//		return OrderIndexBase + Layer.OrderIndex;
-		//	}
-		//}
-
 		public void Delete()
 		{
 			if (CanDelete())
