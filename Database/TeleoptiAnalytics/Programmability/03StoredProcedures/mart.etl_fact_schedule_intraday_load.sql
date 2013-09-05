@@ -59,10 +59,7 @@ INNER JOIN mart.fact_schedule fs
 INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC dd
 	ON dd.shift_startdate_id = fs.shift_startdate_id 
 	AND dd.person_id = fs.person_id
-WHERE stg.business_unit_code = @business_unit_code
 
-DECLARE @business_unit_id int
-SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
 -- special delete if something is left, a shift over midninght for example
 DELETE fs
 FROM Stage.stg_schedule stg
@@ -85,8 +82,6 @@ INNER JOIN mart.fact_schedule fs
 	AND fs.schedule_date_id = dsd.date_id
 	AND fs.interval_id = stg.interval_id
 	AND ds.scenario_id = fs.scenario_id
-	WHERE fs.business_unit_id = @business_unit_id
-
 
 --insert new and updated
 INSERT INTO mart.fact_schedule

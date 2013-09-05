@@ -54,16 +54,16 @@ ON
 				(f.shift_start < dp.valid_to_date)
 		)
 
-LEFT JOIN
+INNER JOIN
 	mart.dim_date		dsd
 ON
 	f.schedule_date	= dsd.date_date
 	
-LEFT JOIN
+INNER JOIN
 	mart.dim_interval	di
 ON
 	f.interval_id = di.interval_id
-LEFT JOIN
+INNER JOIN
 	mart.dim_interval	dist
 ON
 	f.shift_startinterval_id = dist.interval_id
@@ -79,19 +79,19 @@ LEFT JOIN
 	mart.dim_scenario	ds
 ON
 	f.scenario_code = ds.scenario_code
-LEFT JOIN
+INNER JOIN
 	mart.dim_date	dad --activity start
 ON
 	convert(smalldatetime,floor(convert(decimal(18,8),f.activity_start ))) = dad.date_date
-LEFT JOIN
+INNER JOIN
 	mart.dim_date daed
 ON
 	convert(smalldatetime,floor(convert(decimal(18,8),f.activity_end ))) = daed.date_date
-LEFT JOIN
+INNER JOIN
 	mart.dim_date ssd
 ON
 	convert(smalldatetime,floor(convert(decimal(18,8),f.shift_start ))) = ssd.date_date
-LEFT JOIN
+INNER JOIN
 	mart.dim_date sed	
 ON
 	convert(smalldatetime,floor(convert(decimal(18,8),f.shift_end ))) = sed.date_date
