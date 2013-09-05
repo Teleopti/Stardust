@@ -41,9 +41,12 @@ BEGIN
 	INNER JOIN mart.dim_person P
 		ON p.person_code = AAS.PersonId
 	
-	WHERE AAS.BatchId IS NOT NULL
-	AND AAS.BatchId < @batch_id
-	AND AAS.OriginalDataSourceId = @datasource_id
+	WHERE AAS.OriginalDataSourceId = @datasource_id
+	AND (
+		AAS.BatchId < @batch_id
+		OR 
+		AAS.BatchId IS NULL
+		)
 	AND (
 			(@toDayDateId BETWEEN (p.valid_from_date_id-1)and (p.valid_to_date_id+1))
 			OR
