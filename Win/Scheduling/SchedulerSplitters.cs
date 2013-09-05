@@ -188,5 +188,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             _pinnedSkillHelper.ReplaceOldWithNew(newSkill, oldSkill);
         }
+
+        public void ToggelPropertyPanel(bool value)
+        {
+            lessIntellegentSplitContainerAdvMainContainer.Panel2Collapsed = value;
+        }
+        
     }
 }

@@ -4823,6 +4823,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             
 
 		    updateDistrbutionInformation();
+            schedulerSplitters1.ToggelPropertyPanel(true);
 		}
 
 		private PersonsFilterView _cachedPersonsFilterView;
@@ -7200,6 +7201,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 			drawSkillGrid();
 			reloadChart();
 		}
+
+	    private void toolStripButtonShowPropertyPanel_Click(object sender, EventArgs e)
+	    {
+            toolStripButtonShowPropertyPanel.Checked = !toolStripButtonShowPropertyPanel.Checked;
+	        schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
+            
+	    }
+
+	    private void toolStripMenuItemAgentInfo_Click(object sender, EventArgs e)
+	    {
+            if (!toolStripButtonShowPropertyPanel.Checked)
+            {
+                toolStripButtonShowPropertyPanel.Checked = true;
+                schedulerSplitters1.ToggelPropertyPanel(false);
+            }
+            _tabInfoPanels.SelectedIndex = 0;
+            _agentInfoControl.SetDefaultSelectedTab();
+               
+            updateSelectionInfo(_scheduleView.SelectedSchedules());
+	    }
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 

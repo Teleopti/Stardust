@@ -1862,6 +1862,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Analysis Info.
+        /// </summary>
+        public static string AnalysisInfo {
+            get {
+                return ResourceManager.GetString("AnalysisInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anchor:.
         /// </summary>
         public static string AnchorColon {
