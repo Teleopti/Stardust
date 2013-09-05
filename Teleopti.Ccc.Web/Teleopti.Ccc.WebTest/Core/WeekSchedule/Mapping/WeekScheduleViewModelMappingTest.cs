@@ -11,6 +11,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon;
@@ -201,11 +202,24 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		}
 
 		[Test]
-		public void ShouldMapOvertimeAvailabilityDefaultValues()
+		public void ShouldMapOvertimeAvailabilityDefaultValuesForEmpty()
 		{
 			var domainData = new WeekScheduleDayDomainData { Date = DateOnly.Today };
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date);
-			scheduleDay.Stub(x => x.SignificantPartForDisplay()).Return(SchedulePartView.DayOff);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date, SchedulePartView.None, (IPublicNote)null);
+			domainData.ScheduleDay = scheduleDay;
+
+			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
+
+			result.OvertimeAvailabililty.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0), CultureInfo.CurrentCulture));
+			result.OvertimeAvailabililty.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0), CultureInfo.CurrentCulture));
+			result.OvertimeAvailabililty.NextDay.Should().Be.EqualTo(false);
+		}
+
+		[Test]
+		public void ShouldMapOvertimeAvailabilityDefaultValuesForDayOff()
+		{
+			var domainData = new WeekScheduleDayDomainData { Date = DateOnly.Today };
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date, SchedulePartView.DayOff, (IPublicNote)null);
 			domainData.ScheduleDay = scheduleDay;
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);

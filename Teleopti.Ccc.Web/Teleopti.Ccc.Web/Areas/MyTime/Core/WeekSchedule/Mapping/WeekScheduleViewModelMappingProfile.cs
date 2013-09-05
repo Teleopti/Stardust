@@ -151,27 +151,33 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						if (s.OvertimeAvailablityCollection() != null && s.OvertimeAvailablityCollection().FirstOrDefault() != null)
 							return TimeHelper.TimeOfDayFromTimeSpan(s.OvertimeAvailablityCollection().FirstOrDefault().StartTime.Value,
 							                                        CultureInfo.CurrentCulture);
-						return s.SignificantPartForDisplay() == SchedulePartView.MainShift
-							       ? TimeHelper.TimeOfDayFromTimeSpan(s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).EndTime,
-							                                          CultureInfo.CurrentCulture)
-							       : TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0));
+						return s.SignificantPartForDisplay() == SchedulePartView.DayOff ||
+						       s.SignificantPartForDisplay() == SchedulePartView.ContractDayOff ||
+							   s.SignificantPartForDisplay() == SchedulePartView.None
+							       ? TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0))
+							       : TimeHelper.TimeOfDayFromTimeSpan(s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).EndTime,
+							                                          CultureInfo.CurrentCulture);
 					}))
 				.ForMember(d => d.EndTime, o => o.ResolveUsing(s =>
 					{
 						if (s.OvertimeAvailablityCollection() != null && s.OvertimeAvailablityCollection().FirstOrDefault() != null)
 							return TimeHelper.TimeOfDayFromTimeSpan(s.OvertimeAvailablityCollection().FirstOrDefault().EndTime.Value,
 							                                        CultureInfo.CurrentCulture);
-						return s.SignificantPartForDisplay() == SchedulePartView.MainShift
-							       ? TimeHelper.TimeOfDayFromTimeSpan(
+						return s.SignificantPartForDisplay() == SchedulePartView.DayOff ||
+							   s.SignificantPartForDisplay() == SchedulePartView.ContractDayOff ||
+							   s.SignificantPartForDisplay() == SchedulePartView.None
+							       ? TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0))
+							       : TimeHelper.TimeOfDayFromTimeSpan(
 								       s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).EndTime.Add(new TimeSpan(1, 0, 0)),
-								       CultureInfo.CurrentCulture)
-							       : TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0));
+								       CultureInfo.CurrentCulture);
 					}))
 				.ForMember(d => d.NextDay, o => o.ResolveUsing(s =>
 					{
 						if (s.OvertimeAvailablityCollection() != null && s.OvertimeAvailablityCollection().FirstOrDefault() != null)
 							return s.OvertimeAvailablityCollection().FirstOrDefault().EndTime.Value.Days > 0;
-						return s.SignificantPartForDisplay() == SchedulePartView.MainShift &&
+						return s.SignificantPartForDisplay() != SchedulePartView.DayOff &&
+						       s.SignificantPartForDisplay() != SchedulePartView.ContractDayOff &&
+							   s.SignificantPartForDisplay() == SchedulePartView.None &&
 						       s.PersonAssignment(false).Period.TimePeriod(s.TimeZone).EndTime.Add(new TimeSpan(1, 0, 0)).Days > 0;
 					}))
 				;

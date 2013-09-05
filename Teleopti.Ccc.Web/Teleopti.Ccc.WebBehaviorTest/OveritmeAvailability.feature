@@ -74,23 +74,6 @@ Scenario: Default overtime availability values on empty day
 	| Start time | 08:00      |
 	| End time   | 17:00      |
 
-Scenario: Default overtime availability values on absence
-	Given I have the role 'Access to overtime availability'
-	And I has an absence with
-	| Field      | Value            |
-	| Name       | Vacation         |
-	| Start time | 2013-08-20 00:00 |
-	| End time   | 2013-08-20 23:59 |
-	And I view my week schedule for date '2013-08-20'
-	When I click on the day summary for date '2013-08-20'
-	And I click to add overtime availability
-	Then I should see add overtime availability form with
-	| Field      | Value      |
-	| Start date | 2013-08-20 |
-	| End date   | 2013-08-20 |
-	| Start time | 08:00      |
-	| End time   | 17:00      |
-
 Scenario: Default overtime availability values on dayoff
 	Given I have the role 'Access to overtime availability'
 	And 'I' have a day off with
