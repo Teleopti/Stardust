@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 
 		private bool IsInvalid(TimeOfDay early, TimeOfDay late)
 		{
-			return early.Time > (EndTimeNextDay ? late.Time.Add(new TimeSpan(1, 0, 0, 0)) : late.Time);
+			return early.Time > late.ToTimeSpan(EndTimeNextDay);
 		}
 	}
 }

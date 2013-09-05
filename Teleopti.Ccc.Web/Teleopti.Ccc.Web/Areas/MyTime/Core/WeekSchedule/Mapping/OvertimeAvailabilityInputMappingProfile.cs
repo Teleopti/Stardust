@@ -1,4 +1,3 @@
-using System;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
@@ -9,9 +8,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 {
 	public class OvertimeAvailabilityInputMappingProfile : Profile
 	{
-		public OvertimeAvailabilityInputMappingProfile()
+		private readonly ILoggedOnUser _loggedOnUser;
+
+		public OvertimeAvailabilityInputMappingProfile(ILoggedOnUser loggedOnUser)
 		{
-			
+			_loggedOnUser = loggedOnUser;
 		}
 
 		protected override void Configure()
@@ -19,39 +20,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			base.Configure();
 
 			CreateMap<OvertimeAvailabilityInput, IOvertimeAvailability>()
-				.ConvertUsing<OvertimeAvailabilityInputToOvertimeAvailability>();
-		}
-
-		public class OvertimeAvailabilityInputToOvertimeAvailability : ITypeConverter<OvertimeAvailabilityInput, IOvertimeAvailability>
-		{
-			private readonly Func<ILoggedOnUser> _loggedOnUser;
-			private readonly Func<IMappingEngine> _mapper;
-
-			public OvertimeAvailabilityInputToOvertimeAvailability(Func<IMappingEngine> mapper, Func<ILoggedOnUser> loggedOnUser)
-			{
-				_loggedOnUser = loggedOnUser;
-				_mapper = mapper;
-			}
-
-			public IOvertimeAvailability Convert(ResolutionContext context)
-			{
-				var source = context.SourceValue as OvertimeAvailabilityInput;
-				var destination = context.DestinationValue as IOvertimeAvailability;
-				if (destination == null)
-				{
-					var person = _loggedOnUser.Invoke().CurrentUser();
-					destination = new OvertimeAvailability(person, source.Date, source.StartTime.ToTimeSpan(),
-					                                       source.EndTimeNextDay
-						                                       ? source.EndTime.Time.Add(new TimeSpan(1, 0, 0, 0))
-						                                       : source.EndTime.ToTimeSpan());
-				}
-				else
-				{
-					//destination.
-					//_mapper.Invoke().Map(source, destination.Restriction);
-				}
-				return destination;
-			}
+				.ConstructUsing(
+					s =>
+					new OvertimeAvailability(_loggedOnUser.CurrentUser(), s.Date, s.StartTime.ToTimeSpan(),
+					                         s.EndTime.ToTimeSpan(s.EndTimeNextDay)))
+				.ForMember(d => d.NotAvailable, o => o.Ignore());
 		}
 	}
 }

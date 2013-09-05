@@ -30,7 +30,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 			}
 			else
 			{
-				_mapper.Map(input, overtimeAvailability);
+				_overtimeAvailabilityRepository.Remove(overtimeAvailability);
+				overtimeAvailability = _mapper.Map<OvertimeAvailabilityInput, IOvertimeAvailability>(input);
+				_overtimeAvailabilityRepository.Add(overtimeAvailability);
 			}
 			return _mapper.Map<IOvertimeAvailability, OvertimeAvailabilityViewModel>(overtimeAvailability);
 		}

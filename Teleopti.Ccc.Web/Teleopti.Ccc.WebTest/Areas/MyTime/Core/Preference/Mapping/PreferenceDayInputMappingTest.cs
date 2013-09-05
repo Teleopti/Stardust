@@ -9,51 +9,11 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 {
-	[TestFixture]
-	public class OvertimeAvailabilityInputMappingTest
-	{
-		private ILoggedOnUser loggedOnUser;
-		[SetUp]
-		public void Setup()
-		{
-			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			Mapper.Reset();
-			Mapper.Initialize(
-				c =>
-				{
-					c.ConstructServicesUsing(t =>
-						new OvertimeAvailabilityInputMappingProfile.OvertimeAvailabilityInputToOvertimeAvailability(
-							() => Mapper.Engine,
-							() => loggedOnUser
-						));
-					c.AddProfile(
-						new OvertimeAvailabilityInputMappingProfile()
-						);
-				}
-				);
-		}
-
-		[Test]
-		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
-
-		[Test]
-		public void ShouldMapToDestination()
-		{
-			var destination = new OvertimeAvailability(new Person(), DateOnly.Today, null, null);
-
-			var result = Mapper.Map<OvertimeAvailabilityInput, IOvertimeAvailability>(new OvertimeAvailabilityInput(), destination);
-
-			result.Should().Be.SameInstanceAs(destination);
-		}
-	}
-
 	[TestFixture]
 	public class PreferenceDayInputMappingTest
 	{
