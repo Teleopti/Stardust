@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var date = new DateOnly(2000, 1, 1);
 			var data = new ShiftTradeScheduleViewModelData {ShiftTradeDate = date};
 
-			personRepository.Expect(rep => rep.FindPossibleShiftTrades(currentUser)).Return(new List<IPerson>{validAgent, invalidAgent});
+			personRepository.Expect(rep => rep.FindPossibleShiftTrades(currentUser, data.LoadOnlyMyTeam, data.ShiftTradeDate))
+			                .Return(new List<IPerson> {validAgent, invalidAgent});
 			permissionProvider.Expect(c => c.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, validAgent)).Return(true);
 			permissionProvider.Expect(c => c.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, invalidAgent)).Return(true);
 
@@ -64,7 +65,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var invalidAgent = new Person();
 			var date = new DateOnly(2000, 1, 1);
 			var data = new ShiftTradeScheduleViewModelData {ShiftTradeDate = date};
-			personRepository.Expect(rep => rep.FindPossibleShiftTrades(currentUser)).Return(new List<IPerson> { validAgent, invalidAgent });
+
+			personRepository.Expect(rep => rep.FindPossibleShiftTrades(currentUser, data.LoadOnlyMyTeam, data.ShiftTradeDate))
+			                .Return(new List<IPerson> {validAgent, invalidAgent});
 			permissionProvider.Expect(c => c.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, validAgent)).Return(true);
 			permissionProvider.Expect(c => c.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, date, invalidAgent)).Return(false);
 

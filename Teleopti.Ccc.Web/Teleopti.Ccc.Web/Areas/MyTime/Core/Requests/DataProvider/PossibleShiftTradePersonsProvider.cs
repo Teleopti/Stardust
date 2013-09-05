@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		{
 			var me = _loggedOnUser.CurrentUser();
 
-			return _personRepository.FindPossibleShiftTrades(me)
+			return _personRepository.FindPossibleShiftTrades(me, shiftTradeArguments.LoadOnlyMyTeam, shiftTradeArguments.ShiftTradeDate)
 				.Where(person => _permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, shiftTradeArguments.ShiftTradeDate, person) &&
 							_shiftTradeValidator.Validate(new ShiftTradeAvailableCheckItem(shiftTradeArguments.ShiftTradeDate, me, person)).Value);
 		}

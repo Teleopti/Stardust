@@ -252,7 +252,17 @@
 	<query name="FindPossibleShiftTrades">
 		<![CDATA[
 		select p from Person p
-		where p<>:loggedOnUser and p.WorkflowControlSet is not null
+		where p<>:loggedOnUser 
+			and p.WorkflowControlSet is not null
+		order by newid()
+		]]>
+	</query>
+	<query name="FindPossibleShiftTradesInMyTeam">
+		<![CDATA[
+		select p from Person p
+		inner join p.PersonPeriodCollection as pp
+		where p<>:loggedOnUser 
+			and p.WorkflowControlSet is not null
 		order by newid()
 		]]>
 	</query>

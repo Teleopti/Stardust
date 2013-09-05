@@ -161,11 +161,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return res != null;
 		}
 
-    	public IEnumerable<IPerson> FindPossibleShiftTrades(IPerson loggedOnUser)
-    	{
-    		return Session.GetNamedQuery("FindPossibleShiftTrades")
-				.SetEntity("loggedOnUser", loggedOnUser)
-				.List<IPerson>();
+		public IEnumerable<IPerson> FindPossibleShiftTrades(IPerson loggedOnUser, bool loadOnlyMyTeam, DateOnly shiftTradeDate)
+		{
+			if (loadOnlyMyTeam)
+			{
+				var myTeamId = loggedOnUser.Period(shiftTradeDate);
+				return Session.GetNamedQuery("FindPossibleShiftTradesInMyTeam")
+				 .SetEntity("loggedOnUser", loggedOnUser)
+				 .SetEntity("myTeamId", myTeamId.Id)
+				 .List<IPerson>();
+			}
+
+			return Session.GetNamedQuery("FindPossibleShiftTrades")
+				 .SetEntity("loggedOnUser", loggedOnUser)
+				 .List<IPerson>();
     	}
 
 

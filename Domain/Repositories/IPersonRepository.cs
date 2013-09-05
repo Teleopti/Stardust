@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         ICollection<IPerson> FindPeople(IEnumerable<Guid> peopleId);
         ICollection<IPerson> FindPeople(IEnumerable<IPerson> people);
     	bool DoesWindowsUserExists(string domainName, string userName);
-    	IEnumerable<IPerson> FindPossibleShiftTrades(IPerson loggedOnUser);
+		IEnumerable<IPerson> FindPossibleShiftTrades(IPerson loggedOnUser, bool loadOnlyMyTeam, DateOnly shiftTradeDate);
 	    int SaveLoginAttempt(LoginAttemptModel model);
     }
 }
