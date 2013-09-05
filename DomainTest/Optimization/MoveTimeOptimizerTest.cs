@@ -323,6 +323,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				.Return(_effectiveRestriction);
 
 			//delete
+
+            Expect.Call(_rollbackService.ModificationCollection).Return(new List<IScheduleDay>()).Repeat.Any();
 			Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(null, null, true)).IgnoreArguments()
 				.Return(null);
 		}

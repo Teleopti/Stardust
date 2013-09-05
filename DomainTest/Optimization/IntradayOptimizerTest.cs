@@ -187,6 +187,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             
             using (_mockRepository.Record())
             {
+                Expect.Call(_rollbackService.ModificationCollection).Return(new List<IScheduleDay>()).Repeat.AtLeastOnce();
                 Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
                     .Return(_schedulingOptions);
 				Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
@@ -228,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 
                 Expect.Call(() =>_rollbackService.ClearModificationCollection());
                 Expect.Call(() =>_rollbackService.Rollback());
-                Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_removedDate, null)).IgnoreArguments().Return(true);
+                Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_removedDate, null, new List<IScheduleDay>(), new List<IScheduleDay>())).IgnoreArguments().Return(true);
 				Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay>(), _rollbackService, true)).IgnoreArguments();
                 Expect.Call(() =>_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_removedDate, _removedDate)));
             }
@@ -369,7 +370,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mockRepository.Record())
             {
-
                 Expect.Call(_bitArrayConverter.SourceMatrix)
                     .Return(_scheduleMatrix).Repeat.AtLeastOnce();
                 Expect.Call(_dailyValueCalculator.DayValue(new DateOnly())).IgnoreArguments()
@@ -412,6 +412,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_rollbackService.ModificationCollection).Return(
                     new ReadOnlyCollection<IScheduleDay>(new List<IScheduleDay> { _removedSchedulePart }));
                 _rollbackService.Rollback();
+
+                Expect.Call(_rollbackService.ModificationCollection).Return(new List<IScheduleDay>()).Repeat.AtLeastOnce();
                 Expect.Call(_removedSchedulePart.DateOnlyAsPeriod).Return(period);
                 Expect.Call(period.DateOnly).Return(_removedDate);
                 _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_removedDate, _removedDate));
