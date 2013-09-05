@@ -73,17 +73,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 					_sortedShiftCategories = shiftFairness.OrderByWithDirection(s => s.AverageValue, !_sortAscending).Select(s => s.ShiftCategory).ToList();
 				if (_sortColumn == (int)ShiftFairnessGridColumns.StandardDeviationValue) 
 					_sortedShiftCategories = shiftFairness.OrderByWithDirection(s => s.StandardDeviationValue, !_sortAscending).Select(s => s.ShiftCategory).ToList();
-				
-				foreach (var shiftCategory in model.ShiftCategories)
-				{
-					if (_sortedShiftCategories != null && !_sortedShiftCategories.Contains(shiftCategory))
-					{
-						if (_sortAscending) 
-							_sortedShiftCategories.Insert(0, shiftCategory);
-						else 
-							_sortedShiftCategories.Add(shiftCategory);
-					}
-				}
 			}
 		}
 
