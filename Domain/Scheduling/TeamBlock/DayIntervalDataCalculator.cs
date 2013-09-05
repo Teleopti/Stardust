@@ -39,6 +39,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			{
 				var forecastedDemands = new List<double>();
 				var currentDemands = new List<double>();
+			    var minimumStaff = new List<double>();
+			    var maximumStaff = new List<double>();
+			    var calculatedLoggedOnStaff = new List<double>();
 				foreach (var dayIntervalPair in dayIntervalData)
 				{
 					TimeSpan interval1 = interval;
@@ -47,14 +50,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					{
 						forecastedDemands.Add(dataInInteral.ForecastedDemand);
 						currentDemands.Add(dataInInteral.CurrentDemand);
+                        if (dataInInteral.MinimumHeads.HasValue ) 
+							minimumStaff.Add(dataInInteral.MinimumHeads.Value );
+                        if (dataInInteral.MaximumHeads.HasValue ) 
+							maximumStaff.Add(dataInInteral.MaximumHeads.Value );
+                        calculatedLoggedOnStaff.Add(dataInInteral.CurrentHeads);
+
 					}
 				}
 				if(forecastedDemands.Count == 0) continue;
 			    var calculatedFDemand = _intervalDataCalculator.Calculate(forecastedDemands);
 				var calculatedCDemand = _intervalDataCalculator.Calculate(currentDemands);
+			    var calculatedMinimumStaff = _intervalDataCalculator.Calculate(minimumStaff);
+			    var calculatedMaximumStaff = _intervalDataCalculator.Calculate(maximumStaff);
+                var calculatedLoggedOn = _intervalDataCalculator.Calculate(calculatedLoggedOnStaff);
 				var startTime = baseDate.Date.Add(interval);
 				var endTime = startTime.AddMinutes(resolution);
-				ISkillIntervalData skillIntervalData = new SkillIntervalData(new DateTimePeriod(startTime, endTime), calculatedFDemand, calculatedCDemand, 0, 0, 0);
+                ISkillIntervalData skillIntervalData = new SkillIntervalData(new DateTimePeriod(startTime, endTime), calculatedFDemand, calculatedCDemand, calculatedLoggedOn, calculatedMinimumStaff, calculatedMaximumStaff);
 				result.Add(interval, skillIntervalData);
 			}
 			return result;
