@@ -36,9 +36,11 @@ namespace Teleopti.Ccc.WinCode.Common
         private readonly CommonStateHolder _commonStateHolder = new CommonStateHolder();
         private IDictionary<Guid, IPerson> _filteredAgents;
 		private IDictionary<Guid, IPerson> _filteredPersonsOvertimeAvailability;
+		private IDictionary<Guid, IPerson> _filteredPersonsHourlyAvailability;
 	    private bool _considerShortBreaks = true;
 	    private const int _NUMBER_OF_PERSONREQUEST_DAYS = -14;
 	    private bool _filterOnOvertimeAvailability;
+		private bool _filterOnHourlyAvailability;
 
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
@@ -117,8 +119,20 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		private IDictionary<Guid, IPerson> combinedFilters()
 		{
-			if (!_filterOnOvertimeAvailability) return _filteredAgents;
-			return _filteredAgents.Intersect(_filteredPersonsOvertimeAvailability).ToDictionary(t => t.Key, t => t.Value);
+			//if (!_filterOnOvertimeAvailability) return _filteredAgents;
+			//return _filteredAgents.Intersect(_filteredPersonsOvertimeAvailability).ToDictionary(t => t.Key, t => t.Value);
+
+			var filter = _filteredAgents;
+
+			if (!_filterOnOvertimeAvailability && !_filterOnHourlyAvailability) return filter;
+
+			if (_filterOnOvertimeAvailability)
+				filter = filter.Intersect(_filteredPersonsOvertimeAvailability).ToDictionary(t => t.Key, t => t.Value);
+
+			if(_filterOnHourlyAvailability)
+				filter = filter.Intersect(_filteredPersonsHourlyAvailability).ToDictionary(t => t.Key, t => t.Value);
+
+			return filter;
 		}
 
         public IScheduleDictionary Schedules
@@ -301,6 +315,12 @@ namespace Teleopti.Ccc.WinCode.Common
 			_filterOnOvertimeAvailability = false;
 		}
 
+		public void ResetFilteredPersonsHourlyAvailability()
+		{
+			_filteredPersonsHourlyAvailability = new Dictionary<Guid, IPerson>();
+			_filterOnHourlyAvailability = false;	
+		}
+
         public void FilterPersons(IList<ITeam> selectedTeams)
         {
             List<IPerson> list = new List<IPerson>(AllPermittedPersons).FindAll(
@@ -322,6 +342,13 @@ namespace Teleopti.Ccc.WinCode.Common
 			_filteredPersonsOvertimeAvailability =
 				(from p in selectedPersons orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
 			_filterOnOvertimeAvailability = true;
+		}
+
+		public void FilterPersonsHourlyAvailability(IList<IPerson> selectedPersons)
+		{
+			_filteredPersonsHourlyAvailability =
+				(from p in selectedPersons orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
+			_filterOnHourlyAvailability = true;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -396,6 +423,11 @@ namespace Teleopti.Ccc.WinCode.Common
 		public bool OvertimeAvailabilityFilter()
 		{
 			return _filterOnOvertimeAvailability;
+		}
+
+		public bool HourlyAvailabilityFilter()
+		{
+			return _filterOnHourlyAvailability;
 		}
     }
 }

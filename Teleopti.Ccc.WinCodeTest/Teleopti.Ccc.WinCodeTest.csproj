@@ -560,6 +560,7 @@
     <Compile Include="Scheduler\BusinessRuleResponseListViewModelTest.cs" />
     <Compile Include="Scheduler\BusinessRuleResponseViewModelTest.cs" />
     <Compile Include="Scheduler\CalculateMinMaxCacheDeciderTest.cs" />
+    <Compile Include="Scheduler\FilterHourlyAvailabilityPresenterTest.cs" />
     <Compile Include="Scheduler\FilterOvertimeAvailabilityPresenterTest.cs" />
     <Compile Include="Scheduler\MatrixUnselectedDaysLockerTest.cs" />
     <Compile Include="Scheduler\Reporting\ScheduledTimePerActivityModelTest.cs" />
@@ -571,6 +572,7 @@
     <Compile Include="Scheduler\AgentOvertimeAvailabilityRemoveCommandTest.cs" />
     <Compile Include="Scheduler\Restriction\Commands\OvertimeAvailabilityAddCommandTest.cs" />
     <Compile Include="Scheduler\Restriction\Commands\OvertimeAvailabilityEditCommandTest.cs" />
+    <Compile Include="Scheduler\Restriction\HourlyAvailabilityPersonFilterTest.cs" />
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityCreatorTest.cs" />
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityPersonFilterTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryFairnessValueHelperTest.cs" />
