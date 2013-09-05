@@ -22,11 +22,10 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters 
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public abstract class ScheduleScreenPersisterIntegrationTest : DatabaseTestWithoutTransaction, IOwnMessageQueue, IReassociateData
 	{
 		private IClearReferredShiftTradeRequests _clearReferredShiftTradeRequests;
-		private IMessageBrokerModule _messageBrokerModule;
+		private IMessageBrokerIdentifier _messageBrokerIdentifier;
 		private IPersonAbsenceAccountValidator _personAbsenceAccountValidator;
 
 		protected IScheduleDictionaryConflictCollector ScheduleDictionaryConflictCollector { get; set; }
@@ -130,7 +129,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			}
 
 			_clearReferredShiftTradeRequests = Mocks.DynamicMock<IClearReferredShiftTradeRequests>();
-			_messageBrokerModule = Mocks.DynamicMock<IMessageBrokerModule>();
+			_messageBrokerIdentifier = Mocks.DynamicMock<IMessageBrokerIdentifier>();
 			_personAbsenceAccountValidator = Mocks.DynamicMock<IPersonAbsenceAccountValidator>();
 			ScheduleRepository = new ScheduleRepository(UnitOfWorkFactory.Current);
 			PersonAssignmentRepository = new PersonAssignmentRepository(UnitOfWorkFactory.Current);
@@ -159,13 +158,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 													   _personAbsenceAccountValidator,
 													   ScheduleDictionaryConflictCollector,
 														//new ScheduleDictionaryModifiedCallback(),
-													   _messageBrokerModule,
+													   _messageBrokerIdentifier,
 													   new ScheduleDictionaryBatchPersister(
 														   UnitOfWorkFactory.CurrentUnitOfWorkFactory(),
 														   ScheduleRepository,
 														   ScheduleDictionarySaver,
 														   new DifferenceEntityCollectionService<IPersistableScheduleData>(),
-														   _messageBrokerModule,
+														   _messageBrokerIdentifier,
 														   this,
 														   new ScheduleDictionaryModifiedCallback()),
 													   this);
@@ -201,7 +200,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			{
 				var personAssignmentRepository = new PersonAssignmentRepository(unitOfWork);
 				var personAssignment = new PersonAssignment(Person, Scenario, date);
-				personAssignment.SetMainShiftLayers(new[] { new MainShiftLayer(Activity, FirstDayDateTimePeriod) }, ShiftCategory);
+				personAssignment.AddMainLayer(Activity, FirstDayDateTimePeriod);
 				personAssignmentRepository.Add(personAssignment);
 
 				unitOfWork.PersistAll();
@@ -215,7 +214,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			if (ScheduleData != null)
 				throw new Exception("You'v already created a schedule data, and I can only handle 1, unless you modify me");
 			var personAssignment = new PersonAssignment(Person, Scenario, date);
-			personAssignment.SetMainShiftLayers(new[] { new MainShiftLayer(Activity, new DateTimePeriod(date, date.AddDays(1))) }, ShiftCategory);
+			personAssignment.AddMainLayer(Activity, new DateTimePeriod(date, date.AddDays(1)));
 
 			
 			var scheduleDay = ScheduleDictionary[Person].ScheduledDay(date);
@@ -315,7 +314,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 		protected abstract IEnumerable<IAggregateRoot> TestDataToReassociate();
 
-		public void NotifyMessageQueueSize()
+		public void NotifyMessageQueueSizeChange()
 		{
 			throw new NotImplementedException();
 		}

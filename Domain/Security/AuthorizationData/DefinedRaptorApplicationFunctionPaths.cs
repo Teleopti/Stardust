@@ -33,7 +33,6 @@
         // Global
         public const string ModifyPersonAssignment = "Raptor/Global/ModifySchedule/ModifyAssignment";
         public const string ModifyPersonAbsence = "Raptor/Global/ModifySchedule/ModifyAbsence";
-        public const string ModifyPersonDayOff = "Raptor/Global/ModifySchedule/ModifyDayOff";
         public const string ModifyPersonRestriction = "Raptor/Global/ModifySchedule/ModifyPersonRestriction";
         public const string ViewSchedules = "Raptor/Global/ViewSchedules";
         public const string ViewUnpublishedSchedules = "Raptor/Global/ViewUnpublishedSchedules";

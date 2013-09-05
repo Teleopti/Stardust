@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using Autofac;
-using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using log4net;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
@@ -18,17 +15,17 @@ using Teleopti.Messaging.Events;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	public class SchedulerMessageBrokerHandler : IMessageBrokerModule, IDisposable, IOwnMessageQueue, IReassociateData, IUpdateScheduleDataFromMessages, IUpdateMeetingsFromMessages, IUpdatePersonRequestsFromMessages
+	public class SchedulerMessageBrokerHandler : IMessageBrokerIdentifier, IDisposable, IOwnMessageQueue, IReassociateData, IUpdateScheduleDataFromMessages, IUpdateMeetingsFromMessages, IUpdatePersonRequestsFromMessages
 	{
 		private SchedulingScreen _owner;
 		private readonly IScheduleScreenRefresher _scheduleScreenRefresher;
-		private readonly Guid _moduleId = Guid.NewGuid();
+		private readonly Guid _instanceId = Guid.NewGuid();
 		private static readonly ILog Log = LogManager.GetLogger(typeof(SchedulerMessageBrokerHandler));
 		private readonly IList<IEventMessage> _messageQueue = new List<IEventMessage>();
 
-		public Guid ModuleId
+		public Guid InstanceId
 		{
-			get { return _moduleId; }
+			get { return _instanceId; }
 		}
 
 		public SchedulerMessageBrokerHandler(SchedulingScreen owner, ILifetimeScope container)
@@ -38,6 +35,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			_scheduleScreenRefresher = container.Resolve<IScheduleScreenRefresher>(
 				TypedParameter.From<IOwnMessageQueue>(this),
+				TypedParameter.From(container.Resolve<IScheduleRefresher>(
+					TypedParameter.From<IUpdateScheduleDataFromMessages>(this)
+					)),
 				TypedParameter.From(container.Resolve<IScheduleDataRefresher>(
 					TypedParameter.From<IUpdateScheduleDataFromMessages>(this)
 					)),
@@ -52,6 +52,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void Listen(DateTimePeriod period)
 		{
+			// add new message listener here
+			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(OnEventMessage,
+			                                                                                          _owner.SchedulerState.RequestedScenario.Id.GetValueOrDefault(), typeof (Scenario), typeof (IScheduleChangedEvent),
+			                                                                                          period.StartDateTime,
+			                                                                                          period.EndDateTime);
 			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.RegisterEventSubscription(OnEventMessage,
 																					   typeof(IPersistableScheduleData),
 																					   period.StartDateTime,
@@ -62,7 +67,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 																					   typeof(IPersonRequest));
 		}
 
-		public void StopListen()
+		private void stopListen()
 		{
 			StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.UnregisterEventSubscription(OnEventMessage);
 		}
@@ -71,7 +76,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_owner.IsDisposed)
 				return;
-			if (e.Message.ModuleId == ModuleId)
+			if (e.Message.ModuleId == InstanceId)
 				return;
 			if (_owner.InvokeRequired)
 			{
@@ -113,11 +118,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			       	{
 			       		new IAggregateRoot[] {_owner.SchedulerState.RequestedScenario},
 			       		personsToReassociate,
-			       		_owner.MultiplicatorDefinitionSet.Cast<IAggregateRoot>(),
-			       		_owner.SchedulerState.CommonStateHolder.Absences.Cast<IAggregateRoot>(),
-			       		_owner.SchedulerState.CommonStateHolder.DayOffs.Cast<IAggregateRoot>(),
-			       		_owner.SchedulerState.CommonStateHolder.Activities.Cast<IAggregateRoot>(),
-			       		_owner.SchedulerState.CommonStateHolder.ShiftCategories.Cast<IAggregateRoot>()
+			       		_owner.MultiplicatorDefinitionSet,
+			       		_owner.SchedulerState.CommonStateHolder.Absences,
+			       		_owner.SchedulerState.CommonStateHolder.DayOffs,
+			       		_owner.SchedulerState.CommonStateHolder.Activities,
+			       		_owner.SchedulerState.CommonStateHolder.ShiftCategories
 			       	};
 		}
 
@@ -133,7 +138,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				if (_owner.IsDisposed) return;
 				Log.Debug("Message broker - catched event");
-				if (eventMessage.ModuleId != ModuleId)
+				if (eventMessage.ModuleId != InstanceId)
 				{
 					deleteMeetingOnEvent(eventMessage);
 					if (eventMessage.DomainUpdateType != DomainUpdateType.Delete)
@@ -158,7 +163,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				if (_owner.IsDisposed) return;
 				Log.Debug("Message broker - catched event");
-				if (eventMessage.ModuleId != ModuleId)
+				if (eventMessage.ModuleId != InstanceId)
 				{
 					var deletedRequest = deleteOnEventRequest(eventMessage);
 					var onRequestDeletedFromBroker = RequestDeletedFromBroker;
@@ -272,43 +277,33 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void Dispose()
 		{
-			Dispose(true);
+			Disposing(true);
 			GC.SuppressFinalize(this);
 		}
 
-		/// <summary>
-		/// Virtual dispose method
-		/// </summary>
-		/// <param name="disposing">
-		/// If set to <c>true</c>, explicitly called.
-		/// If set to <c>false</c>, implicitly called from finalizer.
-		/// </param>
-		private void Dispose(bool disposing)
+		protected virtual void Disposing(bool disposing)
 		{
 			if (disposing)
 			{
 				ReleaseManagedResources();
 			}
 			ReleaseUnmanagedResources();
+
 		}
 
-		/// <summary>
-		/// Releases the unmanaged resources.
-		/// </summary>
 		protected virtual void ReleaseUnmanagedResources()
 		{
 		}
 
-		/// <summary>
-		/// Releases the managed resources.
-		/// </summary>
 		protected virtual void ReleaseManagedResources()
 		{
+			stopListen();
 			_owner = null;
 		}
+
 		#endregion
 
-		public void NotifyMessageQueueSize()
+		public void NotifyMessageQueueSizeChange()
 		{
 			_owner.SizeOfMessageBrokerQueue(_messageQueue.Count);
 		}

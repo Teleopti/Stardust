@@ -211,36 +211,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             ruleSet = new WorkShiftRuleSetRepository(UnitOfWork).Get(ruleSet.Id.Value);
             Assert.AreEqual(1, ruleSet.LimiterCollection.Count);
         }
-
-
-        [Test, Explicit("Robin, just a smaller example than yours")]
-        public void SmallOneUsingTeleoptiApi()
-        {
-            SkipRollback();
-
-            WorkShiftRuleSetRepository workShiftRuleSetRepository = new WorkShiftRuleSetRepository(UnitOfWork);
-            IWorkShiftRuleSet ruleSet = CreateAggregateWithCorrectBusinessUnit();
-            workShiftRuleSetRepository.Add(ruleSet);
-            ruleSet.DeleteExtender(ruleSet.ExtenderCollection[2]);
-            UnitOfWork.PersistAll();
-
-            workShiftRuleSetRepository.Remove(ruleSet);
-            UnitOfWork.PersistAll();
-        }
-
-        [Test, Explicit("Robin, it's got nothing to do with our api")]
-        public void SmallOneUsingPlainHibernate()
-        {
-            SkipRollback();
-
-            IWorkShiftRuleSet ruleSet = CreateAggregateWithCorrectBusinessUnit();
-            ruleSet = (IWorkShiftRuleSet) Session.Merge(ruleSet);
-            ruleSet.DeleteExtender(ruleSet.ExtenderCollection[2]);
-            Session.Flush();
-
-            Session.Delete(ruleSet);
-            Session.Flush();
-        }
-
     }
 }

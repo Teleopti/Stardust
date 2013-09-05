@@ -3849,10 +3849,6 @@ Columns</value>
     <value>Modify assignment</value>
     <comment>Modify assignment</comment>
   </data>
-  <data name="ModifyDayOff" xml:space="preserve">
-    <value>Modify day off</value>
-    <comment>Modify day off</comment>
-  </data>
   <data name="ModifyMainShift" xml:space="preserve">
     <value>Modify main shift</value>
     <comment>Modify main shift</comment>
@@ -5169,7 +5165,7 @@ Availability</value>
     <comment>Function CreateShiftTradeRequest</comment>
   </data>
   <data name="CreateTextRequest" xml:space="preserve">
-    <value>Change Requests</value>
+    <value>Text Requests</value>
     <comment>Function CreateTextRequest</comment>
   </data>
   <data name="OpenScorecard" xml:space="preserve">
@@ -8589,7 +8585,7 @@ Period: {3}</value>
     <value>Scheduling result</value>
   </data>
   <data name="OnlineReports" xml:space="preserve">
-    <value>Online reports</value>
+    <value>Real time reports</value>
     <comment>Online reports application function</comment>
   </data>
   <data name="ScheduledTimePerActivityReport" xml:space="preserve">

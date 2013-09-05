@@ -60,6 +60,8 @@ namespace Teleopti.Interfaces.Domain
 
 		public static void AddScheduleDayToContainer(this IResourceCalculationDataContainerWithSingleOperation resources, IScheduleDay scheduleDay, int minutesSplit)
 		{
+            if (!scheduleDay.HasProjection) return;
+
 			var projection = scheduleDay.ProjectionService().CreateProjection();
 			var resourceLayers = projection.ToResourceLayers(minutesSplit);
 			foreach (var resourceLayer in resourceLayers)
@@ -70,6 +72,8 @@ namespace Teleopti.Interfaces.Domain
 
 		public static void RemoveScheduleDayFromContainer(this IResourceCalculationDataContainerWithSingleOperation resources, IScheduleDay scheduleDay, int minutesSplit)
 		{
+            if (!scheduleDay.HasProjection) return;
+
 			var projection = scheduleDay.ProjectionService().CreateProjection();
 			var resourceLayers = projection.ToResourceLayers(minutesSplit);
 			foreach (var resourceLayer in resourceLayers)

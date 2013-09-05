@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
             _view.SetTexts();
             _view.SetColor();
             _view.SetPermissionOnAbsences(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence));
-            _view.SetPermissionOnDayOffs(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff));
+			_view.SetPermissionOnDayOffs(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
             _view.SetPermissionOnPersonalAssignments(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
             _view.SetPermissionOnAssignments(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
             _view.SetPermissionOnOvertime(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));

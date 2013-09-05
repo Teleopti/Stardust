@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 				var coherentChecker = new TeamSteadyStateCoherentChecker();
 				var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-				var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper, new EditableShiftMapper());
+				var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
 				var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
 				var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
             	var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			var coherentChecker = new TeamSteadyStateCoherentChecker();
 			var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-			var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper, new EditableShiftMapper());
+			var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
 			var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
 
             service.ReportProgress += resourceOptimizerPersonOptimized;
@@ -439,7 +439,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				groupPagePerDateHolder.GroupPersonGroupPagePerDate =
 					_container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(dates,
 																				   groupPageDataProvider,
-																				   schedulingOptions.GroupOnGroupPage,
+																				   schedulingOptions.GroupOnGroupPageForTeamBlockPer ,
 																				   true);
 			}
 			IGroupPersonFactory groupPersonFactory = new GroupPersonFactory();
@@ -505,7 +505,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<IDayOffOptimizationDecisionMakerFactory>(),
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamDayOffModifier>(),
-					_container.Resolve<IBlockSteadyStateValidator>(),
+					_container.Resolve<ITeamBlockSteadyStateValidator>(),
 					teamBlockCleaner,
                     teamBlockRestrictionOverLimitValidator, _container.Resolve<ITeamBlockMaxSeatChecker >()
 					);
@@ -727,7 +727,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         	var coherentChecker = new TeamSteadyStateCoherentChecker();
         	var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
         	var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
-        	var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper, new EditableShiftMapper());
+        	var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
 			
 
 			var dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(_stateHolder);

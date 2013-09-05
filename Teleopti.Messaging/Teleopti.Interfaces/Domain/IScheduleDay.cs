@@ -393,6 +393,9 @@ namespace Teleopti.Interfaces.Domain
 			/// can not be viewed at the time.
 			///</summary>
 	    IPersonAssignment PersonAssignment(bool createIfNotExists = false);
+
+	    IScheduleDay ReFetch();
+	    void AddMainShift(IPersonAssignment mainShiftSource);
     }
 
 }

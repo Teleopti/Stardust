@@ -63,6 +63,12 @@ namespace Teleopti.Ccc.WinCode.Common
 			}
 		}
 
+		public void UpdateModel()
+		{
+			Replace();
+			IsChanged = false;
+		}
+
 		public bool IsSelected
 		{
 			get { return _isSelected; }
@@ -85,6 +91,10 @@ namespace Teleopti.Ccc.WinCode.Common
 				if (_isChanged != value)
 				{
 					_isChanged = value;
+					if (_isChanged)
+					{
+						ParentObservingCollection.ShouldBeUpdated(this);
+					}
 					SendPropertyChanged("IsChanged");
 				}
 			}
@@ -234,7 +244,10 @@ namespace Teleopti.Ccc.WinCode.Common
 		{
 			if (IsChanged)
 			{
-				Replace();
+				if (ParentObservingCollection != null)
+				{
+					ParentObservingCollection.UpdateAllMovedLayers();
+				}
 				if (_part != null)
 				{
 					new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
@@ -248,20 +261,18 @@ namespace Teleopti.Ccc.WinCode.Common
 		{
 		}
 
-		/// <summary>
-		/// Gets the order index base, decides where in the collection different types should appear
-		/// </summary>
-		protected abstract int OrderIndexBase { get; }
 
-		public virtual int VisualOrderIndex
-		{
-			get
-			{
-				if (this is MeetingLayerViewModel)
-					return OrderIndexBase + 1;
-				return OrderIndexBase + Layer.OrderIndex;
-			}
-		}
+		public abstract int VisualOrderIndex { get; }
+
+		//public virtual int VisualOrderIndex
+		//{
+		//	get
+		//	{
+		//		if (this is MeetingLayerViewModel)
+		//			return OrderIndexBase + 1;
+		//		return OrderIndexBase + Layer.OrderIndex;
+		//	}
+		//}
 
 		public void Delete()
 		{
@@ -301,7 +312,6 @@ namespace Teleopti.Ccc.WinCode.Common
 				MoveLayer(t);
 				IsChanged = true;
 			}
-
 		}
 		public void EndTimeChanged(FrameworkElement parent, double change)
 		{
@@ -319,6 +329,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		public void MoveLayer(TimeSpan span)
 		{
+			IsChanged = true;
 			if (ParentObservingCollection != null)
 			{
 				ParentObservingCollection.MoveAllLayers(this, span);

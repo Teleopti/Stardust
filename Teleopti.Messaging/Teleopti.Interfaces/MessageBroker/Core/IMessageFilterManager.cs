@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Teleopti.Interfaces.MessageBroker.Core
 {
@@ -9,17 +7,26 @@ namespace Teleopti.Interfaces.MessageBroker.Core
     /// </summary>
     public interface IMessageFilterManager
     {
-        ///<summary>
-        /// The filter dictionary of domain object interfaces you can subscribe to.
-        ///</summary>
-        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        IDictionary<Type, IList<Type>> FilterDictionary { get; }
+        /// <summary>
+        /// Determines if the typ exists in the filter
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        bool HasType(Type type);
+
+        /// <summary>
+        /// Finds the type to notify as
+        /// </summary>
+        /// <param name="domainObjectType"></param>
+        /// <returns></returns>
+        /// <remarks>This is not the type that you subscribe to!</remarks>
+        string LookupTypeToSend(Type domainObjectType);
 
         /// <summary>
         /// Lookups the type.
         /// </summary>
         /// <param name="domainObjectType">Type of the domain object.</param>
         /// <returns></returns>
-        string LookupType(Type domainObjectType);
+        Type LookupType(Type domainObjectType);
     }
 }

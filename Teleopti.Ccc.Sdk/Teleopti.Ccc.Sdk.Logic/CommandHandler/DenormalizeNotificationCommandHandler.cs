@@ -27,9 +27,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			}
 
 			var message = new ProcessDenormalizeQueue();
-			message.SetMessageDetail();
-
-			_busSender.Send(message);
+			
+            _busSender.Send(message);
 			command.Result = new CommandResultDto { AffectedId = Guid.Empty, AffectedItems = 1 };
 		}
 	}

@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			              		ScenarioId = command.ScenarioId,
 			              		PersonId = command.PersonId
 			              	};
-			((IEvent)message).SetMessageDetail();
-
+			
 			_busSender.Send(message);
 
 			command.Result = new CommandResultDto { AffectedId = Guid.Empty, AffectedItems = 1 };

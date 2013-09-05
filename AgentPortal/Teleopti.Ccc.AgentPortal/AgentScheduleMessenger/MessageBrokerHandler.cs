@@ -9,11 +9,11 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
 {
-    public class MessageBrokerHandler : IMessageBrokerModule
+    public class MessageBrokerHandler : IMessageBrokerIdentifier
     {
         private readonly ScheduleMessengerScreen _scheduleMessengerScreen;
         private readonly PushMessageController _pushMessageController;
-        private readonly Guid _moduleId = Guid.NewGuid();
+        private readonly Guid _instanceId = Guid.NewGuid();
         
         public MessageBrokerHandler(ScheduleMessengerScreen scheduleMessengerScreen, PushMessageController pushMessageController)
         {
@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
             _pushMessageController = pushMessageController;
         }
 
-        public Guid ModuleId
+        public Guid InstanceId
         {
-            get { return _moduleId; }
+            get { return _instanceId; }
         }
 
         public event EventHandler ScheduleChanged;

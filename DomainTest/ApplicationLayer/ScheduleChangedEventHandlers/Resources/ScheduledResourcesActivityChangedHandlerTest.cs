@@ -11,13 +11,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 	public class ScheduledResourcesActivityChangedHandlerTest
 	{
 		private ScheduledResourcesActivityChangedHandler _target;
-		private IScheduledResourcesReadModelStorage _storage;
+		private IScheduledResourcesReadModelPersister _storage;
 		private readonly Guid _activityId = Guid.NewGuid();
 
 		[SetUp]
 		public void Setup()
 		{
-			_storage = MockRepository.GenerateMock<IScheduledResourcesReadModelStorage>();
+			_storage = MockRepository.GenerateMock<IScheduledResourcesReadModelPersister>();
 			_target = new ScheduledResourcesActivityChangedHandler(_storage);
 		}
 

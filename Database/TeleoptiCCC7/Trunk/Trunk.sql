@@ -1,6 +1,6 @@
 SET NOCOUNT ON
 PRINT '-----------------------'
-PRINT 'Release 360 will re-design the schedule/shift tables and convert a lot of data.'
+PRINT 'Release 386 will re-design the schedule/shift tables and convert a lot of data.'
 PRINT 'This will need some extra time to finish. Please be patient'
 PRINT 'Start time: ' + CONVERT(VARCHAR(24),GETDATE(),113)
 PRINT '-----------------------'
@@ -1147,6 +1147,36 @@ ALTER TABLE [ReadModel].[ScheduledResources] ADD  CONSTRAINT [DF_ScheduledResour
 GO
 
 ALTER TABLE [ReadModel].[ScheduledResources] ADD  CONSTRAINT [DF_ScheduledResources_Heads]  DEFAULT ((0)) FOR [Heads]
+GO
+
+
+----------------  
+--Name: Robin Karlsson
+--Date: 2013-08-28
+--Desc: Truncate read model for projected layers to force load of scheduled resources
+---------------- 
+TRUNCATE TABLE [ReadModel].[ScheduleProjectionReadOnly]
+GO
+
+----------------  
+--Name: tamasb
+--Date: 2013-08-30  
+--Desc: Delete the following application function: ModifyPersionDayOff
+----------------  
+	
+DECLARE @FunctionCode as varchar(255)
+DECLARE @ForeignId as varchar(255)
+
+--modify the following application function
+SELECT @ForeignId = '0013' -- Foreign id of the function
+SELECT @FunctionCode = 'ModifyDayOff' -- Name of the function
+
+UPDATE ApplicationFunction
+SET IsDeleted=1
+WHERE ForeignSource='Raptor' 
+	AND ForeignId Like(@ForeignId + '%') 
+	AND FunctionCode=@FunctionCode 
+
 GO
 
 ---------------- 

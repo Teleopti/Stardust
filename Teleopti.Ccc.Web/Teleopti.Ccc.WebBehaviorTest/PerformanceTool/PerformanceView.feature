@@ -21,6 +21,7 @@ Scenario: Default configuration for scenario add and remove full day absences
 	And I select scenario 'Add and remove full day absence'
 	Then I should see a default configuration in json format
 
+#Ignoring for now, we have to change this so that we only measure adds in other pbi repo
 @ignore
 Scenario: Measure add and remove full day absences
 	When I am viewing the performance view

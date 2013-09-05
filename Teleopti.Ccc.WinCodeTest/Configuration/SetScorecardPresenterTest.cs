@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             var eventMessage = _mocks.StrictMock<IEventMessage>();
             if (sameModule)
             {
-                Expect.Call(eventMessage.ModuleId).Return(_target.ModuleId);
+                Expect.Call(eventMessage.ModuleId).Return(_target.InstanceId);
             }
             else
             {

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			root.Stub(x => x.PopAllEvents()).Return(Enumerable.Empty<IEvent>());
 			var roots = new IRootChangeInfo[] { new RootChangeInfo(root, DomainUpdateType.Insert) };
 
-			target.Execute(roots);
+			target.Execute(null, roots);
 
 			root.AssertWasCalled(x => x.PopAllEvents());
 		}
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var expected = root.AllEvents();
 			var roots = new IRootChangeInfo[] { new RootChangeInfo(root, DomainUpdateType.Insert) };
 
-			target.Execute(roots);
+			target.Execute(null, roots);
 
 			eventsPublisher.AssertWasCalled(x => x.Publish(Arg<IEnumerable<IEvent>>.List.ContainsAll(expected)));
 		}

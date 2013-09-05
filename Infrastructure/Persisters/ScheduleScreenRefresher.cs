@@ -8,13 +8,15 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 	public class ScheduleScreenRefresher : IScheduleScreenRefresher
     {
         private readonly IOwnMessageQueue _messageQueueUpdater;
-        private readonly IScheduleDataRefresher _scheduleDataRefresher;
+	    private readonly IScheduleRefresher _scheduleRefresher;
+	    private readonly IScheduleDataRefresher _scheduleDataRefresher;
         private readonly IMeetingRefresher _meetingRefresher;
         private readonly IPersonRequestRefresher _personRequestRefresher;
 
-        public ScheduleScreenRefresher(IOwnMessageQueue messageQueueUpdater, IScheduleDataRefresher scheduleDataRefresher, IMeetingRefresher meetingRefresher, IPersonRequestRefresher personRequestRefresher) 
+        public ScheduleScreenRefresher(IOwnMessageQueue messageQueueUpdater, IScheduleRefresher scheduleRefresher, IScheduleDataRefresher scheduleDataRefresher, IMeetingRefresher meetingRefresher, IPersonRequestRefresher personRequestRefresher) 
 		{
             _messageQueueUpdater = messageQueueUpdater;
+            _scheduleRefresher = scheduleRefresher;
             _scheduleDataRefresher = scheduleDataRefresher;
             _meetingRefresher = meetingRefresher;
             _personRequestRefresher = personRequestRefresher;
@@ -23,6 +25,10 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
         public void Refresh(IScheduleDictionary scheduleDictionary, IList<IEventMessage> messageQueue, ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflictMessageState> conflictsBuffer)
         {
             _messageQueueUpdater.ReassociateDataWithAllPeople();
+
+            var scheduleMessages = QueryMessagesByType<IScheduleChangedEvent>(messageQueue);
+            _scheduleRefresher.Refresh(scheduleDictionary, messageQueue, scheduleMessages, refreshedEntitiesBuffer,
+                                       conflictsBuffer);
 
             var scheduleDataMessages = QueryMessagesByType<IPersistableScheduleData>(messageQueue);
             _scheduleDataRefresher.Refresh(scheduleDictionary, messageQueue, scheduleDataMessages, refreshedEntitiesBuffer, conflictsBuffer);
@@ -33,12 +39,12 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
             var personRequestMessages = QueryMessagesByType<IPersonRequest>(messageQueue);
             _personRequestRefresher.Refresh(messageQueue, personRequestMessages);
 
-            _messageQueueUpdater.NotifyMessageQueueSize();
+            _messageQueueUpdater.NotifyMessageQueueSizeChange();
         }
 
         private static IEnumerable<IEventMessage> QueryMessagesByType<T>(IEnumerable<IEventMessage> messageQueue)
         {
-            return (from m in messageQueue where typeof(T).IsAssignableFrom(m.InterfaceType) select m).ToArray();
+            return messageQueue.Where(m => typeof(T).IsAssignableFrom(m.InterfaceType)).ToArray();
         }
     }
 }

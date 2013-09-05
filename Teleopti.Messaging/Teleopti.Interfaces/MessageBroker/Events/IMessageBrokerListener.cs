@@ -68,5 +68,19 @@ namespace Teleopti.Interfaces.MessageBroker.Events
 		/// </summary>
 		/// <param name="eventMessageHandler"></param>
 		void UnregisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler);
+
+		/// <summary>
+		/// Method for Raptor Developers to Register Event Subscriptions,
+		/// a delegate and filter criterias including dates is taken as arguments.
+		/// </summary>
+		/// <param name="dataSource"></param>
+		/// <param name="businessUnitId"></param>
+		/// <param name="eventMessageHandler"></param>
+		/// <param name="referenceObjectId"></param>
+		/// <param name="referenceObjectType"></param>
+		/// <param name="domainObjectType"></param>
+		/// <param name="startDate"></param>
+		/// <param name="endDate"></param>
+		void RegisterEventSubscription(string dataSource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid referenceObjectId, Type referenceObjectType, Type domainObjectType, DateTime startDate, DateTime endDate);
 	}
 }

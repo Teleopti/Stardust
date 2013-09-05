@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.WinCode.Converters;
 
 namespace Teleopti.Ccc.WinCodeTest.Converters
@@ -36,6 +37,18 @@ namespace Teleopti.Ccc.WinCodeTest.Converters
         {
             object value = _target.ConvertBack(null, null, null, null);
             Assert.AreEqual(DependencyProperty.UnsetValue, value);
+        }
+
+        [Test]
+        public void ShouldReturnNullOnMinValue()
+        {
+            _target.Convert(DateTime.MinValue, null, null, null).Should().Be.Null();
+        }
+
+        [Test]
+        public void ShouldReturnNullOnMoreThanOneDay()
+        {
+            _target.Convert(DateTime.UtcNow.AddDays(-1).AddMinutes(-1), null, null, null).Should().Be.Null();
         }
     }
 }

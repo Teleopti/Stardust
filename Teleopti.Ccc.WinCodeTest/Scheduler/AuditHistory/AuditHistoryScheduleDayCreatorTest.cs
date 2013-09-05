@@ -1,184 +1,80 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling.AuditHistory;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
 {
-    [TestFixture]
-    public class AuditHistoryScheduleDayCreatorTest
-    {
-        private IAuditHistoryScheduleDayCreator _target;
-        private IScheduleDay _currentScheduleDay;
-        private IPerson _person;
 
-        private IScheduleParameters _parameters;
-        private IScheduleRange _range;
-        private DateTimePeriod _rangePeriod;
-        private IPersonAbsence _abs;
-        private IPersonAssignment _ass1;
-        private IPersonMeeting _personMeeting;
-        private IScenario _scenario;
-        private IScheduleDictionary _dic;
-        private MockRepository _mocks;
-        private IDictionary<IPerson, IScheduleRange> _underlyingDictionary;
-        private INote _note;
-        private IList<IPersistableScheduleData> _newData;
+	[TestFixture]
+	public class AuditHistoryScheduleDayCreatorTest
+	{
+		private IScheduleDay scheduleDay;
+		private IAuditHistoryScheduleDayCreator target;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        [SetUp]
-        public void Setup()
-        {
-            _target = new AuditHistoryScheduleDayCreator();
-            _mocks = new MockRepository();
-            _person = PersonFactory.CreatePerson();
-
-			_range = _mocks.StrictMock<IScheduleRange>();
-			_rangePeriod = new DateTimePeriod(2000, 1, 1, 2001, 6, 1);
-			_parameters =
-				new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), _person, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			_scenario = _parameters.Scenario;
-			_underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
-			_dic = new ScheduleDictionaryForTest(_scenario, new ScheduleDateTimePeriod(_rangePeriod), _underlyingDictionary);
-            _currentScheduleDay = ExtractedSchedule.CreateScheduleDay(_dic, _parameters.Person, new DateOnly(_parameters.Period.StartDateTime));
-			_underlyingDictionary.Add(_parameters.Person, _range);
-			_note = new Note(_parameters.Person, new DateOnly(2000, 1, 1), _scenario, "The agent is very cute");
-			
-			_abs =
-				PersonAbsenceFactory.CreatePersonAbsence(_parameters.Person, _parameters.Scenario,
-														 new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-            _currentScheduleDay.Add(_abs);
-
-			_ass1	 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_parameters.Scenario, _parameters.Person,
-																	  _parameters.Period);
-
-			IMeeting meeting = new Meeting(_person, new List<IMeetingPerson>(), "subject", "location", "description",
-				ActivityFactory.CreateActivity("activity"), _parameters.Scenario);
-
-			_personMeeting = new PersonMeeting(meeting, new MeetingPerson(_parameters.Person, true), _rangePeriod);
-
-
-			_personMeeting.BelongsToMeeting.AddMeetingPerson(new MeetingPerson(_parameters.Person, true));
-
-            _currentScheduleDay.Add(_personMeeting);
-            _currentScheduleDay.Add(_ass1);
-            _currentScheduleDay.Add(_note);
-
-			DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
-			dayOff.Anchor = TimeSpan.FromHours(12);
-			dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
-
-            _newData = new List<IPersistableScheduleData>();
-            _newData.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_parameters.Scenario, _parameters.Person,_parameters.Period));	
-            _newData.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario, _parameters.Period));
-        }
-
-        [Test]
-        public void ShouldEmptyPersonAssignments()
-        {
-            using(_mocks.Record())
-            {
-                
-            }
-            IScheduleDay result;
-            using(_mocks.Playback())
-            {
-                result = _target.Create(_currentScheduleDay, new List<IPersistableScheduleData>());
-            }
-
-	        result.PersonAssignment().Should().Be.Null();
-					_currentScheduleDay.PersonAssignment().Should().Not.Be.Null();
-        }
-
-        [Test]
-        public void ShouldEmptyPersonAbsences()
-        {
-            using (_mocks.Record())
-            {
-
-            }
-            IScheduleDay result;
-            using (_mocks.Playback())
-            {
-                result = _target.Create(_currentScheduleDay, new List<IPersistableScheduleData>());
-            }
-
-            Assert.AreEqual(0, result.PersonAbsenceCollection().Count);
-            Assert.AreEqual(1, _currentScheduleDay.PersonAbsenceCollection().Count);
-        }
-
-
-        [Test]
-        public void ShouldAddNewPersonAssignments()
-        {
-            using (_mocks.Record())
-            {
-
-            }
-            IScheduleDay result;
-            using (_mocks.Playback())
-            {
-                result = _target.Create(_currentScheduleDay, _newData);
-            }
-
-						result.PersonAssignment().Should().Not.Be.Null();
-        }
-
-		[Test]
-		public void ShouldAddNewPersonAbsencesSpanOverSeveralDays()
+		[SetUp]
+		public void Setup()
 		{
-			_parameters = new ScheduleParameters(_scenario, _person, new DateTimePeriod(2000, 1, 1, 2001, 1, 3));
-			var newData = new List<IPersistableScheduleData>();
-			newData.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario, _parameters.Period));
-			var abs = PersonAbsenceFactory.CreatePersonAbsence(_parameters.Person, _parameters.Scenario,
-													 new DateTimePeriod(2000, 1, 1, 2001, 1, 3));
-			var currentScheduleDay = ExtractedSchedule.CreateScheduleDay(_dic, _parameters.Person, new DateOnly(2000, 1, 2));
-			currentScheduleDay.Add(abs);
-
-			var result = _target.Create(currentScheduleDay, newData);
-
-			Assert.AreEqual(1, result.PersonAbsenceCollection().Count);
-			
-			currentScheduleDay = ExtractedSchedule.CreateScheduleDay(_dic, _parameters.Person, new DateOnly(2000, 1, 3));
-			currentScheduleDay.Add(abs);
-
-			result = _target.Create(currentScheduleDay, newData);
-
-			Assert.AreEqual(1, result.PersonAbsenceCollection().Count);
+			scheduleDay = ScheduleDayFactory.Create(new DateOnly(2000, 1, 1));
+			target = new AuditHistoryScheduleDayCreator();
 		}
 
-        [Test]
-        public void ShouldAddNewAbsences()
-        {
-            using (_mocks.Record())
-            {
+		[Test]
+		public void ShouldReplaceAbsences()
+		{
+			scheduleDay.CreateAndAddAbsence(new AbsenceLayer(new Absence(), new DateTimePeriod()));
+			var newAbsences = new[]
+				{
+					new PersonAbsence(scheduleDay.Person, scheduleDay.Scenario, new AbsenceLayer(new Absence(), new DateTimePeriod(2000,1,1,2000,1,2))),
+					new PersonAbsence(scheduleDay.Person, scheduleDay.Scenario, new AbsenceLayer(new Absence(), new DateTimePeriod(2000,1,1,2000,1,2)))
+				};
+			target.Apply(scheduleDay, newAbsences);
+			scheduleDay.PersonAbsenceCollection().Count.Should().Be.EqualTo(2);
+		}
 
-            }
-            IScheduleDay result;
-            using (_mocks.Playback())
-            {
-                result = _target.Create(_currentScheduleDay, _newData);
-            }
+		[Test]
+		public void ShouldReplaceAssignment()
+		{
+			scheduleDay.CreateAndAddActivity(new Activity("no"), new DateTimePeriod(2000,1,1,2000,1,2), new ShiftCategory("sdf"));
+			var newAss = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
+			newAss.AddMainLayer(new Activity("yes"), new DateTimePeriod(2000,1,1,2000,1,2));
+			newAss.SetShiftCategory(new ShiftCategory("sdf"));
+			target.Apply(scheduleDay, new[]{newAss});
+			scheduleDay.PersonAssignment().MainLayers().Single().Payload.Name.Should().Be.EqualTo("yes");
+		}
 
-            Assert.AreEqual(1, result.PersonAbsenceCollection().Count);
-        }
+		[Test]
+		public void ShouldKeepOriginalPersonAssignmentId()
+		{
+			var ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
+			ass.SetId(Guid.NewGuid());
+			scheduleDay.Add(ass);
+			target.Apply(scheduleDay, new[]{new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1))});
+			scheduleDay.PersonAssignment().Id.Should().Be.EqualTo(ass.Id);
+		}
+
+		[Test]
+		public void ShouldKeepOriginalPersonAssignmentVersion()
+		{
+			var ass = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
+			ass.SetVersion(123);
+			scheduleDay.Add(ass);
+			target.Apply(scheduleDay, new[] { new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1)) });
+			scheduleDay.PersonAssignment().Version.Should().Be.EqualTo(ass.Version);
+		}
 
 
 		[Test]
-		public void ShouldSkipDataStartingOutsideCurrentDay()
+		public void ShouldKeepNote()
 		{
-			_newData.Clear();
-			_newData.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_parameters.Scenario, _parameters.Person, _parameters.Period.ChangeStartTime(TimeSpan.FromDays(-1))));
-
-			var result = _target.Create(_currentScheduleDay, _newData);
-			result.PersonAssignment().Should().Be.Null();
-		}	
-    }
+			scheduleDay.CreateAndAddNote("hej");
+			target.Apply(scheduleDay, Enumerable.Empty<IPersistableScheduleData>());
+			scheduleDay.NoteCollection().Should().Not.Be.Empty();
+		}
+	}
 }

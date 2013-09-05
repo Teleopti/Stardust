@@ -147,8 +147,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	            return;
 	        }
 	        self.setRequestViewModel();
-	        self.requestViewModel().DateFrom(moment(self.initialRequestDay.date()));
-	        self.requestViewModel().DateTo(moment(self.initialRequestDay.date()));
+	        self.requestViewModel().DateFrom(moment(self.initialRequestDay.date(), self.requestViewModel().DateFormat()));
+	        self.requestViewModel().DateTo(moment(self.initialRequestDay.date(), self.requestViewModel().DateFormat()));
 	        self.requestViewModel().AddTextRequest(false);
 	    };
 	    
@@ -157,8 +157,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	            return;
 	        }
 	        self.setRequestViewModel();
-	        self.requestViewModel().DateFrom(moment(self.initialRequestDay.date()));
-	        self.requestViewModel().DateTo(moment(self.initialRequestDay.date()));
+	        self.requestViewModel().DateFrom(moment(self.initialRequestDay.date(), self.requestViewModel().DateFormat()));
+	        self.requestViewModel().DateTo(moment(self.initialRequestDay.date(), self.requestViewModel().DateFormat()));
 	        self.requestViewModel().AddAbsenceRequest(false);
 	    };
 
@@ -181,8 +181,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	        	if (self.requestViewModel().LoadRequestData) {
 	        		self.requestViewModel().LoadRequestData(self.initialRequestDay);
 	        	}
-	            self.requestViewModel().DateFrom(moment(day.date()));
-	            self.requestViewModel().DateTo(moment(day.date()));
+	            self.requestViewModel().DateFrom(moment(day.date(), self.requestViewModel().DateFormat()));
+	            self.requestViewModel().DateTo(moment(day.date(), self.requestViewModel().DateFormat()));
 	            return;
 	        }
 

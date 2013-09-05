@@ -147,6 +147,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillAddedHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesActivityChangedHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesChangedHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedNotifierTest.cs" />
     <Compile Include="ApplicationLayer\SyncEventsPublisherTest.cs" />
     <Compile Include="ApplicationLayer\TestWriteSideRepository.cs" />
     <Compile Include="Auditing\AuditSettingTest.cs" />
@@ -418,7 +419,6 @@
     <Compile Include="Scheduling\Assignment\ProjectionIntersectingPeriodMergerTest.cs" />
     <Compile Include="Scheduling\Assignment\ProjectionMidnightSplitterMergerTest.cs" />
     <Compile Include="Scheduling\Assignment\RangeProjectionServiceTest.cs" />
-    <Compile Include="Scheduling\Assignment\RestoreSchedulePartServiceTest.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePartStringVisualizerTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessManagerTest.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodSplitCheckerTest.cs" />
@@ -787,6 +787,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetToShiftsGeneratorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ShiftCategoryRestrictionShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilterTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetSkillActivityCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TimeLimitationShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TimeLimitsRestrictionShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\WorkTimeLimitationShiftFilterTest.cs" />

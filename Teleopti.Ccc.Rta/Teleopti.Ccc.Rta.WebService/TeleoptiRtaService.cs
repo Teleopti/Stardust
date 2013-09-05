@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.ServiceModel;
+using Teleopti.Interfaces.Domain;
 using log4net;
 using log4net.Config;
 using Teleopti.Ccc.Rta.Interfaces;
@@ -15,56 +17,39 @@ namespace Teleopti.Ccc.Rta.WebService
         private IRtaDataHandler _rtaDataHandler;
         private readonly string _authenticationKey;
         private readonly object _lockObject = new object();
-        private const string LogOutStateCode = "LOGGED-OFF";
-        private static readonly ILog Log = LogManager.GetLogger(typeof (TeleoptiRtaService));
-	    private RtaProcessMissingAgents _processMissingAgents;
+        private const string logOutStateCode = "LOGGED-OFF";
+        private static readonly ILog Log = LogManager.GetLogger(typeof (TeleoptiRtaService));	
 
-        public TeleoptiRtaService()
+	    public TeleoptiRtaService()
         {
             XmlConfigurator.Configure();
-            
 
             Log.Info("The real time adherence service is now started");
-            string authenticationKey = ConfigurationManager.AppSettings["AuthenticationKey"];
-            if (string.IsNullOrEmpty(authenticationKey)) authenticationKey = "!#¤atAbgT%";
+            var authenticationKey = ConfigurationManager.AppSettings["AuthenticationKey"];
+            if (string.IsNullOrEmpty(authenticationKey)) 
+				authenticationKey = "!#¤atAbgT%";
             _authenticationKey = authenticationKey;
-			_processMissingAgents = new RtaProcessMissingAgents(LogOutStateCode, processRtaAgentState);
         }
-
-		private void processRtaAgentState(RtaAgentState rtaAgentState)
-		{
-			processExternalUserState(new Guid(), rtaAgentState.UserCode, rtaAgentState.StateCode, rtaAgentState.StateDescription,
-			                         rtaAgentState.IsLoggedOn, 0, rtaAgentState.Timestamp, rtaAgentState.PlatformTypeId,
-			                         rtaAgentState.SourceId, rtaAgentState.BatchId, rtaAgentState.IsSnapshot);
-		}
 
         private void InitializeClientHandler()
         {
             _rtaDataHandler = RtaFactory.DataHandler;
         }
 
-        public int SaveExternalUserState(string authenticationKey, string userCode, string stateCode, string stateDescription, bool isLoggedOn, int secondsInState, DateTime timestamp, string platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
+	    public int SaveExternalUserState(string authenticationKey, string userCode, string stateCode,
+	                                     string stateDescription, bool isLoggedOn, int secondsInState, DateTime timestamp,
+	                                     string platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
         {
-            Guid messageId = Guid.NewGuid();
+            var messageId = Guid.NewGuid();
 
 			verifyAuthenticationKey(authenticationKey, messageId);
-			_processMissingAgents.Check(new RtaAgentState()
-				                            {
-												AuthenticationKey = authenticationKey,
-												UserCode = userCode,
-												StateCode = stateCode,
-												StateDescription = stateDescription,
-												IsLoggedOn = isLoggedOn,
-												Timestamp = timestamp,
-												PlatformTypeId = platformTypeId,
-												SourceId = sourceId,
-												BatchId = batchId,
-												IsSnapshot = isSnapshot
-				                            });
-            return processExternalUserState(messageId, userCode, stateCode, stateDescription, isLoggedOn, secondsInState, timestamp, platformTypeId, sourceId, batchId, isSnapshot);
+	        return processExternalUserState(messageId, userCode, stateCode, stateDescription, isLoggedOn, secondsInState,
+	                                        timestamp, platformTypeId, sourceId, batchId, isSnapshot);
         }
 
-    	private int processExternalUserState(Guid messageId, string userCode, string stateCode, string stateDescription, bool isLoggedOn, int secondsInState, DateTime timestamp, string platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
+	    private int processExternalUserState(Guid messageId, string userCode, string stateCode, string stateDescription,
+	                                         bool isLoggedOn, int secondsInState, DateTime timestamp, string platformTypeId,
+	                                         string sourceId, DateTime batchId, bool isSnapshot)
     	{
 			if (Log.IsInfoEnabled)
 			{
@@ -93,9 +78,8 @@ namespace Teleopti.Ccc.Rta.WebService
     			//If the user isn't logged on we'll substitute the stateCode to reflect this
     			Log.InfoFormat(
     				"This is a log out state. The original state code {0} is substituted with hardcoded state code {1}. (MessageId = {2})",
-    				stateCode, LogOutStateCode, messageId);
-    			stateCode = LogOutStateCode;
-    			stateDescription = stateCode;
+    				stateCode, logOutStateCode, messageId);
+    			stateCode = logOutStateCode;
     		}
 
     		//The DateTimeKind.Utc is not set automatically when deserialising from soap message
@@ -124,7 +108,8 @@ namespace Teleopti.Ccc.Rta.WebService
 			}
     		lock (_lockObject)
     		{
-    			if (_rtaDataHandler == null || !_rtaDataHandler.IsAlive) InitializeClientHandler();
+    			if (_rtaDataHandler == null || !_rtaDataHandler.IsAlive) 
+					InitializeClientHandler();
     			if (_rtaDataHandler != null)
     			{
     				_rtaDataHandler.ProcessRtaData(userCode.Trim(), stateCode, TimeSpan.FromSeconds(secondsInState), timestamp,
@@ -149,45 +134,44 @@ namespace Teleopti.Ccc.Rta.WebService
     		}
     	}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
-		public int SaveBatchExternalUserState(string authenticationKey, string platformTypeId, string sourceId, ICollection<ExternalUserState> externalUserStateBatch)
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+		    MessageId = "3")]
+	    public int SaveBatchExternalUserState(string authenticationKey, string platformTypeId, string sourceId,
+	                                          ICollection<ExternalUserState> externalUserStateBatch)
     	{
-			Guid messageId = Guid.NewGuid();
+			var messageId = Guid.NewGuid();
 
 			verifyAuthenticationKey(authenticationKey, messageId);
 
     		verifyBatchNotTooLarge(externalUserStateBatch);
 
-    		int result = 0;
+    		var result = 0;
 
-			foreach (var externalUserState in externalUserStateBatch)
+			foreach (var user in externalUserStateBatch)
 			{
-				var processResult = processExternalUserState(messageId, externalUserState.UserCode, externalUserState.StateCode,
-				                                             externalUserState.StateDescription, externalUserState.IsLoggedOn,
-				                                             externalUserState.SecondsInState, externalUserState.Timestamp,
-				                                             platformTypeId, sourceId, externalUserState.BatchId,
-				                                             externalUserState.IsSnapshot);
+				var processResult = SaveExternalUserState(authenticationKey, user.UserCode, user.StateCode, user.StateDescription,
+				                                          user.IsLoggedOn, user.SecondsInState, user.Timestamp, platformTypeId,
+				                                          sourceId, user.BatchId, user.IsSnapshot);
 				if (processResult < result || result == 0)
-				{
 					result = processResult;
-				}
 			}
 
     		return result;
     	}
 
 		public void GetUpdatedScheduleChange(Guid personId, Guid businessUnitId, DateTime timestamp)
-        {
-			Log.InfoFormat("Recieved message from servicebus to check schedule for Person: {0}, BusinessUnit: {1}, Timestamp: {2}", personId, businessUnitId, timestamp);
-            lock (_lockObject)
-            {
-                if (_rtaDataHandler == null || !_rtaDataHandler.IsAlive) InitializeClientHandler();
-                if (_rtaDataHandler != null)
-                {
+		{
+			Log.InfoFormat(
+				"Recieved message from servicebus to check schedule for Person: {0}, BusinessUnit: {1}, Timestamp: {2}", personId,
+				businessUnitId, timestamp);
+			lock (_lockObject)
+			{
+				if (_rtaDataHandler == null || !_rtaDataHandler.IsAlive)
+					InitializeClientHandler();
+				if (_rtaDataHandler != null)
 					_rtaDataHandler.ProcessScheduleUpdate(personId, businessUnitId, timestamp);
-                }
-            }
-        }
+			}
+		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "log4net.ILog.ErrorFormat(System.String,System.Object[])")]
 		private static void verifyBatchNotTooLarge(ICollection<ExternalUserState> externalUserStateBatch)

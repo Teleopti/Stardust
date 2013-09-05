@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2008, 12, 5), TimeZoneHelper.CurrentSessionTimeZone)).Repeat.Any();
 
 			_mocks.ReplayAll();
-			_target = new OvertimeLayerViewModel(null, _layerWithPayload, null, null, null);
+			_target = new OvertimeLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, null, null, null);
 			_testRunner = new CrossThreadTestRunner();
 		}
 
@@ -190,17 +190,16 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
-		public void UpdatePeriod_WhenCalled_ShouldCallReplaceActivityOnObserver()
+		public void UpdatePeriod_WhenCalled_ShouldCallUpdateAllMovedLayersOnObserver()
 		{
-			var layerObserver = MockRepository.GenerateStrictMock<ILayerViewModelObserver>();
+			var layerObserver = MockRepository.GenerateMock<ILayerViewModelObserver>();
 
 			_target = new OvertimeLayerViewModel(layerObserver, _layerWithPayload, null, null, null);
-			layerObserver.Expect(l => l.ReplaceActivity(_target, _layerWithPayload, _target.SchedulePart));
-
+			
 			_target.IsChanged = true;
 			_target.UpdatePeriod();
 
-			layerObserver.VerifyAllExpectations();
+            layerObserver.AssertWasCalled(l => l.UpdateAllMovedLayers());
 		}
 
 		[Test]

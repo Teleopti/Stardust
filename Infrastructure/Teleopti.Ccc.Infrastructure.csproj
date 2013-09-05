@@ -137,6 +137,7 @@
     <Compile Include="ApplicationLayer\IServiceBusSender.cs" />
     <Compile Include="ApplicationLayer\ServiceBusEventPublisher.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
+    <Compile Include="ApplicationLayer\UnitOfWorkTransactionEventSyncronization.cs" />
     <Compile Include="Foundation\ConfigReader.cs" />
     <Compile Include="Foundation\ConfigurationDictionaryWrapper.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapper.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="Persisters\IScheduleDictionaryModifiedCallback.cs" />
     <Compile Include="Persisters\IScheduleDictionarySaver.cs" />
     <Compile Include="Persisters\IScheduleDictionaryPersisterResult.cs" />
+    <Compile Include="Persisters\IScheduleRefresher.cs" />
     <Compile Include="Persisters\IScheduleScreenPersister.cs" />
     <Compile Include="Persisters\IScheduleScreenPersisterResult.cs" />
     <Compile Include="Persisters\IScheduleScreenRefresher.cs" />
@@ -258,9 +260,12 @@
     <Compile Include="Persisters\ScheduleDictionaryConflictCollector.cs" />
     <Compile Include="Persisters\ScheduleDictionaryModifiedCallback.cs" />
     <Compile Include="Persisters\ScheduleDictionaryPersisterResult.cs" />
+    <Compile Include="Persisters\ScheduleEntityLoader.cs" />
+    <Compile Include="Persisters\ScheduleRefresher.cs" />
     <Compile Include="Persisters\ScheduleScreenPersisterResult.cs" />
     <Compile Include="Persisters\ScheduleScreenRefresher.cs" />
     <Compile Include="Persisters\ScheduleScreenRetryingPersister.cs" />
+    <Compile Include="Persisters\VersionTupleExtensions.cs" />
     <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelPersister.cs" />
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
@@ -381,14 +386,9 @@
     <Compile Include="Repositories\QueueSourceRepository.cs" />
     <Compile Include="Repositories\WorkShiftRuleSetRepository.cs" />
     <Compile Include="Repositories\WriteProtectionRepository.cs" />
-    <Compile Include="SystemCheck\AgentDayConverter\AgentDayConverters.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\FetchPersonIdAndTimeZone.cs" />
-    <Compile Include="SystemCheck\AgentDayConverter\IPersonAssignmentConverter.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentDateSetter.cs" />
-    <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentDateSetterBase.cs" />
-    <Compile Include="SystemCheck\AgentDayConverter\PersonTimeZoneSetter.cs" />
     <Compile Include="SystemCheck\CheckMessageBroker.cs" />
-    <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentAuditDateSetter.cs" />
     <Compile Include="SystemCheck\SystemCheckerValidator.cs" />
     <Compile Include="UnitOfWork\CurrentUnitOfWork.cs" />
     <Compile Include="UnitOfWork\FixedCurrentUnitOfWork.cs" />

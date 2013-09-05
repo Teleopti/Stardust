@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 {

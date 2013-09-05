@@ -145,7 +145,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var agentState = new ActualAgentState
 				{
-					ReceivedTime = new DateTime(1900, 1, 1)
+					ReceivedTime = new DateTime(1900, 1, 1),
+					OriginalDataSourceId = ""
 				};
 			target.AddOrUpdateActualAgentState(agentState);
 		}

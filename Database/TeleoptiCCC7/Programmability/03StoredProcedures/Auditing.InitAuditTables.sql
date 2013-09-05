@@ -70,7 +70,8 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		,[OrderIndex]
 		,[Payload]
 		,[DefinitionSet]
-		,[LayerType])
+		,[LayerType]
+		,[Parent])
 	 select al.Id,
 		rev,
 		0,
@@ -79,7 +80,8 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		al.OrderIndex,
 		al.Payload,
 		al.DefinitionSet,
-		al.LayerType
+		al.LayerType,
+		al.Parent
 	 from dbo.ShiftLayer al
 	 inner join Auditing.PersonAssignment_AUD pa_aud
 	 on al.Parent = pa_aud.Id

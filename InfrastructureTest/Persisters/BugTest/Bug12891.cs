@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 		protected override IPersistableScheduleData SetupScheduleData()
 		{
 			var personAssignment = new PersonAssignment(Person, Scenario, FirstDayDateOnly);
-			personAssignment.SetMainShiftLayers(new[]{new MainShiftLayer(Activity, FirstDayDateTimePeriod)}, ShiftCategory);
+			personAssignment.AddMainLayer(Activity, FirstDayDateTimePeriod);
+			personAssignment.SetShiftCategory(ShiftCategory);
 			return personAssignment;
 		}
 
@@ -42,9 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 			var scheduleDay = ScheduleDictionary[Person].ScheduledDay(FirstDayDateOnly);
 
 			var personAssignment = scheduleDay.PersonAssignment();
-			var orgLayers = new List<IMainShiftLayer>(personAssignment.MainLayers());
-			orgLayers.Add(new MainShiftLayer(orgLayers.First().Payload, FirstDayDateTimePeriod));
-			personAssignment.SetMainShiftLayers(orgLayers, personAssignment.ShiftCategory);
+			personAssignment.AddMainLayer(personAssignment.MainLayers().First().Payload, FirstDayDateTimePeriod);
 			ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 		}
 

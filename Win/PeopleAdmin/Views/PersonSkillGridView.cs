@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Syncfusion.Styles;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common.Controls.Columns;

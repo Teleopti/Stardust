@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
@@ -16,8 +17,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		{
 			var handler = MockRepository.GenerateMock<IHandleEvent<TestEvent>>();
 			var resolver = MockRepository.GenerateMock<IResolve>();
+			var currentIdentity = MockRepository.GenerateMock<ICurrentIdentity>();
 			resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestEvent>>))).Return(new[] {handler});
-			var target = new EventPublisher(resolver);
+			var target = new EventPublisher(resolver,currentIdentity);
 			var @event = new TestEvent();
 
 			target.Publish(@event);
@@ -31,8 +33,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			var handler1 = MockRepository.GenerateMock<IHandleEvent<TestEvent>>();
 			var handler2 = MockRepository.GenerateMock<IHandleEvent<TestEvent>>();
 			var resolver = MockRepository.GenerateMock<IResolve>();
-			resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestEvent>>))).Return(new[] { handler1, handler2 });
-			var target = new EventPublisher(resolver);
+            var currentIdentity = MockRepository.GenerateMock<ICurrentIdentity>();
+            resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestEvent>>))).Return(new[] { handler1, handler2 });
+			var target = new EventPublisher(resolver,currentIdentity);
 			var @event = new TestEvent();
 
 			target.Publish(@event);
@@ -45,9 +48,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		public void ShouldCallCorrectHandleMethod()
 		{
 			var handler = MockRepository.GenerateMock<ITestHandler>();
-			var resolver = MockRepository.GenerateMock<IResolve>();
+            var currentIdentity = MockRepository.GenerateMock<ICurrentIdentity>();
+            var resolver = MockRepository.GenerateMock<IResolve>();
 			resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestEventTwo>>))).Return(new[] { handler });
-			var target = new EventPublisher(resolver);
+			var target = new EventPublisher(resolver,currentIdentity);
 			var @event = new TestEventTwo();
 
 			target.Publish(@event);
@@ -61,7 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
             var handler = MockRepository.GenerateMock<IHandleEvent<TestDomainEvent>>();
             var resolver = MockRepository.GenerateMock<IResolve>();
             resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestDomainEvent>>))).Return(new[] { handler });
-            var target = new EventPublisher(resolver);
+            var target = new EventPublisher(resolver,new CurrentIdentity());
             var @event = new TestDomainEvent();
 
             target.Publish(@event);

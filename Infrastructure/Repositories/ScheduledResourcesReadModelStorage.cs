@@ -8,7 +8,9 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class ScheduledResourcesReadModelStorage : IScheduledResourcesReadModelStorage
+	public class ScheduledResourcesReadModelStorage : 
+		IScheduledResourcesReadModelPersister,
+		IScheduledResourcesReadModelReader
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
