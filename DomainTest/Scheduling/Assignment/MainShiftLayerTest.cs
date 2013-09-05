@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void ShouldKnowItsIndex()
 		{
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
-			ass.MainLayers().Last().OrderIndex.Should().Be.EqualTo(2);
+			((MainShiftLayer)ass.MainLayers().Last()).OrderIndex.Should().Be.EqualTo(2);
 		}
 	}
 }

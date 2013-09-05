@@ -11,7 +11,5 @@
 		/// </summary>
 		/// <value>The name of the payload.</value>
 		T Payload { get; }
-
-		int OrderIndex { get; }
 	}
 }
