@@ -31,12 +31,13 @@ namespace Teleopti.Ccc.WinCode.Common
             get { return UserTexts.Resources.Activity; }
         }
 
-        protected override int OrderIndexBase
-        {
-            get { return 0; }
-        }
 
-        public override bool IsMovePermitted()
+				public override int VisualOrderIndex
+				{
+					get { return _assignment.MainLayers().ToList().IndexOf(_layer); }
+				}
+
+	    public override bool IsMovePermitted()
         {
             if (SchedulePart != null)
             {
