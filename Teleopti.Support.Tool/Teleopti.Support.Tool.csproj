@@ -65,7 +65,7 @@
     <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Teleopti.Support.Tool.CommandLine</StartupObject>
+    <StartupObject>Teleopti.Support.Tool.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -165,7 +165,6 @@
     <Compile Include="DataLayer\XmlHandler.cs" />
     <Compile Include="DataLayer\XmlHandlerException.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="CommandLine.cs" />
     <Compile Include="HelpWindow.cs">
       <SubType>Form</SubType>
     </Compile>

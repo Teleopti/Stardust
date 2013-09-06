@@ -4,10 +4,17 @@ namespace Teleopti.Support.Code.Tool
 {
     public class RefreshConfigFile
     {
+        private readonly IConfigFileTagReplacer _configFileTagReplacer;
+
+        public RefreshConfigFile(IConfigFileTagReplacer configFileTagReplacer)
+        {
+            _configFileTagReplacer = configFileTagReplacer;
+        }
+
         public void ReplaceFile(string oldFilePath, string newFilePath)
         {
-            //System.IO.File.Delete(oldFilePath);
             System.IO.File.Copy(newFilePath, oldFilePath,true);
+            _configFileTagReplacer.ReplaceTags(oldFilePath);
         }
 
         public void SplitAndReplace(string oldAndNewFile)

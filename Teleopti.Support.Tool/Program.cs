@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
+using Teleopti.Support.Code.Tool;
 
 namespace Teleopti.Support.Tool
 {
@@ -11,11 +9,22 @@ namespace Teleopti.Support.Tool
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        public static void Main(string[] args)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            if (args.Length.Equals(0))
+                new MainForm().ShowDialog();
+            else
+            {
+                var commandLineArgument = new CommandLineArgument(args);
+                if (commandLineArgument.ShowHelp)
+                    new HelpWindow(commandLineArgument.Help).ShowDialog();
+                else
+                {
+                    var refresher = new RefreshConfigFile(new ConfigFileTagReplacer(commandLineArgument));
+                    refresher.ReadLinesFromString(System.IO.File.ReadAllText(@"ConfigFiles\ConfigFiles.txt"));
+                }
+            }
+
         }
     }
 }

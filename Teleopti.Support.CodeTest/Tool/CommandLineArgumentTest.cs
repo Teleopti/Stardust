@@ -1,4 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Diagnostics;
+using System.Reflection;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Support.Code.Tool;
 
@@ -40,6 +43,12 @@ namespace Teleopti.Support.CodeTest.Tool
             target.ConnectionString.Should().Be("Data Source=server;Initial Catalog=database;Integrated Security=True");
         }
 
-        
+        [Test]
+        public void ShouldHaveAttributesDefiningSearch()
+        {
+            var args = new[] { "-DSserver", "-DBdatabase", "-ADanalyticsDB", "-BUburl", "-EE", };
+            var target = new CommandLineArgument(args);
+            target.GetSearchReplaceList().Count.Should().Be.EqualTo(2);
+        }
     }
 }

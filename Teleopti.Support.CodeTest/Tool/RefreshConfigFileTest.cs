@@ -1,29 +1,40 @@
 ﻿using NUnit.Framework;
 using Teleopti.Support.Code.Tool;
+using Rhino.Mocks;
 
 namespace Teleopti.Support.CodeTest.Tool
 {
-    [TestFixture()]
+    [TestFixture]
     public class RefreshConfigFileTest
     {
         private const string OldFile = @"..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\App.config";
         private const string Newfile = @"ConfigFiles\AppETLTool.config";
-        readonly RefreshConfigFile _refresher = new RefreshConfigFile();
+        MockRepository _mock = new MockRepository();
+        private IConfigFileTagReplacer _replacer;
+        RefreshConfigFile _refresher;
 
-        [Test()]
+        [SetUp]
+        public void Setup()
+        {
+            _mock = new MockRepository();
+            _replacer = _mock.DynamicMock<IConfigFileTagReplacer>();
+            _refresher = new RefreshConfigFile(_replacer);
+        }
+
+        [Test]
         public void ReplaceFileTest()
         {
             _refresher.ReplaceFile(OldFile, Newfile);
         }
 
-        [Test()]
+        [Test]
         public void SplitAndReplaceTest()
         {
             const string files = @"..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\App.config,ConfigFiles\AppETLTool.config";
             _refresher.SplitAndReplace(files);
         }
 
-        [Test()]
+        [Test]
         public void ReadLinesSplitAndReplaceTest()
         {
             const string files = @"..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\App.config,ConfigFiles\AppETLService.config

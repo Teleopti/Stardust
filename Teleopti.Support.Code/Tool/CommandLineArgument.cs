@@ -1,4 +1,6 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Globalization;
 
 namespace Teleopti.Support.Code.Tool
@@ -15,20 +17,24 @@ namespace Teleopti.Support.Code.Tool
         string ConnectionString{ get; }
         bool ShowHelp { get; }
         string Help { get; }
+        IList<SearchReplace> GetSearchReplaceList();
     }
 
     public class CommandLineArgument : ICommandLineArgument
     {
-        private readonly string[] _argumentCollection;
+       private readonly string[] _argumentCollection;
         
         public CommandLineArgument(string[] argumentCollection)
         {
+            AppServer = ".";
             _argumentCollection = argumentCollection;
             ReadArguments();
         }
-
+        
+        [SearchFor("$(DataSource)")]
         public string AppServer { get; private set; }
         public string AppDatabase { get; private set; }
+        [SearchFor("$(AnalyticsDB)")]
         public string AnalyticsDatabase { get; private set; }
         public string UserId { get; private set; }
         public string Password { get; private set; }
@@ -41,7 +47,7 @@ namespace Teleopti.Support.Code.Tool
             get { return @"Command line arguments:
 
         -? or ? or -HELP or HELP, Shows this help
-        -DS is the Database Server
+        -DS is the Database Server, default '.' (local)
         -DB is the Application Database, TeleoptiCCC7 for example
         -AD is the AnalyticsDatabase, Teleopti_Analytics for example
         -US is the User Name used to log on to the Database
@@ -49,6 +55,23 @@ namespace Teleopti.Support.Code.Tool
         -EE if present use Integrated Security to log on instead
         -BU is the Url to the Message Broker";
             }
+        }
+
+        public IList<SearchReplace> GetSearchReplaceList()
+        {
+            var ret = new List<SearchReplace>();
+            foreach (var prop in (typeof(CommandLineArgument)).GetProperties())
+            {
+                foreach (var attribute in prop.GetCustomAttributes(true))
+                {
+                    var searchfor = (SearchForAttribute)attribute;
+                    if (searchfor != null)
+                    {
+                        ret.Add(new SearchReplace { SearchFor = searchfor.SearchFor, ReplaceWith = prop.GetValue(this, null).ToString() });
+                    }
+                }
+            }
+            return ret;
         }
 
         public string ConnectionString
