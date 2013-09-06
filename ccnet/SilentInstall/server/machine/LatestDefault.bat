@@ -19,9 +19,9 @@ SET DB_AdminAccess=WINAUTH
 ::SET DB_ADMIN_SQLLOGIN
 ::SET DB_ADMIN_PWD
 
-SET DB_EndUserAccess=WINAUTH
+SET DB_EndUserAccess=SQL
 ::if you specify:
 ::SET DB_EndUserAccess=SQL
 ::you must also provide:
-::SET DB_ENDUSER_SQLLOGIN
-::SET DB_ENDUSER_PWD
+SET DB_ENDUSER_SQLLOGIN=TeleoptiDemoUser
+SET DB_ENDUSER_PWD=TeleoptiDemoPwd2
