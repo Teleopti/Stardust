@@ -160,3 +160,16 @@ BEGIN
 	ADD [BatchId] [datetime] NULL,
 		[OriginalDataSourceId] [nvarchar](50) NOT NULL
 END
+GO
+
+----------------  
+--Name: David J
+--Date: 2013-09-06
+--Desc: bug #24623 - improve performance in fact_schedule_load
+-----------------
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[stage].[stg_schedule]') AND name = N'IX_stg_schedule_personCode_intervalId_scenarioCode_shiftStart')
+CREATE NONCLUSTERED INDEX IX_stg_schedule_personCode_intervalId_scenarioCode_shiftStart
+ON [stage].[stg_schedule] ([person_code],[interval_id],[scenario_code],[shift_start])
+INCLUDE ([schedule_date])
+GO
+
