@@ -700,16 +700,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
             if (period != null)
             {
-                foreach (var personAss in source.PersonAssignmentCollectionDoNotUse())
-                {
-	                foreach (var layer in personAss.OvertimeLayers())
-	                {
-										if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
-										{
-											CreateAndAddOvertime(layer.Payload, layer.Period.MovePeriod(diff), layer.DefinitionSet);
-										}
-	                }
-                }
+	            var personAss = source.PersonAssignment();
+							if (personAss != null)
+							{
+								foreach (var layer in personAss.OvertimeLayers())
+								{
+									if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
+									{
+										CreateAndAddOvertime(layer.Payload, layer.Period.MovePeriod(diff), layer.DefinitionSet);
+									}
+								}
+							}
             }
         }
 
