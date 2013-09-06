@@ -2,7 +2,7 @@
 define([
 		'knockout',
 		'progressitem-count',
-		'addremovefulldayabsence/iteration',
+		'addfulldayabsence/iteration',
 		'result',
 		'messagebroker'
 	], function(
@@ -12,17 +12,14 @@ define([
 		ResultViewModel,
 		messagebroker
 	) {
-		
-
-		return function(readModelName, isApplicableReadModelNotification) {
+		return function (readModelName, isApplicableReadModelNotification) {
 
 			var self = this;
 			var startPromise = messagebroker.start();
 			var readModelSubscription;
-			var personAbsenceSubscription;
 			var result;
 			
-			this.Name = "Add and remove full day absence -> " + readModelName;
+			this.Name = "Add full day absence -> " + readModelName;
 
 			this.Configuration = ko.observable();
 
@@ -88,7 +85,7 @@ define([
 			var progressItemReadModel = new ProgressItemCountViewModel(
 				readModelName,
 				ko.computed(function() {
-					return self.IterationsExpected() * 2;
+					return self.IterationsExpected();
 				})
 			);
 			
@@ -143,7 +140,7 @@ define([
 			loadDefaultConfiguration();
 			
 			var calculateRunDone = function () {
-				var calculatedInterationsDone = progressItemReadModel.Count() / 2;
+				var calculatedInterationsDone = progressItemReadModel.Count();
 				if (calculatedInterationsDone > result.IterationsDone()) {
 					result.IterationsDone(calculatedInterationsDone);
 					if (result.IterationsDone() >= self.IterationsExpected()) {
@@ -174,28 +171,8 @@ define([
 						}
 					});
 					
-					personAbsenceSubscription = messagebroker.subscribe({
-						domainType: 'IPersistableScheduleData',
-						callback: function (notification) {
-							
-							if (notification.DomainUpdateType == 0) //Only insert
-							{
-								$.each(iterations, function(i, e) {
-									if (e.NotifyPersonAbsenceChanged(notification)) {
-										if (e == iterations[iterations.length - 1]) {
-											messagebroker.unsubscribe(personAbsenceSubscription);
-											personAbsenceSubscription = null;
-										}
-										return false;
-									}
-								});
-							}
-						}
-					});
-
 					$.when(
-						readModelSubscription.promise,
-						personAbsenceSubscription.promise
+						readModelSubscription.promise
 					).done(function() {
 
 						$.each(iterations, function(i, e) {

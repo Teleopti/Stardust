@@ -1,28 +1,27 @@
-
 define([
 		'knockout',
 		'moment',
-		'addremovefulldayabsence/scenario',
+		'addfulldayabsence/scenario',
 		'jqueryajax'
 ], function (
 	ko,
 	moment,
-	AddRemoveFullDayAbsenceScenario,
+	AddFullDayAbsenceScenario,
 	JqueryAjax
 	) {
 
 	return function() {
 
 		var self = this;
-		
+
 		this.Scenarios = [
-			new AddRemoveFullDayAbsenceScenario(
+			new AddFullDayAbsenceScenario(
 				"PersonScheduleDayReadModel",
 				function (notification) {
 					if (this.PersonId == notification.DomainReferenceId) { return true; }
 					return false;
 				}),
-			new AddRemoveFullDayAbsenceScenario(
+			new AddFullDayAbsenceScenario(
 				"ScheduledResourcesReadModel",
 				function () { return true; })
 		];
