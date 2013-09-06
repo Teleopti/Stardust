@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 	public class RtaDataHandlerTest
 	{
 		private MockRepository _mocks;
-		private RtaDataHandlerForTest _target;
+		private rtaDataHandlerForTest _target;
 		private IActualAgentAssembler _agentAssembler;
 		private ILog _loggingSvc;
 		private IMessageSender _messageSender;
@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		private IDataSourceResolver _dataSourceResolver;
 		private IPersonResolver _personResolver;
 		private IStateResolver _stateResolver;
+		private IActualAgentStateCache _stateCache;
 	    
 		private string _logOn;
 		private string _stateCode;
@@ -52,6 +53,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataSourceResolver = _mocks.StrictMock<IDataSourceResolver>();
 			_personResolver = _mocks.DynamicMock<IPersonResolver>();
 			_stateResolver = _mocks.DynamicMock<IStateResolver>();
+			_stateCache = _mocks.StrictMock<IActualAgentStateCache>();
+			
 		    
 			_logOn = "002";
 			_stateCode = "AUX2";
@@ -69,14 +72,14 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void VerifyCreateInstanceUsingEmptyConstructorFailsBecauseNoConfigurationAvailable()
 		{
-			new RtaDataHandler(_agentAssembler);
+			new RtaDataHandler(_agentAssembler, _stateCache);
 		}
 
 		[Test]
 		public void ShouldClearCacheWhenCheckScheduleIsCalled()
 		{
 			var agentHandler = MockRepository.GenerateMock<IActualAgentAssembler>();
-			var target = new RtaDataHandler(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory, _dataSourceResolver, _personResolver, _stateResolver, agentHandler);
+			var target = new RtaDataHandler(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory, _dataSourceResolver, _personResolver, _stateResolver, agentHandler, _stateCache);
 			var personId = Guid.NewGuid();
 			var timeStamp = new DateTime(2000, 1, 1);
 
@@ -89,8 +92,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		{
 			_messageSender.Expect(e => e.InstantiateBrokerService());
 			_mocks.ReplayAll();
-			new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory, _dataSourceResolver,
-			                          _personResolver, _stateResolver);
+			new rtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory, _dataSourceResolver,
+									  _personResolver, _stateResolver, _stateCache);
 			_mocks.VerifyAll();
 		}
 
@@ -100,8 +103,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_messageSender.Expect(e => e.InstantiateBrokerService()).Throw(new BrokerNotInstantiatedException());
 			_loggingSvc.Expect(l => l.Error("", new BrokerNotInstantiatedException())).IgnoreArguments();
 			_mocks.ReplayAll();
-			new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory, _dataSourceResolver,
-			                          _personResolver, _stateResolver);
+			new rtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory, _dataSourceResolver,
+			                          _personResolver, _stateResolver, _stateCache);
 			_mocks.VerifyAll();
 		}
 
@@ -113,8 +116,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_messageSender.InstantiateBrokerService();
 			LastCall.Throw(new BrokerNotInstantiatedException());
 			_mocks.ReplayAll();
-			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
-												_dataSourceResolver, _personResolver, _stateResolver, _agentAssembler);
+			_target = new rtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
+												_dataSourceResolver, _personResolver, _stateResolver, _agentAssembler, _stateCache);
 			_mocks.VerifyAll();
 		}
 
@@ -124,8 +127,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_messageSender.InstantiateBrokerService();
 			Expect.Call(_messageSender.IsAlive).Return(true);
 			_mocks.ReplayAll();
-			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
-												_dataSourceResolver, _personResolver, _stateResolver, _agentAssembler);
+			_target = new rtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
+												_dataSourceResolver, _personResolver, _stateResolver, _agentAssembler, _stateCache);
 			Assert.IsTrue(_target.IsAlive);
 			_mocks.VerifyAll();
 		}
@@ -137,7 +140,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_loggingSvc.Expect(l => l.Error("No connection information available in configuration file."));
 			_mocks.ReplayAll();
 
-			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, string.Empty, _databaseConnectionFactory, _dataSourceResolver, _personResolver, _stateResolver, _agentAssembler);
+			_target = new rtaDataHandlerForTest(_loggingSvc, _messageSender, string.Empty, _databaseConnectionFactory, _dataSourceResolver, _personResolver, _stateResolver, _agentAssembler, _stateCache);
 			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId,
 			                       _isSnapshot);
 			_mocks.VerifyAll();
@@ -151,7 +154,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataSourceResolver.Expect(d => d.TryResolveId("1", out dataSource)).Return(false).OutRef(1);
 			
 			_mocks.ReplayAll();
-			AssignTargetAndRun();
+			assignTargetAndRun();
 			_mocks.VerifyAll();
 		}
 
@@ -166,7 +169,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(false).OutRef(new object[1]);
 			
 			_mocks.ReplayAll();
-			AssignTargetAndRun();
+			assignTargetAndRun();
 			_mocks.VerifyAll();
 		}
 
@@ -191,7 +194,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode, _timestamp)).Return(false);
 			
 			_mocks.ReplayAll();
-			AssignTargetAndRun();
+			assignTargetAndRun();
 			_mocks.VerifyAll();
 		}
 
@@ -215,12 +218,12 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				retPersonBusinessUnits);
 			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode, _timestamp)).Return(true);
 			_agentAssembler.Expect(
-				r => r.GetAndSaveState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
+				r => r.GetAgentState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
 				IgnoreArguments().Return(
 					null);
 			
 			_mocks.ReplayAll();
-			AssignTargetAndRun();
+			assignTargetAndRun();
 			_mocks.VerifyAll();
 		}
 
@@ -246,14 +249,15 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_messageSender.Expect(m => m.IsAlive).Return(true);
 			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode, _timestamp)).Return(true);
 			_agentAssembler.Expect(
-				r => r.GetAndSaveState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
+				r => r.GetAgentState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
 				IgnoreArguments().Return(agentState);
+			_stateCache.Expect(s => s.AddAgentStateToCache(agentState));
 			_messageSender.Expect(m => m.SendRtaData(Guid.Empty, Guid.Empty, agentState));
 			
 			_mocks.ReplayAll();
 
-			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, "connectionStringDataStore", _databaseConnectionFactory,
-												_dataSourceResolver, _personResolver, _stateResolver, _agentAssembler);
+			_target = new rtaDataHandlerForTest(_loggingSvc, _messageSender, "connectionStringDataStore", _databaseConnectionFactory,
+												_dataSourceResolver, _personResolver, _stateResolver, _agentAssembler, _stateCache);
 			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId,
 								   _isSnapshot);
 			
@@ -282,13 +286,14 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_messageSender.Expect(m => m.IsAlive).Return(true);
 			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode, _timestamp)).Return(true);
 			_agentAssembler.Expect(
-				r => r.GetAndSaveState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
+				r => r.GetAgentState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
 				IgnoreArguments().Return(agentState);
+			_stateCache.Expect(s => s.AddAgentStateToCache(agentState));
 			_messageSender.Expect(m => m.SendRtaData(Guid.Empty, Guid.Empty, agentState)).Throw(new SocketException());
 			_loggingSvc.Expect(l => l.Error("", new SocketException())).IgnoreArguments();
 
 			_mocks.ReplayAll();
-			AssignTargetAndRun();
+			assignTargetAndRun();
 			_mocks.VerifyAll();
 		}
 
@@ -314,13 +319,14 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_messageSender.Expect(m => m.IsAlive).Return(true);
 			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode, _timestamp)).Return(true);
 			_agentAssembler.Expect(
-				r => r.GetAndSaveState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
+				r => r.GetAgentState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
 				IgnoreArguments().Return(agentState);
+			_stateCache.Expect(s => s.AddAgentStateToCache(agentState));
 			_messageSender.Expect(m => m.SendRtaData(Guid.Empty, Guid.Empty, agentState)).Throw(new BrokerNotInstantiatedException());
 			_loggingSvc.Expect(l => l.Error("", new SocketException())).IgnoreArguments();
 
 			_mocks.ReplayAll();
-			AssignTargetAndRun();
+			assignTargetAndRun();
 			_mocks.VerifyAll();
 		}
 
@@ -330,13 +336,14 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			var agentState = new ActualAgentState();
 
 			_messageSender.InstantiateBrokerService();
-			_agentAssembler.Expect(a => a.CheckSchedule(_personId, _businessUnitId, _timestamp)).IgnoreArguments().Return(
+			_agentAssembler.Expect(a => a.GetAgentStateForScheduleUpdate(_personId, _businessUnitId, _timestamp)).IgnoreArguments().Return(
 				agentState);
+			_stateCache.Expect(s => s.AddAgentStateToCache(agentState));
 			_messageSender.Expect(m => m.SendRtaData(_personId, _businessUnitId, agentState));
 			_mocks.ReplayAll();
 
-			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
-												_dataSourceResolver, _personResolver, _stateResolver, _agentAssembler);
+			_target = new rtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
+												_dataSourceResolver, _personResolver, _stateResolver, _agentAssembler, _stateCache);
 			_target.ProcessScheduleUpdate(_personId, _businessUnitId, _timestamp);
 			_mocks.VerifyAll();
 		}
@@ -348,8 +355,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_loggingSvc.Expect(l => l.Error("No connection information avaiable in configuration file."));
 			_mocks.ReplayAll();
 
-			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, null, _databaseConnectionFactory,
-												_dataSourceResolver, _personResolver, _stateResolver, _agentAssembler);
+			_target = new rtaDataHandlerForTest(_loggingSvc, _messageSender, null, _databaseConnectionFactory,
+												_dataSourceResolver, _personResolver, _stateResolver, _agentAssembler, _stateCache);
 			_target.ProcessScheduleUpdate(_personId, _businessUnitId, _timestamp);
 			_mocks.VerifyAll();
 		}
@@ -358,12 +365,12 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void ShouldNotSendWhenStateHaveNotChangedForScheduleUpdate()
 		{
 			_messageSender.InstantiateBrokerService();
-			_agentAssembler.Expect(a => a.CheckSchedule(_personId, _businessUnitId, _timestamp)).IgnoreArguments().Return(null);
+			_agentAssembler.Expect(a => a.GetAgentStateForScheduleUpdate(_personId, _businessUnitId, _timestamp)).IgnoreArguments().Return(null);
 			_loggingSvc.Expect(l => l.InfoFormat("Schedule for {0} has not changed", _personId));
 			_mocks.ReplayAll();
 
-			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
-												_dataSourceResolver, _personResolver, _stateResolver, _agentAssembler);
+			_target = new rtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
+												_dataSourceResolver, _personResolver, _stateResolver, _agentAssembler, _stateCache);
 			_target.ProcessScheduleUpdate(_personId, _businessUnitId, _timestamp);
 			_mocks.VerifyAll();
 		}
@@ -371,37 +378,37 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ShouldReturnFromConstructorWhenNoMessageSender()
 		{
-			_target = new RtaDataHandlerForTest(_loggingSvc, null, ConnectionString, _databaseConnectionFactory,
-												_dataSourceResolver, _personResolver, _stateResolver);
+			_target = new rtaDataHandlerForTest(_loggingSvc, null, ConnectionString, _databaseConnectionFactory,
+												_dataSourceResolver, _personResolver, _stateResolver, _stateCache);
 		}
-
-		private void AssignTargetAndRun()
+		
+		private void assignTargetAndRun()
 		{
-			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
-												_dataSourceResolver, _personResolver, _stateResolver, _agentAssembler);
+			_target = new rtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
+												_dataSourceResolver, _personResolver, _stateResolver, _agentAssembler, _stateCache);
 			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId,
 			                       _isSnapshot);
 		}
 
-		private class RtaDataHandlerForTest : RtaDataHandler
+		private class rtaDataHandlerForTest : RtaDataHandler
 		{
-			public RtaDataHandlerForTest(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
+			public rtaDataHandlerForTest(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
 			                             IDatabaseConnectionFactory databaseConnectionFactory,
 			                             IDataSourceResolver dataSourceResolver, IPersonResolver personResolver,
-										 IStateResolver stateResolver, IActualAgentAssembler agentAssembler)
+										 IStateResolver stateResolver, IActualAgentAssembler agentAssembler, IActualAgentStateCache stateCache)
 				: base(
 					loggingSvc, messageSender, connectionStringDataStore, databaseConnectionFactory, dataSourceResolver, personResolver,
-                    stateResolver, agentAssembler)
+					stateResolver, agentAssembler, stateCache)
 			{
 			}
 
-			public RtaDataHandlerForTest(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
+			public rtaDataHandlerForTest(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
 			                             IDatabaseConnectionFactory databaseConnectionFactory,
 			                             IDataSourceResolver dataSourceResolver, IPersonResolver personResolver,
-			                             IStateResolver stateResolver)
+			                             IStateResolver stateResolver, IActualAgentStateCache stateCache)
 				: base(
 					loggingSvc, messageSender, connectionStringDataStore, databaseConnectionFactory, dataSourceResolver, personResolver,
-					stateResolver)
+					stateResolver, stateCache)
 			{
 			}
 		}

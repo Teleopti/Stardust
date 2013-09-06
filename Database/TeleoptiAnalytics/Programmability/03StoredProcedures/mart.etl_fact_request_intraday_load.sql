@@ -8,13 +8,7 @@ CREATE PROCEDURE [mart].[etl_fact_request_intraday_load]
 	
 AS
 BEGIN
-SET NOCOUNT ON
-DECLARE @business_unit_id int
 
-/*Get business unit id*/
-SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
-
-SET NOCOUNT OFF
 ----------------
 --Remove old data
 ----------------
@@ -22,12 +16,9 @@ DELETE fact
 FROM stage.stg_request stg
 INNER JOIN mart.fact_request fact
 	ON stg.request_code = fact.request_code
-	AND fact.business_unit_id = @business_unit_id
 INNER JOIN mart.dim_date dLocal
 	ON dLocal.date_date = CONVERT(smalldatetime,CONVERT(nvarchar(30), stg.request_date, 112))	
 	AND stg.request_start_date_count = 1  --1 marks that this is the startday of a request
-INNER JOIN mart.dim_business_unit bu
-	ON bu.business_unit_code = stg.business_unit_code
 INNER JOIN mart.dim_person dp
 ON
 	stg.person_code	= dp.person_code
