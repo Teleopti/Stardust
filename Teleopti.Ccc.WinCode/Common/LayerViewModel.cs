@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			//for activity layers - overriden in absencelayerviewmodel
 			if (ParentObservingCollection != null)
 			{
-				ParentObservingCollection.RemoveActivity(this, Layer as ILayer<IActivity>, SchedulePart);
+				ParentObservingCollection.RemoveActivity(this, (IShiftLayer)Layer, SchedulePart);
 				new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
 			}
 		}

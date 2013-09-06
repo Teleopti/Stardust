@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WinCode.Common
         }
 
 
-		public void RemoveActivity(ILayerViewModel sender, ILayer<IActivity> activityLayer, IScheduleDay scheduleDay)
+		public void RemoveActivity(ILayerViewModel sender, IShiftLayer activityLayer, IScheduleDay scheduleDay)
 		{
 			_removeService.Remove(scheduleDay, activityLayer);
 			CreateProjectionViewModels(scheduleDay);
