@@ -21160,6 +21160,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shift as overtime.
+        /// </summary>
+        public static string ShiftAsOvertime {
+            get {
+                return ResourceManager.GetString("ShiftAsOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift bags.
         /// </summary>
         public static string ShiftBags {

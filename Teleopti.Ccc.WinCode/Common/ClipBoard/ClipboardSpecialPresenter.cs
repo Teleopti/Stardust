@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common.Clipboard
 {
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
             _view.SetPermissionOnAssignments(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
             _view.SetPermissionOnOvertime(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
             _view.SetPermissionsOnRestrictions(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction));
+			_view.SetPermissionsOnShiftAsOvertime(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
             _view.ShowRestrictions(_showRestrictions);
         }
 
@@ -99,5 +101,15 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
         {
             _model.OvertimeAvailability = check;
         }
+
+		public void OnCheckBoxShiftAsOvertimeCheckedChanged(bool check)
+		{
+			_model.ShiftAsOvertime = check;
+		}
+
+		public void OnComboBoxAdvOvertimeSelectedIndexChanged(IMultiplicatorDefinitionSet multiplicatorDefinitionSet)
+		{
+			_model.MulitiplicatorDefinitionSet = multiplicatorDefinitionSet;
+		}
     }
 }
