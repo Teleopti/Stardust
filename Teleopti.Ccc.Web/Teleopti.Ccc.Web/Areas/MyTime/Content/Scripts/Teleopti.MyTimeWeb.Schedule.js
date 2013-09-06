@@ -523,9 +523,19 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		        model.AddRequestCallback = _displayRequest;
 		        return model;
 		    };
-		    
-		    vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests);
-			ko.applyBindings(vm, $('#page')[0]);
+			
+			ko.bindingHandlers.nonEncodedTitle = {
+				update: function (element, valueAccessor) {
+					var value = ko.utils.unwrapObservable(valueAccessor());
+					var d = document.createElement('div');
+					d.innerHTML = value;
+					element.title = d.innerText;
+				}
+			};
+
+			vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests);
+			
+		    ko.applyBindings(vm, $('#page')[0]);
 		},
 		LoadAndBindData: function () {
 			ajax.Ajax({
