@@ -136,19 +136,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						if (s.ScheduleDay.OvertimeAvailablityCollection() != null &&
 						    s.ScheduleDay.OvertimeAvailablityCollection().FirstOrDefault() != null)
 							return s.ScheduleDay.OvertimeAvailablityCollection().FirstOrDefault();
-						if (s.ScheduleDay.SignificantPartForDisplay() == SchedulePartView.DayOff ||
-						    s.ScheduleDay.SignificantPartForDisplay() == SchedulePartView.ContractDayOff ||
-						    s.ScheduleDay.SignificantPartForDisplay() == SchedulePartView.None)
+						if (s.ScheduleDay.SignificantPartForDisplay() == SchedulePartView.MainShift)
 						{
 							return new OvertimeAvailabilityViewModel
-								{
-									HasOvertimeAvailability = false,
-									StartTime = TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0)),
-									EndTime = TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0)),
-									EndTimeNextDay = false
-								};
-						}
-						return new OvertimeAvailabilityViewModel
 							{
 								HasOvertimeAvailability = false,
 								StartTime = TimeHelper.TimeOfDayFromTimeSpan(
@@ -157,6 +147,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 									s.ScheduleDay.PersonAssignment().Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime.Add(new TimeSpan(1, 0, 0)), CultureInfo.CurrentCulture),
 								EndTimeNextDay = s.ScheduleDay.PersonAssignment().Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime.Add(new TimeSpan(1, 0, 0)).Days > 0
 							};
+						}
+						return new OvertimeAvailabilityViewModel
+						{
+							HasOvertimeAvailability = false,
+							StartTime = TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0)),
+							EndTime = TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0)),
+							EndTimeNextDay = false
+						};
+						
 					}))
 				;
 
