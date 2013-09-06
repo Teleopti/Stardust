@@ -78,9 +78,28 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .SetReadOnly(true)
                     .List<IUserDefinedTabLight>();   
         }
+
+		public IList<IAuthorizeOrganisationDetail> GetPersonForShiftTrade(DateOnly shiftTradeDate, Guid? teamId)
+		{
+			return ((NHibernateStatelessUnitOfWork)_unitOfWork).Session.CreateSQLQuery(
+					"exec ReadModel.LoadPersonForShiftTrade @shiftTradeDate=:shiftTradeDate, @myTeamId=:myTeamId")
+					.SetDateTime("shiftTradeDate", shiftTradeDate)
+					.SetParameter("myTeamId", teamId.HasValue ? teamId.Value : (Guid?)null)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorShiftTrade)))
+					.SetReadOnly(true)
+					.List<IAuthorizeOrganisationDetail>();
+	    }
     }
 
-    public class PersonSelectorOrganization : IPersonSelectorOrganization
+	public class PersonSelectorShiftTrade : IAuthorizeOrganisationDetail
+	{
+		public Guid PersonId { get; set; }
+		public Guid? TeamId { get; set; }
+		public Guid? SiteId { get; set; }
+		public Guid BusinessUnitId { get; set; }
+	}
+
+	public class PersonSelectorOrganization : IPersonSelectorOrganization
     {
         public Guid PersonId { get; set; }
 

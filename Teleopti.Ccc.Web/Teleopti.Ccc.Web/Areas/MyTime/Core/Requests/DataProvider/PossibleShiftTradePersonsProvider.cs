@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
@@ -15,25 +16,42 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IShiftTradeLightValidator _shiftTradeValidator;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPermissionProvider _permissionProvider;
+		private readonly IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
 
 		public PossibleShiftTradePersonsProvider(IPersonRepository personRepository, 
 																					IShiftTradeLightValidator shiftTradeValidator, 
 																					ILoggedOnUser loggedOnUser,
-																					IPermissionProvider permissionProvider)
+																					IPermissionProvider permissionProvider,
+																					IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository)
 		{
 			_personRepository = personRepository;
 			_shiftTradeValidator = shiftTradeValidator;
 			_loggedOnUser = loggedOnUser;
 			_permissionProvider = permissionProvider;
+			_personSelectorReadOnlyRepository = personSelectorReadOnlyRepository;
 		}
 
 		public IEnumerable<IPerson> RetrievePersons(ShiftTradeScheduleViewModelData shiftTradeArguments)
 		{
 			var me = _loggedOnUser.CurrentUser();
+			Guid? myTeamid = shiftTradeArguments.LoadOnlyMyTeam
+				                 ? me.Period(shiftTradeArguments.ShiftTradeDate).Team.Id
+				                 : null;
+			var personForShiftTradeList = _personSelectorReadOnlyRepository.GetPersonForShiftTrade(shiftTradeArguments.ShiftTradeDate, myTeamid);
+			personForShiftTradeList = personForShiftTradeList.Where(
+				personGuid =>
+				_permissionProvider.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
+				                                                    shiftTradeArguments.ShiftTradeDate, personGuid)).ToList();
 
-			return _personRepository.FindPossibleShiftTrades(me, shiftTradeArguments.LoadOnlyMyTeam, shiftTradeArguments.ShiftTradeDate)
-				.Where(person => _permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, shiftTradeArguments.ShiftTradeDate, person) &&
-							_shiftTradeValidator.Validate(new ShiftTradeAvailableCheckItem(shiftTradeArguments.ShiftTradeDate, me, person)).Value);
+			var personGuidList = personForShiftTradeList.Select(item => item.PersonId).ToList();
+
+			var personList = _personRepository.FindPeople(personGuidList);
+
+			return
+				personList.Where(
+					person =>
+					_shiftTradeValidator.Validate(new ShiftTradeAvailableCheckItem(shiftTradeArguments.ShiftTradeDate, me, person))
+					                    .Value);
 		}
 	}
 }
