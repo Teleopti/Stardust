@@ -206,7 +206,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_rollbackService.ModificationCollection).Return(new List<IScheduleDay>()).Repeat.AtLeastOnce();
-                Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2011, 1, 1), null, new List<IScheduleDay>())).Return(true);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments()
                     .Return(false);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments()
@@ -296,8 +295,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_decider.DecideDates(null, null)).IgnoreArguments()
                 .Return(new List<DateOnly> { new DateOnly(2011, 1, 1) }).Repeat.Any();
             Expect.Call(_schedulingOptions.WorkShiftLengthHintOption).PropertyBehavior().Return(WorkShiftLengthHintOption.Long).Repeat.Any();
-            Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2011, 1, 1), null, new List<IScheduleDay>(), new List<IScheduleDay>())).Return(true).Repeat.Any();
-            Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2011, 1, 2), null, new List<IScheduleDay>(), new List<IScheduleDay>())).Return(true).Repeat.Any();
+            Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2011, 1, 1), null)).Return(true).Repeat.Any();
+            Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2011, 1, 2), null)).Return(true).Repeat.Any();
             Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(2011, 1, 1, 2011, 1, 1))).Repeat.AtLeastOnce();
             Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(2011, 1, 2, 2011, 1, 2))).Repeat.AtLeastOnce();
             Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay1, _schedulingOptions)).IgnoreArguments()

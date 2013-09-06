@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -120,13 +119,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<DateOnly> daysToRecalculate = _decider.DecideDates(scheduleDayAfter, scheduleDayBefore);
             foreach (var dateToRecalculate in daysToRecalculate)
             {
-                _resourceCalculateDelayer.CalculateIfNeeded(dateToRecalculate, null, new List<IScheduleDay>(), new List<IScheduleDay>());
+                _resourceCalculateDelayer.CalculateIfNeeded(dateToRecalculate, null);
             }
 
             matrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
             if (!tryScheduleDay(dateOnly, schedulingOptions, lenghtHint))
             {
-                _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, new List<IScheduleDay>(), new List<IScheduleDay>());
+                _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
                 return false;
             }
 
@@ -160,20 +159,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private void rollbackAndResourceCalculate(DateOnly dateOnly)
         {
-            IScheduleDay scheduleDayBefore;
-            IScheduleDay scheduleDayAfter;
-            scheduleDayBefore =
-                (IScheduleDay) _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
+            IScheduleDay scheduleDayBefore = (IScheduleDay) _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
             _rollbackService.Rollback();
-            scheduleDayAfter =
-                (IScheduleDay) _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
+            IScheduleDay scheduleDayAfter = (IScheduleDay) _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
             IList<DateOnly> days = _decider.DecideDates(scheduleDayAfter, scheduleDayBefore);
 
-            var changes = _rollbackService.ModificationCollection.ToList();
             foreach (var date in days)
             {
-                _resourceCalculateDelayer.CalculateIfNeeded(date, null, changes);
-                changes.Clear();
+                _resourceCalculateDelayer.CalculateIfNeeded(date, null);
             }
         }
 

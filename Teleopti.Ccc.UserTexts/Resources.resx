@@ -11687,4 +11687,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Send again</value>
     <comment>Send again (ie. shifttrade)</comment>
   </data>
+  <data name="FilterHourlyAvailability" xml:space="preserve">
+    <value>Filter Hourly Availability</value>
+    <comment>Caption button to Filter on hourly availability</comment>
+  </data>
+  <data name="HourlyAvailability" xml:space="preserve">
+    <value>Hourly Availability</value>
+    <comment>Caption dialog to filter hourly availability</comment>
+  </data>
 </root>

@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
                         removeDayOffFromMatrix(workingBitArray, originalBitArray, matrix, daysOffPreferences, movedDays);
                         _schedulePartModifyAndRollbackService.Modify(part);
-						_resourceOptimizationHelper.ResourceCalculateDate(changed.DateChanged, true, schedulingOptions.ConsiderShortBreaks, new List<IScheduleDay>{ changed.PrevoiousSchedule }, new List<IScheduleDay>());
+						_resourceOptimizationHelper.ResourceCalculateDate(changed.DateChanged, true, schedulingOptions.ConsiderShortBreaks);
 
                         changed.CurrentSchedule = scheduleDayPro.DaySchedulePart();
                         movedDays.Add(changed);
@@ -480,13 +480,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 				return null;
 
             IList<DateOnly> removedIllegalDates = _workTimeBackToLegalStateService.RemovedDays;
-        	IList<IScheduleDay> removedIllegalScheules = _workTimeBackToLegalStateService.RemovedSchedules;
-            //resource calculate removed days
+        	//resource calculate removed days
             foreach (DateOnly dateOnly in removedIllegalDates)
             {
 				bool considerShortBreaks = schedulingOptions.ConsiderShortBreaks;
-                _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, considerShortBreaks, removedIllegalScheules, new List<IScheduleDay>());
-				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly.AddDays(1), true, considerShortBreaks, removedIllegalScheules, new List<IScheduleDay>());
+                _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, considerShortBreaks);
+                if (!removedIllegalDates.Contains(dateOnly.AddDays(1)))
+                {
+                    _resourceOptimizationHelper.ResourceCalculateDate(dateOnly.AddDays(1), true, considerShortBreaks);
+                }
             }
 
             return removedIllegalDates;

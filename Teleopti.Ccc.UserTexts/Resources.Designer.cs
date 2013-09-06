@@ -8410,6 +8410,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter Hourly Availability.
+        /// </summary>
+        public static string FilterHourlyAvailability {
+            get {
+                return ResourceManager.GetString("FilterHourlyAvailability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter KPI&apos;s.
         /// </summary>
         public static string FilterKPIs {
@@ -9748,6 +9757,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Hour {
             get {
                 return ResourceManager.GetString("Hour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hourly Availability.
+        /// </summary>
+        public static string HourlyAvailability {
+            get {
+                return ResourceManager.GetString("HourlyAvailability", resourceCulture);
             }
         }
         

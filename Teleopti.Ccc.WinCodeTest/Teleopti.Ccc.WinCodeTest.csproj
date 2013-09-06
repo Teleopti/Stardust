@@ -348,6 +348,7 @@
     <Compile Include="Converters\DateTimeConverter\TimeSpanToDateTimeConverterTest.cs" />
     <Compile Include="Converters\ExtendDateTimePeriodConverterTest.cs" />
     <Compile Include="Converters\Layers\IsMoveAllLayersConverterTest.cs" />
+    <Compile Include="Converters\SimpleConverterTest.cs" />
     <Compile Include="Events\EventAggregatorModuleTest.cs" />
     <Compile Include="Events\EventAggregatorTest.cs" />
     <Compile Include="ExceptionHandler\ExceptionHandlerTest.cs" />

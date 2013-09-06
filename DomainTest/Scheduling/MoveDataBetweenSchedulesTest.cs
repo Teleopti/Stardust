@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         public void Setup()
         {
             newRules = NewBusinessRuleCollection.Minimum();
-            target = new MoveDataBetweenSchedules(newRules,new EmptyScheduleDayChangeCallback());
+            target = new MoveDataBetweenSchedules(newRules,new ResourceCalculationOnlyScheduleDayChangeCallback());
             destination = new ScheduleDictionary(new Scenario("dest scen"), new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 10)));
         }
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             var nfRule = new NewFailingRule();
             var nr = NewBusinessRuleCollection.Minimum();
             nr.Add(nfRule);
-            target =new MoveDataBetweenSchedules( nr,new EmptyScheduleDayChangeCallback());
+            target =new MoveDataBetweenSchedules( nr,new ResourceCalculationOnlyScheduleDayChangeCallback());
 
             IPersonAssignment assValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("sdf"),
                                                                             new Person(),

@@ -36,18 +36,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldResourceCalculateContainersToRemoveWhenModifiedIsMainShift()
 		{
-
-			IList<IScheduleDay> toRemove = new List<IScheduleDay> { _orgScheduleDay };
-			IList<IScheduleDay> toAdd = new List<IScheduleDay> { _modifiedScheduleDay };
-			
 			using(_mocks.Record())
 			{
-				Expect.Call(_modifiedScheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(_orgScheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_modifiedScheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
-				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_date).Repeat.Twice();
-				Expect.Call(_orgScheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date, false, false, toRemove, toAdd));
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_date);
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date, false, false));
 			}
 
 			using(_mocks.Playback())
@@ -59,17 +52,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldResourceCalculateContainersToRemoveWhenModifiedIsDayOff()
 		{
-			IList<IScheduleDay> toRemove = new List<IScheduleDay> { _orgScheduleDay };
-			IList<IScheduleDay> toAdd = new List<IScheduleDay>();
-
 			using (_mocks.Record())
 			{
-				Expect.Call(_modifiedScheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
-				Expect.Call(_orgScheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_modifiedScheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
-				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_date).Repeat.Twice();
-				Expect.Call(_orgScheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date, false, false, toRemove, toAdd));
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_date);
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date, false, false));
 			}
 
 			using (_mocks.Playback())

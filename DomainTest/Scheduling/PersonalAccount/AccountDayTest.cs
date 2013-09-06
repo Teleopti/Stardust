@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.PersonalAccount
 
             Expect.Call(_parent.AccountCollection()).Return(accounts);
             Expect.Call(newerAccountWithSameDate.StartDate).Return(_startDate);
-	        Expect.Call(_parent.Person).Return(PersonFactory.CreatePerson());
+			Expect.Call(_parent.Person).Return(PersonFactory.CreatePerson());
 
             _mocks.ReplayAll();
 

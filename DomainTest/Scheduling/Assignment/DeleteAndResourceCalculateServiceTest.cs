@@ -47,20 +47,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Expect.Call(dateOnlyAsDateTimePeriod2.DateOnly).Return(new DateOnly(2012, 1, 10));
 				Expect.Call(
 					() =>
-					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true, true,
-					                                                  new List<IScheduleDay> {_part1}, new List<IScheduleDay>()));
+					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true, true));
 				Expect.Call(
 					() =>
-					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1).AddDays(1), true, true,
-					                                                  new List<IScheduleDay>(), new List<IScheduleDay>()));
+					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1).AddDays(1), true, true));
 				Expect.Call(
 					() =>
-					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 10), true, true,
-					                                                  new List<IScheduleDay> {_part2}, new List<IScheduleDay>()));
+					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 10), true, true));
 				Expect.Call(
 					() =>
-					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 10).AddDays(1), true, true,
-					                                                  new List<IScheduleDay>(), new List<IScheduleDay>()));
+					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 10).AddDays(1), true, true));
 			}
 
 			IList<IScheduleDay> ret;

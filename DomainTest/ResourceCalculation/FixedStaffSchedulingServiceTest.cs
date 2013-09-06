@@ -124,10 +124,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 					_effectiveRestriction).Repeat.Any();
             Expect.Call(_scheduleService.FinderResults).Return(
                 new ReadOnlyCollection<IWorkShiftFinderResult>(new List<IWorkShiftFinderResult>()));
-		    Expect.Call(_schedulingResultStateHolder.Skills).Return(skills).Repeat.AtLeastOnce();
-#pragma warning disable 612,618
-			Expect.Call(()=>schedules.ExtractAllScheduleData(null)).IgnoreArguments();
-#pragma warning restore 612,618
 
 			_mocks.ReplayAll();
 
@@ -177,10 +173,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(part1, _schedulingOptions)).Return(_effectiveRestriction);
             Expect.Call(_scheduleService.FinderResults).Return(
                 new ReadOnlyCollection<IWorkShiftFinderResult>(new List<IWorkShiftFinderResult>()));
-		    Expect.Call(_schedulingResultStateHolder.Skills).Return(skills).Repeat.AtLeastOnce();
-#pragma warning disable 612,618
-			Expect.Call(() => schedules.ExtractAllScheduleData(null)).IgnoreArguments();
-#pragma warning restore 612,618
 			_mocks.ReplayAll();
 
             _schedulingOptions.UseShiftCategoryLimitations = false;

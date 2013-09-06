@@ -407,7 +407,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripStatusLabelScheduleTag.Name = "toolStripStatusLabelScheduleTag";
 			this.SetShortcut(this.toolStripStatusLabelScheduleTag, System.Windows.Forms.Keys.None);
 			this.toolStripStatusLabelScheduleTag.Size = new System.Drawing.Size(53, 21);
-			this.toolStripStatusLabelScheduleTag.Text = "fgsdgsd";
+			this.toolStripStatusLabelScheduleTag.Text = "...";
 			this.toolStripStatusLabelScheduleTag.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// toolStripStatusLabelContractTime

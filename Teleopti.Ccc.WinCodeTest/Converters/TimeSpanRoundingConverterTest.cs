@@ -48,5 +48,11 @@ namespace Teleopti.Ccc.WinCodeTest.Converters
             object value = _target.ConvertBack(null, null, null, null);
             Assert.AreEqual(DependencyProperty.UnsetValue, value);
         }
+
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void ShouldThrowOnWrongType()
+        {
+            _target.Convert(33, null, null, null);
+        }
     }
 }

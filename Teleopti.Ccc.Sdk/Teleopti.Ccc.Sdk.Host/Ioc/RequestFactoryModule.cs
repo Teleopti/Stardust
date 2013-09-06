@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Ioc
             builder.RegisterType<ShiftTradeRequestStatusChecker>().As<IBatchShiftTradeRequestStatusChecker>().InstancePerLifetimeScope();
             builder.RegisterType<SwapAndModifyService>().As<ISwapAndModifyService>().InstancePerDependency();
             builder.RegisterType<SwapService>().As<ISwapService>().InstancePerDependency();
-            builder.RegisterType<EmptyScheduleDayChangeCallback>().As<IScheduleDayChangeCallback>().InstancePerDependency();
+            builder.RegisterType<ResourceCalculationOnlyScheduleDayChangeCallback>().As<IScheduleDayChangeCallback>().InstancePerDependency();
             builder.RegisterType<SaveSchedulePartService>().As<ISaveSchedulePartService>().InstancePerDependency();
             builder.RegisterType<MessageBrokerEnablerFactory>().As<IMessageBrokerEnablerFactory>().InstancePerDependency();
         }

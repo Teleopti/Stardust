@@ -139,8 +139,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay1)).Return(_scheduleMatrixPro);
 				Expect.Call(_teamSteadyStateScheduleMatrixProFinder.MatrixPro(_matrixes, _scheduleDay2)).Return(_scheduleMatrixPro2);
 				Expect.Call(_scheduleDay2.Period).Return(_dateTimePeriod);
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_dateOnly, true, true, new List<IScheduleDay>(), new List<IScheduleDay> {_scheduleDay2}));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_dateOnly.AddDays(1), true, true, new List<IScheduleDay>(), new List<IScheduleDay> { _scheduleDay2 }));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_dateOnly, true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_dateOnly.AddDays(1), true, true));
 			}
 
 			using(_mocks.Playback())

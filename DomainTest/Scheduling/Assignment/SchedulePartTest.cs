@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IScheduleDay clone = (IScheduleDay)_target.Clone();
 			Assert.AreEqual(_target.PersonAbsenceCollection().Count, clone.PersonAbsenceCollection().Count);
-			Assert.AreEqual(_target.PersonAssignmentCollectionDoNotUse().Count, clone.PersonAssignmentCollectionDoNotUse().Count);
+			clone.PersonAssignment().Should().Not.Be.Null();
 			Assert.AreEqual(_target.PersonMeetingCollection().Count, clone.PersonMeetingCollection().Count);
 			Assert.AreEqual(_target.NoteCollection().Count, clone.NoteCollection().Count);
 			Assert.IsFalse(clone.FullAccess);
@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.Add(personAssignment);
 	        _target.CreateAndAddPersonalActivity(activity2, periodPersonalShift);
 
-			Assert.AreEqual(1,_target.PersonAssignmentCollectionDoNotUse().Count);
+			_target.PersonAssignment().Should().Not.Be.Null();
 			Assert.AreEqual(personAssignment,_target.PersonAssignment());
 			Assert.AreEqual(1, _target.PersonAssignment().PersonalLayers().Count());
 
@@ -343,10 +343,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTime end = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 			DateTimePeriod period = new DateTimePeriod(start, end);
 			_target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
-			Assert.AreEqual(0, _target.PersonAssignmentCollectionDoNotUse().Count);
+			_target.PersonAssignment().Should().Be.Null();
 			_target.CreateAndAddOvertime(activity, period, definitionSet);
 			Assert.AreEqual(period, _target.PersonAssignment().OvertimeLayers().Single().Period);
-			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse().Count);
+			_target.PersonAssignment().Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -412,7 +412,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.Add(personAssignment);
 			_target.CreateAndAddOvertime(activity, overtimePeriod, definitionSet);
 
-			var targetLayer = _target.PersonAssignmentCollectionDoNotUse().Single().OvertimeLayers().Single();
+			var targetLayer = _target.PersonAssignment().OvertimeLayers().Single();
 			targetLayer.Payload.Should().Be.SameInstanceAs(activity);
 			targetLayer.Period.Should().Be.EqualTo(overtimePeriod);
 			targetLayer.DefinitionSet.Should().Be.SameInstanceAs(definitionSet);
@@ -435,10 +435,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, definitionSet);
 			_target.Add(ass);
 
-			Assert.IsTrue(1 == _target.PersonAssignmentCollectionDoNotUse().Count);
+			_target.PersonAssignment().Should().Not.Be.Null();
 			_target.CreateAndAddOvertime(activity, period, definitionSet);
 			Assert.AreSame(ass, _target.PersonAssignment());
-			Assert.IsTrue(1 == _target.PersonAssignmentCollectionDoNotUse().Count);
+			_target.PersonAssignment().Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -458,7 +458,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, definitionSet);
 			_target.Add(ass);
 
-			Assert.IsTrue(1 == _target.PersonAssignmentCollectionDoNotUse().Count);
+			_target.PersonAssignment().Should().Not.Be.Null();
 			_target.CreateAndAddOvertime(activity, period, definitionSet);
 			_target.PersonAssignment().OvertimeLayers().Count().Should().Be.EqualTo(1);
 		}
@@ -494,7 +494,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																	ShiftCategoryFactory.CreateShiftCategory("test1"));
 			_target.AddMainShift(mainShift);
 			Assert.AreEqual(mainShift.ShiftCategory.Description.Name, _target.PersonAssignment().ShiftCategory.Description.Name);
-			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse().Count);
+			_target.PersonAssignment().Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -1409,13 +1409,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
  
 			Assert.AreEqual(1, _target.PersonAssignment().OvertimeLayers().Count());
 			_target.DeleteOvertime();
-			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse().Count);
+			_target.PersonAssignment().Should().Not.Be.Null();
 
 			_target = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000, 1, 1));
 			_target.CreateAndAddOvertime(activity, period, definitionSet);
 			Assert.AreEqual(1, _target.PersonAssignment().OvertimeLayers().Count());
 			_target.DeleteOvertime();
-			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse().Count);
+			_target.PersonAssignment().Should().Not.Be.Null();
 		}
 		
 		[Test]
@@ -1431,9 +1431,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTimePeriod period = new DateTimePeriod(start, end);
 
 			source.CreateAndAddOvertime(activity, period, definitionSet);
-			Assert.AreEqual(0, destination.PersonAssignmentCollectionDoNotUse().Count);
+			destination.PersonAssignment().Should().Be.Null();
 			((ExtractedSchedule)destination).MergeOvertime(source);
-			Assert.AreEqual(0, destination.PersonAssignmentCollectionDoNotUse().Count);
+			destination.PersonAssignment().Should().Be.Null();
 
 			PersonFactory.AddDefinitionSetToPerson(person2, definitionSet);
 			((ExtractedSchedule)destination).MergeOvertime(source);
@@ -1531,7 +1531,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.CreateAndAddPersonalActivity(activity, dateTimePeriod1);
 			_target.CreateAndAddPersonalActivity(activity, dateTimePeriod2);
 
-			Assert.AreEqual(1, _target.PersonAssignmentCollectionDoNotUse().Count);
+			_target.PersonAssignment().Should().Not.Be.Null();
 			Assert.AreEqual(2, _target.PersonAssignment().PersonalLayers().Count());
 			Assert.AreEqual(dateTimePeriod1, _target.PersonAssignment().PersonalLayers().First().Period);
 			Assert.AreEqual(dateTimePeriod2, _target.PersonAssignment().PersonalLayers().Last().Period);

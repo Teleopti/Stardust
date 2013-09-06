@@ -65,7 +65,6 @@ INNER JOIN mart.dim_scenario ds
 INNER JOIN mart.fact_schedule_preference f
 	ON f.date_id = dd.date_id
 	AND f.scenario_id = ds.scenario_id
-WHERE stg.business_unit_code = @business_unit_code
 
 INSERT INTO mart.fact_schedule_preference
 	(

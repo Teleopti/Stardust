@@ -116,6 +116,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		}
 
 		[Test]
+		public void ShouldPunishAndBoostIfNeeded()
+		{
+			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 5, 11, 13, 11);
+			double result = _target.PeriodValue(skillIntervalData, 15, true, true);
+			Assert.AreEqual(6.09 + 100000, result, 0.01);
+		}
+
+
+		[Test]
 		public void ShouldHandleZeroAdditionalResource()
 		{
 			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 5, 10, null, 11);

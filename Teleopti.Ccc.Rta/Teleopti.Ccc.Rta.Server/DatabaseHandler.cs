@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Data.SqlTypes;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Rta.Server
 		IActualAgentState LoadOldState(Guid personToLoad);
 		ConcurrentDictionary<string, List<RtaStateGroupLight>> StateGroups();
 		ConcurrentDictionary<Guid, List<RtaAlarmLight>> ActivityAlarms();
-		void AddOrUpdate(IEnumerable<IActualAgentState> states);
+		void AddOrUpdate(IList<IActualAgentState> states);
 		IList<ScheduleLayer> GetReadModel(Guid personId);
 		void AddNewRtaState(string stateCode, Guid platformTypeId);
 		IList<IActualAgentState> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId);
@@ -310,14 +309,17 @@ namespace Teleopti.Ccc.Rta.Server
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
 			MessageId = "0")]
-		public void AddOrUpdate(IEnumerable<IActualAgentState> states)
+		public void AddOrUpdate(IList<IActualAgentState> actualAgentStates)
 		{
+			if (!actualAgentStates.Any())
+				return;
+			
 			using (
 				var connection =
 					_databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
 			{
 				connection.Open();
-				foreach (var newState in states)
+				foreach (var newState in actualAgentStates)
 				{
 					var command = connection.CreateCommand();
 					command.CommandType = CommandType.StoredProcedure;

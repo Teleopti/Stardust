@@ -31,19 +31,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			foreach (var dateOnly in dates)
 			{
-				var toDelete = new List<IScheduleDay>();
-
-				foreach (var scheduleDay in daysToDelete)
+                if (daysToDelete.Any(scheduleDay => scheduleDay.DateOnlyAsPeriod.DateOnly == dateOnly))
 				{
-					if (scheduleDay.DateOnlyAsPeriod.DateOnly == dateOnly)
-					{
-						toDelete.Add(scheduleDay);
-					}
-				}
-
-				if (toDelete.Count > 0)
-				{
-					_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true, toDelete, new List<IScheduleDay>());
+					_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
 				}
 			}		
 		}
@@ -52,8 +42,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public void Rollback(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IScheduleDictionary scheduleDictionary)
 		{
 			var dates = new List<DateOnly>();
-			var modifiedDays = new List<IScheduleDay>();
-			var orgDays = new List<IScheduleDay>();
 
 			foreach (var modifiedSchedule in schedulePartModifyAndRollbackService.ModificationCollection.ToList())
 			{
@@ -61,59 +49,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				if (!dates.Contains(modifiedDate))
 					dates.Add(modifiedDate);
-
-				modifiedDays.Add(modifiedSchedule);
-
-				var scheduleRange = scheduleDictionary[modifiedSchedule.Person];
-				var orgDay = scheduleRange.ScheduledDay(modifiedDate);
-				orgDays.Add(orgDay);
 			}
 
 			schedulePartModifyAndRollbackService.Rollback();
 
 			foreach (var date in dates)
 			{
-				var toRemove = new List<IScheduleDay>();
-				var toAdd = new List<IScheduleDay>();
-
-				var toRemoveNextDay = new List<IScheduleDay>();
-				var toAddNextDay = new List<IScheduleDay>();
-
-				foreach (var modifiedDay in modifiedDays)
-				{
-					if (modifiedDay.DateOnlyAsPeriod.DateOnly == date && modifiedDay.HasProjection)
-					{
-						toAdd.Add(modifiedDay);
-
-						var modifiedPeriod = modifiedDay.Period;
-
-						if (modifiedPeriod.StartDateTime.Date != modifiedPeriod.EndDateTime.Date)
-							toAddNextDay.Add(modifiedDay);
-					}
-				}
-
-				foreach (var orgDay in orgDays)
-				{
-					if (orgDay.DateOnlyAsPeriod.DateOnly == date && orgDay.HasProjection)
-					{
-						toRemove.Add(orgDay);
-
-						var orgDayPeriod = orgDay.Period;
-
-						if (orgDayPeriod.StartDateTime.Date != orgDayPeriod.EndDateTime.Date)
-							toRemoveNextDay.Add(orgDay);
-					}
-				}
-
-				if (toRemove.Count > 0 || toAdd.Count > 0)
-				{
-					_resourceOptimizationHelper.ResourceCalculateDate(date, true, true, toRemove, toAdd);
-				}
-
-				if (toRemoveNextDay.Count > 0 || toAddNextDay.Count > 0)
-				{
-					_resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(1), true, true, toRemoveNextDay, toAddNextDay);
-				}
+				_resourceOptimizationHelper.ResourceCalculateDate(date, true, true);
+                if (!dates.Contains(date.AddDays(1)))
+                {
+                    _resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(1), true, true);
+                }
 			}
 		}
 	}

@@ -364,27 +364,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 					if (activities.Count() == 0)
 						permissionState = PermissionState.Broken;
 
-					//if(!activities.Any())
-					//    permissionState = PermissionState.Broken;	
 				}
-
-				//IActivity activity = null;
-				//if (preference.ActivityRestrictionCollection.Count > 0)
-				//{
-				//    activity = preference.ActivityRestrictionCollection[0].Activity;
-				//}
-
-				//var activities = visualLayerCollection.FilterLayers(activity);
-				//foreach (var layer in activities)
-				//{
-				//    if (activity != null)
-				//    {
-				//        if (!layer.Payload.Equals(preference.ActivityRestrictionCollection[0].Activity))
-				//        {
-				//            permissionState = PermissionState.Broken;
-				//        }
-				//    }
-				//}
             }
 
             return permissionState;

@@ -17,13 +17,13 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             get { return UserTexts.Resources.Meeting; }
         }
+			
+	    public override int VisualOrderIndex
+	    {
+				get { return 301; }
+	    }
 
-        protected override int OrderIndexBase
-        {
-            get { return 300; }
-        }
-		
-        public override bool IsMovePermitted()
+	    public override bool IsMovePermitted()
         {
             return false;
         }
