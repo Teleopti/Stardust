@@ -18,8 +18,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
 			var overnightFilter = isPeriodOvernight(filterEndTime);
 			foreach (var scheduleDay in scheduleDaysList)
 			{
-				var studentAvailabilityDay =
-					scheduleDay.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>().FirstOrDefault();
+				var studentAvailabilityDay = scheduleDay.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>().FirstOrDefault();
 				if (studentAvailabilityDay != null)
 				{
 					var restriction = studentAvailabilityDay.RestrictionCollection.FirstOrDefault();
@@ -27,10 +26,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
 					if (restriction != null)
 					{
 						var startTime = restriction.StartTimeLimitation.StartTime.GetValueOrDefault();
-						//var startTime = overtimeAvailability.StartTime.GetValueOrDefault();
-
 						var endTime = restriction.EndTimeLimitation.EndTime.GetValueOrDefault();
-						//var endTime = overtimeAvailability.EndTime.GetValueOrDefault();
 						var overnightShift = isPeriodOvernight(endTime);
 
 						if ((overnightShift && overnightFilter) || (!overnightShift && !overnightFilter))
