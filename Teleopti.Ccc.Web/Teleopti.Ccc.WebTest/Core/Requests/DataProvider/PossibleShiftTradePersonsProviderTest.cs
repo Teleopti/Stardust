@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Castle.Components.DictionaryAdapter;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -10,14 +9,12 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
@@ -39,6 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			myTeam = new Team();
 			myTeam.SetId(Guid.NewGuid());
 			currentUser = new Person();
+			currentUser.SetId(Guid.NewGuid());
 			currentUser.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today, myTeam));
 			shiftTradeValidator = MockRepository.GenerateMock<IShiftTradeLightValidator>();
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
@@ -48,6 +46,21 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			loggedOnUser.Expect(l => loggedOnUser.CurrentUser()).Return(currentUser);
 
 			target = new PossibleShiftTradePersonsProvider(personRepository, shiftTradeValidator, loggedOnUser, permissionProvider, personSelectorReadOnlyRepository);
+		}
+
+		[Test]
+		public void ShouldNotReturnMeAsPossiblePersonToTradeShiftWith()
+		{
+			var currentUserGuids = new PersonSelectorShiftTrade { PersonId = currentUser.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
+			var date = DateOnly.Today;
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, LoadOnlyMyTeam = true };
+
+			personSelectorReadOnlyRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, myTeam.Id))
+											.Return(new List<IAuthorizeOrganisationDetail> { currentUserGuids });
+
+			personRepository.Expect(rep => rep.FindPeople(new List<Guid>())).Return(new Collection<IPerson>());
+
+			target.RetrievePersons(data).Should().Be.Empty();
 		}
 
 		[Test]

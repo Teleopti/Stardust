@@ -38,8 +38,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				                 ? me.Period(shiftTradeArguments.ShiftTradeDate).Team.Id
 				                 : null;
 			var personForShiftTradeList = _personSelectorReadOnlyRepository.GetPersonForShiftTrade(shiftTradeArguments.ShiftTradeDate, myTeamid);
+
 			personForShiftTradeList = personForShiftTradeList.Where(
-				personGuid =>
+				personGuid => personGuid.PersonId != me.Id &&
 				_permissionProvider.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
 				                                                    shiftTradeArguments.ShiftTradeDate, personGuid)).ToList();
 
