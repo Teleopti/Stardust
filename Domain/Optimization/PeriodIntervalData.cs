@@ -3,18 +3,18 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public interface IStandardDeviationData
+	public interface IPeriodIntervalData
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		IDictionary<DateOnly, double?> Data { get; }
 		void Add(DateOnly day, double? standardDeviation);
 	}
 
-	public class StandardDeviationData : IStandardDeviationData
+	public class PeriodIntervalData : IPeriodIntervalData
 	{
 		public IDictionary<DateOnly, double?> Data { get; private set; }
 
-		public StandardDeviationData()
+		public PeriodIntervalData()
 		{
 			Data = new Dictionary<DateOnly, double?>();
 		}
