@@ -195,7 +195,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					                                                                             .UseMinimumPersons,
 				                                                                             schedulingOptions
 					                                                                             .UseMaximumPersons);
-				if (roleModelShift == null)
+			    if (bestShiftProjectionCache == null) continue;
+                if (roleModelShift == null)
 					roleModelShift = bestShiftProjectionCache;
 				_teamScheduling.DayScheduled += OnDayScheduled;
 				_teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache, selectedPeriod);

@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 
 		//	var scheduleDay = ScheduleDictionary[Person].ScheduledDay(FirstDayDateOnly);
 		//	scheduleDay.Add(_personAssignment);
-		//	ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+		//	ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 		//}
 
 		//protected override void TeardownForRepositoryTest()

@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
@@ -206,33 +204,5 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			UpdateShiftEditor();
 		}
-    }
-
-    public class SchedulerStateScheduleDayChangedCallback : IScheduleDayChangeCallback
-    {
-        private readonly IResourceCalculateDaysDecider _resourceCalculateDaysDecider;
-        private readonly ISchedulerStateHolder _schedulerStateHolder;
-
-        private IScheduleDay _dayBefore;
-
-        public SchedulerStateScheduleDayChangedCallback(IResourceCalculateDaysDecider resourceCalculateDaysDecider, ISchedulerStateHolder schedulerStateHolder)
-        {
-            _resourceCalculateDaysDecider = resourceCalculateDaysDecider;
-            _schedulerStateHolder = schedulerStateHolder;
-        }
-
-        public void ScheduleDayChanging(IScheduleDay partBefore)
-        {
-            _dayBefore = partBefore;
-        }
-
-        public void ScheduleDayChanged(IScheduleDay partAfter)
-        {
-            if (_dayBefore!=null && partAfter!=null)
-            {
-                _resourceCalculateDaysDecider.DecideDates(partAfter, _dayBefore).ForEach(
-                    _schedulerStateHolder.MarkDateToBeRecalculated);
-            }
-        }
     }
 }

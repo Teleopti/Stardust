@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
            return new RequestApprovalServiceScheduler(scheduleDictionary,
                                                                           scenario,
                                                                           swapAndModifyService, newBusinessRules,
-                                                                          new EmptyScheduleDayChangeCallback());
+                                                                          new ResourceCalculationOnlyScheduleDayChangeCallback());
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

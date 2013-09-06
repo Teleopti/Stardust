@@ -132,15 +132,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(new DateOnly(2010, 1, 2)).Repeat.Twice();
             	Expect.Call(
             		() =>
-            		_resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true, true, new List<IScheduleDay>(),
-            		                                                  new List<IScheduleDay>())).IgnoreArguments().Repeat.
+            		_resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true, true)).IgnoreArguments().Repeat.
             		AtLeastOnce();
                 Expect.Call(_workShiftBackToLegalStateService.Execute(_scheduleMatrix, schedulingOptions, _rollbackService))
                     .Return(true).Repeat.Once();
                 Expect.Call(_workShiftBackToLegalStateService.RemovedDays)
                     .Return(new List<DateOnly>());
-				Expect.Call(_workShiftBackToLegalStateService.RemovedSchedules)
-					.Return(new List<IScheduleDay>());
                 Expect.Call(_smartDayOffBackToLegalStateService.BuildSolverList(bitArrayAfterMove)).IgnoreArguments().Return(null).Repeat.Once();
                 Expect.Call(_smartDayOffBackToLegalStateService.Execute(null, 25)).IgnoreArguments()
                     .Return(true).Repeat.Once();
@@ -238,8 +235,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(new DateOnly(2010, 1, 1)).Repeat.Twice();
                 Expect.Call(scheduleDay9.Day)
                     .Return(new DateOnly(2010, 1, 2)).Repeat.Twice();
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 1, 1), true, true, new List<IScheduleDay>(), new List<IScheduleDay>())).IgnoreArguments().Repeat.AtLeastOnce();
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 1, 2), true, true)).IgnoreArguments().Repeat.AtLeastOnce();
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(1,1,11), true, true)).Repeat.AtLeastOnce();
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010,1,2), true, true)).Repeat.AtLeastOnce();
                 expectsBreakingDayOffRule(part, bitArrayAfterMove);
                 Expect.Call(_dayOffOptimizerConflictHandler.HandleConflict(schedulingOptions, new DateOnly()))
                     .Return(false);
@@ -315,20 +312,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 part.CreateAndAddDayOff(_dayOffTemplate);
                 part.DeleteDayOff();
                 Expect.Call(() => _rollbackService.Modify(part)).Repeat.Twice();
-				//Expect.Call(_decider.DecideDates(part, part))
-				//    .Return(new List<DateOnly> { DateOnly.MinValue }).Repeat.Twice();
                 Expect.Call(scheduleDay8.Day)
                     .Return(new DateOnly(2010, 1, 1)).Repeat.Twice();
                 Expect.Call(scheduleDay9.Day)
                     .Return(new DateOnly(2010, 1, 2)).Repeat.Twice();
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 1, 1), true, true, new List<IScheduleDay>(), new List<IScheduleDay>())).IgnoreArguments().Repeat.AtLeastOnce();
-				//Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 1, 2), true, true)).IgnoreArguments().Repeat.AtLeastOnce();
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 1, 1), true, true)).IgnoreArguments().Repeat.AtLeastOnce();
                 Expect.Call(_workShiftBackToLegalStateService.Execute(_scheduleMatrix, schedulingOptions, _rollbackService))
                     .Return(true).Repeat.Once();
                 Expect.Call(_workShiftBackToLegalStateService.RemovedDays)
                     .Return(new List<DateOnly>());
-				Expect.Call(_workShiftBackToLegalStateService.RemovedSchedules)
-				   .Return(new List<IScheduleDay>());
                 expectsBreakingDayOffRule(part, bitArrayAfterMove);
                 Expect.Call(_dayOffOptimizerConflictHandler.HandleConflict(schedulingOptions, new DateOnly()))
                     .Return(true);
@@ -461,8 +453,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(new DateOnly(2010, 1, 2)).Repeat.Twice();
 				Expect.Call(
 					() =>
-					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 1, 2), true, true,
-					                                                  new List<IScheduleDay> {part}, new List<IScheduleDay>()));
+					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 1, 2), true, true));
 				Expect.Call(_dayOffOptimizerValidator.Validate(dateOnly, _scheduleMatrix))
 					.Return(true);
 
@@ -471,9 +462,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(true);
 				Expect.Call(_workShiftBackToLegalStateService.RemovedDays)
 					.Return(new List<DateOnly> { DateOnly.Today });
-				Expect.Call(_workShiftBackToLegalStateService.RemovedSchedules).Return(new List<IScheduleDay> { part });
-				_resourceOptimizationHelper.ResourceCalculateDate(DateOnly.Today, true, true, new List<IScheduleDay> { part }, new List<IScheduleDay>());
-				_resourceOptimizationHelper.ResourceCalculateDate(DateOnly.Today.AddDays(1), true, true, new List<IScheduleDay> { part }, new List<IScheduleDay>());
+				_resourceOptimizationHelper.ResourceCalculateDate(DateOnly.Today, true, true);
+				_resourceOptimizationHelper.ResourceCalculateDate(DateOnly.Today.AddDays(1), true, true);
 
 				//reschedule
 				Expect.Call(_scheduleMatrix.Person)
@@ -584,8 +574,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(new DateOnly(2010, 1, 2)).Repeat.Twice();
 				Expect.Call(
 					() =>
-					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 1, 2), true, true,
-																	  new List<IScheduleDay> { part }, new List<IScheduleDay>()));
+					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 1, 2), true, true));
 				Expect.Call(_dayOffOptimizerValidator.Validate(dateOnly, _scheduleMatrix))
 					.Return(true);
 
@@ -594,9 +583,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(true);
 				Expect.Call(_workShiftBackToLegalStateService.RemovedDays)
 					.Return(new List<DateOnly> { DateOnly.Today });
-				Expect.Call(_workShiftBackToLegalStateService.RemovedSchedules).Return(new List<IScheduleDay> { part });
-				_resourceOptimizationHelper.ResourceCalculateDate(DateOnly.Today, true, true, new List<IScheduleDay> { part }, new List<IScheduleDay>());
-				_resourceOptimizationHelper.ResourceCalculateDate(DateOnly.Today.AddDays(1), true, true, new List<IScheduleDay> { part }, new List<IScheduleDay>());
+				_resourceOptimizationHelper.ResourceCalculateDate(DateOnly.Today, true, true);
+				_resourceOptimizationHelper.ResourceCalculateDate(DateOnly.Today.AddDays(1), true, true);
 
 				//reschedule
 				Expect.Call(_scheduleMatrix.Person)
@@ -715,8 +703,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(new DateOnly(2010, 1, 2)).Repeat.Twice();
 				Expect.Call(
 					() =>
-					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 1, 2), true, true,
-																	  new List<IScheduleDay> { part }, new List<IScheduleDay>()));
+					_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 1, 2), true, true));
 				Expect.Call(_dayOffOptimizerValidator.Validate(dateOnly, _scheduleMatrix))
 					.Return(true);
 
@@ -725,7 +712,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(true);
 				Expect.Call(_workShiftBackToLegalStateService.RemovedDays)
 					.Return(new List<DateOnly> ());
-				Expect.Call(_workShiftBackToLegalStateService.RemovedSchedules).Return(new List<IScheduleDay> ());
 
 				//reschedule and fail
 				Expect.Call(_scheduleMatrix.Person)

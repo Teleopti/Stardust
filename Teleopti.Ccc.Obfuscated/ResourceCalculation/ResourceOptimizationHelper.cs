@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
@@ -31,16 +32,11 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 		public void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
 		{
-			resourceCalculateDate(localDate, useOccupancyAdjustment, considerShortBreaks, Enumerable.Empty<IScheduleDay>(), Enumerable.Empty<IScheduleDay>());
-		}
-
-		public void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks, IEnumerable<IScheduleDay> toRemove, IEnumerable<IScheduleDay> toAdd)
-		{
-			resourceCalculateDate(localDate, useOccupancyAdjustment, considerShortBreaks, toRemove, toAdd);
+			resourceCalculateDate(localDate, useOccupancyAdjustment, considerShortBreaks);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.DateOnly.ToShortDateString")]
-		private void resourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks, IEnumerable<IScheduleDay> toRemove, IEnumerable<IScheduleDay> toAdd)
+		private void resourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
 		{
 			if (_stateHolder.TeamLeaderMode)
 				return;
@@ -50,33 +46,27 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 			using (PerformanceOutput.ForOperation("ResourceCalculate " + localDate.ToShortDateString()))
 			{
-				var relevantProjections =
-					ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.Container(
-						() => new ResourceCalculationDataContainer(_personSkillProvider));
-
-				if (!ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.InContext)
-				{
-					var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.Skills.Min(s => s.DefaultResolution));
-					relevantProjections = extractor.CreateRelevantProjectionList(_stateHolder.Schedules,
-					                                                             TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-						                                                             localDate.AddDays(-1), localDate.AddDays(1)));
-				}
-
-				addAndRemoveScheduleDays(relevantProjections, toRemove, toAdd);
+			    IResourceCalculationDataContainerWithSingleOperation relevantProjections;
+			    IDisposable context = null;
+			    if (ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.InContext)
+			    {
+			        relevantProjections = ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.Container();
+			    }
+			    else
+			    {
+			        var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.Skills.Min(s => s.DefaultResolution));
+			        relevantProjections = extractor.CreateRelevantProjectionList(_stateHolder.Schedules,
+			                                                                     TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+			                                                                         localDate.AddDays(-1), localDate.AddDays(1)));
+			        context = new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(relevantProjections);
+			    }
 
 				ResourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, considerShortBreaks);
-			}
-		}
 
-		private void addAndRemoveScheduleDays(IResourceCalculationDataContainerWithSingleOperation relevantProjections, IEnumerable<IScheduleDay> toRemove, IEnumerable<IScheduleDay> toAdd)
-		{
-			foreach (var scheduleDay in toRemove)
-			{
-				relevantProjections.RemoveScheduleDayFromContainer(scheduleDay,relevantProjections.MinSkillResolution);
-			}
-			foreach (var scheduleDay in toAdd)
-			{
-				relevantProjections.AddScheduleDayToContainer(scheduleDay, relevantProjections.MinSkillResolution);
+                if (context != null)
+                {
+                    context.Dispose();
+                }
 			}
 		}
 

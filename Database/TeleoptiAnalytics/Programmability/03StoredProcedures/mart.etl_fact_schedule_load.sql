@@ -66,9 +66,12 @@ SET @end_date_id	 =	(SELECT date_id FROM mart.dim_date WHERE @end_date = date_da
 DECLARE @business_unit_id int
 SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
 
-DELETE FROM mart.fact_schedule
+DELETE FROM fs
+FROM mart.fact_schedule fs
+INNER JOIN mart.dim_scenario ds
+	ON ds.scenario_id = fs.scenario_id
+	AND ds.business_unit_id = @business_unit_id
 WHERE shift_startdate_id between @start_date_id AND @end_date_id
-AND business_unit_id = @business_unit_id
 
 --special delete for newly created midnight shifts, where the next day is already occupied with existing shifts but not part of this ETL-run (=> #22882 - duplicates on some intervals)
 DELETE fs
@@ -94,7 +97,6 @@ INNER JOIN mart.fact_schedule fs
 	AND dp.person_id = fs.person_id
 	AND stg.interval_id = fs.interval_id
 	AND ds.scenario_id = fs.scenario_id
-WHERE fs.business_unit_id = @business_unit_id
 
 --another special delete for newly deleted midnight shifts, where the next day is now occupied with existing shifts overlapping the old (Mobily problems))
 DELETE fs
@@ -117,12 +119,9 @@ INNER JOIN mart.dim_scenario ds
 	ON stg.scenario_code = ds.scenario_code
 INNER JOIN mart.fact_schedule fs
 	ON dd.date_id = fs.schedule_date_id
-	
 	AND dp.person_id = fs.person_id
 	AND stg.interval_id = fs.interval_id
 	AND ds.scenario_id = fs.scenario_id
-	WHERE fs.business_unit_id = @business_unit_id
-		AND convert(smalldatetime,floor(convert(decimal(18,8),shift_start ))) = @start_date
 
 /*
 DELETE FROM mart.fact_schedule

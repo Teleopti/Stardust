@@ -167,15 +167,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return excludeDataOutsideDayOrShift(org, sorter);
 		}
 
-			//will be deleted!
-        public ReadOnlyCollection<IPersonAssignment> PersonAssignmentCollectionDoNotUse()
-        {
-	        var currentAssignment = PersonAssignment();
-	        return currentAssignment == null ? 
-						new List<IPersonAssignment>().AsReadOnly() : 
-						new List<IPersonAssignment> {currentAssignment}.AsReadOnly();
-        }
-
 	    public ReadOnlyCollection<IScheduleData> PersonRestrictionCollection()
         {
             // temporärt så länge båda finns
@@ -700,16 +691,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
             if (period != null)
             {
-                foreach (var personAss in source.PersonAssignmentCollectionDoNotUse())
-                {
-	                foreach (var layer in personAss.OvertimeLayers())
-	                {
-										if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
-										{
-											CreateAndAddOvertime(layer.Payload, layer.Period.MovePeriod(diff), layer.DefinitionSet);
-										}
-	                }
-                }
+	            var personAss = source.PersonAssignment();
+							if (personAss != null)
+							{
+								foreach (var layer in personAss.OvertimeLayers())
+								{
+									if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
+									{
+										CreateAndAddOvertime(layer.Payload, layer.Period.MovePeriod(diff), layer.DefinitionSet);
+									}
+								}
+							}
             }
         }
 
@@ -745,37 +737,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void CreateAndAddPersonalActivity(IActivity activity, DateTimePeriod period)
 		{
-			var closest = PersonAssignmentCollectionDoNotUse().FirstOrDefault();
-
-			foreach (IPersonAssignment personAssignment in PersonAssignmentCollectionDoNotUse())
-			{
-				if (personAssignment.Period.Intersect(period) || personAssignment.Period.AdjacentTo(period))
-				{
-					personAssignment.AddPersonalLayer(activity, period);
-					return;
-				}
-
-				if (closest != null)
-				{
-					var diff = personAssignment.Period.StartDateTime.Subtract(period.StartDateTime);
-					var closestDiff = closest.Period.StartDateTime.Subtract(period.StartDateTime);
-
-					if (Math.Abs(diff.TotalSeconds) < Math.Abs(closestDiff.TotalSeconds))
-						closest = personAssignment;
-				}
-
-			}
-
-			if (closest != null)
-			{
-				closest.AddPersonalLayer(activity, period);
-				return;
-			}
-
-			//TODO create inparameters to check on if to create new personassignment
-			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-			newPersonAssignment.AddPersonalLayer(activity, period);
-			Add(newPersonAssignment);
+			var ass = PersonAssignment(true);
+			ass.AddPersonalLayer(activity, period);
 		}
 
 			//will be removed
@@ -796,7 +759,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public void Restore(IScheduleDay previousState)
         {
-            Owner.Modify(ScheduleModifier.UndoRedo, previousState, null, new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+            Owner.Modify(ScheduleModifier.UndoRedo, previousState, null, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
         }
 
         public IMemento CreateMemento()

@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			
 			var scheduleDay = ScheduleDictionary[Person].ScheduledDay(date);
 			scheduleDay.Add(personAssignment);
-			ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+			ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 		}
 
 		protected void ModifyPersonAbsenceAccountInMemory()

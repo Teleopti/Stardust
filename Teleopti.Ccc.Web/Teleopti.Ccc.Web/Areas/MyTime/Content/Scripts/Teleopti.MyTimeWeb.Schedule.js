@@ -574,7 +574,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		    };
 
 			vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests);
-			ko.applyBindings(vm, $('#page')[0]);
+			
+		    ko.applyBindings(vm, $('#page')[0]);
 		},
 		LoadAndBindData: function () {
 			ajax.Ajax({

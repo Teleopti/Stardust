@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             internal DayPresenterNewTestClass(IScheduleViewBase view, ISchedulerStateHolder schedulerState, GridlockManager lockManager,
                 ClipHandler<IScheduleDay> clipHandler, SchedulePartFilter schedulePartFilter, IDayPresenterScaleCalculator scaleCalculator)
-                : base(view, schedulerState, lockManager, clipHandler, schedulePartFilter, new OverriddenBusinessRulesHolder(), new Domain.Scheduling.EmptyScheduleDayChangeCallback(), scaleCalculator, NullScheduleTag.Instance)
+                : base(view, schedulerState, lockManager, clipHandler, schedulePartFilter, new OverriddenBusinessRulesHolder(), new Domain.Scheduling.ResourceCalculationOnlyScheduleDayChangeCallback(), scaleCalculator, NullScheduleTag.Instance)
             {
                 
             }

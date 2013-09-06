@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -118,8 +117,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if (!tryScheduleFirstDay(firstDayDate, schedulingOptions, firstDayEffectiveRestriction, firstDayContractTime))
             {
-                safeCalculateDate(firstDayDate, originalFirstScheduleDay, resourceCalculateDelayer, _rollbackService.ModificationCollection.ToArray());
-                safeCalculateDate(secondDayDate, originalSecondScheduleDay, resourceCalculateDelayer, new List<IScheduleDay>());
+                safeCalculateDate(firstDayDate, originalFirstScheduleDay, resourceCalculateDelayer);
+                safeCalculateDate(secondDayDate, originalSecondScheduleDay, resourceCalculateDelayer);
                 return true;
             }
 
@@ -128,8 +127,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if (!tryScheduleSecondDay(secondDayDate, schedulingOptions, secondDayEffectiveRestriction, secondDayContractTime))
             {
-                safeCalculateDate(firstDayDate, originalFirstScheduleDay, resourceCalculateDelayer, _rollbackService.ModificationCollection.ToArray());
-                safeCalculateDate(secondDayDate, originalSecondScheduleDay, resourceCalculateDelayer, new List<IScheduleDay>());
+                safeCalculateDate(firstDayDate, originalFirstScheduleDay, resourceCalculateDelayer);
+                safeCalculateDate(secondDayDate, originalSecondScheduleDay, resourceCalculateDelayer);
                 return true;
             }
 
@@ -164,13 +163,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private void rollbackLockAndCalculate(DateOnly firstDayDate, DateOnly secondDayDate, IScheduleDay originalFirstScheduleDay, IScheduleDay originalSecondScheduleDay,IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 			_rollbackService.Rollback();
-            safeCalculateDate(firstDayDate, originalFirstScheduleDay, resourceCalculateDelayer, _rollbackService.ModificationCollection.ToArray());
-            safeCalculateDate(secondDayDate, originalSecondScheduleDay, resourceCalculateDelayer, new List<IScheduleDay>());
+            safeCalculateDate(firstDayDate, originalFirstScheduleDay, resourceCalculateDelayer);
+            safeCalculateDate(secondDayDate, originalSecondScheduleDay, resourceCalculateDelayer);
 		}
 
-        private void safeCalculateDate(DateOnly dayDate, IScheduleDay originalScheduleDay, IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleDay> rollbackDays)
+        private void safeCalculateDate(DateOnly dayDate, IScheduleDay originalScheduleDay, IResourceCalculateDelayer resourceCalculateDelayer)
         {
-            resourceCalculateDelayer.CalculateIfNeeded(dayDate, originalScheduleDay.ProjectionService().CreateProjection().Period(), rollbackDays);
+            resourceCalculateDelayer.CalculateIfNeeded(dayDate, originalScheduleDay.ProjectionService().CreateProjection().Period());
         }
 
 		private void lockDays(DateOnly firstDayDate, DateOnly secondDayDate)

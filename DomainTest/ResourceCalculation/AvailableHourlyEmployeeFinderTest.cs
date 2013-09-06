@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																	ShiftCategoryFactory.CreateShiftCategory("bla"));
 			IScheduleDay scheduleDay = _dic[person].ScheduledDay(_date);
 			scheduleDay.AddMainShift(mainShift);
-            _dic.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay> { scheduleDay }, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+            _dic.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay> { scheduleDay }, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 		}
 
 		private void scheduleExtraPerson(IPerson person)
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																	ShiftCategoryFactory.CreateShiftCategory("bla"));
 			IScheduleDay scheduleDay = _dic[person].ScheduledDay(_date.AddDays(-1));
 			scheduleDay.AddMainShift(mainShift);
-			_dic.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay> { scheduleDay }, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+			_dic.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay> { scheduleDay }, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 
 			start = DateTime.SpecifyKind(_date.Date.AddDays(1).AddHours(8), DateTimeKind.Utc);
 			end = DateTime.SpecifyKind(_date.Date.AddDays(1).AddHours(16), DateTimeKind.Utc);
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 																	ShiftCategoryFactory.CreateShiftCategory("bla"));
 			scheduleDay = _dic[person].ScheduledDay(_date.AddDays(1));
 			scheduleDay.AddMainShift(mainShift);
-			_dic.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay> { scheduleDay }, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+			_dic.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay> { scheduleDay }, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 		}
 
 		private IPerson createFixedPerson()
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				IStudentAvailabilityDay studentAvailabilityDay = new StudentAvailabilityDay(extraPerson, _date, new List<IStudentAvailabilityRestriction> { restriction });
 				IScheduleDay scheduleDay = _dic[extraPerson].ScheduledDay(_date);
 				scheduleDay.Add(studentAvailabilityDay);
-                _dic.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay> { scheduleDay }, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+                _dic.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay> { scheduleDay }, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 			}
 
 			return extraPerson;

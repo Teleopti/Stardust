@@ -15,26 +15,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var partCollection = current.ScheduledDayCollection(new DateOnlyPeriod(dateToCheck.AddDays(-3),
 																				dateToCheck.AddDays(3)));
 			foreach (IScheduleDay scheduleDay in partCollection)
-            {
-                foreach (IPersonAssignment ass in scheduleDay.PersonAssignmentCollectionDoNotUse())
-                {
-                    if (ass.ShiftCategory != null)
-                    {
-                        if (ass.Period.StartDateTime <= approxUtc && ass.Period.EndDateTime >= approxUtc)
-                        {
-                            return new DateTimePeriod(approxUtc, approxUtc);
-                        }
-                        if (ass.Period.EndDateTime < approxUtc)
-                        {
-                            assBefore = ass;
-                        }
-                        if (approxUtc < ass.Period.StartDateTime)
-                        {
-                            assAfter = ass;
-                            break;
-                        }
-                    }
-                }
+			{
+				var ass = scheduleDay.PersonAssignment();
+				if (ass != null && ass.ShiftCategory != null)
+				{
+					if (ass.Period.StartDateTime <= approxUtc && ass.Period.EndDateTime >= approxUtc)
+					{
+						return new DateTimePeriod(approxUtc, approxUtc);
+					}
+					if (ass.Period.EndDateTime < approxUtc)
+					{
+						assBefore = ass;
+					}
+					if (approxUtc < ass.Period.StartDateTime)
+					{
+						assAfter = ass;
+					}
+				}
             }
             
             DateTime earliestStartTime = endTimeOnAssignmentBefore(current, assBefore);

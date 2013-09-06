@@ -529,6 +529,7 @@
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
+    <Compile Include="Scheduling\TeamBlock\IntervalDataEntendedMedianCalculator.cs" />
     <Compile Include="ResourceCalculation\TransformResourcesFromStorageCommand.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayer.cs" />
@@ -579,7 +580,7 @@
     <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataMapper.cs" />
     <Compile Include="Scheduling\DayOffTemplateSorter.cs" />
     <Compile Include="Scheduling\DeletedDescription.cs" />
-    <Compile Include="Scheduling\EmptyScheduleDayChangeCallback.cs" />
+    <Compile Include="Scheduling\ResourceCalculationOnlyScheduleDayChangeCallback.cs" />
     <Compile Include="ApplicationLayer\Events\FullDayAbsenceAddedEvent.cs" />
     <Compile Include="Scheduling\ISkillLoaderDecider.cs" />
     <Compile Include="Scheduling\LoadScheduleByPersonSpecification.cs" />
