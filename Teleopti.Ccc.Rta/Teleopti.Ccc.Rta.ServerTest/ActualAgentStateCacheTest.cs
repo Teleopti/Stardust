@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -69,6 +67,13 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_target.AddAgentStateToCache(_agentState);
 			_target.AddAgentStateToCache(olderState);
 			_target.batchedAgents[_personId].StateId.Should().Be.EqualTo(stateId);
+		}
+
+		[Test]
+		public void FlushCacheToDataBase_NoBatchedAgents_ReturnNoAction()
+		{
+			_target.FlushCacheToDatabase();
+			_databaseHandler.AssertWasNotCalled(d => d.AddOrUpdate(null), a => a.IgnoreArguments());
 		}
 
 		[Test]
