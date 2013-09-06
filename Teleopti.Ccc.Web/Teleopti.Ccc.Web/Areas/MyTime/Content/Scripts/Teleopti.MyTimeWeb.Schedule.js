@@ -167,8 +167,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return;
 			}
 			self.setOvertimeAvailabilityViewModel();
-			self.requestViewModel().DateFrom(moment(self.initialRequestDay.date()));
-			self.requestViewModel().DateTo(moment(self.initialRequestDay.date()));
+			self.requestViewModel().DateFrom(moment(self.initialRequestDay.date(), self.requestViewModel().DateFormat()));
+			self.requestViewModel().DateTo(moment(self.initialRequestDay.date(), self.requestViewModel().DateFormat()));
 			if (self.requestViewModel().LoadRequestData) {
 				self.requestViewModel().LoadRequestData(self.initialRequestDay);
 			}
