@@ -174,7 +174,8 @@ namespace Teleopti.Interfaces.Domain
 				result = (result*397) ^ ScheduledNextId.GetHashCode();
 				result = (result*397) ^ AlarmId.GetHashCode();
 				result = (result*397) ^ StateId.GetHashCode();
-				result = (result*397) ^ ScheduledNext.GetHashCode();
+				if (ScheduledNext != null)
+					result = (result*397) ^ ScheduledNext.GetHashCode();
 				result = (result*397) ^ NextStart.GetHashCode();
 				return result;
 			}
