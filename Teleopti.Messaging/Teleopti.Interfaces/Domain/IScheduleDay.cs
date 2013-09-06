@@ -137,18 +137,6 @@ namespace Teleopti.Interfaces.Domain
 				/// </remarks>
 				bool FullAccess { get; }
 
-
-				/// <summary>
-				/// Gets a list of cloned person assignments.
-				/// To pick the most relevant assignment use AssignmentHighZOrder instead
-				/// </summary>
-				/// <returns></returns>
-				/// <remarks>
-				/// Created by: rogerkr
-				/// Created date: 2008-05-23
-				/// </remarks>
-				ReadOnlyCollection<IPersonAssignment> PersonAssignmentCollectionDoNotUse();
-
 				/// <summary>
 				/// Get a list of cloned personMeetings
 				/// </summary>

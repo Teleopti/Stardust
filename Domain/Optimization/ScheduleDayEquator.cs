@@ -53,25 +53,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (current.SignificantPart() == SchedulePartView.None && original.SignificantPart() == SchedulePartView.MainShift)
 				return false;
 
-            for (int assignmentIndex = 0; assignmentIndex < original.PersonAssignmentCollectionDoNotUse().Count; assignmentIndex++)
-            {
-                if(current.PersonAssignmentCollectionDoNotUse().Count  > 0)
-                {
-					IEditableShift originalMainShift =_editableShiftMapper.CreateEditorShift(original.PersonAssignmentCollectionDoNotUse()[assignmentIndex]);
-					IEditableShift currentMainShift =_editableShiftMapper.CreateEditorShift( current.PersonAssignmentCollectionDoNotUse()[assignmentIndex]);
+	        var originalAss = original.PersonAssignment();
+	        if (originalAss == null)
+		        return false;
+	        var currentAss = current.PersonAssignment();
+					if (currentAss != null)
+					{
+						IEditableShift originalMainShift = _editableShiftMapper.CreateEditorShift(originalAss);
+						IEditableShift currentMainShift = _editableShiftMapper.CreateEditorShift(currentAss);
+						if (originalMainShift == null || currentMainShift == null)
+							return false;
 
-                    if (originalMainShift == null || currentMainShift == null)
-                        return false;
-
-                    if (!MainShiftEquals(originalMainShift, currentMainShift))
-                        return false;
-                }
-                
-            }
+						if (!MainShiftEquals(originalMainShift, currentMainShift))
+							return false;
+					}
             return true;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public bool MainShiftEquals(IEditableShift original, IEditableShift current)
         {
             if(original.ShiftCategory.Id != current.ShiftCategory.Id)
