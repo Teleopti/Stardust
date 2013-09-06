@@ -16,6 +16,9 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 ##============
 
 #Add IIS admin module
+
+Write-Host 'Put you break point here'
+
 Load-SnapIn -ModuleName "WebAdministration"
 
 $Ntml = "Ntlm"
