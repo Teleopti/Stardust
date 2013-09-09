@@ -557,30 +557,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\Restriction\RestrictionEditor.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\Restriction\RestrictionEditorTabbedView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\Restriction\RestrictionEditorView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\Restriction\RestrictionEditorGridView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Controls\ScheduleViewer\ScheduleDictionaryViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1089,18 +1065,6 @@
     </Compile>
     <Compile Include="Controls\Requests\Views\HandlePersonRequestView.xaml.cs">
       <DependentUpon>HandlePersonRequestView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Restriction\RestrictionEditor.xaml.cs">
-      <DependentUpon>RestrictionEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Restriction\RestrictionEditorTabbedView.xaml.cs">
-      <DependentUpon>RestrictionEditorTabbedView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Restriction\RestrictionEditorView.xaml.cs">
-      <DependentUpon>RestrictionEditorView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\Restriction\RestrictionEditorGridView.xaml.cs">
-      <DependentUpon>RestrictionEditorGridView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ScheduleViewer\Models\ScheduleRangeViewModel.cs" />
     <Compile Include="Controls\ScheduleViewer\Models\ScheduleViewerScheduleDayViewModel.cs" />

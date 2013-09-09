@@ -418,6 +418,7 @@
     <Compile Include="Intraday\DayLayerModelComparer.cs" />
     <Compile Include="Intraday\DispatcherWrapper.cs" />
     <Compile Include="Intraday\LoadStatisticsAndActualHeadsCommand.cs" />
+    <Compile Include="Intraday\OnEventMeetingMessageCommand.cs" />
     <Compile Include="Intraday\OpenIntradayTodayCommand.cs" />
     <Compile Include="Intraday\ReforecastModel.cs" />
     <Compile Include="Intraday\ReforecastWizardPages.cs" />
@@ -431,13 +432,13 @@
     <Compile Include="Meetings\MeetingMousePositionDecider.cs" />
     <Compile Include="Meetings\MeetingMover.cs" />
     <Compile Include="Meetings\Overview\OverlappingAppointmentsHelper.cs" />
+    <Compile Include="PeopleAdmin\Commands\AddPersonEnableCommand.cs" />
     <Compile Include="PeopleAdmin\Commands\SendInstantMessageCommand.cs" />
     <Compile Include="PeopleAdmin\Commands\SendInstantMessageEnableCommand.cs" />
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodMustHavePreferenceComparer.cs" />
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodSeasonalityComparer.cs" />
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodTimeOverrideComparer.cs" />
     <Compile Include="PeopleAdmin\DayOfWeekDisplay.cs" />
-    <Compile Include="PeopleAdmin\IPersonTimeZoneView.cs" />
     <Compile Include="PeopleAdmin\IScheduleNavigator.cs" />
     <Compile Include="PeopleAdmin\IPersonFinderView.cs" />
     <Compile Include="PeopleAdmin\Models\PersonFinderModel.cs" />
@@ -451,7 +452,6 @@
     <Compile Include="PeopleAdmin\Commands\PersonFinderPreviousCommand.cs" />
     <Compile Include="PeopleAdmin\PersonFinderSettings.cs" />
     <Compile Include="PeopleAdmin\PersonSkillStringParser.cs" />
-    <Compile Include="PeopleAdmin\PersonTimeZonePresenter.cs" />
     <Compile Include="PeopleAdmin\SameUserCredentialOnOtherChecker.cs" />
     <Compile Include="Permissions\Commands\LoadRolesAndPersonsOnDataRangeLightCommand.cs" />
     <Compile Include="Permissions\Commands\LoadRolesAndPersonsOnDataLightCommand.cs" />
@@ -532,6 +532,7 @@
     <Compile Include="Presentation\IReportSettingsScheduleTimeVersusTargetTimeView.cs" />
     <Compile Include="Presentation\ReportSettingsScheduleTimeVersusTargetTimePresenter.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimePerActivity.cs" />
+    <Compile Include="Scheduling\AbsenceMerger.cs" />
     <Compile Include="Scheduling\AgentPreferenceAddCommand.cs" />
     <Compile Include="Scheduling\AgentPreferenceCanCreateResult.cs" />
     <Compile Include="Scheduling\AgentPreferenceData.cs" />
@@ -979,19 +980,6 @@
     <Compile Include="Scheduling\RestrictionSummary\SingleAgentRestrictionModel.cs" />
     <Compile Include="Scheduling\RestrictionSummary\SingleAgentRestrictionPresenter.cs" />
     <Compile Include="Scheduling\RestrictionSummary\WeekHeaderCellData.cs" />
-    <Compile Include="Scheduling\Restriction\AvailabilityRestrictionViewModel.cs" />
-    <Compile Include="Scheduling\Restriction\AvailableRestrictionViewModel.cs" />
-    <Compile Include="Scheduling\Restriction\Commands\AddPreferenceRestrictionCommandModel.cs" />
-    <Compile Include="Scheduling\Restriction\Commands\AddStudentAvailabilityCommandModel.cs" />
-    <Compile Include="Scheduling\Restriction\Commands\RestrictionEditorRoutedCommands.cs" />
-    <Compile Include="Scheduling\Restriction\ReadOnlyRestrictionViewModel.cs" />
-    <Compile Include="Scheduling\Restriction\ILimitationViewModel.cs" />
-    <Compile Include="Scheduling\Restriction\IRestrictionAltered.cs" />
-    <Compile Include="Scheduling\Restriction\IRestrictionViewModel.cs" />
-    <Compile Include="Scheduling\Restriction\LimitationViewModel.cs" />
-    <Compile Include="Scheduling\Restriction\PreferenceRestrictionViewModel.cs" />
-    <Compile Include="Scheduling\Restriction\RotationRestrictionViewModel.cs" />
-    <Compile Include="Scheduling\Restriction\WorkTimeLimitationAdapter.cs" />
     <Compile Include="Scheduling\ScheduleReporting\PdfFontManager.cs" />
     <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDetail.cs" />
     <Compile Include="Scheduling\ScheduleReporting\ShiftsPerDayToPdfManager.cs" />
@@ -1090,8 +1078,6 @@
     <Compile Include="Scheduling\Panels\ILengthToTimeCalculator.cs" />
     <Compile Include="Scheduling\Panels\LengthToTimeCalculator.cs" />
     <Compile Include="Scheduling\PeriodPresenter.cs" />
-    <Compile Include="Scheduling\Restriction\RestrictionEditorViewModel.cs" />
-    <Compile Include="Scheduling\Restriction\RestrictionViewModel.cs" />
     <Compile Include="Scheduling\SchedulePartFilter.cs" />
     <Compile Include="Scheduling\SchedulePresenterBase.cs" />
     <Compile Include="Scheduling\WeekPresenter.cs" />

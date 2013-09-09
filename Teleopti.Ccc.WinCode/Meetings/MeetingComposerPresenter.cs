@@ -18,14 +18,14 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Meetings
 {
-    public class MeetingComposerPresenter : IMessageBrokerModule, IDisposable
+    public class MeetingComposerPresenter : IMessageBrokerIdentifier, IDisposable
     {
         private ISchedulerStateHolder _schedulerStateHolder;
         private readonly IMeetingComposerView _view;
         private readonly IMeetingViewModel _model;
         private readonly DateOnly _minDate = new DateOnly(DateHelper.MinSmallDateTime);
         private readonly DateOnly _maxDate = new DateOnly(DateHelper.MaxSmallDateTime);
-        private readonly Guid _moduleId = Guid.NewGuid();
+        private readonly Guid _instanceId = Guid.NewGuid();
         protected static CommonNameDescriptionSetting CommonNameDescription;
         private bool _canClose = true;
         private bool _isDirty;
@@ -312,9 +312,9 @@ namespace Teleopti.Ccc.WinCode.Meetings
             _view.Close();
         }
 
-        public Guid ModuleId
+        public Guid InstanceId
         {
-            get { return _moduleId; }
+            get { return _instanceId; }
         }
 
         public ISchedulerStateHolder SchedulerStateHolder

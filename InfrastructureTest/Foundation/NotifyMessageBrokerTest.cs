@@ -92,58 +92,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             }
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void VerifySendMessageWithDatePeriodAndMainReferenceWithProxy()
-        {
-            UnitOfWork.PersistAll();
-            DateTimePeriod period = new DateTimePeriod(2000, 1, 1, 2001, 1, 1);
-            IPerson per = PersonFactory.CreatePerson("for test");
-            new Repository(UnitOfWork).Add(per);
-            UnitOfWork.PersistAll();
-            UnitOfWork.Clear();
-            per = Session.Load<Person>(per.Id);
-            IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
-            new Repository(UnitOfWork).Add(scenario);
-            IPersonAbsence pAbs = PersonAbsenceFactory.CreatePersonAbsence(per, scenario, period);
-            new Repository(UnitOfWork).Add(pAbs.Layer.Payload);
-            UnitOfWork.PersistAll();
-
-            IPersonAbsence obj = pAbs;
-            IEventMessage mess1 = mocks.StrictMock<IEventMessage>();
-            new Repository(uow).Add(pAbs);
-
-            using (mocks.Record())
-            {
-                using (mocks.Ordered())
-                {
-                    Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(period.StartDateTime, period.EndDateTime, Guid.Empty, per.Id.Value, typeof(Person), obj.Id.Value, typeof(PersonAbsence), DomainUpdateType.Insert))
-                    .Return(mess1);
-					messBroker.SendEventMessages(null, Guid.Empty, null);
-					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1 }));
-
-                    Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(period.StartDateTime, period.EndDateTime, Guid.Empty, per.Id.Value, typeof(Person), obj.Id.Value, typeof(PersonAbsence), DomainUpdateType.Delete))
-                    .Return(mess1);
-					messBroker.SendEventMessages(null, Guid.Empty, null);
-					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1 }));
-                }
-            }
-            using (mocks.Playback())
-            {
-                uow.PersistAll();
-                //delete
-                new Repository(uow).Remove(obj);
-                uow.PersistAll();
-            }
-
-            //cleanup
-            new Repository(UnitOfWork).Remove(pAbs.Layer.Payload);
-            new Repository(UnitOfWork).Remove(per);
-            new Repository(UnitOfWork).Remove(scenario);
-            UnitOfWork.PersistAll();
-        }
-
         [Test]
         public void VerifyNotSentToMessageBrokerWhenNotInitialized()
         {
@@ -154,104 +102,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             NotifyMessageBroker notifier = new NotifyMessageBroker(messBroker);
             notifier.Notify(Guid.Empty, new List<IRootChangeInfo> { rootChangeInfo });
             mocks.VerifyAll();
-        }
-
-        [Test]
-        public void VerifyRootWithoutDeleteSentToMessageBroker()
-        {
-            var person = PersonFactory.CreatePerson("Person1");
-            var scenario = ScenarioFactory.CreateScenarioAggregate();
-            new PersonRepository(UnitOfWork).Add(person);
-            new ScenarioRepository(UnitOfWork).Add(scenario);
-            UnitOfWork.PersistAll();
-            var obj = new PersonAssignment(person, scenario, new DateOnly(2010,1,1));
-            
-            IEventMessage mess1 = mocks.StrictMock<IEventMessage>();
-            IEventMessage mess2 = mocks.StrictMock<IEventMessage>();
-
-            new Repository(uow).Add(obj);
-
-            Assert.IsNotInstanceOf<IDeleteTag>(obj);
-            using (mocks.Record())
-            {
-                using (mocks.Ordered())
-                {
-                    Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(new DateTime(2010, 1, 1), new DateTime(2010, 1, 2), Guid.Empty, person.Id.Value, typeof(Person), obj.Id.Value, obj.GetType(), DomainUpdateType.Insert))
-                                        .Return(mess1);
-					messBroker.SendEventMessages(null, Guid.Empty, null);
-					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1 }));
-
-                    Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(new DateTime(2010, 1, 1), new DateTime(2010, 1, 2), Guid.Empty, person.Id.Value, typeof(Person), obj.Id.Value, obj.GetType(), DomainUpdateType.Delete))
-                                        .Return(mess2);
-					messBroker.SendEventMessages(null, Guid.Empty, null);
-					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess2 }));
-                }
-            }
-            using (mocks.Playback())
-            {
-                //insert
-                uow.PersistAll();
-
-                //delete
-                new Repository(uow).Remove(obj);
-                uow.PersistAll();
-            }
-
-            //clean up
-            new PersonRepository(UnitOfWork).Remove(person);
-            new ScenarioRepository(UnitOfWork).Remove(scenario);
-            UnitOfWork.PersistAll();
-        }
-
-        [Test]
-        public void VerifySendMessageWithDatePeriodAndMainReference()
-        {
-            UnitOfWork.PersistAll();
-            DateTimePeriod period = new DateTimePeriod(2000,1,1,2001,1,1);
-            IPerson per = PersonFactory.CreatePerson("for test");
-            IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
-            new Repository(UnitOfWork).Add(per);
-            new Repository(UnitOfWork).Add(scenario);
-            IPersonAbsence pAbs = PersonAbsenceFactory.CreatePersonAbsence(per, scenario, period);
-            new Repository(UnitOfWork).Add(pAbs.Layer.Payload);
-            UnitOfWork.PersistAll();
-
-            IPersonAbsence obj = pAbs;
-            IEventMessage mess1 = mocks.StrictMock<IEventMessage>();
-            new Repository(uow).Add(pAbs);
-
-            using (mocks.Record())
-            {
-                using (mocks.Ordered())
-                {
-                    Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(period.StartDateTime, period.EndDateTime, Guid.Empty, per.Id.Value, typeof(Person), obj.Id.Value, obj.GetType(), DomainUpdateType.Insert))
-                    .Return(mess1);
-					messBroker.SendEventMessages(null, Guid.Empty, null);
-					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1 }));
-
-                    Expect.Call(messBroker.IsInitialized).Return(true);
-                    Expect.Call(messBroker.CreateEventMessage(period.StartDateTime, period.EndDateTime, Guid.Empty, per.Id.Value, typeof(Person), obj.Id.Value, obj.GetType(), DomainUpdateType.Delete))
-                    .Return(mess1);
-					messBroker.SendEventMessages(null, Guid.Empty, null);
-					LastCall.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Anything(), List.Equal(new[] { mess1 }));
-                }
-            }
-            using (mocks.Playback())
-            {
-                uow.PersistAll();
-                //delete
-                new Repository(uow).Remove(obj);
-                uow.PersistAll();
-            }
-
-            //cleanup
-            new Repository(UnitOfWork).Remove(pAbs.Layer.Payload);
-            new Repository(UnitOfWork).Remove(per);
-            new Repository(UnitOfWork).Remove(scenario);
-            UnitOfWork.PersistAll();
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -371,14 +221,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IEventMessage mess1 = mocks.StrictMock<IEventMessage>();
             IEventMessage mess2 = mocks.StrictMock<IEventMessage>();
             IEventMessage mess3 = mocks.StrictMock<IEventMessage>();
-            IMessageBrokerModule module = mocks.StrictMock<IMessageBrokerModule>();
+            IMessageBrokerIdentifier identifier = mocks.StrictMock<IMessageBrokerIdentifier>();
             new Repository(uow).Add(obj);
 
             using (mocks.Record())
             {
                 using (mocks.Ordered())
                 {
-                    Expect.Call(module.ModuleId).Return(moduleId).Repeat.Any();
+                    Expect.Call(identifier.InstanceId).Return(moduleId).Repeat.Any();
                     Expect.Call(messBroker.IsInitialized).Return(true);
                     Expect.Call(messBroker.CreateEventMessage(moduleId, obj.Id.Value, obj.GetType(), DomainUpdateType.Insert))
                                         .Return(mess1);
@@ -401,16 +251,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             using (mocks.Playback())
             {
                 //insert
-                uow.PersistAll(module);
+                uow.PersistAll(identifier);
 
                 //update
                 obj = new ActivityRepository(uow).Load(obj.Id.Value);
                 obj.Description = new Description("changed");
-                uow.PersistAll(module);
+                uow.PersistAll(identifier);
 
                 //delete
                 new Repository(uow).Remove(obj);
-                uow.PersistAll(module);
+                uow.PersistAll(identifier);
             }
         }
 

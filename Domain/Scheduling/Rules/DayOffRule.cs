@@ -107,19 +107,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             IPersonAssignment returnVal = null;
             foreach (IScheduleDay scheduleDay in partCollection)
             {
-                foreach (var assignment in scheduleDay.PersonAssignmentCollectionDoNotUse())
-                {
-                    if(assignment.Period.StartDateTime.Date == dayOff.Anchor.Date)
-                        continue;
-                    if (assignment.Period.StartDateTime < dayOff.Anchor)
-                    {
-                        returnVal = assignment;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+	            var assignment = scheduleDay.PersonAssignment();
+							if (assignment != null)
+							{
+								if (assignment.Period.StartDateTime.Date == dayOff.Anchor.Date)
+									continue;
+								if (assignment.Period.StartDateTime < dayOff.Anchor)
+								{
+									returnVal = assignment;
+								}								
+							}
             }
             
             return returnVal;
@@ -129,13 +126,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         {
             foreach (IScheduleDay scheduleDay in partCollection)
             {
-                foreach (var assignment in scheduleDay.PersonAssignmentCollectionDoNotUse())
-                {
-                    if (assignment.Period.StartDateTime.Date == dayOff.Anchor.Date)
-                        continue;
-                    if (assignment.Period.StartDateTime > dayOff.Anchor)
-                        return assignment;
-                }
+	            var assignment = scheduleDay.PersonAssignment();
+							if (assignment != null)
+							{
+								if (assignment.Period.StartDateTime.Date == dayOff.Anchor.Date)
+									continue;
+								if (assignment.Period.StartDateTime > dayOff.Anchor)
+									return assignment;								
+							}
             }
             return null;
         }

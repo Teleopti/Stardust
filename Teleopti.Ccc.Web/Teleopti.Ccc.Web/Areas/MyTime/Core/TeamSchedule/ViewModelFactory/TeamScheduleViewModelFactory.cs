@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			return _mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(domainData);
 		}
 
-		public IEnumerable<ISelectOption> CreateTeamOptionsViewModel(DateOnly date)
+		public IEnumerable<ISelectOption> CreateTeamOrGroupOptionsViewModel(DateOnly date)
 		{
 			return _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages) ?
 				       createGroupPagesOptions(date) : createTeamOptions(date);
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 						{
 							p.PageName = Resources.ResourceManager.GetString(p.PageName.Substring(2));
 						}
-						return new SelectSelectGroup {text = p.PageName, PageId = p.PageId};
+						return new SelectGroup {text = p.PageName, PageId = p.PageId};
 					}).OrderBy(x => x.text).ToArray();
 
 
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			return groupPages;
 		}
 
-		private void constructOptions(DateOnly date, SelectSelectGroup page, IEnumerable<ReadOnlyGroupDetail> details, Guid pageId, string prefix)
+		private void constructOptions(DateOnly date, SelectGroup page, IEnumerable<ReadOnlyGroupDetail> details, Guid pageId, string prefix)
 		{
 			var detailsByGroup = from d in details
 			                     where d.PageId == pageId

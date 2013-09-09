@@ -75,8 +75,7 @@
 						access="field"
 						type="string"
 						length="50"
-						not-null="true"
-						update="false"/>
+						not-null="true"/>
 
 			<property name="culture"
                 access="field"

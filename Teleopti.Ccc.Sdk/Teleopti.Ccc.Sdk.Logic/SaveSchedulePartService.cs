@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.Logic
             IEnumerable<IBusinessRuleResponse> invalidList;
             
             invalidList = dic.Modify(ScheduleModifier.Scheduler,
-                                        scheduleDay, newBusinessRuleCollection, new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(scheduleTag));
+                                        scheduleDay, newBusinessRuleCollection, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(scheduleTag));
 
             if (invalidList != null && invalidList.Any())
 			{

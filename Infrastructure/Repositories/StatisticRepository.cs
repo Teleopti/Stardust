@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 const string stringQuery = @"[RTA].[rta_addorupdate_actualagentstate] @PersonId=:personId,  @StateCode=:stateCode, @PlatformTypeId=:platform, 
 					@State=:state, @StateId=:stateId, @Scheduled=:scheduled, @ScheduledId=:scheduledId, @StateStart=:stateStart, @ScheduledNext=:scheduledNext,  
 					@ScheduledNextId=:scheduledNextId, @NextStart=:nextStart, @AlarmName=:alarmName, @AlarmId=:alarmId, @Color=:color, @AlarmStart=:alarmStart, 
-					@StaffingEffect=:staffingEffect, @ReceivedTime=:receivedTime";
+					@StaffingEffect=:staffingEffect, @ReceivedTime=:receivedTime, @BatchId=:batchId, @OriginalDataSourceId=:originalDataSourceId";
                 session(uow).CreateSQLQuery(stringQuery)
                     .SetGuid("personId", actualAgentState.PersonId)
                     .SetString("stateCode", actualAgentState.StateCode)
@@ -340,6 +340,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .SetDateTime("alarmStart", actualAgentState.AlarmStart)
                     .SetDouble("staffingEffect", actualAgentState.StaffingEffect)
 					.SetDateTime("receivedTime", actualAgentState.ReceivedTime)
+					.SetParameter("batchId", actualAgentState.BatchId)
+					.SetString("originalDataSourceId", actualAgentState.OriginalDataSourceId)
                     .SetTimeout(300)
                     .ExecuteUpdate();
             }

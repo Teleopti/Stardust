@@ -1,45 +1,33 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.AuditHistory
 {
     public interface IAuditHistoryScheduleDayCreator
     {
-        IScheduleDay Create(IScheduleDay currentScheduleDay,  IEnumerable<IPersistableScheduleData> newData);
+        void Apply(IScheduleDay currentScheduleDay,  IEnumerable<IPersistableScheduleData> newData);
     }
 
     public class AuditHistoryScheduleDayCreator : IAuditHistoryScheduleDayCreator
     {
-        public IScheduleDay Create(IScheduleDay currentScheduleDay,  IEnumerable<IPersistableScheduleData> newData)
+        public void Apply(IScheduleDay currentScheduleDay,  IEnumerable<IPersistableScheduleData> newData)
         {
-            var resultingDay = (ExtractedSchedule)currentScheduleDay.Clone();
-	        var personAssignment = currentScheduleDay.PersonAssignment();
-					if (personAssignment != null)
-					{
-						resultingDay.RemovePersonAssignment(personAssignment);
-					}
-            foreach (var persistableScheduleData in currentScheduleDay.PersistableScheduleDataCollection())
-            {
-                if(persistableScheduleData is IPersonAbsence)
-                    resultingDay.Remove(persistableScheduleData);
-            }
+					currentScheduleDay.Clear<IPersonAbsence>();
+					var resultingAss = currentScheduleDay.PersonAssignment(true);
+					resultingAss.Clear();
 
-            foreach (var persistableScheduleData in newData)
-            {
-				if (persistableScheduleData is IPersonAbsence)
-				{
-					if (persistableScheduleData.Period.ToDateOnlyPeriod(currentScheduleDay.TimeZone).Contains(currentScheduleDay.DateOnlyAsPeriod.DateOnly))
-						resultingDay.Add(persistableScheduleData);
-					continue;
-				}
-				if(persistableScheduleData.Period.ToDateOnlyPeriod(currentScheduleDay.TimeZone).StartDate != currentScheduleDay.DateOnlyAsPeriod.DateOnly)
-					continue;
-                if(persistableScheduleData is IPersonAssignment)
-                    resultingDay.Add(persistableScheduleData);
-            }
-
-            return resultingDay;
+	        foreach (var scheduleData in newData)
+	        {
+		        var newAss = scheduleData as IPersonAssignment;
+						if (newAss != null)
+						{
+							resultingAss.FillWithDataFrom(newAss);
+						}
+						else
+						{
+							currentScheduleDay.Add(scheduleData.CreateTransient());
+						}
+	        }
         }
     }
 }

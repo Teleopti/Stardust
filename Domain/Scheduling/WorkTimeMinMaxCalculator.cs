@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (person == null) throw new ArgumentNullException("person");
 			var result = new WorkTimeMinMaxCalculationResult();
 
-			var personPeriod = person.PersonPeriods(new DateOnlyPeriod(date, date)).SingleOrDefault();
+			var personPeriod = person.Period(date);
 			if (personPeriod == null)
 				return null;
 

@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages)).Return(false);
 			var target = new TeamScheduleViewModelFactory(null, teamProvider, permissionProvider, null);
 
-			var result = target.CreateTeamOptionsViewModel(DateOnly.Today);
+			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today);
 
 			result.Select(t => t.text).Should().Have.SameSequenceAs("site/team");
 		}
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			groupingReadOnlyRepository.Stub(x => x.AvailableGroups(DateOnly.Today)).IgnoreArguments().Return(new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail { PageId = pageId, GroupName = "team", GroupId = teamId } });
 			var target = new TeamScheduleViewModelFactory(null, null, permissionProvider, groupingReadOnlyRepository);
 
-			var result = target.CreateTeamOptionsViewModel(DateOnly.Today) as IEnumerable<ISelectGroup>;
+			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today) as IEnumerable<ISelectGroup>;
 			result.FirstOrDefault().children.FirstOrDefault().id.Should().Be.EqualTo(teamId.ToString());
 			result.FirstOrDefault().children.FirstOrDefault().text.Should().Be.EqualTo("team");
 			result.FirstOrDefault().text.Should().Be.EqualTo("Business Hierarchy");
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			groupingReadOnlyRepository.Stub(x => x.AvailableGroups(DateOnly.Today)).IgnoreArguments().Return(new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail { PageId = pageId, GroupName = "full time", GroupId = teamId } });
 			var target = new TeamScheduleViewModelFactory(null, null, permissionProvider, groupingReadOnlyRepository);
 
-			var result = target.CreateTeamOptionsViewModel(DateOnly.Today) as IEnumerable<ISelectGroup>;
+			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today) as IEnumerable<ISelectGroup>;
 			result.FirstOrDefault().children.FirstOrDefault().id.Should().Be.EqualTo(teamId.ToString());
 			result.FirstOrDefault().children.FirstOrDefault().text.Should().Be.EqualTo("Contract/full time");
 			result.FirstOrDefault().text.Should().Be.EqualTo("Contract");

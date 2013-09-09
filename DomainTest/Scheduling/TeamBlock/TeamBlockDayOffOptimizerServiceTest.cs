@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
 		private ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private ITeamDayOffModifier _teamDayOffModifier;
-		private IBlockSteadyStateValidator _teamBlockSteadyStateValidator;
+		private ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
 		private ITeamBlockClearer _teamBlockClearer;
 		private ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
 		private IOptimizationPreferences _optimizationPreferences;
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_dayOffOptimizationDecisionMakerFactory = _mocks.StrictMock<IDayOffOptimizationDecisionMakerFactory>();
 			_safeRollbackAndResourceCalculation = _mocks.StrictMock<ISafeRollbackAndResourceCalculation>();
 			_teamDayOffModifier = _mocks.StrictMock<ITeamDayOffModifier>();
-			_teamBlockSteadyStateValidator = _mocks.StrictMock<IBlockSteadyStateValidator>();
+			_teamTeamBlockSteadyStateValidator = _mocks.StrictMock<ITeamBlockSteadyStateValidator>();
 			_teamBlockClearer = _mocks.StrictMock<ITeamBlockClearer>();
 			_restrictionOverLimitValidator = _mocks.StrictMock<ITeamBlockRestrictionOverLimitValidator>();
 			_optimizationPreferences = new OptimizationPreferences();
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			                                              _periodValueCalculatorForAllSkills,
 			                                              _dayOffOptimizationDecisionMakerFactory,
 			                                              _safeRollbackAndResourceCalculation, _teamDayOffModifier,
-			                                              _teamBlockSteadyStateValidator, _teamBlockClearer,
+			                                              _teamTeamBlockSteadyStateValidator, _teamBlockClearer,
 														  _restrictionOverLimitValidator, _teamBlockMaxSeatChecker);
 		}
 
@@ -368,7 +368,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																  _schedulingOptions.BlockFinderTypeForAdvanceScheduling, false, _matrixList))
 			      .Return(_teamBlockInfo);
 
-			Expect.Call(_teamBlockSteadyStateValidator.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).Return(false);
+			Expect.Call(_teamTeamBlockSteadyStateValidator.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).Return(false);
 			Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
 			Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1), _schedulingOptions,
 			                                                     new DateOnlyPeriod(DateOnly.MinValue,

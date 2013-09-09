@@ -20,7 +20,7 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
         </button>
         <span data-bind="if: IsSaveAsNewTemplate()">
             <span id="Template-name-section">
-                <input id="Template-name-input" class="input" type="text" placeholder="@Resources.NewTemplateName" data-bind="value: NewTemplateName"/>
+                <input class="preference-template-name input" type="text" placeholder="@Resources.NewTemplateName" data-bind="value: NewTemplateName"/>
                 <button id="Preference-extended-save-template" class="btn btn-mini btn-primary" data-bind="click: SaveAsNewTemplate">@Resources.Save</button>
             </span>
         </span>
@@ -47,8 +47,10 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
         <td>
             <table class="table-condensed">
                 <tr>
-                    <td></td>
-                    <td colspan="2">
+                    <td>
+                        <i class="icon-edit" title="@Resources.Preference"></i>
+                    </td>
+                    <td colspan="3">
                         <span title="@Resources.Preference">
                             <select id="Preference-Picker" data-bind="select2: { value: PreferenceId, formatResult: FormatPreferencesOption, formatSelection: FormatPreferencesOption }">
                                 <option value="" data-preference-extended="true"></option>
@@ -63,7 +65,7 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                 </tr>
                 <tr class="form-inline" data-bind="if: IsTimeInputVisible">
                     <td>
-                        <i class="icon-step-backward"></i>
+                        <i class="icon-step-backward" title="@Resources.StartTime"></i>
                     </td>
                     <td>
                         <div class="input-append bootstrap-timepicker" title="@Resources.EarliestStartTime">
@@ -71,22 +73,26 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                             <span class="add-on"><i class="icon-time"></i></span>
                         </div>
                     </td>
+                    <td></td>
                     <td>
                         <div class="input-append bootstrap-timepicker" title="@Resources.LatestStartTime">
                             <input type="text" class="preference-start-time-max input-small" data-bind="timepicker: LatestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
                             <span class="add-on"><i class="icon-time"></i></span>
                         </div>
                     </td>
+                    <td></td>
                 </tr>
                 <tr class="form-inline" data-bind="if: IsTimeInputVisible">
                     <td>
-                        <i class="icon-step-forward"></i>
+                        <i class="icon-step-forward" title="@Resources.EndTime"></i>
                     </td>
                     <td>
                         <div class="input-append bootstrap-timepicker" title="@Resources.EarliestEndTime">
                             <input type="text" class="preference-end-time-min input-small" data-bind="timepicker: EarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
                             <span class="add-on"><i class="icon-time"></i></span>
                         </div>
+                    </td>
+                    <td>
                         <input type="checkbox" class="preference-end-time-min-next-day" data-bind="checked: NextDayMin, enable: EarliestEndTimeNextDayToggleEnabled" title="@Resources.NextDay" />  
                     </td>
                     <td>
@@ -94,15 +100,17 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                             <input type="text" class="preference-end-time-max input-small" data-bind="timepicker: LatestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
                             <span class="add-on"><i class="icon-time"></i></span>
                         </div>
+                    </td>
+                    <td>
                         <input type="checkbox" class="preference-end-time-max-next-day" data-bind="checked: NextDayMax, enable: LatestEndTimeNextDayToggleEnabled" title="@Resources.NextDay" />  
                     </td>
                 </tr>
                 <tr class="form-inline" data-bind="if: IsTimeInputVisible">
                     <td>
-                        <i class="icon-resize-horizontal"></i>
+                        <i class="icon-resize-horizontal" title="@Resources.WorkTime"></i>
                     </td>
                     <td>
-                        <select class="preference-extended-work-time-min input-small" data-bind="value: MinimumWorkTime" title="@Resources.MinWorkTime">
+                        <select class="preference-extended-work-time-min width130" data-bind="value: MinimumWorkTime" title="@Resources.MinWorkTime">
                             <option value=""></option>
                             @foreach (var timeSpan in timeLengths)
                             {
@@ -110,8 +118,9 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                             }
                         </select>
                     </td>
+                    <td></td>
                     <td>
-                        <select class="preference-extended-work-time-max input-small" data-bind="value: MaximumWorkTime" title="@Resources.MaxWorkTime">
+                        <select class="preference-extended-work-time-max width130" data-bind="value: MaximumWorkTime" title="@Resources.MaxWorkTime">
                             <option value=""></option>
                             @foreach (var timeSpan in timeLengths)
                             {
@@ -119,13 +128,19 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                             }
                         </select>
                     </td>
+                    <td></td>
                 </tr>
             </table>
         </td>
+        <td class="width10"></td>
+        <td class="td-vertical-divider"></td>
+        <td class="width10"></td>
         <td style="vertical-align: top;" data-bind="if: IsTimeInputVisible">
             <table class="preference-activity-section table-condensed">
                 <tr>
-                    <td></td>
+                    <td>
+                        <i class="icon-tasks" title="@Resources.Activity"></i>
+                    </td>
                     <td colspan="2">
                         <span title="@Resources.Activity">
                             <select id="Preference-extended-activity-Picker" data-bind="select2: { value: ActivityPreferenceId, formatResult: FormatPreferencesOption, formatSelection: FormatPreferencesOption }">
@@ -141,7 +156,7 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                 </tr>
                 <tr class="form-inline" data-bind="visible: EnableActivityTimeEditing">
                     <td>
-                        <i class="icon-step-backward"></i>
+                        <i class="icon-step-backward" title="@Resources.StartTime"></i>
                     </td>
                     <td>
                         <div class="input-append bootstrap-timepicker" title="@Resources.EarliestStartTime">
@@ -158,7 +173,7 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                 </tr>
                 <tr class="form-inline" data-bind="visible: EnableActivityTimeEditing">
                     <td>
-                        <i class="icon-step-forward"></i>
+                        <i class="icon-step-forward" title="@Resources.EndTime"></i>
                     </td>
                     <td>
                         <div class="input-append bootstrap-timepicker" title="@Resources.EarliestEndTime">
@@ -175,10 +190,10 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                 </tr>
                 <tr class="form-inline" data-bind="visible: EnableActivityTimeEditing">
                     <td>
-                        <i class="icon-resize-horizontal"></i>
+                        <i class="icon-resize-horizontal" title="@Resources.WorkTime"></i>
                     </td>
                     <td>
-                        <select class="preference-activity-extended-work-time-min input-small" data-bind="value: ActivityMinimumTime" title="@Resources.MinWorkTime">
+                        <select class="preference-activity-extended-work-time-min width130" data-bind="value: ActivityMinimumTime" title="@Resources.MinWorkTime">
                             <option value="">&nbsp;</option>
                             @foreach (var timeSpan in timeLengths)
                             {
@@ -187,7 +202,7 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                         </select>
                     </td>
                     <td>
-                        <select class="preference-activity-extended-work-time-max input-small" data-bind="value: ActivityMaximumTime" title="@Resources.MaxWorkTime">
+                        <select class="preference-activity-extended-work-time-max width130" data-bind="value: ActivityMaximumTime" title="@Resources.MaxWorkTime">
                             <option value="">&nbsp;</option>
                             @foreach (var timeSpan in timeLengths)
                             {

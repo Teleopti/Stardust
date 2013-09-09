@@ -68,15 +68,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnTeamsAsJson()
 		{
-			var teams = new[] {new SelectSelectGroup()};
+			var teams = new[] {new SelectGroup()};
 			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
-			viewModelFactory.Stub(x => x.CreateTeamOptionsViewModel(DateOnly.Today)).Return(teams);
+			viewModelFactory.Stub(x => x.CreateTeamOrGroupOptionsViewModel(DateOnly.Today)).Return(teams);
 
 			var target = new TeamScheduleController(viewModelFactory, null);
 
 			var result = target.Teams(DateOnly.Today);
 
-			var data = result.Data as IEnumerable<SelectSelectGroup>;
+			var data = result.Data as IEnumerable<SelectGroup>;
 			data.Should().Have.SameValuesAs(teams);
 		}
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			target.Teams(null);
 
-			viewModelFactory.AssertWasCalled(x => x.CreateTeamOptionsViewModel(DateOnly.Today));
+			viewModelFactory.AssertWasCalled(x => x.CreateTeamOrGroupOptionsViewModel(DateOnly.Today));
 		}
 	}
 }

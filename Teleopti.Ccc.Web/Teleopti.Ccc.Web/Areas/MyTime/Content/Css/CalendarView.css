@@ -88,7 +88,7 @@
 
 .calendarview-week li.non-editable{background-color: #eaeaea; border-bottom: none;}
 .calendarview-week li.non-editable .day-header-text{background-color: #eaeaea; color: white; text-shadow: none;}
-.calendarview-week li.non-editable .day-content-text{color: #eaeaea; text-shadow: none;}
+.calendarview-week li.non-editable .day-content-text{color: black; text-shadow: none;}
 .calendarview-week li.non-editable .preference-text{color: #eaeaea; text-shadow: none;}
 .calendarview-week li.non-editable .extended-indication{ opacity: 0.3;}
 .calendarview-week li.non-editable .dayoff{ opacity: 0.3;}

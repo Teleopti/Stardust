@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_mocks.ReplayAll();
 			var personMeeting = createPersonMeeting(_period);
 			_layerWithPayload = personMeeting.ToLayer();
-			_target = new MeetingLayerViewModel(null, personMeeting,null);
+			_target = new MeetingLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), personMeeting,null);
 			testRunner = new CrossThreadTestRunner();
 		}
 

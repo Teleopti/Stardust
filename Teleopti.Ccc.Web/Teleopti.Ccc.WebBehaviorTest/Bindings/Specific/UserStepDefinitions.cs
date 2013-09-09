@@ -1,12 +1,9 @@
 using System;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
-using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Interfaces.Domain;
 
@@ -524,7 +521,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		{
 			var team = new AnotherSitesTeam();
 			UserFactory.User().Setup(team);
-			UserFactory.User().Setup(new PersonPeriod(team.TheTeam, DateTime.Today.AddDays(1)));
+			UserFactory.User().Setup(new PersonPeriod(team.TheTeam, DateOnlyForBehaviorTests.TestToday.AddDays(1)));
 		}
 
 		[Given(@"I have a shift bag with start times (.*) to (.*) and end times (.*) to (.*)")]

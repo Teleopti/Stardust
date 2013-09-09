@@ -22,22 +22,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 {
     internal class SchedulerMeetingHelper
     {
-        private readonly IMessageBrokerModule _messageBrokerModule;
+        private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
         private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SchedulerMeetingHelper"/> class.
         /// </summary>
-        /// <param name="messageBrokerModule">The message broker module.</param>
+        /// <param name="messageBrokerIdentifier">The message broker module.</param>
         /// <param name="schedulerStateHolder">The scheduler state holder.</param>
         /// <remarks>
         /// Created by: robink
         /// Created date: 2009-10-26
         /// </remarks>
-        internal SchedulerMeetingHelper(IMessageBrokerModule messageBrokerModule, ISchedulerStateHolder schedulerStateHolder)
+        internal SchedulerMeetingHelper(IMessageBrokerIdentifier messageBrokerIdentifier, ISchedulerStateHolder schedulerStateHolder)
         {
-            _messageBrokerModule = messageBrokerModule;
+            _messageBrokerIdentifier = messageBrokerIdentifier;
             _schedulerStateHolder = schedulerStateHolder;
         }
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         meetingRepository.Remove(meeting);
                     if (!modifiedMeetings.Contains(meeting)) modifiedMeetings.Add(meeting);
                 }
-                unitOfWork.PersistAll(_messageBrokerModule);
+                unitOfWork.PersistAll(_messageBrokerIdentifier);
             }
             foreach (var meeting in modifiedMeetings)
             {
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 IMeetingRepository meetingRepository = _repositoryFactory.CreateMeetingRepository(unitOfWork);
                 meetingRepository.Remove(meetingToRemove);
-                unitOfWork.PersistAll(_messageBrokerModule);
+                unitOfWork.PersistAll(_messageBrokerIdentifier);
             }
             NotifyModificationOccured(meetingToRemove, true);
         }

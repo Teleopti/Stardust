@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var schedulePeriod = _matrixConverter.SourceMatrix.SchedulePeriod;
 			int targetDaysoff;
-			IList<IScheduleDay> dayOffDays = new List<IScheduleDay>();
+			IList<IScheduleDay> dayOffDays;
 			if (!_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysoff, out dayOffDays))
 				return false;
 
@@ -174,6 +174,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IList<DateOnly> toResourceCalculate =
 				_rollbackService.ModificationCollection.Select(scheduleDay => scheduleDay.DateOnlyAsPeriod.DateOnly).ToList();
 			_rollbackService.Rollback();
+
 			foreach (DateOnly dateOnly1 in toResourceCalculate)
 			{
 			    var currentScheduleDay = _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly1).DaySchedulePart();
@@ -293,7 +294,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private IEnumerable<DateOnly> removeIllegalWorkTimeDays(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			_workTimeBackToLegalStateService.Execute(matrix, schedulingOptions, rollbackService);
-			IList<DateOnly> removedIllegalDates = _workTimeBackToLegalStateService.RemovedDays;
+			var removedIllegalDates = _workTimeBackToLegalStateService.RemovedDays;
 			//resource calculate removed days
 			foreach (DateOnly dateOnly in removedIllegalDates)
 			{

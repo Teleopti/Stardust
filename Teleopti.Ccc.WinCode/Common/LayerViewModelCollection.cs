@@ -32,14 +32,15 @@ namespace Teleopti.Ccc.WinCode.Common
 
         private TimeSpan _interval = TimeSpan.FromMinutes(15); //Default
         private IScheduleDay _part;
-        private IRemoveLayerFromSchedule _removeService;
+        private readonly IRemoveLayerFromSchedule _removeService;
 	    private readonly IReplaceLayerInSchedule _replaceService;
-	    private IEventAggregator _eventAggregator;
+	    private readonly IEventAggregator _eventAggregator;
         private readonly ICreateLayerViewModelService _createLayerViewModelService;
-        private ObservableCollection<LayerGroupViewModel> _groups = new ObservableCollection<LayerGroupViewModel>();
+        private readonly ObservableCollection<LayerGroupViewModel> _groups = new ObservableCollection<LayerGroupViewModel>();
+	    private readonly HashSet<ILayerViewModel> _layersThatShouldBeUpdated = new HashSet<ILayerViewModel>();
 
 
-		public LayerViewModelCollection(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, IRemoveLayerFromSchedule removeService, IReplaceLayerInSchedule replaceService)
+	    public LayerViewModelCollection(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, IRemoveLayerFromSchedule removeService, IReplaceLayerInSchedule replaceService)
         {
             _eventAggregator = eventAggregator;
             _createLayerViewModelService = createLayerViewModelService;
@@ -103,7 +104,7 @@ namespace Teleopti.Ccc.WinCode.Common
         }
 
 
-		public void RemoveActivity(ILayerViewModel sender, ILayer<IActivity> activityLayer, IScheduleDay scheduleDay)
+		public void RemoveActivity(ILayerViewModel sender, IShiftLayer activityLayer, IScheduleDay scheduleDay)
 		{
 			_removeService.Remove(scheduleDay, activityLayer);
 			CreateProjectionViewModels(scheduleDay);
@@ -227,11 +228,27 @@ namespace Teleopti.Ccc.WinCode.Common
 
         public void MoveAllLayers(ILayerViewModel sender, TimeSpan timeSpanToMove)
         {
+			ShouldBeUpdated(sender);
             foreach (ILayerViewModel model in this.Where(l => l.CanMoveAll))
             {
-                if ((model.ShouldBeIncludedInGroupMove(sender)) && (model != sender)) model.Period = model.Period.MovePeriod(timeSpanToMove);
+                if ((model.ShouldBeIncludedInGroupMove(sender)))
+                {
+					ShouldBeUpdated(model);
+	                if (model != sender)
+	                {
+		                model.Period = model.Period.MovePeriod(timeSpanToMove);
+	                }
+                }
             }
         }
+
+		public void ShouldBeUpdated(ILayerViewModel layerViewModel)
+		{
+			//if (!_layersThatShouldBeUpdated.Contains(layerViewModel))
+			//{
+				_layersThatShouldBeUpdated.Add(layerViewModel);
+			//}
+		}
 
         public void LayerMovedVertically(ILayerViewModel sender)
         {
@@ -273,6 +290,13 @@ namespace Teleopti.Ccc.WinCode.Common
 				_replaceService.Replace(scheduleDay, layer, sender.Payload as IAbsence, sender.Period);
 	    }
 
-	   
+	    public void UpdateAllMovedLayers()
+	    {
+		    foreach (var layerViewModel in _layersThatShouldBeUpdated)
+		    {
+			    layerViewModel.UpdateModel();
+		    }
+			_layersThatShouldBeUpdated.Clear();
+	    }
     }
 }

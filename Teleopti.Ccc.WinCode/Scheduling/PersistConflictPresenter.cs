@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				if (databaseVersion == null)
                 {
 					var scheduleRange = ((ScheduleRange)_model.ScheduleDictionary[originalVersion.Person]);
-					scheduleRange.SolveConflictBecauseOfExternalDeletion(originalVersion.Id.Value, discardMyChanges); 
+					scheduleRange.SolveConflictBecauseOfExternalDeletion(originalVersion.Id.GetValueOrDefault(), discardMyChanges); 
                 }
                 else
                 {
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 return UserTexts.Resources.StudentAvailability;
 	        if (conflict is IPublicNote)
 		        return UserTexts.Resources.PublicNoteColon;
-	        if (conflict is IScheduleTag)
+	        if (conflict is IAgentDayScheduleTag)
 		        return UserTexts.Resources.Tags;
 	        if (conflict is IPreferenceDay)
 		        return UserTexts.Resources.Preference;

@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Tracking
             using(_mocker.Record())
             {
                 Expect.Call(() => pacc.CalculateUsed(null, null, null)).IgnoreArguments().Repeat.Once();
-                //Expect.Call(() => pacc.CalculateBalanceIn()).Repeat.Once();
             }
             using(_mocker.Playback())
             {

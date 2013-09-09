@@ -43,10 +43,10 @@ namespace Teleopti.Ccc.Web.Broker
 			}
 
 			value = ConfigurationManager.AppSettings["ThrottleMessages"];
-			settings.ThrottleMessages = !string.IsNullOrEmpty(value) && Convert.ToBoolean(value);
+			settings.ThrottleMessages = string.IsNullOrEmpty(value) || Convert.ToBoolean(value);
 
 			value = ConfigurationManager.AppSettings["MessagesPerSecond"];
-			settings.MessagesPerSecond = !string.IsNullOrEmpty(value) ? Convert.ToInt32(value) : 80;
+			settings.MessagesPerSecond = string.IsNullOrEmpty(value) ? 80 : Convert.ToInt32(value);
 
 			return settings;
 		}

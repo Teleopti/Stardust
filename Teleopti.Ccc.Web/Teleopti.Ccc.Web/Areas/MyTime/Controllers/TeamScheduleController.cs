@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			if (!date.HasValue)
 				date = DateOnly.Today;
-			return Json(_teamScheduleViewModelFactory.CreateTeamOptionsViewModel(date.Value), JsonRequestBehavior.AllowGet);
+			return Json(_teamScheduleViewModelFactory.CreateTeamOrGroupOptionsViewModel(date.Value), JsonRequestBehavior.AllowGet);
 		}
 	}
 }

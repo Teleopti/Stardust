@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
@@ -109,12 +110,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			result.Absences.Single().Id.Should().Be(absence.Id.Value.ToString());
 		}
 
-		private dynamic MakeLayer(string Color = "", DateTime? Start = null, int Minutes = 0)
+		private dynamic MakeLayer(string Color = "", DateTime? Start = null, int Minutes = 0,
+		                          bool isAbsenceConfidential = false)
 		{
 			dynamic layer = new ExpandoObject();
 			layer.Color = Color;
 			layer.Start = Start.HasValue ? Start : null;
 			layer.Minutes = Minutes;
+			layer.IsAbsenceConfidential = isAbsenceConfidential;
 			return layer;
 		}
 
@@ -140,6 +143,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			shift.Projection = new[] { MakeLayer("Green")};
 
 			var result = target.Map(new PersonScheduleData {Shift = shift });
+
+			result.Layers.Single().Color.Should().Be("Green");
+		}
+
+		[Test]
+		public void ShouldMapLayerColorForConfidentialAbsence()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			dynamic shift = new ExpandoObject();
+			shift.Projection = new[] {MakeLayer("Green", isAbsenceConfidential: true)};
+
+			var result = target.Map(new PersonScheduleData { Shift = shift });
+
+			result.Layers.Single().Color.Should().Be(ConfidentialPayloadValues.DisplayColor.ToHtml());
+		}
+
+		[Test]
+		public void ShouldMapLayerColorForConfidentialAbsenceButHavePermission()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			dynamic shift = new ExpandoObject();
+			shift.Projection = new[] { MakeLayer("Green", isAbsenceConfidential: true) };
+
+			var result = target.Map(new PersonScheduleData { Shift = shift, HasViewConfidentialPermission = true});
 
 			result.Layers.Single().Color.Should().Be("Green");
 		}
@@ -179,8 +208,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void ShouldMapPersonAbsences()
 		{
 			var target = new PersonScheduleViewModelMapper();
-
-			var personAbsences = new[] { new PersonAbsence(MockRepository.GenerateMock<IScenario>()) };
+			var absenceLayer = new AbsenceLayer(new Absence() { DisplayColor = Color.Red },
+												new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
+			var personAbsence = new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer);
+			var personAbsences = new[] { personAbsence };
 		
 			var result = target.Map(new PersonScheduleData {PersonAbsences = personAbsences});
 			
@@ -203,15 +234,72 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
+		public void ShouldMapPersonAbsenceColorForConfidentialAbsence()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			var absenceLayer = new AbsenceLayer(new Absence { DisplayColor = Color.Red, Confidential = true},
+												new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
+
+			var personAbsences = new[] { new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer) };
+
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
+
+			result.PersonAbsences.Single().Color.Should().Be.EqualTo(ConfidentialPayloadValues.DisplayColor.ToHtml());
+		}
+
+		[Test]
+		public void ShouldMapPersonAbsenceColorForConfidentialAbsenceButHavePermission()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			var absenceLayer = new AbsenceLayer(new Absence { DisplayColor = Color.Red, Confidential = true },
+												new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
+
+			var personAbsences = new[] { new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer) };
+
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences, HasViewConfidentialPermission = true});
+
+			result.PersonAbsences.Single().Color.Should().Be.EqualTo("Red");
+		}
+
+		[Test]
 		public void ShouldMapPersonAbsenceName()
 		{
 			var target = new PersonScheduleViewModelMapper();
 
-			var absenceLayer = new AbsenceLayer(new Absence() { Description = new Description("Vacation")},
-			                                    new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
-			var personAbsences = new[] {new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer)};
-			
+			var absenceLayer = new AbsenceLayer(new Absence { Description = new Description("Vacation") },
+												new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
+			var personAbsences = new[] { new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer) };
+
 			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
+
+			result.PersonAbsences.Single().Name.Should().Be.EqualTo("Vacation");
+		}
+
+		[Test]
+		public void ShouldMapPersonAbsenceNameForConfidentialAbsence()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			var absenceLayer = new AbsenceLayer(new Absence { Description = new Description("Vacation"), Confidential = true },
+												new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
+			var personAbsences = new[] { new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer) };
+
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
+
+			result.PersonAbsences.Single().Name.Should().Be.EqualTo(ConfidentialPayloadValues.Description.Name);
+		}
+
+		[Test]
+		public void ShouldMapPersonAbsenceNameForConfidentialAbsenceButHavePermission()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var absenceLayer = new AbsenceLayer(new Absence { Description = new Description("Vacation"), Confidential = true },
+												new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
+			var personAbsences = new[] { new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer) };
+
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences, HasViewConfidentialPermission = true});
 
 			result.PersonAbsences.Single().Name.Should().Be.EqualTo("Vacation");
 		}
@@ -264,8 +352,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void ShouldMapPersonAbsenceId()
 		{
 			var target = new PersonScheduleViewModelMapper();
-
-			var personAbsence = new PersonAbsence(MockRepository.GenerateMock<IScenario>());
+			var absenceLayer = new AbsenceLayer(new Absence() { DisplayColor = Color.Red },
+												new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
+			var personAbsence = new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer);
 			personAbsence.SetId(Guid.NewGuid());
 			var personAbsences = new[] { personAbsence };
 

@@ -532,7 +532,8 @@ Scenario: Resend referred shifttrade
 	And I am viewing requests
 	When I click on the request at position '1' in the list
 	And I click on shifttrade resend button
-	Then I should see a indication that the request is pending
+	Then I should see that request at position '1' is processing
+	And I should not see resend shifttrade button for request at position '1'
 
 Scenario: Cancel referred shifttrade 
 	Given I have the role 'Full access to mytime'
@@ -616,8 +617,7 @@ Scenario: Do not show resend and cancelbuttons to sender when shifttrade is not 
 	| HasBeenReferred	| False         |
 	And I am viewing requests
 	When I click on the request at position '1' in the list
-	Then I should not see resend shifttrade button
-	And I should not see cancel shifttrade button
+	Then I should not see resend shifttrade button for request at position '1'
 	
 
 

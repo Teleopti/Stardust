@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<SafeRollbackAndResourceCalculation>().As<ISafeRollbackAndResourceCalculation>();
 			builder.RegisterType<TeamBlockClearer>().As<ITeamBlockClearer>();
 			builder.RegisterType<TeamBlockRestrictionOverLimitValidator>().As<ITeamBlockRestrictionOverLimitValidator>();
-			builder.RegisterType<BlockSteadyStateValidator>().As<IBlockSteadyStateValidator>();
+			builder.RegisterType<TeamBlockSteadyStateValidator>().As<ITeamBlockSteadyStateValidator>();
 			builder.RegisterType<RestrictionOverLimitDecider>().As<IRestrictionOverLimitDecider>();
 			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>();
 			builder.RegisterType<GroupPersonBuilderForOptimizationFactory>().As<IGroupPersonBuilderForOptimizationFactory>();
@@ -286,6 +286,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		    builder.RegisterType<TimeLimitsRestrictionShiftFilter>().As<ITimeLimitsRestrictionShiftFilter>();
 		    builder.RegisterType<WorkTimeLimitationShiftFilter>().As<IWorkTimeLimitationShiftFilter>();
 			builder.RegisterType<CommonActivityFilter>().As<ICommonActivityFilter>();
+			builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>();
 	    }
     }
 }

@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public interface ILayerViewModel : INotifyPropertyChanged
     {
+	    void UpdateModel();
         bool IsSelected { get; set; }
         bool IsChanged { get; set; }
         IScheduleDay SchedulePart { get; set; }

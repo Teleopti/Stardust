@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Dynamic;
-using System.Linq;
+using Autofac.Extras.DynamicProxy2;
 using Microsoft.AspNet.SignalR.Hubs;
-using Newtonsoft.Json;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
+using Teleopti.Ccc.Web.Core.Aop.Core;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	[HubName("teamScheduleHub")]
+	[Intercept(typeof(AspectInterceptor))]
 	public class TeamScheduleHub : TestableHub
 	{
 		private readonly ITeamScheduleProvider _teamScheduleProvider;
@@ -19,15 +19,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		}
 
 		[UnitOfWork]
-		public void SubscribeTeamSchedule(Guid teamId, DateTime date)
+		public virtual void SubscribeTeamSchedule(Guid teamId, DateTime date)
 		{
 			pushSchedule(Clients.Caller, teamId, date);
 		}
 
 		private void pushSchedule(dynamic target, Guid teamId, DateTime date)
 		{
-			target.incomingTeamSchedule(
-				_teamScheduleProvider.TeamSchedule(teamId, date).Select(s => JsonConvert.DeserializeObject<ExpandoObject>(s.Shift)));
+			target.incomingTeamSchedule(_teamScheduleProvider.TeamSchedule(teamId, date));
 		}
 	}
 }

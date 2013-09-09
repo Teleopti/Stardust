@@ -67,7 +67,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 						WorkloadIds = command.WorkloadIds,
 						IncreaseWith = command.IncreaseWith
 					};
-				message.SetMessageDetail();
 
 				_busSender.Send(message);
 			}

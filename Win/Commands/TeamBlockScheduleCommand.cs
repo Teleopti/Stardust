@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private readonly IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
-		private readonly IBlockSteadyStateValidator _blockSteadyStateValidator;
+		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private readonly IOpenHoursToEffectiveRestrictionConverter _openHoursToEffectiveRestrictionConverter;
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Win.Commands
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
 			IWorkShiftFinderResultHolder workShiftFinderResultHolder,
-			IBlockSteadyStateValidator blockSteadyStateValidator,
+			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			IOpenHoursToEffectiveRestrictionConverter openHoursToEffectiveRestrictionConverter,
 			ITeamBlockClearer teamBlockClearer)
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Win.Commands
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 			_workShiftFinderResultHolder = workShiftFinderResultHolder;
-			_blockSteadyStateValidator = blockSteadyStateValidator;
+			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 			_openHoursToEffectiveRestrictionConverter = openHoursToEffectiveRestrictionConverter;
 			_teamBlockClearer = teamBlockClearer;
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Win.Commands
 											 teamInfoFactory,
 											 _teamBlockInfoFactory,
 											 teamBlockScheduler, 
-											 _blockSteadyStateValidator, 
+											 _teamBlockSteadyStateValidator, 
 											 _safeRollbackAndResourceCalculation,
 											 _workShiftMinMaxCalculator, advanceSchedulingResults, _teamBlockMaxSeatChecker);
 

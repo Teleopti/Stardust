@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
@@ -13,12 +13,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         public void MessageFilterManagerTest()
         {
             MessageFilterManager filterManager = MessageFilterManager.Instance;
-            Assert.IsNotNull(filterManager.FilterDictionary);
-            Assert.IsTrue(filterManager.FilterDictionary.Keys.Contains(typeof(IStatisticTask)));
-            Assert.AreEqual(1,filterManager.FilterDictionary[typeof(IStatisticTask)].Count);
-            Assert.IsTrue(filterManager.FilterDictionary.Keys.Contains(typeof(IJobResultProgress)));
-            Assert.AreEqual(1, filterManager.FilterDictionary[typeof(IJobResultProgress)].Count);
-            Assert.AreEqual(1, filterManager.FilterDictionary[typeof(IScheduleChangedInDefaultScenario)].Count);
+            Assert.IsTrue(filterManager.HasType(typeof(IStatisticTask)));
+            Assert.AreEqual(filterManager.LookupType(typeof(PublicNote)),typeof(IPersistableScheduleData));
+            Assert.AreEqual(filterManager.LookupTypeToSend(typeof(PublicNote)), typeof(IPublicNote).AssemblyQualifiedName);
         }
     }
 }

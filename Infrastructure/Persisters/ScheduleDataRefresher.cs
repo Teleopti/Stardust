@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -9,77 +7,54 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 	public class ScheduleDataRefresher : IScheduleDataRefresher
     {
         private readonly IScheduleRepository _scheduleRepository;
-		private readonly IPersonAssignmentRepository _personAssignmentRepository;
-		private readonly IPersonRepository _personRepository;
-		private readonly IUpdateScheduleDataFromMessages _scheduleDataUpdater;
+	    private readonly IUpdateScheduleDataFromMessages _scheduleDataUpdater;
 
-        public ScheduleDataRefresher(IScheduleRepository scheduleRepository, IPersonAssignmentRepository personAssignmentRepository, IPersonRepository personRepository, IUpdateScheduleDataFromMessages scheduleDataUpdater)
+        public ScheduleDataRefresher(IScheduleRepository scheduleRepository, IUpdateScheduleDataFromMessages scheduleDataUpdater)
         {
             _scheduleRepository = scheduleRepository;
-	        _personAssignmentRepository = personAssignmentRepository;
-	        _personRepository = personRepository;
-	        _scheduleDataUpdater = scheduleDataUpdater;
+            _scheduleDataUpdater = scheduleDataUpdater;
         }
 
-        public void Refresh(IScheduleDictionary scheduleDictionary, IList<IEventMessage> messageQueue, IEnumerable<IEventMessage> scheduleDataMessages, ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflictMessageState> conflictsBuffer)
-        {
-            var myChanges = scheduleDictionary.DifferenceSinceSnapshot();
+	    public void Refresh(IScheduleDictionary scheduleDictionary, IList<IEventMessage> messageQueue,
+	                        IEnumerable<IEventMessage> scheduleDataMessages,
+	                        ICollection<IPersistableScheduleData> refreshedEntitiesBuffer,
+	                        ICollection<PersistConflictMessageState> conflictsBuffer)
+	    {
+	        var myChanges = scheduleDictionary.DifferenceSinceSnapshot();
 
             foreach (var eventMessage in scheduleDataMessages)
             {
-	            DifferenceCollectionItem<IPersistableScheduleData>? myVersionOfEntity;
-
-				if (eventMessage.InterfaceType == typeof (IPersonAssignment) &&
-				    eventMessage.DomainUpdateType == DomainUpdateType.Insert)
-				{
-					var person = _personRepository.Load(eventMessage.ReferenceObjectId);
-					var period = new DateOnlyPeriod(new DateOnly(eventMessage.EventStartDate), new DateOnly(eventMessage.EventEndDate));
-					var result = _personAssignmentRepository.Find(new[] { person }, period, scheduleDictionary.Scenario);
-					var databaseVerionOfEntity = result.Single();
-
-					myVersionOfEntity = (from d in myChanges
-					                     let pa = d.CurrentItem as IPersonAssignment
-					                     where
-						                     pa != null &&
-											 pa.Equals(databaseVerionOfEntity)
-					                     select d).SingleOrDefault();
-				}
-				else
-				{
-					myVersionOfEntity = myChanges.FindItemByOriginalId(eventMessage.DomainObjectId);
-				}
+                var myVersionOfEntity = myChanges.FindItemByOriginalId(eventMessage.DomainObjectId);
 
                 if (myVersionOfEntity.HasValue)
                 {
-                    var databaseVerionOfEntity = _scheduleRepository.LoadScheduleDataAggregate(eventMessage.InterfaceType, eventMessage.DomainObjectId);
+                    var databaseVerionOfEntity =
+                        _scheduleRepository.LoadScheduleDataAggregate(eventMessage.InterfaceType,
+                                                                      eventMessage.DomainObjectId);
                     _scheduleDataUpdater.FillReloadedScheduleData(databaseVerionOfEntity);
-                    var state = new PersistConflictMessageState(myVersionOfEntity.Value, databaseVerionOfEntity, eventMessage, m => RemoveFromQueue(messageQueue, m));
+                    var state = new PersistConflictMessageState(myVersionOfEntity.Value, databaseVerionOfEntity,
+                                                                eventMessage, m => RemoveFromQueue(messageQueue, m));
                     conflictsBuffer.Add(state);
-					continue;
+                    continue;
                 }
 
-                if (!myVersionOfEntity.HasValue)
-                {
-                    IPersistableScheduleData messageVersionOfEntity;
-                    if (eventMessage.DomainUpdateType == DomainUpdateType.Delete)
-                    {
-                        messageVersionOfEntity = _scheduleDataUpdater.DeleteScheduleData(eventMessage);
-                    }
-                    else
-                    {
-                        messageVersionOfEntity = _scheduleDataUpdater.UpdateInsertScheduleData(eventMessage);
-                    }
-                    if (messageVersionOfEntity != null)
-                        refreshedEntitiesBuffer.Add(messageVersionOfEntity); //denna gör lite fel idag, ska ta hänsyn till både gammalt och nytt
-                    messageQueue.Remove(eventMessage);
-                }
+                IPersistableScheduleData messageVersionOfEntity = eventMessage.DomainUpdateType ==
+                                                                  DomainUpdateType.Delete
+                                                                      ? _scheduleDataUpdater.DeleteScheduleData(
+                                                                          eventMessage)
+                                                                      : _scheduleDataUpdater.UpdateInsertScheduleData(
+                                                                          eventMessage);
+                if (messageVersionOfEntity != null)
+                    refreshedEntitiesBuffer.Add(messageVersionOfEntity);
+                //denna gör lite fel idag, ska ta hänsyn till både gammalt och nytt
+                messageQueue.Remove(eventMessage);
             }
-        }
+	    }
 
-        private void RemoveFromQueue(ICollection<IEventMessage> messageQueue, IEventMessage m) 
+	    private void RemoveFromQueue(ICollection<IEventMessage> messageQueue, IEventMessage m) 
 		{
             messageQueue.Remove(m);
-            _scheduleDataUpdater.NotifyMessageQueueSize();
+            _scheduleDataUpdater.NotifyMessageQueueSizeChange();
         }
     }
 }

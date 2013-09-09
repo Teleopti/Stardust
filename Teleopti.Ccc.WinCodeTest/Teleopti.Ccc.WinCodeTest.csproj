@@ -348,6 +348,7 @@
     <Compile Include="Converters\DateTimeConverter\TimeSpanToDateTimeConverterTest.cs" />
     <Compile Include="Converters\ExtendDateTimePeriodConverterTest.cs" />
     <Compile Include="Converters\Layers\IsMoveAllLayersConverterTest.cs" />
+    <Compile Include="Converters\SimpleConverterTest.cs" />
     <Compile Include="Events\EventAggregatorModuleTest.cs" />
     <Compile Include="Events\EventAggregatorTest.cs" />
     <Compile Include="ExceptionHandler\ExceptionHandlerTest.cs" />
@@ -397,6 +398,7 @@
     <Compile Include="Intraday\DayLayerModelComparerTest.cs" />
     <Compile Include="Intraday\IntradayMainModelTest.cs" />
     <Compile Include="Intraday\LoadStatisticsAndActualHeadsCommandTest.cs" />
+    <Compile Include="Intraday\OnEventMeetingMessageCommandTest.cs" />
     <Compile Include="Intraday\OnEventScheduleMessageCommandTest.cs" />
     <Compile Include="Intraday\DayLayerModelTest.cs" />
     <Compile Include="Intraday\DispatcherWrapperTest.cs" />
@@ -476,6 +478,7 @@
     <Compile Include="Payroll\PayrollHelperTest.cs" />
     <Compile Include="Payroll\VisualizePresenterTest.cs" />
     <Compile Include="Payroll\VisualPayloadInfoTest.cs" />
+    <Compile Include="PeopleAdmin\AddPersonEnableCommandTest.cs" />
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodMustHavePreferenceComparerTest.cs" />
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodSeasonalityComparerTest.cs" />
     <Compile Include="PeopleAdmin\Comparers\SchedulePeriodExtraComparerTest.cs" />
@@ -494,7 +497,6 @@
     <Compile Include="PeopleAdmin\PersonFinderPreviousCommandTest.cs" />
     <Compile Include="PeopleAdmin\PersonFinderSettingsTest.cs" />
     <Compile Include="PeopleAdmin\PersonSkillStringParserTest.cs" />
-    <Compile Include="PeopleAdmin\PersonTimeZonePresenterTest.cs" />
     <Compile Include="PeopleAdmin\SameUserCredentialOnOtherCheckerTest.cs" />
     <Compile Include="PeopleAdmin\SendInstantMessageCommandTest.cs" />
     <Compile Include="PeopleAdmin\SendInstantMessageEnableCommandTest.cs" />
@@ -655,10 +657,6 @@
     <Compile Include="Scheduler\RestrictionSummary\SingleAgentRestrictionModelTest.cs" />
     <Compile Include="Scheduler\RestrictionSummary\SingleAgentRestrictionPresenterTest.cs" />
     <Compile Include="Scheduler\RestrictionSummary\WeekHeaderCellDataTest.cs" />
-    <Compile Include="Scheduler\Restriction\Commands\AddPreferenceRestrictionCommandModelTest.cs" />
-    <Compile Include="Scheduler\Restriction\Commands\AddStudentAvailabilityCommandModelTest.cs" />
-    <Compile Include="Scheduler\Restriction\LimitationViewModelTest.cs" />
-    <Compile Include="Scheduler\Restriction\WorkTimeLimitationAdapterTest.cs" />
     <Compile Include="Scheduler\ScheduleNavigatorPresenterTest.cs" />
     <Compile Include="Scheduler\SchedulerStateLoaderTest.cs" />
     <Compile Include="Scheduler\ScheduleSortingCommands\SchedulerSortCommandMapperTest.cs" />
@@ -802,8 +800,6 @@
     <Compile Include="Scheduler\PeriodPresenterTest.cs" />
     <Compile Include="Scheduler\DetailPresenterTest.cs" />
     <Compile Include="Scheduler\OverviewPresenterTest.cs" />
-    <Compile Include="Scheduler\Restriction\RestrictionEditorViewModelTest.cs" />
-    <Compile Include="Scheduler\Restriction\RestrictionViewModelTest.cs" />
     <Compile Include="Scheduler\WeekPresenterTest.cs" />
     <Compile Include="Scheduler\DateTimePeriodViewModelTest.cs" />
     <Compile Include="Scheduler\DayPresenterTest.cs" />

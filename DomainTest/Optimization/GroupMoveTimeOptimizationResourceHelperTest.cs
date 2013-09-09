@@ -52,16 +52,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldResourceCalculateDeletedDays()
 		{
-			var toRemove1 = new List<IScheduleDay> {_scheduleDay1};
-			var toRemove2 = new List<IScheduleDay> {_scheduleDay2};
 			using(_mocks.Record())
 			{
 				Expect.Call(_scheduleDay1.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod2).Repeat.AtLeastOnce();
 				Expect.Call(_dateOnlyAsDateTimePeriod1.DateOnly).Return(_date1).Repeat.AtLeastOnce();
 				Expect.Call(_dateOnlyAsDateTimePeriod2.DateOnly).Return(_date2).Repeat.AtLeastOnce();
-				Expect.Call(() =>_resourceOptimizationHelper.ResourceCalculateDate(_date1, true, true, toRemove1, new List<IScheduleDay>()));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date2, true, true, toRemove2, new List<IScheduleDay>()));
+				Expect.Call(() =>_resourceOptimizationHelper.ResourceCalculateDate(_date1, true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date2, true, true));
 			}
 
 			using(_mocks.Playback())
@@ -73,30 +71,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldRollback()
 		{
-			var toRemove = new List<IScheduleDay> {_scheduleDay2};
-			var toRemoveNextDay = new List<IScheduleDay> {_scheduleDay2};
-
-			var toAdd = new List<IScheduleDay> {_scheduleDay1};
-			var toAddNextDay = new List<IScheduleDay> {_scheduleDay1};
-
 			using(_mocks.Record())
 			{
 				Expect.Call(_schedulePartModifyAndRollbackService.ModificationCollection).Return(_modifiedSchedules);
 				Expect.Call(_scheduleDay1.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod1).Repeat.AtLeastOnce();
 				Expect.Call(_dateOnlyAsDateTimePeriod1.DateOnly).Return(_date1).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
-				Expect.Call(_scheduleDay1.Person).Return(_person);
-				Expect.Call(_scheduleRange.ScheduledDay(_date1)).Return(_scheduleDay2);
 				Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
-				Expect.Call(_scheduleDay1.HasProjection).Return(true);
-				Expect.Call(_scheduleDay1.Period).Return(_dateTimePeriod);
 
-				Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod1);
-				Expect.Call(_scheduleDay2.HasProjection).Return(true);
-				Expect.Call(_scheduleDay2.Period).Return(_dateTimePeriod);
-
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date1, true, true, toRemove, toAdd));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date1.AddDays(1), true, true, toRemoveNextDay, toAddNextDay));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date1, true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_date1.AddDays(1), true, true));
 			}
 
 			using(_mocks.Playback())

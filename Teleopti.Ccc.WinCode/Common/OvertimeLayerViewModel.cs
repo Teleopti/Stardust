@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 	    public override bool CanMoveUp
 	    {
-				get { return _moveLayerVertical != null && _layer.OrderIndex > 0; }
+				get { return _moveLayerVertical != null && _assignment != null && _assignment.OvertimeLayers().ToList().IndexOf(_layer) > 0; ; }
 	    }
 
 	    public override bool CanMoveDown
@@ -57,11 +57,11 @@ namespace Teleopti.Ccc.WinCode.Common
 	            return _layer != null ? _layer.DefinitionSet.Name : UserTexts.Resources.Overtime;
             }
         }
-
-        protected override int OrderIndexBase
-        {
-            get { return 100; }
-        }
+			
+				public override int VisualOrderIndex
+				{
+					get { return 100 + _assignment.OvertimeLayers().ToList().IndexOf(_layer); ; }
+				}
 
         public override bool IsMovePermitted()
         {
