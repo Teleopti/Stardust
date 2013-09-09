@@ -103,7 +103,7 @@ define([
 				return undefined;
 			});
 			
-			var loadDefaultConfiguration = function (callback) {
+			var loadDefaultConfiguration = function () {
 				var absenceId;
 				var personId;
 
