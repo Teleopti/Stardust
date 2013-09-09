@@ -3912,11 +3912,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			var scheduleDays = argument.ScheduleDays;
 
-			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-			var selectedPeriod =
-				new DateOnlyPeriod(
-					OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone),
-					OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
+			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
 
 			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _container.Resolve<IMatrixListFactory>().CreateMatrixList(scheduleDays, selectedPeriod);
 			if (matrixesOfSelectedScheduleDays.Count == 0)

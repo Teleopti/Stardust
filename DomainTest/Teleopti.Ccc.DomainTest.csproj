@@ -370,7 +370,6 @@
     <Compile Include="Scheduling\Overtime\SkillIntervalDataDividerTest.cs" />
     <Compile Include="Scheduling\Overtime\SkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\Overtime\SkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
-    <Compile Include="Scheduling\Overtime\SkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecificationTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
