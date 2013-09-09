@@ -240,6 +240,8 @@
     <Compile Include="Areas\MyTime\Core\ShareCalendar\ICalendarLinkGenerator.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ICalendarLinkViewModelFactory.cs" />
+    <Compile Include="Core\IResourceVersion.cs" />
+    <Compile Include="Core\ResourceVersion.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\CalendarLinkViewModel.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkId.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkIdGenerator.cs" />
@@ -710,7 +712,7 @@
     <Content Include="Areas\PerformanceTool\Content\Scripts\view.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\main.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\require\signalrrr.js" />
-    <Content Include="Areas\PerformanceTool\Content\Templates\index.html" />
+    <Content Include="Areas\PerformanceTool\Views\Application\index.aspx" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordViewModel.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\helpers.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\layout.js" />
@@ -1144,6 +1146,7 @@
   <ItemGroup>
     <Folder Include="Areas\Anywhere\Models\" />
     <Folder Include="Areas\Anywhere\Views\" />
+    <Folder Include="Areas\PerformanceTool\Content\Templates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MobileReports\Views\Report\Index.cshtml" />
