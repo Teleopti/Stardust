@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -10,7 +9,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration.MasterActivity
     public class MasterActivityModel : IMasterActivityModel
     {
         private readonly IMasterActivity _masterActivityEntity;
-        private ILocalizedUpdateInfo _localizer;
+        private readonly ILocalizedUpdateInfo _localizer;
 
         public MasterActivityModel(IMasterActivity masterActivityEntity, ILocalizedUpdateInfo localizer)
         {

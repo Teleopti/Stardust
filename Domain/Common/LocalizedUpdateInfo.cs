@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Common
                     tempDate,
                     TeleoptiPrincipal.Current.Regional.TimeZone);
 
-                updatedBy = string.Concat(" | ", localizedUpdatedByText, " ", entity.UpdatedBy.Name, " ",
+                updatedBy = string.Concat(localizedUpdatedByText, " ", entity.UpdatedBy.Name, " ",
                                           string.Format(CultureInfo.CurrentCulture, localChangeDateTime.ToString()));
             }
             return updatedBy;

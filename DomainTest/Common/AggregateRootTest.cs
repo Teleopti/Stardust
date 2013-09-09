@@ -63,9 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		 {
 			 var target = new AggRootWithBusinessUnit();
 		 	var aggRootType = typeof (AggregateRoot);
-			 aggRootType.GetField("_createdOn", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(target, DateTime.Now);
 			 aggRootType.GetField("_updatedOn", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(target, DateTime.Now);
-			 aggRootType.GetField("_createdBy", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(target, new Person());
 			 aggRootType.GetField("_updatedBy", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(target, new Person());
 		 	((IEntity)target).SetId(Guid.NewGuid());
 
