@@ -30,22 +30,10 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.IsTrue(updated.Length == 0);
         }
         [Test]
-        public void VerifyCanGetCreateTimeTextWhenNull()
-        {
-            var rootCreatedTest = new AggregateRootTest.AggRootWithNoBusinessUnit();
-            Assert.AreEqual(string.Empty, target.CreatedTimeInUserPerspective(rootCreatedTest));
-        }
-        [Test]
         public void VerifyCanGetUpdateTimeTextWhenNull()
         {
             var rootCreatedTest = new AggregateRootTest.AggRootWithNoBusinessUnit();
             Assert.AreEqual(string.Empty, target.UpdatedTimeInUserPerspective(rootCreatedTest));
-        }
-        [Test]
-        public void VerifyCanGetCreateTimeText()
-        {
-            var testRoot = new AggregateRootTest.CreatedAndChangedTest();
-            Assert.IsTrue(!string.IsNullOrEmpty(target.CreatedTimeInUserPerspective(testRoot)));
         }
         [Test]
         public void VerifyCanGetUpdateTimeText()

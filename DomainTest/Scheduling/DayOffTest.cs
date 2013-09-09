@@ -61,9 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(_timeSpanTargetLength, _target.TargetLength);
             Assert.AreEqual(_timeSpanFlexibility, _target.Flexibility);
             Assert.AreEqual(_timeSpanAnchor, _target.Anchor);
-            Assert.IsNull(_target.CreatedBy);
             Assert.IsNull(_target.UpdatedBy);
-            Assert.IsNull(_target.CreatedOn);
             Assert.IsNull(_target.UpdatedOn);
         }
 
@@ -162,9 +160,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(_target.Flexibility, cloneWithoutId.Flexibility);
             Assert.AreEqual(_target.PayrollCode, cloneWithoutId.PayrollCode);
             Assert.AreEqual(_target.TargetLength, cloneWithoutId.TargetLength);
-            Assert.AreEqual(_target.CreatedBy, cloneWithoutId.CreatedBy);
-            Assert.AreEqual(_target.CreatedOn, cloneWithoutId.CreatedOn);
-            Assert.AreEqual(_target.CreatedTimeInUserPerspective, cloneWithoutId.CreatedTimeInUserPerspective);
             Assert.AreEqual(_target.UpdatedBy, cloneWithoutId.UpdatedBy);
             Assert.AreEqual(_target.UpdatedOn, cloneWithoutId.UpdatedOn);
             Assert.AreEqual(_target.UpdatedTimeInUserPerspective, cloneWithoutId.UpdatedTimeInUserPerspective);
@@ -189,9 +184,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(_target.Flexibility, cloneWithId.Flexibility);
             Assert.AreEqual(_target.PayrollCode, cloneWithId.PayrollCode);
             Assert.AreEqual(_target.TargetLength, cloneWithId.TargetLength);
-            Assert.AreEqual(_target.CreatedBy, cloneWithId.CreatedBy);
-            Assert.AreEqual(_target.CreatedOn, cloneWithId.CreatedOn);
-            Assert.AreEqual(_target.CreatedTimeInUserPerspective, cloneWithId.CreatedTimeInUserPerspective);
             Assert.AreEqual(_target.UpdatedBy, cloneWithId.UpdatedBy);
             Assert.AreEqual(_target.UpdatedOn, cloneWithId.UpdatedOn);
             Assert.AreEqual(_target.UpdatedTimeInUserPerspective, cloneWithId.UpdatedTimeInUserPerspective);

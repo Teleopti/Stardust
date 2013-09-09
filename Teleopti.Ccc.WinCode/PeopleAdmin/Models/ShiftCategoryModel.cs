@@ -83,12 +83,20 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 
         public IPerson CreatedBy
         {
-            get { return ContainedEntity.CreatedBy; }
+					get { 
+						//return "will be removed"; 
+						return null;
+					}
         }
 
         public DateTime? CreatedOn
         {
-            get { return ContainedEntity.CreatedOn; }
+            get
+            {
+	             //"will be removed"
+							//return ContainedEntity.CreatedOn;
+							return new DateTime(1900,1,1);
+            }
         }
 
         public IPerson UpdatedBy
@@ -101,7 +109,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             get { return ContainedEntity.UpdatedOn; }
         }
 
-        public string CreatedTimeInUserPerspective { get { return _localizer.CreatedTimeInUserPerspective(ContainedEntity); } }
+        public string CreatedTimeInUserPerspective { get { return "will be removed"; } }
 
         public string UpdatedTimeInUserPerspective { get { return _localizer.UpdatedTimeInUserPerspective(ContainedEntity); } }
     }

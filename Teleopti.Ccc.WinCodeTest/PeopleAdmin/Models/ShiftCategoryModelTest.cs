@@ -93,8 +93,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         public void VerifyCanGetUpdateInfo()
         {
             ShiftCategoryModel adpt = new ShiftCategoryModel(_shiftCategory);
-            Assert.AreEqual(adpt.CreatedBy, _shiftCategory.CreatedBy);
-            Assert.AreEqual(adpt.CreatedOn, _shiftCategory.CreatedOn);
             Assert.AreEqual(adpt.UpdatedBy, _shiftCategory.UpdatedBy);
             Assert.AreEqual(adpt.UpdatedOn, _shiftCategory.UpdatedOn);
         }

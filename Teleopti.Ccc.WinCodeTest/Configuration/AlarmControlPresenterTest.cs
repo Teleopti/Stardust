@@ -51,8 +51,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             foreach (AlarmType alarmType in alarms)
             {
                 ReflectionHelper.SetUpdatedBy(alarmType, _createPerson);
-                ReflectionHelper.SetCreatedBy(alarmType, _createPerson);
-                ReflectionHelper.SetCreatedOn(alarmType, _createDate);
                 ReflectionHelper.SetUpdatedOn(alarmType, _createDate.AddHours(1));
             }
         }

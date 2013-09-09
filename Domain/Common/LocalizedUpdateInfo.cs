@@ -8,27 +8,12 @@ namespace Teleopti.Ccc.Domain.Common
     //rk - cut/paste from aggregateroot.
     public interface ILocalizedUpdateInfo
     {
-       string CreatedTimeInUserPerspective(ICreateInfo entity);
        string UpdatedTimeInUserPerspective(IChangeInfo entity);
        string UpdatedByText(IChangeInfo entity, string localizedUpdatedByText);
     }
 
     public class LocalizedUpdateInfo : ILocalizedUpdateInfo
     {
-        public string CreatedTimeInUserPerspective(ICreateInfo entity)
-        {
-            string createdText = string.Empty;
-
-            if (!entity.CreatedOn.HasValue)
-                return createdText;
-
-            DateTime localCreateDateTime = TimeZoneHelper.ConvertFromUtc(entity.CreatedOn.Value,
-                TeleoptiPrincipal.Current.Regional.TimeZone);
-
-            createdText = string.Format(CultureInfo.CurrentCulture, localCreateDateTime.ToString());
-            return createdText;
-        }
-
         public string UpdatedTimeInUserPerspective(IChangeInfo entity)
         {
             string updated = string.Empty;

@@ -67,10 +67,10 @@ namespace Teleopti.Ccc.WinCode.Settings
         {
             get { return _localizer.UpdatedTimeInUserPerspective(ContainedEntity); }
         }
-        public string CreatedTimeInUserPerspective
-        {
-            get { return _localizer.CreatedTimeInUserPerspective(ContainedEntity); }
-        }
+				//public string CreatedTimeInUserPerspective
+				//{
+				//		get { return _localizer.CreatedTimeInUserPerspective(ContainedEntity); }
+				//}
 
         /// <summary>
         /// Gets or sets a value indicating whether [in contract time].
@@ -225,18 +225,14 @@ namespace Teleopti.Ccc.WinCode.Settings
         {
             get
             {
-                if (ContainedEntity.CreatedBy != null)
-                    return ContainedEntity.CreatedBy.Name.ToString();
-                return string.Empty;
+	            return "will be removed";
             }
         }
         public string CreatedOn
         {
             get
             {
-                if (ContainedEntity.CreatedOn.HasValue)
-                    return ContainedEntity.CreatedOn.Value.ToString(CultureInfo.CurrentCulture);
-                return string.Empty;
+	            return "will be removed";
             }
         }
 

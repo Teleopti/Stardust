@@ -79,8 +79,6 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 			Assert.AreEqual(string.Empty, _targetView.CreatedOn);
 
 			ReflectionHelper.SetUpdatedBy(_studRestriction, _createPerson);
-			ReflectionHelper.SetCreatedBy(_studRestriction, _createPerson);
-			ReflectionHelper.SetCreatedOn(_studRestriction, _createDate);
 			ReflectionHelper.SetUpdatedOn(_studRestriction, _createDate.AddHours(1));
 
 			Assert.AreEqual(_createPerson.Name.ToString(), _targetView.UpdatedBy);

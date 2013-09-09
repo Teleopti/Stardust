@@ -103,16 +103,12 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
         private void QueryCreatedBy(GridQueryCellInfoEventArgs e)
         {
-            e.Style.CellType = "Static";
-            if (_alarmTypes[e.RowIndex - 1].CreatedBy != null)
-                e.Style.CellValue = _alarmTypes[e.RowIndex - 1].CreatedBy.Name;
+					//will be removed
         }
 
         private void QueryCreatedOn(GridQueryCellInfoEventArgs e)
         {
-            e.Style.CellType = "Static";
-            if (_alarmTypes[e.RowIndex - 1].CreatedOn.HasValue)
-                e.Style.CellValue = _localizer.CreatedTimeInUserPerspective(_alarmTypes[e.RowIndex - 1]);
+					//will be removed
         }
 
         private void QueryUpdatedBy(GridQueryCellInfoEventArgs e)

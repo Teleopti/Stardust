@@ -95,11 +95,8 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
             Assert.AreEqual(string.Empty, _absenceView.CreatedOn);
             
         }
-        [Test]
-        public void VerifyCanGetCreateTimeText()
-        {
-            Assert.AreEqual(string.Empty, _absenceView.CreatedTimeInUserPerspective);
-        }
+
+
         [Test]
         public void VerifyCanGetUpdateTimeText()
         {

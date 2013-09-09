@@ -468,10 +468,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                     {
                         var absence = uow.Merge(absenceView.ContainedEntity);
                         // lazy load
-                        if (!LazyLoadingManager.IsInitialized(absence.CreatedBy))
-                            LazyLoadingManager.Initialize(absence.CreatedBy);
-                        if (!LazyLoadingManager.IsInitialized(absence.UpdatedBy))
-                            LazyLoadingManager.Initialize(absence.UpdatedBy);
+                        LazyLoadingManager.Initialize(absence.UpdatedBy);
                         absenceView.UpdateAfterMerge(absence);
                     }
                 }

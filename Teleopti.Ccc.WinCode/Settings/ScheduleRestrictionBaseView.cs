@@ -43,10 +43,7 @@ namespace Teleopti.Ccc.WinCode.Settings
 		{
 			get
 			{
-				IChangeInfo root = ContainedEntity.Root() as IChangeInfo;
-				if (root != null && root.CreatedBy != null)
-					return root.CreatedBy.Name.ToString();
-				return string.Empty;
+				return "will be deleted";
 			}
 		}
 
@@ -65,10 +62,7 @@ namespace Teleopti.Ccc.WinCode.Settings
 		{
 			get
 			{
-				IChangeInfo root = ContainedEntity.Root() as IChangeInfo;
-				if (root != null && root.CreatedOn.HasValue)
-					return root.CreatedOn.Value.ToString(CultureInfo.CurrentCulture);
-				return string.Empty;
+				return "will be deleted";
 			}
 		}
 

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -172,5 +173,8 @@ namespace Teleopti.Ccc.Domain.Common
         {
             _isDeleted = true;
         }
+
+	    public virtual IPerson CreatedBy { get; protected set; }
+	    public virtual DateTime? CreatedOn { get; protected set; }
     }
 }

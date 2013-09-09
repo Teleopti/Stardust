@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
                             EntityUpdateInformation values = new EntityUpdateInformation();
                             TimeZoneInfo timeZoneInfo =
                                 TeleoptiPrincipal.Current.Regional.TimeZone;
-                            values.LastUpdate = TimeZoneHelper.ConvertFromUtc(skillDay.UpdatedOn.GetValueOrDefault(skillDay.CreatedOn.Value), timeZoneInfo);
+                            values.LastUpdate = TimeZoneHelper.ConvertFromUtc(skillDay.UpdatedOn.Value, timeZoneInfo);
 	                        values.Name = skillDay.UpdatedBy.Name;
                             values.Tag = scenario.Description.Name;
                             allvalues.Add(scenario, values);
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
                     {
                         TimeZoneInfo timeZoneInfo =
                             TeleoptiPrincipal.Current.Regional.TimeZone;
-                        values.LastUpdate = TimeZoneHelper.ConvertFromUtc(validatedVolumeDay.UpdatedOn.GetValueOrDefault(validatedVolumeDay.CreatedOn.Value),
+                        values.LastUpdate = TimeZoneHelper.ConvertFromUtc(validatedVolumeDay.UpdatedOn.Value,
                                                                           timeZoneInfo);
                         values.Name = validatedVolumeDay.UpdatedBy.Name;
                     }
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
                 foreach (IWorkload workload in workloads)
                 {
                     var entityUpdateInformation = new EntityUpdateInformation();
-                    entityUpdateInformation.LastUpdate = TimeZoneHelper.ConvertFromUtc(workload.UpdatedOn.GetValueOrDefault(workload.CreatedOn.Value), timeZoneInfo);
+                    entityUpdateInformation.LastUpdate = TimeZoneHelper.ConvertFromUtc(workload.UpdatedOn.Value, timeZoneInfo);
                     if (workload.UpdatedBy != null)
                     {
                         entityUpdateInformation.Name = workload.UpdatedBy.Name;

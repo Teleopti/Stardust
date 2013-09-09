@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
                                                                                            Color.DarkSlateGray,
                                                                                            Color.DimGray);
 
-            Assert.AreEqual(keyPerformanceIndicator.CreatedBy, _person);
             Assert.IsNotNull(keyPerformanceIndicator);
             Assert.AreEqual("Very importent KPI", keyPerformanceIndicator.Name);
             Assert.AreEqual("TheKPI", keyPerformanceIndicator.ResourceKey);

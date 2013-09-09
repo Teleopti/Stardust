@@ -7,7 +7,8 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IBusinessUnit : IAggregateRoot, 
                                         IBusinessUnitHierarchyEntity,
-                                        IChangeInfo
+                                        IChangeInfo,
+																				ICreateInfo
     {
         
         /// <summary>

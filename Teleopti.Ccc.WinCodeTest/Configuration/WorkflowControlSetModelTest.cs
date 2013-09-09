@@ -62,11 +62,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             // Existing entity
             _domainEntity.SetId(Guid.NewGuid());
 
-            DateTime createdDate = new DateTime(2010, 1, 1, 14, 13, 0);
             DateTime updatedDate = new DateTime(2010, 2, 2, 9, 12, 0);
             IPerson person = PersonFactory.CreatePerson("kalle","kula");
-            ReflectionHelper.SetCreatedBy(_domainEntity,person);
-            ReflectionHelper.SetCreatedOn(_domainEntity, createdDate);
             ReflectionHelper.SetUpdatedBy(_domainEntity, person);
             ReflectionHelper.SetUpdatedOn(_domainEntity, updatedDate);
 

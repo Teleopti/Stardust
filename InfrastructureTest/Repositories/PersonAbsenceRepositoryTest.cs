@@ -140,7 +140,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IAbsenceLayer layer = new AbsenceLayer(absence, period);
             IPersonAbsence agAbs = new PersonAbsence(aTinyAgent, scen, layer);
             PersistAndRemoveFromUnitOfWork(agAbs);
-            Assert.AreEqual(agAbs.UpdatedBy, agAbs.CreatedBy);
             Assert.AreEqual(agAbs.UpdatedOn, agAbs.UpdatedOn);
         }
 
