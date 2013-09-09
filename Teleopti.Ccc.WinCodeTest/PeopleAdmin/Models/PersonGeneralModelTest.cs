@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _base.AddPersonPeriod(_personPeriod);
             _mocks = new MockRepository();
             _principalAuthorization = _mocks.StrictMock<IPrincipalAuthorization>();
-            _target = new PersonGeneralModel(_base, new UserDetail(_base),_principalAuthorization, new PersonAccountUpdater());
+			_target = new PersonGeneralModel(_base, new UserDetail(_base), _principalAuthorization, new PersonAccountUpdaterDummy());
         }
 
         [Test]
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             }
             using (_mocks.Playback())
             {
-                _target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdater()) {ApplicationLogOnName = setValue};
+				_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy()) { ApplicationLogOnName = setValue };
 
                 //Test get method
                 var getValue = _target.ApplicationLogOnName;
@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             }
             using (_mocks.Playback())
             {
-                _target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdater()) {ApplicationLogOnName = setValue};
+				_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy()) { ApplicationLogOnName = setValue };
 
                 Assert.That(_target.IsValid,Is.True);
             }
@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             }
             using (_mocks.Playback())
             {
-                _target = new PersonGeneralModel(_base, userDetail,_principalAuthorization, new PersonAccountUpdater()) {Password = setValue};
+				_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy()) { Password = setValue };
             }
         }
 

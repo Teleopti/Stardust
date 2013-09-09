@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		{
 			_mocks = new MockRepository();
 			_personAbsenceAccounts = new List<IAccount>();
-			_target = new PersonAccountUpdater(_personAbsenceAccounts);
+			//_target = new PersonAccountUpdater(_personAbsenceAccounts);
 		}
 
 		//[Test]

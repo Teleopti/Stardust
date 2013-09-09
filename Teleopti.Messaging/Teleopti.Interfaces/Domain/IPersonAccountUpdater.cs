@@ -11,6 +11,11 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// Updates the person absence accounts
 		/// </summary>
-		void UpdatePersonAccounts(DateTime? terminalDate);
+		void UpdateOnTermination(DateOnly terminalDate, IPerson person);
+
+		/// <summary>
+		/// Updates the person absence accounts
+		/// </summary>
+		void UpdateOnActivation(IPerson person);
 	}
 }

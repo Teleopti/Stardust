@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			}
 
 			if (TerminalDate.HasValue)
-				user.TerminatePerson(new DateOnly(TerminalDate.Value), new PersonAccountUpdater());
+				user.TerminatePerson(new DateOnly(TerminalDate.Value), new PersonAccountUpdaterDummy());
 
 			if (!string.IsNullOrEmpty(UserName))
 			{

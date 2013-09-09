@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             _mocks = new MockRepository();
             _personRepository = _mocks.StrictMock<IPersonRepository>();
             _workflowControlSetAssembler = _mocks.StrictMock<IAssembler<IWorkflowControlSet, WorkflowControlSetDto>>();
+	        _personAccountUpdater = _mocks.StrictMock<IPersonAccountUpdater>();
             _target = new PersonAssembler(_personRepository, _workflowControlSetAssembler, _personAccountUpdater);
         }
 

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
     public class PersonAssembler : Assembler<IPerson,PersonDto>, IPersonAssembler
     {
         private readonly IAssembler<IWorkflowControlSet,WorkflowControlSetDto> _workflowControlSetAssembler;
-	    //private readonly IPersonAccountUpdater _personAccountUpdater;
+	    private readonly IPersonAccountUpdater _personAccountUpdater;
 	    public IPersonRepository PersonRepository { get; private set; }
         public bool IgnorePersonPeriods { get; set; }
 
@@ -42,10 +42,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         /// </remarks>
         public bool EnableSaveOrUpdate { get; set; }
 
-        public PersonAssembler(IPersonRepository personRepository, IAssembler<IWorkflowControlSet,WorkflowControlSetDto> workflowControlSetAssembler)
+		public PersonAssembler(IPersonRepository personRepository, IAssembler<IWorkflowControlSet, WorkflowControlSetDto> workflowControlSetAssembler, IPersonAccountUpdater personAccountUpdater)
         {
             _workflowControlSetAssembler = workflowControlSetAssembler;
-	        PersonRepository = personRepository;
+			_personAccountUpdater = personAccountUpdater;
+			PersonRepository = personRepository;
             IgnorePersonPeriods = false;
         }
 

@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.Win.Payroll
                 payrollExportDto = new PayrollExportAssembler(payrollExportRepository, personRepository, null, new DateTimePeriodAssembler()).DomainEntityToDto(payrollExport);
                 payrollExportDto.PersonCollection.Clear();
 
-                PersonAssembler personAssembler = new PersonAssembler(null, new WorkflowControlSetAssembler(new ShiftCategoryAssembler(null), new DayOffAssembler(null), new ActivityAssembler(null), new AbsenceAssembler(null)), new PersonAccountUpdater());
+				PersonAssembler personAssembler = new PersonAssembler(null, new WorkflowControlSetAssembler(new ShiftCategoryAssembler(null), new DayOffAssembler(null), new ActivityAssembler(null), new AbsenceAssembler(null)), new PersonAccountUpdaterDummy());
                 personAssembler.IgnorePersonPeriods = true;
             }
             

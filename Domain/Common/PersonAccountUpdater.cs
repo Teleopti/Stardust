@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
 	public class PersonAccountUpdater : IPersonAccountUpdater
 	{
-		private readonly IEnumerable<IAccount> _personAbsenceAccounts;
+		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 
-		public PersonAccountUpdater(IEnumerable<IAccount> personAbsenceAccounts)
+		public PersonAccountUpdater(IPersonAbsenceAccountRepository personAbsenceAccountRepository)
 		{
-			_personAbsenceAccounts = personAbsenceAccounts;
+			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 		}
 
-		public void UpdatePersonAccounts(DateTime? terminalDate)
+
+		public void UpdateOnTermination(DateOnly terminalDate, IPerson person)
 		{
-			// sort person account collection by starting datetime
-			// go though all of them
-			// set the terminal date
-			// 
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
+		}
+
+		public void UpdateOnActivation(IPerson person)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

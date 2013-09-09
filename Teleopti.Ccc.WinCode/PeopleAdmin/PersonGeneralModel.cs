@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
         public static IWorkflowControlSet NullWorkflowControlSet = new WorkflowControlSet(string.Empty);
         private readonly IUserDetail _userDetail;
         private readonly IPrincipalAuthorization _principalAuthorization;
-        private readonly PersonAccountUpdater _personAccountUpdater;
+        private readonly IPersonAccountUpdater _personAccountUpdater;
         private bool _isValid = true;
         private RoleCollectionParser _roleCollectionParser;
         private bool _logonDataCanBeChanged;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
             _optionalColumns = new List<IOptionalColumn>();
         }
 
-        public PersonGeneralModel(IPerson person, IUserDetail userDetail, IPrincipalAuthorization principalAuthorization, PersonAccountUpdater personAccountUpdater)
+        public PersonGeneralModel(IPerson person, IUserDetail userDetail, IPrincipalAuthorization principalAuthorization, IPersonAccountUpdater personAccountUpdater)
             : this()
         {
             ContainedEntity = person;

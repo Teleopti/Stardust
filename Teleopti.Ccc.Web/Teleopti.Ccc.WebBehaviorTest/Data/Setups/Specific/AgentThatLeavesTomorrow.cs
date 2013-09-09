@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			user.PermissionInformation.AddApplicationRole(TestData.AgentRole);
-			user.TerminatePerson(DateOnlyForBehaviorTests.TestToday, new PersonAccountUpdater());
+			user.TerminatePerson(DateOnlyForBehaviorTests.TestToday, new PersonAccountUpdaterDummy());
 		}
 	}
 }
