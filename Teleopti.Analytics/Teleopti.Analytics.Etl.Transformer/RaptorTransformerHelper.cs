@@ -22,17 +22,6 @@ namespace Teleopti.Analytics.Etl.Transformer
             return root.UpdatedOn.Value;
         }
 
-        public static void SetCreatedOn(IAggregateRoot root, DateTime? createdOn)
-        {
-            IChangeInfo rootCheck = root as IChangeInfo;
-            if (rootCheck != null)
-            {
-                Type rootType = typeof(AggregateRoot);
-                if (createdOn.HasValue)
-                    rootType.GetField("_createdOn", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(root, createdOn);
-            }
-        }
-
         public static void SetUpdatedOn(IAggregateRoot root, DateTime? updatedOn)
         {
             IChangeInfo rootCheck = root as IChangeInfo;

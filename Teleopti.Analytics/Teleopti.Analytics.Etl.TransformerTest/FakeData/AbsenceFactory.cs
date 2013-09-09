@@ -15,21 +15,21 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
             IAbsence absence = new Absence();
             absence.SetId(Guid.NewGuid());
-            RaptorTransformerHelper.SetCreatedOn(absence, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(absence, DateTime.Now);
             absence.Description = new Description("Sick Leave");
             absence.DisplayColor = Color.ForestGreen;
             retList.Add(absence);
 
             absence = new Absence();
             absence.SetId(Guid.NewGuid());
-            RaptorTransformerHelper.SetCreatedOn(absence, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(absence, DateTime.Now);
             absence.Description = new Description("parentalLeave");
             absence.DisplayColor = Color.DeepPink;
             retList.Add(absence);
 
             absence = new Absence();
             absence.SetId(Guid.NewGuid());
-            RaptorTransformerHelper.SetCreatedOn(absence, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(absence, DateTime.Now);
             absence.Description = new Description("Deleted absence");
             absence.DisplayColor = Color.LemonChiffon;
             ((Absence)absence).SetDeleted();

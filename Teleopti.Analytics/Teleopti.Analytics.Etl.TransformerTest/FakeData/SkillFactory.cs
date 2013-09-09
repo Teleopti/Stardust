@@ -20,14 +20,14 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             ISkill skill1 = new Skill("skill 1", "desc skill 1", Color.FromArgb(0), 15, skillType);
             skill1.SetId(Guid.NewGuid());
             skill1.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-            RaptorTransformerHelper.SetCreatedOn(skill1, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(skill1, DateTime.Now);
 
             ISkill skill2 = new Skill("skill 2", "desc skill 2 [deleted]", Color.FromArgb(255), 15, skillType);
             skill2.SetId(Guid.NewGuid());
             // Set IsDeleted = True
             ((IDeleteTag)skill2).SetDeleted();
             skill2.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time"));
-            RaptorTransformerHelper.SetCreatedOn(skill2, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(skill2, DateTime.Now);
 
             return new List<ISkill> {skill1, skill2 };
         }
