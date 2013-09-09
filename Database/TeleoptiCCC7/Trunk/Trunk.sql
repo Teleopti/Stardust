@@ -4,25 +4,31 @@
 --Desc: Dropping CreatedBy + CreatedOn from database
 ---------------- 
 /*
-select
-	'ALTER TABLE dbo.' + so.name + ' drop column ' + sc.name
+--Columns
+select 'ALTER TABLE '+ sch.name +'.' + so.name + ' drop column ' + sc.name
 from sys.objects so
+inner join sys.schemas sch
+	on so.schema_id = sch.schema_id
 inner join sys.columns sc
 	on so.object_id = sc.object_id
 where so.type_desc='USER_TABLE'
 and sc.name in ('CreatedBy','CreatedOn')
 and so.name not in ('PersonRequest','PushMessage','PushMessageDialogue','PayrollExport')
 
-select 'ALTER TABLE dbo.' + so.name + ' DROP CONSTRAINT ['+ object_name(fk.constraint_object_id) +']'
+--FKs
+select 'ALTER TABLE ' +sch.name +'.' + so.name + ' DROP CONSTRAINT ['+ object_name(fk.constraint_object_id) +']'
 from sys.foreign_key_columns fk
 inner join sys.columns sc
 	on fk.parent_object_id = sc.object_id
 	and fk.parent_column_id = sc.column_id
 inner join sys.objects so
 	on so.object_id = sc.object_id
+inner join sys.schemas sch
+	on so.schema_id = sch.schema_id
 where so.type_desc='USER_TABLE'
 and sc.name in ('CreatedBy','CreatedOn')
 and so.name not in ('PersonRequest','PushMessage','PushMessageDialogue','PayrollExport')
+order by sch.name,so.name,sc.name
 */
 --Indexes depending on columns
 DROP INDEX [IX_PersonDayOff_Scenario_BU_Anchor] ON [dbo].[PersonDayOff]
