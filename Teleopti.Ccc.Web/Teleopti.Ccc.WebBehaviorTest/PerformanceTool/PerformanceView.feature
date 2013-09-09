@@ -21,7 +21,7 @@ Scenario: Default configuration for scenario add and remove full day absences
 	And I select scenario 'Add and remove full day absence'
 	Then I should see a default configuration in json format
 
-Scenario: Measure PersonScheduleDayReadModel by adding and removing full day absences
+Scenario: Measure PersonScheduleDayReadModel by adding full day absences
 	When I am viewing the performance view
 	And I select scenario 'Add full day absence -> PersonScheduleDayReadModel'
 	And I input a configuration with 1 scenarios in json format
@@ -32,7 +32,7 @@ Scenario: Measure PersonScheduleDayReadModel by adding and removing full day abs
 	And I should see total time to send commands
 	And I should see scenarios per second
 
-Scenario: Measure ScheduledResourcesReadModel by adding and removing full day absences
+Scenario: Measure ScheduledResourcesReadModel by adding full day absences
 	When I am viewing the performance view
 	And I select scenario 'Add full day absence -> ScheduledResourcesReadModel'
 	And I input a configuration with 1 scenarios in json format
