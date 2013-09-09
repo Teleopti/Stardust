@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(_viewModel.AllNotDeletedActivities).Return(new List<IActivityModel>());
             Expect.Call(() => _view.LoadTwoList(new List<IActivityModel>(), new List<IActivityModel>()));
             Expect.Call(_localizer.UpdatedByText(null, "")).IgnoreArguments().Return("hej");
-            Expect.Call(() => _view.SetUpdateInfo("hejhej"));
+            Expect.Call(() => _view.SetUpdateInfo("hej"));
             _mocks.ReplayAll();
 
             _target.OnAddNew();
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(_viewModel.AllNotDeletedActivities).Return(new List<IActivityModel>());
             Expect.Call(() => _view.LoadTwoList(new List<IActivityModel>(), new List<IActivityModel>()));
             Expect.Call(_localizer.UpdatedByText(null, "")).IgnoreArguments().Return("hej");
-            Expect.Call(() => _view.SetUpdateInfo("hejhej"));
+            Expect.Call(() => _view.SetUpdateInfo("hej"));
             _mocks.ReplayAll();
 
             _target.OnDeleteMasterActivity(master1);
