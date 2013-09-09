@@ -99,9 +99,9 @@ define([
 		});
 		
 		this.Run = function () {
-			var result = self.Scenario().Run();
-			result.StartTime(moment());
-			runResult(result);
+		    var result = self.Scenario().Run();
+		    runResult(result);
+		    result.StartTime(moment());
 		};
 
 		var formatTimeDiff = function(first, second) {
