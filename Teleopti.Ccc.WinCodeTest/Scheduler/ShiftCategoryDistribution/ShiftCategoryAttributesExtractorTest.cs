@@ -132,7 +132,22 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             _target.ExtractShiftCategoryInformation(shiftCategoryStructureList);
             Assert.AreEqual(_target.Dates[0], DateOnly.Today);
         }
-    }
 
-   
+		[Test]
+		public void ShouldSortShiftCategories()
+		{
+			_shiftCategoryStructure1 = new ShiftCategoryStructure(_sc1, DateOnly.Today, _person1);
+			_shiftCategoryStructure2 = new ShiftCategoryStructure(_sc2, DateOnly.Today, _person2);
+			var shiftCategoryStructureList = new List<ShiftCategoryStructure>
+                {
+                    _shiftCategoryStructure2,
+                    _shiftCategoryStructure1,
+                };
+			_target.ExtractShiftCategoryInformation(shiftCategoryStructureList);
+
+			Assert.AreEqual(_target.ShiftCategories.Count, 2);
+			Assert.AreEqual(_sc1, _target.ShiftCategories[0]);
+			Assert.AreEqual(_sc2, _target.ShiftCategories[1]);
+		}
+    }   
 }

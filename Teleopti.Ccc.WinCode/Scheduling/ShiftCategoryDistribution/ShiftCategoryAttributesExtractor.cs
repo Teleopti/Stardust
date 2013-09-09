@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
+using System.Linq;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 {
@@ -56,6 +57,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
                 }
                 
             }
+
+	        _shiftCategories = _shiftCategories.OrderBy(s => s.Description.Name).ToList();
         }
     }
 }
