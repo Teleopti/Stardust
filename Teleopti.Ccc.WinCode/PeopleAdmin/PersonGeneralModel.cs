@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
         public static IWorkflowControlSet NullWorkflowControlSet = new WorkflowControlSet(string.Empty);
         private readonly IUserDetail _userDetail;
         private readonly IPrincipalAuthorization _principalAuthorization;
+        private readonly PersonAccountUpdater _personAccountUpdater;
         private bool _isValid = true;
         private RoleCollectionParser _roleCollectionParser;
         private bool _logonDataCanBeChanged;
@@ -39,12 +40,13 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
             _optionalColumns = new List<IOptionalColumn>();
         }
 
-        public PersonGeneralModel(IPerson person, IUserDetail userDetail, IPrincipalAuthorization principalAuthorization)
+        public PersonGeneralModel(IPerson person, IUserDetail userDetail, IPrincipalAuthorization principalAuthorization, PersonAccountUpdater personAccountUpdater)
             : this()
         {
             ContainedEntity = person;
             _userDetail = userDetail;
             _principalAuthorization = principalAuthorization;
+            _personAccountUpdater = personAccountUpdater;
         }
 
         /// <summary>
@@ -441,7 +443,17 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
         public DateOnly? TerminalDate
         {
             get { return ContainedEntity.TerminalDate; }
-            set { ContainedEntity.TerminalDate = value; }
+            set
+            {
+                var terminateDate = value;
+
+                if(terminateDate!=null)
+                    ContainedEntity.TerminatePerson(terminateDate.GetValueOrDefault(), _personAccountUpdater);
+                else
+                {
+                    ContainedEntity.ActivatePerson(_personAccountUpdater);
+                }
+            }
             
         }
 

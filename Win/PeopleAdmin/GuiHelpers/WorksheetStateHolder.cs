@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             filteredPeopleHolder.MarkForInsert(newPerson);
 
-            var gridData = new PersonGeneralModel(newPerson, new UserDetail(newPerson), new PrincipalAuthorization(new CurrentTeleoptiPrincipal())) {CanBold = true};
+            var gridData = new PersonGeneralModel(newPerson, new UserDetail(newPerson), new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new PersonAccountUpdater()) {CanBold = true};
 
         	gridData.SetAvailableRoles(filteredPeopleHolder.ApplicationRoleCollection);
 
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
                 filteredPeopleHolder.MarkForInsert(person);
    
-                var personGridData = new PersonGeneralModel(person, new UserDetail(person),new PrincipalAuthorization(new CurrentTeleoptiPrincipal())) {CanBold = true};
+                var personGridData = new PersonGeneralModel(person, new UserDetail(person),new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new PersonAccountUpdater()) {CanBold = true};
             	personGridData.SetAvailableRoles(filteredPeopleHolder.ApplicationRoleCollection);
 
                 //set optional columns if any.);

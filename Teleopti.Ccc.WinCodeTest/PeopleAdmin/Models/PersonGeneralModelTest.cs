@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _base.AddPersonPeriod(_personPeriod);
             _mocks = new MockRepository();
             _principalAuthorization = _mocks.StrictMock<IPrincipalAuthorization>();
-            _target = new PersonGeneralModel(_base, new UserDetail(_base),_principalAuthorization);
+            _target = new PersonGeneralModel(_base, new UserDetail(_base),_principalAuthorization, new PersonAccountUpdater());
         }
 
         [Test]
@@ -253,7 +254,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             }
             using (_mocks.Playback())
             {
-                _target = new PersonGeneralModel(_base, userDetail, _principalAuthorization) {ApplicationLogOnName = setValue};
+                _target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdater()) {ApplicationLogOnName = setValue};
 
                 //Test get method
                 var getValue = _target.ApplicationLogOnName;
@@ -278,7 +279,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             }
             using (_mocks.Playback())
             {
-                _target = new PersonGeneralModel(_base, userDetail, _principalAuthorization) {ApplicationLogOnName = setValue};
+                _target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdater()) {ApplicationLogOnName = setValue};
 
                 Assert.That(_target.IsValid,Is.True);
             }
@@ -302,7 +303,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             }
             using (_mocks.Playback())
             {
-                _target = new PersonGeneralModel(_base, userDetail,_principalAuthorization) {Password = setValue};
+                _target = new PersonGeneralModel(_base, userDetail,_principalAuthorization, new PersonAccountUpdater()) {Password = setValue};
             }
         }
 
