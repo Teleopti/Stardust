@@ -71,6 +71,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
         private void assignValuesToChart(IShiftCategory selectedShiftCategory)
         {
+			
             if (selectedShiftCategory == null)
             {
 	            _chart.ShowLegend = true;
@@ -84,15 +85,40 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             {
 				_chart.ShowLegend = false;
                 var chartSeries = new ChartSeries(selectedShiftCategory.Description.Name);
+				chartSeries.Style.Font.Facename = "Microsoft Sans Serif";
                 chartSeries.Style.Interior = new BrushInfo(selectedShiftCategory.DisplayColor);
                 _chart.Model.Series.Add(chartSeries);
                 Dictionary<int, int> frequency = _model.GetShiftCategoryFrequency(selectedShiftCategory);
+	            frequency = addFakeValuesForEmptyPoints(frequency);
+				_chart.PrimaryXAxis.Range = new MinMaxInfo(0, frequency.Count, 1);
+
                 foreach (var item in frequency)
                 {
-                    chartSeries.Points.Add(item.Key, item.Value);
-                }
+                    chartSeries.Points.Add(item.Key, item.Value);    
+                }	
             }    
         }
+
+		private Dictionary<int, int> addFakeValuesForEmptyPoints(IDictionary<int, int> frequency)
+		{
+			var adjustededFrequency = new Dictionary<int, int>();
+			var max = frequency.Select(keyValuePair => keyValuePair.Key).Concat(new[] {0}).Max();
+
+			for (var i = 1; i <= max + 1; i++)
+			{
+				if (!frequency.ContainsKey(i))
+				{
+					adjustededFrequency.Add(i,0);
+				}
+				else
+				{
+					var value = frequency[i];
+					adjustededFrequency.Add(i, value);
+				}
+			}
+
+			return adjustededFrequency;
+		}
 
         private void initializeComponent()
         {
