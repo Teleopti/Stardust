@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldHandleModelErrorInPersistPreferenceInput()
+		public void ShouldHandleModelErrorInPersistOvertimeAvailabilityInput()
 		{
 			var overtimeAvailabilityPersister = MockRepository.GenerateMock<IOvertimeAvailabilityPersister>();
 			var response = MockRepository.GenerateStub<FakeHttpResponse>();
@@ -109,6 +109,21 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = target.OvertimeAvailability(input);
 			var data = result.Data as ModelStateResult;
 			data.Errors.Should().Contain("Error");
+		}
+
+		[Test]
+		public void ShouldDeleteOvertimeAvailability()
+		{
+			var overtimeAvailabilityPersister = MockRepository.GenerateMock<IOvertimeAvailabilityPersister>();
+			var date = DateOnly.Today;
+			var overtimeAvailabilityViewModel = new OvertimeAvailabilityViewModel();
+			overtimeAvailabilityPersister.Stub(x => x.Delete(date)).Return(overtimeAvailabilityViewModel);
+
+			using (var target = new ScheduleController(null, null, null, overtimeAvailabilityPersister))
+			{
+				var model = target.DeleteOvertimeAvailability(date).Data as OvertimeAvailabilityViewModel;
+				model.Should().Be.SameInstanceAs(overtimeAvailabilityViewModel);
+			}
 		}
 	}
 }

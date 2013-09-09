@@ -141,19 +141,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 							return new OvertimeAvailabilityViewModel
 							{
 								HasOvertimeAvailability = false,
-								StartTime = TimeHelper.TimeOfDayFromTimeSpan(
+								DefaultStartTime = TimeHelper.TimeOfDayFromTimeSpan(
 									s.ScheduleDay.PersonAssignment().Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime, CultureInfo.CurrentCulture),
-								EndTime = TimeHelper.TimeOfDayFromTimeSpan(
+								DefaultEndTime = TimeHelper.TimeOfDayFromTimeSpan(
 									s.ScheduleDay.PersonAssignment().Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime.Add(new TimeSpan(1, 0, 0)), CultureInfo.CurrentCulture),
-								EndTimeNextDay = s.ScheduleDay.PersonAssignment().Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime.Add(new TimeSpan(1, 0, 0)).Days > 0
+								DefaultEndTimeNextDay = s.ScheduleDay.PersonAssignment().Period.TimePeriod(s.ScheduleDay.TimeZone).EndTime.Add(new TimeSpan(1, 0, 0)).Days > 0
 							};
 						}
 						return new OvertimeAvailabilityViewModel
 						{
 							HasOvertimeAvailability = false,
-							StartTime = TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0)),
-							EndTime = TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0)),
-							EndTimeNextDay = false
+							DefaultStartTime = TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0)),
+							DefaultEndTime = TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0)),
+							DefaultEndTimeNextDay = false
 						};
 						
 					}))

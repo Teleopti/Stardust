@@ -74,5 +74,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			}
 			return Json(_overtimeAvailabilityPersister.Persist(input), JsonRequestBehavior.AllowGet);
 		}
+
+		[UnitOfWorkAction]
+		[HttpDelete]
+		[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb)]
+		public JsonResult DeleteOvertimeAvailability(DateOnly date)
+		{
+			return Json(_overtimeAvailabilityPersister.Delete(date));
+		}
 	}
 }

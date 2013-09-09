@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Web;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -108,7 +109,44 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.DataProvider
 
 			var result = target.Persist(input);
 			result.Should().Be.SameInstanceAs(viewModel);
+		}
 
+		[Test]
+		public void ShouldDeleteOvertimeAvailability()
+		{
+			var overtimeAvailabilityRepository = MockRepository.GenerateMock<IOvertimeAvailabilityRepository>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var date = DateOnly.Today;
+			var person = new Person();
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			var overtimeAvailability = MockRepository.GenerateMock<IOvertimeAvailability>();
+			overtimeAvailabilityRepository.Stub(x => x.Find(date, person))
+			                              .Return(new List<IOvertimeAvailability>
+				                              {
+					                              overtimeAvailability
+				                              });
+			var target = new OvertimeAvailabilityPersister(overtimeAvailabilityRepository, loggedOnUser, null);
+
+			var result = target.Delete(date);
+
+			overtimeAvailabilityRepository.AssertWasCalled(x => x.Remove(overtimeAvailability));
+			result.HasOvertimeAvailability.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldThrowHttp404OIfOvertimeAvailabilityDoesNotExists()
+		{
+			var overtimeAvailabilityRepository = MockRepository.GenerateMock<IOvertimeAvailabilityRepository>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var date = DateOnly.Today;
+			var person = new Person();
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			overtimeAvailabilityRepository.Stub(x => x.Find(date, person))
+										  .Return(new List<IOvertimeAvailability>());
+			var target = new OvertimeAvailabilityPersister(overtimeAvailabilityRepository, loggedOnUser, null);
+
+			var exception = Assert.Throws<HttpException>(() => target.Delete(DateOnly.Today));
+			exception.GetHttpCode().Should().Be(404);
 		}
 	}
 }

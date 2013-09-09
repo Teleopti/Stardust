@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Web;
+using AutoMapper;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Ccc.Web.Core;
@@ -35,6 +37,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 				_overtimeAvailabilityRepository.Add(overtimeAvailability);
 			}
 			return _mapper.Map<IOvertimeAvailability, OvertimeAvailabilityViewModel>(overtimeAvailability);
+		}
+
+		public OvertimeAvailabilityViewModel Delete(DateOnly date)
+		{
+			var overtimeAvailabilities = _overtimeAvailabilityRepository.Find(date, _loggedOnUser.CurrentUser());
+			if (overtimeAvailabilities.IsEmpty())
+				throw new HttpException(404, "OvertimeAvailability not found");
+
+			foreach (var overtimeAvailability in overtimeAvailabilities)
+			{
+				_overtimeAvailabilityRepository.Remove(overtimeAvailability);
+			}
+			return new OvertimeAvailabilityViewModel
+				{
+					HasOvertimeAvailability = false,
+					StartTime = null,
+					EndTime = null,
+					EndTimeNextDay = false
+				};
 		}
 	}
 }
