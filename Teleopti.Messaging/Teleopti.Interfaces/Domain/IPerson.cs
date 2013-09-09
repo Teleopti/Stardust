@@ -292,6 +292,19 @@ namespace Teleopti.Interfaces.Domain
         TimeSpan AverageWorkTimeOfDay(DateOnly dateOnly);
 
 		/// <summary>
+		/// activates / reactivates person
+		/// </summary>
+		/// <param name="personAccountUpdater"></param>
+	    void ActivatePerson(IPersonAccountUpdater personAccountUpdater);
+
+		/// <summary>
+		/// Terminates a person
+		/// </summary>
+		/// <param name="terminalDate"></param>
+		/// <param name="personAccountUpdater"></param>
+	    void TerminatePerson(DateOnly terminalDate, IPersonAccountUpdater personAccountUpdater);
+
+		/// <summary>
 		/// Change the start date for a person period.
 		/// </summary>
 		/// <param name="startDate"></param>

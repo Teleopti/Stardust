@@ -784,5 +784,42 @@ namespace Teleopti.Ccc.DomainTest.Common
             _target.AddSchedulePeriod(schedulePeriod);
             Assert.That(_target.AverageWorkTimeOfDay(dateOnly), Is.EqualTo(TimeSpan.FromMinutes(schedulePeriod.PeriodTime.Value.TotalMinutes / 19)));
         }
+
+	    [Test]
+	    public void ShuoldPersonAccountUpdaterCalledWhenTerminatePerson()
+	    {
+			DateOnly dateOnly = new DateOnly();
+		    MockRepository mocks = new MockRepository();
+			var personAccountUpdater = mocks.StrictMock<IPersonAccountUpdater>();
+		    using (mocks.Record())
+		    {
+			   Expect.Call(() => personAccountUpdater.UpdatePersonAccounts())
+				   .Repeat.Once();
+		    }
+		    using (mocks.Playback())
+		    {
+				_target.TerminatePerson(dateOnly, personAccountUpdater);
+		    }
+
+
+	    }
+
+		[Test]
+		public void ShouldPersonAccountUpdaterCalledWhenActivatePerson()
+		{
+			MockRepository mocks = new MockRepository();
+			var personAccountUpdater = mocks.StrictMock<IPersonAccountUpdater>();
+			using (mocks.Record())
+			{
+				Expect.Call(() => personAccountUpdater.UpdatePersonAccounts())
+					.Repeat.Once();
+			}
+			using (mocks.Playback())
+			{
+				_target.ActivatePerson(personAccountUpdater);
+			}
+
+
+		}
     }
 }

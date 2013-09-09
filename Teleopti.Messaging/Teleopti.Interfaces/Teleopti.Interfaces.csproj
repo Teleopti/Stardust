@@ -127,6 +127,7 @@
     <Compile Include="Domain\IMainShiftLayer.cs" />
     <Compile Include="Domain\IMoveLayerVertical.cs" />
     <Compile Include="Domain\IOvertimeShiftLayer.cs" />
+    <Compile Include="Domain\IPersonAccountUpdater.cs" />
     <Compile Include="Domain\IPersonalShiftLayer.cs" />
     <Compile Include="Domain\IOvertimeAvailability.cs" />
     <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />
