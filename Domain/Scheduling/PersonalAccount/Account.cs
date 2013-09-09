@@ -59,7 +59,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
         {
             get
             {
-                //CalculateBalanceIn();
                 return BalanceIn.Add(Accrued).Add(Extra).Subtract(LatestCalculatedBalance).Subtract(BalanceOut);
             }
         }

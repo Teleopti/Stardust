@@ -17,7 +17,8 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			// sort person account collection by starting datetime
 			// go though all of them
-			// set the account 
+			// set the terminal date
+			// 
 			throw new System.NotImplementedException();
 		}
 	}
