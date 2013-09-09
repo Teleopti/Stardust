@@ -21,11 +21,6 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         DateOnly StartDate { get; set; }
 
-        /////<summary>
-        ///// Forces the PersonAccount to recalculate BalanceIn
-        /////</summary>
-        //void CalculateBalanceIn();
-
         /// <summary>
         /// Gets a value indicating whether this instance is exceeded.
         /// </summary>

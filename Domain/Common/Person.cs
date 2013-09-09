@@ -64,19 +64,19 @@ namespace Teleopti.Ccc.Domain.Common
 		public void ActivatePerson(IPersonAccountUpdater personAccountUpdater)
 	    {
 		    TerminalDate = null;
-			personAccountUpdater.UpdatePersonAccounts();
+			personAccountUpdater.UpdatePersonAccounts(null);
 	    }
 
 	    public void TerminatePerson(DateOnly terminalDate, IPersonAccountUpdater personAccountUpdater)
 	    {
 		    TerminalDate = terminalDate;
-			personAccountUpdater.UpdatePersonAccounts();
+			personAccountUpdater.UpdatePersonAccounts(terminalDate);
 	    }
 
 	    public virtual DateOnly? TerminalDate
         {
             get { return _terminalDate; }
-            private set
+            set
             {
 	            if (_terminalDate != value)
 	            {

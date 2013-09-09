@@ -793,7 +793,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var personAccountUpdater = mocks.StrictMock<IPersonAccountUpdater>();
 		    using (mocks.Record())
 		    {
-			   Expect.Call(() => personAccountUpdater.UpdatePersonAccounts())
+			   Expect.Call(() => personAccountUpdater.UpdatePersonAccounts(dateOnly))
 				   .Repeat.Once();
 		    }
 		    using (mocks.Playback())
@@ -811,7 +811,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var personAccountUpdater = mocks.StrictMock<IPersonAccountUpdater>();
 			using (mocks.Record())
 			{
-				Expect.Call(() => personAccountUpdater.UpdatePersonAccounts())
+				Expect.Call(() => personAccountUpdater.UpdatePersonAccounts(null))
 					.Repeat.Once();
 			}
 			using (mocks.Playback())
