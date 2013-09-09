@@ -1,4 +1,5 @@
-﻿using Syncfusion.Windows.Forms.Grid;
+﻿using Syncfusion.Windows.Forms;
+using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
@@ -41,7 +42,15 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			QueryCellInfo += shiftPerAgentGridQueryCellInfo;
 			CellDoubleClick += shiftPerAgentGridCellDoubleClick;
 
-			ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);	
+			ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
+
+			ResizingColumns -= shiftPerAgentGridResizingColumns;
+			ResizingColumns += shiftPerAgentGridResizingColumns;
+		}
+
+		void shiftPerAgentGridResizingColumns(object sender, GridResizingColumnsEventArgs e)
+		{
+			e.Cancel = true;
 		}
 
 		void shiftPerAgentGridCellDoubleClick(object sender, GridCellClickEventArgs e)
@@ -115,7 +124,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				QueryColCount -= shiftPerAgentGridQueryColCount;
 				QueryRowCount -= shiftPerAgentGridQueryRowCount;
 				QueryCellInfo -= shiftPerAgentGridQueryCellInfo;
-				CellDoubleClick -= shiftPerAgentGridCellDoubleClick;	
+				CellDoubleClick -= shiftPerAgentGridCellDoubleClick;
+				ResizingColumns -= shiftPerAgentGridResizingColumns;
 			}
 
 			base.Dispose(disposing);
