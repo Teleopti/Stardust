@@ -1,4 +1,5 @@
-﻿Feature: Preferences feedback - Scenario refact
+﻿@WatiN
+Feature: Preferences feedback - Scenario refact
 	In order to know at which times I might work
 	As an agent
 	I want feedback for my preferences

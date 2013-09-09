@@ -1,4 +1,5 @@
-﻿Feature: Preferences Extended
+﻿@WatiN
+Feature: Preferences Extended
 	In order to view and submit when I prefer to work in more detail
 	As an agent
 	I want to view and submit extended preferences

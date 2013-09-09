@@ -1,4 +1,5 @@
-﻿Feature: License
+﻿@WatiN
+Feature: License
 	In order to enforce application license
 	As Teleopti
 	I want restrict usage based on license

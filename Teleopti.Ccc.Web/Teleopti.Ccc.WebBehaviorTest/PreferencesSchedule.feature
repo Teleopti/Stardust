@@ -1,4 +1,5 @@
-﻿Feature: Preferences schedule
+﻿@WatiN
+Feature: Preferences schedule
 	In order to view and submit when I prefer to work
 	As an agent
 	I want to see when I have been scheduled already

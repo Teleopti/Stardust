@@ -1,4 +1,5 @@
-﻿Feature: Preferences follow up
+﻿@WatiN
+Feature: Preferences follow up
 	In order to see my schedule and my preferences side by side
 	As an agent
 	I can easily see my preferences on a scheduled day

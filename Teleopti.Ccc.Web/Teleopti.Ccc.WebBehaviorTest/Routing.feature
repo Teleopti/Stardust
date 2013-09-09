@@ -1,4 +1,5 @@
-﻿Feature: Routing
+﻿@WatiN
+Feature: Routing
 	In order make it easy to browse to the site
 	As a user
 	I want to be redirected to the correct locations

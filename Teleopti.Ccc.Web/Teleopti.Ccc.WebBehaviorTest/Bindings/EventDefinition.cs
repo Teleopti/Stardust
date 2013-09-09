@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Log.Debug("Preparing for scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 
-			Navigation.GotoBlank();
 			Browser.SelectBrowserByTag();
 			Browser.NotifyBeforeScenario();
 			

@@ -1,4 +1,5 @@
-﻿Feature: View daily staffing metrics
+﻿@WatiN
+Feature: View daily staffing metrics
 	In order to make future staffing decisions
 	As a team leader
 	I want to see the staffing metrics for skills

@@ -1,4 +1,5 @@
-﻿Feature: Preferences feedback blacklisting
+﻿@WatiN
+Feature: Preferences feedback blacklisting
 	In order to not be assigned extreme shifts without requesting it
 	As an agent
 	I want feedback to only give me extreme shifts when I have a preference for it

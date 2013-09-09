@@ -1,4 +1,5 @@
-﻿Feature: Calendar Share
+﻿@WatiN
+Feature: Calendar Share
 	In order to share my calendar with myself and others on the internet
 	As an agent
 	I want to 
