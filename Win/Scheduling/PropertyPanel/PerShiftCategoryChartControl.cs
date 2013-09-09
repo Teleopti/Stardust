@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Drawing;
+using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Win.Common;
@@ -99,6 +100,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             _comboBoxShiftCategory = new ComboBoxAdv();
 			_comboBoxShiftCategory.Margin = new Padding(33, 3, 3, 3);
             _comboBoxShiftCategory.SelectedIndexChanged += selectedIndexChanged;
+			_comboBoxShiftCategory.DropDownStyle = ComboBoxStyle.DropDownList;
+			_comboBoxShiftCategory.Style = VisualStyle.Office2007;
             tableLayoutPanel1 = new TableLayoutPanel();
             SuspendLayout();
             // 
