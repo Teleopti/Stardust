@@ -138,10 +138,16 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 			markRoot(ent);
 
-			ICreateInfo createInfo = entity as ICreateInfo;
+			var createInfo = entity as ICreateInfo;
 			if (createInfo != null)
 			{
 				setCreatedProperties(createInfo, propertyNames, state);
+				return true;
+			}
+			var updateInfo = entity as IChangeInfo;
+			if (updateInfo != null)
+			{
+				setUpdatedProperties(updateInfo, propertyNames, state);
 				return true;
 			}
 			return false;
@@ -195,14 +201,12 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			return false;
 		}
 
-		private void setCreatedProperties(ICreateInfo createInfo, string[] propertyNames, object[] state)
+		private void setCreatedProperties(ICreateInfo createInfo, IEnumerable<string> propertyNames, IList<object> state)
 		{
 			var nu = DateTime.UtcNow;
 			var props = propertyIndexesForInsert(propertyNames);
 			state[props[createdByPropertyName]] = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
 			state[props[createdOnPropertyName]] = nu;
-
-			setUpdatedProperties(nu, createInfo, propertyNames, state);
 
 			var root = createInfo as IAggregateRoot;
 			if (root != null) modifiedRoots.Add(new RootChangeInfo(root, DomainUpdateType.Insert));
@@ -210,7 +214,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		private void setUpdatedInfo(IAggregateRoot root, object[] currentState, string[] propertyNames)
 		{
-			setUpdatedProperties(DateTime.UtcNow, root, propertyNames, currentState);
+			setUpdatedProperties(root, propertyNames, currentState);
 
 			var deleteInfo = root as IDeleteTag;
 			if (deleteInfo != null && deleteInfo.IsDeleted)
@@ -223,10 +227,11 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			}
 		}
 
-		private static void setUpdatedProperties(DateTime nu, object root, string[] propertyNames, object[] currentState)
+		private static void setUpdatedProperties(object root, string[] propertyNames, object[] currentState)
 		{
 			if (root is IChangeInfo)
 			{
+				var nu = DateTime.UtcNow;
 				var props = propertyIndexesForUpdate(propertyNames);
 				currentState[props[updatedByPropertyName]] = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
 				currentState[props[updatedOnPropertyName]] = nu;
