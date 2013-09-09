@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
                             TimeZoneInfo timeZoneInfo =
                                 TeleoptiPrincipal.Current.Regional.TimeZone;
                             values.LastUpdate = TimeZoneHelper.ConvertFromUtc(skillDay.UpdatedOn.GetValueOrDefault(skillDay.CreatedOn.Value), timeZoneInfo);
-                            values.Name = skillDay.UpdatedBy != null ? skillDay.UpdatedBy.Name : skillDay.CreatedBy.Name;
+	                        values.Name = skillDay.UpdatedBy.Name;
                             values.Tag = scenario.Description.Name;
                             allvalues.Add(scenario, values);
                         }
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
                             TeleoptiPrincipal.Current.Regional.TimeZone;
                         values.LastUpdate = TimeZoneHelper.ConvertFromUtc(validatedVolumeDay.UpdatedOn.GetValueOrDefault(validatedVolumeDay.CreatedOn.Value),
                                                                           timeZoneInfo);
-                        values.Name = validatedVolumeDay.UpdatedBy != null ? validatedVolumeDay.UpdatedBy.Name : validatedVolumeDay.CreatedBy.Name;
+                        values.Name = validatedVolumeDay.UpdatedBy.Name;
                     }
                 }
             }
