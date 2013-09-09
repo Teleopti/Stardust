@@ -112,9 +112,13 @@ namespace Teleopti.Ccc.Rta.Server
 
 				List<RtaAlarmLight> alarmList;
 				if (!activityAlarms.TryGetValue(state.ScheduledId, out alarmList))
+				{
 					LoggingSvc.InfoFormat("Could not find any alarms connected to this activity id: {0}", state.ScheduledId);
-
-				else
+					if (!activityAlarms.TryGetValue(Guid.Empty, out alarmList))
+						LoggingSvc.Info("Coult not find any alarms with no activity");
+				}
+				
+				if (alarmList != null)
 				{
 					var loggedOutState = alarmList.FirstOrDefault(a => a.IsLogOutState);
 					if (loggedOutState == null)
@@ -264,8 +268,20 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 
 			LoggingSvc.InfoFormat(
-				"Could not find alarm (no matching schedulelayer payloadId)  for PlatformId: {0}, StateCode: {1}", platformTypeId,
+				"Could not find alarm (no matching schedulelayer payloadId) for Scheduled: {0} PlatformId: {1}, StateCode: {2}",
+				localPayloadId, platformTypeId,
 				stateCode);
+
+			LoggingSvc.Info("Trying to find alarm for no scheduled activity");
+			if (activityAlarms.TryGetValue(Guid.Empty, out list))
+			{
+				var alarm = list.SingleOrDefault(s => s.StateGroupId == state);
+				if (alarm != null)
+					LoggingSvc.InfoFormat("Found alarm for no activity: {1}, alarmId: {0}", alarm.AlarmTypeId, alarm.Name);
+				return alarm;
+			}
+
+			LoggingSvc.Info("Could not find any alarm");
 			return null;
 		}
 

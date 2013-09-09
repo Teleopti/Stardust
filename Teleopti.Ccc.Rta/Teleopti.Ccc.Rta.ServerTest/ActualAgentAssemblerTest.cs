@@ -136,6 +136,67 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		}
 
 		[Test]
+		public void VerifyGetState_ReadModel()
+		{
+			var currentLayer = new ScheduleLayer
+			{
+				Name = "CurrentLayer",
+				StartDateTime = _dateTime,
+				PayloadId = _payloadId
+			};
+
+			var nextLayer = new ScheduleLayer
+			{
+				Name = "NextLayer"
+			};
+
+			var previousState = new ActualAgentState
+			{
+				AlarmId = _guid,
+				StateStart = _dateTime
+			};
+
+			var alarmLight = new RtaAlarmLight
+			{
+				Name = "SomeName",
+				AlarmTypeId = _guid
+			};
+			var dictionary = new Dictionary<string, List<RtaStateGroupLight>>
+				{
+					{
+						_stateCode, new List<RtaStateGroupLight>
+							{
+								new RtaStateGroupLight
+									{
+										PlatformTypeId = _platformTypeId,
+										StateCode = _stateCode,
+										BusinessUnitId = _businessUnitId,
+										StateGroupId = _stateGroupId
+									}
+							}
+					}
+				};
+
+			_dataHandler.Expect(s => s.GetReadModel(_guid)).Return(new List<ScheduleLayer>{currentLayer, nextLayer});
+			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, new List<ScheduleLayer>()))
+						.Return(new List<ScheduleLayer> { currentLayer, nextLayer }).IgnoreArguments();
+			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
+			_dataHandler.Expect(s => s.StateGroups())
+						.Return(new ConcurrentDictionary<string, List<RtaStateGroupLight>>(dictionary));
+
+			_dataHandler.Expect(s => s.ActivityAlarms())
+						.Return(_activityAlarms);
+			_mock.ReplayAll();
+
+			var result = _target.GetAgentState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan(), new DateTime(), "");
+			Assert.That(result.AlarmName, Is.EqualTo(alarmLight.Name));
+			Assert.That(result.StateStart, Is.EqualTo(currentLayer.StartDateTime));
+			Assert.That(result.Scheduled, Is.EqualTo(currentLayer.Name));
+			Assert.That(result.ScheduledNext, Is.EqualTo(nextLayer.Name));
+			_mock.VerifyAll();
+		}
+		
+		[Test]
 		public void VerifyGetStateNextAndCurrentAreEqual()
 		{
 			var currentLayer = new ScheduleLayer
@@ -335,7 +396,75 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_mock.VerifyAll();
 			resetEvent.Dispose();
 		}
-		
+
+		[Test]
+		public void ShouldCheckSchedule_FoundReadModel()
+		{
+
+			var currentLayer = new ScheduleLayer
+				{
+					Name = "CurrentLayer",
+					StartDateTime = _dateTime,
+					PayloadId = _payloadId
+				};
+
+			var nextLayer = new ScheduleLayer
+				{
+					Name = "NextLayer"
+				};
+
+			var previousState = new ActualAgentState
+				{
+					AlarmId = _guid,
+					StateStart = _dateTime,
+					StateCode = _stateCode,
+					PlatformTypeId = _platformTypeId
+				};
+
+			var alarmLight = new RtaAlarmLight
+				{
+					Name = "SomeName",
+					AlarmTypeId = _guid
+				};
+
+			var dictionary = new Dictionary<string, List<RtaStateGroupLight>>
+				{
+					{
+						_stateCode, new List<RtaStateGroupLight>
+							{
+								new RtaStateGroupLight
+									{
+										PlatformTypeId = _platformTypeId,
+										StateCode = _stateCode,
+										BusinessUnitId = _businessUnitId,
+										StateGroupId = _stateGroupId
+									}
+							}
+					}
+				};
+			var resetEvent = new AutoResetEvent(false);
+
+			_dataHandler.Expect(s => s.GetReadModel(_guid)).Return(new List<ScheduleLayer> {currentLayer, nextLayer});
+			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, new List<ScheduleLayer>()))
+			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer}).IgnoreArguments();
+			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
+			_dataHandler.Expect(s => s.StateGroups())
+			            .Return(new ConcurrentDictionary<string, List<RtaStateGroupLight>>(dictionary));
+
+			_dataHandler.Expect(s => s.ActivityAlarms())
+			            .Return(_activityAlarms);
+			_dataHandler.Expect(s => s.AddOrUpdate(new List<IActualAgentState> {new ActualAgentState()})).IgnoreArguments();
+			_mock.ReplayAll();
+
+			var result = _target.GetAgentStateForScheduleUpdate(_guid, _businessUnitId, _dateTime);
+			Assert.That(result.AlarmName, Is.EqualTo(alarmLight.Name));
+			Assert.That(result.StateStart, Is.EqualTo(currentLayer.StartDateTime));
+			Assert.That(result.Scheduled, Is.EqualTo(currentLayer.Name));
+			Assert.That(result.ScheduledNext, Is.EqualTo(nextLayer.Name));
+			_mock.VerifyAll();
+			resetEvent.Dispose();
+		}
+
 		[Test]
 		public void ShouldCheckScheduleNoPreviousState()
 		{
@@ -487,6 +616,65 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			result.First().State.Should().Be.EqualTo("StateGroupName");
 		}
 
+		[Test]
+		public void GetAgentStateForMissingAgent_UnknownScheduledActivity_ShouldSetAlarmToNoScheduledActivity()
+		{
+			var agent = initializeAgentStateWithDefaults();
+			agent.ScheduledId = Guid.NewGuid();
+			var missingAgents = new List<IActualAgentState> {agent};
+			
+			var noActivityAlarm = new RtaAlarmLight
+				{
+					ActivityId = Guid.Empty,
+					Name = "NoScheduledActivity",
+					IsLogOutState = true
+				};
+			var alarmDictionary = new ConcurrentDictionary<Guid, List<RtaAlarmLight>>();
+			alarmDictionary.TryAdd(Guid.Empty, new List<RtaAlarmLight> {noActivityAlarm});			
+
+			var stateGroup = new RtaStateGroupLight
+				{
+					BusinessUnitId = _guid,
+					PlatformTypeId = _guid,
+					StateCode = "LOGGED-OFF",
+					StateGroupName = "Logged Off"
+				};
+			var stateDictionary = new ConcurrentDictionary<string, List<RtaStateGroupLight>>();
+			stateDictionary.TryAdd("LOGGED-OFF", new List<RtaStateGroupLight> {stateGroup});
+
+
+			_dataHandler.Expect(d => d.GetMissingAgentStatesFromBatch(_batchId, _sourceId)).Return(missingAgents);
+			_dataHandler.Expect(d => d.ActivityAlarms()).Return(alarmDictionary);
+			_dataHandler.Expect(d => d.StateGroups()).Return(stateDictionary);
+
+			var result = _target.GetAgentStatesForMissingAgents(_batchId, _sourceId).Single();
+			result.AlarmName.Should().Be.EqualTo("NoScheduledActivity");
+		}
+
+		[Test]
+		public void GetAgentState_UnKnownScheduledActivity_ShouldSetAlarmToNoSchuledActivity()
+		{
+			var stateGroup = new RtaStateGroupLight { BusinessUnitId = _guid, PlatformTypeId = _guid, StateGroupId = _guid};
+			var stateGroupDictionary = new ConcurrentDictionary<string, List<RtaStateGroupLight>>();
+			stateGroupDictionary.TryAdd("stateCode", new List<RtaStateGroupLight> {stateGroup});
+
+			var activityAlarm = new RtaAlarmLight {ActivityId = Guid.Empty, StateGroupId = _guid, StateGroupName = "Logged out"};
+			var alarmDicitonary = new ConcurrentDictionary<Guid, List<RtaAlarmLight>>();
+			alarmDicitonary.TryAdd(Guid.Empty, new List<RtaAlarmLight> {activityAlarm});
+		
+			var scheduleLayer = new ScheduleLayer { PayloadId = Guid.NewGuid() };
+
+			_dataHandler.Expect(d => d.GetReadModel(_guid)).Return(new List<ScheduleLayer>());
+			_dataHandler.Expect(d => d.CurrentLayerAndNext(_dateTime, null)).IgnoreArguments().Return(new List<ScheduleLayer> {scheduleLayer, scheduleLayer});
+			_dataHandler.Expect(d => d.LoadOldState(_guid)).Return(initializeAgentStateWithDefaults());
+
+			_dataHandler.Expect(d => d.StateGroups()).Return(stateGroupDictionary);
+			_dataHandler.Expect(d => d.ActivityAlarms()).Return(alarmDicitonary);
+
+			var result = _target.GetAgentState(_guid, _guid, _guid, "stateCode", _dateTime, new TimeSpan(), new DateTime(), "2");
+			result.State.Should().Be.EqualTo("Logged out");
+		}
+		
 		private IActualAgentState initializeAgentStateWithDefaults()
 		{
 			return new ActualAgentState

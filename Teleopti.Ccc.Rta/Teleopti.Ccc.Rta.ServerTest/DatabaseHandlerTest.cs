@@ -241,24 +241,25 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void VerifyAddOrUpdate()
 		{
 			var agentState = new ActualAgentState();
+			var batchAgentState = new ActualAgentState {BatchId = new DateTime()};
 			var dataParameters = _mock.StrictMock<IDataParameterCollection>();
 
 			_stringHandler.Expect(sh => sh.DataStoreConnectionString()).Return("connectionString");
 			_connectionFactory.Expect(cf => cf.CreateConnection("connectionString")).Return(_connection);
-			_connection.Expect(c => c.CreateCommand()).Return(_command);
+			_connection.Expect(c => c.CreateCommand()).Return(_command).Repeat.Twice();
 
-			_command.CommandType = CommandType.StoredProcedure;
-			_command.CommandText = "[RTA].[rta_addorupdate_actualagentstate]";
+			_command.Expect(c => c.CommandType = CommandType.StoredProcedure).Repeat.Twice();
+			_command.Expect(c => c.CommandText = "[RTA].[rta_addorupdate_actualagentstate]").Repeat.Twice();
 
 			_command.Expect(c => c.Parameters).Return(dataParameters).Repeat.Any();
 			dataParameters.Expect(d => d.Add(new SqlParameter())).IgnoreArguments().Return(0).Repeat.Any();
 			
 			_connection.Expect(c => c.Open());
-			_command.Expect(c => c.ExecuteNonQuery()).Return(1);
+			_command.Expect(c => c.ExecuteNonQuery()).Return(1).Repeat.Twice();
 			_connection.Expect(c => c.Dispose());
 			_mock.ReplayAll();
 
-			_target.AddOrUpdate(new List<IActualAgentState> {agentState});
+			_target.AddOrUpdate(new List<IActualAgentState> {agentState, batchAgentState});
 			_mock.VerifyAll();
 		}
 
