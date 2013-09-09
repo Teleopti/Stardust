@@ -159,6 +159,7 @@
     <Compile Include="Persisters\BugTest\Bug24079.cs" />
     <Compile Include="Persisters\PersonRequestRefresherTest.cs" />
     <Compile Include="Repositories\AbsenceRequestInfoTest.cs" />
+    <Compile Include="Repositories\PersonForShiftTradeRepositoryTest.cs" />
     <Compile Include="Repositories\SkillLoaderDeciderTest.cs" />
     <Compile Include="Repositories\Deadlock\StudentAvailabilityPersistTest.cs" />
     <Compile Include="Foundation\ApplicationDataTest.cs" />

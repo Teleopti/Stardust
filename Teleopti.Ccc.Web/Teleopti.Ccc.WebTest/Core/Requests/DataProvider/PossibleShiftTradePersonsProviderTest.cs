@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private IPersonRepository personRepository;
 		private IPermissionProvider permissionProvider;
 		private IPerson currentUser;
-		private IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository;
+		private IPersonForShiftTradeRepository personForShiftTradeRepository;
 		private ITeam myTeam;
 
 		[SetUp]
@@ -40,12 +40,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			currentUser.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today, myTeam));
 			shiftTradeValidator = MockRepository.GenerateMock<IShiftTradeLightValidator>();
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			personSelectorReadOnlyRepository = MockRepository.GenerateMock<IPersonSelectorReadOnlyRepository>();
+			personForShiftTradeRepository = MockRepository.GenerateMock<IPersonForShiftTradeRepository>();
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Expect(l => loggedOnUser.CurrentUser()).Return(currentUser);
 
-			target = new PossibleShiftTradePersonsProvider(personRepository, shiftTradeValidator, loggedOnUser, permissionProvider, personSelectorReadOnlyRepository);
+			target = new PossibleShiftTradePersonsProvider(personRepository, shiftTradeValidator, loggedOnUser, permissionProvider, personForShiftTradeRepository);
 		}
 
 		[Test]
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var date = DateOnly.Today;
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, LoadOnlyMyTeam = true };
 
-			personSelectorReadOnlyRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, myTeam.Id))
+			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, myTeam.Id))
 											.Return(new List<IAuthorizeOrganisationDetail> { currentUserGuids });
 
 			personRepository.Expect(rep => rep.FindPeople(new List<Guid>())).Return(new Collection<IPerson>());
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var date = DateOnly.Today;
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, LoadOnlyMyTeam = true };
 
-			personSelectorReadOnlyRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, myTeam.Id))
+			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, myTeam.Id))
 											.Return(new List<IAuthorizeOrganisationDetail> { personInMyTeamGuids });
 			permissionProvider.Expect(
 				perm =>
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var date = DateOnly.Today;
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, LoadOnlyMyTeam = true };
 
-			personSelectorReadOnlyRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, myTeam.Id))
+			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, myTeam.Id))
 											.Return(new List<IAuthorizeOrganisationDetail> { validAgentGuids, invalidAgentGuids });
 			permissionProvider.Expect(
 				perm =>

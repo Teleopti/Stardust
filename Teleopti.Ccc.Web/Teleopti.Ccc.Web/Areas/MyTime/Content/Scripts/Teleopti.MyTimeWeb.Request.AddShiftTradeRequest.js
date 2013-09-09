@@ -161,7 +161,11 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				url: "Requests/ShiftTradeRequestSchedule",
 				dataType: "json",
 				type: 'GET',
-				data: { selectedDate: self.requestedDateInternal().toDate().toJSON(), loadMyTeam: self.filterMyTeam() },
+				contentType: 'application/json; charset=utf-8',
+				data: {
+				    selectedDate: self.requestedDateInternal().toDate().toJSON(),
+				    loadOnlyMyTeam: self.myTeamFilter()
+				},
 				beforeSend: function () {
 					self.IsLoading(true);
 				},

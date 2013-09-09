@@ -16,19 +16,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IShiftTradeLightValidator _shiftTradeValidator;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPermissionProvider _permissionProvider;
-		private readonly IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
+		private readonly IPersonForShiftTradeRepository _personForShiftTradeRepository;
 
 		public PossibleShiftTradePersonsProvider(IPersonRepository personRepository, 
 																					IShiftTradeLightValidator shiftTradeValidator, 
 																					ILoggedOnUser loggedOnUser,
 																					IPermissionProvider permissionProvider,
-																					IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository)
+																					IPersonForShiftTradeRepository personForShiftTradeRepository)
 		{
 			_personRepository = personRepository;
 			_shiftTradeValidator = shiftTradeValidator;
 			_loggedOnUser = loggedOnUser;
 			_permissionProvider = permissionProvider;
-			_personSelectorReadOnlyRepository = personSelectorReadOnlyRepository;
+			_personForShiftTradeRepository = personForShiftTradeRepository;
 		}
 
 		public IEnumerable<IPerson> RetrievePersons(ShiftTradeScheduleViewModelData shiftTradeArguments)
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			Guid? myTeamid = shiftTradeArguments.LoadOnlyMyTeam
 				                 ? me.Period(shiftTradeArguments.ShiftTradeDate).Team.Id
 				                 : null;
-			var personForShiftTradeList = _personSelectorReadOnlyRepository.GetPersonForShiftTrade(shiftTradeArguments.ShiftTradeDate, myTeamid);
+			var personForShiftTradeList = _personForShiftTradeRepository.GetPersonForShiftTrade(shiftTradeArguments.ShiftTradeDate, myTeamid);
 
 			personForShiftTradeList = personForShiftTradeList.Where(
 				personGuid => personGuid.PersonId != me.Id &&

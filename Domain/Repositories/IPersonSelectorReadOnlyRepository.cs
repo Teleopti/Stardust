@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         IList<IPersonSelectorUserDefined> GetUserDefinedTab(DateOnly onDate, Guid value);
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         IList<IUserDefinedTabLight> GetUserDefinedTabs();
-	    IList<IAuthorizeOrganisationDetail> GetPersonForShiftTrade(DateOnly shiftTradeDate, Guid? teamId);
     }
 
     public enum PersonSelectorField

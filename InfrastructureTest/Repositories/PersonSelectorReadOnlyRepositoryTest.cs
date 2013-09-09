@@ -60,29 +60,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				_target.GetUserDefinedTab(new DateOnly(2012, 1, 27), Guid.NewGuid());
 			}
 		}
-
-		[Test]
-		public void ShouldLoadPersonInMyTeamForShiftTrade()
-		{
-			UnitOfWork.PersistAll();
-			SkipRollback();
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
-			{
-				_target = new PersonSelectorReadOnlyRepository(uow);
-				_target.GetPersonForShiftTrade(new DateOnly(2012, 12, 27), Guid.NewGuid());
-			}
-		}
-
-		[Test]
-		public void ShouldLoadPersonInAnyTeamForShiftTrade()
-		{
-			UnitOfWork.PersistAll();
-			SkipRollback();
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
-			{
-				_target = new PersonSelectorReadOnlyRepository(uow);
-				_target.GetPersonForShiftTrade(new DateOnly(2012, 12, 27), null);
-			}
-		}
 	}
 }
