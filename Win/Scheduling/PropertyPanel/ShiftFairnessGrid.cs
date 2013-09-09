@@ -40,6 +40,16 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			CellDoubleClick += shiftFairnessGridCellDoubleClick;
 
 			ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
+
+			ResizingColumns -= shiftFairnessGridResizingColumns;
+			ResizingColumns += shiftFairnessGridResizingColumns;
+
+			((NumericReadOnlyCellModel)CellModels["NumericReadOnlyCell"]).NumberOfDecimals = 2;
+		}
+
+		void shiftFairnessGridResizingColumns(object sender, GridResizingColumnsEventArgs e)
+		{
+			e.Cancel = true;
 		}
 
 		void shiftFairnessGridCellDoubleClick(object sender, GridCellClickEventArgs e)
@@ -148,6 +158,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				QueryRowCount -= shiftFairnessGridQueryRowCount;
 				QueryCellInfo -= shiftFairnessGridQueryCellInfo;
 				CellDoubleClick -= shiftFairnessGridCellDoubleClick;
+				ResizingColumns -= shiftFairnessGridResizingColumns;
+				ResizingColumns += shiftFairnessGridResizingColumns;
 			}
 
 			base.Dispose(disposing);
