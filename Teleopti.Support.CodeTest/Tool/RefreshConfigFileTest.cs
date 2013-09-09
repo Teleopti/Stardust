@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Teleopti.Support.Code.Tool;
 using Rhino.Mocks;
 
@@ -12,6 +13,7 @@ namespace Teleopti.Support.CodeTest.Tool
         MockRepository _mock = new MockRepository();
         private IConfigFileTagReplacer _replacer;
         RefreshConfigFile _refresher;
+        private List<SearchReplace> _lst;
 
         [SetUp]
         public void Setup()
@@ -19,19 +21,20 @@ namespace Teleopti.Support.CodeTest.Tool
             _mock = new MockRepository();
             _replacer = _mock.DynamicMock<IConfigFileTagReplacer>();
             _refresher = new RefreshConfigFile(_replacer);
+            _lst = new List<SearchReplace>();
         }
 
         [Test]
         public void ReplaceFileTest()
         {
-            _refresher.ReplaceFile(OldFile, Newfile);
+            _refresher.ReplaceFile(OldFile, Newfile, _lst, true);
         }
 
         [Test]
         public void SplitAndReplaceTest()
         {
             const string files = @"..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\App.config,ConfigFiles\AppETLTool.config";
-            _refresher.SplitAndReplace(files);
+            _refresher.SplitAndReplace(files, _lst, true);
         }
 
         [Test]
@@ -40,7 +43,16 @@ namespace Teleopti.Support.CodeTest.Tool
             const string files = @"..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\App.config,ConfigFiles\AppETLService.config
 ..\..\..\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\app.config,ConfigFiles\AppRaptor.config
 ..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\App.config,ConfigFiles\AppETLTool.config";
-            _refresher.ReadLinesFromString(files);
+            _refresher.ReadLinesFromString(files, _lst, true);
+        }
+
+        [Test]
+        public void ShouldOverWriteTest()
+        {
+            const string files = @"..\..\..\dummy.config,ConfigFiles\AppETLTool.config";
+            _refresher.SplitAndReplace(files, _lst, false);
+            Expect.Call(
+                () => _replacer.ReplaceTags(@"c:\dummy.config", _lst));
         }
     }
 

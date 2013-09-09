@@ -1,20 +1,19 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Teleopti.Support.Code.Tool;
 
 namespace Teleopti.Support.CodeTest.Tool
 {
-    [TestFixture()]
+    [TestFixture]
     public class ConfigFileTagReplacerTest
     {
-        
-        [Test()]
+        [Test]
         public void ReplaceTagsTest()
         {
-            var args = new[] { "-DSserver", "-DBdatabase", "-ADanalyticsDB", "-BUburl", "-PWpassword" };
-            ICommandLineArgument arg = new CommandLineArgument(args);
-            var target = new ConfigFileTagReplacer(arg);
+            var lst = new List<SearchReplace>(){new SearchReplace{SearchFor = "#SOMETEXTTHATSHOULDNOTBETHERE", ReplaceWith = "NOTHING"}};
+            var target = new ConfigFileTagReplacer();
             // should not be any tags to replace, i hope
-            target.ReplaceTags("ConfigFiles/ConfigFiles.txt");
+            target.ReplaceTags("ConfigFiles/ConfigFiles.txt", lst);
         }
     }
 }

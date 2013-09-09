@@ -59,6 +59,7 @@
     <Compile Include="Tool\CommandLineArgumentTest.cs" />
     <Compile Include="Tool\ConfigFileTagReplacerTest.cs" />
     <Compile Include="Tool\RefreshConfigFileTest.cs" />
+    <Compile Include="Tool\SettingsReaderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

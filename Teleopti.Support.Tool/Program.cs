@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Teleopti.Support.Code.Tool;
 
 namespace Teleopti.Support.Tool
@@ -20,8 +21,13 @@ namespace Teleopti.Support.Tool
                     new HelpWindow(commandLineArgument.Help).ShowDialog();
                 else
                 {
-                    var refresher = new RefreshConfigFile(new ConfigFileTagReplacer(commandLineArgument));
-                    refresher.ReadLinesFromString(System.IO.File.ReadAllText(@"ConfigFiles\ConfigFiles.txt"));
+                    var file = "ConfigFiles.txt";
+                    if (commandLineArgument.Mode.ToUpper(CultureInfo.InvariantCulture).Equals("DEPLOY"))
+                        file = "DeployConfigFiles.txt";
+                    var reader = new SettingsReader();
+                    var settings = reader.GetSearchReplaceList(System.IO.File.ReadAllText(@"settings.txt"));
+                    var refresher = new RefreshConfigFile(new ConfigFileTagReplacer());
+                    refresher.ReadLinesFromString(System.IO.File.ReadAllText(@"ConfigFiles\" + file), settings, false);
                 }
             }
 
