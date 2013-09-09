@@ -23,22 +23,23 @@ namespace Teleopti.Ccc.Rta.Server
 			builder.RegisterType<DatabaseConnectionFactory>().As<IDatabaseConnectionFactory>();
 			//mark activityalarms and stategroups to be cached
 			_cacheBuilder
-				.For<ActualAgentDataHandler>()
+				.For<DatabaseHandler>()
 					.CacheMethod(svc => svc.ActivityAlarms())
 					.CacheMethod(svc => svc.StateGroups())
 					.CacheMethod(svc => svc.GetReadModel(Guid.NewGuid()))
-				.As<IActualAgentDataHandler>();
+				.As<IDatabaseHandler>();
 
 			builder.Register(c =>
 									{
 										var mbcache = c.Resolve<IMbCacheFactory>();
 										var connStringHandler = c.Resolve<IDatabaseConnectionStringHandler>();
 										var connFac = c.Resolve<IDatabaseConnectionFactory>();							
-										var instance = mbcache.Create<IActualAgentDataHandler>(connFac, connStringHandler);
+										var instance = mbcache.Create<IDatabaseHandler>(connFac, connStringHandler);
 										return instance;
 									});
-			builder.RegisterType<ActualAgentHandler>().As<IActualAgentHandler>();
+			builder.RegisterType<ActualAgentAssembler>().As<IActualAgentAssembler>();
 			builder.RegisterType<RtaDataHandler>().As<IRtaDataHandler>();
+			builder.RegisterType<ActualAgentStateCache>().As<IActualAgentStateCache>().SingleInstance();
 		}
 	}
 }

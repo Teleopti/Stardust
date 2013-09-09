@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		}
 
 
-		public virtual IEnumerable<IRootChangeInfo> PersistAll(IMessageBrokerModule moduleUsedForPersist)
+		public virtual IEnumerable<IRootChangeInfo> PersistAll(IMessageBrokerIdentifier identifierUsedForPersist)
 		{
 			//man borde nog styra upp denna genom att använda ISynchronization istället,
 			//när tran startas, lägg på en sync callback via tran.RegisterSynchronization(callback);
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				Flush();
 
 				modifiedRoots = new List<IRootChangeInfo>(Interceptor.ModifiedRoots);
-				invokeMessageSenders(modifiedRoots);
+				invokeMessageSenders(identifierUsedForPersist, modifiedRoots);
 				if (Transaction.Current == null)
 				{
 					_transaction.Commit();
@@ -162,18 +162,19 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				Interceptor.Clear();
 			}
-			notifyBroker(moduleUsedForPersist, modifiedRoots);
+			notifyBroker(identifierUsedForPersist, modifiedRoots);
 			return modifiedRoots;
 		}
 
-		private void invokeMessageSenders(IEnumerable<IRootChangeInfo> modifiedRoots)
+		private void invokeMessageSenders(IMessageBrokerIdentifier identifierUsedForPersist, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			if (_messageSenders == null) return;
+
 			_messageSenders.ForEach(d =>
 				{
 					using (PerformanceOutput.ForOperation(string.Format(System.Globalization.CultureInfo.InvariantCulture, "Sending message with {0}", d.GetType())))
 					{
-						d.Execute(modifiedRoots);
+						d.Execute(identifierUsedForPersist, modifiedRoots);
 					}
 				});
 		}
@@ -276,9 +277,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 		}
 
-		private void notifyBroker(IMessageBrokerModule module, IEnumerable<IRootChangeInfo> modifiedRoots)
+		private void notifyBroker(IMessageBrokerIdentifier identifier, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			Guid moduleId = module == null ? Guid.Empty : module.ModuleId;
+			Guid moduleId = identifier == null ? Guid.Empty : identifier.InstanceId;
 			new NotifyMessageBroker(_messageBroker).Notify(moduleId, modifiedRoots);
 		}
 

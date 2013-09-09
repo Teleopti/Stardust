@@ -59,9 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var orgLayers = new List<IMainShiftLayer>(PersonAssignment.MainLayers());
-				orgLayers.Add(new MainShiftLayer(orgLayers.First().Payload, new DateTimePeriod(Today, Today.AddDays(1))));
-				PersonAssignment.SetMainShiftLayers(orgLayers, PersonAssignment.ShiftCategory);
+				PersonAssignment.AddMainLayer(PersonAssignment.MainLayers().First().Payload, new DateTimePeriod(Today, Today.AddDays(1)));
 				uow.Merge(PersonAssignment);
 				uow.PersistAll();
 			}

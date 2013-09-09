@@ -4,98 +4,64 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	//one valid for mainshiftlayer and overtimeshiftlayer
 	//throw if layer not found?
 	public class MoveLayerVertical : IMoveLayerVertical
 	{
 		public void MoveUp(IPersonAssignment personAssignment, ILayer<IActivity> layer)
 		{
-			//no need to cast later when agentday is done
-			var msLayer = layer as IMainShiftLayer;
-			if (msLayer != null)
-			{
-				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainLayers());
-				var indexOfMainShiftLayer = msLayer.OrderIndex;
-				oldLayers.Remove(msLayer);
-				oldLayers.Insert(indexOfMainShiftLayer-1, msLayer);
-				personAssignment.SetMainShiftLayers(oldLayers, personAssignment.ShiftCategory);
-				return;
-			}
-
-			var pLayer = layer as IPersonalShiftLayer;
-			if (pLayer != null)
-			{
-				var oldLayers = new List<IPersonalShiftLayer>(personAssignment.PersonalLayers());
-				var index = pLayer.OrderIndex;
-				oldLayers.RemoveAt(index);
-				oldLayers.Insert(index-1, pLayer);
-				personAssignment.ClearPersonalLayers();
-				foreach (var newPersonalLayer in oldLayers)
-				{
-					personAssignment.AddPersonalLayer(newPersonalLayer.Payload, newPersonalLayer.Period);
-				}
-				return;
-			}
-
-			//no need to cast later when agentday is done
-			var overLayer = layer as IOvertimeShiftLayer;
-			if (overLayer != null)
-			{
-				var oldLayers = personAssignment.OvertimeLayers().ToList();
-				var index = overLayer.OrderIndex;
-				oldLayers.RemoveAt(index);
-				oldLayers.Insert(index - 1, overLayer);
-				personAssignment.ClearOvertimeLayers();
-				foreach (var newOvertimeShiftLayer in oldLayers)
-				{
-					personAssignment.AddOvertimeLayer(newOvertimeShiftLayer.Payload, newOvertimeShiftLayer.Period, newOvertimeShiftLayer.DefinitionSet);
-				}
-			}
+			moveLayer(personAssignment, layer, -1);
 		}
 
 		public void MoveDown(IPersonAssignment personAssignment, ILayer<IActivity> layer)
 		{
-			//no need to cast later when agentday is done
-			var msLayer = layer as IMainShiftLayer;
-			if (msLayer != null)
+			moveLayer(personAssignment, layer, 1);
+		}
+
+		private static void moveLayer(IPersonAssignment personAssignment, ILayer<IActivity> layer, int positionMove)
+		{
+			if (layer is IMainShiftLayer)
 			{
-				var oldLayers = new List<IMainShiftLayer>(personAssignment.MainLayers());
-				var indexOfMainShiftLayer = msLayer.OrderIndex;
-				oldLayers.Remove(msLayer);
-				oldLayers.Insert(indexOfMainShiftLayer + 1, msLayer);
-				personAssignment.SetMainShiftLayers(oldLayers, personAssignment.ShiftCategory);
+				var layers = createNewCollectionOfLayers(personAssignment.MainLayers(), layer, positionMove);
+				personAssignment.ClearMainLayers();
+				foreach (var newMainLayer in layers)
+				{
+					personAssignment.AddMainLayer(newMainLayer.Payload, newMainLayer.Period);
+				}
 				return;
 			}
 
-			var pLayer = layer as IPersonalShiftLayer;
-			if (pLayer != null)
+			if (layer is IPersonalShiftLayer)
 			{
-				var oldLayers = new List<IPersonalShiftLayer>(personAssignment.PersonalLayers());
-				var index = pLayer.OrderIndex;
-				oldLayers.RemoveAt(index);
-				oldLayers.Insert(index +1, pLayer);
+				var layers = createNewCollectionOfLayers(personAssignment.PersonalLayers(), layer, positionMove);
 				personAssignment.ClearPersonalLayers();
-				foreach (var newPersonalLayer in oldLayers)
+				foreach (var newPersonalLayer in layers)
 				{
 					personAssignment.AddPersonalLayer(newPersonalLayer.Payload, newPersonalLayer.Period);
 				}
 				return;
 			}
 
-			//no need to cast later when agentday is done
-			var overLayer = layer as IOvertimeShiftLayer;
-			if (overLayer != null)
+			if (layer is IOvertimeShiftLayer)
 			{
-				var oldLayers = personAssignment.OvertimeLayers().ToList();
-				var index = overLayer.OrderIndex;
-				oldLayers.RemoveAt(index);
-				oldLayers.Insert(index + 1, overLayer);
+				var layers = createNewCollectionOfLayers(personAssignment.OvertimeLayers(), layer, positionMove);
 				personAssignment.ClearOvertimeLayers();
-				foreach (var newOvertimeShiftLayer in oldLayers)
+				foreach (IOvertimeShiftLayer newOvertimeShiftLayer in layers)
 				{
-					personAssignment.AddOvertimeLayer(newOvertimeShiftLayer.Payload, newOvertimeShiftLayer.Period, newOvertimeShiftLayer.DefinitionSet);
+					personAssignment.AddOvertimeLayer(newOvertimeShiftLayer.Payload, newOvertimeShiftLayer.Period,
+					                                  newOvertimeShiftLayer.DefinitionSet);
 				}
 			}
+		}
+
+		private static IEnumerable<ILayer<IActivity>> createNewCollectionOfLayers(IEnumerable<ILayer<IActivity>> oldCollection,
+		                                                                  ILayer<IActivity> layerToMove,
+																																			int positionMove)
+		{
+			var oldLayers = oldCollection.ToList();
+			var index = oldLayers.IndexOf(layerToMove);
+			oldLayers.RemoveAt(index);
+			oldLayers.Insert(index + positionMove, layerToMove);
+			return oldLayers;
 		}
 	}
 }

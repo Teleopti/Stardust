@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -32,8 +31,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			using(_mocks.Playback())
 			{
+                Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
 				Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
-				Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod(), new List<IScheduleDay>(), new List<IScheduleDay>()));
 			}
 		}
 
@@ -43,14 +42,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 3, true, true);
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true, new List<IScheduleDay>(), new List<IScheduleDay>()));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, true, new List<IScheduleDay>(), new List<IScheduleDay>()));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, true));
 			}
 
 			using (_mocks.Playback())
 			{
-				Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
-				Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly().AddDays(7), new DateTimePeriod()));
+                Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
+                Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly().AddDays(7), new DateTimePeriod()));
 			}
 		}
 
@@ -60,14 +59,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 2, true, true);
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true, new List<IScheduleDay>(), new List<IScheduleDay>()));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, true, new List<IScheduleDay>(), new List<IScheduleDay>()));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, true));
 			}
 
 			using (_mocks.Playback())
 			{
-				Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
-				Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
+                Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
+                Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
 			}
 		}
 
@@ -79,13 +78,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true, new List<IScheduleDay>(), new List<IScheduleDay>()));
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, true, new List<IScheduleDay>(), new List<IScheduleDay>()));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly().AddDays(1), true, true));
 			}
 
 			using (_mocks.Playback())
 			{
-				Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), dp));
+                Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), dp));
 			}
 		}
 
@@ -98,12 +97,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_target = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true, new List<IScheduleDay>(), new List<IScheduleDay>()));
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(), true, true));
 			}
 
 			using (_mocks.Playback())
 			{
-				Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), dp));
+                Assert.IsTrue(_target.CalculateIfNeeded(new DateOnly(), dp));
 			}
 		}
 	}

@@ -142,6 +142,21 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// 
 		/// </summary>
+		public string OriginalDataSourceId { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public DateTime? BatchId { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public Guid BusinessUnit { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
 		public bool Equals(IActualAgentState other)
 		{
 			return other != null && GetHashCode().Equals(other.GetHashCode());
@@ -159,7 +174,8 @@ namespace Teleopti.Interfaces.Domain
 				result = (result*397) ^ ScheduledNextId.GetHashCode();
 				result = (result*397) ^ AlarmId.GetHashCode();
 				result = (result*397) ^ StateId.GetHashCode();
-				result = (result*397) ^ ScheduledNext.GetHashCode();
+				if (ScheduledNext != null)
+					result = (result*397) ^ ScheduledNext.GetHashCode();
 				result = (result*397) ^ NextStart.GetHashCode();
 				return result;
 			}

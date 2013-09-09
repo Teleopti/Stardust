@@ -66,13 +66,13 @@ namespace Teleopti.Interfaces.Infrastructure
         /// Persists all.
         /// Tells the MB what module made the persist
         /// </summary>
-        /// <param name="moduleUsedForPersist">The module.</param>
+        /// <param name="identifierUsedForPersist">The module.</param>
         /// <returns></returns>
         /// <remarks>
         /// Created by: rogerkr
         /// Created date: 2008-07-01
         /// </remarks>
-        IEnumerable<IRootChangeInfo> PersistAll(IMessageBrokerModule moduleUsedForPersist);
+        IEnumerable<IRootChangeInfo> PersistAll(IMessageBrokerIdentifier identifierUsedForPersist);
 
         /// <summary>
         /// Reassociates the specified root.

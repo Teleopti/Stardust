@@ -129,20 +129,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_decisionMaker.Execute(_matrixConverter, _personalScheduleResultDataExtractor,
                                                    _validatorList)).Return(_extendReduceTimeDecisionMakerResult);
                 Expect.Call(_personalSkillPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10);
-                Expect.Call(_dayOffsInPeriodCalculator.OutsideOrAtMinimumTargetDaysOff(_schedulePeriod))
-                    .Return(false);
+                Expect.Call(_dayOffsInPeriodCalculator.OutsideOrAtMinimumTargetDaysOff(_schedulePeriod)).Return(false);
                 Expect.Call(() => _scheduleDay.DeleteDayOff());
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
-				Expect.Call(_workTimeBackToLegalStateService.Execute(_matrix, _schedulingOptions, _rollbackService))
-                    .Return(true);
-                Expect.Call(_workTimeBackToLegalStateService.RemovedDays)
-                    .Return(new List<DateOnly>{DateOnly.MinValue});
+				Expect.Call(_workTimeBackToLegalStateService.Execute(_matrix, _schedulingOptions, _rollbackService)).Return(true);
+                Expect.Call(_workTimeBackToLegalStateService.RemovedDays).Return(new List<DateOnly>{DateOnly.MinValue});
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
-                Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService).Repeat.Any();
-                Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod()).Repeat.Any();
+                Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService).Repeat.AtLeastOnce();
+                Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.AtLeastOnce();
+                Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod()).Repeat.AtLeastOnce();
                 Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(), null)).
-                    IgnoreArguments().Return(true).Repeat.Any();
+                    IgnoreArguments().Return(true).Repeat.AtLeastOnce();
                 Expect.Call(_originalStateContainerForTagChange.OldPeriodDaysState)
                     .Return(new Dictionary<DateOnly, IScheduleDay>
                         {
@@ -205,11 +202,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_workTimeBackToLegalStateService.Execute(_matrix, _schedulingOptions, _rollbackService)).Return(true);
                 Expect.Call(_workTimeBackToLegalStateService.RemovedDays).Return(new List<DateOnly> { DateOnly.MinValue });
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
-                Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService).Repeat.Any();
-                Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod()).Repeat.Any();
+                Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService).Repeat.AtLeastOnce();
+                Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.AtLeastOnce();
+                Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod()).Repeat.AtLeastOnce();
                 Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(), null)).
-                    IgnoreArguments().Return(true).Repeat.Any();
+                    IgnoreArguments().Return(true).Repeat.AtLeastOnce();
                 Expect.Call(_originalStateContainerForTagChange.OldPeriodDaysState).Return(
                     new Dictionary<DateOnly, IScheduleDay>
                         {
@@ -263,7 +260,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_dayOffsInPeriodCalculator.OutsideOrAtMinimumTargetDaysOff(_schedulePeriod)).Return(false);
                 Expect.Call(() => _scheduleDay.DeleteDayOff());
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
-				Expect.Call(_workTimeBackToLegalStateService.Execute(_matrix, _schedulingOptions, _rollbackService)).Return(true);
+                Expect.Call(_workTimeBackToLegalStateService.Execute(_matrix, _schedulingOptions, _rollbackService)).Return(true);
                 Expect.Call(_workTimeBackToLegalStateService.RemovedDays).Return(new List<DateOnly> { DateOnly.MinValue });
                 Expect.Call(_originalStateContainerForTagChange.OldPeriodDaysState).Return(
                     new Dictionary<DateOnly, IScheduleDay>
@@ -273,24 +270,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                         }).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, null, _resourceCalculateDelayer, useCategory, _rollbackService)).IgnoreArguments()
                     .Return(false).Repeat.AtLeastOnce();
-				//Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService))
-				//    .Return(false);
                 Expect.Call(_nightRestWhiteSpotSolverService.Resolve(_matrix, _schedulingOptions, _rollbackService)).IgnoreArguments()
                     .Return(true).Repeat.AtLeastOnce();
                 Expect.Call(_originalStateContainerForTagChange.IsFullyScheduled()).Return(false);
-                Expect.Call(_rollbackService.ModificationCollection).Return(
-                    new ReadOnlyCollection<IScheduleDay>(new List<IScheduleDay>{ _scheduleDay }));
+                Expect.Call(_rollbackService.ModificationCollection).Return(new List<IScheduleDay>{ _scheduleDay });
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
                 Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService).Repeat.Any();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod()).Repeat.Any();
                 Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(), null)).
-                    IgnoreArguments().Return(true).Repeat.Any();
+                    IgnoreArguments().Return(true).Repeat.AtLeastOnce();
                 Expect.Call(() => _rollbackService.Rollback());
                 Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(DateOnly.MaxValue, DateOnly.MaxValue)));
 
                 Expect.Call(_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(_schedulePeriod)).Return(true);
-
             }
 
             bool ret;

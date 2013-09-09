@@ -91,6 +91,10 @@ namespace Teleopti.Ccc.WinCode.Common
 				if (_isChanged != value)
 				{
 					_isChanged = value;
+					if (_isChanged)
+					{
+						ParentObservingCollection.ShouldBeUpdated(this);
+					}
 					SendPropertyChanged("IsChanged");
 				}
 			}
@@ -183,7 +187,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			//for activity layers - overriden in absencelayerviewmodel
 			if (ParentObservingCollection != null)
 			{
-				ParentObservingCollection.RemoveActivity(this, Layer as ILayer<IActivity>, SchedulePart);
+				ParentObservingCollection.RemoveActivity(this, (IShiftLayer)Layer, SchedulePart);
 				new TriggerShiftEditorUpdate().PublishEvent("LayerViewModel", LocalEventAggregator);
 			}
 		}
@@ -257,20 +261,8 @@ namespace Teleopti.Ccc.WinCode.Common
 		{
 		}
 
-		/// <summary>
-		/// Gets the order index base, decides where in the collection different types should appear
-		/// </summary>
-		protected abstract int OrderIndexBase { get; }
 
-		public virtual int VisualOrderIndex
-		{
-			get
-			{
-				if (this is MeetingLayerViewModel)
-					return OrderIndexBase + 1;
-				return OrderIndexBase + Layer.OrderIndex;
-			}
-		}
+		public abstract int VisualOrderIndex { get; }
 
 		public void Delete()
 		{

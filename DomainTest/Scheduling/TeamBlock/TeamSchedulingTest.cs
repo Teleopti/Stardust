@@ -84,8 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	            Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay));
 	            Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 	            Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(new DateTimePeriod());
-	            Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod(),
-	                                                                    new List<IScheduleDay> {_scheduleDay}))
+	            Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod()))
 	                  .Return(true);
             }
 

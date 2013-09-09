@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			_mocks.ReplayAll();
 
-			_target = new MainShiftLayerViewModel(null, _layerWithPayload, null, null, null);
+			_target = new MainShiftLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(), _layerWithPayload, null, null, null);
 			_testRunner = new CrossThreadTestRunner();
 		}
 
@@ -113,7 +114,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			[Test]
 			public void VerifyCanMoveUp()
 			{
-				var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
+				var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000,1,1));
+				ass.AddOvertimeLayer(new Activity("d"), new DateTimePeriod(), null);
+				ass.AddMainLayer(new Activity("d"), new DateTimePeriod());
+				ass.AddMainLayer(new Activity("d"), new DateTimePeriod());
 
 				var first = new MainShiftLayerViewModel(null, ass.MainLayers().First(), ass, null, new MoveLayerVertical());
 				var last = new MainShiftLayerViewModel(null, ass.MainLayers().Last(), ass, null, new MoveLayerVertical());
@@ -125,7 +129,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			[Test]
 			public void VerifyCanMoveDown()
 			{
-				var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
+				var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000, 1, 1));
+				ass.AddOvertimeLayer(new Activity("d"), new DateTimePeriod(), null);
+				ass.AddMainLayer(new Activity("d"), new DateTimePeriod());
+				ass.AddMainLayer(new Activity("d"), new DateTimePeriod());
 
 				var first = new MainShiftLayerViewModel(null, ass.MainLayers().First(), ass, null, new MoveLayerVertical());
 				var last = new MainShiftLayerViewModel(null, ass.MainLayers().Last(), ass, null, new MoveLayerVertical());
@@ -253,15 +260,14 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void UpdatePeriod_WhenCalled_ShouldCallUpdateAllMovedLayersOnObserver()
 		{
-			var layerObserver = MockRepository.GenerateStrictMock<ILayerViewModelObserver>();
+			var layerObserver = MockRepository.GenerateMock<ILayerViewModelObserver>();
 
 			_target = new MainShiftLayerViewModel(layerObserver, _layerWithPayload, null, null, null);
-			layerObserver.Expect(l => l.UpdateAllMovedLayers());
-
+			
 			_target.IsChanged = true;
 			_target.UpdatePeriod();
 
-			layerObserver.VerifyAllExpectations();
+            layerObserver.AssertWasCalled(l => l.UpdateAllMovedLayers());
 		}
 
 		[Test]

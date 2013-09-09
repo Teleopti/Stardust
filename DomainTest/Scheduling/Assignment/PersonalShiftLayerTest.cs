@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			ass.AddPersonalLayer(new Activity("sdf"), new DateTimePeriod(start, start.AddHours(1)));
 			ass.AddPersonalLayer(new Activity("sdf"), new DateTimePeriod(start, start.AddHours(1)));
 			ass.AddPersonalLayer(new Activity("sdf"), new DateTimePeriod(start, start.AddHours(1)));
-			ass.PersonalLayers().Last().OrderIndex.Should().Be.EqualTo(2);
+			((PersonalShiftLayer)ass.PersonalLayers().Last()).OrderIndex.Should().Be.EqualTo(2);
 		}
 	}
 }

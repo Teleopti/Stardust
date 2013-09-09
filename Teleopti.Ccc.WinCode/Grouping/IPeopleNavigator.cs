@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.WinCode.Grouping
     {
         bool SendMessageVisible { get; set; }
     	bool SendMessageEnable { get; set; }
-    	void FindPeople();
+        bool AddNewEnabled { get; set; }
+        void FindPeople();
     }
 }

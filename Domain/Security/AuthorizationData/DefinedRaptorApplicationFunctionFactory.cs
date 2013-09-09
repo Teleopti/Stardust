@@ -78,7 +78,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifySchedule, "xxModifySchedule", DefinedRaptorApplicationFunctionForeignIds.ModifySchedule, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, "xxModifyAssignment", DefinedRaptorApplicationFunctionForeignIds.ModifyPersonAssignment, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence, "xxModifyAbsence", DefinedRaptorApplicationFunctionForeignIds.ModifyPersonAbsence, null);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff, "xxModifyDayOff", DefinedRaptorApplicationFunctionForeignIds.ModifyPersonDayOff, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction, "xxModifyPersonRestriction", DefinedRaptorApplicationFunctionForeignIds.ModifyPersonRestriction, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewSchedules, "xxViewSchedules", DefinedRaptorApplicationFunctionForeignIds.ViewSchedules, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, "xxViewUnpublishedSchedules", DefinedRaptorApplicationFunctionForeignIds.ViewUnpublishedSchedules, null);

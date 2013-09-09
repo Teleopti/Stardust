@@ -1,5 +1,8 @@
-﻿using Syncfusion.Windows.Forms.Grid;
+﻿using System.Linq;
+using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 using System;
 using System.Collections.Generic;
@@ -18,9 +21,6 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
     /// </remarks>
     public class NormalPasteBehavior : PasteBehavior, IPasteBehavior
     {
-
-
-
         /// <summary>
         /// Todo Fix this, moved from Win, rewrite & test
         /// </summary>
@@ -159,6 +159,6 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
 			if(ass != null) part.Remove(ass);
 	
             return part;
-        }	
+        }
     }
 }

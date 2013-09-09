@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
         void LayerMovedVertically(ILayerViewModel sender);
 
-        void RemoveActivity(ILayerViewModel sender, ILayer<IActivity> activityLayer,IScheduleDay scheduleDay);
+        void RemoveActivity(ILayerViewModel sender, IShiftLayer activityLayer,IScheduleDay scheduleDay);
 
 		void RemoveAbsence(ILayerViewModel sender, ILayer<IAbsence> absenceLayer, IScheduleDay scheduleDay);
 
@@ -20,5 +20,6 @@ namespace Teleopti.Ccc.WinCode.Common
 		void ReplaceAbsence(ILayerViewModel sender, ILayer<IAbsence> layer, IScheduleDay scheduleDay);
 
 	    void UpdateAllMovedLayers();
+	    void ShouldBeUpdated(ILayerViewModel layerViewModel);
     }
 }

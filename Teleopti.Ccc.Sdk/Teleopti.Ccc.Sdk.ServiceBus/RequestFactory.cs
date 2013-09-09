@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		public IRequestApprovalService GetRequestApprovalService(INewBusinessRuleCollection allNewRules, IScenario scenario)
 		{
 			return new RequestApprovalServiceScheduler(_schedulingResultStateHolder.Schedules, 
-													   scenario, _swapAndModifyService,  allNewRules, new EmptyScheduleDayChangeCallback());
+													   scenario, _swapAndModifyService,  allNewRules, new ResourceCalculationOnlyScheduleDayChangeCallback());
 		}
 
 		public IShiftTradeRequestStatusChecker GetShiftTradeRequestStatusChecker()

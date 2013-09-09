@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -19,19 +18,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public class TeamSteadyStateMainShiftScheduler : ITeamSteadyStateMainShiftScheduler
 	{
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private readonly IEditableShiftMapper _editableShiftMapper;
 		private readonly ITeamSteadyStateCoherentChecker _coherentChecker;
 		private readonly ITeamSteadyStateScheduleMatrixProFinder _teamSteadyStateScheduleMatrixProFinder;
 
         public TeamSteadyStateMainShiftScheduler(ITeamSteadyStateCoherentChecker coherentChecker, 
 			ITeamSteadyStateScheduleMatrixProFinder teamSteadyStateScheduleMatrixProFinder, 
-			IResourceOptimizationHelper resourceOptimizationHelper,
-			IEditableShiftMapper editableShiftMapper)
+			IResourceOptimizationHelper resourceOptimizationHelper)
 		{
             _coherentChecker = coherentChecker;
             _teamSteadyStateScheduleMatrixProFinder = teamSteadyStateScheduleMatrixProFinder;
             _resourceOptimizationHelper = resourceOptimizationHelper;
-	        _editableShiftMapper = editableShiftMapper;
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
@@ -97,7 +93,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 if (personAssignmentSource == null)
                     return false;
 
-	            var mainShift = _editableShiftMapper.CreateEditorShift(personAssignmentSource);
                 var scheduleRange = scheduleDictionary[groupMember];
                 var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
 
@@ -109,17 +104,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 var locked = !theMatrix.UnlockedDays.Contains(theMatrix.GetScheduleDayByKey(dateOnly));
 
                 if (locked) continue;
-				scheduleDay.AddMainShift(mainShift);
+								scheduleDay.AddMainShift(personAssignmentSource);
                 rollbackService.Modify(scheduleDay);
                 daysToRecalculate.Add(scheduleDay);
             }
 
             if (daysToRecalculate.Count > 0)
             {
-                _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true, new List<IScheduleDay>(), daysToRecalculate);
+                _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
                 var period = daysToRecalculate[0].Period;
                 if (period.StartDateTime.Date != period.EndDateTime.Date)
-                    _resourceOptimizationHelper.ResourceCalculateDate(dateOnly.AddDays(1), true, true, new List<IScheduleDay>(), daysToRecalculate);
+                    _resourceOptimizationHelper.ResourceCalculateDate(dateOnly.AddDays(1), true, true);
             }
 
             return true;

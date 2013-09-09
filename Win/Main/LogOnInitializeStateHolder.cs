@@ -8,6 +8,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Xml.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -121,7 +122,7 @@ namespace Teleopti.Ccc.Win.Main
                 messageBrokerDisabled = true;
             }
         	
-			var sendToServiceBus = new ServiceBusSender();
+			var sendToServiceBus = new ServiceBusSender(new CurrentIdentity());
         	var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),

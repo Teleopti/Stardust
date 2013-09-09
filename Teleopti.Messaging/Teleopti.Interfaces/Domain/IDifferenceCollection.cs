@@ -23,5 +23,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2009-11-13
         /// </remarks>
         DifferenceCollectionItem<T>? FindItemByOriginalId(Guid id);
+
+        DifferenceCollectionItem<T>? FindItemByMatchingOriginal(T match);
     }
 }

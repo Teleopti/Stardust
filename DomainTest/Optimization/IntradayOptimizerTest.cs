@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -365,11 +364,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyExecuteDayCannotScheduled()
         {
-            var period = _mockRepository.StrictMock<IDateOnlyAsDateTimePeriod>();
-
             using (_mockRepository.Record())
             {
-
                 Expect.Call(_bitArrayConverter.SourceMatrix)
                     .Return(_scheduleMatrix).Repeat.AtLeastOnce();
                 Expect.Call(_dailyValueCalculator.DayValue(new DateOnly())).IgnoreArguments()
@@ -401,7 +397,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_removedSchedulePart.Clone())
                     .Return(_removedSchedulePart);
                 Expect.Call(_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay>(), _rollbackService, true)).IgnoreArguments();
-                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_removedDate, true, false, new List<IScheduleDay>(), new List<IScheduleDay>())).IgnoreArguments();
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_removedSchedulePart, _schedulingOptions))
                     .Return(_effectiveRestriction);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_removedSchedulePart, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments()
@@ -409,11 +404,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 // rollback
                 _rollbackService.ClearModificationCollection();
-                Expect.Call(_rollbackService.ModificationCollection).Return(
-                    new ReadOnlyCollection<IScheduleDay>(new List<IScheduleDay> { _removedSchedulePart }));
                 _rollbackService.Rollback();
-                Expect.Call(_removedSchedulePart.DateOnlyAsPeriod).Return(period);
-                Expect.Call(period.DateOnly).Return(_removedDate);
+
+                Expect.Call(_rollbackService.ModificationCollection).Return(new List<IScheduleDay>()).Repeat.AtLeastOnce();
                 _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_removedDate, _removedDate));
             }
 

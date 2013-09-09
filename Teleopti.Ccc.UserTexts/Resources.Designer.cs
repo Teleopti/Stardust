@@ -5131,7 +5131,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change Requests.
+        ///   Looks up a localized string similar to Text Requests.
         /// </summary>
         public static string CreateTextRequest {
             get {
@@ -8410,6 +8410,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter Hourly Availability.
+        /// </summary>
+        public static string FilterHourlyAvailability {
+            get {
+                return ResourceManager.GetString("FilterHourlyAvailability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter KPI&apos;s.
         /// </summary>
         public static string FilterKPIs {
@@ -9748,6 +9757,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Hour {
             get {
                 return ResourceManager.GetString("Hour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hourly Availability.
+        /// </summary>
+        public static string HourlyAvailability {
+            get {
+                return ResourceManager.GetString("HourlyAvailability", resourceCulture);
             }
         }
         
@@ -12787,15 +12805,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Modify day off.
-        /// </summary>
-        public static string ModifyDayOff {
-            get {
-                return ResourceManager.GetString("ModifyDayOff", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Modify group page.
         /// </summary>
         public static string ModifyGroupPage {
@@ -15121,7 +15130,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Online reports.
+        ///   Looks up a localized string similar to Real time reports.
         /// </summary>
         public static string OnlineReports {
             get {

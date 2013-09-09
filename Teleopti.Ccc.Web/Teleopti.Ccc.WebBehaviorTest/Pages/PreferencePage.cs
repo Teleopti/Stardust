@@ -73,8 +73,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public ComboBox ExtendedPreferenceActivityTimeMaximum;
 		[FindBy(Id = "Template-save")]
 		public Div TemplateSaveDiv;
-		[FindBy(Id = "Template-name-input")]
-		public TextField TemplateNameTextField;
 
 		[FindBy(Id = "Preference-extended-error")]
 		public Div ExtendedPreferencePanelError { get; set; }
@@ -120,7 +118,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		
 		public Div ExtendedPreferenceForDate(DateTime date)
 		{
-			return Document.Div("qtip-extended-" + date.ToString("yyyy-MM-dd"));
+			return Document.Div(QuicklyFind.ByClass("tooltip-inner")).EventualGet();
 		}
 
 		public Div MeetingAndPersonalShiftForDate(DateTime date)

@@ -38,6 +38,11 @@ namespace Teleopti.Ccc.Rta.LogClientProxy
         {
             get { return true; }
         }
+
+	    public void FlushCacheToDatabase()
+	    {
+		    throw new NotImplementedException();
+	    }
     }
 
 	public static class ProxyExtensions

@@ -23,25 +23,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 																				dateToCheck.AddDays(3)));
 
 			foreach (IScheduleDay scheduleDay in partCollection)
-            {
-                foreach (IPersonAssignment ass in scheduleDay.PersonAssignmentCollectionDoNotUse())
-                {
-                    if (ass.ShiftCategory != null)
-                    {
-                        if (ass.Period.Contains(approxUtc))
-                            return new DateTimePeriod(approxUtc, approxUtc);
+			{
+				var ass = scheduleDay.PersonAssignment();
+				if (ass != null && ass.ShiftCategory!=null)
+				{
+					if (ass.Period.Contains(approxUtc))
+						return new DateTimePeriod(approxUtc, approxUtc);
 
-                        if (ass.Period.EndDateTime < approxUtc)
-                        {
-                            assBefore = ass;
-                        }
-                        if (assAfter == null && approxUtc < ass.Period.StartDateTime)
-                        {
-                            assAfter = ass;
-                            break;
-                        }
-                    }
-                }
+					if (ass.Period.EndDateTime < approxUtc)
+					{
+						assBefore = ass;
+					}
+					if (assAfter == null && approxUtc < ass.Period.StartDateTime)
+					{
+						assAfter = ass;
+					}
+				}
             }
             
             DateTime earliestStartTime = endTimeOnAssignmentBeforePlusNightRest(current, assBefore, nightRest.Value);

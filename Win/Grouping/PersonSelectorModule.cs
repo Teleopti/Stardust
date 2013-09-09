@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Win.Grouping
             builder.RegisterType<PeopleNavigatorPresenter>().As<IPeopleNavigatorPresenter>().InstancePerLifetimeScope();
             builder.RegisterType<ScheduleNavigatorPresenter>().As<IScheduleNavigatorPresenter>().InstancePerLifetimeScope();
             builder.RegisterType<GroupPageHelper>().As<IGroupPageHelper>().InstancePerLifetimeScope();
-            
+            builder.RegisterType<AddPersonEnableCommand>().As<IAddPersonEnableCommand>().InstancePerLifetimeScope();
         }
 
     }

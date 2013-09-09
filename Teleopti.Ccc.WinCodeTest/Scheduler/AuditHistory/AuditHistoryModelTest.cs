@@ -76,13 +76,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
                 mockExpectationsFirst();
                 for (int i = 10; i < 12; i++)
                 {
+									var refetchedScheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+									Expect.Call(_scheduleDay.ReFetch()).Return(refetchedScheduleDay);
                     Expect.Call(_scheduleHistoryRepository.FindSchedules(_revisions[i], _person, new DateOnly(2000, 1, 1))).Return(_scheduleData);
-                    Expect.Call(_auditHistoryScheduleDayCreator.Create(_scheduleDay, _scheduleData)).Return(_scheduleDay);
+										Expect.Call(() => _auditHistoryScheduleDayCreator.Apply(refetchedScheduleDay, _scheduleData));
                 }
                 for (int i = 0; i < 10; i++)
-                {
+								{
+									var refetchedScheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+									Expect.Call(_scheduleDay.ReFetch()).Return(refetchedScheduleDay);
                     Expect.Call(_scheduleHistoryRepository.FindSchedules(_revisions[i], _person, new DateOnly(2000, 1, 1))).Return(_scheduleData);
-                    Expect.Call(_auditHistoryScheduleDayCreator.Create(_scheduleDay, _scheduleData)).Return(_scheduleDay);
+                    Expect.Call(() => _auditHistoryScheduleDayCreator.Apply(refetchedScheduleDay, _scheduleData));
                 }
             }
 
@@ -109,15 +113,16 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
             IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2000, 1, 1),
                                                                                           TimeZoneInfoFactory.
                                                                                               UtcTimeZoneInfo());
-            
-            
+
             Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
             Expect.Call(_scheduleHistoryRepository.FindRevisions(_person, new DateOnly(2000, 1, 1), 10000)).Return(_revisions);
             for (int i = 0; i < Math.Min(_revisions.Count, 10); i++)
             {
+							var refetchedScheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+							Expect.Call(_scheduleDay.ReFetch()).Return(refetchedScheduleDay);
                 Expect.Call(_scheduleHistoryRepository.FindSchedules(_revisions[i], _person, new DateOnly(2000, 1, 1))).Return(_scheduleData);
-                Expect.Call(_auditHistoryScheduleDayCreator.Create(_scheduleDay, _scheduleData)).Return(_scheduleDay);
+                Expect.Call(() => _auditHistoryScheduleDayCreator.Apply(refetchedScheduleDay, _scheduleData));
             }
         }
 

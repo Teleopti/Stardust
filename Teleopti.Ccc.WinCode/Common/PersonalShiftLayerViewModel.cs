@@ -27,15 +27,9 @@ namespace Teleopti.Ccc.WinCode.Common
 			get { return UserTexts.Resources.PersonalShifts; }
 		}
 
-		protected override int OrderIndexBase
+		public override int VisualOrderIndex
 		{
-			get
-			{
-				var idx = 0;
-				if (_parent != null)
-					idx = _parent.PersonalLayers().ToList().IndexOf(_layer);
-				return 200 + idx;
-			}
+			get { return 200 + _parent.PersonalLayers().ToList().IndexOf(_layer); }
 		}
 
 		public override bool IsMovePermitted()
@@ -51,12 +45,7 @@ namespace Teleopti.Ccc.WinCode.Common
 		{
 			get
 			{
-				if (_parent != null)
-				{
-					return _layer.OrderIndex > 0;
-				}
-
-				return false;
+				return _parent != null && _parent.PersonalLayers().ToList().IndexOf(_layer) > 0;
 			}
 		}
 

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			var eventMessages = new List<IEventMessage>();
             foreach (IRootChangeInfo change in rootModifications)
             {
-                if (!MessageFilterManager.Instance.FilterDictionary.ContainsKey(change.Root.GetType())) continue;
+                if (!MessageFilterManager.Instance.HasType(change.Root.GetType())) continue;
                 eventMessages.Add(CreateEventMessage(change, moduleId));
 
             	var provideCustomChangeInfo = change.Root as IProvideCustomChangeInfo;

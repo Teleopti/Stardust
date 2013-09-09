@@ -181,6 +181,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesChangedHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillAddedHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesReadModelUpdater.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedNotifier.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\DoNotNotifySmsLink.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\IDoNotifySmsLink.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\IScheduleDayReadModelsCreator.cs" />
@@ -528,6 +529,7 @@
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
+    <Compile Include="Scheduling\TeamBlock\IntervalDataEntendedMedianCalculator.cs" />
     <Compile Include="ResourceCalculation\TransformResourcesFromStorageCommand.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayer.cs" />
@@ -554,7 +556,6 @@
     <Compile Include="Scheduling\Assignment\ProjectionMidnightSplitterMerger.cs" />
     <Compile Include="Scheduling\Assignment\ProjectionPayloadMerger.cs" />
     <Compile Include="Scheduling\Assignment\ProjectionProvider.cs" />
-    <Compile Include="Scheduling\Assignment\RestoreSchedulePartService.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePartSignificantPartForDisplayDefinitions.cs" />
     <Compile Include="Scheduling\Assignment\GroupShiftCategoryFairnessCreator.cs" />
     <Compile Include="Scheduling\Assignment\HasContractDayOffDefinition.cs" />
@@ -579,7 +580,7 @@
     <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataMapper.cs" />
     <Compile Include="Scheduling\DayOffTemplateSorter.cs" />
     <Compile Include="Scheduling\DeletedDescription.cs" />
-    <Compile Include="Scheduling\EmptyScheduleDayChangeCallback.cs" />
+    <Compile Include="Scheduling\ResourceCalculationOnlyScheduleDayChangeCallback.cs" />
     <Compile Include="ApplicationLayer\Events\FullDayAbsenceAddedEvent.cs" />
     <Compile Include="Scheduling\ISkillLoaderDecider.cs" />
     <Compile Include="Scheduling\LoadScheduleByPersonSpecification.cs" />
@@ -919,7 +920,7 @@
     <Compile Include="Scheduling\TeamBlock\BlockFinderTypeHelper.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfo.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockPeriodFinderBetweenDayOff.cs" />
-    <Compile Include="Scheduling\TeamBlock\BlockSteadyStateValidator.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateValidator.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalDataCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\DynamicBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\GroupPersonBuilderBasedOnContractTime.cs" />

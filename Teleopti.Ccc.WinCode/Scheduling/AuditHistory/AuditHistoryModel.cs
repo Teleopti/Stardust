@@ -1,11 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -140,7 +135,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AuditHistory
                     initializerPersonAbsence.Initialize();
                 }
 
-                var historicalDay = _auditHistoryScheduleDayCreator.Create(_currentScheduleDay, result);
+	            var historicalDay = _currentScheduleDay.ReFetch();
+                _auditHistoryScheduleDayCreator.Apply(historicalDay, result);
                 var changedOnLocal = TimeZoneHelper.ConvertFromUtc(revision.ModifiedAt, TimeZoneHelper.CurrentSessionTimeZone);
                 var row = new RevisionDisplayRow{ScheduleDay = historicalDay, Name = revision.ModifiedBy.Name.ToString(), ChangedOn = changedOnLocal};
                 retList.Add(row);
