@@ -15,7 +15,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.HasOvertimeAvailability, o => o.MapFrom(s => true))
 				.ForMember(d => d.StartTime, o => o.MapFrom(s => TimeHelper.TimeOfDayFromTimeSpan(s.StartTime.Value, CultureInfo.CurrentCulture)))
 				.ForMember(d => d.EndTime, o => o.MapFrom(s => TimeHelper.TimeOfDayFromTimeSpan(s.EndTime.Value, CultureInfo.CurrentCulture)))
-				.ForMember(d => d.EndTimeNextDay, o => o.MapFrom(s => s.EndTime.Value.Days > 0));
+				.ForMember(d => d.EndTimeNextDay, o => o.MapFrom(s => s.EndTime.Value.Days > 0))
+				.ForMember(d => d.DefaultStartTime, c => c.Ignore())
+				.ForMember(d => d.DefaultEndTime, c => c.Ignore())
+				.ForMember(d => d.DefaultEndTimeNextDay, c => c.Ignore());
 		}
 	}
 }

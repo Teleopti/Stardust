@@ -211,9 +211,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
-			result.OvertimeAvailabililty.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0), CultureInfo.CurrentCulture));
-			result.OvertimeAvailabililty.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0), CultureInfo.CurrentCulture));
-			result.OvertimeAvailabililty.EndTimeNextDay.Should().Be.EqualTo(false);
+			result.OvertimeAvailabililty.DefaultStartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0), CultureInfo.CurrentCulture));
+			result.OvertimeAvailabililty.DefaultEndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0), CultureInfo.CurrentCulture));
+			result.OvertimeAvailabililty.DefaultEndTimeNextDay.Should().Be.EqualTo(false);
 		}
 
 		[Test]
@@ -225,9 +225,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
-			result.OvertimeAvailabililty.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0), CultureInfo.CurrentCulture));
-			result.OvertimeAvailabililty.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0), CultureInfo.CurrentCulture));
-			result.OvertimeAvailabililty.EndTimeNextDay.Should().Be.EqualTo(false);
+			result.OvertimeAvailabililty.DefaultStartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0), CultureInfo.CurrentCulture));
+			result.OvertimeAvailabililty.DefaultEndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0), CultureInfo.CurrentCulture));
+			result.OvertimeAvailabililty.DefaultEndTimeNextDay.Should().Be.EqualTo(false);
 		}
 
 		[Test]
@@ -244,8 +244,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
-			result.OvertimeAvailabililty.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(endTime.AddHours(2).TimeOfDay, CultureInfo.CurrentCulture));
-			result.OvertimeAvailabililty.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(endTime.AddHours(3).TimeOfDay, CultureInfo.CurrentCulture));
+			result.OvertimeAvailabililty.DefaultStartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(endTime.AddHours(2).TimeOfDay, CultureInfo.CurrentCulture));
+			result.OvertimeAvailabililty.DefaultEndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(endTime.AddHours(3).TimeOfDay, CultureInfo.CurrentCulture));
 		}
 
 		[Test]
