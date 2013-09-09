@@ -127,6 +127,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		public override bool OnSave(object entity, object id, object[] state, string[] propertyNames, IType[] types)
 		{
+			var ret = false;
 			_entityStateRollbackInterceptor.OnSave(entity, id, state, propertyNames, types);
 
 			var ent = entity as IEntity;
@@ -142,15 +143,18 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			if (createInfo != null)
 			{
 				setCreatedProperties(createInfo, propertyNames, state);
-				return true;
+				ret = true;
 			}
+			var root = entity as IAggregateRoot;
+			if (root != null) 
+				modifiedRoots.Add(new RootChangeInfo(root, DomainUpdateType.Insert));
 			var updateInfo = entity as IChangeInfo;
 			if (updateInfo != null)
 			{
 				setUpdatedProperties(updateInfo, propertyNames, state);
-				return true;
+				ret = true;
 			}
-			return false;
+			return ret;
 		}
 
 		private static IDictionary<string, int> propertyIndexesForInsert(IEnumerable<string> properties)
@@ -207,9 +211,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			var props = propertyIndexesForInsert(propertyNames);
 			state[props[createdByPropertyName]] = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
 			state[props[createdOnPropertyName]] = nu;
-
-			var root = createInfo as IAggregateRoot;
-			if (root != null) modifiedRoots.Add(new RootChangeInfo(root, DomainUpdateType.Insert));
 		}
 
 		private void setUpdatedInfo(IAggregateRoot root, object[] currentState, string[] propertyNames)
