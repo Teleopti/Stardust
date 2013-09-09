@@ -162,7 +162,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(_target.TargetLength, cloneWithoutId.TargetLength);
             Assert.AreEqual(_target.UpdatedBy, cloneWithoutId.UpdatedBy);
             Assert.AreEqual(_target.UpdatedOn, cloneWithoutId.UpdatedOn);
-            Assert.AreEqual(_target.UpdatedTimeInUserPerspective, cloneWithoutId.UpdatedTimeInUserPerspective);
             Assert.AreEqual(_target.IsDeleted, cloneWithoutId.IsDeleted);
             Assert.AreEqual(_target.Version, cloneWithoutId.Version);
         }
@@ -186,7 +185,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(_target.TargetLength, cloneWithId.TargetLength);
             Assert.AreEqual(_target.UpdatedBy, cloneWithId.UpdatedBy);
             Assert.AreEqual(_target.UpdatedOn, cloneWithId.UpdatedOn);
-            Assert.AreEqual(_target.UpdatedTimeInUserPerspective, cloneWithId.UpdatedTimeInUserPerspective);
             Assert.AreEqual(_target.IsDeleted, cloneWithId.IsDeleted);
             Assert.AreEqual(_target.Version, cloneWithId.Version);
         }

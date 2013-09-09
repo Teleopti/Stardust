@@ -5,20 +5,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 {
-
 	public abstract class AggregateRoot : Entity,
 		IAggregateRoot,
 		IChangeInfo,
 		IVersioned
 	{
-
-#pragma warning disable 0649
 		private int? _version;
 		private IPerson _updatedBy;
 		private DateTime? _updatedOn;
-		private readonly LocalizedUpdateInfo _localizedUpdateInfo = new LocalizedUpdateInfo();
-#pragma warning restore 0649
-
 
 		private readonly IList<IEvent> _events = new List<IEvent>();
 
@@ -65,11 +59,6 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 			base.ClearId();
 			_updatedBy = null;
 			_updatedOn = null;
-		}
-
-		public virtual string UpdatedTimeInUserPerspective
-		{
-			get { return _localizedUpdateInfo.UpdatedTimeInUserPerspective(this); }
 		}
 	}
 }
