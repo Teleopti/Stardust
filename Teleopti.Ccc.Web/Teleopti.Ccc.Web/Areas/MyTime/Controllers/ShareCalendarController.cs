@@ -2,7 +2,6 @@
 using System.Security.Cryptography;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
@@ -19,12 +18,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[HttpGet]
-		public ContentResult iCal(string id)
+		public ContentResult iCal(string id, string type = "text/calendar")
 		{
 			try
 			{
 				var calendarLinkId = _calendarLinkIdGenerator.Parse(id);
-				return Content(_calendarLinkGenerator.Generate(calendarLinkId), "text/plain");
+				return Content(_calendarLinkGenerator.Generate(calendarLinkId), type);
 			}
 			catch (FormatException)
 			{
