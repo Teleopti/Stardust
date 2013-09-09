@@ -22,7 +22,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Terminal date
         /// </summary>
-        DateOnly? TerminalDate { get; }
+		DateOnly? TerminalDate { get; set; }
 
         /// <summary>
         /// Gets or sets the name.

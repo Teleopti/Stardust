@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Interfaces.Domain
+﻿using System;
+
+namespace Teleopti.Interfaces.Domain
 {
 
 	/// <summary>
@@ -6,6 +8,9 @@
 	/// </summary>
 	public interface IPersonAccountUpdater
 	{
-		void UpdatePersonAccounts();
+		/// <summary>
+		/// Updates the person absence accounts
+		/// </summary>
+		void UpdatePersonAccounts(DateTime? terminalDate);
 	}
 }
