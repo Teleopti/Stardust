@@ -37,9 +37,7 @@ namespace Teleopti.Ccc.WinCode.Payroll
         {
             get
             {
-                string changed = _localizer.UpdatedByText(DomainEntity, UserTexts.Resources.UpdatedByColon);
-                string created = _localizer.CreatedText(DomainEntity, UserTexts.Resources.CreatedByColon);
-                return string.Concat(created, changed);
+                return _localizer.UpdatedByText(DomainEntity, UserTexts.Resources.UpdatedByColon);
             }
         }
 

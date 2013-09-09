@@ -236,7 +236,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             var master = _mocks.StrictMock<IMasterActivity>();
             _model = new MasterActivityModel(master,_localizer);
 
-            Expect.Call(_localizer.CreatedText(master, UserTexts.Resources.CreatedByColon)).Return("created by: ola ");
             Expect.Call(_localizer.UpdatedByText(master, UserTexts.Resources.UpdatedByColon)).Return("updated by: ola");
 
             _mocks.ReplayAll();

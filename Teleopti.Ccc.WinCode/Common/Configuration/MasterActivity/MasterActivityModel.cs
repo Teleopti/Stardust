@@ -42,9 +42,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration.MasterActivity
         {
             get
             {
-                string changed = _localizer.UpdatedByText(_masterActivityEntity, UserTexts.Resources.UpdatedByColon);
-                string created = _localizer.CreatedText(_masterActivityEntity, UserTexts.Resources.CreatedByColon);
-                return string.Concat(created, changed);
+                return _localizer.UpdatedByText(_masterActivityEntity, UserTexts.Resources.UpdatedByColon);
             }
         }
 

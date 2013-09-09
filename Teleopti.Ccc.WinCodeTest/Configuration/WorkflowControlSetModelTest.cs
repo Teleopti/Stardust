@@ -330,9 +330,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         {
             LocalizedUpdateInfo localizer = new LocalizedUpdateInfo();
             string changed = localizer.UpdatedByText(domainEntity, Resources.UpdatedByColon);
-            string created = localizer.CreatedText(domainEntity, Resources.CreatedByColon);
             
-            return string.Concat(created, changed);
+            return changed;
         }
 
 		[Test]

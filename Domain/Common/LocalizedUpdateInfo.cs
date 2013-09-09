@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Common
     {
        string CreatedTimeInUserPerspective(ICreateInfo entity);
        string UpdatedTimeInUserPerspective(IChangeInfo entity);
-       string CreatedText(ICreateInfo entity, string localizedCreatedByText);
        string UpdatedByText(IChangeInfo entity, string localizedUpdatedByText);
     }
 
@@ -43,21 +42,6 @@ namespace Teleopti.Ccc.Domain.Common
                 updated = string.Format(CultureInfo.CurrentCulture, localChangeDateTime.ToString());
             }
             return updated;
-        }
-
-        public string CreatedText(ICreateInfo entity, string localizedCreatedByText)
-        {
-            string createdText = string.Empty;
-
-            if (!entity.CreatedOn.HasValue)
-                return createdText;
-
-            DateTime localCreateDateTime = TimeZoneHelper.ConvertFromUtc(entity.CreatedOn.Value,
-                TeleoptiPrincipal.Current.Regional.TimeZone);
-
-            createdText = string.Concat(localizedCreatedByText, " ", entity.CreatedBy.Name, " ",
-                                        string.Format(CultureInfo.CurrentCulture, localCreateDateTime.ToString()));
-            return createdText;
         }
 
         public string UpdatedByText(IChangeInfo entity, string localizedUpdatedByText)

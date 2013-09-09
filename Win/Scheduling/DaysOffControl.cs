@@ -253,8 +253,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				timeSpanTextBoxTargetLength.SetInitialResolution(SelectedDayOff.TargetLength);
 
                 string changed = _localizer.UpdatedByText(SelectedDayOff, Resources.UpdatedByColon);
-                string created = _localizer.CreatedText(SelectedDayOff, Resources.CreatedByColon);
-                autoLabelInfoAboutChanges.Text = string.Concat(created, changed);
+                autoLabelInfoAboutChanges.Text = changed;
             }
         }
 
