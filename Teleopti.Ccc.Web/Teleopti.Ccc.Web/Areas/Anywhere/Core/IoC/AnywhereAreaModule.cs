@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<TeamScheduleHub>().EnableClassInterceptors();
 			builder.RegisterType<PersonScheduleHub>().EnableClassInterceptors();
 
-			builder.RegisterType<InterceptorPipelineModule>().As<IHubPipelineModule>();
 			builder.RegisterType<ExceptionHandlerPipelineModule>().As<IHubPipelineModule>();
 
 			builder.RegisterType<TeamScheduleProvider>().As<ITeamScheduleProvider>().SingleInstance();
