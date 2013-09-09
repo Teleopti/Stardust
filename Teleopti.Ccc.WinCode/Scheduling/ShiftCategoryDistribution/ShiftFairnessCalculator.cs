@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
             var shiftCategoryPerAgentCountValues = new Dictionary<IShiftCategory, List<double>>();
             foreach (var shiftCategoryPerAgent in shiftCategoryPerAgentList)
             {
+                if (shiftCategoryPerAgent.ShiftCategory == null) continue;
                 if (shiftCategoryPerAgentCountValues.ContainsKey(shiftCategoryPerAgent.ShiftCategory))
                 {
                     shiftCategoryPerAgentCountValues[shiftCategoryPerAgent.ShiftCategory].Add(shiftCategoryPerAgent.Count);

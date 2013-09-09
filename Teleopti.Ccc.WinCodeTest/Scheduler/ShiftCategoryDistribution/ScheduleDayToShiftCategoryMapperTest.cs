@@ -93,11 +93,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             {
                 Expect.Call(_scheduleDay1.PersonAssignment()).Return(_personAssignment1);
                 Expect.Call(_personAssignment1.ShiftCategory).Return(null);
+                Expect.Call(_scheduleDay1.DateOnlyAsPeriod)
+                      .Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
             }
             var returnList =
                 ScheduleDayToShiftCategoryMapper.MapScheduleDay(new List<IScheduleDay> { _scheduleDay1 });
 
-            Assert.AreEqual(returnList.Count , 0);
+            Assert.AreEqual(returnList.Count , 1);
         }
 
         private void  setUpData()
@@ -116,7 +118,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             Expect.Call(scheduleDay1.PersonAssignment()).Return(personAssignment1);
             Expect.Call(personAssignment1.ShiftCategory).Return(shiftCategory1).Repeat.Twice() ;
             Expect.Call(scheduleDay1.DateOnlyAsPeriod)
-                  .Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+                  .Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc)).Repeat.Twice() ;
             Expect.Call(scheduleDay1.Person).Return(person);
         }
     }

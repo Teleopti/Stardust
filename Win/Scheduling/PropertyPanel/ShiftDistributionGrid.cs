@@ -1,5 +1,6 @@
 ﻿using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common.Controls;
+using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Interfaces.Domain;
 
@@ -13,6 +14,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         public ShiftDistributionGrid()
         {
             base.Initialize();
+            if (!CellModels.ContainsKey("IgnoreCellModel")) CellModels.Add("IgnoreCellModel", new IgnoreCellModel(Model));
         }
 
         public void UpdateModel(IDistributionInformationExtractor model)
@@ -20,12 +22,18 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             ResetVolatileData();
             _model = model;
             _presenter = new ShiftDistributionGridPresenter(this, _model.GetShiftDistribution());
+            _presenter.Sort(0);
             initializeComponent();
-            _presenter.ReSort();
         }
 
         private void initializeComponent()
         {
+            ResetVolatileData();
+
+            QueryColCount -= shiftPerAgentGridQueryColCount;
+            QueryRowCount -= shiftPerAgentGridQueryRowCount;
+            QueryCellInfo -= shiftPerAgentGridQueryCellInfo;
+            CellDoubleClick -= shiftPerAgentGridCellDoubleClick;
 
             QueryColCount += shiftPerAgentGridQueryColCount;
             QueryRowCount += shiftPerAgentGridQueryRowCount;
@@ -71,11 +79,13 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             {
                 var date = (DateOnly) this[e.RowIndex, 0].Tag;
                 var shiftCategory = this[0, e.ColIndex].Tag as IShiftCategory;
-				e.Style.CellType = "IntegerReadOnlyCelll";
+                e.Style.CellType = "IntegerReadOnlyCell";
 
                 var count = _presenter.ShiftCategoryCount(date, shiftCategory);
                 if (count.HasValue)
                     e.Style.CellValue = count;
+                else
+                    e.Style.CellValue = 0;
             }
 
             e.Handled = true;

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
                 Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
                 Expect.Call(_personAssignment.ShiftCategory).Return(shiftCategory).Repeat.Twice();
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod)
-                      .Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
+                      .Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc)).Repeat.Twice() ;
 
                 Expect.Call(_scheduleDay.Person).Return(person);
             }
@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             {
                 Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
                 Expect.Call(_personAssignment.ShiftCategory).Return(null);
+                Expect.Call(_scheduleDay.DateOnlyAsPeriod)
+                      .Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
             }
             _target = new ShiftCategoryStructure(_scheduleDay);
             Assert.AreEqual(_target.ShiftCategory, null);
@@ -65,6 +67,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             using (_mocks.Record())
             {
                 Expect.Call(_scheduleDay.PersonAssignment()).Return(null);
+                Expect.Call(_scheduleDay.DateOnlyAsPeriod)
+                      .Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
             }
             _target = new ShiftCategoryStructure(_scheduleDay);
             Assert.AreEqual(_target.ShiftCategory, null);

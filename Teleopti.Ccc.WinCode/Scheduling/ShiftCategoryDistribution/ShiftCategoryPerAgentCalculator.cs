@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
         {
             foreach (var shiftDistribution in shiftCategoryPerAgentList)
             {
-                if (shiftDistribution.Person == shiftCategoryStructure.PersonValue
+                if (shiftDistribution.Person == shiftCategoryStructure.PersonValue && shiftCategoryStructure.ShiftCategory != null
                     && shiftCategoryStructure.ShiftCategory.Equals(shiftDistribution.ShiftCategory))
                 {
                     shiftDistribution.Count++;

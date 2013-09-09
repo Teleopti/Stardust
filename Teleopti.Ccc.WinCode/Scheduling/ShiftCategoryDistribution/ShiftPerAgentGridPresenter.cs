@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		public int ShiftCategoryCount(IPerson person, IShiftCategory shiftCategory, IList<ShiftCategoryPerAgent> shiftCategoryPerAgentList)
 		{
 			return (from shiftCategoryPerAgent in shiftCategoryPerAgentList 
-					where shiftCategoryPerAgent.Person.Equals(person) 
+					where shiftCategoryPerAgent.Person.Equals(person) && shiftCategoryPerAgent.ShiftCategory!=null
 					where shiftCategoryPerAgent.ShiftCategory.Equals(shiftCategory) 
 					select shiftCategoryPerAgent.Count).FirstOrDefault();
 		}

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 	    {
 	        foreach (var shiftDistribution in _shiftDistributionList)
 	        {
-	            if (shiftDistribution.DateOnly.Equals(date))
+	            if (shiftDistribution.DateOnly.Equals(date) && shiftDistribution.ShiftCategory!= null)
 	            {
 	                if (shiftDistribution.ShiftCategory.Equals(shiftCategory))
 	                {

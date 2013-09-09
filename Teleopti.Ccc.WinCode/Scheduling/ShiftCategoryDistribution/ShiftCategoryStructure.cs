@@ -12,12 +12,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
         {
 
             var personAssignment = scheduleDay.PersonAssignment();
+            //if (personAssignment != null && personAssignment.ShiftCategory != null)
+            //{
+            //    populateFeilds(personAssignment.ShiftCategory, scheduleDay.DateOnlyAsPeriod.DateOnly,
+            //                       scheduleDay.Person);
+            //}
             if (personAssignment != null && personAssignment.ShiftCategory != null)
             {
-                populateFeilds(personAssignment.ShiftCategory, scheduleDay.DateOnlyAsPeriod.DateOnly,
-                                   scheduleDay.Person);
+                ShiftCategory = personAssignment.ShiftCategory;
             }
-            
+            DateOnlyValue = scheduleDay.DateOnlyAsPeriod.DateOnly;
+            PersonValue = scheduleDay.Person;
         }
 
         public ShiftCategoryStructure(IShiftCategory shiftCategory,DateOnly dateOnly, IPerson person  )

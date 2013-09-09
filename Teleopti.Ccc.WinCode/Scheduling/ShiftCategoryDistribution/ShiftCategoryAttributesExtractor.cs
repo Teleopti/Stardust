@@ -41,12 +41,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
             foreach (var shiftCategoryStructure in shiftCategoryStructureList)
             {
-                if (!_shiftCategories.Contains(shiftCategoryStructure.ShiftCategory))
+                if (shiftCategoryStructure.ShiftCategory != null &&  !_shiftCategories.Contains(shiftCategoryStructure.ShiftCategory) )
                 {
                     _shiftCategories.Add(shiftCategoryStructure.ShiftCategory);
                 }
 
-                if (!_persons.Contains(shiftCategoryStructure.PersonValue))
+                if ( !_persons.Contains(shiftCategoryStructure.PersonValue))
                 {
                     _persons.Add(shiftCategoryStructure.PersonValue );
                 }
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
                 
             }
 
-	        _shiftCategories = _shiftCategories.OrderBy(s => s.Description.Name).ToList();
+            _shiftCategories = _shiftCategories.OrderBy(s => s.Description.Name).ToList();
         }
     }
 }
