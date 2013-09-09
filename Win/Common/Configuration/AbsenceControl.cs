@@ -276,11 +276,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
                 foreach (Absence absence in absenceCollection)
                 {
-                    // lazy load
-                    if (!LazyLoadingManager.IsInitialized(absence.CreatedBy))
-                        LazyLoadingManager.Initialize(absence.CreatedBy);
-                    if (!LazyLoadingManager.IsInitialized(absence.UpdatedBy))
-                        LazyLoadingManager.Initialize(absence.UpdatedBy);
+                    LazyLoadingManager.Initialize(absence.UpdatedBy);
 
                     // Instantiates the absence view relevant for the 
                     // givenabsence and add it to the collection.
