@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(_localizer.UpdatedByText(master, UserTexts.Resources.UpdatedByColon)).Return("updated by: ola");
 
             _mocks.ReplayAll();
-            Assert.That(_model.UpdateInfo, Is.EqualTo("created by: ola updated by: ola"));
+            Assert.That(_model.UpdateInfo, Is.EqualTo("updated by: ola"));
             _mocks.VerifyAll();
         }
 
