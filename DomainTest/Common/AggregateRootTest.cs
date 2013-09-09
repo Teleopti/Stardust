@@ -49,12 +49,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             target.SetDeleted();
             Assert.IsTrue(target.IsDeleted);
         }
-        [Test]
-        public void VerifyLocalizedStringIsNotNull()
-        {
-            _targetAggregateRootWithBusinessUnit = new AggRootWithBusinessUnit();
-            Assert.IsNotNull(_targetAggregateRootWithBusinessUnit.UpdatedTimeInUserPerspective);
-        }
 
         [Test]
         public void VerifySetVersion()
