@@ -18,10 +18,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
 				public override PersonDayOffDto DomainEntityToDto(IPersonAssignment entity)
 				{
-					var retDto = new PersonDayOffDto();
+					PersonDayOffDto retDto = null;
 					var dayOff = entity.DayOff();
 					if (dayOff != null)
 					{
+					    retDto = new PersonDayOffDto();
 						retDto.Id = entity.Id;
 						retDto.Person = _personAssembler.DomainEntityToDto(entity.Person);
 						retDto.Anchor = dayOff.Anchor;
