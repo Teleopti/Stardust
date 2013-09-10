@@ -103,12 +103,12 @@
 		        <span data-bind="text: summary"></span>
 		    </li>
 			<li id="day-symbol" class="fourth" data-bind="click: $parent.showAddRequestForm">
-				<div class="text-request floatright" data-bind="visible: hasTextRequest, nonEncodedTitle: textRequestText, click: navigateToRequests">
+				<div class="text-request floatright" data-bind="visible: hasTextRequest, tooltip: { title: textRequestText, html: true }, click: navigateToRequests">
 					<div class="floatright extrasmall" data-bind="text:textRequestCount">
 					</div>
 					<div class="icon text-request ir floatright" />
 				</div>
-				<div class="holiday-agents show-request floatright" data-bind="visible: absenceRequestPermission, nonEncodedTitle: holidayChanceText()">
+				<div class="holiday-agents show-request floatright" data-bind="visible: absenceRequestPermission, tooltip: { title: holidayChanceText(), html: true }">
 					<div>
 						<div class="small-circle" data-bind="style: {background: holidayChanceColor()}" >
 							<div class="small-radial-circle"></div>
