@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			setting.IsActive = IsActive;
 			SharingUrl = TestSiteConfigurationSetup.Url + "MyTime/Share?id=" +
 								  HttpServerUtility.UrlTokenEncode(
-									  Encryption.EncryptStringToBytes("TestData" + "/" + user.Id.Value, EncryptionConstants.Image1, EncryptionConstants.Image2));
+									  Encryption.EncryptStringToBytes("TestData" + "/" + user.Id.Value, EncryptionConstants.Image1, EncryptionConstants.Image2)) + "&type=text/plain";
 
 			var personalSettingData = new PersonalSettingData("CalendarLinkSettings", user);
 			personalSettingData.SetValue(setting);

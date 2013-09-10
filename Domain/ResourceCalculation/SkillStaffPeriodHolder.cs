@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     		return periodsToSort.OrderBy(p => p.Period.StartDateTime).ToList();
         }
 
-        private static void HandleAggregate(KeyValuePair<DateTimePeriod, IList<ISkillStaffPeriod>> keyValuePair, IAggregateSkillStaffPeriod aggregate, ISkillStaffPeriod staffPeriod, IAggregateSkillStaffPeriod asAgg)
+        public static void HandleAggregate(KeyValuePair<DateTimePeriod, IList<ISkillStaffPeriod>> keyValuePair, IAggregateSkillStaffPeriod aggregate, ISkillStaffPeriod staffPeriod, IAggregateSkillStaffPeriod asAgg)
         {
             asAgg.AggregatedFStaff = staffPeriod.FStaff;
             asAgg.AggregatedCalculatedResource = staffPeriod.CalculatedResource;
@@ -407,7 +407,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return returnDictionary;
         }
 
-		private static IEnumerable<ISkillStaffPeriod> SplitSkillStaffPeriod(ISkillStaffPeriod skillStaffPeriod, double factor, TimeSpan minimumResolution)
+		public static IEnumerable<ISkillStaffPeriod> SplitSkillStaffPeriod(ISkillStaffPeriod skillStaffPeriod, double factor, TimeSpan minimumResolution)
         {
             IList<ISkillStaffPeriod> skillStaffPeriods = new List<ISkillStaffPeriod>();
             for (DateTime currentTime = skillStaffPeriod.Period.StartDateTime; currentTime < skillStaffPeriod.Period.EndDateTime; currentTime = currentTime.Add(minimumResolution))
