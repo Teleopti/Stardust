@@ -61,13 +61,13 @@ namespace Teleopti.Ccc.Domain.Common
             return new ReadOnlyCollection<IPerson>(ret);
         }
 
-		public void ActivatePerson(IPersonAccountUpdater personAccountUpdater)
+		public virtual void ActivatePerson(IPersonAccountUpdater personAccountUpdater)
 	    {
 		    TerminalDate = null;
 			personAccountUpdater.UpdateOnActivation(this);
 	    }
 
-	    public void TerminatePerson(DateOnly terminalDate, IPersonAccountUpdater personAccountUpdater)
+		public virtual void TerminatePerson(DateOnly terminalDate, IPersonAccountUpdater personAccountUpdater)
 	    {
 		    TerminalDate = terminalDate;
 			personAccountUpdater.UpdateOnTermination(terminalDate, this);

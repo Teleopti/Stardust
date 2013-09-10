@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
                 var terminateDate = value;
 
                 if(terminateDate!=null)
-                    ContainedEntity.TerminatePerson(terminateDate.GetValueOrDefault(), _personAccountUpdater);
+                    ContainedEntity.TerminatePerson(terminateDate.Value, _personAccountUpdater);
                 else
                 {
                     ContainedEntity.ActivatePerson(_personAccountUpdater);
