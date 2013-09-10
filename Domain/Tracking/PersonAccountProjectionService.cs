@@ -22,11 +22,13 @@ namespace Teleopti.Ccc.Domain.Tracking
             _period = _accountPeriod;
         }
 
+
+		// todo: tamasb> can be removed, not used, we never send a schedule as parameter
         public IList<DateTimePeriod> PeriodsToLoad()
         {
 
             IList<DateTimePeriod> retList = new List<DateTimePeriod>();
-            if (_schedule == null || _accountPeriod.Intersection(_schedule.Period) == null)
+			if (noSchedule() || noIntersection())
             {
                 retList.Add(_accountPeriod);
                 return retList;
@@ -40,7 +42,17 @@ namespace Teleopti.Ccc.Domain.Tracking
             return retList;
         }
 
-        public DateTimePeriod? PeriodToReadFromSchedule()
+	    private bool noIntersection()
+	    {
+		    return _accountPeriod.Intersection(_schedule.Period) == null;
+	    }
+
+	    private bool noSchedule()
+	    {
+		    return _schedule == null;
+	    }
+
+	    public DateTimePeriod? PeriodToReadFromSchedule()
         {
             return (_schedule != null) ? _accountPeriod.Intersection(_schedule.Period) : null;
         }

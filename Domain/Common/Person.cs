@@ -61,13 +61,26 @@ namespace Teleopti.Ccc.Domain.Common
             return new ReadOnlyCollection<IPerson>(ret);
         }
 
-        public virtual DateOnly? TerminalDate
+		public virtual void ActivatePerson(IPersonAccountUpdater personAccountUpdater)
+	    {
+		    TerminalDate = null;
+			personAccountUpdater.UpdateOnActivation(this);
+	    }
+
+		public virtual void TerminatePerson(DateOnly terminalDate, IPersonAccountUpdater personAccountUpdater)
+	    {
+		    TerminalDate = terminalDate;
+			personAccountUpdater.UpdateOnTermination(terminalDate, this);
+	    }
+
+	    public virtual DateOnly? TerminalDate
         {
             get { return _terminalDate; }
             set
             {
 	            if (_terminalDate != value)
 	            {
+					
 		            var valueBefore = _terminalDate.HasValue ? _terminalDate.Value.Date : (DateTime?) null;
 		            var personPeriodsBefore = gatherPersonPeriodDetails();
 		            _terminalDate = value;

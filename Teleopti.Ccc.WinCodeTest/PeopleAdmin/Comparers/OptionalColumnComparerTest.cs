@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 			_person.AddPersonPeriod(_personPeriod);
             _principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal());
 			// Ses the contained entity
-            _target = new PersonGeneralModel(_person, new UserDetail(_person), _principalAuthorization);
+			_target = new PersonGeneralModel(_person, new UserDetail(_person), _principalAuthorization, new PersonAccountUpdaterDummy());
 
 			// Instantiates the person and teh team
 			_person1 = PersonFactory.CreatePerson();
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 				 team1);
 			_person.AddPersonPeriod(personPeriod1);
 			// Ses the contained entity
-            _personGeneralModel = new PersonGeneralModel(_person1, new UserDetail(_person1), _principalAuthorization);
+			_personGeneralModel = new PersonGeneralModel(_person1, new UserDetail(_person1), _principalAuthorization, new PersonAccountUpdaterDummy());
 		}
 
         /// <summary>

@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
     public class PersonAssembler : Assembler<IPerson,PersonDto>, IPersonAssembler
     {
         private readonly IAssembler<IWorkflowControlSet,WorkflowControlSetDto> _workflowControlSetAssembler;
-        public IPersonRepository PersonRepository { get; private set; }
+	    private readonly IPersonAccountUpdater _personAccountUpdater;
+	    public IPersonRepository PersonRepository { get; private set; }
         public bool IgnorePersonPeriods { get; set; }
 
         /// <summary>
@@ -41,10 +42,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         /// </remarks>
         public bool EnableSaveOrUpdate { get; set; }
 
-        public PersonAssembler(IPersonRepository personRepository, IAssembler<IWorkflowControlSet,WorkflowControlSetDto> workflowControlSetAssembler)
+		public PersonAssembler(IPersonRepository personRepository, IAssembler<IWorkflowControlSet, WorkflowControlSetDto> workflowControlSetAssembler, IPersonAccountUpdater personAccountUpdater)
         {
             _workflowControlSetAssembler = workflowControlSetAssembler;
-            PersonRepository = personRepository;
+			_personAccountUpdater = personAccountUpdater;
+			PersonRepository = personRepository;
             IgnorePersonPeriods = false;
         }
 
@@ -117,7 +119,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             return person;
         }
 
-        private static IPerson CreateNewPerson(PersonDto dto)
+        private IPerson CreateNewPerson(PersonDto dto)
         {
             IPerson person = new Person();
             UpdatePerson(dto, person);
@@ -125,7 +127,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             return person;
         }
 
-        private static void UpdatePerson(PersonDto dto, IPerson person)
+        private void UpdatePerson(PersonDto dto, IPerson person)
         {
             if (dto.CultureLanguageId.HasValue)
                 person.PermissionInformation.SetCulture(new CultureInfo(dto.CultureLanguageId.Value));
@@ -156,9 +158,9 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                                                            WindowsLogOnName = dto.WindowsLogOnName
                                                        };
             if(dto.TerminationDate != null)
-                person.TerminalDate = new DateOnly(dto.TerminationDate.DateTime);
+                person.TerminatePerson(new DateOnly(dto.TerminationDate.DateTime), null) ;
             else
-                person.TerminalDate = null;
+                person.ActivatePerson(null);
             if (!string.IsNullOrEmpty(dto.Note))
                 person.Note = dto.Note;
             if(dto.IsDeleted)
