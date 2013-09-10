@@ -95,16 +95,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             e.Style.CellType = "NumericCell";
         }
 
-        private void QueryCreatedBy(GridQueryCellInfoEventArgs e)
-        {
-					//will be removed
-        }
-
-        private void QueryCreatedOn(GridQueryCellInfoEventArgs e)
-        {
-					//will be removed
-        }
-
         private void QueryUpdatedBy(GridQueryCellInfoEventArgs e)
         {
             e.Style.CellType = "Static";

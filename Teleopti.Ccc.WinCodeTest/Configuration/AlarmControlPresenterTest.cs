@@ -151,11 +151,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Assert.AreEqual(_createPerson.Name, style.CellValue);
 
             style = new GridStyleInfo();
-            e = new GridQueryCellInfoEventArgs(4, (int)AlarmControlPresenter.ColumnHeader.UpdatedOn, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual(_createDate.AddHours(1).ToString(CultureInfo.CurrentCulture), style.CellValue);
-
-            style = new GridStyleInfo();
 
             e = new GridQueryCellInfoEventArgs(0, 0, style);
             _target.QueryCellInfo(null, e);
