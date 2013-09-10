@@ -24,7 +24,7 @@ Background:
 	| Access to team             | Team green          |
 	| Access to Anywhere         | true                |
 	| View unpublished schedules | true                |
-	And I have a person period with
+	And 'Pierre Baldi' has a person period with
 	| Field        | Value        |
 	| Team         | Team green   |
 	| Start date   | 2013-04-08   |
@@ -32,6 +32,74 @@ Background:
 	And there are shift categories
 	| Name |
 	| Day  |
+
+Scenario: View staffing metrics
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| StartTime      | 2013-04-09 09:00 |
+	| EndTime        | 2013-04-09 16:00 |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	And there is a forecast with
+	| Field                  | Value        |
+	| Skill                  | Direct Sales |
+	| Date                   | 2013-04-09   |
+	| Hours                  | 8            |
+	| ServiceLevelSeconds    | 20           |
+	| ServiceLevelPercentage | 80           |
+	| OpenFrom               | 09:00        |
+	| OpenTo                 | 16:00        |
+	When I view team schedules staffing metrics for '2013-04-09' and 'Direct Sales'
+	Then I should see metrics for skill 'Direct Sales' with
+	| Field                   | Value  |
+	| Forecasted hours        | 11.50  |
+	| Scheduled hours         | 7.0    |
+	| Difference hours        | -4.49  |
+	| Difference percentage   | -39.10 |
+	| Estimated service level | 0.00   |
+
+Scenario: Push staffing metrics changes
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| StartTime      | 2013-09-09 09:00 |
+	| EndTime        | 2013-09-09 16:00 |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	And there is a forecast with
+	| Field                  | Value        |
+	| Skill                  | Direct Sales |
+	| Date                   | 2013-09-09   |
+	| Hours                  | 8            |
+	| ServiceLevelSeconds    | 20           |
+	| ServiceLevelPercentage | 80           |
+	| OpenFrom               | 09:00        |
+	| OpenTo                 | 16:00        |
+	And there is an absence with
+	| Field | Value    |
+	| Name  | Vacation |
+	| Color | Red      |
+	When I view team schedules staffing metrics for '2013-09-09' and 'Direct Sales'
+	Then I should see metrics for skill 'Direct Sales' with
+	| Field                   | Value  |
+	| Forecasted hours        | 11.50  |
+	| Scheduled hours         | 7.0    |
+	| Difference hours        | -4.49  |
+	| Difference percentage   | -39.10 |
+	| Estimated service level | 0.00   |
+	When someone else adds a full day absence for 'Pierre Baldi' with
+	| Field   | Value      |
+	| Absence | Vacation   |
+	| From    | 2013-09-09 |
+	| To      | 2013-09-09 |
+	Then I should see metrics for skill 'Direct Sales' with
+	| Field                   | Value   |
+	| Forecasted hours        | 11.50   |
+	| Scheduled hours         | 0.0     |
+	| Difference hours        | -11.50  |
+	| Difference percentage   | -100.00 |
+	| Estimated service level | 0.00    |
 
 Scenario: View skill selection
 	Given I have the role 'Anywhere Team Green'
@@ -49,39 +117,12 @@ Scenario: View skill selection
 	| Hours    | 8             |
 	| OpenFrom | 09:00         |
 	| OpenTo   | 16:00         |
-	When I view schedules for '2013-04-09'
+	When I view team schedules staffing metrics for '2013-04-09'
 	Then I should be able to select skills
 	| Skill         |
 	| Direct Sales  |
 	| Channel Sales |
-
-Scenario: View staffing metrics
-	Given I have the role 'Anywhere Team Green'
-	And I have a shift with
-	| Field          | Value            |
-	| StartTime      | 2013-04-09 09:00 |
-	| EndTime        | 2013-04-09 16:00 |
-	| Shift category | Day              |
-	| Activity       | Phone            |
-	And there is a forecast with
-	| Field                  | Value        |
-	| Skill                  | Direct Sales |
-	| Date                   | 2013-04-09   |
-	| Hours                  | 8            |
-	| ServiceLevelSeconds    | 20           |
-	| ServiceLevelPercentage | 80           |
-	| OpenFrom               | 09:00        |
-	| OpenTo                 | 16:00        |
-	When I view schedules for '2013-04-09'
-	And I select skill 'Direct Sales'
-	Then I should see metrics for skill 'Direct Sales' with
-	| Field                   | Value  |
-	| Forecasted hours        | 11.50  |
-	| Scheduled hours         | 7.0    |
-	| Difference hours        | -4.49  |
-	| Difference percentage   | -39.10 |
-	| Estimated service level | 0.00   |
-
+	
 Scenario: Remember skill selection when changing date
 	Given I have the role 'Anywhere Team Green'
 	And there is a forecast with
@@ -98,9 +139,8 @@ Scenario: Remember skill selection when changing date
 	| Hours    | 8            |
 	| OpenFrom | 09:00        |
 	| OpenTo   | 16:00        |
-	And I view schedules for '2013-04-09'
-	When I select skill 'Direct Sales'
-	And I select date '2013-04-10'
+	And I am viewing team schedules staffing metrics for '2013-04-09' and 'Direct Sales'
+	When  I select date '2013-04-10'
 	Then I should see metrics for skill 'Direct Sales'
 
 Scenario: Remember skill selection when changing team
@@ -127,8 +167,7 @@ Scenario: Remember skill selection when changing team
 	| Access to team             | Team green, Team other        |
 	| Access to Anywhere         | true                          |
 	| View unpublished schedules | true                          |
-	And I have the role 'Anywhere Team Green And Other'
-	And I view schedules for '2013-04-09'
-	When I select skill 'Direct Sales'
-	And I select team 'Team other'
+	And I have the role 'Anywhere Team Green And Other'	
+	And I am viewing team schedules staffing metrics for 'Team green' and '2013-04-09' and 'Direct Sales'
+	When I select team 'Team other'
 	Then I should see metrics for skill 'Direct Sales'

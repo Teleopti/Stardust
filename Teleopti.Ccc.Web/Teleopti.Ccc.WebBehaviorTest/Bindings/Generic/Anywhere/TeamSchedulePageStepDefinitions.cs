@@ -109,6 +109,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I select skill '(.*)'")]
 		public void WhenISelectSkill(string name)
 		{
+			SelectSkill(name);
+		}
+
+		public static void SelectSkill(string name)
+		{
 			var skillDropDown = Browser.Current.Span(Find.BySelector("#skill-selector"));
 			EventualAssert.That(() => skillDropDown.Exists, Is.True);
 
