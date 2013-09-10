@@ -16,10 +16,10 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		 {
 			 var mbCacheFactory = MockRepository.GenerateMock<IMbCacheFactory>();
 			 var dataHandler = MockRepository.GenerateMock<IDatabaseHandler>();
+			 var alarmMapper = MockRepository.GenerateMock<IAlarmMapper>();
 			 var personId = Guid.NewGuid();
 			 var timeStamp = DateTime.Now;
-			 var target = new actualAgentAssemblerForTest(dataHandler, mbCacheFactory);
-			 
+			 var target = new actualAgentAssemblerForTest(dataHandler, mbCacheFactory, alarmMapper);
 
 			 target.InvalidateReadModelCache(personId);
 
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 		private class actualAgentAssemblerForTest : ActualAgentAssembler
 		{
-			public actualAgentAssemblerForTest(IDatabaseHandler databaseHandler, IMbCacheFactory mbCacheFactory) : base(databaseHandler, mbCacheFactory)
+			public actualAgentAssemblerForTest(IDatabaseHandler databaseHandler, IMbCacheFactory mbCacheFactory, IAlarmMapper alarmMapper) : base(databaseHandler, mbCacheFactory, alarmMapper)
 			{
 			}
 
