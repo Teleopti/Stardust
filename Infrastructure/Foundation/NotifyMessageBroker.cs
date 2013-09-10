@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
             foreach (var change in rootModifications)
             {
                 if (!MessageFilterManager.Instance.HasType(change.Root.GetType())) continue;
-                    continue;
 
                 var rootBrokerConditions = change.Root as IAggregateRootBrokerConditions;
                 if (rootBrokerConditions != null)
