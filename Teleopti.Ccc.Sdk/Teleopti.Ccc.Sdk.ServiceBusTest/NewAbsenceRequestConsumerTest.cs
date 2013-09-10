@@ -52,7 +52,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         private IAlreadyAbsentSpecification _alreadyAbsentSpecification;
         private IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
         private IBudgetGroupHeadCountSpecification _budgetGroupHeadCountSpecification;
-        private IBudgetGroupAllowanceCalculator _budgetGroupAllowanceCalculator;
         private IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
     	private ILoadSchedulingStateHolderForResourceCalculation _loader;
     	private IResourceOptimizationHelper _resourceOptimizationHelper;
@@ -79,7 +78,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             _loader = _mockRepository.DynamicMock<ILoadSchedulingStateHolderForResourceCalculation>();
             _loaderWithoutResourceCalculation = _mockRepository.DynamicMock<ILoadSchedulesForRequestWithoutResourceCalculation>();
             _budgetGroupAllowanceSpecification = _mockRepository.StrictMock<IBudgetGroupAllowanceSpecification>();
-    	    _budgetGroupAllowanceCalculator = _mockRepository.DynamicMock<IBudgetGroupAllowanceCalculator>();
     	    _budgetGroupHeadCountSpecification = _mockRepository.DynamicMock<IBudgetGroupHeadCountSpecification>();
             _resourceOptimizationHelper = _mockRepository.StrictMock<IResourceOptimizationHelper>();
             _updateScheduleProjectionReadModel = _mockRepository.StrictMock<IUpdateScheduleProjectionReadModel>();
@@ -95,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                                                     _scheduleDictionarySaver, _scheduleIsInvalidSpecification,
                                                     _authorization, _scheduleDictionaryModifiedCallback, _resourceOptimizationHelper, 
                                                     _updateScheduleProjectionReadModel, _budgetGroupAllowanceSpecification, _loader, _loaderWithoutResourceCalculation, _alreadyAbsentSpecification, 
-                                                    _budgetGroupAllowanceCalculator, _budgetGroupHeadCountSpecification);
+                                                    _budgetGroupHeadCountSpecification);
         }
 
         private void CreateServices()
