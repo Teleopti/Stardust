@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Payroll
         /// Initializes a new instance of the <see cref="ViewModel&lt;T&gt;"/> class.
         /// </summary>
         /// <param name="domainEntity">The domain entity.</param>
-        public ViewModel(T domainEntity)
+        protected ViewModel(T domainEntity)
         {
             _domainEntity = domainEntity;
         }
