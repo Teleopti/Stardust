@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	public class TeamDayOffSchedulerTest
 	{
 		private ITeamDayOffScheduler _target;
-		private MockRepository _mocks;
 		private IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
@@ -38,50 +37,49 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
 			_schedulingOptions = new SchedulingOptions();
-			_dayOffsInPeriodCalculator = _mocks.StrictMock<IDayOffsInPeriodCalculator>();
+			_dayOffsInPeriodCalculator = MockRepository.GenerateMock<IDayOffsInPeriodCalculator>();
 
-			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
-			_schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
+			_effectiveRestrictionCreator = MockRepository.GenerateMock<IEffectiveRestrictionCreator>();
+			_schedulePartModifyAndRollbackService = MockRepository.GenerateMock<ISchedulePartModifyAndRollbackService>();
 
-			_scheduleDayAvailableForDayOffSpecification = _mocks.StrictMock<IScheduleDayAvailableForDayOffSpecification>();
-			_hasContractDayOffDefinition = _mocks.StrictMock<IHasContractDayOffDefinition>();
+			_scheduleDayAvailableForDayOffSpecification = MockRepository.GenerateMock<IScheduleDayAvailableForDayOffSpecification>();
+			_hasContractDayOffDefinition = MockRepository.GenerateMock<IHasContractDayOffDefinition>();
 
-			_matrixDataListInSteadyState = _mocks.StrictMock<IMatrixDataListInSteadyState>();
-			_matrixDataListCreator = _mocks.StrictMock<IMatrixDataListCreator>();
+			_matrixDataListInSteadyState = MockRepository.GenerateMock<IMatrixDataListInSteadyState>();
+			_matrixDataListCreator = MockRepository.GenerateMock<IMatrixDataListCreator>();
 
-			_groupPersonBuilderForOptimization = _mocks.StrictMock<IGroupPersonBuilderForOptimization>();
+			_groupPersonBuilderForOptimization = MockRepository.GenerateMock<IGroupPersonBuilderForOptimization>();
 
-			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
+			_schedulingResultStateHolder = MockRepository.GenerateMock<ISchedulingResultStateHolder>();
+			_schedulePeriod = MockRepository.GenerateMock<IVirtualSchedulePeriod>();
 			_schedulingOptions.DayOffTemplate = new DayOffTemplate(new Description("DayOff"));
 			_schedulingOptions.GroupOnGroupPageForTeamBlockPer = new GroupPageLight
 				{
 					Key = "Root",
 					Name = "BU"
 				};
-			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
-			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
-			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
+			_scheduleDayPro = MockRepository.GenerateMock<IScheduleDayPro>();
+			_scheduleMatrixPro = MockRepository.GenerateMock<IScheduleMatrixPro>();
+			_schedulePeriod = MockRepository.GenerateMock<IVirtualSchedulePeriod>();
 			_target = new TeamDayOffScheduler(_dayOffsInPeriodCalculator, _effectiveRestrictionCreator,
 											  _schedulePartModifyAndRollbackService, _scheduleDayAvailableForDayOffSpecification,
 											  _hasContractDayOffDefinition, _matrixDataListInSteadyState, _matrixDataListCreator,
 											  _schedulingResultStateHolder);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),
+		 Test]
 		public void ShouldAddPreferenceDayOffForTeam()
 		{
-			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro, MockRepository.GenerateMock<IScheduleMatrixPro>() };
 			var person = PersonFactory.CreatePerson("Bill");
-			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro});
 			var date = new DateOnly(2013, 2, 1);
-			var matrixData1 = _mocks.StrictMock<IMatrixData>();
+			var matrixData1 = MockRepository.GenerateMock<IMatrixData>();
 			var matrixDataList = new List<IMatrixData> {matrixData1};
-			var groupPerson = _mocks.StrictMock<IGroupPerson>();
-			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var groupPerson = MockRepository.GenerateMock<IGroupPerson>();
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
 			var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
 			                                                    new EndTimeLimitation(),
 			                                                    new WorkTimeLimitation()
@@ -91,33 +89,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					DayOffTemplate = _schedulingOptions.DayOffTemplate
 				};
 
-			using (_mocks.Record())
-			{
-				Expect.Call(_scheduleMatrixPro.Person).Return(person).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDayPro.Day).Return(date).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
-				Expect.Call(_schedulePeriod.IsValid).Return(false).Repeat.AtLeastOnce();
-				Expect.Call(_matrixDataListCreator.Create(matrixList, _schedulingOptions)).Return(matrixDataList);
-				Expect.Call(_matrixDataListInSteadyState.IsListInSteadyState(matrixDataList)).Return(true);
-				Expect.Call(matrixData1.Matrix).Return(_scheduleMatrixPro).Repeat.AtLeastOnce();
-				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(person, date)).Return(groupPerson).Repeat.Twice();
-				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary).Repeat.Twice();
-				Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { person })).Repeat.Twice();
-				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson> { person }, date, _schedulingOptions, scheduleDictionary)).Return(effectiveRestriction).Repeat.Twice();
-				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(date)).Return(_scheduleDayPro).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(scheduleDay).Repeat.AtLeastOnce();
-				Expect.Call(scheduleDay.IsScheduled()).Return(false).Repeat.AtLeastOnce();
-				Expect.Call(() => scheduleDay.CreateAndAddDayOff(effectiveRestriction.DayOffTemplate)).Repeat.AtLeastOnce();
-				Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(scheduleDay)).Repeat.AtLeastOnce();
-			}
+			_scheduleMatrixPro.Stub(x => x.Person).Return(person);
+			_scheduleDayPro.Stub(x => x.Day).Return(date);
+			_scheduleMatrixPro.Stub(x => x.UnlockedDays).Return(scheduleDayProList);
+			_matrixDataListCreator.Stub(x => x.Create(matrixList, _schedulingOptions)).Return(matrixDataList);
+			_matrixDataListInSteadyState.Stub(x => x.IsListInSteadyState(matrixDataList)).Return(true);
+			matrixData1.Stub(x => x.Matrix).Return(_scheduleMatrixPro);
+			_groupPersonBuilderForOptimization.Stub(x => x.BuildGroupPerson(person, date)).Return(groupPerson);
+			groupPerson.Stub(x => x.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {person}));
+			_scheduleDayPro.Stub(x => x.DaySchedulePart()).Return(scheduleDay);
+			_scheduleMatrixPro.Stub(x => x.SchedulePeriod).Return(_schedulePeriod);
+			_effectiveRestrictionCreator.Stub(
+				x => x.GetEffectiveRestriction(new List<IPerson> {person}, date, _schedulingOptions, null))
+			                            .Return(effectiveRestriction);
+			_scheduleMatrixPro.Stub(x => x.GetScheduleDayByKey(date)).Return(_scheduleDayPro);
 
-			using (_mocks.Playback())
-			{
-				_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
-			}
+			_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions,
+			                         _groupPersonBuilderForOptimization);
+
+			scheduleDay.AssertWasCalled(x => x.CreateAndAddDayOff(effectiveRestriction.DayOffTemplate), o => o.Repeat.Once());
 		}
-		
+
+		/*
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldAddContractDayOffForTeam()
 		{
@@ -125,11 +118,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var person = PersonFactory.CreatePerson("Bill");
 			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
 			var date = new DateOnly(2013, 2, 1);
-			var matrixData1 = _mocks.StrictMock<IMatrixData>();
+			var matrixData1 = MockRepository.GenerateMock<IMatrixData>();
 			var matrixDataList = new List<IMatrixData> { matrixData1 };
-			var groupPerson = _mocks.StrictMock<IGroupPerson>();
-			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var groupPerson = MockRepository.GenerateMock<IGroupPerson>();
+			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
 			var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
 			                                                    new EndTimeLimitation(),
 			                                                    new WorkTimeLimitation()
@@ -175,9 +168,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
 			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
-			var matrixData1 = _mocks.StrictMock<IMatrixData>();
+			var matrixData1 = MockRepository.GenerateMock<IMatrixData>();
 			var matrixDataList = new List<IMatrixData> { matrixData1 };
-			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
 			var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
 																new EndTimeLimitation(),
 																new WorkTimeLimitation()
@@ -214,9 +207,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
 			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
-			var matrixData1 = _mocks.StrictMock<IMatrixData>();
+			var matrixData1 = MockRepository.GenerateMock<IMatrixData>();
 			var matrixDataList = new List<IMatrixData> { matrixData1 };
-			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
 			var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
 			                                                    new EndTimeLimitation(),
 			                                                    new WorkTimeLimitation()
@@ -258,11 +251,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var person = PersonFactory.CreatePerson("Bill");
 			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
 			var date = new DateOnly(2013, 2, 1);
-			var matrixData1 = _mocks.StrictMock<IMatrixData>();
+			var matrixData1 = MockRepository.GenerateMock<IMatrixData>();
 			var matrixDataList = new List<IMatrixData> { matrixData1 };
-			var groupPerson = _mocks.StrictMock<IGroupPerson>();
-			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var groupPerson = MockRepository.GenerateMock<IGroupPerson>();
+			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
 			var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
 																new EndTimeLimitation(),
 																new WorkTimeLimitation()
@@ -330,9 +323,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
-            var matrixData1 = _mocks.StrictMock<IMatrixData>();
+            var matrixData1 = MockRepository.GenerateMock<IMatrixData>();
             var matrixDataList = new List<IMatrixData> { matrixData1 };
-            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
             
             using (_mocks.Record())
             {
@@ -361,9 +354,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
-            var matrixData1 = _mocks.StrictMock<IMatrixData>();
+            var matrixData1 = MockRepository.GenerateMock<IMatrixData>();
             var matrixDataList = new List<IMatrixData> { matrixData1 };
-            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
            
 
             using (_mocks.Record())
@@ -393,9 +386,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
-            var matrixData1 = _mocks.StrictMock<IMatrixData>();
+            var matrixData1 = MockRepository.GenerateMock<IMatrixData>();
             var matrixDataList = new List<IMatrixData> { matrixData1 };
-            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
             
 
             using (_mocks.Record())
@@ -426,9 +419,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
-            var matrixData1 = _mocks.StrictMock<IMatrixData>();
+            var matrixData1 = MockRepository.GenerateMock<IMatrixData>();
             var matrixDataList = new List<IMatrixData> { matrixData1 };
-            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
            
 
             using (_mocks.Record())
@@ -460,9 +453,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
-            var matrixData1 = _mocks.StrictMock<IMatrixData>();
+            var matrixData1 = MockRepository.GenerateMock<IMatrixData>();
             var matrixDataList = new List<IMatrixData> { matrixData1 };
-            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
             var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
                                                                 new EndTimeLimitation(),
                                                                 new WorkTimeLimitation()
@@ -501,9 +494,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
-            var matrixData1 = _mocks.StrictMock<IMatrixData>();
+            var matrixData1 = MockRepository.GenerateMock<IMatrixData>();
             var matrixDataList = new List<IMatrixData> { matrixData1 };
-            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
            
             using (_mocks.Record())
             {
@@ -527,10 +520,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var person = PersonFactory.CreatePerson("Bill");
             var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
             var date = new DateOnly(2013, 2, 1);
-            var matrixData1 = _mocks.StrictMock<IMatrixData>();
+            var matrixData1 = MockRepository.GenerateMock<IMatrixData>();
             var matrixDataList = new List<IMatrixData> { matrixData1 };
-            var groupPerson = _mocks.StrictMock<IGroupPerson>();
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+            var groupPerson = MockRepository.GenerateMock<IGroupPerson>();
+            var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
             var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
                                                                 new EndTimeLimitation(),
                                                                 new WorkTimeLimitation()
@@ -565,10 +558,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var person = PersonFactory.CreatePerson("Bill");
             var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
             var date = new DateOnly(2013, 2, 1);
-            var matrixData1 = _mocks.StrictMock<IMatrixData>();
+            var matrixData1 = MockRepository.GenerateMock<IMatrixData>();
             var matrixDataList = new List<IMatrixData> { matrixData1 };
-            var groupPerson = _mocks.StrictMock<IGroupPerson>();
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+            var groupPerson = MockRepository.GenerateMock<IGroupPerson>();
+            var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
             var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
                                                                 new EndTimeLimitation(),
                                                                 new WorkTimeLimitation()
@@ -604,11 +597,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var person = PersonFactory.CreatePerson("Bill");
             var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
             var date = new DateOnly(2013, 2, 1);
-            var matrixData1 = _mocks.StrictMock<IMatrixData>();
+            var matrixData1 = MockRepository.GenerateMock<IMatrixData>();
             var matrixDataList = new List<IMatrixData> { matrixData1 };
-            var groupPerson = _mocks.StrictMock<IGroupPerson>();
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            var groupPerson = MockRepository.GenerateMock<IGroupPerson>();
+            var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+            var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
             var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
                                                                 new EndTimeLimitation(),
                                                                 new WorkTimeLimitation()
@@ -650,10 +643,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var person = PersonFactory.CreatePerson("Bill");
             var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
             var date = new DateOnly(2013, 2, 1);
-            var matrixData1 = _mocks.StrictMock<IMatrixData>();
+            var matrixData1 = MockRepository.GenerateMock<IMatrixData>();
             var matrixDataList = new List<IMatrixData> { matrixData1 };
-            var groupPerson = _mocks.StrictMock<IGroupPerson>();
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+            var groupPerson = MockRepository.GenerateMock<IGroupPerson>();
+            var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
             var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
                                                                 new EndTimeLimitation(),
                                                                 new WorkTimeLimitation()
@@ -695,11 +688,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var person = PersonFactory.CreatePerson("Bill");
             var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
             var date = new DateOnly(2013, 2, 1);
-            var matrixData1 = _mocks.StrictMock<IMatrixData>();
+            var matrixData1 = MockRepository.GenerateMock<IMatrixData>();
             var matrixDataList = new List<IMatrixData> { matrixData1 };
-            var groupPerson = _mocks.StrictMock<IGroupPerson>();
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            var groupPerson = MockRepository.GenerateMock<IGroupPerson>();
+            var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+            var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
             var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
                                                                 new EndTimeLimitation(),
                                                                 new WorkTimeLimitation()
@@ -744,11 +737,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var person = PersonFactory.CreatePerson("Bill");
             var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
             var date = new DateOnly(2013, 2, 1);
-            var matrixData1 = _mocks.StrictMock<IMatrixData>();
+            var matrixData1 = MockRepository.GenerateMock<IMatrixData>();
             var matrixDataList = new List<IMatrixData> { matrixData1 };
-            var groupPerson = _mocks.StrictMock<IGroupPerson>();
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            var groupPerson = MockRepository.GenerateMock<IGroupPerson>();
+            var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+            var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
             var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
                                                                 new EndTimeLimitation(),
                                                                 new WorkTimeLimitation()
@@ -785,5 +778,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 _target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
             }
         }
+		 * */
 	}
 }
