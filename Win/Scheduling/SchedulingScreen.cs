@@ -5431,8 +5431,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void updateSelectionInfo(IList<IScheduleDay> selectedSchedules)
 		{
-			var updater = new UpdateSelectionForAgentInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag, toolStripStatusLabelTimeZone);
-			updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfoControl, _scheduleTimeType);
+            var updater = new UpdateSelectionForAgentInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag);
+            updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfoControl, _scheduleTimeType);
 		}
 
 		private void deleteInMainGrid(PasteOptions deleteOptions)
@@ -7332,7 +7332,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    private void toolStripButtonShowPropertyPanel_Click(object sender, EventArgs e)
 	    {
             toolStripButtonShowPropertyPanel.Checked = !toolStripButtonShowPropertyPanel.Checked;
-	        schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
+            schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
             
 	    }
 
@@ -7348,6 +7348,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                
             updateSelectionInfo(_scheduleView.SelectedSchedules());
 	    }
+        
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 

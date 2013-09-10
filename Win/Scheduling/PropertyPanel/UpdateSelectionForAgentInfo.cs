@@ -9,81 +9,106 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
-	public class UpdateSelectionForAgentInfo
-	{
-		private readonly ToolStripStatusLabel _statusLabelContractTime;
-		private readonly ToolStripStatusLabel _statusLabelTag;
-		private readonly ToolStripStatusLabel _statusLabelTimeZone;
+    public class UpdateSelectionForAgentInfo
+        {
+            private readonly ToolStripSplitButton _statusLabelTime;
+            private readonly ToolStripStatusLabel _statusLabelTag;
 
-		public UpdateSelectionForAgentInfo(ToolStripStatusLabel statusLabelContractTime, ToolStripStatusLabel statusLabelTag, ToolStripStatusLabel statusLabelTimeZone)
-		{
-			_statusLabelContractTime = statusLabelContractTime;
-			_statusLabelTag = statusLabelTag;
-			_statusLabelTimeZone = statusLabelTimeZone;
-		}
+            public UpdateSelectionForAgentInfo(ToolStripSplitButton statusLabelTime, ToolStripStatusLabel statusLabelTag)
+            {
+                _statusLabelTime = statusLabelTime;
+                _statusLabelTag = statusLabelTag;
+            }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.ToolStripItem.set_Text(System.String)")]
-		public void Update(IList<IScheduleDay> selectedSchedules, IScheduleViewBase scheduleView, ISchedulerStateHolder schedulerStateHolder, AgentInfoControl agentInfoControl)
-		{
-			if (scheduleView != null)
-			{
-				IDictionary<IPerson, IScheduleRange> personDic = new Dictionary<IPerson, IScheduleRange>();
-				var dateList = new HashSet<DateOnly>();
-				var totalTime = TimeSpan.Zero;
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.ToolStripItem.set_Text(System.String)")]
+            public void Update(IList<IScheduleDay> selectedSchedules, IScheduleViewBase scheduleView, ISchedulerStateHolder schedulerStateHolder, AgentInfoControl agentInfo, ScheduleTimeType scheduleTimeType)
+            {
+                if (scheduleView != null)
+                {
+                    IDictionary<IPerson, IScheduleRange> personDic = new Dictionary<IPerson, IScheduleRange>();
+                    HashSet<DateOnly> dateList = new HashSet<DateOnly>();
+                    TimeSpan totalTime = TimeSpan.Zero;
 
-				var selectedTags = new List<IScheduleTag>();
+                    var selectedTags = new List<IScheduleTag>();
 
-				foreach (var scheduleDay in selectedSchedules)
-				{
-					var projSvc = scheduleDay.ProjectionService();
-					totalTime += projSvc.CreateProjection().ContractTime();
+                    foreach (IScheduleDay scheduleDay in selectedSchedules)
+                    {
+                        IProjectionService projSvc = scheduleDay.ProjectionService();
+                        IVisualLayerCollection visualLayerCollection = projSvc.CreateProjection();
+                        switch (scheduleTimeType)
+                        {
+                            case ScheduleTimeType.ContractTime:
+                                totalTime += visualLayerCollection.ContractTime();
+                                break;
 
-					dateList.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
-					if (!personDic.ContainsKey(scheduleDay.Person))
-						personDic.Add(scheduleDay.Person, schedulerStateHolder.Schedules[scheduleDay.Person]);
+                            case ScheduleTimeType.WorkTime:
+                                totalTime += visualLayerCollection.WorkTime();
+                                break;
+
+                            case ScheduleTimeType.PaidTime:
+                                totalTime += visualLayerCollection.PaidTime();
+                                break;
+
+                            case ScheduleTimeType.OverTime:
+                                totalTime += visualLayerCollection.Overtime();
+                                break;
+                        }
 
 
-					if (!selectedTags.Contains(scheduleDay.ScheduleTag()))
-						selectedTags.Add(scheduleDay.ScheduleTag());
-				}
+                        dateList.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
+                        if (!personDic.ContainsKey(scheduleDay.Person))
+                            personDic.Add(scheduleDay.Person, schedulerStateHolder.Schedules[scheduleDay.Person]);
 
-                //if (agentInfo != null)
-                //    agentInfo.UpdateData(personDic, dateList, schedulerStateHolder.SchedulingResultState,
-                //                          schedulerStateHolder.SchedulingResultState.AllPersonAccounts);
-				if (agentInfoControl != null)
-					agentInfoControl.UpdateData(personDic, dateList, schedulerStateHolder.SchedulingResultState,
-										  schedulerStateHolder.SchedulingResultState.AllPersonAccounts);
 
-				_statusLabelContractTime.Text = string.Concat(Resources.ContractScheduledTime, " ",
-																	  DateHelper.HourMinutesString(
-																		  totalTime.TotalMinutes));
+                        if (!selectedTags.Contains(scheduleDay.ScheduleTag()))
+                            selectedTags.Add(scheduleDay.ScheduleTag());
+                    }
 
-				var selectedTagsText = string.Empty;
-				var counter = 0;
+                    if (agentInfo != null)
+                        agentInfo.UpdateData(personDic, dateList, schedulerStateHolder.SchedulingResultState,
+                                              schedulerStateHolder.SchedulingResultState.AllPersonAccounts);
 
-				foreach (var selectedTag in selectedTags)
-				{
-					if (string.Concat(selectedTagsText, selectedTag.Description).Length > 100)
-					{
-						selectedTagsText = string.Concat(selectedTagsText, Resources.ThreeDots);
-						break;
-					}
+                    string label = string.Empty;
+                    switch (scheduleTimeType)
+                    {
+                        case ScheduleTimeType.ContractTime:
+                            label = Resources.ContractScheduledTime;
+                            break;
 
-					selectedTagsText = string.Concat(selectedTagsText, selectedTag.Description);
+                        case ScheduleTimeType.WorkTime:
+                            label = Resources.WorkTime;
+                            break;
 
-					counter++;
+                        case ScheduleTimeType.PaidTime:
+                            label = Resources.PaidTime;
+                            break;
 
-					if (counter != selectedTags.Count) selectedTagsText = string.Concat(selectedTagsText, ", ");
-				}
+                        case ScheduleTimeType.OverTime:
+                            label = Resources.Overtime;
+                            break;
+                    }
+                    _statusLabelTime.Text = string.Concat(label, ": ", DateHelper.HourMinutesString(totalTime.TotalMinutes));
 
-				_statusLabelTag.Text = string.Concat(Resources.ScheduleTagColon, " ", selectedTagsText);
+                    var selectedTagsText = string.Empty;
+                    var counter = 0;
+                    foreach (var selectedTag in selectedTags)
+                    {
+                        if (string.Concat(selectedTagsText, selectedTag.Description).Length > 100)
+                        {
+                            selectedTagsText = string.Concat(selectedTagsText, Resources.ThreeDots);
+                            break;
+                        }
 
-				var firstSelected = selectedSchedules.FirstOrDefault();
-				if (firstSelected != null)
-				{
-					_statusLabelTimeZone.Text = string.Concat(firstSelected.Person.Name, Resources.Colon, firstSelected.Person.PermissionInformation.DefaultTimeZone().DisplayName);
-				}
-			}	
-		}
-	}
+                        selectedTagsText = string.Concat(selectedTagsText, selectedTag.Description);
+
+                        counter++;
+
+                        if (counter != selectedTags.Count) selectedTagsText = string.Concat(selectedTagsText, ", ");
+                    }
+
+                    _statusLabelTag.Text = string.Concat(Resources.ScheduleTagColon, " ", selectedTagsText);
+
+                }
+            }
+        }
 }
