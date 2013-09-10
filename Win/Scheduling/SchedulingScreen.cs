@@ -152,6 +152,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private bool _showResult = true;
 		private bool _showGraph = true;
 		private bool _showRibbonTexts = true;
+		private bool _showInfoPanel = true;
 		#endregion
 		private ControlType _controlType;
 		private SchedulerMessageBrokerHandler _schedulerMessageBrokerHandler;
@@ -1003,7 +1004,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemAddOvertimeAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability);
 			
 			schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += AgentRestrictionGridSelectedAgentIsReady;
-
+			
 			_backgroundWorkerRunning = true;
 			backgroundWorkerLoadData.RunWorkerAsync();
 		}
@@ -1047,6 +1048,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_currentSchedulingScreenSettings.HideEditor = !_showEditor;
 					_currentSchedulingScreenSettings.HideGraph = !_showGraph;
 					_currentSchedulingScreenSettings.HideResult = !_showResult;
+					_currentSchedulingScreenSettings.HideInfoPanel = !_showInfoPanel;
 					_currentSchedulingScreenSettings.HideRibbonTexts = !_showRibbonTexts;
 					_currentSchedulingScreenSettings.DefaultScheduleTag = _defaultScheduleTag.Id;
 					_currentSchedulingScreenSettings.SkillResultViewSetting = _skillResultViewSetting;
@@ -2883,6 +2885,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			SplitterManager.ShowEditor = !_currentSchedulingScreenSettings.HideEditor;
 			toolStripButtonShowEditor.Checked = !_currentSchedulingScreenSettings.HideEditor;
 			_showEditor = !_currentSchedulingScreenSettings.HideEditor;
+			_showInfoPanel = !_currentSchedulingScreenSettings.HideInfoPanel;
+			toolStripButtonShowPropertyPanel.Checked = _showInfoPanel;
 
 			toolStripButtonShowTexts.Checked = !_currentSchedulingScreenSettings.HideRibbonTexts;
 			_showRibbonTexts = !_currentSchedulingScreenSettings.HideRibbonTexts;
@@ -4867,7 +4871,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             
 
 		    updateDistrbutionInformation();
-            schedulerSplitters1.ToggelPropertyPanel(true);
+			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 		}
 
 		private PersonsFilterView _cachedPersonsFilterView;
@@ -7333,7 +7337,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    {
             toolStripButtonShowPropertyPanel.Checked = !toolStripButtonShowPropertyPanel.Checked;
             schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
-            
+		    _showInfoPanel = toolStripButtonShowPropertyPanel.Checked;
 	    }
 
 	    private void toolStripMenuItemAgentInfo_Click(object sender, EventArgs e)

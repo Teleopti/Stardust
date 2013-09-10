@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private bool _hideEditor;
         private bool _hideGraph;
         private bool _hideResult;
+	    private bool _hideInfoPanel;
         private bool _hideRibbonTexts;
         private Guid? _defaultScheduleTag;
 		private SkillResultViewSetting _skillResultViewSetting = SkillResultViewSetting.Day;
@@ -77,6 +78,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             get { return _hideResult; }
             set { _hideResult = value; }
         }
+
+	    public bool HideInfoPanel
+	    {
+			get { return _hideInfoPanel; }
+			set { _hideInfoPanel = value; }
+	    }
 
         public bool HideRibbonTexts
         {
