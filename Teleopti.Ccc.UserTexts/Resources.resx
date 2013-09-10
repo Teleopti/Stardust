@@ -11737,4 +11737,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Hourly Availability</value>
     <comment>Caption dialog to filter hourly availability</comment>
   </data>
+  <data name="Distribution" xml:space="preserve">
+    <value>Distribution</value>
+    <comment>Distribution</comment>
+  </data>
 </root>
