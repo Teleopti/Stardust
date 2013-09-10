@@ -84,14 +84,14 @@ end
 item: Execute Program
   Pathname=CMD
   Command Line=/C "%AGENTPORTALWEB%\WiseIISConfig\IIS7ConfigAgentPortalWeb.bat" %SDKCREDPROT%
-  Flags=00000010
+  Flags=00000110
 end
 item: Else Statement
 end
 item: Execute Program
   Pathname=CMD
   Command Line=/C "%AGENTPORTALWEB%\WiseIISConfig\IIS6ConfigAgentPortalWeb.bat" %SDKCREDPROT%
-  Flags=00000010
+  Flags=00000110
 end
 item: End Block
 end
