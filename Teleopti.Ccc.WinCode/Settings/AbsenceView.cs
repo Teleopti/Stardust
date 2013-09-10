@@ -221,22 +221,7 @@ namespace Teleopti.Ccc.WinCode.Settings
             }
         }
 
-        public string CreatedBy
-        {
-            get
-            {
-	            return "will be removed";
-            }
-        }
-        public string CreatedOn
-        {
-            get
-            {
-	            return "will be removed";
-            }
-        }
-
-        /// <summary>
+		/// <summary>
         /// Gets or sets a value indicating whether the tracker of this absence is disabled.
         /// </summary>
         /// <value>
