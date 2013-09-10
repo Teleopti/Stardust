@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -17,9 +14,6 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.SystemCheck;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
@@ -30,10 +24,10 @@ using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-    public partial class FormAgentInfo : BaseRibbonForm
+    public partial class AgentInfoControl : BaseUserControl
     {
     	private readonly IWorkShiftWorkTime _workShiftWorkTime;
     	private readonly ILifetimeScope _container;
@@ -50,19 +44,17 @@ namespace Teleopti.Ccc.Win.Scheduling
         private bool _dataLoaded;
     	private IShiftCategoryFairnessAggregateManager _fairnessManager;
 
-    	public FormAgentInfo()
+    	public AgentInfoControl()
         {
             InitializeComponent();
             if (!DesignMode)
                 SetTexts();
 
-            TopLevel = true;
-
-			_employmentTypeList = LanguageResourceHelper.TranslateEnum<EmploymentType>();
+            _employmentTypeList = LanguageResourceHelper.TranslateEnum<EmploymentType>();
 			_schedulePeriodTypeList = LanguageResourceHelper.TranslateEnum<SchedulePeriodType>();
         }
 
-		public FormAgentInfo(IWorkShiftWorkTime workShiftWorkTime, ILifetimeScope container, ISchedulerGroupPagesProvider groupPagesProvider)
+		public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ILifetimeScope container, ISchedulerGroupPagesProvider groupPagesProvider)
 			: this()
 		{
 			_workShiftWorkTime = workShiftWorkTime;
@@ -827,5 +819,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 				updatePersonInfo(_selectedPerson);
 			}
 		}
+
+        public void SetDefaultSelectedTab()
+        {
+            tabControlAgentInfo.SelectedIndex  = 0;
+        }
     }
 }
