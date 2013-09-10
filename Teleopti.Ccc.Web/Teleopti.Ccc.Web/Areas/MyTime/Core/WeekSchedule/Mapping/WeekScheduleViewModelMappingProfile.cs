@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			CreateMap<WeekScheduleDomainData, WeekScheduleViewModel>()
 				.ForMember(d => d.PeriodSelection, c => c.ResolveUsing(s => _periodSelectionViewModelFactory.Invoke().CreateModel(s.Date)))
 				.ForMember(d => d.Styles, o => o.MapFrom(s => s.Days == null ? null : _scheduleColorProvider.Invoke().GetColors(s.ColorSource)))
+				.ForMember(d => d.TimeLineCulture, o => o.MapFrom(s => _loggedOnUser.Invoke().CurrentUser().PermissionInformation.Culture().ToString()))
 				.ForMember(d => d.TimeLine, o => o.ResolveUsing(s =>
 				{
 					var startTime = s.MinMaxTime.StartTime;
@@ -63,12 +64,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 
 					var diff = endTime - startTime;
 					return (from t in times
-						   select new TimeLineViewModel
-									{
-										PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal)(t - startTime).Ticks / diff.Ticks,
-										Culture = _loggedOnUser.Invoke().CurrentUser().PermissionInformation.Culture().ToString(),
-										Time = t
-									}).ToArray();
+							select new TimeLineViewModel
+									 {
+										 PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal)(t - startTime).Ticks / diff.Ticks,
+										 Time = t
+									 }).ToArray();
 				}))
 				.ForMember(d => d.RequestPermission, c => c.ResolveUsing(s => new RequestPermission
 				{

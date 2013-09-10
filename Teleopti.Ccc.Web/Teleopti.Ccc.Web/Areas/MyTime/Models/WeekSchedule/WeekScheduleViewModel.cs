@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public IEnumerable<DayViewModel> Days { get; set; }
 		public RequestPermission RequestPermission { get; set; }
 		public IEnumerable<TimeLineViewModel> TimeLine { get; set; }
+		public string TimeLineCulture { get; set; }
 		public bool AsmPermission { get; set; }
 		public bool IsCurrentWeek { get; set; }
 		public string DatePickerFormat { get; set; }
@@ -36,7 +37,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public TimeSpan Time { get; set; }
 		public decimal PositionPercentage { get; set; }
 		public string TimeFixedFormat { get; set; }
-		public string Culture { get; set; }
 	}
 
 	[Flags]

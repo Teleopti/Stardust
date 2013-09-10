@@ -241,7 +241,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			});
 			self.styles(styleToSet);
 			var timelines = ko.utils.arrayMap(data.TimeLine, function (item) {
-				return new TimelineViewModel(item);
+				return new TimelineViewModel(item, data.TimeLineCulture);
 			});
 			self.timeLines(timelines);
 			var days = ko.utils.arrayMap(data.Days, function (item) {
@@ -440,7 +440,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 	};
 
-	var TimelineViewModel = function (timeline) {
+	var TimelineViewModel = function (timeline, timelineCulture) {
 		var self = this;
 		self.positionPercentage = ko.observable(timeline.PositionPercentage);
 
@@ -448,7 +448,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var timeFromMinutes = moment().startOf('day').add('minutes', self.minutes());
 
 		self.time = ko.observable(timeFromMinutes.format('H:mm'));
-		if (timeline.Culture == "en-US") {
+		if (timelineCulture == "en-US") {
 			self.time(timeFromMinutes.format('h A'));
 		}
 		self.timeText = self.time() + "\ntotalMinutes" + self.minutes();
