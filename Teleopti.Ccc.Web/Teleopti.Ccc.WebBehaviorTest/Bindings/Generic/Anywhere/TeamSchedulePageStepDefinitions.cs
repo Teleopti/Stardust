@@ -132,8 +132,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.Javascript(string.Format("test.callViewMethodWhenReady('teamschedule', 'setDateFromTest', '{0}');", date));
 		}
 
-		[Then(@"I should see metrics for skill '(.*)'")]
-		public void ThenIShouldSeeMetricsForSkill(string name)
+		[Then(@"I should see staffing metrics for skill '(.*)'")]
+		public void ThenIShouldSeeStaffingMetricsForSkill(string name)
 		{
 			var skillDropDown = Browser.Current.Span(Find.BySelector("#skill-selector"));
 			EventualAssert.That(() => skillDropDown.Exists, Is.True);
@@ -141,8 +141,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			EventualAssert.That(() => selectedSkill.InnerHtml.Contains(name), Is.True);
 		}
 
-		[Then(@"I should see metrics for skill '(.*)' with")]
-		public void ThenIShouldSeeMetricsForSkillWith(string name, Table table)
+		[Then(@"I should see staffing metrics for skill '(.*)' with")]
+		public void ThenIShouldSeeStaffingMetricsForSkillWith(string name, Table table)
 		{
 			var skillDropDown = Browser.Current.Span(Find.BySelector("#skill-selector"));
 			EventualAssert.That(() => skillDropDown.Exists, Is.True);

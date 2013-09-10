@@ -51,7 +51,7 @@ Scenario: View staffing metrics
 	| OpenFrom               | 09:00        |
 	| OpenTo                 | 16:00        |
 	When I view team schedules staffing metrics for '2013-04-09' and 'Direct Sales'
-	Then I should see metrics for skill 'Direct Sales' with
+	Then I should see staffing metrics for skill 'Direct Sales' with
 	| Field                   | Value  |
 	| Forecasted hours        | 11.50  |
 	| Scheduled hours         | 7.0    |
@@ -81,7 +81,7 @@ Scenario: Push staffing metrics changes
 	| Name  | Vacation |
 	| Color | Red      |
 	When I view team schedules staffing metrics for '2013-09-09' and 'Direct Sales'
-	Then I should see metrics for skill 'Direct Sales' with
+	Then I should see staffing metrics for skill 'Direct Sales' with
 	| Field                   | Value  |
 	| Forecasted hours        | 11.50  |
 	| Scheduled hours         | 7.0    |
@@ -93,7 +93,7 @@ Scenario: Push staffing metrics changes
 	| Absence | Vacation   |
 	| From    | 2013-09-09 |
 	| To      | 2013-09-09 |
-	Then I should see metrics for skill 'Direct Sales' with
+	Then I should see staffing metrics for skill 'Direct Sales' with
 	| Field                   | Value   |
 	| Forecasted hours        | 11.50   |
 	| Scheduled hours         | 0.0     |
@@ -107,16 +107,10 @@ Scenario: View skill selection
 	| Field    | Value        |
 	| Skill    | Direct Sales |
 	| Date     | 2013-04-09   |
-	| Hours    | 8            |
-	| OpenFrom | 09:00        |
-	| OpenTo   | 16:00        |
 	And there is a forecast with
 	| Field    | Value         |
 	| Skill    | Channel Sales |
 	| Date     | 2013-04-09    |
-	| Hours    | 8             |
-	| OpenFrom | 09:00         |
-	| OpenTo   | 16:00         |
 	When I view team schedules staffing metrics for '2013-04-09'
 	Then I should be able to select skills
 	| Skill         |
@@ -129,19 +123,13 @@ Scenario: Remember skill selection when changing date
 	| Field    | Value        |
 	| Skill    | Direct Sales |
 	| Date     | 2013-04-09   |
-	| Hours    | 8            |
-	| OpenFrom | 09:00        |
-	| OpenTo   | 16:00        |
 	And there is a forecast with
 	| Field    | Value        |
 	| Skill    | Direct Sales |
 	| Date     | 2013-04-10   |
-	| Hours    | 8            |
-	| OpenFrom | 09:00        |
-	| OpenTo   | 16:00        |
 	And I am viewing team schedules staffing metrics for '2013-04-09' and 'Direct Sales'
 	When  I select date '2013-04-10'
-	Then I should see metrics for skill 'Direct Sales'
+	Then I should see staffing metrics for skill 'Direct Sales'
 
 Scenario: Remember skill selection when changing team
 	Given there is a team with
@@ -151,16 +139,10 @@ Scenario: Remember skill selection when changing team
 	| Field    | Value        |
 	| Skill    | Direct Sales |
 	| Date     | 2013-04-09   |
-	| Hours    | 8            |
-	| OpenFrom | 09:00        |
-	| OpenTo   | 16:00        |
 	And there is a forecast with
 	| Field    | Value         |
 	| Skill    | Channel Sales |
 	| Date     | 2013-04-09    |
-	| Hours    | 8             |
-	| OpenFrom | 09:00         |
-	| OpenTo   | 16:00         |
 	And there is a role with
 	| Field                      | Value                         |
 	| Name                       | Anywhere Team Green And Other |
@@ -170,4 +152,4 @@ Scenario: Remember skill selection when changing team
 	And I have the role 'Anywhere Team Green And Other'	
 	And I am viewing team schedules staffing metrics for 'Team green' and '2013-04-09' and 'Direct Sales'
 	When I select team 'Team other'
-	Then I should see metrics for skill 'Direct Sales'
+	Then I should see staffing metrics for skill 'Direct Sales'
