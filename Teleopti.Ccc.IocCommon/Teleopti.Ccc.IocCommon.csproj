@@ -145,7 +145,6 @@
     <Compile Include="Configuration\ShiftTradeModule.cs" />
     <Compile Include="Configuration\TeleoptiCacheKey.cs" />
     <Compile Include="Configuration\UnitOfWorkModule.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Configuration\MbCacheModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

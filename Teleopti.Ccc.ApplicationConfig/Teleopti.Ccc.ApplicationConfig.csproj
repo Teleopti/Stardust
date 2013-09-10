@@ -130,7 +130,6 @@
     <Compile Include="Creators\ScenarioCreator.cs" />
     <Compile Include="Creators\SetChangeInfoCommand.cs" />
     <Compile Include="Creators\SkillTypeCreator.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\DatabaseHandler.cs" />

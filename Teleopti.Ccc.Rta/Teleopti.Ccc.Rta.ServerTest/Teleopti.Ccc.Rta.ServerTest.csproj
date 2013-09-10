@@ -143,7 +143,6 @@
     <Compile Include="DatabaseHandlerTest.cs" />
     <Compile Include="DatabaseConnectionStringHandlerTest.cs" />
     <Compile Include="Resolvers\DataSourceResolverTest.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InvalidateRtaDataHandlerCacheTest.cs" />
     <Compile Include="Resolvers\PersonResolverTest.cs" />
     <Compile Include="PersonStateHolderTest.cs" />

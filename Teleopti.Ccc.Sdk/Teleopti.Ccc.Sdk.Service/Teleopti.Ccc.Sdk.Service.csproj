@@ -217,7 +217,6 @@
     <Compile Include="Factory\SkillDataFactory.cs" />
     <Compile Include="Factory\WebWindowsUserProvider.cs" />
     <Compile Include="Factory\WriteProtectionFactory.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Factory\LicenseFactory.cs" />
     <Compile Include="Factory\PersonRequestFactory.cs" />
     <Compile Include="IInvokeQuery.cs" />

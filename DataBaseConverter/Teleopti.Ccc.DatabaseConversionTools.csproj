@@ -206,7 +206,6 @@
     <Compile Include="EntityMapper\WorkShiftMapper.cs" />
     <Compile Include="EntityMapper\WorkShiftRuleSetMapper.cs" />
     <Compile Include="FakeOldEntityRuleSetBag.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MappedObjectPair.cs" />
     <Compile Include="ObjectPair.cs" />
     <Compile Include="ObjectPairCollection.cs" />

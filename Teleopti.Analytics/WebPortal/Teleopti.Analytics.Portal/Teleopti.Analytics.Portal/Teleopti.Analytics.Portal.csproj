@@ -155,7 +155,6 @@
     <Compile Include="ErrorMessage.aspx.designer.cs">
       <DependentUpon>ErrorMessage.aspx</DependentUpon>
     </Compile>
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="PerformanceManager\CloseReport.aspx.cs">
       <DependentUpon>CloseReport.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

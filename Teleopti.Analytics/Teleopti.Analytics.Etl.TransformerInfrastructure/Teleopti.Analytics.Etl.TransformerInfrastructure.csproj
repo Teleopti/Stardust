@@ -120,7 +120,6 @@
     <Compile Include="ScheduleTransformerException.cs" />
     <Compile Include="DataTableDefinition\UserInfrastructure.cs" />
     <Compile Include="DataTableDefinition\PersonSkillInfrastructure.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="DataTableDefinition\PermissionReportInfrastructure.cs" />
     <Compile Include="RaptorRepositoryStub.cs" />
     <Compile Include="DataTableDefinition\KpiTargetTeamInfrastructure.cs" />
