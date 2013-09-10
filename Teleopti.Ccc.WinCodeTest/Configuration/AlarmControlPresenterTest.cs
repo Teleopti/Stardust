@@ -114,12 +114,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void QueryCellInfoShouldReturnGrid()
         {
-            DateTime expectedDate =
-                _createDate = TimeZoneHelper.ConvertFromUtc(_createDate,
-                                                            (
-                                                                TimeZoneInfo.FindSystemTimeZoneById(
-                                                                    "W. Europe Standard Time")));
-
+ 
             var style = new GridStyleInfo();
             var e = new GridQueryCellInfoEventArgs(0, (int)AlarmControlPresenter.ColumnHeader.Name, style);
             _target.QueryCellInfo(null, e);
