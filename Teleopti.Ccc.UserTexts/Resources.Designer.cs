@@ -6736,6 +6736,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Distribution.
+        /// </summary>
+        public static string Distribution {
+            get {
+                return ResourceManager.GetString("Distribution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Distribution between sub skills must be equal to 100%.
         /// </summary>
         public static string DistributionBetweenSubskillsMustbeEqualToOneHundredPercent {

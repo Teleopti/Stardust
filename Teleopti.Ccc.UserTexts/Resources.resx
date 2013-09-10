@@ -11741,4 +11741,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Info Panel</value>
     <comment>Text on button to toggle the info panel on and off in scheduler</comment>
   </data>
+  <data name="Distribution" xml:space="preserve">
+    <value>Distribution</value>
+    <comment>Distribution</comment>
+  </data>
 </root>
