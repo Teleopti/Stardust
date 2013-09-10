@@ -8,23 +8,15 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
     /// <summary>
     /// Contains a new text request
     /// </summary>
-    /// <remarks>
-    /// Created by: zoet
-    /// Created date: 2008-10-06
-    /// </remarks>
     public class TextRequest : Request
     {
         private string _typeDescription = UserTexts.Resources.RequestTypeText;
-    	private string _textRequestHasBeenApprovedDot = UserTexts.Resources.TextRequestHasBeenApprovedDot;
-        private string _textRequestHasBeenDeniedDot = UserTexts.Resources.TextRequestHasBeenDeniedDot;
+        private const string _textRequestHasBeenApprovedDot = "TextRequestHasBeenApprovedDot";
+        private const string _textRequestHasBeenDeniedDot = "TextRequestHasBeenDeniedDot";
 
         /// <summary>
         /// Constructor for NHibernate
         /// </summary>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-10-06
-        /// </remarks>
         protected TextRequest()
         {
         }
@@ -33,10 +25,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         /// Initializes a new instance of the <see cref="TextRequest"/> class.
         /// </summary>
         /// <param name="period">The period.</param>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-10-06
-        /// </remarks>
         public TextRequest(DateTimePeriod period)
             : base(period)
         {
@@ -45,10 +33,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         /// <summary>
         /// Denies this instance.
         /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-05
-        /// </remarks>
         public override void Deny(IPerson denyPerson)
         {
             TextForNotification = _textRequestHasBeenDeniedDot;
@@ -73,14 +57,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             return text;
         }
 
-        /// <summary>
-        /// Denies this instance.
-        /// </summary>
-        /// <param name="approvalService"></param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-05
-        /// </remarks>
         protected internal override IEnumerable<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService)
         {
             TextForNotification = _textRequestHasBeenApprovedDot;
@@ -91,10 +67,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         /// Description for type of request
         /// </summary>
         /// <value></value>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-10-06
-        /// </remarks>
         public override string RequestTypeDescription
         {
             get

@@ -11,8 +11,7 @@ namespace Teleopti.Ccc.WebTest.Areas.PerformanceTool.Controllers
 		{
 			var target = new ApplicationController();
 			var result = target.Index();
-			result.FileName.Should().Be("~/Areas/PerformanceTool/Content/Templates/index.html");
-			result.ContentType.Should().Be("text/html");
+			result.ViewName.Should().Be.Empty();
 		}
 
 	}

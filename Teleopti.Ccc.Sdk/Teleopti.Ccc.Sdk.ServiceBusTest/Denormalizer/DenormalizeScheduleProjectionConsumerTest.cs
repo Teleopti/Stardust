@@ -15,15 +15,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 	public class DenormalizeScheduleProjectionConsumerTest
 	{
 		private ScheduleProjectionReadOnlyUpdater target;
-		private MockRepository mocks;
 		private IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository;
+	    private readonly DateTime utcNow = DateTime.UtcNow;
+	    private readonly DateOnly today = DateOnly.Today;
+	    private IPublishEventsFromEventHandlers serviceBus;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
-			mocks = new MockRepository();
-			scheduleProjectionReadOnlyRepository = mocks.DynamicMock<IScheduleProjectionReadOnlyRepository>();
-			target = new ScheduleProjectionReadOnlyUpdater(scheduleProjectionReadOnlyRepository, MockRepository.GenerateMock<IPublishEventsFromEventHandlers>());
+			scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
+	        serviceBus = MockRepository.GenerateMock<IPublishEventsFromEventHandlers>();
+	        target = new ScheduleProjectionReadOnlyUpdater(scheduleProjectionReadOnlyRepository, serviceBus);
 		}
 
 		[Test]
@@ -32,13 +34,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
 
-			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
+			var period = new DateTimePeriod(utcNow,utcNow);
 
-			using (mocks.Record())
-			{
-			}
-			using (mocks.Playback())
-			{
 				target.Handle(new ScheduledResourcesChangedEvent
 				               	{
 				               		IsDefaultScenario = true,
@@ -47,6 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 				               		               	{
 				               		               		new ProjectionChangedEventScheduleDay
 				               		               			{
+                                                                Date = today,
 				               		               				StartDateTime = period.StartDateTime,
 				               		               				EndDateTime = period.EndDateTime,
 				               		               				Layers =
@@ -55,7 +53,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 				               		               			}
 				               		               	}
 				               	});
-			}
+
+			scheduleProjectionReadOnlyRepository.AssertWasCalled(x => x.ClearPeriodForPerson(new DateOnlyPeriod(today,today),Guid.Empty,person.Id.GetValueOrDefault()));
+			serviceBus.AssertWasCalled(x => x.Publish(null), o=> o.IgnoreArguments());
 		}
 
 		[Test]
@@ -64,17 +64,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
 
-			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
+			var period = new DateTimePeriod(utcNow, utcNow);
 
-			using (mocks.Record())
-			{
-				Expect.Call(()=>scheduleProjectionReadOnlyRepository.ClearPeriodForPerson(new DateOnlyPeriod(), Guid.Empty,
-				                                                                      person.Id.GetValueOrDefault()))
-				      .IgnoreArguments()
-				      .Repeat.Never();
-			}
-			using (mocks.Playback())
-			{
 				target.Handle(new ScheduledResourcesChangedEvent
 				               	{
 				               		IsDefaultScenario = true,
@@ -92,7 +83,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 				               		               	},
 				               		IsInitialLoad = true,
 				               	});
-			}
+
+		    scheduleProjectionReadOnlyRepository.AssertWasNotCalled(x => x.ClearPeriodForPerson(new DateOnlyPeriod(), Guid.Empty, person.Id.GetValueOrDefault()));
+            serviceBus.AssertWasNotCalled(x => x.Publish(null), o => o.IgnoreArguments());
 		}
 
 		[Test]
@@ -101,13 +94,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
 
-			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
+			var period = new DateTimePeriod(utcNow, utcNow);
 
-			using (mocks.Record())
-			{
-			}
-			using (mocks.Playback())
-			{
 				target.Handle(new ScheduledResourcesChangedEvent
 				               	{
 				               		IsDefaultScenario = false,
@@ -124,19 +112,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 				               		               			}
 				               		               	}
 				               	});
-			}
 		}
 
 		[Test]
 		public void ShouldSendUpdatedScheduleDay()
 		{
-			var serviceBus = MockRepository.GenerateMock<IPublishEventsFromEventHandlers>();
 			target = new ScheduleProjectionReadOnlyUpdater(scheduleProjectionReadOnlyRepository, serviceBus);
 			var guid = Guid.NewGuid();
 			var person = PersonFactory.CreatePerson();
 			person.SetId(guid);
 
-			var utcNow = DateTime.UtcNow;
 			var closestPeriod = new DateTimePeriod(utcNow.AddMinutes(-5), utcNow.AddMinutes(5));
 			var notClosestPeriod = new DateTimePeriod(utcNow.AddMinutes(5), utcNow.AddMinutes(10));
 
@@ -151,7 +136,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 							new ProjectionChangedEventScheduleDay
 								{
 									Label = "ClosestLayer",
-									Date = utcNow.Date,
+									Date = today,
 									Layers = new Collection<ProjectionChangedEventLayer>
 										{
 											new ProjectionChangedEventLayer

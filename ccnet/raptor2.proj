@@ -38,7 +38,6 @@
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 	<UsingTask TaskName="NCover.MSBuildTasks.NCover"  AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll"/>
 	<UsingTask TaskName="NCover.MSBuildTasks.NCoverReporting" AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll" />
-	<UsingTask TaskName="ThrowIfWarning" AssemblyFile="$(CCNetWorkingDirectory)\ccnet\FxCopUgly.dll" />
 	<UsingTask AssemblyFile="$(MsBuildPath)\MSBuild.ExtensionPack\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
 
 	<PropertyGroup>
@@ -80,7 +79,7 @@
 		<AnalyticsReportsTest Include="$(CCNetWorkingDirectory)\Database\Tools\AnalyticsReportsCompile.sql"/>
 	</ItemGroup>
 
-	<Target Name="BuildAndTest" DependsOnTargets="ScriptTest;FxCop;NDepend;CopyNDependStatisticsToDatabase">
+	<Target Name="BuildAndTest" DependsOnTargets="ScriptTest;NCoverReporting;NDepend;CopyNDependStatisticsToDatabase">
 		<Message Importance="high" Text="BuildAndTest finished" />
 	</Target>
 	
@@ -399,20 +398,4 @@
 		<Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\GetRevision.bat&quot; &quot;$(RevisionOutput)&quot;"/>
 		<Exec Command="&quot;$(NDependTransferDataPath)&quot; &quot;$(NDependOutput)&quot; &quot;$(NDependOutput)&quot; &quot;$(NCoverOutput)&quot;"/>
 	</Target>
-  
-	<Target Name="FxCop" DependsOnTargets="NCoverReporting">
-		<Message Importance="high" Text="Running FxCop target..." />
-		<CreateItem Include="$(CCNetWorkingDirectory)\**\*.codeanalysislog.xml">
-			<Output ItemName="fxCopResult" TaskParameter="Include"/>
-		</CreateItem>
-		<Message Importance="high" Text="FxCop target finished..." />
-
-		<!--
-		Om man vill skapa ccnetrapport... skiter i det nu
-		<Copy SourceFiles="@(fxCopResult)"
-					DestinationFolder="$(CCNetWorkingDirectory)" />-->
-
-		<ThrowIfWarning Assemblies="@(fxCopResult)" />
-	</Target>
-
 </Project>

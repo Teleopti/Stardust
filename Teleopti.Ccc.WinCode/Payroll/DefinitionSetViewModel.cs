@@ -7,7 +7,15 @@ namespace Teleopti.Ccc.WinCode.Payroll
     public class DefinitionSetViewModel : ViewModel<IMultiplicatorDefinitionSet>, IDefinitionSetViewModel
     {
         private readonly LocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
-        #region Properties -Instance Members
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefinitionSetViewModel"/> class.
+        /// </summary>
+        /// <param name="definitionSet">The definition set.</param>
+        public DefinitionSetViewModel(IMultiplicatorDefinitionSet definitionSet)
+            : base(definitionSet)
+        {
+        }
 
         /// <summary>
         /// Gets the name.
@@ -40,25 +48,5 @@ namespace Teleopti.Ccc.WinCode.Payroll
                 return _localizer.UpdatedByText(DomainEntity, UserTexts.Resources.UpdatedByColon);
             }
         }
-
-        #endregion
-
-        #region Methods - Instance Members
-
-        #region Methods - Instance Members - Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DefinitionSetViewModel"/> class.
-        /// </summary>
-        /// <param name="definitionSet">The definition set.</param>
-        public DefinitionSetViewModel(IMultiplicatorDefinitionSet definitionSet)
-            : base(definitionSet)
-        {
-
-        }
-
-        #endregion
-
-        #endregion
     }
 }

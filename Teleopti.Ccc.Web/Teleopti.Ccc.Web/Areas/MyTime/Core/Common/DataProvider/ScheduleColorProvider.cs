@@ -24,13 +24,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 							  from l in layers
 							  select l.DisplayColor();
 
-			IEnumerable<Color> personAssignmentColors = new List<Color>();
 			var assignments = scheduleDays.Select(x => x.PersonAssignment()).Where(x => x != null);
-			if (assignments.Any(x => x.ShiftCategory != null))
-			{
-				personAssignmentColors = from d in assignments
-										 select d.ShiftCategory.DisplayColor;
-			}
+			
+			var personAssignmentColors =
+				(from assignment in assignments
+				 where assignment.ShiftCategory != null
+				 select assignment.ShiftCategory.DisplayColor)
+					.ToList();
 
 			var absenceColors = from d in scheduleDays
 			                    let personAbsences = d.PersonAbsenceCollection()

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -118,6 +119,8 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 			aggregateRoots.Add(typeof (IPersonScheduleDayReadModel),
 							   new List<Type> {typeof (IPersonScheduleDayReadModel)});
 			aggregateRoots.Add(typeof (IScheduleChangedEvent), new List<Type> {typeof (IScheduleChangedEvent)});
+	        aggregateRoots.Add(typeof (IScheduledResourcesReadModel),
+	                           new List<Type> {typeof (IScheduledResourcesReadModel)});
 
 			aggregateRoots.Add(typeof (Person), new List<Type> {typeof (IPerson)});
 			aggregateRoots.Add(typeof (Scenario), new List<Type> {typeof (IScenario)});

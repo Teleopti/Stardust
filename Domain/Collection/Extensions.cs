@@ -175,5 +175,11 @@ namespace Teleopti.Ccc.Domain.Collection
         {
             return source.Cast<T>().ToList();
         }
+
+		public static IEnumerable<T> Randomize<T>(this IEnumerable<T> source)
+		{
+			Random rnd = new Random();
+			return source.OrderBy((item) => rnd.Next());
+		}
     }
 }
