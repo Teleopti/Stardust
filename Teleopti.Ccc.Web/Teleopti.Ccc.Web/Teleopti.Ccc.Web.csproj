@@ -833,7 +833,6 @@
     <Content Include="Areas\MyTime\Views\TeamSchedule\NoTeamsPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\TeamSchedule\NoPersonPeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Preference\NoPersonPeriodPartial.cshtml" />
-    <Content Include="Areas\MyTime\Views\Schedule\WeekRequestPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Asm\Index.cshtml" />
     <Content Include="Areas\MyTime\Views\Message\MessagePartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\NewShiftTradeRequest.cshtml" />
