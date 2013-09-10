@@ -37,19 +37,19 @@ Scenario: View staffing metrics
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |
-	| StartTime      | 2013-04-09 09:00 |
-	| EndTime        | 2013-04-09 16:00 |
+	| Start time     | 2013-04-09 09:00 |
+	| End time       | 2013-04-09 16:00 |
 	| Shift category | Day              |
 	| Activity       | Phone            |
 	And there is a forecast with
-	| Field                  | Value        |
-	| Skill                  | Direct Sales |
-	| Date                   | 2013-04-09   |
-	| Hours                  | 8            |
-	| ServiceLevelSeconds    | 20           |
-	| ServiceLevelPercentage | 80           |
-	| OpenFrom               | 09:00        |
-	| OpenTo                 | 16:00        |
+	| Field                    | Value        |
+	| Skill                    | Direct Sales |
+	| Date                     | 2013-04-09   |
+	| Hours                    | 8            |
+	| Service level seconds    | 20           |
+	| Service level percentage | 80           |
+	| Open from                | 09:00        |
+	| Open to                  | 16:00        |
 	When I view team schedules staffing metrics for '2013-04-09' and 'Direct Sales'
 	Then I should see staffing metrics for skill 'Direct Sales' with
 	| Field                   | Value  |
@@ -63,19 +63,19 @@ Scenario: Push staffing metrics changes
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |
-	| StartTime      | 2013-09-09 09:00 |
-	| EndTime        | 2013-09-09 16:00 |
+	| Start time     | 2013-09-09 09:00 |
+	| End time       | 2013-09-09 16:00 |
 	| Shift category | Day              |
 	| Activity       | Phone            |
 	And there is a forecast with
-	| Field                  | Value        |
-	| Skill                  | Direct Sales |
-	| Date                   | 2013-09-09   |
-	| Hours                  | 8            |
-	| ServiceLevelSeconds    | 20           |
-	| ServiceLevelPercentage | 80           |
-	| OpenFrom               | 09:00        |
-	| OpenTo                 | 16:00        |
+	| Field                    | Value        |
+	| Skill                    | Direct Sales |
+	| Date                     | 2013-09-09   |
+	| Hours                    | 8            |
+	| Service level seconds    | 20           |
+	| Service level percentage | 80           |
+	| Open from                | 09:00        |
+	| Open to                  | 16:00        |
 	And there is an absence with
 	| Field | Value    |
 	| Name  | Vacation |
@@ -121,13 +121,21 @@ Scenario: View skill selection
 Scenario: Remember skill selection when changing date
 	Given I have the role 'Anywhere Team Green'
 	And there is a forecast with
-	| Field    | Value        |
-	| Skill    | Direct Sales |
-	| Date     | 2013-04-09   |
+	| Field | Value         |
+	| Skill | Channel Sales |
+	| Date  | 2013-04-09    |
 	And there is a forecast with
-	| Field    | Value        |
-	| Skill    | Direct Sales |
-	| Date     | 2013-04-10   |
+	| Field | Value        |
+	| Skill | Direct Sales |
+	| Date  | 2013-04-09   |
+	And there is a forecast with
+	| Field | Value         |
+	| Skill | Channel Sales |
+	| Date  | 2013-04-10    |
+	And there is a forecast with
+	| Field | Value        |
+	| Skill | Direct Sales |
+	| Date  | 2013-04-10   |
 	And I am viewing team schedules staffing metrics for '2013-04-09' and 'Direct Sales'
 	When  I select date '2013-04-10'
 	Then I should see staffing metrics for skill 'Direct Sales'
@@ -137,13 +145,13 @@ Scenario: Remember skill selection when changing team
 	| Field | Value      |
 	| Name  | Team other |
 	And there is a forecast with
-	| Field    | Value        |
-	| Skill    | Direct Sales |
-	| Date     | 2013-04-09   |
-	And there is a forecast with
 	| Field    | Value         |
 	| Skill    | Channel Sales |
 	| Date     | 2013-04-09    |
+	And there is a forecast with
+	| Field    | Value        |
+	| Skill    | Direct Sales |
+	| Date     | 2013-04-09   |
 	And there is a role with
 	| Field                      | Value                         |
 	| Name                       | Anywhere Team Green And Other |

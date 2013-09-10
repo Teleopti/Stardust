@@ -71,18 +71,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertNotExists("#team-selector", "#team-selector option");
 		}
 
-
 		[Then(@"I should be able to select skills")]
 		public void ThenIShouldBeAbleToSelectSkills(Table table)
 		{
-			var skillDropDown = Browser.Current.Span(Find.BySelector("#skill-selector"));
-			EventualAssert.That(() => skillDropDown.Exists, Is.True);
+			Browser.Interactions.AssertExists("#skill-selector");
 
-			var skillList = skillDropDown.List(Find.First());
-			EventualAssert.That(() => skillList.Exists, Is.True);
+			var skills = table.CreateSet<SkillInfo>().ToArray();
+			skills.ForEach(s => Browser.Interactions.AssertAnyContains("#skill-selector li", s.Skill));
 
-			var skills = table.CreateSet<SkillInfo>();
-			skills.ForEach(s => EventualAssert.That(() => skillList.ListItem(Find.BySelector(string.Format(":contains('{0}')", s.Skill))).Exists, Is.True));
+			Browser.Interactions.AssertNotExists("#skill-selector li:nth-child(" + skills.Length + ")", "#skill-selector li:nth-child(" + (skills.Length + 1) + ")");
 		}
 		
 		public class TeamInfo
@@ -114,16 +111,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		public static void SelectSkill(string name)
 		{
-			var skillDropDown = Browser.Current.Span(Find.BySelector("#skill-selector"));
-			EventualAssert.That(() => skillDropDown.Exists, Is.True);
-
-			var skillList = skillDropDown.List(Find.First());
-			EventualAssert.That(() => skillList.ListItems.Count > 0, Is.True);
-
-			skillList.ListItem(Find.BySelector(string.Format(":contains('{0}')", name))).Link(Find.First()).EventualClick();
-
-			var selectedSkill = skillDropDown.Link(Find.First()).Span(Find.First());
-			EventualAssert.That(() => selectedSkill.InnerHtml.Contains(name), Is.True);
+			Browser.Interactions.ClickContaining("#skill-selector li a", name);
 		}
 
 		[When(@"I select date '(.*)'")]
@@ -135,30 +123,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see staffing metrics for skill '(.*)'")]
 		public void ThenIShouldSeeStaffingMetricsForSkill(string name)
 		{
-			var skillDropDown = Browser.Current.Span(Find.BySelector("#skill-selector"));
-			EventualAssert.That(() => skillDropDown.Exists, Is.True);
-			var selectedSkill = skillDropDown.Link(Find.First()).Span(Find.First());
-			EventualAssert.That(() => selectedSkill.InnerHtml.Contains(name), Is.True);
+			Browser.Interactions.AssertFirstContains("#skill-selector a", name);
 		}
 
 		[Then(@"I should see staffing metrics for skill '(.*)' with")]
 		public void ThenIShouldSeeStaffingMetricsForSkillWith(string name, Table table)
 		{
-			var skillDropDown = Browser.Current.Span(Find.BySelector("#skill-selector"));
-			EventualAssert.That(() => skillDropDown.Exists, Is.True);
-			var selectedSkill = skillDropDown.Link(Find.First()).Span(Find.First());
-			EventualAssert.That(() => selectedSkill.InnerHtml.Contains(name), Is.True);
+			Browser.Interactions.AssertFirstContains("#skill-selector a", name);
 
 			var staffingMetric = table.CreateInstance<StaffingMetricInfo>();
 
-			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#forecasted-hours")).InnerHtml, Is.StringContaining(staffingMetric.ForecastedHours));
-			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#scheduled-hours")).InnerHtml, Is.StringContaining(staffingMetric.ScheduledHours));
-			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#difference-forecasted-scheduled")).InnerHtml, Is.StringContaining(staffingMetric.DifferenceHours));
-			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#difference-forecasted-scheduled")).InnerHtml, Is.StringContaining(staffingMetric.DifferencePercentage));
-			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#estimated-service-level")).InnerHtml, Is.StringContaining(staffingMetric.EstimatedServiceLevel));
+			Browser.Interactions.AssertAnyContains("#forecasted-hours", staffingMetric.ForecastedHours);
+			Browser.Interactions.AssertAnyContains("#scheduled-hours", staffingMetric.ScheduledHours);
+			Browser.Interactions.AssertAnyContains("#difference-forecasted-scheduled", staffingMetric.DifferenceHours);
+			Browser.Interactions.AssertAnyContains("#difference-forecasted-scheduled", staffingMetric.DifferencePercentage);
+			Browser.Interactions.AssertAnyContains("#estimated-service-level", staffingMetric.EstimatedServiceLevel);
 		}
-
-
 	}
 
 	public class StaffingMetricInfo
