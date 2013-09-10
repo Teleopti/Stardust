@@ -2479,7 +2479,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    private void updateDistrbutionInformation()
 	    {
             var allSchedules = _scheduleDayListFactory.CreatScheduleDayList();
-	        var updateSelectionForShiftDistribution = new UpdateSelectionForShiftDistribution();
+	        var updateSelectionForShiftDistribution = new UpdateSelectionForShiftDistribution(new DistributionInformationExtractor());
             updateSelectionForShiftDistribution.Update(allSchedules,_scheduleView,_shiftDistributionControl ,_shiftFairnessAnalysisControl,_shiftPerAgentControl   );
 	    }
 

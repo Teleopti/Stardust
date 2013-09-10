@@ -17,15 +17,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
     public class DistributionInformationExtractor : IDistributionInformationExtractor
     {
-        private readonly ShiftCategoryAttributesExtractor _shiftCategoryAttributedExtractor;
-        private readonly IList<ShiftCategoryStructure> _mappedScheduleDays;
+        private ShiftCategoryAttributesExtractor _shiftCategoryAttributedExtractor;
+        private IList<ShiftCategoryStructure> _mappedScheduleDays;
         private IList<ShiftCategoryPerAgent> _shiftCategoryPerAgentList;
 
-        public DistributionInformationExtractor(IList<IScheduleDay> scheduleDays)
+        public DistributionInformationExtractor()
         {
-            _mappedScheduleDays = ScheduleDayToShiftCategoryMapper.MapScheduleDay(scheduleDays);
+            //_mappedScheduleDays = ScheduleDayToShiftCategoryMapper.MapScheduleDay(scheduleDays);
             _shiftCategoryAttributedExtractor = new ShiftCategoryAttributesExtractor();
-            _shiftCategoryAttributedExtractor.ExtractShiftCategoryInformation( _mappedScheduleDays);
+            //_shiftCategoryAttributedExtractor.ExtractShiftCategoryInformation( _mappedScheduleDays);
             _shiftCategoryPerAgentList = new List<ShiftCategoryPerAgent>();
         }
 
@@ -66,6 +66,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
                 
             }
             return result;
+        }
+
+        public void ExtractDistributionInfo(IList<IScheduleDay> allSchedules)
+        {
+            _mappedScheduleDays = ScheduleDayToShiftCategoryMapper.MapScheduleDay(allSchedules);
+            _shiftCategoryAttributedExtractor.ExtractShiftCategoryInformation(_mappedScheduleDays);
         }
     }
 }

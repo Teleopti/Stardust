@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
                 if (!assignShiftDistrubuionIfExists(shiftDistributionList,shiftCategoryStructure))
                 {
                     shiftDistributionList.Add(new ShiftDistribution(shiftCategoryStructure.DateOnlyValue,
-                                                                    shiftCategoryStructure.ShiftCategory, 0));
+                                                                    shiftCategoryStructure.ShiftCategory, 1));
                 }
                 
             }
