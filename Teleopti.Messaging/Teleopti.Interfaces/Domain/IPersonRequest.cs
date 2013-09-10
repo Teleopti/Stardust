@@ -15,7 +15,8 @@ namespace Teleopti.Interfaces.Domain
                                         IAggregateRoot,
                                         IOriginator<IPersonRequest>,
                                         IChangeInfo,
-                                        INotifyPropertyChanged
+                                        INotifyPropertyChanged,
+																				ICreateInfo
     {
         /// <summary>
         /// Gets the date.

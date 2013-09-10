@@ -59,12 +59,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
                     case ColumnHeader.StaffingEffect:
                         QueryStaffingEffect(e);
                         break;
-                    case ColumnHeader.CreatedBy:
-                        QueryCreatedBy(e);
-                        break;
-                    case ColumnHeader.CreatedOn:
-                        QueryCreatedOn(e);
-                        break;
                     case ColumnHeader.UpdatedOn:
                         QueryUpdatedOn(e);
                         break;
@@ -99,20 +93,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         {
             e.Style.CellValue = _alarmTypes[e.RowIndex - 1].ThresholdTime.TotalSeconds ;
             e.Style.CellType = "NumericCell";
-        }
-
-        private void QueryCreatedBy(GridQueryCellInfoEventArgs e)
-        {
-            e.Style.CellType = "Static";
-            if (_alarmTypes[e.RowIndex - 1].CreatedBy != null)
-                e.Style.CellValue = _alarmTypes[e.RowIndex - 1].CreatedBy.Name;
-        }
-
-        private void QueryCreatedOn(GridQueryCellInfoEventArgs e)
-        {
-            e.Style.CellType = "Static";
-            if (_alarmTypes[e.RowIndex - 1].CreatedOn.HasValue)
-                e.Style.CellValue = _localizer.CreatedTimeInUserPerspective(_alarmTypes[e.RowIndex - 1]);
         }
 
         private void QueryUpdatedBy(GridQueryCellInfoEventArgs e)
@@ -152,14 +132,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
                     e.Style.Text = Resources.StaffingEffect;
                     break;
 
-                case ColumnHeader.CreatedBy:
-
-                    e.Style.Text = Resources.CreatedBy;
-                    break;
-                case ColumnHeader.CreatedOn:
-
-                    e.Style.Text = Resources.CreatedOn;
-                    break;
                 case ColumnHeader.UpdatedBy:
 
                     e.Style.Text = Resources.UpdatedBy;
@@ -187,10 +159,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             StaffingEffect,
 
             Color,
-
-            CreatedBy,
-
-            CreatedOn,
 
             UpdatedBy,
 

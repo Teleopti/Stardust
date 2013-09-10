@@ -116,11 +116,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			return CalendarCellForDate(date).Div(QuicklyFind.ByClass("meeting-tooltip")).EventualGet();
 		}
 		
-		public Div ExtendedPreferenceForDate(DateTime date)
-		{
-			return Document.Div(QuicklyFind.ByClass("tooltip-inner")).EventualGet();
-		}
-
 		public Div MeetingAndPersonalShiftForDate(DateTime date)
 		{
 			return Document.Div("qtip-meeting-" + date.ToString("yyyy-MM-dd")).EventualGet();

@@ -9,7 +9,8 @@ namespace Teleopti.Interfaces.Domain
     public interface IPushMessageDialogue : IAggregateRoot, 
                                             IMainReference, 
                                             IReplyOptionTarget<string>,
-                                            IChangeInfo
+                                            IChangeInfo,
+																						ICreateInfo
     {
         /// <summary>
         /// Gets the conversation.

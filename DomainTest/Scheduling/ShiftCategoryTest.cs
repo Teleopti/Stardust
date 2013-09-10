@@ -44,9 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         public void VerifyDefaultProperties()
         {
             Assert.AreEqual(name, target.Description.Name);
-            Assert.IsNull(target.CreatedBy);
             Assert.IsNull(target.UpdatedBy);
-            Assert.IsNull(target.CreatedOn);
             Assert.IsNull(target.UpdatedOn);
             Assert.IsTrue(target.Id.HasValue);
             Assert.AreEqual(string.Empty, target.Description.ShortName);
@@ -116,12 +114,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(target.BusinessUnit, cloneWithoutId.BusinessUnit);
             Assert.AreEqual(target.DisplayColor, cloneWithoutId.DisplayColor);
 
-            Assert.AreEqual(target.CreatedBy, cloneWithoutId.CreatedBy);
-            Assert.AreEqual(target.CreatedOn, cloneWithoutId.CreatedOn);
-            Assert.AreEqual(target.CreatedTimeInUserPerspective, cloneWithoutId.CreatedTimeInUserPerspective);
             Assert.AreEqual(target.UpdatedBy, cloneWithoutId.UpdatedBy);
             Assert.AreEqual(target.UpdatedOn, cloneWithoutId.UpdatedOn);
-            Assert.AreEqual(target.UpdatedTimeInUserPerspective, cloneWithoutId.UpdatedTimeInUserPerspective);
             Assert.AreEqual(target.IsDeleted, cloneWithoutId.IsDeleted);
             Assert.AreEqual(target.Version, cloneWithoutId.Version);
         }
@@ -142,12 +136,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(target.BusinessUnit, cloneWithId.BusinessUnit);
             Assert.AreEqual(target.DisplayColor, cloneWithId.DisplayColor);
 
-            Assert.AreEqual(target.CreatedBy, cloneWithId.CreatedBy);
-            Assert.AreEqual(target.CreatedOn, cloneWithId.CreatedOn);
-            Assert.AreEqual(target.CreatedTimeInUserPerspective, cloneWithId.CreatedTimeInUserPerspective);
             Assert.AreEqual(target.UpdatedBy, cloneWithId.UpdatedBy);
             Assert.AreEqual(target.UpdatedOn, cloneWithId.UpdatedOn);
-            Assert.AreEqual(target.UpdatedTimeInUserPerspective, cloneWithId.UpdatedTimeInUserPerspective);
             Assert.AreEqual(target.IsDeleted, cloneWithId.IsDeleted);
             Assert.AreEqual(target.Version, cloneWithId.Version);
         }

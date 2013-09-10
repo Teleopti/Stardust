@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using NHibernate;
+﻿using NHibernate;
 using NUnit.Framework;
 using Teleopti.Ccc.ApplicationConfig.Creators;
 using Teleopti.Interfaces.Domain;
@@ -42,8 +41,6 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
             string businessUnitName = "MyBusinessUnit";
             IBusinessUnit businessUnit = _target.Create(businessUnitName);
             Assert.AreEqual(businessUnitName, businessUnit.Name);
-            Assert.AreEqual(businessUnit.CreatedBy,_person);
-            Assert.IsNotNull(businessUnit.CreatedOn);
         }
 
         [Test]

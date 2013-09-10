@@ -96,10 +96,10 @@ namespace Teleopti.Ccc.ApplicationConfig
 					session.CreateCriteria(typeof(BusinessUnit)).Add(Restrictions.Eq("Description.Name",
 																					  argument.BusinessUnit));
 				businessUnit = criteria.UniqueResult<IBusinessUnit>();
-				LazyLoadingManager.Initialize(businessUnit.CreatedBy);
+				LazyLoadingManager.Initialize(businessUnit.UpdatedBy);
 			}
 		    var programHelper = new ProgramHelper();
-			programHelper.LogOn(argument, databaseHandler, businessUnit, businessUnit.CreatedBy);
+			programHelper.LogOn(argument, databaseHandler, businessUnit, businessUnit.UpdatedBy);
 		}
 
 		private static void convertCCC6(ICommandLineArgument argument, DefaultAggregateRoot defaultAggregateRoot)

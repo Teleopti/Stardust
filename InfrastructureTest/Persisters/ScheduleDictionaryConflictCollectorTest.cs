@@ -58,7 +58,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters {
 			Expect.Call(_scheduleRepository.LoadScheduleDataAggregate(conflictingEntity.GetType(), conflictingEntity.Id.Value)).Return(conflictingDatabaseEntity);
 			Expect.Call(() => _lazyLoadingManager.Initialize(conflictingDatabaseEntity.Person));
 			Expect.Call(() => _lazyLoadingManager.Initialize(conflictingDatabaseEntity.UpdatedBy));
-			Expect.Call(() => _lazyLoadingManager.Initialize(conflictingDatabaseEntity.CreatedBy));
 
 			_mocks.ReplayAll();
 

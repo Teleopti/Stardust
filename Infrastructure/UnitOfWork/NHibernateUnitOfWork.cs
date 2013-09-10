@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Transactions;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -37,8 +35,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private IEnumerable<IMessageSender> _messageSenders;
 		private readonly Action<ISession> _unbind;
 		private ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
+	    private static readonly EmptyMessageBrokerIdentifier EmptyMessageBrokerIdentifier = new EmptyMessageBrokerIdentifier();
 
-		protected internal NHibernateUnitOfWork(ISession session,
+	    protected internal NHibernateUnitOfWork(ISession session,
 		                                        IMessageBroker messageBroker,
 		                                        IEnumerable<IMessageSender> messageSenders,
 		                                        NHibernateFilterManager filterManager,
@@ -170,11 +169,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			if (_messageSenders == null) return;
 
+		    var identifierToUse = identifierUsedForPersist ?? EmptyMessageBrokerIdentifier;
 			_messageSenders.ForEach(d =>
 				{
 					using (PerformanceOutput.ForOperation(string.Format(System.Globalization.CultureInfo.InvariantCulture, "Sending message with {0}", d.GetType())))
 					{
-						d.Execute(identifierUsedForPersist, modifiedRoots);
+                        d.Execute(identifierToUse, modifiedRoots);
 					}
 				});
 		}

@@ -268,9 +268,7 @@ ALTER TABLE [Auditing].[PersonDayOff_AUD] CHECK CONSTRAINT [FK_PersonDayOff_AUD_
 ------------
 CREATE TABLE [dbo].[AuditTrailSetting](
 	[Id] [uniqueidentifier] NOT NULL,
-	[CreatedBy] [uniqueidentifier] NOT NULL,
 	[UpdatedBy] [uniqueidentifier] NOT NULL,
-	[CreatedOn] [datetime] NOT NULL,
 	[UpdatedOn] [datetime] NOT NULL,
 	[DaysToKeep] [int] NOT NULL,
 	[IsRunning] [bit] NOT NULL)
@@ -281,11 +279,6 @@ ALTER TABLE dbo.AuditTrailSetting ADD CONSTRAINT
 	(
 	Id
 	)
-
-ALTER TABLE [dbo].[AuditTrailSetting]  WITH CHECK ADD  CONSTRAINT [FK_AuditTrailSetting_Person_CreatedBy] FOREIGN KEY([CreatedBy])
-REFERENCES [dbo].[Person] ([Id])
-
-ALTER TABLE [dbo].[AuditTrailSetting] CHECK CONSTRAINT [FK_AuditTrailSetting_Person_CreatedBy]
 
 ALTER TABLE [dbo].[AuditTrailSetting]  WITH CHECK ADD  CONSTRAINT [FK_AuditTrailSetting_Person_UpdatedBy] FOREIGN KEY([UpdatedBy])
 REFERENCES [dbo].[Person] ([Id])
