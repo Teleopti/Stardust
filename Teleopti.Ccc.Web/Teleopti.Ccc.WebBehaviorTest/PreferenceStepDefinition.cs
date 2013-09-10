@@ -5,6 +5,7 @@ using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
@@ -42,21 +43,21 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenISelectAnEditableDayWithoutPreference()
 		{
 			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			_page.SelectCalendarCellByClass(date);
+			PreferencesPageStepDefinitions.SelectCalendarCellByClass(date);
 		}
 
 		[When(@"I select an editable day with standard preference")]
 		public void WhenISelectAnEditableDayWithStandardPreference() 
 		{ 
 			var data = UserFactory.User().UserData<StandardPreference>();
-			_page.SelectCalendarCellByClass(data.Date);
+			PreferencesPageStepDefinitions.SelectCalendarCellByClass(data.Date);
 		}
 
 		[When(@"I also select an editable day without standard preference")]
 		public void WhenISelectAnEditableDayWithoutStandardPreference()
 		{
 			var data = UserFactory.User().UserData<StandardPreference>();
-			_page.SelectCalendarCellByClass(data.Date.AddDays(1));
+			PreferencesPageStepDefinitions.SelectCalendarCellByClass(data.Date.AddDays(1));
 		}
 
 		[When(@"I select 2 editable day with standard preference")]
@@ -64,8 +65,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var data1 = UserFactory.User().UserData<StandardPreference>();
 			var data2 = UserFactory.User().UserData<AnotherStandardPreference>();
-			_page.SelectCalendarCellByClass(data1.Date);
-			_page.SelectCalendarCellByClass(data2.Date);
+			PreferencesPageStepDefinitions.SelectCalendarCellByClass(data1.Date);
+			PreferencesPageStepDefinitions.SelectCalendarCellByClass(data2.Date);
 		}
 
 		[Then(@"I should see my existing shift category preference")]

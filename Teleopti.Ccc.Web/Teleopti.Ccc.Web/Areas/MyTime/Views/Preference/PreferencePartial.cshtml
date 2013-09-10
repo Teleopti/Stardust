@@ -120,7 +120,8 @@
                 </li>
                 @foreach (DayViewModel day in week.Days)
                 {
-                    <li class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" data-mytime-editable="@day.Editable" data-bind="css: {editable: Editable, 'non-editable': !Editable(), feedback: Feedback}, class: StyleClassName()">
+                    var date = Html.Schedule().FormatDate(day.Date);
+                    <li class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-mytime-date="@date" data-mytime-editable="@day.Editable" data-bind="css: {editable: Editable, 'non-editable': !Editable(), feedback: Feedback}, class: StyleClassName()">
                         <div>
                             <div class="day-header">
                                 <span class="floatleft day-header-left badge day-header-text">@day.Header.DayDescription</span><span class="floatright day-header-right badge day-header-text">@day.Header.DayNumber</span>
@@ -140,7 +141,7 @@
                                         <div class="preference-text" data-bind="text: Preference, attr: {title: Preference}"/>
                                         <div class="preference-indicator">
 				                            <!-- ko if: Extended -->
-                                                <div class="extended-indication" style="display: none" data-bind="visible: Extended, tooltip: { title: tooltipText, html: true }">&raquo;</div>
+                                            <div class="extended-indication" style="display: none" data-bind="visible: Extended, tooltip: { title: tooltipText, html: true }">&raquo;</div>
                                             <!-- /ko -->
                                         </div>
                                         <div class="preference-indicator">

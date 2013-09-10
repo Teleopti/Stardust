@@ -7,12 +7,9 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
-using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
-using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
@@ -22,10 +19,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 	[Binding]
 	public class PreferencesPageStepDefinitions
 	{
+		public static string Cell(DateTime date)
+		{
+			return string.Format("li[data-mytime-date='{0}']", date.ToString("yyyy-MM-dd"));
+		}
+
+		public static string ExtendedTooltip(DateTime date)
+		{
+			return Cell(date) + " .extended-tooltip";
+		}
+
+		public static string ExtendedIndication(DateTime date)
+		{
+			return Cell(date) + " .extended-indication";
+		}
+
+		public static void SelectCalendarCellByClass(DateTime date)
+		{
+			Browser.Interactions.AssertExists(Cell(date) + ".ui-selectee");
+			Browser.Interactions.AddClassUsingJQuery("ui-selected", Cell(date) + ".ui-selectee");
+		}
+
 		[When(@"I select day '(.*)'")]
 		public void WhenISelectDayDate(DateTime date)
 		{
-			Pages.Pages.PreferencePage.SelectCalendarCellByClass(date);
+			SelectCalendarCellByClass(date);
 		}
 
 		[When(@"I click the add extended preference button")]
@@ -49,8 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click the extended preference indication on '(.*)'")]
 		public void WhenIClickTheExtendedPreferenceIndicationOn(DateTime date)
 		{
-			Browser.Interactions.AssertExists(".extended-indication");
-			Browser.Interactions.Javascript("$('.extended-indication').trigger('mouseenter')");
+			OpenExtendedTooltip(date);
 		}
 
 		[Then(@"I should see that I have an extended preference on '(.*)'")]
@@ -102,8 +119,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see the extended preference on '(.*)'")]
 		public void ThenIShouldSeeTheExtendedPreferenceOn(DateTime date)
 		{
-			var extendedPreference = Pages.Pages.PreferencePage.ExtendedPreferenceForDate(date);
-			EventualAssert.That(() => extendedPreference.Exists, Is.True);
+			Browser.Interactions.AssertExists(ExtendedTooltip(date));
 		}
 
 		[Then(@"I should see the preference (.*) on '(.*)'")]
@@ -278,29 +294,36 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see extended preference with")]
 		public void ThenIShouldSeeExtendedPanelWith(Table table)
 		{
-			Browser.Interactions.AssertExists(".tooltip-inner");
-			Browser.Interactions.AssertExists(".extended-indication");
-			Browser.Interactions.Javascript("$('.extended-indication').trigger('mouseleave')");
-			Browser.Interactions.Javascript("$('.extended-indication').trigger('mouseenter')");
-
 			var fields = table.CreateInstance<ExtendedPreferenceFields>();
-			var extendedPreference = Pages.Pages.PreferencePage.ExtendedPreferenceForDate(fields.Date);
 
-			if (fields.Preference != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.Preference));
-			if (fields.StartTimeMinimum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.StartTimeMinimum));
-			if (fields.StartTimeMaximum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.StartTimeMaximum));
-			if (fields.EndTimeMinimum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.EndTimeMinimum));
-			if (fields.EndTimeMaximum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.EndTimeMaximum));
-			if (fields.WorkTimeMinimum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.WorkTimeMinimum));
-			if (fields.WorkTimeMaximum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.WorkTimeMaximum));
+			OpenExtendedTooltip(fields.Date);
 
-			if (fields.Activity != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.Activity));
-			if (fields.ActivityStartTimeMinimum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.ActivityStartTimeMinimum));
-			if (fields.ActivityStartTimeMaximum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.StartTimeMaximum));
-			if (fields.ActivityEndTimeMinimum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.ActivityEndTimeMinimum));
-			if (fields.ActivityEndTimeMaximum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.ActivityEndTimeMaximum));
-			if (fields.ActivityTimeMinimum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.ActivityTimeMinimum));
-			if (fields.ActivityTimeMaximum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.ActivityTimeMaximum));
+			var tooltip = ExtendedTooltip(fields.Date);
+			Browser.Interactions.AssertExists(tooltip);
+
+			if (fields.Preference != null) Browser.Interactions.AssertAnyContains(tooltip, fields.Preference);
+			if (fields.StartTimeMinimum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.StartTimeMinimum);
+			if (fields.StartTimeMaximum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.StartTimeMaximum);
+			if (fields.EndTimeMinimum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.EndTimeMinimum);
+			if (fields.EndTimeMaximum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.EndTimeMaximum);
+			if (fields.WorkTimeMinimum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.WorkTimeMinimum);
+			if (fields.WorkTimeMaximum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.WorkTimeMaximum);
+
+			if (fields.Activity != null) Browser.Interactions.AssertAnyContains(tooltip, fields.Activity);
+			if (fields.ActivityStartTimeMinimum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.ActivityStartTimeMinimum);
+			if (fields.ActivityStartTimeMaximum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.StartTimeMaximum);
+			if (fields.ActivityEndTimeMinimum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.ActivityEndTimeMinimum);
+			if (fields.ActivityEndTimeMaximum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.ActivityEndTimeMaximum);
+			if (fields.ActivityTimeMinimum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.ActivityTimeMinimum);
+			if (fields.ActivityTimeMaximum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.ActivityTimeMaximum);
+		}
+
+		private static void OpenExtendedTooltip(DateTime date)
+		{
+			var extendedIndication = ExtendedIndication(date);
+			Browser.Interactions.AssertExists(extendedIndication);
+			Browser.Interactions.Javascript("$('{0}').trigger('mouseleave')", extendedIndication.JSEncode());
+			Browser.Interactions.Javascript("$('{0}').trigger('mouseenter')", extendedIndication.JSEncode());
 		}
 
 		private void AssertExtendedActivityTimeFieldsAreReset()
@@ -352,14 +375,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void WhenIClickOnRemoveMustHaveButton()
 		{
             Browser.Interactions.Click(".icon-minus");
-		}
-
-
-		[Given(@"I have a preference template with")]
-		public void GivenIHaveAPreferenceTemplateWith(Table table)
-		{
-			var preferenceTemplate = table.CreateInstance<PreferenceTemplateConfigurable>();
-			UserFactory.User().Setup(preferenceTemplate);
 		}
 
 		[When(@"I select preference template with '(.*)'")]
