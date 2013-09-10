@@ -6,7 +6,7 @@ $(AS_DATABASE)|TeleoptiAnalytics_Demo
 $(ConnectionStringApp)|Data Source=.;Initial Catalog=TeleoptiCCC7_Demo;Integrated Security=True
 $(ConnectionStringAnalytics)|Data Source=.;Initial Catalog=TeleoptiAnalytics_Demo;Integrated Security=True
 $(ConnectionStringCube)|Provider=MSOLAP.3;Integrated Security=SSPI;Persist Security Info=True;Data Source=.;Initial Catalog=TeleoptiAnalytics_Demo;Client Cache Size=25;Auto Synch Period=10000
-$(MessageBroker)|http://localhost:54903/
+$(AgentPortalWebURL)|http://localhost:54903/
 $(IIS_AUTH)|Windows
 $(PM_ASMX)|http://localhost/analyzer/services/Analyzer2005.asmx
 $(PM_AUTH_MODE)|Windows

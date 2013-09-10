@@ -47,6 +47,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Messaging", "Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj", "{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Interfaces", "Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj", "{8D2565F2-7C44-45B7-96AD-2CD900E033A1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{807A8AFE-C46B-4907-B287-BD4AEC6DAE01} = {807A8AFE-C46B-4907-B287-BD4AEC6DAE01}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.Common", "Teleopti.Analytics\Teleopti.Analytics.Etl.Common\Teleopti.Analytics.Etl.Common.csproj", "{34C3B171-160E-4320-AA49-B8162BAD0E36}"
 EndProject
