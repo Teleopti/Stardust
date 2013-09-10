@@ -38,15 +38,6 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         }
 
         /// <summary>
-        /// Determines whether this type [can validate number of properties].
-        /// </summary>
-        [Test]
-        public void CanValidateNumberOfProperties()
-        {
-            Assert.AreEqual(11, PropertyCounter.CountProperties(typeof (Multiplicator)));
-        }
-
-        /// <summary>
         /// Determines whether this instance [can map overtime activity6x].
         /// </summary>
         [Test]

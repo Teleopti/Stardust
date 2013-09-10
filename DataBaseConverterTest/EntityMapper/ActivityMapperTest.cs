@@ -27,15 +27,6 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             _target = new ActivityMapper(new MappedObjectPair(), new GroupingActivity("test"));
         }
 
-        /// <summary>
-        /// Determines whether this type [can validate number of properties].
-        /// </summary>
-        [Test]
-        public void CanValidateNumberOfProperties()
-        {
-            Assert.AreEqual(21, PropertyCounter.CountProperties(typeof (Activity)));
-        }
-
 
         /// <summary>
         /// Determines whether this instance [can map activity6x].

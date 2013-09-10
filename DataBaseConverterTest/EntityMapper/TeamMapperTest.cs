@@ -2,8 +2,6 @@ using Domain;
 using NUnit.Framework;
 using Teleopti.Ccc.DatabaseConverter;
 using Teleopti.Ccc.DatabaseConverter.EntityMapper;
-using Teleopti.Ccc.DatabaseConverterTest.Helpers;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -16,15 +14,6 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
     [TestFixture]
     public class TeamMapperTest : MapperTest<UnitBase>
     {
-        /// <summary>
-        /// Determines whether this type [can validate number of properties].
-        /// </summary>
-        [Test]
-        public void CanValidateNumberOfProperties()
-        {
-            Assert.AreEqual(6, PropertyCounter.CountProperties(typeof (UnitSub)));
-            Assert.AreEqual(11, PropertyCounter.CountProperties(typeof (Team)));
-        }
 
         /// <summary>
         /// Determines whether this instance [can map activity6x].
