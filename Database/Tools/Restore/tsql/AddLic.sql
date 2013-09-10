@@ -22,7 +22,7 @@ SELECT top 1 @PersonGUID = Id FROM dbo.person
 SET @now				= getdate()
 
 SELECT @LicString = CAST(XmlCol as varchar(4000)) FROM TempLic
-exec sp_executesql N'INSERT INTO dbo.License (Version, CreatedBy, UpdatedBy, CreatedOn, UpdatedOn, XmlString, Id) VALUES (@p0, @p1, @p1, @p2, @p2, @p3, @p4)',N'@p0 int,@p1 uniqueidentifier,@p2 datetime,@p3 nvarchar(4000),@p4 uniqueidentifier',
+exec sp_executesql N'INSERT INTO dbo.License (Version, UpdatedBy, UpdatedOn, XmlString, Id) VALUES (@p0, @p1, @p2, @p3, @p4)',N'@p0 int,@p1 uniqueidentifier,@p2 datetime,@p3 nvarchar(4000),@p4 uniqueidentifier',
 @p0=1,
 @p1=@PersonGUID,
 @p2=@now,
