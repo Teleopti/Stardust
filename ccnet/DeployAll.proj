@@ -359,6 +359,7 @@
 	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.jpg;
 	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.rdlc;
 	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.ascx;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.asax;
 	$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\*.master;"
 			Exclude=
 	"$(CCNetWorkingDirectory)\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\**\obj\**\*.*;
