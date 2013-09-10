@@ -16,20 +16,32 @@ Background:
 
 #Only for spec, not for testing
 @ignore
-Scenario: Default configuration for scenario add and remove full day absences
+Scenario: Default configuration for scenario add full day absences
 	When I am viewing the performance view
-	And I select scenario 'Add and remove full day absence'
+	And I select scenario 'Add full day absence -> PersonScheduleDayReadModel'
 	Then I should see a default configuration in json format
 
-#Ignoring for now, we have to change this so that we only measure adds in other pbi repo
-@ignore
-Scenario: Measure add and remove full day absences
+Scenario: Measure PersonScheduleDayReadModel by adding full day absences
 	When I am viewing the performance view
-	And I select scenario 'Add and remove full day absence'
+	And I select scenario 'Add full day absence -> PersonScheduleDayReadModel'
 	And I input a configuration with 1 scenarios in json format
 	And I click 'run'
 	Then I should see that the test run has finished
-	And I should see a count of 2 messages received for 'PersonScheduleDayReadModel'
+	And I should see a count of 1 messages received for 'PersonScheduleDayReadModel'
 	And I should see total run time
 	And I should see total time to send commands
 	And I should see scenarios per second
+
+Scenario: Measure ScheduledResourcesReadModel by adding full day absences
+	When I am viewing the performance view
+	And I select scenario 'Add full day absence -> ScheduledResourcesReadModel'
+	And I input a configuration with 1 scenarios in json format
+	And I click 'run'
+	Then I should see that the test run has finished
+	And I should see a count of 1 messages received for 'ScheduledResourcesReadModel'
+	And I should see total run time
+	And I should see total time to send commands
+	And I should see scenarios per second
+
+
+

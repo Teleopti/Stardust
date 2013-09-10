@@ -192,6 +192,15 @@ namespace Teleopti.Ccc.DomainTest.Collection
             Assert.That(actual.ElementAt(0), Is.EqualTo(nonGenericList[0]));
             Assert.That(actual.ElementAt(1), Is.EqualTo(nonGenericList[1]));
         }
+
+		[Test]
+		public void ShouldBeRandomized()
+		{
+			var list = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 };
+			var newList = list.Randomize();
+
+			Assert.That(newList, Is.Not.EqualTo(list));
+		}
     }
 }
  

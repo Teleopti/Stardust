@@ -125,6 +125,12 @@ namespace Teleopti.Interfaces.Domain
 		/// 
 		/// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-		IList<IOptionalColumn> OptionalColumns { get; set; } 
+		IList<IOptionalColumn> OptionalColumns { get; set; }
+		
+		/// <summary>
+		/// Gets the visible skills without max seat and non-blend skills
+		/// </summary>
+		/// <value>The visible skills.</value>
+	    IList<ISkill> NonVirtualSkills { get; }
     }
 }

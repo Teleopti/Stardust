@@ -5,12 +5,12 @@ define([
     ko
 	) {
 
-	return function(text) {
+	return function(text, targetObservable) {
 	    var self = this;
 	    
 	    this.Text = text;
 	    
-	    this.Target = ko.observable(0);
+	    this.Target = targetObservable;
 	    this.Successes = ko.observable(null);
 	    this.Failures = ko.observable(null);
 
