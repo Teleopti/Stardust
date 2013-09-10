@@ -14,14 +14,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		private readonly IShiftDistributionGrid _view;
         private int _sortColumn;
         private bool _sortAscending;
-	    private readonly IList<ShiftDistribution> _shiftDistributionList;
-        private IList<DateOnly> _sortedDates; 
+	    private IList<ShiftDistribution> _shiftDistributionList;
+        private IList<DateOnly> _sortedDates;
 
-	    public ShiftDistributionGridPresenter(IShiftDistributionGrid view, IList<ShiftDistribution> shiftDistributionList)
-		{
-		    _view = view;
-		    _shiftDistributionList = shiftDistributionList;
-		}
+        public ShiftDistributionGridPresenter(IShiftDistributionGrid view, IList<ShiftDistribution> shiftDistributionList)
+        {
+            _view = view;
+            _shiftDistributionList = shiftDistributionList;
+        }
 
 	    public int? ShiftCategoryCount(DateOnly date, IShiftCategory shiftCategory)
 	    {

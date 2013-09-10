@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             if (scheduleView != null)
             {
-                //var shiftCategoryDistributionExtractor = new DistributionInformationExtractor(allSchedules);
                 _distributionInformationExtractor.ExtractDistributionInfo(allSchedules);
                 shiftDistributionControl.UpdateModel(_distributionInformationExtractor);
                 shiftFairnessAnalysisControl.UpdateModel(_distributionInformationExtractor);
