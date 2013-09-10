@@ -270,6 +270,7 @@
     <Compile Include="Repositories\PersonScheduleDayReadModelPersister.cs" />
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
     <Compile Include="Repositories\ScheduledResourcesReadModelStorage.cs" />
+    <Compile Include="UnitOfWork\EmptyMessageBrokerIdentifier.cs" />
     <Compile Include="UnitOfWork\EventExtensions.cs" />
     <Compile Include="UnitOfWork\TeamOrSiteChangedMessageSender.cs" />
     <Compile Include="Util\CompressionExtensions.cs" />
