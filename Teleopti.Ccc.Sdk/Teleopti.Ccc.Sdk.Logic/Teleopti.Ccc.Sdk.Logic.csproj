@@ -194,7 +194,6 @@
     <Compile Include="CommandHandler\SetPersonAccountForPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\SetPersonOptionalValuesForPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\SetSchedulePeriodWorktimeOverrideCommandHandler.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IMessageBrokerEnablerFactory.cs" />
     <Compile Include="IPayrollResultFactory.cs" />
     <Compile Include="IPersistPersonRequest.cs" />

@@ -503,7 +503,6 @@
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAspect.cs" />
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAttribute.cs" />
     <Compile Include="Filters\HttpRequestBaseExtensions.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Models\Shared\Link.cs" />
     <Compile Include="Areas\Start\Controllers\MenuController.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtension.cs" />

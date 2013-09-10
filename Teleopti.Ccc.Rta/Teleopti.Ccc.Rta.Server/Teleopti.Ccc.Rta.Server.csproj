@@ -136,7 +136,6 @@
     <Compile Include="ActualAgentStateCache.cs" />
     <Compile Include="Resolvers\PersonResolver.cs" />
     <Compile Include="Resolvers\DataSourceResolver.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="PersonStateHolder.cs" />
     <Compile Include="RealTimeContainerInstaller.cs" />
     <Compile Include="RtaDataHandler.cs" />

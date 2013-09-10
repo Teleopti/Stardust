@@ -222,7 +222,6 @@
     <Compile Include="Foundation\WriteStringToFile.cs" />
     <Compile Include="NHibernateConfiguration\VersionStateRollbackInterceptor.cs" />
     <Compile Include="NHibernateConfiguration\XmlType.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Licensing\TooManyActiveAgentsException.cs" />
     <Compile Include="Licensing\InvalidLicenseException.cs" />
     <Compile Include="Licensing\IXmlLicense.cs" />

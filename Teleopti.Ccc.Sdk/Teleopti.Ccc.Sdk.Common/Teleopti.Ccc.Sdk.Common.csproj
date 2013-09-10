@@ -291,7 +291,6 @@
     <Compile Include="DataTransferObject\TimeLimitationDto.cs" />
     <Compile Include="DataTransferObject\ValidatedSchedulePartDto.cs" />
     <Compile Include="DataTransferObject\WorkflowControlSetDto.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Contracts\ITeleoptiForecastingService.cs" />
     <Compile Include="Contracts\IPayrollExportProcessor.cs" />
     <Compile Include="Contracts\ITeleoptiOrganizationService.cs" />
