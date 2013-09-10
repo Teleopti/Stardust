@@ -611,6 +611,12 @@
     <Compile Include="Common\PropertyPageAndWizard\WizardNoRoot.designer.cs">
       <DependentUpon>WizardNoRoot.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\PropertyPanel\AgentInfoControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\AgentInfoControl.Designer.cs">
+      <DependentUpon>AgentInfoControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Common\SearchPerson.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1313,6 +1319,32 @@
     <Compile Include="Scheduling\PermissionClipboardRestrictionControl.cs" />
     <Compile Include="Scheduling\PermissionEditControl.cs" />
     <Compile Include="Scheduling\PermissionEditRestrictionControl.cs" />
+    <Compile Include="Scheduling\PropertyPanel\PerShiftCategoryChart.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\PerShiftCategoryChartControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ScheduleDayListFactory.cs" />
+    <Compile Include="Scheduling\PropertyPanel\ShiftDistributionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftDistributionGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftFairnessAnalysisControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftFairnessGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftPerAgentControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftPerAgentGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\UpdateSelectionForShiftDistribution.cs" />
     <Compile Include="Scheduling\QuickAccessState.cs" />
     <Compile Include="Scheduling\ScheduleOvertimeCommand.cs" />
     <Compile Include="Scheduling\SchedulerRibbonHelper.cs" />
@@ -1466,12 +1498,6 @@
     <Compile Include="Scheduling\SchedulingSessionPreferences\ResourceOptimizerDayOffPreferencesPanel.Designer.cs">
       <DependentUpon>ResourceOptimizerDayOffPreferencesPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\FormAgentInfo.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scheduling\FormAgentInfo.Designer.cs">
-      <DependentUpon>FormAgentInfo.cs</DependentUpon>
-    </Compile>
     <Compile Include="Scheduling\ScheduleViewBase.cs" />
     <Compile Include="Scheduling\SchedulingResult.cs">
       <SubType>Form</SubType>
@@ -1503,7 +1529,7 @@
     </Compile>
     <Compile Include="Scheduling\Swapper.cs" />
     <Compile Include="Scheduling\TagsMenuLoader.cs" />
-    <Compile Include="Scheduling\UpdateSelectionInfo.cs" />
+    <Compile Include="Scheduling\PropertyPanel\UpdateSelectionForAgentInfo.cs" />
     <Compile Include="Scheduling\VirtualSkillHelper.cs" />
     <Compile Include="SearchPersonView.cs">
       <SubType>UserControl</SubType>
@@ -2662,6 +2688,10 @@
     <EmbeddedResource Include="Scheduling\AuditHistoryView.resx">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PropertyPanel\AgentInfoControl.resx">
+      <DependentUpon>AgentInfoControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\FilterOvertimeAvailabilityView.resx">
       <DependentUpon>FilterOvertimeAvailabilityView.cs</DependentUpon>
     </EmbeddedResource>
@@ -2676,6 +2706,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PersonsFilterView.resx">
       <DependentUpon>PersonsFilterView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PropertyPanel\PerShiftCategoryChartControl.resx">
+      <DependentUpon>PerShiftCategoryChartControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftDistributionControl.resx">
+      <DependentUpon>ShiftDistributionControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftFairnessAnalysisControl.resx">
+      <DependentUpon>ShiftFairnessAnalysisControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftPerAgentControl.resx">
+      <DependentUpon>ShiftPerAgentControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\RequestHistoryView.resx">
       <DependentUpon>RequestHistoryView.cs</DependentUpon>
@@ -3075,10 +3117,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\ResourceOptimizerDayOffPreferencesPanel.resx">
       <DependentUpon>ResourceOptimizerDayOffPreferencesPanel.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\FormAgentInfo.resx">
-      <DependentUpon>FormAgentInfo.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulingResult.resx">

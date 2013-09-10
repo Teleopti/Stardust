@@ -1,58 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
-	public class UpdateSelectionInfo
+	public class UpdateSelectionForAgentInfo
 	{
-		private readonly ToolStripSplitButton _statusLabelTime;
+		private readonly ToolStripStatusLabel _statusLabelContractTime;
 		private readonly ToolStripStatusLabel _statusLabelTag;
+		private readonly ToolStripStatusLabel _statusLabelTimeZone;
 
-		public UpdateSelectionInfo(ToolStripSplitButton statusLabelTime, ToolStripStatusLabel statusLabelTag)
+		public UpdateSelectionForAgentInfo(ToolStripStatusLabel statusLabelContractTime, ToolStripStatusLabel statusLabelTag, ToolStripStatusLabel statusLabelTimeZone)
 		{
-			_statusLabelTime = statusLabelTime;
+			_statusLabelContractTime = statusLabelContractTime;
 			_statusLabelTag = statusLabelTag;
+			_statusLabelTimeZone = statusLabelTimeZone;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.ToolStripItem.set_Text(System.String)")]
-		public void Update(IList<IScheduleDay> selectedSchedules, IScheduleViewBase scheduleView, ISchedulerStateHolder schedulerStateHolder, FormAgentInfo agentInfo, ScheduleTimeType scheduleTimeType)
+		public void Update(IList<IScheduleDay> selectedSchedules, IScheduleViewBase scheduleView, ISchedulerStateHolder schedulerStateHolder, AgentInfoControl agentInfoControl)
 		{
 			if (scheduleView != null)
 			{
 				IDictionary<IPerson, IScheduleRange> personDic = new Dictionary<IPerson, IScheduleRange>();
-				HashSet<DateOnly> dateList = new HashSet<DateOnly>();
-				TimeSpan totalTime = TimeSpan.Zero;
+				var dateList = new HashSet<DateOnly>();
+				var totalTime = TimeSpan.Zero;
 
 				var selectedTags = new List<IScheduleTag>();
 
-				foreach (IScheduleDay scheduleDay in selectedSchedules)
+				foreach (var scheduleDay in selectedSchedules)
 				{
-					IProjectionService projSvc = scheduleDay.ProjectionService();
-					IVisualLayerCollection visualLayerCollection = projSvc.CreateProjection();
-					switch (scheduleTimeType)
-					{
-							case ScheduleTimeType.ContractTime:
-							totalTime += visualLayerCollection.ContractTime();
-							break;
-
-							case ScheduleTimeType.WorkTime:
-							totalTime += visualLayerCollection.WorkTime();
-							break;
-
-							case ScheduleTimeType.PaidTime:
-							totalTime += visualLayerCollection.PaidTime();
-							break;
-
-							case ScheduleTimeType.OverTime:
-							totalTime += visualLayerCollection.Overtime();
-							break;
-					}
-					
+					var projSvc = scheduleDay.ProjectionService();
+					totalTime += projSvc.CreateProjection().ContractTime();
 
 					dateList.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
 					if (!personDic.ContainsKey(scheduleDay.Person))
@@ -63,33 +47,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 						selectedTags.Add(scheduleDay.ScheduleTag());
 				}
 
-				if (agentInfo != null)
-					agentInfo.UpdateData(personDic, dateList, schedulerStateHolder.SchedulingResultState,
+                //if (agentInfo != null)
+                //    agentInfo.UpdateData(personDic, dateList, schedulerStateHolder.SchedulingResultState,
+                //                          schedulerStateHolder.SchedulingResultState.AllPersonAccounts);
+				if (agentInfoControl != null)
+					agentInfoControl.UpdateData(personDic, dateList, schedulerStateHolder.SchedulingResultState,
 										  schedulerStateHolder.SchedulingResultState.AllPersonAccounts);
 
-				string label = string.Empty;
-				switch (scheduleTimeType)
-				{
-					case ScheduleTimeType.ContractTime:
-						label = Resources.ContractScheduledTime;
-						break;
-
-					case ScheduleTimeType.WorkTime:
-						label = Resources.WorkTime;
-						break;
-
-					case ScheduleTimeType.PaidTime:
-						label = Resources.PaidTime;
-						break;
-
-					case ScheduleTimeType.OverTime:
-						label = Resources.Overtime;
-						break;
-				}
-				_statusLabelTime.Text = string.Concat(label, ": ", DateHelper.HourMinutesString(totalTime.TotalMinutes));
+				_statusLabelContractTime.Text = string.Concat(Resources.ContractScheduledTime, " ",
+																	  DateHelper.HourMinutesString(
+																		  totalTime.TotalMinutes));
 
 				var selectedTagsText = string.Empty;
 				var counter = 0;
+
 				foreach (var selectedTag in selectedTags)
 				{
 					if (string.Concat(selectedTagsText, selectedTag.Description).Length > 100)
@@ -107,6 +78,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				_statusLabelTag.Text = string.Concat(Resources.ScheduleTagColon, " ", selectedTagsText);
 
+				var firstSelected = selectedSchedules.FirstOrDefault();
+				if (firstSelected != null)
+				{
+					_statusLabelTimeZone.Text = string.Concat(firstSelected.Person.Name, Resources.Colon, firstSelected.Person.PermissionInformation.DefaultTimeZone().DisplayName);
+				}
 			}	
 		}
 	}

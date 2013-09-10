@@ -34,7 +34,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             chbSchedules.Checked = true;
             _pinnedSkillHelper = new PinnedSkillHelper();
             tabSkillData.TabStyle = typeof(SkillTabRenderer);
-            tabSkillData.TabPanelBackColor = Color.FromArgb(199, 216, 237);    
+            tabSkillData.TabPanelBackColor = Color.FromArgb(199, 216, 237);
+			tabInfoPanels.TabStyle = typeof(TabRendererOffice2007);
+			tabInfoPanels.TabPanelBackColor = Color.FromArgb(199, 216, 237);    
         }
 
         public WpfControls.Common.Interop.MultipleHostControl MultipleHostControl3
@@ -44,6 +46,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         public TeleoptiLessIntelligentSplitContainer SplitContainerAdvMain
         {
             get { return lessIntellegentSplitContainerAdvMain; }
+        }
+		
+		public TeleoptiLessIntelligentSplitContainer SplitContainerAdvMainContainer
+        {
+            get { return lessIntellegentSplitContainerAdvMainContainer; }
         }
         public TeleoptiLessIntelligentSplitContainer SplitContainerAdvResultGraph
         {
@@ -64,6 +71,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         public TabControlAdv TabSkillData
         {
             get { return tabSkillData; }
+        }
+		
+		public TabControlAdv TabInfoPanels
+        {
+            get { return tabInfoPanels; }
         }
 
         public ElementHost ElementHostRequests
@@ -176,5 +188,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             _pinnedSkillHelper.ReplaceOldWithNew(newSkill, oldSkill);
         }
+
+        public void ToggelPropertyPanel(bool value)
+        {
+            lessIntellegentSplitContainerAdvMainContainer.Panel2Collapsed = value;
+        }
+        
     }
 }
