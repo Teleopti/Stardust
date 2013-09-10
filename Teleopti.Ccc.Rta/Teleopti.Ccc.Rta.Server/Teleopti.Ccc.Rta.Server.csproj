@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActualAgentAssembler.cs" />
+    <Compile Include="AlarmMapper.cs" />
     <Compile Include="DatabaseHandler.cs" />
     <Compile Include="DatabaseConnectionStringHandler.cs" />
     <Compile Include="ActualAgentStateCache.cs" />
