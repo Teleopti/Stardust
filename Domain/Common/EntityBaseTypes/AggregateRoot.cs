@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		private int? _version;
 		private IPerson _updatedBy;
 		private DateTime? _updatedOn;
-
+		private readonly LocalizedUpdateInfo _localizedUpdateInfo = new LocalizedUpdateInfo();
 		private readonly IList<IEvent> _events = new List<IEvent>();
 
 		public virtual IEnumerable<IEvent> PopAllEvents()
@@ -60,5 +60,14 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 			_updatedBy = null;
 			_updatedOn = null;
 		}
+
+		public virtual string UpdatedTimeInUserPerspective
+		{
+			get
+			{
+				return _localizedUpdateInfo.UpdatedTimeInUserPerspective(this);
+			}
+		}
+
 	}
 }
