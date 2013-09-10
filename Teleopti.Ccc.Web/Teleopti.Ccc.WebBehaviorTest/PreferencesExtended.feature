@@ -164,6 +164,7 @@ Scenario: View available activity list when adding extended preference
 	| Value |
 	| Lunch |
 
+@ignore
 Scenario: Replace extended preference
 	Given I have the role 'Access to extended preferences'
 	And I have an extended preference with
