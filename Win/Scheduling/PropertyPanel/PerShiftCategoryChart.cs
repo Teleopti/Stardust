@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			TextRenderingHint = TextRenderingHint.AntiAlias;
 			EnableXZooming = false; 
 			EnableYZooming = false;
-			Text = "xxDistribution";
+			Text = UserTexts.Resources.Distribution;
 			PrimaryXAxis.LabelIntersectAction = ChartLabelIntersectAction.Rotate;
 		}
 	}
