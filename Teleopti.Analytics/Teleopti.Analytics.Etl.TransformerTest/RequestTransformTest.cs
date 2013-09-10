@@ -44,7 +44,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             personRequest2.Request = new AbsenceRequest(AbsenceFactory.CreateAbsenceCollection().ElementAt(0), new DateTimePeriod(2012, 01, 28, 2012, 01, 28));
             personRequest2.SetId(Guid.NewGuid());
             personRequest2.Deny(person2, "test", new PersonRequestAuthorizationCheckerForTest());
-            RaptorTransformerHelper.SetCreatedOn(personRequest2, DateTime.UtcNow);
+            RaptorTransformerHelper.SetUpdatedOn(personRequest2, DateTime.UtcNow);
             _personRequestList = new List<IPersonRequest>() { personRequest2 };
             _target = new RequestTransformer();
             _target.Transform(_personRequestList, 96, _dataTable);
@@ -60,7 +60,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             IPersonRequest personRequest1 = new PersonRequest(person);
             personRequest1.SetId(Guid.NewGuid());
             personRequest1.Pending();
-            RaptorTransformerHelper.SetCreatedOn(personRequest1, DateTime.UtcNow);
+            RaptorTransformerHelper.SetUpdatedOn(personRequest1, DateTime.UtcNow);
 
             personRequest1.Request = new TextRequest(new DateTimePeriod(2012,01,28,2012,01,28));
             _personRequestList = new List<IPersonRequest>() { personRequest1};
@@ -81,7 +81,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             personRequest3.SetId(Guid.NewGuid());
             personRequest3.Pending();
             personRequest3.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
-            RaptorTransformerHelper.SetCreatedOn(personRequest3, DateTime.UtcNow);
+            RaptorTransformerHelper.SetUpdatedOn(personRequest3, DateTime.UtcNow);
 
             _personRequestList = new List<IPersonRequest>() { personRequest3 };
             _target = new RequestTransformer();
@@ -104,7 +104,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             personRequest4.Request = new ShiftTradeRequest(_shiftTradeSwapDetails);
             personRequest4.SetId(Guid.NewGuid());
             personRequest4.Pending();
-            RaptorTransformerHelper.SetCreatedOn(personRequest4, DateTime.UtcNow);
+            RaptorTransformerHelper.SetUpdatedOn(personRequest4, DateTime.UtcNow);
 
             _personRequestList = new List<IPersonRequest>() { personRequest4 };
             _target = new RequestTransformer();

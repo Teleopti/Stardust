@@ -138,7 +138,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             IValidatedVolumeDay validatedVolumeDay = query
                 .AddOrder(Order.Desc("vd.UpdatedOn"))
-                .AddOrder(Order.Desc("vd.CreatedOn"))
                 .SetMaxResults(1)
                 .UniqueResult<IValidatedVolumeDay>();
 

@@ -9,9 +9,7 @@ namespace Teleopti.Ccc.Domain.Payroll
 {
     public class PayrollExport : AggregateRootWithBusinessUnit, IPayrollExport, IDeleteTag
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")] 
         private string _name;
-        //private ExportFormat _exportFormat;
         private IList<IPerson> _persons = new List<IPerson>();
         private DateOnlyPeriod _period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
         private Guid _payrollFormatId;
@@ -99,5 +97,9 @@ namespace Teleopti.Ccc.Domain.Payroll
         {
             _isDeleted = true;
         }
+
+				public virtual IPerson CreatedBy { get; protected set; }
+				public virtual DateTime? CreatedOn { get; protected set; }
+
     }
 }

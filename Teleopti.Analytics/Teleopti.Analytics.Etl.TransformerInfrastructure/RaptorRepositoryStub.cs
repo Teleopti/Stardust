@@ -71,7 +71,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             scenario.SetId(Guid.NewGuid());
             scenario.DefaultScenario = isDefaultScenario;
             Type rootType = typeof(AggregateRoot);
-            rootType.GetField("_createdOn", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(
+            rootType.GetField("_updatedOn", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(
                 scenario, new DateTime(1900, 1, 1, 1, 0, 0, 0, DateTimeKind.Utc));
             return scenario;
         }

@@ -42,10 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .List<IWorkflowControlSet>();
             foreach (var workflowControlSet in list)
             {
-                if (!LazyLoadingManager.IsInitialized(workflowControlSet.UpdatedBy))
-                    LazyLoadingManager.Initialize(workflowControlSet.UpdatedBy);
-                if (!LazyLoadingManager.IsInitialized(workflowControlSet.CreatedBy))
-                    LazyLoadingManager.Initialize(workflowControlSet.CreatedBy);
+                LazyLoadingManager.Initialize(workflowControlSet.UpdatedBy);
             }
             return list;
         }

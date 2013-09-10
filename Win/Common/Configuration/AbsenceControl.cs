@@ -194,12 +194,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
             createColumnsForAbsenceGrid(gridColumns);
 
-			// append audit columns
-			gridColumns.Add(new SFGridReadOnlyTextColumn<AbsenceView>("CreatedBy", Resources.CreatedBy));
-			gridColumns.Add(new SFGridReadOnlyTextColumn<AbsenceView>("CreatedTimeInUserPerspective", Resources.CreatedOn));
-			gridColumns.Add(new SFGridReadOnlyTextColumn<AbsenceView>("UpdatedBy", Resources.UpdatedBy));
-			gridColumns.Add(new SFGridReadOnlyTextColumn<AbsenceView>("UpdatedTimeInUserPerspective", Resources.UpdatedOn));
-
             gridControlAbsences.RowCount = gridRowCount();
             gridControlAbsences.ColCount = (gridColumns.Count - ColumnListCountMappingValue);
 
@@ -221,7 +215,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         }
 
-        private void createColumnsForAbsenceGrid(ICollection<SFGridColumnBase<AbsenceView>> gridColumns)
+        private void createColumnsForAbsenceGrid(IList<SFGridColumnBase<AbsenceView>> gridColumns)
         {
             gridColumns.Add(new SFGridDescriptionNameColumn<AbsenceView>("Description", Resources.Name));
             var shortName = new SFGridDescriptionShortNameColumn<AbsenceView>("Description", Resources.ShortName, 150, false, 2)
@@ -245,6 +239,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                                 	{UseDisablePropertyCheck = true};
         	gridColumns.Add(trackerColumn);
             gridColumns.Add(new SFGridCheckBoxColumn<AbsenceView>("Confidential", Resources.Confidential));
+			gridColumns.Add(new SFGridReadOnlyTextColumn<AbsenceView>("UpdatedBy", Resources.UpdatedBy));
+			gridColumns.Add(new SFGridReadOnlyTextColumn<AbsenceView>("UpdatedTimeInUserPerspective", Resources.UpdatedOn));
+
         }
 
         private int gridRowCount()
@@ -276,11 +273,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
                 foreach (Absence absence in absenceCollection)
                 {
-                    // lazy load
-                    if (!LazyLoadingManager.IsInitialized(absence.CreatedBy))
-                        LazyLoadingManager.Initialize(absence.CreatedBy);
-                    if (!LazyLoadingManager.IsInitialized(absence.UpdatedBy))
-                        LazyLoadingManager.Initialize(absence.UpdatedBy);
+                    LazyLoadingManager.Initialize(absence.UpdatedBy);
 
                     // Instantiates the absence view relevant for the 
                     // givenabsence and add it to the collection.
@@ -472,10 +465,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                     {
                         var absence = uow.Merge(absenceView.ContainedEntity);
                         // lazy load
-                        if (!LazyLoadingManager.IsInitialized(absence.CreatedBy))
-                            LazyLoadingManager.Initialize(absence.CreatedBy);
-                        if (!LazyLoadingManager.IsInitialized(absence.UpdatedBy))
-                            LazyLoadingManager.Initialize(absence.UpdatedBy);
+                        LazyLoadingManager.Initialize(absence.UpdatedBy);
                         absenceView.UpdateAfterMerge(absence);
                     }
                 }

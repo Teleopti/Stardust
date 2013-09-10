@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -52,6 +53,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_modificationStack.Push(schedulePart);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void ModifyStrictly(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection)
+		{
+			IScheduleRange range = _stateHolder.Schedules[schedulePart.Person];
+			IScheduleDay partToSave = range.ReFetch(schedulePart);
+			var responses = modifyWithNoValidation(schedulePart, ScheduleModifier.Scheduler, scheduleTagSetter, newBusinessRuleCollection);
+			_rollbackStack.Push(partToSave);
+			_modificationStack.Push(schedulePart);
+			if (responses.Any())
+				RollbackLast();
+		}
+	
         public void Rollback()
         {
             using (PerformanceOutput.ForOperation("SchedulePartModifyAndRollbackService performed a rollback"))
@@ -103,9 +116,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
            return _stateHolder.Schedules.Modify(modifier, schedulePart, NewBusinessRuleCollection.AllForScheduling(_stateHolder), _scheduleDayChangeCallback, scheduleTagSetter);
         }
 
-		private void modifyWithNoValidation(IScheduleDay schedulePart, ScheduleModifier modifier, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection)
+		private IEnumerable<IBusinessRuleResponse> modifyWithNoValidation(IScheduleDay schedulePart, ScheduleModifier modifier, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection)
 		{
-			_stateHolder.Schedules.Modify(modifier, schedulePart, newBusinessRuleCollection, _scheduleDayChangeCallback, scheduleTagSetter);
+			return _stateHolder.Schedules.Modify(modifier, schedulePart, newBusinessRuleCollection, _scheduleDayChangeCallback, scheduleTagSetter);
 		}
     }
 }

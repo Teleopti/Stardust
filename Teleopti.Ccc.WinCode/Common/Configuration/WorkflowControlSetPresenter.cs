@@ -265,14 +265,10 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
                         uow.Reassociate(workflowControlSetModel.OriginalDomainEntity);
                         var updatedWorkflowControlSet = uow.Merge(workflowControlSetModel.DomainEntity);
                         LazyLoadingManager.Initialize(updatedWorkflowControlSet.AllowedPreferenceActivity);
-                        if (!LazyLoadingManager.IsInitialized(updatedWorkflowControlSet.UpdatedBy))
-                            LazyLoadingManager.Initialize(updatedWorkflowControlSet.UpdatedBy);
-                        if (!LazyLoadingManager.IsInitialized(updatedWorkflowControlSet.CreatedBy))
-                            LazyLoadingManager.Initialize(updatedWorkflowControlSet.CreatedBy);
+                        LazyLoadingManager.Initialize(updatedWorkflowControlSet.UpdatedBy);
                         foreach (var absenceRequestOpenPeriod in updatedWorkflowControlSet.AbsenceRequestOpenPeriods)
                         {
-                            if (!LazyLoadingManager.IsInitialized(absenceRequestOpenPeriod.Absence))
-                                LazyLoadingManager.Initialize(absenceRequestOpenPeriod.Absence);
+                            LazyLoadingManager.Initialize(absenceRequestOpenPeriod.Absence);
                         }
                         workflowControlSetModel.UpdateAfterMerge(updatedWorkflowControlSet);
                         toBeUpdatedAfterPersist.Add(workflowControlSetModel);

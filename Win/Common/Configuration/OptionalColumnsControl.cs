@@ -269,8 +269,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             autoLabelInfoAboutChanges.ForeColor = ColorHelper.ChangeInfoTextColor();
             autoLabelInfoAboutChanges.Font = ColorHelper.ChangeInfoTextFontStyleItalic(autoLabelInfoAboutChanges.Font);
             var changed = _localizer.UpdatedByText(SelectedOptionalColumn, Resources.UpdatedByColon);
-            var created = _localizer.CreatedText(SelectedOptionalColumn, Resources.CreatedByColon);
-            autoLabelInfoAboutChanges.Text = string.Concat(created, changed);
+            autoLabelInfoAboutChanges.Text = changed;
         }
 
         public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)

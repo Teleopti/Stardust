@@ -20,6 +20,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string OpenFrom { get; set; }
 		public string OpenTo { get; set; }
 
+		public ForecastConfigurable()
+		{
+			Hours = 8;
+			OpenFrom = "09:00";
+			OpenTo = "16:00";
+		}
+
 		public void Apply(IUnitOfWork uow)
 		{
 			var skillRepository = new SkillRepository(uow);

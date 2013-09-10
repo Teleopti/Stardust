@@ -4,9 +4,10 @@ namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers
 {
 	public class ApplicationController : Controller
 	{
-		public FilePathResult Index()
+		public ViewResult Index()
 		{
-			return new FilePathResult("~/Areas/PerformanceTool/Content/Templates/index.html", "text/html");
+			return new ViewResult();
+			//return new FilePathResult("~/Areas/PerformanceTool/Content/Templates/index.html", "text/html");
 		}
 	}
 }

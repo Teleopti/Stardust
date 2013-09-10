@@ -35,9 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         {
             Assert.AreEqual("myName", myGroupingActivity.Description.Name);
             Assert.AreEqual("myName", myGroupingActivity.Name);
-            Assert.IsNull(myGroupingActivity.CreatedBy);
             Assert.IsNull(myGroupingActivity.UpdatedBy);
-            Assert.IsNull(myGroupingActivity.CreatedOn);
             Assert.IsNull(myGroupingActivity.UpdatedOn);
             Assert.IsNull(myGroupingActivity.Id);
             Assert.IsNull(myGroupingActivity.Version);

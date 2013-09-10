@@ -107,9 +107,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 
             updateTotalOpeningHours();
 	        if (skill.SkillType.ForecastSource.Equals(ForecastSource.Chat))
-	        {
+            {
+                numericUpDownMaxParallel.Visible = true;
+                label1.Visible = true;
 		        numericUpDownMaxParallel.Enabled = true;
 		        numericUpDownMaxParallel.Value = skill.MaxParallelTasks;
+	        }
+	        else
+	        {
+	            numericUpDownMaxParallel.Visible = false;
+	            label1.Visible = false;
 	        }
         }
 

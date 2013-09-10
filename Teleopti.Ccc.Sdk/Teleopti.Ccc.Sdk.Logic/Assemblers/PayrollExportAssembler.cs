@@ -94,8 +94,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
         private static void SetCreatedBy(ICreateInfo aggregateRoot, IPerson person)
         {
-            typeof(AggregateRoot).GetField("_createdBy", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(
-                aggregateRoot, person);
+            aggregateRoot.GetType().GetProperty("CreatedBy", BindingFlags.Instance | BindingFlags.Public).SetValue(aggregateRoot, person, null);
         }
     }
 }

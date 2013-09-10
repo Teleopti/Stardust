@@ -172,7 +172,6 @@
     <Compile Include="Gui\JobSchedule.Designer.cs">
       <DependentUpon>JobSchedule.cs</DependentUpon>
     </Compile>
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Transformer\BackGroundJob.cs" />
     <Compile Include="Transformer\DataSourceValidCollection.cs" />
     <Compile Include="Transformer\JobCollectionFactory.cs" />

@@ -1,3 +1,5 @@
+<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage" %>
+<%@ Import Namespace="Teleopti.Ccc.Web.Core" %>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -12,7 +14,7 @@
 		
     <link rel="stylesheet" href="Content/bootstrap/bootstrap.css" />
     <link rel="stylesheet" href="Content/bootstrap/bootstrap-responsive.css" />
-		
+	
     <link href="content/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
 		
     <!-- 
@@ -20,7 +22,7 @@
         increment when having cache problems...
         make this use some sort of build number?
         -->
-    <script>var require = { urlArgs: 'bust=v8' };</script>
+    <script>var require = { urlArgs: 'v=<%=new ResourceVersion().Version()%>' };</script>
 
     <script data-main="Areas/PerformanceTool/Content/Scripts/main" type="text/javascript" src="Content/require/require.js"></script>
 		
@@ -91,7 +93,7 @@
                         <fieldset>
                             <h2>Scenario</h2>
                             <label>Scenario</label>
-                            <select disabled="disabled" class="scenario-selector" data-bind="options: Scenarios, optionsText: 'Name', value: Scenario, enable: EnableForm"></select>
+                            <select disabled="disabled" class="scenario-selector" data-bind="options: Scenarios, optionsText: 'Name', optionsValue: 'Name', value: ScenarioName, enable: EnableForm"></select>
                             <label>Configuration</label>
                             <textarea disabled="disabled" class="scenario-configuration" data-bind="value: Configuration, valueUpdate: 'afterkeydown', enable: EnableForm"></textarea>
                             <label></label>
@@ -101,7 +103,7 @@
                 </div>
                 <div class="span6">
                     <h2>Progress</h2>
-                    <!-- ko foreach: Scenario().ProgressItems -->
+                    <!-- ko foreach: ProgressItems() -->
                     <p class="message-count">
                         <span class="message-successes badge badge-success" data-bind="text: Successes"></span>
                         <span class="message-failures badge badge-important" data-bind="text: Failures"></span>

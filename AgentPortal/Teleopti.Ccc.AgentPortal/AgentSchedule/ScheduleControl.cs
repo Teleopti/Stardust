@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.Remoting;
 using System.ServiceModel;
 using System.Threading;
-using System.Web.Services.Protocols;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Schedule;
@@ -23,6 +23,7 @@ using Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade;
 using Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -700,20 +701,18 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 		{
 			var tradeDate = scheduleTeamView.StartDateForTeamView;
 			var personToTradeWith = scheduleTeamView.LastRightClickedPerson;
-			var loggedPerson = SdkServiceHelper.LogOnServiceClient.GetLoggedOnPerson();
 			var loggedOnPerson = StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson;
 			var dateOnlyDto = new DateOnlyDto { DateTime = tradeDate };
-			var shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto { DateFrom = dateOnlyDto, DateTo = dateOnlyDto, PersonFrom = loggedPerson, PersonTo = personToTradeWith };
-			var personRequestDto = SdkServiceHelper.SchedulingService.CreateShiftTradeRequest(loggedPerson, "", "", new[] { shiftTradeSwapDetailDto });
-			var model = new ShiftTradeModel(SdkServiceHelper.SchedulingService, personRequestDto, loggedOnPerson, tradeDate);
+    	    var schedule =
+    	        SdkServiceHelper.SchedulingService.GetSchedulesByQuery(new GetSchedulesByPersonQueryDto
+    	            {
+    	                PersonId = personToTradeWith.Id.GetValueOrDefault(),
+    	                StartDate = dateOnlyDto,
+    	                EndDate = dateOnlyDto,
+    	                TimeZoneId = loggedOnPerson.TimeZoneId
+    	            });
 
-			foreach (var shiftTradeDetail in model.ShiftTradeDetailModels)
-			{
-				if (shiftTradeDetail.VisualProjectionContainsAbsence)
-					return true;
-			}
-
-			return false;
+    	    return schedule.SelectMany(scheduleDay => scheduleDay.ProjectedLayerCollection).Any(projectedLayerDto => projectedLayerDto.IsAbsence);
 		}
 
 

@@ -104,9 +104,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private static string changedInfo(IChangeInfo entity)
         {
-            string changed = Localizer.UpdatedByText(entity, Resources.UpdatedByColon);
-            string created = Localizer.CreatedText(entity, Resources.CreatedByColon);
-            return string.Concat( created, changed);
+            return Localizer.UpdatedByText(entity, Resources.UpdatedByColon);
         }
 
         private void bindTreeNodeList()

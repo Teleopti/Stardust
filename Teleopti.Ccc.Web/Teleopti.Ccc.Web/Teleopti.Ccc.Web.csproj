@@ -240,6 +240,8 @@
     <Compile Include="Areas\MyTime\Core\ShareCalendar\ICalendarLinkGenerator.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ICalendarLinkViewModelFactory.cs" />
+    <Compile Include="Core\IResourceVersion.cs" />
+    <Compile Include="Core\ResourceVersion.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\CalendarLinkViewModel.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkId.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkIdGenerator.cs" />
@@ -501,7 +503,6 @@
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAspect.cs" />
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAttribute.cs" />
     <Compile Include="Filters\HttpRequestBaseExtensions.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Models\Shared\Link.cs" />
     <Compile Include="Areas\Start\Controllers\MenuController.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtension.cs" />
@@ -698,17 +699,18 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel.js" />
-    <Content Include="Areas\PerformanceTool\Content\Scripts\scenario-addremovefulldayabsence-iteration.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\addfulldayabsence\iteration.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\jqueryajax.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\messagebroker.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\result.js" />
-    <Content Include="Areas\PerformanceTool\Content\Scripts\scenario-addremovefulldayabsence.js" />
+    <Content Include="Areas\PerformanceTool\Content\Scripts\addfulldayabsence\scenario.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\progressitem-count.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\signalrhubs.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\vm.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\view.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\main.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\require\signalrrr.js" />
-    <Content Include="Areas\PerformanceTool\Content\Templates\index.html" />
+    <Content Include="Areas\PerformanceTool\Views\Application\index.aspx" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordViewModel.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\helpers.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\layout.js" />
@@ -831,7 +833,6 @@
     <Content Include="Areas\MyTime\Views\TeamSchedule\NoTeamsPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\TeamSchedule\NoPersonPeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Preference\NoPersonPeriodPartial.cshtml" />
-    <Content Include="Areas\MyTime\Views\Schedule\WeekRequestPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Asm\Index.cshtml" />
     <Content Include="Areas\MyTime\Views\Message\MessagePartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\NewShiftTradeRequest.cshtml" />
@@ -1142,6 +1143,7 @@
   <ItemGroup>
     <Folder Include="Areas\Anywhere\Models\" />
     <Folder Include="Areas\Anywhere\Views\" />
+    <Folder Include="Areas\PerformanceTool\Content\Templates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MobileReports\Views\Report\Index.cshtml" />
