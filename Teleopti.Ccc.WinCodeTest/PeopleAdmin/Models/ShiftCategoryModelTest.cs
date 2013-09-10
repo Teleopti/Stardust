@@ -63,11 +63,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _shiftCategoryModel.Name = newName;
             Assert.AreEqual(newName, _shiftCategoryModel.Name);
         }
-        [Test]
-        public void VerifyCanGetCreateTimeText()
-        {
-            Assert.AreEqual(string.Empty, _shiftCategoryModel.CreatedTimeInUserPerspective); ;
-        }
+
         [Test]
         public void VerifyCanGetUpdateTimeText()
         {

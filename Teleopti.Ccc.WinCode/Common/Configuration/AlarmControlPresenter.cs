@@ -59,12 +59,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
                     case ColumnHeader.StaffingEffect:
                         QueryStaffingEffect(e);
                         break;
-                    case ColumnHeader.CreatedBy:
-                        QueryCreatedBy(e);
-                        break;
-                    case ColumnHeader.CreatedOn:
-                        QueryCreatedOn(e);
-                        break;
                     case ColumnHeader.UpdatedOn:
                         QueryUpdatedOn(e);
                         break;
@@ -148,14 +142,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
                     e.Style.Text = Resources.StaffingEffect;
                     break;
 
-                case ColumnHeader.CreatedBy:
-
-                    e.Style.Text = Resources.CreatedBy;
-                    break;
-                case ColumnHeader.CreatedOn:
-
-                    e.Style.Text = Resources.CreatedOn;
-                    break;
                 case ColumnHeader.UpdatedBy:
 
                     e.Style.Text = Resources.UpdatedBy;
@@ -183,10 +169,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             StaffingEffect,
 
             Color,
-
-            CreatedBy,
-
-            CreatedOn,
 
             UpdatedBy,
 

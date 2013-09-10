@@ -39,14 +39,6 @@ namespace Teleopti.Ccc.WinCode.Settings
 		/// </summary>
 		public int Week { get; private set; }
 
-		public string CreatedBy
-		{
-			get
-			{
-				return "will be deleted";
-			}
-		}
-
 		public string UpdatedBy
 		{
 			get
@@ -55,14 +47,6 @@ namespace Teleopti.Ccc.WinCode.Settings
 				if (root != null && root.UpdatedBy != null)
 					return root.UpdatedBy.Name.ToString();
 				return string.Empty;
-			}
-		}
-
-		public string CreatedOn
-		{
-			get
-			{
-				return "will be deleted";
 			}
 		}
 

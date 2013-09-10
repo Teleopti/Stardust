@@ -109,8 +109,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             get { return ContainedEntity.UpdatedOn; }
         }
 
-        public string CreatedTimeInUserPerspective { get { return "will be removed"; } }
-
         public string UpdatedTimeInUserPerspective { get { return _localizer.UpdatedTimeInUserPerspective(ContainedEntity); } }
     }
 }

@@ -75,16 +75,12 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 
 			Assert.AreEqual(string.Empty, _targetView.UpdatedBy);
 			Assert.AreEqual(string.Empty, _targetView.UpdatedOn);
-			Assert.AreEqual(string.Empty, _targetView.CreatedBy);
-			Assert.AreEqual(string.Empty, _targetView.CreatedOn);
 
 			ReflectionHelper.SetUpdatedBy(_studRestriction, _createPerson);
 			ReflectionHelper.SetUpdatedOn(_studRestriction, _createDate.AddHours(1));
 
 			Assert.AreEqual(_createPerson.Name.ToString(), _targetView.UpdatedBy);
 			Assert.AreEqual(_createDate.AddHours(1).ToString(CultureInfo.CurrentCulture), _targetView.UpdatedOn);
-			Assert.AreEqual(_createPerson.Name.ToString(), _targetView.CreatedBy);
-			Assert.AreEqual(_createDate.ToString(CultureInfo.CurrentCulture), _targetView.CreatedOn);
 
 			string dayName = UserTexts.Resources.Day + " " + _dayCount.ToString(CultureInfo.CurrentUICulture);
 			Assert.AreEqual(_targetView.Day, dayName);

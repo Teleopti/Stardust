@@ -101,14 +101,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             _target.QueryCellInfo(null, e);
             Assert.AreEqual(Resources.Time, e.Style.Text);
 
-            e = new GridQueryCellInfoEventArgs(0, (int)AlarmControlPresenter.ColumnHeader.CreatedBy, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual(Resources.CreatedBy, e.Style.Text);
-
-            e = new GridQueryCellInfoEventArgs(0, (int)AlarmControlPresenter.ColumnHeader.CreatedOn, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual(Resources.CreatedOn, e.Style.Text);
-
             e = new GridQueryCellInfoEventArgs(0, (int)AlarmControlPresenter.ColumnHeader.UpdatedBy, style);
             _target.QueryCellInfo(null, e);
             Assert.AreEqual(Resources.UpdatedBy, e.Style.Text);
@@ -157,16 +149,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             e = new GridQueryCellInfoEventArgs(4, (int)AlarmControlPresenter.ColumnHeader.StaffingEffect, style);
             _target.QueryCellInfo(null, e);
             Assert.AreEqual(0.8, style.CellValue);
-
-            style = new GridStyleInfo();
-            e = new GridQueryCellInfoEventArgs(4, (int)AlarmControlPresenter.ColumnHeader.CreatedBy, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual(_createPerson.Name, style.CellValue);
-
-            style = new GridStyleInfo();
-            e = new GridQueryCellInfoEventArgs(4, (int)AlarmControlPresenter.ColumnHeader.CreatedOn, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual(expectedDate.ToString(CultureInfo.CurrentCulture), style.CellValue);
 
             style = new GridStyleInfo();
             e = new GridQueryCellInfoEventArgs(4, (int)AlarmControlPresenter.ColumnHeader.UpdatedBy, style);
