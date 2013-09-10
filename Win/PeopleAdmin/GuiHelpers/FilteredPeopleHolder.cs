@@ -25,57 +25,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 {
-
-	public class FilteredPeopleAccountUpdater : IPersonAccountUpdater
-	{
-		private readonly FilteredPeopleHolder _filteredPeopleHolder;
-
-		public FilteredPeopleAccountUpdater(FilteredPeopleHolder filteredPeopleHolder)
-		{
-			_filteredPeopleHolder = filteredPeopleHolder;
-		}
-
-
-		public void UpdateOnTermination(DateOnly terminalDate, IPerson person)
-		{
-			// check for authorization???
-
-			// load accounts
-			var personAccounts = _filteredPeopleHolder.AllAccounts.Where(p => p.Key == person).ToList();
-			foreach (var personAccount in personAccounts)
-			{
-				foreach (var temp in personAccount.Value)
-				{
-					foreach (var account in temp.AccountCollection())
-					{
-						_filteredPeopleHolder.RefreshService.Refresh(account, _filteredPeopleHolder.UnitOfWork);
-					}
-				}
-			}
-
-			//checkIfAuthorized(foundPerson, dateFrom);
-
-			//var accounts = _personAbsenceAccountRepository.Find(foundPerson);
-			//var personAccount = accounts.Find(foundAbsence, dateFrom);
-			//if (personAccount == null || !personAccount.StartDate.Equals(dateFrom))
-			//{
-			//	personAccount = createPersonAccount(foundAbsence, accounts, dateFrom);
-			//}
-
-			//setPersonAccount(personAccount, command);
-
-			//unitOfWork.PersistAll();
-
-
-		}
-
-		public void UpdateOnActivation(IPerson person)
-		{
-			throw new NotImplementedException();
-		}
-	}
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public class FilteredPeopleHolder : IDisposable
     {
         private ITraceableRefreshService _refreshService;
