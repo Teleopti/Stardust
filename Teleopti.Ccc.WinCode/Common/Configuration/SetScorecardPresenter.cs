@@ -8,7 +8,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.WinCode.Common.Configuration
 {
-    public class SetScorecardPresenter : IDisposable, IMessageBrokerModule
+    public class SetScorecardPresenter : IDisposable, IMessageBrokerIdentifier
     {
         private readonly ISetScorecardView _view;
         private readonly IUnitOfWork _unitOfWork;
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         private readonly IScorecardProvider _scorecardProvider;
         private readonly ISiteProvider _siteProvider;
         private readonly ITeamProvider _teamProvider;
-        private readonly Guid _messageBrokerModule = Guid.NewGuid();
+        private readonly Guid _messageBrokerInstance = Guid.NewGuid();
         private ISite _selectedSite;
 
         public SetScorecardPresenter(ISetScorecardView view, IUnitOfWork unitOfWork, IMessageBrokerListener messageBroker, IScorecardProvider scorecardProvider, ISiteProvider siteProvider, ITeamProvider teamProvider)
@@ -29,9 +29,9 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             _teamProvider = teamProvider;
         }
 
-        public Guid ModuleId
+        public Guid InstanceId
         {
-            get { return _messageBrokerModule; }
+            get { return _messageBrokerInstance; }
         }
 
         public void SaveChanges()
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
         private void OnScorecardEvent(object sender, EventMessageArgs e)
         {
-            if (e.Message.ModuleId == ModuleId) return;
+            if (e.Message.ModuleId == InstanceId) return;
             if (_view.InvokeRequired)
             {
                 _view.BeginInvoke(new EventHandler<EventMessageArgs>(OnScorecardEvent),sender,e);
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
         private void OnSiteEvent(object sender, EventMessageArgs e)
         {
-            if (e.Message.ModuleId==ModuleId) return;
+            if (e.Message.ModuleId==InstanceId) return;
             if (_view.InvokeRequired)
             {
                 _view.BeginInvoke(new EventHandler<EventMessageArgs>(OnSiteEvent), sender, e);
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
         private void OnTeamEvent(object sender, EventMessageArgs e)
         {
-            if (e.Message.ModuleId == ModuleId) return;
+            if (e.Message.ModuleId == InstanceId) return;
             if (_view.InvokeRequired)
             {
                 _view.BeginInvoke(new EventHandler<EventMessageArgs>(OnTeamEvent), sender, e);

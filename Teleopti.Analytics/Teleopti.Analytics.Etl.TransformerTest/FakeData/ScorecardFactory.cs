@@ -16,7 +16,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
             IScorecard scorecard1 = new Scorecard();
             scorecard1.SetId(Guid.NewGuid());
-            RaptorTransformerHelper.SetCreatedOn(scorecard1, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(scorecard1, DateTime.Now);
 			RaptorTransformerHelper.SetUpdatedOn(scorecard1, updatedOnDateTime);
             scorecard1.Name = "scorecard week";
             scorecard1.Period = scorecardPeriodWeek;
@@ -25,7 +25,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
             IScorecard scorecard2 = new Scorecard();
             scorecard2.SetId(Guid.NewGuid());
-            RaptorTransformerHelper.SetCreatedOn(scorecard2, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(scorecard2, DateTime.Now);
 			RaptorTransformerHelper.SetUpdatedOn(scorecard2, updatedOnDateTime);
             scorecard2.Name = "scorecard quarter";
             scorecard2.Period = scorecardPeriodQuarter;

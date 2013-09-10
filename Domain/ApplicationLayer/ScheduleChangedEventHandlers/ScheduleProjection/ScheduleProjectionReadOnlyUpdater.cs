@@ -5,9 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
-	public class ScheduleProjectionReadOnlyUpdater : 
-		IHandleEvent<ScheduledResourcesChangedEvent>, 
-		IHandleEvent<ProjectionChangedEventForScheduleProjection>
+	public class ScheduleProjectionReadOnlyUpdater : IHandleEvent<ScheduledResourcesChangedEvent>
 	{
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 	    private readonly IPublishEventsFromEventHandlers _serviceBus;
@@ -20,16 +18,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(ScheduledResourcesChangedEvent @event)
-		{
-			createReadModel(@event);
-		}
-
-		public void Handle(ProjectionChangedEventForScheduleProjection @event)
-		{
-			createReadModel(@event);
-		}
-
-		private void createReadModel(ProjectionChangedEventBase @event)
 		{
 			if (!@event.IsDefaultScenario) return;
 			var nearestLayerToNow = new ProjectionChangedEventLayer
@@ -54,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				}
 			}
 			
-			if (@event.ScheduleDays.All(x => x.Date != DateTime.UtcNow.Date))
+			if (@event.ScheduleDays.All(x => x.Date != DateTime.Today))
 				return;
 
 			if (!haveChanged(nearestLayerToNow))
@@ -84,12 +72,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 		private static bool isCurrentLayerCloser(DateOnly date, ProjectionChangedEventLayer layer, ProjectionChangedEventLayer nearestLayerToNow)
 		{
-			return date == DateTime.UtcNow.Date &&
-			       ((layer.StartDateTime.ToUniversalTime() < DateTime.UtcNow &&
-			         layer.EndDateTime.ToUniversalTime() > DateTime.UtcNow)
+			return date == DateOnly.Today &&
+			       ((layer.StartDateTime < DateTime.UtcNow &&
+			         layer.EndDateTime > DateTime.UtcNow)
 			        ||
-			        (layer.StartDateTime.ToUniversalTime() > DateTime.UtcNow &&
-			         layer.StartDateTime.ToUniversalTime() < nearestLayerToNow.StartDateTime.ToUniversalTime()));
+			        (layer.StartDateTime > DateTime.UtcNow &&
+			         layer.StartDateTime < nearestLayerToNow.StartDateTime));
 		}
 	}
 }

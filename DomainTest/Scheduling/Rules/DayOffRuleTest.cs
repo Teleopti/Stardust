@@ -101,27 +101,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         }
 
         [Test]
-        public void VerifyAfterDayOffWithAssignmentBefore()
-        {
-            createDayOffRule();
-            DayOffTemplate dayOff = new DayOffTemplate(new Description("test"));
-            dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(4));
-            dayOff.Anchor = TimeSpan.FromHours(14); //för att få 12:00 UTC
-
-	        var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person,
-	                                                                        new DateTimePeriod(new DateTime(2007, 8, 1, 22, 0, 0, DateTimeKind.Utc),
-		                                                                        new DateTime(2007, 8, 1, 23, 0, 0,DateTimeKind.Utc)));
-
-					ass.SetDayOff(dayOff);
-            ((Schedule)_scheduleRange).Add(ass);
-
-            var expected = new DateTimePeriod(new DateTime(2007, 8, 2, 23, 0, 0, DateTimeKind.Utc), new DateTime(2007, 8, 6, 22, 0, 0, DateTimeKind.Utc));
-
-            var result = _target.LongestDateTimePeriodForAssignment(_scheduleRange, new DateOnly(2007, 8, 3));
-            Assert.AreEqual(expected, result);
-        }
-        
-        [Test]
         public void VerifyAfterDayOffWithAssignmentBeforeOnTheSameDayAsDayOff()
         {
             createDayOffRule();

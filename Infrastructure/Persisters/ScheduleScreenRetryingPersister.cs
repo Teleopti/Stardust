@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		private readonly IPersonAbsenceAccountRefresher _personAbsenceAccountRefresher;
 		private readonly IPersonAbsenceAccountValidator _personAbsenceAccountValidator;
 		private readonly IScheduleDictionaryConflictCollector _scheduleDictionaryConflictCollector;
-		private readonly IMessageBrokerModule _messageBrokerModule;
+		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
 		private readonly IScheduleDictionaryBatchPersister _scheduleDictionaryBatchPersister;
 		private readonly IOwnMessageQueue _messageQueueUpdater;
 
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		                                       IPersonAbsenceAccountRefresher personAbsenceAccountRefresher,
 		                                       IPersonAbsenceAccountValidator personAbsenceAccountValidator,
 		                                       IScheduleDictionaryConflictCollector scheduleDictionaryConflictCollector,
-		                                       IMessageBrokerModule messageBrokerModule,
+		                                       IMessageBrokerIdentifier messageBrokerIdentifier,
 												IScheduleDictionaryBatchPersister scheduleDictionaryBatchPersister,
 												IOwnMessageQueue messageQueueUpdater)
 		{
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			_personAbsenceAccountRefresher = personAbsenceAccountRefresher;
 			_personAbsenceAccountValidator = personAbsenceAccountValidator;
 			_scheduleDictionaryConflictCollector = scheduleDictionaryConflictCollector;
-			_messageBrokerModule = messageBrokerModule;
+			_messageBrokerIdentifier = messageBrokerIdentifier;
         	_scheduleDictionaryBatchPersister = scheduleDictionaryBatchPersister;
         	_messageQueueUpdater = messageQueueUpdater;
 		}
@@ -67,23 +66,36 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 				{
 					transactions(unitOfWorkFactory, conflictedPersonAbsenceAccounts, personAbsenceAccounts, scheduleDictionary, personRequests);
 					retry = false;
-				} 
+				}
 				catch (OptimisticLockExceptionOnPersonAccount)
 				{
 					conflictedPersonAbsenceAccounts = GetPersonAbsenceAccountConflicts(unitOfWorkFactory, personAbsenceAccounts);
 					retry = true;
-				} 
+				}
 				catch (OptimisticLockExceptionOnScheduleDictionary)
 				{
-					var conflicts = GetScheduleDictionaryConflicts(unitOfWorkFactory, scheduleDictionary);
-					return new ScheduleScreenPersisterResult {Saved = false, ScheduleDictionaryConflicts = conflicts};
-				} 
+					return scheduleDictionaryConflictResult(scheduleDictionary, unitOfWorkFactory);
+				}
+				catch (ForeignKeyExceptionOnScheduleDictionary)
+				{
+					return scheduleDictionaryConflictResult(scheduleDictionary, unitOfWorkFactory);
+				}
+				catch (PersonAssignmentConstraintViolationOnScheduleDictionary)
+				{
+					return scheduleDictionaryConflictResult(scheduleDictionary, unitOfWorkFactory);
+				}
 				catch (OptimisticLockException)
 				{
-					return new ScheduleScreenPersisterResult {Saved = false};
+					return new ScheduleScreenPersisterResult { Saved = false };
 				}
 			} while (retry);
 			return new ScheduleScreenPersisterResult {Saved = true};
+		}
+
+		private IScheduleScreenPersisterResult scheduleDictionaryConflictResult(IScheduleDictionary scheduleDictionary, IUnitOfWorkFactory unitOfWorkFactory)
+		{
+			var conflicts = GetScheduleDictionaryConflicts(unitOfWorkFactory, scheduleDictionary);
+			return new ScheduleScreenPersisterResult {Saved = false, ScheduleDictionaryConflicts = conflicts};
 		}
 
 		private void saveWriteProtectionInSeparateTransaction(IUnitOfWorkFactory unitOfWorkFactory, ICollection<IPersonWriteProtectionInfo> personWriteProtectionInfos)
@@ -91,7 +103,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			using (var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				_writeProtectionRepository.AddRange(personWriteProtectionInfos);
-				unitOfWork.PersistAll(_messageBrokerModule);
+				unitOfWork.PersistAll(_messageBrokerIdentifier);
 				personWriteProtectionInfos.Clear();
 			}
 		}
@@ -128,7 +140,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			using (var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				_personRequestPersister.MarkForPersist(_personRequestRepository, personRequests);
-				unitOfWork.PersistAll(_messageBrokerModule);
+				unitOfWork.PersistAll(_messageBrokerIdentifier);
 			}
 		}
 
@@ -143,7 +155,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 					_messageQueueUpdater.ReassociateDataWithAllPeople();
 					RefreshConflictedPersonAbsenceAccounts(unitOfWork, refreshPersonAbsenceAccounts);
 					_personAbsenceAccountRepository.AddRange(personAbsenceAccounts);
-					unitOfWork.PersistAll(_messageBrokerModule);
+					unitOfWork.PersistAll(_messageBrokerIdentifier);
 					personAbsenceAccounts.Clear();
 				}
 			} 
@@ -173,35 +185,46 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			try
 			{
 				_scheduleDictionaryBatchPersister.Persist(scheduleDictionary);
-			} 
+			}
 			catch (OptimisticLockException exception)
 			{
 				throw new OptimisticLockExceptionOnScheduleDictionary(exception);
 			}
-			catch(ForeignKeyException exception)
+			catch (ForeignKeyException exception)
 			{
-				//special case. if fk-exception -> treat it like opt lock
+				//special case.
 				//because the reason is probably a deleted ref row i db
-				var fakeOptLock = new OptimisticLockException(exception.Message, exception);
-				throw new OptimisticLockExceptionOnScheduleDictionary(fakeOptLock);
+				throw new ForeignKeyExceptionOnScheduleDictionary(exception);
+			}
+			catch (ConstraintViolationException exception)
+			{
+				if (exception.InnerException.Message.Contains("'UQ_PersonAssignment_Date_Scenario_Person'"))
+				{
+					// if 2 persons try to save a PA for the same person and date, handle it like a conflict
+					throw new PersonAssignmentConstraintViolationOnScheduleDictionary(exception);
+				}
+				throw;
 			}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable"),
-		 SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors"),
-		 SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
 		private class OptimisticLockExceptionOnPersonAccount : Exception
 		{
 			public OptimisticLockExceptionOnPersonAccount(OptimisticLockException innerException) : base(null, innerException) {}
 		}
 
-		[SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable"),
-		 SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors"),
-		 SuppressMessage("Microsoft.Design", "CA1064:ExceptionsShouldBePublic")]
 		private class OptimisticLockExceptionOnScheduleDictionary : Exception
 		{
-			public OptimisticLockExceptionOnScheduleDictionary(OptimisticLockException innerException)
-				: base(null, innerException) {}
+			public OptimisticLockExceptionOnScheduleDictionary(OptimisticLockException innerException) : base(null, innerException) {}
+		}
+
+		private class ForeignKeyExceptionOnScheduleDictionary : Exception
+		{
+			public ForeignKeyExceptionOnScheduleDictionary(ForeignKeyException innerException) : base(null, innerException) { }
+		}
+
+		private class PersonAssignmentConstraintViolationOnScheduleDictionary : Exception
+		{
+			public PersonAssignmentConstraintViolationOnScheduleDictionary(ConstraintViolationException innerException) : base(null, innerException) { }
 		}
 	}
 }

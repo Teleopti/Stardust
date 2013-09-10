@@ -21,10 +21,14 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
         private readonly IRenameGroupPageCommand _renameGroupPageCommand;
         private readonly ISendInstantMessageCommand _sendInstantMessageCommand;
     	private readonly ISendInstantMessageEnableCommand _sendInstantMessageEnableCommand;
-    	private IPeopleNavigator _navigator;
+        private readonly IAddPersonEnableCommand _addPersonEnableCommand;
+        private IPeopleNavigator _navigator;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public PeopleNavigatorPresenter(IEventAggregator eventAggregator, IOpenModuleCommand openModuleCommand, IAddGroupPageCommand addGroupPageCommand, IDeleteGroupPageCommand deleteGroupPageCommand, IModifyGroupPageCommand modifyGroupPageCommand, IRenameGroupPageCommand renameGroupPageCommand, ISendInstantMessageCommand sendInstantMessageCommand, ISendInstantMessageEnableCommand sendInstantMessageEnableCommand)
+        public PeopleNavigatorPresenter(IEventAggregator eventAggregator, IOpenModuleCommand openModuleCommand, IAddGroupPageCommand addGroupPageCommand, 
+            IDeleteGroupPageCommand deleteGroupPageCommand, IModifyGroupPageCommand modifyGroupPageCommand, 
+            IRenameGroupPageCommand renameGroupPageCommand, ISendInstantMessageCommand sendInstantMessageCommand, 
+            ISendInstantMessageEnableCommand sendInstantMessageEnableCommand,IAddPersonEnableCommand addPersonEnableCommand)
         {
             _eventAggregator = eventAggregator;
             _openModuleCommand = openModuleCommand;
@@ -34,7 +38,8 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
             _renameGroupPageCommand = renameGroupPageCommand;
             _sendInstantMessageCommand = sendInstantMessageCommand;
         	_sendInstantMessageEnableCommand = sendInstantMessageEnableCommand;
-        	_eventAggregator.GetEvent<SelectedNodesChanged>().Subscribe(selectedNodesChanged);
+            _addPersonEnableCommand = addPersonEnableCommand;
+            _eventAggregator.GetEvent<SelectedNodesChanged>().Subscribe(selectedNodesChanged);
             _eventAggregator.GetEvent<OpenModuleClicked>().Subscribe(openModuleClicked);
             _eventAggregator.GetEvent<FindPeopleClicked>().Subscribe(findPeopleClicked);
             
@@ -70,6 +75,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
             _navigator.RenameGroupPageEnabled = _renameGroupPageCommand.CanExecute();
             _navigator.SendMessageVisible = _sendInstantMessageCommand.CanExecute();
             _navigator.SendMessageEnable = _sendInstantMessageEnableCommand.CanExecute();
+            _navigator.AddNewEnabled = _addPersonEnableCommand.CanExecute();
         }
     }
 }

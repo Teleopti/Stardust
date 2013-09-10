@@ -32,6 +32,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 		}
 
+		public virtual void Clear()
+		{
+			ClearMainLayers();
+			ClearOvertimeLayers();
+			ClearPersonalLayers();
+			SetDayOff(null);
+		}
+
 		public virtual DateOnly Date { get; protected set; }
 
 		public virtual DateTimePeriod Period
@@ -121,24 +129,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			get { return _shiftLayers; }
 		}
-
-		public virtual void SetMainShiftLayers(IEnumerable<IMainShiftLayer> activityLayers, IShiftCategory shiftCategory)
-		{
-			//todo: make sure not reusing layer from another assignment...
-			//* either do a check here or 
-			//* don't expose and accept IMainShiftACtivityLayerNew but another type
-
-			InParameter.ListCannotBeEmpty("activityLayers", activityLayers);
-			//clear or new list?
-			ClearMainLayers();
-			activityLayers.ForEach(layer =>
-			{
-				layer.SetParent(this);
-				_shiftLayers.Add(layer);
-			});
-			ShiftCategory = shiftCategory;
-		}
-
 
 		public virtual IPerson Person
 		{
@@ -297,6 +287,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_shiftLayers.Add(layer);
 		}
 
+		public virtual void AddMainLayer(IActivity activity, DateTimePeriod period)
+		{
+			var layer = new MainShiftLayer(activity, period);
+			layer.SetParent(this);
+			_shiftLayers.Add(layer);
+			SetDayOff(null);
+		}
+
+		public virtual void SetShiftCategory(IShiftCategory shiftCategory)
+		{
+			_shiftCategory = shiftCategory;
+		}
+
+		public virtual void SetMainLayersAndShiftCategoryFrom(IPersonAssignment assignment)
+		{
+			ClearMainLayers();
+			SetShiftCategory(assignment.ShiftCategory);
+			foreach (var mainLayer in assignment.MainLayers())
+			{
+				AddMainLayer(mainLayer.Payload, mainLayer.Period);
+			}
+		}
+
 		public virtual IDayOff DayOff()
 		{
 			if (_dayOffTemplate == null)
@@ -308,6 +321,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void SetDayOff(IDayOffTemplate template)
 		{
+			if (template != null)
+			{
+				ClearMainLayers();				
+			}
 			_dayOffTemplate = template;
 		}
 
@@ -322,5 +339,58 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				return template == null;
 			return _dayOffTemplate.Equals(template);
 		}
+
+		public virtual void FillWithDataFrom(IPersonAssignment personAssignmentSource)
+		{
+			Clear();
+			personAssignmentSource.SetThisAssignmentsDayOffOn(this);
+			SetShiftCategory(personAssignmentSource.ShiftCategory);
+			foreach (var mainLayer in personAssignmentSource.MainLayers())
+			{
+				AddMainLayer(mainLayer.Payload, mainLayer.Period);
+			}
+			foreach (var personalLayer in personAssignmentSource.PersonalLayers())
+			{
+				AddPersonalLayer(personalLayer.Payload, personalLayer.Period);
+			}
+			foreach (var overtimeLayer in personAssignmentSource.OvertimeLayers())
+			{
+				AddOvertimeLayer(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
+			}
+		}
+
+		#region Equals
+
+		public virtual bool Equals(IPersonAssignment other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			return
+				Equals(_person, other.Person) && 
+				Equals(_scenario, other.Scenario) && 
+				Date.Equals(other.Date);
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (ReferenceEquals(null, obj)) return false;
+			if (ReferenceEquals(this, obj)) return true;
+			if (obj.GetType() != this.GetType()) return false;
+			return Equals((IPersonAssignment) obj);
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				var hashCode = Date.GetHashCode();
+				hashCode = (hashCode * 397) ^ (_person != null ? _person.GetHashCode() : 0);
+				hashCode = (hashCode * 397) ^ (_scenario != null ? _scenario.GetHashCode() : 0);
+				return hashCode;
+			}
+		}
+
+		#endregion
+
 	}
 }

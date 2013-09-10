@@ -23,8 +23,9 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 		private IRenameGroupPageCommand _renameGroupPageCommand;
 		private ISendInstantMessageCommand _sendInstantMessageCommand;
 		private ISendInstantMessageEnableCommand _sendInstantMessageEnableCommand;
+	    private IAddPersonEnableCommand _addPersonEnableCommand;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
@@ -35,10 +36,11 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 			_renameGroupPageCommand = _mocks.StrictMock<IRenameGroupPageCommand>();
 			_sendInstantMessageCommand = _mocks.StrictMock<ISendInstantMessageCommand>();
 			_sendInstantMessageEnableCommand = _mocks.StrictMock<ISendInstantMessageEnableCommand>();
+		    _addPersonEnableCommand = _mocks.StrictMock<IAddPersonEnableCommand>();
 			_eventAggregator = new EventAggregator();
 			_view = _mocks.StrictMock<IPeopleNavigator>();
 			_target = new PeopleNavigatorPresenter(_eventAggregator, _openModuleCommand, _addGroupPageCommand, _deleteGroupPageCommand,
-				_modifyGroupPageCommand, _renameGroupPageCommand, _sendInstantMessageCommand, _sendInstantMessageEnableCommand);
+                _modifyGroupPageCommand, _renameGroupPageCommand, _sendInstantMessageCommand, _sendInstantMessageEnableCommand, _addPersonEnableCommand);
 			_target.Init(_view);
 		}
 
@@ -52,6 +54,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 			Expect.Call(_renameGroupPageCommand.CanExecute()).Return(false);
 			Expect.Call(_sendInstantMessageCommand.CanExecute()).Return(false);
 			Expect.Call(_sendInstantMessageEnableCommand.CanExecute()).Return(false);
+		    Expect.Call(_addPersonEnableCommand.CanExecute()).Return(false);
 			Expect.Call(() => _view.OpenEnabled = false);
 			Expect.Call(() => _view.AddGroupPageEnabled = false);
 			Expect.Call(() => _view.DeleteGroupPageEnabled = false);
@@ -59,7 +62,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 			Expect.Call(() => _view.RenameGroupPageEnabled = false);
 			Expect.Call(() => _view.SendMessageVisible = false);
 			Expect.Call(() => _view.SendMessageEnable = false);
-			
+            Expect.Call(() => _view.AddNewEnabled = false);
 			_mocks.ReplayAll();
 			_eventAggregator.GetEvent<SelectedNodesChanged>().Publish("");
 			_mocks.VerifyAll();

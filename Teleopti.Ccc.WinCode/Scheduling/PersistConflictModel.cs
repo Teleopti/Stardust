@@ -8,17 +8,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     {
         public PersistConflictModel(IScheduleDictionary scheduleDictionary,
                                     IEnumerable<IPersistConflict> persistConflicts,
-                                    ICollection<IPersistableScheduleData> modifiedData)
+                                    ICollection<IPersistableScheduleData> modifiedDataResult)
         {
             ScheduleDictionary = scheduleDictionary;
             PersistConflicts = persistConflicts;
-            ModifiedData = modifiedData;
+            ModifiedDataResult = modifiedDataResult;
             Data = new List<PersistConflictData>();
         }
 
         public IScheduleDictionary ScheduleDictionary { get; private set; }
         public IEnumerable<IPersistConflict> PersistConflicts { get; private set; }
-        public ICollection<IPersistableScheduleData> ModifiedData { get; private set; }
+        public ICollection<IPersistableScheduleData> ModifiedDataResult { get; private set; }
         public IList<PersistConflictData> Data { get; private set; }
     }
 

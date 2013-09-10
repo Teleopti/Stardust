@@ -11,14 +11,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class ScheduleMessageSender : IMessageSender
 	{
 		private readonly IServiceBusSender _serviceBusSender;
-		private static readonly Type[] ExcludedTypes = new[] { typeof(INote), typeof(IPublicNote) };
+		private static readonly Type[] IncludedTypes = new[] { typeof(IPersonAbsence), typeof(IPersonAssignment) };
 
 		public ScheduleMessageSender(IServiceBusSender serviceBusSender)
 		{
 			_serviceBusSender = serviceBusSender;
 		}
 
-		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void Execute(IMessageBrokerIdentifier messageBrokerIdentifier, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			if (!_serviceBusSender.EnsureBus()) return;
 
@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 					var message = new ScheduleChangedEvent
 					              	{
+										InitiatorId = messageBrokerIdentifier.InstanceId,
 					              		ScenarioId = scenario.Id.GetValueOrDefault(),
 										StartDateTime = startDateTime.AddHours(-24), //Bug fix for #23647
 					              		EndDateTime = endDateTime,
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private static IEnumerable<IPersistableScheduleData> extractScheduleChangesOnly(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var scheduleData = modifiedRoots.Select(r => r.Root).OfType<IPersistableScheduleData>();
-			scheduleData = scheduleData.Where(s => !ExcludedTypes.Any(t => s.GetType().GetInterfaces().Contains(t)));
+			scheduleData = scheduleData.Where(s => IncludedTypes.Any(t => s.GetType().GetInterfaces().Contains(t)));
 			return scheduleData;
 		}
 	}

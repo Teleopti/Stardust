@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (_mocks.Playback())
 			{
-				_target.Execute(roots);
+				_target.Execute(null, roots);
 			}
 		}
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (_mocks.Playback())
 			{
-				_target.Execute(roots);
+				_target.Execute(null, roots);
 			}
 		}
 	}

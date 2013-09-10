@@ -672,6 +672,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             _updatedOnServerUtc = new DateTime();
         }
 
+        public virtual IPerson CreatedBy { get; protected set; }
+	public virtual DateTime? CreatedOn { get; protected set; }
+
+
+
         public virtual bool SendChangeOverMessageBroker()
         {
             if (_persistedState == null)

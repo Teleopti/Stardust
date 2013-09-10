@@ -8,28 +8,12 @@ namespace Teleopti.Ccc.Domain.Common
     //rk - cut/paste from aggregateroot.
     public interface ILocalizedUpdateInfo
     {
-       string CreatedTimeInUserPerspective(ICreateInfo entity);
        string UpdatedTimeInUserPerspective(IChangeInfo entity);
-       string CreatedText(ICreateInfo entity, string localizedCreatedByText);
        string UpdatedByText(IChangeInfo entity, string localizedUpdatedByText);
     }
 
     public class LocalizedUpdateInfo : ILocalizedUpdateInfo
     {
-        public string CreatedTimeInUserPerspective(ICreateInfo entity)
-        {
-            string createdText = string.Empty;
-
-            if (!entity.CreatedOn.HasValue)
-                return createdText;
-
-            DateTime localCreateDateTime = TimeZoneHelper.ConvertFromUtc(entity.CreatedOn.Value,
-                TeleoptiPrincipal.Current.Regional.TimeZone);
-
-            createdText = string.Format(CultureInfo.CurrentCulture, localCreateDateTime.ToString());
-            return createdText;
-        }
-
         public string UpdatedTimeInUserPerspective(IChangeInfo entity)
         {
             string updated = string.Empty;
@@ -45,21 +29,6 @@ namespace Teleopti.Ccc.Domain.Common
             return updated;
         }
 
-        public string CreatedText(ICreateInfo entity, string localizedCreatedByText)
-        {
-            string createdText = string.Empty;
-
-            if (!entity.CreatedOn.HasValue)
-                return createdText;
-
-            DateTime localCreateDateTime = TimeZoneHelper.ConvertFromUtc(entity.CreatedOn.Value,
-                TeleoptiPrincipal.Current.Regional.TimeZone);
-
-            createdText = string.Concat(localizedCreatedByText, " ", entity.CreatedBy.Name, " ",
-                                        string.Format(CultureInfo.CurrentCulture, localCreateDateTime.ToString()));
-            return createdText;
-        }
-
         public string UpdatedByText(IChangeInfo entity, string localizedUpdatedByText)
         {
             string updatedBy = string.Empty;
@@ -71,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Common
                     tempDate,
                     TeleoptiPrincipal.Current.Regional.TimeZone);
 
-                updatedBy = string.Concat(" | ", localizedUpdatedByText, " ", entity.UpdatedBy.Name, " ",
+                updatedBy = string.Concat(localizedUpdatedByText, " ", entity.UpdatedBy.Name, " ",
                                           string.Format(CultureInfo.CurrentCulture, localChangeDateTime.ToString()));
             }
             return updatedBy;

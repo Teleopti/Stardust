@@ -234,3 +234,12 @@ ko.bindingHandlers.clickable = {
 	}
 };
 
+ko.bindingHandlers.nonEncodedTitle = {
+	update: function (element, valueAccessor) {
+		var value = ko.utils.unwrapObservable(valueAccessor());
+		var d = document.createElement('div');
+		d.innerHTML = value;
+		element.title = d.innerText;
+	}
+};
+

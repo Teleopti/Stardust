@@ -124,7 +124,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             matrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
             if (!tryScheduleDay(dateOnly, schedulingOptions, lenghtHint))
-
             {
                 _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
                 return false;
@@ -160,14 +159,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private void rollbackAndResourceCalculate(DateOnly dateOnly)
         {
-            IScheduleDay scheduleDayBefore;
-            IScheduleDay scheduleDayAfter;
-            scheduleDayBefore =
-                (IScheduleDay) _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
+            IScheduleDay scheduleDayBefore = (IScheduleDay) _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
             _rollbackService.Rollback();
-            scheduleDayAfter =
-                (IScheduleDay) _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
+            IScheduleDay scheduleDayAfter = (IScheduleDay) _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
             IList<DateOnly> days = _decider.DecideDates(scheduleDayAfter, scheduleDayBefore);
+
             foreach (var date in days)
             {
                 _resourceCalculateDelayer.CalculateIfNeeded(date, null);

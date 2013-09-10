@@ -120,7 +120,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		            {
 			            PersonRequestId = result.Id.GetValueOrDefault(Guid.Empty)
 		            };
-				message.SetMessageDetail();
                 _serviceBusSender.Send(message);
             }
 
@@ -234,7 +233,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		                {
 			                PersonRequestId = personRequestDto.Id.GetValueOrDefault(Guid.Empty), AcceptingPersonId = person.Id.GetValueOrDefault(Guid.Empty), Message = personRequestDto.Message
 		                };
-					message.SetMessageDetail();
 	                _serviceBusSender.Send(message);
                 }
                 else

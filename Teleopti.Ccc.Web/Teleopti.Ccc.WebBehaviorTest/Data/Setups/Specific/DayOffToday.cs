@@ -1,6 +1,7 @@
 using System.Globalization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 {
 	public class DayOffToday : IUserDataSetup
 	{
-		public DateOnly Date = DateOnly.Today;
+		public DateOnly Date = DateOnlyForBehaviorTests.TestToday;
 		public readonly IDayOffTemplate DayOff = TestData.DayOffTemplate;
 		public readonly IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 

@@ -205,6 +205,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(new List<DateOnly>()).Repeat.Twice();
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
+                Expect.Call(_rollbackService.ModificationCollection).Return(new List<IScheduleDay>()).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay1, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments()
                     .Return(false);
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments()

@@ -63,16 +63,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
 	        using (PerformanceOutput.ForOperation("Adding schedule part"))
 	        {
-				IProjectionService svc = schedulePart.ProjectionService();
-				var projection = svc.CreateProjection();
-				if (projection.HasLayers)
-				{
-					var resourceLayers = projection.ToResourceLayers(_minResolution);
-					foreach (var resourceLayer in resourceLayers)
-					{
-						retList.AddResources(schedulePart.Person, schedulePart.DateOnlyAsPeriod.DateOnly, resourceLayer);
-					}
-				}
+                retList.AddScheduleDayToContainer(schedulePart,_minResolution);
 			}
         }
     }

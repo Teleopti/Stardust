@@ -39,12 +39,16 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		public PersonScheduleViewModel CreateViewModel(Guid personId, DateTime date)
 		{
+			
 			var person = _personRepository.Get(personId);
+			var hasViewConfidentialPermission = _permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential,
+																				  DateOnly.Today, person);
 			var data = new PersonScheduleData
 			{
 				Person = person,
 				Date = date,
-				Absences = _absenceRepository.LoadAllSortByName()
+				Absences = _absenceRepository.LoadAllSortByName(),
+				HasViewConfidentialPermission = hasViewConfidentialPermission
 			};
 
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
@@ -60,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		}
 
 		private IEnumerable<IPersonAbsence> calculatePersonAbsences(DateTime date, IPerson person,
-													PersonScheduleDayReadModel personScheduleDayReadModel)
+													IPersonScheduleDayReadModel personScheduleDayReadModel)
 		{
 			var previousDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date).AddDays(-1), person.Id.Value);
 			var start = TimeZoneInfo.ConvertTimeToUtc(date, person.PermissionInformation.DefaultTimeZone());

@@ -8,6 +8,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.UserTexts;
@@ -1698,7 +1699,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				}
 			}
 
-			Grid.Model.SelectedRanges.AddRange(ranges.ToArray());
+            ranges.ForEach(Grid.Selections.Add);
 		}
 
 		internal override void DisposeChildGrids()

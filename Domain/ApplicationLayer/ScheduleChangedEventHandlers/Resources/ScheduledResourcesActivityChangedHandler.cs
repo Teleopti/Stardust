@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 {
 	public class ScheduledResourcesActivityChangedHandler : IHandleEvent<ActivityChangedEvent>
 	{
-		private readonly IScheduledResourcesReadModelStorage _scheduledResourcesReadModelStorage;
+		private readonly IScheduledResourcesReadModelPersister _scheduledResourcesReadModelStorage;
 
-		public ScheduledResourcesActivityChangedHandler(IScheduledResourcesReadModelStorage scheduledResourcesReadModelStorage)
+		public ScheduledResourcesActivityChangedHandler(IScheduledResourcesReadModelPersister scheduledResourcesReadModelStorage)
 		{
 			_scheduledResourcesReadModelStorage = scheduledResourcesReadModelStorage;
 		}

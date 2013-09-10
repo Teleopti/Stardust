@@ -100,7 +100,8 @@
       <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\packages\NHibernate.3.3.3.4000\lib\Net35\NHibernate.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -147,6 +148,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillAddedHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesActivityChangedHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesChangedHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedNotifierTest.cs" />
     <Compile Include="ApplicationLayer\SyncEventsPublisherTest.cs" />
     <Compile Include="ApplicationLayer\TestWriteSideRepository.cs" />
     <Compile Include="Auditing\AuditSettingTest.cs" />
@@ -363,7 +365,12 @@
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\IntervalDataMinimumMedianCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerFromStorageTest.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimeLengthDeciderTest.cs" />
+    <Compile Include="Scheduling\Overtime\SkillIntervalDataDividerTest.cs" />
+    <Compile Include="Scheduling\Overtime\SkillIntervalDataTest.cs" />
+    <Compile Include="Scheduling\Overtime\SkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecificationTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
@@ -418,7 +425,6 @@
     <Compile Include="Scheduling\Assignment\ProjectionIntersectingPeriodMergerTest.cs" />
     <Compile Include="Scheduling\Assignment\ProjectionMidnightSplitterMergerTest.cs" />
     <Compile Include="Scheduling\Assignment\RangeProjectionServiceTest.cs" />
-    <Compile Include="Scheduling\Assignment\RestoreSchedulePartServiceTest.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePartStringVisualizerTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessManagerTest.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodSplitCheckerTest.cs" />
@@ -471,12 +477,8 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestTest.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeSwapDetailTest.cs" />
     <Compile Include="AgentInfo\Requests\TextRequestTest.cs" />
-    <Compile Include="AgentInfo\TeamBelongsToSiteSpecificationTest.cs" />
     <Compile Include="AgentInfo\ExternalLogOnTest.cs" />
-    <Compile Include="AgentInfo\PersonBelongsToAnyBusinessUnitSpecificationTest.cs" />
-    <Compile Include="AgentInfo\PersonBelongsToBusinessUnitSpecificationTest.cs" />
     <Compile Include="AgentInfo\PersonBelongsToRoleSpecificationTest.cs" />
-    <Compile Include="AgentInfo\PersonBelongsToSiteSpecificationTest.cs" />
     <Compile Include="AgentInfo\PersonBelongsToTeamSpecificationTest.cs" />
     <Compile Include="AgentInfo\PersonContractTest.cs" />
     <Compile Include="AgentInfo\Requests\PersonRequestTest.cs" />
@@ -736,6 +738,8 @@
     <Compile Include="Scheduling\ShiftCreator\WorkShiftVisualLayerInfoTest.cs" />
     <Compile Include="Scheduling\ShiftTradeChecksumCalculatorTest.cs" />
     <Compile Include="Scheduling\Restriction\ExtendedPreferenceTemplateTest.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimePreferencesTest.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimePrefernecesGeneralPersonalSettingTest.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockFinderTypeCreatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoTest.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockPeriodFinderBetweenDayOffTest.cs" />
@@ -760,7 +764,7 @@
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataDividerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataSkillFactorApplierTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\SkillResolutionProviderTest.cs" />
+    <Compile Include="Scheduling\SkillResolutionProviderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SuggestedShiftRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfoFactoryTest.cs" />
@@ -791,6 +795,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetToShiftsGeneratorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ShiftCategoryRestrictionShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilterTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetSkillActivityCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TimeLimitationShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TimeLimitsRestrictionShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\WorkTimeLimitationShiftFilterTest.cs" />

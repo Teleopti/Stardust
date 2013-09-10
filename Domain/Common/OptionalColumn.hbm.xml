@@ -9,19 +9,12 @@
       <generator class="guid.comb" />
     </id>
     <version name="Version" unsaved-value ="null"/>
-    <many-to-one name="CreatedBy" class="Teleopti.Ccc.Domain.Common.Person" not-null="true" update="false" foreign-key="FK_OptionalColumn_Person_CreatedBy"/>
     <many-to-one name="UpdatedBy" class="Teleopti.Ccc.Domain.Common.Person" not-null="true" foreign-key="FK_OptionalColumn_Person_UpdatedBy"/>
-    <property name="CreatedOn" type="UtcDateTime" not-null="true" update="false" />
     <property name="UpdatedOn" type="UtcDateTime" not-null="true"/>
 
     <property name="Name" type="string" not-null="true" />
     <property name="TableName" type="string" not-null="true" />
     
-    <!--<bag name="ValueCollection" cascade="all-delete-orphan" inverse="true">
-      <key column="Parent" />
-      <one-to-many class="OptionalColumnValue"/>
-    </bag>-->
-
     <many-to-one name="BusinessUnit"
      class="Teleopti.Ccc.Domain.Common.BusinessUnit"
      access="nosetter.camelcase-underscore"

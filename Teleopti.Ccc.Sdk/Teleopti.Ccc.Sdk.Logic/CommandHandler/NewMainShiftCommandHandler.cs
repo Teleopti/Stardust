@@ -65,7 +65,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					currentAss = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, scheduleDay.DateOnlyAsPeriod.DateOnly);
 					scheduleDay.Add(currentAss);
 				}
-				currentAss.SetMainShiftLayers(mainShiftLayers, shiftCategory);
+							currentAss.SetShiftCategory(shiftCategory);
+	            foreach (var shiftLayer in mainShiftLayers)
+	            {
+		            currentAss.AddMainLayer(shiftLayer.Payload, shiftLayer.Period);
+	            }
                 _saveSchedulePartService.Save(scheduleDay, rules);
                 using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {

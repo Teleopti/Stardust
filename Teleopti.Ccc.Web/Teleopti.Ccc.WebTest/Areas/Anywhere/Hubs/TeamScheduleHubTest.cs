@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var teamScheduleProvider = MockRepository.GenerateMock<ITeamScheduleProvider>();
 			var teamId = Guid.NewGuid();
 			var dateTime = new DateTime(2013, 3, 4, 0, 0, 0);
-			var data = new[] {new PersonScheduleDayReadModel {Shift = "{FirstName: 'Pierre'}"}};
+			var data = new[] { new Shift { FirstName = "Pierre" } };
 			teamScheduleProvider.Stub(x => x.TeamSchedule(teamId, dateTime)).Return(data);
 			var target = new TeamScheduleHub(teamScheduleProvider);
 			var hubBuilder = new TestHubBuilder();

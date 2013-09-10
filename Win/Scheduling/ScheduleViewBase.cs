@@ -804,11 +804,16 @@ namespace Teleopti.Ccc.Win.Scheduling
                         {
                             IList<IScheduleDay> pasteList =
                                    GridHelper.HandlePasteScheduleGridFrozenColumn(_grid, Presenter.ClipHandlerSchedule, pasteAction);
-   
-                            if(!pasteList.IsEmpty())
-                                Presenter.TryModify(pasteList);
-                            
-                            undoRedo.CommitBatch();
+
+	                        if (!pasteList.IsEmpty())
+	                        {
+		                        var absenceMerger = new AbsenceMerger(pasteList);
+								absenceMerger.MergeWithDayBefore();
+								absenceMerger.MergeOnDayStart();
+		                        Presenter.TryModify(pasteList);
+	                        }
+
+	                        undoRedo.CommitBatch();
 
                             if (!Presenter.ClipHandlerSchedule.IsInCutMode)
                                 OnPasteCompleted();
@@ -830,8 +835,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        
-        private void splitLongAbsencePeriod(IScheduleDay splitDay)
+	    private void splitLongAbsencePeriod(IScheduleDay splitDay)
         {
             IList<IScheduleDay> modifiedParts = new List<IScheduleDay>();
             IList<IPersonAbsence> dayAbsence = getSplitDayLongAbsences(splitDay);

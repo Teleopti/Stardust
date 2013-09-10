@@ -6,7 +6,6 @@ using Teleopti.Ccc.DatabaseConverterTest.Helpers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Absence=Domain.Absence;
 
 namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
@@ -26,15 +25,6 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         public void Setup()
         {
             _target = new ActivityMapper(new MappedObjectPair(), new GroupingActivity("test"));
-        }
-
-        /// <summary>
-        /// Determines whether this type [can validate number of properties].
-        /// </summary>
-        [Test]
-        public void CanValidateNumberOfProperties()
-        {
-            Assert.AreEqual(25, PropertyCounter.CountProperties(typeof (Activity)));
         }
 
 

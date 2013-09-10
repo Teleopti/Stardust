@@ -6,6 +6,7 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
@@ -34,8 +35,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 					AbsenceId = UserFactory.User().UserData<AbsenceConfigurable>().Absence.Id.Value.ToString(),
 					DateRange = new
 						{
-							From = DateTime.Now.Date.ToShortDateString(),
-							To = DateTime.Now.Date.AddDays(scenarios - 1).ToShortDateString()
+                            From = DateOnlyForBehaviorTests.TestToday.ToShortDateString(),
+                            To = DateOnlyForBehaviorTests.TestToday.AddDays(scenarios - 1).ToShortDateString()
 						}
 				};
 			var value = JsonConvert.SerializeObject(configuration, Formatting.Indented);

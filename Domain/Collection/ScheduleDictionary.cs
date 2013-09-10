@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
             foreach (KeyValuePair<IPerson, IScheduleRange> pair in _dictionary)
             {
-                IPersistableScheduleData retVal = ((ScheduleRange)pair.Value).UnsafeSnapshotDelete(id, true);
+                IPersistableScheduleData retVal = ((ScheduleRange)pair.Value).SolveConflictBecauseOfExternalDeletion(id, true);
                 if (retVal != null)
                 {
                     OnPartModified(new ModifyEventArgs(ScheduleModifier.MessageBroker, retVal.Person, retVal.Period));
@@ -297,6 +297,15 @@ namespace Teleopti.Ccc.Domain.Collection
                             var range = ((ScheduleRange) this[part.Person]);
 
                             var partBefore = range.ReFetch(part);
+
+#if (DEBUG)
+							//check for duplicate personassignments remove before next release
+							if (partBefore.PersonAssignment(true).Id != null && part.PersonAssignment() != null &&
+							    part.PersonAssignment().Id == null)
+							{
+								throw new DuplicateElementException(part.DateOnlyAsPeriod.DateOnly.ToShortDateString() + " " + part.Person.Name);
+							}
+#endif
                             scheduleDayChangeCallback.ScheduleDayChanging(partBefore);
 
                             range.ModifyInternal(part);
@@ -431,7 +440,7 @@ namespace Teleopti.Ccc.Domain.Collection
                     if (range.WithinRange(updatedData.Period))
                     {
                         using(TurnoffPermissionScope.For(this)) 
-                            range.UnsafeSnapshotUpdate(updatedData, true);
+                            range.SolveConflictBecauseOfExternalUpdate(updatedData, true);
                         OnPartModified(new ModifyEventArgs(ScheduleModifier.MessageBroker, updatedData.Person, updatedData.Period));
                         returnData = updatedData;
                     }
@@ -455,7 +464,7 @@ namespace Teleopti.Ccc.Domain.Collection
                 foreach (var personMeeting in personMeetings)
                 {
                     if (!range.WithinRange(personMeeting.Period)) continue;
-                    using (TurnoffPermissionScope.For(this)) range.UnsafeSnapshotUpdate(personMeeting, true);
+                    using (TurnoffPermissionScope.For(this)) range.SolveConflictBecauseOfExternalUpdate(personMeeting, true);
                     OnPartModified(new ModifyEventArgs(ScheduleModifier.MessageBroker, personMeeting.Person, personMeeting.Period));
                 }
             }

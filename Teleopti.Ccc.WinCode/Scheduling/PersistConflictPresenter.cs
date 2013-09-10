@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             _view.SetupGridControl(_model.Data);            
         }
 
-        public void OnUndoClientChanges()
+        public void OnDiscardMyChanges()
         {
             mergeConflict(true);
             closeForm(true);
@@ -61,35 +61,45 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             return string.Empty;
         }
 
-        private void mergeConflict(bool undoClientState)
+        private void mergeConflict(bool discardMyChanges)
         {
             foreach (var messState in _model.PersistConflicts)
             {
-                var dbVersion = messState.DatabaseVersion;
-                addToModifiedCollection(messState, undoClientState);
-                if(dbVersion==null)
+				if (discardMyChanges)
+					addToModifiedCollection(messState);
+
+				var databaseVersion = messState.DatabaseVersion;
+				var originalVersion = messState.ClientVersion.OriginalItem;
+
+				if (databaseVersion == null)
                 {
-                    var orgVersion = messState.ClientVersion.OriginalItem;
-                    ((ScheduleRange)_model.ScheduleDictionary[orgVersion.Person])
-                        .UnsafeSnapshotDelete(orgVersion.Id.Value, undoClientState); 
+					var scheduleRange = ((ScheduleRange)_model.ScheduleDictionary[originalVersion.Person]);
+					scheduleRange.SolveConflictBecauseOfExternalDeletion(originalVersion.Id.GetValueOrDefault(), discardMyChanges); 
                 }
                 else
                 {
-                    ((ScheduleRange)_model.ScheduleDictionary[dbVersion.Person])
-                        .UnsafeSnapshotUpdate(dbVersion, undoClientState);  
-                }                
+					var scheduleRange = ((ScheduleRange)_model.ScheduleDictionary[databaseVersion.Person]);
+					// I inserted a person assignment, and so did someone else
+					if (databaseVersion is IPersonAssignment && messState.ClientVersion.OriginalItem == null)
+					{
+						scheduleRange.SolveConflictBecauseOfExternalInsert(databaseVersion, discardMyChanges);
+					}
+					else
+					{
+						scheduleRange.SolveConflictBecauseOfExternalUpdate(databaseVersion, discardMyChanges);
+					}
+                }
+
                 messState.RemoveFromCollection();
             }
         }
 
-        private void addToModifiedCollection(IPersistConflict messState, bool undoClientState)
+        private void addToModifiedCollection(IPersistConflict messState)
         {
-            if(undoClientState)
-            {
-                _model.ModifiedData.Add(messState.ClientVersion.OriginalItem);
-                if(messState.DatabaseVersion!=null)
-                    _model.ModifiedData.Add(messState.DatabaseVersion);
-            }
+			if (messState.ClientVersion.OriginalItem != null)
+				_model.ModifiedDataResult.Add(messState.ClientVersion.OriginalItem);
+			if (messState.DatabaseVersion != null)
+				_model.ModifiedDataResult.Add(messState.DatabaseVersion);
         }
 
         private void closeForm(bool allConflictsSolved)
@@ -104,27 +114,29 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         private static PersistConflictData createConflictData(IPersistConflict messageState)
         {
-            var orgClientItem = messageState.ClientVersion.OriginalItem;
-            var ret = new PersistConflictData
+            var clientVersion = messageState.ClientVersion.OriginalItem;
+	        if (clientVersion == null)
+				clientVersion = messageState.ClientVersion.CurrentItem;
+            var conflictData = new PersistConflictData
                         {
-                            Name = formatName(orgClientItem.Person.Name),
-                            Date = new DateOnly(orgClientItem.Period.StartDateTime),
-                            ConflictType = typeString(orgClientItem),
+                            Name = formatName(clientVersion.Person.Name),
+                            Date = new DateOnly(clientVersion.Period.StartDateTime),
+                            ConflictType = typeString(clientVersion),
                             LastModifiedName = string.Empty
                         };
             if(messageState.DatabaseVersion == null)
             {
-                ret.LastModifiedName = UserTexts.Resources.Deleted;                 
+                conflictData.LastModifiedName = UserTexts.Resources.Deleted;                 
             }
             else
             {
                 var change = messageState.DatabaseVersion as IChangeInfo;
                 if(change!=null)
                 {
-                    ret.LastModifiedName = formatName(change.UpdatedBy.Name);
+                    conflictData.LastModifiedName = formatName(change.UpdatedBy.Name);
                 }
             }
-            return ret;
+            return conflictData;
         }
 
         private static string typeString(IScheduleParameters conflict)
@@ -139,7 +151,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 return UserTexts.Resources.StudentAvailability;
 	        if (conflict is IPublicNote)
 		        return UserTexts.Resources.PublicNoteColon;
-	        if (conflict is IScheduleTag)
+	        if (conflict is IAgentDayScheduleTag)
 		        return UserTexts.Resources.Tags;
 	        if (conflict is IPreferenceDay)
 		        return UserTexts.Resources.Preference;

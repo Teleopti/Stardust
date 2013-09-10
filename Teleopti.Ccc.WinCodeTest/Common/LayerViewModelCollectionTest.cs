@@ -337,17 +337,16 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             //This is how we want the NOT PROJECTED layers to appear in the gui
             #region setup
             var assignment = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
-
-	        var multi = mocks.DynamicMock<IMultiplicatorDefinitionSet>();
-			var overtime = new OvertimeShiftLayer(ActivityFactory.CreateActivity("activity"), period, multi);
-	        var personal = new PersonalShiftLayer(ActivityFactory.CreateActivity("activity"), period);
+						var multi = mocks.DynamicMock<IMultiplicatorDefinitionSet>();
+						assignment.AddOvertimeLayer(ActivityFactory.CreateActivity("activity"), period, multi);
+						assignment.AddPersonalLayer(ActivityFactory.CreateActivity("activity"), period);
             AbsenceLayer absenceLayer = new AbsenceLayer(AbsenceFactory.CreateAbsence("absence"), period);
 
 
             MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(null, assignment.MainLayers().First(), assignment, null, null);
             MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, assignment.MainLayers().Last(), assignment, null, null);
-			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(null, overtime, null, null, null);
-			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null,personal, null, null,null);
+			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(null, assignment.OvertimeLayers().Single(), assignment, null, null);
+			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null,assignment.PersonalLayers().Single(), assignment, null,null);
             AbsenceLayerViewModel absenceLayerViewModel = new AbsenceLayerViewModel(null, absenceLayer,null);
 	        var meetingPerson = new MeetingPerson(new Person(), false);
 						Meeting meeting = new Meeting(new Person(), new[]{meetingPerson }, "subject", "location", "description", ActivityFactory.CreateActivity("activity"), ScenarioFactory.CreateScenarioAggregate());
@@ -607,6 +606,39 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			replaceService.Expect(r => r.Replace(part, theLayer, newAbsence, newPeriod));
 
 			target.ReplaceAbsence(theLayerViewModel, theLayer, part);
+
+			replaceService.VerifyAllExpectations();
+		}
+
+		[Test]
+		public void MoveAllLayers_WhenMultipleLayersHasBeenMoved_ShouldReplaceAllLayersThatHasBeenMoved()
+		{
+			var replaceService = MockRepository.GenerateStrictMock<IReplaceLayerInSchedule>();
+
+			target = new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), replaceService);
+
+			IScheduleDay part = _partFactory.CreatePartWithMainShiftWithDifferentActivities();
+			target.AddFromSchedulePart(part);
+
+			var firstViewModel = target.First();
+			var secondViewModel = target.Skip(1).First();
+
+			var firstModel = part.PersonAssignment().MainLayers().First(l => l.Period == firstViewModel.Period);
+			var secondModel = part.PersonAssignment().MainLayers().First(l => l.Period == secondViewModel.Period);
+			var firstPeriod = firstModel.Period;
+			var secondPeriod = secondModel.Period;
+
+			var firstPayload = firstModel.Payload;
+			var secondPayload = secondModel.Payload;
+
+			firstViewModel.CanMoveAll = true;
+			secondViewModel.CanMoveAll = true;
+			firstViewModel.MoveLayer(TimeSpan.Zero);
+
+			replaceService.Expect(r => r.Replace(part, firstModel, firstPayload, firstPeriod));
+			replaceService.Expect(r => r.Replace(part, secondModel, secondPayload, secondPeriod));
+
+			firstViewModel.UpdatePeriod();
 
 			replaceService.VerifyAllExpectations();
 		}

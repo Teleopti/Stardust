@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			_mocks = new MockRepository();
 			_cultureSpecificViewModelFactory = _mocks.DynamicMock<ICultureSpecificViewModelFactory>();
 			_datePickerGlobalizationViewModelFactory = _mocks.DynamicMock<IDatePickerGlobalizationViewModelFactory>();
-			_target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now(null));
+			_target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now(null), MockRepository.GenerateMock<IResourceVersion>());
 		}
 
 		[Test]
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			nowComponent.Expect(c => c.IsExplicitlySet()).Return(true);
 			nowComponent.Expect(c => c.LocalDateTime()).Return(date);
 
-			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, nowComponent);
+			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, nowComponent, MockRepository.GenerateMock<IResourceVersion>());
 			
 			target.CreateLayoutBaseViewModel(string.Empty).FixedDate.Should().Be.EqualTo(date);
 		}
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldReturnNullIfNotSet()
 		{
-			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now(null));
+			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now(null), MockRepository.GenerateMock<IResourceVersion>());
 			target.CreateLayoutBaseViewModel(string.Empty).FixedDate.HasValue.Should().Be.False();
 		}
 	}

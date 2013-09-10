@@ -129,6 +129,7 @@
     <Compile Include="Domain\IMoveLayerVertical.cs" />
     <Compile Include="Domain\IOvertimeShiftLayer.cs" />
     <Compile Include="Domain\IPersonalShiftLayer.cs" />
+	<Compile Include="Domain\IOvertimePreferences.cs" />
     <Compile Include="Domain\IOvertimeAvailability.cs" />
     <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />
     <Compile Include="Domain\IActivityNormalExtender.cs" />
@@ -176,6 +177,7 @@
     <Compile Include="Domain\IRestrictionCombiner.cs" />
     <Compile Include="Domain\IRevision.cs" />
     <Compile Include="Domain\IRuleSetProjectionService.cs" />
+    <Compile Include="Domain\IScheduleChangedEvent.cs" />
     <Compile Include="Domain\IScheduleDayAvailabilityRestrictionExtractor.cs" />
     <Compile Include="Domain\IScheduleDayChangeCallback.cs" />
     <Compile Include="Domain\IScheduleDayPreferenceRestrictionExtractor.cs" />
@@ -734,7 +736,7 @@
     <Compile Include="Domain\WorkTime.cs" />
     <Compile Include="Domain\WorkTimeDirective.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Infrastructure\IMessageBrokerModule.cs" />
+    <Compile Include="Infrastructure\IMessageBrokerIdentifier.cs" />
     <Compile Include="Infrastructure\ISessionData.cs" />
     <Compile Include="Infrastructure\IStatelessUnitOfWork.cs" />
     <Compile Include="Infrastructure\IUnitOfWork.cs" />

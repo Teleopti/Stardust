@@ -34,17 +34,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void LayerShouldHaveOrderIndex()
-		{
-			ILayer<IActivity> activityLayer1 = new EditorActivityLayer(new Activity("phone"), new DateTimePeriod());
-			ILayer<IActivity> activityLayer2 = new EditorActivityLayer(new Activity("phone"), new DateTimePeriod());
-			_target.LayerCollection.Add(activityLayer1);
-			_target.LayerCollection.Add(activityLayer2);
-			Assert.AreEqual(0, _target.LayerCollection[0].OrderIndex);
-			Assert.AreEqual(1, _target.LayerCollection[1].OrderIndex);
-		}
-
-		[Test]
 		public void CloneShouldWork()
 		{
 			

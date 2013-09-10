@@ -15,14 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
     public class BlockSteadyStateValidator : IBlockSteadyStateValidator
     {
-	    private readonly IScheduleDayEquator _scheduleDayEquator;
-
-	    public BlockSteadyStateValidator(IScheduleDayEquator scheduleDayEquator)
-		{
-			_scheduleDayEquator = scheduleDayEquator;
-		}
-
-	    public bool IsBlockInSteadyState(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions)
+        public bool IsBlockInSteadyState(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions)
         {
             if (teamBlockInfo == null || schedulingOptions == null) return false ;
             //if (schedulingOptions == null ) throw new ArgumentNullException("schedulingOptions");
@@ -55,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
         private static bool verifySameStartTime(ITeamBlockInfo teamBlockInfo, IEnumerable<DateOnly> dayList, IScheduleDay sampleScheduleDay)
         {
-            var dateTimePeriod = getShiftPeriod(sampleScheduleDay.GetEditorShift());
+            var dateTimePeriod = getShiftPeriod(sampleScheduleDay);
             if (dateTimePeriod.HasValue)
             {
                 var sampleStartTime = dateTimePeriod.Value.StartDateTimeLocal(sampleScheduleDay.TimeZone);
@@ -80,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
         private static DateTime getStartTimeLocal(IScheduleDay scheduleDay)
         {
-            var dateTimePeriod = getShiftPeriod(scheduleDay.GetEditorShift());
+            var dateTimePeriod = getShiftPeriod(scheduleDay);
             if (dateTimePeriod.HasValue)
             {
                 return dateTimePeriod.Value.StartDateTimeLocal(scheduleDay.TimeZone);
@@ -88,27 +81,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return DateTime.MinValue ;
         }
 
-        private static DateTimePeriod? getShiftPeriod(IEditableShift editableShift)
+        private static DateTimePeriod? getShiftPeriod(IScheduleDay scheduleDay)
         {
-			if (editableShift != null)
+            var samplePersonAssignment = scheduleDay.AssignmentHighZOrder();
+            if (samplePersonAssignment != null && samplePersonAssignment.MainShift!=null)
             {
-				return editableShift.ProjectionService().CreateProjection().Period();
+                return  samplePersonAssignment.MainShift.ProjectionService().CreateProjection().Period();
             }
             return null;
         }
 
-        private bool verifySameShift(ITeamBlockInfo teamBlockInfo, IList<DateOnly> dayList, IScheduleDay sampleScheduleDay)
+        private static bool verifySameShift(ITeamBlockInfo teamBlockInfo, IList<DateOnly> dayList, IScheduleDay sampleScheduleDay)
         {
+            var equator = new ScheduleDayEquator();
             foreach (var day in dayList)
                 foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(day))
                 {
                     var scheduleDay = matrix.GetScheduleDayByKey(day).DaySchedulePart();
+                    //scheduleDay.AssignmentHighZOrder().MainShift.ProjectionService().CreateProjection().Period().Value.StartDateTimeLocal(schedulePart.TimeZone)
                     if (scheduleDay.IsScheduled())
                     {
-	                    var sourceShift = sampleScheduleDay.GetEditorShift();
-	                    var destShift = scheduleDay.GetEditorShift();
-						if (sourceShift != null && destShift != null)
-							if ((!_scheduleDayEquator.MainShiftEqualsWithoutPeriod(sourceShift, destShift)))
+                        var sourceZOrder = sampleScheduleDay.AssignmentHighZOrder();
+                        var destZOrder = scheduleDay.AssignmentHighZOrder();
+                        if ((sourceZOrder != null && destZOrder != null) && (sourceZOrder.MainShift != null && destZOrder.MainShift != null ))
+                            if ((!equator.MainShiftEqualsWithoutPeriod(sourceZOrder.MainShift, destZOrder.MainShift)))
                                 return false;
                     }
                        

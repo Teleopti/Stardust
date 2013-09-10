@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			Mocks.ReplayAll();
 
-			_target = new AbsenceLayerViewModel(null,_layerWithPayload,null);
+			_target = new AbsenceLayerViewModel(MockRepository.GenerateMock<ILayerViewModelObserver>(),_layerWithPayload,null);
 
 			testRunner = new CrossThreadTestRunner();
 		}
@@ -185,7 +185,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void UpdatePeriod_WhenCalled_ShouldSetIsChangedToFalse()
 		{
-
 			_target.IsChanged = true;
 			_target.Period = _period.ChangeStartTime(TimeSpan.FromMinutes(-5));
 			_target.UpdatePeriod();
@@ -194,17 +193,16 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
-		public void UpdatePeriod_WhenCalled_ShouldCallReplaceAbsenceOnObserver()
+		public void UpdatePeriod_WhenCalled_ShouldCallUpdateAllMovedLayersOnObserver()
 		{
-			var layerObserver = MockRepository.GenerateStrictMock<ILayerViewModelObserver>();
+			var layerObserver = MockRepository.GenerateMock<ILayerViewModelObserver>();
 
 			_target = new AbsenceLayerViewModel(layerObserver, _layerWithPayload, new EventAggregator());
-			layerObserver.Expect(l => l.ReplaceAbsence(_target, _layerWithPayload, _target.SchedulePart));
-
+			
 			_target.IsChanged = true;
 			_target.UpdatePeriod();
 
-			layerObserver.VerifyAllExpectations();
+            layerObserver.AssertWasCalled(l => l.UpdateAllMovedLayers());
 		}
 
 		[Test]

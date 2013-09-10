@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web;
+using Autofac;
 using Microsoft.AspNet.SignalR;
 using log4net;
 
@@ -9,13 +10,32 @@ namespace Teleopti.Ccc.Web.Broker
 	public class Global : HttpApplication
 	{
 	    private static readonly ILog Logger = LogManager.GetLogger(typeof (Global));
+		private static IContainer _container;
+
 		protected void Application_Start(object sender, EventArgs e)
 		{
 			log4net.Config.XmlConfigurator.Configure();
 
+			var containerBuilder = new ContainerBuilder();
+			containerBuilder.Register(c => SignalRConfiguration.ActionScheduler).As<IActionScheduler>();
+			containerBuilder.RegisterType<SubscriptionPassThrough>().As<IBeforeSubscribe>();
+			containerBuilder.RegisterType<MessageBrokerHub>();
+			_container = containerBuilder.Build();
+			GlobalHost.DependencyResolver = new AutofacDependencyResolver(_container.BeginLifetimeScope()); 
+			
 			var hubConfiguration = new HubConfiguration { EnableCrossDomain = true };
 			SignalRConfiguration.Configure(hubConfiguration);
+
             TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
+		}
+
+		protected void Application_End(object sender, EventArgs e)
+		{
+			if (SignalRConfiguration.ActionScheduler is IDisposable)
+			{
+				var actionThrottle = SignalRConfiguration.ActionScheduler as ActionThrottle;
+				if (actionThrottle != null) actionThrottle.Dispose();
+			}
 		}
 
 	    private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs unobservedTaskExceptionEventArgs)
@@ -53,9 +73,5 @@ namespace Teleopti.Ccc.Web.Broker
 
 		}
 
-		protected void Application_End(object sender, EventArgs e)
-		{
-
-		}
 	}
 }

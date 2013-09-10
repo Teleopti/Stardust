@@ -1079,17 +1079,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual("Tjillevippen", infoText);
             Assert.AreEqual("-", periodText);
             Assert.AreEqual("00:00", timeText);
-
-            infoList = ViewBaseHelper.GetInfoTextWeekView(_schedulePart3, SchedulePartView.MainShift);
-            infoText = infoList[0];
-            periodText = infoList[1];
-            timeText = infoList[2];
-            ViewBaseHelper.GetInfoTextWeekView(_schedulePart3, SchedulePartView.MainShift);
-            Assert.AreEqual("shiftcategory", infoText);
-	        Assert.AreEqual(
-		        _personAssignment.Period.StartDateTimeLocal(TimeZoneGuard.Instance.TimeZone).ToShortTimeString() + " - " +
-		        _personAssignment.Period.EndDateTimeLocal(TimeZoneGuard.Instance.TimeZone).ToShortTimeString(), periodText);
-            Assert.AreEqual("00:00", timeText);
         }
 
 		[Test]

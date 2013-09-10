@@ -51,8 +51,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             foreach (AlarmType alarmType in alarms)
             {
                 ReflectionHelper.SetUpdatedBy(alarmType, _createPerson);
-                ReflectionHelper.SetCreatedBy(alarmType, _createPerson);
-                ReflectionHelper.SetCreatedOn(alarmType, _createDate);
                 ReflectionHelper.SetUpdatedOn(alarmType, _createDate.AddHours(1));
             }
         }
@@ -103,14 +101,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             _target.QueryCellInfo(null, e);
             Assert.AreEqual(Resources.Time, e.Style.Text);
 
-            e = new GridQueryCellInfoEventArgs(0, (int)AlarmControlPresenter.ColumnHeader.CreatedBy, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual(Resources.CreatedBy, e.Style.Text);
-
-            e = new GridQueryCellInfoEventArgs(0, (int)AlarmControlPresenter.ColumnHeader.CreatedOn, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual(Resources.CreatedOn, e.Style.Text);
-
             e = new GridQueryCellInfoEventArgs(0, (int)AlarmControlPresenter.ColumnHeader.UpdatedBy, style);
             _target.QueryCellInfo(null, e);
             Assert.AreEqual(Resources.UpdatedBy, e.Style.Text);
@@ -124,12 +114,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void QueryCellInfoShouldReturnGrid()
         {
-            DateTime expectedDate =
-                _createDate = TimeZoneHelper.ConvertFromUtc(_createDate,
-                                                            (
-                                                                TimeZoneInfo.FindSystemTimeZoneById(
-                                                                    "W. Europe Standard Time")));
-
+ 
             var style = new GridStyleInfo();
             var e = new GridQueryCellInfoEventArgs(0, (int)AlarmControlPresenter.ColumnHeader.Name, style);
             _target.QueryCellInfo(null, e);
@@ -161,24 +146,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Assert.AreEqual(0.8, style.CellValue);
 
             style = new GridStyleInfo();
-            e = new GridQueryCellInfoEventArgs(4, (int)AlarmControlPresenter.ColumnHeader.CreatedBy, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual(_createPerson.Name, style.CellValue);
-
-            style = new GridStyleInfo();
-            e = new GridQueryCellInfoEventArgs(4, (int)AlarmControlPresenter.ColumnHeader.CreatedOn, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual(expectedDate.ToString(CultureInfo.CurrentCulture), style.CellValue);
-
-            style = new GridStyleInfo();
             e = new GridQueryCellInfoEventArgs(4, (int)AlarmControlPresenter.ColumnHeader.UpdatedBy, style);
             _target.QueryCellInfo(null, e);
             Assert.AreEqual(_createPerson.Name, style.CellValue);
-
-            style = new GridStyleInfo();
-            e = new GridQueryCellInfoEventArgs(4, (int)AlarmControlPresenter.ColumnHeader.UpdatedOn, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual(_createDate.AddHours(1).ToString(CultureInfo.CurrentCulture), style.CellValue);
 
             style = new GridStyleInfo();
 

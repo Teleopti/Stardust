@@ -345,7 +345,8 @@
       <DependentUpon>SmsSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Controls\Cells\DropDownCultureCellModel.cs" />
-    <Compile Include="Common\Controls\Cells\TimeStaticCellRenderer.cs" />
+    
+	<Compile Include="Common\Controls\Cells\TimeStaticCellRenderer.cs" />
     <Compile Include="Common\Controls\Columns\IColumnDisableCondition.cs" />
     <Compile Include="Common\Controls\Columns\SelectedItemChangeBaseEventArgs.cs" />
     <Compile Include="Common\Controls\Columns\SelectedItemChangeEventArgs.cs" />
@@ -359,6 +360,18 @@
     <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarInfo.cs" />
     <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspaceModel.cs" />
     <Compile Include="Common\Controls\OutlookControls\Workspaces\OutlookBarWorkspacePresenter.cs" />
+	<Compile Include="Common\Controls\FromToTimeDurationPicker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Common\Controls\FromToTimeDurationPicker.Designer.cs">
+      <DependentUpon>FromToTimeDurationPicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\Controls\Office2007OutlookTimeDurationPicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Common\Controls\Office2007OutlookTimeDurationPicker.Designer.cs">
+      <DependentUpon>Office2007OutlookTimeDurationPicker.cs</DependentUpon>
+    </Compile>
     <Compile Include="Common\Controls\OutlookTimePicker.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -1117,12 +1130,6 @@
     <Compile Include="PeopleAdmin\Views\PersonFinderView.Designer.cs">
       <DependentUpon>PersonFinderView.cs</DependentUpon>
     </Compile>
-    <Compile Include="PeopleAdmin\Views\PersonTimeZoneView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="PeopleAdmin\Views\PersonTimeZoneView.Designer.cs">
-      <DependentUpon>PersonTimeZoneView.cs</DependentUpon>
-    </Compile>
     <Compile Include="PeopleAdmin\Views\UserCredentialConflicts.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1307,7 +1314,10 @@
     <Compile Include="Scheduling\PermissionEditControl.cs" />
     <Compile Include="Scheduling\PermissionEditRestrictionControl.cs" />
     <Compile Include="Scheduling\QuickAccessState.cs" />
+    <Compile Include="Scheduling\ScheduleOvertimeCommand.cs" />
     <Compile Include="Scheduling\SchedulerRibbonHelper.cs" />
+    <Compile Include="Scheduling\SchedulerStateScheduleDayChangedCallback.cs" />
+    <Compile Include="Scheduling\ScheduleTimeType.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -2381,6 +2391,9 @@
       <DependentUpon>ScheduleTagControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+	<EmbeddedResource Include="Common\Controls\FromToTimeDurationPicker.resx">
+      <DependentUpon>FromToTimeDurationPicker.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\MaskedTimeSpanTextBox.resx">
       <DependentUpon>MaskedTimeSpanTextBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -2574,9 +2587,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PeopleAdmin\Views\PersonFinderView.resx">
       <DependentUpon>PersonFinderView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PeopleAdmin\Views\PersonTimeZoneView.resx">
-      <DependentUpon>PersonTimeZoneView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PeopleAdmin\Views\UserCredentialConflicts.resx">
       <DependentUpon>UserCredentialConflicts.cs</DependentUpon>

@@ -81,16 +81,6 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         string Name { get; }
 
-        ///<summary>
-        /// Created time from the user's perspective
-        ///</summary>
-        string CreatedTimeInUserPerspective { get; }
-
-        ///<summary>
-        /// Updated time from the user's perspective
-        ///</summary>
-        string UpdatedTimeInUserPerspective { get; }
-
         /// <summary>
         /// Gets the type of the target value.
         /// </summary>

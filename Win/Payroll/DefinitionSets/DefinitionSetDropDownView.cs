@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
                 //Previous implementation was to use a set of definition sets at once. 
                 //It was changed later to have only one at a time. But still it is better to keep the previous implementation unchanged incase 
                 //of future alteration. 
-                IList<IMultiplicatorDefinitionSet> filteredSet = new List<IMultiplicatorDefinitionSet>() { SelectedDefinitionSet.DomainEntity };
+                IList<IMultiplicatorDefinitionSet> filteredSet = new List<IMultiplicatorDefinitionSet> { SelectedDefinitionSet.DomainEntity };
 
                 ExplorerView.ExplorerPresenter.Model.FilteredDefinitionSetCollection = filteredSet;
                 ExplorerView.RefreshSelectedViews();

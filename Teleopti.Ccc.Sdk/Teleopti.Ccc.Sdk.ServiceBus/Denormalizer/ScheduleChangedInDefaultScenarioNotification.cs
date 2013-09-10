@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
@@ -31,17 +32,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		{
 			if (!message.IsDefaultScenario) return;
 			if (message.IsInitialLoad) return;
+            if (message.ScheduleDays.Count == 0) return;
 
 			using (new MessageBrokerSendEnabler())
 			{
 				if (messageBrokerIsRunning())
 				{
-					var messages = new List<IEventMessage>();
-					foreach (var scheduleDay in message.ScheduleDays)
-					{
-						messages.Add(_messageBroker.CreateEventMessage(scheduleDay.Date,scheduleDay.Date,Guid.Empty, message.PersonId, typeof(Person), Guid.Empty, typeof(IScheduleChangedInDefaultScenario), DomainUpdateType.NotApplicable));
-					}
-					_messageBroker.SendEventMessages(message.Datasource,message.BusinessUnitId, messages.ToArray());
+				    var firstDate = message.ScheduleDays.Min(d => d.Date);
+				    var lastDate = message.ScheduleDays.Max(d => d.Date);
+                    _messageBroker.SendEventMessage(message.Datasource, message.BusinessUnitId, firstDate, lastDate, Guid.Empty, message.PersonId, typeof(Person), Guid.Empty, typeof(IScheduleChangedInDefaultScenario), DomainUpdateType.NotApplicable, null);
 				}
 				else
 				{

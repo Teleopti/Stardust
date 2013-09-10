@@ -41,13 +41,23 @@ namespace Teleopti.Ccc.Web.Broker
 			{
 				settings.ScaleOutBackplaneUrl = uri;
 			}
+
+			value = ConfigurationManager.AppSettings["ThrottleMessages"];
+			settings.ThrottleMessages = string.IsNullOrEmpty(value) || Convert.ToBoolean(value);
+
+			value = ConfigurationManager.AppSettings["MessagesPerSecond"];
+			settings.MessagesPerSecond = string.IsNullOrEmpty(value) ? 80 : Convert.ToInt32(value);
+
 			return settings;
 		}
+
 
 		public TimeSpan? KeepAlive { get; set; }
 		public TimeSpan? ConnectionTimeout { get; set; }
 		public TimeSpan? DisconnectTimeout { get; set; }
 		public int? DefaultMessageBufferSize { get; set; }
 		public Uri ScaleOutBackplaneUrl { get; set; }
+		public bool ThrottleMessages { get; set; }
+		public int MessagesPerSecond { get; set; }
 	}
 }

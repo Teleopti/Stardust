@@ -6,13 +6,14 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
+using WatiN.Core;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
@@ -45,12 +46,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.Click("#Preference-extended-reset");
 		}
 
-
 		[When(@"I click the extended preference indication on '(.*)'")]
 		public void WhenIClickTheExtendedPreferenceIndicationOn(DateTime date)
 		{
-			var indication = Pages.Pages.PreferencePage.ExtendedPreferenceIndicationForDate(date);
-			indication.EventualClick();
+			Browser.Interactions.AssertExists(".extended-indication");
+			Browser.Interactions.Javascript("$('.extended-indication').trigger('mouseenter')");
 		}
 
 		[Then(@"I should see that I have an extended preference on '(.*)'")]
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldNotSeeAnExtendedPreferenceIndicationOn(DateTime date)
 		{
 			var indication = Pages.Pages.PreferencePage.ExtendedPreferenceIndicationForDate(date);
-			EventualAssert.That(() => indication.DisplayVisible(), Is.False);
+			EventualAssert.That(() => indication.Exists, Is.False);
 		}
 
 		[Then(@"I should see the extended preference on '(.*)'")]
@@ -104,8 +104,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			var extendedPreference = Pages.Pages.PreferencePage.ExtendedPreferenceForDate(date);
 			EventualAssert.That(() => extendedPreference.Exists, Is.True);
-			EventualAssert.That(() => extendedPreference.JQueryVisible(), Is.True);
-			EventualAssert.That(() => extendedPreference.DisplayVisible(), Is.True);
 		}
 
 		[Then(@"I should see the preference (.*) on '(.*)'")]
@@ -280,24 +278,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see extended preference with")]
 		public void ThenIShouldSeeExtendedPanelWith(Table table)
 		{
+			Browser.Interactions.AssertExists(".tooltip-inner");
+			Browser.Interactions.AssertExists(".extended-indication");
+			Browser.Interactions.Javascript("$('.extended-indication').trigger('mouseleave')");
+			Browser.Interactions.Javascript("$('.extended-indication').trigger('mouseenter')");
+
 			var fields = table.CreateInstance<ExtendedPreferenceFields>();
 			var extendedPreference = Pages.Pages.PreferencePage.ExtendedPreferenceForDate(fields.Date);
 
 			if (fields.Preference != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.Preference));
-			if (fields.StartTimeMinimum!= null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.StartTimeMinimum));
-			if (fields.StartTimeMaximum!= null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.StartTimeMaximum));
-			if (fields.EndTimeMinimum!= null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.EndTimeMinimum));
-			if (fields.EndTimeMaximum!= null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.EndTimeMaximum));
-			if (fields.WorkTimeMinimum!= null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.WorkTimeMinimum));
-			if (fields.WorkTimeMaximum!= null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.WorkTimeMaximum));
+			if (fields.StartTimeMinimum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.StartTimeMinimum));
+			if (fields.StartTimeMaximum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.StartTimeMaximum));
+			if (fields.EndTimeMinimum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.EndTimeMinimum));
+			if (fields.EndTimeMaximum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.EndTimeMaximum));
+			if (fields.WorkTimeMinimum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.WorkTimeMinimum));
+			if (fields.WorkTimeMaximum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.WorkTimeMaximum));
 
 			if (fields.Activity != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.Activity));
-			if (fields.ActivityStartTimeMinimum!= null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.ActivityStartTimeMinimum));
-			if (fields.ActivityStartTimeMaximum!= null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.StartTimeMaximum));
-			if (fields.ActivityEndTimeMinimum!= null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.ActivityEndTimeMinimum));
-			if (fields.ActivityEndTimeMaximum!= null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.ActivityEndTimeMaximum));
-			if (fields.ActivityTimeMinimum!= null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.ActivityTimeMinimum));
-			if (fields.ActivityTimeMaximum!= null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.ActivityTimeMaximum));
+			if (fields.ActivityStartTimeMinimum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.ActivityStartTimeMinimum));
+			if (fields.ActivityStartTimeMaximum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.StartTimeMaximum));
+			if (fields.ActivityEndTimeMinimum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.ActivityEndTimeMinimum));
+			if (fields.ActivityEndTimeMaximum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.ActivityEndTimeMaximum));
+			if (fields.ActivityTimeMinimum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.ActivityTimeMinimum));
+			if (fields.ActivityTimeMaximum != null) EventualAssert.That(() => extendedPreference.InnerHtml, Is.StringContaining(fields.ActivityTimeMaximum));
 		}
 
 		private void AssertExtendedActivityTimeFieldsAreReset()
@@ -387,7 +390,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I input new template name '(.*)'")]
 		public void WhenIInputNewTemplateName(string name)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Template-name-input", name);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".preference-template-name", name);
 		}
 
 		[When(@"I click save template button")]

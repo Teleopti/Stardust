@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string Name { get; set; }
 		public string Color { get; set; }
 		public bool? InContractTime { get; set; }
+		public bool? Confidential { get; set; }
 
 		public Absence Absence;
 
@@ -22,6 +23,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			if (InContractTime.HasValue)
 				Absence.InContractTime = InContractTime.Value;
+
+			if (Confidential.HasValue)
+				Absence.Confidential = Confidential.Value;
 			var absenceRepository = new AbsenceRepository(uow);
 			absenceRepository.Add(Absence);
 		}

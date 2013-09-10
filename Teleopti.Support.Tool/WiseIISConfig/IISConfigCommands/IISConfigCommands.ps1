@@ -181,6 +181,7 @@ Function Uninstall-ByRegPath(){
 				throw "The MSI failed to get uninstalled. MSIEXEC.exe returned an exit code of $ExitCode."
 				} 
 			}
+            Remove-Item -Path HKLM:\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings
 		}
 
 		catch [Exception] {
@@ -201,17 +202,25 @@ function UnZip-File(){
         $shellApplication = new-object -com shell.application
         $zipPackage = $shellApplication.NameSpace($zipfilename)
         $destinationFolder = $shellApplication.NameSpace($destination)
-        $destinationFolder.CopyHere($zipPackage.Items(),20)
+        #this does not work as tfsintergration
+        #$destinationFolder.CopyHere($zipPackage.Items(),20)
+
+        #trying this instead
+        $CMD = 'C:\Program Files\7-zip\7z'
+        $arg1 = 'e'
+        $arg2 = '-o' + $destination
+        & $CMD $arg1 $arg2 $zipfilename
     }
 } 
 
 function Copy-ZippedMsi{
     param(
-        $workingFolder
+        $workingFolder,
+        $version
     )
-    $scrFolder='\\hebe\Installation\PBImsi\Kanbox\BuildMSI-main'
+    $scrFolder='\\hebe\Installation\PBImsi\Kanbox\BuildMSI-' + $version
     $destFolder=$workingFolder
-
+    Write-Host 'source: ' $scrFolder
     $zipFileName = Get-ChildItem $scrFolder -filter "*.zip" | Select-Object -First 1
     
     if (!(Test-Path "$destFolder\$zipFileName")) {
@@ -219,6 +228,7 @@ function Copy-ZippedMsi{
     }
     return @("$destFolder\$zipFileName")
 }
+
 
 function destroy-WorkingFolder{
     param(
@@ -248,9 +258,9 @@ function Check-HttpStatus {
 	[net.httpWebRequest] $req = [net.webRequest]::create($url)
     $req.Credentials = $credentials;
 	$req.Method = "GET"
-
+    Write-Host 'Check-HttpStatus: ' $url
 	[net.httpWebResponse] $res = $req.getResponse()
-
+    
 	if ($res.StatusCode -ge "200") {
 		return $true
 	}
@@ -278,20 +288,7 @@ function Install-TeleoptiCCCServer
 	Start-Process -FilePath $temp -NoNewWindow -Wait -RedirectStandardOutput stdout.log -RedirectStandardError stderr.log
 }
 
-function Copy-ZippedMsi{
-    param(
-        $workingFolder
-    )
-    $scrFolder='\\hebe\Installation\PBImsi\Kanbox\BuildMSI-main'
-    $destFolder=$workingFolder
 
-    $zipFileName = Get-ChildItem $scrFolder -filter "*.zip" | Select-Object -First 1
-    
-    if (!(Test-Path "$destFolder\$zipFileName")) {
-        Copy-Item "$scrFolder\$zipFileName" "$destFolder"
-    }
-    return @("$destFolder\$zipFileName")
-}
 
 function Add-UserToLocalGroup{
      Param(
@@ -396,4 +393,66 @@ function start-AppPool{
     param($PoolName)
             Invoke-AppCmd Start Apppool "$PoolName"
 			Invoke-AppCmd Set Apppool "$PoolName" /autoStart:true
+}
+
+function restoreToBaseline
+{
+    param($computerName,
+            $spContent)
+$stringDrop = "IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RestoreToBaseline]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[RestoreToBaseline]"
+$con = New-Object System.Data.SqlClient.SqlConnection
+$con.ConnectionString = "Server=$Server;Database=master;Integrated Security=true"
+$con.Open()
+
+# Create SqlCommand object, define command text, and set the connection
+$cmd = New-Object System.Data.SqlClient.SqlCommand
+$cmd.Connection = $con
+$cmd.CommandTimeout = 0
+#the sp
+$cmd.CommandText = $stringDrop
+$cmd.ExecuteNonQuery()
+
+$cmd.CommandText = $spContent
+$cmd.ExecuteNonQuery()
+#and run it
+$cmd.CommandText = "RestoreToBaseline '$computerName'" 
+$cmd.ExecuteNonQuery()
+
+
+}
+ 
+function insert-License{
+    param($Server,
+            $Db,
+            $xmlString)
+# Create SqlConnection object, define connection string, and open connection
+$con = New-Object System.Data.SqlClient.SqlConnection
+$con.ConnectionString = "Server=$Server;Database=$Db;Integrated Security=true"
+$con.Open()
+
+# Create SqlCommand object, define command text, and set the connection
+$cmd = New-Object System.Data.SqlClient.SqlCommand
+$cmd.Connection = $con
+$cmd.CommandText = "DELETE FROM License"
+$cmd.ExecuteNonQuery()
+
+$cmd.CommandText = "INSERT INTO License
+  (Id, Version, CreatedBy, UpdatedBy, CreatedOn, UpdatedOn, XmlString)
+  VALUES (@Id, @Version, @CreatedBy, @UpdatedBy, @CreatedOn, @UpdatedOn, @XmlString)"
+
+$superUser = "3f0886ab-7b25-4e95-856a-0d726edc2a67"
+$now = Get-Date
+
+# Add parameters to pass values to the INSERT statement
+$cmd.Parameters.AddWithValue("@Id", [guid]::NewGuid()) | Out-Null
+$cmd.Parameters.AddWithValue("@Version", 1) | Out-Null
+$cmd.Parameters.AddWithValue("@CreatedBy", $superUser) | Out-Null
+$cmd.Parameters.AddWithValue("@UpdatedBy", $superUser) | Out-Null
+$cmd.Parameters.AddWithValue("@CreatedOn", $now) | Out-Null
+$cmd.Parameters.AddWithValue("@UpdatedOn", $now) | Out-Null
+$cmd.Parameters.AddWithValue("@XmlString", $xmlString) | Out-Null
+# Execute INSERT statement
+$RowsInserted = $cmd.ExecuteNonQuery()
+Write-Host 'Inserted License: ' $RowsInserted
 }

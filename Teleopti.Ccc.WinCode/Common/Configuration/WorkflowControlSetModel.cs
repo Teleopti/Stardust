@@ -115,9 +115,8 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             {
                 LocalizedUpdateInfo localizer = new LocalizedUpdateInfo();
                 string changed = localizer.UpdatedByText(DomainEntity, Resources.UpdatedByColon);
-                string created = localizer.CreatedText(DomainEntity, Resources.CreatedByColon);
 
-                return string.Concat(created, changed);
+                return changed;
             }
         }
 

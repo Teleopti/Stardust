@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			dto.OpenRaptorApplication = DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication;
 			dto.RaptorGlobal = DefinedRaptorApplicationFunctionPaths.RaptorGlobal;
 			dto.ModifyPersonAbsence = DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence;
-			dto.ModifyPersonDayOff = DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff;
+			dto.ModifyPersonDayOff = DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment;
 			dto.ModifyPersonAssignment = DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment;
 			dto.ViewUnpublishedSchedules = DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules;
 			dto.AccessToReports = DefinedRaptorApplicationFunctionPaths.AccessToReports;
@@ -1848,8 +1848,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				foreach (IPersonAbsenceAccount personAbsenceAccount in accounts)
 				{
 					IAccount personAccount = personAbsenceAccount.Find(new DateOnly(containingDate.DateTime));
-					if (personAccount==null) continue;
-					//personAccount.CalculateBalanceIn();
+					if (personAccount == null) continue;
 					PersonAccountAssembler timeAssembler = new PersonAccountAssembler();
 					result.Add(timeAssembler.DomainEntityToDto(personAccount));
 				}

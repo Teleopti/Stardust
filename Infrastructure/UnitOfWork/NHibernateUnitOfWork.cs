@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Transactions;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -37,8 +35,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private IEnumerable<IMessageSender> _messageSenders;
 		private readonly Action<ISession> _unbind;
 		private ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
+	    private static readonly EmptyMessageBrokerIdentifier EmptyMessageBrokerIdentifier = new EmptyMessageBrokerIdentifier();
 
-		protected internal NHibernateUnitOfWork(ISession session,
+	    protected internal NHibernateUnitOfWork(ISession session,
 		                                        IMessageBroker messageBroker,
 		                                        IEnumerable<IMessageSender> messageSenders,
 		                                        NHibernateFilterManager filterManager,
@@ -125,7 +124,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		}
 
 
-		public virtual IEnumerable<IRootChangeInfo> PersistAll(IMessageBrokerModule moduleUsedForPersist)
+		public virtual IEnumerable<IRootChangeInfo> PersistAll(IMessageBrokerIdentifier identifierUsedForPersist)
 		{
 			//man borde nog styra upp denna genom att använda ISynchronization istället,
 			//när tran startas, lägg på en sync callback via tran.RegisterSynchronization(callback);
@@ -135,7 +134,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				Flush();
 
 				modifiedRoots = new List<IRootChangeInfo>(Interceptor.ModifiedRoots);
-				invokeMessageSenders(modifiedRoots);
+				invokeMessageSenders(identifierUsedForPersist, modifiedRoots);
 				if (Transaction.Current == null)
 				{
 					_transaction.Commit();
@@ -162,18 +161,20 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				Interceptor.Clear();
 			}
-			notifyBroker(moduleUsedForPersist, modifiedRoots);
+			notifyBroker(identifierUsedForPersist, modifiedRoots);
 			return modifiedRoots;
 		}
 
-		private void invokeMessageSenders(IEnumerable<IRootChangeInfo> modifiedRoots)
+		private void invokeMessageSenders(IMessageBrokerIdentifier identifierUsedForPersist, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			if (_messageSenders == null) return;
+
+		    var identifierToUse = identifierUsedForPersist ?? EmptyMessageBrokerIdentifier;
 			_messageSenders.ForEach(d =>
 				{
 					using (PerformanceOutput.ForOperation(string.Format(System.Globalization.CultureInfo.InvariantCulture, "Sending message with {0}", d.GetType())))
 					{
-						d.Execute(modifiedRoots);
+                        d.Execute(identifierToUse, modifiedRoots);
 					}
 				});
 		}
@@ -276,9 +277,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 		}
 
-		private void notifyBroker(IMessageBrokerModule module, IEnumerable<IRootChangeInfo> modifiedRoots)
+		private void notifyBroker(IMessageBrokerIdentifier identifier, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			Guid moduleId = module == null ? Guid.Empty : module.ModuleId;
+			Guid moduleId = identifier == null ? Guid.Empty : identifier.InstanceId;
 			new NotifyMessageBroker(_messageBroker).Notify(moduleId, modifiedRoots);
 		}
 

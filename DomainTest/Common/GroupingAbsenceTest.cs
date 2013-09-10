@@ -32,9 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void CanCreateAndLoadDefaults()
         {
             Assert.AreEqual("myName", myGroupingAbsence.Description.Name);
-            Assert.IsNull(myGroupingAbsence.CreatedBy);
             Assert.IsNull(myGroupingAbsence.UpdatedBy);
-            Assert.IsNull(myGroupingAbsence.CreatedOn);
             Assert.IsNull(myGroupingAbsence.UpdatedOn);
             Assert.IsNull(myGroupingAbsence.Id);
             Assert.IsNull(myGroupingAbsence.Version);

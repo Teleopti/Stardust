@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			var eventMessages = new List<IEventMessage>();
             foreach (var change in rootModifications)
             {
-                if (!MessageFilterManager.Instance.FilterDictionary.ContainsKey(change.Root.GetType()))
+                if (!MessageFilterManager.Instance.HasType(change.Root.GetType())) continue;
                     continue;
 
                 var rootBrokerConditions = change.Root as IAggregateRootBrokerConditions;

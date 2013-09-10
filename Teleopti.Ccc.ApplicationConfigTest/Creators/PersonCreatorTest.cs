@@ -46,8 +46,6 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
 
             Assert.AreEqual(databaseConverterClient, person.Name.FirstName);
             Assert.AreEqual(databaseConverter, person.Name.LastName);
-            Assert.AreEqual(person.CreatedBy, person);
-            Assert.IsNotNull(person.CreatedOn);
             Assert.AreEqual(cultureInfo, person.PermissionInformation.UICulture());
             Assert.AreEqual(cultureInfo, person.PermissionInformation.Culture());
         }

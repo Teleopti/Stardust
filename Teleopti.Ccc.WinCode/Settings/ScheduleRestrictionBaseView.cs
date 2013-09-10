@@ -39,17 +39,6 @@ namespace Teleopti.Ccc.WinCode.Settings
 		/// </summary>
 		public int Week { get; private set; }
 
-		public string CreatedBy
-		{
-			get
-			{
-				IChangeInfo root = ContainedEntity.Root() as IChangeInfo;
-				if (root != null && root.CreatedBy != null)
-					return root.CreatedBy.Name.ToString();
-				return string.Empty;
-			}
-		}
-
 		public string UpdatedBy
 		{
 			get
@@ -57,17 +46,6 @@ namespace Teleopti.Ccc.WinCode.Settings
 				IChangeInfo root = ContainedEntity.Root() as IChangeInfo;
 				if (root != null && root.UpdatedBy != null)
 					return root.UpdatedBy.Name.ToString();
-				return string.Empty;
-			}
-		}
-
-		public string CreatedOn
-		{
-			get
-			{
-				IChangeInfo root = ContainedEntity.Root() as IChangeInfo;
-				if (root != null && root.CreatedOn.HasValue)
-					return root.CreatedOn.Value.ToString(CultureInfo.CurrentCulture);
 				return string.Empty;
 			}
 		}

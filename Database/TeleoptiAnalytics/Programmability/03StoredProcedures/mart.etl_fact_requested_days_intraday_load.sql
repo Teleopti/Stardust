@@ -10,9 +10,6 @@ AS
 BEGIN
 SET NOCOUNT ON
 
-DECLARE @business_unit_id int
-SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
-
 --Delete all request in stage 
 DELETE f
 FROM stage.stg_request stg

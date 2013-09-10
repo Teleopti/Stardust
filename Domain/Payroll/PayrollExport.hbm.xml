@@ -17,12 +17,14 @@
     <many-to-one name="CreatedBy"
 					 class="Teleopti.Ccc.Domain.Common.Person"
 					 not-null="true"
+					 access="property"
 					 update="false" foreign-key="FK_PayrollExport_Person_CreatedBy"/>
     <many-to-one name="UpdatedBy"
 					 class="Teleopti.Ccc.Domain.Common.Person"
 					 not-null="true"
 					 foreign-key="FK_PayrollExport_Person_UpdatedBy"/>
     <property name="CreatedOn"
+				  access="property"				  
 				  type="UtcDateTime"
 				  not-null="true"
 				  update="false" />

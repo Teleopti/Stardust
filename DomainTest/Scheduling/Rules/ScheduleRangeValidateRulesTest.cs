@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             ScheduleDateTimePeriod per = new ScheduleDateTimePeriod(_schedulePeriod);
 
             ScheduleDictionary dic = new ScheduleDictionary(_scenario, per);
-            dic.Modify(ScheduleModifier.Scheduler, schedulePart, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+            dic.Modify(ScheduleModifier.Scheduler, schedulePart, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 
 
             var parts = dic.SchedulesForDay(new DateOnly(2007, 8, 1));

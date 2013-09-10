@@ -145,6 +145,16 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 			_result.First().IsRead.Should().Be.True();
 		}
 
+        [Test]
+        public void ShouldTranslateMessageForReceiver()
+        {
+            _pushMessage.TranslateMessage = true;
+            _pushMessage.Message = "TextRequestHasBeenDeniedDot";
+
+            _result = Mapper.Map<IList<IPushMessageDialogue>, IList<MessageViewModel>>(_domainMessages);
+            _result.First().Message.Should().Be.EqualTo(UserTexts.Resources.TextRequestHasBeenDeniedDot);
+        }
+
 		public static void SetDate(IAggregateRoot root, DateTime dateTime, string property)
 		{
 			var rootCheck = root as IChangeInfo;

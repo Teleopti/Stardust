@@ -1,7 +1,9 @@
 using System;
 using System.Linq;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
@@ -83,6 +85,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[When(@"I view schedules for '([0-9\-\\\/]*)'")]
+		[When(@"I view team schedules staffing metrics for '([0-9\-\\\/]*)'")]
 		public void WhenIViewSchedulesForDate(DateTime date)
 		{
 			TestControllerMethods.Logon();
@@ -93,12 +96,34 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIViewSchedulesWithTeamAndDate(string teamName, DateTime date)
 		{
 			TestControllerMethods.Logon();
-			var teamSetups = UserFactory.User().UserDatasOfType<TeamConfigurable>();
-			var teamId = (from t in teamSetups
-						  let team = t.Team
-						  where team.Description.Name.Equals(teamName)
-						  select team.Id.Value).First();
-			Navigation.GotoAnywhereTeamSchedule(date, teamId);
+			Navigation.GotoAnywhereTeamSchedule(date, IdForTeam(teamName));
+		}
+
+		private static Guid IdForTeam(string teamName)
+		{
+			var teamId = (from t in UserFactory.User().UserDatasOfType<TeamConfigurable>()
+			              let team = t.Team
+			              where team.Description.Name.Equals(teamName)
+			              select team.Id.Value).First();
+			return teamId;
+		}
+
+		[Given(@"I am viewing team schedules staffing metrics for '([0-9\-\\\/]*)' and '(.*)'")]
+		[When(@"I view team schedules staffing metrics for '([0-9\-\\\/]*)' and '(.*)'")]
+		public void WhenIViewTeamSchedulesStaffingMetricsForDate(DateTime date, string skill)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoAnywhereTeamSchedule(date);
+			TeamSchedulePageStepDefinitions.SelectSkill(skill);
+		}
+
+		[Given(@"I am viewing team schedules staffing metrics for '(.*)' and '([0-9\-\\\/]*)' and '(.*)'")]
+		[When(@"I view team schedules staffing metrics for '(.*)' and '([0-9\-\\\/]*)' and '(.*)'")]
+		public void WhenIViewTeamSchedulesStaffingMetricsForDateAndTeam(string team, DateTime date, string skill)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoAnywhereTeamSchedule(date, IdForTeam(team));
+			TeamSchedulePageStepDefinitions.SelectSkill(skill);
 		}
 
 		[When(@"I view person schedule for '(.*)' on '(.*)'")]
@@ -137,7 +162,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void GivenIAmViewingTeamScheduleForTomorrow()
 		{
 			TestControllerMethods.LogonWithReadModelsUpdated();
-			Navigation.GotoTeamSchedule(DateTime.Today.AddDays(1));
+			Navigation.GotoTeamSchedule(DateOnlyForBehaviorTests.TestToday.Date.AddDays(1));
 		}
 
 		[When(@"I view team schedule for '(.*)'")]

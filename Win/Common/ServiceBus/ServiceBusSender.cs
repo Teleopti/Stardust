@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Specialized;
-using System.Configuration;
 using System.Globalization;
 using System.IO;
 using Autofac;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Impl;
 using Rhino.ServiceBus.Internal;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Messages;
 using log4net;
 
@@ -19,9 +19,15 @@ namespace Teleopti.Ccc.Win.Common.ServiceBus
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ServiceBusSender));
 		private IContainer _customHost;
 		private static readonly object LockObject = new object();
-		private bool _isRunning;
+        private bool _isRunning; 
+        private readonly ICurrentIdentity _currentIdentity;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability",
+	    public ServiceBusSender(ICurrentIdentity currentIdentity)
+	    {
+	        _currentIdentity = currentIdentity;
+	    }
+
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability",
 			"CA2000:Dispose objects before losing scope")]
 		private void MoveThatBus()
 		{
@@ -60,14 +66,15 @@ namespace Teleopti.Ccc.Win.Common.ServiceBus
 		{
 			var bus = _customHost.Resolve<IOnewayBus>();
 
+            var raptorDomainMessage = message as IRaptorDomainMessageInfo;
+            raptorDomainMessage.SetMessageDetail(_currentIdentity);
+
 			if (Logger.IsDebugEnabled)
 			{
-				var raptorDomainMessage = message as RaptorDomainMessage;
 				var identity = "<unknown>";
 				var datasource = "<unknown>";
 				if (raptorDomainMessage != null)
 				{
-					identity = raptorDomainMessage.Identity.ToString();
 					datasource = raptorDomainMessage.Datasource;
 				}
 				Logger.Debug(string.Format(CultureInfo.InvariantCulture,
