@@ -10248,6 +10248,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Info Panel.
+        /// </summary>
+        public static string InfoPanel {
+            get {
+                return ResourceManager.GetString("InfoPanel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Information.
         /// </summary>
         public static string Information {

@@ -11737,4 +11737,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Hourly Availability</value>
     <comment>Caption dialog to filter hourly availability</comment>
   </data>
+  <data name="InfoPanel" xml:space="preserve">
+    <value>Info Panel</value>
+    <comment>Text on button to toggle the info panel on and off in scheduler</comment>
+  </data>
 </root>
