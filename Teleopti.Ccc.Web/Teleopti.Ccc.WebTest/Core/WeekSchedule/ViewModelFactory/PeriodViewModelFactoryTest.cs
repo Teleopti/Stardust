@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Interfaces.Domain;
 
@@ -210,7 +215,58 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
             }
         }
 
-        [TearDown]
+	    [Test]
+		public void ShouldCreateOvertimeAvailabilityPeriodViewModelNotSpanToTomorrow()
+	    {
+		    var start = new TimeSpan(12, 0, 0);
+		    var end = new TimeSpan(24, 0, 1);
+		    var result=target.CreateOvertimeAvailabilityPeriodViewModels(new OvertimeAvailability(new Person(), DateOnly.Today, start, end), null, minMaxTime);
+		    result.First().Title.Should().Be.EqualTo(Resources.OvertimeAvailabilityWeb);
+		    result.First().TimeSpan.Should().Equals(TimeHelper.TimeOfDayFromTimeSpan(start, CultureInfo.CurrentCulture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(end, CultureInfo.CurrentCulture));
+		    result.First().StartPositionPercentage.Should().Be.EqualTo((decimal) (start - minMaxTime.StartTime).Ticks/(minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
+			result.First().EndPositionPercentage.Should().Be.EqualTo(1);
+			result.First().IsOvertimeAvailability.Should().Be.True();
+		    result.First().Color.Should().Be.EqualTo(Color.DarkGray.ToCSV());
+	    }
+
+		[Test]
+		public void ShouldCreateOvertimeAvailabilityPeriodViewModel()
+		{
+			var start = new TimeSpan(12, 0, 0);
+			var end = new TimeSpan(13, 0, 0);
+			var result = target.CreateOvertimeAvailabilityPeriodViewModels(new OvertimeAvailability(new Person(), DateOnly.Today, start, end), null, minMaxTime);
+			result.First().Title.Should().Be.EqualTo(Resources.OvertimeAvailabilityWeb);
+			result.First().TimeSpan.Should().Equals(TimeHelper.TimeOfDayFromTimeSpan(start, CultureInfo.CurrentCulture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(end, CultureInfo.CurrentCulture));
+			result.First().StartPositionPercentage.Should().Be.EqualTo((decimal)(start - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
+			result.First().EndPositionPercentage.Should().Be.EqualTo((decimal)(end - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
+			result.First().IsOvertimeAvailability.Should().Be.True();
+			result.First().Color.Should().Be.EqualTo(Color.DarkGray.ToCSV());
+		}
+
+		[Test]
+		public void ShouldCreateOvertimeAvailabilityPeriodViewModelForYesterday()
+		{
+			var start = new TimeSpan(12, 0, 0);
+			var end = new TimeSpan(25, 0, 0);
+			var result = target.CreateOvertimeAvailabilityPeriodViewModels(null, new OvertimeAvailability(new Person(), DateOnly.Today, start, end), minMaxTime);
+			result.First().Title.Should().Be.EqualTo(Resources.OvertimeAvailabilityWeb);
+			result.First().TimeSpan.Should().Equals(TimeHelper.TimeOfDayFromTimeSpan(start, CultureInfo.CurrentCulture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(end, CultureInfo.CurrentCulture));
+			result.First().StartPositionPercentage.Should().Be.EqualTo(0);
+			result.First().EndPositionPercentage.Should().Be.EqualTo((decimal)(end.Subtract(new TimeSpan(1, 0, 0, 0)) - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
+			result.First().IsOvertimeAvailability.Should().Be.True();
+			result.First().Color.Should().Be.EqualTo(Color.DarkGray.ToCSV());
+		}
+
+		[Test]
+		public void ShouldNotCreateOvertimeAvailabilityPeriodViewModelForYesterdayIfNotSpanToToday()
+		{
+			var start = new TimeSpan(12, 0, 0);
+			var end = new TimeSpan(13, 0, 0);
+			var result = target.CreateOvertimeAvailabilityPeriodViewModels(null, new OvertimeAvailability(new Person(), DateOnly.Today, start, end), minMaxTime);
+			result.Should().Be.Empty();
+		}
+
+	    [TearDown]
         public void Teardown()
         {
             System.Threading.Thread.CurrentPrincipal = principalBefore;

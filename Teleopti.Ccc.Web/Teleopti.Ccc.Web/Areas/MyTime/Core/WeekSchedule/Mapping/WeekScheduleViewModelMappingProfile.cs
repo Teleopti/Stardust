@@ -83,18 +83,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.Date, c => c.MapFrom(s => s.Date.ToShortDateString()))
 				.ForMember(d => d.FixedDate, c => c.MapFrom(s => s.Date.ToFixedClientDateOnlyFormat()))
 				.ForMember(d => d.DayOfWeekNumber, c => c.MapFrom(s => (int)s.Date.DayOfWeek))
-				.ForMember(d => d.Periods, c => c.ResolveUsing(s =>
-															{
-																var projectionList = new List<IVisualLayer>();
-																if (s.ProjectionYesterday != null)
-																	projectionList.AddRange(s.ProjectionYesterday);
-																if (s.Projection != null)
-																	projectionList.AddRange(s.Projection);
-																return _periodViewModelFactory.Invoke().CreatePeriodViewModels(projectionList,
-																																s.MinMaxTime,
-																																s.Date.Date,
-																																s.ScheduleDay == null ? null : s.ScheduleDay.TimeZone);
-															}))
+				.ForMember(d => d.Periods, c => c.ResolveUsing(
+					s =>
+					{
+						var projectionList = new List<IVisualLayer>();
+						if (s.ProjectionYesterday != null)
+							projectionList.AddRange(s.ProjectionYesterday);
+						if (s.Projection != null)
+							projectionList.AddRange(s.Projection);
+						var periodViewModelFactory = _periodViewModelFactory.Invoke();
+						var periodsViewModels = periodViewModelFactory.CreatePeriodViewModels(projectionList, s.MinMaxTime, s.Date.Date, s.ScheduleDay == null ? null : s.ScheduleDay.TimeZone);
+						var overtimeAvailabilityPeriodViewModels = periodViewModelFactory.CreateOvertimeAvailabilityPeriodViewModels(s.OvertimeAvailability, s.OvertimeAvailabilityYesterday, s.MinMaxTime);
+						return overtimeAvailabilityPeriodViewModels == null ? periodsViewModels : periodsViewModels == null ? overtimeAvailabilityPeriodViewModels : overtimeAvailabilityPeriodViewModels.Concat(periodsViewModels);
+					}))
 				.ForMember(d => d.TextRequestCount, o => o.ResolveUsing(s => s.PersonRequests == null ? 0 : s.PersonRequests.Count(r => (r.Request is TextRequest || r.Request is AbsenceRequest))))
 				.ForMember(d => d.Allowance, c => c.MapFrom(s => s.Allowance))
 				.ForMember(d => d.AbsenceAgents, c => c.MapFrom(s => s.AbsenceTime))
@@ -113,29 +114,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 					s =>
 					{
 						var mappingEngine = _mapper();
-					if (s.ScheduleDay!=null)
+						if (s.ScheduleDay != null)
 						{
-						var significantPart = s.ScheduleDay.SignificantPartForDisplay();
-						if (significantPart == SchedulePartView.ContractDayOff)
-						{
-							var periodViewModel = mappingEngine.Map<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>(s);
-							periodViewModel.StyleClassName += " " + StyleClasses.Striped;
-							return periodViewModel;
+							var significantPart = s.ScheduleDay.SignificantPartForDisplay();
+							if (significantPart == SchedulePartView.ContractDayOff)
+							{
+								var periodViewModel = mappingEngine.Map<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>(s);
+								periodViewModel.StyleClassName += " " + StyleClasses.Striped;
+								return periodViewModel;
+							}
+							if (significantPart == SchedulePartView.DayOff)
+								return mappingEngine.Map<WeekScheduleDayDomainData, PersonDayOffPeriodViewModel>(s);
+							if (significantPart == SchedulePartView.MainShift)
+								return mappingEngine.Map<WeekScheduleDayDomainData, PersonAssignmentPeriodViewModel>(s);
+							if (significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
+								return mappingEngine.Map<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>(s);
 						}
-						if (significantPart == SchedulePartView.DayOff)
-							return mappingEngine.Map<WeekScheduleDayDomainData, PersonDayOffPeriodViewModel>(s);
-						if (significantPart == SchedulePartView.MainShift)
-							return mappingEngine.Map<WeekScheduleDayDomainData, PersonAssignmentPeriodViewModel>(s);
-						if (significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
-							return mappingEngine.Map<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>(s);
-						}	
 						return mappingEngine.Map<WeekScheduleDayDomainData, PeriodViewModel>(s);
 					}))
 				.ForMember(d => d.OvertimeAvailabililty, o => o.ResolveUsing(s =>
 					{
-						if (s.ScheduleDay.OvertimeAvailablityCollection() != null &&
-						    s.ScheduleDay.OvertimeAvailablityCollection().FirstOrDefault() != null)
-							return s.ScheduleDay.OvertimeAvailablityCollection().FirstOrDefault();
+						if (s.OvertimeAvailability != null)
+							return s.OvertimeAvailability;
 						if (s.ScheduleDay.SignificantPartForDisplay() == SchedulePartView.MainShift)
 						{
 							return new OvertimeAvailabilityViewModel
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 							DefaultEndTime = TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0)),
 							DefaultEndTimeNextDay = false
 						};
-						
+
 					}))
 				;
 
