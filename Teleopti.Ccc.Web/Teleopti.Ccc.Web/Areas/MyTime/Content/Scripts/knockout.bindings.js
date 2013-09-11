@@ -154,19 +154,50 @@ ko.bindingHandlers.timepicker = {
 };
 
 //Sets the tooltip (using bootstrapper) to the bound text
-ko.bindingHandlers.tooltip = {
-	update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-		var $element, options, tooltip;
-		options = ko.utils.unwrapObservable(valueAccessor());
-		$element = $(element);
-		tooltip = $element.data('tooltip');
-		if (tooltip) {
-			$.extend(tooltip.options, options);
-		} else {
-			$element.tooltip(options);
-		}
-	}
+var TooltipBinding = function() {
+
+    var getOptions = function (valueAccessor) {
+        var options = ko.utils.unwrapObservable(valueAccessor());
+        options.title = ko.utils.unwrapObservable(options.title);
+        return options;
+    };
+
+    var trackIsShowing = function($element) {
+        var tooltip = $element.data('tooltip');
+        tooltip.options.showing = false;
+        $element
+            .on("hide", function () {
+                tooltip.showing = false;
+            }).on("show", function () {
+                tooltip.showing = true;
+            });
+    };
+
+    var refreshIfShowing = function ($element) {
+        var tooltip = $element.data('tooltip');
+        if (tooltip.showing) {
+            var preserveAnimation = tooltip.options.animation;
+            tooltip.options.animation = false;
+            $element.tooltip('hide').tooltip('show');
+            tooltip.options.animation = preserveAnimation;
+        }
+    };
+    
+    this.init = function(element, valueAccessor, allBindingsAccessor) {
+        var $element = $(element);
+        $element.tooltip(getOptions(valueAccessor));
+        trackIsShowing($element);
+    };
+
+    this.update = function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        var $element = $(element);
+        var tooltip = $element.data('tooltip');
+        $.extend(tooltip.options, getOptions(valueAccessor));
+        refreshIfShowing($element);
+    };
+
 };
+ko.bindingHandlers.tooltip = new TooltipBinding();
 
 ko.bindingHandlers.select2 = {
 	init: function (element, valueAccessor) {
