@@ -71,20 +71,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						var scheduleDate = scheduleDayPro.Day;
 						var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(matrixData.Matrix.Person, scheduleDate);
 						var scheduleDictionary = _schedulingResultStateHolder.Schedules;
-						var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
+						var groupMembers = groupPerson.GroupMembers;
+						var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupMembers,
 						                                                                       scheduleDate, schedulingOptions,
 						                                                                       scheduleDictionary);
-						addDaysOffForTeam(matrixListAll, schedulingOptions, scheduleDate, restriction);
+						var matrixesOfOneTeam = matrixListAll.Where(x => groupMembers.Contains(x.Person)).ToList();
+						addDaysOffForTeam(matrixesOfOneTeam, schedulingOptions, scheduleDate, restriction);
 					}
 					foreach (var scheduleDayPro in matrixData.Matrix.UnlockedDays)
 					{
 						var scheduleDate = scheduleDayPro.Day;
 						var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(matrixData.Matrix.Person, scheduleDate);
 						var scheduleDictionary = _schedulingResultStateHolder.Schedules;
-						var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
+						var groupMembers = groupPerson.GroupMembers;
+						var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupMembers,
 						                                                                       scheduleDate, schedulingOptions,
 						                                                                       scheduleDictionary);
-						addContractDaysOffForTeam(matrixListAll, schedulingOptions, rollbackService, scheduleDate, restriction);
+						var matrixesOfOneTeam = matrixListAll.Where(x => groupMembers.Contains(x.Person)).ToList();
+						addContractDaysOffForTeam(matrixesOfOneTeam, schedulingOptions, rollbackService, scheduleDate, restriction);
 					}
 				}
 			}
