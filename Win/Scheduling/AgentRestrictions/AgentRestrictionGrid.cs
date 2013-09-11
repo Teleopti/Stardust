@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Threading;
+using Autofac;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Optimization;
@@ -14,6 +14,7 @@ using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Interfaces.Domain;
+using IContainer = System.ComponentModel.IContainer;
 
 namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 {
@@ -259,7 +260,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			Model.CoveredRanges.Add(GridRangeInfo.Cells(0, 9, 0, 12));	
 		}
 
-		public void LoadData(ISchedulerStateHolder stateHolder, IList<IPerson> persons, RestrictionSchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, IPerson selectedPerson, AgentRestrictionsDetailView detailView, IScheduleDay scheduleDay)
+		public void LoadData(ISchedulerStateHolder stateHolder, IList<IPerson> persons, RestrictionSchedulingOptions schedulingOptions, IWorkShiftWorkTime workShiftWorkTime, IPerson selectedPerson, AgentRestrictionsDetailView detailView, IScheduleDay scheduleDay, ILifetimeScope container)
 		{
 			if (stateHolder == null) throw new ArgumentNullException("stateHolder");
 
@@ -275,8 +276,9 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 			_model.DisplayRows.Clear();
 
+			var locker = container.Resolve<IMatrixUserLockLocker>();
 			var scheduleMatrixListCreator = new ScheduleMatrixListCreator(stateHolder.SchedulingResultState);
-			var agentRestrictionsDisplayRowCreator = new AgentRestrictionsDisplayRowCreator(stateHolder, scheduleMatrixListCreator);
+			var agentRestrictionsDisplayRowCreator = new AgentRestrictionsDisplayRowCreator(stateHolder, scheduleMatrixListCreator, locker);
 
 			Load(agentRestrictionsDisplayRowCreator);
 			//ThreadPool.QueueUserWorkItem(Load, agentRestrictionsDisplayRowCreator);
