@@ -26,7 +26,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-    public class FilteredPeopleHolder : IDisposable
+	public class FilteredPeopleHolder : IDisposable, IPeopleAccountUpdaterProvider
     {
         private ITraceableRefreshService _refreshService;
         private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
@@ -93,7 +93,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
         public IUnitOfWork UnitOfWork { get; set; }
 
-        public Collection<IPerson> PersonCollection
+		public IEnumerable<KeyValuePair<IPerson, IPersonAccountCollection>> PersonAccounts(IPerson person)
+		{
+			return AllAccounts.Where(p => p.Key == person).ToList();
+		}
+
+		public Collection<IPerson> PersonCollection
         {
             get { return new Collection<IPerson>(_personCollection); }
         }
@@ -476,7 +481,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         private void loadFilteredPeopleGridData(IPerson person, IUserDetail userDetail)
         {
             //create new person grid data.
-			var personGridData = new PersonGeneralModel(person, userDetail, new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new FilteredPeopleAccountUpdater(this));
+			var personGridData = new PersonGeneralModel(person, userDetail, new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new PersonAccountUpdaterForWin(this));
 
             //set optional columns if any.
             if (_optionalColumnCollection.Count > 0)

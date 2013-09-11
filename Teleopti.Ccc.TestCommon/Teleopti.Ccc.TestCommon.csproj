@@ -87,6 +87,7 @@
     <Compile Include="FakeData\FakeDataSource.cs" />
     <Compile Include="FakeData\FakePersonAssignmentRepository.cs" />
     <Compile Include="FakeData\FakePersonRepository.cs" />
+    <Compile Include="FakeData\PersonAccountCollectionFactory.cs" />
     <Compile Include="FakeData\ScheduleDayFactory.cs" />
     <Compile Include="GenericDisposable.cs" />
     <Compile Include="IniFileInfo.cs" />

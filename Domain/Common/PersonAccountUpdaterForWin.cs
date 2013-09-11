@@ -1,7 +1,6 @@
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
+namespace Teleopti.Ccc.Domain.Common
 {
 	/// <summary>
 	/// Person account updater that works with the Win project's FilteredPeopleHolder's domain data
@@ -9,13 +8,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 	/// <remarks>
 	/// Used for the win fat client where all the data is already loaded in the FilteredPeopleHolder
 	/// </remarks>
-	public class FilteredPeopleAccountUpdater : IPersonAccountUpdater
+	public class PersonAccountUpdaterForWin : IPersonAccountUpdater
 	{
-		private readonly FilteredPeopleHolder _filteredPeopleHolder;
+		private readonly IPeopleAccountUpdaterProvider _provider;
 
-		public FilteredPeopleAccountUpdater(FilteredPeopleHolder filteredPeopleHolder)
+		public PersonAccountUpdaterForWin(IPeopleAccountUpdaterProvider provider)
 		{
-			_filteredPeopleHolder = filteredPeopleHolder;
+			_provider = provider;
 		}
 
 		public void UpdateOnTermination(DateOnly terminalDate, IPerson person)
@@ -43,17 +42,19 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 		private void refreshAllAccounts(IPerson person)
 		{
-			var personAccounts = _filteredPeopleHolder.AllAccounts.Where(p => p.Key == person).ToList();
+			var personAccounts = _provider.PersonAccounts(person);
 			foreach (var personAccount in personAccounts)
 			{
 				foreach (var temp in personAccount.Value)
 				{
 					foreach (var account in temp.AccountCollection())
 					{
-						_filteredPeopleHolder.RefreshService.Refresh(account, _filteredPeopleHolder.UnitOfWork);
+						_provider.RefreshService.Refresh(account, _provider.UnitOfWork);
 					}
 				}
 			}
 		}
+
+	
 	}
 }

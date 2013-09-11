@@ -22,14 +22,15 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             UnitOfWorkFactory = Infrastructure.UnitOfWork.UnitOfWorkFactory.Current;
         }
 
-        public PersonAccountChildModel(ITraceableRefreshService refreshService, IPersonAccountCollection personAccounts, IAccount account, CommonNameDescriptionSetting commonNameDescription)
+        public PersonAccountChildModel(ITraceableRefreshService refreshService, IPersonAccountCollection personAccounts, IAccount account, CommonNameDescriptionSetting commonNameDescription, IPersonAccountUpdater _personAccountUpdater)
             : this()
         {
             _refreshService = refreshService;
             _containedEntity = personAccounts;
             _currentAccount = account;
             _commonNameDescription = commonNameDescription;
-            base.ContainedEntity = account;
+	        this._personAccountUpdater = _personAccountUpdater;
+	        base.ContainedEntity = account;
         }
 
         protected IUnitOfWorkFactory UnitOfWorkFactory { get; set; }
@@ -212,7 +213,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
                 if (_currentAccount != null && value.HasValue)
                 {
                     _currentAccount.StartDate = value.Value;
-                    RefreshAccount();
+					_personAccountUpdater.UpdateOnActivation(_currentAccount.Owner.Person);
                 }
             }
         }
@@ -326,8 +327,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
                  {
                      //fixa sen. Om du inte vet hur, fråga brasilianarna
                      throw new ArgumentException("Kan inte sätta absence ännu");
-                     //_currentAccount.Owner.Absence = value;
-                     //RefreshAccount();
                  }
             }
         }

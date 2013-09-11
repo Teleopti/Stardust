@@ -999,7 +999,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             {
                 foreach (var account in personAcccountCollection.AllPersonAccounts())
                 {
-                    var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription);
+                    var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription, new PersonAccountUpdaterDummy());
                     if (adapter.ContainedEntity != null && ((account == currentAccount) && canBold) ||
                         adapter.ContainedEntity.Id == null)
                         adapter.CanBold = true;
@@ -1024,7 +1024,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             foreach (var account in personAcccountCollection.AllPersonAccounts())
             {
-                var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription);
+                var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription, new PersonAccountUpdaterDummy());
                 handleCanBold(cachedCollection, canBold, currentAccount, account, adapter);
                 _personaccountGridViewChildCollection.Add(adapter);   
             }
