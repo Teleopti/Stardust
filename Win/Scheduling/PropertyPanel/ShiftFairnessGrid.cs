@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			{
 				var shiftCategory = this[e.RowIndex, 0].Tag as IShiftCategory;
 
-				foreach (var shiftFairness in _model.GetShiftFairness())
+				foreach (var shiftFairness in _model.ShiftFairness)
 				{
 					if (shiftFairness.ShiftCategory.Equals(shiftCategory))
 					{
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 					if (e.ColIndex == (int) ShiftFairnessGridColumns.StandardDeviationValue)
 					{
 						e.Style.CellType = "NumericReadOnlyCell";
-						e.Style.CellValue = _presenter.CalculateTotalStandardDeviation(_model.GetShiftFairness());	
+						e.Style.CellValue = _presenter.CalculateTotalStandardDeviation(_model.ShiftFairness );	
 					}
 					else
 					{

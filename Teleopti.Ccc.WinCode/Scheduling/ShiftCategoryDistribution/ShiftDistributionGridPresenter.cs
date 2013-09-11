@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
             _sortColumn = colIndex;
 
             var model = _view.ExtractorModel;
-            var shiftDistributions = model.GetShiftDistribution();
+            var shiftDistributions = model.ShiftDistributions ;
 
             if (colIndex == 0)
             {

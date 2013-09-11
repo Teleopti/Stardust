@@ -50,9 +50,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             }
             using (_mock.Playback())
             {
-                _target = new DistributionInformationExtractor(_scheduleDays);
+                _target = new DistributionInformationExtractor();
             }
-            var result = _target.GetShiftFairness() ;
+            var result = _target.ShiftFairness ;
             Assert.AreEqual(result.Count(), 2);
         }
 
@@ -69,9 +69,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             }
             using (_mock.Playback())
             {
-                _target = new DistributionInformationExtractor(_scheduleDays);
+                _target = new DistributionInformationExtractor();
             }
-            var result = _target.GetShiftCategoryPerAgent() ;
+            var result = _target.ShiftCategoryPerAgents  ;
             Assert.AreEqual(result.Count(), 3);
         }
         
@@ -88,9 +88,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             }
             using (_mock.Playback())
             {
-                _target = new DistributionInformationExtractor(_scheduleDays);
+                _target = new DistributionInformationExtractor();
             }
-            var result = _target.GetShiftDistribution();
+            var result = _target.ShiftDistributions ;
             Assert.AreEqual(result.Count(), 2);
         }
 
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             }
             using (_mock.Playback())
             {
-                _target = new DistributionInformationExtractor(_scheduleDays);
+                _target = new DistributionInformationExtractor();
             }
             var result = _target.PersonInvolved.OrderBy(s=>s.Name.FirstName).ToArray();
             Assert.AreEqual(result.Count(), 2);
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             }
             using (_mock.Playback())
             {
-                _target = new DistributionInformationExtractor(_scheduleDays);
+                _target = new DistributionInformationExtractor();
             }
             var result = _target.Dates.OrderBy(s=>s.Date ).ToArray();
             Assert.AreEqual(result.Count(), 1);
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             }
             using (_mock.Playback())
             {
-                _target = new DistributionInformationExtractor(_scheduleDays);
+                _target = new DistributionInformationExtractor();
             }
             var result = _target.ShiftCategories.OrderBy(s=>s.Description.Name ).ToArray() ;
             Assert.AreEqual(result.Count(), 2);
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             }
             using (_mock.Playback())
             {
-                _target = new DistributionInformationExtractor(_scheduleDays);
+                _target = new DistributionInformationExtractor();
             }
             var result = _target.GetShiftCategoryFrequency(_morning );
             Assert.AreEqual(result.Count(), 1);

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			_sortColumn = colIndex;
 
 			var model = _view.ExtractorModel;
-			var shiftCategoryPerAgent = model.GetShiftCategoryPerAgent();
+            var shiftCategoryPerAgent = model.ShiftCategoryPerAgents;
 
 			if (model.ShiftCategories.Count  <= (_sortColumn - 1) || model.ShiftCategories.Count == 0)
 			{

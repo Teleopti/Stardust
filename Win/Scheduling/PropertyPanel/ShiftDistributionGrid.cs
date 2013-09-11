@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             ResetVolatileData();
             _model = model;
-            _presenter = new ShiftDistributionGridPresenter(this, _model.GetShiftDistribution());
+            _presenter = new ShiftDistributionGridPresenter(this, _model.ShiftDistributions);
             _presenter.Sort(0);
             initializeComponent();
         }

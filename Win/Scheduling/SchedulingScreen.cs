@@ -1007,6 +1007,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			
 			_backgroundWorkerRunning = true;
 			backgroundWorkerLoadData.RunWorkerAsync();
+            _updateSelectionForShiftDistribution = new UpdateSelectionForShiftDistribution(new DistributionInformationExtractor());
 		}
 
 		private void loadQuickAccessState()
@@ -2450,7 +2451,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void _backgroundWorkerResourceCalculator_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-            updateDistrbutionInformation();
+            //updateDistrbutionInformation(TODO);
 
             if (Disposing)
 				return;
@@ -2478,11 +2479,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			validatePersons();
         }
 
-	    private void updateDistrbutionInformation()
+	    private void updateDistrbutionInformation(ModifyEventArgs modifyEventArgs)
 	    {
             var allSchedules = _scheduleDayListFactory.CreatScheduleDayList();
-	        var updateSelectionForShiftDistribution = new UpdateSelectionForShiftDistribution(new DistributionInformationExtractor());
-            updateSelectionForShiftDistribution.Update(allSchedules,_scheduleView,_shiftDistributionControl ,_shiftFairnessAnalysisControl,_shiftPerAgentControl   );
+            _updateSelectionForShiftDistribution.Update(allSchedules, _scheduleView, _shiftDistributionControl, _shiftFairnessAnalysisControl, _shiftPerAgentControl, modifyEventArgs, _schedulerState.TimeZoneInfo);
 	    }
 
 	    private void _backgroundWorkerResourceCalculator_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -4411,6 +4411,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				_lastModifiedPart = e;
 
+                updateDistrbutionInformation(e);
+
 				if (!_backgroundWorkerRunning)
 				{
 					if (_scheduleView != null)
@@ -4870,7 +4872,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             
 
-		    updateDistrbutionInformation();
+		    updateDistrbutionInformation(null);
 			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 		}
 
@@ -6508,7 +6510,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripButtonFilterAgents_Click(object sender, EventArgs e)
 		{
 			showFilterDialog();
-			updateDistrbutionInformation();
+			updateDistrbutionInformation(null);
 		}
 
 		private class ConflictHandlingResult
@@ -6656,7 +6658,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		private DateTime _lastclickLabels;
-	    
+	    private UpdateSelectionForShiftDistribution _updateSelectionForShiftDistribution;
 
 
 	    private void toolStripButtonShowTexts_Click(object sender, EventArgs e)
@@ -7232,7 +7234,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_requestView.FilterPersons(_schedulerState.FilteredPersonDictionary.Select(kvp => kvp.Key));
 			drawSkillGrid();
 
-			updateDistrbutionInformation();
+			updateDistrbutionInformation(null);
 		}
 
 		private void toolStripMenuItemSwitchViewPointToTimeZoneOfSelectedAgent_Click(object sender, EventArgs e)

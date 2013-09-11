@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
 			_sortColumn = colIndex;
 			var model = _view.ExtractorModel;
-			var shiftFairness = model.GetShiftFairness();
+			var shiftFairness = model.ShiftFairness ;
 
 			if (colIndex == (int)ShiftFairnessGridColumns.ShiftCategory) _sortedShiftCategories = model.ShiftCategories.OrderByWithDirection(s => s.Description.Name, !_sortAscending).ToList();
 			else
