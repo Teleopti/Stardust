@@ -168,12 +168,14 @@ function Test-InstallationSQLLogin {
                 {
                     $spFile="$here\RestoreToBaseline.sql"
                     $spContent = [IO.File]::ReadAllText($spFile)
-                    restoreToBaseline -computerName $computerName -spContent $spContent}
+                    restoreToBaseline -computerName $computerName -spContent $spContent
+                    #add Lic
+                    Add-CccLicenseToDemo
+                }
         }
 
         
-        #add Lic
-        Add-CccLicenseToDemo
+        
 
 		It "should install correct MSI from Hebe"{
 			
@@ -185,7 +187,11 @@ function Test-InstallationSQLLogin {
 			[array]$ArgArray = @($MsiFile, $global:batName, "dummmyUser","dummmyPwd")
 		  
 			Install-TeleoptiCCCServer -BatchFile "$BatchFile" -ArgArray $ArgArray
-			
+			if($global:resetToBaseline -eq "False")
+            {
+                #add Lic
+                Add-CccLicenseToDemo
+            }
 		}
 	}
 }
