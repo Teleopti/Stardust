@@ -148,7 +148,7 @@ item: Execute Program
   Pathname=.\AnalysisServicesManager.exe
   Command Line=-AS"%AS%" -AD"%AD%" -SS"%SS%" -SD"%SD%" %SA% -FP"%FP%"
   Default Directory=%DIR%
-  Flags=00000010
+  Flags=00000110
 end
 item: Remark
   Text=Create AS Database
@@ -161,12 +161,12 @@ item: Execute Program
   Pathname=.\AnalysisServicesManager.exe
   Command Line=-AS"%AS%" -AD"%AD%" -SS"%SS%" -SD"%SD%" %SA% -FP"%FP%"
   Default Directory=%DIR%
-  Flags=00000010
+  Flags=00000110
 end
 item: Execute Program
   Pathname=PING
   Command Line=127.0.0.1 -n 3 -w 1000 > nul
-  Flags=00000010
+  Flags=00000110
 end
 item: Remark
   Text=Process Database
@@ -183,7 +183,7 @@ item: Execute Program
   Pathname=.\AnalysisServicesManager.exe
   Command Line=-AS"%AS%" -AD"%AD%" -SS"%SS%" -SD"%SD%" %SA% -FP"%FP%"
   Default Directory=%DIR%
-  Flags=00000010
+  Flags=00000110
 end
 item: End Block
 end

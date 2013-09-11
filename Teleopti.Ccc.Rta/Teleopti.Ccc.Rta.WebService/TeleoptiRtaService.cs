@@ -19,9 +19,6 @@ namespace Teleopti.Ccc.Rta.WebService
         private const string logOutStateCode = "LOGGED-OFF";
         private static readonly ILog Log = LogManager.GetLogger(typeof (TeleoptiRtaService));
 		
-		//private static Timer _flushTimer;
-		//private ElapsedEventHandler _flushRtaStateCache;
-
 	    public TeleoptiRtaService(IRtaDataHandler rtaDataHandler)
         {
 		    _rtaDataHandler = rtaDataHandler;
@@ -33,26 +30,6 @@ namespace Teleopti.Ccc.Rta.WebService
 				authenticationKey = "!#¤atAbgT%";
             _authenticationKey = authenticationKey;
         }
-
-		//private void InitializeClientHandler()
-		//{
-		//	_rtaDataHandler = RtaFactory.DataHandler;
-		//	initializeFlushTimer();
-		//}
-
-		//private void initializeFlushTimer()
-		//{
-		//	if (_flushTimer != null) return;
-		//	_flushRtaStateCache = delegate
-		//		{
-		//			if (_rtaDataHandler != null && _rtaDataHandler.IsAlive)
-		//				_rtaDataHandler.FlushCacheToDatabase();
-		//		};
-
-		//	_flushTimer = new Timer(5000);
-		//	_flushTimer.Elapsed += _flushRtaStateCache;
-		//	_flushTimer.Start();
-		//}
 
 	    public int SaveExternalUserState(string authenticationKey, string userCode, string stateCode,
 	                                     string stateDescription, bool isLoggedOn, int secondsInState, DateTime timestamp,

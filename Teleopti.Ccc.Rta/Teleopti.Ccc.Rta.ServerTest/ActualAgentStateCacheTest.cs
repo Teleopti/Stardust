@@ -101,11 +101,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_target.batchedAgents.Count.Should().Be.EqualTo(0);
 		}
 
-		[Test]
-		public void FlushCacheToDataBase_ShouldOnlyRemoveIfNoNewStateHaveBeenAdded()
-		{
-		}
-
 		private class actualAgentStateCacheForTest :ActualAgentStateCache
 		{
 			public actualAgentStateCacheForTest(IDatabaseHandler databaseHandler) : base(databaseHandler)

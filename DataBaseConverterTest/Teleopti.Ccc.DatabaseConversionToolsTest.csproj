@@ -187,7 +187,6 @@
     <Compile Include="EntityMapper\ShiftCategoryMapperTest.cs" />
     <Compile Include="EntityMapper\WorkShiftRuleSetMapperTest.cs" />
     <Compile Include="FakeOldEntityRuleSetBagTest.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helpers\AgentDayFactory.cs" />
     <Compile Include="Helpers\ConverterEventHelper.cs" />
     <Compile Include="Helpers\PropertyCounter.cs" />

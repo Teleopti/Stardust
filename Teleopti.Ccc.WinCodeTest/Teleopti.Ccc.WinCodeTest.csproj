@@ -824,7 +824,6 @@
     <Compile Include="Forecasting\SkillPages\SkillWizardPagesTest.cs" />
     <Compile Include="Forecasting\WorkloadPages\WorkloadPropertiesPagesTest.cs" />
     <Compile Include="Forecasting\WorkloadPages\WorkloadWizardPagesTest.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="PeopleAdmin\Models\PersonGeneralModelTest.cs" />
     <Compile Include="Common\ClipHandlerTest.cs" />
     <Compile Include="Common\ClipTest.cs" />

@@ -91,7 +91,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="PmGetUsersException.cs" />
     <Compile Include="ImpersonationInspector.cs" />
     <Compile Include="ImpersonationValidationAttribute.cs" />
