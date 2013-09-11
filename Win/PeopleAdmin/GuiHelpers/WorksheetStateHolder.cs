@@ -7,8 +7,6 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -150,7 +148,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             filteredPeopleHolder.MarkForInsert(newPerson);
 
-			var gridData = new PersonGeneralModel(newPerson, new UserDetail(newPerson), new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new PersonAccountUpdaterDummy()) { CanBold = true };
+			var gridData = new PersonGeneralModel(newPerson, new UserDetail(newPerson), new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new PersonAccountUpdaterForWin(filteredPeopleHolder)) { CanBold = true };
 
         	gridData.SetAvailableRoles(filteredPeopleHolder.ApplicationRoleCollection);
 
@@ -202,7 +200,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
                 filteredPeopleHolder.MarkForInsert(person);
 
-				var personGridData = new PersonGeneralModel(person, new UserDetail(person), new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new PersonAccountUpdaterDummy()) { CanBold = true };
+				var personGridData = new PersonGeneralModel(person, new UserDetail(person), new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new PersonAccountUpdaterForWin(filteredPeopleHolder)) { CanBold = true };
             	personGridData.SetAvailableRoles(filteredPeopleHolder.ApplicationRoleCollection);
 
                 //set optional columns if any.);
@@ -983,23 +981,28 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         }
 
         public void GetChildPersonAccounts(int index, 
-                                Collection<IPersonAccountModel> personAccountGridViewAdaptorCollection, 
-                                CommonNameDescriptionSetting commonNameDescription,
-                                IDictionary<IPerson, IPersonAccountCollection> allAccounts)
+								FilteredPeopleHolder filteredPeopleHolder)
         {
+
+
+			Collection<IPersonAccountModel> personAccountGridViewAdaptorCollection =
+				filteredPeopleHolder.PersonAccountGridViewAdaptorCollection;
             IPerson personFiltered = personAccountGridViewAdaptorCollection[index].Parent.Person;
+
+			IDictionary<IPerson, IPersonAccountCollection> allAccounts = filteredPeopleHolder.AllAccounts;
             var personAcccountCollection = allAccounts[personFiltered];
 
             bool canBold = personAccountGridViewAdaptorCollection[index].CanBold;
             IAccount currentAccount = personAccountGridViewAdaptorCollection[index].CurrentAccount;
 
             _personaccountGridViewChildCollection = new List<IPersonAccountChildModel>();
+			CommonNameDescriptionSetting commonNameDescription = filteredPeopleHolder.CommonNameDescription;
             CurrentChildName = commonNameDescription.BuildCommonNameDescription(personFiltered);
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 foreach (var account in personAcccountCollection.AllPersonAccounts())
                 {
-                    var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription, new PersonAccountUpdaterDummy());
+                    var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription, new PersonAccountUpdaterForWin(filteredPeopleHolder));
                     if (adapter.ContainedEntity != null && ((account == currentAccount) && canBold) ||
                         adapter.ContainedEntity.Id == null)
                         adapter.CanBold = true;
@@ -1009,22 +1012,27 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             }
         }
 
-        public void GetChildPersonAccounts(int index, Collection<IPersonAccountModel> personAccountGridViewAdaptorCollection,
-            ReadOnlyCollection<IPersonAccountChildModel> cachedCollection, CommonNameDescriptionSetting commonNameDescription,
-                                IDictionary<IPerson, IPersonAccountCollection> allAccounts)
+        public void GetChildPersonAccounts(int index, ReadOnlyCollection<IPersonAccountChildModel> cachedCollection, FilteredPeopleHolder filteredPeopleHolder)
         {
+
+			Collection<IPersonAccountModel> personAccountGridViewAdaptorCollection =
+				filteredPeopleHolder.PersonAccountGridViewAdaptorCollection;
             IPerson personFiltered = personAccountGridViewAdaptorCollection[index].Parent.Person;
-            var personAcccountCollection = allAccounts[personFiltered];
+
+			IDictionary<IPerson, IPersonAccountCollection> allAccounts = filteredPeopleHolder.AllAccounts;
+            var accountCollection = allAccounts[personFiltered];
 
             bool canBold = personAccountGridViewAdaptorCollection[index].CanBold;
             IAccount currentAccount = personAccountGridViewAdaptorCollection[index].CurrentAccount;
 
             _personaccountGridViewChildCollection = new List<IPersonAccountChildModel>();
+
+			CommonNameDescriptionSetting commonNameDescription = filteredPeopleHolder.CommonNameDescription;
             CurrentChildName =commonNameDescription.BuildCommonNameDescription( personFiltered);
 
-            foreach (var account in personAcccountCollection.AllPersonAccounts())
+            foreach (var account in accountCollection.AllPersonAccounts())
             {
-                var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription, new PersonAccountUpdaterDummy());
+                var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription, new PersonAccountUpdaterForWin(filteredPeopleHolder));
                 handleCanBold(cachedCollection, canBold, currentAccount, account, adapter);
                 _personaccountGridViewChildCollection.Add(adapter);   
             }
