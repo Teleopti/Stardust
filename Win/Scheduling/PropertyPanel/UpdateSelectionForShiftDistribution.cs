@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             if (scheduleView != null)
             {
                 //_distributionInformationExtractor.ExtractDistributionInfo(allSchedules);
-                _distributionInformationExtractor.ExtractDistributionInfo2(allSchedules, lastModifiedPart, timeZoneInfo);
+                _distributionInformationExtractor.ExtractDistributionInfo(allSchedules, lastModifiedPart, timeZoneInfo);
                 shiftDistributionControl.UpdateModel(_distributionInformationExtractor);
                 shiftFairnessAnalysisControl.UpdateModel(_distributionInformationExtractor);
                 shiftPerAgentControl.UpdateModel(_distributionInformationExtractor);

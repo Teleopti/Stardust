@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			using (_mock.Record())
 			{
 				Expect.Call(_view.ExtractorModel).Return(_extractor).Repeat.AtLeastOnce();
-				Expect.Call(_extractor.GetShiftCategoryPerAgent()).Return(shiftCategoryPerAgentList).Repeat.AtLeastOnce();
+				Expect.Call(_extractor.ShiftCategoryPerAgents ).Return(shiftCategoryPerAgentList).Repeat.AtLeastOnce();
 				Expect.Call(_extractor.PersonInvolved).Return(personInvolved).Repeat.AtLeastOnce();
 				Expect.Call(_extractor.ShiftCategories).Return(new List<IShiftCategory> {shiftCategory}).Repeat.AtLeastOnce();
 				Expect.Call(_view.SchedulerState).Return(_schedulerState).Repeat.AtLeastOnce();
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			using (_mock.Record())
 			{
 				Expect.Call(_view.ExtractorModel).Return(_extractor).Repeat.AtLeastOnce();
-				Expect.Call(_extractor.GetShiftCategoryPerAgent()).Return(shiftCategoryPerAgentList).Repeat.AtLeastOnce();
+				Expect.Call(_extractor.ShiftCategoryPerAgents ).Return(shiftCategoryPerAgentList).Repeat.AtLeastOnce();
 				Expect.Call(_extractor.PersonInvolved).Return(personInvolved).Repeat.AtLeastOnce();
 				Expect.Call(_extractor.ShiftCategories).Return(new List<IShiftCategory> { shiftCategory }).Repeat.AtLeastOnce();
 			}
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			using (_mock.Record())
 			{
 				Expect.Call(_view.ExtractorModel).Return(_extractor).Repeat.Twice();
-				Expect.Call(_extractor.GetShiftCategoryPerAgent()).Return(new List<ShiftCategoryPerAgent>());
+                Expect.Call(_extractor.ShiftCategoryPerAgents).Return(new List<ShiftCategoryPerAgent>());
 				Expect.Call(_extractor.PersonInvolved).Return(personInvolved);
 				Expect.Call(_extractor.ShiftCategories).Return(new List<IShiftCategory>());
 

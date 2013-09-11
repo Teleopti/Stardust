@@ -13,27 +13,30 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
         IList<DateOnly> Dates { get; }
         IList<IPerson> PersonInvolved { get; }
         IList<ShiftFairness> ShiftFairness { get; }
-        //IList<ShiftDistribution> GetShiftDistribution();
-        //IList<ShiftCategoryPerAgent> GetShiftCategoryPerAgent();
-        //IList<ShiftFairness> GetShiftFairness();
+
+        /// <summary>
+        /// For testing the code
+        /// </summary>
+        IDictionary<IPerson, IList<ShiftCategoryPerAgent>> PersonCache { get; }
+
+        /// <summary>
+        /// For testing the code
+        /// </summary>
+        IDictionary<DateOnly, IList<ShiftDistribution>> DateCache { get; }
         Dictionary<int, int> GetShiftCategoryFrequency(IShiftCategory shiftCategory);
-        void ExtractDistributionInfo2(IList<IScheduleDay> allSchedules, ModifyEventArgs modifyEventArgs, TimeZoneInfo timeZoneInfo);
+        void ExtractDistributionInfo(IList<IScheduleDay> allSchedules, ModifyEventArgs modifyEventArgs, TimeZoneInfo timeZoneInfo);
     }
 
     public class DistributionInformationExtractor : IDistributionInformationExtractor
     {
-        private ShiftCategoryAttributesExtractor _shiftCategoryAttributedExtractor;
+        private readonly ShiftCategoryAttributesExtractor _shiftCategoryAttributedExtractor;
         private IList<ShiftCategoryStructure> _mappedScheduleDays;
-        //private IList<ShiftCategoryPerAgent> _shiftCategoryPerAgentList;
         private IDictionary<IPerson, IList<ShiftCategoryPerAgent>> _personCache;
         private IDictionary<DateOnly, IList<ShiftDistribution>> _dateCache; 
 
         public DistributionInformationExtractor()
         {
-            //_mappedScheduleDays = ScheduleDayToShiftCategoryMapper.MapScheduleDay(scheduleDays);
             _shiftCategoryAttributedExtractor = new ShiftCategoryAttributesExtractor();
-            //_shiftCategoryAttributedExtractor.ExtractShiftCategoryInformation( _mappedScheduleDays);
-            //_shiftCategoryPerAgentList = new List<ShiftCategoryPerAgent>();
             _personCache = new Dictionary<IPerson, IList<ShiftCategoryPerAgent>>();
             _dateCache = new Dictionary<DateOnly, IList<ShiftDistribution>>();
         }
@@ -44,28 +47,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
         public IList<IPerson> PersonInvolved { get { return _shiftCategoryAttributedExtractor.PersonInvolved; } }
 
-        //public IList<ShiftDistribution> GetShiftDistribution()
-        //{
-        //    return ShiftDistributionCalculator.Extract(_mappedScheduleDays);
-        //}
-
-        //public IList<ShiftCategoryPerAgent> GetShiftCategoryPerAgent()
-        //{
-        //    _shiftCategoryPerAgentList = ShiftCategoryPerAgentCalculator.Extract(_mappedScheduleDays);
-        //    return ShiftCategoryPerAgentCalculator.Extract(_mappedScheduleDays);
-        //}
-
-        //public IList<ShiftFairness> GetShiftFairness()
-        //{
-        //    if (!_shiftCategoryPerAgentList.Any())
-        //        _shiftCategoryPerAgentList = ShiftCategoryPerAgentCalculator.Extract(_mappedScheduleDays);
-        //    return ShiftFairnessCalculator.GetShiftFairness(_shiftCategoryPerAgentList);
-        //}
-
         public Dictionary<int, int> GetShiftCategoryFrequency(IShiftCategory shiftCategory)
         {
             var result = new Dictionary<int, int>();
-            //var shiftCategoriesPerAgent = ShiftCategoryPerAgents;
             foreach (var item in ShiftCategoryPerAgents.Where(i => i.ShiftCategory == shiftCategory))
             {
                 if (result.ContainsKey(item.Count))
@@ -77,13 +61,21 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
             return result;
         }
 
-        public void ExtractDistributionInfo(IList<IScheduleDay> allSchedules)
+        /// <summary>
+        /// For testing the code
+        /// </summary>
+        public IDictionary<IPerson, IList<ShiftCategoryPerAgent>> PersonCache
         {
-            _mappedScheduleDays = ScheduleDayToShiftCategoryMapper.MapScheduleDay(allSchedules);
-            _shiftCategoryAttributedExtractor.ExtractShiftCategoryInformation(_mappedScheduleDays);
+            get { return _personCache; }
         }
 
-        //----------------------------------------------------
+        /// <summary>
+        /// For testing the code
+        /// </summary>
+        public IDictionary<DateOnly, IList<ShiftDistribution>> DateCache
+        {
+            get { return _dateCache; }
+        }
 
         public IList<ShiftDistribution> ShiftDistributions 
         { 
@@ -123,7 +115,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
             }
         }
 
-        public void ExtractDistributionInfo2(IList<IScheduleDay> allSchedules, ModifyEventArgs modifyEventArgs, TimeZoneInfo timeZoneInfo)
+        public void ExtractDistributionInfo(IList<IScheduleDay> allSchedules, ModifyEventArgs modifyEventArgs, TimeZoneInfo timeZoneInfo)
         {
             if (modifyEventArgs == null)
             {

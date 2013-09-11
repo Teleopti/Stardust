@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			using (_mock.Record())
 			{
 				Expect.Call(_view.ExtractorModel).Return(_extractor).Repeat.AtLeastOnce();
-				Expect.Call(_extractor.GetShiftFairness()).Return(fairnessList).Repeat.AtLeastOnce();
+				Expect.Call(_extractor.ShiftFairness ).Return(fairnessList).Repeat.AtLeastOnce();
 				Expect.Call(_extractor.ShiftCategories).Return(shiftCategories).Repeat.AtLeastOnce();
 			}
 			using (_mock.Playback())
