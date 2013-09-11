@@ -145,9 +145,9 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	}
 
 	this.HasTemplates = ko.computed(function () {
-	    return self.AvailableTemplates().length > 0;
+	    return self.AvailableTemplates().length > 1;
 	});
-
+    
 	this.IsDetailsVisible = ko.computed(function() {
 	    return !self.HasTemplates() || self.IsTemplateDetailsVisible();
 	});

@@ -207,6 +207,7 @@
 }
 #Preference-add-extended-form {
 	min-width: 268px;
+	padding-bottom: 0px;
 }
 
 .ie9 .preference-ui-tooltip {
@@ -231,8 +232,8 @@ div.qtip-content {
 	height: 5px;
 }
 
-.width130 {
-	width: 130px;
+.width131 {
+	width: 131px;
 }
 
 .width10 {
@@ -248,15 +249,23 @@ div.qtip-content {
 }
 
 #Preference-Picker {
-	width: 295px;
+	width: 100%;
 }
 
 #Preference-extended-activity-Picker {
-	width: 272px;
+	width: 100%;
 }
 
 .td-vertical-divider {
 	border-right: 1px solid #E0D9D9; 
 	border-left: 1px solid #ffffff; 
 	padding: 0px !important;
+}
+
+.hr-thin {
+	margin: 5px 0;
+}
+
+.preference-input-container {
+	width: 100%;
 }
