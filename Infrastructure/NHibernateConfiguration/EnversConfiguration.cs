@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				.Exclude(pa => pa.UpdatedOn)
 				.ExcludeRelationData(pa => pa.Person)
 				.ExcludeRelationData(pa => pa.Scenario)
-				.ExcludeRelationData(pa => pa.BusinessUnit)
 				.ExcludeRelationData(pa => pa.ShiftCategory)
 				.ExcludeRelationData("_dayOffTemplate");
 			fluentCfg.Audit<ShiftLayer>()

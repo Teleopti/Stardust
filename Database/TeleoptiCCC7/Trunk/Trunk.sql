@@ -232,3 +232,12 @@ ALTER TABLE dbo.Person drop column CreatedBy
 ALTER TABLE dbo.Person drop column CreatedOn
 ALTER TABLE dbo.Scenario drop column CreatedBy
 ALTER TABLE dbo.Scenario drop column CreatedOn
+
+----------------  
+--Name: Roger Kratz
+--Date: 2013-09-11
+--Desc: Dropping BusinessUnit from PersonAssignment
+---------------- 
+ALTER TABLE dbo.PersonAssignment DROP CONSTRAINT [FK_PersonAssignment_BusinessUnit]
+alter table dbo.PersonAssignment drop column BusinessUnit
+alter table auditing.PersonAssignment_AUD drop column BusinessUnit

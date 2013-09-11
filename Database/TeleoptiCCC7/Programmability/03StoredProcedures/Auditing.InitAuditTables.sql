@@ -43,7 +43,6 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		,[Version]
 		,[Person]
 		,[Scenario]
-		,[BusinessUnit]
 		,[ShiftCategory]
 		,[DayOffTemplate]
 		,[Date])
@@ -53,7 +52,6 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		,p.Version
 		,[Person]
 		,[Scenario]
-		,p.BusinessUnit
 		,p.ShiftCategory
 		,p.DayOffTemplate
 		,p.[Date]
