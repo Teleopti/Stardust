@@ -1,4 +1,5 @@
 ﻿..\TeleoptiCCC\SDK\web.config,ConfigFiles\SDKWeb.config
+..\TeleoptiCCC\SDK\FixMyConfig.nhib.xml,ConfigFiles\TeleoptiCCC7.nhib.xml
 ..\TeleoptiCCC\ETL\Tools\Teleopti.Analytics.Etl.ConfigTool.exe.config,ConfigFiles\AppETLTool.config
 ..\TeleoptiCCC\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe.config,ConfigFiles\AppETLService.config
 ..\TeleoptiCCC\Client\Teleopti.Ccc.SmartClientPortal.Shell.exe.config.deploy,ConfigFiles\AppRaptor.config
@@ -10,5 +11,3 @@
 ..\TeleoptiCCC\MyTime\Teleopti.Ccc.AgentPortal.exe.config.deploy,ConfigFiles\AppMytime.config
 ..\TeleoptiCCCBroker.Backplane\Web.config,ConfigFiles\BrokerBackplaneWeb.config
 ..\TeleoptiCCC\RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe.config,ConfigFiles\AppRTATestApplication.config
-##hur gör vi med denna??
-FixMyConfig.nhib.xml,ConfigFiles\TeleoptiCCC7.nhib.xml
