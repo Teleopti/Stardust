@@ -16,35 +16,41 @@ namespace Teleopti.Support.Security
 
 		static void Main(string[] args)
 		{
+			int ExitCode = 0;
+
 			var commandLineArgument = new CommandLineArgument(args);
 			if (!string.IsNullOrEmpty(commandLineArgument.AggDatabase))
 			{
-				CrossDatabaseViewUpdate.Execute(commandLineArgument);
+				ExitCode=CrossDatabaseViewUpdate.Execute(commandLineArgument);
 			}
 			else
 			{
 				setPersonAssignmentDate(commandLineArgument);
-				RemoveDuplicateAssignments.Execute(commandLineArgument);
-				ForecasterDateAdjustment.Execute(commandLineArgument);
-				PersonFirstDayOfWeekSetter.Execute(commandLineArgument);
-				PasswordEncryption.Execute(commandLineArgument);
-				LicenseStatusChecker.Execute(commandLineArgument);
+				ExitCode += RemoveDuplicateAssignments.Execute(commandLineArgument);
+				ExitCode += ForecasterDateAdjustment.Execute(commandLineArgument);
+				ExitCode += PersonFirstDayOfWeekSetter.Execute(commandLineArgument);
+				ExitCode += PasswordEncryption.Execute(commandLineArgument);
+				ExitCode += LicenseStatusChecker.Execute(commandLineArgument);
 				convertDayOffToNewStructure(commandLineArgument);
 				initAuditData(commandLineArgument);
 			}
-			Environment.ExitCode = 0;
+			Environment.ExitCode = ExitCode;
         }
 
 		private static void initAuditData(CommandLineArgument commandLineArgument)
 		{
 			const string proc = "[Auditing].[TryInitAuditTables]";
+			Console.WriteLine("Init Audit tables ...");
 			callProcInSeperateTransaction(commandLineArgument, proc);
+			Console.WriteLine("Done");
 		}
 
 		private static void convertDayOffToNewStructure(CommandLineArgument commandLineArgument)
 		{
 			const string proc = "[dbo].[DayOffConverter]";
+			Console.WriteLine("Converting DayOff ...");
 			callProcInSeperateTransaction(commandLineArgument, proc);
+			Console.WriteLine("Done");
 		}
 
 		private static void callProcInSeperateTransaction(CommandLineArgument commandLineArgument, string proc)
