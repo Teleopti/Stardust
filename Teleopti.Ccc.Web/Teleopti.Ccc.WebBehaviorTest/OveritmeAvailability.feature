@@ -101,10 +101,11 @@ Scenario: Submit overtime availability
 	| End time          | 03:00 |
 	| End time next day | true  |
 	And I click submit button
-	Then I should see an overtime availability symbol for date '2013-08-20' with tooltip
-	| Field      | Value    |
-	| Start time | 16:30    |
-	| End time   | 03:00 +1 |
+	Then I should see an overtime availability symbol with
+	| Field      | Value      |
+	| Date       | 2013-08-20 |
+	| Start time | 16:30      |
+	| End time   | 03:00 +1   |
 
 Scenario: Cancel adding overtime availability
 	Given I have the role 'Access to overtime availability'
@@ -133,8 +134,8 @@ Scenario: Add invalid overtime availability
 	And I should not see an overtime availability symbol for date '2013-08-20'
 
 
-
-Scenario: Show existing overtime availability
+@ignore
+Scenario: See existing overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
 	| Field             | Value      |
@@ -142,16 +143,17 @@ Scenario: Show existing overtime availability
 	| Start time        | 16:30      |
 	| End time          | 17:30      |
 	When I view my week schedule for date '2013-08-20'
-	Then I should see an overtime availability symbol for date '2013-08-20' with tooltip
-	| Field      | Value |
-	| Start time | 16:30 |
-	| End time   | 17:30 |
+	Then I should see an overtime availability symbol with
+	| Field      | Value      |
+	| Date       | 2013-08-20 |
+	| Start time | 16:30      |
+	| End time   | 17:30      |
 	And I should see overtime availability bar on date '2013-08-20' with
 	| Field      | Value |
 	| Start time | 16:30 |
 	| End time   | 17:30 |
-
-Scenario: Show existing overtime availability over midnight
+@ignore
+Scenario: See existing overtime availability over midnight
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
 	| Field             | Value      |
@@ -160,10 +162,11 @@ Scenario: Show existing overtime availability over midnight
 	| End time          | 03:15      |
 	| End time next day | true       |
 	When I view my week schedule for date '2013-08-20'
-	Then I should see an overtime availability symbol for date '2013-08-20' with tooltip
-	| Field      | Value    |
-	| Start time | 16:30    |
-	| End time   | 03:00 +1 |
+	Then I should see an overtime availability symbol with
+	| Field      | Value      |
+	| Date       | 2013-08-20 |
+	| Start time | 16:30      |
+	| End time   | 03:15 +1   |
 	And I should see overtime availability bar on date '2013-08-20' with
 	| Field      | Value |
 	| Start time | 16:30 |
@@ -211,10 +214,11 @@ Scenario: Replace overtime availability
 	| Start time        | 15:30 |
 	| End time          | 23:45 |
 	And I click submit button
-	Then I should see an overtime availability symbol for date '2013-08-20' with tooltip
-	| Field      | Value |
-	| Start time | 15:30 |
-	| End time   | 23:45 |
+	Then I should see an overtime availability symbol with
+	| Field      | Value      |
+	| Date       | 2013-08-20 |
+	| Start time | 15:30      |
+	| End time   | 23:45      |
 
 #followings belong to the delete overtime availability pbi
 @ignore

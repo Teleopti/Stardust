@@ -53,15 +53,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Browser.Interactions.AssertVisibleUsingJQuery(string.Format("ul.weekview-day[data-mytime-date={0}] li .text-request", formattedDate));
 		}
 
-		[Then(@"I should see an overtime availability symbol for date '(.*)' with tooltip")]
-		public void ThenIShouldSeeAnOvertimeAvailabilitySymbolForDateWithTooltip(DateTime date, Table table)
+		[Then(@"I should see an overtime availability symbol with")]
+		public void ThenIShouldSeeAnOvertimeAvailabilitySymbolWith(Table table)
 		{
 			var overtimeAvailability = table.CreateInstance<OvertimeAvailabilityTooltip>();
-			var formattedDate = date.ToString(CultureInfo.GetCultureInfo("sv-SE").DateTimeFormat.ShortDatePattern);
+			var formattedDate = overtimeAvailability.Date.ToString(CultureInfo.GetCultureInfo("sv-SE").DateTimeFormat.ShortDatePattern);
 			Browser.Interactions.AssertVisibleUsingJQuery(string.Format("ul.weekview-day[data-mytime-date={0}] li .overtime-availability-symbol", formattedDate));
 			Browser.Interactions.AssertFirstOuterHtmlContains(string.Format("ul.weekview-day[data-mytime-date={0}] li .overtime-availability-symbol", formattedDate), overtimeAvailability.StartTime);
 			Browser.Interactions.AssertFirstOuterHtmlContains(string.Format("ul.weekview-day[data-mytime-date={0}] li .overtime-availability-symbol", formattedDate), overtimeAvailability.EndTime);
 		}
+
 
 		[Then(@"I should not see a symbol at the top of the schedule for date '(.*)'")]
 		public void ThenIShouldNotSeeASymbolAtTheTopOfTheScheduleForDate(DateTime date)
