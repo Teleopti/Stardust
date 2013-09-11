@@ -6541,7 +6541,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private PersistConflictDialogResult showPersistConflictView(List<IPersistableScheduleData> modifiedData, IEnumerable<IPersistConflict> conflicts)
 		{
 			PersistConflictDialogResult dialogResult;
-			using (var conflictForm = new PersistConflictView(_schedulerState.Schedules, conflicts, modifiedDataResult))
+			using (var conflictForm = new PersistConflictView(_schedulerState.Schedules, conflicts, modifiedData))
 			{
 				conflictForm.ShowDialog();
 				dialogResult = conflictForm.DialogResult;
