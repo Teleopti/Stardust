@@ -119,6 +119,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
         {
             if (modifyEventArgs == null)
             {
+                _personCache.Clear();
+                _dateCache.Clear();
                 _mappedScheduleDays = ScheduleDayToShiftCategoryMapper.MapScheduleDay(allSchedules);
                 _shiftCategoryAttributedExtractor.ExtractShiftCategoryInformation(_mappedScheduleDays);
                 updatePersonCache(_mappedScheduleDays);
