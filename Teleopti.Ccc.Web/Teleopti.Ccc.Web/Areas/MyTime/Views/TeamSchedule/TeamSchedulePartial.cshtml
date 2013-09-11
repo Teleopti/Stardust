@@ -21,8 +21,8 @@
         <ul class="nav" data-bind="if: showTeamPicker">
             <li class="divider-vertical"></li>
         </ul>
-        <div data-bind="if: showTeamPicker">
-            <span class="nav-header" data-bind="if: showGroupings">
+        <div class="navbar-text" data-bind="if: showTeamPicker">
+            <span data-bind="if: showGroupings">
                 <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
                     <optgroup data-bind="attr: { label: text }, foreach: children">
                         <option data-bind="text: text, value: id"></option>

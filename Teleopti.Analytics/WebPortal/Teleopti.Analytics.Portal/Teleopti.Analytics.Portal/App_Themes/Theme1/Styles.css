@@ -239,6 +239,6 @@ body
 #ViewerFrame {
 	border: none;
 	height:680px; 
-	overflow:hidden; 
+	overflow:auto; 
 
 }

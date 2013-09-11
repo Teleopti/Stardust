@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             columnList.Add(new SFGridHourMinutesColumn<IMultiplicatorDefinitionViewModel>("EndTime", Resources.EndTime));
             columnList.Add(new SFGridDateTimeColumn<IMultiplicatorDefinitionViewModel>("FromDate", Resources.From, 100));
             columnList.Add(new SFGridDateTimeColumn<IMultiplicatorDefinitionViewModel>("ToDate", Resources.To, 100));
-            columnList.Add(new SFGridDynamicDropDownColumn<IMultiplicatorDefinitionViewModel, IMultiplicator>("Multiplicator", Resources.Multiplicator, "MultiplicatorCollection", "Description", null, typeof(Multiplicator)));
+            columnList.Add(new SFGridDynamicDropDownColumn<IMultiplicatorDefinitionViewModel, IMultiplicator>("Multiplicator", Resources.Multiplicator, null, "MultiplicatorCollection", "Description", typeof(Multiplicator)));
 
             // Adds column list.
             _gridColumns = new ReadOnlyCollection<SFGridColumnBase<IMultiplicatorDefinitionViewModel>>(columnList);
