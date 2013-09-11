@@ -110,6 +110,7 @@
     <Content Include="..\BuildArtifacts\Web.Root.Web.config">
       <Link>ConfigFiles\Web.Root.Web.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <None Include="..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>

@@ -14,6 +14,10 @@ namespace Teleopti.Support.Code.Tool
 
         public void ReplaceFile(string oldFilePath, string newFilePath, IList<SearchReplace> searchReplaces, bool doNotOverWrite)
         {
+            var dir = GetDirectories(oldFilePath);
+            if (!System.IO.Directory.Exists(dir))
+                System.IO.Directory.CreateDirectory(dir);
+
             if (System.IO.File.Exists(oldFilePath) && doNotOverWrite ) return;
             System.IO.File.Copy(newFilePath, oldFilePath,true);
             _configFileTagReplacer.ReplaceTags(oldFilePath,searchReplaces);
@@ -30,6 +34,14 @@ namespace Teleopti.Support.Code.Tool
         {
             foreach (var myString in allFilesToRefresh.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
                 SplitAndReplace(myString, searchReplaces, doNotOverWrite);
+        }
+
+
+        public string GetDirectories(string fullPath)
+        {
+            var pos = fullPath.LastIndexOf(@"\", StringComparison.InvariantCulture);
+            if (pos == 0) return ".";
+            return fullPath.Substring(0, pos);
         }
     }
 }

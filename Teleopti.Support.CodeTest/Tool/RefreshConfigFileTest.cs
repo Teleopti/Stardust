@@ -31,6 +31,19 @@ namespace Teleopti.Support.CodeTest.Tool
         }
 
         [Test]
+        public void ShouldGetDirectoriesFromFullPath()
+        {
+           Assert.That(_refresher.GetDirectories(@"..\TeleoptiCCC\ETL\newfile.config"),Is.EqualTo(@"..\TeleoptiCCC\ETL"));
+        }
+
+        [Test]
+        public void ShouldCreateDirectoryIfNotExists()
+        {
+            _refresher.ReplaceFile(@"..\TeleoptiCCC\ETL\newfile.config", Newfile, _lst, true);
+        }
+
+        
+        [Test]
         public void SplitAndReplaceTest()
         {
             const string files = @"..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\App.config,ConfigFiles\AppETLTool.config";
