@@ -2,7 +2,6 @@ using System;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	[Serializable]
 	public class PersonAbsenceAddedEvent : RaptorDomainEvent
 	{
 		public Guid AbsenceId { get; set; }

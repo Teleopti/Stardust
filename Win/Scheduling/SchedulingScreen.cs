@@ -4923,7 +4923,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var view = (AgentRestrictionsDetailView)detailView;
 			_splitContainerLessIntellegentRestriction.SplitterDistance = 300;
 			schedulerSplitters1.AgentRestrictionGrid.MergeHeaders();
-			schedulerSplitters1.AgentRestrictionGrid.LoadData(SchedulerState, persons, schedulingOptions, _workShiftWorkTime, selectedPerson, view, schedulePart);
+			schedulerSplitters1.AgentRestrictionGrid.LoadData(SchedulerState, persons, schedulingOptions, _workShiftWorkTime, selectedPerson, view, schedulePart, _container);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
