@@ -235,6 +235,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             treeViewAdv1.AllowDrop = true;
             treeViewAdv1.DragOnText = true;
             treeViewAdv1.LabelEdit = true;
+            treeViewAdv1.AutoScrolling = ScrollBars.Vertical;
             treeViewAdv1.ContextMenu = new ContextMenu();
         }
 
