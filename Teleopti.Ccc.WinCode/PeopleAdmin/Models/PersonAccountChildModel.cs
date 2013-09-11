@@ -15,29 +15,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         private readonly IPersonAccountCollection _containedEntity;
         private IAccount _currentAccount;
         private CommonNameDescriptionSetting _commonNameDescription;
+		private readonly IPersonAccountUpdater _personAccountUpdater;
 
         protected PersonAccountChildModel()
         {
             UnitOfWorkFactory = Infrastructure.UnitOfWork.UnitOfWorkFactory.Current;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PersonAccountChildModel"/> class.
-        /// </summary>
-        /// <param name="refreshService"></param>
-        /// <param name="selectedDate">The selected date.</param>
-        /// <param name="personAccounts">The person accounts.</param>
-        /// <remarks>
-        /// Created by:SanjayaI
-        /// Created date: 8/21/2008
-        /// </remarks>
-        public PersonAccountChildModel(ITraceableRefreshService refreshService, DateOnly selectedDate, IPersonAccountCollection personAccounts)
-            : this()
-        {
-            _refreshService = refreshService;
-            _containedEntity = personAccounts;
-            //gör som grekerna - fel här! kan vara flera, en per absence
-            _currentAccount = personAccounts.Find(selectedDate).FirstOrDefault();
         }
 
         public PersonAccountChildModel(ITraceableRefreshService refreshService, IPersonAccountCollection personAccounts, IAccount account, CommonNameDescriptionSetting commonNameDescription)

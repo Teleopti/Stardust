@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -341,7 +342,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
         private void SetTargetDayWithoutAccount()
         {
-            _targetDay = new PersonAccountChildModel(new TraceableRefreshService(ScenarioFactory.CreateScenarioAggregate(), new RepositoryFactory()), new DateOnly(2005, 5, 2), _acc);
+			var account = _acc.Find(new DateOnly(2005, 5, 2)).FirstOrDefault();
+	        _targetDay =
+		        new PersonAccountChildModel(
+			        new TraceableRefreshService(ScenarioFactory.CreateScenarioAggregate(), new RepositoryFactory()), _acc, account, null);
         }
 
         [Test]

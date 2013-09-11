@@ -444,6 +444,7 @@
     <Compile Include="PeopleAdmin\Models\PersonFinderModel.cs" />
     <Compile Include="PeopleAdmin\Models\PersonFinderSearchCriteria.cs" />
     <Compile Include="PeopleAdmin\Commands\OpenModuleCommand.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonGeneralModel.cs" />
     <Compile Include="PeopleAdmin\PeopleNavigatorPresenter.cs" />
     <Compile Include="PeopleAdmin\Commands\PersonFinderFindCommand.cs" />
     <Compile Include="PeopleAdmin\Commands\PersonFinderNextCommand.cs" />
@@ -1106,7 +1107,6 @@
     <Compile Include="Common\CommonStateHolder.cs" />
     <Compile Include="Common\GuiHelpers\ListBoxItem.cs" />
     <Compile Include="Common\PasteOptions.cs" />
-    <Compile Include="PeopleAdmin\PersonGeneralModel.cs" />
     <Compile Include="Scheduling\PersonRequestViewModel.cs" />
     <Compile Include="Scheduling\RequestPresenter.cs" />
     <Compile Include="Scheduling\ScheduleHelper.cs" />
