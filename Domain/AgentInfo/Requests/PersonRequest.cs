@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
@@ -139,15 +138,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             return formatter.Format(_subject);
         }
 
-        public virtual IList<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService,
-                                                            IPersonRequestCheckAuthorization authorization)
+	    public virtual IList<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService,
+	                                                        IPersonRequestCheckAuthorization authorization,
+	                                                        bool isAutoGrant = false)
         {
             authorization.VerifyEditRequestPermission(this);
             var brokenRules = new List<IBusinessRuleResponse>();
             brokenRules.AddRange(((Request) getRequest()).Approve(approvalService));
             if (brokenRules.Count == 0)
             {
-                RequestState.Approve();
+                RequestState.Approve(isAutoGrant);
                 notifyOnStatusChange();
             }
             return brokenRules;
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             notifyPropertyChanged("IsApproved");
         }
 
-        public virtual void Deny(IPerson denyPerson, string denyReasonTextResourceKey,
+	    public virtual void Deny(IPerson denyPerson, string denyReasonTextResourceKey,
                                  IPersonRequestCheckAuthorization authorization)
         {
             authorization.VerifyEditRequestPermission(this);
@@ -376,9 +376,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             RequestState = new pendingPersonRequest(this);
         }
 
-        private void moveToApproved()
+        private void moveToApproved(bool isAutoGrant)
         {
-            RequestState = new approvedPersonRequest(this);
+			if (isAutoGrant)
+				RequestState = new autoApprovedPersonRequest(this);
+			else
+				RequestState = new approvedPersonRequest(this);
         }
 
         private void moveToDenied(bool autoDenied = false)
@@ -419,7 +422,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             get { return RequestState.IsApproved; }
         }
 
-        private personRequestState PersistedRequestState
+	    public virtual bool IsAutoAproved
+	    {
+			get { return RequestState.IsAutoApproved; }
+	    }
+
+	    private personRequestState PersistedRequestState
         {
             get { return _persistedState ?? (_persistedState = RequestState); }
         }
@@ -477,6 +485,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                 get { return false; }
             }
 
+	        protected internal virtual bool IsAutoApproved
+	        {
+		        get { return false; }
+	        }
+
             protected internal virtual bool IsPending
             {
                 get { return false; }
@@ -494,7 +507,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                                                                                GetType().Name));
             }
 
-            protected internal virtual void Approve()
+            protected internal virtual void Approve(bool isAutoGrant)
             {
                 throw new InvalidRequestStateTransitionException(string.Format(CultureInfo.InvariantCulture,
                                                                                "This transition is not allowed (from {0} to approved).",
@@ -555,6 +568,29 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             }
         }
 
+		private class autoApprovedPersonRequest : personRequestState
+		{
+			public autoApprovedPersonRequest(PersonRequest personRequest) 
+				: base(personRequest, 2)
+			{
+			}
+
+			protected internal override bool IsApproved
+			{
+				get { return true; }
+			}
+
+			protected internal override bool IsAutoApproved
+			{
+				get { return true; }
+			}
+
+			protected internal override string StatusText
+			{
+				get { return Resources.Approved; }
+			}
+		}
+
         private class deniedPersonRequest : personRequestState
         {
             public deniedPersonRequest(PersonRequest personRequest)
@@ -608,9 +644,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                 PersonRequest.moveToDenied();
             }
 
-            protected internal override void Approve()
+            protected internal override void Approve(bool isAutoGrant)
             {
-                PersonRequest.moveToApproved();
+                PersonRequest.moveToApproved(isAutoGrant);
             }
 
             protected internal override void SetNew()
@@ -691,6 +727,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                     return false;
                 if (_persistedState.IsDenied && _requestState.IsDenied)
                     return true;
+	            if (_persistedState.IsPending && _requestState.IsAutoApproved)
+		            return false;
                 return true;
             }
             return !(_persistedState.IsNew && _requestState.IsNew);

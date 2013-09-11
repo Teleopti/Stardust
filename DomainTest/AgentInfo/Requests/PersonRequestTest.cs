@@ -224,7 +224,18 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             IList<IBusinessRuleResponse> brokenRules = _target.Approve(null,_authorization);
             Assert.AreEqual(0, brokenRules.Count);
             Assert.IsTrue(_target.IsApproved);
+			Assert.IsFalse(_target.IsAutoAproved);
         }
+
+		[Test]
+		public void VerifyApprove_AutoApproved()
+		{
+			_target.Pending();
+			var brokenRules = _target.Approve(null, _authorization, true);
+			brokenRules.Count.Should().Be.EqualTo(0);
+			_target.IsApproved.Should().Be.True();
+			_target.IsAutoAproved.Should().Be.True();
+		}
 
         [Test]
         public void VerifyPending()
@@ -706,5 +717,17 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _target.Persisted();
             _target.SendChangeOverMessageBroker().Should().Be.EqualTo(true);
         }
+		
+	    [Test]
+	    public void ShiftTrade_SendChangeOverMessageBroker_AutoApproved_ReturnFalse()
+	    {
+		    var approvalService = new ApprovalServiceForTest();
+			
+			setupShiftTrade();
+			_target.Pending();
+			_target.Persisted();
+			_target.Approve(approvalService, _authorization, true);
+			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(false);
+	    }
     }
 }
