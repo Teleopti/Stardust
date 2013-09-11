@@ -49,12 +49,8 @@
         </component>
       </component>
     </component>
-		<many-to-one name="BusinessUnit"
-        class="Teleopti.Ccc.Domain.Common.BusinessUnit"
-        access="nosetter.camelcase-underscore"
-        not-null="true" foreign-key="FK_PersonAbsence_BusinessUnit"/>
-    <filter name="businessUnitFilter"
-        condition=":businessUnitParameter = BusinessUnit" />
+		<filter name="businessUnitFilter"
+						condition="exists(select 1 from Scenario s where s.BusinessUnit = :businessUnitParameter and s.Id=Scenario)" />
     <filter name="deletedPeopleFilter"
         condition="exists(select 1 from Person p where Person=p.Id and p.IsDeleted=0)"/>
 	</class>

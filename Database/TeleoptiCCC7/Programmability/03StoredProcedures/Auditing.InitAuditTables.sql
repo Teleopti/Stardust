@@ -94,8 +94,7 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		,[Maximum]
 		,[Person]
 		,[Scenario]
-		,[Payload]
-		,[BusinessUnit])
+		,[Payload])
 	 select p.Id,
 		ar.Id,
 		0,
@@ -105,8 +104,7 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		Maximum,
 		Person,
 		Scenario,
-		Payload,
-		p.BusinessUnit
+		Payload
 	 from dbo.PersonAbsence p
 	inner join Auditing.Revision ar on p.UpdatedBy = ar.ModifiedBy and p.UpdatedOn = ar.ModifiedAt
 	inner join Scenario s on s.Id = p.Scenario and s.DefaultScenario = 1
