@@ -171,6 +171,10 @@ function Test-InstallationSQLLogin {
                     restoreToBaseline -computerName $computerName -spContent $spContent}
         }
 
+        
+        #add Lic
+        Add-CccLicenseToDemo
+
 		It "should install correct MSI from Hebe"{
 			
 			#add double quotes
@@ -188,9 +192,6 @@ function Test-InstallationSQLLogin {
 
 function Test-SitesAndServicesOk {
 	Describe "Run common test on services and web site config"{
-
-        #add Lic
-        Add-CccLicenseToDemo
 
         #start system
 		It "should start SDK" {
@@ -237,10 +238,12 @@ function Add-CccLicenseToDemo
 {
     if($global:Server -ne '')
     {
-        $LicFile="$here\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
-        $xmlString = [IO.File]::ReadAllText($LicFile)
-        insert-License -Server "$global:Server" -Db "$global:Db" -xmlString $xmlString
-    
+        It "should insert a new license" {
+            $LicFile="$here\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
+            $xmlString = [IO.File]::ReadAllText($LicFile)
+            $result = insert-License -Server "$global:Server" -Db "$global:Db" -xmlString $xmlString
+            $result | Should Be 1
+        }
     }
     else
     {
