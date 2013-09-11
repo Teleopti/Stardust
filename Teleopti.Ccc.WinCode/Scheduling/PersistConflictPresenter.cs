@@ -29,18 +29,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         public void OnUndoClientChanges()
         {
             mergeConflict(true);
-            closeForm(true);
+			closeForm(PersistConflictDialogResult.OK);
         }
 
         public void OnOverwriteServerChanges()
         {
             mergeConflict(false);
-            closeForm(true);
+			closeForm(PersistConflictDialogResult.Overwrite);
         }
 
         public void OnCancel()
         {
-            closeForm(false);
+            closeForm(PersistConflictDialogResult.Cancel);
         }
 
         public string OnQueryCellInfo(int rowIndex, int colIndex)
@@ -92,9 +92,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
         }
 
-        private void closeForm(bool allConflictsSolved)
+        private void closeForm(PersistConflictDialogResult dialogResult)
         {
-            _view.CloseForm(allConflictsSolved);
+            _view.CloseForm(dialogResult);
         }
 
         private void bindToModel()
@@ -153,4 +153,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             return name.ToString(NameOrderOption.FirstNameLastName);
         }
     }
+	
+	public enum PersistConflictDialogResult
+	{
+		OK, Cancel, Overwrite, None
+	}
 }

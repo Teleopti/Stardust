@@ -4526,7 +4526,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var refreshResult = refreshEntitiesUsingMessageBroker();
 			if (refreshResult.ConflictsFound)
 			{
-				if (refreshResult.DialogResult == DialogResult.OK)
+				if (refreshResult.DialogResult == PersistConflictDialogResult.OK)
 					showPleaseSaveAgainDialog();
 			}
 			else
@@ -4542,7 +4542,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 						if (result.ScheduleDictionaryConflicts != null && result.ScheduleDictionaryConflicts.Any())
 						{
 							var conflictHandlingResult = handleConflicts(result.ScheduleDictionaryConflicts);
-							if (conflictHandlingResult.DialogResult == DialogResult.OK)
+							if (conflictHandlingResult.DialogResult == PersistConflictDialogResult.Overwrite)
+								doSaveProcess();
+							if (conflictHandlingResult.DialogResult == PersistConflictDialogResult.OK)
 								showPleaseSaveAgainDialog();
 							return;
 						}
@@ -6554,7 +6556,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private class ConflictHandlingResult
 		{
 			public bool ConflictsFound { get; set; }
-			public DialogResult DialogResult { get; set; }
+			public PersistConflictDialogResult DialogResult { get; set; }
 		}
 
 		private ConflictHandlingResult refreshEntitiesUsingMessageBroker()
@@ -6579,7 +6581,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			else
 				changedEntitiesBuffer = new List<IPersistableScheduleData>(refreshedEntities);
 
-			var result = new ConflictHandlingResult { ConflictsFound = false, DialogResult = DialogResult.None };
+			var result = new ConflictHandlingResult { ConflictsFound = false, DialogResult = PersistConflictDialogResult.None };
 			result.ConflictsFound = conflicts.Any();
 			if (result.ConflictsFound)
 				result.DialogResult = showPersistConflictView(changedEntitiesBuffer, conflicts);
@@ -6593,9 +6595,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return result;
 		}
 
-		private DialogResult showPersistConflictView(List<IPersistableScheduleData> modifiedData, IEnumerable<IPersistConflict> conflicts)
+		private PersistConflictDialogResult showPersistConflictView(List<IPersistableScheduleData> modifiedData, IEnumerable<IPersistConflict> conflicts)
 		{
-			DialogResult dialogResult;
+			PersistConflictDialogResult dialogResult;
 			using (var conflictForm = new PersistConflictView(_schedulerState.Schedules, conflicts, modifiedData))
 			{
 				conflictForm.ShowDialog();
