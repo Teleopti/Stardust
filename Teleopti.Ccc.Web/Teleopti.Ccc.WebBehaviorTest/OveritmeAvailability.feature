@@ -148,10 +148,11 @@ Scenario: See existing overtime availability
 	| Date       | 2013-08-20 |
 	| Start time | 16:30      |
 	| End time   | 17:30      |
-	And I should see overtime availability bar on date '2013-08-20' with
-	| Field      | Value |
-	| Start time | 16:30 |
-	| End time   | 17:30 |
+	And I should see overtime availability bar with
+	| Field      | Value      |
+	| Date       | 2013-08-20 |
+	| Start time | 16:30      |
+	| End time   | 17:30      |
 @ignore
 Scenario: See existing overtime availability over midnight
 	Given I have the role 'Access to overtime availability'
@@ -167,14 +168,16 @@ Scenario: See existing overtime availability over midnight
 	| Date       | 2013-08-20 |
 	| Start time | 16:30      |
 	| End time   | 03:15 +1   |
-	And I should see overtime availability bar on date '2013-08-20' with
-	| Field      | Value |
-	| Start time | 16:30 |
-	| End time   | 24:00 |
-	And I should see overtime availability bar on date '2013-08-21' with
-	| Field      | Value |
-	| Start time | 00:00 |
-	| End time   | 03:15 |
+	And I should see overtime availability bar with
+	| Field      | Value      |
+	| Date       | 2013-08-20 |
+	| Start time | 16:30      |
+	| End time   | 24:00      |
+	And I should see overtime availability bar with
+	| Field      | Value      |
+	| Date       | 2013-08-21 |
+	| Start time | 00:00      |
+	| End time   | 03:15      |
 
 
 #followings belong to the change overtime availability pbi
