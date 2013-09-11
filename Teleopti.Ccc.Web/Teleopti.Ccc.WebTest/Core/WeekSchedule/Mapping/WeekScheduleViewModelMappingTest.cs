@@ -97,6 +97,29 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		}
 
 		[Test]
+		public void ShouldMapPeriodsForOvertimeAvailabilityFromLegacyFactory()
+		{
+			var overtimeAvailability = new OvertimeAvailability(new Person(), DateOnly.Today, new TimeSpan(1, 1, 1), new TimeSpan(2, 2, 2));
+			var overtimeAvailabilityYesterday = new OvertimeAvailability(new Person(), DateOnly.Today, new TimeSpan(1, 1, 1), new TimeSpan(2, 2, 2));
+			var minMaxTime = new TimePeriod();
+			var domainData = new WeekScheduleDayDomainData
+				{
+					OvertimeAvailability = overtimeAvailability,
+					OvertimeAvailabilityYesterday = overtimeAvailabilityYesterday,
+					MinMaxTime = minMaxTime
+				};
+			var periodViewModels = new[] { new OvertimeAvailabilityPeriodViewModel() };
+
+			periodViewModelFactory.Stub(
+				x =>
+				x.CreateOvertimeAvailabilityPeriodViewModels(overtimeAvailability, overtimeAvailabilityYesterday, minMaxTime)).Return(periodViewModels);
+
+			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
+
+			result.Periods.First().Should().Be.SameInstanceAs(periodViewModels.First());
+		}
+
+		[Test]
 		public void ShouldMapDate()
 		{
 			var domainData = new WeekScheduleDayDomainData {Date = DateOnly.Today};
@@ -185,15 +208,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapOvertimeAvailability()
 		{
-			var domainData = new WeekScheduleDayDomainData { Date = DateOnly.Today };
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date);
-			var overtimeAvailability = new OvertimeAvailability(new Person(), DateOnly.Today, new TimeSpan(1, 1, 1),
-			                                                    new TimeSpan(1, 2, 2, 2));
-			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
-			           .Return(
-				           new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability> {overtimeAvailability}));
-			domainData.ScheduleDay = scheduleDay;
-
+			var overtimeAvailability = new OvertimeAvailability(new Person(), DateOnly.Today, new TimeSpan(1, 1, 1), new TimeSpan(1, 2, 2, 2));
+			var domainData = new WeekScheduleDayDomainData { Date = DateOnly.Today, OvertimeAvailability = overtimeAvailability };
+			
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
 			result.OvertimeAvailabililty.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(overtimeAvailability.StartTime.Value, CultureInfo.CurrentCulture));

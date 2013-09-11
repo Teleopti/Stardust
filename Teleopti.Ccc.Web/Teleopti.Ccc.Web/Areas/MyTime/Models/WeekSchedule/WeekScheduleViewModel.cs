@@ -110,6 +110,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 	{
 	}
 
+	public class OvertimeAvailabilityPeriodViewModel : PeriodViewModel
+	{
+		public bool IsOvertimeAvailability { get; set; }
+	}
+
 	public class MeetingViewModel
 	{
 		public string Title { get; set; }

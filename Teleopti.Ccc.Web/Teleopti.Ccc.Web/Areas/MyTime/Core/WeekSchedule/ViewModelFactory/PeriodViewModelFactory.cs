@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -61,6 +62,46 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
             }
             return newList;
         }
+
+		public IEnumerable<OvertimeAvailabilityPeriodViewModel> CreateOvertimeAvailabilityPeriodViewModels(IOvertimeAvailability overtimeAvailability, IOvertimeAvailability overtimeAvailabilityYesterday, TimePeriod minMaxTime)
+		{
+			var overtimeAvailabilityPeriods = new List<OvertimeAvailabilityPeriodViewModel>();
+			if (overtimeAvailability != null)
+			{
+				var start = overtimeAvailability.StartTime.Value;
+				var end = overtimeAvailability.EndTime.Value;
+				var endPositionPercentage = (decimal)(end - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
+				overtimeAvailabilityPeriods.Add(new OvertimeAvailabilityPeriodViewModel
+				{
+					Title = Resources.OvertimeAvailabilityWeb,
+					TimeSpan = TimeHelper.TimeOfDayFromTimeSpan(start, CultureInfo.CurrentCulture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(end, CultureInfo.CurrentCulture),
+					StartPositionPercentage = (decimal)(start - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks,
+					EndPositionPercentage = endPositionPercentage > 1 ? 1 : endPositionPercentage,
+					IsOvertimeAvailability = true,
+					Color = Color.DarkGray.ToCSV()
+				});
+			}
+
+			if (overtimeAvailabilityYesterday != null)
+			{
+				var startYesterday = overtimeAvailabilityYesterday.StartTime.Value;
+				var endYesterday = overtimeAvailabilityYesterday.EndTime.Value;
+				if (endYesterday.Days >= 1)
+				{
+					var endPositionPercentageYesterday = (decimal)(endYesterday.Subtract(new TimeSpan(1, 0, 0, 0)) - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks;
+					overtimeAvailabilityPeriods.Add(new OvertimeAvailabilityPeriodViewModel
+					{
+						Title = Resources.OvertimeAvailabilityWeb,
+						TimeSpan = TimeHelper.TimeOfDayFromTimeSpan(startYesterday, CultureInfo.CurrentCulture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(endYesterday, CultureInfo.CurrentCulture),
+						StartPositionPercentage = 0,
+						EndPositionPercentage = endPositionPercentageYesterday,
+						IsOvertimeAvailability = true,
+						Color = Color.DarkGray.ToCSV()
+					});
+				}
+			}
+			return overtimeAvailabilityPeriods;
+		}
 
 
 		private static string colorToString(Color color)
