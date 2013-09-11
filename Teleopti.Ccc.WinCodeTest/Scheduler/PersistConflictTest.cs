@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(schedDic[dataOrg.Person]).Return(range);
                 range.SolveConflictBecauseOfExternalUpdate(dataDb, false);
                 forgetAboutDebugAssertsOnMock(1);
-				view.CloseForm(PersistConflictDialogResult.OK);
+				view.CloseForm(PersistConflictDialogResult.Overwrite);
             }
             using (mocks.Playback())
             {
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(schedDic[dataOrg.Person]).Return(range);
                 range.SolveConflictBecauseOfExternalUpdate(dataDb, false);
                 forgetAboutDebugAssertsOnMock(1);
-				view.CloseForm(PersistConflictDialogResult.OK);
+				view.CloseForm(PersistConflictDialogResult.Overwrite);
             }
             using (mocks.Playback())
             {
@@ -311,7 +311,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(schedDic[dataOrg.Person]).Return(range);
                 range.SolveConflictBecauseOfExternalDeletion(dataOrg.Id.Value, false);
                 forgetAboutDebugAssertsOnMock(1);
-				view.CloseForm(PersistConflictDialogResult.OK);
+				view.CloseForm(PersistConflictDialogResult.Overwrite);
             }
             using (mocks.Playback())
             {
@@ -327,7 +327,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             using (mocks.Record())
             {
-				view.CloseForm(PersistConflictDialogResult.OK);
+				view.CloseForm(PersistConflictDialogResult.Cancel);
             }
             using (mocks.Playback())
             {
