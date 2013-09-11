@@ -84,13 +84,17 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapPeriodsFromLegacyFactory()
 		{
-			var domainData = new WeekScheduleDayDomainData();
+			var minMaxTime = new TimePeriod();
+			var domainData = new WeekScheduleDayDomainData{
+					MinMaxTime = minMaxTime
+				};
 			var periodViewModels = new[] { new PeriodViewModel(), };
 
 			periodViewModelFactory.Stub(
 				x => x.CreatePeriodViewModels(Arg<IEnumerable<IVisualLayer>>.Is.Anything, Arg<TimePeriod>.Is.Anything,
 				                              Arg<DateTime>.Is.Anything, Arg<TimeZoneInfo>.Is.Null)).Return(periodViewModels);
-
+			periodViewModelFactory.Stub(
+				x => x.CreateOvertimeAvailabilityPeriodViewModels(null, null,minMaxTime)).Return(new OvertimeAvailabilityPeriodViewModel[]{});
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
 			result.Periods.First().Should().Be.SameInstanceAs(periodViewModels.First());
@@ -109,7 +113,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 					MinMaxTime = minMaxTime
 				};
 			var periodViewModels = new[] { new OvertimeAvailabilityPeriodViewModel() };
-
+			periodViewModelFactory.Stub(
+				x => x.CreatePeriodViewModels(Arg<IEnumerable<IVisualLayer>>.Is.Anything, Arg<TimePeriod>.Is.Anything,
+											  Arg<DateTime>.Is.Anything, Arg<TimeZoneInfo>.Is.Null)).Return(new List<PeriodViewModel>());
 			periodViewModelFactory.Stub(
 				x =>
 				x.CreateOvertimeAvailabilityPeriodViewModels(overtimeAvailability, overtimeAvailabilityYesterday, minMaxTime)).Return(periodViewModels);

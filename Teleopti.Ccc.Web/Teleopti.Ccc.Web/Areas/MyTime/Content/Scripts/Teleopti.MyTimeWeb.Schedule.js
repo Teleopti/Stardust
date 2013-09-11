@@ -430,6 +430,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 		self.startPositionPercentage = ko.observable(layer.StartPositionPercentage);
 		self.endPositionPercentage = ko.observable(layer.EndPositionPercentage);
+		self.isOvertimeAvailability = ko.observable(layer.IsOvertimeAvailability);
 		self.top = ko.computed(function () {
 			return Math.round(scheduleHeight * self.startPositionPercentage());
 		});

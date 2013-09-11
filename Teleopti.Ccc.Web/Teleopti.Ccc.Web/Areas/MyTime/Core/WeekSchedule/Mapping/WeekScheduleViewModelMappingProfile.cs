@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						var periodViewModelFactory = _periodViewModelFactory.Invoke();
 						var periodsViewModels = periodViewModelFactory.CreatePeriodViewModels(projectionList, s.MinMaxTime, s.Date.Date, s.ScheduleDay == null ? null : s.ScheduleDay.TimeZone);
 						var overtimeAvailabilityPeriodViewModels = periodViewModelFactory.CreateOvertimeAvailabilityPeriodViewModels(s.OvertimeAvailability, s.OvertimeAvailabilityYesterday, s.MinMaxTime);
-						return overtimeAvailabilityPeriodViewModels == null ? periodsViewModels : periodsViewModels == null ? overtimeAvailabilityPeriodViewModels : overtimeAvailabilityPeriodViewModels.Concat(periodsViewModels);
+						return periodsViewModels.Concat(overtimeAvailabilityPeriodViewModels);
 					}))
 				.ForMember(d => d.TextRequestCount, o => o.ResolveUsing(s => s.PersonRequests == null ? 0 : s.PersonRequests.Count(r => (r.Request is TextRequest || r.Request is AbsenceRequest))))
 				.ForMember(d => d.Allowance, c => c.MapFrom(s => s.Allowance))

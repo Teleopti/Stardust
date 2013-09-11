@@ -137,12 +137,16 @@
 				<div class="week-schedule-time-indicator relative">
 				</div>
 				<!-- ko foreach: layers -->
-				<div class="week-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': widthPx }">
+				<div class="week-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': widthPx, 'opacity': isOvertimeAvailability()?0.6:1}">
+					<!-- ko if: isOvertimeAvailability() -->
+					<i class="icon-time"></i>
+					<!-- /ko -->
 					<!-- ko if: hasMeeting -->
 					<div class="icon meeting floatright">
 					</div>
 					<!-- /ko -->
-					<strong class="truncate" data-bind="text: title, visible: showTitle"></strong><span
+					<strong class="truncate" data-bind="text: title, visible: showTitle"></strong>
+					<span
 						class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan">
 					</span>
 				</div>

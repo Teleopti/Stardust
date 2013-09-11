@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 					StartPositionPercentage = (decimal)(start - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks,
 					EndPositionPercentage = endPositionPercentage > 1 ? 1 : endPositionPercentage,
 					IsOvertimeAvailability = true,
-					Color = Color.DarkGray.ToCSV()
+					Color = Color.Gray.ToCSV()
 				});
 			}
 
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 						StartPositionPercentage = 0,
 						EndPositionPercentage = endPositionPercentageYesterday,
 						IsOvertimeAvailability = true,
-						Color = Color.DarkGray.ToCSV()
+						Color = Color.Gray.ToCSV()
 					});
 				}
 			}
