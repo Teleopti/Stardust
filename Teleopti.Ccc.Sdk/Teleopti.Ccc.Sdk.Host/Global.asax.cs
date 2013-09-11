@@ -150,6 +150,9 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 			builder.RegisterModule<EncryptionModule>();
 			builder.RegisterModule<AuthenticationModule>();
+
+			builder.RegisterType<PersonAccountUpdater>().As<IPersonAccountUpdater>();
+
             builder.RegisterModule<AssemblerModule>();
             builder.RegisterModule<RepositoryModule>();
             builder.RegisterModule<UnitOfWorkModule>();
