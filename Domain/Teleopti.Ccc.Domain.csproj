@@ -237,6 +237,8 @@
     <Compile Include="Collection\IdenticalLayersSpecification.cs" />
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
+    <Compile Include="Common\PersonAccountUpdaterForWin.cs" />
+    <Compile Include="Common\IPersonAccountUpdaterFroWinProvider.cs" />
     <Compile Include="Common\PersonAccountUpdaterDummy.cs" />
     <Compile Include="Common\CurrentBusinessUnit.cs" />
     <Compile Include="Common\CurrentDataSource.cs" />
@@ -536,7 +538,7 @@
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
     <Compile Include="Scheduling\TeamBlock\IntervalDataEntendedMedianCalculator.cs" />
     <Compile Include="ResourceCalculation\TransformResourcesFromStorageCommand.cs" />
-     <Compile Include="Scheduling\Overtime\SkillIntervalData.cs" />
+    <Compile Include="Scheduling\Overtime\SkillIntervalData.cs" />
     <Compile Include="Scheduling\Overtime\SkillIntervalDataDivider.cs" />
     <Compile Include="Scheduling\Overtime\SkillStaffPeriodToSkillIntervalDataMapper.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
