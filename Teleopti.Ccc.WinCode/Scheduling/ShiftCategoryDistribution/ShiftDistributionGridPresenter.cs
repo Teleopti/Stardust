@@ -81,13 +81,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
                 {
                     _sortedDates = (from ShiftDistribution s in shiftDistributions
                                              orderby s.Count ascending
+											 where s.ShiftCategory != null
                                              where s.ShiftCategory.Equals(shiftCategory)
                                              select s.DateOnly ).ToList();
                 }
                 else
                 {
                     _sortedDates = (from ShiftDistribution s in shiftDistributions
-                                             orderby s.Count descending 
+                                             orderby s.Count descending
+											 where s.ShiftCategory != null
                                              where s.ShiftCategory.Equals(shiftCategory)
                                              select s.DateOnly).ToList();
                 }
