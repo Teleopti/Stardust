@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should see an overtime availability symbol with")]
 		public void ThenIShouldSeeAnOvertimeAvailabilitySymbolWith(Table table)
 		{
-			var overtimeAvailability = table.CreateInstance<OvertimeAvailabilityTooltip>();
+			var overtimeAvailability = table.CreateInstance<OvertimeAvailabilityTooltipAndBar>();
 			var formattedDate = overtimeAvailability.Date.ToString(CultureInfo.GetCultureInfo("sv-SE").DateTimeFormat.ShortDatePattern);
 			Browser.Interactions.AssertVisibleUsingJQuery(string.Format("ul.weekview-day[data-mytime-date={0}] li .overtime-availability-symbol", formattedDate));
 			Browser.Interactions.AssertFirstOuterHtmlContains(string.Format("ul.weekview-day[data-mytime-date={0}] li .overtime-availability-symbol", formattedDate), overtimeAvailability.StartTime);

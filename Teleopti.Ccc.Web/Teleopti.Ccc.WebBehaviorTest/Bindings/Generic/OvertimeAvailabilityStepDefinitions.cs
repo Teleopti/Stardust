@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public bool EndTimeNextDay { get; set; }
 	}
 
-	public class OvertimeAvailabilityTooltip
+	public class OvertimeAvailabilityTooltipAndBar
 	{
 		public DateTime Date { get; set; }
 		public string StartTime { get; set; }

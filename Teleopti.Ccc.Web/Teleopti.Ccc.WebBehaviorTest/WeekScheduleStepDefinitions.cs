@@ -4,6 +4,8 @@ using System.Xml;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
@@ -127,6 +129,29 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 			EventualAssert.That(() => layers[2].Style.GetAttributeValue("Top"), Is.EqualTo("270px"));
 			EventualAssert.That(() => layers[2].Style.GetAttributeValue("Height"), Is.EqualTo("381px"));
+		}
+
+		[Then(@"I should see overtime availability bar with")]
+		public void ThenIShouldSeeOvertimeAvailabilityBarWith(Table table)
+		{
+			var overtimeAvailability = table.CreateInstance<OvertimeAvailabilityTooltipAndBar>();
+			var layers = _page.DayLayers(overtimeAvailability.Date);
+			if (overtimeAvailability.Date.Day == 20)
+			{
+				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Top"), Is.EqualTo("111px"));
+				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Height"), Is.EqualTo("445px"));
+			}
+			if (overtimeAvailability.Date.Day == 21)
+			{
+				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Top"), Is.EqualTo("459px"));
+				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Height"), Is.EqualTo("208px"));
+			}
+			if (overtimeAvailability.Date.Day == 22)
+			{
+				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Top"), Is.EqualTo("0px"));
+				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Height"), Is.EqualTo("89px"));
+			}
+			EventualAssert.That(() => layers[0].Style.GetAttributeValue("Width"), Is.EqualTo("20px"));
 		}
 
 		[Then(@"I should see activities on date '(.*)'")]

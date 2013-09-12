@@ -133,8 +133,6 @@ Scenario: Add invalid overtime availability
 	Then I should see the 'overtime availability error' 'End time'
 	And I should not see an overtime availability symbol for date '2013-08-20'
 
-
-@ignore
 Scenario: See existing overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
@@ -153,29 +151,29 @@ Scenario: See existing overtime availability
 	| Date       | 2013-08-20 |
 	| Start time | 16:30      |
 	| End time   | 17:30      |
-@ignore
+
 Scenario: See existing overtime availability over midnight
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
 	| Field             | Value      |
-	| Date              | 2013-08-20 |
+	| Date              | 2013-08-21 |
 	| Start time        | 16:30      |
 	| End time          | 03:15      |
 	| End time next day | true       |
 	When I view my week schedule for date '2013-08-20'
 	Then I should see an overtime availability symbol with
 	| Field      | Value      |
-	| Date       | 2013-08-20 |
+	| Date       | 2013-08-21 |
 	| Start time | 16:30      |
 	| End time   | 03:15 +1   |
 	And I should see overtime availability bar with
 	| Field      | Value      |
-	| Date       | 2013-08-20 |
+	| Date       | 2013-08-21 |
 	| Start time | 16:30      |
 	| End time   | 24:00      |
 	And I should see overtime availability bar with
 	| Field      | Value      |
-	| Date       | 2013-08-21 |
+	| Date       | 2013-08-22 |
 	| Start time | 00:00      |
 	| End time   | 03:15      |
 
