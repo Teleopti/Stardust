@@ -843,7 +843,6 @@
     <Compile Include="Settings\ScheduleRestrictionBaseViewTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
     <Compile Include="Scheduler\ViewBaseHelperTest.cs" />
-    <Compile Include="Scheduler\DetailViewHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShiftCreator\AbsolutePositionViewTest.cs" />
     <Compile Include="ShiftCreator\AutoPositionViewTest.cs" />
