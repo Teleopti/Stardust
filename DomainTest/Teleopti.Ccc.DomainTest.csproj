@@ -391,7 +391,6 @@
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonConsistentCheckerTest.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDateTest.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonsBuilderTest.cs" />
-    <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonShiftCategoryConsistentCheckerTest.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonTest.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupSchedulingServiceTest.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\RuleSetBagForGroupPersonTest.cs" />

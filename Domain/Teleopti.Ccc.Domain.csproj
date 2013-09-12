@@ -496,12 +496,10 @@
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPerson.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonFactory.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonsBuilder.cs" />
-    <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonShiftCategoryConsistentChecker.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupSchedulingService.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPagePerDate.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonFactory.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonsBuilder.cs" />
-    <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonShiftCategoryConsistentChecker.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\PossibleCombinationsOfStartEndCategoryCreator.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\RuleSetBagForGroupPerson.cs" />
     <Compile Include="ResourceCalculation\IPersonSkillProvider.cs" />
