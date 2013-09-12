@@ -227,6 +227,7 @@ GO
 --Name: David Jonsson
 --Date: 2013-06-12
 --Desc: Bug #23815 - remove duplicates from PersonAbsence
+--Desc: Bug #24721 - patch deletes absences incorrect from PersonAbsence
 ---------------- 
 --first remove duplicates but keep the Absence with the biggest time span
 create table #PersonAbsenceRemove (Id uniqueidentifier)
@@ -239,17 +240,17 @@ where id not in
 	select t1.Id
 	from PersonAbsence t1
 	inner join (
-		select cast(min(cast(id as varchar(36))) as uniqueidentifier) Id, person, Scenario, Minimum, PayLoad, max(Maximum) Maximum
+		select  person, Scenario, Minimum, PayLoad, max(Maximum) Maximum
 		from PersonAbsence
 		group by person, Scenario, Minimum,PayLoad
 		having count(*) > 1
 	) t2
 	on t1.Person = t2.Person
-		and t1.Id = t2.Id --t2.Id is lowest one -> manipulated string/Id cast above
 		and t1.Minimum = t2.Minimum
 		and t1.PayLoad = t2.PayLoad
-		and t1.Maximum = t2.Maximum --t2.Maximum is the longest one
+		and t1.maximum = t2.Maximum
 		and t1.Scenario= t2.Scenario
+		
 
 	union all
 	
