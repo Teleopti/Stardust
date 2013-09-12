@@ -1375,7 +1375,6 @@
     <Compile Include="Time\DateTimeExtensions.cs" />
     <Compile Include="Collection\FixedCapacityStack.cs" />
     <Compile Include="Tracking\TrackerCalculator.cs" />
-    <Compile Include="Tracking\SchedulePartTrackingDataProvider.cs" />
     <Compile Include="UndoRedo\BatchMemento.cs" />
     <Compile Include="UndoRedo\Memento.cs">
       <SubType>Code</SubType>
