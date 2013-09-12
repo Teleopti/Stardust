@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             _model = distributionInformationExtractor;
 			_presenter.ReSort();
-            initializeComponent();	
+            initializeComponent();
+			Refresh();
         }
 
 		private void initializeComponent()

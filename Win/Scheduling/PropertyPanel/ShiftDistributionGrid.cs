@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             _presenter = new ShiftDistributionGridPresenter(this, _model.ShiftDistributions);
             _presenter.Sort(0);
             initializeComponent();
+			Refresh();
         }
 
         private void initializeComponent()
