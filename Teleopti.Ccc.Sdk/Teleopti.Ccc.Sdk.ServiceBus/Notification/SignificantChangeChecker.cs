@@ -26,6 +26,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			DateTime? publishedToDate = null;
 
 			var wfc = person.WorkflowControlSet;
+            if (wfc != null && !wfc.SchedulePublishedToDate.HasValue)
+                return ret;
+
 			if (wfc != null)
 			{
 				publishedToDate = wfc.SchedulePublishedToDate;
