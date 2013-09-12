@@ -976,7 +976,6 @@
     <Compile Include="ResourceCalculation\FurnessDataTest.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSet1.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSet2.cs" />
-    <Compile Include="ResourceCalculation\OccupancyCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\PersonSkillDictionaryTest.cs" />
     <Compile Include="ResourceCalculation\ScheduleResourceOptimizerTest.cs" />
     <Compile Include="ResourceCalculation\SkillCollectionKeyTest.cs" />
