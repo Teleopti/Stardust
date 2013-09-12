@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
         {
             var date = DateTime.Today;
             var period = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date.AddDays(2)));
-            
+            _person.WorkflowControlSet = new WorkflowControlSet("mm") { SchedulePublishedToDate = new DateOnly(date.AddDays(7)) };
             var newReadModel = new ScheduleDayReadModel
                 {
                     StartDateTime = date.AddDays(1).AddHours(2),
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
         {
             var date = DateTime.Today;
             var period = new DateOnlyPeriod(new DateOnly(date.AddDays(1)), new DateOnly(date.AddDays(1)));
-
+            _person.WorkflowControlSet = new WorkflowControlSet("mm") { SchedulePublishedToDate = new DateOnly(date.AddDays(7)) };
             var newReadModel = new ScheduleDayReadModel
                 {
                     StartDateTime = date.AddDays(-1).AddHours(2),
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
         {
             var date = DateTime.Today;
             var period = new DateOnlyPeriod(new DateOnly(date.AddDays(1)), new DateOnly(date.AddDays(1)));
-
+            _person.WorkflowControlSet = new WorkflowControlSet("mm") { SchedulePublishedToDate = new DateOnly(date.AddDays(7)) };
             var newReadModel = new ScheduleDayReadModel
                 {
                     StartDateTime = date.AddDays(1).AddHours(2),
@@ -202,6 +202,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
             _person.WorkflowControlSet = new WorkflowControlSet("mm");
             var period = new DateOnlyPeriod(new DateOnly(date.AddDays(0)), new DateOnly(date.AddDays(1)));
            
+            Expect.Call(_scheduleDayReadModelRepository.ReadModelsOnPerson(new DateOnly(date.AddDays(0)), new DateOnly(date.AddDays(0)),
+                                                                           _person.Id.GetValueOrDefault())).Repeat.Never();
+
+            Expect.Call(_scheduleDayReadModelComparer.FindSignificantChanges(null, null,
+                                                                             _person.PermissionInformation.UICulture(),
+                                                                             new DateOnly(date.AddDays(0)))).Repeat.Never();
+            _mocks.ReplayAll();
+
+            Assert.That(_target.SignificantChangeNotificationMessage(period.StartDate, _person, null).Subject, Is.Empty);
+
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldReturnNullIfNoWorkflowControlSet()
+        {
+            var date = DateTime.Today;
+            
+            var period = new DateOnlyPeriod(new DateOnly(date.AddDays(0)), new DateOnly(date.AddDays(1)));
+
             Expect.Call(_scheduleDayReadModelRepository.ReadModelsOnPerson(new DateOnly(date.AddDays(0)), new DateOnly(date.AddDays(0)),
                                                                            _person.Id.GetValueOrDefault())).Repeat.Never();
 

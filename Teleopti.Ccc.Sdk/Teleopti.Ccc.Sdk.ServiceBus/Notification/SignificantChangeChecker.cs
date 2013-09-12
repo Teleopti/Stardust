@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.Contracts;
@@ -29,15 +30,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			var ret = new NotificationMessage();
 			var lang = person.PermissionInformation.UICulture();
 			var endDate = DateOnly.Today.AddDays(14);
+            DateTime? publishedToDate = null;
 
 			var wfc = person.WorkflowControlSet;
-            if (wfc != null && !wfc.SchedulePublishedToDate.HasValue)
+		    if (wfc == null) return ret;
+
+            if (!wfc.SchedulePublishedToDate.HasValue)
                 return ret;
 
-			if (wfc != null && wfc.SchedulePublishedToDate.HasValue && wfc.SchedulePublishedToDate.Value < DateOnly.Today)
+            publishedToDate = wfc.SchedulePublishedToDate;
+
+            if (publishedToDate.Value < DateOnly.Today)
 				return ret;
 
-			if (wfc != null && wfc.SchedulePublishedToDate.HasValue && wfc.SchedulePublishedToDate.Value < endDate)
+            if (publishedToDate.Value < endDate)
 				endDate = new DateOnly(wfc.SchedulePublishedToDate.Value.Date);
 
 			var period = new DateOnlyPeriod(DateOnly.Today, endDate);
