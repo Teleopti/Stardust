@@ -31,6 +31,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			var endDate = DateOnly.Today.AddDays(14);
 
 			var wfc = person.WorkflowControlSet;
+            if (wfc != null && !wfc.SchedulePublishedToDate.HasValue)
+                return ret;
+
 			if (wfc != null && wfc.SchedulePublishedToDate.HasValue && wfc.SchedulePublishedToDate.Value < DateOnly.Today)
 				return ret;
 
