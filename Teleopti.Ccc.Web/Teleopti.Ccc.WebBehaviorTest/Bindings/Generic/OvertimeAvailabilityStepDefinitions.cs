@@ -1,6 +1,7 @@
 using System;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 
@@ -15,6 +16,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var fields = table.CreateInstance<OvertimeAvailabilityConfigurable>();
 			UserFactory.User().Setup(fields);
 		}
+
+		[When(@"I click overtime availability bar")]
+		public void WhenIClickOvertimeAvailabilityBar()
+		{
+			Browser.Interactions.Click(".overtime-availability-bar");
+		}
+
 	}
 
 	public class OvertimeAvailabilityFields

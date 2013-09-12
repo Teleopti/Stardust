@@ -177,6 +177,42 @@ Scenario: See existing overtime availability over midnight
 	| Start time | 00:00      |
 	| End time   | 03:15      |
 
+Scenario: Click overtime availability bar
+	Given I have the role 'Access to overtime availability'
+	And I have an overtime availability with
+	| Field             | Value      |
+	| Date              | 2013-08-20 |
+	| Start time        | 16:30      |
+	| End time          | 03:15      |
+	| End time next day | true       |
+	When I view my week schedule for date '2013-08-20'
+	And I click overtime availability bar
+	Then I should see add overtime availability form with
+	| Field             | Value      |
+	| Start date        | 2013-08-20 |
+	| End date          | 2013-08-21 |
+	| Start time        | 16:30      |
+	| End time          | 03:15      |
+	| End time next day | true       |
+
+Scenario: Click overtime availability bar span to next day
+	Given I have the role 'Access to overtime availability'
+	And I have an overtime availability with
+	| Field             | Value      |
+	| Date              | 2013-08-25 |
+	| Start time        | 16:30      |
+	| End time          | 03:15      |
+	| End time next day | true       |
+	When I view my week schedule for date '2013-08-26'
+	And I click overtime availability bar
+	Then I should see add overtime availability form with
+	| Field             | Value      |
+	| Start date        | 2013-08-25 |
+	| End date          | 2013-08-26 |
+	| Start time        | 16:30      |
+	| End time          | 03:15      |
+	| End time next day | true       |
+
 
 #followings belong to the change overtime availability pbi
 Scenario: Default overtime availability values on existing overtime availability
