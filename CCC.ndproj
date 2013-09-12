@@ -227,22 +227,22 @@
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Startpage\bin</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Web.Broker.Backplane\bin</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\DomainTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\InfrastructureTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\DataBaseConverterTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.WinCodeTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Analytics\Teleopti.Analytics.Etl.CommonTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Analytics\Teleopti.Analytics.Etl.TransformerTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatterTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.LogClientTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.ServerTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.LogicTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\AgentPortal\Teleopti.Ccc.AgentPortalCodeTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.TestCommon\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.DayOffPlanningTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.IocCommonTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\DomainTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\InfrastructureTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\DataBaseConverterTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.WinCodeTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.CommonTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.TransformerTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatterTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.LogClientTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.ServerTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.LogicTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\AgentPortal\Teleopti.Ccc.AgentPortalCodeTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.TestCommon\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.DayOffPlanningTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.IocCommonTest\bin\Debug</Dir>
   </Dirs>
   <Report Kind="0" SectionsEnabled="2563" XslPath="" Flags="63488">
     <Section Enabled="True">Application Metrics</Section>
