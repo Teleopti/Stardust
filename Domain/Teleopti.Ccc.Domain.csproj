@@ -876,7 +876,6 @@
     <Compile Include="Scheduling\Rules\WeekShiftCategoryLimitationRule.cs" />
     <Compile Include="Scheduling\ScheduleDayAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\Rules\WorkTimeStartEndExtractor.cs" />
-    <Compile Include="Scheduling\ScheduleMatrixListPeriodFinder.cs" />
     <Compile Include="Scheduling\SchedulePeriodTargetDayOffCalculator.cs" />
     <Compile Include="Scheduling\SchedulePeriodTargetTimeCalculator.cs" />
     <Compile Include="Scheduling\ScheduleService.cs" />

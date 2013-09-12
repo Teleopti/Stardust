@@ -695,7 +695,6 @@
     <Compile Include="Scheduling\Rules\WeeksFromScheduleDaysExtractorTest.cs" />
     <Compile Include="Scheduling\Rules\WeekShiftCategoryLimitationRuleTest.cs" />
     <Compile Include="Scheduling\Rules\WorkTimeStartEndExtractorTest.cs" />
-    <Compile Include="Scheduling\ScheduleMatrixListPeriodFinderTest.cs" />
     <Compile Include="Scheduling\SchedulePeriodTargetDayOffCalculatorTest.cs" />
     <Compile Include="Scheduling\SchedulePeriodTargetTimeCalculatorTest.cs" />
     <Compile Include="Scheduling\SchedulerSkillDayHelperTest.cs" />
