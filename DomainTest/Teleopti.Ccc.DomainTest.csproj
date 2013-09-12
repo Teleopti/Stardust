@@ -568,7 +568,6 @@
     <Compile Include="Forecasting\Template\WorkloadDayTemplateReferenceTest.cs" />
     <Compile Include="Forecasting\TimeZoneDateCacheTest.cs" />
     <Compile Include="Helper\EncryptionConstantsTest.cs" />
-    <Compile Include="Helper\MathHelperTest.cs" />
     <Compile Include="Helper\StaffingEmailCalculatorServiceTest.cs" />
     <Compile Include="Helper\EndTimeLimitationTest.cs" />
     <Compile Include="Helper\SerializationHelperTest.cs" />
