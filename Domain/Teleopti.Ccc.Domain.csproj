@@ -1181,7 +1181,6 @@
     <Compile Include="Common\EntityConverter.cs" />
     <Compile Include="Common\EntityBaseTypes\AggregateRootWithBusinessUnit.cs" />
     <Compile Include="Scheduling\Rules\DayOffRule.cs" />
-    <Compile Include="Common\PayloadTime.cs" />
     <Compile Include="AgentInfo\PersonPeriod.cs" />
     <Compile Include="Common\RestrictionSet.cs" />
     <Compile Include="Common\IRestriction.cs" />

@@ -900,7 +900,6 @@
     <Compile Include="Common\ContractScheduleTest.cs" />
     <Compile Include="Common\ContractScheduleWeekTest.cs" />
     <Compile Include="Common\ContainerTest.cs" />
-    <Compile Include="Common\PayloadTimeTest.cs" />
     <Compile Include="AgentInfo\PersonPeriodTest.cs" />
     <Compile Include="Common\ValidationExceptionTest.cs" />
     <Compile Include="Common\DescriptionTest.cs" />
