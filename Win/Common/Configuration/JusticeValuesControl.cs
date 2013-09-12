@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // Grid must have a Header column
             gridColumns.Add(new SFGridRowHeaderColumn<JusticeValuesView>(string.Empty));
 
-            gridColumns.Add(new SFGridReadOnlyTextColumn<JusticeValuesView>("Name", Resources.ShiftCategory));
+            gridColumns.Add(new SFGridReadOnlyTextColumn<JusticeValuesView>("Name", Resources.ShiftCategoryHeader));
             var days = DateHelper.GetDaysOfWeek(
                     TeleoptiPrincipal.Current.Regional.Culture);
             foreach (var dayOfWeek in days)

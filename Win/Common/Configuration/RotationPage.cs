@@ -455,7 +455,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_gridColumns.Add(new SFGridHourMinutesOrEmptyColumn<RotationRestrictionView>("MaximumWorkTime",
 																						 UserTexts.Resources.MaxWorkTime));
 			_shiftCategoriesColumn = new SFGridDropDownColumn<RotationRestrictionView, IShiftCategory>("ShiftCategory",
-																									   UserTexts.Resources.ShiftCategory,
+																									   UserTexts.Resources.ShiftCategoryHeader,
 																									   _shiftCategoryList,
 																									   "Description",
 																									   null,
