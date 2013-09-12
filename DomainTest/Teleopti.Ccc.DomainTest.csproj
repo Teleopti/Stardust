@@ -501,7 +501,6 @@
     <Compile Include="Common\Messaging\SendPushMessageServiceTest.cs" />
     <Compile Include="Common\Messaging\SendPushMessageWhenRootAlteredServiceTest.cs" />
     <Compile Include="Common\ModifyCalculatorTest.cs" />
-    <Compile Include="Common\NameCompaperTest.cs" />
     <Compile Include="Common\OfficialWeekendDaysTest.cs" />
     <Compile Include="Common\OptionalColumnTest.cs" />
     <Compile Include="Common\OptionalColumnValueTest.cs" />
