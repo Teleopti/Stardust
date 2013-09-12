@@ -18,6 +18,12 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			base.Initialize();
 			_presenter = new ShiftPerAgentGridPresenter(this);
 			_schedulerState = schedulerState;
+			QueryColCount += shiftPerAgentGridQueryColCount;
+			QueryRowCount += shiftPerAgentGridQueryRowCount;
+			QueryCellInfo += shiftPerAgentGridQueryCellInfo;
+			CellDoubleClick += shiftPerAgentGridCellDoubleClick;
+			ResizingColumns -= shiftPerAgentGridResizingColumns;
+			ResizingColumns += shiftPerAgentGridResizingColumns;
 			
 		}
 
@@ -32,21 +38,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		private void initializeComponent()
 		{
 			ResetVolatileData();
-
-			QueryColCount -= shiftPerAgentGridQueryColCount;
-			QueryRowCount -= shiftPerAgentGridQueryRowCount;
-			QueryCellInfo -= shiftPerAgentGridQueryCellInfo;
-			CellDoubleClick -= shiftPerAgentGridCellDoubleClick;
-
-			QueryColCount += shiftPerAgentGridQueryColCount;
-			QueryRowCount += shiftPerAgentGridQueryRowCount;
-			QueryCellInfo += shiftPerAgentGridQueryCellInfo;
-			CellDoubleClick += shiftPerAgentGridCellDoubleClick;
-
 			ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
-
-			ResizingColumns -= shiftPerAgentGridResizingColumns;
-			ResizingColumns += shiftPerAgentGridResizingColumns;
 		}
 
 		void shiftPerAgentGridResizingColumns(object sender, GridResizingColumnsEventArgs e)
@@ -68,6 +60,12 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 	    void shiftPerAgentGridQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
 		{
+			if (_model == null)
+			{
+				e.Handled = true;
+				return;
+			}
+
 			if (e.ColIndex < 0 || e.RowIndex < 0) return;
 			if (e.ColIndex == 0 && e.RowIndex == 0) return;
 			if (e.ColIndex > _model.ShiftCategories.Count) return;
@@ -101,13 +99,15 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 		void shiftPerAgentGridQueryRowCount(object sender, GridRowColCountEventArgs e)
 		{
-			e.Count = _model.PersonInvolved.Count;
+			if(_model != null)
+				e.Count = _model.PersonInvolved.Count;
 			e.Handled = true;
 		}
 
 		void shiftPerAgentGridQueryColCount(object sender, GridRowColCountEventArgs e)
 		{
-			e.Count = _model.ShiftCategories.Count;
+			if(_model != null)
+				e.Count = _model.ShiftCategories.Count;
 			e.Handled = true;
 		}
 

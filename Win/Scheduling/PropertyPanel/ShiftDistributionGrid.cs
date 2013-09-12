@@ -19,6 +19,11 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             base.Initialize();
             if (!CellModels.ContainsKey("IgnoreCellModel")) CellModels.Add("IgnoreCellModel", new IgnoreCellModel(Model));
+			QueryColCount += shiftPerAgentGridQueryColCount;
+			QueryRowCount += shiftPerAgentGridQueryRowCount;
+			QueryCellInfo += shiftPerAgentGridQueryCellInfo;
+			CellDoubleClick += shiftPerAgentGridCellDoubleClick;
+			ResizingColumns += shiftDistributionGridResizingColumns;
         }
 
         public void UpdateModel(IDistributionInformationExtractor model)
@@ -34,21 +39,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         private void initializeComponent()
         {
             ResetVolatileData();
-
-            QueryColCount -= shiftPerAgentGridQueryColCount;
-            QueryRowCount -= shiftPerAgentGridQueryRowCount;
-            QueryCellInfo -= shiftPerAgentGridQueryCellInfo;
-            CellDoubleClick -= shiftPerAgentGridCellDoubleClick;
-
-            QueryColCount += shiftPerAgentGridQueryColCount;
-            QueryRowCount += shiftPerAgentGridQueryRowCount;
-            QueryCellInfo += shiftPerAgentGridQueryCellInfo;
-            CellDoubleClick += shiftPerAgentGridCellDoubleClick;
-
             ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
-
-			ResizingColumns -= shiftDistributionGridResizingColumns;
-			ResizingColumns += shiftDistributionGridResizingColumns;
         }
 
 		void shiftDistributionGridResizingColumns(object sender, GridResizingColumnsEventArgs e)
@@ -68,9 +59,14 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             }
         }
 
-        private void shiftPerAgentGridQueryCellInfo(object sender,
-                                                    GridQueryCellInfoEventArgs e)
+        private void shiftPerAgentGridQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
         {
+			if (_model == null)
+			{
+				e.Handled = true;
+				return;
+			}
+
             if (e.ColIndex < 0 || e.RowIndex < 0) return;
             if (e.ColIndex == 0 && e.RowIndex == 0) return;
             if (e.ColIndex > _model.ShiftCategories.Count) return;
@@ -126,17 +122,17 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             }
         }
 
-        private void shiftPerAgentGridQueryRowCount(object sender,
-                                                    GridRowColCountEventArgs e)
+        private void shiftPerAgentGridQueryRowCount(object sender, GridRowColCountEventArgs e)
         {
-            e.Count = _model.Dates.Count;
+			if(_model != null)
+				e.Count = _model.Dates.Count;
             e.Handled = true;
         }
 
-        private void shiftPerAgentGridQueryColCount(object sender,
-                                                    GridRowColCountEventArgs e)
+        private void shiftPerAgentGridQueryColCount(object sender, GridRowColCountEventArgs e)
         {
-            e.Count = _model.ShiftCategories.Count;
+			if(_model != null)
+				e.Count = _model.ShiftCategories.Count;
             e.Handled = true;
         }
 

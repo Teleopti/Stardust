@@ -15,7 +15,12 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		{
 			base.Initialize();
 			if (!CellModels.ContainsKey("IgnoreCellModel")) CellModels.Add("IgnoreCellModel", new IgnoreCellModel(Model));
-			_presenter = new ShiftFairnessGridPresenter(this);	
+			_presenter = new ShiftFairnessGridPresenter(this);
+			QueryColCount += shiftFairnessGridQueryColCount;
+			QueryRowCount += shiftFairnessGridQueryRowCount;
+			QueryCellInfo += shiftFairnessGridQueryCellInfo;
+			CellDoubleClick += shiftFairnessGridCellDoubleClick;
+			ResizingColumns += shiftFairnessGridResizingColumns;
 		}
 
         public void UpdateModel(IDistributionInformationExtractor distributionInformationExtractor)
@@ -29,22 +34,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		private void initializeComponent()
 		{
 			ResetVolatileData();
-
-			QueryColCount -= shiftFairnessGridQueryColCount;
-			QueryRowCount -= shiftFairnessGridQueryRowCount;
-			QueryCellInfo -= shiftFairnessGridQueryCellInfo;
-			CellDoubleClick -= shiftFairnessGridCellDoubleClick;
-
-			QueryColCount += shiftFairnessGridQueryColCount;
-			QueryRowCount += shiftFairnessGridQueryRowCount;
-			QueryCellInfo += shiftFairnessGridQueryCellInfo;
-			CellDoubleClick += shiftFairnessGridCellDoubleClick;
-
 			ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
-
-			ResizingColumns -= shiftFairnessGridResizingColumns;
-			ResizingColumns += shiftFairnessGridResizingColumns;
-
 			((NumericReadOnlyCellModel)CellModels["NumericReadOnlyCell"]).NumberOfDecimals = 2;
 		}
 
@@ -67,6 +57,12 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 		void shiftFairnessGridQueryCellInfo(object sender,GridQueryCellInfoEventArgs e)
 		{
+			if (_model == null)
+			{
+				e.Handled = true;
+				return;
+			}
+
 			if (e.ColIndex < (int)ShiftFairnessGridColumns.ShiftCategory || e.RowIndex < 0) return;
 			if (e.ColIndex == (int)ShiftFairnessGridColumns.ShiftCategory && e.RowIndex == 0) return;
 			if (e.ColIndex > (int)ShiftFairnessGridColumns.StandardDeviationValue) return;
@@ -136,13 +132,15 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 		void shiftFairnessGridQueryRowCount(object sender,GridRowColCountEventArgs e)
 		{
-			e.Count = _model.ShiftCategories.Count + 1;
+			if(_model != null)
+				e.Count = _model.ShiftCategories.Count + 1;
 			e.Handled = true;
 		}
 
 		void shiftFairnessGridQueryColCount(object sender, GridRowColCountEventArgs e)
 		{
-			e.Count = _presenter.ColCount;
+			if(_model != null)
+				e.Count = _presenter.ColCount;
 			e.Handled = true;
 		}
 
