@@ -45,7 +45,15 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             CellDoubleClick += shiftPerAgentGridCellDoubleClick;
 
             ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
+
+			ResizingColumns -= shiftDistributionGridResizingColumns;
+			ResizingColumns += shiftDistributionGridResizingColumns;
         }
+
+		void shiftDistributionGridResizingColumns(object sender, GridResizingColumnsEventArgs e)
+		{
+			e.Cancel = true;
+		}
 
         void shiftPerAgentGridCellDoubleClick(object sender, GridCellClickEventArgs e)
         {
