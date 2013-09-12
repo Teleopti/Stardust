@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterModule<EncryptionModule>();
 			builder.RegisterModule<AuthenticationModule>();
 
-			builder.RegisterType<PersonAccountUpdater>().As<IPersonAccountUpdater>();
+			//builder.RegisterType<PersonAccountUpdater>().As<IPersonAccountUpdater>();
 
             builder.RegisterModule<AssemblerModule>();
             builder.RegisterModule<RepositoryModule>();

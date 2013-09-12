@@ -48,13 +48,11 @@ namespace Teleopti.Ccc.DomainTest.Common
 			AccountDay account1;
 			AccountTime account2;
 			var accountCollection = PersonAccountCollectionFactory.Create(_person, _absence1, _absence2, out account1, out account2);
-			IList<KeyValuePair<IPerson, IPersonAccountCollection>> accountCollectionDict = new BindingList<KeyValuePair<IPerson, IPersonAccountCollection>>();
-			accountCollectionDict.Add(new KeyValuePair<IPerson, IPersonAccountCollection>(_person, accountCollection));
 
 			using (_mocks.Record())
 			{
 				_provider.Stub(p => p.PersonAccounts(_person))
-					.Return(accountCollectionDict);
+					.Return(accountCollection);
 				_provider.Stub(p => p.UnitOfWork)
 					.Return(_unitOfWork);
 				_provider.Stub(p => p.RefreshService)

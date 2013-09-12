@@ -10,6 +10,6 @@ namespace Teleopti.Ccc.Domain.Common
 	{
 		ITraceableRefreshService RefreshService { get; }
 		IUnitOfWork UnitOfWork { get; }
-		IEnumerable<KeyValuePair<IPerson, IPersonAccountCollection>> PersonAccounts(IPerson person);
+		IPersonAccountCollection PersonAccounts(IPerson person);
 	}
 }

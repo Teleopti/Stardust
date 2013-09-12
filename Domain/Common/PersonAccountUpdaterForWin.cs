@@ -27,34 +27,16 @@ namespace Teleopti.Ccc.Domain.Common
 			refreshAllAccounts(person);
 		}
 
-		//checkIfAuthorized(foundPerson, dateFrom);
-
-		//var accounts = _personAbsenceAccountRepository.Find(foundPerson);
-		//var personAccount = accounts.Find(foundAbsence, dateFrom);
-		//if (personAccount == null || !personAccount.StartDate.Equals(dateFrom))
-		//{
-		//	personAccount = createPersonAccount(foundAbsence, accounts, dateFrom);
-		//}
-
-		//setPersonAccount(personAccount, command);
-
-		//unitOfWork.PersistAll();
-
 		private void refreshAllAccounts(IPerson person)
 		{
 			var personAccounts = _provider.PersonAccounts(person);
 			foreach (var personAccount in personAccounts)
 			{
-				foreach (var temp in personAccount.Value)
+				foreach (var account in personAccount.AccountCollection())
 				{
-					foreach (var account in temp.AccountCollection())
-					{
-						_provider.RefreshService.Refresh(account, _provider.UnitOfWork);
-					}
+					_provider.RefreshService.Refresh(account, _provider.UnitOfWork);
 				}
 			}
 		}
-
-	
 	}
 }

@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                                                            WindowsLogOnName = dto.WindowsLogOnName
                                                        };
             if(dto.TerminationDate != null)
-                person.TerminatePerson(new DateOnly(dto.TerminationDate.DateTime), null) ;
+                person.TerminatePerson(new DateOnly(dto.TerminationDate.DateTime), new PersonAccountUpdaterDummy()) ;
             else
                 person.ActivatePerson(null);
             if (!string.IsNullOrEmpty(dto.Note))

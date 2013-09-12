@@ -250,7 +250,7 @@
     <Compile Include="Common\IModifyNow.cs" />
     <Compile Include="Common\LayersExtensions.cs" />
     <Compile Include="Common\ListAggregator.cs" />
-    <Compile Include="Common\PersonAccountUpdater.cs" />
+    <Compile Include="Common\PersonAccountUpdaterProvider.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Common\SpecificBusinessUnit.cs" />
     <Compile Include="Common\TrueFalseRandomizer.cs" />
