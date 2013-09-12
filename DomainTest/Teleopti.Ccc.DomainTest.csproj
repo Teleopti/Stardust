@@ -699,7 +699,6 @@
     <Compile Include="Scheduling\SchedulePeriodTargetDayOffCalculatorTest.cs" />
     <Compile Include="Scheduling\SchedulePeriodTargetTimeCalculatorTest.cs" />
     <Compile Include="Scheduling\SchedulerSkillDayHelperTest.cs" />
-    <Compile Include="Scheduling\SchedulerSkillHelperTest.cs" />
     <Compile Include="Scheduling\ScheduleTagging\AgentDayScheduleTagTest.cs" />
     <Compile Include="Scheduling\ScheduleTagging\KeepOriginalScheduleTagTest.cs" />
     <Compile Include="Scheduling\ScheduleTagging\NullScheduleTagTest.cs" />
