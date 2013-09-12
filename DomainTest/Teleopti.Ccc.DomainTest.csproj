@@ -395,7 +395,6 @@
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonTest.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupSchedulingServiceTest.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\RuleSetBagForGroupPersonTest.cs" />
-    <Compile Include="ResourceCalculation\LegalStateCheckerOptionsTest.cs" />
     <Compile Include="ResourceCalculation\OptimizerActivitiesPreferencesTest.cs" />
     <Compile Include="ResourceCalculation\PersonalShiftMeetingTimeCheckerTest.cs" />
     <Compile Include="ResourceCalculation\PossibleCombinationsOfStartEndCategoryCreatorTest.cs" />

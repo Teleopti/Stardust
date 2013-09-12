@@ -365,7 +365,6 @@
     <Compile Include="Domain\IChartSeriesSetting.cs" />
     <Compile Include="Domain\ICommandLineArgument.cs" />
     <Compile Include="Domain\IEffectiveRestriction.cs" />
-    <Compile Include="Domain\ILegalStateCheckerOptions.cs" />
     <Compile Include="Domain\IMeetingPayload.cs" />
     <Compile Include="Domain\IMoveDataBetweenSchedules.cs" />
     <Compile Include="Domain\IPersonCollection.cs" />

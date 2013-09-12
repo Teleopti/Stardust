@@ -777,7 +777,6 @@
     <Compile Include="ResourceCalculation\DeviationStatisticsCalculator.cs" />
     <Compile Include="ResourceCalculation\DeviationStatisticsData.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\FairnessValueResult.cs" />
-    <Compile Include="ResourceCalculation\LegalStateCheckerOptions.cs" />
     <Compile Include="ResourceCalculation\OptimizerOriginalPreferences.cs" />
     <Compile Include="ResourceCalculation\PersonSkillPeriodsDataHolderManager.cs" />
     <Compile Include="ResourceCalculation\PopulationStatisticsCalculator.cs" />
