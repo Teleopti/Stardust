@@ -256,7 +256,6 @@
     <Compile Include="AgentInfo\Requests\PersonRequestCheckAuthorization.cs" />
     <Compile Include="Common\LogWriter.cs" />
     <Compile Include="Common\Now.cs" />
-    <Compile Include="Common\PersonComparer.cs" />
     <Compile Include="Common\PersonProvider.cs" />
     <Compile Include="Common\DateOnlyAsDateTimePeriod.cs" />
     <Compile Include="Common\PersonsInOrganizationProvider.cs" />
