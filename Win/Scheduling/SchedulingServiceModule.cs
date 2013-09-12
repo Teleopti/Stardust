@@ -261,6 +261,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			builder.RegisterType<TeamBlockIntradayDecisionMaker>().As<ITeamBlockIntradayDecisionMaker>();
 			builder.RegisterType<StandardDeviationSumCalculator>().As<IStandardDeviationSumCalculator>();
+		    builder.RegisterType<RelativeDailyValueCalculatorForTeamBlock>().As<IRelativeDailyValueCalculatorForTeamBlock>();
 		}
 
 		private static void registerTeamBlockDayOffOptimizerService(ContainerBuilder builder)
