@@ -445,7 +445,6 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCreatorTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessFactorsTest.cs" />
     <Compile Include="Scheduling\BestWorkShiftFinderTest.cs" />
-    <Compile Include="Scheduling\CreatePersonAbsenceTest.cs" />
     <Compile Include="Scheduling\HasLayerWithPeriodAndActivityThatIsEqualToTest.cs" />
     <Compile Include="Scheduling\Meetings\BestSlotForMeetingFinderTest.cs" />
     <Compile Include="Scheduling\Meetings\MeetingSlotFinderServiceTest.cs" />

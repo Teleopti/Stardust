@@ -599,7 +599,6 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCalculator.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCreator.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessFactors.cs" />
-    <Compile Include="Scheduling\CreatePersonAbsence.cs" />
     <Compile Include="Scheduling\HasLayerWithPeriodAndActivityThatIsEqualTo.cs" />
     <Compile Include="Scheduling\MasterActivity.cs" />
     <Compile Include="Scheduling\Meetings\BestSlotForMeetingFinder.cs" />
