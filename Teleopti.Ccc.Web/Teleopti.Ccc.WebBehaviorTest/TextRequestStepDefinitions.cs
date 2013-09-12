@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see texts describing too long subject error")]
 		public void ThenIShouldSeeTextsDescribingTooLongSubjectError()
 		{
-			Browser.Interactions.AssertFirstContains("#Request-add-section .request-new-error", Resources.TheNameIsTooLong);
+			Browser.Interactions.AssertFirstContains("#Request-add-section .request-new-error", Resources.SubjectTooLong);
 		}
 
 		[Then(@"I should not see any requests in the list")]
