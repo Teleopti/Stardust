@@ -191,45 +191,38 @@ GO
 --Desc: Bug #23815 - remove duplicates from PersonAbsence
 --Desc: Bug #24721 - patch deletes absences incorrect from PersonAbsence
 ---------------- 
---first remove duplicates but keep the Absence with the biggest time span
 create table #PersonAbsenceRemove (Id uniqueidentifier)
+CREATE TABLE #PersonAbsence (
+	[Id] [uniqueidentifier] NOT NULL,
+	[Person] [uniqueidentifier] NOT NULL,
+	[Scenario] [uniqueidentifier] NOT NULL,
+	[PayLoad] [uniqueidentifier] NOT NULL,
+	[Minimum] [datetime] NOT NULL,
+	[Maximum] [datetime] NOT NULL)
 
-insert into #PersonAbsenceRemove (Id)
-select Id from PersonAbsence
-where id not in
-(
-	--keep longest Abscence with lowest Guid from the duplicates, count(*) > 1
-	select t1.Id
-	from PersonAbsence t1
-	inner join (
-		select  person, Scenario, Minimum, PayLoad, max(Maximum) Maximum
-		from PersonAbsence
-		group by person, Scenario, Minimum,PayLoad
-		having count(*) > 1
-	) t2
-	on t1.Person = t2.Person
-		and t1.Minimum = t2.Minimum
-		and t1.PayLoad = t2.PayLoad
-		and t1.maximum = t2.Maximum
-		and t1.Scenario= t2.Scenario
-		
+--First get all correct (unique) rows keeping only the longest Absence
+--note: The [Id] column will still represent some duplicated rows as [Id] is not included in the GROUP BY
+insert into #PersonAbsence (Id, Person, Scenario, PayLoad, Minimum, Maximum)
+select t1.Id, t1.Person, t1.Scenario, t1.PayLoad, t1.Minimum, t1.Maximum
+from PersonAbsence t1
+inner join (
+	select person, Scenario, Minimum, PayLoad, max(Maximum) Maximum
+	from PersonAbsence
+	group by person, Scenario, Minimum,PayLoad
+) t2
+on t1.Person = t2.Person
+	and t1.Minimum = t2.Minimum
+	and t1.PayLoad = t2.PayLoad
+	and t1.Maximum = t2.Maximum
+	and t1.Scenario= t2.Scenario
 
-	union all
-	
-	--get all the correct ones, count(*) = 1
-	select t1.Id
-	from PersonAbsence t1
-	inner join (
-		select person, Scenario, Minimum, PayLoad, max(Maximum) Maximum
-		from PersonAbsence
-		group by person, Scenario, Minimum,PayLoad
-		having count(*) = 1
-	) t2
-	on t1.Person = t2.Person
-		and t1.Minimum = t2.Minimum
-		and t1.PayLoad = t2.PayLoad
-		and t1.Maximum = t2.Maximum
-		and t1.Scenario= t2.Scenario
+--Secondly, we group again, now by lowest GUID ("random")
+INSERT INTO #PersonAbsenceRemove
+SELECT Id FROM PersonAbsence
+where Id not in (
+	select cast(min(cast(id as varchar(36))) as uniqueidentifier) Id
+	from #PersonAbsence
+	group by person, Scenario, Minimum,PayLoad,Maximum
 )
 
 --delete PersonAbsence_AUD
