@@ -33,17 +33,17 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
             workload1.SetId(Guid.NewGuid());
             workload1.Name = "workload 1";
-            RaptorTransformerHelper.SetCreatedOn(workload1, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(workload1, DateTime.Now);
 
             workload2.SetId(Guid.NewGuid());
             workload2.Name = "workload 2 [deleted]";
-            RaptorTransformerHelper.SetCreatedOn(workload2, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(workload2, DateTime.Now);
             // Set IsDeleted = True
             ((IDeleteTag)workload2).SetDeleted();
 
             workload3.SetId(Guid.NewGuid());
             workload3.Name = "workload 3";
-            RaptorTransformerHelper.SetCreatedOn(workload3, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(workload3, DateTime.Now);
 
             workload1.QueueAdjustments = new QueueAdjustment
                                              {

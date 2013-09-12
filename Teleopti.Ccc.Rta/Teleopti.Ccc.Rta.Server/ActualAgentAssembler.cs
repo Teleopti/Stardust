@@ -15,8 +15,6 @@ namespace Teleopti.Ccc.Rta.Server
 
 	public interface IActualAgentAssembler : IRtaDataHandlerCache
 	{
-		RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid state);
-
 		IActualAgentState GetAgentState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode,
 		                                DateTime timestamp,
 		                                TimeSpan timeInState,
@@ -30,17 +28,87 @@ namespace Teleopti.Ccc.Rta.Server
 	{
 		private readonly IDatabaseHandler _databaseHandler;
 		private readonly IMbCacheFactory _mbCacheFactory;
+		private readonly IAlarmMapper _alarmMapper;
 		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof (IActualAgentAssembler));
+		private const string notInBatchStatecode = "CCC Logged out";
 
-		public ActualAgentAssembler(IDatabaseHandler databaseHandler, IMbCacheFactory mbCacheFactory)
+		public ActualAgentAssembler(IDatabaseHandler databaseHandler, IMbCacheFactory mbCacheFactory, IAlarmMapper alarmMapper)
 		{
 			_databaseHandler = databaseHandler;
 			_mbCacheFactory = mbCacheFactory;
+			_alarmMapper = alarmMapper;
 		}
 
 		protected IDatabaseHandler DatabaseHandler
 		{
 			get { return _databaseHandler; }
+		}
+
+		public IEnumerable<IActualAgentState> GetAgentStatesForMissingAgents(DateTime batchId, string sourceId)
+		{
+			LoggingSvc.InfoFormat("Getting missing agent states from from batch: {0}, sourceId: {1}", batchId, sourceId);
+			var missingAgentStates = DatabaseHandler.GetMissingAgentStatesFromBatch(batchId, sourceId);
+			if (!missingAgentStates.Any())
+			{
+				LoggingSvc.InfoFormat("Did not find any missing agent states, all were included in batch");
+				return new Collection<IActualAgentState>();
+			}
+			LoggingSvc.InfoFormat("Found {0} missing agents", missingAgentStates.Count);
+
+			var updatedAgents = new List<IActualAgentState>();
+			foreach (var agentState in missingAgentStates
+				.Where(agentState => !_alarmMapper.IsAgentLoggedOut(agentState.ScheduledId,
+				                                  agentState.StateCode,
+				                                  agentState.PlatformTypeId,
+				                                  agentState.BusinessUnit)))
+			{
+				RtaAlarmLight foundAlarm;
+				var state = agentState;
+				state.State = "";
+				state.StateCode = notInBatchStatecode;
+				state.StateStart = batchId;
+				state.AlarmId = Guid.Empty;
+				state.AlarmName = "";
+				state.Color = 0;
+				state.AlarmStart = batchId;
+				state.StaffingEffect = 0;
+				state.ReceivedTime = batchId;
+				state.BatchId = batchId;
+				state.OriginalDataSourceId = sourceId;
+
+				var stateGroup = _alarmMapper.GetStateGroup(notInBatchStatecode, Guid.Empty, state.BusinessUnit);
+				if (stateGroup != null)
+				{
+					state.State = stateGroup.StateGroupName;
+					foundAlarm = _alarmMapper.GetAlarm(state.ScheduledId, stateGroup.StateGroupId);
+				}
+				else
+					foundAlarm = _alarmMapper.GetAlarm(state.ScheduledId, Guid.Empty);
+
+				if (foundAlarm != null)
+				{
+					if (state.StateId == foundAlarm.StateGroupId)
+					{
+						LoggingSvc.InfoFormat("Agent {0} is already in logged out state {1}", agentState.PersonId, state.StateId);
+						continue;
+					}
+
+					state.State = foundAlarm.StateGroupName;
+					state.StateId = foundAlarm.StateGroupId;
+					state.StateStart = batchId;
+					state.AlarmName = foundAlarm.Name;
+					state.AlarmId = foundAlarm.AlarmTypeId;
+					state.Color = foundAlarm.DisplayColor;
+					state.AlarmStart = batchId.AddTicks(foundAlarm.ThresholdTime);
+					state.StaffingEffect = foundAlarm.StaffingEffect;
+					state.ReceivedTime = batchId;
+					state.BatchId = batchId;
+					state.OriginalDataSourceId = sourceId;
+				}
+				updatedAgents.Add(state);
+			}
+			LoggingSvc.InfoFormat("Found {0} agents to send over message broker", updatedAgents.Count);
+			return updatedAgents;
 		}
 
 		public IActualAgentState GetAgentStateForScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp)
@@ -61,7 +129,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			if (previousState == null)
 				return buildAgentState(scheduleLayers, null, personId, platformId, stateCode, timestamp, new TimeSpan(0),
-				                       businessUnitId, null, originalSourceId);
+									   businessUnitId, null, originalSourceId);
 
 			if (scheduleLayers[0] != null && haveScheduleChanged(scheduleLayers[0], previousState))
 			{
@@ -75,76 +143,7 @@ namespace Teleopti.Ccc.Rta.Server
 			var batchId = previousState.BatchId;
 
 			return buildAgentState(scheduleLayers, previousState, personId, platformId, stateCode, timestamp, new TimeSpan(0),
-			                       businessUnitId, batchId, originalSourceId);
-		}
-
-		public IEnumerable<IActualAgentState> GetAgentStatesForMissingAgents(DateTime batchId, string sourceId)
-		{
-			LoggingSvc.InfoFormat("Getting missing agent states from from batch: {0}, sourceId: {1}", batchId, sourceId);
-			var missingAgentStates = DatabaseHandler.GetMissingAgentStatesFromBatch(batchId, sourceId);
-			if (!missingAgentStates.Any())
-			{
-				LoggingSvc.InfoFormat("Did not find any missing agent states, all were included in batch");
-				return new Collection<IActualAgentState>();
-			}
-			LoggingSvc.InfoFormat("Found {0} missing agents", missingAgentStates.Count);
-
-			var activityAlarms = DatabaseHandler.ActivityAlarms();
-			var updatedAgents = new List<IActualAgentState>();
-			foreach (var agentState in missingAgentStates)
-			{
-				var state = agentState;
-				state.State = "";
-				state.StateCode = "LOGGED-OFF";
-				state.StateStart = batchId;
-				state.AlarmId = Guid.Empty;
-				state.AlarmName = "";
-				state.Color = 0;
-				state.AlarmStart = batchId;
-				state.StaffingEffect = 0;
-				state.ReceivedTime = batchId;
-				state.BatchId = batchId;
-				state.OriginalDataSourceId = sourceId;
-
-				var rtaStateGroup = resolveStateGroupId(state.PlatformTypeId, "LOGGED-OFF", state.BusinessUnit);
-				if (rtaStateGroup != null)
-					state.State = rtaStateGroup.StateGroupName;
-
-				List<RtaAlarmLight> alarmList;
-				if (!activityAlarms.TryGetValue(state.ScheduledId, out alarmList))
-					LoggingSvc.InfoFormat("Could not find any alarms connected to this activity id: {0}", state.ScheduledId);
-
-				else
-				{
-					var loggedOutState = alarmList.FirstOrDefault(a => a.IsLogOutState);
-					if (loggedOutState == null)
-						LoggingSvc.InfoFormat("Could not find any alarm that is set to logged out");
-
-					else
-					{
-						if (state.StateId == loggedOutState.StateGroupId)
-						{
-							LoggingSvc.InfoFormat("Agent {0} is already in logged out state {1}", agentState.PersonId, state.StateId);
-							continue;
-						}
-
-						state.State = loggedOutState.StateGroupName;
-						state.StateId = loggedOutState.StateGroupId;
-						state.StateStart = batchId;
-						state.AlarmName = loggedOutState.Name;
-						state.AlarmId = loggedOutState.AlarmTypeId;
-						state.Color = loggedOutState.DisplayColor;
-						state.AlarmStart = batchId.AddTicks(loggedOutState.ThresholdTime);
-						state.StaffingEffect = loggedOutState.StaffingEffect;
-						state.ReceivedTime = batchId;
-						state.BatchId = batchId;
-						state.OriginalDataSourceId = sourceId;
-					}
-				}
-				updatedAgents.Add(state);
-			}
-			LoggingSvc.InfoFormat("Found {0} agents to send over message broker", updatedAgents.Count);
-			return updatedAgents;
+								   businessUnitId, batchId, originalSourceId);
 		}
 
 		public IActualAgentState GetAgentState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode,
@@ -171,11 +170,10 @@ namespace Teleopti.Ccc.Rta.Server
 		                                          Guid businessUnitId, DateTime? batchId, string originalSourceId)
 		{
 			RtaAlarmLight foundAlarm;
+			LoggingSvc.InfoFormat("Starting to build ActualAgentState for personId: {0}", personId);
 			var scheduleLayer = scheduleLayers.FirstOrDefault();
 			var nextLayer = scheduleLayers.LastOrDefault();
-			var state = resolveStateGroupId(platformTypeId, stateCode, businessUnitId);
-
-			LoggingSvc.InfoFormat("Starting to build ActualAgentState for personId: {0}", personId);
+			var activityId = scheduleLayer != null ? scheduleLayer.PayloadId : Guid.Empty;
 
 			var newState = new ActualAgentState
 				{
@@ -192,15 +190,15 @@ namespace Teleopti.Ccc.Rta.Server
 			if (batchId.HasValue)
 				newState.BatchId = batchId.Value;
 
+			var state = _alarmMapper.GetStateGroup(stateCode, platformTypeId, businessUnitId);
 			if (state != null)
 			{
 				newState.State = state.StateGroupName;
-				foundAlarm = GetAlarm(platformTypeId, stateCode, scheduleLayer, state.StateGroupId);
+				foundAlarm = _alarmMapper.GetAlarm(activityId, state.StateGroupId);
 			}
-
 			else
-				foundAlarm = GetAlarm(platformTypeId, stateCode, scheduleLayer, Guid.Empty);
-
+				foundAlarm = _alarmMapper.GetAlarm(activityId, Guid.Empty);
+			
 			if (foundAlarm != null)
 			{
 				newState.AlarmName = foundAlarm.Name;
@@ -243,66 +241,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			return newState;
 		}
-
-		public RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid state)
-		{
-			LoggingSvc.InfoFormat("Getting alarm for PlatformId: {0}, StateCode: {1}", platformTypeId, stateCode);
-			LoggingSvc.Info("Loading activity alarms.");
-			var activityAlarms = DatabaseHandler.ActivityAlarms();
-			var localPayloadId = payloadId(layer);
-			List<RtaAlarmLight> list;
-
-			if (activityAlarms.TryGetValue(localPayloadId, out list))
-			{
-				var alarm = list.SingleOrDefault(s => s.StateGroupId == state);
-				if (alarm != null)
-					LoggingSvc.InfoFormat("Found alarm: {1}, alarmId: {0}", alarm.AlarmTypeId, alarm.Name);
-				else
-					LoggingSvc.InfoFormat("Could not find alarm (no matching stategroupid) for PlatformId: {0}, StateCode: {1}",
-					                      platformTypeId, stateCode);
-				return alarm;
-			}
-
-			LoggingSvc.InfoFormat(
-				"Could not find alarm (no matching schedulelayer payloadId)  for PlatformId: {0}, StateCode: {1}", platformTypeId,
-				stateCode);
-			return null;
-		}
-
-		private static Guid payloadId(ScheduleLayer scheduleLayer)
-		{
-			return scheduleLayer == null ? Guid.Empty : scheduleLayer.PayloadId;
-		}
-
-		private RtaStateGroupLight resolveStateGroupId(Guid platformTypeId, string stateCode, Guid businessUnitId)
-		{
-			LoggingSvc.Info("Loading stategroups");
-			List<RtaStateGroupLight> outState;
-			if (DatabaseHandler.StateGroups().TryGetValue(stateCode, out outState))
-			{
-				var foundstate =
-					outState.FirstOrDefault(s => s.BusinessUnitId == businessUnitId && s.PlatformTypeId == platformTypeId);
-				if (foundstate != null)
-					return foundstate;
-			}
-			else if (!string.IsNullOrEmpty(stateCode))
-			{
-				LoggingSvc.InfoFormat("Could not find state: {0}, on platform {1} adding it to database", stateCode, platformTypeId);
-				DatabaseHandler.AddNewRtaState(stateCode, platformTypeId);
-				LoggingSvc.Info("Clearing cache for StateGroups");
-				invalidateStateGroupCache();
-			}
-
-			LoggingSvc.WarnFormat("Could not find StateGroup for PlatformId: {0}, StateCode: {1}, BU: {2}", platformTypeId,
-			                      stateCode, businessUnitId);
-			return null;
-		}
-
-		private void invalidateStateGroupCache()
-		{
-			_mbCacheFactory.Invalidate(DatabaseHandler, x => x.StateGroups(), false);
-		}
-
+		
 		private static bool haveScheduleChanged(ScheduleLayer layer, IActualAgentState oldState)
 		{
 			return layer.PayloadId == oldState.ScheduledId

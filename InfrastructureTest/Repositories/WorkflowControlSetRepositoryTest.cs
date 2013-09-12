@@ -116,7 +116,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(item2.Name,result[0].Name);
             Assert.AreEqual(item1.Name, result[1].Name);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(result[0].UpdatedBy));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(result[0].CreatedBy));
         }
 
         [Test]

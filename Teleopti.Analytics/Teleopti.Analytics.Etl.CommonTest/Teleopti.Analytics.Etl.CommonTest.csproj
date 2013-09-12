@@ -96,7 +96,6 @@
     <Compile Include="Infrastructure\RepositoryStub.cs" />
     <Compile Include="JobSchedule\EtlJobScheduleTest.cs" />
     <Compile Include="FakeData\RepositoryFactory.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="JobRunnerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunControllerTest.cs" />

@@ -61,8 +61,7 @@ namespace Teleopti.Ccc.TestCommon
 
         public static void SetCreatedOn(ICreateInfo aggregateRoot, DateTime date)
         {
-            typeof(AggregateRoot).GetField("_createdOn", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(
-                aggregateRoot, date);
+					aggregateRoot.GetType().GetProperty("CreatedOn", BindingFlags.Instance | BindingFlags.Public).SetValue(aggregateRoot, date, null);
         }
         public static void SetUpdatedBy(IChangeInfo aggregateRoot, IPerson person)
         {
@@ -72,8 +71,7 @@ namespace Teleopti.Ccc.TestCommon
 
         public static void SetCreatedBy(ICreateInfo aggregateRoot, IPerson person)
         {
-            typeof(AggregateRoot).GetField("_createdBy", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(
-                aggregateRoot, person);
+					aggregateRoot.GetType().GetProperty("CreatedBy", BindingFlags.Instance | BindingFlags.Public).SetValue(aggregateRoot, person, null);
         }
 
         public static void SetBusinessUnit(IAggregateRoot aggregateRoot, IBusinessUnit businessUnit)

@@ -22,7 +22,7 @@ BEGIN
 /*
 DELETE FROM personAssignment WHERE ShiftCategory IS null
 UPDATE personAssignment SET DayOffTemplate = null WHERE DayOffTemplate IS not null
-DELETE FROM dbo.dayOffTemplate WHERE CreatedBy='3F0886AB-7B25-4E95-856A-0D726EDC2A67'
+DELETE FROM dbo.dayOffTemplate WHERE UpdatedBy='3F0886AB-7B25-4E95-856A-0D726EDC2A67'
 DELETE FROM dbo.DatabaseVersion WHERE BuildNumber=-18589
 
 BEGIN TRAN
@@ -148,9 +148,7 @@ ROLLBACK TRAN
 	SELECT
 	newid()
 	,[Version] = 1
-	,[CreatedBy] = @superUser
 	,[UpdatedBy] = @superUser
-	,[CreatedOn] = getutcdate()
 	,[UpdatedOn] = getutcdate()
 	,[Name]		 = pdo.Name
 	,[ShortName] = pdo.ShortName
@@ -182,7 +180,7 @@ ROLLBACK TRAN
 	(
 	select
 		dot.Id,
-		dot.CreatedOn,
+		dot.UpdatedOn,
 		dot.Name,
 		dot.BusinessUnit,
 		ROW_NUMBER() OVER
@@ -190,7 +188,7 @@ ROLLBACK TRAN
 			PARTITION BY
 				dot.Name,
 				dot.BusinessUnit
-			ORDER BY dot.CreatedOn DESC
+			ORDER BY dot.UpdatedOn DESC
 			) AS OrderIndex
 	from dbo.DayOffTemplate dot
 	)
@@ -226,13 +224,10 @@ ROLLBACK TRAN
 		SELECT DISTINCT
 		newid(),
 		[Version]		= 1,
-		[CreatedBy]		= cast(max(cast(pdo.CreatedBy AS BINARY(16)))as uniqueidentifier),
 		[UpdatedBy]		= cast(max(cast(pdo.UpdatedBy AS BINARY(16)))as uniqueidentifier),
-		[CreatedOn]		= max(pdo.CreatedOn),
 		[UpdatedOn]		= max(pdo.UpdatedOn),
 		[Person]		= pdo.Person,
 		[Scenario]		= pdo.scenario,
-		[BusinessUnit]	= cast(max(cast(pdo.BusinessUnit AS BINARY(16)))as uniqueidentifier),
 		[Date]			= convert(datetime,floor(convert(decimal(18,8),pdo.anchor))),
 		[ShiftCategory]	= NULL,
 		[DayOffTemplate]= cast(max(cast(dot.Id AS BINARY(16)))as uniqueidentifier)

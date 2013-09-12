@@ -11,7 +11,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: HenryG
     /// Created date: 2009-02-24
     /// </remarks>
-    public interface IPayrollExport : IAggregateRoot, IChangeInfo
+	public interface IPayrollExport : IAggregateRoot, IChangeInfo, ICreateInfo
     {
 
         /// <summary>

@@ -60,7 +60,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             businessUnitGraph.SiteCollection[1].TeamCollection[0].SetId(Guid.NewGuid());
             person.AddPersonPeriod(personPeriod);
             person.TerminalDate = new DateOnly(2007, 2, 10);
-            RaptorTransformerHelper.SetCreatedOn(person, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(person, DateTime.Now);
             retList.Add(person);
 
             //User
@@ -68,7 +68,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             person.SetId(Guid.NewGuid());
             person.PermissionInformation.SetDefaultTimeZone(
                 (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
-            RaptorTransformerHelper.SetCreatedOn(person, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(person, DateTime.Now);
             retList.Add(person);
 
             //Agent with one period with no terminal date set. No id for PersonPeriod
@@ -80,7 +80,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
             businessUnitGraph.SiteCollection[0].TeamCollection[1].SetId(Guid.NewGuid());
             person.AddPersonPeriod(personPeriod); //what happens when overlapping periods
-            RaptorTransformerHelper.SetCreatedOn(person, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(person, DateTime.Now);
             retList.Add(person);
 
             // User with permission to view Performance Mangager reports (both windows and application logon info!)
@@ -95,7 +95,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
                                                        };
             person.SetId(Guid.NewGuid());
             person.PermissionInformation.AddApplicationRole(getApplicationRole("PM Users", true, false));
-            RaptorTransformerHelper.SetCreatedOn(person, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(person, DateTime.Now);
             retList.Add(person);
 
             // User with permission to create AND view Performance Mangager reports
@@ -104,7 +104,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             
             person.SetId(Guid.NewGuid());
             person.PermissionInformation.AddApplicationRole(getApplicationRole("PM Users", false, true));
-            RaptorTransformerHelper.SetCreatedOn(person, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(person, DateTime.Now);
             retList.Add(person);
 
 
@@ -122,7 +122,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
                 PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2009, 10, 22), personContract, businessUnitGraph.SiteCollection[0].TeamCollection[1]);
             businessUnitGraph.SiteCollection[0].TeamCollection[1].SetId(Guid.NewGuid());
             person.AddPersonPeriod(personPeriod);
-            RaptorTransformerHelper.SetCreatedOn(person, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(person, DateTime.Now);
             retList.Add(person);
 
 
@@ -135,7 +135,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             person.PermissionInformation.AddApplicationRole(getApplicationRole("PM Users creators", false, true));
             person.PermissionInformation.AddApplicationRole(getApplicationRole("PM Users viewers", true, false));
             person.PermissionInformation.AddApplicationRole(getApplicationRole("No PM Users", false, false));
-            RaptorTransformerHelper.SetCreatedOn(person, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(person, DateTime.Now);
             retList.Add(person);
 
             // User with Windows logon credentials but NO permission to Performance Mangager reports
@@ -143,7 +143,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo { DomainName = "Gdomain", WindowsLogOnName = "GregG" };
 
             person.SetId(Guid.NewGuid());
-            RaptorTransformerHelper.SetCreatedOn(person, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(person, DateTime.Now);
             retList.Add(person);
 
             return retList;

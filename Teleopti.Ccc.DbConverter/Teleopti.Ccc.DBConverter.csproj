@@ -118,7 +118,6 @@
     <Compile Include="DatabaseConvert.cs" />
     <Compile Include="DatabaseConverterClient.cs" />
     <Compile Include="ForecastingTemplateHelper.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="GroupConverter\AgentModuleConverter.cs" />
     <Compile Include="GroupConverter\CommonConverter.cs" />
     <Compile Include="GroupConverter\EmployeeOptionalColumnModuleConverter.cs" />

@@ -12,19 +12,10 @@
 		</id>
 		<version name="Version"
 			 unsaved-value ="null"/>
-
-		<many-to-one name="CreatedBy"
-					 class="Teleopti.Ccc.Domain.Common.Person"
-					 not-null="true"
-					 update="false" foreign-key="FK_PersonAbsence_Person_CreatedBy"/>
 		<many-to-one name="UpdatedBy"
 					 class="Teleopti.Ccc.Domain.Common.Person"
 					 not-null="true"
 					 foreign-key="FK_PersonAbsence_Person_UpdatedBy"/>
-		<property name="CreatedOn"
-				  type="UtcDateTime"
-				  not-null="true"
-				  update="false" />
 		<property name="UpdatedOn"
 				  type="UtcDateTime"
 				  not-null="true"/>
@@ -58,12 +49,8 @@
         </component>
       </component>
     </component>
-		<many-to-one name="BusinessUnit"
-        class="Teleopti.Ccc.Domain.Common.BusinessUnit"
-        access="nosetter.camelcase-underscore"
-        not-null="true" foreign-key="FK_PersonAbsence_BusinessUnit"/>
-    <filter name="businessUnitFilter"
-        condition=":businessUnitParameter = BusinessUnit" />
+		<filter name="businessUnitFilter"
+						condition="exists(select 1 from Scenario s where s.BusinessUnit = :businessUnitParameter and s.Id=Scenario)" />
     <filter name="deletedPeopleFilter"
         condition="exists(select 1 from Person p where Person=p.Id and p.IsDeleted=0)"/>
 	</class>

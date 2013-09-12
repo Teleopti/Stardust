@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
                     _businessUnit = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
                 return _businessUnit;
             }
-			set { _businessUnit = value; }
+			protected set { _businessUnit = value; }
         }
 
     }

@@ -210,6 +210,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_reader.Expect(r => r.GetOrdinal("StateGroupId")).Return(1).Repeat.Twice();
 			_reader.Expect(r => r.IsDBNull(1)).Return(false);
 			_reader.Expect(r => r.GetGuid(1)).Return(_guid);
+
 			_reader.Expect(r => r.GetOrdinal("AlarmTypeId")).Return(2);
 			_reader.Expect(r => r.GetGuid(2)).Return(_guid);
 			_reader.Expect(r => r.GetOrdinal("StaffingEffect")).Return(3);
@@ -223,7 +224,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_reader.Expect(r => r.GetInt64(6)).Return(123456789);
 			_reader.Expect(r => r.GetOrdinal("Name")).Return(7);
 			_reader.Expect(r => r.GetString(7)).Return("name");
-			_reader.Expect(r => r.GetOrdinal("IsLogOutState")).Return(8);
+			_reader.Expect(r => r.GetOrdinal("IsLogOutState")).Return(8).Repeat.Twice();
+			_reader.Expect(r => r.IsDBNull(8)).Return(false);
 			_reader.Expect(r => r.GetBoolean(8)).Return(true);
 			_reader.Expect(r => r.Read()).Return(false);
 			_reader.Expect(r => r.Close());
@@ -241,24 +243,25 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void VerifyAddOrUpdate()
 		{
 			var agentState = new ActualAgentState();
+			var batchAgentState = new ActualAgentState {BatchId = new DateTime()};
 			var dataParameters = _mock.StrictMock<IDataParameterCollection>();
 
 			_stringHandler.Expect(sh => sh.DataStoreConnectionString()).Return("connectionString");
 			_connectionFactory.Expect(cf => cf.CreateConnection("connectionString")).Return(_connection);
-			_connection.Expect(c => c.CreateCommand()).Return(_command);
+			_connection.Expect(c => c.CreateCommand()).Return(_command).Repeat.Twice();
 
-			_command.CommandType = CommandType.StoredProcedure;
-			_command.CommandText = "[RTA].[rta_addorupdate_actualagentstate]";
+			_command.Expect(c => c.CommandType = CommandType.StoredProcedure).Repeat.Twice();
+			_command.Expect(c => c.CommandText = "[RTA].[rta_addorupdate_actualagentstate]").Repeat.Twice();
 
 			_command.Expect(c => c.Parameters).Return(dataParameters).Repeat.Any();
 			dataParameters.Expect(d => d.Add(new SqlParameter())).IgnoreArguments().Return(0).Repeat.Any();
 			
 			_connection.Expect(c => c.Open());
-			_command.Expect(c => c.ExecuteNonQuery()).Return(1);
+			_command.Expect(c => c.ExecuteNonQuery()).Return(1).Repeat.Twice();
 			_connection.Expect(c => c.Dispose());
 			_mock.ReplayAll();
 
-			_target.AddOrUpdate(new List<IActualAgentState> {agentState});
+			_target.AddOrUpdate(new List<IActualAgentState> {agentState, batchAgentState});
 			_mock.VerifyAll();
 		}
 
@@ -377,6 +380,10 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_reader.Expect(r => r.Read()).Return(true);
 			_reader.Expect(r => r.GetOrdinal("Id")).Return(0);
 			_reader.Expect(r => r.GetGuid(0)).Return(Guid.NewGuid());
+			_reader.Expect(r => r.GetOrdinal("Name")).Return(1);
+			_reader.Expect(r => r.GetString(1)).Return("stateName");
+			_reader.Expect(r => r.GetOrdinal("BusinessUnit")).Return(2);
+			_reader.Expect(r => r.GetGuid(2)).Return(Guid.NewGuid());
 
 			_reader.Expect(r => r.Read()).Return(false);
 			_reader.Expect(r => r.Close());
@@ -388,7 +395,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			
 			_mock.ReplayAll();
 
-			_target.AddNewRtaState("stateCode", Guid.NewGuid());
+			_target.AddAndGetNewRtaState("stateCode", Guid.NewGuid());
 			_mock.VerifyAll();
 		}
 

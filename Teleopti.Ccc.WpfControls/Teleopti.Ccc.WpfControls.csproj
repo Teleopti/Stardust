@@ -1178,7 +1178,6 @@
     <Compile Include="Converters\TextConverter.cs" />
     <Compile Include="Converters\TimeToAngleConverter.cs" />
     <Compile Include="Converters\DateTimeConverter.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ProjectionLayerView.xaml.cs">
       <DependentUpon>ProjectionLayerView.xaml</DependentUpon>
     </Compile>

@@ -2,7 +2,6 @@ using System;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	[Serializable]
 	public class ActivityChangedEvent : RaptorDomainEvent
 	{
 		public Guid ActivityId { get; set; }

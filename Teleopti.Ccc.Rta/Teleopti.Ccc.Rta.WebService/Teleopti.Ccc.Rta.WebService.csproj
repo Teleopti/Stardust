@@ -149,7 +149,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ITeleoptiRtaService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TeleoptiRtaService.cs" />

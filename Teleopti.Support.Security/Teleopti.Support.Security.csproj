@@ -84,7 +84,6 @@
     <Compile Include="LicenseStatusChecker.cs" />
     <Compile Include="PersonFirstDayOfWeekSetter.cs" />
     <Compile Include="ForecasterDateAdjustment.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="ICommandLineCommand.cs" />
     <Compile Include="PasswordEncryption.cs" />
     <Compile Include="Program.cs" />

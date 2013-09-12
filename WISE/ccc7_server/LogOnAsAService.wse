@@ -82,7 +82,7 @@ item: Execute Program
   Pathname=.\ntrights.exe
   Command Line=+r SeServiceLogonRight -u %ONE%
   Default Directory=%LOG4NET%
-  Flags=00000010
+  Flags=00000110
 end
 item: End Block
 end
@@ -98,7 +98,7 @@ item: Execute Program
   Pathname=.\ntrights.exe
   Command Line=+r SeServiceLogonRight -u %TWO%
   Default Directory=%LOG4NET%
-  Flags=00000010
+  Flags=00000110
 end
 item: End Block
 end

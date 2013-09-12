@@ -323,7 +323,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 
 			ISkillDay skillDay = query.AddOrder(Order.Desc("sd.UpdatedOn"))
-				.AddOrder(Order.Desc("sd.CreatedOn"))
 				.SetMaxResults(1)
 				.UniqueResult<SkillDay>();
 

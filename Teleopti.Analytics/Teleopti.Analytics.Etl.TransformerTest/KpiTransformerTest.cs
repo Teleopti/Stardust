@@ -26,7 +26,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 
             _kpiList.Add(_kpi);
 
-            RaptorTransformerHelper.SetCreatedOn(_kpi, _insertDateTime);
+            RaptorTransformerHelper.SetUpdatedOn(_kpi, _insertDateTime);
 
             using (DataTable dataTable = new DataTable())
             {

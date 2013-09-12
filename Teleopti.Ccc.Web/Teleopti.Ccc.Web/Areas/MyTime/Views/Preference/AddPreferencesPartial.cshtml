@@ -15,7 +15,7 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
 
 <span class="form-inline clearfix">
     <span>
-        <button class="preference-toggle-save-template btn btn-mini" data-toggle="button" data-bind="click: IsSaveAsNewTemplateToggle" title="@Resources.SaveAsTemplate">
+        <button class="preference-toggle-save-template btn btn-mini" data-bind="click: IsSaveAsNewTemplateToggle" title="@Resources.SaveAsTemplate">
             <i class="icon-plus-sign" data-bind="css: IsSaveAsNewTemplateClass"></i>
         </button>
         <span data-bind="if: IsSaveAsNewTemplate()">
@@ -25,7 +25,7 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
             </span>
         </span>
     </span>
-    <span data-bind="visible: AvailableTemplates().length > 0">
+    <span data-bind="visible: HasTemplates">
         <select class="preference-template-list" data-bind="foreach: AvailableTemplates, value: SelectedTemplateId" title="@Resources.ExtendedPreferencesTemplate">
             <option data-bind="text: Text, value: Value"></option>
         </select>
@@ -37,15 +37,15 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
         <i class="icon-circle-arrow-up" data-bind="css: IsPreferenceInputVisibleToggleCss"></i>
     </button>
 </span>
-<hr data-bind="visible: IsPreferenceInputVisible"/>
+<hr class="hr-thin" data-bind="visible: IsPreferenceInputVisible"/>
 <div data-bind="if: ShowError">
     <div class="preference-error-panel alert alert-danger" data-bind="html: ValidationError" />
 </div>
 
-<table class="table-condensed" data-bind="visible: IsPreferenceInputVisible">
+<table class="table-condensed preference-input-container">
     <tr>
         <td>
-            <table class="table-condensed">
+            <table class="table-condensed" data-bind="visible: IsPreferenceInputVisible">
                 <tr>
                     <td>
                         <i class="icon-edit" title="@Resources.Preference"></i>
@@ -110,7 +110,7 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                         <i class="icon-resize-horizontal" title="@Resources.WorkTime"></i>
                     </td>
                     <td>
-                        <select class="preference-extended-work-time-min width130" data-bind="value: MinimumWorkTime" title="@Resources.MinWorkTime">
+                        <select class="preference-extended-work-time-min width131" data-bind="value: MinimumWorkTime" title="@Resources.MinWorkTime">
                             <option value=""></option>
                             @foreach (var timeSpan in timeLengths)
                             {
@@ -120,7 +120,7 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                     </td>
                     <td></td>
                     <td>
-                        <select class="preference-extended-work-time-max width130" data-bind="value: MaximumWorkTime" title="@Resources.MaxWorkTime">
+                        <select class="preference-extended-work-time-max width131" data-bind="value: MaximumWorkTime" title="@Resources.MaxWorkTime">
                             <option value=""></option>
                             @foreach (var timeSpan in timeLengths)
                             {
@@ -133,15 +133,15 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
             </table>
         </td>
         <td class="width10"></td>
-        <td class="td-vertical-divider"></td>
+        <td class="td-vertical-divider" data-bind="visible: IsPreferenceInputVisible"></td>
         <td class="width10"></td>
         <td style="vertical-align: top;" data-bind="if: IsTimeInputVisible">
-            <table class="preference-activity-section table-condensed">
+            <table class="preference-activity-section table-condensed" data-bind="visible: IsPreferenceInputVisible">
                 <tr>
                     <td>
                         <i class="icon-tasks" title="@Resources.Activity"></i>
                     </td>
-                    <td colspan="2">
+                    <td colspan="2" style="width: 272px;">
                         <span title="@Resources.Activity">
                             <select id="Preference-extended-activity-Picker" data-bind="select2: { value: ActivityPreferenceId, formatResult: FormatPreferencesOption, formatSelection: FormatPreferencesOption }">
                                 <option value=""></option>
@@ -193,7 +193,7 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                         <i class="icon-resize-horizontal" title="@Resources.WorkTime"></i>
                     </td>
                     <td>
-                        <select class="preference-activity-extended-work-time-min width130" data-bind="value: ActivityMinimumTime" title="@Resources.MinWorkTime">
+                        <select class="preference-activity-extended-work-time-min width131" data-bind="value: ActivityMinimumTime" title="@Resources.MinWorkTime">
                             <option value="">&nbsp;</option>
                             @foreach (var timeSpan in timeLengths)
                             {
@@ -202,7 +202,7 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                         </select>
                     </td>
                     <td>
-                        <select class="preference-activity-extended-work-time-max width130" data-bind="value: ActivityMaximumTime" title="@Resources.MaxWorkTime">
+                        <select class="preference-activity-extended-work-time-max width131" data-bind="value: ActivityMaximumTime" title="@Resources.MaxWorkTime">
                             <option value="">&nbsp;</option>
                             @foreach (var timeSpan in timeLengths)
                             {
@@ -213,9 +213,11 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                 </tr>
             </table>
         </td>
+        <td style="vertical-align: bottom">
+            <div class="pull-right" style="padding-bottom: 4px">
+                <button id="Preference-extended-reset" class="btn" data-bind="click: Reset">@Resources.Reset</button>
+                <button id="Preference-extended-apply" class="btn btn-primary" data-bind="click: SavePreferences">@Resources.Apply</button>
+            </div>
+        </td>
     </tr>
 </table>
-<div class="pull-right">
-    <button id="Preference-extended-reset" class="btn" data-bind="click: Reset">@Resources.Reset</button>
-    <button id="Preference-extended-apply" class="btn btn-primary" data-bind="click: SavePreferences">@Resources.Apply</button>
-</div>

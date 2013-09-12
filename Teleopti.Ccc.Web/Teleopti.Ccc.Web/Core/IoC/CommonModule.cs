@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		private static void registerCommonTypes(ContainerBuilder builder)
 		{
+			builder.RegisterType<ResourceVersion>().As<IResourceVersion>();
 			builder.RegisterType<ErrorMessageProvider>().As<IErrorMessageProvider>();
 			builder.RegisterType<LazyLoadingManagerWrapper>().As<ILazyLoadingManager>();
 			builder.RegisterType<DefaultScenarioScheduleProvider>()

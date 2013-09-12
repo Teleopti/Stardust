@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -65,9 +62,31 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             {
                 var dayOffDto = _target.DomainEntityToDto(personDayOff);
 
-                Assert.AreEqual(personDayOff.Person.Id.Value, dayOffDto.Person.Id.Value);
-                Assert.AreEqual(personDayOff.Id.Value, dayOffDto.Id.Value);
+                Assert.IsNotNull(dayOffDto);
+                Assert.AreEqual(personDayOff.Person.Id.GetValueOrDefault(), dayOffDto.Person.Id.GetValueOrDefault());
+                Assert.AreEqual(personDayOff.Id.GetValueOrDefault(), dayOffDto.Id.GetValueOrDefault());
                 Assert.AreEqual(personDayOff.Period.StartDateTime, dayOffDto.Period.UtcStartTime);
+            }
+        }
+
+        [Test]
+        public void VerifyDoToDtoWithNoDayOffInAssignment()
+        {
+            var personDayOff = PersonAssignmentFactory.CreatePersonAssignment(_person);
+            personDayOff.SetId(Guid.NewGuid());
+
+            using (_mocks.Record())
+            {
+                Expect.Call(_personAssembler.DomainEntityToDto(_person)).Return(new PersonDto
+                {
+                    Id = _person.Id,
+                    Name = _person.Name.ToString()
+                }).Repeat.Never();
+            }
+            using (_mocks.Playback())
+            {
+                var dayOffDto = _target.DomainEntityToDto(personDayOff);
+                Assert.IsNull(dayOffDto);
             }
         }
     }

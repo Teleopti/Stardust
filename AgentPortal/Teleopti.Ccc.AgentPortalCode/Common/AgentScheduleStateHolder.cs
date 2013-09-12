@@ -122,14 +122,10 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
 
         public void FillScheduleMessengerDictionary(IList<ICustomScheduleAppointment> scheduleAppointmentCollection, DateTime date)
         {
-            IScheduleItemList list;
-            if (_asmScheduleDictionary.TryGetValue(date, out list))
+            if (_asmScheduleDictionary.ContainsKey(date))
             {
-
                 _asmScheduleDictionary.Clear(); // fix for 9517.
-                //list.ScheduleItemCollection.Clear();
             }
-
 
             _asmScheduleDictionary.Fill(scheduleAppointmentCollection);
         }
@@ -372,33 +368,13 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
 
         public void CheckNextActivity()
         {
-            IScheduleItemList asmScheduleItemList = null;
+            IScheduleItemList asmScheduleItemList;
             DateTime currentDateTime = DateTime.Now;
             ICustomScheduleAppointment nextActivity = null;
 
-            if (_asmScheduleDictionary.ContainsKey(currentDateTime.Date))
+            if (_asmScheduleDictionary.TryGetValue(currentDateTime.Date, out asmScheduleItemList))
             {
-                asmScheduleItemList = _asmScheduleDictionary[currentDateTime.Date];
-            }
-            if (asmScheduleItemList != null)
-            {
-                // shift ended or not yet started
-                if (asmScheduleItemList.GetCurrentScheduleItem(currentDateTime) == null)
-                {
-                    ICustomScheduleAppointment firstScheduleItem = asmScheduleItemList.FirstScheduleItem();
-                    if (asmScheduleItemList.ScheduleItemCollection.Count > 0)
-                    {
-                        if (currentDateTime < firstScheduleItem.StartTime)
-                        {
-                            //Show first activity
-                            nextActivity = firstScheduleItem;
-                        }
-                    }
-                }
-                else
-                {
-                    nextActivity = asmScheduleItemList.GetNextActivity(currentDateTime);
-                }
+                nextActivity = asmScheduleItemList.GetNextActivity(currentDateTime);
             }
             OnActivityChanged(nextActivity);
         }
@@ -406,9 +382,10 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
         protected void OnActivityChanged(ICustomScheduleAppointment nextScheduleItem)
         {
             ActivityChangedEventArgs arg = new ActivityChangedEventArgs(nextScheduleItem);
-            if (ActivityChanged != null)
+            var handler = ActivityChanged;
+            if (handler != null)
             {
-                ActivityChanged.Invoke(this, arg);
+                handler.Invoke(this, arg);
             }
         }
     }

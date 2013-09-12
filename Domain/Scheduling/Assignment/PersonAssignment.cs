@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public class PersonAssignment : AggregateRootWithBusinessUnit, 
+	public class PersonAssignment : AggregateRoot, 
 									IPersonAssignment,
 									IExportToAnotherScenario
 	{

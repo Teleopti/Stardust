@@ -17,7 +17,8 @@
     <many-to-one name="CreatedBy"
                  class="Teleopti.Ccc.Domain.Common.Person"
                  not-null="true"
-                 update="false" foreign-key="FK_PersonRequest_Person_CreatedBy"/>
+                 update="false" foreign-key="FK_PersonRequest_Person_CreatedBy"
+					  access="property"/>
     <many-to-one name="UpdatedBy"
                  class="Teleopti.Ccc.Domain.Common.Person"
                  not-null="true"
@@ -25,16 +26,11 @@
     <property name="CreatedOn"
               type="UtcDateTime"
               not-null="true"
+				  access="property"
               update="false" />
     <property name="UpdatedOn"
               type="UtcDateTime"
               not-null="true"/>
-    <!--IEntity-->
-		<!--<property name="serializedValue" type="BinaryBlob" access="field">
-			<column name="SerializedValue"
-              sql-type="varbinary(max)"
-							  not-null="true"/>
-		</property>-->
 		<property name="UpdatedOnServerUtc" type="timestamp" generated="always"/>
 		
     <many-to-one name="Person"

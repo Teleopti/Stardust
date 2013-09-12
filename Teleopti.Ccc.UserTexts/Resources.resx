@@ -11556,6 +11556,48 @@ Reduce the complexity to use these shifts.</value>
   <data name="FilterOvertimeAvailability" xml:space="preserve">
     <value>Filter Overtime Availability</value>
   </data>
+  <data name="AssignmentOptions" xml:space="preserve">
+    <value>Assignment options</value>
+  </data>
+  <data name="OvertimeDuration" xml:space="preserve">
+    <value>Overtime duration</value>
+  </data>
+  <data name="ScheduleOvertime" xml:space="preserve">
+    <value>Schedule Overtime</value>
+  </data>
+  <data name="ScheduleOvertimeOptions" xml:space="preserve">
+    <value>Schedule Overtime Options</value>
+  </data>
+  <data name="SkillActivity" xml:space="preserve">
+    <value>Skill activity</value>
+  </data>
+  <data name="TagChangesWithWithColon" xml:space="preserve">
+    <value>Tag changes with:</value>
+  </data>
+  <data name="TypeOfOvertime" xml:space="preserve">
+    <value>Type of overtime</value>
+  </data>
+  <data name="AllowBreakContractMaxWorkTimePerWeek" xml:space="preserve">
+    <value>Allow break contract max work time per week</value>
+  </data>
+  <data name="AllowBreakContractNightlyRest" xml:space="preserve">
+    <value>Allow break contract nightly rest</value>
+  </data>
+  <data name="AllowBreakContractWeeklyRest" xml:space="preserve">
+    <value>Allow break contract weekly rest</value>
+  </data>
+  <data name="ExtendTheEndOfExistingShiftsColon" xml:space="preserve">
+    <value>Extend the end of existing shifts:</value>
+  </data>
+  <data name="OvertimeDurationColon" xml:space="preserve">
+    <value>Overtime duration:</value>
+  </data>
+  <data name="SkillActivityColon" xml:space="preserve">
+    <value>Skill activity:</value>
+  </data>
+  <data name="TypeOfOvertimeColon" xml:space="preserve">
+    <value>Type of overtime:</value>
+  </data>
   <data name="RepViewerCurrentPage" xml:space="preserve">
     <value>Current page</value>
     <comment>Report Viewer Toolbar</comment>
@@ -11698,5 +11740,13 @@ Reduce the complexity to use these shifts.</value>
   <data name="HourlyAvailability" xml:space="preserve">
     <value>Hourly Availability</value>
     <comment>Caption dialog to filter hourly availability</comment>
+  </data>
+  <data name="InfoPanel" xml:space="preserve">
+    <value>Info Panel</value>
+    <comment>Text on button to toggle the info panel on and off in scheduler</comment>
+  </data>
+  <data name="Distribution" xml:space="preserve">
+    <value>Distribution</value>
+    <comment>Distribution</comment>
   </data>
 </root>
