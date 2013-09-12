@@ -2147,7 +2147,7 @@ Periods</comment>
     <comment>Update</comment>
   </data>
   <data name="UpdatedBy" xml:space="preserve">
-    <value>Updated by</value>
+    <value>Updated By</value>
     <comment>Updated by</comment>
   </data>
   <data name="UpdateGrid" xml:space="preserve">
@@ -2359,8 +2359,8 @@ Periods</comment>
     <comment>Grouping activity</comment>
   </data>
   <data name="IsContractTime" xml:space="preserve">
-    <value>Is contract time</value>
-    <comment>Is contract time</comment>
+    <value>Is Contract Time</value>
+    <comment>Is Contract Time</comment>
   </data>
   <data name="Message" xml:space="preserve">
     <value>Message</value>
@@ -5571,11 +5571,11 @@ Availability</value>
     <comment>Canceling load and closing application...</comment>
   </data>
   <data name="IsPaidTime" xml:space="preserve">
-    <value>Is paid time</value>
+    <value>Is Paid time</value>
     <comment>Options gui</comment>
   </data>
   <data name="IsWorkTime" xml:space="preserve">
-    <value>Is work time</value>
+    <value>Is Work time</value>
     <comment>Options gui</comment>
   </data>
   <data name="ErrorMessageFromToTimeIsInvalidParameter" xml:space="preserve">
@@ -6790,15 +6790,15 @@ Meeting</value>
     <comment>No tracker - default description of new instance of a default tracker.</comment>
   </data>
   <data name="CreatedBy" xml:space="preserve">
-    <value>Created by</value>
+    <value>Created By</value>
     <comment>Rotation/availability</comment>
   </data>
   <data name="CreatedOn" xml:space="preserve">
-    <value>Created on</value>
+    <value>Created On</value>
     <comment>Rotation/availability</comment>
   </data>
   <data name="UpdatedOn" xml:space="preserve">
-    <value>Updated on</value>
+    <value>Updated On</value>
     <comment>Rotation/availability</comment>
   </data>
   <data name="CreateInfo" xml:space="preserve">

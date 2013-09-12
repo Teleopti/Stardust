@@ -4878,7 +4878,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Created by.
+        ///   Looks up a localized string similar to Created By.
         /// </summary>
         public static string CreatedBy {
             get {
@@ -4905,7 +4905,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Created on.
+        ///   Looks up a localized string similar to Created On.
         /// </summary>
         public static string CreatedOn {
             get {
@@ -10401,7 +10401,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is contract time.
+        ///   Looks up a localized string similar to Is Contract Time.
         /// </summary>
         public static string IsContractTime {
             get {
@@ -10437,7 +10437,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is paid time.
+        ///   Looks up a localized string similar to Is Paid time.
         /// </summary>
         public static string IsPaidTime {
             get {
@@ -10446,7 +10446,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is work time.
+        ///   Looks up a localized string similar to Is Work time.
         /// </summary>
         public static string IsWorkTime {
             get {
@@ -24215,7 +24215,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Updated by.
+        ///   Looks up a localized string similar to Updated By.
         /// </summary>
         public static string UpdatedBy {
             get {
@@ -24233,7 +24233,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Updated on.
+        ///   Looks up a localized string similar to Updated On.
         /// </summary>
         public static string UpdatedOn {
             get {
