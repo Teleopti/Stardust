@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using AutoMapper;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
@@ -12,7 +13,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 {
 	public class PeriodViewModelFactory : IPeriodViewModelFactory
     {
-        public IEnumerable<PeriodViewModel> CreatePeriodViewModels(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateTime localDate, TimeZoneInfo timeZone)
+		private readonly IMappingEngine _mapper;
+
+		public PeriodViewModelFactory(IMappingEngine mapper)
+		{
+			_mapper = mapper;
+		}
+
+		public IEnumerable<PeriodViewModel> CreatePeriodViewModels(IEnumerable<IVisualLayer> visualLayerCollection, TimePeriod minMaxTime, DateTime localDate, TimeZoneInfo timeZone)
         {
             var calendarDayExtractor = new VisualLayerCalendarDayExtractor();
             var layerExtendedList = calendarDayExtractor.CreateVisualPeriods(localDate, visualLayerCollection, timeZone);
@@ -96,6 +104,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 						StartPositionPercentage = 0,
 						EndPositionPercentage = endPositionPercentageYesterday,
 						IsOvertimeAvailability = true,
+						OvertimeAvailabilityYesterday = _mapper.Map<IOvertimeAvailability, OvertimeAvailabilityViewModel>(overtimeAvailabilityYesterday),
 						Color = Color.Gray.ToCSV()
 					});
 				}

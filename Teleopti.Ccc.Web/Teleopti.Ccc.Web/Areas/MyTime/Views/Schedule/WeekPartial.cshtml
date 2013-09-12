@@ -100,14 +100,14 @@
 			</li>
 		    <li id="day-summary" 
 		        data-bind="css: { 'show-request': textRequestPermission }, attr: { 'class': classForDaySummary },
-                style: { 'background-color': colorForDaySummary, 'color': textColor }, click: $parent.showAddRequestForm"
+	style: { 'background-color': colorForDaySummary, 'color': textColor }, click: function () { $parent.showAddRequestForm($data.date()) }"
 		        class="third category">
 		        
 		        <strong class="fullwidth displayblock" data-bind="text: summaryTitle"></strong>
 		        <span class="fullwidth displayblock" data-bind="text: summaryTimeSpan"></span>
 		        <span data-bind="text: summary"></span>
 		    </li>
-			<li id="day-symbol" class="fourth" data-bind="click: $parent.showAddRequestForm">
+			<li id="day-symbol" class="fourth" data-bind="click: function () { $parent.showAddRequestForm($data.date()) }">
 				<div class="text-request floatright" data-bind="visible: hasTextRequest, tooltip: { title: textRequestText, html: true }, click: navigateToRequests">
 					<div class="floatright extrasmall" data-bind="text:textRequestCount">
 					</div>
@@ -134,10 +134,13 @@
 				<div class="week-schedule-time-indicator relative">
 				</div>
 				<!-- ko foreach: layers -->
-				<div class="week-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': widthPx, 'opacity': isOvertimeAvailability()?0.6:1}">
-					<!-- ko if: isOvertimeAvailability() -->
+				<!-- ko if: isOvertimeAvailability() -->
+				<div class="week-schedule-layer absolute overtime-availability-bar" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': widthPx }, click: function () { $data.showOvertimeAvailability($parents) }">
 					<i class="icon-time"></i>
-					<!-- /ko -->
+				</div>
+				<!-- /ko -->
+				<!-- ko ifnot: isOvertimeAvailability() -->
+				<div class="week-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': widthPx }">
 					<!-- ko if: hasMeeting -->
 					<div class="icon meeting floatright">
 					</div>
@@ -147,6 +150,7 @@
 						class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan">
 					</span>
 				</div>
+				<!-- /ko -->
 				<!-- /ko -->
 			</li>
 			<!-- /ko -->

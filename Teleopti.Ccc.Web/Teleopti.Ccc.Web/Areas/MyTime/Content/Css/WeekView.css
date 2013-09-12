@@ -21,6 +21,10 @@
 .overtime-availability-symbol {
 	cursor: pointer;
 }
+.overtime-availability-bar {
+	cursor: pointer;
+	opacity: 0.6;
+}
 
 .body-weekview-inner ul.today, .body-weekview-inner ul.ui-selected, .calendarview-week li.today, .calendarview-week li.ui-selected{
 	 background-image: url(../Images/view_ul_states_sprite.png);

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
+using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -17,6 +18,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
@@ -36,8 +38,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
         private TimePeriod minMaxTime;
         private IPerson person;
         private DateTime localDate;
+	    private IMappingEngine _mapper;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             mocks = new MockRepository();
@@ -59,7 +62,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 
             visualActivityLayer = factory.CreateShiftSetupLayer(activity, period, person);
 
-            target = new PeriodViewModelFactory();
+			_mapper = MockRepository.GenerateMock<IMappingEngine>();
+			target = new PeriodViewModelFactory(_mapper);
         }
 
         private void setPrincipal()
@@ -248,12 +252,18 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 		{
 			var start = new TimeSpan(12, 0, 0);
 			var end = new TimeSpan(25, 0, 0);
-			var result = target.CreateOvertimeAvailabilityPeriodViewModels(null, new OvertimeAvailability(new Person(), DateOnly.Today, start, end), minMaxTime);
+			var overtimeAvailabilityYesterday = new OvertimeAvailability(new Person(), DateOnly.Today, start, end);
+			var overtimeAvailabilityViewModel = new OvertimeAvailabilityViewModel();
+			_mapper.Stub(x => x.Map<IOvertimeAvailability, OvertimeAvailabilityViewModel>(overtimeAvailabilityYesterday))
+			       .Return(overtimeAvailabilityViewModel);
+
+			var result = target.CreateOvertimeAvailabilityPeriodViewModels(null, overtimeAvailabilityYesterday, minMaxTime);
 			result.First().Title.Should().Be.EqualTo(Resources.OvertimeAvailabilityWeb);
 			result.First().TimeSpan.Should().Equals(TimeHelper.TimeOfDayFromTimeSpan(start, CultureInfo.CurrentCulture) + " - " + TimeHelper.TimeOfDayFromTimeSpan(end, CultureInfo.CurrentCulture));
 			result.First().StartPositionPercentage.Should().Be.EqualTo(0);
 			result.First().EndPositionPercentage.Should().Be.EqualTo((decimal)(end.Subtract(new TimeSpan(1, 0, 0, 0)) - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
 			result.First().IsOvertimeAvailability.Should().Be.True();
+			result.First().OvertimeAvailabilityYesterday.Should().Be.SameInstanceAs(overtimeAvailabilityViewModel);
 			result.First().Color.Should().Be.EqualTo(Color.Gray.ToCSV());
 		}
 

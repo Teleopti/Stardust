@@ -48,16 +48,16 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 		});
 	};
 
-	this.LoadRequestData = function(day) {
-		self.HasOvertimeAvailability(day.overtimeAvailability().HasOvertimeAvailability);
-		if (day.overtimeAvailability().HasOvertimeAvailability) {
-			self.StartTime(day.overtimeAvailability().StartTime);
-			self.EndTime(day.overtimeAvailability().EndTime);
-			self.EndTimeNextDay(day.overtimeAvailability().EndTimeNextDay);
+	this.LoadRequestData = function(data) {
+		self.HasOvertimeAvailability(data.HasOvertimeAvailability);
+		if (data.HasOvertimeAvailability) {
+			self.StartTime(data.StartTime);
+			self.EndTime(data.EndTime);
+			self.EndTimeNextDay(data.EndTimeNextDay);
 		} else {
-			self.StartTime(day.overtimeAvailability().DefaultStartTime);
-			self.EndTime(day.overtimeAvailability().DefaultEndTime);
-			self.EndTimeNextDay(day.overtimeAvailability().DefaultEndTimeNextDay);
+			self.StartTime(data.DefaultStartTime);
+			self.EndTime(data.DefaultEndTime);
+			self.EndTimeNextDay(data.DefaultEndTimeNextDay);
 		}
 	};
 

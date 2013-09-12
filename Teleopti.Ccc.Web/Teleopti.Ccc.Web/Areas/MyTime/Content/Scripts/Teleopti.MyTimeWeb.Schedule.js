@@ -6,6 +6,7 @@
 /// <reference path="Teleopti.MyTimeWeb.Portal.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.RequestViewModel.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel.js"/>
 /// <reference path="~/Content/moment/moment.js" />
 
 if (typeof (Teleopti) === 'undefined') {
@@ -124,12 +125,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	        }
 	    };
 
-	    self.overtimeAvailabilityActivate = function () {
+	    self.overtimeAvailabilityActivate = function (data) {
 	    	self.textRequestActive(false);
 	    	self.absenceRequestActive(false);
 	    	if (!self.overtimeAvailabilityActive()) {
 	    		self.overtimeAvailabilityActive(true);
-	    		self.showAddOvertimeAvailabilityForm();
+	    		self.showAddOvertimeAvailabilityForm(data);
 	    	}
 	    };
 
@@ -158,14 +159,28 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return (startDate <= self.maxDate() && endDate >= self.minDate());
 		    
 		};
+		
+		function _fillFormData(data) {
+			self.requestViewModel().DateFrom(moment(self.initialRequestDay, self.requestViewModel().DateFormat()));
+			self.requestViewModel().DateTo(moment(self.initialRequestDay, self.requestViewModel().DateFormat()));
+			if (self.requestViewModel().LoadRequestData) {
+				if (data) {
+					self.requestViewModel().LoadRequestData(data);
+				} else {
+					var day = ko.utils.arrayFirst(self.days(), function (item) {
+						return item.date() == self.initialRequestDay;
+					});
+					self.requestViewModel().LoadRequestData(day.overtimeAvailability());
+				}
+			}
+		}
 
 	    self.showAddTextRequestForm = function() {
 	        if (self.textPermission() !== true) {
 	            return;
 	        }
 	        self.setRequestViewModel();
-	        self.requestViewModel().DateFrom(moment(self.initialRequestDay.date(), self.requestViewModel().DateFormat()));
-	        self.requestViewModel().DateTo(moment(self.initialRequestDay.date(), self.requestViewModel().DateFormat()));
+	        _fillFormData();
 	        self.requestViewModel().AddTextRequest(false);
 	    };
 	    
@@ -174,37 +189,28 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	            return;
 	        }
 	        self.setRequestViewModel();
-	        self.requestViewModel().DateFrom(moment(self.initialRequestDay.date(), self.requestViewModel().DateFormat()));
-	        self.requestViewModel().DateTo(moment(self.initialRequestDay.date(), self.requestViewModel().DateFormat()));
+	        _fillFormData();
 	        self.requestViewModel().AddAbsenceRequest(false);
 	    };
 
-		self.showAddOvertimeAvailabilityForm = function() {
+		self.showAddOvertimeAvailabilityForm = function(data) {
 			if (self.overtimeAvailabilityPermission() !== true) {
 				return;
 			}
 			self.setOvertimeAvailabilityViewModel();
-			self.requestViewModel().DateFrom(moment(self.initialRequestDay.date(), self.requestViewModel().DateFormat()));
-			self.requestViewModel().DateTo(moment(self.initialRequestDay.date(), self.requestViewModel().DateFormat()));
-			if (self.requestViewModel().LoadRequestData) {
-				self.requestViewModel().LoadRequestData(self.initialRequestDay);
-			}
+			_fillFormData(data);
 		};
 
-	    self.showAddRequestForm = function (day) {
-	        self.initialRequestDay = day;
+	    self.showAddRequestForm = function (date, data) {
+	        self.initialRequestDay = date;
 		    
 	        if ((self.requestViewModel() || '') != '') {
-	        	if (self.requestViewModel().LoadRequestData) {
-	        		self.requestViewModel().LoadRequestData(self.initialRequestDay);
-	        	}
-	            self.requestViewModel().DateFrom(moment(day.date(), self.requestViewModel().DateFormat()));
-	            self.requestViewModel().DateTo(moment(day.date(), self.requestViewModel().DateFormat()));
+		        _fillFormData(data);
 	            return;
 	        }
 
 	        if (self.overtimeAvailabilityPermission() === true) {
-		        self.overtimeAvailabilityActivate();
+		        self.overtimeAvailabilityActivate(data);
 	        } else {
 		        self.textRequestActivate();
 	        }
@@ -225,7 +231,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
         };
 		
         function _displayOvertimeAvailability(overtimeAvailability) {
-        	self.initialRequestDay.overtimeAvailability(overtimeAvailability);
         	self.CancelAddingNewRequest();
 	        _fetchData();
         }
@@ -452,11 +457,27 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return scheduleHeight * (self.endPositionPercentage() - self.startPositionPercentage());
 		});
 		self.showTitle = ko.computed(function () {
-			return layer.IsOvertimeAvailability ? false : self.heightDouble() > pixelToDisplayTitle;
+			return self.heightDouble() > pixelToDisplayTitle;
 		});
 		self.showDetail = ko.computed(function () {
-			return layer.IsOvertimeAvailability ? false : self.heightDouble() > pixelToDisplayAll;
+			return self.heightDouble() > pixelToDisplayAll;
 		});
+		self.showOvertimeAvailability = function (parents) {
+			var date = parents[0].fixedDate();
+			var momentDate = moment(date, "YYYY-MM-DD");
+			if (self.startPositionPercentage() == 0 && layer.OvertimeAvailabilityYesterday) {
+				momentDate.add('days', -1);
+			}
+			date = momentDate.format("YYYY-MM-DD");
+			var day = ko.utils.arrayFirst(parents[1].days(), function(item) {
+				return item.fixedDate() == date;
+			});
+			if (day) {
+				parents[1].showAddRequestForm(momentDate.format($('#Request-detail-datepicker-format').val().toUpperCase()));
+			} else {
+				parents[1].showAddRequestForm(momentDate.format($('#Request-detail-datepicker-format').val().toUpperCase()), layer.OvertimeAvailabilityYesterday);
+			}
+		};
 	};
 
 	var TimelineViewModel = function (timeline, timelineCulture) {
