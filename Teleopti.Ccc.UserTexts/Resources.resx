@@ -11741,4 +11741,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Hourly Availability</value>
     <comment>Caption dialog to filter hourly availability</comment>
   </data>
+  <data name="SubjectTooLong" xml:space="preserve">
+    <value>Subject too long</value>
+    <comment>Invalid field info</comment>
+  </data>
 </root>
