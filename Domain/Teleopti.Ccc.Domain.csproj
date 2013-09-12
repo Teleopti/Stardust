@@ -256,7 +256,6 @@
     <Compile Include="AgentInfo\Requests\PersonRequestCheckAuthorization.cs" />
     <Compile Include="Common\LogWriter.cs" />
     <Compile Include="Common\Now.cs" />
-    <Compile Include="Common\PersonComparer.cs" />
     <Compile Include="Common\PersonProvider.cs" />
     <Compile Include="Common\DateOnlyAsDateTimePeriod.cs" />
     <Compile Include="Common\PersonsInOrganizationProvider.cs" />
@@ -332,14 +331,12 @@
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
-    <Compile Include="Optimization\DataExtractorValuesForMatrixes.cs" />
     <Compile Include="Optimization\TeamBlock\OptimizationOverLimitByRestrictionDeciderFactory.cs" />
     <Compile Include="Optimization\TeamBlock\ScheduleMatrixOriginalStateContainerFactory.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffOptimizerService.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettings.cs" />
-    <Compile Include="Optimization\IntradayDecisionMakerComponents.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizationResourceHelper.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToAdd.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToRemove.cs" />
@@ -499,12 +496,10 @@
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPerson.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonFactory.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonsBuilder.cs" />
-    <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonShiftCategoryConsistentChecker.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupSchedulingService.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPagePerDate.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonFactory.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonsBuilder.cs" />
-    <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonShiftCategoryConsistentChecker.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\PossibleCombinationsOfStartEndCategoryCreator.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\RuleSetBagForGroupPerson.cs" />
     <Compile Include="ResourceCalculation\IPersonSkillProvider.cs" />
@@ -602,8 +597,6 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCalculator.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCreator.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessFactors.cs" />
-    <Compile Include="Scheduling\CreatePersonAbsence.cs" />
-    <Compile Include="Scheduling\HasLayerWithPeriodAndActivityThatIsEqualTo.cs" />
     <Compile Include="Scheduling\MasterActivity.cs" />
     <Compile Include="Scheduling\Meetings\BestSlotForMeetingFinder.cs" />
     <Compile Include="Scheduling\Meetings\MeetingSlotFinderService.cs" />
@@ -637,7 +630,6 @@
     <Compile Include="AgentInfo\Requests\TextRequest.cs" />
     <Compile Include="AgentInfo\ExternalLogOn.cs" />
     <Compile Include="AgentInfo\Requests\Request.cs" />
-    <Compile Include="AgentInfo\PersonBelongsToRoleSpecification.cs" />
     <Compile Include="AgentInfo\PersonBelongsToTeamSpecification.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -646,7 +638,6 @@
     <Compile Include="AgentInfo\PersonSkill.cs" />
     <Compile Include="Analytics\DataSourceEtl.cs" />
     <Compile Include="Analytics\TimeZoneDim.cs" />
-    <Compile Include="Analyzer\AnalyzerReport.cs" />
     <Compile Include="Collection\DayOfWeekIntDictionary.cs" />
     <Compile Include="Collection\DifferenceCollection.cs" />
     <Compile Include="Collection\DifferenceEntityCollectionService.cs" />
@@ -688,7 +679,6 @@
     <Compile Include="Common\Messaging\SendPushMessageService.cs" />
     <Compile Include="Common\Messaging\SendPushMessageWhenRootAlteredService.cs" />
     <Compile Include="Common\ModifyCalculator.cs" />
-    <Compile Include="Common\NameComparer.cs" />
     <Compile Include="Common\OfficialWeekendDays.cs" />
     <Compile Include="Common\OptionalColumnValue.cs" />
     <Compile Include="Common\OptionalColumn.cs" />
@@ -730,8 +720,6 @@
     <Compile Include="Forecasting\Template\SkillDayTemplateReference.cs" />
     <Compile Include="Forecasting\Template\TemplateReference.cs" />
     <Compile Include="Forecasting\Template\WorkloadDayTemplateReference.cs" />
-    <Compile Include="Forecasting\TimeZoneDateCache.cs" />
-    <Compile Include="Helper\MathHelper.cs" />
     <Compile Include="Helper\SerializationHelper.cs" />
     <Compile Include="Helper\StaffingCalculatorService.cs" />
     <Compile Include="Helper\StaffingEmailCalculatorService.cs" />
@@ -749,7 +737,6 @@
     <Compile Include="Payroll\PayrollResult.cs" />
     <Compile Include="RealTimeAdherence\ExternalLogOnPerson.cs" />
     <Compile Include="RealTimeAdherence\IRtaStateHolder.cs" />
-    <Compile Include="RealTimeAdherence\RtaVisualLayer.cs" />
     <Compile Include="RealTimeAdherence\StateGroupActivityAlarm.cs" />
     <Compile Include="Repositories\IAbsenceRepository.cs" />
     <Compile Include="Repositories\IGroupPageRepository.cs" />
@@ -784,7 +771,6 @@
     <Compile Include="ResourceCalculation\DeviationStatisticsCalculator.cs" />
     <Compile Include="ResourceCalculation\DeviationStatisticsData.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\FairnessValueResult.cs" />
-    <Compile Include="ResourceCalculation\LegalStateCheckerOptions.cs" />
     <Compile Include="ResourceCalculation\OptimizerOriginalPreferences.cs" />
     <Compile Include="ResourceCalculation\PersonSkillPeriodsDataHolderManager.cs" />
     <Compile Include="ResourceCalculation\PopulationStatisticsCalculator.cs" />
@@ -888,12 +874,10 @@
     <Compile Include="Scheduling\Rules\WeekShiftCategoryLimitationRule.cs" />
     <Compile Include="Scheduling\ScheduleDayAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\Rules\WorkTimeStartEndExtractor.cs" />
-    <Compile Include="Scheduling\ScheduleMatrixListPeriodFinder.cs" />
     <Compile Include="Scheduling\SchedulePeriodTargetDayOffCalculator.cs" />
     <Compile Include="Scheduling\SchedulePeriodTargetTimeCalculator.cs" />
     <Compile Include="Scheduling\ScheduleService.cs" />
     <Compile Include="Scheduling\SchedulerSkillDayHelper.cs" />
-    <Compile Include="Scheduling\SchedulerSkillHelper.cs" />
     <Compile Include="Scheduling\ScheduleTagging\AgentDayScheduleTag.cs" />
     <Compile Include="Scheduling\ScheduleTagging\IScheduleTag.cs" />
     <Compile Include="Scheduling\ScheduleTagging\KeepOriginalScheduleTag.cs" />
@@ -1042,7 +1026,6 @@
     <Compile Include="Security\LicenseOptions\TeleoptiCccSmsLinkLicenseOption.cs" />
     <Compile Include="Security\LicenseStatus.cs" />
     <Compile Include="Security\ISystemUserPasswordSpecification.cs" />
-    <Compile Include="Security\InsufficientPrivilegeException.cs" />
     <Compile Include="Security\IOneWayEncryption.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1144,7 +1127,6 @@
     <Compile Include="Repositories\IQueueSourceRepository.cs" />
     <Compile Include="Repositories\ISkillTypeRepository.cs" />
     <Compile Include="Repositories\IWorkloadRepository.cs" />
-    <Compile Include="ResourceCalculation\SchedulePartTracker.cs" />
     <Compile Include="ResourceCalculation\PeriodDistribution.cs" />
     <Compile Include="ResourceCalculation\PeriodDistributionService.cs" />
     <Compile Include="ResourceCalculation\SchedulePartModifyAndRollbackService.cs" />
@@ -1186,7 +1168,6 @@
     <Compile Include="Common\EntityConverter.cs" />
     <Compile Include="Common\EntityBaseTypes\AggregateRootWithBusinessUnit.cs" />
     <Compile Include="Scheduling\Rules\DayOffRule.cs" />
-    <Compile Include="Common\PayloadTime.cs" />
     <Compile Include="AgentInfo\PersonPeriod.cs" />
     <Compile Include="Common\RestrictionSet.cs" />
     <Compile Include="Common\IRestriction.cs" />
@@ -1289,7 +1270,6 @@
     <Compile Include="Scheduling\Assignment\VisualLayerProjectionService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Scheduling\AgentDate.cs" />
     <Compile Include="Scheduling\Rules\OverlappingAssignmentRule.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleRange.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleParameter.cs" />
@@ -1371,13 +1351,11 @@
     <Compile Include="Specification\OrSpecification.cs" />
     <Compile Include="Specification\Specification.cs" />
     <Compile Include="SystemSetting\GlobalSetting\CommonNameDescriptionSetting.cs" />
-    <Compile Include="Time\AnchorTimePeriod.cs" />
     <Compile Include="Time\IntervalRounding.cs" />
     <Compile Include="Time\PeriodScaleUnit.cs" />
     <Compile Include="Time\DateTimeExtensions.cs" />
     <Compile Include="Collection\FixedCapacityStack.cs" />
     <Compile Include="Tracking\TrackerCalculator.cs" />
-    <Compile Include="Tracking\SchedulePartTrackingDataProvider.cs" />
     <Compile Include="UndoRedo\BatchMemento.cs" />
     <Compile Include="UndoRedo\Memento.cs">
       <SubType>Code</SubType>
@@ -1888,6 +1866,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\Assignment\ShiftLayer.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Analyzer\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

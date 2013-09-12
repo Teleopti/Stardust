@@ -624,7 +624,6 @@
     <Compile Include="Scheduling\ISchedulingScreenSettings.cs" />
     <Compile Include="Scheduling\MatrixUserLockLocker.cs" />
     <Compile Include="Scheduling\MoveTimeOptimizerCreator.cs" />
-    <Compile Include="Scheduling\NotSkillGroupSpecification.cs" />
     <Compile Include="Common\RestoreFocusWhenCompleted.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimePerActivityModel.cs" />
     <Compile Include="Common\SearchPersonPresenter.cs" />
@@ -1114,7 +1113,6 @@
     <Compile Include="Common\Clip.cs" />
     <Compile Include="Common\ClipHandler.cs" />
     <Compile Include="Scheduling\DisplayMode.cs" />
-    <Compile Include="Scheduling\DetailViewHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\AvailabilityRestrictionView.cs" />
     <Compile Include="Settings\ScheduleRestrictionBaseView.cs" />
