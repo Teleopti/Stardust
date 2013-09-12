@@ -158,7 +158,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				QueryCellInfo -= shiftFairnessGridQueryCellInfo;
 				CellDoubleClick -= shiftFairnessGridCellDoubleClick;
 				ResizingColumns -= shiftFairnessGridResizingColumns;
-				ResizingColumns += shiftFairnessGridResizingColumns;
 			}
 
 			base.Dispose(disposing);

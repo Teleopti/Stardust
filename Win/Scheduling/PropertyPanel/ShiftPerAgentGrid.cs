@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			QueryRowCount += shiftPerAgentGridQueryRowCount;
 			QueryCellInfo += shiftPerAgentGridQueryCellInfo;
 			CellDoubleClick += shiftPerAgentGridCellDoubleClick;
-			ResizingColumns -= shiftPerAgentGridResizingColumns;
 			ResizingColumns += shiftPerAgentGridResizingColumns;
 			
 		}
