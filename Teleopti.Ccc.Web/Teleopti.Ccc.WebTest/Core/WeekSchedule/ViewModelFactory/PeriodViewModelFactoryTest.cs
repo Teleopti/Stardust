@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 		    result.First().StartPositionPercentage.Should().Be.EqualTo((decimal) (start - minMaxTime.StartTime).Ticks/(minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
 			result.First().EndPositionPercentage.Should().Be.EqualTo(1);
 			result.First().IsOvertimeAvailability.Should().Be.True();
-		    result.First().Color.Should().Be.EqualTo(Color.DarkGray.ToCSV());
+			result.First().Color.Should().Be.EqualTo(Color.Gray.ToCSV());
 	    }
 
 		[Test]
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 			result.First().StartPositionPercentage.Should().Be.EqualTo((decimal)(start - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
 			result.First().EndPositionPercentage.Should().Be.EqualTo((decimal)(end - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
 			result.First().IsOvertimeAvailability.Should().Be.True();
-			result.First().Color.Should().Be.EqualTo(Color.DarkGray.ToCSV());
+			result.First().Color.Should().Be.EqualTo(Color.Gray.ToCSV());
 		}
 
 		[Test]
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 			result.First().StartPositionPercentage.Should().Be.EqualTo(0);
 			result.First().EndPositionPercentage.Should().Be.EqualTo((decimal)(end.Subtract(new TimeSpan(1, 0, 0, 0)) - minMaxTime.StartTime).Ticks / (minMaxTime.EndTime - minMaxTime.StartTime).Ticks);
 			result.First().IsOvertimeAvailability.Should().Be.True();
-			result.First().Color.Should().Be.EqualTo(Color.DarkGray.ToCSV());
+			result.First().Color.Should().Be.EqualTo(Color.Gray.ToCSV());
 		}
 
 		[Test]
