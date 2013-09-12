@@ -1028,7 +1028,6 @@
     <Compile Include="Security\LicenseOptions\TeleoptiCccSmsLinkLicenseOption.cs" />
     <Compile Include="Security\LicenseStatus.cs" />
     <Compile Include="Security\ISystemUserPasswordSpecification.cs" />
-    <Compile Include="Security\InsufficientPrivilegeException.cs" />
     <Compile Include="Security\IOneWayEncryption.cs">
       <SubType>Code</SubType>
     </Compile>
