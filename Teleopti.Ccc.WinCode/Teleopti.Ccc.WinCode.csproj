@@ -624,7 +624,6 @@
     <Compile Include="Scheduling\ISchedulingScreenSettings.cs" />
     <Compile Include="Scheduling\MatrixUserLockLocker.cs" />
     <Compile Include="Scheduling\MoveTimeOptimizerCreator.cs" />
-    <Compile Include="Scheduling\NotSkillGroupSpecification.cs" />
     <Compile Include="Common\RestoreFocusWhenCompleted.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimePerActivityModel.cs" />
     <Compile Include="Common\SearchPersonPresenter.cs" />
