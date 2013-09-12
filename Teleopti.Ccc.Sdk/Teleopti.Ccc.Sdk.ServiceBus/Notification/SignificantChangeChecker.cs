@@ -23,20 +23,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			var ret = new NotificationMessage();
 			var lang = person.PermissionInformation.UICulture();
 			var endDate = DateOnly.Today.AddDays(14);
-            DateTime? publishedToDate = null;
 
-			var wfc = person.WorkflowControlSet;
+		    var wfc = person.WorkflowControlSet;
 		    if (wfc == null) return ret;
 
             if (!wfc.SchedulePublishedToDate.HasValue)
                 return ret;
 
-            publishedToDate = wfc.SchedulePublishedToDate;
+            DateTime? publishedToDate = wfc.SchedulePublishedToDate;
 
-            if (publishedToDate.Value < DateOnly.Today)
-			}
-
-			if (publishedToDate.HasValue && publishedToDate.Value < DateOnly.Today)
+			if (publishedToDate.Value < DateOnly.Today)
 				return ret;
 
             if (publishedToDate.Value < endDate)
