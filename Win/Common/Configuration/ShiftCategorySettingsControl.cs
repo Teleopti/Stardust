@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         public string TreeNode()
         {
-            return Resources.ShiftCategory;
+            return Resources.ShiftCategoryHeader;
         }
 
     	public void OnShow()
