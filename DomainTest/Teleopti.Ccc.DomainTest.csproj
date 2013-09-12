@@ -272,7 +272,6 @@
     <Compile Include="Optimization\GroupMoveTimeOptimizerTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeValidatorRunnerTest.cs" />
     <Compile Include="Optimization\GroupOptimizationValidatorRunnerTest.cs" />
-    <Compile Include="Optimization\IntradayDecisionMakerComponentsTest.cs" />
     <Compile Include="Optimization\GroupOptimizerFindMatrixesForGroupTest.cs" />
     <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameGroupTest.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationTest.cs" />
