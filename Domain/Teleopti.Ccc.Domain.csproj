@@ -728,7 +728,6 @@
     <Compile Include="Forecasting\Template\SkillDayTemplateReference.cs" />
     <Compile Include="Forecasting\Template\TemplateReference.cs" />
     <Compile Include="Forecasting\Template\WorkloadDayTemplateReference.cs" />
-    <Compile Include="Forecasting\TimeZoneDateCache.cs" />
     <Compile Include="Helper\SerializationHelper.cs" />
     <Compile Include="Helper\StaffingCalculatorService.cs" />
     <Compile Include="Helper\StaffingEmailCalculatorService.cs" />

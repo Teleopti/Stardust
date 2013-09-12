@@ -564,7 +564,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Forecasting\Template\WorkloadDayTemplateReferenceTest.cs" />
-    <Compile Include="Forecasting\TimeZoneDateCacheTest.cs" />
     <Compile Include="Helper\EncryptionConstantsTest.cs" />
     <Compile Include="Helper\StaffingEmailCalculatorServiceTest.cs" />
     <Compile Include="Helper\EndTimeLimitationTest.cs" />
