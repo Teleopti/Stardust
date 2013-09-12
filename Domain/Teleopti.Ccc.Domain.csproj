@@ -237,6 +237,7 @@
     <Compile Include="Collection\IdenticalLayersSpecification.cs" />
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
+    <Compile Include="Common\PersonAccountUpdaterForSdk.cs" />
     <Compile Include="Common\PersonAccountUpdaterForWin.cs" />
     <Compile Include="Common\IPersonAccountUpdaterFroWinProvider.cs" />
     <Compile Include="Common\PersonAccountUpdaterDummy.cs" />
@@ -250,7 +251,7 @@
     <Compile Include="Common\IModifyNow.cs" />
     <Compile Include="Common\LayersExtensions.cs" />
     <Compile Include="Common\ListAggregator.cs" />
-    <Compile Include="Common\PersonAccountUpdaterProvider.cs" />
+    <Compile Include="Common\PersonAccountUpdaterInteractionsForSdk.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Common\SpecificBusinessUnit.cs" />
     <Compile Include="Common\TrueFalseRandomizer.cs" />

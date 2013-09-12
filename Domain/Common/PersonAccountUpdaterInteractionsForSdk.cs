@@ -7,13 +7,13 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public class PersonAccountUpdaterProvider : IPeopleAccountUpdaterProvider
+	public class PersonAccountUpdaterInteractionsForSdk : IPeopleAccountUpdaterInteraction
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IPersonAccountCollection _personAccounts;
 		private readonly ITraceableRefreshService _refreshService;
 
-		public PersonAccountUpdaterProvider(
+		public PersonAccountUpdaterInteractionsForSdk(
 			IUnitOfWork unitOfWork,
 			IPersonAccountCollection personAccounts,
 			ITraceableRefreshService refreshService)

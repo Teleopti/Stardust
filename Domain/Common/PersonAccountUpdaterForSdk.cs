@@ -8,11 +8,11 @@ namespace Teleopti.Ccc.Domain.Common
 	/// <remarks>
 	/// Used for the win fat client where all the data is already loaded in the FilteredPeopleHolder
 	/// </remarks>
-	public class PersonAccountUpdaterForWin : IPersonAccountUpdater
+	public class PersonAccountUpdaterForSdk : IPersonAccountUpdater
 	{
 		private readonly IPeopleAccountUpdaterInteraction _interaction;
 
-		public PersonAccountUpdaterForWin(IPeopleAccountUpdaterInteraction interaction)
+		public PersonAccountUpdaterForSdk(IPeopleAccountUpdaterInteraction interaction)
 		{
 			_interaction = interaction;
 		}

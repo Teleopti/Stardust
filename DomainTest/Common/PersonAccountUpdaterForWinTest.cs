@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 	{
 		private PersonAccountUpdaterForWin _target;
 		private MockRepository _mocks;
-		private IPeopleAccountUpdaterProvider _provider;
+		private IPeopleAccountUpdaterInteraction _interaction;
 		private IPerson _person;
 		private IAbsence _absence1;
 		private IAbsence _absence2;
@@ -33,13 +33,13 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_provider = _mocks.Stub<IPeopleAccountUpdaterProvider>();
+			_interaction = _mocks.Stub<IPeopleAccountUpdaterInteraction>();
 			_person = PersonFactory.CreatePerson();
 			_absence1 = new Absence();
 			_absence2 = new Absence();
 			_unitOfWork = _mocks.Stub<IUnitOfWork>();
 			_refreshService = _mocks.StrictMock<ITraceableRefreshService>();
-			_target = new PersonAccountUpdaterForWin(_provider);
+			_target = new PersonAccountUpdaterForWin(_interaction);
 		}
 
 		[Test]
@@ -51,11 +51,11 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			using (_mocks.Record())
 			{
-				_provider.Stub(p => p.PersonAccounts(_person))
+				_interaction.Stub(p => p.PersonAccounts(_person))
 					.Return(accountCollection);
-				_provider.Stub(p => p.UnitOfWork)
+				_interaction.Stub(p => p.UnitOfWork)
 					.Return(_unitOfWork);
-				_provider.Stub(p => p.RefreshService)
+				_interaction.Stub(p => p.RefreshService)
 				         .Return(_refreshService);
 				
 				// must be called exactly once for each account

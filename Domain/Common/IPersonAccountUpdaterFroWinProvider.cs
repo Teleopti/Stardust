@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public interface IPeopleAccountUpdaterProvider
+	public interface IPeopleAccountUpdaterInteraction
 	{
 		ITraceableRefreshService RefreshService { get; }
 		IUnitOfWork UnitOfWork { get; }

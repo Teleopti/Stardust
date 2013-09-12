@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic
 {
-	public class PersonAccountUpdaterProvider : IPeopleAccountUpdaterProvider
+	public class PersonAccountUpdaterInteraction : IPeopleAccountUpdaterInteraction
 	{
 
 		private readonly IRepositoryFactory _repositoryFactory;
@@ -18,11 +18,13 @@ namespace Teleopti.Ccc.Sdk.Logic
 		private readonly ITraceableRefreshService _refreshService;
 		private readonly object Locker = new object();
 
-		public PersonAccountUpdaterProvider(
+		public PersonAccountUpdaterInteraction(
 			IRepositoryFactory repositoryFactory,
+			ICurrentUnitOfWorkFactory unitOfWorkFactory,
 			ITraceableRefreshService refreshService)
 		{
 			_repositoryFactory = repositoryFactory;
+			_unitOfWorkFactory = unitOfWorkFactory;
 			_refreshService = refreshService;
 		}
 
