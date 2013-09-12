@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             using (_mock.Playback())
             {
                 _target.ExtractDistributionInfo(_scheduleDays, null, TimeZoneInfo.Utc);
-                _target.ExtractDistributionInfo(_scheduleDays, new ModifyEventArgs(new ScheduleModifier(), person1, _todayDateTimePeriod), TimeZoneInfo.Utc);
+                _target.ExtractDistributionInfo(_scheduleDays, new ModifyEventArgs(new ScheduleModifier(), person1, _todayDateTimePeriod, null), TimeZoneInfo.Utc);
             }
             
                
@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             using (_mock.Playback())
             {
                 _target.ExtractDistributionInfo(_scheduleDays, null, TimeZoneInfo.Utc);
-                _target.ExtractDistributionInfo(_scheduleDays, new ModifyEventArgs(new ScheduleModifier(), person1, _todayDateTimePeriod), TimeZoneInfo.Utc);
+                _target.ExtractDistributionInfo(_scheduleDays, new ModifyEventArgs(new ScheduleModifier(), person1, _todayDateTimePeriod, null), TimeZoneInfo.Utc);
             }
 
 

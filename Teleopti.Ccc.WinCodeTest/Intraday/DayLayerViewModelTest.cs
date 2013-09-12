@@ -182,8 +182,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             using (mocks.Playback())
             {
 				target.Models.Add(new DayLayerModel(person, period, team, new LayerViewModelCollection(eventAggregator, createLayerViewModelService, new RemoveLayerFromSchedule(), null), null));
-                target.OnScheduleModified(this, new ModifyEventArgs(ScheduleModifier.MessageBroker, null, period));
-                target.OnScheduleModified(this, new ModifyEventArgs(ScheduleModifier.MessageBroker, person, period));
+                target.OnScheduleModified(this, new ModifyEventArgs(ScheduleModifier.MessageBroker, null, period, null));
+                target.OnScheduleModified(this, new ModifyEventArgs(ScheduleModifier.MessageBroker, person, period, null));
             }
         }
 
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             {
                 target = new DayLayerViewModel(null, eventAggregator, unitOfWorkFactory, repositoryFactory, testDispatcher);
 				target.Models.Add(new DayLayerModel(person, period, team, new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null), null));
-                target.OnScheduleModified(this, new ModifyEventArgs(ScheduleModifier.MessageBroker, person, period));
+                target.OnScheduleModified(this, new ModifyEventArgs(ScheduleModifier.MessageBroker, person, period, null));
             }
         }
 
