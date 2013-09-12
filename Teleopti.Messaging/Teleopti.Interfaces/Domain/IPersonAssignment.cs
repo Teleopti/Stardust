@@ -15,7 +15,6 @@ namespace Teleopti.Interfaces.Domain
     public interface IPersonAssignment : IPersistableScheduleData, 
 											IAggregateRootWithEvents,
                                             IChangeInfo,
-                                            IBelongsToBusinessUnit,
                                             IRestrictionChecker<IPersonAssignment>, 
                                             IProjectionSource, 
                                             ICloneableEntity<IPersonAssignment>,

@@ -411,10 +411,10 @@ namespace Teleopti.Ccc.Domain.Common
 				});
 		}
 
-		private IEnumerable<PersonPeriodDetail> gatherPersonPeriodDetails()
+		private ICollection<PersonPeriodDetail> gatherPersonPeriodDetails()
 		{
 			var personPeriods = InternalPersonPeriodCollection;
-			if (personPeriods == null) return Enumerable.Empty<PersonPeriodDetail>();
+			if (personPeriods == null) return new List<PersonPeriodDetail>();
 			return 
 				personPeriods.Select(
 					p =>
@@ -427,7 +427,7 @@ namespace Teleopti.Ccc.Domain.Common
 						}).ToList();
 		}
 
-		private IEnumerable<PersonSkillDetail> gatherSkillDetails(IPersonPeriod personPeriod)
+		private ICollection<PersonSkillDetail> gatherSkillDetails(IPersonPeriod personPeriod)
 		{
 			return personPeriod.PersonSkillCollection.Select(p => new PersonSkillDetail
 				{

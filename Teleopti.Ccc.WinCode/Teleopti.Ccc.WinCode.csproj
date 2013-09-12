@@ -1111,7 +1111,6 @@
     <Compile Include="Scheduling\RequestPresenter.cs" />
     <Compile Include="Scheduling\ScheduleHelper.cs" />
     <Compile Include="Scheduling\ViewBaseHelper.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Common\Clip.cs" />
     <Compile Include="Common\ClipHandler.cs" />
     <Compile Include="Scheduling\DisplayMode.cs" />

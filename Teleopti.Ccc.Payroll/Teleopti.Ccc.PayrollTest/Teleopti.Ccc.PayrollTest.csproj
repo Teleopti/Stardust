@@ -129,7 +129,6 @@
   <ItemGroup>
     <Compile Include="BaseExportTest.cs" />
     <Compile Include="FormatAppenderTest.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="TeleoptiActivitiesExportTest.cs" />
     <Compile Include="TeleoptiDetailedExportTest.cs" />
     <Compile Include="TeleoptiTimeExportTest.cs" />

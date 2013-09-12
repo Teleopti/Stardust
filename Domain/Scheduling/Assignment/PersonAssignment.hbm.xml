@@ -48,10 +48,6 @@
 		<many-to-one name="Scenario"
 								 class="Teleopti.Ccc.Domain.Common.Scenario"
 								 not-null="true" foreign-key="FK_PersonAssignment_Scenario"/>
-		<many-to-one name="BusinessUnit"
-				class="Teleopti.Ccc.Domain.Common.BusinessUnit"
-				access="nosetter.camelcase-underscore"
-				not-null="true" foreign-key="FK_PersonAssignment_BusinessUnit"/>
 		<many-to-one name="_dayOffTemplate"
 				access="field"
 				column="DayOffTemplate"
@@ -59,7 +55,7 @@
 				foreign-key="FK_PersonAssignment_DayOffTemplate"/>
 
 		<filter name="businessUnitFilter"
-						condition=":businessUnitParameter = BusinessUnit" />
+						condition="exists(select 1 from Scenario s where s.BusinessUnit = :businessUnitParameter and s.Id=Scenario)" />
 
 		<filter name="deletedPeopleFilter"
 						condition="exists(select 1 from Person p where Person=p.Id and p.IsDeleted=0)"/>

@@ -47,6 +47,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			interactions.AssertJavascriptResultContains(script, "clicked");
 		}
 
+		public static void AddClassUsingJQuery(this IBrowserInteractions interactions, string className, string selector, params object[] args)
+		{
+			selector = f(selector, args);
+			var jquery = dollar(selector);
+			var script = f("var jq = {0};", jquery) +
+						 "if (jq.length > 0) {" +
+						 f("jq.addClass('{0}');", className) +
+						 "return 'added';" +
+						 "} else {" +
+						 f("throw \"Cannot find element with selector '{0}' using jquery \";", selector) +
+						 "}";
+			interactions.AssertJavascriptResultContains(script, "added");
+		}
+
 		public static void AssertInputValueUsingJQuery(this IBrowserInteractions interactions, string selector, string value)
 		{
 			interactions.AssertJavascriptResultContains("return $('" + selector + "').val();", value);

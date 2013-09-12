@@ -137,7 +137,7 @@ end
 item: Execute Program
   Pathname=CMD
   Command Line=/C ""%DBINST%Enrypted\Teleopti.Support.Security.exe" -DS"%SRV%" -DD"%DCCC%" %SA%"
-  Flags=00000010
+  Flags=00000110
 end
 item: Remark
   Text=This command fixes the CrossDB view from Analytics into Agg DB
@@ -145,5 +145,5 @@ end
 item: Execute Program
   Pathname=CMD
   Command Line=/C ""%DBINST%Enrypted\Teleopti.Support.Security.exe" -DS"%SRV%" -DD"%DMART%" -CD"%DAGG%" %SA%"
-  Flags=00000010
+  Flags=00000110
 end

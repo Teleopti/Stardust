@@ -228,7 +228,6 @@ ROLLBACK TRAN
 		[UpdatedOn]		= max(pdo.UpdatedOn),
 		[Person]		= pdo.Person,
 		[Scenario]		= pdo.scenario,
-		[BusinessUnit]	= cast(max(cast(pdo.BusinessUnit AS BINARY(16)))as uniqueidentifier),
 		[Date]			= convert(datetime,floor(convert(decimal(18,8),pdo.anchor))),
 		[ShiftCategory]	= NULL,
 		[DayOffTemplate]= cast(max(cast(dot.Id AS BINARY(16)))as uniqueidentifier)

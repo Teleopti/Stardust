@@ -534,7 +534,7 @@
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
     <Compile Include="Scheduling\TeamBlock\IntervalDataEntendedMedianCalculator.cs" />
     <Compile Include="ResourceCalculation\TransformResourcesFromStorageCommand.cs" />
-     <Compile Include="Scheduling\Overtime\SkillIntervalData.cs" />
+    <Compile Include="Scheduling\Overtime\SkillIntervalData.cs" />
     <Compile Include="Scheduling\Overtime\SkillIntervalDataDivider.cs" />
     <Compile Include="Scheduling\Overtime\SkillStaffPeriodToSkillIntervalDataMapper.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
@@ -1359,7 +1359,6 @@
     <Compile Include="Scheduling\Activity.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignment.cs" />
     <Compile Include="Scheduling\Assignment\ActivityLayer.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\AuthorizationEntities\SiteAuthorizationEntityConverter.cs" />
     <Compile Include="Security\AuthorizationEntities\WindowsAuthenticationInfo.cs" />

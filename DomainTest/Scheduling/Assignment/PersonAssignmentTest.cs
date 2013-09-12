@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.IsNull(target.UpdatedBy);
 			Assert.IsNull(target.UpdatedOn);
 			Assert.IsNull(target.Version);
-			Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
+			Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, target.Scenario.BusinessUnit);
 		}
 
 

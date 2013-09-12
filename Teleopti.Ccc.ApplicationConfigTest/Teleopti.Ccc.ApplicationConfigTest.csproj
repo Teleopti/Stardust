@@ -105,7 +105,6 @@
     <Compile Include="Creators\RtaStateGroupCreatorTest.cs" />
     <Compile Include="Creators\ScenarioCreatorTest.cs" />
     <Compile Include="Creators\SkillTypeCreatorTest.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Common\CreatorFactory.cs" />
     <Compile Include="Creators\GroupingActivityCreatorTest.cs" />
     <Compile Include="Creators\AvailableDataCreatorTest.cs" />

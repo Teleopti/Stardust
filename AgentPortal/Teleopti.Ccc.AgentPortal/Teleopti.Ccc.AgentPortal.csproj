@@ -327,7 +327,6 @@
     <Compile Include="Common\ScheduleResolutionType.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helper\AppConfigHelper.cs" />
     <Compile Include="Helper\Encryption.cs" />
     <Compile Include="Helper\MessageBoxHelper.cs">

@@ -114,7 +114,6 @@
     <Compile Include="Common\IJobLogRepository.cs" />
     <Compile Include="Common\IJobScheduleRepository.cs" />
     <Compile Include="Common\JobScheduleType.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Transformer\EtlToolStateType.cs" />
     <Compile Include="Transformer\IEtlTransform.cs" />
     <Compile Include="Transformer\IGeneralFunctions.cs" />

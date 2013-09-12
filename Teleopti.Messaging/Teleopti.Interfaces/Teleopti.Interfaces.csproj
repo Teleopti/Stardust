@@ -128,7 +128,7 @@
     <Compile Include="Domain\IMoveLayerVertical.cs" />
     <Compile Include="Domain\IOvertimeShiftLayer.cs" />
     <Compile Include="Domain\IPersonalShiftLayer.cs" />
-	<Compile Include="Domain\IOvertimePreferences.cs" />
+    <Compile Include="Domain\IOvertimePreferences.cs" />
     <Compile Include="Domain\IOvertimeAvailability.cs" />
     <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />
     <Compile Include="Domain\IActivityNormalExtender.cs" />
@@ -735,7 +735,6 @@
     <Compile Include="Domain\TimeZoneHelper.cs" />
     <Compile Include="Domain\WorkTime.cs" />
     <Compile Include="Domain\WorkTimeDirective.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Infrastructure\IMessageBrokerIdentifier.cs" />
     <Compile Include="Infrastructure\ISessionData.cs" />
     <Compile Include="Infrastructure\IStatelessUnitOfWork.cs" />
