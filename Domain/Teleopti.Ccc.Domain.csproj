@@ -1129,7 +1129,6 @@
     <Compile Include="Repositories\IQueueSourceRepository.cs" />
     <Compile Include="Repositories\ISkillTypeRepository.cs" />
     <Compile Include="Repositories\IWorkloadRepository.cs" />
-    <Compile Include="ResourceCalculation\SchedulePartTracker.cs" />
     <Compile Include="ResourceCalculation\PeriodDistribution.cs" />
     <Compile Include="ResourceCalculation\PeriodDistributionService.cs" />
     <Compile Include="ResourceCalculation\SchedulePartModifyAndRollbackService.cs" />

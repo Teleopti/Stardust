@@ -611,7 +611,6 @@
     <Compile Include="ResourceCalculation\PeriodDistributionServiceTest.cs" />
     <Compile Include="ResourceCalculation\PeriodDistributionTest.cs" />
     <Compile Include="ResourceCalculation\SchedulePartModifyAndRollbackServiceTest.cs" />
-    <Compile Include="ResourceCalculation\SchedulePartTrackerTest.cs" />
     <Compile Include="ResourceCalculation\SchedulingOptionsTest.cs" />
     <Compile Include="ResourceCalculation\SchedulingResultServiceTest.cs" />
     <Compile Include="ResourceCalculation\SchedulingResultStateHolderTest.cs" />
