@@ -14,11 +14,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 	{
 		private readonly ISchedulerStateHolder _stateHolder;
 		private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
-		
-		public AgentRestrictionsDisplayRowCreator(ISchedulerStateHolder stateHolder, IScheduleMatrixListCreator scheduleMatrixListCreator)
+		private readonly IMatrixUserLockLocker _locker;
+
+		public AgentRestrictionsDisplayRowCreator(ISchedulerStateHolder stateHolder, IScheduleMatrixListCreator scheduleMatrixListCreator, IMatrixUserLockLocker locker)
 		{
 			_stateHolder = stateHolder;
 			_scheduleMatrixListCreator = scheduleMatrixListCreator;
+			_locker = locker;
 		}
 
 		public IList<AgentRestrictionsDisplayRow> Create(IList<IPerson> persons)
@@ -27,7 +29,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 			var displayRows = new List<AgentRestrictionsDisplayRow>();
 			var period = _stateHolder.RequestedPeriod.DateOnlyPeriod;
-			
+
 			foreach (var person in persons)
 			{
 				var scheduleDays = new List<IScheduleDay>();
@@ -44,10 +46,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 				if (scheduleDays.Count <= 0) continue;
 				var matrixLists = _scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(scheduleDays);
+				_locker.Execute(scheduleDays, matrixLists,period);
 
 				foreach (var scheduleMatrixPro in matrixLists)
 				{
-					var displayRow = new AgentRestrictionsDisplayRow(scheduleMatrixPro) {AgentName = _stateHolder.CommonAgentName(scheduleMatrixPro.Person)};
+					var displayRow = new AgentRestrictionsDisplayRow(scheduleMatrixPro) { AgentName = _stateHolder.CommonAgentName(scheduleMatrixPro.Person) };
 					displayRows.Add(displayRow);
 				}
 			}

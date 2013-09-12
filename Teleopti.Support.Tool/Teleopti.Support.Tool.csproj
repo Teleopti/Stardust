@@ -164,7 +164,6 @@
     <Compile Include="DataLayer\NHibDatasource.cs" />
     <Compile Include="DataLayer\XmlHandler.cs" />
     <Compile Include="DataLayer\XmlHandlerException.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="HelpWindow.cs">
       <SubType>Form</SubType>
     </Compile>

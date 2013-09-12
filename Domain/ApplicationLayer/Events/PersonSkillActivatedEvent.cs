@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	[Serializable]
 	public class PersonSkillActivatedEvent : RaptorDomainEvent
 	{
 		public Guid PersonId { get; set; }

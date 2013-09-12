@@ -34,9 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void CanCreateAndLoadDefaults()
         {
             Assert.AreEqual("myName", _target.Description.Name);
-            Assert.IsNull(_target.CreatedBy);
             Assert.IsNull(_target.UpdatedBy);
-            Assert.IsNull(_target.CreatedOn);
             Assert.IsNull(_target.UpdatedOn);
             Assert.IsNull(_target.Id);
             Assert.IsNull(_target.Version);

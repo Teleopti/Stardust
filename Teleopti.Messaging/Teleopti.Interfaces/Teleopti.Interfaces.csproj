@@ -113,8 +113,8 @@
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
     <Compile Include="Domain\IActivityRestrictableVisualLayer.cs" />
     <Compile Include="Domain\IActualAgentState.cs" />
+    <Compile Include="Domain\IAggregateRootBrokerConditions.cs" />
     <Compile Include="Domain\IAggregateRootWithEvents.cs" />
-    <Compile Include="Domain\IBudgetGroupAllowanceCalculator.cs" />
     <Compile Include="Domain\IBudgetGroupHeadCountSpecification.cs" />
     <Compile Include="Domain\ICalculator.cs" />
     <Compile Include="Domain\IDayOff.cs" />
@@ -128,6 +128,7 @@
     <Compile Include="Domain\IMoveLayerVertical.cs" />
     <Compile Include="Domain\IOvertimeShiftLayer.cs" />
     <Compile Include="Domain\IPersonalShiftLayer.cs" />
+    <Compile Include="Domain\IOvertimePreferences.cs" />
     <Compile Include="Domain\IOvertimeAvailability.cs" />
     <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />
     <Compile Include="Domain\IActivityNormalExtender.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="Domain\IOptimizationPreferences.cs" />
     <Compile Include="Domain\IPersonFinderDisplayRow.cs" />
     <Compile Include="Domain\IPersonFinderSearchCriteria.cs" />
+    <Compile Include="Domain\IPersonRequestSpecification.cs" />
     <Compile Include="Domain\IPersonScheduleDayReadModel.cs" />
     <Compile Include="Domain\IPreferenceAbsenceChecker.cs" />
     <Compile Include="Domain\IJobResult.cs" />
@@ -733,7 +735,6 @@
     <Compile Include="Domain\TimeZoneHelper.cs" />
     <Compile Include="Domain\WorkTime.cs" />
     <Compile Include="Domain\WorkTimeDirective.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Infrastructure\IMessageBrokerIdentifier.cs" />
     <Compile Include="Infrastructure\ISessionData.cs" />
     <Compile Include="Infrastructure\IStatelessUnitOfWork.cs" />

@@ -168,8 +168,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			autoLabelInfoAboutChanges.ForeColor = ColorHelper.ChangeInfoTextColor();
 			autoLabelInfoAboutChanges.Font = ColorHelper.ChangeInfoTextFontStyleItalic(autoLabelInfoAboutChanges.Font);
 			string changed = _localizer.UpdatedByText(SelectedAvailability, UserTexts.Resources.UpdatedByColon);
-			string created = _localizer.CreatedText(SelectedAvailability, UserTexts.Resources.CreatedByColon);
-			autoLabelInfoAboutChanges.Text = string.Concat(created, changed);
+			autoLabelInfoAboutChanges.Text = changed;
 		}
 
 		private void ChangeToOverMidnight()

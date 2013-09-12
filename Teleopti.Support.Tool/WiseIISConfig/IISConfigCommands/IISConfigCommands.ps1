@@ -437,22 +437,44 @@ $cmd.Connection = $con
 $cmd.CommandText = "DELETE FROM License"
 $cmd.ExecuteNonQuery()
 
-$cmd.CommandText = "INSERT INTO License
-  (Id, Version, CreatedBy, UpdatedBy, CreatedOn, UpdatedOn, XmlString)
-  VALUES (@Id, @Version, @CreatedBy, @UpdatedBy, @CreatedOn, @UpdatedOn, @XmlString)"
+$cmd.CommandText = "if exists(select object_id from sys.columns  where Name = N'CreatedBy' and Object_ID = Object_ID(N'License')) 
+select 1 else select 0"
+$sqlReader = $cmd.ExecuteReader()
 
+while ($sqlReader.Read()) { $exists = $sqlReader[0]}
+
+$sqlReader.Close()
+
+if($exists -eq 1)
+{
+    $cmd.CommandText = "INSERT INTO License
+      (Id, Version, CreatedBy, UpdatedBy, CreatedOn, UpdatedOn, XmlString)
+      VALUES (@Id, @Version, @CreatedBy, @UpdatedBy, @CreatedOn, @UpdatedOn, @XmlString)"
+}
+else
+{
+    $cmd.CommandText = "INSERT INTO License
+      (Id, Version,  UpdatedBy,  UpdatedOn, XmlString)
+      VALUES (@Id, @Version, @UpdatedBy, @UpdatedOn, @XmlString)"
+}
 $superUser = "3f0886ab-7b25-4e95-856a-0d726edc2a67"
 $now = Get-Date
 
 # Add parameters to pass values to the INSERT statement
 $cmd.Parameters.AddWithValue("@Id", [guid]::NewGuid()) | Out-Null
 $cmd.Parameters.AddWithValue("@Version", 1) | Out-Null
-$cmd.Parameters.AddWithValue("@CreatedBy", $superUser) | Out-Null
 $cmd.Parameters.AddWithValue("@UpdatedBy", $superUser) | Out-Null
-$cmd.Parameters.AddWithValue("@CreatedOn", $now) | Out-Null
 $cmd.Parameters.AddWithValue("@UpdatedOn", $now) | Out-Null
 $cmd.Parameters.AddWithValue("@XmlString", $xmlString) | Out-Null
+
+if($exists -eq 1)
+{
+    $cmd.Parameters.AddWithValue("@CreatedBy", $superUser) | Out-Null
+    $cmd.Parameters.AddWithValue("@CreatedOn", $now) | Out-Null
+}
+
 # Execute INSERT statement
 $RowsInserted = $cmd.ExecuteNonQuery()
 Write-Host 'Inserted License: ' $RowsInserted
+return $RowsInserted
 }

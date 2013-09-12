@@ -14,7 +14,7 @@
         /// </summary>
         /// <param name="part">The part.</param>
         /// <param name="layer">The layer.</param>
-        void Remove(IScheduleDay part, ILayer<IActivity> layer);
+        void Remove(IScheduleDay part, IShiftLayer layer);
 
         /// <summary>
         /// Removes the specified layer if it exists.

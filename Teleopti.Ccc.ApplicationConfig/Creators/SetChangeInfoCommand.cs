@@ -12,12 +12,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 			DateTime nu = DateTime.UtcNow;
 
 			typeof(T)
-				.GetField("_createdBy", BindingFlags.NonPublic | BindingFlags.Instance)
-				.SetValue(item, person);
-			typeof(T)
-				.GetField("_createdOn", BindingFlags.NonPublic | BindingFlags.Instance)
-				.SetValue(item, nu);
-			typeof(T)
 				.GetField("_updatedBy", BindingFlags.NonPublic | BindingFlags.Instance)
 				.SetValue(item, person);
 			typeof(T)

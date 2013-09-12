@@ -5,7 +5,8 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IPushMessage : IAggregateRoot, 
                                     IReplyOptionsSource<string>,
-                                    IChangeInfo
+                                    IChangeInfo,
+																		ICreateInfo
     {
         /// <summary>
         /// Gets or sets the sender of the conversation.

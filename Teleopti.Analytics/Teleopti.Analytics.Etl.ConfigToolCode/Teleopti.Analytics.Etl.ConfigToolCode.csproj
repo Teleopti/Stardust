@@ -89,7 +89,6 @@
     <Compile Include="Gui\DataSourceConfiguration\DataSourceState.cs" />
     <Compile Include="Gui\DataSourceConfiguration\IDataSourceConfigurationView.cs" />
     <Compile Include="Gui\DataSourceConfiguration\MessageBoxProperties.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Gui\StartupConfiguration\LookupStringItem.cs" />
     <Compile Include="Gui\StartupConfiguration\LookupIntegerItem.cs" />

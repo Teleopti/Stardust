@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
+using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -28,6 +29,10 @@ using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using ISkillIntervalDataDivider = Teleopti.Ccc.Domain.Scheduling.TeamBlock.ISkillIntervalDataDivider;
+using ISkillStaffPeriodToSkillIntervalDataMapper = Teleopti.Ccc.Domain.Scheduling.TeamBlock.ISkillStaffPeriodToSkillIntervalDataMapper;
+using SkillIntervalDataDivider = Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillIntervalDataDivider;
+using SkillStaffPeriodToSkillIntervalDataMapper = Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillStaffPeriodToSkillIntervalDataMapper;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
@@ -220,6 +225,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			registerTeamBlockDayOffOptimizerService(builder);
 			registerTeamBlockIntradayOptimizerService(builder);
 			registerTeamBlockSchedulingService(builder);
+
+            builder.RegisterType<ScheduleOvertimeCommand>().As<IScheduleOvertimeCommand>();
+            builder.RegisterType<OvertimeLengthDecider>().As<IOvertimeLengthDecider>();
+            builder.RegisterType<ResourceCalculateDelayer>().As<IResourceCalculateDelayer>();
+            builder.RegisterType<OvertimeSkillIntervalData>().As<IOvertimeSkillIntervalData>();
+            builder.RegisterType<OvertimeSkillIntervalDataDivider>().As<IOvertimeSkillIntervalDataDivider>();
+            builder.RegisterType<OvertimeSkillStaffPeriodToSkillIntervalDataMapper>().As<IOvertimeSkillStaffPeriodToSkillIntervalDataMapper>();
+			builder.RegisterType<ProjectionProvider>().As<IProjectionProvider>();
         }
 
 		private static void registerTeamBlockCommon(ContainerBuilder builder)

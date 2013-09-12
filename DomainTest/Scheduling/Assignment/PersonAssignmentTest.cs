@@ -65,12 +65,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.PersonalLayers().Should().Be.Empty();
 			target.ShiftCategory.Should().Be.Null();
 			target.DayOff().Should().Be.Null();
-			Assert.IsNull(target.CreatedBy);
 			Assert.IsNull(target.UpdatedBy);
-			Assert.IsNull(target.CreatedOn);
 			Assert.IsNull(target.UpdatedOn);
 			Assert.IsNull(target.Version);
-			Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
+			Assert.AreEqual(BusinessUnitFactory.BusinessUnitUsedInTest, target.Scenario.BusinessUnit);
 		}
 
 

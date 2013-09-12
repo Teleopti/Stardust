@@ -62,7 +62,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	        text = self.StartTimeLimitation();
 	    }
 
-	    return '<div class="extended-part-title">{0}</div>{1}'.format(self.ExtendedTitle(), text);
+	    return '<div class="extended-tooltip"><div class="extended-part-title">{0}</div>{1}</div>'.format(self.ExtendedTitle(), text);
 	    
 	});
 

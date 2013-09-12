@@ -342,8 +342,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			autoLabelInfoAboutChanges.ForeColor = ColorHelper.ChangeInfoTextColor();
 			autoLabelInfoAboutChanges.Font = ColorHelper.ChangeInfoTextFontStyleItalic(autoLabelInfoAboutChanges.Font);
 			string changed = _localizer.UpdatedByText(SelectedRotation, UserTexts.Resources.UpdatedByColon);
-			string created = _localizer.CreatedText(SelectedRotation, UserTexts.Resources.CreatedByColon);
-			autoLabelInfoAboutChanges.Text = string.Concat(created, changed);
+			autoLabelInfoAboutChanges.Text = changed;
 		}
 
 		private void ChangeToOverMidnight()
@@ -465,7 +464,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_gridColumns.Add(new SFGridHourMinutesOrEmptyColumn<RotationRestrictionView>("MaximumWorkTime",
 																						 UserTexts.Resources.MaxWorkTime));
 			_shiftCategoriesColumn = new SFGridDropDownColumn<RotationRestrictionView, IShiftCategory>("ShiftCategory",
-																									   UserTexts.Resources.ShiftCategory,
+																									   UserTexts.Resources.ShiftCategoryHeader,
 																									   _shiftCategoryList,
 																									   "Description",
 																									   typeof (

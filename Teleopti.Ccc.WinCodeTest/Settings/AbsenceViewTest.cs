@@ -91,15 +91,10 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
             Assert.AreEqual(_absenceView.ContainedEntity, _absenceView.ContainedOriginalEntity);
             Assert.AreNotSame(_absenceView.ContainedEntity, _absenceView.ContainedOriginalEntity);
 
-            Assert.AreEqual(string.Empty, _absenceView.CreatedBy);
-            Assert.AreEqual(string.Empty, _absenceView.CreatedOn);
             
         }
-        [Test]
-        public void VerifyCanGetCreateTimeText()
-        {
-            Assert.AreEqual(string.Empty, _absenceView.CreatedTimeInUserPerspective);
-        }
+
+
         [Test]
         public void VerifyCanGetUpdateTimeText()
         {

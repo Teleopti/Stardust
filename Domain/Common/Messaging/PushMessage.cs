@@ -86,5 +86,9 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
         {
             return (_replyOptions.Contains(replyToCheck));
         }
+
+				public virtual IPerson CreatedBy { get; protected set; }
+				public virtual DateTime? CreatedOn { get; protected set; }
+
     }
 }

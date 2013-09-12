@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     	private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
         private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;
         private readonly IAlreadyAbsentSpecification _alreadyAbsentSpecification;
-        private readonly IBudgetGroupAllowanceCalculator _budgetGroupAllowanceCalculator;
         private readonly IBudgetGroupHeadCountSpecification _budgetGroupHeadCountSpecification;
         private IProcessAbsenceRequest _process;
     	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
@@ -60,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                                          IAbsenceRequestOpenPeriodMerger absenceRequestOpenPeriodMerger, IRequestFactory factory,
                                          IScheduleDictionarySaver scheduleDictionarySaver, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback, 
                                          IResourceOptimizationHelper resourceOptimizationHelper, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, 
-                                         ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation, IAlreadyAbsentSpecification alreadyAbsentSpecification, IBudgetGroupAllowanceCalculator budgetGroupAllowanceCalculator, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification)
+                                         ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation, IAlreadyAbsentSpecification alreadyAbsentSpecification, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification)
         {
             _scheduleRepository = scheduleRepository;
             _personAbsenceAccountProvider = personAbsenceAccountProvider;
@@ -79,7 +78,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     		_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
     	    _loadSchedulesForRequestWithoutResourceCalculation = loadSchedulesForRequestWithoutResourceCalculation;
     	    _alreadyAbsentSpecification = alreadyAbsentSpecification;
-    	    _budgetGroupAllowanceCalculator = budgetGroupAllowanceCalculator;
     	    _budgetGroupHeadCountSpecification = budgetGroupHeadCountSpecification;
 
     	    _loadDataActions = new List<LoadDataAction>
@@ -236,7 +234,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                                                                        personAccountBalanceCalculator,
                                                                        _resourceOptimizationHelper,
                                                                        _budgetGroupAllowanceSpecification,
-                                                                       _budgetGroupAllowanceCalculator,
                                                                        _budgetGroupHeadCountSpecification),
                                  validatorList);
 

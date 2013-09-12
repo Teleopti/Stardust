@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -33,7 +34,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     var skill = tabPage.Tag as ISkill;
                     if (skill != null)
                     {
-                        _pinnedSkills.Add(skill);
+						if(!_pinnedSkills.Contains(skill))
+							_pinnedSkills.Add(skill);
                         _notPinnedSkills.Remove(skill);
                     }
                 }
@@ -57,21 +59,21 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public void SortSkills()
         {
-            foreach (var skill in allSkillsCorrectSorted())
-            {
-                if (!skill.Id.HasValue)
-                    continue;
-                var tabPage = findPageWithSkill(skill.Id.Value, _tabControlAdv.TabPages);
-                if (tabPage != null)
-                {
-                    var idx = allSkillsCorrectSorted().IndexOf(skill);
-                    if (idx != _tabControlAdv.TabPages.IndexOf(tabPage))
-                    {
-                        _tabControlAdv.TabPages.Remove(tabPage);
-                        _tabControlAdv.TabPages.Insert(idx, tabPage);
-                    }
-                }
-            }
+			foreach (var skill in allSkillsCorrectSorted())
+			{
+				if (!skill.Id.HasValue)
+					continue;
+				var tabPage = findPageWithSkill(skill.Id.Value, _tabControlAdv.TabPages);
+				if (tabPage != null)
+				{
+					var idx = allSkillsCorrectSorted().IndexOf(skill);
+					if (idx != _tabControlAdv.TabPages.IndexOf(tabPage))
+					{
+						_tabControlAdv.TabPages.Remove(tabPage);
+						_tabControlAdv.TabPages.Insert(idx, tabPage);
+					}
+				}
+			}
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

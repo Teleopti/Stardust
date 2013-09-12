@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -140,7 +142,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IAbsenceLayer layer = new AbsenceLayer(absence, period);
             IPersonAbsence agAbs = new PersonAbsence(aTinyAgent, scen, layer);
             PersistAndRemoveFromUnitOfWork(agAbs);
-            Assert.AreEqual(agAbs.UpdatedBy, agAbs.CreatedBy);
             Assert.AreEqual(agAbs.UpdatedOn, agAbs.UpdatedOn);
         }
 
@@ -430,6 +431,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var retList = rep.Find(persons, new DateTimePeriod(2000, 1, 1, 2007, 1, 3), okScenario, abs1);
 			verifyRelatedObjectsAreEagerlyLoaded(retList);
 			Assert.AreEqual(1, retList.Count());
+		}
+
+		[Test]
+		public void ShouldNotFetchIfScenarioIsNotLoggedOnBusinessUnit()
+		{
+			var absence = new Absence{Description = new Description("sdf")};
+			PersistAndRemoveFromUnitOfWork(absence);
+			var bu = new BusinessUnit("wrong bu");
+			PersistAndRemoveFromUnitOfWork(bu);
+			var scenarioWrongBu = new Scenario("wrong");
+			scenarioWrongBu.HackToSetBusinessUnit(bu);
+			PersistAndRemoveFromUnitOfWork(scenarioWrongBu);
+			var ass = new PersonAbsence(dummyAgent, scenarioWrongBu,
+																	new AbsenceLayer(absence, new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
+			PersistAndRemoveFromUnitOfWork(ass);
+
+			rep.Find(new DateTimePeriod(1900, 1, 1, 2100, 1, 1), scenarioWrongBu).Should().Be.Empty();
 		}
 
         [Test]

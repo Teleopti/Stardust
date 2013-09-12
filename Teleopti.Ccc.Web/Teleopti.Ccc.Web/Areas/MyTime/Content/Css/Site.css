@@ -43,20 +43,6 @@
 
 .cursorpointer { cursor: pointer; }
 
-.clearfix:before, .clearfix:after
-{
-	content: "\0020";
-	display: block;
-	height: 0;
-	visibility: hidden;	
-} 
-.clearfix:after {
-	clear: both;
-}
-.clearfix {
-	zoom: 1;
-} /* Fix clearfix: blueprintcss.lighthouseapp.com/projects/15318/tickets/5-extra-margin-padding-bottom-of-page */
-
 .truncate
 {
 	overflow: hidden;
@@ -587,25 +573,6 @@ select.time-input
 {
 	height: 94px;
 }
-
-.information-panel 
-{
-	color: gray;
-
-	font-family: Verdana;
-	font-size: 1em;
-	line-height: 2em;
-	
-	padding-top: 0.6em;
-	padding-bottom: 0.7em;
-	padding-left: 1.8em;
-	padding-right: 1.8em;
-	border: 1px solid rgba(0, 0, 0, 0.15);
-	background: #f8f8f8;
-	margin-top: 0.1em;
-	margin-bottom: 0.3em;
-}
-
 
 /*
  * CSS alterations in order to get RTL-direction to work properly

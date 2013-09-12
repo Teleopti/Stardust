@@ -26,6 +26,14 @@ BEGIN
 	RETURN 0
 END
 
+--temp table for perf.
+CREATE TABLE #stg_schedule(
+	[scenario_id] [smallint] NOT NULL,
+	[interval_id] [int] NOT NULL,
+	[date_id] [int] NOT NULL,
+	[person_id] [int] NOT NULL
+)
+
 --Get first row scenario in stage table, currently this must(!) be the default scenario, else RAISERROR
 if (select count(*)
 	from mart.dim_scenario
@@ -59,12 +67,14 @@ INNER JOIN mart.fact_schedule fs
 INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC dd
 	ON dd.shift_startdate_id = fs.shift_startdate_id 
 	AND dd.person_id = fs.person_id
-WHERE stg.business_unit_code = @business_unit_code
 
-DECLARE @business_unit_id int
-SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
 -- special delete if something is left, a shift over midninght for example
-DELETE fs
+INSERT INTO #stg_schedule
+SELECT
+	ds.scenario_id,
+	stg.interval_id,
+	dsd.date_id,
+	dp.person_id
 FROM Stage.stg_schedule stg
 INNER JOIN
 	mart.dim_person		dp
@@ -80,13 +90,14 @@ INNER JOIN mart.dim_date AS dsd
 ON stg.schedule_date = dsd.date_date
 INNER JOIN mart.dim_scenario ds
 	ON stg.scenario_code = ds.scenario_code
-INNER JOIN mart.fact_schedule fs
-	ON dp.person_id = fs.person_id
-	AND fs.schedule_date_id = dsd.date_id
-	AND fs.interval_id = stg.interval_id
-	AND ds.scenario_id = fs.scenario_id
-	WHERE fs.business_unit_id = @business_unit_id
 
+DELETE fs
+FROM #stg_schedule tmp
+INNER JOIN mart.fact_schedule fs 
+	ON tmp.person_id	= fs.person_id
+	AND tmp.date_id		= fs.schedule_date_id
+	AND tmp.interval_id = fs.interval_id
+	AND tmp.scenario_id = fs.scenario_id
 
 --insert new and updated
 INSERT INTO mart.fact_schedule

@@ -81,7 +81,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 						personAssignment.AddMainLayer(ActivityCollection[2], phone4);
 						personAssignment.SetShiftCategory(_shiftCategoryCollection[0]);
 
-            RaptorTransformerHelper.SetCreatedOn(personAssignment, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(personAssignment, DateTime.Now);
 
             return new List<IPersonAssignment> {personAssignment};
         }
@@ -97,7 +97,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             IAbsenceLayer absenceLayer = new AbsenceLayer(absence, absencePeriod);
             IPersonAbsence personAbsence = new PersonAbsence(_personCollection[0], _scenarioCollection[0], absenceLayer);
 
-            RaptorTransformerHelper.SetCreatedOn(personAbsence, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(personAbsence, DateTime.Now);
             personAbsenceList.Add(personAbsence);
 
             return personAbsenceList;

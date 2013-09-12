@@ -60,6 +60,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Log.Debug("Preparing for scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 
+			Navigation.GotoBlank();
+			Browser.SelectBrowserByTag();
 			Browser.NotifyBeforeScenario();
 			
 			TestControllerMethods.BeforeScenario();
@@ -74,7 +76,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[AfterScenario]
-		public void AfterScenario()
+		public static void AfterScenario()
 		{
 			Log.Debug("Cleaning up after scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 
@@ -119,7 +121,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 
 
-		private void HandleScenarioException()
+		private static void HandleScenarioException()
 		{
 			if (!Browser.IsStarted()) return;
 			if (ScenarioContext.Current.TestError != null)

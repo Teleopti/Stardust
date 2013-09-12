@@ -12,18 +12,10 @@
 				unsaved-value="null">
       <generator class="guid.comb" />
     </id>
-    <many-to-one name="CreatedBy"
-					 class="Teleopti.Ccc.Domain.Common.Person"
-					 not-null="true"
-					 update="false" foreign-key="FK_ExtendedPreferenceTemplate_Person_CreatedBy" />
     <many-to-one name="UpdatedBy"
 					 class="Teleopti.Ccc.Domain.Common.Person"
 					 not-null="true"
 					 foreign-key="FK_ExtendedPreferenceTemplate_Person_UpdatedBy" />
-    <property name="CreatedOn"
-				  type="UtcDateTime"
-				  not-null="true"
-				  update="false" />
     <property name="UpdatedOn"
 				  type="UtcDateTime"
 				  not-null="true"/>

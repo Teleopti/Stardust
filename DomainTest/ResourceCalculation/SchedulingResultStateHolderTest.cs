@@ -93,5 +93,19 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IList<ISkill> result = target.VisibleSkills;
 			Assert.AreEqual(3, result.Count);
 		}
+
+		[Test]
+		public void ShouldGetSkillsWithoutMaxSeatSkill()
+		{
+			ISkill normal = SkillFactory.CreateSkillWithWorkloadAndSources();
+			ISkill maxSeat = SkillFactory.CreateSiteSkill("maxseat");
+			ISkill nonBlend = SkillFactory.CreateNonBlendSkill("nonBlend");
+			SchedulingResultStateHolder target = SchedulingResultStateHolderFactory.Create(_period);
+			target.Skills.Add(normal);
+			target.Skills.Add(maxSeat);
+			target.Skills.Add(nonBlend);
+			IList<ISkill> result = target.NonVirtualSkills;
+			Assert.AreEqual(1, result.Count);
+		}
     }
 }

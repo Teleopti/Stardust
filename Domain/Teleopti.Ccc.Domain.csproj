@@ -412,6 +412,9 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapper.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\StandardDeviationData.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimeLengthDecider.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimePreferences.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimePreferencesGeneralPersonalSetting.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockGenerator.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockIntradayDecisionMaker.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockIntradayOptimizationService.cs" />
@@ -529,7 +532,11 @@
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
+    <Compile Include="Scheduling\TeamBlock\IntervalDataEntendedMedianCalculator.cs" />
     <Compile Include="ResourceCalculation\TransformResourcesFromStorageCommand.cs" />
+    <Compile Include="Scheduling\Overtime\SkillIntervalData.cs" />
+    <Compile Include="Scheduling\Overtime\SkillIntervalDataDivider.cs" />
+    <Compile Include="Scheduling\Overtime\SkillStaffPeriodToSkillIntervalDataMapper.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayer.cs" />
     <Compile Include="Scheduling\Assignment\EditableShift.cs" />
@@ -935,7 +942,7 @@
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataDivider.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataSkillFactorApplyer.cs" />
-    <Compile Include="Scheduling\TeamBlock\SkillResolutionProvider.cs" />
+    <Compile Include="Scheduling\SkillResolutionProvider.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillStaffPeriodToSkillIntervalDataMapper.cs" />
     <Compile Include="Scheduling\TeamBlock\SuggestedShiftRestrictionExtractor.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockClearer.cs" />
@@ -1102,6 +1109,7 @@
     <Compile Include="Security\RegExpSpecification.cs" />
     <Compile Include="Security\UserDetail.cs" />
     <Compile Include="Specification\All.cs" />
+    <Compile Include="Specification\PersonRequestSpecification.cs" />
     <Compile Include="SystemSetting\GlobalSettingData.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSetting.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSettingCalculationMethod.cs" />
@@ -1351,7 +1359,6 @@
     <Compile Include="Scheduling\Activity.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignment.cs" />
     <Compile Include="Scheduling\Assignment\ActivityLayer.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\AuthorizationEntities\SiteAuthorizationEntityConverter.cs" />
     <Compile Include="Security\AuthorizationEntities\WindowsAuthenticationInfo.cs" />

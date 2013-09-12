@@ -47,7 +47,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             sc.Description = new Description(name, shortName);
             sc.DisplayColor = displayColor;
             ((IEntity) sc).SetId(Guid.NewGuid());
-            RaptorTransformerHelper.SetCreatedOn(sc, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(sc, DateTime.Now);
 
             return sc;
         }

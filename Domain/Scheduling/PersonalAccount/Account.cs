@@ -78,6 +78,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
             CalculateUsed(repository, loadedSchedule, scenario, new PersonAccountProjectionService(this, loadedSchedule));
         }
 
+		public virtual void CalculateUsed(IScheduleRepository repository, ISchedule loadedSchedule, IScenario scenario, IPersonAccountProjectionService projectionServiceForPersonAccount)
+		{
+			IList<IScheduleDay> scheduleDays = projectionServiceForPersonAccount.CreateProjection(repository, scenario);
+			_usedInScheduler = TimeSpan.Zero;
+			_usedOutsideScheduler = null;
+			TimeSpan result = Owner.Absence.Tracker.TrackForReset(Owner.Absence, scheduleDays);
+			LatestCalculatedBalance = result;
+		}
+
         public virtual DateOnlyPeriod Period()
         {
             return new DateOnlyPeriod(StartDate, endDate());
@@ -95,15 +104,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
             }
 
         }
-
-		public virtual void CalculateUsed(IScheduleRepository repository, ISchedule loadedSchedule, IScenario scenario, IPersonAccountProjectionService projectionServiceForPersonAccount)
-		{
-			IList<IScheduleDay> scheduleDays = projectionServiceForPersonAccount.CreateProjection(repository, scenario);
-			_usedInScheduler = TimeSpan.Zero;
-			_usedOutsideScheduler = null;
-			TimeSpan result = Owner.Absence.Tracker.TrackForReset(Owner.Absence, scheduleDays);
-			LatestCalculatedBalance = result;
-		}
 
         public virtual IAccount FindEarliestPersonAccount()
         {
@@ -153,12 +153,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
                     }
                 }
             }
-	        if (Owner != null && Owner.Person.TerminalDate.HasValue)
-	        {
-		        var terminateDate = Owner.Person.TerminalDate.Value;
-		        if (terminateDate < endDate)
-			        endDate = terminateDate;
-	        }
+			if (Owner != null && Owner.Person.TerminalDate.HasValue)
+			{
+				var terminateDate = Owner.Person.TerminalDate.Value;
+				if (terminateDate < endDate)
+					endDate = StartDate;
+			}
 
             return new DateOnly(endDate);
         }

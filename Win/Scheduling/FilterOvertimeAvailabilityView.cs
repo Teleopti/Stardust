@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    public FilterOvertimeAvailabilityView(DateOnly defaultDate, ISchedulerStateHolder schedulerStateHolder)
         {
 	        InitializeComponent();
+            outlookTimePickerFrom.EnableNull = false;
+            outlookTimePickerTo.EnableNull = false;
 			tableLayoutPanel2.BackColor = Color.FromArgb(191, 219, 254);
 			datePicker.Value = defaultDate;
 			datePicker.SetCultureInfoSafe(CultureInfo.CurrentCulture);

@@ -103,5 +103,8 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
                 _isReplied = true;
             }
         }
+
+				public virtual IPerson CreatedBy { get; protected set; }
+				public virtual DateTime? CreatedOn { get; protected set; }
     }
 }

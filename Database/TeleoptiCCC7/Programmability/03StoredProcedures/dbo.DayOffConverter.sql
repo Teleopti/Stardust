@@ -9,6 +9,7 @@ GO
 -- When			Who	Change
 -- ---------------------------------------------
 -- 2013-09-04	DJ	skip periods for templates, just get last
+-- 2013-09-05	DJ	remove RAISERROR, added warning instead
 -- =============================================
 CREATE PROCEDURE [dbo].[DayOffConverter]
 AS
@@ -21,7 +22,7 @@ BEGIN
 /*
 DELETE FROM personAssignment WHERE ShiftCategory IS null
 UPDATE personAssignment SET DayOffTemplate = null WHERE DayOffTemplate IS not null
-DELETE FROM dbo.dayOffTemplate WHERE CreatedBy='3F0886AB-7B25-4E95-856A-0D726EDC2A67'
+DELETE FROM dbo.dayOffTemplate WHERE UpdatedBy='3F0886AB-7B25-4E95-856A-0D726EDC2A67'
 DELETE FROM dbo.DatabaseVersion WHERE BuildNumber=-18589
 
 BEGIN TRAN
@@ -69,7 +70,6 @@ ROLLBACK TRAN
 	END
 	
 	SELECT top 1 @SystemVersion=SystemVersion+'.1' FROM dbo.DatabaseVersion ORDER BY BuildNumber
-	SELECT top 1 SystemVersion,* FROM dbo.DatabaseVersion ORDER BY BuildNumber DESC
 
 	--get the number of dayOff to convert
 	select @Assert = count(person) from (
@@ -124,12 +124,9 @@ ROLLBACK TRAN
 		having count(Bu.id) > 1
 	IF @PersonsMultipleBu>0
 	BEGIN
-		PRINT char(13)
-		PRINT '----'
-		PRINT char(9) + 'Warning - Some agents have belonged to more than one business unit!!'
+		PRINT char(9) + 'WARNING: Some agents have belonged to more than one business unit!!'
 		PRINT char(9) + '@PersonsMultipleBu=' +cast(@PersonsMultipleBu as nvarchar(10))
 		PRINT char(9) + 'DayOff conversion might put the wrong scenario_id in personAssignment'
-		PRINT '----'
 	END
 
 	--DayOff connected to a person without Person Period = No Business Unit
@@ -142,11 +139,8 @@ ROLLBACK TRAN
 		where p.person is null
 	)
 	BEGIN
-		PRINT char(13)
-		PRINT '----'
-		PRINT char(9) + 'Warning - Some PersonDayOff belong to a person without team/site/businessUnit'
+		PRINT char(9) + 'WARNING: Some PersonDayOff belong to a person without team/site/businessUnit'
 		PRINT char(9) + '@PersonsWithoutBu: ' +cast(@PersonsWithoutBu as nvarchar(10))
-		PRINT '----'
 	END
 
 	--Recreate DayOffTemplate that is no longer to find by Name
@@ -154,9 +148,7 @@ ROLLBACK TRAN
 	SELECT
 	newid()
 	,[Version] = 1
-	,[CreatedBy] = @superUser
 	,[UpdatedBy] = @superUser
-	,[CreatedOn] = getutcdate()
 	,[UpdatedOn] = getutcdate()
 	,[Name]		 = pdo.Name
 	,[ShortName] = pdo.ShortName
@@ -188,7 +180,7 @@ ROLLBACK TRAN
 	(
 	select
 		dot.Id,
-		dot.CreatedOn,
+		dot.UpdatedOn,
 		dot.Name,
 		dot.BusinessUnit,
 		ROW_NUMBER() OVER
@@ -196,7 +188,7 @@ ROLLBACK TRAN
 			PARTITION BY
 				dot.Name,
 				dot.BusinessUnit
-			ORDER BY dot.CreatedOn DESC
+			ORDER BY dot.UpdatedOn DESC
 			) AS OrderIndex
 	from dbo.DayOffTemplate dot
 	)
@@ -232,13 +224,10 @@ ROLLBACK TRAN
 		SELECT DISTINCT
 		newid(),
 		[Version]		= 1,
-		[CreatedBy]		= cast(max(cast(pdo.CreatedBy AS BINARY(16)))as uniqueidentifier),
 		[UpdatedBy]		= cast(max(cast(pdo.UpdatedBy AS BINARY(16)))as uniqueidentifier),
-		[CreatedOn]		= max(pdo.CreatedOn),
 		[UpdatedOn]		= max(pdo.UpdatedOn),
 		[Person]		= pdo.Person,
 		[Scenario]		= pdo.scenario,
-		[BusinessUnit]	= cast(max(cast(pdo.BusinessUnit AS BINARY(16)))as uniqueidentifier),
 		[Date]			= convert(datetime,floor(convert(decimal(18,8),pdo.anchor))),
 		[ShiftCategory]	= NULL,
 		[DayOffTemplate]= cast(max(cast(dot.Id AS BINARY(16)))as uniqueidentifier)
@@ -273,23 +262,21 @@ ROLLBACK TRAN
 		end
 	end
 
+	IF @Assert<>@Converted
+	BEGIN
+		SELECT @ErrorMsg='WARNING: The number of DayOff converted did not match the original number of DayOffs. Expected: ' + cast(@Assert as nvarchar(10)) +' but was: ' + cast(@Converted as nvarchar(10))
+		PRINT char(9) + @ErrorMsg
+		WAITFOR DELAY '00:00:05'
+		--RAISERROR (@ErrorMsg,16,1)
+	END
+
 	PRINT '----'
 	PRINT 'Total number of DayOff converted:' + cast(@Converted as nvarchar(10))
 	PRINT '----'
 
-	IF @Assert<>@Converted
-	BEGIN
-		SELECT @ErrorMsg='The number of DayOff converted did not match the original number of DayOffs. Expected: ' + cast(@Assert as nvarchar(10)) +' but was: ' + cast(@Converted as nvarchar(10))
-		PRINT @ErrorMsg
-		RAISERROR (@ErrorMsg,16,1)
-	END
-
-	SELECT @Assert as 'Assert',@Converted as 'Test'
-
-	PRINT 'Adding DayOff conversion build number to database' 
 	INSERT INTO DatabaseVersion(BuildNumber, SystemVersion) VALUES (@BuildNumber,@SystemVersion) 
 
-	RETURN 0
+	RETURN (@Converted-@Assert)
 
 END
 GO

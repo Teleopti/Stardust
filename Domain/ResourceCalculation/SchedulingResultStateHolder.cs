@@ -97,7 +97,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
         }
 
-        public IList<ISkillDay> SkillDaysOnDateOnly(IList<DateOnly> theDateList)
+		public IList<ISkill> NonVirtualSkills
+		{
+			get
+			{
+				IList<ISkill> ret = new List<ISkill>();
+				foreach (var visibleSkill in VisibleSkills)
+				{
+					if (visibleSkill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill &&
+					    visibleSkill.SkillType.ForecastSource != ForecastSource.NonBlendSkill)
+						ret.Add(visibleSkill);
+				}
+
+				return ret;
+			}
+		}
+
+		public IList<ISkillDay> SkillDaysOnDateOnly(IList<DateOnly> theDateList)
         {
             IList<ISkillDay> ret = new List<ISkillDay>();
             foreach (KeyValuePair<ISkill, IList<ISkillDay>> pair in SkillDays)

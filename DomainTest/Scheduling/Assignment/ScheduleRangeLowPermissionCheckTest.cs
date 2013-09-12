@@ -219,7 +219,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             public void AddSchedulePart(IScheduleDay schedulePart)
             {
-                schedulePart.PersonAssignmentCollectionDoNotUse().ForEach(PersonAssignments.Add);
+	            var ass = schedulePart.PersonAssignment();
+							if (ass != null)
+							{
+								PersonAssignments.Add(ass);
+							}
                 schedulePart.PersonAbsenceCollection().ForEach(PersonAbsences.Add);
             }
         }

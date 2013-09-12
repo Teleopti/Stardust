@@ -20,7 +20,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var timeIndicatorDateTime;
 	var scheduleHeight = 668;
 	var timeLineOffset = 109;
-	var pixelToDisplayAll = 33;
+	var pixelToDisplayAll = 38;
 	var pixelToDisplayTitle = 16;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
@@ -523,9 +523,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		        model.AddRequestCallback = _displayRequest;
 		        return model;
 		    };
-		    
-		    vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests);
-			ko.applyBindings(vm, $('#page')[0]);
+
+			vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests);
+			
+		    ko.applyBindings(vm, $('#page')[0]);
 		},
 		LoadAndBindData: function () {
 			ajax.Ajax({
