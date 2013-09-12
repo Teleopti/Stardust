@@ -975,7 +975,6 @@
     <Compile Include="ResourceCalculation\ScheduleResourceOptimizerTest.cs" />
     <Compile Include="ResourceCalculation\SkillCollectionKeyTest.cs" />
     <Compile Include="Scheduling\Assignment\VisualLayerProjectionServiceTest.cs" />
-    <Compile Include="Scheduling\AgentDateTest.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleParametersTest.cs" />
     <Compile Include="Scheduling\Assignment\SchedulePeriodTest.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleRangeTest.cs" />

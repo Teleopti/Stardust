@@ -1275,7 +1275,6 @@
     <Compile Include="Scheduling\Assignment\VisualLayerProjectionService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Scheduling\AgentDate.cs" />
     <Compile Include="Scheduling\Rules\OverlappingAssignmentRule.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleRange.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleParameter.cs" />
