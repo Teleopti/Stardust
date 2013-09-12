@@ -32,16 +32,26 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
             if (_messageBroker==null || !_messageBroker.IsInitialized) return;
             
 			var eventMessages = new List<IEventMessage>();
-            foreach (IRootChangeInfo change in rootModifications)
+            foreach (var change in rootModifications)
             {
                 if (!MessageFilterManager.Instance.HasType(change.Root.GetType())) continue;
+
+                var rootBrokerConditions = change.Root as IAggregateRootBrokerConditions;
+                if (rootBrokerConditions != null)
+                {
+                    if (rootBrokerConditions.SendChangeOverMessageBroker())
+                        eventMessages.Add(CreateEventMessage(change, moduleId));
+                    continue;
+                }
+
+
                 eventMessages.Add(CreateEventMessage(change, moduleId));
 
-            	var provideCustomChangeInfo = change.Root as IProvideCustomChangeInfo;
-				if (provideCustomChangeInfo == null) continue;
+                var provideCustomChangeInfo = change.Root as IProvideCustomChangeInfo;
+                if (provideCustomChangeInfo == null) continue;
 
-            	var changes = provideCustomChangeInfo.CustomChanges(change.Status);
-            	eventMessages.AddRange(changes.Select(rootChangeInfo => CreateEventMessage(rootChangeInfo, moduleId)));
+                var changes = provideCustomChangeInfo.CustomChanges(change.Status);
+                eventMessages.AddRange(changes.Select(rootChangeInfo => CreateEventMessage(rootChangeInfo, moduleId)));
             }
             if (eventMessages.Count > 0)
             {

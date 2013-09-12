@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
                         if (ShouldShiftTradeBeAutoGranted.IsSatisfiedBy(_shiftTradeRequest))
                         {
                             Logger.DebugFormat("Approving ShiftTrade: {0}", _personRequest.GetSubject(new NormalizeText()));
-                            var brokenBusinessRules = _personRequest.Approve(approvalService, _authorization);
+                            var brokenBusinessRules = _personRequest.Approve(approvalService, _authorization, true);
                             HandleBrokenBusinessRules(brokenBusinessRules);
 							var result = _scheduleDictionarySaver.MarkForPersist(unitOfWork, _scheduleRepository, _schedulingResultStateHolder.Schedules.DifferenceSinceSnapshot());
 							//vet inte om denna behövs - går inte att följa denna method

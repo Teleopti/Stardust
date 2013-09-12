@@ -616,7 +616,6 @@
     <Compile Include="Scheduler\NotesEditorViewModelTest.cs" />
     <Compile Include="Scheduler\Panels\LengthToDateCalculatorTest.cs" />
     <Compile Include="Scheduler\PersistConflictTest.cs" />
-    <Compile Include="Scheduler\NotSkillGroupSpecificationTest.cs" />
     <Compile Include="Scheduler\PinnedSkillHelperTests.cs" />
     <Compile Include="Scheduler\Reporting\CCCPdfStringFormatTest.cs" />
     <Compile Include="Scheduler\Reporting\PdfFontManagerTest.cs" />
@@ -843,7 +842,6 @@
     <Compile Include="Settings\ScheduleRestrictionBaseViewTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
     <Compile Include="Scheduler\ViewBaseHelperTest.cs" />
-    <Compile Include="Scheduler\DetailViewHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShiftCreator\AbsolutePositionViewTest.cs" />
     <Compile Include="ShiftCreator\AutoPositionViewTest.cs" />

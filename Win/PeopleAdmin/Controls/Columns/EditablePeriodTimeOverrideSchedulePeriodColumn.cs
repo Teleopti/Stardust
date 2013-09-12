@@ -47,23 +47,17 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 
 		public override void SaveCellInfo(GridSaveCellInfoEventArgs e, ReadOnlyCollection<T> dataItems)
 		{
-			if (e.ColIndex > 0 && e.RowIndex > 0)
-			{
-				T dataItem = dataItems[e.RowIndex - 1];
+			if (e.ColIndex <= 0 || e.RowIndex <= 0) return;
+			
+			var dataItem = dataItems[e.RowIndex - 1];
+			
+			if (e.Style.CellValue == null || (TimeSpan)e.Style.CellValue == TimeSpan.Zero)
+				PeopleAdminHelper.ResetPeriodTime(dataItem);
+			else
+				_propertyReflector.SetValue(dataItem, BindingProperty, e.Style.CellValue);
 
-			    var value = (TimeSpan) e.Style.CellValue;
-				if (value == TimeSpan.Zero)
-				{
-					PeopleAdminHelper.ResetPeriodTime(dataItem);
-				}
-				else
-				{
-					_propertyReflector.SetValue(dataItem, BindingProperty, value);
-				}
-
-				OnCellChanged(dataItem, e);
-				e.Handled = true;
-			}
+			OnCellChanged(dataItem, e);
+			e.Handled = true;
 		}
 	}
 }

@@ -13,85 +13,51 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
-    /// <summary>
-    /// Contains information about a request from an employee
-    /// </summary>
-    /// <remarks>
-    /// Created by: robink
-    /// Created date: 2008-06-05
-    /// </remarks>
-    public class PersonRequest : AggregateRootWithBusinessUnit, 
-                                IPersonRequest, IDeleteTag,IPushMessageWhenRootAltered
+    public class PersonRequest : AggregateRootWithBusinessUnit,
+                                 IPersonRequest, IDeleteTag, IPushMessageWhenRootAltered
     {
         private const int messageLength = 2000;
         private readonly IPerson _person;
         private string _message;
         private int requestStatus = 3;
-        private PersonRequestState _requestState;
-        private PersonRequestState _persistedState;
+        private personRequestState _requestState;
+        private personRequestState _persistedState;
         private bool _deserialized;
         private string _subject;
         private bool _changed;
         private IList<IRequest> requests = new List<IRequest>(1);
         private bool _isDeleted;
         private string _denyReason = string.Empty;
-		private DateTime _updatedOnServerUtc;
+        private DateTime _updatedOnServerUtc;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PersonRequest"/> class.
-        /// Empty constructor for NHibernate to use.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-05
-        /// </remarks>
         protected PersonRequest()
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PersonRequest"/> class.
-        /// </summary>
-        /// <param name="person">The person.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-05
-        /// </remarks>
         public PersonRequest(IPerson person)
             : this(person, null)
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PersonRequest"/> class.
-        /// </summary>
-        /// <param name="person">The person.</param>
-        /// <param name="request">The request.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-05
-        /// </remarks>
-        public PersonRequest(IPerson person, IRequest request) : this()
+        public PersonRequest(IPerson person, IRequest request)
+            : this()
         {
             InParameter.NotNull("person", person);
             _person = person;
-            SetRequest(request);
+            setRequest(request);
         }
 
-        private void SetRequest(IRequest request)
+        private void setRequest(IRequest request)
         {
             //We have to do it this way as cascading actions for one-to-one maappings aren't implemented in NHibernate
             requests.Clear();
-            if (request!=null)
+            if (request != null)
             {
                 request.SetParent(this);
                 requests.Add(request);
             }
         }
 
-        /// <summary>
-        /// Tells this PersonRequest that it has been persisted.
-        /// </summary>
         public virtual void Persisted()
         {
             _deserialized = true;
@@ -99,32 +65,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             _changed = false;
         }
 
-        /// <summary>
-        /// Gets the date.
-        /// </summary>
-        /// <value>The date.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-05
-        /// </remarks>
         public virtual DateTime RequestedDate
         {
             get
             {
-                IRequest request = GetRequest();
-                if (request!=null) return request.Period.StartDateTime;
+                IRequest request = getRequest();
+                if (request != null) return request.Period.StartDateTime;
                 return CreatedOn.GetValueOrDefault(DateTime.Today);
             }
         }
 
-        /// <summary>
-        /// Gets the person.
-        /// </summary>
-        /// <value>The person.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-05
-        /// </remarks>
         public virtual IPerson Person
         {
             get { return _person; }
@@ -132,42 +82,31 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public virtual bool TrySetMessage(string message)
         {
-            CheckIfEditable();
-	        message = message ?? string.Empty;
+            checkIfEditable();
+            message = message ?? string.Empty;
             if (message.Length > messageLength)
                 return false;
 
             var request = Request;
-            if (request != null && message!=_message)
+            if (request != null && message != _message)
             {
-                request.TextForNotification = message.Length>255 ? message.Substring(0,255) : message; //Need to set this to make the message to be sent
+                request.TextForNotification = message.Length > 255 ? message.Substring(0, 255) : message;
+                //Need to set this to make the message to be sent
             }
 
             _message = message;
-            NotifyPropertyChanged("Message");
+            notifyPropertyChanged("Message");
             return true;
         }
 
-    	/// <summary>
-    	/// Gets the formatted message
-    	/// </summary>
-    	/// <value>The message.</value>
-    	public virtual string GetMessage(ITextFormatter formatter)
-    	{
-    		if(formatter == null)
-				throw new ArgumentNullException("formatter");
+        public virtual string GetMessage(ITextFormatter formatter)
+        {
+            if (formatter == null)
+                throw new ArgumentNullException("formatter");
 
-			return formatter.Format(_message);
-    	}
+            return formatter.Format(_message);
+        }
 
-    	/// <summary>
-        /// Gets or sets the message.
-        /// </summary>
-        /// <value>The message.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-05
-        /// </remarks>
         private string Message
         {
             get { return _message; }
@@ -175,92 +114,68 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public virtual IRequest Request
         {
-            get { return GetRequest(); }
+            get { return getRequest(); }
+            set { setRequest(value); }
+        }
+
+        public virtual string Subject
+        {
+            protected get { return _subject; }
+
             set
             {
-                SetRequest(value);
+                _subject = value;
+                notifyPropertyChanged("Subject");
             }
         }
 
-        /// <summary>
-        /// Gets or sets the subject of the message.
-        /// </summary>
-        /// <value>The subject.</value>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-10-06
-        /// </remarks>
-		public virtual string Subject
-		{
-			protected get
-			{
-				return _subject;
-			}
 
-			set
-			{
-				_subject = value;
-				NotifyPropertyChanged("Subject");
-			}
-		}
+        public virtual string GetSubject(ITextFormatter formatter)
+        {
+            if (formatter == null)
+                throw new ArgumentNullException("formatter");
 
+            return formatter.Format(_subject);
+        }
 
-		public virtual string GetSubject(ITextFormatter formatter)
-		{
-			if (formatter == null)
-				throw new ArgumentNullException("formatter");
-			
-			return formatter.Format(_subject);
-		}
-
-        public virtual IList<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService, IPersonRequestCheckAuthorization authorization)
+	    public virtual IList<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService,
+	                                                        IPersonRequestCheckAuthorization authorization,
+	                                                        bool isAutoGrant = false)
         {
             authorization.VerifyEditRequestPermission(this);
-            List<IBusinessRuleResponse> brokenRules = new List<IBusinessRuleResponse>();
-            brokenRules.AddRange(((Request)GetRequest()).Approve(approvalService));
+            var brokenRules = new List<IBusinessRuleResponse>();
+            brokenRules.AddRange(((Request) getRequest()).Approve(approvalService));
             if (brokenRules.Count == 0)
             {
-                RequestState.Approve();
-                NotifyOnStatusChange();
+                RequestState.Approve(isAutoGrant);
+                notifyOnStatusChange();
             }
             return brokenRules;
         }
 
-        private void NotifyOnStatusChange()
+        private void notifyOnStatusChange()
         {
-            NotifyPropertyChanged("StatusText");
-            NotifyPropertyChanged("IsNew");
-            NotifyPropertyChanged("IsPending");
-            NotifyPropertyChanged("IsDenied");
-            NotifyPropertyChanged("IsApproved");
+            notifyPropertyChanged("StatusText");
+            notifyPropertyChanged("IsNew");
+            notifyPropertyChanged("IsPending");
+            notifyPropertyChanged("IsDenied");
+            notifyPropertyChanged("IsApproved");
         }
 
-        /// <summary>
-        /// Denies this instance.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-06-09
-        /// </remarks>
-        public virtual void Deny(IPerson denyPerson,string denyReasonTextResourceKey, IPersonRequestCheckAuthorization authorization)
+	    public virtual void Deny(IPerson denyPerson, string denyReasonTextResourceKey,
+                                 IPersonRequestCheckAuthorization authorization)
         {
             authorization.VerifyEditRequestPermission(this);
-            IRequest request = GetRequest();
-            if (request!=null) request.Deny(denyPerson);
-			RequestState.Deny();
+            IRequest request = getRequest();
+            if (request != null) request.Deny(denyPerson);
+            RequestState.Deny();
             _denyReason = denyReasonTextResourceKey ?? string.Empty;
-            NotifyOnStatusChange();
+            notifyOnStatusChange();
         }
 
-    	/// <summary>
-        /// Gets a value indicating whether this instance is editable.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance is editable; otherwise, <c>false</c>.
-        /// </value>
         public virtual bool IsEditable
         {
-            get 
+            get
             {
                 if (PersistedRequestState.IsPending)
                 {
@@ -277,7 +192,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         public virtual bool Changed
         {
             get { return _changed; }
-            set{ _changed = value;}
+            set { _changed = value; }
         }
 
         public virtual bool IsDeleted
@@ -285,48 +200,44 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             get { return _isDeleted; }
         }
 
-		public virtual DateTime UpdatedOnServerUtc { get { return _updatedOnServerUtc; } }
-
-
-        private void CheckIfEditable()
+        public virtual DateTime UpdatedOnServerUtc
         {
-            if (!IsEditable) throw new InvalidOperationException("Requests cannot be changed once they have been handled.");
+            get { return _updatedOnServerUtc; }
+        }
+
+
+        private void checkIfEditable()
+        {
+            if (!IsEditable)
+                throw new InvalidOperationException("Requests cannot be changed once they have been handled.");
         }
 
         #region ICloneableEntity<PersonRequest> Members
 
-        /// <summary>
-        /// NoneEntityClone
-        /// </summary>
-        /// <returns></returns>
         public virtual IPersonRequest NoneEntityClone()
         {
-            PersonRequest clone = (PersonRequest)MemberwiseClone();
-            IRequest request = GetRequest();
+            var clone = (PersonRequest) MemberwiseClone();
+            var request = getRequest();
             if (request != null)
             {
                 IRequest requestClone = request.NoneEntityClone();
                 clone.requests = new List<IRequest>(1);
-                clone.SetRequest(requestClone);
+                clone.setRequest(requestClone);
             }
             clone.SetId(null);
 
             return clone;
         }
 
-        /// <summary>
-        /// EntityClone
-        /// </summary>
-        /// <returns></returns>
         public virtual IPersonRequest EntityClone()
         {
-            PersonRequest clone = (PersonRequest)MemberwiseClone();
-            IRequest request = GetRequest();
+            var clone = (PersonRequest) MemberwiseClone();
+            var request = getRequest();
             if (request != null)
             {
                 IRequest requestClone = request.EntityClone();
                 clone.requests = new List<IRequest>(1);
-                clone.SetRequest(requestClone);
+                clone.setRequest(requestClone);
             }
             clone.SetId(Id);
 
@@ -337,10 +248,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         #region ICloneable Members
 
-        /// <summary>
-        /// Clone
-        /// </summary>
-        /// <returns></returns>
         public virtual object Clone()
         {
             return NoneEntityClone();
@@ -348,17 +255,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         #endregion
 
-        /// <summary>
-        /// Answers the specified message.
-        /// </summary>
-        /// <param name="answerMessage">The answer message.</param>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-10-06
-        /// </remarks>
         public virtual bool Reply(string answerMessage)
         {
-            if(string.IsNullOrEmpty(answerMessage))
+            if (string.IsNullOrEmpty(answerMessage))
                 return true;
             var builder = new StringBuilder();
             builder.AppendLine(Message);
@@ -372,16 +271,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             var builder = new StringBuilder();
             builder.AppendLine(Message);
             builder.Append(answerMessage);
-            CheckIfEditable();
+            checkIfEditable();
             return builder.Length <= messageLength;
         }
-        /// <summary>
-        /// Sets the status to pending IF it was pending originally. Or if the current state is new.
-        /// </summary>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-10-08
-        /// </remarks>
+
         public virtual void Pending()
         {
             if (PersistedRequestState.IsPending)
@@ -392,13 +285,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             {
                 RequestState.MakePending();
             }
-            NotifyOnStatusChange();
+            notifyOnStatusChange();
         }
 
         public virtual void ForcePending()
         {
-            MoveToPending();
-            NotifyOnStatusChange();
+            moveToPending();
+            notifyOnStatusChange();
         }
 
         #region INotifyPropertyChanged Members
@@ -407,9 +300,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         #endregion
 
-        private void NotifyPropertyChanged(string info)
+        private void notifyPropertyChanged(string info)
         {
-        	var handler = PropertyChanged;
+            var handler = PropertyChanged;
             if (handler != null)
             {
                 handler(this, new PropertyChangedEventArgs(info));
@@ -417,31 +310,33 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             _changed = true;
         }
 
-        private IRequest GetRequest()
+        private IRequest getRequest()
         {
             //We have to do it this way as cascading actions for one-to-one maappings aren't implemented in NHibernate
-            if (requests.Count==0)
-            return null;
+            if (requests.Count == 0)
+                return null;
 
             return requests[0];
         }
 
         public virtual void Restore(IPersonRequest previousState)
         {
-        	_message = previousState.GetMessage(new NoFormatting());
+            _message = previousState.GetMessage(new NoFormatting());
             var previousStateTyped = (PersonRequest) previousState;
             RequestState = previousStateTyped.RequestState;
             Subject = previousState.GetSubject(new NoFormatting());
             _denyReason = previousState.DenyReason;
             _isDeleted = previousStateTyped.IsDeleted;
-            SetRequest(previousState.Request);
+            setRequest(previousState.Request);
         }
 
         public virtual IMemento CreateMemento()
         {
-            return new Memento<IPersonRequest>(this, 
-                                                EntityClone(), 
-                                                string.Format(CultureInfo.CurrentUICulture, Resources.UndoRedoModifyPersonRequest, Person.Name));
+            return new Memento<IPersonRequest>(this,
+                                               EntityClone(),
+                                               string.Format(CultureInfo.CurrentUICulture,
+                                                             Resources.UndoRedoModifyPersonRequest,
+                                                             Person.Name));
         }
 
         public virtual void SetDeleted()
@@ -451,7 +346,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public virtual bool ShouldSendPushMessageWhenAltered()
         {
-           return  Request.ShouldNotifyWithMessage;
+            return Request.ShouldNotifyWithMessage;
         }
 
         public virtual ISendPushMessageService PushMessageWhenAlteredInformation()
@@ -461,7 +356,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             string title = String.IsNullOrEmpty(Subject) ? message : Subject;
 
             return SendPushMessageService.CreateConversation(title, message, false).
-                To(Request.ReceiversForNotification).TranslateMessage().AddReplyOption("OK");
+                                          To(Request.ReceiversForNotification).TranslateMessage().AddReplyOption("OK");
         }
 
         public virtual string DenyReason
@@ -473,30 +368,33 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         public virtual void SetNew()
         {
             RequestState.SetNew();
-            NotifyOnStatusChange();
+            notifyOnStatusChange();
         }
 
-        private void MoveToPending()
+        private void moveToPending()
         {
-            RequestState = new PendingPersonRequest(this);
+            RequestState = new pendingPersonRequest(this);
         }
 
-        private void MoveToApproved()
+        private void moveToApproved(bool isAutoGrant)
         {
-            RequestState = new ApprovedPersonRequest(this);
+			if (isAutoGrant)
+				RequestState = new autoApprovedPersonRequest(this);
+			else
+				RequestState = new approvedPersonRequest(this);
         }
 
-	    private void MoveToDenied(bool autoDenied = false)
-	    {
-		    if (autoDenied)
-			    RequestState = new AutoDeniedPersonRequest(this);
-		    else
-			    RequestState = new DeniedPersonRequest(this);
-	    }
-
-	    private void MovetoNew()
+        private void moveToDenied(bool autoDenied = false)
         {
-            RequestState = new NewPersonRequest(this);
+            if (autoDenied)
+                RequestState = new autoDeniedPersonRequest(this);
+            else
+                RequestState = new deniedPersonRequest(this);
+        }
+
+        private void movetoNew()
+        {
+            RequestState = new newPersonRequest(this);
         }
 
         public virtual bool IsNew
@@ -514,36 +412,29 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             get { return RequestState.IsDenied; }
         }
 
-		public virtual bool IsAutoDenied
-		{
-			get { return RequestState.IsAutoDenied; }
-		}
+        public virtual bool IsAutoDenied
+        {
+            get { return RequestState.IsAutoDenied; }
+        }
 
         public virtual bool IsApproved
         {
             get { return RequestState.IsApproved; }
         }
 
-        private PersonRequestState PersistedRequestState
+	    public virtual bool IsAutoAproved
+	    {
+			get { return RequestState.IsAutoApproved; }
+	    }
+
+	    private personRequestState PersistedRequestState
         {
-            get
-            {
-                if (_persistedState == null)
-                    _persistedState = RequestState;
-                return _persistedState;
-            }
+            get { return _persistedState ?? (_persistedState = RequestState); }
         }
 
-        private PersonRequestState RequestState
+        private personRequestState RequestState
         {
-            get
-            {
-                if (_requestState == null)
-                {
-                    _requestState = PersonRequestState.CreateFromId(this, requestStatus);
-                }
-                return _requestState;
-            }
+            get { return _requestState ?? (_requestState = personRequestState.CreateFromId(this, requestStatus)); }
             set
             {
                 if (!_deserialized)
@@ -556,18 +447,21 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             }
         }
 
-        public virtual string StatusText { get { return RequestState.StatusText; } }
+        public virtual string StatusText
+        {
+            get { return RequestState.StatusText; }
+        }
 
         #region Classes handling status transitions
 
-        private abstract class PersonRequestState
+        private abstract class personRequestState
         {
-            protected readonly PersonRequest _personRequest;
+            protected readonly PersonRequest PersonRequest;
             private readonly int _requestStatusId;
 
-            protected PersonRequestState(PersonRequest personRequest, int requestStatusId)
+            protected personRequestState(PersonRequest personRequest, int requestStatusId)
             {
-                _personRequest = personRequest;
+                PersonRequest = personRequest;
                 _requestStatusId = requestStatusId;
             }
 
@@ -576,122 +470,188 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                 get { return _requestStatusId; }
             }
 
-            protected internal virtual bool IsDenied { get { return false; } }
-			protected internal virtual bool IsAutoDenied { get { return false; } }
-            protected internal virtual bool IsApproved { get { return false; } }
-            protected internal virtual bool IsPending { get { return false; } }
-            protected internal virtual bool IsNew { get { return false; } }
+            protected internal virtual bool IsDenied
+            {
+                get { return false; }
+            }
+
+            protected internal virtual bool IsAutoDenied
+            {
+                get { return false; }
+            }
+
+            protected internal virtual bool IsApproved
+            {
+                get { return false; }
+            }
+
+	        protected internal virtual bool IsAutoApproved
+	        {
+		        get { return false; }
+	        }
+
+            protected internal virtual bool IsPending
+            {
+                get { return false; }
+            }
+
+            protected internal virtual bool IsNew
+            {
+                get { return false; }
+            }
 
             protected internal virtual void Deny()
             {
                 throw new InvalidRequestStateTransitionException(string.Format(CultureInfo.InvariantCulture,
-                                                                  "This transition is not allowed (from {0} to denied).",
-                                                                  GetType().Name));
+                                                                               "This transition is not allowed (from {0} to denied).",
+                                                                               GetType().Name));
             }
-            protected internal virtual void Approve()
+
+            protected internal virtual void Approve(bool isAutoGrant)
             {
                 throw new InvalidRequestStateTransitionException(string.Format(CultureInfo.InvariantCulture,
-                                                                  "This transition is not allowed (from {0} to approved).",
-                                                                  GetType().Name));
+                                                                               "This transition is not allowed (from {0} to approved).",
+                                                                               GetType().Name));
             }
+
             protected internal virtual void MakePending()
             {
                 throw new InvalidRequestStateTransitionException(string.Format(CultureInfo.InvariantCulture,
-                                                                  "This transition is not allowed (from {0} to pending).",
-                                                                  GetType().Name));
+                                                                               "This transition is not allowed (from {0} to pending).",
+                                                                               GetType().Name));
             }
+
             protected internal virtual void SetNew()
             {
                 throw new InvalidRequestStateTransitionException(string.Format(CultureInfo.InvariantCulture,
-                                                                  "This transition is not allowed (from {0} to new).",
-                                                                  GetType().Name));
+                                                                               "This transition is not allowed (from {0} to new).",
+                                                                               GetType().Name));
             }
 
             protected internal abstract string StatusText { get; }
 
-            public static PersonRequestState CreateFromId(PersonRequest personRequest, int requestStatusId)
+            public static personRequestState CreateFromId(PersonRequest personRequest, int requestStatusId)
             {
                 //This should be refactored into a more dynamic way...
                 switch (requestStatusId)
                 {
                     case 0:
-                        return new PendingPersonRequest(personRequest);
+                        return new pendingPersonRequest(personRequest);
                     case 1:
-                        return new DeniedPersonRequest(personRequest);
+                        return new deniedPersonRequest(personRequest);
                     case 2:
-                        return new ApprovedPersonRequest(personRequest);
+                        return new approvedPersonRequest(personRequest);
                     case 3:
-                        return new NewPersonRequest(personRequest);
-					case 4:
-						return new AutoDeniedPersonRequest(personRequest);
+                        return new newPersonRequest(personRequest);
+                    case 4:
+                        return new autoDeniedPersonRequest(personRequest);
                 }
                 throw new ArgumentOutOfRangeException("requestStatusId", "The request status id is invalid");
             }
         }
 
-        private class ApprovedPersonRequest : PersonRequestState
+        private class approvedPersonRequest : personRequestState
         {
-            public ApprovedPersonRequest(PersonRequest personRequest)
+            public approvedPersonRequest(PersonRequest personRequest)
                 : base(personRequest, 2)
             {
             }
 
-            protected internal override bool IsApproved { get { return true; } }
+            protected internal override bool IsApproved
+            {
+                get { return true; }
+            }
+
             protected internal override string StatusText
             {
                 get { return Resources.Approved; }
             }
         }
 
-        private class DeniedPersonRequest : PersonRequestState
+		private class autoApprovedPersonRequest : personRequestState
+		{
+			public autoApprovedPersonRequest(PersonRequest personRequest) 
+				: base(personRequest, 2)
+			{
+			}
+
+			protected internal override bool IsApproved
+			{
+				get { return true; }
+			}
+
+			protected internal override bool IsAutoApproved
+			{
+				get { return true; }
+			}
+
+			protected internal override string StatusText
+			{
+				get { return Resources.Approved; }
+			}
+		}
+
+        private class deniedPersonRequest : personRequestState
         {
-            public DeniedPersonRequest(PersonRequest personRequest)
+            public deniedPersonRequest(PersonRequest personRequest)
                 : base(personRequest, 1)
             {
             }
 
-            protected internal override bool IsDenied { get { return true; } }
+            protected internal override bool IsDenied
+            {
+                get { return true; }
+            }
+
             protected internal override string StatusText
             {
                 get { return Resources.Denied; }
             }
         }
 
-		private class AutoDeniedPersonRequest : PersonRequestState
-		{
-			public AutoDeniedPersonRequest(PersonRequest personRequest)
-				: base(personRequest, 4)
-			{
-			}
-
-			protected internal override bool IsDenied { get { return true; } }
-			protected internal override bool IsAutoDenied { get { return true; } }
-			protected internal override string StatusText
-			{
-				get { return Resources.Denied; }
-			}
-		}
-
-        private class PendingPersonRequest : PersonRequestState
+        private class autoDeniedPersonRequest : personRequestState
         {
-            public PendingPersonRequest(PersonRequest personRequest)
+            public autoDeniedPersonRequest(PersonRequest personRequest)
+                : base(personRequest, 4)
+            {
+            }
+
+            protected internal override bool IsDenied
+            {
+                get { return true; }
+            }
+
+            protected internal override bool IsAutoDenied
+            {
+                get { return true; }
+            }
+
+            protected internal override string StatusText
+            {
+                get { return Resources.Denied; }
+            }
+        }
+
+        private class pendingPersonRequest : personRequestState
+        {
+            public pendingPersonRequest(PersonRequest personRequest)
                 : base(personRequest, 0)
             {
             }
 
             protected internal override void Deny()
             {
-                _personRequest.MoveToDenied();
+                PersonRequest.moveToDenied();
             }
 
-            protected internal override void Approve()
+            protected internal override void Approve(bool isAutoGrant)
             {
-                _personRequest.MoveToApproved();
+                PersonRequest.moveToApproved(isAutoGrant);
             }
 
             protected internal override void SetNew()
             {
-                _personRequest.MovetoNew();
+                PersonRequest.movetoNew();
             }
 
             protected internal override string StatusText
@@ -699,24 +659,27 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                 get { return Resources.Pending; }
             }
 
-            protected internal override bool IsPending { get { return true; } }
+            protected internal override bool IsPending
+            {
+                get { return true; }
+            }
         }
 
-        private class NewPersonRequest : PersonRequestState
+        private class newPersonRequest : personRequestState
         {
-            public NewPersonRequest(PersonRequest personRequest)
+            public newPersonRequest(PersonRequest personRequest)
                 : base(personRequest, 3)
             {
             }
 
             protected internal override void Deny()
             {
-				_personRequest.MoveToDenied(true);
+                PersonRequest.moveToDenied(true);
             }
 
             protected internal override void MakePending()
             {
-                _personRequest.MoveToPending();
+                PersonRequest.moveToPending();
             }
 
             protected internal override string StatusText
@@ -724,7 +687,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                 get { return Resources.New; }
             }
 
-            protected internal override bool IsNew { get { return true; } }
+            protected internal override bool IsNew
+            {
+                get { return true; }
+            }
         }
 
         #endregion
@@ -732,16 +698,40 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         public static int GetUnderlyingStateId(IPersonRequest request)
         {
             var typedRequest = request as PersonRequest;
-            if (typedRequest == null) return 3;
-            return typedRequest.requestStatus;
+            return typedRequest == null
+                       ? 3
+                       : typedRequest.requestStatus;
         }
 
-		public virtual void DummyMethodToRemoveCompileErrorsWithUnusedVariable()
-		{
-			_updatedOnServerUtc = new DateTime();
-		}
-		public virtual IPerson CreatedBy { get; protected set; }
-		public virtual DateTime? CreatedOn { get; protected set; }
+        public virtual void DummyMethodToRemoveCompileErrorsWithUnusedVariable()
+        {
+            _updatedOnServerUtc = new DateTime();
+        }
 
+        public virtual IPerson CreatedBy { get; protected set; }
+	public virtual DateTime? CreatedOn { get; protected set; }
+
+
+
+        public virtual bool SendChangeOverMessageBroker()
+        {
+            if (_persistedState == null)
+                return false;
+            if (Request is ShiftTradeRequest)
+            {
+                if (_persistedState.IsNew && _requestState.IsNew)
+                    return false;
+                if (_persistedState.IsNew && _requestState.IsPending)
+                    return false;
+                if (_persistedState.IsPending && _requestState.IsDenied)
+                    return false;
+                if (_persistedState.IsDenied && _requestState.IsDenied)
+                    return true;
+	            if (_persistedState.IsPending && _requestState.IsAutoApproved)
+		            return false;
+                return true;
+            }
+            return !(_persistedState.IsNew && _requestState.IsNew);
+        }
     }
 }

@@ -22846,6 +22846,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Subject too long.
+        /// </summary>
+        public static string SubjectTooLong {
+            get {
+                return ResourceManager.GetString("SubjectTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Submit.
         /// </summary>
         public static string SubmitRequest {

@@ -64,18 +64,15 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         public void ShouldReturnFalseIfNotEnoughAllowanceLeft()
         {
             var specification = _mocks.StrictMock<IBudgetGroupHeadCountSpecification>();
-            var calculator = _mocks.StrictMock<IBudgetGroupAllowanceCalculator>();
             var absenceRequest = _mocks.StrictMock<IAbsenceRequest>();
-            const string validationErrors = "Not Enough Allowance left";
-
+            
             using (_mocks.Record())
             {
-                Expect.Call(specification.IsSatisfiedBy(absenceRequest)).IgnoreArguments().Return(false);
-                Expect.Call(calculator.CheckHeadCountInBudgetGroup(absenceRequest)).IgnoreArguments().Return(validationErrors);
+                Expect.Call(specification.IsSatisfied(absenceRequest).IsValid).IgnoreArguments().Return(false);
             }
             using (_mocks.Playback())
             {
-                var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(null, null, null, null, calculator, specification));
+                var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(null, null, null, null, specification));
                 Assert.IsFalse(result.IsValid);
             }
         }
