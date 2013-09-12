@@ -6722,7 +6722,7 @@ Meeting</value>
     <comment>multiplicator</comment>
   </data>
   <data name="ConnectedDefinitionSets" xml:space="preserve">
-    <value>Connected definition sets:</value>
+    <value>Connected Definition Sets:</value>
     <comment>Contract</comment>
   </data>
   <data name="ShowLessPanels" xml:space="preserve">
@@ -6912,7 +6912,7 @@ Updated on: {1}</value>
     <comment>PersonSelection</comment>
   </data>
   <data name="ChangeInfoColon" xml:space="preserve">
-    <value>Change info:</value>
+    <value>Change Info:</value>
     <comment>Rotations</comment>
   </data>
   <data name="CreatedByColon" xml:space="preserve">
@@ -7942,11 +7942,11 @@ Period</value>
     <comment>Show last number of days</comment>
   </data>
   <data name="TargetToleranceMinus" xml:space="preserve">
-    <value>Target tolerance -</value>
+    <value>Target Tolerance -</value>
     <comment>Target tolerance -</comment>
   </data>
   <data name="TargetTolerancePlus" xml:space="preserve">
-    <value>Target tolerance +</value>
+    <value>Target Tolerance +</value>
     <comment>Target tolerance +</comment>
   </data>
   <data name="OtherUser" xml:space="preserve">

@@ -3803,7 +3803,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change info:.
+        ///   Looks up a localized string similar to Change Info:.
         /// </summary>
         public static string ChangeInfoColon {
             get {
@@ -4491,7 +4491,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Connected definition sets:.
+        ///   Looks up a localized string similar to Connected Definition Sets:.
         /// </summary>
         public static string ConnectedDefinitionSets {
             get {
@@ -22792,7 +22792,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Target tolerance -.
+        ///   Looks up a localized string similar to Target Tolerance -.
         /// </summary>
         public static string TargetToleranceMinus {
             get {
@@ -22801,7 +22801,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Target tolerance +.
+        ///   Looks up a localized string similar to Target Tolerance +.
         /// </summary>
         public static string TargetTolerancePlus {
             get {
