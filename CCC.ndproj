@@ -2116,7 +2116,7 @@ select new {
 	select new { m, m.FullName }]]>
 	</Query>
 	<Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types potentially only used from Tests</Name>
-	warnif count > 0
+	
 	let allTestAssemblies = JustMyCode.Assemblies.Where(a=>a.Name.Contains("Test"))
 	let allCodeAssemblies = JustMyCode.Assemblies.Where(a=>!a.Name.Contains("Test"))
  
@@ -2124,7 +2124,7 @@ select new {
 	let typesUsedByTest = JustMyCode.Types.UsedByAny(allTestAssemblies.ChildTypes())
  
 	let typesUsedOnlyInTest = typesUsedByTest.Except(typesUsedByCode)
- 
+	warnif count > 0
 	from t in typesUsedOnlyInTest
 	where
 	!allTestAssemblies.Contains(t.ParentAssembly) //skippa klasser som ligger i testprojekten
@@ -2132,7 +2132,7 @@ select new {
 	</Query>
 	
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Potentially dead Types</Name>
-warnif count > 0
+
 // Filter procedure for types that should'nt be considered as dead
 let canTypeBeConsideredAsDeadProc = new Func<IType, bool>(
    t => !t.IsPublic && //   Public types might be used by client applications of your assemblies.
@@ -2159,7 +2159,7 @@ types => from t in codeBase.Application.Types.UsedByAny(types).Except(types)
          where canTypeBeConsideredAsDeadProc(t) &&
                t.TypesUsingMe.Intersect(types).Count() == t.NbTypesUsingMe
          select t)
-
+warnif count > 0
 from t in deadTypesMetric.DefinitionDomain
 select new { t, t.TypesUsingMe, depth = deadTypesMetric[t] }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Potentially dead Methods</Name>
