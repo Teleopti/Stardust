@@ -32,7 +32,7 @@ IF ERRORLEVEL 2 SET /a remoteaccess=0
 CALL "%ROOTDIR%\UnInstallLocalCCServer.bat"
 
 ::install
-start /wait "SomeName" "%TargetArtifacts%\CruiseControl.NET-1.8.2.0-Setup.exe" /S
+start /wait "SomeName" "%TargetArtifacts%\CruiseControl.NET-1.8.4.0-Setup.exe" /S
 
 ::if this is a re-install, some extra steps are needed
 "%systemroot%\System32\inetsrv\appcmd" delete app "Default Web Site/ccnet"
