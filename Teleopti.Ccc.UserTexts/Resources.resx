@@ -8589,7 +8589,7 @@ Period: {3}</value>
     <comment>Online reports application function</comment>
   </data>
   <data name="ScheduledTimePerActivityReport" xml:space="preserve">
-    <value>Scheduled time per activity</value>
+    <value>Scheduled Time Per Activity</value>
     <comment>Scheduled time per activity report application function</comment>
   </data>
   <data name="ScheduledTimePerActivity" xml:space="preserve">
@@ -9616,7 +9616,7 @@ Period</comment>
     <comment>The input is not a legal time value</comment>
   </data>
   <data name="ScheduledTimeVsTarget" xml:space="preserve">
-    <value>Scheduled time vs target</value>
+    <value>Scheduled Time vs Target</value>
     <comment>ScheduledTimeVsTarget</comment>
   </data>
   <data name="TheServiceLevelForSpecifiedIntervalLengthIsTooLongDot" xml:space="preserve">

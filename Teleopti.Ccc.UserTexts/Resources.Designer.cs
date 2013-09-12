@@ -19659,7 +19659,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scheduled time per activity.
+        ///   Looks up a localized string similar to Scheduled Time Per Activity.
         /// </summary>
         public static string ScheduledTimePerActivityReport {
             get {
@@ -19668,7 +19668,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scheduled time vs target.
+        ///   Looks up a localized string similar to Scheduled Time vs Target.
         /// </summary>
         public static string ScheduledTimeVsTarget {
             get {
