@@ -334,6 +334,7 @@
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
     <Compile Include="Optimization\DataExtractorValuesForMatrixes.cs" />
     <Compile Include="Optimization\TeamBlock\OptimizationOverLimitByRestrictionDeciderFactory.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockTargetValueCalculator.cs" />
     <Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\ScheduleMatrixOriginalStateContainerFactory.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffOptimizerService.cs" />

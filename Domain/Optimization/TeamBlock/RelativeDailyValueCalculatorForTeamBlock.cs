@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
             IList<double> intradayRelativePersonnelDeficits =
                 GetIntradayRelativePersonnelDeficits(scheduleDay,scheduleMatrix,advancedPreferences );
 
-            IPopulationStatisticsCalculator calculator = new PopulationStatisticsCalculator();
+            ITeamBlockTargetValueCalculator calculator = new TeamBlockTargetValueCalculator();
 
             double? result = null;
 
