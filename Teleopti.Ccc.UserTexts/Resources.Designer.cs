@@ -21262,7 +21262,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Short name.
+        ///   Looks up a localized string similar to Short Name.
         /// </summary>
         public static string ShortName {
             get {
@@ -24405,7 +24405,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use for requests.
+        ///   Looks up a localized string similar to Use for Requests.
         /// </summary>
         public static string UseForRequests {
             get {
