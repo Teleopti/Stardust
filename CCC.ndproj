@@ -2133,7 +2133,7 @@ warnif count > 0
 	</Query>
 	
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Potentially dead Types</Name>
-//warnif count > 0
+warnif count > 0
 // Filter procedure for types that should'nt be considered as dead
 let canTypeBeConsideredAsDeadProc = new Func<IType, bool>(
    t => !t.IsPublic && //   Public types might be used by client applications of your assemblies.
