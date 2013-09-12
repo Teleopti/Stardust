@@ -15834,7 +15834,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Part-time percentage.
+        ///   Looks up a localized string similar to Part-Time Percentage.
         /// </summary>
         public static string PartTimePercentageLower {
             get {
@@ -19209,7 +19209,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shift bag.
+        ///   Looks up a localized string similar to Shift Bag.
         /// </summary>
         public static string RuleSetBag {
             get {

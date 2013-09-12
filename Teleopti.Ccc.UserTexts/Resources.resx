@@ -2423,7 +2423,7 @@ Periods</comment>
     <comment>Use average on deviating days</comment>
   </data>
   <data name="RuleSetBag" xml:space="preserve">
-    <value>Shift bag</value>
+    <value>Shift Bag</value>
     <comment>Rule Set Bag</comment>
   </data>
   <data name="AbsenceRequest" xml:space="preserve">
@@ -3750,7 +3750,7 @@ Columns</value>
     <comment>Funtion name Teleopti CCC</comment>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
-    <value>Part-time percentage</value>
+    <value>Part-Time Percentage</value>
     <comment>Grid header</comment>
   </data>
   <data name="Optional" xml:space="preserve">
