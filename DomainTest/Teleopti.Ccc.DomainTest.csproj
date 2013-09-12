@@ -590,7 +590,6 @@
     <Compile Include="RealTimeAdherence\RtaStateGroupTest.cs" />
     <Compile Include="RealTimeAdherence\RtaStateHolderTest.cs" />
     <Compile Include="RealTimeAdherence\RtaStateTest.cs" />
-    <Compile Include="RealTimeAdherence\RtaVisualLayerTest.cs" />
     <Compile Include="Optimization\FullWeekOuterWeekPeriodCreatorTest.cs" />
     <Compile Include="Optimization\RemoveShiftCategoryBackToLegalServiceTest.cs" />
     <Compile Include="Optimization\ScheduleDayServiceTest.cs" />

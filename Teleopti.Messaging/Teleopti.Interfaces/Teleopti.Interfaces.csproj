@@ -421,7 +421,6 @@
     <Compile Include="Domain\IRotationDay.cs" />
     <Compile Include="Domain\IRotation.cs" />
     <Compile Include="Domain\IRotationRestriction.cs" />
-    <Compile Include="Domain\IRtaVisualLayer.cs" />
     <Compile Include="Domain\IScheduleData.cs" />
     <Compile Include="Domain\IScheduleDataRestriction.cs" />
     <Compile Include="Domain\ISchedulePartModifyAndRollbackService.cs" />

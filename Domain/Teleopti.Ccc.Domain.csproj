@@ -748,7 +748,6 @@
     <Compile Include="Payroll\PayrollResult.cs" />
     <Compile Include="RealTimeAdherence\ExternalLogOnPerson.cs" />
     <Compile Include="RealTimeAdherence\IRtaStateHolder.cs" />
-    <Compile Include="RealTimeAdherence\RtaVisualLayer.cs" />
     <Compile Include="RealTimeAdherence\StateGroupActivityAlarm.cs" />
     <Compile Include="Repositories\IAbsenceRepository.cs" />
     <Compile Include="Repositories\IGroupPageRepository.cs" />
