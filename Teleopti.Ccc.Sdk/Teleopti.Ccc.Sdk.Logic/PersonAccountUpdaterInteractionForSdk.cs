@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic
 {
-	public class PersonAccountUpdaterSdkProvider : IPeopleAccountUpdaterProvider
+	public class PersonAccountUpdaterSdkProvider : IPersonAccountUpdaterProvider
 	{
 
 		private readonly IRepositoryFactory _repositoryFactory;

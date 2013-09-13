@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Common
 	/// <summary>
 	/// External depencency provider for IPeopleAccountUpdater
 	/// </summary>
-	public interface IPeopleAccountUpdaterProvider
+	public interface IPersonAccountUpdaterProvider
 	{
 		ITraceableRefreshService GetRefreshService();
 		IUnitOfWork GetUnitOfWork { get; }

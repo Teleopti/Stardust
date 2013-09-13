@@ -3,7 +3,6 @@ using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -157,9 +156,9 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                                                            DomainName = dto.WindowsDomain,
                                                            WindowsLogOnName = dto.WindowsLogOnName
                                                        };
-            if(dto.TerminationDate != null)
-                person.TerminatePerson(new DateOnly(dto.TerminationDate.DateTime), new PersonAccountUpdaterDummy()) ;
-            else
+            if(personTerminated(dto, person))
+                person.TerminatePerson(new DateOnly(dto.TerminationDate.DateTime), _personAccountUpdater) ;
+            if(personActivated(dto, person))
                 person.ActivatePerson(null);
             if (!string.IsNullOrEmpty(dto.Note))
                 person.Note = dto.Note;
@@ -167,8 +166,27 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 ((IDeleteTag)person).SetDeleted();
         }
 
+	    private static bool personActivated(PersonDto dto, IPerson person)
+	    {
+			if (dto.TerminationDate == null && person.TerminalDate.HasValue)
+				return true;
+			return false;
+	    }
 
-        private static PersonPeriodDto PersonPeriodDoToDto(IPersonPeriod entity)
+	    private static bool personTerminated(PersonDto dto, IPerson person)
+	    {
+		    if (dto.TerminationDate != null)
+		    {
+			    if (!person.TerminalDate.HasValue)
+				    return true;
+			    if (person.TerminalDate.Value != new DateOnly(dto.TerminationDate.DateTime))
+				    return true;
+		    }
+		    return false;
+	    }
+
+
+	    private static PersonPeriodDto PersonPeriodDoToDto(IPersonPeriod entity)
         {
             PersonPeriodDto personPeriodDto = new PersonPeriodDto();
 			personPeriodDto.Period = new DateOnlyPeriodDto

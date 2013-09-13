@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 	{
 		private PersonAccountUpdaterWin _target;
 		private MockRepository _mocks;
-		private IPeopleAccountUpdaterProvider _provider;
+		private IPersonAccountUpdaterProvider _provider;
 		private IPerson _person;
 		private IAbsence _absence1;
 		private IAbsence _absence2;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_provider = _mocks.Stub<IPeopleAccountUpdaterProvider>();
+			_provider = _mocks.Stub<IPersonAccountUpdaterProvider>();
 			_person = PersonFactory.CreatePerson();
 			_absence1 = new Absence();
 			_absence2 = new Absence();

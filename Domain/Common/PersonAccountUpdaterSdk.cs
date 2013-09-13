@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.Domain.Common
 	/// </remarks>
 	public class PersonAccountUpdaterSdk : IPersonAccountUpdater
 	{
-		private readonly IPeopleAccountUpdaterProvider _provider;
+		private readonly IPersonAccountUpdaterProvider _provider;
 
-		public PersonAccountUpdaterSdk(IPeopleAccountUpdaterProvider provider)
+		public PersonAccountUpdaterSdk(IPersonAccountUpdaterProvider provider)
 		{
 			_provider = provider;
 		}
