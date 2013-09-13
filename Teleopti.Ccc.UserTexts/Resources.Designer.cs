@@ -1484,7 +1484,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Agent settings.
+        ///   Looks up a localized string similar to Agent Settings.
         /// </summary>
         public static string AgentSettings {
             get {
@@ -21115,7 +21115,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set KPI targets.
+        ///   Looks up a localized string similar to Set KPI Targets.
         /// </summary>
         public static string SetKPITargets {
             get {
