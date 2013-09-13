@@ -641,7 +641,6 @@
     <Compile Include="Common\Clipboard\ClipHandler.cs" />
     <Compile Include="Common\Clipboard\ExtenderPasteBehavior.cs" />
     <Compile Include="Common\Clipboard\IPasteBehavior.cs" />
-    <Compile Include="Common\Clipboard\MergePasteBehavior.cs" />
     <Compile Include="Common\Clipboard\NormalPasteBehavior.cs" />
     <Compile Include="Common\Collections\FilteredCollection.cs" />
     <Compile Include="Common\Collections\FilterExtensions.cs" />
@@ -1079,7 +1078,6 @@
     <Compile Include="PeopleAdmin\Models\SchedulePeriodChildModel.cs" />
     <Compile Include="PeopleAdmin\Models\SchedulePeriodModel.cs" />
     <Compile Include="PeopleAdmin\Models\SiteTeamModel.cs" />
-    <Compile Include="Presentation\TimeSpanSelectorViewModel.cs" />
     <Compile Include="Scheduling\DateTimePeriodViewModel.cs" />
     <Compile Include="Scheduling\Gridlock.cs" />
     <Compile Include="Scheduling\GridlockManager.cs" />
