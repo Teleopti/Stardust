@@ -134,7 +134,6 @@
     <Compile Include="WorkShiftBackToLegalStateDecisionMaker.cs" />
     <Compile Include="IntradayDecisionMaker.cs" />
     <Compile Include="DayOffOptimizationWeekEndLegalStateValidatorListCreator.cs" />
-    <Compile Include="MoveWeekendDayOffNoValidationDecisionMaker.cs" />
     <Compile Include="MatrixRestrictionLocker.cs" />
     <Compile Include="MoveTimeDecisionMaker2.cs" />
     <Compile Include="MoveWeekendDayOffDecisionMaker.cs" />

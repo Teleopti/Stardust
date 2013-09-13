@@ -142,7 +142,6 @@
     <Compile Include="WorkShiftBackToLegalStateDecisionMakerTest.cs" />
     <Compile Include="IntradayDecisionMakerTest.cs" />
     <Compile Include="MoveTimeDecisionMaker2Test.cs" />
-    <Compile Include="MoveWeekendDayOffNoValidationDecisionMakerTest.cs" />
     <Compile Include="DayOffOptimizationLegalStateValidatorListCreatorTest.cs" />
     <Compile Include="MatrixRestrictionLockerTest.cs" />
     <Compile Include="MoveWeekendDayOffDecisionMakerTest.cs" />
