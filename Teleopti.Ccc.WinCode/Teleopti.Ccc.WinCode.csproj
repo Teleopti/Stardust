@@ -1116,8 +1116,6 @@
     <Compile Include="Settings\AvailabilityRestrictionView.cs" />
     <Compile Include="Settings\ScheduleRestrictionBaseView.cs" />
     <Compile Include="ShiftCreator\AccessibilityDateView.cs" />
-    <Compile Include="ShiftCreator\ICombinedView.cs" />
-    <Compile Include="ShiftCreator\IGridDataValidator.cs" />
     <Compile Include="Shifts\ActivityTypeChangedEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
