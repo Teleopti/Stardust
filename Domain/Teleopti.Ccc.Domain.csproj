@@ -1151,7 +1151,6 @@
     <Compile Include="ResourceCalculation\SchedulingResultStateHolder.cs" />
     <Compile Include="ResourceCalculation\DayOffPlannerRules.cs" />
     <Compile Include="Scheduling\Meetings\MeetingPeriod.cs" />
-    <Compile Include="Scheduling\Meetings\MeetingPeriodSorter.cs" />
     <Compile Include="Scheduling\Meetings\Meeting.cs" />
     <Compile Include="Scheduling\Meetings\MeetingPerson.cs" />
     <Compile Include="Scheduling\Meetings\PersonMeeting.cs" />
