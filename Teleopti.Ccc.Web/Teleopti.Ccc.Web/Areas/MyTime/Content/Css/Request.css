@@ -129,7 +129,8 @@
 }
 
 .request-data-subject {
-	word-wrap: break-word;	
+	word-wrap: break-word;
+	margin: 0 0 5px 0;
 }
 .request-data-text {
 	word-wrap: break-word;	
