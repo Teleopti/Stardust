@@ -601,7 +601,6 @@
     <Compile Include="Scheduling\Meetings\MeetingSlotFinderService.cs" />
     <Compile Include="Scheduling\Meetings\MeetingSlotImpactCalculator.cs" />
     <Compile Include="Scheduling\NonBlendSkill\NonBlendSkillCalculator.cs" />
-    <Compile Include="Scheduling\NonBlendSkill\NonBlendPersonSkillFromGroupingCreator.cs" />
     <Compile Include="Scheduling\NonBlendSkill\NonBlendSkillImpactOnPeriodForProjection.cs" />
     <Compile Include="Scheduling\NonBlendSkill\NonBlendWorkShiftCalculator.cs" />
     <Compile Include="Scheduling\PersonalAccount\Account.cs" />

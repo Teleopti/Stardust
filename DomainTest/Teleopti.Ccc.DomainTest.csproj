@@ -448,7 +448,6 @@
     <Compile Include="Scheduling\Meetings\MeetingSlotImpactCalculatorTest.cs" />
     <Compile Include="Scheduling\NonBlendSkill\NonBlendImpactOnPeriodForProjectionTest.cs" />
     <Compile Include="Scheduling\NonBlendSkill\NonBlendSkillCalculatorTest.cs" />
-    <Compile Include="Scheduling\NonBlendSkill\NonBlendPersonSkillFromGroupingCreatorTest.cs" />
     <Compile Include="Scheduling\NonBlendSkill\NonBlendWorkShiftCalculatorTest.cs" />
     <Compile Include="Scheduling\PersonalAccount\PersonAbsenceAccountTest.cs" />
     <Compile Include="Scheduling\PersonalAccount\AccountDayTest.cs" />
