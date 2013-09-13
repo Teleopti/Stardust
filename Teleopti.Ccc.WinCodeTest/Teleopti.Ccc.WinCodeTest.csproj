@@ -574,7 +574,6 @@
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityPersonFilterTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryFairnessValueHelperTest.cs" />
     <Compile Include="Scheduler\SkillFullPeriodGridControlPresenterTest.cs" />
-    <Compile Include="Scheduler\DateTimePeriodIsValidTest.cs" />
     <Compile Include="Scheduler\DayPresenterNewTest.cs" />
     <Compile Include="Scheduler\DayPresenterScaleCalculatorTest.cs" />
     <Compile Include="Scheduler\Editor\ShiftEditorRoutedCommandsTest.cs" />
