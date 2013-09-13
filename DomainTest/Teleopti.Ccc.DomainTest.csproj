@@ -629,7 +629,6 @@
     <Compile Include="Scheduling\Assignment\SchedulePartSignificantPartDefinitionsTest.cs" />
     <Compile Include="Scheduling\Assignment\ShiftCategoryLimitationTest.cs" />
     <Compile Include="Scheduling\Assignment\SignificantPartServiceTest.cs" />
-    <Compile Include="Scheduling\Assignment\SmartJumpOptimizerTest.cs" />
     <Compile Include="Scheduling\Assignment\TurnoffPermissionScopeTest.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodTest.cs" />
     <Compile Include="Scheduling\BlockSchedulingServiceTest.cs" />

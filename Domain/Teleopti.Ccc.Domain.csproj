@@ -792,7 +792,6 @@
     <Compile Include="Scheduling\Assignment\SchedulePartSignificantPartDefinitions.cs" />
     <Compile Include="Scheduling\Assignment\ShiftCategoryLimitation.cs" />
     <Compile Include="Scheduling\Assignment\SignificantPartService.cs" />
-    <Compile Include="Scheduling\Assignment\SmartJumpOptimizer.cs" />
     <Compile Include="Scheduling\Assignment\TurnoffPermissionScope.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriod.cs" />
     <Compile Include="Scheduling\Assignment\VisualLayerFactory.cs" />
