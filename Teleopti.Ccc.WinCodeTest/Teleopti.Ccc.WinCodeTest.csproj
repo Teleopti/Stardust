@@ -845,7 +845,6 @@
     <Compile Include="ShiftCreator\AbsolutePositionViewTest.cs" />
     <Compile Include="ShiftCreator\AutoPositionViewTest.cs" />
     <Compile Include="ShiftCreator\AccessibilityDateViewTest.cs" />
-    <Compile Include="ShiftCreator\GeneralTemplateViewTest.cs" />
     <Compile Include="ShiftCreator\DaysOfWeekViewTest.cs" />
   </ItemGroup>
   <ItemGroup>

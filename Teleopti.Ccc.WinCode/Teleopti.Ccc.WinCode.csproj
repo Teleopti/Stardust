@@ -1119,7 +1119,6 @@
     <Compile Include="ShiftCreator\AccessibilityDateView.cs" />
     <Compile Include="ShiftCreator\AutoPositionView.cs" />
     <Compile Include="ShiftCreator\DaysOfWeekView.cs" />
-    <Compile Include="ShiftCreator\GeneralTemplateView.cs" />
     <Compile Include="ShiftCreator\ICombinedView.cs" />
     <Compile Include="ShiftCreator\IGridDataValidator.cs" />
     <Compile Include="Shifts\ActivityTypeChangedEventArgs.cs">
