@@ -133,9 +133,6 @@
     <Content Include="ReportViewer.aspx" />
     <Content Include="Selection.aspx" />
     <Content Include="Timeout.aspx" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Default.aspx.cs">
@@ -467,6 +464,11 @@
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\..\..\BuildArtifacts\projects\Teleopti.Analytics.Portal\Web.config">
+      <Link>Web.config</Link>
+    </Content>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -502,6 +504,7 @@
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)web.config" copy "$(ProjectDir)..\..\..\..\BuildArtifacts\AnalyticsWeb.config" "$(ProjectDir)web.config"</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
 </Project>
