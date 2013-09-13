@@ -8,33 +8,28 @@ namespace Teleopti.Ccc.Domain.Common
 	/// <remarks>
 	/// Used for the win fat client where all the data is already loaded in the FilteredPeopleHolder
 	/// </remarks>
-	public class PersonAccountUpdaterForWin : IPersonAccountUpdater
+	public class PersonAccountUpdaterWin : IPersonAccountUpdater
 	{
-		private readonly IPeopleAccountUpdaterInteraction _interaction;
+		private readonly IPeopleAccountUpdaterWinProvider _provider;
 
-		public PersonAccountUpdaterForWin(IPeopleAccountUpdaterInteraction interaction)
+		public PersonAccountUpdaterWin(IPeopleAccountUpdaterWinProvider provider)
 		{
-			_interaction = interaction;
+			_provider = provider;
 		}
 
-		public void UpdateOnTermination(DateOnly terminalDate, IPerson person)
-		{
-			refreshAllAccounts(person);
-		}
-
-		public void UpdateOnActivation(IPerson person)
+		public void Update(IPerson person)
 		{
 			refreshAllAccounts(person);
 		}
 
 		private void refreshAllAccounts(IPerson person)
 		{
-			var personAccounts = _interaction.PersonAccounts(person);
+			var personAccounts = _provider.GetPersonAccounts(person);
 			foreach (var personAccount in personAccounts)
 			{
 				foreach (var account in personAccount.AccountCollection())
 				{
-					_interaction.RefreshService.Refresh(account, _interaction.UnitOfWork);
+					_provider.GetRefreshService().Refresh(account, _provider.GetUnitOfWork);
 				}
 			}
 		}

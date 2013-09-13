@@ -491,7 +491,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                 // Add Person rotations and Availability to Repository
                 _filteredPeopleHolder.AddRootsToRepository();
 
-                if (!_filteredPeopleHolder.UnitOfWork.IsDirty())
+                if (!_filteredPeopleHolder.GetUnitOfWork.IsDirty())
                 {
                     _filteredPeopleHolder.ResetBoldProperty();
                     return;
@@ -602,11 +602,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             DisposeAllChildGrids();
 
             //Create new UoW.
-            _filteredPeopleHolder.UnitOfWork.Dispose();
+            _filteredPeopleHolder.GetUnitOfWork.Dispose();
             IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork();
-            _filteredPeopleHolder.UnitOfWork = uow;
+            _filteredPeopleHolder.GetUnitOfWork = uow;
 
-            _filteredPeopleHolder.UnitOfWork.Reassociate(_filteredPeopleHolder.RuleSetBagCollection);
+            _filteredPeopleHolder.GetUnitOfWork.Reassociate(_filteredPeopleHolder.RuleSetBagCollection);
             _filteredPeopleHolder.LoadIt();
             //Copy filtered people collection.
             IList<IPerson> filteredPeopleCollection =
@@ -985,7 +985,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             // Add Person rotations and Availability to Repository
             _filteredPeopleHolder.AddRootsToRepository();
 
-            if (_filteredPeopleHolder.UnitOfWork.IsDirty())
+            if (_filteredPeopleHolder.GetUnitOfWork.IsDirty())
             {
                 DialogResult response = ShowConfirmationMessage(UserTexts.Resources.DoYouWantToSaveChangesYouMade, Text);
                 switch (response)

@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
                 if (_currentAccount != null && value.HasValue)
                 {
                     _currentAccount.StartDate = value.Value;
-					_personAccountUpdater.UpdateOnActivation(_currentAccount.Owner.Person);
+					_personAccountUpdater.Update(_currentAccount.Owner.Person);
                 }
             }
         }

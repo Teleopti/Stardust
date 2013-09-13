@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             filteredPeopleHolder.MarkForInsert(newPerson);
 
-			var gridData = new PersonGeneralModel(newPerson, new UserDetail(newPerson), new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new PersonAccountUpdaterForWin(filteredPeopleHolder)) { CanBold = true };
+			var gridData = new PersonGeneralModel(newPerson, new UserDetail(newPerson), new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new PersonAccountUpdaterWin(filteredPeopleHolder)) { CanBold = true };
 
         	gridData.SetAvailableRoles(filteredPeopleHolder.ApplicationRoleCollection);
 
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
                 filteredPeopleHolder.MarkForInsert(person);
 
-				var personGridData = new PersonGeneralModel(person, new UserDetail(person), new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new PersonAccountUpdaterForWin(filteredPeopleHolder)) { CanBold = true };
+				var personGridData = new PersonGeneralModel(person, new UserDetail(person), new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new PersonAccountUpdaterWin(filteredPeopleHolder)) { CanBold = true };
             	personGridData.SetAvailableRoles(filteredPeopleHolder.ApplicationRoleCollection);
 
                 //set optional columns if any.);
@@ -436,7 +436,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
             _contractScheduleBindingCollection.Clear();
 
-            var repository = new ContractScheduleRepository(filterPeopleHolder.UnitOfWork);
+            var repository = new ContractScheduleRepository(filterPeopleHolder.GetUnitOfWork);
             var list = repository.FindAllContractScheduleByDescription().Where(ptp => ptp.IsChoosable);
 
             foreach (IContractSchedule item in list)
@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         public void LoadPartTimePercentages(FilteredPeopleHolder filterPeopleHolder)
         {
             _partTimePercentageBindingCollection.Clear();
-            var partTimePercentageRepository = new PartTimePercentageRepository(filterPeopleHolder.UnitOfWork);
+            var partTimePercentageRepository = new PartTimePercentageRepository(filterPeopleHolder.GetUnitOfWork);
             var list = partTimePercentageRepository.FindAllPartTimePercentageByDescription().Where(ptp => ptp.IsChoosable);
 
         	IEnumerable<IPartTimePercentage> sorted = list.OrderByDescending(n2 => n2.Percentage.Value);
@@ -463,7 +463,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         public void LoadContracts(FilteredPeopleHolder filterPeopleHolder)
         {
             _contractBindingCollection.Clear();
-            var repository = new ContractRepository(filterPeopleHolder.UnitOfWork);
+            var repository = new ContractRepository(filterPeopleHolder.GetUnitOfWork);
             var list = repository.FindAllContractByDescription().Where(ptp => ptp.IsChoosable).ToList();
 
             foreach (IContract item in list)
@@ -1002,7 +1002,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             {
                 foreach (var account in personAcccountCollection.AllPersonAccounts())
                 {
-                    var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription, new PersonAccountUpdaterForWin(filteredPeopleHolder));
+                    var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription, new PersonAccountUpdaterWin(filteredPeopleHolder));
                     if (adapter.ContainedEntity != null && ((account == currentAccount) && canBold) ||
                         adapter.ContainedEntity.Id == null)
                         adapter.CanBold = true;
@@ -1032,7 +1032,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             foreach (var account in accountCollection.AllPersonAccounts())
             {
-                var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription, new PersonAccountUpdaterForWin(filteredPeopleHolder));
+                var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription, new PersonAccountUpdaterWin(filteredPeopleHolder));
                 handleCanBold(cachedCollection, canBold, currentAccount, account, adapter);
                 _personaccountGridViewChildCollection.Add(adapter);   
             }

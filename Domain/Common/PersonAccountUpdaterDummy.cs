@@ -6,15 +6,9 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public class PersonAccountUpdaterDummy : IPersonAccountUpdater
 	{
-
-		public void UpdateOnTermination(DateOnly terminalDate, IPerson person)
+		public void Update(IPerson person)
 		{
-			// should do nothing
-		}
-
-		public void UpdateOnActivation(IPerson person)
-		{
-			// should do nothing
+			throw new NotImplementedException();
 		}
 	}
 }

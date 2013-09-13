@@ -9,13 +9,8 @@ namespace Teleopti.Interfaces.Domain
 	public interface IPersonAccountUpdater
 	{
 		/// <summary>
-		/// Updates the person absence accounts
+		/// Updates the person absence accounts on activation / on termination
 		/// </summary>
-		void UpdateOnTermination(DateOnly terminalDate, IPerson person);
-
-		/// <summary>
-		/// Updates the person absence accounts
-		/// </summary>
-		void UpdateOnActivation(IPerson person);
+		void Update(IPerson person);
 	}
 }
