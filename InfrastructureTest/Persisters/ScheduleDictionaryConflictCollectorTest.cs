@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters {
 
 		private void MakeTarget()
 		{
-			_target = new ScheduleDictionaryConflictCollector(_scheduleRepository, _personAssignmentRepository, _lazyLoadingManager, new UtcTimeZone());
+			_target = new ScheduleDictionaryConflictCollector(_scheduleRepository, _personAssignmentRepository, _lazyLoadingManager, TimeZoneInfoFactory.UtcTimeZoneInfo());
 		}
 
 		[Test]
