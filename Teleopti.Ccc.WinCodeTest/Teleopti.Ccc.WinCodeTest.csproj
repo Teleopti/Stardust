@@ -805,7 +805,6 @@
     <Compile Include="Scheduler\GridlockTest.cs" />
     <Compile Include="Forecasting\SkillPages\MultisiteSkillPropertiesPagesTest.cs" />
     <Compile Include="Common\EntitiesUpdatedEventArgsTest.cs" />
-    <Compile Include="Common\GuiHelpers\TimePixelRelationHelperTest.cs" />
     <Compile Include="Common\LanguageResourceHelperTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AbstractPropertyPagesTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AbstractWizardPagesTest.cs" />
