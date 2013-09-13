@@ -138,7 +138,6 @@
     <Compile Include="MatrixRestrictionLocker.cs" />
     <Compile Include="MoveTimeDecisionMaker2.cs" />
     <Compile Include="MoveWeekendDayOffDecisionMaker.cs" />
-    <Compile Include="WorkShiftLegalStateWeekDecisionMaker.cs" />
     <Compile Include="Scheduling\PossibleMinMaxWorkShiftLengthExtractor.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessShiftValueCalculator.cs" />
     <Compile Include="Scheduling\WorkShiftMinMaxCalculator.cs" />
