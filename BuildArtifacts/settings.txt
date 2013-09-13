@@ -1,11 +1,8 @@
-﻿$(DataSource)=.
+﻿$(SQL_AUTH_STRING)|Data Source=.;Integrated Security=SSPI
 $(AS_SERVER_NAME)|.
-$(CCC7DB)|TeleoptiCCC7_Demo
+$(DB_CCC7)|TeleoptiCCC7_Demo
 $(DB_ANALYTICS)|TeleoptiAnalytics_Demo
 $(AS_DATABASE)|TeleoptiAnalytics_Demo
-$(ConnectionStringApp)|Data Source=.;Initial Catalog=TeleoptiCCC7_Demo;Integrated Security=True
-$(ConnectionStringAnalytics)|Data Source=.;Initial Catalog=TeleoptiAnalytics_Demo;Integrated Security=True
-$(ConnectionStringCube)|Provider=MSOLAP.3;Integrated Security=SSPI;Persist Security Info=True;Data Source=.;Initial Catalog=TeleoptiAnalytics_Demo;Client Cache Size=25;Auto Synch Period=10000
 $(AgentPortalWebURL)|http://localhost:54903/
 $(IIS_AUTH)|Windows
 $(PM_ASMX)|http://localhost/analyzer/services/Analyzer2005.asmx
