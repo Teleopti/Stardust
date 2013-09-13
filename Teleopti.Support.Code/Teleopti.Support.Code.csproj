@@ -65,6 +65,10 @@
       <Link>ConfigFiles\AppRaptor.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\BuildArtifacts\LegalNotice.txt">
+      <Link>ConfigFiles\LegalNotice.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\BuildArtifacts\SDKWeb.config">
       <Link>ConfigFiles\SDKWeb.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -111,6 +115,30 @@
       <Link>ConfigFiles\Web.Root.Web.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
+    </Content>
+    <Content Include="..\BuildArtifacts\CccAppConfig.config">
+      <Link>ConfigFiles\CccAppConfig.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\BuildArtifacts\ServiceBuslog4net.config">
+      <Link>ConfigFiles\ServiceBuslog4net.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\BuildArtifacts\PMWeb.config">
+      <Link>ConfigFiles\PMWeb.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\BuildArtifacts\Web.Mobile.Web.config">
+      <Link>ConfigFiles\Web.Mobile.Web.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\BuildArtifacts\Web.MyTime.Web.config">
+      <Link>ConfigFiles\Web.MyTime.Web.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\BuildArtifacts\Web.Start.Web.config">
+      <Link>ConfigFiles\Web.Start.Web.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>

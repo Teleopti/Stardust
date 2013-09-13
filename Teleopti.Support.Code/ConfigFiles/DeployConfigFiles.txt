@@ -1,6 +1,5 @@
 ﻿..\ApplicationConfiguration\CccAppConfig.exe.config,ConfigFiles\CccAppConfig.config
 ..\TeleoptiCCC\SDK\web.config,ConfigFiles\SDKWeb.config
-..\TeleoptiCCC\SDK\Teleopti.Ccc.Sdk.ServiceBus.Client.config,ConfigFiles\ServiceBusClient.config
 ..\TeleoptiCCC\SDK\TeleoptiCCC7.nhib.xml,ConfigFiles\TeleoptiCCC7.nhib.xml
 ..\TeleoptiCCC\ETL\Tools\Teleopti.Analytics.Etl.ConfigTool.exe.config,ConfigFiles\AppETLTool.config
 ..\TeleoptiCCC\ETL\Tools\TeleoptiCCC7.nhib.xml,ConfigFiles\TeleoptiCCC7.nhib.xml
@@ -20,7 +19,6 @@
 ..\TeleoptiCCC\MyTime\ClickOnce\Teleopti.Ccc.AgentPortal.exe.config.deploy,ConfigFiles\AppMytime.config
 ..\TeleoptiCCC\PMService\web.config,ConfigFiles\PMWeb.config
 ..\TeleoptiCCC\Web\web.config,ConfigFiles\Web.Root.Web.config
-..\TeleoptiCCC\Web\Teleopti.Ccc.Web.ServiceBus.Client.config,ConfigFiles\ServiceBusClient.config
 ..\TeleoptiCCC\Web\TeleoptiCCC7.nhib.xml,ConfigFiles\TeleoptiCCC7.nhib.xml
 ..\TeleoptiCCC\SDK\LegalNotice.txt,ConfigFiles\LegalNotice.txt
 ..\TeleoptiCCC\Web\Areas\MyTime\Views\web.config,ConfigFiles\Web.MyTime.Web.config
