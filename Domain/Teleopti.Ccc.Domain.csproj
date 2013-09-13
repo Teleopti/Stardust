@@ -731,7 +731,6 @@
     </Compile>
     <Compile Include="Payroll\PayrollExport.cs" />
     <Compile Include="Payroll\PayrollResult.cs" />
-    <Compile Include="RealTimeAdherence\ExternalLogOnPerson.cs" />
     <Compile Include="RealTimeAdherence\IRtaStateHolder.cs" />
     <Compile Include="RealTimeAdherence\StateGroupActivityAlarm.cs" />
     <Compile Include="Repositories\IAbsenceRepository.cs" />

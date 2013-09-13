@@ -571,7 +571,6 @@
     <Compile Include="Payroll\PayrollExportTest.cs" />
     <Compile Include="Payroll\PayrollResultTest.cs" />
     <Compile Include="RealTimeAdherence\AlarmTypeTest.cs" />
-    <Compile Include="RealTimeAdherence\ExternalLogOnPersonTest.cs" />
     <Compile Include="RealTimeAdherence\RtaStateGroupTest.cs" />
     <Compile Include="RealTimeAdherence\RtaStateHolderTest.cs" />
     <Compile Include="RealTimeAdherence\RtaStateTest.cs" />
