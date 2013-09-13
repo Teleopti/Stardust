@@ -1115,7 +1115,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\AvailabilityRestrictionView.cs" />
     <Compile Include="Settings\ScheduleRestrictionBaseView.cs" />
-    <Compile Include="ShiftCreator\AccessibilityDateView.cs" />
     <Compile Include="Shifts\ActivityTypeChangedEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1319,9 +1318,10 @@
     </None>
     <None Include="Meetings\MeetingsClassDiagram.cd" />
     <None Include="packages.config" />
-    <None Include="ShiftCreator\ShiftCreator.cd" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="ShiftCreator\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
