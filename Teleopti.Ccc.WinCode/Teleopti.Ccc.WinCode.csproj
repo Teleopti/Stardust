@@ -580,7 +580,6 @@
     <Compile Include="Scheduling\ScheduleReporting\ScheduledTimePerActivityModel.cs" />
     <Compile Include="Scheduling\MatrixUnselectedDaysLocker.cs" />
     <Compile Include="Scheduling\Requests\HandlePersonRequestComparer.cs" />
-    <Compile Include="Scheduling\Restriction\Commands\OvertimeAvailabilityAddCommand.cs" />
     <Compile Include="Scheduling\Restriction\Commands\OvertimeAvailabilityEditCommand.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailabilityCreator.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessOptimizer.cs" />
