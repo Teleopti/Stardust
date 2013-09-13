@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			using (_mocks.Playback())
 			{
-				_target.UpdateOnActivation(_person);
+				_target.Update(_person);
 			}
 		}
 
