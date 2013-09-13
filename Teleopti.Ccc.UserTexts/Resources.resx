@@ -254,7 +254,7 @@
     <comment>Agents</comment>
   </data>
   <data name="AgentSettings" xml:space="preserve">
-    <value>Agent settings</value>
+    <value>Agent Settings</value>
     <comment>Agent settings</comment>
   </data>
   <data name="All" xml:space="preserve">
@@ -1767,7 +1767,7 @@ Periods</comment>
     <comment>Set culture</comment>
   </data>
   <data name="SetKPITargets" xml:space="preserve">
-    <value>Set KPI targets</value>
+    <value>Set KPI Targets</value>
     <comment>Set KPI targets</comment>
   </data>
   <data name="SetPassword" xml:space="preserve">
