@@ -1089,7 +1089,6 @@
     <Compile Include="Scheduling\Gridlock.cs" />
     <Compile Include="Scheduling\GridlockManager.cs" />
     <Compile Include="Common\EntitiesUpdatedEventArgs.cs" />
-    <Compile Include="Common\GuiHelpers\TimeSpanSeconds.cs" />
     <Compile Include="Common\GuiHelpers\TimePixelRelationHelper.cs" />
     <Compile Include="Common\ILocalized.cs" />
     <Compile Include="Common\LanguageResourceHelper.cs" />
