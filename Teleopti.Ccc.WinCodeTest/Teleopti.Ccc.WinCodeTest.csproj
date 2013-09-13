@@ -455,7 +455,6 @@
     <Compile Include="Converters\TimeSpanRoundingConverterTest.cs" />
     <Compile Include="Converters\PersonNameConverterTest.cs" />
     <Compile Include="Converters\IsNullConverterTest.cs" />
-    <Compile Include="Converters\LayerPeriodConverterTest.cs" />
     <Compile Include="Converters\ElapsedTimeConverterTest.cs" />
     <Compile Include="Meetings\MeetingSchedulesPresenterTest.cs" />
     <Compile Include="Meetings\MeetingViewModelTest.cs" />

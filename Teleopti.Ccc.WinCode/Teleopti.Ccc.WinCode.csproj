@@ -764,7 +764,6 @@
     <Compile Include="Converters\TimeSpanRoundingConverter.cs" />
     <Compile Include="Converters\IsNullConverter.cs" />
     <Compile Include="Converters\PersonNameConverter.cs" />
-    <Compile Include="Converters\LayerPeriodConverter.cs" />
     <Compile Include="Converters\ElapsedTimeConverter.cs" />
     <Compile Include="Converters\SimpleConverter.cs" />
     <Compile Include="Intraday\AgentStateViewAdapter.cs" />
