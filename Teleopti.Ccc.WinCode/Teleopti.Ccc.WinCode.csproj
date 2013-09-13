@@ -965,7 +965,6 @@
     <Compile Include="Scheduling\Requests\ShowOnlyPersonRequestViewModelSpecification.cs" />
     <Compile Include="Scheduling\Requests\HandlePersonRequestViewModel.cs" />
     <Compile Include="Scheduling\RestrictionCellValue.cs" />
-    <Compile Include="Scheduling\RestrictionPresenter.cs" />
     <Compile Include="Scheduling\RestrictionSchedulingOptions.cs" />
     <Compile Include="Scheduling\RestrictionSummary\RestrictionSummaryModel.cs" />
     <Compile Include="Scheduling\RestrictionSummary\RestrictionSummaryPresenter.cs" />

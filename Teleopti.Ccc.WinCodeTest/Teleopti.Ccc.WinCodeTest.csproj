@@ -635,7 +635,6 @@
     <Compile Include="Scheduler\Requests\RequestAllowancePresenterTest.cs" />
     <Compile Include="Scheduler\Requests\RequestDetailsPresenterTest.cs" />
     <Compile Include="Scheduler\Requests\RequestDetailsShiftTradePresenterTest.cs" />
-    <Compile Include="Scheduler\RestrictionPresenterTest.cs" />
     <Compile Include="Scheduler\Editor\ExpandedLayersViewModelTest.cs" />
     <Compile Include="Scheduler\Editor\EditLayerViewModelTest.cs" />
     <Compile Include="Scheduler\Editor\ShiftEditorEventArgsTest.cs" />
