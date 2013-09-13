@@ -720,7 +720,6 @@
     <Compile Include="Helper\StaffingEmailCalculatorService.cs" />
     <Compile Include="Optimization\ScheduleMatrixBitArrayConverter.cs" />
     <Compile Include="Optimization\SchedulePeriodDayOffLegalStateValidator.cs" />
-    <Compile Include="Optimization\SchedulePeriodDayOffBackToLegalStateByBrutalForceService.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\SchedulePeriodShiftCategoryBackToLegalStateServiceBuilder.cs" />
     <Compile Include="Optimization\SchedulePeriodShiftCategoryBackToLegalStateService.cs" />
