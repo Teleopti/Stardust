@@ -237,10 +237,9 @@
     <Compile Include="Collection\IdenticalLayersSpecification.cs" />
     <Compile Include="Collection\ITeamCollection.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
-    <Compile Include="Common\IPersonAccountUpdaterSdkProvider.cs" />
     <Compile Include="Common\PersonAccountUpdaterSdk.cs" />
     <Compile Include="Common\PersonAccountUpdaterWin.cs" />
-    <Compile Include="Common\IPersonAccountUpdaterWinProvider.cs" />
+    <Compile Include="Common\IPersonAccountUpdaterProvider.cs" />
     <Compile Include="Common\PersonAccountUpdaterDummy.cs" />
     <Compile Include="Common\CurrentBusinessUnit.cs" />
     <Compile Include="Common\CurrentDataSource.cs" />

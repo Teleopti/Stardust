@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.Mocks.Generated;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -21,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 	{
 		private PersonAccountUpdaterWin _target;
 		private MockRepository _mocks;
-		private IPeopleAccountUpdaterWinProvider _provider;
+		private IPeopleAccountUpdaterProvider _provider;
 		private IPerson _person;
 		private IAbsence _absence1;
 		private IAbsence _absence2;
@@ -33,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_provider = _mocks.Stub<IPeopleAccountUpdaterWinProvider>();
+			_provider = _mocks.Stub<IPeopleAccountUpdaterProvider>();
 			_person = PersonFactory.CreatePerson();
 			_absence1 = new Absence();
 			_absence2 = new Absence();

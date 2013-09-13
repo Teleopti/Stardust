@@ -7,9 +7,9 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Domain.Common
 {
 	/// <summary>
-	/// External depencency provider for IPeopleAccountUpdater in win
+	/// External depencency provider for IPeopleAccountUpdater
 	/// </summary>
-	public interface IPeopleAccountUpdaterWinProvider
+	public interface IPeopleAccountUpdaterProvider
 	{
 		ITraceableRefreshService GetRefreshService();
 		IUnitOfWork GetUnitOfWork { get; }

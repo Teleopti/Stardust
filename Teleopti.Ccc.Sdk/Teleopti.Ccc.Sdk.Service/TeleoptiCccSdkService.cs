@@ -806,7 +806,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
                 ((PersonAssembler)assembler).EnableSaveOrUpdate = true;
 				IPerson person = assembler.DtoToDomainEntity(personDto);
 				repository.Add(person);
-				IPeopleAccountUpdaterSdkProvider provider =
+				IPeopleAccountUpdaterProvider provider =
 					new PersonAccountUpdaterSdkProvider(repositoryFactory, uow); 
 				IPersonAccountUpdater updater = new PersonAccountUpdaterSdk(provider);
 	

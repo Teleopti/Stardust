@@ -27,7 +27,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-	public class FilteredPeopleHolder : IDisposable, IPeopleAccountUpdaterWinProvider
+	public class FilteredPeopleHolder : IDisposable, IPeopleAccountUpdaterProvider
     {
         private ITraceableRefreshService _refreshService;
         private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
