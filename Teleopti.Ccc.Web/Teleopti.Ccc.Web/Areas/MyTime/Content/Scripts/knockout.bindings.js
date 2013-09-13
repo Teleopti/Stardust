@@ -135,21 +135,27 @@ ko.bindingHandlers.increaseWidthIf = {
 };
 
 ko.bindingHandlers.timepicker = {
-	init: function (element, valueAccessor, allBindingsAccessor) {
-		var options = allBindingsAccessor().timepickerOptions || {};
-		$(element).timepicker(options);
+    init: function (element, valueAccessor, allBindingsAccessor) {
+	    var options = allBindingsAccessor().timepickerOptions || {};
+	    var $element = $(element);
+	    $element.timepicker(options);
 
-		ko.utils.registerEventHandler(element, "changeTime.timepicker", function (e) {
-			var observable = valueAccessor();
-			observable(e.time.value);
-		});
+	    $element.on('change', function () {
+	        var observable = valueAccessor();
+	        var value = $element.val();
+	        value = value == '' ? undefined : value;
+	        observable(value);
+	    });
 	},
 	update: function (element, valueAccessor) {
-		var value = ko.utils.unwrapObservable(valueAccessor());
-		if (typeof value === 'function') return;
-		if (value === undefined) value = '';
-            
-		$(element).timepicker("setTime", value);
+	    var $element = $(element);
+
+	    var value = ko.utils.unwrapObservable(valueAccessor());
+	    if (value) {
+	        $element.timepicker("setTime", value);
+	    } else {
+	        $element.val(value);
+	    }
 	}
 };
 
