@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Tracking;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -13,14 +14,10 @@ namespace Teleopti.Ccc.Sdk.Logic
 
 		private readonly IRepositoryFactory _repositoryFactory;
 
-		private IUnitOfWork _unitOfWork;
-
 		public PersonAccountUpdaterSdkProvider(
-			IRepositoryFactory repositoryFactory,
-			IUnitOfWork unitOfWork)
+			IRepositoryFactory repositoryFactory)
 		{
 			_repositoryFactory = repositoryFactory;
-			_unitOfWork = unitOfWork;
 		}
 
 		public ITraceableRefreshService GetRefreshService()
@@ -32,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.Logic
 
 		public IUnitOfWork GetUnitOfWork
 		{
-			get { return _unitOfWork; }
+			get { return UnitOfWorkFactory.Current.CurrentUnitOfWork(); }
 		}
 
 		public IPersonAccountCollection GetPersonAccounts(IPerson person)

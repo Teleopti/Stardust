@@ -8,11 +8,11 @@ namespace Teleopti.Ccc.Domain.Common
 	/// <remarks>
 	/// Used for the win fat client where all the data is already loaded in the FilteredPeopleHolder
 	/// </remarks>
-	public class PersonAccountUpdaterWin : IPersonAccountUpdater
+	public class PersonAccountUpdater : IPersonAccountUpdater
 	{
 		private readonly IPersonAccountUpdaterProvider _provider;
 
-		public PersonAccountUpdaterWin(IPersonAccountUpdaterProvider provider)
+		public PersonAccountUpdater(IPersonAccountUpdaterProvider provider)
 		{
 			_provider = provider;
 		}
@@ -25,11 +25,12 @@ namespace Teleopti.Ccc.Domain.Common
 		private void refreshAllAccounts(IPerson person)
 		{
 			var personAccounts = _provider.GetPersonAccounts(person);
+			var refreshService = _provider.GetRefreshService();
 			foreach (var personAccount in personAccounts)
 			{
 				foreach (var account in personAccount.AccountCollection())
 				{
-					_provider.GetRefreshService().Refresh(account, _provider.GetUnitOfWork);
+					refreshService.Refresh(account, _provider.GetUnitOfWork);
 				}
 			}
 		}

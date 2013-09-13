@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Common
 	    public virtual DateOnly? TerminalDate
         {
             get { return _terminalDate; }
-            private set
+            protected set
             {
 	            if (_terminalDate != value)
 	            {

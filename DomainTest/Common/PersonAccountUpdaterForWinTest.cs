@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 	[TestFixture]
 	public class PersonAccountUpdaterForWinTest
 	{
-		private PersonAccountUpdaterWin _target;
+		private PersonAccountUpdater _target;
 		private MockRepository _mocks;
 		private IPersonAccountUpdaterProvider _provider;
 		private IPerson _person;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			_absence2 = new Absence();
 			_unitOfWork = _mocks.Stub<IUnitOfWork>();
 			_refreshService = _mocks.StrictMock<ITraceableRefreshService>();
-			_target = new PersonAccountUpdaterWin(_provider);
+			_target = new PersonAccountUpdater(_provider);
 		}
 
 		[Test]

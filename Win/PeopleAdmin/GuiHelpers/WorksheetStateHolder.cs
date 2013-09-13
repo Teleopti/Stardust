@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             filteredPeopleHolder.MarkForInsert(newPerson);
 
-			var gridData = new PersonGeneralModel(newPerson, new UserDetail(newPerson), new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new PersonAccountUpdaterWin(filteredPeopleHolder)) { CanBold = true };
+			var gridData = new PersonGeneralModel(newPerson, new UserDetail(newPerson), new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new PersonAccountUpdater(filteredPeopleHolder)) { CanBold = true };
 
         	gridData.SetAvailableRoles(filteredPeopleHolder.ApplicationRoleCollection);
 
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
                 filteredPeopleHolder.MarkForInsert(person);
 
-				var personGridData = new PersonGeneralModel(person, new UserDetail(person), new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new PersonAccountUpdaterWin(filteredPeopleHolder)) { CanBold = true };
+				var personGridData = new PersonGeneralModel(person, new UserDetail(person), new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new PersonAccountUpdater(filteredPeopleHolder)) { CanBold = true };
             	personGridData.SetAvailableRoles(filteredPeopleHolder.ApplicationRoleCollection);
 
                 //set optional columns if any.);
@@ -1002,7 +1002,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             {
                 foreach (var account in personAcccountCollection.AllPersonAccounts())
                 {
-                    var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription, new PersonAccountUpdaterWin(filteredPeopleHolder));
+                    var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription, new PersonAccountUpdater(filteredPeopleHolder));
                     if (adapter.ContainedEntity != null && ((account == currentAccount) && canBold) ||
                         adapter.ContainedEntity.Id == null)
                         adapter.CanBold = true;
@@ -1032,7 +1032,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             foreach (var account in accountCollection.AllPersonAccounts())
             {
-                var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription, new PersonAccountUpdaterWin(filteredPeopleHolder));
+                var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription, new PersonAccountUpdater(filteredPeopleHolder));
                 handleCanBold(cachedCollection, canBold, currentAccount, account, adapter);
                 _personaccountGridViewChildCollection.Add(adapter);   
             }
