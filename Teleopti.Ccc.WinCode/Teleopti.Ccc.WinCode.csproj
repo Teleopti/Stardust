@@ -987,7 +987,6 @@
     <Compile Include="Settings\AbsenceView.cs" />
     <Compile Include="Settings\PageHelper.cs" />
     <Compile Include="Settings\TrackerView.cs" />
-    <Compile Include="Common\DateTimePeriodController.cs" />
     <Compile Include="Common\GuiHelpers\ApplicationTextHelper.cs" />
     <Compile Include="Common\GuiHelpers\GuiSettings.cs" />
     <Compile Include="Common\IGridPasteAction.cs" />
