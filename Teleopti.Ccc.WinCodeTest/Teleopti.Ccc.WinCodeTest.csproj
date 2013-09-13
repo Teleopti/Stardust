@@ -640,7 +640,6 @@
     <Compile Include="Scheduler\Editor\ShiftEditorEventArgsTest.cs" />
     <Compile Include="Scheduler\Editor\ShiftEditorSettingsTest.cs" />
     <Compile Include="Scheduler\Editor\ShiftEditorViewModelTest.cs" />
-    <Compile Include="Scheduler\Panels\IntervalSelectorTest.cs" />
     <Compile Include="Scheduler\RestrictionCellValueTest.cs" />
     <Compile Include="Scheduler\RestrictionSummary\PainterHelperTest.cs" />
     <Compile Include="Scheduler\RestrictionSummary\PreferenceNightRestCheckerTest.cs" />

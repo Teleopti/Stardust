@@ -951,7 +951,6 @@
     <Compile Include="Scheduling\GridlockDictionary.cs" />
     <Compile Include="Scheduling\IExportToScenarioResultView.cs" />
     <Compile Include="Scheduling\IPersistConflictView.cs" />
-    <Compile Include="Scheduling\Panels\IntervalSelector.cs" />
     <Compile Include="Scheduling\PersistConflictPresenter.cs" />
     <Compile Include="Scheduling\RestrictionSummary\IRestrictionSummaryViewCellModel.cs" />
     <Compile Include="Scheduling\RestrictionSummary\IWeekHeaderCellData.cs" />
