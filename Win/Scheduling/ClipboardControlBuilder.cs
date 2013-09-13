@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				Text = Resources.PastePersonalShift,
 				Tag = ClipboardItems.PersonalShift
 			});
-			_clipboardControl.PasteSpecialItems.Add(new ToolStripButton { Text = Resources.PasteNew, Tag = ClipboardItems.Special });
+			_clipboardControl.PasteSpecialItems.Add(new ToolStripButton { Text = Resources.PasteSpecial, Tag = ClipboardItems.Special });
 			_clipboardControl.PasteSpecialItems.Add(new ToolStripButton
 			{
 				Text = Resources.PasteShiftFromShifts,
