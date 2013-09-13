@@ -50,6 +50,33 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
+  Variable Value1=AGENT_SERVICE
+  Variable Name2=_PROP_VAR_
+  Variable Value2=AGENT_SERVICE_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SDK_SSL_SECURITY_MODE
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SDK_SSL_SECURITY_MODE_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=PM_SERVICE
+  Variable Name2=_PROP_VAR_
+  Variable Value2=PM_SERVICE_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
   Variable Value1=MATRIX_WEB_SITE_URL
   Variable Name2=_PROP_VAR_
   Variable Value2=MATRIX_WEB_SITE_URL_TMP
@@ -197,9 +224,23 @@ item: Insert Line into Text File
   New Text=$(nhibConfPath)|.
   Line Number=0
 end
-
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(MATRIX_WEB_SITE_URL)|%MATRIX_WEB_SITE_URL_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(PM_SERVICE)|%PM_SERVICE_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(SDK_SSL_SECURITY_MODE)|%SDK_SSL_SECURITY_MODE_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(AGENT_SERVICE)|%AGENT_SERVICE_TMP%
   Line Number=0
 end
