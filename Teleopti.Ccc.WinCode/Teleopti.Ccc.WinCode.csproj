@@ -344,7 +344,6 @@
     <Compile Include="Common\PropertyPageAndWizard\IAbstractPropertyPagesNoRoot.cs" />
     <Compile Include="Common\PropertyPageAndWizard\IPropertyPageNoRoot.cs" />
     <Compile Include="Converters\DateTimeConverter\TimeSpanToStringConverter.cs" />
-    <Compile Include="Common\RequestPreferencesPersonalSettings.cs" />
     <Compile Include="Forecasting\CopyToSkillCommand.cs" />
     <Compile Include="Forecasting\CopyToSkillModel.cs" />
     <Compile Include="Forecasting\CopyToSkillPresenter.cs" />
