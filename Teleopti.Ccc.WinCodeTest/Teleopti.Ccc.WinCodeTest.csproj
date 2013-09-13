@@ -785,7 +785,6 @@
     <Compile Include="PeopleAdmin\Models\SiteTeamModelTest.cs" />
     <Compile Include="Scheduler\DateTimeTimeSpanDictionaryTest.cs" />
     <Compile Include="Scheduler\PeriodPresenterTest.cs" />
-    <Compile Include="Scheduler\DetailPresenterTest.cs" />
     <Compile Include="Scheduler\OverviewPresenterTest.cs" />
     <Compile Include="Scheduler\WeekPresenterTest.cs" />
     <Compile Include="Scheduler\DateTimePeriodViewModelTest.cs" />

@@ -1057,7 +1057,6 @@
     <Compile Include="Scheduling\ColumnType.cs" />
     <Compile Include="Scheduling\DateDateTimePeriodDictionary.cs" />
     <Compile Include="Scheduling\DayPresenter.cs" />
-    <Compile Include="Scheduling\DetailPresenter.cs" />
     <Compile Include="Scheduling\IRequestPresenter.cs" />
     <Compile Include="Scheduling\IResourceOptimizationHelperWin.cs" />
     <Compile Include="Scheduling\IScheduleViewBase.cs" />
