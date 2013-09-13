@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters {
 
 		private void MakeTarget()
 		{
-			_target = new ScheduleDictionaryConflictCollector(_scheduleRepository, _personAssignmentRepository, _lazyLoadingManager, TimeZoneInfoFactory.UtcTimeZoneInfo());
+			_target = new ScheduleDictionaryConflictCollector(_scheduleRepository, _personAssignmentRepository, _lazyLoadingManager, new UtcTimeZone());
 		}
 
 		[Test]
