@@ -842,7 +842,6 @@
     <Compile Include="SetUpFixtureForAssembly.cs" />
     <Compile Include="Scheduler\ViewBaseHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShiftCreator\AutoPositionViewTest.cs" />
     <Compile Include="ShiftCreator\AccessibilityDateViewTest.cs" />
   </ItemGroup>
   <ItemGroup>
