@@ -516,11 +516,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             if (personPeriod.PersonMaxSeatSkillCollection.Count > 0)
             {
-                createAndAddItem(listViewPersonPeriod, "̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶—————————————————————————", "", 3);
-
                 foreach (IPersonSkill personSkill in personPeriod.PersonMaxSeatSkillCollection)
                 {
-                    createAndAddItem(listViewPersonPeriod, personSkill.Skill.Name, "", 3);
+					createAndAddItem(listViewPersonPeriod,  personSkill.Skill.Name, Resources.MaximumSeats, 3);
                 }
             }
             
