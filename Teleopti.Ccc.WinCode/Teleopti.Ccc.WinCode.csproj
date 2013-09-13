@@ -631,7 +631,6 @@
     <Compile Include="Common\TransparentControlMeetingHelper.cs" />
     <Compile Include="Common\TransparentMeetingControlModel.cs" />
     <Compile Include="Common\TransparentMeetingControlPresenter.cs" />
-    <Compile Include="Converters\DateTimeConverter\ExtendDateTimePeriodConverter.cs" />
     <Compile Include="Converters\DateTimeConverter\TimeSpanToDateTimeConverter.cs" />
     <Compile Include="Events\EventAggregatorModule.cs" />
     <Compile Include="Events\IEventAggregatorLocator.cs" />
