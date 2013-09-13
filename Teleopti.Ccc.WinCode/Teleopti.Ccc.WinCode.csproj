@@ -989,7 +989,6 @@
     <Compile Include="Settings\PageHelper.cs" />
     <Compile Include="Settings\TrackerView.cs" />
     <Compile Include="Common\DateTimePeriodController.cs" />
-    <Compile Include="Common\FilterBoxAdvancedFilter.cs" />
     <Compile Include="Common\FilterAdvancedTupleItem.cs" />
     <Compile Include="Common\GuiHelpers\ApplicationTextHelper.cs" />
     <Compile Include="Common\GuiHelpers\GuiSettings.cs" />
