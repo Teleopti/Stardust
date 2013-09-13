@@ -1036,7 +1036,6 @@
     <Compile Include="Scheduling\AbsenceLayerTest.cs" />
     <Compile Include="Scheduling\AbsenceTest.cs" />
     <Compile Include="Scheduling\PersonAbsenceTest.cs" />
-    <Compile Include="Scheduling\Assignment\AssignmentBelongsToAgentSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\AssignmentLengthTest.cs" />
     <Compile Include="Scheduling\Assignment\RestrictionTest.cs" />
     <Compile Include="Scheduling\WorkShiftTest.cs" />
