@@ -361,7 +361,6 @@
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\IntervalDataMinimumMedianCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerFromStorageTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeLengthDeciderTest.cs" />
     <Compile Include="Scheduling\Overtime\SkillIntervalDataDividerTest.cs" />
