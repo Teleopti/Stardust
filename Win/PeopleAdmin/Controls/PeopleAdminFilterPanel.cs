@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 
         void ReloadPeople()
         {
-            _filteredPeopleHolder.UnitOfWork.Dispose();
+            _filteredPeopleHolder.GetUnitOfWork.Dispose();
 
             var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork();
 
