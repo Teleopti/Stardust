@@ -489,7 +489,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_backgroundWorkerOptimization.DoWork += _backgroundWorkerOptimization_DoWork;
 			_backgroundWorkerOptimization.ProgressChanged += _backgroundWorkerOptimization_ProgressChanged;
 			_backgroundWorkerOptimization.RunWorkerCompleted += _backgroundWorkerOptimization_RunWorkerCompleted;
-			setPermissionOnControls();
+			//setPermissionOnControls();
 			setInitialClipboardControlState();
 			setupContextMenuSkillGrid();
 			setupToolbarButtonsChartViews();
@@ -991,6 +991,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemMeetingOrganizer.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyMeetings);
 			toolStripMenuItemWriteProtectSchedule.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
 			toolStripMenuItemAddOvertimeAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability);
+
+			setPermissionOnControls();
 			
 			schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += AgentRestrictionGridSelectedAgentIsReady;
 
