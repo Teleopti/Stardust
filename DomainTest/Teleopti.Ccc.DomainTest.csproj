@@ -348,7 +348,6 @@
     <Compile Include="Optimization\MainShiftOptimizeActivitiesSpecificationTest.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByPersonalSkillsExtractorTest.cs" />
     <Compile Include="Optimization\DayOffOptimizationServiceTest.cs" />
-    <Compile Include="Optimization\ScheduleMatrixBackToLegalStateBrutalForceServiceContainerTest.cs" />
     <Compile Include="Optimization\ScheduleMatrixListCreatorTest.cs" />
     <Compile Include="Optimization\ScheduleMatrixOriginalStateContainerTest.cs" />
     <Compile Include="Optimization\TimePeriodCanHaveShortBreakTest.cs" />

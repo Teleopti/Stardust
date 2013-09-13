@@ -690,7 +690,6 @@
     <Compile Include="Optimization\RmsPeriodValueCalculator.cs" />
     <Compile Include="Optimization\DayOffOptimizationService.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByPersonalSkillsExtractor.cs" />
-    <Compile Include="Optimization\ScheduleMatrixBackToLegalStateBrutalForceServiceContainer.cs" />
     <Compile Include="Optimization\ScheduleMatrixLockableBitArrayConverter.cs" />
     <Compile Include="RealTimeAdherence\DefaultStateGroupException.cs" />
     <Compile Include="Forecasting\ActiveAgentCount.cs" />
