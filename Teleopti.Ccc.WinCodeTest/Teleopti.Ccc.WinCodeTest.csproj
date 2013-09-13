@@ -296,7 +296,6 @@
     <Compile Include="Common\PersonPicker\SelectablePersonViewModelTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AbstractPropertyPagesNoRootTest.cs" />
     <Compile Include="Common\ReportSettingsScheduledTimeVersusTargetTest.cs" />
-    <Compile Include="Common\RestoreFocusWhenCompletedTest.cs" />
     <Compile Include="Common\Rows\RowManagerSchedulerTest.cs" />
     <Compile Include="Common\ScheduleContractTimeCalculatorTest.cs" />
     <Compile Include="Common\ScheduleDataLoaderTest.cs" />
