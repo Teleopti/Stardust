@@ -167,10 +167,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\BuildArtifacts\projects\Teleopti.Ccc.ApplicationConfig\App.config">
+      <Link>App.config</Link>
+    </None>
     <None Include="..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
-    <None Include="App.config" />
     <None Include="New BU.bat" />
     <None Include="packages.config" />
     <None Include="Upgrade BU.bat" />
