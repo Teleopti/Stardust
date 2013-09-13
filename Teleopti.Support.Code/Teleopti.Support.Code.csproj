@@ -69,6 +69,10 @@
       <Link>ConfigFiles\SDKWeb.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\BuildArtifacts\AnalyticsWeb.config">
+      <Link>ConfigFiles\AnalyticsWeb.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\BuildArtifacts\BrokerWeb.config">
       <Link>ConfigFiles\BrokerWeb.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -108,12 +112,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <None Include="..\BuildArtifacts\projects\Teleopti.Analytics.Portal\Web.config">
-      <Link>ConfigFiles\projects\Teleopti.Analytics.Portal\Web.config</Link>
-    </None>
-    <None Include="..\BuildArtifacts\projects\Teleopti.Ccc.ApplicationConfig\App.config">
-      <Link>ConfigFiles\projects\Teleopti.Ccc.ApplicationConfig\App.config</Link>
-    </None>
     <None Include="..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
@@ -123,7 +121,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if not exist "$(ProjectDir)settings.txt" copy "$(ProjectDir)..\BuildArtifacts\settings.txt" "$(ProjectDir)settings.txt"</PreBuildEvent>
