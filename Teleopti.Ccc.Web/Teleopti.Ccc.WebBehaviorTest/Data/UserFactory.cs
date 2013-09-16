@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private readonly AnalyticsDataFactory _analyticsDataFactory = new AnalyticsDataFactory();
 
 		private readonly ICollection<UserFactory> _colleagues = new List<UserFactory>();
-		private UserFactory _teamColleague;
 
 		public static UserFactory User()
 		{
@@ -57,7 +56,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			return ScenarioContext.Current.Value<UserFactory>(trimmedUserName);
 		}
 
-		public void AddColleague() { _colleagues.Add(new UserFactory()); }
+		public static bool HasUser(string userName)
+		{
+			var trimmedUserName = userName.Trim('\'');
+			return ScenarioContext.Current.Value<UserFactory>(trimmedUserName) != null;
+		}
 
 		private void AddColleague(string userName)
 		{
@@ -66,16 +69,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_colleagues.Add(userFactory);
 			ScenarioContext.Current.Value(userName, userFactory);
 		}
-
-		public void AddTeamColleague()
-		{
-			_teamColleague = new UserFactory();
-			_colleagues.Add(_teamColleague);
-		}
-
-		public UserFactory LastColleague() { return _colleagues.Last(); }
-		public UserFactory TeamColleague() { return _teamColleague; }
-		public IEnumerable<UserFactory> AllColleagues() { return _colleagues; }
 
 		private class NameInfo
 		{

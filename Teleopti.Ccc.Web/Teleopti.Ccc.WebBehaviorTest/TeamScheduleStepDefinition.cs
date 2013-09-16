@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.WebBehaviorTest.Bindings.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see my colleague's schedule")]
 		public void ThenIShouldSeeMyColleagueSSchedule()
 		{
-			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(UserFactory.User().TeamColleague().Person.Name.ToString());
+			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(UserFactory.User(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString());
 			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
 		}
 
@@ -103,7 +104,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see my colleague's absence")]
 		public void ThenIShouldMyColleagueSAbsence()
 		{
-			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(UserFactory.User().TeamColleague().Person.Name.ToString());
+			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(UserFactory.User(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString());
 			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
 		}
 
@@ -135,7 +136,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not see the absence's color")]
 		public void ThenIShouldNotSeeTheAbsenceSColor()
 		{
-			var collLayers = Pages.Pages.TeamSchedulePage.LayersByAgentName(UserFactory.User().TeamColleague().Person.Name.ToString());
+			var collLayers = Pages.Pages.TeamSchedulePage.LayersByAgentName(UserFactory.User(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString());
 			var color = TestData.ConfidentialAbsence.DisplayColor;
 			var colorAsString = string.Format("#{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B);
 
@@ -149,7 +150,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see my colleague's day off")]
 		public void ThenIShouldSeeMyColleagueSDayOff()
 		{
-			var dayOff = Pages.Pages.TeamSchedulePage.DayOffByAgentName(UserFactory.User().TeamColleague().Person.Name.ToString());
+			var dayOff = Pages.Pages.TeamSchedulePage.DayOffByAgentName(UserFactory.User(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString());
 			EventualAssert.That(() => dayOff.Exists, Is.True);
 		}
 
@@ -163,7 +164,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not see my colleagues schedule")]
 		public void ThenIShouldNotSeeMyColleaguesSchedule()
 		{
-			AssertAgentIsNotDisplayed(UserFactory.User().TeamColleague().Person.Name.ToString());
+			AssertAgentIsNotDisplayed(UserFactory.User(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString());
 		}
 
 		[Then(@"I should not see '(.*)' schedule")]
@@ -175,13 +176,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not see the other colleague's schedule")]
 		public void ThenIShouldNotSeeTheOtherColleagueSSchedule()
 		{
-			AssertAgentIsNotDisplayed(UserFactory.User().LastColleague().Person.Name.ToString());
+			AssertAgentIsNotDisplayed(UserFactory.User(ColleagueStepDefinitions.OtherTeamColleagueName).Person.Name.ToString());
 		}
 
 		[Then(@"I should see my colleague before myself")]
 		public void ThenIShouldSeeMyColleagueBeforeMyself()
 		{
-			var colleague = Pages.Pages.TeamSchedulePage.AgentByName(UserFactory.User().LastColleague().Person.Name.ToString());
+			var colleague = Pages.Pages.TeamSchedulePage.AgentByName(UserFactory.User(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString());
 			var mySelf = Pages.Pages.TeamSchedulePage.AgentByName(UserFactory.User().Person.Name.ToString());
 			
 			EventualAssert.That(() => colleague.Exists, Is.True);
@@ -219,7 +220,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see my colleague without schedule")]
 		public void ThenIShouldSeeMyColleagueWithoutSchedule()
 		{
-			var name = UserFactory.User().LastColleague().Person.Name.ToString();
+			var name = UserFactory.User(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString();
 			AssertAgentIsDisplayed(name);
 			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(name);
 			EventualAssert.That(() => layers.Count, Is.EqualTo(0));
@@ -272,7 +273,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see my colleague")]
 		public void ThenIShouldSeeMyColleague()
 		{
-			AssertAgentIsDisplayed(UserFactory.User().LastColleague().Person.Name.ToString());
+			// refact hack to see if which colleague has been created in this scenario
+			if (UserFactory.HasUser(ColleagueStepDefinitions.TeamColleagueName))
+				AssertAgentIsDisplayed(UserFactory.User(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString());
+			else
+				AssertAgentIsDisplayed(UserFactory.User(ColleagueStepDefinitions.OtherTeamColleagueName).Person.Name.ToString());
 		}
 
 		[Then(@"I should see colleague '(.*)'")]
