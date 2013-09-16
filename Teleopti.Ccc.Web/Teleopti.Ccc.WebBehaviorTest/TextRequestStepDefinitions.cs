@@ -70,6 +70,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			Browser.Interactions.Click(".request-new-send");
 		}
+
+		[When(@"I click delete button")]
+		public void WhenIClickRemoveButton()
+		{
+			Browser.Interactions.Click(".request-new-delete");
+		}
+
 		
 		[Then(@"I should see the text request's values at position '(.*)' in the list")]
 		public void ThenIShouldSeeTheTextRequestSValuesAtPositionInTheList(int position)

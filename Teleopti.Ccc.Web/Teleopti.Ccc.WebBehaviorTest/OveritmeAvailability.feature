@@ -261,9 +261,9 @@ Scenario: Delete overtime availability
 	| Field      | Value      |
 	| Date       | 2013-08-20 |
 	| Start time | 16:30      |
-	| End time   | 03:00 +1   |
+	| End time   | 17:30      |
 	And I view my week schedule for date '2013-08-20'
 	When I click on the day summary for date '2013-08-20'
 	And I click add new overtime availability
-	And I click remove button
+	And I click delete button
 	Then I should not see an overtime availability symbol for date '2013-08-20'
