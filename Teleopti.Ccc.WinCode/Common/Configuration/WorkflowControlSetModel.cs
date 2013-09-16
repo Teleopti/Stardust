@@ -144,8 +144,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             {
                 _absenceRequestPeriodModels.Clear();
                 _absenceRequestPeriodModels.AddRange(DomainEntity.AbsenceRequestOpenPeriods.Select(a => new AbsenceRequestPeriodModel(a, this)));
-                //List<AbsenceRequestPeriodModel> list = DomainEntity.AbsenceRequestOpenPeriods.Select(a => new AbsenceRequestPeriodModel(a)).ToList();
-                //_absenceRequestPeriodModels.AddRange(list);
                 return _absenceRequestPeriodModels;
             }
         }

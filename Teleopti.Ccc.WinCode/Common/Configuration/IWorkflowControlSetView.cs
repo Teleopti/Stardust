@@ -78,19 +78,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         /// </summary>
         /// <returns></returns>
         IList<AbsenceRequestPeriodModel> AbsenceRequestPeriodSelected { get; }
-
-        /// <summary>
-        /// Handles the paste when cell is copied.
-        /// </summary>
-        /// <returns>Returns true if paste of copied cell(s).</returns>
-        bool HandlePasteWhenCellIsCopied();
-
-        /// <summary>
-        /// Sets the clipbord text.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        void SetClipboardText(string text);
-
+		
         /// <summary>
         /// Enables/disables the handling of absence request periods.
         /// </summary>
