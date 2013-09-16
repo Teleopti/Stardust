@@ -103,9 +103,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private DockingManager _dockingManager;
 		//private FormAgentInfo _agentInfo;
 		private AgentInfoControl _agentInfoControl;
-        private ShiftDistributionControl _shiftDistributionControl;
-        private ShiftFairnessAnalysisControl _shiftFairnessAnalysisControl;
-	    private ShiftPerAgentControl _shiftPerAgentControl; 
+		private ShiftCategoryDistributionModel _shiftCategoryDistributionModel;
 		private ScheduleViewBase _scheduleView;
 		private RequestView _requestView;
 		private ResourceOptimizationHelperWin _optimizationHelperWin;
@@ -1005,9 +1003,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			
 			schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += AgentRestrictionGridSelectedAgentIsReady;
 			
+			
 			_backgroundWorkerRunning = true;
 			backgroundWorkerLoadData.RunWorkerAsync();
-            _updateSelectionForShiftDistribution = new UpdateSelectionForShiftDistribution(new DistributionInformationExtractor());
+			//No code after the call to runworkerasynk
 		}
 
 		private void loadQuickAccessState()
@@ -2478,12 +2477,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			validatePersons();
         }
-
-	    private void updateDistrbutionInformation(ModifyEventArgs modifyEventArgs)
-	    {
-            var allSchedules = _scheduleDayListFactory.CreatScheduleDayList();
-            _updateSelectionForShiftDistribution.Update(allSchedules, _scheduleView, _shiftDistributionControl, _shiftFairnessAnalysisControl, _shiftPerAgentControl, modifyEventArgs, _schedulerState.TimeZoneInfo);
-	    }
 
 	    private void _backgroundWorkerResourceCalculator_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
@@ -4201,6 +4194,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_defaultScheduleTag = tag;
 				break;
 			}
+
+			var cachedNumberOfEachCategoryPerPerson = new CachedNumberOfEachCategoryPerPerson(_schedulerState.Schedules,
+															_schedulerState.RequestedPeriod.DateOnlyPeriod);
+			var distributionInformationExtractor = new DistributionInformationExtractor(cachedNumberOfEachCategoryPerPerson,
+														 _schedulerState.RequestedPeriod.DateOnlyPeriod);
+			distributionInformationExtractor.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
+			_updateSelectionForShiftDistribution = new UpdateSelectionForShiftDistribution(distributionInformationExtractor);
 		}
 
 		private void createMaxSeatSkills(ISkillDayRepository skillDayRepository)
@@ -4411,8 +4411,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				_lastModifiedPart = e;
 
-                updateDistrbutionInformation(e);
-
 				if (!_backgroundWorkerRunning)
 				{
 					if (_scheduleView != null)
@@ -4425,7 +4423,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 						enableSave();
 					if (_scheduleView != null && _scheduleView.SelectedSchedules().Count == 1)
 						updateShiftEditor();
+
+					schedulerSplitters1.RefreshTabInfoPanels();
 				}
+
+				
 			}
 		}
 
@@ -4846,33 +4848,37 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void setupInfoTabs()
 		{
 			_currentIntraDayDate = _schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
-			_tabInfoPanels.TabPages.Clear();
-			var agentInfoTab = ColorHelper.CreateTabPage("Agent Info", "Agent Information");
-			_tabInfoPanels.TabPages.Add(agentInfoTab);
+			//_tabInfoPanels.TabPages.Clear();
+			//var agentInfoTab = ColorHelper.CreateTabPage("Agent Info", "Agent Information");
+			//_tabInfoPanels.TabPages.Add(agentInfoTab);
 			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _container, _groupPagesProvider);
-			_agentInfoControl.Dock = DockStyle.Fill;
-			agentInfoTab.Controls.Add(_agentInfoControl);
+			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl);
+			ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerDate = new CachedNumberOfEachCategoryPerPerson(_schedulerState.Schedules,_schedulerState.RequestedPeriod.DateOnlyPeriod);
+			_shiftCategoryDistributionModel = new ShiftCategoryDistributionModel(cachedNumberOfEachCategoryPerDate, _schedulerState.RequestedPeriod.DateOnlyPeriod, _schedulerState);
+			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
+			schedulerSplitters1.InsertShiftCategoryDistributionModel(_shiftCategoryDistributionModel);
+			//_agentInfoControl.Dock = DockStyle.Fill;
+			//agentInfoTab.Controls.Add(_agentInfoControl);
 
-            var shiftCategoryTab = ColorHelper.CreateTabPage("Shift Distribution", "Shift Distribution");
-			_tabInfoPanels.TabPages.Add(shiftCategoryTab);
-            _shiftDistributionControl = new ShiftDistributionControl();
-            _shiftDistributionControl.Dock = DockStyle.Fill;
-            shiftCategoryTab.Controls.Add(_shiftDistributionControl);
+			//var shiftCategoryTab = ColorHelper.CreateTabPage("Shift Distribution", "Shift Distribution");
+			//_tabInfoPanels.TabPages.Add(shiftCategoryTab);
+			//_shiftDistributionControl = new ShiftDistributionControl();
+			//_shiftDistributionControl.Dock = DockStyle.Fill;
+			//shiftCategoryTab.Controls.Add(_shiftDistributionControl);
 
-            var shiftperAgentTab = ColorHelper.CreateTabPage("Shift Fairness Per Agent", "Shift Fairness Per Agent");
-            _tabInfoPanels.TabPages.Add(shiftperAgentTab);
-            _shiftPerAgentControl = new ShiftPerAgentControl(_schedulerState) {Dock = DockStyle.Fill};
-            shiftperAgentTab.Controls.Add(_shiftPerAgentControl);
+			//var shiftperAgentTab = ColorHelper.CreateTabPage("Shift Fairness Per Agent", "Shift Fairness Per Agent");
+			//_tabInfoPanels.TabPages.Add(shiftperAgentTab);
+			//_shiftPerAgentControl = new ShiftPerAgentControl(_schedulerState) {Dock = DockStyle.Fill};
+			//shiftperAgentTab.Controls.Add(_shiftPerAgentControl);
 
-            var shiftFairnessTab = ColorHelper.CreateTabPage("Shift Fairness Analysis", "Shift Fairness Analysis");
-            _tabInfoPanels.TabPages.Add(shiftFairnessTab);
-            _shiftFairnessAnalysisControl = new ShiftFairnessAnalysisControl();
-            _shiftFairnessAnalysisControl.Dock = DockStyle.Fill;
-            shiftFairnessTab.Controls.Add(_shiftFairnessAnalysisControl);
+			//var shiftFairnessTab = ColorHelper.CreateTabPage("Shift Fairness Analysis", "Shift Fairness Analysis");
+			//_tabInfoPanels.TabPages.Add(shiftFairnessTab);
+			//_shiftFairnessAnalysisControl = new ShiftFairnessAnalysisControl();
+			//_shiftFairnessAnalysisControl.Dock = DockStyle.Fill;
+			//shiftFairnessTab.Controls.Add(_shiftFairnessAnalysisControl);
 
             
 
-		    updateDistrbutionInformation(null);
 			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 		}
 
@@ -6510,7 +6516,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripButtonFilterAgents_Click(object sender, EventArgs e)
 		{
 			showFilterDialog();
-			updateDistrbutionInformation(null);
+			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
+			schedulerSplitters1.RefreshTabInfoPanels();
 		}
 
 		private class ConflictHandlingResult
@@ -7234,7 +7241,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_requestView.FilterPersons(_schedulerState.FilteredPersonDictionary.Select(kvp => kvp.Key));
 			drawSkillGrid();
 
-			updateDistrbutionInformation(null);
+			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
+			schedulerSplitters1.RefreshTabInfoPanels();
 		}
 
 		private void toolStripMenuItemSwitchViewPointToTimeZoneOfSelectedAgent_Click(object sender, EventArgs e)

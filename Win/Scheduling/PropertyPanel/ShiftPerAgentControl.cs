@@ -1,53 +1,102 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 
 namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
-    public class ShiftPerAgentControl : BaseUserControl
-    {
-        private readonly ShiftPerAgentGrid  _shiftPerAgentGrid ;
-        private TableLayoutPanel tableLayoutPanelPerAgent;
+	public partial class ShiftPerAgentControl : UserControl, IShiftPerAgentView, INeedShiftCategoryDistributionModel
+	{
+		private IShiftPerAgentPresenter _presenter;
 
-        public ShiftPerAgentControl(ISchedulerStateHolder schedulerState)
-        {
-            initializeComponent();
-            _shiftPerAgentGrid = new ShiftPerAgentGrid(schedulerState) {Dock = DockStyle.Fill};
-            tableLayoutPanelPerAgent.Controls.Add(_shiftPerAgentGrid, 0, 1);
-            
-        }
+		public ShiftPerAgentControl()
+		{
+			InitializeComponent();
+			GridHelper.GridStyle(gridControl1);
+			gridControl1.ResizingColumns += shiftPerAgentGridResizingColumns;
+			gridControl1.CellModels.Add("IntegerReadOnlyCell", initializeNumericNoDecimalsReadOnlyCell());
+		}
 
-        public void UpdateModel(IDistributionInformationExtractor model)
-        {
-            _shiftPerAgentGrid.UpdateModel(model);
-        }
+		public void SetModel(IShiftCategoryDistributionModel model)
+		{
+			if (_presenter == null)
+			{
+				model.ResetNeeded += modelResetNeeded;
+			}
+			_presenter = new ShiftPerAgentPresenter(model);
+			_presenter.ReSort(null);
+		}
 
-        private void initializeComponent()
-        {
-            tableLayoutPanelPerAgent = new TableLayoutPanel();
-            SuspendLayout();
-            // 
-            // tableLayoutPanelPerAgent
-            // 
-            tableLayoutPanelPerAgent.ColumnCount = 1;
-            tableLayoutPanelPerAgent.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanelPerAgent.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-            tableLayoutPanelPerAgent.Dock = DockStyle.Fill;
-            tableLayoutPanelPerAgent.Location = new System.Drawing.Point(0, 0);
-            tableLayoutPanelPerAgent.Name = "tableLayoutPanelPerAgent";
-            tableLayoutPanelPerAgent.RowCount = 2;
-            tableLayoutPanelPerAgent.RowStyles.Add(new RowStyle(SizeType.Absolute, 21F));
-            tableLayoutPanelPerAgent.RowStyles.Add(new RowStyle());
-            tableLayoutPanelPerAgent.Size = new System.Drawing.Size(150, 150);
-            tableLayoutPanelPerAgent.TabIndex = 0;
-            // 
-            // ShiftPerAgentControl
-            // 
-            Controls.Add(tableLayoutPanelPerAgent);
-            Name = "ShiftPerAgentControl";
-            ResumeLayout(false);
-        }    
-    }
+		void modelResetNeeded(object sender, EventArgs e)
+		{
+			if (InvokeRequired)
+			{
+				BeginInvoke(new EventHandler<EventArgs>(modelResetNeeded), sender, e);
+			}
+			else
+			{
+				gridControl1.ResetVolatileData();
+				_presenter.ReSort(null);
+				gridControl1.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
+				gridControl1.UpdateScrollBars();
+				gridControl1.Invalidate(true);
+			}
+		}
+
+		private void gridControl1_CellDoubleClick(object sender, GridCellClickEventArgs e)
+		{
+			if (e.RowIndex > 0)
+				return;
+
+			object tag = gridControl1[0, e.ColIndex].Tag;
+			_presenter.ReSort(tag);
+			gridControl1.Invalidate();
+		}
+
+		private void gridControl1_QueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
+		{
+			if (_presenter == null)
+				return;
+
+			object tag = null;
+			if (e.RowIndex > 0)
+				tag = gridControl1[0, e.ColIndex].Tag;
+
+			_presenter.SetCellInfo(e.Style, e.RowIndex, e.ColIndex, tag);
+
+			e.Handled = true;
+		}
+
+		private void gridControl1_QueryRowCount(object sender, GridRowColCountEventArgs e)
+		{
+			if (_presenter == null)
+				return;
+			
+			e.Count = _presenter.RowCount;
+			e.Handled = true;
+		}
+
+		private void gridControl1_QueryColCount(object sender, GridRowColCountEventArgs e)
+		{
+			if (_presenter == null)
+				return;
+
+			e.Count = _presenter.ColumnCount();
+			e.Handled = true;
+		}
+
+		void shiftPerAgentGridResizingColumns(object sender, GridResizingColumnsEventArgs e)
+		{
+			e.Cancel = true;
+		}
+
+		private GridCellModelBase initializeNumericNoDecimalsReadOnlyCell()
+		{
+			var cellModel = new NumericReadOnlyCellModel(gridControl1.Model);
+			return cellModel;
+		}
+
+	}
 }
-

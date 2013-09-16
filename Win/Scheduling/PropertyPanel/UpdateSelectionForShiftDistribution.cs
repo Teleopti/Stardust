@@ -14,16 +14,16 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             _distributionInformationExtractor = distributionInformationExtractor;
         }
 
-        public void Update(IList<IScheduleDay> allSchedules, ScheduleViewBase scheduleView, ShiftDistributionControl shiftDistributionControl, ShiftFairnessAnalysisControl shiftFairnessAnalysisControl, ShiftPerAgentControl shiftPerAgentControl, ModifyEventArgs lastModifiedPart, TimeZoneInfo timeZoneInfo)
+        public void Update(ShiftDistributionControl shiftDistributionControl, ShiftFairnessAnalysisControl shiftFairnessAnalysisControl, ShiftPerAgentControl shiftPerAgentControl)
         {
-            if (scheduleView != null)
-            {
+			//if (scheduleView != null)
+			//{
                 //_distributionInformationExtractor.ExtractDistributionInfo(allSchedules);
-                _distributionInformationExtractor.ExtractDistributionInfo(allSchedules, lastModifiedPart, timeZoneInfo);
-                shiftDistributionControl.UpdateModel(_distributionInformationExtractor);
-                shiftFairnessAnalysisControl.UpdateModel(_distributionInformationExtractor);
-                shiftPerAgentControl.UpdateModel(_distributionInformationExtractor);
-            }
+				//_distributionInformationExtractor.ExtractDistributionInfo(allSchedules, lastModifiedPart, timeZoneInfo);
+                //shiftDistributionControl.UpdateModel(_distributionInformationExtractor);
+                //shiftFairnessAnalysisControl.UpdateModel(_distributionInformationExtractor);
+                //shiftPerAgentControl.UpdateModel(_distributionInformationExtractor);
+			//}
         }
     }
 }

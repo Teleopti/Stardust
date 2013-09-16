@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			if (e.ColIndex < (int)ShiftFairnessGridColumns.ShiftCategory || e.RowIndex < 0) return;
 			if (e.ColIndex == (int)ShiftFairnessGridColumns.ShiftCategory && e.RowIndex == 0) return;
 			if (e.ColIndex > (int)ShiftFairnessGridColumns.StandardDeviationValue) return;
-			if (e.RowIndex > _model.ShiftCategories.Count + 1) return;
+			if (e.RowIndex > _model.GetShiftCategories().Count + 1) return;
 
 			if (e.ColIndex > (int)ShiftFairnessGridColumns.ShiftCategory && e.RowIndex == 0)
 			{
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 			if (e.ColIndex == (int)ShiftFairnessGridColumns.ShiftCategory && e.RowIndex > 0)
 			{
-				if (e.RowIndex < _model.ShiftCategories.Count + 1)
+				if (e.RowIndex < _model.GetShiftCategories().Count + 1)
 				{
 					e.Style.CellValue = _presenter.SortedShiftCategories()[e.RowIndex - 1].Description.Name;
 					e.Style.Tag = _presenter.SortedShiftCategories()[e.RowIndex - 1];
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 					}
 				}
 
-				if (e.RowIndex == _model.ShiftCategories.Count + 1)
+				if (e.RowIndex == _model.GetShiftCategories().Count + 1)
 				{
 					if (e.ColIndex == (int) ShiftFairnessGridColumns.StandardDeviationValue)
 					{
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		void shiftFairnessGridQueryRowCount(object sender,GridRowColCountEventArgs e)
 		{
 			if(_model != null)
-				e.Count = _model.ShiftCategories.Count + 1;
+				e.Count = _model.GetShiftCategories().Count + 1;
 			e.Handled = true;
 		}
 

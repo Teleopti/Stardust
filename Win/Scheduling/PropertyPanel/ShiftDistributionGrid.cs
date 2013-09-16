@@ -69,13 +69,13 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
             if (e.ColIndex < 0 || e.RowIndex < 0) return;
             if (e.ColIndex == 0 && e.RowIndex == 0) return;
-            if (e.ColIndex > _model.ShiftCategories.Count) return;
+            if (e.ColIndex > _model.GetShiftCategories().Count) return;
             if (e.RowIndex > _model.Dates.Count) return;
 
             if (e.ColIndex > 0 && e.RowIndex == 0)
             {
-                e.Style.CellValue = _model.ShiftCategories[e.ColIndex - 1].Description.Name;
-                e.Style.Tag = _model.ShiftCategories[e.ColIndex - 1];
+                e.Style.CellValue = _model.GetShiftCategories()[e.ColIndex - 1].Description.Name;
+                e.Style.Tag = _model.GetShiftCategories()[e.ColIndex - 1];
             }
 
             if (e.ColIndex == 0 && e.RowIndex > 0)
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         private void shiftPerAgentGridQueryColCount(object sender, GridRowColCountEventArgs e)
         {
 			if(_model != null)
-				e.Count = _model.ShiftCategories.Count;
+				e.Count = _model.GetShiftCategories().Count;
             e.Handled = true;
         }
 

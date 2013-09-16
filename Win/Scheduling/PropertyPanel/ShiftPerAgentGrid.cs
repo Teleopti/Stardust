@@ -1,5 +1,4 @@
-﻿using Syncfusion.Windows.Forms;
-using Syncfusion.Windows.Forms.Grid;
+﻿using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
@@ -67,28 +66,30 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 			if (e.ColIndex < 0 || e.RowIndex < 0) return;
 			if (e.ColIndex == 0 && e.RowIndex == 0) return;
-			if (e.ColIndex > _model.ShiftCategories.Count) return;
+			
 			if (e.RowIndex > _model.PersonInvolved.Count) return;
 
 			if (e.ColIndex > 0 && e.RowIndex == 0)
 			{
-				e.Style.CellValue = _model.ShiftCategories[e.ColIndex - 1].Description.Name ;
-				e.Style.Tag = _model.ShiftCategories[e.ColIndex - 1];	
+				var shiftCategoryList = _model.GetShiftCategories();
+				if (e.ColIndex > shiftCategoryList.Count)
+					return;
+				e.Style.CellValue = shiftCategoryList[e.ColIndex - 1].Description.Name;
+				e.Style.Tag = shiftCategoryList[e.ColIndex - 1];	
 			}
 
 			if (e.ColIndex == 0 && e.RowIndex > 0)
 			{
 				e.Style.CellValue = _schedulerState.CommonAgentName(_presenter.SortedPersonInvolved()[e.RowIndex - 1]);
-				e.Style.Tag = _presenter.SortedPersonInvolved()[e.RowIndex - 1];
 			}
 
 			if (e.ColIndex > 0 && e.RowIndex > 0)
 			{
-				var person = this[e.RowIndex, 0].Tag as IPerson;
+				var person = _presenter.SortedPersonInvolved()[e.RowIndex - 1];
 				var shiftCategory = this[0, e.ColIndex].Tag as IShiftCategory;
 				e.Style.CellType = "IntegerReadOnlyCell";
 			    if (shiftCategory != null)
-			        e.Style.CellValue = _presenter.ShiftCategoryCount(person, shiftCategory, _model.ShiftCategoryPerAgents );
+			        e.Style.CellValue = _presenter.ShiftCategoryCount(person, shiftCategory, _model.PersonCache);
 			    else
 			        e.Style.CellValue = 0;
 			}
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		void shiftPerAgentGridQueryColCount(object sender, GridRowColCountEventArgs e)
 		{
 			if(_model != null)
-				e.Count = _model.ShiftCategories.Count;
+				e.Count = _model.GetShiftCategories().Count;
 			e.Handled = true;
 		}
 

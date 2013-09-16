@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             _model = model;
             _comboBoxShiftCategory.Items.Clear();
-            foreach (var shiftCategory in _model.ShiftCategories.OrderBy(s => s.Description.Name))
+            foreach (var shiftCategory in _model.GetShiftCategories().OrderBy(s => s.Description.Name))
             {
                 _comboBoxShiftCategory.Items.Add(shiftCategory.Description.Name);
             }
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             IShiftCategory selectedShiftCategory = null;
             _chart.Series.Clear();
             var tempList =
-                _model.ShiftCategories.Where(
+                _model.GetShiftCategories().Where(
                     shiftCategory => shiftCategory.Description.Name.Equals(_comboBoxShiftCategory.SelectedItem)).ToArray();
             if (tempList.Any())
             {

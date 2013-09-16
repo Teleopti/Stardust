@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
 		public void ReSort()
 		{
-			_sortedShiftCategories = _view.ExtractorModel.ShiftCategories;
+			_sortedShiftCategories = _view.ExtractorModel.GetShiftCategories();
 			_sortAscending = !_sortAscending;
 			Sort(_sortColumn);
 		}
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			var model = _view.ExtractorModel;
 			var shiftFairness = model.ShiftFairness ;
 
-			if (colIndex == (int)ShiftFairnessGridColumns.ShiftCategory) _sortedShiftCategories = model.ShiftCategories.OrderByWithDirection(s => s.Description.Name, !_sortAscending).ToList();
+			if (colIndex == (int)ShiftFairnessGridColumns.ShiftCategory) _sortedShiftCategories = model.GetShiftCategories().OrderByWithDirection(s => s.Description.Name, !_sortAscending).ToList();
 			else
 			{
 				if (_sortColumn == (int) ShiftFairnessGridColumns.MinimumValue) 
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
 		public IList<IShiftCategory> SortedShiftCategories()
 		{
-			if (_sortedShiftCategories == null) _sortedShiftCategories = _view.ExtractorModel.ShiftCategories;
+			if (_sortedShiftCategories == null) _sortedShiftCategories = _view.ExtractorModel.GetShiftCategories();
 			return _sortedShiftCategories;
 		}
 	}

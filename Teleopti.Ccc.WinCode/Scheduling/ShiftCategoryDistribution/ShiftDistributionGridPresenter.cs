@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
             else
             {
-                var shiftCategory = model.ShiftCategories[_sortColumn - 1];
+                var shiftCategory = model.GetShiftCategories()[_sortColumn - 1];
 
                 if (_sortAscending)
                 {

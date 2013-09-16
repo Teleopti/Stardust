@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -26,12 +27,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			_sortedPersonInvolved = null;
 		}
 
-		public int ShiftCategoryCount(IPerson person, IShiftCategory shiftCategory, IList<ShiftCategoryPerAgent> shiftCategoryPerAgentList)
+		public int ShiftCategoryCount(IPerson person, IShiftCategory shiftCategory, ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson)
 		{
-			return (from shiftCategoryPerAgent in shiftCategoryPerAgentList 
-					where shiftCategoryPerAgent.Person.Equals(person) && shiftCategoryPerAgent.ShiftCategory!=null
-					where shiftCategoryPerAgent.ShiftCategory.Equals(shiftCategory) 
-					select shiftCategoryPerAgent.Count).FirstOrDefault();
+			int value;
+			if (!cachedNumberOfEachCategoryPerPerson.GetValue(person).TryGetValue(shiftCategory, out value))
+				value = 0;
+
+			return value;
 		}
 
 		public void ReSort()
@@ -51,9 +53,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			_sortColumn = colIndex;
 
 			var model = _view.ExtractorModel;
-            var shiftCategoryPerAgent = model.ShiftCategoryPerAgents;
+			var shiftCategoryList = model.GetShiftCategories();
 
-			if (model.ShiftCategories.Count  <= (_sortColumn - 1) || model.ShiftCategories.Count == 0)
+			if (shiftCategoryList.Count <= (_sortColumn - 1) || shiftCategoryList.Count == 0)
 			{
 				return;	
 			}
@@ -66,20 +68,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
 			else
 			{
-				var shiftCategory = model.ShiftCategories[_sortColumn - 1];
+				var shiftCategory = shiftCategoryList[_sortColumn - 1];
 
-				_sortedPersonInvolved = shiftCategoryPerAgent.OrderByWithDirection(s => s.Count, !_sortAscending).Where(s=> s.ShiftCategory != null).Where(s=> s.ShiftCategory.Equals(shiftCategory)).Select(s => s.Person).ToList();
+				_sortedPersonInvolved = model.GetAgentsSortedByNumberOfShiftCategories(shiftCategory);
 
-				foreach (var person in model.PersonInvolved)
-				{
-					if (_sortedPersonInvolved != null && !_sortedPersonInvolved.Contains(person))
-					{
-						if(_sortAscending)
-							_sortedPersonInvolved.Insert(0, person);
-						else
-							_sortedPersonInvolved.Add(person);
-					}
-				}
+				if (_sortAscending)
+					_sortedPersonInvolved = new List<IPerson>(_sortedPersonInvolved.Reverse());
 			}
 		}
 
