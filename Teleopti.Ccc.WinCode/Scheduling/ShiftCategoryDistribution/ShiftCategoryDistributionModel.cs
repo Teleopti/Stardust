@@ -17,10 +17,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
 		//IEnumerable<IPerson> FilteredPersons { get; }
 		int ShiftCategoryCount(IPerson person, IShiftCategory shiftCategory);
+		int ShiftCategoryCount(DateOnly dateOnly, IShiftCategory shiftCategory);
 		IList<IShiftCategory> GetSortedShiftCategories();
 		string CommonAgentName(IPerson person);
 		IList<IPerson> GetSortedPersons(bool ascending);
+		IList<DateOnly> GetSortedDates(bool ascending);
 		IList<IPerson> GetAgentsSortedByNumberOfShiftCategories(IShiftCategory shiftCategory, bool ascending);
+		IList<DateOnly> GetDatesSortedByNumberOfShiftCategories(IShiftCategory shiftCategory, bool ascending);
 
 		event EventHandler ResetNeeded;
 	}
@@ -28,13 +31,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 	public class ShiftCategoryDistributionModel : IShiftCategoryDistributionModel
 	{
 		private IEnumerable<IPerson> _filteredPersons = new List<IPerson>();
+		private readonly ICachedNumberOfEachCategoryPerDate _cachedNumberOfEachCategoryPerDate;
 		private readonly ICachedNumberOfEachCategoryPerPerson _cachedNumberOfEachCategoryPerPerson;
 		private readonly DateOnlyPeriod _periodToMonitor;
 		private readonly ISchedulerStateHolder _schedulerStateHolder;
 		private int _lastShiftCategoryCount;
 
-		public ShiftCategoryDistributionModel(ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson, DateOnlyPeriod periodToMonitor, ISchedulerStateHolder schedulerStateHolder)
+		public ShiftCategoryDistributionModel(ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate, ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson, DateOnlyPeriod periodToMonitor, ISchedulerStateHolder schedulerStateHolder)
 		{
+			_cachedNumberOfEachCategoryPerDate = cachedNumberOfEachCategoryPerDate;
 			_cachedNumberOfEachCategoryPerPerson = cachedNumberOfEachCategoryPerPerson;
 			_periodToMonitor = periodToMonitor;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -45,6 +50,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		public void SetFilteredPersons(IEnumerable<IPerson> filteredPersons)
 		{
 			_filteredPersons = filteredPersons;
+			_cachedNumberOfEachCategoryPerDate.SetFilteredPersons(_filteredPersons);
 			OnResetNeeded();
 		}
 
@@ -59,6 +65,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		public int ShiftCategoryCount(IPerson person, IShiftCategory shiftCategory)
 		{
 			IDictionary<IShiftCategory, int> shiftCategoryDic = _cachedNumberOfEachCategoryPerPerson.GetValue(person);
+			int value;
+			if (!shiftCategoryDic.TryGetValue(shiftCategory, out value))
+				value = 0;
+
+			return value;
+		}
+
+		public int ShiftCategoryCount(DateOnly dateOnly, IShiftCategory shiftCategory)
+		{
+			IDictionary<IShiftCategory, int> shiftCategoryDic = _cachedNumberOfEachCategoryPerDate.GetValue(dateOnly);
 			int value;
 			if (!shiftCategoryDic.TryGetValue(shiftCategory, out value))
 				value = 0;
@@ -116,7 +132,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			return sortedFilteredPersons;
 		}
 
-		//this one is a bit slow but we doesn't sort that often
+		public IList<DateOnly> GetSortedDates(bool ascending)
+		{
+			List<DateOnly> sortedDates = new List<DateOnly>(_periodToMonitor.DayCollection());
+			sortedDates.Sort();
+
+			if (!ascending)
+				sortedDates.Reverse();
+
+			return sortedDates;
+		}
+
 		public IList<IPerson> GetAgentsSortedByNumberOfShiftCategories(IShiftCategory shiftCategory, bool ascending)
 		{
 			var result = new List<agentIntPair>();
@@ -143,6 +169,32 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			return returnList;
 		}
 
+		public IList<DateOnly> GetDatesSortedByNumberOfShiftCategories(IShiftCategory shiftCategory, bool ascending)
+		{
+			var result = new List<dateIntPair>();
+			var returnList = new List<DateOnly>();
+
+			if (shiftCategory == null)
+				return returnList;
+
+			foreach (var dateOnly in _periodToMonitor.DayCollection())
+			{
+				int value;
+				if (!_cachedNumberOfEachCategoryPerDate.GetValue(dateOnly).TryGetValue(shiftCategory, out value))
+					value = 0;
+
+				result.Add(new dateIntPair(dateOnly, value));
+			}
+
+			result.Sort();
+			returnList.AddRange(result.Select(dateIntPair => dateIntPair.DateOnly));
+
+			if (ascending)
+				returnList.Reverse();
+
+			return returnList;
+		}
+
 		private class agentIntPair : IComparable
 		{
 			private readonly int _count;
@@ -157,6 +209,34 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			public int CompareTo(object obj)
 			{
 				var other = (agentIntPair)obj;
+				if (other._count == _count)
+					return 0;
+
+				if (other._count > _count)
+					return 1;
+
+				return -1;
+			}
+		}
+
+		private class dateIntPair : IComparable
+		{
+			private readonly int _count;
+			public DateOnly DateOnly
+			{
+				get;
+				private set;
+			}
+
+			public dateIntPair(DateOnly dateOnly, int count)
+			{
+				DateOnly = dateOnly;
+				_count = count;
+			}
+
+			public int CompareTo(object obj)
+			{
+				var other = (dateIntPair)obj;
 				if (other._count == _count)
 					return 0;
 

@@ -1,4 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common;
@@ -7,11 +13,11 @@ using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 
 namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
-	public partial class ShiftPerAgentControl : UserControl, INeedShiftCategoryDistributionModel
+	public partial class ShiftPerDateControl : UserControl, INeedShiftCategoryDistributionModel
 	{
-		private IShiftPerAgentPresenter _presenter;
+		private IShiftPerDayPresenter _presenter;
 
-		public ShiftPerAgentControl()
+		public ShiftPerDateControl()
 		{
 			InitializeComponent();
 			GridHelper.GridStyle(gridControl1);
@@ -25,7 +31,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			{
 				model.ResetNeeded += modelResetNeeded;
 			}
-			_presenter = new ShiftPerAgentPresenter(model);
+			_presenter = new ShiftPerDayPresenter(model);
 			_presenter.ReSort(null);
 		}
 
@@ -45,16 +51,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			}
 		}
 
-		private void gridControl1_CellDoubleClick(object sender, GridCellClickEventArgs e)
-		{
-			if (e.RowIndex > 0)
-				return;
-
-			object tag = gridControl1[0, e.ColIndex].Tag;
-			_presenter.ReSort(tag);
-			gridControl1.Invalidate();
-		}
-
 		private void gridControl1_QueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
 		{
 			if (_presenter == null)
@@ -69,15 +65,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			e.Handled = true;
 		}
 
-		private void gridControl1_QueryRowCount(object sender, GridRowColCountEventArgs e)
-		{
-			if (_presenter == null)
-				return;
-			
-			e.Count = _presenter.RowCount;
-			e.Handled = true;
-		}
-
 		private void gridControl1_QueryColCount(object sender, GridRowColCountEventArgs e)
 		{
 			if (_presenter == null)
@@ -85,6 +72,25 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 			e.Count = _presenter.ColumnCount();
 			e.Handled = true;
+		}
+
+		private void gridControl1_QueryRowCount(object sender, GridRowColCountEventArgs e)
+		{
+			if (_presenter == null)
+				return;
+
+			e.Count = _presenter.RowCount;
+			e.Handled = true;
+		}
+
+		private void gridControl1_CellDoubleClick(object sender, GridCellClickEventArgs e)
+		{
+			if (e.RowIndex > 0)
+				return;
+
+			object tag = gridControl1[0, e.ColIndex].Tag;
+			_presenter.ReSort(tag);
+			gridControl1.Invalidate();
 		}
 
 		void shiftPerAgentGridResizingColumns(object sender, GridResizingColumnsEventArgs e)
@@ -97,6 +103,5 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			var cellModel = new NumericReadOnlyCellModel(gridControl1.Model);
 			return cellModel;
 		}
-
 	}
 }

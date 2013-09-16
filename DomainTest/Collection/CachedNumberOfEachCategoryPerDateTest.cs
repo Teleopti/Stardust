@@ -52,7 +52,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 			using (_mocks.Playback())
 			{
-				_target = new CachedNumberOfEachCategoryPerDate(_dic, periodToMonitor, personList);
+				_target = new CachedNumberOfEachCategoryPerDate(_dic, periodToMonitor);
+				_target.SetFilteredPersons(personList);
 				IDictionary<IShiftCategory, int> value = _target.GetValue(new DateOnly(2013, 09, 12));
 				Assert.AreEqual(1, value[shiftCategory]);
 				//and if we call it again with the same date the key will be found
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		}
 
 		[Test]
-		public void ClearShouldClearIsThatClear()
+		public void SettingFilteredPersonsShouldClearTheCache()
 		{
 			var periodToMonitor = new DateOnlyPeriod(2013, 09, 12, 2013, 09, 13);
 			var person1 = PersonFactory.CreatePerson();
@@ -88,11 +89,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 			using (_mocks.Playback())
 			{
-				_target = new CachedNumberOfEachCategoryPerDate(_dic, periodToMonitor, personList);
+				_target = new CachedNumberOfEachCategoryPerDate(_dic, periodToMonitor);
+				_target.SetFilteredPersons(personList);
 				_target.GetValue(new DateOnly(2013, 09, 12));
 				_target.GetValue(new DateOnly(2013, 09, 13));
 				Assert.AreEqual(2, _target.ItemCount);
-				_target.Clear();
+				_target.SetFilteredPersons(personList);
 				Assert.AreEqual(0, _target.ItemCount);
 			}
 		}
@@ -131,7 +133,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 			using (_mocks.Playback())
 			{
-				_target = new CachedNumberOfEachCategoryPerDate(_dic, periodToMonitor, personList);
+				_target = new CachedNumberOfEachCategoryPerDate(_dic, periodToMonitor);
+				_target.SetFilteredPersons(personList);
 				_target.GetValue(new DateOnly(2013, 09, 12));
 				_target.GetValue(new DateOnly(2013, 09, 13));
 				Assert.AreEqual(2, _target.ItemCount);
@@ -173,7 +176,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 			using (_mocks.Playback())
 			{
-				_target = new CachedNumberOfEachCategoryPerDate(_dic, periodToMonitor, personList);
+				_target = new CachedNumberOfEachCategoryPerDate(_dic, periodToMonitor);
+				_target.SetFilteredPersons(personList);
 				_target.GetValue(new DateOnly(2013, 09, 12));
 				_target.GetValue(new DateOnly(2013, 09, 13));
 				Assert.AreEqual(2, _target.ItemCount);

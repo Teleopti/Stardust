@@ -8,21 +8,20 @@ namespace Teleopti.Ccc.Domain.Collection
 	{
 		IDictionary<IShiftCategory, int> GetValue(DateOnly dateOnly);
 		int ItemCount { get; }
-		void Clear();
+		void SetFilteredPersons(IEnumerable<IPerson> filteredPersons);
 	}
 
 	public class CachedNumberOfEachCategoryPerDate : ICachedNumberOfEachCategoryPerDate
 	{
 		private readonly IScheduleDictionary _scheduleDictionary;
 		private readonly DateOnlyPeriod _periodToMonitor;
-		private readonly IEnumerable<IPerson> _filteredAgents;
+		private IEnumerable<IPerson> _filteredAgents = new List<IPerson>();
 		private readonly IDictionary<DateOnly, IDictionary<IShiftCategory, int>> _internalDic = new Dictionary<DateOnly, IDictionary<IShiftCategory, int>>();
 
-		public CachedNumberOfEachCategoryPerDate(IScheduleDictionary scheduleDictionary, DateOnlyPeriod periodToMonitor, IEnumerable<IPerson> filteredAgents)
+		public CachedNumberOfEachCategoryPerDate(IScheduleDictionary scheduleDictionary, DateOnlyPeriod periodToMonitor)
 		{
 			_scheduleDictionary = scheduleDictionary;
 			_periodToMonitor = periodToMonitor;
-			_filteredAgents = filteredAgents;
 			_scheduleDictionary.PartModified += scheduleDictionary_PartModified;
 		}
 
@@ -46,9 +45,10 @@ namespace Teleopti.Ccc.Domain.Collection
 			}
 		}
 
-		public void Clear()
+		public void SetFilteredPersons(IEnumerable<IPerson> filteredPersons)
 		{
 			_internalDic.Clear();
+			_filteredAgents = filteredPersons;
 		}
 
 		void scheduleDictionary_PartModified(object sender, ModifyEventArgs e)

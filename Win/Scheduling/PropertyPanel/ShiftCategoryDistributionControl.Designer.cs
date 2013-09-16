@@ -33,10 +33,12 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			this.tabControlShiftCategoryDistribution = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPagePerDate = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tabPagePerAgent = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.tabPageDistribution = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.shiftPerAgentControl1 = new Teleopti.Ccc.Win.Scheduling.PropertyPanel.ShiftPerAgentControl();
+			this.tabPageDistribution = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
+			this.shiftPerDateControl1 = new Teleopti.Ccc.Win.Scheduling.PropertyPanel.ShiftPerDateControl();
 			((System.ComponentModel.ISupportInitialize)(this.tabControlShiftCategoryDistribution)).BeginInit();
 			this.tabControlShiftCategoryDistribution.SuspendLayout();
+			this.tabPagePerDate.SuspendLayout();
 			this.tabPagePerAgent.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -57,6 +59,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			// 
 			// tabPagePerDate
 			// 
+			this.tabPagePerDate.Controls.Add(this.shiftPerDateControl1);
 			this.tabPagePerDate.Image = null;
 			this.tabPagePerDate.ImageSize = new System.Drawing.Size(16, 16);
 			this.tabPagePerDate.Location = new System.Drawing.Point(1, 22);
@@ -82,6 +85,15 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			this.tabPagePerAgent.Text = "xxPerAgent";
 			this.tabPagePerAgent.ThemesEnabled = false;
 			// 
+			// shiftPerAgentControl1
+			// 
+			this.shiftPerAgentControl1.BackColor = System.Drawing.SystemColors.Window;
+			this.shiftPerAgentControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.shiftPerAgentControl1.Location = new System.Drawing.Point(3, 3);
+			this.shiftPerAgentControl1.Name = "shiftPerAgentControl1";
+			this.shiftPerAgentControl1.Size = new System.Drawing.Size(343, 500);
+			this.shiftPerAgentControl1.TabIndex = 0;
+			// 
 			// tabPageDistribution
 			// 
 			this.tabPageDistribution.Image = null;
@@ -95,13 +107,13 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			this.tabPageDistribution.Text = "xxDistribution";
 			this.tabPageDistribution.ThemesEnabled = false;
 			// 
-			// shiftPerAgentControl1
+			// shiftPerDateControl1
 			// 
-			this.shiftPerAgentControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.shiftPerAgentControl1.Location = new System.Drawing.Point(3, 3);
-			this.shiftPerAgentControl1.Name = "shiftPerAgentControl1";
-			this.shiftPerAgentControl1.Size = new System.Drawing.Size(343, 500);
-			this.shiftPerAgentControl1.TabIndex = 0;
+			this.shiftPerDateControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.shiftPerDateControl1.Location = new System.Drawing.Point(3, 3);
+			this.shiftPerDateControl1.Name = "shiftPerDateControl1";
+			this.shiftPerDateControl1.Size = new System.Drawing.Size(343, 500);
+			this.shiftPerDateControl1.TabIndex = 0;
 			// 
 			// ShiftCategoryDistributionControl
 			// 
@@ -112,6 +124,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			this.Size = new System.Drawing.Size(352, 530);
 			((System.ComponentModel.ISupportInitialize)(this.tabControlShiftCategoryDistribution)).EndInit();
 			this.tabControlShiftCategoryDistribution.ResumeLayout(false);
+			this.tabPagePerDate.ResumeLayout(false);
 			this.tabPagePerAgent.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -124,5 +137,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPagePerAgent;
 		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageDistribution;
 		private ShiftPerAgentControl shiftPerAgentControl1;
+		private ShiftPerDateControl shiftPerDateControl1;
 	}
 }

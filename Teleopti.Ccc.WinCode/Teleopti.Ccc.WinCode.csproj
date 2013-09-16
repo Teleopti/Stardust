@@ -586,7 +586,6 @@
     <Compile Include="Scheduling\Restriction\OvertimeAvailabilityCreator.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\DistributionInformationExtractor.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\INeedShiftCategoryDistributionModel.cs" />
-    <Compile Include="Scheduling\ShiftCategoryDistribution\IShiftPerAgentView.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftCategoryDistributionExtensions.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftCategoryDistributionModel.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftCategoryPerAgent.cs" />
@@ -599,6 +598,7 @@
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftFairnessGridPresenter.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftPerAgentGridPresenter.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftPerAgentPresenter.cs" />
+    <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftPerDayPresenter.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessOptimizer.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessValueHelper.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ScheduleDayToShiftCategoryMapper.cs" />

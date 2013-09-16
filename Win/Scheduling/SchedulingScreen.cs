@@ -4853,8 +4853,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//_tabInfoPanels.TabPages.Add(agentInfoTab);
 			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _container, _groupPagesProvider);
 			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl);
-			ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerDate = new CachedNumberOfEachCategoryPerPerson(_schedulerState.Schedules,_schedulerState.RequestedPeriod.DateOnlyPeriod);
-			_shiftCategoryDistributionModel = new ShiftCategoryDistributionModel(cachedNumberOfEachCategoryPerDate, _schedulerState.RequestedPeriod.DateOnlyPeriod, _schedulerState);
+			ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson =
+				new CachedNumberOfEachCategoryPerPerson(_schedulerState.Schedules, _schedulerState.RequestedPeriod.DateOnlyPeriod);
+			ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate =
+				new CachedNumberOfEachCategoryPerDate(_schedulerState.Schedules, _schedulerState.RequestedPeriod.DateOnlyPeriod);
+			_shiftCategoryDistributionModel = new ShiftCategoryDistributionModel(cachedNumberOfEachCategoryPerDate,
+			                                                                     cachedNumberOfEachCategoryPerPerson,
+			                                                                     _schedulerState.RequestedPeriod.DateOnlyPeriod,
+			                                                                     _schedulerState);
 			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
 			schedulerSplitters1.InsertShiftCategoryDistributionModel(_shiftCategoryDistributionModel);
 			//_agentInfoControl.Dock = DockStyle.Fill;

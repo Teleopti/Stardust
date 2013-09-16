@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 		private MockRepository _mocks;
 		private IShiftCategoryDistributionModel _target;
 		private ICachedNumberOfEachCategoryPerPerson _cachedNumberOfEachCategoryPerPerson;
+		private ICachedNumberOfEachCategoryPerDate _cachedNumberOfEachCategoryPerDate;
 		private ISchedulerStateHolder _schedulerStateHolder;
 
 		[SetUp]
@@ -24,8 +25,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 		{
 			_mocks = new MockRepository();
 			_cachedNumberOfEachCategoryPerPerson = _mocks.StrictMock<ICachedNumberOfEachCategoryPerPerson>();
+			_cachedNumberOfEachCategoryPerDate = _mocks.StrictMock<ICachedNumberOfEachCategoryPerDate>();
 			_schedulerStateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
-			_target = new ShiftCategoryDistributionModel(_cachedNumberOfEachCategoryPerPerson, new DateOnlyPeriod(), _schedulerStateHolder);
+			_target = new ShiftCategoryDistributionModel(_cachedNumberOfEachCategoryPerDate, _cachedNumberOfEachCategoryPerPerson,
+			                                             new DateOnlyPeriod(2013, 09, 16, 2013, 09, 17), _schedulerStateHolder);
 		}
 
 		[Test]
@@ -40,11 +43,20 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 		}
 
 		[Test]
+		public void ShouldGetDatesSorted()
+		{
+			var person1 = PersonFactory.CreatePerson("Bertil");
+			var filteredPersons = new List<IPerson> { person1 };
+			_target.SetFilteredPersons(filteredPersons);
+			Assert.AreEqual(new DateOnly(2013, 9, 16), _target.GetSortedDates(true)[0]);
+			Assert.AreEqual(new DateOnly(2013, 9, 17), _target.GetSortedDates(false)[0]);
+		}
+
+		[Test]
 		public void ShouldGetSortedShiftCategories()
 		{
 			var person1 = PersonFactory.CreatePerson("Bertil");
 			var filteredPersons = new List<IPerson> {person1};
-			_target.SetFilteredPersons(filteredPersons);
 
 			var cat1 = new ShiftCategory("B");
 			var cat2 = new ShiftCategory("A");
@@ -55,10 +67,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			using (_mocks.Record())
 			{
 				Expect.Call(_cachedNumberOfEachCategoryPerPerson.GetValue(person1)).Return(value);
+				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
 			}
 
 			using (_mocks.Playback())
 			{
+				_target.SetFilteredPersons(filteredPersons);
 				var result = _target.GetSortedShiftCategories();
 				Assert.AreEqual(cat2, result[0]);
 				Assert.AreEqual(cat1, result[1]);
@@ -70,7 +84,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 		{
 			var person1 = PersonFactory.CreatePerson("Bertil");
 			var filteredPersons = new List<IPerson> { person1 };
-			_target.SetFilteredPersons(filteredPersons);
 
 			var cat1 = new ShiftCategory("B");
 			var cat2 = new ShiftCategory("A");
@@ -81,11 +94,38 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			using (_mocks.Record())
 			{
 				Expect.Call(_cachedNumberOfEachCategoryPerPerson.GetValue(person1)).Return(value);
+				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
 			}
 
 			using (_mocks.Playback())
 			{
+				_target.SetFilteredPersons(filteredPersons);
 				Assert.AreEqual(33, _target.ShiftCategoryCount(person1, cat2));
+			}
+		}
+
+		[Test]
+		public void ShouldGetShiftCategoryCountForCategoryAndDate()
+		{
+			var person1 = PersonFactory.CreatePerson("Bertil");
+			var filteredPersons = new List<IPerson> { person1 };
+
+			var cat1 = new ShiftCategory("B");
+			var cat2 = new ShiftCategory("A");
+			IDictionary<IShiftCategory, int> value = new Dictionary<IShiftCategory, int>();
+			value.Add(cat1, 0);
+			value.Add(cat2, 33);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_cachedNumberOfEachCategoryPerDate.GetValue(new DateOnly(2013, 9, 16))).Return(value);
+				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.SetFilteredPersons(filteredPersons);
+				Assert.AreEqual(33, _target.ShiftCategoryCount(new DateOnly(2013, 9, 16), cat2));
 			}
 		}
 
@@ -95,7 +135,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			var person1 = PersonFactory.CreatePerson("Bertil");
 			var person2 = PersonFactory.CreatePerson("Adam");
 			var filteredPersons = new List<IPerson> { person1, person2 };
-			_target.SetFilteredPersons(filteredPersons);
+			
 
 			var cat1 = new ShiftCategory("B");
 			IDictionary<IShiftCategory, int> value1 = new Dictionary<IShiftCategory, int>();
@@ -107,11 +147,40 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			{
 				Expect.Call(_cachedNumberOfEachCategoryPerPerson.GetValue(person1)).Return(value1);
 				Expect.Call(_cachedNumberOfEachCategoryPerPerson.GetValue(person2)).Return(value2);
+				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
 			}
 
 			using (_mocks.Playback())
 			{
+				_target.SetFilteredPersons(filteredPersons);
 				Assert.AreEqual(person2, _target.GetAgentsSortedByNumberOfShiftCategories(cat1, false)[0]);
+			}
+		}
+
+		[Test]
+		public void ShouldGetDatesSortedByNumberOfShiftCategories()
+		{
+			var person1 = PersonFactory.CreatePerson("Bertil");
+			var person2 = PersonFactory.CreatePerson("Adam");
+			var filteredPersons = new List<IPerson> { person1, person2 };
+
+			var cat1 = new ShiftCategory("B");
+			IDictionary<IShiftCategory, int> value1 = new Dictionary<IShiftCategory, int>();
+			value1.Add(cat1, 0);
+			IDictionary<IShiftCategory, int> value2 = new Dictionary<IShiftCategory, int>();
+			value2.Add(cat1, 33);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_cachedNumberOfEachCategoryPerDate.GetValue(new DateOnly(2013, 9, 16))).Return(value1);
+				Expect.Call(_cachedNumberOfEachCategoryPerDate.GetValue(new DateOnly(2013, 9, 17))).Return(value2);
+				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.SetFilteredPersons(filteredPersons);
+				Assert.AreEqual(new DateOnly(2013, 9, 17), _target.GetDatesSortedByNumberOfShiftCategories(cat1, false)[0]);
 			}
 		}
 	}
