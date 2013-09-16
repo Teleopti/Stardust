@@ -27,6 +27,7 @@ define([
 		var teamScheduleHub = $.connection.teamScheduleHub;
 	    teamScheduleHub.client.exceptionHandler = errorview.display;
 	    var incomingTeamSchedule = null;
+		var teamScheduleSubscription = null;
 	    teamScheduleHub.client.incomingTeamSchedule = function (data) {
 	        if (incomingTeamSchedule != null)
     	        logException(function() { incomingTeamSchedule(data); });
@@ -55,14 +56,41 @@ define([
 	            personScheduleSubscription = null;
 	        });
 	    };
+
+		var unsubscribeTeamSchedule = function() {
+			if (!teamScheduleSubscription)
+				return;
+			startPromise.done(function() {
+				incomingTeamSchedule = null;
+				messagebroker.unsubscribe(teamScheduleSubscription);
+				teamScheduleSubscription = null;
+			});
+		};
 	    
 	    return {
 	        start: start,
 	        
-	        subscribeTeamSchedule: function(teamId, date, callback) {
+	        subscribeTeamSchedule: function (teamId, date, callback, isApplicableNotification) {
+		        unsubscribeTeamSchedule();
 	            incomingTeamSchedule = callback;
 	            startPromise.done(function() {
-	                teamScheduleHub.server.subscribeTeamSchedule(teamId, date);
+	            	teamScheduleHub.server.subscribeTeamSchedule(teamId, date);
+
+	            	teamScheduleSubscription = messagebroker.subscribe({
+		            	domainReferenceType: 'Person',
+		            	domainType: 'IPersonScheduleDayReadModel',
+		            	callback: function (notification) {
+		            		if (!isApplicableNotification(notification)) {
+		            			return;
+		            		}
+		            		var momentDate = moment(date);
+		            		var startDate = helpers.Date.ToMoment(notification.StartDate);
+		            		var endDate = helpers.Date.ToMoment(notification.EndDate);
+		            		if (momentDate.diff(startDate) >= 0 && momentDate.diff(endDate) <= 0) {
+		            			teamScheduleHub.server.subscribeTeamSchedule(teamId, date);
+		            		}
+		            	}
+		            });
 	            });
 	        },
 	        
@@ -90,7 +118,8 @@ define([
 	            });
 	        },
 	        
-	        unsubscribePersonSchedule: unsubscribePersonSchedule
+	        unsubscribePersonSchedule: unsubscribePersonSchedule,
+	        unsubscribeTeamSchedule: unsubscribeTeamSchedule
 	    };
 
 	});

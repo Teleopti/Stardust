@@ -39,18 +39,24 @@ define([
 		    subscriptions.subscribeTeamSchedule(
 				teamSchedule.SelectedTeam(),
 				helpers.Date.ToServer(teamSchedule.SelectedDate()),
-				function(schedules) {
-				    var currentPersons = teamSchedule.Persons();
-
+				function (schedules) {
+					var currentPersons = teamSchedule.Persons();
+					
 				    var dateClone = teamSchedule.SelectedDate().clone();
 
-				    for (var i = 0; i < schedules.length; i++) {
-				    	for (var j = 0; j < currentPersons.length; j++) {
-				    		if (currentPersons[j].Id == schedules[i].Id) {
-				    			currentPersons[j].ClearLayers();
-				    			break;
-				    		}
-				    	}
+				    for (var i = 0; i < currentPersons.length; i++) {
+					    if (schedules.length == 0) {
+					    	currentPersons[i].ClearLayers();
+					    	currentPersons[i].ContractTimeMinutes(0);
+						    currentPersons[i].WorkTimeMinutes(0);
+					    } else {
+					    	for (var j = 0; j < schedules.length; j++) {
+					    		if (currentPersons[i].Id == schedules[j].Id) {
+					    			currentPersons[i].ClearLayers();
+					    			break;
+					    		}
+					    	}
+					    }
 				    }
 					
 					for (var i = 0; i < schedules.length; i++) {
@@ -63,6 +69,7 @@ define([
 							}
 						}
 					}
+					
 
 					currentPersons.sort(function (a, b) {
 						var firstStartMinutes = a.TimeLineAffectingStartMinute();
@@ -75,7 +82,16 @@ define([
 					options.success();
 				    
 					resize.notify();
-				});
+				},
+			    function (notification) {
+				    for (var i = 0; i < teamSchedule.Persons().length; i++) {
+					    if (notification.DomainReferenceId == teamSchedule.Persons()[i].Id) {
+						    return true;
+					    }
+				    }
+				    return false;
+			    }
+		    );
 		};
 
 		var loadPersons = function (options) {
@@ -266,6 +282,7 @@ define([
 			},
 			
 			dispose: function (options) {
+				subscriptions.unsubscribeTeamSchedule();
 			    $(".datepicker.dropdown-menu").remove();
 			},
 			
