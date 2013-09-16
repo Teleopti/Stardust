@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 using Autofac;
+using Teleopti.Ccc.Domain.Common;
 using log4net;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Domain.Repositories;
@@ -221,7 +222,7 @@ namespace Teleopti.Ccc.Win.Payroll
                 payrollExportDto = new PayrollExportAssembler(payrollExportRepository, personRepository, null, new DateTimePeriodAssembler()).DomainEntityToDto(payrollExport);
                 payrollExportDto.PersonCollection.Clear();
 
-                PersonAssembler personAssembler = new PersonAssembler(null, new WorkflowControlSetAssembler(new ShiftCategoryAssembler(null), new DayOffAssembler(null), new ActivityAssembler(null), new AbsenceAssembler(null)));
+				PersonAssembler personAssembler = new PersonAssembler(null, new WorkflowControlSetAssembler(new ShiftCategoryAssembler(null), new DayOffAssembler(null), new ActivityAssembler(null), new AbsenceAssembler(null)), new PersonAccountUpdaterDummy());
                 personAssembler.IgnorePersonPeriods = true;
             }
             

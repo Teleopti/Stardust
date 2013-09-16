@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -64,9 +65,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             accountDay.Add(_account3);
             accountTime.Add(_account2);
 
-            _targetDay = new PersonAccountChildModel(_traceableRefreshService, _acc, _account1,null);
+            _targetDay = new PersonAccountChildModel(_traceableRefreshService, _acc, _account1,null, null);
            
-            _targetTime = new PersonAccountChildModel(_traceableRefreshService, _acc, _account2, null);
+            _targetTime = new PersonAccountChildModel(_traceableRefreshService, _acc, _account2, null, null);
         }
 
         [Test]
@@ -341,7 +342,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
         private void SetTargetDayWithoutAccount()
         {
-            _targetDay = new PersonAccountChildModel(new TraceableRefreshService(ScenarioFactory.CreateScenarioAggregate(), new RepositoryFactory()), new DateOnly(2005, 5, 2), _acc);
+			var account = _acc.Find(new DateOnly(2005, 5, 2)).FirstOrDefault();
+	        _targetDay =
+		        new PersonAccountChildModel(
+			        new TraceableRefreshService(ScenarioFactory.CreateScenarioAggregate(), new RepositoryFactory()), _acc, account, null, null);
         }
 
         [Test]
@@ -359,7 +363,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         private class PersonAccountChildModelForTest : PersonAccountChildModel
         {
             public PersonAccountChildModelForTest(ITraceableRefreshService refreshService, IPersonAccountCollection personAccounts, IAccount account, CommonNameDescriptionSetting commonNameDescription)
-                : base(refreshService, personAccounts, account, commonNameDescription)
+                : base(refreshService, personAccounts, account, commonNameDescription, null)
             {}
 
             public void SetUnitOfWorkFactory(IUnitOfWorkFactory unitOfWorkFactory)
