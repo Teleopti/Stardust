@@ -53,91 +53,10 @@
     <Compile Include="Tool\SettingsReader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\BuildArtifacts\AppETLTool.config">
-      <Link>ConfigFiles\AppETLTool.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\AppETLService.config">
-      <Link>ConfigFiles\AppETLService.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\AppRaptor.config">
-      <Link>ConfigFiles\AppRaptor.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\LegalNotice.txt">
-      <Link>ConfigFiles\LegalNotice.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\SDKWeb.config">
-      <Link>ConfigFiles\SDKWeb.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\AnalyticsWeb.config">
-      <Link>ConfigFiles\AnalyticsWeb.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\BrokerWeb.config">
-      <Link>ConfigFiles\BrokerWeb.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\RTAWeb.config">
-      <Link>ConfigFiles\RTAWeb.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\ServiceBusHost.config">
-      <Link>ConfigFiles\ServiceBusHost.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\TeleoptiCCC7.nhib.xml">
-      <Link>ConfigFiles\TeleoptiCCC7.nhib.xml</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="ConfigFiles\DeployConfigFiles.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="settings.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\AppMytime.config">
-      <Link>ConfigFiles\AppMytime.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\AppRTATestApplication.config">
-      <Link>ConfigFiles\AppRTATestApplication.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\BrokerBackplaneWeb.config">
-      <Link>ConfigFiles\BrokerBackplaneWeb.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\Web.Root.Web.config">
-      <Link>ConfigFiles\Web.Root.Web.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="..\BuildArtifacts\CccAppConfig.config">
-      <Link>ConfigFiles\CccAppConfig.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\ServiceBuslog4net.config">
-      <Link>ConfigFiles\ServiceBuslog4net.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\PMWeb.config">
-      <Link>ConfigFiles\PMWeb.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\Web.Mobile.Web.config">
-      <Link>ConfigFiles\Web.Mobile.Web.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\Web.MyTime.Web.config">
-      <Link>ConfigFiles\Web.MyTime.Web.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\BuildArtifacts\Web.Start.Web.config">
-      <Link>ConfigFiles\Web.Start.Web.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="..\Teleopti.Ccc.snk">
@@ -149,9 +68,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)settings.txt" copy "$(ProjectDir)..\BuildArtifacts\settings.txt" "$(ProjectDir)settings.txt"</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
