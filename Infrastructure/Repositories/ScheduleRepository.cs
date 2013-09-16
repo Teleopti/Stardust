@@ -195,7 +195,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				foreach (DateTimePeriod p in searchPeriods)
 				{
 					var longDateOnlyP = new DateOnlyPeriod(new DateOnly(p.StartDateTime.AddDays(-1)), new DateOnly(p.EndDateTime.AddDays(1)));
-					addPersonAssignments(retDic, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(people, longDateOnlyP, scenario));
+					var personAssignments = 
+						_repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(people, longDateOnlyP, scenario);
+					addPersonAssignments(retDic, personAssignments);
 				}
             }
 
