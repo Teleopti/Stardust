@@ -120,7 +120,7 @@
 						</div>
 					</div> 
 				</div>
-				<div class="overtime-availability-symbol floatright" data-bind="visible: overtimeAvailability().HasOvertimeAvailability, attr: { title: textOvertimeAvailabilityText }">
+				<div class="overtime-availability-symbol floatright" data-bind="visible: overtimeAvailability().HasOvertimeAvailability, tooltip: { title: textOvertimeAvailabilityText, html: true }">
 					<i class="icon-time ir floatright" />
 				</div>
 				<!-- ko if: hasNote -->
