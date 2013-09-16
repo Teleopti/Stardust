@@ -50,6 +50,42 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
+  Variable Value1=PM_ASMX
+  Variable Name2=_PROP_VAR_
+  Variable Value2=PM_ASMX_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=PM_ANONYMOUS_PWD
+  Variable Name2=_PROP_VAR_
+  Variable Value2=PM_ANONYMOUS_PWD_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=PM_ANONYMOUS_DOMAINUSER
+  Variable Name2=_PROP_VAR_
+  Variable Value2=PM_ANONYMOUS_DOMAINUSER_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=PM_AUTH_MODE
+  Variable Name2=_PROP_VAR_
+  Variable Value2=PM_AUTH_MODE_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
   Variable Value1=AS_DATABASE
   Variable Name2=_PROP_VAR_
   Variable Value2=AS_DATABASE_TMP
@@ -173,6 +209,15 @@ item: Custom Script Item
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=IIS_AUTH
+  Variable Name2=_PROP_VAR_
+  Variable Value2=IIS_AUTH_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
 item: Remark
   Text===============================================
 end
@@ -247,6 +292,36 @@ end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(AGENT_SERVICE)|%AGENT_SERVICE_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(PM_INSTALL)|%PM_INSTALL_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(PM_AUTH_MODE)|%PM_AUTH_MODE_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(PM_ANONYMOUS_DOMAINUSER)|%PM_ANONYMOUS_DOMAINUSER_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(PM_ANONYMOUS_PWD)|%PM_ANONYMOUS_PWD_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(PM_ASMX)|%PM_ASMX_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(IIS_AUTH)|%IIS_AUTH_TMP%
   Line Number=0
 end
 item: Remark
