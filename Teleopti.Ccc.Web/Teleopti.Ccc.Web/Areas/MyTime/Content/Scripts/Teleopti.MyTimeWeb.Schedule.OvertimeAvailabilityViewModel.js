@@ -47,6 +47,26 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 		}
 		});
 	};
+	
+	this.DeleteOvertimeAvailability = function () {
+		ajax.Ajax({
+			url: "Schedule/DeleteOvertimeAvailability",
+			dataType: "json",
+			data: { Date: self.DateFrom().format('YYYY-MM-DD') },
+			type: 'DELETE',
+			success: function (data, textStatus, jqXHR) {
+				displayOvertimeAvailability(data);
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				if (jqXHR.status == 400) {
+					var data = $.parseJSON(jqXHR.responseText);
+					self.ErrorMessage(data.Errors.join('</br>'));
+					return;
+				}
+				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+			}
+		});
+	};
 
 	this.LoadRequestData = function(data) {
 		self.HasOvertimeAvailability(data.HasOvertimeAvailability);
