@@ -161,17 +161,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		/// <summary>
 		/// Creates ans persists a person with an automatic number as name, plus creates and persists the list of persons who are in the inner Colleague list.
 		/// </summary>
-		/// <param name="updateReadModels"></param>
 		/// <returns></returns>
-		public string MakeUser(bool updateReadModels)
-		{
-			var userName = NextUserName();
-			return MakeUser(userName.LogOnName, userName.LastName, TestData.CommonPassword, updateReadModels);
-		}
-
 		public string MakeUser()
 		{
-			return MakeUser(false);
+			var userName = NextUserName();
+			return MakeUser(userName.LogOnName, userName.LastName, TestData.CommonPassword);
 		}
 
 		/// <summary>
@@ -182,7 +176,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		/// <param name="password">The password.</param>
 		/// <param name="updateReadModel"></param>
 		/// <returns>Returns the given logonName</returns>
-		public string MakeUser(string logonName, string lastName, string password, bool updateReadModel)
+		public string MakeUser(string logonName, string lastName, string password)
 		{
 			Person = PersonFactory.CreatePersonWithBasicPermissionInfo(logonName, password);
 			Person.Name = new Name("Agent", lastName);
@@ -203,19 +197,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_colleagues.ForEach(c => c.doPostSetups());
 			Resources.Culture = Culture;
 
-			if (updateReadModel)
-			{
-				updateReadModels(Person.Id.Value);
-			}
-
 			return logonName;
-		}
-
-		private void updateReadModels(Guid id)
-		{
-			var uowf = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory;
-			var groupingReadOnlyRepository = new GroupingReadOnlyRepository(uowf);
-			groupingReadOnlyRepository.UpdateGroupingReadModel(new Collection<Guid> { id });
 		}
 
 		private void doPostSetups()

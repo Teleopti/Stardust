@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenIHaveUserCredentialWith(Table table)
 		{
 			var user = table.CreateInstance<UserConfigurable>();
-			UserFactory.User().MakeUser(user.UserName, user.UserName, user.Password, false);
+			UserFactory.User().MakeUser(user.UserName, user.UserName, user.Password);
 		}
 
 
