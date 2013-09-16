@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -7,13 +7,11 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.PeopleAdmin
+namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 {
     /// <summary>
     /// Data source class for People Admin Grid
@@ -29,6 +27,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
         public static IWorkflowControlSet NullWorkflowControlSet = new WorkflowControlSet(string.Empty);
         private readonly IUserDetail _userDetail;
         private readonly IPrincipalAuthorization _principalAuthorization;
+        private readonly IPersonAccountUpdater _personAccountUpdater;
         private bool _isValid = true;
         private RoleCollectionParser _roleCollectionParser;
         private bool _logonDataCanBeChanged;
@@ -39,12 +38,13 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
             _optionalColumns = new List<IOptionalColumn>();
         }
 
-        public PersonGeneralModel(IPerson person, IUserDetail userDetail, IPrincipalAuthorization principalAuthorization)
+        public PersonGeneralModel(IPerson person, IUserDetail userDetail, IPrincipalAuthorization principalAuthorization, IPersonAccountUpdater personAccountUpdater)
             : this()
         {
             ContainedEntity = person;
             _userDetail = userDetail;
             _principalAuthorization = principalAuthorization;
+            _personAccountUpdater = personAccountUpdater;
         }
 
         /// <summary>
@@ -441,7 +441,17 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
         public DateOnly? TerminalDate
         {
             get { return ContainedEntity.TerminalDate; }
-            set { ContainedEntity.TerminalDate = value; }
+            set
+            {
+                var terminateDate = value;
+
+                if(terminateDate!=null)
+                    ContainedEntity.TerminatePerson(terminateDate.Value, _personAccountUpdater);
+                else
+                {
+                    ContainedEntity.ActivatePerson(_personAccountUpdater);
+                }
+            }
             
         }
 

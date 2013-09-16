@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 
         	                                                                             		var filteredPeopleHolder = new FilteredPeopleHolder(service, accounts) {
         	                                                                             					SelectedDate = _selectorPresenter.SelectedDate,
-        	                                                                             					UnitOfWork = uow
+        	                                                                             					GetUnitOfWork = uow
         	                                                                             				};
 
         	                                                                             		var state = new WorksheetStateHolder(service);
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
                 var filteredPeopleHolder = new FilteredPeopleHolder(cacheServiceForPersonAccounts, accounts)
                 {
                     SelectedDate = DateOnly.Today,
-                    UnitOfWork = uow
+                    GetUnitOfWork = uow
                 };
 
                 //Load the people general view & initial references

@@ -22,8 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
         private DateTime _dateTime2;
         private DateTime _dateTime3;
         private DateTime _dateTime4;
-        //private DateTime _dateTime5;
-        private IPersonAccountProjectionService _service;
+        private IPersonAccountProjectionService _target;
 
         private List<DateTimePeriod> _periodsToReadFromDatabase;
         private DateOnlyPeriod _accountPeriod;
@@ -40,8 +39,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
             _dateTime2 = _dateTime1.Add(TimeSpan.FromDays(100));
             _dateTime3 = _dateTime2.Add(TimeSpan.FromDays(100));
             _dateTime4 = _dateTime3.Add(TimeSpan.FromDays(100));
-            //_dateTime5 = _dateTime4.Add(TimeSpan.FromDays(100));
-
         }
 
         private void SetupExpects()
@@ -72,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
             }
             using (_mocker.Playback())
             {
-                _service = new PersonAccountProjectionService(_account, _schedule);
+                _target = new PersonAccountProjectionService(_account, _schedule);
             }
         }
 
@@ -90,12 +87,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 
             using (_mocker.Playback())
             {
-                _service = new PersonAccountProjectionService(_account, _schedule);
-                _periodsToReadFromDatabase = (List<DateTimePeriod>)_service.PeriodsToLoad();
+                _target = new PersonAccountProjectionService(_account, _schedule);
+                _periodsToReadFromDatabase = (List<DateTimePeriod>)_target.PeriodsToLoad();
                 Assert.AreEqual(2, _periodsToReadFromDatabase.Count);
                 Assert.Contains(new DateTimePeriod(tempAccountPeriod.StartDateTime, _dateTime2), _periodsToReadFromDatabase);
                 Assert.Contains(new DateTimePeriod(_dateTime3, tempAccountPeriod.EndDateTime), _periodsToReadFromDatabase);
-                Assert.AreEqual(new DateTimePeriod(_dateTime2, _dateTime3), _service.PeriodToReadFromSchedule());
+                Assert.AreEqual(new DateTimePeriod(_dateTime2, _dateTime3), _target.PeriodToReadFromSchedule());
             }
         }
 
@@ -112,10 +109,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 
             using (_mocker.Playback())
             {
-                _service = new PersonAccountProjectionService(_account, _schedule);
-                _periodsToReadFromDatabase = (List<DateTimePeriod>)_service.PeriodsToLoad();
+                _target = new PersonAccountProjectionService(_account, _schedule);
+                _periodsToReadFromDatabase = (List<DateTimePeriod>)_target.PeriodsToLoad();
                 Assert.AreEqual(0, _periodsToReadFromDatabase.Count);
-                Assert.AreEqual(_accountPeriod.ToDateTimePeriod(timeZone), _service.PeriodToReadFromSchedule());
+                Assert.AreEqual(_accountPeriod.ToDateTimePeriod(timeZone), _target.PeriodToReadFromSchedule());
             }
         }
 
@@ -132,15 +129,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 
             using (_mocker.Playback())
             {
-                _service = new PersonAccountProjectionService(_account, _schedule);
-                _periodsToReadFromDatabase = (List<DateTimePeriod>)_service.PeriodsToLoad();
+                _target = new PersonAccountProjectionService(_account, _schedule);
+                _periodsToReadFromDatabase = (List<DateTimePeriod>)_target.PeriodsToLoad();
                 Assert.AreEqual(_accountPeriod.ToDateTimePeriod(timeZone), _periodsToReadFromDatabase[0]);
-                Assert.IsNull(_service.PeriodToReadFromSchedule());
+                Assert.IsNull(_target.PeriodToReadFromSchedule());
 
-                _service = new PersonAccountProjectionService(_account, null);
-                _periodsToReadFromDatabase = (List<DateTimePeriod>)_service.PeriodsToLoad();
+                _target = new PersonAccountProjectionService(_account, null);
+                _periodsToReadFromDatabase = (List<DateTimePeriod>)_target.PeriodsToLoad();
                 Assert.AreEqual(_accountPeriod.ToDateTimePeriod(timeZone), _periodsToReadFromDatabase[0]);
-                Assert.IsNull(_service.PeriodToReadFromSchedule());
+                Assert.IsNull(_target.PeriodToReadFromSchedule());
             }
         }
 
@@ -158,12 +155,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
             SetupExpects();
             using (_mocker.Playback())
             {
-                _service = new PersonAccountProjectionService(_account, _schedule);
-                _periodsToReadFromDatabase = (List<DateTimePeriod>)_service.PeriodsToLoad();
+                _target = new PersonAccountProjectionService(_account, _schedule);
+                _periodsToReadFromDatabase = (List<DateTimePeriod>)_target.PeriodsToLoad();
                 Assert.AreEqual(new DateTimePeriod(_dateTime3, tempAccountPeriod.EndDateTime),
                                 _periodsToReadFromDatabase[0]);
                 Assert.AreEqual(
-                    new DateTimePeriod(tempAccountPeriod.StartDateTime, _dateTime3), _service.PeriodToReadFromSchedule());
+                    new DateTimePeriod(tempAccountPeriod.StartDateTime, _dateTime3), _target.PeriodToReadFromSchedule());
             }
         }
 
@@ -181,12 +178,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 
             using (_mocker.Playback())
             {
-                _service = new PersonAccountProjectionService(_account, _schedule);
-                _periodsToReadFromDatabase = (List<DateTimePeriod>)_service.PeriodsToLoad();
+                _target = new PersonAccountProjectionService(_account, _schedule);
+                _periodsToReadFromDatabase = (List<DateTimePeriod>)_target.PeriodsToLoad();
                 Assert.AreEqual(new DateTimePeriod(tempAccountPeriod.StartDateTime, _dateTime2),
                                 _periodsToReadFromDatabase[0]);
                 Assert.AreEqual(new DateTimePeriod(_dateTime2, tempAccountPeriod.EndDateTime),
-                                _service.PeriodToReadFromSchedule());
+                                _target.PeriodToReadFromSchedule());
             }
         }
 
@@ -230,8 +227,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 
             using (_mocker.Playback())
             {
-                _service = new PersonAccountProjectionService(_account, _schedule);
-                var days = _service.CreateProjection(repository, scenario);
+                _target = new PersonAccountProjectionService(_account, _schedule);
+                var days = _target.CreateProjection(repository, scenario);
 
                 //Verify correct number of days is returned
                 Assert.AreEqual(200, days.Count);

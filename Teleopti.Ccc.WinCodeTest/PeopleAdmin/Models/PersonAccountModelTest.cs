@@ -376,11 +376,11 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             {
                 IPersonAccountChildModel adapter1 = new PersonAccountChildModel
                     (new TraceableRefreshService(new Scenario("d"), new RepositoryFactory()), _collection, _account1,
-                     null);
+                     null, null);
 
                 IPersonAccountChildModel adapter2 = new PersonAccountChildModel
                     (new TraceableRefreshService(new Scenario("d"), new RepositoryFactory()), _collection, _account3,
-                     null);
+                     null, null);
 
                 adapter1.CanBold = true;
                 adapter2.CanBold = true;
