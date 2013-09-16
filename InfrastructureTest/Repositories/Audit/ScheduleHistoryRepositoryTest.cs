@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Criterion;
 using NHibernate.Envers;
@@ -188,6 +187,45 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				target.FindRevisions(Agent, new DateOnly(Today), 1)
 					.Should().Have.SameSequenceAs(new Revision { Id = revisionNumberAtSetupStart });
+			}
+		}
+
+		[Test]
+		public void ShouldFindAbsenceNextDayDueToPossibleNightShifts()
+		{
+			var newAbsence = new PersonAbsence(Agent, Scenario,
+					new AbsenceLayer(PersonAbsence.Layer.Payload, new DateTimePeriod(Today.AddHours(27), Today.AddHours(28))));
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				PersonAssignment.AddMainLayer(PersonAssignment.MainLayers().First().Payload, new DateTimePeriod(Today.AddHours(23), Today.AddHours(30)));
+				Repository.Add(PersonAssignment);
+
+				Repository.Add(newAbsence);
+				uow.PersistAll();
+			}
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var data = target.FindSchedules(new Revision { Id = revisionNumberAfterOneUnitTestModification }, Agent, new DateOnly(Today));
+				data.Should().Contain(newAbsence);
+			}
+		}
+
+		[Test]
+		public void ShouldNotFindAbsenceNextDayIfNoNightShifts()
+		{
+			var newAbsence = new PersonAbsence(Agent, Scenario,
+					new AbsenceLayer(PersonAbsence.Layer.Payload, new DateTimePeriod(Today.AddHours(27), Today.AddHours(28))));
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				Repository.Add(newAbsence);
+				uow.PersistAll();
+			}
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var data = target.FindSchedules(new Revision { Id = revisionNumberAfterOneUnitTestModification }, Agent, new DateOnly(Today));
+				data.Should().Not.Contain(newAbsence);
 			}
 		}
 
