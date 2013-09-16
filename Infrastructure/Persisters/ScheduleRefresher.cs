@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		private IEnumerable<IPersistableScheduleData> myPersonAbsenceCollection(IScheduleDictionary scheduleDictionary, IPerson person, DateTimePeriod period)
 		{
 			var scheduleDays = scheduleDictionary[person].ScheduledDayCollection(period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()));
-			return scheduleDays.SelectMany(s => s.PersonAbsenceCollection(true)).Where(a => a.Id.HasValue).Distinct().ToArray();
+			return scheduleDays.SelectMany(s => s.PersonAbsenceCollection(false)).Where(a => a.Id.HasValue).Distinct().ToArray();
 		}
 
 		private IEnumerable<IPersistableScheduleData> messagePersonAbsenceCollection(IScheduleDictionary scheduleDictionary, IPerson person, DateTimePeriod period)
