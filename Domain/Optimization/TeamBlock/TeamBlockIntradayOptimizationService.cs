@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private readonly ITeamBlockGenerator _teamBlockGenerator;
 		private readonly ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
+	    private IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private bool _cancelMe;
 
 		public TeamBlockIntradayOptimizationService(ITeamBlockGenerator teamBlockGenerator,
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                                            ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
 		                                            ITeamBlockClearer teamBlockClearer,
 		                                            IStandardDeviationSumCalculator standardDeviationSumCalculator,
-													ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker)
+													ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker, IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
@@ -49,7 +50,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockClearer = teamBlockClearer;
 			_standardDeviationSumCalculator = standardDeviationSumCalculator;
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
-			_teamBlockGenerator = teamBlockGenerator;
+		    _dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
+		    _teamBlockGenerator = teamBlockGenerator;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 		}
 
@@ -115,8 +117,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					break;
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
 
-				var previousStandardDevationSum  = _standardDeviationSumCalculator.Calculate(selectedPeriod, allMatrixesOfOnePerson,
-																							optimizationPreferences, schedulingOptions);
+                //var previousStandardDevationSum  = _standardDeviationSumCalculator.Calculate(selectedPeriod, allMatrixesOfOnePerson,
+                //                                                                            optimizationPreferences, schedulingOptions);
+			    var previousStandardDevationSum = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo,
+			                                                                                          optimizationPreferences
+			                                                                                              .Advanced);
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
 				var firstSelectedDay = selectedPeriod.DayCollection().First();
 				var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
