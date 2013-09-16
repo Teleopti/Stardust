@@ -13,11 +13,14 @@ namespace Teleopti.Ccc.Sdk.Logic
 	{
 
 		private readonly IRepositoryFactory _repositoryFactory;
+		private readonly ICurrentUnitOfWork _unitOfWorkFactory;
 
 		public PersonAccountUpdaterSdkProvider(
-			IRepositoryFactory repositoryFactory)
+			IRepositoryFactory repositoryFactory,
+			ICurrentUnitOfWork unitOfWorkFactory)
 		{
 			_repositoryFactory = repositoryFactory;
+			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
 		public ITraceableRefreshService GetRefreshService()
@@ -29,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.Logic
 
 		public IUnitOfWork GetUnitOfWork
 		{
-			get { return UnitOfWorkFactory.Current.CurrentUnitOfWork(); }
+			get { return _unitOfWorkFactory.Current(); }
 		}
 
 		public IPersonAccountCollection GetPersonAccounts(IPerson person)

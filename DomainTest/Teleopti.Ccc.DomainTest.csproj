@@ -180,7 +180,7 @@
     <Compile Include="Common\NowTest.cs" />
     <Compile Include="Common\JobResultDetailTest.cs" />
     <Compile Include="Common\JobResultTest.cs" />
-    <Compile Include="Common\PersonAccountUpdaterForWinTest.cs" />
+    <Compile Include="Common\PersonAccountUpdaterTest.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptionsTest.cs" />
     <Compile Include="Common\TrueFalseRandomizerTest.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinderTest.cs" />

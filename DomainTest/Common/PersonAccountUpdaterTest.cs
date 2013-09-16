@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.DomainTest.Common
 {
 	[TestFixture]
-	public class PersonAccountUpdaterForWinTest
+	public class PersonAccountUpdaterTest
 	{
 		private PersonAccountUpdater _target;
 		private MockRepository _mocks;
