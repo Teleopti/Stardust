@@ -39,17 +39,28 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			var ret = new List<IPersistableScheduleData>();
 			var dateTime = convertFromDateOnly(agent, dateOnly);
 			findAssignment(agent, dateOnly, revision).ForEach(ret.Add);
-			findAbsence(agent, dateTime, revision).ForEach(ret.Add);
+			findAbsence(agent, dateTime, revision, ret).ForEach(ret.Add);
 			return ret;
 		}
 
-		private IEnumerable<PersonAbsence> findAbsence(IPerson agent, DateTimePeriod dateTimePeriod, IRevision revision)
+		private IEnumerable<PersonAbsence> findAbsence(IPerson agent, DateTimePeriod dateTimePeriod, IRevision revision, IEnumerable<IPersistableScheduleData> assignments)
 		{
+			var periodEnd = dateTimePeriod.EndDateTime;
+			if (assignments.Any())
+			{
+				var latestAssignmentEnd = assignments.Max(a => a.Period.EndDateTime);
+				if (latestAssignmentEnd > periodEnd)
+				{
+					periodEnd = latestAssignmentEnd;
+				}				
+			}
+
+			var periodWithExtraAtEnd = new DateTimePeriod(dateTimePeriod.StartDateTime, periodEnd);
 			return session().Auditer().CreateQuery()
 				.ForEntitiesAtRevision<PersonAbsence>(revision.Id)
 				.Add(AuditEntity.Property("Person").Eq(agent))
-				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Lt(dateTimePeriod.EndDateTime))
-				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(dateTimePeriod.StartDateTime))
+				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Lt(periodWithExtraAtEnd.EndDateTime))
+				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(periodWithExtraAtEnd.StartDateTime))
 				.Results();
 		}
 
