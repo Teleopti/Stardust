@@ -58,7 +58,7 @@
 </div>
 <ul class="nav nav-pills" data-bind="visible: showAddRequestToolbar">
 	<li data-bind="visible: overtimeAvailabilityPermission, css: { active: overtimeAvailabilityActive }">
-		<a class="overtime-availability-add" href="#" data-bind="click: overtimeAvailabilityActivate"><i class="icon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
+		<a class="overtime-availability-add" href="#" data-bind="click: function () { overtimeAvailabilityActivate() }"><i class="icon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
 	</li>
 	<li data-bind="visible: textPermission, css: {active: textRequestActive}">
 		<a class="text-request-add" href="#" data-bind="click: textRequestActivate"><i class="icon-plus"></i>&nbsp;@Resources.TextRequest</a>
