@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Browser.Interactions.AssertVisibleUsingJQuery(string.Format("ul.weekview-day[data-mytime-date={0}] li .text-request", formattedDate));
 		}
 
-		[Then(@"I should see an overtime availability symbol with")]
-		public void ThenIShouldSeeAnOvertimeAvailabilitySymbolWith(Table table)
+		[Then(@"I should see an overtime availability symbol with tooltip")]
+		public void ThenIShouldSeeAnOvertimeAvailabilitySymbolWithTooltip(Table table)
 		{
 			var overtimeAvailability = table.CreateInstance<OvertimeAvailabilityTooltipAndBar>();
 			var formattedDate = overtimeAvailability.Date.ToString(CultureInfo.GetCultureInfo("sv-SE").DateTimeFormat.ShortDatePattern);
@@ -62,7 +62,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Browser.Interactions.AssertKnockoutContextContains(string.Format("ul.weekview-day[data-mytime-date={0}]", formattedDate), "textOvertimeAvailabilityText()", overtimeAvailability.StartTime);
 			Browser.Interactions.AssertKnockoutContextContains(string.Format("ul.weekview-day[data-mytime-date={0}]", formattedDate), "textOvertimeAvailabilityText()", overtimeAvailability.EndTime);
 		}
-
 
 		[Then(@"I should not see a symbol at the top of the schedule for date '(.*)'")]
 		public void ThenIShouldNotSeeASymbolAtTheTopOfTheScheduleForDate(DateTime date)

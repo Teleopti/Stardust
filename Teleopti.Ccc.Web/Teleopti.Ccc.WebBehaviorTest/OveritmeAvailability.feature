@@ -101,7 +101,7 @@ Scenario: Submit overtime availability
 	| End time          | 03:00 |
 	| End time next day | true  |
 	And I click submit button
-	Then I should see an overtime availability symbol with
+	Then I should see an overtime availability symbol with tooltip
 	| Field      | Value      |
 	| Date       | 2013-08-20 |
 	| Start time | 16:30      |
@@ -141,7 +141,7 @@ Scenario: See existing overtime availability
 	| Start time        | 16:30      |
 	| End time          | 17:30      |
 	When I view my week schedule for date '2013-08-20'
-	Then I should see an overtime availability symbol with
+	Then I should see an overtime availability symbol with tooltip
 	| Field      | Value      |
 	| Date       | 2013-08-20 |
 	| Start time | 16:30      |
@@ -161,7 +161,7 @@ Scenario: See existing overtime availability over midnight
 	| End time          | 03:15      |
 	| End time next day | true       |
 	When I view my week schedule for date '2013-08-20'
-	Then I should see an overtime availability symbol with
+	Then I should see an overtime availability symbol with tooltip
 	| Field      | Value      |
 	| Date       | 2013-08-21 |
 	| Start time | 16:30      |
@@ -247,7 +247,7 @@ Scenario: Replace overtime availability
 	| Start time | 16:30 |
 	| End time   | 23:45 |
 	And I click submit button
-	Then I should see an overtime availability symbol with
+	Then I should see an overtime availability symbol with tooltip
 	| Field      | Value      |
 	| Date       | 2013-08-20 |
 	| Start time | 16:30      |
