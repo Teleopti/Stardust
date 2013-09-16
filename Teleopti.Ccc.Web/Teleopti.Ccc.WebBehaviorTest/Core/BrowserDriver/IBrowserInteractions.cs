@@ -18,12 +18,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		void AssertAnyContains(string selector, string text);
 		void AssertFirstContains(string selector, string text);
 		void AssertFirstNotContains(string selector, string text);
-		void AssertFirstOuterHtmlContains(string selector, string text);
 
 		void AssertUrlContains(string url);
 		void AssertUrlNotContains(string urlContains, string urlNotContains);
 
 		void AssertJavascriptResultContains(string javascript, string text);
+		void AssertKnockoutContextContains(string selector, string knockoutBinding, string text);
 
 		void DumpInfo(Action<string> writer);
 		void DumpUrl(Action<string> writer);

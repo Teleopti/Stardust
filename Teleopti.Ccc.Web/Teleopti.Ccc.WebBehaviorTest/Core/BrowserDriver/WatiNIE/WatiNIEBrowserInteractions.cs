@@ -79,6 +79,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 				() => _helper.AssertJavascriptResultContainsMessage(javascript, text, lastActual as string));
 		}
 
+		public void AssertKnockoutContextContains(string selector, string knockoutBinding, string text)
+		{
+			AssertJavascriptResultContains("return ko.contextFor($('" + selector + "').get(0)).$data." + knockoutBinding, text);
+		}
+
 		public void AssertExists(string selector)
 		{
 			validateSelector(selector);
@@ -104,12 +109,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 		{
 			validateSelector(selector);
 			_helper.EventualAssert(() => _browser.Element(Find.BySelector(selector)).Text, Is.StringContaining(text), _helper.AssertFirstContainsMessage(selector, text));
-		}
-
-		public void AssertFirstOuterHtmlContains(string selector, string text)
-		{
-			validateSelector(selector);
-			_helper.EventualAssert(() => _browser.Element(Find.BySelector(selector)).OuterHtml, Is.StringContaining(text), _helper.AssertFirstContainsMessage(selector, text));
 		}
 
 		public void AssertFirstNotContains(string selector, string text)

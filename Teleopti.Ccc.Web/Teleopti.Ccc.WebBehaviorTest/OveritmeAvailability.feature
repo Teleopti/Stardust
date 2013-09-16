@@ -254,7 +254,6 @@ Scenario: Replace overtime availability
 	| End time   | 23:45      |
 
 #followings belong to the delete overtime availability pbi
-@ignore
 Scenario: Delete overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
@@ -267,3 +266,10 @@ Scenario: Delete overtime availability
 	And I click add new overtime availability
 	And I click delete button
 	Then I should not see an overtime availability symbol for date '2013-08-20'
+
+Scenario: Cannot see delete button when no existing overtime availability
+	Given I have the role 'Access to overtime availability'
+	And I view my week schedule for date '2013-08-20'
+	When I click on the day summary for date '2013-08-20'
+	And I click add new overtime availability
+	Then I should not see delete button

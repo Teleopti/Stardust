@@ -77,6 +77,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.Click(".request-new-delete");
 		}
 
+		[Then(@"I should not see delete button")]
+		public void ThenIShouldNotSeeDeleteButton()
+		{
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".request-new-delete");
+		}
 		
 		[Then(@"I should see the text request's values at position '(.*)' in the list")]
 		public void ThenIShouldSeeTheTextRequestSValuesAtPositionInTheList(int position)
