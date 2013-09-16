@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             {
                 if (components != null)
                 components.Dispose();
-                ReleaseMangedResources();
+                releaseMangedResources();
 
                 if (_gridHelper!=null)
                     _gridHelper.Dispose();
@@ -118,9 +118,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.buttonAddAbsenceRequestPeriod = new System.Windows.Forms.Button();
             this.gridControlAbsenceRequestOpenPeriods = new Syncfusion.Windows.Forms.Grid.GridControl();
             this.contextMenuStripOpenPeriodsGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemCut = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemCopy = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemPaste = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemFromToPeriod = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemRollingPeriod = new System.Windows.Forms.ToolStripMenuItem();
@@ -1100,7 +1097,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.radioButtonAdvFairnessPoints.TabIndex = 17;
             this.radioButtonAdvFairnessPoints.Text = "xxPointsPerShiftCategory";
             this.radioButtonAdvFairnessPoints.ThemesEnabled = true;
-            this.radioButtonAdvFairnessPoints.CheckChanged += new System.EventHandler(this.RadioButtonAdvFairnessPointsCheckChanged);
+            this.radioButtonAdvFairnessPoints.CheckChanged += new System.EventHandler(this.radioButtonAdvFairnessPointsCheckChanged);
             // 
             // radioButtonAdvFairnessEqual
             // 
@@ -1111,7 +1108,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.radioButtonAdvFairnessEqual.TabIndex = 18;
             this.radioButtonAdvFairnessEqual.Text = "xxEqualOfEachShiftCategory";
             this.radioButtonAdvFairnessEqual.ThemesEnabled = true;
-            this.radioButtonAdvFairnessEqual.CheckChanged += new System.EventHandler(this.RadioButtonAdvFairnessEqualCheckChanged);
+            this.radioButtonAdvFairnessEqual.CheckChanged += new System.EventHandler(this.radioButtonAdvFairnessEqualCheckChanged);
             // 
             // panel7
             // 
@@ -1282,10 +1279,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // contextMenuStripOpenPeriodsGrid
             // 
             this.contextMenuStripOpenPeriodsGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemCut,
-            this.toolStripMenuItemCopy,
-            this.toolStripMenuItemPaste,
-            this.toolStripSeparator1,
             this.toolStripMenuItemFromToPeriod,
             this.toolStripMenuItemRollingPeriod,
             this.toolStripMenuItemDelete,
@@ -1295,27 +1288,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.contextMenuStripOpenPeriodsGrid.Name = "contextMenuStripOpenPeriodsGrid";
             this.contextMenuStripOpenPeriodsGrid.ShowImageMargin = false;
             this.contextMenuStripOpenPeriodsGrid.Size = new System.Drawing.Size(158, 192);
-            // 
-            // toolStripMenuItemCut
-            // 
-            this.toolStripMenuItemCut.Name = "toolStripMenuItemCut";
-            this.toolStripMenuItemCut.Size = new System.Drawing.Size(157, 22);
-            this.toolStripMenuItemCut.Text = "xxCut";
-            this.toolStripMenuItemCut.Click += new System.EventHandler(this.toolStripMenuItemCut_Click);
-            // 
-            // toolStripMenuItemCopy
-            // 
-            this.toolStripMenuItemCopy.Name = "toolStripMenuItemCopy";
-            this.toolStripMenuItemCopy.Size = new System.Drawing.Size(157, 22);
-            this.toolStripMenuItemCopy.Text = "xxCopy";
-            this.toolStripMenuItemCopy.Click += new System.EventHandler(this.toolStripMenuItemCopy_Click);
-            // 
-            // toolStripMenuItemPaste
-            // 
-            this.toolStripMenuItemPaste.Name = "toolStripMenuItemPaste";
-            this.toolStripMenuItemPaste.Size = new System.Drawing.Size(157, 22);
-            this.toolStripMenuItemPaste.Text = "xxPaste";
-            this.toolStripMenuItemPaste.Click += new System.EventHandler(this.toolStripMenuItemPaste_Click);
             // 
             // toolStripSeparator1
             // 
@@ -1899,9 +1871,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvPreviousProjectionPeriod;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvNextProjectionPeriod;
         private ContextMenuStrip contextMenuStripOpenPeriodsGrid;
-        private ToolStripMenuItem toolStripMenuItemCut;
-        private ToolStripMenuItem toolStripMenuItemCopy;
-        private ToolStripMenuItem toolStripMenuItemPaste;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripMenuItem toolStripMenuItemDelete;
         private ToolStripSeparator toolStripSeparator2;
