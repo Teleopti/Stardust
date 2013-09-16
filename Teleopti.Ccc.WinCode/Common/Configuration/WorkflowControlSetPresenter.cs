@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
@@ -94,8 +93,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         }
 
         public DateOnlyPeriod ProjectionPeriod { get; private set; }
-
-        public ReadOnlyCollection<AbsenceRequestPeriodModel> AbsenceRequestPeriodsCopied { get; private set; }
 
         public IList<IActivity> ActivityCollection
         {
@@ -327,10 +324,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             _selectedModel.IsDirty = true;
 
             _view.SetOpenPeriodsGridRowCount(_selectedModel.AbsenceRequestPeriodModels.Count);
-
-            //new
-            //RefreshWorkflowControlSetCombo();
-            //_view.SelectWorkflowControlSet(_selectedModel);
             _view.RefreshOpenPeriodsGrid();
         }
 
@@ -354,8 +347,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
             _selectedModel.IsDirty = true;
             _view.SetOpenPeriodsGridRowCount(_selectedModel.AbsenceRequestPeriodModels.Count);
-            //RefreshWorkflowControlSetCombo();
-            //_view.SelectWorkflowControlSet(_selectedModel);
             _view.RefreshOpenPeriodsGrid();
         }
 
@@ -396,143 +387,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
                 _view.RefreshOpenPeriodsGrid();
             }
         }
-
-        public void CopyAbsenceRequestPeriod()
-        {
-            AbsenceRequestPeriodsCopied =
-                new ReadOnlyCollection<AbsenceRequestPeriodModel>(_view.AbsenceRequestPeriodSelected);
-        }
-
-        public void CutAbsenceRequestPeriod()
-        {
-            AbsenceRequestPeriodsCopied =
-                new ReadOnlyCollection<AbsenceRequestPeriodModel>(_view.AbsenceRequestPeriodSelected);
-
-            if (AbsenceRequestPeriodsCopied.Count < 1)
-                return;
-
-            // Build a string of all selected view models that will be cut and set to clipbord.
-            _view.SetClipboardText(getClipboardCopyText());
-
-            //Delete the selected models
-            deleteSelectedAbsenceRequestPeriods(AbsenceRequestPeriodsCopied);
-        }
-
-        private string getClipboardCopyText()
-        {
-            string clipboardText = "";
-
-            foreach (AbsenceRequestPeriodModel model in AbsenceRequestPeriodsCopied)
-            {
-                string periodStart = "";
-                string periodEnd = "";
-                string rollingStart = "";
-                string rollingEnd = "";
-
-                if (model.PeriodStartDate.HasValue)
-                    periodStart = model.PeriodStartDate.Value.ToShortDateString();
-                if (model.PeriodEndDate.HasValue)
-                    periodEnd = model.PeriodEndDate.Value.ToShortDateString();
-                if (model.RollingStart.HasValue)
-                    rollingStart = model.RollingStart.ToString();
-                if (model.RollingEnd.HasValue)
-                    rollingEnd = model.RollingEnd.ToString();
-
-                clipboardText += string.Format(CultureInfo.CurrentCulture,
-                                               "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}\t{10}\r\n",
-                                               model.PeriodType.DisplayText,
-                                               model.Absence.Name,
-                                               model.PersonAccountValidator.DisplayText,
-                                               model.StaffingThresholdValidator.DisplayText,
-                                               model.AbsenceRequestProcess.DisplayText,
-                                               periodStart,
-                                               periodEnd,
-                                               rollingStart,
-                                               rollingEnd,
-                                               model.OpenStartDate.ToShortDateString(),
-                                               model.OpenEndDate.ToShortDateString());
-            }
-
-            return clipboardText;
-        }
-
-        public void PasteAbsenceRequestPeriod()
-        {
-            // Handle paste of copied models
-            IList<AbsenceRequestPeriodModel> selectedPeriods = _view.AbsenceRequestPeriodSelected;
-            if (selectedPeriods == null || selectedPeriods.Count == 0)
-                return;
-
-            if (AbsenceRequestPeriodsCopied == null || AbsenceRequestPeriodsCopied.Count == 0)
-                return;
-
-            // Fix Issue 23573 - Workflow Control Set - Crash on Ctrl+C and Ctrl+V of check staffing rules
-            var firstModelSelectedIndex = 0;
-            if (selectedPeriods[0] != null)
-            {
-                firstModelSelectedIndex = SelectedModel.DomainEntity.AbsenceRequestOpenPeriods.IndexOf(selectedPeriods[0].DomainEntity);
-            }
-            else
-            {
-                if (selectedPeriods.Count > 1)
-                    firstModelSelectedIndex = SelectedModel.DomainEntity.AbsenceRequestOpenPeriods.IndexOf(selectedPeriods[1].DomainEntity);
-            }
-            
-            int modelsToPasteCount = getNumberOfRowsToPaste(firstModelSelectedIndex, AbsenceRequestPeriodsCopied.Count, selectedPeriods.Count);
-            int pasteModelOffsetIndex = 0;
-            int clipIndex = 0;
-
-            for (int i = 1; i <= modelsToPasteCount; i++)
-            {
-                int currentModelIndex = firstModelSelectedIndex + pasteModelOffsetIndex;
-                AbsenceRequestPeriodModel viewModel = SelectedModel.AbsenceRequestPeriodModels[currentModelIndex];
-                if (viewModel == null)
-                    break; // No model exist to paste onto
-
-                // Do replace of selected model with new model
-                replaceAbsenceRequestPeriod(viewModel, AbsenceRequestPeriodsCopied[clipIndex]);
-
-                pasteModelOffsetIndex++;
-                clipIndex++;
-
-                if (clipIndex == AbsenceRequestPeriodsCopied.Count)
-                    clipIndex = 0; // Prepare to lay out copied models for a new round
-            }
-            
-            SelectedModel.IsDirty = true;
-            _view.SetOpenPeriodsGridRowCount(SelectedModel.AbsenceRequestPeriodModels.Count);
-            _view.RefreshOpenPeriodsGrid();
-        }
-
-        private void replaceAbsenceRequestPeriod(AbsenceRequestPeriodModel modelToDelete, AbsenceRequestPeriodModel modelToInsert)
-        {
-            int orderIndex = SelectedModel.DomainEntity.RemoveOpenAbsenceRequestPeriod(modelToDelete.DomainEntity);
-            SelectedModel.DomainEntity.InsertPeriod(modelToInsert.DomainEntity.NoneEntityClone(), orderIndex);
-            SelectedModel.IsDirty = true;
-        }
-
-        private int getNumberOfRowsToPaste(int firstModelSelectedIndex, int copiedRowsCount, int selectedRowsCount)
-        {
-            int modelCount = SelectedModel.AbsenceRequestPeriodModels.Count;
-            int modelsToPasteCount;
-            //if (((copiedRowsCount + firstModelSelectedIndex) - 1) > modelCount)
-            if ((copiedRowsCount + firstModelSelectedIndex) > modelCount)
-            {
-                //modelsToPasteCount = (modelCount - firstModelSelectedIndex) + 1;
-                modelsToPasteCount = (modelCount - firstModelSelectedIndex);
-            }
-            else if (selectedRowsCount < copiedRowsCount)
-            {
-                modelsToPasteCount = copiedRowsCount;
-            }
-            else
-            {
-                int iterateCopiedRows = selectedRowsCount / copiedRowsCount;
-                modelsToPasteCount = iterateCopiedRows * copiedRowsCount;
-            }
-            return modelsToPasteCount;
-        }
-
+		
         public void SetSelectedAllowedPreferenceActivity(IActivity activity)
         {
             if (_selectedModel != null)
@@ -611,7 +466,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             }
             var ret = new List<DateOnlyPeriod> { new DateOnlyPeriod(start, end) };
 
-            //if (!end.Equals(DateOnly.MaxValue))
             ret.AddRange(BasicVisualizerPreferencePeriods());
             ret.AddRange(BasicVisualizerStudentAvailabilityPeriods());
             return ret;
