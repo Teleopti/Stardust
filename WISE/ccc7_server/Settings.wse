@@ -50,6 +50,15 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
+  Variable Value1=AS_DATABASE
+  Variable Name2=_PROP_VAR_
+  Variable Value2=AS_DATABASE_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
   Variable Value1=AGENT_SERVICE
   Variable Name2=_PROP_VAR_
   Variable Value2=AGENT_SERVICE_TMP
@@ -155,7 +164,6 @@ item: Custom Script Item
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
-
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
@@ -165,9 +173,6 @@ item: Custom Script Item
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
-
-
-
 item: Remark
   Text===============================================
 end
@@ -243,4 +248,19 @@ item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(AGENT_SERVICE)|%AGENT_SERVICE_TMP%
   Line Number=0
+end
+item: Remark
+  Text===============================================
+end
+item: Remark
+  Text=Start SupportTool in Deploy mode
+end
+item: Remark
+  Text===============================================
+end
+item: Execute Program
+  Pathname=.\Teleopti.Support.Tool.exe
+  Command Line=-MODeploy
+  Default Directory=%SUPPORTTOOLS_TMP%
+  Flags=00000110
 end
