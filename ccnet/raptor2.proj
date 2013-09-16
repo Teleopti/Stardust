@@ -145,6 +145,11 @@
 		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(DBNamePrefix)_ccc7]&quot;"/>
 	</Target>
 	
+	<Target Name="SetUpConfigFiles">
+		<Message Importance="high" Text="Fixing config files"/>
+		<Exec Command = "$(CCNetWorkingDirectory)\Teleopti.Support.Tool\bin\Debug\Teleopti.Support.Tool.exe -MODevelop" />
+	</Target>
+	
 	<Target Name="BuildDBManager">
 		<Message Importance="high" Text="Compile of Db Manager starting..." />
 
@@ -332,7 +337,7 @@
 		 />
 	</ItemGroup>
 	
-	<Target Name="NCover" DependsOnTargets="FixConfigFiles;Compile;CreateAgentPortalWeb">
+	<Target Name="NCover" DependsOnTargets="FixConfigFiles;Compile;CreateAgentPortalWeb;SetUpConfigFiles">
 		
 		<MakeDir Directories="$(CCNetWorkingDirectory)\NcoverResult"/>
 		<MakeDir Directories="$(CCNetWorkingDirectory)\NUnitResult"/>
