@@ -10,7 +10,7 @@
 	 min-height: 19px;
 	 padding: 0; 
 }
-.weekview-day li.second, .calendarview-week li .day-header {
+.weekview-day, .calendarview-week li .day-header {
 	border-top: 1px solid  #f9f9f9;
 	border-bottom: 1px solid #dfdfdf;
 }
@@ -27,7 +27,7 @@
 
 .body-weekview-inner {
 	border: 1px solid #dfdfdf;
-	background: #f8f8f8;
+	/*background: #f8f8f8;*/
 	white-space: nowrap;
 	font-size: 0;
 	display: none;
@@ -84,17 +84,17 @@
 		border-right: 1px solid #dfdfdf;
 	}
 }
-.weekview-day li
+.weekview-day li:not(.second)
 {
 	border-bottom: 1px solid #dfdfdf;
 }
-.rgba .weekview-day li
+.rgba .weekview-day li:not(.second)
 {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
 }
 /* rgba on many elements makes scrolling very slow in chrome so lets use static */
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-	.rgba .weekview-day li
+	.rgba .weekview-day li:not(.second)
 	{
 		border-bottom: 1px solid #dfdfdf;
 	}
@@ -107,7 +107,7 @@
 	height: 16px;
 }
 
-.weekview-day li:first-child, .weekview-day li.second 
+.weekview-day li:first-child
 {
 	border-top: 1px solid  #f9f9f9;
 	border-bottom: 1px solid #dfdfdf;
@@ -124,7 +124,7 @@
 }
 .rgba .weekview-day li.third 
 {
-	border-top: 1px solid rgba(255, 255, 255, 0.5);
+	
 }
 .weekview-day li.dayoff 
 {
