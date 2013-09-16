@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists("#Request-add-section");
 		}
 
-		[When(@"I click to add overtime availability")]
-		public void WhenIClickToAddOvertimeAvailability()
+		[When(@"I click add new overtime availability")]
+		public void WhenIClickAddNewOvertimeAvailability()
 		{
 			Browser.Interactions.Click(".overtime-availability-add");
 			Browser.Interactions.AssertExists("#Request-add-section");

@@ -54,7 +54,7 @@ Scenario: Default overtime availability values on shift
 	| End time         | 2013-08-20 18:00 |
 	And I view my week schedule for date '2013-08-20'
 	When I click on the day summary for date '2013-08-20'
-	And I click to add overtime availability
+	And I click add new overtime availability
 	Then I should see add overtime availability form with
 	| Field      | Value      |
 	| Start date | 2013-08-20 |
@@ -66,7 +66,7 @@ Scenario: Default overtime availability values on empty day
 	Given I have the role 'Access to overtime availability'
 	And I view my week schedule for date '2013-08-20'
 	When I click on the day summary for date '2013-08-20'
-	And I click to add overtime availability
+	And I click add new overtime availability
 	Then I should see add overtime availability form with
 	| Field      | Value      |
 	| Start date | 2013-08-20 |
@@ -82,7 +82,7 @@ Scenario: Default overtime availability values on dayoff
 	| Date  | 2013-08-20 |
 	And I view my week schedule for date '2013-08-20'
 	When I click on the day summary for date '2013-08-20'
-	And I click to add overtime availability
+	And I click add new overtime availability
 	Then I should see add overtime availability form with
 	| Field      | Value      |
 	| Start date | 2013-08-20 |
@@ -94,7 +94,7 @@ Scenario: Submit overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I view my week schedule for date '2013-08-20'
 	When I click on the day summary for date '2013-08-20'
-	And I click to add overtime availability
+	And I click add new overtime availability
 	And I input overtime availability with
 	| Field             | Value |
 	| Start time        | 16:30 |
@@ -111,7 +111,7 @@ Scenario: Cancel adding overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I view my week schedule for date '2013-08-20'
 	When I click on the day summary for date '2013-08-20'
-	And I click to add overtime availability
+	And I click add new overtime availability
 	And I input overtime availability with
 	| Field             | Value |
 	| Start time        | 16:30 |
@@ -124,7 +124,7 @@ Scenario: Add invalid overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I view my week schedule for date '2013-08-20'
 	When I click on the day summary for date '2013-08-20'
-	And I click to add overtime availability
+	And I click add new overtime availability
 	And I input overtime availability with
 	| Field      | Value |
 	| Start time | 13:30 |
@@ -215,46 +215,42 @@ Scenario: Click overtime availability bar span to next day
 
 
 #followings belong to the change overtime availability pbi
-Scenario: Default overtime availability values on existing overtime availability
+Scenario: Default values on existing overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
 	| Field             | Value      |
 	| Date              | 2013-08-20 |
 	| Start time        | 16:30      |
-	| End time          | 03:00      |
-	| End time next day | true       |
+	| End time          | 18:00      |
 	And I view my week schedule for date '2013-08-20'
 	When I click on the day summary for date '2013-08-20'
-	And I click to add overtime availability
+	And I click add new overtime availability
 	Then I should see add overtime availability form with
 	| Field             | Value      |
-	| Field             | Value      |
 	| Start date        | 2013-08-20 |
-	| End date          | 2013-08-21 |
+	| End date          | 2013-08-20 |
 	| Start time        | 16:30      |
-	| End time          | 03:00      |
-	| End time next day | true       |
+	| End time          | 18:00      |
 
 Scenario: Replace overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
-	| Field             | Value      |
-	| Date              | 2013-08-20 |
-	| Start time        | 16:30      |
-	| End time          | 03:00      |
-	| End time next day | true       |
+	| Field      | Value      |
+	| Date       | 2013-08-20 |
+	| Start time | 15:30      |
+	| End time   | 22:45      |
 	And I view my week schedule for date '2013-08-20'
 	When I click on the day summary for date '2013-08-20'
-	And I click to add overtime availability
+	And I click add new overtime availability
 	And I input overtime availability with
-	| Field             | Value |
-	| Start time        | 15:30 |
-	| End time          | 23:45 |
+	| Field      | Value |
+	| Start time | 16:30 |
+	| End time   | 23:45 |
 	And I click submit button
 	Then I should see an overtime availability symbol with
 	| Field      | Value      |
 	| Date       | 2013-08-20 |
-	| Start time | 15:30      |
+	| Start time | 16:30      |
 	| End time   | 23:45      |
 
 #followings belong to the delete overtime availability pbi
@@ -268,6 +264,6 @@ Scenario: Delete overtime availability
 	| End time   | 03:00 +1   |
 	And I view my week schedule for date '2013-08-20'
 	When I click on the day summary for date '2013-08-20'
-	And I click to add overtime availability
+	And I click add new overtime availability
 	And I click remove button
 	Then I should not see an overtime availability symbol for date '2013-08-20'
