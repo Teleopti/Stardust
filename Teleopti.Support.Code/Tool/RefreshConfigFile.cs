@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Teleopti.Support.Code.Tool
 {
@@ -16,12 +17,15 @@ namespace Teleopti.Support.Code.Tool
 
         public void ReplaceFile(string oldFilePath, string newFilePath, IList<SearchReplace> searchReplaces, bool doNotOverWrite)
         {
-            var dir = GetDirectories(oldFilePath);
-            if (!System.IO.Directory.Exists(dir))
-                System.IO.Directory.CreateDirectory(dir);
+            oldFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, oldFilePath);
+            newFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, newFilePath);
 
-            if (System.IO.File.Exists(oldFilePath) && doNotOverWrite ) return;
-            System.IO.File.Copy(newFilePath, oldFilePath,true);
+            var dir = GetDirectories(oldFilePath);
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
+            if (File.Exists(oldFilePath) && doNotOverWrite ) return;
+            File.Copy(newFilePath, oldFilePath,true);
             _configFileTagReplacer.ReplaceTags(oldFilePath,searchReplaces);
            _machineKeyChecker.CheckForMachineKey(oldFilePath);
         }

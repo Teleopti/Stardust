@@ -66,8 +66,8 @@ namespace Teleopti.Support.CodeTest.Tool
         {
             const string files = @"..\..\..\dummy.config,BuildArtifacts\AppETLTool.config";
             Expect.Call(
-                () => _replacer.ReplaceTags(@"..\..\..\dummy.config", _lst));
-            Expect.Call(_machineKeyChecker.CheckForMachineKey(@"..\..\..\dummy.config")).Return(false);
+                () => _replacer.ReplaceTags(@"..\..\..\dummy.config", _lst)).IgnoreArguments();
+            Expect.Call(_machineKeyChecker.CheckForMachineKey(@"..\..\..\dummy.config")).Return(false).IgnoreArguments();
             _mock.ReplayAll();
 
             _refresher.SplitAndReplace(files, _lst, false);
