@@ -11652,7 +11652,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Longterm Forecast.
+        ///   Looks up a localized string similar to Long-term Forecast.
         /// </summary>
         public static string LongtermForecast {
             get {
