@@ -10731,8 +10731,8 @@ These options are activated:
     <comment>please close workload window.</comment>
   </data>
   <data name="LongtermForecast" xml:space="preserve">
-    <value>Longterm Forecast</value>
-    <comment>Longterm Forecast</comment>
+    <value>Long-term Forecast</value>
+    <comment>Long-term Forecast</comment>
   </data>
   <data name="ManageRuleSets" xml:space="preserve">
     <value>Manage Rule Sets</value>
