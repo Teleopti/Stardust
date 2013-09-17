@@ -5,11 +5,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class DataMaker
 	{
-		public static DataFactoryCoordinator Data()
+		public static ScenarioDataFactory Data()
 		{
-			if (ScenarioContext.Current.Value<DataFactoryCoordinator>() == null)
-				ScenarioContext.Current.Value(new DataFactoryCoordinator());
-			return ScenarioContext.Current.Value<DataFactoryCoordinator>();
+			if (ScenarioContext.Current.Value<ScenarioDataFactory>() == null)
+				ScenarioContext.Current.Value(new ScenarioDataFactory());
+			return ScenarioContext.Current.Value<ScenarioDataFactory>();
 		}
 
 		public static PersonDataFactory Me()

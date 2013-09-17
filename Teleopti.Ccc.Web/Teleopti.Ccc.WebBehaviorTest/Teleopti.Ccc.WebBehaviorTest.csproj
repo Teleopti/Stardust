@@ -115,7 +115,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Data\Setups\Generic\CalendarLinkConfigurable.cs" />
-    <Compile Include="Data\DataFactoryCoordinator.cs" />
+    <Compile Include="Data\ScenarioDataFactory.cs" />
     <Compile Include="PerformanceTool\PerformanceView.feature.cs">
       <DependentUpon>PerformanceView.feature</DependentUpon>
       <AutoGen>True</AutoGen>

@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
-	public class DataFactoryCoordinator
+	public class ScenarioDataFactory
 	{
 		private readonly DataFactory _dataFactory = new DataFactory(ScenarioUnitOfWorkState.UnitOfWorkAction);
 		private readonly AnalyticsDataFactory _analyticsDataFactory = new AnalyticsDataFactory();
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private readonly IDictionary<string, PersonDataFactory> _persons = new Dictionary<string, PersonDataFactory>();
 
-		public DataFactoryCoordinator()
+		public ScenarioDataFactory()
 		{
 			var me = new PersonDataFactory(
 				new Name("The", "One"),
