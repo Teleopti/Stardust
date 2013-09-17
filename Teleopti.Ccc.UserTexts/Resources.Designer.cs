@@ -11364,7 +11364,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log on name:.
+        ///   Looks up a localized string similar to Logon name:.
         /// </summary>
         public static string LoginNameColon {
             get {
@@ -16899,7 +16899,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please enter your log on credentials.
+        ///   Looks up a localized string similar to Please enter your logon credentials.
         /// </summary>
         public static string PleaseEnterYourLogonCredentials {
             get {

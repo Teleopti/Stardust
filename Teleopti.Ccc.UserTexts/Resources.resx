@@ -3778,8 +3778,8 @@ Columns</value>
     <comment>Logging on...</comment>
   </data>
   <data name="LoginNameColon" xml:space="preserve">
-    <value>Log on name:</value>
-    <comment>Log on name:</comment>
+    <value>Logon name:</value>
+    <comment>Logon name:</comment>
   </data>
   <data name="PasswordColon" xml:space="preserve">
     <value>Password:</value>
@@ -3794,8 +3794,8 @@ Columns</value>
     <comment>Please choose a datasource</comment>
   </data>
   <data name="PleaseEnterYourLogonCredentials" xml:space="preserve">
-    <value>Please enter your log on credentials</value>
-    <comment>Please enter your log on credentials</comment>
+    <value>Please enter your logon credentials</value>
+    <comment>Please enter your logon credentials</comment>
   </data>
   <data name="SearchingForDataSourcesTreeDots" xml:space="preserve">
     <value>Searching for data sources...</value>
