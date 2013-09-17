@@ -347,7 +347,7 @@
     <Compile Include="Core\BrowserDriver\IBrowserActivator.cs" />
     <Compile Include="Core\BrowserDriver\WatiNIE\WatiNSingleBrowserIEActivator.cs" />
     <Compile Include="Core\BrowserDriver\WatiNIE\WatiNParallelBrowserIEActivator.cs" />
-    <Compile Include="Data\GlobalDataContext.cs" />
+    <Compile Include="Data\GlobalDataMaker.cs" />
     <Compile Include="Data\GlobalPrincipalState.cs" />
     <Compile Include="Data\GlobalUnitOfWorkState.cs" />
     <Compile Include="Data\ScenarioUnitOfWorkState.cs" />

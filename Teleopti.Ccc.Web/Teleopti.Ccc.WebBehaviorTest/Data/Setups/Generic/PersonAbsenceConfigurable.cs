@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 
-		public IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
+		public IScenario Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
 		
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{

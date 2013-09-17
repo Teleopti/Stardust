@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIChooseTheOtherTeamInTheTeamPicker()
 		{
 			var team = DataMaker.Data().UserData<AnotherTeam>().TheTeam;
-			var site = GlobalDataContext.Data().Data<CommonSite>().Site.Description.Name;
+			var site = GlobalDataMaker.Data().Data<CommonSite>().Site.Description.Name;
 			var id = team.Id.ToString();
 			var text = site + "/" + team.Description.Name;
 			Select2Box.SelectItemByIdAndText("Team-Picker", id, text);
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the team-picker with both teams")]
 		public void ThenIShouldSeeTheTeam_PickerWithBothTeams()
 		{
-			var site = GlobalDataContext.Data().Data<CommonSite>().Site.Description.Name;
+			var site = GlobalDataMaker.Data().Data<CommonSite>().Site.Description.Name;
 			var myTeam = site + "/" + DataMaker.Data().UserData<Team>().TheTeam.Description.Name;
 			var otherTeam = site + "/" + DataMaker.Data().UserData<AnotherTeam>().TheTeam.Description.Name;
 

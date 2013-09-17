@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string ShiftColor { get; set; }	// this should not be here. this exists on the ShiftCategoryConfigurable
 		public string AllActivityColor { get; set; }// this should not be here. this should exist on the ActivityConfigurable
 
-		public IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
+		public IScenario Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
