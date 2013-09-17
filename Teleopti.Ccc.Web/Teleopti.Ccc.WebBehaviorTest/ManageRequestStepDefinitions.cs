@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I have a requestable absence called (.*)")]
 		public void GivenIHaveARequestableAbsenceCalledVacation(string name)
 		{
-			UserFactory.User().Setup(new RequestableAbsenceType(name));
+			DataMaker.Data().Setup(new RequestableAbsenceType(name));
 		}
 
 		[When(@"I input absence request values with (\S*)")]
@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-subject", "The cake is a.. Cake!");
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-message", "A message. A very very very short message. Or maybe not.");
 			Browser.Interactions.SelectOptionByTextUsingJQuery("#Request-add-section .request-new-absence", name);
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-datefrom", date.ToShortDateString(UserFactory.User().Culture));
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-dateto", date.ToShortDateString(UserFactory.User().Culture));	
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-datefrom", date.ToShortDateString(DataMaker.Data().MyCulture));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-dateto", date.ToShortDateString(DataMaker.Data().MyCulture));	
         }
 
 		[Then(@"I should see the text request in the list")]
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I am an agent without access to absence requests")]
 		public void GivenIAmAnAgentWithoutAccessToAbsenceRequests()
 		{
-			UserFactory.User().Setup(new AgentWithoutAbsenceRequestsAccess());
+			DataMaker.Data().Setup(new AgentWithoutAbsenceRequestsAccess());
 		}
 
 		[When(@"I click the send button")]

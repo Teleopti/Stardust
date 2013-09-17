@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should see current or first future virtual schedule period \+/- 1 week")]
 		public void ThenIShouldSeeCurrentOrFirstFutureVirtualSchedulePeriod_1Week()
 		{
-			var virtualSchedulePeriodData = UserFactory.User().UserData<SchedulePeriod>();
+			var virtualSchedulePeriodData = DataMaker.Data().UserData<SchedulePeriod>();
 
 			var firstDateDisplayed = virtualSchedulePeriodData.FirstDayOfDisplayedPeriod();
 			var lastDateDisplayed = virtualSchedulePeriodData.LastDayOfDisplayedPeriod();
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should see next virtual schedule period")]
 		public void ThenIShouldSeeNextVirtualSchedulePeriod()
 		{
-			var virtualSchedulePeriodData = UserFactory.User().UserData<SchedulePeriod>();
+			var virtualSchedulePeriodData = DataMaker.Data().UserData<SchedulePeriod>();
 
 			var nextPeriodFirstDateDisplayed = virtualSchedulePeriodData.FirstDayOfNextDisplayedVirtualSchedulePeriod();
 			var nextPeriodLastDateDisplayed = virtualSchedulePeriodData.LastDayOfNextDisplayedVirtualSchedulePeriod();
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should see previous virtual schedule period")]
 		public void ThenIShouldSeePreviousVirtualSchedulePeriod()
 		{
-			var virtualSchedulePeriodData = UserFactory.User().UserData<SchedulePeriod>();
+			var virtualSchedulePeriodData = DataMaker.Data().UserData<SchedulePeriod>();
 
 			var previousPeriodFirstDateDisplayed = virtualSchedulePeriodData.FirstDayOfDisplayedPreviousVirtualSchedulePeriod();
 			var previousPeriodLastDateDisplayed = virtualSchedulePeriodData.LastDayOfDisplayedPreviousVirtualSchedulePeriod();

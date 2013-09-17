@@ -20,9 +20,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private IUserSetup _cultureSetup = new SwedishCulture();
 		private IUserSetup _timeZoneSetup = new UtcTimeZone();
 
-		public PersonDataFactory(Name name, Action<Action<IUnitOfWork>> unitOfWorkAction)
+		public PersonDataFactory(Name name, IEnumerable<IUserSetup> setups, Action<Action<IUnitOfWork>> unitOfWorkAction)
 		{
 			_name = name;
+			setups.ForEach(Setup);
 			_unitOfWorkAction = unitOfWorkAction;
 		}
 

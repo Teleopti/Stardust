@@ -15,11 +15,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see my shift")]
 		public void ThenIShouldSeeMyShift()
 		{
-			var data = UserFactory.User().UserData<ShiftToday>();
+			var data = DataMaker.Data().UserData<ShiftToday>();
 			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
-			var from = TimeHelper.GetLongHourMinuteTimeString(data.StartTime, UserFactory.User().Culture);
-			var to = TimeHelper.GetLongHourMinuteTimeString(data.StartTime, UserFactory.User().Culture);
-			var contractTime = TimeHelper.GetLongHourMinuteTimeString(data.GetContractTime(), UserFactory.User().Culture);
+			var from = TimeHelper.GetLongHourMinuteTimeString(data.StartTime, DataMaker.Data().MyCulture);
+			var to = TimeHelper.GetLongHourMinuteTimeString(data.StartTime, DataMaker.Data().MyCulture);
+			var contractTime = TimeHelper.GetLongHourMinuteTimeString(data.GetContractTime(), DataMaker.Data().MyCulture);
 
 			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(data.ShiftCategory.Description.Name));
 			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(from));
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the dayoff")]
 		public void ThenIShouldSeeTheDayoff()
 		{
-			var data = UserFactory.User().UserData<DayOffToday>();
+			var data = DataMaker.Data().UserData<DayOffToday>();
 			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
 
 			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(data.DayOff.Description.Name));
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the absence")]
 		public void ThenIShouldSeeTheAbsence()
 		{
-			var data = UserFactory.User().UserData<AbsenceToday>();
+			var data = DataMaker.Data().UserData<AbsenceToday>();
 			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
 
 			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(data.Absence.Description.Name));
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not be able to add preference today")]
 		public void ThenIShouldNotBeAbleToAddPreferenceToday()
 		{
-			var data = UserFactory.User().UserData<ShiftToday>();
+			var data = DataMaker.Data().UserData<ShiftToday>();
 			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(data.Date);
 
 			cell.ClassName.Should().Not.Contain("ui-selectee");

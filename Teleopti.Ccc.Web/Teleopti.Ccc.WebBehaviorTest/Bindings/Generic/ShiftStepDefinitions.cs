@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenIHaveAShiftWith(string userName, Table table)
 		{
 			var schedule = table.CreateInstance<ShiftConfigurable>();
-			UserFactory.User(userName).Setup(schedule);
+			DataMaker.Person(userName).Setup(schedule);
 		}
 
 		[When(@"I am assigned this shift with")]
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var schedule = table.CreateInstance<ShiftConfigurable>();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var user = UserFactory.User().Person;
+				var user = DataMaker.Data().MePerson;
 				schedule.Apply(uow, user, user.PermissionInformation.Culture());
 				uow.PersistAll();
 			}

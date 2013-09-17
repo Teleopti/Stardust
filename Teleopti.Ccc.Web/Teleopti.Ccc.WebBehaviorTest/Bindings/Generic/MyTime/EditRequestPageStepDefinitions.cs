@@ -87,16 +87,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var endTimeSpan = new TimeSpan(end[0], end[1], 0);
 
 			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-timefrom",
-												TimeHelper.TimeOfDayFromTimeSpan(startTimeSpan, UserFactory.User().Culture));
+												TimeHelper.TimeOfDayFromTimeSpan(startTimeSpan, DataMaker.Data().MyCulture));
 			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-timeto",
-												TimeHelper.TimeOfDayFromTimeSpan(endTimeSpan, UserFactory.User().Culture));
+												TimeHelper.TimeOfDayFromTimeSpan(endTimeSpan, DataMaker.Data().MyCulture));
 		}
 
 		[Then(@"I should see the request form with '(.*)' as default date")]
 		public void ThenIShouldSeeTheTextRequestFormWithAsDefaultDate(DateTime date)
 		{
-			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-datefrom", date.ToShortDateString(UserFactory.User().Culture));
-			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-dateto", date.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-datefrom", date.ToShortDateString(DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-dateto", date.ToShortDateString(DataMaker.Data().MyCulture));
 		}
 
 		[Then(@"I should see the detail form for request at position '(.*)' in the list")]

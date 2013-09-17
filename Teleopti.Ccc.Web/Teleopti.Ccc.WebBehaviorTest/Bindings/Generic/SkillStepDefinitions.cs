@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsASkillWith(Table table)
 		{
 			var skill = table.CreateInstance<SkillConfigurable>();
-			UserFactory.User().Setup(skill);
+			DataMaker.Data().Setup(skill);
 		}
 
 	}

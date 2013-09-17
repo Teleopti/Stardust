@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the start and end dates of current week for date '(.*)'")]
 		public void ThenIShouldSeeTheStartAndEndDatesOfCurrentWeekForDate(DateTime date)
 		{
-			AssertShowingWeekForDay(DateHelper.GetFirstDateInWeek(date.Date, UserFactory.User().Culture));
+			AssertShowingWeekForDay(DateHelper.GetFirstDateInWeek(date.Date, DataMaker.Data().MyCulture));
 		}
 
 		[Then(@"I should not see the end of the shift on date '(.*)'")]
@@ -215,8 +215,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
 		{
-			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(anyDayOfWeek, UserFactory.User().Culture);
-			var lastDayOfWeek = DateHelper.GetLastDateInWeek(anyDayOfWeek, UserFactory.User().Culture);
+			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(anyDayOfWeek, DataMaker.Data().MyCulture);
+			var lastDayOfWeek = DateHelper.GetLastDateInWeek(anyDayOfWeek, DataMaker.Data().MyCulture);
 			EventualAssert.That(() => _page.FirstDay.GetAttributeValue("data-mytime-date"), Is.EqualTo(firstDayOfWeek.ToString("yyyy-MM-dd")));
 			EventualAssert.That(() => _page.SeventhDay.GetAttributeValue("data-mytime-date"), Is.EqualTo(lastDayOfWeek.ToString("yyyy-MM-dd")));
 		}

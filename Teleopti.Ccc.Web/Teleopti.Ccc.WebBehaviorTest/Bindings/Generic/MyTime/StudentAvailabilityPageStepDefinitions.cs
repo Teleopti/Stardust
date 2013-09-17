@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void GivenIHaveAStudentAvailabilityWith(Table table)
 		{
 			var fields = table.CreateInstance<StudentAvailabilityFields>();
-			UserFactory.User().Setup(fields);
+			DataMaker.Data().Setup(fields);
 		}
 
 		[When(@"I click the close button")]

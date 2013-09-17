@@ -23,32 +23,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[Given(@"I have skill analytics data")]
 		public void GivenIHaveSkillAnalyticsData()
 		{
-			var timeZones = UserFactory.User().UserData<ITimeZoneData>();
-			var dataSource = UserFactory.User().UserData<IDatasourceData>();
+			var timeZones = DataMaker.Data().UserData<ITimeZoneData>();
+			var dataSource = DataMaker.Data().UserData<IDatasourceData>();
 			var businessUnits = new BusinessUnit(TestData.BusinessUnit, dataSource);
-			UserFactory.User().Setup(businessUnits);
-			UserFactory.User().Setup(new ThreeSkills(timeZones, businessUnits, dataSource));
+			DataMaker.Data().Setup(businessUnits);
+			DataMaker.Data().Setup(new ThreeSkills(timeZones, businessUnits, dataSource));
 		}
 
 		[Given(@"I have analytics fact queue data")]
 		public void GivenIHaveFactQueueDataForAWeek()
 		{
-			var timeZones = UserFactory.User().UserData<ITimeZoneData>();
-			var dataSource = UserFactory.User().UserData<IDatasourceData>();
+			var timeZones = DataMaker.Data().UserData<ITimeZoneData>();
+			var dataSource = DataMaker.Data().UserData<IDatasourceData>();
 			var queues = new AQueue(dataSource);
 			var businessUnits = new BusinessUnit(TestData.BusinessUnit, dataSource);
-			UserFactory.User().Setup(queues);
-			UserFactory.User().Setup(businessUnits);
+			DataMaker.Data().Setup(queues);
+			DataMaker.Data().Setup(businessUnits);
 			var skills = new ThreeSkills(timeZones, businessUnits, dataSource);
-			UserFactory.User().Setup(skills);
+			DataMaker.Data().Setup(skills);
 			var workloads = new AWorkload(skills, timeZones, businessUnits, dataSource);
-			UserFactory.User().Setup(workloads);
-			UserFactory.User().Setup(new FillBridgeQueueWorkloadFromData(workloads, queues, businessUnits, dataSource));
-			var intervals = UserFactory.User().UserData<IIntervalData>();
-			var bridgeTimeZones = UserFactory.User().UserData<IBridgeTimeZone>();
-			var dates = UserFactory.User().UserData<IDateData>();
-			UserFactory.User().Setup(new FactQueue(dates, intervals, queues, dataSource, bridgeTimeZones));
-			UserFactory.User().Setup(new WeekdayTranslations());
+			DataMaker.Data().Setup(workloads);
+			DataMaker.Data().Setup(new FillBridgeQueueWorkloadFromData(workloads, queues, businessUnits, dataSource));
+			var intervals = DataMaker.Data().UserData<IIntervalData>();
+			var bridgeTimeZones = DataMaker.Data().UserData<IBridgeTimeZone>();
+			var dates = DataMaker.Data().UserData<IDateData>();
+			DataMaker.Data().Setup(new FactQueue(dates, intervals, queues, dataSource, bridgeTimeZones));
+			DataMaker.Data().Setup(new WeekdayTranslations());
 		}
 
 		[When(@"I click the signout button")]
@@ -73,14 +73,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[Then(@"I should see a report for next date")]
 		public void ThenIShouldSeeAReportForNextDate()
 		{
-			var expected = DateOnlyForBehaviorTests.TestToday.AddDays(1).ToShortDateString(UserFactory.User().Culture);
+			var expected = DateOnlyForBehaviorTests.TestToday.AddDays(1).ToShortDateString(DataMaker.Data().MyCulture);
 			Browser.Interactions.AssertFirstContains("#report-view-date-nav-current", expected);
 		}
 
 		[Then(@"I should see a report for previous date")]
 		public void ThenIShouldSeeAReportForPreviousDate()
 		{
-			var expected = DateOnlyForBehaviorTests.TestToday.AddDays(-1).ToShortDateString(UserFactory.User().Culture);
+			var expected = DateOnlyForBehaviorTests.TestToday.AddDays(-1).ToShortDateString(DataMaker.Data().MyCulture);
 			Browser.Interactions.AssertFirstContains("#report-view-date-nav-current", expected);
 		}
 
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[Then(@"I should see ReportSettings with default value")]
 		public void ThenIShouldSeeReportSettingsWithDefaultValue()
 		{
-			Browser.Interactions.AssertInputValueUsingJQuery("#sel-date", DateOnlyForBehaviorTests.TestToday.AddDays(-1).ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery("#sel-date", DateOnlyForBehaviorTests.TestToday.AddDays(-1).ToShortDateString(DataMaker.Data().MyCulture));
 			Browser.Interactions.AssertFirstContains("#sel-skill-menu", Resources.All);
 			Browser.Interactions.AssertExists("#report-settings-type-graph:checked");
 			Browser.Interactions.AssertExists("#report-settings-type-table:not(:checked)");
@@ -116,13 +116,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[Then(@"I should see the selected date")]
 		public void ThenIShouldSeeTheSelectedDate()
 		{
-			Browser.Interactions.AssertInputValueUsingJQuery("#sel-date", _clickedDateInDatePicker.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery("#sel-date", _clickedDateInDatePicker.ToShortDateString(DataMaker.Data().MyCulture));
 		}
 
 		[Then(@"I should see the selected skill")]
 		public void ThenIShouldSeeTheSelectedSkill()
 		{
-			var skillName = UserFactory.User().UserData<ThreeSkills>().Skill2Name;
+			var skillName = DataMaker.Data().UserData<ThreeSkills>().Skill2Name;
 			Browser.Interactions.AssertFirstContains("#sel-skill-button", skillName);
 		}
 
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		public void WhenIClickNextDate()
 		{
 			// before click next date, make sure current is today
-			var expected = DateOnlyForBehaviorTests.TestToday.ToShortDateString(UserFactory.User().Culture);
+			var expected = DateOnlyForBehaviorTests.TestToday.ToShortDateString(DataMaker.Data().MyCulture);
 			Browser.Interactions.AssertFirstContains("#report-view-date-nav-current", expected);
 			Browser.Interactions.Click("#report-view-date-nav-next");
 		}
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		public void WhenIClickPreviousDate()
 		{
 			// before click previous date, make sure current is today
-            var expected = DateOnlyForBehaviorTests.TestToday.ToShortDateString(UserFactory.User().Culture);
+            var expected = DateOnlyForBehaviorTests.TestToday.ToShortDateString(DataMaker.Data().MyCulture);
 			Browser.Interactions.AssertFirstContains("#report-view-date-nav-current", expected);
 			Browser.Interactions.Click("#report-view-date-nav-prev");
 		}
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		public void WhenISelectDateToday()
 		{
 			var date = DateOnlyForBehaviorTests.TestToday;
-			var dateString = date.ToShortDateString(UserFactory.User().Culture);
+			var dateString = date.ToShortDateString(DataMaker.Data().MyCulture);
 			// this cant be correct. trigger an avent named datebox?!
 			new JQueryExpression()
 				.SelectById("sel-date")
@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		[When(@"I select a skill")]
 		public void WhenISelectASkill()
 		{
-			var skillId = UserFactory.User().UserData<ThreeSkills>().Skill2Id;
+			var skillId = DataMaker.Data().UserData<ThreeSkills>().Skill2Id;
 			var script = "var el = $('#sel-skill');" +
 						 "el.val('" + skillId + "').attr('selected', true).siblings('option').removeAttr('selected');" +
 						 "el.selectmenu('refresh', true);";

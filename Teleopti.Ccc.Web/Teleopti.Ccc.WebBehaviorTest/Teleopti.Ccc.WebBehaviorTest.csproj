@@ -115,6 +115,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Data\Setups\Generic\CalendarLinkConfigurable.cs" />
+    <Compile Include="Data\DataFactoryCoordinator.cs" />
     <Compile Include="PerformanceTool\PerformanceView.feature.cs">
       <DependentUpon>PerformanceView.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -584,7 +585,7 @@
     <Compile Include="Core\Extensions\FuncExtensions.cs" />
     <Compile Include="Core\Navigation.cs" />
     <Compile Include="Core\BrowserDriver\TimeoutScope.cs" />
-    <Compile Include="Data\UserFactory.cs" />
+    <Compile Include="Data\DataMaker.cs" />
     <Compile Include="Bindings\Specific\UserStepDefinitions.cs" />
     <Compile Include="TextRequestFromSchedule.feature.cs">
       <AutoGen>True</AutoGen>
