@@ -1360,6 +1360,12 @@
     <Compile Include="Scheduling\PropertyPanel\ShiftPerDateControl.Designer.cs">
       <DependentUpon>ShiftPerDateControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftStatisticsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftStatisticsControl.Designer.cs">
+      <DependentUpon>ShiftStatisticsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\PropertyPanel\UpdateSelectionForShiftDistribution.cs" />
     <Compile Include="Scheduling\QuickAccessState.cs" />
     <Compile Include="Scheduling\ScheduleOvertimeCommand.cs" />
@@ -2740,6 +2746,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftPerDateControl.resx">
       <DependentUpon>ShiftPerDateControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftStatisticsControl.resx">
+      <DependentUpon>ShiftStatisticsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\RequestHistoryView.resx">
       <DependentUpon>RequestHistoryView.cs</DependentUpon>

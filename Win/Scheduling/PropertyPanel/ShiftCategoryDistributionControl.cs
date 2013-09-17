@@ -27,14 +27,23 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				if (page == null)
 					continue;
 
-				foreach (var control in page.Controls)
-				{
-					var distributionControl = control as INeedShiftCategoryDistributionModel;
-					if(distributionControl != null)
-						distributionControl.SetModel(model);
-				}
-
+				setModelRec(model, page);
 			}
 		}
+
+		private void setModelRec(IShiftCategoryDistributionModel model, Control control)
+		{
+			foreach (var childControl in control.Controls)
+			{
+				var child = childControl as INeedShiftCategoryDistributionModel;
+				if(child != null)
+					child.SetModel(model);
+
+				var child1 = childControl as Control;
+				if (child1 != null)
+					setModelRec(model, child1);
+			}
+		}
+
 	}
 }

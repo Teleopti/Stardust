@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		IList<DateOnly> GetSortedDates(bool ascending);
 		IList<IPerson> GetAgentsSortedByNumberOfShiftCategories(IShiftCategory shiftCategory, bool ascending);
 		IList<DateOnly> GetDatesSortedByNumberOfShiftCategories(IShiftCategory shiftCategory, bool ascending);
+		MinMax<int> GetMinMaxForShiftCategory(IShiftCategory shiftCategory); 
 
 		event EventHandler ResetNeeded;
 	}
@@ -31,18 +32,26 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 	public class ShiftCategoryDistributionModel : IShiftCategoryDistributionModel
 	{
 		private IEnumerable<IPerson> _filteredPersons = new List<IPerson>();
+		private readonly ICachedShiftCategoryDistribution _cachedShiftCategoryDistribution;
 		private readonly ICachedNumberOfEachCategoryPerDate _cachedNumberOfEachCategoryPerDate;
 		private readonly ICachedNumberOfEachCategoryPerPerson _cachedNumberOfEachCategoryPerPerson;
 		private readonly DateOnlyPeriod _periodToMonitor;
 		private readonly ISchedulerStateHolder _schedulerStateHolder;
 		private int _lastShiftCategoryCount;
 
-		public ShiftCategoryDistributionModel(ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate, ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson, DateOnlyPeriod periodToMonitor, ISchedulerStateHolder schedulerStateHolder)
+		public ShiftCategoryDistributionModel(ICachedShiftCategoryDistribution cachedShiftCategoryDistribution, ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate, ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson, DateOnlyPeriod periodToMonitor, ISchedulerStateHolder schedulerStateHolder)
 		{
+			_cachedShiftCategoryDistribution = cachedShiftCategoryDistribution;
 			_cachedNumberOfEachCategoryPerDate = cachedNumberOfEachCategoryPerDate;
 			_cachedNumberOfEachCategoryPerPerson = cachedNumberOfEachCategoryPerPerson;
 			_periodToMonitor = periodToMonitor;
 			_schedulerStateHolder = schedulerStateHolder;
+		}
+
+		public MinMax<int> GetMinMaxForShiftCategory(IShiftCategory shiftCategory)
+		{
+			var dic = _cachedShiftCategoryDistribution.GetMinMaxDictionary();
+			return dic[shiftCategory];
 		}
 
 		public event EventHandler ResetNeeded;
@@ -51,6 +60,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		{
 			_filteredPersons = filteredPersons;
 			_cachedNumberOfEachCategoryPerDate.SetFilteredPersons(_filteredPersons);
+			_cachedShiftCategoryDistribution.SetFilteredPersons(_filteredPersons);
 			OnResetNeeded();
 		}
 
@@ -222,11 +232,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		private class dateIntPair : IComparable
 		{
 			private readonly int _count;
-			public DateOnly DateOnly
-			{
-				get;
-				private set;
-			}
+			public DateOnly DateOnly { get; private set; }
 
 			public dateIntPair(DateOnly dateOnly, int count)
 			{
@@ -245,6 +251,19 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
 				return -1;
 			}
+		}
+
+		private class intMinMax
+		{
+			public intMinMax()
+			{
+				Min = int.MaxValue;
+				Max = int.MinValue;
+			}
+
+			public int Min { get; set; }
+
+			public int Max { get; set; }
 		}
 	}
 }

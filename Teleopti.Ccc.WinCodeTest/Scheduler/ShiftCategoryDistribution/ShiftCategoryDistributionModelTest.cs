@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 		private IShiftCategoryDistributionModel _target;
 		private ICachedNumberOfEachCategoryPerPerson _cachedNumberOfEachCategoryPerPerson;
 		private ICachedNumberOfEachCategoryPerDate _cachedNumberOfEachCategoryPerDate;
+		private ICachedShiftCategoryDistribution _cachedShiftCategoryDistribution;
 		private ISchedulerStateHolder _schedulerStateHolder;
 
 		[SetUp]
@@ -26,8 +27,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			_mocks = new MockRepository();
 			_cachedNumberOfEachCategoryPerPerson = _mocks.StrictMock<ICachedNumberOfEachCategoryPerPerson>();
 			_cachedNumberOfEachCategoryPerDate = _mocks.StrictMock<ICachedNumberOfEachCategoryPerDate>();
+			_cachedShiftCategoryDistribution = _mocks.StrictMock<ICachedShiftCategoryDistribution>();
 			_schedulerStateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
-			_target = new ShiftCategoryDistributionModel(_cachedNumberOfEachCategoryPerDate, _cachedNumberOfEachCategoryPerPerson,
+			_target = new ShiftCategoryDistributionModel(_cachedShiftCategoryDistribution, _cachedNumberOfEachCategoryPerDate, _cachedNumberOfEachCategoryPerPerson,
 			                                             new DateOnlyPeriod(2013, 09, 16, 2013, 09, 17), _schedulerStateHolder);
 		}
 
@@ -68,6 +70,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			{
 				Expect.Call(_cachedNumberOfEachCategoryPerPerson.GetValue(person1)).Return(value);
 				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
+				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons));
 			}
 
 			using (_mocks.Playback())
@@ -95,6 +98,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			{
 				Expect.Call(_cachedNumberOfEachCategoryPerPerson.GetValue(person1)).Return(value);
 				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
+				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons));
 			}
 
 			using (_mocks.Playback())
@@ -120,6 +124,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			{
 				Expect.Call(_cachedNumberOfEachCategoryPerDate.GetValue(new DateOnly(2013, 9, 16))).Return(value);
 				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
+				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons));
 			}
 
 			using (_mocks.Playback())
@@ -148,6 +153,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 				Expect.Call(_cachedNumberOfEachCategoryPerPerson.GetValue(person1)).Return(value1);
 				Expect.Call(_cachedNumberOfEachCategoryPerPerson.GetValue(person2)).Return(value2);
 				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
+				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons));
 			}
 
 			using (_mocks.Playback())
@@ -175,6 +181,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 				Expect.Call(_cachedNumberOfEachCategoryPerDate.GetValue(new DateOnly(2013, 9, 16))).Return(value1);
 				Expect.Call(_cachedNumberOfEachCategoryPerDate.GetValue(new DateOnly(2013, 9, 17))).Return(value2);
 				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
+				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons));
 			}
 
 			using (_mocks.Playback())
