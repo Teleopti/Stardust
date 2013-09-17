@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public void Setup(IDataSetup setup)
 		{
-			_dataFactory.Setup(setup);
+			_dataFactory.Apply(setup);
 		}
 
 		public void Setup(IPostSetup postSetup)
@@ -110,8 +110,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public string MakeUser()
 		{
-			_dataFactory.Persist();
-
 			_persons.ForEach(p => p.Value.Persist());
 
 			_analyticsDataFactory.Persist(Me().Culture);
@@ -136,7 +134,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				return Me().Setups
 				           .Union(_analyticsDataFactory.Setups)
 				           .Union(_postSetups)
-				           .Union(_dataFactory.Setups)
+				           .Union(_dataFactory.Applied)
 					;
 			}
 		}

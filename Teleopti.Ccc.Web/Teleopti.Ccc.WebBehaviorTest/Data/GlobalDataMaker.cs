@@ -6,9 +6,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static DataFactory Data() { return _dataFactory; }
 
-		public static void Persist()
-		{
-			_dataFactory.Persist();
-		}
 	}
 }
