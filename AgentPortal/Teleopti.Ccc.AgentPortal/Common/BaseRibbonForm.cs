@@ -68,19 +68,18 @@ namespace Teleopti.Ccc.AgentPortal.Common
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            bool local = keyData != (Keys.F1 | Keys.Shift);
-
             if (keyData == Keys.F1 || keyData == (Keys.Shift | Keys.F1))
             {
-                GuiHelper guiHelper = new GuiHelper();
-                Control activeControl = guiHelper.GetActiveControl(this);
+	            var local = keyData == (Keys.Shift & Keys.F1);
+                var guiHelper = new GuiHelper();
+                var activeControl = guiHelper.GetActiveControl(this);
                 BaseUserControl userControl = null;
                 while (activeControl != null)
                 {
                     userControl = activeControl as BaseUserControl;
                     if ((userControl == null) || (!userControl.HasHelp))
                     {
-                        foreach (Control control in _manualHelpContextList)
+                        foreach (var control in _manualHelpContextList)
                         {
                             if (activeControl.Equals(control))
                             {
