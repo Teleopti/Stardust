@@ -197,7 +197,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					var longDateOnlyP = new DateOnlyPeriod(new DateOnly(p.StartDateTime.AddDays(-1)), new DateOnly(p.EndDateTime.AddDays(1)));
 					var personAssignments = 
 						_repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(people, longDateOnlyP, scenario);
-					addPersonAssignments(retDic, personAssignments);
+					foreach (var personAssignment in personAssignments)
+					{
+						IScheduleRange range = retDic[personAssignment.Person];
+						IScheduleDay scheduleDay = range.ScheduledDay(personAssignment.Date);
+						if(scheduleDay.PersonAssignment(false) == null)
+							addPersonAssignments(retDic, new List<IPersonAssignment>{ personAssignment });
+					}
 				}
             }
 
