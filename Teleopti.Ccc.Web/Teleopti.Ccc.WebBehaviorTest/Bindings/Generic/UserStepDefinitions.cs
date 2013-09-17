@@ -49,9 +49,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenIHaveUserCredentialWith(Table table)
 		{
 			var user = table.CreateInstance<UserConfigurable>();
-			UserFactory.User().MakeUser(user.UserName, user.UserName, user.Password);
+			UserFactory.User().Setup(user);
+			UserFactory.User().MakeUser();
 		}
-
 
 		[Given(@"I am a user signed in with")]
 		public void GivenIAmAUserSignedInWith(Table table)

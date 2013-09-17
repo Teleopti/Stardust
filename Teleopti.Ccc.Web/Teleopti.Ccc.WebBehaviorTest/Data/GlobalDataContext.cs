@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void Persist()
 		{
-			_dataFactory.Apply();
+			_dataFactory.Persist();
 		}
 	}
 }

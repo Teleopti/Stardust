@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core
@@ -50,7 +51,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void LogonForSpecificUser(string userName, string password)
 		{
-			UserFactory.User().MakeUser(userName, userName, password);
+			UserFactory.User().Setup(
+				new UserConfigurable
+					{
+						UserName = userName, 
+						Password = password
+					});
+			UserFactory.User().MakeUser();
 			InnerLogon(userName, password);
 		}
 
