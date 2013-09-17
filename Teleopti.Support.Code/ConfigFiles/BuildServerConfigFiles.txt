@@ -1,0 +1,9 @@
+﻿..\..\..\InfrastructureTest\Teleopti.Ccc.InfrastructureTest.dll.Config,BuildArtifacts\CruiseControl.config
+..\..\..\Teleopti.Ccc.ApplicationConfigTest\Teleopti.Ccc.ApplicationConfigTest.dll.Config,BuildArtifacts\CruiseControl.config
+..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.dll.Config,BuildArtifacts\CruiseControl.config
+..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Areas\MobileReports\Views\web.config,BuildArtifacts\Web.Mobile.Web.config
+..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Areas\MyTime\Views\web.config,BuildArtifacts\Web.MyTime.Web.config
+..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Areas\Start\Views\web.config,BuildArtifacts\Web.Start.Web.config
+..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Web.config,BuildArtifacts\Web.Root.Web.config
+..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
+..\..\..\ccnet\InfraTest.ini,BuildArtifacts\InfraTest.ini
