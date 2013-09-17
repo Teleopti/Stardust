@@ -50,6 +50,51 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
+  Variable Value1=SDK_SSL_MEX_BINDING
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SDK_SSL_MEX_BINDING_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=WEB_BROKER_BACKPLANE
+  Variable Name2=_PROP_VAR_
+  Variable Value2=WEB_BROKER_BACKPLANE_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=RTA_QUEUE_ID
+  Variable Name2=_PROP_VAR_
+  Variable Value2=RTA_QUEUE_ID_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=HTTSPGETENABLED
+  Variable Name2=_PROP_VAR_
+  Variable Value2=HTTSPGETENABLED_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=HTTPGETENABLED
+  Variable Name2=_PROP_VAR_
+  Variable Value2=HTTPGETENABLED_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
   Variable Value1=PM_ASMX
   Variable Name2=_PROP_VAR_
   Variable Value2=PM_ASMX_TMP
@@ -322,6 +367,31 @@ end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(IIS_AUTH)|%IIS_AUTH_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(HTTPGETENABLED)|%HTTPGETENABLED_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(HTTPSGETENABLED)|%HTTSPGETENABLED_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(RTA_QUEUE_ID)|%RTA_QUEUE_ID_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(WEB_BROKER_BACKPLANE)|%WEB_BROKER_BACKPLANE_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(SDK_SSL_MEX_BINDING)|%SDK_SSL_MEX_BINDING_TMP%
   Line Number=0
 end
 item: Remark
