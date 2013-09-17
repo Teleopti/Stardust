@@ -49,33 +49,7 @@ Scenario: View night shift
 	When I view my week schedule for date '2012-08-27'
 	Then I should not see the end of the shift on date '2012-08-27'
 	And I should see the end of the shift on date '2012-08-28'
-
-Scenario: View start of night shift on last day of week for swedish culture
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Published schedule'
-	And I am swedish
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2012-08-26 20:00 |
-	| EndTime               | 2012-08-27 04:00 |
-	| Lunch3HoursAfterStart | true             |
-	| Shift category		| Night	           |
-	When I view my week schedule for date '2012-08-26'
-	Then I should see the start of the shift on date '2012-08-26'
-
-Scenario: View end of night shift from previuos week for swedish culture
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Published schedule'
-	And I am swedish
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2012-08-26 20:00 |
-	| EndTime               | 2012-08-27 04:00 |
-	| Lunch3HoursAfterStart | true             |
-	| Shift category		| Night	           |
-	When I view my week schedule for date '2012-08-27'
-	Then I should see the end of the shift on date '2012-08-27'
-
+	
 Scenario: Do not show unpublished schedule
 	Given I have the role 'Full access to mytime'
 	And I have a shift with
@@ -121,7 +95,6 @@ Scenario: Show text request symbol
 	| End Time  | 2013-10-03 14:00 |
 	When I view my week schedule for date '2013-10-03'
 	Then I should see a symbol at the top of the schedule for date '2013-10-03'
-	And I should see number '1' with the request count for date '2013-10-03'
 
 Scenario: Multiple day text requests symbol
 	Given I have the role 'Full access to mytime'
@@ -135,16 +108,12 @@ Scenario: Multiple day text requests symbol
 
 Scenario: Show both text and absence requests
 	Given I have the role 'Full access to mytime'
-	And I have an existing text request with
-	| Field     | Value            |
-	| StartTime | 2013-10-03 20:00 |
-	| End Time  | 2013-10-03 22:00 |
 	And I have an existing absence request with
 	| Field     | Value            |
 	| StartTime | 2013-10-03 10:00 |
 	| End Time  | 2013-10-03 14:00 |
 	When I view my week schedule for date '2013-10-03'
-	Then I should see number '2' with the request count for date '2013-10-03'
+	Then I should see a symbol at the top of the schedule for date '2013-10-03'
 
 Scenario: Navigate to request page by clicking request symbol
 	Given I have the role 'Full access to mytime'
@@ -169,8 +138,8 @@ Scenario: Show timeline with no schedule
 	Then I should see start timeline and end timeline according to schedule with:
 	| Field						| Value |
 	| start timeline			| 0:00  |
-	| end timeline				| 23:59 |
-	| number of timeline labels	| 25    |
+	| end timeline				| 23:00 |
+	| number of timeline labels	| 24    |
 
 @ignore
 Scenario: Show calender according to the users culture
@@ -215,8 +184,8 @@ Scenario: Show timeline with night shift
 	Then I should see start timeline and end timeline according to schedule with:
 	| Field						| Value |
 	| start timeline			| 0:00  |
-	| end timeline				| 23:59 |
-	| number of timeline labels	| 25    |
+	| end timeline				| 23:00 |
+	| number of timeline labels	| 24    |
 
 Scenario: Show timeline with night shift from the last day of the previous week
 	Given I have the role 'Full access to mytime'
@@ -247,8 +216,8 @@ Scenario: Show timeline with night shift starting on the last day of current wee
 	Then I should see start timeline and end timeline according to schedule with:
 	| Field						| Value	|
 	| start timeline			| 20:00	|
-	| end timeline				| 23:59 |
-	| number of timeline labels	| 5		|
+	| end timeline				| 23:00 |
+	| number of timeline labels	| 4		|
 
 Scenario: Show activity at correct times
 	Given I have the role 'Full access to mytime'
