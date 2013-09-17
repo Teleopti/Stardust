@@ -4,7 +4,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.WinCode.Shifts;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCodeTest.ShiftCreator
+namespace Teleopti.Ccc.WinCodeTest.Shifts
 {
 	[TestFixture]
 	public class WorkShiftAddCallbackTest

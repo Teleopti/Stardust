@@ -12,6 +12,7 @@ GO
 -- 2012-02-13	DavidJ	#18135 - Adding missing filter for Agents
 -- 2012-02-14	DavidJ	#	- refactor tables
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
+-- 2013-09-17	ErikS	#24754 - Unable to see requests from future personperiod
 -- =============================================
 --Static dimension table
 --------------------------------------------------------
@@ -77,7 +78,7 @@ SET @hide_time_zone = 1
 
 --Get all agents/persons that user has permission to see
 INSERT INTO #rights_agents 
-SELECT * FROM mart.ReportAgentsMultipleTeams(@date_from, @date_from, @group_page_code, @group_page_group_set, '00000000-0000-0000-0000-000000000002', @site_id, @team_set, '00000000-0000-0000-0000-000000000002', @person_code, @report_id, @business_unit_code)
+SELECT * FROM mart.ReportAgentsMultipleTeams(@date_from, @date_to, @group_page_code, @group_page_group_set, '00000000-0000-0000-0000-000000000002', @site_id, @team_set, '00000000-0000-0000-0000-000000000002', @person_code, @report_id, @business_unit_code)
 
 --Get all teams that user has permission to see
 INSERT INTO #rights_teams

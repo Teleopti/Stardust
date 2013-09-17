@@ -331,8 +331,6 @@
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
-    <Compile Include="Optimization\TeamBlock\OptimizationOverLimitByRestrictionDeciderFactory.cs" />
-    <Compile Include="Optimization\TeamBlock\ScheduleMatrixOriginalStateContainerFactory.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffOptimizerService.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
@@ -527,7 +525,6 @@
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
-    <Compile Include="Scheduling\TeamBlock\IntervalDataEntendedMedianCalculator.cs" />
     <Compile Include="ResourceCalculation\TransformResourcesFromStorageCommand.cs" />
     <Compile Include="Scheduling\Overtime\SkillIntervalData.cs" />
     <Compile Include="Scheduling\Overtime\SkillIntervalDataDivider.cs" />
@@ -602,8 +599,6 @@
     <Compile Include="Scheduling\Meetings\MeetingSlotFinderService.cs" />
     <Compile Include="Scheduling\Meetings\MeetingSlotImpactCalculator.cs" />
     <Compile Include="Scheduling\NonBlendSkill\NonBlendSkillCalculator.cs" />
-    <Compile Include="Scheduling\NonBlendSkill\NonBlendPersonSkillFromGroupingCreator.cs" />
-    <Compile Include="Scheduling\NonBlendSkill\NonBlendSkillFromGroupingCreator.cs" />
     <Compile Include="Scheduling\NonBlendSkill\NonBlendSkillImpactOnPeriodForProjection.cs" />
     <Compile Include="Scheduling\NonBlendSkill\NonBlendWorkShiftCalculator.cs" />
     <Compile Include="Scheduling\PersonalAccount\Account.cs" />
@@ -694,7 +689,6 @@
     <Compile Include="Optimization\RmsPeriodValueCalculator.cs" />
     <Compile Include="Optimization\DayOffOptimizationService.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByPersonalSkillsExtractor.cs" />
-    <Compile Include="Optimization\ScheduleMatrixBackToLegalStateBrutalForceServiceContainer.cs" />
     <Compile Include="Optimization\ScheduleMatrixLockableBitArrayConverter.cs" />
     <Compile Include="RealTimeAdherence\DefaultStateGroupException.cs" />
     <Compile Include="Forecasting\ActiveAgentCount.cs" />
@@ -723,9 +717,7 @@
     <Compile Include="Helper\SerializationHelper.cs" />
     <Compile Include="Helper\StaffingCalculatorService.cs" />
     <Compile Include="Helper\StaffingEmailCalculatorService.cs" />
-    <Compile Include="Optimization\ScheduleMatrixBitArrayConverter.cs" />
     <Compile Include="Optimization\SchedulePeriodDayOffLegalStateValidator.cs" />
-    <Compile Include="Optimization\SchedulePeriodDayOffBackToLegalStateByBrutalForceService.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\SchedulePeriodShiftCategoryBackToLegalStateServiceBuilder.cs" />
     <Compile Include="Optimization\SchedulePeriodShiftCategoryBackToLegalStateService.cs" />
@@ -735,7 +727,6 @@
     </Compile>
     <Compile Include="Payroll\PayrollExport.cs" />
     <Compile Include="Payroll\PayrollResult.cs" />
-    <Compile Include="RealTimeAdherence\ExternalLogOnPerson.cs" />
     <Compile Include="RealTimeAdherence\IRtaStateHolder.cs" />
     <Compile Include="RealTimeAdherence\StateGroupActivityAlarm.cs" />
     <Compile Include="Repositories\IAbsenceRepository.cs" />
@@ -795,7 +786,6 @@
     <Compile Include="Scheduling\Assignment\SchedulePartSignificantPartDefinitions.cs" />
     <Compile Include="Scheduling\Assignment\ShiftCategoryLimitation.cs" />
     <Compile Include="Scheduling\Assignment\SignificantPartService.cs" />
-    <Compile Include="Scheduling\Assignment\SmartJumpOptimizer.cs" />
     <Compile Include="Scheduling\Assignment\TurnoffPermissionScope.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriod.cs" />
     <Compile Include="Scheduling\Assignment\VisualLayerFactory.cs" />
@@ -860,7 +850,6 @@
     <Compile Include="Scheduling\Rules\MinWeeklyRestRule.cs" />
     <Compile Include="Scheduling\Rules\NewBusinessRuleCollection.cs" />
     <Compile Include="Scheduling\Rules\NewDayOffRule.cs" />
-    <Compile Include="Scheduling\Rules\NewLegalStateRule.cs" />
     <Compile Include="Scheduling\Rules\NewMaxWeekWorkTimeRule.cs" />
     <Compile Include="Scheduling\Rules\NewNightlyRestRule.cs" />
     <Compile Include="Scheduling\Rules\NewPersonAccountRule.cs" />
@@ -1153,7 +1142,6 @@
     <Compile Include="ResourceCalculation\SchedulingResultStateHolder.cs" />
     <Compile Include="ResourceCalculation\DayOffPlannerRules.cs" />
     <Compile Include="Scheduling\Meetings\MeetingPeriod.cs" />
-    <Compile Include="Scheduling\Meetings\MeetingPeriodSorter.cs" />
     <Compile Include="Scheduling\Meetings\Meeting.cs" />
     <Compile Include="Scheduling\Meetings\MeetingPerson.cs" />
     <Compile Include="Scheduling\Meetings\PersonMeeting.cs" />
@@ -1327,7 +1315,6 @@
     <Compile Include="Infrastructure\StateHolderException.cs" />
     <Compile Include="Scheduling\Absence.cs" />
     <Compile Include="Scheduling\AbsenceLayer.cs" />
-    <Compile Include="Scheduling\Assignment\AssignmentBelongsToAgentSpecification.cs" />
     <Compile Include="Scheduling\Assignment\AssignmentLength.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignmentRestrictionSet.cs" />
     <Compile Include="Scheduling\WorkShift.cs" />
@@ -1335,7 +1322,6 @@
     <Compile Include="Security\AuthorizationEntities\ApplicationAuthenticationInfo.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationFunction.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationRole.cs" />
-    <Compile Include="Security\AuthorizationEntities\AuthorizationSettings.cs" />
     <Compile Include="Scheduling\Activity.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignment.cs" />
     <Compile Include="Scheduling\Assignment\ActivityLayer.cs" />

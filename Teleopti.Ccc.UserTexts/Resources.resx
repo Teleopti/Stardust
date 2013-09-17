@@ -254,7 +254,7 @@
     <comment>Agents</comment>
   </data>
   <data name="AgentSettings" xml:space="preserve">
-    <value>Agent settings</value>
+    <value>Agent Settings</value>
     <comment>Agent settings</comment>
   </data>
   <data name="All" xml:space="preserve">
@@ -1767,7 +1767,7 @@ Periods</comment>
     <comment>Set culture</comment>
   </data>
   <data name="SetKPITargets" xml:space="preserve">
-    <value>Set KPI targets</value>
+    <value>Set KPI Targets</value>
     <comment>Set KPI targets</comment>
   </data>
   <data name="SetPassword" xml:space="preserve">
@@ -3778,8 +3778,8 @@ Columns</value>
     <comment>Logging on...</comment>
   </data>
   <data name="LoginNameColon" xml:space="preserve">
-    <value>Log on name:</value>
-    <comment>Log on name:</comment>
+    <value>Logon name:</value>
+    <comment>Logon name:</comment>
   </data>
   <data name="PasswordColon" xml:space="preserve">
     <value>Password:</value>
@@ -3794,8 +3794,8 @@ Columns</value>
     <comment>Please choose a datasource</comment>
   </data>
   <data name="PleaseEnterYourLogonCredentials" xml:space="preserve">
-    <value>Please enter your log on credentials</value>
-    <comment>Please enter your log on credentials</comment>
+    <value>Please enter your logon credentials</value>
+    <comment>Please enter your logon credentials</comment>
   </data>
   <data name="SearchingForDataSourcesTreeDots" xml:space="preserve">
     <value>Searching for data sources...</value>
@@ -10723,8 +10723,8 @@ These options are activated:
     <comment>please close workload window.</comment>
   </data>
   <data name="LongtermForecast" xml:space="preserve">
-    <value>Longterm Forecast</value>
-    <comment>Longterm Forecast</comment>
+    <value>Long-term Forecast</value>
+    <comment>Long-term Forecast</comment>
   </data>
   <data name="ManageRuleSets" xml:space="preserve">
     <value>Manage Rule Sets</value>

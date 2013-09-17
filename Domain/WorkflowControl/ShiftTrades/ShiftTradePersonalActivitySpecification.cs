@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
@@ -30,20 +31,20 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 				if (mainShiftFrom != null)
 				{
-					var periodFrom = mainShiftFrom.LayerCollection.Period();
-					if (!periodFrom.HasValue) continue;
-
-					if (!checkCover(personAssignmentTo, periodFrom.Value))
+					if (mainShiftFrom.LayerCollection.PeriodBlocks()
+								.Any(periodFrom => !checkCover(personAssignmentTo, periodFrom)))
+					{
 						return false;
+					}
 				}
 
 				if (mainShiftTo != null)
 				{
-					var periodTo = mainShiftTo.LayerCollection.Period();
-					if (!periodTo.HasValue) continue;
-
-					if (!checkCover(personAssignmentFrom, periodTo.Value))
+					if (mainShiftTo.LayerCollection.PeriodBlocks()
+								.Any(periodTo => !checkCover(personAssignmentFrom, periodTo)))
+					{
 						return false;
+					}
 				}	
 			}
 

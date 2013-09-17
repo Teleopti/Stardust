@@ -372,7 +372,7 @@ inner join mart.bridge_time_zone b
 --Date: 2013-08-30
 --Desc: Update handling of RTA batch, adding info to ActualAgentState to make it stateless
 -----------------
-IF NOT EXISTS (SELECT * FROM sys.columns WHERE (Name = N'ReceivedTime' OR Name = N'OriginalDataSourceId' OR name = N'BusinessUnit') AND OBJECT_ID = OBJECT_ID(N'ActualAgentState'))
+IF NOT EXISTS (SELECT * FROM sys.columns WHERE (Name = N'BatchId' OR Name = N'OriginalDataSourceId') AND OBJECT_ID = OBJECT_ID(N'[RTA].[ActualAgentState]'))
 BEGIN
 	TRUNCATE TABLE [RTA].[ActualAgentState]
 	ALTER TABLE [RTA].[ActualAgentState]

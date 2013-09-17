@@ -78,13 +78,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         /// </summary>
         /// <returns></returns>
         IList<AbsenceRequestPeriodModel> AbsenceRequestPeriodSelected { get; }
-
-        /// <summary>
-        /// Sets the clipbord text.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        void SetClipboardText(string text);
-
+		
         /// <summary>
         /// Enables/disables the handling of absence request periods.
         /// </summary>

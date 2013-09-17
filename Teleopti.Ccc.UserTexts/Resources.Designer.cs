@@ -1484,7 +1484,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Agent settings.
+        ///   Looks up a localized string similar to Agent Settings.
         /// </summary>
         public static string AgentSettings {
             get {
@@ -11589,7 +11589,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Log on name:.
+        ///   Looks up a localized string similar to Logon name:.
         /// </summary>
         public static string LoginNameColon {
             get {
@@ -11670,7 +11670,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Longterm Forecast.
+        ///   Looks up a localized string similar to Long-term Forecast.
         /// </summary>
         public static string LongtermForecast {
             get {
@@ -17178,7 +17178,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please enter your log on credentials.
+        ///   Looks up a localized string similar to Please enter your logon credentials.
         /// </summary>
         public static string PleaseEnterYourLogonCredentials {
             get {
@@ -21124,7 +21124,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set KPI targets.
+        ///   Looks up a localized string similar to Set KPI Targets.
         /// </summary>
         public static string SetKPITargets {
             get {

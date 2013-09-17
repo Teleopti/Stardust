@@ -261,14 +261,11 @@
     <Compile Include="Domain\IScheduleDayStudentAvailabilityRestrictionExtractor.cs" />
     <Compile Include="Domain\IScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Domain\IScheduleHistoryRepository.cs" />
-    <Compile Include="Domain\IScheduleMatrixBackToLegalStateBrutalForceServiceContainer.cs" />
-    <Compile Include="Domain\IScheduleMatrixBitArrayConverter.cs" />
     <Compile Include="Domain\IScheduleMatrixListCreator.cs" />
     <Compile Include="Domain\IScheduleMatrixLockableBitArrayConverter.cs" />
     <Compile Include="Domain\IScheduleMatrixOriginalStateContainer.cs" />
     <Compile Include="Domain\IScheduleOptimizationService.cs" />
     <Compile Include="Domain\ISchedulePeriodDayOffLegalStateValidator.cs" />
-    <Compile Include="Domain\ISchedulePeriodDayOffBackToLegalStateByBrutalForceService.cs" />
     <Compile Include="Domain\ISchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Domain\IBestBlockShiftCategoryFinder.cs" />
     <Compile Include="Domain\IBlockSchedulingService.cs" />
