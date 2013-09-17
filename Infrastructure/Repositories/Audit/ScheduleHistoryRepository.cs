@@ -46,13 +46,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 		private IEnumerable<PersonAbsence> findAbsence(IPerson agent, DateTimePeriod dateTimePeriod, IRevision revision, IEnumerable<IPersistableScheduleData> assignments)
 		{
 			var periodEnd = dateTimePeriod.EndDateTime;
-			if (assignments.Any())
+			var ass = assignments.FirstOrDefault();
+			if (ass != null)
 			{
-				var latestAssignmentEnd = assignments.Max(a => a.Period.EndDateTime);
-				if (latestAssignmentEnd > periodEnd)
+				var assPeriod = ass.Period;
+				if (assPeriod.EndDateTime > periodEnd)
 				{
-					periodEnd = latestAssignmentEnd;
-				}				
+					periodEnd = assPeriod.EndDateTime;
+				}
 			}
 
 			var periodWithExtraAtEnd = new DateTimePeriod(dateTimePeriod.StartDateTime, periodEnd);
