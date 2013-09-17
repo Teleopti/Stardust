@@ -70,77 +70,72 @@
 
 </div>
 <div>
-	<div class="week-schedule-ASM-permission-granted" data-bind="if : asmPermission">yes</div>
-	<div class="week-schedule-current-week" data-bind="if : isCurrentWeek">yes</div>
-	<div class="body-weekview-inner clearfix well-small" style="padding: 0">
-		<div class="weekview-timeline floatleft">
-			<div class="week-schedule-time-indicator-small absolute">
-			</div>
-			<!-- ko foreach: timeLines -->
-			<div class="weekview-timeline-label absolute" data-bind="style: {top: topPosition}, text : timeText, visible : evenHour">
-			</div>
-			<!-- /ko -->
-		</div>
-		<!-- ko foreach: days -->
-		<ul class="weekview-day" data-bind="attr: {'data-mytime-date': fixedDate, 'data-mytime-state': state, 'data-mytime-dayofweek': dayOfWeek}">
-			<li>
-				<div data-bind="text: headerTitle">
-				</div>
-			</li>
-			<li class="second">
-				<div style="padding: 2px 2px 0 2px">
-				    <span class="floatleft badge day-header-text" data-bind="text: headerDayDescription"></span>
-                    <span class="floatright badge day-header-text" data-bind="text: headerDayNumber"></span>
-				</div>
-			</li>
-		    <li id="day-summary" 
-		        data-bind="css: { 'show-request': textRequestPermission }, attr: { 'class': classForDaySummary },
-                style: { 'background-color': colorForDaySummary, 'color': textColor }, click: $parent.showAddRequestForm"
-		        class="third category">
+    <div class="week-schedule-ASM-permission-granted" data-bind="if : asmPermission">yes</div>
+    <div class="week-schedule-current-week" data-bind="if : isCurrentWeek">yes</div>
+    <div class="body-weekview-inner clearfix well-small" style="padding: 0">
+        <div class="weekview-timeline floatleft">
+            <div class="weekview-day-time-indicator-small absolute">
+            </div>
+            <!-- ko foreach: timeLines -->
+            <div class="weekview-timeline-label absolute" data-bind="style: {top: topPosition}, text : timeText, visible : evenHour">
+            </div>
+            <!-- /ko -->
+        </div>
+        <!-- ko foreach: days -->
+        <div class="weekview-day" data-bind="attr: {'data-mytime-date': fixedDate, 'data-mytime-state': state, 'data-mytime-dayofweek': dayOfWeek}">
+            <div class="weekview-day-header" data-bind="text: headerTitle"></div>
+            <div class="weekview-day-date clearfix">
+                <label class="weekview-day-month pull-left badge day-header-text" data-bind="text: headerDayDescription"></label>
+                <label class="weekview-day-dayofmonth pull-right badge day-header-text" data-bind="text: headerDayNumber"></label>
+            </div>
+            <div 
+                data-bind="css: { 'show-request': textRequestPermission }, attr: { 'class': classForDaySummary },
+                style: { 'background-color': colorForDaySummary, 'color': textColor }, click: $parent.showAddRequestForm" 
+                class="weekview-day-summary">
 		        
-		        <strong class="fullwidth displayblock" data-bind="text: summaryTitle"></strong>
-		        <span class="fullwidth displayblock" data-bind="text: summaryTimeSpan"></span>
-		        <span data-bind="text: summary"></span>
-		    </li>
-			<li id="day-symbol" class="fourth" data-bind="click: $parent.showAddRequestForm">
-				<div class="text-request floatright" data-bind="visible: hasTextRequest, tooltip: { title: textRequestText, html: true }, click: navigateToRequests">
-					<div class="floatright extrasmall" data-bind="text:textRequestCount">
-					</div>
+                <strong class="fullwidth displayblock" data-bind="text: summaryTitle"></strong>
+                <span class="fullwidth displayblock" data-bind="text: summaryTimeSpan"></span>
+                <span data-bind="text: summary"></span>
+            </div>
+            <div class="weekview-day-symbol" data-bind="click: $parent.showAddRequestForm, css: { 'weekview-day-show-request': textRequestPermission }">
+                <div class="weekview-day-symbol-request pull-right" data-bind="visible: hasTextRequest, tooltip: { title: textRequestText, html: true }, click: navigateToRequests">
                     <i class="icon-comment"></i>
-				</div>
-				<div class="holiday-agents show-request floatright" data-bind="visible: absenceRequestPermission, tooltip: { title: holidayChanceText(), html: true }">
-					<div>
-						<div class="small-circle" data-bind="style: {background: holidayChanceColor()}" >
-							<div class="small-radial-circle"></div>
-						</div>
-					</div> 
-				</div>
-				<!-- ko if: hasNote -->
-			    <div class="pull-right" data-bind="tooltip: { title: noteMessage, html: true }">
-			        <i class="icon-exclamation-sign"></i>
-			    </div>
-				<!-- /ko -->
-				<div id="add-request-cell" data-bind="css:{'add-request-space show-request': textRequestPermission}">
-				</div>
-			</li>
-			<li class="weekview-day-schedule relative">
-				<div class="week-schedule-time-indicator relative">
-				</div>
-				<!-- ko foreach: layers -->
-				<div class="week-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': '131px' }">
-					<!-- ko if: hasMeeting -->
-				    <div class="meeting floatright">
-				        <i class="icon-time"></i>
-				    </div>
-					<!-- /ko -->
-					<strong class="truncate" data-bind="text: title, visible: showTitle"></strong><span
-						class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan">
-					</span>
-				</div>
-				<!-- /ko -->
-			</li>
-			<!-- /ko -->
-		</ul>
-		<!-- /ko -->
-	</div>
+                </div>
+                <div class="pull-right" data-bind="visible: absenceRequestPermission, tooltip: { title: holidayChanceText(), html: true }">
+                    <div>
+                        <div class="small-circle" data-bind="style: {background: holidayChanceColor()}" >
+                            <div class="small-radial-circle"></div>
+                        </div>
+                    </div> 
+                </div>
+                <!-- ko if: hasNote -->
+                <div class="pull-right" data-bind="tooltip: { title: noteMessage, html: true }">
+                    <i class="icon-exclamation-sign"></i>
+                </div>
+                <!-- /ko -->
+                <div id="add-request-cell" data-bind="css:{'add-request-space show-request': textRequestPermission}">
+                </div>
+            </div>
+            <div class="weekview-day-schedule relative">
+                <div class="weekview-day-time-indicator relative">
+                </div>
+                <!-- ko foreach: layers -->
+                <div class="weekview-day-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': '131px' }">
+                    <!-- ko if: hasMeeting -->
+                    <div class="meeting floatright">
+                        <i class="meeting-icon icon-user mr10">
+                            <i class="icon-user ml10"></i>
+                        </i>
+                    </div>
+                    <!-- /ko -->
+                    <strong class="truncate" data-bind="text: title, visible: showTitle"></strong><span
+                                                                                                      class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan">
+                                                                                                  </span>
+                </div>
+                <!-- /ko -->
+            </div>
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+    </div>
 </div>

@@ -1,9 +1,4 @@
-﻿
-.weekview-day li.striped div 
-{
-	background-image: url(../Images/stripe.png);
-}
-.weekview-day li.dayoff div
+﻿.weekview-day li.dayoff div
 {
 	border-left-color: beige;
 	border-right-color: beige;
