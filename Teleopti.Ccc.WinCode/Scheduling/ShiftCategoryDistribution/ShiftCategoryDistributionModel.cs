@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -13,20 +14,21 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 {
 	public interface IShiftCategoryDistributionModel
 	{
-		void SetFilteredPersons(IEnumerable<IPerson> filteredPersons);
-
 		//IEnumerable<IPerson> FilteredPersons { get; }
+		MinMax<int> GetMinMaxForShiftCategory(IShiftCategory shiftCategory);
+		double GetAverageForShiftCategory(IShiftCategory shiftCategory);
+		double GetStandardDeviationForShiftCategory(IShiftCategory shiftCategory);
+		event EventHandler ResetNeeded;
+		void SetFilteredPersons(IEnumerable<IPerson> filteredPersons);
 		int ShiftCategoryCount(IPerson person, IShiftCategory shiftCategory);
 		int ShiftCategoryCount(DateOnly dateOnly, IShiftCategory shiftCategory);
 		IList<IShiftCategory> GetSortedShiftCategories();
 		string CommonAgentName(IPerson person);
+		void OnResetNeeded();
 		IList<IPerson> GetSortedPersons(bool ascending);
 		IList<DateOnly> GetSortedDates(bool ascending);
 		IList<IPerson> GetAgentsSortedByNumberOfShiftCategories(IShiftCategory shiftCategory, bool ascending);
 		IList<DateOnly> GetDatesSortedByNumberOfShiftCategories(IShiftCategory shiftCategory, bool ascending);
-		MinMax<int> GetMinMaxForShiftCategory(IShiftCategory shiftCategory); 
-
-		event EventHandler ResetNeeded;
 	}
 
 	public class ShiftCategoryDistributionModel : IShiftCategoryDistributionModel
@@ -37,21 +39,42 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		private readonly ICachedNumberOfEachCategoryPerPerson _cachedNumberOfEachCategoryPerPerson;
 		private readonly DateOnlyPeriod _periodToMonitor;
 		private readonly ISchedulerStateHolder _schedulerStateHolder;
+		private readonly IPopulationStatisticsCalculator _populationStatisticsCalculator;
 		private int _lastShiftCategoryCount;
 
-		public ShiftCategoryDistributionModel(ICachedShiftCategoryDistribution cachedShiftCategoryDistribution, ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate, ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson, DateOnlyPeriod periodToMonitor, ISchedulerStateHolder schedulerStateHolder)
+		public ShiftCategoryDistributionModel(ICachedShiftCategoryDistribution cachedShiftCategoryDistribution, ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate, ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson, DateOnlyPeriod periodToMonitor, ISchedulerStateHolder schedulerStateHolder, IPopulationStatisticsCalculator populationStatisticsCalculator)
 		{
 			_cachedShiftCategoryDistribution = cachedShiftCategoryDistribution;
 			_cachedNumberOfEachCategoryPerDate = cachedNumberOfEachCategoryPerDate;
 			_cachedNumberOfEachCategoryPerPerson = cachedNumberOfEachCategoryPerPerson;
 			_periodToMonitor = periodToMonitor;
 			_schedulerStateHolder = schedulerStateHolder;
+			_populationStatisticsCalculator = populationStatisticsCalculator;
 		}
 
 		public MinMax<int> GetMinMaxForShiftCategory(IShiftCategory shiftCategory)
 		{
 			var dic = _cachedShiftCategoryDistribution.GetMinMaxDictionary();
 			return dic[shiftCategory];
+		}
+
+		//use something else than the _populationStatisticsCalculator, should be something you send in values to and it returns what you want and dont calculate anything else
+		public double GetAverageForShiftCategory(IShiftCategory shiftCategory)
+		{
+			var minMax = GetMinMaxForShiftCategory(shiftCategory);
+			_populationStatisticsCalculator.AddItem(minMax.Minimum);
+			_populationStatisticsCalculator.AddItem(minMax.Maximum);
+			_populationStatisticsCalculator.Analyze();
+			return _populationStatisticsCalculator.Average;
+		}
+
+		public double GetStandardDeviationForShiftCategory(IShiftCategory shiftCategory)
+		{
+			var minMax = GetMinMaxForShiftCategory(shiftCategory);
+			_populationStatisticsCalculator.AddItem(minMax.Minimum);
+			_populationStatisticsCalculator.AddItem(minMax.Maximum);
+			_populationStatisticsCalculator.Analyze();
+			return _populationStatisticsCalculator.StandardDeviation;
 		}
 
 		public event EventHandler ResetNeeded;
@@ -63,14 +86,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			_cachedShiftCategoryDistribution.SetFilteredPersons(_filteredPersons);
 			OnResetNeeded();
 		}
-
-		//public IEnumerable<IPerson> FilteredPersons
-		//{
-		//	get
-		//	{
-		//		return _filteredPersons;
-		//	}
-		//}
 
 		public int ShiftCategoryCount(IPerson person, IShiftCategory shiftCategory)
 		{

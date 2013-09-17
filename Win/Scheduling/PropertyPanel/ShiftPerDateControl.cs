@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				model.ResetNeeded += modelResetNeeded;
 			}
 			_presenter = new ShiftPerDayPresenter(model);
-			_presenter.ReSort(null);
+			_presenter.ReSort(null, true);
 		}
 
 		void modelResetNeeded(object sender, EventArgs e)
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			else
 			{
 				gridControl1.ResetVolatileData();
-				_presenter.ReSort(null);
+				_presenter.ReSort(null, true);
 				gridControl1.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
 				gridControl1.UpdateScrollBars();
 				gridControl1.Invalidate(true);
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				return;
 
 			object tag = gridControl1[0, e.ColIndex].Tag;
-			_presenter.ReSort(tag);
+			_presenter.ReSort(tag, false);
 			gridControl1.Invalidate();
 		}
 

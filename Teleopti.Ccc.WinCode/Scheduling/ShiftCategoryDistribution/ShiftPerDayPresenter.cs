@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			get;
 		}
 		int ColumnCount();
-		void ReSort(object tag);
+		void ReSort(object tag, bool keepOrder);
 	}
 
 	public class ShiftPerDayPresenter : IShiftPerDayPresenter
@@ -24,18 +24,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		private readonly IShiftCategoryDistributionModel _model;
 		private IList<DateOnly> _sortedDates = new List<DateOnly>();
 		private IShiftCategory _lastSortedCategory;
-		private bool _lastSortOrderAscending;
+		private bool _lastSortOrderAscending = true;
 
 		public ShiftPerDayPresenter(IShiftCategoryDistributionModel model)
 		{
 			_model = model;
 		}
-
-		//if (DateHelper.IsWeekend(dateTime, CultureInfo.CurrentCulture))
-		//	{
-		//		if (backColor) e.Style.BackColor = backGroundHolidayColor;
-		//		if (textColor) e.Style.TextColor = _colorHolidayHeader;
-		//	}
 
 		public void SetCellInfo(GridStyleInfo style, int rowIndex, int colIndex, object columnTag)
 		{
@@ -88,12 +82,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			return _model.GetSortedShiftCategories().Count;
 		}
 
-		public void ReSort(object tag)
+		public void ReSort(object tag, bool keepOrder)
 		{
 			var shiftCategory = tag as IShiftCategory;
 			if (shiftCategory == null && _lastSortedCategory == null)
 			{
-				_lastSortOrderAscending = !_lastSortOrderAscending;
+				if(!keepOrder)
+					_lastSortOrderAscending = !_lastSortOrderAscending;
+
 				_sortedDates = _model.GetSortedDates(_lastSortOrderAscending);
 				return;
 			}
