@@ -269,7 +269,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	    var date = portal ? portal.CurrentFixedDate() : null;
 	    if (date == null) {
 	        var periodData = $('#Preference-body').data('mytime-periodselection');
-	        date = periodData.Date;
+	        if (periodData) {
+	            date = periodData.Date;
+	        } else {
+	            date = moment().startOf('day').format('YYYY-MM-DD');
+	        }
 	    }
 	    var dayViewModels = {};
 
