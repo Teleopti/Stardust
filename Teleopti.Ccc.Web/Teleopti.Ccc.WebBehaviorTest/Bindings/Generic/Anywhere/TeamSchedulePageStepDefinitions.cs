@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var schedule = table.CreateInstance<ScheduleInfo>();
 
-			Browser.Interactions.AssertExists(
+			Browser.Interactions.AssertExistsUsingJQuery(
 				string.Format(
 					".person:contains('{0}') .shift .layer[data-start-time='{1}'][data-length-minutes='{2}'][style*='background-color: {3}']",
 					personName,
@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			var absence = table.CreateInstance<AbsenceInfo>();
 			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift li[style*='background-color: {1}']", personName, PersonSchedulePageStepDefinitions.ColorNameToCss(absence.Color));
 		}
-
 
 		[Then(@"I should see '(.*)' with no schedule")]
 		[Then(@"I should see no schedule for '(.*)'")]
