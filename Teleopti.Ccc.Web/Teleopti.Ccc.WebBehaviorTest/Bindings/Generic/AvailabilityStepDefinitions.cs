@@ -23,13 +23,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"there is an availability rotation with")]
 		public void GivenThereIsAnAvailabilityRotationWith(AvailabilityRotationConfigurable rotation)
 		{
-			DataMaker.Data().Setup(rotation);
+			DataMaker.Data().Apply(rotation);
 		}
 
 		[Given(@"I have an availability with")]
 		public void GivenIHaveAnAvailabilityWith(PersonAvailabilityConfigurable availability)
 		{
-			DataMaker.Data().Setup(availability);
+			DataMaker.Data().Apply(availability);
 		}
 	}
 }

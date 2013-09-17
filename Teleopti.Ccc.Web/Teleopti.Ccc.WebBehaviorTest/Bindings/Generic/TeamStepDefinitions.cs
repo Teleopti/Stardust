@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsATeamWith(Table table)
 		{
 			var team = table.CreateInstance<TeamConfigurable>();
-			DataMaker.Data().Setup(team);
+			DataMaker.Data().Apply(team);
 		}
 
 	}

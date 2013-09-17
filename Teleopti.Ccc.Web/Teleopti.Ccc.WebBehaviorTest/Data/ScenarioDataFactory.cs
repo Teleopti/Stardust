@@ -68,27 +68,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public CultureInfo MyCulture { get { return Me().Culture; } }
 		public IPerson MePerson { get { return Me().Person; } }
 
-		public void SetupCulture(IUserSetup setup)
+		public void Apply(IUserSetup setup)
 		{
-			Me().SetupCulture(setup);
+			Me().Apply(setup);
 		}
 
-		public void SetupTimeZone(IUserSetup setup)
+		public void Apply(IUserDataSetup setup)
 		{
-			Me().SetupTimeZone(setup);
+			Me().Apply(setup);
 		}
 
-		public void Setup(IUserSetup setup)
-		{
-			Me().Setup(setup);
-		}
-
-		public void Setup(IUserDataSetup setup)
-		{
-			Me().Setup(setup);
-		}
-
-		public void Setup(IDataSetup setup)
+		public void Apply(IDataSetup setup)
 		{
 			_dataFactory.Apply(setup);
 		}
@@ -103,10 +93,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_analyticsDataFactory.Setup(analyticsDataSetup);
 		}
 
-		public string MakeUser()
+		public string ApplySetups()
 		{
-			_persons.ForEach(p => p.Value.Persist());
-
 			_analyticsDataFactory.Persist(Me().Culture);
 
 			using (var uow = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
@@ -126,7 +114,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			get
 			{
-				return Me().Setups
+				return Me().Applied
 				           .Union(_analyticsDataFactory.Setups)
 				           .Union(_postSetups)
 				           .Union(_dataFactory.Applied)

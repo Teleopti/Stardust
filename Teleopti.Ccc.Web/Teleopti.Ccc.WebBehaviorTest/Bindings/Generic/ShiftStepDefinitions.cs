@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenIHaveAShiftWith(string userName, Table table)
 		{
 			var schedule = table.CreateInstance<ShiftConfigurable>();
-			DataMaker.Person(userName).Setup(schedule);
+			DataMaker.Person(userName).Apply(schedule);
 		}
 
 		[When(@"I am assigned this shift with")]

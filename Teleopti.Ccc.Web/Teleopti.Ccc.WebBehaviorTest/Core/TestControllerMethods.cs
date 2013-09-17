@@ -44,20 +44,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		/// </remarks>
 		public static void Logon()
 		{
-			var userName = DataMaker.Data().MakeUser();
+			var userName = DataMaker.Data().ApplySetups();
 			var password = TestData.CommonPassword;
 			InnerLogon(userName, password);
 		}
 
 		public static void LogonForSpecificUser(string userName, string password)
 		{
-			DataMaker.Data().Setup(
+			DataMaker.Data().Apply(
 				new UserConfigurable
 					{
 						UserName = userName, 
 						Password = password
 					});
-			DataMaker.Data().MakeUser();
+			DataMaker.Data().ApplySetups();
 			InnerLogon(userName, password);
 		}
 

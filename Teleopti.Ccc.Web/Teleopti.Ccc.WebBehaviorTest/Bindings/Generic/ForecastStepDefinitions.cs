@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsAForecastWith(Table table)
 		{
 			var forecast = table.CreateInstance<ForecastConfigurable>();
-			DataMaker.Data().Setup(forecast);
+			DataMaker.Data().Apply(forecast);
 		}
 	}
 }

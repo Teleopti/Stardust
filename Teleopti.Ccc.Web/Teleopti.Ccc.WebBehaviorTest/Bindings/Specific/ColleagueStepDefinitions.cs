@@ -14,67 +14,67 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"I have a colleague")]
 		public void GivenIHaveAColleague()
 		{
-			DataMaker.Person(TeamColleagueName).Setup(new Agent());
-			DataMaker.Person(TeamColleagueName).Setup(new SchedulePeriod());
+			DataMaker.Person(TeamColleagueName).Apply(new Agent());
+			DataMaker.Person(TeamColleagueName).Apply(new SchedulePeriod());
 			if (DataMaker.Data().HasSetup<Team>())
 			{
 				var team = DataMaker.Data().UserData<Team>().TheTeam;
-				DataMaker.Person(TeamColleagueName).Setup(new PersonPeriod(team));
+				DataMaker.Person(TeamColleagueName).Apply(new PersonPeriod(team));
 			}
 			else
 			{
-				DataMaker.Person(TeamColleagueName).Setup(new PersonPeriod());
+				DataMaker.Person(TeamColleagueName).Apply(new PersonPeriod());
 			}
-			DataMaker.Person(TeamColleagueName).Setup(new ScheduleIsPublished());
+			DataMaker.Person(TeamColleagueName).Apply(new ScheduleIsPublished());
 		}
 
 		[Given(@"I have a colleague in another team")]
 		public void GivenIHaveAColleagueInAnotherTeam()
 		{
 			if (!DataMaker.Data().HasSetup<AnotherTeam>())
-				DataMaker.Data().Setup(new AnotherTeam());
+				DataMaker.Data().Apply(new AnotherTeam());
 			var team = DataMaker.Data().UserData<AnotherTeam>().TheTeam;
-			DataMaker.Person(OtherTeamColleagueName).Setup(new Agent());
-			DataMaker.Person(OtherTeamColleagueName).Setup(new SchedulePeriod());
-			DataMaker.Person(OtherTeamColleagueName).Setup(new PersonPeriod(team));
-			DataMaker.Person(OtherTeamColleagueName).Setup(new ScheduleIsPublished());
+			DataMaker.Person(OtherTeamColleagueName).Apply(new Agent());
+			DataMaker.Person(OtherTeamColleagueName).Apply(new SchedulePeriod());
+			DataMaker.Person(OtherTeamColleagueName).Apply(new PersonPeriod(team));
+			DataMaker.Person(OtherTeamColleagueName).Apply(new ScheduleIsPublished());
 		}
 
 		[Given(@"My colleague has a shift today")]
 		public void GivenMyColleagueHasAShiftToday()
 		{
-			DataMaker.Person(TeamColleagueName).Setup(new ShiftToday());
+			DataMaker.Person(TeamColleagueName).Apply(new ShiftToday());
 		}
 
 		[Given(@"The colleague in the other team has a shift today")]
 		public void GivenTheColleagueInTheOtherTeamHasAShiftToday()
 		{
-			DataMaker.Person(OtherTeamColleagueName).Setup(new ShiftToday());
+			DataMaker.Person(OtherTeamColleagueName).Apply(new ShiftToday());
 		}
 
 		[Given(@"My colleague has an absence today")]
 		[Given(@"My colleague has a full-day absence today")]
 		public void GivenMyColleagueHasAnAbsenceToday()
 		{
-			DataMaker.Person(TeamColleagueName).Setup(new AbsenceToday());
+			DataMaker.Person(TeamColleagueName).Apply(new AbsenceToday());
 		}
 
 		[Given(@"My colleague has a dayoff today")]
 		public void GivenMyColleagueHasADayoffToday()
 		{
-			DataMaker.Person(TeamColleagueName).Setup(new DayOffToday());
+			DataMaker.Person(TeamColleagueName).Apply(new DayOffToday());
 		}
 
 		[Given(@"My colleague has a shift from (.*) to (.*)")]
 		public void GivenMyColleagueHaveAShiftFrom900To1801(string from, string to)
 		{
-			DataMaker.Person(TeamColleagueName).Setup(new ShiftToday(TimeSpan.Parse(from), TimeSpan.Parse(to)));
+			DataMaker.Person(TeamColleagueName).Apply(new ShiftToday(TimeSpan.Parse(from), TimeSpan.Parse(to)));
 		}
 
 		[Given(@"My colleague has a confidential absence")]
 		public void GivenMyColleagueHasAnConfidentialAbsence()
 		{
-			DataMaker.Person(TeamColleagueName).Setup(new ShiftWithConfidentialAbsence());
+			DataMaker.Person(TeamColleagueName).Apply(new ShiftWithConfidentialAbsence());
 		}
 
 	}

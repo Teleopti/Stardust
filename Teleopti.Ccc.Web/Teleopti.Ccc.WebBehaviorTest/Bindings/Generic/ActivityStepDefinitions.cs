@@ -12,14 +12,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsAnActivity(Table table)
 		{
 			var activity = table.CreateInstance<ActivityConfigurable>();
-			DataMaker.Data().Setup(activity);
+			DataMaker.Data().Apply(activity);
 		}
 
 		[Given(@"there is an activity named '(.*)'")]
 		public void GivenThereIsAnActivityNamed(string name)
 		{
 			var activity = new ActivityConfigurable {Name = name};
-			DataMaker.Data().Setup(activity);
+			DataMaker.Data().Apply(activity);
 		}
 	}
 

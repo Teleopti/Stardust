@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenIHaveAPreferenceTemplateWith(Table table)
 		{
 			var preferenceTemplate = table.CreateInstance<PreferenceTemplateConfigurable>();
-			DataMaker.Data().Setup(preferenceTemplate);
+			DataMaker.Data().Apply(preferenceTemplate);
 		}
 
 	}

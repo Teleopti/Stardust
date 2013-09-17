@@ -13,68 +13,41 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public class PersonDataFactory
 	{
-		private readonly Name _name;
 		private readonly Action<Action<IUnitOfWork>> _unitOfWorkAction;
 		private readonly IList<IUserSetup> _userSetups = new List<IUserSetup>();
 		private readonly IList<IUserDataSetup> _userDataSetups = new List<IUserDataSetup>();
-		private IUserSetup _cultureSetup = new SwedishCulture();
-		private IUserSetup _timeZoneSetup = new UtcTimeZone();
 
 		public PersonDataFactory(Name name, IEnumerable<IUserSetup> setups, Action<Action<IUnitOfWork>> unitOfWorkAction)
 		{
-			_name = name;
-			setups.ForEach(Setup);
 			_unitOfWorkAction = unitOfWorkAction;
+
+			unitOfWorkAction(uow =>
+				{
+					Person = PersonFactory.CreatePerson(name);
+					Person.Name = name;
+					new PersonRepository(uow).Add(Person);
+				});
+			Apply(new SwedishCulture());
+			Apply(new UtcTimeZone());
+			setups.ForEach(Apply);
 		}
 
-		public void Setup(IUserSetup setup)
+		public void Apply(IUserSetup setup)
 		{
+			_unitOfWorkAction(uow => setup.Apply(uow, Person, Person.PermissionInformation.Culture()));
 			_userSetups.Add(setup);
 		}
 
-		public void Setup(IUserDataSetup setup)
+		public void Apply(IUserDataSetup setup)
 		{
+			_unitOfWorkAction(uow => setup.Apply(uow, Person, Person.PermissionInformation.Culture()));
 			_userDataSetups.Add(setup);
 		}
 
-		public void SetupCulture(IUserSetup setup)
-		{
-			_cultureSetup = setup;
-		}
+		public IEnumerable<object> Applied { get { return _userSetups.Cast<object>().Union(_userDataSetups); } }
 
-		public void SetupTimeZone(IUserSetup setup)
-		{
-			_timeZoneSetup = setup;
-		}
-
-		public IEnumerable<object> Setups { get { return _userSetups.Cast<object>().Union(_userDataSetups); } }
-
-		public void Persist()
-		{
-			CultureInfo cultureInfo = null;
-
-			var person = PersonFactory.CreatePerson(_name);
-			person.Name = _name;
-
-			_unitOfWorkAction(uow =>
-				{
-					_cultureSetup.Apply(uow, person, null);
-					cultureInfo = person.PermissionInformation.Culture();
-					_timeZoneSetup.Apply(uow, person, cultureInfo);
-					_userSetups.ForEach(s => s.Apply(uow, person, cultureInfo));
-					new PersonRepository(uow).Add(person);
-				});
-
-			_unitOfWorkAction(uow => _userDataSetups.ForEach(s => s.Apply(uow, person, cultureInfo)));
-
-			Culture = cultureInfo;
-			Person = person;
-			if (Person.ApplicationAuthenticationInfo != null)
-				LogOnName = Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
-		}
-
-		public string LogOnName { get; private set; }
+		public string LogOnName { get { return Person.ApplicationAuthenticationInfo.ApplicationLogOnName; } }
 		public IPerson Person { get; private set; }
-		public CultureInfo Culture { get; private set; }
+		public CultureInfo Culture { get { return Person.PermissionInformation.Culture(); } }
 	}
 }
