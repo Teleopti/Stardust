@@ -24,7 +24,6 @@ item: Global
   Per-User Version ID=1
   Dialogs Version=7
   Crystal Format=10111100101100000010001001001001
-  Step View=&Properties
   Variable Name1=_INIT_WINDOW_
   Variable Default1=HIDE
   Variable Flags1=00001000
@@ -99,15 +98,6 @@ item: Custom Script Item
   Variable Value1=AS_DATABASE
   Variable Name2=_PROP_VAR_
   Variable Value2=AS_DATABASE_TMP
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
-  Variable Value1=SDK_SSL_SECURITY_MODE
-  Variable Name2=_PROP_VAR_
-  Variable Value2=SDK_SSL_SECURITY_MODE_TMP
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
