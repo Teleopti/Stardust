@@ -116,19 +116,13 @@ define([
 
 		var loadDailyStaffingMetrics = function (options) {
 			if (teamSchedule.SelectedSkill() == null) return;
-			$.ajax({
-				url: 'StaffingMetrics/DailyStaffingMetrics',
-				cache: false,
-				dataType: 'json',
-				data: {
-					skillId: teamSchedule.SelectedSkill().Id,
-					date: teamSchedule.SelectedDate().toDate().toJSON()
-				},
-				success: function (data, textStatus, jqXHR) {
+			subscriptions.subscribeDailyStaffingMetrics(
+				helpers.Date.ToServer(teamSchedule.SelectedDate()),
+				teamSchedule.SelectedSkill().Id,
+				function (data) {
 					teamSchedule.SetDailyMetrics(data);
 					options.success();
-				}
-			});
+				});
 		};
 		var loadTeams = function (options) {
 		    ajax.ajax({
@@ -271,6 +265,7 @@ define([
 			
 			dispose: function (options) {
 				subscriptions.unsubscribeTeamSchedule();
+				subscriptions.unsubscribeDailyStaffingMetrics();
 			    $(".datepicker.dropdown-menu").remove();
 			},
 			

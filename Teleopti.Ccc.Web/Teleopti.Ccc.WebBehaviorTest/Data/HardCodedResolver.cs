@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -21,6 +22,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public object Resolve(Type type)
 		{
 			// use autofac soon?
+			if (type == typeof (IEnumerable<IHandleEvent<ScheduledResourcesChangedEvent>>))
+				return new[]
+					{
+						new ScheduleProjectionReadOnlyUpdater(
+							new ScheduleProjectionReadOnlyRepository(CurrentUnitOfWork.Make()),
+							new EventPublisher(this, new CurrentIdentity()))
+					};
 			if (type == typeof (IEnumerable<IHandleEvent<ScheduleChangedEvent>>))
 				return MakeScheduleChangedHandler();
 			if (type == typeof(IEnumerable<IHandleEvent<PersonAbsenceAddedEvent>>))
