@@ -104,5 +104,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Assert.IsNull(skillIntervalData.MaximumHeads);
 			Assert.IsNull(skillIntervalData.MinimumHeads);
 		}
+
+        [Test]
+        public void CalculateAbsoluteDifference()
+        {
+            var skillIntervalData = new SkillIntervalData(_dtp, 3.63, 2, 3, 0, 0);
+            Assert.AreEqual( skillIntervalData.AbsoluteDifference, -1.63,0.01 );
+        }
+
+        [Test]
+        public void CalculateRelativeDifference()
+        {
+            var skillIntervalData = new SkillIntervalData(_dtp, 3.63, 2, 3, 0, 0);
+            Assert.AreEqual(skillIntervalData.AbsoluteDifference, -0.44,0.01);
+        }
 	}
 }

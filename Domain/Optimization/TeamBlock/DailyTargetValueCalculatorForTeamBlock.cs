@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
     public class DailyTargetValueCalculatorForTeamBlock : IDailyTargetValueCalculatorForTeamBlock
     {
-        private readonly ISkillIntervalDataSkillFactorApplier _skillIntervalDataSkillFactorApplier;
+        //private readonly ISkillIntervalDataSkillFactorApplier _skillIntervalDataSkillFactorApplier;
         private readonly ISkillResolutionProvider _resolutionProvider;
         private readonly ISkillIntervalDataDivider _intervalDataDivider;
         private readonly ISkillIntervalDataAggregator _intervalDataAggregator;
@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
-        public DailyTargetValueCalculatorForTeamBlock(ISkillIntervalDataSkillFactorApplier skillIntervalDataSkillFactorApplier, ISkillResolutionProvider resolutionProvider, ISkillIntervalDataDivider intervalDataDivider, ISkillIntervalDataAggregator intervalDataAggregator, IDayIntervalDataCalculator dayIntervalDataCalculator, ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper, ISchedulingResultStateHolder schedulingResultStateHolder, IGroupPersonSkillAggregator groupPersonSkillAggregator)
+        public DailyTargetValueCalculatorForTeamBlock(ISkillResolutionProvider resolutionProvider, ISkillIntervalDataDivider intervalDataDivider, ISkillIntervalDataAggregator intervalDataAggregator, IDayIntervalDataCalculator dayIntervalDataCalculator, ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper, ISchedulingResultStateHolder schedulingResultStateHolder, IGroupPersonSkillAggregator groupPersonSkillAggregator)
         {
-            _skillIntervalDataSkillFactorApplier = skillIntervalDataSkillFactorApplier;
+            //_skillIntervalDataSkillFactorApplier = skillIntervalDataSkillFactorApplier;
             _resolutionProvider = resolutionProvider;
             _intervalDataDivider = intervalDataDivider;
             _intervalDataAggregator = intervalDataAggregator;
@@ -46,35 +46,37 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
             var minimumResolution = _resolutionProvider.MinimumResolution(skills);
 
             var skillIntervalPerDayList = getSkillIntervalListForEachDay(dateOnlyList,skills ,minimumResolution );
+            var finalSkillIntervalData = calculateMedianValue(skillIntervalPerDayList, minimumResolution);
+            return  getTargetValue(finalSkillIntervalData, advancedPreferences.TargetValueCalculation);
+        }
 
-            var aggregatedValues = mapToDoubleList(calculateMedianValue(skillIntervalPerDayList, minimumResolution));
+        private double getTargetValue(IList<ISkillIntervalData> finalSkillIntervalData,TargetValueOptions targetValueCalculation)
+        {
+            var calculator = new TeamBlockTargetValueCalculator();
+            if (targetValueCalculation == TargetValueOptions.RootMeanSquare)
+            {
+                var aggregatedValues = finalSkillIntervalData.Select(interval => interval.AbsoluteDifference).ToList();
+                runCalculator(calculator,aggregatedValues);
+                return calculator.RootMeanSquare;
+            }
+            else
+            {
+                var aggregatedValues = finalSkillIntervalData.Select(interval => interval.RelativeDifference).ToList();
+                runCalculator(calculator, aggregatedValues);
+                if (targetValueCalculation == TargetValueOptions.StandardDeviation)
+                    return calculator.StandardDeviation;
+                return calculator.Teleopti ;
+            }
             
-            ITeamBlockTargetValueCalculator calculator = new TeamBlockTargetValueCalculator();
+        }
 
+        private void runCalculator(TeamBlockTargetValueCalculator calculator, List<double> aggregatedValues)
+        {
             foreach (double personnelDeficit in aggregatedValues)
             {
                 calculator.AddItem(personnelDeficit);
             }
-            if (calculator.Count > 0)
-            {
-                calculator.Analyze();
-                switch (advancedPreferences.TargetValueCalculation)
-                {
-                    case TargetValueOptions.StandardDeviation:
-                        return calculator.StandardDeviation;
-                    case TargetValueOptions.RootMeanSquare:
-                         return calculator.RootMeanSquare;
-                    case TargetValueOptions.Teleopti:
-                        return calculator.Teleopti;
-                }
-
-            }
-            return 0;
-        }
-
-        private IEnumerable<double> mapToDoubleList(IList<ISkillIntervalData> skillIntervalDatas)
-        {
-            return skillIntervalDatas.Select(interval => Math.Abs(interval.CurrentDemand)).ToList();
+            calculator.Analyze();
         }
 
         private IList<ISkillIntervalData> calculateMedianValue(IDictionary<DateOnly, IList<ISkillIntervalData>> skillIntervalPerDayList, int minimumResolution)
@@ -98,17 +100,28 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
                 if (skillDay.SkillStaffPeriodCollection.Count == 0) continue ;
                 var mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDay.SkillStaffPeriodCollection);
                 mappedData = _intervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
-                var adjustedMapedData = new List<ISkillIntervalData>();
-                foreach (var data in mappedData)
+                //TODO check for the tweeked values ASAD
+                //var adjustedMapedData = new List<ISkillIntervalData>();
+                //foreach (var data in mappedData)
+                //{
+                //    var appliedData = _skillIntervalDataSkillFactorApplier.ApplyFactors(data, skill);
+                //    adjustedMapedData.Add(appliedData);
+                //}
+                //var aggregatedSkillsIntervals = new List<IList<ISkillIntervalData>> { adjustedMapedData, mappedData };
+                //var dayIntervalData = _intervalDataAggregator.AggregateSkillIntervalData(aggregatedSkillsIntervals);
+                if(!result.ContainsKey(currentDate ))
+                    result.Add(currentDate, mappedData);
+                    //result.Add(currentDate, dayIntervalData);
+                else
                 {
-                    var appliedData = _skillIntervalDataSkillFactorApplier.ApplyFactors(data, skill);
-                    adjustedMapedData.Add(appliedData);
+                    var dayIntervalData = _intervalDataAggregator.AggregateSkillIntervalData(new List<IList<ISkillIntervalData>> { result[currentDate], mappedData });
+                    result[currentDate] = dayIntervalData;
                 }
-                var aggregatedSkillsIntervals = new List<IList<ISkillIntervalData>> { adjustedMapedData, mappedData };
-                var dayIntervalData = _intervalDataAggregator.AggregateSkillIntervalData(aggregatedSkillsIntervals);
-                result.Add(currentDate, dayIntervalData);
         
             }
+
+           
+
             return result;
         }
 

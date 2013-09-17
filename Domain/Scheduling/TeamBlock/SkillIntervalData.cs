@@ -13,14 +13,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		double CurrentDemand { get; }
         double MinMaxBoostFactor { get; set; }
 		TimeSpan Resolution();
+	    double RelativeDifference { get; }
+        double AbsoluteDifference { get; }
 	}
 
 	public class SkillIntervalData : ISkillIntervalData
 	{
-		public SkillIntervalData(DateTimePeriod period, double forecastedDemand, double currentDemand, double currentHeads, double? minimumHeads, double? maximumHeads)
+	    private double _forecastedDemand;
+
+	    public SkillIntervalData(DateTimePeriod period, double forecastedDemand, double currentDemand, double currentHeads, double? minimumHeads, double? maximumHeads)
 		{
 			Period = period;
-			ForecastedDemand = forecastedDemand;
+            _forecastedDemand = forecastedDemand;
 			CurrentDemand = currentDemand;
 			CurrentHeads = currentHeads;
 			MinimumHeads = minimumHeads.HasValue && minimumHeads.Value < 0.001 ? null : minimumHeads;
@@ -45,7 +49,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        return minHeadValue + maxHeadValue;
 	    }
 
-	    public double ForecastedDemand { get; private set; }
+	    public double ForecastedDemand 
+        { get
+	        {
+                if (_forecastedDemand == 0)
+                    _forecastedDemand = 0.01;
+	            return _forecastedDemand;
+	        }    
+        }
 
 		public DateTimePeriod Period { get; private set; }
 
@@ -63,5 +74,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			return Period.EndDateTime.Subtract(Period.StartDateTime);
 		}
+
+	    public double RelativeDifference
+	    {
+	        get
+	        {
+                return AbsoluteDifference / ForecastedDemand;
+	        }
+	    }
+        public double AbsoluteDifference { get { return CurrentHeads - ForecastedDemand; } }
 	}
 }
