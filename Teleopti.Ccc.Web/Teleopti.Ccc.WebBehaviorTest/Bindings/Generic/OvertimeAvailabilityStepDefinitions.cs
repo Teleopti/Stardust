@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenIHaveAnOvertimeAvailabilityWith(Table table)
 		{
 			var fields = table.CreateInstance<OvertimeAvailabilityConfigurable>();
-			UserFactory.User().Setup(fields);
+			DataMaker.Data().Setup(fields);
 		}
 
 		[When(@"I click overtime availability bar")]

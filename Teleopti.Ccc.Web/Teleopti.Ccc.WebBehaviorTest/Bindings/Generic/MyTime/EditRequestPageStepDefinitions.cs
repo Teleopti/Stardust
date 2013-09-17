@@ -103,10 +103,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var overtimeAvailability = table.CreateInstance<OvertimeAvailabilityFields>();
 			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .overtime-availability-start-date",
 			                                                 overtimeAvailability.StartDate.ToShortDateString(
-				                                                 UserFactory.User().Culture));
+				                                                 DataMaker.Data().MyCulture));
 			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .overtime-availability-end-date",
 															 overtimeAvailability.EndDate.ToShortDateString(
-																 UserFactory.User().Culture));
+																 DataMaker.Data().MyCulture));
 
 			var st = overtimeAvailability.StartTime.Split(':').Select(n => Convert.ToInt32(n)).ToArray();
 			var startTimeSpan = new TimeSpan(st[0], st[1], 0);
@@ -114,9 +114,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var endTimeSpan = new TimeSpan(end[0], end[1], 0);
 
 			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .overtime-availability-start-time",
-												TimeHelper.TimeOfDayFromTimeSpan(startTimeSpan, UserFactory.User().Culture));
+												TimeHelper.TimeOfDayFromTimeSpan(startTimeSpan, DataMaker.Data().MyCulture));
 			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .overtime-availability-end-time",
-												TimeHelper.TimeOfDayFromTimeSpan(endTimeSpan, UserFactory.User().Culture));
+												TimeHelper.TimeOfDayFromTimeSpan(endTimeSpan, DataMaker.Data().MyCulture));
 			Browser.Interactions.AssertExistsUsingJQuery(overtimeAvailability.EndTimeNextDay
 				                                             ? ".overtime-availability-next-day:checked"
 				                                             : ".overtime-availability-next-day:not(:checked)");
