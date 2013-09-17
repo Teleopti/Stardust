@@ -14,11 +14,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string Name { get; set; }
 		public Team Team { get; private set; }
 
-		public TeamConfigurable() : this(GlobalDataContext.Data().Data<CommonSite>().Site) { }
+		public TeamConfigurable() : this(GlobalDataMaker.Data().Data<CommonSite>().Site) { }
 
 		private TeamConfigurable(ISite site)
 		{
-			Site = GlobalDataContext.Data().Data<CommonSite>().Site.Description.Name;
+			Site = GlobalDataMaker.Data().Data<CommonSite>().Site.Description.Name;
 		}
 
 		public void Apply(IUnitOfWork uow)

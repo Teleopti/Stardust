@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsAScenario(Table table)
 		{
 			var scenario = table.CreateInstance<ScenarioConfigurable>();
-			UserFactory.User().Setup(scenario);
+			DataMaker.Data().Setup(scenario);
 		}
 	}
 }

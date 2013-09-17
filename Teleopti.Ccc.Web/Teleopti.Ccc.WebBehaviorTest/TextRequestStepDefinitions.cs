@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the text request's values at position '(.*)' in the list")]
 		public void ThenIShouldSeeTheTextRequestSValuesAtPositionInTheList(int position)
 		{
-			var request = UserFactory.User().UserData<ExistingTextRequest>();
+			var request = DataMaker.Data().UserData<ExistingTextRequest>();
 
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-subject", position),
@@ -97,17 +97,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
-				request.PersonRequest.Request.Period.StartDateTime.Date.ToShortDateString(UserFactory.User().Culture));
+				request.PersonRequest.Request.Period.StartDateTime.Date.ToShortDateString(DataMaker.Data().MyCulture));
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
-				request.PersonRequest.Request.Period.StartDateTime.ToShortTimeString(UserFactory.User().Culture));
+				request.PersonRequest.Request.Period.StartDateTime.ToShortTimeString(DataMaker.Data().MyCulture));
 
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
-				request.PersonRequest.Request.Period.EndDateTime.Date.ToShortDateString(UserFactory.User().Culture));
+				request.PersonRequest.Request.Period.EndDateTime.Date.ToShortDateString(DataMaker.Data().MyCulture));
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
-				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(UserFactory.User().Culture));
+				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(DataMaker.Data().MyCulture));
 		}
 
 		[Then(@"I should see the request form with today's date as default")]
@@ -115,8 +115,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var today = DateOnlyForBehaviorTests.TestToday.Date;
 
-			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-datefrom", today.ToShortDateString(UserFactory.User().Culture));
-			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-dateto", today.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-datefrom", today.ToShortDateString(DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-dateto", today.ToShortDateString(DataMaker.Data().MyCulture));
 		}
 
 		[When(@"I input empty subject")]
@@ -157,12 +157,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EnableTimePickersByUncheckingFullDayCheckbox();
 
 			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-datefrom').datepicker('set', '{0}');",
-							  fromDate.ToShortDateString(UserFactory.User().Culture)));
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-timefrom", fromTime.ToShortTimeString(UserFactory.User().Culture));
+							  fromDate.ToShortDateString(DataMaker.Data().MyCulture)));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-timefrom", fromTime.ToShortTimeString(DataMaker.Data().MyCulture));
 
 			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-dateto').datepicker('set', '{0}');",
-							  toDate.ToShortDateString(UserFactory.User().Culture)));
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-timeto", toTime.ToShortTimeString(UserFactory.User().Culture));
+							  toDate.ToShortDateString(DataMaker.Data().MyCulture)));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-timeto", toTime.ToShortTimeString(DataMaker.Data().MyCulture));
 		}
 
 		[When(@"I input later start time than end time")]

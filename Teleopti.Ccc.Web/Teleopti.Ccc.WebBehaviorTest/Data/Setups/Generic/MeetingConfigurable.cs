@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
+			var scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
 			var meeting = new Meeting(user,
 									  new[] { new MeetingPerson(user, false) },
 									  Subject, Location, Description ?? String.Empty,
