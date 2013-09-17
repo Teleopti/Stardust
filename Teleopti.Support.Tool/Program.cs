@@ -26,7 +26,7 @@ namespace Teleopti.Support.Tool
                         file = "DeployConfigFiles.txt";
                     var reader = new SettingsReader();
                     var settings = reader.GetSearchReplaceList(System.IO.File.ReadAllText(@"settings.txt"));
-                    var refresher = new RefreshConfigFile(new ConfigFileTagReplacer());
+                    var refresher = new RefreshConfigFile(new ConfigFileTagReplacer(), new MachineKeyChecker());
                     refresher.ReadLinesFromString(System.IO.File.ReadAllText(@"ConfigFiles\" + file), settings, false);
                 }
             }

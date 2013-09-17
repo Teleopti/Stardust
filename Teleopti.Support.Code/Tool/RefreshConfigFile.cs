@@ -6,10 +6,12 @@ namespace Teleopti.Support.Code.Tool
     public class RefreshConfigFile
     {
         private readonly IConfigFileTagReplacer _configFileTagReplacer;
+        private readonly IMachineKeyChecker _machineKeyChecker;
 
-        public RefreshConfigFile(IConfigFileTagReplacer configFileTagReplacer)
+        public RefreshConfigFile(IConfigFileTagReplacer configFileTagReplacer, IMachineKeyChecker machineKeyChecker)
         {
             _configFileTagReplacer = configFileTagReplacer;
+            _machineKeyChecker = machineKeyChecker;
         }
 
         public void ReplaceFile(string oldFilePath, string newFilePath, IList<SearchReplace> searchReplaces, bool doNotOverWrite)
@@ -21,6 +23,7 @@ namespace Teleopti.Support.Code.Tool
             if (System.IO.File.Exists(oldFilePath) && doNotOverWrite ) return;
             System.IO.File.Copy(newFilePath, oldFilePath,true);
             _configFileTagReplacer.ReplaceTags(oldFilePath,searchReplaces);
+           _machineKeyChecker.CheckForMachineKey(oldFilePath);
         }
 
         public void SplitAndReplace(string oldAndNewFile, IList<SearchReplace> searchReplaces, bool doNotOverWrite)

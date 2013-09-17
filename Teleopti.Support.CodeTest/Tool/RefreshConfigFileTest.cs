@@ -9,18 +9,20 @@ namespace Teleopti.Support.CodeTest.Tool
     public class RefreshConfigFileTest
     {
         private const string OldFile = @"..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\App.config";
-        private const string Newfile = @"ConfigFiles\AppETLTool.config";
+        private const string Newfile = @"BuildArtifacts\AppETLTool.config";
         MockRepository _mock = new MockRepository();
         private IConfigFileTagReplacer _replacer;
         RefreshConfigFile _refresher;
         private List<SearchReplace> _lst;
+        private IMachineKeyChecker _machineKeyChecker;
 
         [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
             _replacer = _mock.DynamicMock<IConfigFileTagReplacer>();
-            _refresher = new RefreshConfigFile(_replacer);
+            _machineKeyChecker = _mock.DynamicMock<IMachineKeyChecker>();
+            _refresher = new RefreshConfigFile(_replacer, _machineKeyChecker);
             _lst = new List<SearchReplace>();
         }
 
@@ -62,10 +64,14 @@ namespace Teleopti.Support.CodeTest.Tool
         [Test]
         public void ShouldOverWriteTest()
         {
-            const string files = @"..\..\..\dummy.config,ConfigFiles\AppETLTool.config";
-            _refresher.SplitAndReplace(files, _lst, false);
+            const string files = @"..\..\..\dummy.config,BuildArtifacts\AppETLTool.config";
             Expect.Call(
-                () => _replacer.ReplaceTags(@"c:\dummy.config", _lst));
+                () => _replacer.ReplaceTags(@"..\..\..\dummy.config", _lst));
+            Expect.Call(_machineKeyChecker.CheckForMachineKey(@"..\..\..\dummy.config")).Return(false);
+            _mock.ReplayAll();
+
+            _refresher.SplitAndReplace(files, _lst, false);
+            _mock.VerifyAll();
         }
     }
 
