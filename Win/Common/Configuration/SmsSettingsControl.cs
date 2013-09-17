@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         public string TreeNode()
         {
-        	return "Sms Settings"; // Resources.OptionalColumn;
+	        return Resources.SmsSettings;
         }
 
     	public void OnShow()
