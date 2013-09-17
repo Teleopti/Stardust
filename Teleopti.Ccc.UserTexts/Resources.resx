@@ -11753,4 +11753,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Distribution</value>
     <comment>Distribution</comment>
   </data>
+  <data name="ShiftAsOvertime" xml:space="preserve">
+    <value>Shift as overtime</value>
+    <comment>Used when transforming a shift to a overtime shift</comment>
+  </data>
 </root>
