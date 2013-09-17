@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -13,7 +14,7 @@ namespace Teleopti.Support.Code.Tool
     {
         public bool CheckForMachineKey(string filePath)
         {
-            if (!filePath.EndsWith("web.config"))
+            if (!filePath.ToLower(CultureInfo.InvariantCulture).EndsWith("web.config"))
                 return false;
 
             XDocument xDocument = XDocument.Load(filePath);
