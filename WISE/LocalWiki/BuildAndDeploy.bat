@@ -72,7 +72,7 @@ copy "%ROOTDIR%\web.config" "%WorkingFolder%\%OutputFolder%\"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ::copy javascript file for replacement of translated links
-copy "%Dependencies%\DynamicLinkReplace.js" "%Deployment%\%OutputFolder%"
+copy "%ROOTDIR%\DynamicLinkReplace.js" "%Deployment%\%OutputFolder%"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ::replace strings and URLs
