@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			var result = _authenticator.AuthenticateApplicationUser(dataSourceName, userName, password);
 			var businessUnits = _businessUnitProvider.RetrieveBusinessUnitsForPerson(result.DataSource, result.Person);
 			var businessUnit = (from b in businessUnits where b.Name == businessUnitName select b).Single();
-			_logon.LogOn(businessUnit.Id.Value, dataSourceName, result.Person.Id.Value);
+			_logon.LogOn(dataSourceName, businessUnit.Id.Value, result.Person.Id.Value);
 			var viewModel = new TestMessageViewModel
 			                	{
 			                		Title = "Quick logon",
