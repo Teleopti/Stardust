@@ -494,6 +494,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                 if (!_filteredPeopleHolder.UnitOfWork.IsDirty())
                 {
                     _filteredPeopleHolder.ResetBoldProperty();
+					_gridConstructor.View.Invalidate();
                     return;
                 }
 

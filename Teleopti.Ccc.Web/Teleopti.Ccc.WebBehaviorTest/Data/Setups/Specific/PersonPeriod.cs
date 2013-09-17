@@ -12,11 +12,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		public ITeam Team;
 		public PersonContract PersonContract;
 		public Domain.AgentInfo.PersonPeriod ThePersonPeriod;
-		public IContractScheduleSetup ContractSchedule = GlobalDataContext.Data().Data<CommonContractSchedule>();
-		public IContractSetup Contract = GlobalDataContext.Data().Data<CommonContract>();
+		public IContractScheduleSetup ContractSchedule = GlobalDataMaker.Data().Data<CommonContractSchedule>();
+		public IContractSetup Contract = GlobalDataMaker.Data().Data<CommonContract>();
 		private DateTime StartDate;
 
-		public PersonPeriod() : this(GlobalDataContext.Data().Data<CommonTeam>().Team) { }
+		public PersonPeriod() : this(GlobalDataMaker.Data().Data<CommonTeam>().Team) { }
 		public PersonPeriod(ITeam team) : this(team, new DateTime(2001, 1, 1)) { }
 		public PersonPeriod(ITeam team, DateTime startDate)
 		{
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			PersonContract = new PersonContract(Contract.Contract,
-												GlobalDataContext.Data().Data<CommonPartTimePercentage>().PartTimePercentage,
+												GlobalDataMaker.Data().Data<CommonPartTimePercentage>().PartTimePercentage,
 												ContractSchedule.ContractSchedule);
 			ThePersonPeriod = new Domain.AgentInfo.PersonPeriod(new DateOnly(StartDate), 
 											PersonContract,

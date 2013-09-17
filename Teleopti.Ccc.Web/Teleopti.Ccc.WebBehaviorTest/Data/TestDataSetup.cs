@@ -201,8 +201,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				select r;
 
 
-			var secondBusinessUnit = GlobalDataContext.Data().Data<SecondBusinessUnit>().BusinessUnit;
-			var anotherSite = GlobalDataContext.Data().Data<AnotherSite>().Site;
+			var secondBusinessUnit = GlobalDataMaker.Data().Data<SecondBusinessUnit>().BusinessUnit;
+			var anotherSite = GlobalDataMaker.Data().Data<AnotherSite>().Site;
 
 			var shippedRoles = ApplicationRoleFactory.CreateShippedRoles(out TestData.AdministratorRole, out TestData.AgentRole, out TestData.UnitRole, out TestData.SiteRole, out TestData.TeamRole);
 			shippedRoles.ForEach(r => r.Name += "Shipped");

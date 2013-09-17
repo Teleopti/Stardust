@@ -2099,6 +2099,39 @@ select new {
 }]]></Query>
     </Group>
     <Group Name="Dead Code" Active="True" ShownInReport="True">
+	<Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Methods potentially only used from Tests</Name>
+warnif count > 0
+	let allTestAssemblies = JustMyCode.Assemblies.Where(a=>a.Name.Contains("Test"))
+	let allCodeAssemblies = JustMyCode.Assemblies.Where(a=>!a.Name.Contains("Test"))
+ 
+	let methodsUsedByCode = JustMyCode.Methods.UsedByAny(allCodeAssemblies.ChildMethods())
+	let methodsUsedByTest = JustMyCode.Methods.UsedByAny(allTestAssemblies.ChildMethods())
+ 
+	let methodsUsedOnlyInTest = methodsUsedByTest.Except(methodsUsedByCode)
+ 
+	from m in methodsUsedOnlyInTest
+	//skippa abstracta metoder
+	where !m.IsAbstract && 
+	//skippa metoder som ligger i testprojekten
+	!allTestAssemblies.Contains(m.ParentAssembly) 
+	select new { m, m.FullName }]]>
+	</Query>
+	<Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types potentially only used from Tests</Name>
+warnif count > 0
+	let allTestAssemblies = JustMyCode.Assemblies.Where(a=>a.Name.Contains("Test"))
+	let allCodeAssemblies = JustMyCode.Assemblies.Where(a=>!a.Name.Contains("Test"))
+ 
+	let typesUsedByCode = JustMyCode.Types.UsedByAny(allCodeAssemblies.ChildTypes())
+	let typesUsedByTest = JustMyCode.Types.UsedByAny(allTestAssemblies.ChildTypes())
+ 
+	let typesUsedOnlyInTest = typesUsedByTest.Except(typesUsedByCode)
+	
+	from t in typesUsedOnlyInTest
+	//skippa klasser som ligger i testprojekten
+	where !allTestAssemblies.Contains(t.ParentAssembly) 
+	select new { t, t.FullName}]]>
+	</Query>
+	
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Potentially dead Types</Name>
 warnif count > 0
 // Filter procedure for types that should'nt be considered as dead
@@ -2577,33 +2610,6 @@ select new { m, m.NbLinesOfCode }
 // introduced with .NET v4.0.]]></Query>
     </Group>
     <Group Name="Naming Conventions" Active="True" ShownInReport="False">
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Instance fields should be prefixed with a 'm_'</Name>
-warnif count > 0 from f in Application.Fields where 
-  !f.NameLike (@"^m_") && 
-  !f.IsStatic && 
-  !f.IsLiteral && 
-  !f.IsGeneratedByCompiler  && 
-  !f.IsSpecialName && 
-  !f.IsEventDelegateObject
-select new { f, f.SizeOfInst } 
-
-// This naming convention provokes debate.
-// Don't hesitate to customize the regex of 
-// NameLike to your preference.]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Static fields should be prefixed with a 's_'</Name>
-warnif count > 0 from f in Application.Fields where 
-  !f.NameLike (@"^s_") && 
-   f.IsStatic && 
-  !f.IsLiteral && 
-  !f.IsGeneratedByCompiler && 
-  !f.IsSpecialName && 
-  !f.IsEventDelegateObject
-select new { f, f.SizeOfInst }  
-
-// This naming convention provokes debate.
-// Don't hesitate to customize the regex of 
-// NameLike to your preference.
-]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Interface name should begin with a 'I'</Name>
 warnif count > 0 from t in Application.Types where 
 t.IsInterface  
@@ -2653,7 +2659,8 @@ select new { t, t.NbLinesOfCode }]]></Query>
 warnif count > 0 from m in JustMyCode.Methods where 
   !m.NameLike (@"^[A-Z]") && 
   !m.IsSpecialName && 
-  !m.IsGeneratedByCompiler
+  !m.IsGeneratedByCompiler &&
+  !m.IsPrivate
 select m
 
 // The name of a regular method should 

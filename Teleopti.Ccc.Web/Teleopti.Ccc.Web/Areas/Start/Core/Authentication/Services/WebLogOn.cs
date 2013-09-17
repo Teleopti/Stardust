@@ -39,11 +39,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 
 		public void LogOn(string dataSourceName, Guid businessUnitId, Guid personId)
 		{
-			LogOn(businessUnitId, dataSourceName, personId, null);
-		}
-
-		public void LogOn(Guid businessUnitId, string dataSourceName, Guid personId, string warningMessage = null)
-		{
 			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
@@ -55,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				_roleToPrincipalCommand.Execute(principal, uow, personRep);
 
 				var allowed = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MobileReports) ||
-				               _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb) ||
+							   _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb) ||
 							   _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere);
 
 				if (!allowed)
@@ -65,6 +60,5 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			var sessionSpecificData = new SessionSpecificData(businessUnitId, dataSourceName, personId);
 			_sessionSpecificDataProvider.StoreInCookie(sessionSpecificData);
 		}
-
 	}
 }

@@ -23,13 +23,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"there is a rule set with")]
 		public void GivenThereIsARuleSetWith(WorkShiftRuleSetConfigurable workShiftRuleSet)
 		{
-			UserFactory.User().Setup(workShiftRuleSet);
+			DataMaker.Data().Setup(workShiftRuleSet);
 		}
 
 		[Given(@"there is a rule set bag with")]
 		public void GivenThereIsARuleSetBagWith(RuleSetBagConfigurable ruleSetBag)
 		{
-			UserFactory.User().Setup(ruleSetBag);
+			DataMaker.Data().Setup(ruleSetBag);
 		}
 
 	}

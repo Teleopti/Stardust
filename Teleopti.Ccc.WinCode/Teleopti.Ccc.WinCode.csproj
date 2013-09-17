@@ -344,7 +344,6 @@
     <Compile Include="Common\PropertyPageAndWizard\IAbstractPropertyPagesNoRoot.cs" />
     <Compile Include="Common\PropertyPageAndWizard\IPropertyPageNoRoot.cs" />
     <Compile Include="Converters\DateTimeConverter\TimeSpanToStringConverter.cs" />
-    <Compile Include="Common\RequestPreferencesPersonalSettings.cs" />
     <Compile Include="Forecasting\CopyToSkillCommand.cs" />
     <Compile Include="Forecasting\CopyToSkillModel.cs" />
     <Compile Include="Forecasting\CopyToSkillPresenter.cs" />
@@ -581,8 +580,6 @@
     <Compile Include="Scheduling\ScheduleReporting\ScheduledTimePerActivityModel.cs" />
     <Compile Include="Scheduling\MatrixUnselectedDaysLocker.cs" />
     <Compile Include="Scheduling\Requests\HandlePersonRequestComparer.cs" />
-    <Compile Include="Scheduling\Restriction\Commands\OvertimeAvailabilityAddCommand.cs" />
-    <Compile Include="Scheduling\Restriction\Commands\OvertimeAvailabilityEditCommand.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailabilityCreator.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessOptimizer.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessValueHelper.cs" />
@@ -624,8 +621,6 @@
     <Compile Include="Scheduling\ISchedulingScreenSettings.cs" />
     <Compile Include="Scheduling\MatrixUserLockLocker.cs" />
     <Compile Include="Scheduling\MoveTimeOptimizerCreator.cs" />
-    <Compile Include="Scheduling\NotSkillGroupSpecification.cs" />
-    <Compile Include="Common\RestoreFocusWhenCompleted.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimePerActivityModel.cs" />
     <Compile Include="Common\SearchPersonPresenter.cs" />
     <Compile Include="Common\Time\TimeDurationPickerPresenter.cs" />
@@ -634,7 +629,6 @@
     <Compile Include="Common\TransparentControlMeetingHelper.cs" />
     <Compile Include="Common\TransparentMeetingControlModel.cs" />
     <Compile Include="Common\TransparentMeetingControlPresenter.cs" />
-    <Compile Include="Converters\DateTimeConverter\ExtendDateTimePeriodConverter.cs" />
     <Compile Include="Converters\DateTimeConverter\TimeSpanToDateTimeConverter.cs" />
     <Compile Include="Events\EventAggregatorModule.cs" />
     <Compile Include="Events\IEventAggregatorLocator.cs" />
@@ -644,7 +638,6 @@
     <Compile Include="Common\Clipboard\ClipHandler.cs" />
     <Compile Include="Common\Clipboard\ExtenderPasteBehavior.cs" />
     <Compile Include="Common\Clipboard\IPasteBehavior.cs" />
-    <Compile Include="Common\Clipboard\MergePasteBehavior.cs" />
     <Compile Include="Common\Clipboard\NormalPasteBehavior.cs" />
     <Compile Include="Common\Collections\FilteredCollection.cs" />
     <Compile Include="Common\Collections\FilterExtensions.cs" />
@@ -768,8 +761,6 @@
     <Compile Include="Converters\TimeSpanRoundingConverter.cs" />
     <Compile Include="Converters\IsNullConverter.cs" />
     <Compile Include="Converters\PersonNameConverter.cs" />
-    <Compile Include="Converters\ScrollPositionConverter.cs" />
-    <Compile Include="Converters\LayerPeriodConverter.cs" />
     <Compile Include="Converters\ElapsedTimeConverter.cs" />
     <Compile Include="Converters\SimpleConverter.cs" />
     <Compile Include="Intraday\AgentStateViewAdapter.cs" />
@@ -930,7 +921,6 @@
     <Compile Include="Scheduling\SplitLongDayAbsences.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessAggregateManager.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessGroupPersonHolder.cs" />
-    <Compile Include="Scheduling\ViewModelIsValidRule.cs" />
     <Compile Include="Scheduling\Editor\TriggerShiftEditorUpdate.cs" />
     <Compile Include="Scheduling\IAddLayerViewModel.cs" />
     <Compile Include="Scheduling\INotesAltered.cs" />
@@ -959,7 +949,6 @@
     <Compile Include="Scheduling\GridlockDictionary.cs" />
     <Compile Include="Scheduling\IExportToScenarioResultView.cs" />
     <Compile Include="Scheduling\IPersistConflictView.cs" />
-    <Compile Include="Scheduling\Panels\IntervalSelector.cs" />
     <Compile Include="Scheduling\PersistConflictPresenter.cs" />
     <Compile Include="Scheduling\RestrictionSummary\IRestrictionSummaryViewCellModel.cs" />
     <Compile Include="Scheduling\RestrictionSummary\IWeekHeaderCellData.cs" />
@@ -973,7 +962,6 @@
     <Compile Include="Scheduling\Requests\ShowOnlyPersonRequestViewModelSpecification.cs" />
     <Compile Include="Scheduling\Requests\HandlePersonRequestViewModel.cs" />
     <Compile Include="Scheduling\RestrictionCellValue.cs" />
-    <Compile Include="Scheduling\RestrictionPresenter.cs" />
     <Compile Include="Scheduling\RestrictionSchedulingOptions.cs" />
     <Compile Include="Scheduling\RestrictionSummary\RestrictionSummaryModel.cs" />
     <Compile Include="Scheduling\RestrictionSummary\RestrictionSummaryPresenter.cs" />
@@ -990,10 +978,6 @@
     <Compile Include="Settings\AbsenceView.cs" />
     <Compile Include="Settings\PageHelper.cs" />
     <Compile Include="Settings\TrackerView.cs" />
-    <Compile Include="Common\DateTimePeriodController.cs" />
-    <Compile Include="Common\FilterAdvancedSetting.cs" />
-    <Compile Include="Common\FilterBoxAdvancedFilter.cs" />
-    <Compile Include="Common\FilterAdvancedTupleItem.cs" />
     <Compile Include="Common\GuiHelpers\ApplicationTextHelper.cs" />
     <Compile Include="Common\GuiHelpers\GuiSettings.cs" />
     <Compile Include="Common\IGridPasteAction.cs" />
@@ -1070,7 +1054,6 @@
     <Compile Include="Scheduling\ColumnType.cs" />
     <Compile Include="Scheduling\DateDateTimePeriodDictionary.cs" />
     <Compile Include="Scheduling\DayPresenter.cs" />
-    <Compile Include="Scheduling\DetailPresenter.cs" />
     <Compile Include="Scheduling\IRequestPresenter.cs" />
     <Compile Include="Scheduling\IResourceOptimizationHelperWin.cs" />
     <Compile Include="Scheduling\IScheduleViewBase.cs" />
@@ -1086,13 +1069,10 @@
     <Compile Include="PeopleAdmin\Models\SchedulePeriodChildModel.cs" />
     <Compile Include="PeopleAdmin\Models\SchedulePeriodModel.cs" />
     <Compile Include="PeopleAdmin\Models\SiteTeamModel.cs" />
-    <Compile Include="Presentation\TimeSpanSelectorViewModel.cs" />
     <Compile Include="Scheduling\DateTimePeriodViewModel.cs" />
     <Compile Include="Scheduling\Gridlock.cs" />
     <Compile Include="Scheduling\GridlockManager.cs" />
     <Compile Include="Common\EntitiesUpdatedEventArgs.cs" />
-    <Compile Include="Common\GuiHelpers\TimeSpanSeconds.cs" />
-    <Compile Include="Common\GuiHelpers\TimePixelRelationHelper.cs" />
     <Compile Include="Common\ILocalized.cs" />
     <Compile Include="Common\LanguageResourceHelper.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AbstractPropertyPages.cs" />
@@ -1114,17 +1094,9 @@
     <Compile Include="Common\Clip.cs" />
     <Compile Include="Common\ClipHandler.cs" />
     <Compile Include="Scheduling\DisplayMode.cs" />
-    <Compile Include="Scheduling\DetailViewHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\AvailabilityRestrictionView.cs" />
     <Compile Include="Settings\ScheduleRestrictionBaseView.cs" />
-    <Compile Include="ShiftCreator\AbsolutePositionView.cs" />
-    <Compile Include="ShiftCreator\AccessibilityDateView.cs" />
-    <Compile Include="ShiftCreator\AutoPositionView.cs" />
-    <Compile Include="ShiftCreator\DaysOfWeekView.cs" />
-    <Compile Include="ShiftCreator\GeneralTemplateView.cs" />
-    <Compile Include="ShiftCreator\ICombinedView.cs" />
-    <Compile Include="ShiftCreator\IGridDataValidator.cs" />
     <Compile Include="Shifts\ActivityTypeChangedEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1328,7 +1300,6 @@
     </None>
     <None Include="Meetings\MeetingsClassDiagram.cd" />
     <None Include="packages.config" />
-    <None Include="ShiftCreator\ShiftCreator.cd" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

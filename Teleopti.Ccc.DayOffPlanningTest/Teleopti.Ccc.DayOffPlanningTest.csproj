@@ -140,14 +140,11 @@
     <Compile Include="TuiCaseSolverTest.cs" />
     <Compile Include="WorkShiftBackToLegalStateBitArrayCreatorTest.cs" />
     <Compile Include="WorkShiftBackToLegalStateDecisionMakerTest.cs" />
-    <Compile Include="WorkShiftLegalStatePeriodDecisionMakerTest.cs" />
     <Compile Include="IntradayDecisionMakerTest.cs" />
     <Compile Include="MoveTimeDecisionMaker2Test.cs" />
-    <Compile Include="MoveWeekendDayOffNoValidationDecisionMakerTest.cs" />
     <Compile Include="DayOffOptimizationLegalStateValidatorListCreatorTest.cs" />
     <Compile Include="MatrixRestrictionLockerTest.cs" />
     <Compile Include="MoveWeekendDayOffDecisionMakerTest.cs" />
-    <Compile Include="WorkShiftLegalStateWeekDecisionMakerTest.cs" />
     <Compile Include="Scheduling\PossibleMinMaxWorkShiftLengthExtractorTest.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessShiftValueCalculatorTest.cs" />
     <Compile Include="Scheduling\WorkShiftMinMaxLengthCalculatorTest.cs" />

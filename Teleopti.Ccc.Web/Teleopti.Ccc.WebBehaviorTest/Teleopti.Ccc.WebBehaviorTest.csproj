@@ -98,9 +98,18 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\OvertimeAvailabilityConfigurable.cs" />
+    <Compile Include="Bindings\Generic\OvertimeAvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceTemplateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\UserLogonDetailsStepDefinitions.cs" />
+    <Compile Include="Data\PersonDataFactory.cs" />
+    <Compile Include="Data\Setups\Specific\GroupingReadOnlyUpdate.cs" />
+    <Compile Include="OveritmeAvailability.feature.cs">
+      <DependentUpon>OveritmeAvailability.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Core\BrowserDriver\BrowserInteractionException.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsControlExtensions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsJQueryExtensions.cs" />
@@ -113,6 +122,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Data\Setups\Generic\CalendarLinkConfigurable.cs" />
+    <Compile Include="Data\ScenarioDataFactory.cs" />
     <Compile Include="PerformanceTool\PerformanceView.feature.cs">
       <DependentUpon>PerformanceView.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -344,7 +354,7 @@
     <Compile Include="Core\BrowserDriver\IBrowserActivator.cs" />
     <Compile Include="Core\BrowserDriver\WatiNIE\WatiNSingleBrowserIEActivator.cs" />
     <Compile Include="Core\BrowserDriver\WatiNIE\WatiNParallelBrowserIEActivator.cs" />
-    <Compile Include="Data\GlobalDataContext.cs" />
+    <Compile Include="Data\GlobalDataMaker.cs" />
     <Compile Include="Data\GlobalPrincipalState.cs" />
     <Compile Include="Data\GlobalUnitOfWorkState.cs" />
     <Compile Include="Data\ScenarioUnitOfWorkState.cs" />
@@ -582,7 +592,7 @@
     <Compile Include="Core\Extensions\FuncExtensions.cs" />
     <Compile Include="Core\Navigation.cs" />
     <Compile Include="Core\BrowserDriver\TimeoutScope.cs" />
-    <Compile Include="Data\UserFactory.cs" />
+    <Compile Include="Data\DataMaker.cs" />
     <Compile Include="Bindings\Specific\UserStepDefinitions.cs" />
     <Compile Include="TextRequestFromSchedule.feature.cs">
       <AutoGen>True</AutoGen>
@@ -621,6 +631,10 @@
     <None Include="CalendarShare.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>CalendarShare.feature.cs</LastGenOutput>
+    </None>
+    <None Include="OveritmeAvailability.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>OveritmeAvailability.feature.cs</LastGenOutput>
     </None>
     <None Include="PerformanceTool\PerformanceView.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

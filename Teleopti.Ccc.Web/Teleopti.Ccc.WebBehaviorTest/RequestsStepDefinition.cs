@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I scroll down to the bottom of the page")]
 		public void WhenIScrollDownToTheBottomOfThePage()
 		{
-			var data = UserFactory.User().UserData<MoreThanOnePageOfRequests>();
+			var data = DataMaker.Data().UserData<MoreThanOnePageOfRequests>();
 			EventualAssert.That(() => _page.Requests.Count(), Is.EqualTo(data.PageSize));
 			_page.LastRequest.ScrollIntoView();
 		}
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeMyExistingTextRequest()
 		{
 			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
-			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingTextRequest>().PersonRequest.GetSubject(new NoFormatting())));
+			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(DataMaker.Data().UserData<ExistingTextRequest>().PersonRequest.GetSubject(new NoFormatting())));
 		}
 
 		[Then(@"I should see a shift trade request in the list with subject '(.*)'")]
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeMyExistingAbsenceRequest()
 		{
 			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
-			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingAbsenceRequest>().PersonRequest.GetSubject(new NoFormatting())));
+			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(DataMaker.Data().UserData<ExistingAbsenceRequest>().PersonRequest.GetSubject(new NoFormatting())));
 		}
 
 
@@ -116,21 +116,21 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should only see one page of requests")]
 		public void ThenIShouldOnlySeeOnePageOfRequests()
 		{
-			var data = UserFactory.User().UserData<MoreThanOnePageOfRequests>();
+			var data = DataMaker.Data().UserData<MoreThanOnePageOfRequests>();
 			EventualAssert.That(() => _page.Requests.Count(), Is.EqualTo(data.PageSize));
 		}
 
 		[Then(@"I should see the page fill with the next page of requests")]
 		public void ThenIShouldSeeThePageFillWithTheNextPageOfRequests()
 		{
-			var data = UserFactory.User().UserData<MoreThanOnePageOfRequests>();
+			var data = DataMaker.Data().UserData<MoreThanOnePageOfRequests>();
 			EventualAssert.That(() => _page.Requests.Count(), Is.EqualTo(data.RequestCount));
 		}
 
 		[Then(@"I should see that the list is sorted on changed date and time")]
 		public void ThenIShouldSeeThatTheListIsSortedOnChangedDateAndTime()
 		{
-			var data = UserFactory.User().UserData<TwoExistingTextRequestChangedOnDifferentTimes>();
+			var data = DataMaker.Data().UserData<TwoExistingTextRequestChangedOnDifferentTimes>();
 			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(data.PersonRequest2.GetSubject(new NoFormatting())));
 			EventualAssert.That(() => _page.LastRequest.InnerHtml, Is.StringContaining(data.PersonRequest1.GetSubject(new NoFormatting())));
 		}

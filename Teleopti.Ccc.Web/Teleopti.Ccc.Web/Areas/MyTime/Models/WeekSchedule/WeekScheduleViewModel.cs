@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public IEnumerable<DayViewModel> Days { get; set; }
 		public RequestPermission RequestPermission { get; set; }
 		public IEnumerable<TimeLineViewModel> TimeLine { get; set; }
+		public string TimeLineCulture { get; set; }
 		public bool AsmPermission { get; set; }
 		public bool IsCurrentWeek { get; set; }
 		public string DatePickerFormat { get; set; }
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public bool TextRequestPermission { get; set; }
 		public bool AbsenceRequestPermission { get; set; }
 		public bool ShiftTradeRequestPermission { get; set; }
+		public bool OvertimeAvailabilityPermission { get; set; }
 	}
 
 	public class AbsenceTypeViewModel
@@ -35,7 +37,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public TimeSpan Time { get; set; }
 		public decimal PositionPercentage { get; set; }
 		public string TimeFixedFormat { get; set; }
-		public string Culture { get; set; }
 	}
 
 	[Flags]
@@ -54,6 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public SpecialDateState State { get; set; }
 		public HeaderViewModel Header { get; set; }
 		public NoteViewModel Note { get; set; }
+		public OvertimeAvailabilityViewModel OvertimeAvailabililty { get; set; }
 		public PeriodViewModel Summary { get; set; }
 		public IEnumerable<PeriodViewModel> Periods { get; set; }
 		public int Allowance { get; set; }
@@ -66,6 +68,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		{
 			get { return Note != null && !string.IsNullOrWhiteSpace(Note.Message); }
 		}
+	}
+
+	public class OvertimeAvailabilityViewModel
+	{
+		public bool HasOvertimeAvailability { get; set; }
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
+		public bool EndTimeNextDay { get; set; }
+		public string DefaultStartTime { get; set; }
+		public string DefaultEndTime { get; set; }
+		public bool DefaultEndTimeNextDay { get; set; }
 	}
 
 	public class NoteViewModel
@@ -95,6 +108,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 
 	public class FullDayAbsencePeriodViewModel : PeriodViewModel
 	{
+	}
+
+	public class OvertimeAvailabilityPeriodViewModel : PeriodViewModel
+	{
+		public bool IsOvertimeAvailability { get; set; }
+		public OvertimeAvailabilityViewModel OvertimeAvailabilityYesterday { get; set; }
 	}
 
 	public class MeetingViewModel

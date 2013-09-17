@@ -3,7 +3,9 @@ using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -51,11 +53,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Browser.Interactions.AssertVisibleUsingJQuery(string.Format("ul.weekview-day[data-mytime-date={0}] li .text-request", formattedDate));
 		}
 
+		[Then(@"I should see an overtime availability symbol with tooltip")]
+		public void ThenIShouldSeeAnOvertimeAvailabilitySymbolWithTooltip(Table table)
+		{
+			var overtimeAvailability = table.CreateInstance<OvertimeAvailabilityTooltipAndBar>();
+			var formattedDate = overtimeAvailability.Date.ToString(CultureInfo.GetCultureInfo("sv-SE").DateTimeFormat.ShortDatePattern);
+			Browser.Interactions.AssertVisibleUsingJQuery(string.Format("ul.weekview-day[data-mytime-date={0}] li .overtime-availability-symbol", formattedDate));
+			Browser.Interactions.AssertKnockoutContextContains(string.Format("ul.weekview-day[data-mytime-date={0}]", formattedDate), "textOvertimeAvailabilityText()", overtimeAvailability.StartTime);
+			Browser.Interactions.AssertKnockoutContextContains(string.Format("ul.weekview-day[data-mytime-date={0}]", formattedDate), "textOvertimeAvailabilityText()", overtimeAvailability.EndTime);
+		}
+
 		[Then(@"I should not see a symbol at the top of the schedule for date '(.*)'")]
 		public void ThenIShouldNotSeeASymbolAtTheTopOfTheScheduleForDate(DateTime date)
 		{
 			var formattedDate = date.ToString(CultureInfo.GetCultureInfo("sv-SE").DateTimeFormat.ShortDatePattern);
 			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format("ul.weekview-day[data-mytime-date={0}] li .text-request", formattedDate));
+		}
+
+		[Then(@"I should not see an overtime availability symbol for date '(.*)'")]
+		public void ThenIShouldNotSeeAnOvertimeAvailabilitySymbolForDate(DateTime date)
+		{
+			var formattedDate = date.ToString(CultureInfo.GetCultureInfo("sv-SE").DateTimeFormat.ShortDatePattern);
+			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format("ul.weekview-day[data-mytime-date={0}] li .overtime-availability-symbol", formattedDate));
 		}
 
 		[Then(@"I should see an indication that no agents that can go on holiday for date '(.*)'")]
@@ -68,7 +87,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should see current or first future virtual schedule period \+/- 1 week")]
 		public void ThenIShouldSeeCurrentOrFirstFutureVirtualSchedulePeriod_1Week()
 		{
-			var virtualSchedulePeriodData = UserFactory.User().UserData<SchedulePeriod>();
+			var virtualSchedulePeriodData = DataMaker.Data().UserData<SchedulePeriod>();
 
 			var firstDateDisplayed = virtualSchedulePeriodData.FirstDayOfDisplayedPeriod();
 			var lastDateDisplayed = virtualSchedulePeriodData.LastDayOfDisplayedPeriod();
@@ -84,7 +103,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should see next virtual schedule period")]
 		public void ThenIShouldSeeNextVirtualSchedulePeriod()
 		{
-			var virtualSchedulePeriodData = UserFactory.User().UserData<SchedulePeriod>();
+			var virtualSchedulePeriodData = DataMaker.Data().UserData<SchedulePeriod>();
 
 			var nextPeriodFirstDateDisplayed = virtualSchedulePeriodData.FirstDayOfNextDisplayedVirtualSchedulePeriod();
 			var nextPeriodLastDateDisplayed = virtualSchedulePeriodData.LastDayOfNextDisplayedVirtualSchedulePeriod();
@@ -94,7 +113,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should see previous virtual schedule period")]
 		public void ThenIShouldSeePreviousVirtualSchedulePeriod()
 		{
-			var virtualSchedulePeriodData = UserFactory.User().UserData<SchedulePeriod>();
+			var virtualSchedulePeriodData = DataMaker.Data().UserData<SchedulePeriod>();
 
 			var previousPeriodFirstDateDisplayed = virtualSchedulePeriodData.FirstDayOfDisplayedPreviousVirtualSchedulePeriod();
 			var previousPeriodLastDateDisplayed = virtualSchedulePeriodData.LastDayOfDisplayedPreviousVirtualSchedulePeriod();

@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public LocalizedText To(string textToBeResourceKey)
 		{
 			var resourceKey = new CultureInfo("en-US").TextInfo.ToTitleCase(textToBeResourceKey).Replace(" ", "");
-			var localizedText = Resources.ResourceManager.GetString(resourceKey, UserFactory.User().Culture) ?? textToBeResourceKey;
+			var localizedText = Resources.ResourceManager.GetString(resourceKey, DataMaker.Data().MyCulture) ?? textToBeResourceKey;
 			return new LocalizedText { Text = localizedText };
 		}
 
@@ -65,6 +65,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		// *NOT* I should see the time indicator at time '2030-01-01 11:00'
 		[Then(@"I should see the ([a-z]*|[a-z]* [a-z]*) '(.*)'")]
 		public void ThenIShouldSeeTheMessage(CssClass cssClass, LocalizedText text)
+		{
+			Browser.Interactions.AssertFirstContains("." + cssClass.Name, text.Text);
+		}
+
+		[Then(@"I should see the '(.*)' '(.*)'")]
+		public void ThenIShouldSeeTheMessageWithQuote(CssClass cssClass, LocalizedText text)
 		{
 			Browser.Interactions.AssertFirstContains("." + cssClass.Name, text.Text);
 		}

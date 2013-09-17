@@ -38,12 +38,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
         public bool AccessToShiftTradeRequests { get; set; }
 		public bool AccessToStudentAvailability { get; set; }
 		public bool AccessToCalendarLink { get; set; }
+		public bool AccessToOvertimeAvailability { get; set; }
 
 		public bool AccessToViewAllGroupPages { get; set; }
 
 		public RoleConfigurable()
 		{
-			BusinessUnit = GlobalDataContext.Data().Data<CommonBusinessUnit>().BusinessUnit.Description.Name;
+			BusinessUnit = GlobalDataMaker.Data().Data<CommonBusinessUnit>().BusinessUnit.Description.Name;
 			ViewUnpublishedSchedules = false;
 			ViewConfidential = false;
 			AccessToMyOwn = false;
@@ -57,6 +58,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			AccessToAnywhere = false;
 			AccessToViewAllGroupPages = false;
 			AccessToCalendarLink = false;
+			AccessToOvertimeAvailability = false;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -163,6 +165,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				applicationFunctions = from f in applicationFunctions
 				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShareCalendar
 				                       select f;
+			if(!AccessToOvertimeAvailability)
+				applicationFunctions = from f in applicationFunctions
+									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb
+									   select f;
 			return applicationFunctions;
 		}
 	}

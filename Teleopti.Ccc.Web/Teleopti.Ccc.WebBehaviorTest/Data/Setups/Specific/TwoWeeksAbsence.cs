@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 {
 	public class TwoWeeksAbsence : IUserDataSetup
 	{
-		public IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
+		public IScenario Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{

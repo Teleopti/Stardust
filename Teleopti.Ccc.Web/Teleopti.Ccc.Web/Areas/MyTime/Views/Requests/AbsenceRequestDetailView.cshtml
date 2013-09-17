@@ -5,10 +5,10 @@
 
 <div class="request-denyreason alert" data-bind="html: DenyReason, visible: DenyReason() != ''" />
     <div>
-        <input type="text" class="input-block-level request-edit-subject" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" />
+        <input type="text" class="input-block-level request-edit-subject" placeholder="@Resources.Subject" data-bind="value: Subject, visible: IsEditable" />
     </div>
     <div>
-        <textarea class="input-block-level request-edit-message" placeholder="@Resources.Message" data-bind="value: Message, enable: IsEditable" />
+        <textarea class="input-block-level request-edit-message" placeholder="@Resources.Message" data-bind="value: Message, visible: IsEditable" />
     </div>
     <div>
         <label>

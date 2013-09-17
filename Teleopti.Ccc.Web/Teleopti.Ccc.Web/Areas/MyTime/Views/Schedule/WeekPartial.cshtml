@@ -36,7 +36,9 @@
 <script type="text/html" id="add-new-request-detail-template">  
 	@Html.Partial("~/Areas/MyTime/Views/Requests/AddNewRequestDetailView.cshtml")
 </script>
-
+<script type="text/html" id="add-overtime-availability-template">
+    @Html.Partial("AddOvertimeAvailabilityPartial")
+</script>
 <input id="Request-detail-datepicker-format" type="hidden" data-bind="value: datePickerFormat"/>
 
 <div class="navbar">
@@ -55,12 +57,15 @@
     </div>
 </div>
 <ul class="nav nav-pills" data-bind="visible: showAddRequestToolbar">
-    <li data-bind="visible: textPermission, css: {active: textRequestActive}">
-        <a class="text-request-add" href="#" data-bind="click: textRequestActivate"><i class="icon-plus"></i>&nbsp;@Resources.TextRequest</a>
-    </li>
-    <li data-bind="visible: absenceRequestPermission, css: { active: absenceRequestActive }">
-        <a class="absence-request-add" href="#" data-bind="click: absenceRequestActivate"><i class="icon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
-    </li>
+	<li data-bind="visible: overtimeAvailabilityPermission, css: { active: overtimeAvailabilityActive }">
+		<a class="overtime-availability-add" href="#" data-bind="click: function () { overtimeAvailabilityActivate() }"><i class="icon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
+	</li>
+	<li data-bind="visible: textPermission, css: {active: textRequestActive}">
+		<a class="text-request-add" href="#" data-bind="click: textRequestActivate"><i class="icon-plus"></i>&nbsp;@Resources.TextRequest</a>
+	</li>
+	<li data-bind="visible: absenceRequestPermission, css: { active: absenceRequestActive }">
+		<a class="absence-request-add" href="#" data-bind="click: absenceRequestActivate"><i class="icon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+	</li>
 </ul>
 <div data-bind="with: requestViewModel">
     <div id="Request-add-section" class="well well-small clearfix">
@@ -95,14 +100,14 @@
 			</li>
 		    <li id="day-summary" 
 		        data-bind="css: { 'show-request': textRequestPermission }, attr: { 'class': classForDaySummary },
-                style: { 'background-color': colorForDaySummary, 'color': textColor }, click: $parent.showAddRequestForm"
+	style: { 'background-color': colorForDaySummary, 'color': textColor }, click: function () { $parent.showAddRequestForm($data.date()) }"
 		        class="third category">
 		        
 		        <strong class="fullwidth displayblock" data-bind="text: summaryTitle"></strong>
 		        <span class="fullwidth displayblock" data-bind="text: summaryTimeSpan"></span>
 		        <span data-bind="text: summary"></span>
 		    </li>
-			<li id="day-symbol" class="fourth" data-bind="click: $parent.showAddRequestForm">
+			<li id="day-symbol" class="fourth" data-bind="click: function () { $parent.showAddRequestForm($data.date()) }">
 				<div class="text-request floatright" data-bind="visible: hasTextRequest, tooltip: { title: textRequestText, html: true }, click: navigateToRequests">
 					<div class="floatright extrasmall" data-bind="text:textRequestCount">
 					</div>
@@ -115,6 +120,9 @@
 						</div>
 					</div> 
 				</div>
+				<div class="overtime-availability-symbol floatright" data-bind="visible: overtimeAvailability().HasOvertimeAvailability, tooltip: { title: textOvertimeAvailabilityText, html: true }">
+					<i class="icon-time ir floatright" />
+				</div>
 				<!-- ko if: hasNote -->
 				<div class="icon comment-day ir qtip-tooltip floatright" data-bind="attr: {'tooltip-text': noteMessage}">
 				</div>
@@ -126,15 +134,23 @@
 				<div class="week-schedule-time-indicator relative">
 				</div>
 				<!-- ko foreach: layers -->
-				<div class="week-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': '131px' }">
+				<!-- ko if: isOvertimeAvailability() -->
+				<div class="week-schedule-layer absolute overtime-availability-bar" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': widthPx }, click: function () { $data.showOvertimeAvailability($parents) }">
+					<i class="icon-time"></i>
+				</div>
+				<!-- /ko -->
+				<!-- ko ifnot: isOvertimeAvailability() -->
+				<div class="week-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': widthPx }">
 					<!-- ko if: hasMeeting -->
 					<div class="icon meeting floatright">
 					</div>
 					<!-- /ko -->
-					<strong class="truncate" data-bind="text: title, visible: showTitle"></strong><span
+					<strong class="truncate" data-bind="text: title, visible: showTitle"></strong>
+					<span
 						class="fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan">
 					</span>
 				</div>
+				<!-- /ko -->
 				<!-- /ko -->
 			</li>
 			<!-- /ko -->

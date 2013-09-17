@@ -16,7 +16,7 @@ SET SDK_SSL_MEX_BINDING=mexHttpBinding
 SET SDK_SSL_SECURITY_MODE=TransportCredentialOnly
 )
 
-
+SET SERVICEBUSENABLED=true
 SET SQL_SERVER_NAME=%DBServerInstance%
 
 IF "%DB_AdminAccess%"=="WINAUTH" (

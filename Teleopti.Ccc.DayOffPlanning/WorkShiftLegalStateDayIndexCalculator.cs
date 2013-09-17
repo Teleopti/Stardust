@@ -6,9 +6,6 @@ using System.Linq;
 
 namespace Teleopti.Ccc.DayOffPlanning
 {
-    /// <summary>
-    /// Calculates the value (index) for each day to be moved for the <see cref="WorkShiftLegalStateWeekDecisionMaker"/>.
-    /// </summary>
     public interface IWorkShiftLegalStateDayIndexCalculator
     {
         /// <summary>

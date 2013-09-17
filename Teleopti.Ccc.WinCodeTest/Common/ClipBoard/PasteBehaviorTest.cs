@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -122,47 +121,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
             }
         }
 
-        [Test]
-        public void VerifyMergedPasteOnlyCallsFirstRowCellInEachRange()
-        {
-            MergePasteBehavior mergeBehavior = new MergePasteBehavior();
-            int col = 2;
-            int row = 2;
-
-            IScheduleDay part = mockRep.StrictMock<IScheduleDay>();
-
-            using (GridControl gridControl = new GridControl())
-            {
-                GridRangeInfo range = GridRangeInfo.Cells(row, 1, 1, col);
-                GridRangeInfo range2 = GridRangeInfo.Cells(4, 3, 3, 8);
-                gridControl.SetRowHeight(0, 100, 5);
-                gridControl.SetColWidth(0, 100, 5);
-                ClipHandler<IScheduleDay> handler = new ClipHandler<IScheduleDay>();
-
-                GridRangeInfoList rangeList = new GridRangeInfoList();
-                rangeList.Add(range);
-                rangeList.Add(range2);
-                IGridPasteAction<IScheduleDay> pasteAction = mockRep.StrictMock<IGridPasteAction<IScheduleDay>>();
-                handler.AddClip(0, 0, part);
-                Clip<IScheduleDay> clip = handler.ClipList[0];
-
-                using (mockRep.Record())
-                {
-                    Expect.Call(part.PersonAbsenceCollection()).Return(
-                        new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>())).Repeat.AtLeastOnce();
-                    Expect.Call(pasteAction.PasteBehavior).Return(mergeBehavior);
-                    Expect.Call(pasteAction.Paste(gridControl, clip, 1, 1)).Return(clip.ClipValue);
-                    Expect.Call(pasteAction.Paste(gridControl, clip, 2, 1)).Return(clip.ClipValue);
-                    Expect.Call(pasteAction.Paste(gridControl, clip, 3, 3)).Return(clip.ClipValue);
-                    Expect.Call(pasteAction.Paste(gridControl, clip, 4, 3)).Return(clip.ClipValue);
-                }
-
-                using (mockRep.Playback())
-                {
-                    pasteAction.PasteBehavior.DoPaste(gridControl, handler, pasteAction, rangeList);
-                }
-            }
-        }
+       
 
         [Test]
         public void VerifyNormalPaste()
@@ -242,65 +201,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
                 {
                     pasteAction.PasteBehavior.DoPaste(gridControl, handler, pasteAction, rangeList);
                 }
-            }
-        }
-
-        [Test]
-        public void VerifyMergeDoesNothingWhenNoClips()
-        {
-            MergePasteBehavior mergeBehavior = new MergePasteBehavior();
-            using (GridControl gridControl = new GridControl())
-            {
-                ClipHandler<IScheduleDay> handler = new ClipHandler<IScheduleDay>();
-                GridRangeInfoList rangeList = new GridRangeInfoList();
-                IGridPasteAction<IScheduleDay> pasteAction = mockRep.StrictMock<IGridPasteAction<IScheduleDay>>();
-
-                using (mockRep.Record())
-                {
-                    Expect.Call(pasteAction.PasteBehavior).Return(mergeBehavior);
-                    Expect.Call(pasteAction.Paste(gridControl,
-                                                  new Clip<IScheduleDay>(0, 0, mockRep.StrictMock<IScheduleDay>()), 1, 1))
-                        .IgnoreArguments().Repeat.Never();
-                }
-
-                using (mockRep.Playback())
-                {
-                    pasteAction.PasteBehavior.DoPaste(gridControl, handler, pasteAction, rangeList);
-                }
-            }
-        }
-
-        [Test]
-        public void VerifyExtendLayers()
-        {
-            DateTime baseDate = new DateTime(2001,1,1,0,0,0,DateTimeKind.Utc);
-            IList<IPersonAbsence> retList = new List<IPersonAbsence>();
-	        var absence = new Absence();
-	        var person = PersonFactory.CreatePerson();
-	        var scenario = new Scenario("hej");
-	        var period = new DateTimePeriod(baseDate, baseDate.AddDays(1));
-	        AbsenceLayer absLayer = new AbsenceLayer(absence, period);
-	        PersonAbsence pAbs = new PersonAbsence(person, scenario, absLayer);
-            retList.Add(pAbs);
-	        var newPersonAbsence = new PersonAbsence(person, scenario,
-	                                                 new AbsenceLayer(absence, period.ChangeEndTime(TimeSpan.FromDays(2))));
-			var newList = new List<IPersonAbsence>{ newPersonAbsence };
-            PasteMergeBehaviorForTest testBehavior = new PasteMergeBehaviorForTest();
-            IScheduleDay part = mockRep.StrictMock<IScheduleDay>();
-         
-           
-            using (mockRep.Record())
-            {
-                Expect.Call(part.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(retList)).Repeat.Twice();
-	            Expect.Call(()=> part.Remove(pAbs));
-	            Expect.Call(part.Scenario).Return(scenario);
-	            Expect.Call(()=> part.Add(newPersonAbsence)).IgnoreArguments();
-				Expect.Call(part.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(newList));
-            }
-            using (mockRep.Playback())
-            {
-                IPersonAbsence result = testBehavior.ExtendAbsence(part, 2).PersonAbsenceCollection()[0];
-                Assert.AreEqual(baseDate.AddDays(3), result.Layer.Period.EndDateTime);
             }
         }
 
@@ -441,14 +341,4 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
             return base.FitsInsideRange(range, clipRowOffset, clipColOffset, row, col);
         }
     }
-
-    internal sealed class PasteMergeBehaviorForTest : MergePasteBehavior
-    {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        internal new IScheduleDay ExtendAbsence(IScheduleDay part, int days)
-        {
-            return MergePasteBehavior.ExtendAbsence(part, days);
-        }
-    }
-
 }

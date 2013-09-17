@@ -296,8 +296,6 @@
     <Compile Include="Common\PersonPicker\SelectablePersonViewModelTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AbstractPropertyPagesNoRootTest.cs" />
     <Compile Include="Common\ReportSettingsScheduledTimeVersusTargetTest.cs" />
-    <Compile Include="Common\RequestPreferencesPersonalSettingsTest.cs" />
-    <Compile Include="Common\RestoreFocusWhenCompletedTest.cs" />
     <Compile Include="Common\Rows\RowManagerSchedulerTest.cs" />
     <Compile Include="Common\ScheduleContractTimeCalculatorTest.cs" />
     <Compile Include="Common\ScheduleDataLoaderTest.cs" />
@@ -346,7 +344,6 @@
     <Compile Include="Converters\DateTimeConverter\DateTimeToLocalStringConverterTest.cs" />
     <Compile Include="Converters\DateTimeConverter\TimeSpanToStringConverterTest.cs" />
     <Compile Include="Converters\DateTimeConverter\TimeSpanToDateTimeConverterTest.cs" />
-    <Compile Include="Converters\ExtendDateTimePeriodConverterTest.cs" />
     <Compile Include="Converters\Layers\IsMoveAllLayersConverterTest.cs" />
     <Compile Include="Converters\SimpleConverterTest.cs" />
     <Compile Include="Events\EventAggregatorModuleTest.cs" />
@@ -457,8 +454,6 @@
     <Compile Include="Converters\TimeSpanRoundingConverterTest.cs" />
     <Compile Include="Converters\PersonNameConverterTest.cs" />
     <Compile Include="Converters\IsNullConverterTest.cs" />
-    <Compile Include="Converters\ScrollPositionConverterTest.cs" />
-    <Compile Include="Converters\LayerPeriodConverterTest.cs" />
     <Compile Include="Converters\ElapsedTimeConverterTest.cs" />
     <Compile Include="Meetings\MeetingSchedulesPresenterTest.cs" />
     <Compile Include="Meetings\MeetingViewModelTest.cs" />
@@ -570,13 +565,10 @@
     <Compile Include="Scheduler\AgentOvertimeAvailabilityEditCommandTest.cs" />
     <Compile Include="Scheduler\AgentOvertimeAvailabilityPresenterTest.cs" />
     <Compile Include="Scheduler\AgentOvertimeAvailabilityRemoveCommandTest.cs" />
-    <Compile Include="Scheduler\Restriction\Commands\OvertimeAvailabilityAddCommandTest.cs" />
-    <Compile Include="Scheduler\Restriction\Commands\OvertimeAvailabilityEditCommandTest.cs" />
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityCreatorTest.cs" />
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityPersonFilterTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryFairnessValueHelperTest.cs" />
     <Compile Include="Scheduler\SkillFullPeriodGridControlPresenterTest.cs" />
-    <Compile Include="Scheduler\DateTimePeriodIsValidTest.cs" />
     <Compile Include="Scheduler\DayPresenterNewTest.cs" />
     <Compile Include="Scheduler\DayPresenterScaleCalculatorTest.cs" />
     <Compile Include="Scheduler\Editor\ShiftEditorRoutedCommandsTest.cs" />
@@ -616,7 +608,6 @@
     <Compile Include="Scheduler\NotesEditorViewModelTest.cs" />
     <Compile Include="Scheduler\Panels\LengthToDateCalculatorTest.cs" />
     <Compile Include="Scheduler\PersistConflictTest.cs" />
-    <Compile Include="Scheduler\NotSkillGroupSpecificationTest.cs" />
     <Compile Include="Scheduler\PinnedSkillHelperTests.cs" />
     <Compile Include="Scheduler\Reporting\CCCPdfStringFormatTest.cs" />
     <Compile Include="Scheduler\Reporting\PdfFontManagerTest.cs" />
@@ -642,13 +633,11 @@
     <Compile Include="Scheduler\Requests\RequestAllowancePresenterTest.cs" />
     <Compile Include="Scheduler\Requests\RequestDetailsPresenterTest.cs" />
     <Compile Include="Scheduler\Requests\RequestDetailsShiftTradePresenterTest.cs" />
-    <Compile Include="Scheduler\RestrictionPresenterTest.cs" />
     <Compile Include="Scheduler\Editor\ExpandedLayersViewModelTest.cs" />
     <Compile Include="Scheduler\Editor\EditLayerViewModelTest.cs" />
     <Compile Include="Scheduler\Editor\ShiftEditorEventArgsTest.cs" />
     <Compile Include="Scheduler\Editor\ShiftEditorSettingsTest.cs" />
     <Compile Include="Scheduler\Editor\ShiftEditorViewModelTest.cs" />
-    <Compile Include="Scheduler\Panels\IntervalSelectorTest.cs" />
     <Compile Include="Scheduler\RestrictionCellValueTest.cs" />
     <Compile Include="Scheduler\RestrictionSummary\PainterHelperTest.cs" />
     <Compile Include="Scheduler\RestrictionSummary\PreferenceNightRestCheckerTest.cs" />
@@ -673,7 +662,7 @@
     <Compile Include="Security\PasswordPolicyServiceViewModelTest.cs" />
     <Compile Include="Settings\AbsenceViewTest.cs" />
     <Compile Include="Settings\PageHelperTest.cs" />
-    <Compile Include="ShiftCreator\WorkShiftAddCallbackTest.cs" />
+    <Compile Include="Shifts\WorkShiftAddCallbackTest.cs" />
     <Compile Include="Shifts\AbsolutePositionViewModelTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -729,11 +718,7 @@
     <Compile Include="Tracking\DefaultTrackerTest.cs" />
     <Compile Include="Settings\TrackerViewTest.cs" />
     <Compile Include="Common\CustomEventArgsTest.cs" />
-    <Compile Include="Common\DateTimePeriodControllerTest.cs" />
     <Compile Include="Common\Clipboard\PasteBehaviorTest.cs" />
-    <Compile Include="Common\FilterAdvancedSettingTest.cs" />
-    <Compile Include="Common\FilterBoxAdvancedFilterTest.cs" />
-    <Compile Include="Common\FilterOperandTest.cs" />
     <Compile Include="Common\GuiHelpers\ApplicationTextHelperTest.cs" />
     <Compile Include="Common\Rows\GridRowTest.cs" />
     <Compile Include="Common\Rows\IntervalHeaderGridRowTest.cs" />
@@ -795,10 +780,8 @@
     <Compile Include="PeopleAdmin\Models\SchedulePeriodModelTest.cs" />
     <Compile Include="PeopleAdmin\Models\ShiftCategoryModelTest.cs" />
     <Compile Include="PeopleAdmin\Models\SiteTeamModelTest.cs" />
-    <Compile Include="Presentation\TimeSpanSelectorViewModelTest.cs" />
     <Compile Include="Scheduler\DateTimeTimeSpanDictionaryTest.cs" />
     <Compile Include="Scheduler\PeriodPresenterTest.cs" />
-    <Compile Include="Scheduler\DetailPresenterTest.cs" />
     <Compile Include="Scheduler\OverviewPresenterTest.cs" />
     <Compile Include="Scheduler\WeekPresenterTest.cs" />
     <Compile Include="Scheduler\DateTimePeriodViewModelTest.cs" />
@@ -807,8 +790,6 @@
     <Compile Include="Scheduler\GridlockTest.cs" />
     <Compile Include="Forecasting\SkillPages\MultisiteSkillPropertiesPagesTest.cs" />
     <Compile Include="Common\EntitiesUpdatedEventArgsTest.cs" />
-    <Compile Include="Common\GuiHelpers\TimeSpanSecondsTest.cs" />
-    <Compile Include="Common\GuiHelpers\TimePixelRelationHelperTest.cs" />
     <Compile Include="Common\LanguageResourceHelperTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AbstractPropertyPagesTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AbstractWizardPagesTest.cs" />
@@ -843,13 +824,7 @@
     <Compile Include="Settings\ScheduleRestrictionBaseViewTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
     <Compile Include="Scheduler\ViewBaseHelperTest.cs" />
-    <Compile Include="Scheduler\DetailViewHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShiftCreator\AbsolutePositionViewTest.cs" />
-    <Compile Include="ShiftCreator\AutoPositionViewTest.cs" />
-    <Compile Include="ShiftCreator\AccessibilityDateViewTest.cs" />
-    <Compile Include="ShiftCreator\GeneralTemplateViewTest.cs" />
-    <Compile Include="ShiftCreator\DaysOfWeekViewTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">

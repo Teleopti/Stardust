@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
@@ -26,8 +27,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		private IEditableShift _mainShift;
 		private ILayerCollection<IActivity> _layerCollectionFrom;
 		private ILayerCollection<IActivity> _layerCollectionTo;
-		private DateTimePeriod? _periodFrom;
-		private DateTimePeriod? _periodTo;
+		private DateTimePeriod _periodFrom;
+		private DateTimePeriod _periodTo;
 
 		[SetUp]
 		public void Setup()
@@ -41,8 +42,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			_personAssignmentFrom = _mocks.StrictMock<IPersonAssignment>();
 			_personAssignmentTo = _mocks.StrictMock<IPersonAssignment>();
 			_mainShift = _mocks.StrictMock<IEditableShift>();
-			_layerCollectionFrom = _mocks.StrictMock<ILayerCollection<IActivity>>();
-			_layerCollectionTo = _mocks.StrictMock<ILayerCollection<IActivity>>();
+			_layerCollectionFrom = new LayerCollection<IActivity>();
+			_layerCollectionTo = new LayerCollection<IActivity>(); 
 			_shiftTradeSwapDetail = new ShiftTradeSwapDetail(_personFrom, _personTo, new DateOnly(), new DateOnly()) { SchedulePartFrom = _scheduleDayFrom, SchedulePartTo = _scheduleDayTo };
 			_details = new List<IShiftTradeSwapDetail> { _shiftTradeSwapDetail };
 			var startFrom = new DateTime(2011,1,1,8,0,0,DateTimeKind.Utc);
@@ -63,19 +64,19 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			var startTo = new DateTime(2011, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			var endTo = new DateTime(2011, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 			_periodTo = new DateTimePeriod(startTo, endTo);
+			_layerCollectionFrom.Add(new ActivityLayer(new Activity("d"), _periodFrom));
 
 			using(_mocks.Record())
 			{
 				Expect.Call(_scheduleDayFrom.PersonAssignment()).Return(_personAssignmentFrom);
 				Expect.Call(_scheduleDayFrom.GetEditorShift()).Return(_mainShift);
 				Expect.Call(_mainShift.LayerCollection).Return(_layerCollectionFrom);
-				Expect.Call(_layerCollectionFrom.Period()).Return(_periodFrom);
 
 				Expect.Call(_scheduleDayTo.PersonAssignment()).Return(_personAssignmentTo);
 				Expect.Call(_scheduleDayTo.GetEditorShift()).Return(null);
 				Expect.Call(_personAssignmentTo.PersonalLayers()).Return(new[]
 					{
-						new PersonalShiftLayer(new Activity("d"), _periodTo.Value) 
+						new PersonalShiftLayer(new Activity("d"), _periodTo) 
 					});
 			}
 
@@ -91,25 +92,54 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			var startTo = new DateTime(2011, 1, 1, 16, 0, 0, DateTimeKind.Utc);
 			var endTo = new DateTime(2011, 1, 1, 19, 0, 0, DateTimeKind.Utc);
 			_periodTo = new DateTimePeriod(startTo, endTo);
+			_layerCollectionTo.Add(new ActivityLayer(new Activity("d"), _periodFrom));
 
 			using(_mocks.Record())
 			{
 				Expect.Call(_scheduleDayTo.PersonAssignment()).Return(_personAssignmentTo);
 				Expect.Call(_scheduleDayTo.GetEditorShift()).Return(_mainShift);
 				Expect.Call(_mainShift.LayerCollection).Return(_layerCollectionTo);
-				Expect.Call(_layerCollectionTo.Period()).Return(_periodFrom);
 
 				Expect.Call(_scheduleDayFrom.PersonAssignment()).Return(_personAssignmentFrom);
 				Expect.Call(_scheduleDayFrom.GetEditorShift()).Return(null);
 				Expect.Call(_personAssignmentFrom.PersonalLayers()).Return(new[]
 					{
-						new PersonalShiftLayer(new Activity("d"), _periodTo.Value)
+						new PersonalShiftLayer(new Activity("d"), _periodTo)
 					});
 			}
 
 			using(_mocks.Playback())
 			{
 				Assert.IsFalse(_target.IsSatisfiedBy(_details));	
+			}
+		}
+
+		[Test]
+		public void ShouldReturnFalseWhenShiftWithHoleDoNotCoverMeeting()
+		{
+			var startTo = new DateTime(2011, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+			var endTo = new DateTime(2011, 1, 1, 13, 0, 0, DateTimeKind.Utc);
+			_periodTo = new DateTimePeriod(startTo, endTo);
+			_layerCollectionTo.Add(new ActivityLayer(new Activity("d"), new DateTimePeriod(_periodFrom.StartDateTime, _periodFrom.StartDateTime.AddHours(1))));
+			_layerCollectionTo.Add(new ActivityLayer(new Activity("d"), new DateTimePeriod(_periodFrom.EndDateTime.AddHours(-1), _periodFrom.EndDateTime)));
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_scheduleDayTo.PersonAssignment()).Return(_personAssignmentTo);
+				Expect.Call(_scheduleDayTo.GetEditorShift()).Return(_mainShift);
+				Expect.Call(_mainShift.LayerCollection).Return(_layerCollectionTo);
+
+				Expect.Call(_scheduleDayFrom.PersonAssignment()).Return(_personAssignmentFrom);
+				Expect.Call(_scheduleDayFrom.GetEditorShift()).Return(null);
+				Expect.Call(_personAssignmentFrom.PersonalLayers()).Return(new[]
+					{
+						new PersonalShiftLayer(new Activity("d"), _periodTo)
+					});
+			}
+
+			using (_mocks.Playback())
+			{
+				Assert.IsFalse(_target.IsSatisfiedBy(_details));
 			}
 		}
 

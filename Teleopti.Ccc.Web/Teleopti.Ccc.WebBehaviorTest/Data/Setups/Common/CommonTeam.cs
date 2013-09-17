@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common
 
 		public void Apply(IUnitOfWork uow)
 		{
-			var site = GlobalDataContext.Data().Data<CommonSite>().Site;
+			var site = GlobalDataMaker.Data().Data<CommonSite>().Site;
 
 			Team = TeamFactory.CreateSimpleTeam("Common Team");
 			site.AddTeam(Team);

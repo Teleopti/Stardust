@@ -18,5 +18,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.Click(string.Format("ul.weekview-day[data-mytime-date='{0}'] li#day-summary", date.ToString("yyyy-MM-dd")));
 		}
+
+		[When(@"I click overtime availability bar")]
+		public void WhenIClickOvertimeAvailabilityBar()
+		{
+			Browser.Interactions.Click(".overtime-availability-bar");
+		}
 	}
 }
