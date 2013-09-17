@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 		public void Apply(IPerson user, IUnitOfWork uow)
 		{
-			var scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
+			var scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
 			var scenarioId = scenario.Id.GetValueOrDefault();
 
 			var absenceRepository = new AbsenceRepository(uow);

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		private readonly bool _withLunch;
 		private DateTimePeriod _assignmentPeriod;
 
-		public IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
+		public IScenario Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
 
 		protected ShiftForDate(TimeSpan startTime, TimeSpan endTime)
 		{

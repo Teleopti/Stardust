@@ -37,12 +37,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the student availability period information")]
 		public void ThenIShouldSeeTheStudentAvailabilityPeriodInformation()
 		{
-			var data = UserFactory.User().UserData<ExistingWorkflowControlSet>();
+			var data = DataMaker.Data().UserData<ExistingWorkflowControlSet>();
 			var innerHtml = _page.StudentAvailabilityPeriod.InnerHtml;
-			innerHtml.Should().Contain(data.StudentAvailabilityInputPeriod.StartDate.ToShortDateString(UserFactory.User().Culture));
-			innerHtml.Should().Contain(data.StudentAvailabilityInputPeriod.EndDate.ToShortDateString(UserFactory.User().Culture));
-			innerHtml.Should().Contain(data.StudentAvailabilityPeriod.StartDate.ToShortDateString(UserFactory.User().Culture));
-			innerHtml.Should().Contain(data.StudentAvailabilityPeriod.EndDate.ToShortDateString(UserFactory.User().Culture));
+			innerHtml.Should().Contain(data.StudentAvailabilityInputPeriod.StartDate.ToShortDateString(DataMaker.Data().MyCulture));
+			innerHtml.Should().Contain(data.StudentAvailabilityInputPeriod.EndDate.ToShortDateString(DataMaker.Data().MyCulture));
+			innerHtml.Should().Contain(data.StudentAvailabilityPeriod.StartDate.ToShortDateString(DataMaker.Data().MyCulture));
+			innerHtml.Should().Contain(data.StudentAvailabilityPeriod.EndDate.ToShortDateString(DataMaker.Data().MyCulture));
 		}
 
 		[Then(@"the student availabilty calendar should be editable")]
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			if (_page == null)
 				ScenarioContext.Current.Pending();
-			var editableDate = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
+			var editableDate = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			_page.SelectCalendarCellForDateByClick(editableDate);
 			_page.CalendarCellForDate(editableDate).ClassName.Should().Contain("ui-selected");
 		}
@@ -75,9 +75,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see my existing student availability")]
 		public void ThenIShouldSeeMyExistingStudentAvailability()
 		{
-			var data = UserFactory.User().UserData<StudentAvailability>();
-			var startTime = TimeHelper.TimeOfDayFromTimeSpan(data.StartTime, UserFactory.User().Culture);
-			var endTime = TimeHelper.TimeOfDayFromTimeSpan(data.EndTime, UserFactory.User().Culture);
+			var data = DataMaker.Data().UserData<StudentAvailability>();
+			var startTime = TimeHelper.TimeOfDayFromTimeSpan(data.StartTime, DataMaker.Data().MyCulture);
+			var endTime = TimeHelper.TimeOfDayFromTimeSpan(data.EndTime, DataMaker.Data().MyCulture);
 
 			EventualAssert.That(()=> _page.CalendarCellForDate(data.Date).InnerHtml, Is.StringContaining(startTime).And.StringContaining(endTime));
 		}
@@ -85,8 +85,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the first virtual schedule period overlapping open student availability period")]
 		public void ThenIShouldSeeTheFirstVirtualSchedulePeriodOverlappingOpenStudentAvailabilityPeriod()
 		{
-			var studentAvailabilityPeriod = UserFactory.User().UserData<StudentAvailabilityOpenNextMonthWorkflowControlSet>().StudentAvailabilityPeriod;
-			var displayedPeriod = UserFactory.User().UserData<SchedulePeriod>().DisplayedVirtualSchedulePeriodForDate(studentAvailabilityPeriod.StartDate);
+			var studentAvailabilityPeriod = DataMaker.Data().UserData<StudentAvailabilityOpenNextMonthWorkflowControlSet>().StudentAvailabilityPeriod;
+			var displayedPeriod = DataMaker.Data().UserData<SchedulePeriod>().DisplayedVirtualSchedulePeriodForDate(studentAvailabilityPeriod.StartDate);
 			calendarShouldDisplayPeriod(displayedPeriod);
 		}
 

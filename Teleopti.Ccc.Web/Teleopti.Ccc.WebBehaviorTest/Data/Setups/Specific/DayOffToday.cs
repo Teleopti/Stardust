@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 	{
 		public DateOnly Date = DateOnlyForBehaviorTests.TestToday;
 		public readonly IDayOffTemplate DayOff = TestData.DayOffTemplate;
-		public readonly IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
+		public readonly IScenario Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{

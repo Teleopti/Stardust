@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				budgetGroupRepository.Add(budgetGroup);
 			}
 		    user.PersonPeriodCollection.First().BudgetGroup = budgetGroup;
-			var scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
+			var scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
 			var budgetDay = new BudgetDay(budgetGroup, scenario, new DateOnly(Date)) { Allowance = Allowance, FulltimeEquivalentHours = FulltimeEquivalentHours };
             budgetDayRepository.Add(budgetDay);
 	    }

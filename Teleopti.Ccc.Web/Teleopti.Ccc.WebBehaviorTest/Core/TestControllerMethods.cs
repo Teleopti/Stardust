@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core
@@ -43,21 +44,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		/// </remarks>
 		public static void Logon()
 		{
-			var userName = UserFactory.User().MakeUser();
-			var password = TestData.CommonPassword;
-			InnerLogon(userName, password);
-		}
-
-		public static void LogonWithReadModelsUpdated()
-		{
-			var userName = UserFactory.User().MakeUser(true);
+			var userName = DataMaker.Data().MakeUser();
 			var password = TestData.CommonPassword;
 			InnerLogon(userName, password);
 		}
 
 		public static void LogonForSpecificUser(string userName, string password)
 		{
-			UserFactory.User().MakeUser(userName, userName, password, false);
+			DataMaker.Data().Setup(
+				new UserConfigurable
+					{
+						UserName = userName, 
+						Password = password
+					});
+			DataMaker.Data().MakeUser();
 			InnerLogon(userName, password);
 		}
 
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		private static void InnerLogon(string userName, string password)
 		{
 			const string dataSourceName = "TestData";
-			var businessUnitName = UserFactory.User().Person.PermissionInformation.ApplicationRoleCollection.Single().BusinessUnit.Name;
+			var businessUnitName = DataMaker.Data().MePerson.PermissionInformation.ApplicationRoleCollection.Single().BusinessUnit.Name;
 			var queryString = string.Format("?dataSourceName={0}&businessUnitName={1}&userName={2}&password={3}", dataSourceName, businessUnitName, userName, password);
 			Navigation.GoToWaitForCompleted("Test/Logon" + queryString, new ApplicationStartupTimeout());
 		}
