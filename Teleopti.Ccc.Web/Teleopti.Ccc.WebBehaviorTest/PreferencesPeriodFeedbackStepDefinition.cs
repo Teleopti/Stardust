@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I have a scheduling period of 1 week")]
 		public void GivenIHaveASchedulingPeriodOf1Week()
 		{
-			DataMaker.Data().ReplaceSetupByType<SchedulePeriod>(new SchedulePeriod(0, 1));
+			DataMaker.Data().Setup(new SchedulePeriod(0, 1));
 		}
 
 		[Given(@"I have a contract schedule with 2 days off")]

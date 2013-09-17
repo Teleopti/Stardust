@@ -47,20 +47,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_timeZoneSetup = setup;
 		}
 
-		public void ReplaceSetupByType<T>(IUserSetup setup)
-		{
-			ReplaceSetupByType<T, IUserSetup>(_userSetups, setup);
-		}
-
-		private void ReplaceSetupByType<TReplace, TSetup>(IList<TSetup> setups, TSetup setup)
-		{
-			var existing = setups
-				.Where(s => typeof(TReplace).IsAssignableFrom(s.GetType()))
-				.Select((s, i) => new { s, i }).Single();
-			setups.Remove(existing.s);
-			setups.Insert(existing.i, setup);
-		}
-
 		public IEnumerable<object> Setups { get { return _userSetups.Cast<object>().Union(_userDataSetups); } }
 
 		public void Persist()

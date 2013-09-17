@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"I have several virtual schedule periods")]
 		public void GivenIHaveSeveralVirtualSchedulePeriods()
 		{
-			DataMaker.Data().ReplaceSetupByType<SchedulePeriod>(new SchedulePeriod(2));
+			DataMaker.Data().Setup(new SchedulePeriod(2));
 		}
 
 		[Given(@"I do not have a virtual schedule period")]

@@ -83,11 +83,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Me().Setup(setup);
 		}
 
-		public void ReplaceSetupByType<T>(IUserSetup setup)
-		{
-			Me().ReplaceSetupByType<T>(setup);
-		}
-
 		public void Setup(IUserDataSetup setup)
 		{
 			Me().Setup(setup);
@@ -151,7 +146,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public T UserData<T>()
 		{
-			return UserDatasOfType<T>().SingleOrDefault();
+			return UserDatasOfType<T>().Last();
 		}
 	}
 }
