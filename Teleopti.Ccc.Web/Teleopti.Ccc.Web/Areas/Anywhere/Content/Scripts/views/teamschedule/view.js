@@ -43,33 +43,21 @@ define([
 					var currentPersons = teamSchedule.Persons();
 					
 				    var dateClone = teamSchedule.SelectedDate().clone();
-
-				    for (var i = 0; i < currentPersons.length; i++) {
-					    if (schedules.length == 0) {
-					    	currentPersons[i].ClearLayers();
-					    	currentPersons[i].ContractTimeMinutes(0);
-						    currentPersons[i].WorkTimeMinutes(0);
-					    } else {
-					    	for (var j = 0; j < schedules.length; j++) {
-					    		if (currentPersons[i].Id == schedules[j].Id) {
-					    			currentPersons[i].ClearLayers();
-					    			break;
-					    		}
-					    	}
-					    }
-				    }
 					
-					for (var i = 0; i < schedules.length; i++) {
-						for (var j = 0; j < currentPersons.length; j++) {
-						    if (currentPersons[j].Id == schedules[i].Id) {
-						        currentPersons[j].AddLayers(schedules[i].Projection, teamSchedule.TimeLine, dateClone);
-						        currentPersons[j].AddContractTime(schedules[i].ContractTimeMinutes);
-						        currentPersons[j].AddWorkTime(schedules[i].WorkTimeMinutes);
+				    for (var i = 0; i < currentPersons.length; i++) {
+				    	currentPersons[i].ClearLayers();
+				    	currentPersons[i].ContractTimeMinutes(0);
+				    	currentPersons[i].WorkTimeMinutes(0);
+
+				    	for (var j = 0; j < schedules.length; j++) {
+						    if (currentPersons[i].Id == schedules[j].Id) {
+						    	currentPersons[i].AddLayers(schedules[j].Projection, teamSchedule.TimeLine, dateClone);
+						    	currentPersons[i].AddContractTime(schedules[j].ContractTimeMinutes);
+						    	currentPersons[i].AddWorkTime(schedules[j].WorkTimeMinutes);
 								break;
 							}
 						}
 					}
-					
 
 					currentPersons.sort(function (a, b) {
 						var firstStartMinutes = a.TimeLineAffectingStartMinute();
