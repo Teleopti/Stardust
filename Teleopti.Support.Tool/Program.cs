@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using Teleopti.Support.Code.Tool;
 
 namespace Teleopti.Support.Tool
@@ -25,9 +26,9 @@ namespace Teleopti.Support.Tool
                     if (commandLineArgument.Mode.ToUpper(CultureInfo.InvariantCulture).Equals("DEPLOY"))
                         file = "DeployConfigFiles.txt";
                     var reader = new SettingsReader();
-                    var settings = reader.GetSearchReplaceList(System.IO.File.ReadAllText(@"settings.txt"));
+                    var settings = reader.GetSearchReplaceList(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"settings.txt")));
                     var refresher = new RefreshConfigFile(new ConfigFileTagReplacer(), new MachineKeyChecker());
-                    refresher.ReadLinesFromString(System.IO.File.ReadAllText(@"ConfigFiles\" + file), settings, false);
+                    refresher.ReadLinesFromString(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"ConfigFiles\" + file)), settings, false);
                 }
             }
 
