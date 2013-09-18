@@ -2113,7 +2113,9 @@ warnif count > 0
 	//skippa abstracta metoder
 	where !m.IsAbstract && 
 	//skippa metoder som ligger i testprojekten
-	!allTestAssemblies.Contains(m.ParentAssembly) 
+	!allTestAssemblies.Contains(m.ParentAssembly)
+	//skippa "KeepMe"
+	&& !m.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute")	
 	select new { m, m.FullName }]]>
 	</Query>
 	<Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types potentially only used from Tests</Name>
@@ -2128,7 +2130,11 @@ warnif count > 0
 	
 	from t in typesUsedOnlyInTest
 	//skippa klasser som ligger i testprojekten
-	where !allTestAssemblies.Contains(t.ParentAssembly) 
+	where !allTestAssemblies.Contains(t.ParentAssembly)
+	//skippa "KeepMe"
+	&& !t.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute")
+	&& !t.BaseClasses.Any(type => type.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute"))
+	&& !t.InterfacesImplemented.Any(type => type.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute"))	
 	select new { t, t.FullName}]]>
 	</Query>
 	
