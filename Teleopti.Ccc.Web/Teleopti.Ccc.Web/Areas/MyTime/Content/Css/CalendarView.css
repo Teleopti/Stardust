@@ -92,7 +92,7 @@
 .calendarview-week li.non-editable .preference-text{color: #eaeaea; text-shadow: none;}
 .calendarview-week li.non-editable .extended-indication{ opacity: 0.3;}
 .calendarview-week li.non-editable .dayoff{ opacity: 0.3;}
-.calendarview-week li.non-editable .icon-user{ opacity: 0.1;}
+.calendarview-week li.non-editable .meeting-icon{ opacity: 0.1;}
 .calendarview-week li.non-editable .preference-must-have{ opacity: 0.1;}
 .calendarview-week li.non-editable .day-content-text{ opacity: 0.5;}
 

@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void ThenIShouldSeeASymbolAtTheTopOfTheScheduleForDate(DateTime date)
 		{
 			var formattedDate = date.ToString(CultureInfo.GetCultureInfo("sv-SE").DateTimeFormat.ShortDatePattern);
-			Browser.Interactions.AssertVisibleUsingJQuery(string.Format("ul.weekview-day[data-mytime-date={0}] li .text-request", formattedDate));
+			Browser.Interactions.AssertVisibleUsingJQuery(string.Format(".weekview-day[data-mytime-date={0}] .icon-comment", formattedDate));
 		}
 
 		[Then(@"I should see an overtime availability symbol with tooltip")]
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void ThenIShouldNotSeeASymbolAtTheTopOfTheScheduleForDate(DateTime date)
 		{
 			var formattedDate = date.ToString(CultureInfo.GetCultureInfo("sv-SE").DateTimeFormat.ShortDatePattern);
-			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format("ul.weekview-day[data-mytime-date={0}] li .text-request", formattedDate));
+			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format(".weekview-day[data-mytime-date={0}] .icon-comment", formattedDate));
 		}
 
 		[Then(@"I should not see an overtime availability symbol for date '(.*)'")]
