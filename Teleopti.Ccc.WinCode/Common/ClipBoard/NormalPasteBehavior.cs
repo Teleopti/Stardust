@@ -32,14 +32,11 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
         public IList<T> DoPaste<T>(GridControl gridControl, ClipHandler<T> clipHandler, IGridPasteAction<T> gridPasteAction, GridRangeInfoList rangeList)
         {
             IList<T> pasteList = new List<T>();
-			bool multipleColumnsPaste = clipHandler.ClipList.Count > 1;
-
+			
             if (clipHandler.ClipList.Count > 0)
             {
                 foreach (GridRangeInfo range in rangeList)
                 {
-					if (range.Left != range.Right) multipleColumnsPaste = true;
-
                     //loop all rows in selection, step with height in clip
                     for (int row = range.Top; row <= range.Bottom; row += clipHandler.RowSpan())
                     {
@@ -64,17 +61,12 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
 											if (pasteResult != null)
 											{
 												pasteList.Add(pasteResult);
-
-												if (!multipleColumnsPaste)
+												foreach (var item in pasteList)
 												{
-													foreach (var item in pasteList)
-													{
-														AdjustFullDayAbsenceNextDay(item);
-													}
+													AdjustFullDayAbsenceNextDay(item);
 												}
+												
 											}
-
-
 										}
 										else
 										{
@@ -109,11 +101,13 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
 			IList<IPersonAbsence> allAbsences = new List<IPersonAbsence>(destination.PersonAbsenceCollection());
 			foreach (IPersonAbsence personAbsence in destination.PersonAbsenceCollection())
 			{
-				destination.Remove(personAbsence);
+				if(personAbsence.Period.StartDateTime < destination.Period.EndDateTime)
+					destination.Remove(personAbsence);
 			}
 
 			foreach (var personAbsence in allAbsences)
 			{
+				if(personAbsence.Period.StartDateTime >= destination.Period.EndDateTime) continue;
 				var oldLayer = personAbsence.Layer;
 				var oldPeriod = oldLayer.Period;
 
