@@ -74,7 +74,12 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
 
             if (oldEntity.PeriodCollection != null)
             {
-                newPerson.TerminatePerson(TerminalDate(oldEntity.PeriodCollection).GetValueOrDefault(), new PersonAccountUpdaterDummy());
+
+				if (TerminalDate(oldEntity.PeriodCollection).HasValue)
+	                newPerson.TerminatePerson(TerminalDate(oldEntity.PeriodCollection).GetValueOrDefault(), new PersonAccountUpdaterDummy());
+				else
+					newPerson.ActivatePerson(new PersonAccountUpdaterDummy());
+
 
                 foreach (var agentPeriod in oldEntity.PeriodCollection)
                 {

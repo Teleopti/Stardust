@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Common
 	{
 		public void Update(IPerson person)
 		{
-			throw new NotImplementedException();
+			// do not do anything
 		}
 	}
 }
