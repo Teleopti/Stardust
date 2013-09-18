@@ -59,6 +59,7 @@ Scenario: View staffing metrics
 	| Difference percentage   | -39.10 |
 	| Estimated service level | 0.00   |
 
+@ignore
 Scenario: Push staffing metrics changes
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
@@ -88,9 +89,8 @@ Scenario: Push staffing metrics changes
 	| Difference hours        | -4.49  |
 	| Difference percentage   | -39.10 |
 	| Estimated service level | 0.00   |
-	When someone else adds a full day absence with
+	When 'Martin Fowler' adds an absence for 'Pierre Baldi' with
 	| Field   | Value        |
-	| Person  | Pierre Baldi |
 	| Absence | Vacation     |
 	| From    | 2013-09-09   |
 	| To      | 2013-09-09   |

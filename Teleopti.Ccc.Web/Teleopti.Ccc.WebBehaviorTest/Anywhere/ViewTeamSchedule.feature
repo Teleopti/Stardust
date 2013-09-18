@@ -66,7 +66,7 @@ Scenario: View team schedule
 	| Lunch 3 hours after start | true             |
 	When I view schedules for '2012-12-02'
 	Then I should see schedule for 'Pierre Baldi'
-	
+
 Scenario: View team schedule with night shift from yesterday
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
@@ -168,7 +168,7 @@ Scenario: View unpublished schedule when permitted
 	| End time       | 2013-08-10 17:00 |
 	When I view schedules for '2013-08-10'
 	Then I should see 'Pierre Baldi' with schedule
-
+	
 @ignore
 Scenario: Push team schedule changes
 	Given I have the role 'Anywhere Team Green'
@@ -188,9 +188,8 @@ Scenario: Push team schedule changes
 	| Start time | 08:00 |
 	| End time   | 17:00 |
 	| Color      | Green |	
-	When someone else adds a full day absence with
-	| Field   | Value        |
-	| Person  | Pierre Baldi |
+	When 'Martin Fowler' adds an absence for 'Pierre Baldi' with
+	| Field   | Value        |	
 	| Absence | Vacation     |
 	| From    | 2013-09-10   |
 	| To      | 2013-09-10   |
