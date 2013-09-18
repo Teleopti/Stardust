@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -29,39 +27,56 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				{
 					if (scheduleDay.Person.Equals(scheduleDayBefore.Person))
 					{
-						IPersonAbsence personAbsenceDayBefore = null;
-						IPersonAbsence personAbsenceMerged = null;
+						var merged = false;
 
 						foreach (var data in scheduleDay.PersistableScheduleDataCollection())
 						{
 							var personAbsence = data as IPersonAbsence;
 							if (personAbsence == null) continue;
+							if(personAbsence.Id != null) continue;
 
 							foreach (var dataDayBefore in scheduleDayBefore.PersistableScheduleDataCollection())
 							{
-								personAbsenceDayBefore = dataDayBefore as IPersonAbsence;
+								var personAbsenceDayBefore = dataDayBefore as IPersonAbsence;
 								if (personAbsenceDayBefore == null) continue;
+								if(personAbsenceDayBefore.Id != null) continue;
 
-								personAbsenceMerged = personAbsenceDayBefore.Merge(personAbsence);
+								var personAbsenceMerged = personAbsenceDayBefore.Merge(personAbsence);
 								if (personAbsenceMerged != null)
 								{
-									break;
+									merged = true;
+									scheduleDayBefore.Remove(dataDayBefore);
+									scheduleDayBefore.Add(personAbsenceMerged);
 								}
 							}
-
-							if (personAbsenceMerged != null)
-							{
-								break;
-							}
 						}
 
-						if (personAbsenceMerged != null)
+						if(merged)
 						{
 							pasteList.RemoveAt(i);
-							scheduleDayBefore.Remove(personAbsenceDayBefore);
-							scheduleDayBefore.Add(personAbsenceMerged);
+							RemoveDoubles(scheduleDayBefore);
 						}
 					}
+				}
+			}
+		}
+
+		public void RemoveDoubles(IScheduleDay scheduleDay)
+		{
+			var tempList = scheduleDay.PersistableScheduleDataCollection().ToList();
+			for (var i = tempList.Count - 1; i > 0; i--)
+			{
+				var personAbsence = tempList[i] as IPersonAbsence;
+				if (personAbsence == null) continue;
+				foreach (var data in tempList)
+				{
+					var tempPersonAbsence = data as IPersonAbsence;
+					if (tempPersonAbsence == null) continue;
+					if (tempPersonAbsence == personAbsence) continue;
+
+					if(tempPersonAbsence.Period.Contains(personAbsence.Period) && tempPersonAbsence.Layer.Payload == personAbsence.Layer.Payload)
+					scheduleDay.Remove(personAbsence);
+					break;
 				}
 			}
 		}
