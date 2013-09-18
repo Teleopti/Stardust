@@ -19,7 +19,7 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var timeIndicatorDateTime;
 	var scheduleHeight = 668;
-	var timeLineOffset = 109;
+	var timeLineOffset = 111;
 	var pixelToDisplayAll = 38;
 	var pixelToDisplayTitle = 16;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
@@ -89,6 +89,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	        return (self.requestViewModel() || '') != '';
 	    });
 
+
+	    self.increaseRequestCount = function(fixedDate) {
+	        var arr = $.grep(self.days(), function(item, index) {
+	            return item.fixedDate() == fixedDate;
+	        });
+	        arr[0].textRequestCount(arr[0].textRequestCount() + 1);
+	    };
+        
 	    self.textRequestActivate = function() {
 	        self.absenceRequestActive(false);
 	        if (!self.textRequestActive()) {
@@ -271,8 +279,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 
 		self.classForDaySummary = ko.computed(function () {
-			var showRequestClass = self.textRequestPermission() ? 'show-request ' : '';
-			return 'third category ' + showRequestClass + self.summaryStyleClassName(); //last one needs to be becuase of "stripes" and similar
+		    var showRequestClass = self.textRequestPermission() ? 'weekview-day-summary weekview-day-show-request ' : 'weekview-day-summary';
+		    if (self.summaryStyleClassName() != null && self.summaryStyleClassName() != 'undefined') {
+		        return showRequestClass + self.summaryStyleClassName(); //last one needs to be becuase of "stripes" and similar
+		    }
+		    return showRequestClass; //last one needs to be becuase of "stripes" and similar
 		});
 
 		self.colorForDaySummary = ko.computed(function () {
@@ -416,7 +427,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		var timelineHeight = 668;
-		var offset = 120;
+		var offset = 121;
 		var timeindicatorHeight = 2;
 
 		var hours = theDate.getHours();
@@ -428,10 +439,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		var division = (clientNowMinutes - timelineStartMinutes) / (timelineEndMinutes - timelineStartMinutes);
 		var position = Math.round(timelineHeight * division) - Math.round(timeindicatorHeight / 2);
+		if (position == -1) {
+		    position = 0;
+		}
 
 		var dayOfWeek = moment(theDate).day();
-		var timeIndicator = $('ul[data-mytime-dayofweek="' + dayOfWeek + '"] .week-schedule-time-indicator');
-		var timeIndicatorTimeLine = $('.week-schedule-time-indicator-small');
+		var timeIndicator = $('div[data-mytime-dayofweek="' + dayOfWeek + '"] .weekview-day-time-indicator');
+		var timeIndicatorTimeLine = $('.weekview-day-time-indicator-small');
 
 		if (timelineStartMinutes <= clientNowMinutes && clientNowMinutes <= timelineEndMinutes) {
 			timeIndicator.css("top", position).show();
@@ -486,19 +500,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	function _displayRequest(data) {
 	    var date = moment(new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth));
 	    var formattedDate = date.format('YYYY-MM-DD');
-	    var textRequestCount = $('ul[data-mytime-date="' + formattedDate + '"] .text-request');
-	    var decodedTitle = $('<div/>').html(textRequestCount.attr('title')).text();
-	    if (decodedTitle == undefined)
-	        return;
-	    var newTitle = decodedTitle.replace(/[\d\.]+/g, parseInt(textRequestCount.text()) + 1);
-	    textRequestCount.attr('title', newTitle);
-	    textRequestCount
-			.show()
-			.children()
-			.first()
-			.text(parseInt(textRequestCount.text()) + 1)
-	    ;
-	    
+	    vm.increaseRequestCount(formattedDate);
 	    vm.CancelAddingNewRequest();
 	}
     
