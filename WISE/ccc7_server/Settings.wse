@@ -50,18 +50,18 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=PM_VIRDIR
+  Variable Value1=RTA_QUEUE_ID
   Variable Name2=_PROP_VAR_
-  Variable Value2=PM_VIRDIR_TMP
+  Variable Value2=RTA_QUEUE_ID_TMP
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=RTA_QUEUE_ID
+  Variable Value1=PM_VIRDIR
   Variable Name2=_PROP_VAR_
-  Variable Value2=RTA_QUEUE_ID_TMP
+  Variable Value2=PM_VIRDIR_TMP
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
@@ -95,27 +95,9 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=AS_DATABASE
-  Variable Name2=_PROP_VAR_
-  Variable Value2=AS_DATABASE_TMP
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
   Variable Value1=PM_INSTALL
   Variable Name2=_PROP_VAR_
   Variable Value2=PM_INSTALL_TMP
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
-  Variable Value1=DB_CCC7
-  Variable Name2=_PROP_VAR_
-  Variable Value2=DB_CCC7_TMP
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
@@ -131,9 +113,63 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
+  Variable Value1=SDK_SSL
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SDK_SSL_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
   Variable Value1=SDK_CRED_PROT
   Variable Name2=_PROP_VAR_
   Variable Value2=SDK_CRED_PROT_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=IIS_AUTH
+  Variable Name2=_PROP_VAR_
+  Variable Value2=IIS_AUTH_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=AS_SERVER_NAME
+  Variable Name2=_PROP_VAR_
+  Variable Value2=AS_SERVER_NAME_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=AS_DATABASE
+  Variable Name2=_PROP_VAR_
+  Variable Value2=AS_DATABASE_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DB_CCC7
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DB_CCC7_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DB_ANALYTICS
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DB_ANALYTICS_TMP
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
@@ -152,42 +188,6 @@ item: Custom Script Item
   Variable Value1=SQL_AUTH_STRING
   Variable Name2=_PROP_VAR_
   Variable Value2=SQL_AUTH_STRING_TMP
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
-  Variable Value1=DB_ANALYTICS
-  Variable Name2=_PROP_VAR_
-  Variable Value2=DB_ANALYTICS_TMP
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
-  Variable Value1=AS_SERVER_NAME
-  Variable Name2=_PROP_VAR_
-  Variable Value2=AS_SERVER_NAME_TMP
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
-  Variable Value1=IIS_AUTH
-  Variable Name2=_PROP_VAR_
-  Variable Value2=IIS_AUTH_TMP
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
-  Variable Value1=SDK_SSL
-  Variable Name2=_PROP_VAR_
-  Variable Value2=SDK_SSL_TMP
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
@@ -297,6 +297,7 @@ item: Insert Line into Text File
   Line Number=0
 end
 item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(MATRIX_WEB_SITE_URL)|%DNS_ALIAS_TMP%TeleoptiCCC/Analytics
   Line Number=0
 end
