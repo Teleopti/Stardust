@@ -33,7 +33,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             kpiTarget1.BetweenColor = Color.Yellow;
             kpiTarget1.HigherThanMaxColor = Color.Green;
             kpiTarget1.LowerThanMinColor = Color.Red;
-            RaptorTransformerHelper.SetCreatedOn(kpiTarget1, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(kpiTarget1, DateTime.Now);
             retList.Add(kpiTarget1);
 
             KpiTarget kpiTarget2 = new KpiTarget();
@@ -45,7 +45,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             kpiTarget2.BetweenColor = Color.Blue;
             kpiTarget2.HigherThanMaxColor = Color.LightGreen;
             kpiTarget2.LowerThanMinColor = Color.DarkRed;
-            RaptorTransformerHelper.SetCreatedOn(kpiTarget2, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(kpiTarget2, DateTime.Now);
             retList.Add(kpiTarget2);
 
             return retList;

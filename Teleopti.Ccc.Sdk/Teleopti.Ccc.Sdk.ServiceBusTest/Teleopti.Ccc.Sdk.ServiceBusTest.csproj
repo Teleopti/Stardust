@@ -119,7 +119,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbsenceRequestResolveTest.cs" />
-    <Compile Include="BudgetGroupAllowanceCalculatorTest.cs" />
     <Compile Include="ApplicationLayer\EventsConsumerTest.cs" />
     <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />
     <Compile Include="BudgetGroupHeadCountSpecificationTest.cs" />
@@ -149,7 +148,6 @@
     <Compile Include="Forecast\RecalculateForecastOnSkillConsumerTest.cs" />
     <Compile Include="Forecast\SendImportForecastBusMessageTest.cs" />
     <Compile Include="Forecast\StatisticLoaderTest.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="NewAbsenceRequestConsumerTest.cs" />
     <Compile Include="Notification\ScheduleDayReadModelComparerTest.cs" />
     <Compile Include="PayrollDllCopyTest.cs" />

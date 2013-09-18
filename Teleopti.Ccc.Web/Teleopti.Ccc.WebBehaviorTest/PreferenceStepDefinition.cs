@@ -5,6 +5,7 @@ using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
@@ -34,44 +35,44 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIChangeStandardPreference()
 		{
 			Browser.Interactions.Click("#preference-split-button .dropdown-toggle");
-			var shiftCategory = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
+			var shiftCategory = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
 			Browser.Interactions.ClickContaining("a", shiftCategory.Description.Name);
 		}
 
 		[When(@"I select an editable day without preference")]
 		public void WhenISelectAnEditableDayWithoutPreference()
 		{
-			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			_page.SelectCalendarCellByClass(date);
+			var date = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
+			PreferencesPageStepDefinitions.SelectCalendarCellByClass(date);
 		}
 
 		[When(@"I select an editable day with standard preference")]
 		public void WhenISelectAnEditableDayWithStandardPreference() 
 		{ 
-			var data = UserFactory.User().UserData<StandardPreference>();
-			_page.SelectCalendarCellByClass(data.Date);
+			var data = DataMaker.Data().UserData<StandardPreference>();
+			PreferencesPageStepDefinitions.SelectCalendarCellByClass(data.Date);
 		}
 
 		[When(@"I also select an editable day without standard preference")]
 		public void WhenISelectAnEditableDayWithoutStandardPreference()
 		{
-			var data = UserFactory.User().UserData<StandardPreference>();
-			_page.SelectCalendarCellByClass(data.Date.AddDays(1));
+			var data = DataMaker.Data().UserData<StandardPreference>();
+			PreferencesPageStepDefinitions.SelectCalendarCellByClass(data.Date.AddDays(1));
 		}
 
 		[When(@"I select 2 editable day with standard preference")]
 		public void WhenISelect2EditableDayWithStandardPreference()
 		{
-			var data1 = UserFactory.User().UserData<StandardPreference>();
-			var data2 = UserFactory.User().UserData<AnotherStandardPreference>();
-			_page.SelectCalendarCellByClass(data1.Date);
-			_page.SelectCalendarCellByClass(data2.Date);
+			var data1 = DataMaker.Data().UserData<StandardPreference>();
+			var data2 = DataMaker.Data().UserData<AnotherStandardPreference>();
+			PreferencesPageStepDefinitions.SelectCalendarCellByClass(data1.Date);
+			PreferencesPageStepDefinitions.SelectCalendarCellByClass(data2.Date);
 		}
 
 		[Then(@"I should see my existing shift category preference")]
 		public void ThenIShouldSeeMyExistingShiftCategoryPreference()
 		{
-			var data = UserFactory.User().UserData<ShiftCategoryPreference>();
+			var data = DataMaker.Data().UserData<ShiftCategoryPreference>();
 			var shiftCategory = data.ShiftCategory.Description.Name;
 			var cell = _page.CalendarCellForDate(data.Date);
 			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(shiftCategory));
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see my existing day off preference")]
 		public void ThenIShouldSeeMyExistingDayOffPreference()
 		{
-			var data = UserFactory.User().UserData<DayOffPreference>();
+			var data = DataMaker.Data().UserData<DayOffPreference>();
 			var dayOff = data.DayOffTemplate.Description.Name;
 			var cell = _page.CalendarCellForDate(data.Date);
 			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(dayOff));
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see my existing absence preference")]
 		public void ThenIShouldSeeMyExistingAbsencePreference()
 		{
-			var data = UserFactory.User().UserData<AbsencePreference>();
+			var data = DataMaker.Data().UserData<AbsencePreference>();
 			var absence = data.Absence.Description.Name;
 
 			var cell = _page.CalendarCellForDate(data.Date);
@@ -99,7 +100,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the workflow control set's standard preferences list")]
 		public void ThenIShouldSeeTheWorkflowControlSetSStandardPreferencesList()
 		{
-			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
+			var data = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
 			Browser.Interactions.AssertFirstContains("#preference-split-button", data.ShiftCategory.Description.Name);
 			Browser.Interactions.AssertFirstContains("#preference-split-button", data.DayOffTemplate.Description.Name);
 			Browser.Interactions.AssertFirstContains("#preference-split-button", data.Absence.Description.Name);
@@ -108,23 +109,23 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the selected standard preference in the split-button")]
 		public void ThenIShouldSeeTheSelectedStandardPreferenceInTheSplit_Button()
 		{
-			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
+			var data = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
 			Browser.Interactions.AssertFirstContains("#preference-split-button .btn", data.ShiftCategory.Description.Name);
 		}
 
 		[Then(@"I should see the standard preference in the calendar")]
 		public void ThenIShouldSeeTheStandardPreferenceInTheCalendar()
 		{
-			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			var shiftCategory = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
+			var date = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
+			var shiftCategory = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
 			Browser.Interactions.AssertFirstContains(CalendarCellsPage.DateSelector(date), shiftCategory.Description.Name);
 		}
 
 		[Then(@"I should see the 2 standard preferences in the calendar")]
 		public void ThenIShouldSeeThe2StandardPreferencesInTheCalendar()
 		{
-			var shiftCategory = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
-			var data = UserFactory.User().UserData<StandardPreference>();
+			var shiftCategory = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
+			var data = DataMaker.Data().UserData<StandardPreference>();
 			Browser.Interactions.AssertFirstContains(CalendarCellsPage.DateSelector(data.Date), shiftCategory.Description.Name);
 			Browser.Interactions.AssertFirstContains(CalendarCellsPage.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
 			Browser.Interactions.AssertFirstContains(CalendarCellsPage.DateSelector(data.Date), shiftCategory.Description.Name);
@@ -134,34 +135,34 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not see the former standard preference in the calendar")]
 		public void ThenIShouldNotSeeTheFormerStandardPreferenceInTheCalendar()
 		{
-			var data = UserFactory.User().UserData<StandardPreference>();
+			var data = DataMaker.Data().UserData<StandardPreference>();
 			Browser.Interactions.AssertFirstNotContains(CalendarCellsPage.DateSelector(data.Date), data.Preference);
 		}
 
 		[Then(@"I should see the first virtual schedule period overlapping open preference period")]
 		public void ThenIShouldSeeTheFirstVirtualSchedulePeriodOverlappingOpenPreferencePeriod()
 		{
-			var preferencePeriod = UserFactory.User().UserData<PreferenceOpenNextMonthWorkflowControlSet>().PreferencePeriod;
-			var displayedPeriod = UserFactory.User().UserData<SchedulePeriod>().DisplayedVirtualSchedulePeriodForDate(preferencePeriod.StartDate);
+			var preferencePeriod = DataMaker.Data().UserData<PreferenceOpenNextMonthWorkflowControlSet>().PreferencePeriod;
+			var displayedPeriod = DataMaker.Data().UserData<SchedulePeriod>().DisplayedVirtualSchedulePeriodForDate(preferencePeriod.StartDate);
 			calendarShouldDisplayPeriod(displayedPeriod);
 		}
 
 		[Then(@"I should see the preference period information")]
 		public void ThenIShouldSeeThePreferencePeriodInformation()
 		{
-			var data = UserFactory.User().UserData<ExistingWorkflowControlSet>();
+			var data = DataMaker.Data().UserData<ExistingWorkflowControlSet>();
 			var innerHtml = _page.PreferencePeriodFeedbackView.InnerHtml;
-			innerHtml.Should().Contain(data.PreferenceInputPeriod.StartDate.ToShortDateString(UserFactory.User().Culture));
-			innerHtml.Should().Contain(data.PreferenceInputPeriod.EndDate.ToShortDateString(UserFactory.User().Culture));
-			innerHtml.Should().Contain(data.PreferencePeriod.StartDate.ToShortDateString(UserFactory.User().Culture));
-			innerHtml.Should().Contain(data.PreferencePeriod.EndDate.ToShortDateString(UserFactory.User().Culture));
+			innerHtml.Should().Contain(data.PreferenceInputPeriod.StartDate.ToShortDateString(DataMaker.Data().MyCulture));
+			innerHtml.Should().Contain(data.PreferenceInputPeriod.EndDate.ToShortDateString(DataMaker.Data().MyCulture));
+			innerHtml.Should().Contain(data.PreferencePeriod.StartDate.ToShortDateString(DataMaker.Data().MyCulture));
+			innerHtml.Should().Contain(data.PreferencePeriod.EndDate.ToShortDateString(DataMaker.Data().MyCulture));
 		}
 
 		[Then(@"I should no longer see the 2 standard preferences in the calendar")]
 		public void ThenIShouldNoLongerSeeThe2StandardPreferencesInTheCalendar()
 		{
-			var data1 = UserFactory.User().UserData<StandardPreference>();
-			var data2 = UserFactory.User().UserData<AnotherStandardPreference>();
+			var data1 = DataMaker.Data().UserData<StandardPreference>();
+			var data2 = DataMaker.Data().UserData<AnotherStandardPreference>();
 			var cell1 = _page.CalendarCellForDate(data1.Date);
 			var cell2 = _page.CalendarCellForDate(data2.Date);
 			EventualAssert.That(() => cell1.Text, Is.Not.StringContaining(data1.Preference));
@@ -182,7 +183,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"the preference calendar should be editable")]
 		public void ThenThePreferenceCalendarShouldBeEditable()
 		{
-			var editableDate = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
+			var editableDate = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			_page.SelectCalendarCellForDateByClick(editableDate);
 			_page.CalendarCellForDate(editableDate).ClassName.Should().Contain("ui-selected");
 		}
@@ -211,7 +212,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the contract time boundry (\d+) to (\d+)")]
 		public void ThenIShouldSeeTheContractTimeBoundryTo(string earliest, string latest)
 		{
-			var culture = UserFactory.User().Person.PermissionInformation.Culture();
+			var culture = DataMaker.Data().MePerson.PermissionInformation.Culture();
 			var expected = GetExpectedContractTimesString(earliest, latest, culture);
 
 			EventualAssert.That(() => _page.CalendarCellDataForDate(DateOnlyForBehaviorTests.TestToday, "possible-contract-times").InnerHtml, Is.StringMatching(expected));
@@ -227,7 +228,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the preference feedback")]
 		public void ThenIShouldSeeThePreferenceFeedback()
 		{
-			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
+			var date = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			
 			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-start-times").InnerHtml, Is.Not.Null.Or.Empty);
 			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-end-times").InnerHtml, Is.Not.Null.Or.Empty);
@@ -257,7 +258,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			TimeSpan latestTime;
 			TimeHelper.TryParse(earliest, out earliestTime);
 			TimeHelper.TryParse(latest, out latestTime);
-			var culture = UserFactory.User().Person.PermissionInformation.Culture();
+			var culture = DataMaker.Data().MePerson.PermissionInformation.Culture();
 			var expected = TimeHelper.TimeOfDayFromTimeSpan(earliestTime, culture).ToLower()
 			               + "-" +
 			               TimeHelper.TimeOfDayFromTimeSpan(latestTime, culture).ToLower();

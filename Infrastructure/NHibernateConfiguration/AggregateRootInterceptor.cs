@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		public InterceptorIteration Iteration { get; set; }
 		
-		public ICollection<IRootChangeInfo> ModifiedRoots
+		public IEnumerable<IRootChangeInfo> ModifiedRoots
 		{
 			get { return modifiedRoots; }
 		}
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			int[] retVal = null;
 			if (Iteration == InterceptorIteration.UpdateRoots)
 			{
-				IAggregateRoot root = entity as IAggregateRoot;
+				var root = entity as IAggregateRoot;
 				if (root != null && rootsWithModifiedChildren.Contains(root) && !modifiedRootsContainsRoot(root))
 				{
 					IDictionary<string, int> props = propertyIndexesForUpdate(propertyNames);
@@ -127,6 +127,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		public override bool OnSave(object entity, object id, object[] state, string[] propertyNames, IType[] types)
 		{
+			var ret = false;
 			_entityStateRollbackInterceptor.OnSave(entity, id, state, propertyNames, types);
 
 			var ent = entity as IEntity;
@@ -138,18 +139,25 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 			markRoot(ent);
 
-			ICreateInfo createInfo = entity as ICreateInfo;
-			if (createInfo != null)
+			if (setCreatedProperties(entity, propertyNames, state))
 			{
-				setCreatedProperties(createInfo, propertyNames, state);
-				return true;
+				ret = true;
 			}
-			return false;
+
+			var root = entity as IAggregateRoot;
+			if (root != null) 
+				modifiedRoots.Add(new RootChangeInfo(root, DomainUpdateType.Insert));
+			if (setUpdatedProperties(entity, propertyNames, state))
+			{
+				ret = true;
+			}
+
+			return ret;
 		}
 
 		private static IDictionary<string, int> propertyIndexesForInsert(IEnumerable<string> properties)
 		{
-			List<string> listOfProperties = properties.ToList();
+			var listOfProperties = properties.ToList();
 
 			IDictionary<string, int> result = new Dictionary<string, int>();
 
@@ -179,9 +187,10 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		private void markRoot(IEntity ent)
 		{
-			IAggregateEntity aggEnt = ent as IAggregateEntity;
-			if (aggEnt == null) return;
-			IAggregateRoot root = aggEnt.Root();
+			var aggEnt = ent as IAggregateEntity;
+			if (aggEnt == null) 
+				return;
+			var root = aggEnt.Root();
 			rootsWithModifiedChildren.Add(root);
 		}
 
@@ -195,22 +204,22 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			return false;
 		}
 
-		private void setCreatedProperties(ICreateInfo createInfo, string[] propertyNames, object[] state)
+		private bool setCreatedProperties(object root, IEnumerable<string> propertyNames, IList<object> state)
 		{
-			var nu = DateTime.UtcNow;
-			var props = propertyIndexesForInsert(propertyNames);
-			state[props[createdByPropertyName]] = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
-			state[props[createdOnPropertyName]] = nu;
-
-			setUpdatedProperties(nu, createInfo, propertyNames, state);
-
-			var root = createInfo as IAggregateRoot;
-			if (root != null) modifiedRoots.Add(new RootChangeInfo(root, DomainUpdateType.Insert));
+			if (root is ICreateInfo)
+			{
+				var nu = DateTime.UtcNow;
+				var props = propertyIndexesForInsert(propertyNames);
+				state[props[createdByPropertyName]] = ((IUnsafePerson) TeleoptiPrincipal.Current).Person;
+				state[props[createdOnPropertyName]] = nu;
+				return true;
+			}
+			return false;
 		}
 
 		private void setUpdatedInfo(IAggregateRoot root, object[] currentState, string[] propertyNames)
 		{
-			setUpdatedProperties(DateTime.UtcNow, root, propertyNames, currentState);
+			setUpdatedProperties(root, propertyNames, currentState);
 
 			var deleteInfo = root as IDeleteTag;
 			if (deleteInfo != null && deleteInfo.IsDeleted)
@@ -223,14 +232,17 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			}
 		}
 
-		private static void setUpdatedProperties(DateTime nu, object root, string[] propertyNames, object[] currentState)
+		private static bool setUpdatedProperties(object root, IEnumerable<string> propertyNames, object[] currentState)
 		{
 			if (root is IChangeInfo)
 			{
+				var nu = DateTime.UtcNow;
 				var props = propertyIndexesForUpdate(propertyNames);
 				currentState[props[updatedByPropertyName]] = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
 				currentState[props[updatedOnPropertyName]] = nu;
+				return true;
 			}
+			return false;
 		}
 	}
 }

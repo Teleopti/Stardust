@@ -11,7 +11,6 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using WatiN.Core;
@@ -23,11 +22,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 	[Binding]
 	public class StudentAvailabilityPageStepDefinitions
 	{
+		public static string Cell(DateTime date)
+		{
+			return string.Format("li[data-mytime-date='{0}']", date.ToString("yyyy-MM-dd"));
+		}
+
+		public static void SelectCalendarCellByClass(DateTime date)
+		{
+			Browser.Interactions.AssertExists(Cell(date) + ".ui-selectee");
+			Browser.Interactions.AddClassUsingJQuery("ui-selected", Cell(date) + ".ui-selectee");
+		}
+
 		[Given(@"I have a student availability with")]
 		public void GivenIHaveAStudentAvailabilityWith(Table table)
 		{
 			var fields = table.CreateInstance<StudentAvailabilityFields>();
-			UserFactory.User().Setup(fields);
+			DataMaker.Data().Apply(fields);
 		}
 
 		[When(@"I click the close button")]
@@ -39,15 +49,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I select day '(.*)' in student availability")]
 		public void WhenISelectDayInStudentAvailability(DateTime date)
 		{
-
-			Pages.Pages.StudentAvailabilityPage.SelectCalendarCellByClass(date);
+			SelectCalendarCellByClass(date);
 		}
 
 		[When(@"I select following days in student availability")]
 		public void WhenISelectFollowingDaysInStudentAvailability(Table table)
 		{
 			var dates = table.CreateSet<SingleValue>();
-			dates.ForEach(date => Pages.Pages.StudentAvailabilityPage.SelectCalendarCellByClass(date.Value));
+			dates.ForEach(date => SelectCalendarCellByClass(date.Value));
 		}
 		
 		[When(@"I click the edit button in student availability")]

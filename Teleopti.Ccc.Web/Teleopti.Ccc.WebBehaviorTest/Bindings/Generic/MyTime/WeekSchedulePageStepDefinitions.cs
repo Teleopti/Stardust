@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using TechTalk.SpecFlow;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
@@ -11,15 +10,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click on the day symbol area for date '(.*)'")]
 		public void WhenIClickOnTheDaySymbolAreaForDate(DateTime date)
 		{
-			var formattedDate = date.ToString(CultureInfo.GetCultureInfo("sv-SE").DateTimeFormat.ShortDatePattern);
-			Browser.Interactions.Click(string.Format("ul.weekview-day[data-mytime-date='{0}'] li#day-symbol #add-request-cell", formattedDate));
+			Browser.Interactions.Click(string.Format("ul.weekview-day[data-mytime-date='{0}'] li#day-symbol #add-request-cell", date.ToString("yyyy-MM-dd")));
 		}
 
 		[When(@"I click on the day summary for date '(.*)'")]
 		public void WhenIClickOnTheDaySummaryForDate(DateTime date)
 		{
-			var formattedDate = date.ToString(CultureInfo.GetCultureInfo("sv-SE").DateTimeFormat.ShortDatePattern);
-			Browser.Interactions.Click(string.Format("ul.weekview-day[data-mytime-date='{0}'] li#day-summary", formattedDate));
+			Browser.Interactions.Click(string.Format("ul.weekview-day[data-mytime-date='{0}'] li#day-summary", date.ToString("yyyy-MM-dd")));
+		}
+
+		[When(@"I click overtime availability bar")]
+		public void WhenIClickOvertimeAvailabilityBar()
+		{
+			Browser.Interactions.Click(".overtime-availability-bar");
 		}
 	}
 }

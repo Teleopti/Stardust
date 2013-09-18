@@ -227,7 +227,6 @@
     <Compile Include="Foundation\StateHandlers\StateHolder.cs" />
     <Compile Include="Foundation\StateHandlers\StateHolderReader.cs" />
     <Compile Include="Foundation\StateHandlers\StateManager.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helper\AgentPortalSettingsHelper.cs" />
     <Compile Include="Helper\ApplicationFunctionHelper.cs" />
     <Compile Include="Helper\ColorHelper.cs" />

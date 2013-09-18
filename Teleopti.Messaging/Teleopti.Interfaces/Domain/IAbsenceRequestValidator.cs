@@ -60,7 +60,6 @@ namespace Teleopti.Interfaces.Domain
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly IPersonAccountBalanceCalculator _personAccountBalanceCalculator;
         private readonly IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
-        private readonly IBudgetGroupAllowanceCalculator _budgetGroupAllowanceCalculator;
         private readonly IBudgetGroupHeadCountSpecification _budgetGroupHeadCountSpecification;
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
@@ -71,13 +70,11 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="personAccountBalanceCalculator"></param>
         /// <param name="resourceOptimizationHelper"></param>
         /// <param name="budgetGroupAllowanceSpecification"></param>
-        /// <param name="budgetGroupAllowanceCalculator"></param>
         /// <param name="budgetGroupHeadCountSpecification"></param>
-        public RequiredForHandlingAbsenceRequest(ISchedulingResultStateHolder schedulingResultStateHolder, IPersonAccountBalanceCalculator personAccountBalanceCalculator, IResourceOptimizationHelper resourceOptimizationHelper, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IBudgetGroupAllowanceCalculator budgetGroupAllowanceCalculator, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification = null)
+        public RequiredForHandlingAbsenceRequest(ISchedulingResultStateHolder schedulingResultStateHolder, IPersonAccountBalanceCalculator personAccountBalanceCalculator, IResourceOptimizationHelper resourceOptimizationHelper, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification = null)
         {
             _resourceOptimizationHelper = resourceOptimizationHelper;
             _budgetGroupAllowanceSpecification = budgetGroupAllowanceSpecification;
-            _budgetGroupAllowanceCalculator = budgetGroupAllowanceCalculator;
             _budgetGroupHeadCountSpecification = budgetGroupHeadCountSpecification;
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _personAccountBalanceCalculator = personAccountBalanceCalculator;
@@ -105,14 +102,6 @@ namespace Teleopti.Interfaces.Domain
         public IBudgetGroupAllowanceSpecification BudgetGroupAllowanceSpecification
         {
             get { return _budgetGroupAllowanceSpecification; }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public IBudgetGroupAllowanceCalculator BudgetGroupAllowanceCalculator
-        {
-            get { return _budgetGroupAllowanceCalculator; }
         }
 
         /// <summary>

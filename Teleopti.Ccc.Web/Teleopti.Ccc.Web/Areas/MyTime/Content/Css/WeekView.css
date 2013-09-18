@@ -18,6 +18,13 @@
 .holiday-agents {
 
 }
+.overtime-availability-symbol {
+	cursor: pointer;
+}
+.overtime-availability-bar {
+	cursor: pointer;
+	opacity: 0.6;
+}
 
 .body-weekview-inner ul.today, .body-weekview-inner ul.ui-selected, .calendarview-week li.today, .calendarview-week li.ui-selected{
 	 background-image: url(../Images/view_ul_states_sprite.png);
@@ -28,7 +35,6 @@
 .body-weekview-inner {
 	border: 1px solid #dfdfdf;
 	background: #f8f8f8;
-	font-family: Verdana;
 	white-space: nowrap;
 	font-size: 0;
 	display: none;
@@ -136,10 +142,6 @@
 }
 .weekview-day li.empty{border-top-color: transparent; border-bottom-color: transparent;}
 
-.weekview-day > li > div {}
-
-.rtl .weekview-day > li > div{}
-
 .weekview-day li div.meeting {
 	bottom: 1px;
 	height: 18px;
@@ -169,9 +171,7 @@ select.absence-input
 .week-schedule-layer {
 	width: 131px;
 	border-radius: 2px;
-	border-left: 0px;
-	/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00FFFFFF', endColorstr='#99FFFFFF',GradientType=0 );
-	background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .6) 100%);*/
+	border-left: 0;
 	overflow: hidden;
 	border-top: 1px solid #DFDFDF;
 	border-bottom: 1px solid #DFDFDF;
@@ -204,16 +204,6 @@ select.absence-input
 	height: 100%; 
 	width: 100%;
 }
-
-.category 
-{
-	/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00FFFFFF', endColorstr='#99FFFFFF',GradientType=0 );
-	background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .6) 100%);*/
-}
-
-
-
-
 
 .absence-input-label {
 	min-width: 70px;

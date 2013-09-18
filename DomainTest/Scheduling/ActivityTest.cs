@@ -48,9 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual("TestActivity", _target.Description.Name);
             Assert.AreEqual(0, _target.DisplayColor.ToArgb());
             Assert.AreEqual("test", _target.GroupingActivity.Description.Name);
-            Assert.IsNull(_target.CreatedBy);
             Assert.IsNull(_target.UpdatedBy);
-            Assert.IsNull(_target.CreatedOn);
             Assert.IsNull(_target.UpdatedOn);
             Assert.IsTrue(_target.InContractTime);
         }

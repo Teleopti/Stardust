@@ -1,10 +1,8 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common
 {
-    //rk - cut/paste from aggregateroottest
     [TestFixture]
     public class LocalizedUpdateInfoTest
     {
@@ -17,13 +15,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         }
 
         [Test]
-        public void VerifyCreatedText()
-        {
-            ICreateInfo testRoot = new AggregateRootTest.CreatedAndChangedTest();
-            string created = target.CreatedText(testRoot, "Created by:");
-            Assert.IsTrue(created.Length > 0);
-        }
-        [Test]
         public void VerifyUpdatedText()
         {
             AggregateRootTest.CreatedAndChangedTest testRoot = new AggregateRootTest.CreatedAndChangedTest();
@@ -32,13 +23,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         }
 
         [Test]
-        public void VerifyCreatedTextWhenValuesAreNull()
-        {
-            var rootCreatedTest = new AggregateRootTest.AggRootWithNoBusinessUnit();
-            string created = target.CreatedText(rootCreatedTest, "Created by:");
-            Assert.IsTrue(created.Length == 0);
-        }
-        [Test]
         public void VerifyUpdatedTextWhenValuesAreNull()
         {
             var rootCreatedTest = new AggregateRootTest.AggRootWithNoBusinessUnit();
@@ -46,22 +30,10 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.IsTrue(updated.Length == 0);
         }
         [Test]
-        public void VerifyCanGetCreateTimeTextWhenNull()
-        {
-            var rootCreatedTest = new AggregateRootTest.AggRootWithNoBusinessUnit();
-            Assert.AreEqual(string.Empty, target.CreatedTimeInUserPerspective(rootCreatedTest));
-        }
-        [Test]
         public void VerifyCanGetUpdateTimeTextWhenNull()
         {
             var rootCreatedTest = new AggregateRootTest.AggRootWithNoBusinessUnit();
             Assert.AreEqual(string.Empty, target.UpdatedTimeInUserPerspective(rootCreatedTest));
-        }
-        [Test]
-        public void VerifyCanGetCreateTimeText()
-        {
-            var testRoot = new AggregateRootTest.CreatedAndChangedTest();
-            Assert.IsTrue(!string.IsNullOrEmpty(target.CreatedTimeInUserPerspective(testRoot)));
         }
         [Test]
         public void VerifyCanGetUpdateTimeText()

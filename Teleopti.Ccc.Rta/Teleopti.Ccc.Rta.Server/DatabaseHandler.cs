@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Rta.Server
 		ConcurrentDictionary<Guid, List<RtaAlarmLight>> ActivityAlarms();
 		void AddOrUpdate(IList<IActualAgentState> states);
 		IList<ScheduleLayer> GetReadModel(Guid personId);
-		void AddNewRtaState(string stateCode, Guid platformTypeId);
+		RtaStateGroupLight AddAndGetNewRtaState(string stateCode, Guid platformTypeId);
 		IList<IActualAgentState> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId);
 	}
 
@@ -76,8 +76,8 @@ namespace Teleopti.Ccc.Rta.Server
 			var idString = string.Format(CultureInfo.InvariantCulture, personId.ToString());
 			var query = string.Format(CultureInfo.InvariantCulture,
 			                          @"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
-						FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta
-						WHERE PersonId='{0}'", idString);
+											FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta
+											WHERE PersonId='{0}'", idString);
 			var layers = new List<ScheduleLayer>();
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
 			{
@@ -194,30 +194,45 @@ namespace Teleopti.Ccc.Rta.Server
 			return missingUsers;
 		}
 
-		public void AddNewRtaState(string stateCode, Guid platformTypeId)
+		public RtaStateGroupLight AddAndGetNewRtaState(string stateCode, Guid platformTypeId)
 		{
-			const string getDefaultStateGroupQuery = @"SELECT Id FROM RtaStateGroup WHERE DefaultStateGroup = 1";
-			using (
-				var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString())
-				)
+			var stateId = Guid.NewGuid();
+			var defaultStateGroupId = Guid.Empty;
+			var defaultStateGroupName = "";
+			var defaultStateGroupBusinessUnit = Guid.Empty;
+			const string getDefaultStateGroupQuery = @"SELECT Name, Id, BusinessUnit FROM RtaStateGroup WHERE DefaultStateGroup = 1";
+			
+			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
 				command.CommandText = getDefaultStateGroupQuery;
 				connection.Open();
 				var reader = command.ExecuteReader();
-				var defaultStateGroupId = Guid.Empty;
 				while (reader.Read())
+				{
 					defaultStateGroupId = reader.GetGuid(reader.GetOrdinal("Id"));
+					defaultStateGroupName = reader.GetString(reader.GetOrdinal("Name"));
+					defaultStateGroupBusinessUnit = reader.GetGuid(reader.GetOrdinal("BusinessUnit"));
+				}
 				reader.Close();
-				var addRtaStateQuery = string.Format("INSERT INTO RtaState VALUES ('{0}', '{1}', '{1}', '{2}', '{3}')", Guid.NewGuid(),
+				var addRtaStateQuery = string.Format("INSERT INTO RtaState VALUES ('{0}', '{1}', '{1}', '{2}', '{3}')", stateId,
 				                                     stateCode, platformTypeId, defaultStateGroupId);
 
 				command = connection.CreateCommand();
 				command.CommandText = addRtaStateQuery;
 				command.ExecuteNonQuery();
 			}
-
+			return new RtaStateGroupLight
+				{
+					StateGroupId = defaultStateGroupId,
+					StateGroupName = defaultStateGroupName,
+					BusinessUnitId = defaultStateGroupBusinessUnit,
+					StateName = stateCode,
+					PlatformTypeId = platformTypeId,
+					StateCode = stateCode,
+					StateId = stateId
+				};
 		}
 
 		public ConcurrentDictionary<string, List<RtaStateGroupLight>> StateGroups()
@@ -264,10 +279,16 @@ namespace Teleopti.Ccc.Rta.Server
 								t.DisplayColor,t.StaffingEffect, t.ThresholdTime, sg.IsLogOutState
 								FROM StateGroupActivityAlarm a
 								INNER JOIN AlarmType t ON a.AlarmType = t.Id
-								LEFT JOIN RtaStateGroup sg ON  a.StateGroup = sg.Id
+								LEFT JOIN RtaStateGroup sg ON  a.StateGroup = sg.Id 
 								WHERE t.IsDeleted = 0
 								AND sg.IsDeleted = 0
-								ORDER BY Activity";
+				UNION ALL								
+				SELECT NULL,NULL,Activity ActivityId, t.Name, t.Id AlarmTypeId,
+								t.DisplayColor,t.StaffingEffect, t.ThresholdTime, NULL
+								FROM StateGroupActivityAlarm a
+								INNER JOIN AlarmType t ON a.AlarmType = t.Id 
+								WHERE t.IsDeleted = 0
+								AND a.StateGroup IS NULL";
 			var stateGroups = new List<RtaAlarmLight>();
 			using (
 				var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString())
@@ -291,10 +312,10 @@ namespace Teleopti.Ccc.Rta.Server
 							ActivityId = !reader.IsDBNull(reader.GetOrdinal("ActivityId"))
 								             ? reader.GetGuid(reader.GetOrdinal("ActivityId"))
 								             : Guid.Empty,
+							IsLogOutState = !reader.IsDBNull(reader.GetOrdinal("IsLogOutState")) && reader.GetBoolean(reader.GetOrdinal("IsLogOutState")),
 							DisplayColor = reader.GetInt32(reader.GetOrdinal("DisplayColor")),
 							StaffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect")),
 							AlarmTypeId = reader.GetGuid(reader.GetOrdinal("AlarmTypeId")),
-							IsLogOutState = reader.GetBoolean(reader.GetOrdinal("IsLogOutState")),
 							Name = reader.GetString(reader.GetOrdinal("Name")),
 							ThresholdTime = reader.GetInt64(reader.GetOrdinal("ThresholdTime"))
 						};
@@ -473,30 +494,6 @@ namespace Teleopti.Ccc.Rta.Server
 				}
 			}
 		}
-	}
-
-	public class RtaStateGroupLight
-	{
-		public Guid StateId { get; set; }
-		public string StateName { get; set; }
-		public string StateGroupName { get; set; }
-		public Guid PlatformTypeId { get; set; }
-		public string StateCode { get; set; }
-		public Guid StateGroupId { get; set; }
-		public Guid BusinessUnitId { get; set; }
-	}
-	
-	public class RtaAlarmLight
-	{
-		public Guid StateGroupId { get; set; }
-		public string StateGroupName { get; set; }
-		public Guid ActivityId { get; set; }
-		public string Name { get; set; }
-		public Guid AlarmTypeId { get; set; }
-		public int DisplayColor { get; set; }
-		public double StaffingEffect { get; set; }
-		public long ThresholdTime { get; set; }
-		public bool IsLogOutState { get; set; }
 	}
 
 	public class ScheduleLayer

@@ -106,7 +106,7 @@ end
 item: Execute Program
   Pathname=CMD
   Command Line=/C ""%LOG4NET%SetPermissions.bat" "%ONE%" "%TWO%" "%THREE%" "%FOUR%" "%FIVE%""
-  Flags=00000010
+  Flags=00000110
 end
 item: Else Statement
 end

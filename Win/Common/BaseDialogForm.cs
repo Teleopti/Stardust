@@ -26,18 +26,6 @@ namespace Teleopti.Ccc.Win.Common
         		
         }
 
-		  //[Browsable(false)]
-		  //public override Color BackColor { get { return base.BackColor; } set { base.BackColor = value; } }
-
-		  //[Browsable(false)]
-		  //public new Office2007Theme ColorScheme { get { return base.ColorScheme; } set { base.ColorScheme = value; } }
-
-		  //[Browsable(false)]
-		  //public override Color ForeColor { get { return base.ForeColor; } set { base.ForeColor = value; } }
-
-		  //[Browsable(false)]
-		  //public new bool UseOffice2007SchemeBackColor { get { return base.UseOffice2007SchemeBackColor; } set { base.UseOffice2007SchemeBackColor = value; } }
-
         protected void SetColorScheme(Office2007Theme scheme)
         {
             Office2007Colors.ApplyManagedScheme(this, scheme);
@@ -53,9 +41,9 @@ namespace Teleopti.Ccc.Win.Common
             if (e.KeyCode == Keys.F1)
             {
                 if (e.KeyCode == Keys.F1 && e.Modifiers == Keys.Shift)
-                    ShowHelp(false);//Online
+                    ShowHelp(true);//Offline
                 else
-                    ShowHelp(true);
+                    ShowHelp(false);
             }
             base.OnKeyDown(e);
         }

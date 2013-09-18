@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -329,24 +328,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
 			[Test]
-				public override void VerifyIncorrectBusinessUnitIsNotReadable()
-				{
-					var correct = CreateAggregateWithCorrectBusinessUnit();
-					PersistAndRemoveFromUnitOfWork(correct);
-
-						MockRepository newMock = new MockRepository();
-						IState newStateMock = newMock.StrictMock<IState>();
-						BusinessUnit buTemp = new BusinessUnit("dummy");
-						PersistAndRemoveFromUnitOfWork(buTemp);
-						StateHolderProxyHelper.ClearAndSetStateHolder(newMock, LoggedOnPerson, buTemp, SetupFixtureForAssembly.ApplicationData, newStateMock);
-						var inCorrect = new PersonAssignment(correct.Person, correct.Scenario, new DateOnly(1900,1,1));
-						PersistAndRemoveFromUnitOfWork(inCorrect);
-
-						var retList = _rep.LoadAll();
-						Assert.IsTrue(retList.All(r => r.BusinessUnit.Equals(r.BusinessUnit)));
-				}
-
-			[Test]
 			public void ShouldPersistDayoff()
 			{
 				var template = new DayOffTemplate(new Description("hej"));
@@ -355,6 +336,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				ass.SetDayOff(template);
 				PersistAndRemoveFromUnitOfWork(ass);
 				_rep.Get(ass.Id.Value).DayOff().Description.Should().Be.EqualTo(new Description("hej"));
+			}
+
+			[Test]
+			public void ShouldNotFetchIfScenarioIsNotLoggedOnBusinessUnit()
+			{
+				var bu = new BusinessUnit("wrong bu");
+				PersistAndRemoveFromUnitOfWork(bu);
+				var scenarioWrongBu = new Scenario("wrong");
+				scenarioWrongBu.HackToSetBusinessUnit(bu);
+				PersistAndRemoveFromUnitOfWork(scenarioWrongBu);
+				var ass = new PersonAssignment(_dummyAgent, scenarioWrongBu, new DateOnly(2000, 1, 1));
+				PersistAndRemoveFromUnitOfWork(ass);
+
+				_rep.Find(new DateOnlyPeriod(1900, 1, 1, 2100, 1, 1), scenarioWrongBu).Should().Be.Empty();
+				_rep.Find(new[] {_dummyAgent}, new DateOnlyPeriod(1900, 1, 1, 2100, 1, 1), scenarioWrongBu).Should().Be.Empty();
 			}
 
         protected override Repository<IPersonAssignment> TestRepository(IUnitOfWork unitOfWork)

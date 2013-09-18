@@ -23,10 +23,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string WorkflowControlSet { get; set; }
 
 		public PersonPeriodConfigurable() {
-			Contract = GlobalDataContext.Data().Data<CommonContract>().Contract.Description.Name;
-			PartTimePercentage = GlobalDataContext.Data().Data<CommonPartTimePercentage>().PartTimePercentage.Description.Name;
-			ContractSchedule = GlobalDataContext.Data().Data<CommonContractSchedule>().ContractSchedule.Description.Name;
-			Team = GlobalDataContext.Data().Data<CommonTeam>().Team.Description.Name;
+			Contract = GlobalDataMaker.Data().Data<CommonContract>().Contract.Description.Name;
+			PartTimePercentage = GlobalDataMaker.Data().Data<CommonPartTimePercentage>().PartTimePercentage.Description.Name;
+			ContractSchedule = GlobalDataMaker.Data().Data<CommonContractSchedule>().ContractSchedule.Description.Name;
+			Team = GlobalDataMaker.Data().Data<CommonTeam>().Team.Description.Name;
 		}
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)

@@ -49,13 +49,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             target.SetDeleted();
             Assert.IsTrue(target.IsDeleted);
         }
-        [Test]
-        public void VerifyLocalizedStringIsNotNull()
-        {
-            _targetAggregateRootWithBusinessUnit = new AggRootWithBusinessUnit();
-            Assert.IsNotNull(_targetAggregateRootWithBusinessUnit.CreatedTimeInUserPerspective);
-            Assert.IsNotNull(_targetAggregateRootWithBusinessUnit.UpdatedTimeInUserPerspective);
-        }
 
         [Test]
         public void VerifySetVersion()
@@ -70,31 +63,15 @@ namespace Teleopti.Ccc.DomainTest.Common
 		 {
 			 var target = new AggRootWithBusinessUnit();
 		 	var aggRootType = typeof (AggregateRoot);
-			 aggRootType.GetField("_createdOn", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(target, DateTime.Now);
 			 aggRootType.GetField("_updatedOn", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(target, DateTime.Now);
-			 aggRootType.GetField("_createdBy", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(target, new Person());
 			 aggRootType.GetField("_updatedBy", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(target, new Person());
 		 	((IEntity)target).SetId(Guid.NewGuid());
 
 		 	target.ClearId();
 
 		 	target.Id.HasValue.Should().Be.False();
-			target.CreatedBy.Should().Be.Null();
-			target.CreatedOn.HasValue.Should().Be.False();
 			target.UpdatedBy.Should().Be.Null();
 			target.UpdatedOn.HasValue.Should().Be.False();
-		 }
-
-		 [Test]
-		 public void SetIdNullShouldBehaveLikeClear()
-		 {
-			 var target = new AggRootWithBusinessUnit();
-			 var aggRootType = typeof(AggregateRoot);
-			 aggRootType.GetField("_createdOn", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(target, DateTime.Now);
-
-			 ((IEntity)target).SetId(null);
-
-			 target.CreatedOn.HasValue.Should().Be.False();
 		 }
 
         internal class AggRootWithNoBusinessUnit : AggregateRoot, IDeleteTag
@@ -131,22 +108,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         {
             private bool _isDeleted;
 
-            public override IPerson CreatedBy
-            {
-                get
-                {
-                    IPerson person = new Person();
-                    person.Name = new Name("Alexander"," Bard");
-                    return person;
-                }
-            }
-            public override DateTime? CreatedOn
-            {
-                get
-                {
-                    return DateTime.Now;
-                }
-            }
             public override IPerson UpdatedBy
             {
                 get

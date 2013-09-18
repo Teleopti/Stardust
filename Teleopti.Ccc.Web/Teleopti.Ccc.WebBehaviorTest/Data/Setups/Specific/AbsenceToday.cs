@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 		public string Date { get; set; }
 		public IAbsence Absence = TestData.Absence;
-		public IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
+		public IScenario Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
 		public string AbsenceColor { get; set; }
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)

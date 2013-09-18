@@ -12,10 +12,11 @@ namespace Teleopti.Interfaces.Domain
     /// Created date: 2008-10-10
     /// </remarks>
     public interface IPersonRequest : ICloneableEntity<IPersonRequest>, 
-                                        IAggregateRoot,
+                                        IAggregateRootBrokerConditions,
                                         IOriginator<IPersonRequest>,
                                         IChangeInfo,
-                                        INotifyPropertyChanged
+                                        INotifyPropertyChanged,
+																				ICreateInfo
     {
         /// <summary>
         /// Gets the date.
@@ -108,6 +109,12 @@ namespace Teleopti.Interfaces.Domain
         /// </value>
         bool IsApproved { get; }
 
+		/// <summary>
+		/// Get a value indicating whether this instance is auto approved by service bus.
+		/// </summary>
+		/// <value><c>true</c> if this instance is auto approved; otherwise, <c>false</c>.</value>
+		bool IsAutoAproved { get; }
+
         /// <summary>
         /// Gets the status text.
         /// </summary>
@@ -125,7 +132,7 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="approvalService">The approval service.</param>
         /// <param name="authorization"></param>
-        IList<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService, IPersonRequestCheckAuthorization authorization);
+        IList<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService, IPersonRequestCheckAuthorization authorization, bool isAutoGrant = false);
 
         /// <summary>
         /// Denies this instance.

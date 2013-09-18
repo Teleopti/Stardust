@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -10,7 +9,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration.MasterActivity
     public class MasterActivityModel : IMasterActivityModel
     {
         private readonly IMasterActivity _masterActivityEntity;
-        private ILocalizedUpdateInfo _localizer;
+        private readonly ILocalizedUpdateInfo _localizer;
 
         public MasterActivityModel(IMasterActivity masterActivityEntity, ILocalizedUpdateInfo localizer)
         {
@@ -42,9 +41,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration.MasterActivity
         {
             get
             {
-                string changed = _localizer.UpdatedByText(_masterActivityEntity, UserTexts.Resources.UpdatedByColon);
-                string created = _localizer.CreatedText(_masterActivityEntity, UserTexts.Resources.CreatedByColon);
-                return string.Concat(created, changed);
+                return _localizer.UpdatedByText(_masterActivityEntity, UserTexts.Resources.UpdatedByColon);
             }
         }
 

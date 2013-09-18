@@ -65,8 +65,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             autoLabelInfoAboutChanges.ForeColor = ColorHelper.ChangeInfoTextColor();
             autoLabelInfoAboutChanges.Font = ColorHelper.ChangeInfoTextFontStyleItalic(autoLabelInfoAboutChanges.Font);
             string changed = _localizer.UpdatedByText(SelectedContract, Resources.UpdatedByColon);
-            string created = _localizer.CreatedText(SelectedContract, Resources.CreatedByColon);
-            autoLabelInfoAboutChanges.Text = string.Concat(created, changed);
+            autoLabelInfoAboutChanges.Text = changed;
         }
         
         public void Unload()

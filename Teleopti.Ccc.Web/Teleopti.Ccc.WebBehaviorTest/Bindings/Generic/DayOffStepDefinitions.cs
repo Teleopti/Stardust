@@ -12,20 +12,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsAnActivity(Table table)
 		{
 			var dayOff = table.CreateInstance<DayOffTemplateConfigurable>();
-			UserFactory.User().Setup(dayOff);
+			DataMaker.Data().Apply(dayOff);
 		}
 
 		[Given(@"there is a dayoff named '(.*)'")]
 		public void GivenThereIsADayOffNamed(string name)
 		{
-			UserFactory.User().Setup(new DayOffTemplateConfigurable() {Name = name});
+			DataMaker.Data().Apply(new DayOffTemplateConfigurable() {Name = name});
 		}
 
 		[Given(@"'(.*)' have a day off with")]
 		public void GivenHaveADayOffWith(string username, Table table)
 		{
 			var personDayOff = table.CreateInstance<PersonDayOffConfigurable>();
-			UserFactory.User(username).Setup(personDayOff);
+			DataMaker.Person(username).Apply(personDayOff);
 		}
 	}
 }

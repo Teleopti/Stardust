@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenIHaveAPreferenceWith(Table table)
 		{
 			var preference = table.CreateInstance<PreferenceConfigurable>();
-			UserFactory.User().Setup(preference);
+			DataMaker.Data().Apply(preference);
 		}
 
 		[Given(@"I have an extended preference with")]
@@ -21,13 +21,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var preference = table.CreateInstance<PreferenceConfigurable>();
 			preference.IsExtended = true;
-			UserFactory.User().Setup(preference);
+			DataMaker.Data().Apply(preference);
 		}
 
 		[Given(@"I have an extended preference on '(.*)'")]
 		public void GivenIHaveAnExtendedPreferenceOn(DateTime date)
 		{
-			UserFactory.User().Setup(new PreferenceConfigurable { Date = date, IsExtended = true });
+			DataMaker.Data().Apply(new PreferenceConfigurable { Date = date, IsExtended = true });
 		}
 
 	}

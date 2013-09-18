@@ -236,6 +236,12 @@
     <Compile Include="Areas\Anywhere\Core\ITeamScheduleProvider.cs" />
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecification.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamScheduleProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IOvertimeAvailabilityPersister.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Models\WeekSchedule\OvertimeAvailabilityInput.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\OvertimeAvailabilityPersister.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkGenerator.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\ICalendarLinkGenerator.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactory.cs" />
@@ -503,7 +509,6 @@
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAspect.cs" />
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAttribute.cs" />
     <Compile Include="Filters\HttpRequestBaseExtensions.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Models\Shared\Link.cs" />
     <Compile Include="Areas\Start\Controllers\MenuController.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtension.cs" />
@@ -693,6 +698,7 @@
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.RequestViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.SelectionViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js" />
@@ -834,7 +840,6 @@
     <Content Include="Areas\MyTime\Views\TeamSchedule\NoTeamsPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\TeamSchedule\NoPersonPeriodPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Preference\NoPersonPeriodPartial.cshtml" />
-    <Content Include="Areas\MyTime\Views\Schedule\WeekRequestPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Asm\Index.cshtml" />
     <Content Include="Areas\MyTime\Views\Message\MessagePartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\NewShiftTradeRequest.cshtml" />
@@ -1046,6 +1051,7 @@
     <Content Include="Areas\MyTime\Views\Preference\AddPreferencesPartial.cshtml" />
     <Content Include="Content\jquery\jquery-1.10.2.min.map" />
     <Content Include="Areas\MyTime\Views\Availability\AddStudentAvailabilityPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\Schedule\AddOvertimeAvailabilityPartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -168,8 +168,14 @@ function Test-InstallationSQLLogin {
                 {
                     $spFile="$here\RestoreToBaseline.sql"
                     $spContent = [IO.File]::ReadAllText($spFile)
-                    restoreToBaseline -computerName $computerName -spContent $spContent}
+                    restoreToBaseline -computerName $computerName -spContent $spContent
+                    #add Lic
+                    Add-CccLicenseToDemo
+                }
         }
+
+        
+        
 
 		It "should install correct MSI from Hebe"{
 			
@@ -183,14 +189,18 @@ function Test-InstallationSQLLogin {
 			Install-TeleoptiCCCServer -BatchFile "$BatchFile" -ArgArray $ArgArray
 			
 		}
+        It "should add license if not restore to Baseline"{
+            if($global:resetToBaseline -eq "False")
+            {
+                #add Lic
+                Add-CccLicenseToDemo
+            }
+        }
 	}
 }
 
 function Test-SitesAndServicesOk {
 	Describe "Run common test on services and web site config"{
-
-        #add Lic
-        Add-CccLicenseToDemo
 
         #start system
 		It "should start SDK" {
@@ -237,10 +247,12 @@ function Add-CccLicenseToDemo
 {
     if($global:Server -ne '')
     {
-        $LicFile="$here\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
-        $xmlString = [IO.File]::ReadAllText($LicFile)
-        insert-License -Server "$global:Server" -Db "$global:Db" -xmlString $xmlString
-    
+        It "should insert a new license" {
+            $LicFile="$here\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
+            $xmlString = [IO.File]::ReadAllText($LicFile)
+            $RowsInserted = insert-License -Server "$global:Server" -Db "$global:Db" -xmlString $xmlString
+            $RowsInserted | Should Be 1
+        }
     }
     else
     {

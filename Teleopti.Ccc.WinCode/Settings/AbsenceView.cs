@@ -67,10 +67,10 @@ namespace Teleopti.Ccc.WinCode.Settings
         {
             get { return _localizer.UpdatedTimeInUserPerspective(ContainedEntity); }
         }
-        public string CreatedTimeInUserPerspective
-        {
-            get { return _localizer.CreatedTimeInUserPerspective(ContainedEntity); }
-        }
+				//public string CreatedTimeInUserPerspective
+				//{
+				//		get { return _localizer.CreatedTimeInUserPerspective(ContainedEntity); }
+				//}
 
         /// <summary>
         /// Gets or sets a value indicating whether [in contract time].
@@ -221,26 +221,7 @@ namespace Teleopti.Ccc.WinCode.Settings
             }
         }
 
-        public string CreatedBy
-        {
-            get
-            {
-                if (ContainedEntity.CreatedBy != null)
-                    return ContainedEntity.CreatedBy.Name.ToString();
-                return string.Empty;
-            }
-        }
-        public string CreatedOn
-        {
-            get
-            {
-                if (ContainedEntity.CreatedOn.HasValue)
-                    return ContainedEntity.CreatedOn.Value.ToString(CultureInfo.CurrentCulture);
-                return string.Empty;
-            }
-        }
-
-        /// <summary>
+		/// <summary>
         /// Gets or sets a value indicating whether the tracker of this absence is disabled.
         /// </summary>
         /// <value>

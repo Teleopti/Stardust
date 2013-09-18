@@ -261,7 +261,6 @@
     <Compile Include="ScheduleForecastSkillTransformer.cs" />
     <Compile Include="ForecastWorkloadTransformer.cs" />
     <Compile Include="GeneralFunctions.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Interval.cs" />
     <Compile Include="IntervalFactory.cs" />
     <Compile Include="IntervalTransformer.cs" />

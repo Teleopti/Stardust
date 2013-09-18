@@ -254,7 +254,7 @@
     <comment>Agents</comment>
   </data>
   <data name="AgentSettings" xml:space="preserve">
-    <value>Agent settings</value>
+    <value>Agent Settings</value>
     <comment>Agent settings</comment>
   </data>
   <data name="All" xml:space="preserve">
@@ -406,7 +406,7 @@
     <comment>Category</comment>
   </data>
   <data name="ManageContracts" xml:space="preserve">
-    <value>Manage contracts</value>
+    <value>Manage Contracts</value>
     <comment>Manage contract settings</comment>
   </data>
   <data name="ChangeYourCultureSettings" xml:space="preserve">
@@ -414,7 +414,7 @@
     <comment>Computer default culture settings</comment>
   </data>
   <data name="ManagePartTimePercentages" xml:space="preserve">
-    <value>Manage part-time percentages</value>
+    <value>Manage Part-Time Percentages</value>
     <comment>Manage part-time percentages</comment>
   </data>
   <data name="ChangeYourPassword" xml:space="preserve">
@@ -502,8 +502,8 @@
     <comment>Contract schedule time</comment>
   </data>
   <data name="Contractschedules" xml:space="preserve">
-    <value>Contract schedules</value>
-    <comment>Contract schedules</comment>
+    <value>Contract Schedules</value>
+    <comment>Contract Schedules</comment>
   </data>
   <data name="ContractTargetTime" xml:space="preserve">
     <value>Contract target time</value>
@@ -623,7 +623,7 @@ Date</value>
     <comment>Days</comment>
   </data>
   <data name="DaysOff" xml:space="preserve">
-    <value>Days off</value>
+    <value>Days Off</value>
     <comment>Days off</comment>
   </data>
   <data name="DayView" xml:space="preserve">
@@ -639,7 +639,7 @@ Date</value>
     <comment>Interval length</comment>
   </data>
   <data name="ManageScorecards" xml:space="preserve">
-    <value>Manage scorecards</value>
+    <value>Manage Scorecards</value>
     <comment>Manage scorecards</comment>
   </data>
   <data name="Delete" xml:space="preserve">
@@ -1110,7 +1110,7 @@ Date</value>
     <comment>Main screen</comment>
   </data>
   <data name="ManageAbsence" xml:space="preserve">
-    <value>Manage absence</value>
+    <value>Manage Absence</value>
     <comment>Manage absence</comment>
   </data>
   <data name="ManageDayDistributionsThreeDots" xml:space="preserve">
@@ -1399,7 +1399,7 @@ Percentage</value>
     <comment>Part time percentage ribbon item</comment>
   </data>
   <data name="PartTimepercentages" xml:space="preserve">
-    <value>Part-time percentages</value>
+    <value>Part-Time Percentages</value>
     <comment>Part time percentages</comment>
   </data>
   <data name="Password" xml:space="preserve">
@@ -1767,7 +1767,7 @@ Periods</comment>
     <comment>Set culture</comment>
   </data>
   <data name="SetKPITargets" xml:space="preserve">
-    <value>Set KPI targets</value>
+    <value>Set KPI Targets</value>
     <comment>Set KPI targets</comment>
   </data>
   <data name="SetPassword" xml:space="preserve">
@@ -2147,7 +2147,7 @@ Periods</comment>
     <comment>Update</comment>
   </data>
   <data name="UpdatedBy" xml:space="preserve">
-    <value>Updated by</value>
+    <value>Updated By</value>
     <comment>Updated by</comment>
   </data>
   <data name="UpdateGrid" xml:space="preserve">
@@ -2359,8 +2359,8 @@ Periods</comment>
     <comment>Grouping activity</comment>
   </data>
   <data name="IsContractTime" xml:space="preserve">
-    <value>Is contract time</value>
-    <comment>Is contract time</comment>
+    <value>Is Contract Time</value>
+    <comment>Is Contract Time</comment>
   </data>
   <data name="Message" xml:space="preserve">
     <value>Message</value>
@@ -2411,8 +2411,8 @@ Periods</comment>
     <comment>Roles available</comment>
   </data>
   <data name="ShortName" xml:space="preserve">
-    <value>Short name</value>
-    <comment>Short name</comment>
+    <value>Short Name</value>
+    <comment>Short Name</comment>
   </data>
   <data name="UnableToConnectRemoteService" xml:space="preserve">
     <value>Unable to connect the the remote service</value>
@@ -2423,7 +2423,7 @@ Periods</comment>
     <comment>Use average on deviating days</comment>
   </data>
   <data name="RuleSetBag" xml:space="preserve">
-    <value>Shift bag</value>
+    <value>Shift Bag</value>
     <comment>Rule Set Bag</comment>
   </data>
   <data name="AbsenceRequest" xml:space="preserve">
@@ -2539,7 +2539,7 @@ Periods</comment>
     <comment>Audit Trail</comment>
   </data>
   <data name="ManageScenarios" xml:space="preserve">
-    <value>Manage scenarios</value>
+    <value>Manage Scenarios</value>
     <comment>Manage your scenarios</comment>
   </data>
   <data name="DefaultScenario" xml:space="preserve">
@@ -2699,7 +2699,7 @@ Periods</comment>
     <comment>Add new group page</comment>
   </data>
   <data name="ManageGroupings" xml:space="preserve">
-    <value>Manage groupings</value>
+    <value>Manage Groupings</value>
     <comment>Manage groupings</comment>
   </data>
   <data name="DoNotGroup" xml:space="preserve">
@@ -2751,8 +2751,8 @@ Periods</comment>
     <comment>Group Page Settings Screen</comment>
   </data>
   <data name="OptionalColumn" xml:space="preserve">
-    <value>Optional column</value>
-    <comment>Optional column</comment>
+    <value>Optional Column</value>
+    <comment>Optional Column</comment>
   </data>
   <data name="PreviewOrEditGroupPage" xml:space="preserve">
     <value>Preview grouping</value>
@@ -2888,7 +2888,7 @@ Exclude</value>
     <comment>Weekly Rest Time</comment>
   </data>
   <data name="ManageContractSchedules" xml:space="preserve">
-    <value>Manage contract schedules</value>
+    <value>Manage Contract Schedules</value>
     <comment>Manage Contract Schedules</comment>
   </data>
   <data name="ChooseContractScheduleToChange" xml:space="preserve">
@@ -2938,10 +2938,6 @@ Exclude</value>
   <data name="DefaultScenarioColon" xml:space="preserve">
     <value>Default scenario:</value>
     <comment>Default Scenario Colon</comment>
-  </data>
-  <data name="EnterSettingsForScenario" xml:space="preserve">
-    <value>Enter Settings For Scenario</value>
-    <comment>Enter Settings For Scenario</comment>
   </data>
   <data name="CancelLoading" xml:space="preserve">
     <value>Cancel loading</value>
@@ -3016,11 +3012,11 @@ Exclude</value>
     <comment>Enter property values for grouping activities</comment>
   </data>
   <data name="ManageActivities" xml:space="preserve">
-    <value>Manage activities</value>
+    <value>Manage Activities</value>
     <comment>ManageActivities</comment>
   </data>
   <data name="CommonAgentDescription" xml:space="preserve">
-    <value>Common agent description</value>
+    <value>Common Agent Description</value>
     <comment>CommonAgentDescription</comment>
   </data>
   <data name="Main" xml:space="preserve">
@@ -3386,7 +3382,7 @@ Replace</value>
     <comment>There are two overlapping shifts</comment>
   </data>
   <data name="ChooseOptionalColumnToChange" xml:space="preserve">
-    <value>Choose Optional Column To Change</value>
+    <value>Choose optional column to change</value>
     <comment>Choose Optional Column To Change</comment>
   </data>
   <data name="OptionalColumns" xml:space="preserve">
@@ -3750,7 +3746,7 @@ Columns</value>
     <comment>Funtion name Teleopti CCC</comment>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
-    <value>Part-time percentage</value>
+    <value>Part-Time Percentage</value>
     <comment>Grid header</comment>
   </data>
   <data name="Optional" xml:space="preserve">
@@ -3782,8 +3778,8 @@ Columns</value>
     <comment>Logging on...</comment>
   </data>
   <data name="LoginNameColon" xml:space="preserve">
-    <value>Log on name:</value>
-    <comment>Log on name:</comment>
+    <value>Logon name:</value>
+    <comment>Logon name:</comment>
   </data>
   <data name="PasswordColon" xml:space="preserve">
     <value>Password:</value>
@@ -3798,8 +3794,8 @@ Columns</value>
     <comment>Please choose a datasource</comment>
   </data>
   <data name="PleaseEnterYourLogonCredentials" xml:space="preserve">
-    <value>Please enter your log on credentials</value>
-    <comment>Please enter your log on credentials</comment>
+    <value>Please enter your logon credentials</value>
+    <comment>Please enter your logon credentials</comment>
   </data>
   <data name="SearchingForDataSourcesTreeDots" xml:space="preserve">
     <value>Searching for data sources...</value>
@@ -4339,7 +4335,7 @@ Accounts</value>
     <comment>No chart data rows enabled</comment>
   </data>
   <data name="EnterPublishingDates" xml:space="preserve">
-    <value>Enter Publishing Dates for each Team</value>
+    <value>Enter publishing dates for each team</value>
     <comment>Enter Publishing Dates for each Team</comment>
   </data>
   <data name="FilterTeams" xml:space="preserve">
@@ -4387,7 +4383,7 @@ Accounts</value>
     <comment>The caption of the error message when invalid time entered!</comment>
   </data>
   <data name="UseForRequests" xml:space="preserve">
-    <value>Use for requests</value>
+    <value>Use for Requests</value>
     <comment>Header in absence options</comment>
   </data>
   <data name="DefaultRuleSetBagName" xml:space="preserve">
@@ -4450,10 +4446,6 @@ Rule set</value>
   <data name="GroupStates" xml:space="preserve">
     <value>Group states</value>
     <comment>Group states</comment>
-  </data>
-  <data name="ManageStateGroupsAndStates" xml:space="preserve">
-    <value>Manage state groups and states</value>
-    <comment>Manage state groups and states</comment>
   </data>
   <data name="NewStateGroup" xml:space="preserve">
     <value>New state group</value>
@@ -5268,7 +5260,7 @@ Availability</value>
     <comment>Caption of the "Anchor" field of the Day off setting page</comment>
   </data>
   <data name="ChooseDaysOffToChange" xml:space="preserve">
-    <value>Choose Day Off To Change</value>
+    <value>Choose day off to change</value>
     <comment>"Choos day off to change" title in day off setting page</comment>
   </data>
   <data name="DaysOffColon" xml:space="preserve">
@@ -5276,7 +5268,7 @@ Availability</value>
     <comment>Caption of the "Day Off" field of the Day off setting page</comment>
   </data>
   <data name="EnterSettingsForDaysOff" xml:space="preserve">
-    <value>Enter Settings For Day Off</value>
+    <value>Enter settings for day off</value>
     <comment>"Enter Settings For Days Off" title in the day off setting page</comment>
   </data>
   <data name="FlexibilityColon" xml:space="preserve">
@@ -5555,7 +5547,7 @@ Availability</value>
     <comment>settings : part time percentatge</comment>
   </data>
   <data name="ManageAlarmSituations" xml:space="preserve">
-    <value>Manage alarm situations</value>
+    <value>Manage Alarm Situations</value>
     <comment>used in tree in options dialog</comment>
   </data>
   <data name="CannotChangeSystemAlarmType" xml:space="preserve">
@@ -5575,11 +5567,11 @@ Availability</value>
     <comment>Canceling load and closing application...</comment>
   </data>
   <data name="IsPaidTime" xml:space="preserve">
-    <value>Is paid time</value>
+    <value>Is Paid time</value>
     <comment>Options gui</comment>
   </data>
   <data name="IsWorkTime" xml:space="preserve">
-    <value>Is work time</value>
+    <value>Is Work time</value>
     <comment>Options gui</comment>
   </data>
   <data name="ErrorMessageFromToTimeIsInvalidParameter" xml:space="preserve">
@@ -5854,11 +5846,11 @@ These options are activated:
     <comment>EnterValuesForTheDifferentCombinations</comment>
   </data>
   <data name="JusticeValues" xml:space="preserve">
-    <value>Fairness values</value>
-    <comment>Fairness values</comment>
+    <value>Fairness Values</value>
+    <comment>Fairness Values</comment>
   </data>
   <data name="ManageJusticeValues" xml:space="preserve">
-    <value>Manage fairness values</value>
+    <value>Manage Fairness Values</value>
     <comment>ManageFairnessValues</comment>
   </data>
   <data name="PreferenceStartDate" xml:space="preserve">
@@ -6403,7 +6395,7 @@ Meeting</value>
     <comment>recurrent meetings</comment>
   </data>
   <data name="EnterPropertyValuesForMultiplicators" xml:space="preserve">
-    <value>Enter Property Values For Multiplicators</value>
+    <value>Enter property values For multiplicators</value>
     <comment>Isntructions to add Multiplicators</comment>
   </data>
   <data name="ExportCode" xml:space="preserve">
@@ -6646,7 +6638,7 @@ Meeting</value>
     <comment>"Add Meeting" action in schedule navigation panel</comment>
   </data>
   <data name="MultiplicatorDefinitionSets" xml:space="preserve">
-    <value>Multiplicator definition sets</value>
+    <value>Multiplicator Definition Sets</value>
     <comment>multiplocators</comment>
   </data>
   <data name="EmploymentType" xml:space="preserve">
@@ -6698,7 +6690,7 @@ Meeting</value>
     <comment>multiplicator</comment>
   </data>
   <data name="ManageDefinitionSets" xml:space="preserve">
-    <value>Manage definition sets</value>
+    <value>Manage Definition Sets</value>
     <comment>multiplicator</comment>
   </data>
   <data name="DefinitionSetNameColon" xml:space="preserve">
@@ -6722,7 +6714,7 @@ Meeting</value>
     <comment>multiplicator</comment>
   </data>
   <data name="ConnectedDefinitionSets" xml:space="preserve">
-    <value>Connected definition sets:</value>
+    <value>Connected Definition Sets:</value>
     <comment>Contract</comment>
   </data>
   <data name="ShowLessPanels" xml:space="preserve">
@@ -6790,15 +6782,15 @@ Meeting</value>
     <comment>No tracker - default description of new instance of a default tracker.</comment>
   </data>
   <data name="CreatedBy" xml:space="preserve">
-    <value>Created by</value>
+    <value>Created By</value>
     <comment>Rotation/availability</comment>
   </data>
   <data name="CreatedOn" xml:space="preserve">
-    <value>Created on</value>
+    <value>Created On</value>
     <comment>Rotation/availability</comment>
   </data>
   <data name="UpdatedOn" xml:space="preserve">
-    <value>Updated on</value>
+    <value>Updated On</value>
     <comment>Rotation/availability</comment>
   </data>
   <data name="CreateInfo" xml:space="preserve">
@@ -6912,7 +6904,7 @@ Updated on: {1}</value>
     <comment>PersonSelection</comment>
   </data>
   <data name="ChangeInfoColon" xml:space="preserve">
-    <value>Change info:</value>
+    <value>Change Info:</value>
     <comment>Rotations</comment>
   </data>
   <data name="CreatedByColon" xml:space="preserve">
@@ -7942,11 +7934,11 @@ Period</value>
     <comment>Show last number of days</comment>
   </data>
   <data name="TargetToleranceMinus" xml:space="preserve">
-    <value>Target tolerance -</value>
+    <value>Target Tolerance -</value>
     <comment>Target tolerance -</comment>
   </data>
   <data name="TargetTolerancePlus" xml:space="preserve">
-    <value>Target tolerance +</value>
+    <value>Target Tolerance +</value>
     <comment>Target tolerance +</comment>
   </data>
   <data name="OtherUser" xml:space="preserve">
@@ -8459,8 +8451,8 @@ Schedule</value>
     <comment>Check staffing</comment>
   </data>
   <data name="ChooseWorkflowControlSetToEdit" xml:space="preserve">
-    <value>Choose Workflow Control Set to edit</value>
-    <comment>Choose Workflow Control Set to edit</comment>
+    <value>Choose workflow control set to edit</value>
+    <comment>Choose workflow control set to edit</comment>
   </data>
   <data name="ManageWorkflowControlSets" xml:space="preserve">
     <value>Manage Workflow Control Sets</value>
@@ -8589,7 +8581,7 @@ Period: {3}</value>
     <comment>Online reports application function</comment>
   </data>
   <data name="ScheduledTimePerActivityReport" xml:space="preserve">
-    <value>Scheduled time per activity</value>
+    <value>Scheduled Time Per Activity</value>
     <comment>Scheduled time per activity report application function</comment>
   </data>
   <data name="ScheduledTimePerActivity" xml:space="preserve">
@@ -8771,7 +8763,7 @@ Period: {3}</value>
     <comment>Remove Note</comment>
   </data>
   <data name="ManageDefinitionSet" xml:space="preserve">
-    <value>Manage definition set</value>
+    <value>Manage Definition Set</value>
     <comment>Manage definition set</comment>
   </data>
   <data name="ScheduleVerb" xml:space="preserve">
@@ -8839,8 +8831,8 @@ Period: {3}</value>
     <comment>Select scorecard to use for teams</comment>
   </data>
   <data name="SetScorecard" xml:space="preserve">
-    <value>Set scorecard</value>
-    <comment>Set scorecard</comment>
+    <value>Set Scorecard</value>
+    <comment>Set Scorecard</comment>
   </data>
   <data name="SetScorecards" xml:space="preserve">
     <value>Set scorecards</value>
@@ -9011,7 +9003,7 @@ Longterm</value>
     <comment>Not selected Activities</comment>
   </data>
   <data name="SelectActivitiesIncludedInMaster" xml:space="preserve">
-    <value>Select which activities the Master Activity can become</value>
+    <value>Select which activities the master activity can become</value>
     <comment>Select which activities the Master Activity can become</comment>
   </data>
   <data name="SelectedActivities" xml:space="preserve">
@@ -9019,8 +9011,8 @@ Longterm</value>
     <comment>Selected Activities</comment>
   </data>
   <data name="SelectMasterActivitetToManage" xml:space="preserve">
-    <value>Select Master Activity to change</value>
-    <comment>Select Master Activity to change</comment>
+    <value>Select master activity to change</value>
+    <comment>Select master activity to change</comment>
   </data>
   <data name="NewMasterActivity" xml:space="preserve">
     <value>New Master</value>
@@ -9355,8 +9347,8 @@ exclusion</value>
     <value>Periods</value>
   </data>
   <data name="EnterPropertiesOnSite" xml:space="preserve">
-    <value>Enter Properties On Site</value>
-    <comment>Enter Properties On Site</comment>
+    <value>Enter properties on site</value>
+    <comment>Enter properties on site</comment>
   </data>
   <data name="ManageSites" xml:space="preserve">
     <value>Manage Sites</value>
@@ -9616,7 +9608,7 @@ Period</comment>
     <comment>The input is not a legal time value</comment>
   </data>
   <data name="ScheduledTimeVsTarget" xml:space="preserve">
-    <value>Scheduled time vs target</value>
+    <value>Scheduled Time vs Target</value>
     <comment>ScheduledTimeVsTarget</comment>
   </data>
   <data name="TheServiceLevelForSpecifiedIntervalLengthIsTooLongDot" xml:space="preserve">
@@ -10162,7 +10154,7 @@ These options are activated:
     <comment>Missing subject</comment>
   </data>
   <data name="ChooseScheduleTagToChange" xml:space="preserve">
-    <value>Choose Schedule Tag To Change</value>
+    <value>Choose schedule tag to change</value>
   </data>
   <data name="DeleteTag" xml:space="preserve">
     <value>Delete Tag</value>
@@ -10731,11 +10723,11 @@ These options are activated:
     <comment>please close workload window.</comment>
   </data>
   <data name="LongtermForecast" xml:space="preserve">
-    <value>Longterm Forecast</value>
-    <comment>Longterm Forecast</comment>
+    <value>Long-term Forecast</value>
+    <comment>Long-term Forecast</comment>
   </data>
   <data name="ManageRuleSets" xml:space="preserve">
-    <value>Manage rule sets</value>
+    <value>Manage Rule Sets</value>
     <comment>Manage rule sets</comment>
   </data>
   <data name="ManualAgents" xml:space="preserve">
@@ -11706,6 +11698,18 @@ Reduce the complexity to use these shifts.</value>
     <value>Unfulfilled</value>
     <comment>Unfulfilled</comment>
   </data>
+  <data name="ManageStateGroupsAndStates" xml:space="preserve">
+    <value>Manage State Groups and States</value>
+    <comment>Manage state groups and states</comment>
+  </data>
+  <data name="EnterSettingsForScenario" xml:space="preserve">
+    <value>Enter settings for scenario</value>
+    <comment>Enter settings for scenario</comment>
+  </data>
+  <data name="ShiftCategoryHeader" xml:space="preserve">
+    <value>Shift Category</value>
+    <comment>Shift Category Header</comment>
+  </data>
   <data name="SwitchToViewPointOfSelectedAgent" xml:space="preserve">
     <value>Switch to View Point of Selected Agent</value>
   </data>
@@ -11729,6 +11733,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Send again</value>
     <comment>Send again (ie. shifttrade)</comment>
   </data>
+  <data name="OvertimeAvailabilityWeb" xml:space="preserve">
+    <value>Overtime Availability</value>
+    <comment>Overtime Availability used on mytime web</comment>
+  </data>
   <data name="FilterHourlyAvailability" xml:space="preserve">
     <value>Filter Hourly Availability</value>
     <comment>Caption button to Filter on hourly availability</comment>
@@ -11740,6 +11748,10 @@ Reduce the complexity to use these shifts.</value>
   <data name="InfoPanel" xml:space="preserve">
     <value>Info Panel</value>
     <comment>Text on button to toggle the info panel on and off in scheduler</comment>
+  </data>
+  <data name="SubjectTooLong" xml:space="preserve">
+    <value>Subject too long</value>
+    <comment>Invalid field info</comment>
   </data>
   <data name="Distribution" xml:space="preserve">
     <value>Distribution</value>

@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenIHaveAnUnreadMessageWith(Table table)
 		{
 			var message = table.CreateInstance<MessageConfigurable>();
-			UserFactory.User().Setup(message);
+			DataMaker.Data().Apply(message);
 		}
 
 		[Given(@"I should be notified that I have '(.*)' unread message\(s\)")]

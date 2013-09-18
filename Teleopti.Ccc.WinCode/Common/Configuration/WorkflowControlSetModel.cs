@@ -115,9 +115,8 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             {
                 LocalizedUpdateInfo localizer = new LocalizedUpdateInfo();
                 string changed = localizer.UpdatedByText(DomainEntity, Resources.UpdatedByColon);
-                string created = localizer.CreatedText(DomainEntity, Resources.CreatedByColon);
 
-                return string.Concat(created, changed);
+                return changed;
             }
         }
 
@@ -144,8 +143,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             {
                 _absenceRequestPeriodModels.Clear();
                 _absenceRequestPeriodModels.AddRange(DomainEntity.AbsenceRequestOpenPeriods.Select(a => new AbsenceRequestPeriodModel(a, this)));
-                //List<AbsenceRequestPeriodModel> list = DomainEntity.AbsenceRequestOpenPeriods.Select(a => new AbsenceRequestPeriodModel(a)).ToList();
-                //_absenceRequestPeriodModels.AddRange(list);
                 return _absenceRequestPeriodModels;
             }
         }

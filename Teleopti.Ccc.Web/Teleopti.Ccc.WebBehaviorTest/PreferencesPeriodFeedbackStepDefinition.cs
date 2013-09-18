@@ -22,68 +22,68 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I have a scheduling period of 1 week")]
 		public void GivenIHaveASchedulingPeriodOf1Week()
 		{
-			UserFactory.User().ReplaceSetupByType<SchedulePeriod>(new SchedulePeriod(0, 1));
+			DataMaker.Data().Apply(new SchedulePeriod(0, 1));
 		}
 
 		[Given(@"I have a contract schedule with 2 days off")]
 		public void GivenIHaveAContractScheduleWith2DaysOff()
 		{
-			var contractSchedule = GlobalDataContext.Data().Data<CommonContractSchedule>();
-			UserFactory.User().Setup(new UserContractSchedule(contractSchedule.ContractSchedule));
+			var contractSchedule = GlobalDataMaker.Data().Data<CommonContractSchedule>();
+			DataMaker.Data().Apply(new UserContractSchedule(contractSchedule.ContractSchedule));
 		}
 
 		[Given(@"I have a scheduled day off on weekday (\d)")]
 		[Given(@"I have a day off scheduled on weekday (\d)")]
 		public void GivenIHaveADayOffScheduledOnWeekday3(int weekday)
 		{
-			UserFactory.User().Setup(new DayOffScheduled(weekday));
+			DataMaker.Data().Apply(new DayOffScheduled(weekday));
 		}
 		
 		[Given(@"I have a day off preference on weekday (\d)")]
 		public void GivenIHaveADayOffPreferenceOnWeekday3(int weekday)
 		{
-			UserFactory.User().Setup(new DayOffPreferenceOnWeekday(weekday));
+			DataMaker.Data().Apply(new DayOffPreferenceOnWeekday(weekday));
 		}
 
 		[Given(@"I have a contract with:")]
 		public void GivenIHaveAContractWith(Table table)
 		{
 			var contract = table.CreateInstance<ContractFromTable>();
-			UserFactory.User().Setup(contract);
-			UserFactory.User().UserData<PersonPeriod>().Contract = contract;
+			DataMaker.Data().Apply(contract);
+			DataMaker.Data().Apply(new UserContract(contract.Contract));
 		}
 
 		[Given(@"I have a contract schedule with:")]
 		public void GivenIHaveAContractScheduleWith(Table table)
 		{
 			var contractSchedule = table.CreateInstance<ContractScheduleFromTable>();
-			UserFactory.User().Setup(contractSchedule);
-			UserFactory.User().UserData<PersonPeriod>().ContractSchedule = contractSchedule;
+			DataMaker.Data().Apply(contractSchedule);
+			DataMaker.Data().Apply(new UserContractSchedule(contractSchedule.ContractSchedule));
 		}
 		
 		[Given(@"I have a absence preference on weekday (\d)")]
 		[Given(@"I have a non-contract time absence preference on weekday (\d)")]
 		public void GivenIHaveAAbsencePreferenceOnWeekdayX(int weekday)
 		{
-			UserFactory.User().Setup(new AbsencePreferenceOnWeekday(weekday));
+			DataMaker.Data().Apply(new AbsencePreferenceOnWeekday(weekday));
 		}
 
 		[Given(@"I have a contract time absence preference on weekday (\d)")]
 		public void GivenIHaveAContractTimeAbsencePreferenceOnWeekdayX(int weekday)
 		{
-			UserFactory.User().Setup(new AbsencePreferenceInContractTimeOnWeekday(weekday));
+			DataMaker.Data().Apply(new AbsencePreferenceInContractTimeOnWeekday(weekday));
 		}
 
 		[Given(@"I have a shift category preference on weekday (\d)")]
 		public void GivenIHaveAShiftCategoryPreferenceOnWeekday1(int weekday)
 		{
-			UserFactory.User().Setup(new ShiftCategoryPreferenceOnWeekday(weekday));
+			DataMaker.Data().Apply(new ShiftCategoryPreferenceOnWeekday(weekday));
 		}
 
 		[Given(@"I have a scheduled shift of (\d) hours on weekday (\d)")]
 		public void GivenIHaveAScheduledShiftOf8HoursOnWeekday1(int hours, int weekday)
 		{
-			UserFactory.User().Setup(new ShiftOnWeekday(TimeSpan.FromHours(8), TimeSpan.FromHours(8 + hours), weekday));
+			DataMaker.Data().Apply(new ShiftOnWeekday(TimeSpan.FromHours(8), TimeSpan.FromHours(8 + hours), weekday));
 		}
 
 

@@ -116,11 +116,9 @@ pre, code, kbd, samp { font-family: monospace, sans-serif; }
 body{text-align: center;}
 body { 
     color: #444; 
-    font-family: Arial, serif; 
 }
 select, input, textarea, button, label
 {
-	font-family: Verdana,Arial,sans-serif;
 	font-size: 1.0em !important;
 }
 input[type=text]
@@ -606,10 +604,6 @@ header {
 #body{background: transparent url(../Images/main_content_bg.jpg) center repeat-y; }
 #body-inner{background: transparent url(../Images/main_content_top_bg.jpg) top center no-repeat; }
 #body-bottom{background: transparent url(../Images/main_content_bottom_bg.jpg) bottom center no-repeat; }
-.information-panel {
-	font-family: Verdana;
-	font-size: 11px;
-}
 
 /*** Footer ***/
 footer p

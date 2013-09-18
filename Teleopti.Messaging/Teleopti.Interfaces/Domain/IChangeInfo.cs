@@ -5,7 +5,7 @@ namespace Teleopti.Interfaces.Domain
     /// <summary>
     /// Interface holding simple audit info
     /// </summary>
-    public interface IChangeInfo : ICreateInfo
+    public interface IChangeInfo 
     {
         /// <summary>
         /// Gets the person that last saved this entity.

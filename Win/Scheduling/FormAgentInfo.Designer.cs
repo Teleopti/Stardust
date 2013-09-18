@@ -426,8 +426,8 @@
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "FormAgentInfo";
 			this.Text = "xxAgentInfo";
-			this.Load += new System.EventHandler(this.AgentInfo_FromLoad);
-			this.ResizeEnd += new System.EventHandler(this.FormAgentInfoResizeEnd);
+			this.Load += new System.EventHandler(this.agentInfo_FromLoad);
+			this.ResizeEnd += new System.EventHandler(this.formAgentInfoResizeEnd);
 			((System.ComponentModel.ISupportInitialize)(this.tabControlAgentInfo)).EndInit();
 			this.tabControlAgentInfo.ResumeLayout(false);
 			this.tabPageAdvSchedulePeriod.ResumeLayout(false);

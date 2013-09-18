@@ -103,7 +103,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             Assert.AreEqual(dataRowCollection[1]["starttime"], _schedulePart2.PersonAssignment().DayOff().Anchor);
             Assert.AreEqual(dataRowCollection[0]["day_off_code"], DBNull.Value);
             Assert.AreEqual(dataRowCollection[0]["day_count"], 1);
-						Assert.AreEqual(dataRowCollection[0]["business_unit_code"], _schedulePart1.PersonAssignment().BusinessUnit.Id);
+						Assert.AreEqual(dataRowCollection[0]["business_unit_code"], _schedulePart1.Scenario.BusinessUnit.Id);
 						Assert.AreEqual(dataRowCollection[1]["datasource_update_date"], _schedulePart2.PersonAssignment().UpdatedOn.Value);
         }
 

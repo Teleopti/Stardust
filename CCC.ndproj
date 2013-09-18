@@ -56,12 +56,26 @@
     <Name>Teleopti.Analytics.Portal</Name>
     <Name>Teleopti.Analytics.Parameters</Name>
     <Name>Teleopti.Analytics.Portal.AnalyzerProxy</Name>
-    <Name>Teleopti.Analytics.ReportTexts</Name>
     <Name>Teleopti.Ccc.DBManager.Library</Name>
     <Name>Teleopti.Ccc.Sdk.Notification</Name>
-    <Name>Teleopti.Ccc.Startpage</Name>
     <Name>Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost</Name>
     <Name>Teleopti.Ccc.Web.Broker.Backplane</Name>
+	<Name>Teleopti.Ccc.DomainTest</Name>
+	<Name>Teleopti.Ccc.InfrastructureTest</Name>
+	<Name>Teleopti.Ccc.DatabaseConverterTest</Name>
+	<Name>Teleopti.Ccc.WinCodeTest</Name>
+	<Name>Teleopti.Analytics.Etl.CommonTest</Name>
+	<Name>Teleopti.Analytics.Etl.TransformerTest</Name>
+	<Name>Teleopti.Ccc.PayrollFormatterTest</Name>
+	<Name>Teleopti.Ccc.PayrollTest</Name>
+	<Name>Teleopti.Ccc.Rta.LogClientTest</Name>
+	<Name>Teleopti.Ccc.Rta.ServerTest</Name>
+	<Name>Teleopti.Ccc.Sdk.LogicTest</Name>
+	<Name>Teleopti.Ccc.AgentPortalCodeTest</Name>
+	<Name>Teleopti.Ccc.Sdk.ServiceBusTest</Name>
+	<Name>Teleopti.Ccc.TestCommon</Name>
+	<Name>Teleopti.Ccc.DayOffPlanningTest</Name>
+	<Name>Teleopti.Ccc.IocCommonTest</Name>
   </Assemblies>
   <FrameworkAssemblies>
     <Name>mscorlib</Name>
@@ -213,6 +227,22 @@
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Startpage\bin</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Web.Broker.Backplane\bin</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\DomainTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\InfrastructureTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\DataBaseConverterTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.WinCodeTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.CommonTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.TransformerTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatterTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.LogClientTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.ServerTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.LogicTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\AgentPortal\Teleopti.Ccc.AgentPortalCodeTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.TestCommon\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.DayOffPlanningTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.IocCommonTest\bin\Debug</Dir>
   </Dirs>
   <Report Kind="0" SectionsEnabled="2563" XslPath="" Flags="63488">
     <Section Enabled="True">Application Metrics</Section>
@@ -2069,6 +2099,39 @@ select new {
 }]]></Query>
     </Group>
     <Group Name="Dead Code" Active="True" ShownInReport="True">
+	<Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Methods potentially only used from Tests</Name>
+warnif count > 0
+	let allTestAssemblies = JustMyCode.Assemblies.Where(a=>a.Name.Contains("Test"))
+	let allCodeAssemblies = JustMyCode.Assemblies.Where(a=>!a.Name.Contains("Test"))
+ 
+	let methodsUsedByCode = JustMyCode.Methods.UsedByAny(allCodeAssemblies.ChildMethods())
+	let methodsUsedByTest = JustMyCode.Methods.UsedByAny(allTestAssemblies.ChildMethods())
+ 
+	let methodsUsedOnlyInTest = methodsUsedByTest.Except(methodsUsedByCode)
+ 
+	from m in methodsUsedOnlyInTest
+	//skippa abstracta metoder
+	where !m.IsAbstract && 
+	//skippa metoder som ligger i testprojekten
+	!allTestAssemblies.Contains(m.ParentAssembly) 
+	select new { m, m.FullName }]]>
+	</Query>
+	<Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types potentially only used from Tests</Name>
+warnif count > 0
+	let allTestAssemblies = JustMyCode.Assemblies.Where(a=>a.Name.Contains("Test"))
+	let allCodeAssemblies = JustMyCode.Assemblies.Where(a=>!a.Name.Contains("Test"))
+ 
+	let typesUsedByCode = JustMyCode.Types.UsedByAny(allCodeAssemblies.ChildTypes())
+	let typesUsedByTest = JustMyCode.Types.UsedByAny(allTestAssemblies.ChildTypes())
+ 
+	let typesUsedOnlyInTest = typesUsedByTest.Except(typesUsedByCode)
+	
+	from t in typesUsedOnlyInTest
+	//skippa klasser som ligger i testprojekten
+	where !allTestAssemblies.Contains(t.ParentAssembly) 
+	select new { t, t.FullName}]]>
+	</Query>
+	
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Potentially dead Types</Name>
 warnif count > 0
 // Filter procedure for types that should'nt be considered as dead
@@ -2547,33 +2610,6 @@ select new { m, m.NbLinesOfCode }
 // introduced with .NET v4.0.]]></Query>
     </Group>
     <Group Name="Naming Conventions" Active="True" ShownInReport="False">
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Instance fields should be prefixed with a 'm_'</Name>
-warnif count > 0 from f in Application.Fields where 
-  !f.NameLike (@"^m_") && 
-  !f.IsStatic && 
-  !f.IsLiteral && 
-  !f.IsGeneratedByCompiler  && 
-  !f.IsSpecialName && 
-  !f.IsEventDelegateObject
-select new { f, f.SizeOfInst } 
-
-// This naming convention provokes debate.
-// Don't hesitate to customize the regex of 
-// NameLike to your preference.]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Static fields should be prefixed with a 's_'</Name>
-warnif count > 0 from f in Application.Fields where 
-  !f.NameLike (@"^s_") && 
-   f.IsStatic && 
-  !f.IsLiteral && 
-  !f.IsGeneratedByCompiler && 
-  !f.IsSpecialName && 
-  !f.IsEventDelegateObject
-select new { f, f.SizeOfInst }  
-
-// This naming convention provokes debate.
-// Don't hesitate to customize the regex of 
-// NameLike to your preference.
-]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Interface name should begin with a 'I'</Name>
 warnif count > 0 from t in Application.Types where 
 t.IsInterface  
@@ -2623,7 +2659,8 @@ select new { t, t.NbLinesOfCode }]]></Query>
 warnif count > 0 from m in JustMyCode.Methods where 
   !m.NameLike (@"^[A-Z]") && 
   !m.IsSpecialName && 
-  !m.IsGeneratedByCompiler
+  !m.IsGeneratedByCompiler &&
+  !m.IsPrivate
 select m
 
 // The name of a regular method should 

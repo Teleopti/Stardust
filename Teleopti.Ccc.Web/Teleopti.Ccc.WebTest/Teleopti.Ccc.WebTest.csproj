@@ -137,12 +137,16 @@
   <ItemGroup>
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecificationTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\TeamScheduleProviderTest.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\OvertimeAvailabilityPersisterTest.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkGeneratorTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkIdGeneratorTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\DataProvider\CalendarLinkSettingsPersisterAndProviderTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ShareCalendarControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\UserInfoControllerTest.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityViewModelMappingTest.cs" />
+    <Compile Include="Areas\MyTime\Models\WeekSchedule\OvertimeAvailabilityInputTest.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\ConfigurationControllerTest.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\ApplicationControllerTest.cs" />
     <Compile Include="Areas\PerformanceTool\PerformanceToolAreaRegistrationTest.cs" />
@@ -303,7 +307,6 @@
     <Compile Include="Core\DatePatternConverterTest.cs" />
     <Compile Include="Areas\MyTime\Core\LayoutBase\LayoutBaseHtmlHelperTest.cs" />
     <Compile Include="TestHtmlHelperBuilder.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="StubbingControllerBuilder.cs" />
     <Compile Include="Areas\MyTime\Controllers\StudentAvailabilityControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\PortalControllerTest.cs" />

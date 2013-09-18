@@ -4,8 +4,7 @@
 @{
 	Layout = null;
 }
-<!-- temporary fix for loading bootrapper after jqueryUI until that PBI is fixed -->
-<script src="@Url.Content("~/Content/bootstrap/bootstrap.js")"></script>
+
 <div id="AsmMessage-body-inner" class="asmMessage-body-inner relative">
     <div class="alert alert-block bdd-show-message" data-bind="visible: shouldShowMessage">
         @Resources.NoMessagesFound
@@ -17,8 +16,8 @@
                     <div class="bdd-asm-message-body" data-bind="click: toggleSelected" style="cursor: pointer">
                         <span class="displaynone" data-bind="text: messageId"></span>
                         <div>
-                            <h4 data-bind="text: title">
-                            </h4>
+                            <h5 class="asmMessage-title" data-bind="text: title">
+                            </h5>
                         </div>
                         <div>
                             <div>

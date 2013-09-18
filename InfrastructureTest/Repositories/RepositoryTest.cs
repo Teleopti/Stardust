@@ -249,14 +249,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyCreatedPropSetsCorrectly()
         {
-            if(simpleEntity is IChangeInfo)
+            if(simpleEntity is ICreateInfo)
             {
                 DateTime nu = DateTime.UtcNow;
                 rep.Add(simpleEntity);
                 Session.Flush();
                 Session.Evict(simpleEntity);
                 Guid id = simpleEntity.Id.Value;
-                IChangeInfo loadedEntity = (IChangeInfo)rep.Load(id);
+								var loadedEntity = (ICreateInfo)rep.Load(id);
 
                 Assert.Less(nu.Subtract(new TimeSpan(0, 0, 1)), loadedEntity.CreatedOn);
                 Assert.Greater(nu.AddMinutes(1), loadedEntity.CreatedOn);

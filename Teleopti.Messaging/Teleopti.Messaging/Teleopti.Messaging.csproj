@@ -140,7 +140,6 @@
     <Compile Include="Exceptions\NotInterfaceTypeException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalR\DoNotSend.cs" />
     <Compile Include="SignalR\SignalBroker.cs" />

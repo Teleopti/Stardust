@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -58,7 +59,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters {
 			Expect.Call(_scheduleRepository.LoadScheduleDataAggregate(conflictingEntity.GetType(), conflictingEntity.Id.Value)).Return(conflictingDatabaseEntity);
 			Expect.Call(() => _lazyLoadingManager.Initialize(conflictingDatabaseEntity.Person));
 			Expect.Call(() => _lazyLoadingManager.Initialize(conflictingDatabaseEntity.UpdatedBy));
-			Expect.Call(() => _lazyLoadingManager.Initialize(conflictingDatabaseEntity.CreatedBy));
 
 			_mocks.ReplayAll();
 

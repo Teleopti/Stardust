@@ -15,18 +15,17 @@ namespace Teleopti.Ccc.Rta.Server
 {
 	public class RtaDataHandler : IRtaDataHandler
 	{
+		private static ILog _loggingSvc;
+		private static IActualAgentStateCache _stateCache;
+
 		private readonly IActualAgentAssembler _agentAssembler;
 		private readonly IMessageSender _messageSender;
 		private readonly string _connectionStringDataStore;
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
-		private static ILog _loggingSvc;
 		private readonly IDataSourceResolver _dataSourceResolver;
 		private readonly IPersonResolver _personResolver;
 		private readonly IStateResolver _stateResolver;
-
-		private static IActualAgentStateCache _stateCache;
-
-
+		
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
 			MessageId = "1")]
 		protected RtaDataHandler(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
@@ -90,8 +89,7 @@ namespace Teleopti.Ccc.Rta.Server
 					ex);
 			}
 		}
-
-
+		
 		public RtaDataHandler(IActualAgentAssembler agentAssembler, IActualAgentStateCache stateCache)
 			: this(
 				LogManager.GetLogger(typeof (RtaDataHandler)),

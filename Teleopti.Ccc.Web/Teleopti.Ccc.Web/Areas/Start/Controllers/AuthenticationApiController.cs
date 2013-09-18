@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		{
 			var result = model.AuthenticateUser();
 			if (!result.Successful)
-				return ReturnErrorMessage(result.Message);
+				return errorMessage(result.Message);
 			var businessUnits = _businessUnitViewModelFactory.BusinessUnits(result.DataSource, result.Person);
 			return Json(businessUnits, JsonRequestBehavior.AllowGet);
 		}
@@ -47,17 +47,17 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				var result = model.AuthenticateUser();
 				model.SaveAuthenticateResult(result);
 				if (!result.Successful)
-					return ReturnErrorMessage(Resources.LogOnFailedInvalidUserNameOrPassword);
+					return errorMessage(Resources.LogOnFailedInvalidUserNameOrPassword);
 				_webLogon.LogOn(result.DataSource.DataSourceName, businessUnitId, result.Person.Id.Value);
 			}
 			catch (PermissionException)
 			{
-				return ReturnErrorMessage(Resources.InsufficientPermissionForWeb);
+				return errorMessage(Resources.InsufficientPermissionForWeb);
 			}
 			return Json(string.Empty, JsonRequestBehavior.AllowGet);
 		}
 
-		private JsonResult ReturnErrorMessage(string message)
+		private JsonResult errorMessage(string message)
 		{
 			Response.StatusCode = 400;
 			Response.TrySkipIisCustomErrors = true;

@@ -140,7 +140,6 @@
     <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\UnitOfWorkTransactionEventSyncronization.cs" />
     <Compile Include="Foundation\ConfigReader.cs" />
-    <Compile Include="Foundation\ConfigurationDictionaryWrapper.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapper.cs" />
     <Compile Include="Foundation\IConfigurationWrapper.cs" />
     <Compile Include="Foundation\NewtonsoftJsonDeserializer.cs" />
@@ -222,7 +221,6 @@
     <Compile Include="Foundation\WriteStringToFile.cs" />
     <Compile Include="NHibernateConfiguration\VersionStateRollbackInterceptor.cs" />
     <Compile Include="NHibernateConfiguration\XmlType.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Licensing\TooManyActiveAgentsException.cs" />
     <Compile Include="Licensing\InvalidLicenseException.cs" />
     <Compile Include="Licensing\IXmlLicense.cs" />
@@ -271,6 +269,7 @@
     <Compile Include="Repositories\PersonScheduleDayReadModelPersister.cs" />
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
     <Compile Include="Repositories\ScheduledResourcesReadModelStorage.cs" />
+    <Compile Include="UnitOfWork\EmptyMessageBrokerIdentifier.cs" />
     <Compile Include="UnitOfWork\EventExtensions.cs" />
     <Compile Include="UnitOfWork\TeamOrSiteChangedMessageSender.cs" />
     <Compile Include="Util\CompressionExtensions.cs" />

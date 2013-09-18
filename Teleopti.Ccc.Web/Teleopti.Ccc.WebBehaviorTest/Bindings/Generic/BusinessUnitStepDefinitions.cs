@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsABusinessUnitWith(Table table)
 		{
 			var businessUnit = table.CreateInstance<BusinessUnitConfigurable>();
-			UserFactory.User().Setup(businessUnit);
+			DataMaker.Data().Apply(businessUnit);
 		}
 
 	}

@@ -26,22 +26,22 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
             IScenario scenario = Ccc.TestCommon.FakeData.ScenarioFactory.CreateScenarioAggregate("Default", true);
             scenario.SetId(Guid.NewGuid());
-            RaptorTransformerHelper.SetCreatedOn(scenario, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(scenario, DateTime.Now);
             retList.Add(scenario);
 
             scenario = Ccc.TestCommon.FakeData.ScenarioFactory.CreateScenarioAggregate("Worst case", false);
             scenario.SetId(Guid.NewGuid());
-            RaptorTransformerHelper.SetCreatedOn(scenario, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(scenario, DateTime.Now);
             retList.Add(scenario);
 
             scenario = Ccc.TestCommon.FakeData.ScenarioFactory.CreateScenarioAggregate("Best case", false);
             scenario.SetId(Guid.NewGuid());
-            RaptorTransformerHelper.SetCreatedOn(scenario, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(scenario, DateTime.Now);
             retList.Add(scenario);
 
             scenario = Ccc.TestCommon.FakeData.ScenarioFactory.CreateScenarioAggregate("Deleted Scenario", false);
             scenario.SetId(Guid.NewGuid());
-            RaptorTransformerHelper.SetCreatedOn(scenario, DateTime.Now);
+            RaptorTransformerHelper.SetUpdatedOn(scenario, DateTime.Now);
             ((Scenario)scenario).SetDeleted();
             retList.Add(scenario);
 

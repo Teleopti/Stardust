@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         private IList<IDayOffTemplate> _dayOffTemplates;
         private WorkflowControlSetModel _workflowControlSetModel;
         private IWorkflowControlSet _workflowControlSet;
-        private CultureInfo _culture = TeleoptiPrincipal.Current.Regional.Culture;
+        private readonly CultureInfo _culture = TeleoptiPrincipal.Current.Regional.Culture;
         private List<ISkill> _skillList;
 
         [SetUp]
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             _target.SetPeriodType(chosenAbsenceRequestOpenPeriod,
                                   new AbsenceRequestPeriodTypeModel(new AbsenceRequestOpenDatePeriod(), "From-To"));
             Assert.AreEqual(1, _workflowControlSetModel.DomainEntity.AbsenceRequestOpenPeriods.Count);
-            Assert.IsTrue(typeof(AbsenceRequestOpenDatePeriod).IsInstanceOfType(_workflowControlSetModel.DomainEntity.AbsenceRequestOpenPeriods[0]));
+            Assert.IsTrue(_workflowControlSetModel.DomainEntity.AbsenceRequestOpenPeriods[0] is AbsenceRequestOpenDatePeriod);
             Assert.AreSame(chosenAbsenceRequestOpenPeriod, currentModels[0]);
             Assert.AreSame(chosenAbsenceRequestOpenPeriod.DomainEntity, _workflowControlSetModel.DomainEntity.AbsenceRequestOpenPeriods[0]);
             Assert.AreEqual(absence, chosenAbsenceRequestOpenPeriod.Absence);
@@ -408,10 +408,10 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void VerifyMove()
         {
-            AbsenceRequestOpenDatePeriod openDatePeriod =
+            var openDatePeriod =
                 (AbsenceRequestOpenDatePeriod)WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item;
             ((IEntity)openDatePeriod).SetId(Guid.NewGuid());
-            AbsenceRequestOpenRollingPeriod openRollingPeriod =
+            var openRollingPeriod =
                 (AbsenceRequestOpenRollingPeriod)WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].Item;
             ((IEntity)openRollingPeriod).SetId(Guid.NewGuid());
             _workflowControlSet.AddOpenAbsenceRequestPeriod(openDatePeriod);
@@ -440,474 +440,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 Assert.AreEqual(openRollingPeriod, _target.SelectedModel.AbsenceRequestPeriodModels[1].DomainEntity);
             }
         }
-
-        [Test]
-        public void VerifyCopyAbsenceRequestPeriod()
-        {
-            AbsenceRequestPeriodModel openDatePeriodModel = new AbsenceRequestPeriodModel(new AbsenceRequestOpenDatePeriod(), _workflowControlSetModel);
-            IList<AbsenceRequestPeriodModel> selectedModels = new List<AbsenceRequestPeriodModel> { openDatePeriodModel };
-
-            using (_mocks.Record())
-            {
-                Expect.Call(_view.AbsenceRequestPeriodSelected).Return(selectedModels);
-            }
-
-            using (_mocks.Playback())
-            {
-                _target.CopyAbsenceRequestPeriod();
-                Assert.AreEqual(selectedModels.Count, _target.AbsenceRequestPeriodsCopied.Count);
-            }
-        }
-
-        [Test]
-        public void VerifyCutAbsenceRequestPeriodWithTwoItems()
-        {
-            IAbsence absence = AbsenceFactory.CreateRequestableAbsence("Holiday", "HL", Color.Red);
-            IAbsenceRequestOpenPeriod openDatePeriod = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item;
-            openDatePeriod.Absence = absence;
-            openDatePeriod.SetId(Guid.NewGuid());
-            IAbsenceRequestOpenPeriod openRollingPeriod = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].Item;
-            openRollingPeriod.Absence = absence;
-            openRollingPeriod.SetId(Guid.NewGuid());
-            List<AbsenceRequestPeriodModel> selectedPeriodModels = new List<AbsenceRequestPeriodModel>
-                        {
-                            new AbsenceRequestPeriodModel(openDatePeriod,_workflowControlSetModel),
-                            new AbsenceRequestPeriodModel(openRollingPeriod,_workflowControlSetModel)
-                        };
-
-            _workflowControlSet.AddOpenAbsenceRequestPeriod(openDatePeriod);
-            _workflowControlSet.AddOpenAbsenceRequestPeriod(openRollingPeriod);
-            IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
-
-            using (_mocks.Record())
-            {
-                // Initialize mocks
-                ExpectInitialize(repositoryCollection);
-                ExpectSetSelectedWorkflowControlSetModel();
-                //// Cut mocks
-                Expect.Call(_view.AbsenceRequestPeriodSelected).Return(selectedPeriodModels);
-                Expect.Call(() => _view.SetClipboardText(getCopyString(selectedPeriodModels[0], selectedPeriodModels[1])));
-                //// Cut mocks for delete of selected items
-                Expect.Call(() => _view.SetOpenPeriodsGridRowCount(_workflowControlSetModel.AbsenceRequestPeriodModels.Count));
-                _view.RefreshOpenPeriodsGrid();
-            }
-
-            using (_mocks.Playback())
-            {
-                _target.Initialize();
-                _target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
-
-                Assert.AreEqual(2, _target.SelectedModel.AbsenceRequestPeriodModels.Count);
-                _target.CutAbsenceRequestPeriod();
-                Assert.AreEqual(0, _target.SelectedModel.AbsenceRequestPeriodModels.Count);
-            }
-        }
-
-        private static string getCopyString(AbsenceRequestPeriodModel openDatePeriod, AbsenceRequestPeriodModel openRollingPeriod)
-        {
-            string copyString = string.Format(CultureInfo.CurrentCulture,
-                                                  "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t\t\t{7}\t{8}",
-                                                  Resources.FromTo, openDatePeriod.Absence.Name, Resources.No, Resources.Intraday,
-                                                  Resources.No,
-                                                  openDatePeriod.PeriodStartDate.Value.ToShortDateString(),
-                                                  openDatePeriod.PeriodEndDate.Value.ToShortDateString(),
-                                                  openDatePeriod.OpenStartDate.ToShortDateString(),
-                                                  openDatePeriod.OpenEndDate.ToShortDateString());
-            copyString += "\r\n";
-            copyString += string.Format(CultureInfo.CurrentCulture,
-                                        "{0}\t{1}\t{2}\t{3}\t{4}\t\t\t{5}\t{6}\t{7}\t{8}",
-                                        Resources.Rolling, openRollingPeriod.Absence.Name, Resources.No, Resources.Intraday,
-                                        Resources.No, openRollingPeriod.RollingStart,
-                                        openRollingPeriod.RollingEnd,
-                                        openRollingPeriod.OpenStartDate.ToShortDateString(),
-                                        openRollingPeriod.OpenEndDate.ToShortDateString());
-            copyString += "\r\n";
-
-            return copyString;
-        }
-
-        [Test]
-        public void VerifyCutAbsenceRequestPeriodWithZeroItems()
-        {
-            IList<AbsenceRequestPeriodModel> selectedModels = new List<AbsenceRequestPeriodModel>();
-
-            using (_mocks.Record())
-            {
-                Expect.Call(_view.AbsenceRequestPeriodSelected).Return(selectedModels);
-            }
-
-            using (_mocks.Playback())
-            {
-                _target.CutAbsenceRequestPeriod();
-                Assert.AreEqual(selectedModels.Count, _target.AbsenceRequestPeriodsCopied.Count);
-            }
-        }
-
-       [Test]
-        public void VerifyPasteAbsenceRequestPeriodOneModelOntoExistingModel()
-        {
-            IAbsence absenceForDatePeriod = AbsenceFactory.CreateRequestableAbsence("Holiday", "HL", Color.Red);
-            IAbsence absenceForRollingPeriod = AbsenceFactory.CreateRequestableAbsence("Time in lieu", "TL", Color.Blue);
-            IAbsenceRequestOpenPeriod openDatePeriod = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item;
-            openDatePeriod.Absence = absenceForDatePeriod;
-            openDatePeriod.SetId(Guid.NewGuid());
-            IAbsenceRequestOpenPeriod openRollingPeriod = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].Item;
-            openRollingPeriod.Absence = absenceForRollingPeriod;
-            openRollingPeriod.SetId(Guid.NewGuid());
-
-            _workflowControlSet.AddOpenAbsenceRequestPeriod(openDatePeriod);
-            IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
-            IList<AbsenceRequestPeriodModel> selectedPeriodModels = new List<AbsenceRequestPeriodModel>
-                                                                        {
-                            new AbsenceRequestPeriodModel(openDatePeriod,_workflowControlSetModel)
-                        };
-            List<AbsenceRequestPeriodModel> copiedPeriodModels = new List<AbsenceRequestPeriodModel>
-                        {
-                            new AbsenceRequestPeriodModel(openRollingPeriod,_workflowControlSetModel)
-                        };
-
-            using (_mocks.Record())
-            {
-                // Initialize mocks
-                ExpectInitialize(repositoryCollection);
-                ExpectSetSelectedWorkflowControlSetModel();
-                using (_mocks.Ordered())
-                {
-                    Expect.Call(_view.AbsenceRequestPeriodSelected).Return(copiedPeriodModels);
-                    //Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
-                    Expect.Call(_view.AbsenceRequestPeriodSelected).Return(selectedPeriodModels);
-                    Expect.Call(() => _view.SetOpenPeriodsGridRowCount(0)).IgnoreArguments();
-                    Expect.Call(() => _view.RefreshOpenPeriodsGrid());
-                }
-            }
-
-            using (_mocks.Playback())
-            {
-                _target.Initialize();
-                _target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
-
-                _target.CopyAbsenceRequestPeriod();
-                Assert.AreEqual(openDatePeriod.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Absence);
-                Assert.IsTrue(_target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Id.HasValue);
-                Assert.AreEqual(1, _target.SelectedModel.AbsenceRequestPeriodModels.Count);
-                _target.PasteAbsenceRequestPeriod();
-                Assert.IsFalse(_target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Id.HasValue);
-                Assert.AreEqual(openRollingPeriod.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Absence);
-                Assert.AreEqual(1, _target.SelectedModel.AbsenceRequestPeriodModels.Count);
-            }
-        }
-
-        [Test]
-        public void VerifyPasteAbsenceRequestPeriodTwoModelOnLastModel()
-        {
-            IAbsence absenceForDatePeriod = AbsenceFactory.CreateRequestableAbsence("Holiday", "HL", Color.Red);
-            IAbsence absenceForRollingPeriod = AbsenceFactory.CreateRequestableAbsence("Time in lieu", "TL", Color.Blue);
-            IAbsenceRequestOpenPeriod openDatePeriod1 = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item;
-            openDatePeriod1.Absence = absenceForDatePeriod;
-            openDatePeriod1.SetId(Guid.NewGuid());
-            IAbsenceRequestOpenPeriod openDatePeriod2 = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item;
-            openDatePeriod2.Absence = absenceForDatePeriod;
-            openDatePeriod2.SetId(Guid.NewGuid());
-            IAbsenceRequestOpenPeriod openDatePeriod3 = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item;
-            openDatePeriod3.Absence = absenceForDatePeriod;
-            openDatePeriod3.SetId(Guid.NewGuid());
-
-            IAbsenceRequestOpenPeriod openRollingPeriod1 = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].Item;
-            openRollingPeriod1.Absence = absenceForRollingPeriod;
-            openRollingPeriod1.SetId(Guid.NewGuid());
-            IAbsenceRequestOpenPeriod openRollingPeriod2 = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].Item;
-            openRollingPeriod2.Absence = absenceForRollingPeriod;
-            openRollingPeriod2.SetId(Guid.NewGuid());
-
-            _workflowControlSet.AddOpenAbsenceRequestPeriod(openDatePeriod1);
-            _workflowControlSet.AddOpenAbsenceRequestPeriod(openDatePeriod2);
-            _workflowControlSet.AddOpenAbsenceRequestPeriod(openDatePeriod3);
-            IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
-            IList<AbsenceRequestPeriodModel> selectedPeriodModels = new List<AbsenceRequestPeriodModel>
-                                                                        {
-                            new AbsenceRequestPeriodModel(openDatePeriod3,_workflowControlSetModel)
-                        };
-            List<AbsenceRequestPeriodModel> copiedPeriodModels = new List<AbsenceRequestPeriodModel>
-                        {
-                            new AbsenceRequestPeriodModel(openRollingPeriod1,_workflowControlSetModel),
-                            new AbsenceRequestPeriodModel(openRollingPeriod2,_workflowControlSetModel)
-                        };
-
-            using (_mocks.Record())
-            {
-                // Initialize mocks
-                ExpectInitialize(repositoryCollection);
-                ExpectSetSelectedWorkflowControlSetModel();
-                using (_mocks.Ordered())
-                {
-                    Expect.Call(_view.AbsenceRequestPeriodSelected).Return(copiedPeriodModels);
-                    //Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
-                    Expect.Call(_view.AbsenceRequestPeriodSelected).Return(selectedPeriodModels);
-                    Expect.Call(() => _view.SetOpenPeriodsGridRowCount(0)).IgnoreArguments();
-                    Expect.Call(() => _view.RefreshOpenPeriodsGrid());
-                }
-            }
-
-            using (_mocks.Playback())
-            {
-                _target.Initialize();
-                _target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
-
-                _target.CopyAbsenceRequestPeriod();
-                Assert.AreEqual(openDatePeriod1.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Absence);
-                Assert.AreEqual(openDatePeriod2.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[1].DomainEntity.Absence);
-                Assert.AreEqual(openDatePeriod3.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[2].DomainEntity.Absence);
-                Assert.IsTrue(_target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Id.HasValue);
-                Assert.IsTrue(_target.SelectedModel.AbsenceRequestPeriodModels[1].DomainEntity.Id.HasValue);
-                Assert.IsTrue(_target.SelectedModel.AbsenceRequestPeriodModels[2].DomainEntity.Id.HasValue);
-                Assert.AreEqual(3, _target.SelectedModel.AbsenceRequestPeriodModels.Count);
-                _target.PasteAbsenceRequestPeriod();
-                Assert.IsTrue(_target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Id.HasValue);
-                Assert.IsTrue(_target.SelectedModel.AbsenceRequestPeriodModels[1].DomainEntity.Id.HasValue);
-                Assert.IsFalse(_target.SelectedModel.AbsenceRequestPeriodModels[2].DomainEntity.Id.HasValue);
-                Assert.AreEqual(openDatePeriod1.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Absence);
-                Assert.AreEqual(openDatePeriod2.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[1].DomainEntity.Absence);
-                Assert.AreEqual(openRollingPeriod1.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[2].DomainEntity.Absence);
-                Assert.AreEqual(3, _target.SelectedModel.AbsenceRequestPeriodModels.Count);
-            }
-        }
-
-        [Test]
-        public void VerifyPasteAbsenceRequestPeriodOneModelOntoThreeModels()
-        {
-            IAbsence absenceForDatePeriod = AbsenceFactory.CreateRequestableAbsence("Holiday", "HL", Color.Red);
-            IAbsence absenceForRollingPeriod = AbsenceFactory.CreateRequestableAbsence("Time in lieu", "TL", Color.Blue);
-
-            IAbsenceRequestOpenPeriod openDatePeriod1 = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item;
-            openDatePeriod1.Absence = absenceForDatePeriod;
-            openDatePeriod1.SetId(Guid.NewGuid());
-            IAbsenceRequestOpenPeriod openDatePeriod2 = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item;
-            openDatePeriod2.Absence = absenceForDatePeriod;
-            openDatePeriod2.SetId(Guid.NewGuid());
-            IAbsenceRequestOpenPeriod openDatePeriod3 = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item;
-            openDatePeriod3.Absence = absenceForDatePeriod;
-            openDatePeriod3.SetId(Guid.NewGuid());
-
-            IAbsenceRequestOpenPeriod openRollingPeriod1 = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].Item;
-            openRollingPeriod1.Absence = absenceForRollingPeriod;
-            openRollingPeriod1.SetId(Guid.NewGuid());
-            IAbsenceRequestOpenPeriod openRollingPeriod2 = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].Item;
-            openRollingPeriod2.Absence = absenceForRollingPeriod;
-            openRollingPeriod2.SetId(Guid.NewGuid());
-
-            _workflowControlSet.AddOpenAbsenceRequestPeriod(openRollingPeriod1);
-            _workflowControlSet.AddOpenAbsenceRequestPeriod(openDatePeriod1);
-            _workflowControlSet.AddOpenAbsenceRequestPeriod(openDatePeriod2);
-            _workflowControlSet.AddOpenAbsenceRequestPeriod(openDatePeriod3);
-
-            IList<AbsenceRequestPeriodModel> selectedPeriodModels = new List<AbsenceRequestPeriodModel>
-                                                                        {
-                            new AbsenceRequestPeriodModel(openDatePeriod1,_workflowControlSetModel),
-                            new AbsenceRequestPeriodModel(openDatePeriod2,_workflowControlSetModel),
-                            new AbsenceRequestPeriodModel(openDatePeriod3,_workflowControlSetModel)
-                        };
-            List<AbsenceRequestPeriodModel> copiedPeriodModels = new List<AbsenceRequestPeriodModel>
-                        {
-                            new AbsenceRequestPeriodModel(openRollingPeriod2,_workflowControlSetModel)
-                        };
-
-            IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
-
-            using (_mocks.Record())
-            {
-                // Initialize mocks
-                ExpectInitialize(repositoryCollection);
-                ExpectSetSelectedWorkflowControlSetModel();
-                using (_mocks.Ordered())
-                {
-                    Expect.Call(_view.AbsenceRequestPeriodSelected).Return(copiedPeriodModels);
-                    //Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
-                    Expect.Call(_view.AbsenceRequestPeriodSelected).Return(selectedPeriodModels);
-                    Expect.Call(() => _view.SetOpenPeriodsGridRowCount(0)).IgnoreArguments();
-                    Expect.Call(() => _view.RefreshOpenPeriodsGrid());
-                }
-            }
-
-            using (_mocks.Playback())
-            {
-                _target.Initialize();
-                _target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
-
-                _target.CopyAbsenceRequestPeriod();
-                Assert.AreEqual(openRollingPeriod1.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Absence);
-                Assert.AreEqual(openDatePeriod1.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[1].DomainEntity.Absence);
-                Assert.AreEqual(openDatePeriod2.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[2].DomainEntity.Absence);
-                Assert.AreEqual(openDatePeriod3.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[2].DomainEntity.Absence);
-                Assert.IsTrue(_target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Id.HasValue);
-                Assert.IsTrue(_target.SelectedModel.AbsenceRequestPeriodModels[1].DomainEntity.Id.HasValue);
-                Assert.IsTrue(_target.SelectedModel.AbsenceRequestPeriodModels[2].DomainEntity.Id.HasValue);
-                Assert.IsTrue(_target.SelectedModel.AbsenceRequestPeriodModels[3].DomainEntity.Id.HasValue);
-                Assert.AreEqual(4, _target.SelectedModel.AbsenceRequestPeriodModels.Count);
-                _target.PasteAbsenceRequestPeriod();
-                Assert.IsTrue(_target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Id.HasValue);
-                Assert.IsFalse(_target.SelectedModel.AbsenceRequestPeriodModels[1].DomainEntity.Id.HasValue);
-                Assert.IsFalse(_target.SelectedModel.AbsenceRequestPeriodModels[2].DomainEntity.Id.HasValue);
-                Assert.IsFalse(_target.SelectedModel.AbsenceRequestPeriodModels[3].DomainEntity.Id.HasValue);
-                Assert.AreEqual(openRollingPeriod1.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Absence);
-                Assert.AreEqual(openRollingPeriod1.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[1].DomainEntity.Absence);
-                Assert.AreEqual(openRollingPeriod1.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[2].DomainEntity.Absence);
-                Assert.AreEqual(openRollingPeriod1.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[3].DomainEntity.Absence);
-                Assert.AreEqual(4, _target.SelectedModel.AbsenceRequestPeriodModels.Count);
-            }
-        }
-
-        [Test]
-        public void VerifyPasteAbsenceRequestPeriodTwoModelOntoTwoModels()
-        {
-            // Pasting two models onto two other models when only one model is selected
-            IAbsence absenceForDatePeriod = AbsenceFactory.CreateRequestableAbsence("Holiday", "HL", Color.Red);
-            IAbsence absenceForRollingPeriod = AbsenceFactory.CreateRequestableAbsence("Time in lieu", "TL", Color.Blue);
-
-            IAbsenceRequestOpenPeriod openDatePeriod1 = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item;
-            openDatePeriod1.Absence = absenceForDatePeriod;
-            openDatePeriod1.SetId(Guid.NewGuid());
-            IAbsenceRequestOpenPeriod openDatePeriod2 = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item;
-            openDatePeriod2.Absence = absenceForDatePeriod;
-            openDatePeriod2.SetId(Guid.NewGuid());
-
-            IAbsenceRequestOpenPeriod openRollingPeriod1 = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].Item;
-            openRollingPeriod1.Absence = absenceForRollingPeriod;
-            openRollingPeriod1.SetId(Guid.NewGuid());
-            IAbsenceRequestOpenPeriod openRollingPeriod2 = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].Item;
-            openRollingPeriod2.Absence = absenceForRollingPeriod;
-            openRollingPeriod2.SetId(Guid.NewGuid());
-
-            _workflowControlSet.AddOpenAbsenceRequestPeriod(openRollingPeriod1);
-            _workflowControlSet.AddOpenAbsenceRequestPeriod(openRollingPeriod2);
-            _workflowControlSet.AddOpenAbsenceRequestPeriod(openDatePeriod1);
-            _workflowControlSet.AddOpenAbsenceRequestPeriod(openDatePeriod2);
-
-            IList<AbsenceRequestPeriodModel> selectedPeriodModels = new List<AbsenceRequestPeriodModel>
-                                                                        {
-                            new AbsenceRequestPeriodModel(openDatePeriod1,_workflowControlSetModel)
-                        };
-            List<AbsenceRequestPeriodModel> copiedPeriodModels = new List<AbsenceRequestPeriodModel>
-                                                                     {
-                            new AbsenceRequestPeriodModel(openRollingPeriod1,_workflowControlSetModel),
-                            new AbsenceRequestPeriodModel(openRollingPeriod2,_workflowControlSetModel)
-                        };
-
-            IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
-
-            using (_mocks.Record())
-            {
-                // Initialize mocks
-                ExpectInitialize(repositoryCollection);
-                ExpectSetSelectedWorkflowControlSetModel();
-                using (_mocks.Ordered())
-                {
-                    Expect.Call(_view.AbsenceRequestPeriodSelected).Return(copiedPeriodModels);
-                    //Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
-                    Expect.Call(_view.AbsenceRequestPeriodSelected).Return(selectedPeriodModels);
-                    Expect.Call(() => _view.SetOpenPeriodsGridRowCount(0)).IgnoreArguments();
-                    Expect.Call(() => _view.RefreshOpenPeriodsGrid());
-                }
-            }
-
-            using (_mocks.Playback())
-            {
-                _target.Initialize();
-                _target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
-
-                _target.CopyAbsenceRequestPeriod();
-                Assert.AreEqual(openRollingPeriod1.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Absence);
-                Assert.AreEqual(openRollingPeriod2.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[1].DomainEntity.Absence);
-                Assert.AreEqual(openDatePeriod1.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[2].DomainEntity.Absence);
-                Assert.AreEqual(openDatePeriod2.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[3].DomainEntity.Absence);
-                Assert.IsTrue(_target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Id.HasValue);
-                Assert.IsTrue(_target.SelectedModel.AbsenceRequestPeriodModels[1].DomainEntity.Id.HasValue);
-                Assert.IsTrue(_target.SelectedModel.AbsenceRequestPeriodModels[2].DomainEntity.Id.HasValue);
-                Assert.IsTrue(_target.SelectedModel.AbsenceRequestPeriodModels[3].DomainEntity.Id.HasValue);
-                Assert.AreEqual(4, _target.SelectedModel.AbsenceRequestPeriodModels.Count);
-                _target.PasteAbsenceRequestPeriod();
-                Assert.IsTrue(_target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Id.HasValue);
-                Assert.IsTrue(_target.SelectedModel.AbsenceRequestPeriodModels[1].DomainEntity.Id.HasValue);
-                Assert.IsFalse(_target.SelectedModel.AbsenceRequestPeriodModels[2].DomainEntity.Id.HasValue);
-                Assert.IsFalse(_target.SelectedModel.AbsenceRequestPeriodModels[3].DomainEntity.Id.HasValue);
-                Assert.AreEqual(openRollingPeriod1.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Absence);
-                Assert.AreEqual(openRollingPeriod2.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[1].DomainEntity.Absence);
-                Assert.AreEqual(openRollingPeriod1.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[2].DomainEntity.Absence);
-                Assert.AreEqual(openRollingPeriod2.Absence, _target.SelectedModel.AbsenceRequestPeriodModels[3].DomainEntity.Absence);
-                Assert.AreEqual(4, _target.SelectedModel.AbsenceRequestPeriodModels.Count);
-            }
-        }
-
-        [Test]
-        public void VerifyPasteAbsenceRequestPeriodNothingIsPastedIfNoCopied()
-        {
-            IAbsence absence = AbsenceFactory.CreateRequestableAbsence("Holiday", "HL", Color.Red);
-            IAbsenceRequestOpenPeriod openDatePeriod = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item;
-            openDatePeriod.Absence = absence;
-            openDatePeriod.SetId(Guid.NewGuid());
-
-            _workflowControlSet.AddOpenAbsenceRequestPeriod(openDatePeriod);
-            IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
-            IList<AbsenceRequestPeriodModel> selectedPeriodModels = new List<AbsenceRequestPeriodModel>
-                                                                        {
-                            new AbsenceRequestPeriodModel(openDatePeriod,_workflowControlSetModel)
-                        };
-
-            using (_mocks.Record())
-            {
-                // Initialize mocks
-                ExpectInitialize(repositoryCollection);
-                ExpectSetSelectedWorkflowControlSetModel();
-                // Paste mocks
-                //Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
-                Expect.Call(_view.AbsenceRequestPeriodSelected).Return(selectedPeriodModels);
-            }
-
-            using (_mocks.Playback())
-            {
-                _target.Initialize();
-                _target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
-
-                Assert.AreEqual(openDatePeriod.Id, _target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Id);
-                Assert.AreEqual(1, _target.SelectedModel.AbsenceRequestPeriodModels.Count);
-                _target.PasteAbsenceRequestPeriod();
-                Assert.AreEqual(openDatePeriod.Id, _target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Id);
-                Assert.AreEqual(1, _target.SelectedModel.AbsenceRequestPeriodModels.Count);
-            }
-        }
-
-        [Test]
-        public void VerifyPasteAbsenceRequestPeriodNothingIsPastedIfNoSelected()
-        {
-            IAbsence absence = AbsenceFactory.CreateRequestableAbsence("Holiday", "HL", Color.Red);
-            IAbsenceRequestOpenPeriod openDatePeriod = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item;
-            openDatePeriod.Absence = absence;
-            openDatePeriod.SetId(Guid.NewGuid());
-
-            _workflowControlSet.AddOpenAbsenceRequestPeriod(openDatePeriod);
-            IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
-
-            using (_mocks.Record())
-            {
-                ExpectInitialize(repositoryCollection);
-                ExpectSetSelectedWorkflowControlSetModel();
-                // Paste mocks
-                //Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
-                Expect.Call(_view.AbsenceRequestPeriodSelected).Return(new List<AbsenceRequestPeriodModel>());
-            }
-
-            using (_mocks.Playback())
-            {
-                _target.Initialize();
-                _target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
-
-                Assert.AreEqual(openDatePeriod.Id, _target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Id);
-                Assert.AreEqual(1, _target.SelectedModel.AbsenceRequestPeriodModels.Count);
-                _target.PasteAbsenceRequestPeriod();
-                Assert.AreEqual(openDatePeriod.Id, _target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity.Id);
-                Assert.AreEqual(1, _target.SelectedModel.AbsenceRequestPeriodModels.Count);
-            }
-        }
-
+		
         [Test]
         public void VerifyActivityListContainsNullValueFirstAfterFillAllowedPreferenceActivityCombo()
         {
@@ -1040,8 +573,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void VerifyDefaultValuesForPreferencePeriodAreSetWhenCreatingNew()
         {
-            DateOnlyPeriod insertPeriod = new DateOnlyPeriod(2010, 4, 1, 2010, 4, 30);
-            DateOnlyPeriod preferencePeriod = new DateOnlyPeriod(2010, 5, 1, 2010, 5, 31);
+            var insertPeriod = new DateOnlyPeriod(2010, 4, 1, 2010, 4, 30);
+            var preferencePeriod = new DateOnlyPeriod(2010, 5, 1, 2010, 5, 31);
 
             using (_mocks.Record())
             {
@@ -1062,8 +595,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void VerifyDefaultValuesForStudentAvailabilityPeriodAreSetWhenCreatingNew()
         {
-            DateOnlyPeriod insertPeriod = new DateOnlyPeriod(2010, 4, 1, 2010, 4, 30);
-            DateOnlyPeriod studentAvailabilityPeriod = new DateOnlyPeriod(2010, 5, 1, 2010, 5, 31);
+			var insertPeriod = new DateOnlyPeriod(2010, 4, 1, 2010, 4, 30);
+			var studentAvailabilityPeriod = new DateOnlyPeriod(2010, 5, 1, 2010, 5, 31);
 
             using (_mocks.Record())
             {
@@ -1084,8 +617,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void VerifySetPreferencePeriods()
         {
-            DateOnlyPeriod insertPeriod = new DateOnlyPeriod(2010, 4, 1, 2010, 4, 30);
-            DateOnlyPeriod preferencePeriod = new DateOnlyPeriod(2010, 5, 1, 2010, 5, 31);
+            var insertPeriod = new DateOnlyPeriod(2010, 4, 1, 2010, 4, 30);
+			var preferencePeriod = new DateOnlyPeriod(2010, 5, 1, 2010, 5, 31);
 
             IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
             using (_mocks.Record())
@@ -1108,8 +641,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void VerifySetStudentAvailabilityPeriods()
         {
-            DateOnlyPeriod insertPeriod = new DateOnlyPeriod(2010, 4, 1, 2010, 4, 30);
-            DateOnlyPeriod studentAvailabilityPeriod = new DateOnlyPeriod(2010, 5, 1, 2010, 5, 31);
+			var insertPeriod = new DateOnlyPeriod(2010, 4, 1, 2010, 4, 30);
+			var studentAvailabilityPeriod = new DateOnlyPeriod(2010, 5, 1, 2010, 5, 31);
 
             IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
             using (_mocks.Record())
@@ -1145,8 +678,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 _target.Initialize();
                 _target.SetSelectedWorkflowControlSetModel(_workflowControlSetModel);
 
-                DateOnlyPeriod expected = new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue);
-                IList<DateOnlyPeriod> result = _target.BasicVisualizerWriteProtectionPeriods(new DateOnly(2010, 6, 1));
+				var expected = new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue);
+				var result = _target.BasicVisualizerWriteProtectionPeriods(new DateOnly(2010, 6, 1));
                 Assert.AreEqual(1, result.Count);
                 Assert.AreEqual(expected, result[0]);
 
@@ -1175,10 +708,10 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 _target.Initialize();
                 _target.SetSelectedWorkflowControlSetModel(_workflowControlSetModel);
 
-                DateOnlyPeriod expected = new DateOnlyPeriod(new DateOnly(2010, 7, 1), new DateOnly(2010, 7, 31));
+                var expected = new DateOnlyPeriod(new DateOnly(2010, 7, 1), new DateOnly(2010, 7, 31));
                 _target.SetPreferencePeriod(expected);
 
-                IList<DateOnlyPeriod> result = _target.BasicVisualizerPreferencePeriods();
+				var result = _target.BasicVisualizerPreferencePeriods();
                 Assert.AreEqual(1, result.Count);
                 Assert.AreEqual(expected, result[0]);
             }
@@ -1201,10 +734,10 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 _target.Initialize();
                 _target.SetSelectedWorkflowControlSetModel(_workflowControlSetModel);
 
-                DateOnlyPeriod expected = new DateOnlyPeriod(new DateOnly(2010, 7, 1), new DateOnly(2010, 7, 31));
+				var expected = new DateOnlyPeriod(new DateOnly(2010, 7, 1), new DateOnly(2010, 7, 31));
                 _target.SetStudentAvailabilityPeriod(expected);
 
-                IList<DateOnlyPeriod> result = _target.BasicVisualizerStudentAvailabilityPeriods();
+				var result = _target.BasicVisualizerStudentAvailabilityPeriods();
                 Assert.AreEqual(1, result.Count);
                 Assert.AreEqual(expected, result[0]);
             }
@@ -1227,14 +760,14 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 _target.Initialize();
                 _target.SetSelectedWorkflowControlSetModel(_workflowControlSetModel);
 
-                DateOnlyPeriod expected1 = new DateOnlyPeriod(new DateOnly(2010, 7, 1), new DateOnly(2010, 7, 31));
+                var expected1 = new DateOnlyPeriod(new DateOnly(2010, 7, 1), new DateOnly(2010, 7, 31));
                 _target.SetPreferencePeriod(expected1);
                 _target.SetStudentAvailabilityPeriod(expected1);
                 _target.SetPublishedToDate(null);
 
-                DateOnlyPeriod expected2 = new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime), new DateOnly(DateHelper.MinSmallDateTime));
+                var expected2 = new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime), new DateOnly(DateHelper.MinSmallDateTime));
 
-                IList<DateOnlyPeriod> result = _target.BasicVisualizerPublishedPeriods();
+                var result = _target.BasicVisualizerPublishedPeriods();
                 Assert.AreEqual(3, result.Count);
                 Assert.AreEqual(expected2, result[0]);
                 Assert.AreEqual(expected1, result[1]);
@@ -1257,12 +790,12 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 _target.Initialize();
                 _target.SetSelectedWorkflowControlSetModel(_workflowControlSetModel);
 
-                DateOnlyPeriod expected1 = new DateOnlyPeriod(new DateOnly(2010, 7, 1), new DateOnly(2010, 7, 31));
+				var expected1 = new DateOnlyPeriod(new DateOnly(2010, 7, 1), new DateOnly(2010, 7, 31));
                 _target.SetPreferencePeriod(expected1);
                 _target.SetStudentAvailabilityPeriod(expected1);
                 _target.SetPublishedToDate(new DateOnly(2010, 5, 31));
 
-                DateOnlyPeriod expected2 = new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime), new DateOnly(2010, 5, 31));
+				var expected2 = new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime), new DateOnly(2010, 5, 31));
 
                 IList<DateOnlyPeriod> result = _target.BasicVisualizerPublishedPeriods();
                 Assert.AreEqual(3, result.Count);
@@ -1277,7 +810,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         public void VerifySetShiftTradeOpenPeriodDaysForwardMinimum()
         {
             IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
-            MinMax<int> tradePeriodDays = new MinMax<int>(20, 100);
+			var tradePeriodDays = new MinMax<int>(20, 100);
             using (_mocks.Record())
             {
                 ExpectInitialize(repositoryCollection);
@@ -1298,7 +831,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void VerifyDefaultShiftTradePeriodDaysWhenCreatingNew()
         {
-            MinMax<int> periodDays = new MinMax<int>(2, 17);
+			var periodDays = new MinMax<int>(2, 17);
 
             using (_mocks.Record())
             {
@@ -1319,7 +852,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), Test]
         public void VerifyShiftTradeTargetTimeFlexibilityIsSetWhenCreatingNew()
         {
-            TimeSpan flexibility = new TimeSpan(0, 0, 0);
+			var flexibility = new TimeSpan(0, 0, 0);
 
             using (_mocks.Record())
             {
@@ -1351,7 +884,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void VerifySetShiftTradeTargetTimeFlexibility()
         {
-            TimeSpan flexibility = new TimeSpan(0, 34, 0);
+			var flexibility = new TimeSpan(0, 34, 0);
             IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
             using (_mocks.Record())
             {
