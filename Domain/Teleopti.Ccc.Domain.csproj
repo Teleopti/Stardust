@@ -717,7 +717,6 @@
     <Compile Include="Helper\SerializationHelper.cs" />
     <Compile Include="Helper\StaffingCalculatorService.cs" />
     <Compile Include="Helper\StaffingEmailCalculatorService.cs" />
-    <Compile Include="Optimization\SchedulePeriodDayOffLegalStateValidator.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\SchedulePeriodShiftCategoryBackToLegalStateServiceBuilder.cs" />
     <Compile Include="Optimization\SchedulePeriodShiftCategoryBackToLegalStateService.cs" />

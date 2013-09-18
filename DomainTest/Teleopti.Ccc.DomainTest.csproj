@@ -557,7 +557,6 @@
     <Compile Include="Helper\StartTimeLimitationTest.cs" />
     <Compile Include="Helper\WorkTimeLimitationTest.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateServiceTest.cs" />
-    <Compile Include="Optimization\SchedulePeriodLegalStateValidatorTest.cs" />
     <Compile Include="Optimization\RemoveShiftCategoryBackToLegalServiceBuilderTest.cs" />
     <Compile Include="Optimization\SchedulePeriodBackToLegalStateServiceProTest.cs" />
     <Compile Include="Optimization\ShiftCategoryLimitationCheckerTest.cs" />
