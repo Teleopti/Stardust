@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 		private ICachedNumberOfEachCategoryPerDate _cachedNumberOfEachCategoryPerDate;
 		private ICachedShiftCategoryDistribution _cachedShiftCategoryDistribution;
 		private ISchedulerStateHolder _schedulerStateHolder;
+		private IPopulationStatisticsCalculator _calculator;
 
 		[SetUp]
 		public void Setup()
@@ -29,8 +30,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			_cachedNumberOfEachCategoryPerDate = _mocks.StrictMock<ICachedNumberOfEachCategoryPerDate>();
 			_cachedShiftCategoryDistribution = _mocks.StrictMock<ICachedShiftCategoryDistribution>();
 			_schedulerStateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
+			_calculator = _mocks.StrictMock<IPopulationStatisticsCalculator>();
 			_target = new ShiftCategoryDistributionModel(_cachedShiftCategoryDistribution, _cachedNumberOfEachCategoryPerDate, _cachedNumberOfEachCategoryPerPerson,
-			                                             new DateOnlyPeriod(2013, 09, 16, 2013, 09, 17), _schedulerStateHolder);
+														 new DateOnlyPeriod(2013, 09, 16, 2013, 09, 17), _schedulerStateHolder, _calculator);
 		}
 
 		[Test]

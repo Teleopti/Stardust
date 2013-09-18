@@ -576,10 +576,6 @@
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityPersonFilterTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftCategoryDistributionExtensionsTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftCategoryDistributionModelTest.cs" />
-    <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftFairnessCalculatorTest.cs" />
-    <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftDistributionTest.cs" />
-    <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftCategoryPerAgentTest.cs" />
-    <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftFairnessTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryFairnessValueHelperTest.cs" />
     <Compile Include="Scheduler\SkillFullPeriodGridControlPresenterTest.cs" />
     <Compile Include="Scheduler\DateTimePeriodIsValidTest.cs" />

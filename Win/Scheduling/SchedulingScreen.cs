@@ -4194,13 +4194,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_defaultScheduleTag = tag;
 				break;
 			}
-
-			var cachedNumberOfEachCategoryPerPerson = new CachedNumberOfEachCategoryPerPerson(_schedulerState.Schedules,
-															_schedulerState.RequestedPeriod.DateOnlyPeriod);
-			var distributionInformationExtractor = new DistributionInformationExtractor(cachedNumberOfEachCategoryPerPerson,
-														 _schedulerState.RequestedPeriod.DateOnlyPeriod);
-			distributionInformationExtractor.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
-			_updateSelectionForShiftDistribution = new UpdateSelectionForShiftDistribution(distributionInformationExtractor);
 		}
 
 		private void createMaxSeatSkills(ISkillDayRepository skillDayRepository)
@@ -6653,9 +6646,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		private DateTime _lastclickLabels;
-	    private UpdateSelectionForShiftDistribution _updateSelectionForShiftDistribution;
-
-
 	    private void toolStripButtonShowTexts_Click(object sender, EventArgs e)
 		{
 			// fix for bug in syncfusion that shoots click event twice on buttons in quick access
