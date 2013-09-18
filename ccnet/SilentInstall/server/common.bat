@@ -59,6 +59,7 @@ SET SITEPATH=%INSTALLDIR%TeleoptiCCC\SDK\
 SET AGENT_SERVICE=%DNS_ALIAS%TeleoptiCCC/SDK/TeleoptiCccSdkService.svc
 SET RTA_SERVICE=%DNS_ALIAS%TeleoptiCCC/RTA/TeleoptiRtaService.svc
 SET WEB_BROKER=%DNS_ALIAS%TeleoptiCCC/broker/
+SET WEB_BROKER_BACKPLANE=%DNS_ALIAS%TeleoptiCCC/Broker.backplane/backplane
 
 SET CONTEXT_HELP_URL=http://wiki.teleopti.com/TeleoptiCCC/Special:MyLanguage/
 
