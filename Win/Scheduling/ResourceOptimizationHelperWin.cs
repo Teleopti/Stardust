@@ -46,7 +46,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void ResourceCalculateAllDays(DoWorkEventArgs e, BackgroundWorker backgroundWorker, bool useOccupancyAdjustment)
 		{
-			var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
+            var minutesPerInterval = 15;
+            if (_stateHolder.SchedulingResultState.Skills.Count > 0)
+            {
+                minutesPerInterval = _stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
+            }
+            var extractor = new ScheduleProjectionExtractor(_personSkillProvider, minutesPerInterval);
 			var resources = extractor.CreateRelevantProjectionList(_stateHolder.Schedules);
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{

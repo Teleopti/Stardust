@@ -232,7 +232,6 @@
     <Compile Include="Domain\IPayrollResultDetail.cs" />
     <Compile Include="Domain\IPersonAccountCollection.cs" />
     <Compile Include="Domain\IAssignmentPeriodRule.cs" />
-    <Compile Include="Domain\IBinaryValidator.cs" />
     <Compile Include="Domain\IDayOffOptimizerContainer.cs" />
     <Compile Include="Domain\IExecutableCommand.cs" />
     <Compile Include="Domain\ILockableBitArray.cs" />
@@ -265,7 +264,6 @@
     <Compile Include="Domain\IScheduleMatrixLockableBitArrayConverter.cs" />
     <Compile Include="Domain\IScheduleMatrixOriginalStateContainer.cs" />
     <Compile Include="Domain\IScheduleOptimizationService.cs" />
-    <Compile Include="Domain\ISchedulePeriodDayOffLegalStateValidator.cs" />
     <Compile Include="Domain\ISchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Domain\IBestBlockShiftCategoryFinder.cs" />
     <Compile Include="Domain\IBlockSchedulingService.cs" />
