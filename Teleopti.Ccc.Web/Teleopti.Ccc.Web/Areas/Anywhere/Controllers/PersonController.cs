@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -13,11 +14,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	{
 		private readonly ISchedulePersonProvider _schedulePersonProvider;
 		private readonly ITeamProvider _teamProvider;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-		public PersonController(ISchedulePersonProvider schedulePersonProvider, ITeamProvider teamProvider)
+		public PersonController(ISchedulePersonProvider schedulePersonProvider, ITeamProvider teamProvider, ILoggedOnUser loggedOnUser)
 		{
 			_schedulePersonProvider = schedulePersonProvider;
 			_teamProvider = teamProvider;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		[UnitOfWorkAction,HttpGet]
@@ -33,13 +36,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[UnitOfWorkAction, HttpGet]
 		public JsonResult AvailableTeams(DateTime date)
 		{
-			var teams =
-				_teamProvider.GetPermittedTeams(new DateOnly(date), DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere).Select(
-					t => new {t.Id, t.SiteAndTeam}).OrderBy(t => t.SiteAndTeam).ToList();
-			return Json(new
-			            	{
-			            		Teams = teams
-			            	},JsonRequestBehavior.AllowGet);
+			var dateOnly = new DateOnly(date);
+			var teams = _teamProvider.GetPermittedTeams(dateOnly, DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere).ToList();
+			if (!teams.Any())
+				teams = new List<ITeam> {_loggedOnUser.CurrentUser().MyTeam(dateOnly)};
+			return Json(new { Teams = teams.Select(t => new { t.Id, t.SiteAndTeam }).OrderBy(t => t.SiteAndTeam).ToList() }, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

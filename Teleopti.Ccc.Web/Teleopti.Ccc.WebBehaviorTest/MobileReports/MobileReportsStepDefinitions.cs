@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 			var timeZones = DataMaker.Data().UserData<ITimeZoneData>();
 			var dataSource = DataMaker.Data().UserData<IDatasourceData>();
 			var businessUnits = new BusinessUnit(TestData.BusinessUnit, dataSource);
-			DataMaker.Data().Setup(businessUnits);
-			DataMaker.Data().Setup(new ThreeSkills(timeZones, businessUnits, dataSource));
+			DataMaker.Analytics().Setup(businessUnits);
+			DataMaker.Analytics().Setup(new ThreeSkills(timeZones, businessUnits, dataSource));
 		}
 
 		[Given(@"I have analytics fact queue data")]
@@ -37,18 +37,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 			var dataSource = DataMaker.Data().UserData<IDatasourceData>();
 			var queues = new AQueue(dataSource);
 			var businessUnits = new BusinessUnit(TestData.BusinessUnit, dataSource);
-			DataMaker.Data().Setup(queues);
-			DataMaker.Data().Setup(businessUnits);
+			DataMaker.Analytics().Setup(queues);
+			DataMaker.Analytics().Setup(businessUnits);
 			var skills = new ThreeSkills(timeZones, businessUnits, dataSource);
-			DataMaker.Data().Setup(skills);
+			DataMaker.Analytics().Setup(skills);
 			var workloads = new AWorkload(skills, timeZones, businessUnits, dataSource);
-			DataMaker.Data().Setup(workloads);
-			DataMaker.Data().Setup(new FillBridgeQueueWorkloadFromData(workloads, queues, businessUnits, dataSource));
+			DataMaker.Analytics().Setup(workloads);
+			DataMaker.Analytics().Setup(new FillBridgeQueueWorkloadFromData(workloads, queues, businessUnits, dataSource));
 			var intervals = DataMaker.Data().UserData<IIntervalData>();
 			var bridgeTimeZones = DataMaker.Data().UserData<IBridgeTimeZone>();
 			var dates = DataMaker.Data().UserData<IDateData>();
-			DataMaker.Data().Setup(new FactQueue(dates, intervals, queues, dataSource, bridgeTimeZones));
-			DataMaker.Data().Setup(new WeekdayTranslations());
+			DataMaker.Analytics().Setup(new FactQueue(dates, intervals, queues, dataSource, bridgeTimeZones));
+			DataMaker.Analytics().Setup(new WeekdayTranslations());
 		}
 
 		[When(@"I click the signout button")]

@@ -735,6 +735,7 @@
     <Compile Include="Infrastructure\ICurrentUnitOfWorkFactory.cs" />
     <Compile Include="Infrastructure\IWriteToFile.cs" />
     <Compile Include="Domain\IWorkShiftBackToLegalStateServicePro.cs" />
+    <Compile Include="Infrastructure\IsNotDeadCodeAttribute.cs" />
     <Compile Include="Infrastructure\LicenseType.cs" />
     <Compile Include="Infrastructure\MessageBrokerException.cs" />
     <Compile Include="IPossibleStartEndCategory.cs" />

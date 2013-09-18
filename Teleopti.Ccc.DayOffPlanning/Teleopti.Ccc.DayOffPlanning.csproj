@@ -144,7 +144,6 @@
     <Compile Include="KeepFreeWeekendValidator.cs" />
     <Compile Include="KeepFreeWeekendDayValidator.cs" />
     <Compile Include="DayOffBackToLegalStateFunctions.cs" />
-    <Compile Include="DayOffBackToLegalStateValidatorListCreator.cs" />
     <Compile Include="DaysOffPerWeekSolver.cs" />
     <Compile Include="FreeWeekendDaySolver.cs" />
     <Compile Include="FreeWeekendDayValidator.cs" />

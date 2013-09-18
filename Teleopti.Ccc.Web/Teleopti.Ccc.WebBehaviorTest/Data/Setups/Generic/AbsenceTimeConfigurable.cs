@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 {
-	public class AbsenceTimeConfigurable : IPostSetup
+	public class AbsenceTimeConfigurable : IDelayedSetup
 	{
 		public DateTime Date { get; set; }
 		public int Hours { get; set; }

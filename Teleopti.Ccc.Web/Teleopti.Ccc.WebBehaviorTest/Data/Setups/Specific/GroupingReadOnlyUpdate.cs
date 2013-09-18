@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 {
-	public class GroupingReadOnlyUpdate : IPostSetup
+	public class GroupingReadOnlyUpdate : IDelayedSetup
 	{
 		public void Apply(IPerson user, IUnitOfWork uow)
 		{

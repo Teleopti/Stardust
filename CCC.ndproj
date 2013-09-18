@@ -2,6 +2,7 @@
 <NDepend AppName="CCC" Platform="DotNet">
   <OutputDir KeepHistoric="False" KeepXmlFiles="True">C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\NDependOut</OutputDir>
   <Assemblies>
+	<Name>Teleopti.Interfaces</Name>
     <Name>Teleopti.Ccc.Domain</Name>
     <Name>Teleopti.Ccc.Infrastructure</Name>
     <Name>Teleopti.Ccc.DatabaseConverter</Name>
@@ -2113,7 +2114,9 @@ warnif count > 0
 	//skippa abstracta metoder
 	where !m.IsAbstract && 
 	//skippa metoder som ligger i testprojekten
-	!allTestAssemblies.Contains(m.ParentAssembly) 
+	!allTestAssemblies.Contains(m.ParentAssembly)
+	//skippa "KeepMe"
+	&& !m.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute")	
 	select new { m, m.FullName }]]>
 	</Query>
 	<Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types potentially only used from Tests</Name>
@@ -2128,7 +2131,11 @@ warnif count > 0
 	
 	from t in typesUsedOnlyInTest
 	//skippa klasser som ligger i testprojekten
-	where !allTestAssemblies.Contains(t.ParentAssembly) 
+	where !allTestAssemblies.Contains(t.ParentAssembly)
+	//skippa "KeepMe"
+	&& !t.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute")
+	&& !t.BaseClasses.Any(type => type.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute"))
+	&& !t.InterfacesImplemented.Any(type => type.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute"))	
 	select new { t, t.FullName}]]>
 	</Query>
 	
@@ -2141,7 +2148,7 @@ let canTypeBeConsideredAsDeadProc = new Func<IType, bool>(
         !t.IsGeneratedByCompiler &&
 
          // If you don't want to link NDepend.API.dll, you can use your own IsNotDeadCodeAttribute and adapt this rule.
-        !t.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch()) &&
+        !t.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch()) &&
 
         // Exclude static types that define only const fields
         // because they cannot be seen as used in IL code.
@@ -2185,7 +2192,7 @@ let canMethodBeConsideredAsDeadProc = new Func<IMethod, bool>(
          !m.HasAttribute("System.Runtime.Serialization.OnDeserializedAttribute".AllowNoMatch()) &&
 
          // If you don't want to link NDepend.API.dll, you can use your own IsNotDeadCodeAttribute and adapt this rule.
-         !m.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch()))
+         !m.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch()))
 
 // Get methods unused
 let methodsUnused = 
@@ -2216,7 +2223,7 @@ from f in JustMyCode.Fields where
    !f.IsLiteral &&    // The IL code never explicitely uses literal fields.
    !f.IsEnumValue &&  // The IL code never explicitely uses enumeration value.
    f.Name !=  "value__"  && // Field named 'value__' are relative to enumerations and the IL code never explicitely uses them.
-   !f.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch())
+   !f.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch())
    // If you don't want to link NDepend.API.dll, you can use your own IsNotDeadCodeAttribute and adapt this rule.
 select f]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Wrong usage of IsNotDeadCodeAttribute</Name>
@@ -2230,12 +2237,12 @@ select f]]></Query>
 // your own IsNotDeadCodeAttribute and adapt this rule.
 warnif count == 1
 
-let tAttr = Types.WithFullName("NDepend.Attributes.IsNotDeadCodeAttribute").FirstOrDefault()
+let tAttr = Types.WithFullName("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute").FirstOrDefault()
 where tAttr != null
 
 // Get types that do a wrong usage of IsNotDeadCodeAttribute
 let types = from t in Application.Types where 
-   t.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch()) &&
+   t.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch()) &&
 
    ( // types used don't need to be tagged with IsNotDeadCodeAttribute!
      t.NbTypesUsingMe > 0  ||
@@ -2248,13 +2255,13 @@ let types = from t in Application.Types where
 
 // Get methods that do a wrong usage of IsNotDeadCodeAttribute
 let methods = from m in Application.Methods where 
-   m.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch()) &&
+   m.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch()) &&
    m.NbMethodsCallingMe > 0
    select m
 
 // Get fields that do a wrong usage of IsNotDeadCodeAttribute
 let fields = from f in Application.Fields where 
-   f.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch()) &&
+   f.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch()) &&
    f.NbMethodsUsingMe > 0
    select f
 
@@ -2266,7 +2273,7 @@ select new { tAttr, types , methods, fields }]]></Query>
 warnif count > 0 from m in JustMyCode.Methods where 
   m.Visibility != m.OptimalVisibility &&
   !m.HasAttribute("NDepend.Attributes.CannotDecreaseVisibilityAttribute".AllowNoMatch()) &&
-  !m.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch()) &&
+  !m.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch()) &&
   // If you don't want to link NDepend.API.dll, you can use your own attributes and adapt this rule.
   
   // Eliminate default constructor from the result.
@@ -2289,7 +2296,7 @@ warnif count > 0 from t in JustMyCode.Types where
 
   // If you don't want to link NDepend.API.dll, you can use your own attributes and adapt this rule.
  !t.HasAttribute("NDepend.Attributes.CannotDecreaseVisibilityAttribute".AllowNoMatch()) &&
- !t.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch()) &&
+ !t.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch()) &&
 
   // Static types that define only const fields cannot be seen as used in IL code.
   // They don't have  to be tagged with CannotDecreaseVisibilityAttribute.
@@ -2303,7 +2310,7 @@ select new { t, t.Visibility ,
 warnif count > 0 from f in JustMyCode.Fields where 
   f.Visibility != f.OptimalVisibility &&
  !f.HasAttribute("NDepend.Attributes.CannotDecreaseVisibilityAttribute".AllowNoMatch()) &&
- !f.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch())
+ !f.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch())
   // If you don't want to link NDepend.API.dll, you can use your own attributes and adapt this rule.
   
 select new { f, 
