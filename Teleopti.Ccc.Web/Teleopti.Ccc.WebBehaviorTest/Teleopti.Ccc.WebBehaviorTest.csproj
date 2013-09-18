@@ -504,7 +504,7 @@
     <Compile Include="Data\TestData.cs" />
     <Compile Include="Data\Setups\Specific\AnotherStandardPreference.cs" />
     <Compile Include="Data\Setups\Specific\BasePreference.cs" />
-    <Compile Include="Data\IPostSetup.cs" />
+    <Compile Include="Data\IDelayedSetup.cs" />
     <Compile Include="Data\Setups\Specific\MoreThanOnePageOfRequests.cs" />
     <Compile Include="Data\Setups\Specific\PreferenceClosedWorkflowControlSet.cs" />
     <Compile Include="Data\Setups\Specific\PreferenceOpenNextMonthWorkflowControlSet.cs" />
