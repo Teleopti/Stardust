@@ -78,6 +78,8 @@
 	<Name>Teleopti.Ccc.IocCommonTest</Name>
   </Assemblies>
   <FrameworkAssemblies>
+    <Name>nunit.framework</Name>
+    <Name>SharpTestsEx</Name>
     <Name>mscorlib</Name>
     <Name>System</Name>
     <Name>System.IdentityModel</Name>
