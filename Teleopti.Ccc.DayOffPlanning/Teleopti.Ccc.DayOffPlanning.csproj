@@ -112,7 +112,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BinaryPermutation.cs" />
     <Compile Include="CMSBCaseSolver.cs" />
     <Compile Include="CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker.cs" />
     <Compile Include="ConsecutiveDayOffValidator.cs" />
