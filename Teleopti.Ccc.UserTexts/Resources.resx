@@ -278,8 +278,8 @@
     <comment>Answered calls</comment>
   </data>
   <data name="ApplicationLogInName" xml:space="preserve">
-    <value>Appl. log on name</value>
-    <comment>Appl. log on name</comment>
+    <value>Appl. logon name</value>
+    <comment>Appl. logon name</comment>
   </data>
   <data name="Roles" xml:space="preserve">
     <value>Roles</value>
@@ -2255,8 +2255,8 @@ Periods</comment>
     <comment>Welcome</comment>
   </data>
   <data name="WinLoginNameDot" xml:space="preserve">
-    <value>Windows log on</value>
-    <comment>Windows log on</comment>
+    <value>Windows logon</value>
+    <comment>Windows logon</comment>
   </data>
   <data name="Wizard" xml:space="preserve">
     <value>Wizard</value>
@@ -3197,7 +3197,7 @@ Replace</value>
     <comment>Ready... </comment>
   </data>
   <data name="EnterNameOnNewGroup" xml:space="preserve">
-    <value>Enter name on the new grouping</value>
+    <value>Enter name of the new grouping</value>
     <comment>Enter name on the new grouping</comment>
   </data>
   <data name="PersonAssignmentIsNotValidDot" xml:space="preserve">
@@ -3330,8 +3330,8 @@ Replace</value>
     <comment>Agents with shrinkage</comment>
   </data>
   <data name="ExternalLogOn" xml:space="preserve">
-    <value>External Log On</value>
-    <comment>External Log On</comment>
+    <value>External logon</value>
+    <comment>External logon</comment>
   </data>
   <data name="AgentPortalOptions" xml:space="preserve">
     <value>Agent Portal Options</value>
@@ -3746,7 +3746,7 @@ Columns</value>
     <comment>Funtion name Teleopti CCC</comment>
   </data>
   <data name="PartTimePercentageLower" xml:space="preserve">
-    <value>Part-Time Percentage</value>
+    <value>Part-time percentage</value>
     <comment>Grid header</comment>
   </data>
   <data name="Optional" xml:space="preserve">
@@ -3762,8 +3762,8 @@ Columns</value>
     <comment>Prepare Skil</comment>
   </data>
   <data name="ApplicationLogon" xml:space="preserve">
-    <value>Application log on</value>
-    <comment>Application log on</comment>
+    <value>Application logon</value>
+    <comment>Application logon</comment>
   </data>
   <data name="InitializingTreeDots" xml:space="preserve">
     <value>Initializing...</value>
@@ -3806,8 +3806,8 @@ Columns</value>
     <comment>Verifying permissions...</comment>
   </data>
   <data name="WindowsLogon" xml:space="preserve">
-    <value>Windows log on</value>
-    <comment>Windows log on</comment>
+    <value>Windows logon</value>
+    <comment>Windows logon</comment>
   </data>
   <data name="TeleoptiRaptorColonPeople" xml:space="preserve">
     <value>People – Teleopti CCC</value>
@@ -4001,10 +4001,10 @@ Columns</value>
     <value>Accrued</value>
   </data>
   <data name="BalanceIn" xml:space="preserve">
-    <value>Balance In</value>
+    <value>Balance in</value>
   </data>
   <data name="BalanceOut" xml:space="preserve">
-    <value>Balance Out</value>
+    <value>Balance out</value>
   </data>
   <data name="DeleteRole" xml:space="preserve">
     <value>Delete Role</value>
@@ -5756,11 +5756,11 @@ Error details:
     <comment>Title</comment>
   </data>
   <data name="PaidTime" xml:space="preserve">
-    <value>Paid Time</value>
+    <value>Paid time</value>
     <comment>Paid Time</comment>
   </data>
   <data name="WorkTime" xml:space="preserve">
-    <value>Work Time</value>
+    <value>Work time</value>
     <comment>Work Time</comment>
   </data>
   <data name="ActivityTime" xml:space="preserve">
@@ -8277,7 +8277,7 @@ Period</value>
     <comment>One or more absences was not saved. You are not allowed to change tracker type of an absence when it is in use by a person account.</comment>
   </data>
   <data name="TrackerType" xml:space="preserve">
-    <value>Tracker Type</value>
+    <value>Tracker type</value>
     <comment>Tracker Type</comment>
   </data>
   <data name="BlockNotValidConflictingCategories" xml:space="preserve">
@@ -8379,7 +8379,7 @@ Schedule</value>
     <value>Understaff</value>
   </data>
   <data name="WorkflowControlSet" xml:space="preserve">
-    <value>Workflow Control Set</value>
+    <value>Workflow control set</value>
     <comment>Workflow Control Set</comment>
   </data>
   <data name="ModifySelection" xml:space="preserve">
@@ -8581,7 +8581,7 @@ Period: {3}</value>
     <comment>Online reports application function</comment>
   </data>
   <data name="ScheduledTimePerActivityReport" xml:space="preserve">
-    <value>Scheduled Time Per Activity</value>
+    <value>Scheduled Time per Activity</value>
     <comment>Scheduled time per activity report application function</comment>
   </data>
   <data name="ScheduledTimePerActivity" xml:space="preserve">
@@ -10311,8 +10311,8 @@ These options are activated:
     <comment>Running background job</comment>
   </data>
   <data name="ResReportRequestsPerAgent" xml:space="preserve">
-    <value>Requests Per Agent</value>
-    <comment>Requests Per Agent</comment>
+    <value>Requests per Agent</value>
+    <comment>Requests per Agent</comment>
   </data>
   <data name="TargetValue" xml:space="preserve">
     <value>Target Value</value>
@@ -10552,7 +10552,7 @@ These options are activated:
     <comment>ShowPublicNote</comment>
   </data>
   <data name="AvailabilityFulfillment" xml:space="preserve">
-    <value>Availability Fulfillment</value>
+    <value>Availability fulfillment</value>
     <comment>Availability Fulfillment</comment>
   </data>
   <data name="NoAvailableShifts" xml:space="preserve">
@@ -10560,7 +10560,7 @@ These options are activated:
     <comment>No available shifts</comment>
   </data>
   <data name="MustHaveFulfillment" xml:space="preserve">
-    <value>Must Have Fulfillment</value>
+    <value>Must have fulfillment</value>
     <comment>Must Have Fulfillment</comment>
   </data>
   <data name="ActualAfterCallWorkTime" xml:space="preserve">
@@ -10568,7 +10568,7 @@ These options are activated:
     <comment>Actual after call work time</comment>
   </data>
   <data name="PreferenceFulfillment" xml:space="preserve">
-    <value>Preference Fulfillment</value>
+    <value>Preference fulfillment</value>
     <comment>Preference Fulfillment</comment>
   </data>
   <data name="AbsenceRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
@@ -10576,7 +10576,7 @@ These options are activated:
     <comment>Approve absence request for one day.</comment>
   </data>
   <data name="RotationFulfillment" xml:space="preserve">
-    <value>Rotation Fulfillment</value>
+    <value>Rotation fulfillment</value>
     <comment>Rotation Fulfillment</comment>
   </data>
   <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
@@ -11737,6 +11737,30 @@ Reduce the complexity to use these shifts.</value>
     <value>Overtime Availability</value>
     <comment>Overtime Availability used on mytime web</comment>
   </data>
+  <data name="PaidTimeHeader" xml:space="preserve">
+    <value>Paid Time</value>
+    <comment>Paid time header</comment>
+  </data>
+  <data name="PartTimePercentageHeader" xml:space="preserve">
+    <value>Part-Time Percentage</value>
+    <comment>Part-time percentage header</comment>
+  </data>
+  <data name="RuleSetBagLower" xml:space="preserve">
+    <value>Shift bag</value>
+    <comment>Shift bag lower</comment>
+  </data>
+  <data name="TrackerTypeHeader" xml:space="preserve">
+    <value>Tracker Type</value>
+    <comment>Tracker type header</comment>
+  </data>
+  <data name="WorkflowControlSetHeader" xml:space="preserve">
+    <value>Workflow Control Set</value>
+    <comment>Workflow Control Set Header</comment>
+  </data>
+  <data name="WorkTimeHeader" xml:space="preserve">
+    <value>Work Time</value>
+    <comment>Work time header</comment>
+	</data>
   <data name="FilterHourlyAvailability" xml:space="preserve">
     <value>Filter Hourly Availability</value>
     <comment>Caption button to Filter on hourly availability</comment>
