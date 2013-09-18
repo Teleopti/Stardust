@@ -77,6 +77,10 @@
 	<Name>Teleopti.Ccc.TestCommon</Name>
 	<Name>Teleopti.Ccc.DayOffPlanningTest</Name>
 	<Name>Teleopti.Ccc.IocCommonTest</Name>
+	<Name>Teleopti.Ccc.UserTexts</Name>
+	<Name>Teleopti.Analytics.Etl.Interfaces</Name>
+	<Name>Teleopti.Ccc.Rta.Interfaces</Name>
+	<Name>Teleopti.Analytics.ReportTexts</Name>
   </Assemblies>
   <FrameworkAssemblies>
     <Name>nunit.framework</Name>
