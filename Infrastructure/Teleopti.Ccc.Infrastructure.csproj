@@ -192,7 +192,6 @@
     <Compile Include="NHibernateConfiguration\SqlServerProgrammabilityAuxiliary.cs" />
     <Compile Include="NHibernateConfiguration\ColorNumber.cs" />
     <Compile Include="Foundation\ConstraintViolationException.cs" />
-    <Compile Include="NHibernateConfiguration\DataSourceSettingValues.cs" />
     <Compile Include="NHibernateConfiguration\DateOnlyMappingType.cs" />
     <Compile Include="Foundation\LogOnOff.cs" />
     <Compile Include="Foundation\LazyLoadingManager.cs" />
