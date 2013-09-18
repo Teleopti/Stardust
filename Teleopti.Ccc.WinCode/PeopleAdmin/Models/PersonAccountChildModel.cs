@@ -22,14 +22,14 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             UnitOfWorkFactory = Infrastructure.UnitOfWork.UnitOfWorkFactory.Current;
         }
 
-        public PersonAccountChildModel(ITraceableRefreshService refreshService, IPersonAccountCollection personAccounts, IAccount account, CommonNameDescriptionSetting commonNameDescription, IPersonAccountUpdater _personAccountUpdater)
+        public PersonAccountChildModel(ITraceableRefreshService refreshService, IPersonAccountCollection personAccounts, IAccount account, CommonNameDescriptionSetting commonNameDescription, IPersonAccountUpdater personAccountUpdater)
             : this()
         {
             _refreshService = refreshService;
             _containedEntity = personAccounts;
             _currentAccount = account;
             _commonNameDescription = commonNameDescription;
-	        this._personAccountUpdater = _personAccountUpdater;
+	        _personAccountUpdater = personAccountUpdater;
 	        base.ContainedEntity = account;
         }
 

@@ -27,17 +27,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 	    private ISchedulingResultStateHolder _resultHolder;
 		private IPerson _person1;
 		private IPerson _person2;
-	    private IPersonAccountUpdater _personAccountUpdater;
 
 	    [SetUp]
 		public void Setup()
 	    {
             _mocks = new MockRepository();
-	        _personAccountUpdater = _mocks.StrictMock<IPersonAccountUpdater>();
 	        var persons = new List<IPerson>();
 			_person1 = PersonFactory.CreatePerson();
             _person2 = PersonFactory.CreatePerson();
-			_person2.TerminatePerson(new DateOnly(2005, 1, 1), _personAccountUpdater);
+			_person2.TerminatePerson(new DateOnly(2005, 1, 1), new PersonAccountUpdaterDummy());
             _resultHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
 			_unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
@@ -243,8 +241,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var person1 = PersonFactory.CreatePerson("ittan");
 			var person2 = PersonFactory.CreatePerson("tvåan");
 			var person3 = PersonFactory.CreatePerson("trean");
-			person2.TerminatePerson( new DateOnly(2015,1,1), _personAccountUpdater);
-			person3.TerminatePerson(new DateOnly(2005,1,1), _personAccountUpdater);
+			person2.TerminatePerson(new DateOnly(2015, 1, 1), new PersonAccountUpdaterDummy());
+			person3.TerminatePerson(new DateOnly(2005,1,1), new PersonAccountUpdaterDummy());
 			var persons = new List<IPerson> {person1, person2, person3,};
 			_target.SetSelectedPeriod(new DateOnlyPeriod(2012,1,1,2012,12,31));
 			Expect.Call(_resultHolder.PersonsInOrganization).Return(persons);
