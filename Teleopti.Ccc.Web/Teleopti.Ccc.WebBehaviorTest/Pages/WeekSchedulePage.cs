@@ -175,12 +175,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public DivCollection DayLayers(DateTime date)
         {
-			return Document.Divs.Filter(Find.BySelector(DateSelector(date) + " .week-schedule-layer"));
+			return Document.Divs.Filter(Find.BySelector(DateSelector(date) + " .weekview-day-schedule-layer"));
         }
 
 		public Div DayLayerTooltipElement(DateTime date, string tooltipContent)
 		{
-			return Document.Div(Find.BySelector(DateSelector(date) + " .week-schedule-layer[tooltip-text*='" + tooltipContent + "']"));
+			return Document.Div(Find.BySelector(DateSelector(date) + " .weekview-day-schedule-layer[tooltip-text*='" + tooltipContent + "']"));
 		}
 
 		public Div InnerBody
