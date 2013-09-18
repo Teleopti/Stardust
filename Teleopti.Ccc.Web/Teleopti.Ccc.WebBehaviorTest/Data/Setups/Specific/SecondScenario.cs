@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		{
 			var businessUnit = GlobalDataMaker.Data().Data<SecondBusinessUnit>().BusinessUnit;
 
-			Scenario = ScenarioFactory.CreateScenarioAggregate("Second scenario", true);
+			Scenario = ScenarioFactory.CreateScenarioAggregate("Second scenario", false);
 			Scenario.SetBusinessUnit(businessUnit);
 			new ScenarioRepository(uow).Add(Scenario);
 		}

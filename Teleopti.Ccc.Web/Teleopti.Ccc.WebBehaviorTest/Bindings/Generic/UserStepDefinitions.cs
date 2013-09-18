@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var user = table.CreateInstance<UserConfigurable>();
 			DataMaker.Data().Apply(user);
-			DataMaker.Data().ApplySetups();
+			DataMaker.Data().ApplyDelayed();
 		}
 
 		[Given(@"I am a user signed in with")]

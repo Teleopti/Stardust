@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     /// Created by: rogerkr
     /// Created date: 2009-02-04
     /// </remarks>
+    [IsNotDeadCode]
     public class FilterLayerNoOptimizer : IFilterOnPeriodOptimizer
     {
         public int FindStartIndex(IEnumerable<IVisualLayer> unmergedCollection, DateTime start)
