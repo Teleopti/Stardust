@@ -722,7 +722,6 @@
     <Compile Include="Scheduling\TeamBlock\DayIntervalDataCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DynamicBlockFinderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\EqualWorkShiftValueDeciderTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\GroupPersonBuilderBasedOnContractTimeTest.cs" />
     <Compile Include="Scheduling\TeamBlock\GroupPersonSkillAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\IntervalDataMedianCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\OpenHoursToEffectiveRestrictionConverterTest.cs" />
