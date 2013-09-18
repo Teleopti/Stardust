@@ -4,6 +4,7 @@ using NHibernate;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 	/// Created by: HenryG
 	/// Created date: 2008-11-20
 	/// </remarks>
+	[IsNotDeadCode("Used in NH mapping files.")]
 	public class DateOnlyMappingType : IUserType
 	{
 		#region Implementation of IUserType

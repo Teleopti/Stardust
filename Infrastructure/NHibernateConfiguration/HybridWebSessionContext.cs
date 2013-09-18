@@ -2,10 +2,11 @@
 using NHibernate;
 using NHibernate.Context;
 using NHibernate.Engine;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
-
+	[IsNotDeadCode("Used from NH file in web app.")]
 	public class HybridWebSessionContext : CurrentSessionContext
 	{
 		private const string _itemsKey = "HybridWebSessionContext";
