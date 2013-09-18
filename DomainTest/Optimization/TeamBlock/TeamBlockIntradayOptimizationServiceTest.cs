@@ -170,9 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 					  .Return(false);
                 Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced))
                       .Return(5.0);
-                //Expect.Call(_standardDeviationSumCalculator.Calculate(selectedPeriod, matrixes, optimizationPreferences,
-                //                                                      schedulingOptions)).Return(5.0);
-				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
+                Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_schedulePartModifyAndRollbackService, schedulingOptions));
 			}
 			using (_mocks.Playback())
@@ -203,9 +201,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_target.ReportProgress += targetReportProgress;
 			using (_mocks.Record())
 			{
-                //Expect.Call(matrix1.Person).Return(person);
-                //Expect.Call(matrix2.Person).Return(person);
-				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences)).Return(schedulingOptions);
+                Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences)).Return(schedulingOptions);
 				Expect.Call(_teamBlockGenerator.Generate(matrixes, selectedPeriod, persons, schedulingOptions))
 					  .Return(teamBlocks);
 			}

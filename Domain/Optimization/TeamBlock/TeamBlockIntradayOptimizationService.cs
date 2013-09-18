@@ -64,7 +64,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			var teamBlocks = _teamBlockGenerator.Generate(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
-			//var allMatrixesOfOnePerson = allPersonMatrixList.Where(x => x.Person.Equals(selectedPersons.First())).ToList();
 			var remainingInfoList = new List<ITeamBlockInfo>(teamBlocks);
 			
 			while (remainingInfoList.Count > 0)
@@ -113,9 +112,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					break;
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
 
-                //var previousStandardDevationSum  = _standardDeviationSumCalculator.Calculate(selectedPeriod, allMatrixesOfOnePerson,
-                //                                                                            optimizationPreferences, schedulingOptions);
-			    var previousTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo,
+                var previousTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo,
 			                                                                                          optimizationPreferences
 			                                                                                              .Advanced);
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
@@ -136,8 +133,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					continue;
 				}
 
-                //var newStandardDeviationSum = _standardDeviationSumCalculator.Calculate(selectedPeriod, allMatrixesOfOnePerson,
-                //                                                                                optimizationPreferences, schedulingOptions);
                 var newTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo,
                                                                                                       optimizationPreferences
                                                                                                           .Advanced);
