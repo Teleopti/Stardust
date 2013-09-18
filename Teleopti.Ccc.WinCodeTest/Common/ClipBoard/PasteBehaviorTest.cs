@@ -197,6 +197,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
                     Expect.Call(pasteAction.Paste(gridControl, clip, 1, 2)).Return(part);
 	                Expect.Call(part.AssignmentHighZOrder()).Return(personAssignment).Repeat.AtLeastOnce();
 	                Expect.Call(() => part.Remove(personAssignment)).Repeat.AtLeastOnce();
+	                Expect.Call(part.PersistableScheduleDataCollection()).Return(new List<IPersistableScheduleData>());
                 }
 
                 using (mockRep.Playback())
@@ -238,6 +239,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
                         .Call(pasteAction.Paste(gridControl, clip, 1, 1))
                         .Return(clip.ClipValue)
                         .Repeat.Any();
+
+
                 }
 
                 using (mockRep.Playback())
@@ -338,11 +341,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 
 					Expect.Call(pasteAction.Paste(gridControl, clip, 1, 1)).Return(destination);
 					Expect.Call(destination.PersistableScheduleDataCollection()).Return(persistableScheduleData);
+					Expect.Call(destination.Period).Return(destinationPeriod);
 					Expect.Call(destination.AssignmentHighZOrder()).Return(personAssignment).Repeat.AtLeastOnce();
 					Expect.Call(destination.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
 					Expect.Call(dateOnlyAsDateTimePeriod.Period()).Return(destinationPeriod);
 					Expect.Call(personAssignment.Period).Return(assignmentPeriod).Repeat.AtLeastOnce();
 					Expect.Call(personAssignment.MainShift).Return(mainShift);
+					
 				}
 
 				using (mockRep.Playback())

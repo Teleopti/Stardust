@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_scheduleDayBefore.Person).Return(_person);
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(_persistableScheduleData2);
-				Expect.Call(_scheduleDayBefore.PersistableScheduleDataCollection()).Return(_persistableScheduleData1);
+				Expect.Call(_scheduleDayBefore.PersistableScheduleDataCollection()).Return(_persistableScheduleData1).Repeat.AtLeastOnce();
 				Expect.Call(() => _scheduleDayBefore.Remove(_personAbsence1));
 				Expect.Call(() => _scheduleDayBefore.Add(null)).IgnoreArguments();
 			}
@@ -66,6 +66,46 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Assert.AreEqual(1, _days.Count);
 				Assert.AreEqual(_days[0], _scheduleDayBefore);
 			}
+		}
+
+		[Test]
+		public void ShouldRemoveDoubles()
+		{
+			_personAbsence1 = PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario, _period1, _absence);
+			_personAbsence2 = PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario, _period1, _absence);
+			_persistableScheduleData1 = new List<IPersistableScheduleData> { _personAbsence1, _personAbsence2 };
+	
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(_persistableScheduleData1);
+				Expect.Call(() => _scheduleDay.Remove(_personAbsence2));
+			}
+			using (_mock.Playback())
+			{
+				_target.RemoveDoubles(_scheduleDay);
+			}
+		}
+
+		[Test]
+		public void ShouldNotMergeWhenAbsenceIsPersisted()
+		{
+			_persistableScheduleData1[0].SetId(Guid.NewGuid());
+
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.FullDayAbsence);
+				Expect.Call(_scheduleDay.Person).Return(_person);
+				Expect.Call(_scheduleDayBefore.Person).Return(_person);
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(_persistableScheduleData2);
+				Expect.Call(_scheduleDayBefore.PersistableScheduleDataCollection()).Return(_persistableScheduleData1);
+			}
+			using (_mock.Playback())
+			{
+				_target.MergeWithDayBefore();
+				Assert.AreEqual(2, _days.Count);
+				Assert.AreEqual(_days[0], _scheduleDayBefore);
+				Assert.AreEqual(_days[1], _scheduleDay);
+			}	
 		}
 
 		[Test]
