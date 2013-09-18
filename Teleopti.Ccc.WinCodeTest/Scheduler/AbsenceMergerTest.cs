@@ -69,6 +69,24 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
+		public void ShouldRemoveDoubles()
+		{
+			_personAbsence1 = PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario, _period1, _absence);
+			_personAbsence2 = PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario, _period1, _absence);
+			_persistableScheduleData1 = new List<IPersistableScheduleData> { _personAbsence1, _personAbsence2 };
+
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(_persistableScheduleData1);
+				Expect.Call(() => _scheduleDay.Remove(_personAbsence2));
+			}
+			using (_mock.Playback())
+			{
+				_target.RemoveDoubles(_scheduleDay);
+			}
+		}
+
+		[Test]
 		public void ShouldMergeOnDayStart()
 		{
 			_days = new List<IScheduleDay>{_scheduleDay};
