@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             person.Email = "email";
             person.EmploymentNumber = "email";
             person.Note = "A very good agent";
-            person.TerminatePerson(new DateOnly(2011, 8, 20), _personAccountUpdater);
+            person.TerminatePerson(new DateOnly(2011, 8, 20), new PersonAccountUpdaterDummy());
             ((Person) person).SetDeleted();
             
             
@@ -104,10 +104,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         [Test]
         public void ShouldMapDomainEntityWithoutWorkflowControlSetToDto()
         {
-            _mocks.Record();
-            _mocks.ReplayAll();
+			var person = CreatePerson(false);
 
-            var person = CreatePerson(false);
+	        _mocks.Record();
+
+            _mocks.ReplayAll();
 
             var personDto = _target.DomainEntityToDto(person);
 
