@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Tracking
             IAccount pacc = _mocker.StrictMock<IAccount>();
             using(_mocker.Record())
             {
-                Expect.Call(() => pacc.CalculateUsed(null, null, null)).IgnoreArguments().Repeat.Once();
+                Expect.Call(() => pacc.CalculateUsed(null, null)).IgnoreArguments().Repeat.Once();
             }
             using(_mocker.Playback())
             {
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Tracking
             IAccount pacc = _mocker.StrictMock<IAccount>();
             using (_mocker.Record())
             {
-                Expect.Call(() => pacc.CalculateUsed(null, null, null)).IgnoreArguments().Repeat.Twice();
+                Expect.Call(() => pacc.CalculateUsed(null, null)).IgnoreArguments().Repeat.Twice();
                 //Expect.Call(()=>pacc.CalculateBalanceIn()).Repeat.Twice();
             }
             using (_mocker.Playback())

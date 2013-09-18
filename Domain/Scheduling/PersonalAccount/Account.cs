@@ -59,7 +59,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
         {
             get
             {
-                //CalculateBalanceIn();
                 return BalanceIn.Add(Accrued).Add(Extra).Subtract(LatestCalculatedBalance).Subtract(BalanceOut);
             }
         }
@@ -73,12 +72,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
             }
         }
 
-        public virtual void CalculateUsed(IScheduleRepository repository,ISchedule loadedSchedule, IScenario scenario)
+        public virtual void CalculateUsed(IScheduleRepository repository, IScenario scenario)
         {
-            CalculateUsed(repository, loadedSchedule, scenario, new PersonAccountProjectionService(this, loadedSchedule));
+            CalculateUsed(repository, scenario, new PersonAccountProjectionService(this, null));
         }
 
-		public virtual void CalculateUsed(IScheduleRepository repository, ISchedule loadedSchedule, IScenario scenario, IPersonAccountProjectionService projectionServiceForPersonAccount)
+		private void CalculateUsed(IScheduleRepository repository, IScenario scenario, IPersonAccountProjectionService projectionServiceForPersonAccount)
 		{
 			IList<IScheduleDay> scheduleDays = projectionServiceForPersonAccount.CreateProjection(repository, scenario);
 			_usedInScheduler = TimeSpan.Zero;
@@ -157,6 +156,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 			{
 				var terminateDate = Owner.Person.TerminalDate.Value;
 				if (terminateDate < endDate)
+					endDate = terminateDate;
+				if (terminateDate < StartDate)
 					endDate = StartDate;
 			}
 

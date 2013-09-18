@@ -3,7 +3,6 @@ using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -28,7 +27,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
     public class PersonAssembler : Assembler<IPerson,PersonDto>, IPersonAssembler
     {
         private readonly IAssembler<IWorkflowControlSet,WorkflowControlSetDto> _workflowControlSetAssembler;
-        public IPersonRepository PersonRepository { get; private set; }
+	    private readonly IPersonAccountUpdater _personAccountUpdater;
+	    public IPersonRepository PersonRepository { get; private set; }
         public bool IgnorePersonPeriods { get; set; }
 
         /// <summary>
@@ -41,10 +41,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         /// </remarks>
         public bool EnableSaveOrUpdate { get; set; }
 
-        public PersonAssembler(IPersonRepository personRepository, IAssembler<IWorkflowControlSet,WorkflowControlSetDto> workflowControlSetAssembler)
+		public PersonAssembler(IPersonRepository personRepository, IAssembler<IWorkflowControlSet, WorkflowControlSetDto> workflowControlSetAssembler, IPersonAccountUpdater personAccountUpdater)
         {
             _workflowControlSetAssembler = workflowControlSetAssembler;
-            PersonRepository = personRepository;
+			_personAccountUpdater = personAccountUpdater;
+			PersonRepository = personRepository;
             IgnorePersonPeriods = false;
         }
 
@@ -117,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             return person;
         }
 
-        private static IPerson CreateNewPerson(PersonDto dto)
+        private IPerson CreateNewPerson(PersonDto dto)
         {
             IPerson person = new Person();
             UpdatePerson(dto, person);
@@ -125,7 +126,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             return person;
         }
 
-        private static void UpdatePerson(PersonDto dto, IPerson person)
+        private void UpdatePerson(PersonDto dto, IPerson person)
         {
             if (dto.CultureLanguageId.HasValue)
                 person.PermissionInformation.SetCulture(new CultureInfo(dto.CultureLanguageId.Value));
@@ -155,18 +156,37 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                                                            DomainName = dto.WindowsDomain,
                                                            WindowsLogOnName = dto.WindowsLogOnName
                                                        };
-            if(dto.TerminationDate != null)
-                person.TerminalDate = new DateOnly(dto.TerminationDate.DateTime);
-            else
-                person.TerminalDate = null;
+            if(personTerminated(dto, person))
+                person.TerminatePerson(new DateOnly(dto.TerminationDate.DateTime), _personAccountUpdater) ;
+            if(personActivated(dto, person))
+                person.ActivatePerson(null);
             if (!string.IsNullOrEmpty(dto.Note))
                 person.Note = dto.Note;
             if(dto.IsDeleted)
                 ((IDeleteTag)person).SetDeleted();
         }
 
+	    private static bool personActivated(PersonDto dto, IPerson person)
+	    {
+			if (dto.TerminationDate == null && person.TerminalDate.HasValue)
+				return true;
+			return false;
+	    }
 
-        private static PersonPeriodDto PersonPeriodDoToDto(IPersonPeriod entity)
+	    private static bool personTerminated(PersonDto dto, IPerson person)
+	    {
+		    if (dto.TerminationDate != null)
+		    {
+			    if (!person.TerminalDate.HasValue)
+				    return true;
+			    if (person.TerminalDate.Value != new DateOnly(dto.TerminationDate.DateTime))
+				    return true;
+		    }
+		    return false;
+	    }
+
+
+	    private static PersonPeriodDto PersonPeriodDoToDto(IPersonPeriod entity)
         {
             PersonPeriodDto personPeriodDto = new PersonPeriodDto();
 			personPeriodDto.Period = new DateOnlyPeriodDto

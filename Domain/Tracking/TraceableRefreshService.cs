@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Tracking
 
         private void RefreshAndAddToCache(IAccount account, IUnitOfWork unitOfWork)
         {
-            account.CalculateUsed(_repositoryFactory.CreateScheduleRepository(unitOfWork), null, _scenario);
+            account.CalculateUsed(_repositoryFactory.CreateScheduleRepository(unitOfWork), _scenario);
             
             _refreshedAccounts.Add(account);
         }
