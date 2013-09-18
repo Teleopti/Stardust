@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(account.BalanceIn = TimeSpan.FromMinutes(11));
                 Expect.Call(account.Extra = TimeSpan.FromMinutes(12));
                 Expect.Call(_scenarioRepository.Current()).Return(null);
-                Expect.Call(() => account.CalculateUsed(null, null, null)).IgnoreArguments();
+                Expect.Call(() => account.CalculateUsed(null, null)).IgnoreArguments();
             }
             using(_mock.Playback())
             {

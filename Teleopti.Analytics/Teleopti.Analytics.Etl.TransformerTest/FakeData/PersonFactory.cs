@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Rhino.Mocks;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -59,7 +60,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             businessUnitGraph.SiteCollection[0].TeamCollection[0].SetId(Guid.NewGuid());
             businessUnitGraph.SiteCollection[1].TeamCollection[0].SetId(Guid.NewGuid());
             person.AddPersonPeriod(personPeriod);
-            person.TerminalDate = new DateOnly(2007, 2, 10);
+            person.TerminatePerson(new DateOnly(2007, 2, 10), new MockRepository().StrictMock<IPersonAccountUpdater>());
             RaptorTransformerHelper.SetUpdatedOn(person, DateTime.Now);
             retList.Add(person);
 

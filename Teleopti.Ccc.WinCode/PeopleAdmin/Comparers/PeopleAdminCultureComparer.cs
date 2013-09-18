@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 
 #endregion
 

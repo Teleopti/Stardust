@@ -15,39 +15,22 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         private readonly IPersonAccountCollection _containedEntity;
         private IAccount _currentAccount;
         private CommonNameDescriptionSetting _commonNameDescription;
+		private readonly IPersonAccountUpdater _personAccountUpdater;
 
         protected PersonAccountChildModel()
         {
             UnitOfWorkFactory = Infrastructure.UnitOfWork.UnitOfWorkFactory.Current;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PersonAccountChildModel"/> class.
-        /// </summary>
-        /// <param name="refreshService"></param>
-        /// <param name="selectedDate">The selected date.</param>
-        /// <param name="personAccounts">The person accounts.</param>
-        /// <remarks>
-        /// Created by:SanjayaI
-        /// Created date: 8/21/2008
-        /// </remarks>
-        public PersonAccountChildModel(ITraceableRefreshService refreshService, DateOnly selectedDate, IPersonAccountCollection personAccounts)
-            : this()
-        {
-            _refreshService = refreshService;
-            _containedEntity = personAccounts;
-            //gör som grekerna - fel här! kan vara flera, en per absence
-            _currentAccount = personAccounts.Find(selectedDate).FirstOrDefault();
-        }
-
-        public PersonAccountChildModel(ITraceableRefreshService refreshService, IPersonAccountCollection personAccounts, IAccount account, CommonNameDescriptionSetting commonNameDescription)
+        public PersonAccountChildModel(ITraceableRefreshService refreshService, IPersonAccountCollection personAccounts, IAccount account, CommonNameDescriptionSetting commonNameDescription, IPersonAccountUpdater _personAccountUpdater)
             : this()
         {
             _refreshService = refreshService;
             _containedEntity = personAccounts;
             _currentAccount = account;
             _commonNameDescription = commonNameDescription;
-            base.ContainedEntity = account;
+	        this._personAccountUpdater = _personAccountUpdater;
+	        base.ContainedEntity = account;
         }
 
         protected IUnitOfWorkFactory UnitOfWorkFactory { get; set; }
@@ -230,7 +213,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
                 if (_currentAccount != null && value.HasValue)
                 {
                     _currentAccount.StartDate = value.Value;
-                    RefreshAccount();
+					_personAccountUpdater.Update(_currentAccount.Owner.Person);
                 }
             }
         }
@@ -344,8 +327,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
                  {
                      //fixa sen. Om du inte vet hur, fråga brasilianarna
                      throw new ArgumentException("Kan inte sätta absence ännu");
-                     //_currentAccount.Owner.Absence = value;
-                     //RefreshAccount();
                  }
             }
         }

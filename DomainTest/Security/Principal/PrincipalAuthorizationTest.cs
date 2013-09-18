@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         private IAuthorizeAvailableData authorizeAvailableData;
         private IApplicationFunction applicationFunction;
         private OrganisationMembership organisationMembership;
+        private IPersonAccountUpdater _personAccountUpdater;
         const string Function = "test";
 
         [SetUp]
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             mocks = new MockRepository();
             authorizeAvailableData = mocks.StrictMock<IAuthorizeAvailableData>();
             person = PersonFactory.CreatePerson();
-
+            _personAccountUpdater = mocks.StrictMock<IPersonAccountUpdater>();
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null), person);
             organisationMembership = (OrganisationMembership) principal.Organisation;
 			principalAuthorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
@@ -182,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today.AddDays(-10), site.TeamCollection[0]));
 			otherPerson.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today.AddDays(-15), site.TeamCollection[0]));
-			person.TerminalDate = today;
+			person.TerminatePerson(today, _personAccountUpdater);
 
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null), person);
 			organisationMembership = (OrganisationMembership) principal.Organisation;
