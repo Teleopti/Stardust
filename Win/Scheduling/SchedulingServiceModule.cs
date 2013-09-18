@@ -250,6 +250,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<GroupPersonBuilderForOptimizationFactory>().As<IGroupPersonBuilderForOptimizationFactory>();
 			builder.RegisterType<MatrixListFactory>().As<IMatrixListFactory>();
 			builder.RegisterType<TeamBlockMaxSeatChecker>().As<ITeamBlockMaxSeatChecker>();
+		    builder.RegisterType<DailyTargetValueCalculatorForTeamBlock>().As<IDailyTargetValueCalculatorForTeamBlock>();
 		}
 
 		private static void registerTeamBlockSchedulingService(ContainerBuilder builder)
@@ -261,6 +262,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			builder.RegisterType<TeamBlockIntradayDecisionMaker>().As<ITeamBlockIntradayDecisionMaker>();
 			builder.RegisterType<StandardDeviationSumCalculator>().As<IStandardDeviationSumCalculator>();
+		    builder.RegisterType<RelativeDailyValueCalculatorForTeamBlock>().As<IRelativeDailyValueCalculatorForTeamBlock>();
 		}
 
 		private static void registerTeamBlockDayOffOptimizerService(ContainerBuilder builder)
