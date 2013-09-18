@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
@@ -154,6 +155,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
                     Expect.Call(pasteAction.Paste(gridControl, clip, 1, 2)).Return(part);
 	                Expect.Call(part.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
 	                Expect.Call(() => part.Remove(personAssignment)).Repeat.AtLeastOnce();
+	                Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2001, 1, 1), TeleoptiPrincipal.Current.Regional.TimeZone));
+	                Expect.Call(personAssignment.Period).Return(new DateTimePeriod(2013, 1, 1, 2013, 1, 1)).Repeat.AtLeastOnce();
                 }
 
                 using (mockRep.Playback())
