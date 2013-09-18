@@ -5,7 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         private IAuthorizeAvailableData authorizeAvailableData;
         private IApplicationFunction applicationFunction;
         private OrganisationMembership organisationMembership;
-        private IPersonAccountUpdater _personAccountUpdater;
         const string Function = "test";
 
         [SetUp]
@@ -33,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             mocks = new MockRepository();
             authorizeAvailableData = mocks.StrictMock<IAuthorizeAvailableData>();
             person = PersonFactory.CreatePerson();
-            _personAccountUpdater = mocks.StrictMock<IPersonAccountUpdater>();
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null), person);
             organisationMembership = (OrganisationMembership) principal.Organisation;
 			principalAuthorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
@@ -183,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today.AddDays(-10), site.TeamCollection[0]));
 			otherPerson.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today.AddDays(-15), site.TeamCollection[0]));
-			person.TerminatePerson(today, _personAccountUpdater);
+			person.TerminatePerson(today, new PersonAccountUpdaterDummy());
 
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null), person);
 			organisationMembership = (OrganisationMembership) principal.Organisation;
