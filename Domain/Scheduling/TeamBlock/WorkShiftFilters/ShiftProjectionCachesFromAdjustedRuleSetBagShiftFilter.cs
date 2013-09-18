@@ -15,15 +15,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		private readonly IRuleSetDeletedActivityChecker _ruleSetDeletedActivityChecker;
 		private readonly IRuleSetDeletedShiftCategoryChecker _rulesSetDeletedShiftCategoryChecker;
 		private readonly IRuleSetToShiftsGenerator _ruleSetToShiftsGenerator;
+		private readonly IRuleSetSkillActivityChecker _ruleSetSkillActivityChecker;
 		private readonly IDictionary<IWorkShiftRuleSet, IList<IShiftProjectionCache>> _ruleSetListDictionary = new Dictionary<IWorkShiftRuleSet, IList<IShiftProjectionCache>>();
 
 		public ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter(IRuleSetDeletedActivityChecker ruleSetDeletedActivityChecker,
 			IRuleSetDeletedShiftCategoryChecker rulesSetDeletedShiftCategoryChecker,
-			IRuleSetToShiftsGenerator ruleSetToShiftsGenerator)
+			IRuleSetToShiftsGenerator ruleSetToShiftsGenerator,
+			IRuleSetSkillActivityChecker ruleSetSkillActivityChecker)
 		{
 			_ruleSetDeletedActivityChecker = ruleSetDeletedActivityChecker;
 			_rulesSetDeletedShiftCategoryChecker = rulesSetDeletedShiftCategoryChecker;
 			_ruleSetToShiftsGenerator = ruleSetToShiftsGenerator;
+			_ruleSetSkillActivityChecker = ruleSetSkillActivityChecker;
 		}
 
 		public IList<IShiftProjectionCache> Filter(DateOnly scheduleDateOnly, IPerson person,  bool forRestrictionsOnly)
@@ -47,6 +50,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 					continue;
 
 				if (_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet))
+					continue;
+
+				if (!_ruleSetSkillActivityChecker.CheckSkillActivties(ruleSet, personPeriod.PersonSkillCollection))
 					continue;
 
 				IEnumerable<IShiftProjectionCache> ruleSetList = getShiftsForRuleset(ruleSet);
