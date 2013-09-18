@@ -11,5 +11,9 @@ namespace Teleopti.Interfaces.Infrastructure
 	/// </summary>
 	public class IsNotDeadCodeAttribute : Attribute
 	{
+		public IsNotDeadCodeAttribute(string descriptionWhyThisShouldBeKept)
+		{
+			
+		}
 	}
 }

@@ -13,11 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     /// Here primary to be able to the VisualLayerCollection
     /// with no optimizer at all.
     /// </summary>
-    /// <remarks>
-    /// Created by: rogerkr
-    /// Created date: 2009-02-04
-    /// </remarks>
-    [IsNotDeadCode]
+    [IsNotDeadCode("Keep this for now - used when doing performance benchmarks with projections.")]
     public class FilterLayerNoOptimizer : IFilterOnPeriodOptimizer
     {
         public int FindStartIndex(IEnumerable<IVisualLayer> unmergedCollection, DateTime start)
