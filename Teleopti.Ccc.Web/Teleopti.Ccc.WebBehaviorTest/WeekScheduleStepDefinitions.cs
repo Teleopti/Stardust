@@ -190,32 +190,31 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer[style*='color: {1}']", date.ToString("yyyy-MM-dd"), color));
 		}
 
+		[Then(@"I should see an '(.*)' indication for chance of absence request on '(.*)'")]
+		public void ThenIShouldSeeAnIndicationForChanceOfAbsenceRequestOn(string color, DateTime date)
+		{
+			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .small-circle[style*='{1}']", date.ToString("yyyy-MM-dd"), color));
+		}
+
 		[Then(@"I should not see any indication of how many agents can go on holiday")]
 		public void ThenIShouldNotSeeAnyIndicationOfHowManyAgentsCanGoOnHoliday()
 		{
-			var indicators = Pages.Pages.WeekSchedulePage.AbsenceIndiciators();
-			foreach (var indicator in indicators)
-			{
-				EventualAssert.That(()=>indicator.IsDisplayed(), Is.False);
-			}
+			AssertAbsenceIndicators(0);
 		}
 
 		[Then(@"I should see an indication of the amount of agents that can go on holiday on each day of the week")]
 		public void ThenIShouldSeeAnIndicationOfTheAmountOfAgentsThatCanGoOnHolidayOnEachDayOfTheWeek()
 		{
-			var indicators = Pages.Pages.WeekSchedulePage.AbsenceIndiciators();
-			foreach (var indicator in indicators)
-			{
-				EventualAssert.That(()=>indicator.IsDisplayed(), Is.True);
-			}
+			AssertAbsenceIndicators(7);
 		}
-		[Then(@"I should see an '(.*)' indication for chance of absence request on '(.*)'")]
-		public void ThenIShouldSeeAnIndicationForChanceOfAbsenceRequestOn(string color, DateTime date)
+
+		private void AssertAbsenceIndicators(int visibleIndicatorCount)
 		{
-			var background = _page.DayElementForDate(date).Divs.Filter(Find.ByClass("small-circle"))[0].Style.BackgroundColor;
-			
-			EventualAssert.That(() => background.ToHexString, Is.EqualTo(new HtmlColor(color).ToHexString));
+			Browser.Interactions.AssertJavascriptResultContains("return $('.holiday-agents:visible').length",
+																visibleIndicatorCount.ToString(
+																	CultureInfo.InvariantCulture));
 		}
+
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
 		{
 			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(anyDayOfWeek, UserFactory.User().Culture).ToString("yyyy-MM-dd");
