@@ -2033,7 +2033,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Appl. log on name.
+        ///   Looks up a localized string similar to Appl. logon name.
         /// </summary>
         public static string ApplicationLogInName {
             get {
@@ -2042,7 +2042,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Application log on.
+        ///   Looks up a localized string similar to Application logon.
         /// </summary>
         public static string ApplicationLogon {
             get {
@@ -2612,7 +2612,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Availability Fulfillment.
+        ///   Looks up a localized string similar to Availability fulfillment.
         /// </summary>
         public static string AvailabilityFulfillment {
             get {
@@ -2901,7 +2901,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Balance In.
+        ///   Looks up a localized string similar to Balance in.
         /// </summary>
         public static string BalanceIn {
             get {
@@ -2910,7 +2910,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Balance Out.
+        ///   Looks up a localized string similar to Balance out.
         /// </summary>
         public static string BalanceOut {
             get {
@@ -7501,7 +7501,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter name on the new grouping.
+        ///   Looks up a localized string similar to Enter name of the new grouping.
         /// </summary>
         public static string EnterNameOnNewGroup {
             get {
@@ -8185,7 +8185,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to External Log On.
+        ///   Looks up a localized string similar to External Logon.
         /// </summary>
         public static string ExternalLogOn {
             get {
@@ -13426,7 +13426,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Must Have Fulfillment.
+        ///   Looks up a localized string similar to Must have fulfillment.
         /// </summary>
         public static string MustHaveFulfillment {
             get {
@@ -16049,11 +16049,20 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Paid Time.
+        ///   Looks up a localized string similar to Paid time.
         /// </summary>
         public static string PaidTime {
             get {
                 return ResourceManager.GetString("PaidTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paid Time.
+        /// </summary>
+        public static string PaidTimeHeader {
+            get {
+                return ResourceManager.GetString("PaidTimeHeader", resourceCulture);
             }
         }
         
@@ -16087,6 +16096,15 @@ namespace Teleopti.Ccc.UserTexts {
         
         /// <summary>
         ///   Looks up a localized string similar to Part-Time Percentage.
+        /// </summary>
+        public static string PartTimePercentageHeader {
+            get {
+                return ResourceManager.GetString("PartTimePercentageHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Part-time percentage.
         /// </summary>
         public static string PartTimePercentageLower {
             get {
@@ -17250,7 +17268,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preference Fulfillment.
+        ///   Looks up a localized string similar to Preference fulfillment.
         /// </summary>
         public static string PreferenceFulfillment {
             get {
@@ -19038,7 +19056,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Requests Per Agent.
+        ///   Looks up a localized string similar to Requests per Agent.
         /// </summary>
         public static string ResReportRequestsPerAgent {
             get {
@@ -19380,7 +19398,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rotation Fulfillment.
+        ///   Looks up a localized string similar to Rotation fulfillment.
         /// </summary>
         public static string RotationFulfillment {
             get {
@@ -19502,6 +19520,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RuleSetBag {
             get {
                 return ResourceManager.GetString("RuleSetBag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shift bag.
+        /// </summary>
+        public static string RuleSetBagLower {
+            get {
+                return ResourceManager.GetString("RuleSetBagLower", resourceCulture);
             }
         }
         
@@ -19947,7 +19974,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scheduled Time Per Activity.
+        ///   Looks up a localized string similar to Scheduled Time per Activity.
         /// </summary>
         public static string ScheduledTimePerActivityReport {
             get {
@@ -24324,11 +24351,20 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tracker Type.
+        ///   Looks up a localized string similar to Tracker type.
         /// </summary>
         public static string TrackerType {
             get {
                 return ResourceManager.GetString("TrackerType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tracker Type.
+        /// </summary>
+        public static string TrackerTypeHeader {
+            get {
+                return ResourceManager.GetString("TrackerTypeHeader", resourceCulture);
             }
         }
         
@@ -25863,7 +25899,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Windows log on.
+        ///   Looks up a localized string similar to Windows logon.
         /// </summary>
         public static string WindowsLogon {
             get {
@@ -25881,7 +25917,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Windows log on.
+        ///   Looks up a localized string similar to Windows logon.
         /// </summary>
         public static string WinLoginNameDot {
             get {
@@ -25917,7 +25953,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Workflow Control Set.
+        ///   Looks up a localized string similar to Workflow control set.
         /// </summary>
         public static string WorkflowControlSet {
             get {
@@ -25940,6 +25976,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WorkflowControlSetEqualsDenyReason {
             get {
                 return ResourceManager.GetString("WorkflowControlSetEqualsDenyReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workflow Control Set.
+        /// </summary>
+        public static string WorkflowControlSetHeader {
+            get {
+                return ResourceManager.GetString("WorkflowControlSetHeader", resourceCulture);
             }
         }
         
@@ -26181,11 +26226,20 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Work Time.
+        ///   Looks up a localized string similar to Work time.
         /// </summary>
         public static string WorkTime {
             get {
                 return ResourceManager.GetString("WorkTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Work Time.
+        /// </summary>
+        public static string WorkTimeHeader {
+            get {
+                return ResourceManager.GetString("WorkTimeHeader", resourceCulture);
             }
         }
         
