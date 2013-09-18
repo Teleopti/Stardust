@@ -119,14 +119,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlwaysTrueValidator.cs" />
     <Compile Include="CMSBCaseSolverTest.cs" />
     <Compile Include="CMSBOneFreeWeekendMax5WorkingDaysDecisionMakerTest.cs" />
     <Compile Include="ConsecutiveDayOffValidatorTest.cs" />
     <Compile Include="ConsecutiveDaysOffSolverTest.cs" />
     <Compile Include="ConsecutiveWorkdaysSolverTest.cs" />
     <Compile Include="ConsecutiveWorkdayValidatorTest.cs" />
-    <Compile Include="AlwaysFalseValidator.cs" />
     <Compile Include="DayOffOptimizationWeekendLegalStateValidatorListCreatorTest.cs" />
     <Compile Include="ExtendReduceDaysOffDecisionMakerTest.cs" />
     <Compile Include="ExtendReduceTimeDecisionMakerTest.cs" />
