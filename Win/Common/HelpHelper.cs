@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.Win.Common
 	    private string GetUrl(string formName, IHelpContext control)
 	    {
 	        var topic = GetTopic(formName, control);
-	        //if (!_staticHelp) topic = HttpUtility.UrlEncode(topic);
             return string.Concat(_http, _helpLang, _prefix, topic, _suffix);
 	        
 	    }
