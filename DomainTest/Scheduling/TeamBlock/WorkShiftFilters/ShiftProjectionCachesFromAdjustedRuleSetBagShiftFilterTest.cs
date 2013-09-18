@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private IRuleSetBag _ruleSetBag;
 		private TimeZoneInfo _timeZoneInfo;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
+		private IRuleSetSkillActivityChecker _ruleSetSkillActivityChecker;
 
 		[SetUp]
 		public void Setup()
@@ -40,9 +41,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_ruleSetDeletedActivityChecker = _mocks.StrictMock<IRuleSetDeletedActivityChecker>();
 			_rulesSetDeletedShiftCategoryChecker = _mocks.StrictMock<IRuleSetDeletedShiftCategoryChecker>();
 			_ruleSetToShiftsGenerator = _mocks.StrictMock<IRuleSetToShiftsGenerator>();
+			_ruleSetSkillActivityChecker = _mocks.StrictMock<IRuleSetSkillActivityChecker>();
 			_target = new ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter(_ruleSetDeletedActivityChecker,
 			                                                                     _rulesSetDeletedShiftCategoryChecker,
-			                                                                     _ruleSetToShiftsGenerator);
+			                                                                     _ruleSetToShiftsGenerator,
+																				 _ruleSetSkillActivityChecker);
 		}
 
 		[Test]
@@ -60,6 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
 			var ruleSets = new List<IWorkShiftRuleSet> {ruleSet1};
 			var shifts = getCashes();
+			var personalSkills = new List<IPersonSkill>();
 			using (_mocks.Record())
 			{
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
@@ -71,6 +75,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Expect.Call(_person.PermissionInformation).Return(permissionInfo);
 				Expect.Call(_ruleSetBag.RuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets));
 				Expect.Call(_ruleSetToShiftsGenerator.Generate(ruleSet1)).Return(shifts);
+				Expect.Call(_personPeriod.PersonSkillCollection).Return(personalSkills);
+				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivties(ruleSet1, personalSkills)).Return(true);
 			}
 			using (_mocks.Playback())
 			{
