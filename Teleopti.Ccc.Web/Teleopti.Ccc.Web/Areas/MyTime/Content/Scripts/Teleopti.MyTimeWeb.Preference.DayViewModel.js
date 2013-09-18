@@ -78,10 +78,6 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
         return self.Absence() != '';
     });
 
-    this.HasDayOff = ko.computed(function () {
-        return self.DayOff() != '';
-    });
-
     this.HasPersonAssignmentShiftCategory = ko.computed(function () {
         return self.PersonAssignmentShiftCategory() != '';
     });
@@ -305,9 +301,4 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 			return true;
 		return false;
 	});
-
 };
-
-
-
-
