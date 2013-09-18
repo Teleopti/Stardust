@@ -1286,7 +1286,6 @@
     <Compile Include="Security\AuthorizationData\DefinedLicenseOptionPaths.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccBaseLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccAgentSelfServiceLicenseOption.cs" />
-    <Compile Include="Security\AuthorizationData\DefaultAuthorizationSettings.cs" />
     <Compile Include="Security\AuthorizationData\DefinedRaptorApplicationFunctionForeignIds.cs" />
     <Compile Include="Security\AuthorizationData\DefinedRaptorApplicationFunctionPaths.cs" />
     <Compile Include="Security\AuthorizationData\DefinedRaptorApplicationFunctionFactory.cs" />
