@@ -531,7 +531,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             createAndAddItem(listViewPersonPeriod, Resources.PartTimePercentageLower, personPeriod.PersonContract.PartTimePercentage.Description.Name, 2);
 			createAndAddItem(listViewPersonPeriod, Resources.EmploymentType, _employmentTypeList[personPeriod.PersonContract.Contract.EmploymentType], 2);
 			if (personPeriod.RuleSetBag != null)
-				createAndAddItem(listViewPersonPeriod, Resources.RuleSetBag, personPeriod.RuleSetBag.Description.Name, 2);
+				createAndAddItem(listViewPersonPeriod, Resources.RuleSetBagLower, personPeriod.RuleSetBag.Description.Name, 2);
             
         }
 
@@ -603,7 +603,7 @@ namespace Teleopti.Ccc.Win.Scheduling
            
 
             createAndAddItem(listViewSchedulePeriod, Resources.Current, helper.Period.Value.DateString, 1);
-            item = createAndAddItem(listViewSchedulePeriod, Resources.DaysOff,
+            item = createAndAddItem(listViewSchedulePeriod, Resources.TargetDaysOff,
                                     helper.CurrentDaysOff.ToString(CultureInfo.CurrentCulture), 2);
             if (employmentType == EmploymentType.FixedStaffNormalWorkTime)
             {

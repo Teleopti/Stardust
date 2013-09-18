@@ -379,8 +379,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             }
             gridColumns.Add(new SFGridByteCellColumn<T>("Priority", Resources.Priority, null));
             gridColumns.Add(new SFGridCheckBoxColumn<T>("Requestable", UserTexts.Resources.UseForRequests));
-            //TODO: Get header "Tracker" from resource files.
-            var trackerColumn = new SFGridDropDownColumn<T, TrackerView>("Tracker", Resources.TrackerType, _trackerAdopterCollection,
+            var trackerColumn = new SFGridDropDownColumn<T, TrackerView>("Tracker", Resources.TrackerTypeHeader, _trackerAdopterCollection,
                                                       "Description", null, typeof(TrackerView))
                                 	{UseDisablePropertyCheck = true};
         	gridColumns.Add(trackerColumn);

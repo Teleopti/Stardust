@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_ruleSetToShiftsGenerator = _mocks.StrictMock<IRuleSetToShiftsGenerator>();
 			_target = new ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter(_ruleSetDeletedActivityChecker,
 			                                                                     _rulesSetDeletedShiftCategoryChecker,
-			                                                                     _ruleSetToShiftsGenerator);
+			                                                                     _ruleSetToShiftsGenerator,null);
 		}
 
 		[Test]

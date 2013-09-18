@@ -379,7 +379,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         public string TreeNode()
         {
-            return Resources.WorkflowControlSet;
+            return Resources.WorkflowControlSetHeader;
         }
 
     	public void OnShow()

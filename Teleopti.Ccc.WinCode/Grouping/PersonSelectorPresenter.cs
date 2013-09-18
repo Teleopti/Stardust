@@ -210,12 +210,12 @@ namespace Teleopti.Ccc.WinCode.Grouping
                                                PersonSelectorField.ContractSchedule, _personSelectorView,
                                                Resources.ContractSchedule,ApplicationFunction, ShowPersons)
                                    },
-                               new TabPageAdv(Resources.PartTimePercentageLower)
+                               new TabPageAdv(Resources.PartTimePercentageHeader)
                                    {
                                        Tag =
                                            _commandProvider.GetLoadBuiltInTabsCommand(
                                                PersonSelectorField.PartTimePercentage, _personSelectorView,
-                                               Resources.PartTimePercentageLower,ApplicationFunction, ShowPersons)
+                                               Resources.PartTimePercentageHeader,ApplicationFunction, ShowPersons)
                                    },
                                new TabPageAdv(Resources.Note)
                                    {
