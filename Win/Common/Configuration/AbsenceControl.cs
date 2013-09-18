@@ -233,8 +233,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             }
             gridColumns.Add(new SFGridByteCellColumn<AbsenceView>("Priority", Resources.Priority));
             gridColumns.Add(new SFGridCheckBoxColumn<AbsenceView>("Requestable", Resources.UseForRequests));
-            //TODO: Get header "Tracker" from resource files.
-            var trackerColumn = new SFGridDropDownColumn<AbsenceView, TrackerView>("Tracker", Resources.TrackerType, _trackerAdopterCollection,
+            var trackerColumn = new SFGridDropDownColumn<AbsenceView, TrackerView>("Tracker", Resources.TrackerTypeHeader, _trackerAdopterCollection,
                                                       "Description", typeof(TrackerView))
                                 	{UseDisablePropertyCheck = true};
         	gridColumns.Add(trackerColumn);

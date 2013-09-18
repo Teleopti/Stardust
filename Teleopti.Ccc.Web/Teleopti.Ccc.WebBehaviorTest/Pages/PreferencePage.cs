@@ -105,12 +105,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			return CalendarCellForDate(date).Div(QuicklyFind.ByClass("extended-indication"));
 		}
-
-		public Div MeetingAndPersonalShiftIndicationForDate(DateTime date)
-		{
-			return CalendarCellForDate(date).Div(QuicklyFind.ByClass("icon-user")).EventualGet();
-		}
-
+		
 		public Div MeetingAndPersonalShiftTooltipForDate(DateTime date)
 		{
 			return CalendarCellForDate(date).Div(QuicklyFind.ByClass("meeting-tooltip")).EventualGet();
