@@ -48,7 +48,7 @@ Scenario: View night shift
 	| Shift category		| Night	           |
 	When I view my week schedule for date '2012-08-27'
 	Then I should not see the end of the shift on date '2012-08-27'
-	And I should see the end of the shift on date '2012-08-28'
+	And I should see the the shift ending at '04:00' on date '2012-08-28'
 	
 Scenario: Do not show unpublished schedule
 	Given I have the role 'Full access to mytime'

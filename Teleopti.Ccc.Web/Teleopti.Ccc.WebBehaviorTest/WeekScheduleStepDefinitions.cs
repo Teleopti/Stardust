@@ -50,12 +50,27 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			AssertDayContainsGivenNumberOfLayers(date, 2);
 		}
 
+		[Then(@"I should see the the shift ending at '(.*)' on date '(.*)'")]
+		public void ThenIShouldSeeTheTheShiftEndingAtOnDate(string time, DateTime date)
+		{
+			var activityNameScript =
+				string.Format(
+					"return $('.weekview-day[data-mytime-date=\"{0}\"] .weekview-day-schedule-layer:last .weekview-day-schedule-layer-activity:contains(\"{1}\")').length > 0",
+					date.ToString("yyyy-MM-dd"), TestData.ActivityPhone.Description.Name);
+			var endTimeScript =
+				string.Format(
+					"return $('.weekview-day[data-mytime-date=\"{0}\"] .weekview-day-schedule-layer:last .weekview-day-schedule-layer-time:contains(\"{1}\")').length > 0",
+					date.ToString("yyyy-MM-dd"), time);
+			Browser.Interactions.AssertJavascriptResultContains(activityNameScript, "true");
+			Browser.Interactions.AssertJavascriptResultContains(endTimeScript, "true");
+		}
+
 		[Then(@"I should see a shift on date '(.*)'")]
-		[Then(@"I should see the end of the shift on date '(.*)'")]
-		public void ThenIShouldSeeTheEndOfTheShiftOnDate(DateTime date)
+		public void ThenIShouldSeeAShiftOnDate(DateTime date)
 		{
 			AssertDayContainsGivenNumberOfLayers(date, 1);
 		}
+
 
 		[When(@"I hover layer '(.*)' on '(.*)'")]
 		public void WhenIHoverLayerOn(int layer, DateTime date)
