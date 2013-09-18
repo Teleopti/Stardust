@@ -2,6 +2,7 @@
 <NDepend AppName="CCC" Platform="DotNet">
   <OutputDir KeepHistoric="False" KeepXmlFiles="True">C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\NDependOut</OutputDir>
   <Assemblies>
+	<Name>Teleopti.Interfaces</Name>
     <Name>Teleopti.Ccc.Domain</Name>
     <Name>Teleopti.Ccc.Infrastructure</Name>
     <Name>Teleopti.Ccc.DatabaseConverter</Name>
