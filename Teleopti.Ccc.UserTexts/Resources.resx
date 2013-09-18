@@ -11756,6 +11756,7 @@ Reduce the complexity to use these shifts.</value>
   <data name="WorkTimeHeader" xml:space="preserve">
     <value>Work Time</value>
     <comment>Work time header</comment>
+	</data>
   <data name="FilterHourlyAvailability" xml:space="preserve">
     <value>Filter Hourly Availability</value>
     <comment>Caption button to Filter on hourly availability</comment>

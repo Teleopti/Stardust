@@ -8185,7 +8185,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to External Logon.
+        ///   Looks up a localized string similar to External logon.
         /// </summary>
         public static string ExternalLogOn {
             get {

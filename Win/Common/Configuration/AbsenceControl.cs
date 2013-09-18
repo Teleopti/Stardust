@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             }
             gridColumns.Add(new SFGridByteCellColumn<AbsenceView>("Priority", Resources.Priority));
             gridColumns.Add(new SFGridCheckBoxColumn<AbsenceView>("Requestable", Resources.UseForRequests));
-            var trackerColumn = new SFGridDropDownColumn<T, TrackerView>("Tracker", Resources.TrackerTypeHeader, _trackerAdopterCollection,
+            var trackerColumn = new SFGridDropDownColumn<AbsenceView, TrackerView>("Tracker", Resources.TrackerTypeHeader, _trackerAdopterCollection,
                                                       "Description", typeof(TrackerView))
                                 	{UseDisablePropertyCheck = true};
         	gridColumns.Add(trackerColumn);
