@@ -154,7 +154,6 @@
     <Compile Include="IDayOffBackToLegalStateSolver.cs" />
     <Compile Include="ISmartDayOffBackToLegalStateService.cs" />
     <Compile Include="LockableBitArray.cs" />
-    <Compile Include="LockedValueValidator.cs" />
     <Compile Include="MinMaxNumberOfResult.cs" />
     <Compile Include="MoveOneDayOffDecisionMaker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
