@@ -190,9 +190,9 @@ Scenario: Push team schedule changes
 	| Color      | Green |	
 	When 'Martin Fowler' adds an absence for 'Pierre Baldi' with
 	| Field   | Value        |	
-	| Absence | Vacation     |
-	| From    | 2013-09-10   |
-	| To      | 2013-09-10   |
+	| Name       | Vacation         |
+	| Start time | 2013-09-10 00:00 |
+	| End time   | 2013-09-11 00:00 |
 	Then I should see 'Pierre Baldi' with the schedule
 	| Field      | Value |
 	| Start time | 08:00 |
