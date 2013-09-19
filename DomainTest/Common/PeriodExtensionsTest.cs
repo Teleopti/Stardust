@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Common;
 namespace Teleopti.Ccc.DomainTest.Common
 {
 	[TestFixture]
-	public class LayersExtensionsPeriodTest
+	public class PeriodExtensionsTest
 	{
 		[Test]
 		public void ShouldReturnEmptyIfEmpty()
