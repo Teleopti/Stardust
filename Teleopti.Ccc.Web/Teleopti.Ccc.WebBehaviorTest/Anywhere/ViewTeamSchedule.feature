@@ -67,7 +67,6 @@ Scenario: View team schedule
 	When I view schedules for '2012-12-02'
 	Then I should see schedule for 'Pierre Baldi'
 
-@ignore
 Scenario: View team schedule in my time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Hawaii

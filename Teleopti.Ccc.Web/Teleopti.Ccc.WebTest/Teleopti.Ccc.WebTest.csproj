@@ -137,6 +137,7 @@
   <ItemGroup>
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecificationTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\TeamScheduleViewModelFactoryTest.cs" />
+    <Compile Include="Areas\Anywhere\Hubs\TeamScheduleViewModelMapperTest.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\OvertimeAvailabilityPersisterTest.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkGeneratorTest.cs" />

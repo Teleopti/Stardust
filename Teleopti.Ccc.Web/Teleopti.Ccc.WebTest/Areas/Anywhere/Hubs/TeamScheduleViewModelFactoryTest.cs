@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -25,7 +26,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		private IPermissionProvider _permissionProvider;
 		private ISchedulePersonProvider _schedulePersonProvider;
 		private IPersonScheduleDayReadModelFinder _personScheduleDayReadModelRepository;
-		private IPerson _personWithPublishedSchedule; 
+		private IPerson _personWithPublishedSchedule;
+		private ILoggedOnUser _loggedOnPerson;
 
 		[SetUp]
 		public void Setup()
@@ -37,6 +39,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			_permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			_schedulePersonProvider = MockRepository.GenerateStub<ISchedulePersonProvider>();
 			_personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
+			_loggedOnPerson = MockRepository.GenerateMock<ILoggedOnUser>();
+			_loggedOnPerson.Stub(x => x.CurrentUser()).Return(new Person());
 
 			_personWithPublishedSchedule = 
 				PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(_scheduleDate.AddDays(1))); // set the published date one day after the schedule time
@@ -57,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 				DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 				.Return(new[] { _personWithPublishedSchedule });
 
-			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), _personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
+			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), _loggedOnPerson, _personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
 
 			var result = target.CreateViewModel(_teamId, _scheduleDate).First();
 			result.FirstName.Should().Be.EqualTo("Pierre");
@@ -86,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 				DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 				.Return(new[] { _personWithPublishedSchedule, personWithUnpublishedSchedule });
 
-			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), _personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
+			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), _loggedOnPerson, _personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
 
 			var result = target.CreateViewModel(_teamId, _scheduleDate);
 			result.Count().Should().Be.EqualTo(1);
@@ -113,12 +117,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			     DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 			     .Return(new List<IPerson>()); // no person with confidental
 
-			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), _personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
+			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), _loggedOnPerson, _personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
 
 			var result = target.CreateViewModel(_teamId, _scheduleDate).First();
 			result.FirstName.Should().Be.EqualTo("Pierre");
-			result.Projection[0].Title.Should().Be.EqualTo(ConfidentialPayloadValues.Description.Name);
-			result.Projection[0].Color.Should().Be.EqualTo(ColorTranslator.ToHtml(ConfidentialPayloadValues.DisplayColor));
+			result.Projection.Single().Title.Should().Be.EqualTo(ConfidentialPayloadValues.Description.Name);
+			result.Projection.Single().Color.Should().Be.EqualTo(ColorTranslator.ToHtml(ConfidentialPayloadValues.DisplayColor));
 		}
 
 		[Test]
@@ -141,12 +145,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 				 DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 				 .Return(new List<IPerson>()); // no person with confidental
 
-			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), _personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
+			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), _loggedOnPerson, _personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
 
 			var result = target.CreateViewModel(_teamId, _scheduleDate).First();
 			result.FirstName.Should().Be.EqualTo("Pierre");
-			result.Projection[0].Title.Should().Be.EqualTo("Vacation");
-			result.Projection[0].Color.Should().Be.EqualTo("Red");
+			result.Projection.Single().Title.Should().Be.EqualTo("Vacation");
+			result.Projection.Single().Color.Should().Be.EqualTo("Red");
 		}
 
 
@@ -170,12 +174,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 				 DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 				 .Return(new[] { _personWithPublishedSchedule });
 
-			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), _personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
+			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), _loggedOnPerson, _personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
 
 			var result = target.CreateViewModel(_teamId, _scheduleDate).First();
 			result.FirstName.Should().Be.EqualTo("Pierre");
-			result.Projection[0].Title.Should().Be.EqualTo("Vacation");
-			result.Projection[0].Color.Should().Be.EqualTo(ColorTranslator.ToHtml(Color.Red));
+			result.Projection.Single().Title.Should().Be.EqualTo("Vacation");
+			result.Projection.Single().Color.Should().Be.EqualTo(ColorTranslator.ToHtml(Color.Red));
 		}
 	}
 }

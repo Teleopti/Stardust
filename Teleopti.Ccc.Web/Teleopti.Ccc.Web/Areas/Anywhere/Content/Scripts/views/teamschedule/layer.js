@@ -12,8 +12,8 @@ define([
 
 			var self = this;
 			
-			var localTime = moment(data.Start, "YYYY-MM-DD hh:mm:ss Z").local();
-			var layerStartMinutes = localTime.diff(date, 'minutes');
+			var startTime = moment(data.Start, resources.FixedDateTimeFormatForMoment);
+			var layerStartMinutes = startTime.diff(date, 'minutes');
 
 			this.InternalStartMinutes = layerStartMinutes;
 			this.LengthMinutes = data.Minutes;
