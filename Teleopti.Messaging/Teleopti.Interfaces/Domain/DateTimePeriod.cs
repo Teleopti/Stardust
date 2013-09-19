@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -14,7 +13,6 @@ namespace Teleopti.Interfaces.Domain
     {
         private MinMax<DateTime> period;
         private const string DATETIME_SEPARATOR = " - ";
-	    private readonly int _hashCode;
 
         #region Properties
 
@@ -104,8 +102,6 @@ namespace Teleopti.Interfaces.Domain
                 validateDateTime(startDateTime, endDateTime);
 
             period = new MinMax<DateTime>(startDateTime, endDateTime);
-			_hashCode = (string.Format(CultureInfo.InvariantCulture, "{0}|{1}|{2}", typeof(DateTimePeriod).FullName,
-						   period.Minimum.Ticks, period.Maximum.Ticks)).GetHashCode();
         }
 
         /// <summary>
@@ -117,8 +113,6 @@ namespace Teleopti.Interfaces.Domain
         {
             validateDateTime(startDateTime, endDateTime);
             period = new MinMax<DateTime>(startDateTime, endDateTime);
-			_hashCode = (string.Format(CultureInfo.InvariantCulture, "{0}|{1}|{2}", typeof(DateTimePeriod).FullName,
-						   period.Minimum.Ticks, period.Maximum.Ticks)).GetHashCode();
         }
 
         /// <summary>
@@ -157,9 +151,6 @@ namespace Teleopti.Interfaces.Domain
 
             validateDateTime(startDateTimeTemp, endDateTimeTemp);
             period = new MinMax<DateTime>(startDateTimeTemp, endDateTimeTemp);
-
-			_hashCode = (string.Format(CultureInfo.InvariantCulture, "{0}|{1}|{2}", typeof(DateTimePeriod).FullName,
-						   period.Minimum.Ticks, period.Maximum.Ticks)).GetHashCode();
         }
 
         #endregion
@@ -438,7 +429,7 @@ namespace Teleopti.Interfaces.Domain
         /// </returns>
         public override int GetHashCode()
         {
-            return _hashCode;
+            return period.Minimum.GetHashCode() ^ period.Maximum.GetHashCode();
         }
 
         /// <summary>
