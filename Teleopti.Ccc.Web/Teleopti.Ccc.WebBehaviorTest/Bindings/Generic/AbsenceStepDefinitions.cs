@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		}
 
 		[When(@"'(.*)' adds an absence for '(.*)' with")]
-		public void WhenAddsAnAbsenceForWith(string adder, string person, Table scenarioData)
+		public void WhenAddsAnAbsenceForWith(string adder, string person, Table table)
 		{
-			DataMaker.ApplyFromTable<PersonAbsenceConfigurable>(person, scenarioData);
+			DataMaker.ApplyFromTable<PersonAbsenceConfigurable>(person, table);
 		}
 
 	}
