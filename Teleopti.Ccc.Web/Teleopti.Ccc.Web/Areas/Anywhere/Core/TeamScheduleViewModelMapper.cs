@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		private Shift MutateConfidentialAbsenceLayers(PersonScheduleDayReadModel readModel, Shift shift, TeamScheduleData data)
 		{
-			var canSeeConfidentialAbsence = (data.CanSeeConfidentialAbsencesFor.SingleOrDefault(x => x.Id == readModel.PersonId)) != null;
+			var canSeeConfidentialAbsence = data.CanSeeConfidentialAbsencesFor.Any(x => x.Id == readModel.PersonId);
 
 			if (canSeeConfidentialAbsence)
 				return shift;
