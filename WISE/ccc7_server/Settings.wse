@@ -381,6 +381,16 @@ item: Insert Line into Text File
   New Text=$(WEB_BROKER_BACKPLANE)|%DNS_ALIAS_TMP%TeleoptiCCC/Broker.backplane/backplane
   Line Number=0
 end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(RTA_STATE_CODE)|Ready,InCall,ACW,AUX1,AUX2,AUX3,AUX4,AUX5
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(RTA_SERVICE)|%DNS_ALIAS_TMP%TeleoptiCCC/RTA/TeleoptiRtaService.svc
+  Line Number=0
+end
 item: Remark
   Text===============================================
 end
