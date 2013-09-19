@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using Teleopti.Support.Code.Tool;
@@ -40,13 +41,22 @@ namespace Teleopti.Support.Tool
                     }
                     catch (Exception e)
                     {
-                        //MessageBox.Show(e.Message);
                         Logger.Error("Failed to process the config files", e);
+						foreach (log4net.Appender.IAppender appender in log4net.LogManager.GetRepository().GetAppenders())
+						{
+							if (appender is log4net.Appender.FileAppender)
+							{
+								log4net.Appender.FileAppender fileAppender = (log4net.Appender.FileAppender)appender;
+								string filePath = fileAppender.File;
+								if (new FileInfo(filePath).Length != 0)
+								{
+									Process.Start("Notepad.exe", filePath);
+								}
+							}
+						}
                     }
-                    
                 }
             }
-
         }
     }
 }
