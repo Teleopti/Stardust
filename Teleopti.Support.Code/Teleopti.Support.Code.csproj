@@ -55,6 +55,9 @@
     <Compile Include="Tool\SettingsReader.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ConfigFiles\BuildServerConfigFiles.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ConfigFiles\DeployConfigFiles.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
