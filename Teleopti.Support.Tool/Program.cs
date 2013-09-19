@@ -25,6 +25,8 @@ namespace Teleopti.Support.Tool
                     var file = "ConfigFiles.txt";
                     if (commandLineArgument.Mode.ToUpper(CultureInfo.InvariantCulture).Equals("DEPLOY"))
                         file = "DeployConfigFiles.txt";
+                    if (commandLineArgument.Mode.ToUpper(CultureInfo.InvariantCulture).Equals("TEST"))
+                        file = "BuildServerConfigFiles.txt";
                     var reader = new SettingsReader();
                     var settings = reader.GetSearchReplaceList(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"settings.txt")));
                     var refresher = new RefreshConfigFile(new ConfigFileTagReplacer(), new MachineKeyChecker());
