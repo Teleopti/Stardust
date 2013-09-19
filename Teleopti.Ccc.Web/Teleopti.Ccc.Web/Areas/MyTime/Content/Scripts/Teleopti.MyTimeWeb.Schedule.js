@@ -209,19 +209,23 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			_fillFormData(data);
 		};
 
-	    self.showAddRequestForm = function (date, data) {
-	        self.initialRequestDay = date;
-		    
-	        if ((self.requestViewModel() || '') != '') {
-		        _fillFormData(data);
-	            return;
-	        }
+	    self.showAddRequestForm = function (day) {
+	    	self.showAddRequestFormWithData(day.date(), day.overtimeAvailability());
+	    };
+		
+	    self.showAddRequestFormWithData = function (date, data) {
+	    	self.initialRequestDay = date;
 
-	        if (self.overtimeAvailabilityPermission() === true) {
-		        self.overtimeAvailabilityActivate(data);
-	        } else {
-		        self.textRequestActivate();
-	        }
+	    	if ((self.requestViewModel() || '') != '') {
+	    		_fillFormData(data);
+	    		return;
+	    	}
+
+	    	if (self.overtimeAvailabilityPermission() === true) {
+	    		self.overtimeAvailabilityActivate(data);
+	    	} else {
+	    		self.textRequestActivate();
+	    	}
 	    };
 	    
         self.setRequestViewModel = function()
@@ -484,9 +488,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return item.fixedDate() == date;
 			});
 			if (day) {
-				parents[1].showAddRequestForm(momentDate.format($('#Request-detail-datepicker-format').val().toUpperCase()));
+				parents[1].showAddRequestForm(day);
 			} else {
-				parents[1].showAddRequestForm(momentDate.format($('#Request-detail-datepicker-format').val().toUpperCase()), layer.OvertimeAvailabilityYesterday);
+				parents[1].showAddRequestFormWithData(momentDate.format($('#Request-detail-datepicker-format').val().toUpperCase()), layer.OvertimeAvailabilityYesterday);
 			}
 		};
 	};

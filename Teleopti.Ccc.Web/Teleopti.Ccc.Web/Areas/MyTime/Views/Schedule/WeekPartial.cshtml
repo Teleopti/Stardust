@@ -95,14 +95,14 @@
             </div>
             <div 
                 data-bind="css: { 'show-request': textRequestPermission }, attr: { 'class': classForDaySummary },
-	style: { 'background-color': colorForDaySummary, 'color': textColor }, click: function () { $parent.showAddRequestForm($data.date()) }"
+	style: { 'background-color': colorForDaySummary, 'color': textColor }, click: $parent.showAddRequestForm"
                 class="weekview-day-summary">
 		        
                 <strong class="fullwidth displayblock" data-bind="text: summaryTitle"></strong>
                 <span class="fullwidth displayblock" data-bind="text: summaryTimeSpan"></span>
                 <span data-bind="text: summary"></span>
             </div>
-            <div class="weekview-day-symbol" data-bind="click: function () { $parent.showAddRequestForm($data.date()) }, css: { 'weekview-day-show-request': textRequestPermission }">
+            <div class="weekview-day-symbol" data-bind="click: $parent.showAddRequestForm, css: { 'weekview-day-show-request': textRequestPermission }">
                 <div class="weekview-day-symbol-request pull-right" data-bind="visible: hasTextRequest, tooltip: { title: textRequestText, html: true }, click: navigateToRequests">
                     <i class="icon-comment"></i>
                 </div>
