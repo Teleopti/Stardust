@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripExMessages = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
             this.toolStripTabItemPreferences = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
             this.toolStripExClipboard = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
-            this.toolStripEx1 = new Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery.TeleoptiToolStrip();
+            this.toolStripEx1 = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
             this.teleoptiToolStripGalleryPreferences = new Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery.TeleoptiToolStripGallery();
             this.toolStripExNavigate = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
             this.toolStripButtonPreviousPeriod = new System.Windows.Forms.ToolStripButton();
@@ -256,6 +256,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             // 
             this.xpTaskBar1.AutoScroll = true;
             this.xpTaskBar1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255)))));
+            this.xpTaskBar1.BorderColor = System.Drawing.Color.Black;
             this.xpTaskBar1.Controls.Add(this.xpTaskBarBoxLegends);
             this.xpTaskBar1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.xpTaskBar1.Location = new System.Drawing.Point(0, 0);
@@ -318,7 +319,10 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.ribbonControlAdv1.Header.AddMainItem(toolStripTabItemRequests);
             this.ribbonControlAdv1.Header.AddMainItem(toolStripTabItemStudentAvailability);
             this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
+            this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
             this.ribbonControlAdv1.MenuButtonImage = ((System.Drawing.Image)(resources.GetObject("ribbonControlAdv1.MenuButtonImage")));
+            this.ribbonControlAdv1.MenuButtonText = "";
+            this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
             this.ribbonControlAdv1.Name = "ribbonControlAdv1";
             // 
             // ribbonControlAdv1.OfficeMenu
@@ -381,7 +385,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripExView.Location = new System.Drawing.Point(0, 1);
             this.toolStripExView.Name = "toolStripExView";
             this.toolStripExView.ShowLauncher = false;
-            this.toolStripExView.Size = new System.Drawing.Size(669, 98);
+            this.toolStripExView.Size = new System.Drawing.Size(669, 0);
             this.toolStripExView.TabIndex = 0;
             this.toolStripExView.Text = "xxView";
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExView, false);
@@ -393,7 +397,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripButtonSchedule.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSchedule.Name = "toolStripButtonSchedule";
             this.SetShortcut(this.toolStripButtonSchedule, System.Windows.Forms.Keys.None);
-            this.toolStripButtonSchedule.Size = new System.Drawing.Size(69, 78);
+            this.toolStripButtonSchedule.Size = new System.Drawing.Size(69, 0);
             this.toolStripButtonSchedule.Text = "xxSchedule";
             this.toolStripButtonSchedule.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonSchedule, false);
@@ -406,7 +410,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripButtonPreference.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonPreference.Name = "toolStripButtonPreference";
             this.SetShortcut(this.toolStripButtonPreference, System.Windows.Forms.Keys.None);
-            this.toolStripButtonPreference.Size = new System.Drawing.Size(77, 78);
+            this.toolStripButtonPreference.Size = new System.Drawing.Size(77, 0);
             this.toolStripButtonPreference.Text = "xxPreference";
             this.toolStripButtonPreference.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonPreference, false);
@@ -419,7 +423,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripButtonViewStudentAvailability.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonViewStudentAvailability.Name = "toolStripButtonViewStudentAvailability";
             this.SetShortcut(this.toolStripButtonViewStudentAvailability, System.Windows.Forms.Keys.None);
-            this.toolStripButtonViewStudentAvailability.Size = new System.Drawing.Size(120, 78);
+            this.toolStripButtonViewStudentAvailability.Size = new System.Drawing.Size(79, 0);
             this.toolStripButtonViewStudentAvailability.Text = "xxAvailability";
             this.toolStripButtonViewStudentAvailability.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonViewStudentAvailability, false);
@@ -432,7 +436,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripButtonScoreCard.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonScoreCard.Name = "toolStripButtonScoreCard";
             this.SetShortcut(this.toolStripButtonScoreCard, System.Windows.Forms.Keys.None);
-            this.toolStripButtonScoreCard.Size = new System.Drawing.Size(75, 78);
+            this.toolStripButtonScoreCard.Size = new System.Drawing.Size(75, 0);
             this.toolStripButtonScoreCard.Text = "xxScoreCard";
             this.toolStripButtonScoreCard.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonScoreCard, false);
@@ -445,7 +449,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripButtonRequests.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRequests.Name = "toolStripButtonRequests";
             this.SetShortcut(this.toolStripButtonRequests, System.Windows.Forms.Keys.None);
-            this.toolStripButtonRequests.Size = new System.Drawing.Size(95, 78);
+            this.toolStripButtonRequests.Size = new System.Drawing.Size(95, 0);
             this.toolStripButtonRequests.Text = "xxRequestStatus";
             this.toolStripButtonRequests.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonRequests, false);
@@ -458,7 +462,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripSplitButtonReport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripSplitButtonReport.Name = "toolStripSplitButtonReport";
             this.SetShortcut(this.toolStripSplitButtonReport, System.Windows.Forms.Keys.None);
-            this.toolStripSplitButtonReport.Size = new System.Drawing.Size(73, 78);
+            this.toolStripSplitButtonReport.Size = new System.Drawing.Size(73, 0);
             this.toolStripSplitButtonReport.Text = "xxReports";
             this.toolStripSplitButtonReport.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripSplitButtonReport, false);
@@ -470,7 +474,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripButtonASM.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonASM.Name = "toolStripButtonASM";
             this.SetShortcut(this.toolStripButtonASM, System.Windows.Forms.Keys.None);
-            this.toolStripButtonASM.Size = new System.Drawing.Size(46, 78);
+            this.toolStripButtonASM.Size = new System.Drawing.Size(46, 0);
             this.toolStripButtonASM.Text = "xxASM";
             this.toolStripButtonASM.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonASM, false);
@@ -483,7 +487,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripButtonAccounts.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonAccounts.Name = "toolStripButtonAccounts";
             this.SetShortcut(this.toolStripButtonAccounts, System.Windows.Forms.Keys.None);
-            this.toolStripButtonAccounts.Size = new System.Drawing.Size(107, 78);
+            this.toolStripButtonAccounts.Size = new System.Drawing.Size(107, 0);
             this.toolStripButtonAccounts.Text = "xxPersonAccounts";
             this.toolStripButtonAccounts.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonAccounts, false);
@@ -503,7 +507,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripExShow.Name = "toolStripExShow";
             this.toolStripExShow.ShowCaption = true;
             this.toolStripExShow.ShowLauncher = false;
-            this.toolStripExShow.Size = new System.Drawing.Size(206, 98);
+            this.toolStripExShow.Size = new System.Drawing.Size(206, 0);
             this.toolStripExShow.TabIndex = 2;
             this.toolStripExShow.Text = "xxShow";
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExShow, false);
@@ -516,7 +520,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripButtonShowRequests.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonShowRequests.Name = "toolStripButtonShowRequests";
             this.SetShortcut(this.toolStripButtonShowRequests, System.Windows.Forms.Keys.None);
-            this.toolStripButtonShowRequests.Size = new System.Drawing.Size(68, 78);
+            this.toolStripButtonShowRequests.Size = new System.Drawing.Size(68, 0);
             this.toolStripButtonShowRequests.Text = "xxRequests";
             this.toolStripButtonShowRequests.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonShowRequests, false);
@@ -533,7 +537,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripExMessages.Name = "toolStripExMessages";
             this.toolStripExMessages.Padding = new System.Windows.Forms.Padding(10);
             this.toolStripExMessages.ShowLauncher = false;
-            this.toolStripExMessages.Size = new System.Drawing.Size(78, 98);
+            this.toolStripExMessages.Size = new System.Drawing.Size(78, 0);
             this.toolStripExMessages.TabIndex = 4;
             this.toolStripExMessages.Text = "xxMsg";
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExMessages, false);
@@ -568,7 +572,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripExClipboard.Location = new System.Drawing.Point(0, 1);
             this.toolStripExClipboard.Name = "toolStripExClipboard";
             this.toolStripExClipboard.ShowLauncher = false;
-            this.toolStripExClipboard.Size = new System.Drawing.Size(38, 98);
+            this.toolStripExClipboard.Size = new System.Drawing.Size(106, 98);
             this.toolStripExClipboard.TabIndex = 8;
             this.toolStripExClipboard.Text = "xxClipboard";
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExClipboard, false);
@@ -577,21 +581,18 @@ namespace Teleopti.Ccc.AgentPortal.Main
             // 
             this.toolStripEx1.DefaultDropDownDirection = System.Windows.Forms.ToolStripDropDownDirection.BelowRight;
             this.toolStripEx1.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStripEx1.DropDownDirection = System.Windows.Forms.ToolStripDropDownDirection.BelowRight;
             this.toolStripEx1.ForeColor = System.Drawing.Color.MidnightBlue;
             this.toolStripEx1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStripEx1.Image = null;
             this.toolStripEx1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.teleoptiToolStripGalleryPreferences});
             this.toolStripEx1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.toolStripEx1.Location = new System.Drawing.Point(40, 1);
+            this.toolStripEx1.Location = new System.Drawing.Point(108, 1);
             this.toolStripEx1.Name = "toolStripEx1";
             this.toolStripEx1.ShowLauncher = false;
             this.toolStripEx1.Size = new System.Drawing.Size(382, 98);
             this.toolStripEx1.TabIndex = 4;
             this.toolStripEx1.Text = "xxPreferences";
-            this.toolStripEx1.ToolStripDockStyle = System.Windows.Forms.DockStyle.None;
-            this.toolStripEx1.ToolStripLayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripEx1, false);
             // 
             // teleoptiToolStripGalleryPreferences
@@ -628,10 +629,10 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripButtonNextPeriod,
             this.toolStripButtonValidate,
             this.toolStripButtonMustHave});
-            this.toolStripExNavigate.Location = new System.Drawing.Point(424, 1);
+            this.toolStripExNavigate.Location = new System.Drawing.Point(492, 1);
             this.toolStripExNavigate.Name = "toolStripExNavigate";
             this.toolStripExNavigate.ShowLauncher = false;
-            this.toolStripExNavigate.Size = new System.Drawing.Size(382, 98);
+            this.toolStripExNavigate.Size = new System.Drawing.Size(413, 98);
             this.toolStripExNavigate.TabIndex = 5;
             this.toolStripExNavigate.Text = "xxPeriods";
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExNavigate, false);
@@ -702,7 +703,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripExTimeBank.Image = null;
             this.toolStripExTimeBank.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonPlanningTimeBank});
-            this.toolStripExTimeBank.Location = new System.Drawing.Point(808, 1);
+            this.toolStripExTimeBank.Location = new System.Drawing.Point(907, 1);
             this.toolStripExTimeBank.Name = "toolStripExTimeBank";
             this.toolStripExTimeBank.Size = new System.Drawing.Size(170, 98);
             this.toolStripExTimeBank.TabIndex = 7;
@@ -784,7 +785,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripTabItemStudentAvailability.Panel.Text = "xxAvailability";
             this.toolStripTabItemStudentAvailability.Position = 3;
             this.SetShortcut(this.toolStripTabItemStudentAvailability, System.Windows.Forms.Keys.None);
-            this.toolStripTabItemStudentAvailability.Size = new System.Drawing.Size(109, 19);
+            this.toolStripTabItemStudentAvailability.Size = new System.Drawing.Size(72, 19);
             this.toolStripTabItemStudentAvailability.Text = "xxAvailability";
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripTabItemStudentAvailability, false);
             this.toolStripTabItemStudentAvailability.Visible = false;
@@ -965,7 +966,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
         private System.Windows.Forms.ToolStripButton toolStripButtonExport;
         private System.Windows.Forms.ToolStripButton toolStripButtonPreference;
         private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItemPreferences;
-        private Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery.TeleoptiToolStrip toolStripEx1;
+        private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx1;
         private Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery.TeleoptiToolStripGallery teleoptiToolStripGalleryPreferences;
         private System.Windows.Forms.ToolStripDropDownButton toolStripButton1;
         private System.Windows.Forms.ToolStripMenuItem addNewTemplateToolStripMenuItem;
