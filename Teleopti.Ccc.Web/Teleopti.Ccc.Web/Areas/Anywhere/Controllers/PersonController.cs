@@ -39,7 +39,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			var dateOnly = new DateOnly(date);
 			var teams = _teamProvider.GetPermittedTeams(dateOnly, DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere).ToList();
 			if (!teams.Any())
-				teams = new List<ITeam> {_loggedOnUser.CurrentUser().MyTeam(dateOnly)};
+			{
+				var myTeam = _loggedOnUser.CurrentUser().MyTeam(dateOnly);
+				if (myTeam != null)
+					teams = new List<ITeam> {myTeam};
+			}
 			return Json(new { Teams = teams.Select(t => new { t.Id, t.SiteAndTeam }).OrderBy(t => t.SiteAndTeam).ToList() }, JsonRequestBehavior.AllowGet);
 		}
 	}
