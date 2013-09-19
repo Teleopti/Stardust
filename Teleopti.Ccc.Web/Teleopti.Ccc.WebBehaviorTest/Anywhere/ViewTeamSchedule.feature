@@ -67,6 +67,24 @@ Scenario: View team schedule
 	When I view schedules for '2012-12-02'
 	Then I should see schedule for 'Pierre Baldi'
 
+@ignore
+Scenario: View team schedule in my time zone
+	Given I have the role 'Anywhere Team Green'
+	And I am located in Hawaii
+	And 'Pierre Baldi' is located in Stockholm
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-09-20 22:00 |
+	| End time       | 2013-09-21 05:00 |
+	When I view schedules for '2013-09-20'
+	Then I should see a shift layer with
+	| Field      | Value |
+	| Start time | 10:00 |
+	| End time   | 17:00 |
+	| Color      | Green |
+
 Scenario: View team schedule with night shift from yesterday
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
