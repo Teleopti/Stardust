@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
@@ -81,7 +79,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
 
         }
 
-        
+		[Test]
+		public void ShouldDelete()
+		{
+			(_target as OvertimeAvailability).SetDeleted();
+			_target.IsDeleted.Should().Be.True();
+		}
 
     }
 }

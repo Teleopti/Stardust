@@ -294,3 +294,18 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 
 SET NOCOUNT OFF
 GO
+
+---------------- 
+--Name: Kunning
+--Date: 2013-09-18 
+--Desc: add IsDeleted tag to OvertimeAvailability
+---------------- 
+ALTER TABLE OvertimeAvailability
+ADD IsDeleted bit NULL
+GO
+UPDATE OvertimeAvailability
+SET IsDeleted = 0
+GO
+ALTER TABLE OvertimeAvailability
+ALTER COLUMN IsDeleted bit NOT NULL
+GO

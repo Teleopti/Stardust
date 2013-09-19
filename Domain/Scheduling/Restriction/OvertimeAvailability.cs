@@ -2,15 +2,17 @@
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 {
-    public class OvertimeAvailability : AggregateRootWithBusinessUnit, IOvertimeAvailability
+    public class OvertimeAvailability : AggregateRootWithBusinessUnit, IOvertimeAvailability, IDeleteTag
     {
         private readonly IPerson _person;
         private DateOnly _dateOfOvertime;
         private readonly TimeSpan? _startTime;
         private readonly TimeSpan? _endTime;
+		private bool _isDeleted;
 
 
         public OvertimeAvailability(IPerson person, DateOnly dateOfOvertime, TimeSpan? startTime, TimeSpan? endTime)
@@ -78,5 +80,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 
         public virtual TimeSpan? StartTime { get { return _startTime; } }
         public virtual TimeSpan? EndTime { get { return _endTime ; } }
+
+	    public virtual bool IsDeleted
+	    {
+		    get { return _isDeleted; }
+	    }
+
+	    public virtual void SetDeleted()
+		{
+			_isDeleted = true;
+		}
     }
 }
