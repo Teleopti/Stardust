@@ -36,11 +36,12 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.ViewModel
         private void _peopleViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var handler = CanExecuteChanged;
-            if (handler!=null)
+            if (handler != null)
             {
-                handler.Invoke(this,EventArgs.Empty);
+                handler.Invoke(this, EventArgs.Empty);
             }
         }
+
 
         public void Execute(object parameter)
         {
@@ -51,16 +52,21 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.ViewModel
 
             initializeRepositories(startDate, endDate);
 
-			_peopleViewModel.FoundPeople.Clear();
-
-        	var businessUnit = _businessHierarchyRepository.GetBusinessUnit();
-			var personDetailContainers = _personPeriodRepository.GetPersonPeriods();
+            _peopleViewModel.FoundPeople.Clear();
+            PersonDto terminatedAgent = null;
+            var businessUnit = _businessHierarchyRepository.GetBusinessUnit();
+            var personDetailContainers = _personPeriodRepository.GetPersonPeriods();
             foreach (var personDetailContainer in personDetailContainers)
             {
                 var personId = personDetailContainer.PersonPeriod.PersonId;
+
                 personDetailContainer.Person = _personRepository.GetById(personId);
 
-				if (personDetailContainer.Person == null) continue;
+                if (personDetailContainer.Person == null) continue;
+
+                if (personDetailContainer.Person.FirstName.Contains("Robert"))
+                    terminatedAgent = personDetailContainer.Person;
+
 
                 personDetailContainer.Contract = _contractRepository.GetById(personDetailContainer.PersonPeriod.ContractId).Description;
                 personDetailContainer.ContractSchedule = _contractScheduleRepository.GetById(personDetailContainer.PersonPeriod.ContractScheduleId).Description;
@@ -75,38 +81,41 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.ViewModel
                 var site = _businessHierarchyRepository.GetSiteByTeam(personDetailContainer.PersonPeriod.Team.Id.GetValueOrDefault());
                 personDetailContainer.Site = site.Site;
 
-				_peopleViewModel.FoundPeople.Add(new PersonDetailModel
-				{
-					Team = personDetailContainer.PersonPeriod.Team.Description,
-					StartPeriod =
-						personDetailContainer.PersonPeriod.StartDate.DateTime,
-					EndPeriod =
-						personDetailContainer.PersonSkillPeriod.DateTo.DateTime,
-					FirstName = personDetailContainer.Person.FirstName,
-					LastName = personDetailContainer.Person.LastName,
-					Skills =
-						string.Join(", ",
-									personDetailContainer.PersonSkillPeriod.
-										SkillCollection.Select(
-											s => _skillRepository.GetById(s).Name)),
-					ExternalLogOns =
-						string.Join(", ",
-									personDetailContainer.PersonPeriod.
-										ExternalLogOn.Select(
-											e => e.AcdLogOnOriginalId)),
-					Note = personDetailContainer.PersonPeriod.Note,
-					Contract = personDetailContainer.Contract,
-					ContractSchedule = personDetailContainer.ContractSchedule,
-					PartTimePercentageName =
-						personDetailContainer.PartTimePercentageName,
-					PartTimePercentageValue =
-						personDetailContainer.PartTimePercentageValue,
-					Site = personDetailContainer.Site.Name,
-					BusinessUnit = businessUnit.Name,
-					IsDeleted = personDetailContainer.Person.IsDeleted,
-					LeavingDate = (personDetailContainer.Person.TerminationDate != null) ? personDetailContainer.Person.TerminationDate.DateTime : (DateTime?)null,
-				});
+                _peopleViewModel.FoundPeople.Add(new PersonDetailModel
+                {
+                    Team = personDetailContainer.PersonPeriod.Team.Description,
+                    StartPeriod =
+                        personDetailContainer.PersonPeriod.StartDate.DateTime,
+                    EndPeriod =
+                        personDetailContainer.PersonSkillPeriod.DateTo.DateTime,
+                    FirstName = personDetailContainer.Person.FirstName,
+                    LastName = personDetailContainer.Person.LastName,
+                    Skills =
+                        string.Join(", ",
+                                    personDetailContainer.PersonSkillPeriod.
+                                        SkillCollection.Select(
+                                            s => _skillRepository.GetById(s).Name)),
+                    ExternalLogOns =
+                        string.Join(", ",
+                                    personDetailContainer.PersonPeriod.
+                                        ExternalLogOn.Select(
+                                            e => e.AcdLogOnOriginalId)),
+                    Note = personDetailContainer.PersonPeriod.Note,
+                    Contract = personDetailContainer.Contract,
+                    ContractSchedule = personDetailContainer.ContractSchedule,
+                    PartTimePercentageName =
+                        personDetailContainer.PartTimePercentageName,
+                    PartTimePercentageValue =
+                        personDetailContainer.PartTimePercentageValue,
+                    Site = personDetailContainer.Site.Name,
+                    BusinessUnit = businessUnit.Name,
+                    IsDeleted = personDetailContainer.Person.IsDeleted,
+                    LeavingDate = (personDetailContainer.Person.TerminationDate != null) ? personDetailContainer.Person.TerminationDate.DateTime : (DateTime?)null,
+                });
             }
+
+            if (terminatedAgent != null)
+                _personRepository.TerminatePerson(terminatedAgent);
 
             _peopleViewModel.ResultCountVisible = Visibility.Visible;
         }
@@ -118,7 +127,7 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.ViewModel
             _contractScheduleRepository.Initialize();
             _partTimePercentageRepository.Initialize();
             _skillRepository.Initialize();
-            _personPeriodRepository.Initialize(startDate,endDate);
+            _personPeriodRepository.Initialize(startDate, endDate);
             _businessHierarchyRepository.Initialize();
         }
 

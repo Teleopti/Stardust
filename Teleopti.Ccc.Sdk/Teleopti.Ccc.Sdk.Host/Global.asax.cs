@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using MbCache.Configuration;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -150,8 +151,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 			builder.RegisterModule<EncryptionModule>();
 			builder.RegisterModule<AuthenticationModule>();
-
-			builder.RegisterType<PersonAccountUpdaterSdkProvider>().As<IPersonAccountUpdaterProvider>();
+            builder.RegisterModule<PersonAccountModule>();
+            
 			builder.RegisterType<PersonAccountUpdater>().As<IPersonAccountUpdater>();
 
             builder.RegisterModule<AssemblerModule>();

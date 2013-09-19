@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         private IAccount _currentAccount;
         private CommonNameDescriptionSetting _commonNameDescription;
 		private readonly IPersonAccountUpdater _personAccountUpdater;
+        
 
         protected PersonAccountChildModel()
         {
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             _currentAccount = account;
             _commonNameDescription = commonNameDescription;
 	        _personAccountUpdater = personAccountUpdater;
-	        base.ContainedEntity = account;
+            base.ContainedEntity = account;
         }
 
         protected IUnitOfWorkFactory UnitOfWorkFactory { get; set; }
@@ -50,9 +51,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 
         private void RefreshAccount()
         {
-            using (IUnitOfWork uow = UnitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (UnitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                _refreshService.Refresh(_currentAccount, uow);
+                _refreshService.Refresh(_currentAccount);
             }
         }
 

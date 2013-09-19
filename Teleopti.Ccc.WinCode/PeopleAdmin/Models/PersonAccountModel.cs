@@ -53,9 +53,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 
         private void RefreshAccount()
         {
-            using (IUnitOfWork uow = UnitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (UnitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                _refreshService.Refresh(_currentAccount, uow);
+                _refreshService.Refresh(_currentAccount);
             }
         }
 

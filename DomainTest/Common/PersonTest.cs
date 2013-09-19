@@ -794,6 +794,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			DateOnly dateOnly = new DateOnly();
 		    MockRepository mocks = new MockRepository();
 			var personAccountUpdater = mocks.StrictMock<IPersonAccountUpdater>();
+	        var scenario = mocks.DynamicMock<IScenario>();
 		    using (mocks.Record())
 		    {
 			   Expect.Call(() => personAccountUpdater.Update(_target))
@@ -812,6 +813,8 @@ namespace Teleopti.Ccc.DomainTest.Common
 		{
 			MockRepository mocks = new MockRepository();
 			var personAccountUpdater = mocks.StrictMock<IPersonAccountUpdater>();
+            var scenario = mocks.DynamicMock<IScenario>();
+
 			using (mocks.Record())
 			{
 				Expect.Call(() => personAccountUpdater.Update(_target))

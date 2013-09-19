@@ -26,11 +26,40 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-	public class FilteredPeopleHolder : IDisposable, IPersonAccountUpdaterProvider
+    public class FilteredPeopleAccountUpdater : IPersonAccountUpdater
     {
-        private ITraceableRefreshService _refreshService;
-        private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
+        private readonly FilteredPeopleHolder _filteredPeopleHolder;
+        private readonly ITraceableRefreshService _traceableRefreshService;
+        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+
+        public FilteredPeopleAccountUpdater(FilteredPeopleHolder filteredPeopleHolder, ITraceableRefreshService traceableRefreshService, IUnitOfWorkFactory unitOfWorkFactory)
+        {
+            _filteredPeopleHolder = filteredPeopleHolder;
+            _traceableRefreshService = traceableRefreshService;
+            _unitOfWorkFactory = unitOfWorkFactory;
+        }
+
+        public void Update(IPerson person)
+        {
+            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            {
+                var accounts = _filteredPeopleHolder.GetPersonAccounts(person);
+                foreach (var personAbsenceAccount in accounts)
+                {
+                    foreach (var account in personAbsenceAccount.AccountCollection())
+                    {
+                        _traceableRefreshService.Refresh(account);
+                    }
+                }
+            }
+        }
+    }
+
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+	public class FilteredPeopleHolder : IDisposable
+    {
+	    private ITraceableRefreshService _refreshService;
+	    private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
         private readonly List<IPerson> _personCollection = new List<IPerson>();
         private readonly List<IPerson> _filteredPersonCollection = new List<IPerson>();
         private List<PersonGeneralModel> _filteredPeopleGridData = new List<PersonGeneralModel>();
@@ -66,20 +95,21 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         private ReadOnlyCollection<PersonGeneralModel> _selectedPeopleGeneralGridData;
     	private IList<ExternalLogOnModel> _filteredExternalLogOnCollection;
 
-    	public FilteredPeopleHolder(ITraceableRefreshService cacheServiceForPersonAccount, IDictionary<IPerson, IPersonAccountCollection> allAccounts)
-        {
-            _refreshService = cacheServiceForPersonAccount;
-            _allAccounts = allAccounts;
-        }
+    	public FilteredPeopleHolder(ITraceableRefreshService refreshService,
+            IDictionary<IPerson, IPersonAccountCollection> allAccounts)
+    	{
+    	    _refreshService = refreshService;
+    	    _allAccounts = allAccounts;
+    	}
 
-        public void SetState(IUnitOfWork unitOfWork,
-                             ITraceableRefreshService cacheServiceForPersonAccount,
+	    public void SetState(ITraceableRefreshService refreshService,
+            IUnitOfWork unitOfWork,
                              IDictionary<IPerson, IPersonAccountCollection> allAccounts)
         {
             clearCollections();
 
+	        _refreshService = refreshService;
             GetUnitOfWork = unitOfWork;
-            _refreshService = cacheServiceForPersonAccount;
             _allAccounts.Clear();
             foreach (var allAccount in allAccounts)
             {
@@ -488,7 +518,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         private void loadFilteredPeopleGridData(IPerson person, IUserDetail userDetail)
         {
             //create new person grid data.
-			var personGridData = new PersonGeneralModel(person, userDetail, new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new PersonAccountUpdater(this));
+			var personGridData = new PersonGeneralModel(person, userDetail, new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new FilteredPeopleAccountUpdater(this,_refreshService, UnitOfWorkFactory.Current));
 
             //set optional columns if any.
             if (_optionalColumnCollection.Count > 0)
@@ -865,7 +895,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                     account = null;
             }
 
-            IPersonAccountModel adapter = new PersonAccountModel(GetRefreshService(),accounts, account, _commonNameDescription);
+            IPersonAccountModel adapter = new PersonAccountModel(_refreshService,accounts, account, _commonNameDescription);
 
             handleCanBold(canBold, grid, adapter);
             adapter.GridControl = grid;
@@ -1537,18 +1567,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             get { return _validatePasswordPolicy;}
         }
 
-		public ITraceableRefreshService GetRefreshService()
-		{
-			return _refreshService;
-		}
-
 		private void GetParentPersonAccounts(IPerson person, DateOnly selectedDate)
         {
             //fel här. kan vara flera. fråga estländarna.
             IAccount account = AllAccounts[person].Find(selectedDate).FirstOrDefault();
 
             // Gets the person account adoptor using the person data and the selcted date
-            IPersonAccountModel personAccountModel = new PersonAccountModel(GetRefreshService(), AllAccounts[person], account,_commonNameDescription);
+            IPersonAccountModel personAccountModel = new PersonAccountModel(_refreshService, AllAccounts[person], account,_commonNameDescription);
             _personAccountGridViewAdaptorCollection.Add(personAccountModel);
         }
 
@@ -1561,7 +1586,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 				//fel här. kan vara flera. fråga sydkoreanerna
         		IAccount account = AllAccounts[person].Find(SelectedDate).FirstOrDefault();
         		// Gets the person account adoptor using the person data and the selcted date
-        		IPersonAccountModel personAccountModel = new PersonAccountModel(GetRefreshService(), AllAccounts[person], account, _commonNameDescription);
+        		IPersonAccountModel personAccountModel = new PersonAccountModel(_refreshService, AllAccounts[person], account, _commonNameDescription);
         		_personAccountGridViewAdaptorCollection.Add(personAccountModel);
         	}
         }
@@ -1650,7 +1675,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         		}
 
         		// Gets the person account adoptor using the person data and the selcted date
-        		IPersonAccountModel personAccountModel = new PersonAccountModel(GetRefreshService(), AllAccounts[person], account, _commonNameDescription);
+        		IPersonAccountModel personAccountModel = new PersonAccountModel(_refreshService, AllAccounts[person], account, _commonNameDescription);
         		_personAccountGridViewAdaptorCollection.Add(personAccountModel);
         	}
         }

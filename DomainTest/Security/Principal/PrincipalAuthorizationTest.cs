@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             mocks = new MockRepository();
             authorizeAvailableData = mocks.StrictMock<IAuthorizeAvailableData>();
             person = PersonFactory.CreatePerson();
+            _personAccountUpdater = new PersonAccountUpdaterDummy();
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null), person);
             organisationMembership = (OrganisationMembership) principal.Organisation;
 			principalAuthorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
@@ -193,6 +194,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			{
 				Expect.Call(authorizeAvailableData.Check(organisationMembership, today.AddDays(-15), otherPerson)).Return(true);
 				Expect.Call(authorizeAvailableData.Check(organisationMembership, today.AddDays(-10), otherPerson)).Return(true);
+			   // Expect.Call(()=>_personAccountUpdater.Update(otherPerson)).Repeat.Once();
 			}
 			using (mocks.Playback())
 			{
