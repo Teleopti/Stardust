@@ -236,6 +236,11 @@ define([
 				var deferred = $.Deferred();
 				var loadPersonsAndSchedules = function () {
 					var currentTeam = currentTeamId();
+					if (!currentTeam) {
+						teamSchedule.Loading(false);
+						deferred.resolve();
+						return;
+					}
 					teamSchedule.SelectedTeam(currentTeam);
 					loadPersons({
 						success: function() {
