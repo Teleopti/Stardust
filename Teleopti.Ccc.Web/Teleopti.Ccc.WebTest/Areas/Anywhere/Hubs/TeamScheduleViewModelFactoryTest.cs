@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 {
 	[TestFixture]
-	public class TeamScheduleProviderTest
+	public class TeamScheduleViewModelFactoryTest
 	{
 		private Guid _teamId;
 		private DateTime _scheduleDate;
@@ -57,9 +57,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 				DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 				.Return(new[] { _personWithPublishedSchedule });
 
-			var target = new TeamScheduleProvider(_personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
+			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), _personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
 
-			var result = target.TeamSchedule(_teamId, _scheduleDate).First();
+			var result = target.CreateViewModel(_teamId, _scheduleDate).First();
 			result.FirstName.Should().Be.EqualTo("Pierre");
 		}
 
@@ -86,9 +86,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 				DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 				.Return(new[] { _personWithPublishedSchedule, personWithUnpublishedSchedule });
 
-			var target = new TeamScheduleProvider(_personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
+			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), _personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
 
-			var result = target.TeamSchedule(_teamId, _scheduleDate);
+			var result = target.CreateViewModel(_teamId, _scheduleDate);
 			result.Count().Should().Be.EqualTo(1);
 			result.First().FirstName.Should().Be.EqualTo("Published");
 		}
@@ -113,9 +113,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			     DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 			     .Return(new List<IPerson>()); // no person with confidental
 
-			var target = new TeamScheduleProvider(_personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
+			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), _personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
 
-			var result = target.TeamSchedule(_teamId, _scheduleDate).First();
+			var result = target.CreateViewModel(_teamId, _scheduleDate).First();
 			result.FirstName.Should().Be.EqualTo("Pierre");
 			result.Projection[0].Title.Should().Be.EqualTo(ConfidentialPayloadValues.Description.Name);
 			result.Projection[0].Color.Should().Be.EqualTo(ColorTranslator.ToHtml(ConfidentialPayloadValues.DisplayColor));
@@ -141,9 +141,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 				 DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 				 .Return(new List<IPerson>()); // no person with confidental
 
-			var target = new TeamScheduleProvider(_personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
+			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), _personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
 
-			var result = target.TeamSchedule(_teamId, _scheduleDate).First();
+			var result = target.CreateViewModel(_teamId, _scheduleDate).First();
 			result.FirstName.Should().Be.EqualTo("Pierre");
 			result.Projection[0].Title.Should().Be.EqualTo("Vacation");
 			result.Projection[0].Color.Should().Be.EqualTo("Red");
@@ -170,9 +170,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 				 DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 				 .Return(new[] { _personWithPublishedSchedule });
 
-			var target = new TeamScheduleProvider(_personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
+			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), _personScheduleDayReadModelRepository, _permissionProvider, _schedulePersonProvider);
 
-			var result = target.TeamSchedule(_teamId, _scheduleDate).First();
+			var result = target.CreateViewModel(_teamId, _scheduleDate).First();
 			result.FirstName.Should().Be.EqualTo("Pierre");
 			result.Projection[0].Title.Should().Be.EqualTo("Vacation");
 			result.Projection[0].Color.Should().Be.EqualTo(ColorTranslator.ToHtml(Color.Red));

@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 	public class PublishedScheduleSpecificationTest
 	{
 		private PublishedScheduleSpecification _target;
-		private ISchedulePersonProvider _schedulePersonProvider;
 		private Guid _teamId;
 		private DateOnly _date;
 		private IPersonScheduleDayReadModel _personSchedule;
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		public void Setup()
 		{
 			_mock = new MockRepository();
-			_schedulePersonProvider = _mock.Stub<ISchedulePersonProvider>();
 			_teamId = Guid.NewGuid();
 			_date = new DateOnly(2013, 02, 01);
 			_personSchedule = _mock.Stub<IPersonScheduleDayReadModel>();
@@ -40,26 +38,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		[Test]
 		public void CanInstanciate()
 		{
-			_target = new PublishedScheduleSpecification(_schedulePersonProvider, _teamId, _date);
+			_target = new PublishedScheduleSpecification(_persons, _date);
 			Assert.IsNotNull(_target);
 		}
 
 		[Test]
 		public void ShouldReturnFalseIfScheduleBelongsToOtherTeam()
 		{
-			using (_mock.Record())
-			{
-				_schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(_date, _teamId, null))
-					.IgnoreArguments()
-			        .Return(_persons);
-			}
-			using (_mock.Playback())
-			{
-				_target = new PublishedScheduleSpecification(_schedulePersonProvider, _teamId, _date);
+			_target = new PublishedScheduleSpecification(_persons, _date);
 
-				bool result = _target.IsSatisfiedBy(_personSchedule);
-				result.Should().Be.False();
-			}
+			bool result = _target.IsSatisfiedBy(_personSchedule);
+			result.Should().Be.False();
 		}
 
 		[Test]
@@ -67,23 +56,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		{
 			Guid personId = Guid.NewGuid();
 
-			using (_mock.Record())
-			{
-				_schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(_date, _teamId, null))
-									.IgnoreArguments()
-									.Return(_persons);
-				_person1.Stub(x => x.Id)
-					.Return(personId);
-				_personSchedule.PersonId = personId;
-				_person1.WorkflowControlSet = null;
-			}
-			using (_mock.Playback())
-			{
-				_target = new PublishedScheduleSpecification(_schedulePersonProvider, _teamId, _date);
+			_person1.Stub(x => x.Id)
+			        .Return(personId);
+			_personSchedule.PersonId = personId;
+			_person1.WorkflowControlSet = null;
 
-				bool result = _target.IsSatisfiedBy(_personSchedule);
-				result.Should().Be.False();
-			}
+			_target = new PublishedScheduleSpecification(_persons, _date);
+
+			bool result = _target.IsSatisfiedBy(_personSchedule);
+			result.Should().Be.False();
 		}
 
 		[Test]
@@ -91,25 +72,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		{
 			Guid personId = Guid.NewGuid();
 
-			using (_mock.Record())
-			{
-				_schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(_date, _teamId, null))
-					.IgnoreArguments()
-					.Return(_persons);
-				_person1.Stub(x => x.Id)
-				    .Return(personId);
-				_personSchedule.PersonId = personId;
-				_person1.WorkflowControlSet = _workflowControlSet;
-				// set the date before the publish date
-				_workflowControlSet.SchedulePublishedToDate = _date.AddDays(-2);
-			}
-			using (_mock.Playback())
-			{
-				_target = new PublishedScheduleSpecification(_schedulePersonProvider, _teamId, _date);
+			_person1.Stub(x => x.Id)
+			        .Return(personId);
+			_personSchedule.PersonId = personId;
+			_person1.WorkflowControlSet = _workflowControlSet;
+			// set the date before the publish date
+			_workflowControlSet.SchedulePublishedToDate = _date.AddDays(-2);
 
-				bool result = _target.IsSatisfiedBy(_personSchedule);
-				result.Should().Be.False();
-			}
+			_target = new PublishedScheduleSpecification(_persons, _date);
+
+			bool result = _target.IsSatisfiedBy(_personSchedule);
+			result.Should().Be.False();
 		}
 
 		[Test]
@@ -119,9 +92,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 
 			using (_mock.Record())
 			{
-				_schedulePersonProvider.Stub(x => x.GetPermittedPersonsForTeam(_date, _teamId, null))
-					.IgnoreArguments()
-					.Return(_persons);
 				_person1.Stub(x => x.Id)
 					.Return(personId);
 				_personSchedule.PersonId = personId;
@@ -131,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 			}
 			using (_mock.Playback())
 			{
-				_target = new PublishedScheduleSpecification(_schedulePersonProvider, _teamId, _date);
+				_target = new PublishedScheduleSpecification(_persons, _date);
 
 				bool result = _target.IsSatisfiedBy(_personSchedule);
 				result.Should().Be.True();

@@ -233,9 +233,12 @@
       <Link>Core\MessageBroker\SubscriptionPassThrough.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
-    <Compile Include="Areas\Anywhere\Core\ITeamScheduleProvider.cs" />
+    <Compile Include="Areas\Anywhere\Core\ITeamScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\Anywhere\Core\ITeamScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecification.cs" />
-    <Compile Include="Areas\Anywhere\Core\TeamScheduleProvider.cs" />
+    <Compile Include="Areas\Anywhere\Core\TeamScheduleData.cs" />
+    <Compile Include="Areas\Anywhere\Core\TeamScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\Anywhere\Core\TeamScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IOvertimeAvailabilityPersister.cs" />

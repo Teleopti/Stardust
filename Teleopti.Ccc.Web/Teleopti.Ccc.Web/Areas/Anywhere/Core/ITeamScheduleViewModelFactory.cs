@@ -4,8 +4,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
-	public interface ITeamScheduleProvider
+	public interface ITeamScheduleViewModelFactory
 	{
-		IEnumerable<Shift> TeamSchedule(Guid teamId, DateTime date);
+		IEnumerable<Shift> CreateViewModel(Guid teamId, DateTime date);
 	}
 }
