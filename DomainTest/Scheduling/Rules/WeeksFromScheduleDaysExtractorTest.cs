@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         {
             _mocks = new MockRepository();           
             _target = new WeeksFromScheduleDaysExtractor();
-            _personAccountUpdater = _mocks.StrictMock<IPersonAccountUpdater>();
+            _personAccountUpdater = new PersonAccountUpdaterDummy();
         }
 
         [Test]

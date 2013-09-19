@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void Setup()
 	    {
             _mocks = new MockRepository();
-	        _personAccountUpdater = _mocks.StrictMock<IPersonAccountUpdater>();
+	        _personAccountUpdater = _mocks.DynamicMock<IPersonAccountUpdater>();
 	        var persons = new List<IPerson>();
 			_person1 = PersonFactory.CreatePerson();
             _person2 = PersonFactory.CreatePerson();
@@ -243,12 +243,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var person1 = PersonFactory.CreatePerson("ittan");
 			var person2 = PersonFactory.CreatePerson("tvåan");
 			var person3 = PersonFactory.CreatePerson("trean");
-			person2.TerminatePerson( new DateOnly(2015,1,1), _personAccountUpdater);
-			person3.TerminatePerson(new DateOnly(2005,1,1), _personAccountUpdater);
 			var persons = new List<IPerson> {person1, person2, person3,};
 			_target.SetSelectedPeriod(new DateOnlyPeriod(2012,1,1,2012,12,31));
 			Expect.Call(_resultHolder.PersonsInOrganization).Return(persons);
-			_mocks.ReplayAll();
+		    
+            _mocks.ReplayAll();
+            person2.TerminatePerson(new DateOnly(2015, 1, 1), _personAccountUpdater);
+            person3.TerminatePerson(new DateOnly(2005, 1, 1), _personAccountUpdater);
+
 			var result = _target.AllLoadedPersons;
 			Assert.That(result.Count(),Is.EqualTo(2));
 			Assert.That(!result.Contains(person3));

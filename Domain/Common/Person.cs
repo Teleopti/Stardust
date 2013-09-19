@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Common
 		public virtual void ActivatePerson(IPersonAccountUpdater personAccountUpdater)
 	    {
 		    TerminalDate = null;
-			personAccountUpdater.Update(this);
+            personAccountUpdater.Update(this);
 	    }
 
 		public virtual void TerminatePerson(DateOnly terminalDate, IPersonAccountUpdater personAccountUpdater)

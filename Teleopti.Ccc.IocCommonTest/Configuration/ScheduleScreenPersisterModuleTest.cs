@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
         		);
             var instance = _container.Resolve<IScheduleScreenPersister>(
                 TypedParameter.From(mocks.Stub<IPersonRequestPersister>()),
-                TypedParameter.From(mocks.Stub<IPersonAbsenceAccountRefresher>()),
                 TypedParameter.From(mocks.Stub<IPersonAbsenceAccountValidator>()),
 				TypedParameter.From(mocks.Stub<IMessageBrokerIdentifier>()),
 				TypedParameter.From(mocks.Stub<IOwnMessageQueue>()),

@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		private readonly DateOnlyDto _dateOnlydto = new DateOnlyDto { DateTime = new DateOnly(_startDate) };
         private SetPersonAccountForPersonCommandDto _setPersonAccountForPersonCommandDto;
         private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+        private ITraceableRefreshService _tracesableRefreshService;
 
         [SetUp]
         public void Setup()
@@ -45,7 +47,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _absenceRepository = _mock.StrictMock<IAbsenceRepository>();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
-            _target = new SetPersonAccountForPersonCommandHandler(_repositoryFactory,_scenarioRepository,_personRepository,_personAbsenceAccountRepository,_absenceRepository,_currentUnitOfWorkFactory);
+            _tracesableRefreshService = _mock.DynamicMock<ITraceableRefreshService>();
+            _target = new SetPersonAccountForPersonCommandHandler(_repositoryFactory,_scenarioRepository,_personRepository,_personAbsenceAccountRepository,_absenceRepository,_currentUnitOfWorkFactory,_tracesableRefreshService);
 
             _person = PersonFactory.CreatePerson("test");
             _person.SetId(Guid.NewGuid());

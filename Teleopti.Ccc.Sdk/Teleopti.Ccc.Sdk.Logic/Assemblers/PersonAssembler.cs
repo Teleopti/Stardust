@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             if(personTerminated(dto, person))
                 person.TerminatePerson(new DateOnly(dto.TerminationDate.DateTime), _personAccountUpdater) ;
             if(personActivated(dto, person))
-                person.ActivatePerson(null);
+                person.ActivatePerson(_personAccountUpdater);
             if (!string.IsNullOrEmpty(dto.Note))
                 person.Note = dto.Note;
             if(dto.IsDeleted)
