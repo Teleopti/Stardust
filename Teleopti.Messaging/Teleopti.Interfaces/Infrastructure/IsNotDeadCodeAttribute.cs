@@ -9,7 +9,7 @@ namespace Teleopti.Interfaces.Infrastructure
 	/// Can be applied to base types and/or interfaces as well. If implemented
 	/// that way, all derived classes is considered "IsNotDeadCode" as well.
 	/// </summary>
-	public class IsNotDeadCodeAttribute : Attribute
+    public sealed class IsNotDeadCodeAttribute : Attribute
 	{
 		public IsNotDeadCodeAttribute(string descriptionWhyThisShouldBeKept)
 		{
