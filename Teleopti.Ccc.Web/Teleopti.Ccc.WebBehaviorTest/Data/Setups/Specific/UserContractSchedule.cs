@@ -9,7 +9,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 	{
 		private readonly IContractSchedule _contractSchedule;
 
-		public UserContractSchedule(IContractSchedule contractSchedule) {
+		public UserContractSchedule(IContractSchedule contractSchedule)
+		{
 			_contractSchedule = contractSchedule;
 		}
 

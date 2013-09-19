@@ -81,24 +81,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
         		() => new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(7, 0, 0)));
         }
 
-		  [Test]
-		  [ExpectedException(typeof(ArgumentOutOfRangeException))]
-		  public void VerifyToBigViaString()
-		  {
-			  target.TimeSpanFromString("1:1:16:33");
-		  }
-		  [Test]
-		  public void VerifySetEndDateWithString()
-		  {
-			  target.TimeSpanFromString("5 AM")
-				  .Should().Be.EqualTo(new TimeSpan(5, 0, 0));
-		  }
-		  [Test]
-		  public void VerifyTimeSpanFromStringWhenNull()
-		  {
-			  target.TimeSpanFromString(null).HasValue.Should().Be.False();
-		  }
-
         [Test]
         public void VerifyHasValue()
         {

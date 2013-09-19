@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 			if (validateTimeOfDay(ActivityEarliestEndTime, ActivityLatestEndTime))
 				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.ActivityTime)));
 			if (validateTimeSpan(MinimumWorkTime, MaximumWorkTime))
-				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.WorkTime)));
+				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.WorkTimeHeader)));
 			if (validateTimeSpan(ActivityMinimumTime, ActivityMaximumTime))
 				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.ActivityLength)));
 			return result;

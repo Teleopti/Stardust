@@ -112,8 +112,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArrayValueValidator.cs" />
-    <Compile Include="BinaryPermutation.cs" />
     <Compile Include="CMSBCaseSolver.cs" />
     <Compile Include="CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker.cs" />
     <Compile Include="ConsecutiveDayOffValidator.cs" />
@@ -146,7 +144,6 @@
     <Compile Include="KeepFreeWeekendValidator.cs" />
     <Compile Include="KeepFreeWeekendDayValidator.cs" />
     <Compile Include="DayOffBackToLegalStateFunctions.cs" />
-    <Compile Include="DayOffBackToLegalStateValidatorListCreator.cs" />
     <Compile Include="DaysOffPerWeekSolver.cs" />
     <Compile Include="FreeWeekendDaySolver.cs" />
     <Compile Include="FreeWeekendDayValidator.cs" />
@@ -156,7 +153,6 @@
     <Compile Include="IDayOffBackToLegalStateSolver.cs" />
     <Compile Include="ISmartDayOffBackToLegalStateService.cs" />
     <Compile Include="LockableBitArray.cs" />
-    <Compile Include="LockedValueValidator.cs" />
     <Compile Include="MinMaxNumberOfResult.cs" />
     <Compile Include="MoveOneDayOffDecisionMaker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

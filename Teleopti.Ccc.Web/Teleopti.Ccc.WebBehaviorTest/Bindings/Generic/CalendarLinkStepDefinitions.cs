@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			{
 				IsActive = true
 			};
-			DataMaker.Data().Setup(calendarLinkConfigurable);
+			DataMaker.Data().Apply(calendarLinkConfigurable);
 		}
 
 		[Given(@"I have revoked calendar sharing")]
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			{
 				IsActive = false
 			};
-			DataMaker.Data().Setup(calendarLinkConfigurable);
+			DataMaker.Data().Apply(calendarLinkConfigurable);
 		}
 	}
 }

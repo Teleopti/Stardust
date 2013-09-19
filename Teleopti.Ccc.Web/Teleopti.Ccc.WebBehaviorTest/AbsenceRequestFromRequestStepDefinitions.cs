@@ -15,13 +15,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I have an approved absence request")]
 		public void GivenIHaveAnApprovedAbsenceRequest()
 		{
-			DataMaker.Data().Setup(new ExistingApprovedAbsenceRequest());
+			DataMaker.Data().Apply(new ExistingApprovedAbsenceRequest());
 		}
 
 		[Given(@"I have a denied absence request")]
 		public void GivenIHaveADeniedAbsenceRequest()
 		{
-			DataMaker.Data().Setup(new ExistingDeniedAbsenceRequest());
+			DataMaker.Data().Apply(new ExistingDeniedAbsenceRequest());
 		}
 
 		[When(@"I click the absence request's delete button for request at position '(.*)' in the list")]
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I have a denied absence request beacuse of missing workflow control set")]
 		public void GivenIHaveADeniedAbsenceRequestBeacuseOfMissingWorkflowControlSet()
 		{
-			DataMaker.Data().Setup(new ExistingDeniedAbsenceRequest("RequestDenyReasonNoWorkflow"));
+			DataMaker.Data().Apply(new ExistingDeniedAbsenceRequest("RequestDenyReasonNoWorkflow"));
 		}
 	}
 }

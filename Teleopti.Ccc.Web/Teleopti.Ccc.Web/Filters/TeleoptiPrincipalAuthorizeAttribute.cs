@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Web.Filters
 	// Simple way until we add conditional registration http://blogs.msdn.com/b/rickandy/archive/2011/05/02/securing-your-asp-net-mvc-3-application.aspx
 
 	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, Inherited = true, AllowMultiple = true)]
-	public class TeleoptiPrincipalAuthorizeAttribute : AuthorizeAttribute
+	public sealed class TeleoptiPrincipalAuthorizeAttribute : AuthorizeAttribute
 	{
 		private readonly IEnumerable<Type> _excludeControllerTypes;
 

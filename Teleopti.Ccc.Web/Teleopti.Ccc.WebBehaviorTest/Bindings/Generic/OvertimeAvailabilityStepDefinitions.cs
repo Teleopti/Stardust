@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenIHaveAnOvertimeAvailabilityWith(Table table)
 		{
 			var fields = table.CreateInstance<OvertimeAvailabilityConfigurable>();
-			DataMaker.Data().Setup(fields);
+			DataMaker.Data().Apply(fields);
 		}
 	}
 

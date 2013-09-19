@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsAWorkflowControlSetWith(Table table)
 		{
 			var workflowControlSet = table.CreateInstance<WorkflowControlSetConfigurable>();
-			DataMaker.Data().Setup(workflowControlSet);
+			DataMaker.Data().Apply(workflowControlSet);
 		}
 
 		[Given(@"'(.*)' has the workflow control set '(.*)'")]
@@ -20,16 +20,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenIHaveTheWorkflowControlSetPublishedSchedule(string userName, string name)
 		{
 			var userWorkflowControlSet = new WorkflowControlSetForUser { Name = name };
-			DataMaker.Person(userName).Setup(userWorkflowControlSet);
+			DataMaker.Person(userName).Apply(userWorkflowControlSet);
 		}
 
 		[Given(@"I have a workflow control set with")]
 		public void GivenIHaveAWorkflowControlSetWith(Table table)
 		{
 			var workflowControlSet = table.CreateInstance<WorkflowControlSetConfigurable>();
-			DataMaker.Data().Setup(workflowControlSet);
+			DataMaker.Data().Apply(workflowControlSet);
 			var userWorkflowControlSet = new WorkflowControlSetForUser { Name = workflowControlSet.Name };
-			DataMaker.Data().Setup(userWorkflowControlSet);
+			DataMaker.Data().Apply(userWorkflowControlSet);
 		}
 
 	}

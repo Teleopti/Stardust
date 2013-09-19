@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.Preference
 			var result = input.Validate(null).ToArray();
 
 			result.Count().Should().Be(2);
-			result.First().ErrorMessage.Should().Be(string.Format(Resources.InvalidTimeValue, Resources.WorkTime));
+			result.First().ErrorMessage.Should().Be(string.Format(Resources.InvalidTimeValue, Resources.WorkTimeHeader));
 		}
 
 		[Test]

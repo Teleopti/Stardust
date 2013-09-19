@@ -5,6 +5,7 @@ using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
     /// Hashes a string when it's saved
     /// and salt hashes it when it gets it from the database.
     /// </summary>
+		[IsNotDeadCode("Used in NH mapping files.")]
     public class HashedString : IUserType
     {
         private readonly IOneWayEncryption _encryption;

@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 {
+		[IsNotDeadCode("Derived classes aren't instantiated by code but auto wired by ioc. Unfortunatly we won't see if concrete types aren't used....")]
     public abstract class Assembler<TDo, TDto> : IAssembler<TDo, TDto>
     {
         public IEnumerable<TDo> DtosToDomainEntities(IEnumerable<TDto> dtoCollection)

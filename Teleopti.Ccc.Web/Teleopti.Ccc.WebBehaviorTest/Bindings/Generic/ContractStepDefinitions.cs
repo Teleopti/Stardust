@@ -23,13 +23,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"there is a contract schedule with")]
 		public void GivenThereIsAContractScheduleWith(ContractScheduleConfigurable contractSchedule)
 		{
-			DataMaker.Data().Setup(contractSchedule);
+			DataMaker.Data().Apply(contractSchedule);
 		}
 
 		[Given(@"there is a contract with")]
 		public void GivenThereIsAContractWith(ContractConfigurable contract)
 		{
-			DataMaker.Data().Setup(contract);
+			DataMaker.Data().Apply(contract);
 		}
 	}
 }

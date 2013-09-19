@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		public void IAmSignedIn()
 		{
 			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
-				DataMaker.Data().Setup(new Agent());
+				DataMaker.Data().Apply(new Agent());
 			TestControllerMethods.Logon();
 		}
 

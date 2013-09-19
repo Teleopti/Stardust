@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
             string helpDivider = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpDivider"];
             string helpLang = string.Empty; //empty for now
 
-            if (Keyboard.Modifiers == ModifierKeys.Shift)
+            if (Keyboard.Modifiers != ModifierKeys.Shift)
             {
                 helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrlOnline"];
                 helpPrefix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpPrefixOnline"];

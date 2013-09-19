@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	{
 		private readonly DataFactory _dataFactory = new DataFactory(ScenarioUnitOfWorkState.UnitOfWorkAction);
 		private readonly AnalyticsDataFactory _analyticsDataFactory = new AnalyticsDataFactory();
-		private readonly IList<IPostSetup> _postSetups = new List<IPostSetup>();
+		private readonly IList<IDelayedSetup> _delayedSetups = new List<IDelayedSetup>();
 
 		private readonly IDictionary<string, PersonDataFactory> _persons = new Dictionary<string, PersonDataFactory>();
 
@@ -68,55 +68,36 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public CultureInfo MyCulture { get { return Me().Culture; } }
 		public IPerson MePerson { get { return Me().Person; } }
 
-		public void SetupCulture(IUserSetup setup)
+		public AnalyticsDataFactory Analytics()
 		{
-			Me().SetupCulture(setup);
+			return _analyticsDataFactory;
 		}
 
-		public void SetupTimeZone(IUserSetup setup)
+		public void Apply(IUserSetup setup)
 		{
-			Me().SetupTimeZone(setup);
+			Me().Apply(setup);
 		}
 
-		public void Setup(IUserSetup setup)
+		public void Apply(IUserDataSetup setup)
 		{
-			Me().Setup(setup);
+			Me().Apply(setup);
 		}
 
-		public void Setup(IUserDataSetup setup)
-		{
-			Me().Setup(setup);
-		}
-
-		public void Setup(IDataSetup setup)
+		public void Apply(IDataSetup setup)
 		{
 			_dataFactory.Apply(setup);
 		}
 
-		public void Setup(IPostSetup postSetup)
+		public void ApplyLater(IDelayedSetup delayedSetup)
 		{
-			_postSetups.Add(postSetup);
+			_delayedSetups.Add(delayedSetup);
 		}
 
-		public void Setup(IAnalyticsDataSetup analyticsDataSetup)
+		public string ApplyDelayed()
 		{
-			_analyticsDataFactory.Setup(analyticsDataSetup);
-		}
-
-		public string MakeUser()
-		{
-			_persons.ForEach(p => p.Value.Persist());
-
 			_analyticsDataFactory.Persist(Me().Culture);
 
-			using (var uow = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
-			{
-				_postSetups.ForEach(s =>
-					{
-						s.Apply(Me().Person, uow);
-					});
-				uow.PersistAll();
-			}
+			ScenarioUnitOfWorkState.UnitOfWorkAction(uow => _delayedSetups.ForEach(s => s.Apply(Me().Person, uow)));
 
 			Resources.Culture = Me().Culture;
 			return Me().LogOnName;
@@ -126,9 +107,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			get
 			{
-				return Me().Setups
+				return Me().Applied
 				           .Union(_analyticsDataFactory.Setups)
-				           .Union(_postSetups)
+				           .Union(_delayedSetups)
 				           .Union(_dataFactory.Applied)
 					;
 			}

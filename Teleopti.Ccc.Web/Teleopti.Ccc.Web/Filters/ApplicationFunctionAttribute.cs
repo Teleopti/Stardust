@@ -5,7 +5,7 @@ using Teleopti.Ccc.Web.Models.Shared;
 
 namespace Teleopti.Ccc.Web.Filters
 {
-	public class RequestPermissionAttribute : ApplicationFunctionAttribute
+	public sealed class RequestPermissionAttribute : ApplicationFunctionAttribute
 	{
 		public RequestPermissionAttribute()
 			: base(DefinedRaptorApplicationFunctionPaths.TextRequests, DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)
@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Web.Filters
 		}
 	}
 
-	public class PreferencePermissionAttribute : ApplicationFunctionAttribute
+	public sealed class PreferencePermissionAttribute : ApplicationFunctionAttribute
 	{
 		public PreferencePermissionAttribute() : base(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb,DefinedRaptorApplicationFunctionPaths.StandardPreferences)
 		{

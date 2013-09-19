@@ -141,20 +141,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			get { return Document.Element(QuicklyFind.ByClass("qtip-close")); }
 		}
-
-		public Div TimeIndicatorForDate(DateTime date)
-		{
-			return Document.Div(Find.BySelector(DateSelector(date) + " .week-schedule-time-indicator")).EventualGet();
-		}
-
-		public Div TimeIndicatorInTimeLine
-		{
-			get
-			{
-				return TimeLineDiv.Div(QuicklyFind.ByClass("week-schedule-time-indicator-small")); 
-			}
-		}
-
+		
 		//not yet used
 		public Span RequestDetailDenyReason { get; private set; }
 
@@ -188,22 +175,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public DivCollection DayLayers(DateTime date)
         {
-			return Document.Divs.Filter(Find.BySelector(DateSelector(date) + " .week-schedule-layer"));
+			return Document.Divs.Filter(Find.BySelector(DateSelector(date) + " .weekview-day-schedule-layer"));
         }
 
 		public Div DayLayerTooltipElement(DateTime date, string tooltipContent)
 		{
-			return Document.Div(Find.BySelector(DateSelector(date) + " .week-schedule-layer[tooltip-text*='" + tooltipContent + "']"));
+			return Document.Div(Find.BySelector(DateSelector(date) + " .weekview-day-schedule-layer[tooltip-text*='" + tooltipContent + "']"));
 		}
 
 		public Div InnerBody
 		{
 			get { return Document.Div(Find.BySelector(".body-weekview-inner")); }
-		}
-
-		public DivCollection AbsenceIndiciators()
-		{
-			return Document.Divs.Filter(Find.BySelector(".holiday-agents"));
 		}
 	}
 }

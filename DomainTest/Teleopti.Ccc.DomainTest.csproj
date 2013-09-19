@@ -557,7 +557,6 @@
     <Compile Include="Helper\StartTimeLimitationTest.cs" />
     <Compile Include="Helper\WorkTimeLimitationTest.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateServiceTest.cs" />
-    <Compile Include="Optimization\SchedulePeriodLegalStateValidatorTest.cs" />
     <Compile Include="Optimization\RemoveShiftCategoryBackToLegalServiceBuilderTest.cs" />
     <Compile Include="Optimization\SchedulePeriodBackToLegalStateServiceProTest.cs" />
     <Compile Include="Optimization\ShiftCategoryLimitationCheckerTest.cs" />
@@ -635,7 +634,6 @@
     <Compile Include="Scheduling\Meetings\RecurrentMonthlyByDayMeetingTest.cs" />
     <Compile Include="Scheduling\Meetings\RecurrentWeeklyMeetingTest.cs" />
     <Compile Include="Scheduling\Meetings\RecurrentDailyMeetingTest.cs" />
-    <Compile Include="Scheduling\Meetings\MeetingPeriodTest.cs" />
     <Compile Include="Scheduling\MoveDataBetweenSchedulesTest.cs" />
     <Compile Include="Scheduling\NoteByDateSorterTest.cs" />
     <Compile Include="Scheduling\NoteTest.cs" />
@@ -724,7 +722,6 @@
     <Compile Include="Scheduling\TeamBlock\DayIntervalDataCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DynamicBlockFinderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\EqualWorkShiftValueDeciderTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\GroupPersonBuilderBasedOnContractTimeTest.cs" />
     <Compile Include="Scheduling\TeamBlock\GroupPersonSkillAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\IntervalDataMedianCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\OpenHoursToEffectiveRestrictionConverterTest.cs" />

@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
 
 namespace Teleopti.Ccc.Win.Main
 {
-    public partial class Legal : BaseRibbonForm
+    public partial class Legal : BaseDialogForm
     {
         public Legal()
         {

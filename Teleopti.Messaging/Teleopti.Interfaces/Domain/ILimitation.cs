@@ -55,18 +55,7 @@ namespace Teleopti.Interfaces.Domain
         /// /// </remarks>
         string EndTimeString { get; }
 
-        /// <summary>
-        /// Exposes the parselogic for parsing string to timespan
-        /// </summary>
-        /// <param name="value">The time string.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Exposed for handling Validation in the presentation-layer
-        /// Created by: henrika
-        /// Created date: 2009-01-26
-        /// </remarks>
-		TimeSpan? TimeSpanFromString(string value);
-
+        
         /// <summary>
         /// Exposes the parselogic for converting TimeSpan to string
         /// </summary>

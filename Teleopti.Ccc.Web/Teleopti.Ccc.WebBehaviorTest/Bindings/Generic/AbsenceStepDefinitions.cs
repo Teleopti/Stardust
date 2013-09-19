@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsAnActivity(Table table)
 		{
 			var absence = table.CreateInstance<AbsenceConfigurable>();
-			DataMaker.Data().Setup(absence);
+			DataMaker.Data().Apply(absence);
 		}
 
 		[Given(@"'?(I)'? have a absence with")]
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenHaveAAbsenceWith(string userName, Table table)
 		{
 			var personAbsence = table.CreateInstance<PersonAbsenceConfigurable>();
-			DataMaker.Person(userName).Setup(personAbsence);
+			DataMaker.Person(userName).Apply(personAbsence);
 		}
 	}
 }

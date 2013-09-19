@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"Someone is viewing sharing link")]
 		public void WhenSomeoneIsViewingSharingLink()
 		{
-			DataMaker.Data().MakeUser();
 			Navigation.GotoRaw(DataMaker.Data().UserData<CalendarLinkConfigurable>().SharingUrl);
 		}
 
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIAmViewingAnApplicationPage()
 		{
 			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
-				DataMaker.Data().Setup(new Agent());
+				DataMaker.Data().Apply(new Agent());
 			TestControllerMethods.Logon();
 			Navigation.GotoAnApplicationPage();
 		}
@@ -154,7 +153,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view team schedule")]
 		public void WhenIViewTeamSchedule()
 		{
-			DataMaker.Data().Setup(new GroupingReadOnlyUpdate());
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GotoTeamSchedule();
 		}
@@ -162,7 +161,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am viewing team schedule for tomorrow")]
 		public void GivenIAmViewingTeamScheduleForTomorrow()
 		{
-			DataMaker.Data().Setup(new GroupingReadOnlyUpdate());
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GotoTeamSchedule(DateOnlyForBehaviorTests.TestToday.Date.AddDays(1));
 		}
@@ -170,7 +169,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view team schedule for '(.*)'")]
 		public void WhenIViewTeamScheduleFor(DateTime date)
 		{
-			DataMaker.Data().Setup(new GroupingReadOnlyUpdate());
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GotoTeamSchedule(date);
 		}
@@ -213,7 +212,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am viewing the sign in page")]
 		public void GivenIAmAtTheSignInPage()
 		{
-			DataMaker.Data().MakeUser();
+			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoGlobalSignInPage();
 		}
 
@@ -221,28 +220,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I navigate to the site's root")]
 		public void WhenINavigateToTheSiteSRoot()
 		{
-			DataMaker.Data().MakeUser();
+			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoSiteHomePage();
 		}
 
 		[When(@"I navigate to MyTime")]
 		public void WhenINavigateToMyTime()
 		{
-			DataMaker.Data().MakeUser();
+			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoMyTime();
 		}
 
 		[When(@"I navigate to Mobile Reports")]
 		public void WhenINavigateToMobileReposrts()
 		{
-			DataMaker.Data().MakeUser();
+			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoMobileReports();
 		}
 
 		[When(@"I navigate to Anywhere")]
 		public void WhenINavigateToAnywhere()
 		{
-			DataMaker.Data().MakeUser();
+			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoAnywhere();
 		}
 

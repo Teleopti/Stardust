@@ -405,7 +405,6 @@ namespace Teleopti.Ccc.Win.Intraday
 			this.toolStripButtonHelp.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripButtonHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonHelp.Name = "toolStripButtonHelp";
-			this.SetShortcut(this.toolStripButtonHelp, System.Windows.Forms.Keys.F1);
 			this.toolStripButtonHelp.Size = new System.Drawing.Size(78, 36);
 			this.toolStripButtonHelp.Text = "xxHelp";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonHelp, true);

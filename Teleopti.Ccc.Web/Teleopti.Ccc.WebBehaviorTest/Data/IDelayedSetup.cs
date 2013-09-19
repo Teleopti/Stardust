@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
-	public interface IPostSetup
+	public interface IDelayedSetup
 	{
 		void Apply(IPerson user,IUnitOfWork uow);
 	}

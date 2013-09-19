@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Filters
 {
-	public class EnsureInPortalAttribute : ActionFilterAttribute
+	public sealed class EnsureInPortalAttribute : ActionFilterAttribute
 	{
 		// Must Execute after UnitOfWorkAction
 		public EnsureInPortalAttribute()

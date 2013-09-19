@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 {
-	public class TwoExistingTextRequestChangedOnDifferentTimes : IPostSetup
+	public class TwoExistingTextRequestChangedOnDifferentTimes : IDelayedSetup
 	{
 		public PersonRequest PersonRequest1;
 		public PersonRequest PersonRequest2;

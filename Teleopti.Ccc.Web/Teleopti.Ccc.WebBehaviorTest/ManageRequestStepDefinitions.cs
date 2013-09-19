@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I have a requestable absence called (.*)")]
 		public void GivenIHaveARequestableAbsenceCalledVacation(string name)
 		{
-			DataMaker.Data().Setup(new RequestableAbsenceType(name));
+			DataMaker.Data().Apply(new RequestableAbsenceType(name));
 		}
 
 		[When(@"I input absence request values with (\S*)")]
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I am an agent without access to absence requests")]
 		public void GivenIAmAnAgentWithoutAccessToAbsenceRequests()
 		{
-			DataMaker.Data().Setup(new AgentWithoutAbsenceRequestsAccess());
+			DataMaker.Data().Apply(new AgentWithoutAbsenceRequestsAccess());
 		}
 
 		[When(@"I click the send button")]
