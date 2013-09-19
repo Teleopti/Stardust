@@ -6,7 +6,7 @@
 ..\..\..\Teleopti.Ccc.Startpage\web.config,BuildArtifacts\RTAWeb.config
 ..\..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\App.config,BuildArtifacts\ServiceBusHost.config
 ..\..\..\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\web.config,BuildArtifacts\AnalyticsWeb.config
-..\..\..\Teleopti.Ccc.Web.Broker\web.config,BuildArtifacts\BrokerWeb.config
+..\..\..\Teleopti.Ccc.Web.Broker\web.config,BuildArtifacts\BrokerWebXXXXXX.config
 ..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Web.config,BuildArtifacts\Web.Root.Web.config
 ..\..\..\AgentPortal\Teleopti.Ccc.AgentPortal\app.config,BuildArtifacts\AppMytime.config
 ..\..\..\Teleopti.Ccc.Web.Broker.Backplane\Web.config,BuildArtifacts\BrokerBackplaneWeb.config
