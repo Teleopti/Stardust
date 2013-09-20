@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
                 _view.SetColor();
 
                 Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence)).Return(true).Repeat.Once();
-                Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment)).Return(true).Repeat.Times(4);
+                Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment)).Return(true).Repeat.Times(5);
                 Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction)).Return(true).Repeat.Once();
                 
                 _view.SetPermissionOnAbsences(true);

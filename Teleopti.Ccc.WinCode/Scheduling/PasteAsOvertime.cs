@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public void Paste()
 		{
-			if (_source == null || _destination == null || _multiplicatorDefinitionSet == null) return;
+			if (_source == null || _destination == null || _multiplicatorDefinitionSet == null ) return;
 			var personAssignment = _source.PersonAssignment();
 			if (personAssignment == null) return;
 			if (_multiplicatorDefinitionSet.MultiplicatorType != MultiplicatorType.Overtime) return;
