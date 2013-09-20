@@ -16,6 +16,7 @@ GO
 --				2011-09-27 Fix start/end times = 0
 --				2012-11-25 #19854 - PBI to add Shortname for DayOff.
 --				2013-04-29 Added absence_id and must_haves in load KJ
+--				2013-09-20  Removed check on min/maxdate in stage
 -- Interface:	smalldatetime, with only datepart! No time allowed
 -- =============================================
 --exec mart.etl_fact_schedule_preference_load '2009-02-01','2009-02-17'
@@ -29,21 +30,6 @@ AS
 
 DECLARE @start_date_id	INT
 DECLARE @end_date_id	INT
-
---Declare
-DECLARE @max_start_date smalldatetime
-DECLARE @min_start_date smalldatetime
-
---init
-SELECT  
-	@max_start_date= max(restriction_date),
-	@min_start_date= min(restriction_date)
-FROM
-	Stage.stg_schedule_preference
---select * from v_stg_schedule_preference
---Reset @start_date, @end_date to 
-SET	@start_date = CASE WHEN @min_start_date > @start_date THEN @min_start_date ELSE @start_date END
-SET	@end_date	= CASE WHEN @max_start_date < @end_date THEN @max_start_date ELSE @end_date	END
 
 --There must not be any timevalue on the interface values, since that will mess things up around midnight!
 --Consider: DECLARE @end_date smalldatetime;SET @end_date = '2006-01-31 23:59:30';SELECT @end_date
