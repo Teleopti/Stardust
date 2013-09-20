@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon
 		public static bool CreateByNHib { get; private set; }
 		public static string Url { get; private set; }
 		public static string SitePath { get; private set; }
-		public static bool CassiniDev { get; private set; }
+		public static bool IISExpress { get; private set; }
 		public static bool ServiceBus { get; private set; }
 
 		private static void readIniFile()
@@ -41,7 +41,8 @@ namespace Teleopti.Ccc.TestCommon
 			ConnectionStringMatrix = iniFileHelper.ReadIniValue(testDatabaseSection, "matrix");
 			Url = iniFileHelper.ReadIniValue(testDatabaseSection, "url");
 			SitePath = iniFileHelper.ReadIniValue(testDatabaseSection, "sitepath");
-			CassiniDev = iniFileHelper.ReadIniValue(testDatabaseSection, "cassinidev") == "true";
+			var iisexpress = iniFileHelper.ReadIniValue(testDatabaseSection, "iisexpress");
+			IISExpress = iisexpress == "true" || string.IsNullOrEmpty(iisexpress);
 			ServiceBus = iniFileHelper.ReadIniValue(testDatabaseSection, "servicebus") == "true";
 
 			buildConnectionString();
