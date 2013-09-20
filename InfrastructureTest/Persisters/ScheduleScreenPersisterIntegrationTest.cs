@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NHibernate.Criterion;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -137,6 +138,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			ScheduleDictionaryConflictCollector = Mocks.DynamicMock<IScheduleDictionaryConflictCollector>();
 			ScheduleDictionarySaver = new ScheduleDictionarySaver();
 		    _currentScenario = Mocks.DynamicMock<ICurrentScenario>();
+		    _currentScenario.Stub(x => x.Current()).Return(Scenario);
 			Mocks.ReplayAll();
 		}
 
