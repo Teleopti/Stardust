@@ -44,14 +44,23 @@ INNER JOIN Stage.stg_schedule_updated_personLocal stg
 --Currently we can't tell on what UTC-day the shift starts.
 --We need local shift start time in order to calculate correct UTC on shift_startdate_id
 INSERT INTO Stage.stg_schedule_updated_ShiftStartDateUTC
-SELECT 
-	person_id			= dp.person_id,
+SELECT DISTINCT
+	person_id			= p.person_id,
 	shift_startdate_id	= dd.date_id
 FROM Stage.stg_schedule_updated_personLocal dp
 INNER JOIN stage.stg_schedule_changed stg
 	ON stg.person_code = dp.person_code
 INNER JOIN mart.dim_date dd
 	ON dd.date_date = stg.schedule_date
+INNER JOIN	mart.dim_person p
+ON stg.person_code	= p.person_code
+	AND --trim to person valid in this range
+		(
+				(stg.schedule_date	>= p.valid_from_date)
+
+			AND
+				(stg.schedule_date < p.valid_to_date)
+		)
 
 END
 
