@@ -73,10 +73,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			var cellModel = new GridDropDownMonthCalendarAdvCellModel(grid.Model);
 			cellModel.HideNoneButton();
 			cellModel.HideTodayButton();
-			if (!grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDatePickerCell)) grid.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
-			if (!grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDropDownCultureCell)) grid.CellModels.Add(GridCellModelConstants.CellTypeDropDownCultureCell, new DropDownCultureCellModel(grid.Model));
+			if (!grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDatePickerCell)) 
+				grid.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
+			if (!grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDropDownCultureCell))
+				grid.CellModels.Add(GridCellModelConstants.CellTypeDropDownCultureCell, new DropDownCultureCellModel(grid.Model));
+			if (!grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDropDownCellModel))
+				grid.CellModels.Add(GridCellModelConstants.CellTypeDropDownCellModel, new DropDownCellModel(grid.Model));
 		}
-
+		
 		public override void Sort(bool isAscending)
 		{
 			// Sorts the people data

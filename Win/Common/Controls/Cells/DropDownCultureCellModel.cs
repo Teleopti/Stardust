@@ -1,11 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System;
-using System.Runtime.Serialization;
-using System.Windows.Forms;
+﻿using System.Runtime.Serialization;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Cells
 {
@@ -24,7 +18,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
 		public override GridCellRendererBase CreateRenderer(GridControlBase control)
 		{
-			return (GridCellRendererBase)new GridComboBoxCellRenderer(control, (GridCellModelBase)this);
+			var renderer = new GridComboBoxCellRenderer(control, this);
+			((GridComboBoxListBoxPart) renderer.ListBoxPart).DropDownRows = 25;
+			return renderer;
 		}
 
 		public override bool ApplyFormattedText(GridStyleInfo style, string text, int textInfo)
