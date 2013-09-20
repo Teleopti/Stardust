@@ -575,6 +575,7 @@
     <Compile Include="Scheduling\IAgentPreferenceView.cs" />
     <Compile Include="Scheduling\IAgentStudentAvailabilityView.cs" />
     <Compile Include="Scheduling\ISchedulePresenterBase.cs" />
+    <Compile Include="Scheduling\PasteAsOvertime.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailabilityPersonFilter.cs" />
     <Compile Include="Scheduling\ScheduleReporting\IReportData.cs" />
     <Compile Include="Scheduling\ScheduleReporting\ScheduledTimePerActivityModel.cs" />

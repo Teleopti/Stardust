@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	        checkBoxShiftAsOvertime.Visible = clipboardSpecialOptions.ShowShiftAsOvertime;
 	        comboBoxAdvOvertime.Visible = clipboardSpecialOptions.ShowShiftAsOvertime;
 			fillComboOvertime(multiplicatorDefinitionSet);
+			enableComboBoxOvertime();
         }
 
 		private void fillComboOvertime(IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSet)
@@ -156,6 +157,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void checkBoxShiftAsOvertime_CheckedChanged(object sender, EventArgs e)
 		{
 			_clipboardSpecialPresenter.OnCheckBoxShiftAsOvertimeCheckedChanged(checkBoxShiftAsOvertime.Checked);
+			enableComboBoxOvertime();
 		}
 
 		private void comboBoxAdvOvertime_SelectedIndexChanged(object sender, EventArgs e)
@@ -163,6 +165,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var multiplicatorDefinitionSet = comboBoxAdvOvertime.SelectedItem as IMultiplicatorDefinitionSet;
 			if(multiplicatorDefinitionSet != null)
 				_clipboardSpecialPresenter.OnComboBoxAdvOvertimeSelectedIndexChanged(multiplicatorDefinitionSet);
+		}
+
+		private void enableComboBoxOvertime()
+		{
+			comboBoxAdvOvertime.Enabled = checkBoxShiftAsOvertime.Checked;
 		}
     }
 
