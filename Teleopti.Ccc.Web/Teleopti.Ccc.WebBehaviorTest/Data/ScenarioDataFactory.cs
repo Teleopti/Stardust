@@ -97,14 +97,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			_analyticsDataFactory.Persist(Me().Culture);
 
-			using (var uow = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
-			{
-				_postSetups.ForEach(s =>
-					{
-						s.Apply(Me().Person, uow);
-					});
-				uow.PersistAll();
-			}
+			ScenarioUnitOfWorkState.UnitOfWorkAction(uow => _postSetups.ForEach(s => s.Apply(Me().Person, uow)));
 
 			Resources.Culture = Me().Culture;
 			return Me().LogOnName;
