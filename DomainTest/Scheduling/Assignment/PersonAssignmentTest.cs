@@ -297,12 +297,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void VerifyHasProjection()
+		public void VerifyHasNoProjection()
 		{
-			Assert.IsFalse(target.HasProjection);
-			var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
-			new EditableShiftMapper().SetMainShiftLayers(target, mainShift);
-			Assert.IsTrue(target.HasProjection);
+			target.ProjectionService().CreateProjection().Should().Be.Empty();
 		}
 
 		[Test]

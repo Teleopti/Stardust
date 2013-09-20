@@ -37,14 +37,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return proj;
 		}
 
-		public virtual bool HasProjection
-		{
-			get
-			{
-				return (LayerCollection.Count > 0);
-			}
-		}
-
 		public virtual object Clone()
 		{
 			return EntityClone();

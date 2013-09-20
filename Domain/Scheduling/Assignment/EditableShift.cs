@@ -18,8 +18,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return proj;
 		}
 
-		public bool HasProjection { get; private set; }
-
 		public IShiftCategory ShiftCategory { get; set; }
 		public IList<IEditableShiftLayer> LayerCollection { get; private set; }
 

@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual IProjectionService ProjectionService()
 		{
 			var proj = new VisualLayerProjectionService(Person);
-			if (HasProjection)
+			if (hasProjection())
 			{
 				proj.Add(MainLayers(), new VisualLayerFactory());
 				var validPeriods = new HashSet<DateTimePeriod>(MainLayers().PeriodBlocks());
@@ -212,12 +212,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return proj;
 		}
 
-		public virtual bool HasProjection
+		private bool hasProjection()
 		{
-			get
-			{
 				return MainLayers().Any() || OvertimeLayers().Any();
-			}
 		}
 
 		#region ICloneableEntity<PersonAssignment> Members
