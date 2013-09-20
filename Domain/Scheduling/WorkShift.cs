@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 var end = start.Add(layer.Period.ElapsedTime());
                 var outPeriod = new DateTimePeriod(start, end);
 
-                var mainShiftLayer = new EditorActivityLayer(layer.Payload, outPeriod);
+                var mainShiftLayer = new EditableShiftLayer(layer.Payload, outPeriod);
                 ret.LayerCollection.Add(mainShiftLayer);
             }
 
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 var end = localTimeZoneInfo.SafeConvertTimeToUtc(localEnd);
                 var outPeriod = new DateTimePeriod(start, end);
 
-				var mainShiftLayer = new EditorActivityLayer(layer.Payload, outPeriod);
+				var mainShiftLayer = new EditableShiftLayer(layer.Payload, outPeriod);
                 ret.LayerCollection.Add(mainShiftLayer);
             }
 

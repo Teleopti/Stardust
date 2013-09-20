@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						return false;
 				}
 
-				var layer = new EditorActivityLayer(personMeeting.BelongsToMeeting.Activity, personMeeting.Period);
+				var layer = new EditableShiftLayer(personMeeting.BelongsToMeeting.Activity, personMeeting.Period);
 				clone.LayerCollection.Add(layer);	
 			}
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			foreach (var personalLayer in personAssignment.PersonalLayers())
 			{
-				var layer = new EditorActivityLayer(personalLayer.Payload, personalLayer.Period);
+				var layer = new EditableShiftLayer(personalLayer.Payload, personalLayer.Period);
 				clone.LayerCollection.Add(layer);
 			}
 

@@ -217,11 +217,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             IPerson person = new Person();
 
             var mainShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
-            ActivityLayer layer = new EditorActivityLayer(ActivityFactory.CreateActivity("test"), period);
+            var layer = new EditableShiftLayer(ActivityFactory.CreateActivity("test"), period);
             mainShift.LayerCollection.Add(layer);
             using (mocks.Record())
             {
-                IScheduleDay part = createPart(person, new DateOnly(mainShift.LayerCollection.Period().Value.StartDateTime));
+                IScheduleDay part = createPart(person, new DateOnly(mainShift.LayerCollection.OuterPeriod().Value.StartDateTime));
                 part.AddMainShift(mainShift);
                 target.CreateViewModels(part);
             }
@@ -241,11 +241,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             IPerson person = new Person();
 
             var mainShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
-            var layer = new EditorActivityLayer(ActivityFactory.CreateActivity("test"), period);
+            var layer = new EditableShiftLayer(ActivityFactory.CreateActivity("test"), period);
             mainShift.LayerCollection.Add(layer);
             using (mocks.Record())
             {
-                IScheduleDay part = createPart(person, new DateOnly(mainShift.LayerCollection.Period().Value.StartDateTime));
+                IScheduleDay part = createPart(person, new DateOnly(mainShift.LayerCollection.OuterPeriod().Value.StartDateTime));
                 part.AddMainShift(mainShift);
                 target.CreateViewModels(part); //Creates both projection and normal
             }
