@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
 				 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
-			DataSource = DataSourceHelper.CreateDataSource();
+			DataSource = DataSourceHelper.CreateDataSource(null, null);
 
 			loggedOnPerson = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatClenUpDataSource", string.Empty);
 
@@ -185,7 +185,7 @@ in what infrastructuretest this has happened - it is unknown for me.";
 
 		internal static IDictionary<string, string> Sql2005conf(string connString, int? timeout)
 		{
-			return DataSourceHelper.CreateDataSourceSettings(connString, timeout);
+			return DataSourceHelper.CreateDataSourceSettings(connString, timeout, null);
 		}
 	}
 }

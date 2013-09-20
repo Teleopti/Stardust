@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest
         [SetUp]
         public void RunBeforeAnyTest()
         {
-            var uowFactory = DataSourceHelper.CreateDataSource();
+            var uowFactory = DataSourceHelper.CreateDataSource(null, null);
             _sessionFactory = (ISessionFactory)typeof(NHibernateUnitOfWorkFactory)
                 .GetField("_factory", BindingFlags.Instance | BindingFlags.NonPublic)
                 .GetValue(uowFactory.Application);
