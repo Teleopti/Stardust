@@ -27,5 +27,5 @@ $(WEB_BROKER_BACKPLANE)|false
 $(ETL_SERVICE_nhibConfPath)|c:\nhib
 $(ETL_TOOL_nhibConfPath)|c:\nhib
 $(AGENTPORTALWEB_nhibConfPath)|c:\nhib
-$(CompilationDebug)|true
+<compilation targetFramework="4.0">|<compilation debug="true" targetFramework="4.0">
 $(SDK_nhibConfPath)|c:\nhib
