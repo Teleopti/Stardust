@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 								new NewtonsoftJsonSerializer()),
 							new PersonScheduleDayReadModelPersister(
 								CurrentUnitOfWork.Make(),
-								new DoNotSend(),
+								messageBroker(),
 								new CurrentDataSource(new CurrentIdentity()))
 							),
 						new ScheduledResourcesChangedHandler(
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 							new ScheduledResourcesReadModelUpdater(
 								new ScheduledResourcesReadModelStorage(
 									CurrentUnitOfWork.Make()), 
-									new DoNotSend(), 
+									messageBroker(), 
 									new ControllableEventSyncronization()),
 							new PersonSkillProvider(),
 							new EventPublisher(this,new CurrentIdentity()))
