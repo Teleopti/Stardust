@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -10,6 +11,16 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			var allPeriods = periods.Select(l => l.Period);
 			return DateTimePeriod.MergePeriods(allPeriods);
+		}
+
+		public static DateTimePeriod? OuterPeriod(this IEnumerable<IPeriodized> periods)
+		{
+			DateTimePeriod? maxPeriod = null;
+			foreach (var period in periods)
+			{
+				maxPeriod = DateTimePeriod.MaximumPeriod(maxPeriod, period.Period);
+			}
+			return maxPeriod;
 		}
 	}
 }
