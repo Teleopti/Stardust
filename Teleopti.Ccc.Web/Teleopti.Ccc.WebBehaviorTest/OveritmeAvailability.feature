@@ -263,7 +263,7 @@ Scenario: Delete overtime availability
 	| End time   | 17:30      |
 	And I view my week schedule for date '2013-08-20'
 	When I click on the day summary for date '2013-08-20'
-	And I click add new overtime availability
+	And I click overtime availability
 	And I click delete button
 	Then I should not see an overtime availability symbol for date '2013-08-20'
 
@@ -271,5 +271,5 @@ Scenario: Cannot see delete button when no existing overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I view my week schedule for date '2013-08-20'
 	When I click on the day summary for date '2013-08-20'
-	And I click add new overtime availability
+	And I click overtime availability
 	Then I should not see delete button
