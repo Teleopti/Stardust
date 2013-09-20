@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
             unitOfWork = mocker.StrictMock<IUnitOfWork>();
             loader = mocker.DynamicMock<ILoadSchedulesForRequestWithoutResourceCalculation>();
             
-            target = new ShiftTradeRequestSaga(schedulingResultState, validator, requestFactory, scenarioRepository, personRequestRepository, scheduleRepository, personRepository, personRequestCheckAuthorization, scheduleDictionarySaver, loader);
+            target = new ShiftTradeRequestSaga(unitOfWorkFactory, schedulingResultState, validator, requestFactory, scenarioRepository, personRequestRepository, scheduleRepository, personRepository, personRequestCheckAuthorization, scheduleDictionarySaver, loader);
         }
 
         private void CreateRepositories()
@@ -97,7 +97,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
         public void CanConsumeNewValidateIsTrue()
         {
             var created = getNewShiftTradeRequestCreated();
-            setupDataSource();
             prepareUnitOfWork(1, true);
             var statusChecker = mocker.StrictMock<IShiftTradeRequestStatusChecker>();
 
@@ -124,7 +123,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
         public void CanConsumeNewValidateIsFalse()
         {
             var created = getNewShiftTradeRequestCreated();
-            setupDataSource();
             prepareUnitOfWork(1, true);
             var statusChecker = mocker.StrictMock<IShiftTradeRequestStatusChecker>();
 
@@ -155,7 +153,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
         public void CanConsumeAcceptValidIsTrue()
         {
             var accept = getAcceptShiftTrade();
-            setupDataSource();
 
             var approvalService = mocker.StrictMock<IRequestApprovalService>();
             var statusChecker = mocker.StrictMock<IShiftTradeRequestStatusChecker>();
@@ -201,7 +198,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
         public void CanConsumeAcceptValidIsTrueAndShutdownNiceUponValidationExceptionWhenSavingSchedules()
         {
             var accept = getAcceptShiftTrade();
-            setupDataSource();
 
             var approvalService = mocker.StrictMock<IRequestApprovalService>();
             var statusChecker = mocker.StrictMock<IShiftTradeRequestStatusChecker>();
@@ -241,7 +237,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
         public void ShouldKeepAsPendingWhenBusinessRulesFail()
         {
             var accept = getAcceptShiftTrade();
-            setupDataSource();
 
             var approvalService = mocker.StrictMock<IRequestApprovalService>();
             var statusChecker = mocker.StrictMock<IShiftTradeRequestStatusChecker>();
@@ -284,7 +279,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
         public void DoNotProcessAlreadyHandledAcceptMessages()
         {
             var accept = getAcceptShiftTrade();
-            setupDataSource();
 
             personRequest.Pending();
             personRequest.Deny(null, "DenyReason", new PersonRequestAuthorizationCheckerForTest());
@@ -305,8 +299,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
         public void DoNotProcessAlreadyHandledCreatedMessages()
         {
             var shiftTradeRequestCreated = getNewShiftTradeRequestCreated();
-            setupDataSource();
-
+            
             personRequest.Pending();
             personRequest.Deny(null, "DenyReason", new PersonRequestAuthorizationCheckerForTest());
 
@@ -320,11 +313,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
             {
                 target.Consume(shiftTradeRequestCreated);
             }
-        }
-
-        private void setupDataSource()
-        {
-            UnitOfWorkFactoryContainer.Current = unitOfWorkFactory;
         }
 
         private void prepareUnitOfWork(int times, bool persistAll)

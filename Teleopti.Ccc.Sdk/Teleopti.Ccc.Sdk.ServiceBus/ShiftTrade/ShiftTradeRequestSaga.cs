@@ -21,7 +21,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
 {
     public class ShiftTradeRequestSaga : ConsumerOf<NewShiftTradeRequestCreated>, ConsumerOf<AcceptShiftTrade>
     {
-        private ISchedulingResultStateHolder _schedulingResultStateHolder;
+	    private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+	    private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IShiftTradeValidator _validator;
         private readonly IRequestFactory _requestFactory;
         private readonly ICurrentScenario _scenarioRepository;
@@ -44,9 +45,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         private IPersonRequestCheckAuthorization _authorization;
     	private IScenario _defaultScenario;
 
-    	public ShiftTradeRequestSaga(ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDictionarySaver scheduleDictionarySaver, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation)
+		public ShiftTradeRequestSaga(ICurrentUnitOfWorkFactory unitOfWorkFactory, ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDictionarySaver scheduleDictionarySaver, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation)
         {
-            _schedulingResultStateHolder = schedulingResultStateHolder;
+			_unitOfWorkFactory = unitOfWorkFactory;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
             _validator = validator;
             _authorization = personRequestCheckAuthorization;
             _requestFactory = requestFactory;
@@ -63,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         public void Consume(NewShiftTradeRequestCreated message)
         {
             Logger.DebugFormat("Consuming message for person request with Id = {0}. (Message timestamp = {1})", message.PersonRequestId, message.Timestamp);
-        	using (IUnitOfWork unitOfWork = UnitOfWorkFactoryContainer.Current.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+        	using (IUnitOfWork unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 loadPersonRequest(message.PersonRequestId);
                 if (!IsRequestReadyForProcessing.IsSatisfiedBy(_personRequest))
@@ -94,7 +96,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         public void Consume(AcceptShiftTrade message)
         {
             Logger.DebugFormat("Consuming message for person request with Id = {0}. (Message timestamp = {1})", message.PersonRequestId, message.Timestamp);
-        	using (IUnitOfWork unitOfWork = UnitOfWorkFactoryContainer.Current.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+        	using (IUnitOfWork unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 Logger.DebugFormat("Loading PersonRequest = {0}", message.PersonRequestId);
                 loadPersonRequest(message.PersonRequestId);
@@ -145,8 +147,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
                             var brokenBusinessRules = _personRequest.Approve(approvalService, _authorization, true);
                             HandleBrokenBusinessRules(brokenBusinessRules);
 							var result = _scheduleDictionarySaver.MarkForPersist(unitOfWork, _scheduleRepository, _schedulingResultStateHolder.Schedules.DifferenceSinceSnapshot());
-							//vet inte om denna behövs - går inte att följa denna method
-                        	//unitOfWork.PersistAll();
+
                             new ScheduleDictionaryModifiedCallback().Callback(_schedulingResultStateHolder.Schedules, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
                         }
                     }
