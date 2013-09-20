@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
                 Expect.Call(range.ScheduledDay(new DateOnly(2001, 1, 1))).Return(part);
                 Expect.Call(range.ScheduledDay(new DateOnly(2001, 1, 2))).Return(emptyPart);
                 Expect.Call(range.ScheduledDay(new DateOnly(2001, 1, 3))).Return(emptyPart);
-                Expect.Call(emptyPart.HasProjection).Return(false).Repeat.Times(3);
+                Expect.Call(emptyPart.HasProjection()).Return(false).Repeat.Times(3);
             }
             using (mocks.Playback())
             {
