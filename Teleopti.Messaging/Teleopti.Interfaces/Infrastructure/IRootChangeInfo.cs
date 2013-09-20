@@ -1,5 +1,4 @@
-﻿using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Events;
+﻿using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Interfaces.Infrastructure
 {
