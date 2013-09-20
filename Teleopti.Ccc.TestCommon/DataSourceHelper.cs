@@ -185,6 +185,7 @@ namespace Teleopti.Ccc.TestCommon
 		public static IDictionary<string, string> CreateDataSourceSettings(string connectionString, int? timeout)
 		{
 			var dictionary = new Dictionary<string, string>();
+			dictionary[NHibernate.Cfg.Environment.SessionFactoryName] = "TestData";
 			dictionary[NHibernate.Cfg.Environment.ConnectionProvider] =
 				"Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TeleoptiDriverConnectionProvider, Teleopti.Ccc.Infrastructure";
 			dictionary[NHibernate.Cfg.Environment.Dialect] = "NHibernate.Dialect.MsSql2005Dialect";
