@@ -116,6 +116,7 @@
     <Compile Include="Job\Steps\StatisticsUpdateNotificationJobStepTest.cs" />
     <Compile Include="OvertimeTransformerTest.cs" />
     <Compile Include="PmPermissionExtractorTest.cs" />
+    <Compile Include="RaptorRepositoryForTest.cs" />
     <Compile Include="RequestTransformTest.cs" />
     <Compile Include="SchedulePreferenceTransformerHelperTest.cs" />
     <Compile Include="ScheduleThreading\ContractDataRowFactoryTest.cs" />
