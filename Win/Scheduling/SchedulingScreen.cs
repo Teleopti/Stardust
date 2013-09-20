@@ -6642,7 +6642,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		private DateTime _lastclickLabels;
-	    private ITraceableRefreshService _traceableRefreshService;
+	    
 
 	    private void toolStripButtonShowTexts_Click(object sender, EventArgs e)
 		{
