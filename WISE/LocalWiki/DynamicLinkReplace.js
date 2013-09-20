@@ -1,6 +1,9 @@
 function notTranslatedPrefixes() {
 	return ['F01%253APM_',
-		'PM_'];
+	'PM_',
+	'www.teleopti.com',
+	'Category%253AP',
+	'Special%253ACategories'];
 }
 
 function notTranslatedPages() {
@@ -76,6 +79,10 @@ function isSuffixAllowed(link) {
 	return true;
 }
 
+function isPageToTeleoptiSite(link) {
+	return (link.substr(0, 23) === 'http://www.teleopti.com');
+}
+
 function shouldReplaceLink(link) {
 	return isPrefixAllowed(link, notTranslatedPrefixes()) &&
 		isLinkTranslated(link, notTranslatedPages()) &&
@@ -98,6 +105,8 @@ function replaceLinks() {
 	for (var i = 0, link; link = links[i]; i++) {
 		if (link) {
 			link = link.href;
+			if (isPageToTeleoptiSite(link))
+				continue;
 			if (shouldReplaceLink(link, pageName)) {
 				var trimmedLink = endsWith(link, '1.html')
 					? link.substr(0, link.length - 7)
