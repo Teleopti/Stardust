@@ -12,12 +12,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	public class PersonalShiftMeetingTimeChecker : IPersonalShiftMeetingTimeChecker
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool CheckTimeMeeting(IEditableShift mainShift, IVisualLayerCollection mainShiftProjection, ReadOnlyCollection<IPersonMeeting> meetings)
 		{
 			var worktime = mainShiftProjection.WorkTime();
 			var contractTime = mainShiftProjection.ContractTime();
-			var clone = mainShift.NoneEntityClone();
+			var clone = mainShift.MakeCopy();
 			
 			if(!mainShiftProjection.Period().HasValue)
 				return false;
@@ -46,18 +45,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return (worktime == mainWithMeetingWorkTime) && (contractTime == mainWithMeetingContractTime);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-			MessageId = "2"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-			 MessageId = "1"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-			 MessageId = "0")]
 		public bool CheckTimePersonAssignment(IEditableShift mainShift, IVisualLayerCollection mainShiftProjection,
 		                                      IPersonAssignment personAssignment)
 		{
 			var worktime = mainShiftProjection.WorkTime();
 			var contractTime = mainShiftProjection.ContractTime();
-			var clone = mainShift.NoneEntityClone();
+			var clone = mainShift.MakeCopy();
 
 			if (!mainShiftProjection.Period().HasValue)
 				return false;

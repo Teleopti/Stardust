@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyIsSatisfiedByPeriod()
         {
-            var shiftToCheck = (IEditableShift)_mainShift.Clone();
+            var shiftToCheck = _mainShift.MakeCopy();
             Assert.IsTrue(_target.IsSatisfiedBy(shiftToCheck.ProjectionService().CreateProjection()));
 
 	        var oldLayer = shiftToCheck.LayerCollection[3];

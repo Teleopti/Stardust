@@ -20,29 +20,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IShiftCategory ShiftCategory { get; set; }
 		public IList<IEditableShiftLayer> LayerCollection { get; private set; }
-
-		public object Clone()
+		public IEditableShift MakeCopy()
 		{
 			var ret = new EditableShift(ShiftCategory);
 			foreach (var layer in LayerCollection)
 			{
 				ret.LayerCollection.Add(new EditableShiftLayer(layer.Payload, layer.Period));
 			}
-
 			return ret;
-		}
-
-		public IEditableShift NoneEntityClone()
-		{
-			//Should not be necessary
-			return (IEditableShift) Clone();
-
-		}
-
-		public IEditableShift EntityClone()
-		{
-			//Should not be necessary
-			return (IEditableShift)Clone();
 		}
 	}
 }
