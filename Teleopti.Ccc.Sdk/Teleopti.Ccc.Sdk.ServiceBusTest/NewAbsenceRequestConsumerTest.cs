@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
     	    _validatedRequest.ValidationErrors = "";
 
             Expect.Call(_absenceRequest.Person).Return(_person).Repeat.Any();
-            _target = new NewAbsenceRequestConsumer(_scheduleRepository, _personAbsenceAccountProvider,
+            _target = new NewAbsenceRequestConsumer(_unitOfWorkFactory, _scheduleRepository, _personAbsenceAccountProvider,
                                                     _scenarioRepository, _personRequestRepository,
                                                     _schedulingResultStateHolder, _merger, _factory,
                                                     _scheduleDictionarySaver, _scheduleIsInvalidSpecification,
@@ -140,7 +140,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         [Test]
         public void VerifyCanConsumeMessageAndReturnIfNotNew()
         {
-            SetupAuthorizationAndDataSource();
             using (_mockRepository.Record())
             {
                 PrepareUnitOfWork(false);
@@ -158,7 +157,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         [Test]
         public void VerifyCanConsumeMessageAndReturnIfNotAbsenceRequest()
         {
-            SetupAuthorizationAndDataSource();
             using (_mockRepository.Record())
             {
                 PrepareUnitOfWork(false);
@@ -177,7 +175,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         [Test]
         public void VerifyCanConsumeMessageAndReturnIfRequestIsNull()
         {
-            SetupAuthorizationAndDataSource();
             using (_mockRepository.Record())
             {
                 PrepareUnitOfWork(false);
@@ -195,8 +192,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyAbsenceRequestCanBeSetToPending()
         {
-            SetupAuthorizationAndDataSource();
-            
             IProcessAbsenceRequest processAbsenceRequest = _mockRepository.StrictMock<IProcessAbsenceRequest>();
             IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
             IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
@@ -252,8 +247,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldSetRequestToPendingWhenInvalidSchedule()
         {
-            SetupAuthorizationAndDataSource();
-
             IProcessAbsenceRequest processAbsenceRequest = _mockRepository.StrictMock<IProcessAbsenceRequest>();
             IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
             IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
@@ -310,8 +303,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldSetRequestToPendingWhenAlreadyAbsent()
 		{
-			SetupAuthorizationAndDataSource();
-
 			IProcessAbsenceRequest processAbsenceRequest = new GrantAbsenceRequest();
 			IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
 			IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
@@ -364,8 +355,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldOnlyRecreateScheduleReadModelsOnApprove()
 		{
-			SetupAuthorizationAndDataSource();
-
 			IProcessAbsenceRequest processAbsenceRequest = _mockRepository.StrictMock<IProcessAbsenceRequest>();
 			IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
 			IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
@@ -428,8 +417,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldSetRequestToDeniedWhenAlreadyAbsentAndAutoGrantEnabled()
 		{
-			SetupAuthorizationAndDataSource();
-
 			IProcessAbsenceRequest processAbsenceRequest = new GrantAbsenceRequest();
 			IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
 			IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
@@ -482,8 +469,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldLogErrorWhenInvalidScheduleInPersist()
         {
-            SetupAuthorizationAndDataSource();
-
             IProcessAbsenceRequest processAbsenceRequest = _mockRepository.StrictMock<IProcessAbsenceRequest>();
             IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
             IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
@@ -542,8 +527,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyNoValidPersonAccountFoundContinuesRequest()
         {
-            SetupAuthorizationAndDataSource();
-            
             IProcessAbsenceRequest processAbsenceRequest = _mockRepository.StrictMock<IProcessAbsenceRequest>();
             IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
             IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
@@ -615,8 +598,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         [Test]
         public void ShouldStillDenyIfScheduleIsInvalid()
         {
-            SetupAuthorizationAndDataSource();
-
             IProcessAbsenceRequest processAbsenceRequest = _mockRepository.StrictMock<IProcessAbsenceRequest>();
             IAbsenceRequestValidator absenceRequestValidator = _mockRepository.StrictMock<IAbsenceRequestValidator>();
             IPersonAccountCollection personAccountCollection = _mockRepository.StrictMock<IPersonAccountCollection>();
@@ -672,8 +653,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         [Test]
         public void VerifyAbsenceRequestGetsDeniedWhenNoWorkflowControlSet()
         {
-            SetupAuthorizationAndDataSource();
-
             _person.WorkflowControlSet = null;
             
             using (_mockRepository.Record())
@@ -699,11 +678,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
             Expect.Call(_absenceRequest.Period).Return(_period).Repeat.AtLeastOnce();
             Expect.Call(_absenceRequest.Absence).Return(_absence).Repeat.Any();
-        }
-
-        private void SetupAuthorizationAndDataSource()
-        {
-            UnitOfWorkFactoryContainer.Current = _unitOfWorkFactory;
         }
 
         private void PrepareUnitOfWork(bool persistAll)

@@ -23,8 +23,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
     {
         private PayrollExportConsumer target;
         readonly MockRepository mock = new MockRepository();
-        private IRepositoryFactory repositoryFactory;
-				private ICurrentUnitOfWorkFactory unitOfWorkFactory;
+	    private ICurrentUnitOfWorkFactory unitOfWorkFactory;
         private IUnitOfWork unitOfWork;
         private IPayrollExportRepository payrollExportRepository;
         private IPayrollPeopleLoader payrollPeopleLoader;
@@ -38,24 +37,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
     	[SetUp]
         public void Setup()
         {
-            repositoryFactory = mock.StrictMock<IRepositoryFactory>();
             payrollExportRepository = mock.StrictMock<IPayrollExportRepository>();
             payrollPeopleLoader = mock.StrictMock<IPayrollPeopleLoader>();
             payrollResultRepository = mock.StrictMock<IPayrollResultRepository>();
-						unitOfWorkFactory = mock.StrictMock<ICurrentUnitOfWorkFactory>();
+    		unitOfWorkFactory = mock.StrictMock<ICurrentUnitOfWorkFactory>();
             unitOfWork = mock.StrictMock<IUnitOfWork>();
             payrollDataExtractor = mock.StrictMock<IPayrollDataExtractor>();
             personBusAssembler = mock.StrictMock<IPersonBusAssembler>();
             serviceBusReportProgress = mock.StrictMock<IServiceBusPayrollExportFeedback>();
         	_resolver = mock.DynamicMock<IDomainAssemblyResolver>();
             exportingPerson = new Person{Name = new Name("Ex", "Porter")};
-			target = new PayrollExportConsumer(repositoryFactory, payrollDataExtractor, personBusAssembler, serviceBusReportProgress, payrollPeopleLoader, _resolver);
+			target = new PayrollExportConsumer(unitOfWorkFactory, payrollExportRepository, payrollResultRepository, payrollDataExtractor, personBusAssembler, serviceBusReportProgress, payrollPeopleLoader, _resolver);
         }
 
         [Test] //Dont know what I am testing here anymore
         public void ShouldConsumePayrollExport()
         {
-            setupDataSource();
             var payrollGuid = Guid.NewGuid();
             var ownerGuid = Guid.NewGuid();
             var buGuid = Guid.NewGuid();
@@ -82,11 +79,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
             {
                 prepareUnitOfWork(1, false);
                 Expect.Call(payrollPeopleLoader.GetPeopleForExport(exportMessage, new DateOnlyPeriod(), unitOfWork)).Return(persons).IgnoreArguments();
-                Expect.Call(repositoryFactory.CreatePayrollExportRepository(unitOfWork)).Return(payrollExportRepository);
                 Expect.Call(payrollExportRepository.Get(payrollGuid)).Return(payrollExport);
                 Expect.Call(personBusAssembler.CreatePersonDto(persons)).Return(personDtos);
                 Expect.Call(payrollDataExtractor.Extract(payrollExport, exportMessage, personDtos, serviceBusReportProgress)).Return(document);
-                Expect.Call(repositoryFactory.CreatePayrollResultRepository(unitOfWork)).Return(payrollResultRepository);
                 Expect.Call(payrollResultRepository.Get(resultId)).Return(payrollResult);
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(()=>serviceBusReportProgress.SetPayrollResult(null)).IgnoreArguments();
@@ -104,7 +99,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
         [Test]
         public void ShouldLogErrorWhenRunningExport()
         {
-            setupDataSource();
             var payrollGuid = Guid.NewGuid();
             var ownerGuid = Guid.NewGuid();
             var buGuid = Guid.NewGuid();
@@ -124,11 +118,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
             {
                 prepareUnitOfWork(1, false);
                 Expect.Call(payrollPeopleLoader.GetPeopleForExport(exportMessage, new DateOnlyPeriod(), unitOfWork)).Return(new List<IPerson>()).IgnoreArguments();
-                Expect.Call(repositoryFactory.CreatePayrollExportRepository(unitOfWork)).Return(payrollExportRepository);
                 Expect.Call(payrollExportRepository.Get(payrollGuid)).Return(payrollExport);
                 Expect.Call(personBusAssembler.CreatePersonDto(new List<IPerson>())).Return(new List<PersonDto>());
                 Expect.Call(payrollDataExtractor.Extract(payrollExport, exportMessage, new List<PersonDto>(), serviceBusReportProgress)).Throw(new Exception("For test"));
-                Expect.Call(repositoryFactory.CreatePayrollResultRepository(unitOfWork)).Return(payrollResultRepository);
                 Expect.Call(payrollResultRepository.Get(resultId)).Return(payrollResult);
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(() => serviceBusReportProgress.SetPayrollResult(null)).IgnoreArguments();
@@ -147,11 +139,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
         public void ShouldNotConsumePayrollExportIfNull()
         {
             target.Consume(null);
-        }
-
-        private void setupDataSource()
-        {
-            UnitOfWorkFactoryContainer.Current = unitOfWorkFactory;
         }
 
         private void prepareUnitOfWork(int times, bool persistAll)
