@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
     /// <summary>
     /// WorkShiftActivitylayer class
     /// </summary>
-    public class WorkShiftActivityLayer : ActivityLayer
+    public class WorkShiftActivityLayer : ActivityLayer, ICloneableEntity<ILayer<IActivity>>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkShiftActivityLayer"/> class.
