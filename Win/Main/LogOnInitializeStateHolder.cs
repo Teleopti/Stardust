@@ -29,22 +29,23 @@ namespace Teleopti.Ccc.Win.Main
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (LogOnInitializeStateHolder));
 
-        /// <summary>
-        /// Initializes the state holder.
-        /// </summary>
-        /// <remarks>
-        /// You can get the application settings from two sources, either locally from the application config file, or fetch them over the web service.
-        /// To decide the source of the settings, make sure that the "GetConfigFromWebService" entry is "false" in in the appsettings section 
-        /// in the app.config file.
-        /// </remarks>
-        public static bool InitializeStateHolder()
+	    /// <summary>
+	    /// Initializes the state holder.
+	    /// </summary>
+	    /// <param name="endpointNames"></param>
+	    /// <remarks>
+	    /// You can get the application settings from two sources, either locally from the application config file, or fetch them over the web service.
+	    /// To decide the source of the settings, make sure that the "GetConfigFromWebService" entry is "false" in in the appsettings section 
+	    /// in the app.config file.
+	    /// </remarks>
+	    public static bool InitializeStateHolder(string endpointNames)
         {
             ErrorMessage = string.Empty;
             WarningMessage = string.Empty;
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["GetConfigFromWebService"],
                                   CultureInfo.InvariantCulture))
             {
-                return GetConfigFromWebService();
+                return GetConfigFromWebService(endpointNames);
             }
             
             return GetConfigFromFileSystem();
@@ -77,12 +78,12 @@ namespace Teleopti.Ccc.Win.Main
         public static string WarningMessage = string.Empty;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		private static bool GetConfigFromWebService()
+		private static bool GetConfigFromWebService(string endpointNames)
         {
             ICollection<string> encryptedNHibConfigs;
             IDictionary<string, string> encryptedAppSettings;
             string passwordPolicyString;
-            using (Proxy proxy = new Proxy())
+            using (var proxy = new Proxy(endpointNames))
             {
                 using(PerformanceOutput.ForOperation("Getting config from web service"))
                 {

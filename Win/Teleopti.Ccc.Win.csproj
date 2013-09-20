@@ -849,6 +849,7 @@
     <Compile Include="Main\NavigationPanelProvider.cs" />
     <Compile Include="Main\PortalSettings.cs" />
     <Compile Include="Main\PortalSettingsProvider.cs" />
+    <Compile Include="Main\ServerEndpointSelector.cs" />
     <Compile Include="Main\UpdatedEntities.cs" />
     <Compile Include="MapiMailMessage.cs" />
     <Compile Include="Matrix\MatrixNavigationView.cs">
