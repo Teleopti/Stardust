@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         {
             ExplicitlySetGenericPrincipalDataSourceException exception = new ExplicitlySetGenericPrincipalDataSourceException("Test");
             string datasourceName = exception.DataSource;
-            Assert.AreEqual("TestData", datasourceName);
+            Assert.AreEqual("[not set]", datasourceName);
 
         }
 
