@@ -185,6 +185,33 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
+  Variable Value1=DMZ
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DMZ_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=INSTALLDIR
+  Variable Name2=_PROP_VAR_
+  Variable Value2=INSTALLDIR_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=INSIDE_HOSTNAME
+  Variable Name2=_PROP_VAR_
+  Variable Value2=INSIDE_HOSTNAME_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
   Variable Value1=SQL_AUTH_STRING
   Variable Name2=_PROP_VAR_
   Variable Value2=SQL_AUTH_STRING_TMP
@@ -249,6 +276,30 @@ end
 item: Set Variable
   Variable=SDK_SSL_MEX_BINDING_TMP
   Value=mexHttpBinding
+end
+item: End Block
+end
+item: If/While Statement
+  Variable=DMZ_TMP
+  Value=YES
+end
+item: Set Variable
+  Variable=WEB_BROKER_TMP
+  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Web
+end
+item: Set Variable
+  Variable=WEB_BROKER_BACKPLANE_TMP
+  Value=%INSIDE_HOSTNAME_TMP%TeleoptiCCC/Broker.backplane/backplane
+end
+item: Else Statement
+end
+item: Set Variable
+  Variable=WEB_BROKER_TMP
+  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Broker/
+end
+item: Set Variable
+  Variable=WEB_BROKER_BACKPLANE_TMP
+  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Broker.backplane/backplane
 end
 item: End Block
 end
@@ -368,12 +419,12 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(WEB_BROKER)|%DNS_ALIAS_TMP%TeleoptiCCC/Broker/
+  New Text=$(WEB_BROKER)|%WEB_BROKER_TMP%
   Line Number=0
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(WEB_BROKER_BACKPLANE)|%DNS_ALIAS_TMP%TeleoptiCCC/Broker.backplane/backplane
+  New Text=$(WEB_BROKER_BACKPLANE)|%WEB_BROKER_BACKPLANE_TMP%
   Line Number=0
 end
 item: Insert Line into Text File
