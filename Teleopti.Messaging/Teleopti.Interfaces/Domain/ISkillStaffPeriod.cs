@@ -447,16 +447,5 @@ namespace Teleopti.Interfaces.Domain
 		/// The skillday the period belongs to
 		/// </summary>
 		ISkillDay SkillDay { get; }
-
-		/// <summary>
-		/// Added because all layers not are IEntity any longer
-		/// </summary>
-		/// <param name="parent"></param>
-		void SetParent(IEntity parent);
-
-		/// <summary>
-		/// The Parent
-		/// </summary>
-		IEntity Parent { get; }
     }
 }

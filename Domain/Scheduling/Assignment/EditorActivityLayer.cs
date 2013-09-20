@@ -18,17 +18,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			InParameter.EnsureNoSecondsInPeriod(period);
 		}
 
-		public override int OrderIndex
-		{
-			get
-			{
-				if (_parent == null)
-					return -1;
-
-				return Parent.LayerCollection.IndexOf(this);
-			}
-		}
-
 		public new IEditableShift Parent
 		{
 			get { return _parent; }
