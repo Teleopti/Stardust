@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             base.Dispose(disposing);
 			if (disposing)
 			{
-				if (Grid != null) Grid.CurrentCellShowingDropDown -= GridOnCurrentCellShowingDropDown;
 				if (_addNewPersonMenuItem != null) _addNewPersonMenuItem.Dispose();
 				if (_addNewPersonFromClipboardMenuItem != null) _addNewPersonFromClipboardMenuItem.Dispose();
 				if (_deleteSelectedPeopleMenuItem != null) _deleteSelectedPeopleMenuItem.Dispose();
@@ -75,20 +74,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				grid.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
 			if (!grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDropDownCultureCell))
 				grid.CellModels.Add(GridCellModelConstants.CellTypeDropDownCultureCell, new DropDownCultureCellModel(grid.Model));
-			grid.CurrentCellShowingDropDown += GridOnCurrentCellShowingDropDown;
+			if (!grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDropDownCellModel))
+				grid.CellModels.Add(GridCellModelConstants.CellTypeDropDownCellModel, new DropDownCellModel(grid.Model));
 		}
-
-		private void GridOnCurrentCellShowingDropDown(object sender, GridCurrentCellShowingDropDownEventArgs gridCurrentCellShowingDropDownEventArgs)
-		{
-			if (Grid == null) 
-				return;
-
-			var currentCell = Grid.CurrentCell;
-			var comboRenderer = currentCell.Renderer as GridComboBoxCellRenderer;
-			if (comboRenderer != null)
-				((GridComboBoxListBoxPart) comboRenderer.ListBoxPart).DropDownRows = 25;
-		}
-
+		
 		public override void Sort(bool isAscending)
 		{
 			// Sorts the people data
