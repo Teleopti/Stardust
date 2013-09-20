@@ -1,6 +1,4 @@
-﻿using Teleopti.Interfaces.Domain;
-
-namespace Teleopti.Interfaces.Domain
+﻿namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
     /// This class will hold all data for the erlang calculation regarding service level

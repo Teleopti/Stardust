@@ -127,7 +127,8 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	// iterates over all tab widgets, changing the current tab as necessary.
 	$(window)
 		.bind('hashchange', function (e) {
-			var hashInfo = _parseHash();
+		    var hashInfo = _parseHash();
+		    _invokeDisposeCallback(currentViewId);
 			_adjustTabs(hashInfo);
 			_loadContent(hashInfo);
 		});
@@ -137,7 +138,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		//needed due to stopPropagation in tabberiet
 		// ^^^ replace with a callback?
 		Teleopti.MyTimeWeb.Portal.Layout.HideSettingsMenu();
-		_invokeDisposeCallback(currentViewId);
+		//_invokeDisposeCallback(currentViewId);
 
 		var hash = action;
 		if (date) {
@@ -259,53 +260,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			return currentFixedDate;
 		},
 		InitPeriodSelection: function (rangeSelectorId, periodData, actionSuffix) {
-			/*var common = Teleopti.MyTimeWeb.Common;
-			var range = $(rangeSelectorId);
-			var actionPrefix = range.data('mytime-action');
-			actionSuffix = actionSuffix || '';
-
-			currentFixedDate = null;
-			if (typeof (periodData) !== 'undefined') {
-				currentFixedDate = periodData.Date;
-
-				var dp = range.find('.datepicker').datepicker({
-					minDate: common.ParseToDate(periodData.SelectableDateRange.MinDate),
-					maxDate: common.ParseToDate(periodData.SelectableDateRange.MaxDate),
-					defaultDate: common.ParseToDate(periodData.Date),
-					showAnim: "slideDown",
-					onSelect: function (dateText, inst) {
-						var fixedDate = _datePickerPartsToFixedDate(inst.selectedYear, inst.selectedMonth, inst.selectedDay);
-						var urlDate = Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(fixedDate);
-						var hash = actionPrefix + urlDate + actionSuffix;
-						_navigateTo(hash);
-					}
-				});
-
-				range.find('.datepicker')
-					.datepicker('viewDate', moment(common.ParseToDate(periodData.Date)));
-
-				var nextPeriod = periodData.PeriodNavigation.NextPeriod;
-				var prevPeriod = periodData.PeriodNavigation.PrevPeriod;
-				var urlNextPeriod = common.FixedDateToPartsUrl(nextPeriod);
-				var urlPrevPeriod = common.FixedDateToPartsUrl(prevPeriod);
-
-				range.find('span').html(periodData.Display);
-				range.find('button:first')
-					.unbind('click')
-					.click(function () {
-						_navigateTo(actionPrefix + urlPrevPeriod + actionSuffix);
-					})
-					;
-				range.find('button:last')
-					.unbind('click')
-					.click(function () {
-						_navigateTo(actionPrefix + urlNextPeriod + actionSuffix);
-					})
-					;
-
-				_enablePortalControls(rangeSelectorId);
-			}*/
-
 		}
 	};
 })(jQuery);

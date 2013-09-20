@@ -33,13 +33,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var indexOfLayer = mainLayers.IndexOf(layerAsMain);
 				if (indexOfLayer > -1)
 				{
-					mainLayers.RemoveAt(indexOfLayer);
-					mainLayers.Insert(indexOfLayer, new MainShiftLayer(newActivity, newPeriod));
-					assignment.ClearMainLayers();
-					foreach (var mainLayer in mainLayers)
-					{
-						assignment.AddMainLayer(mainLayer.Payload, mainLayer.Period);
-					}
+					assignment.RemoveLayer(layerAsMain);
+					assignment.InsertMainLayer(newActivity,newPeriod,indexOfLayer);
 					return true;
 				}
 			}

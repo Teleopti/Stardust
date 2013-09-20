@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace ReplaceString
 {
@@ -44,17 +43,15 @@ namespace ReplaceString
 			var path = args[0];
 			var files = Directory.GetFiles(path);
 			var directories = Directory.GetDirectories(path);
-			string[] regExps = {"F01%253A[A-Za-z0-9]*\\+[A-Za-z0-9]*", "F02%253A[A-Za-z0-9]*\\+[A-Za-z0-9]*"};
-
 			try
 			{
 				foreach (var file in files)
-					ReplaceInFile(file, regExps, false);
+					replaceLinks(file, false);
 
-				ReplaceFileNames(files, path);
+				replaceFileNames(files, path);
 
 				foreach (var file in directories.SelectMany(Directory.GetFiles))
-					ReplaceInFile(file, regExps, true);
+					replaceLinks(file, true);
 
 				foreach (var directory in directories.Where(dir => dir.Contains("+")))
 				{
@@ -71,7 +68,7 @@ namespace ReplaceString
 			return appStatus;
 		}
 
-		private static void ReplaceFileNames(IEnumerable<string> files, string path)
+		private static void replaceFileNames(IEnumerable<string> files, string path)
 		{
 			foreach (var file in files)
 			{
@@ -126,7 +123,7 @@ namespace ReplaceString
 			}
 		}
 
-		public static void ReplaceInFile(string filePath, string[] searchText, bool injectJavascript)
+		private static void replaceLinks(string filePath, bool isInSubFolder)
 		{
 			string content;
 			using (var reader = new StreamReader(filePath))
@@ -148,25 +145,15 @@ namespace ReplaceString
 				content = content.Replace(Teleopti10, "teleopti10.css");
 			}
 
-			foreach (var s in searchText)
-			{
-				var regExp = new Regex(s);
-				foreach (Match match in regExp.Matches(content))
-				{
-					var matchStr = match.ToString();
-					var replaceStr = matchStr.Replace("+", "_");
-					content = Regex.Replace(content, matchStr.Replace("+", "\\+"), replaceStr);
-				}
-			}
-
-			if (injectJavascript)
-			{
-				const string script =
-					@"<script src='..\DynamicLinkReplace.js' type='text/javascript'></script>
+			var script = isInSubFolder
+								? @"<script src='..\DynamicLinkReplace.js' type='text/javascript'></script>
+<script type='text/javascript'> onload = replaceLinks;</script>
+</head>"
+								: @"<script src='DynamicLinkReplace.js' type='text/javascript'></script>
 <script type='text/javascript'> onload = replaceLinks;</script>
 </head>";
-				content = content.Replace("</head>", script);
-			}
+			content = content.Replace("</head>", script);
+
 
 			using (var writer = new StreamWriter(filePath))
 			{

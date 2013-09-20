@@ -586,7 +586,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	}
     
 	function _cleanBindings() {
-        ko.cleanNode($('#body-inner')[0]);
+        ko.cleanNode($('#page')[0]);
         if (vm != null) {
             vm.days([]);
             vm.timeLines([]);

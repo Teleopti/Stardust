@@ -601,5 +601,42 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.AddMainLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 			target.DayOff().Should().Be.Null();
 		}
+
+		[Test]
+		public void ShouldRemoveDayoffWhenInsertinggMainLayer()
+		{
+			target.SetDayOff(new DayOffTemplate());
+			target.InsertMainLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2),0);
+			target.DayOff().Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldInstertMainLayerAtGivenPosition()
+		{
+			IActivity activity1 = new Activity("act1");
+			IActivity activity2 = new Activity("act2");
+			IActivity activity3 = new Activity("act3");
+
+			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+
+			target.AddMainLayer(activity1, period);
+			target.AddMainLayer(activity3, period);
+
+			target.InsertMainLayer(activity2,period,1);
+
+			target.MainLayers().First().Payload.Should().Be.EqualTo(activity1);
+			target.MainLayers().Skip(1).First().Payload.Should().Be.EqualTo(activity2);
+			target.MainLayers().Skip(2).First().Payload.Should().Be.EqualTo(activity3);
+		}
+
+		[Test]
+		public void ShouldKeepOtherMainShiftLayersWhenInsertingAwMainShiftLayer()
+		{
+			target.AddMainLayer(new Activity("any activity"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			var firstLayer = target.MainLayers().First();
+
+			target.InsertMainLayer(new Activity("any activity"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), 0);
+			target.MainLayers().Skip(1).First().Should().Be.SameInstanceAs(firstLayer);
+		}
 	}
 }

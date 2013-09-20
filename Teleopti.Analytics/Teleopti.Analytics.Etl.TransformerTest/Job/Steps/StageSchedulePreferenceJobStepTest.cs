@@ -25,7 +25,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 		{
 			var jobParameters = JobParametersFactory.SimpleParameters(false);
 			var target = new StageSchedulePreferenceJobStep(jobParameters);
-			jobParameters.Helper = new JobHelper(new RaptorRepositoryStub(), null, null);
+			jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null);
 			Assert.AreEqual(JobCategoryType.Schedule, target.JobCategory);
 			Assert.AreEqual("stg_schedule_preference, stg_day_off, dim_day_off", target.Name);
 			Assert.IsFalse(target.IsBusinessUnitIndependent);

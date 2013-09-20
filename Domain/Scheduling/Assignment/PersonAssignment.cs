@@ -307,6 +307,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
+		public virtual void InsertMainLayer(IActivity activity, DateTimePeriod period, int index)
+		{
+			var layer = new MainShiftLayer(activity, period);
+			layer.SetParent(this);
+			_shiftLayers.Insert(index,layer);
+			SetDayOff(null);
+		}
+
 		public virtual IDayOff DayOff()
 		{
 			if (_dayOffTemplate == null)

@@ -17,6 +17,7 @@ GO
 --				2012-11-25 #19854 - PBI to add Shortname for DayOff.
 --				2013-04-29 Added absence_id and must_haves in load KJ
 --				2013-08-14 Change to use local agent date (instead of UTC)
+--				2013-09-20  Removed check on min/maxdate in stage
 -- Interface:	smalldatetime, with only datepart! No time allowed
 -- =============================================
 --exec mart.etl_fact_schedule_preference_load '2009-02-01','2009-02-17'
