@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			retobj.SetId(null);
 			retobj._shiftLayers = new List<IShiftLayer>();
 			//todo: no need to cast here when interfaces are correct
-			foreach (IShiftLayer newLayer in _shiftLayers.Select(layer => layer.NoneEntityClone()))
+			foreach (var newLayer in _shiftLayers.Select(layer => layer.NoneEntityClone()))
 			{
 				newLayer.SetParent(retobj);
 				retobj._shiftLayers.Add(newLayer);
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var retobj = (PersonAssignment)MemberwiseClone();
 			retobj._shiftLayers = new List<IShiftLayer>();
 			//todo: no need to cast here when interfaces are correct
-			foreach (IShiftLayer newLayer in _shiftLayers.Select(layer => layer.EntityClone()))
+			foreach (var newLayer in _shiftLayers.Select(layer => layer.EntityClone()))
 			{
 				newLayer.SetParent(retobj);
 				retobj._shiftLayers.Add(newLayer);
