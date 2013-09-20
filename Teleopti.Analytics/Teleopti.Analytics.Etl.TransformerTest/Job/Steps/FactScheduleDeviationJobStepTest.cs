@@ -54,5 +54,34 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 
 			_repository.VerifyAllExpectations();
 		}
+
+        [Test]
+        public void ShouldRunIfToday()
+        {
+            var startDate = DateTime.SpecifyKind(DateTime.Today.AddDays(0), DateTimeKind.Local);
+            var endDate = DateTime.SpecifyKind(DateTime.Today.AddDays(0), DateTimeKind.Local);
+
+            _jobCategoryDates.Add(startDate, endDate, JobCategoryType.AgentStatistics);
+            var jobParameters = new JobParameters(_jobCategoryDates, 1, _timeZone.Id, 15, "", "", CultureInfo.CurrentCulture);
+
+            var jobHelper = new JobHelper(_repository, null, null);
+            jobParameters.Helper = jobHelper;
+
+            _repository.Expect(x => x.FillScheduleDeviationDataMart(new DateTimePeriod(), null, null, false)).Constraints(
+                                                                    Rhino.Mocks.Constraints.Is.Anything(),
+                                                                    Rhino.Mocks.Constraints.Is.Anything(),
+                                                                    Rhino.Mocks.Constraints.Is.Anything(),
+                                                                    Rhino.Mocks.Constraints.Is.Anything()
+                                                                    )
+                                                                    .Return(0)
+                                                                    .Repeat.Times(1); 
+
+            var target = new FactScheduleDeviationJobStep(jobParameters);
+            var result = target.Run(new List<IJobStep>(), null, null, false);
+            result.JobStepException.Should().Be.Null();
+
+            _repository.VerifyAllExpectations();
+        }
+
 	}
 }
