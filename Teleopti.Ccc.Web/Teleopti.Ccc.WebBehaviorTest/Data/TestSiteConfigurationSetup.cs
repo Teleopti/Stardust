@@ -28,11 +28,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				{
 					var port = new Random().Next(57000, 57999);
 					_server = new IISExpress(new Parameters
-					{
-						Path = Paths.WebPath(),
-						Port = port,
-						Systray = true
-					});
+						{
+							Path = Paths.WebPath(),
+							Port = port,
+							Systray = true
+						});
 					Url = new Uri(string.Format("http://localhost:{0}/", port));
 				}
 				catch (Exception)
