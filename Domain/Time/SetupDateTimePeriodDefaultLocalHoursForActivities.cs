@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Time
         public SetupDateTimePeriodDefaultLocalHoursForActivities(IScheduleDay scheduleDay, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
         {
 	        _currentTeleoptiPrincipal = currentTeleoptiPrincipal;
+	        HasDefaultValue = false;
 	        _period = GetPeriodFromScheduleDays(scheduleDay);
         }
 
