@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         private PersonAccountCollection _acc;
 	    private IPerson _person;
 
+
         [SetUp]
         public void Setup()
         {
@@ -123,7 +124,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             LastCall.Repeat.AtLeastOnce();
 
             var personAbsenceAccountRepository = _mocker.DynamicMock<IPersonAbsenceAccountRepository>();
-
+            var refreshService = _mocker.DynamicMock<ITraceableRefreshService>();
             _targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, new PersonAccountUpdater(personAbsenceAccountRepository, refreshService));
             ((PersonAccountChildModelForTest)_targetDay).SetUnitOfWorkFactory(unitOfWorkFactory);
             
@@ -282,19 +283,19 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             var personAbsenceAccountRepository = _mocker.DynamicMock<IPersonAbsenceAccountRepository>();
             var refreshService = _mocker.DynamicMock<ITraceableRefreshService>();
 
-            var personAccountCollection = new PersonAccountCollection(person);
+            var personAccountCollection = new PersonAccountCollection(_person);
             var absence1 = AbsenceFactory.CreateAbsence("Test Absence1");
             absence1.SetId(Guid.NewGuid());
             var absence2 = AbsenceFactory.CreateAbsence("Test Absence2");
             absence1.SetId(Guid.NewGuid());
             AccountDay account1;
             AccountTime account2;
-            var accountCollection = PersonAccountCollectionFactory.Create(person, absence1, absence2, out account1, out account2);
+            var accountCollection = PersonAccountCollectionFactory.Create(_person, absence1, absence2, out account1, out account2);
 
             personAccountCollection.Add(absence1, account1);
             personAccountCollection.Add(absence1, account2);
             
-            Expect.Call(personAbsenceAccountRepository.Find(person)).Return(personAccountCollection);
+            Expect.Call(personAbsenceAccountRepository.Find(_person)).Return(personAccountCollection);
             
             _mocker.ReplayAll();
             _targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, new PersonAccountUpdater(personAbsenceAccountRepository, refreshService));

@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         private IApplicationFunction applicationFunction;
         private OrganisationMembership organisationMembership;
         const string Function = "test";
+        private IPersonAccountUpdater _personAccountUpdater;
 
         [SetUp]
         public void Setup()

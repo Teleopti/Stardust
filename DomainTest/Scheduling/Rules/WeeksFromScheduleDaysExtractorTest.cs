@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private IPerson _person2;
         private IScheduleDay _scheduleDay1;
         private IScheduleDay _scheduleDay2;
+        private IPersonAccountUpdater _personAccountUpdater;
 
         [SetUp]
         public void Setup()

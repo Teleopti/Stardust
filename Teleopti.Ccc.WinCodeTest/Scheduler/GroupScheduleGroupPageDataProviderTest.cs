@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 	    private ISchedulingResultStateHolder _resultHolder;
 		private IPerson _person1;
 		private IPerson _person2;
+	    private IPersonAccountUpdater _personAccountUpdater;
 
 	    [SetUp]
 		public void Setup()
