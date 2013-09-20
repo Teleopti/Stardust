@@ -75,12 +75,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var request = UserFactory.User().UserData<ExistingTextRequest>();
 
+			var firstFiftyCharsOfMessage = request.PersonRequest.GetMessage(new NoFormatting()).Substring(0,50);
+
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-subject", position),
 				request.PersonRequest.GetSubject(new NoFormatting()));
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-message", position),
-				request.PersonRequest.GetMessage(new NoFormatting()));
+				firstFiftyCharsOfMessage);
 
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
