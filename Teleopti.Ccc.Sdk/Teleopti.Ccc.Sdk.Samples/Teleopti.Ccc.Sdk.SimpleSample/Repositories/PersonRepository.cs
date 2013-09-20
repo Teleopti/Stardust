@@ -22,13 +22,6 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.Repositories
             _personDictionary = people.ToDictionary(k => k.Id.GetValueOrDefault(), v => v);
         }
 
-        public void TerminatePerson(PersonDto personDto)
-        {
-            var dateOnlyDto = new DateOnlyDto(2013, 10, 31);
-            personDto.TerminationDate = dateOnlyDto;
-            _teleoptiOrganizationService.UpdatePerson(personDto);
-        }
-
         public PersonDto GetById(Guid id)
         {
             PersonDto personDto;

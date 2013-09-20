@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.ViewModel
             initializeRepositories(startDate, endDate);
 
             _peopleViewModel.FoundPeople.Clear();
-            PersonDto terminatedAgent = null;
             var businessUnit = _businessHierarchyRepository.GetBusinessUnit();
             var personDetailContainers = _personPeriodRepository.GetPersonPeriods();
             foreach (var personDetailContainer in personDetailContainers)
@@ -63,10 +62,6 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.ViewModel
                 personDetailContainer.Person = _personRepository.GetById(personId);
 
                 if (personDetailContainer.Person == null) continue;
-
-                if (personDetailContainer.Person.FirstName.Contains("Robert"))
-                    terminatedAgent = personDetailContainer.Person;
-
 
                 personDetailContainer.Contract = _contractRepository.GetById(personDetailContainer.PersonPeriod.ContractId).Description;
                 personDetailContainer.ContractSchedule = _contractScheduleRepository.GetById(personDetailContainer.PersonPeriod.ContractScheduleId).Description;
@@ -114,10 +109,7 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.ViewModel
                 });
             }
 
-            if (terminatedAgent != null)
-                _personRepository.TerminatePerson(terminatedAgent);
-
-            _peopleViewModel.ResultCountVisible = Visibility.Visible;
+           _peopleViewModel.ResultCountVisible = Visibility.Visible;
         }
 
         private void initializeRepositories(DateOnlyDto startDate, DateOnlyDto endDate)
