@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					{
 						MakeScheduleChangedHandler()
 					};
-			if (type == typeof(IEnumerable<IHandleEvent<ProjectionChangedEvent>>))
+			if (type == typeof (IEnumerable<IHandleEvent<ProjectionChangedEvent>>))
 				return new IHandleEvent<ProjectionChangedEvent>[]
 					{
 						new PersonScheduleDayReadModelHandler(
@@ -74,11 +74,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 							new ScheduleProjectionReadOnlyRepository(CurrentUnitOfWork.Make()),
 							new ScheduledResourcesReadModelUpdater(
 								new ScheduledResourcesReadModelStorage(
-									CurrentUnitOfWork.Make()), 
-									messageBroker(), 
-									new ControllableEventSyncronization()),
+									CurrentUnitOfWork.Make()
+									),
+								messageBroker(),
+								new UnitOfWorkTransactionEventSyncronization(CurrentUnitOfWork.Make())),
 							new PersonSkillProvider(),
-							new EventPublisher(this,new CurrentIdentity()))
+							new EventPublisher(this, new CurrentIdentity()))
 					};
             Console.WriteLine("Cannot resolve type {0}! Add it manually or consider using autofac!", type);
 		    return null;

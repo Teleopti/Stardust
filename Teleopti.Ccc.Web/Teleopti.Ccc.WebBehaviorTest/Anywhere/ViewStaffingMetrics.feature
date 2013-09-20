@@ -59,7 +59,6 @@ Scenario: View staffing metrics
 	| Difference percentage   | -39.10 |
 	| Estimated service level | 0.00   |
 
-@ignore
 Scenario: Push staffing metrics changes
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
@@ -98,7 +97,7 @@ Scenario: Push staffing metrics changes
 	| Field                   | Value   |
 	| Forecasted hours        | 11.50   |
 	| Scheduled hours         | 0.0     |
-	| Difference hours        | -11.50  |
+	| Difference hours        | -11.49  |
 	| Difference percentage   | -100.00 |
 	| Estimated service level | 0.00    |
 
