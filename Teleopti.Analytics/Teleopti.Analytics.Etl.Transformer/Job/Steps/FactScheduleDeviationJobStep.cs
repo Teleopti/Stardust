@@ -28,7 +28,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 
             var toDate = JobCategoryDatePeriod.EndDateUtc;
 		    for (DateTime startDateTime = JobCategoryDatePeriod.StartDateUtc;
-                startDateTime < toDate;
+                startDateTime <= toDate;
 					startDateTime = startDateTime.AddDays(chunkTimeSpan))
 			{
 			    

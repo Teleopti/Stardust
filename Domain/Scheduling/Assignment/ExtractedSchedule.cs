@@ -235,17 +235,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return new ScheduleProjectionService(this, new ProjectionPayloadMerger());
         }
 
-        public bool HasProjection
-        {
-            get
-            {
-                return (ScheduleDataInternalCollection().OfType<IPersonAssignment>().Any() ||
-                        ScheduleDataInternalCollection().OfType<IPersonAbsence>().Any());
-            }
-        }
+	    public bool HasProjection()
+	    {
+		    return (ScheduleDataInternalCollection().OfType<IPersonAssignment>().Any() ||
+		            ScheduleDataInternalCollection().OfType<IPersonAbsence>().Any());
+	    }
 
-
-		#region Methods (7)
+	    #region Methods (7)
 
 
         public void Merge(IScheduleDay source, bool isDelete)

@@ -62,5 +62,6 @@ namespace Teleopti.Interfaces.Domain
 	    void AddMainLayer(IActivity activity, DateTimePeriod period);
 	    void SetShiftCategory(IShiftCategory shiftCategory);
 	    void SetMainLayersAndShiftCategoryFrom(IPersonAssignment assignment);
+	    void InsertMainLayer(IActivity activity, DateTimePeriod period, int index);
     }
 }

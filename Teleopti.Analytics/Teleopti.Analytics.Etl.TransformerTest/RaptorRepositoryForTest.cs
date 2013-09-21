@@ -16,9 +16,9 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.ReadModel;
 
-namespace Teleopti.Analytics.Etl.TransformerInfrastructure
+namespace Teleopti.Analytics.Etl.TransformerTest
 {
-    public class RaptorRepositoryStub : IRaptorRepository
+	public class RaptorRepositoryForTest : IRaptorRepository
     {
         public IList<IActivity> LoadActivity()
         {

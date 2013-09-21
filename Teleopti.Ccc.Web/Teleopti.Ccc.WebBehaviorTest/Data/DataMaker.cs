@@ -1,6 +1,7 @@
 ﻿using System;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
@@ -27,6 +28,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static bool PersonExists(string name)
 		{
 			return Data().HasPerson(name);
+		}
+
+		public static AnalyticsDataFactory Analytics()
+		{
+			return Data().Analytics();
 		}
 
 		public static void ApplyFromTable<T>(Table table)

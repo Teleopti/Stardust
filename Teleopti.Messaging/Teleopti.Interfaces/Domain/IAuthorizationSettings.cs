@@ -1,6 +1,4 @@
-﻿using Teleopti.Interfaces.Infrastructure;
-
-namespace Teleopti.Interfaces.Domain
+﻿namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
     /// Info object to the current authorization settings.

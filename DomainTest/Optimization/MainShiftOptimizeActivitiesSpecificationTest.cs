@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var shift = EditableShiftFactory.CreateEditorShiftWithLayers(_baseAct, _lunchAct, _shbrAct);
 	        var layer = shift.LayerCollection[3];
 	        shift.LayerCollection.Remove(layer);
-			ILayer<IActivity> newLayer = new EditorActivityLayer(layer.Payload, layer.Period.MovePeriod(TimeSpan.FromMinutes(1)));
+			var newLayer = new EditableShiftLayer(layer.Payload, layer.Period.MovePeriod(TimeSpan.FromMinutes(1)));
             shift.LayerCollection.Add(newLayer);
             IVisualLayerCollection layers = shift.ProjectionService().CreateProjection();
             Assert.IsTrue(_target.CorrectAlteredBetween(layers));
@@ -84,13 +84,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             //reset shift
 			layer = shift.LayerCollection[3];
 			shift.LayerCollection.Remove(layer);
-			newLayer = new EditorActivityLayer(layer.Payload, layer.Period.MovePeriod(TimeSpan.FromMinutes(-1)));
+			newLayer = new EditableShiftLayer(layer.Payload, layer.Period.MovePeriod(TimeSpan.FromMinutes(-1)));
 			shift.LayerCollection.Add(newLayer);
 
             //lengthen instead of move
 			layer = shift.LayerCollection[3];
 			shift.LayerCollection.Remove(layer);
-			newLayer = new EditorActivityLayer(layer.Payload, layer.Period.ChangeEndTime(TimeSpan.FromMinutes(1)));
+			newLayer = new EditableShiftLayer(layer.Payload, layer.Period.ChangeEndTime(TimeSpan.FromMinutes(1)));
 			shift.LayerCollection.Add(newLayer);
             layers = shift.ProjectionService().CreateProjection();
             period =

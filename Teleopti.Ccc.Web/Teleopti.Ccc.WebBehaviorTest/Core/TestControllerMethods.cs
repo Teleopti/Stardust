@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		/// </remarks>
 		public static void Logon()
 		{
-			var userName = DataMaker.Data().ApplySetups();
+			var userName = DataMaker.Data().ApplyDelayed();
 			var password = TestData.CommonPassword;
 			InnerLogon(userName, password);
 		}
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 						UserName = userName, 
 						Password = password
 					});
-			DataMaker.Data().ApplySetups();
+			DataMaker.Data().ApplyDelayed();
 			InnerLogon(userName, password);
 		}
 

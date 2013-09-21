@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 {
-	public class ExistingShiftTradeRequest : IPostSetup
+	public class ExistingShiftTradeRequest : IDelayedSetup
 	{
 		public PersonRequest PersonRequest { get; set; }
 		public string From { get; set; }

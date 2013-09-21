@@ -247,6 +247,7 @@
     <Compile Include="Common\IModifyNow.cs" />
     <Compile Include="Common\LayersExtensions.cs" />
     <Compile Include="Common\ListAggregator.cs" />
+    <Compile Include="Common\PeriodExtensions.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Common\SpecificBusinessUnit.cs" />
     <Compile Include="Common\TrueFalseRandomizer.cs" />
@@ -530,7 +531,7 @@
     <Compile Include="Scheduling\Overtime\SkillIntervalDataDivider.cs" />
     <Compile Include="Scheduling\Overtime\SkillStaffPeriodToSkillIntervalDataMapper.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
-    <Compile Include="Scheduling\Assignment\EditorActivityLayer.cs" />
+    <Compile Include="Scheduling\Assignment\EditableShiftLayer.cs" />
     <Compile Include="Scheduling\Assignment\EditableShift.cs" />
     <Compile Include="Scheduling\Assignment\EditorShiftMapper.cs" />
     <Compile Include="Scheduling\Assignment\MainShiftLayer.cs" />
@@ -717,7 +718,6 @@
     <Compile Include="Helper\SerializationHelper.cs" />
     <Compile Include="Helper\StaffingCalculatorService.cs" />
     <Compile Include="Helper\StaffingEmailCalculatorService.cs" />
-    <Compile Include="Optimization\SchedulePeriodDayOffLegalStateValidator.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\SchedulePeriodShiftCategoryBackToLegalStateServiceBuilder.cs" />
     <Compile Include="Optimization\SchedulePeriodShiftCategoryBackToLegalStateService.cs" />
@@ -902,7 +902,6 @@
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateValidator.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalDataCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\DynamicBlockFinder.cs" />
-    <Compile Include="Scheduling\TeamBlock\GroupPersonBuilderBasedOnContractTime.cs" />
     <Compile Include="Scheduling\TeamBlock\GroupPersonSkillAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\IntervalDataMedianCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\MaxMovedDaysOverLimitValidator.cs" />
@@ -1141,7 +1140,6 @@
     <Compile Include="Repositories\IMeetingRepository.cs" />
     <Compile Include="ResourceCalculation\SchedulingResultStateHolder.cs" />
     <Compile Include="ResourceCalculation\DayOffPlannerRules.cs" />
-    <Compile Include="Scheduling\Meetings\MeetingPeriod.cs" />
     <Compile Include="Scheduling\Meetings\Meeting.cs" />
     <Compile Include="Scheduling\Meetings\MeetingPerson.cs" />
     <Compile Include="Scheduling\Meetings\PersonMeeting.cs" />
@@ -1286,7 +1284,6 @@
     <Compile Include="Security\AuthorizationData\DefinedLicenseOptionPaths.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccBaseLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccAgentSelfServiceLicenseOption.cs" />
-    <Compile Include="Security\AuthorizationData\DefaultAuthorizationSettings.cs" />
     <Compile Include="Security\AuthorizationData\DefinedRaptorApplicationFunctionForeignIds.cs" />
     <Compile Include="Security\AuthorizationData\DefinedRaptorApplicationFunctionPaths.cs" />
     <Compile Include="Security\AuthorizationData\DefinedRaptorApplicationFunctionFactory.cs" />

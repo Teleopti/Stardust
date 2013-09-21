@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsAbsenceTimeForTo(Table table)
 		{
 			var absenceTimeConfigurable = table.CreateInstance<AbsenceTimeConfigurable>();
-			DataMaker.Data().Setup(absenceTimeConfigurable);
+			DataMaker.Data().ApplyLater(absenceTimeConfigurable);
 		}
 	}
 }

@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
                 Expect.Call(scheduleRange.Person).Return(person).Repeat.AtLeastOnce();
 				Expect.Call(scheduleRange.ScheduledDay(DateOnly.Today)).IgnoreArguments().Return(scheduleDay).Repeat.
 					AtLeastOnce();
-				Expect.Call(scheduleDay.HasProjection).Return(false).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDay.HasProjection()).Return(false).Repeat.AtLeastOnce();
 				Expect.Call(() => scheduleDictionary.PartModified += target.OnScheduleModified);
                 expectLoadOfSettings();
             }

@@ -163,7 +163,6 @@
     <Compile Include="NHibernateConfiguration\DataSourceConfigurationSetter.cs" />
     <Compile Include="Config\LoadPasswordPolicyService.cs" />
     <Compile Include="Foundation\AvailableWindowsDataSources.cs" />
-    <Compile Include="Foundation\CannotConnectToDatabaseException.cs" />
     <Compile Include="Foundation\ForeignKeyException.cs" />
     <Compile Include="Foundation\IAvailableWindowsDataSources.cs" />
     <Compile Include="Foundation\IInitializeApplication.cs" />
@@ -192,7 +191,6 @@
     <Compile Include="NHibernateConfiguration\SqlServerProgrammabilityAuxiliary.cs" />
     <Compile Include="NHibernateConfiguration\ColorNumber.cs" />
     <Compile Include="Foundation\ConstraintViolationException.cs" />
-    <Compile Include="NHibernateConfiguration\DataSourceSettingValues.cs" />
     <Compile Include="NHibernateConfiguration\DateOnlyMappingType.cs" />
     <Compile Include="Foundation\LogOnOff.cs" />
     <Compile Include="Foundation\LazyLoadingManager.cs" />

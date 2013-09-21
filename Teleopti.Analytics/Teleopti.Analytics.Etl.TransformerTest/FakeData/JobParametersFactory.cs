@@ -14,7 +14,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 									 isPMInstalled.ToString(CultureInfo.InvariantCulture),
 									 CultureInfo.CurrentCulture);
 
-			jobParameters.Helper = new JobHelper(new RaptorRepositoryStub(), null, null);
+			jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null);
 
 			return jobParameters;
 		}

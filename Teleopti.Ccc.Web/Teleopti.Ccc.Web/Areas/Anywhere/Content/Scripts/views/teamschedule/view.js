@@ -239,7 +239,7 @@ define([
 						deferred.resolve();
 						return;
 					}
-				    teamSchedule.SelectedTeam(currentTeam);
+					teamSchedule.SelectedTeam(currentTeam);
 					loadPersons({
 						success: function() {
 							loadSchedules({

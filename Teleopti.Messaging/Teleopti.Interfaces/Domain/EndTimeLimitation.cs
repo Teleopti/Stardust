@@ -196,34 +196,6 @@ namespace Teleopti.Interfaces.Domain
 
         /// <summary>
         /// </summary>
-        /// <param name="value">The time string.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Throws ArgumentOutOfRangeException if not able to parse
-        /// Created by: henrika
-        /// Created date: 2009-01-26
-        /// </remarks>
-		public TimeSpan? TimeSpanFromString(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return null;
-            }
-            if (value.StartsWith("24", StringComparison.OrdinalIgnoreCase))
-                value = "00:00 +1";
-            TimeSpan timeSpan;
-            if (TimeHelper.TryParse(value, out timeSpan))
-            {
-				verifyTimes(timeSpan, null);
-                return timeSpan;
-            }
-
-            throw new ArgumentOutOfRangeException("value", value, "The string can not be converted to a TimeSpan");
-            
-        }
-
-        /// <summary>
-        /// </summary>
         /// <param name="value">The value.</param>
         /// <returns></returns>
         /// <remarks>

@@ -1,10 +1,9 @@
 using System;
 using System.Globalization;
-using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
 
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldSeeTheTimeIndicatorAtTime(DateTime date)
 		{
 			const int heightOfDay = 668;
-			const int timeLineOffset = 120;
+			const int timeLineOffset = 121;
 			const int timeIndicatorHeight = 2;
 		    TimeSpan minTimelineTime;
 		    TimeSpan maxTimelineTime;
@@ -53,30 +52,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var heightOfTimeIndicator = Math.Round(positionPercentage * heightOfDay, 0) -
 										Math.Round((decimal)(timeIndicatorHeight / 2), 0);
 
-			EventualAssert.That(() => _page.TimeIndicatorForDate(date).Style.GetAttributeValue("Top"), Is.EqualTo(Math.Round(heightOfTimeIndicator, 0).ToString(CultureInfo.InvariantCulture) + "px"));
+			heightOfTimeIndicator = heightOfTimeIndicator == -1 ? 0 : heightOfTimeIndicator;
 
-			EventualAssert.That(() => _page.TimeIndicatorInTimeLine.Style.GetAttributeValue("Top"),
-								Is.EqualTo((Math.Round(heightOfTimeIndicator, 0) + timeLineOffset).ToString(CultureInfo.InvariantCulture) + "px"));
+			var topIndicatorPx = Math.Round(heightOfTimeIndicator, 0).ToString(CultureInfo.InvariantCulture) + "px";
+			var topIndicatorSmallPx = (Math.Round(heightOfTimeIndicator, 0) + timeLineOffset).ToString(CultureInfo.InvariantCulture) + "px";
+			
+			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-time-indicator[style*='top: {1}']", date.ToString("yyyy-MM-dd"), topIndicatorPx));
+			Browser.Interactions.AssertExists(string.Format(".weekview-day-time-indicator-small[style*='top: {0}']", topIndicatorSmallPx));
 		}
 
 		[Then(@"I should not see the time indicator for date '(.*)'")]
 		public void ThenIShouldNotSeeTheTimeIndicatorForDate(DateTime date)
 		{
-			EventualAssert.That(() => _page.TimeIndicatorForDate(date).DisplayVisible(), Is.False);
-			EventualAssert.That(() => _page.TimeIndicatorInTimeLine.DisplayVisible(), Is.False);
+			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-time-indicator", date.ToString("yyyy-MM-dd")));
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".weekview-day-time-indicator-small");
 		}
 		
 		[Then(@"I should not see the time indicator")]
 		public void ThenIShouldNotSeeTheTimeIndicator()
 		{
-			EventualAssert.That(() => _page.FirstDay.ListItems[4].Divs[0].Style.GetAttributeValue("display"), Is.EqualTo("none"));
-			EventualAssert.That(() => _page.SecondDay.ListItems[4].Divs[0].Style.GetAttributeValue("display"), Is.EqualTo("none"));
-			EventualAssert.That(() => _page.ThirdDay.ListItems[4].Divs[0].Style.GetAttributeValue("display"), Is.EqualTo("none"));
-			EventualAssert.That(() => _page.FourthDay.ListItems[4].Divs[0].Style.GetAttributeValue("display"), Is.EqualTo("none"));
-			EventualAssert.That(() => _page.FifthDay.ListItems[4].Divs[0].Style.GetAttributeValue("display"), Is.EqualTo("none"));
-			EventualAssert.That(() => _page.SixthDay.ListItems[4].Divs[0].Style.GetAttributeValue("display"), Is.EqualTo("none"));
-			EventualAssert.That(() => _page.SeventhDay.ListItems[4].Divs[0].Style.GetAttributeValue("display"), Is.EqualTo("none"));
-			EventualAssert.That(() => _page.TimeIndicatorInTimeLine.Style.GetAttributeValue("display"), Is.EqualTo("none"));
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".weekview-day .weekview-day-time-indicator");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".weekview-day-time-indicator-small");
 		}
 	}
 }

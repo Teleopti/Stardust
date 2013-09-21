@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		private IScheduleDay _scheduleDayFrom;
 		private IScheduleDay _scheduleDayTo;
 		private IEditableShift _mainShift;
-		private ILayerCollection<IActivity> _layerCollectionFrom;
-		private ILayerCollection<IActivity> _layerCollectionTo;
+		private IList<IEditableShiftLayer> _layerCollectionFrom;
+		private IList<IEditableShiftLayer> _layerCollectionTo;
 		private DateTimePeriod _periodFrom;
 		private DateTimePeriod _periodTo;
 		private ReadOnlyCollection<IPersonMeeting> _personMeetings;
@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			_swapDetail = new ShiftTradeSwapDetail(_personFrom, _personTo, new DateOnly(), new DateOnly()){SchedulePartFrom = _scheduleDayFrom, SchedulePartTo = _scheduleDayTo};
 			_details = new List<IShiftTradeSwapDetail>{_swapDetail};
 			_mainShift = _mock.StrictMock<IEditableShift>();
-			_layerCollectionFrom = new LayerCollection<IActivity>();
-			_layerCollectionTo = new LayerCollection<IActivity>();
+			_layerCollectionFrom = new List<IEditableShiftLayer>();
+			_layerCollectionTo = new List<IEditableShiftLayer>();
 			var startFrom = new DateTime(2011, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var endFrom = new DateTime(2011, 1, 1, 17, 0, 0, DateTimeKind.Utc);
 			_periodFrom = new DateTimePeriod(startFrom, endFrom);
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			var startTo = new DateTime(2011, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			var endTo = new DateTime(2011, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 			_periodTo = new DateTimePeriod(startTo, endTo);
-			_layerCollectionFrom.Add(new ActivityLayer(new Activity("ds"), _periodFrom));
+			_layerCollectionFrom.Add(new EditableShiftLayer(new Activity("ds"), _periodFrom));
 
 			using(_mock.Record())
 			{
@@ -97,8 +97,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			var endTo = new DateTime(2011, 1, 1, 18, 0, 0, DateTimeKind.Utc);
 			_periodTo = new DateTimePeriod(startTo, endTo);
 
-			_layerCollectionTo.Add(new ActivityLayer(new Activity("ds"), new DateTimePeriod(_periodFrom.StartDateTime, _periodFrom.StartDateTime.AddHours(1))));
-			_layerCollectionTo.Add(new ActivityLayer(new Activity("ds"), new DateTimePeriod(_periodFrom.EndDateTime.AddHours(-1), _periodFrom.EndDateTime)));
+			_layerCollectionTo.Add(new EditableShiftLayer(new Activity("ds"), new DateTimePeriod(_periodFrom.StartDateTime, _periodFrom.StartDateTime.AddHours(1))));
+			_layerCollectionTo.Add(new EditableShiftLayer(new Activity("ds"), new DateTimePeriod(_periodFrom.EndDateTime.AddHours(-1), _periodFrom.EndDateTime)));
 
 			using (_mock.Record())
 			{
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			var endTo = new DateTime(2011, 1, 1, 18, 0, 0, DateTimeKind.Utc);
 			_periodTo = new DateTimePeriod(startTo, endTo);
 
-			_layerCollectionTo.Add(new ActivityLayer(new Activity("ds"), _periodFrom));
+			_layerCollectionTo.Add(new EditableShiftLayer(new Activity("ds"), _periodFrom));
 
 			using (_mock.Record())
 			{

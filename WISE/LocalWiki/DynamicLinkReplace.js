@@ -1,6 +1,9 @@
-﻿function notTranslatedPrefixes() {
+function notTranslatedPrefixes() {
 	return ['F01%253APM_',
-		'PM_'];
+	'PM_',
+	'www.teleopti.com',
+	'Category%253AP',
+	'Special%253ACategories'];
 }
 
 function notTranslatedPages() {
@@ -65,29 +68,54 @@ function endsWith(str, suffix) {
 	return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
 
-function shouldReplaceLink(link, pageName) {
-	// if pageName is sv.html and link is pointing to a sv.html 
-	// then it is alerady pointing to a traslated page
-	return !endsWith(link, pageName) &&
-		isPrefixAllowed(link, notTranslatedPrefixes()) &&
-		isLinkTranslated(link, notTranslatedPages());
+function isSuffixAllowed(link) {
+	var linkPage = getPageName(link);
+	var forbiddenSuflixes = ['en.html', 'ru.html', 'sv.html', 'zh.html'];
+	for (var i = 0, suffix; suffix = forbiddenSuflixes[i]; i++) {
+		if (endsWith(linkPage, suffix)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+function isPageToTeleoptiSite(link) {
+	return (link.substr(0, 23) === 'http://www.teleopti.com');
+}
+
+function shouldReplaceLink(link) {
+	return isPrefixAllowed(link, notTranslatedPrefixes()) &&
+		isLinkTranslated(link, notTranslatedPages()) &&
+		isSuffixAllowed(link);
+}
+
+function isLinkInArray(string, array) {
+	for (var i = 0, item; item = array[i]; i++) {
+		if (item === string) {
+			return true;
+		}
+	}
+	return false;
 }
 
 function replaceLinks() {
 	var url = window.location.pathname;
 	var pageName = getPageName(url);
-	for (var i = 0, link; link = document.links[i]; i++) {
-		if (link)
+	var links = document.links;
+	for (var i = 0, link; link = links[i]; i++) {
+		if (link) {
 			link = link.href;
-		else
-			continue;
-		if (shouldReplaceLink(link, pageName)) {
-			var trimmedLink = endsWith(link, '1.html')
-				? link.substr(0, link.length - 7)
-				: link.substr(0, link.length - 5);
+			if (isPageToTeleoptiSite(link))
+				continue;
+			if (shouldReplaceLink(link, pageName)) {
+				var trimmedLink = endsWith(link, '1.html')
+					? link.substr(0, link.length - 7)
+					: link.substr(0, link.length - 5);
 
-			document.links[i].href = trimmedLink + '\\' + pageName;
+				document.links[i].href = trimmedLink + '\\' + pageName;
+			}
 		}
+		document.links[i].href = document.links[i].href.replace("+", "_");
 	}
 	fixNavigationLinkTexts(pageName);
 }
@@ -128,7 +156,7 @@ function fixNavigationLinkTexts(pageName) {
 }
 
 function getTitleTranslationText() {
-	return [[],['Modules', 'Модули', 'Moduler', '模块'],
+	return [[], ['Modules', 'Модули', 'Moduler', '模块'],
 	['Agent tools', 'Инструменты оператора', 'Agentverktyg', '坐席工具'],
 	['Terms', 'Термины', 'Termer', '词条'],
 	['Functionality', 'Функциональность', 'Funktionalitet', '功能'],
@@ -137,11 +165,12 @@ function getTitleTranslationText() {
 	['General settings', 'Общие настройки', 'Allmänna inställningar', '一般设置'],
 	['Interface and layout', 'Интерфейс и размещение', 'Gränssnitt och utformning', '界面和布局'],
 	['Toolbox', 'Инструменты', 'Verktygslåda', '工具箱'],
-	['Contact', 'Контакт', 'Kontakt', '联系']];
+	['Contact', 'Контакт', 'Kontakt', '联系'], ['', '', '', '']];
 }
 
 function getLinkTranslationText() {
-	return [ // Modules
+	return [['', '', '', ''],
+		// Modules
 ['People', 'Сотрудники', 'Personer', '人员'],
 ['Forecasts', 'Прогнозы', 'Prognoser', '预测'],
 ['Shifts', 'Смены', 'Skift', '班次'],
@@ -205,7 +234,7 @@ function getLinkTranslationText() {
 ['Keyboard shortcuts', 'Сочетания клавиш', 'Kortkommandon', '键盘快捷键'],
 ['Wiki help', 'Помощь Wiki', 'Wikihjälp', 'Wiki 帮助'],
 ['Upload file', 'Загрузить файл', 'Ladda upp fil', '上传文件'],
-[], [], [], [],
+['', '', '', ''], ['', '', '', ''], ['', '', '', ''],
 	// Contact
 ['Feedback', 'Обратная связь', 'Feedback', '反馈']];
 }

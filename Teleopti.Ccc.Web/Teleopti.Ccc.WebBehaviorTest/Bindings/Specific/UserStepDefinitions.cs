@@ -62,12 +62,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			var dates = new TodayDate();
 			var intervals = new QuarterOfAnHourInterval();
 			var dataSource = new ExistingDatasources(timeZones);
-			DataMaker.Data().Setup(new EternityAndNotDefinedDate());
-			DataMaker.Data().Setup(timeZones);
-			DataMaker.Data().Setup(dates);
-			DataMaker.Data().Setup(intervals);
-			DataMaker.Data().Setup(dataSource);
-			DataMaker.Data().Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones, dataSource));
+			DataMaker.Analytics().Setup(new EternityAndNotDefinedDate());
+			DataMaker.Analytics().Setup(timeZones);
+			DataMaker.Analytics().Setup(dates);
+			DataMaker.Analytics().Setup(intervals);
+			DataMaker.Analytics().Setup(dataSource);
+			DataMaker.Analytics().Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones, dataSource));
 		}
 
 		[Given(@"I have analytics data for the current week")]
@@ -77,12 +77,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			var dates = new CurrentWeekDates();
 			var intervals = new QuarterOfAnHourInterval();
 			var dataSource = new ExistingDatasources(timeZones);
-			DataMaker.Data().Setup(new EternityAndNotDefinedDate());
-			DataMaker.Data().Setup(timeZones);
-			DataMaker.Data().Setup(dates);
-			DataMaker.Data().Setup(intervals);
-			DataMaker.Data().Setup(dataSource);
-			DataMaker.Data().Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones, dataSource));
+			DataMaker.Analytics().Setup(new EternityAndNotDefinedDate());
+			DataMaker.Analytics().Setup(timeZones);
+			DataMaker.Analytics().Setup(dates);
+			DataMaker.Analytics().Setup(intervals);
+			DataMaker.Analytics().Setup(dataSource);
+			DataMaker.Analytics().Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones, dataSource));
 		}
 
 		[Given(@"I am user with partial access to reports")]
@@ -485,7 +485,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"I have 2 existing request changed on different times")]
 		public void GivenIHave2ExistingRequestChangedOnDifferentTimes()
 		{
-			DataMaker.Data().Setup(new TwoExistingTextRequestChangedOnDifferentTimes());
+			DataMaker.Data().ApplyLater(new TwoExistingTextRequestChangedOnDifferentTimes());
 		}
 
 		[Given(@"I have an existing absence request")]
@@ -499,7 +499,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		public void GivenIHaveCreatedAShiftTradeRequest(Table table)
 		{
 			var existingShiftTrade = table.CreateInstance<ExistingShiftTradeRequest>();
-			DataMaker.Data().Setup(existingShiftTrade);
+			DataMaker.Data().ApplyLater(existingShiftTrade);
 		}
 
 		[Given(@"the site has another team")]

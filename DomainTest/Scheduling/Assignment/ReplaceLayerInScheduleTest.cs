@@ -163,7 +163,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				.Should().Be.SameInstanceAs(newActivity);
 		}
 
-
 		[Test]
 		public void ShouldKeepAssignmentInstance()
 		{
@@ -188,6 +187,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.Replace(scheduleDay, orgAbsence.Layer, new Absence(), orgAbsence.Layer.Period);
 			scheduleDay.PersonAbsenceCollection().Single().Should().Be.SameInstanceAs(orgAbsence);
 			scheduleDay.PersonAbsenceCollection().Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ReplaceMainShiftLayer_WhenOtherLayersExists_ShouldKeepOldLayers()
+		{
+			var target = new ReplaceLayerInSchedule();
+			var scheduleDay = new SchedulePartFactoryForDomain()
+				.AddMainShiftLayer()
+				.AddMainShiftLayer()
+				.CreatePart();
+
+			var firstMainShiftLayer = scheduleDay.PersonAssignment().MainLayers().First();
+			var secondMainShiftLayer = scheduleDay.PersonAssignment().MainLayers().Skip(1).First();
+		
+			var newPayload = new Activity("d");
+			var newPeriod = new DateTimePeriod();
+			
+			target.Replace(scheduleDay, secondMainShiftLayer, newPayload, newPeriod);
+
+			scheduleDay.PersonAssignment().MainLayers().First().Should().Be.SameInstanceAs(firstMainShiftLayer);
 		}
 	}
 }
