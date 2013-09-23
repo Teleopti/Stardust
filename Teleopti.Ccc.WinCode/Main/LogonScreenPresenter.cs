@@ -9,35 +9,22 @@ namespace Teleopti.Ccc.WinCode.Main
 	{
 		void OkbuttonClicked(LoginStep currentStep);
 		void BackButtonClicked(LoginStep currentStep);
-		void InitializeLogin();
+		bool InitializeLogin();
 	}
 
 	public class LogonScreenPresenter : ILogonScreenPresenter
 	{
 		private readonly ILogonScreenView _view;
 		private readonly ILogonScreenModel _model;
+		private readonly ILoginInitializer _initializer;
 
 		private DataSourceContainer _dataSource;
-
-		private delegate bool LoadingFunction();
-		private readonly IEnumerable<LoadingFunction> _initializeFunctions;
-
-		public LogonScreenPresenter(ILogonScreenView view, ILogonScreenModel model)
+		
+		public LogonScreenPresenter(ILogonScreenView view, ILogonScreenModel model, ILoginInitializer initializer)
 		{
 			_view = view;
 			_model = model;
-			
-			_initializeFunctions = new List<LoadingFunction>
-				{
-					setupCulture,
-					initializeLicense,
-					checkRaptorApplicationFunctions
-				};
-		}
-
-		private bool checkRaptorApplicationFunctions()
-		{
-			throw new NotImplementedException();
+			_initializer = initializer;
 		}
 
 		public void OkbuttonClicked(LoginStep currentStep)
@@ -50,24 +37,9 @@ namespace Teleopti.Ccc.WinCode.Main
 			throw new NotImplementedException();
 		}
 
-		public void InitializeLogin()
+		public bool InitializeLogin()
 		{
-			if (_initializeFunctions.All(m => m()))
-				;
-			else
-				_view.Exit();
-
-		}
-
-
-		public void Warning(string warning)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Error(string error)
-		{
-			throw new NotImplementedException();
+			return _initializer.InitializeApplication();
 		}
 	}
 

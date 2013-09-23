@@ -17,7 +17,12 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
-	public class LoginInitializer : ILicenseFeedback
+	public interface ILoginInitializer
+	{
+		bool InitializeApplication();
+	}
+
+	public class LoginInitializer : ILoginInitializer, ILicenseFeedback
 	{
 		private readonly IDataSourceContainer _dataSource;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
@@ -30,14 +35,30 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public bool InitializeApplication()
 		{
-			var list = new List<Func<bool>>
-				{
-					setupCulture,
-					initializeLicense,
-					checkRaptorApplicationFunctions
-				};
+			return setupCulture() &&
+			       initializeLicense() &&
+			       checkRaptorApplicationFunctions();
+		}
 
-			return list.All(m => m());
+		private bool setupCulture()
+		{
+			if (TeleoptiPrincipal.Current.Regional == null) return false;
+
+			Thread.CurrentThread.CurrentCulture =
+				TeleoptiPrincipal.Current.Regional.Culture;
+			Thread.CurrentThread.CurrentUICulture =
+				TeleoptiPrincipal.Current.Regional.UICulture;
+			return true;
+		}
+
+		private bool initializeLicense()
+		{
+			var unitofWorkFactory = _dataSource.DataSource.Application;
+			var verifier = new LicenseVerifier(this, unitofWorkFactory, new LicenseRepository(unitofWorkFactory));
+			var licenseService = verifier.LoadAndVerifyLicense();
+			if (licenseService == null) return false;
+			LicenseProvider.ProvideLicenseActivator(licenseService);
+			return checkStatusOfLicense(licenseService);
 		}
 
 		private bool checkRaptorApplicationFunctions()
@@ -94,27 +115,6 @@ namespace Teleopti.Ccc.WinCode.Main
 			}
 
 			return message;
-		}
-
-		private bool setupCulture()
-		{
-			if (TeleoptiPrincipal.Current.Regional == null) return false;
-
-			Thread.CurrentThread.CurrentCulture =
-				TeleoptiPrincipal.Current.Regional.Culture;
-			Thread.CurrentThread.CurrentUICulture =
-				TeleoptiPrincipal.Current.Regional.UICulture;
-			return true;
-		}
-
-		private bool initializeLicense()
-		{
-			var unitofWorkFactory = _dataSource.DataSource.Application;
-			var verifier = new LicenseVerifier(this, unitofWorkFactory, new LicenseRepository(unitofWorkFactory));
-			var licenseService = verifier.LoadAndVerifyLicense();
-			if (licenseService == null) return false;
-			LicenseProvider.ProvideLicenseActivator(licenseService);
-			return checkStatusOfLicense(licenseService);
 		}
 
 		private bool checkStatusOfLicense(ILicenseService licenseService)

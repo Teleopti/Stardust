@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Deployment.Application;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
@@ -12,6 +9,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.Win.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Services;
 using Teleopti.Messaging.SignalR;
@@ -21,64 +19,34 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Sdk.ClientProxies;
 
-namespace Teleopti.Ccc.Win.Main
+namespace Teleopti.Ccc.WinCode.Main
 {
     public static class LogOnInitializeStateHolder
-    {
+	{
+		public static string ErrorMessage = string.Empty;
+		public static string WarningMessage = string.Empty;
         private static readonly ILog Logger = LogManager.GetLogger(typeof (LogOnInitializeStateHolder));
+		
+		public static bool GetConfigFromFileSystem(string nhibConfigPath, string isNetworkDeployed, bool messageBrokerDisabled)
+		{
+			var nhibConfPath = (string.IsNullOrEmpty(isNetworkDeployed)
+				                    ? nhibConfigPath
+				                    : isNetworkDeployed)
+			                   ?? Directory.GetCurrentDirectory();
 
-	    /// <summary>
-	    /// Initializes the state holder.
-	    /// </summary>
-	    /// <param name="endpointNames"></param>
-	    /// <remarks>
-	    /// You can get the application settings from two sources, either locally from the application config file, or fetch them over the web service.
-	    /// To decide the source of the settings, make sure that the "GetConfigFromWebService" entry is "false" in in the appsettings section 
-	    /// in the app.config file.
-	    /// </remarks>
-	    public static bool InitializeStateHolder(string endpointNames)
-        {
-            ErrorMessage = string.Empty;
-            WarningMessage = string.Empty;
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["GetConfigFromWebService"],
-                                  CultureInfo.InvariantCulture))
-            {
-                return GetConfigFromWebService(endpointNames);
-            }
-            
-            return GetConfigFromFileSystem();
-        }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		private static bool GetConfigFromFileSystem()
-        {
-            string nhibConfPath;
-
-            if (ApplicationDeployment.IsNetworkDeployed)
-                nhibConfPath = ApplicationDeployment.CurrentDeployment.DataDirectory;
-            else
-                nhibConfPath = ConfigurationManager.AppSettings["nhibConfPath"];
-
-            if (nhibConfPath == null)
-                nhibConfPath = Directory.GetCurrentDirectory();
-
-        	bool messageBrokerDisabled = string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessageBroker"]);
-
-        	new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForDesktop()),
+			new InitializeApplication(
+				new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
+				                       DataSourceConfigurationSetter.ForDesktop()),
 				new SignalBroker(MessageFilterManager.Instance))
 				{
 					MessageBrokerDisabled = messageBrokerDisabled
-				}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath), new ConfigurationManagerWrapper(), true);
+				}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath),
+				        new ConfigurationManagerWrapper(), true);
             return true;
         }
 
-        public static string ErrorMessage = string.Empty;
-        public static string WarningMessage = string.Empty;
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		private static bool GetConfigFromWebService(string endpointNames)
+		public static bool GetConfigFromWebService(string endpointNames)
         {
             ICollection<string> encryptedNHibConfigs;
             IDictionary<string, string> encryptedAppSettings;
@@ -143,6 +111,7 @@ namespace Teleopti.Ccc.Win.Main
         			{
         				MessageBrokerDisabled = messageBrokerDisabled
         			};
+
             initializeApplication.Start(new StateManager(), encryptedAppSettings,
                                               encryptedNHibConfigs.DecryptList(
                                                   Interfaces.Infrastructure.EncryptionConstants.Image1,

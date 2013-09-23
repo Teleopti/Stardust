@@ -1,7 +1,7 @@
 ﻿using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Services
+namespace Teleopti.Ccc.WinCode.Services
 {
     /// <summary>
     /// Stores application data for the application lifetime  
