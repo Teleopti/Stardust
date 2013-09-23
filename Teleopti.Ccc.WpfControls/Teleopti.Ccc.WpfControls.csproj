@@ -1170,7 +1170,6 @@
     </Compile>
     <Compile Include="Controls\OutlookTimePicker.cs" />
     <Compile Include="Converters\ColorConverter.cs" />
-    <Compile Include="Converters\DateTimePeriodExtender.cs" />
     <Compile Include="Converters\DateTimeToTimeConverter.cs" />
     <Compile Include="Converters\ILayerConverter.cs" />
     <Compile Include="Converters\TextConverter.cs" />
