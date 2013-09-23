@@ -126,7 +126,7 @@
                             <div class="day-header">
                                 <span class="floatleft day-header-left badge day-header-text">@day.Header.DayDescription</span><span class="floatright day-header-right badge day-header-text">@day.Header.DayNumber</span>
                             </div>
-                            <div class="day-content pdt10">
+                            <div class="day-content">
                                 <img data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
                                 <!-- ko if: HasAjaxError -->
                                 <h2 class="error" data-bind="text: AjaxError"></h2>
@@ -211,9 +211,9 @@
                                     <div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
                                     <!-- /ko -->
                                     <!-- ko if: DisplayFeedback -->
-                                    <div class="possible-start-times time-limitation arrow-icon icon-step-backward" data-bind="text: PossibleStartTimes"></div>
-                                    <div class="possible-end-times time-limitation arrow-icon icon-step-forward" data-bind="text: PossibleEndTimes"></div>
-                                    <div class="possible-contract-times time-limitation arrow-icon icon-resize-horizontal" data-bind="text: PossibleContractTimes"></div>
+                                    <div class="possible-start-times time-limitation icon-step-backward" data-bind="text: PossibleStartTimes"></div>
+                                    <div class="possible-end-times time-limitation icon-step-forward" data-bind="text: PossibleEndTimes"></div>
+                                    <div class="possible-contract-times time-limitation icon-resize-horizontal" data-bind="text: PossibleContractTimes"></div>
                                     <!-- /ko -->
                                     <!-- /ko -->
                                 }
