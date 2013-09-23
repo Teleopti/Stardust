@@ -883,12 +883,10 @@
     <Compile Include="Scheduling\SeatLimitation\SkillVisualLayerCollectionDictionaryCreator.cs" />
     <Compile Include="Scheduling\SeatLimitation\SkillVisualLayerCollectionDictionary.cs" />
     <Compile Include="Scheduling\SeatLimitation\SeatImpactOnPeriodForProjection.cs" />
-    <Compile Include="Scheduling\ShiftCreator\EndTimeLimiter.cs" />
     <Compile Include="Scheduling\ShiftCreator\OperatorLimiter.cs" />
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionEntityService.cs" />
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionService.cs" />
     <Compile Include="Scheduling\ShiftCreator\ShiftFromMasterActivityService.cs" />
-    <Compile Include="Scheduling\ShiftCreator\StartTimeLimiter.cs" />
     <Compile Include="Scheduling\ShiftCreator\WorkShiftAddStopperCallback.cs" />
     <Compile Include="Scheduling\ShiftCreator\WorkshiftCollection.cs" />
     <Compile Include="Scheduling\ShiftCreator\WorkShiftProjection.cs" />

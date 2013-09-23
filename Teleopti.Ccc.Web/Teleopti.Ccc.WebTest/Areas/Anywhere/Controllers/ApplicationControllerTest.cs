@@ -36,8 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldReturnDefaultViewInDefaultAction()
 		{
 			var result = target.Index();
-			result.FileName.Should().Be("~/Areas/Anywhere/Content/Templates/index.html");
-			result.ContentType.Should().Be("text/html");
+			result.ViewName.Should().Be.Empty();
 		}
 
 		[Test]
