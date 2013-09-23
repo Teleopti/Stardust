@@ -5,6 +5,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -30,7 +32,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 		private IUnitOfWork _unitOfWork;
 		private IPersonRepository _personRepository;
 		private IDataSourcesProvider _dataSourcesProvider;
-		private INow _now;
 		private IPersonScheduleDayReadModelFinder _personScheduleDayReadModelFinder;
 		private ICurrentPrincipalContext _currentPrincipalContext;
 		private IPersonalSettingDataRepository _personalSettingDataRepository;
@@ -51,8 +52,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(_unitOfWork)).Return(_personRepository);
 			_dataSourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
 			_dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName(dataSourceName)).Return(_dataSource);
-			_now = MockRepository.GenerateMock<INow>();
-			_now.Stub(x => x.DateOnly()).Return(DateOnly.Today);
 			_personScheduleDayReadModelFinder = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			_currentPrincipalContext = MockRepository.GenerateMock<ICurrentPrincipalContext>();
 			_personalSettingDataRepository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
@@ -91,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 					PersonId = person.Id.Value
 				};
 
-			var target = new CalendarLinkGenerator(_repositoryFactory, _dataSourcesProvider, deserializer, _now,
+			var target = new CalendarLinkGenerator(_repositoryFactory, _dataSourcesProvider, deserializer, new Now(), 
 			                                       _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider
 				);
 			var result = target.Generate(calendarlinkid);

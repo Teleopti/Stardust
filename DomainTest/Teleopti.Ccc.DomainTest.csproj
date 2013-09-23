@@ -176,7 +176,7 @@
     <Compile Include="Common\PeriodExtensionsTest.cs" />
     <Compile Include="Common\LayersExtensionsProjectionTest.cs" />
     <Compile Include="Common\ListAggregatorTest.cs" />
-    <Compile Include="Common\ModifyNowTest.cs" />
+    <Compile Include="Common\MutableNowTest.cs" />
     <Compile Include="Common\NowTest.cs" />
     <Compile Include="Common\JobResultDetailTest.cs" />
     <Compile Include="Common\JobResultTest.cs" />

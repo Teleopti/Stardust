@@ -672,7 +672,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapIsCurrentWeek()
 		{
-			var date = new DateOnly(2014, 08, 26);
+			var date = new DateTime(2014, 08, 26);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
 			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
 			var period = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
@@ -688,7 +688,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
-			now.Stub(x => x.DateOnly()).Return(date);
+			now.Stub(x => x.UtcDateTime()).Return(date);
 
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(firstDayOfWeek);
 

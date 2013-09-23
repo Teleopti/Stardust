@@ -2,8 +2,9 @@
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public interface IModifyNow
+	public interface IMutateNow
 	{
 		void SetNow(DateTime? dateTime);
+		bool IsExplicitlySet();
 	}
 }

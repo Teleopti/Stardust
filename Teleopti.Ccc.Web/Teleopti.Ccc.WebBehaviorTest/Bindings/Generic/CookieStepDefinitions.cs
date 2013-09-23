@@ -1,18 +1,11 @@
 ﻿using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
 
-namespace Teleopti.Ccc.WebBehaviorTest
+namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
 	[Binding]
-	public class SessionStepDefinition
+	public class CookieStepDefinitions
 	{
-		[When(@"the server restarts")]
-		public void GivenTheServerRestarts()
-		{
-			TestSiteConfigurationSetup.RecycleApplication();
-		}
 
 		[When(@"my cookie expires")]
 		public void WhenMyCookieExpires()
