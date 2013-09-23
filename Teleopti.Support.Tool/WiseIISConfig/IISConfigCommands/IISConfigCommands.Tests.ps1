@@ -41,6 +41,7 @@ $global:batName = 'PesterTest-DbSQL'
 $global:Server = ''
 $global:Db = ''
 $global:resetToBaseline="False"
+$global:insertedLicense=$false
 
 function TearDown {
 	Describe "Tear down previous test"{
@@ -252,7 +253,7 @@ function Add-CccLicenseToDemo
             $xmlString = [IO.File]::ReadAllText($LicFile)
             $InsertedLicense = insert-License -Server "$global:Server" -Db "$global:Db" -xmlString $xmlString
             Write-Host 'insert-License returned: ' $InsertedLicense
-            $RowsInserted[0] | Should Be True
+            $global:insertedLicense | Should Be True
         }
     }
     else
