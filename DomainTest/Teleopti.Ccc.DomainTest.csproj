@@ -698,7 +698,6 @@
     <Compile Include="Scheduling\SeatLimitations\SkillVisualLayerCollectionDictionaryTest.cs" />
     <Compile Include="Scheduling\SeatLimitations\SeatImpactOnPeriodForProjectionTest.cs" />
     <Compile Include="Scheduling\SeatLimitations\SeatLimitationWorkShiftCalculatorTest.cs" />
-    <Compile Include="Scheduling\ShiftCreator\EndTimeLimiterTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\PersonMeetingByDateSorterTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionEntityServiceTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionServiceTest.cs" />
