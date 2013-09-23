@@ -332,7 +332,6 @@
     <Compile Include="Repositories\DayOffTemplateRepository.cs" />
     <Compile Include="Repositories\RtaStateGroupRepository.cs" />
     <Compile Include="Repositories\ForecastProcessReportRepository.cs" />
-    <Compile Include="Repositories\GeneralRepository.cs" />
     <Compile Include="Repositories\GroupPageRepository.cs" />
     <Compile Include="Repositories\OptionalColumnRepository.cs">
       <SubType>Code</SubType>

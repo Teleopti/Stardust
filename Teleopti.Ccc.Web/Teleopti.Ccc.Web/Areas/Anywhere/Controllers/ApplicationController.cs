@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 		}
 
-		public FilePathResult Index()
+		public ViewResult Index()
 		{
-            return new FilePathResult("~/Areas/Anywhere/Content/Templates/index.html", "text/html");
+			return new ViewResult();
 		}
 
 		[HttpGet,OutputCache(NoStore = true,Duration = 0)]
