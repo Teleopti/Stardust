@@ -14,7 +14,7 @@
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
 		<DoCodeAnalysis>false</DoCodeAnalysis>
-		<RunWebBehaviorTests>true</RunWebBehaviorTests>
+		<RunWebBehaviorTests>false</RunWebBehaviorTests>
 		
 		<vs2020ide>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe</vs2020ide>
 		<AsDBDeploy>C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\ManagementStudio\Microsoft.AnalysisServices.Deployment.exe</AsDBDeploy>
