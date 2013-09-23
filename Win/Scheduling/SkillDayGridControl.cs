@@ -256,17 +256,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void SetDataSource(ISchedulerStateHolder stateHolder,ISkill skill)
 		{
-			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection();
-			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolder.TimeZoneInfo))).ToList();
-
-			// in ViewPoint
-			var timeZone = stateHolder.TimeZoneInfo;
-			// user timeZone
-			var userTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-			var diff = userTimeZone.BaseUtcOffset - timeZone.BaseUtcOffset;
-			var viewPointPeriod = stateHolder.RequestedPeriod.Period().MovePeriod(diff);
-
-			dateTimePeriods = viewPointPeriod.WholeDayCollection();
+		    var stateHolderTimeZone = stateHolder.TimeZoneInfo;
+            var dateTimePeriods = stateHolder.RequestedPeriod.Period(stateHolderTimeZone).WholeDayCollection(stateHolderTimeZone);
+            _dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolderTimeZone))).ToList();
 			var dataSource = createDataSourceDictionary(dateTimePeriods, stateHolder, skill);
 
 			_rowManager.SetDataSource(new List<IDictionary<DateTime, IList<ISkillStaffPeriod>>> { dataSource });
@@ -282,7 +274,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 Model.Options.MergeCellsMode = GridMergeCellsMode.OnDemandCalculation |
                                                GridMergeCellsMode.MergeColumnsInRow;
 
-                var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection();
+                var dateTimePeriods = stateHolder.RequestedPeriod.Period(stateHolder.TimeZoneInfo).WholeDayCollection(stateHolder.TimeZoneInfo);
                 _dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolder.TimeZoneInfo))).ToList();
                 createGridRows(skill, _dates, stateHolder);
             	SetDataSource(stateHolder, skill);

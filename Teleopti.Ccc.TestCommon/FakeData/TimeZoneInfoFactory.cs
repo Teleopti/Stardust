@@ -38,5 +38,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             return TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time");
         }
+
+        public static TimeZoneInfo BrazilTimeZoneInfo()
+        {
+            return TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+        }
     }
 }
