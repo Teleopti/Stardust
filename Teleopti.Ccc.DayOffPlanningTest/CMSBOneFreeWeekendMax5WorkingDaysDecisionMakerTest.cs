@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DayOffPlanningTest
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "CMSB"), TestFixture]
+	[TestFixture]
 	public class CMSBOneFreeWeekendMax5WorkingDaysDecisionMakerTest
 	{
 		private IDayOffDecisionMaker _target;
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 		[SetUp]
 		public void Setup()
 		{
-			_target = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(new OfficialWeekendDays(), new FalseRandomizerForTest());
+			_target = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(new OfficialWeekendDays(), new falseRandomizerForTest());
 			_values = new List<double?> { 0, 1, 3, 40, 25, 3, 2, 0, 1, 3, 30, 30, 3, 2 };
 			_workingArray = new LockableBitArray(21, false, false, null);
 			_workingArray.PeriodArea = new MinMax<int>(2, 15);
@@ -122,7 +122,13 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 			Assert.IsTrue(_workingArray[33]);
 			Assert.IsTrue(_workingArray[34]);
 		}
-	}
 
-	
+		private class falseRandomizerForTest : ITrueFalseRandomizer
+		{
+			public bool Randomize(int seed)
+			{
+				return false;
+			}
+		}
+	}
 }
