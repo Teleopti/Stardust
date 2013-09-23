@@ -1133,7 +1133,6 @@
     </Compile>
     <Compile Include="Converters\ColorConverterSoft.cs" />
     <Compile Include="Converters\DateTimeResolutionConverter.cs" />
-    <Compile Include="Converters\DateTimeToDateConverter.cs" />
     <Compile Include="Converters\DateTimeToHourConverter.cs" />
     <Compile Include="Converters\DateTimeToLocalAndNotMinValueConverter.cs" />
     <Compile Include="Converters\LessThanConverter.cs" />
