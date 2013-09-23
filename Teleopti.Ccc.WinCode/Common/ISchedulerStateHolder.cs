@@ -52,6 +52,11 @@ namespace Teleopti.Ccc.WinCode.Common
 		/// </summary>
 	    void ResetFilteredPersonsOvertimeAvailability();
 
+		/// <summary>
+		/// Reset the filtered hourly availability
+		/// </summary>
+		void ResetFilteredPersonsHourlyAvailability();
+
         /// <summary>
         /// Loads the schedules.
         /// </summary>
@@ -147,6 +152,8 @@ namespace Teleopti.Ccc.WinCode.Common
         void FilterPersons(IList<IPerson> selectedPersons);
 
 	    void FilterPersonsOvertimeAvailability(IList<IPerson> selectedPersons);
+
+		void FilterPersonsHourlyAvailability(IList<IPerson> selectedPersons);
 
 		void FilterPersons(HashSet<Guid> selectedGuids);
 
