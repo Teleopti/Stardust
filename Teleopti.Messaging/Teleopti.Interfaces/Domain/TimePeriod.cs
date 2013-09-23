@@ -360,30 +360,6 @@ namespace Teleopti.Interfaces.Domain
             return false;
         }
 
-
-        /// <summary>
-        /// Gets the time period representing the intersection of the two periods.
-        /// If the periods does not intersect then null is returned
-        /// </summary>
-        /// <param name="intersectPeriod">The period.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 4.12.2007
-        /// </remarks>
-        public TimePeriod? Intersection(TimePeriod intersectPeriod)
-        {
-            if (!Intersect(intersectPeriod))
-                return null;
-            TimeSpan start = StartTime;
-            if (intersectPeriod.StartTime > start)
-                start = intersectPeriod.StartTime;
-            TimeSpan end = EndTime;
-            if (intersectPeriod.EndTime < end)
-                end = intersectPeriod.EndTime;
-            return new TimePeriod(start,end);
-        }
-
         /// <summary>
         /// Returns a TimePeriod representing the spanning time of this TimePeriod.
         /// </summary>

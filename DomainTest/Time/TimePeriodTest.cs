@@ -159,36 +159,6 @@ namespace Teleopti.Ccc.DomainTest.Time
         }
 
         [Test]
-        public void VerifyIntersection()
-        {
-            TimePeriod t1 = new TimePeriod(new TimeSpan(12, 0, 0), new TimeSpan(13, 0, 0));
-            TimePeriod t2 = new TimePeriod(new TimeSpan(13, 0, 0), new TimeSpan(14, 0, 0));
-            Assert.IsNull(t1.Intersection(t2));
-            Assert.IsNull(t2.Intersection(t1));
-
-            TimePeriod t = new TimePeriod(new TimeSpan(12, 59, 59), new TimeSpan(13, 0, 1));
-            Assert.AreEqual(new TimeSpan(12, 59, 59), t1.Intersection(t).Value.StartTime);
-            Assert.AreEqual(new TimeSpan(13, 0, 0), t1.Intersection(t).Value.EndTime);
-            Assert.AreEqual(new TimeSpan(13, 0, 0), t2.Intersection(t).Value.StartTime);
-            Assert.AreEqual(new TimeSpan(13, 0, 1), t2.Intersection(t).Value.EndTime);
-
-            t = new TimePeriod(new TimeSpan(12, 15, 0), new TimeSpan(12, 45, 0));
-            Assert.AreEqual(new TimeSpan(12, 15, 0), t1.Intersection(t).Value.StartTime);
-            Assert.AreEqual(new TimeSpan(12, 45, 0), t1.Intersection(t).Value.EndTime);
-            Assert.AreEqual(new TimeSpan(12, 15, 0), t.Intersection(t1).Value.StartTime);
-            Assert.AreEqual(new TimeSpan(12, 45, 0), t.Intersection(t1).Value.EndTime);
-
-            t1 = new TimePeriod(new TimeSpan(12, 0, 0), new TimeSpan(13, 0, 0));
-            t2 = new TimePeriod(new TimeSpan(12, 0, 0), new TimeSpan(13, 0, 0));
-            Assert.AreEqual(1, t1.Intersection(t2).Value.SpanningTime().TotalHours);
-
-            t1 = new TimePeriod(new TimeSpan(12, 0, 0), new TimeSpan(16, 0, 0));
-            t2 = new TimePeriod(new TimeSpan(13, 0, 0), new TimeSpan(14, 0, 0));
-            Assert.AreEqual(1, t1.Intersection(t2).Value.SpanningTime().TotalHours);
-            Assert.AreEqual(1, t2.Intersection(t1).Value.SpanningTime().TotalHours);
-        }
-
-        [Test]
         public void VerifyContainsTimePeriod()
         {
             TimeSpan start = new TimeSpan(0, 13, 0, 0);
