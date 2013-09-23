@@ -213,6 +213,6 @@
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\CccAppConfig.config" "$(ProjectDir)App.config"</PreBuildEvent>
+    <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\BuildArtifacts\CccAppConfig.config" "$(ProjectDir)App.config"</PreBuildEvent>
   </PropertyGroup>
 </Project>
