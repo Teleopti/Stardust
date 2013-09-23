@@ -79,14 +79,23 @@ function isSuffixAllowed(link) {
 	return true;
 }
 
+function isCurrentPageTranslated(link) {
+	var pageName = getPageName(link)
+	return pageName === 'en.html' ||
+			pageName === 'ru.html' ||
+			pageName === 'sv.html' ||
+			pageName === 'zh.html';
+}
+
 function isPageToTeleoptiSite(link) {
 	return (link.substr(0, 23) === 'http://www.teleopti.com');
 }
 
-function shouldReplaceLink(link) {
+function shouldReplaceLink(link, pageName) {
 	return isPrefixAllowed(link, notTranslatedPrefixes()) &&
 		isLinkTranslated(link, notTranslatedPages()) &&
-		isSuffixAllowed(link);
+		isSuffixAllowed(link)
+		&& isCurrentPageTranslated(pageName);
 }
 
 function isLinkInArray(string, array) {
@@ -115,7 +124,7 @@ function replaceLinks() {
 				document.links[i].href = trimmedLink + '\\' + pageName;
 			}
 		}
-		document.links[i].href = document.links[i].href.replace("+", "_");
+		document.links[i].href = document.links[i].href.replace(/\+/, '_');
 	}
 	fixNavigationLinkTexts(pageName);
 }
