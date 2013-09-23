@@ -252,7 +252,7 @@ function Add-CccLicenseToDemo
             $xmlString = [IO.File]::ReadAllText($LicFile)
             $InsertedLicense = insert-License -Server "$global:Server" -Db "$global:Db" -xmlString $xmlString
             Write-Host 'insert-License returned: ' $InsertedLicense
-            $RowsInserted | Should Be True
+            $RowsInserted[0] | Should Be True
         }
     }
     else
