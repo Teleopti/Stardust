@@ -250,9 +250,9 @@ function Add-CccLicenseToDemo
         It "should insert a new license" {
             $LicFile="$here\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
             $xmlString = [IO.File]::ReadAllText($LicFile)
-            $RowsInserted = insert-License -Server "$global:Server" -Db "$global:Db" -xmlString $xmlString
-            Write-Host 'insert-License returned: ' $RowsInserted
-            $RowsInserted | Should Be 1
+            $InsertedLicense = insert-License -Server "$global:Server" -Db "$global:Db" -xmlString $xmlString
+            Write-Host 'insert-License returned: ' $InsertedLicense
+            $RowsInserted | Should Be True
         }
     }
     else
