@@ -621,7 +621,6 @@
     <Compile Include="Scheduling\MoveTimeOptimizerCreator.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimePerActivityModel.cs" />
     <Compile Include="Common\SearchPersonPresenter.cs" />
-    <Compile Include="Common\Time\TimeDurationPickerPresenter.cs" />
     <Compile Include="Common\Time\ITimeDurationPickerView.cs" />
     <Compile Include="Common\Time\TimeSpanDataBoundItem.cs" />
     <Compile Include="Common\TransparentControlMeetingHelper.cs" />

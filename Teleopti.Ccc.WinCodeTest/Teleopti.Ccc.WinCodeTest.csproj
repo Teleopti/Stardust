@@ -308,7 +308,6 @@
     <Compile Include="Common\SearchPersonPresenterTest.cs" />
     <Compile Include="Common\Time\DateTimeViewModelTest.cs" />
     <Compile Include="Common\Time\LayerViewModelGroupMoveTest.cs" />
-    <Compile Include="Common\Time\TimeDurationPickerPresenterTest.cs" />
     <Compile Include="Common\Time\IntervalCollectionTest.cs" />
     <Compile Include="Common\Time\IntervalViewModelTest.cs" />
     <Compile Include="Common\Time\Timeline\TimelineControlViewModelTest.cs" />
