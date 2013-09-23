@@ -138,6 +138,7 @@
     <Name>Ricciolo.Controls.TreeListView</Name>
     <Name>Microsoft.AnalysisServices.AdomdClient</Name>
     <Name>Autofac.Integration.Wcf</Name>
+    <Name>Rhino.Mocks</Name>
     <Name>Rhino.ServiceBus</Name>
     <Name>Rhino.ServiceBus.SqlQueues</Name>
     <Name>Rhino.ServiceBus.Autofac</Name>

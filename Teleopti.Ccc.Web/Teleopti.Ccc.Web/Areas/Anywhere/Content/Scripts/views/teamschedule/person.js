@@ -22,12 +22,12 @@ define([
 
             this.ContractTime = ko.computed(function() {
                 var time = moment().startOf('day').add('minutes', self.ContractTimeMinutes());
-                return time.format(resources.TimeFormatForMoment);
+                return time.format("H:mm");
             });
 
             this.WorkTime = ko.computed(function() {
                 var time = moment().startOf('day').add('minutes', self.WorkTimeMinutes());
-                return time.format(resources.TimeFormatForMoment);
+                return time.format("H:mm");
             });
 
 	        this.ClearLayers = function() {
