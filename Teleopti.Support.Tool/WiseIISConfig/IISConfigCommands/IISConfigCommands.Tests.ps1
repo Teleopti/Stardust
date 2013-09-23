@@ -251,6 +251,7 @@ function Add-CccLicenseToDemo
             $LicFile="$here\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
             $xmlString = [IO.File]::ReadAllText($LicFile)
             $RowsInserted = insert-License -Server "$global:Server" -Db "$global:Db" -xmlString $xmlString
+            Write-Host 'insert-License returned: ' $RowsInserted
             $RowsInserted | Should Be 1
         }
     }
