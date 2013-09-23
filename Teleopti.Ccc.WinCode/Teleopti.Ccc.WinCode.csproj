@@ -685,7 +685,6 @@
     <Compile Include="Common\Messaging\FollowUpMessageDialogueViewModel.cs" />
     <Compile Include="Common\Messaging\IFollowUpMessageDialogueViewModel.cs" />
     <Compile Include="Common\Messaging\IFollowUpPushMessageViewModel.cs" />
-    <Compile Include="Common\Messaging\PushMessageViewModel.cs" />
     <Compile Include="Common\Messaging\FollowUpPushMessageViewModel.cs" />
     <Compile Include="Common\Messaging\FollowUpServiceViewModel.cs" />
     <Compile Include="Common\Messaging\ReplyOptionViewModel.cs" />

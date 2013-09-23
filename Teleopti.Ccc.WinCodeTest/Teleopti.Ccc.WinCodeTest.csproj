@@ -275,7 +275,6 @@
     <Compile Include="Common\Filter\SpecificationFilterTest.cs" />
     <Compile Include="Common\Messaging\FollowUpDialogueForTest.cs" />
     <Compile Include="Common\Messaging\FollowUpMessageDialogueViewModelTest.cs" />
-    <Compile Include="Common\Messaging\PushMessageViewModelTest.cs" />
     <Compile Include="Common\Messaging\FollowUpPushMessageViewModelTest.cs">
       <SubType>Code</SubType>
     </Compile>
