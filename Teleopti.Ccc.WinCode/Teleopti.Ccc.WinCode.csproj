@@ -677,7 +677,6 @@
     <Compile Include="Common\LayerViewModelCollection.cs" />
     <Compile Include="Common\MainShiftLayerViewModel.cs" />
     <Compile Include="Common\MeetingLayerViewModel.cs" />
-    <Compile Include="Common\Messaging\Filters\DialogueHasMoreMessagesThan.cs" />
     <Compile Include="Common\Messaging\Filters\DialogueIsRepliedSpecification.cs" />
     <Compile Include="Common\Messaging\Filters\DialogueReplySpecification.cs" />
     <Compile Include="Common\Messaging\Filters\IFilterTarget.cs" />
