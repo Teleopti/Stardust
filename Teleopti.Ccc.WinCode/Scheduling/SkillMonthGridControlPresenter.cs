@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			if (stateHolder == null || skill == null) return;
 
-			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection();
+			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(stateHolder.TimeZoneInfo );
 			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolder.TimeZoneInfo))).ToList();
 
 			var monthDates = new List<DateOnly>();
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			if (stateHolder == null) return;
 
-			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection();
+			var dateTimePeriods = stateHolder.RequestedPeriod.Period().WholeDayCollection(stateHolder.TimeZoneInfo );
 			_dates = dateTimePeriods.Select(d => new DateOnly(TimeZoneHelper.ConvertFromUtc(d.StartDateTime, stateHolder.TimeZoneInfo))).ToList();	
 		}
 
