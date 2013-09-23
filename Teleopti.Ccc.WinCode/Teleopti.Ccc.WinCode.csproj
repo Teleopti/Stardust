@@ -697,7 +697,6 @@
     <Compile Include="Common\PeopleLoader.cs" />
     <Compile Include="Common\PersonalShiftLayerViewModel.cs" />
     <Compile Include="Common\OvertimeLayerViewModel.cs" />
-    <Compile Include="Common\PersonPicker\PersonPickerViewModel.cs" />
     <Compile Include="Common\PersonPicker\SelectablePersonViewModel.cs" />
     <Compile Include="Common\Rows\RowManagerScheduler.cs" />
     <Compile Include="Common\Time\DateTimeViewModel.cs" />
