@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -144,7 +145,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         MeetingComposerPresenter.CreateDefaultMeeting(
                             TeleoptiPrincipal.Current.GetPerson(_repositoryFactory.CreatePersonRepository(unitOfWork)),
                             _schedulerStateHolder, meetingStart.GetValueOrDefault(DateOnly.Today),
-                            selectedPersons, new Now(()=> null));
+                            selectedPersons, new Now());
                 }
             }
             else

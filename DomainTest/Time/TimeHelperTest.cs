@@ -402,59 +402,6 @@ namespace Teleopti.Ccc.DomainTest.Time
         }
 
         [Test]
-        public void VerifyCanParseLongHourMinuteOrEmpty()
-        {
-			CultureInfo ci = CultureInfo.GetCultureInfo(1033);
-            timeValue = new TimeSpan();
-            Assert.IsTrue(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("2:1", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(2, 1, 0), timeValue);
-            Assert.IsTrue(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("2:22", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(2, 22, 0), timeValue);
-            Assert.IsTrue(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("25:15", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(25, 15, 0), timeValue);
-            Assert.IsTrue(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("1", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(1, 0, 0), timeValue);
-            Assert.IsTrue(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("0:1", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(0, 1, 0), timeValue);
-            Assert.IsTrue(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("02:01", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(2, 1, 0), timeValue);
-            Assert.IsTrue(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("2:01", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(2, 1, 0), timeValue);
-            Assert.IsTrue(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("02:1", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(2, 1, 0), timeValue);
-            Assert.IsTrue(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("60", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(60, 0, 0), timeValue);
-
-            Assert.IsTrue(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("-2", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(-2, 0, 0), timeValue);
-            Assert.IsTrue(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("-2:1", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(-2, -1, 0), timeValue);
-            Assert.IsTrue(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("-02:01", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(-2, -1, 0), timeValue);
-            Assert.IsTrue(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("0", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(0, 0, 0), timeValue);
-            Assert.IsTrue(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("-0", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(0, 0, 0), timeValue);
-            Assert.IsTrue(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(0, 0, 0), timeValue);
-            Assert.IsTrue(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("-0:10", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(0, -10, 0), timeValue);
-
-            Assert.IsFalse(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("25:60", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(), timeValue);
-			Assert.IsFalse(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("abracadabra", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(), timeValue);
-            Assert.IsFalse(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("1:1:1", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(), timeValue);
-            Assert.IsFalse(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("1:ab", ci, out timeValue));
-            Assert.AreEqual(new TimeSpan(), timeValue);
-
-            Assert.IsFalse(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("1:2.2", ci, out timeValue));
-            Assert.IsFalse(TimeHelper.TryParseLongHourMinuteOrEmptyToTimeSpan("1.2:2", ci, out timeValue));
-            
-        }
-
-        [Test]
         public void VerifyGetLongHourMinuteTimeStringWithPreposition()
         {
             timeValue = new TimeSpan(0, 1, 2, 3);

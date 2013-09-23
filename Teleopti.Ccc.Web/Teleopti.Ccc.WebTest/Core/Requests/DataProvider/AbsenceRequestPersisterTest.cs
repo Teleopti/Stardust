@@ -3,6 +3,7 @@ using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -26,8 +27,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
 			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			var currentDataSourceProvider = MockRepository.GenerateMock<ICurrentDataSource>();
-			var now = MockRepository.GenerateMock<INow>();
-			var time = new DateTime(2012, 05, 08, 12, 01, 01);
 
 			var form = new AbsenceRequestForm();
 
@@ -43,11 +42,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			datasource.Stub(x => x.DataSourceName).Return("Data Source");
 			currentDataSourceProvider.Stub(x => x.Current()).Return(datasource);
 
-			now.Stub(x => x.LocalDateTime()).Return(time);
-
 			mapper.Stub(x => x.Map<AbsenceRequestForm, IPersonRequest>(form)).Return(personRequest);
 
-			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now, null);
+			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, new Now(), null);
 			target.Persist(form);
 
 			personRequestRepository.AssertWasCalled(x => x.Add(personRequest));

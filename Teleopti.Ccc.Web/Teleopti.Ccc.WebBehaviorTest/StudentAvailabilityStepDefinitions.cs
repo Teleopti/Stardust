@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	{
 		private StudentAvailabilityPage _page;
 
-
 		[Given(@"I am viewing student availability")]
 		[When(@"I view student availability")]
 		public void WhenIViewStudentAvailability()

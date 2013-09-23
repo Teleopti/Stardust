@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		[SetUp]
 		public void Setup()
 		{
-			_target = new OpenShiftTradePeriodSpecification(new Now(null));
+			_target = new OpenShiftTradePeriodSpecification(new Now());
 			var wcs = new WorkflowControlSet("wcs") { ShiftTradeOpenPeriodDaysForward = new MinMax<int>(1, 99) };
 			_personFrom = PersonFactory.CreatePerson("test person from");
 			_personFrom.WorkflowControlSet = wcs;

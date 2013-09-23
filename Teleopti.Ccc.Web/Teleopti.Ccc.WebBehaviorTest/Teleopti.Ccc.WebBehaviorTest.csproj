@@ -180,6 +180,7 @@
     <Compile Include="Data\CryptoCreator.cs" />
     <Compile Include="Data\HardCodedResolver.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
+    <Compile Include="Bindings\Generic\ServerStepDefinitions.cs" />
     <Compile Include="TeamScheduleForGroups.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -265,7 +266,7 @@
     <Compile Include="Bindings\Generic\DayOffStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftCategoryStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\TimeStepDefinition.cs" />
+    <Compile Include="Bindings\Generic\TimeStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\UserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
@@ -482,7 +483,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Session.feature</DependentUpon>
     </Compile>
-    <Compile Include="SessionStepDefinition.cs" />
+    <Compile Include="Bindings\Generic\CookieStepDefinitions.cs" />
     <Compile Include="TeamSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

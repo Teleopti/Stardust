@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
@@ -55,8 +57,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
  						var allowanceFromBudgetDays =
  							from budgetGroupPeriod in budgetGroupPeriods
  							from budgetDay in _budgetDayRepository.Find(defaultScenario, budgetGroupPeriod.Item2, budgetGroupPeriod.Item1)
- 							where openPeriod.GetPeriod(_now.DateOnly()).Contains(budgetDay.Day)
- 							where openPeriod.OpenForRequestsPeriod.Contains(_now.DateOnly())
+ 							where openPeriod.GetPeriod(_now.LocalDateOnly()).Contains(budgetDay.Day)
+							where openPeriod.OpenForRequestsPeriod.Contains(_now.LocalDateOnly())
  							where openPeriod.AbsenceRequestProcess.GetType() != typeof (DenyAbsenceRequest)
  							select
  								new

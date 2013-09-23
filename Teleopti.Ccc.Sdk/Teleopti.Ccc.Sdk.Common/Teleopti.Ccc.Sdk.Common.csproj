@@ -269,7 +269,6 @@
     <Compile Include="DataTransferObject\ProjectedLayerDto.cs" />
     <Compile Include="DataTransferObject\PushMessageDialogueDto.cs" />
     <Compile Include="DataTransferObject\PushMessageDto.cs" />
-    <Compile Include="DataTransferObject\QueueDto.cs" />
     <Compile Include="DataTransferObject\DialogueMessageDto.cs" />
     <Compile Include="DataTransferObject\RequestDto.cs" />
     <Compile Include="DataTransferObject\RequestStatusDto.cs" />

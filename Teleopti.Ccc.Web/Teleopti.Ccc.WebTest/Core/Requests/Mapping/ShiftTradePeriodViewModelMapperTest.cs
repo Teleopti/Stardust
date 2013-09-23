@@ -45,15 +45,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var mapper = new ShiftTradePeriodViewModelMapper();
 			var now = MockRepository.GenerateMock<INow>();
-			var dateOnly = new DateOnly(2001, 1, 1);
+			var date = new DateTime(2001, 1, 1);
 
-			now.Stub(x => x.DateOnly()).Return(dateOnly);
+			now.Stub(x => x.UtcDateTime()).Return(date);
 
 			var result = mapper.Map(new WorkflowControlSet(), now);
 
-			result.NowYear.Should().Be.EqualTo(dateOnly.Year);
-			result.NowMonth.Should().Be.EqualTo(dateOnly.Month);
-			result.NowDay.Should().Be.EqualTo(dateOnly.Day);
+			result.NowYear.Should().Be.EqualTo(date.Year);
+			result.NowMonth.Should().Be.EqualTo(date.Month);
+			result.NowDay.Should().Be.EqualTo(date.Day);
 		}
 
 		[Test, SetCulture("ar-SA")]
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var now = MockRepository.GenerateMock<INow>();
 			var arabicDate = new DateTime(1435, 1, 1, arabicCalendar);
 
-			now.Stub(x => x.DateOnly()).Return(new DateOnly(arabicDate));
+			now.Stub(x => x.UtcDateTime()).Return(arabicDate);
 
 			var result = mapper.Map(new WorkflowControlSet(), now);
 
