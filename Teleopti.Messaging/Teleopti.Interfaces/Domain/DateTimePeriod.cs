@@ -300,33 +300,7 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <returns></returns>
         /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-21
-        /// </remarks>
-        public IList<DateTimePeriod> WholeDayCollection()
-        {
-            IList<DateTimePeriod> collectionToReturn = new List<DateTimePeriod>();
-            DateTime currentDateTime = LocalStartDateTime;
-            DateTime endDateTime = LocalEndDateTime;
-            while (currentDateTime < endDateTime)
-            {
-                DateTime currentEndDateTime = currentDateTime.AddDays(1);
-                if (currentEndDateTime > endDateTime) currentEndDateTime = endDateTime;
-                if (endDateTime == currentDateTime) break;
-
-                collectionToReturn.Add(TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentDateTime,
-                                                                                            currentEndDateTime));
-                currentDateTime = currentEndDateTime;
-            }
-            return collectionToReturn;
-        } 
-        
-        /// <summary>
-        /// Whole days collection. Uses the start time of period to return whole days (24 hours) after that. Only last period will differ from 24 hours length.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
+        /// Created by: Robink
         /// Created date: 2007-11-21
         /// </remarks>
         public IList<DateTimePeriod> WholeDayCollection(TimeZoneInfo timeZoneInfo )
