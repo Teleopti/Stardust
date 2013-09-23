@@ -218,7 +218,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
             {
                 IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork();
                 var accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
-                IScenario defaultScenario = new ScenarioRepository(uow).LoadDefaultScenario();
                 ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(_currentScenario, new ScheduleRepository(uow));
                 var state = new WorksheetStateHolder(cacheServiceForPersonAccounts);
                 var filteredPeopleHolder = new FilteredPeopleHolder(cacheServiceForPersonAccounts, accounts)

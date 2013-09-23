@@ -870,12 +870,26 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         public void DeleteAllPersonAccounts(int rowIndex)
         {
             var accounts = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
-
-            foreach (var account in accounts.AllPersonAccounts())
+            using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                accounts.Find(account.Owner.Absence).Remove(account);
+                foreach (var account in accounts.AllPersonAccounts())
+                {
+                    accounts.Find(account.Owner.Absence).Remove(account);
+                    UpdatePersonAccounts(account);
+                }
             }
         }
+
+
+        //public void DeleteAllPersonAccounts(int rowIndex)
+        //{
+        //    var accounts = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
+
+        //    foreach (var account in accounts.AllPersonAccounts())
+        //    {
+        //        accounts.Find(account.Owner.Absence).Remove(account);
+        //    }
+        //}
 
         public void GetParentPersonAccountWhenUpdated(int rowIndex)
         {
@@ -1531,6 +1545,15 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             return null;
         }
+
+        private void UpdatePersonAccounts(IAccount account)
+        {
+            var repository = new PersonAbsenceAccountRepository(GetUnitOfWork);
+            var updater = new PersonAccountUpdater(repository, _refreshService);
+            updater.Update(account.Owner.Person);
+        }
+
+
 
         public IRotation GetDefaultRotation
         {
