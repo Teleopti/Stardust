@@ -726,12 +726,16 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
         public void AddPersonAccount(int rowIndex)
         {
-            if ((AbsenceCollection != null) && (AbsenceCollection.Count > 0))
+            using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                var accountForPersonCollection = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
-                IAbsence absence = SelectedPersonAccountAbsenceType ?? _filteredAbsenceCollection[0];
-                IAccount account = absence.Tracker.CreatePersonAccount(SelectedDate);
-                accountForPersonCollection.Add(absence, account);
+                if ((AbsenceCollection != null) && (AbsenceCollection.Count > 0))
+                {
+                    var accountForPersonCollection = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
+                    IAbsence absence = SelectedPersonAccountAbsenceType ?? _filteredAbsenceCollection[0];
+                    IAccount account = absence.Tracker.CreatePersonAccount(SelectedDate);
+                    accountForPersonCollection.Add(absence, account);
+                    UpdatePersonAccounts(account);
+                }
             }
         }
 
