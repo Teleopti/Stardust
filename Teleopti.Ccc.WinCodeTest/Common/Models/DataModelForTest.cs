@@ -21,20 +21,4 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Models
             }
         }
     }
-
-    public class DataModelWithInvalidStateForTest :DataModelWithInvalidState
-    {
-        private readonly string _alwaysErrorProperty;
-
-        public DataModelWithInvalidStateForTest(string alwaysErrorProperty)
-        {
-            _alwaysErrorProperty = alwaysErrorProperty;
-        }
-
-        protected override string CheckProperty(string propertyName)
-        {
-            if (propertyName.Equals(_alwaysErrorProperty)) return "error";
-            return null;
-        }
-    }
 }
