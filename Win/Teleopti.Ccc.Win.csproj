@@ -1067,8 +1067,6 @@
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\LogOnInitializeStateHolder.cs" />
-    <Compile Include="Main\LogOnAuthorize.cs" />
-    <Compile Include="Main\LogOnMatrix.cs" />
     <Compile Include="Meetings\WeeklyRecurrenceView.cs">
       <SubType>UserControl</SubType>
     </Compile>

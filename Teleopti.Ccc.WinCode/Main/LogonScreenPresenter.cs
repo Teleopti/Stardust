@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Licensing;
-using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
@@ -16,7 +12,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		void InitializeLogin();
 	}
 
-	public class LogonScreenPresenter : ILogonScreenPresenter, ILicenseFeedback
+	public class LogonScreenPresenter : ILogonScreenPresenter
 	{
 		private readonly ILogonScreenView _view;
 		private readonly ILogonScreenModel _model;
@@ -63,26 +59,6 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		}
 
-		private bool setupCulture()
-		{
-			if (TeleoptiPrincipal.Current.Regional == null) return false;
-
-			Thread.CurrentThread.CurrentCulture =
-				TeleoptiPrincipal.Current.Regional.Culture;
-			Thread.CurrentThread.CurrentUICulture =
-				TeleoptiPrincipal.Current.Regional.UICulture;
-			return true;
-		}
-
-		private bool initializeLicense()
-		{
-			var unitofWorkFactory = _dataSource.DataSource.Application;
-			var verifier = new LicenseVerifier(this, unitofWorkFactory, new LicenseRepository(unitofWorkFactory));
-			var licenseService = verifier.LoadAndVerifyLicense();
-			if (licenseService == null)
-				return false;
-			return true;
-		}
 
 		public void Warning(string warning)
 		{

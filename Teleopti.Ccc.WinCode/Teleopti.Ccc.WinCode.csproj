@@ -422,6 +422,9 @@
     <Compile Include="Intraday\ReforecastModel.cs" />
     <Compile Include="Intraday\ReforecastWizardPages.cs" />
     <Compile Include="Main\ILogonScreenView.cs" />
+    <Compile Include="Main\LoginInitializer.cs" />
+    <Compile Include="Main\LogOnAuthorize.cs" />
+    <Compile Include="Main\LogOnMatrix.cs" />
     <Compile Include="Main\LogonScreenModel.cs" />
     <Compile Include="Main\LogonScreenPresenter.cs" />
     <Compile Include="Meetings\Commands\AddMeetingFromPanelCommand.cs" />
