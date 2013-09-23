@@ -1,6 +1,6 @@
 namespace Teleopti.Ccc.Win.Main.LogonScreens
 {
-	partial class Login
+	partial class LoginScreen
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		private void InitializeComponent()
 		{
 			this.panelLogin = new System.Windows.Forms.Panel();
+			this.btnBack = new System.Windows.Forms.Button();
 			this.labelLogOn = new System.Windows.Forms.Label();
 			this.textBoxPassword = new System.Windows.Forms.TextBox();
 			this.labelPassword = new System.Windows.Forms.Label();
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			// 
 			this.panelLogin.BackColor = System.Drawing.Color.White;
 			this.panelLogin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+			this.panelLogin.Controls.Add(this.btnBack);
 			this.panelLogin.Controls.Add(this.labelLogOn);
 			this.panelLogin.Controls.Add(this.textBoxPassword);
 			this.panelLogin.Controls.Add(this.labelPassword);
@@ -55,6 +57,16 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.panelLogin.Size = new System.Drawing.Size(484, 331);
 			this.panelLogin.TabIndex = 32;
 			this.panelLogin.Visible = false;
+			// 
+			// btnBack
+			// 
+			this.btnBack.Location = new System.Drawing.Point(178, 262);
+			this.btnBack.Name = "btnBack";
+			this.btnBack.Size = new System.Drawing.Size(75, 23);
+			this.btnBack.TabIndex = 30;
+			this.btnBack.Text = "xxBack";
+			this.btnBack.UseVisualStyleBackColor = true;
+			this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
 			// 
 			// labelLogOn
 			// 
@@ -115,6 +127,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.buttonLogOnCancel.TabIndex = 3;
 			this.buttonLogOnCancel.Text = "xxCancel";
 			this.buttonLogOnCancel.UseVisualStyleBackColor = true;
+			this.buttonLogOnCancel.Click += new System.EventHandler(this.buttonLogOnCancel_Click);
 			// 
 			// buttonLogOnOK
 			// 
@@ -125,13 +138,14 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.buttonLogOnOK.TabIndex = 2;
 			this.buttonLogOnOK.Text = "xxOK";
 			this.buttonLogOnOK.UseVisualStyleBackColor = true;
+			this.buttonLogOnOK.Click += new System.EventHandler(this.buttonLogOnOK_Click);
 			// 
-			// Login
+			// LoginScreen
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.panelLogin);
-			this.Name = "Login";
+			this.Name = "LoginScreen";
 			this.Size = new System.Drawing.Size(490, 337);
 			this.panelLogin.ResumeLayout(false);
 			this.panelLogin.PerformLayout();
@@ -149,5 +163,6 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		private System.Windows.Forms.Label labelLoginName;
 		private System.Windows.Forms.Button buttonLogOnCancel;
 		private System.Windows.Forms.Button buttonLogOnOK;
+		private System.Windows.Forms.Button btnBack;
 	}
 }

@@ -1,6 +1,6 @@
 namespace Teleopti.Ccc.Win.Main.LogonScreens
 {
-	partial class Loading
+	partial class InitializingScreen
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -28,22 +28,21 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Loading));
-			this.pictureBoxStep2 = new System.Windows.Forms.PictureBox();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InitializingScreen));
+			this.pictureBoxStep1 = new System.Windows.Forms.PictureBox();
 			this.labelStatusText = new System.Windows.Forms.Label();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBoxStep2)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBoxStep1)).BeginInit();
 			this.SuspendLayout();
 			// 
-			// pictureBoxStep2
+			// pictureBoxStep1
 			// 
-			this.pictureBoxStep2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxStep2.Image")));
-			this.pictureBoxStep2.Location = new System.Drawing.Point(0, 0);
-			this.pictureBoxStep2.Name = "pictureBoxStep2";
-			this.pictureBoxStep2.Size = new System.Drawing.Size(490, 283);
-			this.pictureBoxStep2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-			this.pictureBoxStep2.TabIndex = 38;
-			this.pictureBoxStep2.TabStop = false;
-			this.pictureBoxStep2.Visible = false;
+			this.pictureBoxStep1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxStep1.Image")));
+			this.pictureBoxStep1.Location = new System.Drawing.Point(0, 0);
+			this.pictureBoxStep1.Name = "pictureBoxStep1";
+			this.pictureBoxStep1.Size = new System.Drawing.Size(490, 297);
+			this.pictureBoxStep1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+			this.pictureBoxStep1.TabIndex = 3;
+			this.pictureBoxStep1.TabStop = false;
 			// 
 			// labelStatusText
 			// 
@@ -51,27 +50,27 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.labelStatusText.ForeColor = System.Drawing.Color.Orange;
 			this.labelStatusText.Location = new System.Drawing.Point(3, 295);
 			this.labelStatusText.Name = "labelStatusText";
-			this.labelStatusText.Size = new System.Drawing.Size(484, 25);
+			this.labelStatusText.Size = new System.Drawing.Size(478, 25);
 			this.labelStatusText.TabIndex = 41;
 			this.labelStatusText.Text = "xxSearching for data sources...";
 			this.labelStatusText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
-			// Loading
+			// InitializingScreen
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.labelStatusText);
-			this.Controls.Add(this.pictureBoxStep2);
-			this.Name = "Loading";
+			this.Controls.Add(this.pictureBoxStep1);
+			this.Name = "InitializingScreen";
 			this.Size = new System.Drawing.Size(490, 337);
-			((System.ComponentModel.ISupportInitialize)(this.pictureBoxStep2)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBoxStep1)).EndInit();
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private System.Windows.Forms.PictureBox pictureBoxStep2;
+		private System.Windows.Forms.PictureBox pictureBoxStep1;
 		private System.Windows.Forms.Label labelStatusText;
 	}
 }

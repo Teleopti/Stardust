@@ -83,31 +83,33 @@ namespace Teleopti.Ccc.Win.Main
             ICollection<string> encryptedNHibConfigs;
             IDictionary<string, string> encryptedAppSettings;
             string passwordPolicyString;
-            using (var proxy = new Proxy(endpointNames))
-            {
-                using(PerformanceOutput.ForOperation("Getting config from web service"))
-                {
-                    try
-                    {
-                        encryptedNHibConfigs = proxy.GetHibernateConfigurationInternal();
-                        encryptedAppSettings = proxy.GetAppSettingsInternal();
-                        passwordPolicyString = proxy.GetPasswordPolicy();
-                    }
-                    catch (TimeoutException timeoutException)
-                    {
-                        Logger.Error("Configuration could not be retrieved from due to a timeout.", timeoutException);
-                        ErrorMessage = timeoutException.Message;
-                        return false;
-                    }
-                    catch (CommunicationException exception)
-                    {
-                        Logger.Error("Configuration could not be retrieved from server.",exception);
-                        ErrorMessage = exception.Message;
-                        return false;
-                    }
-                }
-            }
-            if (encryptedNHibConfigs.Count == 0)
+			using (var proxy = string.IsNullOrEmpty(endpointNames) 
+				? new Proxy() 
+				: new Proxy(endpointNames))
+			{
+				using (PerformanceOutput.ForOperation("Getting config from web service"))
+				{
+					try
+					{
+						encryptedNHibConfigs = proxy.GetHibernateConfigurationInternal();
+						encryptedAppSettings = proxy.GetAppSettingsInternal();
+						passwordPolicyString = proxy.GetPasswordPolicy();
+					}
+					catch (TimeoutException timeoutException)
+					{
+						Logger.Error("Configuration could not be retrieved from due to a timeout.", timeoutException);
+						ErrorMessage = timeoutException.Message;
+						return false;
+					}
+					catch (CommunicationException exception)
+					{
+						Logger.Error("Configuration could not be retrieved from server.", exception);
+						ErrorMessage = exception.Message;
+						return false;
+					}
+				}
+			}
+			if (encryptedNHibConfigs.Count == 0)
                 throw new DataSourceException("No NHibernate configurations received");
 
             var passwordPolicyDocument = XDocument.Parse(passwordPolicyString);

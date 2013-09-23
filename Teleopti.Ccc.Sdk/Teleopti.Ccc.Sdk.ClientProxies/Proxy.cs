@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Sdk.ClientProxies
 {
     public class Proxy : ClientBase<ITeleoptiCccSdkInternal>
     {
-		public Proxy(){}
+		public Proxy() { }
 
-		public Proxy(string serviceEndpoint) : base(serviceEndpoint) {}
+		public Proxy(string serviceEndpoint) : base(serviceEndpoint) { }
 
         public ICollection<PayrollFormatDto> GetPayrollFormats()
         {

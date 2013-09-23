@@ -1,6 +1,6 @@
 namespace Teleopti.Ccc.Win.Main.LogonScreens
 {
-	partial class SelectDatasource
+	partial class SelectDatasourceScreen
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.tabPageApplicationDataSources.Location = new System.Drawing.Point(4, 22);
 			this.tabPageApplicationDataSources.Name = "tabPageApplicationDataSources";
 			this.tabPageApplicationDataSources.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageApplicationDataSources.Size = new System.Drawing.Size(142, 48);
+			this.tabPageApplicationDataSources.Size = new System.Drawing.Size(349, 180);
 			this.tabPageApplicationDataSources.TabIndex = 1;
 			this.tabPageApplicationDataSources.Text = "xxApplication logon";
 			this.tabPageApplicationDataSources.UseVisualStyleBackColor = true;
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.listBoxApplicationDataSources.FormattingEnabled = true;
 			this.listBoxApplicationDataSources.Location = new System.Drawing.Point(3, 3);
 			this.listBoxApplicationDataSources.Name = "listBoxApplicationDataSources";
-			this.listBoxApplicationDataSources.Size = new System.Drawing.Size(136, 42);
+			this.listBoxApplicationDataSources.Size = new System.Drawing.Size(343, 174);
 			this.listBoxApplicationDataSources.TabIndex = 4;
 			// 
 			// labelChooseDataSource
@@ -134,6 +134,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.buttonDataSourcesListCancel.TabIndex = 2;
 			this.buttonDataSourcesListCancel.Text = "xxCancel";
 			this.buttonDataSourcesListCancel.UseVisualStyleBackColor = true;
+			this.buttonDataSourcesListCancel.Click += new System.EventHandler(this.buttonDataSourcesListCancel_Click);
 			// 
 			// buttonDataSourceListOK
 			// 
@@ -144,13 +145,14 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.buttonDataSourceListOK.TabIndex = 1;
 			this.buttonDataSourceListOK.Text = "xxOK";
 			this.buttonDataSourceListOK.UseVisualStyleBackColor = true;
+			this.buttonDataSourceListOK.Click += new System.EventHandler(this.buttonDataSourceListOK_Click);
 			// 
-			// SelectBusinnesUnit
+			// SelectDatasourceScreen
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.panelChooseDataSource);
-			this.Name = "SelectBusinnesUnit";
+			this.Name = "SelectDatasourceScreen";
 			this.Size = new System.Drawing.Size(490, 337);
 			this.panelChooseDataSource.ResumeLayout(false);
 			this.tabControlChooseDataSource.ResumeLayout(false);

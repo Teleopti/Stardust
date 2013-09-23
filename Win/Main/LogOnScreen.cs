@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.Win.Main
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons)")]
 		private bool InitializeAndCheckStateHolder()
 		{
-			if (!LogOnInitializeStateHolder.InitializeStateHolder())
+			if (!LogOnInitializeStateHolder.InitializeStateHolder("local"))
 			{
 				ShowInTaskbar = true;
 				MessageBox.Show(this,

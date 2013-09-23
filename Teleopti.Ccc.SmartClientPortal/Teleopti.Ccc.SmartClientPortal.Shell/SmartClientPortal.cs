@@ -100,6 +100,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
             //This is here instead of in the constructor because this will be created by ObjectBuilder instead of AutoFac
             _logOnScreen = _container.Resolve<LogOnScreen>();
+	        _logonScreenManager = _container.Resolve<LogonScreenManager>();
             _systemChecker = _container.Resolve<SystemCheckerValidator>();
             _outlookPanelContentWorker = _container.Resolve<OutlookPanelContentWorker>();
             _portalSettings = _container.Resolve<PortalSettings>();
@@ -221,7 +222,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         }
 
 	    private long maxMem = 0;
-        private void updateMem(object sender, EventArgs e)
+	    private LogonScreenManager _logonScreenManager;
+
+	    private void updateMem(object sender, EventArgs e)
         {
 	        var mem = GC.GetTotalMemory(true);
 	        if (mem > maxMem)
