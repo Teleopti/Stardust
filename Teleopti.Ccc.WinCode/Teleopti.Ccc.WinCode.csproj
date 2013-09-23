@@ -703,7 +703,6 @@
     <Compile Include="Common\Time\ITimeZoomItemViewModel.cs" />
     <Compile Include="Common\Time\ITimeZoomViewModel.cs" />
     <Compile Include="Common\Time\Timeline\TimelineControlViewModel.cs" />
-    <Compile Include="Common\Time\Timeline\TimelineViewModel.cs" />
     <Compile Include="Common\Time\Timeline\TickMarkViewModel.cs" />
     <Compile Include="Common\Time\TimeZoomItemViewModel.cs" />
     <Compile Include="Common\Time\TimeZoomViewModel.cs" />

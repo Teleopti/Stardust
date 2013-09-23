@@ -311,7 +311,6 @@
     <Compile Include="Common\Time\IntervalCollectionTest.cs" />
     <Compile Include="Common\Time\IntervalViewModelTest.cs" />
     <Compile Include="Common\Time\Timeline\TimelineControlViewModelTest.cs" />
-    <Compile Include="Common\Time\Timeline\TimelineViewModelTest.cs" />
     <Compile Include="Common\Time\Timeline\TickMarkViewModelTest.cs" />
     <Compile Include="Common\Time\TimeSpanDataBoundItemTest.cs" />
     <Compile Include="Common\Time\TimeZoomViewModelTest.cs" />
