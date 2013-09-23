@@ -16,12 +16,4 @@ namespace Teleopti.Ccc.Domain.Common
 		 	return true;
 		 }
 	}
-
-	public class FalseRandomizerForTest : ITrueFalseRandomizer
-	{
-		public bool Randomize(int seed)
-		{
-			return false;
-		}
-	}
 }

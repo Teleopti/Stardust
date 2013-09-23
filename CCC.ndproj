@@ -51,6 +51,7 @@
     <Name>Teleopti.Ccc.Sdk.Client</Name>
     <Name>ClickOnceSign</Name>
     <Name>Teleopti.Ccc.Web</Name>
+    <Name>Teleopti.Ccc.WebTest</Name>
     <Name>Teleopti.Support.LicTool</Name>
     <Name>Teleopti.Ccc.Web.Broker</Name>
     <Name>Teleopti.Analytics.PM.PMServiceHost</Name>
@@ -138,6 +139,7 @@
     <Name>Ricciolo.Controls.TreeListView</Name>
     <Name>Microsoft.AnalysisServices.AdomdClient</Name>
     <Name>Autofac.Integration.Wcf</Name>
+    <Name>Rhino.Mocks</Name>
     <Name>Rhino.ServiceBus</Name>
     <Name>Rhino.ServiceBus.SqlQueues</Name>
     <Name>Rhino.ServiceBus.Autofac</Name>
@@ -2138,10 +2140,12 @@ warnif count > 0
 	from t in typesUsedOnlyInTest
 	//skippa klasser som ligger i testprojekten
 	where !allTestAssemblies.Contains(t.ParentAssembly)
-	//skippa "KeepMe"
+	//skippa "IsNotDeadCodeAttribute"
 	&& !t.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute")
 	&& !t.BaseClasses.Any(type => type.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute"))
 	&& !t.InterfacesImplemented.Any(type => type.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute"))	
+	//skippa web controllers - inget enkelt sätt att sätta attribut på allihopa
+	&& t.BaseClass.FullName!="System.Web.Mvc.Controller"
 	select new { t, t.FullName}]]>
 	</Query>
 	

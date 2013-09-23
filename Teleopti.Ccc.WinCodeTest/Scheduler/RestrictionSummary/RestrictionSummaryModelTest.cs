@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
                 new DateTimePeriod(new DateTime(2007, 1, 1, 21, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 1, 2, 5, 0, 0, DateTimeKind.Utc));
 
-            var layer1 = new EditorActivityLayer(telephone, period1);
+            var layer1 = new EditableShiftLayer(telephone, period1);
 
             var mainShiftShift = EditableShiftFactory.CreateEditorShift(ShiftCategoryFactory.CreateShiftCategory("TEL"));
             mainShiftShift.LayerCollection.Add(layer1);

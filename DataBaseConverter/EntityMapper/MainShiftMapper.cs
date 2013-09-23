@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                 {
                     if (actLayer.LayerActivity != baseActivity)
                     {
-						var newLayer = (EditorActivityLayer)actLayerMapper.Map(actLayer);
+						var newLayer = (EditableShiftLayer)actLayerMapper.Map(actLayer);
                         if (newLayer != null)
                             retShift.LayerCollection.Add(newLayer);
                     }
@@ -65,10 +65,10 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
             return retShift;
         }
 
-        private static EditorActivityLayer BaseLayer(global::Domain.WorkShift oldEntity, global::Domain.Activity baseActivity, ActivityLayerMapper actLayerMapper)
+        private static EditableShiftLayer BaseLayer(global::Domain.WorkShift oldEntity, global::Domain.Activity baseActivity, ActivityLayerMapper actLayerMapper)
         {
             global::Domain.ActivityLayer oldBaseLayer = new global::Domain.ActivityLayer(oldEntity.ProjectedPeriod(), baseActivity);
-			return (EditorActivityLayer)actLayerMapper.Map(oldBaseLayer);
+			return (EditableShiftLayer)actLayerMapper.Map(oldBaseLayer);
         }
 
         private bool absenceActivity(global::Domain.Activity oldActivity)

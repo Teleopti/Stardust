@@ -315,7 +315,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Repositories\PersonAvailabilityRepositoryTest.cs" />
-    <Compile Include="Repositories\GeneralRepositoryTest.cs" />
     <Compile Include="Repositories\PersonRotationRepositoryTest.cs" />
     <Compile Include="Repositories\ExternalLogOnRepositoryTest.cs" />
     <Compile Include="Repositories\MeetingRepositoryTest.cs" />

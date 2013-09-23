@@ -5,12 +5,15 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
@@ -18,13 +21,41 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 	public class HardCodedResolver : IResolve
 	{
+		private static IMessageBrokerSender _messageBroker;
+
+		private IMessageBrokerSender messageBroker()
+		{
+			if (_messageBroker == null)
+			{
+				var broker = new SignalBroker(MessageFilterManager.Instance);
+				broker.ConnectionString = TestSiteConfigurationSetup.Url.ToString();
+				broker.StartMessageBroker();
+				_messageBroker = broker;
+			}
+			return _messageBroker;
+		}
+
 		public object Resolve(Type type)
 		{
 			// use autofac soon?
+			if (type == typeof (IEnumerable<IHandleEvent<ScheduledResourcesChangedEvent>>))
+				return new[]
+					{
+						new ScheduleProjectionReadOnlyUpdater(
+							new ScheduleProjectionReadOnlyRepository(CurrentUnitOfWork.Make()),
+							new EventPublisher(this, new CurrentIdentity()))
+					};
 			if (type == typeof (IEnumerable<IHandleEvent<ScheduleChangedEvent>>))
-				return MakeScheduleChangedHandler();
+				return new[]
+					{
+						MakeScheduleChangedHandler(),
+						new ScheduleChangedNotifier(messageBroker())
+					};
 			if (type == typeof(IEnumerable<IHandleEvent<PersonAbsenceAddedEvent>>))
-				return MakeScheduleChangedHandler();
+				return new[]
+					{
+						MakeScheduleChangedHandler()
+					};
 			if (type == typeof (IEnumerable<IHandleEvent<ProjectionChangedEvent>>))
 				return new IHandleEvent<ProjectionChangedEvent>[]
 					{
@@ -34,7 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 								new NewtonsoftJsonSerializer()),
 							new PersonScheduleDayReadModelPersister(
 								CurrentUnitOfWork.Make(),
-								new DoNotSend(),
+								messageBroker(),
 								new CurrentDataSource(new CurrentIdentity()))
 							),
 						new ScheduledResourcesChangedHandler(
@@ -43,11 +74,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 							new ScheduleProjectionReadOnlyRepository(CurrentUnitOfWork.Make()),
 							new ScheduledResourcesReadModelUpdater(
 								new ScheduledResourcesReadModelStorage(
-									CurrentUnitOfWork.Make()), 
-									new DoNotSend(), 
-									new ControllableEventSyncronization()),
+									CurrentUnitOfWork.Make()
+									),
+								messageBroker(),
+								new UnitOfWorkTransactionEventSyncronization(CurrentUnitOfWork.Make())),
 							new PersonSkillProvider(),
-							new EventPublisher(this,new CurrentIdentity()))
+							new EventPublisher(this, new CurrentIdentity()))
 					};
             Console.WriteLine("Cannot resolve type {0}! Add it manually or consider using autofac!", type);
 		    return null;
@@ -55,15 +87,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private object MakeScheduleChangedHandler()
 		{
-			return new[]
-				{
-					new ScheduleChangedHandler(
-						new EventPublisher(this,new CurrentIdentity()),
-						new ScenarioRepository(CurrentUnitOfWork.Make()),
-						new PersonRepository(CurrentUnitOfWork.Make()),
-						new ScheduleRepository(CurrentUnitOfWork.Make()),
-						new ProjectionChangedEventBuilder())
-				};
+			return new ScheduleChangedHandler(
+					 new EventPublisher(this, new CurrentIdentity()),
+					 new ScenarioRepository(CurrentUnitOfWork.Make()),
+					 new PersonRepository(CurrentUnitOfWork.Make()),
+					 new ScheduleRepository(CurrentUnitOfWork.Make()),
+					 new ProjectionChangedEventBuilder()
+					 );
 		}
 	}
 }

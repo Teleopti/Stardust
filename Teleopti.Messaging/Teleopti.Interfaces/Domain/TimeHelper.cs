@@ -301,51 +301,6 @@ namespace Teleopti.Interfaces.Domain
         }
 
         /// <summary>
-        /// Tries to parse long hour minute or empty to a TimeSpan.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        /// <param name="ci">The ci.</param>
-        /// <param name="timeSpan">The time span.</param>
-        /// <returns></returns>
-        public static bool TryParseLongHourMinuteOrEmptyToTimeSpan(string text, CultureInfo ci, out TimeSpan timeSpan)
-        {
-            timeSpan = TimeSpan.Zero;
-
-            if (string.IsNullOrEmpty(text))
-            {
-                return true;
-            }
-
-            text = text.Trim();
-            bool isNegativSign = text.StartsWith("-", StringComparison.Ordinal);
-
-            char separator = Char.Parse(ci.DateTimeFormat.TimeSeparator);
-            String[] split = text.Split(separator);
-
-            if (split.Length > 2)
-                return false;
-
-            int minutes = 0;
-            int hours;
-            if (split.Length == 2)
-            {
-                if (!int.TryParse(split[1], out minutes))
-                    return false;
-                if (minutes > 59)
-                    return false;
-            }
-
-            if (!int.TryParse(split[0], out hours))
-                return false;
-
-            if (hours < 0 || isNegativSign)
-                minutes = -minutes;
-
-            timeSpan = TimeSpan.FromHours(hours).Add(TimeSpan.FromMinutes(minutes));
-            return true;
-        }
-
-        /// <summary>
         /// Tries the parse long hour string (hh:mm) eg. 25:40.
         /// </summary>
         /// <param name="text">The text.</param>

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public static class DataSourceHelper
 	{
-		public static IDataSource CreateDataSource(IEnumerable<IMessageSender> messageSenders)
+		public static IDataSource CreateDataSource(IEnumerable<IMessageSender> messageSenders, string name)
 		{
 			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest());
 
@@ -26,12 +26,7 @@ namespace Teleopti.Ccc.TestCommon
 					SetupAnalytics(dataSourceFactory, analytics);
 			}
 
-			return CreateDataSource(dataSourceFactory);
-		}
-
-		public static IDataSource CreateDataSource()
-		{
-			return CreateDataSource((IEnumerable<IMessageSender>) null);
+			return CreateDataSource(dataSourceFactory, name);
 		}
 
 		private static void SetupCcc7(DataSourcesFactory dataSourceFactory, DatabaseHelper ccc7)
@@ -150,12 +145,12 @@ namespace Teleopti.Ccc.TestCommon
 
 
 
-		private static IDataSource CreateDataSource(DataSourcesFactory dataSourceFactory)
+		private static IDataSource CreateDataSource(DataSourcesFactory dataSourceFactory, string name)
 		{
 			return ExceptionToConsole(
 				() =>
 				{
-					var dataSourceSettings = CreateDataSourceSettings(ConnectionStringHelper.ConnectionStringUsedInTests, null);
+					var dataSourceSettings = CreateDataSourceSettings(ConnectionStringHelper.ConnectionStringUsedInTests, null, name);
 					return dataSourceFactory.Create(dataSourceSettings, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
 				},
 				"Failed to create datasource {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
@@ -180,9 +175,11 @@ namespace Teleopti.Ccc.TestCommon
 				);
 		}
 
-		public static IDictionary<string, string> CreateDataSourceSettings(string connectionString, int? timeout)
+		public static IDictionary<string, string> CreateDataSourceSettings(string connectionString, int? timeout, string sessionFactoryName)
 		{
 			var dictionary = new Dictionary<string, string>();
+			if(sessionFactoryName != null)
+				dictionary[NHibernate.Cfg.Environment.SessionFactoryName] = sessionFactoryName;
 			dictionary[NHibernate.Cfg.Environment.ConnectionProvider] =
 				"Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TeleoptiDriverConnectionProvider, Teleopti.Ccc.Infrastructure";
 			dictionary[NHibernate.Cfg.Environment.Dialect] = "NHibernate.Dialect.MsSql2005Dialect";

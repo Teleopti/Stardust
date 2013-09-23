@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             foreach (DateOnly day in dateOnlyPeriod.DayCollection())
             {
                 IScheduleDay scheduleDay = scheduleRange.ScheduledDay(day);
-                if (scheduleDay.HasProjection)
+                if (scheduleDay.HasProjection())
                 {
                     listOfVisualLayers.AddRange(scheduleDay.ProjectionService().CreateProjection().FilterLayers(period));
                 }

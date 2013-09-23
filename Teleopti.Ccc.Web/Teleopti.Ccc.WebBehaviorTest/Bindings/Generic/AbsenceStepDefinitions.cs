@@ -1,5 +1,4 @@
 using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 
@@ -11,16 +10,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"there is an absence with")]
 		public void GivenThereIsAnActivity(Table table)
 		{
-			var absence = table.CreateInstance<AbsenceConfigurable>();
-			DataMaker.Data().Apply(absence);
+			DataMaker.ApplyFromTable<AbsenceConfigurable>(table);
 		}
 
 		[Given(@"'?(I)'? have a absence with")]
 		[Given(@"'?(.*)'? has an absence with")]
 		public void GivenHaveAAbsenceWith(string userName, Table table)
 		{
-			var personAbsence = table.CreateInstance<PersonAbsenceConfigurable>();
-			DataMaker.Person(userName).Apply(personAbsence);
+			DataMaker.ApplyFromTable<PersonAbsenceConfigurable>(userName, table);
 		}
+
+		[When(@"'(.*)' adds an absence for '(.*)' with")]
+		public void WhenAddsAnAbsenceForWith(string adder, string person, Table table)
+		{
+			DataMaker.ApplyFromTable<PersonAbsenceConfigurable>(person, table);
+		}
+
 	}
 }

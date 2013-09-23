@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -84,9 +85,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		[Test]
 		public void GetAllowanceForPeriod_WhenTodayIsOutsideOpenPeriod_ShouldSetTheAllowanceToZero()
 		{
-			var now = MockRepository.GenerateMock<INow>();
-			now.Expect(n => n.DateOnly()).Return(new DateOnly(1999, 05, 05));
-
 			var closedPeriod = new DateOnlyPeriod(new DateOnly(2000,1,1), new DateOnly(2005,1,1));
 			addWorkFlowControlSetWithOpenAbsencePeriod(closedPeriod, _alwaysOpenPeriod);
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
@@ -107,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			_user.AddPersonPeriod(personPeriod1);
 			budgetDayRepository.Stub(x => x.Find(_scenario, budgetGroup, period)).Return(budgetDays);
 
-			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods(), now);
+			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods(), new Now());
 			var result = target.GetAllowanceForPeriod(period);
 			verifyThatAllDaysHasZeroAllowance(result);
 		}

@@ -66,7 +66,24 @@ Scenario: View team schedule
 	| Lunch 3 hours after start | true             |
 	When I view schedules for '2012-12-02'
 	Then I should see schedule for 'Pierre Baldi'
-	
+
+Scenario: View team schedule in my time zone
+	Given I have the role 'Anywhere Team Green'
+	And I am located in Hawaii
+	And 'Pierre Baldi' is located in Stockholm
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-09-20 22:00 |
+	| End time       | 2013-09-21 05:00 |
+	When I view schedules for '2013-09-20'
+	Then I should see a shift layer with
+	| Field      | Value |
+	| Start time | 10:00 |
+	| End time   | 17:00 |
+	| Color      | Green |
+
 Scenario: View team schedule with night shift from yesterday
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
@@ -168,7 +185,7 @@ Scenario: View unpublished schedule when permitted
 	| End time       | 2013-08-10 17:00 |
 	When I view schedules for '2013-08-10'
 	Then I should see 'Pierre Baldi' with schedule
-
+	
 Scenario: Push team schedule changes
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
@@ -187,12 +204,11 @@ Scenario: Push team schedule changes
 	| Start time | 08:00 |
 	| End time   | 17:00 |
 	| Color      | Green |	
-	When someone else adds a full day absence with
-	| Field   | Value        |
-	| Person  | Pierre Baldi |
-	| Absence | Vacation     |
-	| From    | 2013-09-10   |
-	| To      | 2013-09-10   |
+	When 'Martin Fowler' adds an absence for 'Pierre Baldi' with
+	| Field      | Value            |
+	| Name       | Vacation         |
+	| Start time | 2013-09-10 00:00 |
+	| End time   | 2013-09-11 00:00 |
 	Then I should see 'Pierre Baldi' with the schedule
 	| Field      | Value |
 	| Start time | 08:00 |

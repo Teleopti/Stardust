@@ -2,6 +2,8 @@ using System;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -173,7 +175,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 
 									var asmPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
 									var absenceRequestPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
-									var isCurrentWeek = week.Contains(_now.DateOnly());
+									var isCurrentWeek = week.Contains(_now.LocalDateOnly());
 
 									return new WeekScheduleDomainData
 											{

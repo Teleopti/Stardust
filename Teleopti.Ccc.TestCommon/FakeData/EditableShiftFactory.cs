@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public static IEditableShift CreateEditorShift(IActivity activity, DateTimePeriod period, IShiftCategory category)
 		{
 			var shift = new EditableShift(category);
-			var layer = new EditorActivityLayer(activity, period);
+			var layer = new EditableShiftLayer(activity, period);
 			shift.LayerCollection.Add(layer);
 			return shift;
 		}
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public static IEditableShift CreateEditorShift(TimeSpan start, TimeSpan end, IActivity activity, IShiftCategory category)
 		{
 			var shift = new EditableShift(category);
-			var layer1 = new EditorActivityLayer(activity, new DateTimePeriod(WorkShift.BaseDate.Add(start),
+			var layer1 = new EditableShiftLayer(activity, new DateTimePeriod(WorkShift.BaseDate.Add(start),
 									  WorkShift.BaseDate.Add(end)));
 			shift.LayerCollection.Add(layer1);
 			return shift;
@@ -57,9 +57,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 								   new DateTime(2007, 1, 2, 2, 0, 0, DateTimeKind.Utc));
 
 
-			EditorActivityLayer layer1 = new EditorActivityLayer(telephone, period1);
-			EditorActivityLayer layer2 = new EditorActivityLayer(longDuty, period2);
-			EditorActivityLayer layer3 = new EditorActivityLayer(longDuty, period3);
+			EditableShiftLayer layer1 = new EditableShiftLayer(telephone, period1);
+			EditableShiftLayer layer2 = new EditableShiftLayer(longDuty, period2);
+			EditableShiftLayer layer3 = new EditableShiftLayer(longDuty, period3);
 
 			var resultShift = CreateEditorShift(ShiftCategoryFactory.CreateShiftCategory("TEL"));
 			resultShift.LayerCollection.Add(layer1);
@@ -89,10 +89,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 								   new DateTime(2007, 1, 1, 16, 15, 0, DateTimeKind.Utc));
 
 
-			EditorActivityLayer layer1 = new EditorActivityLayer(baseAct, period1);
-			EditorActivityLayer layer2 = new EditorActivityLayer(lunchAct, period2);
-			EditorActivityLayer layer3 = new EditorActivityLayer(shortAct, period3);
-			EditorActivityLayer layer4 = new EditorActivityLayer(shortAct, period4);
+			EditableShiftLayer layer1 = new EditableShiftLayer(baseAct, period1);
+			EditableShiftLayer layer2 = new EditableShiftLayer(lunchAct, period2);
+			EditableShiftLayer layer3 = new EditableShiftLayer(shortAct, period3);
+			EditableShiftLayer layer4 = new EditableShiftLayer(shortAct, period4);
 
 			var resultShift = CreateEditorShift(ShiftCategoryFactory.CreateShiftCategory("TEL"));
 			resultShift.LayerCollection.Add(layer1);

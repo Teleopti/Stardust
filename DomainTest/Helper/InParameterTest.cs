@@ -146,21 +146,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
 
         [Test]
         [ExpectedException(typeof(ArgumentException))]
-        public void VerifyVerifyDateIsLocal()
-        {
-            DateTime dateTime = new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            InParameter.VerifyDateIsLocal(_value, dateTime);
-        }
-
-        [Test]
-        public void VerifyVerifyDateIsLocal2()
-        {
-            DateTime dateTime = new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Local);
-            InParameter.VerifyDateIsLocal(_value, dateTime);
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyVerifyInParameterMustBeTrueThrowsArgumentexception()
         {
             InParameter.MustBeTrue("parameter", false);

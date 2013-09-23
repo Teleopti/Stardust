@@ -300,14 +300,14 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <returns></returns>
         /// <remarks>
-        /// Created by: robink
+        /// Created by: Robink
         /// Created date: 2007-11-21
         /// </remarks>
-        public IList<DateTimePeriod> WholeDayCollection()
+        public IList<DateTimePeriod> WholeDayCollection(TimeZoneInfo timeZoneInfo )
         {
             IList<DateTimePeriod> collectionToReturn = new List<DateTimePeriod>();
-            DateTime currentDateTime = LocalStartDateTime;
-            DateTime endDateTime = LocalEndDateTime;
+            DateTime currentDateTime = StartDateTimeLocal(timeZoneInfo );
+            DateTime endDateTime = EndDateTimeLocal(timeZoneInfo );
             while (currentDateTime < endDateTime)
             {
                 DateTime currentEndDateTime = currentDateTime.AddDays(1);
@@ -315,7 +315,7 @@ namespace Teleopti.Interfaces.Domain
                 if (endDateTime == currentDateTime) break;
 
                 collectionToReturn.Add(TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentDateTime,
-                                                                                            currentEndDateTime));
+                                                                                            currentEndDateTime, timeZoneInfo));
                 currentDateTime = currentEndDateTime;
             }
             return collectionToReturn;

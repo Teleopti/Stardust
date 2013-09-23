@@ -1,32 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Specification;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	public class PublishedScheduleSpecification : Specification<IPersonScheduleDayReadModel>
 	{
-		private readonly ISchedulePersonProvider _schedulePersonProvider;
+		private readonly IEnumerable<IPerson> _permittedPersons;
 		private readonly DateTime _date;
-		private readonly IEnumerable<IPerson> _personsInTeam;
 
-		public PublishedScheduleSpecification(ISchedulePersonProvider schedulePersonProvider, Guid teamId, DateTime date)
+		public PublishedScheduleSpecification(IEnumerable<IPerson> permittedPersons, DateTime date)
 		{
-			_schedulePersonProvider = schedulePersonProvider;
+			_permittedPersons = permittedPersons;
 			_date = date;
-			_personsInTeam = _schedulePersonProvider.GetPermittedPersonsForTeam(new DateOnly(date), 
-																		  teamId,
-			                                                              DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere);
 		}
 
 		public override bool IsSatisfiedBy(IPersonScheduleDayReadModel obj)
 		{
-			var person = (from p in _personsInTeam where (p.Id == obj.PersonId) select p).FirstOrDefault();
+			var person = (from p in _permittedPersons where (p.Id == obj.PersonId) select p).FirstOrDefault();
 
 			if (person != null && isSchedulePublished(_date, person))
 				return true;

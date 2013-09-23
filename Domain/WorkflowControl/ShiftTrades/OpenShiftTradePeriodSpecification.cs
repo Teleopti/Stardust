@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.Specification;
+﻿using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
@@ -16,7 +18,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 		{
 			if (obj.PersonFrom.WorkflowControlSet == null || obj.PersonTo.WorkflowControlSet == null)
 				return false;
-			var currentDate = _now.DateOnly();
+			var currentDate = _now.LocalDateOnly();
 			var openPeriodFrom =
 				 new DateOnlyPeriod(
 					  currentDate.AddDays(obj.PersonFrom.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum),
