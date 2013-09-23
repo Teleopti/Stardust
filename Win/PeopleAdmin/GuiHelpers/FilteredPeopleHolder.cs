@@ -724,20 +724,20 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             }
         }
 
-        public void AddPersonAccount(int rowIndex)
-        {
-            using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                if ((AbsenceCollection != null) && (AbsenceCollection.Count > 0))
-                {
-                    var accountForPersonCollection = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
-                    IAbsence absence = SelectedPersonAccountAbsenceType ?? _filteredAbsenceCollection[0];
-                    IAccount account = absence.Tracker.CreatePersonAccount(SelectedDate);
-                    accountForPersonCollection.Add(absence, account);
-                    UpdatePersonAccounts(account);
-                }
-            }
-        }
+		public void AddPersonAccount(int rowIndex)
+		{
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				if ((AbsenceCollection != null) && (AbsenceCollection.Count > 0))
+				{
+					var accountForPersonCollection = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
+					IAbsence absence = SelectedPersonAccountAbsenceType ?? _filteredAbsenceCollection[0];
+					IAccount account = absence.Tracker.CreatePersonAccount(SelectedDate);
+					accountForPersonCollection.Add(absence, account);
+					UpdatePersonAccounts(accountForPersonCollection, account);
+				}
+			}
+		}
 
         public void AddSchedulePeriod(int rowIndex)
         {
@@ -774,17 +774,22 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
         public void DeletePersonAccount(int rowIndex, int personPeriodIndex)
         {
-            var accounts = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
 
-            IOrderedEnumerable<IAccount> sorted = accounts.AllPersonAccounts().OrderByDescending(n2 => n2.StartDate.Date);
-            IList<IAccount> personAccountSortedCollection = sorted.ToList();
+	        using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+	        {
+		        var accounts = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
 
-            IAccount account = personAccountSortedCollection[personPeriodIndex];
+		        IOrderedEnumerable<IAccount> sorted = accounts.AllPersonAccounts().OrderByDescending(n2 => n2.StartDate.Date);
+		        IList<IAccount> personAccountSortedCollection = sorted.ToList();
 
-            if (account != null)
-            {
-                accounts.Find(account.Owner.Absence).Remove(account);
-            }
+		        IAccount account = personAccountSortedCollection[personPeriodIndex];
+
+		        if (account != null)
+		        {
+			        accounts.Find(account.Owner.Absence).Remove(account);
+			        UpdatePersonAccounts(accounts, account);
+		        }
+	        }
         }
 
         public void SetSortedPersonAccountFilteredList(IList<IPersonAccountModel> result)
@@ -867,6 +872,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             if (account != null)
             {
                 accounts.Find(account.Owner.Absence).Remove(account);
+				UpdatePersonAccounts(accounts, account);
                 GetParentPersonAccountWhenUpdated(rowIndex);
             }
         }
@@ -879,21 +885,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 foreach (var account in accounts.AllPersonAccounts())
                 {
                     accounts.Find(account.Owner.Absence).Remove(account);
-                    UpdatePersonAccounts(account);
+					UpdatePersonAccounts(accounts, account);
                 }
             }
         }
-
-
-        //public void DeleteAllPersonAccounts(int rowIndex)
-        //{
-        //    var accounts = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
-
-        //    foreach (var account in accounts.AllPersonAccounts())
-        //    {
-        //        accounts.Find(account.Owner.Absence).Remove(account);
-        //    }
-        //}
 
         public void GetParentPersonAccountWhenUpdated(int rowIndex)
         {
@@ -1550,14 +1545,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             return null;
         }
 
-        private void UpdatePersonAccounts(IAccount account)
+        private void UpdatePersonAccounts(IPersonAccountCollection accounts, IAccount account)
         {
-            var repository = new PersonAbsenceAccountRepository(GetUnitOfWork);
-            var updater = new PersonAccountUpdater(repository, _refreshService);
+			var updater = new PersonAccountUpdater(accounts, _refreshService);
             updater.Update(account.Owner.Person);
         }
-
-
 
         public IRotation GetDefaultRotation
         {

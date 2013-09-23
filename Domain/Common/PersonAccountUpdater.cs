@@ -1,6 +1,7 @@
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Common
 {
@@ -12,19 +13,19 @@ namespace Teleopti.Ccc.Domain.Common
 	/// </remarks>
 	public class PersonAccountUpdater : IPersonAccountUpdater
 	{
-		private readonly IPersonAbsenceAccountRepository  _provider;
-	    private readonly ITraceableRefreshService _traceableRefreshService;
+		private readonly IPersonAccountCollection _provider;
+		private readonly ITraceableRefreshService _traceableRefreshService;
 
-	    public PersonAccountUpdater(IPersonAbsenceAccountRepository provider, ITraceableRefreshService traceableRefreshService)
+		public PersonAccountUpdater(IPersonAccountCollection provider, ITraceableRefreshService traceableRefreshService)
 		{
-		    _provider = provider;
-		    _traceableRefreshService = traceableRefreshService;
+			_provider = provider;
+			_traceableRefreshService = traceableRefreshService;
 		}
 
-        public void Update(IPerson person)
+		public void Update(IPerson person)
 		{
-			var personAccounts = _provider.Find(person);
-			
+			var personAccounts = _provider.PersonAbsenceAccounts();
+
 			foreach (var personAccount in personAccounts)
 			{
 				foreach (var account in personAccount.AccountCollection())

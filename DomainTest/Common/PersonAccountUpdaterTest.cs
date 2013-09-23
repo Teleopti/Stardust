@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 			_absence2 = new Absence();
 			_unitOfWork = _mocks.Stub<IUnitOfWork>();
 			_refreshService = _mocks.StrictMock<ITraceableRefreshService>();
-			_target = new PersonAccountUpdater(_provider, _refreshService);
 		}
 
 		[Test]
@@ -46,18 +45,10 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var accountCollection = PersonAccountCollectionFactory.Create(_person, _absence1, _absence2, out account1, out account2);
 		    var absence1 = AbsenceFactory.CreateAbsence("Test Absence1");
             absence1.SetId(Guid.NewGuid());
+			_target = new PersonAccountUpdater(accountCollection, _refreshService);
 
 		    using (_mocks.Record())
 			{
-                //_provider.Stub(p => p.GetPersonAccounts(_person))
-                //    .Return(accountCollection);
-                //_provider.Stub(p => p.GetUnitOfWork)
-                //    .Return(_unitOfWork);
-                //_provider.Stub(p => p.GetRefreshService())
-                //         .Return(_refreshService);
-				
-				// must be called exactly once for each account
-
 			    var personAccountCollection = new PersonAccountCollection(_person);
 			    personAccountCollection.Add(absence1, account1);
                 personAccountCollection.Add(absence1, account2);
