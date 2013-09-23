@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		private HttpRequestBase httpRequest;
 		private HttpContextBase httpContext;
 		private INow now;
-		private DateTime fictiveNow;
 		private SessionSpecificCookieDataProvider target;
 		private ISessionSpecificCookieDataProviderSettings _sessionSpecificCookieDataProviderSettings;
 		private HttpCookieCollection _cookieCollection;
