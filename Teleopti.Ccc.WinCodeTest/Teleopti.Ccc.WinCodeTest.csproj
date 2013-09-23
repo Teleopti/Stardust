@@ -289,7 +289,6 @@
     <Compile Include="Common\OptionalColumnProviderTest.cs" />
     <Compile Include="Common\PeopleLoaderForTeamLeaderModeTest.cs" />
     <Compile Include="Common\PeopleLoaderTest.cs" />
-    <Compile Include="Common\PersonPicker\SelectablePersonViewModelTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AbstractPropertyPagesNoRootTest.cs" />
     <Compile Include="Common\ReportSettingsScheduledTimeVersusTargetTest.cs" />
     <Compile Include="Common\Rows\RowManagerSchedulerTest.cs" />
@@ -895,7 +894,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Common\PersonPicker\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
