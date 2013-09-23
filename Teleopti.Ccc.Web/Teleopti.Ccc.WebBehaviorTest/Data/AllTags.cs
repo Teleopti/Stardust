@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable")]
 	public class AllTags : Dictionary<string, string>
 	{
 		public AllTags()
@@ -18,9 +16,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Add("AnalyticsDatabase", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
 			Add("ServerName", IniFileInfo.ServerName);
 			Add("Database", IniFileInfo.Database);
-			Add("Url", IniFileInfo.Url);
-			Add("AgentPortalWebURL", IniFileInfo.Url);
-			Add("SitePath", IniFileInfo.SitePath);
+			Add("Url", TestSiteConfigurationSetup.Url.ToString());
+			Add("Port", TestSiteConfigurationSetup.Port.ToString());
+			Add("AgentPortalWebURL", TestSiteConfigurationSetup.Url.ToString());
+			Add("SitePath", Paths.WebPath());
 			Add("ConfigPath", Paths.WebBinPath());
 			Add("MessageBroker", TestSiteConfigurationSetup.Url.ToString());
             Add("MachineKey", CryptoCreator.MachineKeyCreator.GetConfig());

@@ -12,36 +12,43 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static readonly string TargetWebConfig = Path.Combine(Paths.WebPath(), "web.config");
 
 		public static Uri Url;
+		public static int Port;
 
 		private static IISExpress _server;
 
 		public static void Setup()
 		{
 			Url = new Uri(IniFileInfo.Url);
+			Port = Url.Port;
 
-			// attempt IIS express
-			// maybe this SO thread contains alternatives:
-			// http://stackoverflow.com/questions/4772092/starting-and-stopping-iis-express-programmatically
 			if (IniFileInfo.IISExpress)
-			{
-				try
-				{
-					var port = new Random().Next(57000, 57999);
-					_server = new IISExpress(new Parameters
-						{
-							Path = Paths.WebPath(),
-							Port = port,
-							Systray = true
-						});
-					Url = new Uri(string.Format("http://localhost:{0}/", port));
-				}
-				catch (Exception)
-				{
-				}
-			} 
+				AttemptToUseIISExpress();
 
 			UpdateWebConfigFromTemplate();
 			GenerateAndWriteTestDataNHibFileFromTemplate();
+		}
+
+		private static void AttemptToUseIISExpress()
+		{
+			// attempt IIS express
+			// maybe this SO thread contains alternatives:
+			// http://stackoverflow.com/questions/4772092/starting-and-stopping-iis-express-programmatically
+			try
+			{
+				Port = new Random().Next(57000, 57999);
+				Url = new Uri(string.Format("http://localhost:{0}/", Port));
+				FileConfigurator.ConfigureByTags("Data\\iisexpress.config", "Data\\iisexpress.running.config", new AllTags());
+				_server = new IISExpress(new Parameters
+					{
+						Systray = true,
+						Config = "Data\\iisexpress.running.config"
+					});
+			}
+			catch (Exception)
+			{
+				Url = new Uri(IniFileInfo.Url);
+				Port = Url.Port;
+			}
 		}
 
 		public static void TearDown()
