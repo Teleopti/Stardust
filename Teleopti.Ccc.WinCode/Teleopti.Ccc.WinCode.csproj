@@ -329,7 +329,6 @@
     <Compile Include="Common\ITransparentMeetingControlView.cs" />
     <Compile Include="Common\LayerGroupViewModel.cs" />
     <Compile Include="Common\LayerViewModelSelector.cs" />
-    <Compile Include="Common\Models\DataModelWithInvalidState.cs" />
     <Compile Include="Common\ModifySelectionPresenter.cs" />
     <Compile Include="Common\MoveableLayerViewModel.cs" />
     <Compile Include="Common\OpenPeriodBudgetsMode.cs" />
