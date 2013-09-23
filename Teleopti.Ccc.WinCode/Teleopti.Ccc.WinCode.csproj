@@ -649,7 +649,6 @@
     <Compile Include="Common\Commands\SimpleCommandModel.cs" />
     <Compile Include="Common\Commands\RepositoryCommandModel.cs" />
     <Compile Include="Common\Commands\EventBehaviorFactory.cs" />
-    <Compile Include="Common\Commands\SelectorBehavior.cs" />
     <Compile Include="Common\Commands\SimpleRepositoryCommandModel.cs" />
     <Compile Include="Common\Commands\TextBoxBehavior.cs" />
     <Compile Include="Common\Commands\TwoStepCommandModel.cs" />
