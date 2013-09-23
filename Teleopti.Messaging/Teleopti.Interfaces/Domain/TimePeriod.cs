@@ -338,28 +338,6 @@ namespace Teleopti.Interfaces.Domain
             return (timeSpan <= EndTime && timeSpan >= StartTime);
         }
 
-        /// <summary>
-        /// Determines whether the specified period contains part.
-        /// </summary>
-        /// <param name="containsPeriod">The period.</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified period contains part; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 2007-11-13
-        /// </remarks>
-        public bool ContainsPart(TimePeriod containsPeriod)
-        {
-            if (ContainsPart(containsPeriod.StartTime) || ContainsPart(containsPeriod.EndTime))
-                return true;
-
-            if (containsPeriod.Contains(this))
-                return true;
-
-            return false;
-        }
-
         #endregion
 
         /// <summary>
