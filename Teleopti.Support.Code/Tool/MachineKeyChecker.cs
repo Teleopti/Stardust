@@ -16,7 +16,8 @@ namespace Teleopti.Support.Code.Tool
         {
             if (!filePath.ToLower(CultureInfo.InvariantCulture).EndsWith("web.config"))
                 return false;
-
+            if (filePath.Contains(@"\Areas\"))
+                return false;
             XDocument xDocument = XDocument.Load(filePath);
             var xElement = xDocument.Descendants("machineKey").FirstOrDefault();
             if (xElement == null)
