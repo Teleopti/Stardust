@@ -4,9 +4,9 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 {
 	public partial class SelectSdkScreen : UserControl, ILogonStep
 	{
-		private readonly LogonScreenManager _parent;
+		private readonly LogonScreenView _parent;
 
-		public SelectSdkScreen(LogonScreenManager parent)
+		public SelectSdkScreen(LogonScreenView parent)
 		{
 			_parent = parent;
 			InitializeComponent();

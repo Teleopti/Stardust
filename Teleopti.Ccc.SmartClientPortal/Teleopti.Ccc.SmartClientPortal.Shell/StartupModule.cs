@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         {
             builder.RegisterType<LogOnScreen>()
                 .SingleInstance();
-	        builder.RegisterType<LogonScreenManager>()
+	        builder.RegisterType<LogonScreenView>()
 	               .SingleInstance();
             builder.RegisterType<ApplicationStartup>()
                 .SingleInstance();

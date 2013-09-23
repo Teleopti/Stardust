@@ -2,13 +2,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Win.Main.LogonScreens;
+using Teleopti.Ccc.WinCode.Main;
 
 namespace Teleopti.Ccc.Win.Main
 {
-	public partial class LogonScreenManager : Form
+	public partial class LogonScreenView : Form, ILogonScreenView
 	{
+		public LoginStep CurrentStep { get; private set; }
+
+		private readonly ILogonScreenPresenter _presenter;
 		private IList<ILogonStep> _logonSteps;
-		private LoginStep _currentStep;
 
 		private InitializingScreen _initializingScreen;
 		private SelectSdkScreen _selectSdkScreen;
@@ -16,8 +19,9 @@ namespace Teleopti.Ccc.Win.Main
 		private LoginScreen _loginScreen;
 		private LoadingScreen _loadingScreen;
 
-		public LogonScreenManager()
+		public LogonScreenView(ILogonScreenPresenter presenter)
 		{
+			_presenter = presenter;
 			InitializeComponent();
 			initializeLogic();
 		}
@@ -39,12 +43,13 @@ namespace Teleopti.Ccc.Win.Main
 					_loadingScreen
 				};
 
-			_currentStep = LoginStep.Initializing;
+			CurrentStep = LoginStep.Initializing;
+			_presenter.InitializeLogin();
 		}
 
 		public void OkButtonClicked()
 		{
-
+			_presenter.OkbuttonClicked(CurrentStep);
 		}
 
 		public void CancelButtonClicked()
@@ -54,25 +59,25 @@ namespace Teleopti.Ccc.Win.Main
 
 		public void BackButtonClicked()
 		{
-
+			_presenter.BackButtonClicked(CurrentStep);
 		}
 
 		public void StepForward()
 		{
-			_currentStep++;
+			CurrentStep++;
 			refreshView();
 		}
 
 		public void StepBackwards()
 		{
-			_currentStep--;
+			CurrentStep--;
 			refreshView();
 		}
 
 		private void refreshView()
 		{
-			ShowInTaskbar = (int) _currentStep != 0;
-			updatePanel((UserControl)_logonSteps[(int)_currentStep]);
+			ShowInTaskbar = (int) CurrentStep != 0;
+			updatePanel((UserControl) _logonSteps[(int) CurrentStep]);
 			Refresh();
 		}
 
@@ -82,14 +87,10 @@ namespace Teleopti.Ccc.Win.Main
 			pnlContent.Controls.AddRange(userControl.Controls.OfType<Control>().ToArray());
 		}
 
-		private enum LoginStep
+		public void Exit()
 		{
-			Initializing = 0,
-			SelectSdk = 1,
-			SelectDatasource = 2,
-			Login = 3,
-			Loading = 4,
-			Ready = 5
+			DialogResult = DialogResult.Cancel;
+			Close();
 		}
 	}
 }

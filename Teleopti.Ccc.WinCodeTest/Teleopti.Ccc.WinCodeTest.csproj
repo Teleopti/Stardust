@@ -405,6 +405,8 @@
     <Compile Include="Intraday\OpenIntradayTodayCommandTest.cs" />
     <Compile Include="Intraday\ReforecastModelTest.cs" />
     <Compile Include="Intraday\ReforecastWizardPagesTest.cs" />
+    <Compile Include="Main\LogonScreenModelTest.cs" />
+    <Compile Include="Main\LogonScreenPresenterTest.cs" />
     <Compile Include="Matrix\MatrixNavigationModelTest.cs" />
     <Compile Include="Matrix\MatrixNavigationPresenterTest.cs" />
     <Compile Include="Meetings\AddressBookPresenterTest.cs" />

@@ -1,6 +1,6 @@
 namespace Teleopti.Ccc.Win.Main
 {
-	partial class LogonScreenManager
+	partial class LogonScreenView
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -38,15 +38,15 @@ namespace Teleopti.Ccc.Win.Main
 			this.pnlContent.Size = new System.Drawing.Size(488, 334);
 			this.pnlContent.TabIndex = 0;
 			// 
-			// LogonScreenManager
+			// LogonScreenView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(490, 337);
 			this.Controls.Add(this.pnlContent);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-			this.Name = "LogonScreenManager";
-			this.Text = "LogonScreenManager";
+			this.Name = "LogonScreenView";
+			this.Text = "LogonScreenView";
 			this.ResumeLayout(false);
 
 		}

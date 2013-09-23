@@ -845,11 +845,11 @@
     <Compile Include="Main\LicenseAgreementForm.Designer.cs">
       <DependentUpon>LicenseAgreementForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\LogonScreenManager.cs">
+    <Compile Include="Main\LogonScreenView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Main\LogonScreenManager.Designer.cs">
-      <DependentUpon>LogonScreenManager.cs</DependentUpon>
+    <Compile Include="Main\LogonScreenView.Designer.cs">
+      <DependentUpon>LogonScreenView.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\LogonScreens\ILogonStep.cs" />
     <Compile Include="Main\LogonScreens\InitializingScreen.cs">
@@ -2541,8 +2541,8 @@
     <EmbeddedResource Include="Main\LicenseAgreementForm.resx">
       <DependentUpon>LicenseAgreementForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Main\LogonScreenManager.resx">
-      <DependentUpon>LogonScreenManager.cs</DependentUpon>
+    <EmbeddedResource Include="Main\LogonScreenView.resx">
+      <DependentUpon>LogonScreenView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main\LogonScreens\InitializingScreen.resx">
       <DependentUpon>InitializingScreen.cs</DependentUpon>
