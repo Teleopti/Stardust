@@ -61,6 +61,62 @@ namespace Teleopti.Ccc.WinCode.Main
 			return checkStatusOfLicense(licenseService);
 		}
 
+		private bool checkStatusOfLicense(ILicenseService licenseService)
+		{
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var rep = new LicenseStatusRepository(UnitOfWorkFactory.Current);
+				// if something goes wrong here the document is corrupt, handle that in some way ??
+				var status = rep.LoadAll().First();
+				var licenseStatus = new LicenseStatusXml(XDocument.Parse(status.XmlString));
+				if (licenseStatus.StatusOk && licenseStatus.AlmostTooMany)
+				{
+					Warning(getAlmostTooManyAgentsWarning(licenseStatus.NumberOfActiveAgents, licenseService));
+				}
+				if (!licenseStatus.StatusOk && licenseStatus.DaysLeft > 0)
+				{
+					Warning(getLicenseIsOverUsedWarning(licenseService, licenseStatus));
+				}
+				if (!licenseStatus.StatusOk && licenseStatus.DaysLeft < 1)
+				{
+					Error(getTooManyAgentsExplanation(licenseService, UnitOfWorkFactory.Current.Name,
+					                                  licenseStatus.NumberOfActiveAgents));
+					return false;
+				}
+			}
+			return true;
+		}
+
+		private static string getAlmostTooManyAgentsWarning(int numberOfActiveAgents, ILicenseService licenseService)
+		{
+			return licenseService.LicenseType.Equals(LicenseType.Agent)
+					   ? String.Format(CultureInfo.CurrentCulture, Resources.YouHaveAlmostTooManyActiveAgents,
+									   numberOfActiveAgents, licenseService.MaxActiveAgents)
+					   : String.Format(CultureInfo.CurrentCulture, Resources.YouHaveAlmostTooManySeats,
+									   licenseService.MaxSeats);
+		}
+
+		private static string getLicenseIsOverUsedWarning(ILicenseService licenseService, ILicenseStatusXml licenseStatus)
+		{
+			var maxLicensed = licenseService.LicenseType.Equals(LicenseType.Agent)
+				                  ? licenseService.MaxActiveAgents
+				                  : licenseService.MaxSeats;
+
+			return String.Format(CultureInfo.CurrentCulture, Resources.TooManyAgentsIsUsedWarning,
+			                     licenseStatus.NumberOfActiveAgents, maxLicensed, licenseStatus.DaysLeft);
+		}
+
+		private static string getTooManyAgentsExplanation(ILicenseService licenseService, string dataSourceName,
+		                                                  int numberOfActiveAgents)
+		{
+			return licenseService.LicenseType == LicenseType.Agent
+				       ? dataSourceName + "\r\n" +
+				         String.Format(CultureInfo.CurrentCulture, Resources.YouHaveTooManyActiveAgents,
+				                       numberOfActiveAgents, licenseService.MaxActiveAgents)
+				       : dataSourceName + "\r\n" + String.Format(CultureInfo.CurrentCulture, Resources.YouHaveTooManySeats,
+				                                                 licenseService.MaxSeats);
+		}
+
 		private bool checkRaptorApplicationFunctions()
 		{
 			var repositoryFactory = new RepositoryFactory();
@@ -117,61 +173,6 @@ namespace Teleopti.Ccc.WinCode.Main
 			return message;
 		}
 
-		private bool checkStatusOfLicense(ILicenseService licenseService)
-		{
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var rep = new LicenseStatusRepository(UnitOfWorkFactory.Current);
-				// if something goes wrong here the document is corrupt, handle that in some way ??
-				var status = rep.LoadAll().First();
-				var licenseStatus = new LicenseStatusXml(XDocument.Parse(status.XmlString));
-				if (licenseStatus.StatusOk && licenseStatus.AlmostTooMany)
-				{
-					Warning(getAlmostTooManyAgentsWarning(licenseStatus.NumberOfActiveAgents, licenseService));
-				}
-				if (!licenseStatus.StatusOk && licenseStatus.DaysLeft > 0)
-				{
-					Warning(getLicenseIsOverUsedWarning(licenseService, licenseStatus));
-				}
-				if (!licenseStatus.StatusOk && licenseStatus.DaysLeft < 1)
-				{
-					Error(getTooManyAgentsExplanation(licenseService, UnitOfWorkFactory.Current.Name,
-					                                  licenseStatus.NumberOfActiveAgents));
-					return false;
-				}
-			}
-			return true;
-		}
-
-		private static string getLicenseIsOverUsedWarning(ILicenseService licenseService, ILicenseStatusXml licenseStatus)
-		{
-			var maxLicensed = licenseService.LicenseType.Equals(LicenseType.Agent)
-				                  ? licenseService.MaxActiveAgents
-				                  : licenseService.MaxSeats;
-
-			return String.Format(CultureInfo.CurrentCulture, Resources.TooManyAgentsIsUsedWarning,
-			                     licenseStatus.NumberOfActiveAgents, maxLicensed, licenseStatus.DaysLeft);
-		}
-
-		private static string getAlmostTooManyAgentsWarning(int numberOfActiveAgents, ILicenseService licenseService)
-		{
-			return licenseService.LicenseType.Equals(LicenseType.Agent)
-				       ? String.Format(CultureInfo.CurrentCulture, Resources.YouHaveAlmostTooManyActiveAgents,
-				                       numberOfActiveAgents, licenseService.MaxActiveAgents)
-				       : String.Format(CultureInfo.CurrentCulture, Resources.YouHaveAlmostTooManySeats,
-				                       licenseService.MaxSeats);
-		}
-
-		private static string getTooManyAgentsExplanation(ILicenseService licenseService, string dataSourceName,
-		                                                  int numberOfActiveAgents)
-		{
-			return licenseService.LicenseType == LicenseType.Agent
-				       ? dataSourceName + "\r\n" +
-				         String.Format(CultureInfo.CurrentCulture, Resources.YouHaveTooManyActiveAgents,
-				                       numberOfActiveAgents, licenseService.MaxActiveAgents)
-				       : dataSourceName + "\r\n" + String.Format(CultureInfo.CurrentCulture, Resources.YouHaveTooManySeats,
-				                                                 licenseService.MaxSeats);
-		}
 
 		public void Warning(string warning)
 		{

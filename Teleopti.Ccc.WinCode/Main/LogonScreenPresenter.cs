@@ -5,22 +5,22 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
-	public interface ILogonScreenPresenter
+	public interface ILogonPresenter
 	{
 		void OkbuttonClicked(LoginStep currentStep);
 		void BackButtonClicked(LoginStep currentStep);
 		bool InitializeLogin();
 	}
 
-	public class LogonScreenPresenter : ILogonScreenPresenter
+	public class LogonPresenter : ILogonPresenter
 	{
-		private readonly ILogonScreenView _view;
-		private readonly ILogonScreenModel _model;
+		private readonly ILogonView _view;
+		private readonly ILogonModel _model;
 		private readonly ILoginInitializer _initializer;
 
 		private DataSourceContainer _dataSource;
 		
-		public LogonScreenPresenter(ILogonScreenView view, ILogonScreenModel model, ILoginInitializer initializer)
+		public LogonPresenter(ILogonView view, ILogonModel model, ILoginInitializer initializer)
 		{
 			_view = view;
 			_model = model;

@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Ccc.WinCode.Main
 {
-	public interface ILogonScreenView
+	public interface ILogonView
 	{
 		void Exit();
 	}

@@ -6,11 +6,11 @@ using Teleopti.Ccc.WinCode.Main;
 
 namespace Teleopti.Ccc.Win.Main
 {
-	public partial class LogonScreenView : Form, ILogonScreenView
+	public partial class LogonView : Form, ILogonView
 	{
 		public LoginStep CurrentStep { get; private set; }
 
-		private readonly ILogonScreenPresenter _presenter;
+		private readonly ILogonPresenter _presenter;
 		private IList<ILogonStep> _logonSteps;
 
 		private InitializingScreen _initializingScreen;
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Win.Main
 		private LoginScreen _loginScreen;
 		private LoadingScreen _loadingScreen;
 
-		public LogonScreenView(ILogonScreenPresenter presenter)
+		public LogonView(ILogonPresenter presenter)
 		{
 			_presenter = presenter;
 			InitializeComponent();

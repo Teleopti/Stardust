@@ -436,12 +436,12 @@
     <Compile Include="Intraday\OpenIntradayTodayCommand.cs" />
     <Compile Include="Intraday\ReforecastModel.cs" />
     <Compile Include="Intraday\ReforecastWizardPages.cs" />
-    <Compile Include="Main\ILogonScreenView.cs" />
+    <Compile Include="Main\ILogonView.cs" />
     <Compile Include="Main\LoginInitializer.cs" />
     <Compile Include="Main\LogOnAuthorize.cs" />
     <Compile Include="Main\LogOnInitializeStateHolder.cs" />
     <Compile Include="Main\LogOnMatrix.cs" />
-    <Compile Include="Main\LogonScreenModel.cs" />
+    <Compile Include="Main\LogonModel.cs" />
     <Compile Include="Main\LogonScreenPresenter.cs" />
     <Compile Include="Meetings\Commands\AddMeetingFromPanelCommand.cs" />
     <Compile Include="Meetings\Commands\FetchMeetingForCurrentUserChangeCommand.cs" />

@@ -4,9 +4,9 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 {
 	public partial class InitializingScreen : UserControl, ILogonStep
 	{
-		private readonly LogonScreenView _parent;
+		private readonly LogonView _parent;
 
-		public InitializingScreen(LogonScreenView parent)
+		public InitializingScreen(LogonView parent)
 		{
 			_parent = parent;
 			InitializeComponent();
