@@ -26,36 +26,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 {
-    public class FilteredPeopleAccountUpdater : IPersonAccountUpdater
-    {
-        private readonly FilteredPeopleHolder _filteredPeopleHolder;
-        private readonly ITraceableRefreshService _traceableRefreshService;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-
-        public FilteredPeopleAccountUpdater(FilteredPeopleHolder filteredPeopleHolder, ITraceableRefreshService traceableRefreshService, IUnitOfWorkFactory unitOfWorkFactory)
-        {
-            _filteredPeopleHolder = filteredPeopleHolder;
-            _traceableRefreshService = traceableRefreshService;
-            _unitOfWorkFactory = unitOfWorkFactory;
-        }
-
-        public void Update(IPerson person)
-        {
-            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
-            {
-                var accounts = _filteredPeopleHolder.GetPersonAccounts(person);
-                foreach (var personAbsenceAccount in accounts)
-                {
-                    foreach (var account in personAbsenceAccount.AccountCollection())
-                    {
-                        _traceableRefreshService.Refresh(account);
-                    }
-                }
-            }
-        }
-    }
-
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public class FilteredPeopleHolder : IDisposable
     {
 	    private ITraceableRefreshService _refreshService;
@@ -866,7 +837,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
             var accounts = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
 
-            //Ask valonerna, denna kan returnera flera 
             IAccount account = accounts.Find(SelectedDate).FirstOrDefault();
 
             if (account != null)
@@ -1406,8 +1376,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
             return ValidatePasswordPolicy.Count <= 0;
         }
-
-        
 
         public void AddRootsToRepository()
         {
