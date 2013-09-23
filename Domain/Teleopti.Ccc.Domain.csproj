@@ -245,7 +245,6 @@
     <Compile Include="Common\ICurrentDataSource.cs" />
     <Compile Include="Common\ICurrentIdentity.cs" />
     <Compile Include="Common\IModifyNow.cs" />
-    <Compile Include="Common\LayersExtensions.cs" />
     <Compile Include="Common\ListAggregator.cs" />
     <Compile Include="Common\PeriodExtensions.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
