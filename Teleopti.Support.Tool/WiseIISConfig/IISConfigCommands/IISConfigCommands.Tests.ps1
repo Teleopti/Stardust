@@ -41,7 +41,7 @@ $global:batName = 'PesterTest-DbSQL'
 $global:Server = ''
 $global:Db = ''
 $global:resetToBaseline="False"
-$global:insertedLicense=$false
+$global:insertedLicense=0
 
 function TearDown {
 	Describe "Tear down previous test"{
@@ -252,8 +252,7 @@ function Add-CccLicenseToDemo
             $LicFile="$here\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
             $xmlString = [IO.File]::ReadAllText($LicFile)
             $InsertedLicense = insert-License -Server "$global:Server" -Db "$global:Db" -xmlString $xmlString
-            Write-Host 'insert-License returned: ' $InsertedLicense
-            $global:insertedLicense | Should Be True
+            $global:insertedLicense | Should Be 1
         }
     }
     else

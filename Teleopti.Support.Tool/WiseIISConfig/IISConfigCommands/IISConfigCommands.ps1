@@ -475,6 +475,6 @@ if($exists -eq 1)
 
 # Execute INSERT statement
 $global:insertedLicense = $cmd.ExecuteNonQuery()
-#Write-Host 'Inserted License: ' $RowsInserted
+Write-Host 'Inserted License: ' $global:insertedLicense
 return $global:insertedLicense -eq 1
 }
