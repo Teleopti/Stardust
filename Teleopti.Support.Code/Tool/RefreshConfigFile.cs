@@ -4,7 +4,12 @@ using System.IO;
 
 namespace Teleopti.Support.Code.Tool
 {
-    public class RefreshConfigFile
+    public interface IRefreshConfigFile
+    {
+        void ReadLinesFromString(string allFilesToRefresh, IList<SearchReplace> searchReplaces, bool doNotOverWrite);
+    }
+
+    public class RefreshConfigFile : IRefreshConfigFile
     {
         private readonly IConfigFileTagReplacer _configFileTagReplacer;
         private readonly IMachineKeyChecker _machineKeyChecker;

@@ -36,6 +36,9 @@
     <AssemblyOriginatorKeyFile>..\Teleopti.Ccc.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -51,7 +54,9 @@
     <Compile Include="Tool\CryptoCreator.cs" />
     <Compile Include="Tool\MachineKeyChecker.cs" />
     <Compile Include="Tool\RefreshConfigFile.cs" />
+    <Compile Include="Tool\RefreshConfigsRunner.cs" />
     <Compile Include="Tool\SearchReplace.cs" />
+    <Compile Include="Tool\SettingsFileManager.cs" />
     <Compile Include="Tool\SettingsReader.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +71,9 @@
     </Content>
     <None Include="..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
