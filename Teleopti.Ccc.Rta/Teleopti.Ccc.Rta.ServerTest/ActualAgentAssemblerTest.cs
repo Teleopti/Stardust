@@ -66,6 +66,37 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		}
 
 		[Test]
+		public void GetAgentState_DifferenceInStatGroupButNotAlarm_ReturnValidState()
+		{
+			var stateGroupId = Guid.NewGuid();
+			var oldState = new ActualAgentState
+				{
+					ScheduledId = _guid,
+					ScheduledNextId = _guid,
+					AlarmId = Guid.Empty,
+					StateId = Guid.Empty,
+					ScheduledNext = "Hepp",
+					NextStart = _dateTime
+				};
+			var readModelLayers = new List<ScheduleLayer>
+				{
+					new ScheduleLayer {PayloadId = _guid},
+					new ScheduleLayer {PayloadId = _guid, StartDateTime = _dateTime, Name = "Hepp"}
+				};
+
+			_dataHandler.Expect(d => d.GetReadModel(_guid)).Return(readModelLayers);
+			_dataHandler.Expect(d => d.CurrentLayerAndNext(_dateTime, null)).IgnoreArguments().Return(readModelLayers);
+			_dataHandler.Expect(d => d.LoadOldState(_guid)).Return(oldState);
+			_alarmMapper.Expect(a => a.GetStateGroup("", _guid, _guid))
+			            .Return(new RtaStateGroupLight {StateGroupName = "Stategroup", StateGroupId = stateGroupId});
+			_alarmMapper.Expect(a => a.GetAlarm(_guid, stateGroupId)).Return(null);
+
+			var result = _target.GetAgentState(_guid, _guid, _guid, "", _dateTime, new TimeSpan(0), _dateTime, "2");
+			result.Should().Not.Be.Null();
+		}
+
+
+		[Test]
 		public void GetState_ReturnValidState()
 		{
 

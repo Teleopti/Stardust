@@ -193,8 +193,8 @@ namespace Teleopti.Ccc.Rta.Server
 			var state = _alarmMapper.GetStateGroup(stateCode, platformTypeId, businessUnitId);
 			if (state != null)
 			{
-				newState.State = state.StateGroupName;
 				newState.StateId = state.StateGroupId;
+				newState.State = state.StateGroupName;
 				foundAlarm = _alarmMapper.GetAlarm(activityId, state.StateGroupId);
 			}
 			else
