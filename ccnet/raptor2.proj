@@ -292,8 +292,13 @@
 		<FileUpdate Files="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config"
 			Encoding="windows-1252"
 			Regex="_replace_"
-			ReplacementText="$(CCNetWorkingDirectory)\ccnet\infratest.ini"/>
-									
+			ReplacementText="$(InfraTestIni)"/>
+
+		<FileUpdate Files="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config"
+			Encoding="windows-1252"
+			Regex="c:\infratest.ini"
+			ReplacementText="$(InfraTestIni)"/>
+			
 		<!--Explicte copy the correct config to each project that is using it
 		be sure to do this step before compile time; since CopyToLocal will move it to $(OutDir)-->
 		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
@@ -302,9 +307,6 @@
 		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
 			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfigTest\Teleopti.Ccc.ApplicationConfigTest.dll.Config" />
 
-		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\Teleopti.Ccc.WebBehaviorTest.dll.config" OverwriteReadOnlyFiles="true"
-			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config" />
-			
 		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Teleopti.Ccc.Web.csproj"
 			Properties="Configuration=$(Configuration);Platform=AnyCPU"
 			Targets="Build">
