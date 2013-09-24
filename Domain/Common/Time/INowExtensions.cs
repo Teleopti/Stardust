@@ -14,10 +14,5 @@ namespace Teleopti.Ccc.Domain.Common.Time
 		{
 			return new DateOnly(now.LocalDateTime());
 		}
-
-		public static DateOnly UtcDateOnly(this INow now)
-		{
-			return new DateOnly(now.UtcDateTime());
-		}
 	}
 }
