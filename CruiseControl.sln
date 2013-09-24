@@ -47,6 +47,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Messaging", "Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj", "{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Interfaces", "Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj", "{8D2565F2-7C44-45B7-96AD-2CD900E033A1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{807A8AFE-C46B-4907-B287-BD4AEC6DAE01} = {807A8AFE-C46B-4907-B287-BD4AEC6DAE01}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.Common", "Teleopti.Analytics\Teleopti.Analytics.Etl.Common\Teleopti.Analytics.Etl.Common.csproj", "{34C3B171-160E-4320-AA49-B8162BAD0E36}"
 EndProject
@@ -196,6 +199,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ServiceBus
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.Broker.Backplane", "Teleopti.Ccc.Web.Broker.Backplane\Teleopti.Ccc.Web.Broker.Backplane.csproj", "{31C00166-E856-49D3-A664-424224D90C2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Support.Code", "Teleopti.Support.Code\Teleopti.Support.Code.csproj", "{76C7A806-BCB0-41A5-AB91-FC22D3F2AD0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Support.CodeTest", "Teleopti.Support.CodeTest\Teleopti.Support.CodeTest.csproj", "{073CD4E2-6932-4DF2-A875-3E68E9CF77BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1259,6 +1266,30 @@ Global
 		{31C00166-E856-49D3-A664-424224D90C2C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{31C00166-E856-49D3-A664-424224D90C2C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{31C00166-E856-49D3-A664-424224D90C2C}.Release|x86.ActiveCfg = Release|Any CPU
+		{76C7A806-BCB0-41A5-AB91-FC22D3F2AD0C}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{76C7A806-BCB0-41A5-AB91-FC22D3F2AD0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76C7A806-BCB0-41A5-AB91-FC22D3F2AD0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76C7A806-BCB0-41A5-AB91-FC22D3F2AD0C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{76C7A806-BCB0-41A5-AB91-FC22D3F2AD0C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{76C7A806-BCB0-41A5-AB91-FC22D3F2AD0C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{76C7A806-BCB0-41A5-AB91-FC22D3F2AD0C}.Release|.NET.ActiveCfg = Release|Any CPU
+		{76C7A806-BCB0-41A5-AB91-FC22D3F2AD0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76C7A806-BCB0-41A5-AB91-FC22D3F2AD0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76C7A806-BCB0-41A5-AB91-FC22D3F2AD0C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{76C7A806-BCB0-41A5-AB91-FC22D3F2AD0C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{76C7A806-BCB0-41A5-AB91-FC22D3F2AD0C}.Release|x86.ActiveCfg = Release|Any CPU
+		{073CD4E2-6932-4DF2-A875-3E68E9CF77BD}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{073CD4E2-6932-4DF2-A875-3E68E9CF77BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{073CD4E2-6932-4DF2-A875-3E68E9CF77BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{073CD4E2-6932-4DF2-A875-3E68E9CF77BD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{073CD4E2-6932-4DF2-A875-3E68E9CF77BD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{073CD4E2-6932-4DF2-A875-3E68E9CF77BD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{073CD4E2-6932-4DF2-A875-3E68E9CF77BD}.Release|.NET.ActiveCfg = Release|Any CPU
+		{073CD4E2-6932-4DF2-A875-3E68E9CF77BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{073CD4E2-6932-4DF2-A875-3E68E9CF77BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{073CD4E2-6932-4DF2-A875-3E68E9CF77BD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{073CD4E2-6932-4DF2-A875-3E68E9CF77BD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{073CD4E2-6932-4DF2-A875-3E68E9CF77BD}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

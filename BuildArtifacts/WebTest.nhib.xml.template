@@ -3,13 +3,13 @@
 	<hibernate-configuration xmlns="urn:nhibernate-configuration-2.2">
 		<session-factory name="Teleopti CCC">
 			<property name="connection.connection_string">
-				Data Source=.;User Id=sa;Password=cadadi;initial Catalog=$(CCC7DB);Application Name=Teleopti.CCC.WebClient</property>
+				Data Source=.;User Id=sa;Password=cadadi;initial Catalog=$(DB_CCC7);Application Name=Teleopti.CCC.WebClient</property>
 			<property name="command_timeout">20</property>
 		</session-factory>
 	</hibernate-configuration>
 	<matrix name="MatrixDatamartDemo">
 		<connectionString>
-		Data Source=.;User Id=sa;Password=cadadi;Initial Catalog=$(AnalyticsDB);Application Name=Teleopti.CCC.WebClient</connectionString>
+		Data Source=.;User Id=sa;Password=cadadi;Initial Catalog=$(DB_ANALYTICS);Application Name=Teleopti.CCC.WebClient</connectionString>
 	</matrix>
 	<authentication>
 		<logonMode>mix</logonMode>

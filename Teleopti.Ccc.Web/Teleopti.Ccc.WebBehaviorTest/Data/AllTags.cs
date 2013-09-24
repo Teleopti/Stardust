@@ -9,9 +9,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	{
 		public AllTags()
 		{
+			Add("SQL_AUTH_STRING", IniFileInfo.SQL_AUTH_STRING);
+			Add("WEB_BROKER_BACKPLANE", IniFileInfo.WEB_BROKER_BACKPLANE);
 			Add("ConnectionString", IniFileInfo.ConnectionString);
 			Add("ConnectionStringMatrix", IniFileInfo.ConnectionStringMatrix);
 			Add("ConnectionStringAnalytics", IniFileInfo.ConnectionStringMatrix);
+			Add("DB_ANALYTICS", IniFileInfo.DB_ANALYTICS);
+			Add("SQL_SERVER_NAME", IniFileInfo.SQL_SERVER_NAME);
+			Add("DB_CCC7", IniFileInfo.DB_CCC7);
 			Add("AnalyticsDb", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
 			Add("AnalyticsDatabase", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
 			Add("ServerName", IniFileInfo.ServerName);

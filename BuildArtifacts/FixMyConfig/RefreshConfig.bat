@@ -2,64 +2,30 @@
 SETLOCAL
 SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-1%
-SET nhibDir=c:\nhib
-SET nhibFile=FixMyConfig.nhib.xml
+SET masterSettings=%ROOTDIR%\..\settings.txt
 SET CCC7DB=%1
 SET AnalyticsDB=%2
-
-if "%CCC7DB%"=="" (
-SET /P CCC7DB=CCC7DB: 
-)
-
-if "%AnalyticsDB%"=="" (
-SET /P AnalyticsDB=AnalyticsDB: 
-)
-SET ConnectionStringAnalytics=Data Source^=.;Integrated Security^=True;initial Catalog^=%AnalyticsDB%;Current Language^=us_english
+set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
+SET MySettings=%ROOTDIR%\..\..\Teleopti.Support.Code\bin\debug\settings.txt
  
 cd %ROOTDIR%
 
 taskkill /IM WebDev.WebServer40.EXE /F
 taskkill /IM WebDev.WebServer20.EXE /F
-if not exist "%nhibDir%" mkdir "%nhibDir%"
 
-set CustomConfig=%ROOTDIR%\CustomConfig.xml
-call:debugConfigSetup "%CustomConfig%" "%nhibDir%" "%CCC7DB%" "%AnalyticsDB%" "%ConnectionStringAnalytics%"
+::get a fresh Settings.txt
+COPY "%masterSettings%" "%MySettings%"
 
-::del current app.config+web.config
-for /f "tokens=1,2 delims=," %%g in (ConfigFiles.txt) do if exist %%g del %%g
+::Build Teleopti.Support.Tool.exe
+ECHO Building %ROOTDIR%\..\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj
+%MSBUILD% "%ROOTDIR%\..\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" > "%ROOTDIR%\Teleopti.Support.Tool.build.log"
 
-::copy app.config+web.config from BuildArtifacts
-for /f "tokens=1,2 delims=," %%g in (ConfigFiles.txt) do copy "%%h" "%%g"
+::Replace some parameters according to current RestoreToLocal.bat
+cscript replace.vbs "TeleoptiAnalytics_Demo" "%AnalyticsDB%" "%MySettings%" > NUL
+cscript replace.vbs "TeleoptiCCC7_Demo" "%CCC7DB%" "%MySettings%" > NUL
 
-::update app.config+web.config according to your custom config
-for /f "tokens=1,2 delims=," %%g in (ConfigFiles.txt) do call:Replace "%%g" "%CustomConfig%"
-
-::update web.config with machineKey config
-for /f "tokens=1,2 delims=," %%g in (ConfigFiles.txt) do SetMachineKeys "%%g"
-
-::cleanup
-XCOPY "%ROOTDIR%\%nhibFile%" "%nhibDir%" /Y
-DEL "%ROOTDIR%\%nhibFile%"
-DEL "%CustomConfig%"
+::Run supportTool to replace all config
+"%ROOTDIR%\..\..\Teleopti.Support.Tool\bin\Debug\Teleopti.Support.Tool.exe" -MODebug
 
 ENDLOCAL
 goto:eof
-
-:Replace
-SETLOCAL
-set fileName=%~1
-set CustomConfig=%~2
-for /f "tokens=1,2 delims=," %%g in (%CustomConfig%) do cscript replace.vbs "%%g" "%%h" "%fileName%" > NUL
-(
-ENDLOCAL
-)
-goto:eof
-
-:debugConfigSetup
-ECHO $^(CCC7DB^),%~3>"%~1"
-ECHO $^(AnalyticsDB^),%~4>>"%~1"
-ECHO $^(SitePath^),%~2>>"%~1"
-ECHO $^(ConnectionStringAnalytics^),%~5>>"%~1"
-ECHO ^<compilation debug='false',^<compilation debug='true'>>"%~1"
-goto:eof
-
