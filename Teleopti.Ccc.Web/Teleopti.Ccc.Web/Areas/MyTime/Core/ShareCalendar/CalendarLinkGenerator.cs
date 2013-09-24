@@ -58,16 +58,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 				checkPermission(person, dataSource, uow, personRepository);
 				checkStatus(uow, person);
 
-				var scheduleDays = getScheduleDays(calendarLinkId, uow);
+				var scheduleDays = getScheduleDays(calendarLinkId, uow, person.WorkflowControlSet.SchedulePublishedToDate);
 				return generateCalendar(scheduleDays);
 			}
 		}
 
-		private IEnumerable<PersonScheduleDayReadModel> getScheduleDays(CalendarLinkId calendarLinkId, IUnitOfWork uow)
+		private IEnumerable<PersonScheduleDayReadModel> getScheduleDays(CalendarLinkId calendarLinkId, IUnitOfWork uow, DateTime? schedulePublishedToDate)
 		{
+			var endDate = _now.LocalDateOnly().AddDays(end);
+			if (schedulePublishedToDate.HasValue)
+			{
+				var publishedToDate = new DateOnly(schedulePublishedToDate.Value);
+				if (publishedToDate < endDate) 
+					endDate = publishedToDate;
+			}
 			var personScheduleDayReadModelFinder = _repositoryFactory.CreatePersonScheduleDayReadModelFinder(uow);
 			var scheduleDays = personScheduleDayReadModelFinder.ForPerson(_now.LocalDateOnly().AddDays(start),
-																		  _now.LocalDateOnly().AddDays(end), 
+																		  endDate, 
 																		  calendarLinkId.PersonId);
 			return scheduleDays;
 		}
