@@ -302,6 +302,9 @@
 		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
 			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfigTest\Teleopti.Ccc.ApplicationConfigTest.dll.Config" />
 
+		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\Teleopti.Ccc.WebBehaviorTest.dll.config" OverwriteReadOnlyFiles="true"
+			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config" />
+			
 		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Teleopti.Ccc.Web.csproj"
 			Properties="Configuration=$(Configuration);Platform=AnyCPU"
 			Targets="Build">
