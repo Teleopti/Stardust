@@ -278,7 +278,8 @@
 			<InfraTestIniLines Include="DB_ANALYTICS=$(DBNamePrefix)_analytics" />
 			<InfraTestIniLines Include="WEB_BROKER=$(WEB_BROKER)" />
 			<InfraTestIniLines Include="WEB_BROKER_BACKPLANE=$(WEB_BROKER_BACKPLANE)" />	
-			<InfraTestIniLines Include="SitePath=$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web" />			
+			<InfraTestIniLines Include="SitePath=$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web" />
+			<InfraTestIniLines Include="url=http://localhost" />
 			<InfraTestIniLines Include="servicebus=false" />
 			<InfraTestIniLines Include="create=true" />
 			<InfraTestIniLines Include="dbFile=$(InfraTestIni)" />
@@ -307,13 +308,6 @@
 		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
 			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfigTest\Teleopti.Ccc.ApplicationConfigTest.dll.Config" />
 
-		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Teleopti.Ccc.Web.csproj"
-			Properties="Configuration=$(Configuration);Platform=AnyCPU"
-			Targets="Build">
-		</MSBuild>
-<!--		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
-			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\Teleopti.Ccc.WebBehaviorTest.dll.Config" />
--->
 	</Target>
 
 	<!--This is how we "går över ån och runt sjön för att hämta vatten"
