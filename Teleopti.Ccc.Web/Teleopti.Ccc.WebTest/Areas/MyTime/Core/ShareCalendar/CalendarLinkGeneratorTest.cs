@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 		[Test]
 		public void ShouldGetCalendarForPerson()
 		{
-			var person = PersonFactory.CreatePersonWithGuid("first", "last");
+			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(DateOnly.Today.AddDays(181));
 			_personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
 			_personalSettingDataRepository.Stub(
 				x => x.FindValueByKeyAndOwnerPerson("CalendarLinkSettings", person, new CalendarLinkSettings())).IgnoreArguments()
