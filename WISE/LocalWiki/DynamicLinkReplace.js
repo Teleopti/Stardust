@@ -1,9 +1,13 @@
 function notTranslatedPrefixes() {
-	return ['F01%253APM_',
-	'PM_',
+	return ['PM_',
 	'www.teleopti.com',
+	'F01%253APM_',
 	'Category%253AP',
-	'Special%253ACategories'];
+	'Special%253ACategories',
+	'Category%3AP',
+	'F01%3APM_',
+	'Special%3ACategories'
+	];
 }
 
 function notTranslatedPages() {
@@ -117,14 +121,24 @@ function replaceLinks() {
 			if (isPageToTeleoptiSite(link))
 				continue;
 			if (shouldReplaceLink(link, pageName)) {
-				var trimmedLink = endsWith(link, '1.html')
-					? link.substr(0, link.length - 7)
-					: link.substr(0, link.length - 5);
+				var trimmedLink;
+				if (endsWith(link, '1.html'))
+					trimmedLink = link.substr(0, link.length - 7);
+				else if (endsWith(link, 'en') ||
+					endsWith(link, 'ru') ||
+					endsWith(link, 'sv') ||
+					endsWith(link, 'zh'))
+					trimmedLink = link.substr(0, link.length - 3);
+				else
+					trimmedLink = link.substr(0, link.length - 5);
 
 				document.links[i].href = trimmedLink + '\\' + pageName;
 			}
 		}
 		document.links[i].href = document.links[i].href.replace(/\+/, '_');
+		document.links[i].href = document.links[i].href.replace('wiki.teleopti.com/TeleoptiCCC/', 'localhost/TeleoptiCCC/LocalWIki/');
+		document.links[i].href = document.links[i].href.replace('%3A', '%253A');
+		
 	}
 	fixNavigationLinkTexts(pageName);
 }
