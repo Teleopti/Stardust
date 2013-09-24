@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.TestCommon
 			CreateByNHib = iniFileHelper.ReadIniValue(testDatabaseSection, "createmode") == "nhib";
 			SqlOutput = iniFileHelper.ReadIniValue(testDatabaseSection, "sqloutput") == "true";
 			Url = iniFileHelper.ReadIniValue(testDatabaseSection, "url");
-			AGENTPORTALWEB_nhibConfPath = iniFileHelper.ReadIniValue(testDatabaseSection, "AGENTPORTALWEB_nhibConfPath");
+			AGENTPORTALWEB_nhibConfPath = iniFileHelper.ReadIniValue(testDatabaseSection, "AGENTPORTALWEB_nhibConfPath");			
 			SitePath = iniFileHelper.ReadIniValue(testDatabaseSection, "sitepath");
 			var iisexpress = iniFileHelper.ReadIniValue(testDatabaseSection, "iisexpress");
 			IISExpress = iisexpress == "true" || string.IsNullOrEmpty(iisexpress);

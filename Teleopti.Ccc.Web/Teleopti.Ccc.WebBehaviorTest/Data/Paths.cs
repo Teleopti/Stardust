@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	{
 		public static string WebBinPath()
 		{
-			var path = Path.Combine(IniFileInfo.AGENTPORTALWEB_nhibConfPath, "bin");
+			var path = Path.Combine(IniFileInfo.SitePath, "bin");
 			return new DirectoryInfo(path).FullName;
 		}
 
