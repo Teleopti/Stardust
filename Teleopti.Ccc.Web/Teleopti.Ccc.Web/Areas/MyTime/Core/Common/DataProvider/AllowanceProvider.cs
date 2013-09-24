@@ -46,11 +46,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 					absenceRequestOpenPeriod => 
 					absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() == typeof(BudgetGroupAllowanceValidator)).ToList();
 
+				var invalidOpenPeriods = openPeriods.Where(
+					absenceRequestOpenPeriod =>
+					absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() != typeof(BudgetGroupAllowanceValidator)).ToList();
+
 				if (validOpenPeriods.Count != 0)
  				{
 					allowanceList =
 						from d in period.DayCollection()
-						select new { Date = d, Time = TimeSpan.Zero, Heads = TimeSpan.Zero, Availability = true };
+						select new
+							{
+								Date = d,
+								Time = TimeSpan.Zero,
+								Heads = TimeSpan.Zero,
+								Availability = (invalidOpenPeriods.Count <= 0 || !invalidOpenPeriods.Any(x => x.GetPeriod(new DateOnly(_now.UtcDateTime())).Contains(d)))
+							};
+
 
  					foreach (var openPeriod in validOpenPeriods)
  					{
@@ -66,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
  										Date = budgetDay.Day,
  										Time = TimeSpan.FromHours(Math.Max(budgetDay.Allowance*budgetDay.FulltimeEquivalentHours, 0)),
 										Heads = TimeSpan.FromHours(Math.Max(budgetDay.FulltimeEquivalentHours, 0)),
- 										Availability = true
+										Availability = (invalidOpenPeriods.Count <= 0 || !invalidOpenPeriods.Any(x => x.GetPeriod(new DateOnly(_now.UtcDateTime())).Contains(budgetDay.Day)))
  									};
  						allowanceList = allowanceList.Concat(allowanceFromBudgetDays);
  					}

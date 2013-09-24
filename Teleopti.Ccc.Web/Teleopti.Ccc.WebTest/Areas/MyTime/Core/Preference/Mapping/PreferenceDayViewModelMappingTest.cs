@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
 
 			result.Color
-				.Should().Be(Color.PeachPuff.ToHtml());
+				.Should().Be(Color.PeachPuff.ToCSV());
 		}
 
 		[Test]
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
 
 			result.Color
-				.Should().Be(Color.Sienna.ToHtml());
+				.Should().Be(Color.Sienna.ToCSV());
 		}
 
 		[Test]
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
 
 			result.Color
-				.Should().Be(Color.Thistle.ToHtml());
+				.Should().Be(Color.Thistle.ToCSV());
 		}
 
 		[Test]

@@ -48,8 +48,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 
 			if (ticket != null)
 			{
-				var expired = _now.UtcDateTime() > ticket.Expiration.ToUniversalTime();
-				if (!expired)
+				if (!tickedExpired(ticket))
 				{
 					userData = ticket.UserData;
 					handleSlidingExpiration(cookie, ticket);
@@ -57,6 +56,11 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			}
 
 			return _dataStringSerializer.Deserialize(userData);
+		}
+
+		private bool tickedExpired(FormsAuthenticationTicket ticket)
+		{
+			return _now.UtcDateTime() > ticket.Expiration.ToUniversalTime();
 		}
 
 		public void ExpireTicket()
@@ -140,15 +144,19 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		{
 			if (!_sessionSpecificCookieDataProviderSettings.AuthenticationCookieSlidingExpiration) return;
 
+			if (!timeToRenewTicket(ticket)) return;
+
+			var newTicket = makeTicket(ticket);
+			cookie.Value = encryptTicket(newTicket);
+			setCookie(cookie);
+		}
+
+		private bool timeToRenewTicket(FormsAuthenticationTicket ticket)
+		{
 			var ticketAge = _now.LocalDateTime() - ticket.IssueDate;
 			var expiresIn = ticket.Expiration - _now.LocalDateTime();
 			var renew = ticketAge > expiresIn;
-			if (renew)
-			{
-				var newTicket = makeTicket(ticket);
-				cookie.Value = encryptTicket(newTicket);
-				setCookie(cookie);
-			}
+			return renew;
 		}
 
 		private static FormsAuthenticationTicket decryptCookie(HttpCookie cookie)

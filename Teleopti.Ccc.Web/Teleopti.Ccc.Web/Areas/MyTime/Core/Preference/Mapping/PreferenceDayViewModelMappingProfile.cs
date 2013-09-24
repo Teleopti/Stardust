@@ -39,11 +39,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.Color, o => o.ResolveUsing(s =>
 					{
 						if (s.Restriction.DayOffTemplate != null)
-							return s.Restriction.DayOffTemplate.DisplayColor.ToHtml();
+							return s.Restriction.DayOffTemplate.DisplayColor.ToCSV();
 						if (s.Restriction.Absence != null)
-							return s.Restriction.Absence.DisplayColor.ToHtml();
+							return s.Restriction.Absence.DisplayColor.ToCSV();
 						if (s.Restriction.ShiftCategory != null)
-							return s.Restriction.ShiftCategory.DisplayColor.ToHtml();
+							return s.Restriction.ShiftCategory.DisplayColor.ToCSV();
 						return "";
 					}))
 				.ForMember(d => d.Extended, o => o.MapFrom(s => _extendedPreferencePredicate.IsExtended(s)))

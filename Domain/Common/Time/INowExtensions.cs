@@ -10,18 +10,6 @@ namespace Teleopti.Ccc.Domain.Common.Time
 			return now.UtcDateTime().ToLocalTime();
 		}
 
-		//public static DateTime UserDateTime()
-		//{
-		//	var userTimeZone = new UserTimeZone(new LoggedOnUser())
-		//	if (_fakedUtcDateTime.HasValue)
-		//	{
-		//		return _userTimeZone().TimeZone() == null ?
-		//			_fakedUtcDateTime.Value :
-		//			TimeZoneHelper.ConvertToUtc(_fakedUtcDateTime.Value, _userTimeZone().TimeZone());
-		//	}
-		//	return DateTime.UtcNow;
-		//}
-
 		public static DateOnly LocalDateOnly(this INow now)
 		{
 			return new DateOnly(now.LocalDateTime());
