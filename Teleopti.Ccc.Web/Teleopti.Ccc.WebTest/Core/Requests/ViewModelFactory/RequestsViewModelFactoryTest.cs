@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
@@ -184,10 +183,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var target = new RequestsViewModelFactory(null, mapper, null, null, null, null, null, null, null);
 			var viewModel = new ShiftTradeScheduleViewModel();
+			var data = new ShiftTradeScheduleViewModelData {ShiftTradeDate = DateOnly.Today, LoadOnlyMyTeam = true};
 
-			mapper.Stub(x => x.Map<DateOnly, ShiftTradeScheduleViewModel>(Arg<DateOnly>.Is.Anything)).Return(viewModel);
+			mapper.Stub(x => x.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(Arg<ShiftTradeScheduleViewModelData>.Is.Anything)).Return(viewModel);
 
-			var result = target.CreateShiftTradeScheduleViewModel(DateTime.Now);
+			var result = target.CreateShiftTradeScheduleViewModel(data);
 			result.Should().Be.SameInstanceAs(viewModel);
 		}
 
