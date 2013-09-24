@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		private static readonly IDictionary<string, IBrowserActivator> Activators =
 			new Dictionary<string, IBrowserActivator>
 				{
-					{"Coypu", new CoypuBrowserActivator()},
+					{"Chrome", new CoypuChromeActivator()},
 					{"WatiN", new WatiNSingleBrowserIEActivator()}
 				};
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void NotifyBeforeTestRun()
 		{
-			_activator.NotifyBeforeTestRun();
+			Activators.ForEach(a => a.Value.NotifyBeforeTestRun());
 		}
 
 		public static void NotifyBeforeScenario()
