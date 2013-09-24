@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 								Date = d,
 								Time = TimeSpan.Zero,
 								Heads = TimeSpan.Zero,
-								Availability = (invalidOpenPeriods.Count <= 0 || !invalidOpenPeriods.Any(x => x.GetPeriod(_now.DateOnly()).Contains(d)))
+								Availability = (invalidOpenPeriods.Count <= 0 || !invalidOpenPeriods.Any(x => x.GetPeriod(new DateOnly(_now.UtcDateTime())).Contains(d)))
 							};
 
 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
  										Date = budgetDay.Day,
  										Time = TimeSpan.FromHours(Math.Max(budgetDay.Allowance*budgetDay.FulltimeEquivalentHours, 0)),
 										Heads = TimeSpan.FromHours(Math.Max(budgetDay.FulltimeEquivalentHours, 0)),
-										Availability = (invalidOpenPeriods.Count <= 0 || !invalidOpenPeriods.Any(x => x.GetPeriod(_now.DateOnly()).Contains(budgetDay.Day)))
+										Availability = (invalidOpenPeriods.Count <= 0 || !invalidOpenPeriods.Any(x => x.GetPeriod(new DateOnly(_now.UtcDateTime())).Contains(budgetDay.Day)))
  									};
  						allowanceList = allowanceList.Concat(allowanceFromBudgetDays);
  					}
