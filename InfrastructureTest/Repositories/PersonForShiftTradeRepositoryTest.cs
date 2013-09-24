@@ -11,6 +11,7 @@ using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.Infrastructure;
 
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
@@ -22,20 +23,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldLoadPersonInMyTeamForShiftTrade()
 		{
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var date = new DateOnly(2012, 12, 27);
-				var person = persistPerson(date); 
-				var team = person.Period(date).Team;
+			var date = new DateOnly(2012, 12, 27);
+			var person = persistPerson(date);
+			var team = person.Period(date).Team;
 
-				_target = new PersonForShiftTradeRepository(uow);
-				var result = _target.GetPersonForShiftTrade(date, team.Id.Value);
+			_target = new PersonForShiftTradeRepository(UnitOfWork);
+			var result = _target.GetPersonForShiftTrade(date, team.Id.Value);
 
-				result.First().PersonId.Should().Be.EqualTo(person.Id.Value);
-				result.First().TeamId.Should().Be.EqualTo(team.Id.Value);
-				result.First().SiteId.Should().Be.EqualTo(team.Site.Id.Value);
-				result.First().BusinessUnitId.Should().Be.EqualTo(team.Site.BusinessUnit.Id.Value);
-			}
+			result.First().PersonId.Should().Be.EqualTo(person.Id.Value);
+			result.First().TeamId.Should().Be.EqualTo(team.Id.Value);
+			result.First().SiteId.Should().Be.EqualTo(team.Site.Id.Value);
+			result.First().BusinessUnitId.Should().Be.EqualTo(team.Site.BusinessUnit.Id.Value);
 		}
 
 		[Test]
