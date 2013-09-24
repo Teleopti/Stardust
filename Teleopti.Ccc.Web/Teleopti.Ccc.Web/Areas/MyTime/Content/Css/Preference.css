@@ -10,6 +10,7 @@
     max-width: 77px;
 	min-width: 35px;
     overflow: hidden;
+	text-shadow: none;
 }
 .preference-must-have {
 	margin-bottom: 3px;
