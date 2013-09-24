@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 				_datePickerGlobalizationViewModelFactory.CreateDatePickerGlobalizationViewModel();
 			DateTime? fixedDate = null;
 
-			if (_now is IMutateNow && (_now as IMutateNow).IsExplicitlySet())
+			if (_now is IMutateNow && (_now as IMutateNow).IsMutated())
 				fixedDate = _now.UtcDateTime();
 			return new LayoutBaseViewModel
 				{

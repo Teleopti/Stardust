@@ -5,23 +5,21 @@ namespace Teleopti.Ccc.Domain.Common.Time
 {
 	public sealed class MutableNow : INow, IMutateNow
 	{
-		private DateTime? _fakedUtcDateTime;
+		private DateTime? _mutatedUtc;
 
 		public DateTime UtcDateTime()
 		{
-			return _fakedUtcDateTime.HasValue ?
-				       _fakedUtcDateTime.Value :
-				       DateTime.UtcNow;
+			return _mutatedUtc.HasValue ? _mutatedUtc.Value : DateTime.UtcNow;
 		}
 
-		public void SetNow(DateTime? utcDateTime)
+		public void Mutate(DateTime? utc)
 		{
-			_fakedUtcDateTime = utcDateTime;
+			_mutatedUtc = utc;
 		}
 
-		public bool IsExplicitlySet()
+		public bool IsMutated()
 		{
-			return _fakedUtcDateTime.HasValue;
+			return _mutatedUtc.HasValue;
 		}
 	}
 }

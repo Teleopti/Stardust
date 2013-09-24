@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.DomainTest.Common
 		{
 			var target = new MutableNow();
 			var nu = DateTime.UtcNow;
-			target.SetNow(nu.AddYears(2));
-			target.SetNow(null);
+			target.Mutate(nu.AddYears(2));
+			target.Mutate(null);
 
 			target.UtcDateTime().Should().Be.IncludedIn(nu.AddMinutes(-1), nu.AddMinutes(1));
 		}
@@ -23,15 +23,15 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void ShouldBeExplicitlySet()
 		{
 			var target = new MutableNow();
-			target.SetNow(DateTime.Now);
-			target.IsExplicitlySet().Should().Be.True();
+			target.Mutate(DateTime.Now);
+			target.IsMutated().Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldNotBeExplicitlySet()
 		{
 			var target = new MutableNow();
-			target.IsExplicitlySet().Should().Be.False();
+			target.IsMutated().Should().Be.False();
 		}
 	}
 }

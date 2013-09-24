@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		private void updateIocNow(DateTime? dateTimeSet)
 		{
-			_mutateNow.SetNow(dateTimeSet);
+			_mutateNow.Mutate(dateTimeSet);
 		}
 
 		//public JsonResult CrashApplicationPool()

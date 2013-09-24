@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		{
 			var time = new DateTime(2001, 1, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 			var now = new MutableNow();
-			now.SetNow(time);
+			now.Mutate(time);
 
 			var target = new LayoutBaseViewModelFactory(
 				_cultureSpecificViewModelFactory,
