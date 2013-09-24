@@ -1,7 +1,6 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
@@ -50,15 +49,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	    }
 
 	    ko.applyBindings(selectionViewModel, $('div.navbar')[1]);
-	}
-
-	function _initSplitButton() {
-		$('#Preference')
-			.splitbutton({
-				clicked: function (event, item) {
-					_setPreference(item.value);
-				}
-			});
 	}
 
     function _deletePreference() {
@@ -182,7 +172,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				addExtendedPreferenceFormViewModel.AvailableTemplates.sort(function (l, r) {
 					return l.Text > r.Text ? 1 : -1;
 				});
-				$("#Preference-template").selectbox({ refreshMenu: data });
 			}
 		});
 	}
@@ -420,7 +409,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				completelyLoaded();
 				return;
 			}
-			_initSplitButton();
 			_initAddExtendedButton();
 			_initViewModels(_soon);
 			_initPeriodSelection();

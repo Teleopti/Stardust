@@ -56,7 +56,7 @@ echo please wait ...  >> "%Deployment%\export.log"
 
 copy "%ROOTDIR%\ReplaceString\bin\Release\ReplaceString.exe" "%WorkingFolder%\"
 
-::crawle the website and export to working folder
+::crawl the website and export to working folder
 ECHO "%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "%WebURL%"
 "%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "%WebURL%"
 SET /A wgetError=%ERRORLEVEL%

@@ -1,6 +1,5 @@
 ﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Portal.js"/>
@@ -40,8 +39,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	function _bindData(data) {
 		vm.Initialize(data);
 		_initTimeIndicator();
-		//_initTooltip();
-		//Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
+	    
 		$('.body-weekview-inner').show();
 		completelyLoaded();
 	}
@@ -612,7 +610,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 		},
 		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
-			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 			readyForInteractionCallback();
 			completelyLoaded = completelyLoadedCallback;
 		},

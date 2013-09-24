@@ -1,7 +1,6 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
-/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
 
@@ -19,17 +18,11 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	var _partialViewInitCallback = {};
 	var _partialViewDisposeCallback = {};
 	var currentViewId = null;
-	var tabs = null;
 	var currentFixedDate = null;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 
 	function _layout() {
-		Teleopti.MyTimeWeb.Common.Layout.ActivateTabs();
-		Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
-		Teleopti.MyTimeWeb.Portal.Layout.ActivateToolbarButtons();
-		Teleopti.MyTimeWeb.Portal.Layout.ActivateDateButtons();
 		Teleopti.MyTimeWeb.Portal.Layout.ActivateHorizontalScroll();
-		Teleopti.MyTimeWeb.Portal.Layout.ActivateSettingsMenu();
 	}
 
 	function _registerPartialCallback(viewId, callBack, disposeCallback) {
@@ -37,25 +30,9 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		_partialViewDisposeCallback[viewId] = disposeCallback;
 	}
 
-
 	//disable navigation controls on ajax-begin
 	function _disablePortalControls() {
-		$('.ui-buttonset').buttonset("option", "disabled", true);
-		$('nav .ui-button').button("option", "disabled", true);
-
-		$('.selected-date-period').css({ opacity: 0.5 });
 		$('#Team-Picker').select2("enable", false);
-	}
-
-	//enable navigation controls on ajax-complete
-	function _enablePortalControls(periodRangeSelectorId) {
-		$('.ui-buttonset').buttonset("option", "disabled", false);
-		$('.ui-button').button("option", "disabled", false);
-		$('#Team-Picker').select2("enable", true);
-	}
-
-	function _datePickerPartsToFixedDate(year, month, day) {
-		return jQuery.map([parseInt(year), 1 + parseInt(month), parseInt(day)], function (val) { return (val < 10 ? '0' : '') + val.toString(); }).join('-');
 	}
 
 	function _attachAjaxEvents() {
@@ -81,17 +58,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _initNavigation() {
-
-		tabs = $('#tabs')
-			.tabberiet({
-			    click: function (e) {
-			        e.preventDefault();
-					_navigateTo($(this).data('mytime-action'));
-				},
-				emptyContentSelector: '#EmptyTab'
-			})
-			;
-
 	    $('.dropdown-menu a[data-mytime-action]')
 			.click(function (e) {
 			    e.preventDefault();
@@ -134,11 +100,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		});
 
 	function _navigateTo(action, date, id) {
-
-		//needed due to stopPropagation in tabberiet
-		// ^^^ replace with a callback?
-		Teleopti.MyTimeWeb.Portal.Layout.HideSettingsMenu();
-		//_invokeDisposeCallback(currentViewId);
 
 		var hash = action;
 		if (date) {
@@ -266,65 +227,10 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
 
-	function _hideSettingsMenu() {
-		$("#settings-dropdown dd ul").hide();
-	}
 	return {
-		// Activating buttons in toolbar
-		ActivateToolbarButtons: function () {
-			$(".buttonset-nav").buttonset();
-		},
-
-		// Activate date buttons
-		ActivateDateButtons: function () {
-			$(".date-range-selector").each(function () {
-				var t = $(this);
-				var first = t.find("button:first");
-				first.button({
-					icons: {
-						primary: "ui-icon-triangle-1-w"
-					},
-					text: false
-				});
-				first.removeAttr("title");
-				var last = t.find("button:last");
-				last.button({
-					icons: {
-						primary: "ui-icon-triangle-1-e"
-					},
-					text: false
-				});
-				last.removeAttr("title");
-			});
-		},
 		ActivateHorizontalScroll: function () {
 			$(window).scroll(function () {
 				$('header').css("left", -$(window).scrollLeft() + "px");
-			});
-		},
-		HideSettingsMenu: function () {
-			_hideSettingsMenu();
-		},
-		ActivateSettingsMenu: function () {
-			$(document).on("click", "#settings-dropdown dt span", function () {
-				$("#settings-dropdown dd ul").toggle();
-			});
-
-			$(document).on("click", "#settings-dropdown dd ul", function () {
-				_hideSettingsMenu();
-			});
-
-
-			$(document).bind('click', function (e) {
-				var $clicked = $(e.target);
-				if (!$clicked.parents('#settings-dropdown').length > 0)
-					_hideSettingsMenu();
-			});
-
-			$("#settings-dropdown a").hover(function () {
-				$(this).addClass('ui-state-hover');
-			}, function () {
-				$(this).removeClass('ui-state-hover');
 			});
 		}
 	};
