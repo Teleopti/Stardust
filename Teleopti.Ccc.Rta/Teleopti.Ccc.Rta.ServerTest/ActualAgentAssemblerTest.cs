@@ -371,7 +371,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void GetAgentStateForMissingAgent_AlreadyLoggedOut_ReturnEmptyList()
 		{
 			var missingAgents = new List<IActualAgentState> {initializeAgentStateWithDefaults()};
-			var rtaAlarmLight = new RtaAlarmLight {ActivityId = _guid, IsLogOutState = true, StateGroupId = _guid};
+			var rtaAlarmLight = new RtaAlarmLight {ActivityId = _guid, StateGroupId = _guid};
 			var alarmDictionary = new ConcurrentDictionary<Guid, List<RtaAlarmLight>>();
 			alarmDictionary.TryAdd(_guid, new List<RtaAlarmLight> {rtaAlarmLight});
 
@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		{
 			var missingAgents = new List<IActualAgentState> {initializeAgentStateWithDefaults()};
 			var stateGroup = new RtaStateGroupLight {StateGroupId = _guid};
-			var rtaAlarmLight = new RtaAlarmLight {ActivityId = _guid, IsLogOutState = true,StateGroupName = "StateGroupName", StateGroupId = Guid.NewGuid()};
+			var rtaAlarmLight = new RtaAlarmLight {ActivityId = _guid, StateGroupName = "StateGroupName", StateGroupId = Guid.NewGuid()};
 
 			_dataHandler.Expect(d => d.GetMissingAgentStatesFromBatch(_batchId, _sourceId)).Return(missingAgents);
 			_alarmMapper.Expect(a => a.IsAgentLoggedOut(_guid, "StateCode", _guid, _guid)).Return(false);
@@ -410,8 +410,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			var noActivityAlarm = new RtaAlarmLight
 				{
 					ActivityId = Guid.Empty,
-					Name = "NoScheduledActivity",
-					IsLogOutState = true
+					Name = "NoScheduledActivity"
 				};
 			var alarmDictionary = new ConcurrentDictionary<Guid, List<RtaAlarmLight>>();
 			alarmDictionary.TryAdd(Guid.Empty, new List<RtaAlarmLight> {noActivityAlarm});			
@@ -429,7 +428,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 
 			_dataHandler.Expect(d => d.GetMissingAgentStatesFromBatch(_batchId, _sourceId)).Return(missingAgents);
-			_alarmMapper.Expect(a => a.IsAgentLoggedOut(agent.ScheduledId, "StateCode", _guid, _guid)).Return(false);
+			_alarmMapper.Expect(a => a.IsAgentLoggedOut(_guid, "StateCode", _guid, _guid)).Return(false);
 			_alarmMapper.Expect(a => a.GetStateGroup(loggedOutStateCode, Guid.Empty, _guid)).Return(stateGroup);
 			_alarmMapper.Expect(a => a.GetAlarm(agent.ScheduledId, _guid)).Return(noActivityAlarm);
 
