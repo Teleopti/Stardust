@@ -430,9 +430,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 {
                     DateOnly dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
                     IPerson person = scheduleDay.Person;
-                    if (person.Period(dateOnly) == null)
-                        continue;
-                    if (person.TerminalDate != null && scheduleDay.Person.TerminalDate < dateOnly)
+                    if (!person.IsAgent(dateOnly))
                         continue;
 
                     contractTime = contractTime.Add(scheduleDay.ProjectionService().CreateProjection().ContractTime());
@@ -500,10 +498,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				{
 				    DateOnly dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
 				    IPerson person = scheduleDay.Person;
-                    if (person.Period(dateOnly) == null)
-                        continue;
-                    if (person.TerminalDate != null && scheduleDay.Person.TerminalDate < dateOnly)
-                        continue;
+                    if (!person.IsAgent(dateOnly)) continue;
 
 					SchedulePartView significant = scheduleDay.SignificantPart();
 					if (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff)
