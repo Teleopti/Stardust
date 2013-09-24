@@ -55,10 +55,10 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Common
         private void logonForTest()
         {
             string[] strings = new string[6];
-            strings[0] = "-DS" + IniFileInfo.ServerName;
-            strings[1] = "-DU" + IniFileInfo.UserName;
-            strings[2] = "-DP" + IniFileInfo.Password;
-            strings[3] = "-DD" + IniFileInfo.Database;
+			strings[0] = "-DS" + IniFileInfo.SQL_SERVER_NAME;
+			strings[1] = "-DU" + IniFileInfo.SQL_LOGIN;
+			strings[2] = "-DP" + IniFileInfo.SQL_PASSWORD;
+            strings[3] = "-DD" + IniFileInfo.DB_CCC7;
             strings[4] = "-BUTestBU";
             strings[5] = "-CUkn-IN";
 
