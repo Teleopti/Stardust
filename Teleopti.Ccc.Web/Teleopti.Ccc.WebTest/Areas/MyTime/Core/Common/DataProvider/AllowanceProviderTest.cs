@@ -376,6 +376,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			Assert.That(result.First().Item4, Is.EqualTo(false));
 		}
 
+		[Test]
 		public void GetAllowanceForPeriod_WhenIntradayStaffingCheckNextToBudgetgroupStaffingCheck_ShouldSetAvailabilityToFalse()
 		{
 			createValidAndInvalidAbsenceForAvailability();
