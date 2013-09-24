@@ -100,11 +100,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			return View("Message", viewModel);
 		}
 
-		public ViewResult WidgetStylingSample()
-		{
-			return View();
-		}
-
 		public ViewResult SetCurrentTime(DateTime dateSet)
 		{
 			updateIocNow(dateSet);
