@@ -5,6 +5,8 @@ using System.Threading;
 using DDay.iCal;
 using DDay.iCal.Serialization.iCalendar;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -64,8 +66,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 		private IEnumerable<PersonScheduleDayReadModel> getScheduleDays(CalendarLinkId calendarLinkId, IUnitOfWork uow)
 		{
 			var personScheduleDayReadModelFinder = _repositoryFactory.CreatePersonScheduleDayReadModelFinder(uow);
-			var scheduleDays = personScheduleDayReadModelFinder.ForPerson(_now.DateOnly().AddDays(start),
-			                                                              _now.DateOnly().AddDays(end), calendarLinkId.PersonId);
+			var scheduleDays = personScheduleDayReadModelFinder.ForPerson(_now.LocalDateOnly().AddDays(start),
+																		  _now.LocalDateOnly().AddDays(end), 
+																		  calendarLinkId.PersonId);
 			return scheduleDays;
 		}
 

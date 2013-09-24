@@ -240,7 +240,6 @@
     <Compile Include="ScheduleThreading\IScheduleTransformer.cs" />
     <Compile Include="ScheduleThreading\ScheduleDataRowCollectionFactory.cs" />
     <Compile Include="ScheduleThreading\ProjectionsForAllAgentSchedulesFactory.cs" />
-    <Compile Include="ScheduleThreading\ContractDataRowFactory.cs" />
     <Compile Include="ScheduleThreading\ScheduleDataRowFactory.cs" />
     <Compile Include="ScheduleThreading\ScheduleTransformer.cs">
       <SubType>Code</SubType>

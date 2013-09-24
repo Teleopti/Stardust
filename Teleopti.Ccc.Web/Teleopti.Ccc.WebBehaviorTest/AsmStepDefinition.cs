@@ -5,9 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using WatiN.Core;
@@ -19,13 +17,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	public class AsmStepDefinition
 	{
 		private const string attributeUsedForWidth = "padding-left";
-
-		[When(@"I click ASM link")]
-		public void WhenIClickASMLink()
-		{
-			TestControllerMethods.Logon();
-			Navigation.GotoAsm();
-		}
 
 		[Then(@"I should see a schedule in popup")]
 		public void ThenIShouldSeeAScheduleInPopup()

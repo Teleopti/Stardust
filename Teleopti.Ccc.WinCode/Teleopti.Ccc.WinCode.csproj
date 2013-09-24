@@ -267,8 +267,6 @@
     <Compile Include="Common\Commands\CommandBehaviors\CommandExecutionStrategy.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\IExecutionStrategy.cs" />
     <Compile Include="Common\Commands\CommonRoutedCommands.cs" />
-    <Compile Include="Common\Commands\DelegateCommand.cs" />
-    <Compile Include="Common\Commands\DelegateCommandBase.cs" />
     <Compile Include="Common\CommonAgentNameProvider.cs" />
     <Compile Include="Common\Configuration\AbsenceRequestPeriodModel.cs" />
     <Compile Include="Common\Configuration\AbsenceRequestPeriodTypeModel.cs" />
@@ -677,7 +675,6 @@
     <Compile Include="Common\LayerViewModelCollection.cs" />
     <Compile Include="Common\MainShiftLayerViewModel.cs" />
     <Compile Include="Common\MeetingLayerViewModel.cs" />
-    <Compile Include="Common\Messaging\Filters\DialogueHasMoreMessagesThan.cs" />
     <Compile Include="Common\Messaging\Filters\DialogueIsRepliedSpecification.cs" />
     <Compile Include="Common\Messaging\Filters\DialogueReplySpecification.cs" />
     <Compile Include="Common\Messaging\Filters\IFilterTarget.cs" />
@@ -694,7 +691,6 @@
     <Compile Include="Common\PeopleLoader.cs" />
     <Compile Include="Common\PersonalShiftLayerViewModel.cs" />
     <Compile Include="Common\OvertimeLayerViewModel.cs" />
-    <Compile Include="Common\PersonPicker\SelectablePersonViewModel.cs" />
     <Compile Include="Common\Rows\RowManagerScheduler.cs" />
     <Compile Include="Common\Time\DateTimeViewModel.cs" />
     <Compile Include="Common\Time\IntervalCollection.cs" />
@@ -1293,7 +1289,9 @@
     <None Include="Meetings\MeetingsClassDiagram.cd" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Common\PersonPicker\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>

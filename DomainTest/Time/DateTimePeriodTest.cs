@@ -620,7 +620,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime endDate1 = new DateTime(2007, 8, 13, 13, 30, 0, DateTimeKind.Utc);
             _period = new DateTimePeriod(startDate1, endDate1);
 
-            IList<DateTimePeriod> wholeDays = _period.WholeDayCollection();
+            IList<DateTimePeriod> wholeDays = _period.WholeDayCollection(TimeZoneInfo.Utc );
 
             Assert.AreEqual(4, wholeDays.Count);
             Assert.AreEqual(new TimeSpan(1, 30, 0), wholeDays[3].ElapsedTime());
@@ -633,7 +633,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime endDate1 = new DateTime(2008, 10, 26, 13, 30, 0, DateTimeKind.Utc);
             _period = new DateTimePeriod(startDate1, endDate1);
 
-            IList<DateTimePeriod> wholeDays = _period.WholeDayCollection();
+            IList<DateTimePeriod> wholeDays = _period.WholeDayCollection(TimeZoneHelper.CurrentSessionTimeZone);
 
             Assert.AreEqual(2, wholeDays.Count);
             Assert.AreEqual(new TimeSpan(0, 30, 0), wholeDays[1].ElapsedTime());
@@ -643,7 +643,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             endDate1 = new DateTime(2008, 3, 30, 13, 30, 0, DateTimeKind.Utc);
             _period = new DateTimePeriod(startDate1, endDate1);
 
-            wholeDays = _period.WholeDayCollection();
+            wholeDays = _period.WholeDayCollection(TimeZoneHelper.CurrentSessionTimeZone);
 
             Assert.AreEqual(2, wholeDays.Count);
             Assert.AreEqual(new TimeSpan(2, 30, 0), wholeDays[1].ElapsedTime());

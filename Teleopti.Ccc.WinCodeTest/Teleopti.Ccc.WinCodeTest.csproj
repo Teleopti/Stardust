@@ -239,7 +239,6 @@
     <Compile Include="Common\Commands\ApplicationCommandModelTest.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\CommandBehaviorBindingTest.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\CommandBehaviorTest.cs" />
-    <Compile Include="Common\Commands\DelegateCommandTest.cs" />
     <Compile Include="Common\Commands\TesterForCommandModels.cs" />
     <Compile Include="Common\Commands\CommandHelperTest.cs" />
     <Compile Include="Common\Commands\CommandModelTest.cs" />
@@ -289,7 +288,6 @@
     <Compile Include="Common\OptionalColumnProviderTest.cs" />
     <Compile Include="Common\PeopleLoaderForTeamLeaderModeTest.cs" />
     <Compile Include="Common\PeopleLoaderTest.cs" />
-    <Compile Include="Common\PersonPicker\SelectablePersonViewModelTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AbstractPropertyPagesNoRootTest.cs" />
     <Compile Include="Common\ReportSettingsScheduledTimeVersusTargetTest.cs" />
     <Compile Include="Common\Rows\RowManagerSchedulerTest.cs" />
@@ -895,7 +893,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Common\PersonPicker\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>

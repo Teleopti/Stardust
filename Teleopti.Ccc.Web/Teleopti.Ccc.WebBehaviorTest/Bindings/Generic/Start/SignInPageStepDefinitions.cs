@@ -98,8 +98,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			TestControllerMethods.Logon();
 		}
 
-		[Then(@"I should be signed in")]
-		public void ThenIShouldBeSignedIn()
+		[Then(@"I should (be|stay) signed in")]
+		public void ThenIShouldBeSignedIn(string beOrStay)
 		{
 			Browser.Interactions.AssertExists("#signout, #signout-button");
 		}

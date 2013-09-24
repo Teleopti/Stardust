@@ -474,8 +474,7 @@ if($exists -eq 1)
 }
 
 # Execute INSERT statement
-$RowsInserted = $cmd.ExecuteNonQuery()
-#try to not print to see if it helps on neptune
-#Write-Host 'Inserted License: ' $RowsInserted
-$RowsInserted
+$global:insertedLicense = $cmd.ExecuteNonQuery()
+Write-Host 'Inserted License: ' $global:insertedLicense
+return $global:insertedLicense -eq 1
 }
