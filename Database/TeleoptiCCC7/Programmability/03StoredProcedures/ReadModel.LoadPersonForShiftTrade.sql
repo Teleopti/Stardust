@@ -29,12 +29,13 @@ BEGIN
 			INNER JOIN Person p ON pp.Parent = p.Id
 		WHERE p.WorkflowControlSet IS NOT NULL
 			AND (@shiftTradeDate BETWEEN StartDate AND EndDate) 
-			AND Parent in 
-			(
-				SELECT Distinct personid FROM [ReadModel].[FindPerson] 
-				WHERE SearchValue like '%' 
-					AND (SearchType in ('FirstName','LastName','EmployeeNumber'))
-			)
+			/* We should do the name search from a separate SP */
+			--AND Parent in 
+			--(
+			--	SELECT Distinct personid FROM [ReadModel].[FindPerson] 
+			--	WHERE SearchValue like '%' 
+			--		AND (SearchType in ('FirstName','LastName','EmployeeNumber'))
+			--)
 	END
 	ELSE
 	BEGIN
@@ -46,12 +47,13 @@ BEGIN
 		WHERE p.WorkflowControlSet IS NOT NULL
 			AND pp.Team = @myTeamId
 			AND (@shiftTradeDate BETWEEN StartDate AND EndDate) 
-			AND Parent in 
-			(
-				SELECT Distinct personid FROM [ReadModel].[FindPerson] 
-				WHERE SearchValue like '%' 
-					AND (SearchType in ('FirstName','LastName','EmployeeNumber'))
-			)
+			/* We should do the name search from a separate SP */
+			--AND Parent in 
+			--(
+			--	SELECT Distinct personid FROM [ReadModel].[FindPerson] 
+			--	WHERE SearchValue like '%' 
+			--		AND (SearchType in ('FirstName','LastName','EmployeeNumber'))
+			--)
 	END	
 END
 

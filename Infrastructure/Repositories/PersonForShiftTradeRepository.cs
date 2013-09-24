@@ -17,6 +17,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_unitOfWork = unitOfWork;
 		}
 
+		public PersonForShiftTradeRepository(IUnitOfWork unitOfWork)
+		{
+			_unitOfWork = new FixedCurrentUnitOfWork(unitOfWork);
+		}
+
 		public IList<IAuthorizeOrganisationDetail> GetPersonForShiftTrade(DateOnly shiftTradeDate, Guid? teamId)
 		{
 			return ((NHibernateUnitOfWork)_unitOfWork.Current()).Session.CreateSQLQuery(
