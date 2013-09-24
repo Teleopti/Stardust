@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 
 			if (ticket != null)
 			{
-				if (tickedExpired(ticket))
+				if (!tickedExpired(ticket))
 				{
 					userData = ticket.UserData;
 					handleSlidingExpiration(cookie, ticket);
