@@ -175,64 +175,71 @@ namespace Teleopti.Ccc.Rta.Server
 		public void ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp,
 		                           Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
 		{
-			int dataSourceId;
-			var batch = isSnapshot
-				            ? batchId
-				            : (DateTime?) null;
-
-			if (string.IsNullOrEmpty(_connectionStringDataStore))
+			try
 			{
-				_loggingSvc.Error("No connection information available in configuration file.");
-				return;
-			}
+				int dataSourceId;
+				var batch = isSnapshot
+					            ? batchId
+					            : (DateTime?) null;
 
-			if (!_dataSourceResolver.TryResolveId(sourceId, out dataSourceId))
-			{
-				_loggingSvc.WarnFormat(
-					"No data source available for source id = {0}. Event will not be handled before data source is set up.", sourceId);
-				return;
-			}
-
-			if (isSnapshot && string.IsNullOrEmpty(logOn))
-			{
-				_loggingSvc.InfoFormat("Last of batch detected, initializing hanling for batch id: {0}, source id: {1}", batchId,
-				                       sourceId);
-				handleLastOfBatch(batchId, sourceId);
-				return;
-			}
-
-			IEnumerable<PersonWithBusinessUnit> personWithBusinessUnits;
-			if (!_personResolver.TryResolveId(dataSourceId, logOn, out personWithBusinessUnits))
-			{
-				_loggingSvc.InfoFormat(
-					"No person available for datasource id = {0} and log on {1}. Event will not be handled before person is set up.",
-					dataSourceId, logOn);
-				return;
-			}
-
-			foreach (var personWithBusinessUnit in personWithBusinessUnits)
-			{
-				_loggingSvc.InfoFormat("ACD-Logon: {0} is connected to PersonId: {1}", logOn, personWithBusinessUnit.PersonId);
-				if (!_stateResolver.HaveStateCodeChanged(personWithBusinessUnit.PersonId, stateCode, timestamp))
+				if (string.IsNullOrEmpty(_connectionStringDataStore))
 				{
-					_loggingSvc.InfoFormat("Person {0} is already in state {1}", personWithBusinessUnit.PersonId, stateCode);
-					continue;
+					_loggingSvc.Error("No connection information available in configuration file.");
+					return;
 				}
-				var agentState = _agentAssembler.GetAgentState(personWithBusinessUnit.PersonId,
-				                                               personWithBusinessUnit.BusinessUnitId,
-				                                               platformTypeId, stateCode,
-				                                               timestamp, timeInState,
-				                                               batch, sourceId);
-				if (agentState == null)
+
+				if (!_dataSourceResolver.TryResolveId(sourceId, out dataSourceId))
 				{
 					_loggingSvc.WarnFormat(
-						"Could not get state for Person: {0}, Business unit: {1}, PlatformTypeId: {2}, StateCode: {3}, Timestamp: {4}, Time in state: {5}, Batch {6}, SourceId{7}",
-						personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId, platformTypeId, stateCode, timestamp,
-						batchId, sourceId);
-					continue;
+						"No data source available for source id = {0}. Event will not be handled before data source is set up.", sourceId);
+					return;
 				}
-				_stateCache.AddAgentStateToCache(agentState);
-				sendRtaState(agentState);
+
+				if (isSnapshot && string.IsNullOrEmpty(logOn))
+				{
+					_loggingSvc.InfoFormat("Last of batch detected, initializing hanling for batch id: {0}, source id: {1}", batchId,
+					                       sourceId);
+					handleLastOfBatch(batchId, sourceId);
+					return;
+				}
+
+				IEnumerable<PersonWithBusinessUnit> personWithBusinessUnits;
+				if (!_personResolver.TryResolveId(dataSourceId, logOn, out personWithBusinessUnits))
+				{
+					_loggingSvc.InfoFormat(
+						"No person available for datasource id = {0} and log on {1}. Event will not be handled before person is set up.",
+						dataSourceId, logOn);
+					return;
+				}
+
+				foreach (var personWithBusinessUnit in personWithBusinessUnits)
+				{
+					_loggingSvc.InfoFormat("ACD-Logon: {0} is connected to PersonId: {1}", logOn, personWithBusinessUnit.PersonId);
+					if (!_stateResolver.HaveStateCodeChanged(personWithBusinessUnit.PersonId, stateCode, timestamp))
+					{
+						_loggingSvc.InfoFormat("Person {0} is already in state {1}", personWithBusinessUnit.PersonId, stateCode);
+						continue;
+					}
+					var agentState = _agentAssembler.GetAgentState(personWithBusinessUnit.PersonId,
+					                                               personWithBusinessUnit.BusinessUnitId,
+					                                               platformTypeId, stateCode,
+					                                               timestamp, timeInState,
+					                                               batch, sourceId);
+					if (agentState == null)
+					{
+						_loggingSvc.WarnFormat(
+							"Could not get state for Person: {0}, Business unit: {1}, PlatformTypeId: {2}, StateCode: {3}, Timestamp: {4}, Time in state: {5}, Batch {6}, SourceId{7}",
+							personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId, platformTypeId, stateCode, timestamp,
+							timeInState, batchId, sourceId);
+						continue;
+					}
+					_stateCache.AddAgentStateToCache(agentState);
+					sendRtaState(agentState);
+				}
+			}
+			catch (Exception e)
+			{
+				_loggingSvc.Error(e);
 			}
 		}
 

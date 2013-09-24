@@ -66,6 +66,37 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		}
 
 		[Test]
+		public void GetAgentState_DifferenceInStatGroupButNotAlarm_ReturnValidState()
+		{
+			var stateGroupId = Guid.NewGuid();
+			var oldState = new ActualAgentState
+				{
+					ScheduledId = _guid,
+					ScheduledNextId = _guid,
+					AlarmId = Guid.Empty,
+					StateId = Guid.Empty,
+					ScheduledNext = "Hepp",
+					NextStart = _dateTime
+				};
+			var readModelLayers = new List<ScheduleLayer>
+				{
+					new ScheduleLayer {PayloadId = _guid},
+					new ScheduleLayer {PayloadId = _guid, StartDateTime = _dateTime, Name = "Hepp"}
+				};
+
+			_dataHandler.Expect(d => d.GetReadModel(_guid)).Return(readModelLayers);
+			_dataHandler.Expect(d => d.CurrentLayerAndNext(_dateTime, null)).IgnoreArguments().Return(readModelLayers);
+			_dataHandler.Expect(d => d.LoadOldState(_guid)).Return(oldState);
+			_alarmMapper.Expect(a => a.GetStateGroup("", _guid, _guid))
+			            .Return(new RtaStateGroupLight {StateGroupName = "Stategroup", StateGroupId = stateGroupId});
+			_alarmMapper.Expect(a => a.GetAlarm(_guid, stateGroupId)).Return(null);
+
+			var result = _target.GetAgentState(_guid, _guid, _guid, "", _dateTime, new TimeSpan(0), _dateTime, "2");
+			result.Should().Not.Be.Null();
+		}
+
+
+		[Test]
 		public void GetState_ReturnValidState()
 		{
 
@@ -371,7 +402,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void GetAgentStateForMissingAgent_AlreadyLoggedOut_ReturnEmptyList()
 		{
 			var missingAgents = new List<IActualAgentState> {initializeAgentStateWithDefaults()};
-			var rtaAlarmLight = new RtaAlarmLight {ActivityId = _guid, IsLogOutState = true, StateGroupId = _guid};
+			var rtaAlarmLight = new RtaAlarmLight {ActivityId = _guid, StateGroupId = _guid};
 			var alarmDictionary = new ConcurrentDictionary<Guid, List<RtaAlarmLight>>();
 			alarmDictionary.TryAdd(_guid, new List<RtaAlarmLight> {rtaAlarmLight});
 
@@ -388,7 +419,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		{
 			var missingAgents = new List<IActualAgentState> {initializeAgentStateWithDefaults()};
 			var stateGroup = new RtaStateGroupLight {StateGroupId = _guid};
-			var rtaAlarmLight = new RtaAlarmLight {ActivityId = _guid, IsLogOutState = true,StateGroupName = "StateGroupName", StateGroupId = Guid.NewGuid()};
+			var rtaAlarmLight = new RtaAlarmLight {ActivityId = _guid, StateGroupName = "StateGroupName", StateGroupId = Guid.NewGuid()};
 
 			_dataHandler.Expect(d => d.GetMissingAgentStatesFromBatch(_batchId, _sourceId)).Return(missingAgents);
 			_alarmMapper.Expect(a => a.IsAgentLoggedOut(_guid, "StateCode", _guid, _guid)).Return(false);
@@ -410,8 +441,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			var noActivityAlarm = new RtaAlarmLight
 				{
 					ActivityId = Guid.Empty,
-					Name = "NoScheduledActivity",
-					IsLogOutState = true
+					Name = "NoScheduledActivity"
 				};
 			var alarmDictionary = new ConcurrentDictionary<Guid, List<RtaAlarmLight>>();
 			alarmDictionary.TryAdd(Guid.Empty, new List<RtaAlarmLight> {noActivityAlarm});			
@@ -429,7 +459,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 
 			_dataHandler.Expect(d => d.GetMissingAgentStatesFromBatch(_batchId, _sourceId)).Return(missingAgents);
-			_alarmMapper.Expect(a => a.IsAgentLoggedOut(agent.ScheduledId, "StateCode", _guid, _guid)).Return(false);
+			_alarmMapper.Expect(a => a.IsAgentLoggedOut(_guid, "StateCode", _guid, _guid)).Return(false);
 			_alarmMapper.Expect(a => a.GetStateGroup(loggedOutStateCode, Guid.Empty, _guid)).Return(stateGroup);
 			_alarmMapper.Expect(a => a.GetAlarm(agent.ScheduledId, _guid)).Return(noActivityAlarm);
 
