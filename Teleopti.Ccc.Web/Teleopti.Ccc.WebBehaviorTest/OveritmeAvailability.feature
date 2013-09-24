@@ -213,8 +213,6 @@ Scenario: Click overtime availability bar span to next day
 	| End time          | 03:15      |
 	| End time next day | true       |
 
-
-#followings belong to the change overtime availability pbi
 Scenario: Default values on existing overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
@@ -253,7 +251,6 @@ Scenario: Replace overtime availability
 	| Start time | 16:30      |
 	| End time   | 23:45      |
 
-#followings belong to the delete overtime availability pbi
 Scenario: Delete overtime availability
 	Given I have the role 'Access to overtime availability'
 	And I have an overtime availability with
