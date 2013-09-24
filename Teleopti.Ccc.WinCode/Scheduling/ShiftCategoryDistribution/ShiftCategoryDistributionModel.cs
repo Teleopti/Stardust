@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 {
 	public interface IShiftCategoryDistributionModel
 	{
-		//IEnumerable<IPerson> FilteredPersons { get; }
 		MinMax<int> GetMinMaxForShiftCategory(IShiftCategory shiftCategory);
 		double GetAverageForShiftCategory(IShiftCategory shiftCategory);
 		double GetStandardDeviationForShiftCategory(IShiftCategory shiftCategory);
+		double GetSumOfDeviations();
 		event EventHandler ResetNeeded;
 		void SetFilteredPersons(IEnumerable<IPerson> filteredPersons);
 		int ShiftCategoryCount(IPerson person, IShiftCategory shiftCategory);
@@ -62,6 +62,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		public double GetAverageForShiftCategory(IShiftCategory shiftCategory)
 		{
 			var minMax = GetMinMaxForShiftCategory(shiftCategory);
+			_populationStatisticsCalculator.Clear();
 			_populationStatisticsCalculator.AddItem(minMax.Minimum);
 			_populationStatisticsCalculator.AddItem(minMax.Maximum);
 			_populationStatisticsCalculator.Analyze();
@@ -71,10 +72,22 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		public double GetStandardDeviationForShiftCategory(IShiftCategory shiftCategory)
 		{
 			var minMax = GetMinMaxForShiftCategory(shiftCategory);
+			_populationStatisticsCalculator.Clear();
 			_populationStatisticsCalculator.AddItem(minMax.Minimum);
 			_populationStatisticsCalculator.AddItem(minMax.Maximum);
 			_populationStatisticsCalculator.Analyze();
 			return _populationStatisticsCalculator.StandardDeviation;
+		}
+
+		public double GetSumOfDeviations()
+		{
+			double sum = 0;
+			foreach (var category in GetSortedShiftCategories())
+			{
+				sum += GetStandardDeviationForShiftCategory(category);
+			}
+
+			return sum;
 		}
 
 		public event EventHandler ResetNeeded;
