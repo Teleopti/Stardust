@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.TestCommon
 			const string testDatabaseSection = "TestDatabase";
 			var iniFileHelper = new IniFileHelper(ConfigurationManager.AppSettings["dbFile"]);
 
-			SQL_AUTH_STRING = iniFileHelper.ReadIniValue(testDatabaseSection, "SQL_AUTH_STRING");
 			DB_ANALYTICS = iniFileHelper.ReadIniValue(testDatabaseSection, "DB_ANALYTICS");
 			DB_CCC7 = iniFileHelper.ReadIniValue(testDatabaseSection, "DB_CCC7");
 			SQL_SERVER_NAME = iniFileHelper.ReadIniValue(testDatabaseSection, "SQL_SERVER_NAME");
@@ -68,6 +67,12 @@ namespace Teleopti.Ccc.TestCommon
 								string.Format(CultureInfo.InvariantCulture,
 							  "Data Source={0};Initial Catalog={1};User Id={2};Password={3}",
 							  SQL_SERVER_NAME, DB_ANALYTICS, SQL_LOGIN, SQL_PASSWORD);
+
+			SQL_AUTH_STRING =
+				string.Format(CultureInfo.InvariantCulture,
+							  "Data Source={0};User Id={1};Password={2}",
+							  SQL_SERVER_NAME, SQL_LOGIN, SQL_PASSWORD);
+
 
 		}
 	}

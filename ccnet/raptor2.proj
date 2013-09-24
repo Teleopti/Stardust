@@ -273,7 +273,6 @@
 			<InfraTestIniLines Include="SQL_SERVER_NAME=$(DBServer)" />
 			<InfraTestIniLines Include="SQL_LOGIN=$(SQL_LOGIN)" />			
 			<InfraTestIniLines Include="SQL_PASSWORD=$(SQL_PASSWORD)" />
-			<InfraTestIniLines Include="SQL_AUTH_STRING=Data Source=$(DBServer)%3BUser Id=$(SQL_LOGIN)%3BPassword=$(SQL_PASSWORD)" />
 			<InfraTestIniLines Include="AGENTPORTALWEB_nhibConfPath=bin" />
 			<InfraTestIniLines Include="DB_ANALYTICS=$(DBNamePrefix)_analytics" />
 			<InfraTestIniLines Include="WEB_BROKER=$(WEB_BROKER)" />
