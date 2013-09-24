@@ -1333,26 +1333,11 @@
     <Compile Include="Scheduling\PropertyPanel\ShiftCategoryDistributionControl.Designer.cs">
       <DependentUpon>ShiftCategoryDistributionControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\PropertyPanel\ShiftDistributionControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Scheduling\PropertyPanel\ShiftDistributionGrid.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Scheduling\PropertyPanel\ShiftFairnessAnalysisControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Scheduling\PropertyPanel\ShiftFairnessGrid.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Scheduling\PropertyPanel\ShiftPerAgentControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Scheduling\PropertyPanel\ShiftPerAgentControl.Designer.cs">
       <DependentUpon>ShiftPerAgentControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Scheduling\PropertyPanel\ShiftPerAgentGrid.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Scheduling\PropertyPanel\ShiftPerDateControl.cs">
       <SubType>UserControl</SubType>
@@ -1366,7 +1351,6 @@
     <Compile Include="Scheduling\PropertyPanel\ShiftStatisticsControl.Designer.cs">
       <DependentUpon>ShiftStatisticsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\PropertyPanel\UpdateSelectionForShiftDistribution.cs" />
     <Compile Include="Scheduling\QuickAccessState.cs" />
     <Compile Include="Scheduling\ScheduleOvertimeCommand.cs" />
     <Compile Include="Scheduling\SchedulerRibbonHelper.cs" />
@@ -2734,12 +2718,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftCategoryDistributionControl.resx">
       <DependentUpon>ShiftCategoryDistributionControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftDistributionControl.resx">
-      <DependentUpon>ShiftDistributionControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftFairnessAnalysisControl.resx">
-      <DependentUpon>ShiftFairnessAnalysisControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftPerAgentControl.resx">
       <DependentUpon>ShiftPerAgentControl.cs</DependentUpon>

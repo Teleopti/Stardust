@@ -41,21 +41,41 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
 			if (rowIndex <= sortedCategories.Count && rowIndex > 0)
 			{
-				var category = sortedCategories[rowIndex - 1];
-				if (colIndex == 1 || colIndex == 2)
+				setValues(style, rowIndex, colIndex, sortedCategories);
+				return;
+			}
+
+			if (rowIndex > sortedCategories.Count)
+			{
+				if (colIndex < 4)
 				{
-					MinMax<int> minMax = _model.GetMinMaxForShiftCategory(category);
-					style.CellType = "IntegerReadOnlyCell";
-					style.CellValue = colIndex == 1 ? minMax.Minimum : minMax.Maximum;
+					style.CellType = "IgnoreCellModel";
 				}
 				else
 				{
 					style.CellType = "NumericReadOnlyCell";
-					style.CellValue = 0;
-					style.CellValue = colIndex == 3 ? _model.GetAverageForShiftCategory(category) : _model.GetStandardDeviationForShiftCategory(category);
+					style.CellValue = _model.GetSumOfDeviations();
 				}
+				
 			}
+		}
 
+		private void setValues(GridStyleInfo style, int rowIndex, int colIndex, IList<IShiftCategory> sortedCategories)
+		{
+			var category = sortedCategories[rowIndex - 1];
+			if (colIndex == 1 || colIndex == 2)
+			{
+				MinMax<int> minMax = _model.GetMinMaxForShiftCategory(category);
+				style.CellType = "IntegerReadOnlyCell";
+				style.CellValue = colIndex == 1 ? minMax.Minimum : minMax.Maximum;
+			}
+			else
+			{
+				style.CellType = "NumericReadOnlyCell";
+				style.CellValue = colIndex == 3
+					                  ? _model.GetAverageForShiftCategory(category)
+					                  : _model.GetStandardDeviationForShiftCategory(category);
+			}
 		}
 
 		private static void setRowHeader(GridStyleInfo style, int rowIndex, IList<IShiftCategory> sortedCategories)
@@ -92,7 +112,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		public int RowCount()
 		{
 			//could be better
-			return _model.GetSortedShiftCategories().Count;
+			return _model.GetSortedShiftCategories().Count + 1;
 		}
 
 		public void ReSort(int colIndex)

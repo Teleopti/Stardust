@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 {
-	public interface IShiftPerDayPresenter
+	public interface IShiftPerDatePresenter
 	{
 		void SetCellInfo(GridStyleInfo style, int rowIndex, int colIndex, object columnTag);
 		int RowCount
@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		void ReSort(object tag, bool keepOrder);
 	}
 
-	public class ShiftPerDayPresenter : IShiftPerDayPresenter
+	public class ShiftPerDatePresenter : IShiftPerDatePresenter
 	{
 		private readonly IShiftCategoryDistributionModel _model;
 		private IList<DateOnly> _sortedDates = new List<DateOnly>();
 		private IShiftCategory _lastSortedCategory;
 		private bool _lastSortOrderAscending = true;
 
-		public ShiftPerDayPresenter(IShiftCategoryDistributionModel model)
+		public ShiftPerDatePresenter(IShiftCategoryDistributionModel model)
 		{
 			_model = model;
 		}

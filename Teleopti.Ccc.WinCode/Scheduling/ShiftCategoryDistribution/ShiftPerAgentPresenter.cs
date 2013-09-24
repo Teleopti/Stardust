@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		void SetCellInfo(GridStyleInfo style, int rowIndex, int colIndex, object columnTag);
 		int RowCount { get; }
 		int ColumnCount();
-		void ReSort(object tag);
+		void ReSort(object tag, bool keepOrder);
 	}
 
 	public class ShiftPerAgentPresenter : IShiftPerAgentPresenter
@@ -65,12 +65,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			return _model.GetSortedShiftCategories().Count;
 		}
 
-		public void ReSort(object tag)
+		public void ReSort(object tag, bool keepOrder)
 		{
 			var shiftCategory = tag as IShiftCategory;
 			if (shiftCategory == null && _lastSortedCategory == null)
 			{
-				_lastSortOrderAscending = !_lastSortOrderAscending;
+				if(!keepOrder)
+					_lastSortOrderAscending = !_lastSortOrderAscending;
+
 				_sortedPersons = _model.GetSortedPersons(_lastSortOrderAscending);
 				return;
 			}

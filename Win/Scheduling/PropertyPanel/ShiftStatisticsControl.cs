@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			gridControl1.ResizingColumns += shiftPerAgentGridResizingColumns;
 			gridControl1.CellModels.Add("IntegerReadOnlyCell", new NumericReadOnlyCellModel(gridControl1.Model));
 			gridControl1.CellModels.Add("IgnoreCellModel", new IgnoreCellModel(gridControl1.Model));
-			gridControl1.CellModels.Add("NumericReadOnlyCell", new NumericReadOnlyCellModel(gridControl1.Model));
+			gridControl1.CellModels.Add("NumericReadOnlyCell", new NumericReadOnlyCellModel(gridControl1.Model){NumberOfDecimals = 2});
 		}
 
 		public void SetModel(IShiftCategoryDistributionModel model)
