@@ -281,6 +281,7 @@
 			<InfraTestIniLines Include="WEB_BROKER_BACKPLANE=$(WEB_BROKER_BACKPLANE)" />	
 			<InfraTestIniLines Include="servicebus=false" />
 			<InfraTestIniLines Include="create=true" />
+			<InfraTestIniLines Include="dbFile=$(InfraTestIni)" />
 			
 		</ItemGroup> 
 
