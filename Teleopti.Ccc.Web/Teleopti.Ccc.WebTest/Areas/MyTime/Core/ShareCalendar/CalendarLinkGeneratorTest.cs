@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -63,8 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 		[Test]
 		public void ShouldGetCalendarForPerson()
 		{
-
-			var person = PersonFactory.CreatePersonWithGuid("first", "last");
+			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(DateOnly.Today.AddDays(181));
 			_personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
 			_personalSettingDataRepository.Stub(
 				x => x.FindValueByKeyAndOwnerPerson("CalendarLinkSettings", person, new CalendarLinkSettings())).IgnoreArguments()
@@ -100,6 +100,40 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 				x => x.Execute(Thread.CurrentPrincipal as ITeleoptiPrincipal, _unitOfWork, _personRepository));
 			result.Should().Contain("DTSTART:20130708T063000Z");
 			result.Should().Contain("DTEND:20130708T083000Z");
+		}
+
+		[Test]
+		public void ShouldNotGetUnpublishedCalendarForPerson()
+		{
+			var publishedToDate = DateOnly.Today.AddDays(30);
+			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(publishedToDate);
+			_personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
+			_personalSettingDataRepository.Stub(
+				x => x.FindValueByKeyAndOwnerPerson("CalendarLinkSettings", person, new CalendarLinkSettings())).IgnoreArguments()
+										  .Return(new CalendarLinkSettings
+										  {
+											  IsActive = true
+										  });
+			_repositoryFactory.Stub(x => x.CreatePersonalSettingDataRepository(_unitOfWork)).Return(_personalSettingDataRepository);
+			_repositoryFactory.Stub(x => x.CreatePersonScheduleDayReadModelFinder(_unitOfWork)).Return(_personScheduleDayReadModelFinder);
+			_permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
+							   .Return(true);
+			var deserializer = new NewtonsoftJsonDeserializer<ExpandoObject>();
+			var target = new CalendarLinkGenerator(_repositoryFactory, _dataSourcesProvider, deserializer, _now,
+												   _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider
+				);
+			var calendarlinkid = new CalendarLinkId
+			{
+				DataSourceName = dataSourceName,
+				PersonId = person.Id.Value
+			};
+			var startDate = DateOnly.Today.AddDays(-60);
+			_personScheduleDayReadModelFinder.Stub(x => x.ForPerson(startDate, publishedToDate, person.Id.Value)).Return(new PersonScheduleDayReadModel[] { });
+
+			target.Generate(calendarlinkid);
+
+			_personScheduleDayReadModelFinder.AssertWasNotCalled(x => x.ForPerson(startDate, DateOnly.Today.AddDays(180), person.Id.Value));
+			_personScheduleDayReadModelFinder.AssertWasCalled(x => x.ForPerson(startDate, publishedToDate, person.Id.Value));
 		}
 
 		[Test, ExpectedException(typeof(PermissionException))]
