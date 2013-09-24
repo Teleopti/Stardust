@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			if (IniFileInfo.CassiniDev)
 			{
 				Url = new Uri("http://localhost:57567/");
-				_server = new Server(57567, IniFileInfo.SitePath);
+				_server = new Server(57567, IniFileInfo.AGENTPORTALWEB_nhibConfPath);
 				_server.Start();
 			} 
 			else

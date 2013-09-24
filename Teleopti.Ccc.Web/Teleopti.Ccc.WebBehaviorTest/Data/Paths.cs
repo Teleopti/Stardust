@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	{
 		public static string WebBinPath()
 		{
-			var path = Path.Combine(IniFileInfo.SitePath, "bin");
+			var path = Path.Combine(IniFileInfo.AGENTPORTALWEB_nhibConfPath, "bin");
 			return new DirectoryInfo(path).FullName;
 		}
 
@@ -20,13 +20,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static string WebPath()
 		{
-			var path = IniFileInfo.SitePath;
+			var path = IniFileInfo.AGENTPORTALWEB_nhibConfPath;
 			return new DirectoryInfo(path).FullName;
 		}
 
 		public static string FindProjectPath(params string[] projectPaths)
 		{
-			var rootPaths = new[] { IniFileInfo.SitePath, AppDomain.CurrentDomain.BaseDirectory, Directory.GetCurrentDirectory() };
+			var rootPaths = new[] { IniFileInfo.AGENTPORTALWEB_nhibConfPath, AppDomain.CurrentDomain.BaseDirectory, Directory.GetCurrentDirectory() };
 			var relativePaths = new[] { "", @"..\", @"..\..\", @"..\..\..\", @"..\..\..\..\" };
 			var possiblePaths = (from root in rootPaths
 								 from reletive in relativePaths
