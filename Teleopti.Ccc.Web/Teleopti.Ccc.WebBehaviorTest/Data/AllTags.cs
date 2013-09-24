@@ -19,8 +19,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Add("DB_CCC7", IniFileInfo.DB_CCC7);
 			Add("AnalyticsDb", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
 			Add("AnalyticsDatabase", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
-			Add("ServerName", IniFileInfo.ServerName);
-			Add("Database", IniFileInfo.Database);
 			Add("Url", TestSiteConfigurationSetup.Url.ToString());
 			Add("Port", TestSiteConfigurationSetup.Port.ToString());
 			Add("AgentPortalWebURL", TestSiteConfigurationSetup.Url.ToString());
