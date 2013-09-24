@@ -59,7 +59,7 @@
 .calendarview-week li{
 	font-size: 12px;
 	display: inline-block;
-	height: 117px;
+	height: 87px;
 	vertical-align: top;
 	width: 130px;
 }
@@ -67,9 +67,6 @@
 
 .calendarview-week li div.day-content 
 {
-	padding-bottom: 10px;
-	padding-top: 10px;
-	padding-left: 2px;
 	background-color: white;
 }
 
@@ -95,8 +92,9 @@
 .calendarview-week li.non-editable .meeting-icon{ opacity: 0.1;}
 .calendarview-week li.non-editable .preference-must-have{ opacity: 0.1;}
 .calendarview-week li.non-editable .day-content-text{ opacity: 0.5;}
+.calendarview-week li.non-editable .absence{ opacity: 0.5;}
 
-.calendarview-week li .day-content{text-align: center; min-height:76px; border-bottom: none;}
+.calendarview-week li .day-content{text-align: center; min-height:66px; border-bottom: none;}
 .calendarview-week li .day-content span{min-height: 15px;}
 
 

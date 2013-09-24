@@ -1,15 +1,16 @@
 ﻿
 .preference 
 {
-    height: 30px;
+    height: 20px;
 }
 .preference-text 
 {
     float: left;
     font-weight: bold;
-    height: 20px;
     max-width: 77px;
+	min-width: 35px;
     overflow: hidden;
+	text-shadow: none;
 }
 .preference-must-have {
 	margin-bottom: 3px;
@@ -25,8 +26,6 @@
     position: relative;
     top: -2px;
     margin-left: 1px;
-    padding-top: 0px;
-    padding-bottom: 3px;
     border-radius: 4px;
     border: 1px solid lightgray;
 	cursor: pointer;
@@ -95,9 +94,6 @@
 	font-size: 11px;
 	height: 14px;
 	width: auto;
-	padding-top: 1px;
-	padding-right: 3px;
-	padding-left: 3px;
 	border-radius: 3px;
 }
 
@@ -109,43 +105,16 @@
 
 .time-limitation 
 {
+	display: block; /* required because chrome will display a different height without content otherwise */
+	height: 13px;
+	padding-left: 5px;
+	margin-left: 5px;
+	text-indent: 12px;
 	font-size: 11px;
 	height: 13px;
-	padding-bottom: 1px;
 	font-variant: small-caps;
 	white-space: nowrap;
 }
-/*.time-limitation.icon-step-backward, 
-.time-limitation.icon-step-forward, 
-.time-limitation.icon-resize-horizontal*/ 
-.time-limitation.arrow-icon
-{
-	display: block; /* required because chrome will display a different height without content otherwise */
-	height: 13px;
-	padding-left: 6px;
-	text-indent: 12px;
-	
-}
-.time-limitation.icon.leftarrow,
-.time-limitation.icon.rightarrow,
-.time-limitation.icon.doublearrow-blue
-{
-	display: block; /* required because chrome will display a different height without content otherwise */
-	width: 120px;
-	height: 13px;
-	padding-left: 6px;
-}
-
-.time-limitation-label.icon.leftarrow,
-.time-limitation-label.icon.rightarrow,
-.time-limitation-label.icon.doublearrow-blue
-.time-limitation-label.arrow-icon
-{
-	/*display: block; /* required because chrome will display a different height without content otherwise */
-	width: 10px;
-	height: 14px;
-}
-
 
 .feedback-detail 
 {
