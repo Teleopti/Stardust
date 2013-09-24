@@ -239,7 +239,6 @@
     <Compile Include="Common\Commands\ApplicationCommandModelTest.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\CommandBehaviorBindingTest.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\CommandBehaviorTest.cs" />
-    <Compile Include="Common\Commands\DelegateCommandTest.cs" />
     <Compile Include="Common\Commands\TesterForCommandModels.cs" />
     <Compile Include="Common\Commands\CommandHelperTest.cs" />
     <Compile Include="Common\Commands\CommandModelTest.cs" />
