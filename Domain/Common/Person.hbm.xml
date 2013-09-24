@@ -241,13 +241,6 @@
                                 :StartDateTime)
     ]]>
   </query>
-	<query name="FindPossibleShiftTrades">
-		<![CDATA[
-		select p from Person p
-		where p<>:loggedOnUser and p.WorkflowControlSet is not null
-		order by newid()
-		]]>
-	</query>
   <database-object>
     <create>SELECT 1</create>
     <drop>

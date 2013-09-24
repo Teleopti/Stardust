@@ -60,17 +60,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					                });
 				
 			
-			CreateMap<DateOnly, ShiftTradeScheduleViewModel>()
-				.ConvertUsing(dateOnly =>
+			CreateMap<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>()
+				.ConvertUsing(source =>
 					{
-						var myDomainScheduleDay = _shiftTradeRequestProvider.RetrieveMyScheduledDay(dateOnly);
+						var myDomainScheduleDay = _shiftTradeRequestProvider.RetrieveMyScheduledDay(source.ShiftTradeDate);
 						var myScheduleDay = createPersonDay(myDomainScheduleDay.Person, myDomainScheduleDay);
-						var possibleShiftTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(dateOnly);
+						var possibleShiftTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(source);
 
-						var possibleTradePersonsSchedule = _shiftTradeRequestProvider.RetrievePossibleTradePersonsScheduleDay(dateOnly, possibleShiftTradePersons);
+						var possibleTradePersonsSchedule = _shiftTradeRequestProvider.RetrievePossibleTradePersonsScheduleDay(source.ShiftTradeDate, possibleShiftTradePersons);
 						var possibleTradePersonDayCollection = createPossibleTradePersonsDayCollection(possibleShiftTradePersons, possibleTradePersonsSchedule);
 
-						var timeLineRangeTot = setTimeLineRange(dateOnly, myScheduleDay.ScheduleLayers, possibleTradePersonDayCollection,
+						var timeLineRangeTot = setTimeLineRange(source.ShiftTradeDate, myScheduleDay.ScheduleLayers, possibleTradePersonDayCollection,
 																			 myScheduleDay.PersonTimeZone);
 
 						var myScheduleViewModel = new ShiftTradePersonScheduleViewModel
