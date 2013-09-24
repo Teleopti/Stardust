@@ -296,7 +296,7 @@
 
 		<FileUpdate Files="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config"
 			Encoding="windows-1252"
-			Regex="c:\infratest.ini"
+			Regex="_replace_"
 			ReplacementText="$(InfraTestIni)"/>
 			
 		<!--Explicte copy the correct config to each project that is using it
