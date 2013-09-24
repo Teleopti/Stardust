@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static string WebPath()
 		{
-			var path = IniFileInfo.AGENTPORTALWEB_nhibConfPath;
+			var path = IniFileInfo.SitePath;
 			return new DirectoryInfo(path).FullName;
 		}
 

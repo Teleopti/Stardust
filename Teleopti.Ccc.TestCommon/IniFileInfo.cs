@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon
 		public static string WEB_BROKER { get; private set; }
 		public static string ConnectionString { get; private set; }
 		public static string ConnectionStringMatrix { get; private set; }
-
+		public static string SitePath { get; private set; }
 		public static bool SqlOutput { get; private set; }
 		public static string SQL_SERVER_NAME { get; private set; }
 		public static string DB_CCC7 { get; private set; }
@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.TestCommon
 			SqlOutput = iniFileHelper.ReadIniValue(testDatabaseSection, "sqloutput") == "true";
 			Url = iniFileHelper.ReadIniValue(testDatabaseSection, "url");
 			AGENTPORTALWEB_nhibConfPath = iniFileHelper.ReadIniValue(testDatabaseSection, "AGENTPORTALWEB_nhibConfPath");
+			SitePath = iniFileHelper.ReadIniValue(testDatabaseSection, "sitepath");
 			var iisexpress = iniFileHelper.ReadIniValue(testDatabaseSection, "iisexpress");
 			IISExpress = iisexpress == "true" || string.IsNullOrEmpty(iisexpress);
 			ServiceBus = iniFileHelper.ReadIniValue(testDatabaseSection, "servicebus") == "true";

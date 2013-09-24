@@ -275,7 +275,8 @@
 			<InfraTestIniLines Include="SQL_PASSWORD=$(SQL_PASSWORD)" />
 			<InfraTestIniLines Include="SQL_AUTH_STRING=Data Source=$(DBServer)%3BUser Id=$(SQL_LOGIN)%3BPassword=$(SQL_PASSWORD)" />
 			<InfraTestIniLines Include="url=$(AgentPortalWebURL)" />
-			<InfraTestIniLines Include="AGENTPORTALWEB_nhibConfPath=$(AgentPortalWebSitePath)" />
+			<InfraTestIniLines Include="AGENTPORTALWEB_nhibConfPath=$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web" />
+			<InfraTestIniLines Include="SitePath=$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web" />
 			<InfraTestIniLines Include="DB_ANALYTICS=$(DBNamePrefix)_analytics" />
 			<InfraTestIniLines Include="WEB_BROKER=$(WEB_BROKER)" />
 			<InfraTestIniLines Include="WEB_BROKER_BACKPLANE=$(WEB_BROKER_BACKPLANE)" />	

@@ -24,8 +24,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Add("AgentPortalWebURL", TestSiteConfigurationSetup.Url.ToString());
 			Add("SitePath", Paths.WebPath());
 			Add("ConfigPath", Paths.WebBinPath());
-			Add("MessageBroker", TestSiteConfigurationSetup.Url.ToString());
+			Add("WEB_BROKER", TestSiteConfigurationSetup.Url.ToString());
             Add("MachineKey", CryptoCreator.MachineKeyCreator.GetConfig());
+			Add("SitePath", IniFileInfo.SitePath);
 	}
 
 		public AllTags(IEnumerable<KeyValuePair<string, string>> additionalTags)
