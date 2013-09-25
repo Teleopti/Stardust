@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			GridHelper.GridStyle(gridControl1);
 			gridControl1.ResizingColumns += shiftPerAgentGridResizingColumns;
 			gridControl1.CellModels.Add("IntegerReadOnlyCell", initializeNumericNoDecimalsReadOnlyCell());
+			gridControl1.ResetVolatileData();
 		}
 
 		public void SetModel(IShiftCategoryDistributionModel model)
@@ -27,6 +28,11 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			}
 			_presenter = new ShiftPerAgentPresenter(model);
 			_presenter.ReSort(null, true);
+			gridControl1.ResetVolatileData();
+			gridControl1.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
+			gridControl1.UpdateScrollBars();
+			gridControl1.Invalidate(true);
+			
 		}
 
 		void modelResetNeeded(object sender, EventArgs e)
@@ -73,7 +79,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		{
 			if (_presenter == null)
 				return;
-			
+
 			e.Count = _presenter.RowCount;
 			e.Handled = true;
 		}

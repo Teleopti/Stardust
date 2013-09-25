@@ -122,21 +122,23 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
 		public IList<IShiftCategory> GetSortedShiftCategories()
 		{
-			var result = new HashSet<IShiftCategory>();
-			foreach (var filteredPerson in _filteredPersons)
-			{
-				foreach (var shiftCategory in _cachedNumberOfEachCategoryPerPerson.GetValue(filteredPerson).Keys)
-				{
-					result.Add(shiftCategory);
-				}
-			}
+			//var result = new HashSet<IShiftCategory>();
+			//foreach (var filteredPerson in _filteredPersons)
+			//{
+			//	foreach (var shiftCategory in _cachedNumberOfEachCategoryPerPerson.GetValue(filteredPerson).Keys)
+			//	{
+			//		result.Add(shiftCategory);
+			//	}
+			//}
 
-			if (_lastShiftCategoryCount != result.Count)
-			{
-				_lastShiftCategoryCount = result.Count;
-				OnResetNeeded();
-			}
+			//if (_lastShiftCategoryCount != result.Count)
+			//{
+			//	_lastShiftCategoryCount = result.Count;
+			//	OnResetNeeded();
+			//}
 
+			//above returned all anyway so...
+			var result = _cachedShiftCategoryDistribution.AllShiftCategories;
 			var sortedCategories = from c in result
 								   orderby c.Description.ShortName, c.Description.Name
 								   select c;

@@ -29,7 +29,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				model.ResetNeeded += modelResetNeeded;
 			}
 			_presenter = new ShiftStatisticsPresenter(model);
-			_presenter.ReSort(_lastSortColumn);
+			gridControl1.ResetVolatileData();
+			gridControl1.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
+			gridControl1.UpdateScrollBars();
+			gridControl1.Invalidate(true);
 		}
 
 		void modelResetNeeded(object sender, EventArgs e)

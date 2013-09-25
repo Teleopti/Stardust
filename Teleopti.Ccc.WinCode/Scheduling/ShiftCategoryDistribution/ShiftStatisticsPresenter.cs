@@ -82,12 +82,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		{
 			if (rowIndex <= sortedCategories.Count)
 			{
-				//style.Text = sortedCategories[rowIndex-1].Description.ShortName;
 				style.CellValue = sortedCategories[rowIndex - 1].Description.ShortName;
 			}
 			else
 			{
-				//style.Text = UserTexts.Resources.Total;
 				style.CellValue = UserTexts.Resources.Total;
 			}
 		}
@@ -103,7 +101,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 					style.CellValue = UserTexts.Resources.Max;
 					break;
 				case 3:
-					style.CellValue = "xxAvarage";
+					style.CellValue = UserTexts.Resources.Average;
 					break;
 				case 4:
 					style.CellValue = UserTexts.Resources.StandardDeviation;

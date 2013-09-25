@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Collection
 		void SetFilteredPersons(IEnumerable<IPerson> filteredPersons);
 		//refact should only return value for requested category
 		IDictionary<IShiftCategory, MinMax<int>> GetMinMaxDictionary(IEnumerable<IPerson> filteredPersons);
+		IList<IShiftCategory> AllShiftCategories { get; }
 	}
 
 	public class CachedShiftCategoryDistribution : ICachedShiftCategoryDistribution
@@ -30,6 +31,11 @@ namespace Teleopti.Ccc.Domain.Collection
 			_cachedNumberOfEachCategoryPerPerson = cachedNumberOfEachCategoryPerPerson;
 			_allShiftCategories = allShiftCategories;
 			_scheduleDictionary.PartModified += scheduleDictionary_PartModified;
+		}
+
+		public IList<IShiftCategory> AllShiftCategories
+		{
+			get { return _allShiftCategories; }
 		}
 
 		void scheduleDictionary_PartModified(object sender, ModifyEventArgs e)

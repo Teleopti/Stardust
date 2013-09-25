@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		public ShiftCategoryDistributionControl()
 		{
 			InitializeComponent();
+			if(!DesignMode)
+				SetTexts();
 		}
 
 		public void SetModel(IShiftCategoryDistributionModel model)

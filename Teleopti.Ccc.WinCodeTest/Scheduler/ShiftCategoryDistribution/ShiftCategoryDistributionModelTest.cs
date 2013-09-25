@@ -71,9 +71,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_cachedNumberOfEachCategoryPerPerson.GetValue(person1)).Return(value);
+				//Expect.Call(_cachedNumberOfEachCategoryPerPerson.GetValue(person1)).Return(value);
 				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
 				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons));
+				Expect.Call(_cachedShiftCategoryDistribution.AllShiftCategories).Return(new List<IShiftCategory> {cat1, cat2});
 			}
 
 			using (_mocks.Playback())
