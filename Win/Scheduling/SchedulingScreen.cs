@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Autofac;
 using MbCache.Core;
+using Teleopti.Ccc.Domain.Common.Logging;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -3638,113 +3639,118 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		private void _backgroundWorkerScheduling_DoWork(object sender, DoWorkEventArgs e)
-		{
-			setThreadCulture();
-			var schedulingOptions = _optimizerOriginalPreferences.SchedulingOptions;
-			schedulingOptions.DayOffTemplate = _dayOffTemplate;
-			bool lastCalculationState = _schedulerState.SchedulingResultState.SkipResourceCalculation;
-			_schedulerState.SchedulingResultState.SkipResourceCalculation = false;
-			if (lastCalculationState)
-				_optimizationHelperWin.ResourceCalculateAllDays(e, null, true);
+        private void runBackgroundWorkerScheduling(DoWorkEventArgs e)
+        {
+            setThreadCulture();
+            var schedulingOptions = _optimizerOriginalPreferences.SchedulingOptions;
+            schedulingOptions.DayOffTemplate = _dayOffTemplate;
+            bool lastCalculationState = _schedulerState.SchedulingResultState.SkipResourceCalculation;
+            _schedulerState.SchedulingResultState.SkipResourceCalculation = false;
+            if (lastCalculationState)
+                _optimizationHelperWin.ResourceCalculateAllDays(e, null, true);
 
-			_totalScheduled = 0;
-			var argument = (SchedulingAndOptimizeArgument)e.Argument;
+            _totalScheduled = 0;
+            var argument = (SchedulingAndOptimizeArgument)e.Argument;
 
-			turnOffCalculateMinMaxCacheIfNeeded(schedulingOptions);
+            turnOffCalculateMinMaxCacheIfNeeded(schedulingOptions);
 
-			//set to false for first scheduling and then use it for RemoveShiftCategoryBackToLegalState
-			var useShiftCategoryLimitations = schedulingOptions.UseShiftCategoryLimitations;
-			schedulingOptions.UseShiftCategoryLimitations = false;
-			var scheduleDays = argument.ScheduleDays;
+            //set to false for first scheduling and then use it for RemoveShiftCategoryBackToLegalState
+            var useShiftCategoryLimitations = schedulingOptions.UseShiftCategoryLimitations;
+            schedulingOptions.UseShiftCategoryLimitations = false;
+            var scheduleDays = argument.ScheduleDays;
 
-			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-			var selectedPeriod =
-				new DateOnlyPeriod(
-					OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone),
-					OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
+            var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+            var selectedPeriod =
+                new DateOnlyPeriod(
+                    OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone),
+                    OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
 
             IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = OptimizerHelperHelper.CreateMatrixList(scheduleDays, _schedulerState.SchedulingResultState, _container, selectedPeriod);
-			if (matrixesOfSelectedScheduleDays.Count == 0)
-				return;
+            if (matrixesOfSelectedScheduleDays.Count == 0)
+                return;
 
-			var allScheduleDays = new List<IScheduleDay>();
+            var allScheduleDays = new List<IScheduleDay>();
 
-			foreach (var scheduleMatrixPro in matrixesOfSelectedScheduleDays)
-			{
-				allScheduleDays.AddRange(_schedulerState.Schedules[scheduleMatrixPro.Person].ScheduledDayCollection(scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod).ToList());
-			}
+            foreach (var scheduleMatrixPro in matrixesOfSelectedScheduleDays)
+            {
+                allScheduleDays.AddRange(_schedulerState.Schedules[scheduleMatrixPro.Person].ScheduledDayCollection(scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod).ToList());
+            }
 
-			var allMatrixesOfSelectedPersons = OptimizerHelperHelper.CreateMatrixList(allScheduleDays, _schedulerState.SchedulingResultState, _container, selectedPeriod);
+            var allMatrixesOfSelectedPersons = OptimizerHelperHelper.CreateMatrixList(allScheduleDays, _schedulerState.SchedulingResultState, _container, selectedPeriod);
 
-			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
+            _undoRedo.CreateBatch(Resources.UndoRedoScheduling);
 
-			//Extend period with 10 days to handle block scheduling
-			DateOnlyPeriod groupPagePeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
+            //Extend period with 10 days to handle block scheduling
+            DateOnlyPeriod groupPagePeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
             //if (schedulingOptions.UseBlockScheduling != BlockFinderType.None)
             //    groupPagePeriod = new DateOnlyPeriod(groupPagePeriod.StartDate.AddDays(-10), groupPagePeriod.EndDate.AddDays(10));
 
-			_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
-				   .CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(), _optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness);
+            _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
+                   .CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(), _optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness);
 
-			if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
-			{
-				schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
+            if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
+            {
+                schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
-				if (!schedulingOptions.UseTeamBlockPerOption)
-				{
-					if (schedulingOptions.UseGroupScheduling)
-					{
-						var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container, selectedPeriod);
-						_scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixesOfSelectedScheduleDays,
-						                                       allMatrixesOfSelectedPersons, schedulingOptions,
-						                                       _container.Resolve<IGroupPageHelper>(), allMatrixes);
-					}
-					else
-						_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays,
-						                                                    allMatrixesOfSelectedPersons, true,
-						                                                    _backgroundWorkerScheduling, schedulingOptions);
-				}
-				else
-				{
-					//when the advance scheduling is required
-					_groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
+                if (!schedulingOptions.UseTeamBlockPerOption)
+                {
+                    if (schedulingOptions.UseGroupScheduling)
+                    {
+                        var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container, selectedPeriod);
+                        _scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixesOfSelectedScheduleDays,
+                                                               allMatrixesOfSelectedPersons, schedulingOptions,
+                                                               _container.Resolve<IGroupPageHelper>(), allMatrixes);
+                    }
+                    else
+                        _scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays,
+                                                                            allMatrixesOfSelectedPersons, true,
+                                                                            _backgroundWorkerScheduling, schedulingOptions);
+                }
+                else
+                {
+                    //when the advance scheduling is required
+                    _groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
 
-					var allVisibleMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container, selectedPeriod);
-					_scheduleOptimizerHelper.BlockTeamScheduleSelected(matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons,
-					                                                   allVisibleMatrixes, _backgroundWorkerScheduling,
-					                                                   schedulingOptions, scheduleDays);
-				}
+                    var allVisibleMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container, selectedPeriod);
+                    _scheduleOptimizerHelper.BlockTeamScheduleSelected(matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons,
+                                                                       allVisibleMatrixes, _backgroundWorkerScheduling,
+                                                                       schedulingOptions, scheduleDays);
+                }
 
-			}
-			else
-			{
-				_scheduleOptimizerHelper.ScheduleSelectedStudents(scheduleDays, _backgroundWorkerScheduling, schedulingOptions);
-			}
+            }
+            else
+            {
+                _scheduleOptimizerHelper.ScheduleSelectedStudents(scheduleDays, _backgroundWorkerScheduling, schedulingOptions);
+            }
 
-			//shiftcategorylimitations
-			if (!_backgroundWorkerScheduling.CancellationPending)
-			{
-				schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
-				if (schedulingOptions.UseShiftCategoryLimitations)
-				{
-					IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
+            //shiftcategorylimitations
+            if (!_backgroundWorkerScheduling.CancellationPending)
+            {
+                schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
+                if (schedulingOptions.UseShiftCategoryLimitations)
+                {
+                    IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
 
-					if (schedulingOptions.UseGroupScheduling)
-					{
-						allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container, selectedPeriod);
-					}
+                    if (schedulingOptions.UseGroupScheduling)
+                    {
+                        allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container, selectedPeriod);
+                    }
 
-					_scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays, _backgroundWorkerScheduling,
-																				 _optimizationPreferences,
-																				 schedulingOptions,
-																				 selectedPeriod, allMatrixes);
-				}
-			}
-			_schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
-			_undoRedo.CommitBatch();
-		}
+                    _scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays, _backgroundWorkerScheduling,
+                                                                                 _optimizationPreferences,
+                                                                                 schedulingOptions,
+                                                                                 selectedPeriod, allMatrixes);
+                }
+            }
+            _schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
+            _undoRedo.CommitBatch();
+        }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private void _backgroundWorkerScheduling_DoWork(object sender, DoWorkEventArgs e)
+		{
+            AdvanceLoggingService.LogSchedulingInfo(null, 1, 1,()=> runBackgroundWorkerScheduling(e));
+         }
 
 		private void turnOffCalculateMinMaxCacheIfNeeded(ISchedulingOptions schedulingOptions)
 		{
