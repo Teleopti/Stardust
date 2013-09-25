@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Log.Debug("Preparing for test run");
 
+			Browser.SelectDefaultVisibleBrowser();
 			Browser.NotifyBeforeTestRun();
 
 			try

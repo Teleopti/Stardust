@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE;
@@ -20,6 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		private static readonly IDictionary<string, IBrowserActivator> Activators =
 			new Dictionary<string, IBrowserActivator>
 				{
+					{"PhantomJS", new CoypuPhantomJsActivator()},
 					{"Chrome", new CoypuChromeActivator()},
 					{"WatiN", new WatiNSingleBrowserIEActivator()}
 				};
@@ -47,6 +47,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Activators.ForEach(a => a.Value.Start(timeout, retry));
 			Timeouts.Timeout = timeout;
 			Timeouts.Poll = retry;
+		}
+
+		public static void SelectDefaultVisibleBrowser()
+		{
+			_activator = Activators.Single(x => x.Key == "Chrome").Value;
 		}
 
 		public static void SelectBrowserByTag()
