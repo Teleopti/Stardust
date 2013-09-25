@@ -701,11 +701,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			{
 				if ((AbsenceCollection != null) && (AbsenceCollection.Count > 0))
 				{
-					var accountForPersonCollection = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
+					var accounts = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
 					IAbsence absence = SelectedPersonAccountAbsenceType ?? _filteredAbsenceCollection[0];
 					IAccount account = absence.Tracker.CreatePersonAccount(SelectedDate);
-					accountForPersonCollection.Add(absence, account);
-					UpdatePersonAccounts(accountForPersonCollection, account);
+					accounts.Add(absence, account);
+					UpdatePersonAccounts(accounts, account);
 				}
 			}
 		}
@@ -1515,7 +1515,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
         private void UpdatePersonAccounts(IPersonAccountCollection accounts, IAccount account)
         {
-			var updater = new PersonAccountUpdater(accounts, _refreshService);
+			var updater = new PeopleAccountUpdaterForAddDelete(accounts, _refreshService);
             updater.Update(account.Owner.Person);
         }
 

@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 	[TestFixture]
 	public class PersonAccountUpdaterTest
 	{
-		private PersonAccountUpdater _target;
+		private PeopleAccountUpdaterForAddDelete _target;
 		private MockRepository _mocks;
         private IPersonAbsenceAccountRepository _provider;
 		private IPerson _person;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var accountCollection = PersonAccountCollectionFactory.Create(_person, _absence1, _absence2, out account1, out account2);
 		    var absence1 = AbsenceFactory.CreateAbsence("Test Absence1");
             absence1.SetId(Guid.NewGuid());
-			_target = new PersonAccountUpdater(accountCollection, _refreshService);
+			_target = new PeopleAccountUpdaterForAddDelete(accountCollection, _refreshService);
 
 		    using (_mocks.Record())
 			{
