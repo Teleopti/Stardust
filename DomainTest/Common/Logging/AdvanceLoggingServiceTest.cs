@@ -1,26 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Logging;
 using log4net.Appender;
 using log4net.Config;
 using log4net.Filter;
-using NUnit.Framework;
-using SharpTestsEx;
-using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.DomainTest.Common;
 
-namespace Teleopti.Ccc.DomainTest.Helper
+namespace Teleopti.Ccc.DomainTest.Common.Logging
 {
     [TestFixture]
-    public class LogPointOutputTest
+    public class AdvanceLoggingServiceTest
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void ShouldListenToCorrectName()
         {
-            var appender = setUpMemoryAppender("Teleopti.LogPointOutput");
-            LogPointOutput.LogInfo("Foo", "starting");
+            var appender = setUpMemoryAppender("Teleopti.AdvanceLoggingService");
+            AdvanceLoggingService.LogSchedulingInfo(null,1,1, TODO);
             appender.GetEvents().Should().Not.Be.Empty();
         }
 
-
-        
         private static MemoryAppender setUpMemoryAppender(string listeningTo)
         {
             var filter = new LoggerMatchFilter { LoggerToMatch = listeningTo };
@@ -36,8 +37,5 @@ namespace Teleopti.Ccc.DomainTest.Helper
         {
             BasicConfigurator.Configure(new DoNothingAppender());
         }
-        
     }
-
-    
 }
