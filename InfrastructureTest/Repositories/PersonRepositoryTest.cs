@@ -1605,6 +1605,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var loaded = pr.Load(person.Id.Value);
             Assert.That(loaded.FirstDayOfWeek.Equals(DayOfWeek.Saturday));
         }
+
 		[Test]
 		public void VerifyFindAllSortByName()
 		{
@@ -1636,6 +1637,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(testList[1], per2);
 			Assert.AreEqual(testList[2], per1);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(testList[1].PersonPeriodCollection));
+		}
+
+		[Test]
+		public void ShouldNotFindPeopleInOtherBusinessUnits()
+		{
+			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(businessUnit);
+			var site = SiteFactory.CreateSimpleSite("d");
+			ReflectionHelper.SetBusinessUnit(site,businessUnit);
+			PersistAndRemoveFromUnitOfWork(site);
+			var team = TeamFactory.CreateSimpleTeam();
+			team.Site = site;
+			team.Description = new Description("sdf");
+			PersistAndRemoveFromUnitOfWork(team);
+
+			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2000, 1, 1), createPersonContract(businessUnit), team));
+
+			PersistAndRemoveFromUnitOfWork(per1);
+
+			//load
+			IList<IPerson> testList = new List<IPerson>(
+					new PersonRepository(UnitOfWork).FindAllSortByName());
+			//verify
+			Assert.AreEqual(0, testList.Count);
 		}
 
 		[Test]
@@ -1672,9 +1698,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					userRetOk.PermissionInformation.ApplicationRoleCollection[0].ApplicationFunctionCollection)));
 		}
 	  
-		private IPersonContract createPersonContract()
+		private IPersonContract createPersonContract(IBusinessUnit otherBusinessUnit = null)
 		{
 			IPersonContract pContract = PersonContractFactory.CreatePersonContract();
+			if (otherBusinessUnit != null)
+			{
+				ReflectionHelper.SetBusinessUnit(pContract.Contract,otherBusinessUnit);
+				ReflectionHelper.SetBusinessUnit(pContract.ContractSchedule,otherBusinessUnit);
+				ReflectionHelper.SetBusinessUnit(pContract.PartTimePercentage,otherBusinessUnit);
+			}
 			PersistAndRemoveFromUnitOfWork(pContract.Contract);
 			PersistAndRemoveFromUnitOfWork(pContract.ContractSchedule);
 			PersistAndRemoveFromUnitOfWork(pContract.PartTimePercentage);
