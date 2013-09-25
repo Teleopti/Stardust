@@ -23,26 +23,6 @@ ko.subscribable.fn.subscribeTo = function (topic) {
 	return this; //support chaining
 };
 
-ko.bindingHandlers['option-data'] = {
-	update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-		var options = valueAccessor();
-		var observable = options.member;
-		var selected = $(element).find('option:selected');
-		var data = selected.data(options.data);
-		if (observable)
-			observable(data);
-	}
-};
-
-ko.bindingHandlers.animateBackground = {
-	update: function (element, valueAccessor, allBindingsAccessor, viewmodel) {
-		var value = valueAccessor(), allBindings = allBindingsAccessor();
-		var fadeDuration = allBindings.fadeDuration || 1500;
-		var valueUnwrapped = ko.utils.unwrapObservable(value);
-		$(element).stop().animate({ backgroundColor: valueUnwrapped }, fadeDuration);
-	}
-};
-
 ko.bindingHandlers.hoverToggle = {
 	init: function (element, valueAccessor, allBindingsAccessor) {
 		var css = valueAccessor();
@@ -97,29 +77,6 @@ ko.bindingHandlers.fadeInIf = {
 				}
 			});
 		}
-	}
-};
-
-//Increases the elements width (default by 20px) if the bound value is true
-ko.bindingHandlers.increaseWidthIf = {
-	update: function (element, valueAccessor, allBindingsAccessor) {
-		var value = valueAccessor(), allBindings = allBindingsAccessor();
-		if (!element.initialWidthForIncreaseIfBinding) {
-			element.initialWidthForIncreaseIfBinding = $(element).width();
-		}
-
-		var valueUnwrapped = ko.utils.unwrapObservable(value);
-
-		var increaseBy = allBindings.increaseBy || 20;
-		var increaseDuration = allBindings.fadeInDuration || 150;
-		var decreaseDuration = allBindings.fadeOutDuration || 150;
-
-		$(element).stop();
-
-		if (valueUnwrapped)
-			$(element).animate({ width: element.initialWidthForIncreaseIfBinding + increaseBy }, decreaseDuration);
-		else
-			$(element).animate({ width: element.initialWidthForIncreaseIfBinding }, increaseDuration);
 	}
 };
 
