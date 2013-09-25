@@ -198,8 +198,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                 {
                     ret.Append(string.Concat(";", typedValue[i].ToShortTimeString()));
                 }
-                if (typedValue[0].EndTime.Days > 0)
-                    ret.Append(string.Concat(" +", typedValue[0].EndTime.Days));
             }
             else
             {
