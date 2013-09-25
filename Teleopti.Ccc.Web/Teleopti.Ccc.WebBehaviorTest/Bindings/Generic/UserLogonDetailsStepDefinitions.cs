@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenIHaveUserLogonDetailsWith(Table table)
 		{
 			var userLogonDetai = table.CreateInstance<UserLogonDetailConfigurable>();
-			UserFactory.User().Setup(userLogonDetai);
+			DataMaker.Data().Apply(userLogonDetai);
 		}
 
 	}

@@ -135,38 +135,75 @@ ko.bindingHandlers.increaseWidthIf = {
 };
 
 ko.bindingHandlers.timepicker = {
-	init: function (element, valueAccessor, allBindingsAccessor) {
-		var options = allBindingsAccessor().timepickerOptions || {};
-		$(element).timepicker(options);
+    init: function (element, valueAccessor, allBindingsAccessor) {
+	    var options = allBindingsAccessor().timepickerOptions || {};
+	    var $element = $(element);
+	    $element.timepicker(options);
 
-		ko.utils.registerEventHandler(element, "changeTime.timepicker", function (e) {
-			var observable = valueAccessor();
-			observable(e.time.value);
-		});
+	    $element.on('change', function () {
+	        var observable = valueAccessor();
+	        var value = $element.val();
+	        value = value == '' ? undefined : value;
+	        observable(value);
+	    });
 	},
 	update: function (element, valueAccessor) {
-		var value = ko.utils.unwrapObservable(valueAccessor());
-		if (typeof value === 'function') return;
-		if (value === undefined) value = '';
-            
-		$(element).timepicker("setTime", value);
+	    var $element = $(element);
+
+	    var value = ko.utils.unwrapObservable(valueAccessor());
+	    if (value) {
+	        $element.timepicker("setTime", value);
+	    } else {
+	        $element.val(value);
+	    }
 	}
 };
 
 //Sets the tooltip (using bootstrapper) to the bound text
-ko.bindingHandlers.tooltip = {
-	update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-		var $element, options, tooltip;
-		options = ko.utils.unwrapObservable(valueAccessor());
-		$element = $(element);
-		tooltip = $element.data('tooltip');
-		if (tooltip) {
-			$.extend(tooltip.options, options);
-		} else {
-			$element.tooltip(options);
-		}
-	}
+var TooltipBinding = function() {
+
+    var getOptions = function (valueAccessor) {
+        var options = ko.utils.unwrapObservable(valueAccessor());
+        options.title = ko.utils.unwrapObservable(options.title);
+        return options;
+    };
+
+    var trackIsShowing = function($element) {
+        var tooltip = $element.data('tooltip');
+        tooltip.options.showing = false;
+        $element
+            .on("hide", function () {
+                tooltip.showing = false;
+            }).on("show", function () {
+                tooltip.showing = true;
+            });
+    };
+
+    var refreshIfShowing = function ($element) {
+        var tooltip = $element.data('tooltip');
+        if (tooltip.showing) {
+            var preserveAnimation = tooltip.options.animation;
+            tooltip.options.animation = false;
+            $element.tooltip('hide').tooltip('show');
+            tooltip.options.animation = preserveAnimation;
+        }
+    };
+    
+    this.init = function(element, valueAccessor, allBindingsAccessor) {
+        var $element = $(element);
+        $element.tooltip(getOptions(valueAccessor));
+        trackIsShowing($element);
+    };
+
+    this.update = function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        var $element = $(element);
+        var tooltip = $element.data('tooltip');
+        $.extend(tooltip.options, getOptions(valueAccessor));
+        refreshIfShowing($element);
+    };
+
 };
+ko.bindingHandlers.tooltip = new TooltipBinding();
 
 ko.bindingHandlers.select2 = {
 	init: function (element, valueAccessor) {

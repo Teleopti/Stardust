@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Dold redigeringsruta för text</value>
@@ -11205,12 +11205,72 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Upphäv</value>
   </data>
   <data name="ShareMyCalendarHint" xml:space="preserve">
-    <value>Kopiera/klistra in följande URL och lägg till den i Outlook eller Google kalender etc.</value>
+    <value>Kopiera/klistra in följande URL och lägg till den i Outlook eller Google Calendar etc.</value>
   </data>
   <data name="HourShort" xml:space="preserve">
     <value>h</value>
   </data>
   <data name="SwitchToViewPointOfSelectedAgent" xml:space="preserve">
     <value>Ändra till den valda agentens perspektiv</value>
+  </data>
+  <data name="FilterHourlyAvailability" xml:space="preserve">
+    <value>Filtrera tillgänglighet för timanst.</value>
+  </data>
+  <data name="HourlyAvailability" xml:space="preserve">
+    <value>Tillgänglighet för timanställda</value>
+  </data>
+  <data name="InfoPanel" xml:space="preserve">
+    <value>Infopanel</value>
+  </data>
+  <data name="Distribution" xml:space="preserve">
+    <value>Distribution</value>
+  </data>
+  <data name="AssignmentOptions" xml:space="preserve">
+    <value>Inställningar för arbetspasset</value>
+  </data>
+  <data name="OvertimeDuration" xml:space="preserve">
+    <value>Övertidens längd</value>
+  </data>
+  <data name="ScheduleOvertime" xml:space="preserve">
+    <value>Schemalägg övertid</value>
+  </data>
+  <data name="ScheduleOvertimeOptions" xml:space="preserve">
+    <value>Inställningar för schemaläggning av övertid</value>
+  </data>
+  <data name="SkillActivity" xml:space="preserve">
+    <value>Kompetensaktivitet</value>
+  </data>
+  <data name="TagChangesWithWithColon" xml:space="preserve">
+    <value>Tagga ändringar med:</value>
+  </data>
+  <data name="TypeOfOvertime" xml:space="preserve">
+    <value>Övertidstyp</value>
+  </data>
+  <data name="AllowBreakContractMaxWorkTimePerWeek" xml:space="preserve">
+    <value>Tillåt att kontraktets max arbetstid per vecka bryts</value>
+  </data>
+  <data name="AllowBreakContractNightlyRest" xml:space="preserve">
+    <value>Tillåt att kontraktets nattvila bryts</value>
+  </data>
+  <data name="AllowBreakContractWeeklyRest" xml:space="preserve">
+    <value>Tillåt att kontraktets veckovila bryts</value>
+  </data>
+  <data name="ExtendTheEndOfExistingShiftsColon" xml:space="preserve">
+    <value>Senarelägg slutet på befintliga skift</value>
+  </data>
+  <data name="OvertimeDurationColon" xml:space="preserve">
+    <value>Övertidens längd:</value>
+  </data>
+  <data name="SkillActivityColon" xml:space="preserve">
+    <value>Kompetensaktivitet:</value>
+  </data>
+  <data name="TypeOfOvertimeColon" xml:space="preserve">
+    <value>Övertidstyp:</value>
+  </data>
+  <data name="ShiftCategoryHeader" xml:space="preserve">
+    <value>Skiftkategori</value>
+  </data>
+  <data name="SubjectTooLong" xml:space="preserve">
+    <value>Ämnet är för långt</value>
   </data>
 </root>

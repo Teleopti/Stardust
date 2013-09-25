@@ -164,7 +164,6 @@ Scenario: View available activity list when adding extended preference
 	| Value |
 	| Lunch |
 
-@ignore
 Scenario: Replace extended preference
 	Given I have the role 'Access to extended preferences'
 	And I have an extended preference with
@@ -192,7 +191,6 @@ Scenario: Replace extended preference
 	| Activity time minimum       | 0:30 |
 	| Activity time maximum       | 1:00 |
 	And I click the apply extended preferences button
-	And I click the add extended preference button
 	And I click the extended preference indication on '2012-09-05'
 	Then I should see extended preference with
 	| Field                       | Value      |
@@ -211,7 +209,6 @@ Scenario: Replace extended preference
 	| Activity End time maximum   | 12:45      |
 	| Activity time minimum       | 0:30       |
 	| Activity time maximum       | 1:00       |
-
 
 Scenario: Validate preference times
 	Given I have the role 'Access to extended preferences'

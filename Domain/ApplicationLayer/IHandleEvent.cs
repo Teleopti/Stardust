@@ -1,10 +1,11 @@
 ﻿using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
+	[IsNotDeadCode("Event handler resolved dynamically by implementations of IEventPublisher")]
 	public interface IHandleEvent<TEvent> where TEvent : IEvent
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "event")]
 		void Handle(TEvent @event);
 	}
 }

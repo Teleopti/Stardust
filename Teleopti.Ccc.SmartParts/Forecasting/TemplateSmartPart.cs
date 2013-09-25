@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
 
         private void AddTitleLabel()
         {
-            labelTitle.Text = string.Format(CultureInfo.CurrentCulture, "{0} : {1}",UserTexts.Resources.TemplatesSmartpart, _skill.Name);
+            labelTitle.Text = string.Format(CultureInfo.CurrentCulture, "{0}: {1}",UserTexts.Resources.TemplatesSmartpart, _skill.Name);
         }
 
         private void AddForecastGraphsControl()

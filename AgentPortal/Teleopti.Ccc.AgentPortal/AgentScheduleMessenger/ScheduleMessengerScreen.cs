@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Globalization;
 using System.ServiceModel;
 using System.Threading;
-using System.Web.Services.Protocols;
 using System.Windows.Forms;
 using Syncfusion.Schedule;
 using Teleopti.Ccc.AgentPortal.AgentSchedule;

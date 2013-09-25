@@ -101,20 +101,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		private static void CreateData()
 		{
-			GlobalDataContext.Data().Setup(new CommonBusinessUnit());
-			GlobalDataContext.Data().Setup(new CommonSite());
-			GlobalDataContext.Data().Setup(new CommonTeam());
-			GlobalDataContext.Data().Setup(new CommonScenario());
+			GlobalDataMaker.Data().Apply(new CommonBusinessUnit());
+			GlobalDataMaker.Data().Apply(new CommonSite());
+			GlobalDataMaker.Data().Apply(new CommonTeam());
+			GlobalDataMaker.Data().Apply(new CommonScenario());
 
-			GlobalDataContext.Data().Setup(new CommonPartTimePercentage());
-			GlobalDataContext.Data().Setup(new CommonContract());
-			GlobalDataContext.Data().Setup(new CommonContractSchedule());
+			GlobalDataMaker.Data().Apply(new CommonPartTimePercentage());
+			GlobalDataMaker.Data().Apply(new CommonContract());
+			GlobalDataMaker.Data().Apply(new CommonContractSchedule());
 
-			GlobalDataContext.Data().Setup(new SecondBusinessUnit());
-			GlobalDataContext.Data().Setup(new AnotherSite());
-			GlobalDataContext.Data().Setup(new SecondScenario());
-
-			GlobalDataContext.Persist();
+			GlobalDataMaker.Data().Apply(new SecondBusinessUnit());
+			GlobalDataMaker.Data().Apply(new AnotherSite());
+			GlobalDataMaker.Data().Apply(new SecondScenario());
 
 			TestDataSetup.CreateLegacyTestData();
 		}

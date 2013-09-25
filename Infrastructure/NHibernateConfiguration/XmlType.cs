@@ -5,9 +5,11 @@ using System.Xml.XPath;
 using NHibernate;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
+		[IsNotDeadCode("Used in NH mapping files.")]
     public class XmlType : IUserType
     {
         public new bool Equals(object x, object y)

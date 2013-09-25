@@ -13,19 +13,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	[Binding]
 	public class NavigationStepDefinitions
 	{
+		[Given(@"I am viewing ASM")]
+		[When(@"I view ASM")]
+		public void WhenIClickASMLink()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoAsm();
+		}
+
 		[When(@"Someone is viewing sharing link")]
 		public void WhenSomeoneIsViewingSharingLink()
 		{
-			UserFactory.User().MakeUser();
-			Navigation.GotoRaw(UserFactory.User().UserData<CalendarLinkConfigurable>().SharingUrl);
+			Navigation.GotoRaw(DataMaker.Data().UserData<CalendarLinkConfigurable>().SharingUrl);
 		}
 
 		[Given(@"I am viewing an application page")]
 		[When(@"I am viewing an application page")]
 		public void WhenIAmViewingAnApplicationPage()
 		{
-			if (!UserFactory.User().HasSetup<IUserRoleSetup>())
-				UserFactory.User().Setup(new Agent());
+			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
+				DataMaker.Data().Apply(new Agent());
 			TestControllerMethods.Logon();
 			Navigation.GotoAnApplicationPage();
 		}
@@ -101,7 +108,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		private static Guid IdForTeam(string teamName)
 		{
-			var teamId = (from t in UserFactory.User().UserDatasOfType<TeamConfigurable>()
+			var teamId = (from t in DataMaker.Data().UserDatasOfType<TeamConfigurable>()
 			              let team = t.Team
 			              where team.Description.Name.Equals(teamName)
 			              select team.Id.Value).First();
@@ -130,7 +137,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIViewPersonScheduleForPersonOnDate(string name, DateTime date)
 		{
 			TestControllerMethods.Logon();
-			var personId = UserFactory.User(name).Person.Id.Value;
+			var personId = DataMaker.Person(name).Person.Id.Value;
 			Navigation.GotoAnywherePersonSchedule(personId, date);
 		}
 
@@ -138,11 +145,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIViewPersonSchedulesAddFullDayAbsenceFormForPersonOnDate(string name, DateTime date)
 		{
 			TestControllerMethods.Logon();
-			var personId = UserFactory.User(name).Person.Id.Value;
+			var personId = DataMaker.Person(name).Person.Id.Value;
 			Navigation.GotoAnywherePersonScheduleFullDayAbsenceForm(personId, date);
 		}
 
 		[When(@"I navigate to the preferences page")]
+		[When(@"I navigate to preferences")]
 		public void WhenINavigateToThePreferencesPage()
 		{
 			Navigation.GotoPreference();
@@ -154,21 +162,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view team schedule")]
 		public void WhenIViewTeamSchedule()
 		{
-			TestControllerMethods.LogonWithReadModelsUpdated();
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+			TestControllerMethods.Logon();
 			Navigation.GotoTeamSchedule();
 		}
 
 		[Given(@"I am viewing team schedule for tomorrow")]
 		public void GivenIAmViewingTeamScheduleForTomorrow()
 		{
-			TestControllerMethods.LogonWithReadModelsUpdated();
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+			TestControllerMethods.Logon();
 			Navigation.GotoTeamSchedule(DateOnlyForBehaviorTests.TestToday.Date.AddDays(1));
 		}
 
 		[When(@"I view team schedule for '(.*)'")]
 		public void WhenIViewTeamScheduleFor(DateTime date)
 		{
-			TestControllerMethods.LogonWithReadModelsUpdated();
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+			TestControllerMethods.Logon();
 			Navigation.GotoTeamSchedule(date);
 		}
 
@@ -210,7 +221,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am viewing the sign in page")]
 		public void GivenIAmAtTheSignInPage()
 		{
-			UserFactory.User().MakeUser();
+			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoGlobalSignInPage();
 		}
 
@@ -218,28 +229,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I navigate to the site's root")]
 		public void WhenINavigateToTheSiteSRoot()
 		{
-			UserFactory.User().MakeUser();
+			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoSiteHomePage();
 		}
 
 		[When(@"I navigate to MyTime")]
 		public void WhenINavigateToMyTime()
 		{
-			UserFactory.User().MakeUser();
+			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoMyTime();
 		}
 
 		[When(@"I navigate to Mobile Reports")]
 		public void WhenINavigateToMobileReposrts()
 		{
-			UserFactory.User().MakeUser();
+			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoMobileReports();
 		}
 
 		[When(@"I navigate to Anywhere")]
 		public void WhenINavigateToAnywhere()
 		{
-			UserFactory.User().MakeUser();
+			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoAnywhere();
 		}
 

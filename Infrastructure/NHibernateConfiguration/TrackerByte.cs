@@ -6,9 +6,11 @@ using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
+		[IsNotDeadCode("Used in NH mapping files.")]
     public class TrackerByte:IUserType
     {
         private static readonly IList<ITracker> _trackers = Tracker.AllTrackers();

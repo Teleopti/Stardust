@@ -188,21 +188,6 @@ namespace Teleopti.Interfaces.Domain
         }
 
         /// <summary>
-        /// Verifies the date is local.
-        /// </summary>
-        /// <param name="parameterName">Name of the parameter.</param>
-        /// <param name="dateTimeToCheck">The date time to check.</param>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-06-10
-        /// </remarks>
-        public static void VerifyDateIsLocal(string parameterName, DateTime dateTimeToCheck)
-        {
-            if (dateTimeToCheck.Kind != DateTimeKind.Local)
-                throw new ArgumentException("DateTime must be passed as Local.", parameterName);
-        }
-
-        /// <summary>
         /// TimesSpan can not be negativ.
         /// </summary>
         /// <param name="parameterName">Name of the parameter.</param>

@@ -1,13 +1,21 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.Web.Mvc;
+using System.Web.Routing;
+using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
@@ -18,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldRedirectToWeekActionFromDefault()
 		{
-			using (var target = new ScheduleController(null, null, null))
+			using (var target = new ScheduleController(null, null, null, null))
 			{
 				var result = target.Index() as RedirectToRouteResult;
 				result.RouteValues["action"].Should().Be.EqualTo("Week");				
@@ -30,10 +38,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IScheduleViewModelFactory>();
 			var now = MockRepository.GenerateMock<INow>();
-			now.Stub(x => x.DateOnly()).Return(new DateOnly(2012, 8, 1));
-			viewModelFactory.Stub(x => x.CreateWeekViewModel(now.DateOnly())).Return(new WeekScheduleViewModel());
-			
-			using (var target = new ScheduleController(viewModelFactory, null, now))
+			now.Stub(x => x.UtcDateTime()).Return(new DateTime(2012, 8, 1));
+			viewModelFactory.Stub(x => x.CreateWeekViewModel(now.LocalDateOnly())).Return(new WeekScheduleViewModel());
+
+			using (var target = new ScheduleController(viewModelFactory, null, now, null))
 			{
 				new StubbingControllerBuilder().InitializeController(target);
 				target.ControllerContext.HttpContext.Request.Stub(x => x.Headers).Return(new NameValueCollection { { "Accept", "application/json" } });
@@ -52,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<IScheduleViewModelFactory>();
 			var now = MockRepository.GenerateMock<INow>();
 			viewModelFactory.Stub(x => x.CreateWeekViewModel(date)).Return(new WeekScheduleViewModel());
-			using (var target = new ScheduleController(viewModelFactory, null, now))
+			using (var target = new ScheduleController(viewModelFactory, null, now, null))
 			{
 				var result = target.FetchData(date);
 
@@ -67,10 +75,57 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 			var model = new RequestsViewModel();
 			viewModelFactory.Expect(m => m.CreatePageViewModel()).Return(model);
-			using (var target = new ScheduleController(null, viewModelFactory, null))
+			using (var target = new ScheduleController(null, viewModelFactory, null, null))
 			{
 				var result = target.Week() as ViewResult;
 				result.Model.Should().Be.SameInstanceAs(model);
+			}
+		}
+
+		[Test]
+		public void ShouldPersistOvertimeAvailability()
+		{
+			var overtimeAvailabilityPersister = MockRepository.GenerateMock<IOvertimeAvailabilityPersister>();
+			var input = new OvertimeAvailabilityInput();
+			var overtimeAvailabilityViewModel = new OvertimeAvailabilityViewModel();
+			overtimeAvailabilityPersister.Stub(x => x.Persist(input)).Return(overtimeAvailabilityViewModel);
+			using (var target = new ScheduleController(null, null, null, overtimeAvailabilityPersister))
+			{
+				var model = target.OvertimeAvailability(input).Data as OvertimeAvailabilityViewModel;
+				model.Should().Be.SameInstanceAs(overtimeAvailabilityViewModel);
+			}
+		}
+
+		[Test]
+		public void ShouldHandleModelErrorInPersistOvertimeAvailabilityInput()
+		{
+			var overtimeAvailabilityPersister = MockRepository.GenerateMock<IOvertimeAvailabilityPersister>();
+			var response = MockRepository.GenerateStub<FakeHttpResponse>();
+			var input = new OvertimeAvailabilityInput();
+
+			var target = new ScheduleController(null, null, null, overtimeAvailabilityPersister);
+			var context = new FakeHttpContext("/");
+			context.SetResponse(response);
+			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
+			target.ModelState.AddModelError("Error", "Error");
+
+			var result = target.OvertimeAvailability(input);
+			var data = result.Data as ModelStateResult;
+			data.Errors.Should().Contain("Error");
+		}
+
+		[Test]
+		public void ShouldDeleteOvertimeAvailability()
+		{
+			var overtimeAvailabilityPersister = MockRepository.GenerateMock<IOvertimeAvailabilityPersister>();
+			var date = DateOnly.Today;
+			var overtimeAvailabilityViewModel = new OvertimeAvailabilityViewModel();
+			overtimeAvailabilityPersister.Stub(x => x.Delete(date)).Return(overtimeAvailabilityViewModel);
+
+			using (var target = new ScheduleController(null, null, null, overtimeAvailabilityPersister))
+			{
+				var model = target.DeleteOvertimeAvailability(date).Data as OvertimeAvailabilityViewModel;
+				model.Should().Be.SameInstanceAs(overtimeAvailabilityViewModel);
 			}
 		}
 	}

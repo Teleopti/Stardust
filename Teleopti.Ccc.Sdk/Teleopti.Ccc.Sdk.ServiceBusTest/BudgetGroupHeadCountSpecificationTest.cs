@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             }
             using (_mocks.Playback())
             {
-                Assert.IsTrue(_target.IsSatisfiedBy(_absenceRequest));
+                Assert.IsTrue(_target.IsSatisfied(_absenceRequest).IsValid);
             }
         }
 
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             }
             using (_mocks.Playback())
             {
-                Assert.IsFalse(_target.IsSatisfiedBy(_absenceRequest));
+                Assert.IsFalse(_target.IsSatisfied(_absenceRequest).IsValid);
             }
         }
 
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             }
             using (_mocks.Playback())
             {
-                Assert.IsFalse(_target.IsSatisfiedBy(_absenceRequest));
+                Assert.IsFalse(_target.IsSatisfied(_absenceRequest).IsValid);
             }
         }
 
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             }
             using (_mocks.Playback())
             {
-                Assert.IsFalse(_target.IsSatisfiedBy(_absenceRequest));
+                Assert.IsFalse(_target.IsSatisfied(_absenceRequest).IsValid);
             }
         }
 
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             }
             using (_mocks.Playback())
             {
-                Assert.IsFalse(_target.IsSatisfiedBy(_absenceRequest));
+                Assert.IsFalse(_target.IsSatisfied(_absenceRequest).IsValid);
             }
         }
 
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             }
             using (_mocks.Playback())
             {
-                Assert.IsFalse(_target.IsSatisfiedBy(_absenceRequest));
+                Assert.IsFalse(_target.IsSatisfied(_absenceRequest).IsValid);
             }
         }
 
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                   .Return(new List<IBudgetDay> { budgetDay });
             Expect.Call(budgetDay.Allowance).Return(2d);
             Expect.Call(budgetDay.IsClosed).Return(false);
-            Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Once();
+            Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Twice();
             Expect.Call(
                 _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(
                     personPeriod.BudgetGroup.Id.GetValueOrDefault(), new DateOnly(personPeriod.StartDate))).Return(0);
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod))
                   .IgnoreArguments()
                   .Return(new List<IBudgetDay> { budgetDay });
-            Expect.Call(budgetDay.Day).Return(_defaultDay);
+            Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Times(4);
             Expect.Call(budgetDay.IsClosed).Return(false);
             Expect.Call(budgetDay.Allowance).Return(1.5d);
             Expect.Call(

@@ -2,6 +2,8 @@ using System;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -72,7 +74,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 														else if (x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
 															earlyStart = startTime;
 													}
-												    return earlyStart;
+
+													if (x.OvertimeAvailablityCollection() == null)
+														return earlyStart;
+													var overtimeAvailability = x.OvertimeAvailablityCollection().FirstOrDefault();
+													if (overtimeAvailability == null)
+														return earlyStart;
+													var earlyStartOvertimeAvailability = new TimeSpan(23, 59, 59);
+													var overtimeAvailabilityStart = overtimeAvailability.StartTime.Value;
+													var overtimeAvailabilityEnd = overtimeAvailability.EndTime.Value;
+													if (overtimeAvailabilityEnd.Days > overtimeAvailabilityStart.Days && week.Contains(x.DateOnlyAsPeriod.DateOnly.AddDays(1)))
+														earlyStartOvertimeAvailability = TimeSpan.Zero;
+													else if (x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
+														earlyStartOvertimeAvailability = overtimeAvailabilityStart;
+													return earlyStart < earlyStartOvertimeAvailability ? earlyStart : earlyStartOvertimeAvailability;
 												});
 									var latest =
 										scheduleDays.Max(
@@ -87,11 +102,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 														if (endTime.Days > startTime.Days && x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
 															lateEnd = new TimeSpan(23, 59, 59);
 														else
-														{
 															lateEnd = endTime.Days == 1 ? endTime.Add(new TimeSpan(-1, 0, 0, 0)) : endTime;
-														}
 													}
-													return lateEnd;
+													if (x.OvertimeAvailablityCollection() == null)
+														return lateEnd;
+													var overtimeAvailability = x.OvertimeAvailablityCollection().FirstOrDefault();
+													if (overtimeAvailability == null)
+														return lateEnd;
+
+													TimeSpan lateEndOvertimeAvailability;
+													var overtimeAvailabilityStart = overtimeAvailability.StartTime.Value;
+													var overtimeAvailabilityEnd = overtimeAvailability.EndTime.Value;
+													if (overtimeAvailabilityEnd.Days > overtimeAvailabilityStart.Days && x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
+														lateEndOvertimeAvailability = new TimeSpan(23, 59, 59);
+													else
+														lateEndOvertimeAvailability = overtimeAvailabilityEnd.Days == 1 ? overtimeAvailabilityEnd.Add(new TimeSpan(-1, 0, 0, 0)) : overtimeAvailabilityEnd;
+
+													return lateEnd > lateEndOvertimeAvailability ? lateEnd : lateEndOvertimeAvailability;
 												});
 									
 									const int margin = 15;
@@ -114,19 +141,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												let scheduleDay = scheduleDays.SingleOrDefault(d => d.DateOnlyAsPeriod.DateOnly == day)
 												let scheduleYesterday = scheduleDays.SingleOrDefault(d => d.DateOnlyAsPeriod.DateOnly == day.AddDays(-1))
 												let projection = scheduleDay == null ? null : _projectionProvider.Projection(scheduleDay)
-                                                let projectionYesterday = scheduleYesterday == null ? null : _projectionProvider.Projection(scheduleYesterday)
-                                                let personRequestsForDay = personRequests == null ? null : (from i in personRequests where TimeZoneInfo.ConvertTimeFromUtc(i.Request.Period.StartDateTime, _userTimeZone.TimeZone()).Date == day select i).ToArray()
-												let allowanceForDay = allowanceCollection == null ? 0 : allowanceCollection.First(a=>a.Item1==day).Item2.TotalMinutes
+												let projectionYesterday = scheduleYesterday == null ? null : _projectionProvider.Projection(scheduleYesterday)
+												let overtimeAvailability = scheduleDay == null || scheduleDay.OvertimeAvailablityCollection() == null ? null : scheduleDay.OvertimeAvailablityCollection().FirstOrDefault()
+												let overtimeAvailabilityYesterday = scheduleYesterday == null || scheduleYesterday.OvertimeAvailablityCollection() == null ? null : scheduleYesterday.OvertimeAvailablityCollection().FirstOrDefault()
+												let personRequestsForDay = personRequests == null ? null : (from i in personRequests where TimeZoneInfo.ConvertTimeFromUtc(i.Request.Period.StartDateTime, _userTimeZone.TimeZone()).Date == day select i).ToArray()
+												let allowanceForDay = allowanceCollection == null ? 0 : allowanceCollection.First(a => a.Item1 == day).Item2.TotalMinutes
 												let fulltimeEquivalentForDay = allowanceCollection == null ? 0 : allowanceCollection.First(a => a.Item1 == day).Item3.TotalMinutes
 												let availabilityForDay = allowanceCollection != null && allowanceCollection.First(a => a.Item1 == day).Item4
- 												let absenceTimeForDay = absenceTimeCollection == null ? 0 : absenceTimeCollection.First(a => a.Date == day).AbsenceTime
-												
+												let absenceTimeForDay = absenceTimeCollection == null ? 0 : absenceTimeCollection.First(a => a.Date == day).AbsenceTime
+
 												select new WeekScheduleDayDomainData
 														{
 															Date = new DateOnly(day),
 															PersonRequests = personRequestsForDay,
 															Projection = projection,
 															ProjectionYesterday = projectionYesterday,
+															OvertimeAvailability = overtimeAvailability,
+															OvertimeAvailabilityYesterday = overtimeAvailabilityYesterday,
 															ScheduleDay = scheduleDay,
 															MinMaxTime = minMaxTime,
 															Allowance = allowanceForDay,
@@ -144,7 +175,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 
 									var asmPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
 									var absenceRequestPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
-									var isCurrentWeek = week.Contains(_now.DateOnly());
+									var isCurrentWeek = week.Contains(_now.LocalDateOnly());
 
 									return new WeekScheduleDomainData
 											{

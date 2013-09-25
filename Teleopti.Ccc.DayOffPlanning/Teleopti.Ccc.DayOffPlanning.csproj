@@ -112,8 +112,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArrayValueValidator.cs" />
-    <Compile Include="BinaryPermutation.cs" />
     <Compile Include="CMSBCaseSolver.cs" />
     <Compile Include="CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker.cs" />
     <Compile Include="ConsecutiveDayOffValidator.cs" />
@@ -134,11 +132,9 @@
     <Compile Include="WorkShiftBackToLegalStateDecisionMaker.cs" />
     <Compile Include="IntradayDecisionMaker.cs" />
     <Compile Include="DayOffOptimizationWeekEndLegalStateValidatorListCreator.cs" />
-    <Compile Include="MoveWeekendDayOffNoValidationDecisionMaker.cs" />
     <Compile Include="MatrixRestrictionLocker.cs" />
     <Compile Include="MoveTimeDecisionMaker2.cs" />
     <Compile Include="MoveWeekendDayOffDecisionMaker.cs" />
-    <Compile Include="WorkShiftLegalStateWeekDecisionMaker.cs" />
     <Compile Include="Scheduling\PossibleMinMaxWorkShiftLengthExtractor.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessShiftValueCalculator.cs" />
     <Compile Include="Scheduling\WorkShiftMinMaxCalculator.cs" />
@@ -148,7 +144,6 @@
     <Compile Include="KeepFreeWeekendValidator.cs" />
     <Compile Include="KeepFreeWeekendDayValidator.cs" />
     <Compile Include="DayOffBackToLegalStateFunctions.cs" />
-    <Compile Include="DayOffBackToLegalStateValidatorListCreator.cs" />
     <Compile Include="DaysOffPerWeekSolver.cs" />
     <Compile Include="FreeWeekendDaySolver.cs" />
     <Compile Include="FreeWeekendDayValidator.cs" />
@@ -158,7 +153,6 @@
     <Compile Include="IDayOffBackToLegalStateSolver.cs" />
     <Compile Include="ISmartDayOffBackToLegalStateService.cs" />
     <Compile Include="LockableBitArray.cs" />
-    <Compile Include="LockedValueValidator.cs" />
     <Compile Include="MinMaxNumberOfResult.cs" />
     <Compile Include="MoveOneDayOffDecisionMaker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

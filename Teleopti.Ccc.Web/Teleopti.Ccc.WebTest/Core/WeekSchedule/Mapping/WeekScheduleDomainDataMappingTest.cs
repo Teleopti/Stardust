@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
@@ -9,6 +11,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
@@ -177,6 +180,47 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
             result.Days.Single(d => d.Date == date).ProjectionYesterday.Should().Not.Be.Null();
             result.Days.Single(d => d.Date == date).ProjectionYesterday.Should().Be.SameInstanceAs(projectionYesterday);
         }
+
+		[Test]
+		public void ShouldMapOvertimeAvailability()
+		{
+			var date = DateOnly.Today;
+			var scheduleDay = new StubFactory().ScheduleDayStub(date);
+			var overtimeAvailability = new OvertimeAvailability(new Person(), date, new TimeSpan(1, 0, 0), new TimeSpan(2, 0, 0));
+			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
+							 .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability> { overtimeAvailability }));
+			var projection = new StubFactory().ProjectionStub();
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+
+			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
+
+			result.Days.Single(d => d.Date == date).OvertimeAvailability.Should().Be.SameInstanceAs(overtimeAvailability);
+		}
+
+		[Test]
+		public void ShouldMapOvertimeAvailabilityForYesterday()
+		{
+			Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("sv-SE");
+			var date = new DateOnly(2012, 08, 27);
+			var yesterdayDate = new DateOnly(2012, 08, 26);
+			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
+			var period = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), firstDayOfWeek.AddDays(6));
+			var scheduleDay = new StubFactory().ScheduleDayStub(date);
+			var scheduleYesterday = new StubFactory().ScheduleDayStub(yesterdayDate);
+			var overtimeAvailabilityYesterday = new OvertimeAvailability(new Person(), date, new TimeSpan(1, 0, 0), new TimeSpan(2, 0, 0));
+			scheduleYesterday.Stub(x => x.OvertimeAvailablityCollection())
+			                 .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability> {overtimeAvailabilityYesterday}));
+			var projectionYesterday = new StubFactory().ProjectionStub();
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay, scheduleYesterday });
+			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projectionYesterday);
+
+			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
+
+			result.Days.Single(d => d.Date == date).OvertimeAvailabilityYesterday.Should().Not.Be.Null();
+			result.Days.Single(d => d.Date == date).OvertimeAvailabilityYesterday.Should().Be.SameInstanceAs(overtimeAvailabilityYesterday);
+		}
 
 		[Test]
 		public void ShouldMapPersonRequests()
@@ -461,6 +505,119 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
         }
 
 		[Test]
+		public void ShouldMapMinMaxTimeForOvertimeAvailability()
+		{
+			var date = DateOnly.Today;
+			var scheduleDay = new StubFactory().ScheduleDayStub(date);
+			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
+			           .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>
+				           {
+					           new OvertimeAvailability(new Person(), date, new TimeSpan(1, 0, 0), new TimeSpan(2, 0, 0))
+				           }));
+
+			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
+			projection.Stub(x => x.Period()).Return(null);
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+
+			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
+
+			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(0);
+			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(45);
+
+			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(2);
+			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(15);
+		}
+
+		[Test]
+		public void ShouldMapMinMaxTimeForOvertimeAvailabilityForNightShift()
+		{
+			var date = DateOnly.Today;
+			var scheduleDay = new StubFactory().ScheduleDayStub(date);
+			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
+					   .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>
+						   {
+					           new OvertimeAvailability(new Person(), date, new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0))
+				           }));
+
+			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
+			projection.Stub(x => x.Period()).Return(null);
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(Arg<DateOnlyPeriod>.Is.Anything)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+
+			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
+
+			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(0);
+			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(0);
+
+			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(23);
+			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(59);
+		}
+
+		[Test]
+		public void ShouldMapMinMaxTimeForOvertimeAvailabilityForNightShiftFromPreviousWeek()
+		{
+			var date = new DateOnly(2012, 08, 28);
+			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
+			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
+			var period = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
+
+			var scheduleDay = new StubFactory().ScheduleDayStub(firstDayOfWeek.AddDays(-1).Date);
+			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
+					   .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>
+						   {
+					           new OvertimeAvailability(new Person(), date, new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0))
+				           }));
+
+			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
+			projection.Stub(x => x.Period()).Return(null);
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+
+			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(firstDayOfWeek);
+
+			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(0);
+			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(00);
+
+			result.MinMaxTime.EndTime.Days.Should().Be.EqualTo(0);
+			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(4);
+			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(15);
+		}
+
+		[Test]
+		public void ShouldMapMinMaxTimeForOvertimeAvailabilityForNightShiftStartingOnTheLastDayOfCurrentWeek()
+		{
+			var date = new DateOnly(2012, 08, 26);
+			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
+			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
+			var period = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
+
+			var scheduleDay = new StubFactory().ScheduleDayStub(lastDayOfWeek.Date);
+			scheduleDay.Stub(x => x.OvertimeAvailablityCollection())
+					   .Return(new ReadOnlyCollection<IOvertimeAvailability>(new List<IOvertimeAvailability>
+						   {
+					           new OvertimeAvailability(new Person(), date, new TimeSpan(20, 0, 0), new TimeSpan(28, 0, 0))
+				           }));
+
+			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
+			projection.Stub(x => x.Period()).Return(null);
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+
+			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(lastDayOfWeek);
+
+			result.MinMaxTime.StartTime.Hours.Should().Be.EqualTo(19);
+			result.MinMaxTime.StartTime.Minutes.Should().Be.EqualTo(45);
+
+			result.MinMaxTime.EndTime.Hours.Should().Be.EqualTo(23);
+			result.MinMaxTime.EndTime.Minutes.Should().Be.EqualTo(59);
+		}
+
+		[Test]
 		public void ShouldMapAsmPermission()
 		{
 			var date = new DateOnly(2012, 08, 26);
@@ -515,7 +672,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapIsCurrentWeek()
 		{
-			var date = new DateOnly(2014, 08, 26);
+			var date = new DateTime(2014, 08, 26);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
 			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
 			var period = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
@@ -531,7 +688,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
-			now.Stub(x => x.DateOnly()).Return(date);
+			now.Stub(x => x.UtcDateTime()).Return(date);
 
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(firstDayOfWeek);
 

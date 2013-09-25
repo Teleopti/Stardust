@@ -60,8 +60,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             DateTimePeriod first = new DateTimePeriod(CurrentPeriod.StartDateTime, CurrentPeriod.StartDateTime.AddHours(2));
             DateTimePeriod second = new DateTimePeriod(CurrentPeriod.StartDateTime.AddHours(2), CurrentPeriod.StartDateTime.AddHours(4));
             var mainShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
-            var firstLayer = new EditorActivityLayer(ActivityFactory.CreateActivity("first"), first);
-			var secondLayer = new EditorActivityLayer(ActivityFactory.CreateActivity("second"), second);
+            var firstLayer = new EditableShiftLayer(ActivityFactory.CreateActivity("first"), first);
+			var secondLayer = new EditableShiftLayer(ActivityFactory.CreateActivity("second"), second);
             mainShift.LayerCollection.Add(firstLayer);
             mainShift.LayerCollection.Add(secondLayer);
             part.AddMainShift(mainShift);
@@ -80,11 +80,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             DateTimePeriod second = new DateTimePeriod(CurrentPeriod.StartDateTime.AddHours(4), CurrentPeriod.StartDateTime.AddHours(8));
 
             var mainShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("for test"));
-            ActivityLayer layer1 = new EditorActivityLayer(ActivityFactory.CreateActivity("ActivityOne", System.Drawing.Color.DodgerBlue), first.MovePeriod(TimeSpan.FromHours(1)));
-			ActivityLayer layer2 = new EditorActivityLayer(ActivityFactory.CreateActivity("ActivityTwo", System.Drawing.Color.Yellow), first.MovePeriod(TimeSpan.FromHours(2)));
-			ActivityLayer layer3 = new EditorActivityLayer(ActivityFactory.CreateActivity("ActivityThree", System.Drawing.Color.DodgerBlue), first.MovePeriod(TimeSpan.FromHours(4)));
-			ActivityLayer layer4 = new EditorActivityLayer(ActivityFactory.CreateActivity("ActivityFour", System.Drawing.Color.GreenYellow), first.MovePeriod(TimeSpan.FromMinutes(21)));
-			ActivityLayer layer5 = new EditorActivityLayer(ActivityFactory.CreateActivity("ActivityFive"), second);
+            var layer1 = new EditableShiftLayer(ActivityFactory.CreateActivity("ActivityOne", System.Drawing.Color.DodgerBlue), first.MovePeriod(TimeSpan.FromHours(1)));
+			var layer2 = new EditableShiftLayer(ActivityFactory.CreateActivity("ActivityTwo", System.Drawing.Color.Yellow), first.MovePeriod(TimeSpan.FromHours(2)));
+			var layer3 = new EditableShiftLayer(ActivityFactory.CreateActivity("ActivityThree", System.Drawing.Color.DodgerBlue), first.MovePeriod(TimeSpan.FromHours(4)));
+			var layer4 = new EditableShiftLayer(ActivityFactory.CreateActivity("ActivityFour", System.Drawing.Color.GreenYellow), first.MovePeriod(TimeSpan.FromMinutes(21)));
+			var layer5 = new EditableShiftLayer(ActivityFactory.CreateActivity("ActivityFive"), second);
             mainShift.LayerCollection.Add(layer1);
             mainShift.LayerCollection.Add(layer2);
             mainShift.LayerCollection.Add(layer3);

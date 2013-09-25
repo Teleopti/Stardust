@@ -910,7 +910,6 @@
     <Compile Include="Controls\DateTimePeriodControl\EditableDateTimePeriodView.xaml.cs">
       <DependentUpon>EditableDateTimePeriodView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DateTimePeriodControl\DateTimePeriodEditBoxViewModel.cs" />
     <Compile Include="Controls\DateTimePeriodControl\EditableEndDateView.xaml.cs">
       <DependentUpon>EditableEndDateView.xaml</DependentUpon>
     </Compile>
@@ -1133,7 +1132,6 @@
     </Compile>
     <Compile Include="Converters\ColorConverterSoft.cs" />
     <Compile Include="Converters\DateTimeResolutionConverter.cs" />
-    <Compile Include="Converters\DateTimeToDateConverter.cs" />
     <Compile Include="Converters\DateTimeToHourConverter.cs" />
     <Compile Include="Converters\DateTimeToLocalAndNotMinValueConverter.cs" />
     <Compile Include="Converters\LessThanConverter.cs" />
@@ -1171,8 +1169,6 @@
     </Compile>
     <Compile Include="Controls\OutlookTimePicker.cs" />
     <Compile Include="Converters\ColorConverter.cs" />
-    <Compile Include="Converters\DateFilterConverter.cs" />
-    <Compile Include="Converters\DateTimePeriodExtender.cs" />
     <Compile Include="Converters\DateTimeToTimeConverter.cs" />
     <Compile Include="Converters\ILayerConverter.cs" />
     <Compile Include="Converters\TextConverter.cs" />

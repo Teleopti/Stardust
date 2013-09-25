@@ -157,7 +157,6 @@
     <Compile Include="ApplicationLayer\EventsConsumer.cs" />
     <Compile Include="AuthenticationContainerInstaller.cs" />
     <Compile Include="AuthorizationContainerInstaller.cs" />
-    <Compile Include="BudgetGroupAllowanceCalculator.cs" />
     <Compile Include="BudgetGroupAllowanceSpecification.cs" />
     <Compile Include="BudgetGroupHeadCountSpecification.cs" />
     <Compile Include="BusStartup.cs" />

@@ -16,23 +16,28 @@ SET SDK_SSL_MEX_BINDING=mexHttpBinding
 SET SDK_SSL_SECURITY_MODE=TransportCredentialOnly
 )
 
-
+SET SDK_CRED_PROT=Ntlm
+SET SERVICEBUSENABLED=true
 SET SQL_SERVER_NAME=%DBServerInstance%
 
 IF "%DB_AdminAccess%"=="WINAUTH" (
+SET SQL_SERVER_AUTH=NT
 SET WISE_SQL_CONN_STR=Data Source=%DBServerInstance%;Integrated Security=SSPI
 ) else (
+SET SQL_SERVER_AUTH=SQL
 SET WISE_SQL_CONN_STR=Data Source=%DBServerInstance%;User Id=%DB_ADMIN_SQLLOGIN%;Password=%DB_ADMIN_PWD%
 )
 
 IF "%DB_EndUserAccess%"=="WINAUTH" (
 SET SQL_AUTH_STRING=Data Source=%DBServerInstance%;Integrated Security=SSPI
+SET SQL_USER_AUTH=NT
 SET MYUSERNAME=%SvcAccount%
 SET MYPASSWORD=%SvcAccountPwd%
 SET ETLUSERNAME=%SvcAccount%
 SET ETLPASSWORD=%SvcAccountPwd%
 ) else (
 SET SQL_AUTH_STRING=Data Source=%DBServerInstance%;User Id=%DB_ENDUSER_SQLLOGIN%;Password=%DB_ENDUSER_PWD%
+SET SQL_USER_AUTH=SQL
 SET MYUSERNAME=
 SET MYPASSWORD=
 SET ETLUSERNAME=
@@ -54,6 +59,7 @@ SET SITEPATH=%INSTALLDIR%TeleoptiCCC\SDK\
 SET AGENT_SERVICE=%DNS_ALIAS%TeleoptiCCC/SDK/TeleoptiCccSdkService.svc
 SET RTA_SERVICE=%DNS_ALIAS%TeleoptiCCC/RTA/TeleoptiRtaService.svc
 SET WEB_BROKER=%DNS_ALIAS%TeleoptiCCC/broker/
+SET WEB_BROKER_BACKPLANE=%DNS_ALIAS%TeleoptiCCC/Broker.backplane/backplane
 
 SET CONTEXT_HELP_URL=http://wiki.teleopti.com/TeleoptiCCC/Special:MyLanguage/
 

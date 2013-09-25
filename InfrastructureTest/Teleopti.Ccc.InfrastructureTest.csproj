@@ -167,7 +167,6 @@
     <Compile Include="Foundation\AvailableWindowsDataSourcesTest.cs" />
     <Compile Include="Foundation\ConfigReaderTest.cs" />
     <Compile Include="Foundation\ConstraintViolationExceptionTest.cs" />
-    <Compile Include="Foundation\CannotConnectToDatabaseExceptionTest.cs" />
     <Compile Include="Foundation\PurgeApplicationDataTest.cs" />
     <Compile Include="Foundation\ExplicitlySetGenericPrincipalDataSourceException.cs" />
     <Compile Include="Foundation\ForeignKeyExceptionTest.cs" />
@@ -316,7 +315,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Repositories\PersonAvailabilityRepositoryTest.cs" />
-    <Compile Include="Repositories\GeneralRepositoryTest.cs" />
     <Compile Include="Repositories\PersonRotationRepositoryTest.cs" />
     <Compile Include="Repositories\ExternalLogOnRepositoryTest.cs" />
     <Compile Include="Repositories\MeetingRepositoryTest.cs" />

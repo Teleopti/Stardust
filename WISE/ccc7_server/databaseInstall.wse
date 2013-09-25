@@ -308,7 +308,7 @@ item: Execute Program
   Pathname=.\DBManager.exe
   Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7 %C% %U2% -R -T "-F%DIR%
   Default Directory=%DIR%
-  Flags=00000010
+  Flags=00000110
 end
 item: If/While Statement
   Variable=INSTALL_RESULT
@@ -330,7 +330,7 @@ item: Execute Program
   Pathname=.\DBManager.exe
   Command Line=-S"%SRV%" -D"%DAGG%" %SA% -OTeleoptiCCCAgg %C% %U2% -R -T "-F%DIR%
   Default Directory=%DIR%
-  Flags=00000010
+  Flags=00000110
 end
 item: If/While Statement
   Variable=INSTALL_RESULT
@@ -352,7 +352,7 @@ item: Execute Program
   Pathname=DBManager.exe
   Command Line=-S"%SRV%" -D"%DANA%" %SA% -OTeleoptiAnalytics %C% %U2% -R -T "-F%DIR%
   Default Directory=%DIR%
-  Flags=00000010
+  Flags=00000110
 end
 item: If/While Statement
   Variable=INSTALL_RESULT
@@ -378,19 +378,19 @@ item: Execute Program
   Pathname=.\DBManager.exe
   Command Line=-S"%SRV%" -D"%DCCC%" %SA% -OTeleoptiCCC7 %U% -R "-F%DIR%
   Default Directory=%DIR%
-  Flags=00000010
+  Flags=00000110
 end
 item: Execute Program
   Pathname=.\DBManager.exe
   Command Line=-S"%SRV%" -D"%DAGG%" %SA% -OTeleoptiCCCAgg %U% -R "-F%DIR%
   Default Directory=%DIR%
-  Flags=00000010
+  Flags=00000110
 end
 item: Execute Program
   Pathname=DBManager.exe
   Command Line=-S"%SRV%" -D"%DANA%" %SA% -OTeleoptiAnalytics %U% -R "-F%DIR%
   Default Directory=%DIR%
-  Flags=00000010
+  Flags=00000110
 end
 item: Remark
   Text=This step initiate default data via ApplicationConfig.exe
@@ -412,7 +412,7 @@ item: Execute Program
   Pathname=CccAppConfig.exe
   Command Line=-DS"%SRV%" -DD"%DCCC%" %SA2% -NA"%myADMIN_USER%" -NP"%myADMIN_PWD%" -BU"%BU%"
   Default Directory=%DIR2%
-  Flags=00000010
+  Flags=00000110
 end
 item: End Block
 end

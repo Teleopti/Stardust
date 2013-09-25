@@ -94,12 +94,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return Root();
 		}
 
-		public override void SetParent(IEntity parent)
+		public void SetParent(IEntity parent)
 		{
 			Parent = parent;
 		}
 
-		public new virtual IEntity Parent
+		public virtual IEntity Parent
 		{
 			get { return _parent; }
 			private set { _parent = value; }

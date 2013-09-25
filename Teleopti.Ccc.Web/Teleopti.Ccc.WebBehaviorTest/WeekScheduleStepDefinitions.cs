@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Xml;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
@@ -25,43 +28,51 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click the request symbol for date '(.*)'")]
 		public void WhenIClickTheRequestSymbolForDate(DateTime date)
 		{
-            Pages.Pages.WeekSchedulePage.DayElementForDate(date).ListItems.First(Find.ById("day-symbol")).Div(
-				QuicklyFind.ByClass("text-request")).EventualClick();
+			Browser.Interactions.Click(string.Format(".weekview-day[data-mytime-date='{0}'] .icon-comment", date.ToString("yyyy-MM-dd")));
 		}
 
 		[Then(@"I should not see any shifts on date '(.*)'")]
 		public void ThenIShouldNotSeeAnyShiftsOnDate(DateTime date)
 		{
-			_page.DayLayers(date).Count.Should().Be.EqualTo(0);
+			Browser.Interactions.AssertNotExists(".weekview-timeline",
+			                                     string.Format(
+				                                     "'.weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer'",
+				                                     date.ToString("yyyy-MM-dd")));
 		}
 
 		[Then(@"I should see the start and end dates of current week for date '(.*)'")]
 		public void ThenIShouldSeeTheStartAndEndDatesOfCurrentWeekForDate(DateTime date)
 		{
-			AssertShowingWeekForDay(DateHelper.GetFirstDateInWeek(date.Date, UserFactory.User().Culture));
+			AssertShowingWeekForDay(DateHelper.GetFirstDateInWeek(date.Date, DataMaker.Data().MyCulture));
 		}
 
 		[Then(@"I should not see the end of the shift on date '(.*)'")]
 		public void ThenIShouldNotSeeTheEndOfTheShiftOnDate(DateTime date)
 		{
-			_page.DayLayers(date).Count.Should().Be.EqualTo(2);
+			AssertDayContainsGivenNumberOfLayers(date, 2);
 		}
 
-		[Then(@"I should see the end of the shift on date '(.*)'")]
-		public void ThenIShouldSeeTheEndOfTheShiftOnDate(DateTime date)
+		[Then(@"I should see the the shift ending at '(.*)' on date '(.*)'")]
+		public void ThenIShouldSeeTheTheShiftEndingAtOnDate(string time, DateTime date)
 		{
-			var contents = _page.DayElementForDate(date).InnerHtml;
-
-			var indexForShiftEnd = contents.IndexOf(TestData.ActivityPhone.Description.Name);
-
-			indexForShiftEnd.Should().Be.GreaterThan(-1);
+			var activityNameScript =
+				string.Format(
+					"return $('.weekview-day[data-mytime-date=\"{0}\"] .weekview-day-schedule-layer:last .weekview-day-schedule-layer-activity:contains(\"{1}\")').length > 0",
+					date.ToString("yyyy-MM-dd"), TestData.ActivityPhone.Description.Name);
+			var endTimeScript =
+				string.Format(
+					"return $('.weekview-day[data-mytime-date=\"{0}\"] .weekview-day-schedule-layer:last .weekview-day-schedule-layer-time:contains(\"{1}\")').length > 0",
+					date.ToString("yyyy-MM-dd"), time);
+			Browser.Interactions.AssertJavascriptResultContains(activityNameScript, "true");
+			Browser.Interactions.AssertJavascriptResultContains(endTimeScript, "true");
 		}
 
-		[Then(@"I should see the start of the shift on date '(.*)'")]
-		public void ThenIShouldSeeTheStartOfTheShiftOnDate(DateTime date)
+		[Then(@"I should see a shift on date '(.*)'")]
+		public void ThenIShouldSeeAShiftOnDate(DateTime date)
 		{
-			_page.DayLayers(date).Count.Should().Be.EqualTo(2);
+			AssertDayContainsGivenNumberOfLayers(date, 1);
 		}
+
 
 		[When(@"I hover layer '(.*)' on '(.*)'")]
 		public void WhenIHoverLayerOn(int layer, DateTime date)
@@ -80,16 +91,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the public note on date '(.*)'")]
 		public void ThenIShouldSeeThePublicNoteOnDate(DateTime date)
 		{
-			EventualAssert.That(() => _page.DayComment(date).Exists, Is.True);
+			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .icon-exclamation-sign", date.ToString("yyyy-MM-dd")));
 		}
-
-		[Then(@"I should see number '(.*)' with the request count for date '(.*)'")]
-		public void ThenIShouldSeeNumberWithTheRequestCountForDate(int requestCount, DateTime date)
-		{
-			var request = _page.RequestForDate(date);
-			EventualAssert.That(() => request.InnerHtml, Is.StringContaining(requestCount.ToString()));
-		}
-
+		
 		[When(@"I open the weekschedule date-picker")]
 		public void WhenIOpenTheWeekscheduleDate_Picker()
 		{
@@ -106,33 +110,67 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see start timeline and end timeline according to schedule with:")]
 		public void ThenIShouldSeeStartTimelineAndEndTimelineAccordingToScheduleWith(Table table)
 		{
-			_page.AnyTimelineLabel.WaitUntilExists();
-			var divs = _page.TimelineLabels;
-			EventualAssert.That(() => divs[0].InnerHtml.Split('<')[0] + divs[1].InnerHtml.Split('<')[0], Is.StringContaining(table.Rows[0][1]));
-			EventualAssert.That(() => divs[divs.Count - 1].InnerHtml.Split('<')[0] + divs[divs.Count - 2].InnerHtml.Split('<')[0], Is.StringContaining(table.Rows[1][1]));
-			var count = int.Parse(table.Rows[2][1]);
-			EventualAssert.That(() => divs.Count, Is.InRange(count, count + 2));
+			var startTime = table.Rows[0][1];
+			var endTime = table.Rows[1][1];
+			var timeLineCount = table.Rows[2][1];
+
+			Browser.Interactions.AssertJavascriptResultContains("return $('.weekview-timeline-label:visible:first').text()", startTime);
+			Browser.Interactions.AssertJavascriptResultContains("return $('.weekview-timeline-label:visible:last').text()", endTime);
+			Browser.Interactions.AssertJavascriptResultContains("return $('.weekview-timeline-label:visible').length", timeLineCount);
 		}
 
 		[Then(@"I should see activities on date '(.*)' with:")]
 		public void ThenIShouldSeeActivitiesOnDateWith(DateTime date, Table table)
 		{
-			DivCollection layers = _page.DayLayers(date);
+			const string layerTop1 = "16px";
+			const string layerHeigth1 = "190px";
+				
+			const string layerTop2 = "207px";
+			const string layerHeigth2 = "62px";
 
-			EventualAssert.That(() => layers[0].Style.GetAttributeValue("Top"), Is.EqualTo("16px"));
-			EventualAssert.That(() => layers[0].Style.GetAttributeValue("Height"), Is.EqualTo("190px"));
+			const string layerTop3 = "270px";
+			const string layerHeigth3 = "381px";
+			var dateFixed = date.ToString("yyyy-MM-dd");
 
-			EventualAssert.That(() => layers[1].Style.GetAttributeValue("Top"), Is.EqualTo("207px"));
-			EventualAssert.That(() => layers[1].Style.GetAttributeValue("Height"), Is.EqualTo("62px"));
+			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer[style*='top: {1}']", dateFixed, layerTop1));
+			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer[style*='height: {1}']", dateFixed, layerHeigth1));
 
-			EventualAssert.That(() => layers[2].Style.GetAttributeValue("Top"), Is.EqualTo("270px"));
-			EventualAssert.That(() => layers[2].Style.GetAttributeValue("Height"), Is.EqualTo("381px"));
+			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer[style*='top: {1}']", dateFixed, layerTop2));
+			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer[style*='height: {1}']", dateFixed, layerHeigth2));
+
+			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer[style*='top: {1}']", dateFixed, layerTop3));
+			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer[style*='height: {1}']", dateFixed, layerHeigth3));
+		}
+
+		[Then(@"I should see overtime availability bar with")]
+		public void ThenIShouldSeeOvertimeAvailabilityBarWith(Table table)
+		{
+			var overtimeAvailability = table.CreateInstance<OvertimeAvailabilityTooltipAndBar>();
+			var layers = _page.DayLayers(overtimeAvailability.Date);
+			if (overtimeAvailability.Date.Day == 20)
+			{
+				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Top"), Is.EqualTo("111px"));
+				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Height"), Is.EqualTo("445px"));
+			}
+			if (overtimeAvailability.Date.Day == 21)
+			{
+				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Top"), Is.EqualTo("459px"));
+				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Height"), Is.EqualTo("208px"));
+			}
+			if (overtimeAvailability.Date.Day == 22)
+			{
+				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Top"), Is.EqualTo("0px"));
+				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Height"), Is.EqualTo("89px"));
+			}
+			EventualAssert.That(() => layers[0].Style.GetAttributeValue("Width"), Is.EqualTo("20px"));
 		}
 
 		[Then(@"I should see activities on date '(.*)'")]
 		public void ThenIShouldSeeActivitiesOnDate(DateTime date)
 		{
-			EventualAssert.That(() => _page.DayLayers(date), Is.Not.Empty);
+			Browser.Interactions.AssertJavascriptResultContains(
+				string.Format("return $(\".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer\").length > 0;",
+				              date.ToString("yyyy-MM-dd")), "true");
 		}
 
 		[Then(@"I should see request page")]
@@ -144,21 +182,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click the current week button")]
 		public void WhenIClickTheCurrentWeekButton()
 		{
-			Pages.Pages.WeekSchedulePage.TodayButton.EventualClick();
+			Browser.Interactions.Click(".week-schedule-today");
 		}
-
-		[Then(@"I should see a shift on date '(.*)'")]
-		public void ThenIShouldSeeAShiftOnDate(DateTime date)
-		{
-			_page.DayLayers(date).Count.Should().Be.EqualTo(1);
-		}
-
+		
 		[Then(@"I should not see a shift on date '(.*)'")]
 		public void ThenIShouldNotSeeAShiftOnDate(DateTime date)
 		{
 			_page.DayLayers(date).Count.Should().Be.EqualTo(0);
 		}
-
+		
 		[When(@"My schedule between '(.*)' to '(.*)' reloads")]
 		public void WhenMyScheduleBetweenToReloads(DateTime start, DateTime end)
 		{
@@ -174,51 +206,54 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the day summary text for date '(.*)' in '(.*)'")]
 		public void ThenIShouldSeeTheDaySummaryTextForDateIn(DateTime date, string color)
 		{
-			_page.DayElementForDate(date).ListItems.First(Find.ById("day-summary")).Style.Color.ToString().ToLower().Should().Contain(
-				color);
+			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-summary[style*='color: {1}']", date.ToString("yyyy-MM-dd"), color));
 		}
 
 		[Then(@"I should see the text for date '(.*)' in '(.*)'")]
 		public void ThenIShouldSeeTheTextForDateIn(DateTime date, string color)
 		{
-			DivCollection layers = _page.DayLayers(date);
+			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer[style*='color: {1}']", date.ToString("yyyy-MM-dd"), color));
+		}
 
-			EventualAssert.That(() => layers[0].Style.GetAttributeValue("color").ToLower(), Is.StringContaining(color));
+		[Then(@"I should see an '(.*)' indication for chance of absence request on '(.*)'")]
+		public void ThenIShouldSeeAnIndicationForChanceOfAbsenceRequestOn(string color, DateTime date)
+		{
+			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .small-circle[style*='{1}']", date.ToString("yyyy-MM-dd"), color));
 		}
 
 		[Then(@"I should not see any indication of how many agents can go on holiday")]
 		public void ThenIShouldNotSeeAnyIndicationOfHowManyAgentsCanGoOnHoliday()
 		{
-			var indicators = Pages.Pages.WeekSchedulePage.AbsenceIndiciators();
-			foreach (var indicator in indicators)
-			{
-				EventualAssert.That(()=>indicator.IsDisplayed(), Is.False);
-			}
+			AssertAbsenceIndicators(0);
 		}
 
 		[Then(@"I should see an indication of the amount of agents that can go on holiday on each day of the week")]
 		public void ThenIShouldSeeAnIndicationOfTheAmountOfAgentsThatCanGoOnHolidayOnEachDayOfTheWeek()
 		{
-			var indicators = Pages.Pages.WeekSchedulePage.AbsenceIndiciators();
-			foreach (var indicator in indicators)
-			{
-				EventualAssert.That(()=>indicator.IsDisplayed(), Is.True);
-			}
+			AssertAbsenceIndicators(7);
 		}
-		[Then(@"I should see an '(.*)' indication for chance of absence request on '(.*)'")]
-		public void ThenIShouldSeeAnIndicationForChanceOfAbsenceRequestOn(string color, DateTime date)
+
+		private void AssertAbsenceIndicators(int visibleIndicatorCount)
 		{
-			var layers = _page.DayLayers(date);
-			var background = _page.DayElementForDate(date).Divs.Filter(Find.ByClass("small-circle"))[0].Style.BackgroundColor;
-			
-			EventualAssert.That(() => background.ToHexString, Is.EqualTo(new HtmlColor(color).ToHexString));
+			Browser.Interactions.AssertJavascriptResultContains("return $('.holiday-agents:visible').length",
+																visibleIndicatorCount.ToString(
+																	CultureInfo.InvariantCulture));
 		}
+
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
 		{
-			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(anyDayOfWeek, UserFactory.User().Culture);
-			var lastDayOfWeek = DateHelper.GetLastDateInWeek(anyDayOfWeek, UserFactory.User().Culture);
-			EventualAssert.That(() => _page.FirstDay.GetAttributeValue("data-mytime-date"), Is.EqualTo(firstDayOfWeek.ToString("yyyy-MM-dd")));
-			EventualAssert.That(() => _page.SeventhDay.GetAttributeValue("data-mytime-date"), Is.EqualTo(lastDayOfWeek.ToString("yyyy-MM-dd")));
+			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(anyDayOfWeek, DataMaker.Data().MyCulture).ToString("yyyy-MM-dd");
+			var lastDayOfWeek = DateHelper.GetLastDateInWeek(anyDayOfWeek, DataMaker.Data().MyCulture).ToString("yyyy-MM-dd");
+
+			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}']", firstDayOfWeek));
+			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}']", lastDayOfWeek));
 		}
+
+		private void AssertDayContainsGivenNumberOfLayers(DateTime date, int layerCount)
+		{
+			var script = string.Format("return $('.weekview-day[data-mytime-date=\"{0}\"] .weekview-day-schedule-layer').length", date.ToString("yyyy-MM-dd"));
+			Browser.Interactions.AssertJavascriptResultContains(script, layerCount.ToString(CultureInfo.InvariantCulture));
+		}
+
 	}
 }

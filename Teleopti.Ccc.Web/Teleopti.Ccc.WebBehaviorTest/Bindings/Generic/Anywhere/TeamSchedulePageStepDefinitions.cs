@@ -34,13 +34,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift li", personName);
 		}
 
+		[Then(@"I should see '(.*)' with the schedule")]
+		public void ThenIShouldSeeWithTheSchedule(string personName, Table table)
+		{
+			var schedule = table.CreateInstance<ScheduleInfo>();
+
+			Browser.Interactions.AssertExistsUsingJQuery(
+				string.Format(
+					".person:contains('{0}') .shift .layer[data-start-time='{1}'][data-length-minutes='{2}'][style*='background-color: {3}']",
+					personName,
+					schedule.StartTime,
+					schedule.LengthMinutes(),
+					PersonSchedulePageStepDefinitions.ColorNameToCss(schedule.Color)));
+		}
+		
 		[Then(@"I should see '(.*)' with absence")]
 		public void ThenIShouldSeeWithAbsence(string personName, Table table)
 		{
 			var absence = table.CreateInstance<AbsenceInfo>();
 			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift li[style*='background-color: {1}']", personName, PersonSchedulePageStepDefinitions.ColorNameToCss(absence.Color));
 		}
-
 
 		[Then(@"I should see '(.*)' with no schedule")]
 		[Then(@"I should see no schedule for '(.*)'")]
@@ -95,6 +108,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public class SkillInfo
 		{
 			public string Skill { get; set; }
+		}
+
+		public class ScheduleInfo
+		{
+			public string Color { get; set; }
+			public string StartTime { get; set; }
+			public string EndTime { get; set; }
+
+			public int LengthMinutes()
+			{
+				var result = (int)TimeSpan.Parse(EndTime).Subtract(TimeSpan.Parse(StartTime)).TotalMinutes;
+				if (result < 0) result += 60 * 24;
+				return result;
+			}
 		}
 
 		[When(@"I select team '(.*)'")]

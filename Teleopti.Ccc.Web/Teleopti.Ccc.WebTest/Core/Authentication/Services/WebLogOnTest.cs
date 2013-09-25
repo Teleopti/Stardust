@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			}
 			using (mocks.Playback())
 			{
-				target.LogOn(buId, dataSourceName, personId);
+				target.LogOn(dataSourceName, buId, personId);
 			}
 		}
 
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			}
 			using (mocks.Playback())
 			{
-				target.LogOn(buId, dataSourceName, personId);
+				target.LogOn(dataSourceName, buId, personId);
 			}
 		}
 
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			}
 			using (mocks.Playback())
 			{
-				target.LogOn(buId, dataSourceName, personId);
+				target.LogOn(dataSourceName, buId, personId);
 			}
 		}
 
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			using (mocks.Playback())
 			{
 				Assert.Throws<PermissionException>(() =>
-				                                   target.LogOn(buId, dataSourceName, personId));
+												   target.LogOn(dataSourceName, buId, personId));
 			}
 		}
 

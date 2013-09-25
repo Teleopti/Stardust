@@ -31,6 +31,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             var overTimeActivities = (from a in _personAssignments
                                       from ol in a.OvertimeLayers()
                                       select ol.Payload).Distinct();
+
+
             mainShiftActivities.ForEach(LazyLoadingManager.Initialize);
             persShiftActivities.ForEach(LazyLoadingManager.Initialize);
             overTimeActivities.ForEach(LazyLoadingManager.Initialize);
@@ -42,6 +44,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 {
                     LazyLoadingManager.Initialize(overtime.DefinitionSet);   
                 }
+
+	            LazyLoadingManager.Initialize(personAss.DayOff());
             }
 
 	        foreach (var assignment in assWithShiftCategories)

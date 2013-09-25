@@ -12,21 +12,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsABudgetgroup(Table table)
 		{
 			var budgetConfigurable = table.CreateInstance<BudgetGroupConfigurable>();
-			UserFactory.User().Setup(budgetConfigurable);
+			DataMaker.Data().Apply(budgetConfigurable);
 		}
 
 		[Given(@"there is a budgetday")]
 		public void GivenThereIsAnBudgetday(Table table)
 		{
 			var budgetday = table.CreateInstance<BudgetdayConfigurable>();
-			UserFactory.User().Setup(budgetday);
+			DataMaker.Data().Apply(budgetday);
 		}
 
 		[Given(@"there is absence time for")]
 		public void GivenThereIsAbsenceTimeForTo(Table table)
 		{
 			var absenceTimeConfigurable = table.CreateInstance<AbsenceTimeConfigurable>();
-			UserFactory.User().Setup(absenceTimeConfigurable);
+			DataMaker.Data().ApplyLater(absenceTimeConfigurable);
 		}
 	}
 }

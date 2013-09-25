@@ -20,33 +20,39 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public void SetChecksum(IRequest request)
         {
-			  var defaultScenario = _scenarioRepository.Current();
-            IShiftTradeRequest shiftTradeRequest = request as IShiftTradeRequest;
-            if (shiftTradeRequest == null) return;
+            var defaultScenario = _scenarioRepository.Current();
+            var shiftTradeRequest = request as IShiftTradeRequest;
+            if (shiftTradeRequest == null) 
+                return;
 
-            ShiftTradeRequestPersonExtractor shiftTradeRequestPersonExtractor = new ShiftTradeRequestPersonExtractor();
+            var shiftTradeRequestPersonExtractor = new ShiftTradeRequestPersonExtractor();
             shiftTradeRequestPersonExtractor.ExtractPersons(shiftTradeRequest);
-	        var period =
-		        shiftTradeRequest.Period.ToDateOnlyPeriod(shiftTradeRequest.PersonFrom.PermissionInformation.DefaultTimeZone());
-	        var longPeriod = new DateOnlyPeriod(period.StartDate.AddDays(-1),
-	                                            period.EndDate.AddDays(1));
-            _scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(shiftTradeRequestPersonExtractor.Persons), new ScheduleDictionaryLoadOptions(false,false),
-                                                          longPeriod,
-                                                          defaultScenario);
+            
+            var period =
+                shiftTradeRequest.Period.ToDateOnlyPeriod(
+                    shiftTradeRequest.PersonFrom.PermissionInformation.DefaultTimeZone());
+            var longPeriod = new DateOnlyPeriod(period.StartDate.AddDays(-1),
+                                                period.EndDate.AddDays(1));
+            _scheduleDictionary =
+                _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
+                    new PersonProvider(shiftTradeRequestPersonExtractor.Persons),
+                    new ScheduleDictionaryLoadOptions(false, false),
+                    longPeriod,
+                    defaultScenario);
             SetChecksumToShiftTradeRequest(shiftTradeRequest);
         }
 
         private void SetChecksumToShiftTradeRequest(IShiftTradeRequest shiftTradeRequest)
         {
-            foreach (IShiftTradeSwapDetail shiftTradeSwapDetail in shiftTradeRequest.ShiftTradeSwapDetails)
+            foreach (var shiftTradeSwapDetail in shiftTradeRequest.ShiftTradeSwapDetails)
             {
-                IScheduleRange rangeFrom = _scheduleDictionary[shiftTradeSwapDetail.PersonFrom];
-                IScheduleRange rangeTo = _scheduleDictionary[shiftTradeSwapDetail.PersonTo];
+                var rangeFrom = _scheduleDictionary[shiftTradeSwapDetail.PersonFrom];
+                var rangeTo = _scheduleDictionary[shiftTradeSwapDetail.PersonTo];
 
-                IScheduleDay partFrom = rangeFrom.ScheduledDay(shiftTradeSwapDetail.DateFrom);
-                IScheduleDay partTo = rangeTo.ScheduledDay(shiftTradeSwapDetail.DateTo);
-                long checksumFrom = new ShiftTradeChecksumCalculator(partFrom).CalculateChecksum();
-                long checksumTo = new ShiftTradeChecksumCalculator(partTo).CalculateChecksum();
+                var partFrom = rangeFrom.ScheduledDay(shiftTradeSwapDetail.DateFrom);
+                var partTo = rangeTo.ScheduledDay(shiftTradeSwapDetail.DateTo);
+                var checksumFrom = new ShiftTradeChecksumCalculator(partFrom).CalculateChecksum();
+                var checksumTo = new ShiftTradeChecksumCalculator(partTo).CalculateChecksum();
 
                 shiftTradeSwapDetail.SchedulePartFrom = partFrom;
                 shiftTradeSwapDetail.SchedulePartTo = partTo;

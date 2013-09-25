@@ -113,12 +113,13 @@
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
     <Compile Include="Domain\IActivityRestrictableVisualLayer.cs" />
     <Compile Include="Domain\IActualAgentState.cs" />
+    <Compile Include="Domain\IAggregateRootBrokerConditions.cs" />
     <Compile Include="Domain\IAggregateRootWithEvents.cs" />
-    <Compile Include="Domain\IBudgetGroupAllowanceCalculator.cs" />
     <Compile Include="Domain\IBudgetGroupHeadCountSpecification.cs" />
     <Compile Include="Domain\ICalculator.cs" />
     <Compile Include="Domain\IDayOff.cs" />
     <Compile Include="Domain\IEditableShift.cs" />
+    <Compile Include="Domain\IEditableShiftLayer.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />
     <Compile Include="Domain\IChangePasswordResultInfo.cs" />
     <Compile Include="Domain\IEvent.cs" />
@@ -164,6 +165,7 @@
     <Compile Include="Domain\IOptimizationPreferences.cs" />
     <Compile Include="Domain\IPersonFinderDisplayRow.cs" />
     <Compile Include="Domain\IPersonFinderSearchCriteria.cs" />
+    <Compile Include="Domain\IPersonRequestSpecification.cs" />
     <Compile Include="Domain\IPersonScheduleDayReadModel.cs" />
     <Compile Include="Domain\IPreferenceAbsenceChecker.cs" />
     <Compile Include="Domain\IJobResult.cs" />
@@ -231,7 +233,6 @@
     <Compile Include="Domain\IPayrollResultDetail.cs" />
     <Compile Include="Domain\IPersonAccountCollection.cs" />
     <Compile Include="Domain\IAssignmentPeriodRule.cs" />
-    <Compile Include="Domain\IBinaryValidator.cs" />
     <Compile Include="Domain\IDayOffOptimizerContainer.cs" />
     <Compile Include="Domain\IExecutableCommand.cs" />
     <Compile Include="Domain\ILockableBitArray.cs" />
@@ -260,14 +261,10 @@
     <Compile Include="Domain\IScheduleDayStudentAvailabilityRestrictionExtractor.cs" />
     <Compile Include="Domain\IScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Domain\IScheduleHistoryRepository.cs" />
-    <Compile Include="Domain\IScheduleMatrixBackToLegalStateBrutalForceServiceContainer.cs" />
-    <Compile Include="Domain\IScheduleMatrixBitArrayConverter.cs" />
     <Compile Include="Domain\IScheduleMatrixListCreator.cs" />
     <Compile Include="Domain\IScheduleMatrixLockableBitArrayConverter.cs" />
     <Compile Include="Domain\IScheduleMatrixOriginalStateContainer.cs" />
     <Compile Include="Domain\IScheduleOptimizationService.cs" />
-    <Compile Include="Domain\ISchedulePeriodDayOffLegalStateValidator.cs" />
-    <Compile Include="Domain\ISchedulePeriodDayOffBackToLegalStateByBrutalForceService.cs" />
     <Compile Include="Domain\ISchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Domain\IBestBlockShiftCategoryFinder.cs" />
     <Compile Include="Domain\IBlockSchedulingService.cs" />
@@ -364,7 +361,6 @@
     <Compile Include="Domain\IChartSeriesSetting.cs" />
     <Compile Include="Domain\ICommandLineArgument.cs" />
     <Compile Include="Domain\IEffectiveRestriction.cs" />
-    <Compile Include="Domain\ILegalStateCheckerOptions.cs" />
     <Compile Include="Domain\IMeetingPayload.cs" />
     <Compile Include="Domain\IMoveDataBetweenSchedules.cs" />
     <Compile Include="Domain\IPersonCollection.cs" />
@@ -420,13 +416,11 @@
     <Compile Include="Domain\IRotationDay.cs" />
     <Compile Include="Domain\IRotation.cs" />
     <Compile Include="Domain\IRotationRestriction.cs" />
-    <Compile Include="Domain\IRtaVisualLayer.cs" />
     <Compile Include="Domain\IScheduleData.cs" />
     <Compile Include="Domain\IScheduleDataRestriction.cs" />
     <Compile Include="Domain\ISchedulePartModifyAndRollbackService.cs" />
     <Compile Include="Domain\IRtaState.cs" />
     <Compile Include="Domain\IRtaStateGroup.cs" />
-    <Compile Include="Domain\ISchedulePartTracker.cs" />
     <Compile Include="Domain\IScheduleRepository.cs" />
     <Compile Include="Domain\ISchedulingOptions.cs" />
     <Compile Include="Domain\ISchedulingResultStateHolder.cs" />
@@ -742,6 +736,7 @@
     <Compile Include="Infrastructure\ICurrentUnitOfWorkFactory.cs" />
     <Compile Include="Infrastructure\IWriteToFile.cs" />
     <Compile Include="Domain\IWorkShiftBackToLegalStateServicePro.cs" />
+    <Compile Include="Infrastructure\IsNotDeadCodeAttribute.cs" />
     <Compile Include="Infrastructure\LicenseType.cs" />
     <Compile Include="Infrastructure\MessageBrokerException.cs" />
     <Compile Include="IPossibleStartEndCategory.cs" />

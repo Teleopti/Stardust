@@ -82,9 +82,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see that I have a pre-scheduled meeting on '(.*)'")]
 		public void ThenIShouldSeeThatIHaveAPreScheduledMeetingOn(DateTime date)
 		{
-			var indication = Pages.Pages.PreferencePage.MeetingAndPersonalShiftIndicationForDate(date);
-			EventualAssert.That(() => indication.Exists, Is.True);
-			EventualAssert.That(() => indication.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertVisibleUsingJQuery(string.Format("li[data-mytime-date='{0}'] .meeting-icon", date.ToString("yyyy-MM-dd")));
 		}
 
 		[Then(@"I should have a tooltip for meeting details with")]

@@ -140,7 +140,6 @@
     <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\UnitOfWorkTransactionEventSyncronization.cs" />
     <Compile Include="Foundation\ConfigReader.cs" />
-    <Compile Include="Foundation\ConfigurationDictionaryWrapper.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapper.cs" />
     <Compile Include="Foundation\IConfigurationWrapper.cs" />
     <Compile Include="Foundation\NewtonsoftJsonDeserializer.cs" />
@@ -164,7 +163,6 @@
     <Compile Include="NHibernateConfiguration\DataSourceConfigurationSetter.cs" />
     <Compile Include="Config\LoadPasswordPolicyService.cs" />
     <Compile Include="Foundation\AvailableWindowsDataSources.cs" />
-    <Compile Include="Foundation\CannotConnectToDatabaseException.cs" />
     <Compile Include="Foundation\ForeignKeyException.cs" />
     <Compile Include="Foundation\IAvailableWindowsDataSources.cs" />
     <Compile Include="Foundation\IInitializeApplication.cs" />
@@ -193,7 +191,6 @@
     <Compile Include="NHibernateConfiguration\SqlServerProgrammabilityAuxiliary.cs" />
     <Compile Include="NHibernateConfiguration\ColorNumber.cs" />
     <Compile Include="Foundation\ConstraintViolationException.cs" />
-    <Compile Include="NHibernateConfiguration\DataSourceSettingValues.cs" />
     <Compile Include="NHibernateConfiguration\DateOnlyMappingType.cs" />
     <Compile Include="Foundation\LogOnOff.cs" />
     <Compile Include="Foundation\LazyLoadingManager.cs" />
@@ -335,7 +332,6 @@
     <Compile Include="Repositories\DayOffTemplateRepository.cs" />
     <Compile Include="Repositories\RtaStateGroupRepository.cs" />
     <Compile Include="Repositories\ForecastProcessReportRepository.cs" />
-    <Compile Include="Repositories\GeneralRepository.cs" />
     <Compile Include="Repositories\GroupPageRepository.cs" />
     <Compile Include="Repositories\OptionalColumnRepository.cs">
       <SubType>Code</SubType>

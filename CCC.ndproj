@@ -2,6 +2,7 @@
 <NDepend AppName="CCC" Platform="DotNet">
   <OutputDir KeepHistoric="False" KeepXmlFiles="True">C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\NDependOut</OutputDir>
   <Assemblies>
+	<Name>Teleopti.Interfaces</Name>
     <Name>Teleopti.Ccc.Domain</Name>
     <Name>Teleopti.Ccc.Infrastructure</Name>
     <Name>Teleopti.Ccc.DatabaseConverter</Name>
@@ -50,6 +51,7 @@
     <Name>Teleopti.Ccc.Sdk.Client</Name>
     <Name>ClickOnceSign</Name>
     <Name>Teleopti.Ccc.Web</Name>
+    <Name>Teleopti.Ccc.WebTest</Name>
     <Name>Teleopti.Support.LicTool</Name>
     <Name>Teleopti.Ccc.Web.Broker</Name>
     <Name>Teleopti.Analytics.PM.PMServiceHost</Name>
@@ -76,8 +78,14 @@
 	<Name>Teleopti.Ccc.TestCommon</Name>
 	<Name>Teleopti.Ccc.DayOffPlanningTest</Name>
 	<Name>Teleopti.Ccc.IocCommonTest</Name>
+	<Name>Teleopti.Ccc.UserTexts</Name>
+	<Name>Teleopti.Analytics.Etl.Interfaces</Name>
+	<Name>Teleopti.Ccc.Rta.Interfaces</Name>
+	<Name>Teleopti.Analytics.ReportTexts</Name>
   </Assemblies>
   <FrameworkAssemblies>
+    <Name>nunit.framework</Name>
+    <Name>SharpTestsEx</Name>
     <Name>mscorlib</Name>
     <Name>System</Name>
     <Name>System.IdentityModel</Name>
@@ -131,6 +139,7 @@
     <Name>Ricciolo.Controls.TreeListView</Name>
     <Name>Microsoft.AnalysisServices.AdomdClient</Name>
     <Name>Autofac.Integration.Wcf</Name>
+    <Name>Rhino.Mocks</Name>
     <Name>Rhino.ServiceBus</Name>
     <Name>Rhino.ServiceBus.SqlQueues</Name>
     <Name>Rhino.ServiceBus.Autofac</Name>
@@ -227,22 +236,22 @@
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Startpage\bin</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Debug</Dir>
     <Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Web.Broker.Backplane\bin</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\DomainTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\InfrastructureTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\DataBaseConverterTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.WinCodeTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Analytics\Teleopti.Analytics.Etl.CommonTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Analytics\Teleopti.Analytics.Etl.TransformerTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatterTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.LogClientTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.ServerTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.LogicTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\AgentPortal\Teleopti.Ccc.AgentPortalCodeTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.TestCommon\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.DayOffPlanningTest\bin\Debug</Dir>
-	<Dir>C:\Data\hgdata\PBI23761\Teleopti.Ccc.IocCommonTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\DomainTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\InfrastructureTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\DataBaseConverterTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.WinCodeTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.CommonTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Analytics\Teleopti.Analytics.Etl.TransformerTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatterTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.LogClientTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.ServerTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.LogicTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\AgentPortal\Teleopti.Ccc.AgentPortalCodeTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.TestCommon\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.DayOffPlanningTest\bin\Debug</Dir>
+	<Dir>C:\Program Files (x86)\CruiseControl.NET\server\RaptorMain\WorkingDirectory\Teleopti.Ccc.IocCommonTest\bin\Debug</Dir>
   </Dirs>
   <Report Kind="0" SectionsEnabled="2563" XslPath="" Flags="63488">
     <Section Enabled="True">Application Metrics</Section>
@@ -2099,6 +2108,47 @@ select new {
 }]]></Query>
     </Group>
     <Group Name="Dead Code" Active="True" ShownInReport="True">
+	<Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Methods potentially only used from Tests</Name>
+warnif count > 0
+	let allTestAssemblies = JustMyCode.Assemblies.Where(a=>a.Name.Contains("Test"))
+	let allCodeAssemblies = JustMyCode.Assemblies.Where(a=>!a.Name.Contains("Test"))
+ 
+	let methodsUsedByCode = JustMyCode.Methods.UsedByAny(allCodeAssemblies.ChildMethods())
+	let methodsUsedByTest = JustMyCode.Methods.UsedByAny(allTestAssemblies.ChildMethods())
+ 
+	let methodsUsedOnlyInTest = methodsUsedByTest.Except(methodsUsedByCode)
+ 
+	from m in methodsUsedOnlyInTest
+	//skippa abstracta metoder
+	where !m.IsAbstract && 
+	//skippa metoder som ligger i testprojekten
+	!allTestAssemblies.Contains(m.ParentAssembly)
+	//skippa "KeepMe"
+	&& !m.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute")	
+	select new { m, m.FullName }]]>
+	</Query>
+	<Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types potentially only used from Tests</Name>
+warnif count > 0
+	let allTestAssemblies = JustMyCode.Assemblies.Where(a=>a.Name.Contains("Test"))
+	let allCodeAssemblies = JustMyCode.Assemblies.Where(a=>!a.Name.Contains("Test"))
+ 
+	let typesUsedByCode = JustMyCode.Types.UsedByAny(allCodeAssemblies.ChildTypes())
+	let typesUsedByTest = JustMyCode.Types.UsedByAny(allTestAssemblies.ChildTypes())
+ 
+	let typesUsedOnlyInTest = typesUsedByTest.Except(typesUsedByCode)
+	
+	from t in typesUsedOnlyInTest
+	//skippa klasser som ligger i testprojekten
+	where !allTestAssemblies.Contains(t.ParentAssembly)
+	//skippa "IsNotDeadCodeAttribute"
+	&& !t.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute")
+	&& !t.BaseClasses.Any(type => type.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute"))
+	&& !t.InterfacesImplemented.Any(type => type.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute"))	
+	//skippa web controllers - inget enkelt sätt att sätta attribut på allihopa
+	&& t.BaseClass.FullName!="System.Web.Mvc.Controller"
+	select new { t, t.FullName}]]>
+	</Query>
+	
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Potentially dead Types</Name>
 warnif count > 0
 // Filter procedure for types that should'nt be considered as dead
@@ -2108,7 +2158,7 @@ let canTypeBeConsideredAsDeadProc = new Func<IType, bool>(
         !t.IsGeneratedByCompiler &&
 
          // If you don't want to link NDepend.API.dll, you can use your own IsNotDeadCodeAttribute and adapt this rule.
-        !t.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch()) &&
+        !t.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch()) &&
 
         // Exclude static types that define only const fields
         // because they cannot be seen as used in IL code.
@@ -2152,7 +2202,7 @@ let canMethodBeConsideredAsDeadProc = new Func<IMethod, bool>(
          !m.HasAttribute("System.Runtime.Serialization.OnDeserializedAttribute".AllowNoMatch()) &&
 
          // If you don't want to link NDepend.API.dll, you can use your own IsNotDeadCodeAttribute and adapt this rule.
-         !m.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch()))
+         !m.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch()))
 
 // Get methods unused
 let methodsUnused = 
@@ -2183,7 +2233,7 @@ from f in JustMyCode.Fields where
    !f.IsLiteral &&    // The IL code never explicitely uses literal fields.
    !f.IsEnumValue &&  // The IL code never explicitely uses enumeration value.
    f.Name !=  "value__"  && // Field named 'value__' are relative to enumerations and the IL code never explicitely uses them.
-   !f.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch())
+   !f.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch())
    // If you don't want to link NDepend.API.dll, you can use your own IsNotDeadCodeAttribute and adapt this rule.
 select f]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Wrong usage of IsNotDeadCodeAttribute</Name>
@@ -2197,12 +2247,12 @@ select f]]></Query>
 // your own IsNotDeadCodeAttribute and adapt this rule.
 warnif count == 1
 
-let tAttr = Types.WithFullName("NDepend.Attributes.IsNotDeadCodeAttribute").FirstOrDefault()
+let tAttr = Types.WithFullName("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute").FirstOrDefault()
 where tAttr != null
 
 // Get types that do a wrong usage of IsNotDeadCodeAttribute
 let types = from t in Application.Types where 
-   t.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch()) &&
+   t.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch()) &&
 
    ( // types used don't need to be tagged with IsNotDeadCodeAttribute!
      t.NbTypesUsingMe > 0  ||
@@ -2215,13 +2265,13 @@ let types = from t in Application.Types where
 
 // Get methods that do a wrong usage of IsNotDeadCodeAttribute
 let methods = from m in Application.Methods where 
-   m.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch()) &&
+   m.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch()) &&
    m.NbMethodsCallingMe > 0
    select m
 
 // Get fields that do a wrong usage of IsNotDeadCodeAttribute
 let fields = from f in Application.Fields where 
-   f.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch()) &&
+   f.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch()) &&
    f.NbMethodsUsingMe > 0
    select f
 
@@ -2233,7 +2283,7 @@ select new { tAttr, types , methods, fields }]]></Query>
 warnif count > 0 from m in JustMyCode.Methods where 
   m.Visibility != m.OptimalVisibility &&
   !m.HasAttribute("NDepend.Attributes.CannotDecreaseVisibilityAttribute".AllowNoMatch()) &&
-  !m.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch()) &&
+  !m.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch()) &&
   // If you don't want to link NDepend.API.dll, you can use your own attributes and adapt this rule.
   
   // Eliminate default constructor from the result.
@@ -2256,7 +2306,7 @@ warnif count > 0 from t in JustMyCode.Types where
 
   // If you don't want to link NDepend.API.dll, you can use your own attributes and adapt this rule.
  !t.HasAttribute("NDepend.Attributes.CannotDecreaseVisibilityAttribute".AllowNoMatch()) &&
- !t.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch()) &&
+ !t.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch()) &&
 
   // Static types that define only const fields cannot be seen as used in IL code.
   // They don't have  to be tagged with CannotDecreaseVisibilityAttribute.
@@ -2270,7 +2320,7 @@ select new { t, t.Visibility ,
 warnif count > 0 from f in JustMyCode.Fields where 
   f.Visibility != f.OptimalVisibility &&
  !f.HasAttribute("NDepend.Attributes.CannotDecreaseVisibilityAttribute".AllowNoMatch()) &&
- !f.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch())
+ !f.HasAttribute("Teleopti.Interfaces.Infrastructure.IsNotDeadCodeAttribute".AllowNoMatch())
   // If you don't want to link NDepend.API.dll, you can use your own attributes and adapt this rule.
   
 select new { f, 
@@ -2577,33 +2627,6 @@ select new { m, m.NbLinesOfCode }
 // introduced with .NET v4.0.]]></Query>
     </Group>
     <Group Name="Naming Conventions" Active="True" ShownInReport="False">
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Instance fields should be prefixed with a 'm_'</Name>
-warnif count > 0 from f in Application.Fields where 
-  !f.NameLike (@"^m_") && 
-  !f.IsStatic && 
-  !f.IsLiteral && 
-  !f.IsGeneratedByCompiler  && 
-  !f.IsSpecialName && 
-  !f.IsEventDelegateObject
-select new { f, f.SizeOfInst } 
-
-// This naming convention provokes debate.
-// Don't hesitate to customize the regex of 
-// NameLike to your preference.]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Static fields should be prefixed with a 's_'</Name>
-warnif count > 0 from f in Application.Fields where 
-  !f.NameLike (@"^s_") && 
-   f.IsStatic && 
-  !f.IsLiteral && 
-  !f.IsGeneratedByCompiler && 
-  !f.IsSpecialName && 
-  !f.IsEventDelegateObject
-select new { f, f.SizeOfInst }  
-
-// This naming convention provokes debate.
-// Don't hesitate to customize the regex of 
-// NameLike to your preference.
-]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Interface name should begin with a 'I'</Name>
 warnif count > 0 from t in Application.Types where 
 t.IsInterface  
@@ -2653,7 +2676,8 @@ select new { t, t.NbLinesOfCode }]]></Query>
 warnif count > 0 from m in JustMyCode.Methods where 
   !m.NameLike (@"^[A-Z]") && 
   !m.IsSpecialName && 
-  !m.IsGeneratedByCompiler
+  !m.IsGeneratedByCompiler &&
+  !m.IsPrivate
 select m
 
 // The name of a regular method should 

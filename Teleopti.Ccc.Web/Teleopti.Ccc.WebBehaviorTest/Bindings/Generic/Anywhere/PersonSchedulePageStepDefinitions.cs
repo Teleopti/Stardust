@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should be viewing person schedule for '(.*)' on '(.*)'")]
 		public void ThenIShouldSeePersonScheduleForPersonOnDate(string name, string date)
 		{
-			var id = UserFactory.User(name).Person.Id.ToString();
+			var id = DataMaker.Person(name).Person.Id.ToString();
 			Browser.Interactions.AssertUrlContains(id);
 			Browser.Interactions.AssertUrlContains(date.Replace("-", ""));
 		}
@@ -81,8 +81,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var fullDayAbsenceFormInfo = table.CreateInstance<FullDayAbsenceFormInfo>();
 
-			Browser.Interactions.AssertInputValueUsingJQuery(".full-day-absence-form .start-date", fullDayAbsenceFormInfo.StartDate.ToShortDateString(UserFactory.User().Culture));
-			Browser.Interactions.AssertInputValueUsingJQuery(".full-day-absence-form .end-date", fullDayAbsenceFormInfo.StartDate.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery(".full-day-absence-form .start-date", fullDayAbsenceFormInfo.StartDate.ToShortDateString(DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertInputValueUsingJQuery(".full-day-absence-form .end-date", fullDayAbsenceFormInfo.StartDate.ToShortDateString(DataMaker.Data().MyCulture));
 		}
 
 		[Then(@"I should see the add full day absence form")]
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 			Browser.Interactions.Javascript(string.Format("test.callViewMethodWhenReady('personschedule', 'setDateFromTest', '{0}');", fullDayAbsenceFormInfo.EndDate));
 
-			Browser.Interactions.AssertInputValueUsingJQuery(".full-day-absence-form .end-date", fullDayAbsenceFormInfo.EndDate.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery(".full-day-absence-form .end-date", fullDayAbsenceFormInfo.EndDate.ToShortDateString(DataMaker.Data().MyCulture));
 		}
 
 		[Then(@"I should see an absence in the absence list with")]

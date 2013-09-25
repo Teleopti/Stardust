@@ -620,7 +620,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime endDate1 = new DateTime(2007, 8, 13, 13, 30, 0, DateTimeKind.Utc);
             _period = new DateTimePeriod(startDate1, endDate1);
 
-            IList<DateTimePeriod> wholeDays = _period.WholeDayCollection();
+            IList<DateTimePeriod> wholeDays = _period.WholeDayCollection(TimeZoneInfo.Utc );
 
             Assert.AreEqual(4, wholeDays.Count);
             Assert.AreEqual(new TimeSpan(1, 30, 0), wholeDays[3].ElapsedTime());
@@ -633,7 +633,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             DateTime endDate1 = new DateTime(2008, 10, 26, 13, 30, 0, DateTimeKind.Utc);
             _period = new DateTimePeriod(startDate1, endDate1);
 
-            IList<DateTimePeriod> wholeDays = _period.WholeDayCollection();
+            IList<DateTimePeriod> wholeDays = _period.WholeDayCollection(TimeZoneHelper.CurrentSessionTimeZone);
 
             Assert.AreEqual(2, wholeDays.Count);
             Assert.AreEqual(new TimeSpan(0, 30, 0), wholeDays[1].ElapsedTime());
@@ -643,7 +643,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             endDate1 = new DateTime(2008, 3, 30, 13, 30, 0, DateTimeKind.Utc);
             _period = new DateTimePeriod(startDate1, endDate1);
 
-            wholeDays = _period.WholeDayCollection();
+            wholeDays = _period.WholeDayCollection(TimeZoneHelper.CurrentSessionTimeZone);
 
             Assert.AreEqual(2, wholeDays.Count);
             Assert.AreEqual(new TimeSpan(2, 30, 0), wholeDays[1].ElapsedTime());
@@ -1005,6 +1005,34 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.AreEqual(2, result.Count());
             Assert.AreEqual(resultDateTimePeriod1, result.FirstOrDefault());
             Assert.AreEqual(resultDateTimePeriod2, result.LastOrDefault());
+        }
+
+        [Test]
+        public void VerifyTheDayCollectionToReturnCorrectCollectionIncaseOfDayLightSaving()
+        {
+            var timeZoneInfo = TimeZoneInfoFactory.BrazilTimeZoneInfo();
+            var  dateTimePeriod = new DateTimePeriod(new DateTime(2013,02,13,0,0,0,DateTimeKind.Utc  ),new DateTime(2013,02,20,0,0,0,DateTimeKind.Utc) );
+            var returnList = dateTimePeriod.WholeDayCollection(timeZoneInfo);
+            Assert.AreEqual(returnList.Count(), 7);
+            Assert.AreEqual(returnList[0], new DateTimePeriod(new DateTime(2013, 02, 13, 0, 0, 0, DateTimeKind.Utc), new DateTime(2013, 02, 14, 0, 0, 0, DateTimeKind.Utc)));
+            Assert.AreEqual(returnList[1], new DateTimePeriod(new DateTime(2013, 02, 14, 0, 0, 0, DateTimeKind.Utc), new DateTime(2013, 02, 15, 0, 0, 0, DateTimeKind.Utc)));
+            Assert.AreEqual(returnList[2], new DateTimePeriod(new DateTime(2013, 02, 15, 0, 0, 0, DateTimeKind.Utc), new DateTime(2013, 02, 16, 0, 0, 0, DateTimeKind.Utc)));
+            Assert.AreEqual(returnList[3], new DateTimePeriod(new DateTime(2013, 02, 16, 0, 0, 0, DateTimeKind.Utc), new DateTime(2013, 02, 17, 0, 0, 0, DateTimeKind.Utc)));
+            Assert.AreEqual(returnList[4], new DateTimePeriod(new DateTime(2013, 02, 17, 0, 0, 0, DateTimeKind.Utc), new DateTime(2013, 02, 18, 1, 0, 0, DateTimeKind.Utc)));
+            Assert.AreEqual(returnList[5], new DateTimePeriod(new DateTime(2013, 02, 18, 1, 0, 0, DateTimeKind.Utc), new DateTime(2013, 02, 19, 1, 0, 0, DateTimeKind.Utc)));
+            Assert.AreEqual(returnList[6], new DateTimePeriod(new DateTime(2013, 02, 19, 1, 0, 0, DateTimeKind.Utc), new DateTime(2013, 02, 20, 0, 0, 0, DateTimeKind.Utc)));
+
+        }
+
+        [Test]
+        public void VerifyTheDayCollectionToReturnCorrectCollection()
+        {
+            var timeZoneInfo = TimeZoneInfoFactory.BrazilTimeZoneInfo();
+            var dateTimePeriod = new DateTimePeriod(new DateTime(2013, 02, 13, 0, 0, 0, DateTimeKind.Utc), new DateTime(2013, 02, 15, 0, 0, 0, DateTimeKind.Utc));
+            var returnList = dateTimePeriod.WholeDayCollection(timeZoneInfo);
+            Assert.AreEqual(returnList.Count(), 2);
+            Assert.AreEqual(returnList[0], new DateTimePeriod(new DateTime(2013, 02, 13, 0, 0, 0, DateTimeKind.Utc), new DateTime(2013, 02, 14, 0, 0, 0, DateTimeKind.Utc)));
+            Assert.AreEqual(returnList[1], new DateTimePeriod(new DateTime(2013, 02, 14, 0, 0, 0, DateTimeKind.Utc), new DateTime(2013, 02, 15, 0, 0, 0, DateTimeKind.Utc)));
         }
     }
 }

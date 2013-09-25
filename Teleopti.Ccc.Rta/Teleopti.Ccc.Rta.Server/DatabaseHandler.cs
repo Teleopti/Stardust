@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Rta.Server
 			var defaultStateGroupId = Guid.Empty;
 			var defaultStateGroupName = "";
 			var defaultStateGroupBusinessUnit = Guid.Empty;
-			const string getDefaultStateGroupQuery = @"SELECT Name, Id FROM RtaStateGroup WHERE DefaultStateGroup = 1";
+			const string getDefaultStateGroupQuery = @"SELECT Name, Id, BusinessUnit FROM RtaStateGroup WHERE DefaultStateGroup = 1";
 			
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
 			{

@@ -86,15 +86,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see my culture")]
 		public void ThenIShouldSeeMyCulture()
 		{
-			var user = UserFactory.User();
-			Browser.Interactions.AssertFirstContains("#s2id_Culture-Picker a span", user.Person.PermissionInformation.Culture().DisplayName);
+			var user = DataMaker.Data();
+			Browser.Interactions.AssertFirstContains("#s2id_Culture-Picker a span", user.MePerson.PermissionInformation.Culture().DisplayName);
 		}
 
 		[Then(@"I should see my language")]
 		public void ThenIShouldSeeMyLanguage()
 		{
-			var user = UserFactory.User();
-			Browser.Interactions.AssertFirstContains("#s2id_CultureUi-Picker a span", user.Person.PermissionInformation.UICulture().DisplayName);
+			var user = DataMaker.Data();
+			Browser.Interactions.AssertFirstContains("#s2id_CultureUi-Picker a span", user.MePerson.PermissionInformation.UICulture().DisplayName);
 		}
 
 		[When(@"I change culture to US")]

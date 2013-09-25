@@ -120,7 +120,7 @@ Scenario: Show the user a red indication when there is no budgetgroup for that d
 
 
 Scenario: Show the user a red indication when today is outside open absence periods
-	Given Current time is '2023-05-02 20:00'
+	Given the current time is '2023-05-02 20:00'
 	And there is a budgetday
 	| Field						| Value					|
 	| BudgetGroup				| TheBudgetGroup		|
@@ -142,7 +142,7 @@ Scenario: Show the user a red indication when today is outside open absence peri
 
 	
 Scenario: Show the user a red indication when absence day is outside absence preference periods
-	Given Current time is '2023-05-15 20:00'
+	Given the current time is '2023-05-15 20:00'
 	And there is a budgetday
 	| Field						| Value					|
 	| BudgetGroup				| TheBudgetGroup		|
@@ -163,7 +163,7 @@ Scenario: Show the user a red indication when absence day is outside absence pre
 	Then I should see an 'red' indication for chance of absence request on '2023-05-28'
 
 Scenario: Do not show the user any indication when there is no staffing check for that day
-	Given Current time is '2023-05-25 20:00'
+	Given the current time is '2023-05-25 20:00'
 	And there is a budgetday
 	| Field						| Value					|
 	| BudgetGroup				| TheBudgetGroup		|
@@ -181,7 +181,7 @@ Scenario: Do not show the user any indication when there is no staffing check fo
 	Then I should not see any indication of how many agents can go on holiday
 
 Scenario: Do not show the user any indication when there is intraday staffing check for that day
-	Given Current time is '2023-05-25 20:00'
+	Given the current time is '2023-05-25 20:00'
 	And there is a budgetday
 	| Field						| Value					|
 	| BudgetGroup				| TheBudgetGroup		|
@@ -200,7 +200,7 @@ Scenario: Do not show the user any indication when there is intraday staffing ch
 	Then I should not see any indication of how many agents can go on holiday
 	
 Scenario: Show the user a green indication when there is budgetgroup check for that day
-	Given Current time is '2023-05-25 20:00'
+	Given the current time is '2023-05-25 20:00'
 	And there is a budgetday
 	| Field						| Value					|
 	| BudgetGroup				| TheBudgetGroup		|
@@ -219,7 +219,7 @@ Scenario: Show the user a green indication when there is budgetgroup check for t
 	Then I should see an 'green' indication for chance of absence request on '2023-05-28'
 
 Scenario: Do not show the user any indication when there is budgetgroup head count check for that day
-	Given Current time is '2023-05-25 20:00'
+	Given the current time is '2023-05-25 20:00'
 	And there is a budgetday
 	| Field						| Value					|
 	| BudgetGroup				| TheBudgetGroup		|
@@ -238,7 +238,7 @@ Scenario: Do not show the user any indication when there is budgetgroup head cou
 	Then I should not see any indication of how many agents can go on holiday
 	
 Scenario: Show the user a green indication when there is no auto grant for absence requests for that day
-	Given Current time is '2023-05-25 20:00'
+	Given the current time is '2023-05-25 20:00'
 	And there is a budgetday
 	| Field						| Value					|
 	| BudgetGroup				| TheBudgetGroup		|
@@ -257,7 +257,7 @@ Scenario: Show the user a green indication when there is no auto grant for absen
 	Then I should see an 'green' indication for chance of absence request on '2023-05-28'
 
 Scenario: Show the user a green indication when absence requests are auto granted for that day
-	Given Current time is '2023-05-25 20:00'
+	Given the current time is '2023-05-25 20:00'
 	And there is a budgetday
 	| Field						| Value					|
 	| BudgetGroup				| TheBudgetGroup		|
@@ -277,7 +277,7 @@ Scenario: Show the user a green indication when absence requests are auto grante
 	Then I should see an 'green' indication for chance of absence request on '2023-05-28'
 	
 Scenario: Show the user a red indication when absence requests are auto denied for that day
-	Given Current time is '2023-05-25 20:00'
+	Given the current time is '2023-05-25 20:00'
 	And there is a budgetday
 	| Field						| Value					|
 	| BudgetGroup				| TheBudgetGroup		|

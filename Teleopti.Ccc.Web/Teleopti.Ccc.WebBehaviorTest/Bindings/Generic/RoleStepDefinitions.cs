@@ -12,30 +12,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsARoleWith(Table table)
 		{
 			var role = table.CreateInstance<RoleConfigurable>();
-			UserFactory.User().Setup(role);
+			DataMaker.Data().Apply(role);
 		}
 
 		[Given(@"I have the role '(.*)'")]
 		public void GivenIHaveTheRoleAccessToMytime(string name)
 		{
 			var userRole = new RoleForUser { Name = name };
-			UserFactory.User().Setup(userRole); // creates and persists role 
+			DataMaker.Data().Apply(userRole); // creates and persists role 
 		}
 
 		[Given(@"I have a role with")]
 		public void GivenIHaveARoleWith(Table table)
 		{
 			var role = table.CreateInstance<RoleConfigurable>();
-			UserFactory.User().Setup(role); // creates and persists role 
+			DataMaker.Data().Apply(role); // creates and persists role 
 			var userRole = new RoleForUser { Name = role.Name }; // loads the role again
-			UserFactory.User().Setup(userRole); // adds the role to the user and persist
+			DataMaker.Data().Apply(userRole); // adds the role to the user and persist
 		}
 
 		[Given(@"I have a role named '(.*)'")]
 		public void GivenIHaveARoleNamedWith(string name)
 		{
-			UserFactory.User().Setup(new RoleConfigurable {Name = name});
-			UserFactory.User().Setup(new RoleForUser {Name = name});
+			DataMaker.Data().Apply(new RoleConfigurable {Name = name});
+			DataMaker.Data().Apply(new RoleForUser {Name = name});
 		}
 	}
 }

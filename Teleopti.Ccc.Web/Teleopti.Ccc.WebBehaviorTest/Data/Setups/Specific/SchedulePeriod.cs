@@ -34,6 +34,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 				new DateOnly(createdDate),
 				SchedulePeriodType.Week,
 				VirtualSchedulePeriodWeeks);
+
+			user.RemoveAllSchedulePeriods();
 			user.AddSchedulePeriod(TheSchedulePeriod);
 		}
 

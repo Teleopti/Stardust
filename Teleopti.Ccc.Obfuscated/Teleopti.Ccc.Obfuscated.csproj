@@ -114,7 +114,6 @@
     <Compile Include="ResourceCalculation\FurnessData.cs" />
     <Compile Include="ResourceCalculation\FurnessDataConverter.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluator.cs" />
-    <Compile Include="ResourceCalculation\OccupancyCalculator.cs" />
     <Compile Include="ResourceCalculation\ResourceOptimizationHelper.cs" />
     <Compile Include="ResourceCalculation\ScheduleResourceOptimizer.cs" />
     <Compile Include="ResourceCalculation\SchedulingResultService.cs" />

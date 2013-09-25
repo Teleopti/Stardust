@@ -63,7 +63,7 @@ end
 item: Execute Program
   Pathname=CMD
   Command Line=/C ""%SUPPORTTOOLSDIR%StartStopSystem\ResetSystem.bat" 1"
-  Flags=00000010
+  Flags=00000110
 end
 item: Else Statement
 end

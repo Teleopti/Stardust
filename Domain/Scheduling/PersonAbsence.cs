@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
     /// <summary>
     /// Class describing an PersonAbsence
     /// </summary>
-    public class PersonAbsence : AggregateRootWithBusinessUnit, 
+    public class PersonAbsence : AggregateRoot, 
                                     IPersonAbsence,
                                     IExportToAnotherScenario
     {
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
             PersonAbsence retObj = (PersonAbsence)MemberwiseClone();
             retObj.SetId(null);
-            retObj._layer = (AbsenceLayer)Layer.NoneEntityClone();
+            retObj._layer = (IAbsenceLayer) Layer.NoneEntityClone();
 
             return retObj;
         }

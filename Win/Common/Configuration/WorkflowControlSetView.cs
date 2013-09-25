@@ -19,7 +19,6 @@ using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.Columns;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.Win.Common.Controls.DateTimePeriodVisualizer;
-using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
@@ -30,11 +29,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public partial class WorkflowControlSetView : BaseUserControl, ISettingPage, IWorkflowControlSetView
     {
-        private WorkflowControlSetPresenter _presenter;
+        private readonly WorkflowControlSetPresenter _presenter;
         private SFGridColumnGridHelper<AbsenceRequestPeriodModel> _gridHelper;
         private IDictionary<IAbsence, MonthlyProjectionVisualiser> _projectionCache =
             new Dictionary<IAbsence, MonthlyProjectionVisualiser>();
-        private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
         private Point _gridPoint;
 
         public WorkflowControlSetView()
@@ -116,16 +114,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             var gridColumns = new ReadOnlyCollection<SFGridColumnBase<AbsenceRequestPeriodModel>>(columnList);
             _gridHelper = new SFGridColumnGridHelper<AbsenceRequestPeriodModel>(gridControlAbsenceRequestOpenPeriods,
                                                                                         gridColumns, new List<AbsenceRequestPeriodModel>());
-            _gridHelper.UnbindClipboardPasteEvent();
+            //_gridHelper.UnbindClipboardPasteEvent();
 	        
             gridControlAbsenceRequestOpenPeriods.Model.Options.SelectCellsMouseButtonsMask = MouseButtons.Left;
             gridControlAbsenceRequestOpenPeriods.Model.Options.ExcelLikeCurrentCell = true;
 
             gridControlAbsenceRequestOpenPeriods.CurrentCellCloseDropDown += gridControlAbsenceRequestOpenPeriods_CurrentCellCloseDropDown;
             gridControlAbsenceRequestOpenPeriods.SaveCellInfo += gridControlAbsenceRequestOpenPeriods_SaveCellInfo;
-            gridControlAbsenceRequestOpenPeriods.ClipboardCut += gridControlAbsenceRequestOpenPeriods_ClipboardCut;
-            gridControlAbsenceRequestOpenPeriods.ClipboardCopy += gridControlAbsenceRequestOpenPeriods_ClipboardCopy;
-            gridControlAbsenceRequestOpenPeriods.ClipboardPaste += gridControlAbsenceRequestOpenPeriods_ClipboardPaste;
             gridControlAbsenceRequestOpenPeriods.KeyDown += gridControlAbsenceRequestOpenPeriods_KeyDown;
 
             twoListSelectorDayOffs.SelectedAdded += twoListSelectorDayOffs_SelectedAdded;
@@ -155,7 +150,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 _presenter.AddAllowedPreferenceAbsence(item);
         }
 
-        private void ReleaseMangedResources()
+        private void releaseMangedResources()
         {
             twoListSelectorDayOffs.SelectedAdded -= twoListSelectorDayOffs_SelectedAdded;
             twoListSelectorDayOffs.SelectedRemoved -= twoListSelectorDayOffs_SelectedRemoved;
@@ -171,9 +166,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
             gridControlAbsenceRequestOpenPeriods.CurrentCellCloseDropDown -= gridControlAbsenceRequestOpenPeriods_CurrentCellCloseDropDown;
             gridControlAbsenceRequestOpenPeriods.SaveCellInfo -= gridControlAbsenceRequestOpenPeriods_SaveCellInfo;
-            gridControlAbsenceRequestOpenPeriods.ClipboardCut -= gridControlAbsenceRequestOpenPeriods_ClipboardCut;
-            gridControlAbsenceRequestOpenPeriods.ClipboardCopy -= gridControlAbsenceRequestOpenPeriods_ClipboardCopy;
-            gridControlAbsenceRequestOpenPeriods.ClipboardPaste -= gridControlAbsenceRequestOpenPeriods_ClipboardPaste;
             gridControlAbsenceRequestOpenPeriods.KeyDown -= gridControlAbsenceRequestOpenPeriods_KeyDown;
 
             if(_gridHelper!= null)
@@ -230,37 +222,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         	deleteSelected();
         	e.Handled = true;
         }
-
-        void gridControlAbsenceRequestOpenPeriods_ClipboardPaste(object sender, GridCutPasteEventArgs e)
-        {
-            gridControlAbsenceRequestOpenPeriods.SaveCellInfo -= gridControlAbsenceRequestOpenPeriods_SaveCellInfo;
-            _presenter.PasteAbsenceRequestPeriod();
-            refreshProjectionGrid();
-            gridControlAbsenceRequestOpenPeriods.SaveCellInfo += gridControlAbsenceRequestOpenPeriods_SaveCellInfo;
-            e.Handled = true;
-        }
-
-        void gridControlAbsenceRequestOpenPeriods_ClipboardCopy(object sender, GridCutPasteEventArgs e)
-        {
-            gridControlAbsenceRequestOpenPeriods.SaveCellInfo -= gridControlAbsenceRequestOpenPeriods_SaveCellInfo;
-            _presenter.CopyAbsenceRequestPeriod();
-            refreshProjectionGrid();
-            gridControlAbsenceRequestOpenPeriods.SaveCellInfo += gridControlAbsenceRequestOpenPeriods_SaveCellInfo;
-        }
-
-        void gridControlAbsenceRequestOpenPeriods_ClipboardCut(object sender, GridCutPasteEventArgs e)
-        {
-            if (!isHeader(e))
-                return;
-
-            gridControlAbsenceRequestOpenPeriods.SaveCellInfo -= gridControlAbsenceRequestOpenPeriods_SaveCellInfo;
-            _presenter.CutAbsenceRequestPeriod();
-            refreshProjectionGrid();
-            gridControlAbsenceRequestOpenPeriods.SaveCellInfo += gridControlAbsenceRequestOpenPeriods_SaveCellInfo;
-            
-            e.Handled = true;
-        }
-
+		
         private void gridControlAbsenceRequestOpenPeriods_SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
         {
             refreshProjectionGrid();
@@ -323,28 +285,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             _presenter.DefaultShiftTradePeriodDays(new MinMax<int>(2, 17));
         }
 
-        /// <summary>
-        /// Initialzes control components.
-        /// </summary>
         public void InitializeDialogControl()
         {
             setColors();
             SetTexts();
         }
 
-        private bool isHeader(GridCutPasteEventArgs e)
-        {
-            // Just to get rid of cut in the header
-            foreach (GridRangeInfo range in e.RangeList)
-            {
-            	if (range.Top != gridControlAbsenceRequestOpenPeriods.Rows.HeaderCount) continue;
-            	e.Handled = true;
-            	return false;
-            }
-            return true;
-        }
-
-        private void setColors()
+	    private void setColors()
         {
             BackColor = ColorHelper.WizardBackgroundColor();
             gradientPanelHeader.BackgroundColor = ColorHelper.OptionsDialogHeaderGradientBrush();
@@ -364,9 +311,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             toolTip1.SetToolTip(buttonAdvPreviousProjectionPeriod, Resources.PreviousPeriod);
         }
 
-        /// <summary>
-        /// Loads data and bings to controls.
-        /// </summary>
         public void LoadControl()
         {
             _presenter.Initialize();
@@ -378,17 +322,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             tabControlAdvArea.TabPages[2].TabVisible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequests);
         }
 
-        /// <summary>
-        /// Persits all changes made for availabilities.
-        /// </summary>
         public void SaveChanges()
         {
             _presenter.SaveChanges();
             // in some cases the list don't get updated
-            UpdateSourceList();
+            updateSourceList();
         }
 
-        private void UpdateSourceList()
+        private void updateSourceList()
         {
             if(comboBoxAdvWorkflowControlSet.SelectedItem == null)
                 return;
@@ -397,63 +338,37 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             _gridHelper.SetSourceList(selectedItem.AbsenceRequestPeriodModels);
         }
 
-        /// <summary>
-        /// Removes stored information used by control when done.
-        /// </summary>
         public void Unload()
         {
         }
 
-        /// <summary>
-        /// Sets <see cref="IUnitOfWork" /> to the control and for its repositories.
-        /// </summary>
-        /// <param name="value"></param>
         public void SetUnitOfWork(IUnitOfWork value)
         {
         }
 
-        /// <summary>
-        /// Persists all changes made for rotations.
-        /// </summary>
         public void Persist()
         {
             SaveChanges();
         }
 
-        /// <summary>
-        /// Gets family name of the control belongs to.
-        /// </summary>
-        /// <returns>A <see cref="TreeFamily()"/> value.</returns>
         public TreeFamily TreeFamily()
         {
             return new TreeFamily(Resources.Scheduling);
         }
 
-        /// <summary>
-        /// Gets the displayed name of the control.
-        /// </summary>
-        /// <returns>A name value.</returns>
         public string TreeNode()
         {
-            return Resources.WorkflowControlSet;
+            return Resources.WorkflowControlSetHeader;
         }
 
     	public void OnShow()
     	{
     	}
 
-    	/// <summary>
-        /// Loads settings from external module.
-        /// </summary>
-        /// <param name="entity"></param>
         public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)
         {
         }
 
-        /// <summary>
-        /// Gets the type of the view.
-        /// </summary>
-        /// <value>The type of the view.</value>
         public ViewType ViewType
         {
             get { return ViewType.WorkflowControlSets; }
@@ -614,19 +529,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             get { return _gridHelper.FindSelectedItems(gridControlAbsenceRequestOpenPeriods.Rows.HeaderCount + 1); }
         }
 
-        public void SetClipboardText(string text)
-        {
-            _externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetText(text));
-        }
-
         public void EnableHandlingOfAbsenceRequestPeriods(bool enable)
         {
             buttonAddAbsenceRequestPeriod.Enabled = enable;
             buttonDeleteAbsenceRequestPeriod.Enabled = enable;
 
-            toolStripMenuItemCut.Enabled = enable;
-            toolStripMenuItemCopy.Enabled = enable;
-            toolStripMenuItemPaste.Enabled = enable;
             toolStripMenuItemRollingPeriod.Enabled = enable;
             toolStripMenuItemFromToPeriod.Enabled = enable;
             toolStripMenuItemMoveDown.Enabled = enable;
@@ -824,24 +731,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             _presenter.NextProjectionPeriod();
         }
 
-        private void toolStripMenuItemCut_Click(object sender, EventArgs e)
-        {
-            GridRangeInfoList gridRangeInfoList = gridControlAbsenceRequestOpenPeriods.Selections.Ranges;
-            gridControlAbsenceRequestOpenPeriods_ClipboardCut(sender, new GridCutPasteEventArgs(true, false, 0, gridRangeInfoList));
-        }
-
-        private void toolStripMenuItemCopy_Click(object sender, EventArgs e)
-        {
-            GridRangeInfoList gridRangeInfoList = gridControlAbsenceRequestOpenPeriods.Selections.Ranges;
-            gridControlAbsenceRequestOpenPeriods_ClipboardCopy(sender, new GridCutPasteEventArgs(true, false, 0, gridRangeInfoList));
-        }
-
-        private void toolStripMenuItemPaste_Click(object sender, EventArgs e)
-        {
-            GridRangeInfoList gridRangeInfoList = gridControlAbsenceRequestOpenPeriods.Selections.Ranges;
-            gridControlAbsenceRequestOpenPeriods_ClipboardPaste(sender, new GridCutPasteEventArgs(true, false, 0, gridRangeInfoList));
-        }
-
         private void toolStripMenuItemDelete_Click(object sender, EventArgs e)
         {
             buttonAdvDeleteAbsenceRequestPeriod_Click(sender, e);
@@ -1024,26 +913,26 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             _presenter.SetAutoGrant(checkBoxAdvAutoGrant.Checked);
         }
 
-		private void RadioButtonAdvFairnessPointsCheckChanged(object sender, EventArgs e)
+		private void radioButtonAdvFairnessPointsCheckChanged(object sender, EventArgs e)
 		{
 			_presenter.OnRadioButtonAdvFairnessPointsCheckChanged(radioButtonAdvFairnessPoints.Checked);
 		}
 
-		private void RadioButtonAdvFairnessEqualCheckChanged(object sender, EventArgs e)
+		private void radioButtonAdvFairnessEqualCheckChanged(object sender, EventArgs e)
 		{
 			_presenter.OnRadioButtonAdvFairnessEqualCheckChanged(radioButtonAdvFairnessEqual.Checked);
 		}
 
 		public void SetUseShiftCategoryFairness(bool value)
 		{
-			radioButtonAdvFairnessEqual.CheckChanged -= RadioButtonAdvFairnessEqualCheckChanged;
-			radioButtonAdvFairnessPoints.CheckChanged -= RadioButtonAdvFairnessPointsCheckChanged;
+			radioButtonAdvFairnessEqual.CheckChanged -= radioButtonAdvFairnessEqualCheckChanged;
+			radioButtonAdvFairnessPoints.CheckChanged -= radioButtonAdvFairnessPointsCheckChanged;
 
 			radioButtonAdvFairnessEqual.Checked = value;
 			radioButtonAdvFairnessPoints.Checked = !value;
 
-			radioButtonAdvFairnessEqual.CheckChanged += RadioButtonAdvFairnessEqualCheckChanged;
-			radioButtonAdvFairnessPoints.CheckChanged += RadioButtonAdvFairnessPointsCheckChanged;
+			radioButtonAdvFairnessEqual.CheckChanged += radioButtonAdvFairnessEqualCheckChanged;
+			radioButtonAdvFairnessPoints.CheckChanged += radioButtonAdvFairnessPointsCheckChanged;
 		}
 
         public void SetStudentAvailabilityPeriods(DateOnlyPeriod insertPeriod, DateOnlyPeriod studentAvailabilityPeriod)

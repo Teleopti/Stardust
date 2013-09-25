@@ -36,17 +36,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return NoneEntityClone();
 		}
 
-		public virtual ILayer<IActivity> NoneEntityClone()
+		public virtual IShiftLayer NoneEntityClone()
 		{
 			var retObj = (IAggregateEntity)MemberwiseClone();
 			retObj.SetId(null);
 			retObj.SetParent(null);
-			return (ILayer<IActivity>) retObj;
+			return (IShiftLayer)retObj;
 		}
 
-		public virtual ILayer<IActivity> EntityClone()
+		public virtual IShiftLayer EntityClone()
 		{
-			return (ILayer<IActivity>)MemberwiseClone();
+			return (IShiftLayer)MemberwiseClone();
 		}
 	}
 }

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Collection
@@ -39,24 +40,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
         public DateTimePeriod? Period()
         {
-            var count = Count;
-            if (count == 0)
-                return null;
-
-            var firstPeriod = Items[0].Period;
-            var min = firstPeriod.StartDateTime;
-            var max = firstPeriod.EndDateTime;
-            
-            for (var i = 1; i < count; i++)
-            {
-                var period = Items[i].Period;
-                if (period.StartDateTime < min)
-                    min = period.StartDateTime;
-                if (period.EndDateTime > max)
-                    max = period.EndDateTime;
-            }
-            
-            return new DateTimePeriod(min, max);
+	        return Items.OuterPeriod();
         }
 
         public DateTime? FirstStart()

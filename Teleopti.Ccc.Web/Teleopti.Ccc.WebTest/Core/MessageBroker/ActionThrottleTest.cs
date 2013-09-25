@@ -13,10 +13,10 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		public void ShouldNotExecuteActionUntilStarted()
 		{
 			var executed = false;
-			var target = new ActionThrottle(1000);
+			var target = new ActionThrottleUnderTest();
 
 			target.Do(() => { executed = true; });
-			Thread.Sleep(100);
+			target.SignalHasWaited();
 
 			executed.Should().Be.False();
 		}
@@ -25,13 +25,14 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		public void ShouldEventuallyExecuteActions()
 		{
 			var executed = 0;
-			var target = new ActionThrottle(1000);
+			var target = new ActionThrottleUnderTest();
 
 			target.Do(() => { executed++; });
 			target.Do(() => { executed++; });
 			target.Start();
 
-            Assert.That(() => executed, Is.EqualTo(1).After(500, 1));
+			Assert.That(() => executed, Is.EqualTo(1).After(1000, 1));
+			target.SignalHasWaited();
 			Assert.That(() => executed, Is.EqualTo(2).After(1000, 1));
 		}
 
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		{
 			var threadId1 = 0;
 			var threadId2 = 0;
-			var target = new ActionThrottle(1000);
+			var target = new ActionThrottleUnderTest();
 
 			target.Do(() => { threadId1 = Thread.CurrentThread.ManagedThreadId; });
 			target.Do(() => { threadId2 = Thread.CurrentThread.ManagedThreadId; });
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 
 			Assert.That(() => threadId1, Is.Not.EqualTo(0).After(1000, 1));
 			threadId1.Should().Not.Be(Thread.CurrentThread.ManagedThreadId);
+			target.SignalHasWaited();
 			Assert.That(() => threadId2, Is.Not.EqualTo(0).After(1000, 1));
 			threadId2.Should().Be(threadId1);
 		}
@@ -55,42 +57,31 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		[Test]
 		public void ShouldAcceptThrottleArgument()
 		{
-			var time1 = DateTime.MinValue;
-			var time2 = DateTime.MinValue;
-			var target = new ActionThrottle(1);
+			const int actionsPerSecond = 1;
+			var target = new ActionThrottleUnderTest(actionsPerSecond);
 
-			target.Do(() => { time1 = DateTime.Now; });
-			target.Do(() => { time2 = DateTime.Now; });
+			target.Do(() => { });
 			target.Start();
 
-			Assert.That(() => time2, Is.Not.EqualTo(DateTime.MinValue).After(2000, 1));
-			var wholeSecondsBetweenCalls = ((int) time2.Subtract(time1).TotalSeconds);
-			wholeSecondsBetweenCalls.Should().Be(1);
+			Assert.That(() => target.WaitedMilliseconds, Is.EqualTo(1000).After(1000, 1));
 		}
 
 		[Test]
 		public void ShouldAbortOnDispose()
 		{
-			var executed = false;
-			var target = new ActionThrottle(100);
+			var executed = 0;
+			var target = new ActionThrottleUnderTest();
 
-			target.Do(() =>
-			    {
-			        
-			    });
-			target.Do(() =>
-			    {
-			        
-			    });
-			target.Do(() =>
-			    {
-			        executed = true;
-			    });
+			target.Do(() => { executed++; });
+			target.Do(() => { executed++; });
+			target.Do(() => { executed++; });
 			target.Start();
-			target.Dispose();
-			Thread.Sleep(50);
+			target.SignalHasWaited();
 
-			executed.Should().Be.False();
+			Assert.That(() => executed, Is.EqualTo(2).After(1000, 1));
+			target.Dispose();
+			target.SignalHasWaited();
+			Assert.That(() => executed, Is.EqualTo(2).After(1000, 1));
 		}
 
 		[Test]
@@ -106,4 +97,39 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		}
 
 	}
+
+	public class ActionThrottleUnderTest : ActionThrottle
+	{
+		private readonly AutoResetEvent _signal = new AutoResetEvent(false);
+
+		public ActionThrottleUnderTest(int actionsPerSecond)
+			: base(actionsPerSecond)
+		{
+		}
+
+		public ActionThrottleUnderTest()
+			: this(1000)
+		{
+		}
+
+		public int WaitedMilliseconds { get; set; }
+
+		protected override void WaitForNext(int waitMilliseconds)
+		{
+			WaitedMilliseconds = waitMilliseconds;
+			_signal.WaitOne();
+		}
+
+		public void SignalHasWaited()
+		{
+			_signal.Set();
+		}
+
+		public override void Dispose()
+		{
+			base.Dispose();
+			_signal.Dispose();
+		}
+	}
+
 }

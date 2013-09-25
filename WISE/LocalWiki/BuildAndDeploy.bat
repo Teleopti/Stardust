@@ -56,7 +56,7 @@ echo please wait ...  >> "%Deployment%\export.log"
 
 copy "%ROOTDIR%\ReplaceString\bin\Release\ReplaceString.exe" "%WorkingFolder%\"
 
-::crawle the website and export to working folder
+::crawl the website and export to working folder
 ECHO "%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "%WebURL%"
 "%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "%WebURL%"
 SET /A wgetError=%ERRORLEVEL%
@@ -69,7 +69,11 @@ cmd /C "%WorkingFolder:~0,2% & CD "%WorkingFolder%" & del index.php* /S"
 ::add special web.config to the folder
 echo copy "%ROOTDIR%\web.config" "%WorkingFolder%\%OutputFolder%\"
 copy "%ROOTDIR%\web.config" "%WorkingFolder%\%OutputFolder%\"
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
+::copy javascript file for replacement of translated links
+echo copy "%ROOTDIR%\DynamicLinkReplace.js" "%WorkingFolder%\%OutputFolder%"
+copy "%ROOTDIR%\DynamicLinkReplace.js" "%WorkingFolder%\%OutputFolder%"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ::replace strings and URLs
@@ -89,6 +93,7 @@ del "%Deployment%\export.log"
 
 ::clean up
 rmdir "%WorkingFolder%" /S /Q
+
 GOTO :Finish
 
 :Error

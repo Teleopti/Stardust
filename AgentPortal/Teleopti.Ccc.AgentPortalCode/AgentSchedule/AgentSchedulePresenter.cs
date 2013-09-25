@@ -57,33 +57,35 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
         {
             DateTime startDate = utcDate.AddHours(-12);
             DateTime endDate = startDate.AddHours(24).AddTicks(-1);
+            var localDate = utcDate.ToLocalTime();
             DateTimePeriodDto period = new DateTimePeriodDto();
             period.UtcStartTime = startDate;
             period.UtcEndTime = endDate;
             ScheduleStateHolder.ScheduleMessengerPeriod = period;
-            DateOnlyDto dateOnlyDto = new DateOnlyDto();
-            dateOnlyDto.DateTime = DateTime.SpecifyKind(utcDate.ToLocalTime(),DateTimeKind.Unspecified); //This could result in something really wrong, but more correct than today
+            DateOnlyDto dateOnlyStartDate = new DateOnlyDto();
+            dateOnlyStartDate.DateTime = DateTime.SpecifyKind(localDate.AddDays(-1),DateTimeKind.Unspecified); //This could result in something really wrong, but more correct than today
 
-            SchedulePartDto schedulePart = GetSchedulePart(dateOnlyDto, 1);
+            DateOnlyDto dateOnlyEndDate = new DateOnlyDto();
+            dateOnlyEndDate.DateTime = DateTime.SpecifyKind(localDate, DateTimeKind.Unspecified); //This could result in something really wrong, but more correct than today
 
-            IList<SchedulePartDto> schedulePartDtos = new List<SchedulePartDto>{schedulePart};
+            var schedulePartDtos = GetSchedulePart(dateOnlyStartDate, dateOnlyEndDate, 1);
 
-            IList<ICustomScheduleAppointment> scheduleDataCollection = ScheduleAppointmentFactory.Create(schedulePartDtos);
+            IList<ICustomScheduleAppointment> scheduleDataCollection = ScheduleAppointmentFactory.Create(schedulePartDtos).Where(l => l.StartTime>=localDate.Date).ToList();
             ScheduleStateHolder.FillScheduleMessengerDictionary(scheduleDataCollection, DateTime.Today);
         }
 
-        private SchedulePartDto GetSchedulePart(DateOnlyDto dateOnlyDto, int attemptNumber)
+        private IEnumerable<SchedulePartDto> GetSchedulePart(DateOnlyDto dateOnlyStartDto, DateOnlyDto dateOnlyEndDto, int attemptNumber)
         {
             try
             {
             	var query = new GetSchedulesByPersonQueryDto
             	            	{
-            	            		StartDate = dateOnlyDto,
-            	            		EndDate = dateOnlyDto,
+            	            		StartDate = dateOnlyStartDto,
+            	            		EndDate = dateOnlyEndDto,
             	            		PersonId = ScheduleStateHolder.Person.Id.GetValueOrDefault(),
             	            		TimeZoneId = ScheduleStateHolder.Person.TimeZoneId
             	            	};
-                return SdkServiceHelper.SchedulingService.GetSchedulesByQuery(query).First();
+                return SdkServiceHelper.SchedulingService.GetSchedulesByQuery(query);
             }
             catch (WebException webException)
             {
@@ -94,7 +96,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
                 }
                 Random rnd = new Random();
                 Thread.Sleep(rnd.Next(7,13)*1000);
-                return GetSchedulePart(dateOnlyDto, ++attemptNumber);
+                return GetSchedulePart(dateOnlyStartDto, dateOnlyEndDto, ++attemptNumber);
             }
         }
     }

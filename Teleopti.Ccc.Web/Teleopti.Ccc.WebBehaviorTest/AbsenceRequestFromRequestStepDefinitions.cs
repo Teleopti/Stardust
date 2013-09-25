@@ -15,13 +15,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I have an approved absence request")]
 		public void GivenIHaveAnApprovedAbsenceRequest()
 		{
-			UserFactory.User().Setup(new ExistingApprovedAbsenceRequest());
+			DataMaker.Data().Apply(new ExistingApprovedAbsenceRequest());
 		}
 
 		[Given(@"I have a denied absence request")]
 		public void GivenIHaveADeniedAbsenceRequest()
 		{
-			UserFactory.User().Setup(new ExistingDeniedAbsenceRequest());
+			DataMaker.Data().Apply(new ExistingDeniedAbsenceRequest());
 		}
 
 		[When(@"I click the absence request's delete button for request at position '(.*)' in the list")]
@@ -58,8 +58,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not be able to input values for absence request at position '(.*)' in the list")]
 		public void ThenIShouldNotBeAbleToInputValuesForAbsenceRequestAtPositionInTheList(int position)
 		{
-			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-subject:not(:enabled)", position));
-			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-message:not(:enabled)", position));
+			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format(".request:nth-child({0}) .request-edit-subject", position));
+			Browser.Interactions.AssertNotExists(string.Format(".request:nth-child({0}) .request-non-edit-message", position), string.Format(".request:nth-child({0}) .request-edit-message", position));
 
 			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-absence:not(:enabled)", position));
 
@@ -82,14 +82,16 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the absence request's values at position '(.*)' in the list")]
 		public void ThenIShouldSeeTheAbsenceRequestSValuesAtPositionInTheList(int position)
 		{
-			var request = UserFactory.User().UserData<ExistingAbsenceRequest>();
+			var request = DataMaker.Data().UserData<ExistingAbsenceRequest>();
+
+			var firstFiftyCharsOfMessage = request.PersonRequest.GetMessage(new NoFormatting()).Substring(0, 50);
 
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-subject", position),
 				request.PersonRequest.GetSubject(new NoFormatting()));
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-message", position),
-				request.PersonRequest.GetMessage(new NoFormatting()));
+				firstFiftyCharsOfMessage);
 
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-type", position),
@@ -97,23 +99,23 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
-				request.PersonRequest.Request.Period.StartDateTime.Date.ToShortDateString(UserFactory.User().Culture));
+				request.PersonRequest.Request.Period.StartDateTime.Date.ToShortDateString(DataMaker.Data().MyCulture));
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
-				request.PersonRequest.Request.Period.StartDateTime.ToShortTimeString(UserFactory.User().Culture));
+				request.PersonRequest.Request.Period.StartDateTime.ToShortTimeString(DataMaker.Data().MyCulture));
 
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
-				request.PersonRequest.Request.Period.EndDateTime.Date.ToShortDateString(UserFactory.User().Culture));
+				request.PersonRequest.Request.Period.EndDateTime.Date.ToShortDateString(DataMaker.Data().MyCulture));
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-date", position),
-				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(UserFactory.User().Culture));
+				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(DataMaker.Data().MyCulture));
 		}
 
 		[Then(@"I should see the absence request's edit values at position '(.*)' in the list")]
 		public void ThenIShouldSeeTheAbsenceRequestSEditValuesAtPositionInTheList(int position)
 		{
-			var request = UserFactory.User().UserData<ExistingAbsenceRequest>();
+			var request = DataMaker.Data().UserData<ExistingAbsenceRequest>();
 
 			Browser.Interactions.AssertInputValueUsingJQuery(
 				string.Format(".request-list .request:nth-child({0}) .request-edit-subject", position),
@@ -128,17 +130,17 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 			Browser.Interactions.AssertInputValueUsingJQuery(
 				string.Format(".request-list .request:nth-child({0}) .request-edit-datefrom", position),
-				request.PersonRequest.Request.Period.StartDateTime.Date.ToShortDateString(UserFactory.User().Culture));
+				request.PersonRequest.Request.Period.StartDateTime.Date.ToShortDateString(DataMaker.Data().MyCulture));
 			Browser.Interactions.AssertInputValueUsingJQuery(
 				string.Format(".request-list .request:nth-child({0}) .request-edit-timefrom", position),
-				request.PersonRequest.Request.Period.StartDateTime.ToShortTimeString(UserFactory.User().Culture));
+				request.PersonRequest.Request.Period.StartDateTime.ToShortTimeString(DataMaker.Data().MyCulture));
 
 			Browser.Interactions.AssertInputValueUsingJQuery(
 				string.Format(".request-list .request:nth-child({0}) .request-edit-dateto", position),
-				request.PersonRequest.Request.Period.EndDateTime.Date.ToShortDateString(UserFactory.User().Culture));
+				request.PersonRequest.Request.Period.EndDateTime.Date.ToShortDateString(DataMaker.Data().MyCulture));
 			Browser.Interactions.AssertInputValueUsingJQuery(
 				string.Format(".request-list .request:nth-child({0}) .request-edit-timeto", position),
-				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(UserFactory.User().Culture));
+				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(DataMaker.Data().MyCulture));
 
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-list .request:nth-child({0}) .request-edit-fullday checkbox:checked", position),
@@ -148,7 +150,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I have a denied absence request beacuse of missing workflow control set")]
 		public void GivenIHaveADeniedAbsenceRequestBeacuseOfMissingWorkflowControlSet()
 		{
-			UserFactory.User().Setup(new ExistingDeniedAbsenceRequest("RequestDenyReasonNoWorkflow"));
+			DataMaker.Data().Apply(new ExistingDeniedAbsenceRequest("RequestDenyReasonNoWorkflow"));
 		}
 	}
 }

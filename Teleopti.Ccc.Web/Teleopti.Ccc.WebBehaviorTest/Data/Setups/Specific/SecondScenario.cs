@@ -11,9 +11,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 		public void Apply(IUnitOfWork uow)
 		{
-			var businessUnit = GlobalDataContext.Data().Data<SecondBusinessUnit>().BusinessUnit;
+			var businessUnit = GlobalDataMaker.Data().Data<SecondBusinessUnit>().BusinessUnit;
 
-			Scenario = ScenarioFactory.CreateScenarioAggregate("Second scenario", true);
+			Scenario = ScenarioFactory.CreateScenarioAggregate("Second scenario", false);
 			Scenario.SetBusinessUnit(businessUnit);
 			new ScenarioRepository(uow).Add(Scenario);
 		}

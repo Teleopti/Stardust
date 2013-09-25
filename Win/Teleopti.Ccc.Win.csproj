@@ -345,6 +345,7 @@
       <DependentUpon>SmsSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Controls\Cells\DropDownCultureCellModel.cs" />
+    <Compile Include="Common\Controls\Cells\DropDownCellModel.cs" />
     <Compile Include="Common\Controls\Cells\TimeStaticCellRenderer.cs" />
     <Compile Include="Common\Controls\Columns\IColumnDisableCondition.cs" />
     <Compile Include="Common\Controls\Columns\SelectedItemChangeBaseEventArgs.cs" />
@@ -1718,12 +1719,6 @@
     </Compile>
     <Compile Include="Common\Controls\TimeSpanTextBox.Designer.cs">
       <DependentUpon>TimeSpanTextbox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Common\Controls\ToolStripGallery\TeleoptiToolStrip.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Common\Controls\ToolStripGallery\TeleoptiToolStrip.Designer.cs">
-      <DependentUpon>TeleoptiToolStrip.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Controls\ToolStripGallery\TeleoptiToolStripGallery.cs">
       <SubType>Component</SubType>

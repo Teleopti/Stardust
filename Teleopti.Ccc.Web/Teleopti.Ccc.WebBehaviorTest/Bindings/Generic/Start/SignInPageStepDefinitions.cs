@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[When(@"I sign in by user name")]
 		public void WhenISignIn()
 		{
-			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
+			var userName = DataMaker.Data().MePerson.ApplicationAuthenticationInfo.ApplicationLogOnName;
 			SignInApplication(userName, TestData.CommonPassword);
 		}
 
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[When(@"I sign in by user name and wrong password")]
 		public void WhenISignInByUserNameAndWrongPassword()
 		{
-			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
+			var userName = DataMaker.Data().MePerson.ApplicationAuthenticationInfo.ApplicationLogOnName;
 			SignInApplication(userName, "wrong password");
 		}
 
@@ -87,19 +87,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		{
 			Navigation.GotoGlobalSignInPage();
 			SelectApplicationTestDataSource();
-			SignInApplication(UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName, TestData.CommonPassword);
+			SignInApplication(DataMaker.Data().MePerson.ApplicationAuthenticationInfo.ApplicationLogOnName, TestData.CommonPassword);
 		}
 
 		[Given(@"I am signed in")]
 		public void IAmSignedIn()
 		{
-			if (!UserFactory.User().HasSetup<IUserRoleSetup>())
-				UserFactory.User().Setup(new Agent());
+			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
+				DataMaker.Data().Apply(new Agent());
 			TestControllerMethods.Logon();
 		}
 
-		[Then(@"I should be signed in")]
-		public void ThenIShouldBeSignedIn()
+		[Then(@"I should (be|stay) signed in")]
+		public void ThenIShouldBeSignedIn(string beOrStay)
 		{
 			Browser.Interactions.AssertExists("#signout, #signout-button");
 		}
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[When(@"I sign in using my new password '(.*)'")]
 		public void WhenISignInUsingMyNewPassword(string newPassword)
 		{
-			var userName = UserFactory.User().Person.ApplicationAuthenticationInfo.ApplicationLogOnName;
+			var userName = DataMaker.Data().MePerson.ApplicationAuthenticationInfo.ApplicationLogOnName;
 			SelectApplicationTestDataSource();
 			SignInApplication(userName, newPassword);
 		}

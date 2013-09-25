@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Payroll;
 using log4net;
 using Rhino.ServiceBus;
@@ -10,7 +11,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {
     public class PayrollExportConsumer : ConsumerOf<RunPayrollExport>
     {
-        private readonly IRepositoryFactory _repositoryFactory;
+	    private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+	    private readonly IPayrollExportRepository _payrollExportRepository;
+	    private readonly IPayrollResultRepository _payrollResultRepository;
         private readonly IPayrollDataExtractor _payrollDataExtractor;
         private readonly IPersonBusAssembler _personBusAssembler;
         private IServiceBusPayrollExportFeedback _serviceBusPayrollExportFeedback;
@@ -20,11 +23,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 
     	public static bool IsRunning { get; private set; }
 
-    	public PayrollExportConsumer(IRepositoryFactory repositoryFactory, IPayrollDataExtractor payrollDataExtractor,
+		public PayrollExportConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, IPayrollExportRepository payrollExportRepository, IPayrollResultRepository payrollResultRepository, IPayrollDataExtractor payrollDataExtractor,
 			IPersonBusAssembler personBusAssembler, IServiceBusPayrollExportFeedback serviceBusPayrollExportFeedback,
 			IPayrollPeopleLoader payrollPeopleLoader, IDomainAssemblyResolver domainAssemblyResolver)
         {
-            _repositoryFactory = repositoryFactory;
+			_unitOfWorkFactory = unitOfWorkFactory;
+			_payrollExportRepository = payrollExportRepository;
+			_payrollResultRepository = payrollResultRepository;
             _payrollDataExtractor = payrollDataExtractor;
             _personBusAssembler = personBusAssembler;
             _serviceBusPayrollExportFeedback = serviceBusPayrollExportFeedback;
@@ -39,13 +44,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
             Logger.DebugFormat("Consuming message for Payroll Export with Id = {0}. (Message timestamp = {1})", message.PayrollExportId, message.Timestamp);
             Logger.DebugFormat("Payroll Export period = {0})", message.ExportPeriod);
 			AppDomain.CurrentDomain.AssemblyResolve += _domainAssemblyResolver.Resolve;
-            using (var unitOfWork = UnitOfWorkFactoryContainer.Current.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
-                var rep = _repositoryFactory.CreatePayrollExportRepository(unitOfWork);
-                var payrollExport = rep.Get(message.PayrollExportId);
-
-                var repResult = _repositoryFactory.CreatePayrollResultRepository(unitOfWork);
-                var payrollResult = repResult.Get(message.PayrollResultId);
+                var payrollExport = _payrollExportRepository.Get(message.PayrollExportId);
+                var payrollResult = _payrollResultRepository.Get(message.PayrollResultId);
 
                 _serviceBusPayrollExportFeedback.SetPayrollResult(payrollResult);
                 _serviceBusPayrollExportFeedback.ReportProgress(1,"Payroll export initiated.");

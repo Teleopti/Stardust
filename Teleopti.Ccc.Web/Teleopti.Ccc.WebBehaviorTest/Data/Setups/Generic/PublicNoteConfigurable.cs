@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
+			var scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
 			var publicNoteRepository = new PublicNoteRepository(uow);
 			publicNoteRepository.Add(new PublicNote(user, new DateOnly(Date), scenario, NoteText));
 		}

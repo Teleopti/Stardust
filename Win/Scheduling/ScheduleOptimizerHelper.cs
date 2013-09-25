@@ -448,54 +448,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         }
 
-        // verkar inte användas. Vet inte om den någonsin kommer att användas, den löser alltid problemet men det kan ta 14 dagar
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "dayOffTemplate"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        //public IList<IScheduleMatrixPro> DayOffBackToLegalStateBrutal(
-        //                            IList<IScheduleMatrixPro> matrixes,
-        //                            IOptimizerOriginalPreferences optimizerPreferences,
-        //                            BackgroundWorker backgroundWorker,
-        //                            IDayOffTemplate dayOffTemplate,
-        //                            bool reSchedule)
-        //{
-        //    _backgroundWorker = backgroundWorker;
-
-        //    IList<IScheduleMatrixPro> failedBruteForce = new List<IScheduleMatrixPro>();
-        //    IDayOffPlannerRules dayOffPlannerRules =
-        //        optimizerPreferences.DayOffPlannerRules;
-
-        //    IList<ScheduleMatrixBackToLegalStateBrutalForceServiceContainer> serviceContainers = new List<ScheduleMatrixBackToLegalStateBrutalForceServiceContainer>();
-        //    foreach (IScheduleMatrixPro matrix in matrixes)
-        //    {
-        //        IPerson agent = matrix.Person;
-        //        CultureInfo cultureInfo = agent.PermissionInformation.Culture();
-        //        IScheduleMatrixBitArrayConverter converter = new ScheduleMatrixBitArrayConverter();
-        //        ISchedulePeriodDayOffBackToLegalStateByBrutalForceService service =
-        //            new SchedulePeriodDayOffBackToLegalStateByBrutalForceService(converter, dayOffPlannerRules, cultureInfo);
-        //        var serviceContainer = new ScheduleMatrixBackToLegalStateBrutalForceServiceContainer(service, matrix);
-        //        serviceContainers.Add(serviceContainer);
-        //    }
-
-        //    using (PerformanceOutput.ForOperation("BruteForceSolver for " + serviceContainers.Count + " containers"))
-        //    {
-        //        foreach (ScheduleMatrixBackToLegalStateBrutalForceServiceContainer serviceContainer in serviceContainers)
-        //        {
-        //            serviceContainer.Service.Execute(serviceContainer.ScheduleMatrix);
-        //            if (!serviceContainer.Service.Result.Value)
-        //            {
-        //                failedBruteForce.Add(serviceContainer.ScheduleMatrix);
-        //            }
-        //        }
-        //    }
-
-        //    if (reSchedule)
-        //    {
-        //        //call backtolegal
-        //        //reschedule blank days
-        //    }
-
-        //    return failedBruteForce;
-        //}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public void DaysOffBackToLegalState(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
                                     BackgroundWorker backgroundWorker,
