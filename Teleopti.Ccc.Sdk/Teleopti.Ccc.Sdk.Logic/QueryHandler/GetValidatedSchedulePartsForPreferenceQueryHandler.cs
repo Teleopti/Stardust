@@ -119,23 +119,16 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 					stateHolder.Schedules = scheduleDictionary;
 					stateHolder.PersonsInOrganization = personList;
 
-					IFullWeekOuterWeekPeriodCreator fullWeekOuterWeekPeriodCreator =
-						new FullWeekOuterWeekPeriodCreator(schedulePeriod.DateOnlyPeriod, person);
-					IScheduleMatrixPro scheduleMatrix = new ScheduleMatrixPro(stateHolder, fullWeekOuterWeekPeriodCreator, schedulePeriod);
+					var fullWeekOuterWeekPeriodCreator = new FullWeekOuterWeekPeriodCreator(schedulePeriod.DateOnlyPeriod, person);
+					var scheduleMatrix = new ScheduleMatrixPro(stateHolder, fullWeekOuterWeekPeriodCreator, schedulePeriod);
 
-					// todo: tamasb use the following instead
-					//IScheduleTargetTimeCalculator periodTargetTimeCalculator = new ScheduleTargetTimeCalculator();
-
-					ISchedulePeriodTargetTimeCalculator periodTargetTimeCalculator =
-						new SchedulePeriodTargetTimeCalculator();
-					var schedulePeriodTargetBalanced =
-						periodTargetTimeCalculator.TargetTime(scheduleMatrix);
+					var periodTargetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
+					var schedulePeriodTargetBalanced = periodTargetTimeCalculator.TargetTime(scheduleMatrix);
 					var tolerance = periodTargetTimeCalculator.TargetWithTolerance(scheduleMatrix);
 
 					DateOnlyPeriod loadedPeriod = period.ToDateOnlyPeriod(timeZoneInfo);
 
-					IPeriodScheduledAndRestrictionDaysOff periodScheduledAndRestrictionDaysOff =
-						new PeriodScheduledAndRestrictionDaysOff();
+					IPeriodScheduledAndRestrictionDaysOff periodScheduledAndRestrictionDaysOff = new PeriodScheduledAndRestrictionDaysOff();
 					int numberOfDaysOff = periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(scheduleMatrix, true,
 																								 true, false);
 

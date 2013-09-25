@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
@@ -41,123 +40,133 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
         	_preferenceNightRestChecker = preferenceNightRestChecker;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public IList<ValidatedSchedulePartDto> ValidateSchedulePeriod(DateOnlyPeriod loadedPeriod, 
-            DateOnlyPeriod schedulePeriod, ISchedulingResultStateHolder stateHolder, 
-            int periodTargetInMinutes, int periodNegativeTolerance, int periodPositiveTolerance, int periodDayOffsTarget,
-            IPerson person, int mustHave, int balancedPeriodTargetInMinutes, int balanceInInMinutes, int extraInMinutes, int balanceOutInMinutes, int numberOfDaysOff, double seasonality, bool useStudentAvailability) //, IActivityRepository activityRepository)
-        {
-            if(stateHolder == null)
-                throw new ArgumentNullException("stateHolder");
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"),
+	     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")
+	    ]
+	    public IList<ValidatedSchedulePartDto> ValidateSchedulePeriod(DateOnlyPeriod loadedPeriod,
+	                                                                  DateOnlyPeriod schedulePeriod,
+	                                                                  ISchedulingResultStateHolder stateHolder,
+	                                                                  int periodTargetInMinutes,
+	                                                                  int periodNegativeTolerance,
+	                                                                  int periodPositiveTolerance, int periodDayOffsTarget,
+	                                                                  IPerson person, int mustHave,
+	                                                                  int balancedPeriodTargetInMinutes,
+	                                                                  int balanceInInMinutes, int extraInMinutes,
+	                                                                  int balanceOutInMinutes, int numberOfDaysOff,
+	                                                                  double seasonality, bool useStudentAvailability)
+	    {
+		    if (stateHolder == null)
+			    throw new ArgumentNullException("stateHolder");
 
-            if (person == null)
-                throw new ArgumentNullException("person");
-            
-            IList<ValidatedSchedulePartDto> result = new List<ValidatedSchedulePartDto>();
-            IPersonPeriod personPeriod;
+		    if (person == null)
+			    throw new ArgumentNullException("person");
 
-            foreach (DateOnly dateOnly in loadedPeriod.DayCollection())
-            {
-                var dto = new ValidatedSchedulePartDto
-                              {
-                                  MustHave = mustHave,
-								  DateOnly = new DateOnlyDto { DateTime = dateOnly },
-                                  IsInsidePeriod = schedulePeriod.Contains(dateOnly),
-                                  PeriodTargetInMinutes = periodTargetInMinutes,
-                                  PeriodDayOffsTarget = periodDayOffsTarget,
-                                  BalancedPeriodTargetInMinutes = balancedPeriodTargetInMinutes,
-                                  BalanceInInMinutes = balanceInInMinutes,
-                                  ExtraInInMinutes = extraInMinutes,
-                                  BalanceOutInMinutes = balanceOutInMinutes,
-                                  Seasonality = seasonality
-                              };
+		    IList<ValidatedSchedulePartDto> result = new List<ValidatedSchedulePartDto>();
 
-                IScheduleDay scheduleDay = stateHolder.Schedules[person].ScheduledDay(dateOnly);
-                var restrictionExtractor = new RestrictionExtractor(stateHolder);
-                restrictionExtractor.Extract(scheduleDay);
-                IEffectiveRestriction effectiveRestriction =
-                    restrictionExtractor.CombinedRestriction(new SchedulingOptions
-                                                                 {
-                                                                     UseRotations = false,
-                                                                     UsePreferences = true,
-                                                                     UseAvailability = true,
-                                                                     UseStudentAvailability = useStudentAvailability,
-                                                                     UsePreferencesMustHaveOnly = false
-                                                                 });
-                personPeriod = person.Period(dateOnly);
+		    foreach (DateOnly dateOnly in loadedPeriod.DayCollection())
+		    {
+			    var dto = new ValidatedSchedulePartDto
+				    {
+					    MustHave = mustHave,
+					    DateOnly = new DateOnlyDto {DateTime = dateOnly},
+					    IsInsidePeriod = schedulePeriod.Contains(dateOnly),
+					    PeriodTargetInMinutes = periodTargetInMinutes,
+					    PeriodDayOffsTarget = periodDayOffsTarget,
+					    BalancedPeriodTargetInMinutes = balancedPeriodTargetInMinutes,
+					    BalanceInInMinutes = balanceInInMinutes,
+					    ExtraInInMinutes = extraInMinutes,
+					    BalanceOutInMinutes = balanceOutInMinutes,
+					    Seasonality = seasonality
+				    };
 
-                if (personPeriod == null)
-                    continue;
-                    //return result; 
+			    IScheduleDay scheduleDay = stateHolder.Schedules[person].ScheduledDay(dateOnly);
+			    var restrictionExtractor = new RestrictionExtractor(stateHolder);
+			    restrictionExtractor.Extract(scheduleDay);
+			    IEffectiveRestriction effectiveRestriction = restrictionExtractor.CombinedRestriction(new SchedulingOptions
+					    {
+						    UseRotations = false,
+						    UsePreferences = true,
+						    UseAvailability = true,
+						    UseStudentAvailability = useStudentAvailability,
+						    UsePreferencesMustHaveOnly = false
+					    });
+			    IPersonPeriod personPeriod = person.Period(dateOnly);
 
-                dto.IsPreferenceEditable = _isEditablePredicate.IsPreferenceEditable(dateOnly, person);
-                dto.IsStudentAvailabilityEditable = _isEditablePredicate.IsStudentAvailabilityEditable(dateOnly, person);
+			    if (personPeriod == null) continue;
+			    
+			    dto.IsPreferenceEditable = _isEditablePredicate.IsPreferenceEditable(dateOnly, person);
+			    dto.IsStudentAvailabilityEditable = _isEditablePredicate.IsStudentAvailabilityEditable(dateOnly, person);
 
-               IRuleSetBag ruleSetBag = personPeriod.RuleSetBag;
+			    IRuleSetBag ruleSetBag = personPeriod.RuleSetBag;
 
-                dto.WeekMaxInMinutes = (int)personPeriod.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek.TotalMinutes;
-                if (ruleSetBag == null)
-                    return new List<ValidatedSchedulePartDto>();
+			    dto.WeekMaxInMinutes = (int) personPeriod.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek.TotalMinutes;
+			    if (ruleSetBag == null)
+				    return new List<ValidatedSchedulePartDto>();
 
-                IEnumerable<IPreferenceDay> preferenceList =
-                    (from r in scheduleDay.PersistableScheduleDataCollection() where r is IPreferenceDay select (IPreferenceDay)r);
-                if (!preferenceList.IsEmpty())
-                    dto.PreferenceRestriction = _preferenceDayAssembler.DomainEntityToDto(preferenceList.First());
+			    IEnumerable<IPreferenceDay> preferenceList =
+				    (from r in scheduleDay.PersistableScheduleDataCollection() where r is IPreferenceDay select (IPreferenceDay) r);
+			    if (!preferenceList.IsEmpty())
+				    dto.PreferenceRestriction = _preferenceDayAssembler.DomainEntityToDto(preferenceList.First());
 
-                var studentAvailabilityDays = (from r in scheduleDay.PersistableScheduleDataCollection() where r is IStudentAvailabilityDay select (IStudentAvailabilityDay)r);
-                if (!studentAvailabilityDays.IsEmpty())
-                    dto.StudentAvailabilityDay = _studentAvailabilityDayAssembler.DomainEntityToDto(studentAvailabilityDays.First());
+			    var studentAvailabilityDays = (from r in scheduleDay.PersistableScheduleDataCollection()
+			                                   where r is IStudentAvailabilityDay
+			                                   select (IStudentAvailabilityDay) r);
+			    if (!studentAvailabilityDays.IsEmpty())
+				    dto.StudentAvailabilityDay = _studentAvailabilityDayAssembler.DomainEntityToDto(studentAvailabilityDays.First());
 
 	            var assignment = scheduleDay.PersonAssignment();
-                var personMeetingCollection = scheduleDay.PersonMeetingCollection();
+			    var personMeetingCollection = scheduleDay.PersonMeetingCollection();
 
-                var significant = scheduleDay.SignificantPartForDisplay();
-                if (significant == SchedulePartView.DayOff)
+			    var significant = scheduleDay.SignificantPartForDisplay();
+			    if (significant == SchedulePartView.DayOff)
                     checkPersonDayOffCollection(assignment.DayOff(), dto);
 
-                if(significant == SchedulePartView.MainShift)
+			    if (significant == SchedulePartView.MainShift)
                     checkPersonAssignmentCollection(assignment, dto);
-                
-                if (significant == SchedulePartView.FullDayAbsence || significant == SchedulePartView.ContractDayOff)
-                {
-                    IVisualLayerCollection visualLayerCollection = scheduleDay.ProjectionService().CreateProjection();
-                    dto = AddFullDayAbsence(visualLayerCollection, dto);
-                }
 
-                if (significant == SchedulePartView.ContractDayOff)
-                    dto.IsContractDayOff = true;
+			    if (significant == SchedulePartView.FullDayAbsence || significant == SchedulePartView.ContractDayOff)
+			    {
+				    IVisualLayerCollection visualLayerCollection = scheduleDay.ProjectionService().CreateProjection();
+				    dto = AddFullDayAbsence(visualLayerCollection, dto);
+			    }
 
-				DateOnly? schedulePeriodStartDay = person.SchedulePeriodStartDate(dateOnly);
-				if(!schedulePeriodStartDay.HasValue)
-					continue;
+			    if (significant == SchedulePartView.ContractDayOff)
+				    dto.IsContractDayOff = true;
 
-                dto.IsWorkday = personPeriod.PersonContract.ContractSchedule.IsWorkday(schedulePeriodStartDay.Value, dateOnly);
+			    DateOnly? schedulePeriodStartDay = person.SchedulePeriodStartDate(dateOnly);
+			    if (!schedulePeriodStartDay.HasValue)
+				    continue;
 
-                dto.TargetTimeNegativeToleranceInMinutes = periodNegativeTolerance;
-                dto.TargetTimePositiveToleranceInMinutes = periodPositiveTolerance;
+			    dto.IsWorkday = personPeriod.PersonContract.ContractSchedule.IsWorkday(schedulePeriodStartDay.Value, dateOnly);
 
+			    dto.TargetTimeNegativeToleranceInMinutes = periodNegativeTolerance;
+			    dto.TargetTimePositiveToleranceInMinutes = periodPositiveTolerance;
 
-               IWorkTimeMinMax minMaxLength = _minMaxWorkTimeChecker.MinMaxWorkTime(scheduleDay, ruleSetBag, effectiveRestriction);
+			    IWorkTimeMinMax minMaxLength = _minMaxWorkTimeChecker.MinMaxWorkTime(scheduleDay, ruleSetBag,
+			                                                                         effectiveRestriction);
 
-                AddMinMaxToDto(dto, minMaxLength);
+			    AddMinMaxToDto(dto, minMaxLength);
 
                 if ((personMeetingCollection.Count > 0 || assignment!=null) && !(dto.HasShift || dto.HasDayOff || dto.HasAbsence))
-                {
-                    dto.HasPersonalAssignmentOnly = true;
-                    dto.TipText = ScheduleDayStringVisualizer.GetToolTipPersonalAssignments(scheduleDay, person.PermissionInformation.DefaultTimeZone(), person.PermissionInformation.Culture());
-                }
-                result.Add(dto);
-            }
-            TrimValidatedPartListToFirstDayOfWeek(result);
-            foreach (var partDto in result)
-            {
-                partDto.PeriodDayOffs = numberOfDaysOff;
-            }
-			_preferenceNightRestChecker.CheckNightlyRest(result);
-            return result;
-        }
+			    {
+				    dto.HasPersonalAssignmentOnly = true;
+				    dto.TipText = ScheduleDayStringVisualizer.GetToolTipPersonalAssignments(scheduleDay,
+				                                                                            person.PermissionInformation
+				                                                                                  .DefaultTimeZone(),
+				                                                                            person.PermissionInformation.Culture());
+			    }
+			    result.Add(dto);
+		    }
+		    TrimValidatedPartListToFirstDayOfWeek(result);
+		    foreach (var partDto in result)
+		    {
+			    partDto.PeriodDayOffs = numberOfDaysOff;
+		    }
+		    _preferenceNightRestChecker.CheckNightlyRest(result);
+		    return result;
+	    }
 
-        private static void AddMinMaxToDto(ValidatedSchedulePartDto dto, IWorkTimeMinMax minMaxLength)
+	    private static void AddMinMaxToDto(ValidatedSchedulePartDto dto, IWorkTimeMinMax minMaxLength)
         {
             if (minMaxLength != null)
             {

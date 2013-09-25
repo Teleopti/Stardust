@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 						}
 					}
 
-					if (activities.Count() == 0)
+					if (!activities.Any())
 						permissionState = PermissionState.Broken;
 
 				}
@@ -491,7 +491,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 	        return permissionState;
         }
 
-        private static bool isWithinTimeSpan(TimeSpan? startTime, TimeSpan? endTime, TimeSpan scheduleTime)
+	    private static bool isWithinTimeSpan(TimeSpan? startTime, TimeSpan? endTime, TimeSpan scheduleTime)
         {
             bool minBoundaryFulfilled = true;
             bool maxBoundaryFulfilled = true;
@@ -531,6 +531,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             return a && b;
         }
-
     }
 }
