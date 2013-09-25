@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Collection
 	{
 		void SetFilteredPersons(IEnumerable<IPerson> filteredPersons);
 		//refact should only return value for requested category
-		IDictionary<IShiftCategory, MinMax<int>> GetMinMaxDictionary();
+		IDictionary<IShiftCategory, MinMax<int>> GetMinMaxDictionary(IEnumerable<IPerson> filteredPersons);
 	}
 
 	public class CachedShiftCategoryDistribution : ICachedShiftCategoryDistribution
@@ -55,11 +55,23 @@ namespace Teleopti.Ccc.Domain.Collection
 			}
 		}
 
-		public IDictionary<IShiftCategory, MinMax<int>> GetMinMaxDictionary()
+
+		public IDictionary<IShiftCategory, MinMax<int>> GetMinMaxDictionary(IEnumerable<IPerson> filteredPersons)
 		{
+			if (_changedPersons.Count == 0) return _internalDic;
+			SetFilteredPersons(filteredPersons);
+
 			foreach (var changedPerson in _changedPersons)
 			{
 				var values = _cachedNumberOfEachCategoryPerPerson.GetValue(changedPerson);
+				foreach (var shiftCategory in _allShiftCategories)
+				{
+					if (!values.ContainsKey(shiftCategory))
+					{
+						values.Add(shiftCategory, 0);
+					}
+				}
+
 				foreach (var categoryCountPair in values)
 				{
 					var shiftCategory = categoryCountPair.Key;
@@ -85,6 +97,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			_changedPersons.Clear();
 
 			return _internalDic;
+	
 		}
 
 		private void initializeInternalDic()

@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
 		public MinMax<int> GetMinMaxForShiftCategory(IShiftCategory shiftCategory)
 		{
-			var dic = _cachedShiftCategoryDistribution.GetMinMaxDictionary();
+			var dic = _cachedShiftCategoryDistribution.GetMinMaxDictionary(_filteredPersons);
 			return dic[shiftCategory];
 		}
 

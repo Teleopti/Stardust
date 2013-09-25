@@ -82,11 +82,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		{
 			if (rowIndex <= sortedCategories.Count)
 			{
-				style.Text = sortedCategories[rowIndex-1].Description.ShortName;
+				//style.Text = sortedCategories[rowIndex-1].Description.ShortName;
+				style.CellValue = sortedCategories[rowIndex - 1].Description.ShortName;
 			}
 			else
 			{
-				style.CellValue = "xxTotal";
+				//style.Text = UserTexts.Resources.Total;
+				style.CellValue = UserTexts.Resources.Total;
 			}
 		}
 
@@ -95,16 +97,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			switch (colIndex)
 			{
 				case 1:
-					style.CellValue = "xxMin";
+					style.CellValue = UserTexts.Resources.Min;
 					break;
 				case 2:
-					style.CellValue = "xxMax";
+					style.CellValue = UserTexts.Resources.Max;
 					break;
 				case 3:
-					style.CellValue = "xxAverage";
+					style.CellValue = "xxAvarage";
 					break;
 				case 4:
-					style.CellValue = "xxStandardDeviation";
+					style.CellValue = UserTexts.Resources.StandardDeviation;
 					break;
 			}
 		}
