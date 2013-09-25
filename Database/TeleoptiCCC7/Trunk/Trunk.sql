@@ -287,3 +287,32 @@ GO
 
 UPDATE dbo.Contract SET MaxTimePerWeek=1728000000000,NightlyRest=396000000000,WeeklyRest=1296000000000,Version = Version+1 WHERE MaxTimePerWeek=0 AND NightlyRest=0 AND WeeklyRest=0
 GO
+
+----------------  
+--Name: David J
+--Date: 2013-09-25
+--Desc: bug #23113 - Advanced logging
+-----------------
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AdvancedLoggingService]') AND type in (N'U'))
+BEGIN
+	CREATE TABLE [dbo].[AdvancedLoggingService](
+		[LogDate] datetime NOT NULL,
+		[Message] varchar(500) NULL,
+		[BU] varchar(500) NULL,
+		[BUId] uniqueidentifier NULL,
+		[DataSource] varchar(500) NULL,
+		[InitialCatalog] varchar(500) NULL,
+		[WindowsIdentity] varchar(500) NULL,
+		[HostIP] varchar(500) NULL,
+		[BlockScheduling] varchar(500) NULL,
+		[TeamScheduling] varchar(500) NULL,
+		[Scheduling] varchar(500) NULL,
+		[NoOfSkillDays] numeric(18, 0) NULL,
+		[NoOfAgents] numeric(18, 0) NULL
+	) 
+	CREATE CLUSTERED INDEX [CIX_AdvancedLoggingService_] ON [dbo].[AdvancedLoggingService]
+	(
+		[HostIP] ASC
+	)
+END
+GO
