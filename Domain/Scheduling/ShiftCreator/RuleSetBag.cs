@@ -84,17 +84,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             }
         }
 
-
-		  public virtual IWorkTimeMinMax MinMaxWorkTime(IWorkShiftWorkTime workShiftWorkTime,
-                                                        DateOnly onDate,
-														IWorkTimeMinMaxRestriction restriction)
+		public virtual IWorkTimeMinMax MinMaxWorkTime(IWorkShiftWorkTime workShiftWorkTime, DateOnly onDate, IWorkTimeMinMaxRestriction restriction)
         {
-
-            if (restriction == null)
-                return null;
-
-			if (!restriction.MayMatchWithShifts())
-				return null;
+            if (restriction == null) return null;
+			if (!restriction.MayMatchWithShifts()) return null;
 
 		  	var validRuleSets = _ruleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.IsValidDate(onDate)).ToList();
             
@@ -110,30 +103,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             return retVal;
         }
 
-		  private static IWorkTimeMinMax worktimeForRuleSetsAndRestriction(IWorkTimeMinMaxRestriction restriction, IEnumerable<IWorkShiftRuleSet> validRuleSets,
-				IWorkShiftWorkTime workShiftWorkTime)
-        {
-			  IWorkTimeMinMax retVal = null;
-            foreach (var workShiftRuleSet in validRuleSets)
-            {
+	    private static IWorkTimeMinMax worktimeForRuleSetsAndRestriction(IWorkTimeMinMaxRestriction restriction,
+	                                                                     IEnumerable<IWorkShiftRuleSet> validRuleSets,
+	                                                                     IWorkShiftWorkTime workShiftWorkTime)
+	    {
+		    IWorkTimeMinMax retVal = null;
+		    foreach (var workShiftRuleSet in validRuleSets)
+		    {
+			    if (!restriction.Match(workShiftRuleSet.TemplateGenerator.Category))
+				    continue;
 
-				if (!restriction.Match(workShiftRuleSet.TemplateGenerator.Category))
-					continue;
+			    var ruleSetWorkTimeMinMax = workShiftWorkTime.CalculateMinMax(workShiftRuleSet, restriction);
+			    if (ruleSetWorkTimeMinMax != null)
+			    {
+				    if (retVal == null) retVal = new WorkTimeMinMax();
 
-            	var ruleSetWorkTimeMinMax = workShiftWorkTime.CalculateMinMax(workShiftRuleSet, restriction);
-                if (ruleSetWorkTimeMinMax != null)
-                {
-                    if (retVal == null)
-                        retVal = new WorkTimeMinMax();
+				    retVal = retVal.Combine(ruleSetWorkTimeMinMax);
+			    }
+		    }
+		    return retVal;
+	    }
 
-                    retVal = retVal.Combine(ruleSetWorkTimeMinMax);
-                }
-
-            }
-            return retVal;
-        }
-
-        #endregion Properties 
+	    #endregion Properties 
 
         public virtual void AddRuleSet(IWorkShiftRuleSet workShiftRuleSet)
         {
