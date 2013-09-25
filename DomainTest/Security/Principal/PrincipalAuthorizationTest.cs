@@ -5,7 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         private IApplicationFunction applicationFunction;
         private OrganisationMembership organisationMembership;
         const string Function = "test";
+        private IPersonAccountUpdater _personAccountUpdater;
 
         [SetUp]
         public void Setup()
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             mocks = new MockRepository();
             authorizeAvailableData = mocks.StrictMock<IAuthorizeAvailableData>();
             person = PersonFactory.CreatePerson();
-
+            _personAccountUpdater = new PersonAccountUpdaterDummy();
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null), person);
             organisationMembership = (OrganisationMembership) principal.Organisation;
 			principalAuthorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
@@ -182,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 
 			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today.AddDays(-10), site.TeamCollection[0]));
 			otherPerson.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(today.AddDays(-15), site.TeamCollection[0]));
-			person.TerminalDate = today;
+			person.TerminatePerson(today, new PersonAccountUpdaterDummy());
 
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null), person);
 			organisationMembership = (OrganisationMembership) principal.Organisation;
@@ -194,6 +195,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			{
 				Expect.Call(authorizeAvailableData.Check(organisationMembership, today.AddDays(-15), otherPerson)).Return(true);
 				Expect.Call(authorizeAvailableData.Check(organisationMembership, today.AddDays(-10), otherPerson)).Return(true);
+			   // Expect.Call(()=>_personAccountUpdater.Update(otherPerson)).Repeat.Once();
 			}
 			using (mocks.Playback())
 			{

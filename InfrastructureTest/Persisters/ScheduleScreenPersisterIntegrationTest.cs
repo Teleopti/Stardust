@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NHibernate.Criterion;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -27,8 +28,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 		private IClearReferredShiftTradeRequests _clearReferredShiftTradeRequests;
 		private IMessageBrokerIdentifier _messageBrokerIdentifier;
 		private IPersonAbsenceAccountValidator _personAbsenceAccountValidator;
+	    private ICurrentScenario _currentScenario;
 
-		protected IScheduleDictionaryConflictCollector ScheduleDictionaryConflictCollector { get; set; }
+	    protected IScheduleDictionaryConflictCollector ScheduleDictionaryConflictCollector { get; set; }
 		protected ScheduleRepository ScheduleRepository { get; set; }
 		protected PersonAssignmentRepository PersonAssignmentRepository { get; set; }
 
@@ -135,6 +137,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			PersonAssignmentRepository = new PersonAssignmentRepository(UnitOfWorkFactory.Current);
 			ScheduleDictionaryConflictCollector = Mocks.DynamicMock<IScheduleDictionaryConflictCollector>();
 			ScheduleDictionarySaver = new ScheduleDictionarySaver();
+		    _currentScenario = Mocks.DynamicMock<ICurrentScenario>();
+		    _currentScenario.Stub(x => x.Current()).Return(Scenario);
 			Mocks.ReplayAll();
 		}
 
@@ -154,7 +158,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 														//ScheduleDictionarySaver,
 													   new PersonRequestPersister(_clearReferredShiftTradeRequests),
 													   new PersonAbsenceAccountConflictCollector(),
-													   new PersonAbsenceAccountRefresher(new RepositoryFactory(), Scenario),
+													   new TraceableRefreshService(_currentScenario,new ScheduleRepository(UnitOfWorkFactory.Current)), 
 													   _personAbsenceAccountValidator,
 													   ScheduleDictionaryConflictCollector,
 														//new ScheduleDictionaryModifiedCallback(),

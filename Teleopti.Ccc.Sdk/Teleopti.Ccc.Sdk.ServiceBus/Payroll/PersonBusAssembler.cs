@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
     {
         public IEnumerable<PersonDto> CreatePersonDto(IEnumerable<IPerson> persons)
         {
-            var personAssembler = new PersonAssembler(null, new WorkflowControlSetAssembler(new ShiftCategoryAssembler(null), new DayOffAssembler(null),new ActivityAssembler(null), new AbsenceAssembler(null)));
+            var personAssembler = new PersonAssembler(null, new WorkflowControlSetAssembler(new ShiftCategoryAssembler(null), new DayOffAssembler(null),new ActivityAssembler(null), new AbsenceAssembler(null)), null);
             return personAssembler.DomainEntitiesToDtos(persons);
         }
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private readonly IPersonRequestPersister _personRequestPersister;
 		private readonly IPersonAbsenceAccountConflictCollector _personAbsenceAccountConflictCollector;
-		private readonly IPersonAbsenceAccountRefresher _personAbsenceAccountRefresher;
+        private readonly ITraceableRefreshService _traceableRefreshService;
 		private readonly IPersonAbsenceAccountValidator _personAbsenceAccountValidator;
 		private readonly IScheduleDictionaryConflictCollector _scheduleDictionaryConflictCollector;
 		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		                                       IPersonAbsenceAccountRepository personAbsenceAccountRepository,
 		                                       IPersonRequestPersister personRequestPersister,
 		                                       IPersonAbsenceAccountConflictCollector personAbsenceAccountConflictCollector,
-		                                       IPersonAbsenceAccountRefresher personAbsenceAccountRefresher,
+		                                       ITraceableRefreshService traceableRefreshService,
 		                                       IPersonAbsenceAccountValidator personAbsenceAccountValidator,
 		                                       IScheduleDictionaryConflictCollector scheduleDictionaryConflictCollector,
 		                                       IMessageBrokerIdentifier messageBrokerIdentifier,
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 			_personRequestPersister = personRequestPersister;
 			_personAbsenceAccountConflictCollector = personAbsenceAccountConflictCollector;
-			_personAbsenceAccountRefresher = personAbsenceAccountRefresher;
+			_traceableRefreshService = traceableRefreshService;
 			_personAbsenceAccountValidator = personAbsenceAccountValidator;
 			_scheduleDictionaryConflictCollector = scheduleDictionaryConflictCollector;
 			_messageBrokerIdentifier = messageBrokerIdentifier;
@@ -175,7 +176,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			refreshPersonAbsenceAccounts.ForEach(paa =>
 			                                     {
 			                                     	unitOfWork.Refresh(paa);
-			                                     	_personAbsenceAccountRefresher.Refresh(unitOfWork, paa);
+			                                     	paa.AccountCollection().ForEach(_traceableRefreshService.Refresh);
 			                                     	_personAbsenceAccountValidator.Validate(paa);
 			                                     });
 		}

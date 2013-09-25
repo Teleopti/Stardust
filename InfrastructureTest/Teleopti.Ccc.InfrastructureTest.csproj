@@ -240,7 +240,6 @@
     <Compile Include="Persisters\BugTest\Bug12891.cs" />
     <Compile Include="Persisters\PersistWriteProtectionTest.cs" />
     <Compile Include="Persisters\PersonAbsenceAccountConflictCollectorTest.cs" />
-    <Compile Include="Persisters\PersonAbsenceAccountRefresherTest.cs" />
     <Compile Include="Persisters\PersonRequestPersisterTest.cs" />
     <Compile Include="Persisters\ScheduleDictionaryBatchPersisterTest.cs" />
     <Compile Include="Persisters\ScheduleDictionaryConflictCollectorTest.cs" />

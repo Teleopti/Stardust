@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Tracking;
@@ -74,14 +75,16 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 
         void ReloadPeople()
         {
-            _filteredPeopleHolder.UnitOfWork.Dispose();
+            _filteredPeopleHolder.GetUnitOfWork.Dispose();
 
             var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork();
 
             var accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
-            ITraceableRefreshService service = new TraceableRefreshService(new ScenarioRepository(uow).LoadDefaultScenario(), new RepositoryFactory());
 
-            _filteredPeopleHolder.SetState(uow, service, accounts);
+            var currentScenario = _container.Resolve<ICurrentScenario>();
+            ITraceableRefreshService service = new TraceableRefreshService(currentScenario ,new ScheduleRepository(uow));
+
+            _filteredPeopleHolder.SetState(service, uow, accounts);
             _filteredPeopleHolder.SelectedDate = _personSelectorPresenter.SelectedDate;
                  
             _filteredPeopleHolder.LoadIt();
