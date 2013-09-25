@@ -3749,8 +3749,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void _backgroundWorkerScheduling_DoWork(object sender, DoWorkEventArgs e)
 		{
-            AdvanceLoggingService.LogSchedulingInfo(null, 1, 1,()=> runBackgroundWorkerScheduling(e));
-         }
+            var argument = (SchedulingAndOptimizeArgument)e.Argument;
+		    var scheduleDays = argument.ScheduleDays;
+            var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+            var selectedPeriod =
+                new DateOnlyPeriod(
+                    OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone),
+                    OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
+		    var dateOnlyList = selectedPeriod.DayCollection();
+            _schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
+            AdvanceLoggingService.LogSchedulingInfo(_optimizerOriginalPreferences.SchedulingOptions, scheduleDays.Select(x => x.Person).Distinct().Count(), dateOnlyList.Count(), () => runBackgroundWorkerScheduling(e));
+        }
 
 		private void turnOffCalculateMinMaxCacheIfNeeded(ISchedulingOptions schedulingOptions)
 		{

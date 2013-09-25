@@ -296,19 +296,20 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AdvancedLoggingService]') AND type in (N'U'))
 BEGIN
 	CREATE TABLE [dbo].[AdvancedLoggingService](
-		[LogDate] datetime NOT NULL,
-		[Message] varchar(500) NULL,
-		[BU] varchar(500) NULL,
-		[BUId] uniqueidentifier NULL,
-		[DataSource] varchar(500) NULL,
-		[InitialCatalog] varchar(500) NULL,
-		[WindowsIdentity] varchar(500) NULL,
-		[HostIP] varchar(500) NULL,
-		[BlockScheduling] varchar(500) NULL,
-		[TeamScheduling] varchar(500) NULL,
-		[Scheduling] varchar(500) NULL,
-		[NoOfSkillDays] numeric(18, 0) NULL,
-		[NoOfAgents] numeric(18, 0) NULL
+	[LogDate] [datetime] NOT NULL,
+	[Message] [varchar](500) NULL,
+	[BU] [varchar](500) NULL,
+	[BUId] [uniqueidentifier] NULL,
+	[DataSource] [varchar](500) NULL,
+	[InitialCatalog] [varchar](500) NULL,
+	[WindowsIdentity] [varchar](500) NULL,
+	[HostIP] [varchar](500) NULL,
+	[BlockOptions] [varchar](500) NULL,
+	[TeamOptions] [varchar](500) NULL,
+	[Scheduling] [varchar](500) NULL,
+	[SkillDays] [numeric](18, 0) NULL,
+	[Agents] [numeric](18, 0) NULL,
+	[ExecutionTime] [numeric](18, 0) NULL
 	) 
 	CREATE CLUSTERED INDEX [CIX_AdvancedLoggingService_] ON [dbo].[AdvancedLoggingService]
 	(

@@ -17,20 +17,20 @@ namespace Teleopti.Ccc.Domain.Common.Logging
         {
             if (_log == null)
             {
-                Log4NetConfiguration.SetConnectionString("data source=.;initial catalog=Log4net;integrated security=true; persist security info=True;User ID=sa;Password=cadadi");
+                Log4NetConfiguration.SetConnectionString("data source=.;initial catalog=PBI231131_Demoreg_TeleoptiCCC7;integrated security=true; persist security info=True;User ID=sa;Password=cadadi");
                 _log = LogManager.GetLogger("Teleopti.AdvanceLoggingService");
                 
             }
             return _log;
         }
 
-        public static void LogSchedulingInfo(ISchedulingOptions schedulingOptions, int noOfAgent, int noOfSkillDays, Action unknown)
+        public static void LogSchedulingInfo(ISchedulingOptions schedulingOptions, int noOfAgent, int noOfSkillDays, Action callbackAction)
         {
             if (getLog().IsInfoEnabled)
             {
                 var stop = new Stopwatch();
                 stop.Start();
-                unknown.Invoke();
+                callbackAction.Invoke();
                 stop.Stop();
                 //get the system log
                 populateSystemProperties();
@@ -39,16 +39,17 @@ namespace Teleopti.Ccc.Domain.Common.Logging
                 //populateSchedulingOptions(schedulingOptions);
 
                 //log the agent and skill days
-                populateAgentAndSkillDays(noOfAgent, noOfSkillDays);
+                populateAgentAndSkillDays(noOfAgent, noOfSkillDays,stop.ElapsedMilliseconds );
 
                 getLog().Info("Scheduling");
             }
         }
 
-        private static void populateAgentAndSkillDays(int noOfAgent, int noOfSkillDays)
+        private static void populateAgentAndSkillDays(int noOfAgent, int noOfSkillDays, long elapsedMilliseconds)
         {
-            GlobalContext.Properties["NoOfAgents"] = noOfAgent.ToString();
-            GlobalContext.Properties["NoOfSkillDays"] = noOfSkillDays.ToString();
+            GlobalContext.Properties["Agents"] = noOfAgent.ToString();
+            GlobalContext.Properties["SkillDays"] = noOfSkillDays.ToString();
+            GlobalContext.Properties["ExecutionTime"] = elapsedMilliseconds.ToString();
         }
 
         private static void populateSystemProperties()
@@ -62,8 +63,8 @@ namespace Teleopti.Ccc.Domain.Common.Logging
                 GlobalContext.Properties["InitialCatalog"] = identity.DataSource.InitialCatalog;
                 GlobalContext.Properties["WindowsIdentity"] = identity.WindowsIdentity.Name;
                 GlobalContext.Properties["HostIP"] = SystemInformationHelper.GetSystemIPAddress();
-                GlobalContext.Properties["TeamScheduling"] = "team";
-                GlobalContext.Properties["BlockScheduling"] = "team";
+                GlobalContext.Properties["TeamOptions"] = "";
+                GlobalContext.Properties["BlockOptions"] = "";
                 GlobalContext.Properties["Scheduling"] = "Fairness: ";
             }
         }
