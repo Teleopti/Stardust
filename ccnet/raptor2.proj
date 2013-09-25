@@ -290,10 +290,10 @@
 		Overwrite="true" />
 
 		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
-			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfigTest\Teleopti.Ccc.ApplicationConfigTest.dll.Config" />
+			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfigTest\App.config" />
 
 		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
-			DestinationFiles="$(CCNetWorkingDirectory)\InfrastructureTest\Teleopti.Ccc.InfrastructureTest.dll.Config" />
+			DestinationFiles="$(CCNetWorkingDirectory)\InfrastructureTest\App.Config" />
 
 		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\Teleopti.Ccc.WebBehaviorTest.App.config" OverwriteReadOnlyFiles="true"
 			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config" />
@@ -304,12 +304,12 @@
 			Regex="_replace_"
 			ReplacementText="$(InfraTestIni)"/>
 
-		<FileUpdate Files="$(CCNetWorkingDirectory)\InfrastructureTest\Teleopti.Ccc.InfrastructureTest.dll.Config"
+		<FileUpdate Files="$(CCNetWorkingDirectory)\InfrastructureTest\App.Config"
 			Encoding="windows-1252"
 			Regex="_replace_"
 			ReplacementText="$(InfraTestIni)"/>
 			
-		<FileUpdate Files="$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfigTest\Teleopti.Ccc.ApplicationConfigTest.dll.Config"
+		<FileUpdate Files="$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfigTest\App.config"
 			Encoding="windows-1252"
 			Regex="_replace_"
 			ReplacementText="$(InfraTestIni)"/>			
