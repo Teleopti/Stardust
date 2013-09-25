@@ -43,17 +43,6 @@ ko.bindingHandlers.animateBackground = {
 	}
 };
 
-ko.bindingHandlers['class'] = {
-	update: function (element, valueAccessor) {
-		if (element['__ko__previousClassValue__']) {
-			$(element).removeClass(element['__ko__previousClassValue__']);
-		}
-		var value = ko.utils.unwrapObservable(valueAccessor());
-		$(element).addClass(value);
-		element['__ko__previousClassValue__'] = value;
-	}
-};
-
 ko.bindingHandlers.hoverToggle = {
 	init: function (element, valueAccessor, allBindingsAccessor) {
 		var css = valueAccessor();
@@ -228,18 +217,6 @@ ko.bindingHandlers.select2 = {
 	}
 };
 
-ko.bindingHandlers.button = {
-	init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-		$(element).button();
-	},
-	update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-		var value = ko.utils.unwrapObservable(valueAccessor()),
-            disabled = ko.utils.unwrapObservable(value.disabled);
-
-		$(element).button("option", "disabled", disabled);
-	}
-};
-
 //wraps the datepickerbinding and sets the datepickeroptions
 ko.bindingHandlers.mytimeDatePicker = {
 	init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
@@ -262,12 +239,11 @@ ko.bindingHandlers.mytimeDatePicker = {
 };
 
 ko.bindingHandlers.clickable = {
-	update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+	update: function (element, valueAccessor) {
 		var value = ko.utils.unwrapObservable(valueAccessor());
 
 		var clickableCursor = (value) ? "pointer" : "not-allowed";
 		$(element).css('cursor', clickableCursor);
-
 	}
 };
 
@@ -280,3 +256,9 @@ ko.bindingHandlers.nonEncodedTitle = {
 	}
 };
 
+ko.bindingHandlers.selected = {
+    update: function (element, valueAccessor) {
+        var selected = ko.utils.unwrapObservable(valueAccessor());
+        if (selected) element.select();
+    }
+};

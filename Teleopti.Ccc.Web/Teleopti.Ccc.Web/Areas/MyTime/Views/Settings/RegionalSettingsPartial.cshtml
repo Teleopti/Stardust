@@ -28,7 +28,7 @@
 		    </div>
 		    <!-- ko if: CalendarSharingActive() -->
 		    <label>@Resources.ShareMyCalendarHint</label>
-		    <label class="calendar-url" data-bind="text: CalendarUrl"></label>
+		    <input class="calendar-url span10" data-bind="value: CalendarUrl, selected: true"/>
 		    <!-- /ko -->
 	    </div>
     }
