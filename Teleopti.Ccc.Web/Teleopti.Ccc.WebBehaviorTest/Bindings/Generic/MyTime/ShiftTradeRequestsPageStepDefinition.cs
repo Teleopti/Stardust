@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			gotoAddRequestToday();
 		}
 
+		[Given(@"I view Add Shift Trade Request for date '(.*)'")]
 		[When(@"I view Add Shift Trade Request for date '(.*)'")]
 		public void WhenIViewAddShiftTradeRequestForDate(DateTime date)
 		{
@@ -85,24 +86,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see a possible schedule trade with '(.*)'")]
 		public void ThenIShouldNotSeeAPossibleScheduleTradeWith(string name)
 		{
-			Browser.Interactions.AssertNotExists(".shift-trade-agent-name", name);//Fel... Pushat lite mitt i kodningen. /Maria
+			Browser.Interactions.AssertNotExistsUsingJQuery(".shift-trade-my-schedule", string.Format(".shift-trade-agent-name:contains('{0}')", name));
 		}
-
-		[Then(@"I should see a possible schedule trade with")]
-		public void ThenIShouldSeeAPossibleScheduleTradeWith(Table table)
-		{
-			var expectedTimes = table.Rows[0][1] + "-" + table.Rows[1][1];
-
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers.Any(), Is.True);
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers[0].Title, Contains.Substring(expectedTimes));
-		}
-
-		[Then(@"I should not see a possible schedule trade with")]
-		public void ThenIShouldNotSeeAPossibleScheduleTradeWith(Table table)
-		{
-			Browser.Interactions.AssertNotExists(".shift-trade-my-schedule-row", ".shift-trade-person-schedule-row");
-		}
-
+		
 		[Then(@"the selected date should be '(.*)'")]
 		public void ThenTheSelectedDateShouldBe(DateTime date)
 		{
@@ -111,12 +97,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertJavascriptResultContains("return $('.add-shifttrade-datepicker').val();", date.Day.ToString());
 		}
 
+		[When(@"I uncheck the my team filter checkbox")]
+		public void WhenIUncheckTheMyTeamFilterCheckbox()
+		{
+			Browser.Interactions.Click(".shift-trade-myteam-filter");
+		}
+
+		[When(@"I click the search button")]
+		public void WhenIClickTheSearchButton()
+		{
+			Browser.Interactions.Click(".shift-trade-search");
+		}
+
 		[When(@"I click on the next date")]
 		public void WhenIClickOnTheNextDate()
 		{
 			Browser.Interactions.Click(".icon-arrow-right");
 		}
-
 
 		[Then(@"I should see the time line hours span from '(.*)' to '(.*)'")]
 		public void ThenIShouldSeeTheTimeLineHoursSpanFromTo(string timeLineHourFrom, string timeLineHourTo)

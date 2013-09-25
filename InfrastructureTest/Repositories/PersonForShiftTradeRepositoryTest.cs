@@ -21,11 +21,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private PersonForShiftTradeRepository _target;
 
 		[Test]
-		public void ShouldLoadPersonInMyTeamForShiftTrade()
+		public void ShouldLoadPersonInSpecificTeamForShiftTrade()
 		{
 			var date = new DateOnly(2012, 12, 27);
-			var person = persistPerson(date);
-			var team = person.Period(date).Team;
+			var team = TeamFactory.CreateSimpleTeam("team one");
+			var person = persistPerson(date, team);
 
 			_target = new PersonForShiftTradeRepository(UnitOfWork);
 			var result = _target.GetPersonForShiftTrade(date, team.Id.Value);
@@ -39,19 +39,34 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldLoadPersonInAnyTeamForShiftTrade()
 		{
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				_target = new PersonForShiftTradeRepository(uow);
-				_target.GetPersonForShiftTrade(new DateOnly(2012, 12, 27), null);
-			}
+			var date = new DateOnly(2012, 12, 27);
+			var team1 = TeamFactory.CreateSimpleTeam("team one");
+			var person1 = persistPerson(date, team1);
+			var team2 = TeamFactory.CreateSimpleTeam("team two");
+			var person2 = persistPerson(date, team2);
+
+			_target = new PersonForShiftTradeRepository(UnitOfWork);
+			var result = _target.GetPersonForShiftTrade(date, null);
+
+			var firstPerson = result.First();
+			var lastPerson = result.Last();
+
+			firstPerson.PersonId.Should().Be.EqualTo(person1.Id.Value);
+			firstPerson.TeamId.Should().Be.EqualTo(team1.Id.Value);
+			firstPerson.SiteId.Should().Be.EqualTo(team1.Site.Id.Value);
+			firstPerson.BusinessUnitId.Should().Be.EqualTo(team1.Site.BusinessUnit.Id.Value);
+
+			lastPerson.PersonId.Should().Be.EqualTo(person2.Id.Value);
+			lastPerson.TeamId.Should().Be.EqualTo(team2.Id.Value);
+			lastPerson.SiteId.Should().Be.EqualTo(team2.Site.Id.Value);
+			lastPerson.BusinessUnitId.Should().Be.EqualTo(team2.Site.BusinessUnit.Id.Value);
 		}
 
-		private IPerson persistPerson(DateOnly startDate)
+		private IPerson persistPerson(DateOnly startDate, ITeam team)
 		{
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit();
 			var site = SiteFactory.CreateSimpleSite("new site");
 			businessUnit.AddSite(site);
-			var team = TeamFactory.CreateSimpleTeam("new team");
 			site.AddTeam(team);
 			var workflowControlSet = new WorkflowControlSet("new set");
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(startDate, team);
