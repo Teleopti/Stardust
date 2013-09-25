@@ -429,8 +429,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
-                Expect.Call(_schedulePartMock.HasDayOff()).Return(false).Repeat.Twice();
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
+				Expect.Call(_schedulePartMock.HasDayOff()).Return(false).Repeat.Twice();
             }
             
             using (_mockRepository.Playback())
@@ -464,7 +465,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
                 Expect.Call(_schedulePartMock.HasDayOff()).Return(false).Repeat.Twice();
             }
 
@@ -478,7 +480,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyCanCalculateIllegalWorkTimeRotationsPermissionState()
         {
-            RotationRestriction dayRestriction = new RotationRestriction
+            var dayRestriction = new RotationRestriction
             {
                 StartTimeLimitation = new StartTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(20, 0, 0)),
                 EndTimeLimitation = new EndTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(20, 0, 0)),
@@ -489,13 +491,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Record())
             {
-							Expect.Call(_schedulePartMock.PersonAssignment()).Return(null).Repeat.Any();
+	            Expect.Call(_schedulePartMock.PersonAssignment()).Return(null).Repeat.Any();
                 Expect.Call(_schedulePartMock.RestrictionCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
                 Expect.Call(_schedulePartMock.HasDayOff()).Return(false).Repeat.Twice();
             }
 
@@ -526,7 +529,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
                 Expect.Call(_schedulePartMock.HasDayOff()).Return(false).Repeat.Twice();
             }
 
@@ -655,8 +659,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             using(_mockRepository.Record())
             {
                 Expect.Call(scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase>{ rotationRestriction }).Repeat.AtLeastOnce();
-                Expect.Call(scheduleDay.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>{ personDayOff })).Repeat.AtLeastOnce();
-	            Expect.Call(scheduleDay.HasDayOff()).Return(true).Repeat.Any();
+                Expect.Call(scheduleDay.HasDayOff()).Return(true).Repeat.Any();
                 Expect.Call(scheduleDay.PersonAssignment())
                     .Return(personDayOff).Repeat.AtLeastOnce();
             }
@@ -737,7 +740,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
                 Expect.Call(_schedulePartMock.HasDayOff()).Return(false).Repeat.Twice();
             }
 
@@ -779,7 +783,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 
 				Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
             }
 
             using (_mockRepository.Playback())
@@ -814,7 +819,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
             }
 
             using (_mockRepository.Playback())
@@ -840,7 +846,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			
             using (_mockRepository.Record())
             {
-							Expect.Call(_schedulePartMock.PersonAssignment()).Return(assignment).Repeat.Any();
+	            Expect.Call(_schedulePartMock.PersonAssignment()).Return(assignment).Repeat.Any();
                 Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
                 Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
@@ -849,7 +855,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
             }
 
             using (_mockRepository.Playback())
@@ -879,7 +886,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Record())
             {
-							Expect.Call(_schedulePartMock.PersonAssignment()).Return(assignment).Repeat.Any();
+	            Expect.Call(_schedulePartMock.PersonAssignment()).Return(assignment).Repeat.Any();
                 Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
                 Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
@@ -888,7 +895,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(period);
+				Expect.Call(_visualLayerCollection.Period()).Return(period);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(period.EndDateTime.Subtract(period.StartDateTime));
             }
 
             using (_mockRepository.Playback())
@@ -917,7 +925,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			
             using (_mockRepository.Record())
             {
-							Expect.Call(_schedulePartMock.PersonAssignment()).Return(assignment).Repeat.Any();
+	            Expect.Call(_schedulePartMock.PersonAssignment()).Return(assignment).Repeat.Any();
                 Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
                 Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
@@ -926,7 +934,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(period);
+				Expect.Call(_visualLayerCollection.Period()).Return(period);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(period.EndDateTime.Subtract(period.StartDateTime));
             }
 
             using (_mockRepository.Playback())
@@ -953,7 +962,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			
             using (_mockRepository.Record())
             {
-							Expect.Call(_schedulePartMock.PersonAssignment()).Return(assignment).Repeat.Any();
+	            Expect.Call(_schedulePartMock.PersonAssignment()).Return(assignment).Repeat.Any();
                 Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
 				Expect.Call(_schedulePartMock.SignificantPart()).Return(SchedulePartView.None);
@@ -962,7 +971,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
             }
 
             using (_mockRepository.Playback())
@@ -989,7 +999,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			
             using (_mockRepository.Record())
             {
-							Expect.Call(_schedulePartMock.PersonAssignment()).Return(assignment).Repeat.Any();
+	            Expect.Call(_schedulePartMock.PersonAssignment()).Return(assignment).Repeat.Any();
                 Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
                 Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
@@ -998,7 +1008,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
 			}
 
             using (_mockRepository.Playback())
@@ -1019,7 +1030,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				IList<IPersistableScheduleData> list = new List<IPersistableScheduleData> { personRestriction };
 				var dayRestrictions = new ReadOnlyCollection<IPersistableScheduleData>(list);
 			
-				Expect.Call(_schedulePartMock.PersonAssignment()).Return(assignment).Repeat.Any();
+				Expect.Call(_schedulePartMock.PersonAssignment()).Return(null).Repeat.Any();
 				Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
 				Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
@@ -1030,6 +1041,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 				Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
 				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
 			
             }
 
@@ -1089,6 +1101,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
                 Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
             }
 
             using (_mockRepository.Playback())
@@ -1125,7 +1138,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
             }
 
             using (_mockRepository.Playback())
@@ -1171,7 +1185,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
 				Expect.Call(scheduleDay.PersonAssignment()).Return(assignment).Repeat.Any();
 				Expect.Call(_visualLayerCollection.FilterLayers(_activity)).Return(new FilteredVisualLayerCollection(_person,layerCollection,new ProjectionPayloadMerger(), null));
-				Expect.Call(filteredVisualLayers.GetEnumerator()).Return(layerCollection.GetEnumerator()).Repeat.AtLeastOnce();
 			}
 
 			using(_mockRepository.Playback())
@@ -1266,10 +1279,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				var result = _target.CheckPreference();
 				Assert.AreEqual(PermissionState.Broken, result);
 			}
-
 		}
 
-		
         [Test]
         public void VerifyCanCalculateLegalDayOffPreferencePermissionState()
         {
@@ -1293,7 +1304,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			
             using (_mockRepository.Record())
             {
-							Expect.Call(_schedulePartMock.PersonAssignment()).Return(assignment).Repeat.Any();
+	            Expect.Call(_schedulePartMock.PersonAssignment()).Return(assignment).Repeat.Any();
                 Expect.Call(_schedulePartMock.PersistableScheduleDataCollection()).Return(dayRestrictions).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePartMock.ProjectionService()).Return(_projectionService);
                 Expect.Call(_schedulePartMock.Person).Return(_person).Repeat.Once();
@@ -1302,7 +1313,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
                 Expect.Call(_visualLayerCollection.HasLayers).Return(true).Repeat.Any();
-                Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.Period()).Return(_dateTimePeriod);
+				Expect.Call(_visualLayerCollection.ContractTime()).Return(_dateTimePeriod.EndDateTime.Subtract(_dateTimePeriod.StartDateTime));
             }
 
             using (_mockRepository.Playback())
@@ -1389,10 +1401,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             dayOffTemplate.Anchor = TimeSpan.FromHours(10);
             dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(4), TimeSpan.FromHours(1));
 
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(), dayOffTemplate);
+
             IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
             layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod, _person));
 
-						IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(), dayOffTemplate);
+			var dayRestriction = new PreferenceRestriction			
 			{
                 StartTimeLimitation = new StartTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(20, 0, 0)),
                 EndTimeLimitation = new EndTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(20, 0, 0)),

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
@@ -143,14 +142,12 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 			    dto.TargetTimeNegativeToleranceInMinutes = periodNegativeTolerance;
 			    dto.TargetTimePositiveToleranceInMinutes = periodPositiveTolerance;
 
-
 			    IWorkTimeMinMax minMaxLength = _minMaxWorkTimeChecker.MinMaxWorkTime(scheduleDay, ruleSetBag,
 			                                                                         effectiveRestriction);
 
 			    AddMinMaxToDto(dto, minMaxLength);
 
                 if ((personMeetingCollection.Count > 0 || assignment!=null) && !(dto.HasShift || dto.HasDayOff || dto.HasAbsence))
-			        !(dto.HasShift || dto.HasDayOff || dto.HasAbsence))
 			    {
 				    dto.HasPersonalAssignmentOnly = true;
 				    dto.TipText = ScheduleDayStringVisualizer.GetToolTipPersonalAssignments(scheduleDay,
