@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		private readonly DateOnlyPeriod _periodToMonitor;
 		private readonly ISchedulerStateHolder _schedulerStateHolder;
 		private readonly IPopulationStatisticsCalculator _populationStatisticsCalculator;
-		private int _lastShiftCategoryCount;
+		//private int _lastShiftCategoryCount;
 
 		public ShiftCategoryDistributionModel(ICachedShiftCategoryDistribution cachedShiftCategoryDistribution, ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate, ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson, DateOnlyPeriod periodToMonitor, ISchedulerStateHolder schedulerStateHolder, IPopulationStatisticsCalculator populationStatisticsCalculator)
 		{

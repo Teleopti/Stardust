@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			var adjustededFrequency = new Dictionary<int, int>();
 			var max = frequency.Select(keyValuePair => keyValuePair.Key).Concat(new[] { 0 }).Max();
 
-			for (var i = 1; i <= max + 1; i++)
+			for (var i = 0; i <= max + 1; i++)
 			{
 				if (!frequency.ContainsKey(i))
 				{
