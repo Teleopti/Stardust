@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using NUnit.Framework;
 using Teleopti.Support.Code.Tool;
 using Rhino.Mocks;
@@ -36,6 +37,12 @@ namespace Teleopti.Support.CodeTest.Tool
         public void ShouldGetDirectoriesFromFullPath()
         {
            Assert.That(_refresher.GetDirectories(@"..\TeleoptiCCC\ETL\newfile.config"),Is.EqualTo(@"..\TeleoptiCCC\ETL"));
+        }
+
+        [Test]
+        public void ShouldGetCurrentDirectoryFromNoPath()
+        {
+            Assert.That(_refresher.GetDirectories(@"newfile.config"), Is.EqualTo(@"."));
         }
 
         [Test]

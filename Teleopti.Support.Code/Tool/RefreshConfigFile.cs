@@ -52,7 +52,7 @@ namespace Teleopti.Support.Code.Tool
         public string GetDirectories(string fullPath)
         {
             var pos = fullPath.LastIndexOf(@"\", StringComparison.InvariantCulture);
-            if (pos == 0) return ".";
+            if (pos == -1) return @".";
             return fullPath.Substring(0, pos);
         }
     }

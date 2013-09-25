@@ -51,5 +51,11 @@ namespace Teleopti.Support.CodeTest.Tool
             var path = AppDomain.CurrentDomain.BaseDirectory + @"\Areas\web.config";
             Assert.That(target.CheckForMachineKey(path), Is.False);
         }
+
+        [Test()]
+        public void GetCryptoBytesTest()
+        {
+            Assert.That(CryptoCreator.GetCryptoBytes(64),Is.Not.Null);
+        }
     }
 }
