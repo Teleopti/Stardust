@@ -64,16 +64,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 					break;
 				}
 			}
-			
 
-			if (scheduleMatrixPro.Person.Period(dateOnly) == null)
+
+			var personPeriod = scheduleMatrixPro.Person.Period(dateOnly);
+			if (personPeriod == null)
 			{
 				preferenceCellData.WeeklyMax = new TimeSpan(0);
 				preferenceCellData.NightlyRest = new TimeSpan(0);
 			}
 			else
 			{
-				var worktimeDirective = scheduleMatrixPro.Person.Period(dateOnly).PersonContract.Contract.WorkTimeDirective;
+				var worktimeDirective = personPeriod.PersonContract.Contract.WorkTimeDirective;
 				preferenceCellData.WeeklyMax = worktimeDirective.MaxTimePerWeek;
 				preferenceCellData.NightlyRest = worktimeDirective.NightlyRest;
 			}
@@ -145,11 +146,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			var viewLocalTime = TimeZoneHelper.ConvertFromUtc(dateTimePeriod.StartDateTime, zone);
 			var viewLocalEndTime = TimeZoneHelper.ConvertFromUtc(dateTimePeriod.EndDateTime, zone);
 			var startTimeLimitation = new StartTimeLimitation(viewLocalTime.TimeOfDay, viewLocalTime.TimeOfDay);
-			var daysToAdd = 0;
-			if (viewLocalEndTime.Date > viewLocalTime.Date) daysToAdd = 1;
-			var endTimeStart = new TimeSpan(daysToAdd, viewLocalEndTime.TimeOfDay.Hours, viewLocalEndTime.TimeOfDay.Minutes, 0);
+			var endTimeStart = viewLocalEndTime.Subtract(viewLocalTime.Date);
 			var endTimeLimitation = new EndTimeLimitation(endTimeStart, endTimeStart);
-			var workTimeLimitation = new WorkTimeLimitation(projection.ContractTime(), projection.ContractTime());
+
+			var contractTime = projection.ContractTime();
+			var workTimeLimitation = new WorkTimeLimitation(contractTime, contractTime);
 
 			totalRestriction = totalRestriction.Combine(new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, null, null, null, new List<IActivityRestriction>()));
 
@@ -158,7 +159,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			preferenceCellData.DisplayName = assignment.ShiftCategory.Description.Name;
 			preferenceCellData.DisplayShortName = assignment.ShiftCategory.Description.ShortName;
 			preferenceCellData.DisplayColor = assignment.ShiftCategory.DisplayColor;
-			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), TeleoptiPrincipal.Current.Regional.Culture);
+			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(contractTime, TeleoptiPrincipal.Current.Regional.Culture);
 			var period = projection.Period();
 			if (period != null) preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TimeZoneGuard.Instance.TimeZone).ToShortTimeString(TeleoptiPrincipal.Current.Regional.Culture);
 

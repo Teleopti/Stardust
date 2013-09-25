@@ -20,17 +20,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 
 		public TimeSpan NightlyRestOnDay(DateOnlyDto dateOnlyDto)
 		{
-			var ret = TimeSpan.FromMinutes(0);
-			if(dateOnlyDto != null)
-			{
-				var period = _person.Period(new DateOnly(dateOnlyDto.DateTime));
-				if (period != null)
-				{
-					ret = period.PersonContract.Contract.WorkTimeDirective.NightlyRest;
-				}
-			}
-			
-			return ret;
+			var dateOnly = dateOnlyDto.AsDateOnly();
+			if (!dateOnly.HasValue) return TimeSpan.Zero;
+
+			var period = _person.Period(dateOnly.Value);
+			return period != null ? period.PersonContract.Contract.WorkTimeDirective.NightlyRest : TimeSpan.Zero;
 		}
 	}
 }

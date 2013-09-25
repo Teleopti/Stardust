@@ -413,7 +413,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
         /// </remarks>
         public bool IsAgent
         {
-            get { return ContainedEntity.Period(DateOnly.Today) != null; }
+            get { return ContainedEntity.IsAgent(DateOnly.Today); }
         }
 
         /// <summary>

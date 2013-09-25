@@ -15,29 +15,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	{
 		public DateTime? WorkTimeStart(IEnumerable<IVisualLayer> layerCollection)
 		{
-			DateTime? ret = null;
-			if (layerCollection == null)
-				return ret;
+			if (layerCollection == null) return null;
 
-			foreach (var layer in layerCollection.Where(layer => layer.WorkTime() > TimeSpan.Zero))
-			{
-				ret = layer.Period.StartDateTime;
-				break;
-			}
-			return ret;
+			var foundItem = layerCollection.FirstOrDefault(layer => layer.WorkTime() > TimeSpan.Zero);
+			if (foundItem == null) return null;
+
+			return foundItem.Period.StartDateTime;
 		}
 
 		public DateTime? WorkTimeEnd(IEnumerable<IVisualLayer> layerCollection)
 		{
-			DateTime? ret = null;
-			if (layerCollection == null)
-				return ret;
+			if (layerCollection == null) return null;
 
-			foreach (var layer in layerCollection.Where(layer => layer.WorkTime() > TimeSpan.Zero))
-			{
-				ret = layer.Period.EndDateTime;
-			}
-			return ret;
+			var foundItem = layerCollection.LastOrDefault(layer => layer.WorkTime() > TimeSpan.Zero);
+			if (foundItem == null) return null;
+
+			return foundItem.Period.EndDateTime;
 		}
 	}
 }

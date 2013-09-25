@@ -316,10 +316,10 @@ namespace Teleopti.Ccc.Domain.Common
 
         public virtual bool IsAgent(DateOnly theDate)
         {
-            return (Period(theDate) != null);
+	        return !isTerminated(theDate) && _personPeriodCollection.Keys.Any(k => k <= theDate);
         }
 
-        public virtual bool BuiltIn
+	    public virtual bool BuiltIn
         {
             get { return _builtIn; }
             set { _builtIn = value;}

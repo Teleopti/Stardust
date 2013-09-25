@@ -45,4 +45,12 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
     		set { _dateTime = DateTime.SpecifyKind(value,DateTimeKind.Unspecified); }
     	}
     }
+
+	public static class DateOnlyDtoExtensions
+	{
+		public static DateOnly? AsDateOnly(this DateOnlyDto date)
+		{
+			return date != null ? new DateOnly(date.DateTime) : null;
+		}
+	}
 }

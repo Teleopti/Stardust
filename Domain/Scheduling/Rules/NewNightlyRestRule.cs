@@ -111,13 +111,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	        return responseList;
         }
 
-        private TimeSpan? checkDays(IScheduleDay firstdDay, IScheduleDay secondDay, TimeSpan nightRest)
+        private TimeSpan? checkDays(IScheduleDay firstDay, IScheduleDay secondDay, TimeSpan nightRest)
         {
-            if(!(firstdDay.SignificantPart() == SchedulePartView.MainShift && secondDay.SignificantPart() == SchedulePartView.MainShift))
+            if(!(firstDay.SignificantPart() == SchedulePartView.MainShift && secondDay.SignificantPart() == SchedulePartView.MainShift))
                 return null;
 
         	var secondDayStart = _workTimeStartEndExtractor.WorkTimeStart(secondDay.ProjectionService().CreateProjection());
-        	var firstDayEnd = _workTimeStartEndExtractor.WorkTimeEnd(firstdDay.ProjectionService().CreateProjection());
+        	var firstDayEnd = _workTimeStartEndExtractor.WorkTimeEnd(firstDay.ProjectionService().CreateProjection());
 			if(secondDayStart != null && firstDayEnd != null)
 			{
 				var restTime = secondDayStart.Value.Subtract(firstDayEnd.Value);
