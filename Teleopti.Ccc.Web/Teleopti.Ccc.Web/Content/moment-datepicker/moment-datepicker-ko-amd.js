@@ -1,4 +1,8 @@
-(function ($, ko, moment) {
+define([
+		'jquery',
+		'knockout',
+		'moment'
+	], function ($, ko, moment) {
 
     //#region Utils
 
@@ -26,8 +30,8 @@
         "isString": "string",
         "isDate": "date"
     };
-
-    var elBinder = function ($el) {
+    
+    var elBinder = function($el) {
         return {
             set: function (value) {
                 var funcs = elBinder.functions[$el.data(elBinder.DATATYPE_KEY)] || elBinder.functions['_default'];
@@ -41,10 +45,10 @@
             },
             register: function (dataType) {
                 $el.data(elBinder.DATATYPE_KEY, dataType);
-            }
+            }                
         }
     }
-
+    
     elBinder.DATATYPE_KEY = "datepicker.ko.dataType";
 
     elBinder.functions = {
@@ -103,4 +107,4 @@
                 .set(ko.utils.unwrapObservable(valueAccessor()));
         }
     };
-})(jQuery, this.ko, this.moment);
+});
