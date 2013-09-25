@@ -57,10 +57,10 @@ namespace Teleopti.Ccc.Rta.Server
 
 			var updatedAgents = new List<IActualAgentState>();
 			foreach (var agentState in missingAgentStates
-				.Where(agentState => !_alarmMapper.IsAgentLoggedOut(agentState.ScheduledId,
-				                                  agentState.StateCode,
-				                                  agentState.PlatformTypeId,
-				                                  agentState.BusinessUnit)))
+				.Where(agentState => !_alarmMapper.IsAgentLoggedOut(agentState.PersonId,
+				                                                    agentState.StateCode,
+				                                                    agentState.PlatformTypeId,
+				                                                    agentState.BusinessUnit)))
 			{
 				RtaAlarmLight foundAlarm;
 				var state = agentState;
@@ -193,6 +193,7 @@ namespace Teleopti.Ccc.Rta.Server
 			var state = _alarmMapper.GetStateGroup(stateCode, platformTypeId, businessUnitId);
 			if (state != null)
 			{
+				newState.StateId = state.StateGroupId;
 				newState.State = state.StateGroupName;
 				foundAlarm = _alarmMapper.GetAlarm(activityId, state.StateGroupId);
 			}
