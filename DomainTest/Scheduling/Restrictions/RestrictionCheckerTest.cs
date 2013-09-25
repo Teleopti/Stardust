@@ -1065,13 +1065,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             return dayRestriction;
         }
 
-        private IPersonAssignment createPersonAssignment()
-        {
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person, new DateTimePeriod(), _shiftCategory);
-
-            return assignment;
-        }
-
         [Test]
         public void VerifyCanCalculateIllegalShiftCategoryPreferencePermissionState()
         {
