@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Common.Logging
                 populateSystemProperties();
 
                 //log the scheduling options
-                //populateSchedulingOptions(schedulingOptions);
+                populateSchedulingOptions(schedulingOptions);
 
                 //log the agent and skill days
                 populateAgentAndSkillDays(noOfAgent, noOfSkillDays,stop.ElapsedMilliseconds );
@@ -45,6 +45,21 @@ namespace Teleopti.Ccc.Domain.Common.Logging
             }
         }
 
+        private static void populateSchedulingOptions(ISchedulingOptions schedulingOptions)
+        {
+            var schedulingOptionsValueExtractor = new SchedulingOptionsValueExtractor(schedulingOptions);
+            if (schedulingOptions.UseTeamBlockPerOption && schedulingOptions.BlockFinderTypeForAdvanceScheduling != BlockFinderType.None  )
+            {
+                GlobalContext.Properties["BlockOptions"] =
+                    schedulingOptionsValueExtractor.GetBlockOptions() ;
+            }
+            else if (schedulingOptions.UseGroupScheduling)
+            {
+                GlobalContext.Properties["TeamOptions"] = schedulingOptionsValueExtractor.GetTeamOptions() ;
+            }
+            GlobalContext.Properties["Scheduling"] = schedulingOptionsValueExtractor.GetGeneralSchedulingOptions();
+        }
+        
         private static void populateAgentAndSkillDays(int noOfAgent, int noOfSkillDays, long elapsedMilliseconds)
         {
             GlobalContext.Properties["Agents"] = noOfAgent.ToString();
@@ -58,14 +73,14 @@ namespace Teleopti.Ccc.Domain.Common.Logging
             if (identity != null)
             {
                 GlobalContext.Properties["BU"] = identity.BusinessUnit.Name;
-                //GlobalContext.Properties["BUId"] = identity.BusinessUnit.Id;
+                GlobalContext.Properties["BUId"] = identity.BusinessUnit.Id;
                 GlobalContext.Properties["DataSource"] = identity.DataSource.DataSourceName;
                 GlobalContext.Properties["InitialCatalog"] = identity.DataSource.InitialCatalog;
                 GlobalContext.Properties["WindowsIdentity"] = identity.WindowsIdentity.Name;
                 GlobalContext.Properties["HostIP"] = SystemInformationHelper.GetSystemIPAddress();
-                GlobalContext.Properties["TeamOptions"] = "";
-                GlobalContext.Properties["BlockOptions"] = "";
-                GlobalContext.Properties["Scheduling"] = "Fairness: ";
+                //GlobalContext.Properties["TeamOptions"] = "";
+                //GlobalContext.Properties["BlockOptions"] = "";
+                
             }
         }
     }

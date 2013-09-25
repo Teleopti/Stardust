@@ -10,20 +10,6 @@ namespace Teleopti.Ccc.Domain.Common.Logging
         public static void SetConnectionString(string connectionString)
         {
             var logHierarchy = log4net.LogManager.GetRepository() as Hierarchy;
-
-            //if (logHierarchy != null && logHierarchy.Configured)
-            //{
-            //    foreach (IAppender appenderItem in logHierarchy.GetAppenders())
-            //    {
-            //        if (appenderItem is AdoNetAppender)
-            //        {
-            //            var adoNetAppender = (AdoNetAppender)appenderItem;
-            //            adoNetAppender.ConnectionString = connectionString;
-            //            adoNetAppender.ActivateOptions(); //Refresh AdoNetAppenders Settings
-            //        }
-            //    }
-            //}
-
             if (logHierarchy != null)
             {
                 var appender = logHierarchy.GetAppenders()
