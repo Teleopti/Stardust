@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			this.tabPageDistribution = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.shiftStatisticsControl1 = new Teleopti.Ccc.Win.Scheduling.PropertyPanel.ShiftStatisticsControl();
+			this.perShiftCategoryChartControl1 = new Teleopti.Ccc.Win.Scheduling.PropertyPanel.PerShiftCategoryChartControl();
 			((System.ComponentModel.ISupportInitialize)(this.tabControlShiftCategoryDistribution)).BeginInit();
 			this.tabControlShiftCategoryDistribution.SuspendLayout();
 			this.tabPagePerDate.SuspendLayout();
@@ -125,12 +126,14 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.shiftStatisticsControl1, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.perShiftCategoryChartControl1, 0, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(343, 500);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
@@ -141,6 +144,14 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			this.shiftStatisticsControl1.Name = "shiftStatisticsControl1";
 			this.shiftStatisticsControl1.Size = new System.Drawing.Size(337, 294);
 			this.shiftStatisticsControl1.TabIndex = 0;
+			// 
+			// perShiftCategoryChartControl1
+			// 
+			this.perShiftCategoryChartControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.perShiftCategoryChartControl1.Location = new System.Drawing.Point(3, 3);
+			this.perShiftCategoryChartControl1.Name = "perShiftCategoryChartControl1";
+			this.perShiftCategoryChartControl1.Size = new System.Drawing.Size(337, 194);
+			this.perShiftCategoryChartControl1.TabIndex = 1;
 			// 
 			// ShiftCategoryDistributionControl
 			// 
@@ -169,5 +180,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		private ShiftPerDateControl shiftPerDateControl1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private ShiftStatisticsControl shiftStatisticsControl1;
+		private PerShiftCategoryChartControl perShiftCategoryChartControl1;
 	}
 }

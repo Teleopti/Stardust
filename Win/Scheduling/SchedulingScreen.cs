@@ -4419,8 +4419,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					schedulerSplitters1.RefreshTabInfoPanels();
 				}
-
-				
 			}
 		}
 

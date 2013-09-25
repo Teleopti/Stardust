@@ -1,5 +1,6 @@
 ﻿
 
+using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -11,6 +12,7 @@ namespace Teleopti.Ccc.Domain.Collection
 		//refact should only return value for requested category
 		IDictionary<IShiftCategory, MinMax<int>> GetMinMaxDictionary(IEnumerable<IPerson> filteredPersons);
 		IList<IShiftCategory> AllShiftCategories { get; }
+		event EventHandler<ModifyEventArgs> PartModified;
 	}
 
 	public class CachedShiftCategoryDistribution : ICachedShiftCategoryDistribution
@@ -33,6 +35,8 @@ namespace Teleopti.Ccc.Domain.Collection
 			_scheduleDictionary.PartModified += scheduleDictionary_PartModified;
 		}
 
+		public event EventHandler<ModifyEventArgs> PartModified;
+
 		public IList<IShiftCategory> AllShiftCategories
 		{
 			get { return _allShiftCategories; }
@@ -48,6 +52,15 @@ namespace Teleopti.Ccc.Domain.Collection
 					_changedPersons.Add(e.ModifiedPerson);
 			}
 			
+			OnPartModified(e);
+		}
+
+		private void OnPartModified(ModifyEventArgs e)
+		{
+			if (PartModified != null)
+			{
+				PartModified(this, e);
+			}
 		}
 
 		public void SetFilteredPersons(IEnumerable<IPerson> filteredPersons)

@@ -212,6 +212,5 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			tabInfoPanels.Refresh();
 		}
-        
     }
 }
