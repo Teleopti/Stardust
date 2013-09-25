@@ -4,6 +4,12 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 {
+	/// <summary>
+	/// Person account updater that works with the Win project's FilteredPeopleHolder's domain data
+	/// </summary>
+	/// <remarks>
+	/// Used for the win fat client where all the data is already loaded in the FilteredPeopleHolder
+	/// </remarks>
 	public class FilteredPeopleAccountUpdater : IPersonAccountUpdater
 	{
 		private readonly FilteredPeopleHolder _filteredPeopleHolder;

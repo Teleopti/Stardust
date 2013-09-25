@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 	[TestFixture]
 	public class PersonAccountUpdaterTest
 	{
-		private PeopleAccountUpdaterForAddDelete _target;
+		private PersonAccountUpdater _target;
 		private MockRepository _mocks;
         private IPersonAbsenceAccountRepository _provider;
 		private IPerson _person;
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var accountCollection = PersonAccountCollectionFactory.Create(_person, _absence1, _absence2, out account1, out account2);
 		    var absence1 = AbsenceFactory.CreateAbsence("Test Absence1");
             absence1.SetId(Guid.NewGuid());
-			_target = new PeopleAccountUpdaterForAddDelete(accountCollection, _refreshService);
+			_target = new PersonAccountUpdater(_provider, _refreshService);
 
 		    using (_mocks.Record())
 			{

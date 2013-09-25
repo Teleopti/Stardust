@@ -1118,7 +1118,6 @@
     <Compile Include="PeopleAdmin\Controls\ShiftCategoryLimitationView.Designer.cs">
       <DependentUpon>ShiftCategoryLimitationView.cs</DependentUpon>
     </Compile>
-    <Compile Include="PeopleAdmin\GuiHelpers\PeopleAccountUpdaterForAddDelete.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\DatabaseLostConnectionHandler.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\FilteredPeopleAccountUpdater.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\PeriodDateDictionaryBuilder.cs" />

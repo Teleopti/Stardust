@@ -705,7 +705,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 					IAbsence absence = SelectedPersonAccountAbsenceType ?? _filteredAbsenceCollection[0];
 					IAccount account = absence.Tracker.CreatePersonAccount(SelectedDate);
 					accounts.Add(absence, account);
-					UpdatePersonAccounts(accounts, account);
+					UpdatePersonAccounts(account);
 				}
 			}
 		}
@@ -758,7 +758,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		        if (account != null)
 		        {
 			        accounts.Find(account.Owner.Absence).Remove(account);
-			        UpdatePersonAccounts(accounts, account);
+			        UpdatePersonAccounts(account);
 		        }
 	        }
         }
@@ -842,7 +842,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             if (account != null)
             {
                 accounts.Find(account.Owner.Absence).Remove(account);
-				UpdatePersonAccounts(accounts, account);
+				UpdatePersonAccounts(account);
                 GetParentPersonAccountWhenUpdated(rowIndex);
             }
         }
@@ -855,7 +855,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 foreach (var account in accounts.AllPersonAccounts())
                 {
                     accounts.Find(account.Owner.Absence).Remove(account);
-					UpdatePersonAccounts(accounts, account);
+					UpdatePersonAccounts(account);
                 }
             }
         }
@@ -1513,9 +1513,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             return null;
         }
 
-        private void UpdatePersonAccounts(IPersonAccountCollection accounts, IAccount account)
+        private void UpdatePersonAccounts(IAccount account)
         {
-			var updater = new PeopleAccountUpdaterForAddDelete(accounts, _refreshService);
+			var updater = new FilteredPeopleAccountUpdater(this, _refreshService, UnitOfWorkFactory.Current);
             updater.Update(account.Owner.Person);
         }
 
