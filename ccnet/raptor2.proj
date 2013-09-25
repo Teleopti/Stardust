@@ -289,25 +289,32 @@
 		Lines="@(InfraTestIniLines)" 
 		Overwrite="true" />
 
-		<FileUpdate Files="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config"
-			Encoding="windows-1252"
-			Regex="_replace_"
-			ReplacementText="$(InfraTestIni)"/>
+		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
+			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfigTest\Teleopti.Ccc.ApplicationConfigTest.dll.Config" />
 
+		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
+			DestinationFiles="$(CCNetWorkingDirectory)\InfrastructureTest\Teleopti.Ccc.InfrastructureTest.dll.Config" />
+
+		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\Teleopti.Ccc.WebBehaviorTest.App.config" OverwriteReadOnlyFiles="true"
+			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config" />
+
+		
 		<FileUpdate Files="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config"
 			Encoding="windows-1252"
 			Regex="_replace_"
 			ReplacementText="$(InfraTestIni)"/>
+
+		<FileUpdate Files="$(CCNetWorkingDirectory)\InfrastructureTest\Teleopti.Ccc.InfrastructureTest.dll.Config"
+			Encoding="windows-1252"
+			Regex="_replace_"
+			ReplacementText="$(InfraTestIni)"/>
 			
-		<!--Explicte copy the correct config to each project that is using it
-		be sure to do this step before compile time; since CopyToLocal will move it to $(OutDir)-->
-		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
-			DestinationFiles="$(CCNetWorkingDirectory)\InfrastructureTest\Teleopti.Ccc.InfrastructureTest.dll.Config" />
-
-		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
-			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfigTest\Teleopti.Ccc.ApplicationConfigTest.dll.Config" />
-
-	</Target>
+		<FileUpdate Files="$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfigTest\Teleopti.Ccc.ApplicationConfigTest.dll.Config"
+			Encoding="windows-1252"
+			Regex="_replace_"
+			ReplacementText="$(InfraTestIni)"/>			
+			
+		</Target>
 
 	<!--This is how we "går över ån och runt sjön för att hämta vatten"
 		We run into something like this: http://www.mail-archive.com/rhinomocks@googlegroups.com/msg02457.html 
