@@ -6,8 +6,8 @@ function notTranslatedPrefixes() {
 	'Special%253ACategories',
 	'Category%3AP',
 	'F01%3APM_',
-	'Special%3ACategories'
-	];
+	'Special%3ACategories',
+	'mailto'	];
 }
 
 function notTranslatedPages() {
@@ -98,8 +98,8 @@ function isPageToTeleoptiSite(link) {
 function shouldReplaceLink(link, pageName) {
 	return isPrefixAllowed(link, notTranslatedPrefixes()) &&
 		isLinkTranslated(link, notTranslatedPages()) &&
-		isSuffixAllowed(link)
-		&& isCurrentPageTranslated(pageName);
+		isSuffixAllowed(link) &&
+		isCurrentPageTranslated(pageName);
 }
 
 function isLinkInArray(string, array) {
@@ -120,6 +120,10 @@ function replaceLinks() {
 			link = link.href;
 			if (isPageToTeleoptiSite(link))
 				continue;
+			if (endsWith(link, 'pt.html') || endsWith(link, 'pt')) {
+				link = undefined;
+				continue;
+			}
 			if (shouldReplaceLink(link, pageName)) {
 				var trimmedLink;
 				if (endsWith(link, '1.html'))
@@ -165,8 +169,12 @@ function fixNavigationLinkTexts(pageName) {
 	var navigationPanel = document.getElementById('mw-panel');
 	var links = navigationPanel.getElementsByTagName('a');
 	for (var i = 0, link; link = links[i]; i++) {
-		if (i >= 56 && i <= 59)
+		if (i >= 56 && i < 58)
 			continue;
+		if (i === 58) {
+			link = undefined;
+			continue;
+		}
 		if (linkTranslation[i])
 			link.innerHTML = linkTranslation[i][language];
 	}
