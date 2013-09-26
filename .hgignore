@@ -69,3 +69,4 @@ nunit*.xml
 *.log.?
 *.key
 *.log.??
+Teleopti.Support.Code/settings.txt
