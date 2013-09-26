@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Win.Common
             get
             {
                 if (_personRotationRepository == null)
-                    _personRotationRepository = new PersonRotationRepository(_filteredPeopleHolder.UnitOfWork);
+                    _personRotationRepository = new PersonRotationRepository(_filteredPeopleHolder.GetUnitOfWork);
                 return _personRotationRepository;
             }
         }

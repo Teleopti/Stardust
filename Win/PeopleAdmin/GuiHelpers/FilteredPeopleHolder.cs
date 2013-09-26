@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -25,11 +26,11 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-    public class FilteredPeopleHolder : IDisposable
+  [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+	public class FilteredPeopleHolder : IDisposable
     {
-        private ITraceableRefreshService _refreshService;
-        private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
+	    private ITraceableRefreshService _refreshService;
+	    private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
         private readonly List<IPerson> _personCollection = new List<IPerson>();
         private readonly List<IPerson> _filteredPersonCollection = new List<IPerson>();
         private List<PersonGeneralModel> _filteredPeopleGridData = new List<PersonGeneralModel>();
@@ -65,20 +66,21 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         private ReadOnlyCollection<PersonGeneralModel> _selectedPeopleGeneralGridData;
     	private IList<ExternalLogOnModel> _filteredExternalLogOnCollection;
 
-    	public FilteredPeopleHolder(ITraceableRefreshService cacheServiceForPersonAccount, IDictionary<IPerson, IPersonAccountCollection> allAccounts)
-        {
-            _refreshService = cacheServiceForPersonAccount;
-            _allAccounts = allAccounts;
-        }
+    	public FilteredPeopleHolder(ITraceableRefreshService refreshService,
+            IDictionary<IPerson, IPersonAccountCollection> allAccounts)
+    	{
+    	    _refreshService = refreshService;
+    	    _allAccounts = allAccounts;
+    	}
 
-        public void SetState(IUnitOfWork unitOfWork,
-                             ITraceableRefreshService cacheServiceForPersonAccount,
+	    public void SetState(ITraceableRefreshService refreshService,
+            IUnitOfWork unitOfWork,
                              IDictionary<IPerson, IPersonAccountCollection> allAccounts)
         {
             clearCollections();
 
-            UnitOfWork = unitOfWork;
-            _refreshService = cacheServiceForPersonAccount;
+	        _refreshService = refreshService;
+            GetUnitOfWork = unitOfWork;
             _allAccounts.Clear();
             foreach (var allAccount in allAccounts)
             {
@@ -91,9 +93,20 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             get { return _selectedPeopleGeneralGridData; }
         }
 
-        public IUnitOfWork UnitOfWork { get; set; }
+        public IUnitOfWork GetUnitOfWork { get; set; }
 
-        public Collection<IPerson> PersonCollection
+		public IPersonAccountCollection GetPersonAccounts(IPerson person)
+		{
+			IPersonAccountCollection personAccountCollection = new PersonAccountCollection(person);
+			var accounts = AllAccounts.Where(p => p.Key == person).ToArray();
+			foreach (var account in accounts.SelectMany(keyValuePair => keyValuePair.Value))
+			{
+				personAccountCollection.Add(account);
+			}
+			return personAccountCollection;
+		}
+
+		public Collection<IPerson> PersonCollection
         {
             get { return new Collection<IPerson>(_personCollection); }
         }
@@ -311,9 +324,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             if (length > 0)
             {
-                var rep = new PersonRepository(UnitOfWork);
-                var personRotationRep = new PersonRotationRepository(UnitOfWork);
-                var personAvailRep = new PersonAvailabilityRepository(UnitOfWork);
+                var rep = new PersonRepository(GetUnitOfWork);
+                var personRotationRep = new PersonRotationRepository(GetUnitOfWork);
+                var personAvailRep = new PersonAvailabilityRepository(GetUnitOfWork);
 
                 clearCollections();
 
@@ -326,7 +339,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 LoadPersonAvailabilities(foundPeople, personAvailRep);
 
                 var repositoryFactory = new RepositoryFactory();
-                var repository = repositoryFactory.CreateUserDetailRepository(UnitOfWork);
+                var repository = repositoryFactory.CreateUserDetailRepository(GetUnitOfWork);
                 //var userDetails = repository.FindAllUsers();
 
                 var userDetails = repository.FindByUsers(foundPeople);
@@ -361,8 +374,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             if (length > 0)
             {
                 //var rep = new PersonRepository(UnitOfWork);
-                var personRotationRep = new PersonRotationRepository(UnitOfWork);
-                var personAvailRep = new PersonAvailabilityRepository(UnitOfWork);
+                var personRotationRep = new PersonRotationRepository(GetUnitOfWork);
+                var personAvailRep = new PersonAvailabilityRepository(GetUnitOfWork);
 
                 clearCollections();
 
@@ -375,7 +388,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 LoadPersonAvailabilities(people, personAvailRep);
 
                 var repositoryFactory = new RepositoryFactory();
-                var repository = repositoryFactory.CreateUserDetailRepository(UnitOfWork);
+                var repository = repositoryFactory.CreateUserDetailRepository(GetUnitOfWork);
                 //var userDetails = repository.FindAllUsers();
 
                 var userDetails = repository.FindByUsers(people);
@@ -410,9 +423,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             if (length > 0)
             {
-                var rep = new PersonRepository(UnitOfWork);
-                var personRotationRep = new PersonRotationRepository(UnitOfWork);
-                var personAvailRep = new PersonAvailabilityRepository(UnitOfWork);
+                var rep = new PersonRepository(GetUnitOfWork);
+                var personRotationRep = new PersonRotationRepository(GetUnitOfWork);
+                var personAvailRep = new PersonAvailabilityRepository(GetUnitOfWork);
 
                 clearCollections();
 
@@ -432,7 +445,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 LoadPersonAvailabilities(foundPeople, personAvailRep);
 
                 var repositoryFactory = new RepositoryFactory();
-                var repository = repositoryFactory.CreateUserDetailRepository(UnitOfWork);
+                var repository = repositoryFactory.CreateUserDetailRepository(GetUnitOfWork);
                 var userDetails = repository.FindAllUsers();
 
                 foreach (var person in _filteredPersonCollection)
@@ -476,7 +489,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         private void loadFilteredPeopleGridData(IPerson person, IUserDetail userDetail)
         {
             //create new person grid data.
-            var personGridData = new PersonGeneralModel(person, userDetail, new PrincipalAuthorization(new CurrentTeleoptiPrincipal()));
+			var personGridData = new PersonGeneralModel(person, userDetail, new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new FilteredPeopleAccountUpdater(this,_refreshService, UnitOfWorkFactory.Current));
 
             //set optional columns if any.
             if (_optionalColumnCollection.Count > 0)
@@ -490,7 +503,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         private void LoadTeams()
         {
             _siteTeamBindingCollection.Clear();
-            var repository = new TeamRepository(UnitOfWork);
+            var repository = new TeamRepository(GetUnitOfWork);
             var list = repository.FindAllTeamByDescription().ToList();
             
             foreach (ITeam item in list)
@@ -682,16 +695,20 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             }
         }
 
-        public void AddPersonAccount(int rowIndex)
-        {
-            if ((AbsenceCollection != null) && (AbsenceCollection.Count > 0))
-            {
-                var accountForPersonCollection = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
-                IAbsence absence = SelectedPersonAccountAbsenceType ?? _filteredAbsenceCollection[0];
-                IAccount account = absence.Tracker.CreatePersonAccount(SelectedDate);
-                accountForPersonCollection.Add(absence, account);
-            }
-        }
+		public void AddPersonAccount(int rowIndex)
+		{
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				if ((AbsenceCollection != null) && (AbsenceCollection.Count > 0))
+				{
+					var accounts = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
+					IAbsence absence = SelectedPersonAccountAbsenceType ?? _filteredAbsenceCollection[0];
+					IAccount account = absence.Tracker.CreatePersonAccount(SelectedDate);
+					accounts.Add(absence, account);
+					UpdatePersonAccounts(account);
+				}
+			}
+		}
 
         public void AddSchedulePeriod(int rowIndex)
         {
@@ -728,17 +745,22 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
         public void DeletePersonAccount(int rowIndex, int personPeriodIndex)
         {
-            var accounts = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
 
-            IOrderedEnumerable<IAccount> sorted = accounts.AllPersonAccounts().OrderByDescending(n2 => n2.StartDate.Date);
-            IList<IAccount> personAccountSortedCollection = sorted.ToList();
+	        using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+	        {
+		        var accounts = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
 
-            IAccount account = personAccountSortedCollection[personPeriodIndex];
+		        IOrderedEnumerable<IAccount> sorted = accounts.AllPersonAccounts().OrderByDescending(n2 => n2.StartDate.Date);
+		        IList<IAccount> personAccountSortedCollection = sorted.ToList();
 
-            if (account != null)
-            {
-                accounts.Find(account.Owner.Absence).Remove(account);
-            }
+		        IAccount account = personAccountSortedCollection[personPeriodIndex];
+
+		        if (account != null)
+		        {
+			        accounts.Find(account.Owner.Absence).Remove(account);
+			        UpdatePersonAccounts(account);
+		        }
+	        }
         }
 
         public void SetSortedPersonAccountFilteredList(IList<IPersonAccountModel> result)
@@ -815,12 +837,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
             var accounts = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
 
-            //Ask valonerna, denna kan returnera flera 
             IAccount account = accounts.Find(SelectedDate).FirstOrDefault();
 
             if (account != null)
             {
                 accounts.Find(account.Owner.Absence).Remove(account);
+				UpdatePersonAccounts(account);
                 GetParentPersonAccountWhenUpdated(rowIndex);
             }
         }
@@ -828,10 +850,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         public void DeleteAllPersonAccounts(int rowIndex)
         {
             var accounts = _personAccountGridViewAdaptorCollection[rowIndex].Parent;
-
-            foreach (var account in accounts.AllPersonAccounts())
+            using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                accounts.Find(account.Owner.Absence).Remove(account);
+                foreach (var account in accounts.AllPersonAccounts())
+                {
+                    accounts.Find(account.Owner.Absence).Remove(account);
+					UpdatePersonAccounts(account);
+                }
             }
         }
 
@@ -974,7 +999,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         public void LoadRuleSetBag()
         {
             _ruleSetBagBindingCollection.Clear();
-            var repository = new RuleSetBagRepository(UnitOfWork);
+            var repository = new RuleSetBagRepository(GetUnitOfWork);
             var list = repository.LoadAll().Where(ptp => ptp.IsChoosable);
 
         	IOrderedEnumerable<IRuleSetBag> sorted = list.OrderBy(n2 => n2.Description.Name);
@@ -989,7 +1014,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		public void LoadBudgetGroup()
 		{
 			_budgetGroupBindingCollection.Clear();
-			var repository = new BudgetGroupRepository(UnitOfWork);
+			var repository = new BudgetGroupRepository(GetUnitOfWork);
 			var list = repository.LoadAll();
 
 			IOrderedEnumerable<IBudgetGroup> sorted = list.OrderBy(n2 => n2.Name);
@@ -1006,12 +1031,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
             person.WindowsAuthenticationInfo = null;
             person.ApplicationAuthenticationInfo = null;
-            new Repository(UnitOfWork).Remove(person);
+            new Repository(GetUnitOfWork).Remove(person);
         }
 
         public void MarkForInsert(IAggregateRoot person)
         {
-            new Repository(UnitOfWork).Add(person);
+            new Repository(GetUnitOfWork).Add(person);
         }
 
         public void DeleteAndSavePerson(IPerson person)
@@ -1030,7 +1055,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             _personSkillCollection.Clear();
             _personSkillAdapterCollection.Clear();
 
-            ISkillRepository rep = new SkillRepository(UnitOfWork);
+            ISkillRepository rep = new SkillRepository(GetUnitOfWork);
 
             ICollection<ISkill> skillCollection = rep.FindAllWithoutMultisiteSkills();
 
@@ -1047,8 +1072,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
             _externalLogOnCollection.Clear();
 
-            var r = new ExternalLogOnRepository(UnitOfWork);
-            var logObjectUniqueRecord = new QueueSourceRepository(UnitOfWork);
+            var r = new ExternalLogOnRepository(GetUnitOfWork);
+            var logObjectUniqueRecord = new QueueSourceRepository(GetUnitOfWork);
             var logObjectInfo = logObjectUniqueRecord.GetDistinctLogItemName();
             var externalLogOnList = r.LoadAllExternalLogOns();
             foreach (var extLogOnItem in externalLogOnList)
@@ -1162,7 +1187,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
             _optionalColumnCollection.Clear();
 
-            var rep = new OptionalColumnRepository(UnitOfWork);
+            var rep = new OptionalColumnRepository(GetUnitOfWork);
             _optionalColumnCollection = rep.GetOptionalColumns<Person>();
         }
 
@@ -1186,7 +1211,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
             _applicationRoleCollection.Clear();
 
-            var r = new ApplicationRoleRepository(UnitOfWork);
+            var r = new ApplicationRoleRepository(GetUnitOfWork);
             _applicationRoleCollection.AddRange(r.LoadAllApplicationRolesSortedByName());
 
             _rolesViewAdapterCollection.AddRange(_applicationRoleCollection.ConvertAll((EntityConverter.ConvertToOther<IApplicationRole, RolesModel>)));
@@ -1352,13 +1377,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             return ValidatePasswordPolicy.Count <= 0;
         }
 
-        
-
         public void AddRootsToRepository()
         {
             if (_newPersonRotationCollection.Count > 0)
             {
-                var personRotationRepository = new PersonRotationRepository(UnitOfWork);
+                var personRotationRepository = new PersonRotationRepository(GetUnitOfWork);
 
                 foreach (IPersonRotation rotation in _newPersonRotationCollection)
                 {
@@ -1368,7 +1391,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             if (_newPersonAvailabilityCollection.Count > 0)
             {
-                var personAvailabilityRepository = new PersonAvailabilityRepository(UnitOfWork);
+                var personAvailabilityRepository = new PersonAvailabilityRepository(GetUnitOfWork);
 
                 foreach (IPersonAvailability availability in _newPersonAvailabilityCollection)
                 {
@@ -1377,7 +1400,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             }
 
        
-            var rep = new PersonAbsenceAccountRepository(UnitOfWork);
+            var rep = new PersonAbsenceAccountRepository(GetUnitOfWork);
             foreach (var account in AllAccounts)
             {
                 foreach (var accountCollection in account.Value)
@@ -1394,7 +1417,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
             _absenceCollection.Clear();
 
-            var absenceRepository = new AbsenceRepository(UnitOfWork);
+            var absenceRepository = new AbsenceRepository(GetUnitOfWork);
             _absenceCollection.AddRange(absenceRepository.LoadAllSortByName());
         }
 
@@ -1490,6 +1513,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             return null;
         }
 
+        private void UpdatePersonAccounts(IAccount account)
+        {
+			var updater = new FilteredPeopleAccountUpdater(this, _refreshService, UnitOfWorkFactory.Current);
+            updater.Update(account.Owner.Person);
+        }
+
         public IRotation GetDefaultRotation
         {
             get
@@ -1525,7 +1554,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             get { return _validatePasswordPolicy;}
         }
 
-        private void GetParentPersonAccounts(IPerson person, DateOnly selectedDate)
+		private void GetParentPersonAccounts(IPerson person, DateOnly selectedDate)
         {
             //fel här. kan vara flera. fråga estländarna.
             IAccount account = AllAccounts[person].Find(selectedDate).FirstOrDefault();
@@ -1657,7 +1686,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                UnitOfWork.PersistAll();
+                GetUnitOfWork.PersistAll();
                 uow.PersistAll();
             }
         }
@@ -1678,7 +1707,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
             if (disposing)
             {
-                if (UnitOfWork != null) UnitOfWork.Dispose();
+                if (GetUnitOfWork != null) GetUnitOfWork.Dispose();
             }
         }
         #endregion

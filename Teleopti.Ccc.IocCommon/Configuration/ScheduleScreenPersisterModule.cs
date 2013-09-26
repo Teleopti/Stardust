@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleDictionaryBatchPersister>().As<IScheduleDictionaryBatchPersister>();
 			builder.RegisterGeneric(typeof(DifferenceEntityCollectionService<>)).As(typeof(IDifferenceCollectionService<>)).SingleInstance();
 			builder.RegisterType<ScheduleScreenRetryingPersister>().As<IScheduleScreenPersister>();
+
         }
     }
 }

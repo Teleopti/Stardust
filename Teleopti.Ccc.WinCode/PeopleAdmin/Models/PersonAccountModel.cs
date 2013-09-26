@@ -53,9 +53,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 
         private void RefreshAccount()
         {
-            using (IUnitOfWork uow = UnitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (UnitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                _refreshService.Refresh(_currentAccount, uow);
+                _refreshService.Refresh(_currentAccount);
             }
         }
 
@@ -367,9 +367,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
                 //ta bort denna setter
                 if (_currentAccount != null)
                 {
-                    throw new ArgumentException("Kan inte sätta absence ännu");
-                    //_currentAccount.TrackingAbsence = value;
-                    //RefreshAccount();
+                    throw new ArgumentException("There is no absence to work with.");
                 }
             }
         }

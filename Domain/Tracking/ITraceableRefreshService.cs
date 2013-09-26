@@ -20,14 +20,12 @@ namespace Teleopti.Ccc.Domain.Tracking
         /// Refreshes the specified person account.
         /// </summary>
         /// <param name="personAccount">The person account.</param>
-        /// <param name="unitOfWork">The unit of work.</param>
-        void Refresh(IAccount account, IUnitOfWork unitOfWork);
+        void Refresh(IAccount account);
 
         /// <summary>
         /// Refreshes the specified person account if is not cached.
         /// </summary>
         /// <param name="personAccount">The person account.</param>
-        /// <param name="unitOfWork">The unit of work.</param>
-        void RefreshIfNeeded(IAccount account, IUnitOfWork unitOfWork);
+        void RefreshIfNeeded(IAccount account);
     }
 }

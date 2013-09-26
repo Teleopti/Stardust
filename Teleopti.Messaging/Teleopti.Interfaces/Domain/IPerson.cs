@@ -22,7 +22,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Terminal date
         /// </summary>
-        DateOnly? TerminalDate { get; set; }
+		DateOnly? TerminalDate { get; }
 
         /// <summary>
         /// Gets or sets the name.
@@ -290,6 +290,19 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="dateOnly"></param>
         /// <returns>work time</returns>
         TimeSpan AverageWorkTimeOfDay(DateOnly dateOnly);
+
+		/// <summary>
+		/// activates / reactivates person
+		/// </summary>
+		/// <param name="personAccountUpdater"></param>
+	    void ActivatePerson(IPersonAccountUpdater personAccountUpdater);
+
+		/// <summary>
+		/// Terminates a person
+		/// </summary>
+		/// <param name="terminalDate"></param>
+		/// <param name="personAccountUpdater"></param>
+	    void TerminatePerson(DateOnly terminalDate, IPersonAccountUpdater personAccountUpdater);
 
 		/// <summary>
 		/// Change the start date for a person period.

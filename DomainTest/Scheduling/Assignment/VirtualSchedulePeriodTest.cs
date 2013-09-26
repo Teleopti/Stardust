@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _personPeriod = new PersonPeriod(_dateOnly, _personContract, _team);
             IRuleSetBag ruleSetBag = new RuleSetBag();
             _personPeriod.RuleSetBag = ruleSetBag;
-            _person.TerminalDate = null;
+            _person.ActivatePerson(new MockRepository().StrictMock<IPersonAccountUpdater>());
             _person.AddPersonPeriod(_personPeriod);
             _person.AddSchedulePeriod(_schedulePeriod);
 

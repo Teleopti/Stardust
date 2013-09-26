@@ -18,19 +18,21 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
     {
         //Todo : this line need to be removed when mapping of PersonPeriod and Personcontract finalized
         private readonly IPersonContract _dummyPersonContract;
-
+        
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AgentMapper"/> class.
         /// </summary>
         /// <param name="mappedObjectPair">The mapped object pair.</param>
         /// <param name="timeZone">The time zone.</param>
+        /// <param name="personAccountUpdater"></param>
         /// <remarks>
         /// Created by: rogerkr
         /// Created date: 10/26/2007
         /// </remarks>
         public AgentMapper(MappedObjectPair mappedObjectPair, TimeZoneInfo timeZone) : base(mappedObjectPair, timeZone)
         {
+            
         }
 
 
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
         /// <param name="mappedObjectPair">The mapped object pair.</param>
         /// <param name="timeZone">The time zone.</param>
         /// <param name="personContract">The person contract.</param>
+        /// <param name="personAccountUpdater"></param>
         /// <remarks>
         /// Created by: sumeda herath
         /// Created date: 2008-02-05
@@ -71,7 +74,12 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
 
             if (oldEntity.PeriodCollection != null)
             {
-                newPerson.TerminalDate = TerminalDate(oldEntity.PeriodCollection);
+
+				if (TerminalDate(oldEntity.PeriodCollection).HasValue)
+	                newPerson.TerminatePerson(TerminalDate(oldEntity.PeriodCollection).GetValueOrDefault(), new PersonAccountUpdaterDummy());
+				else
+					newPerson.ActivatePerson(new PersonAccountUpdaterDummy());
+
 
                 foreach (var agentPeriod in oldEntity.PeriodCollection)
                 {
