@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Interfaces.Domain;
 
@@ -14,6 +15,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 	public class ShiftStatisticsPresenter : IShiftStatisticsPresenter
 	{
 		private readonly IShiftCategoryDistributionModel _model;
+		private int _lastSortColumn = 0;
+		private bool _lastSortOrderAscending;
 
 		public ShiftStatisticsPresenter(IShiftCategoryDistributionModel model)
 		{
@@ -31,7 +34,23 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 				return;
 			}
 
-			var sortedCategories = _model.GetSortedShiftCategories();
+			var sortedCategories = new List<IShiftCategory>();
+			sortedCategories = _model.GetSortedShiftCategories().ToList();
+
+			if (_lastSortColumn == 0)
+			{
+				if (_lastSortOrderAscending)
+					sortedCategories.Reverse();
+			}
+			
+			if(_lastSortColumn == 1)
+				sortedCategories = _model.GetShiftCategoriesSortedByMinMax(_lastSortOrderAscending, true).ToList();
+			if(_lastSortColumn == 2)
+				sortedCategories = _model.GetShiftCategoriesSortedByMinMax(_lastSortOrderAscending, false).ToList();
+			if (_lastSortColumn == 3)
+				sortedCategories = _model.GetShiftCategoriesSortedByAverage(_lastSortOrderAscending).ToList();
+			if (_lastSortColumn == 4)
+				sortedCategories = _model.GetShiftCategoriesSortedByStandardDeviation(_lastSortOrderAscending).ToList();
 
 			if (colIndex == 0 && rowIndex > 0)
 			{
@@ -117,10 +136,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
 		public void ReSort(int colIndex)
 		{
-			//switch (colIndex)
-			//{
-					
-			//}
+			_lastSortColumn = colIndex;
+			_lastSortOrderAscending = !_lastSortOrderAscending;
 		}
 	}
 }

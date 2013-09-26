@@ -87,6 +87,151 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 		}
 
 		[Test]
+		public void ShouldGetShiftCategoriesSortedByMin()
+		{
+			var person1 = PersonFactory.CreatePerson("Bertil");
+			var filteredPersons = new List<IPerson> { person1 };
+			var minMaxDic = new Dictionary<IShiftCategory, MinMax<int>>();
+
+			var cat1 = new ShiftCategory("B");
+			var cat2 = new ShiftCategory("A");
+			var minMax1 = new MinMax<int>(5, 10);
+			var minMax2 = new MinMax<int>(1, 10);
+			minMaxDic.Add(cat1, minMax1);
+			minMaxDic.Add(cat2, minMax2);
+
+
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
+				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons));
+				Expect.Call(_cachedShiftCategoryDistribution.AllShiftCategories).Return(new List<IShiftCategory> { cat1, cat2 }).Repeat.AtLeastOnce();
+				Expect.Call(_cachedShiftCategoryDistribution.GetMinMaxDictionary(filteredPersons)).Return(minMaxDic).Repeat.AtLeastOnce();
+
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.SetFilteredPersons(filteredPersons);
+				var result = _target.GetShiftCategoriesSortedByMinMax(true, true);
+				Assert.AreEqual(cat2, result[0]);
+				Assert.AreEqual(cat1, result[1]);
+				result = _target.GetShiftCategoriesSortedByMinMax(false, true);
+				Assert.AreEqual(cat1, result[0]);
+				Assert.AreEqual(cat2, result[1]);
+			}	
+		}
+
+		[Test]
+		public void ShouldGetShiftCategoriesSortedByMax()
+		{
+			var person1 = PersonFactory.CreatePerson("Bertil");
+			var filteredPersons = new List<IPerson> { person1 };
+			var minMaxDic = new Dictionary<IShiftCategory, MinMax<int>>();
+
+			var cat1 = new ShiftCategory("B");
+			var cat2 = new ShiftCategory("A");
+			var minMax1 = new MinMax<int>(5, 10);
+			var minMax2 = new MinMax<int>(1, 8);
+			minMaxDic.Add(cat1, minMax1);
+			minMaxDic.Add(cat2, minMax2);
+
+
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
+				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons));
+				Expect.Call(_cachedShiftCategoryDistribution.AllShiftCategories).Return(new List<IShiftCategory> { cat1, cat2 }).Repeat.AtLeastOnce();
+				Expect.Call(_cachedShiftCategoryDistribution.GetMinMaxDictionary(filteredPersons)).Return(minMaxDic).Repeat.AtLeastOnce();
+
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.SetFilteredPersons(filteredPersons);
+				var result = _target.GetShiftCategoriesSortedByMinMax(true, false);
+				Assert.AreEqual(cat2, result[0]);
+				Assert.AreEqual(cat1, result[1]);
+				result = _target.GetShiftCategoriesSortedByMinMax(false, false);
+				Assert.AreEqual(cat1, result[0]);
+				Assert.AreEqual(cat2, result[1]);
+			}
+		}
+
+		[Test]
+		public void ShouldGetShiftCategoriesSortedByAverage()
+		{
+			var person1 = PersonFactory.CreatePerson("Bertil");
+			var filteredPersons = new List<IPerson> { person1 };
+			var minMaxDic = new Dictionary<IShiftCategory, MinMax<int>>();
+
+			var cat1 = new ShiftCategory("B");
+			var cat2 = new ShiftCategory("A");
+			var minMax1 = new MinMax<int>(5, 10);
+			var minMax2 = new MinMax<int>(1, 8);
+			minMaxDic.Add(cat1, minMax1);
+			minMaxDic.Add(cat2, minMax2);
+
+
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
+				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons));
+				Expect.Call(_cachedShiftCategoryDistribution.AllShiftCategories).Return(new List<IShiftCategory> { cat1, cat2 }).Repeat.AtLeastOnce();
+				Expect.Call(_cachedShiftCategoryDistribution.GetMinMaxDictionary(filteredPersons)).Return(minMaxDic).Repeat.AtLeastOnce();
+
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.SetFilteredPersons(filteredPersons);
+				var result = _target.GetShiftCategoriesSortedByAverage(true);
+				Assert.AreEqual(cat2, result[0]);
+				Assert.AreEqual(cat1, result[1]);
+				result = _target.GetShiftCategoriesSortedByAverage(false);
+				Assert.AreEqual(cat1, result[0]);
+				Assert.AreEqual(cat2, result[1]);
+			}
+		}
+
+		[Test]
+		public void ShouldGetShiftCategoriesSortedByStandardDeviation()
+		{
+			var person1 = PersonFactory.CreatePerson("Bertil");
+			var filteredPersons = new List<IPerson> { person1 };
+			var minMaxDic = new Dictionary<IShiftCategory, MinMax<int>>();
+
+			var cat1 = new ShiftCategory("B");
+			var cat2 = new ShiftCategory("A");
+			var minMax1 = new MinMax<int>(1, 8);
+			var minMax2 = new MinMax<int>(5, 10);
+			minMaxDic.Add(cat1, minMax1);
+			minMaxDic.Add(cat2, minMax2);
+
+
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
+				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons));
+				Expect.Call(_cachedShiftCategoryDistribution.AllShiftCategories).Return(new List<IShiftCategory> { cat1, cat2 }).Repeat.AtLeastOnce();
+				Expect.Call(_cachedShiftCategoryDistribution.GetMinMaxDictionary(filteredPersons)).Return(minMaxDic).Repeat.AtLeastOnce();
+
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.SetFilteredPersons(filteredPersons);
+				var result = _target.GetShiftCategoriesSortedByStandardDeviation(true);
+				Assert.AreEqual(cat2, result[0]);
+				Assert.AreEqual(cat1, result[1]);
+				result = _target.GetShiftCategoriesSortedByStandardDeviation(false);
+				Assert.AreEqual(cat1, result[0]);
+				Assert.AreEqual(cat2, result[1]);
+			}
+		}
+
+
+		[Test]
 		public void ShouldGetShiftCategoryCountForCategoryAndPerson()
 		{
 			var person1 = PersonFactory.CreatePerson("Bertil");

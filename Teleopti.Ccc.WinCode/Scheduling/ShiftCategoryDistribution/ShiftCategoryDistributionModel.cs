@@ -22,6 +22,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		int ShiftCategoryCount(IPerson person, IShiftCategory shiftCategory);
 		int ShiftCategoryCount(DateOnly dateOnly, IShiftCategory shiftCategory);
 		IList<IShiftCategory> GetSortedShiftCategories();
+		IList<IShiftCategory> GetShiftCategoriesSortedByMinMax(bool ascending, bool min);
+		IList<IShiftCategory> GetShiftCategoriesSortedByAverage(bool ascending);
+		IList<IShiftCategory> GetShiftCategoriesSortedByStandardDeviation(bool ascending);
 		string CommonAgentName(IPerson person);
 		void OnResetNeeded();
 		IList<IPerson> GetSortedPersons(bool ascending);
@@ -29,6 +32,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		IList<IPerson> GetAgentsSortedByNumberOfShiftCategories(IShiftCategory shiftCategory, bool ascending);
 		IList<DateOnly> GetDatesSortedByNumberOfShiftCategories(IShiftCategory shiftCategory, bool ascending);
 		ICachedShiftCategoryDistribution CachedShiftCategoryDistribution { get; }
+
 		
 	}
 
@@ -152,6 +156,78 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			return sortedCategories.ToList();
 		}
 
+		public IList<IShiftCategory> GetShiftCategoriesSortedByMinMax(bool ascending, bool min)
+		{
+			var result = new List<shiftCategoryIntComparer>();
+			var returnList = new List<IShiftCategory>();
+
+			var shiftCategories = GetSortedShiftCategories();
+
+			foreach (var shiftCategory in shiftCategories)
+			{
+				var minMax = GetMinMaxForShiftCategory(shiftCategory);
+				if(min)
+					result.Add(new shiftCategoryIntComparer(shiftCategory, minMax.Minimum));
+				else
+					result.Add(new shiftCategoryIntComparer(shiftCategory, minMax.Maximum));
+			}
+
+			result.Sort();
+			returnList.AddRange(result.Select(shiftCategoryMinComparer => shiftCategoryMinComparer.ShiftCategory));
+
+
+			if (ascending)
+				returnList.Reverse();
+
+			return returnList;
+		}
+
+		public IList<IShiftCategory> GetShiftCategoriesSortedByAverage(bool ascending)
+		{
+			var result = new List<shiftCategoryDoubleComparer>();
+			var returnList = new List<IShiftCategory>();
+
+			var shiftCategories = GetSortedShiftCategories();
+
+			foreach (var shiftCategory in shiftCategories)
+			{
+				var average = GetAverageForShiftCategory(shiftCategory);
+				result.Add(new shiftCategoryDoubleComparer(shiftCategory, average));	
+			}
+
+			result.Sort();
+			returnList.AddRange(result.Select(shiftCategoryDoubleComparer => shiftCategoryDoubleComparer.ShiftCategory));
+
+
+			if (ascending)
+				returnList.Reverse();
+
+			return returnList;
+		}
+
+		public IList<IShiftCategory> GetShiftCategoriesSortedByStandardDeviation(bool ascending)
+		{
+			var result = new List<shiftCategoryDoubleComparer>();
+			var returnList = new List<IShiftCategory>();
+
+			var shiftCategories = GetSortedShiftCategories();
+
+			foreach (var shiftCategory in shiftCategories)
+			{
+				var std = GetStandardDeviationForShiftCategory(shiftCategory);
+				result.Add(new shiftCategoryDoubleComparer(shiftCategory, std));
+			}
+
+			result.Sort();
+			returnList.AddRange(result.Select(shiftCategoryDoubleComparer => shiftCategoryDoubleComparer.ShiftCategory));
+
+
+			if (ascending)
+				returnList.Reverse();
+
+			return returnList;
+		}
+
 		public string CommonAgentName(IPerson person)
 		{
 			return _schedulerStateHolder.CommonAgentName(person);
@@ -239,6 +315,55 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 				returnList.Reverse();
 
 			return returnList;
+		}
+
+
+		private class shiftCategoryDoubleComparer : IComparable
+		{
+			private readonly double _count;
+			public IShiftCategory ShiftCategory { get; private set; }
+
+			public shiftCategoryDoubleComparer(IShiftCategory shiftCategory, double count)
+			{
+				ShiftCategory = shiftCategory;
+				_count = count;
+			}
+
+			public int CompareTo(object obj)
+			{
+				var other = (shiftCategoryDoubleComparer)obj;
+				if (other._count == _count)
+					return 0;
+
+				if (other._count > _count)
+					return 1;
+
+				return -1;
+			}
+		}
+
+		private class shiftCategoryIntComparer : IComparable
+		{
+			private readonly int _count;
+			public IShiftCategory ShiftCategory { get; private set; }
+
+			public shiftCategoryIntComparer(IShiftCategory shiftCategory, int count)
+			{
+				ShiftCategory = shiftCategory;
+				_count = count;
+			}
+
+			public int CompareTo(object obj)
+			{
+				var other = (shiftCategoryIntComparer)obj;
+				if (other._count == _count)
+					return 0;
+
+				if (other._count > _count)
+					return 1;
+
+				return -1;
+			}
 		}
 
 		private class agentIntPair : IComparable

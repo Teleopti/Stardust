@@ -85,6 +85,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			{
 				_lastSortColumn = e.ColIndex;
 				_presenter.ReSort(_lastSortColumn);
+				gridControl1.Invalidate();
 			}
 		}
 
