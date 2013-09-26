@@ -9,14 +9,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 	{
 		void SetCellInfo(GridStyleInfo style, int rowIndex, int colIndex, object columnTag);
 		int RowCount();
-		void ReSort(int colIndex);
+		void ReSort(int colIndex, bool keepOrder);
 	}
 
 	public class ShiftStatisticsPresenter : IShiftStatisticsPresenter
 	{
 		private readonly IShiftCategoryDistributionModel _model;
 		private int _lastSortColumn = 0;
-		private bool _lastSortOrderAscending;
+		private bool _lastSortOrderAscending = true;
 
 		public ShiftStatisticsPresenter(IShiftCategoryDistributionModel model)
 		{
@@ -134,10 +134,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			return _model.GetSortedShiftCategories().Count + 1;
 		}
 
-		public void ReSort(int colIndex)
+		public void ReSort(int colIndex, bool keepOrder)
 		{
 			_lastSortColumn = colIndex;
-			_lastSortOrderAscending = !_lastSortOrderAscending;
+
+			if(!keepOrder)
+				_lastSortOrderAscending = !_lastSortOrderAscending;
 		}
 	}
 }

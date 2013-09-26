@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			else
 			{
 				gridControl1.ResetVolatileData();
-				_presenter.ReSort(_lastSortColumn);
+				_presenter.ReSort(_lastSortColumn, true);
 				gridControl1.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
 				gridControl1.UpdateScrollBars();
 				gridControl1.Invalidate(true);
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			if (e.RowIndex == 0 && e.ColIndex > -1)
 			{
 				_lastSortColumn = e.ColIndex;
-				_presenter.ReSort(_lastSortColumn);
+				_presenter.ReSort(_lastSortColumn, false);
 				gridControl1.Invalidate();
 			}
 		}
