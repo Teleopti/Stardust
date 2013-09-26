@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -98,7 +97,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		}
 
 		public event EventHandler ResetNeeded;
-		public event EventHandler UpdateChartNeeded;
 
 		public void SetFilteredPersons(IEnumerable<IPerson> filteredPersons)
 		{

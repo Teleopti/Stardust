@@ -11793,9 +11793,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Per Date</value>
     <comment>Header in shift distributions scheduler</comment>
   </data>
-  <data name="ShiftCategoryDistribution" xml:space="preserve">
+	<data name="ShiftCategoryDistribution" xml:space="preserve">
     <value>Shift Category Distribution</value>
     <comment>Header for distributions of shift categories in scheduler</comment>
+	</data>
   <data name="PerAgent" xml:space="preserve">
     <value>Per Agent</value>
   </data>
