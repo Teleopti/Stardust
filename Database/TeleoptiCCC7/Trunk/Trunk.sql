@@ -306,7 +306,7 @@ BEGIN
 	[HostIP] [varchar](500) NULL,
 	[BlockOptions] [varchar](500) NULL,
 	[TeamOptions] [varchar](500) NULL,
-	[Scheduling] [varchar](500) NULL,
+	[GeneralOptions] [varchar](500) NULL,
 	[SkillDays] [numeric](18, 0) NULL,
 	[Agents] [numeric](18, 0) NULL,
 	[ExecutionTime] [numeric](18, 0) NULL

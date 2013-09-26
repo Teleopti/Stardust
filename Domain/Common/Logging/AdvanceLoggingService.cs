@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using log4net;
@@ -32,8 +33,6 @@ namespace Teleopti.Ccc.Domain.Common.Logging
                 stop.Start();
                 callbackAction.Invoke();
                 stop.Stop();
-                //get the system log
-                populateSystemProperties();
 
                 //log the scheduling options
                 populateSchedulingOptions(schedulingOptions);
@@ -48,16 +47,32 @@ namespace Teleopti.Ccc.Domain.Common.Logging
         private static void populateSchedulingOptions(ISchedulingOptions schedulingOptions)
         {
             var schedulingOptionsValueExtractor = new SchedulingOptionsValueExtractor(schedulingOptions);
-            if (schedulingOptions.UseTeamBlockPerOption && schedulingOptions.BlockFinderTypeForAdvanceScheduling != BlockFinderType.None  )
+            getTeamBlockOptions(schedulingOptionsValueExtractor, schedulingOptions);
+            //Scheduling
+            GlobalContext.Properties["GeneralOptions"] = schedulingOptionsValueExtractor.GetGeneralSchedulingOptions();
+        }
+
+        private static void getTeamBlockOptions(SchedulingOptionsValueExtractor schedulingOptionsValueExtractor, ISchedulingOptions schedulingOptions)
+        {
+
+            if (schedulingOptions.UseTeamBlockPerOption && schedulingOptions.BlockFinderTypeForAdvanceScheduling != BlockFinderType.None)
             {
                 GlobalContext.Properties["BlockOptions"] =
-                    schedulingOptionsValueExtractor.GetBlockOptions() ;
+                    schedulingOptionsValueExtractor.GetBlockOptions();
             }
             else if (schedulingOptions.UseGroupScheduling)
             {
-                GlobalContext.Properties["TeamOptions"] = schedulingOptionsValueExtractor.GetTeamOptions() ;
+                GlobalContext.Properties["TeamOptions"] = schedulingOptionsValueExtractor.GetTeamOptions();
             }
-            GlobalContext.Properties["Scheduling"] = schedulingOptionsValueExtractor.GetGeneralSchedulingOptions();
+        }
+
+        private static void populateOptimizationOptions(IOptimizationPreferences optimizationPreferences )
+        {
+            var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
+            var schedulingOptionsValueExtractor = new SchedulingOptionsValueExtractor(schedulingOptions);
+            getTeamBlockOptions(schedulingOptionsValueExtractor, schedulingOptions);
+            //optimization
+            GlobalContext.Properties["GeneralOptions"] = schedulingOptionsValueExtractor.GetGeneralOptimizationOptions(optimizationPreferences);
         }
         
         private static void populateAgentAndSkillDays(int noOfAgent, int noOfSkillDays, long elapsedMilliseconds)
@@ -65,6 +80,7 @@ namespace Teleopti.Ccc.Domain.Common.Logging
             GlobalContext.Properties["Agents"] = noOfAgent.ToString();
             GlobalContext.Properties["SkillDays"] = noOfSkillDays.ToString();
             GlobalContext.Properties["ExecutionTime"] = elapsedMilliseconds.ToString();
+            populateSystemProperties();
         }
 
         private static void populateSystemProperties()
@@ -78,10 +94,35 @@ namespace Teleopti.Ccc.Domain.Common.Logging
                 GlobalContext.Properties["InitialCatalog"] = identity.DataSource.InitialCatalog;
                 GlobalContext.Properties["WindowsIdentity"] = identity.WindowsIdentity.Name;
                 GlobalContext.Properties["HostIP"] = SystemInformationHelper.GetSystemIPAddress();
-                //GlobalContext.Properties["TeamOptions"] = "";
-                //GlobalContext.Properties["BlockOptions"] = "";
                 
             }
+        }
+
+        public static void LogOptimizationInfo(IOptimizationPreferences schedulingOptions, int noOfAgent, int noOfSkillDays, Action callbackAction)
+        {
+            if (getLog().IsInfoEnabled)
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                callbackAction.Invoke();
+                stopwatch.Stop();
+                
+                clearGlobalContext();
+
+                //log the optimization options
+                populateOptimizationOptions(schedulingOptions);
+
+                //log the agent and skill days
+                populateAgentAndSkillDays(noOfAgent, noOfSkillDays, stopwatch.ElapsedMilliseconds);
+
+                getLog().Info("Optimization");
+            }
+        }
+
+        private static void clearGlobalContext()
+        {
+            GlobalContext.Properties["BlockOptions"] = "";
+            GlobalContext.Properties["TeamOptions"] = "";
         }
     }
 }

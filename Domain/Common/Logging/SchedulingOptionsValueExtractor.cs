@@ -52,9 +52,26 @@ namespace Teleopti.Ccc.Domain.Common.Logging
             return result;
         }
 
-        public string GetGeneralOptimizationOptions()
+        public string GetGeneralOptimizationOptions(IOptimizationPreferences optimizationPreferences)
         {
-            return "";
+            var result = optimizationPreferences.Advanced.TargetValueCalculation.ToString();
+            if (optimizationPreferences.General.OptimizationStepDaysOff)
+                result += ",Dayoff Optimization";
+            if (optimizationPreferences.General.OptimizationStepShiftsWithinDay )
+                result += ",Shift within day";
+            if (optimizationPreferences.General.OptimizationStepDaysOff)
+                result += ",Dayoff Optimization";
+            if (optimizationPreferences.General.OptimizationStepTimeBetweenDays )
+                result += ",Intraday";
+            if (optimizationPreferences.General.UsePreferences )
+                result += ",Prefrences";
+            if (optimizationPreferences.General.UseMustHaves )
+                result += ",Must Have";
+            if (optimizationPreferences.General.UseRotations )
+                result += ",Rotations";
+            if (optimizationPreferences.General.UseAvailabilities )
+                result += ",Availability";
+            return result;
         }
        
     }
