@@ -45,20 +45,20 @@ SET /A ISCCC7=1
 )
 
 ::Build Teleopti.Support.Security.exe
-ECHO Building %ROOTDIR%\..\..\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj
-%MSBUILD% "%ROOTDIR%\..\..\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%temp%\build.log"
+ECHO Building %ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj
+%MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%temp%\build.log"
 IF %ERRORLEVEL% NEQ 0 (
 SET /A ERRORLEV=12
 GOTO :error
 )
 
 ::Build DbManager
-ECHO msbuild "%ROOTDIR%\..\..\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" 
-%MSBUILD% "%ROOTDIR%\..\..\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%temp%\build.log"
+ECHO msbuild "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" 
+%MSBUILD% "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%temp%\build.log"
 IF %ERRORLEVEL% EQU 0 (
-SET DATABASEPATH="%ROOTDIR%\..\..\..\Database"
-SET DBMANAGER="%ROOTDIR%\..\..\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\Debug\DBManager.exe"
-SET DBMANAGERPATH="%ROOTDIR%\..\..\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\Debug"
+SET DATABASEPATH="%ROOTDIR%\..\Database"
+SET DBMANAGER="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\Debug\DBManager.exe"
+SET DBMANAGERPATH="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\Debug"
 ) else (
 SET /A ERRORLEV=6
 GOTO :error
@@ -78,7 +78,7 @@ CD "%ROOTDIR%"
 
 IF %ISCCC7% EQU 1 (
 ECHO Running: scheduleConverter, ForecasterDateAdjustment, PersonFirstDayOfWeekSetter, PasswordEncryption, LicenseStatusChecker
-"%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%DATABASE% %Conn2%
+"%ROOTDIR%\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%DATABASE% %Conn2%
 IF %ERRORLEVEL% NEQ 0 (
 SET /A ERRORLEV=10
 GOTO :error
@@ -87,11 +87,17 @@ GOTO :error
 
 IF %CROSSDB% EQU 1 (
 ECHO Running: CrossDatabaseViewUpdate
-"%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD"%DATABASE%" -CD"%TeleoptiCCCAgg%" %Conn2%
+"%ROOTDIR%\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD"%DATABASE%" -CD"%TeleoptiCCCAgg%" %Conn2%
 if %errorlevel% NEQ 0 (
 SET /A ERRORLEV=1
 GOTO :error
 )
+)
+
+::Add license
+CHOICE /C yn /M "Add license?"
+IF ERRORLEVEL 1 (
+SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
 )
 
 ECHO.
