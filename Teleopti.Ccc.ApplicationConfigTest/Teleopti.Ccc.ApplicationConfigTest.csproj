@@ -189,7 +189,7 @@
   -->
   <PropertyGroup>
     <PreBuildEvent>xcopy "$(ProjectDir)Common\Test.xml" "$(TargetDir)" /y
-if not exist "$(ProjectDir)App.Config" copy "$(ProjectDir)..\..\ccnet\CruiseControl.config" "$(ProjectDir)App.Config"</PreBuildEvent>
+if not exist "$(ProjectDir)App.Config" copy "$(ProjectDir)..\ccnet\CruiseControl.config" "$(ProjectDir)App.Config"</PreBuildEvent>
     <PostBuildEvent>xcopy "$(ProjectDir)..\Database\TeleoptiCCC7\*.*" "$(TargetDir)TeleoptiCCC7" /y /r /e /i /D
 xcopy "$(ProjectDir)..\nhibernateAddons\Cache_Providers\*.dll" "$(TargetDir)" /y /D</PostBuildEvent>
   </PropertyGroup>
