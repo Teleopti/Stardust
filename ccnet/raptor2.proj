@@ -36,6 +36,7 @@
 		<AzureMasterConn>SQLCMD -Stcp:$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -dmaster</AzureMasterConn>
 		<DBManagerAzure>-S$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -T -C -L$(AzureDbLogin):$(AzureDbPwd)</DBManagerAzure>
 		<DatabasePath>"$(CCNetWorkingDirectory)\database"</DatabasePath>
+
 		
 		<NDependTransferDataPath>C:\NDepend\NDependXmlToDb\NDependXmlToDb.exe</NDependTransferDataPath>
 	</PropertyGroup>
@@ -265,8 +266,19 @@
 	<Target Name="FixConfigFiles">
 		<Message Importance="high" Text="Fixing config files..." />	
 
+		<!-- Only called from RestoreToLocal -->
+		<PropertyGroup Condition="'$(ImADeveloper)' == 'TRUE'" >
+			<DBNamePrefix>Infratest</DBNamePrefix>
+			<DBServer>$(Computername)</DBServer>
+			<SQL_LOGIN>sa</SQL_LOGIN>
+			<SQL_PASSWORD>cadadi</SQL_PASSWORD>
+			<AgentPortalWebURL>http://localhost/</AgentPortalWebURL>		
+			<WEB_BROKER>$(AgentPortalWebURL)</WEB_BROKER>
+			<WEB_BROKER_BACKPLANE></WEB_BROKER_BACKPLANE>
+			<InfraTestIni>c:\InfraTest.ini</InfraTestIni>
+		</PropertyGroup>
+		
 		<ItemGroup>
-	
 			<!-- MSBuild escape sequence is "% + ASCIIVALUE". e.g [$] = "%24"  -->
 			<InfraTestIniLines Include="[TestDatabase]" />
 			<InfraTestIniLines Include="DB_CCC7=$(DBNamePrefix)_ccc7" />
@@ -278,16 +290,17 @@
 			<InfraTestIniLines Include="WEB_BROKER=$(WEB_BROKER)" />
 			<InfraTestIniLines Include="WEB_BROKER_BACKPLANE=$(WEB_BROKER_BACKPLANE)" />	
 			<InfraTestIniLines Include="SitePath=$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web" />
-			<InfraTestIniLines Include="url=http://localhost" />
+			<InfraTestIniLines Include="url=http://localhost/" />
 			<InfraTestIniLines Include="servicebus=false" />
 			<InfraTestIniLines Include="create=true" />
+			<InfraTestIniLines Include="IISExpress=true" />
 			<InfraTestIniLines Include="dbFile=$(InfraTestIni)" />
-			
 		</ItemGroup> 
-
+		
 		<WriteLinesToFile File="$(InfraTestIni)" 
 		Lines="@(InfraTestIniLines)" 
 		Overwrite="true" />
+
 
 		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
 			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfigTest\App.config" />
@@ -313,9 +326,9 @@
 			Encoding="windows-1252"
 			Regex="_replace_"
 			ReplacementText="$(InfraTestIni)"/>			
-			
+		
 		</Target>
-
+		
 	<!--This is how we "går över ån och runt sjön för att hämta vatten"
 		We run into something like this: http://www.mail-archive.com/rhinomocks@googlegroups.com/msg02457.html 
 		So instead, try to run tests One By One to mimimize numbers of Mocks included.
