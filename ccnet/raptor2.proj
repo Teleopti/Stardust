@@ -7,7 +7,6 @@
 		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
 		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
 		<DBNamePrefix>$(Computername)_$(CCNetProject)</DBNamePrefix>
-		<AgentPortalWebCreator>"$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\AgentPortalWeb.bat"</AgentPortalWebCreator>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
 		<DoCodeAnalysis>false</DoCodeAnalysis>
@@ -193,12 +192,6 @@
 		<Message Importance="high" Text="Analytics report controls. Finished"/>
 	</Target>
 	
-	<Target Name="CreateAgentPortalWeb" Condition="'$(RunWebBehaviorTests)' == 'true'" DependsOnTargets="FixConfigFiles">
-		<!-- create web site/app/VirDir + Copy content-->
-		<Message Importance="high" Text="$(AgentPortalWebCreator) $(AgentPortalWebSiteName) $(DBNamePrefix)_ccc7 $(DBNamePrefix)_analytics"/>
-		<Exec Command = "$(AgentPortalWebCreator) $(AgentPortalWebSiteName) http://$(Computername)/$(AgentPortalWebSiteName)" />
-	</Target>
-
 	<Target Name="CreateAnalyticsDb" DependsOnTargets="BuildDBManager">
 		<Message Importance="high" Text="Dropping Analytics DB on local instance" />
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_agg') BEGIN ALTER DATABASE [$(DBNamePrefix)_agg] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_agg] END" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
@@ -353,7 +346,7 @@
 		 />
 	</ItemGroup>
 	
-	<Target Name="NCover" DependsOnTargets="FixConfigFiles;Compile;CreateAgentPortalWeb;SetUpConfigFiles">
+	<Target Name="NCover" DependsOnTargets="FixConfigFiles;Compile;SetUpConfigFiles">
 		
 		<MakeDir Directories="$(CCNetWorkingDirectory)\NcoverResult"/>
 		<MakeDir Directories="$(CCNetWorkingDirectory)\NUnitResult"/>
