@@ -157,6 +157,11 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// 
 		/// </summary>
+		public bool SendOverMessageBroker { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
 		public bool Equals(IActualAgentState other)
 		{
 			return other != null && GetHashCode().Equals(other.GetHashCode());
