@@ -223,3 +223,13 @@ Scenario: Show friendly message when after leaving date
 	And I am viewing team schedule for today
 	When I click the next day button
 	Then I should see a user-friendly message explaining I dont have anything to view
+
+Scenario: Navigate to shiftrade
+Given I am an agent in a team
+	And I have a shift today
+	And I have a colleague
+	And My colleague has a shift today
+	When I view team schedule
+	And I click the shifttrade button
+	Then I should see the add shifttrade section
+	

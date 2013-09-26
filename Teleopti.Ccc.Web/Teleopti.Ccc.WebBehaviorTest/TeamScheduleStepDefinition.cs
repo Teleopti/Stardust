@@ -370,6 +370,19 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.AssertExists("#Team-Picker");
 		}
 
+		[When(@"I click the shifttrade button")]
+		public void WhenIClickTheShifttradeButton()
+		{
+			//henke: todo
+			ScenarioContext.Current.Pending();
+		}
+
+		[Then(@"I should see the add shifttrade section")]
+		public void ThenIShouldSeeTheAddShifttradeSection()
+		{
+			//henke: todo
+			ScenarioContext.Current.Pending();
+		}
 
 		private static void AssertAgentIsDisplayed(string name)
 		{
