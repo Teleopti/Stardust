@@ -85,8 +85,8 @@ Create database
 		(
 		NAME = $(DBTYPE)_Primary,
 		FILENAME = ''' + @DataFileName + ''',
-		SIZE = 100MB,
-		FILEGROWTH = 100MB
+		SIZE = $(RTADATASIZE),
+		FILEGROWTH = $(RTADATAGROWTH)
 		)
 	LOG ON	(
 		NAME = $(DBTYPE)_Log,

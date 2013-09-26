@@ -9,20 +9,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	{
 		public AllTags()
 		{
+			Add("SQL_AUTH_STRING", IniFileInfo.SQL_AUTH_STRING);
+			Add("WEB_BROKER_BACKPLANE", IniFileInfo.WEB_BROKER_BACKPLANE);
 			Add("ConnectionString", IniFileInfo.ConnectionString);
 			Add("ConnectionStringMatrix", IniFileInfo.ConnectionStringMatrix);
 			Add("ConnectionStringAnalytics", IniFileInfo.ConnectionStringMatrix);
+			Add("DB_ANALYTICS", IniFileInfo.DB_ANALYTICS);
+			Add("SQL_SERVER_NAME", IniFileInfo.SQL_SERVER_NAME);
+			Add("DB_CCC7", IniFileInfo.DB_CCC7);
 			Add("AnalyticsDb", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
 			Add("AnalyticsDatabase", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
-			Add("ServerName", IniFileInfo.ServerName);
-			Add("Database", IniFileInfo.Database);
 			Add("Url", TestSiteConfigurationSetup.Url.ToString());
 			Add("Port", TestSiteConfigurationSetup.Port.ToString());
 			Add("AgentPortalWebURL", TestSiteConfigurationSetup.Url.ToString());
 			Add("SitePath", Paths.WebPath());
 			Add("ConfigPath", Paths.WebBinPath());
-			Add("MessageBroker", TestSiteConfigurationSetup.Url.ToString());
+			Add("WEB_BROKER", TestSiteConfigurationSetup.Url.ToString());
             Add("MachineKey", CryptoCreator.MachineKeyCreator.GetConfig());
+			Add("AGENTPORTALWEB_nhibConfPath", IniFileInfo.AGENTPORTALWEB_nhibConfPath);
 	}
 
 		public AllTags(IEnumerable<KeyValuePair<string, string>> additionalTags)

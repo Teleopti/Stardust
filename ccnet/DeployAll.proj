@@ -42,7 +42,7 @@
 	</PropertyGroup>
 
 	<!-- Entry point for CCNet -->
-  <Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;CleanUpUnwantedFiles;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;CreateAzure;UploadFTP">
+  <Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;CreateAzure;UploadFTP">
 		<Message Text="Done!" Importance="high"/>
 	</Target>
 
@@ -99,21 +99,6 @@
 		<MSBuild Projects="@(localWikiReplaceString)" Properties="Configuration=Release" Targets="Build" />
 	</Target>
 
-	<Target Name="CleanUpUnwantedFiles">
-		<ItemGroup>
-			<DeleteFilesCollection
-				Include="$(CCNetWorkingDirectory)\**\*.xml"
-				Exclude="$(CCNetWorkingDirectory)\AutomatedTests\**\*.xml;
-						$(CCNetWorkingDirectory)\BuildArtifacts\**\*.*;
-						$(CCNetWorkingDirectory)\Teleopti.Support.Tool\**\config.xml;
-						$(CCNetWorkingDirectory)\Teleopti.Support.Tool\**\V7Config.nhib.xml;
-						$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfig\**\RtaStates.xml"/>
-		</ItemGroup>
-		<Exec Command="attrib -R &quot;%(DeleteFilesCollection.FullPath)&quot;"/>
-		<Exec Command="del /Q &quot;%(DeleteFilesCollection.FullPath)&quot;"/>
-	</Target>
-	
-	
 	<Target Name="CreateMSI">
 		<Message Text="Building MSI..." Importance="high" />
 		<Message Text="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) $(ProductsToBuild) $(MSIShare) $(DeployShare)"/>
