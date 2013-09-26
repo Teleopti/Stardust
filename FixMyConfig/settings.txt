@@ -23,7 +23,7 @@ $(SDK_SSL_MEX_BINDING)|mexHttpBinding
 $(MATRIX_WEB_SITE_URL)|http://localhost:52500
 $(LocalWiki)|http://localhost/TeleoptiCCC/LocalWiki/
 $(WEB_BROKER)|http://localhost:54903/
-$(WEB_BROKER_BACKPLANE)|false
+$(WEB_BROKER_BACKPLANE)|http://localhost:50204/Broker.backplane/backplane
 $(ETL_SERVICE_nhibConfPath)|c:\nhib
 $(ETL_TOOL_nhibConfPath)|c:\nhib
 $(AGENTPORTALWEB_nhibConfPath)|c:\nhib
