@@ -2,7 +2,7 @@
 SETLOCAL
 SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-1%
-SET masterSettings=%ROOTDIR%\settings.txt
+SET masterSettings=%ROOTDIR%\config\settings.txt
 SET CCC7DB=%1
 SET AnalyticsDB=%2
 set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
@@ -25,8 +25,8 @@ taskkill /IM WebDev.WebServer20.EXE /F
 COPY "%masterSettings%" "%MySettings%"
 
 ::Replace some parameters according to current RestoreToLocal.bat
-cscript replace.vbs "TeleoptiAnalytics_Demo" "%AnalyticsDB%" "%MySettings%" > NUL
-cscript replace.vbs "TeleoptiCCC7_Demo" "%CCC7DB%" "%MySettings%" > NUL
+cscript .\common\replace.vbs "TeleoptiAnalytics_Demo" "%AnalyticsDB%" "%MySettings%" > NUL
+cscript .\common\replace.vbs "TeleoptiCCC7_Demo" "%CCC7DB%" "%MySettings%" > NUL
 
 ::Build Teleopti.Support.Tool.exe
 ECHO Building %ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj
