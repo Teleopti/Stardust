@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Tracking;
@@ -146,7 +147,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		}
 
 		private void PersistPersonAbsenceAccount(IUnitOfWorkFactory unitOfWorkFactory, 
-																						IEnumerable<IPersonAbsenceAccount> refreshPersonAbsenceAccounts,
+												 IEnumerable<IPersonAbsenceAccount> refreshPersonAbsenceAccounts,
 		                                         ICollection<IPersonAbsenceAccount> personAbsenceAccounts)
 		{
 			try
@@ -159,7 +160,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 					unitOfWork.PersistAll(_messageBrokerIdentifier);
 					personAbsenceAccounts.Clear();
 				}
-			} 
+			}
 			catch (OptimisticLockException exception)
 			{
 				throw new OptimisticLockExceptionOnPersonAccount(exception);
@@ -173,12 +174,23 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			{
 				return;
 			}
+
 			refreshPersonAbsenceAccounts.ForEach(paa =>
-			                                     {
-			                                     	unitOfWork.Refresh(paa);
-			                                     	paa.AccountCollection().ForEach(_traceableRefreshService.Refresh);
-			                                     	_personAbsenceAccountValidator.Validate(paa);
-			                                     });
+			{
+				var foundAccount = _personAbsenceAccountRepository.Get(paa.Id.GetValueOrDefault());
+				if (foundAccount != null)
+				{
+					var removedAccounts = paa.AccountCollection().Except(foundAccount.AccountCollection()).ToList();
+					foreach (IAccount removedAccount in removedAccounts)
+					{
+						paa.Remove(removedAccount);
+					}
+					unitOfWork.Remove(foundAccount);
+					unitOfWork.Refresh(paa);
+				}
+				paa.AccountCollection().ForEach(_traceableRefreshService.Refresh);
+				_personAbsenceAccountValidator.Validate(paa);
+			});
 		}
 
 		private void PersistScheduleDictionary(IScheduleDictionary scheduleDictionary)

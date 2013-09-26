@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Criterion;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -119,8 +120,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 				scheduleRange.Add(ScheduleData);
 
 			innerDictionary[Person] = scheduleRange;
-
-			//_scheduleDictionary.TakeSnapshot();
 		}
 
 		private void SetupDependencies()
@@ -152,16 +151,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 		{
 			Target = new ScheduleScreenRetryingPersister(UnitOfWorkFactory.CurrentUnitOfWorkFactory(),
 													   new WriteProtectionRepository(UnitOfWorkFactory.Current),
-														//ScheduleRepository,
 													   new PersonRequestRepository(UnitOfWorkFactory.Current),
 													   new PersonAbsenceAccountRepository(UnitOfWorkFactory.Current),
-														//ScheduleDictionarySaver,
 													   new PersonRequestPersister(_clearReferredShiftTradeRequests),
 													   new PersonAbsenceAccountConflictCollector(),
 													   new TraceableRefreshService(_currentScenario,new ScheduleRepository(UnitOfWorkFactory.Current)), 
 													   _personAbsenceAccountValidator,
 													   ScheduleDictionaryConflictCollector,
-														//new ScheduleDictionaryModifiedCallback(),
 													   _messageBrokerIdentifier,
 													   new ScheduleDictionaryBatchPersister(
 														   UnitOfWorkFactory.CurrentUnitOfWorkFactory(),
@@ -181,6 +177,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 				var repository = new Repository(unitOfWork);
 				//remove clone to simulate other user (and instance)
 				repository.Remove((IPersistableScheduleData)ScheduleData.Clone());
+				unitOfWork.PersistAll();
+			}
+		}
+
+		protected void DeleteCurrentPersonAbsenceAccountAsAnotherUser()
+		{
+			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var personAbsenceAccountRepository = new PersonAbsenceAccountRepository(unitOfWork);
+				var personAbsenceAccount = personAbsenceAccountRepository.Get(PersonAbsenceAccount.Id.Value);
+				deleteLastAccount(personAbsenceAccount);
+				personAbsenceAccountRepository.Add(personAbsenceAccount);
 				unitOfWork.PersistAll();
 			}
 		}
@@ -237,6 +245,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			{
 				account.BalanceIn = account.BalanceIn.Add(TimeSpan.FromDays(1));
 			}
+		}
+
+		private static void deleteLastAccount(IPersonAbsenceAccount personAbsenceAccountToChange)
+		{
+			var absences = personAbsenceAccountToChange.AccountCollection().ToList();
+			var toRemove = absences[absences.Count - 1];
+			personAbsenceAccountToChange.Remove(toRemove);
 		}
 
 		protected IScheduleScreenPersisterResult TryPersistScheduleScreen()
