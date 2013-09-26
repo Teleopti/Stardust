@@ -30,7 +30,7 @@ SET CreateAnalytics=
 SET Tfiles=\\gigantes\Customer Databases\CCC\RestoreToLocal\Baselines
 
 ::Get current Branch
-CD "%ROOTDIR%\..\..\.."
+CD "%ROOTDIR%\.."
 SET HgFolder=%CD%
 CALL :BRANCH "%CD%"
 ECHO Current branch is: "%BRANCH%"
@@ -44,12 +44,12 @@ IF EXIST DBManager*.log DEL DBManager*.log /Q
 SET INSTANCE=%COMPUTERNAME%
 
 ::Build DbManager
-ECHO msbuild "%ROOTDIR%\..\..\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" 
-%MSBUILD% "%ROOTDIR%\..\..\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%temp%\build.log"
+ECHO msbuild "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" 
+%MSBUILD% "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%temp%\build.log"
 IF %ERRORLEVEL% EQU 0 (
-SET DATABASEPATH="%ROOTDIR%\..\..\..\Database"
-SET DBMANAGER="%ROOTDIR%\..\..\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\Debug\DBManager.exe"
-SET DBMANAGERPATH="%ROOTDIR%\..\..\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\Debug"
+SET DATABASEPATH="%ROOTDIR%\..\Database"
+SET DBMANAGER="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\Debug\DBManager.exe"
+SET DBMANAGERPATH="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\Debug"
 ) else (
 SET /A ERRORLEV=6
 GOTO :error
@@ -215,7 +215,7 @@ ECHO.
 ECHO.
 ECHO ------
 ECHO Restoring baselines databases from backup. This will take a few minutes...
-SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\tsql\Restore.sql" -v DATAFOLDER="%DataFolder%" -v RARFOLDER="%RarFolder%" -v CUSTOMER=%CUSTOMER% -v LOADSTAT=%LOADSTAT% -v BRANCH="%BRANCH%"
+SQLCMD -S%INSTANCE% -E -dmaster -i"%ROOTDIR%\database\tsql\Restore.sql" -v DATAFOLDER="%DataFolder%" -v RARFOLDER="%RarFolder%" -v CUSTOMER=%CUSTOMER% -v LOADSTAT=%LOADSTAT% -v BRANCH="%BRANCH%"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=11 & GOTO :error
 
 ECHO Restoring baselines. Done!
@@ -261,30 +261,30 @@ ECHO.
 CD "%ROOTDIR%"
 
 ::Build Teleopti.Support.Security.exe
-ECHO Building %ROOTDIR%\..\..\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj
-%MSBUILD% "%ROOTDIR%\..\..\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%temp%\build.log"
+ECHO Building %ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj
+%MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%temp%\build.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
 
 ECHO Running: scheduleConverter, ForecasterDateAdjustment, PersonFirstDayOfWeekSetter, PasswordEncryption, LicenseStatusChecker
-"%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiCCC7" -EE
+"%ROOTDIR%\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiCCC7" -EE
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=10 & GOTO :error
 
 ECHO Running: CrossDatabaseViewUpdate
-"%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiAnalytics" -CD"%Branch%_%Customer%_TeleoptiCCCAgg" -EE
+"%ROOTDIR%\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiAnalytics" -CD"%Branch%_%Customer%_TeleoptiCCCAgg" -EE
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 :Add lic
 ::Add license
 CHOICE /C yn /M "Add license?"
 IF ERRORLEVEL 1 (
-SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
+SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
 )
 
 ::FixMyConfig
 ECHO.
 CHOICE /C yn /M "Fix my config?"
 IF ERRORLEVEL 2 GOTO Finish
-IF ERRORLEVEL 1 CALL "%ROOTDIR%\..\..\..\.debug-Setup\FixMyConfig.bat" "%Branch%_%Customer%_TeleoptiCCC7" "%Branch%_%Customer%_TeleoptiAnalytics"
+IF ERRORLEVEL 1 CALL "%ROOTDIR%\FixMyConfig.bat" "%Branch%_%Customer%_TeleoptiCCC7" "%Branch%_%Customer%_TeleoptiAnalytics"
 
 GOTO Finish
 
