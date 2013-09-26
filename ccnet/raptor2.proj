@@ -262,20 +262,7 @@
 			<!-- <SitePath>C:\inetpub\wwwroot\$(AgentPortalWebSiteName)</SitePath> -->
 			<SitePath>$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web</SitePath>		
 		</PropertyGroup>		
-		
-		<!-- If called manually we us ImADeveloper -->
-		<PropertyGroup Condition="'$(ImADeveloper)' == 'TRUE'" >
-			<DBNamePrefix>Infratest</DBNamePrefix>
-			<DBServer>$(Computername)</DBServer>
-			<SQL_LOGIN>sa</SQL_LOGIN>
-			<SQL_PASSWORD>cadadi</SQL_PASSWORD>
-			<AgentPortalWebURL>http://localhost:52858/</AgentPortalWebURL>		
-			<WEB_BROKER>http://localhost:52858/</WEB_BROKER>
-			<WEB_BROKER_BACKPLANE></WEB_BROKER_BACKPLANE>
-			<InfraTestIni>c:\InfraTest.ini</InfraTestIni>
-			<SitePath>..\..\..\Teleopti.Ccc.Web</SitePath>
-		</PropertyGroup>
-		
+
 		<ItemGroup>
 			<!-- MSBuild escape sequence is "% + ASCIIVALUE". e.g [$] = "%24"  -->
 			<InfraTestIniLines Include="[TestDatabase]" />
@@ -291,9 +278,6 @@
 			<InfraTestIniLines Include="url=%22$(AgentPortalWebURL)%22" />
 			<InfraTestIniLines Include="servicebus=%22false%22" />
 			<InfraTestIniLines Include="create=%22true%22" />
-		</ItemGroup> 
-
-		<ItemGroup Condition="'$(ImADeveloper)' != 'TRUE'">
 			<InfraTestIniLines Include="IISExpress=%22true%22" />
 			<InfraTestIniLines Include="dbFile=%22$(InfraTestIni)%22" />
 		</ItemGroup> 

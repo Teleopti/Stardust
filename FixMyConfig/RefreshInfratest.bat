@@ -1,0 +1,1 @@
+COPY %~dp0InfraTest.ini C:\InfraTest.ini
