@@ -7,20 +7,13 @@
 		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
 		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
 		<DBNamePrefix>$(Computername)_$(CCNetProject)</DBNamePrefix>
-		<AgentPortalWebSiteName>$(CCNetProject)-AgentPortalWeb</AgentPortalWebSiteName>
-		<AgentPortalWebSitePath>C:\inetpub\wwwroot\$(AgentPortalWebSiteName)</AgentPortalWebSitePath>
-		<AgentPortalWebURL>http://$(Computername)/$(AgentPortalWebSiteName)/</AgentPortalWebURL>		
-		<WEB_BROKER>$(AgentPortalWebURL)</WEB_BROKER>
-		<WEB_BROKER_BACKPLANE></WEB_BROKER_BACKPLANE>
 		<AgentPortalWebCreator>"$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\AgentPortalWeb.bat"</AgentPortalWebCreator>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
 		<DoCodeAnalysis>false</DoCodeAnalysis>
 		<RunWebBehaviorTests>true</RunWebBehaviorTests>
-		<SQL_LOGIN>sa</SQL_LOGIN>
-		<SQL_PASSWORD>cadadi</SQL_PASSWORD>
-		<InfraTestIni>$(CCNetWorkingDirectory)\ccnet\InfraTest.ini</InfraTestIni>
-				
+		<AgentPortalWebSiteName>$(CCNetProject)-AgentPortalWeb</AgentPortalWebSiteName>
+	
 		<vs2020ide>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe</vs2020ide>
 		<AsDBDeploy>C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\ManagementStudio\Microsoft.AnalysisServices.Deployment.exe</AsDBDeploy>
 
@@ -203,7 +196,7 @@
 	<Target Name="CreateAgentPortalWeb" Condition="'$(RunWebBehaviorTests)' == 'true'" DependsOnTargets="FixConfigFiles">
 		<!-- create web site/app/VirDir + Copy content-->
 		<Message Importance="high" Text="$(AgentPortalWebCreator) $(AgentPortalWebSiteName) $(DBNamePrefix)_ccc7 $(DBNamePrefix)_analytics"/>
-		<Exec Command = "$(AgentPortalWebCreator) $(AgentPortalWebSiteName) $(AgentPortalWebURL)" />
+		<Exec Command = "$(AgentPortalWebCreator) $(AgentPortalWebSiteName) http://$(Computername)/$(AgentPortalWebSiteName)" />
 	</Target>
 
 	<Target Name="CreateAnalyticsDb" DependsOnTargets="BuildDBManager">
@@ -266,35 +259,50 @@
 	<Target Name="FixConfigFiles">
 		<Message Importance="high" Text="Fixing config files..." />	
 
-		<!-- Only called from RestoreToLocal -->
+		<PropertyGroup>
+			<AgentPortalWebURL>http://$(Computername)/$(AgentPortalWebSiteName)/</AgentPortalWebURL>		
+			<WEB_BROKER>$(AgentPortalWebURL)</WEB_BROKER>
+			<WEB_BROKER_BACKPLANE></WEB_BROKER_BACKPLANE>
+			<SQL_LOGIN>sa</SQL_LOGIN>
+			<SQL_PASSWORD>cadadi</SQL_PASSWORD>
+			<InfraTestIni>$(CCNetWorkingDirectory)\ccnet\InfraTest.ini</InfraTestIni>
+			<!-- <SitePath>C:\inetpub\wwwroot\$(AgentPortalWebSiteName)</SitePath> -->
+			<SitePath>$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web</SitePath>		
+		</PropertyGroup>		
+		
+		<!-- If called manually we us ImADeveloper -->
 		<PropertyGroup Condition="'$(ImADeveloper)' == 'TRUE'" >
 			<DBNamePrefix>Infratest</DBNamePrefix>
 			<DBServer>$(Computername)</DBServer>
 			<SQL_LOGIN>sa</SQL_LOGIN>
 			<SQL_PASSWORD>cadadi</SQL_PASSWORD>
-			<AgentPortalWebURL>http://localhost/</AgentPortalWebURL>		
-			<WEB_BROKER>$(AgentPortalWebURL)</WEB_BROKER>
+			<AgentPortalWebURL>http://localhost:52858/</AgentPortalWebURL>		
+			<WEB_BROKER>http://localhost:52858/</WEB_BROKER>
 			<WEB_BROKER_BACKPLANE></WEB_BROKER_BACKPLANE>
 			<InfraTestIni>c:\InfraTest.ini</InfraTestIni>
+			<SitePath>..\..\..\Teleopti.Ccc.Web</SitePath>
 		</PropertyGroup>
 		
 		<ItemGroup>
 			<!-- MSBuild escape sequence is "% + ASCIIVALUE". e.g [$] = "%24"  -->
 			<InfraTestIniLines Include="[TestDatabase]" />
-			<InfraTestIniLines Include="DB_CCC7=$(DBNamePrefix)_ccc7" />
-			<InfraTestIniLines Include="SQL_SERVER_NAME=$(DBServer)" />
-			<InfraTestIniLines Include="SQL_LOGIN=$(SQL_LOGIN)" />			
-			<InfraTestIniLines Include="SQL_PASSWORD=$(SQL_PASSWORD)" />
-			<InfraTestIniLines Include="AGENTPORTALWEB_nhibConfPath=bin" />
-			<InfraTestIniLines Include="DB_ANALYTICS=$(DBNamePrefix)_analytics" />
-			<InfraTestIniLines Include="WEB_BROKER=$(WEB_BROKER)" />
-			<InfraTestIniLines Include="WEB_BROKER_BACKPLANE=$(WEB_BROKER_BACKPLANE)" />	
-			<InfraTestIniLines Include="SitePath=$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web" />
-			<InfraTestIniLines Include="url=http://localhost/" />
-			<InfraTestIniLines Include="servicebus=false" />
-			<InfraTestIniLines Include="create=true" />
-			<InfraTestIniLines Include="IISExpress=true" />
-			<InfraTestIniLines Include="dbFile=$(InfraTestIni)" />
+			<InfraTestIniLines Include="DB_CCC7=%22$(DBNamePrefix)_ccc7%22" />
+			<InfraTestIniLines Include="SQL_SERVER_NAME=%22$(DBServer)%22" />
+			<InfraTestIniLines Include="SQL_LOGIN=%22$(SQL_LOGIN)%22" />			
+			<InfraTestIniLines Include="SQL_PASSWORD=%22$(SQL_PASSWORD)%22" />
+			<InfraTestIniLines Include="AGENTPORTALWEB_nhibConfPath=%22bin%22" />
+			<InfraTestIniLines Include="DB_ANALYTICS=%22$(DBNamePrefix)_analytics%22" />
+			<InfraTestIniLines Include="WEB_BROKER=%22$(WEB_BROKER)%22" />
+			<InfraTestIniLines Include="WEB_BROKER_BACKPLANE=%22$(WEB_BROKER_BACKPLANE)%22" />	
+			<InfraTestIniLines Include="SitePath=%22$(SitePath)%22" />
+			<InfraTestIniLines Include="url=%22$(AgentPortalWebURL)%22" />
+			<InfraTestIniLines Include="servicebus=%22false%22" />
+			<InfraTestIniLines Include="create=%22true%22" />
+		</ItemGroup> 
+
+		<ItemGroup Condition="'$(ImADeveloper)' != 'TRUE'">
+			<InfraTestIniLines Include="IISExpress=%22true%22" />
+			<InfraTestIniLines Include="dbFile=%22$(InfraTestIni)%22" />
 		</ItemGroup> 
 		
 		<WriteLinesToFile File="$(InfraTestIni)" 
