@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -11,14 +12,16 @@ namespace Teleopti.Ccc.DomainTest.Common
 {
 	[TestFixture]
 	public class VirtualSchedulePeriodFinderTest
-	{		
-		[Test]
+	{
+	    
+	    [Test]
 		public void ShouldFindVirtualSchedulePeriods()
 		{
 			var date = new DateOnly(2000, 1, 1);
 			var personContract = PersonContractFactory.CreatePersonContract("Contract", "Testing", "Test");
 			var team = TeamFactory.CreateSimpleTeam();
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, personContract, team);
+	        var _personAccountUpdater = new MockRepository().StrictMock<IPersonAccountUpdater>();
 
 			var schedulePeriod1 = new SchedulePeriod(new DateOnly(2011, 06, 06), SchedulePeriodType.Week, 4);
 			var schedulePeriod2 = new SchedulePeriod(new DateOnly(2011, 06, 13), SchedulePeriodType.Week, 2);
@@ -64,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			Assert.AreEqual(new VirtualSchedulePeriod(person, new DateOnly(2011, 07, 27), checker), virtualSchedulePeriods4[0]);
 
-		    person.TerminalDate = new DateOnly(2011, 06, 10);
+		    person.TerminatePerson(new DateOnly(2011, 06, 10),_personAccountUpdater);
             var virtualSchedulePeriods = periodFinder.FindVirtualPeriods(new DateOnlyPeriod(new DateOnly(2011, 06, 10), new DateOnly(2011, 07, 29)));
             Assert.AreEqual(1, virtualSchedulePeriods.Count);
 		}

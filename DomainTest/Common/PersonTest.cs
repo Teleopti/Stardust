@@ -22,13 +22,16 @@ namespace Teleopti.Ccc.DomainTest.Common
     public class PersonTest
     {
         private IPerson _target;
-      
+        private MockRepository _mockRepository;
+        private IPersonAccountUpdater _personAccountUpdater;
         /// <summary>
         /// Runs once per test
         /// </summary>
         [SetUp]
         public void Setup()
         {
+            _mockRepository = new MockRepository();
+            _personAccountUpdater = _mockRepository.StrictMock<IPersonAccountUpdater>();
             _target = new Person();
         }
 
@@ -61,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             _target.Email = email;
             _target.Note = note;
             _target.EmploymentNumber = employmentNumber;
-            _target.TerminalDate = date;
+            _target.TerminatePerson(date, _personAccountUpdater);
             bool newBuiltIn = !_target.BuiltIn;
             _target.BuiltIn = newBuiltIn;
             Assert.AreEqual(date, _target.TerminalDate);
@@ -258,7 +261,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             _target.AddPersonPeriod(personPeriod2);
             Assert.AreEqual(2, _target.PersonPeriodCollection.Count());
 
-            _target.TerminalDate = new DateOnly(2002, 1, 1);
+            _target.TerminatePerson(new DateOnly(2002, 1, 1), _personAccountUpdater);
 
             Assert.AreEqual(1, _target.PersonPeriodCollection.Count());
         }
@@ -273,7 +276,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			_target.AddPersonPeriod(personPeriod1);
 			_target.AddPersonPeriod(personPeriod2);
 
-			_target.TerminalDate = new DateOnly(2002, 1, 2);
+			_target.TerminatePerson(new DateOnly(2002, 1, 2), _personAccountUpdater);
 
 			Assert.AreEqual(_target.TerminalDate.Value, _target.PersonPeriodCollection[1].EndDate());
 		}
@@ -434,7 +437,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreEqual(1, personPeriodCollection.Count);
 
             dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2002, 1, 1),new DateOnly(2020, 1, 1));
-            _target.TerminalDate = new DateOnly(2001, 1, 1);
+            _target.TerminatePerson(new DateOnly(2001, 1, 1), _personAccountUpdater);
             personPeriodCollection = _target.PersonPeriods(dateOnlyPeriod);
             Assert.AreEqual(0, personPeriodCollection.Count);
 
@@ -459,7 +462,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.IsTrue(personScheduleCollection.Contains(period1));
             Assert.IsTrue(personScheduleCollection.Contains(period2));
 
-            _target.TerminalDate = new DateOnly(2005, 1, 1);
+            _target.TerminatePerson(new DateOnly(2005, 1, 1), _personAccountUpdater);
             dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2005, 10, 10), new DateOnly(2006, 10, 10));
             personScheduleCollection = _target.PersonSchedulePeriods(dateOnlyPeriod);
             Assert.AreEqual(0, personScheduleCollection.Count);
@@ -558,7 +561,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             _target.AddPersonPeriod(personPeriod1);
             _target.AddPersonPeriod(personPeriod2);
             _target.AddPersonPeriod(personPeriod3);
-            _target.TerminalDate = new DateOnly(2009, 1, 8);
+            _target.TerminatePerson(new DateOnly(2009, 1, 8), _personAccountUpdater);
 
             Assert.AreEqual(109, _target.Seniority);
         }
@@ -576,13 +579,13 @@ namespace Teleopti.Ccc.DomainTest.Common
 
             _target.AddPersonPeriod(personPeriodA1);
 
-            _target.TerminalDate = dateTime;
+            _target.TerminatePerson(dateTime, _personAccountUpdater);
 
             DateOnly dateOnly = new DateOnly(2000, 1, 2);
             Assert.IsNotNull(_target.Period(dateOnly));
             Assert.AreEqual(1, _target.PersonPeriods(new DateOnlyPeriod(dateTime, dateTime)).Count);
 
-            _target.TerminalDate = new DateOnly(dateTime1);
+            _target.TerminatePerson(new DateOnly(dateTime1), _personAccountUpdater);
 
             Assert.IsNull(_target.Period(dateOnly));
             Assert.AreEqual(0, _target.PersonPeriods(new DateOnlyPeriod(dateTime1, dateTime1)).Count);
@@ -600,12 +603,12 @@ namespace Teleopti.Ccc.DomainTest.Common
 
             _target.AddSchedulePeriod(period1);
 
-            _target.TerminalDate = dateTime;
+            _target.TerminatePerson(dateTime,_personAccountUpdater);
 
 
             Assert.IsNotNull(_target.SchedulePeriod(dateTime));
 
-            _target.TerminalDate = dateTime1;
+            _target.TerminatePerson(dateTime1, _personAccountUpdater);
 
             Assert.IsNull(_target.SchedulePeriod(dateTime));
 
@@ -784,5 +787,45 @@ namespace Teleopti.Ccc.DomainTest.Common
             _target.AddSchedulePeriod(schedulePeriod);
             Assert.That(_target.AverageWorkTimeOfDay(dateOnly), Is.EqualTo(TimeSpan.FromMinutes(schedulePeriod.PeriodTime.Value.TotalMinutes / 19)));
         }
+
+	    [Test]
+	    public void ShuoldPersonAccountUpdaterCalledWhenTerminatePerson()
+	    {
+			DateOnly dateOnly = new DateOnly();
+		    MockRepository mocks = new MockRepository();
+			var personAccountUpdater = mocks.StrictMock<IPersonAccountUpdater>();
+	        var scenario = mocks.DynamicMock<IScenario>();
+		    using (mocks.Record())
+		    {
+			   Expect.Call(() => personAccountUpdater.Update(_target))
+				   .Repeat.Once();
+		    }
+		    using (mocks.Playback())
+		    {
+				_target.TerminatePerson(dateOnly, personAccountUpdater);
+		    }
+
+
+	    }
+
+		[Test]
+		public void ShouldPersonAccountUpdaterCalledWhenActivatePerson()
+		{
+			MockRepository mocks = new MockRepository();
+			var personAccountUpdater = mocks.StrictMock<IPersonAccountUpdater>();
+            var scenario = mocks.DynamicMock<IScenario>();
+
+			using (mocks.Record())
+			{
+				Expect.Call(() => personAccountUpdater.Update(_target))
+					.Repeat.Once();
+			}
+			using (mocks.Playback())
+			{
+				_target.ActivatePerson(personAccountUpdater);
+			}
+
+
+		}
     }
 }
