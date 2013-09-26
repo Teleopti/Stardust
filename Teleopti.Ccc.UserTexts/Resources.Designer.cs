@@ -16555,6 +16555,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Per Date.
+        /// </summary>
+        public static string PerDate {
+            get {
+                return ResourceManager.GetString("PerDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Performance Manager.
         /// </summary>
         public static string PerformanceManager {
@@ -21345,6 +21354,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShiftCategoryColon {
             get {
                 return ResourceManager.GetString("ShiftCategoryColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shift Category Distributions.
+        /// </summary>
+        public static string ShiftCategoryDistributions {
+            get {
+                return ResourceManager.GetString("ShiftCategoryDistributions", resourceCulture);
             }
         }
         

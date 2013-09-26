@@ -11760,7 +11760,7 @@ Reduce the complexity to use these shifts.</value>
   <data name="WorkTimeHeader" xml:space="preserve">
     <value>Work Time</value>
     <comment>Work time header</comment>
-	</data>
+  </data>
   <data name="FilterHourlyAvailability" xml:space="preserve">
     <value>Filter Hourly Availability</value>
     <comment>Caption button to Filter on hourly availability</comment>
@@ -11784,5 +11784,13 @@ Reduce the complexity to use these shifts.</value>
   <data name="ShiftAsOvertime" xml:space="preserve">
     <value>Shift as overtime</value>
     <comment>Used when transforming a shift to a overtime shift</comment>
+  </data>
+  <data name="PerDate" xml:space="preserve">
+    <value>Per Date</value>
+    <comment>Header in shift distributions scheduler</comment>
+  </data>
+  <data name="ShiftCategoryDistributions" xml:space="preserve">
+    <value>Shift Category Distributions</value>
+    <comment>Header for distributions of shift categories in scheduler</comment>
   </data>
 </root>
