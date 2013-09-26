@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			_schedulerStateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
             _populationStatisticsCalculator = new PopulationStatisticsCalculator(true );
 			_target = new ShiftCategoryDistributionModel(_cachedShiftCategoryDistribution, _cachedNumberOfEachCategoryPerDate, _cachedNumberOfEachCategoryPerPerson,
-			                                             new DateOnlyPeriod(2013, 09, 16, 2013, 09, 17), _schedulerStateHolder,_populationStatisticsCalculator );
+														 new DateOnlyPeriod(2013, 09, 16, 2013, 09, 17), _schedulerStateHolder, _populationStatisticsCalculator);
 		}
 
 		[Test]
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			var person1 = PersonFactory.CreatePerson("Bertil");
 			var person2 = PersonFactory.CreatePerson("Adam");
 			var filteredPersons = new List<IPerson> { person1, person2 };
-			
+
 
 			var cat1 = new ShiftCategory("B");
 			IDictionary<IShiftCategory, int> value1 = new Dictionary<IShiftCategory, int>();

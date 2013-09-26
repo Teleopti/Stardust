@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			_model = model;
 			model.ResetNeeded -= modelResetNeeded;
 			model.ResetNeeded += modelResetNeeded;
-			model.UpdateChartNeeded += modelUpdateChartNeeded;
+			model.CachedShiftCategoryDistribution.PartModified += modelUpdateChartNeeded;
 			fillCombo();
 			UpdateChart();
 		}
