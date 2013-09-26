@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
         private TeleoptiLessIntelligentSplitContainer _restrictionViewSplitter;
 
         public TeleoptiLessIntelligentSplitContainer MainSplitter { get; set; }
+		public TeleoptiLessIntelligentSplitContainer LeftMainSplitter { get; set; }
         public TeleoptiLessIntelligentSplitContainer GraphResultSplitter { get; set; }
 
         public TeleoptiLessIntelligentSplitContainer RestrictionViewSplitter
@@ -69,12 +70,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
                 GridEditorSplitter.SplitterWidth = 7;
                 //GridEditorSplitter.SplitterDistance = GridEditorSplitter.Height - _editorHeight;
 
-                int preferedMainSplitterDistance = MainSplitter.Height - _editorHeight - MainSplitter.Panel2MinSize;
+				int preferedMainSplitterDistance = LeftMainSplitter.Height - _editorHeight - LeftMainSplitter.Panel2MinSize;
 
-                if (MainSplitter.SplitterDistance > preferedMainSplitterDistance)
+				if (LeftMainSplitter.SplitterDistance > preferedMainSplitterDistance)
                 {
-                    if(preferedMainSplitterDistance >= MainSplitter.Panel1MinSize)
-                        MainSplitter.SplitterDistance = preferedMainSplitterDistance;
+					if (preferedMainSplitterDistance >= LeftMainSplitter.Panel1MinSize)
+						LeftMainSplitter.SplitterDistance = preferedMainSplitterDistance;
                 }
             }
         }
@@ -120,8 +121,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
                 return _showRestrictionView;
             }
         }
-
-        private void toggleRestrictionView()
+		
+	    private void toggleRestrictionView()
         {
             if (!_showRestrictionView)
             {
@@ -162,21 +163,21 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
         {
             bool bothHidden = !_showGraph && !_showResult;
 
-            MainSplitter.Panel1Collapsed = bothHidden;
-            MainSplitter.IsSplitterFixed = bothHidden;
+			LeftMainSplitter.Panel1Collapsed = bothHidden;
+			LeftMainSplitter.IsSplitterFixed = bothHidden;
             GraphResultSplitter.IsSplitterFixed = bothHidden;
 
             if (bothHidden)
             {
-                MainSplitter.SplitterWidth = 1;
-                MainSplitter.Style = Style.None;
+				LeftMainSplitter.SplitterWidth = 1;
+				LeftMainSplitter.Style = Style.None;
                 GraphResultSplitter.SplitterWidth = 1;
                 GraphResultSplitter.Style = Style.None;
             }
             else
             {
-                MainSplitter.Style = Style.Office2007Blue;
-                MainSplitter.SplitterWidth = 7;
+				LeftMainSplitter.Style = Style.Office2007Blue;
+				LeftMainSplitter.SplitterWidth = 7;
                 GraphResultSplitter.Style = Style.Office2007Blue;
                 GraphResultSplitter.SplitterWidth = 7;
             }
@@ -221,6 +222,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
             _gridEditorSplitter = null;
             _restrictionViewSplitter = null;
             MainSplitter = null;
+			LeftMainSplitter = null;
             GraphResultSplitter = null;
         }
         #endregion

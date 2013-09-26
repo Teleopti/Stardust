@@ -13,11 +13,12 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="modifier">The modifier.</param>
         /// <param name="person">The person.</param>
         /// <param name="period">The period.</param>
-        public ModifyEventArgs(ScheduleModifier modifier, IPerson person, DateTimePeriod period)
+        public ModifyEventArgs(ScheduleModifier modifier, IPerson person, DateTimePeriod period, IScheduleDay modifiedPart)
         {
             Modifier = modifier;
             ModifiedPerson = person;
             ModifiedPeriod = period;
+	        ModifiedPart = modifiedPart;
         }
 
         /// <summary>
@@ -41,5 +42,11 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value></value>
         public DateTimePeriod ModifiedPeriod { get; private set; }
+
+		public IScheduleDay ModifiedPart
+		{
+			get;
+			private set;
+		}
     }
 }
