@@ -206,11 +206,17 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 							var url = "/" + a.Area + "/";
 							return window.location.href.indexOf(url) !== -1;
 						});
+						
+						var anywhereApplication = ko.utils.arrayFirst(applicationsData, function (a) {
+							return a.Area === "Anywhere";
+						});
 
 						if (inApplication)
 							area = inApplication.Area;
 						else if (applicationsData.length == 1)
 							area = applicationsData[0].Area;
+						else if (anywhereApplication)
+							area = anywhereApplication.Area;
 
 						if (area) {
 							window.location.href = data.baseUrl + area;
