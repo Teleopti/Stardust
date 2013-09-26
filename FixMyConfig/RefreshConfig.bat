@@ -30,7 +30,7 @@ cscript replace.vbs "TeleoptiCCC7_Demo" "%CCC7DB%" "%MySettings%" > NUL
 
 ::Build Teleopti.Support.Tool.exe
 ECHO Building %ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj
-%MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" > "%ROOTDIR%\Teleopti.Support.Tool.build.log"
+%MSBUILD% /t:rebuild "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" > "%ROOTDIR%\Teleopti.Support.Tool.build.log"
 
 ::Run supportTool to replace all config
 "%ROOTDIR%\..\Teleopti.Support.Tool\bin\Debug\Teleopti.Support.Tool.exe" -MODebug
