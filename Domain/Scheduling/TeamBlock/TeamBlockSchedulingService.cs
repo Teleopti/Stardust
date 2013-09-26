@@ -63,6 +63,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 				foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))
 				{
+					if (_cancelMe)
+						break;
+
 					if (!teamSteadyStateHolder.IsSteadyState(teamInfo.GroupPerson))
 						continue;
 
@@ -84,6 +87,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                             var rollbackExecuted = false;
                             foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(datePointer))
                             {
+								if (_cancelMe)
+									break;
+
                                 _workShiftMinMaxCalculator.ResetCache();
                                 if (!_workShiftMinMaxCalculator.IsPeriodInLegalState(matrix, _schedulingOptions))
                                 {
