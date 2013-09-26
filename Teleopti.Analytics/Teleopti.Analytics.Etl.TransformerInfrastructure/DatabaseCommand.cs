@@ -115,7 +115,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 	        return conn;
         }
 
-		private SqlTransaction OpenTransaction(SqlConnection connection)
+		private static SqlTransaction OpenTransaction(SqlConnection connection)
 		{
 			return connection.BeginTransaction();
 		}
