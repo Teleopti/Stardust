@@ -2,11 +2,13 @@
 
 SET CCNetWorkDir=%~1
 SET TargetDir=%~2
-SET CCC7DB=%~3
-SET AnalyticsDB=%~4
+SET DB_CCC7=%~3
+SET DB_ANALYTICS=%~4
 SET config=%~5
 SET AppSqlLogin=%~6
 SET AppSqlPwd=%~7
+
+SET SQL_AUTH_STRING=Data Source=%computername%;User Id=%AppSqlLogin%;Password=%AppSqlPwd%
 
 ::Delete target Dir
 ECHO RMDIR "%TargetDir%" /S /Q
@@ -28,11 +30,10 @@ COPY "%CCNetWorkDir%\BuildArtifacts\AppETLService.config" "%TargetDir%\Teleopti.
 COPY "%CCNetWorkDir%\BuildArtifacts\TeleoptiCCC7.nhib.xml" "%TargetDir%\TeleoptiCCC7.nhib.xml" /Y
 
 ::replace dbnames
-cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" $(CCC7DB) %CCC7DB% "%TargetDir%\TeleoptiCCC7.nhib.xml"
-cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" $(AnalyticsDB) %AnalyticsDB% "%TargetDir%\TeleoptiCCC7.nhib.xml"
-cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" $(AnalyticsDB) %AnalyticsDB% "%TargetDir%\Teleopti.Analytics.Etl.ServiceHost.exe.config"
-cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" $(SitePath) "%TargetDir%" "%TargetDir%\Teleopti.Analytics.Etl.ServiceHost.exe.config"
+cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "$(DB_CCC7)" "%DB_CCC7%" "%TargetDir%\TeleoptiCCC7.nhib.xml"
+cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "$(DB_ANALYTICS)" "%DB_ANALYTICS%" "%TargetDir%\TeleoptiCCC7.nhib.xml"
+cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "$(SQL_AUTH_STRING)" "%SQL_AUTH_STRING%" "%TargetDir%\TeleoptiCCC7.nhib.xml"
 
-::lowered permission account
-cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "Integrated Security=True" "User Id=%AppSqlLogin%;Password=%AppSqlPwd%" "%TargetDir%\Teleopti.Analytics.Etl.ServiceHost.exe.config"
-cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "Integrated Security=True" "User Id=%AppSqlLogin%;Password=%AppSqlPwd%" "%TargetDir%\TeleoptiCCC7.nhib.xml"
+cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "$(DB_ANALYTICS)" "%DB_ANALYTICS%" "%TargetDir%\Teleopti.Analytics.Etl.ServiceHost.exe.config"
+cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "$(ETL_SERVICE_nhibConfPath)" "%TargetDir%" "%TargetDir%\Teleopti.Analytics.Etl.ServiceHost.exe.config"
+cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "$(SQL_AUTH_STRING)" "%SQL_AUTH_STRING%" "%TargetDir%\Teleopti.Analytics.Etl.ServiceHost.exe.config"
