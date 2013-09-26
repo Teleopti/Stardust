@@ -21358,11 +21358,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shift Category Distributions.
+        ///   Looks up a localized string similar to Shift Category Distribution.
         /// </summary>
-        public static string ShiftCategoryDistributions {
+        public static string ShiftCategoryDistribution {
             get {
-                return ResourceManager.GetString("ShiftCategoryDistributions", resourceCulture);
+                return ResourceManager.GetString("ShiftCategoryDistribution", resourceCulture);
             }
         }
         
