@@ -5,8 +5,10 @@ using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
+using Newtonsoft.Json;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
@@ -738,6 +740,35 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 
 			result.PossibleTradePersons.First().HasUnderlyingDayOff.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapMyScheduleFromReadModel()
+		{
+			var data = new ShiftTradeScheduleViewModelData {ShiftTradeDate = DateOnly.Today, LoadOnlyMyTeam = true};
+			var shift = new Shift
+				{
+					FirstName = "Arne", 
+					LastName = "Anka", 
+					Projection = new List<SimpleLayer>{new SimpleLayer
+						{
+							Start = DateTime.Now, End = DateTime.Now.AddHours(1), Color = "green", Title = "Phone", Minutes = 120
+						}}
+				};
+			var readModel = new PersonScheduleDayReadModel
+				{
+					PersonId = Guid.NewGuid(), 
+					ShiftStart = DateTime.Now,
+					Shift = JsonConvert.SerializeObject(shift)
+				};
+
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMySchedule(DateOnly.Today)).Return(readModel);
+
+			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
+
+			result.MySchedule.PersonId.Should().Be.EqualTo(readModel.PersonId);
+			result.MySchedule.StartTimeUtc.Should().Be.EqualTo(readModel.ShiftStart);
+			result.MySchedule.ScheduleLayers.First().Color.Should().Be.EqualTo(shift.Projection.First().Color);
 		}
 	}
 }

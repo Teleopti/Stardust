@@ -28,6 +28,9 @@ Background:
 	And OtherAgent has a person period with
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
+	And OtherAgent2 has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
 	And OtherAgentNotInMyTeam has a person period with
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
@@ -380,6 +383,7 @@ Scenario: Sort possible shift trades by starttime
 	And the current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see 'OtherAgent2' first in the list
+	And I should see 'OtherAgent' last in the list
 
 #Scenario för när man klickat i att shift trades utanför team ska visas
 

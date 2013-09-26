@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core.IoC;
@@ -20,11 +22,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
 		private const int TimeLineOffset = 15;
 
-		public ShiftTradeScheduleViewModelMappingProfile(IShiftTradeRequestProvider shiftTradeRequestProvider, 
-																										IProjectionProvider projectionProvider, 
-																										IShiftTradeTimeLineHoursViewModelFactory shiftTradeTimelineHoursViewModelFactory,
-																										IUserCulture userCulture,
-																										IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider)
+		public ShiftTradeScheduleViewModelMappingProfile(IShiftTradeRequestProvider shiftTradeRequestProvider, IProjectionProvider projectionProvider, 
+														IShiftTradeTimeLineHoursViewModelFactory shiftTradeTimelineHoursViewModelFactory, IUserCulture userCulture, 
+														IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider)
 		{
 			_shiftTradeRequestProvider = shiftTradeRequestProvider;
 			_projectionProvider = projectionProvider;
@@ -63,52 +63,63 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			CreateMap<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>()
 				.ConvertUsing(source =>
 					{
-						var myDomainScheduleDay = _shiftTradeRequestProvider.RetrieveMyScheduledDay(source.ShiftTradeDate);
-						var myScheduleDay = createPersonDay(myDomainScheduleDay.Person, myDomainScheduleDay);
-						var possibleShiftTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(source);
+						var myScheduleDayReadModel = _shiftTradeRequestProvider.RetrieveMySchedule(source.ShiftTradeDate);
+						var myShiftReadModel = JsonConvert.DeserializeObject<Shift>(myScheduleDayReadModel.Shift);
 
-						var possibleTradePersonsSchedule = _shiftTradeRequestProvider.RetrievePossibleTradePersonsScheduleDay(source.ShiftTradeDate, possibleShiftTradePersons);
-						var possibleTradePersonDayCollection = createPossibleTradePersonsDayCollection(possibleShiftTradePersons, possibleTradePersonsSchedule);
-
-						var timeLineRangeTot = setTimeLineRange(source.ShiftTradeDate, myScheduleDay.ScheduleLayers, possibleTradePersonDayCollection,
-																			 myScheduleDay.PersonTimeZone);
-
-						var myScheduleViewModel = new ShiftTradePersonScheduleViewModel
-							{
-								Name = UserTexts.Resources.MySchedule,
-								ScheduleLayers = createShiftTradeLayers(myScheduleDay, myScheduleDay.PersonTimeZone, timeLineRangeTot),
-								MinutesSinceTimeLineStart =
-									myScheduleDay.ScheduleLayers.Any() ? 
-										(int) myScheduleDay.ScheduleLayers.First()
-															.Period.StartDateTime.Subtract(timeLineRangeTot.StartDateTime)
-															.TotalMinutes : 
-										TimeLineOffset,
-								DayOffText = myScheduleDay.DayOffText,
-								HasUnderlyingDayOff = myScheduleDay.SignificantPartForDisplay == SchedulePartView.ContractDayOff,
-							};
-
-						var possibleTradePersonViewModelCollection = new List<ShiftTradePersonScheduleViewModel>();
-						possibleTradePersonViewModelCollection.AddRange(possibleTradePersonDayCollection
-																							.Select(personDay => new ShiftTradePersonScheduleViewModel
-																								{
-																									PersonId = personDay.PersonId,
-																									Name = personDay.Name,
-																									ScheduleLayers = createShiftTradeLayers(personDay, myScheduleDay.PersonTimeZone, timeLineRangeTot),
-																									MinutesSinceTimeLineStart =
-																										personDay.ScheduleLayers.Any() ?
-																											(int)personDay.ScheduleLayers.First()
-																												.Period.StartDateTime.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes : 
-																											TimeLineOffset,
-																									DayOffText = personDay.DayOffText,
-																									HasUnderlyingDayOff = personDay.SignificantPartForDisplay == SchedulePartView.ContractDayOff
-																								}));
 						return new ShiftTradeScheduleViewModel
 							{
-								MySchedule = myScheduleViewModel,
-								PossibleTradePersons = possibleTradePersonViewModelCollection,
-								TimeLineHours = createTimeLineHours(timeLineRangeTot),
-								TimeLineLengthInMinutes = (int)timeLineRangeTot.EndDateTime.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes
+								MySchedule = new ShiftTradePersonScheduleViewModel
+									{
+										PersonId = myScheduleDayReadModel.PersonId,
+										StartTimeUtc = myScheduleDayReadModel.ShiftStart.Value,
+										ScheduleLayers = myShiftReadModel
+									}
 							};
+						//var myScheduleDay = createPersonDay(myScheduleDayReadModel.Person, myScheduleDayReadModel);
+						//var possibleShiftTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(source);
+
+						//var possibleTradePersonsSchedule = _shiftTradeRequestProvider.RetrievePossibleTradePersonsScheduleDay(source.ShiftTradeDate, possibleShiftTradePersons);
+						//var possibleTradePersonDayCollection = createPossibleTradePersonsDayCollection(possibleShiftTradePersons, possibleTradePersonsSchedule);
+
+						//var timeLineRangeTot = setTimeLineRange(source.ShiftTradeDate, myScheduleDay.ScheduleLayers, possibleTradePersonDayCollection,
+						//													 myScheduleDay.PersonTimeZone);
+
+						//var myScheduleViewModel = new ShiftTradePersonScheduleViewModel
+						//	{
+						//		Name = UserTexts.Resources.MySchedule,
+						//		ScheduleLayers = createShiftTradeLayers(myScheduleDay, myScheduleDay.PersonTimeZone, timeLineRangeTot),
+						//		MinutesSinceTimeLineStart =
+						//			myScheduleDay.ScheduleLayers.Any() ? 
+						//				(int) myScheduleDay.ScheduleLayers.First()
+						//									.Period.StartDateTime.Subtract(timeLineRangeTot.StartDateTime)
+						//									.TotalMinutes : 
+						//				TimeLineOffset,
+						//		DayOffText = myScheduleDay.DayOffText,
+						//		HasUnderlyingDayOff = myScheduleDay.SignificantPartForDisplay == SchedulePartView.ContractDayOff,
+						//	};
+
+						//var possibleTradePersonViewModelCollection = new List<ShiftTradePersonScheduleViewModel>();
+						//possibleTradePersonViewModelCollection.AddRange(possibleTradePersonDayCollection
+						//																	.Select(personDay => new ShiftTradePersonScheduleViewModel
+						//																		{
+						//																			PersonId = personDay.PersonId,
+						//																			Name = personDay.Name,
+						//																			ScheduleLayers = createShiftTradeLayers(personDay, myScheduleDay.PersonTimeZone, timeLineRangeTot),
+						//																			MinutesSinceTimeLineStart =
+						//																				personDay.ScheduleLayers.Any() ?
+						//																					(int)personDay.ScheduleLayers.First()
+						//																						.Period.StartDateTime.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes : 
+						//																					TimeLineOffset,
+						//																			DayOffText = personDay.DayOffText,
+						//																			HasUnderlyingDayOff = personDay.SignificantPartForDisplay == SchedulePartView.ContractDayOff
+						//																		}));
+						//return new ShiftTradeScheduleViewModel
+						//	{
+						//		MySchedule = myScheduleViewModel,
+						//		PossibleTradePersons = possibleTradePersonViewModelCollection,
+						//		TimeLineHours = createTimeLineHours(timeLineRangeTot),
+						//		TimeLineLengthInMinutes = (int)timeLineRangeTot.EndDateTime.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes
+						//	};
 					});
 		}
 

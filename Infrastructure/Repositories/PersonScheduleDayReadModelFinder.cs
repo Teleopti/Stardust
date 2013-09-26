@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnly startDate, DateOnly endDate, Guid personId)
 		{
 			return _unitOfWork.Session().CreateSQLQuery(
-				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate")
+				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE PersonId IN (:personid) AND BelongsToDate Between :startdate AND :enddate")
 			                  .AddScalar("PersonId", NHibernateUtil.Guid)
 			                  .AddScalar("TeamId", NHibernateUtil.Guid)
 			                  .AddScalar("SiteId", NHibernateUtil.Guid)
@@ -38,9 +38,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			                  .AddScalar("ShiftStart", NHibernateUtil.DateTime)
 			                  .AddScalar("ShiftEnd", NHibernateUtil.DateTime)
 			                  .AddScalar("Shift", NHibernateUtil.Custom(typeof (CompressedString)))
-			                  .SetGuid("personid", personId)
 			                  .SetDateTime("startdate", startDate)
 			                  .SetDateTime("enddate", endDate)
+							  .SetParameterList("personid",new []{personId})
 			                  .SetResultTransformer(Transformers.AliasToBean(typeof (PersonScheduleDayReadModel)))
 			                  .SetReadOnly(true)
 			                  .List<PersonScheduleDayReadModel>();

@@ -26,6 +26,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			return _scheduleProvider.GetScheduleForPeriod(new DateOnlyPeriod(date, date)).FirstOrDefault();
 		}
 
+		public IPersonScheduleDayReadModel RetrieveMySchedule(DateOnly date)
+		{
+			throw new System.NotImplementedException();
+		}
+
 		public IEnumerable<IScheduleDay> RetrievePossibleTradePersonsScheduleDay(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons)
 		{
 			return _scheduleProvider.GetScheduleForPersons(date, possibleShiftTradePersons);

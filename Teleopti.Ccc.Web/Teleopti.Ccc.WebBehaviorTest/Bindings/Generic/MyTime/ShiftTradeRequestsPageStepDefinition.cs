@@ -83,6 +83,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertAnyContains(".shift-trade-agent-name", name);
 		}
 
+		[Then(@"I should see '(.*)' first in the list")]
+		public void ThenIShouldSeeFirstInTheList(string agentName)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".shift-trade-person-schedule-row:first-child:contains('{0}')", agentName));
+		}
+
+		[Then(@"I should see '(.*)' last in the list")]
+		public void ThenIShouldSeeLastInTheList(string agentName)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".shift-trade-person-schedule-row:first-child:contains('{0}')", agentName));
+		}
+
 		[Then(@"I should not see a possible schedule trade with '(.*)'")]
 		public void ThenIShouldNotSeeAPossibleScheduleTradeWith(string name)
 		{
