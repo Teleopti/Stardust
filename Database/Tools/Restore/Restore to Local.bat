@@ -284,7 +284,7 @@ SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\tsql\Ad
 ECHO.
 CHOICE /C yn /M "Fix my config?"
 IF ERRORLEVEL 2 GOTO Finish
-IF ERRORLEVEL 1 CALL "%ROOTDIR%\..\..\..\BuildArtifacts\FixMyConfig\RefreshConfig.bat" "%Branch%_%Customer%_TeleoptiCCC7" "%Branch%_%Customer%_TeleoptiAnalytics"
+IF ERRORLEVEL 1 CALL "%ROOTDIR%\..\..\..\FixMyConfig\RefreshConfig.bat" "%Branch%_%Customer%_TeleoptiCCC7" "%Branch%_%Customer%_TeleoptiAnalytics"
 
 GOTO Finish
 

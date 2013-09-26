@@ -2,13 +2,21 @@
 SETLOCAL
 SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-1%
-SET masterSettings=%ROOTDIR%\..\settings.txt
+SET masterSettings=%ROOTDIR%\settings.txt
 SET CCC7DB=%1
 SET AnalyticsDB=%2
 set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
-SET MySettings=%ROOTDIR%\..\..\Teleopti.Support.Code\settings.txt
+SET MySettings=%ROOTDIR%\..\Teleopti.Support.Code\settings.txt
  
 cd %ROOTDIR%
+
+if "%1" == "" (
+SET /P CCC7DB=CCC7B?
+)
+
+if "%2" == "" (
+SET /P AnalyticsDB=AnalyticsDB?
+)
 
 taskkill /IM WebDev.WebServer40.EXE /F
 taskkill /IM WebDev.WebServer20.EXE /F
@@ -21,11 +29,11 @@ cscript replace.vbs "TeleoptiAnalytics_Demo" "%AnalyticsDB%" "%MySettings%" > NU
 cscript replace.vbs "TeleoptiCCC7_Demo" "%CCC7DB%" "%MySettings%" > NUL
 
 ::Build Teleopti.Support.Tool.exe
-ECHO Building %ROOTDIR%\..\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj
-%MSBUILD% "%ROOTDIR%\..\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" > "%ROOTDIR%\Teleopti.Support.Tool.build.log"
+ECHO Building %ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj
+%MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" > "%ROOTDIR%\Teleopti.Support.Tool.build.log"
 
 ::Run supportTool to replace all config
-"%ROOTDIR%\..\..\Teleopti.Support.Tool\bin\Debug\Teleopti.Support.Tool.exe" -MODebug
+"%ROOTDIR%\..\Teleopti.Support.Tool\bin\Debug\Teleopti.Support.Tool.exe" -MODebug
 
 ENDLOCAL
 goto:eof
