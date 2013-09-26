@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			Series.Clear();
 
 			Dock = DockStyle.Fill;
-			PrimaryXAxis.ForceZero = true;
+			//PrimaryXAxis.ForceZero = true;
 			PrimaryYAxis.ForceZero = true;
 			BackColor = ColorHelper.ChartControlBackColor();
 			BackInterior = ColorHelper.ChartControlBackInterior();

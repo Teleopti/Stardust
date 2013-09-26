@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Drawing;
-using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Interfaces.Domain;
 
@@ -18,11 +18,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		private PerShiftCategoryChart perShiftCategoryChart1;
 		private Label label1;
 		private TableLayoutPanel tableLayoutPanel1;
-        //private IDistributionInformationExtractor _model;
-		//private TableLayoutPanel tableLayoutPanel1;
-		//private readonly PerShiftCategoryChart _chart;
-		//private ComboBoxAdv _comboBoxShiftCategory;
-		//private Label label1;
 		private IShiftCategoryDistributionModel _model;
        
         
@@ -31,145 +26,11 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             InitializeComponent();
 			if(!DesignMode)
 				SetTexts();
-			//_chart = new PerShiftCategoryChart();
-			//tableLayoutPanel1.Controls.Add(label1, 0, 0);
-			//tableLayoutPanel1.Controls.Add(_comboBoxShiftCategory,0,1);
-			//tableLayoutPanel1.Controls.Add(_chart, 0, 2);
         }
-
-		//private void selectedIndexChanged(object sender, EventArgs e)
-		//{
-		//	updateChart();
-		//}
-
-		//public void UpdateModel(IDistributionInformationExtractor model)
-		//{
-		//	_model = model;
-		//	_comboBoxShiftCategory.Items.Clear();
-		//	foreach (var shiftCategory in _model.GetShiftCategories().OrderBy(s => s.Description.Name))
-		//	{
-		//		_comboBoxShiftCategory.Items.Add(shiftCategory.Description.Name);
-		//	}
-		//	if (_comboBoxShiftCategory.Items.Count > 0)
-		//		_comboBoxShiftCategory.SelectedIndex = 0;
-		//	updateChart();
-		//}
-
-		//private void updateChart()
-		//{
-		//	//IShiftCategory selectedShiftCategory = null;
-		//	_chart.Series.Clear();
-		//	//var tempList =
-		//	//	_model.GetShiftCategories().Where(
-		//	//		shiftCategory => shiftCategory.Description.Name.Equals(_comboBoxShiftCategory.SelectedItem)).ToArray();
-		//	//if (tempList.Any())
-		//	//{
-		//	//	selectedShiftCategory = tempList.FirstOrDefault();
-		//	//}
-		//	//else
-		//	//{
-		//	//	assignValuesToChart(null);
-		//	//}
-		//	//if (selectedShiftCategory == null) return;
-
-		//	//assignValuesToChart(selectedShiftCategory);
-		//}
-
-		//private void assignValuesToChart(IShiftCategory selectedShiftCategory)
-		//{
-			
-		//	if (selectedShiftCategory == null)
-		//	{
-		//		_chart.ShowLegend = true;
-		//		var chartSeriesTemp = new ChartSeries(UserTexts.Resources.NoDataAvailable);
-		//		chartSeriesTemp.Style.Interior = new BrushInfo(_chart.BackColor);
-		//		_chart.Model.Series.Add(chartSeriesTemp);
-		//		chartSeriesTemp.Points.Add(0, 0);
-		//		_chart.LegendAlignment = ChartAlignment.Center;
-		//	}
-		//	else
-		//	{
-		//		_chart.ShowLegend = false;
-		//		var chartSeries = new ChartSeries(selectedShiftCategory.Description.Name);
-		//		chartSeries.Style.Font.Facename = "Microsoft Sans Serif";
-		//		chartSeries.Style.Interior = new BrushInfo(selectedShiftCategory.DisplayColor);
-		//		_chart.Model.Series.Add(chartSeries);
-		//		//Dictionary<int, int> frequency = _model.GetShiftCategoryFrequency(selectedShiftCategory);
-		//		//frequency = addFakeValuesForEmptyPoints(frequency);
-		//		//_chart.PrimaryXAxis.Range = new MinMaxInfo(0, frequency.Count, 1);
-
-		//		//foreach (var item in frequency)
-		//		//{
-		//		//	chartSeries.Points.Add(item.Key, item.Value);    
-		//		//}	
-		//	}    
-		//}
-
-		//private Dictionary<int, int> addFakeValuesForEmptyPoints(IDictionary<int, int> frequency)
-		//{
-		//	var adjustededFrequency = new Dictionary<int, int>();
-		//	var max = frequency.Select(keyValuePair => keyValuePair.Key).Concat(new[] {0}).Max();
-
-		//	for (var i = 1; i <= max + 1; i++)
-		//	{
-		//		if (!frequency.ContainsKey(i))
-		//		{
-		//			adjustededFrequency.Add(i,0);
-		//		}
-		//		else
-		//		{
-		//			var value = frequency[i];
-		//			adjustededFrequency.Add(i, value);
-		//		}
-		//	}
-
-		//	return adjustededFrequency;
-		//}
-
-		//private void initializeComponent()
-		//{
-		//	//label1 = new Label();
-		//	//_comboBoxShiftCategory = new ComboBoxAdv();
-		//	//_comboBoxShiftCategory.Margin = new Padding(33, 3, 3, 3);
-		//	//_comboBoxShiftCategory.SelectedIndexChanged += selectedIndexChanged;
-		//	//_comboBoxShiftCategory.DropDownStyle = ComboBoxStyle.DropDownList;
-		//	//_comboBoxShiftCategory.Style = VisualStyle.Office2007;
-		//	//tableLayoutPanel1 = new TableLayoutPanel();
-		//	//SuspendLayout();
-		//	//// 
-		//	//// tableLayoutPanel1
-		//	//// 
-		//	//tableLayoutPanel1.ColumnCount = 1;
-		//	//tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-		//	//tableLayoutPanel1.Dock = DockStyle.Fill;
-		//	//tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-		//	//tableLayoutPanel1.Name = "tableLayoutPanel1";
-		//	//tableLayoutPanel1.RowCount = 3;
-		//	//tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-		//	//tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-		//	//tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-		//	//tableLayoutPanel1.Size = new System.Drawing.Size(150, 150);
-		//	//tableLayoutPanel1.TabIndex = 0;
-		//	//// 
-		//	//// PerShiftCategoryChartControl
-		//	//// 
-		//	//Controls.Add(tableLayoutPanel1);
-		//	//Name = "PerShiftCategoryChartControl";
-		//	//ResumeLayout(false);
-		//	//// 
-		//	//// label1
-		//	//// 
-		//	//label1.AutoSize = true;
-		//	//label1.Location = new System.Drawing.Point(3, 0);
-		//	//label1.Name = "label1";
-		//	//label1.Size = new System.Drawing.Size(96, 13);
-		//	//label1.TabIndex = 0;
-		//	//label1.Text = UserTexts.Resources.PerShiftCategory;
-		//	//label1.Margin = new Padding(30, 3, 3, 3);
-		//}
 
 		private void InitializeComponent()
 		{
+			this.BackColor = ColorHelper.GridControlGridExteriorColor();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.comboBoxAdvActivity = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.perShiftCategoryChart1 = new Teleopti.Ccc.Win.Scheduling.PropertyPanel.PerShiftCategoryChart();
@@ -205,7 +66,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			this.comboBoxAdvActivity.Size = new System.Drawing.Size(160, 21);
 			this.comboBoxAdvActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvActivity.TabIndex = 15;
-			this.comboBoxAdvActivity.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvActivity_SelectedIndexChanged);
+			this.comboBoxAdvActivity.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvActivitySelectedIndexChanged);
 			// 
 			// perShiftCategoryChart1
 			// 
@@ -271,12 +132,12 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			_model = model;
 			model.ResetNeeded -= modelResetNeeded;
 			model.ResetNeeded += modelResetNeeded;
-			model.UpdateChartNeeded += model_UpdateChartNeeded;
-			Update();
+			model.UpdateChartNeeded += modelUpdateChartNeeded;
+			fillCombo();
 			UpdateChart();
 		}
 
-		void model_UpdateChartNeeded(object sender, EventArgs e)
+		void modelUpdateChartNeeded(object sender, EventArgs e)
 		{
 			UpdateChart();
 		}
@@ -289,48 +150,43 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			}
 			else
 			{
-				Update();
+				fillCombo();
 				UpdateChart();
 			}
 		}
 
-		public void Update()
+		private void fillCombo()
 		{
 			comboBoxAdvActivity.Items.Clear();
-			
-			//add with datasource instead
-			foreach (var shiftCategory in _model.GetSortedShiftCategories())
-			{
-				comboBoxAdvActivity.Items.Add(shiftCategory.Description.Name);
-			}
+			comboBoxAdvActivity.DisplayMember = "Name";
+			comboBoxAdvActivity.DataSource = _model.GetSortedShiftCategories().Select(shiftCategory => new ShiftCategoryComboItem(shiftCategory)).ToArray();
+
 			if (comboBoxAdvActivity.Items.Count > 0)
 				comboBoxAdvActivity.SelectedIndex = 0;
 		}
 
-		private void comboBoxAdvActivity_SelectedIndexChanged(object sender, EventArgs e)
+		private void comboBoxAdvActivitySelectedIndexChanged(object sender, EventArgs e)
 		{
 			UpdateChart();
 		}
 
 		public void UpdateChart()
 		{
-			IShiftCategory selectedShiftCategory = null;
-			perShiftCategoryChart1.Series.Clear();
-
-			//check on id/equals instead of name
-			var tempList = _model.GetSortedShiftCategories().Where(shiftCategory => shiftCategory.Description.Name.Equals(comboBoxAdvActivity.SelectedItem)).ToArray();
-			
-			if (tempList.Any())
+			if (InvokeRequired)
 			{
-				selectedShiftCategory = tempList.FirstOrDefault();
+				BeginInvoke(new System.Action(UpdateChart));
+				return;
 			}
-			else
+
+			perShiftCategoryChart1.Series.Clear();
+			var comboItem = comboBoxAdvActivity.SelectedItem as ShiftCategoryComboItem;
+			if (comboItem == null)
 			{
 				assignValuesToChart(null);
+				return;
 			}
-			if (selectedShiftCategory == null) return;
 
-			assignValuesToChart(selectedShiftCategory);
+			assignValuesToChart(comboItem.ShiftCategory);	
 		}
 
 		private void assignValuesToChart(IShiftCategory selectedShiftCategory)
@@ -353,7 +209,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				chartSeries.Style.Interior = new BrushInfo(selectedShiftCategory.DisplayColor);
 				perShiftCategoryChart1.Model.Series.Add(chartSeries);
 
-				Dictionary<int, int> frequency = new Dictionary<int, int>();
+				var frequency = new Dictionary<int, int>();
 
 				foreach (var sortedPerson in _model.GetSortedPersons(false))
 				{
@@ -369,10 +225,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 					}
 				}
 				
-
-				//Dictionary<int, int> frequency = _model.GetShiftCategoryFrequency(selectedShiftCategory);
 				frequency = addFakeValuesForEmptyPoints(frequency);
-				perShiftCategoryChart1.PrimaryXAxis.Range = new MinMaxInfo(0, frequency.Count, 1);
+				perShiftCategoryChart1.PrimaryXAxis.Range = new MinMaxInfo(-1, frequency.Count, 1);
 
 				foreach (var item in frequency)
 				{
@@ -386,7 +240,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			var adjustededFrequency = new Dictionary<int, int>();
 			var max = frequency.Select(keyValuePair => keyValuePair.Key).Concat(new[] { 0 }).Max();
 
-			for (var i = 0; i <= max + 1; i++)
+			for (var i = -1; i <= max + 1; i++)
 			{
 				if (!frequency.ContainsKey(i))
 				{
@@ -400,6 +254,21 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			}
 
 			return adjustededFrequency;
+		}
+
+		protected class ShiftCategoryComboItem
+		{
+			public Guid? ItemId { get; private set; }
+			public string Name { get; private set; }
+			public IShiftCategory ShiftCategory { get; private set; }
+			
+
+			public ShiftCategoryComboItem(IShiftCategory shiftCategory)
+			{
+				ItemId = shiftCategory.Id;
+				Name = shiftCategory.Description.Name;
+				ShiftCategory = shiftCategory;
+			}
 		}
     }
 }

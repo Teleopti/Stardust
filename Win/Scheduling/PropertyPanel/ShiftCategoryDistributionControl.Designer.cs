@@ -1,4 +1,5 @@
 ﻿using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
 namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.BackColor = ColorHelper.GridControlGridExteriorColor();
 			this.tabControlShiftCategoryDistribution = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPagePerDate = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.shiftPerDateControl1 = new Teleopti.Ccc.Win.Scheduling.PropertyPanel.ShiftPerDateControl();
