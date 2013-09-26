@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
@@ -11,15 +14,31 @@ namespace Teleopti.Ccc.Win.Scheduling
     {
         private readonly ClipboardSpecialPresenter _clipboardSpecialPresenter;
 
-        public FormClipboardSpecial(bool deleteMode, bool showRestrictions, PasteOptions pasteOptions, bool showOvertimeAvailability)
+		public FormClipboardSpecial(PasteOptions pasteOptions, ClipboardSpecialOptions clipboardSpecialOptions, IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSet)
         {
             InitializeComponent();
   
-            _clipboardSpecialPresenter = new ClipboardSpecialPresenter(this, pasteOptions, deleteMode, showRestrictions);
+            _clipboardSpecialPresenter = new ClipboardSpecialPresenter(this, pasteOptions, clipboardSpecialOptions.DeleteMode, clipboardSpecialOptions.ShowRestrictions);
             _clipboardSpecialPresenter.Initialize();
 
-            checkBoxOvertimeAvailability.Visible = showOvertimeAvailability;
+	        checkBoxOvertimeAvailability.Visible = clipboardSpecialOptions.ShowOvertimeAvailability;
+	        checkBoxShiftAsOvertime.Visible = clipboardSpecialOptions.ShowShiftAsOvertime;
+	        comboBoxAdvOvertime.Visible = clipboardSpecialOptions.ShowShiftAsOvertime;
+			fillComboOvertime(multiplicatorDefinitionSet);
+			enableComboBoxOvertime();
         }
+
+		private void fillComboOvertime(IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSet)
+		{
+			comboBoxAdvOvertime.DisplayMember = "Name";
+
+			var definitionSets = from set in MultiplicatorDefinitionSet
+								 where set.MultiplicatorType == MultiplicatorType.Overtime
+								 select set;
+
+
+			comboBoxAdvOvertime.DataSource = definitionSets.ToArray();
+		}
 
         public void ShowRestrictions(bool show)
         {
@@ -83,6 +102,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             checkBoxStudentAvailability.Enabled = permission;
         }
 
+		public void SetPermissionsOnShiftAsOvertime(bool permission)
+		{
+			checkBoxShiftAsOvertime.Enabled = permission;
+			comboBoxAdvOvertime.Enabled = permission;
+		}
+
         private void checkBoxAssignments_CheckedChanged(object sender, EventArgs e)
         {
             _clipboardSpecialPresenter.OnCheckBoxAssignmentsCheckedChanged(checkBoxAssignments.Checked);
@@ -128,5 +153,31 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             _clipboardSpecialPresenter.OnCheckBoxOvertimeAvailabilityCheckedChanged(checkBoxOvertimeAvailability.Checked);
         }
+
+		private void checkBoxShiftAsOvertime_CheckedChanged(object sender, EventArgs e)
+		{
+			_clipboardSpecialPresenter.OnCheckBoxShiftAsOvertimeCheckedChanged(checkBoxShiftAsOvertime.Checked);
+			enableComboBoxOvertime();
+		}
+
+		private void comboBoxAdvOvertime_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var multiplicatorDefinitionSet = comboBoxAdvOvertime.SelectedItem as IMultiplicatorDefinitionSet;
+			if(multiplicatorDefinitionSet != null)
+				_clipboardSpecialPresenter.OnComboBoxAdvOvertimeSelectedIndexChanged(multiplicatorDefinitionSet);
+		}
+
+		private void enableComboBoxOvertime()
+		{
+			comboBoxAdvOvertime.Enabled = checkBoxShiftAsOvertime.Checked;
+		}
     }
+
+	public class ClipboardSpecialOptions
+	{
+		public bool DeleteMode { get; set; }
+		public bool ShowRestrictions { get; set; }
+		public bool ShowOvertimeAvailability { get; set; }
+		public bool ShowShiftAsOvertime { get; set; }
+	}
 }
