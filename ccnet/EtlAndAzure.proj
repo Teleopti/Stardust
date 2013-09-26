@@ -125,8 +125,8 @@
 	</Target>
 
 	<Target Name="AddLic">
-		<Message Text="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\Database\Tools\Restore\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22" Importance="high" />
-		<Exec Command="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\Database\Tools\Restore\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22"/>
+		<Message Text="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\.debug-Setup\database\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22" Importance="high" />
+		<Exec Command="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\.debug-Setup\database\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22"/>
 	</Target>
 
 	<Target Name="MoveOneLogObject">
