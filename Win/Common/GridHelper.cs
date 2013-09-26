@@ -837,6 +837,7 @@ namespace Teleopti.Ccc.Win.Common
             gridControl.ResizeRowsBehavior = GridResizeCellsBehavior.None;
             gridControl.Properties.MarkRowHeader = true;
             gridControl.Properties.MarkColHeader = true;
+	        gridControl.Properties.BackgroundColor = SystemColors.Window;
         }
 
         #endregion
