@@ -66,6 +66,9 @@
 	height: 18px;
 	border-bottom: 1px solid #dfdfdf;
 }
+.weekview-day-symbol div[class="tooltip-inner"] {
+    max-width: none;
+}
 .weekview-day-schedule {
 	width: 131px;
 	height: 668px;
