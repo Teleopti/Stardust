@@ -132,9 +132,8 @@
     <Compile Include="DataTableDefinition\IntervalInfrastructure.cs" />
     <Compile Include="LogonHelper.cs" />
     <Compile Include="BulkWriter.cs" />
-    <Compile Include="DB.cs" />
+    <Compile Include="DatabaseCommand.cs" />
     <Compile Include="HelperFunctions.cs" />
-    <Compile Include="IDb.cs" />
     <Compile Include="LogonService.cs" />
     <Compile Include="DataTableDefinition\PersonInfrastructure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
