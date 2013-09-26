@@ -783,7 +783,6 @@
     <Content Include="Areas\MyTime\Content\Css\ScheduleStyles.css" />
     <Content Include="Areas\MyTime\Content\Css\WeekView.css" />
     <Content Include="Areas\MyTime\Content\Scripts\AllTests.aspx" />
-    <Content Include="Areas\Start\Content\Css\mobile.custom.css" />
     <Content Include="Areas\Start\Content\Images\ajax-loader-small.gif" />
     <Content Include="Areas\Start\Content\Images\ccc_icon.png" />
     <Content Include="Areas\Start\Content\Images\mobile_logo.png" />
@@ -803,7 +802,6 @@
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.DataSourceViewModel.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.Settings.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.Navigation.js" />
-    <Content Include="Areas\Start\Content\Scripts\knockout.bindings.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.js" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.selectbox.css" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.connector.css" />
@@ -817,7 +815,6 @@
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.connector.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.RequestDetail.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.List.js" />
-    <Content Include="Areas\Start\Content\Css\jquery.ui.custom.css" />
     <Content Include="Areas\Start\Content\Css\Site.css" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.labeledinput.css" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.splitbutton.css" />
@@ -1037,6 +1034,7 @@
     </Content>
     <Content Include="Areas\Start\Views\Test\Message.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\TextRequestDetailView.cshtml" />
+    <Content Include="Areas\Start\Views\Shared\Error.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\AbsenceRequestDetailView.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <Content Include="Areas\MyTime\Views\Preference\AddPreferencesPartial.cshtml" />
