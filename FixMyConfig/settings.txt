@@ -27,8 +27,8 @@ $(WEB_BROKER_BACKPLANE)|
 $(ETL_SERVICE_nhibConfPath)|c:\nhib
 $(ETL_TOOL_nhibConfPath)|c:\nhib
 $(AGENTPORTALWEB_nhibConfPath)|c:\nhib
-<compilation debug="false">|<compilation debug="true">
-<compilation targetFramework="4.0">|<compilation debug="true" targetFramework="4.0">
+<compilation debug="false"|<compilation debug="true"
+<compilation targetFramework="4.0"|<compilation debug="true" targetFramework="4.0"
 $(SDK_nhibConfPath)|c:\nhib
 $(SDK_nhibConfPath)|c:\nhib
 _replace_|c:\InfraTest.ini
