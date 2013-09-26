@@ -17,8 +17,8 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         private readonly string _connString;
         private bool _disposed;
         private readonly IList<IDbDataParameter> _procParam;
-        private IDbCommand cmd;
-        private IDbConnection conn;
+        private IDbCommand _cmd;
+        private IDbConnection _conn;
 
         public DB(CommandType commandType, string commandText, string connectionString)
             : this()
@@ -37,15 +37,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         {
             Dispose(false);
         }
-
-        protected virtual CommandBehavior CmdBehavior
-        {
-            get
-            {
-                return CommandBehavior.CloseConnection;
-            }
-        }
-
+        
         public void AddProcParameter(IDbDataParameter parameter)
         {
             InParameter.NotNull("parameter", parameter);
@@ -60,43 +52,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             }
             _procParam.Add(parameter);
         }
-
-        public void AddProcParameter(string parameterName, object value)
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException("Db object disposed!");
-            }
-            AddProcParameter(new SqlParameter(parameterName, RuntimeHelpers.GetObjectValue(value)));
-        }
-
-        public void Close()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException("Db object disposed!");
-            }
-            Dispose();
-        }
-
+        
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-        }
-
-        public IDataReader ExecuteDataReader()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException("Db object disposed!");
-            }
-
-			GrabConnection();
-            SetCommand();
-            setParams();
-            
-			return cmd.ExecuteReader(CmdBehavior);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
@@ -116,7 +76,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
                 GrabConnection();
                 SetCommand();
                 setParams();
-                adapter.SelectCommand = cmd;
+                adapter.SelectCommand = _cmd;
                 adapter.Fill(dataSet);
             }
             catch (Exception)
@@ -142,7 +102,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			GrabConnection();
             SetCommand();
             setParams();
-            int num2 = cmd.ExecuteNonQuery();
+            int num2 = _cmd.ExecuteNonQuery();
             
 			return num2;
         }
@@ -157,7 +117,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			GrabConnection();
             SetCommand();
             setParams();
-            object retVal = cmd.ExecuteScalar();
+            object retVal = _cmd.ExecuteScalar();
             
 			return retVal;
         }
@@ -166,9 +126,9 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         {
             if (!_disposed && calledExplicit)
             {
-                if (cmd != null)
+                if (_cmd != null)
                 {
-                    cmd.Cancel();
+                    _cmd.Cancel();
                 }
                 DisposeResources();
             }
@@ -177,33 +137,33 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
         protected virtual void DisposeResources()
         {
-            if (cmd != null)
+            if (_cmd != null)
             {
-                cmd.Dispose();
+                _cmd.Dispose();
             }
-            if (conn != null)
+            if (_conn != null)
             {
-                if (conn.State != ConnectionState.Closed)
+                if (_conn.State != ConnectionState.Closed)
                 {
-                    conn.Close();
+                    _conn.Close();
                 }
-                conn.Dispose();
+                _conn.Dispose();
             }
         }
 
         protected virtual void SetCommand()
         {
-            cmd = new SqlCommand();
-            cmd.CommandText = _commandText;
-            cmd.Connection = conn;
-            cmd.CommandType = _commandType;
-            cmd.CommandTimeout = int.Parse(ConfigurationManager.AppSettings["databaseTimeout"], CultureInfo.InvariantCulture);
+            _cmd = new SqlCommand();
+            _cmd.CommandText = _commandText;
+            _cmd.Connection = _conn;
+            _cmd.CommandType = _commandType;
+            _cmd.CommandTimeout = int.Parse(ConfigurationManager.AppSettings["databaseTimeout"], CultureInfo.InvariantCulture);
         }
 
         private void GrabConnection()
         {
-            conn = new SqlConnection(_connString);
-            conn.Open();
+            _conn = new SqlConnection(_connString);
+            _conn.Open();
         }
 
         private void setParams()
@@ -211,7 +171,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             int num2 = _procParam.Count - 1;
             for (int i = 0; i <= num2; i++)
             {
-                cmd.Parameters.Add(_procParam[i]);
+                _cmd.Parameters.Add(_procParam[i]);
             }
         }
     }
