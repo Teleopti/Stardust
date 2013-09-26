@@ -18,9 +18,6 @@ if "%2" == "" (
 SET /P AnalyticsDB=AnalyticsDB?
 )
 
-taskkill /IM WebDev.WebServer40.EXE /F
-taskkill /IM WebDev.WebServer20.EXE /F
-
 ::get a fresh Settings.txt
 COPY "%masterSettings%" "%MySettings%"
 

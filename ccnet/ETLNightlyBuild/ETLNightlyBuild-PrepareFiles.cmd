@@ -9,6 +9,7 @@ SET AppSqlLogin=%~6
 SET AppSqlPwd=%~7
 
 SET SQL_AUTH_STRING=Data Source=%computername%;User Id=%AppSqlLogin%;Password=%AppSqlPwd%
+SET ETL_SERVICE_nhibConfPath=%TargetDir%
 
 ::Delete target Dir
 ECHO RMDIR "%TargetDir%" /S /Q
@@ -17,23 +18,14 @@ RMDIR %TargetDir% /S /Q
 ::Create Dir 
 MKDIR %TargetDir%
 
-::Copy the files into TargetDir
-ECHO ROBOCOPY "%CCNetWorkDir%\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\%config%" "%TargetDir%" /E
-ROBOCOPY "%CCNetWorkDir%\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\%config%" "%TargetDir%" /E
-
-::Del TFS Config
-DEL "%TargetDir%\Teleopti.Analytics.Etl.ServiceHost.exe.config" /Q
-DEL "%TargetDir%\test.nhib.xml" /Q
-
-::Get Prepared config for the restored DBs
-COPY "%CCNetWorkDir%\BuildArtifacts\AppETLService.config" "%TargetDir%\Teleopti.Analytics.Etl.ServiceHost.exe.config" /Y
-COPY "%CCNetWorkDir%\BuildArtifacts\TeleoptiCCC7.nhib.xml" "%TargetDir%\TeleoptiCCC7.nhib.xml" /Y
-
 ::replace dbnames
-cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "$(DB_CCC7)" "%DB_CCC7%" "%TargetDir%\TeleoptiCCC7.nhib.xml"
-cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "$(DB_ANALYTICS)" "%DB_ANALYTICS%" "%TargetDir%\TeleoptiCCC7.nhib.xml"
-cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "$(SQL_AUTH_STRING)" "%SQL_AUTH_STRING%" "%TargetDir%\TeleoptiCCC7.nhib.xml"
+ECHO "%CCNetWorkDir%\.debug-Setup\FixMyConfig.bat" "%DB_CCC7%" "%DB_ANALYTICS%"
+CALL "%CCNetWorkDir%\.debug-Setup\FixMyConfig.bat" "%DB_CCC7%" "%DB_ANALYTICS%"
 
-cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "$(DB_ANALYTICS)" "%DB_ANALYTICS%" "%TargetDir%\Teleopti.Analytics.Etl.ServiceHost.exe.config"
-cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "$(ETL_SERVICE_nhibConfPath)" "%TargetDir%" "%TargetDir%\Teleopti.Analytics.Etl.ServiceHost.exe.config"
-cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "$(SQL_AUTH_STRING)" "%SQL_AUTH_STRING%" "%TargetDir%\Teleopti.Analytics.Etl.ServiceHost.exe.config"
+::fix some special stuff
+cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "c:\nhib" "%TargetDir%" "%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\settings.txt"
+cscript "%CCNetWorkDir%\ccnet\ETLNightlyBuild\replace.vbs" "Data Source=.;Integrated Security=SSPI" "%SQL_AUTH_STRING%" "%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\settings.txt"
+
+ECHO "%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\Teleopti.Support.Tool.exe" -MODebug
+"%CCNetWorkDir%\Teleopti.Support.Tool\bin\%config%\Teleopti.Support.Tool.exe" -MODebug
+
