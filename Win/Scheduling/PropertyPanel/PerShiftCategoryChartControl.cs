@@ -157,6 +157,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 		private void fillCombo()
 		{
+			comboBoxAdvActivity.DataSource = null;
 			comboBoxAdvActivity.Items.Clear();
 			comboBoxAdvActivity.DisplayMember = "Name";
 			comboBoxAdvActivity.DataSource = _model.GetSortedShiftCategories().Select(shiftCategory => new ShiftCategoryComboItem(shiftCategory)).ToArray();
