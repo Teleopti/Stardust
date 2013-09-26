@@ -11,4 +11,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			user.PermissionInformation.AddApplicationRole(TestData.AgentRoleOnlyWithOwnData);
 		}
 	}
+
 }
