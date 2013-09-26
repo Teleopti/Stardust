@@ -27,12 +27,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         public void AddProcParameter(SqlParameter parameter)
         {
             InParameter.NotNull("parameter", parameter);
-			
-            if (((parameter.Direction == ParameterDirection.Input) && (parameter.Value == null)))
-            {
-                throw new ArgumentNullException("Missing " + parameter.ParameterName + " value for sproc " + _commandText);
-            }
-            _procParam.Add(parameter);
+
+	        if (parameter.Value == null)
+		        parameter.Value = DBNull.Value;
+
+	        _procParam.Add(parameter);
         }
         
         public DataSet ExecuteDataSet()
