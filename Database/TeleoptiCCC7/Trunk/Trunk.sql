@@ -294,3 +294,5 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 
 SET NOCOUNT OFF
 GO
+PRINT 'dummy change to flush Infratest BDs'
+GO

@@ -273,10 +273,11 @@ ECHO Running: CrossDatabaseViewUpdate
 "%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiAnalytics" -CD"%Branch%_%Customer%_TeleoptiCCCAgg" -EE
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
-::Add license (only if Demoreg)
-IF "%Customer%"=="%Demoreg%" (
+:Add lic
+::Add license
+CHOICE /C yn /M "Add license?"
+IF ERRORLEVEL 1 (
 SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=13 & GOTO :Error
 )
 
 ::FixMyConfig
@@ -301,7 +302,6 @@ IF %ERRORLEV% EQU 6 ECHO Could not build DBManager.exe & notepad "%temp%\build.l
 IF %ERRORLEV% EQU 10 ECHO An error occured while encrypting
 IF %ERRORLEV% EQU 11 ECHO Could not restore databases
 IF %ERRORLEV% EQU 12 ECHO Could not build Teleopti.Support.Security & notepad "%temp%\build.log"
-IF %ERRORLEV% EQU 13 ECHO Could not apply license on demoreg database
 IF %ERRORLEV% EQU 17 ECHO Failed to update msgBroker setings in Analytics
 IF %ERRORLEV% EQU 18 ECHO You dont have permisson or file missing: "%DBPath%"
 ECHO.

@@ -32,7 +32,7 @@ namespace Teleopti.Analytics.Parameters
         internal static Guid BuCode;
         internal static int LangId;
 
-        internal static string _ConnectionString = ConfigurationManager.ConnectionStrings["Database"].ConnectionString;
+		internal static string _ConnectionString = ConfigurationManager.ConnectionStrings["LocalSqlServer"].ConnectionString;
         //public static string _Database;
 
         internal static Unit _LabelWidth = new Unit("200");

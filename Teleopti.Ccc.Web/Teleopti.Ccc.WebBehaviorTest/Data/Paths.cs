@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static string FindProjectPath(params string[] projectPaths)
 		{
-			var rootPaths = new[] { IniFileInfo.SitePath, AppDomain.CurrentDomain.BaseDirectory, Directory.GetCurrentDirectory() };
+			var rootPaths = new[] { IniFileInfo.AGENTPORTALWEB_nhibConfPath, AppDomain.CurrentDomain.BaseDirectory, Directory.GetCurrentDirectory() };
 			var relativePaths = new[] { "", @"..\", @"..\..\", @"..\..\..\", @"..\..\..\..\" };
 			var possiblePaths = (from root in rootPaths
 								 from reletive in relativePaths
