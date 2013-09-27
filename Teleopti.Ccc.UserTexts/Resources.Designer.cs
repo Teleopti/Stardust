@@ -19164,7 +19164,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Service Level  and Agents Ready.
+        ///   Looks up a localized string similar to Service Level and Agents Ready.
         /// </summary>
         public static string ResReportServiceLevelAndAgentsReady {
             get {

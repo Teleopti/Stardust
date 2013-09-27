@@ -11793,8 +11793,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Shift Category Distribution</value>
     <comment>Header for distributions of shift categories in scheduler</comment>
   </data>
-  </data>
   <data name="Here" xml:space="preserve">
     <value>here</value>
     <comment>here</comment>
+  </data>
 </root>
