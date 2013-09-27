@@ -100,8 +100,8 @@ SELECT DISTINCT
 	preferences_unfulfilled	= f.preference_unfulfilled,  --kolla hur vi gör här
 	business_unit_id			= p.business_unit_id, 
 	datasource_id				= f.datasource_id, 
-	datasource_update_date		= f.datasource_update_date, 
-	must_haves					= ISNULL(must_have,0),
+	datasource_update_date		= MAX(f.datasource_update_date), 
+	must_haves					= MAX(ISNULL(must_have,0)),
 	dim_absence					= ISNULL(ab.absence_id,-1)
 FROM 
 	(
@@ -136,5 +136,16 @@ LEFT JOIN
 	mart.dim_absence ab
 ON
 	f.absence_code = ab.absence_code
-
+GROUP BY dsd.date_id,p.person_id,ds.scenario_id, CASE 
+										--Shift Category (standard) Preference
+										WHEN ISNULL(f.StartTimeMinimum,'') + ISNULL(f.EndTimeMinimum,'') + ISNULL(f.StartTimeMaximum,'') + ISNULL(f.EndTimeMaximum,'') +  ISNULL(f.WorkTimeMinimum,'') + ISNULL(f.WorkTimeMaximum,'') = '' AND f.shift_category_code IS NOT NULL AND f.activity_code IS NULL THEN 1
+										--Day Off Preference
+										WHEN ISNULL(f.StartTimeMinimum,'') + ISNULL(f.EndTimeMinimum,'') + ISNULL(f.StartTimeMaximum,'') + ISNULL(f.EndTimeMaximum,'') +  ISNULL(f.WorkTimeMinimum,'') + ISNULL(f.WorkTimeMaximum,'') = '' AND f.day_off_name IS NOT NULL AND f.activity_code IS NULL THEN 2
+										--Extended Preference
+										WHEN f.StartTimeMinimum IS NOT NULL OR f.EndTimeMinimum IS NOT NULL OR f.StartTimeMaximum IS NOT NULL OR f.EndTimeMaximum IS NOT NULL OR f.WorkTimeMinimum IS NOT NULL OR f.WorkTimeMaximum IS NOT NULL OR f.activity_code IS NOT NULL THEN 3
+										--Absence Preference
+										WHEN ISNULL(f.StartTimeMinimum,'') + ISNULL(f.EndTimeMinimum,'') + ISNULL(f.StartTimeMaximum,'') + ISNULL(f.EndTimeMaximum,'') +  ISNULL(f.WorkTimeMinimum,'') + ISNULL(f.WorkTimeMaximum,'') = '' AND f.absence_code IS NOT NULL AND f.activity_code IS NULL THEN 4
+								  END,
+								   sc.shift_category_id, ddo.day_off_id,
+	 f.preference_fulfilled, 	 f.preference_unfulfilled, p.business_unit_id, f.datasource_id, ab.absence_id
 GO
