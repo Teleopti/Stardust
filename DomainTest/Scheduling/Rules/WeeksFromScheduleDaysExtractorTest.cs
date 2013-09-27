@@ -21,12 +21,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private IPerson _person2;
         private IScheduleDay _scheduleDay1;
         private IScheduleDay _scheduleDay2;
+        private IPersonAccountUpdater _personAccountUpdater;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();           
             _target = new WeeksFromScheduleDaysExtractor();
+            _personAccountUpdater = new PersonAccountUpdaterDummy();
         }
 
         [Test]
@@ -212,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _person1 = PersonFactory.CreatePerson("", "");
             var personContract = _mocks.DynamicMock<IPersonContract>();
             _person1.AddPersonPeriod(new PersonPeriod(dateOnly1.AddDays(-100), personContract, new Team()));
-            _person1.TerminalDate = dateOnly1.AddDays(2);
+            _person1.TerminatePerson(dateOnly1.AddDays(2), new PersonAccountUpdaterDummy());
             _person1.PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
 
             IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod1 = new DateOnlyAsDateTimePeriod(dateOnly1, (

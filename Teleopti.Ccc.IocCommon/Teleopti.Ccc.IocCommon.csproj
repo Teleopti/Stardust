@@ -132,6 +132,7 @@
     <Compile Include="Configuration\AuthenticationModule.cs" />
     <Compile Include="Configuration\CommandDispatcherModule.cs" />
     <Compile Include="Configuration\CommandHandlersModule.cs" />
+    <Compile Include="Configuration\PersonAccountModule.cs" />
     <Compile Include="Configuration\EventHandlersModule.cs" />
     <Compile Include="Configuration\EventsPublisherModule.cs" />
     <Compile Include="Configuration\RuleSetModule.cs" />

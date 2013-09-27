@@ -249,7 +249,6 @@
     <Compile Include="Persisters\PersistConflict.cs" />
     <Compile Include="Persisters\PersistConflictMessageState.cs" />
     <Compile Include="Persisters\PersonAbsenceAccountConflictCollector.cs" />
-    <Compile Include="Persisters\PersonAbsenceAccountRefresher.cs" />
     <Compile Include="Persisters\PersonRequestPersister.cs" />
     <Compile Include="Persisters\PersonRequestRefresher.cs" />
     <Compile Include="Persisters\ScheduleDictionaryBatchPersister.cs" />

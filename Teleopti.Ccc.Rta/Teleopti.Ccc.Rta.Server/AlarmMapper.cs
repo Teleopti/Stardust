@@ -64,7 +64,9 @@ namespace Teleopti.Ccc.Rta.Server
 					Logger.InfoFormat("Found StateGroupId: {0}, StateGroupName {1}", stateGroup.StateGroupId, stateGroup.StateGroupName);
 					return stateGroup;
 				}
-				Logger.InfoFormat("Could not find stategroup");
+				Logger.InfoFormat(
+					"Could not find stategroup connected to statecode {0}, for BusinessUnit: {1} and PlatformTypeId: {2}", stateCode,
+					businessUnitId, platformTypeId);
 			}
 			else if (!string.IsNullOrEmpty(stateCode))
 			{

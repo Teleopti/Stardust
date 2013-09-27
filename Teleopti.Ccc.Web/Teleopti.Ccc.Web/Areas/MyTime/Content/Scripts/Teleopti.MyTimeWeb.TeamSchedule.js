@@ -97,6 +97,10 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
             }
             return self.selectedDate().format('YYYY-MM-DD') + '-' + teamId;
         });
+
+        this.initializeShiftTrade = function () {
+	        //henke: todo
+	    };
     };
 
 	function _initTeamPickerSelection() {

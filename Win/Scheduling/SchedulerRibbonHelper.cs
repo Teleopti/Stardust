@@ -53,11 +53,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (!restrictionView)
 			{
-				clipboard.Items[0].Visible = true;
-				clipboard.Items[1].Visible = false;
-
-				edit.Items[0].Visible = true;
-				edit.Items[1].Visible = false;
+				setFirstVisible(clipboard);
+				setFirstVisible(edit);
 			}
 			else
 			{
@@ -65,12 +62,35 @@ namespace Teleopti.Ccc.Win.Scheduling
 				actions.Visible = false;
 				locks.Visible = false;
 
-				clipboard.Items[0].Visible = false;
-				clipboard.Items[1].Visible = true;
-
-				edit.Items[0].Visible = false;
-				edit.Items[1].Visible = true;
+				setSecondVisible(clipboard);
+				setSecondVisible(edit);
 			}	
+		}
+
+		private static void setFirstVisible(ToolStrip toolStrip)
+		{
+			if (toolStrip.Items.Count < 2)
+			{
+				toolStrip.Visible = false;
+			}
+			else
+			{
+				toolStrip.Items[0].Visible = true;
+				toolStrip.Items[1].Visible = false;
+			}
+		}
+
+		private static void setSecondVisible(ToolStrip toolStrip)
+		{
+			if (toolStrip.Items.Count < 2)
+			{
+				toolStrip.Visible = false;
+			}
+			else
+			{
+				toolStrip.Items[0].Visible = false;
+				toolStrip.Items[1].Visible = true;
+			}
 		}
 	}
 }

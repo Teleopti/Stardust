@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
@@ -370,7 +372,40 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.AssertExists("#Team-Picker");
 		}
 
+		[Then(@"I should not see shiftrade button")]
+		public void ThenIShouldNotSeeShiftradeButton()
+		{
+			Browser.Interactions.AssertNotExists("#TeamSchedule-body",".icon-random");
+		}
 
+		[When(@"I click any shifttrade button")]
+		public void WhenIClickAnyShifttradeButton()
+		{
+			Browser.Interactions.Click(".icon-random");
+		}
+
+		[Then(@"I should see the add shifttrade section")]
+		public void ThenIShouldSeeTheAddShifttradeSection()
+		{
+			Browser.Interactions.AssertExists("#Request-add-loaded-ready");
+		}
+
+		[Then(@"I should see the add shifttrade section for '(.*)'")]
+		public void ThenIShouldSeeTheAddShifttradeSectionFor(DateTime date)
+		{
+			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
+			var script = string.Format("return Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
+			Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString);
+			Browser.Interactions.AssertExists("#Request-add-loaded-ready");
+			Browser.Interactions.AssertFirstContains("#Request-add-loaded-date", dateAsSwedishString);
+		}
+
+		[Then(@"Shifttrade button should be disabled")]
+		public void ThenShifttradeButtonShouldBeDisabled()
+		{
+			Browser.Interactions.AssertExists(".btn[disabled]>.icon-random");
+		}
+		
 		private static void AssertAgentIsDisplayed(string name)
 		{
 			Browser.Interactions.AssertAnyContains(".teamschedule-agent-name", name);

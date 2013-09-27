@@ -15,7 +15,7 @@ require.config({
 		swipeListener: '../../../../Content/jquery-plugin/jquery.swipeListener',
 		momentDatepicker: '../../../../Content/moment-datepicker/moment-datepicker',
 		momentLanguages: '../../../../Content/moment/moment.all.min',
-		momentDatepickerKo: '../../../../Content/moment-datepicker/moment-datepicker-ko',
+		momentDatepickerKo: '../../../../Content/moment-datepicker/moment-datepicker-ko-amd',
 		
 		noext: '../../../../Content/require/noext',
 		signalrrr: 'require/signalrrr',

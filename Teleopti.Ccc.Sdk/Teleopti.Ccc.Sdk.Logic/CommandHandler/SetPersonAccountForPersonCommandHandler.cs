@@ -20,8 +20,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
         private readonly IAbsenceRepository _absenceRepository;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ITraceableRefreshService _traceableRefreshService;
 
-        public SetPersonAccountForPersonCommandHandler(IRepositoryFactory repositoryFactory, ICurrentScenario scenarioRepository, IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IAbsenceRepository absenceRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+        public SetPersonAccountForPersonCommandHandler(IRepositoryFactory repositoryFactory, ICurrentScenario scenarioRepository, IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IAbsenceRepository absenceRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ITraceableRefreshService traceableRefreshService)
         {
             _repositoryFactory = repositoryFactory;
             _scenarioRepository = scenarioRepository;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _personAbsenceAccountRepository = personAbsenceAccountRepository;
             _absenceRepository = absenceRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
+            _traceableRefreshService = traceableRefreshService;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -88,13 +90,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
         private void refreshAccount(IAccount account)
         {
-            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
-            {
-                var refreshService = new TraceableRefreshService(_scenarioRepository.Current(),
-                                                                 _repositoryFactory);
-                refreshService.Refresh(account, unitOfWork);
-                unitOfWork.PersistAll();
-            }
+            _traceableRefreshService.Refresh(account);
         }
     }
 }

@@ -1,0 +1,48 @@
+﻿@model Teleopti.Ccc.Web.Models.Shared.ErrorViewModel
+@{ Layout = null;}
+
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if gt IE 9 ]>    <html lang="en" class="no-js ie10"> <![endif]-->
+<!--[if !(IE)]><!-->
+    <html class="no-js ">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Error</title>
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+    <link href="@Url.Content("~/Areas/Start/Content/Css/Login.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Areas/Start/Content/Css/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/favicon.ico")" rel="shortcut icon" type="image/x-icon"/>
+
+    <script src="@Url.Content("~/Content/jquery/jquery-1.10.2.js")"></script>
+	
+    <link href="@Url.Content("~/Content/bootstrap/bootstrap.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/bootstrap/bootstrap-responsive.css")" rel="stylesheet" type="text/css" />
+	
+    <script src="@Url.Content("~/Content/bootstrap/bootstrap.js")"></script>
+</head>
+<body>
+    <section id="page-error">
+        <div class="container" id="Error-container">
+            <div class="login-logo">
+                <img src="@Url.Content("~/Areas/Start/Content/Images/mobile_logo.png")"/>
+            </div>
+            <div id="Exception-div" class="alert alert-error">
+                <h1>@Model.ShortMessage</h1>
+                <span id="Exception-message">@Model.Message</span>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
+
+
+
