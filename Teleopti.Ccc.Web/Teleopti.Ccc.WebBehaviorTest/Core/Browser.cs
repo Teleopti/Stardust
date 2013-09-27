@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		private static readonly IDictionary<string, IBrowserActivator> Activators =
 			new Dictionary<string, IBrowserActivator>
 				{
-					{"PhantomJS", new CoypuPhantomJsActivator()},
+					//{"PhantomJS", new CoypuPhantomJsActivator()},
 					{"Chrome", new CoypuChromeActivator()},
 					{"WatiN", new WatiNSingleBrowserIEActivator()}
 				};
