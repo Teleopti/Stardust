@@ -10994,7 +10994,7 @@ These options are activated:
     <comment>Type used in anywhere report</comment>
   </data>
   <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
-    <value>Service Level  and Agents Ready</value>
+    <value>Service Level and Agents Ready</value>
     <comment>Service Level and Agents Ready</comment>
   </data>
   <data name="FromContract" xml:space="preserve">
