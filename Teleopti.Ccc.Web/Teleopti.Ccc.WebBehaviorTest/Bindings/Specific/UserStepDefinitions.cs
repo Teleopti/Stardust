@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"I am an agent in a team with access only to my own data")]
 		public void GivenIAmAnAgentWithoutPermissionToSeeMyColleagueSSchedule()
 		{
-			DataMaker.Data().Apply(new AgentWithoutRequestsAccess());
+			DataMaker.Data().Apply(new AgentWithoutTeamDataAccess());
 			var team = new Team();
 			DataMaker.Data().Apply(team);
 			DataMaker.Data().Apply(new SchedulePeriod());
