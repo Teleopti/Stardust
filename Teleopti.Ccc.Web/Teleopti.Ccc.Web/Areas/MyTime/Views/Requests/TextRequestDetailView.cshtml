@@ -8,7 +8,12 @@
         <input type="text" class="input-block-level request-edit-subject" placeholder="@Resources.Subject" data-bind="value: Subject, visible: IsEditable" />
     </div>
     <div>
-        <textarea class="input-block-level request-edit-message" placeholder="@Resources.Message" data-bind="value: Message, visible: IsEditable" />
+        <!-- ko if: IsEditable -->
+            <textarea class="input-block-level request-edit-message" placeholder="@Resources.Message" data-bind="value: Message" />
+        <!-- /ko -->
+        <!-- ko if: !IsEditable() -->
+            <label class="input-block-level request-non-edit-message" data-bind="text: Message" />
+        <!-- /ko -->
     </div>
     <div>
         <span class="input-append" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true, weekStart: weekStart()}">
