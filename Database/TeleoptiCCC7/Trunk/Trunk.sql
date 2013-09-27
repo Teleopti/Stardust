@@ -287,3 +287,15 @@ GO
 
 UPDATE dbo.Contract SET MaxTimePerWeek=1728000000000,NightlyRest=396000000000,WeeklyRest=1296000000000,Version = Version+1 WHERE MaxTimePerWeek=0 AND NightlyRest=0 AND WeeklyRest=0
 GO
+
+----------------  
+--Name: Robin Karlsson
+--Date: 2013-09-26
+--Desc: Bug #24859 - Fix messed up values in shifts
+---------------- 
+update ActivityExtender
+set earlystart = 0 where EarlyStart = 1
+
+update ActivityExtender
+set LateStart = 0 where LateStart = 1
+GO
