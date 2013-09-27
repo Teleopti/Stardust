@@ -11769,8 +11769,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Subject too long</value>
     <comment>Invalid field info</comment>
   </data>
-  </data>
   <data name="Here" xml:space="preserve">
     <value>here</value>
     <comment>here</comment>
+  </data>
 </root>
