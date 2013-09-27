@@ -11726,8 +11726,8 @@ Reduce the complexity to use these shifts.</value>
     <comment>Revoke sharing my calendar</comment>
   </data>
   <data name="ShareMyCalendarHint" xml:space="preserve">
-    <value>Copy/Paste following URL, and add this URL to Outlook or Google calendar, etc.</value>
-    <comment>Copy/Paste following URL, and add this URL to Outlook or Google calendar, etc.</comment>
+    <value>To subscribe to your schedule from a calendar app, use the URL below. For instructions on doing this from the most common calendar apps, see </value>
+    <comment>To subscribe to your schedule from a calendar app, use the URL below. For instructions on doing this from the most common calendar apps, see here  ("here" will be in another text resource which will have an underline)</comment>
   </data>
   <data name="SendAgain" xml:space="preserve">
     <value>Send again</value>
@@ -11769,4 +11769,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Subject too long</value>
     <comment>Invalid field info</comment>
   </data>
+  </data>
+  <data name="Here" xml:space="preserve">
+    <value>here</value>
+    <comment>here</comment>
 </root>

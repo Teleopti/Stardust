@@ -9671,6 +9671,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to here.
+        /// </summary>
+        public static string Here {
+            get {
+                return ResourceManager.GetString("Here", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to hh:mm.
         /// </summary>
         public static string HHcolonMM {
@@ -21250,7 +21259,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy/Paste following URL, and add this URL to Outlook or Google calendar, etc..
+        ///   Looks up a localized string similar to To subscribe to your schedule from a calendar app, use the URL below. For instructions on doing this from the most common calendar apps, see .
         /// </summary>
         public static string ShareMyCalendarHint {
             get {
