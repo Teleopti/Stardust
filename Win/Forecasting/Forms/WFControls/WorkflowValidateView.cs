@@ -314,6 +314,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 
         public void RefreshOutliers()
         {
+            _owner.Presenter.SetWorkPeriod(new DateOnlyPeriod(dateSelectionFromToTarget.WorkPeriodStart, dateSelectionFromToTarget.WorkPeriodEnd));
             _owner.Presenter.InitializeOutliersByWorkDate();
 
             outlierBoxControl.SetOutliers(_owner.Presenter.Model.Outliers);
