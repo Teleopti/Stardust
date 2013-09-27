@@ -49,6 +49,15 @@ Background:
 	| Name                       | Schedule published to 0810 |
 	| Schedule published to date | 2013-08-10                 |
 	
+@ignore
+Scenario: View default time line
+	Given I have the role 'Anywhere Team Green'
+	When I view schedules for '2013-09-27'
+	Then I should see the time line with
+	| Field      | Value |
+	| Start time | 08:00 |
+	| End time   | 16:00 |
+	
 Scenario: View empty when no team available
 	Given I have the role 'Anywhere My Own'
 	When I view schedules for '2013-08-10'

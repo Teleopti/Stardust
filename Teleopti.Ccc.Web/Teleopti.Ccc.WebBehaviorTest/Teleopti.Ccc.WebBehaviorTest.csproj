@@ -91,10 +91,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="Anywhere\ViewConfidentialAbsence.feature.cs">
-      <DependentUpon>ViewConfidentialAbsence.feature</DependentUpon>
+    <Compile Include="Anywhere\TeamScheduleSorting.feature.cs">
+      <DependentUpon>TeamScheduleSorting.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Anywhere\ViewConfidentialAbsence.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ViewConfidentialAbsence.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Anywhere\ViewDaysOff.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ViewDaysOff.feature</DependentUpon>
     </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsKnockoutExtensions.cs" />
@@ -614,6 +624,14 @@
     <Content Include="BeforeTestRun.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Anywhere\TeamScheduleSorting.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>TeamScheduleSorting.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\ViewDaysOff.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ViewDaysOff.feature.cs</LastGenOutput>
+    </None>
     <None Include="Data\iisexpress.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
