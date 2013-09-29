@@ -23,11 +23,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_visualLayerColl = _originalMainShift.ProjectionService().CreateProjection();
         }
 
-		public override bool IsSatisfiedBy(IEditableShift obj)
+		public override bool IsSatisfiedBy(IEditableShift shift)
         {
-            IVisualLayerCollection other = obj.ProjectionService().CreateProjection();
+            IVisualLayerCollection other = shift.ProjectionService().CreateProjection();
 
-            return (CorrectShiftCategory(obj)
+            return (CorrectShiftCategory(shift)
                 && CorrectStart(other)
                 && CorrectEnd(other)
                 && CorrectAlteredBetween(other)
@@ -52,11 +52,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return compareLengthOfStaticLengthActivity(_visualLayerColl, other);
 		}
 
+		public bool CorrectShiftCategory(IEditableShift otherShift)
         {
             if(!_optimizerActivitiesPreferences.KeepShiftCategory)
                 return true;
 
-            return shift.ShiftCategory.Equals(_originalMainShift.ShiftCategory);
+			return otherShift.ShiftCategory.Equals(_originalMainShift.ShiftCategory);
         }
 
         public bool CorrectStart(IVisualLayerCollection other)

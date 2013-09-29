@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Specification;
@@ -151,15 +152,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_preferences.DoNotAlterLengthOfActivity = _lunchAct;
 
-			IMainShift shift = MainShiftFactory.CreateMainShiftWithLayers(_shbrAct, _lunchAct, _baseAct);
+			IEditableShift shift = EditableShiftFactory.CreateEditorShiftWithLayers(_shbrAct, _lunchAct, _baseAct);
 			IVisualLayerCollection layers = shift.ProjectionService().CreateProjection();
 			Assert.IsTrue(_target.LengthOfActivityEqual(layers));
 
-			shift.LayerCollection[1].MoveLayer(TimeSpan.FromMinutes(1));
+			shift.LayerCollection[1].Period.MovePeriod(TimeSpan.FromMinutes(1));
 			layers = shift.ProjectionService().CreateProjection();
 			Assert.IsTrue(_target.LengthOfActivityEqual(layers));
 
-			shift.LayerCollection[1].Period = shift.LayerCollection[1].Period.ChangeEndTime(TimeSpan.FromMinutes(1));
+			shift.LayerCollection[1].Period.ChangeEndTime(TimeSpan.FromMinutes(1));
 			layers = shift.ProjectionService().CreateProjection();
 			Assert.IsFalse(_target.LengthOfActivityEqual(layers));
 		}
@@ -172,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var newActivity = ActivityFactory.CreateActivity("hej");
 			_preferences.DoNotAlterLengthOfActivity = newActivity;
 
-			IMainShift shift = MainShiftFactory.CreateMainShiftWithLayers(_shbrAct, newActivity, _baseAct);
+			IEditableShift shift = EditableShiftFactory.CreateEditorShiftWithLayers(_shbrAct, newActivity, _baseAct);
 			IVisualLayerCollection layers = shift.ProjectionService().CreateProjection();
 			Assert.IsFalse(_target.LengthOfActivityEqual(layers));
 
