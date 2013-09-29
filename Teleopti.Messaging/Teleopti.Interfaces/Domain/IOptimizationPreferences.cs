@@ -437,6 +437,9 @@ namespace Teleopti.Interfaces.Domain
         /// 
         /// </summary>
         TimePeriod SelectedTimePeriod { get; set; }
+
+	    bool KeepActivityLength { get; set; }
+	    IActivity ActivityToKeepLengthOn { get; set; }
     }
 
     /// <summary>
