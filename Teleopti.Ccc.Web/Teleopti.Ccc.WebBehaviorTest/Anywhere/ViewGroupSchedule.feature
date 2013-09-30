@@ -54,10 +54,6 @@ Background:
 	| Day   |
 	| Night |
 	And there is an activity with
-	| Field | Value  |
-	| Name  | Lunch  |
-	| Color | Yellow |
-	And there is an activity with
 	| Field | Value |
 	| Name  | Phone |
 	| Color | Green |
@@ -85,6 +81,55 @@ Background:
 	| Contract             | Common contract           |
 	| Part time percentage | Common PartTimePercentage |
 	| Contract schedule    | Common contract schedule  |
+
+#new
+Scenario: View group selection
+	Given I have the role 'Anywhere Team Green And Red'
+	When I view schedules for '2013-03-25'
+	Then I should be able to select teams
+	| Team                                     |
+	| Common Site/Team green                   |
+	| Common Site/Team red                     |
+	| Kontrakt/Common contract                 |
+	| Kontrakt/8 hours a day                   |
+	| Kontraktsschema/Common contract schedule |
+	| Deltidsprocent/Common PartTimePercentage |
+
+#new
+Scenario: View group schedule
+	Given I have the role 'Anywhere Team Green And Red'
+	And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 2013-03-25 09:00 |
+	| EndTime        | 2013-03-25 18:00 |
+	| Shift category | Day              |
+	And John Smith have a shift with
+	| Field          | Value            |
+	| StartTime      | 2013-03-25 10:00 |
+	| EndTime        | 2013-03-25 19:00 |
+	| Shift category | Day              |
+	And Pierre Baldi have a shift with
+	| Field          | Value            |
+	| StartTime      | 2013-03-25 11:00 |
+	| EndTime        | 2013-03-25 20:00 |
+	| Shift category | Day              |
+	When I view schedules for '2013-03-25'
+	And I select team 'Kontrakt/Common contract'
+	Then I should see schedule for me
+	Then I should see schedule for 'John Smith'
+	Then I should see no schedule for 'Pierre Baldi'
+
+#new
+Scenario: Default to my team
+	Given I have the role 'Anywhere Team Green And Red'
+	And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 2013-03-25 09:00 |
+	| EndTime        | 2013-03-25 18:00 |
+	| Shift category | Day              |
+	When I view team schedule for '2013-03-25'
+	Then The team picker should have 'Common Site/Team green' selected
+	And I should see schedule for me
 
 Scenario: View group schedule in my time zone
 	Given I have the role 'Anywhere Team Green'
@@ -119,52 +164,6 @@ Scenario: View group schedule, no shift
 	When I view schedules for '2013-09-20'
 	Then I should see no schedule for 'Pierre Baldi'
 
-Scenario: View group selection
-	Given I have the role 'Anywhere Team Green And Red'
-	When I view schedules for '2013-03-25'
-	Then I should be able to select teams
-	| Team                                     |
-	| Common Site/Team green                   |
-	| Common Site/Team red                     |
-	| Kontrakt/Common contract                 |
-	| Kontrakt/8 hours a day                   |
-	| Kontraktsschema/Common contract schedule |
-	| Deltidsprocent/Common PartTimePercentage |
-
-Scenario: View group schedule
-	Given I have the role 'Anywhere Team Green And Red'
-	And I have a shift with
-	| Field          | Value            |
-	| StartTime      | 2013-03-25 09:00 |
-	| EndTime        | 2013-03-25 18:00 |
-	| Shift category | Day              |
-	And John Smith have a shift with
-	| Field          | Value            |
-	| StartTime      | 2013-03-25 10:00 |
-	| EndTime        | 2013-03-25 19:00 |
-	| Shift category | Day              |
-	And Pierre Baldi have a shift with
-	| Field          | Value            |
-	| StartTime      | 2013-03-25 11:00 |
-	| EndTime        | 2013-03-25 20:00 |
-	| Shift category | Day              |
-	When I view schedules for '2013-03-25'
-	And I select team 'Kontrakt/Common contract'
-	Then I should see schedule for me
-	Then I should see schedule for 'John Smith'
-	Then I should not see schedule for 'Pierre Baldi'
-
-Scenario: Default to my team
-	Given I have the role 'Anywhere Team Green And Red'
-	And I have a shift with
-	| Field          | Value            |
-	| StartTime      | 2013-03-25 09:00 |
-	| EndTime        | 2013-03-25 18:00 |
-	| Shift category | Day              |
-	When I view team schedule for '2013-03-25'
-	Then The team picker should have 'Common Site/Team green' selected
-	And I should see schedule for me
-
 Scenario: Change group
 	Given I have the role 'Anywhere Team Green And Red'
 	When I view schedules for 'Common Site/Team green' on '2013-03-25'
@@ -189,7 +188,6 @@ Scenario: Only view published schedule
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2013-07-25 |
-	And 'Pierre Baldi' has the workflow control set 'Schedule published to 0810'
 	And 'John King' has the workflow control set 'Schedule published to 0809'
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |
@@ -209,15 +207,19 @@ Scenario: Only view published schedule
 
 Scenario: View unpublished schedule when permitted
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' has the workflow control set 'Schedule published to 0809'
-	And 'Pierre Baldi' have a shift with
+	And 'John King' has a person period with
+	| Field      | Value      |
+	| Team       | Team green |
+	| Start date | 2013-07-25 |
+	And 'John King' has the workflow control set 'Schedule published to 0809'
+	And 'John King' have a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
 	| Start time     | 2013-08-10 08:00 |
 	| End time       | 2013-08-10 17:00 |
 	When I view schedules for '2013-08-10'
-	Then I should see 'Pierre Baldi' with schedule
+	Then I should see 'John King' with schedule
 
 Scenario: Push group schedule changes
 	Given I have the role 'Anywhere Team Green'

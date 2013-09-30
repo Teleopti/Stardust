@@ -6,6 +6,7 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
+using Teleopti.Ccc.WebBehaviorTest.Data;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
@@ -64,6 +65,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				".person:contains('{0}') .shift li",
 				personName
 				);
+		}
+
+		[Then(@"I should see schedule for me")]
+		public void ThenIShouldSeeScheduleForMe()
+		{
+			ThenIShouldSeeNoScheduleFor(DataMaker.Data().MePerson.Name.ToString());
 		}
 
 		[Then(@"I should be able to select teams")]
