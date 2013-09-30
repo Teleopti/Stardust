@@ -44,6 +44,34 @@ $global:Db = ''
 $global:resetToBaseline="False"
 $global:insertedLicense=0
 
+funcation Config-Load {
+    It "Should find the right version from the config file"{
+        $serverConfigFile = '\\hebe\Installation\PBImsi\Kanbox\testservers.config'
+        # initialize the xml object
+        $serverConfig = New-Object XML
+        # load the config file as an xml object
+        $serverConfig.Load($serverConfigFile)
+        # iterate over the settings
+        foreach($testServer in $serverConfig.configuration.servers.add)
+        {
+            if ($testServer.name -eq  $computerName)
+            {
+                $global:version =  $testServer.version
+                $global:batName =  $testServer.batname
+                $global:Server =  $testServer.DBServerInstance
+                $global:Db = $testServer.DB
+                $global:resetToBaseline = $testServer.resetToBaseline
+                $global:BaseURL = $testServer.BaseURL
+            }
+                
+        }
+
+        Write-Host 'version: ' $global:version
+        Write-Host 'restToBaseline: '$global:resetToBaseline
+    }
+}
+
+
 function TearDown {
 	Describe "Tear down previous test"{
 		[string] $path = Get-UninstallRegPath -MsiKey "$CccServerMsiKey"
@@ -103,31 +131,6 @@ function Setup-PreReqs {
 			Test-Path "$workingFolder" | Should Be $True
 		}
 		
-        It "Should find the right version from the config file"{
-            $serverConfigFile = '\\hebe\Installation\PBImsi\Kanbox\testservers.config'
-            # initialize the xml object
-            $serverConfig = New-Object XML
-            # load the config file as an xml object
-            $serverConfig.Load($serverConfigFile)
-            # iterate over the settings
-            foreach($testServer in $serverConfig.configuration.servers.add)
-            {
-                if ($testServer.name -eq  $computerName)
-                {
-                    $global:version =  $testServer.version
-                    $global:batName =  $testServer.batname
-                    $global:Server =  $testServer.DBServerInstance
-                    $global:Db = $testServer.DB
-                    $global:resetToBaseline = $testServer.resetToBaseline
-                    $global:BaseURL = $testServer.BaseURL
-                }
-                
-            }
-
-            Write-Host 'version: ' $global:version
-            Write-Host 'restToBaseline: '$global:resetToBaseline
-        }
-
 		It "should copy latest .zip-file from build server"{
 			$global:zipFile = Copy-ZippedMsi -workingFolder "$workingFolder" -version "$global:version"
 			Test-Path $global:zipFile | Should Be $True
@@ -266,6 +269,7 @@ function Add-CccLicenseToDemo
 }
 
 #Main
+Config-Load
 TearDown
 Setup-PreReqs
 Test-InstallationSQLLogin
