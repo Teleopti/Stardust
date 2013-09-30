@@ -608,6 +608,8 @@ namespace Teleopti.Ccc.AgentPortal.Main
         {
             bool result = false;
 
+			var currentBusinessUnit = AuthenticationMessageHeader.BusinessUnit;
+			AuthenticationMessageHeader.BusinessUnit = Guid.Empty;
             LicenseVerificationResultDto licenseVerificationResultDto = SdkServiceHelper.LogOnServiceClient.VerifyLicense();
 
             if (licenseVerificationResultDto.IsValidLicenseFound)
@@ -626,6 +628,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
                 }
             }
 
+			AuthenticationMessageHeader.BusinessUnit = currentBusinessUnit;
             return result;
         }
     }
