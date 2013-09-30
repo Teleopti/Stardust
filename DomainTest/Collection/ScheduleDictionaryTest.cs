@@ -898,7 +898,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     ((ScheduleRange) target[per]).AddRange(new List<IPersonAssignment> {pAssOld, pAssOldOutside});
 
                     var part = target[per].ScheduledDay(new DateOnly(2000, 1, 1));
-                    part.Remove(pAssOld);
                     part.Remove(dOffOld);
                     part.Remove(pAbsOld);
                     part.Add(pAssNew);
@@ -920,7 +919,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     part.Remove(pAssNew);
                     target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
                     Assert.IsTrue(target[per].Contains(pAssOldOutside));
-                    Assert.IsFalse(target[per].Contains(pAssOld));
+                    Assert.IsTrue(target[per].Contains(pAssOld));
                     Assert.IsTrue(target[per].Contains(dOffNew));
                     Assert.IsFalse(target[per].Contains(dOffOld));
                     Assert.IsTrue(target[per].Contains(pAbsNew));

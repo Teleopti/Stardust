@@ -118,7 +118,10 @@ namespace Teleopti.Ccc.Domain.Optimization
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public IList<IActivity> SelectedActivities { get; set; }
 
-        public TimePeriod SelectedTimePeriod { get; set; }
+	    public bool KeepActivityLength { get; set; }
+		public IActivity ActivityToKeepLengthOn { get; set; }
+
+	    public TimePeriod SelectedTimePeriod { get; set; }
         public double KeepShiftsValue { get; set; }
 
 		public ShiftPreferences()

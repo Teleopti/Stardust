@@ -10869,6 +10869,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total time of selected activity.
+        /// </summary>
+        public static string LengthOfActivity {
+            get {
+                return ResourceManager.GetString("LengthOfActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Less &lt;&lt;.
         /// </summary>
         public static string LessDoubleArrow {
