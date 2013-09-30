@@ -76,7 +76,7 @@ Scenario: Default overtime availability values on empty day
 
 Scenario: Default overtime availability values on dayoff
 	Given I have the role 'Access to overtime availability'
-	And 'I' have a day off with
+	And I have a day off with
 	| Field | Value      |
 	| Name  | DayOff     |
 	| Date  | 2013-08-20 |
