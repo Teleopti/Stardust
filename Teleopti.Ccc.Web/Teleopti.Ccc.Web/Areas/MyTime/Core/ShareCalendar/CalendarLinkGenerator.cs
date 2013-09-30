@@ -102,9 +102,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 
 			foreach (var scheduleDay in scheduleDays)
 			{
-				dynamic shift = _deserializer.DeserializeObject<Model>(scheduleDay.Model).Shift;
-				var layers = shift.Projection as IEnumerable<dynamic>;
-				foreach (var layer in layers)
+				var shift = _deserializer.DeserializeObject<Model>(scheduleDay.Model).Shift;
+				foreach (var layer in shift.Projection)
 				{
 					var evt = iCal.Create<Event>();
 
