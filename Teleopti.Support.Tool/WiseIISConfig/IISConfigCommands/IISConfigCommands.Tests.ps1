@@ -96,7 +96,8 @@ function TearDown {
         
 		It "should stop the SDK" {
 			stop-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
-			{Check-HttpStatus -url $global:BaseURL + "TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred}  | Should Throw
+			$SDKUrl = $global:BaseURL + "TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"
+			{Check-HttpStatus -url $SDKUrl -credentials $cred}  | Should Throw
 		}
 
 		It "should uninstall product"{
