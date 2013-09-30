@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.Restrictions
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 
 		public TimeSpan NightlyRestOnDay(DateOnlyDto dateOnlyDto)
 		{
-			var dateOnly = dateOnlyDto.AsDateOnly();
+			var dateOnly = dateOnlyDto.ToNullableDateOnly();
 			if (!dateOnly.HasValue) return TimeSpan.Zero;
 
 			var period = _person.Period(dateOnly.Value);

@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -14,6 +15,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 	public class CancelPersonalActivityCommandHandler : IHandleCommand<CancelPersonalActivityCommandDto>
 	{
 		private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
+		private readonly IScheduleTagAssembler _scheduleTagAssembler;
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScenarioRepository _scenarioRepository;
@@ -22,9 +24,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
-		public CancelPersonalActivityCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
+		public CancelPersonalActivityCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IScheduleTagAssembler scheduleTagAssembler, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
 		{
 			_dateTimePeriodAssembler = dateTimePeriodAssembler;
+			_scheduleTagAssembler = scheduleTagAssembler;
 			_scheduleRepository = scheduleRepository;
 			_personRepository = personRepository;
 			_scenarioRepository = scenarioRepository;
@@ -42,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var person = _personRepository.Load(command.PersonId);
 				var scenario = getDesiredScenario(command);
 				var dateTimePeriod = _dateTimePeriodAssembler.DtoToDomainEntity(command.Period);
-				var startDate = new DateOnly(command.Date.DateTime);
+				var startDate = command.Date.ToDateOnly();
 
 				var scheduleDictionary =
 					_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
@@ -57,7 +60,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				{
 					cancelPersonalActivity(personAssignment, dateTimePeriod);					
 				}
-				_saveSchedulePartService.Save(scheduleDay, rules);
+
+				var scheduleTagEntity =
+					_scheduleTagAssembler.DtoToDomainEntity(new ScheduleTagDto { Id = command.ScheduleTagId });
+				_saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
 				using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
 				{
 					uow.PersistAll();

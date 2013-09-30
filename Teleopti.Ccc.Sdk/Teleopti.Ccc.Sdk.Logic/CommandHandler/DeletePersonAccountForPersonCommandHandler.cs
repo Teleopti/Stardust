@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -31,10 +32,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 var foundPerson = _personRepository.Get(command.PersonId);
-                if (foundPerson == null) throw new FaultException("Person is not exist.");
+                if (foundPerson == null) throw new FaultException("Person does not exist.");
                 var foundAbsence = _absenceRepository.Get(command.AbsenceId);
-                if (foundAbsence == null) throw new FaultException("Absence is not exist.");
-                var dateFrom = new DateOnly(command.DateFrom.DateTime);
+                if (foundAbsence == null) throw new FaultException("Absence does not exist.");
+                var dateFrom = command.DateFrom.ToDateOnly();
 
                 checkIfAuthorized(foundPerson, dateFrom);
 

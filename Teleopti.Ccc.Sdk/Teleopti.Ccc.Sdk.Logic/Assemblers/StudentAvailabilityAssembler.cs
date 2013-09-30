@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.Assemblers
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 }
             }
             IPerson person = PersonAssembler.DtoToDomainEntity(dto.Person);
-            IStudentAvailabilityDay entity = new StudentAvailabilityDay(person, new DateOnly(dto.RestrictionDate.DateTime), restrictions);
+            IStudentAvailabilityDay entity = new StudentAvailabilityDay(person, dto.RestrictionDate.ToDateOnly(), restrictions);
             entity.NotAvailable = dto.NotAvailable;
             return entity;
         }
