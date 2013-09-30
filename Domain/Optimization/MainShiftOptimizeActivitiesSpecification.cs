@@ -31,8 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 && CorrectStart(other)
                 && CorrectEnd(other)
                 && CorrectAlteredBetween(other)
-                && LockedActivityNotMoved(other))
-				&& LengthOfActivityEqual((other));
+                && LockedActivityNotMoved(other));
         }
 
         public bool LockedActivityNotMoved(IVisualLayerCollection other)
@@ -43,14 +42,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             return (compareLockedActivities(_visualLayerColl, other) && compareLockedActivities(other, _visualLayerColl));
 
         }
-
-		public bool LengthOfActivityEqual(IVisualLayerCollection other)
-		{
-			if (_optimizerActivitiesPreferences.DoNotAlterLengthOfActivity == null)
-				return true;
-
-			return compareLengthOfStaticLengthActivity(_visualLayerColl, other);
-		}
 
 		public bool CorrectShiftCategory(IEditableShift otherShift)
         {
@@ -125,26 +116,6 @@ namespace Teleopti.Ccc.Domain.Optimization
                 shiftLayersOutsideAfter.IsSatisfiedBy(
                     VisualLayerCollectionSpecification.IdenticalLayers(originalLayersOutsideAfter));
         }
-
-		private bool compareLengthOfStaticLengthActivity(IVisualLayerCollection compareFrom, IVisualLayerCollection compareTo)
-		{
-			IActivity staticActivity = _optimizerActivitiesPreferences.DoNotAlterLengthOfActivity;
-			TimeSpan fromLength = TimeSpan.Zero;
-			foreach (var fromLayer in compareFrom)
-			{
-				if (fromLayer.Payload.Equals(staticActivity))
-					fromLength = fromLength.Add(fromLayer.Period.ElapsedTime());
-			}
-
-			TimeSpan toLength = TimeSpan.Zero;
-			foreach (var toLayer in compareTo)
-			{
-				if (toLayer.Payload.Equals(staticActivity))
-					toLength = toLength.Add(toLayer.Period.ElapsedTime());
-			}
-
-			return fromLength == toLength;
-		}
 
 		private bool compareLockedActivities(IVisualLayerCollection compareFrom, IVisualLayerCollection compareTo)
         {
