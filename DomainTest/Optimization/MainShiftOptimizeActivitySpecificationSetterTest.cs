@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_optimizationPreferences.Shifts.KeepShiftCategories = true;
 			_optimizationPreferences.Shifts.KeepStartTimes = true;
 			_optimizationPreferences.Shifts.SelectedActivities = new List<IActivity >();
-			_optimizationPreferences.Shifts.KeepActivityLength = true;
 
 			ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences);
 

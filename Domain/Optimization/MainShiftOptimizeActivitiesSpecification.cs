@@ -27,12 +27,11 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             IVisualLayerCollection other = obj.ProjectionService().CreateProjection();
 
-            return (CorrectShiftCategory(obj)
-                && CorrectStart(other)
-                && CorrectEnd(other)
-                && CorrectAlteredBetween(other)
-                && LockedActivityNotMoved(other))
-				&& LengthOfActivityEqual((other));
+	        return (CorrectShiftCategory(obj)
+	                && CorrectStart(other)
+	                && CorrectEnd(other)
+	                && CorrectAlteredBetween(other)
+	                && LockedActivityNotMoved(other));
         }
 
         public bool LockedActivityNotMoved(IVisualLayerCollection other)
@@ -43,14 +42,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             return (compareLockedActivities(_visualLayerColl, other) && compareLockedActivities(other, _visualLayerColl));
 
         }
-
-		public bool LengthOfActivityEqual(IVisualLayerCollection other)
-		{
-			if (_optimizerActivitiesPreferences.DoNotAlterLengthOfActivity == null)
-				return true;
-
-			return compareLengthOfStaticLengthActivity(_visualLayerColl, other);
-		}
 
         public bool CorrectShiftCategory(IMainShift shift)
         {
