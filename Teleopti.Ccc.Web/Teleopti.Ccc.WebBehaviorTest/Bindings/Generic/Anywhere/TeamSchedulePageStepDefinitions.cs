@@ -94,7 +94,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 			Browser.Interactions.AssertNotExists("#skill-selector li:nth-child(" + skills.Length + ")", "#skill-selector li:nth-child(" + (skills.Length + 1) + ")");
 		}
-		
+
+		[Then(@"I should see a day off for '(.*)'")]
+		public void ThenIShouldSeeADayOffFor(string personName)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .dayoff", personName);
+		}
+
 		public class TeamInfo
 		{
 			public string Team { get; set; }
