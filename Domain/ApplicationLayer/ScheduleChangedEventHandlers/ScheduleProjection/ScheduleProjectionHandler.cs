@@ -21,20 +21,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(ProjectionChangedEvent @event)
 		{
-			createReadModel(@event);
+			var closestLayerToNow = createReadModel(@event);
+			handleEnqueueRtaMessage(@event, closestLayerToNow);
 		}
 
 		public void Handle(ProjectionChangedEventForScheduleProjection @event)
 		{
-			createReadModel(@event);
+			var closestLayerToNow = createReadModel(@event);
+			handleEnqueueRtaMessage(@event, closestLayerToNow);
 		}
 
-		private void createReadModel(ProjectionChangedEventBase @event)
+		private DateTimePeriod? createReadModel(ProjectionChangedEventBase @event)
 		{
-			if (!@event.IsDefaultScenario) return;
-			var nearestLayerToNow = new ProjectionChangedEventLayer
+			if (!@event.IsDefaultScenario) 
+				return null;
+			var closestLayerToNow = new ProjectionChangedEventLayer
 				{
-					StartDateTime = DateTime.MaxValue
+					StartDateTime = DateTime.MaxValue,
+					EndDateTime = DateTime.MaxValue
 				};
 
 			foreach (var scheduleDay in @event.ScheduleDays)
@@ -48,48 +52,48 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 				foreach (var layer in scheduleDay.Layers)
 				{
-					if (isCurrentLayerCloser(date, layer, nearestLayerToNow))
-						nearestLayerToNow = layer;
+					if (isLayerRightNow(layer) || 
+						isCurrentLayerCloser(layer, closestLayerToNow))
+						closestLayerToNow = layer;
 					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, @event.ScenarioId, @event.PersonId, layer);
 				}
 			}
-			
-			if (@event.ScheduleDays.All(x => x.Date != DateTime.UtcNow.Date))
-				return;
 
-			if (!haveChanged(nearestLayerToNow))
-				layersHaveBeenRemoved(nearestLayerToNow);
-
-			_serviceBus.Publish(new UpdatedScheduleDay
-				{
-					Datasource = @event.Datasource,
-					BusinessUnitId = @event.BusinessUnitId,
-					PersonId = @event.PersonId,
-					ActivityStartDateTime = nearestLayerToNow.StartDateTime,
-					ActivityEndDateTime = nearestLayerToNow.EndDateTime,
-					Timestamp = DateTime.UtcNow
-				});
+			return new DateTimePeriod(closestLayerToNow.StartDateTime.ToUniversalTime(), closestLayerToNow.EndDateTime.ToUniversalTime());
 		}
 
-		private static void layersHaveBeenRemoved(ProjectionChangedEventLayer nearestLayerToNow)
+		private static bool isLayerRightNow(ProjectionChangedEventLayer layer)
 		{
-			nearestLayerToNow.StartDateTime = DateTime.UtcNow;
-			nearestLayerToNow.EndDateTime = DateTime.UtcNow.AddDays(1);
+			return layer.StartDateTime.ToUniversalTime() <= DateTime.UtcNow &&
+			        layer.EndDateTime.ToUniversalTime() >= DateTime.UtcNow;
+		}
+		
+		private static bool isCurrentLayerCloser(ProjectionChangedEventLayer layer, ProjectionChangedEventLayer closestLayerToNow)
+		{
+			return layer.StartDateTime.ToUniversalTime() >= DateTime.UtcNow &&
+			         layer.StartDateTime.ToUniversalTime() < closestLayerToNow.StartDateTime.ToUniversalTime();
 		}
 
-		private static bool haveChanged(ProjectionChangedEventLayer nearestLayerToNow)
+		private void handleEnqueueRtaMessage(ProjectionChangedEventBase @event, DateTimePeriod? closestLayer)
 		{
-			return nearestLayerToNow.StartDateTime != DateTime.MaxValue;
-		}
+			if (closestLayer == null) return;
 
-		private static bool isCurrentLayerCloser(DateOnly date, ProjectionChangedEventLayer layer, ProjectionChangedEventLayer nearestLayerToNow)
-		{
-			return date == DateTime.UtcNow.Date &&
-			       ((layer.StartDateTime.ToUniversalTime() < DateTime.UtcNow &&
-			         layer.EndDateTime.ToUniversalTime() > DateTime.UtcNow)
-			        ||
-			        (layer.StartDateTime.ToUniversalTime() > DateTime.UtcNow &&
-			         layer.StartDateTime.ToUniversalTime() < nearestLayerToNow.StartDateTime.ToUniversalTime()));
+			var nextActivityStartTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
+			                                                                                           @event.PersonId);
+			if ((nextActivityStartTime != null &&
+			     NotifyRtaDecider.ShouldSendMessage(closestLayer.Value, nextActivityStartTime.Value)) ||
+			    (nextActivityStartTime == null &&
+				closestLayer.Value.EndDateTime > DateTime.UtcNow &&
+				closestLayer.Value.EndDateTime != DateTime.MaxValue.ToUniversalTime()))
+				_serviceBus.Publish(new UpdatedScheduleDay
+					{
+						Datasource = @event.Datasource,
+						BusinessUnitId = @event.BusinessUnitId,
+						PersonId = @event.PersonId,
+						ActivityStartDateTime = closestLayer.Value.StartDateTime,
+						ActivityEndDateTime = closestLayer.Value.EndDateTime,
+						Timestamp = DateTime.UtcNow
+					});
 		}
 	}
 }
