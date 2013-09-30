@@ -163,7 +163,7 @@
 		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj"
 				Properties="Configuration=$(Configuration);Platform=AnyCPU"
 				Targets="Build">
-			<Output ItemName="DbManagerExe" TaskParameter="TargetOutputs"/>
+			<!--<Output ItemName="DbManagerExe" TaskParameter="TargetOutputs"/>-->
 		</MSBuild>
 		
 		<Message Importance="high" Text="Compile of Db Manager starting..." />
