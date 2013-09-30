@@ -52,7 +52,7 @@ Scenario: Order by shift start
 	| Start time     | 2013-09-27 09:00 |
 	| End time       | 2013-09-27 17:00 |
 	When I view schedules for '2013-09-27'
-	Then I should see the schedule of 'Pierre Baldi' before 'Ashley Andeen'
+	Then I should see 'Pierre Baldi' before 'Ashley Andeen'
 
 Scenario: Order full day absences after shifts in team schedule
 	Given I have the role 'Anywhere Team Green'
@@ -68,7 +68,7 @@ Scenario: Order full day absences after shifts in team schedule
 	| Start time     | 2013-09-27 08:00 |
 	| End time       | 2013-09-27 17:00 |
 	When I view schedules for '2013-09-27'
-	Then I should see the schedule of 'Pierre Baldi' before 'Ashley Andeen'
+	Then I should see 'Pierre Baldi' before 'Ashley Andeen'
 
 Scenario: Order days off after full day absences in team schedule
 	Given I have the role 'Anywhere Team Green'
@@ -82,7 +82,7 @@ Scenario: Order days off after full day absences in team schedule
 	| Name  | Day off    |
 	| Date  | 2013-09-27 |
 	When I view schedules for '2013-09-27'
-	Then I should see the schedule of 'Ashley Andeen' before 'Pierre Baldi'
+	Then I should see 'Ashley Andeen' before 'Pierre Baldi'
 
 Scenario: Order no shifts last
 	Given I have the role 'Anywhere Team Green'
@@ -93,5 +93,6 @@ Scenario: Order no shifts last
 	| Start time     | 2013-09-27 08:00 |
 	| End time       | 2013-09-27 17:00 |
 	And 'Ashley Andeen' has no shift
+	And I have no shift
 	When I view schedules for '2013-09-27'
-	Then I should see the schedule of 'Pierre Baldi' before 'Ashley Andeen'
+	Then I should see 'Pierre Baldi' before 'Ashley Andeen'
