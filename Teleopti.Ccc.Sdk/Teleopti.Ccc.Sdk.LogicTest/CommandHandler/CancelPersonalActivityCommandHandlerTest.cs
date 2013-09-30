@@ -44,9 +44,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		private CancelPersonalActivityCommandDto _cancelPersonalActivityCommandDto;
 		private IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 	    private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private IScheduleTagAssembler _scheduleTagAssembler;
 
 
-	    [SetUp]
+		[SetUp]
 		public void Setup()
 		{
 			_mock = new MockRepository();
@@ -59,8 +60,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_saveSchedulePartService = _mock.DynamicMock<ISaveSchedulePartService>();
 			_messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
 			_businessRulesForPersonalAccountUpdate = _mock.DynamicMock<IBusinessRulesForPersonalAccountUpdate>();
+			_scheduleTagAssembler = _mock.DynamicMock<IScheduleTagAssembler>();
 
-			_target = new CancelPersonalActivityCommandHandler(_dateTimePeriodAssembler, _scheduleRepository, _personRepository, _scenarioRepository, _currentUnitOfWorkFactory, _saveSchedulePartService, _messageBrokerEnablerFactory, _businessRulesForPersonalAccountUpdate);
+			_target = new CancelPersonalActivityCommandHandler(_dateTimePeriodAssembler, _scheduleTagAssembler, _scheduleRepository, _personRepository, _scenarioRepository, _currentUnitOfWorkFactory, _saveSchedulePartService, _messageBrokerEnablerFactory, _businessRulesForPersonalAccountUpdate);
 
 			_person = PersonFactory.CreatePerson();
 			_person.SetId(Guid.NewGuid());
@@ -101,7 +103,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);
 				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
-				Expect.Call(() => _saveSchedulePartService.Save(scheduleDay, rules));
+				Expect.Call(() => _saveSchedulePartService.Save(scheduleDay, rules, null));
 			}
 			using (_mock.Playback())
 			{
@@ -133,7 +135,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(scheduleDay);
 				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
-				Expect.Call(() => _saveSchedulePartService.Save(scheduleDay, rules));
+				Expect.Call(() => _saveSchedulePartService.Save(scheduleDay, rules, null));
 			}
 			using (_mock.Playback())
 			{

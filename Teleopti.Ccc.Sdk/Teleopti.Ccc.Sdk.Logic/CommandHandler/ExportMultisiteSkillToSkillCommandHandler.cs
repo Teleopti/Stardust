@@ -6,9 +6,8 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.General;
 
@@ -44,8 +43,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 //Save start of processing to job history
-                var period = new DateOnlyPeriod(new DateOnly(command.Period.StartDate.DateTime),
-                                                new DateOnly(command.Period.EndDate.DateTime));
+                var period = command.Period.ToDateOnlyPeriod();
                 var jobResult = new JobResult(JobCategory.MultisiteExport, period,
                                               ((IUnsafePerson) TeleoptiPrincipal.Current).Person, DateTime.UtcNow);
                 _jobResultRepository.Add(jobResult);

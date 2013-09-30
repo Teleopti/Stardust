@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -157,7 +158,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                                                            WindowsLogOnName = dto.WindowsLogOnName
                                                        };
             if(personTerminated(dto, person))
-                person.TerminatePerson(new DateOnly(dto.TerminationDate.DateTime), _personAccountUpdater) ;
+                person.TerminatePerson(dto.TerminationDate.ToDateOnly(), _personAccountUpdater) ;
             if(personActivated(dto, person))
                 person.ActivatePerson(_personAccountUpdater);
             if (!string.IsNullOrEmpty(dto.Note))

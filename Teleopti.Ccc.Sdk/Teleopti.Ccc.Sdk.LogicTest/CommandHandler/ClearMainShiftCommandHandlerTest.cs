@@ -1,10 +1,12 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Rhino.Mocks.Constraints;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
+using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -15,7 +17,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     [TestFixture]
     public class ClearMainShiftCommandHandlerTest
     {
-        private MockRepository _mock;
         private IScheduleRepository _scheduleRepository;
         private IPersonRepository _personRepository;
         private IScenarioRepository _scenarioRepository;
@@ -32,21 +33,22 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private SchedulePartFactoryForDomain _scheduleRange;
     	private IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
         private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+	    private IScheduleTagAssembler _scheduleTagAssembler;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
-            _mock = new MockRepository();
-            _scheduleRepository = _mock.StrictMock<IScheduleRepository>();
-            _personRepository = _mock.StrictMock<IPersonRepository>();
-            _scenarioRepository = _mock.StrictMock<IScenarioRepository>();
-            _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
-            _saveSchedulePartService = _mock.StrictMock<ISaveSchedulePartService>();
-            _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
-            _businessRulesForPersonalAccountUpdate = _mock.DynamicMock<IBusinessRulesForPersonalAccountUpdate>();
-            _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
+            _scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			_scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
+			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			_saveSchedulePartService = MockRepository.GenerateMock<ISaveSchedulePartService>();
+			_messageBrokerEnablerFactory = MockRepository.GenerateMock<IMessageBrokerEnablerFactory>();
+			_businessRulesForPersonalAccountUpdate = MockRepository.GenerateMock<IBusinessRulesForPersonalAccountUpdate>();
+			_currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			_scheduleTagAssembler = MockRepository.GenerateMock<IScheduleTagAssembler>();
 
-            _target = new ClearMainShiftCommandHandler(_scheduleRepository,_personRepository,_scenarioRepository,_currentUnitOfWorkFactory,_saveSchedulePartService,_messageBrokerEnablerFactory,_businessRulesForPersonalAccountUpdate);
+            _target = new ClearMainShiftCommandHandler(_scheduleTagAssembler, _scheduleRepository,_personRepository,_scenarioRepository,_currentUnitOfWorkFactory,_saveSchedulePartService,_messageBrokerEnablerFactory,_businessRulesForPersonalAccountUpdate);
 
             _person = PersonFactory.CreatePerson("test");
             _person.SetId(Guid.NewGuid());
@@ -58,64 +60,81 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _scheduleRange = new SchedulePartFactoryForDomain(_person, _scenario, _period, SkillFactory.CreateSkill("Test Skill"));
         }
 
-        [Test]
-        public void ClearMainShiftFromTheDictionarySuccessfully()
-        {
-            var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
-            var schedulePart = _scheduleRange.CreatePart();
-            var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
-            var dictionary = _mock.DynamicMock<IScheduleDictionary>();
-        	var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
-            
-            using (_mock.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
-                Expect.Call(_personRepository.Load(_clearMainShiftDto.PersonId)).Return(_person);
-                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
-								Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).
-                    IgnoreArguments().Return(dictionary);
-                Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
-                Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
-                Expect.Call(() => schedulePart.DeleteMainShift(schedulePart));
-				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
-                Expect.Call(() => _saveSchedulePartService.Save(schedulePart,rules));
-            }
-            using(_mock.Playback())
-            {
-                _target.Handle(_clearMainShiftDto);
-            }
-        }
+	    [Test]
+	    public void ClearMainShiftFromTheDictionarySuccessfully()
+	    {
+		    var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+		    var schedulePart = _scheduleRange.CreatePart();
+		    var scheduleRangeMock = MockRepository.GenerateMock<IScheduleRange>();
+		    var dictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+		    var rules = MockRepository.GenerateMock<INewBusinessRuleCollection>();
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ForGiven"), Test]
-		public void ClearMainShiftFromTheDictionaryForGivenScenarioSuccessfully()
+		    _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+		    _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+		    _personRepository.Stub(x => x.Load(_clearMainShiftDto.PersonId)).Return(_person);
+		    _scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario))
+		                       .IgnoreArguments()
+		                       .Return(dictionary);
+		    dictionary.Stub(x => x[_person]).Return(scheduleRangeMock);
+		    scheduleRangeMock.Stub(x => x.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
+		    _businessRulesForPersonalAccountUpdate.Stub(x => x.FromScheduleRange(scheduleRangeMock)).Return(rules);
+
+		    _target.Handle(_clearMainShiftDto);
+
+		    _saveSchedulePartService.AssertWasCalled(x => x.Save(schedulePart, rules, null));
+	    }
+
+	    [Test]
+	    public void ClearMainShiftFromTheDictionaryForGivenScenarioSuccessfully()
+	    {
+		    var scenarioId = Guid.NewGuid();
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+		    var schedulePart = _scheduleRange.CreatePart();
+		    var scheduleRangeMock = MockRepository.GenerateMock<IScheduleRange>();
+			var dictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			var rules = MockRepository.GenerateMock<INewBusinessRuleCollection>();
+
+		    _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+		    _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+		    _personRepository.Stub(x => x.Load(_clearMainShiftDto.PersonId)).Return(_person);
+		    _scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).IgnoreArguments().Return(dictionary);
+		    dictionary.Stub(x => x[_person]).Return(scheduleRangeMock);
+		    scheduleRangeMock.Stub(x => x.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
+		    _businessRulesForPersonalAccountUpdate.Stub(x => x.FromScheduleRange(scheduleRangeMock)).Return(rules);
+		    
+		    _clearMainShiftDto.ScenarioId = scenarioId;
+		    _target.Handle(_clearMainShiftDto);
+
+		    _scenarioRepository.AssertWasCalled(x => x.Get(scenarioId));
+		    _saveSchedulePartService.AssertWasCalled(x => x.Save(schedulePart, rules, null));
+	    }
+
+		[Test]
+		public void ClearMainShiftWithScheduleTag()
 		{
-			var scenarioId = Guid.NewGuid();
-			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			var schedulePart = _scheduleRange.CreatePart();
-			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
-			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
-			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
-            
-			using (_mock.Record())
-			{
-				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
-				Expect.Call(_personRepository.Load(_clearMainShiftDto.PersonId)).Return(_person);
-				Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
-				Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).
-					IgnoreArguments().Return(dictionary);
-				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
-				Expect.Call(scheduleRangeMock.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
-				Expect.Call(() => schedulePart.DeleteMainShift(schedulePart));
-				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
-				Expect.Call(() => _saveSchedulePartService.Save(schedulePart,rules));
-			}
-			using (_mock.Playback())
-			{
-				_clearMainShiftDto.ScenarioId = scenarioId;
-				_target.Handle(_clearMainShiftDto);
-			}
+			var scheduleRangeMock = MockRepository.GenerateMock<IScheduleRange>();
+			var dictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			var rules = MockRepository.GenerateMock<INewBusinessRuleCollection>();
+			var tag = MockRepository.GenerateMock<IScheduleTag>();
+			var tagId = Guid.NewGuid();
+
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			_currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_personRepository.Stub(x => x.Load(_clearMainShiftDto.PersonId)).Return(_person);
+			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).IgnoreArguments().Return(dictionary);
+			dictionary.Stub(x => x[_person]).Return(scheduleRangeMock);
+			scheduleRangeMock.Stub(x => x.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
+			_businessRulesForPersonalAccountUpdate.Stub(x => x.FromScheduleRange(scheduleRangeMock)).Return(rules);
+			_scheduleTagAssembler.Stub(x => x.DtoToDomainEntity(null))
+			                     .Constraints(new PredicateConstraint<ScheduleTagDto>(t => t.Id == tagId))
+			                     .Return(tag);
+
+			_clearMainShiftDto.ScheduleTagId = tagId;
+			_target.Handle(_clearMainShiftDto);
+
+			_saveSchedulePartService.AssertWasCalled(x => x.Save(schedulePart, rules, tag));
 		}
     }
 }
