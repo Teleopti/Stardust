@@ -543,9 +543,9 @@
 			this.comboBoxAdvTag.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.comboBoxAdvTag.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
 			this.comboBoxAdvTag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvTag.Location = new System.Drawing.Point(3, 3);
+			this.comboBoxAdvTag.Location = new System.Drawing.Point(263, 3);
 			this.comboBoxAdvTag.Name = "comboBoxAdvTag";
-			this.comboBoxAdvTag.Size = new System.Drawing.Size(254, 21);
+			this.comboBoxAdvTag.Size = new System.Drawing.Size(148, 21);
 			this.comboBoxAdvTag.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvTag.TabIndex = 6;
 			// 
@@ -553,7 +553,7 @@
 			// 
 			this.labelTagChangesWith.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelTagChangesWith.AutoSize = true;
-			this.labelTagChangesWith.Location = new System.Drawing.Point(263, 5);
+			this.labelTagChangesWith.Location = new System.Drawing.Point(3, 5);
 			this.labelTagChangesWith.Name = "labelTagChangesWith";
 			this.labelTagChangesWith.Size = new System.Drawing.Size(127, 13);
 			this.labelTagChangesWith.TabIndex = 0;

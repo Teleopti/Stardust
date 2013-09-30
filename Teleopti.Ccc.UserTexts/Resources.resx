@@ -11773,4 +11773,8 @@ Reduce the complexity to use these shifts.</value>
     <value>here</value>
     <comment>here</comment>
   </data>
+  <data name="LengthOfActivity" xml:space="preserve">
+    <value>Total time of selected activity</value>
+    <comment>Total time of selected activity</comment>
+  </data>
 </root>
