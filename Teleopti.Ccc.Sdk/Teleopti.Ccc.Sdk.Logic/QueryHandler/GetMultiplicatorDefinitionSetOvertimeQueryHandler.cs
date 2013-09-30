@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -25,9 +25,13 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		public ICollection<DefinitionSetDto> Handle(GetMultiplicatorDefinitionSetOvertimeDto query)
 		{
-			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				var multiplicatorDefinitionSetList = _multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions();
+				IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSetList;
+				using (unitOfWork.LoadDeletedIfSpecified(query.LoadDeleted))
+				{
+					multiplicatorDefinitionSetList = _multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions();
+				}
 				var definitionSetDtoList = new List<DefinitionSetDto>();
 
 				var period = query.Period.ToDateOnlyPeriod();
@@ -57,16 +61,11 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		private IEnumerable<DefinitionSetLayerDto> getProjectedLayerCollection(IEnumerable<IMultiplicatorLayer> projectedLayers)
 		{
-			var layerList = new List<DefinitionSetLayerDto>();
-
-			foreach (var multiplicatorLayer in projectedLayers)
-			{
-				var defintionSetDto = new DefinitionSetLayerDto { MultiplicatorId = multiplicatorLayer.Payload.Id.GetValueOrDefault() };
-				defintionSetDto.Period = _dateTimePeriodAssembler.DomainEntityToDto(multiplicatorLayer.Period);
-				layerList.Add(defintionSetDto);
-			}
-
-			return layerList;
+			return projectedLayers.Select(multiplicatorLayer => new DefinitionSetLayerDto
+				{
+					MultiplicatorId = multiplicatorLayer.Payload.Id.GetValueOrDefault(), 
+					Period = _dateTimePeriodAssembler.DomainEntityToDto(multiplicatorLayer.Period)
+				}).ToList();
 		}
 	}
 }
