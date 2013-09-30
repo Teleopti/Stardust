@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					    new ReadOnlyCollection<IPerson>(new List<IPerson> {_person1}), _dateOnly.AddDays(1),
 					    _schedulingOptions, scheduleDictionary)).IgnoreArguments()
 			          .Return(secondDay);
-			    Expect.Call(_scheduleRestrictionExtractor.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo)).IgnoreArguments()
+			    Expect.Call(_scheduleRestrictionExtractor.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo,_teamBlockInfo )).IgnoreArguments()
 			          .Return(scheduleRestriction);
 		    }
 
@@ -228,13 +228,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			          .Return(firstDay);
 			    Expect.Call(_scheduleRestrictionExtractor.ExtractForOnePersonOneBlock(blockPeriod.DayCollection(), matrixList, _schedulingOptions, _timeZoneInfo)).IgnoreArguments()
 			          .Return(scheduleRestriction);
-				Expect.Call(_scheduleRestrictionExtractor.ExtractForOneTeamOneDay(_dateOnly, matrixList, _schedulingOptions, _timeZoneInfo)).IgnoreArguments()
-			          .Return(scheduleRestriction);
+                //Expect.Call(_scheduleRestrictionExtractor.ExtractForOneTeamOneDay(_dateOnly, matrixList, _schedulingOptions, _timeZoneInfo)).IgnoreArguments()
+                //      .Return(scheduleRestriction);
 			    Expect.Call(_suggestedShiftRestrictionExtractor.ExtractForOneBlock(shift, _schedulingOptions)).Return(shiftRestriction);
-			    Expect.Call(_suggestedShiftRestrictionExtractor.ExtractForOneTeam(shift,_schedulingOptions)).Return(shiftRestriction);
+			    //Expect.Call(_suggestedShiftRestrictionExtractor.ExtractForOneTeam(shift,_schedulingOptions)).Return(shiftRestriction);
 			    Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(schedulePeriod);
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(blockPeriod);
 				Expect.Call(_scheduleMatrixPro.Person).Return(_person1);
+
 		    }
 
 		    using (_mocks.Playback())
@@ -380,7 +381,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 						new ReadOnlyCollection<IPerson>(new List<IPerson> { _person1 }), _dateOnly.AddDays(1),
 						_schedulingOptions, scheduleDictionary)).IgnoreArguments()
 					  .Return(secondDay);
-				Expect.Call(_scheduleRestrictionExtractor.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo)).IgnoreArguments()
+				Expect.Call(_scheduleRestrictionExtractor.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo,_teamBlockInfo )).IgnoreArguments()
 					  .Return(null);
 			}
 
