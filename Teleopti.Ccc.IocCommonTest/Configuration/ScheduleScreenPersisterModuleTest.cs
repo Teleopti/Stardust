@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Interfaces.Infrastructure;
@@ -38,8 +39,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
         		);
             var instance = _container.Resolve<IScheduleScreenPersister>(
                 TypedParameter.From(mocks.Stub<IPersonRequestPersister>()),
-                TypedParameter.From(mocks.Stub<IPersonAbsenceAccountRefresher>()),
                 TypedParameter.From(mocks.Stub<IPersonAbsenceAccountValidator>()),
+                TypedParameter.From(mocks.Stub<ITraceableRefreshService>()),
 				TypedParameter.From(mocks.Stub<IMessageBrokerIdentifier>()),
 				TypedParameter.From(mocks.Stub<IOwnMessageQueue>()),
                 TypedParameter.From(scheduleDictionaryBatchingPersister)

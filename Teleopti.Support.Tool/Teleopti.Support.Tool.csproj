@@ -27,6 +27,9 @@
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
     <PublishUrl>http://localhost/V7Config/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -41,9 +44,6 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,7 +64,13 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Teleopti.Support.Tool.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
@@ -161,6 +167,12 @@
     <Compile Include="DataLayer\NHibDatasource.cs" />
     <Compile Include="DataLayer\XmlHandler.cs" />
     <Compile Include="DataLayer\XmlHandlerException.cs" />
+    <Compile Include="HelpWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HelpWindow.Designer.cs">
+      <DependentUpon>HelpWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -170,6 +182,12 @@
     <Compile Include="ProcessHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Controls\ChangeSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ChangeSettings.Designer.cs">
+      <DependentUpon>ChangeSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="SettingsInRegistry.cs" />
     <EmbeddedResource Include="Controls\ConnectionString\ConnectionSettings.resx">
       <DependentUpon>ConnectionSettings.cs</DependentUpon>
@@ -198,6 +216,9 @@
     <EmbeddedResource Include="Controls\ManageDatabaseVersions.resx">
       <DependentUpon>ManageDatabaseVersions.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="HelpWindow.resx">
+      <DependentUpon>HelpWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -211,7 +232,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Controls\ChangeSettings.resx">
+      <DependentUpon>ChangeSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="App.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -277,14 +302,20 @@
     <Folder Include="Controls\Patch\" />
     <Folder Include="Controls\Resources\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Teleopti.Support.Code\Teleopti.Support.Code.csproj">
+      <Project>{76c7a806-bcb0-41a5-ab91-fc22d3f2ad0c}</Project>
+      <Name>Teleopti.Support.Code</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>COPY "$(ProjectDir)..\BuildArtifacts\TeleoptiCCC7.nhib.xml" "V7Config.nhib.xml" /Y
-</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>XCOPY "$(ProjectDir)..\BuildArtifacts" "$(ProjectDir)bin\$(Configuration)\BuildArtifacts" /S /Y /I
+XCOPY "$(ProjectDir)..\CCnet\*.config" "$(ProjectDir)bin\$(Configuration)\BuildArtifacts" /Y /I</PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -41,9 +41,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private PersonRepository target;
 		private IAbsence absence;
 		private IWorkflowControlSet _workflowControlSet;
+	    private MockRepository _mockRepository;
+	    private IPersonAccountUpdater _personAccountUpdater;
 
 		protected override void ConcreteSetup()
 		{
+		    _mockRepository = new MockRepository();
+		    _personAccountUpdater = _mockRepository.StrictMock<IPersonAccountUpdater>();
+
 			target = new PersonRepository(UnitOfWork);
 
 			absence = AbsenceFactory.CreateAbsence("for test");
@@ -175,8 +180,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var person = PersonFactory.CreatePerson("test person");
 		    person.WindowsAuthenticationInfo = new WindowsAuthenticationInfo
 		                                           {DomainName = "domain", WindowsLogOnName = "username"};
-			
-			person.TerminalDate = DateOnly.Today.AddDays(-2);
+
+            person.TerminatePerson(DateOnly.Today.AddDays(-2), _personAccountUpdater);
 			PersistAndRemoveFromUnitOfWork(person);
 
 			target.DoesWindowsUserExists("domain", "username").Should().Be.False();
@@ -361,7 +366,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var okPass = Guid.NewGuid().ToString();
 			var okLogon = Guid.NewGuid().ToString();
 			var person = PersonFactory.CreatePersonWithBasicPermissionInfo(okLogon, okPass);
-			person.TerminalDate = new DateOnly(1800,1,1);
+			person.TerminatePerson(new DateOnly(1800,1,1), _personAccountUpdater);
 			PersistAndRemoveFromUnitOfWork(person);
 			Assert.IsNull(target.TryFindBasicAuthenticatedPerson(okLogon));
 		}
@@ -447,7 +452,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var okDomain = Guid.NewGuid().ToString();
 			var okLogon = Guid.NewGuid().ToString();
 			var person = PersonFactory.CreatePersonWithWindowsPermissionInfo(okLogon, okDomain);
-			person.TerminalDate = new DateOnly(1800, 1, 1);
+			person.TerminatePerson(new DateOnly(1800, 1, 1), _personAccountUpdater);
 			PersistAndRemoveFromUnitOfWork(person);
 			Assert.IsFalse(target.TryFindWindowsAuthenticatedPerson(okDomain, okLogon, out retPer));
 		}
@@ -606,7 +611,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(role1);
 
             IPerson per = PersonFactory.CreatePerson("Test", "Testorson");
-            per.TerminalDate = DateOnly.Today.AddDays(-1);
+            per.TerminatePerson(DateOnly.Today.AddDays(-1), _personAccountUpdater);
             IPersonPeriod personPeriod =
                 PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), team);
             per.AddPersonPeriod(personPeriod);
@@ -1300,7 +1305,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPersonPeriod personPeriod1 =
 				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), new PersonContract(contract, partTimePercentage, contractSchedule), team1);
 			per1.AddPersonPeriod(personPeriod1);
-			per1.TerminalDate = new DateOnly(2002,1,1);
+			per1.TerminatePerson(new DateOnly(2002,1,1), _personAccountUpdater);
 
 			PersistAndRemoveFromUnitOfWork(site1);
 			PersistAndRemoveFromUnitOfWork(team1);

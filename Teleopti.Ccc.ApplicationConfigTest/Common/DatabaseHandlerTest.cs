@@ -27,17 +27,17 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Common
                     .Repeat.Any();
                 
                 Expect.Call(_commandLineArgument.DestinationServer)
-                    .Return(IniFileInfo.ServerName);
+					.Return(IniFileInfo.SQL_SERVER_NAME);
 
                 Expect.Call(_commandLineArgument.DestinationDatabase)
-                    .Return(IniFileInfo.Database)
+					.Return(IniFileInfo.DB_CCC7)
                     .Repeat.Any();
 
                 Expect.Call(_commandLineArgument.DestinationUserName)
-                   .Return(IniFileInfo.UserName);
+				   .Return(IniFileInfo.SQL_LOGIN);
                 
                 Expect.Call(_commandLineArgument.DestinationPassword)
-                   .Return(IniFileInfo.Password);
+				   .Return(IniFileInfo.SQL_PASSWORD);
                     
                       
             }

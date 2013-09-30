@@ -15,6 +15,8 @@ using System.Xml;
 using System.Xml.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Tracking;
 using log4net;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
@@ -803,7 +805,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
                 var assembler = _factoryProvider.CreatePersonAssembler();
                 ((PersonAssembler)assembler).EnableSaveOrUpdate = true;
 				IPerson person = assembler.DtoToDomainEntity(personDto);
-				repository.Add(person);
+				repository.Add(person);		
 				uow.PersistAll();
 			}
 		}

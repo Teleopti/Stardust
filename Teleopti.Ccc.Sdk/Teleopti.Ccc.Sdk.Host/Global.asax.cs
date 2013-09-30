@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using MbCache.Configuration;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -144,12 +145,13 @@ namespace Teleopti.Ccc.Sdk.WcfHost
         private static ContainerBuilder buildIoc()
         {
             var builder = new ContainerBuilder();
+			var mbCacheModule = new MbCacheModule(new InMemoryCache(20), null);
 
-				var mbCacheModule = new MbCacheModule(new InMemoryCache(20), null);
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule(new RuleSetModule(mbCacheModule, true));
 			builder.RegisterModule<EncryptionModule>();
 			builder.RegisterModule<AuthenticationModule>();
+            builder.RegisterModule<PersonAccountModule>();
             builder.RegisterModule<AssemblerModule>();
             builder.RegisterModule<RepositoryModule>();
             builder.RegisterModule<UnitOfWorkModule>();
