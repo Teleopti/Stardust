@@ -168,6 +168,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncResult.cs" />
+    <Compile Include="LogOn\PersonInRoleCache.cs" />
+    <Compile Include="LogOn\PersonInRoleCacheItem.cs" />
     <Compile Include="SdkCommandHandlersModule.cs" />
     <Compile Include="CreateScheduleDistributionAsyncResult.cs" />
     <Compile Include="Factory\AbsenceTypeFactory.cs" />
