@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var data = new TeamScheduleData
 				{
 					Date = date,
-					User = _user.CurrentUser(),
+					UserTimeZone = _user.CurrentUser().PermissionInformation.DefaultTimeZone(),
 					Schedules = _personScheduleDayReadModelRepository.ForTeam(dateTimePeriod, teamId) ?? new PersonScheduleDayReadModel[] {},
 					CanSeeUnpublishedSchedules = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules),
 					CanSeeConfidentialAbsencesFor = _schedulePersonProvider.GetPermittedPersonsForTeam(new DateOnly(date), teamId, DefinedRaptorApplicationFunctionPaths.ViewConfidential),

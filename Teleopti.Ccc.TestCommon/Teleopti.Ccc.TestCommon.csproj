@@ -89,6 +89,7 @@
     <Compile Include="FakeData\FakePersonRepository.cs" />
     <Compile Include="FakeData\PersonAccountCollectionFactory.cs" />
     <Compile Include="FakeData\ScheduleDayFactory.cs" />
+    <Compile Include="FakeLoggedOnUser.cs" />
     <Compile Include="GenericDisposable.cs" />
     <Compile Include="IniFileInfo.cs" />
     <Compile Include="CrossThreadTestRunner.cs" />

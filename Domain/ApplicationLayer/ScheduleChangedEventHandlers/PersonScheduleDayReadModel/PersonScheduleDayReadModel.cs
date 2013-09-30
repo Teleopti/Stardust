@@ -18,13 +18,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public string Shift { get; set; }
 	}
 
-	public class Shift
+	public class Model
 	{
+		public string Id { get; set; }
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public string EmploymentNumber { get; set; }
-		public string Id { get; set; }
 		public DateTime Date { get; set; }
+		public Shift Shift { get; set; }
+	}
+
+	public class Shift
+	{
 		public int WorkTimeMinutes { get; set; }
 		public int ContractTimeMinutes { get; set; }
 		public IList<SimpleLayer> Projection { get; set; }
