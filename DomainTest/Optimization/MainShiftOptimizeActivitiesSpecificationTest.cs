@@ -147,39 +147,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 						}.CreateProjection();
 				}
 
-		[Test]
-		public void LengthOfSelectedActivityAreNotAllowedToBeChangedIfUserSaySo()
-		{
-			_preferences.DoNotAlterLengthOfActivity = _lunchAct;
+		
 
-			IEditableShift shift = EditableShiftFactory.CreateEditorShiftWithLayers(_shbrAct, _lunchAct, _baseAct);
-			IVisualLayerCollection layers = shift.ProjectionService().CreateProjection();
-			Assert.IsTrue(_target.LengthOfActivityEqual(layers));
-
-			shift.LayerCollection[1].Period.MovePeriod(TimeSpan.FromMinutes(1));
-			layers = shift.ProjectionService().CreateProjection();
-			Assert.IsTrue(_target.LengthOfActivityEqual(layers));
-
-			//shift.LayerCollection[1].Period.ChangeEndTime(TimeSpan.FromMinutes(1));
-			//layers = shift.ProjectionService().CreateProjection();
-			//Assert.IsFalse(_target.LengthOfActivityEqual(layers));
-		}
-
-		[Test]
-		public void
-			LengthOfSelectedActivityAreNotAllowedToBeChangedIfUserSaySoAlsoMeansThatIfNewShiftHasLayerOfThisActivityAndOriginalHasNotWeShouldReturnFalseAndTheOtherWayAround
-			()
-		{
-			var newActivity = ActivityFactory.CreateActivity("hej");
-			_preferences.DoNotAlterLengthOfActivity = newActivity;
-
-			IEditableShift shift = EditableShiftFactory.CreateEditorShiftWithLayers(_shbrAct, newActivity, _baseAct);
-			IVisualLayerCollection layers = shift.ProjectionService().CreateProjection();
-			Assert.IsFalse(_target.LengthOfActivityEqual(layers));
-
-			_preferences.DoNotAlterLengthOfActivity = _lunchAct;
-			Assert.IsFalse(_target.LengthOfActivityEqual(layers));
-		}
+		
 
 		
     }
