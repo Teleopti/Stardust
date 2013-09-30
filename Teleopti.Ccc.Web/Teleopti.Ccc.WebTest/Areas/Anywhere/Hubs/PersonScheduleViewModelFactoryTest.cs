@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
 			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonDeserializer(), _permissionProvider);
 			var shifts = new {FirstName = "Pierre"};
-			var readModel = new PersonScheduleDayReadModel {Shift = Newtonsoft.Json.JsonConvert.SerializeObject(shifts)};
+			var readModel = new PersonScheduleDayReadModel {Model = Newtonsoft.Json.JsonConvert.SerializeObject(shifts)};
 
 			personScheduleDayReadModelRepository.Stub(x => x.ForPerson(DateOnly.Today, person.Id.Value)).Return(readModel);
 
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var personAbsenceRepository = MockRepository.GenerateMock<IPersonAbsenceRepository>();
 			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonDeserializer(), _permissionProvider);
 			var shifts = new {FirstName = "Pierre"};
-			var readModel = new PersonScheduleDayReadModel {Shift = Newtonsoft.Json.JsonConvert.SerializeObject(shifts)};
+			var readModel = new PersonScheduleDayReadModel {Model = Newtonsoft.Json.JsonConvert.SerializeObject(shifts)};
 
 			personScheduleDayReadModelRepository.Stub(x => x.ForPerson(DateOnly.Today, person.Id.Value)).Return(readModel);
 
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var personAbsenceRepository = MockRepository.GenerateMock<IPersonAbsenceRepository>();
 			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonDeserializer(), _permissionProvider);
 			var shifts = new { FirstName = "Pierre" };
-			var readModel = new PersonScheduleDayReadModel { Shift = Newtonsoft.Json.JsonConvert.SerializeObject(shifts) };
+			var readModel = new PersonScheduleDayReadModel { Model = Newtonsoft.Json.JsonConvert.SerializeObject(shifts) };
 
 			personScheduleDayReadModelRepository.Stub(x => x.ForPerson(DateOnly.Today, person.Id.Value)).Return(readModel);
 

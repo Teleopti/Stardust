@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<PersonScheduleDayReadModel> ForTeam(DateTimePeriod period, Guid teamId)
 		{
 			return _unitOfWork.Session().CreateSQLQuery(
-				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE TeamId=:TeamId AND ShiftStart IS NOT NULL AND ShiftStart < :DateEnd AND ShiftEnd > :DateStart")
+				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Model FROM ReadModel.PersonScheduleDay WHERE TeamId=:TeamId AND ShiftStart IS NOT NULL AND ShiftStart < :DateEnd AND ShiftEnd > :DateStart")
 			                  .AddScalar("PersonId", NHibernateUtil.Guid)
 			                  .AddScalar("TeamId", NHibernateUtil.Guid)
 			                  .AddScalar("SiteId", NHibernateUtil.Guid)
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			                  .AddScalar("Date", NHibernateUtil.DateTime)
 			                  .AddScalar("ShiftStart", NHibernateUtil.DateTime)
 			                  .AddScalar("ShiftEnd", NHibernateUtil.DateTime)
-			                  .AddScalar("Shift", NHibernateUtil.Custom(typeof (CompressedString)))
+			                  .AddScalar("Model", NHibernateUtil.Custom(typeof (CompressedString)))
 			                  .SetGuid("TeamId", teamId)
 			                  .SetDateTime("DateStart", period.StartDateTime)
 			                  .SetDateTime("DateEnd", period.EndDateTime)

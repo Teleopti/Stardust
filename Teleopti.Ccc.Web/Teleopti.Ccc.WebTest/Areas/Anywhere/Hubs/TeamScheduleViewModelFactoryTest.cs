@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 					new PersonScheduleDayReadModel
 						{
 							PersonId = person.Id.Value,
-							Shift = MakeJsonModel(new SimpleLayer {IsAbsenceConfidential = true})
+							Model = MakeJsonModel(new SimpleLayer {IsAbsenceConfidential = true})
 						}
 				};
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 					new PersonScheduleDayReadModel
 						{
 							PersonId = person.Id.Value,
-							Shift = MakeJsonModel(new SimpleLayer
+							Model = MakeJsonModel(new SimpleLayer
 								{
 									Title = "Vacation",
 									Color = "Red",
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 					new PersonScheduleDayReadModel
 						{
 							PersonId = person.Id.Value,
-							Shift = MakeJsonModel(new SimpleLayer
+							Model = MakeJsonModel(new SimpleLayer
 								{
 									Title = "Vacation",
 									Color = "Red",

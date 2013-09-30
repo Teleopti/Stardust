@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 							new PersonScheduleDayReadModel
 								{
 									PersonId = agent.Id.Value,
-									Shift = JsonConvert.SerializeObject(new Model
+									Model = JsonConvert.SerializeObject(new Model
 										{
 											Shift =	new Shift
 											{

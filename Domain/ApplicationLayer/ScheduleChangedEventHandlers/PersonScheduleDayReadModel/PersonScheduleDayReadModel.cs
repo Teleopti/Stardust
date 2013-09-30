@@ -4,7 +4,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces")]
 	public class PersonScheduleDayReadModel : IPersonScheduleDayReadModel
 	{
 		public Guid PersonId { get; set; }
@@ -15,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public DateOnly BelongsToDate { get { return new DateOnly(Date); } }
 		public DateTime? ShiftStart { get; set; }
 		public DateTime? ShiftEnd { get; set; }
-		public string Shift { get; set; }
+		public string Model { get; set; }
 	}
 
 	public class Model

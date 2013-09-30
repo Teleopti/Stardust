@@ -306,3 +306,13 @@ set earlystart = 0 where EarlyStart = 1
 update ActivityExtender
 set LateStart = 0 where LateStart = 1
 GO
+
+
+----------------  
+--Name: Mathias Stenbom
+--Date: 2013-09-30
+--Desc: Renaming ReadModel.PersonScheduleDay.Shift to Model to match class property name
+---------------- 
+
+EXEC sp_rename 'ReadModel.PersonScheduleDay.Shift','Model','COLUMN'
+GO

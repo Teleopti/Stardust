@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 					});
 				}
 
-				ret.Shift = _serializer.SerializeObject(model);
+				ret.Model = _serializer.SerializeObject(model);
 
 				yield return ret;
 			}

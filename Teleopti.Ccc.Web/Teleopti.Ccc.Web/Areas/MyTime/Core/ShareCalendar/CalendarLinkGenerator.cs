@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 
 			foreach (var scheduleDay in scheduleDays)
 			{
-				dynamic shift = _deserializer.DeserializeObject<Model>(scheduleDay.Shift).Shift;
+				dynamic shift = _deserializer.DeserializeObject<Model>(scheduleDay.Model).Shift;
 				var layers = shift.Projection as IEnumerable<dynamic>;
 				foreach (var layer in layers)
 				{

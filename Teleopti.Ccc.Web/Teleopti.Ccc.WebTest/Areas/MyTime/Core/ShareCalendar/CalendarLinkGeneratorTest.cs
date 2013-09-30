@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 				{
 					new PersonScheduleDayReadModel
 						{
-							Shift ="{Projection:[{Start:'2013-07-08T06:30:00Z',End:'2013-07-08T08:30:00Z',Title:'Phone'}]}"
+							Model ="{Projection:[{Start:'2013-07-08T06:30:00Z',End:'2013-07-08T08:30:00Z',Title:'Phone'}]}"
 						}
 				});
 			_repositoryFactory.Stub(x => x.CreatePersonScheduleDayReadModelFinder(_unitOfWork)).Return(_personScheduleDayReadModelFinder);

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			        where
 				        data.CanSeeUnpublishedSchedules ||
 				        published.IsSatisfiedBy(s)
-			        let model = JsonConvert.DeserializeObject<Model>(s.Shift ?? "{}")
+			        let model = JsonConvert.DeserializeObject<Model>(s.Model ?? "{}")
 					let shift = model.Shift ?? new Shift()
 					let canSeeConfidentialAbsence = data.CanSeeConfidentialAbsencesFor.Any(x => x.Id == s.PersonId)
 					let layers = mapLayers(data.UserTimeZone, shift, canSeeConfidentialAbsence)

@@ -56,8 +56,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			{
 				var personScheduleDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date), personId);
 				data.PersonAbsences = calculatePersonAbsences(date, person, personScheduleDayReadModel);
-				if (personScheduleDayReadModel != null && personScheduleDayReadModel.Shift != null)
-					data.Model = _deserializer.DeserializeObject<Model>(personScheduleDayReadModel.Shift);
+				if (personScheduleDayReadModel != null && personScheduleDayReadModel.Model != null)
+					data.Model = _deserializer.DeserializeObject<Model>(personScheduleDayReadModel.Model);
 			}
 			return _personScheduleViewModelMapper.Map(data);
 
