@@ -27,9 +27,6 @@ namespace Teleopti.Ccc.Domain.ApplicationRtaQueue
 		public void Handle(PersonWithExternalLogOn message)
 		{
 			Logger.Info("Start consuming PersonalWithExternalLogonOn message.");
-			DateTime? nextActivityStartTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
-			                                                                                     message.PersonId);
-			Logger.InfoFormat("Next activity for Person: {0}, StartTime: {1}.", message.PersonId, nextActivityStartTime);
 
 			try
 			{
@@ -42,11 +39,14 @@ namespace Teleopti.Ccc.Domain.ApplicationRtaQueue
 				Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
 			}
 
+			DateTime? nextActivityStartTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
+																								 message.PersonId);
 			if (nextActivityStartTime == null)
 			{
 				Logger.InfoFormat("No next activity found for Person: {0}. Not putting message on the queue", message.PersonId);
 				return;
 			}
+			Logger.InfoFormat("Next activity for Person: {0}, StartTime: {1}.", message.PersonId, nextActivityStartTime);
 
 			_serviceBus.DelaySend(((DateTime) nextActivityStartTime), new PersonWithExternalLogOn
 				{
@@ -63,34 +63,19 @@ namespace Teleopti.Ccc.Domain.ApplicationRtaQueue
 		{
 			Logger.Info("Start consuming UpdatedScheduleDay message.");
 			
-			if (message.ActivityEndDateTime < DateTime.UtcNow)
-			{
-				Logger.InfoFormat("Message is regarding change in the past, exiting without sending to RTA or Queue");
-				return;
-			}
-
-			DateTime? nextActivityStartTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
-			                                                                                                 message.PersonId);
-
 			try
 			{
-				if ((nextActivityStartTime != null &&
-				     nextActivityStartTime.Value.AddDays(2) >= message.ActivityStartDateTime &&
-				     nextActivityStartTime.Value.AddDays(-2) <= message.ActivityEndDateTime) ||
-				    nextActivityStartTime == null)
-				{
-					_teleoptiRtaService.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
-					Logger.InfoFormat("Message successfully send to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.",
-					                  message.BusinessUnitId, message.PersonId, DateTime.UtcNow);
-				}
-				else
-					Logger.InfoFormat("Schedule update is not within two days of closest activity start time.");
+				_teleoptiRtaService.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
+				Logger.InfoFormat("Message successfully send to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.",
+				                  message.BusinessUnitId, message.PersonId, DateTime.UtcNow);
 			}
 			catch (Exception exception)
 			{
 				Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
 			}
-
+			
+			DateTime? nextActivityStartTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
+																											 message.PersonId);
 			if (nextActivityStartTime == null || nextActivityStartTime < message.ActivityStartDateTime)
 			{
 				Logger.InfoFormat(

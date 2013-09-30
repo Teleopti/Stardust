@@ -17,8 +17,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		private IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository;
 		private UpdatedScheduleInfoHandler target;
 		private IGetUpdatedScheduleChangeFromTeleoptiRtaService teleoptiRtaService;
-		private DateTime utcNow;
-		private Guid personId, businessUntiId;
 
 		[SetUp]
 		public void Setup()
@@ -27,10 +25,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		    serviceBus = mocks.StrictMock<ISendDelayedMessages>();
 		    scheduleProjectionReadOnlyRepository = mocks.StrictMock<IScheduleProjectionReadOnlyRepository>();
 			teleoptiRtaService = mocks.DynamicMock<IGetUpdatedScheduleChangeFromTeleoptiRtaService>();
-
-			utcNow = DateTime.UtcNow;
-			personId = Guid.NewGuid();
-			businessUntiId = Guid.NewGuid();
 
             target = new UpdatedScheduleInfoHandler(serviceBus, scheduleProjectionReadOnlyRepository, teleoptiRtaService);
         }
@@ -196,152 +190,84 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		}
 
 		[Test]
-		public void UpdatedScheduleDayHandler_ChangeIsBeforeNextActivityStartTime_ShouldSend()
+		public void UpdatedScheduleDay_NoNextActivity_ShouldNotEnqueue()
 		{
-			var message = new UpdatedScheduleDay
+			var person = PersonFactory.CreatePerson();
+			person.SetId(Guid.NewGuid());
+
+			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
+			bussinessUnit.SetId(Guid.NewGuid());
+
+			var updatedSchduleDay = new UpdatedScheduleDay
 				{
-					PersonId = personId,
-					BusinessUnitId = businessUntiId,
-					ActivityStartDateTime = utcNow.AddDays(3),
-					ActivityEndDateTime = utcNow.AddDays(4),
-					Datasource = "2",
-					Timestamp = utcNow
+					ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
+					ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
+					PersonId = person.Id.GetValueOrDefault(),
+					BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
 				};
-
-			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(utcNow, personId))
+			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
+			                                                                          person.Id.GetValueOrDefault()))
 			      .IgnoreArguments()
-			      .Return(utcNow.AddDays(4));
-			Expect.Call(() =>serviceBus.DelaySend(utcNow.AddDays(4), null)).IgnoreArguments();
+			      .Return(null);
+
 			mocks.ReplayAll();
-			target.Handle(message);
+			target.Handle(updatedSchduleDay);
 			mocks.VerifyAll();
 		}
-		 
+
 		[Test]
-		public void UpdatedScheduleDayHandler_ChangeIsAfterNextActivityStartTime_ShouldNotSend()
+		public void UpdatedScheduleDay_NextActivityBeforeScheduleChange_ShouldNotEnqueue()
 		{
-			var message = new UpdatedScheduleDay
+			var person = PersonFactory.CreatePerson();
+			person.SetId(Guid.NewGuid());
+
+			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
+			bussinessUnit.SetId(Guid.NewGuid());
+
+			var updatedSchduleDay = new UpdatedScheduleDay
 			{
-				PersonId = personId,
-				BusinessUnitId = businessUntiId,
-				ActivityStartDateTime = utcNow.AddDays(3),
-				ActivityEndDateTime = utcNow.AddDays(4),
-				Datasource = "2",
-				Timestamp = utcNow
+				ActivityStartDateTime = DateTime.UtcNow.AddHours(4),
+				ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
+				PersonId = person.Id.GetValueOrDefault(),
+				BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
 			};
-
-			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(utcNow, personId)).IgnoreArguments().Return(utcNow);
-			mocks.ReplayAll();
-			target.Handle(message);
-			mocks.VerifyAll();
-		}
-
-		[Test]
-		public void UpdatedScheduleDayHandler_NoNextActivity_ShouldNotCrash()
-		{
-			var message = new UpdatedScheduleDay
-			{
-				PersonId = personId,
-				BusinessUnitId = businessUntiId,
-				ActivityStartDateTime = utcNow.AddDays(3),
-				ActivityEndDateTime = utcNow.AddDays(4),
-				Datasource = "2",
-				Timestamp = utcNow
-			};
-
-			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(utcNow, personId)).IgnoreArguments().Return(utcNow);
-			mocks.ReplayAll();
-			target.Handle(message);
-			mocks.VerifyAll();
-		}
-
-		[Test]
-		public void UpdatedScheduleDayHandler_NextActivityWithinTwoDays_SendToRta()
-		{
-			var message = new UpdatedScheduleDay
-				{
-					PersonId = personId,
-					BusinessUnitId = businessUntiId,
-					ActivityStartDateTime = utcNow.AddDays(1),
-					ActivityEndDateTime = utcNow.AddDays(2),
-					Datasource = "2",
-					Timestamp = utcNow
-				};
-
-			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(utcNow, personId))
-			      .IgnoreArguments()
-			      .Return(utcNow);
-			mocks.ReplayAll();
-			target.Handle(message);
-			mocks.VerifyAll();
-		}
-
-		[Test]
-		public void UpdatedScheduleDayHandler_MessageWithinEndRange_SendToRta()
-		{
-			var message = new UpdatedScheduleDay
-				{
-					BusinessUnitId = businessUntiId,
-					PersonId = personId,
-					ActivityStartDateTime = utcNow.AddDays(13),
-					ActivityEndDateTime = utcNow.AddDays(14),
-					Datasource = "2",
-					Timestamp = utcNow
-				};
-
-			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(utcNow, personId))
-			      .IgnoreArguments()
-			      .Return(utcNow.AddDays(11));
-			Expect.Call(() => teleoptiRtaService.GetUpdatedScheduleChange(personId, businessUntiId, utcNow))
-			      .IgnoreArguments();
-
-			mocks.ReplayAll();
-			target.Handle(message);
-			mocks.VerifyAll();
-		}
-
-		[Test]
-		public void UpdatedScheduleDayHandler_MessageWithinStartRange_SendToRta()
-		{
-			var message = new UpdatedScheduleDay
-			{
-				BusinessUnitId = businessUntiId,
-				PersonId = personId,
-				ActivityStartDateTime = utcNow.AddDays(8),
-				ActivityEndDateTime = utcNow.AddDays(9),
-				Datasource = "2",
-				Timestamp = utcNow
-			};
-
-			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(utcNow, personId))
+			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
+																					  person.Id.GetValueOrDefault()))
 				  .IgnoreArguments()
-				  .Return(utcNow.AddDays(11));
-			Expect.Call(() => teleoptiRtaService.GetUpdatedScheduleChange(personId, businessUntiId, utcNow))
-				  .IgnoreArguments();
-			Expect.Call(() => serviceBus.DelaySend(utcNow, null))
-			      .IgnoreArguments();
+				  .Return(DateTime.UtcNow.AddHours(1));
 
 			mocks.ReplayAll();
-			target.Handle(message);
+			target.Handle(updatedSchduleDay);
 			mocks.VerifyAll();
 		}
 
 		[Test]
-		public void UpdatedScheduleDayHandler_MessageBeforeNow_DoNotSend()
+		public void UpdatedScheduleDay_NextActivityAfterScheduleChange_ShouldEnqueue()
 		{
 
-			var message = new UpdatedScheduleDay
+			var person = PersonFactory.CreatePerson();
+			person.SetId(Guid.NewGuid());
+
+			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
+			bussinessUnit.SetId(Guid.NewGuid());
+
+			var updatedSchduleDay = new UpdatedScheduleDay
 			{
-				BusinessUnitId = businessUntiId,
-				PersonId = personId,
-				ActivityStartDateTime = utcNow.AddDays(-2),
-				ActivityEndDateTime = utcNow.AddDays(-1),
-				Datasource = "2",
-				Timestamp = utcNow
+				ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
+				ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
+				PersonId = person.Id.GetValueOrDefault(),
+				BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
 			};
-			
+			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
+																					  person.Id.GetValueOrDefault()))
+				  .IgnoreArguments()
+				  .Return(DateTime.UtcNow.AddHours(4));
+			Expect.Call(() => serviceBus.DelaySend(DateTime.UtcNow, null))
+			      .IgnoreArguments();
+
+
 			mocks.ReplayAll();
-			target.Handle(message);
+			target.Handle(updatedSchduleDay);
 			mocks.VerifyAll();
 		}
 

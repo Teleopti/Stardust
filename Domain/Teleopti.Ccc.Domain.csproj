@@ -130,6 +130,7 @@
     <Compile Include="ApplicationRtaQueue\CannotGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="ApplicationRtaQueue\IGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="ApplicationRtaQueue\IgnoreGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
+    <Compile Include="ApplicationRtaQueue\NotifyRtaDecider.cs" />
     <Compile Include="ApplicationRtaQueue\PersonWithExternalLogon.cs" />
     <Compile Include="ApplicationRtaQueue\UpdatedScheduleDay.cs" />
     <Compile Include="ApplicationRtaQueue\UpdatedScheduleInfoHandler.cs" />
