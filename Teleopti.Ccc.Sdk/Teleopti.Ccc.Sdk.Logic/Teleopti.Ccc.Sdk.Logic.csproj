@@ -231,6 +231,7 @@
     <Compile Include="QueryHandler\GetValidatedSchedulePartsForPreferenceQueryHandler.cs" />
     <Compile Include="QueryHandler\GetValidatedSchedulePartsForStudentAvailabilityQueryHandler.cs" />
     <Compile Include="QueryHandler\IHandleQuery.cs" />
+    <Compile Include="QueryHandler\SdkUnitOfWorkExtensions.cs" />
     <Compile Include="Restrictions\IIsEditablePredicate.cs" />
     <Compile Include="Restrictions\IsEditablePredicate.cs" />
     <Compile Include="Restrictions\MinMaxWorkTimeChecker.cs" />
