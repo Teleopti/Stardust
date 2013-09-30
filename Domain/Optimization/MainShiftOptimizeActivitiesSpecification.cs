@@ -23,15 +23,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_visualLayerColl = _originalMainShift.ProjectionService().CreateProjection();
         }
 
-		public override bool IsSatisfiedBy(IEditableShift obj)
+		public override bool IsSatisfiedBy(IEditableShift shift)
         {
-            IVisualLayerCollection other = obj.ProjectionService().CreateProjection();
+            IVisualLayerCollection other = shift.ProjectionService().CreateProjection();
 
-            return (CorrectShiftCategory(obj)
+            return (CorrectShiftCategory(shift)
                 && CorrectStart(other)
                 && CorrectEnd(other)
                 && CorrectAlteredBetween(other)
-                && LockedActivityNotMoved(other));
+                && LockedActivityNotMoved(other))
+				&& LengthOfActivityEqual((other));
         }
 
         public bool LockedActivityNotMoved(IVisualLayerCollection other)
@@ -43,12 +44,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         }
 
-		public bool CorrectShiftCategory(IEditableShift shift)
+		public bool LengthOfActivityEqual(IVisualLayerCollection other)
+		{
+			if (_optimizerActivitiesPreferences.DoNotAlterLengthOfActivity == null)
+				return true;
+
+			return compareLengthOfStaticLengthActivity(_visualLayerColl, other);
+		}
+
+		public bool CorrectShiftCategory(IEditableShift otherShift)
         {
             if(!_optimizerActivitiesPreferences.KeepShiftCategory)
                 return true;
 
-            return shift.ShiftCategory.Equals(_originalMainShift.ShiftCategory);
+			return otherShift.ShiftCategory.Equals(_originalMainShift.ShiftCategory);
         }
 
         public bool CorrectStart(IVisualLayerCollection other)
@@ -117,7 +126,27 @@ namespace Teleopti.Ccc.Domain.Optimization
                     VisualLayerCollectionSpecification.IdenticalLayers(originalLayersOutsideAfter));
         }
 
-        private bool compareLockedActivities(IVisualLayerCollection compareFrom, IVisualLayerCollection compareTo)
+		private bool compareLengthOfStaticLengthActivity(IVisualLayerCollection compareFrom, IVisualLayerCollection compareTo)
+		{
+			IActivity staticActivity = _optimizerActivitiesPreferences.DoNotAlterLengthOfActivity;
+			TimeSpan fromLength = TimeSpan.Zero;
+			foreach (var fromLayer in compareFrom)
+			{
+				if (fromLayer.Payload.Equals(staticActivity))
+					fromLength = fromLength.Add(fromLayer.Period.ElapsedTime());
+			}
+
+			TimeSpan toLength = TimeSpan.Zero;
+			foreach (var toLayer in compareTo)
+			{
+				if (toLayer.Payload.Equals(staticActivity))
+					toLength = toLength.Add(toLayer.Period.ElapsedTime());
+			}
+
+			return fromLength == toLength;
+		}
+
+		private bool compareLockedActivities(IVisualLayerCollection compareFrom, IVisualLayerCollection compareTo)
         {
             foreach (var fromLayer in compareFrom)
             {

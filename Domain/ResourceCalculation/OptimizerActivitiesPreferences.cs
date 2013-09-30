@@ -12,8 +12,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private TimePeriod? _allowAlterBetween;
         private IList<IActivity> _activities = new List<IActivity>();
         private IList<IActivity> _doNotMoveActivities = new List<IActivity>();
-        
-        public bool KeepShiftCategory
+	    public IActivity DoNotAlterLengthOfActivity { get; set; }
+
+	    public bool KeepShiftCategory
         {
             get { return _keepShiftCategory; }
             set { _keepShiftCategory = value; }
@@ -47,7 +48,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             get { return _doNotMoveActivities; }
         }
 
-        public void SetActivities(IList<IActivity> activities)
+	    
+
+	    public void SetActivities(IList<IActivity> activities)
         {
             _activities = new List<IActivity>(activities);
         }

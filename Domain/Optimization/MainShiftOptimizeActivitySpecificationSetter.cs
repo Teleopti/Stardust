@@ -23,7 +23,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			schedulingOptions.MainShiftOptimizeActivitySpecification = null;
 
 			var shiftPreferences = optimizationPreferences.Shifts;
-			if(!shiftPreferences.AlterBetween && !shiftPreferences.KeepEndTimes && !shiftPreferences.KeepShiftCategories && !shiftPreferences.KeepStartTimes && shiftPreferences.SelectedActivities.Count == 0)
+
+			if (!shiftPreferences.KeepActivityLength && !shiftPreferences.AlterBetween && !shiftPreferences.KeepEndTimes &&
+			    !shiftPreferences.KeepShiftCategories && !shiftPreferences.KeepStartTimes &&
+			    shiftPreferences.SelectedActivities.Count == 0)
 				return;
 
 			IOptimizerActivitiesPreferences optimizerActivitiesPreferences = new OptimizerActivitiesPreferences();
@@ -36,6 +39,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 				optimizerActivitiesPreferences.AllowAlterBetween = optimizationPreferences.Shifts.SelectedTimePeriod;
 
 			optimizerActivitiesPreferences.SetDoNotMoveActivities(optimizationPreferences.Shifts.SelectedActivities);
+			optimizerActivitiesPreferences.DoNotAlterLengthOfActivity = null;
+			if (shiftPreferences.KeepActivityLength)
+			{
+				optimizerActivitiesPreferences.DoNotAlterLengthOfActivity = shiftPreferences.ActivityToKeepLengthOn;
+			}
 
 			schedulingOptions.MainShiftOptimizeActivitySpecification =
 				new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, mainShift, viewDate,
