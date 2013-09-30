@@ -44,7 +44,7 @@ $global:Db = ''
 $global:resetToBaseline="False"
 $global:insertedLicense=0
 
-funcation Config-Load {
+function Config-Load {
     It "Should find the right version from the config file"{
         $serverConfigFile = '\\hebe\Installation\PBImsi\Kanbox\testservers.config'
         # initialize the xml object
