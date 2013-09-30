@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -72,7 +68,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
         private void expectCallForOneMatrix(DateOnly date, DateTimePeriod dateTimePeriod, IScheduleMatrixPro matrix, IScheduleRange range, IPerson person)
         {
+            IScheduleDay scheduleDay = _mock.StrictMock<IScheduleDay>();
             Expect.Call(matrix.ActiveScheduleRange).Return(range);
+            Expect.Call(range.ScheduledDay(date)).Return(scheduleDay);
+            Expect.Call(scheduleDay.IsScheduled()).Return(false);
             Expect.Call(_nightlyRestRule.LongestDateTimePeriodForAssignment(range, date)).Return(dateTimePeriod);
             Expect.Call(matrix.Person).Return(person);
             Expect.Call(person.PermissionInformation).Return(_permissionInformation);
@@ -139,5 +138,37 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             Assert.AreEqual(aggRestriction, expectedResult);
         }
 
+
+        [Test]
+        public void SingleAgentSingleDayBlockWithScheduledDay()
+        {
+            var date = new DateOnly(2013, 09, 27);
+            IBlockInfo blockInfo = new BlockInfo(new DateOnlyPeriod(date, date));
+            IEnumerable<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro> { _matrix1 };
+            var dateTimePeriod = new DateTimePeriod(new DateTime(2013, 09, 27, 11, 0, 0, DateTimeKind.Utc), new DateTime(2013, 09, 27, 13, 0, 0, DateTimeKind.Utc));
+
+            using (_mock.Record())
+            {
+                Expect.Call(_teamBlockInfo.BlockInfo).Return(blockInfo);
+                Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
+                Expect.Call(_teamInfo.MatrixesForGroupAndDate(date)).Return(matrixList);
+
+                IScheduleDay scheduleDay = _mock.StrictMock<IScheduleDay>();
+                Expect.Call(_matrix1.ActiveScheduleRange).Return(_range1);
+                Expect.Call(_range1.ScheduledDay(date)).Return(scheduleDay);
+                Expect.Call(scheduleDay.IsScheduled()).Return(true);
+                Expect.Call(_nightlyRestRule.LongestDateTimePeriodForAssignment(_range1, date)).Return(dateTimePeriod);
+                Expect.Call(_matrix1.Person).Return(_person1);
+                Expect.Call(_person1.PermissionInformation).Return(_permissionInformation);
+                Expect.Call(_permissionInformation.DefaultTimeZone()).Return(TimeZoneInfo.Utc);
+            }
+
+            var aggRestriction = _target.AggregatedNightlyRestRestriction(_teamBlockInfo);
+            var expectedResult = new EffectiveRestriction(new StartTimeLimitation(TimeSpan.MinValue ,null),
+                                                       new EndTimeLimitation(null,new TimeSpan(1, 23, 59, 59)),
+                                                       new WorkTimeLimitation(), null, null, null,
+                                                       new List<IActivityRestriction>());
+            Assert.AreEqual(aggRestriction, expectedResult);
+        }
     }
 }
