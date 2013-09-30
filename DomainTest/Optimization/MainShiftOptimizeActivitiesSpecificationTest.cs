@@ -139,39 +139,5 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsFalse(_target.LockedActivityNotMoved(layers));
 
         }
-
-		[Test]
-		public void LengthOfSelectedActivityAreNotAllowedToBeChangedIfUserSaySo()
-		{
-			_preferences.DoNotAlterLengthOfActivity = _lunchAct;
-
-			IMainShift shift = MainShiftFactory.CreateMainShiftWithLayers(_shbrAct, _lunchAct, _baseAct);
-			IVisualLayerCollection layers = shift.ProjectionService().CreateProjection();
-			Assert.IsTrue(_target.LengthOfActivityEqual(layers));
-
-			shift.LayerCollection[1].MoveLayer(TimeSpan.FromMinutes(1));
-			layers = shift.ProjectionService().CreateProjection();
-			Assert.IsTrue(_target.LengthOfActivityEqual(layers));
-
-			shift.LayerCollection[1].Period = shift.LayerCollection[1].Period.ChangeEndTime(TimeSpan.FromMinutes(1));
-			layers = shift.ProjectionService().CreateProjection();
-			Assert.IsFalse(_target.LengthOfActivityEqual(layers));
-		}
-
-		[Test]
-		public void
-			LengthOfSelectedActivityAreNotAllowedToBeChangedIfUserSaySoAlsoMeansThatIfNewShiftHasLayerOfThisActivityAndOriginalHasNotWeShouldReturnFalseAndTheOtherWayAround
-			()
-		{
-			var newActivity = ActivityFactory.CreateActivity("hej");
-			_preferences.DoNotAlterLengthOfActivity = newActivity;
-
-			IMainShift shift = MainShiftFactory.CreateMainShiftWithLayers(_shbrAct, newActivity, _baseAct);
-			IVisualLayerCollection layers = shift.ProjectionService().CreateProjection();
-			Assert.IsFalse(_target.LengthOfActivityEqual(layers));
-
-			_preferences.DoNotAlterLengthOfActivity = _lunchAct;
-			Assert.IsFalse(_target.LengthOfActivityEqual(layers));
-		}
     }
 }

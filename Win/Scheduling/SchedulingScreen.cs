@@ -1117,7 +1117,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					return;
 
 				using (var optimizationPreferencesDialog =
-					new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, GetNonDeletedActivty(), SchedulerState.DefaultSegmentLength, GetNonDeletedActivty()))
+					new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, GetNonDeletedActivty(), SchedulerState.DefaultSegmentLength))
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{
