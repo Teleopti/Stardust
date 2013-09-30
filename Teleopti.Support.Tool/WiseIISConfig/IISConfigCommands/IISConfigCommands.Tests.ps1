@@ -34,6 +34,7 @@ $secstr = New-Object -TypeName System.Security.SecureString
 $password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)}
 $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $domain\$username, $secstr
 $computerName=(get-childitem -path env:computername).Value
+$global:BaseURL = "http://" + $computerName + "/"
 $global:zipFile
 $global:MsiFile
 $global:version = 'main'
@@ -63,7 +64,7 @@ function TearDown {
         
 		It "should stop the SDK" {
 			stop-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
-			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred}  | Should Throw
+			{Check-HttpStatus -url $global:BaseURL + "TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred}  | Should Throw
 		}
 
 		It "should uninstall product"{
@@ -78,13 +79,13 @@ function TearDown {
         
         It "should have a default web site" {
 			$computerName=(get-childitem -path env:computername).Value
-			$httpStatus=Check-HttpStatus -url "http://$computerName/"
+			$httpStatus=Check-HttpStatus -url $global:BaseURL
 			$httpStatus | Should Be $True
 		}
 			
 		It "should throw exeption when http URL does not exist" {
 			$computerName=(get-childitem -path env:computername).Value
-			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/"}  | Should Throw
+			{Check-HttpStatus -url $global:BaseURL + "TeleoptiCCC/"}  | Should Throw
 		}
 		
 		It "Should destroy working folder" {
@@ -118,6 +119,7 @@ function Setup-PreReqs {
                     $global:Server =  $testServer.DBServerInstance
                     $global:Db = $testServer.DB
                     $global:resetToBaseline = $testServer.resetToBaseline
+                    $global:BaseURL = $testServer.BaseURL
                 }
                 
             }
@@ -207,7 +209,7 @@ function Test-SitesAndServicesOk {
 		It "should start SDK" {
 			start-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
 			
-			$temp = Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred
+			$temp = Check-HttpStatus -url $global:BaseURL + "TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred
 			$temp | Should be $True
 		}
 		
