@@ -44,22 +44,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			target.Handle(new ScheduledResourcesChangedEvent
 				{
 					IsDefaultScenario = true,
-					PersonId = personId,
+					PersonId = person.Id.GetValueOrDefault(),
 					ScheduleDays = new[]
 						{
 							new ProjectionChangedEventScheduleDay
 								{
-                                                                Date = today,
+									Date = today,
 									StartDateTime = period.StartDateTime,
 									EndDateTime = period.EndDateTime,
 									Layers =
 										new Collection<ProjectionChangedEventLayer>
-											{new ProjectionChangedEventLayer()}
+											{new ProjectionChangedEventLayer
+												{
+													StartDateTime = utcNow.AddHours(-1),
+													EndDateTime = utcNow.AddHours(1)
+												}}
 								}
 						}
 				});
 
-			scheduleProjectionReadOnlyRepository.AssertWasCalled(x => x.ClearPeriodForPerson(new DateOnlyPeriod(today,today),Guid.Empty,person.Id.GetValueOrDefault()));
+			scheduleProjectionReadOnlyRepository.AssertWasCalled(x => x.ClearPeriodForPerson(new DateOnlyPeriod(today,today),Guid.Empty,person.Id.GetValueOrDefault()), o => o.IgnoreArguments());
 			serviceBus.AssertWasCalled(x => x.Publish(null), o=> o.IgnoreArguments());
 		}
 
