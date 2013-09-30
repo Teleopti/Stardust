@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		private Guid personId, businessUnitId;
 	    private readonly DateTime utcNow = DateTime.UtcNow;
 	    private readonly DateOnly today = DateOnly.Today;
-	    private IPublishEventsFromEventHandlers serviceBus;
 
 	    [SetUp]
 		public void Setup()
@@ -31,15 +30,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			personId = Guid.NewGuid();
 			businessUnitId = Guid.NewGuid();
 
-			target = new ScheduleProjectionHandler(scheduleProjectionReadOnlyRepository, serviceBus);
+			target = new ScheduleProjectionReadOnlyUpdater(scheduleProjectionReadOnlyRepository, serviceBus);
 		}
 
 		[Test]
 		public void ShouldDenormalizeProjection()
 		{
+			var person = PersonFactory.CreatePerson();
+			person.SetId(Guid.NewGuid());
+
 			var period = new DateTimePeriod(utcNow,utcNow);
 
-			target.Handle(new ProjectionChangedEvent
+			target.Handle(new ScheduledResourcesChangedEvent
 				{
 					IsDefaultScenario = true,
 					PersonId = personId,
@@ -168,10 +170,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		[Test]
 		public void Handle_ScheduleChangeForTomorrow_ShouldSendUpdatedScheduleDay()
 		{
-			var utcNow = DateTime.UtcNow;
 			var closestPeriod = new DateTimePeriod(utcNow.AddDays(1).AddMinutes(10), utcNow.AddDays(1).AddMinutes(20));
 
-			var message = new ProjectionChangedEvent
+			var message = new ScheduledResourcesChangedEvent
 				{
 					IsDefaultScenario = true,
 					Datasource = "DataSource",
@@ -179,7 +180,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 					PersonId = personId,
 					ScheduleDays = new[]
 						{
-							new ProjectionChangedEventScheduleDay
+							new ProjectionChangedEventScheduleDay 
 								{
 									Label = "ClosestLayer",
 									Date = utcNow.Date.AddDays(1),
@@ -198,7 +199,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			target.Handle(message);
 
-			serviceBus.AssertWasCalled(s => s.Publish(new UpdatedScheduleDay
+			serviceBus.AssertWasCalled(s => s.Publish(new ScheduleProjectionReadOnlyChanged
 				{
 					Datasource = message.Datasource,
 					BusinessUnitId = message.BusinessUnitId,
@@ -212,10 +213,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		[Test]
 		public void Handle_SheduleChangeForYesterday_ShouldNotSend()
 		{
-			var utcNow = DateTime.UtcNow;
 			var closestPeriod = new DateTimePeriod(utcNow.AddDays(-2).AddMinutes(10), utcNow.AddDays(-1).AddMinutes(20));
 
-			var message = new ProjectionChangedEvent
+			var message = new ScheduledResourcesChangedEvent
 			{
 				IsDefaultScenario = true,
 				Datasource = "DataSource",
@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			target.Handle(message);
 
-			serviceBus.AssertWasNotCalled(s => s.Publish(new UpdatedScheduleDay
+			serviceBus.AssertWasNotCalled(s => s.Publish(new ScheduleProjectionReadOnlyChanged
 			{
 				Datasource = message.Datasource,
 				BusinessUnitId = message.BusinessUnitId,
@@ -261,9 +261,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		[Test]
 		public void Handle_NoNextActivityStartTime_ShouldSend()
 		{
-			var utcNow = DateTime.UtcNow;
-
-			var message2 = new ProjectionChangedEvent
+			var message2 = new ScheduledResourcesChangedEvent
 				{
 					IsDefaultScenario = true,
 					Datasource = "DataSource",
@@ -294,7 +292,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			var message = message2;
 			target.Handle(message);
-			serviceBus.AssertWasCalled(s => s.Publish(new UpdatedScheduleDay
+			serviceBus.AssertWasCalled(s => s.Publish(new ScheduleProjectionReadOnlyChanged
 				{
 					Datasource = message.Datasource,
 					BusinessUnitId = message.BusinessUnitId,

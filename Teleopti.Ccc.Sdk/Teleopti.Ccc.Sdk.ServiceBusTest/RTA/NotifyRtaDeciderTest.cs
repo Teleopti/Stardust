@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationRtaQueue;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta

@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
 			bussinessUnit.SetId(Guid.NewGuid());
 
-			var updatedSchduleDay = new UpdatedScheduleDay
+			var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
 				{
 					ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
 					ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
 			bussinessUnit.SetId(Guid.NewGuid());
 
-			var updatedSchduleDay = new UpdatedScheduleDay
+			var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
 			{
 				ActivityStartDateTime = DateTime.UtcNow.AddHours(4),
 				ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
 			bussinessUnit.SetId(Guid.NewGuid());
 
-			var updatedSchduleDay = new UpdatedScheduleDay
+			var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
 			{
 				ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
 				ActivityEndDateTime = DateTime.UtcNow.AddHours(8),

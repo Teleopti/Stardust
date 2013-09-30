@@ -152,6 +152,7 @@
     <Compile Include="ApplicationLayer\Rta\CannotGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="ApplicationLayer\Rta\IGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="ApplicationLayer\Rta\IgnoreGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
+    <Compile Include="ApplicationLayer\Rta\NotifyRtaDecider.cs" />
     <Compile Include="ApplicationLayer\Rta\PersonActivityStarting.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleProjectionReadOnlyChanged.cs" />
     <Compile Include="ApplicationLayer\Rta\UpdatedScheduleInfoHandler.cs" />
@@ -534,7 +535,7 @@
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
     <Compile Include="Scheduling\TeamBlock\IntervalDataEntendedMedianCalculator.cs" />
     <Compile Include="ResourceCalculation\TransformResourcesFromStorageCommand.cs" />
-     <Compile Include="Scheduling\Overtime\SkillIntervalData.cs" />
+    <Compile Include="Scheduling\Overtime\SkillIntervalData.cs" />
     <Compile Include="Scheduling\Overtime\SkillIntervalDataDivider.cs" />
     <Compile Include="Scheduling\Overtime\SkillStaffPeriodToSkillIntervalDataMapper.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
