@@ -272,14 +272,14 @@ namespace Teleopti.Ccc.Win.Common.Controls.Chart
         {
             chartControl1.Indexed = false ;
             _secYAxis.LocationType = ChartAxisLocationType.Auto;
-            _secYAxis.LineType.ForeColor = Color.Gray  ;
-            _secYAxis.DrawGrid = ShowGridlines ;
+	        _secYAxis.LineType.ForeColor = Color.Gray;
+	        _secYAxis.DrawGrid = ShowGridlines;
             _secYAxis.GridLineType.ForeColor = Color.Gray;
             _secYAxis.OpposedPosition = false;
             _secYAxis.Orientation = ChartOrientation.Vertical;
             _secYAxis.LabelIntersectAction = ChartLabelIntersectAction.Rotate;
-            _secYAxis.ValueType = ChartValueType.Double ;
-            _secYAxis.RangeType = ChartAxisRangeType.Auto ;
+            _secYAxis.ValueType = ChartValueType.Double;
+            _secYAxis.RangeType = ChartAxisRangeType.Set;
         }
 
         private void SimpleTestCharter()
