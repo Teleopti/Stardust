@@ -10,10 +10,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class ScheduleDictionaryForTest : ScheduleDictionary
 	{
 		public ScheduleDictionaryForTest(IScenario scenario, DateTime date)
-			: this(scenario, new DateTimePeriod(date.Date, date.Date.AddHours(24))) { }
+			: this(scenario, new DateTimePeriod(cloneToUtc(date.Date), cloneToUtc(date.Date.AddHours(24)))) { }
 
 		public ScheduleDictionaryForTest(IScenario scenario, DateTime startDate, DateTime endDate)
-			: this(scenario, new DateTimePeriod(startDate.Date, endDate.Date.AddHours(24))) { }
+			: this(scenario, new DateTimePeriod(cloneToUtc(startDate.Date), cloneToUtc(endDate.Date.AddHours(24)))) { }
 
 		public ScheduleDictionaryForTest(IScenario scenario, IScheduleDateTimePeriod period, IDictionary<IPerson, IScheduleRange> dictionary)
 			: base(scenario, period, dictionary) { }
@@ -35,5 +35,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			BaseDictionary.Add(person, range);
 		}
+
+
+
+		private static DateTime cloneToUtc(DateTime dateTime)
+		{
+			return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second, DateTimeKind.Utc);
+		}
+
 	}
 }
