@@ -117,6 +117,9 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_reader.Expect(r => r.GetOrdinal("OriginalDataSourceId")).Return(14).Repeat.Twice();
 			_reader.Expect(r => r.IsDBNull(14)).Return(false);
 			_reader.Expect(r => r.GetString(14)).Return("1");
+
+			_reader.Expect(r => r.GetOrdinal("AlarmStart")).Return(15);
+			_reader.Expect(r => r.GetDateTime(15)).Return(_dateTime);
 			
 			_reader.Expect(r => r.Dispose());
 			_connection.Expect(c => c.Dispose());

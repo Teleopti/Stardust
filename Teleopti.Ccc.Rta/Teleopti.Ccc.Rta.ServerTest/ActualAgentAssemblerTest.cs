@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, stateGroup.StateGroupId)).Return(_rtaAlarmLight);
 
 			var result = _target.GetAgentState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan(), new DateTime(), "");
-			Assert.IsNull(result);
+			result.SendOverMessageBroker.Should().Be.False();
 			resetEvent.Dispose();
 		}
 
