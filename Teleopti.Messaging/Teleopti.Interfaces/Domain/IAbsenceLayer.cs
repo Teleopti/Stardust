@@ -7,7 +7,7 @@
     /// Created by: rogerkr
     /// Created date: 2008-08-07
     /// </remarks>
-	public interface IAbsenceLayer : ILayer<IAbsence>, IAggregateEntity
+	public interface IAbsenceLayer : ILayer<IAbsence>, IAggregateEntity, ICloneableEntity<ILayer<IAbsence>>
     {
     }
 }

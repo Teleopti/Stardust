@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[SetUp]
 		public void Setup()
 		{
-			target = new Now(null);
+			target = new Now();
 		}
 
 		[Test]
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void ShouldReturnCurrentDateAsDateOnly()
 		{
-			target.DateOnly().Date.Should().Be.EqualTo(DateTime.Now.Date);
+			target.LocalDateOnly().Date.Should().Be.EqualTo(DateTime.Now.Date);
 		}
 	}
 }

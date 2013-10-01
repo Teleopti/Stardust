@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Interfaces.Infrastructure;
 using log4net;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Interfaces.Domain;
@@ -9,17 +10,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {
     public class PayrollExportFeedback : IServiceBusPayrollExportFeedback
     {
-        private IMessageBroker _messageBroker;
+	    private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+	    private IMessageBroker _messageBroker;
         private IPayrollResult _payrollResult;
         private JobResultProgressEncoder _payrollResultProgressEncoder = new JobResultProgressEncoder();
         private static readonly ILog Logger = LogManager.GetLogger(typeof (PayrollExportFeedback));
 
-        public PayrollExportFeedback(IMessageBroker messageBroker)
-        {
-            _messageBroker = messageBroker;
-        }
+		public PayrollExportFeedback(ICurrentUnitOfWorkFactory unitOfWorkFactory, IMessageBroker messageBroker)
+		{
+			_unitOfWorkFactory = unitOfWorkFactory;
+			_messageBroker = messageBroker;
+		}
 
-        public void SetPayrollResult(IPayrollResult payrollResult)
+	    public void SetPayrollResult(IPayrollResult payrollResult)
         {
             _payrollResult = payrollResult;
         }
@@ -38,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
             {
                 if (MessageBrokerIsRunning())
                 {
-                	_messageBroker.SendEventMessage(UnitOfWorkFactoryContainer.Current.LoggedOnUnitOfWorkFactory().Name,
+                	_messageBroker.SendEventMessage(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name,
                 	                                ((IBelongsToBusinessUnit) _payrollResult).BusinessUnit.Id.
                 	                                	GetValueOrDefault(), DateTime.UtcNow, DateTime.UtcNow, Guid.Empty,
                 	                                Guid.Empty, typeof (IJobResultProgress), DomainUpdateType.NotApplicable,

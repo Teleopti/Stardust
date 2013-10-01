@@ -1,14 +1,19 @@
 define([
 		'knockout',
-		'moment'
-	], function (ko, moment) {
+		'moment',
+		'resources!r'
+], function (
+	ko,
+	moment,
+	resources
+	) {
 
 		return function (timeline, data, date) {
 
 			var self = this;
-
-			var localTime = moment(data.Start, "YYYY-MM-DD hh:mm:ss Z").local();
-			var layerStartMinutes = localTime.diff(date, 'minutes');
+			
+			var startTime = moment(data.Start, resources.FixedDateTimeFormatForMoment);
+			var layerStartMinutes = startTime.diff(date, 'minutes');
 
 			this.InternalStartMinutes = layerStartMinutes;
 			this.LengthMinutes = data.Minutes;
@@ -21,6 +26,11 @@ define([
 				}
 				return self.InternalStartMinutes;
 			};
+
+			this.StartTime = ko.computed(function () {
+				var time = moment().startOf('day').add('minutes', self.StartMinutes());
+				return time.format(resources.TimeFormatForMoment);
+			});
 
 			this.EndMinutes = ko.computed(function () {
 				return self.InternalStartMinutes + self.LengthMinutes;

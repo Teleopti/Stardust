@@ -50,6 +50,8 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             grid.CellModels.Add("TimeSpanLongHourMinutesCellModelMinutes", new TimeSpanDurationCellModel(grid.Model) { OnlyPositiveValues = true,InterpretAsMinutes = true});
             if (!grid.CellModels.ContainsKey("ActivityDropDownCell"))
 				grid.CellModels.Add("ActivityDropDownCell", new ActivityDropDownCellModel(grid.Model, Resources.MasterActivity16x16));
+			if (!grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDropDownCellModel))
+				grid.CellModels.Add(GridCellModelConstants.CellTypeDropDownCellModel, new DropDownCellModel(grid.Model));
         }
 
         internal override ShiftCreatorViewType Type

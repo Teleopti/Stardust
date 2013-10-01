@@ -33,24 +33,24 @@ namespace Teleopti.Support.Tool
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.PTracks = new System.Windows.Forms.Panel();
+            this.smoothLabelTools = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
+            this.smoothLabelConnected = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.buttonVerifyCredentials = new System.Windows.Forms.Button();
             this.textBoxPassword = new System.Windows.Forms.TextBox();
             this.textBoxUserName = new System.Windows.Forms.TextBox();
             this.textBoxServerName = new System.Windows.Forms.TextBox();
             this.checkBoxUseWindowsAuthentication = new System.Windows.Forms.CheckBox();
+            this.smoothLabelDBAdminstatrorLogonCredentials = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.linkManageDBVersions = new Teleopti.Support.Tool.Controls.General.SmoothLink();
+            this.LLChangeSettings = new Teleopti.Support.Tool.Controls.General.SmoothLink();
             this.BClose = new System.Windows.Forms.Button();
             this.pictureBoxBathingBall = new System.Windows.Forms.PictureBox();
             this.panelContent = new System.Windows.Forms.Panel();
             this.toolTipInfo = new System.Windows.Forms.ToolTip(this.components);
             this.smoothLabelVersion = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
             this.labelHeader = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
-            this.smoothLabelTools = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
-            this.smoothLabelConnected = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
-            this.smoothLabelDBAdminstatrorLogonCredentials = new Teleopti.Support.Tool.Controls.General.SmoothLabel();
-            this.linkManageDBVersions = new Teleopti.Support.Tool.Controls.General.SmoothLink();
-            this.LLChangeDBConn = new Teleopti.Support.Tool.Controls.General.SmoothLink();
             this.PTracks.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxBathingBall)).BeginInit();
             this.panelContent.SuspendLayout();
@@ -69,12 +69,36 @@ namespace Teleopti.Support.Tool
             this.PTracks.Controls.Add(this.label2);
             this.PTracks.Controls.Add(this.label1);
             this.PTracks.Controls.Add(this.linkManageDBVersions);
-            this.PTracks.Controls.Add(this.LLChangeDBConn);
+            this.PTracks.Controls.Add(this.LLChangeSettings);
             this.PTracks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PTracks.Location = new System.Drawing.Point(0, 0);
             this.PTracks.Name = "PTracks";
             this.PTracks.Size = new System.Drawing.Size(670, 320);
             this.PTracks.TabIndex = 4;
+            // 
+            // smoothLabelTools
+            // 
+            this.smoothLabelTools.AutoSize = true;
+            this.smoothLabelTools.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.smoothLabelTools.Location = new System.Drawing.Point(306, 28);
+            this.smoothLabelTools.Margin = new System.Windows.Forms.Padding(5);
+            this.smoothLabelTools.Name = "smoothLabelTools";
+            this.smoothLabelTools.Size = new System.Drawing.Size(47, 21);
+            this.smoothLabelTools.TabIndex = 16;
+            this.smoothLabelTools.Text = "Tools";
+            this.smoothLabelTools.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            // 
+            // smoothLabelConnected
+            // 
+            this.smoothLabelConnected.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.smoothLabelConnected.ForeColor = System.Drawing.Color.Blue;
+            this.smoothLabelConnected.Location = new System.Drawing.Point(6, 155);
+            this.smoothLabelConnected.Name = "smoothLabelConnected";
+            this.smoothLabelConnected.Size = new System.Drawing.Size(248, 114);
+            this.smoothLabelConnected.TabIndex = 15;
+            this.smoothLabelConnected.Text = "Click \"Verify\" to check your credentials";
+            this.smoothLabelConnected.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.smoothLabelConnected.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             // 
             // buttonVerifyCredentials
             // 
@@ -125,6 +149,18 @@ namespace Teleopti.Support.Tool
             this.checkBoxUseWindowsAuthentication.UseVisualStyleBackColor = true;
             this.checkBoxUseWindowsAuthentication.CheckedChanged += new System.EventHandler(this.checkBoxUseWindowsAuthentication_CheckedChanged);
             // 
+            // smoothLabelDBAdminstatrorLogonCredentials
+            // 
+            this.smoothLabelDBAdminstatrorLogonCredentials.AutoSize = true;
+            this.smoothLabelDBAdminstatrorLogonCredentials.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.smoothLabelDBAdminstatrorLogonCredentials.Location = new System.Drawing.Point(5, 28);
+            this.smoothLabelDBAdminstatrorLogonCredentials.Margin = new System.Windows.Forms.Padding(5);
+            this.smoothLabelDBAdminstatrorLogonCredentials.Name = "smoothLabelDBAdminstatrorLogonCredentials";
+            this.smoothLabelDBAdminstatrorLogonCredentials.Size = new System.Drawing.Size(204, 21);
+            this.smoothLabelDBAdminstatrorLogonCredentials.TabIndex = 9;
+            this.smoothLabelDBAdminstatrorLogonCredentials.Text = "Database Logon Credentials";
+            this.smoothLabelDBAdminstatrorLogonCredentials.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            // 
             // label2
             // 
             this.label2.Location = new System.Drawing.Point(326, 151);
@@ -139,8 +175,37 @@ namespace Teleopti.Support.Tool
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(344, 46);
             this.label1.TabIndex = 7;
-            this.label1.Text = "Update database names and users in all connections and updates database reference" +
-    "s in databases";
+            this.label1.Text = "Update and save all settings and optionally replace the values in the config file" +
+    "s.";
+            // 
+            // linkManageDBVersions
+            // 
+            this.linkManageDBVersions.AutoSize = true;
+            this.linkManageDBVersions.Enabled = false;
+            this.linkManageDBVersions.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkManageDBVersions.Location = new System.Drawing.Point(323, 129);
+            this.linkManageDBVersions.Margin = new System.Windows.Forms.Padding(5);
+            this.linkManageDBVersions.Name = "linkManageDBVersions";
+            this.linkManageDBVersions.Size = new System.Drawing.Size(196, 17);
+            this.linkManageDBVersions.TabIndex = 1;
+            this.linkManageDBVersions.TabStop = true;
+            this.linkManageDBVersions.Text = "Teleopti CCC Database Versions";
+            this.linkManageDBVersions.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            this.linkManageDBVersions.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
+            // 
+            // LLChangeSettings
+            // 
+            this.LLChangeSettings.AutoSize = true;
+            this.LLChangeSettings.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LLChangeSettings.Location = new System.Drawing.Point(323, 57);
+            this.LLChangeSettings.Margin = new System.Windows.Forms.Padding(5);
+            this.LLChangeSettings.Name = "LLChangeSettings";
+            this.LLChangeSettings.Size = new System.Drawing.Size(102, 17);
+            this.LLChangeSettings.TabIndex = 0;
+            this.LLChangeSettings.TabStop = true;
+            this.LLChangeSettings.Text = "Change Settings";
+            this.LLChangeSettings.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
+            this.LLChangeSettings.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LLChangeDBConn_LinkClicked);
             // 
             // BClose
             // 
@@ -203,72 +268,6 @@ namespace Teleopti.Support.Tool
             this.labelHeader.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
             this.labelHeader.UseCompatibleTextRendering = true;
             // 
-            // smoothLabelTools
-            // 
-            this.smoothLabelTools.AutoSize = true;
-            this.smoothLabelTools.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.smoothLabelTools.Location = new System.Drawing.Point(306, 28);
-            this.smoothLabelTools.Margin = new System.Windows.Forms.Padding(5);
-            this.smoothLabelTools.Name = "smoothLabelTools";
-            this.smoothLabelTools.Size = new System.Drawing.Size(47, 21);
-            this.smoothLabelTools.TabIndex = 16;
-            this.smoothLabelTools.Text = "Tools";
-            this.smoothLabelTools.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-            // 
-            // smoothLabelConnected
-            // 
-            this.smoothLabelConnected.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.smoothLabelConnected.ForeColor = System.Drawing.Color.Blue;
-            this.smoothLabelConnected.Location = new System.Drawing.Point(6, 155);
-            this.smoothLabelConnected.Name = "smoothLabelConnected";
-            this.smoothLabelConnected.Size = new System.Drawing.Size(248, 114);
-            this.smoothLabelConnected.TabIndex = 15;
-            this.smoothLabelConnected.Text = "Click \"Verify\" to check your credentials";
-            this.smoothLabelConnected.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.smoothLabelConnected.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-            // 
-            // smoothLabelDBAdminstatrorLogonCredentials
-            // 
-            this.smoothLabelDBAdminstatrorLogonCredentials.AutoSize = true;
-            this.smoothLabelDBAdminstatrorLogonCredentials.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.smoothLabelDBAdminstatrorLogonCredentials.Location = new System.Drawing.Point(5, 28);
-            this.smoothLabelDBAdminstatrorLogonCredentials.Margin = new System.Windows.Forms.Padding(5);
-            this.smoothLabelDBAdminstatrorLogonCredentials.Name = "smoothLabelDBAdminstatrorLogonCredentials";
-            this.smoothLabelDBAdminstatrorLogonCredentials.Size = new System.Drawing.Size(204, 21);
-            this.smoothLabelDBAdminstatrorLogonCredentials.TabIndex = 9;
-            this.smoothLabelDBAdminstatrorLogonCredentials.Text = "Database Logon Credentials";
-            this.smoothLabelDBAdminstatrorLogonCredentials.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-            // 
-            // linkManageDBVersions
-            // 
-            this.linkManageDBVersions.AutoSize = true;
-            this.linkManageDBVersions.Enabled = false;
-            this.linkManageDBVersions.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkManageDBVersions.Location = new System.Drawing.Point(323, 129);
-            this.linkManageDBVersions.Margin = new System.Windows.Forms.Padding(5);
-            this.linkManageDBVersions.Name = "linkManageDBVersions";
-            this.linkManageDBVersions.Size = new System.Drawing.Size(196, 17);
-            this.linkManageDBVersions.TabIndex = 1;
-            this.linkManageDBVersions.TabStop = true;
-            this.linkManageDBVersions.Text = "Teleopti CCC Database Versions";
-            this.linkManageDBVersions.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-            this.linkManageDBVersions.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
-            // 
-            // LLChangeDBConn
-            // 
-            this.LLChangeDBConn.AutoSize = true;
-            this.LLChangeDBConn.Enabled = false;
-            this.LLChangeDBConn.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LLChangeDBConn.Location = new System.Drawing.Point(323, 57);
-            this.LLChangeDBConn.Margin = new System.Windows.Forms.Padding(5);
-            this.LLChangeDBConn.Name = "LLChangeDBConn";
-            this.LLChangeDBConn.Size = new System.Drawing.Size(186, 17);
-            this.LLChangeDBConn.TabIndex = 0;
-            this.LLChangeDBConn.TabStop = true;
-            this.LLChangeDBConn.Text = "Change Database Connections";
-            this.LLChangeDBConn.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
-            this.LLChangeDBConn.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LLChangeDBConn_LinkClicked);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -300,7 +299,7 @@ namespace Teleopti.Support.Tool
         private System.Windows.Forms.Panel PTracks;
         private System.Windows.Forms.Label label1;
         SmoothLink linkManageDBVersions;
-        SmoothLink LLChangeDBConn;
+        SmoothLink LLChangeSettings;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button BClose;
         private SmoothLabel labelHeader;

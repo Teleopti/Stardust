@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Time;
@@ -35,6 +36,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private IPersonContract _personContract;
         private IContract _contract1;
         private int _mustHavePreference;
+        private MockRepository _mocks;
+        private IPersonAccountUpdater _personAccountUpdater;
 
         [SetUp]
         public void Setup()
@@ -95,6 +98,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_person4.AddSchedulePeriod(_periodChineseMonth);
 
             _mustHavePreference = 3;
+
+            _mocks = new MockRepository();
+            _personAccountUpdater = _mocks.StrictMock<IPersonAccountUpdater>();
         }
 
         [Test]
@@ -266,7 +272,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyAdjustForTerminalDateInSchedulePeriod()
         {
             DateOnly terminalDate = new DateOnly(2008, 3, 20);
-            _person2.TerminalDate = terminalDate;
+            _person2.TerminatePerson(terminalDate,_personAccountUpdater);
 
             DateOnly requested = new DateOnly(2008, 3, 15);
             DateOnly expectedLocalStart = new DateOnly(2008, 3, 6);
@@ -280,7 +286,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyAdjustForTerminalDateBeforeSchedulePeriod()
         {
             DateOnly terminalDate = new DateOnly(2008, 1, 20);
-            _person2.TerminalDate = terminalDate;
+            _person2.TerminatePerson(terminalDate, _personAccountUpdater);
             DateOnly requested = new DateOnly(2008, 3, 15);
             Assert.IsFalse(_periodWeek.GetSchedulePeriod(requested) != null);    
         }
@@ -289,7 +295,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyAdjustForTerminalDateAfterSchedulePeriod()
         {
             DateOnly terminalDate = new DateOnly(2008, 5, 20);
-            _person2.TerminalDate = terminalDate;
+            _person2.TerminatePerson(terminalDate, _personAccountUpdater);
 
             DateOnly requested = new DateOnly(2008, 3, 15);
             DateOnly expectedStart = new DateOnly(2008, 3, 6);

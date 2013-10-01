@@ -5,6 +5,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -30,7 +32,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 		private IUnitOfWork _unitOfWork;
 		private IPersonRepository _personRepository;
 		private IDataSourcesProvider _dataSourcesProvider;
-		private INow _now;
 		private IPersonScheduleDayReadModelFinder _personScheduleDayReadModelFinder;
 		private ICurrentPrincipalContext _currentPrincipalContext;
 		private IPersonalSettingDataRepository _personalSettingDataRepository;
@@ -51,8 +52,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(_unitOfWork)).Return(_personRepository);
 			_dataSourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
 			_dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName(dataSourceName)).Return(_dataSource);
-			_now = MockRepository.GenerateMock<INow>();
-			_now.Stub(x => x.DateOnly()).Return(DateOnly.Today);
 			_personScheduleDayReadModelFinder = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			_currentPrincipalContext = MockRepository.GenerateMock<ICurrentPrincipalContext>();
 			_personalSettingDataRepository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
@@ -63,8 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 		[Test]
 		public void ShouldGetCalendarForPerson()
 		{
-
-			var person = PersonFactory.CreatePersonWithGuid("first", "last");
+			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(DateOnly.Today.AddDays(181));
 			_personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
 			_personalSettingDataRepository.Stub(
 				x => x.FindValueByKeyAndOwnerPerson("CalendarLinkSettings", person, new CalendarLinkSettings())).IgnoreArguments()
@@ -77,29 +75,77 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 				{
 					new PersonScheduleDayReadModel
 						{
-							Shift ="{Projection:[{Start:'2013-07-08T06:30:00Z',End:'2013-07-08T08:30:00Z',Title:'Phone'}]}"
+							Model = Newtonsoft.Json.JsonConvert.SerializeObject(new Model
+								{
+									Shift = new Shift
+										{
+											Projection = new[]
+												{
+													new SimpleLayer
+														{
+															Start = new DateTime(2013, 7, 8, 6, 30, 0, DateTimeKind.Utc),
+															End = new DateTime(2013, 7, 8, 8, 30, 0, DateTimeKind.Utc),
+														}
+												}
+										}
+								}),
 						}
 				});
 			_repositoryFactory.Stub(x => x.CreatePersonScheduleDayReadModelFinder(_unitOfWork)).Return(_personScheduleDayReadModelFinder);
 			_permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
 			                   .Return(true);
 
-			var deserializer = new NewtonsoftJsonDeserializer<ExpandoObject>();
+			var deserializer = new NewtonsoftJsonDeserializer();
 			var calendarlinkid = new CalendarLinkId
 				{
 					DataSourceName = dataSourceName,
 					PersonId = person.Id.Value
 				};
 
-			var target = new CalendarLinkGenerator(_repositoryFactory, _dataSourcesProvider, deserializer, _now,
+			var target = new CalendarLinkGenerator(_repositoryFactory, _dataSourcesProvider, deserializer, new Now(), 
 			                                       _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider
 				);
 			var result = target.Generate(calendarlinkid);
+
 			_currentPrincipalContext.AssertWasCalled(x => x.SetCurrentPrincipal(person, _dataSource, null));
 			_roleToPrincipalCommand.AssertWasCalled(
 				x => x.Execute(Thread.CurrentPrincipal as ITeleoptiPrincipal, _unitOfWork, _personRepository));
 			result.Should().Contain("DTSTART:20130708T063000Z");
 			result.Should().Contain("DTEND:20130708T083000Z");
+		}
+
+		[Test]
+		public void ShouldNotGetUnpublishedCalendarForPerson()
+		{
+			var publishedToDate = DateOnly.Today.AddDays(30);
+			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(publishedToDate);
+			_personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
+			_personalSettingDataRepository.Stub(
+				x => x.FindValueByKeyAndOwnerPerson("CalendarLinkSettings", person, new CalendarLinkSettings())).IgnoreArguments()
+										  .Return(new CalendarLinkSettings
+										  {
+											  IsActive = true
+										  });
+			_repositoryFactory.Stub(x => x.CreatePersonalSettingDataRepository(_unitOfWork)).Return(_personalSettingDataRepository);
+			_repositoryFactory.Stub(x => x.CreatePersonScheduleDayReadModelFinder(_unitOfWork)).Return(_personScheduleDayReadModelFinder);
+			_permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
+							   .Return(true);
+			var deserializer = new NewtonsoftJsonDeserializer();
+			var target = new CalendarLinkGenerator(_repositoryFactory, _dataSourcesProvider, deserializer, new Now(),
+												   _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider
+				);
+			var calendarlinkid = new CalendarLinkId
+			{
+				DataSourceName = dataSourceName,
+				PersonId = person.Id.Value
+			};
+			var startDate = DateOnly.Today.AddDays(-60);
+			_personScheduleDayReadModelFinder.Stub(x => x.ForPerson(startDate, publishedToDate, person.Id.Value)).Return(new PersonScheduleDayReadModel[] { });
+
+			target.Generate(calendarlinkid);
+
+			_personScheduleDayReadModelFinder.AssertWasNotCalled(x => x.ForPerson(startDate, DateOnly.Today.AddDays(180), person.Id.Value));
+			_personScheduleDayReadModelFinder.AssertWasCalled(x => x.ForPerson(startDate, publishedToDate, person.Id.Value));
 		}
 
 		[Test, ExpectedException(typeof(PermissionException))]
@@ -111,7 +157,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 			                   .Return(false);
 
 			var target = new CalendarLinkGenerator(_repositoryFactory, _dataSourcesProvider,
-			                                       new NewtonsoftJsonDeserializer<ExpandoObject>(), null,
+			                                       new NewtonsoftJsonDeserializer(), null,
 			                                       _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider);
 			var calendarlinkid = new CalendarLinkId
 				{
@@ -144,7 +190,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 				};
 
 			var target = new CalendarLinkGenerator(_repositoryFactory, _dataSourcesProvider,
-			                                       new NewtonsoftJsonDeserializer<ExpandoObject>(), null,
+			                                       new NewtonsoftJsonDeserializer(), null,
 			                                       _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider
 				);
 			target.Generate(calendarlinkid);

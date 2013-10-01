@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -19,11 +20,16 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         private Person _personWithoutPersonPeriodWithTerminalDate;
         private Person _personWithoutPersonPeriodWithoutTerminalDate;
         private DateOnly _terminalDate;
+        private IPersonAccountUpdater _personAccountUpdater;
+        private MockRepository _mock;
+
 
         [SetUp]
         public void Setup()
         {
             _personWithPersonPeriod = new Person();
+            _mock = new MockRepository();
+            _personAccountUpdater = _mock.StrictMock<IPersonAccountUpdater>();
             _team= new Team();
             IPersonPeriod personPeriod =
                 PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 01, 01), _team);
@@ -31,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             
             _personWithoutPersonPeriodWithTerminalDate = new Person();
             _terminalDate = new DateOnly(2003, 01, 01);
-            _personWithoutPersonPeriodWithTerminalDate.TerminalDate = _terminalDate;
+            _personWithoutPersonPeriodWithTerminalDate.TerminatePerson(_terminalDate, _personAccountUpdater) ;
 
             _personWithoutPersonPeriodWithoutTerminalDate = new Person();
         }

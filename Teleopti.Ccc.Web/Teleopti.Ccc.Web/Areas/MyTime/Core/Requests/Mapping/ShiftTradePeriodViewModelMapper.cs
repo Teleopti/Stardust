@@ -1,4 +1,6 @@
 ﻿using System.Globalization;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
@@ -17,9 +19,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 
 			var calendar = CultureInfo.CurrentCulture.Calendar;
-			vm.NowYear = calendar.GetYear(now.DateOnly());
-			vm.NowMonth = calendar.GetMonth(now.DateOnly());
-			vm.NowDay = calendar.GetDayOfMonth(now.DateOnly());
+			vm.NowYear = calendar.GetYear(now.LocalDateOnly());
+			vm.NowMonth = calendar.GetMonth(now.LocalDateOnly());
+			vm.NowDay = calendar.GetDayOfMonth(now.LocalDateOnly());
 
 			return vm;
 		}

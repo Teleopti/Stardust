@@ -81,5 +81,16 @@
 </div>
 
 <script id="layerTemplate" type="text/html">
-	<li class="layer absolute floatleft" data-bind="if: IsVisible, style: { left: StartPixels() + 'px', width: LengthPixels() + 'px', backgroundColor: Color}" ></li>
+	<li class="layer absolute floatleft" data-bind="
+	if: IsVisible,
+	style: {
+		left: StartPixels() + 'px',
+		width: LengthPixels() + 'px',
+		backgroundColor: Color
+	},
+	attr: {
+		'data-start-time': StartTime,
+		'data-length-minutes': LengthMinutes,
+	}
+	"></li>
 </script>

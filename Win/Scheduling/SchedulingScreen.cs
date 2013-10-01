@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
@@ -408,6 +409,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
 			_schedulerState = _container.Resolve<ISchedulerStateHolder>();
 			_groupPagesProvider = _container.Resolve<ISchedulerGroupPagesProvider>();
+		    
 			_schedulerState.SetRequestedScenario(loadScenario);
 			_schedulerState.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(loadingPeriod, TeleoptiPrincipal.Current.Regional.TimeZone);
 			_defaultFilterDate = _schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
@@ -508,8 +510,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_persister = _container.Resolve<IScheduleScreenPersister>(
 				TypedParameter.From<IPersonRequestPersister>(
 					new PersonRequestPersister((IClearReferredShiftTradeRequests)_schedulerState)),
-				TypedParameter.From<IPersonAbsenceAccountRefresher>(
-					new PersonAbsenceAccountRefresher(new RepositoryFactory(), _scenario)),
 				TypedParameter.From<IPersonAbsenceAccountValidator>(
 					new AnonymousPersonAbsenceAccountValidator(a =>
 																   {
@@ -525,7 +525,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 																		   }
 																	   }
 																   })),
-				TypedParameter.From<IMessageBrokerIdentifier>(_schedulerMessageBrokerHandler),
+                TypedParameter.From<IMessageBrokerIdentifier>(_schedulerMessageBrokerHandler),
 				TypedParameter.From(scheduleDictionaryBatchingPersister),
 				TypedParameter.From<IOwnMessageQueue>(_schedulerMessageBrokerHandler)
 				);
@@ -1128,7 +1128,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					return;
 
 				using (var optimizationPreferencesDialog =
-					new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, GetNonDeletedActivty(), SchedulerState.DefaultSegmentLength))
+					new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, GetNonDeletedActivty(), SchedulerState.DefaultSegmentLength, GetNonDeletedActivty()))
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{
@@ -1931,9 +1931,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void pasteSpecial()
 		{
+			var authorization = PrincipalAuthorization.Instance();
 			var options = new PasteOptions();
-			bool showRestrictions = _scheduleView is RestrictionSummaryView;
-			var pasteSpecial = new FormClipboardSpecial(false, showRestrictions, options, false ) { Text = Resources.PasteSpecial };
+			var clipboardSpecialOptions = new ClipboardSpecialOptions();
+			clipboardSpecialOptions.ShowRestrictions = _scheduleView is RestrictionSummaryView;
+			clipboardSpecialOptions.DeleteMode = false;
+			clipboardSpecialOptions.ShowOvertimeAvailability = false;
+			clipboardSpecialOptions.ShowShiftAsOvertime = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability); ;
+
+			var pasteSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions, MultiplicatorDefinitionSet) { Text = Resources.PasteSpecial };
 			pasteSpecial.ShowDialog();
 
 			if (_scheduleView != null)
@@ -3391,8 +3397,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void cutSpecial()
 		{
 			var options = new PasteOptions();
-			bool showRestrictions = _scheduleView is RestrictionSummaryView;
-			var cutSpecial = new FormClipboardSpecial(true, showRestrictions, options, false ) { Text = Resources.CutSpecial };
+			var clipboardSpecialOptions = new ClipboardSpecialOptions();
+			clipboardSpecialOptions.ShowRestrictions = _scheduleView is RestrictionSummaryView;
+			clipboardSpecialOptions.DeleteMode = true;
+			clipboardSpecialOptions.ShowOvertimeAvailability = false;
+			clipboardSpecialOptions.ShowShiftAsOvertime = false;
+
+			var cutSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions, MultiplicatorDefinitionSet) { Text = Resources.CutSpecial };
 			cutSpecial.ShowDialog();
 
 			if (_scheduleView != null)
@@ -3440,11 +3451,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void deleteSpecial()
 		{
+			var authorization = PrincipalAuthorization.Instance();
 			var options = new PasteOptions();
-			bool showRestrictions = _scheduleView is RestrictionSummaryView;
-            var authorization = PrincipalAuthorization.Instance();
-            var showOvertimeAvailability = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability);
-            using (var deleteSpecial = new FormClipboardSpecial(true, showRestrictions, options, showOvertimeAvailability))
+			var clipboardSpecialOptions = new ClipboardSpecialOptions();
+			clipboardSpecialOptions.ShowRestrictions = _scheduleView is RestrictionSummaryView;
+			clipboardSpecialOptions.DeleteMode = true;
+			clipboardSpecialOptions.ShowOvertimeAvailability = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability);
+			clipboardSpecialOptions.ShowShiftAsOvertime = false;
+			
+            using (var deleteSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions, MultiplicatorDefinitionSet))
 			{
 				deleteSpecial.Text = Resources.DeleteSpecial;
 				deleteSpecial.ShowDialog();
@@ -6642,7 +6657,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		private DateTime _lastclickLabels;
-		private void toolStripButtonShowTexts_Click(object sender, EventArgs e)
+	    
+
+	    private void toolStripButtonShowTexts_Click(object sender, EventArgs e)
 		{
 			// fix for bug in syncfusion that shoots click event twice on buttons in quick access
 			if (_lastclickLabels.AddSeconds(1) > DateTime.Now) return;

@@ -576,7 +576,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                     Repeat.AtLeastOnce();
                 Expect.Call(part.Person).Return(person);
                 Expect.Call(part.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
-                Expect.Call(person.Period(new DateOnly())).Return(null);
+                Expect.Call(person.IsAgent(new DateOnly())).Return(false);
 
             }
 
@@ -616,9 +616,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                     Repeat.AtLeastOnce();
                 Expect.Call(part.Person).Return(person);
                 Expect.Call(part.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
-                Expect.Call(person.Period(new DateOnly())).Return(PersonPeriodFactory.CreatePersonPeriod(new DateOnly()));
-                Expect.Call(person.TerminalDate).Return(null);
-
+                Expect.Call(person.IsAgent(new DateOnly())).Return(true);
             }
 
             using (_mockRep.Playback())
@@ -779,8 +777,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 range.CalculatedScheduleDaysOff = 2;
                 LastCall.IgnoreArguments();
             	Expect.Call(range.CalculatedScheduleDaysOff).Return(2);
-                Expect.Call(person.Period(new DateOnly())).Return(PersonPeriodFactory.CreatePersonPeriod(new DateOnly()));
-                Expect.Call(person.TerminalDate).Return(null);
+                Expect.Call(person.IsAgent(new DateOnly())).Return(true);
             }
 
             using (_mockRep.Playback())
@@ -1153,7 +1150,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var start = new DateTime(2008, 11, 1, 10, 0, 0, DateTimeKind.Utc);
             var end = new DateTime(2008, 11, 1, 12, 0, 0, 0, DateTimeKind.Utc);
             var period = new DateTimePeriod(start, end);
-            mainShift.LayerCollection.Add(new EditorActivityLayer(ActivityFactory.CreateActivity("activity"), period));
+            mainShift.LayerCollection.Add(new EditableShiftLayer(ActivityFactory.CreateActivity("activity"), period));
             new EditableShiftMapper().SetMainShiftLayers(personAssignment, mainShift);
 
             return personAssignment;

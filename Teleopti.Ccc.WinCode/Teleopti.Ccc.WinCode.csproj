@@ -272,7 +272,6 @@
     <Compile Include="Common\AbsenceLayerViewModel.cs" />
     <Compile Include="Common\Clipboard\ClipboardSpecialPresenter.cs" />
     <Compile Include="Common\Clipboard\IClipboardSpecialView.cs" />
-    <Compile Include="Common\Collections\CommonRootCollection.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\ActionExecutionStrategy.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\CommandBehavior.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\CommandBehaviorBinding.cs" />
@@ -280,8 +279,6 @@
     <Compile Include="Common\Commands\CommandBehaviors\CommandExecutionStrategy.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\IExecutionStrategy.cs" />
     <Compile Include="Common\Commands\CommonRoutedCommands.cs" />
-    <Compile Include="Common\Commands\DelegateCommand.cs" />
-    <Compile Include="Common\Commands\DelegateCommandBase.cs" />
     <Compile Include="Common\CommonAgentNameProvider.cs" />
     <Compile Include="Common\Configuration\AbsenceRequestPeriodModel.cs" />
     <Compile Include="Common\Configuration\AbsenceRequestPeriodTypeModel.cs" />
@@ -341,7 +338,6 @@
     <Compile Include="Common\ITransparentMeetingControlView.cs" />
     <Compile Include="Common\LayerGroupViewModel.cs" />
     <Compile Include="Common\LayerViewModelSelector.cs" />
-    <Compile Include="Common\Models\DataModelWithInvalidState.cs" />
     <Compile Include="Common\ModifySelectionPresenter.cs" />
     <Compile Include="Common\MoveableLayerViewModel.cs" />
     <Compile Include="Common\OpenPeriodBudgetsMode.cs" />
@@ -467,6 +463,7 @@
     <Compile Include="PeopleAdmin\Models\PersonFinderModel.cs" />
     <Compile Include="PeopleAdmin\Models\PersonFinderSearchCriteria.cs" />
     <Compile Include="PeopleAdmin\Commands\OpenModuleCommand.cs" />
+    <Compile Include="PeopleAdmin\Models\PersonGeneralModel.cs" />
     <Compile Include="PeopleAdmin\PeopleNavigatorPresenter.cs" />
     <Compile Include="PeopleAdmin\Commands\PersonFinderFindCommand.cs" />
     <Compile Include="PeopleAdmin\Commands\PersonFinderNextCommand.cs" />
@@ -599,6 +596,7 @@
     <Compile Include="Scheduling\IAgentPreferenceView.cs" />
     <Compile Include="Scheduling\IAgentStudentAvailabilityView.cs" />
     <Compile Include="Scheduling\ISchedulePresenterBase.cs" />
+    <Compile Include="Scheduling\PasteAsOvertime.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailabilityPersonFilter.cs" />
     <Compile Include="Scheduling\ScheduleReporting\IReportData.cs" />
     <Compile Include="Scheduling\ScheduleReporting\ScheduledTimePerActivityModel.cs" />
@@ -647,7 +645,6 @@
     <Compile Include="Scheduling\MoveTimeOptimizerCreator.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimePerActivityModel.cs" />
     <Compile Include="Common\SearchPersonPresenter.cs" />
-    <Compile Include="Common\Time\TimeDurationPickerPresenter.cs" />
     <Compile Include="Common\Time\ITimeDurationPickerView.cs" />
     <Compile Include="Common\Time\TimeSpanDataBoundItem.cs" />
     <Compile Include="Common\TransparentControlMeetingHelper.cs" />
@@ -675,7 +672,6 @@
     <Compile Include="Common\Commands\SimpleCommandModel.cs" />
     <Compile Include="Common\Commands\RepositoryCommandModel.cs" />
     <Compile Include="Common\Commands\EventBehaviorFactory.cs" />
-    <Compile Include="Common\Commands\SelectorBehavior.cs" />
     <Compile Include="Common\Commands\SimpleRepositoryCommandModel.cs" />
     <Compile Include="Common\Commands\TextBoxBehavior.cs" />
     <Compile Include="Common\Commands\TwoStepCommandModel.cs" />
@@ -705,7 +701,6 @@
     <Compile Include="Common\LayerViewModelCollection.cs" />
     <Compile Include="Common\MainShiftLayerViewModel.cs" />
     <Compile Include="Common\MeetingLayerViewModel.cs" />
-    <Compile Include="Common\Messaging\Filters\DialogueHasMoreMessagesThan.cs" />
     <Compile Include="Common\Messaging\Filters\DialogueIsRepliedSpecification.cs" />
     <Compile Include="Common\Messaging\Filters\DialogueReplySpecification.cs" />
     <Compile Include="Common\Messaging\Filters\IFilterTarget.cs" />
@@ -713,7 +708,6 @@
     <Compile Include="Common\Messaging\FollowUpMessageDialogueViewModel.cs" />
     <Compile Include="Common\Messaging\IFollowUpMessageDialogueViewModel.cs" />
     <Compile Include="Common\Messaging\IFollowUpPushMessageViewModel.cs" />
-    <Compile Include="Common\Messaging\PushMessageViewModel.cs" />
     <Compile Include="Common\Messaging\FollowUpPushMessageViewModel.cs" />
     <Compile Include="Common\Messaging\FollowUpServiceViewModel.cs" />
     <Compile Include="Common\Messaging\ReplyOptionViewModel.cs" />
@@ -723,8 +717,6 @@
     <Compile Include="Common\PeopleLoader.cs" />
     <Compile Include="Common\PersonalShiftLayerViewModel.cs" />
     <Compile Include="Common\OvertimeLayerViewModel.cs" />
-    <Compile Include="Common\PersonPicker\PersonPickerViewModel.cs" />
-    <Compile Include="Common\PersonPicker\SelectablePersonViewModel.cs" />
     <Compile Include="Common\Rows\RowManagerScheduler.cs" />
     <Compile Include="Common\Time\DateTimeViewModel.cs" />
     <Compile Include="Common\Time\IntervalCollection.cs" />
@@ -732,7 +724,6 @@
     <Compile Include="Common\Time\ITimeZoomItemViewModel.cs" />
     <Compile Include="Common\Time\ITimeZoomViewModel.cs" />
     <Compile Include="Common\Time\Timeline\TimelineControlViewModel.cs" />
-    <Compile Include="Common\Time\Timeline\TimelineViewModel.cs" />
     <Compile Include="Common\Time\Timeline\TickMarkViewModel.cs" />
     <Compile Include="Common\Time\TimeZoomItemViewModel.cs" />
     <Compile Include="Common\Time\TimeZoomViewModel.cs" />
@@ -1110,7 +1101,6 @@
     <Compile Include="Common\CommonStateHolder.cs" />
     <Compile Include="Common\GuiHelpers\ListBoxItem.cs" />
     <Compile Include="Common\PasteOptions.cs" />
-    <Compile Include="PeopleAdmin\PersonGeneralModel.cs" />
     <Compile Include="Scheduling\PersonRequestViewModel.cs" />
     <Compile Include="Scheduling\RequestPresenter.cs" />
     <Compile Include="Scheduling\ScheduleHelper.cs" />
@@ -1329,7 +1319,9 @@
     <None Include="Meetings\MeetingsClassDiagram.cd" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Common\PersonPicker\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>

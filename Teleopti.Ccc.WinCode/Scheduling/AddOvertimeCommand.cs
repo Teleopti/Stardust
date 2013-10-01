@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         	foreach (var schedulePart in ScheduleParts)
         	{
-				if (schedulePart.Person.Period(schedulePart.DateOnlyAsPeriod.DateOnly) == null)
+				if (!schedulePart.Person.IsAgent(schedulePart.DateOnlyAsPeriod.DateOnly))
 				{
 					ScheduleViewBase.ShowInformationMessage(UserTexts.Resources.CouldNotAddOverTimeNoPersonPeriods, UserTexts.Resources.Information);
 					return;

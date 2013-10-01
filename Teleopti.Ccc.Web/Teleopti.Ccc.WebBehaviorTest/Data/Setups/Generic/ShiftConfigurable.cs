@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				lunchPeriod = new DateTimePeriod(startTimeUtc.AddHours(3), startTimeUtc.AddHours(4));
 			}
 			if (lunchPeriod.HasValue)
-				mainShift.LayerCollection.Add(new EditorActivityLayer(lunchActivity, lunchPeriod.Value));
+				mainShift.LayerCollection.Add(new EditableShiftLayer(lunchActivity, lunchPeriod.Value));
 
 			new EditableShiftMapper().SetMainShiftLayers(assignment, mainShift);
 

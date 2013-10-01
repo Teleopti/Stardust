@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
+using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
@@ -36,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _base.AddPersonPeriod(_personPeriod);
             _mocks = new MockRepository();
             _principalAuthorization = _mocks.StrictMock<IPrincipalAuthorization>();
-            _target = new PersonGeneralModel(_base, new UserDetail(_base),_principalAuthorization);
+			_target = new PersonGeneralModel(_base, new UserDetail(_base), _principalAuthorization, new PersonAccountUpdaterDummy());
         }
 
         [Test]
@@ -253,7 +255,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             }
             using (_mocks.Playback())
             {
-                _target = new PersonGeneralModel(_base, userDetail, _principalAuthorization) {ApplicationLogOnName = setValue};
+				_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy()) { ApplicationLogOnName = setValue };
 
                 //Test get method
                 var getValue = _target.ApplicationLogOnName;
@@ -278,7 +280,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             }
             using (_mocks.Playback())
             {
-                _target = new PersonGeneralModel(_base, userDetail, _principalAuthorization) {ApplicationLogOnName = setValue};
+				_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy()) { ApplicationLogOnName = setValue };
 
                 Assert.That(_target.IsValid,Is.True);
             }
@@ -302,7 +304,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             }
             using (_mocks.Playback())
             {
-                _target = new PersonGeneralModel(_base, userDetail,_principalAuthorization) {Password = setValue};
+				_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy()) { Password = setValue };
             }
         }
 

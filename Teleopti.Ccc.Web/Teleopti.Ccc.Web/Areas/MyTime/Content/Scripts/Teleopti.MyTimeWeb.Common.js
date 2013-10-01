@@ -1,7 +1,6 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
+﻿/// <reference path="~/Content/Scripts/jquery-1.9.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
-/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Content/Scripts/jquery.qtip.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js"/>
@@ -38,30 +37,6 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		return '/' + fixedDate.split("-").join("/");
 	}
 
-	function _openEditSection(editSectionId) {
-		var editsection = $(editSectionId);
-
-		$('#modal-disable').show();
-
-		/* Need this to get edit-section height*/
-		editsection.css({ 'visibility': 'hidden', 'display': 'block' });
-		var editHeight = editsection.height();
-		editsection.removeAttr('style');
-
-		$('#page').animate({
-			paddingTop: editHeight + 78
-		}, 300, function () {
-			editsection.show();
-		});
-
-		$(editsection).find('.cancel')
-			.bind('click', function (e) {
-				_closeEditSection(editSectionId);
-			});
-
-		$('.edit-section-content .ui-button').button("option", "disabled", false);
-	}
-
 	function _getTextColorBasedOnBackgroundColor(backgroundColor) {
 		backgroundColor = backgroundColor.slice(backgroundColor.indexOf('(') + 1, backgroundColor.indexOf(')'));
 
@@ -71,17 +46,6 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 		return brightness < 100 ? 'white' : 'black';
 	}
-
-	function _closeEditSection(editSectionId) {
-		var editsection = $(editSectionId);
-		editsection.hide();
-		$('#page').animate({
-			paddingTop: 77
-		}, 300, function () {
-			$('#modal-disable').hide();
-		});
-
-	};
 
 	return {
 		Init: function (settings) {
@@ -111,17 +75,11 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		ParseToDate: function (dateString) {
 			return _parseFixedDateStringToDate(dateString);
 		},
-		OpenEditSection: function (editSectionId) {
-			_openEditSection(editSectionId);
-		},
 		FixedDateToPartsUrl: function (fixedDate) {
 			return _fixedDateToPartsUrl(fixedDate);
 		},
 		IsFixedDate: function (dateString) {
 			return _isFixedDate(dateString);
-		},
-		CloseEditSection: function (editSectionId) {
-			_closeEditSection(editSectionId);
 		},
 		GetTextColorBasedOnBackgroundColor: function (backgroundColor) {
 			return _getTextColorBasedOnBackgroundColor(backgroundColor);
@@ -132,22 +90,6 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 	return {
-		// Disable navigation tabs
-		DisableTabs: function () {
-			$("#tabs-signin, #tabs").tabs({ disabled: [0, 1] });
-		},
-
-		// Activating navigation tabs
-		ActivateTabs: function () {
-			$("#tabs").tabs();
-		},
-
-		// Activate custom inputs
-		ActivateCustomInput: function () {
-			$('.edit-module input[type="checkbox"], .edit-module input[type="radio"]').customInput();
-		},
-
-
 		//Activating tooltip where available
 		ActivateTooltip: function () {
 			$('.qtip-tooltip')

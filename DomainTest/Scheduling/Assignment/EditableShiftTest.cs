@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ShouldBeAbleToAddLayer()
 		{
-			ILayer<IActivity> activityLayer = new EditorActivityLayer(new Activity("phone"), new DateTimePeriod());
+			var activityLayer = new EditableShiftLayer(new Activity("phone"), new DateTimePeriod());
 			_target.LayerCollection.Add(activityLayer);
 			Assert.AreEqual(1, _target.LayerCollection.Count);
 		}

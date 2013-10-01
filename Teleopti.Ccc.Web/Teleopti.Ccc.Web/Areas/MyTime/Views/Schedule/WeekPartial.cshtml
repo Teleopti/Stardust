@@ -95,7 +95,7 @@
             </div>
             <div 
                 data-bind="css: { 'show-request': textRequestPermission }, attr: { 'class': classForDaySummary },
-	style: { 'background-color': colorForDaySummary, 'color': textColor }, click: function () { $parent.showAddRequestForm($data.date()) }"
+	style: { 'background-color': colorForDaySummary, 'color': textColor }, click: $parent.showAddRequestForm"
                 class="weekview-day-summary">
 		        
                 <strong class="fullwidth displayblock" data-bind="text: summaryTitle"></strong>

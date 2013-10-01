@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
@@ -33,12 +34,13 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 
         private void SetupPersons()
         {
+            var personAccountUpdater = new MockRepository().StrictMock<IPersonAccountUpdater>();
             findPerson1 = PersonFactory.CreatePersonWithWindowsPermissionInfo("tommy", "TOPTI");
             findPerson2 = PersonFactory.CreatePersonWithWindowsPermissionInfo("jonny", "TOPTI");
             findPerson3 = PersonFactory.CreatePersonWithWindowsPermissionInfo("conny", "TOPTI");
             findPerson4 = PersonFactory.CreatePersonWithWindowsPermissionInfo("ronny", "TOPTI");
             findPerson5 = PersonFactory.CreatePersonWithWindowsPermissionInfo("benny", "TOPTI");
-            findPerson4.TerminalDate = new DateOnly(2009,12,30);
+            findPerson4.TerminatePerson(new DateOnly(2009,12,30), personAccountUpdater);
            
             findPerson1.AddPersonPeriod(new PersonPeriod(new DateOnly(new DateTime(2010,12,23)),new PersonContract(new Contract("Contract1"),new PartTimePercentage("PartTime3"),new ContractSchedule("CS3")), new Team {Description = new Description("Team1")} ));
             findPerson2.AddPersonPeriod(new PersonPeriod(new DateOnly(new DateTime(2010,12,23)),new PersonContract(new Contract("Contract2"),new PartTimePercentage("PartTime3"),new ContractSchedule("CS")), new Team {Description = new Description("Team1")} ));

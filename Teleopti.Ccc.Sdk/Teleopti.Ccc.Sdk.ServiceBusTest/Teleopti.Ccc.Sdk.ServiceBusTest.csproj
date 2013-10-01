@@ -155,6 +155,7 @@
     <Compile Include="Payroll\PayrollExportResolveTest.cs" />
     <Compile Include="Payroll\PayrollPeopleLoaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rta\NotifyRtaDeciderTest.cs" />
     <Compile Include="Rta\UpdatedScheduleInfoConsumerResolveTest.cs" />
     <Compile Include="Rta\UpdatedScheduleInfoHandlerTest.cs" />
     <Compile Include="Rta\BusinessUnitInfoConsumerTest.cs" />

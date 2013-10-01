@@ -154,8 +154,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.AreEqual(2, personAssingment.MainLayers().Count());
 
             // change order
-            ILayer<IActivity> activity1 = current.GetEditorShift().LayerCollection[0];
-			ILayer<IActivity> activity2 = current.GetEditorShift().LayerCollection[1];
+            var activity1 = current.GetEditorShift().LayerCollection[0];
+			var activity2 = current.GetEditorShift().LayerCollection[1];
 
 	        var mainShift = new EditableShift(category);
 			mainShift.LayerCollection.Add(activity2);

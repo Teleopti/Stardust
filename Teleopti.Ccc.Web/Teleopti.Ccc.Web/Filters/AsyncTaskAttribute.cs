@@ -5,7 +5,7 @@ using System.Web.Mvc;
 
 namespace Teleopti.Ccc.Web.Filters
 {
-	public class AsyncTaskAttribute : ActionFilterAttribute
+	public sealed class AsyncTaskAttribute : ActionFilterAttribute
 	{
 		public override void OnActionExecuting(ActionExecutingContext filterContext)
 		{

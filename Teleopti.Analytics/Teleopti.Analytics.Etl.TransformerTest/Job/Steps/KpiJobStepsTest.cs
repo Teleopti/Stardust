@@ -20,7 +20,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
         }
 
         private readonly IJobParameters _jobParameters = JobParametersFactory.SimpleParameters(false);
-        private readonly IRaptorRepository raptorRepository = new RaptorRepositoryStub();
+        private readonly IRaptorRepository raptorRepository = new RaptorRepositoryForTest();
 
         [Test]
         public void StageKpiJobStepTest()

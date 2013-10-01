@@ -121,7 +121,6 @@
     <Compile Include="DataTableDefinition\UserInfrastructure.cs" />
     <Compile Include="DataTableDefinition\PersonSkillInfrastructure.cs" />
     <Compile Include="DataTableDefinition\PermissionReportInfrastructure.cs" />
-    <Compile Include="RaptorRepositoryStub.cs" />
     <Compile Include="DataTableDefinition\KpiTargetTeamInfrastructure.cs" />
     <Compile Include="DataTableDefinition\ScorecardKpiInfrastructure.cs" />
     <Compile Include="DataTableDefinition\ScorecardInfrastructure.cs" />
@@ -135,9 +134,8 @@
     <Compile Include="DataTableDefinition\IntervalInfrastructure.cs" />
     <Compile Include="LogonHelper.cs" />
     <Compile Include="BulkWriter.cs" />
-    <Compile Include="DB.cs" />
+    <Compile Include="DatabaseCommand.cs" />
     <Compile Include="HelperFunctions.cs" />
-    <Compile Include="IDb.cs" />
     <Compile Include="LogonService.cs" />
     <Compile Include="DataTableDefinition\PersonInfrastructure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

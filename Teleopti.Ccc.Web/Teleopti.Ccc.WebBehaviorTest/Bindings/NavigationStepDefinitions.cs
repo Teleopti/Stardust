@@ -13,6 +13,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	[Binding]
 	public class NavigationStepDefinitions
 	{
+		[Given(@"I am viewing ASM")]
+		[When(@"I view ASM")]
+		public void WhenIClickASMLink()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoAsm();
+		}
+
 		[When(@"Someone is viewing sharing link")]
 		public void WhenSomeoneIsViewingSharingLink()
 		{
@@ -142,6 +150,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[When(@"I navigate to the preferences page")]
+		[When(@"I navigate to preferences")]
 		public void WhenINavigateToThePreferencesPage()
 		{
 			Navigation.GotoPreference();

@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
         void SetPermissionOnAssignments(bool permission);
         void SetPermissionOnOvertime(bool permission);
         void SetPermissionsOnRestrictions(bool permission);
+	    void SetPermissionsOnShiftAsOvertime(bool permission);
         void HideForm();
         void SetTexts();
         void SetColor();

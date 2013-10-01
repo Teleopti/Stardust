@@ -37,6 +37,13 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	self.ActivityEndTimeLimitation = ko.observable();
 	self.ActivityTimeLimitation = ko.observable();
 	self.Color = ko.observable();
+	self.TextColor = ko.computed(function () {
+		var backgroundColor = self.Color();
+		if (backgroundColor) {
+			return Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(backgroundColor);
+		}
+		return 'black';
+	});
 	self.AjaxError = ko.observable('');
 
 	self.DayOff = ko.observable('');
@@ -125,7 +132,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	this.ReadPreference = function (data) {
 		if (!data) return;
 
-		self.Color(data.Color);
+		self.Color('rgb(' + data.Color + ')');
 		self.Preference(data.Preference);
 		self.Extended(data.Extended);
 		self.MustHave(data.MustHave);

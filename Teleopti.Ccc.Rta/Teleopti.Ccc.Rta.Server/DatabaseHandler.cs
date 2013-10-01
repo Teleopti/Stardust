@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.Rta.Server
 		public ConcurrentDictionary<string, List<RtaStateGroupLight>> StateGroups()
 		{
 			const string query =
-				@"SELECT s.Id StateId, s.Name StateName, s.PlatformTypeId,s.StateCode, sg.Id StateGroupId, sg.Name StateGroupName, BusinessUnit BusinessUnitId  
+				@"SELECT s.Id StateId, s.Name StateName, s.PlatformTypeId,s.StateCode, sg.Id StateGroupId, sg.Name StateGroupName, BusinessUnit BusinessUnitId, sg.IsLogOutState 
 								FROM RtaStateGroup sg
 								INNER JOIN RtaState s ON s.Parent = sg.Id 
 								WHERE sg.IsDeleted = 0 
@@ -263,7 +263,8 @@ namespace Teleopti.Ccc.Rta.Server
 					                         		StateCode = reader.GetString(reader.GetOrdinal("StateCode")),
 					                         		StateGroupId = reader.GetGuid(reader.GetOrdinal("StateGroupId")),
 					                         		StateId = reader.GetGuid(reader.GetOrdinal("StateId")),
-					                         		StateName = reader.GetString(reader.GetOrdinal("StateName"))
+					                         		StateName = reader.GetString(reader.GetOrdinal("StateName")),
+													IsLogOutState = reader.GetBoolean(reader.GetOrdinal("IsLogOutState"))
 					                         	};
 					stateGroups.Add(rtaStateGroupLight);
 				}
@@ -276,7 +277,7 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			const string query =
 				@"SELECT sg.Id StateGroupId , sg.Name StateGroupName, Activity ActivityId, t.Name, t.Id AlarmTypeId,
-								t.DisplayColor,t.StaffingEffect, t.ThresholdTime, sg.IsLogOutState
+								t.DisplayColor,t.StaffingEffect, t.ThresholdTime
 								FROM StateGroupActivityAlarm a
 								INNER JOIN AlarmType t ON a.AlarmType = t.Id
 								LEFT JOIN RtaStateGroup sg ON  a.StateGroup = sg.Id 
@@ -284,7 +285,7 @@ namespace Teleopti.Ccc.Rta.Server
 								AND sg.IsDeleted = 0
 				UNION ALL								
 				SELECT NULL,NULL,Activity ActivityId, t.Name, t.Id AlarmTypeId,
-								t.DisplayColor,t.StaffingEffect, t.ThresholdTime, NULL
+								t.DisplayColor,t.StaffingEffect, t.ThresholdTime
 								FROM StateGroupActivityAlarm a
 								INNER JOIN AlarmType t ON a.AlarmType = t.Id 
 								WHERE t.IsDeleted = 0
@@ -312,7 +313,6 @@ namespace Teleopti.Ccc.Rta.Server
 							ActivityId = !reader.IsDBNull(reader.GetOrdinal("ActivityId"))
 								             ? reader.GetGuid(reader.GetOrdinal("ActivityId"))
 								             : Guid.Empty,
-							IsLogOutState = !reader.IsDBNull(reader.GetOrdinal("IsLogOutState")) && reader.GetBoolean(reader.GetOrdinal("IsLogOutState")),
 							DisplayColor = reader.GetInt32(reader.GetOrdinal("DisplayColor")),
 							StaffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect")),
 							AlarmTypeId = reader.GetGuid(reader.GetOrdinal("AlarmTypeId")),

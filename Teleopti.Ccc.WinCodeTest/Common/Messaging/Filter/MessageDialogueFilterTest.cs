@@ -49,17 +49,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging.Filter
             Assert.IsFalse(specification.IsSatisfiedBy(_model2));
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Common.Messaging.DialogueMessageViewModel.set_Text(System.String)"), Test]
-        public void VerifyDialogueHasMoreMessagesThanSpecification()
-        {
-			var message = new DialogueMessageViewModel { Text = "something" };
-            DialogueHasMoreMessagesThan specification = new DialogueHasMoreMessagesThan(1);
-            _model2.Messages = new ObservableCollection<DialogueMessageViewModel> { message,message };
-            _model1.Messages = new ObservableCollection<DialogueMessageViewModel>();
-            Assert.IsTrue(specification.IsSatisfiedBy(_model2));
-            Assert.IsFalse(specification.IsSatisfiedBy(_model1));
-        }
-
         [Test, ExpectedException(typeof(ArgumentException))]
         public void VerifyParameter()
         {

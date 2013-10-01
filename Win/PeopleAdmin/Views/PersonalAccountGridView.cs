@@ -324,10 +324,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             var parentPosition = FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection.IndexOf(dataItem);
 
             FilteredPeopleHolder.GetParentPersonAccountWhenUpdated(parentPosition);
-            PeopleWorksheet.StateHolder.GetChildPersonAccounts(parentPosition,
-                                                               FilteredPeopleHolder.
-                                                                   PersonAccountGridViewAdaptorCollection, FilteredPeopleHolder.CommonNameDescription,
-                                                                   FilteredPeopleHolder.AllAccounts);
+	        PeopleWorksheet.StateHolder.GetChildPersonAccounts(parentPosition, FilteredPeopleHolder);
+															
+
 
             FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[parentPosition].ExpandState = true;
             Grid.Refresh();
@@ -901,14 +900,15 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             {
                 var cachedCollection = grid.Tag as ReadOnlyCollection<IPersonAccountChildModel>;
 
-                PeopleWorksheet.StateHolder.GetChildPersonAccounts(rowIndex - 1, FilteredPeopleHolder.
-                                                                   PersonAccountGridViewAdaptorCollection, cachedCollection, FilteredPeopleHolder.CommonNameDescription, FilteredPeopleHolder.AllAccounts);
+	            PeopleWorksheet.StateHolder.GetChildPersonAccounts(
+		            rowIndex - 1,
+		            cachedCollection,
+		            FilteredPeopleHolder);
+
             }
             else
             {
-                PeopleWorksheet.StateHolder.GetChildPersonAccounts(actualItemIndex,
-                                                               FilteredPeopleHolder.
-                                                                   PersonAccountGridViewAdaptorCollection, FilteredPeopleHolder.CommonNameDescription, FilteredPeopleHolder.AllAccounts);
+	            PeopleWorksheet.StateHolder.GetChildPersonAccounts(actualItemIndex, FilteredPeopleHolder);
             }
         }
 
@@ -1107,9 +1107,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         {
             var actualIndex = index + 1;
 
-            PeopleWorksheet.StateHolder.GetChildPersonAccounts(index,
-                                                               FilteredPeopleHolder.
-                                                                   PersonAccountGridViewAdaptorCollection, FilteredPeopleHolder.CommonNameDescription, FilteredPeopleHolder.AllAccounts);
+	        PeopleWorksheet.StateHolder.GetChildPersonAccounts(index, FilteredPeopleHolder);
+
             var childGrid = Grid[actualIndex, GridInCellColumnIndex].Control as CellEmbeddedGrid;
 
             if (childGrid != null)

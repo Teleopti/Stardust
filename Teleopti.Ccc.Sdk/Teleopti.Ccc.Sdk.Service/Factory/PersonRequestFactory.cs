@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -24,17 +21,17 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         private readonly IPersistPersonRequest _persistPersonRequest;
         private readonly IServiceBusSender _serviceBusSender;
         private readonly IPersonRequestRepository _personRequestRepository;
-        private readonly ICurrentScenario _scenarioRepository;
+        private readonly ICurrentScenario _currentScenario;
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IAssembler<IPersonRequest, PersonRequestDto> _personRequestAssembler;
 
-		  public PersonRequestFactory(IPersistPersonRequest persistPersonRequest, IServiceBusSender serviceBusSender, IPersonRequestRepository personRequestRepository, ICurrentScenario scenarioRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IAssembler<IPersonRequest, PersonRequestDto> personRequestAssembler)
+		  public PersonRequestFactory(IPersistPersonRequest persistPersonRequest, IServiceBusSender serviceBusSender, IPersonRequestRepository personRequestRepository, ICurrentScenario currentScenario, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IAssembler<IPersonRequest, PersonRequestDto> personRequestAssembler)
         {
             _persistPersonRequest = persistPersonRequest;
             _serviceBusSender = serviceBusSender;
             _personRequestRepository = personRequestRepository;
-            _scenarioRepository = scenarioRepository;
+            _currentScenario = currentScenario;
             _scheduleRepository = scheduleRepository;
             _personRepository = personRepository;
             _personRequestAssembler = personRequestAssembler;
@@ -203,7 +200,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         {
             var personRequest = _personRequestAssembler.DtoToDomainEntity(personRequestDto);
             var shiftTradeRequestSetChecksum =
-                new ShiftTradeRequestSetChecksum(_scenarioRepository,
+                new ShiftTradeRequestSetChecksum(_currentScenario,
                                                  _scheduleRepository);
             shiftTradeRequestSetChecksum.SetChecksum(personRequest.Request);
             return _personRequestAssembler.DomainEntityToDto(personRequest);
@@ -221,8 +218,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             PersonRequestedShiftTrade personRequestedShiftTrade = new PersonRequestedShiftTrade(personRequestDto);
             if (personRequestedShiftTrade.IsSatisfiedBy(person))
             {
-                var command = new AcceptPreviouslyReferredShiftTradeCommand(new RepositoryFactory(), _serviceBusSender,
-                                                                            personRequestDto);
+	            var command = new AcceptPreviouslyReferredShiftTradeCommand(_scheduleRepository, _personRequestRepository,
+	                                                                        _currentScenario, _serviceBusSender,
+	                                                                        personRequestDto);
                 command.Execute();
             }
             else
@@ -241,7 +239,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                     using (new MessageBrokerSendEnabler())
                     {
                         ShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum =
-									 new ShiftTradeRequestSetChecksum(_scenarioRepository, _scheduleRepository);
+									 new ShiftTradeRequestSetChecksum(_currentScenario, _scheduleRepository);
 
                         domainPersonRequest =
                             _personRequestRepository.Find(personRequestDto.Id.GetValueOrDefault(Guid.Empty));
@@ -271,10 +269,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         /// <summary>
         /// Check with Domain if PersonRequest has been deleted.
         /// </summary>
-        /// <remarks>
-        /// Created by: HenryG
-        /// Created date: 2010-10-06
-        /// </remarks>
         private bool DomainPersonRequestHasBeenDeleted(Guid personRequestGuid)
         {
             IPersonRequest domainPersonRequest = _personRequestRepository.Load(personRequestGuid);

@@ -17,11 +17,6 @@
 	
     <link href="content/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
 		
-    <!-- 
-        configures require.js cache busting.
-        increment when having cache problems...
-        make this use some sort of build number?
-        -->
     <script>var require = { urlArgs: 'v=<%=new ResourceVersion().Version()%>' };</script>
 
     <script data-main="Areas/PerformanceTool/Content/Scripts/main" type="text/javascript" src="Content/require/require.js"></script>

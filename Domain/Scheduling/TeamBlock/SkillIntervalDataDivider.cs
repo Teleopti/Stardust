@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
@@ -16,11 +17,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             var resultingskillIntervalDataList = new List<ISkillIntervalData>();
             if (skillIntervalDataList != null)
             {
-                var modDiffInMin = (skillIntervalDataList[0].Period.EndDateTime.Minute -
-                                    skillIntervalDataList[0].Period.StartDateTime.Minute) % resolution;
+                
+                var modDiffInMin = getElapsedTime(skillIntervalDataList[0].Period.EndDateTime.Ticks,
+                                                        skillIntervalDataList[0].Period.StartDateTime.Ticks) % resolution ;
 
-                int totallDiffInMin = (skillIntervalDataList[0].Period.EndDateTime.Minute -
-                                       skillIntervalDataList[0].Period.StartDateTime.Minute)/resolution;
+                int totallDiffInMin = (int) (getElapsedTime(skillIntervalDataList[0].Period.EndDateTime.Ticks,
+                                                                  skillIntervalDataList[0].Period.StartDateTime.Ticks) / resolution);
                 if (modDiffInMin!= 0)
                 {
                     //split the interval into to 30 min as the interval length is 15 and the resolution is 10
@@ -38,8 +40,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                     
                     }
                     skillIntervalDataList = aggregatedList;
-                    totallDiffInMin = (skillIntervalDataList[0].Period.EndDateTime.Minute -
-                                       skillIntervalDataList[0].Period.StartDateTime.Minute) / resolution;
+                    totallDiffInMin = (int) (getElapsedTime( skillIntervalDataList[0].Period.EndDateTime.Ticks  ,
+                                                                   skillIntervalDataList[0].Period.StartDateTime.Ticks ) / resolution);
                 }
                 foreach(var skillIntervalItem in skillIntervalDataList )
                 {
@@ -65,6 +67,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
             return resultingskillIntervalDataList;
         }
+
+        private double getElapsedTime(long ticksEnd, long ticksStart)
+        {
+            long elapsedTicks = ticksEnd - ticksStart;
+            var elapsedSpan = new TimeSpan(elapsedTicks);
+            return elapsedSpan.TotalMinutes;
+        }
+
 
         private static ISkillIntervalData aggregateTwoIntervals(ISkillIntervalData skillIntervalData1,ISkillIntervalData skillIntervalData2  )
         {

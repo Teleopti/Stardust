@@ -18,7 +18,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
         }
 
         private readonly IJobParameters _jobParameters = JobParametersFactory.SimpleParameters(false);
-        private readonly IRaptorRepository _raptorRepository = new RaptorRepositoryStub();
+        private readonly IRaptorRepository _raptorRepository = new RaptorRepositoryForTest();
 
         [Test]
         public void BridgeTimeZoneJobStepTest()

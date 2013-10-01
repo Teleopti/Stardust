@@ -1,1 +1,0 @@
-del Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\web.config

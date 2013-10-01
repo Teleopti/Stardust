@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldNotBeAbleToInputValuesForAbsenceRequestAtPositionInTheList(int position)
 		{
 			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format(".request:nth-child({0}) .request-edit-subject", position));
-			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format(".request:nth-child({0}) .request-edit-message", position));
+			Browser.Interactions.AssertNotExists(string.Format(".request:nth-child({0}) .request-non-edit-message", position), string.Format(".request:nth-child({0}) .request-edit-message", position));
 
 			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-absence:not(:enabled)", position));
 
@@ -84,12 +84,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var request = DataMaker.Data().UserData<ExistingAbsenceRequest>();
 
+			var firstFiftyCharsOfMessage = request.PersonRequest.GetMessage(new NoFormatting()).Substring(0, 50);
+
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-subject", position),
 				request.PersonRequest.GetSubject(new NoFormatting()));
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-message", position),
-				request.PersonRequest.GetMessage(new NoFormatting()));
+				firstFiftyCharsOfMessage);
 
 			Browser.Interactions.AssertFirstContains(
 				string.Format(".request-body:nth-child({0}) .request-data-type", position),

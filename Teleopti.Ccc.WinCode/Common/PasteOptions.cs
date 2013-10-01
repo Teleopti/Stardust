@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.WinCode.Common.Clipboard;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
 {
@@ -40,6 +41,8 @@ namespace Teleopti.Ccc.WinCode.Common
         private bool _preference;
         private bool _studentAvailability;
         private bool _overtimeAvailability;
+	    private bool _shiftAsOvertime;
+	    private IMultiplicatorDefinitionSet _multiplicatorDefinitionSet;
 
 
         /// <summary>
@@ -166,5 +169,17 @@ namespace Teleopti.Ccc.WinCode.Common
             get { return _overtimeAvailability; }
             set { _overtimeAvailability = value; }
         }
+
+	    public bool ShiftAsOvertime
+	    {
+			get { return _shiftAsOvertime; }
+			set { _shiftAsOvertime = value; }
+	    }
+
+	    public IMultiplicatorDefinitionSet MulitiplicatorDefinitionSet
+	    {
+			get { return _multiplicatorDefinitionSet; }
+			set { _multiplicatorDefinitionSet = value; }
+	    }
     }
 }

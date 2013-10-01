@@ -13,10 +13,9 @@ define([
 			var self = this;
 
 			var startTime = moment(data.Start, resources.FixedDateTimeFormatForMoment);
-		    
-			var localStartMinutes = startTime.diff(data.Date, 'minutes');
+			var layerStartMinutes = startTime.diff(data.Date, 'minutes');
 
-			this.StartMinutes = ko.observable(localStartMinutes);
+			this.StartMinutes = ko.observable(layerStartMinutes);
 			this.LengthMinutes = ko.observable(data.Minutes);
 			this.Color = ko.observable(data.Color);
 

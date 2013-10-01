@@ -10,6 +10,7 @@ GO
 -- Update date: 2009-02-11
 -- 2009-02-11 New mart schema KJ
 -- 2009-02-09 Stage moved to mart db, removed view KJ
+-- 2013-09-20  Removed check on min/maxdate in stage
 -- =============================================
 CREATE PROCEDURE [mart].[etl_fact_forecast_workload_load] 
 @start_date smalldatetime,
@@ -20,18 +21,6 @@ AS
 ----------------------------------------------------------------------------------
 DECLARE @start_date_id	INT
 DECLARE @end_date_id	INT
-
-DECLARE @max_date smalldatetime
-DECLARE @min_date smalldatetime
-
-SELECT  
-	@max_date= max(date),
-	@min_date= min(date)
-FROM
-	Stage.stg_forecast_workload
-
-SET	@start_date = CASE WHEN @min_date > @start_date THEN @min_date ELSE @start_date END
-SET	@end_date	= CASE WHEN @max_date < @end_date	THEN @max_date ELSE @end_date	END
 
 SET	@start_date = convert(smalldatetime,floor(convert(decimal(18,8),@start_date )))
 SET @end_date	= convert(smalldatetime,floor(convert(decimal(18,8),@end_date )))

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Rta.Server
 	{
 		RtaAlarmLight GetAlarm(Guid activityId, Guid stateGroupId);
 		RtaStateGroupLight GetStateGroup(string stateCode, Guid platformTypeId, Guid businessUnitId);
-		bool IsAgentLoggedOut(Guid scheduledId, string stateCode, Guid platformTypeId, Guid businessUnitId);
+		bool IsAgentLoggedOut(Guid personId, string stateCode, Guid platformTypeId, Guid businessUnitId);
 	}
 
 	public class AlarmMapper : IAlarmMapper
@@ -53,13 +53,20 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public RtaStateGroupLight GetStateGroup(string stateCode, Guid platformTypeId, Guid businessUnitId)
 		{
+			Logger.InfoFormat("Trying to get stategroup for StateCode: {0}, PlatformTypeId: {1}, BusinessUntiId: {2}", stateCode, platformTypeId, businessUnitId);
 			var allStateGroups = _databaseHandler.StateGroups();
 			List<RtaStateGroupLight> stateGroupsForStateCode;
 			if (allStateGroups.TryGetValue(stateCode, out stateGroupsForStateCode))
 			{
 				var stateGroup = stateGroupsForStateCode.SingleOrDefault(s => s.BusinessUnitId == businessUnitId && s.PlatformTypeId == platformTypeId);
 				if (stateGroup != null)
+				{
+					Logger.InfoFormat("Found StateGroupId: {0}, StateGroupName {1}", stateGroup.StateGroupId, stateGroup.StateGroupName);
 					return stateGroup;
+				}
+				Logger.InfoFormat(
+					"Could not find stategroup connected to statecode {0}, for BusinessUnit: {1} and PlatformTypeId: {2}", stateCode,
+					businessUnitId, platformTypeId);
 			}
 			else if (!string.IsNullOrEmpty(stateCode))
 			{
@@ -72,13 +79,17 @@ namespace Teleopti.Ccc.Rta.Server
 			return null;
 		}
 
-		public bool IsAgentLoggedOut(Guid scheduledId, string stateCode, Guid platformTypeId, Guid businessUnitId)
+		public bool IsAgentLoggedOut(Guid personId, string stateCode, Guid platformTypeId, Guid businessUnitId)
 		{
+			Logger.InfoFormat("Checking if agent is already in a stategroup marked as logged out state, personId: {0}", personId);
 			var state = GetStateGroup(stateCode, platformTypeId, businessUnitId);
 			if (state != null)
 			{
-				var alarm = GetAlarm(scheduledId, state.StateGroupId);
-				return alarm.IsLogOutState;
+				Logger.InfoFormat(state.IsLogOutState
+					                  ? "Agent: {0} is already logged out"
+					                  : "Agent: {0} is not logged out",
+				                  personId);
+				return state.IsLogOutState;
 			}
 			return false;
 		}
@@ -98,6 +109,7 @@ namespace Teleopti.Ccc.Rta.Server
 		public string StateCode { get; set; }
 		public Guid StateGroupId { get; set; }
 		public Guid BusinessUnitId { get; set; }
+		public bool IsLogOutState { get; set; }
 	}
 
 	public class RtaAlarmLight
@@ -110,6 +122,5 @@ namespace Teleopti.Ccc.Rta.Server
 		public int DisplayColor { get; set; }
 		public double StaffingEffect { get; set; }
 		public long ThresholdTime { get; set; }
-		public bool IsLogOutState { get; set; }
 	}
 }

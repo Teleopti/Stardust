@@ -18,17 +18,5 @@
         /// Created date: 2008-01-28
         /// </remarks>
         IProjectionService ProjectionService();
-
-        /// <summary>
-        /// Gets a value indicating whether this instance has projection.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance has projection; otherwise, <c>false</c>.
-        /// </value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-01-28
-        /// </remarks>
-        bool HasProjection { get; }
     }
 }

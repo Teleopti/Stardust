@@ -92,13 +92,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 			Browser.Interactions.Javascript(pushMessageDialogueJsonObject.ToString());
 		}
-
-		[Given(@"I have no unread messages")]
-		public void GivenIHaveNoUnreadMessages()
-		{
-			//For helping system tester to understand
-		}
-
+		
 		[Given(@"I am viewing messages")]
 		[When(@"I am viewing messages")]
 		public void WhenIAmViewingMessages()

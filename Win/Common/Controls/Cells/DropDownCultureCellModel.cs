@@ -19,7 +19,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
 		public override GridCellRendererBase CreateRenderer(GridControlBase control)
 		{
-			return new GridComboBoxCellRenderer(control, this);
+			var renderer = new GridComboBoxCellRenderer(control, this);
+			((GridComboBoxListBoxPart) renderer.ListBoxPart).DropDownRows = 25;
+			return renderer;
 		}
 
 		public override bool ApplyFormattedText(GridStyleInfo style, string text, int textInfo)

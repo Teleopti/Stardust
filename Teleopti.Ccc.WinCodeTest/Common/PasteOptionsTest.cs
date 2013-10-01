@@ -107,5 +107,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _options.OvertimeAvailability  = true;
             Assert.AreEqual(true, _options.OvertimeAvailability );
         }
+
+		[Test]
+		public void VerifyShiftAsOvertime()
+		{
+			Assert.AreEqual(false, _options.ShiftAsOvertime);
+			_options.ShiftAsOvertime = true;
+			Assert.AreEqual(true, _options.ShiftAsOvertime);
+		}
     }
 }

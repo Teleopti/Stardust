@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Web.Filters
 	// Example from http://craftycodeblog.com/2010/05/15/asp-net-mvc-ajax-redirect/#comment-110 
 	// MvcAjax will execute script returned (eval).
 
-	public class AjaxJavaScriptRedirectAttribute : ActionFilterAttribute
+	public sealed class AjaxJavaScriptRedirectAttribute : ActionFilterAttribute
 	{
 		public override void OnActionExecuted(ActionExecutedContext filterContext)
 		{

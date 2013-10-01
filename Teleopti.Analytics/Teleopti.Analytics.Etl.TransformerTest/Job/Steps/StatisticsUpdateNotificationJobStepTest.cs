@@ -26,7 +26,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			_messageSender = MockRepository.GenerateMock<IMessageSender>();
 
 			_jobParameters = JobParametersFactory.SimpleParameters(false);
-			_jobParameters.Helper = new JobHelper(new RaptorRepositoryStub(), _messageSender, null);
+			_jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), _messageSender, null);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]

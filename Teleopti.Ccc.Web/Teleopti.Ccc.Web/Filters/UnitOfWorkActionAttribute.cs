@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Filters
 {
-	public class UnitOfWorkActionAttribute : ActionFilterAttribute
+	public sealed class UnitOfWorkActionAttribute : ActionFilterAttribute
 	{
 		public override void OnActionExecuting(ActionExecutingContext filterContext)
 		{

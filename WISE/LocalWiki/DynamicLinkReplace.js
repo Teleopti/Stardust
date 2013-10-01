@@ -1,6 +1,13 @@
-﻿function notTranslatedPrefixes() {
-	return ['F01%253APM_',
-		'PM_'];
+function notTranslatedPrefixes() {
+	return ['PM_',
+	'www.teleopti.com',
+	'F01%253APM_',
+	'Category%253AP',
+	'Special%253ACategories',
+	'Category%3AP',
+	'F01%3APM_',
+	'Special%3ACategories',
+	'mailto'	];
 }
 
 function notTranslatedPages() {
@@ -76,10 +83,23 @@ function isSuffixAllowed(link) {
 	return true;
 }
 
-function shouldReplaceLink(link) {
+function isCurrentPageTranslated(link) {
+	var pageName = getPageName(link)
+	return pageName === 'en.html' ||
+			pageName === 'ru.html' ||
+			pageName === 'sv.html' ||
+			pageName === 'zh.html';
+}
+
+function isPageToTeleoptiSite(link) {
+	return (link.substr(0, 23) === 'http://www.teleopti.com');
+}
+
+function shouldReplaceLink(link, pageName) {
 	return isPrefixAllowed(link, notTranslatedPrefixes()) &&
 		isLinkTranslated(link, notTranslatedPages()) &&
-		isSuffixAllowed(link);
+		isSuffixAllowed(link) &&
+		isCurrentPageTranslated(pageName);
 }
 
 function isLinkInArray(string, array) {
@@ -96,17 +116,33 @@ function replaceLinks() {
 	var pageName = getPageName(url);
 	var links = document.links;
 	for (var i = 0, link; link = links[i]; i++) {
-		if (link)
+		if (link) {
 			link = link.href;
-		else
-			continue;
-		if (shouldReplaceLink(link, pageName)) {
-			var trimmedLink = endsWith(link, '1.html')
-				? link.substr(0, link.length - 7)
-				: link.substr(0, link.length - 5);
+			if (isPageToTeleoptiSite(link))
+				continue;
+			if (endsWith(link, 'pt.html') || endsWith(link, 'pt')) {
+				link = undefined;
+				continue;
+			}
+			if (shouldReplaceLink(link, pageName)) {
+				var trimmedLink;
+				if (endsWith(link, '1.html'))
+					trimmedLink = link.substr(0, link.length - 7);
+				else if (endsWith(link, 'en') ||
+					endsWith(link, 'ru') ||
+					endsWith(link, 'sv') ||
+					endsWith(link, 'zh'))
+					trimmedLink = link.substr(0, link.length - 3);
+				else
+					trimmedLink = link.substr(0, link.length - 5);
 
-			document.links[i].href = trimmedLink + '\\' + pageName;
+				document.links[i].href = trimmedLink + '\\' + pageName;
+			}
 		}
+		document.links[i].href = document.links[i].href.replace(/\+/, '_');
+		document.links[i].href = document.links[i].href.replace('wiki.teleopti.com/TeleoptiCCC/', 'localhost/TeleoptiCCC/LocalWIki/');
+		document.links[i].href = document.links[i].href.replace('%3A', '%253A');
+		
 	}
 	fixNavigationLinkTexts(pageName);
 }
@@ -133,8 +169,12 @@ function fixNavigationLinkTexts(pageName) {
 	var navigationPanel = document.getElementById('mw-panel');
 	var links = navigationPanel.getElementsByTagName('a');
 	for (var i = 0, link; link = links[i]; i++) {
-		if (i >= 56 && i <= 59)
+		if (i >= 56 && i < 58)
 			continue;
+		if (i === 58) {
+			link = undefined;
+			continue;
+		}
 		if (linkTranslation[i])
 			link.innerHTML = linkTranslation[i][language];
 	}
@@ -160,7 +200,8 @@ function getTitleTranslationText() {
 }
 
 function getLinkTranslationText() {
-	return [ // Modules
+	return [['', '', '', ''],
+		// Modules
 ['People', 'Сотрудники', 'Personer', '人员'],
 ['Forecasts', 'Прогнозы', 'Prognoser', '预测'],
 ['Shifts', 'Смены', 'Skift', '班次'],

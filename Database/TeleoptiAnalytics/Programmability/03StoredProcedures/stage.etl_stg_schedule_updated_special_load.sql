@@ -9,49 +9,50 @@ BEGIN
 
 SET NOCOUNT ON;
 
+declare @minDate smalldatetime
+declare @maxDate smalldatetime
+create table #DimPersonLocalized(person_id int, valid_from_date_local smalldatetime,valid_to_date_local smalldatetime)
+insert into #DimPersonLocalized
+select * from mart.DimPersonLocalized('1900-01-01','2059-12-24')
+
 --create local person periods dates
 INSERT INTO Stage.stg_schedule_updated_personLocal
 SELECT DISTINCT
 person_id				= dp.person_id,
-time_zone_id			= dp.time_zone_id,
-person_code				= dp.person_code,
-valid_from_date_local	= dd.date_date,
-valid_to_date_local		= '2059-12-31'
-FROM mart.dim_date dd
-INNER JOIN mart.bridge_time_zone btz
-	ON	btz.local_date_id = dd.date_id
-INNER JOIN mart.dim_person		dp
-	ON btz.time_zone_id =	dp.time_zone_id
-	AND dp.valid_from_date_id = btz.date_id
-	AND dp.valid_from_interval_id = btz.interval_id
+time_zone_id			= p.time_zone_id,
+person_code				= p.person_code,
+valid_from_date_local	= dp.valid_from_date_local,
+valid_to_date_local		= dp.valid_to_date_local
+FROM #DimPersonLocalized dp
+INNER JOIN mart.dim_person p
+	ON dp.person_id = p.person_id
 INNER JOIN Stage.stg_schedule_changed stg
-	ON stg.person_code = dp.person_code
-
-UPDATE Stage.stg_schedule_updated_personLocal 
-SET valid_to_date_local		= dd.date_date 
-FROM mart.dim_date dd
-INNER JOIN mart.bridge_time_zone btz
-	ON	btz.local_date_id = dd.date_id
-INNER JOIN mart.dim_person	dp
-	ON btz.time_zone_id =	dp.time_zone_id
-	AND dp.valid_to_date_id = btz.date_id
-	AND dp.valid_to_interval_id = btz.interval_id
-INNER JOIN Stage.stg_schedule_updated_personLocal stg
-	ON stg.person_id = dp.person_id	
-
---this table is namned UTC,
---... but for now we will go for "agent local date", later used for delete on [shift_startdate_id]
---Currently we can't tell on what UTC-day the shift starts.
---We need local shift start time in order to calculate correct UTC on shift_startdate_id
+	ON stg.person_code = p.person_code
+	
+--get the UTC day via local date on person and bridge time zone
 INSERT INTO Stage.stg_schedule_updated_ShiftStartDateUTC
-SELECT 
-	person_id			= dp.person_id,
-	shift_startdate_id	= dd.date_id
+SELECT DISTINCT
+	person_id			= p.person_id,
+	shift_startdate_id	= btz.date_id  --UTC
 FROM Stage.stg_schedule_updated_personLocal dp
 INNER JOIN stage.stg_schedule_changed stg
 	ON stg.person_code = dp.person_code
 INNER JOIN mart.dim_date dd
 	ON dd.date_date = stg.schedule_date
+INNER JOIN mart.dim_person p
+	ON stg.person_code	= p.person_code
+INNER JOIN	#DimPersonLocalized dp_loc
+	ON dp_loc.person_id = p.person_id
+	AND	 --trim to person valid in this range
+		(
+				(stg.schedule_date	>= dp_loc.valid_from_date_local)
+
+			AND
+				(stg.schedule_date < dp_loc.valid_to_date_local)
+		)
+INNER JOIN mart.bridge_time_zone btz
+	ON	btz.local_date_id = dd.date_id
+	AND btz.time_zone_id = dp.time_zone_id
 
 END
 

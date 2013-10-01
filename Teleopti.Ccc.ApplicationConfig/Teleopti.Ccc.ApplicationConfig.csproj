@@ -212,4 +212,7 @@
     <PostBuildEvent>xcopy "$(ProjectDir)..\nhibernateAddons\Cache_Providers\*.dll" "$(TargetDir)" /y</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\BuildArtifacts\CccAppConfig.config" "$(ProjectDir)App.config"</PreBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
     	private static IJobResultFeedback getThreadJobResultFeedback(IComponentContext componentContext)
     	{
-    		return jobResultFeedback ?? (jobResultFeedback = new JobResultFeedback());
+    		return jobResultFeedback ?? (jobResultFeedback = new JobResultFeedback(componentContext.Resolve<ICurrentUnitOfWorkFactory>()));
     	}
     }
 }

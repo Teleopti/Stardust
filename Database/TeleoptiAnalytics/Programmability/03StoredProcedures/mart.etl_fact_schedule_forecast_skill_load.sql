@@ -18,6 +18,7 @@ GO
 -- 2009-02-09	Stage moved to mart db, removed view KJ
 -- 2009-02-11	New mart schema KJ
 -- 2013-03-01	Removed ABS() calculation from relative difference calculation KJ
+-- 2013-09-20   Removed check on min/maxdate in stage
 -- =============================================
 
 CREATE PROCEDURE [mart].[etl_fact_schedule_forecast_skill_load] 
@@ -31,23 +32,6 @@ AS
 --DECLARES
 DECLARE @start_date_id	INT
 DECLARE @end_date_id	INT
-DECLARE @max_date smalldatetime
-DECLARE @min_date smalldatetime
-DECLARE @min_interval_id int
-DECLARE @max_interval_id int
-
-SELECT  
-	@min_date= min(date),
-	@max_date= max(date)
-	
-FROM
-	Stage.stg_schedule_forecast_skill
-
-SET	@start_date = CASE WHEN @min_date > @start_date THEN @min_date ELSE @start_date END
-SET	@end_date	= CASE WHEN @max_date < @end_date	THEN @max_date ELSE @end_date END
-
---SELECT @min_interval_id= MIN(interval_id) FROM v_stg_schedule_forecast_skill  WHERE date=@min_date
---SELECT @max_interval_id= MAX(interval_id) FROM v_stg_schedule_forecast_skill WHERE date=@max_date
 
 SET	@start_date = convert(smalldatetime,floor(convert(decimal(18,8),@start_date )))
 SET @end_date	= convert(smalldatetime,floor(convert(decimal(18,8),@end_date )))

@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			}
 
 			if (TerminalDate.HasValue)
-				user.TerminalDate = new DateOnly(TerminalDate.Value);
+				user.TerminatePerson(new DateOnly(TerminalDate.Value), new PersonAccountUpdaterDummy());
 
 			if (!string.IsNullOrEmpty(UserName))
 			{

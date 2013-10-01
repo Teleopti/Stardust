@@ -62,7 +62,7 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 		{
 			get
 			{
-				return ConfigurationManager.ConnectionStrings["Database"].ConnectionString;
+				return ConfigurationManager.ConnectionStrings["LocalSqlServer"].ConnectionString;
 			}
 		}
 	}

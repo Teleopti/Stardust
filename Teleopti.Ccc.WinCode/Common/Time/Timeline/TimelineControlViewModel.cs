@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.WinCode.Common.Time.Timeline
                 model.TickMarkDays.Clear();
                 IList<DateTimePeriod> list;
                 if (model.Resolution == TimeSpan.FromDays(1))
-                    list = model.Period.WholeDayCollection();
+                    list = model.Period.WholeDayCollection(model.TimeZone );
                 else
                     list = EvenHourPeriodsInCurrentTimeZone(model.Period, model.TimeZone);
                 foreach (DateTimePeriod period in list)

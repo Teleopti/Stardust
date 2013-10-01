@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.WinCode.Common;
@@ -37,10 +38,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     if (personAssignment != null)
                     {
 	                    var shift = _editableShiftMapper.CreateEditorShift(personAssignment);
-                        if (shift != null && shift.LayerCollection.Period().Value.EndDateTimeLocal(timeZone) > selectedDate.Date)
+                        if (shift != null && shift.LayerCollection.OuterPeriod().Value.EndDateTimeLocal(timeZone) > selectedDate.Date)
                         {
                             DateTime maxTemp =
-                                shift.LayerCollection.Period().Value.EndDateTimeLocal(timeZone);
+																shift.LayerCollection.OuterPeriod().Value.EndDateTimeLocal(timeZone);
                             min = selectedDate.Date;
                             if(maxTemp > max)
                                 max = maxTemp;
@@ -56,10 +57,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					var shift = _editableShiftMapper.CreateEditorShift(personAssignment);
 					if (shift != null)
                     {
-						if (max < shift.LayerCollection.Period().Value.EndDateTimeLocal(timeZone))
-							max = shift.LayerCollection.Period().Value.EndDateTimeLocal(timeZone);
-						if (min > shift.LayerCollection.Period().Value.StartDateTimeLocal(timeZone))
-							min = shift.LayerCollection.Period().Value.StartDateTimeLocal(timeZone);
+											if (max < shift.LayerCollection.OuterPeriod().Value.EndDateTimeLocal(timeZone))
+												max = shift.LayerCollection.OuterPeriod().Value.EndDateTimeLocal(timeZone);
+											if (min > shift.LayerCollection.OuterPeriod().Value.StartDateTimeLocal(timeZone))
+												min = shift.LayerCollection.OuterPeriod().Value.StartDateTimeLocal(timeZone);
                     }
                 }
             }

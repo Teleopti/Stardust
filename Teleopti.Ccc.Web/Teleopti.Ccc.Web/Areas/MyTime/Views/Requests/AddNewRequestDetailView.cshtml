@@ -46,5 +46,5 @@
 <div class="request-new-error alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />    
 <div class="pull-right">
     <button class="request-new-cancel btn" data-bind="click: $parent.CancelAddingNewRequest">@Resources.Cancel</button>
-    <button class="request-new-send btn btn-primary" data-bind="click: AddRequest, text: EntityId > 0 ? '@Html.AttributeEncode(Resources.Update)	' : '@Html.AttributeEncode(Resources.SubmitRequest)	'"/>
+	<button class="request-new-send btn btn-primary" data-bind="click: AddRequest">@Resources.Save</button>
 </div>

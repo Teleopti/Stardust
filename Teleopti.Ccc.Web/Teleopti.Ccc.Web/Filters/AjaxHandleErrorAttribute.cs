@@ -5,7 +5,7 @@ using Teleopti.Ccc.Web.Models.Shared;
 
 namespace Teleopti.Ccc.Web.Filters
 {
-	public class AjaxHandleErrorAttribute : HandleErrorAttribute
+	public sealed class AjaxHandleErrorAttribute : HandleErrorAttribute
 	{
 		private readonly IErrorMessageProvider _errorMessageProvider;
 

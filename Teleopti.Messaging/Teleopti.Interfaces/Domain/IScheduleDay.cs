@@ -384,6 +384,7 @@ namespace Teleopti.Interfaces.Domain
 
 	    IScheduleDay ReFetch();
 	    void AddMainShift(IPersonAssignment mainShiftSource);
+	    bool HasProjection();
     }
 
 }

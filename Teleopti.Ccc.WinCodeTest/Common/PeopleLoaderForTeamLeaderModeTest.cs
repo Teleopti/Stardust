@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         {
             _selectedEntities.Clear();
             _selectedEntities.Add(_team);
-            _person.TerminalDate = new DateOnly(2009, 9, 5);
+            _person.TerminatePerson(new DateOnly(2009, 9, 5), new MockRepository().StrictMock<IPersonAccountUpdater>());
             _target = new PeopleLoaderForTeamLeaderMode(_uow, _schedulerStateHolder, _selectedEntitiesForPeriod, _repositoryFactory);
             IList<IPerson> returnPersons = new List<IPerson>();
             expectsForRepositoryFactory();
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 			_selectedEntities.Clear();
 			_selectedEntities.Add(_team);
-			_person.TerminalDate = new DateOnly(2009, 9, 6);
+			_person.TerminatePerson(new DateOnly(2009, 9, 6), new MockRepository().StrictMock<IPersonAccountUpdater>());
 			_target = new PeopleLoaderForTeamLeaderMode(_uow, _schedulerStateHolder, _selectedEntitiesForPeriod, _repositoryFactory);
 			IList<IPerson> returnPersons = new List<IPerson>();
 

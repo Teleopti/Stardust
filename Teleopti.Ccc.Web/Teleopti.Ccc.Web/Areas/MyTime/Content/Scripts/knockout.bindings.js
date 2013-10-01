@@ -23,37 +23,6 @@ ko.subscribable.fn.subscribeTo = function (topic) {
 	return this; //support chaining
 };
 
-ko.bindingHandlers['option-data'] = {
-	update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-		var options = valueAccessor();
-		var observable = options.member;
-		var selected = $(element).find('option:selected');
-		var data = selected.data(options.data);
-		if (observable)
-			observable(data);
-	}
-};
-
-ko.bindingHandlers.animateBackground = {
-	update: function (element, valueAccessor, allBindingsAccessor, viewmodel) {
-		var value = valueAccessor(), allBindings = allBindingsAccessor();
-		var fadeDuration = allBindings.fadeDuration || 1500;
-		var valueUnwrapped = ko.utils.unwrapObservable(value);
-		$(element).stop().animate({ backgroundColor: valueUnwrapped }, fadeDuration);
-	}
-};
-
-ko.bindingHandlers['class'] = {
-	update: function (element, valueAccessor) {
-		if (element['__ko__previousClassValue__']) {
-			$(element).removeClass(element['__ko__previousClassValue__']);
-		}
-		var value = ko.utils.unwrapObservable(valueAccessor());
-		$(element).addClass(value);
-		element['__ko__previousClassValue__'] = value;
-	}
-};
-
 ko.bindingHandlers.hoverToggle = {
 	init: function (element, valueAccessor, allBindingsAccessor) {
 		var css = valueAccessor();
@@ -108,29 +77,6 @@ ko.bindingHandlers.fadeInIf = {
 				}
 			});
 		}
-	}
-};
-
-//Increases the elements width (default by 20px) if the bound value is true
-ko.bindingHandlers.increaseWidthIf = {
-	update: function (element, valueAccessor, allBindingsAccessor) {
-		var value = valueAccessor(), allBindings = allBindingsAccessor();
-		if (!element.initialWidthForIncreaseIfBinding) {
-			element.initialWidthForIncreaseIfBinding = $(element).width();
-		}
-
-		var valueUnwrapped = ko.utils.unwrapObservable(value);
-
-		var increaseBy = allBindings.increaseBy || 20;
-		var increaseDuration = allBindings.fadeInDuration || 150;
-		var decreaseDuration = allBindings.fadeOutDuration || 150;
-
-		$(element).stop();
-
-		if (valueUnwrapped)
-			$(element).animate({ width: element.initialWidthForIncreaseIfBinding + increaseBy }, decreaseDuration);
-		else
-			$(element).animate({ width: element.initialWidthForIncreaseIfBinding }, increaseDuration);
 	}
 };
 
@@ -228,18 +174,6 @@ ko.bindingHandlers.select2 = {
 	}
 };
 
-ko.bindingHandlers.button = {
-	init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-		$(element).button();
-	},
-	update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-		var value = ko.utils.unwrapObservable(valueAccessor()),
-            disabled = ko.utils.unwrapObservable(value.disabled);
-
-		$(element).button("option", "disabled", disabled);
-	}
-};
-
 //wraps the datepickerbinding and sets the datepickeroptions
 ko.bindingHandlers.mytimeDatePicker = {
 	init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
@@ -262,12 +196,11 @@ ko.bindingHandlers.mytimeDatePicker = {
 };
 
 ko.bindingHandlers.clickable = {
-	update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+	update: function (element, valueAccessor) {
 		var value = ko.utils.unwrapObservable(valueAccessor());
 
 		var clickableCursor = (value) ? "pointer" : "not-allowed";
 		$(element).css('cursor', clickableCursor);
-
 	}
 };
 
@@ -280,3 +213,9 @@ ko.bindingHandlers.nonEncodedTitle = {
 	}
 };
 
+ko.bindingHandlers.selected = {
+    update: function (element, valueAccessor) {
+        var selected = ko.utils.unwrapObservable(valueAccessor());
+        if (selected) element.select();
+    }
+};

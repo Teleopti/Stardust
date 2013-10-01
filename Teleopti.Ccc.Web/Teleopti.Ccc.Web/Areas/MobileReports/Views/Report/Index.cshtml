@@ -4,23 +4,23 @@
 @{ Layout = "~/Areas/MobileReports/Views/Shared/MobileLayoutBase.cshtml"; }
 @section csshead {
 	<link rel="stylesheet" href="@Url.Content("~/Areas/MobileReports/Content/Css/mobile.custom.css")" />
-	<link rel="stylesheet" href="@Url.Content("~/Content/MobileDateBox/jqm-datebox.min.css")" />
+	<link rel="stylesheet" href="@Url.Content("~/Areas/MobileReports/Content/MobileDateBox/jqm-datebox.min.css")" />
 }
 @section jsBeforeMobile {
 	<script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/Teleopti.MobileReports.Common.js")"></script>
 	<script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/Teleopti.MobileReports.Index.js")"></script>
 }
 @section jsAfterMobile {
-	<script src="@Url.Content("~/Content/Scripts/RGraph.common.core.js")"></script>
-	<script src="@Url.Content("~/Content/Scripts/RGraph.common.key.js")"></script>
-	<script src="@Url.Content("~/Content/Scripts/RGraph.bar.js")"></script>
-	<script src="@Url.Content("~/Content/Scripts/RGraph.line.js")"></script>
-	<!--[if lt IE 9]><script src="@Url.Content("~/Content/Scripts/excanvas.original.js")"></script><![endif]-->
+	<script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/RGraph.common.core.js")"></script>
+	<script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/RGraph.common.key.js")"></script>
+	<script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/RGraph.bar.js")"></script>
+	<script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/RGraph.line.js")"></script>
+	<!--[if lt IE 9]><script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/excanvas.original.js")"></script><![endif]-->
 	<script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/jquery.mobile.setting.skillpicker.js")"></script>
 	<script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/jquery.mobile.report.graph.js")"></script>
 	<script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/jquery.mobile.report.table.js")"></script>
-	<script src="@Url.Content("~/Content/MobileDateBox/jqm-datebox.core.js")"></script>
-	<script src="@Url.Content("~/Content/MobileDateBox/jqm-datebox.mode.calbox.js")"></script>
+	<script src="@Url.Content("~/Areas/MobileReports/Content/MobileDateBox/jqm-datebox.core.js")"></script>
+	<script src="@Url.Content("~/Areas/MobileReports/Content/MobileDateBox/jqm-datebox.mode.calbox.js")"></script>
 	<script>
 		$.extend($.mobile.datebox.prototype.options.lang, {
 			'loc': @Html.Raw(Model.DateBoxGlobalization.ToJson())

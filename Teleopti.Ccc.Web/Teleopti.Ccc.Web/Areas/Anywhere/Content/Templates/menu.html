@@ -4,26 +4,26 @@
 		<div class="container">
 			<ul class="nav">  
 				<li class="dropdown">  
-					<a href="#"  
-					   class="dropdown-toggle nowrap brand"  
-					   data-toggle="dropdown">Teleopti <b class="caret"></b>  
-					</a>  
-					<ul class="dropdown-menu">
-						<li><a href="#" tabindex="-1"><span data-bind="text: Resources.Home"></span></a></li>
+					<a href="#" class="nowrap brand">Teleopti</a>
+				</li>  
+			</ul>
+		    <ul class="nav">
+		        <li data-bind="css: {active: ActiveView() == 'teamschedule'}"><a href="#">Schedules</a></li>
+		    </ul>
+            
+		    <ul class="nav pull-right">
+		        <li class="dropdown">
+		            <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-bind="css: { active: ActiveView() == 'settings' }"><i class="icon-user"></i><span class="user-name"><small data-bind="text: UserName"></small></span> <b class="caret"></b></a>
+		            <ul class="dropdown-menu">
+		                <li><a href="#" tabindex="-1"><span data-bind="text: Resources.Home"></span></a></li>
 						<li class="divider"></li>
 						<li id="link-mytime" data-bind="visible: MyTimeVisible"><a href="mytime">MyTime</a></li>
 						<li id="link-mobilereports" data-bind="visible: MobileReportsVisible"><a href="mobilereports" tabindex="-1">Mobile Reports</a></li>
 						<li class="divider"></li>
-						<li><a href="authentication/signout" tabindex="-1"><i class="icon-eject"></i> <span data-bind="text: Resources.LogOut"></span></a></li>  
-					</ul>
-				</li>  
-			</ul>
-			<ul class="nav">
-				<li data-bind="css: {active: ActiveView() == 'teamschedule'}"><a href="#">Schedules</a></li>
-			</ul>
-			<ul class="nav pull-right">
-				<li><a data-bind="text: UserName, css: {active: ActiveView() == 'settings'}"></a></li>
-			</ul>
+						<li><a href="authentication/signout" tabindex="-1"><i class="icon-eject"></i> <span data-bind="text: Resources.LogOut"></span></a></li> 
+		            </ul>
+		        </li>
+		    </ul>
 		</div>
 	</div>
 </nav>

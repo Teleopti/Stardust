@@ -26,6 +26,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         self.Dates = ko.observable();
         self.UpdatedOn = ko.observable();
         self.Text = ko.observable();
+        self.ListText = ko.observable();
         self.Link = ko.observable();
         self.Id = ko.observable();
         self.IsMouseOver = ko.observable(false);
@@ -237,6 +238,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
             self.Dates(data.Dates);
             self.UpdatedOn(data.UpdatedOn);
             self.Text(data.Text);
+            self.ListText(data.Text.length > 50 ? data.Text.substring(0, 50) + '...' : data.Text);
             self.Link(data.Link.href);
             self.Id(data.Id);
             self.StatusClass(_classFromStatus(data));

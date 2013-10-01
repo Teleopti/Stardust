@@ -88,17 +88,16 @@ Scenario: Push staffing metrics changes
 	| Difference hours        | -4.49  |
 	| Difference percentage   | -39.10 |
 	| Estimated service level | 0.00   |
-	When someone else adds a full day absence with
-	| Field   | Value        |
-	| Person  | Pierre Baldi |
-	| Absence | Vacation     |
-	| From    | 2013-09-09   |
-	| To      | 2013-09-09   |
+	When 'Martin Fowler' adds an absence for 'Pierre Baldi' with
+	| Field      | Value            |
+	| Name       | Vacation         |
+	| Start time | 2013-09-09 00:00 |
+	| End time   | 2013-09-10 00:00 |
 	Then I should see staffing metrics for skill 'Direct Sales' with
 	| Field                   | Value   |
 	| Forecasted hours        | 11.50   |
 	| Scheduled hours         | 0.0     |
-	| Difference hours        | -11.50  |
+	| Difference hours        | -11.49  |
 	| Difference percentage   | -100.00 |
 	| Estimated service level | 0.00    |
 

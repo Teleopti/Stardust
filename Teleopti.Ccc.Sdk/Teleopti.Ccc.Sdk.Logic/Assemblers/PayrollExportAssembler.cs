@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.Assemblers
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             }
             if (payrollExport == null) return null;
 
-            payrollExport.Period = new DateOnlyPeriod(new DateOnly(dto.DatePeriod.StartDate.DateTime), new DateOnly(dto.DatePeriod.EndDate.DateTime));
+            payrollExport.Period = dto.DatePeriod.ToDateOnlyPeriod();
             payrollExport.PayrollFormatId = dto.PayrollFormat.FormatId;
             payrollExport.PayrollFormatName = dto.PayrollFormat.Name;
 

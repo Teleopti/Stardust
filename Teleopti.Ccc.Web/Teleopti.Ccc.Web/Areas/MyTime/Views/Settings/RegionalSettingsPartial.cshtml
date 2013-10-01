@@ -27,8 +27,12 @@
 			    <button class="btn btn-large revoke" data-bind="css: { active: !CalendarSharingActive() }, click: DeactivateCalendarSharing">@Resources.Revoke</button>
 		    </div>
 		    <!-- ko if: CalendarSharingActive() -->
-		    <label>@Resources.ShareMyCalendarHint</label>
-		    <label class="calendar-url" data-bind="text: CalendarUrl"></label>
+			<div>
+			    <span>@Resources.ShareMyCalendarHint</span><a href="http://wiki.teleopti.com/TeleoptiCCC/CalendarLink" target="_blank">@Resources.Here</a>
+		    </div>
+		    <div>
+			    <input class="calendar-url span10" data-bind="value: CalendarUrl, selected: true"/>
+		    </div>
 		    <!-- /ko -->
 	    </div>
     }

@@ -249,7 +249,6 @@
     <Compile Include="Persisters\PersistConflict.cs" />
     <Compile Include="Persisters\PersistConflictMessageState.cs" />
     <Compile Include="Persisters\PersonAbsenceAccountConflictCollector.cs" />
-    <Compile Include="Persisters\PersonAbsenceAccountRefresher.cs" />
     <Compile Include="Persisters\PersonRequestPersister.cs" />
     <Compile Include="Persisters\PersonRequestRefresher.cs" />
     <Compile Include="Persisters\ScheduleDictionaryBatchPersister.cs" />
@@ -332,7 +331,6 @@
     <Compile Include="Repositories\DayOffTemplateRepository.cs" />
     <Compile Include="Repositories\RtaStateGroupRepository.cs" />
     <Compile Include="Repositories\ForecastProcessReportRepository.cs" />
-    <Compile Include="Repositories\GeneralRepository.cs" />
     <Compile Include="Repositories\GroupPageRepository.cs" />
     <Compile Include="Repositories\OptionalColumnRepository.cs">
       <SubType>Code</SubType>

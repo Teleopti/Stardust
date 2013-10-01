@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual IProjectionService ProjectionService()
 		{
 			var proj = new VisualLayerProjectionService(Person);
-			if (HasProjection)
+			if (hasProjection())
 			{
 				proj.Add(MainLayers(), new VisualLayerFactory());
 				var validPeriods = new HashSet<DateTimePeriod>(MainLayers().PeriodBlocks());
@@ -212,12 +212,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return proj;
 		}
 
-		public virtual bool HasProjection
+		private bool hasProjection()
 		{
-			get
-			{
 				return MainLayers().Any() || OvertimeLayers().Any();
-			}
 		}
 
 		#region ICloneableEntity<PersonAssignment> Members
@@ -243,7 +240,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			retobj.SetId(null);
 			retobj._shiftLayers = new List<IShiftLayer>();
 			//todo: no need to cast here when interfaces are correct
-			foreach (IShiftLayer newLayer in _shiftLayers.Select(layer => layer.NoneEntityClone()))
+			foreach (var newLayer in _shiftLayers.Select(layer => layer.NoneEntityClone()))
 			{
 				newLayer.SetParent(retobj);
 				retobj._shiftLayers.Add(newLayer);
@@ -257,7 +254,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var retobj = (PersonAssignment)MemberwiseClone();
 			retobj._shiftLayers = new List<IShiftLayer>();
 			//todo: no need to cast here when interfaces are correct
-			foreach (IShiftLayer newLayer in _shiftLayers.Select(layer => layer.EntityClone()))
+			foreach (var newLayer in _shiftLayers.Select(layer => layer.EntityClone()))
 			{
 				newLayer.SetParent(retobj);
 				retobj._shiftLayers.Add(newLayer);
@@ -308,6 +305,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				AddMainLayer(mainLayer.Payload, mainLayer.Period);
 			}
+		}
+
+		public virtual void InsertMainLayer(IActivity activity, DateTimePeriod period, int index)
+		{
+			var layer = new MainShiftLayer(activity, period);
+			layer.SetParent(this);
+			_shiftLayers.Insert(index,layer);
+			SetDayOff(null);
 		}
 
 		public virtual IDayOff DayOff()

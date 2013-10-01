@@ -7,15 +7,12 @@
 		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
 		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
 		<DBNamePrefix>$(Computername)_$(CCNetProject)</DBNamePrefix>
-		<AgentPortalWebSiteName>$(CCNetProject)-AgentPortalWeb</AgentPortalWebSiteName>
-		<AgentPortalWebSitePath>C:\inetpub\wwwroot\$(AgentPortalWebSiteName)</AgentPortalWebSitePath>
-		<AgentPortalWebURL>http://$(Computername)/$(AgentPortalWebSiteName)/</AgentPortalWebURL>
-		<AgentPortalWebCreator>"$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\AgentPortalWeb.bat"</AgentPortalWebCreator>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
 		<DoCodeAnalysis>false</DoCodeAnalysis>
 		<RunWebBehaviorTests>true</RunWebBehaviorTests>
-		
+		<AgentPortalWebSiteName>$(CCNetProject)-AgentPortalWeb</AgentPortalWebSiteName>
+	
 		<vs2020ide>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe</vs2020ide>
 		<AsDBDeploy>C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\ManagementStudio\Microsoft.AnalysisServices.Deployment.exe</AsDBDeploy>
 
@@ -31,6 +28,7 @@
 		<AzureMasterConn>SQLCMD -Stcp:$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -dmaster</AzureMasterConn>
 		<DBManagerAzure>-S$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -T -C -L$(AzureDbLogin):$(AzureDbPwd)</DBManagerAzure>
 		<DatabasePath>"$(CCNetWorkingDirectory)\database"</DatabasePath>
+
 		
 		<NDependTransferDataPath>C:\NDepend\NDependXmlToDb\NDependXmlToDb.exe</NDependTransferDataPath>
 	</PropertyGroup>
@@ -145,6 +143,11 @@
 		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(DBNamePrefix)_ccc7]&quot;"/>
 	</Target>
 	
+	<Target Name="SetUpConfigFiles">
+		<Message Importance="high" Text="Fixing config files"/>
+		<Exec Command = "&quot;$(CCNetWorkingDirectory)\Teleopti.Support.Tool\bin\Debug\Teleopti.Support.Tool.exe&quot; -MODevelop" />
+	</Target>
+	
 	<Target Name="BuildDBManager">
 		<Message Importance="high" Text="Compile of Db Manager starting..." />
 
@@ -189,12 +192,6 @@
 		<Message Importance="high" Text="Analytics report controls. Finished"/>
 	</Target>
 	
-	<Target Name="CreateAgentPortalWeb" Condition="'$(RunWebBehaviorTests)' == 'true'">
-		<!-- create web site/app/VirDir + Copy content-->
-		<Message Importance="high" Text="$(AgentPortalWebCreator) $(AgentPortalWebSiteName) $(DBNamePrefix)_ccc7 $(DBNamePrefix)_analytics"/>
-		<Exec Command = "$(AgentPortalWebCreator) $(AgentPortalWebSiteName) $(DBNamePrefix)_ccc7 $(DBNamePrefix)_analytics $(AgentPortalWebURL)" />
-	</Target>
-
 	<Target Name="CreateAnalyticsDb" DependsOnTargets="BuildDBManager">
 		<Message Importance="high" Text="Dropping Analytics DB on local instance" />
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_agg') BEGIN ALTER DATABASE [$(DBNamePrefix)_agg] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_agg] END" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
@@ -253,69 +250,70 @@
 	</Target>
 
 	<Target Name="FixConfigFiles">
+		<Message Importance="high" Text="Fixing config files..." />	
 
-		<Message Importance="high" Text="Fixing config files..." />
-		<Attrib Files="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config"
-								Normal="true" />
-		<Attrib Files="$(CCNetWorkingDirectory)\ccnet\infratest.ini"
-								Normal="true" />
-		<Attrib Files="$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\Teleopti.Ccc.WebBehaviorTest.dll.config"
-								Normal="true" />
+		<PropertyGroup>
+			<AgentPortalWebURL>http://$(Computername)/$(AgentPortalWebSiteName)/</AgentPortalWebURL>		
+			<WEB_BROKER>$(AgentPortalWebURL)</WEB_BROKER>
+			<WEB_BROKER_BACKPLANE></WEB_BROKER_BACKPLANE>
+			<SQL_LOGIN>sa</SQL_LOGIN>
+			<SQL_PASSWORD>cadadi</SQL_PASSWORD>
+			<InfraTestIni>$(CCNetWorkingDirectory)\ccnet\InfraTest.ini</InfraTestIni>
+			<!-- <SitePath>C:\inetpub\wwwroot\$(AgentPortalWebSiteName)</SitePath> -->
+			<SitePath>$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web</SitePath>		
+		</PropertyGroup>		
 
-		<FileUpdate Files="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config"
-									Encoding="windows-1252"
-									Regex="_replace_"
-									ReplacementText="$(CCNetWorkingDirectory)\ccnet\infratest.ini"/>
+		<ItemGroup>
+			<!-- MSBuild escape sequence is "% + ASCIIVALUE". e.g [$] = "%24"  -->
+			<InfraTestIniLines Include="[TestDatabase]" />
+			<InfraTestIniLines Include="DB_CCC7=%22$(DBNamePrefix)_ccc7%22" />
+			<InfraTestIniLines Include="SQL_SERVER_NAME=%22$(DBServer)%22" />
+			<InfraTestIniLines Include="SQL_LOGIN=%22$(SQL_LOGIN)%22" />			
+			<InfraTestIniLines Include="SQL_PASSWORD=%22$(SQL_PASSWORD)%22" />
+			<InfraTestIniLines Include="AGENTPORTALWEB_nhibConfPath=%22bin%22" />
+			<InfraTestIniLines Include="DB_ANALYTICS=%22$(DBNamePrefix)_analytics%22" />
+			<InfraTestIniLines Include="WEB_BROKER=%22$(WEB_BROKER)%22" />
+			<InfraTestIniLines Include="WEB_BROKER_BACKPLANE=%22$(WEB_BROKER_BACKPLANE)%22" />	
+			<InfraTestIniLines Include="SitePath=%22$(SitePath)%22" />
+			<InfraTestIniLines Include="url=%22$(AgentPortalWebURL)%22" />
+			<InfraTestIniLines Include="servicebus=%22false%22" />
+			<InfraTestIniLines Include="create=%22true%22" />
+			<InfraTestIniLines Include="IISExpress=%22true%22" />
+			<InfraTestIniLines Include="dbFile=%22$(InfraTestIni)%22" />
+		</ItemGroup> 
+		
+		<WriteLinesToFile File="$(InfraTestIni)" 
+		Lines="@(InfraTestIniLines)" 
+		Overwrite="true" />
 
-		<FileUpdate Files="$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\Teleopti.Ccc.WebBehaviorTest.dll.config"
-									Encoding="windows-1252"
-									Regex="_replace_"
-									ReplacementText="$(CCNetWorkingDirectory)\ccnet\infratest.ini"/>
-
-		<FileUpdate Files="$(CCNetWorkingDirectory)\ccnet\infratest.ini"
-									  Encoding="windows-1252"
-									  Regex="_DBNamePrefix_"
-									  ReplacementText="$(DBNamePrefix)"/>
-		<FileUpdate Files="$(CCNetWorkingDirectory)\ccnet\infratest.ini"
-									Encoding="windows-1252"
-									Regex="_url_"
-									ReplacementText="$(AgentPortalWebURL)"/>
-		<FileUpdate Files="$(CCNetWorkingDirectory)\ccnet\infratest.ini"
-									Encoding="windows-1252"
-									Regex="_sitepath_"
-									ReplacementText="$(AgentPortalWebSitePath)"/>
-		<FileUpdate Files="$(CCNetWorkingDirectory)\ccnet\infratest.ini"
-									  Encoding="windows-1252"
-									  Regex="_DBServer_"
-									  ReplacementText="$(DBServer)"/>
-
-		<!-- Only when running Raptor-->
-		<Message Importance="high" Text="Fixing of config files finished" />
-
-		<!--This part is now Obsolete (used previously when Nunit executed CruiseControl.sln)-->
-		<Message Importance="high" Text="Copy Teleopti.Ccc.InfrastructureTest.Config..." />
-		<Exec Command="del /F /Q &quot;$(CCNetWorkingDirectory)\CruiseControl.config&quot;" />
-		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config"
-					DestinationFiles="$(CCNetWorkingDirectory)\CruiseControl.config" />
-
-		<!--Explicte copy the correct config to each project that is using it
-		be sure to do this step before compile time; since CopyToLocal will move it to $(OutDir)-->
-		<Message Importance="high" Text="Copy Teleopti.Ccc.InfrastructureTest.Config." />
 
 		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
-			DestinationFiles="$(CCNetWorkingDirectory)\InfrastructureTest\Teleopti.Ccc.InfrastructureTest.dll.Config" />
+			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfigTest\App.config" />
 
 		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
-			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfigTest\Teleopti.Ccc.ApplicationConfigTest.dll.Config" />
+			DestinationFiles="$(CCNetWorkingDirectory)\InfrastructureTest\App.Config" />
 
-		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
-			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.dll.Config" />
+		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\Teleopti.Ccc.WebBehaviorTest.App.config" OverwriteReadOnlyFiles="true"
+			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config" />
 
-		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\Teleopti.Ccc.WebBehaviorTest.dll.config" OverwriteReadOnlyFiles="true"
-			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\$(OutDir)\App.config" />
+		
+		<FileUpdate Files="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config"
+			Encoding="windows-1252"
+			Regex="_replace_"
+			ReplacementText="$(InfraTestIni)"/>
 
-	</Target>
-
+		<FileUpdate Files="$(CCNetWorkingDirectory)\InfrastructureTest\App.Config"
+			Encoding="windows-1252"
+			Regex="_replace_"
+			ReplacementText="$(InfraTestIni)"/>
+			
+		<FileUpdate Files="$(CCNetWorkingDirectory)\Teleopti.Ccc.ApplicationConfigTest\App.config"
+			Encoding="windows-1252"
+			Regex="_replace_"
+			ReplacementText="$(InfraTestIni)"/>			
+		
+		</Target>
+		
 	<!--This is how we "går över ån och runt sjön för att hämta vatten"
 		We run into something like this: http://www.mail-archive.com/rhinomocks@googlegroups.com/msg02457.html 
 		So instead, try to run tests One By One to mimimize numbers of Mocks included.
@@ -332,7 +330,7 @@
 		 />
 	</ItemGroup>
 	
-	<Target Name="NCover" DependsOnTargets="FixConfigFiles;Compile;CreateAgentPortalWeb">
+	<Target Name="NCover" DependsOnTargets="FixConfigFiles;Compile;SetUpConfigFiles">
 		
 		<MakeDir Directories="$(CCNetWorkingDirectory)\NcoverResult"/>
 		<MakeDir Directories="$(CCNetWorkingDirectory)\NUnitResult"/>

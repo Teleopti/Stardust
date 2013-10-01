@@ -79,11 +79,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 				() => _helper.AssertJavascriptResultContainsMessage(javascript, text, lastActual as string));
 		}
 
-		public void AssertKnockoutContextContains(string selector, string knockoutBinding, string text)
-		{
-			AssertJavascriptResultContains("return ko.contextFor($('" + selector + "').get(0)).$data." + knockoutBinding, text);
-		}
-
 		public void AssertExists(string selector)
 		{
 			validateSelector(selector);

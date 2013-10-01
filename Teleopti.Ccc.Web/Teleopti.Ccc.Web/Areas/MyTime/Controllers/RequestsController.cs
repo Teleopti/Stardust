@@ -155,9 +155,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
-		public JsonResult ReSendShiftTrade(Guid id)
+		public JsonResult ResendShiftTrade(Guid id)
 		{
-			var model = _respondToShiftTrade.ResendReffered(id);
+			var model = _respondToShiftTrade.ResendReferred(id);
 			model.Status = Resources.ProcessingDotDotDot;
 			return Json(model);
 		}

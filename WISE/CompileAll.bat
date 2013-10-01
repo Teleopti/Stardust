@@ -152,50 +152,11 @@ SET ARTIFACTDIR=%SRCDIR%\BuildArtifacts
 ECHO ARTIFACTDIR: %ARTIFACTDIR%
 
 MKDIR "%DYNAMICCONTENT%"
-MKDIR "%DYNAMICCONTENT%"ApplicationConfiguration"
-MKDIR "%DYNAMICCONTENT%\Analytics"
-MKDIR "%DYNAMICCONTENT%\ETL"
-MKDIR "%DYNAMICCONTENT%\ETL\Service"
-MKDIR "%DYNAMICCONTENT%\ETL\Tool"
 MKDIR "%DYNAMICCONTENT%\Client"
 MKDIR "%DYNAMICCONTENT%\Client\Forecasts"
 MKDIR "%DYNAMICCONTENT%\Client\StandAlone"
-MKDIR "%DYNAMICCONTENT%\Client\ClickOnce"
-MKDIR "%DYNAMICCONTENT%\MessageBroker"
 MKDIR "%DYNAMICCONTENT%\MyTime"
 MKDIR "%DYNAMICCONTENT%\MyTime\StandAlone"
-MKDIR "%DYNAMICCONTENT%\MyTime\ClickOnce"
-MKDIR "%DYNAMICCONTENT%\RTA"
-MKDIR "%DYNAMICCONTENT%\RTATools"
-MKDIR "%DYNAMICCONTENT%\RTATools\Testapplication"
-MKDIR "%DYNAMICCONTENT%\RTATools\Testapplication\Web"
-MKDIR "%DYNAMICCONTENT%\SDK"
-MKDIR "%DYNAMICCONTENT%\ServiceBus"
-MKDIR "%DYNAMICCONTENT%\PMService"
-MKDIR "%DYNAMICCONTENT%\Web"
-MKDIR "%DYNAMICCONTENT%\Broker"
-MKDIR "%DYNAMICCONTENT%\BrokerBackplane"
-
-::Del Checked In and Add corresponding Dynamic Artifacts
-DEL /F /Q "%WISESOURCEFILE%\ETL\Service\TeleoptiCCC7.nhib.xml"
-COPY "%ARTIFACTDIR%\TeleoptiCCC7.nhib.xml" "%DYNAMICCONTENT%\ETL\Service\TeleoptiCCC7.nhib.xml"
-
-DEL /F /Q "%WISESOURCEFILE%\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe.config
-COPY "%ARTIFACTDIR%\AppETLService.config" "%DYNAMICCONTENT%\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe.config"
-
-DEL /F /Q "%WISESOURCEFILE%\ETL\Tool\TeleoptiCCC7.nhib.xml"
-COPY "%ARTIFACTDIR%\TeleoptiCCC7.nhib.xml" "%DYNAMICCONTENT%\ETL\Tool\TeleoptiCCC7.nhib.xml"
-
-DEL /F /Q "%WISESOURCEFILE%\ETL\Tool\Teleopti.Analytics.Etl.ConfigTool.exe.config"
-COPY "%ARTIFACTDIR%\AppETLTool.config" "%DYNAMICCONTENT%\ETL\Tool\Teleopti.Analytics.Etl.ConfigTool.exe.config"
-
-COPY "%ARTIFACTDIR%\TeleoptiCCC7.nhib.xml" "%DYNAMICCONTENT%\Client\Forecasts\TeleoptiCCC7.nhib.xml"
-
-DEL /F /Q "%WISESOURCEFILE%\Client\Forecasts\Teleopti.Ccc.SmartClientPortal.Shell.exe.config"
-COPY "%ARTIFACTDIR%\AppForecasts.config"  "%DYNAMICCONTENT%\Client\Forecasts\Teleopti.Ccc.SmartClientPortal.Shell.exe.config"
-
-DEL /F /Q "%WISESOURCEFILE%\Client\ClickOnce\Teleopti.Ccc.SmartClientPortal.Shell.exe.config.deploy"
-COPY "%ARTIFACTDIR%\AppRaptor.config" "%DYNAMICCONTENT%\Client\ClickOnce\Teleopti.Ccc.SmartClientPortal.Shell.exe.config.deploy"
 
 DEL /F /Q "%WISESOURCEFILE%\Client\StandAlone\Teleopti.Ccc.SmartClientPortal.Shell.exe.config"
 COPY "%ARTIFACTDIR%\AppRaptor.config" "%DYNAMICCONTENT%\Client\StandAlone\Teleopti.Ccc.SmartClientPortal.Shell.exe.config"
@@ -203,69 +164,15 @@ COPY "%ARTIFACTDIR%\AppRaptor.config" "%DYNAMICCONTENT%\Client\StandAlone\Teleop
 DEL /F /Q "%WISESOURCEFILE%\MyTime\StandAlone\Teleopti.Ccc.AgentPortal.exe.config"
 COPY "%ARTIFACTDIR%\AppMytime.config" "%DYNAMICCONTENT%\MyTime\StandAlone\Teleopti.Ccc.AgentPortal.exe.config"
 
-DEL /F /Q "%WISESOURCEFILE%\MyTime\ClickOnce\Teleopti.Ccc.AgentPortal.exe.config.deploy"
-COPY "%ARTIFACTDIR%\AppMytime.config" "%DYNAMICCONTENT%\MyTime\ClickOnce\Teleopti.Ccc.AgentPortal.exe.config.deploy"
+DEL /F /Q "%WISESOURCEFILE%\Client\Forecasts\TeleoptiCCC7.nhib.xml"
+COPY "%ARTIFACTDIR%\TeleoptiCCC7.nhib.xml" "%DYNAMICCONTENT%\Client\Forecasts\TeleoptiCCC7.nhib.xml"
 
-DEL /F /Q "%WISESOURCEFILE%\SDK\TeleoptiCCC7.nhib.xml"
-COPY "%ARTIFACTDIR%\TeleoptiCCC7.nhib.xml" "%DYNAMICCONTENT%\SDK\TeleoptiCCC7.nhib.xml"
-
-DEL /F /Q "%WISESOURCEFILE%\RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe.config"
-COPY "%ARTIFACTDIR%\AppRTATestApplication.config" "%DYNAMICCONTENT%\RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe.config"
-
-DEL /F /Q "%WISESOURCEFILE%\ServiceBus\Teleopti.Ccc.Sdk.ServiceBus.Host.exe.config"
-COPY "%ARTIFACTDIR%\ServiceBusHost.config" "%DYNAMICCONTENT%\ServiceBus\Teleopti.Ccc.Sdk.ServiceBus.Host.exe.config"
-
-DEL /F /Q "%WISESOURCEFILE%\ServiceBus\GeneralQueue.config"
-COPY "%ARTIFACTDIR%\ServiceBusHostGeneralQueue.config" "%DYNAMICCONTENT%\ServiceBus\GeneralQueue.config"
-
-DEL /F /Q "%WISESOURCEFILE%\ServiceBus\RequestQueue.config"
-COPY "%ARTIFACTDIR%\ServiceBusHostRequestQueue.config" "%DYNAMICCONTENT%\ServiceBus\RequestQueue.config"
-
-DEL /F /Q "%WISESOURCEFILE%\ServiceBus\DenormalizeQueue.config"
-COPY "%ARTIFACTDIR%\ServiceBusHostDenormalizeQueue.config" "%DYNAMICCONTENT%\ServiceBus\DenormalizeQueue.config"
-
-DEL /F /Q "%WISESOURCEFILE%\ServiceBus\RTAQueue.config"
-COPY "%ARTIFACTDIR%\ServiceBusHostRTAQueue.config" "%DYNAMICCONTENT%\ServiceBus\RTAQueue.config"
-
-DEL /F /Q "%WISESOURCEFILE%\ServiceBus\log4net.config"
-COPY "%ARTIFACTDIR%\ServiceBuslog4net.config" "%DYNAMICCONTENT%\ServiceBus\log4net.config"
-
-DEL /F /Q "%WISESOURCEFILE%\Analytics\web.config"
-COPY "%ARTIFACTDIR%\AnalyticsWeb.config" "%DYNAMICCONTENT%\Analytics\web.config"
-
-DEL /F /Q "%WISESOURCEFILE%\PMService\web.config"
-COPY "%ARTIFACTDIR%\PMWeb.config" "%DYNAMICCONTENT%\PMService\web.config"
-
-DEL /F /Q "%WISESOURCEFILE%\RTA\web.config"
-COPY "%ARTIFACTDIR%\RTAWeb.config" "%DYNAMICCONTENT%\RTA\web.config"
-
-DEL /F /Q "%WISESOURCEFILE%\SDK\web.config"
-COPY "%ARTIFACTDIR%\SDKWeb.config" "%DYNAMICCONTENT%\SDK\web.config"
-
-DEL /F /Q "%WISESOURCEFILE%\SDK\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
-COPY "%ARTIFACTDIR%\ServiceBusClient.config" "%DYNAMICCONTENT%\SDK\Teleopti.Ccc.Sdk.ServiceBus.Client.config"
-
-DEL /F /Q "%WISESOURCEFILE%\AgentPortalWeb\web.config"
-COPY "%ARTIFACTDIR%\Web.Root.Web.config" "%DYNAMICCONTENT%\Web\web.config"
-
-DEL /F /Q "%WISESOURCEFILE%\AgentPortalWeb\Teleopti.Ccc.Web.ServiceBus.Client.config"
-COPY "%ARTIFACTDIR%\ServiceBusClient.config" "%DYNAMICCONTENT%\Web\Teleopti.Ccc.Web.ServiceBus.Client.config"
-
-DEL /F /Q "%WISESOURCEFILE%\AgentPortalWeb\TeleoptiCCC7.nhib.xml"
-COPY "%ARTIFACTDIR%\TeleoptiCCC7.nhib.xml" "%DYNAMICCONTENT%\Web\TeleoptiCCC7.nhib.xml"
-
-DEL /F /Q "%WISESOURCEFILE%\Broker\web*config"
-COPY "%ARTIFACTDIR%\BrokerWeb.config" "%DYNAMICCONTENT%\Broker\web.config"
+DEL /F /Q "%WISESOURCEFILE%\Client\Forecasts\Teleopti.Ccc.SmartClientPortal.Shell.exe.config"
+COPY "%ARTIFACTDIR%\AppForecasts.config"  "%DYNAMICCONTENT%\Client\Forecasts\Teleopti.Ccc.SmartClientPortal.Shell.exe.config"
 
 ::Non-Dynamic Artifacts
-COPY "%ARTIFACTDIR%\CccAppConfig.config" "%WISESOURCEFILE%\ApplicationConfiguration\CccAppConfig.exe.config"
-COPY "%ARTIFACTDIR%\LegalNotice.txt" "%WISESOURCEFILE%\SDK\LegalNotice.txt"
 COPY "%ARTIFACTDIR%\licensecontext.slf" "%WISESOURCEFILE%\Client\Forecasts\licensecontext.slf"
 COPY "%ARTIFACTDIR%\licensecontext.slf" "%WISESOURCEFILE%\Client\StandAlone\licensecontext.slf"
-COPY "%ARTIFACTDIR%\Web.MyTime.Web.config" "%WISESOURCEFILE%\Web\Areas\MyTime\Views\web.config"
-COPY "%ARTIFACTDIR%\Web.Start.Web.config" "%WISESOURCEFILE%\Web\Areas\Start\Views\web.config"
-COPY "%ARTIFACTDIR%\Web.Mobile.Web.config" "%WISESOURCEFILE%\Web\Areas\MobileReports\Views\web.config"
-COPY "%ARTIFACTDIR%\BrokerBackplaneWeb.config" "%WISESOURCEFILE%\BrokerBackplane\web.config"
 
 ::Create msi output folder
 IF NOT EXIST %OUTDIR% MKDIR %OUTDIR%

@@ -345,6 +345,7 @@
       <DependentUpon>SmsSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Controls\Cells\DropDownCultureCellModel.cs" />
+    <Compile Include="Common\Controls\Cells\DropDownCellModel.cs" />
     <Compile Include="Common\Controls\Cells\TimeStaticCellRenderer.cs" />
     <Compile Include="Common\Controls\Columns\IColumnDisableCondition.cs" />
     <Compile Include="Common\Controls\Columns\SelectedItemChangeBaseEventArgs.cs" />
@@ -1151,6 +1152,7 @@
       <DependentUpon>ShiftCategoryLimitationView.cs</DependentUpon>
     </Compile>
     <Compile Include="PeopleAdmin\GuiHelpers\DatabaseLostConnectionHandler.cs" />
+    <Compile Include="PeopleAdmin\GuiHelpers\FilteredPeopleAccountUpdater.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\PeriodDateDictionaryBuilder.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\PeriodDateService.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\PeopleAdminConstants.cs" />

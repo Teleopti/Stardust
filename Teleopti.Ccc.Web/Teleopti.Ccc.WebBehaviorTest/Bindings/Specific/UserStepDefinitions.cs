@@ -126,6 +126,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new ScheduleIsPublished());
 		}
 
+		[Given(@"I am an agent in a team without access to shift trade requests")]
+		public void GivenIAmAnAgentInATeamWithoutAccessToShiftTradeRequests()
+		{
+			DataMaker.Data().Apply(new Agent());
+			var team = new Team();
+			DataMaker.Data().Apply(team);
+			DataMaker.Data().Apply(new SchedulePeriod());
+			DataMaker.Data().Apply(new PersonPeriod(team.TheTeam));
+			DataMaker.Data().Apply(new ScheduleIsPublished());
+		}
+
+
 		[Given(@"I am an agent in a team with access only to my own data")]
 		public void GivenIAmAnAgentWithoutPermissionToSeeMyColleagueSSchedule()
 		{
@@ -451,12 +463,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		public void GivenIHaveAnExistingTextRequest()
 		{
 			DataMaker.Data().Apply(new ExistingTextRequest());
-		}
-
-		[Given(@"I have no existing requests")]
-		public void GivenIHaveNoExistingRequests()
-		{
-
 		}
 
 		[Given(@"I have a pending text request")]

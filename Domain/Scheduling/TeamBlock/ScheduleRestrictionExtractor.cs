@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface IScheduleRestrictionExtractor
 	{
-		IEffectiveRestriction Extract(IList<DateOnly> dateOnlyList, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone);
+        IEffectiveRestriction Extract(IList<DateOnly> dateOnlyList, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone, ITeamBlockInfo teamBlockInfo);
 
 		IEffectiveRestriction ExtractForOnePersonOneBlock(IList<DateOnly> dateOnlyList,
 														  IList<IScheduleMatrixPro> matrixList,
@@ -22,16 +22,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public class ScheduleRestrictionExtractor : IScheduleRestrictionExtractor
 	{
 		private readonly IScheduleDayEquator _scheduleDayEquator;
+        private readonly INightlyRestRestrictionForTeamBlock _nightlyRestRestrictionForTeamBlock;
 
-		public ScheduleRestrictionExtractor(IScheduleDayEquator scheduleDayEquator)
+		public ScheduleRestrictionExtractor(IScheduleDayEquator scheduleDayEquator, INightlyRestRestrictionForTeamBlock nightlyRestRestrictionForTeamBlock)
 		{
-			_scheduleDayEquator = scheduleDayEquator;
+		    _scheduleDayEquator = scheduleDayEquator;
+		    _nightlyRestRestrictionForTeamBlock = nightlyRestRestrictionForTeamBlock;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
 			MessageId = "1")]
 		public IEffectiveRestriction Extract(IList<DateOnly> dateOnlyList, IList<IScheduleMatrixPro> matrixList,
-		                                     ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone)
+                                             ISchedulingOptions schedulingOptions, TimeZoneInfo timeZone, ITeamBlockInfo teamBlockInfo)
 		{
 			IEffectiveRestriction restriction = new EffectiveRestriction(new StartTimeLimitation(),
 			                                                             new EndTimeLimitation(),
@@ -64,6 +66,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (sameShiftCategory == null) return null;
 				restriction = restriction.Combine(sameShiftCategory);
 			}
+
+
+            restriction =
+                restriction.Combine(_nightlyRestRestrictionForTeamBlock.AggregatedNightlyRestRestriction(teamBlockInfo));
 
 
 			return restriction;

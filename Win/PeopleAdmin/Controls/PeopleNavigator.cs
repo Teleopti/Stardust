@@ -4,6 +4,7 @@ using System.Linq;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         private IPeopleNavigatorPresenter _myPresenter;
         private readonly IEventAggregator _localEventAggregator;
         private readonly IEventAggregator _globalEventAggregator;
+        private ICurrentScenario _currentScenario;
 
         public PeopleNavigator(PortalSettings portalSettings, IComponentContext componentContext, IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory, IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler)
             : this()
@@ -55,6 +57,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
             _container = lifetimeScope.BeginLifetimeScope();
             _localEventAggregator = _container.Resolve<IEventAggregator>();
             _globalEventAggregator = _container.Resolve<IEventAggregatorLocator>().GlobalAggregator();
+            _currentScenario = _container.Resolve<ICurrentScenario>();
 
 			SetTexts();
         }
@@ -137,11 +140,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         	                                                                             		var foundPeople = _personRepository.FindPeople(selectedGuids).ToList();
         	                                                                             		var accounts = new PersonAbsenceAccountRepository(uow).FindByUsers(foundPeople);
 
-        	                                                                             		ITraceableRefreshService service = new TraceableRefreshService(new ScenarioRepository(uow).LoadDefaultScenario(),new RepositoryFactory());
+        	                                                                             	    ITraceableRefreshService service = new TraceableRefreshService(_currentScenario,new ScheduleRepository(uow));
 
         	                                                                             		var filteredPeopleHolder = new FilteredPeopleHolder(service, accounts) {
         	                                                                             					SelectedDate = _selectorPresenter.SelectedDate,
-        	                                                                             					UnitOfWork = uow
+        	                                                                             					GetUnitOfWork = uow
         	                                                                             				};
 
         	                                                                             		var state = new WorksheetStateHolder(service);
@@ -215,13 +218,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
             {
                 IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork();
                 var accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
-                IScenario defaultScenario = new ScenarioRepository(uow).LoadDefaultScenario();
-                ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(defaultScenario, new RepositoryFactory());
+                ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(_currentScenario, new ScheduleRepository(uow));
                 var state = new WorksheetStateHolder(cacheServiceForPersonAccounts);
                 var filteredPeopleHolder = new FilteredPeopleHolder(cacheServiceForPersonAccounts, accounts)
                 {
                     SelectedDate = DateOnly.Today,
-                    UnitOfWork = uow
+                    GetUnitOfWork = uow
                 };
 
                 //Load the people general view & initial references

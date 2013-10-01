@@ -161,10 +161,6 @@
 	margin-right: 5px;
 }
 
-#TeamScheduleDateRangeSelector.date-range-selector .datepicker{
-	 width: 110px;
-}
-
 .teamschedule-agent-schedule .tooltip-container {
 	top: -55px;
 	height: 57px;

@@ -67,11 +67,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			result.Saved.Should().Be.True();
 			PersonAbsenceAccount.Version.Should().Be.EqualTo(expectedPaaMemoryVersion);
 			UnitOfWorkAction(uow => uow.DatabaseVersion(PersonAbsenceAccount)).Should().Be.EqualTo(expectedPaaDbVersion);
-			// have to catch the callback mock to update this instance reference with the new reference to get this to work
-			//ScheduleData.Version.Should().Be.EqualTo(expectedSchedDataMemoryVersion);
 			UnitOfWorkAction(uow => uow.DatabaseVersion(ScheduleData).Should().Be.EqualTo(expectedSchedDataDbVersionVersion));
 		}
 
+		[Test]
+		public void ShouldPersistWithDeletedPersonAbsenceAccount()
+		{
+			MakeTarget();
+			// this will cause a optimistic lock + a unitOfWork refresh fail
+			DeleteCurrentPersonAbsenceAccountAsAnotherUser();
+			var result = TryPersistScheduleScreen();
+
+			result.Saved.Should().Be.True();
+		}
+
+		//private void AddPersonAssignmentAndAbsence()
+		//{
+		//	var period = new DateTimePeriod(FirstDayDateOnly, FirstDayDateOnly.AddDays(1));
+		//	var personAssignment = new PersonAssignment(Person, Scenario, FirstDayDateOnly);
+		//	personAssignment.AddMainLayer(Activity, period);
+		//	var scheduleDay = ScheduleDictionary[Person].ScheduledDay(FirstDayDateOnly);
+		//	scheduleDay.Add(personAssignment);
+		//	scheduleDay.CreateAndAddActivity(Activity, period, ShiftCategory);
+		//	scheduleDay.CreateAndAddAbsence(new AbsenceLayer(Absence, period));
+		//	ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+		//}
+		
 		[Test]
 		public void ShouldRevertVersionNumberWhenTransactionFails()
 		{

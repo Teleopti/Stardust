@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Interfaces.Domain
 {

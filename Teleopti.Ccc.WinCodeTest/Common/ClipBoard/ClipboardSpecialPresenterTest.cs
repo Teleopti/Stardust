@@ -1,10 +1,12 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 {
@@ -35,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
                 _view.SetColor();
 
                 Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence)).Return(true).Repeat.Once();
-                Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment)).Return(true).Repeat.Times(4);
+                Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment)).Return(true).Repeat.Times(5);
                 Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction)).Return(true).Repeat.Once();
                 
                 _view.SetPermissionOnAbsences(true);
@@ -44,6 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
                 _view.SetPermissionOnAssignments(true);
                 _view.SetPermissionOnOvertime(true);
                 _view.SetPermissionsOnRestrictions(true);
+				_view.SetPermissionsOnShiftAsOvertime(true);
                 _view.ShowRestrictions(true);
             }
 
@@ -165,6 +168,24 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
             _presenter.OnCheckBoxStudentAvailabilityCheckedChange(false);
             Assert.IsFalse(_model.StudentAvailability);
         }
+
+		[Test]
+		public void VerifyOnCheckBoxShiftAsOvertimeChange()
+		{
+			_presenter.OnCheckBoxShiftAsOvertimeCheckedChanged(true);
+			Assert.IsTrue(_model.ShiftAsOvertime);
+
+			_presenter.OnCheckBoxShiftAsOvertimeCheckedChanged(false);
+			Assert.IsFalse(_model.ShiftAsOvertime);
+		}
+
+		[Test]
+		public void VerifyOnComboboxAdvOvertimeSelectedIndexChanged()
+		{
+			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("name", MultiplicatorType.Overtime);
+			_presenter.OnComboBoxAdvOvertimeSelectedIndexChanged(multiplicatorDefinitionSet);
+			Assert.AreEqual(multiplicatorDefinitionSet, _model.MulitiplicatorDefinitionSet);
+		}
 
         private class ClipboardSpecialPresenterTestClass : ClipboardSpecialPresenter
         {

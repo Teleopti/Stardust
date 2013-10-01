@@ -56,56 +56,58 @@ namespace Teleopti.Ccc.Rta.Server
 			LoggingSvc.InfoFormat("Found {0} missing agents", missingAgentStates.Count);
 
 			var updatedAgents = new List<IActualAgentState>();
-			foreach (var agentState in missingAgentStates
-				.Where(agentState => !_alarmMapper.IsAgentLoggedOut(agentState.ScheduledId,
-				                                  agentState.StateCode,
-				                                  agentState.PlatformTypeId,
-				                                  agentState.BusinessUnit)))
+			var notLoggedOutAgents = missingAgentStates
+				.Where(a => !_alarmMapper.IsAgentLoggedOut(a.PersonId,
+				                                           a.StateCode,
+				                                           a.PlatformTypeId,
+				                                           a.BusinessUnit)).ToList();
+			foreach (var agentState in notLoggedOutAgents)
 			{
 				RtaAlarmLight foundAlarm;
-				var state = agentState;
-				state.State = "";
-				state.StateCode = notInBatchStatecode;
-				state.StateStart = batchId;
-				state.AlarmId = Guid.Empty;
-				state.AlarmName = "";
-				state.Color = 0;
-				state.AlarmStart = batchId;
-				state.StaffingEffect = 0;
-				state.ReceivedTime = batchId;
-				state.BatchId = batchId;
-				state.OriginalDataSourceId = sourceId;
+				agentState.State = "";
+				agentState.StateCode = notInBatchStatecode;
+				agentState.StateStart = batchId;
+				agentState.AlarmId = Guid.Empty;
+				agentState.AlarmName = "";
+				agentState.Color = 0;
+				agentState.AlarmStart = batchId;
+				agentState.StaffingEffect = 0;
+				agentState.ReceivedTime = batchId;
+				agentState.BatchId = batchId;
+				agentState.OriginalDataSourceId = sourceId;
 
-				var stateGroup = _alarmMapper.GetStateGroup(notInBatchStatecode, Guid.Empty, state.BusinessUnit);
+				var stateGroup = _alarmMapper.GetStateGroup(notInBatchStatecode, Guid.Empty, agentState.BusinessUnit);
 				if (stateGroup != null)
 				{
-					state.State = stateGroup.StateGroupName;
-					foundAlarm = _alarmMapper.GetAlarm(state.ScheduledId, stateGroup.StateGroupId);
+					agentState.State = stateGroup.StateGroupName;
+					foundAlarm = _alarmMapper.GetAlarm(agentState.ScheduledId, stateGroup.StateGroupId);
 				}
 				else
-					foundAlarm = _alarmMapper.GetAlarm(state.ScheduledId, Guid.Empty);
+					foundAlarm = _alarmMapper.GetAlarm(agentState.ScheduledId, Guid.Empty);
 
 				if (foundAlarm != null)
 				{
-					if (state.StateId == foundAlarm.StateGroupId)
+					if (agentState.StateId == foundAlarm.StateGroupId)
 					{
-						LoggingSvc.InfoFormat("Agent {0} is already in logged out state {1}", agentState.PersonId, state.StateId);
+						LoggingSvc.InfoFormat("Agent {0} is already in logged out state {1}", agentState.PersonId, agentState.StateId);
 						continue;
 					}
 
-					state.State = foundAlarm.StateGroupName;
-					state.StateId = foundAlarm.StateGroupId;
-					state.StateStart = batchId;
-					state.AlarmName = foundAlarm.Name;
-					state.AlarmId = foundAlarm.AlarmTypeId;
-					state.Color = foundAlarm.DisplayColor;
-					state.AlarmStart = batchId.AddTicks(foundAlarm.ThresholdTime);
-					state.StaffingEffect = foundAlarm.StaffingEffect;
-					state.ReceivedTime = batchId;
-					state.BatchId = batchId;
-					state.OriginalDataSourceId = sourceId;
+					agentState.State = foundAlarm.StateGroupName;
+					agentState.StateId = foundAlarm.StateGroupId;
+					agentState.StateStart = batchId;
+					agentState.AlarmName = foundAlarm.Name;
+					agentState.AlarmId = foundAlarm.AlarmTypeId;
+					agentState.Color = foundAlarm.DisplayColor;
+					agentState.AlarmStart = batchId.AddTicks(foundAlarm.ThresholdTime);
+					agentState.StaffingEffect = foundAlarm.StaffingEffect;
+					agentState.ReceivedTime = batchId;
+					agentState.BatchId = batchId;
+					agentState.OriginalDataSourceId = sourceId;
 				}
-				updatedAgents.Add(state);
+				else if (stateGroup != null)
+					agentState.StateId = stateGroup.StateGroupId;
+				updatedAgents.Add(agentState);
 			}
 			LoggingSvc.InfoFormat("Found {0} agents to send over message broker", updatedAgents.Count);
 			return updatedAgents;
@@ -131,7 +133,7 @@ namespace Teleopti.Ccc.Rta.Server
 				return buildAgentState(scheduleLayers, null, personId, platformId, stateCode, timestamp, new TimeSpan(0),
 									   businessUnitId, null, originalSourceId);
 
-			if (scheduleLayers[0] != null && haveScheduleChanged(scheduleLayers[0], previousState))
+			if (isScheduleSame(scheduleLayers, previousState))
 			{
 				LoggingSvc.InfoFormat("State have not changed for person {0}, will not save or send state", personId);
 				return null;
@@ -144,6 +146,23 @@ namespace Teleopti.Ccc.Rta.Server
 
 			return buildAgentState(scheduleLayers, previousState, personId, platformId, stateCode, timestamp, new TimeSpan(0),
 								   businessUnitId, batchId, originalSourceId);
+		}
+
+		private static bool isScheduleSame(IList<ScheduleLayer> layers, IActualAgentState oldState)
+		{
+			// It might seem strange to check both current.EndDateTime and next.StartDateTime against oldState
+			// But either they are the same or some layer will be null.
+			var currentSame = layers[0] != null
+				                        ? layers[0].PayloadId == oldState.ScheduledId &&
+				                          layers[0].EndDateTime == oldState.NextStart
+				                        : oldState.ScheduledId == Guid.Empty;
+
+			var nextSame = layers[1] != null
+				                         ? layers[1].PayloadId == oldState.ScheduledNextId &&
+				                           layers[1].StartDateTime == oldState.NextStart
+				                         : oldState.ScheduledNextId == Guid.Empty;
+
+			return currentSame && nextSame;
 		}
 
 		public IActualAgentState GetAgentState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode,
@@ -193,6 +212,7 @@ namespace Teleopti.Ccc.Rta.Server
 			var state = _alarmMapper.GetStateGroup(stateCode, platformTypeId, businessUnitId);
 			if (state != null)
 			{
+				newState.StateId = state.StateGroupId;
 				newState.State = state.StateGroupName;
 				foundAlarm = _alarmMapper.GetAlarm(activityId, state.StateGroupId);
 			}
@@ -229,7 +249,7 @@ namespace Teleopti.Ccc.Rta.Server
 				newState.NextStart = nextLayer.StartDateTime;
 			}
 
-			//if same don't send it (could happen often in batchmode)
+			//if same don't send it, but should be saved to db to keep batch intact
 			if (previousState != null && newState.Equals(previousState))
 			{
 				LoggingSvc.InfoFormat("The new state is equal to the old state for person {0}, will not send or save",
@@ -237,16 +257,7 @@ namespace Teleopti.Ccc.Rta.Server
 				return null;
 			}
 
-			LoggingSvc.InfoFormat("ActualAgentState cache - Adding/updating state: {0}", newState);
-
 			return newState;
-		}
-		
-		private static bool haveScheduleChanged(ScheduleLayer layer, IActualAgentState oldState)
-		{
-			return layer.PayloadId == oldState.ScheduledId
-			       && layer.StartDateTime == oldState.StateStart
-			       && layer.EndDateTime == oldState.NextStart;
 		}
 
 		public void InvalidateReadModelCache(Guid personId)

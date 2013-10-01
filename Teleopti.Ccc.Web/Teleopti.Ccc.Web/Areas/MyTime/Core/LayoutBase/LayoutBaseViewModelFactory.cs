@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
@@ -31,10 +32,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 				_datePickerGlobalizationViewModelFactory.CreateDatePickerGlobalizationViewModel();
 			DateTime? fixedDate = null;
 
-			if (_now.IsExplicitlySet())
-			{
-				fixedDate = _now.LocalDateTime();
-			}
+			if (_now is IMutateNow && (_now as IMutateNow).IsMutated())
+				fixedDate = _now.UtcDateTime();
 			return new LayoutBaseViewModel
 				{
 					CultureSpecific = cultureSpecificViewModel,

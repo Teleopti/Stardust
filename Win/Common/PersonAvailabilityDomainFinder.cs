@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Win.Common
             get
             {
                 if (_personAvailabilityRepository == null)
-                    _personAvailabilityRepository = new PersonAvailabilityRepository(_filteredPeopleHolder.UnitOfWork);
+                    _personAvailabilityRepository = new PersonAvailabilityRepository(_filteredPeopleHolder.GetUnitOfWork);
                 return _personAvailabilityRepository;
             }
         }

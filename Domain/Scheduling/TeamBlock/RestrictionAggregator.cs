@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		    var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
 		    var restrictionFromSchedules = _scheduleRestrictionExtractor.Extract(dateOnlyList, matrixList,
-		                                                                         schedulingOptions, timeZone);
+		                                                                         schedulingOptions, timeZone,teamBlockInfo );
 		    if (restrictionFromSchedules == null)
 			    return null;
 		    if (effectiveRestriction != null)
@@ -75,7 +75,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	                                                          IShiftProjectionCache suggestedShiftProjectionCache,
 	                                                          bool isTeamScheduling)
 	    {
-		    var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
+	        //TODO: removing this team scheduling in the next task operation cleanup
+            var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
 		    var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 		    var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson> {person},
 		                                                                           dateOnly, schedulingOptions,
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		    var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
 		    var matrixes = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, teamBlockInfo.BlockInfo.BlockPeriod);
-		    if (isTeamScheduling)
+            if (schedulingOptions.UseGroupScheduling)
 		    {
 			    var teamMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList();
 			    var restrictionFromOneTeam = _scheduleRestrictionExtractor.ExtractForOneTeamOneDay(dateOnly, teamMatrixList,
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    if (suggestedShiftProjectionCache != null)
 		    {
 
-			    if (isTeamScheduling)
+                if (schedulingOptions.UseGroupScheduling)
 			    {
 				    var suggestedShiftRestrictionForOneTeam =
 					    _suggestedShiftRestrictionExtractor.ExtractForOneTeam(suggestedShiftProjectionCache, schedulingOptions);

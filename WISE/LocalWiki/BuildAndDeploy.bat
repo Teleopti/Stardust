@@ -56,9 +56,9 @@ echo please wait ...  >> "%Deployment%\export.log"
 
 copy "%ROOTDIR%\ReplaceString\bin\Release\ReplaceString.exe" "%WorkingFolder%\"
 
-::crawle the website and export to working folder
-ECHO "%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "%WebURL%"
-"%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -R '*Special*' -R '*Help*' -E "%WebURL%"
+::crawl the website and export to working folder
+ECHO "%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -l 0 -R '*Special*' -R '*Help*' -E "%WebURL%"
+"%WorkingFolder%\wget.exe" -k -P"%WorkingFolder%" -r -l 0 -R '*Special*' -R '*Help*' -E "%WebURL%"
 SET /A wgetError=%ERRORLEVEL%
 IF %wgetError% NEQ 0 SET /A ERRORLEV=2 & GOTO :error
 
@@ -72,7 +72,8 @@ copy "%ROOTDIR%\web.config" "%WorkingFolder%\%OutputFolder%\"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ::copy javascript file for replacement of translated links
-copy "%ROOTDIR%\DynamicLinkReplace.js" "%Deployment%\%OutputFolder%"
+echo copy "%ROOTDIR%\DynamicLinkReplace.js" "%WorkingFolder%\%OutputFolder%"
+copy "%ROOTDIR%\DynamicLinkReplace.js" "%WorkingFolder%\%OutputFolder%"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 ::replace strings and URLs
@@ -92,6 +93,7 @@ del "%Deployment%\export.log"
 
 ::clean up
 rmdir "%WorkingFolder%" /S /Q
+
 GOTO :Finish
 
 :Error

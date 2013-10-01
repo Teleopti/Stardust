@@ -114,7 +114,6 @@
     <Compile Include="Job\Steps\PurgeJobStep.cs" />
     <Compile Include="Job\Steps\FactRequestedDaysJobStep.cs" />
     <Compile Include="Job\Steps\FactRequestJobStep.cs" />
-    <Compile Include="Job\Jobs\RequestJobCollection.cs" />
     <Compile Include="Job\Steps\StatisticsUpdateNotificationJobStep.cs" />
     <Compile Include="RequestTransformer.cs" />
     <Compile Include="Job\Steps\StageRequestJobStep.cs" />
@@ -241,7 +240,6 @@
     <Compile Include="ScheduleThreading\IScheduleTransformer.cs" />
     <Compile Include="ScheduleThreading\ScheduleDataRowCollectionFactory.cs" />
     <Compile Include="ScheduleThreading\ProjectionsForAllAgentSchedulesFactory.cs" />
-    <Compile Include="ScheduleThreading\ContractDataRowFactory.cs" />
     <Compile Include="ScheduleThreading\ScheduleDataRowFactory.cs" />
     <Compile Include="ScheduleThreading\ScheduleTransformer.cs">
       <SubType>Code</SubType>

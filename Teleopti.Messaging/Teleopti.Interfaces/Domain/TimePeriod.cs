@@ -338,28 +338,6 @@ namespace Teleopti.Interfaces.Domain
             return (timeSpan <= EndTime && timeSpan >= StartTime);
         }
 
-        /// <summary>
-        /// Determines whether the specified period contains part.
-        /// </summary>
-        /// <param name="containsPeriod">The period.</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified period contains part; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 2007-11-13
-        /// </remarks>
-        public bool ContainsPart(TimePeriod containsPeriod)
-        {
-            if (ContainsPart(containsPeriod.StartTime) || ContainsPart(containsPeriod.EndTime))
-                return true;
-
-            if (containsPeriod.Contains(this))
-                return true;
-
-            return false;
-        }
-
         #endregion
 
         /// <summary>
@@ -380,30 +358,6 @@ namespace Teleopti.Interfaces.Domain
             //if (Contains(period)) this is the same as the row before
             //    return true;
             return false;
-        }
-
-
-        /// <summary>
-        /// Gets the time period representing the intersection of the two periods.
-        /// If the periods does not intersect then null is returned
-        /// </summary>
-        /// <param name="intersectPeriod">The period.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 4.12.2007
-        /// </remarks>
-        public TimePeriod? Intersection(TimePeriod intersectPeriod)
-        {
-            if (!Intersect(intersectPeriod))
-                return null;
-            TimeSpan start = StartTime;
-            if (intersectPeriod.StartTime > start)
-                start = intersectPeriod.StartTime;
-            TimeSpan end = EndTime;
-            if (intersectPeriod.EndTime < end)
-                end = intersectPeriod.EndTime;
-            return new TimePeriod(start,end);
         }
 
         /// <summary>

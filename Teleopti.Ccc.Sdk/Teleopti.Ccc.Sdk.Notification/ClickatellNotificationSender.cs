@@ -6,13 +6,14 @@ using System.Linq;
 using System.Net;
 using System.Xml;
 using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Interfaces.Infrastructure;
 using log4net;
 
 namespace Teleopti.Ccc.Sdk.Notification
 {
 	// this class is a dll where all the Notification Senders could be 
 	// Then more could be added without changes in the Service Bus
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Clickatell"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
+    [IsNotDeadCode("This is instantiated via reflection when to send a SMS."), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Clickatell"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 	public class ClickatellNotificationSender : INotificationSender
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ClickatellNotificationSender));

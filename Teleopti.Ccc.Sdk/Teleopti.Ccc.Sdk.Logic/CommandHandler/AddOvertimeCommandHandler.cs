@@ -1,12 +1,10 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -48,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             {
                 var person = _personRepository.Load(command.PersonId);
                 var scenario = getDesiredScenario(command);
-                var startDate = new DateOnly(command.Date.DateTime);
+                var startDate = command.Date.ToDateOnly();
                 var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
                     new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false),
                     new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
@@ -59,10 +57,12 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
                 var activity = _activityRepository.Load(command.ActivityId);
                 var overtimeDefinition = _multiplicatorDefinitionSetRepository.Load(command.OvertimeDefinitionSetId);
-								scheduleDay.CreateAndAddOvertime(activity, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period), overtimeDefinition);
-				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(command.ScheduleTag);
-
-                _saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
+	            scheduleDay.CreateAndAddOvertime(activity, _dateTimePeriodAssembler.DtoToDomainEntity(command.Period),
+	                                             overtimeDefinition);
+	            
+				var scheduleTagEntity =
+		            _scheduleTagAssembler.DtoToDomainEntity(new ScheduleTagDto {Id = command.ScheduleTagId});
+	            _saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
                 using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
                     uow.PersistAll();

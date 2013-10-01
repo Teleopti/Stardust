@@ -121,12 +121,12 @@
                 @foreach (DayViewModel day in week.Days)
                 {
                     var date = Html.Schedule().FormatDate(day.Date);
-                    <li class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-mytime-date="@date" data-mytime-editable="@day.Editable" data-bind="css: {editable: Editable, 'non-editable': !Editable(), feedback: Feedback}, class: StyleClassName()">
+                    <li class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-mytime-date="@date" data-mytime-editable="@day.Editable" data-bind="css: StyleClassName, css: { editable: Editable, 'non-editable': !Editable(), feedback: Feedback }">
                         <div>
                             <div class="day-header">
                                 <span class="floatleft day-header-left badge day-header-text">@day.Header.DayDescription</span><span class="floatright day-header-right badge day-header-text">@day.Header.DayNumber</span>
                             </div>
-                            <div class="day-content border-left pdt10">
+                            <div class="day-content">
                                 <img data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
                                 <!-- ko if: HasAjaxError -->
                                 <h2 class="error" data-bind="text: AjaxError"></h2>
@@ -138,7 +138,7 @@
                                         <div class="preference-indicator">
                                             <div class="preference-must-have" data-bind="css: {'icon-heart': MustHave}"></div>
                                         </div>
-                                        <div class="preference-text" data-bind="text: Preference, attr: {title: Preference}"/>
+                                        <div class="label preference-text" data-bind="text: Preference, attr: { title: Preference }, style: { color: TextColor(), 'background-color': Color(), opacity: Editable()? 1:0.2 }"/>
                                         <div class="preference-indicator">
 				                            <!-- ko if: Extended -->
                                             <div class="extended-indication" style="display: none" data-bind="visible: Extended, tooltip: { title: tooltipText, html: true }">&raquo;</div>
@@ -211,9 +211,9 @@
                                     <div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
                                     <!-- /ko -->
                                     <!-- ko if: DisplayFeedback -->
-                                    <div class="possible-start-times time-limitation arrow-icon icon-step-backward" data-bind="text: PossibleStartTimes"></div>
-                                    <div class="possible-end-times time-limitation arrow-icon icon-step-forward" data-bind="text: PossibleEndTimes"></div>
-                                    <div class="possible-contract-times time-limitation arrow-icon icon-resize-horizontal" data-bind="text: PossibleContractTimes"></div>
+                                    <div class="possible-start-times time-limitation icon-step-backward" data-bind="text: PossibleStartTimes"></div>
+                                    <div class="possible-end-times time-limitation icon-step-forward" data-bind="text: PossibleEndTimes"></div>
+                                    <div class="possible-contract-times time-limitation icon-resize-horizontal" data-bind="text: PossibleContractTimes"></div>
                                     <!-- /ko -->
                                     <!-- /ko -->
                                 }
