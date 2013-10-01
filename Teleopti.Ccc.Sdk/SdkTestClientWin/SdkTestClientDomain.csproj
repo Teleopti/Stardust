@@ -185,6 +185,9 @@
     <None Include="Web References\Sdk\MultiplicatorDto.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="Web References\Sdk\PayrollBaseExportDto.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Sdk\PayrollExportDto.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
