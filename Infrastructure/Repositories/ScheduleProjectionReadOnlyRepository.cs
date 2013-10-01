@@ -213,11 +213,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	                                        from Absence a
 	                                        inner join ReadModel.ScheduleProjectionReadOnly sp 
 	                                        on a.Id = sp.PayloadId
+                                            and a.Requestable = 1
 	                                        inner join Person p
 	                                        on sp.PersonId = p.Id
-	                                        inner join PersonPeriod pp
+	                                        inner join PersonPeriodWithEndDate pp
                                             on pp.Parent = p.Id
 	                                        and pp.BudgetGroup = :budgetGroupId
+                                            and :currentDate BETWEEN pp.StartDate and pp.EndDate
 	                                        and sp.BelongsToDate = :currentDate 
 	                                        ) t
 	                                        group by t.BelongsToDate
