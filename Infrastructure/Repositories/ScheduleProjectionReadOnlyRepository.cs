@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
@@ -102,10 +101,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 return null;
 
 	        var activityPeriod = result.First();
-			DateTime? nextActivityDateTime = activityPeriod.StartDateTime > dateTime
+			DateTime nextActivityDateTime = activityPeriod.StartDateTime > dateTime
 				                                 ? activityPeriod.StartDateTime
 				                                 : activityPeriod.EndDateTime;
-	        return ((DateTime)nextActivityDateTime).ToLocalTime();
+	        return nextActivityDateTime;
         }
 
 		public IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnly date, Guid personId, Guid scenarioId)
