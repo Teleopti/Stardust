@@ -189,6 +189,24 @@
   <wsdl:message name="TeleoptiSchedulingService_GetSchedulePartsForPersons_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetSchedulePartsForPersonsResponse" />
   </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetTeleoptiTimeExportData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTeleoptiTimeExportData" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetTeleoptiTimeExportData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTeleoptiTimeExportDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetTeleoptiDetailedExportData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTeleoptiDetailedExportData" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetTeleoptiDetailedExportData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTeleoptiDetailedExportDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetTeleoptiActivitiesExportData_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTeleoptiActivitiesExportData" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiSchedulingService_GetTeleoptiActivitiesExportData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTeleoptiActivitiesExportDataResponse" />
+  </wsdl:message>
   <wsdl:message name="TeleoptiSchedulingService_GetSchedules_InputMessage">
     <wsdl:part name="parameters" element="tns:GetSchedules" />
   </wsdl:message>
@@ -889,6 +907,18 @@
     <wsdl:operation name="GetSchedulePartsForPersons">
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetSchedulePartsForPersons" message="tns:TeleoptiSchedulingService_GetSchedulePartsForPersons_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetSchedulePartsForPersonsResponse" message="tns:TeleoptiSchedulingService_GetSchedulePartsForPersons_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTeleoptiTimeExportData">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetTeleoptiTimeExportData" message="tns:TeleoptiSchedulingService_GetTeleoptiTimeExportData_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetTeleoptiTimeExportDataResponse" message="tns:TeleoptiSchedulingService_GetTeleoptiTimeExportData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTeleoptiDetailedExportData">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetTeleoptiDetailedExportData" message="tns:TeleoptiSchedulingService_GetTeleoptiDetailedExportData_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetTeleoptiDetailedExportDataResponse" message="tns:TeleoptiSchedulingService_GetTeleoptiDetailedExportData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTeleoptiActivitiesExportData">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetTeleoptiActivitiesExportData" message="tns:TeleoptiSchedulingService_GetTeleoptiActivitiesExportData_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetTeleoptiActivitiesExportDataResponse" message="tns:TeleoptiSchedulingService_GetTeleoptiActivitiesExportData_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetSchedules">
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiSchedulingService/GetSchedules" message="tns:TeleoptiSchedulingService_GetSchedules_InputMessage" />
