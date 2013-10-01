@@ -91,13 +91,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public DateTime? GetNextActivityStartTime(DateTime dateTime, Guid personId)
         {
             var uow = _currentUnitOfWork.Current();
-            string query = string.Format(CultureInfo.InvariantCulture,@"SELECT TOP 1 StartDateTime, EndDateTime 
-                            FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta WHERE EndDateTime >= :endDate 
-                            AND PersonId=:personId");
-
-            var result = ((NHibernateUnitOfWork) uow).Session
-                .CreateSQLQuery(query)
-                .SetDateTime("endDate", dateTime)
+			var result = ((NHibernateUnitOfWork) uow).Session
+				.CreateSQLQuery("exec ReadModel.GetNextActivityStartTime @PersonId=:personId, @UtcNow=:dateTime")
+				.SetDateTime("dateTime", dateTime)
                 .SetGuid("personId", personId)
                 .SetResultTransformer(Transformers.AliasToBean(typeof(ActivityPeriod)))
                 .List<ActivityPeriod>();

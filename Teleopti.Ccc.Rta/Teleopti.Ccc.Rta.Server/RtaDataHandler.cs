@@ -222,8 +222,6 @@ namespace Teleopti.Ccc.Rta.Server
 						continue;
 					}
 
-
-					_loggingSvc.InfoFormat("ActualAgentState cache - Adding/updating state: {0}", agentState);
 					_stateCache.AddAgentStateToCache(agentState);
 					if (agentState.SendOverMessageBroker)
 						sendRtaState(agentState);

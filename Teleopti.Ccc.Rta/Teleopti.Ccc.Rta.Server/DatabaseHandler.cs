@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Rta.Server
 			var personIdString = personToLoad.ToString();
 			var query =
 				string.Format(
-					"SELECT AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId FROM RTA.ActualAgentState WHERE PersonId ='{0}'",
+					"SELECT AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState WHERE PersonId ='{0}'",
 					personIdString);
 			using (
 				var connection =
@@ -143,7 +143,8 @@ namespace Teleopti.Ccc.Rta.Server
 									          : (DateTime?) null,
 								OriginalDataSourceId = !reader.IsDBNull(reader.GetOrdinal("OriginalDataSourceId"))
 									                       ? reader.GetString(reader.GetOrdinal("OriginalDataSourceId"))
-									                       : ""
+									                       : "",
+								AlarmStart = reader.GetDateTime(reader.GetOrdinal("AlarmStart"))
 							};
 						LoggingSvc.InfoFormat("Found old state for person: {0}, old statecode: {1}", personToLoad, agentState.StateCode);
 						return agentState;

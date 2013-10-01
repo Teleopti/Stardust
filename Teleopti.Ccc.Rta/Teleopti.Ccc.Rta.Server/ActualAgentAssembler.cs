@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 			else
 				foundAlarm = _alarmMapper.GetAlarm(activityId, Guid.Empty);
-			
+
 			if (foundAlarm != null)
 			{
 				newState.AlarmName = foundAlarm.Name;
@@ -229,10 +229,10 @@ namespace Teleopti.Ccc.Rta.Server
 				newState.State = foundAlarm.StateGroupName;
 				newState.StateId = foundAlarm.StateGroupId;
 				newState.StateStart = timestamp.Add(timeInState.Negate());
-
-				if (previousState != null && previousState.AlarmId == newState.AlarmId)
-					newState.StateStart = previousState.StateStart;
 			}
+
+			if (previousState != null && previousState.AlarmId == newState.AlarmId)
+				newState.StateStart = previousState.StateStart;
 
 			if (scheduleLayer != null)
 			{
@@ -254,8 +254,10 @@ namespace Teleopti.Ccc.Rta.Server
 			{
 				LoggingSvc.InfoFormat("The new state is equal to the old state for person {0}, will not send or save",
 				                      newState.PersonId);
-				return null;
+				newState.SendOverMessageBroker = false;
 			}
+			else
+				newState.SendOverMessageBroker = true;
 
 			return newState;
 		}
