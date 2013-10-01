@@ -36,7 +36,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			BaseDictionary.Add(person, range);
 		}
 
-
+		public void AddPersonAssignment(IPersonAssignment personAssignment)
+		{
+			var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, personAssignment.Person, Period.VisiblePeriod));
+			scheduleRange.Add(personAssignment);
+			BaseDictionary.Add(personAssignment.Person, scheduleRange);
+			TakeSnapshot();
+		}
 
 		private static DateTime cloneToUtc(DateTime dateTime)
 		{

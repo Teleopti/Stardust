@@ -19,11 +19,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		private static IScheduleRepository stubScheduleRepository(ICurrentScenario currentScenario, DateTime date)
 		{
+			return stubScheduleRepository(currentScenario, date, null);
+		}
+
+		private static IScheduleRepository stubScheduleRepository(ICurrentScenario currentScenario, DateTime date, IPersonAssignment personAssignment)
+		{
 			var scheduleDictionary = new ScheduleDictionaryForTest(
 				currentScenario.Current(),
 				date.AddDays(-1),
 				date
 				);
+
+			if (personAssignment != null)
+				scheduleDictionary.AddPersonAssignment(personAssignment);
+
 			var scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
 			scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null))
 							  .IgnoreArguments()
@@ -118,65 +127,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldOverlapShift()
 		{
-			var _dateTime = new DateTime(2013, 3, 25);
-			var _dateOnly = new DateOnly(2013, 3, 25);
-			var _previousDate = new DateOnly(2013, 3, 24);
-			var _person = PersonFactory.CreatePersonWithId();
-			var _personRepository = new TestWriteSideRepository<IPerson> { _person };
-			var _absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
-			var _personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
-			var _scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
-			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-			var _scheduleRange = MockRepository.GenerateMock<IScheduleRange>();
-			var _previousDay = MockRepository.GenerateMock<IScheduleDay>();
-			var _firstDay = MockRepository.GenerateMock<IScheduleDay>();
+			var person = PersonFactory.CreatePersonWithId();
+			var personRepository = new TestWriteSideRepository<IPerson> { person };
+			var absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
+			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
+			var currentScenario = new FakeCurrentScenario();
+			var personAssignmentPeriod = new DateTimePeriod(2013, 3, 25, 10, 2013, 3, 25, 15);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(currentScenario.Current(), person, personAssignmentPeriod);
+			var scheduleRepository = stubScheduleRepository(currentScenario, new DateTime(2013, 3, 25), personAssignment);
+			var target = new AddFullDayAbsenceCommandHandler(scheduleRepository, personRepository, absenceRepository, personAbsenceRepository, currentScenario);
 
-			scheduleDictionary.Stub(x => x[_person]).Return(_scheduleRange);
-			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null))
-							  .IgnoreArguments()
-							  .Return(scheduleDictionary);
-
-			_previousDay.Stub(x => x.Period)
-					   .Return(new DateOnlyPeriod(_previousDate, _previousDate).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			_firstDay.Stub(x => x.Period)
-					   .Return(new DateOnlyPeriod(_dateOnly, _dateOnly).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			var _scheduleDays = new[]
+			target.Handle(new AddFullDayAbsenceCommand
 				{
-					_previousDay,
-					_firstDay
-				};
-			_scheduleRange.Stub(
-				x => x.ScheduledDayCollection(new DateOnlyPeriod(new DateOnly(_dateTime).AddDays(-1), new DateOnly(_dateTime)))).Return(_scheduleDays);
+					AbsenceId = absenceRepository.Single().Id.Value,
+					PersonId = personRepository.Single().Id.Value,
+					StartDate = new DateTime(2013, 3, 25),
+					EndDate = new DateTime(2013, 3, 25),
+				});
 
-			var assignmentStart = new DateTime(2013, 3, 25, 10, 0, 0, 0, DateTimeKind.Utc);
-			var assignmentEnd = new DateTime(2013, 3, 25, 15, 0, 0, 0, DateTimeKind.Utc);
-			var assignmentPeriod = new DateTimePeriod(assignmentStart, assignmentEnd);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assignmentPeriod);
-
-			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
-			_firstDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
-
-			var command = new AddFullDayAbsenceCommand
-			{
-				AbsenceId = _absenceRepository.Single().Id.Value,
-				PersonId = _personRepository.Single().Id.Value,
-				StartDate = new DateTime(2013, 3, 25),
-				EndDate = new DateTime(2013, 3, 25),
-			};
-
-			var target = new AddFullDayAbsenceCommandHandler(_scheduleRepository, _personRepository, _absenceRepository, _personAbsenceRepository, new FakeCurrentScenario());
-			target.Handle(command);
-
-			var personAbsence = _personAbsenceRepository.Single();
+			var personAbsence = personAbsenceRepository.Single();
 			var absenceLayer = personAbsence.Layer as AbsenceLayer;
-			personAbsence.Person.Should().Be(_personRepository.Single());
-			absenceLayer.Payload.Should().Be(_absenceRepository.Single());
-			absenceLayer.Period.StartDateTime.Should().Be(command.StartDate.AddHours(10));
-			absenceLayer.Period.EndDateTime.Should().Be(command.EndDate.AddHours(15));
+			personAbsence.Person.Should().Be(personRepository.Single());
+			absenceLayer.Payload.Should().Be(absenceRepository.Single());
+			absenceLayer.Period.StartDateTime.Should().Be(personAssignmentPeriod.StartDateTime);
+			absenceLayer.Period.EndDateTime.Should().Be(personAssignmentPeriod.EndDateTime);
 
-			var @event = _personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
-			@event.StartDateTime.Should().Be(command.StartDate.AddHours(10));
-			@event.EndDateTime.Should().Be(command.EndDate.AddHours(15));
+			var @event = personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+			@event.StartDateTime.Should().Be(personAssignmentPeriod.StartDateTime);
+			@event.EndDateTime.Should().Be(personAssignmentPeriod.EndDateTime);
 		}
 
 		[Test]
