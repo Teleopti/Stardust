@@ -50,15 +50,6 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=RTA_QUEUE_ID
-  Variable Name2=_PROP_VAR_
-  Variable Value2=RTA_QUEUE_ID_TMP
-  Variable Name3=HELPFILE
-  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
-end
-item: Custom Script Item
-  Filename=Get Windows Installer Property.wse
-  Variable Name1=_PROPERTYNAME_
   Variable Value1=PM_VIRDIR
   Variable Name2=_PROP_VAR_
   Variable Value2=PM_VIRDIR_TMP
@@ -399,7 +390,7 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
-  New Text=$(RTA_QUEUE_ID)|%RTA_QUEUE_ID_TMP%
+  New Text=$(RTA_QUEUE_ID)|2001,2002,0063,2000,0019,0068,0085,0202,0238,2003
   Line Number=0
 end
 item: Insert Line into Text File
