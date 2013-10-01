@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Interfaces.Domain;
@@ -64,11 +65,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			                                                                                           @event.PersonId);
 			var layerPeriod = new DateTimePeriod(closestLayer.StartDateTime.ToUniversalTime(),
 			                                     closestLayer.EndDateTime.ToUniversalTime());
-			if ((nextActivityStartTime != null &&
-				 NotifyRtaDecider.ShouldSendMessage(layerPeriod, nextActivityStartTime.Value)) ||
-			    (nextActivityStartTime == null &&
-				layerPeriod.EndDateTime > DateTime.UtcNow &&
-				layerPeriod.EndDateTime != DateTime.MaxValue.ToUniversalTime()))
+			if (NotifyRtaDecider.ShouldSendMessage(layerPeriod, nextActivityStartTime) &&
+			    @event.ScheduleDays.Any(d => d.Date >= DateTime.UtcNow.Date))
+			{
 				_serviceBus.Publish(new ScheduleProjectionReadOnlyChanged
 					{
 						Datasource = @event.Datasource,
@@ -78,6 +77,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 						ActivityEndDateTime = layerPeriod.EndDateTime,
 						Timestamp = DateTime.UtcNow
 					});
+			}
 		}
 	}
 }
