@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
 using Teleopti.Ccc.Domain.Collection;
@@ -38,16 +39,16 @@ namespace Teleopti.Support.Security
 		private static void initAuditData(CommandLineArgument commandLineArgument)
 		{
 			const string proc = "[Auditing].[TryInitAuditTables]";
-			callProcInSeperateTransaction(commandLineArgument, proc);
+			callProcInSeparateTransaction(commandLineArgument, proc);
 		}
 
 		private static void convertDayOffToNewStructure(CommandLineArgument commandLineArgument)
 		{
 			const string proc = "[dbo].[DayOffConverter]";
-			callProcInSeperateTransaction(commandLineArgument, proc);
+			callProcInSeparateTransaction(commandLineArgument, proc);
 		}
 
-		private static void callProcInSeperateTransaction(CommandLineArgument commandLineArgument, string proc)
+		private static void callProcInSeparateTransaction(CommandLineArgument commandLineArgument, string proc)
 		{
 			using (var conn = new SqlConnection(commandLineArgument.DestinationConnectionString))
 			{
@@ -56,6 +57,8 @@ namespace Teleopti.Support.Security
 				{
 					using (var cmd = new SqlCommand(proc, conn, tx))
 					{
+						cmd.CommandType = CommandType.StoredProcedure;
+						cmd.CommandTimeout = 120;
 						cmd.ExecuteNonQuery();
 					}
 					tx.Commit();
