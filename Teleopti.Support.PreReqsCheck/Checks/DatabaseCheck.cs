@@ -45,21 +45,29 @@ namespace CheckPreRequisites.Checks
 
 		public void RunDbChecks(string dbServer)
 		{
-			CheckDatabaseServicesAndComponents(dbServer);
-			DBSoftwareCheck();
+			var sqlVersion = CheckDatabaseVersion();
+			CheckDatabaseServicesAndComponents(dbServer,sqlVersion);
+			DBSoftwareCheck(sqlVersion);
 		}
 
-		private void CheckDatabaseServicesAndComponents(string dbServer)
+		private double CheckDatabaseVersion()
+		{
+			var sqlVersion = Double.Parse(SQLServerFullVersion(_form1.ConnStringGet("master")).Substring(0, 4),
+										  CultureInfo.InvariantCulture);
+			return sqlVersion;
+		}
+
+		private void CheckDatabaseServicesAndComponents(string dbServer, double sqlVersion)
 		{
 			var sqlEngineService = "MSSQLSERVER";
 			var sqlAgentService = "SQLSERVERAGENT";
 			var olapService = "MSSQLServerOLAPService";
 			var ssis = "MSDTSSERVER";
-			var sqlVersion = Double.Parse(SQLServerFullVersion(_form1.ConnStringGet("master")).Substring(0, 4),
-			                              CultureInfo.InvariantCulture);
-
+			
 			if (sqlVersion > 10)
 				ssis = "MSDTSSERVER100";
+			if (sqlVersion >= 11)
+				ssis = "MSDTSSERVER110";
 
 			//Next, find out if this is a named instance
 			var index = dbServer.IndexOf(@"\", StringComparison.Ordinal);
@@ -160,16 +168,25 @@ namespace CheckPreRequisites.Checks
 			return serviceStatus;
 		}
 
-		public void DBSoftwareCheck()
+		public void DBSoftwareCheck(double sqlVersion)
 		{
 			//SQL Management Studio - Used for sql management and development
 			var software = "Microsoft SQL Server Management Studio";
 			var minValue = "SQL Management Studio 2005/2008";
 			CheckSoftware(software, minValue);
 
-			//SQL BI Studio - Used for SSIS development
-			software = "Microsoft SQL Server Development Studio";
-			minValue = "SQL BI Studio 2005/2008";
+			if (sqlVersion >= 11)
+			{
+				//SQL Server Data Tools - New tool used for SSIS development
+				software = "Microsoft SQL Server Data Tools";
+				minValue = "Microsoft SQL Server Data Tools";
+			}
+			else
+			{
+				//SQL BI Studio - Used for SSIS development
+				software = "Microsoft SQL Server Development Studio";
+				minValue = "SQL BI Studio 2005/2008";
+			}
 			CheckSoftware(software, minValue);
 		}
 
