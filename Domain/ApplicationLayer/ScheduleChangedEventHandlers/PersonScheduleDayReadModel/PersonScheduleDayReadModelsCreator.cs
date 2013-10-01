@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 			_serializer = serializer;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public IEnumerable<PersonScheduleDayReadModel> GetReadModels(ProjectionChangedEventBase schedule)
 		{
 			var person = _personRepository.Load(schedule.PersonId);
@@ -38,21 +37,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 					ret.ShiftEnd = scheduleDay.EndDateTime;
 				}
 
-				var shift = new Shift
-				{
-					Date = scheduleDay.Date,
-					FirstName = person.Name.FirstName,
-					LastName = person.Name.LastName,
-					EmploymentNumber = person.EmploymentNumber,
-					Id = schedule.PersonId.ToString(),
-					ContractTimeMinutes = (int)scheduleDay.ContractTime.TotalMinutes,
-					WorkTimeMinutes = (int)scheduleDay.WorkTime.TotalMinutes,
-					Projection = new List<SimpleLayer>()
-				};
+				var model = new Model
+					{
+						Id = schedule.PersonId.ToString(),
+						Date = scheduleDay.Date,
+						FirstName = person.Name.FirstName,
+						LastName = person.Name.LastName,
+						EmploymentNumber = person.EmploymentNumber,
+						Shift = new Shift
+							{
+								ContractTimeMinutes = (int) scheduleDay.ContractTime.TotalMinutes,
+								WorkTimeMinutes = (int) scheduleDay.WorkTime.TotalMinutes,
+								Projection = new List<SimpleLayer>()
+							}
+					};
 
 				foreach (var layer in scheduleDay.Layers)
 				{
-					shift.Projection.Add(new SimpleLayer
+					model.Shift.Projection.Add(new SimpleLayer
 					{
 						Color = ColorTranslator.ToHtml(Color.FromArgb(layer.DisplayColor)),
 						Title = layer.Name,
@@ -63,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 					});
 				}
 
-				ret.Shift = _serializer.SerializeObject(shift);
+				ret.Model = _serializer.SerializeObject(model);
 
 				yield return ret;
 			}

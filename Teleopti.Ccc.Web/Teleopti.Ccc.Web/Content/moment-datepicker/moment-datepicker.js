@@ -17,7 +17,7 @@
  * limitations under the License.
  * ========================================================= */
 
-!function ($, moment) {
+!function ($, moment, undefined) {
 
     // Picker object
 
@@ -110,6 +110,11 @@
             return (this.moment && this.moment.format(format || this.format)) || '';
         },
         show: function (e) {
+	        
+        	if (this.isInput && this.element.is(':disabled')) { return; }
+
+        	else if (this.element.children('input').is(':disabled')) { return; }
+	        
             this.picker.show();
             this.height = (this.component && this.component.outerHeight()) || this.element.outerHeight();
             this.place();

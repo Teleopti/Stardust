@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using System.IdentityModel.Policy;
-using System.Linq;
-using System.Web;
-using System.Web.Caching;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 {
@@ -51,10 +47,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
             lock (teleoptiPrincipal)
             {
                 var person = ((IUnsafePerson) teleoptiPrincipal).Person;
-                if (person == null)
-                {
-                    return true;
-                }
+                if (person == null) return true;
 
                 var unitOfWorkFactory = ((ITeleoptiIdentity) teleoptiPrincipal.Identity).DataSource.Application;
                 var personRepository = new PersonRepository(unitOfWorkFactory);
@@ -62,15 +55,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 
                 using (var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork())
                 {
-                    var personInRoleDetails = _personInRoleCache.Get(personId);
-                    if (personInRoleDetails == null)
-                    {
-                        person = teleoptiPrincipal.GetPerson(personRepository);
-                        if (person == null) return true;
+	                var personInRoleDetails = getOrAddPersonInRoleDetails(personId,teleoptiPrincipal,personRepository);
+	                if (personInRoleDetails == null) return true;
 
-                        personInRoleDetails = new PersonInRoleCacheItem(person);
-                        _personInRoleCache.Add(personInRoleDetails, personId);
-                    }
                     foreach (var applicationRoleId in personInRoleDetails.Roles)
                     {
                         var claimSet = _claimCache.Get(applicationRoleId);
@@ -79,13 +66,14 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                             var roleRepository = new ApplicationRoleRepository(unitOfWork);
                             var applicationRole = roleRepository.Get(applicationRoleId);
 
-                        	var roleToClaimSetTransformer =
-                        		new RoleToClaimSetTransformer(
-                        			new FunctionsForRoleProvider(
-                        				new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()),
-                        				new ExternalFunctionsProvider(new RepositoryFactory())
-                        				)
-                        			);
+	                        var licensedFunctionsProvider =
+		                        new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory());
+							if (!hasValidLicense(licensedFunctionsProvider)) return true;
+
+	                        var roleToClaimSetTransformer =
+		                        new RoleToClaimSetTransformer(new FunctionsForRoleProvider(licensedFunctionsProvider,
+		                                                                                   new ExternalFunctionsProvider(
+			                                                                                   new RepositoryFactory())));
 
                             claimSet = roleToClaimSetTransformer.Transform(applicationRole, unitOfWork);
                             _claimCache.Add(claimSet, applicationRoleId);
@@ -99,32 +87,32 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 
             return true;
         }
-    }
 
-    public class PersonInRoleCacheItem
-    {
-        public PersonInRoleCacheItem(IPerson person)
-        {
-            Roles = person.PermissionInformation.ApplicationRoleCollection.Select(r => r.Id.GetValueOrDefault()).ToList();
-        }
+		private PersonInRoleCacheItem getOrAddPersonInRoleDetails(Guid personId, ITeleoptiPrincipal teleoptiPrincipal, IPersonRepository personRepository)
+		{
+			var personInRoleDetails = _personInRoleCache.Get(personId);
+			if (personInRoleDetails == null)
+			{
+				var person = teleoptiPrincipal.GetPerson(personRepository);
+				if (person == null) return null;
 
-        public IEnumerable<Guid> Roles { get; private set; }
-    }
+				personInRoleDetails = new PersonInRoleCacheItem(person);
+				_personInRoleCache.Add(personInRoleDetails, personId);
+			}
+			return personInRoleDetails;
+		}
 
-    public class PersonInRoleCache
-    {
-        private readonly Cache _cache = HttpRuntime.Cache;
-
-        public void Add(PersonInRoleCacheItem cacheItem, Guid personId)
-        {
-            string key = personId.ToString();
-            _cache.Add(key, cacheItem, null, DateTime.Now.AddMinutes(30), Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
-        }
-
-        public PersonInRoleCacheItem Get(Guid personId)
-        {
-            string key = personId.ToString();
-            return _cache[key] as PersonInRoleCacheItem;
-        }
+	    private static bool hasValidLicense(ILicensedFunctionsProvider licensedFunctionsProvider)
+	    {
+		    try
+		    {
+			    licensedFunctionsProvider.LicensedFunctions();
+			    return true;
+		    }
+		    catch (NullReferenceException)
+		    {
+			    return false;
+		    }
+	    }
     }
 }

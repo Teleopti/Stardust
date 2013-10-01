@@ -5,9 +5,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.General;
 
@@ -36,8 +35,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				//Save start of processing to job history
-				var period = new DateOnlyPeriod(new DateOnly(command.TargetPeriod.StartDate.DateTime),
-				                                new DateOnly(command.TargetPeriod.EndDate.DateTime));
+				var period = command.TargetPeriod.ToDateOnlyPeriod();
 				var jobResult = new JobResult(JobCategory.QuickForecast, period,
 				                              ((IUnsafePerson) TeleoptiPrincipal.Current).Person, DateTime.UtcNow);
 				_jobResultRepository.Add(jobResult);
@@ -52,18 +50,12 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 				var message = new QuickForecastWorkloadsMessage
 					{
-						StatisticPeriod =
-							new DateOnlyPeriod(new DateOnly(command.StatisticPeriod.StartDate.DateTime),
-							                   new DateOnly(command.StatisticPeriod.EndDate.DateTime)),
-						TargetPeriod =
-							new DateOnlyPeriod(new DateOnly(command.TargetPeriod.StartDate.DateTime),
-							                   new DateOnly(command.TargetPeriod.EndDate.DateTime)),
+						StatisticPeriod = command.StatisticPeriod.ToDateOnlyPeriod(),
+						TargetPeriod = command.TargetPeriod.ToDateOnlyPeriod(),
 						ScenarioId = command.ScenarioId,
 						JobId = jobId,
 						SmoothingStyle = command.SmoothingStyle,
-						TemplatePeriod =
-							new DateOnlyPeriod(new DateOnly(command.TemplatePeriod.StartDate.DateTime),
-							                   new DateOnly(command.TemplatePeriod.EndDate.DateTime)),
+						TemplatePeriod = command.TemplatePeriod.ToDateOnlyPeriod(),
 						WorkloadIds = command.WorkloadIds,
 						IncreaseWith = command.IncreaseWith
 					};

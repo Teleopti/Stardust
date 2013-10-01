@@ -82,7 +82,7 @@ EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '$(TeleoptiCCCAg
 EXEC mart.sys_crossDatabaseView_load
 GO
 
-USE [ETLNightlyBuild_TeleoptiCCC7]
+USE [$(TeleoptiCCC7)]
 --Add temporary license
 DELETE FROM License
 

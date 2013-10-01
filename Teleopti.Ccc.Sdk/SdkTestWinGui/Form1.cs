@@ -387,6 +387,8 @@ namespace SdkTestWinGui
                         agentDay.MainShift.LayerCollection[0].Dto.Period.UtcEndTime.AddMinutes(-17);
 					if (comboScheduleTag.SelectedItem != null)
 						agentDay.Dto.ScheduleTag = (ScheduleTagDto)comboScheduleTag.SelectedItem;
+
+					//Not valid anymore!
                     Service.SchedulingService.SaveSchedulePart(agentDay.Dto);
                 }
             }
@@ -468,6 +470,8 @@ namespace SdkTestWinGui
                         agentDay.MainShift.Dto.LayerCollection = toKeep.ToArray();
 						if (comboScheduleTag.SelectedItem != null)
 							agentDay.Dto.ScheduleTag = (ScheduleTagDto)comboScheduleTag.SelectedItem;
+
+						//Not valid anymore!
                         Service.SchedulingService.SaveSchedulePart(agentDay.Dto);
                     }
                 }
@@ -478,9 +482,9 @@ namespace SdkTestWinGui
 		private void AddDayOffToSelectedAgents()
 		{
 			var daysOff = Service.SchedulingService.GetDaysOffs(new LoadOptionDto {LoadDeleted = false, LoadDeletedSpecified = true});
-			ScheduleTagDto tag = null;
+			string scheduleTagId = null;
 			if (comboScheduleTag.SelectedItem != null)
-				tag = (ScheduleTagDto)comboScheduleTag.SelectedItem;
+				scheduleTagId = ((ScheduleTagDto)comboScheduleTag.SelectedItem).Id;
 
 			foreach (var agentDay in _schedules)
 			{
@@ -490,7 +494,7 @@ namespace SdkTestWinGui
 				                                       		PersonId = agentDay.Agent.Dto.Id,
 				                                       		DayOffInfoId = daysOff[0].Id,
 				                                       		ScenarioId = null,
-															ScheduleTag = tag
+															ScheduleTagId = scheduleTagId
 				                                       	});
 			}
 
@@ -503,6 +507,10 @@ namespace SdkTestWinGui
             //Hold shift down to delete all overtime from shifts
             if (ModifierKeys==Keys.Shift)
             {
+				string scheduleTagId = null;
+				if (comboScheduleTag.SelectedItem != null)
+					scheduleTagId = ((ScheduleTagDto)comboScheduleTag.SelectedItem).Id;
+
                 foreach (AgentDay agentDay in _schedules)
                 {
                 	Service.InternalService.ExecuteCommand(new CancelOvertimeCommandDto
@@ -510,7 +518,8 @@ namespace SdkTestWinGui
                 	                                       		Date = agentDay.Dto.Date,
                 	                                       		Period = agentDay.Dto.LocalPeriod,
                 	                                       		PersonId = agentDay.Dto.PersonId,
-                	                                       		ScenarioId = null
+                	                                       		ScenarioId = null,
+																ScheduleTagId = scheduleTagId
                 	                                       	});
                 }
                 loadSchedules(treeView1.SelectedNode);
@@ -557,6 +566,10 @@ namespace SdkTestWinGui
                     }
                 }
 
+				string scheduleTagId = null;
+				if (comboScheduleTag.SelectedItem != null)
+					scheduleTagId = ((ScheduleTagDto)comboScheduleTag.SelectedItem).Id;
+
             	Service.InternalService.ExecuteCommand(new AddOvertimeCommandDto
             	                                       	{
             	                                       		ActivityId = activityToUse.Id,
@@ -570,7 +583,8 @@ namespace SdkTestWinGui
             	                                       		         		UtcEndTimeSpecified = true
             	                                       		         	},
             	                                       		PersonId = agentDay.Dto.PersonId,
-            	                                       		ScenarioId = null
+            	                                       		ScenarioId = null,
+															ScheduleTagId = scheduleTagId
             	                                       	});
             }
             loadSchedules(treeView1.SelectedNode);

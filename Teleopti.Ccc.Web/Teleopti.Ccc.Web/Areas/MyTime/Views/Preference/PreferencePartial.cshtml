@@ -121,7 +121,7 @@
                 @foreach (DayViewModel day in week.Days)
                 {
                     var date = Html.Schedule().FormatDate(day.Date);
-                    <li class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-mytime-date="@date" data-mytime-editable="@day.Editable" data-bind="css: {editable: Editable, 'non-editable': !Editable(), feedback: Feedback}, class: StyleClassName()">
+                    <li class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-mytime-date="@date" data-mytime-editable="@day.Editable" data-bind="css: StyleClassName, css: { editable: Editable, 'non-editable': !Editable(), feedback: Feedback }">
                         <div>
                             <div class="day-header">
                                 <span class="floatleft day-header-left badge day-header-text">@day.Header.DayDescription</span><span class="floatright day-header-right badge day-header-text">@day.Header.DayNumber</span>

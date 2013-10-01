@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly IAbsenceRepository _absenceRepository;
 		private readonly IPersonScheduleViewModelMapper _personScheduleViewModelMapper;
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
-		private readonly IJsonDeserializer<ExpandoObject> _deserializer;
+		private readonly IJsonDeserializer _deserializer;
 		private readonly IPermissionProvider _permissionProvider;
 
 		public PersonScheduleViewModelFactory(IPersonRepository personRepository,
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 											  IAbsenceRepository absenceRepository,
 											  IPersonScheduleViewModelMapper personScheduleViewModelMapper,
 											  IPersonAbsenceRepository personAbsenceRepository,
-											  IJsonDeserializer<ExpandoObject> deserializer,
+											  IJsonDeserializer deserializer,
 											  IPermissionProvider permissionProvider)
 		{
 			_personRepository = personRepository;
@@ -56,8 +56,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			{
 				var personScheduleDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date), personId);
 				data.PersonAbsences = calculatePersonAbsences(date, person, personScheduleDayReadModel);
-				if (personScheduleDayReadModel != null && personScheduleDayReadModel.Shift != null)
-					data.Shift = _deserializer.DeserializeObject(personScheduleDayReadModel.Shift);
+				if (personScheduleDayReadModel != null && personScheduleDayReadModel.Model != null)
+					data.Model = _deserializer.DeserializeObject<Model>(personScheduleDayReadModel.Model);
 			}
 			return _personScheduleViewModelMapper.Map(data);
 

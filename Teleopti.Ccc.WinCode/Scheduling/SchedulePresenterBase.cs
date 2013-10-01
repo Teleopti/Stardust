@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         internal static bool IsInsidePersonPeriod(IScheduleDay schedulePart)
         {
-            return (schedulePart.Person.Period(schedulePart.DateOnlyAsPeriod.DateOnly) != null);
+            return schedulePart.Person.IsAgent(schedulePart.DateOnlyAsPeriod.DateOnly);
         }
 
         /// <summary>

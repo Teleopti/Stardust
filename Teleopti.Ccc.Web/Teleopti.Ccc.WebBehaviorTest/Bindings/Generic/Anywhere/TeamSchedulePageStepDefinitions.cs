@@ -94,7 +94,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 			Browser.Interactions.AssertNotExists("#skill-selector li:nth-child(" + skills.Length + ")", "#skill-selector li:nth-child(" + (skills.Length + 1) + ")");
 		}
-		
+
+		[Then(@"I should see a day off for '(.*)'")]
+		public void ThenIShouldSeeADayOffFor(string personName)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .dayoff", personName);
+		}
+
+		[Then(@"I should see '(.*)' before '(.*)'")]
+		public void ThenIShouldSeeBefore(string person1, string person2)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') + .person:contains('{1}')", person1, person2);
+		}
+
 		public class TeamInfo
 		{
 			public string Team { get; set; }

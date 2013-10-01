@@ -42,8 +42,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		{
 			IList<SchedulePartDto> returnList = new List<SchedulePartDto>();
 
+			var queryDate = query.QueryDate.ToDateOnly();
 			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById(query.TimeZoneId));
-			var datePeriod = new DateOnlyPeriod(new DateOnly(query.QueryDate.DateTime), new DateOnly(query.QueryDate.DateTime));
+			var datePeriod = new DateOnlyPeriod(queryDate, queryDate);
 			var period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1));
 
 			_dateTimePeriodAssembler.TimeZone = timeZone;
@@ -53,13 +54,11 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			{
 				IScenario scenario = GetGivenScenarioOrDefault(query);
 
-				var queryDate = new DateOnly(query.QueryDate.DateTime);
 				var details = _groupingReadOnlyRepository.DetailsForGroup(query.GroupPageGroupId, queryDate);
 
 				var availableDetails = details.Where(
 					p => PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
 																					  queryDate, p));
-
 
 				var personList = _personRepository.FindPeople(availableDetails.Select(d => d.PersonId));
 

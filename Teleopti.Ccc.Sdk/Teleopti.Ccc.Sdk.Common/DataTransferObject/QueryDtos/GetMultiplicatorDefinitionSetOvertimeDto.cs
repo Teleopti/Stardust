@@ -27,5 +27,11 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 			get;
 			set;
 		}
+
+		/// <summary>
+		/// Gets or sets the optional flag to determine if deleted definition sets should be included in the result.
+		/// </summary>
+		[DataMember(IsRequired = false, Order = 1)]
+		public bool LoadDeleted { get; set; }
 	}
 }

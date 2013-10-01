@@ -10994,7 +10994,7 @@ These options are activated:
     <comment>Type used in anywhere report</comment>
   </data>
   <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
-    <value>Service Level  and Agents Ready</value>
+    <value>Service Level and Agents Ready</value>
     <comment>Service Level and Agents Ready</comment>
   </data>
   <data name="FromContract" xml:space="preserve">
@@ -11726,8 +11726,8 @@ Reduce the complexity to use these shifts.</value>
     <comment>Revoke sharing my calendar</comment>
   </data>
   <data name="ShareMyCalendarHint" xml:space="preserve">
-    <value>Copy/Paste following URL, and add this URL to Outlook or Google calendar, etc.</value>
-    <comment>Copy/Paste following URL, and add this URL to Outlook or Google calendar, etc.</comment>
+    <value>To subscribe to your schedule from a calendar app, use the URL below. For instructions on doing this from the most common calendar apps, see </value>
+    <comment>To subscribe to your schedule from a calendar app, use the URL below. For instructions on doing this from the most common calendar apps, see here  ("here" will be in another text resource which will have an underline)</comment>
   </data>
   <data name="SendAgain" xml:space="preserve">
     <value>Send again</value>
@@ -11760,7 +11760,7 @@ Reduce the complexity to use these shifts.</value>
   <data name="WorkTimeHeader" xml:space="preserve">
     <value>Work Time</value>
     <comment>Work time header</comment>
-	</data>
+  </data>
   <data name="FilterHourlyAvailability" xml:space="preserve">
     <value>Filter Hourly Availability</value>
     <comment>Caption button to Filter on hourly availability</comment>
@@ -11780,5 +11780,29 @@ Reduce the complexity to use these shifts.</value>
   <data name="Distribution" xml:space="preserve">
     <value>Distribution</value>
     <comment>Distribution</comment>
+  </data>
+  <data name="ShiftAsOvertime" xml:space="preserve">
+    <value>Shift as overtime</value>
+    <comment>Used when transforming a shift to a overtime shift</comment>
+  </data>
+  <data name="PerDate" xml:space="preserve">
+    <value>Per Date</value>
+    <comment>Header in shift distributions scheduler</comment>
+  </data>
+  <data name="ShiftCategoryDistribution" xml:space="preserve">
+    <value>Shift Category Distribution</value>
+    <comment>Header for distributions of shift categories in scheduler</comment>
+  </data>
+  <data name="Here" xml:space="preserve">
+    <value>here</value>
+    <comment>here</comment>
+  </data>
+  <data name="LengthOfActivity" xml:space="preserve">
+    <value>Total time of selected activity</value>
+    <comment>Total time of selected activity</comment>
+  </data>
+  <data name="LengthOfActivity" xml:space="preserve">
+    <value>Total time of selected activity</value>
+    <comment>Total time of selected activity</comment>
   </data>
 </root>

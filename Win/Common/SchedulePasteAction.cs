@@ -182,6 +182,12 @@ namespace Teleopti.Ccc.Win.Common
                     if (((IList<IRestrictionBase>)tempPart.RestrictionCollection()).Count > 0)
                         destination.Merge(tempPart, false);
                 }
+
+				if (options.ShiftAsOvertime)
+				{
+					var pasteAsOvertime = new PasteAsOvertime(source, destination, options.MulitiplicatorDefinitionSet);
+					pasteAsOvertime.Paste();
+				}
             }
 
             return destination;

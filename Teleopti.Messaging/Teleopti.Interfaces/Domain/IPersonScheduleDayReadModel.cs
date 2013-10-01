@@ -43,6 +43,6 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// Use your english skills and resharper to understand what I am
 		/// </summary>
-		string Shift { get; set; }
+		string Model { get; set; }
 	}
 }

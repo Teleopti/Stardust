@@ -223,3 +223,82 @@ Scenario: Show friendly message when after leaving date
 	And I am viewing team schedule for today
 	When I click the next day button
 	Then I should see a user-friendly message explaining I dont have anything to view
+
+@ignore
+Scenario: Initialize shiftrade from teamschedule
+Given I am an agent in a team
+	And I have a shift today
+	And I have a colleague
+	When I view team schedule
+	And I click any shifttrade button
+	Then I should see the add shifttrade section 
+
+@ignore
+Scenario: Initialize shiftrade from teamschedule with date
+Given I am an agent in a team
+	And I have a shift today
+	And the current time is '2029-12-27'
+	And I have a colleague
+	And there is a workflow control set with
+	| Field                            | Value                                     |
+	| Name                             | Trade from tomorrow until 30 days forward |
+	| Schedule published to date       | 2040-06-24                                |
+	| Shift Trade sliding period start | 1                                         |
+	| Shift Trade sliding period end   | 30                                        |
+	And I have a schedule period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Type       | Week       |
+	| Length     | 1          |
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |	
+	And there are shift categories
+	| Name  |
+	| Day   |
+	| Night |
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	When I view team schedule for '2030-01-01'
+	And I click any shifttrade button
+	Then I should see the add shifttrade section for '2030-01-01'
+
+@ignore
+Scenario: Show shifttrade only if permission
+	Given I am an agent in a team without access to shift trade requests
+	And I have a shift today
+	And I have a colleague
+	When I view team schedule
+	Then I should not see shiftrade button
+
+@ignore
+Scenario: Disable shifttrade if outside shifttrade period
+	Given I am an agent in a team
+	And I have a shift today
+	And I have a colleague
+	And there is a workflow control set with
+	| Field                            | Value                                     |
+	| Name                             | Trade from tomorrow until 30 days forward |
+	| Schedule published to date       | 2040-06-24                                |
+	| Shift Trade sliding period start | 1                                         |
+	| Shift Trade sliding period end   | 30                                        |
+	And I have a schedule period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Type       | Week       |
+	| Length     | 1          |
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |	
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And there are shift categories
+	| Name  |
+	| Day   |
+	| Night |
+	And the current time is '2029-12-27'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	When I view team schedule for '2030-03-01'
+	Then Shifttrade button should be disabled
+
+	

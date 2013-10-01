@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			CanSeeUnpublishedSchedules = true;
 		}
 
-		public IPerson User { get; set; }
+		public TimeZoneInfo UserTimeZone { get; set; }
 		public DateTime Date { get; set; }
 		public IEnumerable<PersonScheduleDayReadModel> Schedules { get; set; }
 		public bool CanSeeUnpublishedSchedules { get; set; }

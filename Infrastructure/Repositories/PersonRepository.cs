@@ -265,7 +265,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             {
                 throw new DataSourceException(sqlException.Message, sqlException);
             }
-
         }
 
         /// <summary>
@@ -350,13 +349,37 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// <returns></returns>
         public ICollection<IPerson> FindAllSortByName()
         {
-            ICollection<IPerson> retList = Session.CreateCriteria(typeof(Person))
-                        .SetFetchMode("PersonPeriodCollection", FetchMode.Join)
-                        .AddOrder(Order.Asc("Name.LastName"))
-                        .AddOrder(Order.Asc("Name.FirstName"))
-                        .SetResultTransformer(Transformers.DistinctRootEntity)
-                        .List<IPerson>();
-            return retList;
+			try
+			{
+				var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+				var personsubQuery = DetachedCriteria.For<PersonPeriod>("personPeriod")
+					.CreateAlias("Team", "team", JoinType.InnerJoin)
+					.CreateAlias("team.Site", "site", JoinType.InnerJoin)
+					.Add(Restrictions.Eq("site.BusinessUnit", identity.BusinessUnit))
+					.SetProjection(Projections.Property("personPeriod.Parent"));
+
+				var list = Session.CreateMultiCriteria()
+					.Add(DetachedCriteria.For<Person>("users")
+						.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+						.Add(Restrictions.IsEmpty("PersonPeriodCollection"))
+						)
+
+					.Add(DetachedCriteria.For<Person>("per")
+						.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+						.Add(Subqueries.PropertyIn("per.Id", personsubQuery))
+						.SetResultTransformer(Transformers.DistinctRootEntity))
+					.List();
+
+				var result = new List<IPerson>();
+				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(list[0]));
+				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(list[1]));
+
+				return result.OrderBy(p => p.Name.LastName).ThenBy(p => p.Name.FirstName).ToArray();
+			}
+			catch (SqlException sqlException)
+			{
+				throw new DataSourceException(sqlException.Message, sqlException);
+			}
         }
 
 
@@ -650,15 +673,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetFetchMode("PersonPeriodCollection.Team.Site.BusinessUnit", FetchMode.Join);
         }
 
-        /// <summary>
-        /// Finds the period match
-        /// </summary>
-        /// <param name="period"></param>
-        /// <returns></returns>
-        /// /// <remarks>
-        /// Created by: rogerkr/cs
-        /// Created date: 2008-13-05
-        /// </remarks>
         private static DetachedCriteria findPeriodMatch(DateOnlyPeriod period)
         {
             var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
@@ -711,46 +725,29 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 											  .Add(Restrictions.Le("StartDate", dateOnlyPeriod.StartDate))));
 		}
 
-		
-
-        /// <summary>
-        /// Checks for the duplicated application logons and windows logons
-        /// </summary>
-        /// <param name="persons">The person collection.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by:VirajS
-        /// Created date: 2008-10-29
-        /// Updated by: MadhurangaP
-        /// </remarks>
         public IList<IPerson> FindPersonsWithGivenUserCredentials(IList<IPerson> persons)
         {
             var result = new List<IPerson>();
             foreach (var personCollection in persons.Batch(200))
             {
-                IList<string[]> personInfoList = (from p in personCollection
-                                                  select new[]
-                                                             {
-                                                                 p.WindowsAuthenticationInfo == null ? "" : p.WindowsAuthenticationInfo.WindowsLogOnName,
-                                                                 p.ApplicationAuthenticationInfo == null ? "" : p.ApplicationAuthenticationInfo.ApplicationLogOnName,
-                                                                 p.WindowsAuthenticationInfo == null ? "" : p.WindowsAuthenticationInfo.DomainName,
-                                                                 p.Id.ToString()
+                var personInfoList = personCollection.Select(p => new {
+                                                                 WindowsAuthenticationName = p.WindowsAuthenticationInfo == null ? "" : p.WindowsAuthenticationInfo.WindowsLogOnName,
+                                                                 WindowsAuthenticationDomain = p.WindowsAuthenticationInfo == null ? "" : p.WindowsAuthenticationInfo.DomainName,
+                                                                 ApplicationAuthentication = p.ApplicationAuthenticationInfo == null ? "" : p.ApplicationAuthenticationInfo.ApplicationLogOnName, p.Id
                                                              }).ToList();
 
-                string[] windowsLogOns =
-                    (from p in personInfoList where !String.IsNullOrEmpty(p[0]) select p[0]).ToArray();
-                string[] applicationLogOns =
-                    (from p in personInfoList where !String.IsNullOrEmpty(p[1]) select p[1]).ToArray();
-                string[] domains = (from p in personInfoList where !String.IsNullOrEmpty(p[2]) select p[2]).ToArray();
+	            string[] windowsLogOns = personInfoList.Where(p => !String.IsNullOrEmpty(p.WindowsAuthenticationName)).Select(p=>p.WindowsAuthenticationName).ToArray();
+	            string[] domains = personInfoList.Where(p => !String.IsNullOrEmpty(p.WindowsAuthenticationDomain)).Select(p=>p.WindowsAuthenticationDomain).ToArray();
+				string[] applicationLogOns = personInfoList.Where(p => !String.IsNullOrEmpty(p.ApplicationAuthentication)).Select(p => p.ApplicationAuthentication).ToArray();
                 Guid[] winlogonNullIds =
                     (from p in personInfoList
-                     where String.IsNullOrEmpty(p[0]) && String.IsNullOrEmpty(p[2])
-                     select new Guid(p[3])).ToArray();
+                     where String.IsNullOrEmpty(p.WindowsAuthenticationName) && String.IsNullOrEmpty(p.WindowsAuthenticationDomain)
+                     select p.Id.GetValueOrDefault()).ToArray();
                 Guid[] ids = (from p in personInfoList
                               where
-                                  !String.IsNullOrEmpty(p[3]) && !String.IsNullOrEmpty(p[0]) &&
-                                  !String.IsNullOrEmpty(p[2])
-                              select new Guid(p[3])).ToArray();
+                                  p.Id.HasValue && !String.IsNullOrEmpty(p.WindowsAuthenticationName) &&
+                                  !String.IsNullOrEmpty(p.WindowsAuthenticationDomain)
+                              select p.Id.GetValueOrDefault()).ToArray();
 
                 int idsBeforeLength = ids.Length;
                 int idsAfterLength = idsBeforeLength + winlogonNullIds.Length;
@@ -802,4 +799,3 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
     }
 }
-

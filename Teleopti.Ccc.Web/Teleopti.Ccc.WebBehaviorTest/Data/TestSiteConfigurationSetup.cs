@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
 using System.Threading;
-using CassiniDev;
+using IISExpressAutomation;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
@@ -15,31 +12,49 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static readonly string TargetWebConfig = Path.Combine(Paths.WebPath(), "web.config");
 
 		public static Uri Url;
-		
-		private static Server _server;
+		public static int Port;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
+		private static IISExpress _server;
+
 		public static void Setup()
 		{
-			if (IniFileInfo.CassiniDev)
-			{
-				Url = new Uri("http://localhost:57567/");
-				_server = new Server(57567, IniFileInfo.SitePath);
-				_server.Start();
-			} 
-			else
-			{
-				Url = new Uri(IniFileInfo.Url);
-			}
+			Url = new Uri(IniFileInfo.Url);
+			Port = Url.Port;
+
+			if (IniFileInfo.IISExpress)
+				AttemptToUseIISExpress();
+
 			UpdateWebConfigFromTemplate();
 			GenerateAndWriteTestDataNHibFileFromTemplate();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
+		private static void AttemptToUseIISExpress()
+		{
+			// attempt IIS express
+			// maybe this SO thread contains alternatives:
+			// http://stackoverflow.com/questions/4772092/starting-and-stopping-iis-express-programmatically
+			try
+			{
+				Port = new Random().Next(57000, 57999);
+				Url = new Uri(string.Format("http://localhost:{0}/", Port));
+				FileConfigurator.ConfigureByTags("Data\\iisexpress.config", "Data\\iisexpress.running.config", new AllTags());
+				_server = new IISExpress(new Parameters
+					{
+						Systray = true,
+						Config = "Data\\iisexpress.running.config"
+					});
+			}
+			catch (Exception)
+			{
+				Url = new Uri(IniFileInfo.Url);
+				Port = Url.Port;
+			}
+		}
+
 		public static void TearDown()
 		{
-			if (IniFileInfo.CassiniDev)
-				_server.ShutDown();
+			if (_server != null)
+				_server.Dispose();
 		}
 
 		public static void RecycleApplication()

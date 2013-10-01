@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                                ? lastPersonPeriod.Team
                                : _teamRepository.Load(command.Team.Id.GetValueOrDefault());
                 checkBusinessUnitConsistency(team.Site);
-                newPersonPeriod = new PersonPeriod(new DateOnly(command.Period.StartDate.DateTime), 
+                newPersonPeriod = new PersonPeriod(command.Period.StartDate.ToDateOnly(), 
                                                    command.PersonContract == null
                                                        ? lastPersonPeriod.PersonContract
                                                        : createPersonContract(command.PersonContract),team);
@@ -158,7 +159,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             var team = _teamRepository.Load(command.Team.Id.GetValueOrDefault());
             checkBusinessUnitConsistency(team.Site);
             var personContract = createPersonContract(command.PersonContract);
-            return new PersonPeriod(new DateOnly(command.Period.StartDate.DateTime), personContract, team);
+            return new PersonPeriod(command.Period.StartDate.ToDateOnly(), personContract, team);
         }
 
         private PersonContract createPersonContract(PersonContractDto personContractDto)

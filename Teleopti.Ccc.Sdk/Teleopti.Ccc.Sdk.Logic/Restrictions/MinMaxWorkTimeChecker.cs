@@ -1,6 +1,7 @@
 using System;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.Restrictions
@@ -87,17 +88,19 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             IWorkTimeMinMax minMaxLength = new WorkTimeMinMax();
             IProjectionService projSvc = scheduleDay.ProjectionService();
             var proj = projSvc.CreateProjection();
-            TimeSpan contractTime = proj.ContractTime();
-            minMaxLength.WorkTimeLimitation = new WorkTimeLimitation(contractTime, contractTime);
-            var period = proj.Period();
-            if (period != null)
-            {
-                minMaxLength.StartTimeLimitation =
-                    new StartTimeLimitation(period.Value.StartDateTimeLocal(timeZoneInfo).TimeOfDay,
-                                            period.Value.StartDateTimeLocal(timeZoneInfo).TimeOfDay);
-                minMaxLength.EndTimeLimitation =
-                    new EndTimeLimitation(period.Value.EndDateTimeLocal(timeZoneInfo).TimeOfDay,
-                                          period.Value.EndDateTimeLocal(timeZoneInfo).TimeOfDay);
+            TimeSpan workTime = proj.WorkTime();
+            minMaxLength.WorkTimeLimitation = new WorkTimeLimitation(workTime, workTime);
+            
+			var workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
+	        var shiftStartTime = workTimeStartEndExtractor.WorkTimeStart(proj);
+	        var shiftEndTime = workTimeStartEndExtractor.WorkTimeEnd(proj);
+
+			if (shiftStartTime.HasValue && shiftEndTime.HasValue)
+			{
+	            var localStartDateTime = TimeZoneHelper.ConvertFromUtc(shiftStartTime.Value,timeZoneInfo);
+				var endTime = TimeZoneHelper.ConvertFromUtc(shiftEndTime.Value, timeZoneInfo).Subtract(localStartDateTime.Date);
+                minMaxLength.StartTimeLimitation = new StartTimeLimitation(localStartDateTime.TimeOfDay, localStartDateTime.TimeOfDay);
+                minMaxLength.EndTimeLimitation = new EndTimeLimitation(endTime, endTime);
             }
 
             return minMaxLength;

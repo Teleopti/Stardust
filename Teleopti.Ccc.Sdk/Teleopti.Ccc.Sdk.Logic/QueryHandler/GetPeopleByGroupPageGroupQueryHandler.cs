@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ICollection<PersonDto> Handle(GetPeopleByGroupPageGroupQueryDto query)
 		{
-			var queryDate = new DateOnly(query.QueryDate.DateTime);
+			var queryDate = query.QueryDate.ToDateOnly();
 			var details = _groupingReadOnlyRepository.DetailsForGroup(query.GroupPageGroupId, queryDate);
 
 			var availableDetails = details.Where(

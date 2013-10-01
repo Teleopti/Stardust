@@ -1,5 +1,6 @@
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.Assemblers
@@ -33,9 +34,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         {
             IPerson personFrom = PersonAssembler.DtoToDomainEntity(dto.PersonFrom);
             IPerson personTo = PersonAssembler.DtoToDomainEntity(dto.PersonTo);
-            IShiftTradeSwapDetail shiftTradeSwapDetail = new ShiftTradeSwapDetail(personFrom, personTo,
-                                                                                  new DateOnly(dto.DateFrom.DateTime),
-                                                                                  new DateOnly(dto.DateTo.DateTime));
+            IShiftTradeSwapDetail shiftTradeSwapDetail = new ShiftTradeSwapDetail(personFrom, personTo, dto.DateFrom.ToDateOnly(), dto.DateTo.ToDateOnly());
             shiftTradeSwapDetail.ChecksumFrom = dto.ChecksumFrom;
             shiftTradeSwapDetail.ChecksumTo = dto.ChecksumTo;
             shiftTradeSwapDetail.SetId(dto.Id);

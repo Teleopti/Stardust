@@ -9,6 +9,7 @@
         <xs:sequence>
           <xs:element xmlns:q2="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="Period" nillable="true" type="q2:DateOnlyPeriodDto" />
           <xs:element minOccurs="0" name="TimeZoneId" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LoadDeleted" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -20,6 +21,7 @@
         <xs:sequence>
           <xs:element xmlns:q4="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="Period" nillable="true" type="q4:DateOnlyPeriodDto" />
           <xs:element minOccurs="0" name="TimeZoneId" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LoadDeleted" type="xs:boolean" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

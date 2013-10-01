@@ -6,7 +6,6 @@
 	<PropertyGroup>
 		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
 		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
-		<DBManagerExe>$(CCNetWorkingDirectory)\Database\DBManager.exe</DBManagerExe>
 		<ETLStuff>$(CCNetWorkingDirectory)\ccnet\ETLNightlyBuild</ETLStuff>
 		<DBNamePrefix>$(Computername)_$(CCNetProject)</DBNamePrefix>
 		<ETLNightlyBuildSql>"$(ETLStuff)\ETLNightlyBuild-Restore.sql"</ETLNightlyBuildSql>
@@ -34,11 +33,11 @@
 
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
 
-	<Target Name="Run" DependsOnTargets="ETLCompile;AzureDeploy;PrepareDB;RunETL">
+	<Target Name="Run" DependsOnTargets="AzureDeploy;RunETL">
 		<Message Text="All target executed!" Importance="high" />
 	</Target>
-	
-	<Target Name="RunETL">
+		
+	<Target Name="RunETL" DependsOnTargets="PrepareDB">
 		<Message Text="Testing ETL service ..." Importance="high" />
 
 		<!-- Un-Install ETL Service-->
@@ -46,12 +45,6 @@
 		<Message Text="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe" Importance="high" />
 		<Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
 		<Message Text="un-Install ETL service. Done!" Importance="high" />
-
-		<!-- Delete Old and Copy new ETL bin files + config to a temporary dir-->
-		<Message Text="Prepare Files. Working..." Importance="high" />
-		<Message Text="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB) $(Configuration) $(AppSqlLogin) $(AppSqlPwd)" Importance="high" />
-		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB) $(Configuration) $(AppSqlLogin) $(AppSqlPwd)"/>
-		<Message Text="Prepare Files. Done!" Importance="high" />
 
 		<!-- Install ETL Service-->
 		<Message Text="Install ETL service. Working..." Importance="high" />
@@ -99,7 +92,7 @@
 	c) Add extra ETL Test SP
 	d) Create one job for the ETL service
 	-->
-	<Target Name="PrepareDB" DependsOnTargets="RestoreDatabasesAndPatch;AddLic;MoveOneLogObject">
+	<Target Name="PrepareDB" DependsOnTargets="ETLCompile;RestoreDatabasesAndPatch;AddLic;MoveOneLogObject">
 		<Message Text="Prepare ETL. Working..." Importance="high" />
 		<Message Text="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)" Importance="high" />
 		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuild-PrepareETL) -v TeleoptiAnalytics=$(AnalyticsDB)" ContinueOnError="false">
@@ -125,8 +118,8 @@
 	</Target>
 
 	<Target Name="AddLic">
-		<Message Text="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\Database\Tools\Restore\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22" Importance="high" />
-		<Exec Command="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\Database\Tools\Restore\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22"/>
+		<Message Text="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\.debug-Setup\database\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22" Importance="high" />
+		<Exec Command="$(SQLCmdConn) -d$(CCC7DB) -i%22$(CCNetWorkingDirectory)\.debug-Setup\database\tsql\AddLic.sql%22 -v LicFile=%22$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml%22"/>
 	</Target>
 
 	<Target Name="MoveOneLogObject">
@@ -142,22 +135,48 @@
 		<Message Text="make log object internal" Importance="high" />
 		<Exec Command ="$(SQLCmdConn) -d$(AnalyticsDB) -Q%22update [mart].[sys_datasource] set internal=1 where [log_object_id]=$(LogObjectId)%22"/>
 	</Target>
-	
+
 	<Target Name="ETLCompile">
 
 		<Message Importance="high" Text="ETLCompile starting ... " />
 		
+		<CallTarget Targets="PrepareFiles" />
+				
 		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\Teleopti.Analytics.Etl.ServiceHost.csproj"
 				Properties="Configuration=$(Configuration);Platform=AnyCPU"
 				Targets="Build">
 		</MSBuild>
 		
+		<ItemGroup>
+			<ETLServiceFiles Include="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\$(Configuration)\**\*.*"/>
+		</ItemGroup>
+		
+		<Copy	SourceFiles="@(ETLServiceFiles)"
+			DestinationFiles="@(ETLServiceFiles->'$(ETLServiceBinDir)\%(RecursiveDir)%(Filename)%(Extension)')"/>
+			
+		
 		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Support.Security\Teleopti.Support.Security.csproj"
 				Properties="Configuration=$(Configuration);Platform=AnyCPU"
 				Targets="Build">
 		</MSBuild>
+
+		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj"
+				Properties="Configuration=$(Configuration);Platform=AnyCPU"
+				Targets="Build">
+			<!--<Output ItemName="DbManagerExe" TaskParameter="TargetOutputs"/>-->
+		</MSBuild>
 		
+		<Message Importance="high" Text="Compile of Db Manager starting..." />
+		<Message Text="DbManagerOutput:   @(DbManagerExe)" />
 		<Message Importance="high" Text="ETLCompile finished!" />
+	</Target>
+
+	<Target Name="PrepareFiles">
+		<!-- Delete Old and Copy new ETL bin files + config to a temporary dir-->
+		<Message Text="Prepare Files. Working..." Importance="high" />
+		<Message Text="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB) $(Configuration) $(AppSqlLogin) $(AppSqlPwd)" Importance="high" />
+		<Exec Command ="$(ETLNightlyBuild-PrepareFilesCmd) %22$(CCNetWorkingDirectory)%22 $(ETLServiceBinDir) $(CCC7DB) $(AnalyticsDB) $(Configuration) $(AppSqlLogin) $(AppSqlPwd)"/>
+		<Message Text="Prepare Files. Done!" Importance="high" />
 	</Target>
 	
 </Project>
