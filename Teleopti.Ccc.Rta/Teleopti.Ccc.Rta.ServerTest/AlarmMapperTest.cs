@@ -90,14 +90,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		}
 
 		[Test]
-		public void GetAlarm_NoMatchingActivity_NoMatchingEmptyActivity_ReturnNull()
-		{
-			_databaseHandler.Expect(d => d.ActivityAlarms()).Return(_alarmDictionary);
-			var result = _target.GetAlarm(Guid.NewGuid(), _stateGroupId);
-			result.Should().Be.Null();
-		}
-
-		[Test]
 		public void GetAlarm_NoMatchingStateGroup_ReturnAlarmForNoStateGroup()
 		{
 			var alarmForNoStateGroup = new List<RtaAlarmLight>
