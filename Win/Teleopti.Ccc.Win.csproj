@@ -829,7 +829,6 @@
     <Compile Include="Main\ActiveAgents.Designer.cs">
       <DependentUpon>ActiveAgents.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\IDataSourceHandler.cs" />
     <Compile Include="Main\Legal.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -879,6 +878,7 @@
     <Compile Include="Main\LogonScreens\SelectSdkScreen.Designer.cs">
       <DependentUpon>SelectSdkScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="Main\MainModule.cs" />
     <Compile Include="Main\NavigationModule.cs" />
     <Compile Include="Main\NavigationPanelProvider.cs" />
     <Compile Include="Main\PortalSettings.cs" />

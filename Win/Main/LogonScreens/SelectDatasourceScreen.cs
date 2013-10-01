@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Teleopti.Ccc.Win.Main.LogonScreens
@@ -12,14 +13,20 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			InitializeComponent();
 		}
 
-		private void buttonDataSourceListOK_Click(object sender, System.EventArgs e)
+		private void buttonDataSourceListOK_Click_1(object sender, System.EventArgs e)
 		{
-			_parent.OkButtonClicked();
+			_parent.OkButtonClicked(new object());
 		}
 
-		private void buttonDataSourcesListCancel_Click(object sender, System.EventArgs e)
+		private void buttonDataSourcesListCancel_Click_1(object sender, System.EventArgs e)
 		{
 			_parent.CancelButtonClicked();
+		}
+
+		public void SetData(object data)
+		{
+			listBoxApplicationDataSources.DataSource = data;
+			listBoxWindowsDataSources.DataSource = data;
 		}
 	}
 }

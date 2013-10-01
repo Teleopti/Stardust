@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.panelChooseDataSource = new System.Windows.Forms.Panel();
 			this.tabControlChooseDataSource = new System.Windows.Forms.TabControl();
 			this.tabPageWindowsDataSources = new System.Windows.Forms.TabPage();
 			this.listBoxWindowsDataSources = new System.Windows.Forms.ListBox();
@@ -37,25 +36,10 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.labelChooseDataSource = new System.Windows.Forms.Label();
 			this.buttonDataSourcesListCancel = new System.Windows.Forms.Button();
 			this.buttonDataSourceListOK = new System.Windows.Forms.Button();
-			this.panelChooseDataSource.SuspendLayout();
 			this.tabControlChooseDataSource.SuspendLayout();
 			this.tabPageWindowsDataSources.SuspendLayout();
 			this.tabPageApplicationDataSources.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// panelChooseDataSource
-			// 
-			this.panelChooseDataSource.BackColor = System.Drawing.Color.White;
-			this.panelChooseDataSource.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panelChooseDataSource.Controls.Add(this.tabControlChooseDataSource);
-			this.panelChooseDataSource.Controls.Add(this.labelChooseDataSource);
-			this.panelChooseDataSource.Controls.Add(this.buttonDataSourcesListCancel);
-			this.panelChooseDataSource.Controls.Add(this.buttonDataSourceListOK);
-			this.panelChooseDataSource.Location = new System.Drawing.Point(3, 3);
-			this.panelChooseDataSource.Name = "panelChooseDataSource";
-			this.panelChooseDataSource.Size = new System.Drawing.Size(484, 331);
-			this.panelChooseDataSource.TabIndex = 35;
-			this.panelChooseDataSource.Visible = false;
 			// 
 			// tabControlChooseDataSource
 			// 
@@ -64,11 +48,11 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControlChooseDataSource.Controls.Add(this.tabPageWindowsDataSources);
 			this.tabControlChooseDataSource.Controls.Add(this.tabPageApplicationDataSources);
-			this.tabControlChooseDataSource.Location = new System.Drawing.Point(63, 51);
+			this.tabControlChooseDataSource.Location = new System.Drawing.Point(71, 64);
 			this.tabControlChooseDataSource.Name = "tabControlChooseDataSource";
 			this.tabControlChooseDataSource.SelectedIndex = 0;
 			this.tabControlChooseDataSource.Size = new System.Drawing.Size(357, 206);
-			this.tabControlChooseDataSource.TabIndex = 33;
+			this.tabControlChooseDataSource.TabIndex = 37;
 			// 
 			// tabPageWindowsDataSources
 			// 
@@ -117,10 +101,10 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.labelChooseDataSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.labelChooseDataSource.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelChooseDataSource.Location = new System.Drawing.Point(31, 25);
+			this.labelChooseDataSource.Location = new System.Drawing.Point(39, 38);
 			this.labelChooseDataSource.Name = "labelChooseDataSource";
 			this.labelChooseDataSource.Size = new System.Drawing.Size(412, 23);
-			this.labelChooseDataSource.TabIndex = 29;
+			this.labelChooseDataSource.TabIndex = 36;
 			this.labelChooseDataSource.Text = "xxPlease choose a datasource";
 			this.labelChooseDataSource.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
@@ -128,33 +112,35 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			// 
 			this.buttonDataSourcesListCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonDataSourcesListCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonDataSourcesListCancel.Location = new System.Drawing.Point(340, 262);
+			this.buttonDataSourcesListCancel.Location = new System.Drawing.Point(348, 275);
 			this.buttonDataSourcesListCancel.Name = "buttonDataSourcesListCancel";
 			this.buttonDataSourcesListCancel.Size = new System.Drawing.Size(75, 23);
-			this.buttonDataSourcesListCancel.TabIndex = 2;
+			this.buttonDataSourcesListCancel.TabIndex = 35;
 			this.buttonDataSourcesListCancel.Text = "xxCancel";
 			this.buttonDataSourcesListCancel.UseVisualStyleBackColor = true;
-			this.buttonDataSourcesListCancel.Click += new System.EventHandler(this.buttonDataSourcesListCancel_Click);
+			this.buttonDataSourcesListCancel.Click += new System.EventHandler(this.buttonDataSourcesListCancel_Click_1);
 			// 
 			// buttonDataSourceListOK
 			// 
 			this.buttonDataSourceListOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonDataSourceListOK.Location = new System.Drawing.Point(259, 262);
+			this.buttonDataSourceListOK.Location = new System.Drawing.Point(267, 275);
 			this.buttonDataSourceListOK.Name = "buttonDataSourceListOK";
 			this.buttonDataSourceListOK.Size = new System.Drawing.Size(75, 23);
-			this.buttonDataSourceListOK.TabIndex = 1;
+			this.buttonDataSourceListOK.TabIndex = 34;
 			this.buttonDataSourceListOK.Text = "xxOK";
 			this.buttonDataSourceListOK.UseVisualStyleBackColor = true;
-			this.buttonDataSourceListOK.Click += new System.EventHandler(this.buttonDataSourceListOK_Click);
+			this.buttonDataSourceListOK.Click += new System.EventHandler(this.buttonDataSourceListOK_Click_1);
 			// 
 			// SelectDatasourceScreen
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.Controls.Add(this.panelChooseDataSource);
+			this.Controls.Add(this.tabControlChooseDataSource);
+			this.Controls.Add(this.labelChooseDataSource);
+			this.Controls.Add(this.buttonDataSourcesListCancel);
+			this.Controls.Add(this.buttonDataSourceListOK);
 			this.Name = "SelectDatasourceScreen";
 			this.Size = new System.Drawing.Size(490, 337);
-			this.panelChooseDataSource.ResumeLayout(false);
 			this.tabControlChooseDataSource.ResumeLayout(false);
 			this.tabPageWindowsDataSources.ResumeLayout(false);
 			this.tabPageApplicationDataSources.ResumeLayout(false);
@@ -164,7 +150,6 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
 		#endregion
 
-		private System.Windows.Forms.Panel panelChooseDataSource;
 		private System.Windows.Forms.TabControl tabControlChooseDataSource;
 		private System.Windows.Forms.TabPage tabPageWindowsDataSources;
 		private System.Windows.Forms.ListBox listBoxWindowsDataSources;
@@ -173,6 +158,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		private System.Windows.Forms.Label labelChooseDataSource;
 		private System.Windows.Forms.Button buttonDataSourcesListCancel;
 		private System.Windows.Forms.Button buttonDataSourceListOK;
+
 
 	}
 }

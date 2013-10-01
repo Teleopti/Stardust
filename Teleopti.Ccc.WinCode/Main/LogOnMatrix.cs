@@ -9,7 +9,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
-	public static class LogOnMatrix
+	public static class LogonMatrix
 	{
 		public static void SynchronizeAndLoadMatrixReports(Form owner)
 		{

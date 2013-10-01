@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Teleopti.Ccc.Win.Main.LogonScreens
@@ -10,6 +11,11 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		{
 			_parent = parent;
 			InitializeComponent();
+		}
+
+		public void SetData(object data)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

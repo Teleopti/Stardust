@@ -76,15 +76,7 @@ namespace Teleopti.Ccc.Win.Main
                                         LogOnWhenMoreThanOneDataSource,
                                     };
 
-			_initializeFunctions = new List<LoadingFunction>
-                                       {
-                                           SetCultureInformation,
-                                           NextState,
-                                           InitializeLicense,
-                                           NextState,
-                                           CheckRaptorApplicationFunctions,
-                                       };
-		}
+	}
 
 		public LogOnScreen(ILogOnOff logOnOff, IDataSourceHandler dataSourceHandler, IRoleToPrincipalCommand roleToPrincipalCommand, ILogonLogger logonLogger)
 			: this()
@@ -130,9 +122,9 @@ namespace Teleopti.Ccc.Win.Main
 				}
 			}
 
-			LogOnMatrix.SynchronizeAndLoadMatrixReports(this);
+			LogonMatrix.SynchronizeAndLoadMatrixReports(this);
 
-			if (LogOnAuthorize.Authorize())
+			if (LogonAuthorize.Authorize())
 				DialogResult = DialogResult.OK;
 			else
 				DialogResult = DialogResult.Cancel;
@@ -144,112 +136,23 @@ namespace Teleopti.Ccc.Win.Main
 			Visible = false;
 		}
 
-		private bool InitializeLicense()
-		{
-			var unitOfWorkFactory = _choosenDataSource.DataSource.Application;
-			var verifier = new LicenseVerifier(this, unitOfWorkFactory, new LicenseRepository(unitOfWorkFactory));
-			ILicenseService licenseService = verifier.LoadAndVerifyLicense();
-			if (licenseService == null)
-			{
-				return false;
-			}
-			LicenseProvider.ProvideLicenseActivator(licenseService);
-			return CheckStatusOfLicense(licenseService);
-		}
-
-		private bool CheckStatusOfLicense(ILicenseService licenseService)
-		{
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var rep = new LicenseStatusRepository(UnitOfWorkFactory.Current);
-				// if something goes wrong here the document is corrupt, handle that in some way ??
-				var status = rep.LoadAll().First();
-				var licenseStatus = new LicenseStatusXml(XDocument.Parse(status.XmlString));
-				if (licenseStatus.StatusOk && licenseStatus.AlmostTooMany)
-				{
-					Warning(getAlmostTooManyAgentsWarning(licenseStatus.NumberOfActiveAgents, licenseService));
-				}
-				if (!licenseStatus.StatusOk && licenseStatus.DaysLeft > 0)
-				{
-					Warning(getLicenseIsOverUsedWarning(licenseService, licenseStatus));
-				}
-				if (!licenseStatus.StatusOk && licenseStatus.DaysLeft < 1)
-				{
-					Error(getTooManyAgentsExplanation(licenseService, UnitOfWorkFactory.Current.Name, licenseStatus.NumberOfActiveAgents));
-					return false;
-				}
-			}
-			return true;
-		}
-
-		private static string getLicenseIsOverUsedWarning(ILicenseService licenseService, ILicenseStatusXml licenseStatus)
-		{
-			int maxLicensed;
-			if (licenseService.LicenseType.Equals(LicenseType.Agent))
-				maxLicensed = licenseService.MaxActiveAgents;
-			else
-				maxLicensed = licenseService.MaxSeats;
-
-			return String.Format(CultureInfo.CurrentCulture, Resources.TooManyAgentsIsUsedWarning,
-								 licenseStatus.NumberOfActiveAgents, maxLicensed, licenseStatus.DaysLeft);
-		}
-
-		private static string getAlmostTooManyAgentsWarning(int numberOfActiveAgents, ILicenseService licenseService)
-		{
-			string warningMessage;
-			if (licenseService.LicenseType.Equals(LicenseType.Agent))
-			{
-				warningMessage = String.Format(CultureInfo.CurrentCulture, Resources.YouHaveAlmostTooManyActiveAgents,
-								  numberOfActiveAgents, licenseService.MaxActiveAgents);
-			}
-			else
-			{
-				warningMessage = String.Format(CultureInfo.CurrentCulture, Resources.YouHaveAlmostTooManySeats,
-											   licenseService.MaxSeats);
-
-			}
-			return warningMessage;
-		}
-
-		private static string getTooManyAgentsExplanation(ILicenseService licenseService, string dataSourceName, int numberOfActiveAgents)
-		{
-			if (licenseService.LicenseType == LicenseType.Agent)
-				return dataSourceName + "\r\n" +
-					   String.Format(CultureInfo.CurrentCulture, Resources.YouHaveTooManyActiveAgents,
-									 numberOfActiveAgents, licenseService.MaxActiveAgents);
-			return dataSourceName + "\r\n" + String.Format(CultureInfo.CurrentCulture, Resources.YouHaveTooManySeats,
-														   licenseService.MaxSeats);
-		}
-
-		private static bool SetCultureInformation()
-		{
-			if (TeleoptiPrincipal.Current.Regional != null)
-			{
-				Thread.CurrentThread.CurrentCulture =
-					TeleoptiPrincipal.Current.Regional.Culture;
-				Thread.CurrentThread.CurrentUICulture =
-					TeleoptiPrincipal.Current.Regional.UICulture;
-			}
-			return true;
-		}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons)")]
 		private bool InitializeAndCheckStateHolder()
 		{
-			if (!LogOnInitializeStateHolder.InitializeStateHolder("local"))
+			if (!LogonInitializeStateHolder.GetConfigFromWebService("local"))
 			{
 				ShowInTaskbar = true;
 				MessageBox.Show(this,
 								string.Format(CultureInfo.CurrentCulture,
 											  "The system configuration could not be loaded from the server. Review error message and log files to troubleshoot this error.\n\n{0}",
-											  LogOnInitializeStateHolder.ErrorMessage),
+											  LogonInitializeStateHolder.ErrorMessage),
 								"Configuration error", MessageBoxButtons.OK);
 				return false;
 			}
-			if (!string.IsNullOrEmpty(LogOnInitializeStateHolder.WarningMessage))
+			if (!string.IsNullOrEmpty(LogonInitializeStateHolder.WarningMessage))
 			{
 				ShowInTaskbar = true;
-				MessageBox.Show(this, LogOnInitializeStateHolder.WarningMessage, "Configuration warning", MessageBoxButtons.OK);
+				MessageBox.Show(this, LogonInitializeStateHolder.WarningMessage, "Configuration warning", MessageBoxButtons.OK);
 				ShowInTaskbar = false;
 			}
 			return true;
@@ -509,65 +412,6 @@ namespace Teleopti.Ccc.Win.Main
 				}
 			}
 			return true;
-		}
-
-		private bool CheckRaptorApplicationFunctions()
-		{
-			var repositoryFactory = new RepositoryFactory();
-			var raptorSynchronizer = new RaptorApplicationFunctionsSynchronizer(repositoryFactory, UnitOfWorkFactory.Current);
-
-			var result = raptorSynchronizer.CheckRaptorApplicationFunctions();
-
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				_roleToPrincipalCommand.Execute(TeleoptiPrincipal.Current, uow, repositoryFactory.CreatePersonRepository(uow));
-			}
-
-			if (result.Result)
-				return true;
-
-			ShowInTaskbar = true;
-			string message =
-				BuildApplicationFunctionWarningMessage(result);
-			DialogResult answer = MessageBox.Show(
-					this,
-					message,
-					Resources.VerifyingPermissionsTreeDots,
-					MessageBoxButtons.YesNo,
-					MessageBoxIcon.Warning,
-					MessageBoxDefaultButton.Button1,
-					0);
-
-			return (answer == DialogResult.Yes);
-		}
-
-		private static string BuildApplicationFunctionWarningMessage(CheckRaptorApplicationFunctionsResult result)
-		{
-			string message = string.Empty;
-			// Added
-			if (result.AddedFunctions.Any())
-			{
-				var p = result.AddedFunctions.Select(f => f.FunctionPath);
-				var appFunctionsText = string.Join(", ", p);
-
-				message = "The following Application Function(s) has been added recently in code but not found in the database: "
-							+ appFunctionsText
-							+ "\nYou can continue, but the program might be unstable. Continue?";
-				return message;
-			}
-
-			// Deleted
-			if (result.DeletedFunctions.Any())
-			{
-				var p = result.DeletedFunctions.Select(f => f.FunctionPath);
-				var appFunctionsText = string.Join(", ", p);
-
-				message = "The following Application Function(s) has been removed recently from code but still exists in the database: "
-						   + appFunctionsText
-						   + "\nYou can continue, but the program might be unstable. Continue?";
-			}
-
-			return message;
 		}
 
 		private bool CheckAndReportInvalidDataSources()

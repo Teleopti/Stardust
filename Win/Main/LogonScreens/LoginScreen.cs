@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Teleopti.Ccc.Win.Main.LogonScreens
@@ -14,7 +15,8 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
 		private void buttonLogOnOK_Click(object sender, System.EventArgs e)
 		{
-			_parent.OkButtonClicked();
+			// TODO
+			_parent.OkButtonClicked(new object());
 		}
 
 		private void buttonLogOnCancel_Click(object sender, System.EventArgs e)
@@ -25,6 +27,11 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		private void btnBack_Click(object sender, System.EventArgs e)
 		{
 			_parent.BackButtonClicked();
+		}
+
+		public void SetData(object data)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

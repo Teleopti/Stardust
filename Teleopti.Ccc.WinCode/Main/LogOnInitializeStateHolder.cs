@@ -22,19 +22,14 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
-    public static class LogOnInitializeStateHolder
+    public static class LogonInitializeStateHolder
 	{
 		public static string ErrorMessage = string.Empty;
 		public static string WarningMessage = string.Empty;
-        private static readonly ILog Logger = LogManager.GetLogger(typeof (LogOnInitializeStateHolder));
-		
-		public static bool GetConfigFromFileSystem(string nhibConfigPath, string isNetworkDeployed, bool messageBrokerDisabled)
-		{
-			var nhibConfPath = (string.IsNullOrEmpty(isNetworkDeployed)
-				                    ? nhibConfigPath
-				                    : isNetworkDeployed)
-			                   ?? Directory.GetCurrentDirectory();
+        private static readonly ILog Logger = LogManager.GetLogger(typeof (LogonInitializeStateHolder));
 
+		public static bool GetConfigFromFileSystem(string nhibConfPath, bool messageBrokerDisabled)
+		{
 			new InitializeApplication(
 				new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
 				                       DataSourceConfigurationSetter.ForDesktop()),

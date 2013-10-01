@@ -2,5 +2,6 @@
 {
 	public interface ILogonStep
 	{
+		void SetData(object data);
 	}
 }

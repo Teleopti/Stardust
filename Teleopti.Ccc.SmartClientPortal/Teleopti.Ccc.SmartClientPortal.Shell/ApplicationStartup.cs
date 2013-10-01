@@ -1,18 +1,19 @@
 ﻿using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Win.Main;
+using Teleopti.Ccc.WinCode.Main;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
 {
     public class ApplicationStartup
     {
         private readonly IComponentContext _componentContext;
-        private readonly LogOnScreen _logOnScreen;
+        private readonly LogonView _logOnScreen;
 
-        public ApplicationStartup(IComponentContext componentContext, LogOnScreen logOnscreen)
+		public ApplicationStartup(IComponentContext componentContext, ILogonView logOnscreen)
         {
             _componentContext = componentContext;
-            _logOnScreen = logOnscreen;
+            _logOnScreen = (LogonView)logOnscreen;
         }
 
         /// <summary>

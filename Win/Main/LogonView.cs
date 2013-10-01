@@ -1,4 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Deployment.Application;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Win.Main.LogonScreens;
@@ -8,26 +13,31 @@ namespace Teleopti.Ccc.Win.Main
 {
 	public partial class LogonView : Form, ILogonView
 	{
-		public LoginStep CurrentStep { get; private set; }
-
-		private readonly ILogonPresenter _presenter;
-		private IList<ILogonStep> _logonSteps;
-
-		private InitializingScreen _initializingScreen;
-		private SelectSdkScreen _selectSdkScreen;
-		private SelectDatasourceScreen _selectDatasourceScreen;
-		private LoginScreen _loginScreen;
-		private LoadingScreen _loadingScreen;
-
-		public LogonView(ILogonPresenter presenter)
+		public LogonPresenter Presenter
 		{
-			_presenter = presenter;
-			InitializeComponent();
-			initializeLogic();
+			get;
+			set;
+			//get
+			//{
+			//	return Presenter ?? new LogonPresenter(this, new LogonModel());
+			//}
 		}
 
-		private void initializeLogic()
+		public LoginStep CurrentStep { get; private set; }
+
+		private readonly IList<ILogonStep> _logonSteps;
+		private readonly InitializingScreen _initializingScreen;
+		private readonly SelectSdkScreen _selectSdkScreen;
+		private readonly SelectDatasourceScreen _selectDatasourceScreen;
+		private readonly LoginScreen _loginScreen;
+		private readonly LoadingScreen _loadingScreen;
+
+		private readonly bool getConfigFromWebService;
+
+		public LogonView()
 		{
+			InitializeComponent();
+
 			_initializingScreen = new InitializingScreen(this);
 			_selectSdkScreen = new SelectSdkScreen(this);
 			_selectDatasourceScreen = new SelectDatasourceScreen(this);
@@ -44,12 +54,25 @@ namespace Teleopti.Ccc.Win.Main
 				};
 
 			CurrentStep = LoginStep.Initializing;
-			_presenter.InitializeLogin();
+			getConfigFromWebService = Convert.ToBoolean(ConfigurationManager.AppSettings["GetConfigFromWebService"],
+			                                            CultureInfo.InvariantCulture);
 		}
 
-		public void OkButtonClicked()
+		public void StartLogon()
 		{
-			_presenter.OkbuttonClicked(CurrentStep);
+			var endpoints = ServerEndpointSelector.GetEndpointNames();
+			if (!getConfigFromWebService && endpoints.Count(s => !string.IsNullOrEmpty(s)) <= 1)
+			{
+				StepForward();
+				StepForward();
+				return;
+			}
+			StepForward();
+		}
+
+		public void OkButtonClicked(object data)
+		{
+			Presenter.OkbuttonClicked(data);
 		}
 
 		public void CancelButtonClicked()
@@ -59,7 +82,7 @@ namespace Teleopti.Ccc.Win.Main
 
 		public void BackButtonClicked()
 		{
-			_presenter.BackButtonClicked(CurrentStep);
+			Presenter.BackButtonClicked();
 		}
 
 		public void StepForward()
@@ -76,17 +99,19 @@ namespace Teleopti.Ccc.Win.Main
 
 		private void refreshView()
 		{
-			ShowInTaskbar = (int) CurrentStep != 0;
-			updatePanel((UserControl) _logonSteps[(int) CurrentStep]);
+			ShowInTaskbar = (int)CurrentStep != 0;
+			var currentControl = _logonSteps[(int) CurrentStep];
+			updatePanel((UserControl) currentControl);
+			currentControl.SetData(Presenter.GetDataForCurrentStep());
 			Refresh();
 		}
 
 		private void updatePanel(Control userControl)
 		{
 			pnlContent.Controls.Clear();
-			pnlContent.Controls.AddRange(userControl.Controls.OfType<Control>().ToArray());
+			pnlContent.Controls.Add(userControl);
 		}
-
+		
 		public void Exit()
 		{
 			DialogResult = DialogResult.Cancel;

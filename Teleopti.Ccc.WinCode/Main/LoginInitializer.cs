@@ -172,15 +172,16 @@ namespace Teleopti.Ccc.WinCode.Main
 
 			return message;
 		}
-
-
+		
 		public void Warning(string warning)
 		{
+			//TODO
 			throw new NotImplementedException();
 		}
 
 		public void Error(string error)
 		{
+			//TODO
 			throw new NotImplementedException();
 		}
 	}
