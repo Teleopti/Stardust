@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IWriteSideRepository<IPersonAbsence> _personAbsenceRepository;
 		private readonly IScheduleRepository _scheduleRepository;
 
-		public AddFullDayAbsenceCommandHandler(ICurrentScenario scenario, IWriteSideRepository<IPerson> personRepository, IWriteSideRepository<IAbsence> absenceRepository, IWriteSideRepository<IPersonAbsence> personAbsenceRepository, IScheduleRepository scheduleRepository)
+		public AddFullDayAbsenceCommandHandler(IScheduleRepository scheduleRepository, IWriteSideRepository<IPerson> personRepository, IWriteSideRepository<IAbsence> absenceRepository, IWriteSideRepository<IPersonAbsence> personAbsenceRepository, ICurrentScenario scenario)
 		{
 			_scenario = scenario;
 			_personRepository = personRepository;

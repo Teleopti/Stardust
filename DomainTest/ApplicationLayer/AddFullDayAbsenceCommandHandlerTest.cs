@@ -17,12 +17,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	public class AddFullDayAbsenceCommandHandlerTest
 	{
 
-		private static IScheduleRepository stubScheduleRepository(ICurrentScenario currentScenario)
+		private static IScheduleRepository stubScheduleRepository(ICurrentScenario currentScenario, DateTime date)
 		{
 			var scheduleDictionary = new ScheduleDictionaryForTest(
 				currentScenario.Current(),
-				new DateTime(2013, 3, 24),
-				new DateTime(2013, 3, 25)
+				date.AddDays(-1),
+				date
 				);
 			var scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
 			scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null))
@@ -38,15 +38,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
 			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
 			var currentScenario = new FakeCurrentScenario();
+			var target = new AddFullDayAbsenceCommandHandler(stubScheduleRepository(currentScenario, new DateTime(2013, 3, 25)), personRepository, absenceRepository, personAbsenceRepository, currentScenario);
+
 			var command = new AddFullDayAbsenceCommand
-			{
-				AbsenceId = absenceRepository.Single().Id.Value,
-				PersonId = personRepository.Single().Id.Value,
-				StartDate = new DateTime(2013, 3, 25),
-				EndDate = new DateTime(2013, 3, 25),
-			};
-			var target = new AddFullDayAbsenceCommandHandler(currentScenario, personRepository, absenceRepository, personAbsenceRepository, stubScheduleRepository(currentScenario));
-			
+				{
+					AbsenceId = absenceRepository.Single().Id.Value,
+					PersonId = personRepository.Single().Id.Value,
+					StartDate = new DateTime(2013, 3, 25),
+					EndDate = new DateTime(2013, 3, 25),
+				};
 			target.Handle(command);
 
 			var @event = personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
@@ -64,15 +64,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
 			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
 			var currentScenario = new FakeCurrentScenario();
+			var target = new AddFullDayAbsenceCommandHandler(stubScheduleRepository(currentScenario, new DateTime(2013, 3, 25)), personRepository, absenceRepository, personAbsenceRepository, currentScenario);
+
 			var command = new AddFullDayAbsenceCommand
-			{
-				AbsenceId = absenceRepository.Single().Id.Value,
-				PersonId = personRepository.Single().Id.Value,
-				StartDate = new DateTime(2013, 3, 25),
-				EndDate = new DateTime(2013, 3, 25),
-			};
-			var target = new AddFullDayAbsenceCommandHandler(currentScenario, personRepository, absenceRepository, personAbsenceRepository, stubScheduleRepository(currentScenario));
-			
+				{
+					AbsenceId = absenceRepository.Single().Id.Value,
+					PersonId = personRepository.Single().Id.Value,
+					StartDate = new DateTime(2013, 3, 25),
+					EndDate = new DateTime(2013, 3, 25),
+				};
 			target.Handle(command);
 
 			var personAbsence = personAbsenceRepository.Single();
@@ -86,58 +86,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldConvertFromAgentsTimeZone()
 		{
-			var _dateTime = new DateTime(2013, 3, 25);
-			var _dateOnly = new DateOnly(2013, 3, 25);
-			var _previousDate = new DateOnly(2013, 3, 24);
-			var _person = PersonFactory.CreatePersonWithId();
-			var _personRepository = new TestWriteSideRepository<IPerson> { _person };
-			var _absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
-			var _personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
-			var _scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
-			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-			var _scheduleRange = MockRepository.GenerateMock<IScheduleRange>();
-			var _previousDay = MockRepository.GenerateMock<IScheduleDay>();
-			var _firstDay = MockRepository.GenerateMock<IScheduleDay>();
-
-			scheduleDictionary.Stub(x => x[_person]).Return(_scheduleRange);
-			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null))
-							  .IgnoreArguments()
-							  .Return(scheduleDictionary);
-
+			var person = PersonFactory.CreatePersonWithId();
 			var agentsTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
-			_person.PermissionInformation.SetDefaultTimeZone(agentsTimeZone);
-			_previousDay.Stub(x => x.Period)
-					   .Return(new DateOnlyPeriod(_previousDate, _previousDate).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			_firstDay.Stub(x => x.Period)
-					   .Return(new DateOnlyPeriod(_dateOnly, _dateOnly).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			var _scheduleDays = new[]
-				{
-					_previousDay,
-					_firstDay
-				};
-			_scheduleRange.Stub(
-				x => x.ScheduledDayCollection(new DateOnlyPeriod(new DateOnly(_dateTime).AddDays(-1), new DateOnly(_dateTime)))).Return(_scheduleDays);
-			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
-			_firstDay.Stub(x => x.PersonAssignment()).Return(null);
+			person.PermissionInformation.SetDefaultTimeZone(agentsTimeZone);
+			var personRepository = new TestWriteSideRepository<IPerson> { person };
+			var absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
+			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
+			var currentScenario = new FakeCurrentScenario();
+			var target = new AddFullDayAbsenceCommandHandler(stubScheduleRepository(currentScenario, new DateTime(2013, 3, 25)), personRepository, absenceRepository, personAbsenceRepository, currentScenario);
 
 			var command = new AddFullDayAbsenceCommand
-			{
-				AbsenceId = _absenceRepository.Single().Id.Value,
-				PersonId = _personRepository.Single().Id.Value,
-				StartDate = new DateTime(2013, 3, 25),
-				EndDate = new DateTime(2013, 3, 25),
-			};
-
-			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentScenario(), _personRepository, _absenceRepository, _personAbsenceRepository, _scheduleRepository);
+				{
+					AbsenceId = absenceRepository.Single().Id.Value,
+					PersonId = personRepository.Single().Id.Value,
+					StartDate = new DateTime(2013, 3, 25),
+					EndDate = new DateTime(2013, 3, 25),
+				};
 			target.Handle(command);
 
-			var personAbsence = _personAbsenceRepository.Single();
+			var personAbsence = personAbsenceRepository.Single();
 			var absenceLayer = personAbsence.Layer as AbsenceLayer;
-			personAbsence.Person.Should().Be(_personRepository.Single());
-			absenceLayer.Payload.Should().Be(_absenceRepository.Single());
+			personAbsence.Person.Should().Be(personRepository.Single());
+			absenceLayer.Payload.Should().Be(absenceRepository.Single());
 			absenceLayer.Period.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.StartDate, agentsTimeZone));
 			absenceLayer.Period.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.EndDate.AddHours(24).AddMinutes(-1), agentsTimeZone));
-			var @event = _personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+			var @event = personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
 			@event.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.StartDate, agentsTimeZone));
 			@event.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.EndDate.AddHours(24).AddMinutes(-1), agentsTimeZone));
 		}
@@ -191,8 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				EndDate = new DateTime(2013, 3, 25),
 			};
 
-			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentScenario(), _personRepository, _absenceRepository,
-															 _personAbsenceRepository, _scheduleRepository);
+			var target = new AddFullDayAbsenceCommandHandler(_scheduleRepository, _personRepository, _absenceRepository, _personAbsenceRepository, new FakeCurrentScenario());
 			target.Handle(command);
 
 			var personAbsence = _personAbsenceRepository.Single();
@@ -256,8 +228,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				EndDate = new DateTime(2013, 3, 25),
 			};
 
-			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentScenario(), _personRepository, _absenceRepository,
-			                                                 _personAbsenceRepository, _scheduleRepository);
+			var target = new AddFullDayAbsenceCommandHandler(_scheduleRepository, _personRepository, _absenceRepository, _personAbsenceRepository, new FakeCurrentScenario());
 			target.Handle(command);
 
 			var personAbsence = _personAbsenceRepository.Single();
@@ -320,8 +291,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				EndDate = new DateTime(2013, 3, 25),
 			};
 
-			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentScenario(), _personRepository, _absenceRepository,
-			                                                 _personAbsenceRepository, _scheduleRepository);
+			var target = new AddFullDayAbsenceCommandHandler(_scheduleRepository, _personRepository, _absenceRepository, _personAbsenceRepository, new FakeCurrentScenario());
 			target.Handle(command);
 
 			var personAbsence = _personAbsenceRepository.Single();
@@ -389,8 +359,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				EndDate = new DateTime(2013, 3, 26),
 			};
 
-			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentScenario(), _personRepository, _absenceRepository,
-			                                                 _personAbsenceRepository, _scheduleRepository);
+			var target = new AddFullDayAbsenceCommandHandler(_scheduleRepository, _personRepository, _absenceRepository, _personAbsenceRepository, new FakeCurrentScenario());
 			target.Handle(command);
 
 			var personAbsence = _personAbsenceRepository.Single();
