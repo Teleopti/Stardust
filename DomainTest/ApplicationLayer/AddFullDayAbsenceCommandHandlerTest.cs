@@ -15,50 +15,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	[TestFixture]
 	public class AddFullDayAbsenceCommandHandlerTest
 	{
-		private IPerson _person;
-		private TestWriteSideRepository<IPerson> _personRepository;
-		private TestWriteSideRepository<IAbsence> _absenceRepository;
-		private TestWriteSideRepository<IPersonAbsence> _personAbsenceRepository;
-		private IScheduleRepository _scheduleRepository;
-		private IScheduleDay _previousDay;
-		private IScheduleDay _firstDay;
-		private DateOnly _dateOnly;
-		private DateOnly _previousDate;
-		private IScheduleDay[] _scheduleDays;
-		private IScheduleRange _scheduleRange;
-		private DateTime _dateTime;
-
-		[SetUp]
-		public void Setup()
+		public void ShouldRaiseFullDayAbsenceAddedEvent()
 		{
-			_dateTime = new DateTime(2013, 3, 25);
-			_dateOnly = new DateOnly(2013, 3, 25);
-			_previousDate = new DateOnly(2013, 3, 24);
-			_person = PersonFactory.CreatePersonWithId();
-			_personRepository = new TestWriteSideRepository<IPerson> { _person };
-			_absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
-			_personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
-			_scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+			var _dateTime = new DateTime(2013, 3, 25);
+			var _dateOnly = new DateOnly(2013, 3, 25);
+			var _previousDate = new DateOnly(2013, 3, 24);
+			var _person = PersonFactory.CreatePersonWithId();
+			var _personRepository = new TestWriteSideRepository<IPerson> { _person };
+			var _absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
+			var _personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
+			var _scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-			_scheduleRange = MockRepository.GenerateMock<IScheduleRange>();
-			_previousDay = MockRepository.GenerateMock<IScheduleDay>();
-			_firstDay = MockRepository.GenerateMock<IScheduleDay>();
-			
-			
+			var _scheduleRange = MockRepository.GenerateMock<IScheduleRange>();
+			var _previousDay = MockRepository.GenerateMock<IScheduleDay>();
+			var _firstDay = MockRepository.GenerateMock<IScheduleDay>();
+
 			scheduleDictionary.Stub(x => x[_person]).Return(_scheduleRange);
 			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null))
 							  .IgnoreArguments()
 							  .Return(scheduleDictionary);
-		}
 
-		public void ShouldRaiseFullDayAbsenceAddedEvent()
-		{
 			var currentScenario = new FakeCurrentScenario();
 			_previousDay.Stub(x => x.Period)
 					   .Return(new DateOnlyPeriod(_previousDate, _previousDate).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
 			_firstDay.Stub(x => x.Period)
 					   .Return(new DateOnlyPeriod(_dateOnly, _dateOnly).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			_scheduleDays = new[]
+			var _scheduleDays = new[]
 				{
 					_previousDay,
 					_firstDay
@@ -89,12 +71,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		public void ShouldSetupEntityState()
-		{
+		{ 
+			var _dateTime = new DateTime(2013, 3, 25);
+			var _dateOnly = new DateOnly(2013, 3, 25);
+			var _previousDate = new DateOnly(2013, 3, 24);
+			var _person = PersonFactory.CreatePersonWithId();
+			var _personRepository = new TestWriteSideRepository<IPerson> { _person };
+			var _absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
+			var _personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
+			var _scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			var _scheduleRange = MockRepository.GenerateMock<IScheduleRange>();
+			var _previousDay = MockRepository.GenerateMock<IScheduleDay>();
+			var _firstDay = MockRepository.GenerateMock<IScheduleDay>();
+
+			scheduleDictionary.Stub(x => x[_person]).Return(_scheduleRange);
+			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null))
+							  .IgnoreArguments()
+							  .Return(scheduleDictionary);
+
 			_previousDay.Stub(x => x.Period)
 					   .Return(new DateOnlyPeriod(_previousDate, _previousDate).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
 			_firstDay.Stub(x => x.Period)
 					   .Return(new DateOnlyPeriod(_dateOnly, _dateOnly).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			_scheduleDays = new[]
+			var _scheduleDays = new[]
 				{
 					_previousDay,
 					_firstDay
@@ -126,13 +126,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		public void ShouldConvertFromAgentsTimeZone()
 		{
+			var _dateTime = new DateTime(2013, 3, 25);
+			var _dateOnly = new DateOnly(2013, 3, 25);
+			var _previousDate = new DateOnly(2013, 3, 24);
+			var _person = PersonFactory.CreatePersonWithId();
+			var _personRepository = new TestWriteSideRepository<IPerson> { _person };
+			var _absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
+			var _personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
+			var _scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			var _scheduleRange = MockRepository.GenerateMock<IScheduleRange>();
+			var _previousDay = MockRepository.GenerateMock<IScheduleDay>();
+			var _firstDay = MockRepository.GenerateMock<IScheduleDay>();
+
+			scheduleDictionary.Stub(x => x[_person]).Return(_scheduleRange);
+			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null))
+							  .IgnoreArguments()
+							  .Return(scheduleDictionary);
+
 			var agentsTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
 			_person.PermissionInformation.SetDefaultTimeZone(agentsTimeZone);
 			_previousDay.Stub(x => x.Period)
 					   .Return(new DateOnlyPeriod(_previousDate, _previousDate).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
 			_firstDay.Stub(x => x.Period)
 					   .Return(new DateOnlyPeriod(_dateOnly, _dateOnly).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			_scheduleDays = new[]
+			var _scheduleDays = new[]
 				{
 					_previousDay,
 					_firstDay
@@ -167,11 +185,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldOverlapShift()
 		{
+			var _dateTime = new DateTime(2013, 3, 25);
+			var _dateOnly = new DateOnly(2013, 3, 25);
+			var _previousDate = new DateOnly(2013, 3, 24);
+			var _person = PersonFactory.CreatePersonWithId();
+			var _personRepository = new TestWriteSideRepository<IPerson> { _person };
+			var _absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
+			var _personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
+			var _scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			var _scheduleRange = MockRepository.GenerateMock<IScheduleRange>();
+			var _previousDay = MockRepository.GenerateMock<IScheduleDay>();
+			var _firstDay = MockRepository.GenerateMock<IScheduleDay>();
+
+			scheduleDictionary.Stub(x => x[_person]).Return(_scheduleRange);
+			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null))
+							  .IgnoreArguments()
+							  .Return(scheduleDictionary);
+
 			_previousDay.Stub(x => x.Period)
 					   .Return(new DateOnlyPeriod(_previousDate, _previousDate).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
 			_firstDay.Stub(x => x.Period)
 					   .Return(new DateOnlyPeriod(_dateOnly, _dateOnly).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			_scheduleDays = new[]
+			var _scheduleDays = new[]
 				{
 					_previousDay,
 					_firstDay
@@ -214,11 +250,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldNotOverlapNightShiftFromDayBeforeStartDate()
 		{
+			var _dateTime = new DateTime(2013, 3, 25);
+			var _dateOnly = new DateOnly(2013, 3, 25);
+			var _previousDate = new DateOnly(2013, 3, 24);
+			var _person = PersonFactory.CreatePersonWithId();
+			var _personRepository = new TestWriteSideRepository<IPerson> { _person };
+			var _absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
+			var _personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
+			var _scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			var _scheduleRange = MockRepository.GenerateMock<IScheduleRange>();
+			var _previousDay = MockRepository.GenerateMock<IScheduleDay>();
+			var _firstDay = MockRepository.GenerateMock<IScheduleDay>();
+
+			scheduleDictionary.Stub(x => x[_person]).Return(_scheduleRange);
+			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null))
+							  .IgnoreArguments()
+							  .Return(scheduleDictionary);
+
 			_previousDay.Stub(x => x.Period)
 					   .Return(new DateOnlyPeriod(_previousDate, _previousDate).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
 			_firstDay.Stub(x => x.Period)
 					   .Return(new DateOnlyPeriod(_dateOnly, _dateOnly).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			_scheduleDays = new[]
+			var _scheduleDays = new[]
 				{
 					_previousDay,
 					_firstDay
@@ -260,11 +314,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldFullyOverlapNightShiftOnEndDate()
 		{
+			var _dateTime = new DateTime(2013, 3, 25);
+			var _dateOnly = new DateOnly(2013, 3, 25);
+			var _previousDate = new DateOnly(2013, 3, 24);
+			var _person = PersonFactory.CreatePersonWithId();
+			var _personRepository = new TestWriteSideRepository<IPerson> { _person };
+			var _absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
+			var _personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
+			var _scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			var _scheduleRange = MockRepository.GenerateMock<IScheduleRange>();
+			var _previousDay = MockRepository.GenerateMock<IScheduleDay>();
+			var _firstDay = MockRepository.GenerateMock<IScheduleDay>();
+
+			scheduleDictionary.Stub(x => x[_person]).Return(_scheduleRange);
+			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null))
+							  .IgnoreArguments()
+							  .Return(scheduleDictionary);
+
 			_previousDay.Stub(x => x.Period)
 					   .Return(new DateOnlyPeriod(_previousDate, _previousDate).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
 			_firstDay.Stub(x => x.Period)
 					   .Return(new DateOnlyPeriod(_dateOnly, _dateOnly).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			_scheduleDays = new[]
+			var _scheduleDays = new[]
 				{
 					_previousDay,
 					_firstDay
@@ -305,6 +377,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldHandleShiftsOnSequenceDays()
 		{
+			var _dateTime = new DateTime(2013, 3, 25);
+			var _dateOnly = new DateOnly(2013, 3, 25);
+			var _previousDate = new DateOnly(2013, 3, 24);
+			var _person = PersonFactory.CreatePersonWithId();
+			var _personRepository = new TestWriteSideRepository<IPerson> { _person };
+			var _absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
+			var _personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
+			var _scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			var _scheduleRange = MockRepository.GenerateMock<IScheduleRange>();
+			var _previousDay = MockRepository.GenerateMock<IScheduleDay>();
+			var _firstDay = MockRepository.GenerateMock<IScheduleDay>();
+
+			scheduleDictionary.Stub(x => x[_person]).Return(_scheduleRange);
+			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null))
+							  .IgnoreArguments()
+							  .Return(scheduleDictionary);
+
 			_previousDay.Stub(x => x.Period)
 					   .Return(new DateOnlyPeriod(_previousDate, _previousDate).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
 			_firstDay.Stub(x => x.Period)
@@ -312,7 +402,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var secondDay = MockRepository.GenerateMock<IScheduleDay>();
 			secondDay.Stub(x => x.Period)
 					   .Return(new DateOnlyPeriod(_dateOnly.AddDays(1), _dateOnly.AddDays(1)).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			_scheduleDays = new[]
+			var _scheduleDays = new[]
 				{
 					_previousDay,
 					_firstDay,

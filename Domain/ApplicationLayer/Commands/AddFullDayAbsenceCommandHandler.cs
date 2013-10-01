@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
@@ -24,7 +26,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_scheduleRepository = scheduleRepository;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(AddFullDayAbsenceCommand command)
 		{
 			var person = _personRepository.Load(command.PersonId);
