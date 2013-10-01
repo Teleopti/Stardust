@@ -80,11 +80,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 			var nextActivityStartTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
 			                                                                                           @event.PersonId);
-			if ((nextActivityStartTime != null &&
-			     NotifyRtaDecider.ShouldSendMessage(closestLayer.Value, nextActivityStartTime.Value)) ||
-			    (nextActivityStartTime == null &&
-				closestLayer.Value.EndDateTime > DateTime.UtcNow &&
-				closestLayer.Value.EndDateTime != DateTime.MaxValue.ToUniversalTime()))
+			if (NotifyRtaDecider.ShouldSendMessage(closestLayer.Value, nextActivityStartTime) &&
+			    @event.ScheduleDays.Any(d => d.Date >= DateTime.UtcNow.Date))
+			{
 				_serviceBus.Publish(new UpdatedScheduleDay
 					{
 						Datasource = @event.Datasource,
@@ -94,6 +92,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 						ActivityEndDateTime = closestLayer.Value.EndDateTime,
 						Timestamp = DateTime.UtcNow
 					});
+			}
 		}
 	}
 }
