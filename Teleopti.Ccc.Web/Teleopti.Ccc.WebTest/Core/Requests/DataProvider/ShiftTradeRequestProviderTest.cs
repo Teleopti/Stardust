@@ -35,45 +35,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldGetMyScheduleForADay()
 		{
-			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
-			var person = new Person();
-			var date = DateOnly.Today;
-			IScheduleDictionary scheduleDictionary = new ScheduleDictionary(new Scenario("scenario"),
-																			new ScheduleDateTimePeriod(
-																				new DateTimePeriod(
-																					DateTime.SpecifyKind(date.Date, DateTimeKind.Utc),
-																					DateTime.SpecifyKind(date.Date, DateTimeKind.Utc))));
-			IScheduleDay scheduleDay = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, person, date);
-
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(new DateOnlyPeriod(date, date))).Return(new[] { scheduleDay });
-
-			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleProvider);
-
-			var result = target.RetrieveMyScheduledDay(date);
-
-			result.Should().Be.SameInstanceAs(scheduleDay);
+			
 		}
 
 		[Test]
 		public void ShouldGetScheduleForPossibleTradePersons()
 		{
-			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
-			var personList = new[] { new Person() };
-			var date = DateOnly.Today;
-			var scheduleDictionary = new ScheduleDictionary(new Scenario("scenario"),
-																			new ScheduleDateTimePeriod(
-																				new DateTimePeriod(
-																					DateTime.SpecifyKind(date.Date, DateTimeKind.Utc),
-																					DateTime.SpecifyKind(date.Date, DateTimeKind.Utc))));
-			var scheduleDay = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, personList[0], date);
-			scheduleProvider.Stub(x => x.GetScheduleForPersons(date, personList)).Return(new[] { scheduleDay });
-
 			
-			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleProvider);
-
-			var result = target.RetrievePossibleTradePersonsScheduleDay(date, personList);
-
-			result.FirstOrDefault().Should().Be.SameInstanceAs(scheduleDay);
 		}
 	}
 }

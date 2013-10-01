@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 	{
 		public ShiftTradePersonScheduleViewModel MySchedule { get; set; }
 
-		public IEnumerable<ShiftTradePersonScheduleViewModel> PossibleTradePersons { get; set; }
+		public IEnumerable<ShiftTradePersonScheduleViewModel> PossibleTradeSchedules { get; set; }
 
 		public IEnumerable<ShiftTradeTimeLineHoursViewModel> TimeLineHours { get; set; }
 

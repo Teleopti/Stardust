@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -8,10 +9,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	public class ShiftTradeTimeLineHoursViewModelFactory : IShiftTradeTimeLineHoursViewModelFactory
 	{
 		private readonly ICreateHourText _createHourText;
+		private readonly TimeZoneInfo _timeZone;
 
-		public ShiftTradeTimeLineHoursViewModelFactory(ICreateHourText createHourText)
+		public ShiftTradeTimeLineHoursViewModelFactory(ICreateHourText createHourText, IUserTimeZone timeZone)
 		{
 			_createHourText = createHourText;
+			_timeZone = timeZone.TimeZone();
 		}
 
 
@@ -28,7 +31,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				hourList.Add(new ShiftTradeTimeLineHoursViewModel
 					             {
 						             HourText = string.Empty,
-						             LengthInMinutesToDisplay = lengthInMinutes
+						             LengthInMinutesToDisplay = lengthInMinutes,
+									 StartTime = TimeZoneHelper.ConvertFromUtc(timeLinePeriod.StartDateTime, _timeZone),
+									 EndTime = TimeZoneHelper.ConvertFromUtc(timeLinePeriod.StartDateTime.AddMinutes(lengthInMinutes), _timeZone)
 					             });
 				shiftStartRounded = timeLinePeriod.StartDateTime.AddMinutes(lengthInMinutes);
 			}
@@ -37,7 +42,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				lastHour = new ShiftTradeTimeLineHoursViewModel
 					           {
 						           HourText = _createHourText.CreateText(timeLinePeriod.EndDateTime),
-						           LengthInMinutesToDisplay = timeLinePeriod.EndDateTime.Minute
+						           LengthInMinutesToDisplay = timeLinePeriod.EndDateTime.Minute,
+								   StartTime = TimeZoneHelper.ConvertFromUtc(timeLinePeriod.EndDateTime.AddMinutes(-timeLinePeriod.EndDateTime.Minute), _timeZone),
+								   EndTime = TimeZoneHelper.ConvertFromUtc(timeLinePeriod.EndDateTime, _timeZone)
 					           };
 				shiftEndRounded = timeLinePeriod.EndDateTime.AddMinutes(-timeLinePeriod.EndDateTime.Minute);
 			}
@@ -46,8 +53,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				hourList.Add(new ShiftTradeTimeLineHoursViewModel
 					             {
-										 HourText = _createHourText.CreateText(time),
-						             LengthInMinutesToDisplay = 60
+									 HourText = _createHourText.CreateText(time),
+						             LengthInMinutesToDisplay = 60,
+									 StartTime = TimeZoneHelper.ConvertFromUtc(time, _timeZone),
+									 EndTime = TimeZoneHelper.ConvertFromUtc(time.AddMinutes(60), _timeZone)
 					             });
 			}
 

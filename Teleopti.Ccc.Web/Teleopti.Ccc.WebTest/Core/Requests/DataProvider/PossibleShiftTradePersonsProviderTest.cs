@@ -60,7 +60,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			personRepository.Expect(rep => rep.FindPeople(new List<Guid>())).Return(new Collection<IPerson>());
 
-			target.RetrievePersons(data).Should().Be.Empty();
+			var result = target.RetrievePersons(data);
+
+			result.Date.Should().Be.EqualTo(data.ShiftTradeDate);
+			result.Persons.Should().Be.Empty();
 		}
 
 		[Test]
@@ -83,7 +86,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			shiftTradeValidator.Expect(
 				val => val.Validate(new ShiftTradeAvailableCheckItem(data.ShiftTradeDate, currentUser, personInMyTeam)))
 							   .Return(new ShiftTradeRequestValidationResult(true));
-			target.RetrievePersons(data).First().Should().Be.SameInstanceAs(personInMyTeam);
+			
+			var result = target.RetrievePersons(data);
+
+			result.Persons.First().Should().Be.SameInstanceAs(personInMyTeam);
 		}
 
 		[Test]
@@ -116,8 +122,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 							   .Return(new ShiftTradeRequestValidationResult(true));
 			var result = target.RetrievePersons(data);
 
-			result.Should().Contain(validAgent);
-			result.Should().Not.Contain(invalidAgent);
+			result.Persons.Should().Contain(validAgent);
+			result.Persons.Should().Not.Contain(invalidAgent);
 		}
 	}
 }
