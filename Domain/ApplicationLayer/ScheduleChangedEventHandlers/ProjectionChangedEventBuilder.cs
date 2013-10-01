@@ -8,7 +8,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	public class ProjectionChangedEventBuilder : IProjectionChangedEventBuilder
 	{
-		public void Build<T>(ScheduleChangedEventBase message, IScheduleRange range, DateOnlyPeriod realPeriod, Action<T> actionForItems) where T : ProjectionChangedEventBase, new()
+		public void Build<T>(ScheduleChangedEventBase message, IScheduleRange range, DateOnlyPeriod realPeriod, Action<T> actionForItems) 
+			where T : ProjectionChangedEventBase, new()
 		{
 			foreach (var scheduleDayBatch in range.ScheduledDayCollection(realPeriod).Batch(50))
 			{
@@ -42,15 +43,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							Layers = new Collection<ProjectionChangedEventLayer>(),
 							WorkTime = projection.WorkTime(),
 							ContractTime = projection.ContractTime(),
-							IsWorkday = isWorkDay(significantPart),
 						};
 
 					switch (significantPart)
 					{
+						case SchedulePartView.Overtime:
+							eventScheduleDay.IsWorkday = true;
+							break;
 						case SchedulePartView.MainShift:
-							var cat = scheduleDay.PersonAssignment().ShiftCategory;
-							eventScheduleDay.Label = cat.Description.ShortName;
-							eventScheduleDay.DisplayColor = cat.DisplayColor.ToArgb();
+							var shiftCategory = scheduleDay.PersonAssignment().ShiftCategory;
+							eventScheduleDay.IsWorkday = true;
+							eventScheduleDay.Label = shiftCategory.Description.ShortName;
+							eventScheduleDay.DisplayColor = shiftCategory.DisplayColor.ToArgb();
 							break;
 						case SchedulePartView.FullDayAbsence:
 							eventScheduleDay.Label = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
@@ -111,9 +115,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			return message.SkipDelete && significantPart == SchedulePartView.None;
 		}
 
-		private static bool isWorkDay(SchedulePartView significantPart)
-		{
-			return significantPart == SchedulePartView.MainShift || significantPart == SchedulePartView.Overtime;
-		}
 	}
 }

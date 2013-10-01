@@ -51,7 +51,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 							  .Return(scheduleDictionary);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldRaiseFullDayAbsenceAddedEvent()
 		{
 			var currentScenario = new FakeCurrentScenario();
@@ -89,7 +88,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.EndDateTime.Should().Be(command.EndDate.AddHours(24).AddMinutes(-1));
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldSetupEntityState()
 		{
 			_previousDay.Stub(x => x.Period)
@@ -126,7 +124,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			absenceLayer.Period.EndDateTime.Should().Be(command.EndDate.AddHours(24).AddMinutes(-1));
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldConvertFromAgentsTimeZone()
 		{
 			var agentsTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
@@ -168,7 +165,54 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShouldConsiderNightShiftEndOnDayBeforeStartDate()
+		public void ShouldOverlapShift()
+		{
+			_previousDay.Stub(x => x.Period)
+					   .Return(new DateOnlyPeriod(_previousDate, _previousDate).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
+			_firstDay.Stub(x => x.Period)
+					   .Return(new DateOnlyPeriod(_dateOnly, _dateOnly).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
+			_scheduleDays = new[]
+				{
+					_previousDay,
+					_firstDay
+				};
+			_scheduleRange.Stub(
+				x => x.ScheduledDayCollection(new DateOnlyPeriod(new DateOnly(_dateTime).AddDays(-1), new DateOnly(_dateTime)))).Return(_scheduleDays);
+
+			var assignmentStart = new DateTime(2013, 3, 25, 10, 0, 0, 0, DateTimeKind.Utc);
+			var assignmentEnd = new DateTime(2013, 3, 25, 15, 0, 0, 0, DateTimeKind.Utc);
+			var assignmentPeriod = new DateTimePeriod(assignmentStart, assignmentEnd);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assignmentPeriod);
+
+			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
+			_firstDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
+
+			var command = new AddFullDayAbsenceCommand
+			{
+				AbsenceId = _absenceRepository.Single().Id.Value,
+				PersonId = _personRepository.Single().Id.Value,
+				StartDate = new DateTime(2013, 3, 25),
+				EndDate = new DateTime(2013, 3, 25),
+			};
+
+			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentScenario(), _personRepository, _absenceRepository,
+															 _personAbsenceRepository, _scheduleRepository);
+			target.Handle(command);
+
+			var personAbsence = _personAbsenceRepository.Single();
+			var absenceLayer = personAbsence.Layer as AbsenceLayer;
+			personAbsence.Person.Should().Be(_personRepository.Single());
+			absenceLayer.Payload.Should().Be(_absenceRepository.Single());
+			absenceLayer.Period.StartDateTime.Should().Be(command.StartDate.AddHours(10));
+			absenceLayer.Period.EndDateTime.Should().Be(command.EndDate.AddHours(15));
+
+			var @event = _personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+			@event.StartDateTime.Should().Be(command.StartDate.AddHours(10));
+			@event.EndDateTime.Should().Be(command.EndDate.AddHours(15));
+		}
+
+		[Test]
+		public void ShouldNotOverlapNightShiftFromDayBeforeStartDate()
 		{
 			_previousDay.Stub(x => x.Period)
 					   .Return(new DateOnlyPeriod(_previousDate, _previousDate).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
@@ -214,7 +258,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShouldConsiderNightShiftEndOnEndDate()
+		public void ShouldFullyOverlapNightShiftOnEndDate()
 		{
 			_previousDay.Stub(x => x.Period)
 					   .Return(new DateOnlyPeriod(_previousDate, _previousDate).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
@@ -256,53 +300,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var @event = _personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
 			@event.EndDateTime.Should().Be(command.EndDate.AddDays(1).AddHours(5));
-		}
-
-		[Test]
-		public void ShouldConsiderShiftStartAndEndWithinADay()
-		{
-			_previousDay.Stub(x => x.Period)
-					   .Return(new DateOnlyPeriod(_previousDate, _previousDate).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			_firstDay.Stub(x => x.Period)
-					   .Return(new DateOnlyPeriod(_dateOnly, _dateOnly).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			_scheduleDays = new[]
-				{
-					_previousDay,
-					_firstDay
-				};
-			_scheduleRange.Stub(
-				x => x.ScheduledDayCollection(new DateOnlyPeriod(new DateOnly(_dateTime).AddDays(-1), new DateOnly(_dateTime)))).Return(_scheduleDays);
-
-			var assignmentStart = new DateTime(2013, 3, 25, 10, 0, 0, 0, DateTimeKind.Utc);
-			var assignmentEnd = new DateTime(2013, 3, 25, 15, 0, 0, 0, DateTimeKind.Utc);
-			var assignmentPeriod = new DateTimePeriod(assignmentStart, assignmentEnd);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assignmentPeriod);
-
-			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
-			_firstDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
-
-			var command = new AddFullDayAbsenceCommand
-			{
-				AbsenceId = _absenceRepository.Single().Id.Value,
-				PersonId = _personRepository.Single().Id.Value,
-				StartDate = new DateTime(2013, 3, 25),
-				EndDate = new DateTime(2013, 3, 25),
-			};
-
-			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentScenario(), _personRepository, _absenceRepository,
-			                                                 _personAbsenceRepository, _scheduleRepository);
-			target.Handle(command);
-
-			var personAbsence = _personAbsenceRepository.Single();
-			var absenceLayer = personAbsence.Layer as AbsenceLayer;
-			personAbsence.Person.Should().Be(_personRepository.Single());
-			absenceLayer.Payload.Should().Be(_absenceRepository.Single());
-			absenceLayer.Period.StartDateTime.Should().Be(command.StartDate.AddHours(10));
-			absenceLayer.Period.EndDateTime.Should().Be(command.EndDate.AddHours(15));
-
-			var @event = _personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
-			@event.StartDateTime.Should().Be(command.StartDate.AddHours(10));
-			@event.EndDateTime.Should().Be(command.EndDate.AddHours(15));
 		}
 
 		[Test]
@@ -356,110 +353,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var @event = _personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
 			@event.StartDateTime.Should().Be(command.StartDate.AddHours(10));
 			@event.EndDateTime.Should().Be(command.EndDate.AddHours(17));
-		}
-
-		[Test]
-		public void ShouldHandleShiftsAndEmptyDayMixed1()
-		{
-			_previousDay.Stub(x => x.Period)
-					   .Return(new DateOnlyPeriod(_previousDate, _previousDate).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			_firstDay.Stub(x => x.Period)
-					   .Return(new DateOnlyPeriod(_dateOnly, _dateOnly).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			var secondDay = MockRepository.GenerateMock<IScheduleDay>();
-			secondDay.Stub(x => x.Period)
-					   .Return(new DateOnlyPeriod(_dateOnly.AddDays(1), _dateOnly.AddDays(1)).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			_scheduleDays = new[]
-				{
-					_previousDay,
-					_firstDay,
-					secondDay
-				};
-			_scheduleRange.Stub(
-				x => x.ScheduledDayCollection(new DateOnlyPeriod(new DateOnly(_dateTime).AddDays(-1), new DateOnly(_dateTime).AddDays(1)))).Return(_scheduleDays);
-
-			var assignmentStart = new DateTime(2013, 3, 25, 10, 0, 0, 0, DateTimeKind.Utc);
-			var assignmentEnd = new DateTime(2013, 3, 25, 15, 0, 0, 0, DateTimeKind.Utc);
-			var assignmentPeriod = new DateTimePeriod(assignmentStart, assignmentEnd);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assignmentPeriod);
-
-			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
-			_firstDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
-			secondDay.Stub(x => x.PersonAssignment()).Return(null);
-
-			var command = new AddFullDayAbsenceCommand
-			{
-				AbsenceId = _absenceRepository.Single().Id.Value,
-				PersonId = _personRepository.Single().Id.Value,
-				StartDate = new DateTime(2013, 3, 25),
-				EndDate = new DateTime(2013, 3, 26),
-			};
-
-			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentScenario(), _personRepository, _absenceRepository,
-			                                                 _personAbsenceRepository, _scheduleRepository);
-			target.Handle(command);
-
-			var personAbsence = _personAbsenceRepository.Single();
-			var absenceLayer = personAbsence.Layer as AbsenceLayer;
-			personAbsence.Person.Should().Be(_personRepository.Single());
-			absenceLayer.Payload.Should().Be(_absenceRepository.Single());
-			absenceLayer.Period.StartDateTime.Should().Be(command.StartDate.AddHours(10));
-			absenceLayer.Period.EndDateTime.Should().Be(command.EndDate.AddDays(1).AddMinutes(-1));
-
-			var @event = _personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
-			@event.StartDateTime.Should().Be(command.StartDate.AddHours(10));
-			@event.EndDateTime.Should().Be(command.EndDate.AddDays(1).AddMinutes(-1));
-		}
-
-		[Test]
-		public void ShouldHandleShiftsAndEmptyDayMixed2()
-		{
-			_previousDay.Stub(x => x.Period)
-					   .Return(new DateOnlyPeriod(_previousDate, _previousDate).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			_firstDay.Stub(x => x.Period)
-					   .Return(new DateOnlyPeriod(_dateOnly, _dateOnly).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			var secondDay = MockRepository.GenerateMock<IScheduleDay>();
-			secondDay.Stub(x => x.Period)
-					   .Return(new DateOnlyPeriod(_dateOnly.AddDays(1), _dateOnly.AddDays(1)).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone()));
-			_scheduleDays = new[]
-				{
-					_previousDay,
-					_firstDay,
-					secondDay
-				};
-			_scheduleRange.Stub(
-				x => x.ScheduledDayCollection(new DateOnlyPeriod(new DateOnly(_dateTime).AddDays(-1), new DateOnly(_dateTime).AddDays(1)))).Return(_scheduleDays);
-
-			var assignmentStart = new DateTime(2013, 3, 26, 10, 0, 0, 0, DateTimeKind.Utc);
-			var assignmentEnd = new DateTime(2013, 3, 26, 15, 0, 0, 0, DateTimeKind.Utc);
-			var assignmentPeriod = new DateTimePeriod(assignmentStart, assignmentEnd);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, assignmentPeriod);
-
-			_previousDay.Stub(x => x.PersonAssignment()).Return(null);
-			_firstDay.Stub(x => x.PersonAssignment()).Return(null);
-			secondDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
-
-			var command = new AddFullDayAbsenceCommand
-			{
-				AbsenceId = _absenceRepository.Single().Id.Value,
-				PersonId = _personRepository.Single().Id.Value,
-				StartDate = new DateTime(2013, 3, 25),
-				EndDate = new DateTime(2013, 3, 26),
-			};
-
-			var target = new AddFullDayAbsenceCommandHandler(new FakeCurrentScenario(), _personRepository, _absenceRepository,
-			                                                 _personAbsenceRepository, _scheduleRepository);
-			target.Handle(command);
-
-			var personAbsence = _personAbsenceRepository.Single();
-			var absenceLayer = personAbsence.Layer as AbsenceLayer;
-			personAbsence.Person.Should().Be(_personRepository.Single());
-			absenceLayer.Payload.Should().Be(_absenceRepository.Single());
-			absenceLayer.Period.StartDateTime.Should().Be(command.StartDate);
-			absenceLayer.Period.EndDateTime.Should().Be(command.EndDate.AddHours(15));
-
-			var @event = _personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
-			@event.StartDateTime.Should().Be(command.StartDate);
-			@event.EndDateTime.Should().Be(command.EndDate.AddHours(15));
 		}
 
 	}

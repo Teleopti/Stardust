@@ -77,28 +77,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				});
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(ScheduleChangedEvent @event)
 		{
 			if (!getPeriodAndScenario(@event)) return;
 			_projectionChangedEventBuilder.Build<ProjectionChangedEvent>(@event, _range, _realPeriod, d => _bus.Publish(d));
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(ScheduleInitializeTriggeredEventForPersonScheduleDay @event)
 		{
 			if (!getPeriodAndScenario(@event)) return;
 			_projectionChangedEventBuilder.Build<ProjectionChangedEventForPersonScheduleDay>(@event, _range, _realPeriod, d => _bus.Publish(d));
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(ScheduleInitializeTriggeredEventForScheduleDay @event)
 		{
 			if (!getPeriodAndScenario(@event)) return;
 			_projectionChangedEventBuilder.Build<ProjectionChangedEventForScheduleDay>(@event, _range, _realPeriod, d => _bus.Publish(d));
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(ScheduleInitializeTriggeredEventForScheduleProjection @event)
 		{
 			if (!getPeriodAndScenario(@event)) return;
