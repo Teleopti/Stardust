@@ -53,22 +53,53 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, LoadOnlyMyTeam = true };
 			var readModel = new PersonScheduleDayReadModel();
-			var mySchedule = new ShiftTradePersonScheduleViewModel();
+			var mySchedule = createPersonScheduleViewModel(data.ShiftTradeDate.Date.AddHours(8),
+			                                               data.ShiftTradeDate.Date.AddHours(17));
+			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new List<IPerson>() };
+			var possibleTradeScheduleModel = new List<ShiftTradePersonScheduleViewModel>();
 
 			_shiftTradeRequestProvider.Stub(x => x.RetrieveMySchedule(DateOnly.Today)).Return(readModel);
+			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
 			_mapper.Stub(x => x.Map<IPersonScheduleDayReadModel, ShiftTradePersonScheduleViewModel>(readModel)).Return(mySchedule);
+			_mapper.Stub(
+				x =>
+				x.Map<DatePersons, IEnumerable<ShiftTradePersonScheduleViewModel>>(persons))
+				   .Return(possibleTradeScheduleModel);
 
 			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 
 			result.MySchedule.Should().Be.SameInstanceAs(mySchedule);
 		}
 
+		private ShiftTradePersonScheduleViewModel createPersonScheduleViewModel(DateTime start, DateTime end)
+		{
+			return new ShiftTradePersonScheduleViewModel
+			{
+				ScheduleLayers =
+					new List<ShiftTradeScheduleLayerViewModel>
+							{
+								new ShiftTradeScheduleLayerViewModel
+									{
+										Start = start,
+										End = end
+									}
+							}
+			};
+		}
+
 		[Test]
 		public void ShouldMapIAmNotScheduledFromReadModel()
 		{
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, LoadOnlyMyTeam = true };
+			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new List<IPerson>() };
+			var possibleTradeScheduleModel = new List<ShiftTradePersonScheduleViewModel>();
 
-			_shiftTradeRequestProvider.Stub(x => x.RetrieveMySchedule(DateOnly.Today)).Return(null);
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMySchedule(data.ShiftTradeDate)).Return(null);
+			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
+			_mapper.Stub(
+				x =>
+				x.Map<DatePersons, IEnumerable<ShiftTradePersonScheduleViewModel>>(persons))
+				   .Return(possibleTradeScheduleModel);
 
 			var result = Mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
 

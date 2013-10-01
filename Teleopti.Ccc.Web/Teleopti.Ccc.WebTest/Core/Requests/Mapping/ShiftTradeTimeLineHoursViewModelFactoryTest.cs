@@ -12,15 +12,26 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 	[TestFixture]
 	public class ShiftTradeTimeLineHoursViewModelFactoryTest
 	{
+		private ShiftTradeTimeLineHoursViewModelFactory _target;
+		private TimeZoneInfo _timeZone;
+		private IUserTimeZone _userTimeZone;
+
+		[SetUp]
+		public void Setup()
+		{
+			_timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
+
+			_target = new ShiftTradeTimeLineHoursViewModelFactory(MockRepository.GenerateMock<ICreateHourText>(), _userTimeZone);
+		}
+
 		[Test]
 		public void ShouldHandleTimeLineStartNotOnTheHour()
 		{
-			var target = new ShiftTradeTimeLineHoursViewModelFactory(MockRepository.GenerateMock<ICreateHourText>(),
-			                                                         MockRepository.GenerateMock<IUserTimeZone>());
-
 			var period = new DateTimePeriod(new DateTime(2013, 9, 30, 7, 45, 0, DateTimeKind.Utc),
 			                                new DateTime(2013, 9, 30, 17, 0, 0, DateTimeKind.Utc));
-			var result = target.CreateTimeLineHours(period);
+			var result = _target.CreateTimeLineHours(period);
 
 			var firstHour = result.First();
 			firstHour.HourText.Should().Be.Empty();
@@ -32,12 +43,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var createHourText = MockRepository.GenerateMock<ICreateHourText>();
 
-			var target = new ShiftTradeTimeLineHoursViewModelFactory(createHourText, MockRepository.GenerateMock<IUserTimeZone>());
+			_target = new ShiftTradeTimeLineHoursViewModelFactory(createHourText, _userTimeZone);
 			
 			var period = new DateTimePeriod(new DateTime(2013, 9, 30, 8, 0, 0, DateTimeKind.Utc),
 											new DateTime(2013, 9, 30, 17, 15, 0, DateTimeKind.Utc));
 			createHourText.Stub(x => x.CreateText(period.EndDateTime)).Return("19");
-			var result = target.CreateTimeLineHours(period);
+			var result = _target.CreateTimeLineHours(period);
 
 			var lastHour = result.Last();
 			lastHour.HourText.Should().Be.EqualTo("19");
@@ -47,48 +58,36 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldContainCorrectAmountOfTimeLineHoursWhenStartingOnTheHour()
 		{
-			var target = new ShiftTradeTimeLineHoursViewModelFactory(MockRepository.GenerateMock<ICreateHourText>(),
-			                                                         MockRepository.GenerateMock<IUserTimeZone>());
-
 			var period = new DateTimePeriod(new DateTime(2013, 9, 30, 8, 0, 0, DateTimeKind.Utc),
 											new DateTime(2013, 9, 30, 9, 0, 0, DateTimeKind.Utc));
 			
-			target.CreateTimeLineHours(period).Count().Should().Be.EqualTo(1);
+			_target.CreateTimeLineHours(period).Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldContainCorrectAmountOfTimeLineHoursWhenStartingNotOnTheHour()
 		{
-			var target = new ShiftTradeTimeLineHoursViewModelFactory(MockRepository.GenerateMock<ICreateHourText>(),
-			                                                         MockRepository.GenerateMock<IUserTimeZone>());
-
 			var period = new DateTimePeriod(new DateTime(2013, 9, 30, 7, 45, 0, DateTimeKind.Utc),
 											new DateTime(2013, 9, 30, 9, 0, 0, DateTimeKind.Utc));
 
-			target.CreateTimeLineHours(period).Count().Should().Be.EqualTo(2);
+			_target.CreateTimeLineHours(period).Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
 		public void ShouldHaveStartAndEndTimeForHours()
 		{
-			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-
-			var target = new ShiftTradeTimeLineHoursViewModelFactory(MockRepository.GenerateMock<ICreateHourText>(), userTimeZone);
-
 			var period = new DateTimePeriod(new DateTime(2013, 9, 30, 7, 45, 0, DateTimeKind.Utc),
 											new DateTime(2013, 9, 30, 17, 0, 0, DateTimeKind.Utc));
-			var result = target.CreateTimeLineHours(period);
+			var result = _target.CreateTimeLineHours(period);
 
 			var firstHour = result.First();
 			var lastHour = result.Last();
 
-			firstHour.StartTime.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, timeZone));
-			firstHour.EndTime.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(new DateTime(2013, 9, 30, 8, 0, 0, DateTimeKind.Utc), timeZone));
+			firstHour.StartTime.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, _timeZone));
+			firstHour.EndTime.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(new DateTime(2013, 9, 30, 8, 0, 0, DateTimeKind.Utc), _timeZone));
 
-			lastHour.StartTime.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(new DateTime(2013, 9, 30, 16, 0, 0, DateTimeKind.Utc), timeZone));
-			lastHour.EndTime.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(period.EndDateTime, timeZone));
+			lastHour.StartTime.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(new DateTime(2013, 9, 30, 16, 0, 0, DateTimeKind.Utc), _timeZone));
+			lastHour.EndTime.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(period.EndDateTime, _timeZone));
 		}
 	}
 }
