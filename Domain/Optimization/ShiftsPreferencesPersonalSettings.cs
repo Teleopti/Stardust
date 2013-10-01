@@ -17,8 +17,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private double _keepShiftsValue;
 	    private TimePeriod _selectedTimePeriod;
 	    private bool _alterBetween;
-		private bool _keepActivityLength;
-		private Guid? _selectedActivityToKeepLenghtOn;
 		
         public ShiftsPreferencesPersonalSettings()
 		{
@@ -40,7 +38,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (target.SelectedActivities == null)
                 target.SelectedActivities = new List<IActivity>();
 
-			target.KeepActivityLength = _keepActivityLength;
             if (activityList!=null)
             {
                 
@@ -51,8 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                         if(!target.SelectedActivities.Contains(activity))
                             target.SelectedActivities.Add(activity);
                     }
-	                if (_selectedActivityToKeepLenghtOn.Equals(activity.Id.Value))
-		                target.ActivityToKeepLengthOn = activity;
+
                 }
                
             }
@@ -83,12 +79,6 @@ namespace Teleopti.Ccc.Domain.Optimization
                 _keepShiftsValue = source.KeepShiftsValue;
                 _selectedTimePeriod = source.SelectedTimePeriod;
                 _alterBetween = source.AlterBetween;
-	            _keepActivityLength = source.KeepActivityLength;
-	            _selectedActivityToKeepLenghtOn = null;
-				if (source.ActivityToKeepLengthOn != null)
-				{
-					_selectedActivityToKeepLenghtOn = source.ActivityToKeepLengthOn.Id;
-				}
             }
 		}
 
