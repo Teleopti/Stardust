@@ -110,6 +110,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             Percent campaignTasksTime = CampaignTaskTime;
             TimeSpan originalAverageTaskTime = AverageTaskTime;
             TimeSpan originalAfterTaskTime = AverageAfterTaskTime;
+		    double tasksSum = 0.0;
 
             Close();
             SetOpenHours(workloadDayTemplate.OpenHourList);
@@ -144,6 +145,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 
                 foreach (ITemplateTaskPeriod newTaskPeriod in taskPeriods)
                 {
+                    tasksSum += keyValuePair.Task.Tasks;
                     newTaskPeriod.Tasks = keyValuePair.Task.Tasks;
                     newTaskPeriod.AverageTaskTime = keyValuePair.AverageTaskTime;
                     newTaskPeriod.AverageAfterTaskTime = keyValuePair.AverageAfterTaskTime;
@@ -157,7 +159,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 CampaignTasks = campaignTasks;
                 CampaignTaskTime = campaignTasksTime;
                 CampaignAfterTaskTime = campaignAfterTasksTime;
-                Tasks = tasks;
+                Tasks = tasks<1 ? tasksSum : tasks;
                 AverageTaskTime = originalAverageTaskTime;
                 AverageAfterTaskTime = originalAfterTaskTime;
             }
@@ -173,7 +175,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     CampaignTasks = campaignTasks;
                     CampaignTaskTime = campaignTasksTime;
                     CampaignAfterTaskTime = campaignAfterTasksTime;
-                    Tasks = tasks;
+                    Tasks = tasks < 1 ? tasksSum : tasks;
                     AverageTaskTime = originalAverageTaskTime;
                     AverageAfterTaskTime = originalAfterTaskTime;
                     releaseAction(this);

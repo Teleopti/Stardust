@@ -83,22 +83,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
 
                 IEffectiveRestriction totalRestriction = extractor.CombinedRestriction(agentInfoHelper.SchedulingOptions);
                 var significantPart = schedulePart.SignificantPart();
-				//if (agentInfoHelper.SchedulingOptions.UseAvailability)
-				//{
-				//    totalRestriction = GetTotalAvailabilityRestriction(extractor, totalRestriction);
-				//}
-				//if (agentInfoHelper.SchedulingOptions.UsePreferences)
-				//{
-				//    totalRestriction = GetTotalPreferenceRestriction(extractor, totalRestriction, cellData);
-				//}
-				//if (agentInfoHelper.SchedulingOptions.UseRotations)
-				//{
-				//    totalRestriction = GetTotalRotationRestriction(extractor, totalRestriction);
-				//}
-				//if (agentInfoHelper.SchedulingOptions.UseStudentAvailability)
-				//{
-				//    totalRestriction = GetTotalStudentRestriction(extractor, totalRestriction);
-				//} 
+
                 if (((RestrictionSchedulingOptions)agentInfoHelper.SchedulingOptions).UseScheduling)
                 {
                     if (significantPart == SchedulePartView.MainShift)
@@ -159,13 +144,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
             		}
             	}
             	cellData.MustHavePreference = foundMustHave;
-                if (agentInfoHelper.Person.Period(agentInfoHelper.SelectedDate) == null)
-                    cellData.WeeklyMax = new TimeSpan(0);
+	            var personPeriod = agentInfoHelper.Person.Period(agentInfoHelper.SelectedDate);
+	            if (personPeriod == null)
+                    cellData.WeeklyMax = TimeSpan.Zero;
                 else
                 {
-                	var worktimeDirective =
-                		agentInfoHelper.Person.Period(agentInfoHelper.SelectedDate).PersonContract.Contract.
-                			WorkTimeDirective;
+                	var worktimeDirective = personPeriod.PersonContract.Contract.WorkTimeDirective;
 					cellData.WeeklyMax = worktimeDirective.MaxTimePerWeek;
 					cellData.NightlyRest = worktimeDirective.NightlyRest;
                 }
@@ -333,7 +317,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
         public static IEffectiveRestriction GetMainShiftTotalRestriction(IScheduleDay schedulePart, IEffectiveRestriction totalRestriction)
         {
             var proj = schedulePart.ProjectionService().CreateProjection();
-            DateTimePeriod dateTimePeriod = proj.Period().Value;
+            DateTimePeriod dateTimePeriod = proj.Period().GetValueOrDefault();
             var zone = schedulePart.Person.PermissionInformation.DefaultTimeZone();
 
             DateTime viewLocalTime = TimeZoneHelper.ConvertFromUtc(dateTimePeriod.StartDateTime, zone);
@@ -341,12 +325,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
 
             var startTimeLimitation = new StartTimeLimitation(viewLocalTime.TimeOfDay, viewLocalTime.TimeOfDay);
 
-            int daysToAdd = 0;
-            if (viewLocalEndTime.Date > viewLocalTime.Date)
-                daysToAdd = 1;
-            var endTimeStart = new TimeSpan(daysToAdd, viewLocalEndTime.TimeOfDay.Hours, viewLocalEndTime.TimeOfDay.Minutes, 0);
-            var endTimeLimitation = new EndTimeLimitation(endTimeStart, endTimeStart);
-            var workTimeLimitation = new WorkTimeLimitation(proj.ContractTime(), proj.ContractTime());
+	        var endTimeOfDay = viewLocalEndTime.Subtract(viewLocalTime.Date);
+            var endTimeLimitation = new EndTimeLimitation(endTimeOfDay, endTimeOfDay);
+
+	        var contractTime = proj.ContractTime();
+            var workTimeLimitation = new WorkTimeLimitation(contractTime, contractTime);
 
             if (totalRestriction == null)
             {

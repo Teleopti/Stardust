@@ -37,17 +37,27 @@ namespace Teleopti.Support.Tool
             PTracks.Hide();
         }
 
+        //private void LLChangeDBConn_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        //{
+        //    //this.Controls.Remove(activeControl);
+        //    panelContent.Controls.Remove(activeControl);
+        //    activeControl = new MainChangeDBSettings(this, _db);
+        //    activeControl.Dock = DockStyle.Fill;
+        //    PTracks.Hide();
+        //    panelContent.Controls.Add(activeControl);
+        //    //this.Controls.Add(activeControl);
+        //}
+
         private void LLChangeDBConn_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             //this.Controls.Remove(activeControl);
             panelContent.Controls.Remove(activeControl);
-            activeControl = new MainChangeDBSettings(this, _db);
-            activeControl.Dock = DockStyle.Fill;
+            activeControl = new ChangeSettings();
             PTracks.Hide();
             panelContent.Controls.Add(activeControl);
+            activeControl.Dock = DockStyle.Fill;
             //this.Controls.Add(activeControl);
         }
-
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             panelContent.Controls.Remove(activeControl);
@@ -99,7 +109,7 @@ namespace Teleopti.Support.Tool
                 }
             }
             buttonVerifyCredentials.Enabled = false;
-            LLChangeDBConn.Enabled = false;
+            
             linkManageDBVersions.Enabled = false;
         }
 
@@ -129,7 +139,7 @@ namespace Teleopti.Support.Tool
         private void VerifyCredentials()
         {
             Cursor = Cursors.WaitCursor;
-            LLChangeDBConn.Enabled = false;
+            
             linkManageDBVersions.Enabled = false;
             smoothLabelConnected.ForeColor = Color.Blue;
             smoothLabelConnected.Text = Resources.Connecting;
@@ -147,7 +157,6 @@ namespace Teleopti.Support.Tool
                         smoothLabelConnected.ForeColor = Color.Green;
                         smoothLabelConnected.Text = Resources.ConnectedAsSystemAdmin;
                         _settingsInRegistry.SaveAll();
-                        LLChangeDBConn.Enabled = true;
                         linkManageDBVersions.Enabled = true;
                         break;
                     case DataLayer.Right.Limited:

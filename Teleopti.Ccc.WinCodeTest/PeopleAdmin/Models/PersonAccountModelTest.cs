@@ -134,9 +134,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.AtLeastOnce();
             unitOfWork.Dispose();
             LastCall.Repeat.AtLeastOnce();
-            _traceableRefreshService.Refresh(_account1, unitOfWork);
+            _traceableRefreshService.Refresh(_account1);
             LastCall.Repeat.AtLeastOnce();
-            _traceableRefreshService.Refresh(_account2, unitOfWork);
+            _traceableRefreshService.Refresh(_account2);
             LastCall.Repeat.AtLeastOnce();
 
             _mocker.ReplayAll();
@@ -192,9 +192,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.AtLeastOnce();
             unitOfWork.Dispose();
             LastCall.Repeat.AtLeastOnce();
-            _traceableRefreshService.Refresh(_account1, unitOfWork);
+            _traceableRefreshService.Refresh(_account1);
             LastCall.Repeat.AtLeastOnce();
-            _traceableRefreshService.Refresh(_account2, unitOfWork);
+            _traceableRefreshService.Refresh(_account2);
             LastCall.Repeat.AtLeastOnce();
 
             _mocker.ReplayAll();
@@ -221,9 +221,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.AtLeastOnce();
             unitOfWork.Dispose();
             LastCall.Repeat.AtLeastOnce();
-            _traceableRefreshService.Refresh(_account1, unitOfWork);
+            _traceableRefreshService.Refresh(_account1);
             LastCall.Repeat.AtLeastOnce();
-            _traceableRefreshService.Refresh(_account2, unitOfWork);
+            _traceableRefreshService.Refresh(_account2);
             LastCall.Repeat.AtLeastOnce();
 
             _mocker.ReplayAll();
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             IUnitOfWork unitOfWork = _mocker.StrictMock<IUnitOfWork>();
             Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             unitOfWork.Dispose();
-            _traceableRefreshService.Refresh(_targetDay.CurrentAccount, unitOfWork);
+            _traceableRefreshService.Refresh(_targetDay.CurrentAccount);
             _mocker.ReplayAll();
 
             _targetDay = new PersonAccountModelForTest(_traceableRefreshService, _collection, _account1);
@@ -270,9 +270,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.AtLeastOnce();
             unitOfWork.Dispose();
             LastCall.Repeat.AtLeastOnce();
-            _traceableRefreshService.Refresh(_account1, unitOfWork);
+            _traceableRefreshService.Refresh(_account1);
             LastCall.Repeat.AtLeastOnce();
-            _traceableRefreshService.Refresh(_account2, unitOfWork);
+            _traceableRefreshService.Refresh(_account2);
             LastCall.Repeat.AtLeastOnce();
 
             _mocker.ReplayAll();
@@ -374,13 +374,16 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         {
             using (GridControl grid = new GridControl())
             {
+                IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
+                ICurrentScenario currentScenario = _mocker.DynamicMock<ICurrentScenario>();
+                
                 IPersonAccountChildModel adapter1 = new PersonAccountChildModel
-                    (new TraceableRefreshService(new Scenario("d"), new RepositoryFactory()), _collection, _account1,
-                     null);
+                    (new TraceableRefreshService(currentScenario, new ScheduleRepository(unitOfWorkFactory.CreateAndOpenUnitOfWork())), _collection, _account1,
+                     null, null);
 
                 IPersonAccountChildModel adapter2 = new PersonAccountChildModel
-                    (new TraceableRefreshService(new Scenario("d"), new RepositoryFactory()), _collection, _account3,
-                     null);
+                    (new TraceableRefreshService(currentScenario, new ScheduleRepository(unitOfWorkFactory.CreateAndOpenUnitOfWork())), _collection, _account3,
+                     null, null);
 
                 adapter1.CanBold = true;
                 adapter2.CanBold = true;

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -17,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private readonly IPersonRequestPersister _personRequestPersister;
 		private readonly IPersonAbsenceAccountConflictCollector _personAbsenceAccountConflictCollector;
-		private readonly IPersonAbsenceAccountRefresher _personAbsenceAccountRefresher;
+        private readonly ITraceableRefreshService _traceableRefreshService;
 		private readonly IPersonAbsenceAccountValidator _personAbsenceAccountValidator;
 		private readonly IScheduleDictionaryConflictCollector _scheduleDictionaryConflictCollector;
 		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
@@ -29,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		                                       IPersonAbsenceAccountRepository personAbsenceAccountRepository,
 		                                       IPersonRequestPersister personRequestPersister,
 		                                       IPersonAbsenceAccountConflictCollector personAbsenceAccountConflictCollector,
-		                                       IPersonAbsenceAccountRefresher personAbsenceAccountRefresher,
+		                                       ITraceableRefreshService traceableRefreshService,
 		                                       IPersonAbsenceAccountValidator personAbsenceAccountValidator,
 		                                       IScheduleDictionaryConflictCollector scheduleDictionaryConflictCollector,
 		                                       IMessageBrokerIdentifier messageBrokerIdentifier,
@@ -42,7 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 			_personRequestPersister = personRequestPersister;
 			_personAbsenceAccountConflictCollector = personAbsenceAccountConflictCollector;
-			_personAbsenceAccountRefresher = personAbsenceAccountRefresher;
+			_traceableRefreshService = traceableRefreshService;
 			_personAbsenceAccountValidator = personAbsenceAccountValidator;
 			_scheduleDictionaryConflictCollector = scheduleDictionaryConflictCollector;
 			_messageBrokerIdentifier = messageBrokerIdentifier;
@@ -145,7 +147,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		}
 
 		private void PersistPersonAbsenceAccount(IUnitOfWorkFactory unitOfWorkFactory, 
-																						IEnumerable<IPersonAbsenceAccount> refreshPersonAbsenceAccounts,
+												 IEnumerable<IPersonAbsenceAccount> refreshPersonAbsenceAccounts,
 		                                         ICollection<IPersonAbsenceAccount> personAbsenceAccounts)
 		{
 			try
@@ -158,7 +160,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 					unitOfWork.PersistAll(_messageBrokerIdentifier);
 					personAbsenceAccounts.Clear();
 				}
-			} 
+			}
 			catch (OptimisticLockException exception)
 			{
 				throw new OptimisticLockExceptionOnPersonAccount(exception);
@@ -172,12 +174,23 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			{
 				return;
 			}
+
 			refreshPersonAbsenceAccounts.ForEach(paa =>
-			                                     {
-			                                     	unitOfWork.Refresh(paa);
-			                                     	_personAbsenceAccountRefresher.Refresh(unitOfWork, paa);
-			                                     	_personAbsenceAccountValidator.Validate(paa);
-			                                     });
+			{
+				var foundAccount = _personAbsenceAccountRepository.Get(paa.Id.GetValueOrDefault());
+				if (foundAccount != null)
+				{
+					var removedAccounts = paa.AccountCollection().Except(foundAccount.AccountCollection()).ToList();
+					foreach (IAccount removedAccount in removedAccounts)
+					{
+						paa.Remove(removedAccount);
+					}
+					unitOfWork.Remove(foundAccount);
+					unitOfWork.Refresh(paa);
+				}
+				paa.AccountCollection().ForEach(_traceableRefreshService.Refresh);
+				_personAbsenceAccountValidator.Validate(paa);
+			});
 		}
 
 		private void PersistScheduleDictionary(IScheduleDictionary scheduleDictionary)

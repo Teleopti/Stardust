@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces;
@@ -174,7 +175,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
             foreach (IShiftProjectionCache proj in shiftList)
             {
-                var mainShiftPeriod = proj.TheMainShift.LayerCollection.Period();
+                var mainShiftPeriod = proj.TheMainShift.LayerCollection.OuterPeriod();
                 if (mainShiftPeriod.HasValue)
                 {
                     if (validPeriod.Contains(mainShiftPeriod.Value))

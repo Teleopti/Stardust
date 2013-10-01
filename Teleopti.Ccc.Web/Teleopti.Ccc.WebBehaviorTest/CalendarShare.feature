@@ -64,7 +64,7 @@ Scenario: View calendar sharing link
 	| Field                      | Value              |
 	| Name                       | Published schedule |
 	| Schedule published to date | 2040-06-24         |
-	And Current time is '2023-06-20'
+	And the current time is '2023-06-20'
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2022-04-10 |
@@ -119,3 +119,43 @@ Scenario: View calendar sharing link
 	| SUMMARY | Phone            |
 	| DTSTART | 20131218T080000Z |
 	| DTEND   | 20131218T170000Z |
+
+Scenario: Cannot view unpublished calendar
+	Given I have the role 'Access to CalendarLink'
+	And I have a workflow control set with
+	| Field                      | Value              |
+	| Name                       | Published schedule |
+	| Schedule published to date | 2023-06-24         |
+	And Current time is '2023-06-20'
+	And I have a schedule period with 
+	| Field      | Value      |
+	| Start date | 2023-04-10 |
+	| Type       | Week       |
+	| Length     | 1          |
+	And I have a person period with
+	| Field      | Value      |
+	| Start date | 2023-04-10 |
+	And I have a shift with
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Phone            |
+	| Start time       | 2023-06-24 08:00 |
+	| End time         | 2023-06-24 17:00 |
+	And I have a shift with
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Phone            |
+	| Start time       | 2023-06-25 08:00 |
+	| End time         | 2023-06-25 17:00 |
+	And I have shared my calendar
+	When Someone is viewing sharing link
+	Then Someone should see ical calendar with
+	| Field   | Value            |
+	| SUMMARY | Phone            |
+	| DTSTART | 20230624T080000Z |
+	| DTEND   | 20230624T170000Z |
+	And Someone should not see ical calendar with
+	| Field   | Value            |
+	| SUMMARY | Phone            |
+	| DTSTART | 20230625T080000Z |
+	| DTEND   | 20230625T170000Z |

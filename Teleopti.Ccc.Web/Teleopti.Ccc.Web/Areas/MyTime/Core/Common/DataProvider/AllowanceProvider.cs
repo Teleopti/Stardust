@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
@@ -44,19 +46,30 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 					absenceRequestOpenPeriod => 
 					absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() == typeof(BudgetGroupAllowanceValidator)).ToList();
 
+				var invalidOpenPeriods = openPeriods.Where(
+					absenceRequestOpenPeriod =>
+					absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() != typeof(BudgetGroupAllowanceValidator)).ToList();
+
 				if (validOpenPeriods.Count != 0)
  				{
 					allowanceList =
 						from d in period.DayCollection()
-						select new { Date = d, Time = TimeSpan.Zero, Heads = TimeSpan.Zero, Availability = true };
+						select new
+							{
+								Date = d,
+								Time = TimeSpan.Zero,
+								Heads = TimeSpan.Zero,
+								Availability = (invalidOpenPeriods.Count <= 0 || !invalidOpenPeriods.Any(x => x.GetPeriod(_now.LocalDateOnly()).Contains(d)))
+							};
+
 
  					foreach (var openPeriod in validOpenPeriods)
  					{
  						var allowanceFromBudgetDays =
  							from budgetGroupPeriod in budgetGroupPeriods
  							from budgetDay in _budgetDayRepository.Find(defaultScenario, budgetGroupPeriod.Item2, budgetGroupPeriod.Item1)
- 							where openPeriod.GetPeriod(_now.DateOnly()).Contains(budgetDay.Day)
- 							where openPeriod.OpenForRequestsPeriod.Contains(_now.DateOnly())
+ 							where openPeriod.GetPeriod(_now.LocalDateOnly()).Contains(budgetDay.Day)
+							where openPeriod.OpenForRequestsPeriod.Contains(_now.LocalDateOnly())
  							where openPeriod.AbsenceRequestProcess.GetType() != typeof (DenyAbsenceRequest)
  							select
  								new
@@ -64,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
  										Date = budgetDay.Day,
  										Time = TimeSpan.FromHours(Math.Max(budgetDay.Allowance*budgetDay.FulltimeEquivalentHours, 0)),
 										Heads = TimeSpan.FromHours(Math.Max(budgetDay.FulltimeEquivalentHours, 0)),
- 										Availability = true
+										Availability = (invalidOpenPeriods.Count <= 0 || !invalidOpenPeriods.Any(x => x.GetPeriod(_now.LocalDateOnly()).Contains(budgetDay.Day)))
  									};
  						allowanceList = allowanceList.Concat(allowanceFromBudgetDays);
  					}

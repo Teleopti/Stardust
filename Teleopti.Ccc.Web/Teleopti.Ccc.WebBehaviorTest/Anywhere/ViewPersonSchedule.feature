@@ -38,6 +38,16 @@ Background:
 	| Field                      | Value                      |
 	| Name                       | Schedule published to 0809 |
 	| Schedule published to date | 2013-08-09                 |
+
+@ignore
+Scenario: View default time line
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' has no shift
+	When I view person schedule for 'Pierre Baldi' on '2013-09-27'
+	Then I should see the time line with
+	| Field      | Value |
+	| Start time | 08:00 |
+	| End time   | 16:00 |
 	
 Scenario: View shift
 	Given I have the role 'Anywhere Team Green'

@@ -304,12 +304,6 @@
     <Compile Include="Common\Controls\TimeSpanTextBox.Designer.cs">
       <DependentUpon>TimeSpanTextBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Controls\ToolStripGallery\TeleoptiToolStrip.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Common\Controls\ToolStripGallery\TeleoptiToolStrip.Designer.cs">
-      <DependentUpon>TeleoptiToolStrip.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\Controls\ToolStripGallery\TeleoptiToolStripGallery.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -1,5 +1,7 @@
 ﻿using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
@@ -44,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWorkAction]
 		public JsonResult FetchData(DateOnly? date)
 		{
-			var showForDate = date ?? _now.DateOnly();
+			var showForDate = date ?? _now.LocalDateOnly();
 			var model = _scheduleViewModelFactory.CreateWeekViewModel(showForDate);
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}

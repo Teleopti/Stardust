@@ -210,7 +210,6 @@
     <Compile Include="OldTests\PersonalShiftActivityDtoTest.cs" />
     <Compile Include="OldTests\PersonalShiftDtoTest.cs" />
     <Compile Include="OldTests\PersonRequestDtoTest.cs" />
-    <Compile Include="OldTests\QueueDtoTest.cs" />
     <Compile Include="OldTests\SchedulePartDtoTest.cs" />
     <Compile Include="OldTests\LogOn.cs">
       <SubType>Code</SubType>

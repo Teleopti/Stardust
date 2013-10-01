@@ -233,9 +233,14 @@
       <Link>Core\MessageBroker\SubscriptionPassThrough.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
-    <Compile Include="Areas\Anywhere\Core\ITeamScheduleProvider.cs" />
+    <Compile Include="Areas\Anywhere\Core\ITeamScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\Anywhere\Core\ITeamScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecification.cs" />
-    <Compile Include="Areas\Anywhere\Core\TeamScheduleProvider.cs" />
+    <Compile Include="Areas\Anywhere\Core\TeamScheduleData.cs" />
+    <Compile Include="Areas\Anywhere\Core\TeamScheduleLayerViewModel.cs" />
+    <Compile Include="Areas\Anywhere\Core\TeamScheduleShiftViewModel.cs" />
+    <Compile Include="Areas\Anywhere\Core\TeamScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\Anywhere\Core\TeamScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IOvertimeAvailabilityPersister.cs" />
@@ -697,6 +702,11 @@
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />
+    <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.js" />
+    <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.min.js" />
+    <Content Include="Areas\MobileReports\Content\moment\moment.js" />
+    <Content Include="Areas\MobileReports\Content\moment\moment.min.js" />
+    <Content Include="Areas\MobileReports\Content\Scripts\json2.js" />
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.RequestViewModel.js" />
@@ -744,7 +754,6 @@
     <Content Include="Areas\MyTime\Content\Css\CalendarView.css" />
     <Content Include="Areas\MobileReports\Content\Scripts\Teleopti.MobileReports.Index.js" />
     <Content Include="Areas\MyTime\Content\Css\AsmMessage.css" />
-    <Content Include="Areas\MyTime\Content\Css\jquery.ui.combobox.css" />
     <Content Include="Areas\MyTime\Content\Css\TooltipCustom.css" />
     <Content Include="Areas\MyTime\Content\Css\Request.css" />
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
@@ -756,7 +765,6 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AsmMessage.js" />
     <Content Include="Areas\MyTime\Content\Images\icon_sprite.png" />
     <Content Include="Areas\MyTime\Content\Scripts\knockout.bindings.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.combobox.ko.js" />
     <Content Include="Areas\MyTime\Content\Scripts\noty\jquery.noty.js" />
     <Content Include="Areas\MyTime\Content\Scripts\noty\layouts\bottom.js" />
     <Content Include="Areas\MyTime\Content\Scripts\noty\layouts\bottomCenter.js" />
@@ -775,7 +783,6 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Asm.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Notifier.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.selectbox.ko.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.DayViewModel.Tests.js" />
@@ -786,13 +793,11 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Signalr.Hubs.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Test.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Ajax.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.tabberiet.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Settings.js" />
     <Content Include="Areas\MyTime\Content\Css\Preference.css" />
     <Content Include="Areas\MyTime\Content\Css\ScheduleStyles.css" />
     <Content Include="Areas\MyTime\Content\Css\WeekView.css" />
     <Content Include="Areas\MyTime\Content\Scripts\AllTests.aspx" />
-    <Content Include="Areas\Start\Content\Css\mobile.custom.css" />
     <Content Include="Areas\Start\Content\Images\ajax-loader-small.gif" />
     <Content Include="Areas\Start\Content\Images\ccc_icon.png" />
     <Content Include="Areas\Start\Content\Images\mobile_logo.png" />
@@ -812,24 +817,18 @@
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.DataSourceViewModel.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.Settings.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.Navigation.js" />
-    <Content Include="Areas\Start\Content\Scripts\knockout.bindings.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.js" />
-    <Content Include="Areas\MyTime\Content\Css\jquery.ui.selectbox.css" />
     <Content Include="Areas\MyTime\Content\Css\jquery.ui.connector.css" />
     <Content Include="Areas\MyTime\Content\Css\TeamSchedule.css" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small.gif" />
     <Content Include="Areas\MyTime\Content\Images\arrow-right.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_55_fbf9ee_1x400.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.selectbox.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamSchedule.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.connector.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.RequestDetail.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.List.js" />
-    <Content Include="Areas\Start\Content\Css\jquery.ui.custom.css" />
     <Content Include="Areas\Start\Content\Css\Site.css" />
-    <Content Include="Areas\MyTime\Content\Css\jquery.ui.labeledinput.css" />
-    <Content Include="Areas\MyTime\Content\Css\jquery.ui.splitbutton.css" />
     <Content Include="Areas\MyTime\Content\Images\alpha-gradient.png" />
     <Content Include="Areas\MyTime\Content\Images\arrow-down.png" />
     <Content Include="Areas\MyTime\Content\Images\main_content_bottom_bg.jpg" />
@@ -884,13 +883,13 @@
     <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.2.custom.min.css" />
     <Content Include="Content\jquery\jquery-1.10.2.js" />
     <Content Include="Content\jquery\jquery-1.10.2.min.js" />
-    <Content Include="Content\MobileDateBox\jqm-datebox.core.js" />
-    <Content Include="Content\MobileDateBox\jqm-datebox.core.min.js" />
-    <Content Include="Content\MobileDateBox\jqm-datebox.css" />
-    <Content Include="Content\MobileDateBox\jqm-datebox.min.css" />
-    <Content Include="Content\MobileDateBox\jqm-datebox.mode.calbox.js" />
-    <Content Include="Content\MobileDateBox\jqm-datebox.mode.calbox.min.js" />
-    <Content Include="Content\Mobile\images\ajax-loader.gif" />
+    <Content Include="Areas\MobileReports\Content\MobileDateBox\jqm-datebox.core.js" />
+    <Content Include="Areas\MobileReports\Content\MobileDateBox\jqm-datebox.core.min.js" />
+    <Content Include="Areas\MobileReports\Content\MobileDateBox\jqm-datebox.css" />
+    <Content Include="Areas\MobileReports\Content\MobileDateBox\jqm-datebox.min.css" />
+    <Content Include="Areas\MobileReports\Content\MobileDateBox\jqm-datebox.mode.calbox.js" />
+    <Content Include="Areas\MobileReports\Content\MobileDateBox\jqm-datebox.mode.calbox.min.js" />
+    <Content Include="Areas\MobileReports\Content\Mobile\images\ajax-loader.gif" />
     <Content Include="Content\Error\404.htm" />
     <Content Include="Content\Error\error.htm" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader.gif" />
@@ -921,25 +920,24 @@
     <Content Include="Areas\MyTime\Content\Images\view_top_wide_bg.png" />
     <Content Include="Areas\MyTime\Content\Images\view_ul_states_sprite.png" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.extensions.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.labeledinput.js" />
+    <Content Include="Content\moment-datepicker\moment-datepicker-ko-amd.js" />
     <Content Include="favicon.ico" />
     <Content Include="Content\bootstrap\images\glyphicons-halflings-white.png" />
     <Content Include="Content\bootstrap\images\glyphicons-halflings.png" />
-    <Content Include="Content\Mobile\images\icons-18-black.png" />
-    <Content Include="Content\Mobile\images\icons-18-white.png" />
-    <Content Include="Content\Mobile\images\icons-36-black.png" />
-    <Content Include="Content\Mobile\images\icons-36-white.png" />
-    <Content Include="Content\Mobile\jquery.mobile-1.3.0.css" />
-    <Content Include="Content\Mobile\jquery.mobile-1.3.0.js" />
-    <Content Include="Content\Mobile\jquery.mobile-1.3.0.min.css" />
-    <Content Include="Content\Mobile\jquery.mobile-1.3.0.min.js" />
-    <Content Include="Content\Mobile\jquery.mobile.structure-1.3.0.css" />
-    <Content Include="Content\Mobile\jquery.mobile.structure-1.3.0.min.css" />
-    <Content Include="Content\Mobile\jquery.mobile.theme-1.3.0.css" />
-    <Content Include="Content\Mobile\jquery.mobile.theme-1.3.0.min.css" />
+    <Content Include="Areas\MobileReports\Content\Mobile\images\icons-18-black.png" />
+    <Content Include="Areas\MobileReports\Content\Mobile\images\icons-18-white.png" />
+    <Content Include="Areas\MobileReports\Content\Mobile\images\icons-36-black.png" />
+    <Content Include="Areas\MobileReports\Content\Mobile\images\icons-36-white.png" />
+    <Content Include="Areas\MobileReports\Content\Mobile\jquery.mobile-1.3.0.css" />
+    <Content Include="Areas\MobileReports\Content\Mobile\jquery.mobile-1.3.0.js" />
+    <Content Include="Areas\MobileReports\Content\Mobile\jquery.mobile-1.3.0.min.css" />
+    <Content Include="Areas\MobileReports\Content\Mobile\jquery.mobile-1.3.0.min.js" />
+    <Content Include="Areas\MobileReports\Content\Mobile\jquery.mobile.structure-1.3.0.css" />
+    <Content Include="Areas\MobileReports\Content\Mobile\jquery.mobile.structure-1.3.0.min.css" />
+    <Content Include="Areas\MobileReports\Content\Mobile\jquery.mobile.theme-1.3.0.css" />
+    <Content Include="Areas\MobileReports\Content\Mobile\jquery.mobile.theme-1.3.0.min.css" />
     <Content Include="Content\modernizr\modernizr-2.6.2.js" />
     <Content Include="Content\modernizr\modernizr-2.6.2.min.js" />
-    <Content Include="Content\moment-datepicker\moment-datepicker-ko-original.js" />
     <Content Include="Content\moment-datepicker\datepicker.css" />
     <Content Include="Content\moment\moment.all.min.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\require\resources.js" />
@@ -951,7 +949,6 @@
     <Content Include="Content\respondjs\respond.min.js" />
     <Content Include="Content\Scripts\indexOf.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.splitbutton.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.js" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.calendarselectable.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Common.js" />
@@ -959,9 +956,8 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Portal.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.js" />
     <Content Include="Areas\MyTime\Content\Css\Site.css" />
-    <Content Include="Content\Scripts\detectmobilebrowser.js" />
-    <Content Include="Content\Scripts\excanvas.compressed.js" />
-    <Content Include="Content\Scripts\excanvas.original.js" />
+    <Content Include="Areas\MobileReports\Content\Scripts\excanvas.compressed.js" />
+    <Content Include="Areas\MobileReports\Content\Scripts\excanvas.original.js" />
     <Content Include="Content\Scripts\jquery.hoverIntent.js" />
     <Content Include="Content\Scripts\jquery.qtip.min.css" />
     <Content Include="Content\Scripts\jquery.qtip.min.js" />
@@ -979,27 +975,21 @@
     <Content Include="Content\Scripts\Pinify\Scripts\jquery.pinify.min.js" />
     <Content Include="Content\Scripts\qunit.css" />
     <Content Include="Content\Scripts\qunit.js" />
-    <Content Include="Content\Scripts\RGraph.bar.js" />
+    <Content Include="Areas\MobileReports\Content\Scripts\RGraph.bar.js" />
     <Content Include="Content\Scripts\jquery.qtip.js" />
-    <Content Include="Content\Scripts\RGraph.common.context.js" />
-    <Content Include="Content\Scripts\RGraph.common.core.js" />
-    <Content Include="Content\Scripts\RGraph.common.key.js" />
-    <Content Include="Content\Scripts\RGraph.line.js" />
+    <Content Include="Areas\MobileReports\Content\Scripts\RGraph.common.context.js" />
+    <Content Include="Areas\MobileReports\Content\Scripts\RGraph.common.core.js" />
+    <Content Include="Areas\MobileReports\Content\Scripts\RGraph.common.key.js" />
+    <Content Include="Areas\MobileReports\Content\Scripts\RGraph.line.js" />
     <Content Include="Content\Scripts\jquery.qtip.css" />
     <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_55_bdd9e3_1x400.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_75_6ab9d3_1x400.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_75_e3f1f4_1x400.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-bg_highlight-soft_75_61abc5_.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-icons_ffffff_256x240.png" />
-    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.custominput.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.combobox.js" />
     <Content Include="Content\Scripts\json2.js" />
     <Content Include="Content\Scripts\jquery.ba-hashchange.js" />
     <Content Include="Content\Scripts\jquery.ba-hashchange.min.js" />
-    <Content Include="Content\Scripts\jquery.unobtrusive-ajax.js" />
-    <Content Include="Content\Scripts\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Content\Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Content\Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Areas\MobileReports\Content\Images\body_bg.jpg" />
     <Content Include="Areas\MobileReports\Content\Images\icon_sprite.png" />
     <Content Include="Content\select2\select2-spinner.gif" />
@@ -1012,9 +1002,6 @@
     <Content Include="Content\jqueryui.touch-punch\jquery.ui.touch-punch.js" />
     <Content Include="Content\bootstrap\bootstrap.js" />
     <Content Include="Content\bootstrap\bootstrap.min.js" />
-    <Content Include="Content\Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Content\Scripts\jquery.validate.js" />
-    <Content Include="Content\Scripts\jquery.validate.min.js" />
     <Content Include="Content\Scripts\knockout-2.2.1.debug.js" />
     <Content Include="Content\Scripts\knockout-2.2.1.js" />
     <Content Include="Content\moment-datepicker\moment-datepicker-ko.js" />
@@ -1027,13 +1014,6 @@
     <Content Include="Content\select2\select2.min.js" />
     <Content Include="Content\signalr\jquery.signalR-1.1.2.js" />
     <Content Include="Content\signalr\jquery.signalR-1.1.2.min.js" />
-    <Content Include="Content\Scripts\MicrosoftAjax.js" />
-    <Content Include="Content\Scripts\MicrosoftAjax.debug.js" />
-    <Content Include="Content\Scripts\MicrosoftMvcAjax.js" />
-    <Content Include="Content\Scripts\MicrosoftMvcAjax.debug.js" />
-    <Content Include="Content\Scripts\MicrosoftMvcValidation.js" />
-    <Content Include="Content\Scripts\MicrosoftMvcValidation.debug.js" />
-    <Content Include="Areas\Start\Views\Test\WidgetStylingSample.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\ShiftTradeRequestDetailView.cshtml" />
     <Content Include="Areas\SSO\Views\OpenId\Xrds.cshtml" />
     <Content Include="Areas\SSO\Views\OpenId\AskUser.cshtml" />
@@ -1046,12 +1026,14 @@
     </Content>
     <Content Include="Areas\Start\Views\Test\Message.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\TextRequestDetailView.cshtml" />
+    <Content Include="Areas\Start\Views\Shared\Error.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\AbsenceRequestDetailView.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <Content Include="Areas\MyTime\Views\Preference\AddPreferencesPartial.cshtml" />
     <Content Include="Content\jquery\jquery-1.10.2.min.map" />
     <Content Include="Areas\MyTime\Views\Availability\AddStudentAvailabilityPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Schedule\AddOvertimeAvailabilityPartial.cshtml" />
+    <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.min.map" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1212,7 +1194,7 @@
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <PropertyGroup>
     <PreBuildEvent>
-      if not exist "$(ProjectDir)Teleopti.Ccc.Web.ServiceBus.Client.config" copy "$(ProjectDir)..\..\BuildArtifacts\ServiceBusClient.config" "$(ProjectDir)Teleopti.Ccc.Web.ServiceBus.Client.config"
+      if not exist "$(ProjectDir)Teleopti.Ccc.Web.ServiceBus.Client.config" copy "$(ProjectDir)..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\Teleopti.Ccc.Sdk.ServiceBus.Client.config" "$(ProjectDir)Teleopti.Ccc.Web.ServiceBus.Client.config"
       if not exist "$(ProjectDir)web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Root.Web.config" "$(ProjectDir)web.config"
       if not exist "$(ProjectDir)Areas\MyTime\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.MyTime.Web.config" "$(ProjectDir)Areas\MyTime\Views\web.config"
       if not exist "$(ProjectDir)Areas\Start\Views\web.config" copy "$(ProjectDir)..\..\BuildArtifacts\Web.Start.Web.config" "$(ProjectDir)Areas\Start\Views\web.config"

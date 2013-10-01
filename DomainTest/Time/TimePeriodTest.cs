@@ -118,53 +118,6 @@ namespace Teleopti.Ccc.DomainTest.Time
         }
 
         [Test]
-        public void VerifyContainsPart()
-        {
-            //This is 13:00 - 03:00 (day after)
-            TimeSpan start = new TimeSpan(0,13, 0,0);
-            TimeSpan end = new TimeSpan(0,22, 0, 0);
-
-            TimePeriod target = new TimePeriod(start, end);
-
-            TimeSpan beforeStartEarlier = new TimeSpan(12,0,0);
-            TimeSpan beforeStartLater = new TimeSpan(12,30,0);
-           
-            TimeSpan inPeriodEarlier = new TimeSpan(14,0,0);
-            TimeSpan inPeriodLater = new TimeSpan(15,0,0);
-            
-            TimeSpan afterEndEarlier = new TimeSpan(1,4,0,0);
-            TimeSpan afterEndLater = new TimeSpan(1,9,0,0);
-
-
-            TimePeriod containsPeriod = new TimePeriod(inPeriodEarlier, inPeriodLater);
-            TimePeriod startEarlierFinishInPeriod = new TimePeriod(beforeStartEarlier, inPeriodLater);
-            TimePeriod startInFinishLaterPeriod = new TimePeriod(inPeriodEarlier, afterEndLater);
-            TimePeriod startEarlierFinishLaterPeriod = new TimePeriod(beforeStartLater, afterEndLater);
-            TimePeriod startEarlierFinishAtStartPeriod = new TimePeriod(beforeStartLater, start);
-            TimePeriod startAtEndFinishLaterPeriod = new TimePeriod(end, afterEndEarlier);
-            TimePeriod startEarlierFinishAtEndPeriod = new TimePeriod(beforeStartLater, end);
-            TimePeriod startAtStartFinishLaterPeriod = new TimePeriod(start, afterEndLater);
-            TimePeriod startLaterFinishLaterPeriod = new TimePeriod(afterEndEarlier, afterEndLater);
-            TimePeriod startEarlierFinishEarlierPeriod =
-                new TimePeriod(beforeStartEarlier, beforeStartLater);
-            TimePeriod equalsPeriod = new TimePeriod(start, end);
-
-            Assert.IsTrue(target.ContainsPart(startEarlierFinishInPeriod));
-            Assert.IsTrue(target.ContainsPart(startInFinishLaterPeriod));
-            Assert.IsTrue(target.ContainsPart(containsPeriod));
-            Assert.IsTrue(target.ContainsPart(equalsPeriod));
-            Assert.IsTrue(target.ContainsPart(startEarlierFinishLaterPeriod));
-            Assert.IsTrue(target.ContainsPart(startEarlierFinishAtStartPeriod));
-            Assert.IsTrue(target.ContainsPart(startAtEndFinishLaterPeriod));
-            Assert.IsTrue(target.ContainsPart(startEarlierFinishAtEndPeriod));
-            Assert.IsTrue(target.ContainsPart(startAtStartFinishLaterPeriod));
-            Assert.IsFalse(target.ContainsPart(startEarlierFinishEarlierPeriod));
-            Assert.IsFalse(target.ContainsPart(startLaterFinishLaterPeriod));
-
-            
-        }
-
-        [Test]
         public void VerifyContainsTimeSpan()
         {
             TimeSpan start = new TimeSpan(13, 0, 0);
@@ -203,36 +156,6 @@ namespace Teleopti.Ccc.DomainTest.Time
             t2 = new TimePeriod(new TimeSpan(13, 0, 0), new TimeSpan(14, 0, 0));
             Assert.IsTrue(t1.Intersect(t2));
             Assert.IsTrue(t2.Intersect(t1));
-        }
-
-        [Test]
-        public void VerifyIntersection()
-        {
-            TimePeriod t1 = new TimePeriod(new TimeSpan(12, 0, 0), new TimeSpan(13, 0, 0));
-            TimePeriod t2 = new TimePeriod(new TimeSpan(13, 0, 0), new TimeSpan(14, 0, 0));
-            Assert.IsNull(t1.Intersection(t2));
-            Assert.IsNull(t2.Intersection(t1));
-
-            TimePeriod t = new TimePeriod(new TimeSpan(12, 59, 59), new TimeSpan(13, 0, 1));
-            Assert.AreEqual(new TimeSpan(12, 59, 59), t1.Intersection(t).Value.StartTime);
-            Assert.AreEqual(new TimeSpan(13, 0, 0), t1.Intersection(t).Value.EndTime);
-            Assert.AreEqual(new TimeSpan(13, 0, 0), t2.Intersection(t).Value.StartTime);
-            Assert.AreEqual(new TimeSpan(13, 0, 1), t2.Intersection(t).Value.EndTime);
-
-            t = new TimePeriod(new TimeSpan(12, 15, 0), new TimeSpan(12, 45, 0));
-            Assert.AreEqual(new TimeSpan(12, 15, 0), t1.Intersection(t).Value.StartTime);
-            Assert.AreEqual(new TimeSpan(12, 45, 0), t1.Intersection(t).Value.EndTime);
-            Assert.AreEqual(new TimeSpan(12, 15, 0), t.Intersection(t1).Value.StartTime);
-            Assert.AreEqual(new TimeSpan(12, 45, 0), t.Intersection(t1).Value.EndTime);
-
-            t1 = new TimePeriod(new TimeSpan(12, 0, 0), new TimeSpan(13, 0, 0));
-            t2 = new TimePeriod(new TimeSpan(12, 0, 0), new TimeSpan(13, 0, 0));
-            Assert.AreEqual(1, t1.Intersection(t2).Value.SpanningTime().TotalHours);
-
-            t1 = new TimePeriod(new TimeSpan(12, 0, 0), new TimeSpan(16, 0, 0));
-            t2 = new TimePeriod(new TimeSpan(13, 0, 0), new TimeSpan(14, 0, 0));
-            Assert.AreEqual(1, t1.Intersection(t2).Value.SpanningTime().TotalHours);
-            Assert.AreEqual(1, t2.Intersection(t1).Value.SpanningTime().TotalHours);
         }
 
         [Test]

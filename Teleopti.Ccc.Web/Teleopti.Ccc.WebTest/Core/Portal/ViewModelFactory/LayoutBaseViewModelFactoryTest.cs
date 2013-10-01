@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			_mocks = new MockRepository();
 			_cultureSpecificViewModelFactory = _mocks.DynamicMock<ICultureSpecificViewModelFactory>();
 			_datePickerGlobalizationViewModelFactory = _mocks.DynamicMock<IDatePickerGlobalizationViewModelFactory>();
-			_target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now(null), MockRepository.GenerateMock<IResourceVersion>());
+			_target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now(), MockRepository.GenerateMock<IResourceVersion>());
 		}
 
 		[Test]
@@ -54,15 +55,17 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldSetTime()
 		{
-			var date = new DateTime(2001, 1, 1,1,12,0,0,DateTimeKind.Utc);
-			var nowComponent = MockRepository.GenerateMock<INow>();
+			var time = new DateTime(2001, 1, 1, 1, 12, 0, 0, DateTimeKind.Utc);
+			var now = new MutableNow();
+			now.Mutate(time);
 
-			nowComponent.Expect(c => c.IsExplicitlySet()).Return(true);
-			nowComponent.Expect(c => c.LocalDateTime()).Return(date);
-
-			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, nowComponent, MockRepository.GenerateMock<IResourceVersion>());
+			var target = new LayoutBaseViewModelFactory(
+				_cultureSpecificViewModelFactory,
+				_datePickerGlobalizationViewModelFactory,
+				now, 
+				MockRepository.GenerateMock<IResourceVersion>());
 			
-			target.CreateLayoutBaseViewModel(string.Empty).FixedDate.Should().Be.EqualTo(date);
+			target.CreateLayoutBaseViewModel(string.Empty).FixedDate.Should().Be.EqualTo(time);
 		}
 
 		[Test]
@@ -75,8 +78,9 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test]
 		public void ShouldReturnNullIfNotSet()
 		{
-			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now(null), MockRepository.GenerateMock<IResourceVersion>());
+			var target = new LayoutBaseViewModelFactory(_cultureSpecificViewModelFactory, _datePickerGlobalizationViewModelFactory, new Now(), MockRepository.GenerateMock<IResourceVersion>());
 			target.CreateLayoutBaseViewModel(string.Empty).FixedDate.HasValue.Should().Be.False();
 		}
 	}
+
 }

@@ -4,6 +4,7 @@ using System.Web.Security;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Interfaces.Domain;
 using log4net;
@@ -17,7 +18,6 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		private HttpRequestBase httpRequest;
 		private HttpContextBase httpContext;
 		private INow now;
-		private DateTime fictiveNow;
 		private SessionSpecificCookieDataProvider target;
 		private ISessionSpecificCookieDataProviderSettings _sessionSpecificCookieDataProviderSettings;
 		private HttpCookieCollection _cookieCollection;
@@ -41,11 +41,8 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			httpContext.Stub(x => x.Response).Return(httpResponse);
 			httpContext.Stub(x => x.Request).Return(httpRequest);
 
-			// Need to remove dependecies to FormsAuthentication.It uses DataTime.Now to check for expiration - test fails with past dates
-			fictiveNow = DateTime.Now; //new DateTime(2000,1,1,1,1,1);
-			now = MockRepository.GenerateStub<INow>();
-			now.Stub(x => x.LocalDateTime()).Return(fictiveNow);
-
+			now = new ThisIsNow(new DateTime(2013, 9, 23, 12, 0, 0));
+			
 			_sessionSpecificCookieDataProviderSettings = new DefaultSessionSpecificCookieDataProviderSettings();
 			target = new SessionSpecificCookieDataProvider(new FakeCurrentHttpContext(httpContext), _sessionSpecificCookieDataProviderSettings, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()));
 		}

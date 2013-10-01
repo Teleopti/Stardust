@@ -1,6 +1,5 @@
 ﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Portal.js"/>
@@ -40,8 +39,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	function _bindData(data) {
 		vm.Initialize(data);
 		_initTimeIndicator();
-		//_initTooltip();
-		//Teleopti.MyTimeWeb.Schedule.Request.PartialInit();
+	    
 		$('.body-weekview-inner').show();
 		completelyLoaded();
 	}
@@ -209,19 +207,23 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			_fillFormData(data);
 		};
 
-	    self.showAddRequestForm = function (date, data) {
-	        self.initialRequestDay = date;
-		    
-	        if ((self.requestViewModel() || '') != '') {
-		        _fillFormData(data);
-	            return;
-	        }
+	    self.showAddRequestForm = function (day) {
+	    	self.showAddRequestFormWithData(day.date(), day.overtimeAvailability());
+	    };
+		
+	    self.showAddRequestFormWithData = function (date, data) {
+	    	self.initialRequestDay = date;
 
-	        if (self.overtimeAvailabilityPermission() === true) {
-		        self.overtimeAvailabilityActivate(data);
-	        } else {
-		        self.textRequestActivate();
-	        }
+	    	if ((self.requestViewModel() || '') != '') {
+	    		_fillFormData(data);
+	    		return;
+	    	}
+
+	    	if (self.overtimeAvailabilityPermission() === true) {
+	    		self.overtimeAvailabilityActivate(data);
+	    	} else {
+	    		self.textRequestActivate();
+	    	}
 	    };
 	    
         self.setRequestViewModel = function()
@@ -484,9 +486,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return item.fixedDate() == date;
 			});
 			if (day) {
-				parents[1].showAddRequestForm(momentDate.format($('#Request-detail-datepicker-format').val().toUpperCase()));
+				parents[1].showAddRequestForm(day);
 			} else {
-				parents[1].showAddRequestForm(momentDate.format($('#Request-detail-datepicker-format').val().toUpperCase()), layer.OvertimeAvailabilityYesterday);
+				parents[1].showAddRequestFormWithData(momentDate.format($('#Request-detail-datepicker-format').val().toUpperCase()), layer.OvertimeAvailabilityYesterday);
 			}
 		};
 	};
@@ -582,7 +584,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	}
     
 	function _cleanBindings() {
-        ko.cleanNode($('#body-inner')[0]);
+        ko.cleanNode($('#page')[0]);
         if (vm != null) {
             vm.days([]);
             vm.timeLines([]);
@@ -608,7 +610,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 		},
 		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
-			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 			readyForInteractionCallback();
 			completelyLoaded = completelyLoadedCallback;
 		},

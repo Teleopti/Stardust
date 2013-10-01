@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -14,7 +13,6 @@ namespace Teleopti.Interfaces.Domain
     {
         private MinMax<DateTime> period;
         private const string DATETIME_SEPARATOR = " - ";
-	    private readonly int _hashCode;
 
         #region Properties
 
@@ -104,8 +102,6 @@ namespace Teleopti.Interfaces.Domain
                 validateDateTime(startDateTime, endDateTime);
 
             period = new MinMax<DateTime>(startDateTime, endDateTime);
-			_hashCode = (string.Format(CultureInfo.InvariantCulture, "{0}|{1}|{2}", typeof(DateTimePeriod).FullName,
-						   period.Minimum.Ticks, period.Maximum.Ticks)).GetHashCode();
         }
 
         /// <summary>
@@ -117,8 +113,6 @@ namespace Teleopti.Interfaces.Domain
         {
             validateDateTime(startDateTime, endDateTime);
             period = new MinMax<DateTime>(startDateTime, endDateTime);
-			_hashCode = (string.Format(CultureInfo.InvariantCulture, "{0}|{1}|{2}", typeof(DateTimePeriod).FullName,
-						   period.Minimum.Ticks, period.Maximum.Ticks)).GetHashCode();
         }
 
         /// <summary>
@@ -157,9 +151,6 @@ namespace Teleopti.Interfaces.Domain
 
             validateDateTime(startDateTimeTemp, endDateTimeTemp);
             period = new MinMax<DateTime>(startDateTimeTemp, endDateTimeTemp);
-
-			_hashCode = (string.Format(CultureInfo.InvariantCulture, "{0}|{1}|{2}", typeof(DateTimePeriod).FullName,
-						   period.Minimum.Ticks, period.Maximum.Ticks)).GetHashCode();
         }
 
         #endregion
@@ -309,14 +300,14 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <returns></returns>
         /// <remarks>
-        /// Created by: robink
+        /// Created by: Robink
         /// Created date: 2007-11-21
         /// </remarks>
-        public IList<DateTimePeriod> WholeDayCollection()
+        public IList<DateTimePeriod> WholeDayCollection(TimeZoneInfo timeZoneInfo )
         {
             IList<DateTimePeriod> collectionToReturn = new List<DateTimePeriod>();
-            DateTime currentDateTime = LocalStartDateTime;
-            DateTime endDateTime = LocalEndDateTime;
+            DateTime currentDateTime = StartDateTimeLocal(timeZoneInfo );
+            DateTime endDateTime = EndDateTimeLocal(timeZoneInfo );
             while (currentDateTime < endDateTime)
             {
                 DateTime currentEndDateTime = currentDateTime.AddDays(1);
@@ -324,7 +315,7 @@ namespace Teleopti.Interfaces.Domain
                 if (endDateTime == currentDateTime) break;
 
                 collectionToReturn.Add(TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentDateTime,
-                                                                                            currentEndDateTime));
+                                                                                            currentEndDateTime, timeZoneInfo));
                 currentDateTime = currentEndDateTime;
             }
             return collectionToReturn;
@@ -438,7 +429,7 @@ namespace Teleopti.Interfaces.Domain
         /// </returns>
         public override int GetHashCode()
         {
-            return _hashCode;
+            return period.Minimum.GetHashCode() ^ period.Maximum.GetHashCode();
         }
 
         /// <summary>

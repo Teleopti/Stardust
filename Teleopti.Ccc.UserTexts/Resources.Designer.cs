@@ -9680,6 +9680,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to here.
+        /// </summary>
+        public static string Here {
+            get {
+                return ResourceManager.GetString("Here", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to hh:mm.
         /// </summary>
         public static string HHcolonMM {
@@ -11081,6 +11090,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Length {
             get {
                 return ResourceManager.GetString("Length", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total time of selected activity.
+        /// </summary>
+        public static string LengthOfActivity {
+            get {
+                return ResourceManager.GetString("LengthOfActivity", resourceCulture);
             }
         }
         
@@ -16555,6 +16573,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Per Date.
+        /// </summary>
+        public static string PerDate {
+            get {
+                return ResourceManager.GetString("PerDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Performance Manager.
         /// </summary>
         public static string PerformanceManager {
@@ -19146,7 +19173,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Service Level  and Agents Ready.
+        ///   Looks up a localized string similar to Service Level and Agents Ready.
         /// </summary>
         public static string ResReportServiceLevelAndAgentsReady {
             get {
@@ -21277,7 +21304,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copy/Paste following URL, and add this URL to Outlook or Google calendar, etc..
+        ///   Looks up a localized string similar to To subscribe to your schedule from a calendar app, use the URL below. For instructions on doing this from the most common calendar apps, see .
         /// </summary>
         public static string ShareMyCalendarHint {
             get {
@@ -21291,6 +21318,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Shift {
             get {
                 return ResourceManager.GetString("Shift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shift as overtime.
+        /// </summary>
+        public static string ShiftAsOvertime {
+            get {
+                return ResourceManager.GetString("ShiftAsOvertime", resourceCulture);
             }
         }
         
@@ -21336,6 +21372,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShiftCategoryColon {
             get {
                 return ResourceManager.GetString("ShiftCategoryColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shift Category Distribution.
+        /// </summary>
+        public static string ShiftCategoryDistribution {
+            get {
+                return ResourceManager.GetString("ShiftCategoryDistribution", resourceCulture);
             }
         }
         

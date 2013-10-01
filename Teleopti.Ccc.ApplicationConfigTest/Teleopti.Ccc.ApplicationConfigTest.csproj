@@ -158,7 +158,7 @@
       <Link>Teleopti.Ccc.snk</Link>
     </None>
     <None Include="packages.config" />
-    <None Include="Teleopti.Ccc.ApplicationConfigTest.dll.Config">
+    <None Include="App.Config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -188,7 +188,8 @@
   </Target>
   -->
   <PropertyGroup>
-    <PreBuildEvent>xcopy "$(ProjectDir)Common\Test.xml" "$(TargetDir)" /y</PreBuildEvent>
+    <PreBuildEvent>xcopy "$(ProjectDir)Common\Test.xml" "$(TargetDir)" /y
+if not exist "$(ProjectDir)App.Config" copy "$(ProjectDir)..\.debug-Setup\config\CruiseControl.config" "$(ProjectDir)App.Config"</PreBuildEvent>
     <PostBuildEvent>xcopy "$(ProjectDir)..\Database\TeleoptiCCC7\*.*" "$(TargetDir)TeleoptiCCC7" /y /r /e /i /D
 xcopy "$(ProjectDir)..\nhibernateAddons\Cache_Providers\*.dll" "$(TargetDir)" /y /D</PostBuildEvent>
   </PropertyGroup>

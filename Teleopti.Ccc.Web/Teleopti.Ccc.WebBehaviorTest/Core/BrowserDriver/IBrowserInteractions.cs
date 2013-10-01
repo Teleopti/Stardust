@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		void AssertUrlNotContains(string urlContains, string urlNotContains);
 
 		void AssertJavascriptResultContains(string javascript, string text);
-		void AssertKnockoutContextContains(string selector, string knockoutBinding, string text);
 
 		void DumpInfo(Action<string> writer);
 		void DumpUrl(Action<string> writer);

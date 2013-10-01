@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					if (personPeriod == null)
 						continue;
 					
-					var bag = person.Period(date).RuleSetBag;
+					var bag = personPeriod.RuleSetBag;
 					if (bag == null)
 						continue;
 

@@ -57,11 +57,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public void WorkTimeEndShouldGetEndTimeOnLastLayerWithWorkTime()
 		{
 			var start = new DateTime(2011, 9, 7, 10, 0, 0, DateTimeKind.Utc);
-			var period = new DateTimePeriod(start, start.AddHours(1));
 			var period2 = new DateTimePeriod(start.AddHours(5), start.AddHours(6));
 
 			Expect.Call(_layer1.WorkTime()).Return(TimeSpan.FromHours(1));
-			Expect.Call(_layer1.Period).Return(period);
 			Expect.Call(_layer2.WorkTime()).Return(TimeSpan.Zero);
 			Expect.Call(_layer3.WorkTime()).Return(TimeSpan.FromHours(1));
 			Expect.Call(_layer3.Period).Return(period2);
@@ -71,6 +69,4 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			_mocks.VerifyAll();
 		}
 	}
-
-	
 }

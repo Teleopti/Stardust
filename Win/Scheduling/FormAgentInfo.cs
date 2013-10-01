@@ -609,9 +609,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             createAndAddItem(listViewSchedulePeriod, Resources.Period, helper.Period.Value.DateString, 1);
             createAndAddItem(listViewSchedulePeriod, Resources.Type, _schedulePeriodTypeList[helper.SchedulePeriod.PeriodType], 2);
-            if (person.Period(helper.SelectedDate) == null)
+	        var personPeriod = person.Period(helper.SelectedDate);
+	        if (personPeriod == null)
                 return;
-            EmploymentType employmentType = person.Period(helper.SelectedDate).PersonContract.Contract.EmploymentType;
+            EmploymentType employmentType = personPeriod.PersonContract.Contract.EmploymentType;
             if (employmentType != EmploymentType.HourlyStaff)
             {
                 if (employmentType == EmploymentType.FixedStaffNormalWorkTime)

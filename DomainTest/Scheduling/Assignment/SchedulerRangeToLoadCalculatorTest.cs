@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -143,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             DateOnly startDate = new DateOnly(2008, 5, 2);
             _person.AddSchedulePeriod(new SchedulePeriod(startDate, SchedulePeriodType.Month, 1));
-            _person.TerminalDate = new DateOnly(2008,5,5);
+            _person.TerminatePerson(new DateOnly(2008,5,5), new MockRepository().StrictMock<IPersonAccountUpdater>());
             _requestedPeriod = new DateTimePeriod(2008, 5, 3, 2008, 5, 10);
           
             _target = new SchedulerRangeToLoadCalculator(_requestedPeriod);
@@ -161,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {   //requested period is from 10/5 so in my opinion null return is correct
             DateOnly startDate = new DateOnly(2008, 5, 2);
             _person.AddSchedulePeriod(new SchedulePeriod(startDate, SchedulePeriodType.Month, 1));
-            _person.TerminalDate = new DateOnly(2008, 5, 5);
+            _person.TerminatePerson(new DateOnly(2008, 5, 5), new MockRepository().StrictMock<IPersonAccountUpdater>());
 
             Assert.AreEqual(_requestedPeriod, _target.SchedulerRangeToLoad(_person));
         }

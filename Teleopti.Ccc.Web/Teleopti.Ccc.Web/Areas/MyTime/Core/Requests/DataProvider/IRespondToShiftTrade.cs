@@ -30,6 +30,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		/// </summary>
 		/// <param name="requestId"></param>
 		/// <returns>An update viewmodel</returns>
-		RequestViewModel ResendReffered(Guid requestId);
+		RequestViewModel ResendReferred(Guid requestId);
 	}
 }

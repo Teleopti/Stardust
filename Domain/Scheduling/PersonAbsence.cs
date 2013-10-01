@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
             PersonAbsence retObj = (PersonAbsence)MemberwiseClone();
             retObj.SetId(null);
-            retObj._layer = (AbsenceLayer)Layer.NoneEntityClone();
+            retObj._layer = (IAbsenceLayer) Layer.NoneEntityClone();
 
             return retObj;
         }

@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 		public void WhenIClickOnAnyDate()
 		{
             _clickedDateInDatePicker = DateOnlyForBehaviorTests.TestToday.AddDays(2);
-            if (_clickedDateInDatePicker.Month != DateOnlyForBehaviorTests.TestToday.Month)
+            if (_clickedDateInDatePicker.Month != DateOnlyForBehaviorTests.TestToday.AddDays(-1).Month)
                 _clickedDateInDatePicker = DateOnlyForBehaviorTests.TestToday.AddDays(-2);
 			Browser.Interactions.ClickContaining(".ui-datebox-griddate.ui-btn-up-d", _clickedDateInDatePicker.Day.ToString());
 		}

@@ -34,6 +34,7 @@ $secstr = New-Object -TypeName System.Security.SecureString
 $password.ToCharArray() | ForEach-Object {$secstr.AppendChar($_)}
 $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $domain\$username, $secstr
 $computerName=(get-childitem -path env:computername).Value
+$global:BaseURL = "http://" + $computerName + "/"
 $global:zipFile
 $global:MsiFile
 $global:version = 'main'
@@ -41,6 +42,42 @@ $global:batName = 'PesterTest-DbSQL'
 $global:Server = ''
 $global:Db = ''
 $global:resetToBaseline="False"
+$global:insertedLicense=0
+
+function Config-Load {
+	Describe "Shold load config from Hebe "{
+		[string] $serverConfigFile = '\\hebe\Installation\PBImsi\Kanbox\testservers.config'
+
+        It "Should find the right version from the config file"{
+        
+            # initialize the xml object
+            $serverConfig = New-Object XML
+            # load the config file as an xml object
+            $serverConfig.Load($serverConfigFile)
+            # iterate over the settings
+            foreach($testServer in $serverConfig.configuration.servers.add)
+            {
+                if ($testServer.name -eq  $computerName)
+                {
+                    $global:version =  $testServer.version
+                    $global:batName =  $testServer.batname
+                    $global:Server =  $testServer.DBServerInstance
+                    $global:Db = $testServer.DB
+                    $global:resetToBaseline = $testServer.resetToBaseline
+                    
+					if ($testServer.BaseURL)
+					{
+						$global:BaseURL = $testServer.BaseURL
+					}
+                }
+                
+            }
+            Write-Host 'version: ' $global:version
+            Write-Host 'restToBaseline: '$global:resetToBaseline
+        }
+    }
+}
+
 
 function TearDown {
 	Describe "Tear down previous test"{
@@ -62,7 +99,8 @@ function TearDown {
         
 		It "should stop the SDK" {
 			stop-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
-			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred}  | Should Throw
+			$SDKUrl = $global:BaseURL + "TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"
+			{Check-HttpStatus -url $SDKUrl -credentials $cred}  | Should Throw
 		}
 
 		It "should uninstall product"{
@@ -77,13 +115,13 @@ function TearDown {
         
         It "should have a default web site" {
 			$computerName=(get-childitem -path env:computername).Value
-			$httpStatus=Check-HttpStatus -url "http://$computerName/"
+			$httpStatus=Check-HttpStatus -url $global:BaseURL
 			$httpStatus | Should Be $True
 		}
 			
 		It "should throw exeption when http URL does not exist" {
 			$computerName=(get-childitem -path env:computername).Value
-			{Check-HttpStatus -url "http://$computerName/TeleoptiCCC/"}  | Should Throw
+			{Check-HttpStatus -url $global:BaseURL + "TeleoptiCCC/"}  | Should Throw
 		}
 		
 		It "Should destroy working folder" {
@@ -101,30 +139,6 @@ function Setup-PreReqs {
 			Test-Path "$workingFolder" | Should Be $True
 		}
 		
-        It "Should find the right version from the config file"{
-            $serverConfigFile = '\\hebe\Installation\PBImsi\Kanbox\testservers.config'
-            # initialize the xml object
-            $serverConfig = New-Object XML
-            # load the config file as an xml object
-            $serverConfig.Load($serverConfigFile)
-            # iterate over the settings
-            foreach($testServer in $serverConfig.configuration.servers.add)
-            {
-                if ($testServer.name -eq  $computerName)
-                {
-                    $global:version =  $testServer.version
-                    $global:batName =  $testServer.batname
-                    $global:Server =  $testServer.DBServerInstance
-                    $global:Db = $testServer.DB
-                    $global:resetToBaseline = $testServer.resetToBaseline
-                }
-                
-            }
-
-            Write-Host 'version: ' $global:version
-            Write-Host 'restToBaseline: '$global:resetToBaseline
-        }
-
 		It "should copy latest .zip-file from build server"{
 			$global:zipFile = Copy-ZippedMsi -workingFolder "$workingFolder" -version "$global:version"
 			Test-Path $global:zipFile | Should Be $True
@@ -206,7 +220,7 @@ function Test-SitesAndServicesOk {
 		It "should start SDK" {
 			start-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
 			
-			$temp = Check-HttpStatus -url "http://$computerName/TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred
+			$temp = Check-HttpStatus -url $global:BaseURL + "TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred
 			$temp | Should be $True
 		}
 		
@@ -250,8 +264,8 @@ function Add-CccLicenseToDemo
         It "should insert a new license" {
             $LicFile="$here\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
             $xmlString = [IO.File]::ReadAllText($LicFile)
-            $RowsInserted = insert-License -Server "$global:Server" -Db "$global:Db" -xmlString $xmlString
-            $RowsInserted | Should Be 1
+            $InsertedLicense = insert-License -Server "$global:Server" -Db "$global:Db" -xmlString $xmlString
+            $global:insertedLicense | Should Be 1
         }
     }
     else
@@ -263,6 +277,7 @@ function Add-CccLicenseToDemo
 }
 
 #Main
+Config-Load
 TearDown
 Setup-PreReqs
 Test-InstallationSQLLogin

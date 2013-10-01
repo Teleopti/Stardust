@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		private IDatabaseHandler _databaseHandler;
 		private IMbCacheFactory _cacheFactory;
 
-		private Guid _platFormTypeId, _activityId, _stateId, _businessUnitId, _stateGroupId;
+		private Guid _platFormTypeId, _activityId, _stateId, _businessUnitId, _stateGroupId, _personId;
 		private string _stateCode;
 
 		private ConcurrentDictionary<string, List<RtaStateGroupLight>> _stateGroupDictionary;
@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_stateId = Guid.NewGuid();
 			_businessUnitId = Guid.NewGuid();
 			_stateGroupId = Guid.NewGuid();
+			_personId = Guid.NewGuid();
 			_stateCode = "AUX3";
 
 			_rtaStateGroup = new RtaStateGroupLight
@@ -58,8 +59,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				ActivityId = _activityId,
 				StateGroupId = _stateGroupId,
 				StateGroupName = "StateGroupName",
-				AlarmTypeId = Guid.NewGuid(),
-				IsLogOutState = true
+				AlarmTypeId = Guid.NewGuid()
 			};
 			_alarmDictionary = new ConcurrentDictionary<Guid, List<RtaAlarmLight>>();
 			_alarmDictionary.TryAdd(_activityId, new List<RtaAlarmLight> {_rtaAlarm});
@@ -132,6 +132,14 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		}
 
 		[Test]
+		public void GetStateGroup_NoMatchForBusinessUnit_ReturnNull()
+		{
+			_databaseHandler.Expect(d => d.StateGroups()).Return(_stateGroupDictionary);
+			var result = _target.GetStateGroup(_stateCode, Guid.Empty, Guid.Empty);
+			result.Should().Be.Null();
+		}
+
+		[Test]
 		public void GetStateGroup_StateCodeNotFound_AddStateGroupToDb_ReturnTheNewState()
 		{
 			const string newStateCode = "some_new_state_code";
@@ -173,19 +181,15 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				{
 					BusinessUnitId = _businessUnitId,
 					PlatformTypeId = _platFormTypeId,
-					StateGroupId = _stateGroupId
+					StateGroupId = _stateGroupId,
+					IsLogOutState = true
 				};
 			var stateDictionary = new ConcurrentDictionary<string, List<RtaStateGroupLight>>();
 			stateDictionary.TryAdd("stateCode", new List<RtaStateGroupLight> { stateGroup });
 
-			var alarm = new RtaAlarmLight {ActivityId = _activityId, StateGroupId = _stateGroupId,IsLogOutState = true};
-			var alarmDictionary = new ConcurrentDictionary<Guid, List<RtaAlarmLight>>();
-			alarmDictionary.TryAdd(_activityId, new List<RtaAlarmLight> {alarm});
-
 			_databaseHandler.Expect(d => d.StateGroups()).Return(stateDictionary);
-			_databaseHandler.Expect(d => d.ActivityAlarms()).Return(alarmDictionary);
 			
-			var result = _target.IsAgentLoggedOut(_activityId, "stateCode", _platFormTypeId, _businessUnitId);
+			var result = _target.IsAgentLoggedOut(_personId, "stateCode", _platFormTypeId, _businessUnitId);
 			result.Should().Be.True();
 		}
 
@@ -198,7 +202,26 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			_databaseHandler.Expect(d => d.StateGroups()).Return(stateDictionary);
 
-			var result = _target.IsAgentLoggedOut(_activityId, "", _platFormTypeId, _businessUnitId);
+			var result = _target.IsAgentLoggedOut(_personId, "", _platFormTypeId, _businessUnitId);
+			result.Should().Be.False();
+		}
+
+		[Test]
+		public void IsAgentLoggedOut_NoAlarm_ShouldNotCrashRta()
+		{
+			var stateGroup = new RtaStateGroupLight
+			{
+				BusinessUnitId = _businessUnitId,
+				PlatformTypeId = _platFormTypeId,
+				StateGroupId = _stateGroupId
+			};
+			var stateDictionary = new ConcurrentDictionary<string, List<RtaStateGroupLight>>();
+			stateDictionary.TryAdd("stateCode", new List<RtaStateGroupLight> { stateGroup });
+
+			_databaseHandler.Expect(d => d.StateGroups()).Return(stateDictionary);
+			_databaseHandler.Expect(d => d.ActivityAlarms()).Return(new ConcurrentDictionary<Guid, List<RtaAlarmLight>>());
+
+			var result = _target.IsAgentLoggedOut(_personId, "stateCode", _platFormTypeId, _businessUnitId);
 			result.Should().Be.False();
 		}
 	}

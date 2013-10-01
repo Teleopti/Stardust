@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			DataMaker.Data().Apply(new DayOffTemplateConfigurable() {Name = name});
 		}
 
+		[Given(@"(I) have a day off with")]
 		[Given(@"'(.*)' have a day off with")]
 		public void GivenHaveADayOffWith(string username, Table table)
 		{

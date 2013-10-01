@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			person.AddPersonPeriod(period2);
 
 			person2.AddPersonPeriod(period3);
-			person2.TerminalDate = new DateOnly(2003,1,1);
+			person2.TerminatePerson(new DateOnly(2003,1,1), new MockRepository().StrictMock<IPersonAccountUpdater>());
 
 			Assert.AreEqual(period2.StartDate.AddDays(-1),period1.EndDate());
 			Assert.AreEqual(new DateOnly(2059, 12, 31), period2.EndDate());
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			person.AddPersonPeriod(period2);
 
 			person2.AddPersonPeriod(period3);
-			person2.TerminalDate = new DateOnly(2003, 1, 1);
+			person2.TerminatePerson(new DateOnly(2003, 1, 1), new MockRepository().StrictMock<IPersonAccountUpdater>());
 
 			Assert.AreEqual(period2.Period.StartDate.AddDays(-1), period1.Period.EndDate);
 			Assert.AreEqual(new DateOnly(2059, 12, 31), period2.Period.EndDate);

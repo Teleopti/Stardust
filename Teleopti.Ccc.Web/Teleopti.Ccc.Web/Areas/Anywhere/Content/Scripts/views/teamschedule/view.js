@@ -39,26 +39,21 @@ define([
 		    subscriptions.subscribeTeamSchedule(
 				teamSchedule.SelectedTeam(),
 				helpers.Date.ToServer(teamSchedule.SelectedDate()),
-				function(schedules) {
-				    var currentPersons = teamSchedule.Persons();
-
-				    var dateClone = teamSchedule.SelectedDate().clone();
-
-				    for (var i = 0; i < schedules.length; i++) {
-				    	for (var j = 0; j < currentPersons.length; j++) {
-				    		if (currentPersons[j].Id == schedules[i].Id) {
-				    			currentPersons[j].ClearLayers();
-				    			break;
-				    		}
-				    	}
-				    }
+				function (schedules) {
+					var currentPersons = teamSchedule.Persons();
 					
-					for (var i = 0; i < schedules.length; i++) {
-						for (var j = 0; j < currentPersons.length; j++) {
-						    if (currentPersons[j].Id == schedules[i].Id) {
-						        currentPersons[j].AddLayers(schedules[i].Projection, teamSchedule.TimeLine, dateClone);
-						        currentPersons[j].AddContractTime(schedules[i].ContractTimeMinutes);
-						        currentPersons[j].AddWorkTime(schedules[i].WorkTimeMinutes);
+				    var dateClone = teamSchedule.SelectedDate().clone();
+					
+				    for (var i = 0; i < currentPersons.length; i++) {
+				    	currentPersons[i].ClearLayers();
+				    	currentPersons[i].ContractTimeMinutes(0);
+				    	currentPersons[i].WorkTimeMinutes(0);
+
+				    	for (var j = 0; j < schedules.length; j++) {
+						    if (currentPersons[i].Id == schedules[j].Id) {
+						    	currentPersons[i].AddLayers(schedules[j].Projection, teamSchedule.TimeLine, dateClone);
+						    	currentPersons[i].AddContractTime(schedules[j].ContractTimeMinutes);
+						    	currentPersons[i].AddWorkTime(schedules[j].WorkTimeMinutes);
 								break;
 							}
 						}
@@ -75,7 +70,16 @@ define([
 					options.success();
 				    
 					resize.notify();
-				});
+				},
+			    function (notification) {
+				    for (var i = 0; i < teamSchedule.Persons().length; i++) {
+					    if (notification.DomainReferenceId == teamSchedule.Persons()[i].Id) {
+						    return true;
+					    }
+				    }
+				    return false;
+			    }
+		    );
 		};
 
 		var loadPersons = function (options) {
@@ -112,19 +116,13 @@ define([
 
 		var loadDailyStaffingMetrics = function (options) {
 			if (teamSchedule.SelectedSkill() == null) return;
-			$.ajax({
-				url: 'StaffingMetrics/DailyStaffingMetrics',
-				cache: false,
-				dataType: 'json',
-				data: {
-					skillId: teamSchedule.SelectedSkill().Id,
-					date: teamSchedule.SelectedDate().toDate().toJSON()
-				},
-				success: function (data, textStatus, jqXHR) {
+			subscriptions.subscribeDailyStaffingMetrics(
+				helpers.Date.ToServer(teamSchedule.SelectedDate()),
+				teamSchedule.SelectedSkill().Id,
+				function (data) {
 					teamSchedule.SetDailyMetrics(data);
 					options.success();
-				}
-			});
+				});
 		};
 		var loadTeams = function (options) {
 		    ajax.ajax({
@@ -236,6 +234,11 @@ define([
 				var deferred = $.Deferred();
 				var loadPersonsAndSchedules = function () {
 					var currentTeam = currentTeamId();
+					if (!currentTeam) {
+						teamSchedule.Loading(false);
+						deferred.resolve();
+						return;
+					}
 					teamSchedule.SelectedTeam(currentTeam);
 					loadPersons({
 						success: function() {
@@ -261,6 +264,8 @@ define([
 			},
 			
 			dispose: function (options) {
+				subscriptions.unsubscribeTeamSchedule();
+				subscriptions.unsubscribeDailyStaffingMetrics();
 			    $(".datepicker.dropdown-menu").remove();
 			},
 			

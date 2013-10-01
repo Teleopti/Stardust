@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MvcContrib.TestHelper.Fakes;
@@ -6,6 +7,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
@@ -35,8 +38,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IScheduleViewModelFactory>();
 			var now = MockRepository.GenerateMock<INow>();
-			now.Stub(x => x.DateOnly()).Return(new DateOnly(2012, 8, 1));
-			viewModelFactory.Stub(x => x.CreateWeekViewModel(now.DateOnly())).Return(new WeekScheduleViewModel());
+			now.Stub(x => x.UtcDateTime()).Return(new DateTime(2012, 8, 1));
+			viewModelFactory.Stub(x => x.CreateWeekViewModel(now.LocalDateOnly())).Return(new WeekScheduleViewModel());
 
 			using (var target = new ScheduleController(viewModelFactory, null, now, null))
 			{

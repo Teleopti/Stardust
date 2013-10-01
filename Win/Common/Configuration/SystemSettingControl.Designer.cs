@@ -88,6 +88,7 @@
             this.comboBoxAdvIntervalLength.AllowNewText = false;
             this.comboBoxAdvIntervalLength.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.comboBoxAdvIntervalLength.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+            this.comboBoxAdvIntervalLength.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAdvIntervalLength.Location = new System.Drawing.Point(186, 37);
             this.comboBoxAdvIntervalLength.Name = "comboBoxAdvIntervalLength";
             this.comboBoxAdvIntervalLength.NumberOnly = true;

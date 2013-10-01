@@ -101,5 +101,10 @@ namespace Teleopti.Interfaces.Domain
 		/// 
 		/// </summary>
 		Guid BusinessUnit { get; set; }
+
+		/// <summary>
+		/// 
+		/// </summary>
+		bool SendOverMessageBroker { get; set; }
 	}
 }

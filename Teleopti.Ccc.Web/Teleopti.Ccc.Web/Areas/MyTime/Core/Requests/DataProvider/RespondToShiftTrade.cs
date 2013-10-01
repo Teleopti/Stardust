@@ -18,8 +18,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IMappingEngine _mapper;
 		private readonly IServiceBusSender _serviceBusSender;
-		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-		private readonly ICurrentBusinessUnit _businessUnitProvider;
 		private readonly INow _nu;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeRequestSetChecksum;
 
@@ -29,8 +27,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 									ILoggedOnUser loggedOnUser,
 									IMappingEngine mapper,
 									IServiceBusSender serviceBusSender,
-									ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
-									ICurrentBusinessUnit businessUnitProvider,
 									INow nu)
 		{
 			_personRequestRepository = personRequestRepository;
@@ -38,8 +34,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_loggedOnUser = loggedOnUser;
 			_mapper = mapper;
 			_serviceBusSender = serviceBusSender;
-			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
-			_businessUnitProvider = businessUnitProvider;
 			_nu = nu;
 			_shiftTradeRequestSetChecksum = shiftTradeRequestSetChecksum;
 		}
@@ -70,9 +64,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 		}
 
-		public RequestViewModel ResendReffered(Guid requestId)
+		public RequestViewModel ResendReferred(Guid requestId)
 		{
-			return OkByMe(requestId);
+			var personRequest = _personRequestRepository.Find(requestId);
+			if (personRequest == null)
+			{
+				return new RequestViewModel();
+			}
+
+			personRequest.Request.Accept(personRequest.Person, _shiftTradeRequestSetChecksum, _personRequestCheckAuthorization);
+			if (_serviceBusSender.EnsureBus())
+			{
+				_serviceBusSender.Send(new NewShiftTradeRequestCreated
+				{
+					PersonRequestId = personRequest.Id.GetValueOrDefault()
+				});
+			}
+
+			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 		}
 
 		private void persistWithBus(IPersonRequest personRequest)
@@ -81,9 +90,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			{
 				_serviceBusSender.Send(new AcceptShiftTrade
 													   {
-														   BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(),
-														   Datasource = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name,
-														   Timestamp = _nu.UtcDateTime(),
 														   PersonRequestId = personRequest.Id.GetValueOrDefault(),
 														   AcceptingPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
 														   Message = personRequest.GetMessage(new NoFormatting())

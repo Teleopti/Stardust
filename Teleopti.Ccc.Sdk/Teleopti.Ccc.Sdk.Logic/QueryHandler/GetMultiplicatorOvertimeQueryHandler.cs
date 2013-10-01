@@ -24,28 +24,22 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		{
 			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				IDisposable filter = null;
-				if (query.LoadDeleted)
+				using (unitOfWork.LoadDeletedIfSpecified(query.LoadDeleted))
 				{
-					filter = unitOfWork.DisableFilter(QueryFilter.Deleted);
+					IList<IMultiplicator> multiplicators = _multiplicatorRepository.LoadAllByTypeAndSortByName(MultiplicatorType.Overtime);
+					var result = multiplicators.Select(x => new MultiplicatorDto
+						{
+							Color = new ColorDto(x.DisplayColor),
+							Id = x.Id,
+							Multiplicator = x.MultiplicatorValue,
+							MultiplicatorType = (MultiplicatorTypeDto) x.MultiplicatorType,
+							Name = x.Description.Name,
+							PayrollCode = x.ExportCode,
+							ShortName = x.Description.ShortName,
+							IsDeleted = ((IDeleteTag) x).IsDeleted
+						}).ToArray();
+					return result;
 				}
-				var exports = _multiplicatorRepository.LoadAllByTypeAndSortByName(MultiplicatorType.Overtime);
-				var result = exports.Select(x => new MultiplicatorDto
-				                                 	{
-				                                 		Color = new ColorDto(x.DisplayColor),
-				                                 		Id = x.Id,
-				                                 		Multiplicator = x.MultiplicatorValue,
-				                                 		MultiplicatorType = (MultiplicatorTypeDto) x.MultiplicatorType,
-				                                 		Name = x.Description.Name,
-				                                 		PayrollCode = x.ExportCode,
-														ShortName = x.Description.ShortName,
-														IsDeleted = ((IDeleteTag)x).IsDeleted
-				                                 	}).ToArray();
-				if (filter != null)
-				{
-					filter.Dispose();
-				}
-				return result;
 			}
 		}
 	}

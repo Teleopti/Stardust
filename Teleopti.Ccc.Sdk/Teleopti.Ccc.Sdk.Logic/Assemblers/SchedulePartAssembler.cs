@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.Assemblers
@@ -108,7 +109,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             //vad ska hända här?
             //TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById(schedulePartDto.TimeZoneId));
             //scheduleDictionary.SetTimeZone(timeZoneInfo);
-            DateOnly date = new DateOnly(schedulePartDto.Date.DateTime);
+            DateOnly date = schedulePartDto.Date.ToDateOnly();
             return scheduleDictionary[person].ScheduledDay(date);
         }
 

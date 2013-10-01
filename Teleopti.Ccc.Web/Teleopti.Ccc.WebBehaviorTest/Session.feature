@@ -10,19 +10,35 @@ Scenario: Stay signed in after server restart
 	And the server restarts
 	And I navigate to an application page
 	Then I should be signed in
+	
+Scenario: Signed out when cookie expires
+	Given I am viewing an application page
+	Then I should be signed in
+	When my cookie expires
+	And I navigate to an application page
+	Then I should be signed out
+	
+Scenario: Signed out when time passes
+	Given the time is '2013-09-30 16:00'
+	And I am viewing an application page
+	Then I should be signed in
+	When the time is '2013-09-30 17:00'
+	And I navigate to an application page
+	Then I should be signed out
+	
+@ignore
+Scenario: Stay signed in when time passes with ASM open
+	Given the time is '2013-09-30 16:00'
+	And I am viewing ASM
+	When the time is '2013-09-30 17:00'
+	And I navigate to an application page
+	Then I should stay signed in
 
 Scenario: Signed out when cookie expires while I browse the internet
 	Given I am viewing an application page
 	Then I should be signed in
 	When my cookie expires
 	And I navigate the internet
-	And I navigate to an application page
-	Then I should be signed out
-
-Scenario: Signed out when cookie expires while I have the browser open
-	Given I am viewing an application page
-	Then I should be signed in
-	When my cookie expires
 	And I navigate to an application page
 	Then I should be signed out
 
@@ -60,3 +76,4 @@ Scenario: Corrupt cookie due to no longer existing database should be overwritte
 	Then I should be signed out
 	When I sign in again
 	Then I should be signed in
+

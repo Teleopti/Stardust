@@ -359,6 +359,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             Assert.AreEqual(skillIntervalData[5].CurrentHeads, 3);
         }
 
+        [Test]
+        public void VerifyThatTheSplitWhenIntervalIsInHour()
+        {
+            _skillIntervalDataList = new List<ISkillIntervalData>();
+            _skillIntervalDataList.Add(createSkillIntervalDataHour(0, 1, null, null, 0, 0, 7));
+            _skillIntervalDataList.Add(createSkillIntervalDataHour(1, 2, null, null, 0, 0, 1));
+            _skillIntervalDataList.Add(createSkillIntervalDataHour(2, 3, null, null, 0, 0, 3));
+            var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList, 30);
+            Assert.AreEqual(skillIntervalData.Count(), 6);
+            Assert.AreEqual(skillIntervalData[0].CurrentHeads, 7);
+            Assert.AreEqual(skillIntervalData[1].CurrentHeads, 7);
+            Assert.AreEqual(skillIntervalData[2].CurrentHeads, 1);
+            Assert.AreEqual(skillIntervalData[3].CurrentHeads, 1);
+            Assert.AreEqual(skillIntervalData[4].CurrentHeads, 3);
+            Assert.AreEqual(skillIntervalData[5].CurrentHeads, 3);
+        }
+
         private static bool verifyResult(double? valueToVerify,double resultValue )
         {
             if (!valueToVerify.HasValue) return false;
@@ -371,6 +388,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
             return new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(startMin), startDateTime.AddMinutes(endMin)), forecastedDemand, currentDemand, currentHeads, minHead, maxHead);
+        }
+
+        private static SkillIntervalData createSkillIntervalDataHour(int startHour, int endHour, double? minHead, double? maxHead, double forecastedDemand, double currentDemand, double currentHeads)
+        {
+            var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
+            return new SkillIntervalData(new DateTimePeriod(startDateTime.AddHours(startHour), startDateTime.AddHours(endHour)), forecastedDemand, currentDemand, currentHeads, minHead, maxHead);
         }
 
         

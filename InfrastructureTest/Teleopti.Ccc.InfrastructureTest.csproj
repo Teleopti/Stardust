@@ -240,7 +240,6 @@
     <Compile Include="Persisters\BugTest\Bug12891.cs" />
     <Compile Include="Persisters\PersistWriteProtectionTest.cs" />
     <Compile Include="Persisters\PersonAbsenceAccountConflictCollectorTest.cs" />
-    <Compile Include="Persisters\PersonAbsenceAccountRefresherTest.cs" />
     <Compile Include="Persisters\PersonRequestPersisterTest.cs" />
     <Compile Include="Persisters\ScheduleDictionaryBatchPersisterTest.cs" />
     <Compile Include="Persisters\ScheduleDictionaryConflictCollectorTest.cs" />
@@ -315,7 +314,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Repositories\PersonAvailabilityRepositoryTest.cs" />
-    <Compile Include="Repositories\GeneralRepositoryTest.cs" />
     <Compile Include="Repositories\PersonRotationRepositoryTest.cs" />
     <Compile Include="Repositories\ExternalLogOnRepositoryTest.cs" />
     <Compile Include="Repositories\MeetingRepositoryTest.cs" />
@@ -440,8 +438,7 @@
       <Link>Teleopti.Ccc.snk</Link>
     </None>
     <None Include="packages.config" />
-    <None Include="Teleopti.Ccc.InfrastructureTest.dll.Config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="App.Config">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
@@ -498,8 +495,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>if not exist "$(ProjectDir)App.Config" copy "$(ProjectDir)..\.debug-Setup\config\CruiseControl.config" "$(ProjectDir)App.Config"</PreBuildEvent>
     <PostBuildEvent>xcopy "$(ProjectDir)..\nhibernateAddons\Cache_Providers\*.dll" "$(TargetDir)" /y</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

@@ -174,7 +174,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see details with message '(.*)'")]
 		public void ThenIShouldSeeDetailsWithMessage(string message)
 		{
-			Browser.Interactions.AssertFirstContains(".request-text", message);
+			var fiftyFirstCharsOfMessage = message.Substring(0, 50);
+			Browser.Interactions.AssertFirstContains(".request-text", fiftyFirstCharsOfMessage);
 		}
 
 		[When(@"I enter subject '(.*)'")]

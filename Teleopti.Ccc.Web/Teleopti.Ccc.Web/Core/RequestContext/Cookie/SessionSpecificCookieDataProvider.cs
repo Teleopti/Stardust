@@ -2,6 +2,8 @@
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Security;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
@@ -30,7 +32,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			var userData = _dataStringSerializer.Serialize(data);
 			var userName = data.PersonId.ToString();
 
-			MakeCookie(userName, _now.LocalDateTime(), userData);
+			MakeCookie(userName, userData);
 		}
 
 		public SessionSpecificData GrabFromCookie()
@@ -43,20 +45,29 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 
 			var ticket = decryptCookie(cookie);
 			var userData = string.Empty;
-			if (ticket != null && !ticket.Expired)
+
+			if (ticket != null)
 			{
-				userData = ticket.UserData;
-				handleSlidingExpiration(cookie, ticket);
+				if (!tickedExpired(ticket))
+				{
+					userData = ticket.UserData;
+					handleSlidingExpiration(cookie, ticket);
+				}
 			}
 
 			return _dataStringSerializer.Deserialize(userData);
+		}
+
+		private bool tickedExpired(FormsAuthenticationTicket ticket)
+		{
+			return _now.UtcDateTime() > ticket.Expiration.ToUniversalTime();
 		}
 
 		public void ExpireTicket()
 		{
 			var cookie = getCookie();
 			var ticket = decryptCookie(cookie);
-			ticket = makeTicket(ticket.Name, _now.LocalDateTime(), ticket.UserData, DateTime.Now.AddHours(-1));
+			ticket = makeTicket(ticket.Name, ticket.UserData, _now.LocalDateTime().AddHours(-1));
 			cookie.Value = encryptTicket(ticket);
 			setCookie(cookie);
 		}
@@ -79,9 +90,9 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			_httpContext.Current().Response.Cookies.Add(cookie);
 		}
 
-		public void MakeCookie(string userName, DateTime now, string userData)
+		public void MakeCookie(string userName, string userData)
 		{
-			var ticket = makeTicket(userName, now, userData);
+			var ticket = makeTicket(userName, userData);
 
 			var encryptedTicket = encryptTicket(ticket);
 
@@ -98,22 +109,29 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			setCookie(cookie);
 		}
 
-		private FormsAuthenticationTicket makeTicket(string userName, DateTime now, string userData)
+		private FormsAuthenticationTicket makeTicket(string userName, string userData)
 		{
 			return makeTicket(
 				userName,
-				now,
 				userData,
-				now.Add(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpan)
+				_now.LocalDateTime().Add(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpan)
 				);
 		}
 
-		private FormsAuthenticationTicket makeTicket(string userName, DateTime now, string userData, DateTime expiration)
+		private FormsAuthenticationTicket makeTicket(FormsAuthenticationTicket ticket)
+		{
+			return makeTicket(
+				ticket.Name,
+				ticket.UserData)
+				;
+		}
+
+		private FormsAuthenticationTicket makeTicket(string userName, string userData, DateTime expiration)
 		{
 			var ticket = new FormsAuthenticationTicket(
 				1,
 				userName,
-				now,
+				_now.LocalDateTime(),
 				expiration,
 				false,
 				userData,
@@ -121,16 +139,24 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			return ticket;
 		}
 
+
 		private void handleSlidingExpiration(HttpCookie cookie, FormsAuthenticationTicket ticket)
 		{
 			if (!_sessionSpecificCookieDataProviderSettings.AuthenticationCookieSlidingExpiration) return;
 
-			var newTicket = FormsAuthentication.RenewTicketIfOld(ticket);
-			if (newTicket != ticket)
-			{
-				cookie.Value = encryptTicket(newTicket);
-				setCookie(cookie);				
-			}
+			if (!timeToRenewTicket(ticket)) return;
+
+			var newTicket = makeTicket(ticket);
+			cookie.Value = encryptTicket(newTicket);
+			setCookie(cookie);
+		}
+
+		private bool timeToRenewTicket(FormsAuthenticationTicket ticket)
+		{
+			var ticketAge = _now.LocalDateTime() - ticket.IssueDate;
+			var expiresIn = ticket.Expiration - _now.LocalDateTime();
+			var renew = ticketAge > expiresIn;
+			return renew;
 		}
 
 		private static FormsAuthenticationTicket decryptCookie(HttpCookie cookie)

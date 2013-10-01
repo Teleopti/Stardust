@@ -10,7 +10,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: robink
     /// Created date: 2008-09-18
     /// </remarks>
-    public interface ISkillStaffPeriod : ILayer<ISkillStaff>
+    public interface ISkillStaffPeriod : ILayer<ISkillStaff>, ICloneableEntity<ILayer<ISkillStaff>>
     {
         /// <summary>
         /// Gets the segment collection.
@@ -447,16 +447,5 @@ namespace Teleopti.Interfaces.Domain
 		/// The skillday the period belongs to
 		/// </summary>
 		ISkillDay SkillDay { get; }
-
-		/// <summary>
-		/// Added because all layers not are IEntity any longer
-		/// </summary>
-		/// <param name="parent"></param>
-		void SetParent(IEntity parent);
-
-		/// <summary>
-		/// The Parent
-		/// </summary>
-		IEntity Parent { get; }
     }
 }

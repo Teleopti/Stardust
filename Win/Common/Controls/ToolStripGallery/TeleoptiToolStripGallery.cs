@@ -220,13 +220,16 @@ namespace Teleopti.Ccc.Win.Common.Controls.ToolStripGallery
                 ToolStripGalleryItem toolStripGalleryItem = GetClickedToolStripGalleryItem(e);
 
 				var menuStrip = Parent.ContextMenuStrip;
-				menuStrip.Click -= ContextMenuStrip_Click;
-				menuStrip.Click += ContextMenuStrip_Click;
+                if (menuStrip != null)
+                {
+                    menuStrip.Click -= ContextMenuStrip_Click;
+                    menuStrip.Click += ContextMenuStrip_Click;
 
-				menuStrip.Closed += ContextMenuStripOnClosed;
+                    menuStrip.Closed += ContextMenuStripOnClosed;
 
-                isOpening = true;
-                OnItemClicked(e, toolStripGalleryItem, Parent.ContextMenuStrip);
+                    isOpening = true;
+                    OnItemClicked(e, toolStripGalleryItem, Parent.ContextMenuStrip);
+                }
             }
         }
 

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					PersonId = personId,
 					ShiftStart = date.AddHours(10),
 					ShiftEnd = date.AddHours(18),
-					Shift = "{shift: blablabla}",
+					Model = "{shift: blablabla}",
 				};
 
 			_target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, new[] { model }, false);
@@ -74,7 +74,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 					BusinessUnitId = Guid.NewGuid(),
 					ShiftStart = new DateTime(2012, 8, 29, 10, 0, 0, DateTimeKind.Utc),
 					ShiftEnd = new DateTime(2012, 8, 29, 18, 0, 0, DateTimeKind.Utc),
-					Shift = shift,
+					Model = shift,
 				};
 
 			_target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), personId, model.BusinessUnitId, new[] { model }, false);
@@ -97,7 +97,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 					BusinessUnitId = Guid.NewGuid(),
 					ShiftStart = new DateTime(2013, 4, 3, 10, 0, 0, DateTimeKind.Utc),
 					ShiftEnd = new DateTime(2013, 4, 3, 18, 0, 0, DateTimeKind.Utc),
-					Shift = "",
+					Model = "",
 				};
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -129,7 +129,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 					BusinessUnitId = Guid.NewGuid(),
 					ShiftStart = new DateTime(2013, 4, 3, 10, 0, 0, DateTimeKind.Utc),
 					ShiftEnd = new DateTime(2013, 4, 3, 18, 0, 0, DateTimeKind.Utc),
-					Shift = "",
+					Model = "",
 				};
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())

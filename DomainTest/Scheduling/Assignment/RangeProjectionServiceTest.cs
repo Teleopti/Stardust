@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Expect.Call(_scheduleRange.Person).Return(person);
                 Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2010, 5, 25))).Return(scheduleDay1);
                 Expect.Call(_scheduleRange.ScheduledDay(new DateOnly(2010, 5, 26))).Return(scheduleDay2);
-                Expect.Call(scheduleDay1.HasProjection).Return(true);
-                Expect.Call(scheduleDay2.HasProjection).Return(true);
+                Expect.Call(scheduleDay1.HasProjection()).Return(true);
+                Expect.Call(scheduleDay2.HasProjection()).Return(true);
                 Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService1);
                 Expect.Call(scheduleDay2.ProjectionService()).Return(projectionService2);
                 Expect.Call(projectionService1.CreateProjection()).Return(visualLayerCollection1);

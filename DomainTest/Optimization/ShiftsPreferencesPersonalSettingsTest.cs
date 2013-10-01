@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.AreEqual(false, _shiftPreferencesTarget.KeepShifts);
             Assert.AreEqual(0.8d, _shiftPreferencesTarget.KeepShiftsValue );
             Assert.AreEqual(false, _shiftPreferencesTarget.KeepStartTimes);
+			Assert.AreEqual(false, _shiftPreferencesTarget.KeepActivityLength);
             Assert.AreEqual(new List<IActivity>(), _shiftPreferencesTarget.SelectedActivities);
             Assert.AreEqual(new TimePeriod(), _shiftPreferencesTarget.SelectedTimePeriod );
         }
@@ -84,6 +85,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization
            
 
         }
+
+		[Test]
+		public void ShouldMapActivityToNotChangeTimeOnIfUserSaySo()
+		{
+			var activity = new Activity("Test");
+			activity.SetId(new Guid());
+			_activityList.Add(activity);
+			_shiftPreferencesSource.KeepActivityLength = true;
+			_shiftPreferencesSource.ActivityToKeepLengthOn = _activityList[0];
+
+			_target.MapFrom(_shiftPreferencesSource);
+			_target.MapTo(_shiftPreferencesTarget, _activityList);
+			Assert.AreSame(activity, _shiftPreferencesTarget.ActivityToKeepLengthOn);
+		}
 
     }
 }

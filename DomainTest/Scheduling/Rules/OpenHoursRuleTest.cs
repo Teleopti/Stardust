@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         public void VerifyValidateTrue()
         {
             
-             Expect.Call(_day.HasProjection).Return(false).Repeat.AtLeastOnce();
+             Expect.Call(_day.HasProjection()).Return(false).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
 
             _target = new OpenHoursRule(_state);
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			Expect.Call(_person.Period(_dateOnlyDate)).Return(_personPeriod).Repeat.Once();
             Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
             Expect.Call(_state.SkillStaffPeriodHolder).Return(holder).Repeat.AtLeastOnce();
-            Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
+            Expect.Call(_day.HasProjection()).Return(true).Repeat.AtLeastOnce();
             Expect.Call(_day.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(layerCollection).Repeat.AtLeastOnce();
             Expect.Call(holder.SkillSkillStaffPeriodDictionary).Return(skillSkillStaffPeriodExtendedDictionary).Repeat.Twice();
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			Expect.Call(_person.Period(_dateOnlyDate)).Return(_personPeriod).Repeat.Once();
             Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
             Expect.Call(_state.SkillStaffPeriodHolder).Return(holder).Repeat.AtLeastOnce();
-            Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
+            Expect.Call(_day.HasProjection()).Return(true).Repeat.AtLeastOnce();
             Expect.Call(_day.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(layerCollection).Repeat.AtLeastOnce();
             Expect.Call(holder.SkillSkillStaffPeriodDictionary).Return(skillSkillStaffPeriodExtendedDictionary).Repeat.Times(3);
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             
             var projectionService = _mocks.StrictMock<IProjectionService>();
                   
-			 Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
+			 Expect.Call(_day.HasProjection()).Return(true).Repeat.AtLeastOnce();
             Expect.Call(_day.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(layerCollection).Repeat.AtLeastOnce();
              _mocks.ReplayAll();
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             Expect.Call(_person.Period(_dateOnlyDate)).Return(_personPeriod).Repeat.Once();
             Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
             Expect.Call(_state.SkillStaffPeriodHolder).Return(holder).Repeat.AtLeastOnce();
-            Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
+            Expect.Call(_day.HasProjection()).Return(true).Repeat.AtLeastOnce();
             Expect.Call(_day.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(layerCollection).Repeat.AtLeastOnce();
             Expect.Call(holder.SkillSkillStaffPeriodDictionary).Return(skillSkillStaffPeriodExtendedDictionary);
@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             
             var projectionService = _mocks.StrictMock<IProjectionService>();
             
-            Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
+            Expect.Call(_day.HasProjection()).Return(true).Repeat.AtLeastOnce();
             Expect.Call(_day.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(layerCollection).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 			Expect.Call(_person.Period(_dateOnlyDate)).Return(_personPeriod).Repeat.Once();
             Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
-            Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
+            Expect.Call(_day.HasProjection()).Return(true).Repeat.AtLeastOnce();
             Expect.Call(_day.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(layerCollection).Repeat.AtLeastOnce();
            _mocks.ReplayAll();
@@ -317,7 +317,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			Expect.Call(_person.Period(_dateOnlyDate)).Return(_personPeriod).Repeat.Once();
             Expect.Call(_personPeriod.PersonSkillCollection).Return(personSkills).Repeat.AtLeastOnce();
             Expect.Call(_state.SkillStaffPeriodHolder).Return(holder).Repeat.AtLeastOnce();
-            Expect.Call(_day.HasProjection).Return(true).Repeat.AtLeastOnce();
+            Expect.Call(_day.HasProjection()).Return(true).Repeat.AtLeastOnce();
             Expect.Call(_day.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(layerCollection).Repeat.AtLeastOnce();
             Expect.Call(holder.SkillSkillStaffPeriodDictionary).Return(skillSkillStaffPeriodExtendedDictionary);

@@ -10,7 +10,7 @@ $(document).ready(function () {
 		viewModelDay.ReadPreference({
 			Preference: "a shift category",
 			MustHave: true,
-			Color: "black",
+			Color: "0,0,0",
 			Extended: true,
 			ExtendedTitle: "ExtendedTitle",
 			StartTimeLimitation: "8:00 am-9:00 am",
@@ -24,7 +24,7 @@ $(document).ready(function () {
 
 		equal(viewModelDay.Preference(), "a shift category");
 		equal(viewModelDay.MustHave(), true);
-		equal(viewModelDay.Color(), "black");
+		equal(viewModelDay.Color(), "rgb(0,0,0)");
 		equal(viewModelDay.Extended(), true);
 		equal(viewModelDay.ExtendedTitle(), "ExtendedTitle");
 		equal(viewModelDay.StartTimeLimitation(), "8:00 am-9:00 am");
@@ -82,7 +82,7 @@ $(document).ready(function () {
 				options.success({
 					Preference: "a shift category",
 					MustHave: true,
-					Color: "black",
+					Color: "0,0,0",
 					Extended: true,
 					ExtendedTitle: "ExtendedTitle",
 					StartTimeLimitation: "8:00 am-9:00 am",
@@ -104,7 +104,7 @@ $(document).ready(function () {
 
 		equal(viewModelDay.Preference(), "a shift category");
 		equal(viewModelDay.MustHave(), true);
-		equal(viewModelDay.Color(), "black");
+		equal(viewModelDay.Color(), "rgb(0,0,0)");
 		equal(viewModelDay.Extended(), true);
 		equal(viewModelDay.ExtendedTitle(), "ExtendedTitle");
 		equal(viewModelDay.StartTimeLimitation(), "8:00 am-9:00 am");
@@ -138,7 +138,7 @@ $(document).ready(function () {
 				equal(result.PreferenceId, "id");
 				options.success({
 					Preference: "a shift category",
-					Color: "black",
+					Color: "0,0,0",
 					Extended: false
 				});
 		};
@@ -151,7 +151,7 @@ $(document).ready(function () {
 		viewModelDay.SetPreference("id");
 
 		equal(viewModelDay.Preference(), "a shift category");
-		equal(viewModelDay.Color(), "black");
+		equal(viewModelDay.Color(), "rgb(0,0,0)");
 	});
 
 	test("should set extended preference", function () {
@@ -176,7 +176,7 @@ $(document).ready(function () {
 				equal(result.ActivityTimeMaximum, "0:30");
 				options.success({
 					Preference: "a shift category",
-					Color: "black",
+					Color: "0,0,0",
 					Extended: true
 				});
 		};
@@ -227,7 +227,7 @@ $(document).ready(function () {
 		viewModelDay.DeletePreference();
 
 		equal(viewModelDay.Preference(), "deleted!");
-		equal(viewModelDay.Color(), "deleted!");
+		equal(viewModelDay.Color(), "rgb(deleted!)");
 		equal(viewModelDay.Extended(), "deleted!");
 	});
 

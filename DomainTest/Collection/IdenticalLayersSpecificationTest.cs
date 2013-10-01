@@ -30,11 +30,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyIsSatisfiedByPeriod()
         {
-            var shiftToCheck = (IEditableShift)_mainShift.Clone();
+            var shiftToCheck = _mainShift.MakeCopy();
             Assert.IsTrue(_target.IsSatisfiedBy(shiftToCheck.ProjectionService().CreateProjection()));
 
 	        var oldLayer = shiftToCheck.LayerCollection[3];
-	        var newLayer = new EditorActivityLayer(oldLayer.Payload, oldLayer.Period.MovePeriod(TimeSpan.FromMinutes(1)));
+	        var newLayer = new EditableShiftLayer(oldLayer.Payload, oldLayer.Period.MovePeriod(TimeSpan.FromMinutes(1)));
 	        shiftToCheck.LayerCollection.Remove(oldLayer);
 			shiftToCheck.LayerCollection.Add(newLayer);
             Assert.IsFalse(_target.IsSatisfiedBy(shiftToCheck.ProjectionService().CreateProjection()));

@@ -11273,4 +11273,41 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="SubjectTooLong" xml:space="preserve">
     <value>Ämnet är för långt</value>
   </data>
+  <data name="OvertimeAvailabilityWeb" xml:space="preserve">
+    <value>Tillgänglighet för övertid</value>
+  </data>
+  <data name="PaidTimeHeader" xml:space="preserve">
+    <value>Betald tid</value>
+  </data>
+  <data name="PartTimePercentageHeader" xml:space="preserve">
+    <value>Deltidsprocentsats</value>
+  </data>
+  <data name="RuleSetBagLower" xml:space="preserve">
+    <value>Skiftpåse</value>
+  </data>
+  <data name="TrackerTypeHeader" xml:space="preserve">
+    <value>Uppföljningstyp</value>
+  </data>
+  <data name="WorkflowControlSetHeader" xml:space="preserve">
+    <value>Arbetsflöde</value>
+  </data>
+  <data name="WorkTimeHeader" xml:space="preserve">
+    <value>Arbetstid</value>
+  </data>
+  <data name="LengthOfActivity" xml:space="preserve">
+    <value>Total tid av vald aktivitet</value>
+    <comment>Total time of selected activity</comment>
+  </data>
+  <data name="ShiftAsOvertime" xml:space="preserve">
+    <value>Skift som övertid</value>
+  </data>
+  <data name="PerDate" xml:space="preserve">
+    <value>Per datum</value>
+  </data>
+  <data name="ShiftCategoryDistribution" xml:space="preserve">
+    <value>Skiftkategoridistribution</value>
+  </data>
+  <data name="Here" xml:space="preserve">
+    <value>här</value>
+  </data>
 </root>

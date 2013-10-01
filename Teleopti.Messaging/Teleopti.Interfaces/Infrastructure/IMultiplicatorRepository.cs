@@ -1,6 +1,5 @@
 #region Imports
 
-using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 

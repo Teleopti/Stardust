@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -13,15 +13,15 @@ namespace Teleopti.Ccc.DomainTest.Tracking
     {
         private MockRepository _mocker;
         private ITraceableRefreshService _target;
-        private IScenario _scenario;
-        private IRepositoryFactory _repositoryFactory;
+        private ICurrentScenario _scenario;
+        private IScheduleRepository _repositoryFactory;
 
         [SetUp]
         public void Setup()
         {
             _mocker = new MockRepository();
-            _scenario = _mocker.StrictMock<IScenario>();
-            _repositoryFactory = _mocker.Stub<IRepositoryFactory>();
+            _scenario = _mocker.StrictMock<ICurrentScenario>();
+            _repositoryFactory = _mocker.Stub<IScheduleRepository>();
             _target = new TraceableRefreshService(_scenario, _repositoryFactory);
         }
         
@@ -32,12 +32,13 @@ namespace Teleopti.Ccc.DomainTest.Tracking
             IAccount pacc = _mocker.StrictMock<IAccount>();
             using(_mocker.Record())
             {
-                Expect.Call(() => pacc.CalculateUsed(null, null, null)).IgnoreArguments().Repeat.Once();
+                Expect.Call(() => pacc.CalculateUsed(null, null)).IgnoreArguments().Repeat.Once();
+                Expect.Call(_scenario.Current()).Repeat.Once();
             }
             using(_mocker.Playback())
             {
-                _target.RefreshIfNeeded(pacc, uow); //should only run once
-                _target.RefreshIfNeeded(pacc, uow);
+                _target.RefreshIfNeeded(pacc); //should only run once
+                _target.RefreshIfNeeded(pacc);
             }
         }
 
@@ -48,13 +49,14 @@ namespace Teleopti.Ccc.DomainTest.Tracking
             IAccount pacc = _mocker.StrictMock<IAccount>();
             using (_mocker.Record())
             {
-                Expect.Call(() => pacc.CalculateUsed(null, null, null)).IgnoreArguments().Repeat.Twice();
+                Expect.Call(() => pacc.CalculateUsed(null, null)).IgnoreArguments().Repeat.Twice();
+                Expect.Call(_scenario.Current()).Repeat.Twice();
                 //Expect.Call(()=>pacc.CalculateBalanceIn()).Repeat.Twice();
             }
             using (_mocker.Playback())
             {
-                _target.Refresh(pacc, uow); 
-                _target.Refresh(pacc, uow);
+                _target.Refresh(pacc); 
+                _target.Refresh(pacc);
             }
         }
     }

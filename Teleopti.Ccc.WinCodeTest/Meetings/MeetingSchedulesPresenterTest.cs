@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -53,10 +54,13 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		    _schedulerStateHolder.TimeZoneInfo = _timeZone;
             _meetingSlotFinderService = _mocks.StrictMock<IMeetingSlotFinderService>();
 
-	        var now = new Now(() => null);
-            ((IModifyNow)now).SetNow(_startDate.Date.AddHours(15));
-            _model = MeetingComposerPresenter.CreateDefaultMeeting(_person, _schedulerStateHolder, _startDate,
-                                                                   new List<IPerson>(), now);
+		    _model = MeetingComposerPresenter.CreateDefaultMeeting(
+			    _person,
+			    _schedulerStateHolder,
+			    _startDate,
+			    new List<IPerson>(),
+			    new ThisIsNow(_startDate.Date.AddHours(15))
+			    );
             _model.StartTime = TimeSpan.FromHours(8);
             _model.EndTime = TimeSpan.FromHours(10);
 

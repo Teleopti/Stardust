@@ -29,10 +29,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 					if (thisIndex.Equals(lastIndex)) return;
 					var nightlyRest = _nightlyRestFromPersonOnDayExtractor.NightlyRestOnDay(validatedSchedulePartDto.DateOnly);
 					checkNightlyRest(validatedSchedulePartDto, validatedSchedulePartDtos[thisIndex + 1], nightlyRest);
-
 				}
 			}
-			
 		}
 
 		private static void checkNightlyRest(ValidatedSchedulePartDto part1, ValidatedSchedulePartDto part2, TimeSpan nightlyRest)
@@ -54,6 +52,5 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 				part2.ViolatesNightlyRest = true;
 			}
 		}
-
 	}
 }

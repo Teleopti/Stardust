@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		    serviceBus = mocks.StrictMock<ISendDelayedMessages>();
 		    scheduleProjectionReadOnlyRepository = mocks.StrictMock<IScheduleProjectionReadOnlyRepository>();
 			teleoptiRtaService = mocks.DynamicMock<IGetUpdatedScheduleChangeFromTeleoptiRtaService>();
+
             target = new UpdatedScheduleInfoHandler(serviceBus, scheduleProjectionReadOnlyRepository, teleoptiRtaService);
         }
 
@@ -153,6 +154,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
                 PersonId = person.Id.GetValueOrDefault(),
                 BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
             };
+	        Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
+	                                                                                  person.Id.GetValueOrDefault()))
+	              .IgnoreArguments().Return(DateTime.UtcNow.AddDays(2));
 
             mocks.ReplayAll();
             target.Handle(updatedSchduleDay);
@@ -184,6 +188,88 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
             mocks.ReplayAll();
             target.Handle(updatedSchduleDay);
             mocks.VerifyAll();
+		}
+
+		[Test]
+		public void UpdatedScheduleDay_NoNextActivity_ShouldNotEnqueue()
+		{
+			var person = PersonFactory.CreatePerson();
+			person.SetId(Guid.NewGuid());
+
+			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
+			bussinessUnit.SetId(Guid.NewGuid());
+
+			var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
+				{
+					ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
+					ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
+					PersonId = person.Id.GetValueOrDefault(),
+					BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
+				};
+			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
+			                                                                          person.Id.GetValueOrDefault()))
+			      .IgnoreArguments()
+			      .Return(null);
+
+			mocks.ReplayAll();
+			target.Handle(updatedSchduleDay);
+			mocks.VerifyAll();
+		}
+
+		[Test]
+		public void UpdatedScheduleDay_NextActivityBeforeScheduleChange_ShouldNotEnqueue()
+		{
+			var person = PersonFactory.CreatePerson();
+			person.SetId(Guid.NewGuid());
+
+			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
+			bussinessUnit.SetId(Guid.NewGuid());
+
+			var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
+			{
+				ActivityStartDateTime = DateTime.UtcNow.AddHours(4),
+				ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
+				PersonId = person.Id.GetValueOrDefault(),
+				BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
+			};
+			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
+																					  person.Id.GetValueOrDefault()))
+				  .IgnoreArguments()
+				  .Return(DateTime.UtcNow.AddHours(1));
+
+			mocks.ReplayAll();
+			target.Handle(updatedSchduleDay);
+			mocks.VerifyAll();
+		}
+
+		[Test]
+		public void UpdatedScheduleDay_NextActivityAfterScheduleChange_ShouldEnqueue()
+		{
+
+			var person = PersonFactory.CreatePerson();
+			person.SetId(Guid.NewGuid());
+
+			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
+			bussinessUnit.SetId(Guid.NewGuid());
+
+			var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
+			{
+				ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
+				ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
+				PersonId = person.Id.GetValueOrDefault(),
+				BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
+			};
+			Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
+																					  person.Id.GetValueOrDefault()))
+				  .IgnoreArguments()
+				  .Return(DateTime.UtcNow.AddHours(4));
+			Expect.Call(() => serviceBus.DelaySend(DateTime.UtcNow, null))
+			      .IgnoreArguments();
+
+
+			mocks.ReplayAll();
+			target.Handle(updatedSchduleDay);
+			mocks.VerifyAll();
 		}
 
 		[Test]

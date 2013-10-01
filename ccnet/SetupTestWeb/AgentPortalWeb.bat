@@ -7,9 +7,7 @@ SET ROOTDIR=%ROOTDIR:~0,-1%
 
 ::Get input
 SET SiteName=%~1
-SET CCC7DB=%~2
-SET AnalyticsDB=%~3
-SET AgentPortalWebURL=%~4
+SET AgentPortalWebURL=%~2
 
 SET DefaultSite="Default Web Site"
 SET DefaultSiteOnly=Default Web Site
@@ -49,12 +47,6 @@ powershell /file "%ROOTDIR%\CreateIISWebSiteAndApp.ps1" %Sitepath% %DefaultSite%
 ::ECHO .cs > excluded.txt
 XCOPY "%ROOTDIR%\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web" "%Sitepath%" /Y /R /S
 ::DEL /Q excluded.txt
-
-::Copy template nhib and replace databases
-COPY "%ROOTDIR%\WebTest.nhib.xml.template" "%Sitepath%\bin\WebTest.nhib.xml"
-cscript "%ROOTDIR%\replace.vbs" $(CCC7DB) %CCC7DB% "%Sitepath%\bin\WebTest.nhib.xml"
-cscript "%ROOTDIR%\replace.vbs" $(AnalyticsDB) %AnalyticsDB% "%Sitepath%\bin\WebTest.nhib.xml"
-cscript "%ROOTDIR%\replace.vbs" $(AgentPortalWebURL) %AgentPortalWebURL% "%Sitepath%\web.config"
 
 ::Set esent permissions
 "%Sitepath%\EsentPermissions.bat" "601" "1" "705" "IIS APPPOOL\%AppPoolName%"

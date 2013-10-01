@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     public class NewAbsenceRequestConsumer : ConsumerOf<NewAbsenceRequestCreated>
     {
         private readonly static ILog Logger = LogManager.GetLogger(typeof(NewAbsenceRequestConsumer));
-        private readonly IScheduleRepository _scheduleRepository;
+	    private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+	    private readonly IScheduleRepository _scheduleRepository;
         private readonly IPersonAbsenceAccountProvider _personAbsenceAccountProvider;
         private readonly ICurrentScenario _scenarioRepository;
         private readonly IPersonRequestRepository _personRequestRepository;
@@ -55,13 +56,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCount")]
-    	public NewAbsenceRequestConsumer(IScheduleRepository scheduleRepository, IPersonAbsenceAccountProvider personAbsenceAccountProvider, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, ISchedulingResultStateHolder schedulingResultStateHolder, 
+		public NewAbsenceRequestConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, IScheduleRepository scheduleRepository, IPersonAbsenceAccountProvider personAbsenceAccountProvider, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, ISchedulingResultStateHolder schedulingResultStateHolder, 
                                          IAbsenceRequestOpenPeriodMerger absenceRequestOpenPeriodMerger, IRequestFactory factory,
                                          IScheduleDictionarySaver scheduleDictionarySaver, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback, 
                                          IResourceOptimizationHelper resourceOptimizationHelper, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, 
                                          ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation, IAlreadyAbsentSpecification alreadyAbsentSpecification, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification)
         {
-            _scheduleRepository = scheduleRepository;
+	        _unitOfWorkFactory = unitOfWorkFactory;
+	        _scheduleRepository = scheduleRepository;
             _personAbsenceAccountProvider = personAbsenceAccountProvider;
             _scenarioRepository = scenarioRepository;
             _personRequestRepository = personRequestRepository;
@@ -101,7 +103,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                                    message.PersonRequestId, message.Timestamp);
             }
 
-            using (IUnitOfWork unitOfWork = UnitOfWorkFactoryContainer.Current.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            using (IUnitOfWork unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 foreach (var action in _loadDataActions)
                 {

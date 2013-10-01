@@ -2,9 +2,6 @@
 
 :: goto start
 
-echo Please configure this file by editing it before running
-pause
-exit
 
 :start
 

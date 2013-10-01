@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
         private IBusinessRuleResponse checkScheduleDay(IScheduleDay scheduleDay, IPerson person, DateOnly dateOnly)
         {
-            if (scheduleDay.HasProjection)
+            if (scheduleDay.HasProjection())
             {
                 IVisualLayerCollection layerCollection = scheduleDay.ProjectionService().CreateProjection();
                 if (layerCollection == null || !layerCollection.HasLayers)

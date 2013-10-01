@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Comparers;
+using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Columns

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WinCode.Common
             foreach (DateOnly day in dateOnlyPeriod.DayCollection())
             {
                 IScheduleDay scheduleDay = scheduleRange.ScheduledDay(day);
-                if (scheduleDay.HasProjection)
+                if (scheduleDay.HasProjection())
                 {
                     var projectedLayers = scheduleDay.ProjectionService().CreateProjection().FilterLayers(period);
                     foreach (IVisualLayer visualLayer in projectedLayers)

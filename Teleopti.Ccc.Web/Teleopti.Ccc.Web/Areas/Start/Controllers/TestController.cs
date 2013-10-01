@@ -14,14 +14,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
 	public class TestController : Controller
 	{
-		private readonly IModifyNow _modifyNow;
+		private readonly IMutateNow _mutateNow;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IAuthenticator _authenticator;
 		private readonly IWebLogOn _logon;
 		private readonly IBusinessUnitProvider _businessUnitProvider;
 
-		public TestController(IModifyNow 
-			modifyNow, 
+		public TestController(
+			IMutateNow mutateNow, 
 			ISessionSpecificDataProvider 
 			sessionSpecificDataProvider, 
 			IAuthenticator authenticator, 
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			IBusinessUnitProvider businessUnitProvider
 			)
 		{
-			_modifyNow = modifyNow;
+			_mutateNow = mutateNow;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_authenticator = authenticator;
 			_logon = logon;
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public ViewResult CorruptMyCookie()
 		{
 			var wrong = Convert.ToBase64String(Convert.FromBase64String("Totally wrong"));
-			_sessionSpecificDataProvider.MakeCookie("UserName", DateTime.Now, wrong);
+			_sessionSpecificDataProvider.MakeCookie("UserName", wrong);
 			var viewModel = new TestMessageViewModel
 			                	{
 			                		Title = "Corrup my cookie",
@@ -100,11 +100,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			return View("Message", viewModel);
 		}
 
-		public ViewResult WidgetStylingSample()
-		{
-			return View();
-		}
-
 		public ViewResult SetCurrentTime(DateTime dateSet)
 		{
 			updateIocNow(dateSet);
@@ -121,7 +116,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		private void updateIocNow(DateTime? dateTimeSet)
 		{
-			_modifyNow.SetNow(dateTimeSet);
+			_mutateNow.Mutate(dateTimeSet);
 		}
 
 		//public JsonResult CrashApplicationPool()

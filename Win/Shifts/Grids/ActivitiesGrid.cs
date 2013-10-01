@@ -346,24 +346,24 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
                 return;
             }
 
-            var ActivityNormal = ((AbsolutePositionViewModel)e.DataItem);
-            IActivity activity = ActivityNormal.CurrentActivity;// (from p in Presenter.Explorer.Model.ActivityCollection where p.Equals(ActivityNormal.CurrentActivity) select p).First();
+            var activityNormal = (AbsolutePositionViewModel)e.DataItem;
+            IActivity activity = activityNormal.CurrentActivity;
             if (e.NewType == typeof(ActivityAbsoluteStartExtender))
             {
-                var aasEntender = new ActivityAbsoluteStartExtender(activity, ActivityNormal.ContainedEntity.ActivityLengthWithSegment, ActivityNormal.ContainedEntity.ActivityPositionWithSegment);
-                Presenter.ChangeExtenderType(ActivityNormal, aasEntender);
+                var aasEntender = new ActivityAbsoluteStartExtender(activity, activityNormal.ContainedEntity.ActivityLengthWithSegment, activityNormal.ContainedEntity.ActivityPositionWithSegment);
+                Presenter.ChangeExtenderType(activityNormal, aasEntender);
             }
 
             if (e.NewType == typeof(ActivityRelativeStartExtender))
             {
-                var arsExtender = new ActivityRelativeStartExtender(activity, ActivityNormal.ContainedEntity.ActivityLengthWithSegment, ActivityNormal.ContainedEntity.ActivityPositionWithSegment);
-                Presenter.ChangeExtenderType(ActivityNormal, arsExtender);
+                var arsExtender = new ActivityRelativeStartExtender(activity, activityNormal.ContainedEntity.ActivityLengthWithSegment, activityNormal.ContainedEntity.ActivityPositionWithSegment);
+                Presenter.ChangeExtenderType(activityNormal, arsExtender);
             }
 
             if (e.NewType == typeof(ActivityRelativeEndExtender))
             {
-                var areExtender = new ActivityRelativeEndExtender(activity, ActivityNormal.ContainedEntity.ActivityLengthWithSegment, ActivityNormal.ContainedEntity.ActivityPositionWithSegment);
-                Presenter.ChangeExtenderType(ActivityNormal, areExtender);
+                var areExtender = new ActivityRelativeEndExtender(activity, activityNormal.ContainedEntity.ActivityLengthWithSegment, activityNormal.ContainedEntity.ActivityPositionWithSegment);
+                Presenter.ChangeExtenderType(activityNormal, areExtender);
             }
             Grid.Invalidate();
         }
@@ -455,12 +455,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             styleInfo.BackColor = Color.Red;
             if (dataItem.APSegment.Equals(TimeSpan.Zero))
                 valid = false;
-            if (dataItem.APSegment == null)
-            {
-                valid = false;
-                styleInfo.BackColor = Color.Gray;
-            }
-            if (valid)
+	        if (valid)
                 styleInfo.ResetBackColor();
         }
 

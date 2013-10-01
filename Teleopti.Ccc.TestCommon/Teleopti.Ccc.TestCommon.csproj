@@ -87,7 +87,9 @@
     <Compile Include="FakeData\FakeDataSource.cs" />
     <Compile Include="FakeData\FakePersonAssignmentRepository.cs" />
     <Compile Include="FakeData\FakePersonRepository.cs" />
+    <Compile Include="FakeData\PersonAccountCollectionFactory.cs" />
     <Compile Include="FakeData\ScheduleDayFactory.cs" />
+    <Compile Include="FakeLoggedOnUser.cs" />
     <Compile Include="GenericDisposable.cs" />
     <Compile Include="IniFileInfo.cs" />
     <Compile Include="CrossThreadTestRunner.cs" />
@@ -197,6 +199,7 @@
     <Compile Include="TestData\Analytics\WeekdayTranslations.cs" />
     <Compile Include="TestData\Core\IAnalyticsDataSetup.cs" />
     <Compile Include="TestData\Core\AnalyticsDataFactory.cs" />
+    <Compile Include="TestData\LayersExtensions.cs" />
     <Compile Include="UsedInTestState.cs" />
   </ItemGroup>
   <ItemGroup>

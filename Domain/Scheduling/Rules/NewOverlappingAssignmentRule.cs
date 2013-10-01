@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
@@ -24,40 +25,62 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
         public bool ForDelete { get; set; }
 
-        public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
-        {
-            var responseList = new HashSet<IBusinessRuleResponse>();
-            if (!ForDelete)
-            {
-                foreach (IScheduleDay day in scheduleDays)
-                {
-                    var person = day.Person;
-                    var currentSchedules = rangeClones[person];
-                    var dateToCheck = day.DateOnlyAsPeriod.DateOnly;
-                    var daysToCheck = currentSchedules.ScheduledDayCollection(new DateOnlyPeriod(dateToCheck.AddDays(-1), dateToCheck.AddDays(1)));
+	    public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones,
+	                                                       IEnumerable<IScheduleDay> scheduleDays)
+	    {
+		    var responseList = new HashSet<IBusinessRuleResponse>();
+		    if (!ForDelete)
+		    {
+			    foreach (IScheduleDay day in scheduleDays)
+			    {
+				    var person = day.Person;
+				    var dateToCheck = day.DateOnlyAsPeriod.DateOnly;
+				    foreach (var assignment in day.PersonAssignmentCollection())
+				    {
+					    var assignmentPeriod = assignment.Period;
+					    var range = rangeClones[person];
+						checkToday(day, assignmentPeriod, person, dateToCheck, responseList);
+						checkAgainstOtherDate(person, dateToCheck.AddDays(-1), assignmentPeriod, range, responseList);
+						checkAgainstOtherDate(person, dateToCheck.AddDays(1), assignmentPeriod, range, responseList);
+				    }
+			    }
+		    }
 
-                    var periodToValidate = new DateOnlyPeriod(dateToCheck.AddDays(-1), dateToCheck.AddDays(1))
-                        .ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-                    foreach (var scheduleDay in daysToCheck)
-                    {
-                        foreach (var conflict in scheduleDay.PersonAssignmentConflictCollection)
-                        {
-                            if (periodToValidate.Intersect(conflict.Period))
-                            {
-                                IBusinessRuleResponse response = CreateResponse(person, scheduleDay.DateOnlyAsPeriod.DateOnly, UserTexts.Resources.BusinessRuleOverlappingErrorMessage2,
-                                                                                typeof(NewOverlappingAssignmentRule));
+		    return responseList;
+	    }
 
-                                responseList.Add(response);
-                            }
-                        }
-                    }
-                }
-            }   
-            
-            return responseList;
-        }
+		private void checkToday(IScheduleDay day, DateTimePeriod assignmentPeriod, IPerson person, DateOnly dateToCheck,
+	                            HashSet<IBusinessRuleResponse> responseList)
+	    {
+		    foreach (var conflict in day.PersonAssignmentConflictCollection)
+		    {
+				if (assignmentPeriod.Intersect(conflict.Period))
+			    {
+				    IBusinessRuleResponse response = createResponse(person, dateToCheck,
+				                                                    UserTexts.Resources.BusinessRuleOverlappingErrorMessage2,
+				                                                    typeof (NewOverlappingAssignmentRule));
+				    responseList.Add(response);
+			    }
+		    }
+	    }
 
-        private IBusinessRuleResponse CreateResponse(IPerson person, DateOnly dateOnly, string message, Type type)
+		private void checkAgainstOtherDate(IPerson person, DateOnly otherDateTocheck, DateTimePeriod assignmentPeriod, IScheduleRange range, HashSet<IBusinessRuleResponse> responseList)
+		{
+			var otherDay = range.ScheduledDay(otherDateTocheck);
+		    foreach (var otherAss in otherDay.PersonAssignmentCollection())
+		    {
+			    if (assignmentPeriod.Intersect(otherAss.Period))
+			    {
+					IBusinessRuleResponse response = createResponse(person, otherDateTocheck,
+																	UserTexts.Resources.BusinessRuleOverlappingErrorMessage2,
+																	typeof(NewOverlappingAssignmentRule));
+					responseList.Add(response);
+			    }
+		    }
+
+		}
+
+        private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message, Type type)
         {
             var dop = new DateOnlyPeriod(dateOnly, dateOnly);
             DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());

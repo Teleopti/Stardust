@@ -41,13 +41,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CassiniDev4-lib, Version=4.0.1.6, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CassiniDev\AnyCPU build\CassiniDev4-lib.dll</HintPath>
-    </Reference>
     <Reference Include="Common.Logging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="IISExpress.Automation">
+      <HintPath>..\..\packages\IISExpress.Automation.0.1.1\lib\net40\IISExpress.Automation.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
@@ -92,12 +91,24 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="Anywhere\ViewConfidentialAbsence.feature.cs">
-      <DependentUpon>ViewConfidentialAbsence.feature</DependentUpon>
+    <Compile Include="Anywhere\TeamScheduleSorting.feature.cs">
+      <DependentUpon>TeamScheduleSorting.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Anywhere\ViewConfidentialAbsence.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ViewConfidentialAbsence.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Anywhere\ViewDaysOff.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ViewDaysOff.feature</DependentUpon>
+    </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\NothingStepDefinitions.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionsKnockoutExtensions.cs" />
     <Compile Include="Data\Setups\Generic\OvertimeAvailabilityConfigurable.cs" />
     <Compile Include="Bindings\Generic\OvertimeAvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
@@ -180,6 +191,7 @@
     <Compile Include="Data\CryptoCreator.cs" />
     <Compile Include="Data\HardCodedResolver.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
+    <Compile Include="Bindings\Generic\ServerStepDefinitions.cs" />
     <Compile Include="TeamScheduleForGroups.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -265,7 +277,7 @@
     <Compile Include="Bindings\Generic\DayOffStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftCategoryStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\TimeStepDefinition.cs" />
+    <Compile Include="Bindings\Generic\TimeStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\UserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
@@ -482,7 +494,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Session.feature</DependentUpon>
     </Compile>
-    <Compile Include="SessionStepDefinition.cs" />
+    <Compile Include="Bindings\Generic\CookieStepDefinitions.cs" />
     <Compile Include="TeamSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -613,6 +625,18 @@
     <Content Include="BeforeTestRun.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Anywhere\TeamScheduleSorting.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>TeamScheduleSorting.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\ViewDaysOff.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ViewDaysOff.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Data\iisexpress.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Data\PasswordPolicy.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -853,7 +877,8 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>"$(SolutionDir)packages\SpecFlow.1.9.0\tools\specflow.exe" generateall "$(ProjectDir)Teleopti.Ccc.WebBehaviorTest.csproj"</PreBuildEvent>
+    <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\.debug-Setup\config\Teleopti.Ccc.WebBehaviorTest.App.config" "$(ProjectDir)App.config"
+"$(SolutionDir)packages\SpecFlow.1.9.0\tools\specflow.exe" generateall "$(ProjectDir)Teleopti.Ccc.WebBehaviorTest.csproj"</PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void ShouldPassDateToMapping()
 		{
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonDeserializer<ExpandoObject>(), _permissionProvider);
+			var target = new PersonScheduleViewModelFactory(FakePersonRepository(), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonDeserializer(), _permissionProvider);
 			
 			target.CreateViewModel(Guid.NewGuid(), DateTime.Today);
 
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var person = FakePerson();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonDeserializer<ExpandoObject>(), _permissionProvider);
+			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonDeserializer(), _permissionProvider);
 
 			target.CreateViewModel(person.Id.Value, DateTime.Today);
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var person = FakePerson();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonDeserializer<ExpandoObject>(), _permissionProvider);
+			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonDeserializer(), _permissionProvider);
 			_permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential,
 			                                                    DateOnly.Today, person)).Return(true);
 			target.CreateViewModel(person.Id.Value, DateTime.Today);
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var absenceRepository = MockRepository.GenerateMock<IAbsenceRepository>();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), absenceRepository, personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonDeserializer<ExpandoObject>(), _permissionProvider);
+			var target = new PersonScheduleViewModelFactory(FakePersonRepository(), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), absenceRepository, personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonDeserializer(), _permissionProvider);
 			var absences = new[] { new Absence() };
 			absenceRepository.Stub(x => x.LoadAllSortByName()).Return(absences);
 
@@ -108,15 +108,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var person = FakePerson();
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonDeserializer<ExpandoObject>(), _permissionProvider);
-			var shifts = new {FirstName = "Pierre"};
-			var readModel = new PersonScheduleDayReadModel {Shift = Newtonsoft.Json.JsonConvert.SerializeObject(shifts)};
+			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonDeserializer(), _permissionProvider);
+			var readModel = new PersonScheduleDayReadModel {Model = Newtonsoft.Json.JsonConvert.SerializeObject(new Model {FirstName = "Pierre"})};
 
 			personScheduleDayReadModelRepository.Stub(x => x.ForPerson(DateOnly.Today, person.Id.Value)).Return(readModel);
 
 			target.CreateViewModel(person.Id.Value, DateTime.Today);
 
-			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => MatchDynamic(s))));
+			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.Model.FirstName == "Pierre")));
 		}
 
 		[Test]
@@ -130,15 +129,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
 			var personAbsenceRepository = MockRepository.GenerateMock<IPersonAbsenceRepository>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonDeserializer<ExpandoObject>(), _permissionProvider);
-			var shifts = new {FirstName = "Pierre"};
-			var readModel = new PersonScheduleDayReadModel {Shift = Newtonsoft.Json.JsonConvert.SerializeObject(shifts)};
-
+			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonDeserializer(), _permissionProvider);
+			var readModel = new PersonScheduleDayReadModel {Model = Newtonsoft.Json.JsonConvert.SerializeObject(new Model {FirstName = "Pierre"})};
 			personScheduleDayReadModelRepository.Stub(x => x.ForPerson(DateOnly.Today, person.Id.Value)).Return(readModel);
 
 			target.CreateViewModel(person.Id.Value, DateTime.Today);
 
-			personScheduleViewModelMapper.AssertWasNotCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => MatchDynamic(s))));
+			personScheduleViewModelMapper.AssertWasNotCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.Model != null)));
 			personAbsenceRepository.AssertWasNotCalled(x => x.Find(new[] { person }, new DateTimePeriod()), y => y.IgnoreArguments());
 		}
 
@@ -156,28 +153,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
 			var personAbsenceRepository = MockRepository.GenerateMock<IPersonAbsenceRepository>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonDeserializer<ExpandoObject>(), _permissionProvider);
-			var shifts = new { FirstName = "Pierre" };
-			var readModel = new PersonScheduleDayReadModel { Shift = Newtonsoft.Json.JsonConvert.SerializeObject(shifts) };
+			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonDeserializer(), _permissionProvider);
+			var readModel = new PersonScheduleDayReadModel {Model = Newtonsoft.Json.JsonConvert.SerializeObject(new Model {FirstName = "Pierre"})};
 
 			personScheduleDayReadModelRepository.Stub(x => x.ForPerson(DateOnly.Today, person.Id.Value)).Return(readModel);
 
 			target.CreateViewModel(person.Id.Value, DateTime.Today);
 
-			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => MatchDynamic(s))));
+			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.Model.FirstName == "Pierre")));
 			personAbsenceRepository.AssertWasCalled(x => x.Find(new[] {person}, new DateTimePeriod()), y => y.IgnoreArguments());
-		}
-
-		private static bool MatchDynamic(PersonScheduleData s)
-		{
-			return s.Shift is ExpandoObject && s.Shift.FirstName == "Pierre";
 		}
 
 		[Test]
 		public void ShouldCreateViewModelUsingMapping()
 		{
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonDeserializer<ExpandoObject>(), _permissionProvider);
+			var target = new PersonScheduleViewModelFactory(FakePersonRepository(), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonDeserializer(), _permissionProvider);
 			var viewModel = new PersonScheduleViewModel();
 			personScheduleViewModelMapper.Stub(x => x.Map(Arg<PersonScheduleData>.Is.Anything)).Return(viewModel);
 
@@ -192,7 +183,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			var personAbsenceRepository = MockRepository.GenerateMock<IPersonAbsenceRepository>();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(personRepository, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonDeserializer<ExpandoObject>(), _permissionProvider);
+			var target = new PersonScheduleViewModelFactory(personRepository, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonDeserializer(), _permissionProvider);
 
 			var person = FakePerson();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.SingaporeTimeZoneInfo());
@@ -217,7 +208,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var personAbsenceRepository = MockRepository.GenerateMock<IPersonAbsenceRepository>();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
-			var target = new PersonScheduleViewModelFactory(personRepository, personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonDeserializer<ExpandoObject>(), _permissionProvider);
+			var target = new PersonScheduleViewModelFactory(personRepository, personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonDeserializer(), _permissionProvider);
 			var person = FakePerson();
 			var date = new DateTime(2013, 5, 7);
 			var shiftStart = DateTime.SpecifyKind(new DateTime(2013, 5, 7, 19, 0, 0, 0), DateTimeKind.Utc);
@@ -247,7 +238,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var personAbsenceRepository = MockRepository.GenerateMock<IPersonAbsenceRepository>();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
-			var target = new PersonScheduleViewModelFactory(personRepository, personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonDeserializer<ExpandoObject>(), _permissionProvider);
+			var target = new PersonScheduleViewModelFactory(personRepository, personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonDeserializer(), _permissionProvider);
 			var person = FakePerson();
 			var date = new DateTime(2013, 5, 7);
 			var shiftStart = DateTime.SpecifyKind(new DateTime(2013, 5, 6, 19, 0, 0, 0), DateTimeKind.Utc);

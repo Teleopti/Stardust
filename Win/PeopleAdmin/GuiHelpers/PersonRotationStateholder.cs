@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             get
             {
                 if (_prRepository == null)
-                    _prRepository = new PersonRotationRepository(FilteredStateHolder.UnitOfWork);
+                    _prRepository = new PersonRotationRepository(FilteredStateHolder.GetUnitOfWork);
 
                 return _prRepository;
             }
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
             //lets load the _childPersonRotationCollection as it is to be used in some other methods
             GetChildPersonRotations(rowIndex);
-            PersonRotationRepository prRepository = new PersonRotationRepository(_filteredPeopleHolder.UnitOfWork);
+            PersonRotationRepository prRepository = new PersonRotationRepository(_filteredPeopleHolder.GetUnitOfWork);
 
             IPersonRotation rotationToBeRemoved = _filteredPeopleHolder.ParentPersonRotationCollection[rowIndex];
 

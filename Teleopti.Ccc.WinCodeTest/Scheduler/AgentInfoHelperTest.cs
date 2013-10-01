@@ -260,16 +260,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IPersonAssignment getPersonAssignment()
         {
             var mainShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory("Day"));
-            ILayerCollection<IActivity> layerCollection = new LayerCollection<IActivity>();
             IActivity activity = ActivityFactory.CreateActivity("Phone");
             activity.InContractTime = true;
             activity.InWorkTime = true;
             activity.InPaidTime = true;
-            ILayer<IActivity> layer = new EditorActivityLayer(activity,
+            var layer = new EditableShiftLayer(activity,
                                                                  new DateTimePeriod(_dateTime.AddHours(7),
                                                                                     _dateTime.AddHours(12)));
-            layerCollection.Add(layer);
-            mainShift.LayerCollection.AddRange(layerCollection);
+            mainShift.LayerCollection.Add(layer);
             var assignment = new PersonAssignment(_person, _scenario, _dateOnly);
             new EditableShiftMapper().SetMainShiftLayers(assignment, mainShift);
             return assignment;

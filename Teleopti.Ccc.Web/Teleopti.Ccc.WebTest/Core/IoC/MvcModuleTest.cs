@@ -47,6 +47,7 @@ using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using ITeamScheduleViewModelFactory = Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory.ITeamScheduleViewModelFactory;
 
 
 namespace Teleopti.Ccc.WebTest.Core.IoC

@@ -25,11 +25,12 @@ namespace Teleopti.Ccc.Domain.Common
         private bool _adjustTimeBankWithSeasonality;
         private bool _adjustTimeBankWithPartTimePercentage;
         private WorkTimeSource _workTimeSource;
-        /// <summary>
+        
+		/// <summary>
         /// Creates a new instance of Contract
         /// </summary>
         /// <param name="name">Name of Contract</param>
-        public Contract(string name)
+        public Contract(string name) : this()
         {
             _employmentType = EmploymentType.FixedStaffNormalWorkTime;
             _description = new Description(name);
@@ -40,7 +41,6 @@ namespace Teleopti.Ccc.Domain.Common
         /// </summary>
         protected Contract()
         {
-            //
         }
 
         /// <summary>
@@ -66,10 +66,7 @@ namespace Teleopti.Ccc.Domain.Common
         /// </summary>
         public virtual WorkTimeDirective WorkTimeDirective
         {
-            get
-            {
-                return _workTimeDirective;
-            }
+            get { return _workTimeDirective; }
             set { _workTimeDirective = value; }
         }
 
@@ -78,10 +75,7 @@ namespace Teleopti.Ccc.Domain.Common
         /// </summary>
         public virtual WorkTime WorkTime
         {
-            get
-            {
-                return _workTime;
-            }
+            get { return _workTime; }
             set { _workTime = value; }
         }
 
@@ -91,14 +85,6 @@ namespace Teleopti.Ccc.Domain.Common
         /// <value>
         /// 	<c>true</c> if this instance is choosable; otherwise, <c>false</c>.
         /// </value>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-09-09
-        /// </remarks>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-09-09
-        /// </remarks>
         public virtual bool IsChoosable
         {
             get { return !IsDeleted; }

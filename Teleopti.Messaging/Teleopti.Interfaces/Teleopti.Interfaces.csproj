@@ -119,6 +119,7 @@
     <Compile Include="Domain\ICalculator.cs" />
     <Compile Include="Domain\IDayOff.cs" />
     <Compile Include="Domain\IEditableShift.cs" />
+    <Compile Include="Domain\IEditableShiftLayer.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />
     <Compile Include="Domain\IChangePasswordResultInfo.cs" />
     <Compile Include="Domain\IEvent.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="Domain\IMainShiftLayer.cs" />
     <Compile Include="Domain\IMoveLayerVertical.cs" />
     <Compile Include="Domain\IOvertimeShiftLayer.cs" />
+    <Compile Include="Domain\IPersonAccountUpdater.cs" />
     <Compile Include="Domain\IPersonalShiftLayer.cs" />
     <Compile Include="Domain\IOvertimePreferences.cs" />
     <Compile Include="Domain\IOvertimeAvailability.cs" />

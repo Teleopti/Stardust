@@ -173,13 +173,14 @@
     <Compile Include="Collection\IdenticalLayersSpecificationTest.cs" />
     <Compile Include="Collection\TeamCollectionTest.cs" />
     <Compile Include="Common\DateTimePeriodPerStartTimeSorterTest.cs" />
-    <Compile Include="Common\LayersExtensionsPeriodTest.cs" />
+    <Compile Include="Common\PeriodExtensionsTest.cs" />
     <Compile Include="Common\LayersExtensionsProjectionTest.cs" />
     <Compile Include="Common\ListAggregatorTest.cs" />
-    <Compile Include="Common\ModifyNowTest.cs" />
+    <Compile Include="Common\MutableNowTest.cs" />
     <Compile Include="Common\NowTest.cs" />
     <Compile Include="Common\JobResultDetailTest.cs" />
     <Compile Include="Common\JobResultTest.cs" />
+    <Compile Include="Common\PersonAccountUpdaterTest.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptionsTest.cs" />
     <Compile Include="Common\TrueFalseRandomizerTest.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinderTest.cs" />
@@ -364,6 +365,7 @@
     <Compile Include="Scheduling\Overtime\SkillIntervalDataDividerTest.cs" />
     <Compile Include="Scheduling\Overtime\SkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\Overtime\SkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlockTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecificationTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
@@ -698,12 +700,10 @@
     <Compile Include="Scheduling\SeatLimitations\SkillVisualLayerCollectionDictionaryTest.cs" />
     <Compile Include="Scheduling\SeatLimitations\SeatImpactOnPeriodForProjectionTest.cs" />
     <Compile Include="Scheduling\SeatLimitations\SeatLimitationWorkShiftCalculatorTest.cs" />
-    <Compile Include="Scheduling\ShiftCreator\EndTimeLimiterTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\PersonMeetingByDateSorterTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionEntityServiceTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionServiceTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\ShiftFromMasterActivityServiceTest.cs" />
-    <Compile Include="Scheduling\ShiftCreator\StartTimeLimiterTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\WorkshiftCollectionTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\WorkShiftVisualLayerInfoTest.cs" />
     <Compile Include="Scheduling\ShiftTradeChecksumCalculatorTest.cs" />
@@ -1139,6 +1139,10 @@
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Win\Teleopti.Ccc.Win.csproj">
+      <Project>{26C57CBE-E75F-42C9-9747-8016AEB305F2}</Project>
+      <Name>Teleopti.Ccc.Win</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

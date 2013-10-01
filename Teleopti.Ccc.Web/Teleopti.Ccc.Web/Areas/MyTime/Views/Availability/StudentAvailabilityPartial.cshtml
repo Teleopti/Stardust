@@ -70,12 +70,12 @@
                             <div class="day-header">
                                 <span class="floatleft badge day-header-left day-header-text">@day.Header.DayDescription</span><span class="floatright badge day-header-right day-header-text">@day.Header.DayNumber</span>
                             </div>
-                            <div class="day-content pdt10">
+                            <div class="day-content">
                                 <img class="loading-small-gray-blue" data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
                                 <!-- ko if: AjaxError().length > 0 -->
                                 <h2 class="error" data-bind="text: AjaxError"></h2>
                                 <!-- /ko -->
-                                <div class="fullwidth mt15 day-content-text" data-bind="text: AvailableTimeSpan">
+                                <div class="fullwidth day-content-text" data-bind="text: AvailableTimeSpan">
                                 </div>
                             </div>
                         </div>

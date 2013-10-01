@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -7,13 +8,15 @@ namespace Teleopti.Ccc.Domain.Tracking
 {
     public class TraceableRefreshService : ITraceableRefreshService
     {
+        private readonly ICurrentScenario _currentScenario;
+        private readonly IScheduleRepository _scheduleRepository;
         private readonly HashSet<ITraceable> _refreshedAccounts = new HashSet<ITraceable>();
-        private readonly IScenario _scenario;
-        private readonly IRepositoryFactory _repositoryFactory;
+        
 
-        public TraceableRefreshService(IScenario scenario, IRepositoryFactory repositoryFactory) {
-            _scenario = scenario;
-            _repositoryFactory = repositoryFactory;
+        public TraceableRefreshService(ICurrentScenario currentScenario, IScheduleRepository scheduleRepository)
+        {
+            _currentScenario = currentScenario;
+            _scheduleRepository = scheduleRepository;
         }
 
         public bool NeedsRefresh(ITraceable traceable)
@@ -21,21 +24,20 @@ namespace Teleopti.Ccc.Domain.Tracking
             return !_refreshedAccounts.Contains(traceable);
         }
 
-        public void RefreshIfNeeded(IAccount account, IUnitOfWork unitOfWork)
+        public void RefreshIfNeeded(IAccount account)
         {
-            if (account != null && NeedsRefresh(account)) RefreshAndAddToCache(account, unitOfWork);
+            if (account != null && NeedsRefresh(account)) RefreshAndAddToCache(account);
         }
 
-        public void Refresh(IAccount account, IUnitOfWork unitOfWork)
+        public void Refresh(IAccount account)
         {
-            if (account != null) RefreshAndAddToCache(account, unitOfWork);
+            if (account != null) RefreshAndAddToCache(account);
         }
 
-        private void RefreshAndAddToCache(IAccount account, IUnitOfWork unitOfWork)
+        private void RefreshAndAddToCache(IAccount account)
         {
-            account.CalculateUsed(_repositoryFactory.CreateScheduleRepository(unitOfWork), null, _scenario);
-            
-            _refreshedAccounts.Add(account);
+            account.CalculateUsed(_scheduleRepository, _currentScenario.Current());
+           _refreshedAccounts.Add(account);
         }
     }
 }

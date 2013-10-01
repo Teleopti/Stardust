@@ -1,7 +1,4 @@
-﻿using Teleopti.Interfaces.Domain;
-using InParameter = Teleopti.Interfaces.Domain.InParameter;
-
-namespace Teleopti.Interfaces.Domain
+﻿namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
     /// Service Level class

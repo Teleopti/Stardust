@@ -5,6 +5,8 @@ using System.Threading;
 using DDay.iCal;
 using DDay.iCal.Serialization.iCalendar;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -22,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 	{
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IDataSourcesProvider _dataSourcesProvider;
-		private readonly IJsonDeserializer<ExpandoObject> _deserializer;
+		private readonly IJsonDeserializer _deserializer;
 		private readonly INow _now;
 		private readonly ICurrentPrincipalContext _currentPrincipalContext;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
@@ -31,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 		private const int end = 180;
 
 		public CalendarLinkGenerator(IRepositoryFactory repositoryFactory, IDataSourcesProvider dataSourcesProvider,
-		                             IJsonDeserializer<ExpandoObject> deserializer, INow now,
+		                             IJsonDeserializer deserializer, INow now,
 		                             ICurrentPrincipalContext currentPrincipalContext,
 		                             IRoleToPrincipalCommand roleToPrincipalCommand, IPermissionProvider permissionProvider)
 		{
@@ -56,16 +58,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 				checkPermission(person, dataSource, uow, personRepository);
 				checkStatus(uow, person);
 
-				var scheduleDays = getScheduleDays(calendarLinkId, uow);
+				var scheduleDays = getScheduleDays(calendarLinkId, uow, person.WorkflowControlSet.SchedulePublishedToDate);
 				return generateCalendar(scheduleDays);
 			}
 		}
 
-		private IEnumerable<PersonScheduleDayReadModel> getScheduleDays(CalendarLinkId calendarLinkId, IUnitOfWork uow)
+		private IEnumerable<PersonScheduleDayReadModel> getScheduleDays(CalendarLinkId calendarLinkId, IUnitOfWork uow, DateTime? schedulePublishedToDate)
 		{
+			var endDate = _now.LocalDateOnly().AddDays(end);
+			if (schedulePublishedToDate.HasValue)
+			{
+				var publishedToDate = new DateOnly(schedulePublishedToDate.Value);
+				if (publishedToDate < endDate) 
+					endDate = publishedToDate;
+			}
 			var personScheduleDayReadModelFinder = _repositoryFactory.CreatePersonScheduleDayReadModelFinder(uow);
-			var scheduleDays = personScheduleDayReadModelFinder.ForPerson(_now.DateOnly().AddDays(start),
-			                                                              _now.DateOnly().AddDays(end), calendarLinkId.PersonId);
+			var scheduleDays = personScheduleDayReadModelFinder.ForPerson(_now.LocalDateOnly().AddDays(start),
+																		  endDate, 
+																		  calendarLinkId.PersonId);
 			return scheduleDays;
 		}
 
@@ -92,9 +102,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 
 			foreach (var scheduleDay in scheduleDays)
 			{
-				dynamic shift = _deserializer.DeserializeObject(scheduleDay.Shift);
-				var layers = shift.Projection as IEnumerable<dynamic>;
-				foreach (var layer in layers)
+				var shift = _deserializer.DeserializeObject<Model>(scheduleDay.Model).Shift;
+				foreach (var layer in shift.Projection)
 				{
 					var evt = iCal.Create<Event>();
 

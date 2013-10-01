@@ -26,49 +26,57 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		public bool AutoDenied { get; set; }
 		public bool HasBeenReferred { get; set; }
 
-		public void Apply(IPerson user, IUnitOfWork uow)
+		public void Apply(IPerson user, IUnitOfWork iDontUse)
 		{
-			var dateTimefrom = DateFrom ?? DateTime.UtcNow.Date;
-			var dateTimeTo = DateTo ?? dateTimefrom.AddDays(1);
-			var sender = String.IsNullOrEmpty(From) ? user : getOrCreatePerson(From, uow);
-			var reciever = String.IsNullOrEmpty(To) ? user : getOrCreatePerson(To, uow);
-			var message = String.IsNullOrEmpty(Message)
-				              ? "This is a short text for the description of a shift trade request"
-				              : Message; 
+			using (var uow = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			{
 
-			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, reciever, new DateOnly(dateTimefrom), new DateOnly(dateTimeTo));
-			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+				var dateTimefrom = DateFrom ?? DateTime.UtcNow.Date;
+				var dateTimeTo = DateTo ?? dateTimefrom.AddDays(1);
+				var sender = String.IsNullOrEmpty(From) ? user : getOrCreatePerson(From, uow);
+				var reciever = String.IsNullOrEmpty(To) ? user : getOrCreatePerson(To, uow);
+				var message = String.IsNullOrEmpty(Message)
+								  ? "This is a short text for the description of a shift trade request"
+								  : Message;
 
-			PersonRequest = new PersonRequest(sender)
-			{
-				Subject = Subject == string.Empty ? "Swap shift with " + sender.Name : Subject
-			};
-			if (Pending)
-			{
-				PersonRequest.Pending();				
-			}
-			
-			PersonRequest.TrySetMessage(message);
-			PersonRequest.Request = shiftTradeRequest;
-			var setShiftTraderequestCheckSum = new ShiftTradeRequestSetChecksum(new DefaultScenarioFromRepository(new ScenarioRepository(uow)), new ScheduleRepository(uow));
+				var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, reciever, new DateOnly(dateTimefrom), new DateOnly(dateTimeTo));
+				var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
 
-			setShiftTraderequestCheckSum.SetChecksum(shiftTradeRequest);
-			var requestRepository = new PersonRequestRepository(uow);
-			if (Approved)
-			{
-				PersonRequest.ForcePending();
-				PersonRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
+				PersonRequest = new PersonRequest(sender)
+				{
+					Subject = Subject == string.Empty ? "Swap shift with " + sender.Name : Subject
+				};
+				if (Pending)
+				{
+					PersonRequest.Pending();
+				}
+
+				PersonRequest.TrySetMessage(message);
+				PersonRequest.Request = shiftTradeRequest;
+				var setShiftTraderequestCheckSum = new ShiftTradeRequestSetChecksum(new DefaultScenarioFromRepository(new ScenarioRepository(uow)), new ScheduleRepository(uow));
+
+				setShiftTraderequestCheckSum.SetChecksum(shiftTradeRequest);
+				var requestRepository = new PersonRequestRepository(uow);
+				if (Approved)
+				{
+					PersonRequest.ForcePending();
+					PersonRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
+				}
+
+				if (AutoDenied)
+				{
+					PersonRequest.Deny(sender, "denyReason", new PersonRequestAuthorizationCheckerForTest());
+				}
+				if (HasBeenReferred)
+				{
+					shiftTradeRequest.Refer(new PersonRequestAuthorizationCheckerForTest());
+				}
+				requestRepository.Add(PersonRequest);
+
+
+				uow.PersistAll();
 			}
 
-			if (AutoDenied)
-			{
-				PersonRequest.Deny(sender, "denyReason", new PersonRequestAuthorizationCheckerForTest());
-			}
-			if (HasBeenReferred)
-			{
-				shiftTradeRequest.Refer(new PersonRequestAuthorizationCheckerForTest());
-			}
-			requestRepository.Add(PersonRequest);
 		}
 
 		private static IPerson getOrCreatePerson(string name, IUnitOfWork uow)

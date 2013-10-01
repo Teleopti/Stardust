@@ -3,7 +3,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -15,7 +14,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     public class CancelAbsenceCommandHandler : IHandleCommand<CancelAbsenceCommandDto>
     {
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
-        private readonly IScheduleRepository _scheduleRepository;
+	    private readonly IScheduleTagAssembler _scheduleTagAssembler;
+	    private readonly IScheduleRepository _scheduleRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IScenarioRepository _scenarioRepository;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
@@ -24,10 +24,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
 
-        public CancelAbsenceCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
+        public CancelAbsenceCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IScheduleTagAssembler scheduleTagAssembler, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
         {
             _dateTimePeriodAssembler = dateTimePeriodAssembler;
-            _scheduleRepository = scheduleRepository;
+	        _scheduleTagAssembler = scheduleTagAssembler;
+	        _scheduleRepository = scheduleRepository;
             _personRepository = personRepository;
             _scenarioRepository = scenarioRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -73,7 +74,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					}
 				}
 
-                _saveSchedulePartService.Save(scheduleDay, rules);
+				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(new ScheduleTagDto {Id = command.ScheduleTagId});
+                _saveSchedulePartService.Save(scheduleDay, rules, scheduleTagEntity);
 				using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
 				{
 					uow.PersistAll();

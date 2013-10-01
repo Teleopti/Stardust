@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common
@@ -34,6 +35,17 @@ namespace Teleopti.Ccc.DomainTest.Common
             var wouldCrashWithoutCacheResult = target.Period();
             
             Assert.AreEqual(realResult, wouldCrashWithoutCacheResult);
+        }
+
+        [Test]
+        public void TestPeriodToReturnTheTimeInProvidedTimeZone()
+        {
+            var zone = TimeZoneInfoFactory.BrazilTimeZoneInfo();
+            var  date = new DateOnlyPeriod(new DateOnly(2013,02,15), new DateOnly( 2013,02,17) );
+            IDateOnlyPeriodAsDateTimePeriod  target = new DateOnlyPeriodAsDateTimePeriod( date, zone);
+            var targetResult = target.Period(zone);
+            Assert.AreEqual(targetResult.StartDateTime,new DateTime(2013,02,15,2,0,0) );
+            Assert.AreEqual(targetResult.EndDateTime ,new DateTime(2013,02,18,3,0,0) );
         }
     }
 }

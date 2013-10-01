@@ -1,5 +1,6 @@
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
                     viewSchedulesPermission = isPermittedToViewSchedules();
                     meetingViewModel = MeetingComposerPresenter.CreateDefaultMeeting(organizer,
                                         defaultScenario, activities[0], DateOnly.Today.AddDays(1),
-                                        pers, commonNameDescription, organizer.PermissionInformation.DefaultTimeZone(), new Now(()=>null));
+                                        pers, commonNameDescription, organizer.PermissionInformation.DefaultTimeZone(), new Now());
 
                 }
 

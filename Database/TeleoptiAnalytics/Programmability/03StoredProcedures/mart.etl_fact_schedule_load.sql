@@ -19,6 +19,7 @@ GO
 --				2009-02-11 New mart schema KJ
 --				2010-11-09	#12320 fix personperiods vs. Schedule_date_id JN+DJ
 --				2011-02-25	Added overtime id Mattias E
+--				2013-09-20   Removed check on min/maxdate in stage
 -- Interface:	smalldatetime, with only datepart! No time allowed
 -- =============================================
 --exec mart.etl_fact_schedule_load '2009-02-02','2009-02-03'
@@ -33,20 +34,6 @@ AS
 DECLARE @start_date_id	INT
 DECLARE @end_date_id	INT
 
---Declare
-DECLARE @max_shiftstart_date smalldatetime
-DECLARE @min_shiftstart_date smalldatetime
-
---init
-SELECT  
-	@max_shiftstart_date= max(shift_start),
-	@min_shiftstart_date= min(shift_start)
-FROM
-	Stage.stg_schedule
-
---Reset @start_date, @end_date to 
-SET	@start_date = CASE WHEN @min_shiftstart_date > @start_date THEN @min_shiftstart_date ELSE @start_date END
-SET	@end_date	= CASE WHEN @max_shiftstart_date < @end_date THEN @max_shiftstart_date ELSE @end_date	END
 
 --There must not be any timevalue on the interface values, since that will mess things up around midnight!
 --Consider: DECLARE @end_date smalldatetime;SET @end_date = '2006-01-31 23:59:30';SELECT @end_date

@@ -1,0 +1,465 @@
+Document Type: WSE
+item: Global
+  Version=9.02
+  Flags=00000100
+  Languages=65 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  Copy Default=1
+  Japanese Font Name=MS Gothic
+  Japanese Font Size=9
+  Start Gradient=0 0 255
+  End Gradient=0 0 0
+  Windows Flags=00000100000000000010110000001010
+  Message Font=MS Sans Serif
+  Font Size=8
+  Pages Modified=00001000011000000000000000000000
+  Extra Pages=00000000000000000000000000010000
+  Disk Label=Default
+  Disk Filename=SETUP
+  Patch Flags=0000000000000001
+  Patch Threshold=85
+  Patch Memory=4000
+  MIF PDF Version=1.0
+  MIF SMS Version=2.0
+  FTP Cluster Size=20
+  Per-User Version ID=1
+  Dialogs Version=7
+  Crystal Format=10111100101100000010001001001001
+  Variable Name1=_INIT_WINDOW_
+  Variable Default1=HIDE
+  Variable Flags1=00001000
+  Variable Name2=_SYS_
+  Variable Default2=C:\Windows\system32
+  Variable Flags2=00001000
+  Variable Name3=_WIN_
+  Variable Default3=C:\Windows
+  Variable Flags3=00001000
+  Variable Name4=_WISE_
+  Variable Default4=C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor
+  Variable Flags4=00001000
+  Requested Execution Level=asInvoker
+end
+item: Remark
+  Text===============================================
+end
+item: Remark
+  Text=Get Wise properties into this script
+end
+item: Remark
+  Text===============================================
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=PM_VIRDIR
+  Variable Name2=_PROP_VAR_
+  Variable Value2=PM_VIRDIR_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=PM_ANONYMOUS_PWD
+  Variable Name2=_PROP_VAR_
+  Variable Value2=PM_ANONYMOUS_PWD_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=PM_ANONYMOUS_DOMAINUSER
+  Variable Name2=_PROP_VAR_
+  Variable Value2=PM_ANONYMOUS_DOMAINUSER_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=PM_AUTH_MODE
+  Variable Name2=_PROP_VAR_
+  Variable Value2=PM_AUTH_MODE_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=PM_INSTALL
+  Variable Name2=_PROP_VAR_
+  Variable Value2=PM_INSTALL_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DNS_ALIAS
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DNS_ALIAS_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SDK_SSL
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SDK_SSL_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SDK_CRED_PROT
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SDK_CRED_PROT_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=IIS_AUTH
+  Variable Name2=_PROP_VAR_
+  Variable Value2=IIS_AUTH_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=AS_SERVER_NAME
+  Variable Name2=_PROP_VAR_
+  Variable Value2=AS_SERVER_NAME_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=AS_DATABASE
+  Variable Name2=_PROP_VAR_
+  Variable Value2=AS_DATABASE_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DB_CCC7
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DB_CCC7_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DB_ANALYTICS
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DB_ANALYTICS_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SUPPORTTOOLS
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SUPPORTTOOLS_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=DMZ
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DMZ_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=INSTALLDIR
+  Variable Name2=_PROP_VAR_
+  Variable Value2=INSTALLDIR_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=INSIDE_HOSTNAME
+  Variable Name2=_PROP_VAR_
+  Variable Value2=INSIDE_HOSTNAME_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=SQL_AUTH_STRING
+  Variable Name2=_PROP_VAR_
+  Variable Value2=SQL_AUTH_STRING_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Remark
+  Text===============================================
+end
+item: Remark
+  Text=Delete previous file
+end
+item: Remark
+  Text===============================================
+end
+item: Delete File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+end
+item: Remark
+  Text===============================================
+end
+item: Remark
+  Text=Some logic
+end
+item: Remark
+  Text===============================================
+end
+item: If/While Statement
+  Variable=SDK_SSL_TMP
+  Value=True
+end
+item: Set Variable
+  Variable=HTTPSGETENABLED_TMP
+  Value=true
+end
+item: Set Variable
+  Variable=HTTPGETENABLED_TMP
+  Value=false
+end
+item: Set Variable
+  Variable=SDK_SSL_SECURITY_MODE_TMP
+  Value=Transport
+end
+item: Set Variable
+  Variable=SDK_SSL_MEX_BINDING_TMP
+  Value=mexHttpsBinding
+end
+item: Else Statement
+end
+item: Set Variable
+  Variable=HTTPSGETENABLED_TMP
+  Value=false
+end
+item: Set Variable
+  Variable=HTTPGETENABLED_TMP
+  Value=true
+end
+item: Set Variable
+  Variable=SDK_SSL_SECURITY_MODE_TMP
+  Value=TransportCredentialOnly
+end
+item: Set Variable
+  Variable=SDK_SSL_MEX_BINDING_TMP
+  Value=mexHttpBinding
+end
+item: End Block
+end
+item: If/While Statement
+  Variable=DMZ_TMP
+  Value=YES
+end
+item: Set Variable
+  Variable=WEB_BROKER_TMP
+  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Web
+end
+item: Set Variable
+  Variable=WEB_BROKER_BACKPLANE_TMP
+  Value=%INSIDE_HOSTNAME_TMP%TeleoptiCCC/Broker.backplane/backplane
+end
+item: Else Statement
+end
+item: Set Variable
+  Variable=WEB_BROKER_TMP
+  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Broker/
+end
+item: Set Variable
+  Variable=WEB_BROKER_BACKPLANE_TMP
+  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Broker.backplane/backplane
+end
+item: End Block
+end
+item: Remark
+  Text===============================================
+end
+item: Remark
+  Text=Fill with new values
+end
+item: Remark
+  Text===============================================
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(SQL_AUTH_STRING)|%SQL_AUTH_STRING_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(AS_SERVER_NAME)|%AS_SERVER_NAME_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(AS_DATABASE)|%AS_DATABASE_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(SDK_CRED_PROT)|%SDK_CRED_PROT_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(DB_ANALYTICS)|%DB_ANALYTICS_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(DB_CCC7)|%DB_CCC7_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(MATRIX_WEB_SITE_URL)|%DNS_ALIAS_TMP%TeleoptiCCC/Analytics
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(PM_SERVICE)|%DNS_ALIAS_TMP%TeleoptiCCC/TeleoptiCCC/PMService/PMService.svc
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(SDK_SSL_SECURITY_MODE)|%SDK_SSL_SECURITY_MODE_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(AGENT_SERVICE)|%DNS_ALIAS_TMP%TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(PM_INSTALL)|%PM_INSTALL_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(PM_AUTH_MODE)|%PM_AUTH_MODE_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(PM_ANONYMOUS_DOMAINUSER)|%PM_ANONYMOUS_DOMAINUSER_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(PM_ANONYMOUS_PWD)|%PM_ANONYMOUS_PWD_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(IIS_AUTH)|%IIS_AUTH_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(HTTPGETENABLED)|%HTTPGETENABLED_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(HTTPSGETENABLED)|%HTTPSGETENABLED_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(RTA_QUEUE_ID)|2001,2002,0063,2000,0019,0068,0085,0202,0238,2003
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(SDK_SSL_MEX_BINDING)|%SDK_SSL_MEX_BINDING_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(LOCAL_WIKI)|%DNS_ALIAS_TMP%TeleoptiCCC/LocalWiki/
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(PM_ASMX)|%DNS_ALIAS_TMP%%PM_VIRDIR_TMP%/services/Analyzer2005.asmx
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(WEB_BROKER)|%WEB_BROKER_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(WEB_BROKER_BACKPLANE)|%WEB_BROKER_BACKPLANE_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(RTA_STATE_CODE)|Ready,InCall,ACW,AUX1,AUX2,AUX3,AUX4,AUX5
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(RTA_SERVICE)|%DNS_ALIAS_TMP%TeleoptiCCC/RTA/TeleoptiRtaService.svc
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(ETL_SERVICE_nhibConfPath)|%INSTALLDIR_TMP%TeleoptiCCC\ETL\Service
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(ETL_TOOL_nhibConfPath)|%INSTALLDIR_TMP%TeleoptiCCC\ETL\Tools
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(SDK_nhibConfPath)|%INSTALLDIR_TMP%TeleoptiCCC\SDK
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(AGENTPORTALWEB_nhibConfPath)|%INSTALLDIR_TMP%TeleoptiCCC\Web
+  Line Number=0
+end
+item: Remark
+  Text===============================================
+end
+item: Remark
+  Text=Start SupportTool in Deploy mode
+end
+item: Remark
+  Text===============================================
+end
+item: Execute Program
+  Pathname=.\Teleopti.Support.Tool.exe
+  Command Line=-MODeploy
+  Default Directory=%SUPPORTTOOLS_TMP%
+  Flags=00000110
+end

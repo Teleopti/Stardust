@@ -533,7 +533,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _viewBase.SetCellBackTextAndBackColor(null, _date, false, false, null);
             LastCall.IgnoreArguments().Repeat.AtLeastOnce();
             Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
-            Expect.Call(person1.Period(new DateOnly(2008, 11, 04))).Return(personPeriod).Repeat.Times(2);
+            Expect.Call(person1.IsAgent(new DateOnly(2008, 11, 04))).Return(true).Repeat.Times(2);
 
             _mocks.ReplayAll();
 
@@ -1505,7 +1505,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             LastCall.Repeat.Once();
             Expect.Call(schedulePart.Person).Return(person);
             Expect.Call(schedulePart.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
-            Expect.Call(person.Period(new DateOnly(2001, 1, 1))).IgnoreArguments().Return(personPeriod);
+            Expect.Call(person.IsAgent(new DateOnly(2001,1,1))).Return(true);
 
             _mocks.ReplayAll();
             _target.AddOvertime(multiplicatorDefinitionSets);
@@ -1528,7 +1528,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
             Expect.Call(schedulePart.Person).Return(person);
             Expect.Call(schedulePart.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
-            Expect.Call(person.Period(new DateOnly(2001, 1, 1))).IgnoreArguments().Return(null);
+            Expect.Call(person.IsAgent(new DateOnly(2001, 1, 1))).Return(false);
             Expect.Call(() => _viewBase.ShowInformationMessage(UserTexts.Resources.CouldNotAddOverTimeNoPersonPeriods, UserTexts.Resources.Information));
 
             _mocks.ReplayAll();

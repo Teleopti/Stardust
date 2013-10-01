@@ -234,13 +234,11 @@
     <Compile Include="Common\Clipboard\ClipHandlerTest.cs" />
     <Compile Include="Common\Clipboard\ClipTest.cs" />
     <Compile Include="Common\AbsenceLayerViewModelTest.cs" />
-    <Compile Include="Common\Collections\CommonRootCollectionTest.cs" />
     <Compile Include="Common\Collections\FilterExtensionsTest.cs" />
     <Compile Include="Common\Collections\ShowOnlyCollectionTest.cs" />
     <Compile Include="Common\Commands\ApplicationCommandModelTest.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\CommandBehaviorBindingTest.cs" />
     <Compile Include="Common\Commands\CommandBehaviors\CommandBehaviorTest.cs" />
-    <Compile Include="Common\Commands\DelegateCommandTest.cs" />
     <Compile Include="Common\Commands\TesterForCommandModels.cs" />
     <Compile Include="Common\Commands\CommandHelperTest.cs" />
     <Compile Include="Common\Commands\CommandModelTest.cs" />
@@ -276,7 +274,6 @@
     <Compile Include="Common\Filter\SpecificationFilterTest.cs" />
     <Compile Include="Common\Messaging\FollowUpDialogueForTest.cs" />
     <Compile Include="Common\Messaging\FollowUpMessageDialogueViewModelTest.cs" />
-    <Compile Include="Common\Messaging\PushMessageViewModelTest.cs" />
     <Compile Include="Common\Messaging\FollowUpPushMessageViewModelTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -285,15 +282,12 @@
     <Compile Include="Common\Messaging\SendPushMessageViewModelTest.cs" />
     <Compile Include="Common\Models\DataModelTest.cs" />
     <Compile Include="Common\Models\DataModelForTest.cs" />
-    <Compile Include="Common\Models\DataModelWithDataErrorInfoTest.cs" />
     <Compile Include="Common\ModifySelectionPresenterTest.cs" />
     <Compile Include="Common\OpenPeriodModeTest.cs" />
     <Compile Include="Common\OpenPeriodSpecificationTest.cs" />
     <Compile Include="Common\OptionalColumnProviderTest.cs" />
     <Compile Include="Common\PeopleLoaderForTeamLeaderModeTest.cs" />
     <Compile Include="Common\PeopleLoaderTest.cs" />
-    <Compile Include="Common\PersonPicker\PersonPickerViewModelTest.cs" />
-    <Compile Include="Common\PersonPicker\SelectablePersonViewModelTest.cs" />
     <Compile Include="Common\PropertyPageAndWizard\AbstractPropertyPagesNoRootTest.cs" />
     <Compile Include="Common\ReportSettingsScheduledTimeVersusTargetTest.cs" />
     <Compile Include="Common\Rows\RowManagerSchedulerTest.cs" />
@@ -311,11 +305,9 @@
     <Compile Include="Common\SearchPersonPresenterTest.cs" />
     <Compile Include="Common\Time\DateTimeViewModelTest.cs" />
     <Compile Include="Common\Time\LayerViewModelGroupMoveTest.cs" />
-    <Compile Include="Common\Time\TimeDurationPickerPresenterTest.cs" />
     <Compile Include="Common\Time\IntervalCollectionTest.cs" />
     <Compile Include="Common\Time\IntervalViewModelTest.cs" />
     <Compile Include="Common\Time\Timeline\TimelineControlViewModelTest.cs" />
-    <Compile Include="Common\Time\Timeline\TimelineViewModelTest.cs" />
     <Compile Include="Common\Time\Timeline\TickMarkViewModelTest.cs" />
     <Compile Include="Common\Time\TimeSpanDataBoundItemTest.cs" />
     <Compile Include="Common\Time\TimeZoomViewModelTest.cs" />
@@ -560,6 +552,7 @@
     <Compile Include="Scheduler\CalculateMinMaxCacheDeciderTest.cs" />
     <Compile Include="Scheduler\FilterOvertimeAvailabilityPresenterTest.cs" />
     <Compile Include="Scheduler\MatrixUnselectedDaysLockerTest.cs" />
+    <Compile Include="Scheduler\PasteAsOvertimeTest.cs" />
     <Compile Include="Scheduler\Reporting\ScheduledTimePerActivityModelTest.cs" />
     <Compile Include="Scheduler\Requests\HandlePersonRequestComparerTest.cs" />
     <Compile Include="Scheduler\AgentOvertimeAvailabilityAddCommandTest.cs" />
@@ -868,6 +861,10 @@
       <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
       <Name>Teleopti.Messaging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Win\Teleopti.Ccc.Win.csproj">
+      <Project>{26C57CBE-E75F-42C9-9747-8016AEB305F2}</Project>
+      <Name>Teleopti.Ccc.Win</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
@@ -903,7 +900,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Common\PersonPicker\" />
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>

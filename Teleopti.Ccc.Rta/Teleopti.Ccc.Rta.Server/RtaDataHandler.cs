@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Rta.Server
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
 		private readonly IDataSourceResolver _dataSourceResolver;
 		private readonly IPersonResolver _personResolver;
-		private readonly IStateResolver _stateResolver;
 		
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
 			MessageId = "1")]
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.Rta.Server
 		                         IDatabaseConnectionFactory databaseConnectionFactory,
 		                         IDataSourceResolver dataSourceResolver,
 		                         IPersonResolver personResolver,
-		                         IStateResolver stateResolver,
 		                         IActualAgentStateCache stateCache)
 		{
 			_loggingSvc = loggingSvc;
@@ -41,7 +39,6 @@ namespace Teleopti.Ccc.Rta.Server
 			_databaseConnectionFactory = databaseConnectionFactory;
 			_dataSourceResolver = dataSourceResolver;
 			_personResolver = personResolver;
-			_stateResolver = stateResolver;
 			_stateCache = stateCache;
 
 			if (_messageSender == null) return;
@@ -62,7 +59,6 @@ namespace Teleopti.Ccc.Rta.Server
 		                      IDatabaseConnectionFactory databaseConnectionFactory,
 		                      IDataSourceResolver dataSourceResolver,
 		                      IPersonResolver personResolver,
-		                      IStateResolver stateResolver,
 		                      IActualAgentAssembler agentAssembler,
 		                      IActualAgentStateCache stateCache)
 		{
@@ -74,7 +70,6 @@ namespace Teleopti.Ccc.Rta.Server
 			_personResolver = personResolver;
 			_agentAssembler = agentAssembler;
 			_stateCache = stateCache;
-			_stateResolver = stateResolver;
 
 			if (_messageSender == null) return;
 
@@ -94,13 +89,12 @@ namespace Teleopti.Ccc.Rta.Server
 			: this(
 				LogManager.GetLogger(typeof (RtaDataHandler)),
 				MessageSenderFactory.CreateMessageSender(ConfigurationManager.AppSettings["MessageBroker"]),
-				ConfigurationManager.AppSettings["DataStore"], new DatabaseConnectionFactory(), null, null, null, null, null)
+				ConfigurationManager.AppSettings["DataStore"], new DatabaseConnectionFactory(), null, null, null, null)
 		{
 			_agentAssembler = agentAssembler;
 
 			_dataSourceResolver = new DataSourceResolver(_databaseConnectionFactory, _connectionStringDataStore);
 			_personResolver = new PersonResolver(_databaseConnectionFactory, _connectionStringDataStore);
-			_stateResolver = new StateResolver(_databaseConnectionFactory, _connectionStringDataStore);
 			_stateCache = stateCache;
 
 			if (_messageSender == null) return;
@@ -162,11 +156,6 @@ namespace Teleopti.Ccc.Rta.Server
 			get { return _messageSender.IsAlive; }
 		}
 
-		public void FlushCacheToDatabase()
-		{
-			_stateCache.FlushCacheToDatabase();
-		}
-
 		// Probably a WaitHandle object isnt a best choice, but same applies to QueueUserWorkItem method.
 		// An alternative using Tasks should be looked at instead.
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"),
@@ -175,64 +164,74 @@ namespace Teleopti.Ccc.Rta.Server
 		public void ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp,
 		                           Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
 		{
-			int dataSourceId;
-			var batch = isSnapshot
-				            ? batchId
-				            : (DateTime?) null;
-
-			if (string.IsNullOrEmpty(_connectionStringDataStore))
+			try
 			{
-				_loggingSvc.Error("No connection information available in configuration file.");
-				return;
-			}
+				int dataSourceId;
+				var batch = isSnapshot
+					            ? batchId
+					            : (DateTime?) null;
 
-			if (!_dataSourceResolver.TryResolveId(sourceId, out dataSourceId))
-			{
-				_loggingSvc.WarnFormat(
-					"No data source available for source id = {0}. Event will not be handled before data source is set up.", sourceId);
-				return;
-			}
-
-			if (isSnapshot && string.IsNullOrEmpty(logOn))
-			{
-				_loggingSvc.InfoFormat("Last of batch detected, initializing hanling for batch id: {0}, source id: {1}", batchId,
-				                       sourceId);
-				handleLastOfBatch(batchId, sourceId);
-				return;
-			}
-
-			IEnumerable<PersonWithBusinessUnit> personWithBusinessUnits;
-			if (!_personResolver.TryResolveId(dataSourceId, logOn, out personWithBusinessUnits))
-			{
-				_loggingSvc.InfoFormat(
-					"No person available for datasource id = {0} and log on {1}. Event will not be handled before person is set up.",
-					dataSourceId, logOn);
-				return;
-			}
-
-			foreach (var personWithBusinessUnit in personWithBusinessUnits)
-			{
-				_loggingSvc.InfoFormat("ACD-Logon: {0} is connected to PersonId: {1}", logOn, personWithBusinessUnit.PersonId);
-				if (!_stateResolver.HaveStateCodeChanged(personWithBusinessUnit.PersonId, stateCode, timestamp))
+				if (string.IsNullOrEmpty(_connectionStringDataStore))
 				{
-					_loggingSvc.InfoFormat("Person {0} is already in state {1}", personWithBusinessUnit.PersonId, stateCode);
-					continue;
+					_loggingSvc.Error("No connection information available in configuration file.");
+					return;
 				}
-				var agentState = _agentAssembler.GetAgentState(personWithBusinessUnit.PersonId,
-				                                               personWithBusinessUnit.BusinessUnitId,
-				                                               platformTypeId, stateCode,
-				                                               timestamp, timeInState,
-				                                               batch, sourceId);
-				if (agentState == null)
+
+				if (!_dataSourceResolver.TryResolveId(sourceId, out dataSourceId))
 				{
 					_loggingSvc.WarnFormat(
-						"Could not get state for Person: {0}, Business unit: {1}, PlatformTypeId: {2}, StateCode: {3}, Timestamp: {4}, Time in state: {5}, Batch {6}, SourceId{7}",
-						personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId, platformTypeId, stateCode, timestamp,
-						batchId, sourceId);
-					continue;
+						"No data source available for source id = {0}. Event will not be handled before data source is set up.", sourceId);
+					return;
 				}
-				_stateCache.AddAgentStateToCache(agentState);
-				sendRtaState(agentState);
+
+				if (isSnapshot && string.IsNullOrEmpty(logOn))
+				{
+					_loggingSvc.InfoFormat("Last of batch detected, initializing hanling for batch id: {0}, source id: {1}", batchId,
+					                       sourceId);
+					handleLastOfBatch(batchId, sourceId);
+					return;
+				}
+
+				IEnumerable<PersonWithBusinessUnit> personWithBusinessUnits;
+				if (!_personResolver.TryResolveId(dataSourceId, logOn, out personWithBusinessUnits))
+				{
+					_loggingSvc.InfoFormat(
+						"No person available for datasource id = {0} and log on {1}. Event will not be handled before person is set up.",
+						dataSourceId, logOn);
+					return;
+				}
+
+				foreach (var personWithBusinessUnit in personWithBusinessUnits)
+				{
+					_loggingSvc.InfoFormat("ACD-Logon: {0} is connected to PersonId: {1}", logOn, personWithBusinessUnit.PersonId);
+
+					var agentState = _agentAssembler.GetAgentState(personWithBusinessUnit.PersonId,
+					                                               personWithBusinessUnit.BusinessUnitId,
+					                                               platformTypeId,
+					                                               stateCode,
+					                                               timestamp,
+					                                               timeInState,
+					                                               batch,
+					                                               sourceId);
+					if (agentState == null)
+					{
+						_loggingSvc.WarnFormat(
+							"Could not get state for Person: {0}, Business unit: {1}, PlatformTypeId: {2}, StateCode: {3}, Timestamp: {4}, Time in state: {5}, Batch {6}, SourceId{7}",
+							personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId, platformTypeId, stateCode, timestamp,
+							timeInState, batchId, sourceId);
+						continue;
+					}
+
+
+					_loggingSvc.InfoFormat("ActualAgentState cache - Adding/updating state: {0}", agentState);
+					_stateCache.AddAgentStateToCache(agentState);
+					if (agentState.SendOverMessageBroker)
+						sendRtaState(agentState);
+				}
+			}
+			catch (Exception e)
+			{
+				_loggingSvc.Error(e);
 			}
 		}
 
@@ -251,8 +250,6 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			try
 			{
-				_stateResolver.UpdateCacheForPerson(agentState.PersonId,
-				                                    new PersonStateHolder(agentState.StateCode, agentState.ReceivedTime));
 				_loggingSvc.InfoFormat("Sending AgentState: {0} through Message Broker", agentState);
 				if (_messageSender.IsAlive)
 					_messageSender.SendRtaData(agentState.PersonId, agentState.BusinessUnit, agentState);

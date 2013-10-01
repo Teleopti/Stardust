@@ -142,7 +142,7 @@ namespace Teleopti.Analytics.Portal
         protected static string ConnectionString
         {
 
-            get { return ConfigurationManager.ConnectionStrings["Database"].ConnectionString; }
+			get { return ConfigurationManager.ConnectionStrings["LocalSqlServer"].ConnectionString; }
         }
 
         protected static string OlapConnectionString

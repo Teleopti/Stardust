@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -68,10 +69,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _timeZone = (TimeZoneInfo.Local);
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             _commonNameDescriptionSetting = new CommonNameDescriptionSetting();
-
-            _now = new Now(() => null);
-            ((IModifyNow) _now).SetNow(new DateTime(2009, 10, 14, 15, 0, 0, DateTimeKind.Utc));
-
+			_now = new ThisIsNow(new DateTime(2009, 10, 14, 15, 0, 0, DateTimeKind.Utc));
             _model = MeetingComposerPresenter.CreateDefaultMeeting(_person, _scenario, _activity,
                                                                    new DateOnly(2009, 10, 14), new List<IPerson>(),
                                                                    _commonNameDescriptionSetting, _timeZone, _now);

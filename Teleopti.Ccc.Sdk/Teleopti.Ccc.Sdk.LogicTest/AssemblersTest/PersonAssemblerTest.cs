@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         private IAssembler<IWorkflowControlSet,WorkflowControlSetDto> _workflowControlSetAssembler;
         private MockRepository _mocks;
         private IPersonRepository _personRepository;
+        private IPersonAccountUpdater _personAccountUpdater;
 
         [SetUp]
         public void Setup()
@@ -28,10 +29,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             _mocks = new MockRepository();
             _personRepository = _mocks.StrictMock<IPersonRepository>();
             _workflowControlSetAssembler = _mocks.StrictMock<IAssembler<IWorkflowControlSet, WorkflowControlSetDto>>();
-            _target = new PersonAssembler(_personRepository, _workflowControlSetAssembler);
+	        _personAccountUpdater = _mocks.StrictMock<IPersonAccountUpdater>();
+            _target = new PersonAssembler(_personRepository, _workflowControlSetAssembler, _personAccountUpdater);
         }
 
-        private static IPerson CreatePerson(bool createWorkflowControlSet)
+        private IPerson CreatePerson(bool createWorkflowControlSet)
         {
             var person = PersonFactory.CreatePersonWithBasicPermissionInfo("testuser", "123");
             person.SetId(Guid.NewGuid());
@@ -41,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             person.Email = "email";
             person.EmploymentNumber = "email";
             person.Note = "A very good agent";
-            person.TerminalDate = new DateOnly(2011, 8, 20);
+            person.TerminatePerson(new DateOnly(2011, 8, 20), new PersonAccountUpdaterDummy());
             ((Person) person).SetDeleted();
             
             
@@ -102,10 +104,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         [Test]
         public void ShouldMapDomainEntityWithoutWorkflowControlSetToDto()
         {
-            _mocks.Record();
-            _mocks.ReplayAll();
+			var person = CreatePerson(false);
 
-            var person = CreatePerson(false);
+	        _mocks.Record();
+
+            _mocks.ReplayAll();
 
             var personDto = _target.DomainEntityToDto(person);
 

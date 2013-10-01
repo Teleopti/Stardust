@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Comparers;
+using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Ccc.WinCodeTest.FakeData;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
