@@ -128,10 +128,10 @@ namespace Teleopti.Ccc.DomainTest.Time
             target = new DateOnly(1901, 1, 1);
             Assert.AreEqual(target, target.ValidDateOnly);
 
-            target = new DateOnly(2078, 1, 1);
+            target = new DateOnly(2077, 1, 1);
             Assert.AreEqual(new DateOnly(DateHelper.MaxSmallDateTime), target.ValidDateOnly);
             
-            target = new DateOnly(2077, 12, 31);
+            target = new DateOnly(2076, 12, 31);
             Assert.AreEqual(target, target.ValidDateOnly);
         }
 
