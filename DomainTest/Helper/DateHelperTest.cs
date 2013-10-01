@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
     {
         private CultureInfo _cult;
         private readonly DateTime _minSmallDateTime = new DateTime(1901,1,1);
-        private readonly DateTime _maxSmallDateTime = new DateTime(2078,1,1);
+        private readonly DateTime _maxSmallDateTime = new DateTime(2077,1,1);
         private string _ok = string.Empty;
 
 		[SetUp]
