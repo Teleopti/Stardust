@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -8,6 +9,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class ScheduleDictionaryForTest : ScheduleDictionary
 	{
+		public ScheduleDictionaryForTest(IScenario scenario, DateTime date)
+			: this(scenario, new DateTimePeriod(date.Date, date.Date.AddHours(24))) { }
+
+		public ScheduleDictionaryForTest(IScenario scenario, DateTime startDate, DateTime endDate)
+			: this(scenario, new DateTimePeriod(startDate.Date, endDate.Date.AddHours(24))) { }
+
 		public ScheduleDictionaryForTest(IScenario scenario, IScheduleDateTimePeriod period, IDictionary<IPerson, IScheduleRange> dictionary)
 			: base(scenario, period, dictionary) { }
 
