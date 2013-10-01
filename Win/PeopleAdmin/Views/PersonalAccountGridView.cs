@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         {
             if (e.ColIndex == 1)
             {
-                LoadInnerGrid(e.RowIndex);
+                ToggleChildGrid(e.RowIndex);
             }
         }
 
@@ -819,98 +819,101 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             }
         }
 
-        private void AddPersonAccount(int rowIndex)
-        {
-            if (rowIndex == 0)
-                return;
-
-            var actualItemIndex = rowIndex - 1;
-            FilteredPeopleHolder.AddPersonAccount(actualItemIndex);
-
-            var grid = FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex - 1].GridControl;
-
-            GetChildPersonAccounts(rowIndex, actualItemIndex, grid);
-
-            if (FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].ExpandState)
-            {
-                var childGrid = Grid[rowIndex, GridInCellColumnIndex].Control as CellEmbeddedGrid;
-
-                if (childGrid != null)
-                {
-                    childGrid.Tag = PeopleWorksheet.StateHolder.PersonAccountChildGridDataWhenAndChild;
-                    // Merging name column's all cells
-                    childGrid.Model.CoveredRanges.Add(GridRangeInfo.Cells(1, 1, childGrid.RowCount, 1));
-                    Grid.RowHeights[rowIndex] += DefaultHeight;
-
-                    // To aviod grid refreshing issue
-                    //childGrid.RowCount += 1;
-                    childGrid.Refresh();
-
-                    Grid.RefreshRange(GridRangeInfo.Cells(rowIndex, 1, rowIndex,
-                                                          ParentGridLastColumnIndex));
-                }
-            }
-            else
-            {
-                FilteredPeopleHolder.GetParentPersonAccountWhenUpdated(actualItemIndex);
-                Grid.Invalidate();
-            }
-        }
-
-        private void LoadInnerGrid(int rowIndex)
-        {
-            if (rowIndex == 0)
-                return;
-
-            // Set grid range for covered ranged
-            var gridInfo = GridRangeInfo.Cells(rowIndex, GridInCellColumnIndex, rowIndex, ParentGridLastColumnIndex);
-            // Set out of focus form current cell.This helps  to fire save cell info in child grid.
-            SetOutOfFocusFromCurrentCell();
-
-            var actualItemIndex = rowIndex - 1;
-
-            if (!FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].ExpandState)
-            {
-                FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].ExpandState = true;
-
-                var grid = FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex - 1].GridControl;
-
-                GetChildPersonAccounts(rowIndex, actualItemIndex, grid);
-
-                LoadAbstractGrid(rowIndex, GridInCellColumnIndex, gridInfo);
-                Grid.CurrentCell.MoveTo(rowIndex, GridInCellColumnIndex);
-            }
-            else
-            {
-                FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].ExpandState = false;
-
-                // Get child grid and dispose it
-                var gridControl = Grid[rowIndex, GridInCellColumnIndex].Control as GridControl;
-                gridCreatorDispose(gridControl, gridInfo);
-
-                Grid.RowHeights[rowIndex] = DefaultRowHeight;
-                FilteredPeopleHolder.GetParentPersonAccountWhenUpdated(actualItemIndex);
-                Grid.InvalidateRange(gridInfo);
-            }
-        }
-
-        private void GetChildPersonAccounts(int rowIndex, int actualItemIndex, GridControl grid)
+        private void GetChildPersonAccounts(int rowIndex, GridControl grid)
         {
             if (grid != null)
             {
                 var cachedCollection = grid.Tag as ReadOnlyCollection<IPersonAccountChildModel>;
 
-	            PeopleWorksheet.StateHolder.GetChildPersonAccounts(
-		            rowIndex - 1,
-		            cachedCollection,
-		            FilteredPeopleHolder);
-
+                PeopleWorksheet.StateHolder.GetChildPersonAccounts(rowIndex - 1, FilteredPeopleHolder.
+                                                                   PersonAccountGridViewAdaptorCollection, cachedCollection, FilteredPeopleHolder.CommonNameDescription, FilteredPeopleHolder.AllAccounts);
             }
             else
             {
-	            PeopleWorksheet.StateHolder.GetChildPersonAccounts(actualItemIndex, FilteredPeopleHolder);
+				PeopleWorksheet.StateHolder.GetChildPersonAccounts(rowIndex - 1,
+                                                               FilteredPeopleHolder.
+                                                                   PersonAccountGridViewAdaptorCollection, FilteredPeopleHolder.CommonNameDescription, FilteredPeopleHolder.AllAccounts);
             }
         }
+
+		private void AddPersonAccount(int rowIndex)
+		{
+			if (rowIndex == 0)
+				return;
+
+			var actualItemIndex = rowIndex - 1;
+			FilteredPeopleHolder.AddPersonAccount(actualItemIndex);
+
+			RefreshChildGrid(rowIndex);
+		}
+
+		private void RefreshChildGrid(int rowIndex)
+		{
+			if (rowIndex == 0)
+				return;
+
+			// Set grid range for covered ranged
+			var gridInfo = GridRangeInfo.Cells(rowIndex, GridInCellColumnIndex, rowIndex, ParentGridLastColumnIndex);
+			// Set out of focus form current cell.This helps  to fire save cell info in child grid.
+			SetOutOfFocusFromCurrentCell();
+
+			var actualItemIndex = rowIndex - 1;
+
+			if (FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].ExpandState)
+			{
+				ExpandChildGrid(rowIndex, gridInfo);
+			}
+			else
+			{
+				FilteredPeopleHolder.GetParentPersonAccountWhenUpdated(actualItemIndex);
+				Grid.Invalidate();
+			}
+		}
+
+		private void ToggleChildGrid(int rowIndex)
+		{
+			if (rowIndex == 0)
+				return;
+
+			// Set grid range for covered ranged
+			var gridInfo = GridRangeInfo.Cells(rowIndex, GridInCellColumnIndex, rowIndex, ParentGridLastColumnIndex);
+			// Set out of focus form current cell.This helps  to fire save cell info in child grid.
+			SetOutOfFocusFromCurrentCell();
+
+			var actualItemIndex = rowIndex - 1;
+
+			if (!FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].ExpandState)
+			{
+				FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].ExpandState = true;
+				ExpandChildGrid(rowIndex, gridInfo);
+			}
+			else
+			{
+				FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].ExpandState = false;
+				CollapseChildGrid(rowIndex, gridInfo);
+			}
+		}
+
+		private void CollapseChildGrid(int rowIndex, GridRangeInfo gridInfo)
+		{
+			// Get child grid and dispose it
+			var gridControl = Grid[rowIndex, GridInCellColumnIndex].Control as GridControl;
+			gridCreatorDispose(gridControl, gridInfo);
+
+			Grid.RowHeights[rowIndex] = DefaultRowHeight;
+			FilteredPeopleHolder.GetParentPersonAccountWhenUpdated(rowIndex - 1);
+			Grid.InvalidateRange(gridInfo);
+		}
+
+		private void ExpandChildGrid(int rowIndex, GridRangeInfo gridInfo)
+		{
+			var grid = FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex - 1].GridControl;
+
+			GetChildPersonAccounts(rowIndex, grid);
+
+			LoadAbstractGrid(rowIndex, GridInCellColumnIndex, gridInfo);
+			Grid.CurrentCell.MoveTo(rowIndex, GridInCellColumnIndex);
+		}
 
         private void RemoveChild(int rowIndex, bool isDeleteAll)
         {
@@ -1068,7 +1071,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                 }
                 else
                 {
-                    RefreshChildGrid(rowIndex);
+                    RefreshChildGridRange(rowIndex);
                 }
             }
         }
@@ -1103,7 +1106,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                 GridRangeInfo.Cells(actualIndex, GridInCellColumnIndex - 1, actualIndex, ParentGridLastColumnIndex));
         }
 
-        private void RefreshChildGrid(int index)
+        private void RefreshChildGridRange(int index)
         {
             var actualIndex = index + 1;
 
@@ -1280,7 +1283,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                     if (personAccountChildCollection != null)
                     {
                         FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].ExpandState = true;
-                        GetChildPersonAccounts(rowIndex, actualItemIndex, childGrid);
+                        GetChildPersonAccounts(rowIndex, childGrid);
                         personAccountChildCollection =
                             PeopleWorksheet.StateHolder.PersonAccountChildGridDataWhenAndChild;
 
