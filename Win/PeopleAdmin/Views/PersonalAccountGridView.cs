@@ -825,14 +825,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             {
                 var cachedCollection = grid.Tag as ReadOnlyCollection<IPersonAccountChildModel>;
 
-                PeopleWorksheet.StateHolder.GetChildPersonAccounts(rowIndex - 1, FilteredPeopleHolder.
-                                                                   PersonAccountGridViewAdaptorCollection, cachedCollection, FilteredPeopleHolder.CommonNameDescription, FilteredPeopleHolder.AllAccounts);
+                PeopleWorksheet.StateHolder.GetChildPersonAccounts(rowIndex - 1, cachedCollection, FilteredPeopleHolder);
             }
             else
             {
-				PeopleWorksheet.StateHolder.GetChildPersonAccounts(rowIndex - 1,
-                                                               FilteredPeopleHolder.
-                                                                   PersonAccountGridViewAdaptorCollection, FilteredPeopleHolder.CommonNameDescription, FilteredPeopleHolder.AllAccounts);
+				PeopleWorksheet.StateHolder.GetChildPersonAccounts(rowIndex - 1, FilteredPeopleHolder);
             }
         }
 
