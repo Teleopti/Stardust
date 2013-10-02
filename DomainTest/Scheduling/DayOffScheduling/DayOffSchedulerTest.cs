@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				int x;
 				IList<IScheduleDay> y = new List<IScheduleDay>();
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y);
-				Expect.Call(_dayOffsInPeriodCalculator.DayOffInScheduleDayWeek(_scheduleDay, y)).Return(null);
+				//Expect.Call(_dayOffsInPeriodCalculator.DayOffInScheduleDayWeek(_scheduleDay, y)).Return(null);
 				Expect.Call(_scheduleAvailableForDayOffSpecification.IsSatisfiedBy(_scheduleDay)).Return(true);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period).Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day).Return(_date1).Repeat.Any();
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				int x;
 				IList<IScheduleDay> y = new List<IScheduleDay>();
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y);
-				Expect.Call(_dayOffsInPeriodCalculator.DayOffInScheduleDayWeek(_scheduleDay, y)).Return(null);
+				//Expect.Call(_dayOffsInPeriodCalculator.DayOffInScheduleDayWeek(_scheduleDay, y)).Return(null);
 				Expect.Call(_scheduleAvailableForDayOffSpecification.IsSatisfiedBy(_scheduleDay)).Return(true);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period).Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day).Return(_date1).Repeat.Any();
@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				int x;
 				IList<IScheduleDay> y = new List<IScheduleDay>();
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y);
-				Expect.Call(_dayOffsInPeriodCalculator.DayOffInScheduleDayWeek(_scheduleDay, y)).Return(null);
+				//Expect.Call(_dayOffsInPeriodCalculator.DayOffInScheduleDayWeek(_scheduleDay, y)).Return(null);
 				Expect.Call(_scheduleAvailableForDayOffSpecification.IsSatisfiedBy(_scheduleDay)).Return(true);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period).Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day).Return(_date1).Repeat.Any();
@@ -465,38 +465,38 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			}
 		}
 
-		[Test]
-		public void ShouldSkipAddingContractDayOffsWhenThereAreMoreOreEqualExistingDayOffsInSameWeek()
-		{
-			_effectiveRestriction.DayOffTemplate = _schedulingOptions.DayOffTemplate;
-			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
-			var dayOffDay = _mocks.StrictMock<IScheduleDay>();
+		//[Test]
+		//public void ShouldSkipAddingContractDayOffsWhenThereAreMoreOreEqualExistingDayOffsInSameWeek()
+		//{
+		//	_effectiveRestriction.DayOffTemplate = _schedulingOptions.DayOffTemplate;
+		//	var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+		//	var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+		//	var dayOffDay = _mocks.StrictMock<IScheduleDay>();
 
-			using (_mocks.Record())
-			{
-				Expect.Call(_schedulePeriod.IsValid).Return(true);
-				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.Any();
-				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDay.IsScheduled()).Return(true).Repeat.Any();
+		//	using (_mocks.Record())
+		//	{
+		//		Expect.Call(_schedulePeriod.IsValid).Return(true);
+		//		Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
+		//		Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.Any();
+		//		Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
+		//		Expect.Call(_scheduleDay.IsScheduled()).Return(true).Repeat.Any();
 
-				int x;
-				IList<IScheduleDay> y = new List<IScheduleDay>{dayOffDay};
-				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(false).OutRef(2, y);
-				Expect.Call(_dayOffsInPeriodCalculator.DayOffInScheduleDayWeek(_scheduleDay, y)).Return(dayOffDay);
-				Expect.Call(_scheduleAvailableForDayOffSpecification.IsSatisfiedBy(_scheduleDay)).Return(true);
-				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period).Repeat.Any();
-				Expect.Call(_scheduleDayPro.Day).Return(_date1).Repeat.Any();
-				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).Return(null); 
-				Expect.Call(_hasContractDayOffDefinition.IsDayOff(_scheduleDay)).Return(true);
-			}
+		//		int x;
+		//		IList<IScheduleDay> y = new List<IScheduleDay>{dayOffDay};
+		//		Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(false).OutRef(2, y);
+		//		Expect.Call(_dayOffsInPeriodCalculator.DayOffInScheduleDayWeek(_scheduleDay, y)).Return(dayOffDay);
+		//		Expect.Call(_scheduleAvailableForDayOffSpecification.IsSatisfiedBy(_scheduleDay)).Return(true);
+		//		Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period).Repeat.Any();
+		//		Expect.Call(_scheduleDayPro.Day).Return(_date1).Repeat.Any();
+		//		Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _schedulingOptions)).Return(null); 
+		//		Expect.Call(_hasContractDayOffDefinition.IsDayOff(_scheduleDay)).Return(true);
+		//	}
 
-			using (_mocks.Playback())
-			{
-				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions);
-			}	
-		}
+		//	using (_mocks.Playback())
+		//	{
+		//		_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions);
+		//	}	
+		//}
 
 		void _target_DayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 		{
