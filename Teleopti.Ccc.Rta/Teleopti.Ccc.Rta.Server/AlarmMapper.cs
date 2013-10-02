@@ -46,7 +46,9 @@ namespace Teleopti.Ccc.Rta.Server
 					Logger.InfoFormat("Could not find alarm, no matching StateGroupId");
 				return alarmForStateGroup;
 			}
-			return findAlarmForActivity(Guid.Empty, stateGroupId, allAlarms);
+			return activityId != Guid.Empty
+				       ? findAlarmForActivity(Guid.Empty, stateGroupId, allAlarms)
+				       : null;
 		}
 
 		public RtaStateGroupLight GetStateGroup(string stateCode, Guid platformTypeId, Guid businessUnitId)
