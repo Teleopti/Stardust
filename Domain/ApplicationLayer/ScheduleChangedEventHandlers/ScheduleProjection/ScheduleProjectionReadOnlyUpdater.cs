@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			var layerPeriod = new DateTimePeriod(DateTime.SpecifyKind(closestLayer.StartDateTime, DateTimeKind.Utc),
 			                                     DateTime.SpecifyKind(closestLayer.EndDateTime, DateTimeKind.Utc));
 			if (NotifyRtaDecider.ShouldSendMessage(layerPeriod, nextActivityStartTime) &&
-			    @event.ScheduleDays.Any(d => d.Date >= DateTime.UtcNow.Date))
+			    @event.ScheduleDays.Any(d => d.Date >= DateTime.Today))
 			{
 				_serviceBus.Publish(new ScheduleProjectionReadOnlyChanged
 					{
