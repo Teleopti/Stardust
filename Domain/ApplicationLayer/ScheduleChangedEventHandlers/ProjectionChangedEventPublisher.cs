@@ -7,17 +7,14 @@ using log4net;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
-	public class ScheduleChangedHandler : 
+	public class ProjectionChangedEventPublisher : 
 		IHandleEvent<ScheduleChangedEvent>, 
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleProjection>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleDay>,
-		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>,
-		IHandleEvent<FullDayAbsenceAddedEvent>,
-		IHandleEvent<PersonAbsenceRemovedEvent>,
-		IHandleEvent<PersonAbsenceAddedEvent>
+		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>
 	{
-		private readonly IPublishEventsFromEventHandlers _bus;
-	    private static readonly ILog Logger = LogManager.GetLogger(typeof (ScheduleChangedHandler));
+		private readonly IPublishEventsFromEventHandlers _publisher;
+	    private static readonly ILog Logger = LogManager.GetLogger(typeof (ProjectionChangedEventPublisher));
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleRepository _scheduleRepository;
@@ -25,80 +22,37 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		private IScheduleRange _range;
 		private DateOnlyPeriod _realPeriod;
 
-		public ScheduleChangedHandler(IPublishEventsFromEventHandlers bus, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IProjectionChangedEventBuilder projectionChangedEventBuilder)
+		public ProjectionChangedEventPublisher(IPublishEventsFromEventHandlers publisher, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IProjectionChangedEventBuilder projectionChangedEventBuilder)
 		{
-			_bus = bus;
+			_publisher = publisher;
 			_scenarioRepository = scenarioRepository;
 			_personRepository = personRepository;
 			_scheduleRepository = scheduleRepository;
 			_projectionChangedEventBuilder = projectionChangedEventBuilder;
-		    
-		}
-
-		public void Handle(PersonAbsenceRemovedEvent @event)
-		{
-			_bus.Publish(new ScheduleChangedEvent
-			{
-				Timestamp = @event.Timestamp,
-				BusinessUnitId = @event.BusinessUnitId,
-				Datasource = @event.Datasource,
-				PersonId = @event.PersonId,
-				ScenarioId = @event.ScenarioId,
-				StartDateTime = @event.StartDateTime,
-				EndDateTime = @event.EndDateTime,
-			});
-		}
-
-		public void Handle(PersonAbsenceAddedEvent @event)
-		{
-			_bus.Publish(new ScheduleChangedEvent
-			{
-				Timestamp = @event.Timestamp,
-				BusinessUnitId = @event.BusinessUnitId,
-				Datasource = @event.Datasource,
-				PersonId = @event.PersonId,
-				ScenarioId = @event.ScenarioId,
-				StartDateTime = @event.StartDateTime,
-				EndDateTime = @event.EndDateTime,
-			});
-		}
-
-		public void Handle(FullDayAbsenceAddedEvent @event)
-		{
-			_bus.Publish(new ScheduleChangedEvent
-				{
-					Timestamp = @event.Timestamp,
-					BusinessUnitId = @event.BusinessUnitId,
-					Datasource = @event.Datasource,
-					PersonId = @event.PersonId,
-					ScenarioId = @event.ScenarioId,
-					StartDateTime = @event.StartDateTime,
-					EndDateTime = @event.EndDateTime,
-				});
 		}
 
 		public void Handle(ScheduleChangedEvent @event)
 		{
 			if (!getPeriodAndScenario(@event)) return;
-			_projectionChangedEventBuilder.Build<ProjectionChangedEvent>(@event, _range, _realPeriod, d => _bus.Publish(d));
+			_projectionChangedEventBuilder.Build<ProjectionChangedEvent>(@event, _range, _realPeriod, d => _publisher.Publish(d));
 		}
 
 		public void Handle(ScheduleInitializeTriggeredEventForPersonScheduleDay @event)
 		{
 			if (!getPeriodAndScenario(@event)) return;
-			_projectionChangedEventBuilder.Build<ProjectionChangedEventForPersonScheduleDay>(@event, _range, _realPeriod, d => _bus.Publish(d));
+			_projectionChangedEventBuilder.Build<ProjectionChangedEventForPersonScheduleDay>(@event, _range, _realPeriod, d => _publisher.Publish(d));
 		}
 
 		public void Handle(ScheduleInitializeTriggeredEventForScheduleDay @event)
 		{
 			if (!getPeriodAndScenario(@event)) return;
-			_projectionChangedEventBuilder.Build<ProjectionChangedEventForScheduleDay>(@event, _range, _realPeriod, d => _bus.Publish(d));
+			_projectionChangedEventBuilder.Build<ProjectionChangedEventForScheduleDay>(@event, _range, _realPeriod, d => _publisher.Publish(d));
 		}
 
 		public void Handle(ScheduleInitializeTriggeredEventForScheduleProjection @event)
 		{
 			if (!getPeriodAndScenario(@event)) return;
-			_projectionChangedEventBuilder.Build<ProjectionChangedEventForScheduleProjection>(@event, _range, _realPeriod, d => _bus.Publish(d));
+			_projectionChangedEventBuilder.Build<ProjectionChangedEventForScheduleProjection>(@event, _range, _realPeriod, d => _publisher.Publish(d));
 		}
 
 		private bool getPeriodAndScenario(ScheduleChangedEventBase @event)

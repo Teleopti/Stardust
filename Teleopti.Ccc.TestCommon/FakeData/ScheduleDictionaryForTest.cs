@@ -24,10 +24,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public static IScheduleDictionary WithPersonAssignment(IScenario scenario, DateTimePeriod period, IPersonAssignment personAssignment)
 		{
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period);
-			var scheduleRange = new ScheduleRange(scheduleDictionary, new ScheduleParameters(scenario, personAssignment.Person, period));
-			scheduleRange.Add(personAssignment);
-			scheduleDictionary.BaseDictionary.Add(personAssignment.Person, scheduleRange);
-			scheduleDictionary.TakeSnapshot();
+			scheduleDictionary.AddPersonAssignment(personAssignment);
 			return scheduleDictionary;
 		}
 

@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private object MakeScheduleChangedHandler()
 		{
-			return new ScheduleChangedHandler(
+			return new ProjectionChangedEventPublisher(
 					 new EventPublisher(this, new CurrentIdentity()),
 					 new ScenarioRepository(CurrentUnitOfWork.Make()),
 					 new PersonRepository(CurrentUnitOfWork.Make()),
