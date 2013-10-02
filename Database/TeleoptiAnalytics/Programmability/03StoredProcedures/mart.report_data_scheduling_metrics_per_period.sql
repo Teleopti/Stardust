@@ -61,8 +61,8 @@ SELECT
 			ELSE						 convert(varchar(4), m.LogDate, 120)
 		END,
 	interval_type	= @interval_type,
-	avg_exec_sec	= sum(ExecutionTime)/(sum(isnull(Agents,1)) * sum(isnull(SkillDays,1))),
-	tot_exec_sec	= sum(ExecutionTime),
+	avg_exec_sec	= sum(ExecutionTime)/1000/(sum(isnull(Agents,1)) * sum(isnull(SkillDays,1))),
+	tot_exec_sec	= sum(ExecutionTime)/1000,
 	avg_skill_days	= avg(SkillDays),
 	tot_skill_days	= sum(SkillDays),
 	avg_agents		= avg(Agents),
