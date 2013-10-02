@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			if (!@event.IsDefaultScenario) return;
 			var closestLayerToNow = new ProjectionChangedEventLayer
 				{
-					StartDateTime = DateTime.MaxValue,
-					EndDateTime = DateTime.MaxValue
+					StartDateTime = DateTime.MaxValue.Date,
+					EndDateTime = DateTime.MaxValue.Date
 				};
 
 			foreach (var scheduleDay in @event.ScheduleDays)
@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				}
 			}
 			handleEnqueueRtaMessage(@event, closestLayerToNow);
+			                          DateTime.SpecifyKind(closestLayerToNow.EndDateTime, DateTimeKind.Utc));
 		}
 
 		private static bool isLayerRightNow(ProjectionChangedEventLayer layer)
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			         layer.StartDateTime.ToUniversalTime() < closestLayerToNow.StartDateTime.ToUniversalTime();
 		}
 
-		private void handleEnqueueRtaMessage(ProjectionChangedEventBase @event, ProjectionChangedEventLayer closestLayer)
+		private void handleEnqueueRtaMessage(ProjectionChangedEventBase @event, DateTimePeriod? closestLayer)
 		{
 			var nextActivityStartTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
 			                                                                                           @event.PersonId);
