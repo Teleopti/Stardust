@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -57,29 +58,48 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
             var minimumResolution = _resolutionProvider.MinimumResolution(skills);
             var activityData = new Dictionary<IActivity, IDictionary<DateOnly, IList<ISkillIntervalData>>>();
-            foreach (var skillDay in skillDays)
+            for(var i= 0;i<skillDays.Count ;i++)
             {
-                aggregateDataOnSkill(skillDay, skills, minimumResolution, activityData);
+                ISkillDay skillDayToday;
+                ISkillDay skillDayTomorrow;
+                getTwoConsectiveDays(i, out skillDayToday, out skillDayTomorrow,skillDays);
+
+                aggregateDataOnSkill(skillDayToday, skillDayTomorrow, skills, minimumResolution, activityData);
             }
 
             foreach (var activityBasedData in activityData)
             {
-                var intervalData = _dayIntervalDataCalculator.Calculate(minimumResolution, activityBasedData.Value);
+                var intervalData = _dayIntervalDataCalculator.CalculatePerfect(minimumResolution, activityBasedData.Value);
                 activityIntervalData.Add(activityBasedData.Key, intervalData);
             }
 
             return activityIntervalData;
         }
 
-	    private void aggregateDataOnSkill(ISkillDay skillDay, List<ISkill> skills, int minimumResolution, Dictionary<IActivity, IDictionary<DateOnly, IList<ISkillIntervalData>>> activityData)
+        private void getTwoConsectiveDays(int index, out ISkillDay today, out ISkillDay tomorrow, IList<ISkillDay  > skillDays   )
+        {
+            tomorrow = new SkillDay();
+            today = skillDays[index];
+            if (index + 1 < skillDays.Count)
+                tomorrow = skillDays[index + 1];
+            if (today.Skill != tomorrow.Skill)
+                tomorrow = new SkillDay();
+        }
+
+	    private void aggregateDataOnSkill(ISkillDay skillDayToday, ISkillDay skillDayTomorrow, List<ISkill> skills, int minimumResolution, Dictionary<IActivity, IDictionary<DateOnly, IList<ISkillIntervalData>>> activityData)
 	    {
-	        var currentDate = skillDay.CurrentDate;
-	        var skill = skillDay.Skill;
+	        var currentDate = skillDayToday.CurrentDate;
+	        var skill = skillDayToday.Skill;
 	        if (!skills.Contains(skill)) return;
 	        var activity = skill.Activity;
-	        if (skillDay.SkillStaffPeriodCollection.Count == 0) return;
-	        var mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDay.SkillStaffPeriodCollection);
-	        mappedData = _intervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
+	        if (skillDayToday.SkillStaffPeriodCollection.Count == 0) return;
+	        
+            List<ISkillIntervalData> mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDayToday.SkillStaffPeriodCollection).ToList() ;
+            if (skillDayTomorrow.Id != null)
+                mappedData.AddRange(
+	                _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDayTomorrow.SkillStaffPeriodCollection)
+	                                                          .ToList());
+	        mappedData = _intervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution).ToList()  ;
 	        var adjustedMapedData = new List<ISkillIntervalData>();
 	        foreach (var data in mappedData)
 	        {
@@ -96,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        else
 	        {
 	            IList<ISkillIntervalData> skillIntervalData;
-	            activityData[activity].TryGetValue(skillDay.CurrentDate, out skillIntervalData);
+	            activityData[activity].TryGetValue(currentDate, out skillIntervalData);
 	            if (skillIntervalData == null)
 	            {
 	                activityData[activity].Add(currentDate, adjustedMapedData);

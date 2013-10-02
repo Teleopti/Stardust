@@ -140,6 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
                 Expect.Call(_skillDay1.CurrentDate).Return(new DateOnly()).Repeat.AtLeastOnce();
                 Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();
+                Expect.Call(_skillDay2.Id).Return(null);
                 Expect.Call(_skillDay2.Skill).Return(skill2).Repeat.AtLeastOnce();
                 Expect.Call(_skillDay2.CurrentDate).Return(new DateOnly()).Repeat.AtLeastOnce();
                 Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_factorApplier.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
                                                         skill2)).IgnoreArguments().Return(skillIntervalData1).Repeat.Times(2);
 
-                Expect.Call(_dayIntervalDataCalculator.Calculate(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
+                Expect.Call(_dayIntervalDataCalculator.CalculatePerfect(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>()) ).
                        IgnoreArguments().Return(intervalData1);
                 Expect.Call(_intervalDataAggregator.AggregateSkillIntervalData(new List<IList<ISkillIntervalData>>(0)))
                       .IgnoreArguments()
@@ -227,9 +228,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_factorApplier.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
                                                         _skill2)).IgnoreArguments().Return(skillIntervalData2).Repeat.Times(2);
 
-                Expect.Call(_dayIntervalDataCalculator.Calculate(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
+                Expect.Call(_dayIntervalDataCalculator.CalculatePerfect(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
                        IgnoreArguments().Return(intervalData1);
-                Expect.Call(_dayIntervalDataCalculator.Calculate(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
+                Expect.Call(_dayIntervalDataCalculator.CalculatePerfect(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
                        IgnoreArguments().Return(intervalData2);
             }
             using(_mock.Playback())
@@ -280,7 +281,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_factorApplier.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
                                                         _skill1)).IgnoreArguments().Return(skillIntervalData1).Repeat.Times(2);
 
-                Expect.Call(_dayIntervalDataCalculator.Calculate(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
+                Expect.Call(_dayIntervalDataCalculator.CalculatePerfect(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
                        IgnoreArguments().Return(intervalData1);
 			}
 			using (_mock.Playback())
