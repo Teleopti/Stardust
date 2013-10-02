@@ -229,6 +229,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_reader.Expect(r => r.GetInt64(6)).Return(123456789);
 			_reader.Expect(r => r.GetOrdinal("Name")).Return(7);
 			_reader.Expect(r => r.GetString(7)).Return("name");
+			_reader.Expect(r => r.GetOrdinal("BusinessUnit")).Return(8);
+			_reader.Expect(r => r.GetGuid(8)).Return(_guid);
 			_reader.Expect(r => r.Read()).Return(false);
 			_reader.Expect(r => r.Close());
 			_connection.Expect(c => c.Dispose());
