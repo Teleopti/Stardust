@@ -117,5 +117,15 @@ namespace Teleopti.Ccc.Win.Main
 			DialogResult = DialogResult.Cancel;
 			Close();
 		}
+
+	    public void Warning(string warning)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public void Error(string error)
+	    {
+	        throw new NotImplementedException();
+	    }
 	}
 }

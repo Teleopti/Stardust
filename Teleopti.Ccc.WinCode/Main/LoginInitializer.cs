@@ -19,24 +19,24 @@ namespace Teleopti.Ccc.WinCode.Main
 {
 	public interface ILoginInitializer
 	{
-		bool InitializeApplication();
+        bool InitializeApplication(IDataSourceContainer dataSourceContainer);
 	}
 
-	public class LoginInitializer : ILoginInitializer, ILicenseFeedback
+	public class LoginInitializer : ILoginInitializer
 	{
-		private readonly IDataSourceContainer _dataSource;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
+	    private readonly ILogonLicenseChecker _licenseChecker;
 
-		public LoginInitializer(IDataSourceContainer dataSource, IRoleToPrincipalCommand roleToPrincipalCommand)
+	    public LoginInitializer(IRoleToPrincipalCommand roleToPrincipalCommand, ILogonLicenseChecker licenseChecker)
 		{
-			_dataSource = dataSource;
-			_roleToPrincipalCommand = roleToPrincipalCommand;
+		    _roleToPrincipalCommand = roleToPrincipalCommand;
+		    _licenseChecker = licenseChecker;
 		}
 
-		public bool InitializeApplication()
+	    public bool InitializeApplication(IDataSourceContainer dataSourceContainer)
 		{
 			return setupCulture() &&
-			       initializeLicense() &&
+                   _licenseChecker.HasValidLicense(dataSourceContainer) &&
 			       checkRaptorApplicationFunctions();
 		}
 
@@ -49,72 +49,6 @@ namespace Teleopti.Ccc.WinCode.Main
 			Thread.CurrentThread.CurrentUICulture =
 				TeleoptiPrincipal.Current.Regional.UICulture;
 			return true;
-		}
-
-		private bool initializeLicense()
-		{
-			var unitofWorkFactory = _dataSource.DataSource.Application;
-			var verifier = new LicenseVerifier(this, unitofWorkFactory, new LicenseRepository(unitofWorkFactory));
-			var licenseService = verifier.LoadAndVerifyLicense();
-			if (licenseService == null) return false;
-			LicenseProvider.ProvideLicenseActivator(licenseService);
-			return checkStatusOfLicense(licenseService);
-		}
-
-		private bool checkStatusOfLicense(ILicenseService licenseService)
-		{
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var rep = new LicenseStatusRepository(UnitOfWorkFactory.Current);
-				// if something goes wrong here the document is corrupt, handle that in some way ??
-				var status = rep.LoadAll().First();
-				var licenseStatus = new LicenseStatusXml(XDocument.Parse(status.XmlString));
-				if (licenseStatus.StatusOk && licenseStatus.AlmostTooMany)
-				{
-					Warning(getAlmostTooManyAgentsWarning(licenseStatus.NumberOfActiveAgents, licenseService));
-				}
-				if (!licenseStatus.StatusOk && licenseStatus.DaysLeft > 0)
-				{
-					Warning(getLicenseIsOverUsedWarning(licenseService, licenseStatus));
-				}
-				if (!licenseStatus.StatusOk && licenseStatus.DaysLeft < 1)
-				{
-					Error(getTooManyAgentsExplanation(licenseService, UnitOfWorkFactory.Current.Name,
-					                                  licenseStatus.NumberOfActiveAgents));
-					return false;
-				}
-			}
-			return true;
-		}
-
-		private static string getAlmostTooManyAgentsWarning(int numberOfActiveAgents, ILicenseService licenseService)
-		{
-			return licenseService.LicenseType.Equals(LicenseType.Agent)
-					   ? String.Format(CultureInfo.CurrentCulture, Resources.YouHaveAlmostTooManyActiveAgents,
-									   numberOfActiveAgents, licenseService.MaxActiveAgents)
-					   : String.Format(CultureInfo.CurrentCulture, Resources.YouHaveAlmostTooManySeats,
-									   licenseService.MaxSeats);
-		}
-
-		private static string getLicenseIsOverUsedWarning(ILicenseService licenseService, ILicenseStatusXml licenseStatus)
-		{
-			var maxLicensed = licenseService.LicenseType.Equals(LicenseType.Agent)
-				                  ? licenseService.MaxActiveAgents
-				                  : licenseService.MaxSeats;
-
-			return String.Format(CultureInfo.CurrentCulture, Resources.TooManyAgentsIsUsedWarning,
-			                     licenseStatus.NumberOfActiveAgents, maxLicensed, licenseStatus.DaysLeft);
-		}
-
-		private static string getTooManyAgentsExplanation(ILicenseService licenseService, string dataSourceName,
-		                                                  int numberOfActiveAgents)
-		{
-			return licenseService.LicenseType == LicenseType.Agent
-				       ? dataSourceName + "\r\n" +
-				         String.Format(CultureInfo.CurrentCulture, Resources.YouHaveTooManyActiveAgents,
-				                       numberOfActiveAgents, licenseService.MaxActiveAgents)
-				       : dataSourceName + "\r\n" + String.Format(CultureInfo.CurrentCulture, Resources.YouHaveTooManySeats,
-				                                                 licenseService.MaxSeats);
 		}
 
 		private bool checkRaptorApplicationFunctions()
@@ -173,16 +107,6 @@ namespace Teleopti.Ccc.WinCode.Main
 			return message;
 		}
 		
-		public void Warning(string warning)
-		{
-			//TODO
-			throw new NotImplementedException();
-		}
-
-		public void Error(string error)
-		{
-			//TODO
-			throw new NotImplementedException();
-		}
+		
 	}
 }

@@ -2,6 +2,7 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.SystemCheck;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using Teleopti.Ccc.Win.Main;
@@ -34,7 +35,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			builder.RegisterType<LogonModel>().SingleInstance();
 			builder.RegisterType<LogonPresenter>().SingleInstance();
 
-		    builder.RegisterType<DataSourceContainer>().As<IDataSourceContainer>();
+            builder.RegisterType<LogonLicenseChecker>().As<ILogonLicenseChecker>();
+            builder.RegisterType<LicenseVerifierFactory>().As<ILicenseVerifierFactory>();
 		    builder.RegisterType<RoleToPrincipalCommand>().As<IRoleToPrincipalCommand>();
 			builder.RegisterType<LoginInitializer>().As<ILoginInitializer>();
 			builder.RegisterType<LogonDataSourceHandler>().As<IDataSourceHandler>();

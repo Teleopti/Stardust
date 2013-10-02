@@ -1,8 +1,8 @@
-﻿using System.Windows.Forms;
+﻿using Teleopti.Ccc.Infrastructure.Licensing;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
-	public interface ILogonView
+	public interface ILogonView:ILicenseFeedback
 	{
 		LogonPresenter Presenter { get; set; }
 		LoginStep CurrentStep { get; }

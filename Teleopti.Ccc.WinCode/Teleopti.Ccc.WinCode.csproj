@@ -434,10 +434,12 @@
     <Compile Include="Intraday\ReforecastWizardPages.cs" />
     <Compile Include="Main\IDataSourceHandler.cs" />
     <Compile Include="Main\ILogonView.cs" />
+    <Compile Include="Main\LicenseStatusLoader.cs" />
     <Compile Include="Main\LoginInitializer.cs" />
     <Compile Include="Main\LogonAuthorize.cs" />
     <Compile Include="Main\LogonDataSourceHandler.cs" />
     <Compile Include="Main\LogonInitializeStateHolder.cs" />
+    <Compile Include="Main\LogonLicenseChecker.cs" />
     <Compile Include="Main\LogonMatrix.cs" />
     <Compile Include="Main\LogonModel.cs" />
     <Compile Include="Main\LogonPresenter.cs" />

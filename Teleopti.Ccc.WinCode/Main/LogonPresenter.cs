@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				case LoginStep.Ready:
 					break;
 				case LoginStep.Loading:
-					_initializer.InitializeApplication();
+                    _initializer.InitializeApplication((DataSourceContainer)data);
 					break;
 			}
 		}
