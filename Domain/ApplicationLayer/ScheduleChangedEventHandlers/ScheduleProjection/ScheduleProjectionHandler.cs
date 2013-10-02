@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				return null;
 			var closestLayerToNow = new ProjectionChangedEventLayer
 				{
-					StartDateTime = DateTime.MaxValue,
-					EndDateTime = DateTime.MaxValue
+					StartDateTime = DateTime.MaxValue.Date,
+					EndDateTime = DateTime.MaxValue.Date
 				};
 
 			foreach (var scheduleDay in @event.ScheduleDays)
@@ -59,7 +59,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				}
 			}
 
-			return new DateTimePeriod(closestLayerToNow.StartDateTime.ToUniversalTime(), closestLayerToNow.EndDateTime.ToUniversalTime());
+			return new DateTimePeriod(DateTime.SpecifyKind(closestLayerToNow.StartDateTime, DateTimeKind.Utc),
+			                          DateTime.SpecifyKind(closestLayerToNow.EndDateTime, DateTimeKind.Utc));
 		}
 
 		private static bool isLayerRightNow(ProjectionChangedEventLayer layer)
