@@ -20,8 +20,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly IProjectionChangedEventBuilder _projectionChangedEventBuilder;
-		private IScheduleRange _range;
-		private DateOnlyPeriod _realPeriod;
 
 		public ProjectionChangedEventPublisher(IPublishEventsFromEventHandlers publisher, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IProjectionChangedEventBuilder projectionChangedEventBuilder)
 		{
@@ -34,48 +32,54 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 		public void Handle(ScheduleChangedEvent @event)
 		{
-			if (!getPeriodAndScenario(@event)) return;
-			_projectionChangedEventBuilder.Build<ProjectionChangedEvent>(@event, _range, _realPeriod)
-			                              .ForEach(_publisher.Publish);
+			publishEvent<ProjectionChangedEvent>(@event);
 		}
 
 		public void Handle(ScheduleInitializeTriggeredEventForPersonScheduleDay @event)
 		{
-			if (!getPeriodAndScenario(@event)) return;
-			_projectionChangedEventBuilder.Build<ProjectionChangedEventForPersonScheduleDay>(@event, _range, _realPeriod)
-			                              .ForEach(_publisher.Publish);
+			publishEvent<ProjectionChangedEventForPersonScheduleDay>(@event);
 		}
 
 		public void Handle(ScheduleInitializeTriggeredEventForScheduleDay @event)
 		{
-			if (!getPeriodAndScenario(@event)) return;
-			_projectionChangedEventBuilder.Build<ProjectionChangedEventForScheduleDay>(@event, _range, _realPeriod)
-			                              .ForEach(_publisher.Publish);
+			publishEvent<ProjectionChangedEventForScheduleDay>(@event);
 		}
 
 		public void Handle(ScheduleInitializeTriggeredEventForScheduleProjection @event)
 		{
-			if (!getPeriodAndScenario(@event)) return;
-			_projectionChangedEventBuilder.Build<ProjectionChangedEventForScheduleProjection>(@event, _range, _realPeriod)
-			                              .ForEach(_publisher.Publish);
+			publishEvent<ProjectionChangedEventForScheduleProjection>(@event);
 		}
 
-		private bool getPeriodAndScenario(ScheduleChangedEventBase @event)
+		private void publishEvent<T>(ScheduleChangedEventBase @event) where T : ProjectionChangedEventBase, new()
+		{
+			var data = getData(@event);
+			if (data == null) return;
+			_projectionChangedEventBuilder.Build<T>(@event, data.ScheduleRange, data.RealPeriod)
+										  .ForEach(_publisher.Publish);
+		}
+
+		private class range
+		{
+			public IScheduleRange ScheduleRange;
+			public DateOnlyPeriod RealPeriod;
+		}
+
+		private range getData(ScheduleChangedEventBase @event)
 		{
 			var scenario = _scenarioRepository.Get(@event.ScenarioId);
             if (scenario == null)
             {
                 Logger.InfoFormat("Scenario not found (Id: {0})", @event.ScenarioId);
-                return false;
+                return null;
             }
-			if (!scenario.DefaultScenario) return false;
+			if (!scenario.DefaultScenario) return null;
 
 			var period = new DateTimePeriod(@event.StartDateTime, @event.EndDateTime);
 			var person = _personRepository.FindPeople(new []{ @event.PersonId}).FirstOrDefault();
 		    if (person == null)
 		    {
                 Logger.InfoFormat("Person not found (Id: {0})", @event.PersonId);
-		        return false;
+		        return null;
 		    }
                     
 		    var timeZone = person.PermissionInformation.DefaultTimeZone();
@@ -85,14 +89,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				                                                   new ScheduleDictionaryLoadOptions(false, false),
 				                                                   dateOnlyPeriod, scenario);
 
-			_range = schedule[person];
+			var range = schedule[person];
 
-			DateTimePeriod? actualPeriod = @event.SkipDelete ? _range.TotalPeriod() : period;
+			DateTimePeriod? actualPeriod = @event.SkipDelete ? range.TotalPeriod() : period;
 
-			if (!actualPeriod.HasValue) return false;
+			if (!actualPeriod.HasValue) return null;
 
-			_realPeriod = actualPeriod.Value.ToDateOnlyPeriod(timeZone);
-			return true;
+			var realPeriod = actualPeriod.Value.ToDateOnlyPeriod(timeZone);
+
+			return new range
+				{
+					ScheduleRange = range,
+					RealPeriod = realPeriod
+				};
 		}
 
 	}
