@@ -33,7 +33,7 @@
 
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
 
-	<Target Name="Run" DependsOnTargets="AzureDeploy;RunETL">
+	<Target Name="Run" DependsOnTargets="SQL2005Deploy;AzureDeploy;RunETL">
 		<Message Text="All target executed!" Importance="high" />
 	</Target>
 		
