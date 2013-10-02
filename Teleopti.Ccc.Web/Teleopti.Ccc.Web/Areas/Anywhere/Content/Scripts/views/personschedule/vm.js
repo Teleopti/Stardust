@@ -51,6 +51,7 @@ define([
                 self.Name(data.Name);
                 self.Site(data.Site);
                 self.Team(data.Team);
+	            self.IsDayOff(data.IsDayOff);
 
                 self.Layers([]);
                 var layers = ko.utils.arrayMap(data.Layers, function(l) {
