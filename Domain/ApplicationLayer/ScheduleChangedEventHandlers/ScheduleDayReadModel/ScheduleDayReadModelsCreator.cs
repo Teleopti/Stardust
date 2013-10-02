@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				ret.EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(schedule.EndDateTime.Value, tz);
 			}
 
-			ret.Label = schedule.Label;
+			ret.Label = schedule.ShortName;
 			ret.ColorCode = schedule.DisplayColor;
 			ret.Workday = schedule.IsWorkday;
 			ret.NotScheduled = schedule.NotScheduled;

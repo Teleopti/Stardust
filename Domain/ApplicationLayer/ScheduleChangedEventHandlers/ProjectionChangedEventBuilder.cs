@@ -8,23 +8,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	public class ProjectionChangedEventBuilder : IProjectionChangedEventBuilder
 	{
-		public void Build<T>(ScheduleChangedEventBase message, IScheduleRange range, DateOnlyPeriod realPeriod, Action<T> actionForItems) 
+		public IEnumerable<T> Build<T>(ScheduleChangedEventBase message, IScheduleRange range, DateOnlyPeriod realPeriod) 
 			where T : ProjectionChangedEventBase, new()
 		{
 			foreach (var scheduleDayBatch in range.ScheduledDayCollection(realPeriod).Batch(50))
 			{
-				var messageList = new List<ProjectionChangedEventScheduleDay>();
-				var result = new T
-					{
-						IsInitialLoad = message.SkipDelete,
-						IsDefaultScenario = range.Scenario.DefaultScenario,
-						Datasource = message.Datasource,
-						BusinessUnitId = message.BusinessUnitId,
-						Timestamp = DateTime.UtcNow,
-						ScenarioId = message.ScenarioId,
-						PersonId = message.PersonId,
-						ScheduleDays = messageList
-					};
+				var scheduleDays = new List<ProjectionChangedEventScheduleDay>();
 				foreach (var scheduleDay in scheduleDayBatch)
 				{
 					var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
@@ -53,17 +42,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 						case SchedulePartView.MainShift:
 							var shiftCategory = scheduleDay.PersonAssignment().ShiftCategory;
 							eventScheduleDay.IsWorkday = true;
-							eventScheduleDay.Label = shiftCategory.Description.ShortName;
+							eventScheduleDay.ShortName = shiftCategory.Description.ShortName;
 							eventScheduleDay.DisplayColor = shiftCategory.DisplayColor.ToArgb();
 							break;
 						case SchedulePartView.FullDayAbsence:
-							eventScheduleDay.Label = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
+							eventScheduleDay.ShortName = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
 							break;
 						case SchedulePartView.DayOff:
-							eventScheduleDay.Label = scheduleDay.PersonAssignment().DayOff().Description.ShortName;
+							eventScheduleDay.IsDayOff = true;
+							var dayOff = scheduleDay.PersonAssignment().DayOff();
+							eventScheduleDay.ShortName = dayOff.Description.ShortName;
+							eventScheduleDay.Name = dayOff.Description.Name;
 							break;
 						case SchedulePartView.None:
-							eventScheduleDay.Label = "";
+							eventScheduleDay.ShortName = "";
 							eventScheduleDay.NotScheduled = true;
 							break;
 					}
@@ -104,9 +96,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 								IsAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential
 							});
 					}
-					messageList.Add(eventScheduleDay);
+					scheduleDays.Add(eventScheduleDay);
 				}
-				actionForItems(result);
+				yield return new T
+					{
+						IsInitialLoad = message.SkipDelete,
+						IsDefaultScenario = range.Scenario.DefaultScenario,
+						Datasource = message.Datasource,
+						BusinessUnitId = message.BusinessUnitId,
+						Timestamp = DateTime.UtcNow,
+						ScenarioId = message.ScenarioId,
+						PersonId = message.PersonId,
+						ScheduleDays = scheduleDays
+					};
 			}
 		}
 

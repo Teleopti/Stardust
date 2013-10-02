@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public ICollection<IPerson> FindPeople(IEnumerable<Guid> peopleId)
 		{
-			throw new NotImplementedException();
+			return new[] {_person};
 		}
 
 		public ICollection<IPerson> FindPeople(IEnumerable<IPerson> people)

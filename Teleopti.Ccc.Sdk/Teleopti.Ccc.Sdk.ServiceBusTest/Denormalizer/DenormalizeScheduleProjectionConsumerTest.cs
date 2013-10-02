@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 						{
 							new ProjectionChangedEventScheduleDay
 								{
-									Label = "ClosestLayer",
+									ShortName = "ClosestLayer",
 									Date = today,
 									Layers = new Collection<ProjectionChangedEventLayer>
 										{
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 						{
 							new ProjectionChangedEventScheduleDay 
 								{
-									Label = "ClosestLayer",
+									ShortName = "ClosestLayer",
 									Date = utcNow.Date.AddDays(1),
 									Layers = new Collection<ProjectionChangedEventLayer>
 										{
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 						{
 							new ProjectionChangedEventScheduleDay
 								{
-									Label = "ClosestLayer",
+									ShortName = "ClosestLayer",
 									Date = closestPeriod.StartDateTime.Date,
 									Layers = new Collection<ProjectionChangedEventLayer>
 										{
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 						{
 							new ProjectionChangedEventScheduleDay
 								{
-									Label = "ClosestLayer",
+									ShortName = "ClosestLayer",
 									Date = utcNow.Date,
 									Layers = new Collection<ProjectionChangedEventLayer>
 										{

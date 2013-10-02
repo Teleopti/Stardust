@@ -32,7 +32,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		/// <summary>
 		/// The label
 		/// </summary>
-		public string Label { get; set; }
+		public string ShortName { get; set; }
+		public string Name { get; set; }
 		/// <summary>
 		/// The color
 		/// </summary>
@@ -41,6 +42,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		/// Is this a work day
 		/// </summary>
 		public bool IsWorkday { get; set; }
+
+		public bool IsDayOff { get; set; }
 		/// <summary>
 		/// Optional shift start
 		/// </summary>

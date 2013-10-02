@@ -1,5 +1,6 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -34,25 +35,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		public void Handle(ScheduleChangedEvent @event)
 		{
 			if (!getPeriodAndScenario(@event)) return;
-			_projectionChangedEventBuilder.Build<ProjectionChangedEvent>(@event, _range, _realPeriod, d => _publisher.Publish(d));
+			_projectionChangedEventBuilder.Build<ProjectionChangedEvent>(@event, _range, _realPeriod)
+			                              .ForEach(_publisher.Publish);
 		}
 
 		public void Handle(ScheduleInitializeTriggeredEventForPersonScheduleDay @event)
 		{
 			if (!getPeriodAndScenario(@event)) return;
-			_projectionChangedEventBuilder.Build<ProjectionChangedEventForPersonScheduleDay>(@event, _range, _realPeriod, d => _publisher.Publish(d));
+			_projectionChangedEventBuilder.Build<ProjectionChangedEventForPersonScheduleDay>(@event, _range, _realPeriod)
+			                              .ForEach(_publisher.Publish);
 		}
 
 		public void Handle(ScheduleInitializeTriggeredEventForScheduleDay @event)
 		{
 			if (!getPeriodAndScenario(@event)) return;
-			_projectionChangedEventBuilder.Build<ProjectionChangedEventForScheduleDay>(@event, _range, _realPeriod, d => _publisher.Publish(d));
+			_projectionChangedEventBuilder.Build<ProjectionChangedEventForScheduleDay>(@event, _range, _realPeriod)
+			                              .ForEach(_publisher.Publish);
 		}
 
 		public void Handle(ScheduleInitializeTriggeredEventForScheduleProjection @event)
 		{
 			if (!getPeriodAndScenario(@event)) return;
-			_projectionChangedEventBuilder.Build<ProjectionChangedEventForScheduleProjection>(@event, _range, _realPeriod, d => _publisher.Publish(d));
+			_projectionChangedEventBuilder.Build<ProjectionChangedEventForScheduleProjection>(@event, _range, _realPeriod)
+			                              .ForEach(_publisher.Publish);
 		}
 
 		private bool getPeriodAndScenario(ScheduleChangedEventBase @event)
