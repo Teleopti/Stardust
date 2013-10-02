@@ -23,6 +23,7 @@ define([
             var self = this;
 
             this.Loading = ko.observable(false);
+	        this.IsDayOff = ko.observable(false);
 
             this.Layers = ko.observableArray();
 

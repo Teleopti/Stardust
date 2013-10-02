@@ -47,7 +47,7 @@
                     </thead>
                     <tbody>
                         <tr class="schedule-row">
-                            <td class="relative shift">
+                            <td class="relative" data-bind="css: { shift: !IsDayOff(), dayoff: IsDayOff() }">
                                 <!-- ko foreach: Layers -->
                                 <div class="layer absolute" data-bind="
                                         style: {
