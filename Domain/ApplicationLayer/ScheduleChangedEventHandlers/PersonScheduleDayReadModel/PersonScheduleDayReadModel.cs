@@ -25,6 +25,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public string EmploymentNumber { get; set; }
 		public DateTime Date { get; set; }
 		public Shift Shift { get; set; }
+		public DayOff DayOff { get; set; }
+	}
+
+	public class DayOff
+	{
+		public string Title { get; set; }
 	}
 
 	public class Shift

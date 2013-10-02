@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Repositories;
@@ -9,9 +10,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	// feel free to continue implementing as see fit
 	// im all for keeping it stupid (in the same manner as an .IgnoreArguments()) until smartness is required
-	public class FakePersonRepository : IPersonRepository
+	public class FakePersonRepository : IPersonRepository, IEnumerable<IPerson>
 	{
 		private readonly IPerson _person;
+
+		public FakePersonRepository()
+		{
+			_person = PersonFactory.CreatePersonWithId();
+		}
 
 		public FakePersonRepository(IPerson person)
 		{
@@ -152,6 +158,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public int SaveLoginAttempt(LoginAttemptModel model)
 		{
 			throw new NotImplementedException();
+		}
+
+		public IEnumerator<IPerson> GetEnumerator()
+		{
+			return new List<IPerson> {_person}.GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return new List<IPerson> { _person }.GetEnumerator();
 		}
 	}
 }

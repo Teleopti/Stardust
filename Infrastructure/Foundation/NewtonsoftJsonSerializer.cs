@@ -3,7 +3,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Newtonsoft")]
 	public class NewtonsoftJsonSerializer : IJsonSerializer
 	{
 		public string SerializeObject(object value)

@@ -4,14 +4,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel
 {
-	public class PersonScheduleDayReadModelHandler :
+	public class PersonScheduleDayReadModelUpdater :
 		IHandleEvent<ProjectionChangedEvent>, 
 		IHandleEvent<ProjectionChangedEventForPersonScheduleDay>
 	{
 		private readonly IPersonScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IPersonScheduleDayReadModelPersister _scheduleDayReadModelRepository;
 
-		public PersonScheduleDayReadModelHandler(
+		public PersonScheduleDayReadModelUpdater(
 			IPersonScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
 			IPersonScheduleDayReadModelPersister scheduleDayReadModelRepository)
 		{
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(message.ScheduleDays.Min(s => s.Date.Date)),
 			                                        new DateOnly(message.ScheduleDays.Max(s => s.Date.Date)));
 
-			var readModels = _scheduleDayReadModelsCreator.GetReadModels(message);
+			var readModels = _scheduleDayReadModelsCreator.MakeReadModels(message);
 			_scheduleDayReadModelRepository.UpdateReadModels(dateOnlyPeriod, message.PersonId, message.BusinessUnitId, readModels, initialLoad: message.IsInitialLoad);
 		}
 	}

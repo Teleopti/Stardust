@@ -15,14 +15,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 			_serializer = serializer;
 		}
 
-		public IEnumerable<PersonScheduleDayReadModel> GetReadModels(ProjectionChangedEventBase schedule)
+		public IEnumerable<PersonScheduleDayReadModel> MakeReadModels(ProjectionChangedEventBase schedule)
 		{
 			var person = _personRepository.Load(schedule.PersonId);
 
 			foreach (var scheduleDay in schedule.ScheduleDays)
 			{
-				if (scheduleDay.Layers.Count == 0) continue;
-
 				var ret = new PersonScheduleDayReadModel();
 
 				ret.PersonId = schedule.PersonId;
@@ -46,23 +44,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 						EmploymentNumber = person.EmploymentNumber,
 						Shift = new Shift
 							{
-								ContractTimeMinutes = (int) scheduleDay.ContractTime.TotalMinutes,
-								WorkTimeMinutes = (int) scheduleDay.WorkTime.TotalMinutes,
+								ContractTimeMinutes = (int)scheduleDay.ContractTime.TotalMinutes,
+								WorkTimeMinutes = (int)scheduleDay.WorkTime.TotalMinutes,
 								Projection = new List<SimpleLayer>()
-							}
+							},
+						DayOff = scheduleDay.IsDayOff ? new DayOff { Title = scheduleDay.Name} : null
 					};
 
-				foreach (var layer in scheduleDay.Layers)
+				if (scheduleDay.Layers != null)
 				{
-					model.Shift.Projection.Add(new SimpleLayer
+					foreach (var layer in scheduleDay.Layers)
 					{
-						Color = ColorTranslator.ToHtml(Color.FromArgb(layer.DisplayColor)),
-						Title = layer.Name,
-						Start = layer.StartDateTime,
-						End = layer.EndDateTime,
-						Minutes = (int)layer.EndDateTime.Subtract(layer.StartDateTime).TotalMinutes,
-						IsAbsenceConfidential = layer.IsAbsenceConfidential
-					});
+						model.Shift.Projection.Add(new SimpleLayer
+							{
+								Color = ColorTranslator.ToHtml(Color.FromArgb(layer.DisplayColor)),
+								Title = layer.Name,
+								Start = layer.StartDateTime,
+								End = layer.EndDateTime,
+								Minutes = (int) layer.EndDateTime.Subtract(layer.StartDateTime).TotalMinutes,
+								IsAbsenceConfidential = layer.IsAbsenceConfidential
+							});
+					}
 				}
 
 				ret.Model = _serializer.SerializeObject(model);
@@ -70,5 +72,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 				yield return ret;
 			}
 		}
+
 	}
 }

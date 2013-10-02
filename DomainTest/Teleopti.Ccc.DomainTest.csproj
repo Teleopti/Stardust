@@ -134,7 +134,9 @@
     <Compile Include="AgentInfo\Requests\RequestApprovalServiceSchedulerTest.cs" />
     <Compile Include="Analytics\BaseConfigurationTest.cs" />
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\FakePersonScheduleDayReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\FakePublishEventsFromEventHandlers.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModelUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonReactivatedHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonTerminatedHandlerTest.cs" />

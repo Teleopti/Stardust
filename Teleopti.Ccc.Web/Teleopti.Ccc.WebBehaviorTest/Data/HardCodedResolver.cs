@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			if (type == typeof (IEnumerable<IHandleEvent<ProjectionChangedEvent>>))
 				return new IHandleEvent<ProjectionChangedEvent>[]
 					{
-						new PersonScheduleDayReadModelHandler(
+						new PersonScheduleDayReadModelUpdater(
 							new PersonScheduleDayReadModelsCreator(
 								new PersonRepository(CurrentUnitOfWork.Make()),
 								new NewtonsoftJsonSerializer()),

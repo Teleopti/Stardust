@@ -163,7 +163,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\IPersonScheduleDayReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\IPersonScheduleDayReadModelsCreator.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\PersonScheduleDayReadModel.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\PersonScheduleDayReadModelHandler.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\PersonScheduleDayReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\PersonScheduleDayReadModelsCreator.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ControllableEventSyncronization.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\IEventSyncronization.cs" />
