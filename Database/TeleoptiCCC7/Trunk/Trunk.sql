@@ -63,7 +63,7 @@ OPEN dropindexes
 FETCH NEXT FROM dropindexes INTO @indexname, @tablename, @ownername 
 WHILE @@fetch_status = 0 
 BEGIN 
-	SET @sql = N'DROP INDEX '+QUOTENAME(@ownername)+'.'+QUOTENAME(@tablename)+'.'+QUOTENAME(@indexname) 
+	SET @sql = N'DROP INDEX '+ QUOTENAME(@indexname) +' ON '+  QUOTENAME(@ownername)+'.'+QUOTENAME(@tablename)
 	EXEC sp_executesql @sql   
 	FETCH NEXT FROM dropindexes INTO @indexname, @tablename, @ownername 
 END 
