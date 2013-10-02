@@ -508,7 +508,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         }
 
 		[Test]
-		public void TotalDateTimePeriod_WhenIncludeAbsenceIsFalse_ShouldReturnTheTotalPeriodFromAllLayerViewModelsExceptAbsence()
+		public void TotalDateTimePeriod_WhenScheduleHasAbsence_ShouldReturnTheTotalPeriodFromAllLayerViewModelsExceptAbsence()
 		{
 			IScheduleDay part = _partFactory
 			 .AddAbsence()
@@ -518,25 +518,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			var expectedStart = part.PersonAssignment().Period.StartDateTime;
 			var expectedEnd = part.PersonAssignment().Period.EndDateTime;
-			var totalPeriod = target.TotalDateTimePeriod(false);
-
-			Assert.That(totalPeriod.StartDateTime, Is.EqualTo(expectedStart));
-			Assert.That(totalPeriod.EndDateTime, Is.EqualTo(expectedEnd));
-		}
-
-		[Test]
-		public void TotalDateTimePeriod_WhenIncludeAbsenceIsTrue_ShouldReturnTheTotalPeriodFromAllLayerViewModelsExceptAbsence()
-		{
-			IScheduleDay part = _partFactory
-			 .AddAbsence()
-			 .AddMainShiftLayer()
-			 .CreatePart();
-			target.AddFromSchedulePart(part);
-
-			var expectedStart = part.PersonAssignment().Period.StartDateTime;
-			var expectedEnd = part.PersonAssignment().Period.EndDateTime;
-
-			var totalPeriod = target.TotalDateTimePeriod(true);
+			var totalPeriod = target.TotalDateTimePeriod();
 
 			Assert.That(totalPeriod.StartDateTime, Is.EqualTo(expectedStart));
 			Assert.That(totalPeriod.EndDateTime, Is.EqualTo(expectedEnd));
@@ -545,10 +527,21 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		[Test]
 		public void TotalDateTimePeriod_WhenNoLayers_ShouldBeEqualToThePartsPeriod()
 		{
-			IScheduleDay part = new SchedulePartFactoryForDomain().CreatePart();
-			target.AddFromSchedulePart(part);
-			Assert.AreEqual(part.Period, target.TotalDateTimePeriod(true));
-			Assert.AreEqual(part.Period, target.TotalDateTimePeriod(false));
+			var schedule = new SchedulePartFactoryForDomain().CreatePart();
+			target.AddFromSchedulePart(schedule);
+			Assert.AreEqual(schedule.Period, target.TotalDateTimePeriod());
+		}
+
+		[Test]
+		public void TotalDateTimePeriod_WhenOnlyAbsence_ShouldreturnTheperiodOfTheSchedule()
+		{
+			var schedule = new SchedulePartFactoryForDomain()
+				.AddAbsence()
+				.AddAbsence()
+				.CreatePart();
+			target.AddFromSchedulePart(schedule);
+
+			Assert.AreEqual(schedule.Period, target.TotalDateTimePeriod());
 		}
 
 		[Test]
