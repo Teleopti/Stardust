@@ -48,13 +48,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			if (type == typeof (IEnumerable<IHandleEvent<ScheduleChangedEvent>>))
 				return new[]
 					{
-						MakeScheduleChangedHandler(),
+						makeProjectionChangedEventPublisher(),
 						new ScheduleChangedNotifier(messageBroker())
 					};
-			if (type == typeof(IEnumerable<IHandleEvent<PersonAbsenceAddedEvent>>))
+			if (type == typeof (IEnumerable<IHandleEvent<PersonAbsenceAddedEvent>>))
 				return new[]
 					{
-						MakeScheduleChangedHandler()
+						new ScheduleChangedEventPublisher(new EventPublisher(this, new CurrentIdentity())),
 					};
 			if (type == typeof (IEnumerable<IHandleEvent<ProjectionChangedEvent>>))
 				return new IHandleEvent<ProjectionChangedEvent>[]
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		    return null;
 		}
 
-		private object MakeScheduleChangedHandler()
+		private object makeProjectionChangedEventPublisher()
 		{
 			return new ProjectionChangedEventPublisher(
 					 new EventPublisher(this, new CurrentIdentity()),
