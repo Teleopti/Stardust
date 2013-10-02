@@ -583,6 +583,7 @@
     <Compile Include="Scheduling\AuditHistory\PreviousPageCommand.cs" />
     <Compile Include="Scheduling\AuditHistory\RevisionDisplayRow.cs" />
     <Compile Include="Scheduling\CalculateMinMaxCacheDecider.cs" />
+    <Compile Include="Scheduling\DaysOnlyHelper.cs" />
     <Compile Include="Scheduling\IAgentPreferenceView.cs" />
     <Compile Include="Scheduling\IAgentStudentAvailabilityView.cs" />
     <Compile Include="Scheduling\ScheduleReporting\IReportData.cs" />
