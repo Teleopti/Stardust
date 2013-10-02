@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
@@ -7,12 +9,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 	public class ShiftTradeRequestProvider : IShiftTradeRequestProvider
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IScheduleProvider _scheduleProvider;
+		private readonly IPersonScheduleDayReadModelFinder _scheduleDayReadModelFinder;
 
-		public ShiftTradeRequestProvider(ILoggedOnUser loggedOnUser, IScheduleProvider scheduleProvider)
+		public ShiftTradeRequestProvider(ILoggedOnUser loggedOnUser, IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder)
 		{
 			_loggedOnUser = loggedOnUser;
-			_scheduleProvider = scheduleProvider;
+			_scheduleDayReadModelFinder = scheduleDayReadModelFinder;
 		}
 
 		public IWorkflowControlSet RetrieveUserWorkflowControlSet()
@@ -22,12 +24,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 		public IPersonScheduleDayReadModel RetrieveMySchedule(DateOnly date)
 		{
-			throw new System.NotImplementedException();
+			var person = _loggedOnUser.CurrentUser();
+			return _scheduleDayReadModelFinder.ForPerson(date, person.Id.Value);
 		}
 
 		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedules(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons)
 		{
-			throw new System.NotImplementedException();
+			IEnumerable<Guid> personIdList = (from person in possibleShiftTradePersons
+			                                 select person.Id.Value).ToList();
+			return _scheduleDayReadModelFinder.ForPersons(date, personIdList);
 		}
 	}
 }
