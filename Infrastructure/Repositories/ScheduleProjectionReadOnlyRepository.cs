@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -104,10 +101,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 return null;
 
 	        var activityPeriod = result.First();
-			DateTime? nextActivityDateTime = activityPeriod.StartDateTime > dateTime
+			DateTime nextActivityDateTime = activityPeriod.StartDateTime > dateTime
 				                                 ? activityPeriod.StartDateTime
 				                                 : activityPeriod.EndDateTime;
-	        return ((DateTime)nextActivityDateTime).ToLocalTime();
+	        return nextActivityDateTime;
         }
 
         public int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate)
