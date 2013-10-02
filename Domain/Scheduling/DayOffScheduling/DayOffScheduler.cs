@@ -115,12 +115,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 					if (effectiveRestriction != null && effectiveRestriction.NotAllowedForDayOffs)
 						continue;
 
-					var existingDayOff = _dayOffsInPeriodCalculator.DayOffInScheduleDayWeek(part, dayOffDays);
-					if (existingDayOff != null)
-					{
-						dayOffDays.Remove(existingDayOff);
-						continue;
-					}
+					//var existingDayOff = _dayOffsInPeriodCalculator.DayOffInScheduleDayWeek(part, dayOffDays);
+					//if (existingDayOff != null)
+					//{
+					//	dayOffDays.Remove(existingDayOff);
+					//	continue;
+					//}
 
                     try
                     {
