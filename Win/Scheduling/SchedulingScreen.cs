@@ -3713,12 +3713,28 @@ namespace Teleopti.Ccc.Win.Scheduling
                     
                 }
                 else
-                {
-                   	_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays,
-						                                                    allMatrixesOfSelectedPersons, true,
-						                                                    _backgroundWorkerScheduling, schedulingOptions);
-                }
+				{
+					var daysOnlyHelper = new DaysOnlyHelper(schedulingOptions);
 
+					if (daysOnlyHelper.DaysOnly)
+					{
+						if (schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly)
+							_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, _backgroundWorkerScheduling, daysOnlyHelper.PreferenceOnlyOptions);
+
+						if (schedulingOptions.RotationDaysOnly)
+							_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, _backgroundWorkerScheduling, daysOnlyHelper.RotationOnlyOptions);
+
+						if (schedulingOptions.AvailabilityDaysOnly)
+							_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, _backgroundWorkerScheduling, daysOnlyHelper.AvailabilityOnlyOptions);
+
+						if (daysOnlyHelper.UsePreferencesWithNoDaysOnly || daysOnlyHelper.UseRotationsWithNoDaysOnly || daysOnlyHelper.UseAvailabilityWithNoDaysOnly || schedulingOptions.UseStudentAvailability)
+							_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, _backgroundWorkerScheduling, daysOnlyHelper.NoOnlyOptions);
+
+					}
+					else
+						_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, _backgroundWorkerScheduling, schedulingOptions);
+				}
+						
 			}
 			else
 			{
