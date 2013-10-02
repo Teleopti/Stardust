@@ -16,30 +16,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	[TestFixture]
 	public class AddFullDayAbsenceCommandHandlerTest
 	{
-
-		private static IScheduleRepository stubScheduleRepository(ICurrentScenario currentScenario, DateTime date)
-		{
-			return stubScheduleRepository(currentScenario, date, null);
-		}
-
-		private static IScheduleRepository stubScheduleRepository(ICurrentScenario currentScenario, DateTime date, IPersonAssignment personAssignment)
-		{
-			var scheduleDictionary = new ScheduleDictionaryForTest(
-				currentScenario.Current(),
-				date.AddDays(-1),
-				date
-				);
-
-			if (personAssignment != null)
-				scheduleDictionary.AddPersonAssignment(personAssignment);
-
-			var scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
-			scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null))
-							  .IgnoreArguments()
-							  .Return(scheduleDictionary);
-			return scheduleRepository;
-		}
-
 		[Test]
 		public void ShouldRaiseFullDayAbsenceAddedEvent()
 		{
@@ -47,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
 			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
 			var currentScenario = new FakeCurrentScenario();
-			var target = new AddFullDayAbsenceCommandHandler(stubScheduleRepository(currentScenario, new DateTime(2013, 3, 25)), personRepository, absenceRepository, personAbsenceRepository, currentScenario);
+			var target = new AddFullDayAbsenceCommandHandler(new FakeReadScheduleRepository(), personRepository, absenceRepository, personAbsenceRepository, currentScenario);
 
 			var command = new AddFullDayAbsenceCommand
 				{
@@ -73,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
 			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
 			var currentScenario = new FakeCurrentScenario();
-			var target = new AddFullDayAbsenceCommandHandler(stubScheduleRepository(currentScenario, new DateTime(2013, 3, 25)), personRepository, absenceRepository, personAbsenceRepository, currentScenario);
+			var target = new AddFullDayAbsenceCommandHandler(new FakeReadScheduleRepository(), personRepository, absenceRepository, personAbsenceRepository, currentScenario);
 
 			var command = new AddFullDayAbsenceCommand
 				{
@@ -102,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
 			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
 			var currentScenario = new FakeCurrentScenario();
-			var target = new AddFullDayAbsenceCommandHandler(stubScheduleRepository(currentScenario, new DateTime(2013, 3, 25)), personRepository, absenceRepository, personAbsenceRepository, currentScenario);
+			var target = new AddFullDayAbsenceCommandHandler(new FakeReadScheduleRepository(), personRepository, absenceRepository, personAbsenceRepository, currentScenario);
 
 			var command = new AddFullDayAbsenceCommand
 				{
@@ -132,8 +108,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var currentScenario = new FakeCurrentScenario();
 			var personAssignmentPeriod = new DateTimePeriod(2013, 3, 25, 10, 2013, 3, 25, 15);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(currentScenario.Current(), person, personAssignmentPeriod);
-			var scheduleRepository = stubScheduleRepository(currentScenario, new DateTime(2013, 3, 25), personAssignment);
-			var target = new AddFullDayAbsenceCommandHandler(scheduleRepository, personRepository, absenceRepository, personAbsenceRepository, currentScenario);
+			var target = new AddFullDayAbsenceCommandHandler(new FakeReadScheduleRepository(personAssignment), personRepository, absenceRepository, personAbsenceRepository, currentScenario);
 
 			target.Handle(new AddFullDayAbsenceCommand
 				{
@@ -162,8 +137,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var currentScenario = new FakeCurrentScenario();
 			var personAssignmentPeriod = new DateTimePeriod(2013, 3, 24, 18, 2013, 3, 25, 5);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(currentScenario.Current(), person, personAssignmentPeriod);
-			var scheduleRepository = stubScheduleRepository(currentScenario, new DateTime(2013, 3, 25), personAssignment);
-			var target = new AddFullDayAbsenceCommandHandler(scheduleRepository, personRepository, absenceRepository, personAbsenceRepository, currentScenario);
+			var target = new AddFullDayAbsenceCommandHandler(new FakeReadScheduleRepository(personAssignment), personRepository, absenceRepository, personAbsenceRepository, currentScenario);
 
 			target.Handle(new AddFullDayAbsenceCommand
 				{
@@ -190,8 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var currentScenario = new FakeCurrentScenario();
 			var personAssignmentPeriod = new DateTimePeriod(2013, 3, 25, 18, 2013, 3, 26, 5);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(currentScenario.Current(), person, personAssignmentPeriod);
-			var scheduleRepository = stubScheduleRepository(currentScenario, new DateTime(2013, 3, 25), personAssignment);
-			var target = new AddFullDayAbsenceCommandHandler(scheduleRepository, personRepository, absenceRepository, personAbsenceRepository, currentScenario);
+			var target = new AddFullDayAbsenceCommandHandler(new FakeReadScheduleRepository(personAssignment), personRepository, absenceRepository, personAbsenceRepository, currentScenario);
 
 			target.Handle(new AddFullDayAbsenceCommand
 				{

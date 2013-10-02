@@ -24,12 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 			scenarioRepository.Stub(x => x.Get(scenario.Id.Value)).Return(scenario);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(2013, 10, 02), new DayOffTemplate(new Description("Day off", "DO")));
-			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(scenario, new DateTime(2013, 10, 02), personAssignment);
-			var scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
-			scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), scenario))
-			                  .IgnoreArguments()
-			                  .Return(scheduleDictionary);
-			var target = new ProjectionChangedEventPublisher(publisher,scenarioRepository, new FakePersonRepository(person), scheduleRepository, new ProjectionChangedEventBuilder());
+			var target = new ProjectionChangedEventPublisher(publisher, scenarioRepository, new FakePersonRepository(person), new FakeReadScheduleRepository(personAssignment), new ProjectionChangedEventBuilder());
 
 			target.Handle(new ScheduleChangedEvent
 				{
