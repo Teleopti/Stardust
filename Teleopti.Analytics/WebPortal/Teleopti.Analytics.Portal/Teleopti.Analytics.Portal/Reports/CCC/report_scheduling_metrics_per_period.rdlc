@@ -82,7 +82,6 @@
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell />
@@ -262,43 +261,108 @@
         <Width>18.44947cm</Width>
         <Style />
       </Tablix>
+      <Line Name="line2">
+        <Top>4.73167cm</Top>
+        <Left>0.29599cm</Left>
+        <Height>0cm</Height>
+        <Width>18.5cm</Width>
+        <ZIndex>1</ZIndex>
+        <Style>
+          <Border>
+            <Color>LightGrey</Color>
+            <Style>Solid</Style>
+          </Border>
+        </Style>
+      </Line>
+      <Textbox Name="textbox5">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Scheduling Report Metrics per Period</Value>
+                <Style>
+                  <FontSize>22pt</FontSize>
+                  <Color>DimGray</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Left</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>textbox4</rd:DefaultName>
+        <Top>0.03833cm</Top>
+        <Height>1.50529cm</Height>
+        <Width>18.25cm</Width>
+        <ZIndex>2</ZIndex>
+        <Style>
+          <Border>
+            <Color>#d3e5ef</Color>
+            <Width>2pt</Width>
+          </Border>
+          <BottomBorder>
+            <Style>None</Style>
+          </BottomBorder>
+          <VerticalAlign>Bottom</VerticalAlign>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Line Name="line1">
+        <Top>1.78833cm</Top>
+        <Height>0cm</Height>
+        <Width>18.74546cm</Width>
+        <ZIndex>3</ZIndex>
+        <Style>
+          <Border>
+            <Color>#d3e5ef</Color>
+            <Style>Solid</Style>
+            <Width>2pt</Width>
+          </Border>
+        </Style>
+      </Line>
       <Tablix Name="table2">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>2.05656cm</Width>
+              <Width>3.43834cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.73271cm</Width>
+              <Width>3.32561cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.97083cm</Width>
+              <Width>1.93125cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.81463cm</Width>
+              <Width>2.33586cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.91792cm</Width>
+              <Width>2.43915cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.33583cm</Width>
+              <Width>2.17456cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.83854cm</Width>
+              <Width>2.35977cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.5cm</Width>
+              <Width>2.40398cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.89146cm</Width>
+              <Width>2.41269cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.85208cm</Width>
+              <Width>2.37331cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>1.25001cm</Height>
+              <Height>1.23017cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -340,14 +404,16 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>avg exec sec</Value>
+                              <Value>sec per agentday</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox65</rd:DefaultName>
@@ -377,7 +443,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>tot exec sec</Value>
+                              <Value>tot sec</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -414,7 +480,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>avg skill days</Value>
+                              <Value>avg days</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -451,7 +517,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>tot skill days</Value>
+                              <Value>tot days</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -605,7 +671,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>block schedule</Value>
+                              <Value>used block</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -644,7 +710,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>team scheduling</Value>
+                              <Value>used team</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -677,7 +743,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.75001cm</Height>
+              <Height>0.73017cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -695,7 +761,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>textbox38</rd:DefaultName>
@@ -726,14 +794,16 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!avg_exec_sec.Value)</Value>
+                              <Value>=FormatNumber(sum(Fields!tot_exec_sec.Value)/(sum(Fields!tot_agents.Value)*sum(Fields!tot_skill_days.Value)),2)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox67</rd:DefaultName>
@@ -800,14 +870,16 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!avg_skill_days.Value)</Value>
+                              <Value>=FormatNumber(sum(Fields!tot_skill_days.Value)/sum(Fields!tot_schedule.Value),2)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox75</rd:DefaultName>
@@ -874,7 +946,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!avg_agents.Value)</Value>
+                              <Value>=FormatNumber(sum(Fields!tot_agents.Value)/sum(Fields!tot_schedule.Value),2)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -1063,7 +1135,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.6cm</Height>
+              <Height>0.58016cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1086,6 +1158,9 @@
                       <rd:DefaultName>textbox8</rd:DefaultName>
                       <ZIndex>8</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1110,7 +1185,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>avg_exec_sec</rd:DefaultName>
@@ -1369,7 +1446,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.82893cm</Height>
+              <Height>0.80909cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1803,86 +1880,18 @@
         </TablixRowHierarchy>
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
-        <PageBreak>
-          <BreakLocation>Start</BreakLocation>
-        </PageBreak>
-        <Top>3.95556cm</Top>
+        <Top>5.83978cm</Top>
         <Left>0.24546cm</Left>
-        <Height>3.42895cm</Height>
-        <Width>18.91056cm</Width>
-        <ZIndex>1</ZIndex>
+        <Height>3.34959cm</Height>
+        <Width>25.19452cm</Width>
+        <ZIndex>4</ZIndex>
         <Style />
       </Tablix>
-      <Line Name="line2">
-        <Top>3.77917cm</Top>
-        <Left>0.24546cm</Left>
-        <Height>0cm</Height>
-        <Width>18.5cm</Width>
-        <ZIndex>2</ZIndex>
-        <Style>
-          <Border>
-            <Color>LightGrey</Color>
-            <Style>Solid</Style>
-          </Border>
-        </Style>
-      </Line>
-      <Textbox Name="textbox5">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>Scheduling Report Metrics per Period</Value>
-                <Style>
-                  <FontSize>22pt</FontSize>
-                  <Color>DimGray</Color>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style>
-              <TextAlign>Left</TextAlign>
-            </Style>
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>textbox4</rd:DefaultName>
-        <Top>0.03833cm</Top>
-        <Height>1.50529cm</Height>
-        <Width>18.25cm</Width>
-        <ZIndex>3</ZIndex>
-        <Style>
-          <Border>
-            <Color>#d3e5ef</Color>
-            <Width>2pt</Width>
-          </Border>
-          <BottomBorder>
-            <Style>None</Style>
-          </BottomBorder>
-          <VerticalAlign>Bottom</VerticalAlign>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Line Name="line1">
-        <Top>1.78833cm</Top>
-        <Height>0cm</Height>
-        <Width>19.15602cm</Width>
-        <ZIndex>4</ZIndex>
-        <Style>
-          <Border>
-            <Color>#d3e5ef</Color>
-            <Style>Solid</Style>
-            <Width>2pt</Width>
-          </Border>
-        </Style>
-      </Line>
     </ReportItems>
     <Height>28.20541cm</Height>
     <Style />
   </Body>
-  <Width>19.41823cm</Width>
+  <Width>26.08573cm</Width>
   <Page>
     <PageFooter>
       <Height>0.75cm</Height>
