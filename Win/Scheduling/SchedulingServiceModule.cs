@@ -236,6 +236,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<BlockSteadyStateValidator>().As<IBlockSteadyStateValidator>();
 			builder.RegisterType<RestrictionOverLimitDecider>().As<IRestrictionOverLimitDecider>();
 			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>();
+            builder.RegisterType<MedianCalculatorForDays >().As<IMedianCalculatorForDays>();
 		}
 
 		private static void registerTeamBlockIntradayOptimizerService(ContainerBuilder builder)
