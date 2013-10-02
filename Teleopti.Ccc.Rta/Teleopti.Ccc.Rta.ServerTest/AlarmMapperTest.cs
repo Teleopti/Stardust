@@ -59,7 +59,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				ActivityId = _activityId,
 				StateGroupId = _stateGroupId,
 				StateGroupName = "StateGroupName",
-				AlarmTypeId = Guid.NewGuid()
+				AlarmTypeId = Guid.NewGuid(),
+				BusinessUnit = _businessUnitId
 			};
 			_alarmDictionary = new ConcurrentDictionary<Guid, List<RtaAlarmLight>>();
 			_alarmDictionary.TryAdd(_activityId, new List<RtaAlarmLight> {_rtaAlarm});
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void GetAlarm_ReturnValidAlarm()
 		{
 			_databaseHandler.Expect(d => d.ActivityAlarms()).Return(_alarmDictionary);
-			var result = _target.GetAlarm(_activityId, _stateGroupId);
+			var result = _target.GetAlarm(_activityId, _stateGroupId, _businessUnitId);
 			result.Should().Be.EqualTo(_rtaAlarm);
 		}
 
@@ -79,13 +80,14 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			var rtaAlarmForNoActivity = new RtaAlarmLight
 			{
 				ActivityId = Guid.Empty,
-				StateGroupId = _stateGroupId
+				StateGroupId = _stateGroupId,
+				BusinessUnit = _businessUnitId
 			};
 			_alarmDictionary.TryAdd(Guid.Empty, new List<RtaAlarmLight>{rtaAlarmForNoActivity});
 
 			_databaseHandler.Expect(d => d.ActivityAlarms()).Return(_alarmDictionary);
 
-			var result = _target.GetAlarm(Guid.NewGuid(), _stateGroupId);
+			var result = _target.GetAlarm(Guid.NewGuid(), _stateGroupId, _businessUnitId);
 			result.Should().Be.EqualTo(rtaAlarmForNoActivity);
 		}
 
@@ -97,13 +99,14 @@ namespace Teleopti.Ccc.Rta.ServerTest
 					new RtaAlarmLight
 						{
 							StateGroupId = Guid.Empty,
-							ActivityId = _activityId
+							ActivityId = _activityId,
+							BusinessUnit = _businessUnitId
 						}
 				};
 			_alarmDictionary.AddOrUpdate(_activityId, alarmForNoStateGroup, (guid, list) => alarmForNoStateGroup);
 
 			_databaseHandler.Expect(d => d.ActivityAlarms()).Return(_alarmDictionary);
-			var result = _target.GetAlarm(_activityId, Guid.Empty);
+			var result = _target.GetAlarm(_activityId, Guid.Empty, _businessUnitId);
 			result.Should().Be.EqualTo(alarmForNoStateGroup.First());
 		}
 
@@ -111,7 +114,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void GetAlarm_NoMatchingStateGroup_NoMatchingEmptyStateGroupAlarm_ReturnNull()
 		{
 			_databaseHandler.Expect(d => d.ActivityAlarms()).Return(_alarmDictionary);
-			var result = _target.GetAlarm(_activityId, Guid.NewGuid());
+			var result = _target.GetAlarm(_activityId, Guid.NewGuid(), _businessUnitId);
 			result.Should().Be.Null();
 		}
 
