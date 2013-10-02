@@ -278,7 +278,7 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			const string query =
 				@"SELECT sg.Id StateGroupId , sg.Name StateGroupName, Activity ActivityId, t.Name, t.Id AlarmTypeId,
-								t.DisplayColor,t.StaffingEffect, t.ThresholdTime
+								t.DisplayColor,t.StaffingEffect, t.ThresholdTime, a.BusinessUnit
 								FROM StateGroupActivityAlarm a
 								INNER JOIN AlarmType t ON a.AlarmType = t.Id
 								LEFT JOIN RtaStateGroup sg ON  a.StateGroup = sg.Id 
@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.Rta.Server
 								AND sg.IsDeleted = 0
 				UNION ALL								
 				SELECT NULL,NULL,Activity ActivityId, t.Name, t.Id AlarmTypeId,
-								t.DisplayColor,t.StaffingEffect, t.ThresholdTime
+								t.DisplayColor,t.StaffingEffect, t.ThresholdTime, a.BusinessUnit
 								FROM StateGroupActivityAlarm a
 								INNER JOIN AlarmType t ON a.AlarmType = t.Id 
 								WHERE t.IsDeleted = 0
@@ -318,7 +318,8 @@ namespace Teleopti.Ccc.Rta.Server
 							StaffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect")),
 							AlarmTypeId = reader.GetGuid(reader.GetOrdinal("AlarmTypeId")),
 							Name = reader.GetString(reader.GetOrdinal("Name")),
-							ThresholdTime = reader.GetInt64(reader.GetOrdinal("ThresholdTime"))
+							ThresholdTime = reader.GetInt64(reader.GetOrdinal("ThresholdTime")),
+							BusinessUnit = reader.GetGuid(reader.GetOrdinal("BusinessUnit"))
 						};
 					stateGroups.Add(rtaAlarmLight);
 				}
