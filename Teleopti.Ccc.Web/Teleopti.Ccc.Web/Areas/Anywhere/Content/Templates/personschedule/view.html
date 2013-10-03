@@ -47,21 +47,26 @@
                     </thead>
                     <tbody>
                         <tr class="schedule-row">
-                            <td class="relative" data-bind="css: { shift: !IsDayOff(), dayoff: IsDayOff() }">
-                                <!-- ko foreach: Layers -->
-                                <div class="layer absolute" data-bind="
-                                        style: {
-                                            left: StartPixels() + 'px',
-                                            width: LengthPixels() + 'px',
-                                            backgroundColor: Color()
-                                        },
-                                        attr: {
-                                            'data-start-time': StartTime,
-                                            'data-length-minutes': LengthMinutes,
-                                        }
-								    "></div>
-                                <!-- /ko -->
-                            </td>
+	                        <td class="relative" data-bind="css: { shift: IsShift()}">
+		                        <!-- ko if: IsDayOff -->
+		                        <div class="unit dayoff"></div>
+		                        <!-- /ko -->
+		                        <!-- ko if: IsShift -->
+									<!-- ko foreach: Layers -->
+									<div class="unit layer absolute" data-bind="
+											style: {
+												left: StartPixels() + 'px',
+												width: LengthPixels() + 'px',
+												backgroundColor: Color()
+											},
+											attr: {
+												'data-start-time': StartTime,
+												'data-length-minutes': LengthMinutes,
+											}
+										"></div>
+									<!-- /ko -->
+								<!-- /ko -->
+	                        </td>
                         </tr>
                     </tbody>
                 </table>
