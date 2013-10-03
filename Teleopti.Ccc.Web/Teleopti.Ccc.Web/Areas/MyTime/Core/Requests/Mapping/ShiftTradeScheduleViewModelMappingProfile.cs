@@ -101,13 +101,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						if (personScheduleReadModel == null)
 							return null;
 
-						var shiftReadModel = JsonConvert.DeserializeObject<Shift>(personScheduleReadModel.Shift);
+						var shiftReadModel = JsonConvert.DeserializeObject<Model>(personScheduleReadModel.Model);
 						return new ShiftTradePersonScheduleViewModel
 						{
 							PersonId = personScheduleReadModel.PersonId,
 							StartTimeUtc = personScheduleReadModel.ShiftStart.Value,
 							Name = UserTexts.Resources.MySchedule,
-							ScheduleLayers = _mapper.Map<IEnumerable<SimpleLayer>, IEnumerable<ShiftTradeScheduleLayerViewModel>>(shiftReadModel.Projection)
+							ScheduleLayers = _mapper.Map<IEnumerable<SimpleLayer>, IEnumerable<ShiftTradeScheduleLayerViewModel>>(shiftReadModel.Shift.Projection)
 						};
 					});
 		}

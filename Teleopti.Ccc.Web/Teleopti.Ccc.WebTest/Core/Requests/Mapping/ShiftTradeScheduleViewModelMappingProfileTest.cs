@@ -158,17 +158,22 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapPersonScheduleFromReadModel()
 		{
+
 			var shift = new Shift
 			{
-				FirstName = "Arne",
-				LastName = "Anka",
 				Projection = new List<SimpleLayer>()
 			};
+			var model = new Model
+				{
+					FirstName = "Arne", 
+					LastName = "Anka", 
+					Shift = shift
+				};
 			var readModel = new PersonScheduleDayReadModel
 			{
 				PersonId = Guid.NewGuid(),
 				ShiftStart = DateTime.Now,
-				Shift = JsonConvert.SerializeObject(shift)
+				Model = JsonConvert.SerializeObject(model)
 			};
 			var layerViewModels = new List<ShiftTradeScheduleLayerViewModel>();
 
