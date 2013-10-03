@@ -21,6 +21,10 @@ define([
 					if (startMinutes < start)
 						start = startMinutes;
 				});
+				
+				if (start === undefined)
+					return minutes.ForHourOfDay(8);
+
 				return minutes.StartOfHour(start);
 			});
 
@@ -33,6 +37,10 @@ define([
 					if (endMinutes > end)
 						end = endMinutes;
 				});
+				
+				if (end === undefined)
+					return minutes.ForHourOfDay(16);
+
 				return minutes.EndOfHour(end);
 			});
 
@@ -54,5 +62,14 @@ define([
 				}
 				return times;
 			}).extend({ throttle: 1 });
+			
+			this.StartTime = ko.computed(function () {
+				return self.Times()[0].Time();
+			});
+
+			this.EndTime = ko.computed(function () {
+				var times = self.Times();
+				return times[times.length - 1].Time();
+			});
 		};
 	});
