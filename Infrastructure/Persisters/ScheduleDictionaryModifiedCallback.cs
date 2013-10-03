@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		{
 			modifiedEntities.ForEach(e => whichRange(e).SolveConflictBecauseOfExternalUpdate(e, true));
 			addedEntities.ForEach(e => whichRange(e).SolveConflictBecauseOfExternalUpdate(e, true));
-			deletedEntities.ForEach(e => whichRange(e).UnsafeSnapshotDelete(e.Id.Value, true));
+			deletedEntities.ForEach(e => whichRange(e).SolveConflictBecauseOfExternalDeletion(e.Id.Value, true));
 		}
 	}
 }

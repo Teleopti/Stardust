@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 					{
 						var tempDiff = new DifferenceCollection<IPersistableScheduleData> { item };
 						var result = _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository, tempDiff);
-						uow.PersistAll(_messageBrokerModule);
+						uow.PersistAll(_messageBrokerIdentifier);
 						if (_callback != null)
 							_callback.Callback(scheduleRange, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
 					}
