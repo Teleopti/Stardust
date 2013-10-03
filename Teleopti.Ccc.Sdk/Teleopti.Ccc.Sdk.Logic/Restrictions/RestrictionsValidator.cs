@@ -101,8 +101,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 			    IRuleSetBag ruleSetBag = personPeriod.RuleSetBag;
 
 			    dto.WeekMaxInMinutes = (int) personPeriod.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek.TotalMinutes;
-			    if (ruleSetBag == null)
-				    return new List<ValidatedSchedulePartDto>();
+				if (ruleSetBag == null)
+				{
+					result.Add(dto);
+					continue;
+				}
 
 			    IEnumerable<IPreferenceDay> preferenceList =
 				    (from r in scheduleDay.PersistableScheduleDataCollection() where r is IPreferenceDay select (IPreferenceDay) r);
