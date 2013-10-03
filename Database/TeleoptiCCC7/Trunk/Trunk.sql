@@ -19,3 +19,12 @@ GO
 ---------------- 
 ALTER TABLE [dbo].[OvertimeAvailability]
 ALTER COLUMN [DateOfOvertime] [datetime] NOT NULL
+
+
+----------------  
+--Name: Erik Sundberg
+--Date: 2013-10-03
+--Desc: Bug #25008 - RTA does not differentiate between no scheduled activity and no alarm
+---------------- 
+ALTER TABLE dbo.StateGroupActivityAlarm ALTER COLUMN AlarmType uniqueidentifier NULL
+GO
