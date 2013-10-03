@@ -28,6 +28,7 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Logging;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
@@ -3641,6 +3642,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void _backgroundWorkerScheduling_DoWork(object sender, DoWorkEventArgs e)
 		{
+			var argument = (SchedulingAndOptimizeArgument)e.Argument;
+			var scheduleDays = argument.ScheduleDays;
+			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+			var selectedPeriod =
+			new DateOnlyPeriod(
+				OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone),
+				OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
+			var dateOnlyList = selectedPeriod.DayCollection();
+			_schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
+			AdvanceLoggingService.LogSchedulingInfo(_optimizerOriginalPreferences.SchedulingOptions, scheduleDays.Select(x => x.Person).Distinct().Count(), dateOnlyList.Count(), () => runBackgroundWorkerScheduling(e));
+		}
+		
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private void runBackgroundWorkerScheduling(DoWorkEventArgs e)
+		{
 			setThreadCulture();
 			var schedulingOptions = _optimizerOriginalPreferences.SchedulingOptions;
 			schedulingOptions.DayOffTemplate = _dayOffTemplate;
@@ -3934,6 +3950,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		private void _backgroundWorkerOptimization_DoWork(object sender, DoWorkEventArgs e)
+		{
+			var argument = (SchedulingAndOptimizeArgument)e.Argument;
+			var scheduleDays = argument.ScheduleDays;
+			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+			var selectedPeriod =
+				new DateOnlyPeriod(
+					OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone),
+					OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
+			var dateOnlyList = selectedPeriod.DayCollection();
+			_schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
+			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
+			AdvanceLoggingService.LogOptimizationInfo(optimizerPreferences, scheduleDays.Select(x => x.Person).Distinct().Count(), dateOnlyList.Count(), () => runBackgroupWorkerOptimization(e));
+			
+		}
+
+		private void runBackgroupWorkerOptimization(DoWorkEventArgs e)
 		{
 			setThreadCulture();
 			var options = (SchedulingAndOptimizeArgument)e.Argument;
