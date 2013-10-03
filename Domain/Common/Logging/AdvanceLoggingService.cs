@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Common.Logging
         {
             if (_log == null)
             {
-                Log4NetConfiguration.SetConnectionString("data source=.;initial catalog=PBI231131_Demoreg_TeleoptiCCC7;integrated security=true; persist security info=True;User ID=sa;Password=cadadi");
                 _log = LogManager.GetLogger("Teleopti.AdvanceLoggingService");
                 
             }
@@ -29,7 +28,9 @@ namespace Teleopti.Ccc.Domain.Common.Logging
         {
             if (getLog().IsInfoEnabled)
             {
-                var stop = new Stopwatch();
+				clearGlobalContext();
+                
+				var stop = new Stopwatch();
                 stop.Start();
                 callbackAction.Invoke();
                 stop.Stop();

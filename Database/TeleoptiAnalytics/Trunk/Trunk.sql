@@ -178,6 +178,7 @@ GO
 --Date: 2013-09-30
 --Desc: PBI23113 - Show execution time for different scheduling options
 -----------------
+SET NOCOUNT ON
 declare @reportId uniqueidentifier
 declare @controlId uniqueidentifier
 
@@ -219,9 +220,38 @@ END
 IF NOT EXISTS(SELECT 1 FROM mart.Report WHERE Id=@reportId)
 BEGIN
 	INSERT INTO mart.Report(Id, report_id, control_collection_id, url, target, report_name, report_name_resource_key, visible, rpt_file_name, proc_name, help_key, sub1_name, sub1_proc_name, sub2_name, sub2_proc_name, ControlCollectionId)
-	VALUES (@reportId,30,45,@url,'_blank','Scheduling Metrics per Period','ResReportSchedulingMetricsPerPeriod',1,'~/Reports/CCC/report_scheduling_metrics_per_period.rdlc','mart.report_data_scheduling_metrics_per_period','f01_Report_SchedulingMetricsPerPeriod.html','','','','','D0CC5826-A320-4210-A91C-67710A4DBBEB')
+	VALUES (@reportId,30,45,@url,'_blank','Scheduling Metrics per Period','ResReportSchedulingMetricsPerPeriod',0,'~/Reports/CCC/report_scheduling_metrics_per_period.rdlc','mart.report_data_scheduling_metrics_per_period','f01_Report_SchedulingMetricsPerPeriod.html','','','','','D0CC5826-A320-4210-A91C-67710A4DBBEB')
 END	
 
 GO
-select * from mart.report_control_collection
-where param_name like '%interval%'
+
+----------------  
+--Name: David J
+--Date: 2013-09-25
+--Desc: bug #23113 - Advanced logging
+-----------------
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AdvancedLoggingService]') AND type in (N'U'))
+BEGIN
+	CREATE TABLE [dbo].[AdvancedLoggingService](
+	[LogDate] [datetime] NOT NULL,
+	[Message] [nvarchar](100) NULL,
+	[BU] [nvarchar](50) NULL,
+	[BUId] [uniqueidentifier] NULL,
+	[DataSource] [nvarchar](200) NULL,
+	[InitialCatalog] [nvarchar](200) NULL,
+	[WindowsIdentity] [nvarchar](200) NULL,
+	[HostIP] [varchar](30) NULL,
+	[BlockOptions] [nvarchar](500) NULL,
+	[TeamOptions] [nvarchar](500) NULL,
+	[GeneralOptions] [nvarchar](500) NULL,
+	[SkillDays] [int] NULL,
+	[Agents] [int] NULL,
+	[ExecutionTime] [int] NULL
+	) 
+	CREATE CLUSTERED INDEX [CIX_AdvancedLoggingService_LogDate_HostIP] ON [dbo].[AdvancedLoggingService]
+	(
+		[LogDate] ASC,
+		[HostIP] ASC
+	)
+END
+GO

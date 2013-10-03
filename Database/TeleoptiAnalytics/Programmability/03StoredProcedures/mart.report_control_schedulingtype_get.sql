@@ -23,7 +23,7 @@ SELECT 1,'Both'
 UNION ALL
 SELECT 2,'Scheduling'
 UNION ALL
-SELECT 3,'Optimazation'
+SELECT 3,'Optimization'
 
 select Id,Name FROM #schedulingtype 
 
