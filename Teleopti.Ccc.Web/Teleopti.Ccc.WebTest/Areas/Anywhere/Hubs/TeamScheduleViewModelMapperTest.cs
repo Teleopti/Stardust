@@ -52,5 +52,35 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var personStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, timeZone).ToFixedDateTimeFormat();
 			result.Single().Projection.Single().Start.Should().Be(personStartTime);
 		}
+
+		[Test]
+		public void ShouldMapDayOff()
+		{
+			var agent = PersonFactory.CreatePersonWithId();
+			var target = new TeamScheduleViewModelMapper();
+
+			var data = new TeamScheduleData
+				{
+					CanSeePersons = new[] { agent },
+					CanSeeConfidentialAbsencesFor = new[] { agent },
+					Schedules = new[]
+						{
+							new PersonScheduleDayReadModel
+								{
+									Model = JsonConvert.SerializeObject(new Model
+										{
+											DayOff = new DayOff
+												{
+													Title = "Day off"
+												}
+										})
+								}
+						}
+				};
+
+			var result = target.Map(data);
+
+			result.Single().IsDayOff.Should().Be.True();
+		}
 	}
 }

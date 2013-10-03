@@ -34,7 +34,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					FirstName = model.FirstName,
 					Id = readModel.PersonId.ToString(),
 					LastName = model.LastName,
-					Projection = layers
+					Projection = layers,
+					IsDayOff = model.DayOff != null
 				};
 		}
 
