@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see schedule for '(.*)'")]
 		public void ThenIShouldSeeScheduleFor(string personName)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift li", personName);
+			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift .layer", personName);
 		}
 
 		[Then(@"I should see '(.*)' with the schedule")]
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void ThenIShouldSeeWithAbsence(string personName, Table table)
 		{
 			var absence = table.CreateInstance<AbsenceInfo>();
-			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift li[style*='background-color: {1}']", personName, PersonSchedulePageStepDefinitions.ColorNameToCss(absence.Color));
+			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift .layer[style*='background-color: {1}']", personName, PersonSchedulePageStepDefinitions.ColorNameToCss(absence.Color));
 		}
 
 		[Then(@"I should see '(.*)' with no schedule")]
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			Browser.Interactions.AssertNotExistsUsingJQuery(
 				".person:contains('{0}')",
-				".person:contains('{0}') .shift li",
+				".person:contains('{0}') .shift .layer",
 				personName
 				);
 		}

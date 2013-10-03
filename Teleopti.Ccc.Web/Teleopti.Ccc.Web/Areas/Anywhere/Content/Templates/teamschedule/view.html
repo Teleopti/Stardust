@@ -68,8 +68,8 @@
 								<!-- Must do it this way to get correct overflow: hidden in IE -->
 								<div class="person-name nowrap" data-bind="text: Name"></div>
 							</td>
-							<td class="shift">
-								<ul class="relative unstyled" data-bind="template: { name: 'layerTemplate', foreach: Layers }"></ul>
+							<td class="schedule">
+								<div class="relative shift" data-bind="template: { name: 'layerTemplate', foreach: Layers }"></div>
 							</td>
 							<td class="contract-time" data-bind="text: ContractTime"></td>
 						</tr>
@@ -82,7 +82,7 @@
 </div>
 
 <script id="layerTemplate" type="text/html">
-	<li class="layer absolute floatleft" data-bind="
+	<div class="layer absolute floatleft" data-bind="
 	if: IsVisible,
 	style: {
 		left: StartPixels() + 'px',
@@ -93,5 +93,5 @@
 		'data-start-time': StartTime,
 		'data-length-minutes': LengthMinutes,
 	}
-	"></li>
+	"></div>
 </script>
