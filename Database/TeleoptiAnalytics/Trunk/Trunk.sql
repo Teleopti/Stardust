@@ -238,7 +238,6 @@ BEGIN
 	[BU] [nvarchar](50) NULL,
 	[BUId] [uniqueidentifier] NULL,
 	[DataSource] [nvarchar](200) NULL,
-	[InitialCatalog] [nvarchar](200) NULL,
 	[WindowsIdentity] [nvarchar](200) NULL,
 	[HostIP] [varchar](30) NULL,
 	[BlockOptions] [nvarchar](500) NULL,

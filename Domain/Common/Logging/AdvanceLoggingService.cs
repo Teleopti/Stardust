@@ -92,7 +92,6 @@ namespace Teleopti.Ccc.Domain.Common.Logging
                 GlobalContext.Properties["BU"] = identity.BusinessUnit.Name;
                 GlobalContext.Properties["BUId"] = identity.BusinessUnit.Id;
                 GlobalContext.Properties["DataSource"] = identity.DataSource.DataSourceName;
-                GlobalContext.Properties["InitialCatalog"] = identity.DataSource.InitialCatalog;
                 GlobalContext.Properties["WindowsIdentity"] = identity.WindowsIdentity.Name;
                 GlobalContext.Properties["HostIP"] = SystemInformationHelper.GetSystemIPAddress();
                 
