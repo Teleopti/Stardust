@@ -7950,7 +7950,7 @@ Period</value>
     <comment>Conflict</comment>
   </data>
   <data name="InfoTextConflict" xml:space="preserve">
-    <value>Another user has modified these records. You need to decide what to do before you continue. Click OK to accept the other user's changes. Please note that your corresponding changes will be lost. Click Cancel to continue without saving. You will be prompted with this conflict again when you click Save. Click Overwrite to save your changes and delete changes made by other users.</value>
+    <value>Another user has modified these records. You need to decide what to do before you continue. Click OK to accept the other user's changes. Please note that your corresponding changes will be lost.  Click Overwrite to save your changes and delete changes made by other users.</value>
     <comment>Info text when conflicts occur</comment>
   </data>
   <data name="NotSaved" xml:space="preserve">
