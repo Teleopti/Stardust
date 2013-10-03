@@ -1,7 +1,7 @@
 define([
         'knockout',
         'navigation',
-		'views/personschedule/timeline',
+		'views/teamschedule/timeline',
         'resources!r',
         'moment',
     ], function(
