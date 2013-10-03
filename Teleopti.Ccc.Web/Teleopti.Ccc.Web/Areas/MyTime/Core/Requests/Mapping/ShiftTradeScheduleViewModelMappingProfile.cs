@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(source);
 
 						ShiftTradePersonScheduleViewModel mySchedule = _mapper.Map<IPersonScheduleDayReadModel, ShiftTradePersonScheduleViewModel>(myScheduleDayReadModel);
-						IEnumerable<ShiftTradePersonScheduleViewModel> possibleTradeSchedule = _mapper.Map<DatePersons, IEnumerable<ShiftTradePersonScheduleViewModel>>(possibleTradePersons);
+						IEnumerable<ShiftTradePersonScheduleViewModel> possibleTradeSchedule = getPossibleTradeSchedules(possibleTradePersons);
 
 						IEnumerable<ShiftTradeTimeLineHoursViewModel> timeLineHours = createTimeLineHours(getTimeLinePeriod(mySchedule, possibleTradeSchedule, source.ShiftTradeDate));
 
@@ -78,18 +78,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 								PossibleTradeSchedules = possibleTradeSchedule,
 								TimeLineHours = timeLineHours
 							};
-					});
-
-			CreateMap<DatePersons, IEnumerable<ShiftTradePersonScheduleViewModel>>()
-				.ConvertUsing(datePersons =>
-					{
-						if (datePersons.Persons.Any())
-						{
-							var schedules = _shiftTradeRequestProvider.RetrievePossibleTradeSchedules(datePersons.Date, datePersons.Persons);
-							return _mapper.Map<IEnumerable<IPersonScheduleDayReadModel>, IEnumerable<ShiftTradePersonScheduleViewModel>>(schedules);
-						}
-
-						return new List<ShiftTradePersonScheduleViewModel>();
 					});
 
 			CreateMap<SimpleLayer, ShiftTradeScheduleLayerViewModel>()
@@ -110,6 +98,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 							ScheduleLayers = _mapper.Map<IEnumerable<SimpleLayer>, IEnumerable<ShiftTradeScheduleLayerViewModel>>(shiftReadModel.Shift.Projection)
 						};
 					});
+		}
+
+		private IEnumerable<ShiftTradePersonScheduleViewModel> getPossibleTradeSchedules(DatePersons datePersons)
+		{
+			if (datePersons.Persons.Any())
+			{
+				var schedules = _shiftTradeRequestProvider.RetrievePossibleTradeSchedules(datePersons.Date, datePersons.Persons);
+				return _mapper.Map<IEnumerable<IPersonScheduleDayReadModel>, IEnumerable<ShiftTradePersonScheduleViewModel>>(schedules);
+			}
+
+			return new List<ShiftTradePersonScheduleViewModel>();
 		}
 
 		private DateTimePeriod getTimeLinePeriod(ShiftTradePersonScheduleViewModel mySchedule, IEnumerable<ShiftTradePersonScheduleViewModel> possibleTradeSchedules, DateOnly shiftTradeDate)
