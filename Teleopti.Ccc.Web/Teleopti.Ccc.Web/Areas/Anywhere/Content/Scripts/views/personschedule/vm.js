@@ -29,7 +29,7 @@ define([
             this.IsDayOff = ko.observable(false);
 	        
             this.IsShift = ko.computed(function () {
-	            return self.Layers().length > 0;
+            	return !self.IsDayOff();
             });
 
             this.Absences = ko.observableArray();
