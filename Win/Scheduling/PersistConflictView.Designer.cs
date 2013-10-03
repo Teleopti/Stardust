@@ -30,7 +30,6 @@
 		private void InitializeComponent()
         {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PersistConflictView));
-			this.btnCancel = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.btnUndo = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.btnOverWrite = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.labelInfo = new System.Windows.Forms.Label();
@@ -42,26 +41,11 @@
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
 			this.SuspendLayout();
 			// 
-			// btnCancel
-			// 
-			this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Location = new System.Drawing.Point(550, 474);
-			this.btnCancel.Name = "btnCancel";
-			this.btnCancel.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.btnCancel.Size = new System.Drawing.Size(94, 23);
-			this.btnCancel.TabIndex = 1;
-			this.btnCancel.Text = "xxCancel";
-			this.btnCancel.UseVisualStyle = true;
-			this.btnCancel.UseVisualStyleBackColor = true;
-			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-			// 
 			// btnUndo
 			// 
 			this.btnUndo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnUndo.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.btnUndo.Location = new System.Drawing.Point(438, 474);
+			this.btnUndo.Location = new System.Drawing.Point(546, 486);
 			this.btnUndo.Name = "btnUndo";
 			this.btnUndo.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.btnUndo.Size = new System.Drawing.Size(94, 23);
@@ -75,7 +59,7 @@
 			// 
 			this.btnOverWrite.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnOverWrite.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.btnOverWrite.Location = new System.Drawing.Point(326, 474);
+			this.btnOverWrite.Location = new System.Drawing.Point(434, 486);
 			this.btnOverWrite.Name = "btnOverWrite";
 			this.btnOverWrite.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.btnOverWrite.Size = new System.Drawing.Size(94, 23);
@@ -93,7 +77,7 @@
 			this.labelInfo.Location = new System.Drawing.Point(3, 0);
 			this.labelInfo.Margin = new System.Windows.Forms.Padding(3, 0, 3, 8);
 			this.labelInfo.Name = "labelInfo";
-			this.labelInfo.Size = new System.Drawing.Size(623, 90);
+			this.labelInfo.Size = new System.Drawing.Size(624, 90);
 			this.labelInfo.TabIndex = 5;
 			this.labelInfo.Text = "xxInfoTextConflict";
 			// 
@@ -101,10 +85,8 @@
 			// 
 			this.gridControlConflict.ColCount = 4;
 			this.gridControlConflict.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.gridControlConflict.GridLineColor = System.Drawing.SystemColors.GrayText;
 			this.gridControlConflict.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
 			this.gridControlConflict.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
-			this.gridControlConflict.HScrollBehavior = Syncfusion.Windows.Forms.Grid.GridScrollbarMode.Disabled;
 			this.gridControlConflict.Location = new System.Drawing.Point(3, 101);
 			this.gridControlConflict.Name = "gridControlConflict";
 			this.gridControlConflict.Office2007ScrollBars = true;
@@ -112,8 +94,7 @@
 			this.gridControlConflict.Properties.BackgroundColor = System.Drawing.Color.White;
 			this.gridControlConflict.Properties.RowHeaders = false;
 			this.gridControlConflict.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridControlConflict.ShowRowHeaders = false;
-			this.gridControlConflict.Size = new System.Drawing.Size(623, 309);
+			this.gridControlConflict.Size = new System.Drawing.Size(624, 318);
 			this.gridControlConflict.SmartSizeBox = false;
 			this.gridControlConflict.TabIndex = 0;
 			this.gridControlConflict.Text = "gridControlConflict";
@@ -136,14 +117,16 @@
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 98F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(629, 413);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(630, 422);
 			this.tableLayoutPanel1.TabIndex = 7;
 			// 
 			// ribbonControlAdv1
 			// 
 			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
+			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
 			this.ribbonControlAdv1.MenuButtonText = "";
 			this.ribbonControlAdv1.MenuButtonVisible = false;
+			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
 			// 
 			// ribbonControlAdv1.OfficeMenu
@@ -152,8 +135,7 @@
 			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
 			this.ribbonControlAdv1.QuickPanelVisible = false;
 			this.ribbonControlAdv1.SelectedTab = null;
-			this.ribbonControlAdv1.ShowMinimizeButton = false;
-			this.ribbonControlAdv1.Size = new System.Drawing.Size(655, 33);
+			this.ribbonControlAdv1.Size = new System.Drawing.Size(656, 33);
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "Start menu";
 			this.ribbonControlAdv1.TabIndex = 29;
 			this.ribbonControlAdv1.Text = "ribbonControlAdv1";
@@ -163,13 +145,12 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
-			this.CancelButton = this.btnCancel;
-			this.ClientSize = new System.Drawing.Size(657, 518);
+			this.ClientSize = new System.Drawing.Size(658, 527);
+			this.ControlBox = false;
 			this.Controls.Add(this.ribbonControlAdv1);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Controls.Add(this.btnOverWrite);
 			this.Controls.Add(this.btnUndo);
-			this.Controls.Add(this.btnCancel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "PersistConflictView";
@@ -184,8 +165,7 @@
 
         #endregion
 
-        private Syncfusion.Windows.Forms.ButtonAdv btnCancel;
-        private Syncfusion.Windows.Forms.ButtonAdv btnUndo;
+		private Syncfusion.Windows.Forms.ButtonAdv btnUndo;
         private Syncfusion.Windows.Forms.ButtonAdv btnOverWrite;
 		private System.Windows.Forms.Label labelInfo;
         private Syncfusion.Windows.Forms.Grid.GridControl gridControlConflict;
