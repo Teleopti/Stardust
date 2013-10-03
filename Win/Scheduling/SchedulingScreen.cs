@@ -3649,11 +3649,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var argument = (SchedulingAndOptimizeArgument)e.Argument;
 			var scheduleDays = argument.ScheduleDays;
-			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-			var selectedPeriod =
-			new DateOnlyPeriod(
-				OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone),
-				OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
+			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
 			var dateOnlyList = selectedPeriod.DayCollection();
 			_schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
 			AdvanceLoggingService.LogSchedulingInfo(_optimizerOriginalPreferences.SchedulingOptions, scheduleDays.Select(x => x.Person).Distinct().Count(), dateOnlyList.Count(), () => runBackgroundWorkerScheduling(e));
@@ -4006,11 +4002,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var argument = (SchedulingAndOptimizeArgument)e.Argument;
 			var scheduleDays = argument.ScheduleDays;
-			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-			var selectedPeriod =
-				new DateOnlyPeriod(
-					OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone),
-					OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
+			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
 			var dateOnlyList = selectedPeriod.DayCollection();
 			_schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
