@@ -10266,7 +10266,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Another user has modified these records. You need to decide what to do before you continue. Click OK to accept the other user&apos;s changes. Please note that your corresponding changes will be lost. Click Cancel to continue without saving. You will be prompted with this conflict again when you click Save. Click Overwrite to save your changes and delete changes made by other users..
+        ///   Looks up a localized string similar to Another user has modified these records. You need to decide what to do before you continue. Click OK to accept the other user&apos;s changes. Please note that your corresponding changes will be lost.  Click Overwrite to save your changes and delete changes made by other users..
         /// </summary>
         public static string InfoTextConflict {
             get {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Syncfusion.Drawing;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Win.Common;
@@ -60,9 +59,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Close();
 		}
 
-		private void btnCancel_Click(object sender, EventArgs e)
-		{
-			_presenter.OnCancel();
 		}
 
 		private void btnUndo_Click(object sender, EventArgs e)
