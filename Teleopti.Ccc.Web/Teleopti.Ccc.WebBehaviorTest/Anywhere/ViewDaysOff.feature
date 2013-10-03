@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: View days off
+﻿Feature: View days off
 	In order to keep track of scheduled days off for a person in my team
 	As a team leader
 	I want to see the scheduled days off for the person
@@ -22,6 +21,7 @@ Background:
     | Field | Value   |
     | Name  | Day off |
 	
+@ignore
 Scenario: View day off in team schedule
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a day off with
