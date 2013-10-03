@@ -12,8 +12,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
-using Teleopti.Ccc.Sdk.ServiceBus.TeleoptiRtaService;
+using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -92,16 +93,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 	public class GetUpdatedScheduleChangeFromTeleoptiRtaService : IGetUpdatedScheduleChangeFromTeleoptiRtaService
 	{
-		private readonly ITeleoptiRtaService _service;
+		private readonly IChannelCreator _channelCreator;
 
-		public GetUpdatedScheduleChangeFromTeleoptiRtaService(ITeleoptiRtaService service)
+		public GetUpdatedScheduleChangeFromTeleoptiRtaService(IChannelCreator channelCreator)
 		{
-			_service = service;
+			_channelCreator = channelCreator;
 		}
 
 		public void GetUpdatedScheduleChange(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
-			_service.GetUpdatedScheduleChange(personId, businessUnitId, timestamp);
+			var channel = _channelCreator.CreateChannel<ITeleoptiRtaService>();
+			channel.GetUpdatedScheduleChange(personId, businessUnitId, timestamp);
 		}
 	}
 
