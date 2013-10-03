@@ -118,7 +118,12 @@
     <Compile Include="Data\Setups\Specific\GroupingReadOnlyUpdate.cs" />
     <Compile Include="Data\Setups\Specific\UserContract.cs" />
     <Compile Include="OveritmeAvailability.feature.cs">
-      <DependentUpon>OveritmeAvailability.feature</DependentUpon>
+      <DependentUpon>OveritmeAvailability.feature</DependentUpon>      
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="ShiftTradeRequestEdit.feature.cs">
+      <DependentUpon>ShiftTradeRequestEdit.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -325,10 +330,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesFeedbackPreSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="ShiftTradeRequests.feature.cs">
+    <Compile Include="ShiftTradeRequestAdd.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ShiftTradeRequests.feature</DependentUpon>
+      <DependentUpon>ShiftTradeRequestAdd.feature</DependentUpon>
     </Compile>
     <Compile Include="WeekScheduleAvailableAsbence.feature.cs">
       <AutoGen>True</AutoGen>
@@ -661,6 +666,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>OveritmeAvailability.feature.cs</LastGenOutput>
     </None>
+    <None Include="ShiftTradeRequestEdit.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ShiftTradeRequestEdit.feature.cs</LastGenOutput>
+    </None>
     <None Include="PerformanceTool\PerformanceView.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PerformanceView.feature.cs</LastGenOutput>
@@ -740,9 +749,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackPreSchedule.feature.cs</LastGenOutput>
     </None>
-    <None Include="ShiftTradeRequests.feature">
+    <None Include="ShiftTradeRequestAdd.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ShiftTradeRequests.feature.cs</LastGenOutput>
+      <LastGenOutput>ShiftTradeRequestAdd.feature.cs</LastGenOutput>
     </None>
     <None Include="Testing\specflow.exe.config" />
     <None Include="Testing\TestExecutionReport.bat" />

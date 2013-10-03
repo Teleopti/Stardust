@@ -161,6 +161,7 @@
     <Compile Include="Persisters\PersonRequestRefresherTest.cs" />
     <Compile Include="Persisters\ScheduleRefresherTest.cs" />
     <Compile Include="Repositories\AbsenceRequestInfoTest.cs" />
+    <Compile Include="Repositories\PersonForShiftTradeRepositoryTest.cs" />
     <Compile Include="Repositories\SkillLoaderDeciderTest.cs" />
     <Compile Include="Repositories\Deadlock\StudentAvailabilityPersistTest.cs" />
     <Compile Include="Foundation\ApplicationDataTest.cs" />
@@ -262,7 +263,6 @@
     <Compile Include="Repositories\Audit\ScheduleHistoryRepositoryTest.cs" />
     <Compile Include="Repositories\EtlReadModelRepositoryTest.cs" />
     <Compile Include="Repositories\OvertimeAvailabilityRepositoryTest.cs" />
-    <Compile Include="Repositories\PersonRepositoryPossibleShiftTradeTest.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelFinderTest.cs" />
     <Compile Include="Repositories\LicenseStatusRepositoryTest.cs" />
     <Compile Include="Repositories\DenormalizationQueueRepositoryTest.cs" />

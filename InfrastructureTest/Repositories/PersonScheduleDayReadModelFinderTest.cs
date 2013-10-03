@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -16,11 +17,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	public class PersonScheduleDayReadModelFinderTest : DatabaseTest
 	{
 		private PersonScheduleDayReadModelFinder _target;
- 
+
 		[Test]
 		public void ShouldReturnReadModelsForPersonForDates()
 		{
-			_target = new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make());	
+			_target = new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make());
 			var dateOnly = new DateOnly(2012, 8, 28);
 			var personId = Guid.NewGuid();
 
@@ -38,9 +39,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				createAndSaveReadModel(personId, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28));
+				createAndSaveReadModel(personId, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 10);
 
 				Assert.That(_target.ForPerson(new DateOnly(2012, 8, 28), personId), Is.Not.Null);
+			}
+		}
+		
+		[Test]
+		public void ShouldReturnReadModelsForPersonsAndDaySortedByShiftStart()
+		{
+			_target = new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make());
+			var personSortedFirst = Guid.NewGuid();
+			var personSortedSecond = Guid.NewGuid();
+			var personSortedThird = Guid.NewGuid();
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				createAndSaveReadModel(personSortedThird, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 10);
+				createAndSaveReadModel(personSortedFirst, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 7);
+				createAndSaveReadModel(personSortedSecond, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 8);
+
+				var result = _target.ForPersons(new DateOnly(2012, 8, 28),
+				                                new[] {personSortedFirst, personSortedSecond, personSortedThird});
+
+				var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
+				Assert.That(scheduleReadModels.ElementAt(0).PersonId, Is.EqualTo(personSortedFirst));
+				Assert.That(scheduleReadModels.ElementAt(1).PersonId, Is.EqualTo(personSortedSecond));
+				Assert.That(scheduleReadModels.ElementAt(2).PersonId, Is.EqualTo(personSortedThird));
 			}
 		}
 
@@ -54,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				createAndSaveReadModel(personId, teamId, Guid.NewGuid(), new DateTime(2012, 8, 29));
+				createAndSaveReadModel(personId, teamId, Guid.NewGuid(), new DateTime(2012, 8, 29), 10);
 
 				var ret = _target.ForPerson(dateOnly.AddDays(-1), dateOnly.AddDays(5), personId);
 
@@ -71,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var businessUnitId = Guid.NewGuid();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				createAndSaveReadModel(personId, teamId, businessUnitId, new DateTime(2012, 8, 29));
+				createAndSaveReadModel(personId, teamId, businessUnitId, new DateTime(2012, 8, 29), 10);
 				uow.PersistAll();
 			}
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -95,7 +120,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			persister.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, null, false);
 		}
 
-		private void createAndSaveReadModel(Guid personId, Guid teamId, Guid businessUnitId, DateTime date)
+		private void createAndSaveReadModel(Guid personId, Guid teamId, Guid businessUnitId, DateTime date, int shiftStartHour)
 		{
 			var model = new PersonScheduleDayReadModel
 			{
@@ -103,14 +128,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				TeamId = teamId,
 				BusinessUnitId = businessUnitId,
 				PersonId = personId,
-				ShiftStart = date.AddHours(10),
-				ShiftEnd = date.AddHours(18),
+				ShiftStart = date.AddHours(shiftStartHour),
+				ShiftEnd = date.AddHours(shiftStartHour + 8),
 				Model = "{shift: blablabla}",
 			};
 
 			var persister = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(),
-			                                                        MockRepository.GenerateMock<IMessageBroker>(),
-			                                                        MockRepository.GenerateMock<ICurrentDataSource>());
+																	MockRepository.GenerateMock<IMessageBroker>(),
+																	MockRepository.GenerateMock<ICurrentDataSource>());
 
 			persister.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, new[] { model }, false);
 		}

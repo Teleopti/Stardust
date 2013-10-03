@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			gotoAddRequestToday();
 		}
 
+		[Given(@"I view Add Shift Trade Request for date '(.*)'")]
 		[When(@"I view Add Shift Trade Request for date '(.*)'")]
 		public void WhenIViewAddShiftTradeRequestForDate(DateTime date)
 		{
@@ -76,16 +77,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).Any(div => div.IsDisplayed() && div.Text.Trim() == agentName), Is.True);
 		}
 
-
-		[Then(@"I should see a possible schedule trade with")]
-		public void ThenIShouldSeeAPossibleScheduleTradeWith(Table table)
+		[Then(@"I should see a possible schedule trade with '(.*)'")]
+		public void ThenIShouldSeeAPossibleScheduleTradeWith(string name)
 		{
-			var expectedTimes = table.Rows[0][1] + "-" + table.Rows[1][1];
-
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers.Any(), Is.True);
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers[0].Title, Contains.Substring(expectedTimes));
+			Browser.Interactions.AssertAnyContains(".shift-trade-agent-name", name);
 		}
 
+		[Then(@"I should see '(.*)' first in the list")]
+		public void ThenIShouldSeeFirstInTheList(string agentName)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".shift-trade-person-schedule-row:first-child:contains('{0}')", agentName));
+		}
+
+		[Then(@"I should see '(.*)' last in the list")]
+		public void ThenIShouldSeeLastInTheList(string agentName)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".shift-trade-person-schedule-row:first-child:contains('{0}')", agentName));
+		}
+
+		[Then(@"I should not see a possible schedule trade with '(.*)'")]
+		public void ThenIShouldNotSeeAPossibleScheduleTradeWith(string name)
+		{
+			Browser.Interactions.AssertNotExistsUsingJQuery(".shift-trade-my-schedule", string.Format(".shift-trade-agent-name:contains('{0}')", name));
+		}
+		
 		[Then(@"the selected date should be '(.*)'")]
 		public void ThenTheSelectedDateShouldBe(DateTime date)
 		{
@@ -94,12 +109,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertJavascriptResultContains("return $('.add-shifttrade-datepicker').val();", date.Day.ToString());
 		}
 
+		[When(@"I uncheck the my team filter checkbox")]
+		public void WhenIUncheckTheMyTeamFilterCheckbox()
+		{
+			Browser.Interactions.Click(".shift-trade-myteam-filter");
+		}
+
+		[When(@"I click the search button")]
+		public void WhenIClickTheSearchButton()
+		{
+			Browser.Interactions.Click(".shift-trade-search");
+		}
+
 		[When(@"I click on the next date")]
 		public void WhenIClickOnTheNextDate()
 		{
 			Browser.Interactions.Click(".icon-arrow-right");
 		}
-
 
 		[Then(@"I should see the time line hours span from '(.*)' to '(.*)'")]
 		public void ThenIShouldSeeTheTimeLineHoursSpanFromTo(string timeLineHourFrom, string timeLineHourTo)

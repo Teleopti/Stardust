@@ -242,6 +242,7 @@
     <Compile Include="Areas\Anywhere\Core\TeamScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\DatePersons.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IOvertimeAvailabilityPersister.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityViewModelMappingProfile.cs" />
@@ -251,6 +252,7 @@
     <Compile Include="Areas\MyTime\Core\ShareCalendar\ICalendarLinkGenerator.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ICalendarLinkViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
     <Compile Include="Core\IResourceVersion.cs" />
     <Compile Include="Core\ResourceVersion.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\CalendarLinkViewModel.cs" />
