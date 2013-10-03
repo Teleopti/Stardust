@@ -59,8 +59,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Close();
 		}
 
-		}
-
 		private void btnUndo_Click(object sender, EventArgs e)
 		{
 			_presenter.OnDiscardMyChanges();
