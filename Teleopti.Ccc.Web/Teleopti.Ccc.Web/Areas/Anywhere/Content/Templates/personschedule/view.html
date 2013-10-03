@@ -29,7 +29,7 @@
             <div class="relative">
 				
                 <!-- ko with: TimeLine -->
-                <div class="time-line absolute">
+                <div class="time-line absolute" data-bind="attr: {'data-start-time': StartTime, 'data-end-time': EndTime}">
                     <div class="relative">
                         <!-- ko foreach: Times -->
                         <div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
@@ -47,7 +47,7 @@
                     </thead>
                     <tbody>
                         <tr class="schedule-row">
-	                        <td class="relative" data-bind="css: { shift: IsShift()}">
+	                        <td class="relative time-line-for" data-bind="css: { shift: IsShift()}">
 		                        <!-- ko if: IsDayOff -->
 		                        <div class="unit dayoff"></div>
 		                        <!-- /ko -->

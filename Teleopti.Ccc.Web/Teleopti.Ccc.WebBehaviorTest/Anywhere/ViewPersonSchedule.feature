@@ -39,7 +39,6 @@ Background:
 	| Name                       | Schedule published to 0809 |
 	| Schedule published to date | 2013-08-09                 |
 
-@ignore
 Scenario: View default time line
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has no shift

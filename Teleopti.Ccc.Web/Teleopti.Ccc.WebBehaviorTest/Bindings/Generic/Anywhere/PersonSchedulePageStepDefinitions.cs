@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void ThenIShouldSeeTheTimeLineWith(Table table)
 		{
 			var timeLineInfo = table.CreateInstance<TimeLineInfo>();
-			Browser.Interactions.AssertExists(".time-line[data-start-time='{0}'][data-end-time='{0}']", timeLineInfo.StartTime, timeLineInfo.EndTime);
+			Browser.Interactions.AssertExists(".time-line[data-start-time='{0}'][data-end-time='{1}']", timeLineInfo.StartTime, timeLineInfo.EndTime);
 		}
 
 		[When(@"I click '(.*)' on absence named '(.*)'")]

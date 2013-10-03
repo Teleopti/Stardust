@@ -36,6 +36,14 @@ define([
 				return minutes.EndOfHour(end);
 			});
 
+			this.Minutes = ko.computed(function () {
+				return self.EndMinutes() - self.StartMinutes();
+			});
+
+			this.PixelsPerMinute = ko.computed(function () {
+				return self.WidthPixels() / self.Minutes();
+			});
+			
 			this.Times = ko.computed(function () {
 				var times = [];
 				var time = self.StartMinutes();
@@ -46,13 +54,5 @@ define([
 				}
 				return times;
 			}).extend({ throttle: 1 });
-
-			this.Minutes = ko.computed(function () {
-				return self.EndMinutes() - self.StartMinutes();
-			});
-
-			this.PixelsPerMinute = ko.computed(function () {
-				return self.WidthPixels() / self.Minutes();
-			});
 		};
 	});
