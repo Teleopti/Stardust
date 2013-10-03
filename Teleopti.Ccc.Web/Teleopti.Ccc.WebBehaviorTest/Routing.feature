@@ -28,6 +28,12 @@ Background:
 	| Access to mobile reports | false                   |
 	| Access to mytime web     | false                   |
 	| Access to anywhere       | true                    |
+	Given there is a role with
+	| Field                    | Value                         |
+	| Name                     | Access to all except anywhere |
+	| Access to mobile reports | true                          |
+	| Access to mytime web     | true                          |
+	| Access to anywhere       | false                         |
 
 Scenario: Browse to root
 	Given I am not signed in
@@ -44,8 +50,8 @@ Scenario: Browse to Mobile Reports
 	When I navigate to Mobile Reports
 	Then I should see Mobile Report's sign in page
 	
-Scenario: Browse to root and sign in to menu
-	Given I have the role 'Access to all areas'
+Scenario: Browse to root and sign in to menu when no Anywhere permission
+	Given I have the role 'Access to all except anywhere'
 	When I navigate to the site's root
 	And I select application logon data source
 	And I sign in
@@ -67,6 +73,13 @@ Scenario: Browse to root and sign in to Mobile Reports
 	
 Scenario: Browse to root and sign in to Anywhere
 	Given I have the role 'Access to anywhere only'
+	When I navigate to the site's root
+	And I select application logon data source
+	And I sign in
+	Then I should see Anywhere
+
+Scenario: Browse to root and always sign in to Anywhere if have Anywhere permission
+	Given I have the role 'Access to all areas'
 	When I navigate to the site's root
 	And I select application logon data source
 	And I sign in
