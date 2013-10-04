@@ -19,6 +19,12 @@ define([
             this.Layers = ko.observableArray();
             this.WorkTimeMinutes = ko.observable(0);
             this.ContractTimeMinutes = ko.observable(0);
+	        
+            this.IsDayOff = ko.observable(data.IsDayOff);
+
+	        this.IsShift = ko.computed(function() {
+		        return !self.IsDayOff();
+	        });
 
             this.ContractTime = ko.computed(function() {
                 var time = moment().startOf('day').add('minutes', self.ContractTimeMinutes());
