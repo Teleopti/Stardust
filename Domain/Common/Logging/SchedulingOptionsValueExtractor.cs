@@ -59,8 +59,6 @@ namespace Teleopti.Ccc.Domain.Common.Logging
                 result += ",Dayoff Optimization";
             if (optimizationPreferences.General.OptimizationStepShiftsWithinDay )
                 result += ",Shift within day";
-            if (optimizationPreferences.General.OptimizationStepDaysOff)
-                result += ",Dayoff Optimization";
             if (optimizationPreferences.General.OptimizationStepTimeBetweenDays )
                 result += ",Intraday";
             if (optimizationPreferences.General.UsePreferences )
