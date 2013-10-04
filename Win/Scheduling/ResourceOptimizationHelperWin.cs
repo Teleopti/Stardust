@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!_stateHolder.DaysToRecalculate.Any()) return;
 			if (!_stateHolder.SchedulingResultState.Skills.Any()) return;
 
-			var period = new DateOnlyPeriod(_stateHolder.DaysToRecalculate.Min(), _stateHolder.DaysToRecalculate.Max());
+			var period = new DateOnlyPeriod(_stateHolder.DaysToRecalculate.Min().AddDays(-1), _stateHolder.DaysToRecalculate.Max());
 			var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
 			var resources = extractor.CreateRelevantProjectionList(_stateHolder.Schedules, period.ToDateTimePeriod(_stateHolder.TimeZoneInfo));
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
