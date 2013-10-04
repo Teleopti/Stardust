@@ -44,6 +44,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		public bool IsWorkday { get; set; }
 
 		public bool IsDayOff { get; set; }
+
+		public bool IsFullDayAbsence { get; set; }
+
 		/// <summary>
 		/// Optional shift start
 		/// </summary>

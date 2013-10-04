@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.TestCommon.FakeData
+namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	// feel free to continue implementing as see fit
 	// im all for keeping it stupid (in the same manner as an .IgnoreArguments()) until smartness is required

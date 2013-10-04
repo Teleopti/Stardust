@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							eventScheduleDay.DisplayColor = shiftCategory.DisplayColor.ToArgb();
 							break;
 						case SchedulePartView.FullDayAbsence:
+							eventScheduleDay.IsFullDayAbsence = true;
 							eventScheduleDay.ShortName = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
 							break;
 						case SchedulePartView.DayOff:
