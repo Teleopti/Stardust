@@ -26,6 +26,8 @@ define([
 		        return !self.IsDayOff();
 	        });
 
+	        this.IsFullDayAbsence = false;
+	        
             this.ContractTime = ko.computed(function() {
                 var time = moment().startOf('day').add('minutes', self.ContractTimeMinutes());
                 return time.format("H:mm");
@@ -49,6 +51,8 @@ define([
 	        	});
 	        	self.Layers.push.apply(self.Layers, newItems);
 
+	        	self.IsFullDayAbsence = data.IsFullDayAbsence;
+		        
 	        	self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
 	        	self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
             };
