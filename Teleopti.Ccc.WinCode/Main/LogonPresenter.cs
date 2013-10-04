@@ -96,38 +96,11 @@ namespace Teleopti.Ccc.WinCode.Main
             // om allt är ok, töm vyn, hämta data till nästa steg till modellen och säg åt vyn att visa det
 
             _model = model;
-            CurrentStep++;
-            GetDataForCurrentStep();
-            
-            //switch (CurrentStep)
-            //{
-            //    case LoginStep.SelectSdk:
-            //        CurrentStep++;
-            //        //_view.StepForward();
-            //        break;
-            //    case LoginStep.SelectDatasource:	
-            //        // know if app or windows choosen
-            //        CurrentStep++;
-            //        //_view.StepForward();
-            //        if(_model.SelectedDataSourceContainer.AuthenticationTypeOption.Equals(AuthenticationTypeOption.Windows))
-            //            CurrentStep++;
-            //        break;
-            //    case LoginStep.Login:
-            //        if (login())
-            //        {
-            //            CurrentStep++;
-            //        }
-            //        break;
-            //    case LoginStep.SelectBu:
-            //        CurrentStep++;
-            //        //_view.StepForward();
-            //        break;
-            //    case LoginStep.Loading:
-            //        _initializer.InitializeApplication(_model.SelectedDataSourceContainer);
-            //        break;
-            //    case LoginStep.Ready:
-            //        break;
-            //}
+			CurrentStep++;
+	        if (CurrentStep == LoginStep.Login &&
+	            _model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Windows)
+		        CurrentStep++;
+	        GetDataForCurrentStep();
 		}
 
 		public void BackButtonClicked()
@@ -155,7 +128,8 @@ namespace Teleopti.Ccc.WinCode.Main
                     _view.ShowStep(CurrentStep, _model, false);
 					break;
                 case LoginStep.SelectBu:
-			        getBusinessUnits();
+					if (login())
+						getBusinessUnits();
                     break;
 				default:
 					break;
@@ -168,6 +142,10 @@ namespace Teleopti.Ccc.WinCode.Main
         private void getBusinessUnits()
         {
             var provider = _model.SelectedDataSourceContainer.AvailableBusinessUnitProvider;
+	        if (_model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Application)
+		        _model.SelectedDataSourceContainer.LogOn(_model.UserName, _model.Password);
+	        else
+		        _model.SelectedDataSourceContainer.LogOn(_model.UserName);
 			_model.AvailableBus = provider.AvailableBusinessUnits().ToList();
             if (_model.AvailableBus.Count == 0)
 			{
@@ -227,8 +205,6 @@ namespace Teleopti.Ccc.WinCode.Main
             _logonLogger.SaveLogonAttempt(model, dataSourceContainer.DataSource.Application);
 
             StateHolderReader.Instance.StateReader.SessionScopeData.AuthenticationTypeOption = dataSourceContainer.AuthenticationTypeOption;
-
-            //InitializeStuff();
         }
 
         private string ipAdress()

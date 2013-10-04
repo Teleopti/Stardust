@@ -138,5 +138,22 @@ namespace Teleopti.Ccc.Win.Main
         {
             Presenter.BackButtonClicked();
         }
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			const int wmKeydown = 0x100;
+			const int wmSyskeydown = 0x104;
+
+			if ((msg.Msg == wmKeydown) || msg.Msg == wmSyskeydown)
+			{
+				switch (keyData)
+				{
+						case Keys.Enter:
+						buttonLogOnOkClick(this, EventArgs.Empty);
+						break;
+				}
+			}
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
 	}
 }
