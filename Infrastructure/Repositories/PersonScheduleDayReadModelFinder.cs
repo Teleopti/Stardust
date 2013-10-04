@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<PersonScheduleDayReadModel> ForPersons(DateOnly date, IEnumerable<Guid> personIdList)
 		{
 			return _unitOfWork.Session().CreateSQLQuery(
-				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE PersonId IN (:personIdList) AND BelongsToDate=:date ORDER BY ShiftStart")
+				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Model FROM ReadModel.PersonScheduleDay WHERE PersonId IN (:personIdList) AND BelongsToDate=:date ORDER BY ShiftStart")
 							  .AddScalar("PersonId", NHibernateUtil.Guid)
 							  .AddScalar("TeamId", NHibernateUtil.Guid)
 							  .AddScalar("SiteId", NHibernateUtil.Guid)
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							  .AddScalar("Date", NHibernateUtil.DateTime)
 							  .AddScalar("ShiftStart", NHibernateUtil.DateTime)
 							  .AddScalar("ShiftEnd", NHibernateUtil.DateTime)
-							  .AddScalar("Shift", NHibernateUtil.Custom(typeof(CompressedString)))
+							  .AddScalar("Model", NHibernateUtil.Custom(typeof(CompressedString)))
 							  .SetDateTime("date", date)
 							  .SetParameterList("personIdList", personIdList)
 							  .SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
