@@ -165,8 +165,7 @@ namespace Teleopti.Ccc.WinCode.Main
                     _view.ShowStep(CurrentStep, _model, true);
 					break;
                 case LoginStep.SelectBu:
-					if (login())
-						getBusinessUnits();
+					getBusinessUnits(); 
                     break;
                 case LoginStep.Loading:
 			        initApplication();
@@ -184,9 +183,8 @@ namespace Teleopti.Ccc.WinCode.Main
         {
             var provider = _model.SelectedDataSourceContainer.AvailableBusinessUnitProvider;
 	        if (_model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Application)
-		        _model.SelectedDataSourceContainer.LogOn(_model.UserName, _model.Password);
-	        else
-		        _model.SelectedDataSourceContainer.LogOn(_model.UserName);
+		        login();
+
 			_model.AvailableBus = provider.AvailableBusinessUnits().ToList();
             if (_model.AvailableBus.Count == 0)
 			{
