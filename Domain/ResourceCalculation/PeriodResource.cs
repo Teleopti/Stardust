@@ -9,8 +9,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		private readonly ConcurrentDictionary<string, PeriodResourceDetail> _resourceDictionary = new ConcurrentDictionary<string, PeriodResourceDetail>();
 		private readonly ConcurrentDictionary<string, ConcurrentDictionary<Guid, double>> _skillEffiencies = new ConcurrentDictionary<string, ConcurrentDictionary<Guid, double>>();
-		private static readonly ConcurrentDictionary<Guid, double> EmptyEfficiencyDictionary = new ConcurrentDictionary<Guid, double>();
-
+		
 		public void AppendResource(string key, SkillCombination skillCombination, double heads, double resource)
 		{
 			_resourceDictionary.AddOrUpdate(key, new PeriodResourceDetail(heads, resource), (s, d) => new PeriodResourceDetail(d.Count + heads, d.Resource + resource));
@@ -104,7 +103,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				ConcurrentDictionary<Guid, double> effiencies;
 				if (!_skillEffiencies.TryGetValue(pair.Key, out effiencies))
 				{
-					effiencies = EmptyEfficiencyDictionary;
+					effiencies = new ConcurrentDictionary<Guid, double>();
 				}
 
 				var skillKey = pair.Key.Split('|')[1];

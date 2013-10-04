@@ -113,6 +113,22 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
+		public void ShouldNotUseSameInstanceOfDictionaryForSkillEfficiencies()
+		{
+			_target.AddResources(_person, _date,
+								 new ResourceLayer
+								 {
+									 PayloadId = _activity.Id.GetValueOrDefault(),
+									 Period = _period,
+									 RequiresSeat = false,
+									 Resource = 0.8
+								 });
+			var firstResult = _target.AffectedResources(_activity, _period);
+			var secondResult = _target.AffectedResources(_activity, _period);
+			firstResult.First().Value.SkillEffiencies.Should().Not.Be.SameInstanceAs(secondResult.First().Value.SkillEffiencies);
+		}
+
+		[Test]
 		public void ShouldGetAffectedSkillsForMultipleIntervalsWithEfficiency()
 		{
 			_person.ChangeSkillProficiency(_skill, new Percent(0.9), _person.Period(_date));
