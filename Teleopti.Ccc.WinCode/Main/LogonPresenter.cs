@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WinCode.Main
         {
             // här borde vi kolla datan o modellen innan vi säger att vi kan gå vidare
             // om allt är ok, töm vyn, hämta data till nästa steg till modellen och säg åt vyn att visa det
-
+            if(!checkModel()) return;
             _model = model;
             CurrentStep++;
             GetDataForCurrentStep();
@@ -134,6 +134,30 @@ namespace Teleopti.Ccc.WinCode.Main
             //        break;
             //}
 		}
+
+        private bool checkModel()
+        {
+            switch (CurrentStep)
+            {
+                case LoginStep.SelectSdk:
+                    if (_model.SelectedSdk == null)
+                        return false;
+                    break;
+                case LoginStep.SelectDatasource:
+                    if (_model.SelectedDataSourceContainer == null)
+                        return false;
+                    break;
+                case LoginStep.Login:
+                    if (!_model.HasValidLogin())
+                        return false;
+                    break;
+                case LoginStep.SelectBu:
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        }
 
 		public void BackButtonClicked()
 		{

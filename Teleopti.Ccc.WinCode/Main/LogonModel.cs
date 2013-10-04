@@ -15,5 +15,9 @@ namespace Teleopti.Ccc.WinCode.Main
 	    public string Password { get; set; }
 
 	    public List<IBusinessUnit> AvailableBus { get; set; }
+        public bool HasValidLogin()
+        {
+            return !string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Password);
+        }
 	}
 }

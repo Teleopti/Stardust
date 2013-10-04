@@ -2,11 +2,9 @@
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.WinCode.Main;
 using Rhino.Mocks;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Main
 {
@@ -40,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
         [Test]
         public void ShouldCallStartLogonOnViewAtStartUp()
         {
-            Expect.Call(() => _view.StartLogon());
+            Expect.Call(_view.StartLogon()).Return(true);
             _mocks.ReplayAll();
             _target.Start();
             _mocks.VerifyAll();
@@ -77,6 +75,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             var dataSorceProvider = _mocks.DynamicMock<IDataSourceProvider>();
             var dataSourceContainer = new DataSourceContainer(null, null, null, AuthenticationTypeOption.Application);
             _model.Sdks = new List<string>{"sdk1", "sdk2"};
+            _model.SelectedSdk = "sdk1";
             Expect.Call(() => _view.ClearForm("")).IgnoreArguments();
             Expect.Call(_dataSourceHandler.DataSourceProviders()).Return(new List<IDataSourceProvider> { dataSorceProvider });
             Expect.Call(dataSorceProvider.DataSourceList()).Return(new List<DataSourceContainer> {dataSourceContainer});
@@ -88,7 +87,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
         }
 
         [Test]
-        public void ShouldReloadSdkOnBaCkFromDataSources()
+        public void ShouldReloadSdkOnBackFromDataSources()
         {
             Expect.Call(() => _view.ClearForm("")).IgnoreArguments();
             Expect.Call(_endPointSelector.GetEndpointNames()).Return(new List<string> { "local", "local2" });
@@ -97,6 +96,19 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             _target.CurrentStep = LoginStep.SelectDatasource;
             _target.BackButtonClicked();
             _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void LogonModelShouldHaveValidLogin()
+        {
+            Assert.That(_model.HasValidLogin(), Is.False);
+            _model.Password = "p";
+            Assert.That(_model.HasValidLogin(), Is.False);
+            _model.Password = "";
+            _model.UserName = "u";
+            Assert.That(_model.HasValidLogin(), Is.False);
+            _model.Password = "p";
+            Assert.That(_model.HasValidLogin(), Is.True);
         }
 	}
 }
