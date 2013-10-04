@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Common.Logging
             _target = new SchedulingOptionsValueExtractor(new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationOption));
 
             var result = _target.GetGeneralOptimizationOptions(optimizationOption);
-            Assert.AreEqual(result, "StandardDeviation,Dayoff Optimization,Shift within day,Dayoff Optimization,Intraday,Prefrences,Must Have,Rotations,Availability");
+            Assert.AreEqual(result, "StandardDeviation,Dayoff Optimization,Shift within day,Intraday,Prefrences,Must Have,Rotations,Availability");
         }
     }
 }
