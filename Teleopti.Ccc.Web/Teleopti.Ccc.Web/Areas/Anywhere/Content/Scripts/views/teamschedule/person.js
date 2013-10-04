@@ -36,25 +36,23 @@ define([
                 return time.format("H:mm");
             });
 
-	        this.ClearLayers = function() {
+	        this.ClearData = function() {
 	        	self.Layers([]);
+	        	self.WorkTimeMinutes(0);
+		        self.ContractTimeMinutes(0);
 	        };
 	        
-            this.AddLayers = function(layers, timeline, date) {
-                var newItems = ko.utils.arrayMap(layers, function(p) {
-                    return new layer(timeline, p, date);
-                });
-                self.Layers.push.apply(self.Layers, newItems);
-            };
+	        this.AddData = function (data, timeline, date) {
+	        	var layers = data.Projection;
+	        	var newItems = ko.utils.arrayMap(layers, function (p) {
+	        		return new layer(timeline, p, date);
+	        	});
+	        	self.Layers.push.apply(self.Layers, newItems);
 
-            this.AddContractTime = function(minutes) {
-                self.ContractTimeMinutes(self.ContractTimeMinutes() + minutes);
+	        	self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
+	        	self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
             };
-
-            this.AddWorkTime = function(minutes) {
-                self.WorkTimeMinutes(self.WorkTimeMinutes() + minutes);
-            };
-
+			
             this.TimeLineAffectingStartMinute = ko.computed(function() {
                 var start = undefined;
                 ko.utils.arrayForEach(self.Layers(), function(l) {
