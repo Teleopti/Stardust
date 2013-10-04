@@ -16,8 +16,6 @@ using System.Xml.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Tracking;
 using log4net;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
