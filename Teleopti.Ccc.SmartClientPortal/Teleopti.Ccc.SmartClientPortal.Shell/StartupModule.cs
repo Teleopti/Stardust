@@ -33,16 +33,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		    builder.RegisterType<OutlookBarWorkspaceModel>().SingleInstance();
 
 			builder.RegisterType<LogonModel>().SingleInstance();
-			builder.RegisterType<LogonPresenter>().SingleInstance();
+            builder.RegisterType<LogonPresenter>().As<ILogonPresenter>().SingleInstance();
 
             builder.RegisterType<LogonLicenseChecker>().As<ILogonLicenseChecker>();
             builder.RegisterType<LicenseVerifierFactory>().As<ILicenseVerifierFactory>();
+            builder.RegisterType<LicenseStatusLoader>().As<ILicenseStatusLoader>();
 		    builder.RegisterType<RoleToPrincipalCommand>().As<IRoleToPrincipalCommand>();
 			builder.RegisterType<LoginInitializer>().As<ILoginInitializer>();
 			builder.RegisterType<LogonDataSourceHandler>().As<IDataSourceHandler>();
+            
 		    builder.RegisterType<LogonView>()
+                    .As<ILicenseFeedback>()
 		           .As<ILogonView>()
-		           .OnActivated(e => e.Instance.Presenter = e.Context.Resolve<LogonPresenter>())
+                   .OnActivated(e => e.Instance.Presenter = e.Context.Resolve<ILogonPresenter>())
 		           .SingleInstance();
 	    }
     }

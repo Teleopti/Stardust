@@ -1,31 +1,37 @@
-using System.Collections.Generic;
+using System;
+using System.Drawing;
 using System.Windows.Forms;
+using Teleopti.Ccc.WinCode.Main;
 
 namespace Teleopti.Ccc.Win.Main.LogonScreens
 {
 	public partial class SelectSdkScreen : UserControl, ILogonStep
 	{
 		private readonly LogonView _parent;
+	    private readonly LogonModel _model;
 
-		public SelectSdkScreen(LogonView parent)
+	    public SelectSdkScreen(LogonView parent, LogonModel model)
 		{
 			_parent = parent;
-			InitializeComponent();
+            _model = model;
+            InitializeComponent();
 		}
 
-		private void buttonDataSourceListOK_Click(object sender, System.EventArgs e)
+        public void SetData(LogonModel model)
 		{
-			_parent.OkButtonClicked(lbxSelectSDK.SelectedItem);
+			lbxSelectSDK.DataSource = model.Sdks;
 		}
 
-		private void buttonDataSourcesListCancel_Click(object sender, System.EventArgs e)
-		{
-			_parent.CancelButtonClicked();
-		}
+        public LogonModel GetData()
+        {
+            _model.SelectedSdk = lbxSelectSDK.SelectedItem.ToString();
+            return _model;
+        }
 
-		public void SetData(object data)
-		{
-			lbxSelectSDK.DataSource = data;
-		}
+        private void selectSdkScreenLoad(object sender, EventArgs e)
+        {
+            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            BackColor = Color.FromArgb(175, Color.CornflowerBlue);
+        }
 	}
 }

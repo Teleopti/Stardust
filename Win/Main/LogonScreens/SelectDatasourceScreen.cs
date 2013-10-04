@@ -1,32 +1,54 @@
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.WinCode.Main;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Main.LogonScreens
 {
 	public partial class SelectDatasourceScreen : UserControl, ILogonStep
 	{
 		private readonly LogonView _parent;
+	    private readonly LogonModel _model;
 
-		public SelectDatasourceScreen(LogonView parent)
+	    public SelectDatasourceScreen(LogonView parent, LogonModel model)
 		{
 			_parent = parent;
-			InitializeComponent();
+            _model = model;
+            InitializeComponent();
 		}
 
-		private void buttonDataSourceListOK_Click_1(object sender, System.EventArgs e)
+		public void SetData(LogonModel model)
 		{
-			_parent.OkButtonClicked(new object());
+            var logonableWindowsDataSources = model.DataSourceContainers.Where(d => d.AuthenticationTypeOption == AuthenticationTypeOption.Windows).ToList();
+            var availableApplicationDataSources = model.DataSourceContainers.Where(d => d.AuthenticationTypeOption == AuthenticationTypeOption.Application).ToList();
+
+            listBoxApplicationDataSources.DataSource = availableApplicationDataSources;
+            listBoxWindowsDataSources.DataSource = logonableWindowsDataSources;
+		    if (listBoxWindowsDataSources.Items.Count < 1)
+		        tabPageWindowsDataSources.Visible = false;
+            
+            tabControlChooseDataSource.Visible = true;
 		}
 
-		private void buttonDataSourcesListCancel_Click_1(object sender, System.EventArgs e)
-		{
-			_parent.CancelButtonClicked();
-		}
+	    public LogonModel GetData()
+	    {
+            _model.SelectedDataSourceContainer = (IDataSourceContainer)listBoxApplicationDataSources.SelectedItem;
+            if (tabControlChooseDataSource.SelectedTab.Equals(tabPageWindowsDataSources))
+                _model.SelectedDataSourceContainer = (IDataSourceContainer)listBoxWindowsDataSources.SelectedItem;
 
-		public void SetData(object data)
-		{
-			listBoxApplicationDataSources.DataSource = data;
-			listBoxWindowsDataSources.DataSource = data;
-		}
+            return _model;
+	    }
+
+        private void SelectDatasourceScreen_Load(object sender, System.EventArgs e)
+        {
+            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            BackColor = Color.FromArgb(175, Color.CornflowerBlue);
+            
+        }
+
+        
 	}
 }

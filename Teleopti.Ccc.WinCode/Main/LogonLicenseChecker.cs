@@ -38,19 +38,19 @@ namespace Teleopti.Ccc.WinCode.Main
 
         private bool initializeLicense(IUnitOfWorkFactory unitOfWorkFactory)
         {
-            using (unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 var verifier = _licenseVerifierFactory.Create(_view, unitOfWorkFactory);
                 var licenseService = verifier.LoadAndVerifyLicense();
                 if (licenseService == null) return false;
                 LicenseProvider.ProvideLicenseActivator(licenseService);
-                return checkStatusOfLicense(licenseService, unitOfWorkFactory.Name);
+                return checkStatusOfLicense(licenseService, uow ,unitOfWorkFactory.Name);
             }
         }
 
-        private bool checkStatusOfLicense(ILicenseService licenseService, string dataSourceName)
+        private bool checkStatusOfLicense(ILicenseService licenseService,IUnitOfWork uow , string dataSourceName)
         {
-            var licenseStatus = _licenseStatusLoader.GetStatus();
+            var licenseStatus = _licenseStatusLoader.GetStatus(uow);
             
             if (licenseStatus.StatusOk && licenseStatus.AlmostTooMany)
             {

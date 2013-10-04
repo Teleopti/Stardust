@@ -400,7 +400,7 @@
     <Compile Include="Main\LicenseStatusLoaderTest.cs" />
     <Compile Include="Main\LogonLicenseCheckerTest.cs" />
     <Compile Include="Main\LogonScreenModelTest.cs" />
-    <Compile Include="Main\LogonScreenPresenterTest.cs" />
+    <Compile Include="Main\LogonPresenterTest.cs" />
     <Compile Include="Matrix\MatrixNavigationModelTest.cs" />
     <Compile Include="Matrix\MatrixNavigationPresenterTest.cs" />
     <Compile Include="Meetings\AddressBookPresenterTest.cs" />

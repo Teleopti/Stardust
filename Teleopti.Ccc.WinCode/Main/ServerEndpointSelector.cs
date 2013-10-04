@@ -3,7 +3,7 @@ using System.Configuration;
 using System.Linq;
 using System.ServiceModel.Configuration;
 
-namespace Teleopti.Ccc.Win.Main
+namespace Teleopti.Ccc.WinCode.Main
 {
 	public static class ServerEndpointSelector
 	{

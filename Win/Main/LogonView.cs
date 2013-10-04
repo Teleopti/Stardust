@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Deployment.Application;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Windows.Forms;
+using Syncfusion.Windows.Forms;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Main.LogonScreens;
 using Teleopti.Ccc.WinCode.Main;
 
@@ -13,98 +13,71 @@ namespace Teleopti.Ccc.Win.Main
 {
 	public partial class LogonView : Form, ILogonView
 	{
-		public LogonPresenter Presenter
+	    private readonly LogonModel _model;
+	    public ILogonPresenter Presenter{get; set; }
+		private  IList<ILogonStep> _logonSteps;
+		
+		public LogonView(LogonModel model)
 		{
-			get;
-			set;
-			//get
-			//{
-			//	return Presenter ?? new LogonPresenter(this, new LogonModel());
-			//}
+		    _model = model;
+		    InitializeComponent();
+            //SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+		    _model = model;
 		}
 
-		public LoginStep CurrentStep { get; private set; }
-
-		private readonly IList<ILogonStep> _logonSteps;
-		private readonly InitializingScreen _initializingScreen;
-		private readonly SelectSdkScreen _selectSdkScreen;
-		private readonly SelectDatasourceScreen _selectDatasourceScreen;
-		private readonly LoginScreen _loginScreen;
-		private readonly LoadingScreen _loadingScreen;
-
-		private readonly bool getConfigFromWebService;
-
-		public LogonView()
+		public bool StartLogon()
 		{
-			InitializeComponent();
-
-			_initializingScreen = new InitializingScreen(this);
-			_selectSdkScreen = new SelectSdkScreen(this);
-			_selectDatasourceScreen = new SelectDatasourceScreen(this);
-			_loginScreen = new LoginScreen(this);
-			_loadingScreen = new LoadingScreen(this);
-
-			_logonSteps = new List<ILogonStep>
+          _logonSteps = new List<ILogonStep>
 				{
-					_initializingScreen,
-					_selectSdkScreen,
-					_selectDatasourceScreen,
-					_loginScreen,
-					_loadingScreen
+					new SelectSdkScreen(this, _model),
+					new SelectDatasourceScreen(this, _model),
+					new LoginScreen(this, _model),
+                    new SelectBuScreen(this, _model)
 				};
-
-			CurrentStep = LoginStep.Initializing;
-			getConfigFromWebService = Convert.ToBoolean(ConfigurationManager.AppSettings["GetConfigFromWebService"],
-			                                            CultureInfo.InvariantCulture);
+            var result = ShowDialog();
+		    return result != DialogResult.Cancel;
 		}
 
-		public void StartLogon()
-		{
-			var endpoints = ServerEndpointSelector.GetEndpointNames();
-			if (!getConfigFromWebService && endpoints.Count(s => !string.IsNullOrEmpty(s)) <= 1)
-			{
-				StepForward();
-				StepForward();
-				return;
-			}
-			StepForward();
-		}
+	    public void ShowStep(LoginStep theStep, bool showBackButton)
+	    {
+            updatePanel((UserControl)_logonSteps[(int)theStep]);
+            labelStatusText.Visible = false;
+	        buttonLogOnCancel.Visible = true;
+	        buttonLogOnOK.Visible = true;
+	        btnBack.Visible = showBackButton;
+	    }
 
-		public void OkButtonClicked(object data)
-		{
-			Presenter.OkbuttonClicked(data);
-		}
+	    public void ClearForm(string labelText)
+	    {
+            pnlContent.Controls.Clear();
+            labelStatusText.Text = labelText;
+            labelStatusText.Visible = labelText != "";
+            buttonLogOnCancel.Visible = false;
+            buttonLogOnOK.Visible = false;
+            btnBack.Visible = false;
+            Refresh();
+	    }
 
-		public void CancelButtonClicked()
-		{
-			DialogResult = DialogResult.Cancel;
-		}
-
-		public void BackButtonClicked()
-		{
-			Presenter.BackButtonClicked();
-		}
-
-		public void StepForward()
-		{
-			CurrentStep++;
-			refreshView();
-		}
-
-		public void StepBackwards()
-		{
-			CurrentStep--;
-			refreshView();
-		}
-
-		private void refreshView()
-		{
-			ShowInTaskbar = (int)CurrentStep != 0;
-			var currentControl = _logonSteps[(int) CurrentStep];
-			updatePanel((UserControl) currentControl);
-			currentControl.SetData(Presenter.GetDataForCurrentStep());
-			Refresh();
-		}
+	    public bool InitializeAndCheckStateHolder(string skdProxyName)
+        {
+            if (!LogonInitializeStateHolder.GetConfigFromWebService(skdProxyName))
+            {
+                ShowInTaskbar = true;
+                MessageBox.Show(this,
+                                string.Format(CultureInfo.CurrentCulture,
+                                              "The system configuration could not be loaded from the server. Review error message and log files to troubleshoot this error.\n\n{0}",
+                                              LogonInitializeStateHolder.ErrorMessage),
+                                "Configuration error", MessageBoxButtons.OK);
+                return false;
+            }
+            if (!string.IsNullOrEmpty(LogonInitializeStateHolder.WarningMessage))
+            {
+                ShowInTaskbar = true;
+                MessageBox.Show(this, LogonInitializeStateHolder.WarningMessage, "Configuration warning", MessageBoxButtons.OK);
+                ShowInTaskbar = false;
+            }
+            return true;
+        }
 
 		private void updatePanel(Control userControl)
 		{
@@ -114,18 +87,60 @@ namespace Teleopti.Ccc.Win.Main
 		
 		public void Exit()
 		{
+            //vi måste nog disposa ngnstans
 			DialogResult = DialogResult.Cancel;
 			Close();
 		}
 
-	    public void Warning(string warning)
-	    {
-	        throw new NotImplementedException();
-	    }
+        public void Warning(string warning)
+        {
+            ShowInTaskbar = true;
+            MessageDialogs.ShowWarning(this, warning, Resources.LogOn);
+            ShowInTaskbar = false;
 
-	    public void Error(string error)
-	    {
-	        throw new NotImplementedException();
-	    }
+            DialogResult = DialogResult.None;
+        }
+
+        public void Error(string error)
+        {
+            showApplyLicenseDialogAndExit(error);
+        }
+
+        // temp until we know how to do this
+#pragma warning disable 649
+	    private IDataSourceContainer _choosenDataSource;
+#pragma warning restore 649
+        private void showApplyLicenseDialogAndExit(string explanation)
+        {
+            var applyLicense = new ApplyLicense(explanation, _choosenDataSource.DataSource.Application);
+            applyLicense.ShowDialog(this);
+            Application.Exit();
+        }
+
+        private void logonViewShown(object sender, EventArgs e)
+        {
+            //We must call back so we not just hang
+            Presenter.Initialize();
+        }
+
+        public void ShowErrorMessage(string message)
+        {
+            MessageBoxAdv.Show(message, Resources.ErrorMessage, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, (RightToLeft == RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
+        }
+
+        private void buttonLogOnCancelClick(object sender, EventArgs e)
+        {
+            Exit();
+        }
+
+        private void buttonLogOnOkClick(object sender, EventArgs e)
+        {
+            Presenter.OkbuttonClicked(_model);
+        }
+
+        private void btnBackClick(object sender, EventArgs e)
+        {
+            Presenter.BackButtonClicked();
+        }
 	}
 }

@@ -4,14 +4,12 @@ namespace Teleopti.Ccc.WinCode.Main
 {
 	public interface ILogonView:ILicenseFeedback
 	{
-		LogonPresenter Presenter { get; set; }
-		LoginStep CurrentStep { get; }
-		void StartLogon();
-		void OkButtonClicked(object data);
-		void CancelButtonClicked();
-		void BackButtonClicked();
-		void StepForward();
-		void StepBackwards();
+		ILogonPresenter Presenter { get; set; }
+		bool StartLogon();
+        void ShowStep(LoginStep theStep, bool showBackButton);
+		void ClearForm(string labelText);
 		void Exit();
+	    bool InitializeAndCheckStateHolder(string skdProxyName);
+	    void ShowErrorMessage(string message);
 	}
 }

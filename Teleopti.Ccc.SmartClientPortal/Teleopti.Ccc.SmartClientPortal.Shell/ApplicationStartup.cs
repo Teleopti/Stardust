@@ -8,12 +8,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
     public class ApplicationStartup
     {
         private readonly IComponentContext _componentContext;
-        private readonly LogonView _logOnScreen;
+        private readonly ILogonPresenter _logonPresenter;
+        //private readonly LogonView _logOnScreen;
 
-		public ApplicationStartup(IComponentContext componentContext, ILogonView logOnscreen)
+		public ApplicationStartup(IComponentContext componentContext, ILogonPresenter logonPresenter)
         {
             _componentContext = componentContext;
-            _logOnScreen = (LogonView)logOnscreen;
+		    _logonPresenter = logonPresenter;
+		    //_logOnScreen = (LogonView)logOnscreen;
         }
 
         /// <summary>
@@ -21,7 +23,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         /// </summary>
         public void LoadShellApplication()
         {
-            SmartClientShellApplication appl = new SmartClientShellApplication(_componentContext);
+            var appl = new SmartClientShellApplication(_componentContext);
             appl.Run();
         }
 
@@ -32,14 +34,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
         public bool LogOn()
         {
-            _logOnScreen.ShowDialog();
-            if (_logOnScreen.IsDisposed)
-                return false;
+            return _logonPresenter.Start();
+            //_logOnScreen.ShowDialog();
+            //if (_logOnScreen.IsDisposed)
+            //    return false;
 
-            _logOnScreen.Show();
-            _logOnScreen.Refresh();
+            //_logOnScreen.Show();
+            //_logOnScreen.Refresh();
 
-            return (_logOnScreen.DialogResult == DialogResult.OK);
+            //return (_logOnScreen.DialogResult == DialogResult.OK);
+            return true;
         }
     }
 }

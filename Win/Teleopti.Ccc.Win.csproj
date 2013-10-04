@@ -842,6 +842,12 @@
     <Compile Include="Main\LicenseAgreementForm.Designer.cs">
       <DependentUpon>LicenseAgreementForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Main\LogonScreens\SelectBuScreen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Main\LogonScreens\SelectBuScreen.Designer.cs">
+      <DependentUpon>SelectBuScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main\LogonView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -849,18 +855,6 @@
       <DependentUpon>LogonView.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\LogonScreens\ILogonStep.cs" />
-    <Compile Include="Main\LogonScreens\InitializingScreen.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Main\LogonScreens\InitializingScreen.Designer.cs">
-      <DependentUpon>InitializingScreen.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Main\LogonScreens\LoadingScreen.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Main\LogonScreens\LoadingScreen.Designer.cs">
-      <DependentUpon>LoadingScreen.cs</DependentUpon>
-    </Compile>
     <Compile Include="Main\LogonScreens\LoginScreen.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -884,7 +878,6 @@
     <Compile Include="Main\NavigationPanelProvider.cs" />
     <Compile Include="Main\PortalSettings.cs" />
     <Compile Include="Main\PortalSettingsProvider.cs" />
-    <Compile Include="Main\ServerEndpointSelector.cs" />
     <Compile Include="Main\UpdatedEntities.cs" />
     <Compile Include="MapiMailMessage.cs" />
     <Compile Include="Matrix\MatrixNavigationView.cs">
@@ -2537,14 +2530,11 @@
     <EmbeddedResource Include="Main\LicenseAgreementForm.resx">
       <DependentUpon>LicenseAgreementForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Main\LogonScreens\SelectBuScreen.resx">
+      <DependentUpon>SelectBuScreen.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main\LogonView.resx">
       <DependentUpon>LogonView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Main\LogonScreens\InitializingScreen.resx">
-      <DependentUpon>InitializingScreen.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Main\LogonScreens\LoadingScreen.resx">
-      <DependentUpon>LoadingScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main\LogonScreens\LoginScreen.resx">
       <DependentUpon>LoginScreen.cs</DependentUpon>

@@ -28,31 +28,104 @@ namespace Teleopti.Ccc.Win.Main
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.pnlContent = new System.Windows.Forms.Panel();
-			this.SuspendLayout();
-			// 
-			// pnlContent
-			// 
-			this.pnlContent.Location = new System.Drawing.Point(1, 1);
-			this.pnlContent.Name = "pnlContent";
-			this.pnlContent.Size = new System.Drawing.Size(488, 334);
-			this.pnlContent.TabIndex = 0;
-			// 
-			// LogonView
-			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(490, 337);
-			this.Controls.Add(this.pnlContent);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-			this.Name = "LogonView";
-			this.Text = "LogonView";
-			this.ResumeLayout(false);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogonView));
+            this.pnlContent = new System.Windows.Forms.Panel();
+            this.labelStatusText = new System.Windows.Forms.Label();
+            this.btnBack = new System.Windows.Forms.Button();
+            this.buttonLogOnCancel = new System.Windows.Forms.Button();
+            this.buttonLogOnOK = new System.Windows.Forms.Button();
+            this.pnlContent.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // pnlContent
+            // 
+            this.pnlContent.BackColor = System.Drawing.Color.Transparent;
+            this.pnlContent.Controls.Add(this.btnBack);
+            this.pnlContent.Controls.Add(this.buttonLogOnCancel);
+            this.pnlContent.Controls.Add(this.buttonLogOnOK);
+            this.pnlContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlContent.Location = new System.Drawing.Point(0, 0);
+            this.pnlContent.Margin = new System.Windows.Forms.Padding(0);
+            this.pnlContent.Name = "pnlContent";
+            this.pnlContent.Size = new System.Drawing.Size(483, 345);
+            this.pnlContent.TabIndex = 5;
+            // 
+            // labelStatusText
+            // 
+            this.labelStatusText.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelStatusText.ForeColor = System.Drawing.Color.Orange;
+            this.labelStatusText.Location = new System.Drawing.Point(2, 305);
+            this.labelStatusText.Name = "labelStatusText";
+            this.labelStatusText.Size = new System.Drawing.Size(481, 25);
+            this.labelStatusText.TabIndex = 42;
+            this.labelStatusText.Text = "xxSearching for data sources...";
+            this.labelStatusText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // btnBack
+            // 
+            this.btnBack.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBack.Location = new System.Drawing.Point(214, 310);
+            this.btnBack.Name = "btnBack";
+            this.btnBack.Size = new System.Drawing.Size(75, 23);
+            this.btnBack.TabIndex = 45;
+            this.btnBack.Text = "xxBack";
+            this.btnBack.UseVisualStyleBackColor = true;
+            this.btnBack.Click += new System.EventHandler(this.btnBackClick);
+            // 
+            // buttonLogOnCancel
+            // 
+            this.buttonLogOnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonLogOnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonLogOnCancel.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonLogOnCancel.Location = new System.Drawing.Point(396, 310);
+            this.buttonLogOnCancel.Name = "buttonLogOnCancel";
+            this.buttonLogOnCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonLogOnCancel.TabIndex = 44;
+            this.buttonLogOnCancel.Text = "xxCancel";
+            this.buttonLogOnCancel.UseVisualStyleBackColor = true;
+            this.buttonLogOnCancel.Click += new System.EventHandler(this.buttonLogOnCancelClick);
+            // 
+            // buttonLogOnOK
+            // 
+            this.buttonLogOnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonLogOnOK.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonLogOnOK.Location = new System.Drawing.Point(305, 310);
+            this.buttonLogOnOK.Name = "buttonLogOnOK";
+            this.buttonLogOnOK.Size = new System.Drawing.Size(75, 23);
+            this.buttonLogOnOK.TabIndex = 43;
+            this.buttonLogOnOK.Text = "xxOK";
+            this.buttonLogOnOK.UseVisualStyleBackColor = true;
+            this.buttonLogOnOK.Click += new System.EventHandler(this.buttonLogOnOkClick);
+            // 
+            // LogonView
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.ClientSize = new System.Drawing.Size(483, 345);
+            this.Controls.Add(this.labelStatusText);
+            this.Controls.Add(this.pnlContent);
+            this.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.Name = "LogonView";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "LogonView";
+            this.Shown += new System.EventHandler(this.logonViewShown);
+            this.pnlContent.ResumeLayout(false);
+            this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private System.Windows.Forms.Panel pnlContent;
+        private System.Windows.Forms.Panel pnlContent;
+        private System.Windows.Forms.Label labelStatusText;
+        private System.Windows.Forms.Button btnBack;
+        private System.Windows.Forms.Button buttonLogOnCancel;
+        private System.Windows.Forms.Button buttonLogOnOK;
 	}
 }

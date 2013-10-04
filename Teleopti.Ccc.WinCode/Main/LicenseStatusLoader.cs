@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Xml.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Licensing;
@@ -8,22 +9,23 @@ namespace Teleopti.Ccc.WinCode.Main
 {
     public interface ILicenseStatusLoader
     {
-        ILicenseStatusXml GetStatus();
+        ILicenseStatusXml GetStatus(IUnitOfWork unitOfWork);
     }
 
     public class LicenseStatusLoader : ILicenseStatusLoader
     {
-        private readonly ILicenseStatusRepository _licenseStatusRepository;
+        private readonly IRepositoryFactory _repositoryFactory;
 
-        public LicenseStatusLoader( ILicenseStatusRepository licenseStatusRepository)
+        public LicenseStatusLoader(IRepositoryFactory repositoryFactory)
         {
-            _licenseStatusRepository = licenseStatusRepository;
+            _repositoryFactory = repositoryFactory;
         }
 
-        public ILicenseStatusXml GetStatus()
+        public ILicenseStatusXml GetStatus(IUnitOfWork unitOfWork)
         {
             // if something goes wrong here the document is corrupt, handle that in some way ??
-            var status = _licenseStatusRepository.LoadAll().First();
+            var rep = _repositoryFactory.CreateLicenseStatusRepository(unitOfWork);
+            var status = rep.LoadAll().First();
             return new LicenseStatusXml(XDocument.Parse(status.XmlString));
         }
     }

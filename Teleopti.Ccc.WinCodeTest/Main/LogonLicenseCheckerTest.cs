@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
             Expect.Call(_licenseVerifierFactory.Create(_view, uowFactory)).Return(_licenseVerifier);
             Expect.Call(_licenseVerifier.LoadAndVerifyLicense()).Return(licenseService);
-            Expect.Call(_licenseStatusLoader.GetStatus()).Return(status);
+            Expect.Call(_licenseStatusLoader.GetStatus(uow)).Return(status);
             Expect.Call(status.StatusOk).Return(true).Repeat.Times(3);
             Expect.Call(status.AlmostTooMany).Return(false);
             Expect.Call(uow.Dispose);
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
             Expect.Call(_licenseVerifierFactory.Create(_view, uowFactory)).Return(_licenseVerifier);
             Expect.Call(_licenseVerifier.LoadAndVerifyLicense()).Return(licenseService);
-            Expect.Call(_licenseStatusLoader.GetStatus()).Return(status);
+            Expect.Call(_licenseStatusLoader.GetStatus(uow)).Return(status);
             Expect.Call(status.StatusOk).Return(true).Repeat.Times(3);
             Expect.Call(status.AlmostTooMany).Return(true);
             Expect.Call(() => _view.Warning("")).IgnoreArguments();
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
             Expect.Call(_licenseVerifierFactory.Create(_view, uowFactory)).Return(_licenseVerifier);
             Expect.Call(_licenseVerifier.LoadAndVerifyLicense()).Return(licenseService);
-            Expect.Call(_licenseStatusLoader.GetStatus()).Return(status);
+            Expect.Call(_licenseStatusLoader.GetStatus(uow)).Return(status);
             Expect.Call(status.StatusOk).Return(false).Repeat.Times(3);
             Expect.Call(status.DaysLeft).Return(5);
             Expect.Call(() => _view.Warning("")).IgnoreArguments();
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
             Expect.Call(_licenseVerifierFactory.Create(_view, uowFactory)).Return(_licenseVerifier);
             Expect.Call(_licenseVerifier.LoadAndVerifyLicense()).Return(licenseService);
-            Expect.Call(_licenseStatusLoader.GetStatus()).Return(status);
+            Expect.Call(_licenseStatusLoader.GetStatus(uow)).Return(status);
             Expect.Call(status.StatusOk).Return(false).Repeat.Times(3);
             Expect.Call(status.DaysLeft).Return(0);
             Expect.Call(() => _view.Error("")).IgnoreArguments();

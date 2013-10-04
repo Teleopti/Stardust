@@ -1,16 +1,16 @@
-using System.Collections.Generic;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Teleopti.Ccc.WinCode.Main;
 
 namespace Teleopti.Ccc.Win.Main.LogonScreens
 {
-	public partial class LoginScreen : UserControl, ILogonStep
+	public partial class SelectBuScreen : UserControl, ILogonStep
 	{
 		private readonly LogonView _parent;
 	    private readonly LogonModel _model;
 
-	    public LoginScreen(LogonView parent, LogonModel model)
+        public SelectBuScreen(LogonView parent, LogonModel model)
 		{
 			_parent = parent;
             _model = model;
@@ -19,17 +19,15 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
         public void SetData(LogonModel model)
 		{
-        }
+			lbxSelectBu.DataSource = model.AvailableBus;
+		}
 
 	    public LogonModel GetData()
 	    {
-            //Ska vi ha ett sätt att tala om för parent att det är ok att trycka Ok
-	        _model.UserName = textBoxLogOnName.Text;
-	        _model.Password = textBoxPassword.Text;
-	        return _model;
+	        throw new NotImplementedException();
 	    }
 
-	    private void LoginScreen_Load(object sender, System.EventArgs e)
+	    private void selectSdkScreenLoad(object sender, EventArgs e)
         {
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             BackColor = Color.FromArgb(175, Color.CornflowerBlue);
