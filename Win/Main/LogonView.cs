@@ -21,6 +21,9 @@ namespace Teleopti.Ccc.Win.Main
 		{
 		    _model = model;
 		    InitializeComponent();
+            buttonLogOnCancel.Text = Resources.Cancel;
+            buttonLogOnOK.Text = Resources.Ok;
+		    btnBack.Text = Resources.Back;
 		}
 
 		public bool StartLogon()

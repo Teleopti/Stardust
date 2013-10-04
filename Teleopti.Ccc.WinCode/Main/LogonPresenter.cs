@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WinCode.Main
             //coming back?
             if (_model.DataSourceContainers == null)
             {
-                _view.ClearForm("Looking for Data Sources");
+                _view.ClearForm(Resources.SearchingForDataSourcesTreeDots);
                 _view.InitializeAndCheckStateHolder(_model.SelectedSdk);
                 var logonableDataSources = new List<IDataSourceContainer>();
                 foreach (IDataSourceProvider dataSourceProvider in _dataSourceHandler.DataSourceProviders())

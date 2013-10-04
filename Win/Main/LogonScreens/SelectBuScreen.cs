@@ -1,7 +1,9 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Main.LogonScreens
 {
@@ -15,6 +17,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			_parent = parent;
             _model = model;
             InitializeComponent();
+            labelChooseBu.Text = Resources.PleaseChooseABusinessUnit;
 		}
 
         public void SetData(LogonModel model)
@@ -24,7 +27,8 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
 	    public LogonModel GetData()
 	    {
-	        throw new NotImplementedException();
+            _model.SelectedBu = (IBusinessUnit)lbxSelectBu.SelectedItem;
+	        return _model;
 	    }
 
 	    private void selectSdkScreenLoad(object sender, EventArgs e)
