@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 							{
 								ContractTimeMinutes = (int)scheduleDay.ContractTime.TotalMinutes,
 								WorkTimeMinutes = (int)scheduleDay.WorkTime.TotalMinutes,
-								Projection = new List<SimpleLayer>()
+								Projection = new List<SimpleLayer>(),
+								IsFullDayAbsence = scheduleDay.IsFullDayAbsence
 							},
 						DayOff = scheduleDay.IsDayOff ? new DayOff { Title = scheduleDay.Name} : null
 					};

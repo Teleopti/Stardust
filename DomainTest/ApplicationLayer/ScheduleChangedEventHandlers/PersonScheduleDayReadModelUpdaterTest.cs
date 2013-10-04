@@ -1,12 +1,10 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
@@ -60,6 +58,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 
 			var model = new NewtonsoftJsonDeserializer().DeserializeObject<Model>(repository.Updated.Single().Model);
 			model.DayOff.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldUpdateFullDayAbsence()
+		{
+			var repository = new FakePersonScheduleDayReadModelPersister();
+			var personRepository = new FakePersonRepository();
+			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository);
+
+			target.Handle(new ProjectionChangedEvent
+			{
+				PersonId = personRepository.Single().Id.Value,
+				ScheduleDays = new[]
+						{
+							new ProjectionChangedEventScheduleDay
+								{
+									IsFullDayAbsence = true
+								}
+						}
+			});
+
+			var model = new NewtonsoftJsonDeserializer().DeserializeObject<Model>(repository.Updated.Single().Model);
+			model.Shift.IsFullDayAbsence.Should().Be.True();
 		}
 
 	}

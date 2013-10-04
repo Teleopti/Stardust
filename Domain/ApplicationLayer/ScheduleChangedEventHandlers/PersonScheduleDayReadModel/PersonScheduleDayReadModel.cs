@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 	{
 		public int WorkTimeMinutes { get; set; }
 		public int ContractTimeMinutes { get; set; }
+		public bool IsFullDayAbsence { get; set; }
 		public IList<SimpleLayer> Projection { get; set; }
 	}
 
