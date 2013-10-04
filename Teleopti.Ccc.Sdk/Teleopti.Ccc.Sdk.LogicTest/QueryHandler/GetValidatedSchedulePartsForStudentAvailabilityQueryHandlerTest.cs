@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -75,7 +76,47 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Playback())
 			{
 				var result = target.Handle(new GetValidatedSchedulePartsForStudentAvailabilityQueryDto { DateInPeriod = new DateOnlyDto { DateTime = date }, Person = personDto, TimeZoneId = "W. Europe Standard Time" });
-				result.Count.Should().Be.EqualTo(0);
+				result.Count.Should().Be.EqualTo(16);
+			}
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),Test]
+		public void ShouldGetValidatedSchedulePartsForStudentAvailabilityWithValidShiftBag()
+		{
+			var date = new DateOnly(2012, 4, 30);
+			var personDto = new PersonDto {Id = Guid.NewGuid()};
+
+			var person = PersonFactory.CreatePerson();
+			PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(person, date);
+
+			var dayFactory = new SchedulePartFactoryForDomain(person, ScenarioFactory.CreateScenarioAggregate(),
+			                                                  new DateTimePeriod(2012, 4, 30, 2012, 4, 30),
+			                                                  SkillFactory.CreateSkill("Test"));
+			var scheduleDay = dayFactory.CreatePartWithMainShift();
+			person.Period(date).RuleSetBag = new RuleSetBag();
+
+			var unitOfWork = mocks.DynamicMock<IUnitOfWork>();
+			var dictionary = mocks.StrictMock<IScheduleDictionary>();
+			var range = mocks.StrictMock<IScheduleRange>();
+			using (mocks.Record())
+			{
+				Expect.Call(personRepository.Load(personDto.Id.GetValueOrDefault())).Return(person);
+				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null)).
+				       IgnoreArguments().Return(dictionary);
+				Expect.Call(dictionary[person]).Return(range).Repeat.AtLeastOnce();
+				Expect.Call(range.ScheduledDay(date)).IgnoreArguments().Return(scheduleDay).Repeat.AtLeastOnce();
+			}
+			using (mocks.Playback())
+			{
+				var result =
+					target.Handle(new GetValidatedSchedulePartsForStudentAvailabilityQueryDto
+						{
+							DateInPeriod = new DateOnlyDto {DateTime = date},
+							Person = personDto,
+							TimeZoneId = "W. Europe Standard Time"
+						});
+				result.Count.Should().Be.EqualTo(16);
 			}
 		}
 	}
