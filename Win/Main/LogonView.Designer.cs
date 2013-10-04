@@ -91,6 +91,7 @@ namespace Teleopti.Ccc.Win.Main
             this.btnBack.TabIndex = 46;
             this.btnBack.Text = "xxBack";
             this.btnBack.UseVisualStyleBackColor = true;
+            this.btnBack.Click += new System.EventHandler(this.btnBackClick);
             // 
             // LogonView
             // 

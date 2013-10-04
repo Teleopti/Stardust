@@ -55,41 +55,79 @@ namespace Teleopti.Ccc.WinCode.Main
             return _view.StartLogon();
         }
 
+        public void Initialize()
+        {
+            getSdks();
+        }
+
+        private void getSdks()
+        {
+            _view.ClearForm("Looking for Sdks");
+            var endpoints = ServerEndpointSelector.GetEndpointNames();
+            _model.Sdks = endpoints;
+            if (endpoints.Count == 1)
+            {
+                _model.SelectedSdk = endpoints[0];
+                CurrentStep++;
+                getDataSources();
+                return;
+            }
+            _view.ShowStep(CurrentStep, _model, false);
+        }
+
+        private void getDataSources()
+        {
+            //coming back
+            if (_model.DataSourceContainers != null) return;
+            _view.ClearForm("Looking for Data Sources");
+            _view.InitializeAndCheckStateHolder(_model.SelectedSdk);
+            var logonableDataSources = new List<IDataSourceContainer>();
+            foreach (IDataSourceProvider dataSourceProvider in _dataSourceHandler.DataSourceProviders())
+            {
+                logonableDataSources.AddRange(dataSourceProvider.DataSourceList());
+            }
+            _model.DataSourceContainers = logonableDataSources;
+            _view.ShowStep(CurrentStep, _model, _model.Sdks.Count > 1);
+        }
+
         public void OkbuttonClicked(LogonModel model)
         {
-            
             // här borde vi kolla datan o modellen innan vi säger att vi kan gå vidare
             // om allt är ok, töm vyn, hämta data till nästa steg till modellen och säg åt vyn att visa det
+
             _model = model;
-			switch (CurrentStep)
-			{
-				case LoginStep.SelectSdk:
-                    CurrentStep++;
-					//_view.StepForward();
-					break;
-				case LoginStep.SelectDatasource:	
-                    // know if app or windows choosen
-                    CurrentStep++;
-                    //_view.StepForward();
-                    if(_model.SelectedDataSourceContainer.AuthenticationTypeOption.Equals(AuthenticationTypeOption.Windows))
-                        CurrentStep++;
-					break;
-				case LoginStep.Login:
-			        if (login())
-			        {
-                        CurrentStep++;
-			        }
-					break;
-                case LoginStep.SelectBu:
-                    CurrentStep++;
-                    //_view.StepForward();
-                    break;
-				case LoginStep.Loading:
-                    _initializer.InitializeApplication(_model.SelectedDataSourceContainer);
-					break;
-                case LoginStep.Ready:
-                    break;
-			}
+            CurrentStep++;
+            GetDataForCurrentStep();
+            
+            //switch (CurrentStep)
+            //{
+            //    case LoginStep.SelectSdk:
+            //        CurrentStep++;
+            //        //_view.StepForward();
+            //        break;
+            //    case LoginStep.SelectDatasource:	
+            //        // know if app or windows choosen
+            //        CurrentStep++;
+            //        //_view.StepForward();
+            //        if(_model.SelectedDataSourceContainer.AuthenticationTypeOption.Equals(AuthenticationTypeOption.Windows))
+            //            CurrentStep++;
+            //        break;
+            //    case LoginStep.Login:
+            //        if (login())
+            //        {
+            //            CurrentStep++;
+            //        }
+            //        break;
+            //    case LoginStep.SelectBu:
+            //        CurrentStep++;
+            //        //_view.StepForward();
+            //        break;
+            //    case LoginStep.Loading:
+            //        _initializer.InitializeApplication(_model.SelectedDataSourceContainer);
+            //        break;
+            //    case LoginStep.Ready:
+            //        break;
+            //}
 		}
 
 		public void BackButtonClicked()
@@ -97,10 +135,6 @@ namespace Teleopti.Ccc.WinCode.Main
 			//_view.StepBackwards();
 		}
 
-		public void Initialize()
-		{
-			getSdks();
-		}
 
 		public bool InitializeLogin(string getEndpointNames, string isBrokerDisabled)
 		{
@@ -118,6 +152,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			        getDataSources();
                     break;
 				case LoginStep.Login:
+                    _view.ShowStep(CurrentStep, _model, false);
 					break;
                 case LoginStep.SelectBu:
 			        getBusinessUnits();
@@ -138,6 +173,8 @@ namespace Teleopti.Ccc.WinCode.Main
 			{
                 _view.ShowErrorMessage(Resources.NoAllowedBusinessUnitFoundInCurrentDatabase);
 			}
+            // if only one we dont need it
+            _view.ShowStep(CurrentStep, _model, true);
         }
 
         private bool login()
@@ -206,35 +243,7 @@ namespace Teleopti.Ccc.WinCode.Main
             return ip;
         }
 
-        private void getSdks()
-        {
-            _view.ClearForm("Looking for Sdks");
-            var endpoints = ServerEndpointSelector.GetEndpointNames();
-            _model.Sdks = endpoints;
-            if (endpoints.Count == 1)
-            {
-                _model.SelectedSdk = endpoints[0];
-                CurrentStep ++;
-                getDataSources();
-                return;
-            }
-            _view.ShowStep(CurrentStep, _model, false);
-        }
-
-        private void getDataSources()
-        {
-            //coming back
-            if (_model.DataSourceContainers != null) return;
-            _view.ClearForm("Looking for Data Sources");
-            _view.InitializeAndCheckStateHolder(_model.SelectedSdk);
-            var logonableDataSources = new List<IDataSourceContainer>();
-			foreach (IDataSourceProvider dataSourceProvider in _dataSourceHandler.DataSourceProviders())
-			{
-				logonableDataSources.AddRange(dataSourceProvider.DataSourceList());
-			}
-            _model.DataSourceContainers = logonableDataSources;
-            _view.ShowStep(CurrentStep, _model, _model.Sdks.Count > 1);
-        }
+        
 	}
 
     

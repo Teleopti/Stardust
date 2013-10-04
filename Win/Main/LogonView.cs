@@ -21,8 +21,6 @@ namespace Teleopti.Ccc.Win.Main
 		{
 		    _model = model;
 		    InitializeComponent();
-            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-		    _model = model;
 		}
 
 		public bool StartLogon()
@@ -59,6 +57,7 @@ namespace Teleopti.Ccc.Win.Main
             Refresh();
 	    }
 
+        //Dessa till resurs eller vet vi ändå inte språket, kan man använda datorns???
 	    public bool InitializeAndCheckStateHolder(string skdProxyName)
         {
             if (!LogonInitializeStateHolder.GetConfigFromWebService(skdProxyName))
@@ -107,13 +106,9 @@ namespace Teleopti.Ccc.Win.Main
             showApplyLicenseDialogAndExit(error);
         }
 
-        // temp until we know how to do this
-#pragma warning disable 649
-	    private IDataSourceContainer _choosenDataSource;
-#pragma warning restore 649
         private void showApplyLicenseDialogAndExit(string explanation)
         {
-            var applyLicense = new ApplyLicense(explanation, _choosenDataSource.DataSource.Application);
+            var applyLicense = new ApplyLicense(explanation, _model.SelectedDataSourceContainer.DataSource.Application);
             applyLicense.ShowDialog(this);
             Application.Exit();
         }
