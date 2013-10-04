@@ -5191,7 +5191,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			var uowFactory = UnitOfWorkFactory.Current;
 			var scheduleRepository = new ScheduleRepository(uowFactory);
-			using (var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository, new MoveDataBetweenSchedules(allNewRules, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState)),
+			using (var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository, new MoveDataBetweenSchedules(allNewRules, new EmptyScheduleDayChangeCallback()),
 															_schedulerMessageBrokerHandler,
 															ScheduleViewBase.AllSelectedPersons(selectedSchedules),
 															selectedSchedules,
