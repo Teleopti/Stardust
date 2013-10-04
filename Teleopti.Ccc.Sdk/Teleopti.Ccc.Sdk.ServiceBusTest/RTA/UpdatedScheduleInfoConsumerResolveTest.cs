@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationRtaQueue;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
-using Teleopti.Ccc.Sdk.ServiceBus.TeleoptiRtaService;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 {
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 			builder.RegisterInstance(MockRepository.GenerateMock<IServiceBus>()).As<IServiceBus>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
-			builder.RegisterInstance(MockRepository.GenerateMock<ITeleoptiRtaService>()).As<ITeleoptiRtaService>();
+			builder.RegisterModule<PayrollContainerInstaller>();
 			builder.RegisterModule<AuthenticationModule>();
 			builder.RegisterModule<UnitOfWorkModule>();
 			builder.RegisterModule<RepositoryModule>();
