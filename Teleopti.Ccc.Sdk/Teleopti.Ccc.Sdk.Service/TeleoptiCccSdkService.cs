@@ -15,6 +15,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Tracking;
 using log4net;
@@ -1076,14 +1077,16 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		public void SavePreference(PreferenceRestrictionDto preferenceRestrictionDto)
 		{
 			IRepositoryFactory repositoryFactory = new RepositoryFactory();
-			DeletePreference(preferenceRestrictionDto);
-
+			
 			using (new MessageBrokerSendEnabler())
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
+					deletePreference(preferenceRestrictionDto,repositoryFactory,uow);
 					IPreferenceDayRepository repository = repositoryFactory.CreatePreferenceDayRepository(uow);
 				    var assembler = _factoryProvider.CreatePreferenceDayAssembler();
+
+					preferenceRestrictionDto.Id = null;
 				    var preferenceDay = assembler.DtoToDomainEntity(preferenceRestrictionDto);
 					repository.Add(preferenceDay);
 					uow.PersistAll();
@@ -1099,20 +1102,28 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-                    var assembler = _factoryProvider.CreatePreferenceDayAssembler();
-                    var preferenceDay = assembler.DtoToDomainEntity(preferenceRestrictionDto);
-					IPreferenceDayRepository repository = repositoryFactory.CreatePreferenceDayRepository(uow);
-					IList<IPreferenceDay> days = repository.Find(preferenceDay.RestrictionDate, preferenceDay.Person);
-					foreach (IPreferenceDay day in days)
-					{
-						repository.Remove(day);
-					}
+					deletePreference(preferenceRestrictionDto, repositoryFactory, uow);
 					uow.PersistAll();
 				}
 			}
 		}
 
-		public void SaveStudentAvailabilityDay(StudentAvailabilityDayDto studentAvailabilityDayDto)
+	    private static void deletePreference(PreferenceRestrictionDto preferenceRestrictionDto,
+	                                         IRepositoryFactory repositoryFactory, IUnitOfWork uow)
+	    {
+		    IPersonRepository personRepository = repositoryFactory.CreatePersonRepository(uow);
+		    IPreferenceDayRepository repository = repositoryFactory.CreatePreferenceDayRepository(uow);
+
+		    var person = personRepository.Get(preferenceRestrictionDto.Person.Id.GetValueOrDefault());
+		    if (person == null) throw new FaultException("Given person was not found.");
+		    IList<IPreferenceDay> days = repository.Find(preferenceRestrictionDto.RestrictionDate.ToDateOnly(), person);
+		    foreach (IPreferenceDay day in days)
+		    {
+			    repository.Remove(day);
+		    }
+	    }
+
+	    public void SaveStudentAvailabilityDay(StudentAvailabilityDayDto studentAvailabilityDayDto)
 		{
 			DeleteStudentAvailabilityDay(studentAvailabilityDayDto);
 			IRepositoryFactory repositoryFactory = new RepositoryFactory();
