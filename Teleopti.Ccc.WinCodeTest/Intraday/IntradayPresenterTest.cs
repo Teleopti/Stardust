@@ -402,6 +402,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+						scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(new DifferenceCollection<IPersistableScheduleData>{new DifferenceCollectionItem<IPersistableScheduleData>()});
             uow.Expect(x => x.PersistAll(_target)).Return(new List<IRootChangeInfo>()).Repeat.Once();
             uow.Expect(x => x.PersistAll(_target)).Throw(new OptimisticLockException());
 
@@ -432,6 +433,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _view.Stub(x => x.ShowConfirmationMessage("", "")).IgnoreArguments().Return(DialogResult.No).Repeat.Once();
             scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(differenceCollection).Repeat.Once();
             _view.Stub(x => x.ShowConfirmationMessage("", "")).IgnoreArguments().Return(DialogResult.Yes).Repeat.Once();
+						scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(new DifferenceCollection<IPersistableScheduleData>()).Repeat.Once();
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow).Repeat.Once();
             uow.Stub(x => x.PersistAll(_target)).Return(new List<IRootChangeInfo>()).Repeat.Once();
 

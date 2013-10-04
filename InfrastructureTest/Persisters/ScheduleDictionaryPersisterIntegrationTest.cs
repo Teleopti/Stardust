@@ -32,16 +32,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
         [Test]
         public void VerifyAddScheduleDictionaryWhenAdd()
         {
-            var diffColl = new DifferenceCollection<IPersistableScheduleData>();
 						var schedData = new PersonAssignment(PersonFactory.CreatePerson(), new Scenario("sdd"), new DateOnly(2000, 1, 1));
             PersistAndRemoveFromUnitOfWork(schedData.Scenario);
             PersistAndRemoveFromUnitOfWork(schedData.Person);
-            diffColl.Add(new DifferenceCollectionItem<IPersistableScheduleData>(null, schedData));
 
             IScheduleDictionaryPersisterResult result;
             using (_mocks.Playback())
             {
-				result = _target.MarkForPersist(UnitOfWork, new ScheduleRepository(UnitOfWork), diffColl);
+							result = _target.MarkForPersist(UnitOfWork, new ScheduleRepository(UnitOfWork), new DifferenceCollectionItem<IPersistableScheduleData>(null, schedData));
             }
 
             Assert.IsNotNull(Session.Get<PersonAssignment>(result.AddedEntities.Single().Id));
@@ -51,16 +49,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
         [Test]
         public void VerifyAddScheduleDictionaryWhenDelete()
         {
-            var diffColl = new DifferenceCollection<IPersistableScheduleData>();
 						var schedData = new PersonAssignment(PersonFactory.CreatePerson(), new Scenario("sdd"), new DateOnly(2000, 1, 1));
             PersistAndRemoveFromUnitOfWork(schedData.Scenario);
             PersistAndRemoveFromUnitOfWork(schedData.Person);
             PersistAndRemoveFromUnitOfWork(schedData);
-            diffColl.Add(new DifferenceCollectionItem<IPersistableScheduleData>(schedData, null));
 
             using (_mocks.Playback())
             {
-				_target.MarkForPersist(UnitOfWork, new ScheduleRepository(UnitOfWork), diffColl);
+							_target.MarkForPersist(UnitOfWork, new ScheduleRepository(UnitOfWork), new DifferenceCollectionItem<IPersistableScheduleData>(schedData, null));
             }
 
             Assert.IsNull(Session.Get<PersonAssignment>(schedData.Id));
@@ -69,7 +65,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
         [Test]
         public void VerifyAddScheduleDictionaryWhenChanged()
         {
-            var diffColl = new DifferenceCollection<IPersistableScheduleData>();
 						var schedData = new PersonAssignment(PersonFactory.CreatePerson(), new Scenario("sdd"), new DateOnly(2000, 1, 1));
             var cat = new ShiftCategory("ballefjong");
 	        var act = new Activity("sdfasdfa");
@@ -82,12 +77,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
             var schedDataModified = schedData.EntityClone();
 	        schedDataModified.AddMainLayer(act, schedData.Period);
 					schedDataModified.SetShiftCategory(cat);
-            
-            diffColl.Add(new DifferenceCollectionItem<IPersistableScheduleData>(schedData, schedDataModified));
 
-
-
-			_target.MarkForPersist(UnitOfWork, new ScheduleRepository(UnitOfWork), diffColl);
+						_target.MarkForPersist(UnitOfWork, new ScheduleRepository(UnitOfWork), new DifferenceCollectionItem<IPersistableScheduleData>(schedData, schedDataModified));
 
             Assert.AreEqual(cat.Id.Value, Session.Get<PersonAssignment>(schedData.Id).ShiftCategory.Id.Value);
         }

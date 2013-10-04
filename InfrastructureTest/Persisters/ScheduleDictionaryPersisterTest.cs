@@ -39,14 +39,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			var addedEntity = _mocks.DynamicMock<IPersistableScheduleData>();
 			var addedEntityClone = _mocks.DynamicMock<IPersistableScheduleData>();
 			var addedItem = new DifferenceCollectionItem<IPersistableScheduleData>(null, addedEntity);
-			var differenceCollection = new DifferenceCollection<IPersistableScheduleData>() { addedItem };
 
 			Expect.Call(addedEntity.Clone()).Return(addedEntityClone);
 			Expect.Call(() => _scheduleRepository.Add(addedEntityClone));
 
 			_mocks.ReplayAll();
 
-			_target.MarkForPersist(_unitOfWork, _scheduleRepository, differenceCollection);
+			_target.MarkForPersist(_unitOfWork, _scheduleRepository, addedItem);
 
 			_mocks.VerifyAll();
 		}
@@ -58,13 +57,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 			var deletedEntity = _mocks.DynamicMock<IPersistableScheduleData>();
 			var deletedItem = new DifferenceCollectionItem<IPersistableScheduleData>(deletedEntity, null);
-			var differenceCollection = new DifferenceCollection<IPersistableScheduleData> { deletedItem };
 
 			Expect.Call(() => _scheduleRepository.Remove(deletedEntity));
 
 			_mocks.ReplayAll();
 
-			_target.MarkForPersist(_unitOfWork, _scheduleRepository, differenceCollection);
+			_target.MarkForPersist(_unitOfWork, _scheduleRepository, deletedItem);
 
 			_mocks.VerifyAll();
 		}
@@ -74,14 +72,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 		{
 			var modifiedEntity = new ScheduleDataStub {Id = Guid.NewGuid()};
 			var modifiedItem = new DifferenceCollectionItem<IPersistableScheduleData>(modifiedEntity, modifiedEntity);
-			var differenceCollection = new DifferenceCollection<IPersistableScheduleData>() { modifiedItem };
 
 			_unitOfWork.Reassociate(modifiedEntity);
 			Expect.Call(_unitOfWork.Merge<IPersistableScheduleData>(modifiedEntity)).Return(modifiedEntity);
 
 			_mocks.ReplayAll();
 
-			_target.MarkForPersist(_unitOfWork, _scheduleRepository, differenceCollection);
+			_target.MarkForPersist(_unitOfWork, _scheduleRepository, modifiedItem);
 
 			_mocks.VerifyAll();
 		}
@@ -91,7 +88,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 		{
 			var modifiedEntity = new ScheduleDataStub() { Id = Guid.NewGuid() };
 			var modifiedItem = new DifferenceCollectionItem<IPersistableScheduleData>(modifiedEntity, modifiedEntity);
-			var differenceCollection = new DifferenceCollection<IPersistableScheduleData>() { modifiedItem };
 			var parameters = MockRepository.GenerateMock<IScheduleParameters>();
 			var person = PersonFactory.CreatePerson();
 			parameters.Stub(x => x.Person).Return(person);
@@ -105,7 +101,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 			_mocks.ReplayAll();
 
-			var result = _target.MarkForPersist(_unitOfWork, _scheduleRepository, differenceCollection);
+			var result = _target.MarkForPersist(_unitOfWork, _scheduleRepository, modifiedItem);
 
 			Assert.That(result.ModifiedEntities.Single(), Is.SameAs(modifiedEntity));
 		}
@@ -115,7 +111,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 		{
 			var addedEntity = _mocks.DynamicMock<IPersistableScheduleData>();
 			var addedItem = new DifferenceCollectionItem<IPersistableScheduleData>(null, addedEntity);
-			var differenceCollection = new DifferenceCollection<IPersistableScheduleData>() { addedItem };
 			var parameters = MockRepository.GenerateMock<IScheduleParameters>();
 			var person = PersonFactory.CreatePerson();
 			parameters.Stub(x => x.Person).Return(person);
@@ -127,7 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 			_mocks.ReplayAll();
 
-			var result = _target.MarkForPersist(_unitOfWork, _scheduleRepository, differenceCollection);
+			var result = _target.MarkForPersist(_unitOfWork, _scheduleRepository, addedItem);
 
 			Assert.That(result.AddedEntities.Single(), Is.SameAs(addedEntity));
 		}
