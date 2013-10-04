@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.tabControlChooseDataSource.Location = new System.Drawing.Point(71, 51);
             this.tabControlChooseDataSource.Name = "tabControlChooseDataSource";
             this.tabControlChooseDataSource.SelectedIndex = 0;
-            this.tabControlChooseDataSource.Size = new System.Drawing.Size(350, 189);
+            this.tabControlChooseDataSource.Size = new System.Drawing.Size(350, 153);
             this.tabControlChooseDataSource.TabIndex = 37;
             this.tabControlChooseDataSource.Visible = false;
             // 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.tabPageWindowsDataSources.Location = new System.Drawing.Point(4, 22);
             this.tabPageWindowsDataSources.Name = "tabPageWindowsDataSources";
             this.tabPageWindowsDataSources.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageWindowsDataSources.Size = new System.Drawing.Size(342, 163);
+            this.tabPageWindowsDataSources.Size = new System.Drawing.Size(342, 127);
             this.tabPageWindowsDataSources.TabIndex = 0;
             this.tabPageWindowsDataSources.Text = "xxWindows logon";
             this.tabPageWindowsDataSources.UseVisualStyleBackColor = true;
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.listBoxWindowsDataSources.ItemHeight = 17;
             this.listBoxWindowsDataSources.Location = new System.Drawing.Point(3, 3);
             this.listBoxWindowsDataSources.Name = "listBoxWindowsDataSources";
-            this.listBoxWindowsDataSources.Size = new System.Drawing.Size(336, 157);
+            this.listBoxWindowsDataSources.Size = new System.Drawing.Size(336, 121);
             this.listBoxWindowsDataSources.TabIndex = 3;
             // 
             // tabPageApplicationDataSources
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.tabPageApplicationDataSources.Location = new System.Drawing.Point(4, 22);
             this.tabPageApplicationDataSources.Name = "tabPageApplicationDataSources";
             this.tabPageApplicationDataSources.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageApplicationDataSources.Size = new System.Drawing.Size(342, 163);
+            this.tabPageApplicationDataSources.Size = new System.Drawing.Size(342, 127);
             this.tabPageApplicationDataSources.TabIndex = 1;
             this.tabPageApplicationDataSources.Text = "xxApplication logon";
             this.tabPageApplicationDataSources.UseVisualStyleBackColor = true;
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.listBoxApplicationDataSources.ItemHeight = 17;
             this.listBoxApplicationDataSources.Location = new System.Drawing.Point(3, 3);
             this.listBoxApplicationDataSources.Name = "listBoxApplicationDataSources";
-            this.listBoxApplicationDataSources.Size = new System.Drawing.Size(336, 157);
+            this.listBoxApplicationDataSources.Size = new System.Drawing.Size(336, 121);
             this.listBoxApplicationDataSources.TabIndex = 4;
             // 
             // labelChooseDataSource
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.labelChooseDataSource.Location = new System.Drawing.Point(0, 0);
             this.labelChooseDataSource.Name = "labelChooseDataSource";
             this.labelChooseDataSource.Padding = new System.Windows.Forms.Padding(0, 20, 0, 0);
-            this.labelChooseDataSource.Size = new System.Drawing.Size(483, 296);
+            this.labelChooseDataSource.Size = new System.Drawing.Size(483, 245);
             this.labelChooseDataSource.TabIndex = 36;
             this.labelChooseDataSource.Text = "xxPlease choose a datasource";
             this.labelChooseDataSource.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.Controls.Add(this.labelChooseDataSource);
             this.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "SelectDatasourceScreen";
-            this.Size = new System.Drawing.Size(483, 345);
+            this.Size = new System.Drawing.Size(483, 245);
             this.Load += new System.EventHandler(this.SelectDatasourceScreen_Load);
             this.tabControlChooseDataSource.ResumeLayout(false);
             this.tabPageWindowsDataSources.ResumeLayout(false);

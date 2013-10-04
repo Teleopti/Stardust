@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.labelChooseDataSource.Location = new System.Drawing.Point(0, 0);
             this.labelChooseDataSource.Name = "labelChooseDataSource";
             this.labelChooseDataSource.Padding = new System.Windows.Forms.Padding(0, 20, 0, 0);
-            this.labelChooseDataSource.Size = new System.Drawing.Size(483, 296);
+            this.labelChooseDataSource.Size = new System.Drawing.Size(483, 245);
             this.labelChooseDataSource.TabIndex = 36;
             this.labelChooseDataSource.Text = "xxPlease choose SDK";
             this.labelChooseDataSource.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.lbxSelectSDK.ItemHeight = 17;
             this.lbxSelectSDK.Location = new System.Drawing.Point(71, 51);
             this.lbxSelectSDK.Name = "lbxSelectSDK";
-            this.lbxSelectSDK.Size = new System.Drawing.Size(352, 191);
+            this.lbxSelectSDK.Size = new System.Drawing.Size(352, 140);
             this.lbxSelectSDK.TabIndex = 37;
             // 
             // SelectSdkScreen
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.Controls.Add(this.labelChooseDataSource);
             this.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "SelectSdkScreen";
-            this.Size = new System.Drawing.Size(483, 345);
+            this.Size = new System.Drawing.Size(483, 245);
             this.Load += new System.EventHandler(this.selectSdkScreenLoad);
             this.ResumeLayout(false);
 

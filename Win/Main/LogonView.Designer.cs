@@ -30,25 +30,46 @@ namespace Teleopti.Ccc.Win.Main
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogonView));
             this.pnlContent = new System.Windows.Forms.Panel();
-            this.labelStatusText = new System.Windows.Forms.Label();
-            this.btnBack = new System.Windows.Forms.Button();
             this.buttonLogOnCancel = new System.Windows.Forms.Button();
             this.buttonLogOnOK = new System.Windows.Forms.Button();
-            this.pnlContent.SuspendLayout();
+            this.labelStatusText = new System.Windows.Forms.Label();
+            this.btnBack = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // pnlContent
             // 
             this.pnlContent.BackColor = System.Drawing.Color.Transparent;
-            this.pnlContent.Controls.Add(this.btnBack);
-            this.pnlContent.Controls.Add(this.buttonLogOnCancel);
-            this.pnlContent.Controls.Add(this.buttonLogOnOK);
-            this.pnlContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlContent.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlContent.Location = new System.Drawing.Point(0, 0);
             this.pnlContent.Margin = new System.Windows.Forms.Padding(0);
             this.pnlContent.Name = "pnlContent";
-            this.pnlContent.Size = new System.Drawing.Size(483, 345);
+            this.pnlContent.Size = new System.Drawing.Size(483, 242);
             this.pnlContent.TabIndex = 5;
+            // 
+            // buttonLogOnCancel
+            // 
+            this.buttonLogOnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonLogOnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonLogOnCancel.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonLogOnCancel.Location = new System.Drawing.Point(399, 308);
+            this.buttonLogOnCancel.Name = "buttonLogOnCancel";
+            this.buttonLogOnCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonLogOnCancel.TabIndex = 44;
+            this.buttonLogOnCancel.Text = "xxCancel";
+            this.buttonLogOnCancel.UseVisualStyleBackColor = true;
+            this.buttonLogOnCancel.Click += new System.EventHandler(this.buttonLogOnCancelClick);
+            // 
+            // buttonLogOnOK
+            // 
+            this.buttonLogOnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonLogOnOK.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonLogOnOK.Location = new System.Drawing.Point(311, 308);
+            this.buttonLogOnOK.Name = "buttonLogOnOK";
+            this.buttonLogOnOK.Size = new System.Drawing.Size(75, 23);
+            this.buttonLogOnOK.TabIndex = 43;
+            this.buttonLogOnOK.Text = "xxOK";
+            this.buttonLogOnOK.UseVisualStyleBackColor = true;
+            this.buttonLogOnOK.Click += new System.EventHandler(this.buttonLogOnOkClick);
             // 
             // labelStatusText
             // 
@@ -64,38 +85,12 @@ namespace Teleopti.Ccc.Win.Main
             // btnBack
             // 
             this.btnBack.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBack.Location = new System.Drawing.Point(214, 310);
+            this.btnBack.Location = new System.Drawing.Point(222, 308);
             this.btnBack.Name = "btnBack";
             this.btnBack.Size = new System.Drawing.Size(75, 23);
-            this.btnBack.TabIndex = 45;
+            this.btnBack.TabIndex = 46;
             this.btnBack.Text = "xxBack";
             this.btnBack.UseVisualStyleBackColor = true;
-            this.btnBack.Click += new System.EventHandler(this.btnBackClick);
-            // 
-            // buttonLogOnCancel
-            // 
-            this.buttonLogOnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonLogOnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonLogOnCancel.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonLogOnCancel.Location = new System.Drawing.Point(396, 310);
-            this.buttonLogOnCancel.Name = "buttonLogOnCancel";
-            this.buttonLogOnCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonLogOnCancel.TabIndex = 44;
-            this.buttonLogOnCancel.Text = "xxCancel";
-            this.buttonLogOnCancel.UseVisualStyleBackColor = true;
-            this.buttonLogOnCancel.Click += new System.EventHandler(this.buttonLogOnCancelClick);
-            // 
-            // buttonLogOnOK
-            // 
-            this.buttonLogOnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonLogOnOK.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonLogOnOK.Location = new System.Drawing.Point(305, 310);
-            this.buttonLogOnOK.Name = "buttonLogOnOK";
-            this.buttonLogOnOK.Size = new System.Drawing.Size(75, 23);
-            this.buttonLogOnOK.TabIndex = 43;
-            this.buttonLogOnOK.Text = "xxOK";
-            this.buttonLogOnOK.UseVisualStyleBackColor = true;
-            this.buttonLogOnOK.Click += new System.EventHandler(this.buttonLogOnOkClick);
             // 
             // LogonView
             // 
@@ -105,6 +100,9 @@ namespace Teleopti.Ccc.Win.Main
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(483, 345);
+            this.Controls.Add(this.buttonLogOnCancel);
+            this.Controls.Add(this.buttonLogOnOK);
+            this.Controls.Add(this.btnBack);
             this.Controls.Add(this.labelStatusText);
             this.Controls.Add(this.pnlContent);
             this.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -115,7 +113,6 @@ namespace Teleopti.Ccc.Win.Main
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LogonView";
             this.Shown += new System.EventHandler(this.logonViewShown);
-            this.pnlContent.ResumeLayout(false);
             this.ResumeLayout(false);
 
 		}
@@ -124,8 +121,8 @@ namespace Teleopti.Ccc.Win.Main
 
         private System.Windows.Forms.Panel pnlContent;
         private System.Windows.Forms.Label labelStatusText;
-        private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.Button buttonLogOnCancel;
         private System.Windows.Forms.Button buttonLogOnOK;
+        private System.Windows.Forms.Button btnBack;
 	}
 }

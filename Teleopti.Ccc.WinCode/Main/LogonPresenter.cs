@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
         public void OkbuttonClicked(LogonModel model)
         {
+            
             // här borde vi kolla datan o modellen innan vi säger att vi kan gå vidare
             // om allt är ok, töm vyn, hämta data till nästa steg till modellen och säg åt vyn att visa det
             _model = model;
@@ -214,7 +215,10 @@ namespace Teleopti.Ccc.WinCode.Main
             {
                 _model.SelectedSdk = endpoints[0];
                 CurrentStep ++;
+                getDataSources();
+                return;
             }
+            _view.ShowStep(CurrentStep, _model, false);
         }
 
         private void getDataSources()
@@ -229,7 +233,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				logonableDataSources.AddRange(dataSourceProvider.DataSourceList());
 			}
             _model.DataSourceContainers = logonableDataSources;
-            
+            _view.ShowStep(CurrentStep, _model, _model.Sdks.Count > 1);
         }
 	}
 

@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
             listBoxApplicationDataSources.DataSource = availableApplicationDataSources;
             listBoxWindowsDataSources.DataSource = logonableWindowsDataSources;
-		    if (listBoxWindowsDataSources.Items.Count < 1)
-		        tabPageWindowsDataSources.Visible = false;
-            
+            if (listBoxWindowsDataSources.Items.Count < 1)
+                tabPageWindowsDataSources.Visible = false;
+
             tabControlChooseDataSource.Visible = true;
 		}
 

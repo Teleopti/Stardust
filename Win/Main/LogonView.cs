@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Win.Main
 		{
 		    _model = model;
 		    InitializeComponent();
-            //SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
 		    _model = model;
 		}
 
@@ -38,8 +38,9 @@ namespace Teleopti.Ccc.Win.Main
 		    return result != DialogResult.Cancel;
 		}
 
-	    public void ShowStep(LoginStep theStep, bool showBackButton)
+	    public void ShowStep(LoginStep theStep, LogonModel model, bool showBackButton)
 	    {
+            _logonSteps[(int)theStep].SetData(model);
             updatePanel((UserControl)_logonSteps[(int)theStep]);
             labelStatusText.Visible = false;
 	        buttonLogOnCancel.Visible = true;
@@ -135,7 +136,7 @@ namespace Teleopti.Ccc.Win.Main
 
         private void buttonLogOnOkClick(object sender, EventArgs e)
         {
-            Presenter.OkbuttonClicked(_model);
+            Presenter.OkbuttonClicked(_logonSteps[(int)Presenter.CurrentStep].GetData());
         }
 
         private void btnBackClick(object sender, EventArgs e)
