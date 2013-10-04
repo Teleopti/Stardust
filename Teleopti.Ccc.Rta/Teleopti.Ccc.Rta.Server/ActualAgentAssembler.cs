@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.Rta.Server
 			//if same don't send it, but should be saved to db to keep batch intact
 			if (previousState != null && newState.Equals(previousState))
 			{
-				LoggingSvc.InfoFormat("The new state is equal to the old state for person {0}, will not send or save",
+				LoggingSvc.InfoFormat("The new state is equal to the old state for person {0}, will send change over message broker",
 				                      newState.PersonId);
 				newState.SendOverMessageBroker = false;
 			}

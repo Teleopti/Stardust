@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 				if (isSnapshot && string.IsNullOrEmpty(logOn))
 				{
-					_loggingSvc.InfoFormat("Last of batch detected, initializing hanling for batch id: {0}, source id: {1}", batchId,
+					_loggingSvc.InfoFormat("Last of batch detected, initializing handling for batch id: {0}, source id: {1}", batchId,
 					                       sourceId);
 					handleLastOfBatch(batchId, sourceId);
 					return;

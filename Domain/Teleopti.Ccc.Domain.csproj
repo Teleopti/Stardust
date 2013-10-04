@@ -251,6 +251,10 @@
     <Compile Include="Common\IMutateNow.cs" />
     <Compile Include="Common\ListAggregator.cs" />
     <Compile Include="Common\PeriodExtensions.cs" />
+    <Compile Include="Common\Logging\AdvanceLoggingService.cs" />
+    <Compile Include="Common\Logging\Log4NetConfiguration.cs" />
+    <Compile Include="Common\Logging\SchedulingOptionsValueExtractor.cs" />
+    <Compile Include="Common\Logging\SystemInformationHelper.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Common\SpecificBusinessUnit.cs" />
     <Compile Include="Common\Time\INowExtensions.cs" />
@@ -532,6 +536,7 @@
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
+    <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriod.cs" />
     <Compile Include="ResourceCalculation\TransformResourcesFromStorageCommand.cs" />
     <Compile Include="Scheduling\Overtime\SkillIntervalData.cs" />
     <Compile Include="Scheduling\Overtime\SkillIntervalDataDivider.cs" />

@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer
+namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeReadScheduleRepository:IScheduleRepository
+	public class FakePersonAssignmentReadScheduleRepository:IScheduleRepository
 	{
 		private readonly IPersonAssignment _personAssignment;
 
-		public FakeReadScheduleRepository()
+		public FakePersonAssignmentReadScheduleRepository()
 		{
 		}
 
-		public FakeReadScheduleRepository(IPersonAssignment personAssignment)
+		public FakePersonAssignmentReadScheduleRepository(IPersonAssignment personAssignment)
 		{
 			_personAssignment = personAssignment;
 		}

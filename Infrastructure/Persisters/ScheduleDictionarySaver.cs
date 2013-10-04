@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 {
 	public class ScheduleDictionarySaver : IScheduleDictionarySaver
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IScheduleDictionaryPersisterResult MarkForPersist(IUnitOfWork unitOfWork, 
 															IScheduleRepository scheduleRepository, 
 															IDifferenceCollection<IPersistableScheduleData> scheduleChanges)
@@ -28,8 +27,11 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 					// We have to set the id here to make sure unsafesnapshot update works later, otherwise it wont understand its the same entity
 					diffItem.CurrentItem.SetId(clone.Id);
 					addedEntities.Add(clone);
-					//scheduleRepository.Add(diffItem.CurrentItem);
 					continue;
+
+					//todo- change to this if it works
+					// scheduleRepository.Add(diffItem.CurrentItem);
+					// addedEntities.Add(diffItem.CurrentItem);
 				}
 				if (diffItem.Status == DifferenceStatus.Deleted)
 				{
