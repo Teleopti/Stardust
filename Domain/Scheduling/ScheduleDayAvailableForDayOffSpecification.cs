@@ -3,11 +3,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public interface IScheduleDayAvailableForDayOffSpecification
-	{
-		bool IsSatisfiedBy(IScheduleDay part);
-	}
-
 	public class ScheduleDayAvailableForDayOffSpecification : Specification<IScheduleDay>, IScheduleDayAvailableForDayOffSpecification
 	{
 		public override bool IsSatisfiedBy(IScheduleDay obj)
