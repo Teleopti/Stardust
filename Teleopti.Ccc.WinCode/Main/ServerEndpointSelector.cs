@@ -5,9 +5,13 @@ using System.ServiceModel.Configuration;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
-	public static class ServerEndpointSelector
+    public interface IServerEndpointSelector
+    {
+        List<string> GetEndpointNames();
+    }
+    public class ServerEndpointSelector : IServerEndpointSelector
 	{
-		public static List<string> GetEndpointNames()
+		public List<string> GetEndpointNames()
 		{
 			var clientSettings = ConfigurationManager.GetSection("system.serviceModel/client") as ClientSection;
 			if (clientSettings != null)
