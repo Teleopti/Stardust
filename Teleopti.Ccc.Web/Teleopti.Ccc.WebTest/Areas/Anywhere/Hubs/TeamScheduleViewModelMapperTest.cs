@@ -18,18 +18,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var target = new TeamScheduleViewModelMapper();
 			var startTime = new DateTime(2013, 3, 4, 8, 0, 0, DateTimeKind.Utc);
-			var agent = PersonFactory.CreatePersonWithId();
+			var person = PersonFactory.CreatePersonWithId();
 			var timeZone = TimeZoneInfoFactory.HelsinkiTimeZoneInfo();
 			var data = new TeamScheduleData
 				{
 					UserTimeZone = timeZone,
-					CanSeePersons = new[] {agent},
-					CanSeeConfidentialAbsencesFor = new[] {agent},
+					CanSeePersons = new[] {person},
+					CanSeeConfidentialAbsencesFor = new[] {person},
 					Schedules = new[]
 						{
 							new PersonScheduleDayReadModel
 								{
-									PersonId = agent.Id.Value,
+									PersonId = person.Id.Value,
 									Model = JsonConvert.SerializeObject(new Model
 										{
 											Shift =	new Shift
@@ -56,13 +56,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		[Test]
 		public void ShouldMapDayOff()
 		{
-			var agent = PersonFactory.CreatePersonWithId();
+			var person = PersonFactory.CreatePersonWithId();
 			var target = new TeamScheduleViewModelMapper();
 
 			var data = new TeamScheduleData
 				{
-					CanSeePersons = new[] { agent },
-					CanSeeConfidentialAbsencesFor = new[] { agent },
+					CanSeePersons = new[] { person },
+					CanSeeConfidentialAbsencesFor = new[] { person },
 					Schedules = new[]
 						{
 							new PersonScheduleDayReadModel
@@ -81,6 +81,36 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var result = target.Map(data);
 
 			result.Single().IsDayOff.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapFullDayAbsence()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			var target = new TeamScheduleViewModelMapper();
+
+			var data = new TeamScheduleData
+				{
+					CanSeePersons = new[] {person},
+					CanSeeConfidentialAbsencesFor = new[] {person},
+					Schedules = new[]
+						{
+							new PersonScheduleDayReadModel
+								{
+									Model = JsonConvert.SerializeObject(new Model
+										{
+											Shift = new Shift
+												{
+													IsFullDayAbsence = true
+												}
+										})
+								}
+						}
+				};
+
+			var result = target.Map(data);
+
+			result.Single().IsFullDayAbsence.Should().Be.True();
 		}
 	}
 }
