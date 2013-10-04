@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac;
+using Autofac.Core;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Autofac;
 using Rhino.ServiceBus.Internal;
