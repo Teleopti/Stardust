@@ -417,6 +417,7 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapper.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\StandardDeviationData.cs" />
+    <Compile Include="Scheduling\EmptyScheduleChangeCallBack.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeLengthDecider.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferences.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferencesGeneralPersonalSetting.cs" />
