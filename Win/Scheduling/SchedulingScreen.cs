@@ -190,6 +190,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private DateTimePeriod _selectedPeriod;
 	    private bool isWindowLoaded = false;
 		private ScheduleTimeType _scheduleTimeType;
+		private DateTime _lastSaved = DateTime.Now;
 
 		#region enums
 		private enum ZoomLevel
@@ -1186,7 +1187,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_forceClose) return;
 
-			save();
+			save();	
 		}
 
 		private void toolStripButtonAgentInfo_Click(object sender, EventArgs e)
@@ -4274,6 +4275,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_defaultScheduleTag = tag;
 				break;
 			}
+
+			_lastSaved = DateTime.Now;
 		}
 
 		private void createMaxSeatSkills(ISkillDayRepository skillDayRepository)
@@ -4559,8 +4562,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
+
+		//fix for sunkfusion clickevent fires twice in this method, will be some issues when debugging
 		private bool save()
 		{
+			if (_lastSaved.AddSeconds(2) > DateTime.Now)
+				return false;
+
 			if (_scheduleView != null)
 			{
 				if (notesEditor.NotesIsAltered || notesEditor.PublicNotesIsAltered)
@@ -4574,6 +4582,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			try
 			{
 				doSaveProcess();
+				_lastSaved = DateTime.Now;
 				return true;
 			}
 			catch (TooManyActiveAgentsException e)
