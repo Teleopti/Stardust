@@ -95,6 +95,13 @@ namespace Teleopti.Ccc.WinCode.Main
             _view.ShowStep(CurrentStep, _model, _model.Sdks.Count > 1);
         }
 
+        private void initApplication()
+        {
+            _view.ClearForm("Initiating application...");
+            if(!_initializer.InitializeApplication(_model.SelectedDataSourceContainer))
+                _view.Exit();
+        }
+
         public void OkbuttonClicked(LogonModel model)
         {
             // här borde vi kolla datan o modellen innan vi säger att vi kan gå vidare
@@ -155,16 +162,20 @@ namespace Teleopti.Ccc.WinCode.Main
 			        getDataSources();
                     break;
 				case LoginStep.Login:
-                    _view.ShowStep(CurrentStep, _model, false);
+                    _view.ShowStep(CurrentStep, _model, true);
 					break;
                 case LoginStep.SelectBu:
 					if (login())
 						getBusinessUnits();
                     break;
+                case LoginStep.Loading:
+			        initApplication();
+			        break;
 				default:
 					break;
 			}
             return _model;
+            // när allt är klart måste vi stänga och returnera True
 		}
 
 	    

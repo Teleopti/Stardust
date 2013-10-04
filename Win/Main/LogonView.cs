@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Win.Main
 	        buttonLogOnCancel.Visible = true;
 	        buttonLogOnOK.Visible = true;
 	        btnBack.Visible = showBackButton;
+            Refresh();
 	    }
 
 	    public void ClearForm(string labelText)
