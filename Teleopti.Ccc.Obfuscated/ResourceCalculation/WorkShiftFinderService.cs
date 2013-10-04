@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -142,32 +143,60 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         		                                                             person, dateOnly, maxSeatSkillPeriods,
         		                                                             currentSchedulePeriod.AverageWorkTimePerDay,
         		                                                             schedulingOptions);
-           
-            double highestShiftValue = double.MinValue;
-            foreach (var workShiftCalculationResultHolder in foundValues)
-            {
-                if (workShiftCalculationResultHolder.Value > highestShiftValue)
-                    highestShiftValue = workShiftCalculationResultHolder.Value;
-            }
-
-		    if (highestShiftValue == double.MinValue)
-				return null;
-
-			if (foundValues.Count == 0)
-				return null;
+	        if (foundValues.Count == 0)
+		        return null;
 
 			// if we only want shifts that don't overstaff
-            if (schedulingOptions.OnlyShiftsWhenUnderstaffed && highestShiftValue <= 0)
+			if (schedulingOptions.OnlyShiftsWhenUnderstaffed)
 			{
-				FinderResult.StoppedOnOverstaffing = true;
-				FinderResult.Successful = true;
-				return null;
+				double highestShiftValue = double.MinValue;
+				foreach (var workShiftCalculationResultHolder in foundValues)
+				{
+					if (workShiftCalculationResultHolder.Value > highestShiftValue)
+						highestShiftValue = workShiftCalculationResultHolder.Value;
+				}
+
+				if (Math.Abs(highestShiftValue - double.MinValue) < 0.000001)
+					return null;
+
+				if (highestShiftValue <= 0)
+				{
+					FinderResult.StoppedOnOverstaffing = true;
+					FinderResult.Successful = true;
+					return null;
+				}
 			}
             
-             foundValues = WorkShiftCalculator.CalculateListForBestImprovementAfterAssignment(foundValues, dataHolders);
-            return foundValues.GetRandom();
-		    
-		}
+            
+            foundValues = WorkShiftCalculator.CalculateListForBestImprovementAfterAssignment(foundValues, dataHolders);
+	        int foundValuesCount = foundValues.Count;
+	        if (foundValuesCount == 1)
+		        return foundValues[0];
+
+			IDictionary<int, int> randomResultList = new Dictionary<int, int>(foundValuesCount);
+			for (int i = 0; i < foundValuesCount; i++)
+	        {
+		        randomResultList.Add(i, 0);
+	        }
+
+	        for (int i = 0; i < 100; i++)
+	        {
+				var rndResult = foundValues.GetRandom();
+		        int index = foundValues.IndexOf(rndResult);
+		        randomResultList[index] = randomResultList[index] + 1;
+	        }
+
+	        int winningIndexValue = randomResultList.Values.Max();
+
+	        foreach (var keyValuePair in randomResultList)
+	        {
+		        if (keyValuePair.Value == winningIndexValue)
+			        return foundValues[keyValuePair.Key];
+	        }
+
+	        return null;
+
+        }
 
 
         #region Private methods
