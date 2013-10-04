@@ -26,15 +26,15 @@ namespace Teleopti.Ccc.Domain.Common.Logging
 
         public static void LogSchedulingInfo(ISchedulingOptions schedulingOptions, int noOfAgent, int noOfSkillDays, Action callbackAction)
         {
+            var stop = new Stopwatch();
+            stop.Start();
+            callbackAction.Invoke();
+            stop.Stop();
+
             if (getLog().IsInfoEnabled)
             {
 				clearGlobalContext();
                 
-				var stop = new Stopwatch();
-                stop.Start();
-                callbackAction.Invoke();
-                stop.Stop();
-
                 //log the scheduling options
                 populateSchedulingOptions(schedulingOptions);
 
@@ -100,13 +100,14 @@ namespace Teleopti.Ccc.Domain.Common.Logging
 
         public static void LogOptimizationInfo(IOptimizationPreferences schedulingOptions, int noOfAgent, int noOfSkillDays, Action callbackAction)
         {
+
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            callbackAction.Invoke();
+            stopwatch.Stop(); 
+            
             if (getLog().IsInfoEnabled)
             {
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-                callbackAction.Invoke();
-                stopwatch.Stop();
-                
                 clearGlobalContext();
 
                 //log the optimization options
