@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		    builder.RegisterType<RoleToPrincipalCommand>().As<IRoleToPrincipalCommand>();
 			builder.RegisterType<LoginInitializer>().As<ILoginInitializer>();
 			builder.RegisterType<LogonDataSourceHandler>().As<IDataSourceHandler>();
+            builder.RegisterType<ServerEndpointSelector>().As<IServerEndpointSelector>();
             
 		    builder.RegisterType<LogonView>()
                     .As<ILicenseFeedback>()

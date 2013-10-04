@@ -31,12 +31,14 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly ILoginInitializer _initializer;
 	    private readonly ILogonLogger _logonLogger;
 	    private readonly ILogOnOff _logOnOff;
+	    private readonly IServerEndpointSelector _serverEndpointSelector;
 	    private readonly IDataSourceHandler _dataSourceHandler;
 	    private bool getConfigFromWebService;
 
 		public LogonPresenter(ILogonView view, LogonModel model,
-		                      IDataSourceHandler dataSourceHandler,
-                              ILoginInitializer initializer, ILogonLogger logonLogger, ILogOnOff logOnOff)
+		                IDataSourceHandler dataSourceHandler, ILoginInitializer initializer, 
+                        ILogonLogger logonLogger, ILogOnOff logOnOff, 
+                        IServerEndpointSelector serverEndpointSelector)
 		{
 			_view = view;
 			_model = model;
@@ -44,6 +46,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			_initializer = initializer;
 		    _logonLogger = logonLogger;
 		    _logOnOff = logOnOff;
+		    _serverEndpointSelector = serverEndpointSelector;
 		    getConfigFromWebService = Convert.ToBoolean(ConfigurationManager.AppSettings["GetConfigFromWebService"], CultureInfo.InvariantCulture);
 		}
 
@@ -63,7 +66,7 @@ namespace Teleopti.Ccc.WinCode.Main
         private void getSdks()
         {
             _view.ClearForm("Looking for Sdks");
-            var endpoints = ServerEndpointSelector.GetEndpointNames();
+            var endpoints = _serverEndpointSelector.GetEndpointNames();
             _model.Sdks = endpoints;
             if (endpoints.Count == 1)
             {
@@ -77,16 +80,18 @@ namespace Teleopti.Ccc.WinCode.Main
 
         private void getDataSources()
         {
-            //coming back
-            if (_model.DataSourceContainers != null) return;
-            _view.ClearForm("Looking for Data Sources");
-            _view.InitializeAndCheckStateHolder(_model.SelectedSdk);
-            var logonableDataSources = new List<IDataSourceContainer>();
-            foreach (IDataSourceProvider dataSourceProvider in _dataSourceHandler.DataSourceProviders())
+            //coming back?
+            if (_model.DataSourceContainers == null)
             {
-                logonableDataSources.AddRange(dataSourceProvider.DataSourceList());
+                _view.ClearForm("Looking for Data Sources");
+                _view.InitializeAndCheckStateHolder(_model.SelectedSdk);
+                var logonableDataSources = new List<IDataSourceContainer>();
+                foreach (IDataSourceProvider dataSourceProvider in _dataSourceHandler.DataSourceProviders())
+                {
+                    logonableDataSources.AddRange(dataSourceProvider.DataSourceList());
+                }
+                _model.DataSourceContainers = logonableDataSources;
             }
-            _model.DataSourceContainers = logonableDataSources;
             _view.ShowStep(CurrentStep, _model, _model.Sdks.Count > 1);
         }
 
@@ -132,7 +137,8 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public void BackButtonClicked()
 		{
-			//_view.StepBackwards();
+		    CurrentStep--;
+		    GetDataForCurrentStep();
 		}
 
 
