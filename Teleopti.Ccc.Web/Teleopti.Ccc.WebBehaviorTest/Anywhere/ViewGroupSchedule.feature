@@ -131,6 +131,23 @@ Scenario: Default to my team
 	Then The team picker should have 'Common Site/Team green' selected
 	And I should see schedule for me
 
+#new
+Scenario: Default to first option if no my team
+	Given I have the role 'Anywhere Team Green And Red'
+	And I donot belong to any team
+	When I view team schedule for '2013-03-25'
+	Then The team picker should have 'Common Site/Team green' selected
+
+Scenario: View my schedule when only have my own data access
+	Given I have the role 'Anywhere My Own'
+	And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 2013-03-25 09:00 |
+	| EndTime        | 2013-03-25 18:00 |
+	| Shift category | Day              |
+	When I view team schedule for '2013-03-25'
+	Then I should see schedule for me
+
 Scenario: View group schedule in my time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Hawaii
@@ -225,10 +242,10 @@ Scenario: Push group schedule changes
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
     | Field          | Value            |
-	| Shift category | Day              |
-	| Activity       | Phone            |
-	| Start time     | 2013-09-10 08:00 |
-	| End time       | 2013-09-10 17:00 |
+    | Shift category | Day              |
+    | Activity       | Phone            |
+    | Start time     | 2013-09-10 08:00 |
+    | End time       | 2013-09-10 17:00 |
 	And there is an absence with
 	| Field | Value    |
 	| Name  | Vacation |
@@ -238,7 +255,7 @@ Scenario: Push group schedule changes
 	| Field      | Value |
 	| Start time | 08:00 |
 	| End time   | 17:00 |
-	| Color      | Green |	
+	| Color      | Green |
 	When 'Martin Fowler' adds an absence for 'Pierre Baldi' with
 	| Field      | Value            |
 	| Name       | Vacation         |
