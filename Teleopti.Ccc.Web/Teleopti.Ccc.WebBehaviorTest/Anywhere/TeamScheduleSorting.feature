@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Team schedule sorting
+﻿Feature: Team schedule sorting
 	In order to easily find who is working at a specific time
 	As a team leader
 	I want to get the persons sorted in order of the schedules
@@ -54,6 +53,7 @@ Scenario: Order by shift start
 	When I view schedules for '2013-09-27'
 	Then I should see 'Pierre Baldi' before 'Ashley Andeen'
 
+@ignore
 Scenario: Order full day absences after shifts in team schedule
 	Given I have the role 'Anywhere Team Green'
 	And 'Ashley Andeen' has an absence with
@@ -70,6 +70,7 @@ Scenario: Order full day absences after shifts in team schedule
 	When I view schedules for '2013-09-27'
 	Then I should see 'Pierre Baldi' before 'Ashley Andeen'
 
+@ignore
 Scenario: Order days off after full day absences in team schedule
 	Given I have the role 'Anywhere Team Green'
 	And 'Ashley Andeen' has an absence with
@@ -84,15 +85,13 @@ Scenario: Order days off after full day absences in team schedule
 	When I view schedules for '2013-09-27'
 	Then I should see 'Ashley Andeen' before 'Pierre Baldi'
 
-Scenario: Order no shifts last
+@ignore
+Scenario: Order no shifts after day off
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
-	| Field          | Value            |
-	| Shift category | Day              |
-	| Activity       | Phone            |
-	| Start time     | 2013-09-27 08:00 |
-	| End time       | 2013-09-27 17:00 |
+	And 'Pierre Baldi' have a day off with
+	| Field | Value      |
+	| Name  | Day off    |
+	| Date  | 2013-09-27 |
 	And 'Ashley Andeen' has no shift
-	And I have no shift
 	When I view schedules for '2013-09-27'
 	Then I should see 'Pierre Baldi' before 'Ashley Andeen'
