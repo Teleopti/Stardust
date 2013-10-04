@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			{
 				Expect.Call(personRepository.Load(personDto.Id.GetValueOrDefault())).Return(person);
 				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null)).
+				Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), null)).
 				       IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[person]).Return(range).Repeat.AtLeastOnce();
 				Expect.Call(range.ScheduledDay(date)).IgnoreArguments().Return(scheduleDay).Repeat.AtLeastOnce();
