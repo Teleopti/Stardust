@@ -46,9 +46,9 @@ namespace Teleopti.Ccc.Domain.Common.Logging
         {
             var result = "Scheduling";
             if (_schedulingOptions.UsePreferences)
-                result += ", Prefrences";
+                result += ",Prefrences";
             if (_schedulingOptions.UseRotations)
-                result += ", Rotations";
+                result += ",Rotations";
             return result;
         }
 
