@@ -1299,6 +1299,7 @@
     <Compile Include="Scheduling\FindMatchingNew.Designer.cs">
       <DependentUpon>FindMatchingNew.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\LockMenuBuilders\LockDaysOffMenuBuilder.cs" />
     <Compile Include="Scheduling\LockMenuBuilders\LockShiftCategoriesMenuBuilder.cs" />
     <Compile Include="Scheduling\OvertimePreferencesDialog.cs">
       <SubType>Form</SubType>

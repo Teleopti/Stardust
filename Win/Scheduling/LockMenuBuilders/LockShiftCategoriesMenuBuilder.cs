@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Win.Scheduling.LockMenuBuilders
 {
 	public class LockShiftCategoriesMenuBuilder
 	{
-		public void Build(IList<IShiftCategory> shiftCategories, EventHandler clickEvent, MouseEventHandler mouseUpEvent, ToolStripMenuItem toolStripMenuItemLockShiftCategory, ToolStripMenuItem toolStripMenuItemLockShiftCategoriesRM)
+		public void Build(IList<IShiftCategory> shiftCategories, EventHandler clickEvent, MouseEventHandler mouseUpEvent, ToolStripMenuItem toolStripMenuItemLockShiftCategory, ToolStripMenuItem toolStripMenuItemLockShiftCategoriesRm)
 		{
 			var toolStripMenuItemShiftCategoryLockRibbon = new ToolStripMenuItem();
 			var toolStripMenuItemShiftCategoryLockRm = new ToolStripMenuItem();
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Win.Scheduling.LockMenuBuilders
 				toolStripMenuItemShiftCategoryLockRibbon.Click += clickEvent;
 				toolStripMenuItemShiftCategoryLockRm.MouseUp += mouseUpEvent;
 				toolStripMenuItemLockShiftCategory.DropDownItems.Add(toolStripMenuItemShiftCategoryLockRibbon);
-				toolStripMenuItemLockShiftCategoriesRM.DropDownItems.Add(toolStripMenuItemShiftCategoryLockRm);
+				toolStripMenuItemLockShiftCategoriesRm.DropDownItems.Add(toolStripMenuItemShiftCategoryLockRm);
 			}
 			foreach (IShiftCategory shiftCategory in sortedCategories)
 			{
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Win.Scheduling.LockMenuBuilders
 				toolStripMenuItemShiftCategoryLockRibbon.Click += clickEvent;
 				toolStripMenuItemShiftCategoryLockRm.MouseUp += mouseUpEvent;
 				toolStripMenuItemLockShiftCategory.DropDownItems.Add(toolStripMenuItemShiftCategoryLockRibbon);
-				toolStripMenuItemLockShiftCategoriesRM.DropDownItems.Add(toolStripMenuItemShiftCategoryLockRm);
+				toolStripMenuItemLockShiftCategoriesRm.DropDownItems.Add(toolStripMenuItemShiftCategoryLockRm);
 			}
 			var deleted = (from a in sortedCategories
 						  where ((IDeleteTag)a).IsDeleted
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Win.Scheduling.LockMenuBuilders
 				toolStripMenuItemDeletedShiftCategoryLockRibbon.Text = Resources.Deleted;
 				toolStripMenuItemDeletedShiftCategoryLockRm.Text = Resources.Deleted;
 				toolStripMenuItemLockShiftCategory.DropDownItems.Add(toolStripMenuItemDeletedShiftCategoryLockRibbon);
-				toolStripMenuItemLockShiftCategoriesRM.DropDownItems.Add(toolStripMenuItemDeletedShiftCategoryLockRm);
+				toolStripMenuItemLockShiftCategoriesRm.DropDownItems.Add(toolStripMenuItemDeletedShiftCategoryLockRm);
 
 				foreach (IShiftCategory category in deleted)
 				{

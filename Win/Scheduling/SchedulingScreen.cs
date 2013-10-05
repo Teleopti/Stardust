@@ -2760,8 +2760,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			wpfShiftEditor1.Interval = _currentSchedulingScreenSettings.EditorSnapToResolution;
 
 			loadAbsencesMenu();
-			loadLockShiftCategoriesMenu();
-			loadDayOffMenu();
+			loadLockMenu();
 			loadScenarioMenuItems();
 			loadTagsMenu();
 
@@ -5268,94 +5267,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void loadDayOffMenu()
+		private void loadLockMenu()
 		{
-			if (_scheduleView != null)
-			{
-				IList<Description> descriptions = new List<Description>();
-				ToolStripMenuItem toolStripMenuItemDayOffLockRibbon;
-				ToolStripMenuItem toolStripMenuItemDayOffLockRm;
-				ToolStripMenuItem toolStripMenuItemDeletedDayOffLockRibbon;
-				ToolStripMenuItem toolStripMenuDeletedItemDayOffLockRm;
+			if (_scheduleView == null) return;
 
-				IList<IDayOffTemplate> displayList = (from item in _schedulerState.CommonStateHolder.DayOffs
-													  orderby item.Description.ShortName, item.Description.Name
-													  select item).ToList();
-				if (displayList.Count > 0)
-				{
-					toolStripMenuItemDayOffLockRibbon = new ToolStripMenuItem();
-					toolStripMenuItemDayOffLockRm = new ToolStripMenuItem();
-					toolStripMenuItemDayOffLockRibbon.Text = Resources.All;
-					toolStripMenuItemDayOffLockRm.Text = Resources.All;
-					toolStripMenuItemDayOffLockRibbon.Click += toolStripMenuItemLockFreeDays_Click;
-					toolStripMenuItemDayOffLockRm.MouseUp += ToolStripMenuItemDayOffLockRmMouseUp;
-					toolStripMenuItemLockDayOff.DropDownItems.Add(toolStripMenuItemDayOffLockRibbon);
-					toolStripMenuItemLockFreeDaysRM.DropDownItems.Add(toolStripMenuItemDayOffLockRm);
-				}
-				foreach (IDayOffTemplate dayOff in displayList)
-				{
-					if (((IDeleteTag)dayOff).IsDeleted)
-						continue;
-					if (descriptions.Count > 0)
-					{
-						if (descriptions.Contains(dayOff.Description))
-							continue;
-					}
-					toolStripMenuItemDayOffLockRibbon = new ToolStripMenuItem();
-					toolStripMenuItemDayOffLockRm = new ToolStripMenuItem();
-					toolStripMenuItemDayOffLockRibbon.Text = dayOff.Description.ToString();
-					toolStripMenuItemDayOffLockRm.Text = dayOff.Description.ToString();
-					toolStripMenuItemDayOffLockRibbon.Tag = dayOff;
-					toolStripMenuItemDayOffLockRm.Tag = dayOff;
-					toolStripMenuItemDayOffLockRibbon.Click += toolStripMenuItemLockSpecificDayOff_Click;
-					toolStripMenuItemDayOffLockRm.Click += toolStripMenuItemLockSpecificDayOff_Click;
-					toolStripMenuItemLockDayOff.DropDownItems.Add(toolStripMenuItemDayOffLockRibbon);
-					toolStripMenuItemLockFreeDaysRM.DropDownItems.Add(toolStripMenuItemDayOffLockRm);
-					descriptions.Add(dayOff.Description);
-				}
-				var deleted = from a in displayList
-							  where ((IDeleteTag)a).IsDeleted
-							  select a;
-				if (deleted.Any())
-				{
-					toolStripMenuItemDeletedDayOffLockRibbon = new ToolStripMenuItem();
-					toolStripMenuDeletedItemDayOffLockRm = new ToolStripMenuItem();
-					toolStripMenuItemDeletedDayOffLockRibbon.Text = Resources.Deleted;
-					toolStripMenuDeletedItemDayOffLockRm.Text = Resources.Deleted;
-					toolStripMenuItemLockDayOff.DropDownItems.Add(toolStripMenuItemDeletedDayOffLockRibbon);
-					toolStripMenuItemLockFreeDaysRM.DropDownItems.Add(toolStripMenuDeletedItemDayOffLockRm);
+			var lockDaysOffMenuBuilder = new LockDaysOffMenuBuilder();
+			lockDaysOffMenuBuilder.Build(_schedulerState.CommonStateHolder.DayOffs, toolStripMenuItemLockFreeDays_Click,
+			                             toolStripMenuItemLockSpecificDayOff_Click, ToolStripMenuItemDayOffLockRmMouseUp,
+			                             toolStripMenuItemLockDayOff, toolStripMenuItemLockFreeDaysRM);
 
-					foreach (IDayOffTemplate dayOff in deleted)
-					{
-						if (descriptions.Count > 0)
-						{
-							if (descriptions.Contains(dayOff.Description))
-								continue;
-						}
-
-						toolStripMenuItemDayOffLockRibbon = new ToolStripMenuItem();
-						toolStripMenuItemDayOffLockRm = new ToolStripMenuItem();
-						toolStripMenuItemDayOffLockRibbon.Text = dayOff.Description.ToString();
-						toolStripMenuItemDayOffLockRm.Text = dayOff.Description.ToString();
-						toolStripMenuItemDayOffLockRibbon.Tag = dayOff;
-						toolStripMenuItemDayOffLockRm.Tag = dayOff;
-						toolStripMenuItemDayOffLockRibbon.Click += toolStripMenuItemLockSpecificDayOff_Click;
-						toolStripMenuItemDayOffLockRm.Click += toolStripMenuItemLockSpecificDayOff_Click;
-						toolStripMenuItemDeletedDayOffLockRibbon.DropDownItems.Add(toolStripMenuItemDayOffLockRibbon);
-						toolStripMenuDeletedItemDayOffLockRm.DropDownItems.Add(toolStripMenuItemDayOffLockRm);
-						descriptions.Add(dayOff.Description);
-					}
-				}
-			}
-		}
-
-		private void loadLockShiftCategoriesMenu()
-		{
-			if (_scheduleView != null)
-			{
-				var lockMenuBuilder = new LockShiftCategoriesMenuBuilder();
-				lockMenuBuilder.Build(_schedulerState.CommonStateHolder.ShiftCategories, toolStripMenuItemLockShiftCategories_Click, ToolStripMenuItemLockShiftCategoriesMouseUp, toolStripMenuItemLockShiftCategory, toolStripMenuItemLockShiftCategoriesRM);
-			}
+			var lockShiftCategoriesMenuBuilder = new LockShiftCategoriesMenuBuilder();
+			lockShiftCategoriesMenuBuilder.Build(_schedulerState.CommonStateHolder.ShiftCategories,
+			                                     toolStripMenuItemLockShiftCategories_Click,
+			                                     ToolStripMenuItemLockShiftCategoriesMouseUp, toolStripMenuItemLockShiftCategory,
+			                                     toolStripMenuItemLockShiftCategoriesRM);
 		}
 
 		private void initializeDocking()
