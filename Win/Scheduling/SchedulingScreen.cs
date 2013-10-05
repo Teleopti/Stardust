@@ -2760,9 +2760,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			wpfShiftEditor1.Interval = _currentSchedulingScreenSettings.EditorSnapToResolution;
 
 			loadAbsencesMenu();
-			loadLockMenu();
+			loadLockMenues();
 			loadScenarioMenuItems();
-			loadTagsMenu();
 
 			setupSkillTabs();
 
@@ -5193,13 +5192,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void loadTagsMenu()
-		{
-			var tags = _schedulerState.CommonStateHolder.ScheduleTags;
-			var tagsMenuLoader = new TagsMenuLoader(toolStripMenuItemLockTags, toolStripMenuItemLockTagsRM, tags, toolStripMenuItemLockTag, toolStripSplitButtonChangeTag, toolStripMenuItemChangeTag, toolStripComboBoxAutoTag, _defaultScheduleTag, toolStripMenuItemChangeTagRM);
-			tagsMenuLoader.LoadTags();
-		}
-
 		private void loadAbsencesMenu()
 		{
 			if (_scheduleView != null)
@@ -5267,7 +5259,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void loadLockMenu()
+		private void loadLockMenues()
 		{
 			if (_scheduleView == null) return;
 
@@ -5281,6 +5273,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			                                     toolStripMenuItemLockShiftCategories_Click,
 			                                     ToolStripMenuItemLockShiftCategoriesMouseUp, toolStripMenuItemLockShiftCategory,
 			                                     toolStripMenuItemLockShiftCategoriesRM);
+
+			var tagsMenuLoader = new TagsMenuLoader(toolStripMenuItemLockTags, toolStripMenuItemLockTagsRM,
+			                                        _schedulerState.CommonStateHolder.ScheduleTags, toolStripMenuItemLockTag,
+			                                        toolStripSplitButtonChangeTag, toolStripMenuItemChangeTag,
+			                                        toolStripComboBoxAutoTag, _defaultScheduleTag, toolStripMenuItemChangeTagRM);
+			tagsMenuLoader.LoadTags();
 		}
 
 		private void initializeDocking()
