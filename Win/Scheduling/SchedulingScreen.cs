@@ -20,6 +20,7 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
+using Teleopti.Ccc.Win.Scheduling.LockMenuBuilders;
 using Teleopti.Ccc.WinCode.Grouping;
 using log4net;
 using Microsoft.Practices.Composite.Events;
@@ -1322,55 +1323,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void cancelAllBackgroundWorkers()
 		{
 			toolStripStatusLabelStatus.Text = Resources.CancellingThreeDots;
-			if (backgroundWorkerLoadData.IsBusy)
-			{
-				toolStripStatusLabelStatus.Text = Resources.CancelingLoadAndCloseProgram;
-				backgroundWorkerLoadData.CancelAsync();
-				while (backgroundWorkerLoadData.IsBusy)
-				{
-					Application.DoEvents();
-					Thread.Sleep(10);
-				}
-			}
 
-			if (_backgroundWorkerDelete.IsBusy)
-			{
-				_backgroundWorkerDelete.CancelAsync();
-				while (_backgroundWorkerDelete.IsBusy)
-				{
-					Application.DoEvents();
-					Thread.Sleep(10);
-				}
-			}
-
-			if (_backgroundWorkerScheduling.IsBusy)
-			{
-				_backgroundWorkerScheduling.CancelAsync();
-				while (_backgroundWorkerScheduling.IsBusy)
-				{
-					Application.DoEvents();
-					Thread.Sleep(10);
-				}
-			}
-
-			if (_backgroundWorkerOvertimeScheduling.IsBusy)
-			{
-				_backgroundWorkerOvertimeScheduling.CancelAsync();
-				while (_backgroundWorkerOvertimeScheduling.IsBusy)
-				{
-					Application.DoEvents();
-					Thread.Sleep(10);
-				}
-			}
-			cancelBackgroundWorkerOptimization();
+			cancelBackgroundWorker(_backgroundWorkerValidatePersons);
+			cancelBackgroundWorker(_backgroundWorkerResourceCalculator);
+			cancelBackgroundWorker(backgroundWorkerLoadData);
+			cancelBackgroundWorker(_backgroundWorkerDelete);
+			cancelBackgroundWorker(_backgroundWorkerScheduling);
+			cancelBackgroundWorker(_backgroundWorkerOvertimeScheduling);
+			cancelBackgroundWorker(_backgroundWorkerOptimization);
 		}
 
-		private void cancelBackgroundWorkerOptimization()
+		private void cancelBackgroundWorker(BackgroundWorker worker)
 		{
-			if (_backgroundWorkerOptimization.IsBusy)
+			if (worker.IsBusy)
 			{
-				_backgroundWorkerOptimization.CancelAsync();
-				while (_backgroundWorkerOptimization.IsBusy)
+				worker.CancelAsync();
+				while (worker.IsBusy)
 				{
 					Application.DoEvents();
 					Thread.Sleep(10);
@@ -2792,7 +2760,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			wpfShiftEditor1.Interval = _currentSchedulingScreenSettings.EditorSnapToResolution;
 
 			loadAbsencesMenu();
-			loadShiftCategoriesMenu();
+			loadLockShiftCategoriesMenu();
 			loadDayOffMenu();
 			loadScenarioMenuItems();
 			loadTagsMenu();
@@ -5381,64 +5349,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void loadShiftCategoriesMenu()
+		private void loadLockShiftCategoriesMenu()
 		{
 			if (_scheduleView != null)
 			{
-				var toolStripMenuItemShiftCategoryLockRibbon = new ToolStripMenuItem();
-				var toolStripMenuItemShiftCategoryLockRM = new ToolStripMenuItem();
-				var toolStripMenuItemDeletedShiftCategoryLockRibbon = new ToolStripMenuItem();
-				var toolStripMenuItemDeletedShiftCategoryLockRM = new ToolStripMenuItem();
-				var sortedCategories = from c in _schedulerState.CommonStateHolder.ShiftCategories
-									   orderby c.Description.ShortName, c.Description.Name
-									   select c;
-				if (sortedCategories.Any())
-				{
-					toolStripMenuItemShiftCategoryLockRibbon.Text = Resources.All;
-					toolStripMenuItemShiftCategoryLockRM.Text = Resources.All;
-					toolStripMenuItemShiftCategoryLockRibbon.Click += toolStripMenuItemLockShiftCategoryDays_Click;
-					toolStripMenuItemShiftCategoryLockRM.MouseUp += ToolStripMenuItemLockShiftCategoryDaysMouseUp;
-					toolStripMenuItemLockShiftCategory.DropDownItems.Add(toolStripMenuItemShiftCategoryLockRibbon);
-					toolStripMenuItemLockShiftCategoriesRM.DropDownItems.Add(toolStripMenuItemShiftCategoryLockRM);
-				}
-				foreach (IShiftCategory shiftCategory in sortedCategories)
-				{
-					if (((IDeleteTag)shiftCategory).IsDeleted) continue;
-					toolStripMenuItemShiftCategoryLockRibbon = new ToolStripMenuItem();
-					toolStripMenuItemShiftCategoryLockRM = new ToolStripMenuItem();
-					toolStripMenuItemShiftCategoryLockRibbon.Text = shiftCategory.Description.ToString();
-					toolStripMenuItemShiftCategoryLockRM.Text = shiftCategory.Description.ToString();
-					toolStripMenuItemShiftCategoryLockRibbon.Tag = shiftCategory;
-					toolStripMenuItemShiftCategoryLockRM.Tag = shiftCategory;
-					toolStripMenuItemShiftCategoryLockRibbon.Click += toolStripMenuItemLockShiftCategories_Click;
-					toolStripMenuItemShiftCategoryLockRM.MouseUp += ToolStripMenuItemLockShiftCategoriesMouseUp;
-					toolStripMenuItemLockShiftCategory.DropDownItems.Add(toolStripMenuItemShiftCategoryLockRibbon);
-					toolStripMenuItemLockShiftCategoriesRM.DropDownItems.Add(toolStripMenuItemShiftCategoryLockRM);
-				}
-				var deleted = from a in sortedCategories
-							  where ((IDeleteTag)a).IsDeleted
-							  select a;
-				if (deleted.Any())
-				{
-					toolStripMenuItemDeletedShiftCategoryLockRibbon.Text = Resources.Deleted;
-					toolStripMenuItemDeletedShiftCategoryLockRM.Text = Resources.Deleted;
-					toolStripMenuItemLockShiftCategory.DropDownItems.Add(toolStripMenuItemDeletedShiftCategoryLockRibbon);
-					toolStripMenuItemLockShiftCategoriesRM.DropDownItems.Add(toolStripMenuItemDeletedShiftCategoryLockRM);
-
-					foreach (IShiftCategory category in deleted)
-					{
-						toolStripMenuItemShiftCategoryLockRibbon = new ToolStripMenuItem();
-						toolStripMenuItemShiftCategoryLockRM = new ToolStripMenuItem();
-						toolStripMenuItemShiftCategoryLockRibbon.Text = category.Description.ToString();
-						toolStripMenuItemShiftCategoryLockRM.Text = category.Description.ToString();
-						toolStripMenuItemShiftCategoryLockRibbon.Tag = category;
-						toolStripMenuItemShiftCategoryLockRM.Tag = category;
-						toolStripMenuItemShiftCategoryLockRibbon.Click += toolStripMenuItemLockShiftCategories_Click;
-						toolStripMenuItemShiftCategoryLockRM.MouseUp += ToolStripMenuItemLockShiftCategoriesMouseUp;
-						toolStripMenuItemDeletedShiftCategoryLockRibbon.DropDownItems.Add(toolStripMenuItemShiftCategoryLockRibbon);
-						toolStripMenuItemDeletedShiftCategoryLockRM.DropDownItems.Add(toolStripMenuItemShiftCategoryLockRM);
-					}
-				}
+				var lockMenuBuilder = new LockShiftCategoriesMenuBuilder();
+				lockMenuBuilder.Build(_schedulerState.CommonStateHolder.ShiftCategories, toolStripMenuItemLockShiftCategories_Click, ToolStripMenuItemLockShiftCategoriesMouseUp, toolStripMenuItemLockShiftCategory, toolStripMenuItemLockShiftCategoriesRM);
 			}
 		}
 
