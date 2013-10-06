@@ -2759,7 +2759,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_dayOffTemplate = displayList[0];
 			wpfShiftEditor1.Interval = _currentSchedulingScreenSettings.EditorSnapToResolution;
 
-			loadAbsencesMenu();
 			loadLockMenues();
 			loadScenarioMenuItems();
 
@@ -5192,76 +5191,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void loadAbsencesMenu()
-		{
-			if (_scheduleView != null)
-			{
-				var toolStripMenuItemAbsenceLockRibbon = new ToolStripMenuItem();
-				var toolStripMenuItemDeletedAbsenceLockRibbon = new ToolStripMenuItem();
-				var toolStripMenuItemAbsenceLockRM = new ToolStripMenuItem();
-				var toolStripMenuItemDeletedAbsenceLockRM = new ToolStripMenuItem();
-				var sortedAbsences = from a in _schedulerState.CommonStateHolder.Absences
-									 orderby a.Description.ShortName, a.Description.Name
-									 select a;
-
-				if (sortedAbsences.Any())
-				{
-					toolStripMenuItemAbsenceLockRibbon.Text = Resources.All;
-					toolStripMenuItemAbsenceLockRM.Text = Resources.All;
-					toolStripMenuItemAbsenceLockRibbon.Click += toolStripMenuItemLockAbsenceDays_Click;
-					toolStripMenuItemAbsenceLockRM.MouseUp += ToolStripMenuItemLockAbsenceDaysMouseUp;
-					toolStripMenuItemLockAbsence.DropDownItems.Add(toolStripMenuItemAbsenceLockRibbon);
-					toolStripMenuItemLockAbsencesRM.DropDownItems.Add(toolStripMenuItemAbsenceLockRM);
-				}
-				foreach (IAbsence abs in sortedAbsences)
-				{
-					if (((IDeleteTag)abs).IsDeleted)
-						continue;
-					toolStripMenuItemAbsenceLockRibbon = new ToolStripMenuItem();
-					toolStripMenuItemAbsenceLockRM = new ToolStripMenuItem();
-
-					toolStripMenuItemAbsenceLockRibbon.Text = abs.Description.ToString();
-					toolStripMenuItemAbsenceLockRM.Text = abs.Description.ToString();
-
-					toolStripMenuItemAbsenceLockRibbon.Tag = abs;
-					toolStripMenuItemAbsenceLockRM.Tag = abs;
-
-					toolStripMenuItemAbsenceLockRibbon.Click += toolStripMenuItemLockAbsences_Click;
-					toolStripMenuItemAbsenceLockRM.MouseUp += ToolStripMenuItemAbsenceLockRmMouseUp;
-
-					toolStripMenuItemLockAbsence.DropDownItems.Add(toolStripMenuItemAbsenceLockRibbon);
-					toolStripMenuItemLockAbsencesRM.DropDownItems.Add(toolStripMenuItemAbsenceLockRM);
-				}
-				var deleted = from a in sortedAbsences
-							  where ((IDeleteTag)a).IsDeleted
-							  select a;
-				if (deleted.Any())
-				{
-					toolStripMenuItemDeletedAbsenceLockRM.Text = Resources.Deleted;
-					toolStripMenuItemDeletedAbsenceLockRibbon.Text = Resources.Deleted;
-					toolStripMenuItemLockAbsence.DropDownItems.Add(toolStripMenuItemDeletedAbsenceLockRibbon);
-					toolStripMenuItemLockAbsencesRM.DropDownItems.Add(toolStripMenuItemDeletedAbsenceLockRM);
-
-					foreach (IAbsence abs in deleted)
-					{
-						toolStripMenuItemAbsenceLockRibbon = new ToolStripMenuItem();
-						toolStripMenuItemAbsenceLockRM = new ToolStripMenuItem();
-						toolStripMenuItemAbsenceLockRibbon.Text = abs.Description.ToString();
-						toolStripMenuItemAbsenceLockRM.Text = abs.Description.ToString();
-						toolStripMenuItemAbsenceLockRibbon.Tag = abs;
-						toolStripMenuItemAbsenceLockRM.Tag = abs;
-						toolStripMenuItemAbsenceLockRibbon.Click += toolStripMenuItemLockAbsences_Click;
-						toolStripMenuItemAbsenceLockRM.MouseUp += ToolStripMenuItemAbsenceLockRmMouseUp;
-						toolStripMenuItemDeletedAbsenceLockRibbon.DropDownItems.Add(toolStripMenuItemAbsenceLockRibbon);
-						toolStripMenuItemDeletedAbsenceLockRM.DropDownItems.Add(toolStripMenuItemAbsenceLockRM);
-					}
-				}
-			}
-		}
-
 		private void loadLockMenues()
 		{
 			if (_scheduleView == null) return;
+
+			var lockAbsencesMenuBuilder = new LockAbsencesMenuBuilder();
+			lockAbsencesMenuBuilder.Build(_schedulerState.CommonStateHolder.Absences, toolStripMenuItemLockAbsenceDays_Click,
+			                              ToolStripMenuItemLockAbsenceDaysMouseUp, toolStripMenuItemLockAbsence,
+			                              toolStripMenuItemLockAbsencesRM, toolStripMenuItemLockAbsences_Click,
+			                              ToolStripMenuItemAbsenceLockRmMouseUp);
 
 			var lockDaysOffMenuBuilder = new LockDaysOffMenuBuilder();
 			lockDaysOffMenuBuilder.Build(_schedulerState.CommonStateHolder.DayOffs, toolStripMenuItemLockFreeDays_Click,
