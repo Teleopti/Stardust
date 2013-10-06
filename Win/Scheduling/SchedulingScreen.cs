@@ -170,8 +170,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private SchedulingScreenSettings _currentSchedulingScreenSettings;
 		private ZoomLevel _currentZoomLevel;
 		private SplitterManagerRestrictionView _splitterManager;
-		private IWorkShiftWorkTime _workShiftWorkTime;
-		private DateOnly _defaultFilterDate;
+		private readonly IWorkShiftWorkTime _workShiftWorkTime;
 		private bool _inUpdate;
 		private int _totalScheduled;
 		private readonly IPersonRequestCheckAuthorization _personRequestAuthorizationChecker;
@@ -181,7 +180,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private bool _isAuditingSchedules;
 		private IScheduleTag _defaultScheduleTag = NullScheduleTag.Instance;
 		private System.Windows.Forms.Timer _tmpTimer = new System.Windows.Forms.Timer();
-		private ISchedulerGroupPagesProvider _groupPagesProvider;
+		private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
 		public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSet { get; private set; }
 		private SkillResultViewSetting _skillResultViewSetting;
     	private ISingleSkillDictionary _singleSkillDictionary;
@@ -414,7 +413,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		    
 			_schedulerState.SetRequestedScenario(loadScenario);
 			_schedulerState.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(loadingPeriod, TeleoptiPrincipal.Current.Regional.TimeZone);
-			_defaultFilterDate = _schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
 			_schedulerState.UndoRedoContainer = _undoRedo;
 			_schedulerMessageBrokerHandler = new SchedulerMessageBrokerHandler(this, _container);
 			_schedulerMeetingHelper = new SchedulerMeetingHelper(_schedulerMessageBrokerHandler, _schedulerState);
@@ -996,7 +994,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			setPermissionOnControls();
 			
-			schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += AgentRestrictionGridSelectedAgentIsReady;
+			schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += agentRestrictionGridSelectedAgentIsReady;
 
 			_backgroundWorkerRunning = true;
 			backgroundWorkerLoadData.RunWorkerAsync();
@@ -4984,8 +4982,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				currentSortColumn = _scheduleView.Presenter.CurrentSortColumn;
 				isAscendingSort = _scheduleView.Presenter.IsAscendingSort;
 				selectedPart = _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex].CellValue as IScheduleDay;
-				_scheduleView.RefreshSelectionInfo -= _scheduleView_RefreshSelectionInfo;
-				_scheduleView.RefreshShiftEditor -= _scheduleView_RefreshShiftEditor;
+				_scheduleView.RefreshSelectionInfo -= scheduleViewRefreshSelectionInfo;
+				_scheduleView.RefreshShiftEditor -= scheduleViewRefreshShiftEditor;
 				_scheduleView.Dispose();
 				_scheduleView = null;
 			}
@@ -5074,8 +5072,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (sortCommand != null) _scheduleView.Presenter.SortCommand = sortCommand;
 				_scheduleView.Presenter.CurrentSortColumn = currentSortColumn;
 				_scheduleView.Presenter.IsAscendingSort = isAscendingSort;
-				_scheduleView.RefreshSelectionInfo += _scheduleView_RefreshSelectionInfo;
-				_scheduleView.RefreshShiftEditor += _scheduleView_RefreshShiftEditor;
+				_scheduleView.RefreshSelectionInfo += scheduleViewRefreshSelectionInfo;
+				_scheduleView.RefreshShiftEditor += scheduleViewRefreshShiftEditor;
 				_scheduleView.ViewPasteCompleted += _currentView_viewPasteCompleted;
 				_scheduleView.LoadScheduleViewGrid();
 
@@ -5102,7 +5100,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		void AgentRestrictionGridSelectedAgentIsReady(object sender, EventArgs e)
+		void agentRestrictionGridSelectedAgentIsReady(object sender, EventArgs e)
 		{
 			AgentRestrictionsDetailView view = _scheduleView as AgentRestrictionsDetailView;
 			if (view == null)
@@ -5110,7 +5108,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (view.TheGrid.InvokeRequired)
 			{
-				BeginInvoke(new EventHandler<EventArgs>(AgentRestrictionGridSelectedAgentIsReady), sender, e);
+				BeginInvoke(new EventHandler<EventArgs>(agentRestrictionGridSelectedAgentIsReady), sender, e);
 			}
 			else
 			{
@@ -5123,12 +5121,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void _scheduleView_RefreshShiftEditor(object sender, EventArgs e)
+		private void scheduleViewRefreshShiftEditor(object sender, EventArgs e)
 		{
 			updateShiftEditor();
 		}
 
-		private void _scheduleView_RefreshSelectionInfo(object sender, EventArgs e)
+		private void scheduleViewRefreshSelectionInfo(object sender, EventArgs e)
 		{
 			updateSelectionInfo(_scheduleView.SelectedSchedules());
 		}
@@ -6135,8 +6133,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_scheduleView != null)
 			{
 				_scheduleView.ViewPasteCompleted -= _currentView_viewPasteCompleted;
-				_scheduleView.RefreshSelectionInfo -= _scheduleView_RefreshSelectionInfo;
-				_scheduleView.RefreshShiftEditor -= _scheduleView_RefreshShiftEditor;
+				_scheduleView.RefreshSelectionInfo -= scheduleViewRefreshSelectionInfo;
+				_scheduleView.RefreshShiftEditor -= scheduleViewRefreshShiftEditor;
 				_scheduleView.Dispose();
 				_scheduleView = null;
 			}
@@ -6810,7 +6808,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (defaultRequest == null)
 			{
-				var allowanceView = new RequestAllowanceView(null, _defaultFilterDate);
+				var allowanceView = new RequestAllowanceView(null, _schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate);
 			    
                 if (!isWindowLoaded)
                 {
