@@ -306,11 +306,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.btnRightLeft = new System.Windows.Forms.ToolStripButton();
             this.imageListSkillTypeIcons = new System.Windows.Forms.ImageList(this.components);
             this.contextMenuStripRestrictionView = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemUseRotation = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemUseAvailability = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemUsePreference = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemUseStudentAvailability = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemUseSchedule = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemAddPreferenceRestriction = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemAddStudentAvailabilityRestriction = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
@@ -3091,11 +3086,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             // contextMenuStripRestrictionView
             // 
             this.contextMenuStripRestrictionView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemUseRotation,
-            this.toolStripMenuItemUseAvailability,
-            this.toolStripMenuItemUsePreference,
-            this.toolStripMenuItemUseStudentAvailability,
-            this.toolStripMenuItemUseSchedule,
             this.toolStripMenuItemAddPreferenceRestriction,
             this.toolStripMenuItemAddStudentAvailabilityRestriction,
             this.toolStripSeparator5,
@@ -3106,62 +3096,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.xxAgentInfoToolStripMenuItem});
             this.contextMenuStripRestrictionView.Name = "contextMenuStripRestrictionView";
             this.contextMenuStripRestrictionView.Size = new System.Drawing.Size(260, 258);
-            // 
-            // toolStripMenuItemUseRotation
-            // 
-            this.toolStripMenuItemUseRotation.CheckOnClick = true;
-            this.toolStripMenuItemUseRotation.Name = "toolStripMenuItemUseRotation";
-            this.SetShortcut(this.toolStripMenuItemUseRotation, System.Windows.Forms.Keys.None);
-            this.toolStripMenuItemUseRotation.Size = new System.Drawing.Size(259, 22);
-            this.toolStripMenuItemUseRotation.Text = "xxRotation";
-            this.toolStripMenuItemUseRotation.Visible = false;
-            this.toolStripMenuItemUseRotation.Click += new System.EventHandler(this.toolStripMenuItemUseRotation_Click);
-            // 
-            // toolStripMenuItemUseAvailability
-            // 
-            this.toolStripMenuItemUseAvailability.Checked = true;
-            this.toolStripMenuItemUseAvailability.CheckOnClick = true;
-            this.toolStripMenuItemUseAvailability.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripMenuItemUseAvailability.Name = "toolStripMenuItemUseAvailability";
-            this.SetShortcut(this.toolStripMenuItemUseAvailability, System.Windows.Forms.Keys.None);
-            this.toolStripMenuItemUseAvailability.Size = new System.Drawing.Size(259, 22);
-            this.toolStripMenuItemUseAvailability.Text = "xxAvailability";
-            this.toolStripMenuItemUseAvailability.Visible = false;
-            this.toolStripMenuItemUseAvailability.Click += new System.EventHandler(this.toolStripMenuItemUseAvailability_Click);
-            // 
-            // toolStripMenuItemUsePreference
-            // 
-            this.toolStripMenuItemUsePreference.Checked = true;
-            this.toolStripMenuItemUsePreference.CheckOnClick = true;
-            this.toolStripMenuItemUsePreference.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripMenuItemUsePreference.Name = "toolStripMenuItemUsePreference";
-            this.SetShortcut(this.toolStripMenuItemUsePreference, System.Windows.Forms.Keys.None);
-            this.toolStripMenuItemUsePreference.Size = new System.Drawing.Size(259, 22);
-            this.toolStripMenuItemUsePreference.Text = "xxPreference";
-            this.toolStripMenuItemUsePreference.Visible = false;
-            this.toolStripMenuItemUsePreference.Click += new System.EventHandler(this.toolStripMenuItemUsePreference_Click);
-            // 
-            // toolStripMenuItemUseStudentAvailability
-            // 
-            this.toolStripMenuItemUseStudentAvailability.CheckOnClick = true;
-            this.toolStripMenuItemUseStudentAvailability.Name = "toolStripMenuItemUseStudentAvailability";
-            this.SetShortcut(this.toolStripMenuItemUseStudentAvailability, System.Windows.Forms.Keys.None);
-            this.toolStripMenuItemUseStudentAvailability.Size = new System.Drawing.Size(259, 22);
-            this.toolStripMenuItemUseStudentAvailability.Text = "xxStudentAvailability";
-            this.toolStripMenuItemUseStudentAvailability.Visible = false;
-            this.toolStripMenuItemUseStudentAvailability.Click += new System.EventHandler(this.toolStripMenuItemUseStudentAvailability_Click);
-            // 
-            // toolStripMenuItemUseSchedule
-            // 
-            this.toolStripMenuItemUseSchedule.Checked = true;
-            this.toolStripMenuItemUseSchedule.CheckOnClick = true;
-            this.toolStripMenuItemUseSchedule.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripMenuItemUseSchedule.Name = "toolStripMenuItemUseSchedule";
-            this.SetShortcut(this.toolStripMenuItemUseSchedule, System.Windows.Forms.Keys.None);
-            this.toolStripMenuItemUseSchedule.Size = new System.Drawing.Size(259, 22);
-            this.toolStripMenuItemUseSchedule.Text = "xxSchedule";
-            this.toolStripMenuItemUseSchedule.Visible = false;
-            this.toolStripMenuItemUseSchedule.Click += new System.EventHandler(this.toolStripMenuItemUseSchedule_Click);
             // 
             // toolStripMenuItemAddPreferenceRestriction
             // 
@@ -3510,11 +3444,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemQuickAccessUndo;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemQuickAccessUndoAll;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripRestrictionView;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUseRotation;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUsePreference;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUseAvailability;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUseStudentAvailability;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUseSchedule;
         private System.Windows.Forms.ToolStripButton toolStripButtonMainMenuHelp;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;

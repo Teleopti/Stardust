@@ -6051,11 +6051,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			changeRequestStatus(new DenyPersonRequestCommand(_requestPresenter, _personRequestAuthorizationChecker), _requestView.SelectedAdapters());
 		}
-
-		private void toolStripButtonFindRequestOnClick(object sender, EventArgs eventArgs)
-		{
-			_requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' '), SchedulerState.FilteredPersonDictionary);
-		}
 		
 		private void toolStripButtonEditNote_Click(object sender, EventArgs e)
 		{
@@ -6312,26 +6307,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (e.Button != MouseButtons.Left) return;
 			ExportToPdf(false);
-		}
-
-		private void toolStripMenuItemUseStudentAvailability_Click(object sender, EventArgs e)
-		{
-		}
-
-		private void toolStripMenuItemUseSchedule_Click(object sender, EventArgs e)
-		{
-		}
-
-		private void toolStripMenuItemUseRotation_Click(object sender, EventArgs e)
-		{
-		}
-
-		private void toolStripMenuItemUsePreference_Click(object sender, EventArgs e)
-		{
-		}
-
-		private void toolStripMenuItemUseAvailability_Click(object sender, EventArgs e)
-		{
 		}
 
 		private void toolStripButtonFilterAgents_Click(object sender, EventArgs e)
@@ -6644,42 +6619,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!isViewRequestDetailsAvailable()) return;
 			var requestDetailsView = new RequestDetailsView(_eventAggregator, _requestView.SelectedAdapters().First(), _schedulerState.Schedules);
 			requestDetailsView.Show(this);
-		}
-
-		private void toolStripMenuItemLoggedOnUserTimeZoneMouseUp(object sender, MouseEventArgs e)
-		{
-			if (e.Button != MouseButtons.Left) return;
-			var item = (ToolStripMenuItem)sender;
-			TimeZoneGuard.Instance.TimeZone = (TimeZoneInfo) item.Tag;
-			_schedulerState.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
-			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.TimeZone);
-			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
-			{
-				downItem.Checked = (TimeZoneGuard.Instance.TimeZone.Equals(downItem.Tag));
-			}
-			if (_scheduleView != null && _scheduleView.HelpId == "AgentRestrictionsDetailView")
-			{
-				prepareAgentRestrictionView(null, _scheduleView, new List<IPerson>(_scheduleView.AllSelectedPersons()));
-			}
-			_scheduleView.SetSelectedDateLocal(_dateNavigateControl.SelectedDate);
-			_grid.Invalidate();
-			_grid.Refresh();
-			displayTimeZoneInfo();
-			updateSelectionInfo(_scheduleView.SelectedSchedules());
-			updateShiftEditor();
-			drawSkillGrid();
-			reloadChart();
-		}
-
-		private void displayTimeZoneInfo()
-		{
-			bool show = toolStripMenuItemViewPointTimeZone.DropDownItems.Count > 1;
-
-			toolStripMenuItemViewPointTimeZone.Visible = show;
-			toolStripMenuItemSwitchToViewPointOfSelectedAgent.Visible = show;
-			toolStripStatusLabelTimeZone.Visible = show;
-			toolStripStatusLabelTimeZone.Text = string.Concat(Resources.ViewPointTimeZone, Resources.Colon,
-			                                                  _schedulerState.TimeZoneInfo.StandardName);
 		}
 
 		private void ToolStripMenuItemStartAscMouseUp(object sender, MouseEventArgs e)
@@ -7063,6 +7002,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var scheduleDay = _scheduleView.SelectedSchedules().First();
 			TimeZoneGuard.Instance.TimeZone = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
+
+			changeTimeZone();
+		}
+
+		private void toolStripMenuItemLoggedOnUserTimeZoneMouseUp(object sender, MouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Left)
+				return;
+			var item = (ToolStripMenuItem)sender;
+			TimeZoneGuard.Instance.TimeZone = (TimeZoneInfo)item.Tag;
+
+			changeTimeZone();
+		}
+
+		private void changeTimeZone()
+		{
 			_schedulerState.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
 			wpfShiftEditor1.SetTimeZone(TimeZoneGuard.Instance.TimeZone);
 			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
@@ -7081,6 +7036,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 			updateShiftEditor();
 			drawSkillGrid();
 			reloadChart();
+		}
+
+		private void displayTimeZoneInfo()
+		{
+			bool show = toolStripMenuItemViewPointTimeZone.DropDownItems.Count > 1;
+
+			toolStripMenuItemViewPointTimeZone.Visible = show;
+			toolStripMenuItemSwitchToViewPointOfSelectedAgent.Visible = show;
+			toolStripStatusLabelTimeZone.Visible = show;
+			toolStripStatusLabelTimeZone.Text = string.Concat(Resources.ViewPointTimeZone, Resources.Colon,
+															  _schedulerState.TimeZoneInfo.StandardName);
 		}
 
         private void toolStripMenuItemScheduleOvertime_Click(object sender, EventArgs e)
