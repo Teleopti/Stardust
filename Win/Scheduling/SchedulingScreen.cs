@@ -16,7 +16,6 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
@@ -622,10 +621,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			_editControl = new EditControl();
 			SchedulerRibbonHelper.InstantiateEditControl(_editControl);
-			_editControl.NewClicked += _editControl_NewClicked;
-			_editControl.NewSpecialClicked += _editControl_NewSpecialClicked;
-			_editControl.DeleteClicked += _editControl_DeleteClicked;
-			_editControl.DeleteSpecialClicked += _editControl_DeleteSpecialClicked;
+			_editControl.NewClicked += editControlNewClicked;
+			_editControl.NewSpecialClicked += editControlNewSpecialClicked;
+			_editControl.DeleteClicked += editControlDeleteClicked;
+			_editControl.DeleteSpecialClicked += editControlDeleteSpecialClicked;
 			var editControlHost = new ToolStripControlHost(_editControl);
 			toolStripExEdit2.Items.Add(editControlHost);
 		}
@@ -650,7 +649,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			permissionSetterRestriction.SetPermission();
 		}
 
-		private void _editControl_DeleteSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
+		private void editControlDeleteSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
 			switch ((ClipboardItems)e.ClickedItem.Tag)
 			{
@@ -661,12 +660,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void _editControl_DeleteClicked(object sender, EventArgs e)
+		private void editControlDeleteClicked(object sender, EventArgs e)
 		{
 			deleteSwitch();
 		}
 
-		private void _editControl_NewSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
+		private void editControlNewSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
 			_editControl.CloseDropDown();
 			if ((ClipboardItems)e.ClickedItem.Tag == ClipboardItems.DayOff)
@@ -710,7 +709,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			updateShiftEditor();
 		}
 
-		private void _editControl_NewClicked(object sender, EventArgs e)
+		private void editControlNewClicked(object sender, EventArgs e)
 		{
 			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
 				addNewLayer(ClipboardItems.Shift);
@@ -824,11 +823,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			_clipboardControl = new ClipboardControl();
 			SchedulerRibbonHelper.InstantiateClipboardControl(_clipboardControl);
-			_clipboardControl.CopyClicked += _clipboardControl_CopyClicked;
-			_clipboardControl.CutSpecialClicked += _clipboardControl_CutSpecialClicked;
-			_clipboardControl.CutClicked += _clipboardControl_CutClicked;
-			_clipboardControl.PasteSpecialClicked += _clipboardControl_PasteSpecialClicked;
-			_clipboardControl.PasteClicked += _clipboardControl_PasteClicked;
+			_clipboardControl.CopyClicked += clipboardControlCopyClicked;
+			_clipboardControl.CutSpecialClicked += clipboardControlCutSpecialClicked;
+			_clipboardControl.CutClicked += clipboardControlCutClicked;
+			_clipboardControl.PasteSpecialClicked += clipboardControlPasteSpecialClicked;
+			_clipboardControl.PasteClicked += clipboardControlPasteClicked;
 			var clipboardhost = new ToolStripControlHost(_clipboardControl);
 			toolStripExClipboard.Items.Add(clipboardhost);	
 		}
@@ -868,22 +867,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 			permissionSetterRestriction.SetPermission();
 		}
 
-		private void _clipboardControl_CutClicked(object sender, EventArgs e)
+		private void clipboardControlCutClicked(object sender, EventArgs e)
 		{
 			cutSwitch();
 		}
 
-		private void _clipboardControl_PasteClicked(object sender, EventArgs e)
+		private void clipboardControlPasteClicked(object sender, EventArgs e)
 		{
 			pasteSwitch();
 		}
 
-		private void _clipboardControl_CopyClicked(object sender, EventArgs e)
+		private void clipboardControlCopyClicked(object sender, EventArgs e)
 		{
 			copySwitch();
 		}
 
-		private void _clipboardControl_PasteSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
+		private void clipboardControlPasteSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
 			switch ((ClipboardItems)e.ClickedItem.Tag)
 			{
@@ -910,7 +909,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void _clipboardControl_CutSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
+		private void clipboardControlCutSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
 			switch ((ClipboardItems)e.ClickedItem.Tag)
 			{
@@ -932,7 +931,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void _clipboardControl_CopySpecialClicked(object sender, ToolStripItemClickedEventArgs e)
+		private void clipboardControlCopySpecialClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
 			switch ((ClipboardItems)e.ClickedItem.Tag)
 			{
@@ -965,7 +964,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region Form events
 
-		private void SchedulingScreen_Load(object sender, EventArgs e)
+		private void schedulingScreenLoad(object sender, EventArgs e)
 		{
 			Cursor = Cursors.WaitCursor;
 			Application.DoEvents();
@@ -1015,7 +1014,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			saver.Save();
 		}
 
-		private void SchedulingScreen_FormClosing(object sender, FormClosingEventArgs e)
+		private void schedulingScreenFormClosing(object sender, FormClosingEventArgs e)
 		{
 			cancelAllBackgroundWorkers();
 
@@ -1083,7 +1082,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region Toolstrip events
 
-		private IList<IActivity> GetNonDeletedActivty()
+		private IList<IActivity> getNonDeletedActivty()
 		{
 			var finalAvailableActivity = new List<IActivity>();
 			foreach (var activity in SchedulerState.CommonStateHolder.Activities.Where(activity => !activity.IsDeleted))
@@ -1091,7 +1090,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return finalAvailableActivity;
 		}
 
-		private void toolStripMenuItemBackToLegalState_Click(object sender, EventArgs e)
+		private void toolStripMenuItemBackToLegalStateClick(object sender, EventArgs e)
 		{
 			if (_backgroundWorkerRunning)
 				return;
@@ -1105,7 +1104,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
 			using (
 				var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences, _schedulerState.CommonStateHolder.ShiftCategories, false,
-														   true, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "SchedulingOptions", GetNonDeletedActivty()))
+														   true, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "SchedulingOptions", getNonDeletedActivty()))
 			{
 				if (options.ShowDialog(this) == DialogResult.OK)
 				{
@@ -1121,7 +1120,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void toolStripMenuItemReOptimize_Click(object sender, EventArgs e)
+		private void toolStripMenuItemReOptimizeClick(object sender, EventArgs e)
 		{
 			if (_backgroundWorkerRunning) return;
 
@@ -1131,7 +1130,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					return;
 
 				using (var optimizationPreferencesDialog =
-					new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, GetNonDeletedActivty(), SchedulerState.DefaultSegmentLength, GetNonDeletedActivty()))
+					new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, getNonDeletedActivty(), SchedulerState.DefaultSegmentLength, getNonDeletedActivty()))
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{
@@ -1146,7 +1145,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void toolStripButtonChartPeriodView_Click(object sender, EventArgs e)
+		private void toolStripButtonChartPeriodViewClick(object sender, EventArgs e)
 		{
 			var button = sender as ToolStripButton;
 			if (button == toolStripButtonChartPeriodView) _skillResultViewSetting = SkillResultViewSetting.Period;
@@ -1173,7 +1172,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			reloadChart();
 		}
 
-		private void toolStripButtonZoom_Click(object sender, EventArgs e)
+		private void toolStripButtonZoomClick(object sender, EventArgs e)
 		{
 			var button = sender as ToolStripButton;
 			if (button != null && button.Tag != null) zoom((ZoomLevel)button.Tag);
@@ -1184,14 +1183,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void toolStripButtonQuickAccessSave_Click(object sender, EventArgs e)
+		private void toolStripButtonQuickAccessSaveClick(object sender, EventArgs e)
 		{
 			if (_forceClose) return;
 
 			save();	
 		}
 
-		private void toolStripButtonAgentInfo_Click(object sender, EventArgs e)
+		private void toolStripButtonAgentInfoClick(object sender, EventArgs e)
 		{
 			if (_scheduleView == null)
 				return;
@@ -1222,7 +1221,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		private void toolStripMenuItemSwapAndReschedule_Click(object sender, EventArgs e)
+		private void toolStripMenuItemSwapAndRescheduleClick(object sender, EventArgs e)
 		{
 			if (_scheduleView != null)
 			{
@@ -1253,7 +1252,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void toolStripMenuItemSwap_Click(object sender, EventArgs e)
+		private void toolStripMenuItemSwapClick(object sender, EventArgs e)
 		{
 			if (_scheduleView != null)
 			{
@@ -1263,7 +1262,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void SwapRaw()
+		private void swapRaw()
 		{
 			var swapper = new Swapper(_scheduleView, _undoRedo, _schedulerState, _gridLockManager, this, _defaultScheduleTag);
 			swapper.SwapRaw();
@@ -1275,12 +1274,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			swapper.SwapSelectedSchedules(_handleBusinessRuleResponse, _overriddenBusinessRulesHolder);
 		}
 
-		private void toolStripMenuItemSchedule_Click(object sender, EventArgs e)
+		private void toolStripMenuItemScheduleClick(object sender, EventArgs e)
 		{
 			scheduleSelected();
 		}
 
-		private void toolStripMenuItemScheduleSelected_Click(object sender, EventArgs e)
+		private void toolStripMenuItemScheduleSelectedClick(object sender, EventArgs e)
 		{
 			scheduleSelected();
 		}
@@ -1348,27 +1347,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region Insert
 
-		private void toolStripButtonInsertDayOff_Click(object sender, EventArgs e)
+		private void toolStripButtonInsertDayOffClick(object sender, EventArgs e)
 		{
 			addDayOff();
 		}
 
-		private void ToolStripMenuItemAddActivity_Click(object sender, EventArgs e)
+		private void toolStripMenuItemAddActivityClick(object sender, EventArgs e)
 		{
 			addNewLayer(ClipboardItems.Shift);
 		}
 
-		private void toolStripMenuItemAddOverTime_Click(object sender, EventArgs e)
+		private void toolStripMenuItemAddOverTimeClick(object sender, EventArgs e)
 		{
 			addNewLayer(ClipboardItems.Overtime);
 		}
 
-		private void toolStripMenuItemInsertAbsence_Click(object sender, EventArgs e)
+		private void toolStripMenuItemInsertAbsenceClick(object sender, EventArgs e)
 		{
 			addNewLayer(ClipboardItems.Absence);
 		}
 
-		private void ToolStripMenuItemAddPersonalActivity_Click(object sender, EventArgs e)
+		private void toolStripMenuItemAddPersonalActivityClick(object sender, EventArgs e)
 		{
 			addNewLayer(ClipboardItems.PersonalShift);
 		}
@@ -1420,7 +1419,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region Copy
 
-		private void toolStripMenuItemCopy_Click(object sender, EventArgs e)
+		private void toolStripMenuItemCopyClick(object sender, EventArgs e)
 		{
 			if (_scheduleView != null)
 			{
@@ -1478,7 +1477,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region Delete
 
-		private void toolStripButtonDelete_Click(object sender, EventArgs e)
+		private void toolStripButtonDeleteClick(object sender, EventArgs e)
 		{
 			if (_scheduleView != null)
 			{
@@ -1488,7 +1487,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void toolStripMenuItemDeleteSpecial2_Click(object sender, EventArgs e)
+		private void toolStripMenuItemDeleteSpecial2Click(object sender, EventArgs e)
 		{
 			deleteSpecial();
 		}
@@ -1527,7 +1526,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Cursor = Cursors.Default;
 		}
 
-		private void toolStripComboBoxAutoTag_SelectedIndexChanged(object sender, EventArgs e)
+		private void toolStripComboBoxAutoTagSelectedIndexChanged(object sender, EventArgs e)
 		{
 			_defaultScheduleTag = (IScheduleTag)toolStripComboBoxAutoTag.SelectedItem;
 			_scheduleView.Presenter.DefaultScheduleTag = _defaultScheduleTag;
@@ -1553,21 +1552,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Cursor = Cursors.Default;
 		}
 
-		private void toolStripSplitButtonLock_ButtonClick(object sender, EventArgs e)
+		private void toolStripSplitButtonLockButtonClick(object sender, EventArgs e)
 		{
 			GridHelper.GridlockSelection(_grid, LockManager);
 			Refresh();
 			RefreshSelection();
 		}
 
-		private void toolStripMenuItemLockSelection_Click(object sender, EventArgs e)
+		private void toolStripMenuItemLockSelectionClick(object sender, EventArgs e)
 		{
 			GridHelper.GridlockSelection(_grid, LockManager);
 			Refresh();
 			RefreshSelection();
 		}
 
-		private void toolStripMenuItemLockAbsenceDays_Click(object sender, EventArgs e)
+		private void toolStripMenuItemLockAbsenceDaysClick(object sender, EventArgs e)
 		{
 			Cursor = Cursors.WaitCursor;
 			GridHelper.GridlockAllAbsences(_grid, LockManager);
@@ -1576,7 +1575,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Cursor = Cursors.Default;
 		}
 
-		private void ToolStripMenuItemLockAbsenceDaysMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemLockAbsenceDaysMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
 			Cursor = Cursors.WaitCursor;
@@ -1586,7 +1585,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Cursor = Cursors.Default;
 		}
 
-		private void toolStripMenuItemLockFreeDays_Click(object sender, EventArgs e)
+		private void toolStripMenuItemLockFreeDaysClick(object sender, EventArgs e)
 		{
 			Cursor = Cursors.WaitCursor;
 			GridHelper.GridlockFreeDays(_grid, LockManager);
@@ -1595,7 +1594,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Cursor = Cursors.Default;
 		}
 
-		private void ToolStripMenuItemDayOffLockRmMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemDayOffLockRmMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
 			Cursor = Cursors.WaitCursor;
@@ -1659,7 +1658,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Cursor = Cursors.Default;
 		}
 
-		private void toolStripMenuItemLockShiftCategoryDays_Click(object sender, EventArgs e)
+		private void toolStripMenuItemLockShiftCategoryDaysClick(object sender, EventArgs e)
 		{
 			Cursor = Cursors.WaitCursor;
 			GridHelper.GridlockAllShiftCategories(_grid, LockManager);
@@ -1668,7 +1667,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Cursor = Cursors.Default;
 		}
 
-		private void ToolStripMenuItemLockShiftCategoryDaysMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemLockShiftCategoryDaysMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
 			Cursor = Cursors.WaitCursor;
@@ -3498,7 +3497,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences,
 																			_schedulerState.CommonStateHolder.ShiftCategories,
-																			 false, false, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "SchedulingOptions", GetNonDeletedActivty()))
+																			 false, false, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "SchedulingOptions", getNonDeletedActivty()))
 					{
 						if (options.ShowDialog(this) == DialogResult.OK)
 						{
@@ -3530,7 +3529,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Free;
 				IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
 				using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences, _schedulerState.CommonStateHolder.ShiftCategories,
-						false, false, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "SchedulingOptionsActivities", GetNonDeletedActivty()))
+						false, false, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "SchedulingOptionsActivities", getNonDeletedActivty()))
 				{
 					if (options.ShowDialog(this) == DialogResult.OK)
 					{
@@ -5196,21 +5195,23 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_scheduleView == null) return;
 
 			var lockAbsencesMenuBuilder = new LockAbsencesMenuBuilder();
-			lockAbsencesMenuBuilder.Build(_schedulerState.CommonStateHolder.Absences, toolStripMenuItemLockAbsenceDays_Click,
-			                              ToolStripMenuItemLockAbsenceDaysMouseUp, toolStripMenuItemLockAbsence,
+			lockAbsencesMenuBuilder.Build(_schedulerState.CommonStateHolder.Absences, toolStripMenuItemLockAbsenceDaysClick,
+			                              toolStripMenuItemLockAbsenceDaysMouseUp, toolStripMenuItemLockAbsence,
 			                              toolStripMenuItemLockAbsencesRM, toolStripMenuItemLockAbsences_Click,
 			                              ToolStripMenuItemAbsenceLockRmMouseUp);
 
 			var lockDaysOffMenuBuilder = new LockDaysOffMenuBuilder();
-			lockDaysOffMenuBuilder.Build(_schedulerState.CommonStateHolder.DayOffs, toolStripMenuItemLockFreeDays_Click,
-			                             toolStripMenuItemLockSpecificDayOff_Click, ToolStripMenuItemDayOffLockRmMouseUp,
+			lockDaysOffMenuBuilder.Build(_schedulerState.CommonStateHolder.DayOffs, toolStripMenuItemLockFreeDaysClick,
+			                             toolStripMenuItemLockSpecificDayOff_Click, toolStripMenuItemDayOffLockRmMouseUp,
 			                             toolStripMenuItemLockDayOff, toolStripMenuItemLockFreeDaysRM);
 
 			var lockShiftCategoriesMenuBuilder = new LockShiftCategoriesMenuBuilder();
 			lockShiftCategoriesMenuBuilder.Build(_schedulerState.CommonStateHolder.ShiftCategories,
+			                                     toolStripMenuItemLockShiftCategoryDaysClick,
+			                                     toolStripMenuItemLockShiftCategoryDaysMouseUp,
+			                                     toolStripMenuItemLockShiftCategory, toolStripMenuItemLockShiftCategoriesRM,
 			                                     toolStripMenuItemLockShiftCategories_Click,
-			                                     ToolStripMenuItemLockShiftCategoriesMouseUp, toolStripMenuItemLockShiftCategory,
-			                                     toolStripMenuItemLockShiftCategoriesRM);
+			                                     ToolStripMenuItemLockShiftCategoriesMouseUp);
 
 			var tagsMenuLoader = new TagsMenuLoader(toolStripMenuItemLockTags, toolStripMenuItemLockTagsRM,
 			                                        _schedulerState.CommonStateHolder.ScheduleTags, toolStripMenuItemLockTag,
@@ -5729,7 +5730,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripComboBoxExFilterDays.SelectedIndexChanged -= toolStripComboBoxExFilterDays_SelectedIndexChanged;
 
 			if (toolStripComboBoxAutoTag != null)
-				toolStripComboBoxAutoTag.SelectedIndexChanged -= toolStripComboBoxAutoTag_SelectedIndexChanged;
+				toolStripComboBoxAutoTag.SelectedIndexChanged -= toolStripComboBoxAutoTagSelectedIndexChanged;
 
 			if (SchedulerState != null && SchedulerState.Schedules != null)
 				SchedulerState.Schedules.PartModified -= _schedules_PartModified;
@@ -5819,12 +5820,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (_clipboardControl != null)
 			{
-				_clipboardControl.CutSpecialClicked -= _clipboardControl_CutSpecialClicked;
-				_clipboardControl.CutClicked -= _clipboardControl_CutClicked;
-				_clipboardControl.PasteSpecialClicked -= _clipboardControl_PasteSpecialClicked;
-				_clipboardControl.PasteClicked -= _clipboardControl_PasteClicked;
-				_clipboardControl.CopySpecialClicked -= _clipboardControl_CopySpecialClicked;
-				_clipboardControl.CopyClicked -= _clipboardControl_CopyClicked;
+				_clipboardControl.CutSpecialClicked -= clipboardControlCutSpecialClicked;
+				_clipboardControl.CutClicked -= clipboardControlCutClicked;
+				_clipboardControl.PasteSpecialClicked -= clipboardControlPasteSpecialClicked;
+				_clipboardControl.PasteClicked -= clipboardControlPasteClicked;
+				_clipboardControl.CopySpecialClicked -= clipboardControlCopySpecialClicked;
+				_clipboardControl.CopyClicked -= clipboardControlCopyClicked;
 			}
 
 			if (_clipboardControlRestrictions != null)
@@ -5835,10 +5836,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (_editControl != null)
 			{
-				_editControl.NewSpecialClicked -= _editControl_NewSpecialClicked;
-				_editControl.DeleteClicked -= _editControl_DeleteClicked;
-				_editControl.DeleteSpecialClicked -= _editControl_DeleteSpecialClicked;
-				_editControl.NewClicked -= _editControl_NewClicked;
+				_editControl.NewSpecialClicked -= editControlNewSpecialClicked;
+				_editControl.DeleteClicked -= editControlDeleteClicked;
+				_editControl.DeleteSpecialClicked -= editControlDeleteSpecialClicked;
+				_editControl.NewClicked -= editControlNewClicked;
 			}
 
 			if (_editControlRestrictions != null)
@@ -5850,7 +5851,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (toolStripMenuItemDeleteSpecial != null)
 			{
-				toolStripMenuItemDeleteSpecial.Click -= toolStripMenuItemDeleteSpecial2_Click;
+				toolStripMenuItemDeleteSpecial.Click -= toolStripMenuItemDeleteSpecial2Click;
 			}
 
 			if (_undoRedo != null) _undoRedo.ChangedHandler -= undoRedo_Changed;
@@ -6708,7 +6709,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripMenuItemSwapRawClick(object sender, EventArgs e)
 		{
 			if (_scheduleView != null)
-				SwapRaw();
+				swapRaw();
 		}
 
 		private void toolStripMenuItemFindMatching_Click(object sender, EventArgs e)
@@ -6876,7 +6877,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripMenuItemRestrictionCopy_Click(object sender, EventArgs e)
 		{
-			toolStripMenuItemCopy_Click(sender, e);
+			toolStripMenuItemCopyClick(sender, e);
 		}
 
 		private void toolStripMenuItemRestrictionPaste_Click(object sender, EventArgs e)
@@ -7078,7 +7079,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     }
                  
 
-                    using (var options = new OvertimePreferencesDialog(overtimePreferences, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "OvertimePreferences", GetNonDeletedActivty(), resolution, definitionSets))
+                    using (var options = new OvertimePreferencesDialog(overtimePreferences, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "OvertimePreferences", getNonDeletedActivty(), resolution, definitionSets))
                     {
                         if (options.ShowDialog(this) == DialogResult.OK)
                         {
