@@ -877,7 +877,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllRM.Size = new System.Drawing.Size(208, 22);
             this.ToolStripMenuItemAllRM.Text = "xxAll";
-            this.ToolStripMenuItemAllRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemLockAllRestrictionsMouseUp);
+            this.ToolStripMenuItemAllRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemLockAllRestrictionsMouseUp);
             // 
             // ToolStripMenuItemLockPreferencesRM
             // 
@@ -903,7 +903,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllPreferencesRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllPreferencesRM.Size = new System.Drawing.Size(194, 22);
             this.ToolStripMenuItemAllPreferencesRM.Text = "xxAll";
-            this.ToolStripMenuItemAllPreferencesRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllPreferencesMouseUp);
+            this.ToolStripMenuItemAllPreferencesRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllPreferencesMouseUp);
             // 
             // ToolStripMenuItemAllAbsencePreferenceRM
             // 
@@ -911,7 +911,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllAbsencePreferenceRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllAbsencePreferenceRM.Size = new System.Drawing.Size(194, 22);
             this.ToolStripMenuItemAllAbsencePreferenceRM.Text = "xxAllAbsences";
-            this.ToolStripMenuItemAllAbsencePreferenceRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllAbsencePreferenceMouseUp);
+            this.ToolStripMenuItemAllAbsencePreferenceRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllAbsencePreferenceMouseUp);
             // 
             // ToolStripMenuItemAllDaysOffPreferencesRM
             // 
@@ -919,7 +919,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllDaysOffPreferencesRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllDaysOffPreferencesRM.Size = new System.Drawing.Size(194, 22);
             this.ToolStripMenuItemAllDaysOffPreferencesRM.Text = "xxAllDaysOff";
-            this.ToolStripMenuItemAllDaysOffPreferencesRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllDaysOffMouseUp);
+            this.ToolStripMenuItemAllDaysOffPreferencesRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllDaysOffMouseUp);
             // 
             // ToolStripMenuItemAllShiftsPreferencesRM
             // 
@@ -927,7 +927,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllShiftsPreferencesRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllShiftsPreferencesRM.Size = new System.Drawing.Size(194, 22);
             this.ToolStripMenuItemAllShiftsPreferencesRM.Text = "xxAllShifts";
-            this.ToolStripMenuItemAllShiftsPreferencesRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllShiftsPreferencesMouseUp);
+            this.ToolStripMenuItemAllShiftsPreferencesRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllShiftsPreferencesMouseUp);
             // 
             // ToolStripMenuItemAllMustHaveRM
             // 
@@ -935,7 +935,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllMustHaveRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllMustHaveRM.Size = new System.Drawing.Size(194, 22);
             this.ToolStripMenuItemAllMustHaveRM.Text = "xxAllMustHave";
-            this.ToolStripMenuItemAllMustHaveRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllMustHaveMouseUp);
+            this.ToolStripMenuItemAllMustHaveRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllMustHaveMouseUp);
             // 
             // ToolStripMenuItemAllFulFilledPreferencesRM
             // 
@@ -943,7 +943,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledPreferencesRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledPreferencesRM.Size = new System.Drawing.Size(194, 22);
             this.ToolStripMenuItemAllFulFilledPreferencesRM.Text = "xxAllFulFilled";
-            this.ToolStripMenuItemAllFulFilledPreferencesRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulFilledPreferencesMouseUp);
+            this.ToolStripMenuItemAllFulFilledPreferencesRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledPreferencesMouseUp);
             // 
             // ToolStripMenuItemAllFulFilledAbsencesPreferencesRM
             // 
@@ -951,7 +951,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledAbsencesPreferencesRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledAbsencesPreferencesRM.Size = new System.Drawing.Size(194, 22);
             this.ToolStripMenuItemAllFulFilledAbsencesPreferencesRM.Text = "xxAllFulFilledAbsences";
-            this.ToolStripMenuItemAllFulFilledAbsencesPreferencesRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulFilledAbsencesPreferencesMouseUp);
+            this.ToolStripMenuItemAllFulFilledAbsencesPreferencesRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledAbsencesPreferencesMouseUp);
             // 
             // ToolStripMenuItemAllFulFilledDaysOffPreferencesRM
             // 
@@ -959,7 +959,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledDaysOffPreferencesRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledDaysOffPreferencesRM.Size = new System.Drawing.Size(194, 22);
             this.ToolStripMenuItemAllFulFilledDaysOffPreferencesRM.Text = "xxAllFulFilledDaysOff";
-            this.ToolStripMenuItemAllFulFilledDaysOffPreferencesRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp);
+            this.ToolStripMenuItemAllFulFilledDaysOffPreferencesRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp);
             // 
             // ToolStripMenuItemAllFulFilledShiftsPreferencesRM
             // 
@@ -967,7 +967,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledShiftsPreferencesRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledShiftsPreferencesRM.Size = new System.Drawing.Size(194, 22);
             this.ToolStripMenuItemAllFulFilledShiftsPreferencesRM.Text = "xxAllFulFilledShifts";
-            this.ToolStripMenuItemAllFulFilledShiftsPreferencesRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulFilledShiftsPreferencesMouseUp);
+            this.ToolStripMenuItemAllFulFilledShiftsPreferencesRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledShiftsPreferencesMouseUp);
             // 
             // ToolStripMenuItemAllFulfilledMustHaveRM
             // 
@@ -975,7 +975,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulfilledMustHaveRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulfilledMustHaveRM.Size = new System.Drawing.Size(194, 22);
             this.ToolStripMenuItemAllFulfilledMustHaveRM.Text = "xxAllFulfilledMustHave";
-            this.ToolStripMenuItemAllFulfilledMustHaveRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulfilledMustHaveMouseUp);
+            this.ToolStripMenuItemAllFulfilledMustHaveRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulfilledMustHaveMouseUp);
             // 
             // ToolStripMenuItemLockRotationsRM
             // 
@@ -997,7 +997,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllRotationsRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllRotationsRM.Size = new System.Drawing.Size(184, 22);
             this.ToolStripMenuItemAllRotationsRM.Text = "xxAll";
-            this.ToolStripMenuItemAllRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllRotationsMouseUp);
+            this.ToolStripMenuItemAllRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllRotationsMouseUp);
             // 
             // ToolStripMenuItemAllDaysOffRotationsRM
             // 
@@ -1005,7 +1005,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllDaysOffRotationsRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllDaysOffRotationsRM.Size = new System.Drawing.Size(184, 22);
             this.ToolStripMenuItemAllDaysOffRotationsRM.Text = "xxAllDaysOff";
-            this.ToolStripMenuItemAllDaysOffRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllDaysOffRotationsMouseUp);
+            this.ToolStripMenuItemAllDaysOffRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllDaysOffRotationsMouseUp);
             // 
             // ToolStripMenuItemAllShiftsRotationsRM
             // 
@@ -1013,7 +1013,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllShiftsRotationsRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllShiftsRotationsRM.Size = new System.Drawing.Size(184, 22);
             this.ToolStripMenuItemAllShiftsRotationsRM.Text = "xxAllShifts";
-            this.ToolStripMenuItemAllShiftsRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllShiftsRotationsMouseUp);
+            this.ToolStripMenuItemAllShiftsRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllShiftsRotationsMouseUp);
             // 
             // ToolStripMenuItemAllFulFilledRotationsRM
             // 
@@ -1021,7 +1021,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledRotationsRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledRotationsRM.Size = new System.Drawing.Size(184, 22);
             this.ToolStripMenuItemAllFulFilledRotationsRM.Text = "xxAllFulFilled";
-            this.ToolStripMenuItemAllFulFilledRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulFilledRotationsMouseUp);
+            this.ToolStripMenuItemAllFulFilledRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledRotationsMouseUp);
             // 
             // ToolStripMenuItemAllFulFilledDaysOffRotationsRM
             // 
@@ -1029,7 +1029,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledDaysOffRotationsRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledDaysOffRotationsRM.Size = new System.Drawing.Size(184, 22);
             this.ToolStripMenuItemAllFulFilledDaysOffRotationsRM.Text = "xxAllFulFilledDaysOff";
-            this.ToolStripMenuItemAllFulFilledDaysOffRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulFilledDaysOffRotationsMouseUp);
+            this.ToolStripMenuItemAllFulFilledDaysOffRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledDaysOffRotationsMouseUp);
             // 
             // ToolStripMenuItemAllFulFilledShiftsRotationsRM
             // 
@@ -1037,7 +1037,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledShiftsRotationsRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledShiftsRotationsRM.Size = new System.Drawing.Size(184, 22);
             this.ToolStripMenuItemAllFulFilledShiftsRotationsRM.Text = "xxAllFulFilledShifts";
-            this.ToolStripMenuItemAllFulFilledShiftsRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulFilledShiftsRotationsMouseUp);
+            this.ToolStripMenuItemAllFulFilledShiftsRotationsRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledShiftsRotationsMouseUp);
             // 
             // ToolStripMenuItemLockStudentAvailabilityRM
             // 
@@ -1056,7 +1056,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllUnavailableStudentAvailabilityRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllUnavailableStudentAvailabilityRM.Size = new System.Drawing.Size(159, 22);
             this.ToolStripMenuItemAllUnavailableStudentAvailabilityRM.Text = "xxAllUnavailable";
-            this.ToolStripMenuItemAllUnavailableStudentAvailabilityRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllUnavailableStudentAvailabilityMouseUp);
+            this.ToolStripMenuItemAllUnavailableStudentAvailabilityRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllUnavailableStudentAvailabilityMouseUp);
             // 
             // ToolStripMenuItemAllAvailableStudentAvailabilityRM
             // 
@@ -1064,7 +1064,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllAvailableStudentAvailabilityRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllAvailableStudentAvailabilityRM.Size = new System.Drawing.Size(159, 22);
             this.ToolStripMenuItemAllAvailableStudentAvailabilityRM.Text = "xxAllAvailable";
-            this.ToolStripMenuItemAllAvailableStudentAvailabilityRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllAvailableStudentAvailabilityMouseUp);
+            this.ToolStripMenuItemAllAvailableStudentAvailabilityRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllAvailableStudentAvailabilityMouseUp);
             // 
             // ToolStripMenuItemAllFulFilledStudentAvailabilityRM
             // 
@@ -1072,7 +1072,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledStudentAvailabilityRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledStudentAvailabilityRM.Size = new System.Drawing.Size(159, 22);
             this.ToolStripMenuItemAllFulFilledStudentAvailabilityRM.Text = "xxAllFulFilled";
-            this.ToolStripMenuItemAllFulFilledStudentAvailabilityRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulFilledStudentAvailabilityMouseUp);
+            this.ToolStripMenuItemAllFulFilledStudentAvailabilityRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledStudentAvailabilityMouseUp);
             // 
             // ToolStripMenuItemLockAvailabilityRM
             // 
@@ -1091,7 +1091,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllUnAvailableAvailabilityRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllUnAvailableAvailabilityRM.Size = new System.Drawing.Size(161, 22);
             this.ToolStripMenuItemAllUnAvailableAvailabilityRM.Text = "xxAllUnAvailable";
-            this.ToolStripMenuItemAllUnAvailableAvailabilityRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllUnavailableAvailabilityMouseUp);
+            this.ToolStripMenuItemAllUnAvailableAvailabilityRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllUnavailableAvailabilityMouseUp);
             // 
             // ToolStripMenuItemAllAvailableAvailabilityRM
             // 
@@ -1107,7 +1107,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledAvailabilityRM, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledAvailabilityRM.Size = new System.Drawing.Size(161, 22);
             this.ToolStripMenuItemAllFulFilledAvailabilityRM.Text = "xxAllFulFilled";
-            this.ToolStripMenuItemAllFulFilledAvailabilityRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulFilledAvailabilityMouseUp);
+            this.ToolStripMenuItemAllFulFilledAvailabilityRM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledAvailabilityMouseUp);
             // 
             // toolStripMenuItemLockTagsRM
             // 
@@ -1856,7 +1856,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemLockAllRestrictions, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemLockAllRestrictions.Size = new System.Drawing.Size(194, 22);
             this.ToolStripMenuItemLockAllRestrictions.Text = "xxAll";
-            this.ToolStripMenuItemLockAllRestrictions.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemLockAllRestrictionsMouseUp);
+            this.ToolStripMenuItemLockAllRestrictions.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemLockAllRestrictionsMouseUp);
             // 
             // ToolStripMenuItemLockPreferences
             // 
@@ -1882,7 +1882,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllPreferences, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllPreferences.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemAllPreferences.Text = "xxAll";
-            this.ToolStripMenuItemAllPreferences.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllPreferencesMouseUp);
+            this.ToolStripMenuItemAllPreferences.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllPreferencesMouseUp);
             // 
             // ToolStripMenuItemAllAbsencePreference
             // 
@@ -1890,7 +1890,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllAbsencePreference, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllAbsencePreference.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemAllAbsencePreference.Text = "xxAllAbsences";
-            this.ToolStripMenuItemAllAbsencePreference.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllAbsencePreferenceMouseUp);
+            this.ToolStripMenuItemAllAbsencePreference.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllAbsencePreferenceMouseUp);
             // 
             // ToolStripMenuItemAllDaysOff
             // 
@@ -1898,7 +1898,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllDaysOff, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllDaysOff.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemAllDaysOff.Text = "xxAllDaysOff";
-            this.ToolStripMenuItemAllDaysOff.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllDaysOffMouseUp);
+            this.ToolStripMenuItemAllDaysOff.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllDaysOffMouseUp);
             // 
             // ToolStripMenuItemAllShiftsPreferences
             // 
@@ -1906,7 +1906,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllShiftsPreferences, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllShiftsPreferences.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemAllShiftsPreferences.Text = "xxAllShifts";
-            this.ToolStripMenuItemAllShiftsPreferences.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllShiftsPreferencesMouseUp);
+            this.ToolStripMenuItemAllShiftsPreferences.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllShiftsPreferencesMouseUp);
             // 
             // ToolStripMenuItemAllMustHave
             // 
@@ -1914,7 +1914,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllMustHave, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllMustHave.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemAllMustHave.Text = "xxAllMustHave";
-            this.ToolStripMenuItemAllMustHave.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllMustHaveMouseUp);
+            this.ToolStripMenuItemAllMustHave.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllMustHaveMouseUp);
             // 
             // ToolStripMenuItemAllFulFilledPreferences
             // 
@@ -1922,7 +1922,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledPreferences, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledPreferences.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemAllFulFilledPreferences.Text = "xxAllFulFilled";
-            this.ToolStripMenuItemAllFulFilledPreferences.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulFilledPreferencesMouseUp);
+            this.ToolStripMenuItemAllFulFilledPreferences.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledPreferencesMouseUp);
             // 
             // ToolStripMenuItemAllFulFilledAbsencesPreferences
             // 
@@ -1930,7 +1930,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledAbsencesPreferences, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledAbsencesPreferences.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemAllFulFilledAbsencesPreferences.Text = "xxAllFulFilledAbsences";
-            this.ToolStripMenuItemAllFulFilledAbsencesPreferences.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllAbsencePreferenceMouseUp);
+            this.ToolStripMenuItemAllFulFilledAbsencesPreferences.MouseMove += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllAbsencePreferenceMouseUp);
             // 
             // ToolStripMenuItemAllFulFilledDaysOffPreferences
             // 
@@ -1938,7 +1938,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledDaysOffPreferences, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledDaysOffPreferences.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemAllFulFilledDaysOffPreferences.Text = "xxAllFulFilledDaysOff";
-            this.ToolStripMenuItemAllFulFilledDaysOffPreferences.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp);
+            this.ToolStripMenuItemAllFulFilledDaysOffPreferences.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp);
             // 
             // ToolStripMenuItemAllFulFilledShiftsPreferences
             // 
@@ -1946,7 +1946,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledShiftsPreferences, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledShiftsPreferences.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemAllFulFilledShiftsPreferences.Text = "xxAllFulFilledShifts";
-            this.ToolStripMenuItemAllFulFilledShiftsPreferences.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulFilledShiftsPreferencesMouseUp);
+            this.ToolStripMenuItemAllFulFilledShiftsPreferences.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledShiftsPreferencesMouseUp);
             // 
             // ToolStripMenuItemAllFulfilledMustHave
             // 
@@ -1954,7 +1954,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulfilledMustHave, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulfilledMustHave.Size = new System.Drawing.Size(180, 22);
             this.ToolStripMenuItemAllFulfilledMustHave.Text = "xxAllFulfilledMustHave";
-            this.ToolStripMenuItemAllFulfilledMustHave.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulfilledMustHaveMouseUp);
+            this.ToolStripMenuItemAllFulfilledMustHave.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulfilledMustHaveMouseUp);
             // 
             // ToolStripMenuItemLockRotations
             // 
@@ -1976,7 +1976,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllRotations, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllRotations.Size = new System.Drawing.Size(171, 22);
             this.ToolStripMenuItemAllRotations.Text = "xxAll";
-            this.ToolStripMenuItemAllRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllRotationsMouseUp);
+            this.ToolStripMenuItemAllRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllRotationsMouseUp);
             // 
             // ToolStripMenuItemAllDaysOffRotations
             // 
@@ -1984,7 +1984,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllDaysOffRotations, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllDaysOffRotations.Size = new System.Drawing.Size(171, 22);
             this.ToolStripMenuItemAllDaysOffRotations.Text = "xxAllDaysOff";
-            this.ToolStripMenuItemAllDaysOffRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllDaysOffRotationsMouseUp);
+            this.ToolStripMenuItemAllDaysOffRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllDaysOffRotationsMouseUp);
             // 
             // ToolStripMenuItemAllFulFilledRotations
             // 
@@ -1992,7 +1992,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledRotations, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledRotations.Size = new System.Drawing.Size(171, 22);
             this.ToolStripMenuItemAllFulFilledRotations.Text = "xxAllFulFilled";
-            this.ToolStripMenuItemAllFulFilledRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulFilledRotationsMouseUp);
+            this.ToolStripMenuItemAllFulFilledRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledRotationsMouseUp);
             // 
             // ToolStripMenuItemAllFulFilledDaysOffRotations
             // 
@@ -2000,7 +2000,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledDaysOffRotations, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledDaysOffRotations.Size = new System.Drawing.Size(171, 22);
             this.ToolStripMenuItemAllFulFilledDaysOffRotations.Text = "xxAllFulFilledDaysOff";
-            this.ToolStripMenuItemAllFulFilledDaysOffRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulFilledDaysOffRotationsMouseUp);
+            this.ToolStripMenuItemAllFulFilledDaysOffRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledDaysOffRotationsMouseUp);
             // 
             // ToolStripMenuItemAllFulFilledShiftsRotations
             // 
@@ -2008,7 +2008,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledShiftsRotations, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledShiftsRotations.Size = new System.Drawing.Size(171, 22);
             this.ToolStripMenuItemAllFulFilledShiftsRotations.Text = "xxAllFulFilledShifts";
-            this.ToolStripMenuItemAllFulFilledShiftsRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulFilledShiftsRotationsMouseUp);
+            this.ToolStripMenuItemAllFulFilledShiftsRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledShiftsRotationsMouseUp);
             // 
             // ToolStripMenuItemAllShiftsRotations
             // 
@@ -2016,7 +2016,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllShiftsRotations, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllShiftsRotations.Size = new System.Drawing.Size(171, 22);
             this.ToolStripMenuItemAllShiftsRotations.Text = "xxAllShifts";
-            this.ToolStripMenuItemAllShiftsRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllShiftsRotationsMouseUp);
+            this.ToolStripMenuItemAllShiftsRotations.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllShiftsRotationsMouseUp);
             // 
             // ToolStripMenuItemLockStudentAvailability
             // 
@@ -2035,7 +2035,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllUnavailableStudentAvailability, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllUnavailableStudentAvailability.Size = new System.Drawing.Size(151, 22);
             this.ToolStripMenuItemAllUnavailableStudentAvailability.Text = "xxAllUnavailable";
-            this.ToolStripMenuItemAllUnavailableStudentAvailability.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllUnavailableStudentAvailabilityMouseUp);
+            this.ToolStripMenuItemAllUnavailableStudentAvailability.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllUnavailableStudentAvailabilityMouseUp);
             // 
             // ToolStripMenuItemAllAvailableStudentAvailability
             // 
@@ -2043,7 +2043,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllAvailableStudentAvailability, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllAvailableStudentAvailability.Size = new System.Drawing.Size(151, 22);
             this.ToolStripMenuItemAllAvailableStudentAvailability.Text = "xxAllAvailable";
-            this.ToolStripMenuItemAllAvailableStudentAvailability.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllAvailableStudentAvailabilityMouseUp);
+            this.ToolStripMenuItemAllAvailableStudentAvailability.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllAvailableStudentAvailabilityMouseUp);
             // 
             // ToolStripMenuItemAllFulFilledStudentAvailability
             // 
@@ -2051,7 +2051,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledStudentAvailability, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledStudentAvailability.Size = new System.Drawing.Size(151, 22);
             this.ToolStripMenuItemAllFulFilledStudentAvailability.Text = "xxAllFulFilled";
-            this.ToolStripMenuItemAllFulFilledStudentAvailability.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulFilledStudentAvailabilityMouseUp);
+            this.ToolStripMenuItemAllFulFilledStudentAvailability.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledStudentAvailabilityMouseUp);
             // 
             // ToolStripMenuItemLockAvailability
             // 
@@ -2070,7 +2070,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllUnavailableAvailability, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllUnavailableAvailability.Size = new System.Drawing.Size(151, 22);
             this.ToolStripMenuItemAllUnavailableAvailability.Text = "xxAllUnavailable";
-            this.ToolStripMenuItemAllUnavailableAvailability.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllUnavailableAvailabilityMouseUp);
+            this.ToolStripMenuItemAllUnavailableAvailability.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllUnavailableAvailabilityMouseUp);
             // 
             // ToolStripMenuItemAllAvailableAvailability
             // 
@@ -2086,7 +2086,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.SetShortcut(this.ToolStripMenuItemAllFulFilledAvailability, System.Windows.Forms.Keys.None);
             this.ToolStripMenuItemAllFulFilledAvailability.Size = new System.Drawing.Size(151, 22);
             this.ToolStripMenuItemAllFulFilledAvailability.Text = "xxAllFulFilled";
-            this.ToolStripMenuItemAllFulFilledAvailability.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemAllFulFilledAvailabilityMouseUp);
+            this.ToolStripMenuItemAllFulFilledAvailability.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemAllFulFilledAvailabilityMouseUp);
             // 
             // toolStripMenuItemLockTags
             // 

@@ -1554,12 +1554,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripSplitButtonLockButtonClick(object sender, EventArgs e)
 		{
-			GridHelper.GridlockSelection(_grid, LockManager);
-			Refresh();
-			RefreshSelection();
+			lockSelection();
 		}
 
 		private void toolStripMenuItemLockSelectionClick(object sender, EventArgs e)
+		{
+			lockSelection();
+		}
+
+		private void lockSelection()
 		{
 			GridHelper.GridlockSelection(_grid, LockManager);
 			Refresh();
@@ -1568,16 +1571,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripMenuItemLockAbsenceDaysClick(object sender, EventArgs e)
 		{
-			Cursor = Cursors.WaitCursor;
-			GridHelper.GridlockAllAbsences(_grid, LockManager);
-			Refresh();
-			RefreshSelection();
-			Cursor = Cursors.Default;
+			lockAllAbsences();
 		}
 
 		private void toolStripMenuItemLockAbsenceDaysMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
+			lockAllAbsences();
+		}
+
+		private void lockAllAbsences()
+		{
 			Cursor = Cursors.WaitCursor;
 			GridHelper.GridlockAllAbsences(_grid, LockManager);
 			Refresh();
@@ -1587,16 +1591,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripMenuItemLockFreeDaysClick(object sender, EventArgs e)
 		{
-			Cursor = Cursors.WaitCursor;
-			GridHelper.GridlockFreeDays(_grid, LockManager);
-			Refresh();
-			RefreshSelection();
-			Cursor = Cursors.Default;
+			lockAllDaysOff();
 		}
 
 		private void toolStripMenuItemDayOffLockRmMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
+			lockAllDaysOff();
+		}
+
+		private void lockAllDaysOff()
+		{
 			Cursor = Cursors.WaitCursor;
 			GridHelper.GridlockFreeDays(_grid, LockManager);
 			Refresh();
@@ -1615,21 +1620,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		//lock all with specified absencens
-		private void toolStripMenuItemLockAbsences_Click(object sender, EventArgs e)
+		private void toolStripMenuItemLockAbsencesClick(object sender, EventArgs e)
 		{
-			Cursor = Cursors.WaitCursor;
-			var absence = (Absence)(((ToolStripMenuItem)(sender)).Tag);
-			GridHelper.GridlockAbsences(_grid, LockManager, absence);
-			Refresh();
-			RefreshSelection();
-			Cursor = Cursors.Default;
+			lockAbsence(sender);
 		}
 
-		private void ToolStripMenuItemAbsenceLockRmMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAbsenceLockRmMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
+			lockAbsence(sender);
+		}
+
+		private void lockAbsence(object sender)
+		{
 			Cursor = Cursors.WaitCursor;
-			var absence = (Absence)(((ToolStripMenuItem)(sender)).Tag);
+			var absence = (Absence) (((ToolStripMenuItem) (sender)).Tag);
 			GridHelper.GridlockAbsences(_grid, LockManager, absence);
 			Refresh();
 			RefreshSelection();
@@ -1637,21 +1642,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		//lock all with specified shiftcategory
-		private void toolStripMenuItemLockShiftCategories_Click(object sender, EventArgs e)
+		private void toolStripMenuItemLockShiftCategoriesClick(object sender, EventArgs e)
 		{
-			Cursor = Cursors.WaitCursor;
-			var shiftCategory = (ShiftCategory)(((ToolStripMenuItem)(sender)).Tag);
-			GridHelper.GridlockShiftCategories(_grid, LockManager, shiftCategory);
-			Refresh();
-			RefreshSelection();
-			Cursor = Cursors.Default;
+			lockShiftCategory(sender);
 		}
 
-		private void ToolStripMenuItemLockShiftCategoriesMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemLockShiftCategoriesMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
+			lockShiftCategory(sender);
+		}
+
+		private void lockShiftCategory(object sender)
+		{
 			Cursor = Cursors.WaitCursor;
-			var shiftCategory = (ShiftCategory)(((ToolStripMenuItem)(sender)).Tag);
+			var shiftCategory = (ShiftCategory) (((ToolStripMenuItem) (sender)).Tag);
 			GridHelper.GridlockShiftCategories(_grid, LockManager, shiftCategory);
 			Refresh();
 			RefreshSelection();
@@ -1660,16 +1665,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripMenuItemLockShiftCategoryDaysClick(object sender, EventArgs e)
 		{
-			Cursor = Cursors.WaitCursor;
-			GridHelper.GridlockAllShiftCategories(_grid, LockManager);
-			Refresh();
-			RefreshSelection();
-			Cursor = Cursors.Default;
+			lockAllShiftCategories();
 		}
 
 		private void toolStripMenuItemLockShiftCategoryDaysMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
+			lockAllShiftCategories();
+		}
+
+		private void lockAllShiftCategories()
+		{
 			Cursor = Cursors.WaitCursor;
 			GridHelper.GridlockAllShiftCategories(_grid, LockManager);
 			Refresh();
@@ -1677,127 +1683,127 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Cursor = Cursors.Default;
 		}
 
-		private void ToolStripMenuItemLockAllRestrictionsMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemLockAllRestrictionsMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.LockAllRestrictions(e.Button);
 		}
 
-		private void ToolStripMenuItemAllPreferencesMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllPreferences(e.Button);
 		}
 
-		private void ToolStripMenuItemAllDaysOffMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllDaysOffMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllDaysOff(e.Button);
 		}
 
-		private void ToolStripMenuItemAllShiftsPreferencesMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllShiftsPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllShiftsPreferences(e.Button);
 		}
 
-		private void ToolStripMenuItemAllMustHaveMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllMustHaveMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllMustHave(e.Button);
 		}
 
-		private void ToolStripMenuItemAllFulfilledMustHaveMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllFulfilledMustHaveMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllFulfilledMustHave(e.Button);
 		}
 
-		private void ToolStripMenuItemAllFulFilledPreferencesMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllFulFilledPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllFulfilledPreferences(e.Button);
 		}
 
-		private void ToolStripMenuItemAllAbsencePreferenceMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllAbsencePreferenceMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllAbsencePreference(e.Button);
 		}
 
-		private void ToolStripMenuItemAllFulFilledAbsencesPreferencesMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllFulFilledAbsencesPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllFulfilledAbsencesPreferences(e.Button);
 		}
 
-		private void ToolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllFulfilledDaysOffPreferences(e.Button);
 		}
 
-		private void ToolStripMenuItemAllFulFilledShiftsPreferencesMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllFulFilledShiftsPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllFulfilledShiftsPreferences(e.Button);
 		}
 
-		private void ToolStripMenuItemAllRotationsMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllRotationsMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllRotations(e.Button);
 		}
 
-		private void ToolStripMenuItemAllDaysOffRotationsMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllDaysOffRotationsMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllDaysOffRotations(e.Button);
 		}
 
-		private void ToolStripMenuItemAllShiftsRotationsMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllShiftsRotationsMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllShiftsRotations(e.Button);
 		}
 
-		private void ToolStripMenuItemAllFulFilledRotationsMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllFulFilledRotationsMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllFulfilledRotations(e.Button);
 		}
 
-		private void ToolStripMenuItemAllFulFilledDaysOffRotationsMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllFulFilledDaysOffRotationsMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllFulfilledDaysOffRotations(e.Button);
 		}
 
-		private void ToolStripMenuItemAllFulFilledShiftsRotationsMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllFulFilledShiftsRotationsMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllFulfilledShiftsRotations(e.Button);
 		}
 
-		private void ToolStripMenuItemAllUnavailableStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllUnavailableStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllUnavailableStudentAvailability(e.Button);
 		}
 
-		private void ToolStripMenuItemAllAvailableStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllAvailableStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllAvailableStudentAvailability(e.Button);
 		}
 
-		private void ToolStripMenuItemAllFulFilledStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllFulFilledStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllFulfilledStudentAvailability(e.Button);
 		}
 
-		private void ToolStripMenuItemAllUnavailableAvailabilityMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllUnavailableAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllUnavailableAvailability(e.Button);
@@ -1809,7 +1815,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			executer.AllAvailableAvailability(e.Button);
 		}
 
-		private void ToolStripMenuItemAllFulFilledAvailabilityMouseUp(object sender, MouseEventArgs e)
+		private void toolStripMenuItemAllFulFilledAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
 			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
 			executer.AllFulfilledAvailability(e.Button);
@@ -5197,8 +5203,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var lockAbsencesMenuBuilder = new LockAbsencesMenuBuilder();
 			lockAbsencesMenuBuilder.Build(_schedulerState.CommonStateHolder.Absences, toolStripMenuItemLockAbsenceDaysClick,
 			                              toolStripMenuItemLockAbsenceDaysMouseUp, toolStripMenuItemLockAbsence,
-			                              toolStripMenuItemLockAbsencesRM, toolStripMenuItemLockAbsences_Click,
-			                              ToolStripMenuItemAbsenceLockRmMouseUp);
+			                              toolStripMenuItemLockAbsencesRM, toolStripMenuItemLockAbsencesClick,
+			                              toolStripMenuItemAbsenceLockRmMouseUp);
 
 			var lockDaysOffMenuBuilder = new LockDaysOffMenuBuilder();
 			lockDaysOffMenuBuilder.Build(_schedulerState.CommonStateHolder.DayOffs, toolStripMenuItemLockFreeDaysClick,
@@ -5210,8 +5216,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			                                     toolStripMenuItemLockShiftCategoryDaysClick,
 			                                     toolStripMenuItemLockShiftCategoryDaysMouseUp,
 			                                     toolStripMenuItemLockShiftCategory, toolStripMenuItemLockShiftCategoriesRM,
-			                                     toolStripMenuItemLockShiftCategories_Click,
-			                                     ToolStripMenuItemLockShiftCategoriesMouseUp);
+			                                     toolStripMenuItemLockShiftCategoriesClick,
+			                                     toolStripMenuItemLockShiftCategoriesMouseUp);
 
 			var tagsMenuLoader = new TagsMenuLoader(toolStripMenuItemLockTags, toolStripMenuItemLockTagsRM,
 			                                        _schedulerState.CommonStateHolder.ScheduleTags, toolStripMenuItemLockTag,
