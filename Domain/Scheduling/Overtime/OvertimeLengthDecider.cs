@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				var pair = new KeyValuePair<TimeSpan, double>(overtimeEndTime-overtimeStartTime, sumOfRelativeDifference);
 				durationValuePairs.Add(pair);
 			}
+			if (durationValuePairs.Count == 0)
+				return TimeSpan.Zero;
 			var worstRelativeDifference = durationValuePairs.Min(x => x.Value);
 			if (worstRelativeDifference >= 0 || double.IsNaN(worstRelativeDifference)) return TimeSpan.Zero;
 			return durationValuePairs.First(x => x.Value == worstRelativeDifference).Key;
