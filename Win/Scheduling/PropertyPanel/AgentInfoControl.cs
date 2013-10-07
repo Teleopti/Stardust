@@ -24,10 +24,10 @@ using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-    public partial class FormAgentInfo : BaseRibbonForm
+    public partial class AgentInfoControl : BaseUserControl
     {
     	private readonly IWorkShiftWorkTime _workShiftWorkTime;
     	private readonly ILifetimeScope _container;
@@ -39,24 +39,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IDictionary<EmploymentType, string> _employmentTypeList;
         private IList<IOptionalColumn> _optionalColumns;
     	private readonly IDictionary<SchedulePeriodType, string> _schedulePeriodTypeList;
-        private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
+        private ISchedulerGroupPagesProvider _groupPagesProvider;
         private IList<IGroupPageLight> _groupPages;
         private bool _dataLoaded;
     	private IShiftCategoryFairnessAggregateManager _fairnessManager;
 
-    	public FormAgentInfo()
+    	public AgentInfoControl()
         {
             InitializeComponent();
             if (!DesignMode)
                 SetTexts();
 
-            TopLevel = true;
-
-			_employmentTypeList = LanguageResourceHelper.TranslateEnum<EmploymentType>();
+            _employmentTypeList = LanguageResourceHelper.TranslateEnum<EmploymentType>();
 			_schedulePeriodTypeList = LanguageResourceHelper.TranslateEnum<SchedulePeriodType>();
         }
 
-		public FormAgentInfo(IWorkShiftWorkTime workShiftWorkTime, ILifetimeScope container, ISchedulerGroupPagesProvider groupPagesProvider)
+		public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ILifetimeScope container, ISchedulerGroupPagesProvider groupPagesProvider)
 			: this()
 		{
 			_workShiftWorkTime = workShiftWorkTime;
@@ -76,6 +74,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 listViewPersonPeriod.Items.Clear();
                 listViewRestrictions.Items.Clear();
                 listViewPerson.Items.Clear();
+                //listViewFairness.Items.Clear();
                 return;
             }
             _dateIsSelected = true;
@@ -238,10 +237,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-        private static bool shouldHeadersBeDisplayedOrNot(IEnumerable<IShiftCategoryFairnessCompareValue> shiftCategoryFairnessCompareValues)
+        private static bool shouldHeadersBeDisplayedOrNot(IList<IShiftCategoryFairnessCompareValue> shiftCategoryFairnessCompareValues)
         {
 			if (shiftCategoryFairnessCompareValues == null) return false;
-	        return shiftCategoryFairnessCompareValues.Any(shiftCategory => !(shiftCategory.Original == 0.0 && shiftCategory.ComparedTo == 0.0));
+            foreach (var shiftCategory in shiftCategoryFairnessCompareValues)
+            {
+                if (!(shiftCategory.Original == 0.0 && shiftCategory.ComparedTo == 0.0))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private static void createAndAddItemInMultipleColumns(ListView listView, string column1Text, string column2Text, string column3Text, string column4Text, string column5Text, bool isBold )
@@ -378,8 +384,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             helper.SchedulePeriodData();
 
-            var perPeriod = helper.SchedulePeriod.ShiftCategoryLimitationCollection().Where(l => !l.Weekly).ToList();
-            var perWeek = helper.SchedulePeriod.ShiftCategoryLimitationCollection().Where(l => l.Weekly).ToList();
+            var perPeriod = helper.SchedulePeriod.ShiftCategoryLimitationCollection().Where(l => !l.Weekly);
+            var perWeek = helper.SchedulePeriod.ShiftCategoryLimitationCollection().Where(l => l.Weekly);
             if (perWeek.Any())
             {
                 createAndAddItem(listViewRestrictions, Resources.PerWeek,
@@ -469,28 +475,28 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
            foreach (IPreferenceRestriction restriction in preferenceList)
            {
-	           if (restriction.MustHave)
-		           createAndAddItem(listViewRestrictions, Resources.MustHave, "", 2);
-
+               var mustHave = "";
+               if (restriction.MustHave)
+                   mustHave = " (" + Resources.MustHave + ")"; 
                 addTimeRestriction(restriction, 2);
                 if (restriction.ShiftCategory != null)
-                    createAndAddItem(listViewRestrictions, Resources.ShiftCategory, restriction.ShiftCategory.Description.Name, 2);
+                    createAndAddItem(listViewRestrictions, Resources.ShiftCategory, restriction.ShiftCategory.Description.Name + mustHave, 2);
 
                if (restriction.ActivityRestrictionCollection.Count>0)
                {
                    IActivityRestriction activityRestriction = restriction.ActivityRestrictionCollection[0];
                    createAndAddItem(listViewRestrictions, Resources.Activity,
-                                    activityRestriction.Activity.Name, 2);
+                                    activityRestriction.Activity.Name + mustHave, 2);
                    addTimeRestriction(activityRestriction, 3);
                }
 
 			   if (restriction.Absence != null)
 			   {
-				   createAndAddItem(listViewRestrictions, Resources.Absence, restriction.Absence.Description.Name, 2);
+				   createAndAddItem(listViewRestrictions, Resources.Absence, restriction.Absence.Description.Name + mustHave, 2);
 			   }
 
                 if (restriction.DayOffTemplate != null)
-                    createAndAddItem(listViewRestrictions, Resources.DayOff, restriction.DayOffTemplate.Description.Name, 2);
+                    createAndAddItem(listViewRestrictions, Resources.DayOff, restriction.DayOffTemplate.Description.Name + mustHave, 2);
             }
         }
 
@@ -558,11 +564,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             if (personPeriod.PersonMaxSeatSkillCollection.Count > 0)
             {
-				createAndAddItem(listViewPersonPeriod, "", "", 2);
+                createAndAddItem(listViewPersonPeriod, "̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶̶—————————————————————————", "", 3);
 
                 foreach (IPersonSkill personSkill in personPeriod.PersonMaxSeatSkillCollection)
                 {
-					createAndAddItem(listViewPersonPeriod, Resources.MaximumSeats, personSkill.Skill.Name, 2);
+                    createAndAddItem(listViewPersonPeriod, personSkill.Skill.Name, "", 3);
                 }
             }
             
@@ -573,7 +579,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             createAndAddItem(listViewPersonPeriod, Resources.PartTimePercentageLower, personPeriod.PersonContract.PartTimePercentage.Description.Name, 2);
 			createAndAddItem(listViewPersonPeriod, Resources.EmploymentType, _employmentTypeList[personPeriod.PersonContract.Contract.EmploymentType], 2);
 			if (personPeriod.RuleSetBag != null)
-				createAndAddItem(listViewPersonPeriod, Resources.RuleSetBagLower, personPeriod.RuleSetBag.Description.Name, 2);
+				createAndAddItem(listViewPersonPeriod, Resources.RuleSetBag, personPeriod.RuleSetBag.Description.Name, 2);
             
         }
 
@@ -609,10 +615,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             createAndAddItem(listViewSchedulePeriod, Resources.Period, helper.Period.Value.DateString, 1);
             createAndAddItem(listViewSchedulePeriod, Resources.Type, _schedulePeriodTypeList[helper.SchedulePeriod.PeriodType], 2);
-	        var personPeriod = person.Period(helper.SelectedDate);
-	        if (personPeriod == null)
+            if (person.Period(helper.SelectedDate) == null)
                 return;
-            EmploymentType employmentType = personPeriod.PersonContract.Contract.EmploymentType;
+            EmploymentType employmentType = person.Period(helper.SelectedDate).PersonContract.Contract.EmploymentType;
             if (employmentType != EmploymentType.HourlyStaff)
             {
                 if (employmentType == EmploymentType.FixedStaffNormalWorkTime)
@@ -646,7 +651,7 @@ namespace Teleopti.Ccc.Win.Scheduling
            
 
             createAndAddItem(listViewSchedulePeriod, Resources.Current, helper.Period.Value.DateString, 1);
-            item = createAndAddItem(listViewSchedulePeriod, Resources.TargetDaysOff,
+            item = createAndAddItem(listViewSchedulePeriod, Resources.DaysOff,
                                     helper.CurrentDaysOff.ToString(CultureInfo.CurrentCulture), 2);
             if (employmentType == EmploymentType.FixedStaffNormalWorkTime)
             {
@@ -670,6 +675,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 TimeSpan time = pair.Value;
                 createAndAddItem(listViewSchedulePeriod, pair.Key, DateHelper.HourMinutesString(time.TotalMinutes), 2);
             }
+            //createAndAddItem(listViewSchedulePeriod, "xxOB", DateHelper.HourMinutesString(helper.CurrentShiftAllowanceTime.TotalMinutes), 2);
+            //createAndAddItem(listViewSchedulePeriod, Resources.Overtime, DateHelper.HourMinutesString(helper.CurrentOvertime.TotalMinutes), 2);
 
             listViewSchedulePeriod.Items.Add("");
             createAndAddItem(listViewSchedulePeriod, Resources.FreeSlots, freeSlots.ToString(CultureInfo.CurrentCulture),
@@ -715,8 +722,10 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             if (e.KeyCode == Keys.F1)
             {
-	            var local = e.KeyCode == Keys.F1 && e.Modifiers == Keys.Shift;
-	            var control = new Control();
+                bool local = true;
+                if (e.KeyCode == Keys.F1 && e.Modifiers == Keys.Shift)
+                    local = false;
+                var control = new Control();
 
                 if (tabControlAgentInfo.SelectedTab == tabPageAdvSchedulePeriod)
                     control = tabPageAdvSchedulePeriod;
@@ -744,8 +753,16 @@ namespace Teleopti.Ccc.Win.Scheduling
             createAndAddItem(listViewPerson, Resources.Email, person.Email ?? "", 2);
             createAndAddItem(listViewPerson, Resources.EmployeeNo, person.EmploymentNumber ?? "", 2);
             createAndAddItem(listViewPerson, Resources.Note, person.Note ?? "", 2);
+            //createAndAddItem(listViewPerson, Resources.Roles, "", 1);
+            // lazy load, do we want to load these one by one?
+            //foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)
+            //{
+            //    createAndAddItem(listViewPerson, applicationRole.Name, "", 2);
+            //}
+
             createAndAddItem(listViewPerson, Resources.WorkflowControlSet,
                              person.WorkflowControlSet != null ? person.WorkflowControlSet.Name : "", 2);
+
 			createAndAddItem(listViewPerson, Resources.TimeZone, timeZoneInfo.DisplayName, 2);
 			createAndAddItem(listViewPerson, Resources.LocalTime, TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZoneInfo).ToShortTimeString(), 2);
             createAndAddItem(listViewPerson, Resources.WorkWeekStartsAt, DayOfWeekDisplay.ListOfDayOfWeek.SingleOrDefault(day => day.DayOfWeek == person.FirstDayOfWeek).DisplayName, 2);
@@ -775,7 +792,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             
         }
 
-        private void formAgentInfoResizeEnd(object sender, EventArgs e)
+        private void FormAgentInfoResizeEnd(object sender, EventArgs e)
         {
             if (Width - 270 > 0)
                 listViewPerson.Columns[1].Width = Width - 270;
@@ -789,7 +806,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        private void agentInfo_FromLoad(object sender, EventArgs e)
+        private void AgentInfo_FromLoad(object sender, EventArgs e)
         {
             initializeFairnessTab();
 	        timerRefresh.Interval = 2000;
@@ -802,5 +819,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 				updatePersonInfo(_selectedPerson);
 			}
 		}
+
+        public void SetDefaultSelectedTab()
+        {
+            tabControlAgentInfo.SelectedIndex  = 0;
+        }
     }
 }

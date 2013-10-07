@@ -20,7 +20,9 @@ using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.Win.Scheduling.LockMenuBuilders;
+using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.WinCode.Grouping;
+using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using log4net;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms;
@@ -101,7 +103,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly SkillResultHighlightGridControl _skillResultHighlightGridControl;
 		private DateOnly _currentIntraDayDate;
 		private DockingManager _dockingManager;
-		private FormAgentInfo _agentInfo;
+		//private FormAgentInfo _agentInfo;
+		private AgentInfoControl _agentInfoControl;
+		private ShiftCategoryDistributionModel _shiftCategoryDistributionModel;
 		private ScheduleViewBase _scheduleView;
 		private RequestView _requestView;
 		private ResourceOptimizationHelperWin _optimizationHelperWin;
@@ -123,6 +127,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly TeleoptiLessIntelligentSplitContainer _splitContainerLessIntellegentEditor;
 		private readonly TeleoptiLessIntelligentSplitContainer _splitContainerLessIntellegentRestriction;
 		private readonly TabControlAdv _tabSkillData;
+		private readonly TabControlAdv _tabInfoPanels;
 		private readonly ElementHost _elementHostRequests;
 		private readonly WpfControls.Controls.Requests.Views.HandlePersonRequestView _handlePersonRequestView1;
 		private SingleAgentRestrictionPresenter _singleAgentRestrictionPresenter;
@@ -147,6 +152,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private bool _showResult = true;
 		private bool _showGraph = true;
 		private bool _showRibbonTexts = true;
+		private bool _showInfoPanel = true;
 		#endregion
 		private ControlType _controlType;
 		private SchedulerMessageBrokerHandler _schedulerMessageBrokerHandler;
@@ -190,6 +196,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    private bool isWindowLoaded = false;
 		private ScheduleTimeType _scheduleTimeType;
 		private DateTime _lastSaved = DateTime.Now;
+        private IScheduleDayListFactory _scheduleDayListFactory;
 
 		#region enums
 		private enum ZoomLevel
@@ -251,13 +258,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripExScheduleViews.Items.Add(hostDatePicker);
 			_grid = schedulerSplitters1.Grid;
 			_chartControlSkillData = schedulerSplitters1.ChartControlSkillData;
-			_splitContainerAdvMain = schedulerSplitters1.SplitContainerAdvMain;
+			_splitContainerAdvMain = schedulerSplitters1.SplitContainerAdvMainContainer;
 			_splitContainerAdvResultGraph = schedulerSplitters1.SplitContainerAdvResultGraph;
 			_splitContainerLessIntellegentEditor = schedulerSplitters1.SplitContainerLessIntelligent1;
 			_splitContainerLessIntellegentRestriction = schedulerSplitters1.SplitContainerView;
 			_elementHostRequests = schedulerSplitters1.ElementHostRequests;
 			_handlePersonRequestView1 = schedulerSplitters1.HandlePersonRequestView1;
 			_tabSkillData = schedulerSplitters1.TabSkillData;
+			_tabInfoPanels = schedulerSplitters1.TabInfoPanels;
 			wpfShiftEditor1 = new WpfShiftEditor(_eventAggregator, new CreateLayerViewModelService(), true);
 			notesEditor = new NotesEditor(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
 			schedulerSplitters1.MultipleHostControl3.AddItem(Resources.ShiftEditor, wpfShiftEditor1);
@@ -529,7 +537,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				TypedParameter.From(scheduleDictionaryBatchingPersister),
 				TypedParameter.From<IOwnMessageQueue>(_schedulerMessageBrokerHandler)
 				);
-
+            
+            _scheduleDayListFactory = _container.Resolve<IScheduleDayListFactory>();
 		}
 
 		private void loadSchedulingScreenSettings()
@@ -995,9 +1004,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setPermissionOnControls();
 			
 			schedulerSplitters1.AgentRestrictionGrid.SelectedAgentIsReady += agentRestrictionGridSelectedAgentIsReady;
-
+			
+			
 			_backgroundWorkerRunning = true;
 			backgroundWorkerLoadData.RunWorkerAsync();
+			//No code after the call to runworkerasynk
 		}
 
 		private void loadQuickAccessState()
@@ -1039,6 +1050,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_currentSchedulingScreenSettings.HideEditor = !_showEditor;
 					_currentSchedulingScreenSettings.HideGraph = !_showGraph;
 					_currentSchedulingScreenSettings.HideResult = !_showResult;
+					_currentSchedulingScreenSettings.HideInfoPanel = !_showInfoPanel;
 					_currentSchedulingScreenSettings.HideRibbonTexts = !_showRibbonTexts;
 					_currentSchedulingScreenSettings.DefaultScheduleTag = _defaultScheduleTag.Id;
 					_currentSchedulingScreenSettings.SkillResultViewSetting = _skillResultViewSetting;
@@ -1067,8 +1079,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 					Log.Error("An error occurred when trying to save settings on closing scheduler.", dataSourceException);
 				}
 
-				if (_agentInfo != null)
-					_agentInfo.Close();
 			}
 
 			Cursor.Current = Cursors.Default;
@@ -1188,30 +1198,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			save();	
 		}
 
-		private void toolStripButtonAgentInfoClick(object sender, EventArgs e)
-		{
-			if (_scheduleView == null)
-				return;
-			if (_agentInfo == null)
-			{
-				_agentInfo = new FormAgentInfo(_workShiftWorkTime, _container, _groupPagesProvider);
-				_agentInfo.FormClosed += _agentInfo_FormClosed;
-				_agentInfo.Show(this);
-			}
-			else
-			{
-				if (_agentInfo.WindowState.Equals(FormWindowState.Minimized))
-					_agentInfo.WindowState = FormWindowState.Normal;
-			}
-
-			updateSelectionInfo(_scheduleView.SelectedSchedules());
-		}
-
-		private void _agentInfo_FormClosed(object sender, FormClosedEventArgs e)
-		{
-			_agentInfo = null;
-		}
-
+		
 		private void changeRequestStatus(IHandlePersonRequestCommand command, IList<PersonRequestViewModel> requestViewAdapters)
 		{
 			_requestPresenter.ApproveOrDeny(requestViewAdapters, command, string.Empty);
@@ -2444,7 +2431,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void _backgroundWorkerResourceCalculator_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			if (Disposing)
+            //updateDistrbutionInformation(TODO);
+
+            if (Disposing)
 				return;
 
 			_backgroundWorkerRunning = false;
@@ -2468,9 +2457,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			validatePersons();
-		}
+        }
 
-		private void _backgroundWorkerResourceCalculator_ProgressChanged(object sender, ProgressChangedEventArgs e)
+	    private void _backgroundWorkerResourceCalculator_ProgressChanged(object sender, ProgressChangedEventArgs e)
 		{
 			if (Disposing)
 				return;
@@ -2766,6 +2755,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			loadScenarioMenuItems();
 
 			setupSkillTabs();
+			setupInfoTabs();
 
 			if (schedulerSplitters1.PinnedPage != null)
 				schedulerSplitters1.TabSkillData.SelectedTab = schedulerSplitters1.PinnedPage;
@@ -2866,6 +2856,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			SplitterManager.ShowEditor = !_currentSchedulingScreenSettings.HideEditor;
 			toolStripButtonShowEditor.Checked = !_currentSchedulingScreenSettings.HideEditor;
 			_showEditor = !_currentSchedulingScreenSettings.HideEditor;
+			_showInfoPanel = !_currentSchedulingScreenSettings.HideInfoPanel;
+			toolStripButtonShowPropertyPanel.Checked = _showInfoPanel;
 
 			toolStripButtonShowTexts.Checked = !_currentSchedulingScreenSettings.HideRibbonTexts;
 			_showRibbonTexts = !_currentSchedulingScreenSettings.HideRibbonTexts;
@@ -3392,28 +3384,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region Docking
 
-		private void dockStateChanged(object sender, DockStateChangeEventArgs arg)
-		{
-			if (_dockingManager.IsFloating(_agentInfo))
-			{
-				var dhost = _agentInfo.Parent as DockHost;
-				if (dhost != null)
-				{
-					var frmfloat = dhost.ParentForm as FloatingForm;
-					if (frmfloat != null)
-					{
-						frmfloat.Opacity = 1.0;
-					}
-				}
-			}
-		}
+        
 
 		private void dockVisibilityChanged(object sender, DockVisibilityChangedEventArgs arg)
 		{
 			arg.Control.Dispose();
 			Controls.Remove(arg.Control);
-			_agentInfo = null;
-		}
+        }
 
 		#endregion
 
@@ -4467,6 +4444,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 						enableSave();
 					if (_scheduleView != null && _scheduleView.SelectedSchedules().Count == 1)
 						updateShiftEditor();
+
+					schedulerSplitters1.RefreshTabInfoPanels();
 				}
 			}
 		}
@@ -4893,6 +4872,31 @@ namespace Teleopti.Ccc.Win.Scheduling
 			schedulerSplitters1.PinSavedSkills(_currentSchedulingScreenSettings);
 		}
 
+		private void setupInfoTabs()
+		{
+			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _container, _groupPagesProvider);
+			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl);
+
+			//container can fix this to one row
+			ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson =
+				new CachedNumberOfEachCategoryPerPerson(_schedulerState.Schedules, _schedulerState.RequestedPeriod.DateOnlyPeriod);
+			ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate =
+				new CachedNumberOfEachCategoryPerDate(_schedulerState.Schedules, _schedulerState.RequestedPeriod.DateOnlyPeriod);
+			ICachedShiftCategoryDistribution cachedShiftCategoryDistribution =
+				new CachedShiftCategoryDistribution(_schedulerState.Schedules, _schedulerState.RequestedPeriod.DateOnlyPeriod,
+				                                    cachedNumberOfEachCategoryPerPerson,
+				                                    _schedulerState.CommonStateHolder.ShiftCategories);
+			_shiftCategoryDistributionModel = new ShiftCategoryDistributionModel(cachedShiftCategoryDistribution,
+			                                                                     cachedNumberOfEachCategoryPerDate,
+			                                                                     cachedNumberOfEachCategoryPerPerson,
+			                                                                     _schedulerState.RequestedPeriod.DateOnlyPeriod,
+			                                                                     _schedulerState,
+			                                                                     new PopulationStatisticsCalculator());
+			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
+			schedulerSplitters1.InsertShiftCategoryDistributionModel(_shiftCategoryDistributionModel);
+			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
+		}
+
 		private PersonsFilterView _cachedPersonsFilterView;
 		private PersonsFilterView getCachedPersonsFilterView()
 		{
@@ -4929,7 +4933,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				_schedulerState.FilterPersons(scheduleFilterView.SelectedAgentGuids());
 
-				//toolStripButtonFilterAgents.Checked = scheduleFilterView.SelectedAgentGuids().Count != SchedulerState.AllPermittedPersons.Count;
 				toolStripButtonFilterAgents.Checked = SchedulerState.AgentFilter();
 
 				if (_scheduleView != null)
@@ -5236,7 +5239,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_dockingManager.CloseEnabled = true;
 			var button = new Syncfusion.Windows.Forms.Tools.CaptionButton(CaptionButtonType.Close);
 			_dockingManager.CaptionButtons.Add(button);
-			_dockingManager.DockStateChanged += dockStateChanged;
+			//_dockingManager.DockStateChanged += dockStateChanged;
 			_dockingManager.DockVisibilityChanged += dockVisibilityChanged;
 		}
 
@@ -5269,8 +5272,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void updateSelectionInfo(IList<IScheduleDay> selectedSchedules)
 		{
-			var updater = new UpdateSelectionInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag);
-			updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfo, _scheduleTimeType);
+            var updater = new UpdateSelectionForAgentInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag);
+            updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfoControl, _scheduleTimeType);
 		}
 
 		private void deleteInMainGrid(PasteOptions deleteOptions)
@@ -6163,7 +6166,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				if (_dockingManager != null)
 				{
-					_dockingManager.DockStateChanged -= dockStateChanged;
+					//_dockingManager.DockStateChanged -= dockStateChanged;
 					_dockingManager.DockVisibilityChanged -= dockVisibilityChanged;
 				}
 				Dispose(true);
@@ -6317,6 +6320,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripButtonFilterAgents_Click(object sender, EventArgs e)
 		{
 			showFilterDialog();
+			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
+			schedulerSplitters1.RefreshTabInfoPanels();
 		}
 
 		private class ConflictHandlingResult
@@ -6430,6 +6435,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_splitterManager = new SplitterManagerRestrictionView
 										   {
 											   MainSplitter = _splitContainerAdvMain,
+											   LeftMainSplitter = schedulerSplitters1.SplitContainerAdvMain,
 											   GraphResultSplitter = _splitContainerAdvResultGraph,
 											   GridEditorSplitter = _splitContainerLessIntellegentEditor,
 											   RestrictionViewSplitter = _splitContainerLessIntellegentRestriction
@@ -7001,6 +7007,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_requestView != null)
 				_requestView.FilterPersons(_schedulerState.FilteredPersonDictionary.Select(kvp => kvp.Key));
 			drawSkillGrid();
+
+			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
+			schedulerSplitters1.RefreshTabInfoPanels();
 		}
 
 		private void toolStripMenuItemSwitchViewPointToTimeZoneOfSelectedAgent_Click(object sender, EventArgs e)
@@ -7127,6 +7136,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_scheduleTimeType = (ScheduleTimeType)item.Tag;
 			updateSelectionInfo(_scheduleView.SelectedSchedules());
 		}
+
+	    private void toolStripButtonShowPropertyPanel_Click(object sender, EventArgs e)
+	    {
+            toolStripButtonShowPropertyPanel.Checked = !toolStripButtonShowPropertyPanel.Checked;
+            schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
+		    _showInfoPanel = toolStripButtonShowPropertyPanel.Checked;
+	    }
+
+	    private void toolStripMenuItemAgentInfo_Click(object sender, EventArgs e)
+	    {
+            if (!toolStripButtonShowPropertyPanel.Checked)
+            {
+                toolStripButtonShowPropertyPanel.Checked = true;
+                schedulerSplitters1.ToggelPropertyPanel(false);
+            }
+            _tabInfoPanels.SelectedIndex = 0;
+            _agentInfoControl.SetDefaultSelectedTab();
+               
+            updateSelectionInfo(_scheduleView.SelectedSchedules());
+	    }
+        
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 

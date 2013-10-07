@@ -11777,6 +11777,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Subject too long</value>
     <comment>Invalid field info</comment>
   </data>
+  <data name="Average" xml:space="preserve">
+    <value>Average</value>
+    <comment>Average</comment>
+  </data>
   <data name="Distribution" xml:space="preserve">
     <value>Distribution</value>
     <comment>Distribution</comment>
@@ -11789,9 +11793,19 @@ Reduce the complexity to use these shifts.</value>
     <value>Per Date</value>
     <comment>Header in shift distributions scheduler</comment>
   </data>
-  <data name="ShiftCategoryDistribution" xml:space="preserve">
+	<data name="ShiftCategoryDistribution" xml:space="preserve">
     <value>Shift Category Distribution</value>
     <comment>Header for distributions of shift categories in scheduler</comment>
+	</data>
+  <data name="PerAgent" xml:space="preserve">
+    <value>Per Agent</value>
+  </data>
+  <data name="PerShiftCategory" xml:space="preserve">
+    <value>Per Shift Category</value>
+  </data>
+  <data name="AnalysisInfo" xml:space="preserve">
+    <value>Analysis Info</value>
+    <comment>Use for the property panel shown on scheduling screen</comment>
   </data>
   <data name="Here" xml:space="preserve">
     <value>here</value>
