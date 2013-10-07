@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Abandoned e-mails.
+///   Looks up a localized string similar to Abandoned emails. 
         /// </summary>
         public static string AbandonedEmails {
             get {
@@ -1979,7 +1979,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answered e-mails.
+        ///   Looks up a localized string similar to Answered emails.
         /// </summary>
         public static string AnsweredEmails {
             get {
@@ -2748,7 +2748,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Average e-mails.
+        ///   Looks up a localized string similar to Average emails.
         /// </summary>
         public static string AverageEmails {
             get {
@@ -3396,7 +3396,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Calculated e-mails.
+        ///   Looks up a localized string similar to Calculated emails.
         /// </summary>
         public static string CalculatedEmails {
             get {
@@ -3558,7 +3558,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Campaign e-mails handling time.
+        ///   Looks up a localized string similar to Campaign emails handling time.
         /// </summary>
         public static string CampaignEmailsHandlingtime {
             get {
@@ -3567,7 +3567,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Campaign e-mails handling time %.
+        ///   Looks up a localized string similar to Campaign emails handling time %.
         /// </summary>
         public static string CampaignEmailsHandlingtimePercent {
             get {
@@ -3576,7 +3576,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Campaign e-mails %.
+        ///   Looks up a localized string similar to Campaign emails %.
         /// </summary>
         public static string CampaignEmailsPercent {
             get {
@@ -6655,7 +6655,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Devaiation e-mails:.
+        ///   Looks up a localized string similar to Deviation emails:.
         /// </summary>
         public static string DeviationEmailsColon {
             get {
@@ -7123,7 +7123,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to E-mail.
+        ///   Looks up a localized string similar to Email.
         /// </summary>
         public static string Email {
             get {
@@ -7132,7 +7132,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to E-mail result.
+        ///   Looks up a localized string similar to Email result.
         /// </summary>
         public static string EmailResult {
             get {
@@ -7141,7 +7141,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to E-mails.
+        ///   Looks up a localized string similar to Emails.
         /// </summary>
         public static string Emails {
             get {
@@ -8870,7 +8870,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Forecasted e-mails.
+        ///   Looks up a localized string similar to Forecasted emails.
         /// </summary>
         public static string ForecastedEmails {
             get {
@@ -10203,7 +10203,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Index e-mails.
+        ///   Looks up a localized string similar to Index emails.
         /// </summary>
         public static string IndexEmails {
             get {
@@ -15130,7 +15130,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Offered e-mails.
+        ///   Looks up a localized string similar to Offered emails.
         /// </summary>
         public static string OfferedEmails {
             get {
@@ -15806,7 +15806,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Original offered e-mails.
+        ///   Looks up a localized string similar to Original offered emails.
         /// </summary>
         public static string OriginalOfferedEmails {
             get {
@@ -20989,7 +20989,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send E-mail.
+        ///   Looks up a localized string similar to Send Email.
         /// </summary>
         public static string SendEmail {
             get {
@@ -20998,7 +20998,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send e-mail report.
+        ///   Looks up a localized string similar to Send email report.
         /// </summary>
         public static string SendEmailReport {
             get {
@@ -22252,7 +22252,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Backoffice.
+        ///   Looks up a localized string similar to Back office.
         /// </summary>
         public static string SkillTypeBackoffice {
             get {
@@ -22270,7 +22270,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to E-mail.
+///   Looks up a localized string similar to Email.
         /// </summary>
         public static string SkillTypeEmail {
             get {
@@ -23071,7 +23071,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Support e-mail address.
+        ///   Looks up a localized string similar to Support email address.
         /// </summary>
         public static string SupportEmailAddress {
             get {
@@ -24342,7 +24342,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total e-mails.
+        ///   Looks up a localized string similar to Total emails.
         /// </summary>
         public static string TotalEmails {
             get {
@@ -25359,7 +25359,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validated e-mails.
+        ///   Looks up a localized string similar to Validated emails.
         /// </summary>
         public static string ValidatedEmails {
             get {
