@@ -136,11 +136,16 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public void BackButtonClicked()
 		{
-			if (_model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Application)
-				CurrentStep--;
+			if (CurrentStep == LoginStep.SelectBu)
+			{
+				if (_model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Application)
+					CurrentStep--;
+				else
+					CurrentStep -= 2;
+			}
 			else
-				CurrentStep -= 2;
-		    GetDataForCurrentStep();
+				CurrentStep--;
+			GetDataForCurrentStep();
 		}
 
 

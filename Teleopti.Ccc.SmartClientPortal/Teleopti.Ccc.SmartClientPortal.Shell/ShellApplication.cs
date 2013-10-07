@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         }
 
 				[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-				private static IContainer configureContainer()
+		private static IContainer configureContainer()
         {
             using (PerformanceOutput.ForOperation("Building Ioc container"))
             {

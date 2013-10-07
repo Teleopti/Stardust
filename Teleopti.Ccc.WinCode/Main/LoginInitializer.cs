@@ -22,24 +22,21 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
 	    private readonly ILogonLicenseChecker _licenseChecker;
 		private readonly IRaptorApplicationFunctionsSynchronizer _raptorSynchronizer;
-		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 		public LoginInitializer(IRoleToPrincipalCommand roleToPrincipalCommand,
 		                        ILogonLicenseChecker licenseChecker,
-		                        IRaptorApplicationFunctionsSynchronizer raptorSynchronizer,
-								ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		                        IRaptorApplicationFunctionsSynchronizer raptorSynchronizer)
 		{
 		    _roleToPrincipalCommand = roleToPrincipalCommand;
 		    _licenseChecker = licenseChecker;
 		    _raptorSynchronizer = raptorSynchronizer;
-			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
 	    public bool InitializeApplication(IDataSourceContainer dataSourceContainer)
 		{
 			return setupCulture() &&
                    _licenseChecker.HasValidLicense(dataSourceContainer) &&
-			       checkRaptorApplicationFunctions();
+			       checkRaptorApplicationFunctions(dataSourceContainer);
 		}
 
 		private static bool setupCulture()
@@ -53,12 +50,13 @@ namespace Teleopti.Ccc.WinCode.Main
 			return true;
 		}
 
-		private bool checkRaptorApplicationFunctions()
+		private bool checkRaptorApplicationFunctions(IDataSourceContainer dataSourceContainer)
 		{
+			var unitOfWorkFactory = dataSourceContainer.DataSource.Application;
 			var repositoryFactory = new RepositoryFactory();
 			var result = _raptorSynchronizer.CheckRaptorApplicationFunctions();
 
-			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				_roleToPrincipalCommand.Execute(TeleoptiPrincipal.Current, uow, repositoryFactory.CreatePersonRepository(uow));
 			}
