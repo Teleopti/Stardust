@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Deployment.Application;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Main.LogonScreens;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Win.Main
 	{
 	    private readonly LogonModel _model;
 	    public ILogonPresenter Presenter{get; set; }
-		private  IList<ILogonStep> _logonSteps;
+		private IList<ILogonStep> _logonSteps;
 		
 		public LogonView(LogonModel model)
 		{
@@ -63,26 +64,45 @@ namespace Teleopti.Ccc.Win.Main
 	    }
 
         //Dessa till resurs eller vet vi ändå inte språket, kan man använda datorns???
-	    public bool InitializeAndCheckStateHolder(string skdProxyName)
-        {
-            if (!LogonInitializeStateHolder.GetConfigFromWebService(skdProxyName))
-            {
-                ShowInTaskbar = true;
-                MessageBox.Show(this,
-                                string.Format(CultureInfo.CurrentCulture,
-                                              "The system configuration could not be loaded from the server. Review error message and log files to troubleshoot this error.\n\n{0}",
-                                              LogonInitializeStateHolder.ErrorMessage),
-                                "Configuration error", MessageBoxButtons.OK);
-                return false;
-            }
-            if (!string.IsNullOrEmpty(LogonInitializeStateHolder.WarningMessage))
-            {
-                ShowInTaskbar = true;
-                MessageBox.Show(this, LogonInitializeStateHolder.WarningMessage, "Configuration warning", MessageBoxButtons.OK);
-                ShowInTaskbar = false;
-            }
-            return true;
-        }
+		public bool InitializeAndCheckStateHolder(string skdProxyName)
+		{
+			if (_model.GetConfigFromWebService)
+			{
+				if (!LogonInitializeStateHolder.GetConfigFromWebService(skdProxyName))
+					return showError();
+			}
+			else
+			{
+				var nhibConfPath = ApplicationDeployment.IsNetworkDeployed
+					                   ? ApplicationDeployment.CurrentDeployment.DataDirectory
+					                   : ConfigurationManager.AppSettings["nhibConfPath"];
+				var useMessageBroker = string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessageBroker"]);
+
+				if (!LogonInitializeStateHolder.GetConfigFromFileSystem(nhibConfPath, useMessageBroker))
+					return showError();
+			}
+			return true;
+		}
+
+		private bool showError()
+		{
+			// ReSharper disable LocalizableElement
+			ShowInTaskbar = true;
+			MessageBox.Show(this,
+			                string.Format(CultureInfo.CurrentCulture,
+			                              "The system configuration could not be loaded from the server. Review error message and log files to troubleshoot this error.\n\n{0}",
+			                              LogonInitializeStateHolder.ErrorMessage),
+			                "Configuration error", MessageBoxButtons.OK);
+
+			if (!string.IsNullOrEmpty(LogonInitializeStateHolder.WarningMessage))
+			{
+				ShowInTaskbar = true;
+				MessageBox.Show(this, LogonInitializeStateHolder.WarningMessage, "Configuration warning", MessageBoxButtons.OK);
+				ShowInTaskbar = false;
+			}
+			return false;
+			// ReSharper restore LocalizableElement
+		}
 
 		private void updatePanel(Control userControl)
 		{

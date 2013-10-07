@@ -2277,9 +2277,7 @@
     <Compile Include="Scheduling\SchedulingScreen.Designer.cs">
       <DependentUpon>SchedulingScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\LogOnScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Main\LogOnScreen.cs" />
     <Compile Include="Main\LogOnScreen.Designer.cs">
       <DependentUpon>LogOnScreen.cs</DependentUpon>
     </Compile>
