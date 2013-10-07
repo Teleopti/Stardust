@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         }
 
 	    private long maxMem = 0;
-	    private LogonView _logonView;
+	   // private LogonView _logonView;
 
 	    private void updateMem(object sender, EventArgs e)
         {

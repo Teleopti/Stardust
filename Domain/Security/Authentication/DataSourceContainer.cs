@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 
         public IPerson User { get; private set; }
 
-        public AvailableBusinessUnitsProvider AvailableBusinessUnitProvider
+        public IAvailableBusinessUnitsProvider AvailableBusinessUnitProvider
         {
             get { return new AvailableBusinessUnitsProvider(this); }
         }

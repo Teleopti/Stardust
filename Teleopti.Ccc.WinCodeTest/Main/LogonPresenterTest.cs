@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Auditing;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 using Rhino.Mocks;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Main
 {
@@ -110,5 +114,98 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             _model.Password = "p";
             Assert.That(_model.HasValidLogin(), Is.True);
         }
+
+        [Test]
+        public void ShopuldNotReloadDataSourcesOnBack()
+        {
+            var dataSourceContainer = new DataSourceContainer(null, null, null, AuthenticationTypeOption.Application);
+            _model.Sdks = new List<string> { "sdk1", "sdk2" };
+            _model.SelectedSdk = "sdk1";
+            _model.SelectedDataSourceContainer = dataSourceContainer;
+            _model.DataSourceContainers = new List<IDataSourceContainer>{dataSourceContainer};
+            Expect.Call(() => _view.ClearForm("")).IgnoreArguments();
+            Expect.Call(() => _view.ShowStep(LoginStep.SelectDatasource, _model, true));
+            _mocks.ReplayAll();
+            _target.CurrentStep = LoginStep.Login;
+            _target.BackButtonClicked();
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldSaveLoginAttempOnLogin()
+        {
+            var dataSourceContainer = _mocks.DynamicMock<IDataSourceContainer>();
+            var dataSource = _mocks.DynamicMock<IDataSource>();
+            var uowFact = _mocks.DynamicMock<IUnitOfWorkFactory>();
+            _model.SelectedDataSourceContainer = dataSourceContainer;
+            _model.UserName = "USER";
+            _model.Password = "PASS";
+            Expect.Call(dataSourceContainer.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
+            Expect.Call(dataSourceContainer.LogOn("USER", "PASS"))
+                  .Return(new AuthenticationResult {HasMessage = true, Message = "ERRRRROR"});
+            Expect.Call(() => _view.ShowErrorMessage("ERRRRROR  "));
+            Expect.Call(dataSourceContainer.DataSource).Return(dataSource);
+            Expect.Call(dataSource.Application).Return(uowFact);
+            Expect.Call(() =>_logonLogger.SaveLogonAttempt(new LoginAttemptModel(), uowFact)).IgnoreArguments();
+            _mocks.ReplayAll();
+            _target.CurrentStep = LoginStep.Login;
+            _target.OkbuttonClicked(_model);
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldGetBusAfterLogin()
+        {
+            var dataSourceContainer = _mocks.DynamicMock<IDataSourceContainer>();
+            var person = _mocks.DynamicMock<IPerson>();
+            var appAuthInfo = _mocks.DynamicMock<IApplicationAuthenticationInfo>();
+            var buProvider = _mocks.DynamicMock<IAvailableBusinessUnitsProvider>();
+            _model.SelectedDataSourceContainer = dataSourceContainer;
+            _model.UserName = "USER";
+            _model.Password = "PASS";
+            
+            Expect.Call(dataSourceContainer.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
+            Expect.Call(dataSourceContainer.LogOn("USER", "PASS"))
+                  .Return(new AuthenticationResult {Successful = true});
+            Expect.Call(dataSourceContainer.User).Return(person);
+            Expect.Call(person.ApplicationAuthenticationInfo).Return(appAuthInfo);
+            Expect.Call(appAuthInfo.Password = "PASS");
+            Expect.Call(dataSourceContainer.AvailableBusinessUnitProvider).Return(buProvider);
+            Expect.Call(buProvider.AvailableBusinessUnits()).Return(new List<IBusinessUnit>());
+            Expect.Call(() => _view.ShowErrorMessage(Resources.NoAllowedBusinessUnitFoundInCurrentDatabase));
+            Expect.Call(() => _view.ShowStep(LoginStep.Login, _model, true));
+           _mocks.ReplayAll();
+            _target.CurrentStep = LoginStep.Login;
+            _target.OkbuttonClicked(_model);
+            _mocks.VerifyAll();
+        }
+
+        [Test]
+        public void ShouldGetBusAfterLoginIfOneSkipSelect()
+        {
+            var dataSourceContainer = _mocks.DynamicMock<IDataSourceContainer>();
+            var person = _mocks.DynamicMock<IPerson>();
+            var appAuthInfo = _mocks.DynamicMock<IApplicationAuthenticationInfo>();
+            var buProvider = _mocks.DynamicMock<IAvailableBusinessUnitsProvider>();
+            _model.SelectedDataSourceContainer = dataSourceContainer;
+            _model.UserName = "USER";
+            _model.Password = "PASS";
+
+            Expect.Call(dataSourceContainer.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
+            Expect.Call(dataSourceContainer.LogOn("USER", "PASS"))
+                  .Return(new AuthenticationResult { Successful = true });
+            Expect.Call(dataSourceContainer.User).Return(person);
+            Expect.Call(person.ApplicationAuthenticationInfo).Return(appAuthInfo);
+            Expect.Call(appAuthInfo.Password = "PASS");
+            Expect.Call(dataSourceContainer.AvailableBusinessUnitProvider).Return(buProvider);
+            Expect.Call(buProvider.AvailableBusinessUnits()).Return(new List<IBusinessUnit>{new BusinessUnit("Bu One")});
+            Expect.Call(() => _view.ShowStep(LoginStep.Loading, _model, true));
+            _mocks.ReplayAll();
+            _target.CurrentStep = LoginStep.Login;
+            _target.OkbuttonClicked(_model);
+            _mocks.VerifyAll();
+        }
 	}
+
+    
 }

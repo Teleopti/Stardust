@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
     {
 	    protected override void Load(ContainerBuilder builder)
 	    {
-		    builder.RegisterType<LogOnScreen>()
-		           .SingleInstance();
+		    //builder.RegisterType<LogOnScreen>()
+		    //       .SingleInstance();
 		    builder.RegisterType<ApplicationStartup>()
 		           .SingleInstance();
 		    builder.RegisterType<SmartClientShellForm>().As<SmartClientShellForm>().As<IClientPortalCallback>();
