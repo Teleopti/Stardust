@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Masked Edit  Text Box</value>
@@ -748,11 +748,11 @@ Date</value>
     <comment>Edit workload templates</comment>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>E-mail</value>
+    <value>Email</value>
     <comment>E-mail</comment>
   </data>
   <data name="EmailResult" xml:space="preserve">
-    <value>E-mail result</value>
+    <value>Email result</value>
     <comment>E-mail result</comment>
   </data>
   <data name="EmployeeNo" xml:space="preserve">
@@ -3458,7 +3458,7 @@ Columns</value>
     <comment>Agents inc with shrinkage</comment>
   </data>
   <data name="Emails" xml:space="preserve">
-    <value>E-mails</value>
+    <value>Emails</value>
     <comment>E-mails</comment>
   </data>
   <data name="HandledWithin" xml:space="preserve">
@@ -4711,7 +4711,7 @@ Workload</value>
     <comment>Organisation structure</comment>
   </data>
   <data name="SkillTypeBackoffice" xml:space="preserve">
-    <value>Backoffice</value>
+    <value>Back office</value>
     <comment>Skilltype Backoffice</comment>
   </data>
   <data name="SkillTypeEmail" xml:space="preserve">
@@ -7775,7 +7775,7 @@ Weekday</value>
     <value>Deviation ATW:</value>
   </data>
   <data name="DeviationEmailsColon" xml:space="preserve">
-    <value>Devaiation e-mails:</value>
+    <value>Deviation e-mails:</value>
   </data>
   <data name="DeviationFacsimilesColon" xml:space="preserve">
     <value>Deviation facsimiles:</value>
