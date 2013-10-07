@@ -103,12 +103,12 @@ namespace Teleopti.Ccc.WinCode.Main
             if(!_initializer.InitializeApplication(_model.SelectedDataSourceContainer))
                 _view.Exit(DialogResult.Cancel);
             _view.Exit(DialogResult.OK);
+
+            //disposa formuläret
         }
 
         public void OkbuttonClicked(LogonModel model)
         {
-            // här borde vi kolla datan o modellen innan vi säger att vi kan gå vidare
-            // om allt är ok, töm vyn, hämta data till nästa steg till modellen och säg åt vyn att visa det
             if(!checkModel()) return;
             _model = model;
 			CurrentStep++;
@@ -148,7 +148,6 @@ namespace Teleopti.Ccc.WinCode.Main
 			GetDataForCurrentStep();
 		}
 
-
 		public bool InitializeLogin(string getEndpointNames, string isBrokerDisabled)
 		{
 			return true;
@@ -177,52 +176,59 @@ namespace Teleopti.Ccc.WinCode.Main
 					break;
 			}
             return _model;
-            // när allt är klart måste vi stänga och returnera True
 		}
 
         private void getBusinessUnits()
         {
-            var provider = _model.SelectedDataSourceContainer.AvailableBusinessUnitProvider;
 	        if (_model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Application)
-		        login();
+		        if (!login())
+		        {
+		            CurrentStep--;
+                    return;
+		        }
 
+            var provider = _model.SelectedDataSourceContainer.AvailableBusinessUnitProvider;
 			_model.AvailableBus = provider.AvailableBusinessUnits().ToList();
             if (_model.AvailableBus.Count == 0)
 			{
                 _view.ShowErrorMessage(Resources.NoAllowedBusinessUnitFoundInCurrentDatabase);
+                CurrentStep--;
 			}
-            // if only one we dont need it
+            // if only one we don't need to select
+            if (_model.AvailableBus.Count == 1)
+            {
+                _model.SelectedBu = _model.AvailableBus[0];
+                initApplication();
+                return;
+            }
             _view.ShowStep(CurrentStep, _model, true);
         }
 
         private bool login()
         {
-            string logOnName = _model.UserName;
-            if (!string.IsNullOrEmpty(logOnName))
-            {
-                var choosenDataSource = _model.SelectedDataSourceContainer;
-                var authenticationResult = choosenDataSource.LogOn(_model.UserName, _model.Password);
+            var choosenDataSource = _model.SelectedDataSourceContainer;
+            var authenticationResult = choosenDataSource.LogOn(_model.UserName, _model.Password);
 
-                if (authenticationResult.HasMessage)
-                    _view.ShowErrorMessage(string.Concat(authenticationResult.Message, "  "));
+            if (authenticationResult.HasMessage)
+                _view.ShowErrorMessage(string.Concat(authenticationResult.Message, "  "));
                    
-                if (authenticationResult.Successful)
-                {
-                    choosenDataSource.User.ApplicationAuthenticationInfo.Password = _model.Password; //To use for silent background log on
-                    //ChooseBusinessUnit();
-                    return true;
-                }
-                var model = new LoginAttemptModel
-                    {
-                        ClientIp = ipAdress(),
-                        Client = "WIN",
-                        UserCredentials = choosenDataSource.LogOnName,
-                        Provider = choosenDataSource.AuthenticationTypeOption.ToString(),
-                        Result = "LogonFailed"
-                    };
-
-                _logonLogger.SaveLogonAttempt(model, choosenDataSource.DataSource.Application);
+            if (authenticationResult.Successful)
+            {
+                choosenDataSource.User.ApplicationAuthenticationInfo.Password = _model.Password; //To use for silent background log on
+                //ChooseBusinessUnit();
+                return true;
             }
+            var model = new LoginAttemptModel
+                {
+                    ClientIp = ipAdress(),
+                    Client = "WIN",
+                    UserCredentials = choosenDataSource.LogOnName,
+                    Provider = choosenDataSource.AuthenticationTypeOption.ToString(),
+                    Result = "LogonFailed"
+                };
+
+            _logonLogger.SaveLogonAttempt(model, choosenDataSource.DataSource.Application);
+            
             return false;
         }
 

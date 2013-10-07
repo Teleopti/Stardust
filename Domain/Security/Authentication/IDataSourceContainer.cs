@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
         AuthenticationResult LogOn(string logOnName, string password);
         AuthenticationResult LogOn(string windowsLogOnName);
 		string LogOnName { get; set; }
-        AvailableBusinessUnitsProvider AvailableBusinessUnitProvider { get; }
+        IAvailableBusinessUnitsProvider AvailableBusinessUnitProvider { get; }
         string DataSourceName { get; }
     }
 }

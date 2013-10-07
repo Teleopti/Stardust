@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
         public void SetData(LogonModel model)
 		{
+            ActiveControl = textBoxLogOnName;
         }
 
 	    public LogonModel GetData()
@@ -37,6 +38,12 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
         {
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             BackColor = Color.FromArgb(175, Color.CornflowerBlue);
+        }
+
+        private void LoginScreen_Enter(object sender, System.EventArgs e)
+        {
+            textBoxLogOnName.Select(0, textBoxLogOnName.Text.Length);
+            ActiveControl = textBoxLogOnName;
         }
 	}
 }

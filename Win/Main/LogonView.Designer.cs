@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Win.Main
             this.pnlContent.Margin = new System.Windows.Forms.Padding(0);
             this.pnlContent.Name = "pnlContent";
             this.pnlContent.Size = new System.Drawing.Size(483, 242);
-            this.pnlContent.TabIndex = 5;
+            this.pnlContent.TabIndex = 0;
             // 
             // buttonLogOnCancel
             // 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Win.Main
             this.buttonLogOnCancel.Location = new System.Drawing.Point(399, 308);
             this.buttonLogOnCancel.Name = "buttonLogOnCancel";
             this.buttonLogOnCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonLogOnCancel.TabIndex = 44;
+            this.buttonLogOnCancel.TabIndex = 2;
             this.buttonLogOnCancel.Text = "xxCancel";
             this.buttonLogOnCancel.UseVisualStyleBackColor = true;
             this.buttonLogOnCancel.Click += new System.EventHandler(this.buttonLogOnCancelClick);
@@ -66,14 +66,14 @@ namespace Teleopti.Ccc.Win.Main
             this.buttonLogOnOK.Location = new System.Drawing.Point(311, 308);
             this.buttonLogOnOK.Name = "buttonLogOnOK";
             this.buttonLogOnOK.Size = new System.Drawing.Size(75, 23);
-            this.buttonLogOnOK.TabIndex = 43;
+            this.buttonLogOnOK.TabIndex = 1;
             this.buttonLogOnOK.Text = "xxOK";
             this.buttonLogOnOK.UseVisualStyleBackColor = true;
             this.buttonLogOnOK.Click += new System.EventHandler(this.buttonLogOnOkClick);
             // 
             // labelStatusText
             // 
-            this.labelStatusText.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelStatusText.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelStatusText.ForeColor = System.Drawing.Color.Orange;
             this.labelStatusText.Location = new System.Drawing.Point(2, 305);
             this.labelStatusText.Name = "labelStatusText";
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Win.Main
             this.btnBack.Location = new System.Drawing.Point(222, 308);
             this.btnBack.Name = "btnBack";
             this.btnBack.Size = new System.Drawing.Size(75, 23);
-            this.btnBack.TabIndex = 46;
+            this.btnBack.TabIndex = 3;
             this.btnBack.Text = "xxBack";
             this.btnBack.UseVisualStyleBackColor = true;
             this.btnBack.Click += new System.EventHandler(this.btnBackClick);

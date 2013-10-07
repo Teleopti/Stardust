@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.textBoxPassword.Name = "textBoxPassword";
             this.textBoxPassword.PasswordChar = '*';
             this.textBoxPassword.Size = new System.Drawing.Size(262, 22);
-            this.textBoxPassword.TabIndex = 37;
+            this.textBoxPassword.TabIndex = 1;
             // 
             // labelPassword
             // 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.textBoxLogOnName.Location = new System.Drawing.Point(157, 82);
             this.textBoxLogOnName.Name = "textBoxLogOnName";
             this.textBoxLogOnName.Size = new System.Drawing.Size(262, 22);
-            this.textBoxLogOnName.TabIndex = 36;
+            this.textBoxLogOnName.TabIndex = 0;
             // 
             // labelLoginName
             // 
@@ -98,6 +98,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.Name = "LoginScreen";
             this.Size = new System.Drawing.Size(483, 345);
             this.Load += new System.EventHandler(this.LoginScreen_Load);
+            this.Enter += new System.EventHandler(this.LoginScreen_Enter);
             this.ResumeLayout(false);
             this.PerformLayout();
 
