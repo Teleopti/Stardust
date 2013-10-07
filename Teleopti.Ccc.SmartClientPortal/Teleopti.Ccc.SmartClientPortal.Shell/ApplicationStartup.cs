@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             //_logOnScreen.Refresh();
 
             //return (_logOnScreen.DialogResult == DialogResult.OK);
-            return true;
+            //return true;
         }
     }
 }

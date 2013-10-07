@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.DomainTest.Security.Matrix;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Security
         /// </summary>
         /// <param name="repositoryFactory">The repository factory.</param>
         /// <param name="unitOfWorkFactory">The unit of work factory.</param>
-        public RaptorApplicationFunctionsSynchronizerTestClass(IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory)
+        public RaptorApplicationFunctionsSynchronizerTestClass(IRepositoryFactory repositoryFactory, ICurrentUnitOfWorkFactory unitOfWorkFactory)
             : base(repositoryFactory, unitOfWorkFactory)
         {
             //

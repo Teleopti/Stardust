@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
@@ -20,13 +21,18 @@ namespace Teleopti.Ccc.WinCode.Main
 	{
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
 	    private readonly ILogonLicenseChecker _licenseChecker;
-		private readonly RaptorApplicationFunctionsSynchronizer _raptorSynchronizer;
+		private readonly IRaptorApplicationFunctionsSynchronizer _raptorSynchronizer;
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
-	    public LoginInitializer(IRoleToPrincipalCommand roleToPrincipalCommand, ILogonLicenseChecker licenseChecker, RaptorApplicationFunctionsSynchronizer raptorSynchronizer)
+		public LoginInitializer(IRoleToPrincipalCommand roleToPrincipalCommand,
+		                        ILogonLicenseChecker licenseChecker,
+		                        IRaptorApplicationFunctionsSynchronizer raptorSynchronizer,
+								ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
 		    _roleToPrincipalCommand = roleToPrincipalCommand;
 		    _licenseChecker = licenseChecker;
 		    _raptorSynchronizer = raptorSynchronizer;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
 	    public bool InitializeApplication(IDataSourceContainer dataSourceContainer)
@@ -50,12 +56,9 @@ namespace Teleopti.Ccc.WinCode.Main
 		private bool checkRaptorApplicationFunctions()
 		{
 			var repositoryFactory = new RepositoryFactory();
-			;
-			raptorSynchronizer = new RaptorApplicationFunctionsSynchronizer(repositoryFactory, UnitOfWorkFactory.Current);
+			var result = _raptorSynchronizer.CheckRaptorApplicationFunctions();
 
-			var result = raptorSynchronizer.CheckRaptorApplicationFunctions();
-
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				_roleToPrincipalCommand.Execute(TeleoptiPrincipal.Current, uow, repositoryFactory.CreatePersonRepository(uow));
 			}
