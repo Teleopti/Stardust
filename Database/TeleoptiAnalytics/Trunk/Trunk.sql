@@ -254,3 +254,96 @@ BEGIN
 	)
 END
 GO
+
+----------------  
+--Name: David J
+--Date: 2013-10-08
+--Desc: PBI #24349 - tables and SPs to collect IO data
+-----------------
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DBA_VirtualFileStats]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[DBA_VirtualFileStats](
+	[database_id] int NOT NULL,
+	[file_id] int NOT NULL,
+	[ServerName] [varchar](255) NOT NULL,
+	[DatabaseName] [varchar](255) NOT NULL,
+	[PhysicalName] [varchar](255) NOT NULL,
+	[num_of_reads] [bigint] NULL,
+	[num_of_reads_from_start] [bigint] NULL,
+	[num_of_writes] [bigint] NULL,
+	[num_of_writes_from_start] [bigint] NULL,
+	[num_of_bytes_read] [bigint] NULL,
+	[num_of_bytes_read_from_start] [bigint] NULL,
+	[num_of_bytes_written] [bigint] NULL,
+	[num_of_bytes_written_from_start] [bigint] NULL,
+	[io_stall] [bigint] NULL,
+	[io_stall_from_start] [bigint] NULL,
+	[io_stall_read_ms] [bigint] NULL,
+	[io_stall_read_ms_from_start] [bigint] NULL,
+	[io_stall_write_ms] [bigint] NULL,
+	[io_stall_write_ms_from_start] [bigint] NULL,
+	[RecordedDateTime] [datetime] NULL,
+	[interval_ms] [bigint] NULL,
+	[FirstMeasureFromStart] [bit] NULL
+)
+CREATE CLUSTERED INDEX [CIX_DBA_VirtualFileStats_RecordedDateTime] ON [dbo].[DBA_VirtualFileStats]
+(
+	[RecordedDateTime] ASC
+)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DBA_VirtualFileStatsHistory]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[DBA_VirtualFileStatsHistory](
+	[RecordID] [int] IDENTITY(1,1) NOT NULL,
+	[database_id] int NOT NULL,
+	[file_id] int NOT NULL,
+	[ServerName] [varchar](255) NOT NULL,
+	[DatabaseName] [varchar](255) NOT NULL,
+	[PhysicalName] [varchar](255) NOT NULL,
+	[num_of_reads] [bigint] NULL,
+	[num_of_reads_from_start] [bigint] NULL,
+	[num_of_writes] [bigint] NULL,
+	[num_of_writes_from_start] [bigint] NULL,
+	[num_of_bytes_read] [bigint] NULL,
+	[num_of_bytes_read_from_start] [bigint] NULL,
+	[num_of_bytes_written] [bigint] NULL,
+	[num_of_bytes_written_from_start] [bigint] NULL,
+	[io_stall] [bigint] NULL,
+	[io_stall_from_start] [bigint] NULL,
+	[io_stall_read_ms] [bigint] NULL,
+	[io_stall_read_ms_from_start] [bigint] NULL,
+	[io_stall_write_ms] [bigint] NULL,
+	[io_stall_write_ms_from_start] [bigint] NULL,
+	[RecordedDateTime] [datetime] NULL,
+	[interval_ms] [bigint] NULL,
+	[FirstMeasureFromStart] [bit] NULL
+)
+CREATE CLUSTERED INDEX [CIX_DBA_VirtualFileStatsHistory_RecordedDateTime] ON [dbo].[DBA_VirtualFileStatsHistory]
+(
+	[RecordedDateTime] ASC
+)
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DBA_VirtualFileStatsCurrent]') AND type in (N'U'))
+BEGIN
+CREATE TABLE [dbo].[DBA_VirtualFileStatsCurrent](
+    [database_id] [smallint] NOT NULL,
+    [file_id] [smallint] NOT NULL,
+	[interval_ms] [bigint] NOT NULL,
+    [num_of_reads] [bigint] NOT NULL,
+    [num_of_bytes_read] [bigint] NOT NULL,
+    [io_stall_read_ms] [bigint] NOT NULL,
+    [num_of_writes] [bigint] NOT NULL,
+    [num_of_bytes_written] [bigint] NOT NULL,
+    [io_stall_write_ms] [bigint] NOT NULL
+)
+CREATE CLUSTERED INDEX [CIX_DBA_VirtualFileStatsCurrent] ON [dbo].[DBA_VirtualFileStatsCurrent]
+(
+	[database_id] ASC,
+	[file_id] ASC
+)
+END
+GO
