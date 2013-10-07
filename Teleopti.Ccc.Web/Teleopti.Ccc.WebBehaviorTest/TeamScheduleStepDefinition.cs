@@ -405,7 +405,19 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			Browser.Interactions.AssertExists(".btn[disabled]>.icon-random");
 		}
-		
+        
+        [When(@"I initialize a shift trade")]
+        public void WhenIInitializeAShiftTrade()
+        {
+            Browser.Interactions.Click(".initialize-shift-trade");
+        }
+        
+        [Then(@"I should not be able to initialize a shift trade")]
+        public void ThenIShouldNotBeAbleToInitializeAShiftTrade()
+        {
+            ScenarioContext.Current.Pending();
+        }
+
 		private static void AssertAgentIsDisplayed(string name)
 		{
 			Browser.Interactions.AssertAnyContains(".teamschedule-agent-name", name);

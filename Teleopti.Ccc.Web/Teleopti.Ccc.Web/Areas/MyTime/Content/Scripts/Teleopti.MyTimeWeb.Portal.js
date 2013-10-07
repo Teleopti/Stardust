@@ -2,6 +2,8 @@
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
+/// <reference path="~/Content/Crossroads/crossroads.js" />
+/// <reference path="~/Content/hasher/hasher.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -65,10 +67,12 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			})
 			;
 
-		if (location.hash.length <= 1) {
-			location.replace('#' + _settings.defaultNavigation);
+	    if (location.hash.length <= 1) {
+	        console.log("no hash to be found");
+		    hasher.setHash(_settings.defaultNavigation);
 		} else {
-			$(window).trigger('hashchange');
+		    console.log("yay, I have a hash");
+    		hasher.setHash(location.hash);
 		}
 
 		$('#asm-link').click(function (ev) {
@@ -91,13 +95,41 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	// Bind an event to window.onhashchange that, when the history state changes,
 	// iterates over all tab widgets, changing the current tab as necessary.
-	$(window)
+	/*$(window)
 		.bind('hashchange', function (e) {
-		    var hashInfo = _parseHash();
-		    _invokeDisposeCallback(currentViewId);
-			_adjustTabs(hashInfo);
-			_loadContent(hashInfo);
-		});
+
+		});*/
+
+	function _setupRoutes() {
+	    var viewRegex = '[a-z]+';
+	    var actionRegex = '[a-z]+';
+	    var guidRegex = '[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}';
+	    var dateRegex = '\\d{8}';
+
+	    console.log("setupRoutes");
+	    
+	    crossroads.addRoute(new RegExp('^(.*)$', 'i'),
+	        function(hash) {
+	            console.log('JA! ' + hash);
+	            var hashInfo = _parseHash('#' + hash);
+	            _invokeDisposeCallback(currentViewId);
+	            _adjustTabs(hashInfo);
+	            _loadContent(hashInfo);
+	        });
+	}
+
+	function _initializeHasher() {
+	    var parseHash = function (newHash, oldHash) {
+	        console.log("triggered!");
+	        console.log(crossroads);
+	        console.log(newHash);
+	        crossroads.parse(newHash);
+	    };
+	    hasher.prependHash = '';
+	    hasher.initialized.add(parseHash);
+	    hasher.changed.add(parseHash);
+	    hasher.init();
+	}
 
 	function _navigateTo(action, date, id) {
 
@@ -111,20 +143,14 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		if (id) {
 			hash += "/" + id;
 		}
-		_pushHash(hash);
-	}
-
-	function _pushHash(hash) {
-		// this will trigger the hashchange event, which we listen for
-		location.hash = hash;
+	    hasher.setHash(hash);
 	}
 
 	function _endsWith(str, suffix) {
 		return str.indexOf(suffix, str.length - suffix.length) !== -1;
 	}
 
-	function _parseHash() {
-		var hash = location.hash || '';
+	function _parseHash(hash) {
 		if (_endsWith(hash, 'Tab')) {
 			if (hash.indexOf('#Schedule') == 0) {
 				hash = hash.substring(0, hash.length - 'Tab'.length) + '/Week';
@@ -133,6 +159,9 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			}
 		}
 		if (hash.length > 0) { hash = hash.substring(1); }
+
+		console.log("parsed hash " + hash);
+	    
 		var parts = $.merge(hash.split('/'), [null, null, null, null, null, null, null, null]);
 		parts.length = 8;
 
@@ -197,8 +226,11 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		Teleopti.MyTimeWeb.Test.TestMessage("Completely loaded");
 	}
 
+	_initializeHasher();
+	_setupRoutes();
+
 	return {
-		Init: function (settings) {
+	    Init: function (settings) {
 			Teleopti.MyTimeWeb.AjaxSettings = settings;
 			Teleopti.MyTimeWeb.Common.Init(settings);
 			Teleopti.MyTimeWeb.Test.Init(settings);
@@ -212,7 +244,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			_navigateTo(action, date, id);
 		},
 		ParseHash: function () {
-			return _parseHash();
+			return _parseHash(location.hash);
 		},
 		RegisterPartialCallBack: function (viewId, callBack, disposeCallback) {
 			_registerPartialCallback(viewId, callBack, disposeCallback);

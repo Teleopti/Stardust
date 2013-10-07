@@ -35,6 +35,12 @@
                 </select>
             </span>
         </div>
+        <ul class="nav">
+            <li>
+                <a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="icon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+            </li>
+        </ul>
+       
     </div>
 </div>
 <div id="TeamSchedule-body" class="body-teamschedule" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
