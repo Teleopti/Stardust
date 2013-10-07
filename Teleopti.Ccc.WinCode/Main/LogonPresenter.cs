@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -97,10 +98,11 @@ namespace Teleopti.Ccc.WinCode.Main
 
         private void initApplication()
         {
-            _view.ClearForm("Initiating application...");
+            _view.ClearForm(Resources.InitializingTreeDots);
             setBusinessUnit();
             if(!_initializer.InitializeApplication(_model.SelectedDataSourceContainer))
-                _view.Exit();
+                _view.Exit(DialogResult.Cancel);
+            _view.Exit(DialogResult.OK);
         }
 
         public void OkbuttonClicked(LogonModel model)

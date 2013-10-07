@@ -89,10 +89,10 @@ namespace Teleopti.Ccc.Win.Main
 			pnlContent.Controls.Add(userControl);
 		}
 		
-		public void Exit()
+		public void Exit(DialogResult result)
 		{
             //vi måste nog disposa ngnstans
-			DialogResult = DialogResult.Cancel;
+		    DialogResult = result;
 			Close();
 		}
 
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Win.Main
 
         private void buttonLogOnCancelClick(object sender, EventArgs e)
         {
-            Exit();
+            Exit(DialogResult.Cancel);
         }
 
         private void buttonLogOnOkClick(object sender, EventArgs e)
