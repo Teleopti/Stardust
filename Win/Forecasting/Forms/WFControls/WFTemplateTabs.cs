@@ -81,13 +81,60 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             ReloadTemplateViews();
         }
 
+        private void setSelectedDateFilter( object sender, IList<DateOnlyPeriod> selectedDates)
+        {
+            _detailViews.ForEach(dw =>
+            {
+                if (sender.Equals(dw))
+                {
+                    IList<IWorkloadDayBase> historicalWorkloadDays;
+                    try
+                    {
+                        Presenter.SetSelectedHistoricTemplatePeriod(selectedDates);
+                        Presenter.LoadWorkloadDayTemplates(selectedDates);
+                        historicalWorkloadDays = Presenter.GetWorkloadDaysForTemplatesWithStatistics();
+                    }
+                    catch (DataSourceException dataSourceException)
+                    {
+                        ShowDataSourceExcetionDialog(dataSourceException);
+                        return;
+                    }
+                    dw.ReloadWorkloadDayTemplates();
+                    dw.RefreshWorkloadDaysForTemplatesWithStatistics(historicalWorkloadDays);
+
+                }
+
+
+                dw.EnableFilterData(false);
+                var selectedDatesHastSet = new HashSet<DateOnly>();
+                foreach (var dateOnlyPeriod in selectedDates)
+                {
+                    foreach (var selectedDate in dateOnlyPeriod.DayCollection())
+                    {
+                        selectedDatesHastSet.Add((selectedDate));
+                    }
+                }
+                if (selectedDatesHastSet.Any(x => (int)x.DayOfWeek == dw.TemplateIndex))
+                {
+                    dw.EnableFilterData(true);
+                }
+            });
+        }
+
         private void detailView_DateRangeChanged(object sender, DateRangeChangedEventArgs e)
+        {
+
+            initializeDateSelections(e.SelectedDates);
+            setSelectedDateFilter(sender,e.SelectedDates);
+        }
+
+        private void initializeDateSelections(IList<DateOnlyPeriod> selectedDates)
         {
             IList<IWorkloadDayBase> historicalWorkloadDays;
             try
             {
-                Presenter.SetSelectedHistoricTemplatePeriod(e.SelectedDates);
-                Presenter.LoadWorkloadDayTemplates(e.SelectedDates);
+                Presenter.SetSelectedHistoricTemplatePeriod(selectedDates);
+                Presenter.LoadWorkloadDayTemplates(selectedDates);
                 historicalWorkloadDays = Presenter.GetWorkloadDaysForTemplatesWithStatistics();
             }
             catch (DataSourceException dataSourceException)
@@ -100,42 +147,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             {
                 if (!dw.HasFilteredData())
                 {
-                    dw.SetSelectedDates(new List<DateOnlyPeriod>(e.SelectedDates));
+                    dw.SetSelectedDates(new List<DateOnlyPeriod>(selectedDates));
                     dw.ReloadWorkloadDayTemplates();
                     dw.RefreshWorkloadDaysForTemplatesWithStatistics(historicalWorkloadDays);
-                }
-
-                if (sender.Equals(dw))
-                {
-                    try
-                    {
-                        Presenter.SetSelectedHistoricTemplatePeriod(e.SelectedDates);
-                        Presenter.LoadWorkloadDayTemplates(e.SelectedDates);
-                        historicalWorkloadDays = Presenter.GetWorkloadDaysForTemplatesWithStatistics();
-                    }
-                    catch (DataSourceException dataSourceException)
-                    {
-                        ShowDataSourceExcetionDialog(dataSourceException);
-                        return;
-                    }
-                    dw.ReloadWorkloadDayTemplates();
-                    dw.RefreshWorkloadDaysForTemplatesWithStatistics(historicalWorkloadDays);
-
-                }
-                
-
-                dw.EnableFilterData(false);
-                var selectedDates = new HashSet<DateOnly>();
-                foreach (var dateOnlyPeriod in e.SelectedDates)
-                {
-                    foreach (var selectedDate in dateOnlyPeriod.DayCollection())
-                    {
-                        selectedDates.Add((selectedDate));
-                    }
-                }
-                if (selectedDates.Any(x => (int)x.DayOfWeek == dw.TemplateIndex))
-                {
-                    dw.EnableFilterData(true);
                 }
             });
         }
