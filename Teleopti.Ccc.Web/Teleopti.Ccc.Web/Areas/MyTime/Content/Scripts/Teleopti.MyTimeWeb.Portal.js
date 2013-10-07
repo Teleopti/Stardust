@@ -104,7 +104,14 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	    var dateRegex = '\\d{8}';
 
 	    console.log("setupRoutes");
-	    
+
+	    crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(' + actionRegex + ')/(' + dateRegex + ')$', 'i'),
+	        function(view,action,secondAction,date) {
+	            var hashInfo = _parseHash('#' + view + '/' + action);
+	            _invokeDisposeCallback(currentViewId);
+	            _adjustTabs(hashInfo);
+	            _loadContent(hashInfo);
+	        });
 	    crossroads.addRoute(new RegExp('^(.*)$', 'i'),
 	        function(hash) {
 	            var hashInfo = _parseHash('#' + hash);
