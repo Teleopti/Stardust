@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Domain;
 
@@ -18,6 +19,9 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			_parent = parent;
             _model = model;
             InitializeComponent();
+            labelChooseDataSource.Text = Resources.PleaseChooseADatasource;
+            tabPageWindowsDataSources.Text = Resources.WindowsLogon;
+            tabPageApplicationDataSources.Text = Resources.ApplicationLogon;
 		}
 
 		public void SetData(LogonModel model)
@@ -29,7 +33,9 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             listBoxWindowsDataSources.DataSource = logonableWindowsDataSources;
 			if (logonableWindowsDataSources.Count < 1)
 			{
-				tabControlChooseDataSource.TabPages.RemoveAt(0);
+			    var idx = tabControlChooseDataSource.TabPages.IndexOf(tabPageWindowsDataSources);
+                if(idx > -1)
+                    tabControlChooseDataSource.TabPages.RemoveAt(idx);
 				tabControlChooseDataSource.SelectedIndex = 0;
 			}
 

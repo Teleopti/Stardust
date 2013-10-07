@@ -21,6 +21,9 @@ namespace Teleopti.Ccc.Win.Main
 		{
 		    _model = model;
 		    InitializeComponent();
+            buttonLogOnCancel.Text = Resources.Cancel;
+            buttonLogOnOK.Text = Resources.Ok;
+		    btnBack.Text = Resources.Back;
 		}
 
 		public bool StartLogon()
@@ -44,6 +47,7 @@ namespace Teleopti.Ccc.Win.Main
 	        buttonLogOnCancel.Visible = true;
 	        buttonLogOnOK.Visible = true;
 	        btnBack.Visible = showBackButton;
+            Refresh();
 	    }
 
 	    public void ClearForm(string labelText)
@@ -85,10 +89,10 @@ namespace Teleopti.Ccc.Win.Main
 			pnlContent.Controls.Add(userControl);
 		}
 		
-		public void Exit()
+		public void Exit(DialogResult result)
 		{
             //vi måste nog disposa ngnstans
-			DialogResult = DialogResult.Cancel;
+		    DialogResult = result;
 			Close();
 		}
 
@@ -126,7 +130,7 @@ namespace Teleopti.Ccc.Win.Main
 
         private void buttonLogOnCancelClick(object sender, EventArgs e)
         {
-            Exit();
+            Exit(DialogResult.Cancel);
         }
 
         private void buttonLogOnOkClick(object sender, EventArgs e)

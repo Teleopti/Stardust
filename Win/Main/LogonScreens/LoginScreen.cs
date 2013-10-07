@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 
 namespace Teleopti.Ccc.Win.Main.LogonScreens
@@ -15,6 +16,9 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			_parent = parent;
             _model = model;
             InitializeComponent();
+            labelLogOn.Text = Resources.PleaseEnterYourLogonCredentials;
+            labelLoginName.Text = Resources.LoginNameColon;
+            labelPassword.Text = Resources.PasswordColon;
 		}
 
         public void SetData(LogonModel model)

@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.WinCode.Main
             //coming back?
             if (_model.DataSourceContainers == null)
             {
-                _view.ClearForm("Looking for Data Sources");
+                _view.ClearForm(Resources.SearchingForDataSourcesTreeDots);
                 _view.InitializeAndCheckStateHolder(_model.SelectedSdk);
                 var logonableDataSources = new List<IDataSourceContainer>();
                 foreach (IDataSourceProvider dataSourceProvider in _dataSourceHandler.DataSourceProviders())
@@ -93,6 +94,15 @@ namespace Teleopti.Ccc.WinCode.Main
                 _model.DataSourceContainers = logonableDataSources;
             }
             _view.ShowStep(CurrentStep, _model, _model.Sdks.Count > 1);
+        }
+
+        private void initApplication()
+        {
+            _view.ClearForm(Resources.InitializingTreeDots);
+            setBusinessUnit();
+            if(!_initializer.InitializeApplication(_model.SelectedDataSourceContainer))
+                _view.Exit(DialogResult.Cancel);
+            _view.Exit(DialogResult.OK);
         }
 
         public void OkbuttonClicked(LogonModel model)
@@ -150,15 +160,19 @@ namespace Teleopti.Ccc.WinCode.Main
 			        getDataSources();
                     break;
 				case LoginStep.Login:
-                    _view.ShowStep(CurrentStep, _model, false);
+                    _view.ShowStep(CurrentStep, _model, true);
 					break;
                 case LoginStep.SelectBu:
 					getBusinessUnits(); 
                     break;
+                case LoginStep.Loading:
+			        initApplication();
+			        break;
 				default:
 					break;
 			}
             return _model;
+            // när allt är klart måste vi stänga och returnera True
 		}
 
         private void getBusinessUnits()
@@ -207,25 +221,26 @@ namespace Teleopti.Ccc.WinCode.Main
             return false;
         }
 
-        private void setBusinessUnit(IBusinessUnit businessUnit, AvailableBusinessUnitsProvider provider, DataSourceContainer dataSourceContainer)
+        private void setBusinessUnit()
         {
-            businessUnit = provider.LoadHierarchyInformation(businessUnit);
+            var businessUnit = _model.SelectedBu;
+            businessUnit = _model.SelectedDataSourceContainer.AvailableBusinessUnitProvider.LoadHierarchyInformation(businessUnit);
 
-            _logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit);
+            _logOnOff.LogOn(_model.SelectedDataSourceContainer.DataSource, _model.SelectedDataSourceContainer.User, businessUnit);
 
             var model = new LoginAttemptModel
             {
                 ClientIp = ipAdress(),
                 Client = "WIN",
-                UserCredentials = dataSourceContainer.LogOnName,
-                Provider = dataSourceContainer.AuthenticationTypeOption.ToString(),
+                UserCredentials = _model.SelectedDataSourceContainer.LogOnName,
+                Provider = _model.SelectedDataSourceContainer.AuthenticationTypeOption.ToString(),
                 Result = "LogonSuccess"
             };
-            if (dataSourceContainer.User != null) model.PersonId = dataSourceContainer.User.Id;
+            if (_model.SelectedDataSourceContainer.User != null) model.PersonId = _model.SelectedDataSourceContainer.User.Id;
 
-            _logonLogger.SaveLogonAttempt(model, dataSourceContainer.DataSource.Application);
+            _logonLogger.SaveLogonAttempt(model, _model.SelectedDataSourceContainer.DataSource.Application);
 
-            StateHolderReader.Instance.StateReader.SessionScopeData.AuthenticationTypeOption = dataSourceContainer.AuthenticationTypeOption;
+            StateHolderReader.Instance.StateReader.SessionScopeData.AuthenticationTypeOption = _model.SelectedDataSourceContainer.AuthenticationTypeOption;
         }
 
         private string ipAdress()

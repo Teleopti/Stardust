@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WinCode.Main
         public IDataSourceContainer SelectedDataSourceContainer { get; set; }
         public IList<string> Sdks { get; set; }
         public string SelectedSdk { get; set; }
-        public string SelectedBu { get; set; }
+        public IBusinessUnit SelectedBu { get; set; }
 	    public string UserName { get; set; }
 	    public string Password { get; set; }
 
