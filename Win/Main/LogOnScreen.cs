@@ -1,31 +1,22 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Infrastructure;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Main
 {
@@ -51,9 +42,9 @@ namespace Teleopti.Ccc.Win.Main
 		private AuthenticationTypeOption _authenticationType = AuthenticationTypeOption.Windows;
 		private delegate bool LoadingFunction();
 		private readonly IEnumerable<LoadingFunction> _loadingFunctions;
-		private readonly IEnumerable<LoadingFunction> _initializeFunctions;
+		//private readonly IEnumerable<LoadingFunction> _initializeFunctions;
 		private readonly WindowsAppDomainPrincipalContext _principalContext = new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory());
-		private IRoleToPrincipalCommand _roleToPrincipalCommand;
+		//private IRoleToPrincipalCommand _roleToPrincipalCommand;
 		private readonly ILogonLogger _logonLogger;
 
 		public LogOnScreen()
@@ -78,12 +69,13 @@ namespace Teleopti.Ccc.Win.Main
 
 	}
 
-		public LogOnScreen(ILogOnOff logOnOff, IDataSourceHandler dataSourceHandler, IRoleToPrincipalCommand roleToPrincipalCommand, ILogonLogger logonLogger)
+		public LogOnScreen(ILogOnOff logOnOff, IDataSourceHandler dataSourceHandler,// IRoleToPrincipalCommand roleToPrincipalCommand,
+            ILogonLogger logonLogger)
 			: this()
 		{
 			_logOnOff = logOnOff;
 			_dataSourceHandler = dataSourceHandler;
-			_roleToPrincipalCommand = roleToPrincipalCommand;
+			//_roleToPrincipalCommand = roleToPrincipalCommand;
 			_logonLogger = logonLogger;
 		}
 
@@ -111,16 +103,16 @@ namespace Teleopti.Ccc.Win.Main
 
 		private void InitializeStuff()
 		{
-			foreach (LoadingFunction loadingFunction in _initializeFunctions)
-			{
-				if (IsDisposed) return;
-				if (!loadingFunction())
-				{
-					DialogResult = DialogResult.Cancel;
-					Close();
-					return;
-				}
-			}
+            //foreach (LoadingFunction loadingFunction in _initializeFunctions)
+            //{
+            //    if (IsDisposed) return;
+            //    if (!loadingFunction())
+            //    {
+            //        DialogResult = DialogResult.Cancel;
+            //        Close();
+            //        return;
+            //    }
+            //}
 
 			LogonMatrix.SynchronizeAndLoadMatrixReports(this);
 
