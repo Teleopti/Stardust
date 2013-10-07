@@ -113,28 +113,23 @@ namespace Teleopti.Ccc.WinCode.Main
             switch (CurrentStep)
             {
                 case LoginStep.SelectSdk:
-                    if (_model.SelectedSdk == null)
-                        return false;
-                    break;
-                case LoginStep.SelectDatasource:
-                    if (_model.SelectedDataSourceContainer == null)
-                        return false;
-                    break;
-                case LoginStep.Login:
-                    if (!_model.HasValidLogin())
-                        return false;
-                    break;
-                case LoginStep.SelectBu:
-                    break;
-                default:
-                    break;
+		            return _model.SelectedSdk != null;
+	            case LoginStep.SelectDatasource:
+		            return _model.SelectedDataSourceContainer != null;
+	            case LoginStep.Login:
+		            return _model.HasValidLogin();
+	            case LoginStep.SelectBu:
+		            return _model.SelectedBu != null;
             }
             return true;
         }
 
 		public void BackButtonClicked()
 		{
-		    CurrentStep--;
+			if (_model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Application)
+				CurrentStep--;
+			else
+				CurrentStep -= 2;
 		    GetDataForCurrentStep();
 		}
 
@@ -165,8 +160,6 @@ namespace Teleopti.Ccc.WinCode.Main
 			}
             return _model;
 		}
-
-	    
 
         private void getBusinessUnits()
         {

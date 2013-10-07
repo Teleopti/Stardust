@@ -26,11 +26,13 @@ namespace Teleopti.Ccc.WinCode.Main
 	{
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
 	    private readonly ILogonLicenseChecker _licenseChecker;
+		private readonly RaptorApplicationFunctionsSynchronizer _raptorSynchronizer;
 
-	    public LoginInitializer(IRoleToPrincipalCommand roleToPrincipalCommand, ILogonLicenseChecker licenseChecker)
+	    public LoginInitializer(IRoleToPrincipalCommand roleToPrincipalCommand, ILogonLicenseChecker licenseChecker, RaptorApplicationFunctionsSynchronizer raptorSynchronizer)
 		{
 		    _roleToPrincipalCommand = roleToPrincipalCommand;
 		    _licenseChecker = licenseChecker;
+		    _raptorSynchronizer = raptorSynchronizer;
 		}
 
 	    public bool InitializeApplication(IDataSourceContainer dataSourceContainer)
@@ -40,7 +42,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			       checkRaptorApplicationFunctions();
 		}
 
-		private bool setupCulture()
+		private static bool setupCulture()
 		{
 			if (TeleoptiPrincipal.Current.Regional == null) return false;
 
@@ -54,7 +56,8 @@ namespace Teleopti.Ccc.WinCode.Main
 		private bool checkRaptorApplicationFunctions()
 		{
 			var repositoryFactory = new RepositoryFactory();
-			var raptorSynchronizer = new RaptorApplicationFunctionsSynchronizer(repositoryFactory, UnitOfWorkFactory.Current);
+			;
+			raptorSynchronizer = new RaptorApplicationFunctionsSynchronizer(repositoryFactory, UnitOfWorkFactory.Current);
 
 			var result = raptorSynchronizer.CheckRaptorApplicationFunctions();
 
