@@ -1,5 +1,6 @@
 ﻿using Autofac;
-using Teleopti.Ccc.WinCode.Main;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Main
 {
@@ -7,7 +8,8 @@ namespace Teleopti.Ccc.Win.Main
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-
+			builder.RegisterType<RaptorApplicationFunctionsSynchronizer>().As<IRaptorApplicationFunctionsSynchronizer>();
+			// builder.RegisterType<ICurrentUnitOfWorkFactory>();
 		}
 	}
 }

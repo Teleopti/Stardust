@@ -42,11 +42,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			builder.RegisterType<LoginInitializer>().As<ILoginInitializer>();
 			builder.RegisterType<LogonDataSourceHandler>().As<IDataSourceHandler>();
             builder.RegisterType<ServerEndpointSelector>().As<IServerEndpointSelector>();
-            
+
 		    builder.RegisterType<LogonView>()
-                    .As<ILicenseFeedback>()
+		           .As<ILicenseFeedback>()
 		           .As<ILogonView>()
-                   .OnActivated(e => e.Instance.Presenter = e.Context.Resolve<ILogonPresenter>())
+		           .OnActivated(e => e.Instance.Presenter = e.Context.Resolve<ILogonPresenter>()) 
 		           .SingleInstance();
 	    }
     }
