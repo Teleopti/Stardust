@@ -10,6 +10,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	{
 		private static readonly string TargetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData.nhib.xml");
 		private static readonly string TargetWebConfig = Path.Combine(Paths.WebPath(), "web.config");
+		private static readonly string BackupWebConfig = Path.Combine(Paths.WebPath(), "web.backup.config");
+		private static readonly string BehaviorTestWebConfig = Path.Combine(Paths.WebPath(), "web.fromtest.config");
 
 		public static Uri Url;
 		public static int Port;
@@ -55,6 +57,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			if (_server != null)
 				_server.Dispose();
+
+			RevertWebConfig();
 		}
 
 		public static void RecycleApplication()
@@ -85,11 +89,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					module
 					);
 			}
+
+			if (File.Exists(TargetWebConfig))
+				File.Copy(TargetWebConfig, BackupWebConfig, true);
+
 			FileConfigurator.ConfigureByTags(
 				sourceFile,
 				TargetWebConfig,
 				tags
 				);
+
+			File.Copy(TargetWebConfig, BehaviorTestWebConfig, true);
+		}
+
+		private static void RevertWebConfig()
+		{
+			if (File.Exists(BackupWebConfig))
+				File.Copy(BackupWebConfig, TargetWebConfig, true);
 		}
 	}
 }
