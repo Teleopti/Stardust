@@ -70,9 +70,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	    if (location.hash.length <= 1) {
 	        console.log("no hash to be found");
 		    hasher.setHash(_settings.defaultNavigation);
-		} else {
-		    console.log("yay, I have a hash");
-    		hasher.setHash(location.hash);
 		}
 
 		$('#asm-link').click(function (ev) {
@@ -110,7 +107,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	    
 	    crossroads.addRoute(new RegExp('^(.*)$', 'i'),
 	        function(hash) {
-	            console.log('JA! ' + hash);
 	            var hashInfo = _parseHash('#' + hash);
 	            _invokeDisposeCallback(currentViewId);
 	            _adjustTabs(hashInfo);
@@ -119,13 +115,10 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _initializeHasher() {
+	    hasher.prependHash = '';
 	    var parseHash = function (newHash, oldHash) {
-	        console.log("triggered!");
-	        console.log(crossroads);
-	        console.log(newHash);
 	        crossroads.parse(newHash);
 	    };
-	    hasher.prependHash = '';
 	    hasher.initialized.add(parseHash);
 	    hasher.changed.add(parseHash);
 	    hasher.init();
@@ -160,8 +153,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		}
 		if (hash.length > 0) { hash = hash.substring(1); }
 
-		console.log("parsed hash " + hash);
-	    
 		var parts = $.merge(hash.split('/'), [null, null, null, null, null, null, null, null]);
 		parts.length = 8;
 
@@ -226,19 +217,18 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		Teleopti.MyTimeWeb.Test.TestMessage("Completely loaded");
 	}
 
-	_initializeHasher();
-	_setupRoutes();
-
 	return {
 	    Init: function (settings) {
-			Teleopti.MyTimeWeb.AjaxSettings = settings;
+	        Teleopti.MyTimeWeb.AjaxSettings = settings;
 			Teleopti.MyTimeWeb.Common.Init(settings);
 			Teleopti.MyTimeWeb.Test.Init(settings);
 			_settings = settings;
 			_layout();
 			_attachAjaxEvents();
 			_initNavigation();
-		},
+			_setupRoutes();
+			_initializeHasher();
+	    },
 
 		NavigateTo: function (action, date, id) {
 			_navigateTo(action, date, id);
