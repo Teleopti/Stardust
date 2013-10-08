@@ -2,6 +2,11 @@
 	In order to be able to work with the application
 	As an agent
 	I want the application to handle my login session approprietly
+	
+Background:
+	Given there is a role with
+	| Field | Value                 |
+	| Name  | Full access to mytime |
 
 Scenario: Stay signed in after server restart
 	Given I am viewing an application page
@@ -26,11 +31,13 @@ Scenario: Signed out when time passes
 	And I navigate to an application page
 	Then I should be signed out
 	
-@ignore
 Scenario: Stay signed in when time passes with ASM open
-	Given the time is '2013-09-30 16:00'
+	Given I have the role 'Full access to mytime'
+	And the time is '2013-09-30 16:00'
 	And I am viewing ASM
-	When the time is '2013-09-30 17:00'
+	When the time is '2013-09-30 16:29'
+	And I am still viewing ASM
+	And the time is '2013-09-30 16:38'
 	And I navigate to an application page
 	Then I should stay signed in
 
