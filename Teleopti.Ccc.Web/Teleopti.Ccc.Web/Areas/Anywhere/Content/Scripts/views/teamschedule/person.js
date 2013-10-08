@@ -20,7 +20,7 @@ define([
             this.WorkTimeMinutes = ko.observable(0);
             this.ContractTimeMinutes = ko.observable(0);
 	        
-            this.IsDayOff = ko.observable(data.IsDayOff);
+            this.IsDayOff = ko.observable(false);
 
 	        this.IsShift = ko.computed(function() {
 		        return !self.IsDayOff();
@@ -52,6 +52,7 @@ define([
 	        	self.Layers.push.apply(self.Layers, newItems);
 
 	        	self.IsFullDayAbsence = data.IsFullDayAbsence;
+	        	self.IsDayOff(data.IsDayOff);
 		        
 	        	self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
 	        	self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
