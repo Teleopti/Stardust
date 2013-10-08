@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		void ClearForm(string labelText);
 		void Exit(DialogResult result);
 	    bool InitializeAndCheckStateHolder(string skdProxyName);
-	    void ShowErrorMessage(string message);
+        void ShowErrorMessage(string message, string caption);
+	    DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton);
 	}
 }

@@ -101,8 +101,11 @@ namespace Teleopti.Ccc.WinCode.Main
         {
             _view.ClearForm(Resources.InitializingTreeDots);
             setBusinessUnit();
-            if(!_initializer.InitializeApplication(_model.SelectedDataSourceContainer))
+            if (!_initializer.InitializeApplication(_model.SelectedDataSourceContainer))
+            {
                 _view.Exit(DialogResult.Cancel);
+                return;
+            }
             _view.Exit(DialogResult.OK);
 
             //disposa formuläret
@@ -140,15 +143,10 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public void BackButtonClicked()
 		{
-			if (CurrentStep == LoginStep.SelectBu)
-			{
-				if (_model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Application)
-					CurrentStep--;
-				else
-					CurrentStep -= 2;
-			}
-			else
-				CurrentStep--;
+            CurrentStep--;
+			if (CurrentStep == LoginStep.Login && _model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Windows )
+			    CurrentStep--;
+				
 			GetDataForCurrentStep();
 		}
 
@@ -176,8 +174,6 @@ namespace Teleopti.Ccc.WinCode.Main
                 case LoginStep.Loading:
 			        initApplication();
 			        break;
-				default:
-					break;
 			}
             return _model;
 		}
@@ -195,7 +191,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			_model.AvailableBus = provider.AvailableBusinessUnits().ToList();
             if (_model.AvailableBus.Count == 0)
 			{
-                _view.ShowErrorMessage(Resources.NoAllowedBusinessUnitFoundInCurrentDatabase);
+                _view.ShowErrorMessage(Resources.NoAllowedBusinessUnitFoundInCurrentDatabase, Resources.ErrorMessage);
                 CurrentStep--;
 			}
             // if only one we don't need to select
@@ -214,7 +210,7 @@ namespace Teleopti.Ccc.WinCode.Main
             var authenticationResult = choosenDataSource.LogOn(_model.UserName, _model.Password);
 
             if (authenticationResult.HasMessage)
-                _view.ShowErrorMessage(string.Concat(authenticationResult.Message, "  "));
+                _view.ShowErrorMessage(string.Concat(authenticationResult.Message, "  "), Resources.ErrorMessage);
                    
             if (authenticationResult.Successful)
             {

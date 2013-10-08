@@ -145,12 +145,17 @@ namespace Teleopti.Ccc.Win.Main
             Presenter.Initialize();
         }
 
-        public void ShowErrorMessage(string message)
+        public void ShowErrorMessage(string message, string caption)
         {
-            MessageBoxAdv.Show(message, Resources.ErrorMessage, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, (RightToLeft == RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
+            MessageBoxAdv.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, (RightToLeft == RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
         }
 
-        private void buttonLogOnCancelClick(object sender, EventArgs e)
+	    public DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton)
+	    {
+	        return ViewBase.ShowYesNoMessage(this, text, caption, defaultButton);
+	    }
+
+	    private void buttonLogOnCancelClick(object sender, EventArgs e)
         {
             Exit(DialogResult.Cancel);
         }

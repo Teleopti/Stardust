@@ -3,12 +3,11 @@ using System.Threading;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
@@ -21,22 +20,31 @@ namespace Teleopti.Ccc.WinCode.Main
 	{
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
 	    private readonly ILogonLicenseChecker _licenseChecker;
-		private readonly IRaptorApplicationFunctionsSynchronizer _raptorSynchronizer;
+	    private readonly ILogonView _logonView;
+	    private readonly IRaptorApplicationFunctionsSynchronizer _raptorSynchronizer;
+	    private readonly ILogonMatrix _logonMatrix;
 
-		public LoginInitializer(IRoleToPrincipalCommand roleToPrincipalCommand,
-		                        ILogonLicenseChecker licenseChecker,
-		                        IRaptorApplicationFunctionsSynchronizer raptorSynchronizer)
+	    public LoginInitializer(IRoleToPrincipalCommand roleToPrincipalCommand,
+		                        ILogonLicenseChecker licenseChecker, ILogonView logonView,
+		                        IRaptorApplicationFunctionsSynchronizer raptorSynchronizer, ILogonMatrix logonMatrix)
 		{
 		    _roleToPrincipalCommand = roleToPrincipalCommand;
 		    _licenseChecker = licenseChecker;
-		    _raptorSynchronizer = raptorSynchronizer;
+	        _logonView = logonView;
+	        _raptorSynchronizer = raptorSynchronizer;
+		    _logonMatrix = logonMatrix;
 		}
 
 	    public bool InitializeApplication(IDataSourceContainer dataSourceContainer)
 		{
-			return setupCulture() &&
+			var result =  setupCulture() &&
                    _licenseChecker.HasValidLicense(dataSourceContainer) &&
-			       checkRaptorApplicationFunctions(dataSourceContainer);
+			       checkRaptorApplicationFunctions(dataSourceContainer) &&
+                   authorize();
+	        if (!result)
+	            return false;
+            syncMatrix(dataSourceContainer);
+	        return true;
 		}
 
 		private static bool setupCulture()
@@ -66,16 +74,27 @@ namespace Teleopti.Ccc.WinCode.Main
 
 			var message =
 				buildApplicationFunctionWarningMessage(result);
-			var answer = MessageBox.Show(
-				message,
-				Resources.VerifyingPermissionsTreeDots,
-				MessageBoxButtons.YesNo,
-				MessageBoxIcon.Warning,
-				MessageBoxDefaultButton.Button1,
-				0);
-
+		    var answer = _logonView.ShowYesNoMessage(message, Resources.VerifyingPermissionsTreeDots,
+		                                             MessageBoxDefaultButton.Button1);
+			
 			return answer == DialogResult.Yes;
 		}
+
+        private bool authorize()
+        {
+            if (!PrincipalAuthorization.Instance().IsPermitted(
+                DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication))
+            {
+                _logonView.ShowErrorMessage(string.Concat(Resources.YouAreNotAuthorizedToRunTheApplication, "  "), Resources.AuthenticationFailed);
+               return false;
+            }
+            return true;
+        }
+
+        private void syncMatrix(IDataSourceContainer dataSourceContainer)
+        {
+            _logonMatrix.SynchronizeAndLoadMatrixReports(dataSourceContainer.DataSource.Application);
+        }
 
 		private static string buildApplicationFunctionWarningMessage(CheckRaptorApplicationFunctionsResult result)
 		{

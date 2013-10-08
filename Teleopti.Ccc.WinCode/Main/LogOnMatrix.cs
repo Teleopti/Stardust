@@ -6,34 +6,38 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
-	public static class LogonMatrix
+    public interface ILogonMatrix
+    {
+        void SynchronizeAndLoadMatrixReports(IUnitOfWorkFactory unitOfWorkFactory);
+    }
+    public class LogonMatrix : ILogonMatrix
 	{
-		public static void SynchronizeAndLoadMatrixReports(Form owner)
+        private readonly ILogonView _logonView;
+
+        public LogonMatrix(ILogonView logonView)
+        {
+            _logonView = logonView;
+        }
+
+        public void SynchronizeAndLoadMatrixReports(IUnitOfWorkFactory unitOfWorkFactory)
 		{
 			using (PerformanceOutput.ForOperation("Synchronize matrix reports"))
 			{
 				try
 				{
-					using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+                    using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 						MatrixSync.SynchronizeReports(uow, new RepositoryFactory());
-
 				}
 				catch (Exception ex)
 				{
-					owner.ShowInTaskbar = true;
-					MessageBox.Show(
-						owner,
-						String.Format(CultureInfo.InvariantCulture, string.Concat(UserTexts.Resources.OperationCanNotProceedWithTheExternalMatrixSystem, "  "), ex.Message),
-						UserTexts.Resources.ExternalSystemError,
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Warning,
-						MessageBoxDefaultButton.Button1,
-						0);
-					owner.ShowInTaskbar = false;
-					((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource.ResetStatistic(); //Makes the factory return empty repository
+                    //have warning on view ??
+                    _logonView.ShowErrorMessage(String.Format(CultureInfo.InvariantCulture, string.Concat(Resources.OperationCanNotProceedWithTheExternalMatrixSystem, "  "), ex.Message), Resources.ExternalSystemError);
+                    ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource.ResetStatistic(); //Makes the factory return empty repository
 				}
 			}
 		}
