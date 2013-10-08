@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 
 namespace Teleopti.Ccc.Win.Main.LogonScreens
@@ -13,6 +14,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		{
 			_model = model;
             InitializeComponent();
+	        labelChooseSDK.Text = Resources.PleaseChooseSDK;
 		}
 
         public void SetData(LogonModel model)
