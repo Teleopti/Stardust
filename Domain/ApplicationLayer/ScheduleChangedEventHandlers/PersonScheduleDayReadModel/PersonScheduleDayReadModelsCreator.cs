@@ -52,6 +52,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 					layers.AddRange(ls);
 				}
 
+				if (scheduleDay.DayOff != null)
+				{
+					readModel.ShiftStart = scheduleDay.DayOff.StartDateTime;
+					readModel.ShiftEnd = scheduleDay.DayOff.EndDateTime;
+				}
+
 				var model = new Model
 				{
 					Id = schedule.PersonId.ToString(),

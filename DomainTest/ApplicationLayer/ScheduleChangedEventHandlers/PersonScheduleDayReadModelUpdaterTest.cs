@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -58,6 +59,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 
 			var model = new NewtonsoftJsonDeserializer().DeserializeObject<Model>(repository.Updated.Single().Model);
 			model.DayOff.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldUpdateStartAndEndFromDayOff()
+		{
+			var repository = new FakePersonScheduleDayReadModelPersister();
+			var personRepository = new FakePersonRepository();
+			var target = new PersonScheduleDayReadModelUpdater(new PersonScheduleDayReadModelsCreator(personRepository, new NewtonsoftJsonSerializer()), repository);
+
+			target.Handle(new ProjectionChangedEvent
+			{
+				PersonId = personRepository.Single().Id.Value,
+				ScheduleDays = new[]
+						{
+							new ProjectionChangedEventScheduleDay
+								{
+									DayOff = new ProjectionChangedEventDayOff
+										{
+											StartDateTime = new DateTime(2013, 10, 08, 0, 0, 0),
+											EndDateTime = new DateTime(2013, 10, 09, 0, 0, 0)
+										},
+								}
+						}
+			});
+
+			var readModel = repository.Updated.Single();
+			readModel.ShiftStart.Should().Be.EqualTo(new DateTime(2013, 10, 08, 0, 0, 0));
+			readModel.ShiftEnd.Should().Be.EqualTo(new DateTime(2013, 10, 09, 0, 0, 0));
 		}
 
 		[Test]
