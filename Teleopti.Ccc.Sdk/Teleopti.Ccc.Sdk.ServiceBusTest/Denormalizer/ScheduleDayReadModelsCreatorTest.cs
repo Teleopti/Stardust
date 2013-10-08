@@ -33,8 +33,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 				                     		ContractTime = TimeSpan.FromHours(8),
 				                     		WorkTime = TimeSpan.FromHours(7),
 				                     		Date = new DateTime(2012, 12, 2),
-				                     		StartDateTime = new DateTime(2012, 12, 1, 8, 0, 0, DateTimeKind.Utc),
-				                     		EndDateTime = new DateTime(2012, 12, 1, 17, 0, 0, DateTimeKind.Utc),
+											Shift = new ProjectionChangedEventShift
+												{
+													StartDateTime = new DateTime(2012, 12, 1, 8, 0, 0, DateTimeKind.Utc),
+													EndDateTime = new DateTime(2012, 12, 1, 17, 0, 0, DateTimeKind.Utc),
+												}
 				                     	}, person);
 
 			ret.ContractTime.Should().Be.EqualTo(TimeSpan.FromHours(8));

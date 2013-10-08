@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
@@ -43,24 +42,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		/// </summary>
 		public bool IsWorkday { get; set; }
 
-		public bool IsDayOff { get; set; }
-
 		public bool IsFullDayAbsence { get; set; }
 
-		/// <summary>
-		/// Optional shift start
-		/// </summary>
-		public DateTime? StartDateTime { get; set; }
-		/// <summary>
-		/// Optional shift end
-		/// </summary>
-		public DateTime? EndDateTime { get; set; }
-
-		/// <summary>
-		/// The layers for this shift
-		/// </summary>
-		public ICollection<ProjectionChangedEventLayer> Layers { get; set; }
-
 		public bool NotScheduled { get; set; }
+
+		public ProjectionChangedEventDayOff DayOff { get; set; }
+
+		public ProjectionChangedEventShift Shift { get; set; }
 	}
 }

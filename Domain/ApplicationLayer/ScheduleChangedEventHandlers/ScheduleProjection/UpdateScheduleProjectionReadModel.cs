@@ -41,7 +41,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 						new DateOnlyPeriod(date, date), message.ScenarioId, message.PersonId);
 				}
 
-				foreach (var layer in scheduleDay.Layers)
+				if (scheduleDay.Shift == null) continue;
+				foreach (var layer in scheduleDay.Shift.Layers)
 				{
 					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, message.ScenarioId, message.PersonId, layer);
 				}

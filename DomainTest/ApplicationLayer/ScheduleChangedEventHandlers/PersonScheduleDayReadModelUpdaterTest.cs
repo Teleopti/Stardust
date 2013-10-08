@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 						{
 							new ProjectionChangedEventScheduleDay
 								{
-									IsDayOff = true,
+									DayOff = new ProjectionChangedEventDayOff(),
 									Name = "Day off"
 								}
 						}
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 						{
 							new ProjectionChangedEventScheduleDay
 								{
-									IsDayOff = false,
+									DayOff = null,
 									Name = "Late"
 								}
 						}

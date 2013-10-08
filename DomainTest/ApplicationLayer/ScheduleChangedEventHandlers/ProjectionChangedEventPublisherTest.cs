@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				});
 
 			var scheduleDay = publisher.Published<ProjectionChangedEvent>().ScheduleDays.Single(x => x.Date == new DateTime(2013, 10, 02));
-			scheduleDay.IsDayOff.Should().Be.True();
+			scheduleDay.DayOff.Should().Not.Be.Null();
 			scheduleDay.ShortName.Should().Be("DO");
 			scheduleDay.Name.Should().Be("Day off");
 		}

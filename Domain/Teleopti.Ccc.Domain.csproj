@@ -167,6 +167,8 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\PersonScheduleDayReadModelsCreator.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ControllableEventSyncronization.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\IEventSyncronization.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventDayOff.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventShift.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\IScheduledResourcesReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonReactivatedHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonTerminatedHandler.cs" />

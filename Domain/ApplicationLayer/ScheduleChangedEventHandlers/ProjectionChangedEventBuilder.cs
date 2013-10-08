@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							TeamId = personPeriod.Team.Id.GetValueOrDefault(),
 							SiteId = personPeriod.Team.Site.Id.GetValueOrDefault(),
 							Date = date.Date,
-							Layers = new Collection<ProjectionChangedEventLayer>(),
 							WorkTime = projection.WorkTime(),
 							ContractTime = projection.ContractTime(),
 						};
+					var layers = new List<ProjectionChangedEventLayer>();
 
 					switch (significantPart)
 					{
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							eventScheduleDay.ShortName = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
 							break;
 						case SchedulePartView.DayOff:
-							eventScheduleDay.IsDayOff = true;
+							eventScheduleDay.DayOff = new ProjectionChangedEventDayOff();
 							var dayOff = scheduleDay.PersonAssignment().DayOff();
 							eventScheduleDay.ShortName = dayOff.Description.ShortName;
 							eventScheduleDay.Name = dayOff.Description.Name;
@@ -59,13 +59,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							eventScheduleDay.ShortName = "";
 							eventScheduleDay.NotScheduled = true;
 							break;
-					}
-
-					var projectedPeriod = projection.Period();
-					if (projectedPeriod != null)
-					{
-						eventScheduleDay.StartDateTime = projectedPeriod.Value.StartDateTime;
-						eventScheduleDay.EndDateTime = projectedPeriod.Value.EndDateTime;
 					}
 
 					foreach (var layer in projection)
@@ -82,14 +75,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							requiresSeat = activity.RequiresSeat;
 						}
 
-						eventScheduleDay.Layers.Add(new ProjectionChangedEventLayer
+						layers.Add(new ProjectionChangedEventLayer
 							{
 								Name = description.Name,
 								ShortName = description.ShortName,
 								ContractTime = contractTime,
 								PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
 								IsAbsence = layer.Payload.UnderlyingPayload is IAbsence,
-								DisplayColor = isPayloadAbsence ? (layer.Payload as IAbsence).DisplayColor.ToArgb() : layer.DisplayColor().ToArgb(),
+								DisplayColor =
+									isPayloadAbsence ? (layer.Payload as IAbsence).DisplayColor.ToArgb() : layer.DisplayColor().ToArgb(),
 								RequiresSeat = requiresSeat,
 								WorkTime = layer.WorkTime(),
 								StartDateTime = layer.Period.StartDateTime,
@@ -97,6 +91,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 								IsAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential
 							});
 					}
+
+					ProjectionChangedEventShift shift = null;
+
+					var projectedPeriod = projection.Period();
+					if (projectedPeriod != null || layers.Count > 0)
+					{
+						shift = new ProjectionChangedEventShift();
+						if (projectedPeriod != null)
+						{
+							shift.StartDateTime = projectedPeriod.Value.StartDateTime;
+							shift.EndDateTime = projectedPeriod.Value.EndDateTime;
+						}
+						shift.Layers = layers;
+					}
+
+					eventScheduleDay.Shift = shift;
 					scheduleDays.Add(eventScheduleDay);
 				}
 				yield return new T
