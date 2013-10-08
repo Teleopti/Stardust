@@ -813,6 +813,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 				foreach (IPersonPeriod period in personPeriods)
 				{
+					if (period.RuleSetBag==null) continue;
 					foreach (IShiftCategory category in period.RuleSetBag.ShiftCategoriesInBag())
 					{
 						IShiftCategory shiftCategory = category;
