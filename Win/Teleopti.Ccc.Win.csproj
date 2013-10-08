@@ -1094,12 +1094,6 @@
     <Compile Include="PeopleAdmin\Controls\PeopleNavigator.Designer.cs">
       <DependentUpon>PeopleNavigator.cs</DependentUpon>
     </Compile>
-    <Compile Include="PeopleAdmin\Controls\ShiftCategoryLimitationView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="PeopleAdmin\Controls\ShiftCategoryLimitationView.Designer.cs">
-      <DependentUpon>ShiftCategoryLimitationView.cs</DependentUpon>
-    </Compile>
     <Compile Include="PeopleAdmin\GuiHelpers\DatabaseLostConnectionHandler.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\PeriodDateDictionaryBuilder.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\PeriodDateService.cs" />
@@ -1110,6 +1104,12 @@
     </Compile>
     <Compile Include="PeopleAdmin\Views\PersonFinderView.Designer.cs">
       <DependentUpon>PersonFinderView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PeopleAdmin\Views\ShiftCategoryLimitationView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PeopleAdmin\Views\ShiftCategoryLimitationView.Designer.cs">
+      <DependentUpon>ShiftCategoryLimitationView.cs</DependentUpon>
     </Compile>
     <Compile Include="PeopleAdmin\Views\UserCredentialConflicts.cs">
       <SubType>Form</SubType>
@@ -2697,6 +2697,9 @@
     <EmbeddedResource Include="PeopleAdmin\Views\PersonFinderView.resx">
       <DependentUpon>PersonFinderView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PeopleAdmin\Views\ShiftCategoryLimitationView.resx">
+      <DependentUpon>ShiftCategoryLimitationView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PeopleAdmin\Views\UserCredentialConflicts.resx">
       <DependentUpon>UserCredentialConflicts.cs</DependentUpon>
     </EmbeddedResource>
@@ -3156,9 +3159,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Payroll\PayrollExportNavigator.resx">
       <DependentUpon>PayrollExportNavigator.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PeopleAdmin\Controls\ShiftCategoryLimitationView.resx">
-      <DependentUpon>ShiftCategoryLimitationView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PerformanceManager\PerformanceManagerNavigator.resx">
       <DependentUpon>PerformanceManagerNavigator.cs</DependentUpon>
