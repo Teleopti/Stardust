@@ -11793,10 +11793,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Per Date</value>
     <comment>Header in shift distributions scheduler</comment>
   </data>
-	<data name="ShiftCategoryDistribution" xml:space="preserve">
+  <data name="ShiftCategoryDistribution" xml:space="preserve">
     <value>Shift Category Distribution</value>
     <comment>Header for distributions of shift categories in scheduler</comment>
-	</data>
+  </data>
   <data name="PerAgent" xml:space="preserve">
     <value>Per Agent</value>
   </data>
@@ -11815,8 +11815,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Total time of selected activity</value>
     <comment>Total time of selected activity</comment>
   </data>
-  <data name="LengthOfActivity" xml:space="preserve">
-    <value>Total time of selected activity</value>
-    <comment>Total time of selected activity</comment>
+  <data name="PleaseChooseSDK" xml:space="preserve">
+    <value>Please choose SDK</value>
+    <comment>When having more than one in config when logging on</comment>
   </data>
 </root>
