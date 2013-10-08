@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 
 				if (scheduleDay.Shift != null)
 				{
-					readModel.ShiftStart = scheduleDay.Shift.StartDateTime;
-					readModel.ShiftEnd = scheduleDay.Shift.EndDateTime;
+					readModel.Start = scheduleDay.Shift.StartDateTime;
+					readModel.End = scheduleDay.Shift.EndDateTime;
 
 					var ls = from layer in scheduleDay.Shift.Layers
 					         select new SimpleLayer
@@ -54,26 +54,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 
 				if (scheduleDay.DayOff != null)
 				{
-					readModel.ShiftStart = scheduleDay.DayOff.StartDateTime;
-					readModel.ShiftEnd = scheduleDay.DayOff.EndDateTime;
+					readModel.Start = scheduleDay.DayOff.StartDateTime;
+					readModel.End = scheduleDay.DayOff.EndDateTime;
 				}
 
 				var model = new Model
-				{
-					Id = schedule.PersonId.ToString(),
-					Date = scheduleDay.Date,
-					FirstName = person.Name.FirstName,
-					LastName = person.Name.LastName,
-					EmploymentNumber = person.EmploymentNumber,
-					Shift = new Shift
 					{
-						ContractTimeMinutes = (int)scheduleDay.ContractTime.TotalMinutes,
-						WorkTimeMinutes = (int)scheduleDay.WorkTime.TotalMinutes,
-						Projection = layers,
-						IsFullDayAbsence = scheduleDay.IsFullDayAbsence
-					},
-					DayOff = scheduleDay.DayOff != null ? new DayOff { Title = scheduleDay.Name } : null
-				};
+						Id = schedule.PersonId.ToString(),
+						Date = scheduleDay.Date,
+						FirstName = person.Name.FirstName,
+						LastName = person.Name.LastName,
+						EmploymentNumber = person.EmploymentNumber,
+						Shift = new Shift
+							{
+								ContractTimeMinutes = (int) scheduleDay.ContractTime.TotalMinutes,
+								WorkTimeMinutes = (int) scheduleDay.WorkTime.TotalMinutes,
+								Projection = layers,
+								IsFullDayAbsence = scheduleDay.IsFullDayAbsence
+							},
+						DayOff = scheduleDay.DayOff != null
+							         ? new DayOff
+								         {
+									         Title = scheduleDay.Name,
+									         Start = scheduleDay.DayOff.StartDateTime,
+									         End = scheduleDay.DayOff.EndDateTime
+								         }
+							         : null
+					};
 
 				readModel.Model = _serializer.SerializeObject(model);
 

@@ -46,8 +46,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					TeamId = teamId,
 					BusinessUnitId = businessUnitId,
 					PersonId = personId,
-					ShiftStart = date.AddHours(10),
-					ShiftEnd = date.AddHours(18),
+					Start = date.AddHours(10),
+					End = date.AddHours(18),
 					Model = "{shift: blablabla}",
 				};
 
@@ -72,8 +72,8 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 					TeamId = teamId,
 					PersonId = personId,
 					BusinessUnitId = Guid.NewGuid(),
-					ShiftStart = new DateTime(2012, 8, 29, 10, 0, 0, DateTimeKind.Utc),
-					ShiftEnd = new DateTime(2012, 8, 29, 18, 0, 0, DateTimeKind.Utc),
+					Start = new DateTime(2012, 8, 29, 10, 0, 0, DateTimeKind.Utc),
+					End = new DateTime(2012, 8, 29, 18, 0, 0, DateTimeKind.Utc),
 					Model = shift,
 				};
 
@@ -95,8 +95,8 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 					TeamId = Guid.NewGuid(),
 					PersonId = Guid.NewGuid(),
 					BusinessUnitId = Guid.NewGuid(),
-					ShiftStart = new DateTime(2013, 4, 3, 10, 0, 0, DateTimeKind.Utc),
-					ShiftEnd = new DateTime(2013, 4, 3, 18, 0, 0, DateTimeKind.Utc),
+					Start = new DateTime(2013, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+					End = new DateTime(2013, 4, 3, 18, 0, 0, DateTimeKind.Utc),
 					Model = "",
 				};
 
@@ -127,8 +127,8 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 					TeamId = Guid.NewGuid(),
 					PersonId = Guid.NewGuid(),
 					BusinessUnitId = Guid.NewGuid(),
-					ShiftStart = new DateTime(2013, 4, 3, 10, 0, 0, DateTimeKind.Utc),
-					ShiftEnd = new DateTime(2013, 4, 3, 18, 0, 0, DateTimeKind.Utc),
+					Start = new DateTime(2013, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+					End = new DateTime(2013, 4, 3, 18, 0, 0, DateTimeKind.Utc),
 					Model = "",
 				};
 

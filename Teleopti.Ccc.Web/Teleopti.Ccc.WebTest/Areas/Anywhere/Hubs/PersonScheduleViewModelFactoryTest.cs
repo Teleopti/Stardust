@@ -216,8 +216,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			personScheduleDayReadModelRepository.Stub(x => x.ForPerson(new DateOnly(date), person.Id.Value))
 			                                    .Return(new PersonScheduleDayReadModel
 				                                    {
-					                                    ShiftStart = shiftStart,
-					                                    ShiftEnd = shiftEnd
+					                                    Start = shiftStart,
+					                                    End = shiftEnd
 				                                    });
 			personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
 
@@ -246,8 +246,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			personScheduleDayReadModelRepository.Stub(x => x.ForPerson(new DateOnly(date).AddDays(-1), person.Id.Value))
 												.Return(new PersonScheduleDayReadModel
 												{
-													ShiftStart = shiftStart,
-													ShiftEnd = shiftEnd
+													Start = shiftStart,
+													End = shiftEnd
 												});
 			personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
 

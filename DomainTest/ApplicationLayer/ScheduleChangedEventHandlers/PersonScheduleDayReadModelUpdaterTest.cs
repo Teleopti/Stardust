@@ -85,8 +85,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			});
 
 			var readModel = repository.Updated.Single();
-			readModel.ShiftStart.Should().Be.EqualTo(new DateTime(2013, 10, 08, 0, 0, 0));
-			readModel.ShiftEnd.Should().Be.EqualTo(new DateTime(2013, 10, 09, 0, 0, 0));
+			readModel.Start.Should().Be.EqualTo(new DateTime(2013, 10, 08, 0, 0, 0));
+			readModel.End.Should().Be.EqualTo(new DateTime(2013, 10, 09, 0, 0, 0));
+			var model = new NewtonsoftJsonDeserializer().DeserializeObject<Model>(readModel.Model);
+			model.DayOff.Start.Should().Be.EqualTo(new DateTime(2013, 10, 08, 0, 0, 0));
+			model.DayOff.End.Should().Be.EqualTo(new DateTime(2013, 10, 09, 0, 0, 0));
 		}
 
 		[Test]

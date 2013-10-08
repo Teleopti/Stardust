@@ -386,3 +386,15 @@ ALTER COLUMN [DateOfOvertime] [datetime] NOT NULL
 ---------------- 
 ALTER TABLE dbo.StateGroupActivityAlarm ALTER COLUMN AlarmType uniqueidentifier NULL
 GO
+
+
+----------------  
+--Name: Mathias Stenbom
+--Date: 2013-10-08
+--Desc: Renaming ReadModel.PersonScheduleDay.ShiftStart to Start to match class property name
+---------------- 
+
+EXEC sp_rename 'ReadModel.PersonScheduleDay.ShiftStart','Start','COLUMN'
+GO
+EXEC sp_rename 'ReadModel.PersonScheduleDay.ShiftEnd','End','COLUMN'
+GO
