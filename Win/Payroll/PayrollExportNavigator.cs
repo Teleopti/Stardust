@@ -225,8 +225,9 @@ namespace Teleopti.Ccc.Win.Payroll
 				PersonAssembler personAssembler = new PersonAssembler(null, new WorkflowControlSetAssembler(new ShiftCategoryAssembler(null), new DayOffAssembler(null), new ActivityAssembler(null), new AbsenceAssembler(null)), new PersonAccountUpdaterDummy());
                 personAssembler.IgnorePersonPeriods = true;
             }
-            
-            var proxy = new Proxy();
+
+            var sdkName = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["Sdk"];
+            var proxy = new Proxy(sdkName);
             try
             {
                 proxy.Open();
