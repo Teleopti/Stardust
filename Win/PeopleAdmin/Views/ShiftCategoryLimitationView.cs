@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Drawing;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Grid;
@@ -8,13 +8,12 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
-using Teleopti.Ccc.Win.PeopleAdmin.Views;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
+namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 {
     public partial class ShiftCategoryLimitationView : BaseUserControl, IShiftCategoryLimitationView
     {

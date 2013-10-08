@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
+namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 {
     partial class ShiftCategoryLimitationView
     {
