@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.UserTexts;
@@ -104,7 +105,9 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		{
 			if(schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
 
-			IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor = new AgentRestrictionsDetailEffectiveRestrictionExtractor(_workShiftWorkTime, restrictionExtractor, schedulingOptions);
+			var personalShiftRestrictionCombiner = new PersonalShiftRestrictionCombiner(new RestrictionCombiner());
+			var meetingRestrictionCombinder = new MeetingRestrictionCombiner(new RestrictionCombiner());
+			IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor = new AgentRestrictionsDetailEffectiveRestrictionExtractor(_workShiftWorkTime, restrictionExtractor, schedulingOptions, personalShiftRestrictionCombiner, meetingRestrictionCombinder);
 			var preferenceNightRestChecker = new PreferenceNightRestChecker();
 			_model.LoadDetails(scheduleMatrixPro, restrictionExtractor, schedulingOptions, effectiveRestrictionExtractor, periodTarget, preferenceNightRestChecker);
 			_useScheduling = schedulingOptions.UseScheduling;
