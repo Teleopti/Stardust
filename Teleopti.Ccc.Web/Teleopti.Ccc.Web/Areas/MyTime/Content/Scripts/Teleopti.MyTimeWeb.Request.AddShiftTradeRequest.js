@@ -22,7 +22,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.requestedDate = ko.observable(moment().startOf('day'));
 		self.missingWorkflowControlSet = ko.observable(true);
 		self.noPossibleShiftTrades = ko.observable(false);
-		self.timeLineLengthInMinutes = ko.observable(0);
+		//self.timeLineLengthInMinutes = ko.observable(0);
 		self.hours = ko.observableArray();
 		self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
 		self.possibleTradeSchedules = ko.observableArray();
@@ -41,6 +41,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		});
 		self.subject = ko.observable();
 		self.message = ko.observable();
+
+	    self.timeLineLengthInMinutes = ko.computed(function() {
+	        var firstHour = moment(self.Hours()[0]);
+	        var lastHour = moment(self.Hours[self.Hours().length - 1]);
+	        return firstHour.diff(lastHour, 'minutes');
+	    });
 		self.pixelPerMinute = ko.computed(function () {
 			return layerCanvasPixelWidth / self.timeLineLengthInMinutes();
 		});
@@ -170,10 +176,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					self.IsLoading(true);
 				},
 				success: function (data, textStatus, jqXHR) {
-					self.timeLineLengthInMinutes(data.TimeLineLengthInMinutes);
+				    self._createTimeLine(data.TimeLineHours);
 					self._createMySchedule(data.MySchedule);
 					self._createPossibleTradeSchedules(data.PossibleTradePersons);
-					self._createTimeLine(data.TimeLineHours);
 					self.setScheduleLoadedReady();
 					self.isReadyLoaded(true);
 				},
