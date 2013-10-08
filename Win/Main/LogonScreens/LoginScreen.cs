@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
         private void LoginScreen_Enter(object sender, System.EventArgs e)
         {
             textBoxLogOnName.Select(0, textBoxLogOnName.Text.Length);
-            ActiveControl = textBoxLogOnName;
+            textBoxLogOnName.Focus();
         }
 	}
 }

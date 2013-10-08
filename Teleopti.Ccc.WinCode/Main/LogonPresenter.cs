@@ -109,12 +109,15 @@ namespace Teleopti.Ccc.WinCode.Main
 
         public void OkbuttonClicked(LogonModel model)
         {
-            if(!checkModel()) return;
-            _model = model;
-			CurrentStep++;
-	        if (CurrentStep == LoginStep.Login &&
-	            _model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Windows)
-		        CurrentStep++;
+            if (checkModel())
+            {
+                _model = model;
+                CurrentStep++;
+                if (CurrentStep == LoginStep.Login &&
+                    _model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Windows)
+                    CurrentStep++;
+            }
+            
 	        GetDataForCurrentStep();
 		}
 
