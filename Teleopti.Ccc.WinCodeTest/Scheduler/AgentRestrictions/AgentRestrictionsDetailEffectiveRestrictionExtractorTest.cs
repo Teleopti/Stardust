@@ -37,6 +37,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private IPerson _person;
 		private IScheduleRange _range;
 		private TimeSpan _periodTarget;
+		private IPersonalShiftRestrictionCombiner _personalShiftRestrictionCombiner;
+		private IMeetingRestrictionCombiner _meetingRestrictionCombiner;
 
 		[SetUp]
 		public void Setup()
@@ -48,7 +50,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_restrictionExtractor = _mocks.StrictMock<IRestrictionExtractor>();
 			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
 			_workShiftWorkTime = _mocks.StrictMock<IWorkShiftWorkTime>();
-			_effectiveRestrictionExtractor = new AgentRestrictionsDetailEffectiveRestrictionExtractor(_workShiftWorkTime, _restrictionExtractor, _schedulingOptions);
+			_personalShiftRestrictionCombiner = _mocks.StrictMock<IPersonalShiftRestrictionCombiner>();
+			_meetingRestrictionCombiner = _mocks.StrictMock<IMeetingRestrictionCombiner>();
+			_effectiveRestrictionExtractor = new AgentRestrictionsDetailEffectiveRestrictionExtractor(_workShiftWorkTime, _restrictionExtractor, _schedulingOptions, _personalShiftRestrictionCombiner, _meetingRestrictionCombiner);
 			_preferenceCellData = new PreferenceCellData();
 			_effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
 
@@ -106,6 +110,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(_effectiveRestriction.EndTimeLimitation).Return(new EndTimeLimitation());
 				Expect.Call(_effectiveRestriction.ShiftCategory).Return(null);
 				Expect.Call(_effectiveRestriction.DayOffTemplate).Return(null).Repeat.AtLeastOnce();
+				Expect.Call(_personalShiftRestrictionCombiner.Combine(part, _effectiveRestriction)).Return(_effectiveRestriction);
+				Expect.Call(_meetingRestrictionCombiner.Combine(part, _effectiveRestriction)).Return(_effectiveRestriction);
 			}
 
 			using (_mocks.Playback())
@@ -139,6 +145,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(() => _restrictionExtractor.Extract(_person, dateOnly));
 				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
 				Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>()).Repeat.Twice();
+				Expect.Call(_personalShiftRestrictionCombiner.Combine(part, _effectiveRestriction)).Return(_effectiveRestriction);
+				Expect.Call(_meetingRestrictionCombiner.Combine(part, _effectiveRestriction)).Return(_effectiveRestriction);
 			}
 
 			using (_mocks.Playback())
@@ -181,6 +189,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(() => _restrictionExtractor.Extract(_person, dateOnly));
 				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
 				Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>()).Repeat.Twice();
+				Expect.Call(_personalShiftRestrictionCombiner.Combine(part, _effectiveRestriction)).Return(_effectiveRestriction);
+				Expect.Call(_meetingRestrictionCombiner.Combine(part, _effectiveRestriction)).Return(_effectiveRestriction);
 			}
 
 			using (_mocks.Playback())
@@ -215,6 +225,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(() => _restrictionExtractor.Extract(_person, dateOnly));
 				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
 				Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>()).Repeat.Twice();
+				Expect.Call(_personalShiftRestrictionCombiner.Combine(part, _effectiveRestriction)).Return(_effectiveRestriction);
+				Expect.Call(_meetingRestrictionCombiner.Combine(part, _effectiveRestriction)).Return(_effectiveRestriction);
 			}
 
 			using(_mocks.Playback())
