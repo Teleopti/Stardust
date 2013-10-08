@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.WinCode.Main
 	    private readonly ILogOnOff _logOnOff;
 	    private readonly IServerEndpointSelector _serverEndpointSelector;
 	    private readonly IDataSourceHandler _dataSourceHandler;
-	    private bool getConfigFromWebService;
 
 		public LogonPresenter(ILogonView view, LogonModel model,
 		                IDataSourceHandler dataSourceHandler, ILoginInitializer initializer, 
@@ -48,7 +47,9 @@ namespace Teleopti.Ccc.WinCode.Main
 		    _logonLogger = logonLogger;
 		    _logOnOff = logOnOff;
 		    _serverEndpointSelector = serverEndpointSelector;
-		    getConfigFromWebService = Convert.ToBoolean(ConfigurationManager.AppSettings["GetConfigFromWebService"], CultureInfo.InvariantCulture);
+			if (ConfigurationManager.AppSettings["GetConfigFromWebService"] != null)
+				_model.GetConfigFromWebService = Convert.ToBoolean(ConfigurationManager.AppSettings["GetConfigFromWebService"],
+				                                                   CultureInfo.InvariantCulture);
 		}
 
         public LoginStep CurrentStep { get; set; }
@@ -139,11 +140,16 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public void BackButtonClicked()
 		{
-			if (_model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Application)
-				CurrentStep--;
+			if (CurrentStep == LoginStep.SelectBu)
+			{
+				if (_model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Application)
+					CurrentStep--;
+				else
+					CurrentStep -= 2;
+			}
 			else
-				CurrentStep -= 2;
-		    GetDataForCurrentStep();
+				CurrentStep--;
+			GetDataForCurrentStep();
 		}
 
 		public bool InitializeLogin(string getEndpointNames, string isBrokerDisabled)

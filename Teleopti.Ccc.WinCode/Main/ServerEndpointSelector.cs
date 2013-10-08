@@ -11,21 +11,21 @@ namespace Teleopti.Ccc.WinCode.Main
     }
     public class ServerEndpointSelector : IServerEndpointSelector
 	{
-		public List<string> GetEndpointNames()
-		{
-			var clientSettings = ConfigurationManager.GetSection("system.serviceModel/client") as ClientSection;
-			if (clientSettings != null)
-			{
-				return clientSettings.Endpoints
-				                     .Cast<ChannelEndpointElement>()
-				                     .Where(
-					                     e =>
-					                     e.Contract ==
-					                     "Teleopti.Ccc.Sdk.Common.Contracts.ITeleoptiCccSdkInternal")
-				                     .Select(e => e.Name)
-				                     .ToList();
-			}
-			return new List<string>();
-		}
+	    public List<string> GetEndpointNames()
+	    {
+		    var clientSettings = ConfigurationManager.GetSection("system.serviceModel/client") as ClientSection;
+		    if (clientSettings != null)
+		    {
+			    return clientSettings.Endpoints
+			                         .Cast<ChannelEndpointElement>()
+			                         .Where(
+				                         e =>
+				                         e.Contract ==
+				                         "Teleopti.Ccc.Sdk.Common.Contracts.ITeleoptiCccSdkInternal")
+			                         .Select(e => e.Name)
+			                         .ToList();
+		    }
+		    return new List<string>();
+	    }
 	}
 }

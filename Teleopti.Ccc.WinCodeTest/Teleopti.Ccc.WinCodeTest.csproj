@@ -836,6 +836,10 @@
       <Project>{A7D4E66F-4B70-4F7A-A982-01D7E6AFDE7E}</Project>
       <Name>Teleopti.Ccc.DayOffPlanning</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{db42d973-9889-4d51-9fc5-be66aa7f117c}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Obfuscated\Teleopti.Ccc.Obfuscated.csproj">
       <Project>{5895BC02-04C8-46E1-A804-43D314A02AD9}</Project>
       <Name>Teleopti.Ccc.Obfuscated</Name>
