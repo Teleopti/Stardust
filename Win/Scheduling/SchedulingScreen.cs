@@ -15,6 +15,7 @@ using MbCache.Core;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Win.Meetings;
 using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
@@ -585,11 +586,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_scheduleView.ViewGrid != null)
 			{
 				_scheduleView.ViewGrid.InvalidateRange(_scheduleView.ViewGrid.ViewLayout.VisibleCellsRange);
-				RecalculateResources();
+			    updateScheduleParts(e);
+                RecalculateResources();
 			}
 		}
 
-		private void permittedPersonsToSelectedList()
+	    private void updateScheduleParts(ModifyMeetingEventArgs e)
+	    {
+	        var startDate = e.ModifiedMeeting.StartDate;
+	        var affectedScheduleDays = new List<IScheduleDay>();
+	        while (startDate <= e.ModifiedMeeting.EndDate)
+	        {
+	            foreach (var meetingPerson in e.ModifiedMeeting.MeetingPersons)
+	            {
+	                var range = SchedulerState.SchedulingResultState.Schedules[meetingPerson.Person];
+	                affectedScheduleDays.Add(range.ScheduledDay(startDate));
+	            }
+	            startDate = startDate.AddDays(1);
+	        }
+	        _scheduleView.Presenter.ModifySchedulePart(affectedScheduleDays, true);
+	    }
+
+	    private void permittedPersonsToSelectedList()
 		{
 			foreach (IPerson person in SchedulerState.AllPermittedPersons)
 			{
@@ -6986,6 +7004,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (e.Button != MouseButtons.Left) return;
 			bool viewSchedulesPermission = isPermittedToViewSchedules();
 			_schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission);
+		    
 		}
 
 		private void toolStripMenuItemEditMeetingMouseUp(object sender, MouseEventArgs e)
