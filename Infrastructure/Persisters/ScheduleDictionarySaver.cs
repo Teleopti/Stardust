@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			switch (scheduleChange.Status)
 			{
 				case DifferenceStatus.Added:
-					// clone entity and add the clone instead, and let the callback handle it with unsafesnapshotupdate.
-					// this to not having to handle entity rollback when the transaction is rolled back
-					// man, this is ugly!
+					//BUG 25007 - see Teleopti.Ccc.InfrastructureTest.Persisters.BugTest.Bug25007
+					//we (Roger & Mathias) don't know why though... Now we have a test a least
+
 					var clone = (IPersistableScheduleData)scheduleChange.CurrentItem.Clone();
 					scheduleRepository.Add(clone);
 					// ouch.
