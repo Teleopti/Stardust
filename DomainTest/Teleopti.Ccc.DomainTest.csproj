@@ -173,6 +173,9 @@
     <Compile Include="Budgeting\NetStaffCalculatorTest.cs" />
     <Compile Include="Budgeting\NetStaffForecastAdjustCalculatorTest.cs" />
     <Compile Include="Budgeting\TotalAllowanceCalculatorTest.cs" />
+    <Compile Include="Collection\CachedNumberOfEachCategoryPerDateTest.cs" />
+    <Compile Include="Collection\CachedNumberOfEachCategoryPerPersonTest.cs" />
+    <Compile Include="Collection\CachedShiftCategoryDistributionTest.cs" />
     <Compile Include="Collection\IdenticalLayersSpecificationTest.cs" />
     <Compile Include="Collection\TeamCollectionTest.cs" />
     <Compile Include="Common\DateTimePeriodPerStartTimeSorterTest.cs" />

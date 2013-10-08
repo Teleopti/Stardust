@@ -1889,6 +1889,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Analysis Info.
+        /// </summary>
+        public static string AnalysisInfo {
+            get {
+                return ResourceManager.GetString("AnalysisInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anchor:.
         /// </summary>
         public static string AnchorColon {
@@ -2663,6 +2672,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AvegareFacsimiles {
             get {
                 return ResourceManager.GetString("AvegareFacsimiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average.
+        /// </summary>
+        public static string Average {
+            get {
+                return ResourceManager.GetString("Average", resourceCulture);
             }
         }
         
@@ -16546,6 +16564,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Per Agent.
+        /// </summary>
+        public static string PerAgent {
+            get {
+                return ResourceManager.GetString("PerAgent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Percentage.
         /// </summary>
         public static string Percentage {
@@ -16713,6 +16740,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PerPeriod {
             get {
                 return ResourceManager.GetString("PerPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Per Shift Category.
+        /// </summary>
+        public static string PerShiftCategory {
+            get {
+                return ResourceManager.GetString("PerShiftCategory", resourceCulture);
             }
         }
         

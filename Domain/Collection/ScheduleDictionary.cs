@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Domain.Collection
                 IPersistableScheduleData retVal = ((ScheduleRange)pair.Value).SolveConflictBecauseOfExternalDeletion(id, true);
                 if (retVal != null)
                 {
-                    OnPartModified(new ModifyEventArgs(ScheduleModifier.MessageBroker, retVal.Person, retVal.Period));
+                    OnPartModified(new ModifyEventArgs(ScheduleModifier.MessageBroker, retVal.Person, retVal.Period, null));
                     
                     returnValue = retVal;
                 }
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Domain.Collection
                 foreach (var personMeeting in personMeetings)
                 {
                     delayedEventArgs.Add(new ModifyEventArgs(ScheduleModifier.MessageBroker, range.Person,
-                                                             personMeeting.Period));
+                                                             personMeeting.Period, null));
                 }
             }
 
@@ -304,7 +304,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
                             scheduleDayChangeCallback.ScheduleDayChanged(part);
 
-                            OnPartModified(new ModifyEventArgs(modifier, part.Person, part.Period));
+                            OnPartModified(new ModifyEventArgs(modifier, part.Person, part.Period, part));
 
                         }
                     }
@@ -433,7 +433,7 @@ namespace Teleopti.Ccc.Domain.Collection
                     {
                         using(TurnoffPermissionScope.For(this)) 
                             range.SolveConflictBecauseOfExternalUpdate(updatedData, true);
-                        OnPartModified(new ModifyEventArgs(ScheduleModifier.MessageBroker, updatedData.Person, updatedData.Period));
+                        OnPartModified(new ModifyEventArgs(ScheduleModifier.MessageBroker, updatedData.Person, updatedData.Period, null));
                         returnData = updatedData;
                     }
                 }
@@ -457,7 +457,7 @@ namespace Teleopti.Ccc.Domain.Collection
                 {
                     if (!range.WithinRange(personMeeting.Period)) continue;
                     using (TurnoffPermissionScope.For(this)) range.SolveConflictBecauseOfExternalUpdate(personMeeting, true);
-                    OnPartModified(new ModifyEventArgs(ScheduleModifier.MessageBroker, personMeeting.Person, personMeeting.Period));
+                    OnPartModified(new ModifyEventArgs(ScheduleModifier.MessageBroker, personMeeting.Person, personMeeting.Period, null));
                 }
             }
         }
