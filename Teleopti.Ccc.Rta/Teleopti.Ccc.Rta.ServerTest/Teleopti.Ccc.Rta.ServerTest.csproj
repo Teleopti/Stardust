@@ -146,7 +146,6 @@
     <Compile Include="Resolvers\DataSourceResolverTest.cs" />
     <Compile Include="InvalidateRtaDataHandlerCacheTest.cs" />
     <Compile Include="Resolvers\PersonResolverTest.cs" />
-    <Compile Include="PersonStateHolderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RtaDataHandlerTest.cs" />
     <Compile Include="ScheduleLayerTest.cs" />

@@ -19,12 +19,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		private readonly IWorkShiftWorkTime _workShiftWorkTime;
 		private readonly IRestrictionExtractor _restrictionExtractor;
 		private readonly RestrictionSchedulingOptions _schedulingOptions;
+		private IPersonalShiftRestrictionCombiner _personalShiftRestrictionCombiner;
+		private IMeetingRestrictionCombiner _meetingRestrictionCombiner;
 
-		public AgentRestrictionsDetailEffectiveRestrictionExtractor(IWorkShiftWorkTime workShiftWorkTime, IRestrictionExtractor restrictionExtractor, RestrictionSchedulingOptions schedulingOptions)
+		public AgentRestrictionsDetailEffectiveRestrictionExtractor(IWorkShiftWorkTime workShiftWorkTime, IRestrictionExtractor restrictionExtractor, RestrictionSchedulingOptions schedulingOptions, IPersonalShiftRestrictionCombiner personalShiftRestrictionCombiner, IMeetingRestrictionCombiner meetingRestrictionCombiner)
 		{
 			_workShiftWorkTime = workShiftWorkTime;
 			_restrictionExtractor = restrictionExtractor;
 			_schedulingOptions = schedulingOptions;
+			_meetingRestrictionCombiner = meetingRestrictionCombiner;
+			_personalShiftRestrictionCombiner = personalShiftRestrictionCombiner;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -43,6 +47,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 			_restrictionExtractor.Extract(scheduleMatrixPro.Person, dateOnly);
 			var totalRestriction = _restrictionExtractor.CombinedRestriction(_schedulingOptions);
+
+			totalRestriction = _personalShiftRestrictionCombiner.Combine(scheduleDay, totalRestriction);
+			totalRestriction = _meetingRestrictionCombiner.Combine(scheduleDay, totalRestriction);
 
 			if (_schedulingOptions.UseScheduling)
 			{

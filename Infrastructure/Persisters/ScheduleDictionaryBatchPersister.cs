@@ -37,8 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 				{
 					using (var uow = makeUnitOfWork(uowFactory, scheduleRange))
 					{
-						var tempDiff = new DifferenceCollection<IPersistableScheduleData> { item };
-						var result = _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository, tempDiff);
+						var result = _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository, item);
 						uow.PersistAll(_messageBrokerIdentifier);
 						if (_callback != null)
 							_callback.Callback(scheduleRange, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);

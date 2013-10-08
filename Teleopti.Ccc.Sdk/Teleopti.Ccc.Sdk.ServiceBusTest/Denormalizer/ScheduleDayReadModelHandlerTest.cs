@@ -62,8 +62,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(2));
 			var denormalizedScheduleDay = new ProjectionChangedEventScheduleDay
 			{
-				StartDateTime = period.StartDateTime,
-				EndDateTime = period.EndDateTime,
+				Shift = new ProjectionChangedEventShift
+					{
+						StartDateTime = period.StartDateTime,
+						EndDateTime = period.EndDateTime,
+					}
 			};
 
 			_mocks.ReplayAll();
@@ -84,11 +87,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(_person.PermissionInformation.DefaultTimeZone());
 			var model = new ScheduleDayReadModel();
 			var denormalizedScheduleDay = new ProjectionChangedEventScheduleDay
-			{
-				Date = dateOnlyPeriod.StartDate,
-				StartDateTime = period.StartDateTime,
-				EndDateTime = period.EndDateTime,
-			};
+				{
+					Date = dateOnlyPeriod.StartDate,
+					Shift = new ProjectionChangedEventShift
+						{
+							StartDateTime = period.StartDateTime,
+							EndDateTime = period.EndDateTime,
+						}
+				};
 			var message = new ProjectionChangedEvent
 			              	{
 				          		PersonId = _person.Id.GetValueOrDefault(),
@@ -117,11 +123,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(_person.PermissionInformation.DefaultTimeZone());
 			var model = new ScheduleDayReadModel();
 			var denormalizedScheduleDay = new ProjectionChangedEventScheduleDay
-			                              	{
-			                              		Date = dateOnlyPeriod.StartDate,
-			                              		StartDateTime = period.StartDateTime,
-			                              		EndDateTime = period.EndDateTime,
-			                              	};
+											{
+												Date = dateOnlyPeriod.StartDate,
+												Shift = new ProjectionChangedEventShift
+													{
+														StartDateTime = period.StartDateTime,
+														EndDateTime = period.EndDateTime,
+													}
+											};
 			var message = new ProjectionChangedEvent
 			              	{
 								PersonId = _person.Id.GetValueOrDefault(),
