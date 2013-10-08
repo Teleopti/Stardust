@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel
@@ -21,18 +22,40 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 
 			foreach (var scheduleDay in schedule.ScheduleDays)
 			{
-				var ret = new PersonScheduleDayReadModel();
+				var readModel = new PersonScheduleDayReadModel
+					{
+						PersonId = schedule.PersonId,
+						TeamId = scheduleDay.TeamId,
+						SiteId = scheduleDay.SiteId,
+						BusinessUnitId = schedule.BusinessUnitId,
+						Date = scheduleDay.Date
+					};
 
-				ret.PersonId = schedule.PersonId;
-				ret.TeamId = scheduleDay.TeamId;
-				ret.SiteId = scheduleDay.SiteId;
-				ret.BusinessUnitId = schedule.BusinessUnitId;
-				ret.Date = scheduleDay.Date;
+				var layers = new List<SimpleLayer>();
 
-				if (scheduleDay.StartDateTime.HasValue && scheduleDay.EndDateTime.HasValue)
+				if (scheduleDay.Shift != null)
 				{
-					ret.ShiftStart = scheduleDay.StartDateTime;
-					ret.ShiftEnd = scheduleDay.EndDateTime;
+					readModel.Start = scheduleDay.Shift.StartDateTime;
+					readModel.End = scheduleDay.Shift.EndDateTime;
+
+					var ls = from layer in scheduleDay.Shift.Layers
+					         select new SimpleLayer
+						         {
+							         Color = ColorTranslator.ToHtml(Color.FromArgb(layer.DisplayColor)),
+							         Title = layer.Name,
+							         Start = layer.StartDateTime,
+							         End = layer.EndDateTime,
+							         Minutes = (int) layer.EndDateTime.Subtract(layer.StartDateTime).TotalMinutes,
+							         IsAbsenceConfidential = layer.IsAbsenceConfidential
+						         };
+
+					layers.AddRange(ls);
+				}
+
+				if (scheduleDay.DayOff != null)
+				{
+					readModel.Start = scheduleDay.DayOff.StartDateTime;
+					readModel.End = scheduleDay.DayOff.EndDateTime;
 				}
 
 				var model = new Model
@@ -44,33 +67,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 						EmploymentNumber = person.EmploymentNumber,
 						Shift = new Shift
 							{
-								ContractTimeMinutes = (int)scheduleDay.ContractTime.TotalMinutes,
-								WorkTimeMinutes = (int)scheduleDay.WorkTime.TotalMinutes,
-								Projection = new List<SimpleLayer>(),
+								ContractTimeMinutes = (int) scheduleDay.ContractTime.TotalMinutes,
+								WorkTimeMinutes = (int) scheduleDay.WorkTime.TotalMinutes,
+								Projection = layers,
 								IsFullDayAbsence = scheduleDay.IsFullDayAbsence
 							},
-						DayOff = scheduleDay.IsDayOff ? new DayOff { Title = scheduleDay.Name} : null
+						DayOff = scheduleDay.DayOff != null
+							         ? new DayOff
+								         {
+									         Title = scheduleDay.Name,
+									         Start = scheduleDay.DayOff.StartDateTime,
+									         End = scheduleDay.DayOff.EndDateTime
+								         }
+							         : null
 					};
 
-				if (scheduleDay.Layers != null)
-				{
-					foreach (var layer in scheduleDay.Layers)
-					{
-						model.Shift.Projection.Add(new SimpleLayer
-							{
-								Color = ColorTranslator.ToHtml(Color.FromArgb(layer.DisplayColor)),
-								Title = layer.Name,
-								Start = layer.StartDateTime,
-								End = layer.EndDateTime,
-								Minutes = (int) layer.EndDateTime.Subtract(layer.StartDateTime).TotalMinutes,
-								IsAbsenceConfidential = layer.IsAbsenceConfidential
-							});
-					}
-				}
+				readModel.Model = _serializer.SerializeObject(model);
 
-				ret.Model = _serializer.SerializeObject(model);
-
-				yield return ret;
+				yield return readModel;
 			}
 		}
 

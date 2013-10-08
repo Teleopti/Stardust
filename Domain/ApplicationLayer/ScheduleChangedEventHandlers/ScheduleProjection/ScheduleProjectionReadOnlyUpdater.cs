@@ -36,10 +36,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 						new DateOnlyPeriod(date, date), @event.ScenarioId, @event.PersonId);
 				}
 
-				foreach (var layer in scheduleDay.Layers)
+				if (scheduleDay.Shift == null) continue;
+				foreach (var layer in scheduleDay.Shift.Layers)
 				{
-					if (isLayerRightNow(layer) || 
-						isCurrentLayerCloser(layer, closestLayerToNow))
+					if (isLayerRightNow(layer) ||
+					    isCurrentLayerCloser(layer, closestLayerToNow))
 						closestLayerToNow = layer;
 					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, @event.ScenarioId, @event.PersonId, layer);
 				}

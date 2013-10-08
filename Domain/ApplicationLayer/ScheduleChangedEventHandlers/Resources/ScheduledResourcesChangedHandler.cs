@@ -67,7 +67,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 							}
 						}
 
-						var resources = scheduleDay.Layers.ToResourceLayers(configurableIntervalLength);
+						if (scheduleDay.Shift == null) continue;
+						var resources = scheduleDay.Shift.Layers.ToResourceLayers(configurableIntervalLength);
 						foreach (var resourceLayer in resources)
 						{
 							storage.AddResource(resourceLayer, combination);
