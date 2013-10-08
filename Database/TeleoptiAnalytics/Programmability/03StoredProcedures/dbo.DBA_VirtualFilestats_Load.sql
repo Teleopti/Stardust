@@ -51,7 +51,7 @@ DECLARE
 @NumberOfRows             INT,
 @ErrorMessageText         NVARCHAR(4000),
 @CurrentServerName        VARCHAR(255),
-@DifferenceInMilliSeconds BIGINT,
+@DifferenceInMilliSeconds BIGINT
 
 SELECT @CurrentServerName = Cast(Serverproperty('servername') AS VARCHAR(255))
 SET @DifferenceInMilliSeconds = Datediff(ms, CONVERT(DATETIME, '00:00:00', 8), @Duration)
