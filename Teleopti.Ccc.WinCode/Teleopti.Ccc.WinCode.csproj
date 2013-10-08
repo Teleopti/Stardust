@@ -590,6 +590,7 @@
     <Compile Include="Scheduling\AuditHistory\RevisionDisplayRow.cs" />
     <Compile Include="Scheduling\CalculateMinMaxCacheDecider.cs" />
     <Compile Include="Scheduling\AgentOvertimeAvailabilityPresenter.cs" />
+    <Compile Include="Scheduling\DaysOnlyHelper.cs" />
     <Compile Include="Scheduling\AgentOvertimeAvailabilityAddCommand.cs" />
     <Compile Include="Scheduling\AgentOvertimeAvailabilityEditCommand.cs" />
     <Compile Include="Scheduling\AgentOvertimeAvailabilityRemoveCommand.cs" />
@@ -606,6 +607,12 @@
     <Compile Include="Scheduling\MatrixUnselectedDaysLocker.cs" />
     <Compile Include="Scheduling\Requests\HandlePersonRequestComparer.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailabilityCreator.cs" />
+    <Compile Include="Scheduling\ShiftCategoryDistribution\INeedShiftCategoryDistributionModel.cs" />
+    <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftCategoryDistributionExtensions.cs" />
+    <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftCategoryDistributionModel.cs" />
+    <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftPerAgentPresenter.cs" />
+    <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftPerDatePresenter.cs" />
+    <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftStatisticsPresenter.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessOptimizer.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessValueHelper.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControlPresenter.cs" />

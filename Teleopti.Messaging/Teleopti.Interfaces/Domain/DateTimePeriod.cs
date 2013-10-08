@@ -144,16 +144,34 @@ namespace Teleopti.Interfaces.Domain
                               int startDay,
                               int endYear,
                               int endMonth,
-                              int endDay)
-        {
-            DateTime startDateTimeTemp = new DateTime(startYear, startMonth, startDay, 0, 0, 0, DateTimeKind.Utc);
-            DateTime endDateTimeTemp = new DateTime(endYear, endMonth, endDay, 0, 0, 0, DateTimeKind.Utc);
+                              int endDay) : this
+			(startYear, 
+			startMonth, 
+			startDay, 
+			0, 
+			endYear, 
+			endMonth, 
+			endDay, 
+			0) { }
 
-            validateDateTime(startDateTimeTemp, endDateTimeTemp);
-            period = new MinMax<DateTime>(startDateTimeTemp, endDateTimeTemp);
-        }
+	    public DateTimePeriod(int startYear,
+	                          int startMonth,
+	                          int startDay,
+	                          int startHour,
+	                          int endYear,
+	                          int endMonth,
+	                          int endDay,
+	                          int endHour
+		    )
+	    {
+		    DateTime startDateTimeTemp = new DateTime(startYear, startMonth, startDay, startHour, 0, 0, DateTimeKind.Utc);
+		    DateTime endDateTimeTemp = new DateTime(endYear, endMonth, endDay, endHour, 0, 0, DateTimeKind.Utc);
 
-        #endregion
+		    validateDateTime(startDateTimeTemp, endDateTimeTemp);
+		    period = new MinMax<DateTime>(startDateTimeTemp, endDateTimeTemp);
+	    }
+
+	    #endregion
 
         #region Methods
 

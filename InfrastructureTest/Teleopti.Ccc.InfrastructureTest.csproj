@@ -158,6 +158,7 @@
     <Compile Include="NHibernateConfiguration\CompressedStringTest.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriverTest.cs" />
     <Compile Include="Persisters\BugTest\Bug24079.cs" />
+    <Compile Include="Persisters\BugTest\Bug25007.cs" />
     <Compile Include="Persisters\PersonRequestRefresherTest.cs" />
     <Compile Include="Persisters\ScheduleRefresherTest.cs" />
     <Compile Include="Repositories\AbsenceRequestInfoTest.cs" />

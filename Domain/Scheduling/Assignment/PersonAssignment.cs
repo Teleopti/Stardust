@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			if (template != null)
 			{
-				ClearMainLayers();				
+				ClearMainLayers();
 			}
 			_dayOffTemplate = template;
 		}

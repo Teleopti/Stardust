@@ -70,13 +70,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var start = TimeZoneInfo.ConvertTimeToUtc(date, person.PermissionInformation.DefaultTimeZone());
 			var end = TimeZoneInfo.ConvertTimeToUtc(date.AddHours(24), person.PermissionInformation.DefaultTimeZone());
 
-			if (personScheduleDayReadModel != null && personScheduleDayReadModel.ShiftStart.HasValue)
-				start = DateTime.SpecifyKind(personScheduleDayReadModel.ShiftStart.Value, DateTimeKind.Utc);
-			if (previousDayReadModel != null && previousDayReadModel.ShiftEnd.HasValue &&
-				previousDayReadModel.ShiftEnd.Value > start)
-				start = DateTime.SpecifyKind(previousDayReadModel.ShiftEnd.Value, DateTimeKind.Utc);
-			if (personScheduleDayReadModel != null && personScheduleDayReadModel.ShiftEnd.HasValue)
-				end = DateTime.SpecifyKind(personScheduleDayReadModel.ShiftEnd.Value, DateTimeKind.Utc);
+			if (personScheduleDayReadModel != null && personScheduleDayReadModel.Start.HasValue)
+				start = DateTime.SpecifyKind(personScheduleDayReadModel.Start.Value, DateTimeKind.Utc);
+			if (previousDayReadModel != null && previousDayReadModel.End.HasValue &&
+				previousDayReadModel.End.Value > start)
+				start = DateTime.SpecifyKind(previousDayReadModel.End.Value, DateTimeKind.Utc);
+			if (personScheduleDayReadModel != null && personScheduleDayReadModel.End.HasValue)
+				end = DateTime.SpecifyKind(personScheduleDayReadModel.End.Value, DateTimeKind.Utc);
 
 			var absencePeriod = new DateTimePeriod(start, end);
 			return _personAbsenceRepository.Find(new[] { person }, absencePeriod);

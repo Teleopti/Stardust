@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 				if (isSnapshot && string.IsNullOrEmpty(logOn))
 				{
-					_loggingSvc.InfoFormat("Last of batch detected, initializing hanling for batch id: {0}, source id: {1}", batchId,
+					_loggingSvc.InfoFormat("Last of batch detected, initializing handling for batch id: {0}, source id: {1}", batchId,
 					                       sourceId);
 					handleLastOfBatch(batchId, sourceId);
 					return;
@@ -222,8 +222,6 @@ namespace Teleopti.Ccc.Rta.Server
 						continue;
 					}
 
-
-					_loggingSvc.InfoFormat("ActualAgentState cache - Adding/updating state: {0}", agentState);
 					_stateCache.AddAgentStateToCache(agentState);
 					if (agentState.SendOverMessageBroker)
 						sendRtaState(agentState);

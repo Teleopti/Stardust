@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Rta.Server
 {
 	public interface IAlarmMapper
 	{
-		RtaAlarmLight GetAlarm(Guid activityId, Guid stateGroupId);
+		RtaAlarmLight GetAlarm(Guid activityId, Guid stateGroupId, Guid businessUnit);
 		RtaStateGroupLight GetStateGroup(string stateCode, Guid platformTypeId, Guid businessUnitId);
 		bool IsAgentLoggedOut(Guid personId, string stateCode, Guid platformTypeId, Guid businessUnitId);
 	}
@@ -25,30 +25,30 @@ namespace Teleopti.Ccc.Rta.Server
 			_mbCacheFactory = mbCacheFactory;
 		}
 
-		public RtaAlarmLight GetAlarm(Guid activityId, Guid stateGroupId)
+		public RtaAlarmLight GetAlarm(Guid activityId, Guid stateGroupId, Guid businessUnit)
 		{
 			Logger.InfoFormat("Getting alarm for Activity: {0}, StateGroupId: {1}", activityId, stateGroupId);
-			
-			var allAlarms = _databaseHandler.ActivityAlarms();
-			var alarm = findAlarmForActivity(activityId, stateGroupId, allAlarms);
-			return alarm ?? findAlarmForActivity(Guid.Empty, stateGroupId, allAlarms);
+			var alarm = findAlarmForActivity(activityId, stateGroupId, _databaseHandler.ActivityAlarms(), businessUnit);
+			return alarm;
 		}
 		
 		private static RtaAlarmLight findAlarmForActivity(Guid activityId, Guid stateGroupId,
-		                                                  IDictionary<Guid, List<RtaAlarmLight>> allAlarms)
+		                                                  IDictionary<Guid, List<RtaAlarmLight>> allAlarms, Guid businessUnit)
 		{
 			Logger.InfoFormat("Trying to get alarm for Activity: {0}, StateGroupId: {1}", activityId, stateGroupId);
 			List<RtaAlarmLight> alarmForActivity;
 			if (allAlarms.TryGetValue(activityId, out alarmForActivity))
 			{
-				var alarmForStateGroup = alarmForActivity.SingleOrDefault(a => a.StateGroupId == stateGroupId);
+				var alarmForStateGroup = alarmForActivity.SingleOrDefault(a => a.StateGroupId == stateGroupId && a.BusinessUnit == businessUnit);
 				if (alarmForStateGroup != null)
 					Logger.InfoFormat("Found Alarm: {0}, AlarmId: {1}", alarmForStateGroup.AlarmTypeId, alarmForStateGroup.Name);
 				else
-					Logger.InfoFormat("Could not find alarm");
+					Logger.InfoFormat("Could not find alarm, no matching StateGroupId");
 				return alarmForStateGroup;
 			}
-			return null;
+			return activityId != Guid.Empty
+				       ? findAlarmForActivity(Guid.Empty, stateGroupId, allAlarms, businessUnit)
+				       : null;
 		}
 
 		public RtaStateGroupLight GetStateGroup(string stateCode, Guid platformTypeId, Guid businessUnitId)
@@ -122,5 +122,6 @@ namespace Teleopti.Ccc.Rta.Server
 		public int DisplayColor { get; set; }
 		public double StaffingEffect { get; set; }
 		public long ThresholdTime { get; set; }
+		public Guid BusinessUnit { get; set; }
 	}
 }

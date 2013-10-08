@@ -22,16 +22,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			var target = new ScheduleDictionaryBatchPersister(currUowFactory, null, scheduleDictionaryPersister, null, null, null, null);
 
 			var difference = new DifferenceCollection<IPersistableScheduleData>() { new DifferenceCollectionItem<IPersistableScheduleData>() };
-			var scheduleDictionary = StubScheduleDictionary(difference);
+			var scheduleDictionary = stubScheduleDictionary(difference);
 			currUowFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
 			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 
 			target.Persist(scheduleDictionary);
 
-			scheduleDictionaryPersister.AssertWasCalled(x => x.MarkForPersist(uow, null, difference));
+			scheduleDictionaryPersister.AssertWasCalled(x => x.MarkForPersist(uow, null, difference.First()));
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void ShouldCreateOneTransactionPerModifiedRange()
 		{
 			var currUowFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			var currUowFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var target = new ScheduleDictionaryBatchPersister(currUowFactory, null, null, null, null, null, null);
-			var scheduleDictionary = StubScheduleDictionary(new DifferenceCollection<IPersistableScheduleData>());
+			var scheduleDictionary = stubScheduleDictionary(new DifferenceCollection<IPersistableScheduleData>());
 			var range = MockRepository.GenerateMock<IScheduleRange>();
 			var difference = new DifferenceCollection<IPersistableScheduleData>();
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			var data = new[] { new[] { MockRepository.GenerateMock<IAggregateRoot>(), MockRepository.GenerateMock<IAggregateRoot>() } };
 			var target = new ScheduleDictionaryBatchPersister(currUowFactory, null, scheduleDictionaryPersister, null, null, reassociateData, null);
 
-			var scheduleDictionary = StubScheduleDictionary();
+			var scheduleDictionary = stubScheduleDictionary();
 
 			currUowFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
 			reassociateData.Stub(x => x.DataToReassociate(scheduleDictionary.Values.Single().Person)).Return(data);
@@ -109,20 +109,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			var scheduleDictionaryPersister = MockRepository.GenerateMock<IScheduleDictionarySaver>();
 			var target = new ScheduleDictionaryBatchPersister(currUowFactory , null, scheduleDictionaryPersister, null, null, null, callback);
 			var result = new ScheduleDictionaryPersisterResult();
-			var scheduleDictionary = StubScheduleDictionary();
+			var scheduleDictionary = stubScheduleDictionary();
 			var range = scheduleDictionary.Values.Single();
 
 			currUowFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
 			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
-			scheduleDictionaryPersister.Stub(x => x.MarkForPersist(uow, null, null)).IgnoreArguments().Return(result);
+			scheduleDictionaryPersister.Stub(x => x.MarkForPersist(uow, null, new DifferenceCollectionItem<IPersistableScheduleData>())).IgnoreArguments().Return(result);
 
 			target.Persist(scheduleDictionary);
 
 			callback.AssertWasCalled(x => x.Callback(range, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities));
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-		private IScheduleDictionary StubScheduleDictionary(DifferenceCollection<IPersistableScheduleData> differenceCollection)
+		private static IScheduleDictionary stubScheduleDictionary(DifferenceCollection<IPersistableScheduleData> differenceCollection)
 		{
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
 			var range = MockRepository.GenerateMock<IScheduleRange>();
@@ -133,9 +132,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			return scheduleDictionary;
 		}
 
-		private IScheduleDictionary StubScheduleDictionary()
+		private static IScheduleDictionary stubScheduleDictionary()
 		{
-			return StubScheduleDictionary(new DifferenceCollection<IPersistableScheduleData> {new DifferenceCollectionItem<IPersistableScheduleData>()});
+			return stubScheduleDictionary(new DifferenceCollection<IPersistableScheduleData> {new DifferenceCollectionItem<IPersistableScheduleData>()});
 		}
 	}
 }

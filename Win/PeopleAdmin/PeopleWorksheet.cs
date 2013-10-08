@@ -198,6 +198,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                         toolStripButtonMainSave_Click(this, null);
                         break;
 
+					case Keys.Control | Keys.N:
+		                handleControlNCmdKey();
+						break;
+
                     case Keys.Escape:
                         _findAndReplaceForm.Hide();
                         break;
@@ -207,7 +211,45 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private void panelConstructor_GridViewChanged(object sender, EventArgs e)
+	    private void handleControlNCmdKey()
+	    {
+		    if (toolStripExEdit.Enabled)
+		    {
+			    var viewType = _gridConstructor.View.Type;
+
+			    ToolStripItem theButton = null;
+			    switch (viewType)
+			    {
+				    case ViewType.GeneralView:
+					    theButton = _editControl.NewSpecialItems.FirstOrDefault(c => c.Text == UserTexts.Resources.NewPerson);
+					    break;
+				    case ViewType.PeoplePeriodView:
+					    theButton = _editControl.NewSpecialItems.FirstOrDefault(c => c.Text == UserTexts.Resources.NewPersonPeriod);
+					    break;
+				    case ViewType.SchedulePeriodView:
+					    theButton = _editControl.NewSpecialItems.FirstOrDefault(c => c.Text == UserTexts.Resources.NewSchedulePeriod);
+					    break;
+				    case ViewType.PersonRotationView:
+					    theButton = _editControl.NewSpecialItems.FirstOrDefault(c => c.Text == UserTexts.Resources.NewPersonRotation);
+					    break;
+				    case ViewType.PersonalAccountGridView:
+					    theButton = _editControl.NewSpecialItems.FirstOrDefault(c => c.Text == UserTexts.Resources.NewPersonAccount);
+					    break;
+				    case ViewType.PersonAvailabilityView:
+					    theButton =
+						    _editControl.NewSpecialItems.FirstOrDefault(c => c.Text == UserTexts.Resources.NewPersonAvailability);
+					    break;
+			    }
+
+			    if (theButton != null)
+			    {
+				    var theEvent = new ToolStripItemClickedEventArgs(theButton);
+				    EditControl_NewSpecialClicked(theButton, theEvent);
+			    }
+		    }
+	    }
+
+	    private void panelConstructor_GridViewChanged(object sender, EventArgs e)
         {
             InParameter.NotNull("sender", sender);
 
@@ -924,7 +966,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             _editControl.DeleteClicked += (EditControl_DeleteClicked);
 
             //Set generalToolStripButton to add new person when press CTRL + N.
-            SetShortcut(generalToolStripButton, ((Keys.Control | Keys.N)));
+            //SetShortcut(generalToolStripButton, ((Keys.Control | Keys.N)));
             toolStripExEdit.Enabled = PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
         }

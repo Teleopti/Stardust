@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
@@ -32,7 +31,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		/// <summary>
 		/// The label
 		/// </summary>
-		public string Label { get; set; }
+		public string ShortName { get; set; }
+		public string Name { get; set; }
 		/// <summary>
 		/// The color
 		/// </summary>
@@ -41,21 +41,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		/// Is this a work day
 		/// </summary>
 		public bool IsWorkday { get; set; }
-		/// <summary>
-		/// Optional shift start
-		/// </summary>
-		public DateTime? StartDateTime { get; set; }
-		/// <summary>
-		/// Optional shift end
-		/// </summary>
-		public DateTime? EndDateTime { get; set; }
 
-		/// <summary>
-		/// The layers for this shift
-		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-		public ICollection<ProjectionChangedEventLayer> Layers { get; set; }
+		public bool IsFullDayAbsence { get; set; }
 
 		public bool NotScheduled { get; set; }
+
+		public ProjectionChangedEventDayOff DayOff { get; set; }
+
+		public ProjectionChangedEventShift Shift { get; set; }
 	}
 }
