@@ -19,25 +19,16 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 				case DifferenceStatus.Added:
 					//BUG 25007 - see Teleopti.Ccc.InfrastructureTest.Persisters.BugTest.Bug25007
 					//we (Roger & Mathias) don't know why though... Now we have a test a least
-
 					var clone = (IPersistableScheduleData)scheduleChange.CurrentItem.Clone();
 					scheduleRepository.Add(clone);
-					// ouch.
-					// We have to set the id here to make sure unsafesnapshot update works later, otherwise it wont understand its the same entity
 					scheduleChange.CurrentItem.SetId(clone.Id);
 					addedEntities.Add(clone);
-
-					//todo- change to this if it works
-					// scheduleRepository.Add(diffItem.CurrentItem);
-					// addedEntities.Add(diffItem.CurrentItem);
-
 					break;
 				case DifferenceStatus.Deleted:
 					scheduleRepository.Remove(scheduleChange.OriginalItem);
 					deletedEntities.Add(scheduleChange.OriginalItem);
 					break;
 				case DifferenceStatus.Modified:
-
 					unitOfWork.Reassociate(scheduleChange.OriginalItem);
 					var merged = unitOfWork.Merge(scheduleChange.CurrentItem);
 					modifiedEntities.Add(merged);
