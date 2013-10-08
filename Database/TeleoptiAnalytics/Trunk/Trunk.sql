@@ -152,24 +152,3 @@ CREATE CLUSTERED INDEX [CIX_DBA_VirtualFileStatsHistory_RecordedDateTime] ON [db
 )
 END
 GO
-
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[DBA_VirtualFileStatsCurrent]') AND type in (N'U'))
-BEGIN
-CREATE TABLE [dbo].[DBA_VirtualFileStatsCurrent](
-    [database_id] [smallint] NOT NULL,
-    [file_id] [smallint] NOT NULL,
-	[interval_ms] [bigint] NOT NULL,
-    [num_of_reads] [bigint] NOT NULL,
-    [num_of_bytes_read] [bigint] NOT NULL,
-    [io_stall_read_ms] [bigint] NOT NULL,
-    [num_of_writes] [bigint] NOT NULL,
-    [num_of_bytes_written] [bigint] NOT NULL,
-    [io_stall_write_ms] [bigint] NOT NULL
-)
-CREATE CLUSTERED INDEX [CIX_DBA_VirtualFileStatsCurrent] ON [dbo].[DBA_VirtualFileStatsCurrent]
-(
-	[database_id] ASC,
-	[file_id] ASC
-)
-END
-GO
