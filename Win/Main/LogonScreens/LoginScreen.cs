@@ -8,13 +8,11 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 {
 	public partial class LoginScreen : UserControl, ILogonStep
 	{
-		private readonly LogonView _parent;
-	    private readonly LogonModel _model;
+		private LogonModel _model;
 
-	    public LoginScreen(LogonView parent, LogonModel model)
+	    public LoginScreen(LogonModel model)
 		{
-			_parent = parent;
-            _model = model;
+			_model = model;
             InitializeComponent();
             labelLogOn.Text = Resources.PleaseEnterYourLogonCredentials;
             labelLoginName.Text = Resources.LoginNameColon;
@@ -32,6 +30,11 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 	        _model.UserName = textBoxLogOnName.Text;
 	        _model.Password = textBoxPassword.Text;
 	        return _model;
+	    }
+
+	    public void Release()
+	    {
+	        _model = null;
 	    }
 
 	    private void LoginScreen_Load(object sender, System.EventArgs e)

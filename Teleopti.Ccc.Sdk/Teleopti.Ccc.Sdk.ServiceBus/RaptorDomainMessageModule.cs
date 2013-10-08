@@ -148,10 +148,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			public void Warning(string warning)
 			{
-				Logger.Warn(warning);
+			    Warning(warning, "");
 			}
 
-			public void Error(string error)
+		    public void Warning(string warning, string caption)
+		    {
+                Logger.Warn(warning);
+		    }
+
+		    public void Error(string error)
 			{
 				Logger.Error(error);
 			}

@@ -49,6 +49,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
         public void Warning(string warning)
         {
+            Warning(warning, "");
+        }
+
+        public void Warning(string warning, string caption)
+        {
             _licenseVerificationResultDto.IsWarningFound = true;
 
             FaultDto exception = new FaultDto(warning);

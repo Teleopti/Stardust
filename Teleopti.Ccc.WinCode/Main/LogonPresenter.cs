@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
         private void getSdks()
         {
-            _view.ClearForm("Looking for Sdks");
+            _view.ClearForm("");
             var endpoints = _serverEndpointSelector.GetEndpointNames();
             _model.Sdks = endpoints;
             if (endpoints.Count == 1)
@@ -107,8 +107,6 @@ namespace Teleopti.Ccc.WinCode.Main
                 return;
             }
             _view.Exit(DialogResult.OK);
-
-            //disposa formuläret
         }
 
         public void OkbuttonClicked(LogonModel model)

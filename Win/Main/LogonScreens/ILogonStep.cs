@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 	{
 		void SetData(LogonModel model);
 	    LogonModel GetData();
+	    void Release();
 	}
 }
