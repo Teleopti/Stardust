@@ -254,6 +254,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<MatrixListFactory>().As<IMatrixListFactory>();
 			builder.RegisterType<TeamBlockMaxSeatChecker>().As<ITeamBlockMaxSeatChecker>();
             builder.RegisterType<NightlyRestRestrictionForTeamBlock>().As<INightlyRestRestrictionForTeamBlock>();
+            builder.RegisterType<MedianCalculatorForDays>().As<IMedianCalculatorForDays>();
+            builder.RegisterType<TwoDaysIntervalGenerator>().As<ITwoDaysIntervalGenerator>();
 		}
 
 		private static void registerTeamBlockSchedulingService(ContainerBuilder builder)

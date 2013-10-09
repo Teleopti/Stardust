@@ -541,11 +541,13 @@
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
+    <Compile Include="Scheduling\TeamBlock\DayIntervalGenerator.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriod.cs" />
     <Compile Include="ResourceCalculation\TransformResourcesFromStorageCommand.cs" />
     <Compile Include="Scheduling\Overtime\SkillIntervalData.cs" />
     <Compile Include="Scheduling\Overtime\SkillIntervalDataDivider.cs" />
     <Compile Include="Scheduling\Overtime\SkillStaffPeriodToSkillIntervalDataMapper.cs" />
+    <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDays.cs" />
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlock.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftLayer.cs" />
@@ -940,6 +942,7 @@
     <Compile Include="Scheduling\TeamBlock\TeamInfo.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamScheduling.cs" />
+    <Compile Include="Scheduling\TeamBlock\TwoDaysIntervalGenerator.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\EqualWorkShiftValueDecider.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftLengthValueCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftPeriodValueCalculator.cs" />
