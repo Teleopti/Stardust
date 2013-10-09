@@ -2313,12 +2313,6 @@
     <Compile Include="Scheduling\SchedulingScreen.Designer.cs">
       <DependentUpon>SchedulingScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\LogOnScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Main\LogOnScreen.Designer.cs">
-      <DependentUpon>LogOnScreen.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\MoreOrLessButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2788,10 +2782,6 @@
     <EmbeddedResource Include="Scheduling\SchedulingScreen.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SchedulingScreen.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Main\LogOnScreen.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>LogOnScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\WorkloadPages\WorkloadGeneral.resx">
       <DependentUpon>WorkloadGeneral.cs</DependentUpon>
