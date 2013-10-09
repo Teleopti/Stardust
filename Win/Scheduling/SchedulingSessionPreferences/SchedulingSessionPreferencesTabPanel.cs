@@ -407,12 +407,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             checkBoxMustHaves.Checked = _localSchedulingOptions.UsePreferencesMustHaveOnly;
             checkBoxMustHaves.Enabled = _localSchedulingOptions.UsePreferences;
 
-            if (mustHaveSetAndOnlyPreferenceDaysVisible())
-            {
-                checkBoxOnlyPreferenceDays.Checked = true;
-                checkBoxOnlyPreferenceDays.Enabled = false;
-            }
-
             checkBoxUseMaximumPersons.Checked = _localSchedulingOptions.UseMaximumPersons;
             checkBoxUseMinimumPersons.Checked = _localSchedulingOptions.UseMinimumPersons;
 
