@@ -75,8 +75,13 @@
 									<!-- /ko -->
 									
 									<!-- ko if: IsDayOff -->
-									<div class="dayoff absolute" 
-										data-bind="style: { left: DayOff().StartPixels() + 'px', width: DayOff().LengthPixels() + 'px' }"></div>
+									<!-- ko with: DayOff -->
+									<!-- ko if: InTimeLine -->
+									<div 
+										class="dayoff absolute" 
+										data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }"></div>
+									<!-- /ko -->
+									<!-- /ko -->
 									<!-- /ko -->
 								</div>
 							</td>

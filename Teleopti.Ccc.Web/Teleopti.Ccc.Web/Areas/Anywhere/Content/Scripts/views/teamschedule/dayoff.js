@@ -10,25 +10,37 @@ define([
 
 	return function (timeline, data) {
 
-		var self = this;
-
 		var startTime = moment(data.Start, resources.FixedDateTimeFormatForMoment);
 		var dayOffStartMinutes = startTime.diff(data.Date, 'minutes');
 
-		this.StartMinutes = ko.observable(dayOffStartMinutes);
-		this.LengthMinutes = ko.observable(data.Minutes);
+		var startMinutes = ko.observable(dayOffStartMinutes);
+		var lengthMinutes = ko.observable(data.Minutes);
+
+		var displayStartMinute = ko.computed(function() {
+			if (startMinutes() < timeline.StartMinutes())
+				return timeline.StartMinutes();
+			return startMinutes();
+		});
+
+		var displayLength = ko.computed(function () {
+			if (timeline.EndMinutes() < startMinutes() + lengthMinutes())
+				return timeline.EndMinutes() - displayStartMinute();
+			return lengthMinutes();
+		});
 
 		this.StartPixels = ko.computed(function () {
-			var startMinutes = self.StartMinutes() - timeline.StartMinutes();
-			var pixels = startMinutes * timeline.PixelsPerMinute();
+			var start = displayStartMinute() - timeline.StartMinutes();
+			var pixels = start * timeline.PixelsPerMinute();
 			return Math.round(pixels);
 		});
 
 		this.LengthPixels = ko.computed(function () {
-			var lengthMinutes = self.LengthMinutes();
-			var pixels = lengthMinutes * timeline.PixelsPerMinute();
+			var pixels = displayLength() * timeline.PixelsPerMinute();
 			return Math.round(pixels);
 		});
 
+		this.InTimeLine = ko.computed(function () {
+			return displayLength() > 0;
+		});
 	};
 });
