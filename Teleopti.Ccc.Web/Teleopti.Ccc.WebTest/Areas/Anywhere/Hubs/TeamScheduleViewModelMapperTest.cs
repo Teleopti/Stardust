@@ -54,16 +54,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
-		public void ShouldMapDayOff()
+		public void ShouldMapDayOffStartAndEndInUserTimeZone()
 		{
+			var startTime = new DateTime(2013, 10, 07, 22, 0, 0, DateTimeKind.Utc);
+			var endTime = new DateTime(2013, 10, 08, 22, 0, 0, DateTimeKind.Utc);
 			var person = PersonFactory.CreatePersonWithId();
+			var userTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var target = new TeamScheduleViewModelMapper();
 
 			var data = new TeamScheduleData
-				{
-					CanSeePersons = new[] { person },
-					CanSeeConfidentialAbsencesFor = new[] { person },
-					Schedules = new[]
+			{
+				UserTimeZone = userTimeZone,
+				CanSeePersons = new[] { person },
+				CanSeeConfidentialAbsencesFor = new[] { person },
+				Schedules = new[]
 						{
 							new PersonScheduleDayReadModel
 								{
@@ -71,16 +75,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 										{
 											DayOff = new DayOff
 												{
+													Start = startTime,
+													End = endTime,
 													Title = "Day off"
 												}
 										})
 								}
 						}
-				};
+			};
 
 			var result = target.Map(data);
 
-			result.Single().IsDayOff.Should().Be.True();
+			var startTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(startTime, userTimeZone).ToFixedDateTimeFormat();
+			var endTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(endTime, userTimeZone).ToFixedDateTimeFormat();
+			result.Single().DayOffStartTime.Should().Be(startTimeInUserTimeZone);
+			result.Single().DayOffEndTime.Should().Be(endTimeInUserTimeZone);
 		}
 
 		[Test]
