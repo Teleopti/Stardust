@@ -40,9 +40,9 @@ namespace Teleopti.Ccc.Win.Main
 		    return result != DialogResult.Cancel;
 		}
 
-	    public void ShowStep(LoginStep theStep, LogonModel model, bool showBackButton)
+	    public void ShowStep(LoginStep theStep, bool showBackButton)
 	    {
-            _logonSteps[(int)theStep].SetData(model);
+            _logonSteps[(int)theStep].SetData(_model);
             updatePanel((UserControl)_logonSteps[(int)theStep]);
             labelStatusText.Visible = false;
 	        buttonLogOnCancel.Visible = true;
@@ -152,7 +152,11 @@ namespace Teleopti.Ccc.Win.Main
 
         public void ShowErrorMessage(string message, string caption)
         {
-            MessageBoxAdv.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, (RightToLeft == RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
+	        MessageBoxAdv.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error,
+	                           MessageBoxDefaultButton.Button1,
+	                           (RightToLeft == RightToLeft.Yes
+		                            ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
+		                            : 0));
         }
 
 	    public DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton)
@@ -160,9 +164,9 @@ namespace Teleopti.Ccc.Win.Main
 	        return ViewBase.ShowYesNoMessage(this, text, caption, defaultButton);
         }
 
-		public void ShowWarningMessage(string message)
+		public void ShowWarningMessage(string message, string caption)
 		{
-			MessageBoxAdv.Show(message, Resources.WarningMessageTitle, MessageBoxButtons.OK, MessageBoxIcon.Warning,
+			MessageBoxAdv.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning,
 			                   MessageBoxDefaultButton.Button1,
 			                   (RightToLeft == RightToLeft.Yes
 				                    ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
@@ -176,7 +180,7 @@ namespace Teleopti.Ccc.Win.Main
 
         private void buttonLogOnOkClick(object sender, EventArgs e)
         {
-            Presenter.OkbuttonClicked(_logonSteps[(int)Presenter.CurrentStep].GetData());
+            Presenter.OkbuttonClicked();
         }
 
         private void btnBackClick(object sender, EventArgs e)
