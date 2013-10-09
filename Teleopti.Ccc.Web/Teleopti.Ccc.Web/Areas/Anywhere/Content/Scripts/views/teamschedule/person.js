@@ -105,7 +105,7 @@ define([
 				value += self.IsFullDayAbsence ? 5000 : 0;
 				value += self.IsDayOff() ? 10000 : 0;
 				var noShift = self.Layers().length == 0 && !self.IsDayOff();
-				value += noShift ? 15000 : 0;
+				value += noShift ? 20000 : 0;
 				return value;
 			};
 		};
