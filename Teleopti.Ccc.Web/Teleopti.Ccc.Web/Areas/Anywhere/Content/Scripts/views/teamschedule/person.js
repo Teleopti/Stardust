@@ -17,7 +17,7 @@ define([
 
 			this.Id = data.Id;
 			this.Name = ko.observable(data.FirstName + ' ' + data.LastName);
-
+			
 			this.Layers = ko.observableArray();
 			this.WorkTimeMinutes = ko.observable(0);
 			this.ContractTimeMinutes = ko.observable(0);
@@ -99,49 +99,14 @@ define([
 				events.notifySubscribers(self.Id, "gotoperson");
 			};
 
-			this.CompareTo = function(other) {
-
-				var first = self;
-				var second = other;
-				
-				/*
-				return a negative value if the first argument is smaller, 
-				a positive value is the second is smaller, 
-				or zero to treat them as equal.
-				*/
-
-				var firstNoShift = first.Layers().length == 0 && !first.IsDayOff();
-				var secondNoShift = second.Layers().length == 0 && !second.IsDayOff();
-				if (firstNoShift && second.IsDayOff())
-					return 1;
-				if (secondNoShift && first.IsDayOff())
-					return -1;
-
-				if (first.IsDayOff() && second.IsFullDayAbsence)
-					return 1;
-				if (second.IsDayOff() && first.IsFullDayAbsence)
-					return -1;
-
-				if (first.IsFullDayAbsence && !second.IsFullDayAbsence)
-					return 1;
-				if (second.IsFullDayAbsence && !first.IsFullDayAbsence)
-					return -1;
-
-				var firstStartMinutes = first.TimeLineAffectingStartMinute();
-				var secondStartMinutes = second.TimeLineAffectingStartMinute();
-				if (firstStartMinutes > secondStartMinutes)
-					return 1;
-				if (firstStartMinutes < secondStartMinutes)
-					return -1;
-
-				var firstEndMinutes = first.TimeLineAffectingEndMinute();
-				var secondEndMinutes = second.TimeLineAffectingEndMinute();
-				if (firstEndMinutes > secondEndMinutes)
-					return 1;
-				if (firstEndMinutes < secondEndMinutes)
-					return -1;
-
-				return 0;
+			this.OrderBy = function () {
+				var value = 0;
+				value += self.TimeLineAffectingStartMinute() || 0;
+				value += self.IsFullDayAbsence ? 5000 : 0;
+				value += self.IsDayOff() ? 10000 : 0;
+				var noShift = self.Layers().length == 0 && !self.IsDayOff();
+				value += noShift ? 15000 : 0;
+				return value;
 			};
 		};
 	});

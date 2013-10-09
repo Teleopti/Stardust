@@ -55,7 +55,9 @@ define([
 					}
 
 				    currentPersons.sort(function (first, second) {
-				    	return first.CompareTo(second);
+				    	first = first.OrderBy();
+					    second = second.OrderBy();
+					    return first == second ? 0 : (first < second ? -1 : 1);
 					});
 
 					teamSchedule.Persons.valueHasMutated();
