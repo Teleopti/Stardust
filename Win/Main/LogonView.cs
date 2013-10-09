@@ -13,17 +13,17 @@ namespace Teleopti.Ccc.Win.Main
 {
 	public partial class LogonView : Form, ILogonView
 	{
-	    private readonly LogonModel _model;
-	    public ILogonPresenter Presenter{get; set; }
+		private readonly LogonModel _model;
+		public ILogonPresenter Presenter { get; set; }
 		private IList<ILogonStep> _logonSteps;
-		
+
 		public LogonView(LogonModel model)
 		{
-		    _model = model;
-		    InitializeComponent();
-            buttonLogOnCancel.Text = Resources.Cancel;
-            buttonLogOnOK.Text = Resources.Ok;
-		    btnBack.Text = Resources.Back;
+			_model = model;
+			InitializeComponent();
+			buttonLogOnCancel.Text = Resources.Cancel;
+			buttonLogOnOK.Text = Resources.Ok;
+			btnBack.Text = Resources.Back;
 		}
 
 		public bool StartLogon()
@@ -35,36 +35,37 @@ namespace Teleopti.Ccc.Win.Main
 					new LoginScreen(this, _model),
 					new SelectBuScreen(this, _model)
 				};
-            var result = ShowDialog();
-		    return result != DialogResult.Cancel;
+			var result = ShowDialog();
+			return result != DialogResult.Cancel;
 		}
 
-	    public void ShowStep(bool showBackButton)
-	    {
-		    var currentStep = _logonSteps[(int) Presenter.CurrentStep];
+		public void ShowStep(bool showBackButton)
+		{
+			var currentStep = _logonSteps[(int) Presenter.CurrentStep];
 			currentStep.SetData();
-            updatePanel((UserControl)currentStep);
-            labelStatusText.Visible = false;
-	        buttonLogOnCancel.Visible = true;
-	        buttonLogOnOK.Visible = true;
-	        btnBack.Visible = showBackButton;
-            Refresh();
+			updatePanel((UserControl) currentStep);
+			labelStatusText.Visible = false;
+			buttonLogOnCancel.Visible = true;
+			buttonLogOnOK.Visible = true;
+			btnBack.Visible = showBackButton;
+			Refresh();
 
-	    }
+		}
 
-	    public void ClearForm(string labelText)
-	    {
-            pnlContent.Controls.Clear();
-            labelStatusText.Text = labelText;
-            labelStatusText.Visible = labelText != "";
-            buttonLogOnCancel.Visible = false;
-            buttonLogOnOK.Visible = false;
-            btnBack.Visible = false;
-            Refresh();
-	    }
+		public void ClearForm(string labelText)
+		{
+			pnlContent.Controls.Clear();
+			labelStatusText.Text = labelText;
+			labelStatusText.Visible = labelText != "";
+			buttonLogOnCancel.Visible = false;
+			buttonLogOnOK.Visible = false;
+			btnBack.Visible = false;
+			Refresh();
+		}
 
 		public bool InitializeAndCheckStateHolder(string skdProxyName)
 		{
+			// ReSharper disable LocalizableElement
 			if (_model.GetConfigFromWebService)
 			{
 				if (!LogonInitializeStateHolder.GetConfigFromWebService(skdProxyName))
@@ -80,13 +81,11 @@ namespace Teleopti.Ccc.Win.Main
 				if (!LogonInitializeStateHolder.GetConfigFromFileSystem(nhibConfPath, useMessageBroker))
 					return showError();
 			}
-            if (!string.IsNullOrEmpty(LogonInitializeStateHolder.WarningMessage))
-            {
-                // ReSharper disable LocalizableElement
-               MessageBox.Show(this, LogonInitializeStateHolder.WarningMessage, "Configuration warning", MessageBoxButtons.OK);
-                // ReSharper restore LocalizableElement
-            }
+
+			if (!string.IsNullOrEmpty(LogonInitializeStateHolder.WarningMessage))
+				MessageBox.Show(this, LogonInitializeStateHolder.WarningMessage, "Configuration warning", MessageBoxButtons.OK);
 			return true;
+			// ReSharper restore LocalizableElement
 		}
 
 		private bool showError()
@@ -106,88 +105,86 @@ namespace Teleopti.Ccc.Win.Main
 		{
 			pnlContent.Controls.Clear();
 			pnlContent.Controls.Add(userControl);
-		    ActiveControl = userControl;
+			ActiveControl = userControl;
 		}
-		
+
 		public void Exit(DialogResult result)
-		{            
-		    DialogResult = result;
-		    release();
-            Close();
-            Dispose();
+		{
+			DialogResult = result;
+			release();
+			Close();
+			Dispose();
 		}
 
-	    public void Warning(string warning)
-	    {
-            Warning(warning, Resources.LogOn);
-	    }
+		public void Warning(string warning)
+		{
+			Warning(warning, Resources.LogOn);
+		}
 
-	    public void Warning(string warning, string caption)
-        {
-            ShowInTaskbar = true;
-            MessageDialogs.ShowWarning(this, warning, caption);
-            ShowInTaskbar = false;
+		public void Warning(string warning, string caption)
+		{
+			ShowInTaskbar = true;
+			MessageDialogs.ShowWarning(this, warning, caption);
+			ShowInTaskbar = false;
 
-            DialogResult = DialogResult.None;
-        }
+			DialogResult = DialogResult.None;
+		}
 
-        public void Error(string error)
-        {
-            showApplyLicenseDialogAndExit(error);
-        }
+		public void Error(string error)
+		{
+			showApplyLicenseDialogAndExit(error);
+		}
 
-        private void showApplyLicenseDialogAndExit(string explanation)
-        {
-            var applyLicense = new ApplyLicense(explanation, _model.SelectedDataSourceContainer.DataSource.Application);
-            applyLicense.ShowDialog(this);
-            Application.Exit();
-        }
+		private void showApplyLicenseDialogAndExit(string explanation)
+		{
+			var applyLicense = new ApplyLicense(explanation, _model.SelectedDataSourceContainer.DataSource.Application);
+			applyLicense.ShowDialog(this);
+			Application.Exit();
+		}
 
-        private void logonViewShown(object sender, EventArgs e)
-        {
-            //We must call back so we not just hang
-            Presenter.Initialize();
-        }
+		private void logonViewShown(object sender, EventArgs e)
+		{
+			//We must call back so we not just hang
+			Presenter.Initialize();
+		}
 
-        public void ShowErrorMessage(string message, string caption)
-        {
-            MessageDialogs.ShowWarning(this,message,caption);
-        }
+		public void ShowErrorMessage(string message, string caption)
+		{
+			MessageDialogs.ShowWarning(this, message, caption);
+		}
 
-	    public DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton)
-	    {
-	        return ViewBase.ShowYesNoMessage(this, text, caption, defaultButton);
-        }
+		public DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton)
+		{
+			return ViewBase.ShowYesNoMessage(this, text, caption, defaultButton);
+		}
 
 		public void ShowWarningMessage(string message, string caption)
 		{
-            MessageDialogs.ShowWarning(this, message, caption);
+			MessageDialogs.ShowWarning(this, message, caption);
+		}
+
+		private void buttonLogOnOkClick(object sender, EventArgs e)
+		{
+			_logonSteps[(int) Presenter.CurrentStep].GetData();
+			Presenter.OkbuttonClicked();
 		}
 
 		private void buttonLogOnCancelClick(object sender, EventArgs e)
-        {
-            Exit(DialogResult.Cancel);
-        }
+		{
+			Exit(DialogResult.Cancel);
+		}
 
-        private void buttonLogOnOkClick(object sender, EventArgs e)
-        {
-	        _logonSteps[(int) Presenter.CurrentStep].GetData();
-            Presenter.OkbuttonClicked();
-        }
+		private void btnBackClick(object sender, EventArgs e)
+		{
+			Presenter.BackButtonClicked();
+		}
 
-        private void btnBackClick(object sender, EventArgs e)
-        {
-            Presenter.BackButtonClicked();
-        }
-
-        private void release()
-        {
-            foreach (var logonStep in _logonSteps)
-            {
-                logonStep.Release();
-            }
-            _logonSteps = null;
-        }
+		private void release()
+		{
+			foreach (var logonStep in _logonSteps)
+				logonStep.Release();
+			_logonSteps = null;
+		}
 
 		public void HandleKeyPress(Message msg, Keys keyData, bool shouldGoFoward)
 		{

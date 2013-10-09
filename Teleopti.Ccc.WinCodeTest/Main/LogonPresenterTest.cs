@@ -5,6 +5,8 @@ using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 using Rhino.Mocks;
@@ -216,8 +218,13 @@ namespace Teleopti.Ccc.WinCodeTest.Main
         public void ShouldGoToLoginIfApplication()
         {
             var dataSourceContainer = new DataSourceContainer(null, null, null, AuthenticationTypeOption.Application);
+			var availableDataSourcesProvider = _mocks.DynamicMock<IAvailableDataSourcesProvider>();
             _model.SelectedDataSourceContainer = dataSourceContainer;
             _model.DataSourceContainers = new List<IDataSourceContainer> { dataSourceContainer };
+
+			Expect.Call(_dataSourceHandler.AvailableDataSourcesProvider()).Return(availableDataSourcesProvider);
+			Expect.Call(availableDataSourcesProvider.UnavailableDataSources())
+				  .Return(new List<IDataSource>());
             Expect.Call(() => _view.ShowStep(true));
             _mocks.ReplayAll();
             _target.CurrentStep = LoginStep.SelectDatasource;
@@ -288,11 +295,18 @@ namespace Teleopti.Ccc.WinCodeTest.Main
         {
             var dataSourceContainer = _mocks.DynamicMock<IDataSourceContainer>();
             var buProvider = _mocks.DynamicMock<IAvailableBusinessUnitsProvider>();
+			var availableDataSourcesProvider = _mocks.DynamicMock<IAvailableDataSourcesProvider>();
+
             var bu = new BusinessUnit("Bu One");
             var bu2 = new BusinessUnit("Bu two");
             _model.SelectedDataSourceContainer = dataSourceContainer;
+	        _model.DataSourceContainers = new List<IDataSourceContainer> {dataSourceContainer};
+			_model.Sdks = new List<string> {"test sdk", "test sdk2"};
 
-            Expect.Call(dataSourceContainer.AuthenticationTypeOption).Return(AuthenticationTypeOption.Windows);
+	        Expect.Call(_dataSourceHandler.AvailableDataSourcesProvider()).Return(availableDataSourcesProvider);
+	        Expect.Call(availableDataSourcesProvider.UnavailableDataSources())
+	              .Return(new List<IDataSource>());
+			Expect.Call(dataSourceContainer.AuthenticationTypeOption).Return(AuthenticationTypeOption.Windows);
             Expect.Call(dataSourceContainer.AvailableBusinessUnitProvider).Return(buProvider);
             Expect.Call(buProvider.AvailableBusinessUnits()).Return(new List<IBusinessUnit> { bu, bu2 });
             Expect.Call(() =>_view.ShowStep(true));

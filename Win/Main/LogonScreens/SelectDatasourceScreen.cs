@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -55,13 +53,6 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 	        listBoxWindowsDataSources.DataSource = null;
 	        listBoxApplicationDataSources.DataSource = null;
 	    }
-
-	    private void SelectDatasourceScreen_Load(object sender, System.EventArgs e)
-        {
-            //SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-            //BackColor = Color.FromArgb(175, Color.CornflowerBlue);
-            
-        }
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{

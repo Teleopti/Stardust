@@ -127,7 +127,6 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "SelectDatasourceScreen";
             this.Size = new System.Drawing.Size(483, 296);
-            this.Load += new System.EventHandler(this.SelectDatasourceScreen_Load);
             this.tabControlChooseDataSource.ResumeLayout(false);
             this.tabPageWindowsDataSources.ResumeLayout(false);
             this.tabPageApplicationDataSources.ResumeLayout(false);

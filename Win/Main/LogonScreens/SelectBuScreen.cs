@@ -1,5 +1,3 @@
-using System;
-using System.Drawing;
 using System.Windows.Forms;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
@@ -35,12 +33,6 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 	        _model = null;
 	        lbxSelectBu.DataSource = null;
 	    }
-
-	    private void selectSdkScreenLoad(object sender, EventArgs e)
-        {
-            //SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-            //BackColor = Color.FromArgb(175, Color.CornflowerBlue);
-        }
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
