@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCode.Common
         private ICollectionView _scheduleLayers;
 
         private TimeSpan _interval = TimeSpan.FromMinutes(15); //Default
-        private IScheduleDay _part;
+        private IScheduleDay _schedule;
         private readonly IRemoveLayerFromSchedule _removeService;
 	    private readonly IReplaceLayerInSchedule _replaceService;
 	    private readonly IEventAggregator _eventAggregator;
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             if (scheduleDay == null) return;
             Clear();
-            _part = scheduleDay;
+            _schedule = scheduleDay;
             var layers = _createLayerViewModelService.CreateViewModelsFromSchedule(selector, scheduleDay, _eventAggregator, Interval, this);
             layers.ForEach(Add);
 
@@ -200,14 +200,14 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             if (scheduleDay == null) return;
             Clear();
-            _part = scheduleDay;
+            _schedule = scheduleDay;
             var layers = _createLayerViewModelService.CreateViewModelsFromSchedule(scheduleDay, _eventAggregator, Interval, this);
             layers.ForEach(Add);
         }
 
-		public DateTimePeriod TotalDateTimePeriod(bool includeAbsence)
+		public DateTimePeriod TotalDateTimePeriod()
 		{
-			if (this.IsEmpty()) return _part.Period;
+			if (this.IsEmpty()) return _schedule.Period;
 			var periods = from l in this
 						  select new
 						  {
@@ -216,13 +216,8 @@ namespace Teleopti.Ccc.WinCode.Common
 							  IsAbsence = l is AbsenceLayerViewModel
 						  };
 
-			if (includeAbsence)
-			{
-				var periodsIncludeAbsence = periods.ToList();
-				return new DateTimePeriod(periodsIncludeAbsence.Min(p => p.Start), periodsIncludeAbsence.Max(p => p.End));
-			}
-
 			var periodsExcludeAbsence = periods.Where(p => !p.IsAbsence).ToList();
+			if (periodsExcludeAbsence.IsEmpty()) return _schedule.Period;
 			return new DateTimePeriod(periodsExcludeAbsence.Min(p => p.Start), periodsExcludeAbsence.Max(p => p.End));
 		}
 
@@ -252,7 +247,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
         public void LayerMovedVertically(ILayerViewModel sender)
         {
-            CreateProjectionViewModels(_part);
+            CreateProjectionViewModels(_schedule);
         }
 
 	   
