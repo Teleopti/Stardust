@@ -54,6 +54,7 @@
 
 .team-schedule .dayoff 
 {
+	top: -7px;
 	height: 35px;
     background-size: 11px 11px;
     background-image: 
@@ -64,7 +65,6 @@
         transparent 8px,
         transparent
         );
-	top: -7px;
 }
 
 .team-schedule .shift .layer
@@ -90,22 +90,7 @@
 	   -moz-border-radius: 4px 4px 4px 4px;
 			border-radius: 4px 4px 4px 4px;
 }
-.team-schedule .resource-layer 
-{
-	height: 14px;
-}
-.team-schedule .resource-layer:last-of-type
-{
-	-webkit-border-radius: 0px 4px 4px 0px;
-	   -moz-border-radius: 0px 4px 4px 0px;
-			border-radius: 0px 4px 4px 0px;
-}
-.team-schedule .resource-layer:first-of-type
-{
-	-webkit-border-radius: 4px 0px 0px 4px;
-	   -moz-border-radius: 4px 0px 0px 4px;
-			border-radius: 4px 0px 0px 4px;
-}
+
 .team-schedule .resources td {
     padding-top: 3px;
 }

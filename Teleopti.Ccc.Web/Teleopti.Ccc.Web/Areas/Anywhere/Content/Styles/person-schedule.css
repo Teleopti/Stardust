@@ -31,24 +31,29 @@
 	height: 57px;
 }
 
-.person-schedule .schedule-row .unit {
+.person-schedule .schedule {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.person-schedule .layer {
 	height: 40px;
 }
 
-.person-schedule .schedule-row .unit:first-of-type
+.person-schedule .layer:first-of-type
 {
 	-webkit-border-radius: 4px 0px 0px 4px;
 	   -moz-border-radius: 4px 0px 0px 4px;
 			border-radius: 4px 0px 0px 4px;
 }
-.person-schedule .schedule-row .unit:last-of-type
+.person-schedule .layer:last-of-type
 {
 	-webkit-border-radius: 0px 4px 4px 0px;
 	   -moz-border-radius: 0px 4px 4px 0px;
 			border-radius: 0px 4px 4px 0px;
 }
 
-.person-schedule .schedule-row .unit:only-child
+.person-schedule .layer:only-child
 {
 	-webkit-border-radius: 4px 4px 4px 4px;
 	   -moz-border-radius: 4px 4px 4px 4px;
@@ -58,7 +63,8 @@
 .person-schedule .dayoff 
 {
 	width: 100%;
-	background-color: beige;
+	top: -8px;
+	height: 57px;
     background-size: 11px 11px;
     background-image: 
         linear-gradient(135deg,
@@ -68,7 +74,6 @@
         transparent 8px,
         transparent
         );
-	border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .person-schedule .full-day-absence-form  {
@@ -94,8 +99,3 @@
 .person-schedule .absence-item {
     vertical-align: middle;
 }
-
-.person-schedule .absence-name {
-    
-}
-
