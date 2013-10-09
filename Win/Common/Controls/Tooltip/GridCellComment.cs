@@ -45,9 +45,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Tooltip
             _editTextBox.BorderStyle = BorderStyle.None;
 
             SuspendLayout();
-            // 
-            // _comment
-            // 
+
             _comment.Anchor = (((AnchorStyles.Top | AnchorStyles.Bottom)
                                 | AnchorStyles.Left)
                                | AnchorStyles.Right);
@@ -58,11 +56,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Tooltip
             _comment.Text = "Author:";
             _comment.Font = new Font(Font, FontStyle.Bold);
             _comment.Dock = DockStyle.Fill;
-            //this._comment.AutoSize = true;
-
-            // 
-            // GridCellComment
-            // 
+			
             AutoScaleBaseSize = new Size(5, 13);
             ClientSize = new Size(width, height);
             ControlBox = false;
@@ -78,7 +72,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Tooltip
             Visible = false;
             TopLevel = false;
 
-
             GraphicsPath myGraphicsPath = new
                 GraphicsPath();
 
@@ -93,7 +86,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Tooltip
             myGraphicsPath.AddPolygon(_points);
 
             BackColor = SystemColors.Info;
-
 
             _dx = 10;
             _dy = 10;
@@ -160,15 +152,15 @@ namespace Teleopti.Ccc.Win.Common.Controls.Tooltip
             pt.Offset(dx1, - dy1);
             Location = pt;
 
-            Graphics g = Graphics.FromHwnd(Handle);
-            SizeF sz = g.MeasureString(CommentText, Font);
+			SizeF sz = TextRenderer.MeasureText(_comment.CreateGraphics(), _comment.Text, _comment.Font, _comment.ClientSize, TextFormatFlags.WordBreak);
+
             int height = (int) (2*yPad + sz.Height); //10 is fudge
             int width = (int) (2*xPad + sz.Width);
 
             Size = new Size(Math.Max(width, _minCommentWidth), Math.Max(height, _minCommentHeight));
 
             _comment.Location = panelPoint;
-            _comment.Size = new Size(width - 2*panelPoint.X, height - 2*panelPoint.Y);
+            //_comment.Size = new Size(width - 2*panelPoint.X, height - 2*panelPoint.Y);
         }
     }
 }
