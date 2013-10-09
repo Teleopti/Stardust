@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
-			builder.RegisterType<PersonScheduleDayReadModelHandler>().As<IHandleEvent<ProjectionChangedEvent>>();
+			builder.RegisterType<PersonScheduleDayReadModelUpdater>().As<IHandleEvent<ProjectionChangedEvent>>();
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();

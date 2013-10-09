@@ -9,13 +9,11 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 {
 	public partial class SelectBuScreen : UserControl, ILogonStep
 	{
-		private readonly LogonView _parent;
-	    private readonly LogonModel _model;
+		private LogonModel _model;
 
-        public SelectBuScreen(LogonView parent, LogonModel model)
+        public SelectBuScreen( LogonModel model)
 		{
-			_parent = parent;
-            _model = model;
+			_model = model;
             InitializeComponent();
             labelChooseBu.Text = Resources.PleaseChooseABusinessUnit;
 		}
@@ -29,6 +27,12 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 	    {
             _model.SelectedBu = (IBusinessUnit)lbxSelectBu.SelectedItem;
 	        return _model;
+	    }
+
+	    public void Release()
+	    {
+	        _model = null;
+	        lbxSelectBu.DataSource = null;
 	    }
 
 	    private void selectSdkScreenLoad(object sender, EventArgs e)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Win.Common;
@@ -32,7 +33,8 @@ namespace Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages
             SdkAuthentication sdkAuthentication = new SdkAuthentication();
             sdkAuthentication.SetSdkAuthenticationHeader();
 
-            using (var proxy = new Proxy())
+            var sdkName = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["Sdk"];
+            using (var proxy = new Proxy(sdkName))
             {
                 bool someTreeNodeIsOptioned = false;
 

@@ -110,12 +110,25 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return person;
         }
 
-        public static IPerson CreatePersonWithPersonPeriod(DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod)
+		public static IPerson CreatePersonWithPersonPeriod(DateOnly personPeriodStart)
+		{
+			return CreatePersonWithPersonPeriod(new Person(), personPeriodStart, new ISkill[] {});
+		}
+
+		public static IPerson CreatePersonWithPersonPeriodTeamSite(DateOnly personPeriodStart)
+		{
+			var site = SiteFactory.CreateSimpleSite(" ");
+			site.SetId(Guid.NewGuid());
+			var team = new Team() {Site = site};
+			var person = CreatePersonWithPersonPeriod(new Person(), personPeriodStart, new ISkill[] { }, team);
+			person.SetId(Guid.NewGuid());
+			return person;
+		}
+
+	    public static IPerson CreatePersonWithPersonPeriod(DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod)
         {
-         
             return CreatePersonWithPersonPeriod(new Person(), personPeriodStart, skillsInPersonPeriod);
         }
-
 
         public static IPerson CreatePersonWithValidVirtualSchedulePeriod(IPerson person, DateOnly periodStart)
         {
@@ -136,33 +149,38 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
         public static IPerson CreatePersonWithPersonPeriod(IPerson person, DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod)
         {
-	        IPersonPeriod pPeriod = person.Period(personPeriodStart);
-	        if (pPeriod == null)
-	        {
-		        pPeriod = new PersonPeriod(personPeriodStart,
-		                         PersonContractFactory.CreatePersonContract(),
-		                         new Team());
-		        person.AddPersonPeriod(pPeriod);
-	        }
-	        foreach (ISkill skill in skillsInPersonPeriod)
-            {
-                IPersonSkill pSkill = new PersonSkill(skill, new Percent(1)) {Active = true};
-            	if(skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
+	        return CreatePersonWithPersonPeriod(person, personPeriodStart, skillsInPersonPeriod, new Team());
+        }
+
+		private static IPerson CreatePersonWithPersonPeriod(IPerson person, DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod, Team teamInPersonPeriod)
+		{
+			IPersonPeriod pPeriod = person.Period(personPeriodStart);
+			if (pPeriod == null)
+			{
+				pPeriod = new PersonPeriod(personPeriodStart,
+								 PersonContractFactory.CreatePersonContract(),
+								 teamInPersonPeriod);
+				person.AddPersonPeriod(pPeriod);
+			}
+			foreach (ISkill skill in skillsInPersonPeriod)
+			{
+				IPersonSkill pSkill = new PersonSkill(skill, new Percent(1)) { Active = true };
+				if (skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
 				{
 					pPeriod.AddPersonMaxSeatSkill(pSkill);
 				}
-                else if (skill.SkillType.ForecastSource == ForecastSource.NonBlendSkill)
-                {
-                    pPeriod.AddPersonNonBlendSkill(pSkill);
-                }
+				else if (skill.SkillType.ForecastSource == ForecastSource.NonBlendSkill)
+				{
+					pPeriod.AddPersonNonBlendSkill(pSkill);
+				}
 				else
 				{
-					person.AddSkill(pSkill,pPeriod);
+					person.AddSkill(pSkill, pPeriod);
 				}
-                
-            }
-            return person;
-        }
+
+			}
+			return person;
+		}
 
 
         #endregion

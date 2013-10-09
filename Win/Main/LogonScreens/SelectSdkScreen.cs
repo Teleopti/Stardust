@@ -1,20 +1,20 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 
 namespace Teleopti.Ccc.Win.Main.LogonScreens
 {
 	public partial class SelectSdkScreen : UserControl, ILogonStep
 	{
-		private readonly LogonView _parent;
-	    private readonly LogonModel _model;
+		private LogonModel _model;
 
-	    public SelectSdkScreen(LogonView parent, LogonModel model)
+	    public SelectSdkScreen(LogonModel model)
 		{
-			_parent = parent;
-            _model = model;
+			_model = model;
             InitializeComponent();
+	        labelChooseSDK.Text = Resources.PleaseChooseSDK;
 		}
 
         public void SetData(LogonModel model)
@@ -28,7 +28,13 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             return _model;
         }
 
-        private void selectSdkScreenLoad(object sender, EventArgs e)
+	    public void Release()
+	    {
+	       _model = null;
+	        lbxSelectSDK.DataSource = null;
+	    }
+
+	    private void selectSdkScreenLoad(object sender, EventArgs e)
         {
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             BackColor = Color.FromArgb(175, Color.CornflowerBlue);

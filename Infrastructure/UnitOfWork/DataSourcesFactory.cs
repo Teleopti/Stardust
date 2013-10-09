@@ -15,6 +15,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
 using Environment = NHibernate.Cfg.Environment;
+using Teleopti.Ccc.Domain.Common.Logging;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
@@ -267,6 +268,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private Configuration createStatisticConfigurationInner(string connectionString, string matrixname)
 		{
+			//REMOVE ME LATER!!!!!!!!!!!!!!!!/((
+			Log4NetConfiguration.SetConnectionString(connectionString);
+			////////////////////////////////////
 			using (PerformanceOutput.ForOperation("Configuring statistic db"))
 			{
 				var statCfg = new Configuration()

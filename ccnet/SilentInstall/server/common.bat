@@ -78,3 +78,10 @@ SET PM_PROCESS_CUBE=False
 SET PM_ASMX=PM not installed
 SET PM_SERVICE=PM not installed
 )
+::PM vs. ETL Service Account
+IF "%PM_INSTALL%"=="True" (
+	IF "%PM_AUTH_MODE%"=="Anonymous" (
+	SET ETLUSERNAME=%PM_ANONYMOUS_DOMAINUSER%
+	SET ETLPASSWORD=%PM_ANONYMOUS_PWD%
+	)
+)

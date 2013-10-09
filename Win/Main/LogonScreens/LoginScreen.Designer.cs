@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.labelLogOn.Location = new System.Drawing.Point(0, 0);
             this.labelLogOn.Name = "labelLogOn";
             this.labelLogOn.Padding = new System.Windows.Forms.Padding(0, 30, 0, 0);
-            this.labelLogOn.Size = new System.Drawing.Size(483, 296);
+            this.labelLogOn.Size = new System.Drawing.Size(483, 245);
             this.labelLogOn.TabIndex = 40;
             this.labelLogOn.Text = "xxPlease enter your logon credentials";
             this.labelLogOn.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.Controls.Add(this.labelLogOn);
             this.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "LoginScreen";
-            this.Size = new System.Drawing.Size(483, 345);
+            this.Size = new System.Drawing.Size(483, 245);
             this.Load += new System.EventHandler(this.LoginScreen_Load);
             this.Enter += new System.EventHandler(this.LoginScreen_Enter);
             this.ResumeLayout(false);

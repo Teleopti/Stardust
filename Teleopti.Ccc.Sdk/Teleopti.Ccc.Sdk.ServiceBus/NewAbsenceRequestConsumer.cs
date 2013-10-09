@@ -293,9 +293,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
     	private void PersistScheduleChanges(IUnitOfWork unitOfWork)
         {
-            var persistResult = _scheduleDictionarySaver.MarkForPersist(unitOfWork, _scheduleRepository,
-																	 _schedulingResultStateHolder.Schedules.DifferenceSinceSnapshot());
-            _scheduleDictionaryModifiedCallback.Callback(_schedulingResultStateHolder.Schedules, persistResult.ModifiedEntities, persistResult.AddedEntities, persistResult.DeletedEntities);
+    		foreach (var diff in _schedulingResultStateHolder.Schedules.DifferenceSinceSnapshot())
+    		{
+					var persistResult = _scheduleDictionarySaver.MarkForPersist(unitOfWork, _scheduleRepository, diff);
+					_scheduleDictionaryModifiedCallback.Callback(_schedulingResultStateHolder.Schedules, persistResult.ModifiedEntities, persistResult.AddedEntities, persistResult.DeletedEntities);    			
+    		}
         }
 
         private void HandleInvalidSchedule()

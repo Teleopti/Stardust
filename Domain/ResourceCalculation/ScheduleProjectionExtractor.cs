@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 

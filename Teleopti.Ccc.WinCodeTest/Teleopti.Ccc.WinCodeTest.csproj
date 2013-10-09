@@ -399,7 +399,9 @@
     <Compile Include="Intraday\ReforecastWizardPagesTest.cs" />
     <Compile Include="Main\LicenseStatusLoaderTest.cs" />
     <Compile Include="Main\LoginInitializerTest.cs" />
+    <Compile Include="Main\LogonDataSourceHandlerTest.cs" />
     <Compile Include="Main\LogonLicenseCheckerTest.cs" />
+    <Compile Include="Main\LogonMatrixTest.cs" />
     <Compile Include="Main\LogonScreenModelTest.cs" />
     <Compile Include="Main\LogonPresenterTest.cs" />
     <Compile Include="Matrix\MatrixNavigationModelTest.cs" />
@@ -554,6 +556,7 @@
     <Compile Include="Scheduler\BusinessRuleResponseViewModelTest.cs" />
     <Compile Include="Scheduler\CalculateMinMaxCacheDeciderTest.cs" />
     <Compile Include="Scheduler\FilterOvertimeAvailabilityPresenterTest.cs" />
+    <Compile Include="Scheduler\DaysOnlyHelperTest.cs" />
     <Compile Include="Scheduler\MatrixUnselectedDaysLockerTest.cs" />
     <Compile Include="Scheduler\PasteAsOvertimeTest.cs" />
     <Compile Include="Scheduler\Reporting\ScheduledTimePerActivityModelTest.cs" />
@@ -565,6 +568,8 @@
     <Compile Include="Scheduler\AgentOvertimeAvailabilityRemoveCommandTest.cs" />
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityCreatorTest.cs" />
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityPersonFilterTest.cs" />
+    <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftCategoryDistributionExtensionsTest.cs" />
+    <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftCategoryDistributionModelTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryFairnessValueHelperTest.cs" />
     <Compile Include="Scheduler\SkillFullPeriodGridControlPresenterTest.cs" />
     <Compile Include="Scheduler\DayPresenterNewTest.cs" />

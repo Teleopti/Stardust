@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(_licenseService.ExpirationDate).Return(DateTime.Today.AddDays(2)).Repeat.Twice();
                 Expect.Call(_licenseService.ExpirationGracePeriod).Return(TimeSpan.FromDays(3));
-                Expect.Call(() => _licenseFeedback.Warning(string.Empty)).IgnoreArguments();
+                Expect.Call(() => _licenseFeedback.Warning(string.Empty, string.Empty)).IgnoreArguments();
             }
             using (_mocks.Playback())
             {

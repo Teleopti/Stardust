@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                     highestShiftValue = shiftValue;
                     continue;
                 }
-                if (shiftValue == highestShiftValue)
+                if (Math.Abs(shiftValue - highestShiftValue) < 0.000001)
                 {
                     var workShiftFinderResultHolder = new WorkShiftCalculationResultHolder { ShiftProjection = shiftProjection, Value = shiftValue };
                     foundValues.Add(workShiftFinderResultHolder);

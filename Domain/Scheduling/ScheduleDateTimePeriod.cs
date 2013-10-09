@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         /// Initializes a new instance of the <see cref="ScheduleDateTimePeriod"/> class.
         /// Use : (int)StateHolderReader.Instance.StateReader.SessionScopeData.SystemSetting[SettingKeys.JusticePointWindow] to load
         /// </summary>
-        /// <param name="period">The period.</param>
+        /// <param name="visiblePeriod">The period.</param>
         /// <param name="personCollection">The person collection.
         /// These people will extend the "LoadedPeriod" to include time outside period based
         /// on each persons scheduleperiod.</param>
@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
         /// Created by: rogerkr
         /// Created date: 2008-05-14
         /// </remarks>
-        public ScheduleDateTimePeriod(DateTimePeriod period, IEnumerable<IPerson> personCollection)
-            : this(period, personCollection, new SchedulerRangeToLoadCalculator(period))
+        public ScheduleDateTimePeriod(DateTimePeriod visiblePeriod, IEnumerable<IPerson> personCollection)
+            : this(visiblePeriod, personCollection, new SchedulerRangeToLoadCalculator(visiblePeriod))
         {
         }
 
@@ -43,29 +43,29 @@ namespace Teleopti.Ccc.Domain.Scheduling
         /// This instance won't take personschedule into consideration.
         /// Use : (int)StateHolderReader.Instance.StateReader.SessionScopeData.SystemSetting[SettingKeys.JusticePointWindow] to load
         /// </summary>
-        /// <param name="period">The period.</param>
+        /// <param name="visiblePeriod">The period.</param>
         /// <remarks>
         /// Created by: rogerkr
         /// Created date: 2008-05-15
         /// </remarks>
-        public ScheduleDateTimePeriod(DateTimePeriod period)
-            : this(period, new List<IPerson>(), new SchedulerRangeToLoadCalculator(period))
+        public ScheduleDateTimePeriod(DateTimePeriod visiblePeriod)
+            : this(visiblePeriod, new List<IPerson>(), new SchedulerRangeToLoadCalculator(visiblePeriod))
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScheduleDateTimePeriod"/> class.
         /// </summary>
-        /// <param name="period">The period.</param>
+        /// <param name="visiblePeriod">The period.</param>
         /// <param name="personCollection">The person collection.</param>
         /// <param name="rangeToLoadCalculator">The range to load calculator.</param>
         /// <remarks>
         /// Created by: rogerkr
         /// Created date: 2008-05-20
         /// </remarks>
-        public ScheduleDateTimePeriod(DateTimePeriod period, IEnumerable<IPerson> personCollection, ISchedulerRangeToLoadCalculator rangeToLoadCalculator) 
+        public ScheduleDateTimePeriod(DateTimePeriod visiblePeriod, IEnumerable<IPerson> personCollection, ISchedulerRangeToLoadCalculator rangeToLoadCalculator) 
         {
-            _visiblePeriod = period;
+            _visiblePeriod = visiblePeriod;
             _personCollection = personCollection;
             _rangeToLoadCalculator = rangeToLoadCalculator;
         }

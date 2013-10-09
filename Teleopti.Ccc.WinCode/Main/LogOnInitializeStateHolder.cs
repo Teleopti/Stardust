@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.Xml.Linq;
@@ -10,7 +9,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Sdk.ClientProxies;
-using Teleopti.Ccc.Win.Common.ServiceBus;
+using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Services;
 using Teleopti.Messaging.SignalR;
 using log4net;
@@ -79,6 +78,7 @@ namespace Teleopti.Ccc.WinCode.Main
             var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
 
             encryptedAppSettings.DecryptDictionary(Interfaces.Infrastructure.EncryptionConstants.Image1, Interfaces.Infrastructure.EncryptionConstants.Image2);
+            encryptedAppSettings.Add("Sdk", endpointNames);
 
             bool messageBrokerDisabled = false;
             string messageBrokerDisabledString;

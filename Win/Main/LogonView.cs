@@ -31,10 +31,10 @@ namespace Teleopti.Ccc.Win.Main
 		{
           _logonSteps = new List<ILogonStep>
 				{
-					new SelectSdkScreen(this, _model),
-					new SelectDatasourceScreen(this, _model),
-					new LoginScreen(this, _model),
-                    new SelectBuScreen(this, _model)
+					new SelectSdkScreen(_model),
+					new SelectDatasourceScreen(_model),
+					new LoginScreen(_model),
+                    new SelectBuScreen(_model)
 				};
             var result = ShowDialog();
 		    return result != DialogResult.Cancel;
@@ -63,7 +63,6 @@ namespace Teleopti.Ccc.Win.Main
             Refresh();
 	    }
 
-        //Dessa till resurs eller vet vi ändå inte språket, kan man använda datorns???
 		public bool InitializeAndCheckStateHolder(string skdProxyName)
 		{
 			if (_model.GetConfigFromWebService)
@@ -112,16 +111,22 @@ namespace Teleopti.Ccc.Win.Main
 		}
 		
 		public void Exit(DialogResult result)
-		{
-            //vi måste nog disposa ngnstans
+		{            
 		    DialogResult = result;
-			Close();
+		    release();
+            Close();
+            Dispose();
 		}
 
-        public void Warning(string warning)
+	    public void Warning(string warning)
+	    {
+            Warning(warning, Resources.LogOn);
+	    }
+
+	    public void Warning(string warning, string caption)
         {
             ShowInTaskbar = true;
-            MessageDialogs.ShowWarning(this, warning, Resources.LogOn);
+            MessageDialogs.ShowWarning(this, warning, caption);
             ShowInTaskbar = false;
 
             DialogResult = DialogResult.None;
@@ -145,14 +150,14 @@ namespace Teleopti.Ccc.Win.Main
             Presenter.Initialize();
         }
 
-        public void ShowErrorMessage(string message)
+        public void ShowErrorMessage(string message, string caption)
         {
-	        MessageBoxAdv.Show(message, Resources.ErrorMessage, MessageBoxButtons.OK, MessageBoxIcon.Error,
-	                           MessageBoxDefaultButton.Button1,
-	                           (RightToLeft == RightToLeft.Yes
-		                            ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-		                            : 0));
+            MessageBoxAdv.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, (RightToLeft == RightToLeft.Yes ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign : 0));
+        }
 
+	    public DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton)
+	    {
+	        return ViewBase.ShowYesNoMessage(this, text, caption, defaultButton);
         }
 
 		public void ShowWarningMessage(string message)
@@ -179,5 +184,13 @@ namespace Teleopti.Ccc.Win.Main
             Presenter.BackButtonClicked();
         }
 
+        private void release()
+        {
+            foreach (var logonStep in _logonSteps)
+            {
+                logonStep.Release();
+            }
+            _logonSteps = null;
+        }
 	}
 }

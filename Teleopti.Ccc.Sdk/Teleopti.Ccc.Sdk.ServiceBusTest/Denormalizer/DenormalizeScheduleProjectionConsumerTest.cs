@@ -50,15 +50,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 							new ProjectionChangedEventScheduleDay
 								{
 									Date = today,
-									StartDateTime = period.StartDateTime,
-									EndDateTime = period.EndDateTime,
-									Layers =
-										new Collection<ProjectionChangedEventLayer>
-											{new ProjectionChangedEventLayer
-												{
-													StartDateTime = utcNow.AddHours(-1),
-													EndDateTime = utcNow.AddHours(1)
-												}}
+									Shift = new ProjectionChangedEventShift
+										{
+											StartDateTime = period.StartDateTime,
+											EndDateTime = period.EndDateTime,
+											Layers =
+												new Collection<ProjectionChangedEventLayer>
+													{
+														new ProjectionChangedEventLayer
+															{
+																StartDateTime = utcNow.AddHours(-1),
+																EndDateTime = utcNow.AddHours(1)
+															}
+													}
+										}
 								}
 						}
 				});
@@ -75,7 +80,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			var period = new DateTimePeriod(utcNow, utcNow);
 
-				target.Handle(new ScheduledResourcesChangedEvent
+			target.Handle(new ScheduledResourcesChangedEvent
 				{
 					IsDefaultScenario = true,
 					PersonId = personId,
@@ -83,11 +88,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 						{
 							new ProjectionChangedEventScheduleDay
 								{
-									StartDateTime = period.StartDateTime,
-									EndDateTime = period.EndDateTime,
-									Layers =
-										new Collection<ProjectionChangedEventLayer>
-											{new ProjectionChangedEventLayer()}
+									Shift = new ProjectionChangedEventShift
+										{
+											StartDateTime = period.StartDateTime,
+											EndDateTime = period.EndDateTime,
+											Layers =
+												new Collection<ProjectionChangedEventLayer>
+													{new ProjectionChangedEventLayer()}
+										}
 								}
 						},
 					IsInitialLoad = true,
@@ -95,29 +103,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 		    scheduleProjectionReadOnlyRepository.AssertWasNotCalled(x => x.ClearPeriodForPerson(new DateOnlyPeriod(), Guid.Empty, person.Id.GetValueOrDefault()));
             serviceBus.AssertWasNotCalled(x => x.Publish(null), o => o.IgnoreArguments());
-		}
-
-		[Test]
-		public void ShouldNotDenormalizeProjectionForOtherThanDefaultScenario()
-		{
-			var period = new DateTimePeriod(utcNow, utcNow);
-
-				target.Handle(new ScheduledResourcesChangedEvent
-				{
-					IsDefaultScenario = false,
-					PersonId = personId,
-					ScheduleDays = new[]
-						{
-							new ProjectionChangedEventScheduleDay
-								{
-									StartDateTime = period.StartDateTime,
-									EndDateTime = period.EndDateTime,
-									Layers =
-										new Collection<ProjectionChangedEventLayer>
-											{new ProjectionChangedEventLayer()}
-								}
-						}
-				});
 		}
 
 		[Test]
@@ -137,22 +122,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 						{
 							new ProjectionChangedEventScheduleDay
 								{
-									Label = "ClosestLayer",
+									ShortName = "ClosestLayer",
 									Date = today,
-									Layers = new Collection<ProjectionChangedEventLayer>
+									Shift = new ProjectionChangedEventShift
 										{
-											new ProjectionChangedEventLayer
+											Layers = new Collection<ProjectionChangedEventLayer>
 												{
-													StartDateTime = closestPeriod.StartDateTime,
-													EndDateTime = closestPeriod.EndDateTime,
-												},
-											new ProjectionChangedEventLayer
-												{
-													StartDateTime = notClosestPeriod.StartDateTime,
-													EndDateTime = notClosestPeriod.EndDateTime,
+													new ProjectionChangedEventLayer
+														{
+															StartDateTime = closestPeriod.StartDateTime,
+															EndDateTime = closestPeriod.EndDateTime,
+														},
+													new ProjectionChangedEventLayer
+														{
+															StartDateTime = notClosestPeriod.StartDateTime,
+															EndDateTime = notClosestPeriod.EndDateTime,
 
+														}
 												}
 										}
+
 								}
 						},
 					Timestamp = utcNow
@@ -184,16 +173,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 					PersonId = personId,
 					ScheduleDays = new[]
 						{
-							new ProjectionChangedEventScheduleDay 
+							new ProjectionChangedEventScheduleDay
 								{
-									Label = "ClosestLayer",
+									ShortName = "ClosestLayer",
 									Date = utcNow.Date.AddDays(1),
-									Layers = new Collection<ProjectionChangedEventLayer>
+									Shift = new ProjectionChangedEventShift
 										{
-											new ProjectionChangedEventLayer
+											Layers = new Collection<ProjectionChangedEventLayer>
 												{
-													StartDateTime = closestPeriod.StartDateTime,
-													EndDateTime = closestPeriod.EndDateTime,
+													new ProjectionChangedEventLayer
+														{
+															StartDateTime = closestPeriod.StartDateTime,
+															EndDateTime = closestPeriod.EndDateTime,
+														}
 												}
 										}
 								}
@@ -220,34 +212,37 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var closestPeriod = new DateTimePeriod(utcNow.AddDays(-2).AddMinutes(10), utcNow.AddDays(-1).AddMinutes(20));
 
 			var message = new ScheduledResourcesChangedEvent
-			{
-				IsDefaultScenario = true,
-				Datasource = "DataSource",
-				BusinessUnitId = businessUnitId,
-				PersonId = personId,
-				ScheduleDays = new[]
+				{
+					IsDefaultScenario = true,
+					Datasource = "DataSource",
+					BusinessUnitId = businessUnitId,
+					PersonId = personId,
+					ScheduleDays = new[]
 						{
 							new ProjectionChangedEventScheduleDay
 								{
-									Label = "ClosestLayer",
+									ShortName = "ClosestLayer",
 									Date = closestPeriod.StartDateTime.Date,
-									Layers = new Collection<ProjectionChangedEventLayer>
+									Shift = new ProjectionChangedEventShift
 										{
-											new ProjectionChangedEventLayer
+											Layers = new Collection<ProjectionChangedEventLayer>
 												{
-													StartDateTime = closestPeriod.StartDateTime,
-													EndDateTime = closestPeriod.EndDateTime,
-												},
-												new ProjectionChangedEventLayer
-												{
-													StartDateTime = closestPeriod.StartDateTime.AddMinutes(5),
-													EndDateTime = closestPeriod.EndDateTime.AddMinutes(20),
+													new ProjectionChangedEventLayer
+														{
+															StartDateTime = closestPeriod.StartDateTime,
+															EndDateTime = closestPeriod.EndDateTime,
+														},
+													new ProjectionChangedEventLayer
+														{
+															StartDateTime = closestPeriod.StartDateTime.AddMinutes(5),
+															EndDateTime = closestPeriod.EndDateTime.AddMinutes(20),
+														}
 												}
 										}
 								}
 						},
-				Timestamp = utcNow
-			};
+					Timestamp = utcNow
+				};
 
 			target.Handle(message);
 
@@ -275,14 +270,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 						{
 							new ProjectionChangedEventScheduleDay
 								{
-									Label = "ClosestLayer",
+									ShortName = "ClosestLayer",
 									Date = utcNow.Date,
-									Layers = new Collection<ProjectionChangedEventLayer>
+									Shift = new ProjectionChangedEventShift
 										{
-											new ProjectionChangedEventLayer
+											Layers = new Collection<ProjectionChangedEventLayer>
 												{
-													StartDateTime = utcNow.AddMinutes(-10),
-													EndDateTime = utcNow.AddHours(1)
+													new ProjectionChangedEventLayer
+														{
+															StartDateTime = utcNow.AddMinutes(-10),
+															EndDateTime = utcNow.AddHours(1)
+														}
 												}
 										}
 								}

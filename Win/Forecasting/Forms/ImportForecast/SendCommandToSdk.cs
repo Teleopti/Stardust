@@ -1,5 +1,6 @@
 using System;
 using System.ServiceModel;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages;
@@ -21,8 +22,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         public CommandResultDto ExecuteCommand(CommandDto command)
         {
             _sdkAuthentication.SetSdkAuthenticationHeader();
-
-            var proxy = new Proxy();
+            var sdkName = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["Sdk"];
+            var proxy = new Proxy(sdkName);
             try
             {
                 proxy.Open();

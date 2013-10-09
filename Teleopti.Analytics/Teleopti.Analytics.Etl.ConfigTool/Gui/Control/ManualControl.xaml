@@ -1,106 +1,104 @@
 ﻿<UserControl x:Class="Teleopti.Analytics.Etl.ConfigTool.Gui.Control.ManualControl"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
     
-               xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
-             >
+xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
+>
 
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
-        <StackPanel Name="stackPanelLogDataSource" Width="200" Margin="10" HorizontalAlignment="Left">
-            <Label>Log Data Source</Label>
-            <ComboBox Name="comboBoxLogDataSource" ItemsSource="{Binding}"  DisplayMemberPath="DataSourceName" SelectedValuePath="DataSourceId" SelectedIndex="0"  >
-            </ComboBox>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <StackPanel Orientation="Horizontal">
-                <GroupBox Name="groupBoxInitial">
-                    <GroupBox.Header>
-                        <Label>Initial - data period</Label>
-                    </GroupBox.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel Width="150" Margin="10" VerticalAlignment="Top">
-                            <Label>Date from</Label>                            
-                                <Controls:DatePicker Name="fromDatePickerInitial"/>                            
-                            <!--<local:DatePicker  Name="fromDatePickerInitial" />-->
-                        </StackPanel>
-                        <StackPanel Width="150" Margin="10" VerticalAlignment="Top">
-                            <Label>Date to</Label>
-                            <Controls:DatePicker  Name="toDatePickerInitial" />
-                        </StackPanel>
-                    </StackPanel>
-                </GroupBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <GroupBox Name="groupBoxQueueStats">
-                    <GroupBox.Header>
-                        <Label>Queue Statistics - data period</Label>
-                    </GroupBox.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel Width="150" Margin="10" VerticalAlignment="Top">
-                            <Label>Date from</Label>
-                            <Controls:DatePicker  Name="fromDatePickerQueueStats" />
-                        </StackPanel>
-                        <StackPanel Width="150" Margin="10" VerticalAlignment="Top">
-                            <Label>Date to</Label>
-                            <Controls:DatePicker  Name="toDatePickerQueueStats" />
-                        </StackPanel>
-                    </StackPanel>
-                </GroupBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <GroupBox Name="groupBoxAgentStats">
-                    <GroupBox.Header>
-                        <Label>Agent Statistics - data period</Label>
-                    </GroupBox.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel Width="150" Margin="10" VerticalAlignment="Top">
-                            <Label>Date from</Label>
-                            <Controls:DatePicker  Name="fromDatePickerAgentStats" />
-                        </StackPanel>
-                        <StackPanel Width="150" Margin="10" VerticalAlignment="Top">
-                            <Label>Date to</Label>
-                            <Controls:DatePicker  Name="toDatePickerAgentStats" />
-                        </StackPanel>
-                    </StackPanel>
-                </GroupBox>
-            </StackPanel>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <StackPanel Orientation="Horizontal">
-                <GroupBox Name="groupBoxSchedule">
-                    <GroupBox.Header>
-                        <Label>Schedule - data period</Label>
-                    </GroupBox.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel Width="150" Margin="10" VerticalAlignment="Top">
-                            <Label>Date from</Label>
-                            <Controls:DatePicker  Name="fromDatePickerSchedule" />
-                        </StackPanel>
-                        <StackPanel Width="150" Margin="10" VerticalAlignment="Top">
-                            <Label>Date to</Label>
-                            <Controls:DatePicker  Name="toDatePickerSchedule" />
-                        </StackPanel>
-                    </StackPanel>
-                </GroupBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <GroupBox Name="groupBoxForecast">
-                    <GroupBox.Header>
-                        <Label>Forecast - data period</Label>
-                    </GroupBox.Header>
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel Width="150" Margin="10" VerticalAlignment="Top">
-                            <Label>Date from</Label>
-                            <Controls:DatePicker  Name="fromDatePickerForecast" />
-                        </StackPanel>
-                        <StackPanel Width="150" Margin="10" VerticalAlignment="Top">
-                            <Label>Date to</Label>
-                            <Controls:DatePicker  Name="toDatePickerForecast" />
-                        </StackPanel>                       
-                    </StackPanel>
-                </GroupBox>
-            </StackPanel>
-        </StackPanel>
-    </StackPanel>
-
+	<StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+		<StackPanel Name="StackPanelLogDataSource" Width="200" Margin="10" HorizontalAlignment="Left">
+			<Label>Log Data Source</Label>
+			<ComboBox Name="ComboBoxLogDataSource" ItemsSource="{Binding}"  DisplayMemberPath="DataSourceName" SelectedValuePath="DataSourceId" SelectedIndex="0"  >
+			</ComboBox>
+		</StackPanel>
+		<StackPanel Orientation="Horizontal">
+			<StackPanel Orientation="Horizontal">
+				<GroupBox Name="GroupBoxInitial">
+					<GroupBox.Header>
+						<Label>Initial - data period</Label>
+					</GroupBox.Header>
+					<StackPanel Orientation="Horizontal">
+						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
+							<Label>Date from</Label>
+							<Controls:DatePicker Name="FromDatePickerInitial"/>
+						</StackPanel>
+						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
+							<Label>Date to</Label>
+							<Controls:DatePicker  Name="ToDatePickerInitial" />
+						</StackPanel>
+					</StackPanel>
+				</GroupBox>
+			</StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<GroupBox Name="GroupBoxQueueStats">
+					<GroupBox.Header>
+						<Label>Queue Statistics - data period</Label>
+					</GroupBox.Header>
+					<StackPanel Orientation="Horizontal">
+						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
+							<Label>Date from</Label>
+							<Controls:DatePicker  Name="FromDatePickerQueueStats" />
+						</StackPanel>
+						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
+							<Label>Date to</Label>
+							<Controls:DatePicker  Name="ToDatePickerQueueStats" />
+						</StackPanel>
+					</StackPanel>
+				</GroupBox>
+			</StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<GroupBox Name="GroupBoxAgentStats">
+					<GroupBox.Header>
+						<Label>Agent Statistics - data period</Label>
+					</GroupBox.Header>
+					<StackPanel Orientation="Horizontal">
+						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
+							<Label>Date from</Label>
+							<Controls:DatePicker  Name="FromDatePickerAgentStats" />
+						</StackPanel>
+						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
+							<Label>Date to</Label>
+							<Controls:DatePicker  Name="ToDatePickerAgentStats" />
+						</StackPanel>
+					</StackPanel>
+				</GroupBox>
+			</StackPanel>
+		</StackPanel>
+		<StackPanel Orientation="Horizontal">
+			<StackPanel Orientation="Horizontal">
+				<GroupBox Name="GroupBoxSchedule">
+					<GroupBox.Header>
+						<Label>Schedule - data period</Label>
+					</GroupBox.Header>
+					<StackPanel Orientation="Horizontal">
+						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
+							<Label>Date from</Label>
+							<Controls:DatePicker  Name="FromDatePickerSchedule" />
+						</StackPanel>
+						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
+							<Label>Date to</Label>
+							<Controls:DatePicker  Name="ToDatePickerSchedule" />
+						</StackPanel>
+					</StackPanel>
+				</GroupBox>
+			</StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<GroupBox Name="GroupBoxForecast">
+					<GroupBox.Header>
+						<Label>Forecast - data period</Label>
+					</GroupBox.Header>
+					<StackPanel Orientation="Horizontal">
+						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
+							<Label>Date from</Label>
+							<Controls:DatePicker  Name="FromDatePickerForecast" />
+						</StackPanel>
+						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
+							<Label>Date to</Label>
+							<Controls:DatePicker  Name="ToDatePickerForecast" />
+						</StackPanel>
+					</StackPanel>
+				</GroupBox>
+			</StackPanel>
+		</StackPanel>
+	</StackPanel>
 </UserControl>

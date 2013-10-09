@@ -46,20 +46,21 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControlChooseDataSource.Controls.Add(this.tabPageWindowsDataSources);
             this.tabControlChooseDataSource.Controls.Add(this.tabPageApplicationDataSources);
+            this.tabControlChooseDataSource.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControlChooseDataSource.Location = new System.Drawing.Point(71, 51);
+            this.tabControlChooseDataSource.Margin = new System.Windows.Forms.Padding(0);
             this.tabControlChooseDataSource.Name = "tabControlChooseDataSource";
             this.tabControlChooseDataSource.SelectedIndex = 0;
             this.tabControlChooseDataSource.Size = new System.Drawing.Size(350, 153);
-            this.tabControlChooseDataSource.TabIndex = 37;
-            this.tabControlChooseDataSource.Visible = false;
+            this.tabControlChooseDataSource.TabIndex = 0;
             // 
             // tabPageWindowsDataSources
             // 
             this.tabPageWindowsDataSources.Controls.Add(this.listBoxWindowsDataSources);
-            this.tabPageWindowsDataSources.Location = new System.Drawing.Point(4, 22);
+            this.tabPageWindowsDataSources.Location = new System.Drawing.Point(4, 26);
+            this.tabPageWindowsDataSources.Margin = new System.Windows.Forms.Padding(0);
             this.tabPageWindowsDataSources.Name = "tabPageWindowsDataSources";
-            this.tabPageWindowsDataSources.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageWindowsDataSources.Size = new System.Drawing.Size(342, 127);
+            this.tabPageWindowsDataSources.Size = new System.Drawing.Size(342, 123);
             this.tabPageWindowsDataSources.TabIndex = 0;
             this.tabPageWindowsDataSources.Text = "xxWindows logon";
             this.tabPageWindowsDataSources.UseVisualStyleBackColor = true;
@@ -72,18 +73,19 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.listBoxWindowsDataSources.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listBoxWindowsDataSources.FormattingEnabled = true;
             this.listBoxWindowsDataSources.ItemHeight = 17;
-            this.listBoxWindowsDataSources.Location = new System.Drawing.Point(3, 3);
+            this.listBoxWindowsDataSources.Location = new System.Drawing.Point(0, 0);
+            this.listBoxWindowsDataSources.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxWindowsDataSources.Name = "listBoxWindowsDataSources";
-            this.listBoxWindowsDataSources.Size = new System.Drawing.Size(336, 121);
+            this.listBoxWindowsDataSources.Size = new System.Drawing.Size(342, 123);
             this.listBoxWindowsDataSources.TabIndex = 3;
             // 
             // tabPageApplicationDataSources
             // 
             this.tabPageApplicationDataSources.Controls.Add(this.listBoxApplicationDataSources);
-            this.tabPageApplicationDataSources.Location = new System.Drawing.Point(4, 22);
+            this.tabPageApplicationDataSources.Location = new System.Drawing.Point(4, 26);
+            this.tabPageApplicationDataSources.Margin = new System.Windows.Forms.Padding(0);
             this.tabPageApplicationDataSources.Name = "tabPageApplicationDataSources";
-            this.tabPageApplicationDataSources.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageApplicationDataSources.Size = new System.Drawing.Size(342, 127);
+            this.tabPageApplicationDataSources.Size = new System.Drawing.Size(342, 123);
             this.tabPageApplicationDataSources.TabIndex = 1;
             this.tabPageApplicationDataSources.Text = "xxApplication logon";
             this.tabPageApplicationDataSources.UseVisualStyleBackColor = true;
@@ -96,9 +98,10 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.listBoxApplicationDataSources.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listBoxApplicationDataSources.FormattingEnabled = true;
             this.listBoxApplicationDataSources.ItemHeight = 17;
-            this.listBoxApplicationDataSources.Location = new System.Drawing.Point(3, 3);
+            this.listBoxApplicationDataSources.Location = new System.Drawing.Point(0, 0);
+            this.listBoxApplicationDataSources.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxApplicationDataSources.Name = "listBoxApplicationDataSources";
-            this.listBoxApplicationDataSources.Size = new System.Drawing.Size(336, 121);
+            this.listBoxApplicationDataSources.Size = new System.Drawing.Size(342, 123);
             this.listBoxApplicationDataSources.TabIndex = 4;
             // 
             // labelChooseDataSource

@@ -38,17 +38,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 		{
 			var unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 			var scheduleDay = mocks.DynamicMock<IScheduleDay>();
-			var differenceCollectionItems = mocks.DynamicMock<IDifferenceCollection<IPersistableScheduleData>>();
+			var differenceCollectionItem = new DifferenceCollectionItem<IPersistableScheduleData>();
 			var response = new List<IBusinessRuleResponse>();
 			var dictionary = mocks.DynamicMock<IReadOnlyScheduleDictionary>();
 
 			using (mocks.Record())
 			{
 				Expect.Call(currentUnitOfWork.Current()).Return(unitOfWork);
-				Expect.Call(dictionary.DifferenceSinceSnapshot()).Return(differenceCollectionItems);
+				Expect.Call(dictionary.DifferenceSinceSnapshot()).Return(new DifferenceCollection<IPersistableScheduleData>{differenceCollectionItem});
 				Expect.Call(scheduleDay.Owner).Return(dictionary);
 				Expect.Call(dictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, null, null, null)).IgnoreArguments().Return(response);
-				Expect.Call(scheduleDictionarySaver.MarkForPersist(unitOfWork, scheduleRepository, differenceCollectionItems)).Return(null);
+				Expect.Call(scheduleDictionarySaver.MarkForPersist(unitOfWork, scheduleRepository, differenceCollectionItem)).Return(null);
 				Expect.Call(dictionary.MakeEditable);
 			}
 			using (mocks.Playback())

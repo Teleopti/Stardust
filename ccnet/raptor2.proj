@@ -9,6 +9,7 @@
 		<DBNamePrefix>$(Computername)_$(CCNetProject)</DBNamePrefix>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
+		<DBServerSQL2005>$(Computername)\SQL2005</DBServerSQL2005>
 		<DoCodeAnalysis>false</DoCodeAnalysis>
 		<RunWebBehaviorTests>true</RunWebBehaviorTests>
 		<AgentPortalWebSiteName>$(CCNetProject)-AgentPortalWeb</AgentPortalWebSiteName>
@@ -17,7 +18,9 @@
 		<AsDBDeploy>C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\ManagementStudio\Microsoft.AnalysisServices.Deployment.exe</AsDBDeploy>
 
 		<AzureDeploy>false</AzureDeploy>
+		<SQL2005Deploy>false</SQL2005Deploy>
 		<AzureDeploy Condition="'$(CCNetProject)' == 'EtlAndAzure'">true</AzureDeploy>
+		<SQL2005Deploy Condition="'$(CCNetProject)' == 'EtlAndAzure'">true</SQL2005Deploy>
 		<AzureAnalyticsReportTest>false</AzureAnalyticsReportTest>
 		<AzureAnalyticsReportTest Condition="'$(CCNetProject)' == 'EtlAndAzure'">true</AzureAnalyticsReportTest>
 		<AzureServer>s8v4m110k9.database.windows.net</AzureServer>
@@ -161,8 +164,6 @@
 		<Message Text="DbManagerOutput:   @(DbManagerExe)" />
 	</Target>
 	
-	
-	
 	<Target Name="AzureCreateDatabase" DependsOnTargets="BuildDBManager">
 		<Message Text="Create Azure database ..." Importance="high" />
 
@@ -185,6 +186,46 @@
 		<CallTarget Targets="AzureAnalyticsReportTest" />
 		<CallTarget Targets="AzurePostDropDatabase" />
 	</Target>
+
+	<Target Name="SQL2005Deploy" Condition="'$(SQL2005Deploy)' == 'true'" DependsOnTargets="BuildDBManager">
+
+		<Message Importance="high" Text="Dropping Dbs on SQL 2005 ..."/>
+
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_agg') BEGIN ALTER DATABASE [$(DBNamePrefix)_agg] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_agg] END" ConnectionString="Data Source=$(DBServerSQL2005);Initial Catalog=master;Integrated Security=True"/>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_analytics') BEGIN ALTER DATABASE [$(DBNamePrefix)_analytics] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_analytics] END" ConnectionString="Data Source=$(DBServerSQL2005);Initial Catalog=master;Integrated Security=True"/>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_ccc7') BEGIN ALTER DATABASE [$(DBNamePrefix)_ccc7] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_ccc7] END" ConnectionString="Data Source=$(DBServerSQL2005);Initial Catalog=master;Integrated Security=True"/>
+		
+		<Message Importance="high" Text="Creating Dbs on SQL 2005 ..."/>
+		
+		<PropertyGroup>
+			<CreateDBCommand>"@(DBManagerExe)" -S$(DBServerSQL2005) -E -C -T -Lnightly:nightly -A -F$(DatabasePath)</CreateDBCommand>
+		</PropertyGroup>
+
+		<Exec Command="$(CreateDBCommand) -D$(DBNamePrefix)_agg -OTeleoptiCCCAgg" ContinueOnError="false">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+		<Message Text="The exit code is $(ErrorCode)"/>
+		<Error Text="Error while executing: $(CreateDBCommand) -D$(DBNamePrefix)_agg -OTeleoptiCCCAgg" Condition="'$(ErrorCode)' != '0'" />
+
+		<Exec Command="$(CreateDBCommand) -D$(DBNamePrefix)_analytics -OTeleoptiAnalytics" ContinueOnError="false">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+		
+		<Message Text="The exit code is $(ErrorCode)"/>
+		<Error Text="Error while executing: $(CreateDBCommand) -D$(DBNamePrefix)_analytics -OTeleoptiAnalytics" Condition="'$(ErrorCode)' != '0'" />
+
+		<Exec Command="$(CreateDBCommand) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7" ContinueOnError="false">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
+		</Exec>
+		
+		<Message Text="The exit code is $(ErrorCode)"/>
+		<Error Text="Error while executing: $(CreateDBCommand) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7" Condition="'$(ErrorCode)' != '0'" />
+		
+		<Message Importance="high" Text="Creation of dbs on SQL 2005 finished." />
+		
+		<OnError ExecuteTargets="MessageErrorHandler"/>	
+		
+	</Target>	
 
 	<Target Name="AzureAnalyticsReportTest" Condition="'$(AzureAnalyticsReportTest)' == 'true'">
 		<Message Importance="high" Text="Check all Analytics report controls and reports are working on Azure"/>

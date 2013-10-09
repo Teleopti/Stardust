@@ -708,7 +708,7 @@ BEGIN
 	CREATE TABLE [dbo].[OvertimeAvailability](
 		[Id] [uniqueidentifier] NOT NULL,
 		[Person] [uniqueidentifier] NOT NULL,
-		[DateOfOvertime] [date] NOT NULL,
+		[DateOfOvertime] [datetime] NOT NULL,
 		[StartTime] [bigint] NULL,
 		[EndTime] [bigint] NULL,
 		[BusinessUnit] [uniqueidentifier] NOT NULL,
