@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
-		public void ShouldMapDayOffStartAndEndInUserTimeZone()
+		public void ShouldMapDayOffTimes()
 		{
 			var startTime = new DateTime(2013, 10, 07, 22, 0, 0, DateTimeKind.Utc);
 			var endTime = new DateTime(2013, 10, 08, 22, 0, 0, DateTimeKind.Utc);
@@ -87,9 +87,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var result = target.Map(data);
 
 			var startTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(startTime, userTimeZone).ToFixedDateTimeFormat();
-			var endTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(endTime, userTimeZone).ToFixedDateTimeFormat();
 			result.Single().DayOff.Start.Should().Be(startTimeInUserTimeZone);
-			result.Single().DayOff.End.Should().Be(endTimeInUserTimeZone);
+			result.Single().DayOff.Minutes.Should().Be(endTime.Subtract(startTime).TotalMinutes);
 		}
 
 		[Test]

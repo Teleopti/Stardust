@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				dayOff = new TeamScheduleDayOffViewModel
 					{
 						Start = TimeZoneInfo.ConvertTimeFromUtc(model.DayOff.Start, userTimeZone).ToFixedDateTimeFormat(),
-						End = TimeZoneInfo.ConvertTimeFromUtc(model.DayOff.End, userTimeZone).ToFixedDateTimeFormat()
+						Minutes = (int) model.DayOff.End.Subtract(model.DayOff.Start).TotalMinutes
 					};
 			return new TeamScheduleShiftViewModel
 				{
