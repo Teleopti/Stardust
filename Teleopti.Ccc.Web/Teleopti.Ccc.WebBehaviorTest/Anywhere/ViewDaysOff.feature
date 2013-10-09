@@ -21,7 +21,6 @@ Background:
     | Field | Value   |
     | Name  | Day off |
 	
-@ignore
 Scenario: View day off in team schedule
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a day off with
