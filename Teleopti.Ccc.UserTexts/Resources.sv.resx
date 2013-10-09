@@ -11326,4 +11326,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Välj ett SDK</value>
     <comment>When having more than one in config when logging on</comment>
   </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Avbryt</value>
+    <comment>Stop current background operation in scheduler</comment>
+  </data>
 </root>
