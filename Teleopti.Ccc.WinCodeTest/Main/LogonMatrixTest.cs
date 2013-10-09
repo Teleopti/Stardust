@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             _target = new LogonMatrix(view);
             
             factory.Expect(f => f.CreateAndOpenUnitOfWork()).Return(uow);
-            view.Expect(v => v.ShowErrorMessage("", "")).IgnoreArguments();
+            view.Expect(v => v.Warning("", "")).IgnoreArguments();
             mock.ReplayAll();
             _target.SynchronizeAndLoadMatrixReports(factory);
             mock.VerifyAll();
