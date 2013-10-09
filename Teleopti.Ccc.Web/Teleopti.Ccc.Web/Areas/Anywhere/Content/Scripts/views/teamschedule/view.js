@@ -61,6 +61,11 @@ define([
 						or zero to treat them as equal.
 						*/
 
+					    if ((first.Layers().length == 0 && !first.IsDayOff()) && second.IsDayOff())
+					    	return 1;
+					    if ((second.Layers().length == 0 && !second.IsDayOff()) && first.IsDayOff())
+						    return -1;
+
 					    if (first.IsDayOff() && second.IsFullDayAbsence)
 					    	return 1;
 					    if (second.IsDayOff() && first.IsFullDayAbsence)

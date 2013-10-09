@@ -83,7 +83,6 @@ Scenario: Order days off after full day absences in team schedule
 	When I view schedules for '2013-09-27'
 	Then I should see 'Ashley Andeen' before 'Pierre Baldi'
 
-@ignore
 Scenario: Order no shifts after day off
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a day off with
