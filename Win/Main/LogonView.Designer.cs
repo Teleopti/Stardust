@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Win.Main
             // btnBack
             // 
             this.btnBack.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnBack.Location = new System.Drawing.Point(222, 308);
+            this.btnBack.Location = new System.Drawing.Point(222, 307);
             this.btnBack.Name = "btnBack";
             this.btnBack.Size = new System.Drawing.Size(75, 23);
             this.btnBack.TabIndex = 3;
