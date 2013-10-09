@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
@@ -44,7 +43,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             if(scheduleDay.IsScheduled() ) return new TimePeriod(TimeSpan.MinValue,TimeSpan.MaxValue );
             var dateTimePeriod = _nightlyRestRule.LongestDateTimePeriodForAssignment(range, dateOnly);
 
-            return dateTimePeriod.TimePeriod(matrix.Person.PermissionInformation.DefaultTimeZone());
+	        var timeZoneInfo = matrix.Person.PermissionInformation.DefaultTimeZone();
+			DateTime lokalStartDateTime = dateTimePeriod.StartDateTimeLocal(timeZoneInfo);
+			DateTime lokalEndDateTime = dateTimePeriod.EndDateTimeLocal(timeZoneInfo);
+
+	        DateTime baseDateTime = dateOnly.Date;
+			TimeSpan startTime = lokalStartDateTime.Subtract(baseDateTime);
+	        TimeSpan endTime = lokalEndDateTime.Subtract(baseDateTime);
+			return new TimePeriod(startTime, endTime);
         }
 
         public IEffectiveRestriction AggregatedNightlyRestRestriction(ITeamBlockInfo teamBlockInfo)
