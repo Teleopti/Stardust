@@ -12,6 +12,13 @@ namespace Teleopti.Ccc.Sdk.ClientProxies
 
 		public Proxy(string serviceEndpoint) : base(serviceEndpoint) { }
 
+		public static Proxy GetProxy(string serviceEndpoint)
+		{
+			return string.IsNullOrEmpty(serviceEndpoint)
+					   ? new Proxy()
+					   : new Proxy(serviceEndpoint);
+		}
+
         public ICollection<PayrollFormatDto> GetPayrollFormats()
         {
             return Channel.GetPayrollFormats();

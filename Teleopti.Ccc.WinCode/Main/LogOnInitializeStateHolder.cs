@@ -40,14 +40,12 @@ namespace Teleopti.Ccc.WinCode.Main
             return true;
         }
 
-		public static bool GetConfigFromWebService(string endpointNames)
+		public static bool GetConfigFromWebService(string endpointName)
         {
             ICollection<string> encryptedNHibConfigs;
             IDictionary<string, string> encryptedAppSettings;
             string passwordPolicyString;
-			using (var proxy = string.IsNullOrEmpty(endpointNames) 
-				? new Proxy() 
-				: new Proxy(endpointNames))
+			using (var proxy = Proxy.GetProxy(endpointName))
 			{
 				using (PerformanceOutput.ForOperation("Getting config from web service"))
 				{

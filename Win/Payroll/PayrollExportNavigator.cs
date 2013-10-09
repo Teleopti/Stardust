@@ -227,9 +227,7 @@ namespace Teleopti.Ccc.Win.Payroll
             }
 
             var sdkName = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["Sdk"];
-			var proxy = string.IsNullOrEmpty(sdkName)
-		                    ? new Proxy()
-		                    : new Proxy(sdkName);
+			var proxy = Proxy.GetProxy(sdkName);
             try
             {
                 proxy.Open();
