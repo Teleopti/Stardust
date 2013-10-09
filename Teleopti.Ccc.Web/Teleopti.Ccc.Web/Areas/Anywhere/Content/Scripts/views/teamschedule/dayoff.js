@@ -15,12 +15,6 @@ define([
 		var startTime = moment(data.Start, resources.FixedDateTimeFormatForMoment);
 		var dayOffStartMinutes = startTime.diff(data.Date, 'minutes');
 
-		console.log(data.Date);
-		console.log(data.Start);
-		
-		console.log(startTime);
-		console.log(dayOffStartMinutes);
-
 		this.StartMinutes = ko.observable(dayOffStartMinutes);
 		this.LengthMinutes = ko.observable(data.Minutes);
 
