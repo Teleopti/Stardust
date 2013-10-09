@@ -55,42 +55,7 @@ define([
 					}
 
 				    currentPersons.sort(function (first, second) {
-				    	/*
-						return a negative value if the first argument is smaller, 
-						a positive value is the second is smaller, 
-						or zero to treat them as equal.
-						*/
-
-					    if ((first.Layers().length == 0 && !first.IsDayOff()) && second.IsDayOff())
-					    	return 1;
-					    if ((second.Layers().length == 0 && !second.IsDayOff()) && first.IsDayOff())
-						    return -1;
-
-					    if (first.IsDayOff() && second.IsFullDayAbsence)
-					    	return 1;
-					    if (second.IsDayOff() && first.IsFullDayAbsence)
-						    return -1;
-
-						if (first.IsFullDayAbsence && !second.IsFullDayAbsence)
-					    	return 1;
-					    if (second.IsFullDayAbsence && !first.IsFullDayAbsence)
-						    return -1;
-
-						var firstStartMinutes = first.TimeLineAffectingStartMinute();
-						var secondStartMinutes = second.TimeLineAffectingStartMinute();
-					    if (firstStartMinutes > secondStartMinutes)
-					    	return 1;
-					    if (firstStartMinutes < secondStartMinutes)
-					    	return -1;
-					    
-					    var firstEndMinutes = first.TimeLineAffectingEndMinute();
-					    var secondEndMinutes = second.TimeLineAffectingEndMinute();
-					    if (firstEndMinutes > secondEndMinutes)
-					    	return 1;
-					    if (firstEndMinutes < secondEndMinutes)
-					    	return -1;
-
-					    return 0;
+				    	return first.CompareTo(second);
 					});
 
 					teamSchedule.Persons.valueHasMutated();
