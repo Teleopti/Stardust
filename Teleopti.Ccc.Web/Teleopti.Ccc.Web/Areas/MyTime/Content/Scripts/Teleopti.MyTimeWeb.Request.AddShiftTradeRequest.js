@@ -33,6 +33,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.isReadyLoaded = ko.observable(false);
 		self.requestedDateInternal = ko.observable(moment().startOf('day'));
 		self.myTeamFilter = ko.observable(true);
+	    self.timeLineStartTime = ko.observable();
+
 		self.isDetailVisible = ko.computed(function () {
 			if (self.agentChoosed() === null) {
 				return false;
@@ -43,19 +45,24 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.message = ko.observable();
 
 	    self.timeLineLengthInMinutes = ko.computed(function() {
-	        var firstHour = moment(self.Hours()[0]);
-	        var lastHour = moment(self.Hours[self.Hours().length - 1]);
+	        var firstHour = moment(self.hours()[0]);
+	        var lastHour = moment(self.hours[self.hours().length - 1]);
+
+	        self.timeLineStartTime(firstHour);
 	        return firstHour.diff(lastHour, 'minutes');
 	    });
 		self.pixelPerMinute = ko.computed(function () {
 			return layerCanvasPixelWidth / self.timeLineLengthInMinutes();
 		});
         
-	    self._createMySchedule = function (myScheduleObject) {
-			var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
-				return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
-			});
-			self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedlayers, myScheduleObject));
+		self._createMySchedule = function (myScheduleObject) {
+		    var mappedlayers = [];
+		    if (myScheduleObject != null) {
+		        mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function(layer) {
+		            return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
+		        });
+		    }
+		    self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedlayers, myScheduleObject));
 		};
 
 		self._createPossibleTradeSchedules = function (possibleTradePersons) {
@@ -111,7 +118,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		    
 			self.hours([]);
 			self.hours.push.apply(self.hours, arrayMap);
-			_positionTimeLineHourTexts();
+			//_positionTimeLineHourTexts();
 		};
 
         self.requestedDate = ko.computed({

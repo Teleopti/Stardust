@@ -31,7 +31,7 @@
                 <div class="relative">
                     <div data-bind="foreach: hours">
                         <div class="shift-trade-ruler absolute" data-bind="style: { left: leftPx }"></div>
-                        <div class="shift-trade-label label-info absolute" data-bind="style: { left: leftPx }"></div>
+                        <div class="shift-trade-label label label-info absolute" data-bind="style: { left: leftPx }, text: hourText"></div>
                     </div>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                 </thead>
                 <tbody>
                     <tr class="shift-trade-my-schedule-row">
-                        <td data-bind="text: mySchedule().agentName"></td>
+                        <td>@Resources.MySchedule</td>
                         <td class="shift-trade-my-schedule" data-bind="foreach: mySchedule().layers">
                             <div class="shift-trade-layer" data-bind="style: { left: leftPx, width: widthPx, backgroundColor: backgroundColor }, attr: { 'title': title }"></div>
                         </td>
@@ -61,7 +61,7 @@
             </table>
             
 
-            <div class="shift-trade-timeline" data-bind="foreach: hours">
+            @*<div class="shift-trade-timeline" data-bind="foreach: hours">
                 <span class="shift-trade-timeline-line" data-bind="style: { width : hourWidth }">
                     <span class="shift-trade-timeline-number ui-corner-all" data-bind="text: hourText, style: {left: leftPx}"></span>
                 </span>
@@ -90,7 +90,7 @@
                         </span>					
                     </div>
                 </div>
-            </div>
+            </div>*@
         </div>
 		
         <p></p>
