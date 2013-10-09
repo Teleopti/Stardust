@@ -138,7 +138,7 @@ define([
 				teamSchedule = new teamScheduleViewModel();
 
 				resize.onresize(function () {
-				    teamSchedule.TimeLine.WidthPixels($('.shift').width());
+					teamSchedule.TimeLine.WidthPixels($('.time-line-for').width());
 				});
 
 				teamSchedule.SelectedTeam.subscribe(function () {
