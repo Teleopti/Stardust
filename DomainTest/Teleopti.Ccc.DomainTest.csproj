@@ -869,7 +869,6 @@
     <Compile Include="Security\AuthorizationEntities\LicenseOptionTest.cs" />
     <Compile Include="Security\AuthorizationEntities\LicenseSchemaTest.cs" />
     <Compile Include="Security\AuthorizationEntities\AvailableDataEntryTest.cs" />
-    <Compile Include="Collection\DuplicateElementExceptionTest.cs" />
     <Compile Include="Collection\ExtensionsTest.cs" />
     <Compile Include="Collection\LayerCollectionTest.cs" />
     <Compile Include="Collection\ReadOnlyDictionaryTest.cs" />

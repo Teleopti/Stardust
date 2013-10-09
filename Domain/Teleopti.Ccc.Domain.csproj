@@ -654,7 +654,6 @@
     <Compile Include="Collection\DayOfWeekIntDictionary.cs" />
     <Compile Include="Collection\DifferenceCollection.cs" />
     <Compile Include="Collection\DifferenceEntityCollectionService.cs" />
-    <Compile Include="Collection\DuplicateElementException.cs" />
     <Compile Include="Collection\Extensions.cs" />
     <Compile Include="Collection\LayerCollection.cs">
       <SubType>Code</SubType>
