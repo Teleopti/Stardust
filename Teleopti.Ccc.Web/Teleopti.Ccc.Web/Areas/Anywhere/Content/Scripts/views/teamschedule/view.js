@@ -60,8 +60,13 @@ define([
 						a positive value is the second is smaller, 
 						or zero to treat them as equal.
 						*/
-					    
-					    if (first.IsFullDayAbsence && !second.IsFullDayAbsence)
+
+					    if (first.IsDayOff() && second.IsFullDayAbsence)
+					    	return 1;
+					    if (second.IsDayOff() && first.IsFullDayAbsence)
+						    return -1;
+
+						if (first.IsFullDayAbsence && !second.IsFullDayAbsence)
 					    	return 1;
 					    if (second.IsFullDayAbsence && !first.IsFullDayAbsence)
 						    return -1;
