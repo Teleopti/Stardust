@@ -773,9 +773,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                     IsAnnotatableCell(gridStyleInfo.CellIdentity.ColIndex, gridStyleInfo.CellIdentity.RowIndex))
                 {
                     IAnnotatable annotatable = (IAnnotatable)taskOwner;
-                    GridExcelTipStyleProperties gridExcelTipStyleProperties =
-                        new GridExcelTipStyleProperties(gridStyleInfo);
-                    gridExcelTipStyleProperties.ExcelTipText = annotatable.Annotation;
+                    
+					var gridExcelTipStyleProperties = new GridExcelTipStyleProperties(gridStyleInfo);
+					gridExcelTipStyleProperties.ExcelTipText = annotatable.Annotation;
                 }
             }
             else if (!taskOwner.OpenForWork.IsOpen)
