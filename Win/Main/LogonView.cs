@@ -81,6 +81,12 @@ namespace Teleopti.Ccc.Win.Main
 				if (!LogonInitializeStateHolder.GetConfigFromFileSystem(nhibConfPath, useMessageBroker))
 					return showError();
 			}
+            if (!string.IsNullOrEmpty(LogonInitializeStateHolder.WarningMessage))
+            {
+                // ReSharper disable LocalizableElement
+               MessageBox.Show(this, LogonInitializeStateHolder.WarningMessage, "Configuration warning", MessageBoxButtons.OK);
+                // ReSharper restore LocalizableElement
+            }
 			return true;
 		}
 
@@ -93,13 +99,6 @@ namespace Teleopti.Ccc.Win.Main
 			                              "The system configuration could not be loaded from the server. Review error message and log files to troubleshoot this error.\n\n{0}",
 			                              LogonInitializeStateHolder.ErrorMessage),
 			                "Configuration error", MessageBoxButtons.OK);
-
-			if (!string.IsNullOrEmpty(LogonInitializeStateHolder.WarningMessage))
-			{
-				ShowInTaskbar = true;
-				MessageBox.Show(this, LogonInitializeStateHolder.WarningMessage, "Configuration warning", MessageBoxButtons.OK);
-				ShowInTaskbar = false;
-			}
 			return false;
 			// ReSharper restore LocalizableElement
 		}
@@ -153,11 +152,7 @@ namespace Teleopti.Ccc.Win.Main
 
         public void ShowErrorMessage(string message, string caption)
         {
-	        MessageBoxAdv.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error,
-	                           MessageBoxDefaultButton.Button1,
-	                           (RightToLeft == RightToLeft.Yes
-		                            ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-		                            : 0));
+            MessageDialogs.ShowWarning(this,message,caption);
         }
 
 	    public DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton)
@@ -167,11 +162,7 @@ namespace Teleopti.Ccc.Win.Main
 
 		public void ShowWarningMessage(string message, string caption)
 		{
-			MessageBoxAdv.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning,
-			                   MessageBoxDefaultButton.Button1,
-			                   (RightToLeft == RightToLeft.Yes
-				                    ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-				                    : 0));
+            MessageDialogs.ShowWarning(this, message, caption);
 		}
 
 		private void buttonLogOnCancelClick(object sender, EventArgs e)

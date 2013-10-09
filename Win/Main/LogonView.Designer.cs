@@ -40,10 +40,10 @@ namespace Teleopti.Ccc.Win.Main
             // 
             this.pnlContent.BackColor = System.Drawing.Color.Transparent;
             this.pnlContent.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlContent.Location = new System.Drawing.Point(0, 0);
+            this.pnlContent.Location = new System.Drawing.Point(1, 1);
             this.pnlContent.Margin = new System.Windows.Forms.Padding(0);
             this.pnlContent.Name = "pnlContent";
-            this.pnlContent.Size = new System.Drawing.Size(483, 242);
+            this.pnlContent.Size = new System.Drawing.Size(481, 295);
             this.pnlContent.TabIndex = 0;
             // 
             // buttonLogOnCancel
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Win.Main
             this.buttonLogOnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonLogOnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.buttonLogOnCancel.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonLogOnCancel.Location = new System.Drawing.Point(399, 308);
+            this.buttonLogOnCancel.Location = new System.Drawing.Point(398, 307);
             this.buttonLogOnCancel.Name = "buttonLogOnCancel";
             this.buttonLogOnCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonLogOnCancel.TabIndex = 2;
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Win.Main
             // 
             this.buttonLogOnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonLogOnOK.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonLogOnOK.Location = new System.Drawing.Point(311, 308);
+            this.buttonLogOnOK.Location = new System.Drawing.Point(310, 307);
             this.buttonLogOnOK.Name = "buttonLogOnOK";
             this.buttonLogOnOK.Size = new System.Drawing.Size(75, 23);
             this.buttonLogOnOK.TabIndex = 1;
@@ -111,6 +111,7 @@ namespace Teleopti.Ccc.Win.Main
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "LogonView";
+            this.Padding = new System.Windows.Forms.Padding(1);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LogonView";
             this.Shown += new System.EventHandler(this.logonViewShown);
