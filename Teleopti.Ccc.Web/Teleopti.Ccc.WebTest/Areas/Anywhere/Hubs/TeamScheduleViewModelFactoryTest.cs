@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
 
-			result.Single().Id.Should().Be.EqualTo(person.Id.Value.ToString());
+			result.Single().PersonId.Should().Be.EqualTo(person.Id.Value.ToString());
 		}
 
 		[Test]
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
 
-			result.Single().Id.Should().Be.EqualTo(personWithPublishedSchedule.Id.Value.ToString());
+			result.Single().PersonId.Should().Be.EqualTo(personWithPublishedSchedule.Id.Value.ToString());
 		}
 
 		[Test]

@@ -48,7 +48,7 @@ define([
 					    currentPersons[i].ClearData();
 
 				    	for (var j = 0; j < schedules.length; j++) {
-				    		if (currentPersons[i].Id == schedules[j].Id) {
+				    		if (currentPersons[i].Id == schedules[j].PersonId) {
 				    			currentPersons[i].AddData(schedules[j], teamSchedule.TimeLine, dateClone);
 							}
 						}

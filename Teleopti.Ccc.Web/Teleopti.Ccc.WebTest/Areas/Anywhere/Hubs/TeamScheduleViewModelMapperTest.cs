@@ -88,8 +88,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var startTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(startTime, userTimeZone).ToFixedDateTimeFormat();
 			var endTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(endTime, userTimeZone).ToFixedDateTimeFormat();
-			result.Single().DayOffStartTime.Should().Be(startTimeInUserTimeZone);
-			result.Single().DayOffEndTime.Should().Be(endTimeInUserTimeZone);
+			result.Single().DayOff.Start.Should().Be(startTimeInUserTimeZone);
+			result.Single().DayOff.End.Should().Be(endTimeInUserTimeZone);
 		}
 
 		[Test]

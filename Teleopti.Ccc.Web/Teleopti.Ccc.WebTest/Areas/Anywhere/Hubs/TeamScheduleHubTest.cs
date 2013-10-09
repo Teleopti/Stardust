@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var teamScheduleProvider = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
 			var teamId = Guid.NewGuid();
 			var dateTime = new DateTime(2013, 3, 4, 0, 0, 0);
-			var data = new[] { new TeamScheduleShiftViewModel { FirstName = "Pierre" } };
+			var data = new[] { new TeamScheduleShiftViewModel { PersonId = Guid.NewGuid().ToString() } };
 			teamScheduleProvider.Stub(x => x.CreateViewModel(teamId, dateTime)).Return(data);
 			var target = new TeamScheduleHub(teamScheduleProvider);
 			var hubBuilder = new TestHubBuilder();
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			target.SubscribeTeamSchedule(teamId, dateTime);
 
-			Assert.That(actual.Single().FirstName, Is.EqualTo("Pierre"));
+			Assert.That(actual.Single().PersonId, Is.EqualTo(data.First().PersonId));
 		}
 
 	}

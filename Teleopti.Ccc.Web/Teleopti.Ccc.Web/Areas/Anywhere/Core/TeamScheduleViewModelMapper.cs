@@ -28,16 +28,20 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		private static TeamScheduleShiftViewModel makeViewModel(PersonScheduleDayReadModel readModel, Model model, Shift shift, IEnumerable<TeamScheduleLayerViewModel> layers, TimeZoneInfo userTimeZone)
 		{
+			TeamScheduleDayOffViewModel dayOff = null;
+			if (model.DayOff != null)
+				dayOff = new TeamScheduleDayOffViewModel
+					{
+						Start = TimeZoneInfo.ConvertTimeFromUtc(model.DayOff.Start, userTimeZone).ToFixedDateTimeFormat(),
+						End = TimeZoneInfo.ConvertTimeFromUtc(model.DayOff.End, userTimeZone).ToFixedDateTimeFormat()
+					};
 			return new TeamScheduleShiftViewModel
 				{
 					ContractTimeMinutes = shift.ContractTimeMinutes,
-					FirstName = model.FirstName,
-					Id = readModel.PersonId.ToString(),
-					LastName = model.LastName,
+					PersonId = readModel.PersonId.ToString(),
 					Projection = layers,
 					IsFullDayAbsence = model.Shift != null && model.Shift.IsFullDayAbsence,
-					DayOffStartTime = model.DayOff != null ? TimeZoneInfo.ConvertTimeFromUtc(model.DayOff.Start, userTimeZone).ToFixedDateTimeFormat() : null,
-					DayOffEndTime = model.DayOff != null ? TimeZoneInfo.ConvertTimeFromUtc(model.DayOff.End, userTimeZone).ToFixedDateTimeFormat() : null
+					DayOff = dayOff
 				};
 		}
 
