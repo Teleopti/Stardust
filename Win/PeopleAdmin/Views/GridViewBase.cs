@@ -259,6 +259,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         internal virtual void ClipboardPaste(GridCutPasteEventArgs e)
         {
             PasteFromClipboard(false);
+	        e.Handled = true;
         }
         internal virtual void CellButtonClicked(GridCellButtonClickedEventArgs e)
         {

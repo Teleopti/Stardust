@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		private ColumnBase<ExternalLogOnModel> _checkBoxColumn;
 		private ColumnBase<ExternalLogOnModel> _externalLogonColumn;
-        //private ColumnBase<ExternalLogOnModel> _acdObjectColumn;
         private ColumnBase<ExternalLogOnModel> _acdObjectNameColumn;
 
         internal override ViewType Type
@@ -63,12 +62,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             Grid.Name = "ExternalLogOnView";
 
             HideRowHeaderColumn();
-        }
+			Grid.ClipboardPaste += gridWorksheet_ClipboardPaste;
+		}
 
-        public override void Invalidate()
-        {
-            Grid.Invalidate();
-        }
+		public override void Invalidate()
+		{
+			Grid.Invalidate();
+		}
 
         internal override void QueryCellInfo(GridQueryCellInfoEventArgs e)
         {
@@ -86,6 +86,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				_gridColumns[e.ColIndex].SaveCellInfo(e, FilteredPeopleHolder.FilteredExternalLogOnCollectionCellStages);
             }
         }
+
+		private void gridWorksheet_ClipboardPaste(object sender, GridCutPasteEventArgs e)
+		{
+			ClipboardPaste(e);
+			e.Handled = true;
+		}
 
         private void checkBoxColumn_CellChanged(object sender, ColumnCellChangedEventArgs<ExternalLogOnModel> e)
         {
