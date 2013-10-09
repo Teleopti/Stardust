@@ -4,8 +4,8 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 {
 	public interface ILogonStep
 	{
-		void SetData(LogonModel model);
-	    LogonModel GetData();
+		void SetData();
+	    void GetData();
 	    void Release();
 	}
 }

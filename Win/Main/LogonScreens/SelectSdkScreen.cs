@@ -17,15 +17,14 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 	        labelChooseSDK.Text = Resources.PleaseChooseSDK;
 		}
 
-        public void SetData(LogonModel model)
+        public void SetData()
 		{
-			lbxSelectSDK.DataSource = model.Sdks;
+			lbxSelectSDK.DataSource = _model.Sdks;
 		}
 
-        public LogonModel GetData()
+		public void GetData()
         {
             _model.SelectedSdk = lbxSelectSDK.SelectedItem.ToString();
-            return _model;
         }
 
 	    public void Release()

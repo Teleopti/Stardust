@@ -75,9 +75,8 @@ namespace Teleopti.Ccc.WinCode.Main
                 _model.SelectedSdk = endpoints[0];
                 CurrentStep++;
                 getDataSources();
-                return;
             }
-            _view.ShowStep(CurrentStep, false);
+            _view.ShowStep(false);
         }
 
         private void getDataSources()
@@ -100,7 +99,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		        CurrentStep++;
 		        GetDataForCurrentStep();
 	        }
-	        _view.ShowStep(CurrentStep, _model.Sdks.Count > 1);
+	        _view.ShowStep(_model.Sdks.Count > 1);
         }
 
 		private void initApplication()
@@ -117,6 +116,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
         public void OkbuttonClicked()
         {
+			
             if (checkModel())
             {
                 CurrentStep++;
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			        getDataSources();
                     break;
 				case LoginStep.Login:
-                    _view.ShowStep(CurrentStep, true);
+                    _view.ShowStep(true);
 					break;
                 case LoginStep.SelectBu:
 					getBusinessUnits(); 
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.WinCode.Main
                 initApplication();
                 return;
             }
-            _view.ShowStep(CurrentStep, true);
+            _view.ShowStep(true);
         }
 
         private bool login()

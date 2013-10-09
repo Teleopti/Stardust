@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Teleopti.Ccc.UserTexts;
@@ -19,17 +18,16 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             labelPassword.Text = Resources.PasswordColon;
 		}
 
-        public void SetData(LogonModel model)
+        public void SetData()
 		{
             ActiveControl = textBoxLogOnName;
         }
 
-	    public LogonModel GetData()
+	    public void GetData()
 	    {
             //Ska vi ha ett sätt att tala om för parent att det är ok att trycka Ok
 	        _model.UserName = textBoxLogOnName.Text;
 	        _model.Password = textBoxPassword.Text;
-	        return _model;
 	    }
 
 	    public void Release()

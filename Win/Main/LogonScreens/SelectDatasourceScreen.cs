@@ -22,10 +22,10 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             tabPageApplicationDataSources.Text = Resources.ApplicationLogon;
 		}
 
-		public void SetData(LogonModel model)
+		public void SetData()
 		{
-            var logonableWindowsDataSources = model.DataSourceContainers.Where(d => d.AuthenticationTypeOption == AuthenticationTypeOption.Windows).ToList();
-            var availableApplicationDataSources = model.DataSourceContainers.Where(d => d.AuthenticationTypeOption == AuthenticationTypeOption.Application).ToList();
+            var logonableWindowsDataSources = _model.DataSourceContainers.Where(d => d.AuthenticationTypeOption == AuthenticationTypeOption.Windows).ToList();
+            var availableApplicationDataSources = _model.DataSourceContainers.Where(d => d.AuthenticationTypeOption == AuthenticationTypeOption.Application).ToList();
 
             listBoxApplicationDataSources.DataSource = availableApplicationDataSources;
             listBoxWindowsDataSources.DataSource = logonableWindowsDataSources;
@@ -40,13 +40,11 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             tabControlChooseDataSource.Visible = true;
 		}
 
-	    public LogonModel GetData()
+		public void GetData()
 	    {
             _model.SelectedDataSourceContainer = (IDataSourceContainer)listBoxApplicationDataSources.SelectedItem;
             if (tabControlChooseDataSource.SelectedTab.Equals(tabPageWindowsDataSources))
                 _model.SelectedDataSourceContainer = (IDataSourceContainer)listBoxWindowsDataSources.SelectedItem;
-
-            return _model;
 	    }
 
 	    public void Release()

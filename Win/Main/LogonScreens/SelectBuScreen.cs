@@ -18,15 +18,14 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             labelChooseBu.Text = Resources.PleaseChooseABusinessUnit;
 		}
 
-        public void SetData(LogonModel model)
+        public void SetData()
 		{
-			lbxSelectBu.DataSource = model.AvailableBus;
+			lbxSelectBu.DataSource = _model.AvailableBus;
 		}
 
-	    public LogonModel GetData()
+		public void GetData()
 	    {
             _model.SelectedBu = (IBusinessUnit)lbxSelectBu.SelectedItem;
-	        return _model;
 	    }
 
 	    public void Release()

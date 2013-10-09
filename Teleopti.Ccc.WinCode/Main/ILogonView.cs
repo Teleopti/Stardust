@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.WinCode.Main
 	{
 		ILogonPresenter Presenter { get; set; }
 		bool StartLogon();
-        void ShowStep(LoginStep theStep, bool showBackButton);
+        void ShowStep(bool showBackButton);
 		void ClearForm(string labelText);
 		void Exit(DialogResult result);
 	    bool InitializeAndCheckStateHolder(string skdProxyName);

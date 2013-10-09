@@ -40,10 +40,11 @@ namespace Teleopti.Ccc.Win.Main
 		    return result != DialogResult.Cancel;
 		}
 
-	    public void ShowStep(LoginStep theStep, bool showBackButton)
+	    public void ShowStep(bool showBackButton)
 	    {
-            _logonSteps[(int)theStep].SetData(_model);
-            updatePanel((UserControl)_logonSteps[(int)theStep]);
+		    var currentStep = _logonSteps[(int) Presenter.CurrentStep];
+			currentStep.SetData();
+            updatePanel((UserControl)currentStep);
             labelStatusText.Visible = false;
 	        buttonLogOnCancel.Visible = true;
 	        buttonLogOnOK.Visible = true;
@@ -180,6 +181,7 @@ namespace Teleopti.Ccc.Win.Main
 
         private void buttonLogOnOkClick(object sender, EventArgs e)
         {
+	        _logonSteps[(int) Presenter.CurrentStep].GetData();
             Presenter.OkbuttonClicked();
         }
 

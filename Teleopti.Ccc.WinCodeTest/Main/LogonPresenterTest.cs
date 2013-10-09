@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
         {
             Expect.Call(() => _view.ClearForm("")).IgnoreArguments();
             Expect.Call(_endPointSelector.GetEndpointNames()).Return(new List<string> {"local", "local2"});
-            Expect.Call(() => _view.ShowStep(LoginStep.SelectSdk, false));
+            Expect.Call(() => _view.ShowStep(false));
             _mocks.ReplayAll();
             _target.CurrentStep = LoginStep.SelectSdk;
             _target.Initialize();
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             Expect.Call(() => _view.ClearForm("")).IgnoreArguments();
             Expect.Call(_endPointSelector.GetEndpointNames()).Return(new List<string> { "local" });
             Expect.Call(_dataSourceHandler.DataSourceProviders()).Return(new List<IDataSourceProvider>());
-            Expect.Call(() => _view.ShowStep(LoginStep.SelectDatasource, false));
+            Expect.Call(() => _view.ShowStep(false));
             _mocks.ReplayAll();
             _target.CurrentStep = LoginStep.SelectSdk;
             _target.Initialize();
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             Expect.Call(() => _view.ClearForm("")).IgnoreArguments();
             Expect.Call(_dataSourceHandler.DataSourceProviders()).Return(new List<IDataSourceProvider> { dataSorceProvider });
             Expect.Call(dataSorceProvider.DataSourceList()).Return(new List<DataSourceContainer> {dataSourceContainer});
-            Expect.Call(() => _view.ShowStep(LoginStep.SelectDatasource, true));
+            Expect.Call(() => _view.ShowStep(true));
             _mocks.ReplayAll();
             _target.CurrentStep = LoginStep.SelectSdk;
             _target.OkbuttonClicked();
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model.SelectedDataSourceContainer = new DataSourceContainer(null,null,null, AuthenticationTypeOption.Application);
             Expect.Call(() => _view.ClearForm("")).IgnoreArguments();
             Expect.Call(_endPointSelector.GetEndpointNames()).Return(new List<string> { "local", "local2" });
-            Expect.Call(() => _view.ShowStep(LoginStep.SelectSdk, false));
+            Expect.Call(() => _view.ShowStep(false));
             _mocks.ReplayAll();
             _target.CurrentStep = LoginStep.SelectDatasource;
             _target.BackButtonClicked();
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             _model.SelectedSdk = "sdk1";
             _model.SelectedDataSourceContainer = dataSourceContainer;
             _model.DataSourceContainers = new List<IDataSourceContainer>{dataSourceContainer};
-            Expect.Call(() => _view.ShowStep(LoginStep.SelectDatasource, true));
+            Expect.Call(() => _view.ShowStep(true));
             _mocks.ReplayAll();
             _target.CurrentStep = LoginStep.Login;
             _target.BackButtonClicked();
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             Expect.Call(dataSourceContainer.AvailableBusinessUnitProvider).Return(buProvider);
             Expect.Call(buProvider.AvailableBusinessUnits()).Return(new List<IBusinessUnit>());
             Expect.Call(() => _view.ShowErrorMessage(Resources.NoAllowedBusinessUnitFoundInCurrentDatabase, Resources.ErrorMessage));
-            Expect.Call(() => _view.ShowStep(LoginStep.Login, true));
+            Expect.Call(() => _view.ShowStep(true));
            _mocks.ReplayAll();
             _target.CurrentStep = LoginStep.Login;
             _target.OkbuttonClicked();
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             var dataSourceContainer = new DataSourceContainer(null, null, null, AuthenticationTypeOption.Application);
             _model.SelectedDataSourceContainer = dataSourceContainer;
             _model.DataSourceContainers = new List<IDataSourceContainer> { dataSourceContainer };
-            Expect.Call(() => _view.ShowStep(LoginStep.Login, true));
+            Expect.Call(() => _view.ShowStep(true));
             _mocks.ReplayAll();
             _target.CurrentStep = LoginStep.SelectDatasource;
             _target.OkbuttonClicked();
@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             Expect.Call(dataSourceContainer.AuthenticationTypeOption).Return(AuthenticationTypeOption.Windows);
             Expect.Call(dataSourceContainer.AvailableBusinessUnitProvider).Return(buProvider);
             Expect.Call(buProvider.AvailableBusinessUnits()).Return(new List<IBusinessUnit> { bu, bu2 });
-            Expect.Call(() =>_view.ShowStep(LoginStep.SelectBu, true));
+            Expect.Call(() =>_view.ShowStep(true));
            
             _mocks.ReplayAll();
             _target.CurrentStep = LoginStep.SelectDatasource;
