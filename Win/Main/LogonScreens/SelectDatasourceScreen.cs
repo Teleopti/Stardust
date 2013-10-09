@@ -11,11 +11,13 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 {
 	public partial class SelectDatasourceScreen : UserControl, ILogonStep
 	{
+		private readonly ILogonView _logonView;
 		private LogonModel _model;
 
-	    public SelectDatasourceScreen(LogonModel model)
+		public SelectDatasourceScreen(ILogonView logonView, LogonModel model)
 		{
-			_model = model;
+		    _logonView = logonView;
+		    _model = model;
             InitializeComponent();
             labelChooseDataSource.Text = Resources.PleaseChooseADatasource;
             tabPageWindowsDataSources.Text = Resources.WindowsLogon;
@@ -61,6 +63,10 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             
         }
 
-        
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			_logonView.HandleKeyPress(msg, keyData, listBoxWindowsDataSources.Focused || listBoxApplicationDataSources.Focused);
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
 	}
 }

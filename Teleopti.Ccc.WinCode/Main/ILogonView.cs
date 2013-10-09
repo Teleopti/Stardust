@@ -14,5 +14,6 @@ namespace Teleopti.Ccc.WinCode.Main
         void ShowErrorMessage(string message, string caption);
 		void ShowWarningMessage(string message, string caption);
 	    DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton);
+		void HandleKeyPress(Message msg, Keys keyData, bool b);
 	}
 }

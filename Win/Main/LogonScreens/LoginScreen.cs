@@ -7,11 +7,13 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 {
 	public partial class LoginScreen : UserControl, ILogonStep
 	{
+		private readonly ILogonView _logonView;
 		private LogonModel _model;
 
-	    public LoginScreen(LogonModel model)
+	    public LoginScreen(ILogonView logonView, LogonModel model)
 		{
-			_model = model;
+		    _logonView = logonView;
+		    _model = model;
             InitializeComponent();
             labelLogOn.Text = Resources.PleaseEnterYourLogonCredentials;
             labelLoginName.Text = Resources.LoginNameColon;
@@ -46,5 +48,11 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             textBoxLogOnName.Select(0, textBoxLogOnName.Text.Length);
             textBoxLogOnName.Focus();
         }
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			_logonView.HandleKeyPress(msg, keyData, textBoxLogOnName.Focused || textBoxPassword.Focused);
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
 	}
 }

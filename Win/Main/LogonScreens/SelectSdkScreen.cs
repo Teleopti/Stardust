@@ -8,11 +8,13 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 {
 	public partial class SelectSdkScreen : UserControl, ILogonStep
 	{
+		private readonly ILogonView _logonView;
 		private LogonModel _model;
 
-	    public SelectSdkScreen(LogonModel model)
+		public SelectSdkScreen(ILogonView logonView, LogonModel model)
 		{
-			_model = model;
+		    _logonView = logonView;
+		    _model = model;
             InitializeComponent();
 	        labelChooseSDK.Text = Resources.PleaseChooseSDK;
 		}
@@ -38,5 +40,11 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             //SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             //BackColor = Color.FromArgb(175, Color.CornflowerBlue);
         }
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			_logonView.HandleKeyPress(msg, keyData, lbxSelectSDK.Focused);
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
 	}
 }

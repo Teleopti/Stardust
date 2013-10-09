@@ -9,11 +9,13 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 {
 	public partial class SelectBuScreen : UserControl, ILogonStep
 	{
+		private readonly ILogonView _logonView;
 		private LogonModel _model;
 
-        public SelectBuScreen( LogonModel model)
+		public SelectBuScreen(ILogonView logonView, LogonModel model)
 		{
-			_model = model;
+	        _logonView = logonView;
+	        _model = model;
             InitializeComponent();
             labelChooseBu.Text = Resources.PleaseChooseABusinessUnit;
 		}
@@ -39,5 +41,11 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             //SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             //BackColor = Color.FromArgb(175, Color.CornflowerBlue);
         }
+
+		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+		{
+			_logonView.HandleKeyPress(msg, keyData, lbxSelectBu.Focused);
+			return base.ProcessCmdKey(ref msg, keyData);
+		}
 	}
 }

@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Deployment.Application;
 using System.Globalization;
 using System.Windows.Forms;
-using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Main.LogonScreens;
@@ -29,12 +28,12 @@ namespace Teleopti.Ccc.Win.Main
 
 		public bool StartLogon()
 		{
-          _logonSteps = new List<ILogonStep>
+			_logonSteps = new List<ILogonStep>
 				{
-					new SelectSdkScreen(_model),
-					new SelectDatasourceScreen(_model),
-					new LoginScreen(_model),
-                    new SelectBuScreen(_model)
+					new SelectSdkScreen(this, _model),
+					new SelectDatasourceScreen(this, _model),
+					new LoginScreen(this, _model),
+					new SelectBuScreen(this, _model)
 				};
             var result = ShowDialog();
 		    return result != DialogResult.Cancel;
@@ -189,5 +188,22 @@ namespace Teleopti.Ccc.Win.Main
             }
             _logonSteps = null;
         }
+
+		public void HandleKeyPress(Message msg, Keys keyData, bool shouldGoFoward)
+		{
+			const int wmKeydown = 0x100;
+			const int wmSyskeydown = 0x104;
+
+			if ((msg.Msg != wmKeydown) && (msg.Msg != wmSyskeydown)) return;
+
+			switch (keyData)
+			{
+				case Keys.Enter:
+					if (shouldGoFoward || buttonLogOnOK.Focused)
+						buttonLogOnOkClick(this, EventArgs.Empty);
+
+					break;
+			}
+		}
 	}
 }
