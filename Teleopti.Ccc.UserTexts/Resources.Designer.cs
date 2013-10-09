@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-///   Looks up a localized string similar to Abandoned emails. 
+        ///   Looks up a localized string similar to Abandoned emails.
         /// </summary>
         public static string AbandonedEmails {
             get {
@@ -3648,7 +3648,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cancelling....
+        ///   Looks up a localized string similar to Waiting to stop....
         /// </summary>
         public static string CancellingThreeDots {
             get {
@@ -22216,7 +22216,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-///   Looks up a localized string similar to Email.
+        ///   Looks up a localized string similar to Email.
         /// </summary>
         public static string SkillTypeEmail {
             get {
@@ -22797,6 +22797,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string StatusColon {
             get {
                 return ResourceManager.GetString("StatusColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop.
+        /// </summary>
+        public static string Stop {
+            get {
+                return ResourceManager.GetString("Stop", resourceCulture);
             }
         }
         

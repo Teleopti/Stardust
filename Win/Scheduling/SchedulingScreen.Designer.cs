@@ -2884,7 +2884,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripButtonQuickAccessCancel.Name = "toolStripButtonQuickAccessCancel";
             this.SetShortcut(this.toolStripButtonQuickAccessCancel, System.Windows.Forms.Keys.None);
             this.toolStripButtonQuickAccessCancel.Size = new System.Drawing.Size(23, 95);
-            this.toolStripButtonQuickAccessCancel.Text = "xxCancel";
+            this.toolStripButtonQuickAccessCancel.Text = "xxStop";
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonQuickAccessCancel, true);
             this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonQuickAccessCancel, false);
             this.toolStripButtonQuickAccessCancel.Click += new System.EventHandler(this.toolStripButtonQuickAccessCancel_Click);

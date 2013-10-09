@@ -6439,7 +6439,7 @@ Meeting</value>
     <comment>Scheduling {0} day(s)</comment>
   </data>
   <data name="CancellingThreeDots" xml:space="preserve">
-    <value>Cancelling...</value>
+    <value>Waiting to stop...</value>
     <comment>Cancelling...</comment>
   </data>
   <data name="NewReport" xml:space="preserve">
@@ -11756,7 +11756,7 @@ Reduce the complexity to use these shifts.</value>
   <data name="WorkTimeHeader" xml:space="preserve">
     <value>Work Time</value>
     <comment>Work time header</comment>
-	</data>
+  </data>
   <data name="FilterHourlyAvailability" xml:space="preserve">
     <value>Filter Hourly Availability</value>
     <comment>Caption button to Filter on hourly availability</comment>
@@ -11777,8 +11777,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Total time of selected activity</value>
     <comment>Total time of selected activity</comment>
   </data>
-  <data name="LengthOfActivity" xml:space="preserve">
-    <value>Total time of selected activity</value>
-    <comment>Total time of selected activity</comment>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+    <comment>Stop current background operation in scheduler</comment>
   </data>
 </root>
