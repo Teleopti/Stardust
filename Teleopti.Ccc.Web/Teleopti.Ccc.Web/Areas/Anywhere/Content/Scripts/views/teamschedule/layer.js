@@ -8,12 +8,12 @@ define([
 	resources
 	) {
 
-		return function (timeline, data, date) {
+		return function (timeline, data) {
 
 			var self = this;
 			
 			var startTime = moment(data.Start, resources.FixedDateTimeFormatForMoment);
-			var layerStartMinutes = startTime.diff(date, 'minutes');
+			var layerStartMinutes = startTime.diff(data.Date, 'minutes');
 
 			this.InternalStartMinutes = layerStartMinutes;
 			this.LengthMinutes = data.Minutes;
