@@ -151,11 +151,7 @@ namespace Teleopti.Ccc.Win.Main
 
         public void ShowErrorMessage(string message, string caption)
         {
-	        MessageBoxAdv.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error,
-	                           MessageBoxDefaultButton.Button1,
-	                           (RightToLeft == RightToLeft.Yes
-		                            ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-		                            : 0));
+            MessageDialogs.ShowWarning(this,message,caption);
         }
 
 	    public DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton)
@@ -165,11 +161,7 @@ namespace Teleopti.Ccc.Win.Main
 
 		public void ShowWarningMessage(string message, string caption)
 		{
-			MessageBoxAdv.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning,
-			                   MessageBoxDefaultButton.Button1,
-			                   (RightToLeft == RightToLeft.Yes
-				                    ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-				                    : 0));
+            MessageDialogs.ShowWarning(this, message, caption);
 		}
 
 		private void buttonLogOnCancelClick(object sender, EventArgs e)
