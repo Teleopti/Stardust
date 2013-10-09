@@ -66,6 +66,10 @@
         transparent
         );
 }
+.no-cssgradients .team-schedule .dayoff 
+{
+	background-color: beige;
+}
 
 .team-schedule .shift .layer
 {
