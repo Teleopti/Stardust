@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var result = target.Map(data);
 
-			var personStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, timeZone).ToFixedDateTimeFormat();
-			result.Single().Projection.Single().Start.Should().Be(personStartTime);
+			var layerStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, timeZone).ToFixedDateTimeFormat();
+			result.Single().Projection.Single().Start.Should().Be(layerStartTime);
 		}
 
 		[Test]
