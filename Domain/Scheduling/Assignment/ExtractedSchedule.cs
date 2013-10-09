@@ -678,30 +678,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					foundPersonAssignment.AddOvertimeLayer(activity, period, definitionSet);
         }
 
-				public void MergeOvertime(IScheduleDay source)
-        {
-            var timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
-            var dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, timeZoneInfo));
-            var period = Person.Period(dateOnlyPerson);
-            var diff = CalculatePeriodOffset(source.Period);
+	    public void MergeOvertime(IScheduleDay source)
+	    {
+		    var timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
+		    var dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, timeZoneInfo));
+		    var period = Person.Period(dateOnlyPerson);
+		    var diff = CalculatePeriodOffset(source.Period);
 
-            if (period != null)
-            {
-	            var personAss = source.PersonAssignment();
-							if (personAss != null)
-							{
-								foreach (var layer in personAss.OvertimeLayers())
-								{
-									if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
-									{
-										CreateAndAddOvertime(layer.Payload, layer.Period.MovePeriod(diff), layer.DefinitionSet);
-									}
-								}
-							}
-            }
-        }
+		    if (period != null)
+		    {
+			    var personAss = source.PersonAssignment();
+			    if (personAss != null)
+			    {
+				    foreach (var layer in personAss.OvertimeLayers())
+				    {
+					    if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
+					    {
+						    CreateAndAddOvertime(layer.Payload, layer.Period.MovePeriod(diff), layer.DefinitionSet);
+					    }
+				    }
+			    }
+		    }
+	    }
 
-				public void CreateAndAddActivity(IActivity activity, DateTimePeriod period, IShiftCategory shiftCategory)
+	    public void CreateAndAddActivity(IActivity activity, DateTimePeriod period, IShiftCategory shiftCategory)
         {
             var authorization = PrincipalAuthorization.Instance();
             if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
