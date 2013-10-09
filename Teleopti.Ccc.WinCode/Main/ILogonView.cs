@@ -12,5 +12,6 @@ namespace Teleopti.Ccc.WinCode.Main
 		void Exit(DialogResult result);
 	    bool InitializeAndCheckStateHolder(string skdProxyName);
 	    void ShowErrorMessage(string message);
+		void ShowWarningMessage(string message);
 	}
 }

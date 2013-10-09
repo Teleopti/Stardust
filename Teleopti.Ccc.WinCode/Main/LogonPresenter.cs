@@ -88,16 +88,22 @@ namespace Teleopti.Ccc.WinCode.Main
                 _view.ClearForm(Resources.SearchingForDataSourcesTreeDots);
                 _view.InitializeAndCheckStateHolder(_model.SelectedSdk);
                 var logonableDataSources = new List<IDataSourceContainer>();
-                foreach (IDataSourceProvider dataSourceProvider in _dataSourceHandler.DataSourceProviders())
+                foreach (var dataSourceProvider in _dataSourceHandler.DataSourceProviders())
                 {
                     logonableDataSources.AddRange(dataSourceProvider.DataSourceList());
                 }
                 _model.DataSourceContainers = logonableDataSources;
-            }
-            _view.ShowStep(CurrentStep, _model, _model.Sdks.Count > 1);
+			}
+	        if (_model.DataSourceContainers.Count == 1)
+	        {
+		        _model.SelectedDataSourceContainer = _model.DataSourceContainers.Single();
+		        CurrentStep++;
+		        GetDataForCurrentStep();
+	        }
+	        _view.ShowStep(CurrentStep, _model, _model.Sdks.Count > 1);
         }
 
-        private void initApplication()
+		private void initApplication()
         {
             _view.ClearForm(Resources.InitializingTreeDots);
             setBusinessUnit();
@@ -126,7 +132,7 @@ namespace Teleopti.Ccc.WinCode.Main
                 case LoginStep.SelectSdk:
 		            return _model.SelectedSdk != null;
 	            case LoginStep.SelectDatasource:
-		            return _model.SelectedDataSourceContainer != null;
+		            return checkAndReportDataSources();
 	            case LoginStep.Login:
 		            return _model.HasValidLogin();
 	            case LoginStep.SelectBu:
@@ -134,6 +140,30 @@ namespace Teleopti.Ccc.WinCode.Main
             }
             return true;
         }
+
+		private bool checkAndReportDataSources()
+		{
+			var notAvailableDataSources =
+				   _dataSourceHandler.AvailableDataSourcesProvider()
+									 .UnavailableDataSources()
+									 .Select(d => d.Application.Name)
+									 .ToList();
+			if (notAvailableDataSources.Any())
+			{
+				var message = notAvailableDataSources.Aggregate("The following data source(s) is currently not available:",
+				                                                (current, source) => current + ("\n\t- " + source)) +
+				              "\nThe data source server is probably down or the connection string is invalid.";
+				_view.ShowWarningMessage(message);
+				return false;
+			}
+			if (_model.SelectedDataSourceContainer == null || !_model.DataSourceContainers.Any())
+			{
+				_view.ShowErrorMessage(Resources.NoAvailableDataSourcesHasBeenFound);
+				return false;
+			}
+			
+			return true;
+		}
 
 		public void BackButtonClicked()
 		{
@@ -173,22 +203,20 @@ namespace Teleopti.Ccc.WinCode.Main
                 case LoginStep.Loading:
 			        initApplication();
 			        break;
-				default:
-					break;
 			}
             return _model;
 		}
 
         private void getBusinessUnits()
         {
-	        if (_model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Application)
-		        if (!login())
-		        {
-		            CurrentStep--;
-                    return;
-		        }
+	        if (_model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Application &&
+	            !login())
+	        {
+		        CurrentStep--;
+		        return;
+	        }
 
-            var provider = _model.SelectedDataSourceContainer.AvailableBusinessUnitProvider;
+	        var provider = _model.SelectedDataSourceContainer.AvailableBusinessUnitProvider;
 			_model.AvailableBus = provider.AvailableBusinessUnits().ToList();
             if (_model.AvailableBus.Count == 0)
 			{
@@ -214,9 +242,9 @@ namespace Teleopti.Ccc.WinCode.Main
                 _view.ShowErrorMessage(string.Concat(authenticationResult.Message, "  "));
                    
             if (authenticationResult.Successful)
-            {
-                choosenDataSource.User.ApplicationAuthenticationInfo.Password = _model.Password; //To use for silent background log on
-                //ChooseBusinessUnit();
+			{
+				//To use for silent background log on
+                choosenDataSource.User.ApplicationAuthenticationInfo.Password = _model.Password; 
                 return true;
             }
             var model = new LoginAttemptModel
