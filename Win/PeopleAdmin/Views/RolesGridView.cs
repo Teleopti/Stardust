@@ -46,9 +46,17 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             Grid.ColWidths[2] = _gridColumns[2].PreferredWidth + 30;
             Grid.Name = "RolesView";
             HideRowHeaderColumn();
+
+			Grid.ClipboardPaste += gridWorksheet_ClipboardPaste;
         }
 
-        public override void Invalidate()
+	    private void gridWorksheet_ClipboardPaste(object sender, GridCutPasteEventArgs e)
+	    {
+			ClipboardPaste(e);
+			e.Handled = true;
+	    }
+
+	    public override void Invalidate()
         {
             Grid.Invalidate();
         }

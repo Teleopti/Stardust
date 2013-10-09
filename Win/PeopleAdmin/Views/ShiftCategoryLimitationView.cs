@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Drawing;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Grid;
@@ -8,13 +8,12 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
-using Teleopti.Ccc.Win.PeopleAdmin.Views;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
+namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 {
     public partial class ShiftCategoryLimitationView : BaseUserControl, IShiftCategoryLimitationView
     {
@@ -22,6 +21,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         private IList<IShiftCategory> _shiftCategories = new List<IShiftCategory>();
         private FilteredPeopleHolder _filteredPeopleHolder;
         private GridConstructor _gridConstructor;
+	    private GridViewBase _gridViewBase;
 
         public ShiftCategoryLimitationView()
         {
@@ -158,6 +158,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         {
             _filteredPeopleHolder = filteredPeopleHolder;
             _gridConstructor = gridConstructor;
+			_gridViewBase = new EmptyGridView(gridLimitatation, filteredPeopleHolder, true);
         }
 
         public int ViewWidth()
@@ -188,59 +189,54 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
             return cellType;
         }
 
-        private void gridLimitatation_CheckBoxClick(object sender, GridCellClickEventArgs e)
-        {
-            if(gridLimitatation.ReadOnly) return;
-            IShiftCategory category = _presenter.OnQueryShiftCategoryCellInfo(e.RowIndex);
-            ShiftCategoryLimitationCombination combination = _presenter.CombinedLimitations[category];
-            if(e.ColIndex == 1)
-            {
-                if (!combination.Limit.HasValue || combination.Limit.Value == false)
-                {
-                    IShiftCategoryLimitation limitation = new ShiftCategoryLimitation(category);
-                    if (combination.Weekly.HasValue)
-                        limitation.Weekly = combination.Weekly.Value;
-                    if (combination.MaxNumberOf.HasValue)
-                        limitation.MaxNumberOf = 0;
-                    _presenter.AddLimitation(limitation);
-                }
-                else
-                {
-                    _presenter.RemoveLimitation(category);
-                }
-            }
-            if(e.ColIndex == 2)
-            {
-                if(!combination.Weekly.HasValue || combination.Weekly.Value == false)
-                {
-                    _presenter.SetWeekProperty(category, true);
-                }
-                else
-                {
-                    _presenter.SetWeekProperty(category, false);
-                }
-            }
-            if (e.ColIndex == 3)
-            {
-                if (!combination.Period.HasValue || combination.Period.Value == false)
-                {
-                    _presenter.SetWeekProperty(category, false);
-                }
-                else
-                {
-                    _presenter.SetWeekProperty(category, true);
-                }
-            }
-
-            gridLimitatation.Invalidate(true);
-        }
-
         private void gridLimitatation_SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
         {
             if(!PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications)) return;
             IShiftCategory category = _presenter.OnQueryShiftCategoryCellInfo(e.RowIndex);
-            if (e.ColIndex == 4)
+
+			ShiftCategoryLimitationCombination combination = _presenter.CombinedLimitations[category];
+			if (e.ColIndex == 1)
+			{
+				if (!combination.Limit.HasValue || combination.Limit.Value == false)
+				{
+					IShiftCategoryLimitation limitation = new ShiftCategoryLimitation(category);
+					if (combination.Weekly.HasValue)
+						limitation.Weekly = combination.Weekly.Value;
+					if (combination.MaxNumberOf.HasValue)
+						limitation.MaxNumberOf = 0;
+					_presenter.AddLimitation(limitation);
+				}
+				else
+				{
+					_presenter.RemoveLimitation(category);
+				}
+			}
+			if (e.ColIndex == 2)
+			{
+				if (!combination.Weekly.HasValue || combination.Weekly.Value == false)
+				{
+					_presenter.SetWeekProperty(category, true);
+				}
+				else
+				{
+					_presenter.SetWeekProperty(category, false);
+				}
+			}
+			if (e.ColIndex == 3)
+			{
+				if (!combination.Period.HasValue || combination.Period.Value == false)
+				{
+					_presenter.SetWeekProperty(category, false);
+				}
+				else
+				{
+					_presenter.SetWeekProperty(category, true);
+				}
+			}
+
+			
+			if (e.ColIndex == 4)
             {
                 e.Style.CellType = "NullableInteger";
                 if (string.IsNullOrEmpty(e.Style.CellValue.ToString()))
@@ -262,12 +258,18 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         {
             if (gridLimitatation!=null)
             {
-                gridLimitatation.CheckBoxClick -= gridLimitatation_CheckBoxClick;
+				gridLimitatation.ClipboardPaste -= gridLimitatation_ClipboardPaste;
             }
 
             _gridConstructor = null;
             _filteredPeopleHolder = null;
             _presenter = null;
+	        _gridViewBase = null;
         }
+
+		private void gridLimitatation_ClipboardPaste(object sender, GridCutPasteEventArgs e)
+		{
+			_gridViewBase.ClipboardPaste(e);
+		}
     }
 }
