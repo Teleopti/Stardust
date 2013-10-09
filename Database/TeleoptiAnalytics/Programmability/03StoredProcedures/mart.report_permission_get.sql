@@ -9,7 +9,8 @@ GO
 -- 20090211 Added new mart schema KJ
 -- Description:	<Checks if a user has permission on a report>
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
--- EXEC [mart].[report_permission_get] '362951B7-A91E-4212-A343-B36C61DC0108', '362951B7-A91E-4212-A343-B36C61DC0108'
+-- EXEC [mart].[report_permission_get] '3F0886AB-7B25-4E95-856A-0D726EDC2A67', '71BDB56D-C12F-489B-8275-04873A668D90'
+-- EXEC [mart].[report_permission_get] '3F0886AB-7B25-4E95-856A-0D726EDC2A67', 'F7F3AF97-EC24-4EA8-A2C7-5175879C7ACC'
 -- =============================================
 CREATE PROCEDURE [mart].[report_permission_get]
 @person_code uniqueidentifier,
@@ -18,11 +19,23 @@ AS
 BEGIN
 	
 SET NOCOUNT ON
+	
+DECLARE @HasPermission int
 
-SELECT COUNT(ReportId) report_permission_count 
+--Visable reports that do have permissions in domain
+SELECT @HasPermission=COUNT(ReportId)
 FROM mart.permission_report
 WHERE person_code=@person_code
 AND ReportId=@report_id
+
+--Hidden reports, just show them if the user know the URL
+SELECT @HasPermission = @HasPermission + COUNT(Id)
+FROM mart.report
+WHERE visible=0
+AND Id=@report_id
+
+--return
+SELECT @HasPermission as report_permission_count 
 
 END
 

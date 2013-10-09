@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Interfaces.Domain;
+using System.Linq;
 
 namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 {
@@ -53,23 +55,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			return false;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public IScheduleDay DayOffInScheduleDayWeek(IScheduleDay scheduleDay, IList<IScheduleDay> dayOffDays)
-		{
-			var week = DateHelper.WeekNumber(scheduleDay.DateOnlyAsPeriod.DateOnly.Date, CultureInfo.CurrentCulture);
-
-			foreach (var dayOffDay in dayOffDays)
-			{
-				var dayOffWeek = DateHelper.WeekNumber(dayOffDay.DateOnlyAsPeriod.DateOnly.Date, CultureInfo.CurrentCulture);
-				if (dayOffWeek == week)
-				{
-					return dayOffDay;
-				}
-			}
-
-			return null;	
-		}
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public bool OutsideOrAtMinimumTargetDaysOff(IVirtualSchedulePeriod virtualSchedulePeriod)
         {
@@ -107,5 +92,48 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
             return (dayOffsNow.Count >= targetDaysOff + contract.PositiveDayOffTolerance);
         }
+
+		public IList<IDayOffOnPeriod> WeekPeriodsSortedOnDayOff(IScheduleMatrixPro scheduleMatrixPro)
+		{
+			var weekPeriod = new DateOnlyPeriod();
+			var weekPeriods = new List<IDayOffOnPeriod>();
+
+			foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
+			{
+				var weekPeriodForDay = DateHelper.GetWeekPeriod(scheduleDayPro.Day, CultureInfo.CurrentCulture);
+				if (weekPeriod.Equals(weekPeriodForDay)) continue;
+
+				var periodDayOff = CountDayOffsOnPeriod(scheduleMatrixPro, weekPeriodForDay);
+				weekPeriods.Add(periodDayOff);
+				
+
+				weekPeriod = weekPeriodForDay;
+			}
+
+			var sortedOnMinList = weekPeriods.OrderBy(p => p.DaysOffCount).ToList();
+			return sortedOnMinList;
+		}
+
+		public IDayOffOnPeriod CountDayOffsOnPeriod(IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod period)
+		{
+			var count = 0;
+			IList<IScheduleDay> scheduleDays = new List<IScheduleDay>();
+
+			foreach (var scheduleDayPro in scheduleMatrixPro.OuterWeeksPeriodDays)
+			{
+				if(!period.Contains(scheduleDayPro.Day)) continue;
+				var scheduleDay = scheduleDayPro.DaySchedulePart();
+				var significant = scheduleDay.SignificantPart();
+				if (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff)
+					count++;
+
+				if(scheduleMatrixPro.UnlockedDays.Contains(scheduleDayPro))
+					scheduleDays.Add(scheduleDay);
+			}
+
+			var dayOffOnPeriod = new DayOffOnPeriod(period, scheduleDays, count);
+
+			return dayOffOnPeriod;
+		}
 	}
 }

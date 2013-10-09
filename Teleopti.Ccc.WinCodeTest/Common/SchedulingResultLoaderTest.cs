@@ -19,15 +19,12 @@ namespace Teleopti.Ccc.WinCodeTest.Common
     [TestFixture]
     public class SchedulingResultLoaderTest
     {
-        private MockRepository _mocks;
-
         private readonly DateOnlyPeriod _requestedPeriod = new DateOnlyPeriod(2008, 10, 20, 2008,10,20);
         private IList<IPerson> _permittedPeople;
         private IScenario _scenario;
         private ISchedulerStateHolder _schedulerState;
         private IRepositoryFactory _repositoryFactory;
     	private ILazyLoadingManager _lazyManager;
-        
         private IUnitOfWork _uow;
         private readonly IEventAggregator _eventAggregator=new EventAggregator();
         private ISkillDayLoadHelper _skillDayLoadHelper;
@@ -36,22 +33,23 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private IResourceOptimizationHelper _resourceOptimizationHelper;
         private ISchedulingResultLoader target;
         private LoadScheduleByPersonSpecification _loadScheduleByPersonSpecification;
+	    private ISkill _skill;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
-            _mocks = new MockRepository();
-            _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
-        	_lazyManager = _mocks.DynamicMock<ILazyLoadingManager>();
-        	_skillDayLoadHelper = _mocks.DynamicMock<ISkillDayLoadHelper>();
-        	_peopleLoader = _mocks.DynamicMock<IPeopleLoader>();
-        	_peopleAndSkillLoaderDecider = _mocks.DynamicMock<IPeopleAndSkillLoaderDecider>();
-        	_resourceOptimizationHelper = _mocks.DynamicMock<IResourceOptimizationHelper>();
-            _loadScheduleByPersonSpecification = _mocks.Stub<LoadScheduleByPersonSpecification>();
-            _uow = _mocks.DynamicMock<IUnitOfWork>();
+            _repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
+        	_lazyManager = MockRepository.GenerateMock<ILazyLoadingManager>();
+        	_skillDayLoadHelper = MockRepository.GenerateMock<ISkillDayLoadHelper>();
+        	_peopleLoader = MockRepository.GenerateMock<IPeopleLoader>();
+        	_peopleAndSkillLoaderDecider = MockRepository.GenerateMock<IPeopleAndSkillLoaderDecider>();
+        	_resourceOptimizationHelper = MockRepository.GenerateMock<IResourceOptimizationHelper>();
+            _loadScheduleByPersonSpecification = MockRepository.GenerateMock<LoadScheduleByPersonSpecification>();
+            _uow = MockRepository.GenerateMock<IUnitOfWork>();
             
-            _permittedPeople = new List<IPerson> { _mocks.StrictMock<IPerson>() };
-            _scenario = _mocks.StrictMock<IScenario>();
+            _permittedPeople = new List<IPerson> { MockRepository.GenerateMock<IPerson>() };
+            _scenario = MockRepository.GenerateMock<IScenario>();
+		    _skill = SkillFactory.CreateSkill("Phone");
 
 			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople);
 
@@ -61,37 +59,28 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         [Test]
         public void VerifyOnEventForecastDataMessageHandler()
         {
-            var skill = _mocks.StrictMock<ISkill>();
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-
-			createSkillInitializeExpectation(skill);
+            var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
 			
-            _mocks.ReplayAll();
-
-            target.SchedulerState.SchedulingResultState.Schedules = scheduleDictionary;
+			createSkillInitializeExpectation();
+            
+			target.SchedulerState.SchedulingResultState.Schedules = scheduleDictionary;
             target.ReloadForecastData(_uow);
 
-            _mocks.VerifyAll();
-
-            Assert.IsTrue(target.SchedulerState.SchedulingResultState.Skills.Contains(skill));
+            Assert.IsTrue(target.SchedulerState.SchedulingResultState.Skills.Contains(_skill));
             Assert.AreSame(scheduleDictionary, target.SchedulerState.SchedulingResultState.Schedules);
         }
 
         [Test]
         public void VerifyReloadForecastDataWithoutSkills()
         {
-            var skillRepository = _mocks.StrictMock<ISkillRepository>();
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+            var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
+            var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
 
-            Expect.Call(_repositoryFactory.CreateSkillRepository(_uow)).Return(skillRepository).Repeat.Once();
-            Expect.Call(skillRepository.FindAllWithSkillDays(_requestedPeriod)).Return(new List<ISkill>()).Repeat.Once();
+            _repositoryFactory.Stub(x => x.CreateSkillRepository(_uow)).Return(skillRepository);
+            skillRepository.Stub(x=>x.FindAllWithSkillDays(_requestedPeriod)).Return(new List<ISkill>());
             
-            _mocks.ReplayAll();
-
             target.SchedulerState.SchedulingResultState.Schedules = scheduleDictionary;
             target.ReloadForecastData(_uow);
-
-            _mocks.VerifyAll();
 
             Assert.AreSame(scheduleDictionary, target.SchedulerState.SchedulingResultState.Schedules);
         }
@@ -99,152 +88,107 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         [Test]
         public void VerifyOnEventScheduleDataMessageHandler()
         {
-            var skill = _mocks.StrictMock<ISkill>();
-            
             IScheduleDictionary scheduleDictionary = createScheduleInitializationExpectation();
 
-            prepareStateHolderWithSkill(skill, new List<ISkillDay>());
-            createReassociatePeopleExpectation();
-            
-            Expect.Call(_permittedPeople[0].PersonSchedulePeriods(new DateOnlyPeriod())).IgnoreArguments().Return(new List<ISchedulePeriod>());
-            Expect.Call(_permittedPeople[0].Name).Return(new Name("first", "last")).Repeat.Any();
-            Expect.Call(_permittedPeople[0].Id).Return(Guid.NewGuid()).Repeat.Any();
-            Expect.Call(_permittedPeople[0].PermissionInformation).Return(new PermissionInformation(_permittedPeople[0]));
-        	Expect.Call(skill.DefaultResolution).Return(15);
-
-            _mocks.ReplayAll();
+            _permittedPeople[0].Stub(x => x.PersonSchedulePeriods(new DateOnlyPeriod())).IgnoreArguments().Return(new List<ISchedulePeriod>());
+            _permittedPeople[0].Stub(x =>x.Name).Return(new Name("first", "last"));
+            _permittedPeople[0].Stub(x =>x.Id).Return(Guid.NewGuid());
+			_permittedPeople[0].Stub(x => x.PermissionInformation).Return(new PermissionInformation(_permittedPeople[0]));
 
             target.ReloadScheduleData(_uow);
 
-            _mocks.VerifyAll();
-
             Assert.AreSame(scheduleDictionary, target.SchedulerState.SchedulingResultState.Schedules);
-        }
-
-        private void createReassociatePeopleExpectation()
-        {
-            Expect.Call(()=>_uow.Reassociate(new List<IContract>())).IgnoreArguments();
-            Expect.Call(()=>_uow.Reassociate(new List<IContractSchedule>())).IgnoreArguments();
-            Expect.Call(()=>_uow.Reassociate(new List<IPerson>())).IgnoreArguments();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyLoadWithIntradayData()
         {
-            var skill = _mocks.StrictMock<ISkill>();
-            
             createContractScheduleInitializationExpectation();
             createContractLoadingExpectation();
             createMultiplicatorDefinitionSetLoadingExpectation();
-            createSkillInitializeExpectation(skill);
+            createSkillInitializeExpectation();
             createScheduleInitializationExpectation();
             createInitializeCommonStateHolderExpectation();
 			createPersonalAccountLoadingExpectation();
             createScheduleTagLoadingExpectation();
+			
+			_permittedPeople[0].Stub(x => x.PersonSchedulePeriods(new DateOnlyPeriod())).IgnoreArguments().Return(new List<ISchedulePeriod>());
+			_permittedPeople[0].Stub(x => x.Name).Return(new Name("first", "last"));
+			_permittedPeople[0].Stub(x => x.EmploymentNumber).Return("hej");
+			_permittedPeople[0].Stub(x => x.Id).Return(Guid.NewGuid());
+			_permittedPeople[0].Stub(x => x.PermissionInformation).Return(new PermissionInformation(_permittedPeople[0]));
 
-            Expect.Call(_permittedPeople[0].PersonSchedulePeriods(new DateOnlyPeriod())).IgnoreArguments().Return(new List<ISchedulePeriod>());
-            Expect.Call(_permittedPeople[0].Name).Return(new Name("first", "last")).Repeat.Any();
-            Expect.Call(_permittedPeople[0].Id).Return(Guid.NewGuid()).Repeat.Any();
-            Expect.Call(_permittedPeople[0].EmploymentNumber).Return("hej");
-            Expect.Call(_permittedPeople[0].PermissionInformation).Return(new PermissionInformation(_permittedPeople[0]));
-        	
-            _mocks.ReplayAll();
             target.LoadWithIntradayData(_uow);
             Assert.IsTrue(_schedulerState.FilteredPersonDictionary.Values.Contains(_permittedPeople[0]));
-            _mocks.VerifyAll();
         }
 
         private void createInitializeCommonStateHolderExpectation()
         {
-            var absenceRepository = _mocks.StrictMock<IAbsenceRepository>();
-            Expect.Call(_repositoryFactory.CreateAbsenceRepository(_uow)).Return(absenceRepository);
-            Expect.Call(absenceRepository.LoadAll()).Return(new List<IAbsence>());
+            var absenceRepository = MockRepository.GenerateMock<IAbsenceRepository>();
+            _repositoryFactory.Stub(x=>x.CreateAbsenceRepository(_uow)).Return(absenceRepository);
+            absenceRepository.Stub(x=>x.LoadAll()).Return(new List<IAbsence>());
 
-            var activityRepository = _mocks.StrictMock<IActivityRepository>();
-            Expect.Call(_repositoryFactory.CreateActivityRepository(_uow)).Return(activityRepository);
-            Expect.Call(activityRepository.LoadAll()).Return(new List<IActivity>());
+            var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
+            _repositoryFactory.Stub(x=>x.CreateActivityRepository(_uow)).Return(activityRepository);
+            activityRepository.Stub(x=>x.LoadAll()).Return(new List<IActivity>());
 
-            var shiftCategoryRepository = _mocks.StrictMock<IShiftCategoryRepository>();
-            Expect.Call(_repositoryFactory.CreateShiftCategoryRepository(_uow)).Return(shiftCategoryRepository);
-            Expect.Call(shiftCategoryRepository.FindAll()).Return(new List<IShiftCategory>());
+            var shiftCategoryRepository = MockRepository.GenerateMock<IShiftCategoryRepository>();
+            _repositoryFactory.Stub(x=>x.CreateShiftCategoryRepository(_uow)).Return(shiftCategoryRepository);
+            shiftCategoryRepository.Stub(x=>x.FindAll()).Return(new List<IShiftCategory>());
 
-            var dayOffRepository = _mocks.StrictMock<IDayOffTemplateRepository>();
-            Expect.Call(_repositoryFactory.CreateDayOffRepository(_uow)).Return(dayOffRepository);
-            Expect.Call(dayOffRepository.LoadAll()).Return(new List<IDayOffTemplate>());
+            var dayOffRepository = MockRepository.GenerateMock<IDayOffTemplateRepository>();
+            _repositoryFactory.Stub(x=>x.CreateDayOffRepository(_uow)).Return(dayOffRepository);
+            dayOffRepository.Stub(x=>x.LoadAll()).Return(new List<IDayOffTemplate>());
         }
 
         private void createContractScheduleInitializationExpectation()
         {
-            var contractScheduleRepository = _mocks.StrictMock<IContractScheduleRepository>();
+            var contractScheduleRepository = MockRepository.GenerateMock<IContractScheduleRepository>();
 
-            Expect.Call(_repositoryFactory.CreateContractScheduleRepository(_uow))
-                .Return(contractScheduleRepository)
-                .Repeat.Twice();
-
-            Expect.Call(contractScheduleRepository.LoadAllAggregate())
-                .Return(new List<IContractSchedule>())
-                .Repeat.Twice();
+            _repositoryFactory.Stub(x => x.CreateContractScheduleRepository(_uow)).Return(contractScheduleRepository);
+            contractScheduleRepository.Stub(x => x.LoadAllAggregate()).Return(new List<IContractSchedule>());
         }
 
         private void createContractLoadingExpectation()
         {
-            var contractRepository = _mocks.StrictMock<IContractRepository>();
+            var contractRepository = MockRepository.GenerateMock<IContractRepository>();
 
-            Expect.Call(_repositoryFactory.CreateContractRepository(_uow))
-                .Return(contractRepository)
-                .Repeat.Twice();
-
-            Expect.Call(contractRepository.FindAllContractByDescription())
-                .Return(new List<IContract>())
-                .Repeat.Twice();
+            _repositoryFactory.Stub(x => x.CreateContractRepository(_uow)).Return(contractRepository);
+            contractRepository.Stub(x => x.FindAllContractByDescription()).Return(new List<IContract>());
         }
 
 		private void createPersonalAccountLoadingExpectation()
 		{
-			var personAbsenceAccountRepository = _mocks.StrictMock<IPersonAbsenceAccountRepository>();
+			var personAbsenceAccountRepository = MockRepository.GenerateMock<IPersonAbsenceAccountRepository>();
 
-			Expect.Call(_repositoryFactory.CreatePersonAbsenceAccountRepository(_uow)).Return(personAbsenceAccountRepository).Repeat.Once();
-			Expect.Call(personAbsenceAccountRepository.LoadAllAccounts()).Return(new Dictionary<IPerson, IPersonAccountCollection>()).Repeat.Once();
+			_repositoryFactory.Stub(x => x.CreatePersonAbsenceAccountRepository(_uow)).Return(personAbsenceAccountRepository);
+			personAbsenceAccountRepository.Stub(x=>x.LoadAllAccounts()).Return(new Dictionary<IPerson, IPersonAccountCollection>());
 		}
 
         private void createMultiplicatorDefinitionSetLoadingExpectation()
         {
-            var multiplicatorDefinitionSetRepository = _mocks.StrictMock<IMultiplicatorDefinitionSetRepository>();
+            var multiplicatorDefinitionSetRepository = MockRepository.GenerateMock<IMultiplicatorDefinitionSetRepository>();
 
-            Expect.Call(_repositoryFactory.CreateMultiplicatorDefinitionSetRepository(_uow))
-                .Return(multiplicatorDefinitionSetRepository)
-                .Repeat.Once();
-
-            Expect.Call(multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions())
-                .Return(new List<IMultiplicatorDefinitionSet>())
-                .Repeat.Once();
+            _repositoryFactory.Stub(x=>x.CreateMultiplicatorDefinitionSetRepository(_uow)).Return(multiplicatorDefinitionSetRepository);
+            multiplicatorDefinitionSetRepository.Stub(x => x.FindAllOvertimeDefinitions()).Return(new List<IMultiplicatorDefinitionSet>());
         }
 
-
-        private void createSkillInitializeExpectation(ISkill skill)
+        private void createSkillInitializeExpectation()
         {
-            var skillRepository = _mocks.StrictMock<ISkillRepository>();
-            Expect.Call(_repositoryFactory.CreateSkillRepository(_uow))
-                .Return(skillRepository)
-                .Repeat.Once();
-
-            Expect.Call(skillRepository.FindAllWithSkillDays(_requestedPeriod))
-                .Return(new List<ISkill> { skill })
-                .Repeat.Once();
-
-            Expect.Call(skill.SkillType).Return(SkillTypeFactory.CreateSkillType());
+            var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
+            
+			_repositoryFactory.Stub(x=>x.CreateSkillRepository(_uow)).Return(skillRepository);
+	        skillRepository.Stub(x => x.FindAllWithSkillDays(_requestedPeriod)).Return(new List<ISkill> {_skill});
         }
 
         private IScheduleDictionary createScheduleInitializationExpectation()
         {
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-            var scheduleRepository = _mocks.StrictMock<IScheduleRepository>();
+            var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+            var scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
         	var period = _schedulerState.RequestedPeriod.Period();
 
-            Expect.Call(_repositoryFactory.CreateScheduleRepository(_uow))
-                .Return(scheduleRepository);
-
-        	Expect.Call(scheduleRepository.FindSchedulesForPersons(null, null, null, null, null)).Constraints(
+            _repositoryFactory.Stub(x => x.CreateScheduleRepository(_uow)).Return(scheduleRepository);
+        	scheduleRepository.Stub(x=>x.FindSchedulesForPersons(null, null, null, null, null)).Constraints(
         		Rhino.Mocks.Constraints.Is.Matching(
         			new Predicate<IScheduleDateTimePeriod>(
         				x =>
@@ -257,18 +201,12 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             return scheduleDictionary;
         }
 
-        private void prepareStateHolderWithSkill(ISkill skill, IList<ISkillDay> skillDays)
-        {
-            _schedulerState.SchedulingResultState.Skills.Add(skill);
-            _schedulerState.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>{{skill, skillDays}};
-        }
-
         private void createScheduleTagLoadingExpectation()
         {
-            var scheduleTagRep = _mocks.StrictMock<IScheduleTagRepository>();
+            var scheduleTagRep = MockRepository.GenerateMock<IScheduleTagRepository>();
 
-            Expect.Call(_repositoryFactory.CreateScheduleTagRepository(_uow)).Return(scheduleTagRep).Repeat.Once();
-            Expect.Call(scheduleTagRep.LoadAll()).Return( new List<IScheduleTag>()).Repeat.Once();
+            _repositoryFactory.Stub(x => x.CreateScheduleTagRepository(_uow)).Return(scheduleTagRep);
+            scheduleTagRep.Stub(x => x.LoadAll()).Return( new List<IScheduleTag>());
         }
     }
 }

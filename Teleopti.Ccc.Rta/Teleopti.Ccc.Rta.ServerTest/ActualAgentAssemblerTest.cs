@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataHandler.Expect(d => d.LoadOldState(_guid)).Return(oldState);
 			_alarmMapper.Expect(a => a.GetStateGroup("", _guid, _guid))
 			            .Return(new RtaStateGroupLight {StateGroupName = "Stategroup", StateGroupId = stateGroupId});
-			_alarmMapper.Expect(a => a.GetAlarm(_guid, stateGroupId)).Return(null);
+			_alarmMapper.Expect(a => a.GetAlarm(_guid, stateGroupId, _guid)).Return(null);
 
 			var result = _target.GetAgentState(_guid, _guid, _guid, "", _dateTime, new TimeSpan(0), _dateTime, "2");
 			result.Should().Not.Be.Null();
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 						.Return(new List<ScheduleLayer> { currentLayer, nextLayer }).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
 			_alarmMapper.Expect(a => a.GetStateGroup("AUX2", _platformTypeId, _businessUnitId)).Return(stateGroup);
-			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, stateGroup.StateGroupId)).Return(alarmLight);
+			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, stateGroup.StateGroupId, _businessUnitId)).Return(alarmLight);
 
 			var result = _target.GetAgentState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan(), new DateTime(), "");
 			Assert.That(result.AlarmName, Is.EqualTo(alarmLight.Name));
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 						.Return(new List<ScheduleLayer> { currentLayer, nextLayer }).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
 			_alarmMapper.Expect(a => a.GetStateGroup(_stateCode, _platformTypeId, _businessUnitId)).Return(stateGroup);
-			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, stateGroup.StateGroupId)).Return(alarmLight);
+			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, stateGroup.StateGroupId, _businessUnitId)).Return(alarmLight);
 
 			var result = _target.GetAgentState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan(), new DateTime(), "");
 			Assert.That(result.AlarmName, Is.EqualTo(alarmLight.Name));
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 						.Return(new List<ScheduleLayer> { currentLayer, nextLayer }).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
 			_alarmMapper.Expect(a => a.GetStateGroup("AUX2", _platformTypeId, _businessUnitId)).Return(stateGroup);
-			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, stateGroup.StateGroupId)).Return(_rtaAlarmLight);
+			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, stateGroup.StateGroupId, _businessUnitId)).Return(_rtaAlarmLight);
 
 			var result = _target.GetAgentState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan(), new DateTime(), "");
 			result.SendOverMessageBroker.Should().Be.False();
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer}).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
 			_alarmMapper.Expect(a => a.GetStateGroup("AUX2", _platformTypeId, _businessUnitId)).Return(stateGroup);
-			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, stateGroup.StateGroupId)).Return(alarmLight);
+			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, stateGroup.StateGroupId, _businessUnitId)).Return(alarmLight);
 
 			var result = _target.GetAgentStateForScheduleUpdate(_guid, _businessUnitId, _dateTime);
 			Assert.That(result.AlarmName, Is.EqualTo(alarmLight.Name));
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer}).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
 			_alarmMapper.Expect(a => a.GetStateGroup("AUX2", _platformTypeId, _businessUnitId)).Return(stategroup);
-			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, stategroup.StateGroupId)).Return(alarmLight);
+			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, stategroup.StateGroupId, _businessUnitId)).Return(alarmLight);
 			
 			var result = _target.GetAgentStateForScheduleUpdate(_guid, _businessUnitId, _dateTime);
 			Assert.That(result.AlarmName, Is.EqualTo(alarmLight.Name));
@@ -320,7 +320,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer}).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(null);
 			_alarmMapper.Expect(a => a.GetStateGroup("", Guid.Empty, _businessUnitId)).Return(null);
-			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, Guid.Empty)).Return(null);
+			_alarmMapper.Expect(a => a.GetAlarm(currentLayer.PayloadId, Guid.Empty, _businessUnitId)).Return(null);
 			
 			var result = _target.GetAgentStateForScheduleUpdate(_guid, _businessUnitId, _dateTime);
 			Assert.That(result.AlarmName, Is.EqualTo(string.Empty));
@@ -387,7 +387,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer}).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(agentState);
 			_alarmMapper.Expect(a => a.GetStateGroup("", Guid.Empty, _businessUnitId));
-			_alarmMapper.Expect(a => a.GetAlarm(_payloadId, Guid.Empty)).Return(null);
+			_alarmMapper.Expect(a => a.GetAlarm(_payloadId, Guid.Empty, _businessUnitId)).Return(null);
 
 			var result = _target.GetAgentStateForScheduleUpdate(_guid, _businessUnitId, _dateTime);
 			result.Should().Not.Be.Null();
@@ -412,7 +412,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				});
 			_alarmMapper.Expect(a => a.IsAgentLoggedOut(_guid, "StateCode", _guid, _guid)).Return(false);
 			_alarmMapper.Expect(a => a.GetStateGroup(loggedOutStateCode, Guid.Empty, _guid)).Return(null);
-			_alarmMapper.Expect(a => a.GetAlarm(_guid, Guid.Empty)).Return(null);
+			_alarmMapper.Expect(a => a.GetAlarm(_guid, Guid.Empty, _guid)).Return(null);
 			_cacheFactory.Expect(c => c.Invalidate(_dataHandler, d => d.StateGroups(), false));
 
 			var result = _target.GetAgentStatesForMissingAgents(_batchId, _sourceId);
@@ -430,7 +430,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			            .Return(new List<IActualAgentState> {oldState});
 			_alarmMapper.Expect(a => a.IsAgentLoggedOut(_guid, "StateCode", _guid, _guid)).Return(false);
 			_alarmMapper.Expect(a => a.GetStateGroup(loggedOutStateCode, Guid.Empty, _guid)).Return(stateGroup);
-			_alarmMapper.Expect(a => a.GetAlarm(oldState.ScheduledId, stateGroup.StateGroupId)).Return(alarm);
+			_alarmMapper.Expect(a => a.GetAlarm(oldState.ScheduledId, stateGroup.StateGroupId, _guid)).Return(alarm);
 
 			var result = _target.GetAgentStatesForMissingAgents(_batchId, _sourceId);
 			result.Count().Should().Be.EqualTo(0);
@@ -477,7 +477,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			            .Return(false);
 			_alarmMapper.Expect(a => a.GetStateGroup("CCC Logged out", Guid.Empty, agentState.BusinessUnit))
 			            .Return(stateGroup);
-			_alarmMapper.Expect(a => a.GetAlarm(state.ScheduledId, stateGroup.StateGroupId)).Return(null);
+			_alarmMapper.Expect(a => a.GetAlarm(state.ScheduledId, stateGroup.StateGroupId, _guid)).Return(null);
 
 			var result = _target.GetAgentStatesForMissingAgents(_batchId, _sourceId);
 			result.Single().StateId.Should().Be.EqualTo(stateGroupId);
@@ -493,7 +493,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataHandler.Expect(d => d.GetMissingAgentStatesFromBatch(_batchId, _sourceId)).Return(missingAgents);
 			_alarmMapper.Expect(a => a.IsAgentLoggedOut(_guid, "StateCode", _guid, _guid)).Return(false);
 			_alarmMapper.Expect(a => a.GetStateGroup(loggedOutStateCode, Guid.Empty, _guid)).Return(stateGroup);
-			_alarmMapper.Expect(a => a.GetAlarm(_guid, _guid)).Return(rtaAlarmLight);
+			_alarmMapper.Expect(a => a.GetAlarm(_guid, _guid, _guid)).Return(rtaAlarmLight);
 			_cacheFactory.Expect(c => c.Invalidate(_dataHandler, d => d.StateGroups(), false));
 
 			var result = _target.GetAgentStatesForMissingAgents(_batchId, _sourceId);
@@ -530,7 +530,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataHandler.Expect(d => d.GetMissingAgentStatesFromBatch(_batchId, _sourceId)).Return(missingAgents);
 			_alarmMapper.Expect(a => a.IsAgentLoggedOut(_guid, "StateCode", _guid, _guid)).Return(false);
 			_alarmMapper.Expect(a => a.GetStateGroup(loggedOutStateCode, Guid.Empty, _guid)).Return(stateGroup);
-			_alarmMapper.Expect(a => a.GetAlarm(agent.ScheduledId, _guid)).Return(noActivityAlarm);
+			_alarmMapper.Expect(a => a.GetAlarm(agent.ScheduledId, _guid, _guid)).Return(noActivityAlarm);
 
 			var result = _target.GetAgentStatesForMissingAgents(_batchId, _sourceId).Single();
 			result.AlarmName.Should().Be.EqualTo("NoScheduledActivity");
@@ -547,7 +547,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataHandler.Expect(d => d.CurrentLayerAndNext(_dateTime, null)).IgnoreArguments().Return(new List<ScheduleLayer> {scheduleLayer, scheduleLayer});
 			_dataHandler.Expect(d => d.LoadOldState(_guid)).Return(initializeAgentStateWithDefaults());
 			_alarmMapper.Expect(a => a.GetStateGroup("stateCode", _guid, _guid)).Return(stateGroup);
-			_alarmMapper.Expect(a => a.GetAlarm(scheduleLayer.PayloadId, _stateGroupId)).Return(activityAlarm);
+			_alarmMapper.Expect(a => a.GetAlarm(scheduleLayer.PayloadId, _stateGroupId, _guid)).Return(activityAlarm);
 
 			var result = _target.GetAgentState(_guid, _guid, _guid, "stateCode", _dateTime, new TimeSpan(), new DateTime(), "2");
 			result.State.Should().Be.EqualTo("Logged out");

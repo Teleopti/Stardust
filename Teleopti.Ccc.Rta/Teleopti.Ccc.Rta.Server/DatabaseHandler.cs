@@ -276,29 +276,12 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public ConcurrentDictionary<Guid, List<RtaAlarmLight>> ActivityAlarms()
 		{
-			const string query =
-				@"SELECT sg.Id StateGroupId , sg.Name StateGroupName, Activity ActivityId, t.Name, t.Id AlarmTypeId,
-								t.DisplayColor,t.StaffingEffect, t.ThresholdTime
-								FROM StateGroupActivityAlarm a
-								INNER JOIN AlarmType t ON a.AlarmType = t.Id
-								LEFT JOIN RtaStateGroup sg ON  a.StateGroup = sg.Id 
-								WHERE t.IsDeleted = 0
-								AND sg.IsDeleted = 0
-				UNION ALL								
-				SELECT NULL,NULL,Activity ActivityId, t.Name, t.Id AlarmTypeId,
-								t.DisplayColor,t.StaffingEffect, t.ThresholdTime
-								FROM StateGroupActivityAlarm a
-								INNER JOIN AlarmType t ON a.AlarmType = t.Id 
-								WHERE t.IsDeleted = 0
-								AND a.StateGroup IS NULL";
 			var stateGroups = new List<RtaAlarmLight>();
-			using (
-				var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString())
-				)
+			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
 			{
 				var command = connection.CreateCommand();
-				command.CommandType = CommandType.Text;
-				command.CommandText = query;
+				command.CommandType = CommandType.StoredProcedure;
+				command.CommandText = "[dbo].[ActivityAlarmMapping]";
 				connection.Open();
 				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
 				while (reader.Read())
@@ -314,11 +297,22 @@ namespace Teleopti.Ccc.Rta.Server
 							ActivityId = !reader.IsDBNull(reader.GetOrdinal("ActivityId"))
 								             ? reader.GetGuid(reader.GetOrdinal("ActivityId"))
 								             : Guid.Empty,
-							DisplayColor = reader.GetInt32(reader.GetOrdinal("DisplayColor")),
-							StaffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect")),
-							AlarmTypeId = reader.GetGuid(reader.GetOrdinal("AlarmTypeId")),
-							Name = reader.GetString(reader.GetOrdinal("Name")),
-							ThresholdTime = reader.GetInt64(reader.GetOrdinal("ThresholdTime"))
+							DisplayColor = !reader.IsDBNull(reader.GetOrdinal("DisplayColor"))
+								               ? reader.GetInt32(reader.GetOrdinal("DisplayColor"))
+								               : 0,
+							StaffingEffect = !reader.IsDBNull(reader.GetOrdinal("StaffingEffect"))
+								                 ? reader.GetDouble(reader.GetOrdinal("StaffingEffect"))
+								                 : 0,
+							AlarmTypeId = !reader.IsDBNull(reader.GetOrdinal("AlarmTypeId"))
+								              ? reader.GetGuid(reader.GetOrdinal("AlarmTypeId"))
+								              : Guid.Empty,
+							Name = !reader.IsDBNull(reader.GetOrdinal("Name"))
+								       ? reader.GetString(reader.GetOrdinal("Name"))
+								       : "",
+							ThresholdTime = !reader.IsDBNull(reader.GetOrdinal("ThresholdTime"))
+								                ? reader.GetInt64(reader.GetOrdinal("ThresholdTime"))
+								                : 0,
+							BusinessUnit = reader.GetGuid(reader.GetOrdinal("BusinessUnit"))
 						};
 					stateGroups.Add(rtaAlarmLight);
 				}

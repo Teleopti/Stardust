@@ -449,6 +449,7 @@
     <EmbeddedResource Include="Reports\Ccc\report_requests_per_agent.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Ccc\report_scheduling_metrics_per_period.rdlc" />
     <EmbeddedResource Include="Reports\Ccc\report_shift_category_and_day_absences_per_agent.rdlc" />
     <EmbeddedResource Include="Reports\Ccc\report_shift_category_and_day_absences_per_day.rdlc" />
     <EmbeddedResource Include="Reports\Ccc\report_shift_category_per_day.rdlc" />

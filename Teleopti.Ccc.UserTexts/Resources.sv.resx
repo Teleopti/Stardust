@@ -7854,7 +7854,7 @@ period</value>
     <value>Konflikt</value>
   </data>
   <data name="InfoTextConflict" xml:space="preserve">
-    <value>En annan användare har ändrat dessa poster. Du måste bestämma vad du vill göra innan du fortsätter. Klicka på "OK" för att acceptera den andra användarens ändringar. Observera att dina egna motsvarande ändringar kommer att tas bort. Klicka på "Avbryt" för att fortsätta utan att spara (denna konflikt upprepas då när du sparar senare). Klicka på "Skriv över" för att spara dina egna ändringar och ta bort den andra användarens ändringar.</value>
+    <value>En annan användare har ändrat dessa poster. Du måste bestämma vad du vill göra innan du fortsätter. Klicka på "OK" för att acceptera den andra användarens ändringar. Observera att dina egna motsvarande ändringar kommer att tas bort. Klicka på "Skriv över" för att spara dina egna ändringar och ta bort den andra användarens ändringar.</value>
   </data>
   <data name="NotSaved" xml:space="preserve">
     <value>Ej sparad</value>
@@ -11309,5 +11309,17 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="Here" xml:space="preserve">
     <value>här</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Genomsnitt</value>
+  </data>
+  <data name="PerAgent" xml:space="preserve">
+    <value>Per agent</value>
+  </data>
+  <data name="PerShiftCategory" xml:space="preserve">
+    <value>Per skiftkategori</value>
+  </data>
+  <data name="AnalysisInfo" xml:space="preserve">
+    <value>Analysinfo</value>
   </data>
 </root>

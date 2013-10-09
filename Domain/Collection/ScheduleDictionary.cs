@@ -298,14 +298,6 @@ namespace Teleopti.Ccc.Domain.Collection
 
                             var partBefore = range.ReFetch(part);
 
-#if (DEBUG)
-							//check for duplicate personassignments remove before next release
-							if (partBefore.PersonAssignment(true).Id != null && part.PersonAssignment() != null &&
-							    part.PersonAssignment().Id == null)
-							{
-								throw new DuplicateElementException(part.DateOnlyAsPeriod.DateOnly.ToShortDateString() + " " + part.Person.Name);
-							}
-#endif
                             scheduleDayChangeCallback.ScheduleDayChanging(partBefore);
 
                             range.ModifyInternal(part);

@@ -25,28 +25,33 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			_callback = callback;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Persist(IScheduleDictionary scheduleDictionary)
 		{
 			var uowFactory = _uowFactory.LoggedOnUnitOfWorkFactory();
 			foreach (var scheduleRange in scheduleDictionary.Values)
 			{
 				var diff = scheduleRange.DifferenceSinceSnapshot(_differenceCollectionService);
-				if(diff.IsEmpty())
+				if (diff.IsEmpty())
 					continue;
-				using (var uow = makeUnitOfWork(uowFactory, scheduleRange))
+				foreach (var item in diff)
 				{
-					var result = _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository, diff);
-					uow.PersistAll(_messageBrokerIdentifier);
-					if (_callback != null)
-						_callback.Callback(scheduleRange, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
+					using (var uow = makeUnitOfWork(uowFactory, scheduleRange))
+					{
+						var tempDiff = new DifferenceCollection<IPersistableScheduleData> { item };
+						var result = _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository, tempDiff);
+						uow.PersistAll(_messageBrokerIdentifier);
+						if (_callback != null)
+							_callback.Callback(scheduleRange, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
+					}
 				}
+				//behövs nog inte men för säkerhets skull...
+				scheduleRange.TakeSnapshot();
 			}
 		}
 
-		private IUnitOfWork makeUnitOfWork(IUnitOfWorkFactory unitOfWorkFactory, IScheduleRange scheduleRange) 
+		private IUnitOfWork makeUnitOfWork(IUnitOfWorkFactory unitOfWorkFactory, IScheduleRange scheduleRange)
 		{
-			return _reassociateData != null ? unitOfWorkFactory.CreateAndOpenUnitOfWork(_reassociateData.DataToReassociate(scheduleRange.Person)) : 
+			return _reassociateData != null ? unitOfWorkFactory.CreateAndOpenUnitOfWork(_reassociateData.DataToReassociate(scheduleRange.Person)) :
 																			unitOfWorkFactory.CreateAndOpenUnitOfWork();
 		}
 	}

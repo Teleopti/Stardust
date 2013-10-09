@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
         }
 
 
+        
         private static MemoryAppender setUpMemoryAppender(string listeningTo)
         {
             var filter = new LoggerMatchFilter { LoggerToMatch = listeningTo };

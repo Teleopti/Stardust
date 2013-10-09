@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 using log4net;
 using Teleopti.Ccc.Rta.LogClient;
@@ -23,7 +24,8 @@ namespace Teleopti.Ccc.Rta.TestApplication
 		private readonly bool _snapshotMode;
 		private readonly int _intervalForScheduleUpdate;
 		private readonly Guid _businessUnitId;
-		private bool _removeOneByOne = false;
+		private readonly bool _removeOneByOne;
+		private readonly bool _randomPersonsInSnapshot;
 
 		public SendSettings()
 		{
@@ -74,6 +76,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
 			try
 			{
 				_removeOneByOne = bool.Parse(ConfigurationManager.AppSettings["RemoveOneByOne"]);
+				_randomPersonsInSnapshot = bool.Parse(ConfigurationManager.AppSettings["RandomPersonsInSnapshot"]);
 			}
 			catch (ConfigurationErrorsException)
 			{
@@ -113,27 +116,39 @@ namespace Teleopti.Ccc.Rta.TestApplication
 					var batchIdentifier = DateTime.UtcNow;
 					foreach (var selectedLogOn in _logOnCollection)
 					{
+						var currentLogOn = selectedLogOn;
+						if (_randomPersonsInSnapshot)
+							currentLogOn = _personIdForScheduleUpdate[random.Next(0, _personIdForScheduleUpdate.Count)];
 						var stateCodeIndex = random.Next(0, _stateCodeCollection.Count);
-						var personIdIndex = random.Next(0, _personIdForScheduleUpdate.Count);
+						
 						_sendCount--;
 
 						yield return
 							new AgentStateForTest(selectedLogOn, _stateCodeCollection[stateCodeIndex],
-												  TimeSpan.Zero, _sourceId, true, batchIdentifier, _personIdForScheduleUpdate[personIdIndex], _businessUnitId);
+												  TimeSpan.Zero, _sourceId, true, batchIdentifier, currentLogOn, _businessUnitId);
 					}
 
 					var waitTime = random.Next(_minDistributionMilliseconds, _maxDistributionMilliseconds);
-					yield return new AgentStateForTest("", "", TimeSpan.FromMilliseconds(waitTime), _sourceId, true, batchIdentifier, _personIdForScheduleUpdate[0], _businessUnitId); //Snapshot end signal - with delay to add delay between snapshots
+					yield return
+						new AgentStateForTest("", "", TimeSpan.FromMilliseconds(waitTime), _sourceId, true, batchIdentifier,
+						                      _personIdForScheduleUpdate[0], _businessUnitId);
+						//Snapshot end signal - with delay to add delay between snapshots
 				}
 				else
 				{
-					var numberOfAgentsToInclude = Math.Max(1, _logOnCollection.Count - 2);
-					var selectedLogOns = new HashSet<int>();
-					while (selectedLogOns.Count < numberOfAgentsToInclude)
-					{
-						selectedLogOns.Add(random.Next(0, _logOnCollection.Count));
-					}
+					var selectedLogOns = new List<int>();
 					var batchIdentifier = DateTime.UtcNow;
+
+					if (_randomPersonsInSnapshot)
+					{
+						var numberOfAgentsToInclude = Math.Max(1, _logOnCollection.Count - 2);
+						while (selectedLogOns.Count < numberOfAgentsToInclude)
+							selectedLogOns.Add(random.Next(0, _logOnCollection.Count));
+					}
+					else
+						for (var i = 0; i < _logOnCollection.Count; i++)
+							selectedLogOns.Add(i);
+
 					foreach (var selectedLogOn in selectedLogOns)
 					{
 						var stateCodeIndex = random.Next(0, _stateCodeCollection.Count);

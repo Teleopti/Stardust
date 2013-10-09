@@ -148,8 +148,10 @@ END
 --Date: 2013-05-14
 --Desc: new "Avaliability per Agent" report
 -----------------
-DECLARE @newreportid uniqueidentifier = 'A56B3EEF-17A2-4778-AA8A-D166232073D2'
-DECLARE @CollectionId uniqueidentifier = (SELECT DISTINCT CollectionId FROM mart.report_control_collection WHERE collection_id=44)
+DECLARE @newreportid uniqueidentifier
+SET  @newreportid= 'A56B3EEF-17A2-4778-AA8A-D166232073D2'
+DECLARE @CollectionId uniqueidentifier
+SELECT DISTINCT @CollectionId = CollectionId FROM mart.report_control_collection WHERE collection_id=44
 
 INSERT INTO mart.report (
 		Id, 

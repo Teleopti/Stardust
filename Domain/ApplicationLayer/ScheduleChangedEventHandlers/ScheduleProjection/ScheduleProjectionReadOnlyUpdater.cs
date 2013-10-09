@@ -49,14 +49,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 		private static bool isLayerRightNow(ProjectionChangedEventLayer layer)
 		{
-			return layer.StartDateTime.ToUniversalTime() <= DateTime.UtcNow &&
-			        layer.EndDateTime.ToUniversalTime() >= DateTime.UtcNow;
+			return layer.StartDateTime <= DateTime.UtcNow &&
+			        layer.EndDateTime >= DateTime.UtcNow;
 		}
 		
 		private static bool isCurrentLayerCloser(ProjectionChangedEventLayer layer, ProjectionChangedEventLayer closestLayerToNow)
 		{
-			return layer.StartDateTime.ToUniversalTime() >= DateTime.UtcNow &&
-			         layer.StartDateTime.ToUniversalTime() < closestLayerToNow.StartDateTime.ToUniversalTime();
+			return layer.StartDateTime >= DateTime.UtcNow &&
+			         layer.StartDateTime < closestLayerToNow.StartDateTime;
 		}
 
 		private void handleEnqueueRtaMessage(ProjectionChangedEventBase @event, ProjectionChangedEventLayer closestLayer)
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			var layerPeriod = new DateTimePeriod(DateTime.SpecifyKind(closestLayer.StartDateTime, DateTimeKind.Utc),
 			                                     DateTime.SpecifyKind(closestLayer.EndDateTime, DateTimeKind.Utc));
 			if (NotifyRtaDecider.ShouldSendMessage(layerPeriod, nextActivityStartTime) &&
-			    @event.ScheduleDays.Any(d => d.Date >= DateTime.UtcNow.Date))
+			    @event.ScheduleDays.Any(d => d.Date >= DateTime.Today))
 			{
 				_serviceBus.Publish(new ScheduleProjectionReadOnlyChanged
 					{

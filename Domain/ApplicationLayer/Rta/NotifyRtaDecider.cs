@@ -7,8 +7,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		public static bool ShouldSendMessage(DateTimePeriod period, DateTime? nearestLayerStartDateTime)
 		{
-			return (period.StartDateTime == DateTime.MaxValue.ToUniversalTime()
-					&& period.EndDateTime == DateTime.MaxValue.ToUniversalTime())
+			return (period.StartDateTime == DateTime.MaxValue.Date
+					&& period.EndDateTime == DateTime.MaxValue.Date)
 				   ||
 				   (nearestLayerStartDateTime != null &&
 					(DateTime.UtcNow < period.EndDateTime &&
