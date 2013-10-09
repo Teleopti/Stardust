@@ -34,7 +34,10 @@ namespace Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages
             sdkAuthentication.SetSdkAuthenticationHeader();
 
             var sdkName = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["Sdk"];
-            using (var proxy = new Proxy(sdkName))
+
+	        using (var proxy = string.IsNullOrEmpty(sdkName)
+		                           ? new Proxy()
+		                           : new Proxy(sdkName))
             {
                 bool someTreeNodeIsOptioned = false;
 

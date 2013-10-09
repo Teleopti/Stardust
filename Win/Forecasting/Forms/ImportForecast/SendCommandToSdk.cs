@@ -23,7 +23,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
         {
             _sdkAuthentication.SetSdkAuthenticationHeader();
             var sdkName = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["Sdk"];
-            var proxy = new Proxy(sdkName);
+	        var proxy = string.IsNullOrEmpty(sdkName)
+		                    ? new Proxy()
+		                    : new Proxy(sdkName);
             try
             {
                 proxy.Open();
