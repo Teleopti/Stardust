@@ -52,7 +52,7 @@ define([
 	        	self.Layers.push.apply(self.Layers, newItems);
 
 	        	self.IsFullDayAbsence = data.IsFullDayAbsence;
-	        	self.IsDayOff(data.IsDayOff);
+	        	self.IsDayOff(data.DayOffStartTime != undefined && data.DayOffEndTime != undefined);
 		        
 	        	self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
 	        	self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
