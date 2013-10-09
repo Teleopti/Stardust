@@ -51,10 +51,8 @@ DECLARE
 @NumberOfRows             INT,
 @ErrorMessageText         NVARCHAR(4000),
 @CurrentServerName        VARCHAR(255),
-@DifferenceInMilliSeconds BIGINT,
-@sqlserver_start_time		DATETIME
+@DifferenceInMilliSeconds BIGINT
 
-SELECT @sqlserver_start_time=sqlserver_start_time FROM sys.dm_os_sys_info
 SELECT @CurrentServerName = Cast(Serverproperty('servername') AS VARCHAR(255))
 SET @DifferenceInMilliSeconds = Datediff(ms, CONVERT(DATETIME, '00:00:00', 8), @Duration)
 SELECT @StopTime = Dateadd(ms, @DifferenceInMilliSeconds, Getdate())
@@ -152,18 +150,4 @@ INSERT INTO dbo.DBA_VirtualFileStatsHistory
 SELECT * FROM dbo.DBA_VirtualFileStats;
 TRUNCATE TABLE dbo.DBA_VirtualFileStats;
 
---save now state; since report login lack permissions
-TRUNCATE TABLE dbo.DBA_VirtualFileStatsCurrent;
-INSERT INTO [dbo].[DBA_VirtualFileStatsCurrent]
-SELECT
-	[database_id]		= [database_id],
-    [file_id]			= [file_id],
-	[interval_ms] = datediff(ms,@sqlserver_start_time,getdate()), --@sqlserver_start_time
-    [num_of_reads]		= [num_of_reads],
-    [num_of_bytes_read] = [num_of_bytes_read],
-    [io_stall_read_ms]	= [io_stall_read_ms],
-    [num_of_writes]		= [num_of_writes],
-    [num_of_bytes_written]=[num_of_bytes_written],
-    [io_stall_write_ms]	= [io_stall_write_ms]
-FROM sys.Dm_io_virtual_file_stats(null,null)
 GO

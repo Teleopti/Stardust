@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void SetCurrentTime(DateTime time)
 		{
-			Navigation.GoToWaitForCompleted("Test/SetCurrentTime?dateSet=" + time);
+			Navigation.GoToInBackground("Test/SetCurrentTime?dateSet=" + time);
 		}
 
 		public static void BeforeTestRun()
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void BeforeScenario()
 		{
 			// use a scenario tag here for enableMyTimeMessageBroker if required
-			Navigation.GoToWaitForCompleted("Test/BeforeScenario?enableMyTimeMessageBroker=false", new ApplicationStartupTimeout());
+			Navigation.GoToInBackground("Test/BeforeScenario?enableMyTimeMessageBroker=false", 60);
 		}
 
 		/// <summary>

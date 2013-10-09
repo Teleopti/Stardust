@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using log4net;
@@ -25,6 +26,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GoToWaitForCompleted(string pageUrl, params IGoToInterceptor[] interceptors)
 		{
 			InnerGoto(new Uri(TestSiteConfigurationSetup.Url, pageUrl), Browser.Interactions.GoToWaitForCompleted, interceptors);
+		}
+
+		public static void GoToInBackground(string pageUrl, int timeoutSeconds = 20)
+		{
+			var url = new Uri(TestSiteConfigurationSetup.Url, pageUrl);
+			var cookieContainer = Browser.Current.GetCookieContainerForUrl(url);
+			using (var client = new WebClientWithTimeout(cookieContainer, TimeSpan.FromSeconds(timeoutSeconds)))
+			{
+				var credentials = new CredentialCache();
+				credentials.Add(url,"NTLM",CredentialCache.DefaultNetworkCredentials);
+				credentials.Add(url,"Kerberos",CredentialCache.DefaultNetworkCredentials);
+				client.Credentials = credentials;
+				var result = client.DownloadString(url);
+				Log.InfoFormat("Browsed to {0}. Result was {1}.", url, result);
+			}
 		}
 
 		public static void GotoRaw(string url, params IGoToInterceptor[] interceptors)
@@ -350,4 +366,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		}
 	}
 
+	public class WebClientWithTimeout : WebClient
+	{
+		private readonly CookieContainer _cookieContainer;
+		private readonly TimeSpan _timeout;
+
+		public WebClientWithTimeout(CookieContainer cookieContainer, TimeSpan timeout)
+		{
+			_cookieContainer = cookieContainer;
+			_timeout = timeout;
+		}
+
+		protected override WebRequest GetWebRequest(Uri address)
+		{
+			var request = base.GetWebRequest(address);
+			var webRequest = request as HttpWebRequest;
+			if (webRequest != null)
+			{
+				webRequest.Timeout = (int) _timeout.TotalMilliseconds;
+				webRequest.CookieContainer = _cookieContainer;
+			}
+			return request;
+		}
+	}
 }
