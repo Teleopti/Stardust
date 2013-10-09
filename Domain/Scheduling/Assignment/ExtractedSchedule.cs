@@ -822,13 +822,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             if (CanCreateAndAddOvertime(overtimeShiftActivityLayer))
             {
+				var overtimeShift = new OvertimeShift();
                 var foundPersonAssignment = FindPersonAssignmentToConnectOvertimeTo(overtimeShiftActivityLayer);
-                if(foundPersonAssignment==null)
-                    foundPersonAssignment = new PersonAssignment(Person, Scenario);
+                if(foundPersonAssignment!=null)
+                {		
+					foundPersonAssignment.AddOvertimeShift(overtimeShift);
+					overtimeShift.LayerCollection.Add(overtimeShiftActivityLayer);
+	                return;
+                }
 
-                var overtimeShift = new OvertimeShift();
+				foundPersonAssignment = new PersonAssignment(Person, Scenario);	
                 foundPersonAssignment.AddOvertimeShift(overtimeShift);
-                overtimeShift.LayerCollection.Add(overtimeShiftActivityLayer);
+				overtimeShift.LayerCollection.Add(overtimeShiftActivityLayer);
                 Add(foundPersonAssignment);
             }
         }
