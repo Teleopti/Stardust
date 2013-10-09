@@ -261,13 +261,11 @@ AND fs.[file_id] = mf.[file_id]
 ORDER BY avg_io_stall_ms DESC OPTION (RECOMPILE);
 
 -------
--- DISK STATS - now  => NEW!
+-- DISK STATS - now
 -------
-USE TeleoptiAnalytics --EDIT
-GO
-
--- We now call a Teleopti Stored Procedure in Analytics and also save the data.
--- select * from dbo.DBA_VirtualFileStatsHistory
+-- We now call a Teleopti Stored Procedure in Analytics to collect and save the data.
+-- EXEC [dbo].[DBA_VirtualFilestats_Load]
+-- Then query the statistics via => select * from dbo.DBA_VirtualFileStatsHistory
 
 --settings for data collection
 DECLARE @Duration datetime
@@ -276,29 +274,81 @@ DECLARE @DateFrom datetime
 
 SET @Duration='24:00:00' --EDIT: default 24 hours
 SET @IntervalInSeconds=900 --EDIT: default 15 min
-SELECT @DateFrom=getdate()-@Duration
 
 --collect data
 EXEC [dbo].[DBA_VirtualFilestats_Load] @Duration=@Duration,@IntervalInSeconds=@IntervalInSeconds
 
---view result for this @Duration
+--view result last batch => @Duration
+SELECT @DateFrom=getdate()-@Duration
 EXEC [dbo].DBA_report_data_IO_By_Interval @DateFrom=@DateFrom,@DateTo='2059-12-31'
 
---View all historic data
+--view all result
 --EXEC [dbo].DBA_report_data_IO_By_Interval @DateFrom='1900-01-01',@DateTo='2059-12-31'
 
-/* =================
-The result will show three result set:
-1) "Sum full period"
-One line for each file with any file activity summed over full period
+/*
+The result will show four result set:
+1) sum of IO stats grouped by hour
+One line per hour, over all IO stats
+note: this output depends on that we run the "collect data" for 24 consecutive hours
 
-2) "All files, All intervals"
-One line for each file with any file activity, per interval
+2) sum of IO stats grouped database file
+One line for each file with any file activity
 
-3) "worst interval"
-Shows the worst interval, worst file (top 1 "total iops")
+3) top 3 worst interval by Total IOPS
+Shows the worst interval, worst file
 
-key figures:
-"Ave read speed (ms)"  should stay < 5ms. Idealy < 1ms
-"Ave write speed (ms)" should stay < 10ms
-================= */
+4) top 3 worst interval by "Total write latency"
+Shows the worst interval, worst file
+
+From Teleopti CCC Pre-reqs:
+SQL Server storage MUST be configured properly for high IO performance.
+Under sustained load "Ave read speed (ms)" must be <=5ms and "Ave read speed (ms)"  <=20ms. 
+To achieve this there must at least be separate physical disks (and controllers) for 
+system files, database files, temp db and database log files. 
+RAID-10 or equivalent can be used for improved reliability of database server (this is  not a requirement).
+Useful reading:
+http://searchsqlserver.techtarget.com/tip/0,289483,sid87_gci1262122,00.html
+http://msdn.microsoft.com/en-us/library/cc966412.aspx
+If SAN storage is used it MUST be configured correct for high IO performance. Useful reading:
+http://www.brentozar.com/sql/sql-server-san-best-practices/
+*/
+
+-------
+-- DISK STATS - Add job
+-------
+-- This job will collect IO stats every tuesday (00:00), 24 hours, every 15 minutes
+USE [msdb]
+GO
+IF EXISTS (select 1 from sys.databases where name='TeleoptiAnalytisc')
+BEGIN
+	DECLARE @server_name nvarchar(30)
+	SELECT @server_name = CAST(SERVERPROPERTY('ServerName') AS nvarchar(30))
+
+	DECLARE @job_name sysname
+	SET @job_name=N'Teleopti_VirtualFileStatsHistory'
+
+	--Drop existing Job
+	IF  EXISTS (SELECT job_id FROM msdb.dbo.sysjobs_view WHERE name = @job_name)
+	EXEC msdb.dbo.sp_delete_job @job_name=@job_name, @delete_unused_schedule=1
+
+	--Add Job
+	EXEC  msdb.dbo.sp_add_job @job_name=@job_name, 
+			@enabled=1, @notify_level_eventlog=0, @notify_level_email=2, @notify_level_netsend=2, @notify_level_page=2, @delete_level=0, 
+			@description=N'Collects IO statistics from [sys].[Dm_io_virtual_file_stats]', @category_name=N'[Uncategorized (Local)]', @owner_login_name=N'sa'
+
+	EXEC msdb.dbo.sp_add_jobserver @job_name=@job_name, @server_name = @server_name
+
+	EXEC msdb.dbo.sp_add_jobstep @job_name=@job_name, @step_name=N'Start collect', 
+			@step_id=1, @cmdexec_success_code=0, @on_success_action=1, @on_fail_action=2, @retry_attempts=0, @retry_interval=0, @os_run_priority=0,
+			@subsystem=N'TSQL', @command=N'EXEC TeleoptiAnalytics.[dbo].[DBA_VirtualFilestats_Load]', @database_name=N'master', @flags=0
+
+	EXEC msdb.dbo.sp_update_job @job_name=@job_name, 
+			@enabled=1, @start_step_id=1, @notify_level_eventlog=0, @notify_level_email=2, @notify_level_netsend=2, @notify_level_page=2, @delete_level=0, 
+			@description=N'Collects IO statistics from [sys].[Dm_io_virtual_file_stats]', @category_name=N'[Uncategorized (Local)]', @owner_login_name=N'sa'
+
+	EXEC msdb.dbo.sp_add_jobschedule @job_name=@job_name, @name=N'Once a week', 
+			@enabled=1,@freq_type=8, @freq_interval=4, @freq_subday_type=1, @freq_subday_interval=0, @freq_relative_interval=0, @freq_recurrence_factor=1, 
+			@active_start_date=20131009, @active_end_date=99991231, @active_start_time=0, @active_end_time=235959
+END
+ELSE
+PRINT 'Sorry, I cannot find the TeleoptiAnalytics database. Please edit the script to point to an existing TeleoptiAnalytics database.'
