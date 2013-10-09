@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
 	    private void selectSdkScreenLoad(object sender, EventArgs e)
         {
-            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-            BackColor = Color.FromArgb(175, Color.CornflowerBlue);
+            //SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            //BackColor = Color.FromArgb(175, Color.CornflowerBlue);
         }
 	}
 }

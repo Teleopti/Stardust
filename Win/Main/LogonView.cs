@@ -80,6 +80,12 @@ namespace Teleopti.Ccc.Win.Main
 				if (!LogonInitializeStateHolder.GetConfigFromFileSystem(nhibConfPath, useMessageBroker))
 					return showError();
 			}
+            if (!string.IsNullOrEmpty(LogonInitializeStateHolder.WarningMessage))
+            {
+                // ReSharper disable LocalizableElement
+               MessageBox.Show(this, LogonInitializeStateHolder.WarningMessage, "Configuration warning", MessageBoxButtons.OK);
+                // ReSharper restore LocalizableElement
+            }
 			return true;
 		}
 
@@ -92,13 +98,6 @@ namespace Teleopti.Ccc.Win.Main
 			                              "The system configuration could not be loaded from the server. Review error message and log files to troubleshoot this error.\n\n{0}",
 			                              LogonInitializeStateHolder.ErrorMessage),
 			                "Configuration error", MessageBoxButtons.OK);
-
-			if (!string.IsNullOrEmpty(LogonInitializeStateHolder.WarningMessage))
-			{
-				ShowInTaskbar = true;
-				MessageBox.Show(this, LogonInitializeStateHolder.WarningMessage, "Configuration warning", MessageBoxButtons.OK);
-				ShowInTaskbar = false;
-			}
 			return false;
 			// ReSharper restore LocalizableElement
 		}

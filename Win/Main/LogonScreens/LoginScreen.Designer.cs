@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             // LoginScreen
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.textBoxPassword);
             this.Controls.Add(this.labelPassword);
             this.Controls.Add(this.textBoxLogOnName);
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.Controls.Add(this.labelLogOn);
             this.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "LoginScreen";
-            this.Size = new System.Drawing.Size(483, 245);
+            this.Size = new System.Drawing.Size(483, 296);
             this.Load += new System.EventHandler(this.LoginScreen_Load);
             this.Enter += new System.EventHandler(this.LoginScreen_Enter);
             this.ResumeLayout(false);

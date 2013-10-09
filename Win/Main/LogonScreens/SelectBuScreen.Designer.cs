@@ -60,12 +60,12 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             // SelectBuScreen
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.lbxSelectBu);
             this.Controls.Add(this.labelChooseBu);
             this.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "SelectBuScreen";
-            this.Size = new System.Drawing.Size(483, 245);
+            this.Size = new System.Drawing.Size(483, 296);
             this.Load += new System.EventHandler(this.selectSdkScreenLoad);
             this.ResumeLayout(false);
 

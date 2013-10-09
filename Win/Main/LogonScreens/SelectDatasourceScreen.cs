@@ -58,8 +58,8 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
 	    private void SelectDatasourceScreen_Load(object sender, System.EventArgs e)
         {
-            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-            BackColor = Color.FromArgb(175, Color.CornflowerBlue);
+            //SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            //BackColor = Color.FromArgb(175, Color.CornflowerBlue);
             
         }
 

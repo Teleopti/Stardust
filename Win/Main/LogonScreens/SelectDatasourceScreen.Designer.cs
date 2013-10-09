@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.tabControlChooseDataSource.Margin = new System.Windows.Forms.Padding(0);
             this.tabControlChooseDataSource.Name = "tabControlChooseDataSource";
             this.tabControlChooseDataSource.SelectedIndex = 0;
-            this.tabControlChooseDataSource.Size = new System.Drawing.Size(350, 153);
+            this.tabControlChooseDataSource.Size = new System.Drawing.Size(352, 140);
             this.tabControlChooseDataSource.TabIndex = 0;
             // 
             // tabPageWindowsDataSources
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.tabPageWindowsDataSources.Location = new System.Drawing.Point(4, 26);
             this.tabPageWindowsDataSources.Margin = new System.Windows.Forms.Padding(0);
             this.tabPageWindowsDataSources.Name = "tabPageWindowsDataSources";
-            this.tabPageWindowsDataSources.Size = new System.Drawing.Size(342, 123);
+            this.tabPageWindowsDataSources.Size = new System.Drawing.Size(344, 110);
             this.tabPageWindowsDataSources.TabIndex = 0;
             this.tabPageWindowsDataSources.Text = "xxWindows logon";
             this.tabPageWindowsDataSources.UseVisualStyleBackColor = true;
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             this.listBoxWindowsDataSources.Location = new System.Drawing.Point(0, 0);
             this.listBoxWindowsDataSources.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxWindowsDataSources.Name = "listBoxWindowsDataSources";
-            this.listBoxWindowsDataSources.Size = new System.Drawing.Size(342, 123);
+            this.listBoxWindowsDataSources.Size = new System.Drawing.Size(344, 110);
             this.listBoxWindowsDataSources.TabIndex = 3;
             // 
             // tabPageApplicationDataSources
@@ -121,12 +121,12 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             // SelectDatasourceScreen
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.BackColor = System.Drawing.Color.CornflowerBlue;
+            this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.tabControlChooseDataSource);
             this.Controls.Add(this.labelChooseDataSource);
             this.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "SelectDatasourceScreen";
-            this.Size = new System.Drawing.Size(483, 245);
+            this.Size = new System.Drawing.Size(483, 296);
             this.Load += new System.EventHandler(this.SelectDatasourceScreen_Load);
             this.tabControlChooseDataSource.ResumeLayout(false);
             this.tabPageWindowsDataSources.ResumeLayout(false);

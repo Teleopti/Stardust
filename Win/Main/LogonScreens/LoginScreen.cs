@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
 	    private void LoginScreen_Load(object sender, System.EventArgs e)
         {
-            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-            BackColor = Color.FromArgb(175, Color.CornflowerBlue);
+            //SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            //BackColor = Color.FromArgb(175, Color.CornflowerBlue);
         }
 
         private void LoginScreen_Enter(object sender, System.EventArgs e)
