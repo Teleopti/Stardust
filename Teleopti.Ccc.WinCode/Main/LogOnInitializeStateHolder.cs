@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WinCode.Main
             var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
 
             encryptedAppSettings.DecryptDictionary(Interfaces.Infrastructure.EncryptionConstants.Image1, Interfaces.Infrastructure.EncryptionConstants.Image2);
-            encryptedAppSettings.Add("Sdk", endpointNames);
+            encryptedAppSettings.Add("Sdk", endpointName);
 
             bool messageBrokerDisabled = false;
             string messageBrokerDisabledString;
