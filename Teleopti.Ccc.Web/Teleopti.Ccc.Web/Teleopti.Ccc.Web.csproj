@@ -697,8 +697,8 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addfulldayabsenceform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\layer.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\timeline-time.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\timeline.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline-time.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\dayoff.js" />
@@ -740,8 +740,6 @@
     <Content Include="Areas\Anywhere\Content\Scripts\navigation.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\person.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\layer.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\timeline-time.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\timeline.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\vm.js" />
     <Content Include="Areas\Anywhere\Content\Styles\helpers.css" />

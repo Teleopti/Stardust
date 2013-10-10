@@ -30,9 +30,7 @@ define([
 			return startTime.diff(data.Date, 'minutes');
 		};
 
-		this.LengthMinutes = function() {
-			return data.Minutes;
-		};
+		this.LengthMinutes = ko.observable(data.Minutes);
 
 		this.EndMinutes = ko.computed(function () {
 			return self.StartMinutes() + self.LengthMinutes();
