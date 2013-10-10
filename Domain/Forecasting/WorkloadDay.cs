@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     {
         private ITemplateReference _templateReference = new WorkloadDayTemplateReference(); // this new() is to VerifyBudget test work
         private string _annotation;
-
+        
         /// <summary>
         /// Creates the specified date.
         /// </summary>
@@ -44,9 +44,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual void CreateFromTemplate(DateOnly workloadDate, IWorkload workload, IWorkloadDayTemplate workloadDayTemplate)
         {
             var templateGuid = workloadDayTemplate.Id ?? Guid.Empty;
-            _templateReference = new WorkloadDayTemplateReference(templateGuid, workloadDayTemplate.VersionNumber, workloadDayTemplate.Name, workloadDayTemplate.DayOfWeek, workload)
-                                 	{UpdatedDate = workloadDayTemplate.UpdatedDate};
-        	Create(workloadDate, workload, workloadDayTemplate.OpenHourList);
+            _templateReference = new WorkloadDayTemplateReference(templateGuid, workloadDayTemplate.VersionNumber, workloadDayTemplate.Name, workloadDayTemplate.DayOfWeek, workload) { UpdatedDate = workloadDayTemplate.UpdatedDate };
+            Create(workloadDate, workload, workloadDayTemplate.OpenHourList);
 
             copyValuesFromTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
         }
@@ -82,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     taskPeriodCount = taskPeriods.Count;
                 }
                 if (taskPeriodCount == 0) continue;
-                
+
                 foreach (ITemplateTaskPeriod newTaskPeriod in taskPeriods)
                 {
                     newTaskPeriod.Tasks = keyValuePair.Task.Tasks;
@@ -101,8 +100,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             ResetStatistics();
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public virtual void ApplyTemplate(IWorkloadDayTemplate workloadDayTemplate, Action<IWorkloadDayBase> lockAction, Action<IWorkloadDayBase> releaseAction)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        public virtual void ApplyTemplate(IWorkloadDayTemplate workloadDayTemplate, Action<IWorkloadDayBase> lockAction, Action<IWorkloadDayBase> releaseAction)
         {
             double tasks = Tasks;
             Percent campaignTasks = CampaignTasks;
@@ -110,10 +109,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
             Percent campaignTasksTime = CampaignTaskTime;
             TimeSpan originalAverageTaskTime = AverageTaskTime;
             TimeSpan originalAfterTaskTime = AverageAfterTaskTime;
+            double tasksSum = 0.0;
+            double averageTaskTimeSum = 0.0;
+            double averageAfterTaskTimeSum = 0.0;
+            IList<ITemplateTaskPeriod> taskPeriods = null;
 
             Close();
             SetOpenHours(workloadDayTemplate.OpenHourList);
-            innerSplitTemplateTaskPeriods(new List<ITemplateTaskPeriod>(TaskPeriodList),lockAction,releaseAction);
+            innerSplitTemplateTaskPeriods(new List<ITemplateTaskPeriod>(TaskPeriodList), lockAction, releaseAction);
 
             double taskTimeFactor = TaskTimeFactorTaskTime(workloadDayTemplate);
             double taskAfterTaskTimeFactor = TaskTimeFactorAfterTaskTime(workloadDayTemplate);
@@ -123,7 +126,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             foreach (var keyValuePair in workloadDayTemplate.SortedTaskPeriodList)
             {
                 var localTemplatePeriod = keyValuePair.Period.TimePeriod(timeZone);
-                var taskPeriods =
+                 taskPeriods =
                     TaskPeriodList.Where(t => localTemplatePeriod.Contains(t.Period.TimePeriod(timeZone))).ToList();
                 int taskPeriodCount = taskPeriods.Count;
                 if (taskPeriodCount == 2 &&
@@ -140,46 +143,112 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     taskPeriodCount = taskPeriods.Count;
                 }
                 if (taskPeriodCount == 0) continue;
-
                 
                 foreach (ITemplateTaskPeriod newTaskPeriod in taskPeriods)
                 {
+                    tasksSum += keyValuePair.Task.Tasks;
                     newTaskPeriod.Tasks = keyValuePair.Task.Tasks;
                     newTaskPeriod.AverageTaskTime = keyValuePair.AverageTaskTime;
                     newTaskPeriod.AverageAfterTaskTime = keyValuePair.AverageAfterTaskTime;
-                    newTaskPeriod.AverageTaskTime = TimeSpan.FromSeconds(newTaskPeriod.AverageTaskTime.TotalSeconds * taskTimeFactor);
-                    newTaskPeriod.AverageAfterTaskTime = TimeSpan.FromSeconds(newTaskPeriod.AverageAfterTaskTime.TotalSeconds * taskAfterTaskTimeFactor);
-				}
+
+                    if (newTaskPeriod.AverageTaskTime.TotalSeconds == 0)
+                        newTaskPeriod.AverageTaskTime = TimeSpan.FromSeconds(taskTimeFactor);
+                    else
+                        newTaskPeriod.AverageTaskTime = TimeSpan.FromSeconds(newTaskPeriod.AverageTaskTime.TotalSeconds * taskTimeFactor);
+
+                    averageTaskTimeSum += newTaskPeriod.AverageTaskTime.TotalSeconds * taskTimeFactor * keyValuePair.Task.Tasks;
+                    
+                    if (newTaskPeriod.AverageAfterTaskTime.TotalSeconds == 0)
+                        newTaskPeriod.AverageAfterTaskTime = TimeSpan.FromSeconds(taskAfterTaskTimeFactor);
+                    else
+                        newTaskPeriod.AverageAfterTaskTime = TimeSpan.FromSeconds(newTaskPeriod.AverageAfterTaskTime.TotalSeconds * taskAfterTaskTimeFactor);
+
+                    averageAfterTaskTimeSum += newTaskPeriod.AverageAfterTaskTime.TotalSeconds * taskAfterTaskTimeFactor * keyValuePair.Task.Tasks;
+                }
             }
-            
+
             if (isOpenForIncomingWork())
             {
                 CampaignTasks = campaignTasks;
                 CampaignTaskTime = campaignTasksTime;
                 CampaignAfterTaskTime = campaignAfterTasksTime;
-                Tasks = tasks;
-                AverageTaskTime = originalAverageTaskTime;
-                AverageAfterTaskTime = originalAfterTaskTime;
+
+                if (tasks == 0 && originalAfterTaskTime.TotalSeconds == 0 && originalAverageTaskTime.TotalSeconds == 0)
+                {
+                    Tasks = tasksSum;
+                    if (tasksSum != 0)
+                    {
+                        setAverageTaskTimeOnEachTaskPeriod(TimeSpan.FromSeconds(averageTaskTimeSum / tasksSum), taskPeriods);
+                        setAverageAfterTaskTimeOnEachTaskPeriod(TimeSpan.FromSeconds(averageAfterTaskTimeSum / tasksSum), taskPeriods);
+                    }
+                    else
+                    {
+                        AverageTaskTime = TimeSpan.Zero;
+                        AverageAfterTaskTime = TimeSpan.Zero;
+                    }
+                }
+                else
+                {
+                    Tasks = tasks;
+                    AverageTaskTime = originalAverageTaskTime;
+                    AverageAfterTaskTime = originalAfterTaskTime;
+                }
             }
             releaseAction(this);
             Guid templateGuid = workloadDayTemplate.Id ?? Guid.Empty;
             _templateReference = new WorkloadDayTemplateReference(templateGuid, workloadDayTemplate.VersionNumber, workloadDayTemplate.Name, workloadDayTemplate.DayOfWeek,
-                workloadDayTemplate.Workload) {UpdatedDate = workloadDayTemplate.UpdatedDate};
+                workloadDayTemplate.Workload) { UpdatedDate = workloadDayTemplate.UpdatedDate };
 
-        	//Apply the original volumes
+            //Apply the original volumes
             if (isOpenForIncomingWork())
             {
-                    lockAction(this);
-                    CampaignTasks = campaignTasks;
-                    CampaignTaskTime = campaignTasksTime;
-                    CampaignAfterTaskTime = campaignAfterTasksTime;
+                lockAction(this);
+                CampaignTasks = campaignTasks;
+                CampaignTaskTime = campaignTasksTime;
+                CampaignAfterTaskTime = campaignAfterTasksTime;
+
+                if (tasks == 0 && originalAfterTaskTime.TotalSeconds == 0 && originalAverageTaskTime.TotalSeconds == 0)
+                {
+                    Tasks = tasksSum;
+                    if (tasksSum != 0)
+                    {
+                        setAverageTaskTimeOnEachTaskPeriod(TimeSpan.FromSeconds(averageTaskTimeSum / tasksSum), taskPeriods);
+                        setAverageAfterTaskTimeOnEachTaskPeriod(TimeSpan.FromSeconds(averageAfterTaskTimeSum / tasksSum), taskPeriods);
+                    }
+                    else
+                    {
+                        AverageTaskTime = TimeSpan.Zero;
+                        AverageAfterTaskTime = TimeSpan.Zero;
+                    }
+                }
+                else
+                {
                     Tasks = tasks;
                     AverageTaskTime = originalAverageTaskTime;
                     AverageAfterTaskTime = originalAfterTaskTime;
-                    releaseAction(this);
+                    
+                }
+                
+                releaseAction(this);
             }
 
             ResetStatistics();
+        }
+        
+        private void setAverageTaskTimeOnEachTaskPeriod(TimeSpan averageTaskTime, IList<ITemplateTaskPeriod> taskPeriods)
+        {
+            foreach (var taskPeriod in taskPeriods)
+            {
+                taskPeriod.AverageTaskTime = averageTaskTime;
+            }
+        }
+
+        private void setAverageAfterTaskTimeOnEachTaskPeriod(TimeSpan averageAfterTaskTime, IList<ITemplateTaskPeriod> taskPeriods)
+        {
+            foreach (var taskPeriod in taskPeriods)
+            {
+                taskPeriod.AverageAfterTaskTime = averageAfterTaskTime;
+            }
         }
 
         private bool isOpenForIncomingWork()
@@ -193,7 +262,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             foreach (TemplateTaskPeriod taskPeriod in workloadDayTemplate.TaskPeriodList)
             {
-                taskTimesAverageTalkTime += taskPeriod.Tasks * taskPeriod.AverageTaskTime.TotalSeconds;
+
+                if (taskPeriod.AverageTaskTime.TotalSeconds == 0)
+                    taskTimesAverageTalkTime += taskPeriod.Tasks;
+                else
+                    taskTimesAverageTalkTime += taskPeriod.Tasks * taskPeriod.AverageTaskTime.TotalSeconds;
             }
 
             TimeSpan templateHandlingTime = TimeSpan.FromSeconds(taskTimesAverageTalkTime);
@@ -224,7 +297,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             foreach (TemplateTaskPeriod taskPeriod in workloadDayTemplate.TaskPeriodList)
             {
-                taskTimesAverageAfterTalkTime += taskPeriod.Tasks * taskPeriod.AverageAfterTaskTime.TotalSeconds;
+                if(taskPeriod.AverageAfterTaskTime.TotalSeconds == 0)
+                    taskTimesAverageAfterTalkTime += taskPeriod.Tasks;
+                else 
+                    taskTimesAverageAfterTalkTime += taskPeriod.Tasks * taskPeriod.AverageAfterTaskTime.TotalSeconds;
             }
 
             TimeSpan templateAfterTaskTime = TimeSpan.FromSeconds(taskTimesAverageAfterTalkTime);
@@ -239,7 +315,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 {
                     taskTimesAverageAfterTalkTime += taskPeriod.AverageTaskTime.TotalSeconds;
                 }
-                if(workloadDayTemplate.TaskPeriodList.Count>0)
+                if (workloadDayTemplate.TaskPeriodList.Count > 0)
                     templateAveragegAfterTaskTime = TimeSpan.FromSeconds(taskTimesAverageAfterTalkTime / workloadDayTemplate.TaskPeriodList.Count);
             }
 
@@ -247,7 +323,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             double taskTimeFactor = 1;
             if (AverageAfterTaskTime.TotalSeconds > 0 && templateAveragegAfterTaskTime.TotalSeconds > 0)
                 taskTimeFactor = AverageAfterTaskTime.TotalSeconds / templateAveragegAfterTaskTime.TotalSeconds;
-           
+
             return taskTimeFactor;
         }
 
@@ -261,8 +337,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public override void UpdateTemplateName()
         {
             // this really means that when the day is updated, you have broken the reference to the original template
-        	_templateReference = new WorkloadDayTemplateReference(Guid.Empty, 0, string.Empty, null, null);
+            _templateReference = new WorkloadDayTemplateReference(Guid.Empty, 0, string.Empty, null, null);
         }
+
 
         /// <summary>
         /// Gets or sets the total tasks.

@@ -35,14 +35,14 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// Use your english skills and resharper to understand what I am
 		/// </summary>
-		DateTime? ShiftStart { get; set; }
+		DateTime? Start { get; set; }
 		/// <summary>
 		/// Use your english skills and resharper to understand what I am
 		/// </summary>
-		DateTime? ShiftEnd { get; set; }
+		DateTime? End { get; set; }
 		/// <summary>
 		/// Use your english skills and resharper to understand what I am
 		/// </summary>
-		string Shift { get; set; }
+		string Model { get; set; }
 	}
 }

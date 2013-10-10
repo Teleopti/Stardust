@@ -14,8 +14,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 {
 	public static class Browser
 	{
-		private static readonly ILog Log = LogManager.GetLogger(typeof (Browser));
-
 		private static readonly IDictionary<string, IBrowserActivator> Activators =
 			new Dictionary<string, IBrowserActivator>
 				{
@@ -89,7 +87,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void Close()
 		{
-			Log.Write("Closing the browser");
 			Activators.ForEach(a => a.Value.Close());
 		}
 

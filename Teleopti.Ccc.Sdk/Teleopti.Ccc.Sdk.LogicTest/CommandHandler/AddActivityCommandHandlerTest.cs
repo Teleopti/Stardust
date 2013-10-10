@@ -83,10 +83,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 ActivityId = _activity.Id.GetValueOrDefault(),
                 PersonId = _person.Id.GetValueOrDefault(),
                 Date = _dateOnlyDto,
-                ScheduleTag = new ScheduleTagDto() { Id = Guid.NewGuid(), Description = "test" }
-
+                ScheduleTagId = Guid.NewGuid()
             };
-
         }
 
         [Test]
@@ -111,7 +109,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
                 Expect.Call(_dateTimePeriodMock.DtoToDomainEntity(_periodDto)).Return(_period);
             	Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
-				Expect.Call(_scheduleTagAssembler.DtoToDomainEntity(_addAbsenceCommandDto.ScheduleTag)).Return(scheduleTag);
+				Expect.Call(_scheduleTagAssembler.DtoToDomainEntity(null)).IgnoreArguments().Return(scheduleTag);
                 Expect.Call(() => _saveSchedulePartService.Save(schedulePart,rules, scheduleTag));
             }
             using (_mock.Playback())
@@ -144,7 +142,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(_dateTimePeriodMock.DtoToDomainEntity(_periodDto)).Return(_period);
 				Expect.Call(_businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRangeMock)).Return(rules);
-				Expect.Call(_scheduleTagAssembler.DtoToDomainEntity(_addAbsenceCommandDto.ScheduleTag)).Return(scheduleTag);
+				Expect.Call(_scheduleTagAssembler.DtoToDomainEntity(null)).IgnoreArguments().Return(scheduleTag);
 				Expect.Call(() => _saveSchedulePartService.Save(schedulePart,rules, scheduleTag ));
 			}
 			using (_mock.Playback())

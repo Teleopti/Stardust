@@ -34,7 +34,9 @@
              column="StartTime" />
    <property name="EndTime" 
              column="EndTime" />
-
+	<property name="IsDeleted"
+			  type="boolean"
+			  not-null="true"/>
    <many-to-one name="BusinessUnit"
                 class="Teleopti.Ccc.Domain.Common.BusinessUnit"
                 access="nosetter.camelcase-underscore"
@@ -42,6 +44,7 @@
                 foreign-key="FK_OvertimeAvailability_BusinessUnit"/>
     <filter name="businessUnitFilter"
             condition=":businessUnitParameter = BusinessUnit" />
-   
+	<filter name="deletedFlagFilter"
+	        condition="IsDeleted = 0" />
   </class>
 </hibernate-mapping>

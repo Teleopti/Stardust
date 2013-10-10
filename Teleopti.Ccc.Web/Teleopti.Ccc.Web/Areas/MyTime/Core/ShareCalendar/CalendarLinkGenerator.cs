@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 	{
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IDataSourcesProvider _dataSourcesProvider;
-		private readonly IJsonDeserializer<ExpandoObject> _deserializer;
+		private readonly IJsonDeserializer _deserializer;
 		private readonly INow _now;
 		private readonly ICurrentPrincipalContext _currentPrincipalContext;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 		private const int end = 180;
 
 		public CalendarLinkGenerator(IRepositoryFactory repositoryFactory, IDataSourcesProvider dataSourcesProvider,
-		                             IJsonDeserializer<ExpandoObject> deserializer, INow now,
+		                             IJsonDeserializer deserializer, INow now,
 		                             ICurrentPrincipalContext currentPrincipalContext,
 		                             IRoleToPrincipalCommand roleToPrincipalCommand, IPermissionProvider permissionProvider)
 		{
@@ -102,9 +102,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 
 			foreach (var scheduleDay in scheduleDays)
 			{
-				dynamic shift = _deserializer.DeserializeObject(scheduleDay.Shift);
-				var layers = shift.Projection as IEnumerable<dynamic>;
-				foreach (var layer in layers)
+				var shift = _deserializer.DeserializeObject<Model>(scheduleDay.Model).Shift;
+				foreach (var layer in shift.Projection)
 				{
 					var evt = iCal.Create<Event>();
 

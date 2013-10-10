@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
     {
         private readonly Func<DateTime> _currentDateProvider;
 
-        public IsEditablePredicate() : this(() => DateTime.Now.Date) {}
+        public IsEditablePredicate() : this(() => DateTime.Today) {}
 
         public IsEditablePredicate(Func<DateTime> currentDateProvider)
         {
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             {
                 return false;
             }
-            if (!person.WorkflowControlSet.PreferenceInputPeriod.Contains(new DateOnly(_currentDateProvider.Invoke().Date)))
+            if (!person.WorkflowControlSet.PreferenceInputPeriod.Contains(new DateOnly(_currentDateProvider.Invoke())))
             {
                 return false;
             }
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             {
                 return false;
             }
-            if (!person.WorkflowControlSet.StudentAvailabilityInputPeriod.Contains(new DateOnly(_currentDateProvider.Invoke().Date)))
+            if (!person.WorkflowControlSet.StudentAvailabilityInputPeriod.Contains(new DateOnly(_currentDateProvider.Invoke())))
             {
                 return false;
             }

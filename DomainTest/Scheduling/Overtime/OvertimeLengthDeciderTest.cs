@@ -126,5 +126,31 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				Assert.That(resultLength, Is.EqualTo(TimeSpan.Zero));
 			}
 		}
+
+		[Test]
+		public void ShouldNotExtendWhenSpecifiedDurationIsZero()
+		{
+			
+			var skillIntervalDataList = new List<IOvertimeSkillIntervalData>();
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
+							  Return(new List<ISkillDay> { _skillDay1 });
+
+				Expect.Call(_skillResolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
+				Expect.Call(_overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
+					 skillIntervalDataList).Repeat.AtLeastOnce();
+				Expect.Call(_overtimeSkillIntervalDataDivider.SplitSkillIntervalData(new List<IOvertimeSkillIntervalData>(), 15)).IgnoreArguments().
+						 Return(skillIntervalDataList).Repeat.AtLeastOnce();
+			}
+			using (_mocks.Playback())
+			{
+				var resultLength = _target.Decide(_person, new DateOnly(_date), _date, _skill1.Activity,
+																  new MinMax<TimeSpan>(TimeSpan.FromHours(0), TimeSpan.FromHours(0)));
+
+				Assert.That(resultLength, Is.EqualTo(TimeSpan.Zero));
+			}
+		}
 	}
 }

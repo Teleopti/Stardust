@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
@@ -20,9 +21,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		public void Handle(ScheduledResourcesChangedEvent @event)
 		{
 			if (!@event.IsDefaultScenario) return;
-			var nearestLayerToNow = new ProjectionChangedEventLayer
+			var closestLayerToNow = new ProjectionChangedEventLayer
 				{
-					StartDateTime = DateTime.MaxValue
+					StartDateTime = DateTime.MaxValue.Date,
+					EndDateTime = DateTime.MaxValue.Date
 				};
 
 			foreach (var scheduleDay in @event.ScheduleDays)
@@ -34,50 +36,49 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 						new DateOnlyPeriod(date, date), @event.ScenarioId, @event.PersonId);
 				}
 
-				foreach (var layer in scheduleDay.Layers)
+				if (scheduleDay.Shift == null) continue;
+				foreach (var layer in scheduleDay.Shift.Layers)
 				{
-					if (isCurrentLayerCloser(date, layer, nearestLayerToNow))
-						nearestLayerToNow = layer;
+					if (isLayerRightNow(layer) ||
+					    isCurrentLayerCloser(layer, closestLayerToNow))
+						closestLayerToNow = layer;
 					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, @event.ScenarioId, @event.PersonId, layer);
 				}
 			}
-			
-			if (@event.ScheduleDays.All(x => x.Date != DateTime.Today))
-				return;
-
-			if (!haveChanged(nearestLayerToNow))
-				layersHaveBeenRemoved(nearestLayerToNow);
-
-			_serviceBus.Publish(new ScheduleProjectionReadOnlyChanged
-				{
-					Datasource = @event.Datasource,
-					BusinessUnitId = @event.BusinessUnitId,
-					PersonId = @event.PersonId,
-					ActivityStartDateTime = nearestLayerToNow.StartDateTime,
-					ActivityEndDateTime = nearestLayerToNow.EndDateTime,
-					Timestamp = DateTime.UtcNow
-				});
+			handleEnqueueRtaMessage(@event, closestLayerToNow);
 		}
 
-		private static void layersHaveBeenRemoved(ProjectionChangedEventLayer nearestLayerToNow)
+		private static bool isLayerRightNow(ProjectionChangedEventLayer layer)
 		{
-			nearestLayerToNow.StartDateTime = DateTime.UtcNow;
-			nearestLayerToNow.EndDateTime = DateTime.UtcNow.AddDays(1);
+			return layer.StartDateTime <= DateTime.UtcNow &&
+			        layer.EndDateTime >= DateTime.UtcNow;
+		}
+		
+		private static bool isCurrentLayerCloser(ProjectionChangedEventLayer layer, ProjectionChangedEventLayer closestLayerToNow)
+		{
+			return layer.StartDateTime >= DateTime.UtcNow &&
+			         layer.StartDateTime < closestLayerToNow.StartDateTime;
 		}
 
-		private static bool haveChanged(ProjectionChangedEventLayer nearestLayerToNow)
+		private void handleEnqueueRtaMessage(ProjectionChangedEventBase @event, ProjectionChangedEventLayer closestLayer)
 		{
-			return nearestLayerToNow.StartDateTime != DateTime.MaxValue;
-		}
-
-		private static bool isCurrentLayerCloser(DateOnly date, ProjectionChangedEventLayer layer, ProjectionChangedEventLayer nearestLayerToNow)
-		{
-			return date == DateOnly.Today &&
-			       ((layer.StartDateTime < DateTime.UtcNow &&
-			         layer.EndDateTime > DateTime.UtcNow)
-			        ||
-			        (layer.StartDateTime > DateTime.UtcNow &&
-			         layer.StartDateTime < nearestLayerToNow.StartDateTime));
+			var nextActivityStartTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
+			                                                                                           @event.PersonId);
+			var layerPeriod = new DateTimePeriod(DateTime.SpecifyKind(closestLayer.StartDateTime, DateTimeKind.Utc),
+			                                     DateTime.SpecifyKind(closestLayer.EndDateTime, DateTimeKind.Utc));
+			if (NotifyRtaDecider.ShouldSendMessage(layerPeriod, nextActivityStartTime) &&
+			    @event.ScheduleDays.Any(d => d.Date >= DateTime.Today))
+			{
+				_serviceBus.Publish(new ScheduleProjectionReadOnlyChanged
+					{
+						Datasource = @event.Datasource,
+						BusinessUnitId = @event.BusinessUnitId,
+						PersonId = @event.PersonId,
+						ActivityStartDateTime = layerPeriod.StartDateTime,
+						ActivityEndDateTime = layerPeriod.EndDateTime,
+						Timestamp = DateTime.UtcNow
+					});
+			}
 		}
 	}
 }

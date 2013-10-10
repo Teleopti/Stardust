@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Win.Optimization
         public IShiftPreferences Preferences { get; private set; }
         private IList<IActivity> _availableActivity;
         private int _resolution;
+	    private IList<IActivity> _allNoneDelededActivities;
 
         public ShiftsPreferencesPanel()
         {
@@ -24,11 +25,14 @@ namespace Teleopti.Ccc.Win.Optimization
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Initialize(
-            IShiftPreferences extraPreferences, IList<IActivity > availableActivity , int resolution)
+            IShiftPreferences extraPreferences, IList<IActivity > availableActivity , int resolution, IList<IActivity> allNoneDelededActivities )
 		{
 
 		    _availableActivity = availableActivity;
 		    _resolution = resolution;
+			_allNoneDelededActivities = allNoneDelededActivities;
+			comboBoxAdvActivity.DisplayMember = "Name";
+			comboBoxAdvActivity.DataSource = _allNoneDelededActivities;
             Preferences = extraPreferences;
 		    SetDefaultTimePeriod();
             ExchangeData(ExchangeDataOption.DataSourceToControls);
@@ -76,6 +80,8 @@ namespace Teleopti.Ccc.Win.Optimization
         {
             
             fromToTimePicker1.WholeDay.Visible = false;
+	        if (comboBoxAdvActivity.SelectedItem == null)
+		        comboBoxAdvActivity.SelectedIndex = 0;
 
         }
 
@@ -120,6 +126,8 @@ namespace Teleopti.Ccc.Win.Optimization
                 activityList.Add(activity);
             }
             Preferences.SelectedActivities = activityList;
+	        Preferences.KeepActivityLength = checkBoxKeepActivityLength.Checked;
+	        Preferences.ActivityToKeepLengthOn = (IActivity)comboBoxAdvActivity.SelectedItem;
         }
 
         private void setDataToControls()
@@ -133,6 +141,9 @@ namespace Teleopti.Ccc.Win.Optimization
             numericUpDownKeepShifts.Value = (decimal) Preferences.KeepShiftsValue * 100;
             fromToTimePicker1.StartTime .SetTimeValue(Preferences.SelectedTimePeriod.StartTime );
             fromToTimePicker1.EndTime .SetTimeValue(Preferences.SelectedTimePeriod.EndTime );
+	        checkBoxKeepActivityLength.Checked = Preferences.KeepActivityLength;
+			if(Preferences.ActivityToKeepLengthOn != null)
+				comboBoxAdvActivity.SelectedItem = Preferences.ActivityToKeepLengthOn;
 
             IList<IActivity> activities = new List<IActivity>();
             if (Preferences.SelectedActivities != null)
@@ -180,6 +191,11 @@ namespace Teleopti.Ccc.Win.Optimization
         {
             setNumericUpDownKeepShiftsStatus();
         }
+
+		private void checkBoxKeepActivityLength_CheckedChanged(object sender, EventArgs e)
+		{
+			comboBoxAdvActivity.Enabled = checkBoxKeepActivityLength.Checked;
+		}
 
     }
 

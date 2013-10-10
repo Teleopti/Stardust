@@ -136,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecificationTest.cs" />
+    <Compile Include="FakeSchedulePersonProvider.cs" />
     <Compile Include="Areas\Anywhere\Hubs\TeamScheduleViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\TeamScheduleViewModelMapperTest.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\OvertimeAvailabilityPersisterTest.cs" />
@@ -254,6 +255,7 @@
     <Compile Include="Core\Common\DataProvider\PersonPeriodProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\SchedulePersonProviderTest.cs" />
     <Compile Include="Core\RequestContext\CurrentIdentityTest.cs" />
+    <Compile Include="FakeNoPermissionProvider.cs" />
     <Compile Include="FakePermissionProvider.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryPreferencesTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryStudentAvailabilityTest.cs" />

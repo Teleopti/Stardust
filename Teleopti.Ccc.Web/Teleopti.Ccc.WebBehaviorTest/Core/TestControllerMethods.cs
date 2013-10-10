@@ -1,12 +1,15 @@
 using System;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
+using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core
 {
+
 	public static class TestControllerMethods
 	{
 
@@ -22,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void SetCurrentTime(DateTime time)
 		{
-			Navigation.GoToWaitForCompleted("Test/SetCurrentTime?dateSet=" + time);
+			WebRequestOutsideBrowser("Test/SetCurrentTime?dateSet=" + time);
 		}
 
 		public static void BeforeTestRun()
@@ -33,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void BeforeScenario()
 		{
 			// use a scenario tag here for enableMyTimeMessageBroker if required
-			Navigation.GoToWaitForCompleted("Test/BeforeScenario?enableMyTimeMessageBroker=false", new ApplicationStartupTimeout());
+			WebRequestOutsideBrowser("Test/BeforeScenario?enableMyTimeMessageBroker=false");
 		}
 
 		/// <summary>
@@ -94,6 +97,44 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void WaitUntilCompletelyLoaded()
 		{
 			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.GetTestMessages();", "Completely loaded");
+		}
+
+
+
+
+
+
+		public static void WebRequestOutsideBrowser(string pageUrl)
+		{
+			var url = new Uri(TestSiteConfigurationSetup.Url, pageUrl);
+			using (var client = new WebClientWithTimeout(TimeSpan.FromSeconds(60)))
+			{
+				var credentials = new CredentialCache();
+				credentials.Add(url, "NTLM", CredentialCache.DefaultNetworkCredentials);
+				credentials.Add(url, "Kerberos", CredentialCache.DefaultNetworkCredentials);
+				client.Credentials = credentials;
+				client.DownloadString(url);
+			}
+		}
+
+		public class WebClientWithTimeout : WebClient
+		{
+			private readonly TimeSpan _timeout;
+
+			public WebClientWithTimeout(TimeSpan timeout)
+			{
+				_timeout = timeout;
+			}
+
+			protected override WebRequest GetWebRequest(Uri address)
+			{
+				var request = base.GetWebRequest(address);
+				var webRequest = request as HttpWebRequest;
+				if (webRequest != null)
+					webRequest.Timeout = (int)_timeout.TotalMilliseconds;
+				return request;
+			}
+
 		}
 
 	}

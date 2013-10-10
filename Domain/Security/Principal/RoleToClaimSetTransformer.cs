@@ -14,67 +14,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         ClaimSet Transform(IApplicationRole role, IUnitOfWork unitOfWork);
     }
 
-	//public interface IApplicationFunctionClaimStrategy
-	//{
-	//    bool UseMeForClaim(Claim claim);
-	//    Claim MakeClaim(IApplicationFunction applicationFunction);
-	//    IApplicationFunction GetApplicationFunction(Claim claim);
-	//}
-
-	//public class ClaimWithId : IApplicationFunctionClaimStrategy
-	//{
-	//    private readonly IApplicationFunctionRepository _repository;
-
-	//    public ClaimWithId(IApplicationFunctionRepository repository) {
-	//        _repository = repository;
-	//    }
-
-	//    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-	//    public bool UseMeForClaim(Claim claim) { return claim.Resource is AuthorizeApplicationFunction; }
-
-	//    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-	//    public Claim MakeClaim(IApplicationFunction applicationFunction)
-	//    {
-	//        return new Claim(
-	//            string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/", applicationFunction.FunctionPath),
-	//            new AuthorizeApplicationFunction
-	//                {
-	//                    ApplicationFunctionId = applicationFunction.Id.Value
-	//                },
-	//            Rights.PossessProperty
-	//            );
-	//    }
-
-	//    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-	//    public IApplicationFunction GetApplicationFunction(Claim claim)
-	//    {
-	//        var resource = (AuthorizeApplicationFunction) claim.Resource;
-	//        return _repository.Get(resource.ApplicationFunctionId);
-	//    }
-	//}
-
-	//public class ClaimWithEntity : IApplicationFunctionClaimStrategy
-	//{
-	//    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-	//    public bool UseMeForClaim(Claim claim) { return claim.Resource is IApplicationFunction; }
-
-	//    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-	//    public Claim MakeClaim(IApplicationFunction applicationFunction)
-	//    {
-	//        return new Claim(
-	//            string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/", applicationFunction.FunctionPath),
-	//            applicationFunction,
-	//            Rights.PossessProperty
-	//            );
-	//    }
-
-	//    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-	//    public IApplicationFunction GetApplicationFunction(Claim claim)
-	//    {
-	//        return (IApplicationFunction)claim.Resource;
-	//    }
-	//}
-
 	public class RoleToClaimSetTransformer : IRoleToClaimSetTransformer
     {
         private readonly IFunctionsForRoleProvider _functionsForRoleProvider;

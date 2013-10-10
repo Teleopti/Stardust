@@ -821,24 +821,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UndoRedo\UndoRedoWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UndoRedo\Views\MementoView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UndoRedo\Views\UndoRedoView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Controls\Intraday\SimpleLayerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1189,18 +1171,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <Compile Include="UndoRedo\UndoRedoWindow.xaml.cs">
-      <DependentUpon>UndoRedoWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UndoRedo\ViewModels\MementoViewModel.cs" />
-    <Compile Include="UndoRedo\ViewModels\MementoViewModelCollection.cs" />
-    <Compile Include="UndoRedo\ViewModels\UndoRedoViewModel.cs" />
-    <Compile Include="UndoRedo\Views\MementoView.xaml.cs">
-      <DependentUpon>MementoView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UndoRedo\Views\UndoRedoView.xaml.cs">
-      <DependentUpon>UndoRedoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Intraday\SimpleLayerView.xaml.cs">
       <DependentUpon>SimpleLayerView.xaml</DependentUpon>

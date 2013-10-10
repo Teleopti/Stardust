@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Sdk.Logic
 {
     public interface ISaveSchedulePartService
     {
-	    void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection);
 		void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag);
     }
 
@@ -33,20 +32,14 @@ namespace Teleopti.Ccc.Sdk.Logic
     		_unitOfWorkFactory = unitOfWorkFactory;
         }
 
-		public void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection)
-		{
-			Save(scheduleDay, newBusinessRuleCollection, NullScheduleTag.Instance);
-		}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag)
         {
             var dic = (IReadOnlyScheduleDictionary)scheduleDay.Owner;
             dic.MakeEditable();
-            IEnumerable<IBusinessRuleResponse> invalidList;
-            
-            invalidList = dic.Modify(ScheduleModifier.Scheduler,
-                                        scheduleDay, newBusinessRuleCollection, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(scheduleTag));
+
+			IEnumerable<IBusinessRuleResponse> invalidList = dic.Modify(ScheduleModifier.Scheduler,
+			                                     scheduleDay, newBusinessRuleCollection, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(scheduleTag));
 
             if (invalidList != null && invalidList.Any())
 			{
@@ -56,7 +49,10 @@ namespace Teleopti.Ccc.Sdk.Logic
 					                          invalidList.Select(i => i.Message).Distinct().ToArray())));
 			}
 
-			_scheduleDictionarySaver.MarkForPersist(_unitOfWorkFactory.Current(), _scheduleRepository, dic.DifferenceSinceSnapshot());
+			foreach (var diff in dic.DifferenceSinceSnapshot())
+			{
+				_scheduleDictionarySaver.MarkForPersist(_unitOfWorkFactory.Current(), _scheduleRepository, diff);				
+			}
 			_personAbsenceAccountRepository.AddRange(dic.ModifiedPersonAccounts);
         }
     }

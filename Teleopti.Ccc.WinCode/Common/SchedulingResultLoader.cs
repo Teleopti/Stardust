@@ -179,6 +179,8 @@ namespace Teleopti.Ccc.WinCode.Common
 
         public void InitializeScheduleData()
         {
+			if (SchedulerState.SchedulingResultState.Skills.IsEmpty()) return;
+
         	splitAllWorkloadDaysWithMergedIntervals();
             var dateOnlyPeriod =
                 SchedulerState.RequestedPeriod.DateOnlyPeriod;

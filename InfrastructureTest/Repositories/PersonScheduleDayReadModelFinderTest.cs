@@ -103,9 +103,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				TeamId = teamId,
 				BusinessUnitId = businessUnitId,
 				PersonId = personId,
-				ShiftStart = date.AddHours(10),
-				ShiftEnd = date.AddHours(18),
-				Shift = "{shift: blablabla}",
+				Start = date.AddHours(10),
+				End = date.AddHours(18),
+				Model = "{shift: blablabla}",
 			};
 
 			var persister = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(),

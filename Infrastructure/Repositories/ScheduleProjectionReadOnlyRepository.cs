@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
@@ -91,13 +90,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public DateTime? GetNextActivityStartTime(DateTime dateTime, Guid personId)
         {
             var uow = _currentUnitOfWork.Current();
-            string query = string.Format(CultureInfo.InvariantCulture,@"SELECT TOP 1 StartDateTime, EndDateTime 
-                            FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta WHERE EndDateTime >= :endDate 
-                            AND PersonId=:personId");
-
-            var result = ((NHibernateUnitOfWork) uow).Session
-                .CreateSQLQuery(query)
-                .SetDateTime("endDate", dateTime)
+			var result = ((NHibernateUnitOfWork) uow).Session
+				.CreateSQLQuery("exec ReadModel.GetNextActivityStartTime @PersonId=:personId, @UtcNow=:dateTime")
+				.SetDateTime("dateTime", dateTime)
                 .SetGuid("personId", personId)
                 .SetResultTransformer(Transformers.AliasToBean(typeof(ActivityPeriod)))
                 .List<ActivityPeriod>();
@@ -106,10 +101,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 return null;
 
 	        var activityPeriod = result.First();
-			DateTime? nextActivityDateTime = activityPeriod.StartDateTime > dateTime
+			DateTime nextActivityDateTime = activityPeriod.StartDateTime > dateTime
 				                                 ? activityPeriod.StartDateTime
 				                                 : activityPeriod.EndDateTime;
-	        return ((DateTime)nextActivityDateTime).ToLocalTime();
+	        return nextActivityDateTime;
         }
 
 		public IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnly date, Guid personId, Guid scenarioId)
@@ -218,11 +213,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	                                        from Absence a
 	                                        inner join ReadModel.ScheduleProjectionReadOnly sp 
 	                                        on a.Id = sp.PayloadId
+                                            and a.Requestable = 1
 	                                        inner join Person p
 	                                        on sp.PersonId = p.Id
-	                                        inner join PersonPeriod pp
+	                                        inner join PersonPeriodWithEndDate pp
                                             on pp.Parent = p.Id
 	                                        and pp.BudgetGroup = :budgetGroupId
+                                            and :currentDate BETWEEN pp.StartDate and pp.EndDate
 	                                        and sp.BelongsToDate = :currentDate 
 	                                        ) t
 	                                        group by t.BelongsToDate

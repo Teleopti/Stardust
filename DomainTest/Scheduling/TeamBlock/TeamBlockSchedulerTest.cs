@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IGroupPerson _groupPerson;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IScheduleRange _scheduleRange;
-		private IScheduleMatrixPro _matrix2;
 		private IOpenHoursToEffectiveRestrictionConverter _openHoursToEffectiveRestrictionConverter;
 		private ITeamBlockClearer _teamBlockCleaner;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
@@ -63,7 +62,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_timeZoneInfo = (zone);
 			_person = PersonFactory.CreatePerson("bill");
 			_matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
-			_matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
 			var matrixes = new List<IScheduleMatrixPro> { _matrix1 };
 			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
 			_groupPerson = _mocks.StrictMock<IGroupPerson>();

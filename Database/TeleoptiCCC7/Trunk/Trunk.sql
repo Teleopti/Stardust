@@ -30,8 +30,46 @@ and sc.name in ('CreatedBy','CreatedOn')
 and so.name not in ('PersonRequest','PushMessage','PushMessageDialogue','PayrollExport')
 order by sch.name,so.name,sc.name
 */
---Indexes depending on columns
-DROP INDEX [IX_PersonDayOff_Scenario_BU_Anchor] ON [dbo].[PersonDayOff]
+--Drop indexes dynamicly depending on columns to be dropped
+DECLARE @ownername SYSNAME 
+DECLARE @tablename SYSNAME 
+DECLARE @indexname SYSNAME 
+DECLARE @sql NVARCHAR(4000) 
+
+DECLARE dropindexes CURSOR FOR 
+SELECT DISTINCT
+     ind.name 
+    ,t.name
+	,sc.name
+FROM sys.indexes ind 
+
+INNER JOIN sys.index_columns ic 
+    ON  ind.object_id = ic.object_id and ind.index_id = ic.index_id 
+INNER JOIN sys.columns col 
+    ON ic.object_id = col.object_id and ic.column_id = col.column_id 
+INNER JOIN sys.tables t 
+    ON ind.object_id = t.object_id
+INNER JOIN sys.schemas sc
+	ON sc.schema_id = t.schema_id 
+WHERE (1=1) 
+    AND ind.is_primary_key = 0 
+    AND ind.is_unique = 0 
+    AND ind.is_unique_constraint = 0 
+    AND t.is_ms_shipped = 0 
+	AND col.name in ('CreatedBy','CreatedOn')
+	AND t.name not in ('PersonRequest','PushMessage','PushMessageDialogue','PayrollExport')
+
+OPEN dropindexes 
+FETCH NEXT FROM dropindexes INTO @indexname, @tablename, @ownername 
+WHILE @@fetch_status = 0 
+BEGIN 
+	SET @sql = N'DROP INDEX '+ QUOTENAME(@indexname) +' ON '+  QUOTENAME(@ownername)+'.'+QUOTENAME(@tablename)
+	EXEC sp_executesql @sql   
+	FETCH NEXT FROM dropindexes INTO @indexname, @tablename, @ownername 
+END 
+CLOSE dropindexes 
+DEALLOCATE dropindexes
+
 
 --FKs depending on columns
 ALTER TABLE dbo.OptionalColumn DROP CONSTRAINT [FK_OptionalColumn_Person_CreatedBy]
@@ -295,6 +333,21 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 SET NOCOUNT OFF
 GO
 
+---------------- 
+--Name: Kunning
+--Date: 2013-09-18 
+--Desc: add IsDeleted tag to OvertimeAvailability
+---------------- 
+ALTER TABLE OvertimeAvailability
+ADD IsDeleted bit NULL
+GO
+UPDATE OvertimeAvailability
+SET IsDeleted = 0
+GO
+ALTER TABLE OvertimeAvailability
+ALTER COLUMN IsDeleted bit NOT NULL
+GO
+
 ----------------  
 --Name: Robin Karlsson
 --Date: 2013-09-26
@@ -305,4 +358,43 @@ set earlystart = 0 where EarlyStart = 1
 
 update ActivityExtender
 set LateStart = 0 where LateStart = 1
+GO
+
+
+----------------  
+--Name: Mathias Stenbom
+--Date: 2013-09-30
+--Desc: Renaming ReadModel.PersonScheduleDay.Shift to Model to match class property name
+---------------- 
+
+EXEC sp_rename 'ReadModel.PersonScheduleDay.Shift','Model','COLUMN'
+GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-10-02
+--Desc: Bug #24989 - Make database compatible with SQL 2005
+---------------- 
+ALTER TABLE [dbo].[OvertimeAvailability]
+ALTER COLUMN [DateOfOvertime] [datetime] NOT NULL
+
+
+----------------  
+--Name: Erik Sundberg
+--Date: 2013-10-03
+--Desc: Bug #25008 - RTA does not differentiate between no scheduled activity and no alarm
+---------------- 
+ALTER TABLE dbo.StateGroupActivityAlarm ALTER COLUMN AlarmType uniqueidentifier NULL
+GO
+
+
+----------------  
+--Name: Mathias Stenbom
+--Date: 2013-10-08
+--Desc: Renaming ReadModel.PersonScheduleDay.ShiftStart to Start to match class property name
+---------------- 
+
+EXEC sp_rename 'ReadModel.PersonScheduleDay.ShiftStart','Start','COLUMN'
+GO
+EXEC sp_rename 'ReadModel.PersonScheduleDay.ShiftEnd','End','COLUMN'
 GO

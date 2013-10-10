@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
                 
                 
                 
-                ZoomToPeriod(Layers.TotalDateTimePeriod(true));
+                ZoomToPeriod(Layers.TotalDateTimePeriod());
                 var assignement = SchedulePart.PersonAssignment();
 				if (assignement != null && assignement.ShiftCategory != null)
                 {

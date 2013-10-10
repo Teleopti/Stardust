@@ -51,7 +51,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.title = ko.observable(item.Title);
 		self.message = ko.observable(item.Message);
 		self.listMessage = ko.observable(item.Message.length > 50 ?
-		    item.Message.substring(0, 50) + '...' : item.Message);
+		    item.Message.substring(0, 50) + '...' : "");
 	    self.errorMessage = ko.observable();
 		self.date = ko.observable(item.Date);
 		self.sender = ko.observable(item.Sender);

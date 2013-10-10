@@ -261,66 +261,94 @@ AND fs.[file_id] = mf.[file_id]
 ORDER BY avg_io_stall_ms DESC OPTION (RECOMPILE);
 
 -------
---DISK STATS - now
+-- DISK STATS - now
 -------
---Here we do a delta of the above disk stat select, same figures apply
--- io_stall_write_ms, should stay < 5ms. Idealy < 1ms
--- io_stall_read_ms,  should stay < 10ms
-SET NOCOUNT ON
-DECLARE @WaitTime datetime
-SET @WaitTime = '01:00:00' -- 1 hour wait and check result.
-						   -- Edit time value as you please, but make sure to include as much time so that you collect 
-						   -- data from normal system usage (load from User, ETL, Agg, etc.)
-						   -- "CopyWithHeaders" to Excel for future. Compare later when new disk setup or other improvments.
+-- We now call a Teleopti Stored Procedure in Analytics to collect and save the data.
+-- EXEC [dbo].[DBA_VirtualFilestats_Load]
+-- Then query the statistics via => select * from dbo.DBA_VirtualFileStatsHistory
 
-DECLARE @IOStats TABLE (
-        [database_id] [smallint] NOT NULL,
-        [file_id] [smallint] NOT NULL,
-        [num_of_reads] [bigint] NOT NULL,
-        [num_of_bytes_read] [bigint] NOT NULL,
-        [io_stall_read_ms] [bigint] NOT NULL,
-        [num_of_writes] [bigint] NOT NULL,
-        [num_of_bytes_written] [bigint] NOT NULL,
-        [io_stall_write_ms] [bigint] NOT NULL)
-INSERT INTO @IOStats
-        SELECT database_id,
-                vio.file_id,
-                num_of_reads,
-                num_of_bytes_read,
-                io_stall_read_ms,
-                num_of_writes,
-                num_of_bytes_written,
-                io_stall_write_ms
-        FROM sys.dm_io_virtual_file_stats (NULL, NULL) vio
-DECLARE @StartTime datetime, @DurationInSecs int
-SET @StartTime = GETDATE()
-WAITFOR DELAY @WaitTime
-SET @DurationInSecs = DATEDIFF(ss, @startTime, GETDATE())
-SELECT @@SERVERNAME as [ServerInstance],
-		DB_NAME(vio.database_id) AS [Database],
-        mf.name AS [Logical name],
-        mf.type_desc AS [Type],
-                (vio.io_stall_read_ms - old.io_stall_read_ms) / CASE (vio.num_of_reads-old.num_of_reads) WHEN 0 THEN 1 ELSE vio.num_of_reads-old.num_of_reads END AS [Ave read speed (ms)],
-        vio.num_of_reads - old.num_of_reads AS [No of reads over period],
-        CONVERT(DEC(14,2), (vio.num_of_reads - old.num_of_reads) / (@DurationInSecs * 1.00)) AS [No of reads/sec],
-        CONVERT(DEC(14,2), (vio.num_of_bytes_read - old.num_of_bytes_read) / 1048576.0) AS [Tot MB read over period],
-        CONVERT(DEC(14,2), ((vio.num_of_bytes_read - old.num_of_bytes_read) / 1048576.0) / @DurationInSecs) AS [Tot MB read/sec],
-        (vio.num_of_bytes_read - old.num_of_bytes_read) / CASE (vio.num_of_reads-old.num_of_reads) WHEN 0 THEN 1 ELSE vio.num_of_reads-old.num_of_reads END AS [Ave read size (bytes)],
-                (vio.io_stall_write_ms - old.io_stall_write_ms) / CASE (vio.num_of_writes-old.num_of_writes) WHEN 0 THEN 1 ELSE vio.num_of_writes-old.num_of_writes END AS [Ave write speed (ms)],
-        vio.num_of_writes - old.num_of_writes AS [No of writes over period],
-        CONVERT(DEC(14,2), (vio.num_of_writes - old.num_of_writes) / (@DurationInSecs * 1.00)) AS [No of writes/sec],
-        CONVERT(DEC(14,2), (vio.num_of_bytes_written - old.num_of_bytes_written)/1048576.0) AS [Tot MB written over period],
-        CONVERT(DEC(14,2), ((vio.num_of_bytes_written - old.num_of_bytes_written)/1048576.0) / @DurationInSecs) AS [Tot MB written/sec],
-        (vio.num_of_bytes_written-old.num_of_bytes_written) / CASE (vio.num_of_writes-old.num_of_writes) WHEN 0 THEN 1 ELSE vio.num_of_writes-old.num_of_writes END AS [Ave write size (bytes)],
-        mf.physical_name AS [Physical file name],
-        size_on_disk_bytes/1048576 AS [File size on disk (MB)]
-FROM sys.dm_io_virtual_file_stats (NULL, NULL) vio,
-        sys.master_files mf,
-        @IOStats old
-WHERE mf.database_id = vio.database_id AND
-        mf.file_id = vio.file_id AND
-        old.database_id = vio.database_id AND
-        old.file_id = vio.file_id AND
-        ((vio.num_of_bytes_read - old.num_of_bytes_read) + (vio.num_of_bytes_written - old.num_of_bytes_written)) > 0
-ORDER BY ((vio.num_of_bytes_read - old.num_of_bytes_read) + (vio.num_of_bytes_written - old.num_of_bytes_written)) DESC
+--settings for data collection
+DECLARE @Duration datetime
+DECLARE @IntervalInSeconds int
+DECLARE @DateFrom datetime
+
+SET @Duration='24:00:00' --EDIT: default 24 hours
+SET @IntervalInSeconds=900 --EDIT: default 15 min
+
+--collect data
+EXEC [dbo].[DBA_VirtualFilestats_Load] @Duration=@Duration,@IntervalInSeconds=@IntervalInSeconds
+
+--view result last batch => @Duration
+SELECT @DateFrom=getdate()-@Duration
+EXEC [dbo].DBA_report_data_IO_By_Interval @DateFrom=@DateFrom,@DateTo='2059-12-31'
+
+--view all result
+--EXEC [dbo].DBA_report_data_IO_By_Interval @DateFrom='1900-01-01',@DateTo='2059-12-31'
+
+/*
+The result will show four result set:
+1) sum of IO stats grouped by hour
+One line per hour, over all IO stats
+note: this output depends on that we run the "collect data" for 24 consecutive hours
+
+2) sum of IO stats grouped database file
+One line for each file with any file activity
+
+3) top 3 worst interval by Total IOPS
+Shows the worst interval, worst file
+
+4) top 3 worst interval by "Total write latency"
+Shows the worst interval, worst file
+
+From Teleopti CCC Pre-reqs:
+SQL Server storage MUST be configured properly for high IO performance.
+Under sustained load "Ave read speed (ms)" must be <=5ms and "Ave read speed (ms)"  <=20ms. 
+To achieve this there must at least be separate physical disks (and controllers) for 
+system files, database files, temp db and database log files. 
+RAID-10 or equivalent can be used for improved reliability of database server (this is  not a requirement).
+Useful reading:
+http://searchsqlserver.techtarget.com/tip/0,289483,sid87_gci1262122,00.html
+http://msdn.microsoft.com/en-us/library/cc966412.aspx
+If SAN storage is used it MUST be configured correct for high IO performance. Useful reading:
+http://www.brentozar.com/sql/sql-server-san-best-practices/
+*/
+
+-------
+-- DISK STATS - Add job
+-------
+-- This job will collect IO stats every tuesday (00:00), 24 hours, every 15 minutes
+USE [msdb]
 GO
+IF EXISTS (select 1 from sys.databases where name='TeleoptiAnalytisc')
+BEGIN
+	DECLARE @server_name nvarchar(30)
+	SELECT @server_name = CAST(SERVERPROPERTY('ServerName') AS nvarchar(30))
+
+	DECLARE @job_name sysname
+	SET @job_name=N'Teleopti_VirtualFileStatsHistory'
+
+	--Drop existing Job
+	IF  EXISTS (SELECT job_id FROM msdb.dbo.sysjobs_view WHERE name = @job_name)
+	EXEC msdb.dbo.sp_delete_job @job_name=@job_name, @delete_unused_schedule=1
+
+	--Add Job
+	EXEC  msdb.dbo.sp_add_job @job_name=@job_name, 
+			@enabled=1, @notify_level_eventlog=0, @notify_level_email=2, @notify_level_netsend=2, @notify_level_page=2, @delete_level=0, 
+			@description=N'Collects IO statistics from [sys].[Dm_io_virtual_file_stats]', @category_name=N'[Uncategorized (Local)]', @owner_login_name=N'sa'
+
+	EXEC msdb.dbo.sp_add_jobserver @job_name=@job_name, @server_name = @server_name
+
+	EXEC msdb.dbo.sp_add_jobstep @job_name=@job_name, @step_name=N'Start collect', 
+			@step_id=1, @cmdexec_success_code=0, @on_success_action=1, @on_fail_action=2, @retry_attempts=0, @retry_interval=0, @os_run_priority=0,
+			@subsystem=N'TSQL', @command=N'EXEC TeleoptiAnalytics.[dbo].[DBA_VirtualFilestats_Load]', @database_name=N'master', @flags=0
+
+	EXEC msdb.dbo.sp_update_job @job_name=@job_name, 
+			@enabled=1, @start_step_id=1, @notify_level_eventlog=0, @notify_level_email=2, @notify_level_netsend=2, @notify_level_page=2, @delete_level=0, 
+			@description=N'Collects IO statistics from [sys].[Dm_io_virtual_file_stats]', @category_name=N'[Uncategorized (Local)]', @owner_login_name=N'sa'
+
+	EXEC msdb.dbo.sp_add_jobschedule @job_name=@job_name, @name=N'Once a week', 
+			@enabled=1,@freq_type=8, @freq_interval=4, @freq_subday_type=1, @freq_subday_interval=0, @freq_relative_interval=0, @freq_recurrence_factor=1, 
+			@active_start_date=20131009, @active_end_date=99991231, @active_start_time=0, @active_end_time=235959
+END
+ELSE
+PRINT 'Sorry, I cannot find the TeleoptiAnalytics database. Please edit the script to point to an existing TeleoptiAnalytics database.'

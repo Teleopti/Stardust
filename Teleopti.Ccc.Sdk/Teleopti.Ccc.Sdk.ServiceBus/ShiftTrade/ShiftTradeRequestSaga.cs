@@ -146,9 +146,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
                             Logger.DebugFormat("Approving ShiftTrade: {0}", _personRequest.GetSubject(new NormalizeText()));
                             var brokenBusinessRules = _personRequest.Approve(approvalService, _authorization, true);
                             HandleBrokenBusinessRules(brokenBusinessRules);
-							var result = _scheduleDictionarySaver.MarkForPersist(unitOfWork, _scheduleRepository, _schedulingResultStateHolder.Schedules.DifferenceSinceSnapshot());
+	                        foreach (var diff in _schedulingResultStateHolder.Schedules.DifferenceSinceSnapshot())
+	                        {
+														var result = _scheduleDictionarySaver.MarkForPersist(unitOfWork, _scheduleRepository, diff);
 
-                            new ScheduleDictionaryModifiedCallback().Callback(_schedulingResultStateHolder.Schedules, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
+														new ScheduleDictionaryModifiedCallback().Callback(_schedulingResultStateHolder.Schedules, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
+	                        }
                         }
                     }
                     catch (ShiftTradeRequestStatusException exception)

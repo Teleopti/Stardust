@@ -4,7 +4,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 {
 	public interface IPersonScheduleDayReadModelsCreator
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		IEnumerable<PersonScheduleDayReadModel> GetReadModels(ProjectionChangedEventBase schedule);
+		IEnumerable<PersonScheduleDayReadModel> MakeReadModels(ProjectionChangedEventBase schedule);
 	}
 }

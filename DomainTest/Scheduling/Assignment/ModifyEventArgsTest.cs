@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             _rangePeriod = new DateTimePeriod(2000, 1, 1, 2001, 6, 1);
             _person = new Person();
-            _target = new ModifyEventArgs(ScheduleModifier.Request, _person,_rangePeriod);
+            _target = new ModifyEventArgs(ScheduleModifier.Request, _person,_rangePeriod, null);
         }
 
         [Test]

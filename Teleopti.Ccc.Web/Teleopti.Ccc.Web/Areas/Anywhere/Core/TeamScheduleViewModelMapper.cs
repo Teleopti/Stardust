@@ -18,33 +18,35 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			        where
 				        data.CanSeeUnpublishedSchedules ||
 				        published.IsSatisfiedBy(s)
-			        let shift = JsonConvert.DeserializeObject<Shift>(s.Shift)
+			        let model = JsonConvert.DeserializeObject<Model>(s.Model ?? "{}")
+					let shift = model.Shift ?? new Shift()
 					let canSeeConfidentialAbsence = data.CanSeeConfidentialAbsencesFor.Any(x => x.Id == s.PersonId)
-					let layers = mapLayers(data.User, shift, canSeeConfidentialAbsence)
-			        select makeViewModel(shift, layers))
+					let layers = mapLayers(data.UserTimeZone, shift, canSeeConfidentialAbsence)
+					select makeViewModel(s, model, shift, layers))
 				.ToArray();
 		}
 
-		private static TeamScheduleShiftViewModel makeViewModel(Shift shift, IEnumerable<TeamScheduleLayerViewModel> layers)
+		private static TeamScheduleShiftViewModel makeViewModel(PersonScheduleDayReadModel readModel, Model model, Shift shift, IEnumerable<TeamScheduleLayerViewModel> layers)
 		{
 			return new TeamScheduleShiftViewModel
 				{
 					ContractTimeMinutes = shift.ContractTimeMinutes,
-					FirstName = shift.FirstName,
-					Id = shift.Id,
-					LastName = shift.LastName,
+					FirstName = model.FirstName,
+					Id = readModel.PersonId.ToString(),
+					LastName = model.LastName,
 					Projection = layers
 				};
 		}
 
-		private static IEnumerable<TeamScheduleLayerViewModel> mapLayers(IPerson user, Shift shift, bool canSeeConfidentialAbsence)
+		private static IEnumerable<TeamScheduleLayerViewModel> mapLayers(TimeZoneInfo userTimeZone, Shift shift, bool canSeeConfidentialAbsence)
 		{
+			var layers = shift.Projection ?? new SimpleLayer[] {};
 			return (
-				       from l in shift.Projection
+					   from l in layers
 					   let canSeeLayerInfo = CanSeeLayerInfo(canSeeConfidentialAbsence, l)
 					   let color = canSeeLayerInfo ? l.Color : ConfidentialPayloadValues.DisplayColor.ToHtml()
 					   let title = canSeeLayerInfo ? l.Title : ConfidentialPayloadValues.Description.Name
-					   let start = TimeZoneInfo.ConvertTimeFromUtc(l.Start, user.PermissionInformation.DefaultTimeZone())
+					   let start = TimeZoneInfo.ConvertTimeFromUtc(l.Start, userTimeZone)
 				       select new TeamScheduleLayerViewModel
 					       {
 						       Color = color,

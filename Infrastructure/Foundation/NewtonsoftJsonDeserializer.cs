@@ -3,10 +3,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Newtonsoft")]
-	public class NewtonsoftJsonDeserializer<T> : IJsonDeserializer<T>
+	public class NewtonsoftJsonDeserializer : IJsonDeserializer
 	{
-		public T DeserializeObject(string value)
+		public T DeserializeObject<T>(string value)
 		{
 			return JsonConvert.DeserializeObject<T>(value);
 		}

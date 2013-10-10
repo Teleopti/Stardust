@@ -32,7 +32,10 @@ namespace Teleopti.Interfaces.Domain
         /// Get available activities
         /// </summary>
         IList<IActivity> Activities { get; }
-        /// <summary>
+
+	    IActivity DoNotAlterLengthOfActivity { get; set; }
+
+	    /// <summary>
         /// Set all activities
         /// </summary>
         /// <param name="activities"></param>

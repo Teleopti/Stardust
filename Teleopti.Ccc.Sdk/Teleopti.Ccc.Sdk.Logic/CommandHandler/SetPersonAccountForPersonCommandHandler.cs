@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 if (foundPerson == null) throw new FaultException("Person is not exist.");
                 var foundAbsence = _absenceRepository.Get(command.AbsenceId);
                 if (foundAbsence == null) throw new FaultException("Absence is not exist.");
-                var dateFrom = new DateOnly(command.DateFrom.DateTime);
+                var dateFrom = command.DateFrom.ToDateOnly();
 
                 checkIfAuthorized(foundPerson, dateFrom);
 

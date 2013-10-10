@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[BeforeTestRun]
 		public static void BeforeTestRun()
 		{
+			log4net.Config.XmlConfigurator.Configure();
+
 			Log.Debug("Preparing for test run");
 
 			Browser.SelectDefaultVisibleBrowser();
@@ -30,8 +32,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				TestControllerMethods.BeforeTestRun();
 
 				TestSiteConfigurationSetup.RecycleApplication();
-
-				log4net.Config.XmlConfigurator.Configure();
 
 				TestDataSetup.CreateDataSource();
 

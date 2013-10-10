@@ -169,7 +169,6 @@
     <Compile Include="EntityMapper\TaskPeriodMapperTest.cs" />
     <Compile Include="EntityMapper\UserMapperTest.cs" />
     <Compile Include="EntityMapper\WorkloadDayMapperTest.cs" />
-    <Compile Include="EntityMapper\WorkShiftMapperTest.cs" />
     <Compile Include="EntityMapper\SiteMapperTest.cs" />
     <Compile Include="EntityMapper\TaskMapperTest.cs" />
     <Compile Include="EntityMapper\TeamMapperTest.cs" />

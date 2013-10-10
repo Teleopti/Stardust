@@ -281,7 +281,7 @@ Scenario: Show my scheduled day off
 	| Field | Value  |
 	| Name  | DayOff |
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And 'I' have a day off with
+	And I have a day off with
 	| Field | Value      |
 	| Name  | DayOff     |
 	| Date  | 2030-01-04 |
@@ -431,7 +431,7 @@ Scenario: Show day off in a shifttrade
 	| Field | Value		|
 	| Name  | VacationButWithAReallyLongName |
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And 'I' have a day off with
+	And I have a day off with
 	| Field | Value      |
 	| Name  | DayOff     |
 	| Date  | 2030-01-04 |
