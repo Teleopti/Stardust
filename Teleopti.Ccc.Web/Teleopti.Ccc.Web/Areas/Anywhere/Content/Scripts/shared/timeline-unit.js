@@ -57,6 +57,7 @@ define([
 		this.CutInsideTimeLineLengthMinutes = ko.computed(function () {
 			if (timeline.EndMinutes() < self.StartMinutes() + self.LengthMinutes())
 				return timeline.EndMinutes() - self.CutInsideTimeLineStartMinutes();
+			// there's probably a case here not covered!
 			return self.LengthMinutes();
 		});
 

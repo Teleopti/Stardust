@@ -3,11 +3,11 @@ define([
 		'moment',
 		'resources!r',
 		'shared/timeline-unit'
-], function (
-	ko,
-	moment,
-	resources,
-	unitViewModel
+	], function (
+		ko,
+		moment,
+		resources,
+		unitViewModel
 	) {
 
 		return function (timeline, data) {
