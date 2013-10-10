@@ -142,13 +142,17 @@ Teleopti.MyTimeWeb.Request.TimeLineHourViewModel = function (hour, parentViewMod
 	self.hourText = hour.HourText;
 	self.lengthInMinutes = hour.LengthInMinutesToDisplay;
 	self.leftPx = ko.observable('-8px');
-    self.startTime = hour.StartTime;
-    self.endTime = hour.EndTime;
+    self.startTime = moment(hour.StartTime);
+    self.endTime = moment(hour.EndTime);
 
 	self.hourWidth = ko.computed(function () {
 		return self.lengthInMinutes * parentViewModel.pixelPerMinute() - self.borderSize + 'px';
 	});
-
+    
+    self.leftPos = ko.computed(function() {
+        var minutesSinceTimeLineStart = parentViewModel.timeLineStartTime().diff(self.startTime, 'minutes');
+        return minutesSinceTimeLineStart * parentViewModel.pixelPerMinute();
+     });
 };
 
 Teleopti.MyTimeWeb.Request.LayerViewModel = function(layer, minutesSinceTimeLineStart, pixelPerMinute) {

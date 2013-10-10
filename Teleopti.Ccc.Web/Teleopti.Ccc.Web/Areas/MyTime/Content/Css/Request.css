@@ -167,7 +167,7 @@
 .shift-trade-add-schedule
 {
 	position: relative;
-	margin-top: 18px;
+	/*margin-top: 18px;*/
 }
 .shift-trade-my-schedule-row 
 {
@@ -205,6 +205,7 @@
 .shift-trade-timeline 
 {
 	height: 100%;
+	width: 100%;
 	position: absolute;
 	left: 166px; /* 150 + 8 + 8 , padding in first column*/
 }
@@ -347,14 +348,20 @@
 	float: left;
 	border-left: 1px solid rgb(216, 216, 216);
 }
+
+.shift-trade-add-schedule .shift-trade-timeline,
+.shift-trade-add-schedule .shift-trade-timeline div {
+	height: 100%;
+	/*z-index: -10;*/
+}
 .shift-trade-ruler {
 	height: 100%;
 	width: 1px;
 	background-color: rgba(0,0,0,0.2);
 	z-index: 100;
 }
-.shift-trade-timeline .time-line .label {
+.shift-trade-timeline .label {
 	font-size: xx-small;
-	height: 12px;
+	height: 12px !important;
 	z-index: 111;
  }

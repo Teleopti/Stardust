@@ -33,7 +33,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.isReadyLoaded = ko.observable(false);
 		self.requestedDateInternal = ko.observable(moment().startOf('day'));
 		self.myTeamFilter = ko.observable(true);
-	    self.timeLineStartTime = ko.observable();
+		self.timeLineStartTime = ko.observable();
+	    self.timeLineLengthInMinutes = ko.observable();
 
 		self.isDetailVisible = ko.computed(function () {
 			if (self.agentChoosed() === null) {
@@ -44,13 +45,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.subject = ko.observable();
 		self.message = ko.observable();
 
-	    self.timeLineLengthInMinutes = ko.computed(function() {
-	        var firstHour = moment(self.hours()[0]);
-	        var lastHour = moment(self.hours[self.hours().length - 1]);
-
+	    self.setTimeLineLengthInMinutes = function(firstHour, lastHour) {
 	        self.timeLineStartTime(firstHour);
-	        return firstHour.diff(lastHour, 'minutes');
-	    });
+	        self.timeLineLengthInMinutes(firstHour.diff(lastHour, 'minutes'));
+	    };
 		self.pixelPerMinute = ko.computed(function () {
 			return layerCanvasPixelWidth / self.timeLineLengthInMinutes();
 		});
@@ -112,8 +110,11 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 		self._createTimeLine = function (hours) {
+		    var firstTimeLineHour = moment(hours[0].StartTime);
+		    var lastTimeLineHour = moment(hours[hours.length - 1].EndTime);
+		    self.setTimeLineLengthInMinutes(firstTimeLineHour, lastTimeLineHour);
 			var arrayMap = ko.utils.arrayMap(hours, function (hour) {
-				return new Teleopti.MyTimeWeb.Request.TimeLineHourViewModel(hour, self);
+			    return new Teleopti.MyTimeWeb.Request.TimeLineHourViewModel(hour, self);
 			});
 		    
 			self.hours([]);
@@ -299,13 +300,13 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function _positionTimeLineHourTexts() {
-		$('.shift-trade-timeline-number').each(function () {
+	    $('.shift-trade-label').each(function () {
 			var leftPx = Math.round(this.offsetWidth / 2);
 			if (leftPx > 0) {
-				ko.dataFor(this).leftPx(-leftPx + 'px');
+				ko.dataFor(this).leftPos(-leftPx + 'px');
 			}
 		});
-		_initAgentNameOverflow();
+		//_initAgentNameOverflow();
 	}
 
 	function _initAgentNameOverflow() {

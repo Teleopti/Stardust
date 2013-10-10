@@ -30,15 +30,15 @@
             <div class="shift-trade-timeline">
                 <div class="relative">
                     <div data-bind="foreach: hours">
-                        <div class="shift-trade-ruler absolute" data-bind="style: { left: leftPx }"></div>
-                        <div class="shift-trade-label label label-info absolute" data-bind="style: { left: leftPx }, text: hourText"></div>
+                        <div class="shift-trade-ruler absolute" data-bind="style: { left: leftPos() + 'px' }"></div>
+                        <div class="shift-trade-label label label-info absolute" data-bind="style: { left: leftPos() - 8 + 'px' }, text: hourText"></div>
                     </div>
                 </div>
             </div>
             <table>
                 <thead>
                     <tr>
-                        <td></td>
+                        <td>&nbsp;</td>
                         <td></td>
                     </tr>
                 </thead>
