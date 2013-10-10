@@ -1,7 +1,7 @@
 define([
 		'knockout',
 		'helpers',
-		'views/personschedule/timeline-time'
+		'shared/timeline-time'
 	], function (ko, helpers, timeViewModel) {
 
 		var minutes = helpers.Minutes;

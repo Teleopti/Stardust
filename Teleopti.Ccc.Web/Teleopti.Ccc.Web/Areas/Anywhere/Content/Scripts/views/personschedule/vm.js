@@ -2,7 +2,7 @@ define([
         'knockout',
         'navigation',
         'views/personschedule/layer',
-        'views/personschedule/timeline',
+        'shared/timeline',
         'views/personschedule/addfulldayabsenceform',
         'views/personschedule/absencelistitem',
         'helpers',
