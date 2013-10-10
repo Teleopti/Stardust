@@ -76,7 +76,7 @@
 									
 									<!-- ko if: IsDayOff -->
 									<!-- ko with: DayOff -->
-									<!-- ko if: InTimeLine -->
+									<!-- ko if: OverlapsTimeLine -->
 									<div 
 										class="dayoff absolute" 
 										data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }"></div>
@@ -96,8 +96,8 @@
 </div>
 
 <script id="layerTemplate" type="text/html">
+	<!-- ko if: OverlapsTimeLine -->
 	<div class="layer absolute floatleft" data-bind="
-	if: IsVisible,
 	style: {
 		left: StartPixels() + 'px',
 		width: LengthPixels() + 'px',
@@ -108,4 +108,5 @@
 		'data-length-minutes': LengthMinutes,
 	}
 	"></div>
+	<!-- /ko -->
 </script>
