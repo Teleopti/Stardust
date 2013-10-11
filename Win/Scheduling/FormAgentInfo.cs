@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             createAndAddItem(listViewRestrictions, Resources.StudentAvailability, "", 1);
             handleStudentAvailabilities(extractor.StudentAvailabilityList);
 
-	        if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability))
+	        if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities))
 	        {
 		        createAndAddItem(listViewRestrictions, Resources.OvertimeAvailability, "", 1);
 		        var scheduleDay = getScheduleDay(person, dateOnly, state);
