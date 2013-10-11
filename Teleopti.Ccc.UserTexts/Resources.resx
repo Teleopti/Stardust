@@ -11781,4 +11781,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Stop</value>
     <comment>Stop current background operation in scheduler</comment>
   </data>
+  <data name="ModifyAvailabilities" xml:space="preserve">
+    <value>Modify availabilities</value>
+    <comment>Modify availabilities in scheduler</comment>
+  </data>
 </root>
