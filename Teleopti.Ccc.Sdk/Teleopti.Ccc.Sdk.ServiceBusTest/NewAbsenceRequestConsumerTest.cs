@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
@@ -484,7 +483,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                                                {
                                                    personAbsenceAccount
                                                };
-        	var changes = new DifferenceCollection<IPersistableScheduleData>{new DifferenceCollectionItem<IPersistableScheduleData>()};
+        	var changes = new DifferenceCollection<IPersistableScheduleData>();
 
             using (_mockRepository.Record())
             {
@@ -514,7 +513,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
                 Expect.Call(_scheduleIsInvalidSpecification.IsSatisfiedBy(_schedulingResultStateHolder)).Return(false);
             	Expect.Call(_scheduleDictionary.DifferenceSinceSnapshot()).Return(changes);
-				Expect.Call(_scheduleDictionarySaver.MarkForPersist(_unitOfWork, _scheduleRepository, changes.Single())).Throw(new ValidationException());
+				Expect.Call(_scheduleDictionarySaver.MarkForPersist(_unitOfWork, _scheduleRepository, changes)).Throw(new ValidationException());
                 Expect.Call(_personRequest.IsApproved).Return(true);
             }
             using (_mockRepository.Playback())
@@ -588,9 +587,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
         private void ExpectPersistOfDictionary()
         {
-        	var changes = new DifferenceCollection<IPersistableScheduleData>{new DifferenceCollectionItem<IPersistableScheduleData>()};
+        	var changes = new DifferenceCollection<IPersistableScheduleData>();
         	Expect.Call(_scheduleDictionary.DifferenceSinceSnapshot()).Return(changes);
-			_scheduleDictionarySaver.MarkForPersist(_unitOfWork, _scheduleRepository, changes.Single());
+			_scheduleDictionarySaver.MarkForPersist(_unitOfWork, _scheduleRepository, changes);
             LastCall.Return(new ScheduleDictionaryPersisterResult { ModifiedEntities = new IPersistableScheduleData[] { }, AddedEntities = new IPersistableScheduleData[] { }, DeletedEntities = new IPersistableScheduleData[] { } });
         }
 

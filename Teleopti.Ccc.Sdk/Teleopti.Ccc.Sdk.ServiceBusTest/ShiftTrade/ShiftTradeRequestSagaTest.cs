@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
@@ -177,9 +176,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
                         }),Is.Equal(scenario)}).Return(approvalService);
                 Expect.Call(approvalService.ApproveShiftTrade(shiftTradeRequest)).Return(
                     new List<IBusinessRuleResponse>());
-	            var diffItem = new DifferenceCollectionItem<IPersistableScheduleData>();
-	            Expect.Call(schedulingResultState.Schedules.DifferenceSinceSnapshot()).Return(new DifferenceCollection<IPersistableScheduleData>{diffItem});
-				Expect.Call(scheduleDictionarySaver.MarkForPersist(unitOfWork, scheduleRepository, diffItem)).Return(new ScheduleDictionaryPersisterResult { ModifiedEntities = new IPersistableScheduleData[] { }, AddedEntities = new IPersistableScheduleData[] { }, DeletedEntities = new IPersistableScheduleData[] { } });
+				Expect.Call(scheduleDictionarySaver.MarkForPersist(unitOfWork, scheduleRepository, schedulingResultState.Schedules.DifferenceSinceSnapshot())).Return(new ScheduleDictionaryPersisterResult { ModifiedEntities = new IPersistableScheduleData[] { }, AddedEntities = new IPersistableScheduleData[] { }, DeletedEntities = new IPersistableScheduleData[] { } });
                 Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker()).Return(
                     statusChecker);
                 Expect.Call(() => statusChecker.Check(shiftTradeRequest)).Repeat.Twice();
@@ -219,9 +216,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
                     approvalService);
                 Expect.Call(approvalService.ApproveShiftTrade(shiftTradeRequest)).Return(
                     new List<IBusinessRuleResponse>());
-								var diffItem = new DifferenceCollectionItem<IPersistableScheduleData>();
-								Expect.Call(schedulingResultState.Schedules.DifferenceSinceSnapshot()).Return(new DifferenceCollection<IPersistableScheduleData> { diffItem });
-								Expect.Call(scheduleDictionarySaver.MarkForPersist(unitOfWork, scheduleRepository, diffItem)).Throw(new ValidationException());
+				Expect.Call(scheduleDictionarySaver.MarkForPersist(unitOfWork, scheduleRepository, schedulingResultState.Schedules.DifferenceSinceSnapshot())).Throw(new ValidationException());
                 Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker()).Return(
                     statusChecker);
                 Expect.Call(() => statusChecker.Check(shiftTradeRequest));
@@ -262,10 +257,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
                     approvalService);
                 Expect.Call(approvalService.ApproveShiftTrade(shiftTradeRequest)).Return(
                     new List<IBusinessRuleResponse>{rule,rule});
-
-								var diffItem = new DifferenceCollectionItem<IPersistableScheduleData>();
-								Expect.Call(schedulingResultState.Schedules.DifferenceSinceSnapshot()).Return(new DifferenceCollection<IPersistableScheduleData> { diffItem });
-			Expect.Call(scheduleDictionarySaver.MarkForPersist(unitOfWork, scheduleRepository, diffItem)).Return(new ScheduleDictionaryPersisterResult { ModifiedEntities = new IPersistableScheduleData[] { }, AddedEntities = new IPersistableScheduleData[] { }, DeletedEntities = new IPersistableScheduleData[] { } });
+				Expect.Call(scheduleDictionarySaver.MarkForPersist(unitOfWork, scheduleRepository, schedulingResultState.Schedules.DifferenceSinceSnapshot())).Return(new ScheduleDictionaryPersisterResult { ModifiedEntities = new IPersistableScheduleData[] { }, AddedEntities = new IPersistableScheduleData[] { }, DeletedEntities = new IPersistableScheduleData[] { } });
                 Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker()).Return(
                     statusChecker);
                 Expect.Call(() => statusChecker.Check(shiftTradeRequest)).Repeat.Twice();

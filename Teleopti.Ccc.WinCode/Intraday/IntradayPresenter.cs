@@ -388,13 +388,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
                     reassociateCommonStateHolder(uow);
                     uow.Reassociate(_schedulingResultLoader.SchedulerState.SchedulingResultState.PersonsInOrganization);
                     uow.Reassociate(MultiplicatorDefinitionSets);
-	                foreach (var diff in SchedulerStateHolder.Schedules.DifferenceSinceSnapshot())
-	                {
-										var result = _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository, diff);
-										uow.PersistAll(this);
-										if (result != null)
-											new ScheduleDictionaryModifiedCallback().Callback(SchedulerStateHolder.Schedules, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);		                
-	                }
+                    var result = _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository, SchedulerStateHolder.Schedules.DifferenceSinceSnapshot());
+                    uow.PersistAll(this);
+                    if (result != null)
+                        new ScheduleDictionaryModifiedCallback().Callback(SchedulerStateHolder.Schedules, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
                 }
             }
             catch (OptimisticLockException optLockEx)
