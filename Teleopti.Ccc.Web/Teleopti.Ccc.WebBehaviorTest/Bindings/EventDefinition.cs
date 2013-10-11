@@ -21,8 +21,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			Log.Debug("Preparing for test run");
 
-			Browser.NotifyBeforeTestRun();
-
 			try
 			{
 				Browser.SetDefaultTimeouts(TimeSpan.FromSeconds(20), TimeSpan.FromMilliseconds(25));

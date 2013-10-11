@@ -6,9 +6,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 	{
 		void SetTimeout(TimeSpan timeout);
 		void Start(TimeSpan timeout, TimeSpan retry);
-		void Close();
-		void NotifyBeforeTestRun();
-		void NotifyBeforeScenario();
 		IBrowserInteractions GetInteractions();
+		void Close();
+		void NotifyBeforeScenario();
 	}
 }

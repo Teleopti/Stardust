@@ -19,6 +19,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		public void Start(TimeSpan timeout, TimeSpan retry)
 		{
+			closeAllBrowsersIfIAmTheOnlyTestRun();
+
 			Settings.AutoCloseDialogs = true;
 			Settings.AutoMoveMousePointerToTopLeft = false;
 			Settings.HighLightColor = "Green";
@@ -40,11 +42,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			Internal.Close();
 			Internal.Dispose();
 			Internal = null;
-		}
-
-		public void NotifyBeforeTestRun()
-		{
-			closeAllBrowsersIfIAmTheOnlyTestRun();
 		}
 
 		private static void closeAllBrowsersIfIAmTheOnlyTestRun()
