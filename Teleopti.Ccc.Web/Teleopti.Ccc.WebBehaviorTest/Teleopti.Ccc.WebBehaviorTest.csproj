@@ -91,11 +91,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="Anywhere\ViewGroupSchedule.feature.cs">
-      <DependentUpon>ViewGroupSchedule.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Anywhere\TeamScheduleSorting.feature.cs">
       <DependentUpon>TeamScheduleSorting.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -110,6 +105,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ViewDaysOff.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Anywhere\ViewGroupSchedule.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ViewGroupSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsKnockoutExtensions.cs" />
@@ -632,6 +632,10 @@
     <None Include="Anywhere\ViewGroupSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewGroupSchedule.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\ViewGroupScheduleK.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ViewGroupScheduleK.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\TeamScheduleSorting.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
