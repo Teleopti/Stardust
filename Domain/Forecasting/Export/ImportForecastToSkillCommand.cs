@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
                                    UtcDateTimeFrom = skillStaffPeriod.Period.StartDateTime,
                                    UtcDateTimeTo = skillStaffPeriod.Period.EndDateTime,
                                    SkillName = sourceSkill.Name,
-                                   Tasks = (int) skillStaffPeriod.Payload.TaskData.Tasks,
+                                   Tasks = skillStaffPeriod.Payload.TaskData.Tasks,
                                    TaskTime = skillStaffPeriod.Payload.TaskData.AverageTaskTime.TotalSeconds,
                                    AfterTaskTime = skillStaffPeriod.Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
                                    Agents = skillStaffPeriod.Payload.ForecastedIncomingDemand,

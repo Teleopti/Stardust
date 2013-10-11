@@ -140,6 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
                 Expect.Call(_skillDay1.CurrentDate).Return(new DateOnly()).Repeat.AtLeastOnce();
                 Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();
+                Expect.Call(_skillDay2.Id).Return(null);
                 Expect.Call(_skillDay2.Skill).Return(skill2).Repeat.AtLeastOnce();
                 Expect.Call(_skillDay2.CurrentDate).Return(new DateOnly()).Repeat.AtLeastOnce();
                 Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();

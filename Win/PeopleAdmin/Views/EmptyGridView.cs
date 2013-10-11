@@ -10,10 +10,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			get { return ViewType.EmptyView; }
 		}
 
-		public EmptyGridView(GridControl view, FilteredPeopleHolder filteredPeopleHolder)
+		public EmptyGridView(GridControl view, FilteredPeopleHolder filteredPeopleHolder, bool visible)
 			: base(view, filteredPeopleHolder)
 		{
-			view.Visible = false;
+			view.Visible = visible;
 		}
 	}
 }

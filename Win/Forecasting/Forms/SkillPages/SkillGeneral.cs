@@ -58,14 +58,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 				ISkillRepository rep = _repositoryFactory.CreateSkillRepository(unitOfWork);
                 skills = rep.LoadAll();
 
-                // *************************************************************************
-                // Warning !!
-                // Must be the last repository.
-                unitOfWork.DisableFilter(QueryFilter.Deleted);
-                IActivityRepository activityRepository = _repositoryFactory.CreateActivityRepository(unitOfWork);
-                activityList = activityRepository.LoadAllSortByName();
-                // *************************************************************************
-
+	            using (unitOfWork.DisableFilter(QueryFilter.Deleted))
+	            {
+		            IActivityRepository activityRepository = _repositoryFactory.CreateActivityRepository(unitOfWork);
+		            activityList = activityRepository.LoadAllSortByName();
+	            }
             }
 
 			_presenter = new SkillGeneralPresenter(this, skill, activityList, skills);
@@ -230,30 +227,42 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 		    thisSkill.MaxParallelTasks = (int)numericUpDownMaxParallel.Value;
 
             if (office2007OutlookTimePickerMidnightOffsetBreak.Enabled)
-            {
-                foreach (KeyValuePair<int, ISkillDayTemplate> template in thisSkill.TemplateWeekCollection)
-                {
-                    IList<ITemplateSkillDataPeriod> templateSkillDataPeriods = new List<ITemplateSkillDataPeriod>();
-                    DateTime startDateUtc =
-                        TimeZoneInfo.ConvertTimeToUtc(
-                            SkillDayTemplate.BaseDate.Date.Add(thisSkill.MidnightBreakOffset), thisSkill.TimeZone);
-                    var timePeriod = new DateTimePeriod(startDateUtc, startDateUtc.AddDays(1));
+			{
+				createDefaultTemplates(thisSkill);
+			}
 
-                    foreach (
-                        ITemplateSkillDataPeriod skillDataPeriod in template.Value.TemplateSkillDataPeriodCollection)
-                    {
-                        templateSkillDataPeriods.Add(new TemplateSkillDataPeriod(skillDataPeriod.ServiceAgreement,
-                                                                                 skillDataPeriod.SkillPersonData,
-                                                                                 timePeriod));
-                    }
-                    template.Value.SetSkillDataPeriodCollection(
-                        new ReadOnlyCollection<ITemplateSkillDataPeriod>(templateSkillDataPeriods));
-                }
-            }
             return true;
         }
 
-        #region IPropertyPage Members
+		private static void createDefaultTemplates(ISkill thisSkill)
+		{
+			var startDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date.Add(thisSkill.MidnightBreakOffset), thisSkill.TimeZone);
+			var timePeriod = new DateTimePeriod(startDateUtc, startDateUtc.AddDays(1));
+			foreach (var template in thisSkill.TemplateWeekCollection)
+			{
+				var templateSkillDataPeriods =
+					template.Value.TemplateSkillDataPeriodCollection.Select(
+						skillDataPeriod =>
+						new TemplateSkillDataPeriod(skillDataPeriod.ServiceAgreement, skillDataPeriod.SkillPersonData, timePeriod))
+					        .Cast<ITemplateSkillDataPeriod>()
+					        .ToList();
+
+				template.Value.SetSkillDataPeriodCollection(new ReadOnlyCollection<ITemplateSkillDataPeriod>(templateSkillDataPeriods));
+			}
+
+			var multisiteSkill = thisSkill as IMultisiteSkill;
+			if (multisiteSkill == null) return;
+
+			foreach (var template in multisiteSkill.TemplateMultisiteWeekCollection.Values)
+			{
+				template.SetMultisitePeriodCollection(new List<ITemplateMultisitePeriod>
+					{
+						new TemplateMultisitePeriod(timePeriod, new Dictionary<IChildSkill, Percent>())
+					});
+			}
+		}
+
+		#region IPropertyPage Members
 
         public string PageName
         {

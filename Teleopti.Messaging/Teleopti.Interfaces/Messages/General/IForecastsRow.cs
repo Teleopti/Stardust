@@ -30,7 +30,7 @@ namespace Teleopti.Interfaces.Messages.General
         /// <summary>
         /// Tasks
         /// </summary>
-        int Tasks { get; set; }
+        double Tasks { get; set; }
         /// <summary>
         /// Task time
         /// </summary>

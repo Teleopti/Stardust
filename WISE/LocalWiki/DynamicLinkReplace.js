@@ -74,7 +74,7 @@ function endsWith(str, suffix) {
 
 function isSuffixAllowed(link) {
 	var linkPage = getPageName(link);
-	var forbiddenSuflixes = ['en.html', 'ru.html', 'sv.html', 'zh.html'];
+	var forbiddenSuflixes = ['en.html', 'ru.html', 'sv.html', 'zh.html', '.png'];
 	for (var i = 0, suffix; suffix = forbiddenSuflixes[i]; i++) {
 		if (endsWith(linkPage, suffix)) {
 			return false;
@@ -120,10 +120,6 @@ function replaceLinks() {
 			link = link.href;
 			if (isPageToTeleoptiSite(link))
 				continue;
-			if (endsWith(link, 'pt.html') || endsWith(link, 'pt')) {
-				link = undefined;
-				continue;
-			}
 			if (shouldReplaceLink(link, pageName)) {
 				var trimmedLink;
 				if (endsWith(link, '1.html'))
@@ -131,7 +127,8 @@ function replaceLinks() {
 				else if (endsWith(link, 'en') ||
 					endsWith(link, 'ru') ||
 					endsWith(link, 'sv') ||
-					endsWith(link, 'zh'))
+					endsWith(link, 'zh') ||
+					endsWith(link, 'pt'))
 					trimmedLink = link.substr(0, link.length - 3);
 				else
 					trimmedLink = link.substr(0, link.length - 5);
@@ -139,10 +136,9 @@ function replaceLinks() {
 				document.links[i].href = trimmedLink + '\\' + pageName;
 			}
 		}
-		document.links[i].href = document.links[i].href.replace(/\+/, '_');
+		document.links[i].href = document.links[i].href.replace(/\+/g, '_');
 		document.links[i].href = document.links[i].href.replace('wiki.teleopti.com/TeleoptiCCC/', 'localhost/TeleoptiCCC/LocalWIki/');
 		document.links[i].href = document.links[i].href.replace('%3A', '%253A');
-		
 	}
 	fixNavigationLinkTexts(pageName);
 }
@@ -250,6 +246,7 @@ function getLinkTranslationText() {
 ['MyTime functions', 'Функции MyTime', 'Funktioner i MyTime', 'MyTime功能'],
 	// Processes
 ['Forecasting', 'Прогнозирование', 'Prognostisera', '预测'],
+['Creating Shifts','Creating Shifts','Skapa skift','Creating Shifts'],
 ['Budgeting', 'Составление бюджетов', 'Budgetering', '预算'],
 	// Troubleshooting
 ['Scheduling', 'Планирование расписания', 'Schemaläggning', '排班'],
@@ -265,7 +262,6 @@ function getLinkTranslationText() {
 ['Keyboard shortcuts', 'Сочетания клавиш', 'Kortkommandon', '键盘快捷键'],
 ['Wiki help', 'Помощь Wiki', 'Wikihjälp', 'Wiki 帮助'],
 ['Upload file', 'Загрузить файл', 'Ladda upp fil', '上传文件'],
-['', '', '', ''], ['', '', '', ''], ['', '', '', ''],
 	// Contact
 ['Feedback', 'Обратная связь', 'Feedback', '反馈']];
 }

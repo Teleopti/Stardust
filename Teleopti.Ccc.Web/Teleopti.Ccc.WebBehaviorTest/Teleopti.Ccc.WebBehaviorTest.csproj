@@ -603,9 +603,7 @@
     <Compile Include="Core\Browser.cs" />
     <Compile Include="Pages\WeekSchedulePage.cs" />
     <Compile Include="Core\Extensions\FuncExtensions.cs" />
-    <Compile Include="Core\Navigation.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Core\Navigation.cs" />
     <Compile Include="Core\BrowserDriver\TimeoutScope.cs" />
     <Compile Include="Data\DataMaker.cs" />
     <Compile Include="Bindings\Specific\UserStepDefinitions.cs" />

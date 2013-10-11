@@ -103,13 +103,13 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MaxWidth="5"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition MaxWidth="5"/>
+				<ColumnDefinition MaxWidth="5"/>
             </Grid.ColumnDefinitions>
 
             <Button Opacity="0" Grid.ColumnSpan="3" x:Name="hiddenButtonForFocusThatShouldBeHandledInViewModelInstead" x:FieldModifier="private"/> 
-            <Thumb Grid.Column="0" DragDelta="Thumb_Start_DragDelta"  Style="{StaticResource resizeThumbStyle}"/>
-            <Thumb Grid.Column="1" DragDelta="Thumb_Move_DragDelta" Style="{StaticResource moveThumbStyle}" />
-            <Thumb Grid.Column="2" DragDelta="Thumb_End_DragDelta" Style="{StaticResource resizeThumbStyle}"/>
+            <Thumb Grid.Column="0" DragDelta="Thumb_Start_DragDelta" Style="{StaticResource resizeThumbStyle}"/>
+			<Thumb Grid.Column="1" DragDelta="Thumb_Move_DragDelta" Style="{StaticResource moveThumbStyle}" />
+			<Thumb Grid.Column="2" DragDelta="Thumb_End_DragDelta" Style="{StaticResource resizeThumbStyle}"/>
 
           
         </Grid>
