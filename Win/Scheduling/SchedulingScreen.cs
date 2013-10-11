@@ -1915,7 +1915,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			clipboardSpecialOptions.ShowRestrictions = _scheduleView is RestrictionSummaryView;
 			clipboardSpecialOptions.DeleteMode = false;
 			clipboardSpecialOptions.ShowOvertimeAvailability = false;
-			clipboardSpecialOptions.ShowShiftAsOvertime = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability); ;
+			clipboardSpecialOptions.ShowShiftAsOvertime = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities); ;
 
 			var pasteSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions, MultiplicatorDefinitionSet) { Text = Resources.PasteSpecial };
 			pasteSpecial.ShowDialog();
