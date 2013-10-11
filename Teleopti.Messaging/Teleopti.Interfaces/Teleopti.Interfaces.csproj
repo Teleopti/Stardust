@@ -118,10 +118,12 @@
     <Compile Include="Domain\IBudgetGroupAllowanceCalculator.cs" />
     <Compile Include="Domain\IBudgetGroupHeadCountSpecification.cs" />
     <Compile Include="Domain\ICalculator.cs" />
+    <Compile Include="Domain\IDayOffOnPeriod.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />
     <Compile Include="Domain\IChangePasswordResultInfo.cs" />
     <Compile Include="Domain\IEvent.cs" />
     <Compile Include="Domain\IExtractBudgetGroupPeriods.cs" />
+    <Compile Include="Domain\IHasContractDayOffDefinition.cs" />
     <Compile Include="Domain\ILoggedOnUser.cs" />
     <Compile Include="Domain\IPersistedActivityLayer.cs" />
     <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />
@@ -172,6 +174,7 @@
     <Compile Include="Domain\IRevision.cs" />
     <Compile Include="Domain\IRuleSetProjectionService.cs" />
     <Compile Include="Domain\IScheduleDayAvailabilityRestrictionExtractor.cs" />
+    <Compile Include="Domain\IScheduleDayAvailableForDayOffSpecification.cs" />
     <Compile Include="Domain\IScheduleDayChangeCallback.cs" />
     <Compile Include="Domain\IScheduleDayPreferenceRestrictionExtractor.cs" />
     <Compile Include="Domain\IScheduleDayRestrictionExtractor.cs" />

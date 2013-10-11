@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {
@@ -12,11 +13,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
         {
             var channelFactory = new ChannelFactory<T>(typeof (T).Name);
             _channelFactories.Add(channelFactory);
-
+			channelFactory.Faulted += onFactoryOnFaulted;
+			
             return channelFactory.CreateChannel();
         }
 
-        public void Dispose()
+	    private void onFactoryOnFaulted(object sender, EventArgs e)
+	    {
+		    var factory = sender as IChannelFactory;
+		    if (factory == null) return;
+
+		    factory.Faulted -= onFactoryOnFaulted;
+		    _channelFactories.Remove((IDisposable) factory);
+	    }
+
+	    public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);

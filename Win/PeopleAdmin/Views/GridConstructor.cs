@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                     break;
 
                 case ViewType.EmptyView:
-                    view = new EmptyGridView(new GridControl(), _filteredPeopleHolder); // TODO: Change this to EmptyGridView.
+                    view = new EmptyGridView(new GridControl(), _filteredPeopleHolder, false); // TODO: Change this to EmptyGridView.
                     break;
 
                 case ViewType.PersonRotationView:

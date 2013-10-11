@@ -41,7 +41,7 @@
 
     <many-to-one name="AlarmType"
        class="Teleopti.Ccc.Domain.RealTimeAdherence.AlarmType"
-       not-null="true" foreign-key="FK_StateGroupActivityAlarm_AlarmType"/>
+       not-null="false" foreign-key="FK_StateGroupActivityAlarm_AlarmType"/>
     
 		<many-to-one name="BusinessUnit"
 					 class="Teleopti.Ccc.Domain.Common.BusinessUnit"

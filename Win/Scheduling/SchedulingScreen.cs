@@ -15,6 +15,7 @@ using MbCache.Core;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Win.Meetings;
 using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
@@ -28,6 +29,7 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Logging;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
@@ -584,11 +586,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_scheduleView.ViewGrid != null)
 			{
 				_scheduleView.ViewGrid.InvalidateRange(_scheduleView.ViewGrid.ViewLayout.VisibleCellsRange);
-				RecalculateResources();
+			    updateScheduleParts(e);
+                RecalculateResources();
 			}
 		}
 
-		private void permittedPersonsToSelectedList()
+	    private void updateScheduleParts(ModifyMeetingEventArgs e)
+	    {
+	        var startDate = e.ModifiedMeeting.StartDate;
+	        var affectedScheduleDays = new List<IScheduleDay>();
+	        while (startDate <= e.ModifiedMeeting.EndDate)
+	        {
+	            foreach (var meetingPerson in e.ModifiedMeeting.MeetingPersons)
+	            {
+	                var range = SchedulerState.SchedulingResultState.Schedules[meetingPerson.Person];
+	                affectedScheduleDays.Add(range.ScheduledDay(startDate));
+	            }
+	            startDate = startDate.AddDays(1);
+	        }
+	        _scheduleView.Presenter.ModifySchedulePart(affectedScheduleDays, true);
+	    }
+
+	    private void permittedPersonsToSelectedList()
 		{
 			foreach (IPerson person in SchedulerState.AllPermittedPersons)
 			{
@@ -3641,6 +3660,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void _backgroundWorkerScheduling_DoWork(object sender, DoWorkEventArgs e)
 		{
+			var argument = (SchedulingAndOptimizeArgument)e.Argument;
+			var scheduleDays = argument.ScheduleDays;
+			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+			var selectedPeriod =
+			new DateOnlyPeriod(
+				OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone),
+				OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
+			var dateOnlyList = selectedPeriod.DayCollection();
+			_schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
+			AdvanceLoggingService.LogSchedulingInfo(_optimizerOriginalPreferences.SchedulingOptions, scheduleDays.Select(x => x.Person).Distinct().Count(), dateOnlyList.Count(), () => runBackgroundWorkerScheduling(e));
+		}
+		
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private void runBackgroundWorkerScheduling(DoWorkEventArgs e)
+		{
 			setThreadCulture();
 			var schedulingOptions = _optimizerOriginalPreferences.SchedulingOptions;
 			schedulingOptions.DayOffTemplate = _dayOffTemplate;
@@ -3934,6 +3968,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		private void _backgroundWorkerOptimization_DoWork(object sender, DoWorkEventArgs e)
+		{
+			var argument = (SchedulingAndOptimizeArgument)e.Argument;
+			var scheduleDays = argument.ScheduleDays;
+			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+			var selectedPeriod =
+				new DateOnlyPeriod(
+					OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone),
+					OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
+			var dateOnlyList = selectedPeriod.DayCollection();
+			_schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
+			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
+			AdvanceLoggingService.LogOptimizationInfo(optimizerPreferences, scheduleDays.Select(x => x.Person).Distinct().Count(), dateOnlyList.Count(), () => runBackgroupWorkerOptimization(e));
+			
+		}
+
+		private void runBackgroupWorkerOptimization(DoWorkEventArgs e)
 		{
 			setThreadCulture();
 			var options = (SchedulingAndOptimizeArgument)e.Argument;
@@ -5152,7 +5202,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			var uowFactory = UnitOfWorkFactory.Current;
 			var scheduleRepository = new ScheduleRepository(uowFactory);
-			using (var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository, new MoveDataBetweenSchedules(allNewRules, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState)),
+			using (var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository, new MoveDataBetweenSchedules(allNewRules, new EmptyScheduleDayChangeCallback()),
 															_schedulerMessageBrokerHandler,
 															ScheduleViewBase.AllSelectedPersons(selectedSchedules),
 															selectedSchedules,
@@ -6954,6 +7004,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (e.Button != MouseButtons.Left) return;
 			bool viewSchedulesPermission = isPermittedToViewSchedules();
 			_schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission);
+		    
 		}
 
 		private void toolStripMenuItemEditMeetingMouseUp(object sender, MouseEventArgs e)

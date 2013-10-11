@@ -2,11 +2,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public interface IHasContractDayOffDefinition
-	{
-		bool IsDayOff(IScheduleDay scheduleDay);
-	}
-
 	public class HasContractDayOffDefinition : IHasContractDayOffDefinition
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

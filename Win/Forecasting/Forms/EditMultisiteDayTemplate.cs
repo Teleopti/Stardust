@@ -104,12 +104,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
     	}
 
     	private Dictionary<IChildSkill, Percent> InitializeDistribution()
-    	{
+		{
+			var distribution = new Dictionary<IChildSkill, Percent>();
     		var childCount = _multisiteSkill.ChildSkills.Count;
+    		if (childCount == 0) return distribution;
+
     		int remainder;
     		var value = Math.DivRem(100, childCount, out remainder);
 
-    		var distribution = new Dictionary<IChildSkill, Percent>();
     		foreach (var child in _multisiteSkill.ChildSkills)
     		{
     			distribution.Add(child, new Percent((value + remainder) / 100d));
@@ -117,7 +119,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
     		}
     		return distribution;
     	}
-
 
     	private void SetColor()
         {
@@ -152,9 +153,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             }
             
             var multisiteDayTemplate = _multisiteSkill.TryFindTemplateByName(TemplateTarget.Multisite, textBoxTemplateName.Text) as IMultisiteDayTemplate;
-            return (
-                       multisiteDayTemplate == null || 
-                       multisiteDayTemplate.Equals(_multisiteDayTemplate));
+            return (multisiteDayTemplate == null || multisiteDayTemplate.Equals(_multisiteDayTemplate));
         }
 
         private void textBoxTemplateName_TextChanged(object sender, EventArgs e)
@@ -201,7 +200,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             {
                 ShowErrorMessage(string.Format(CultureInfo.CurrentCulture, validationException.Message), UserTexts.Resources.ValidationError);
             }
-            
         }
 
     	private void ReleaseManagedResources()

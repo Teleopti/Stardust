@@ -26,14 +26,7 @@ namespace Teleopti.Interfaces.Domain
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#")]
 		bool HasCorrectNumberOfDaysOff(IVirtualSchedulePeriod virtualSchedulePeriod, out int targetDaysOff, out IList<IScheduleDay> dayOffsNow);
 
-		/// <summary>
-		/// Return first occasion of day off from dayOffDays that are in same week as scheduleDay
-		/// </summary>
-		/// <param name="scheduleDay"></param>
-		/// <param name="dayOffDays"></param>
-		/// <returns></returns>
-		IScheduleDay DayOffInScheduleDayWeek(IScheduleDay scheduleDay, IList<IScheduleDay> dayOffDays);
-
+		
         /// <summary>
         /// Outsides the or at minimum target daysoff.
         /// </summary>
@@ -48,5 +41,20 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="virtualSchedulePeriod">The virtual schedule period.</param>
         /// <returns></returns>
 	    bool OutsideOrAtMaximumTargetDaysOff(IVirtualSchedulePeriod virtualSchedulePeriod);
+
+		/// <summary>
+		///  Get week periods sorted on day offs
+		/// </summary>
+		/// <param name="scheduleMatrixPro"></param>
+		/// <returns></returns>
+		IList<IDayOffOnPeriod> WeekPeriodsSortedOnDayOff(IScheduleMatrixPro scheduleMatrixPro);
+
+		/// <summary>
+		/// Counts days off on given period
+		/// </summary>
+		/// <param name="scheduleMatrixPro"></param>
+		/// <param name="period"></param>
+		/// <returns></returns>
+		IDayOffOnPeriod CountDayOffsOnPeriod(IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod period);
 	}
 }

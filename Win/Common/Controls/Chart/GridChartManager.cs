@@ -184,6 +184,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Chart
                 if (!gridValidated()) return;
 
                 GridControl grid = _currentGrid as GridControl;
+				grid.Refresh();
 
                 //Init chart
                 init(grid, _name);
