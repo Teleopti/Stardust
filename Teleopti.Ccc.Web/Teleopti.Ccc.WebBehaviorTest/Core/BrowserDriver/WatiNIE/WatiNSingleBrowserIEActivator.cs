@@ -36,11 +36,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			StartBrowser();
 		}
 
-		public bool IsRunning()
-		{
-			return Internal != null;
-		}
-
 		private void StartBrowser()
 		{
 			Internal = new IE { AutoClose = true };
@@ -60,6 +55,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		public void Close()
 		{
+			if (Internal == null)
+				return;
 			try
 			{
 				CloseBrowser();

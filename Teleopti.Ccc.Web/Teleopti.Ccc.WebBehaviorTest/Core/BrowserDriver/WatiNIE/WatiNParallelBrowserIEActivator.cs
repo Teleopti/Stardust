@@ -33,13 +33,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			Internal.BringToFront();
 		}
 
-		public bool IsRunning()
-		{
-			return Internal != null;
-		}
-
 		public void Close()
 		{
+			if (Internal == null)
+				return;
 			Internal.Close();
 			Internal.Dispose();
 			Internal = null;

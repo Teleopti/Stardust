@@ -25,8 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			try
 			{
-				if (!Browser.IsStarted())
-					Browser.Start(TimeSpan.FromSeconds(20), TimeSpan.FromMilliseconds(25));
+				Browser.SetDefaultTimeouts(TimeSpan.FromSeconds(20), TimeSpan.FromMilliseconds(25));
 
 				TestControllerMethods.BeforeTestRun();
 
@@ -91,8 +90,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Log.Debug("Cleaing up after test run");
 
-			if (Browser.IsStarted())
-				Browser.Close();
+			Browser.Close();
 			ServiceBusSetup.TearDown();
 			TestSiteConfigurationSetup.TearDown();
 
@@ -121,7 +119,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		private static void HandleScenarioException()
 		{
-			if (!Browser.IsStarted()) return;
 			if (ScenarioContext.Current.TestError != null)
 			{
 				Log.Error("Scenario exception occurred, dumping info here.");
