@@ -1189,7 +1189,6 @@
     <Compile Include="Forecasting\MultisiteSkill.cs" />
     <Compile Include="Forecasting\MinMaxOccupancy.cs" />
     <Compile Include="Forecasting\Outlier.cs" />
-    <Compile Include="Forecasting\OutlierDateProviderBase.cs" />
     <Compile Include="Forecasting\SkillRestrictionSet.cs" />
     <Compile Include="Forecasting\DayOfWeekItem.cs" />
     <Compile Include="Forecasting\DayOfWeeks.cs" />
@@ -1596,9 +1595,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forecasting\Outlier.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Forecasting\OutlierDateProviderBase.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AgentInfo\Requests\PersonRequest.hbm.xml">

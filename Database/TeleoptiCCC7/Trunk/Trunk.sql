@@ -398,3 +398,12 @@ EXEC sp_rename 'ReadModel.PersonScheduleDay.ShiftStart','Start','COLUMN'
 GO
 EXEC sp_rename 'ReadModel.PersonScheduleDay.ShiftEnd','End','COLUMN'
 GO
+
+----------------  
+--Name: Roger Kratz
+--Date: 2013-10-11
+--Desc: Removing unused table
+---------------- 
+
+DROP TABLE [dbo].[OutlierDateProviderBase]
+GO

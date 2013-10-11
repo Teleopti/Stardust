@@ -552,7 +552,6 @@
     <Compile Include="Forecasting\StaffingThresholdsTest.cs" />
     <Compile Include="Forecasting\TaskTimeEmailDistributionServiceTest.cs" />
     <Compile Include="Forecasting\SkillTypeEmailTest.cs" />
-    <Compile Include="Forecasting\OutlierDateProviderBaseTest.cs" />
     <Compile Include="Forecasting\DistributionPercentageTest.cs" />
     <Compile Include="Forecasting\OutlierTest.cs" />
     <Compile Include="Forecasting\StatisticHelperTest.cs" />
