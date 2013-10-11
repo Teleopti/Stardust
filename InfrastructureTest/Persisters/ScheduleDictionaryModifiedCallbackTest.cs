@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 	[TestFixture]
 	public class ScheduleDictionaryModifiedCallbackTest
 	{
+		[Test]
 		public void ShouldDoUnsafeSnapshotUpdateOnModifiedOnCallback()
 		{
 			var modifiedEntity = MockRepository.GenerateMock<IPersistableScheduleData>();
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			scheduleRange.AssertWasCalled(x => x.UnsafeSnapshotUpdate(modifiedEntity, true));
 		}
 
+		[Test]
 		public void ShouldDoUnsafeSnapshotUpdateOnAddedOnCallback()
 		{
 			var addedEntity = MockRepository.GenerateMock<IPersistableScheduleData>();
