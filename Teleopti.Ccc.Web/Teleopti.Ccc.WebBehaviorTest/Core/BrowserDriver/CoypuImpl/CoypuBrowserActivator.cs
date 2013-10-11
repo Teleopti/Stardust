@@ -1,6 +1,5 @@
 ﻿using System;
 using Coypu;
-using Coypu.Drivers.Selenium;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 {
@@ -40,21 +39,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			_interactions = new CoypuBrowserInteractions(_browser, configuration);
 		}
 
-		public bool IsRunning()
-		{
-			return _browser != null;
-		}
-
 		public void Close()
 		{
 			if (_browser == null) return;
 			_browser.Dispose();
 			_browser = null;
 			_interactions = null;
-		}
-
-		public void NotifyBeforeTestRun()
-		{
 		}
 
 		public void NotifyBeforeScenario()
