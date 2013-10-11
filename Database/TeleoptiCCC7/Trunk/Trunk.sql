@@ -407,3 +407,15 @@ GO
 
 DROP TABLE [dbo].[OutlierDateProviderBase]
 GO
+
+----------------  
+--Name:CS
+--Date: 2013-10-11
+--Desc: Bug #25079 - Unclear permission setting for overtime availability
+---------------- 
+update dbo.ApplicationFunction
+set FunctionCode = 'ModifyAvailabilities' where ForeignId = '0087'
+
+update dbo.ApplicationFunction
+set FunctionDescription = 'xxModifyAvailabilities' where ForeignId = '0087'
+GO
