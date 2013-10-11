@@ -25,6 +25,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		public void Start(TimeSpan timeout, TimeSpan retry)
 		{
+			MakeSureBrowserIsNotRunning();
+			ResetScenarioCount();
+
 			LockBrowser();
 			Settings.AutoCloseDialogs = true;
 			Settings.AutoMoveMousePointerToTopLeft = false;
@@ -34,11 +37,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			Settings.MakeNewIeInstanceVisible = true;
 			SetTimeout(timeout);
 			StartBrowser();
-		}
-
-		public bool IsRunning()
-		{
-			return Internal != null;
 		}
 
 		private void StartBrowser()
@@ -52,14 +50,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			_interactions = new WatiNIEBrowserInteractions(Internal);
 		}
 
-		public void NotifyBeforeTestRun()
-		{
-			ResetScenarioCount();
-			MakeSureBrowserIsNotRunning();
-		}
-
 		public void Close()
 		{
+			if (Internal == null)
+				return;
 			try
 			{
 				CloseBrowser();
