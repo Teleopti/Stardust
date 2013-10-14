@@ -343,5 +343,21 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         }
 
+		[Test]
+		public void ShouldAssignCorrectValueForTeamSchedulingWhenBlockIsUnchecked()
+		{
+			_optimizationPreferences.Extra.UseTeamBlockOption = false;
+			_schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+			Assert.That(_schedulingOptions.BlockFinderTypeForAdvanceScheduling, Is.EqualTo(BlockFinderType.SingleDay));
+		}
+		
+		[Test]
+		public void ShouldAssignCorrectValueForBlockSchedulingWhenTeamIsUnchecked()
+		{
+			_optimizationPreferences.Extra.UseTeams = false;
+			_schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+			Assert.That(_schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key, Is.EqualTo("SingleAgentTeam"));
+		}
+
     }
 }
