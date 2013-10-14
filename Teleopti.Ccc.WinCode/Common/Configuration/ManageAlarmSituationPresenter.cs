@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             var activity = _activities[e.RowIndex - 1];
             IStateGroupActivityAlarm stateGroupActivityAlarm =
                 _stateGroupActivityAlarms.SingleOrDefault(item => isActivityMatch(item,activity) && isStateGroupMatch(item,rtaStateGroup));
-            if (stateGroupActivityAlarm != null)
+            if (stateGroupActivityAlarm != null && stateGroupActivityAlarm.AlarmType != null)
             {
                 e.Style.CellValue = stateGroupActivityAlarm.AlarmType.Description.Name;
                 e.Style.BackColor = stateGroupActivityAlarm.AlarmType.DisplayColor;
@@ -335,25 +335,27 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
                 _stateGroupActivityAlarms.SingleOrDefault(
                     item => isActivityMatch(item,activity) && isStateGroupMatch(item,rtaStateGroup));
 
-            if (stateGroupActivityAlarm == null && alarmType!=null)
+            if (stateGroupActivityAlarm == null)
             {
-                stateGroupActivityAlarm = new StateGroupActivityAlarm(rtaStateGroup, activity);
-                stateGroupActivityAlarm.AlarmType = alarmType;
-                _stateGroupActivityAlarms.Add(stateGroupActivityAlarm);
+                stateGroupActivityAlarm = new StateGroupActivityAlarm(rtaStateGroup, activity)
+	                {
+		                AlarmType = alarmType
+	                };
+	            _stateGroupActivityAlarms.Add(stateGroupActivityAlarm);
 				_stateGroupActivityAlarmsToAdd.Add(stateGroupActivityAlarm);
             }
-			else if (stateGroupActivityAlarm != null && alarmType == null)
+			//else if (stateGroupActivityAlarm != null && alarmType == null)
+			//{
+			//	_stateGroupActivityAlarms.Remove(stateGroupActivityAlarm);
+			//	_stateGroupActivityAlarmsToRemove.Add(stateGroupActivityAlarm);
+			//	_stateGroupActivityAlarmsToAdd.Remove(stateGroupActivityAlarm);
+			//}
+            else
             {
-                _stateGroupActivityAlarms.Remove(stateGroupActivityAlarm);
-				_stateGroupActivityAlarmsToRemove.Add(stateGroupActivityAlarm);
-            	_stateGroupActivityAlarmsToAdd.Remove(stateGroupActivityAlarm);
+	            stateGroupActivityAlarm.AlarmType = alarmType;
             }
-            else if (stateGroupActivityAlarm!=null)
-            {
-                 stateGroupActivityAlarm.AlarmType = alarmType;
-            }
-           
-            e.Handled = true;
+
+	        e.Handled = true;
         }
 
         public void Dispose()

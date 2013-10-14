@@ -80,18 +80,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 			result.Saved.Should().Be.True();
 		}
-
-		//private void AddPersonAssignmentAndAbsence()
-		//{
-		//	var period = new DateTimePeriod(FirstDayDateOnly, FirstDayDateOnly.AddDays(1));
-		//	var personAssignment = new PersonAssignment(Person, Scenario, FirstDayDateOnly);
-		//	personAssignment.AddMainLayer(Activity, period);
-		//	var scheduleDay = ScheduleDictionary[Person].ScheduledDay(FirstDayDateOnly);
-		//	scheduleDay.Add(personAssignment);
-		//	scheduleDay.CreateAndAddActivity(Activity, period, ShiftCategory);
-		//	scheduleDay.CreateAndAddAbsence(new AbsenceLayer(Absence, period));
-		//	ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
-		//}
 		
 		[Test]
 		public void ShouldRevertVersionNumberWhenTransactionFails()

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
@@ -9,7 +8,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
@@ -61,13 +59,11 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			string timeZoneInfoId)
 		{
 			IList<IPerson> personList = new List<IPerson>();
-			IVirtualSchedulePeriod schedulePeriod;
-			if (!personDto.Id.HasValue)
+    		if (!personDto.Id.HasValue)
 				return new List<ValidatedSchedulePartDto>();
 
-			var dateOnlyInPeriod = new DateOnly(dateInPeriod.DateTime);
-			IPerson person;
-			using (IUnitOfWork uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			var dateOnlyInPeriod = dateInPeriod.ToDateOnly();
+    		using (IUnitOfWork uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				using (uow.DisableFilter(QueryFilter.Deleted))
 				{
@@ -76,12 +72,12 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				}
 
 				var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId);
-				person = _personRepository.Load(personDto.Id.Value);
+				IPerson person = _personRepository.Load(personDto.Id.Value);
 
 				if (person.PermissionInformation.Culture() == null && personDto.CultureLanguageId.HasValue)
 					person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo((int)personDto.CultureLanguageId));
 
-				schedulePeriod = person.VirtualSchedulePeriodOrNext(dateOnlyInPeriod);
+				IVirtualSchedulePeriod schedulePeriod = person.VirtualSchedulePeriodOrNext(dateOnlyInPeriod);
 				if (!schedulePeriod.IsValid)
 					return new List<ValidatedSchedulePartDto>();
 				DateOnlyPeriod realSchedulePeriod = schedulePeriod.DateOnlyPeriod;

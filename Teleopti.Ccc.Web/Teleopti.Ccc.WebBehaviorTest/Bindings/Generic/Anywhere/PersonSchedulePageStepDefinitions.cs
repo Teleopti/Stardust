@@ -129,10 +129,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				Browser.Interactions.AssertNotExists(".absence-list .absence:nth-child(" + count + ")", ".absence-list .absence:nth-child(" + (count + 1) + ")");
 		}
 
+		[Then(@"I should see a day off")]
+		public void ThenIShouldSeeADayOff()
+		{
+			Browser.Interactions.AssertExists(".dayoff");
+		}
+
+		[Then(@"I should see the time line with")]
+		public void ThenIShouldSeeTheTimeLineWith(Table table)
+		{
+			var timeLineInfo = table.CreateInstance<TimeLineInfo>();
+			Browser.Interactions.AssertExists(".time-line[data-start-time='{0}'][data-end-time='{1}']", timeLineInfo.StartTime, timeLineInfo.EndTime);
+		}
+
 		[When(@"I click '(.*)' on absence named '(.*)'")]
 		public void WhenIClickOnAbsenceNamed(CssClass cssClass, string absenceName)
 		{
 			Browser.Interactions.ClickUsingJQuery(".absence-list .absence:contains('" + absenceName + "') ." + cssClass.Name);
+		}
+
+		public class TimeLineInfo
+		{
+			public string StartTime { get; set; }
+			public string EndTime { get; set; }
 		}
 		
 		public class AbsenceListItemInfo

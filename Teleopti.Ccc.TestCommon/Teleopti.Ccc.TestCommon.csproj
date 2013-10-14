@@ -85,10 +85,14 @@
     <Compile Include="FakeData\CultureInfoFactory.cs" />
     <Compile Include="FakeData\EditableShiftFactory.cs" />
     <Compile Include="FakeData\FakeDataSource.cs" />
-    <Compile Include="FakeData\FakePersonAssignmentRepository.cs" />
-    <Compile Include="FakeData\FakePersonRepository.cs" />
+    <Compile Include="FakeRepositories\FakePersonAbsenceReadScheduleRepository.cs" />
+    <Compile Include="FakeRepositories\FakePersonAssignmentRepository.cs" />
+    <Compile Include="FakeRepositories\FakePersonRepository.cs" />
     <Compile Include="FakeData\PersonAccountCollectionFactory.cs" />
     <Compile Include="FakeData\ScheduleDayFactory.cs" />
+    <Compile Include="FakeLoggedOnUser.cs" />
+    <Compile Include="FakeRepositories\FakePersonAssignmentReadScheduleRepository.cs" />
+    <Compile Include="FakeRepositories\FakeScenarioRepository.cs" />
     <Compile Include="GenericDisposable.cs" />
     <Compile Include="IniFileInfo.cs" />
     <Compile Include="CrossThreadTestRunner.cs" />

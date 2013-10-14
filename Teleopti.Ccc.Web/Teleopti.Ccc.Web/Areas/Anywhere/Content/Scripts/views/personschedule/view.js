@@ -24,8 +24,9 @@ define([
 
 				personSchedule = new personScheduleViewModel();
 
-			    resize.onresize(function() {
-			        personSchedule.TimeLine.WidthPixels($('.shift').width());
+				resize.onresize(function () {
+					personSchedule.TimeLine.WidthPixels($('.time-line-for').width());
+					
 			    });
 			    
 				ko.applyBindings(personSchedule, options.bindingElement);

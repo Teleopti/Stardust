@@ -113,6 +113,7 @@
     </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PartTimePercentageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\NothingStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SiteStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsKnockoutExtensions.cs" />
     <Compile Include="Data\Setups\DefaultName.cs" />
@@ -201,6 +202,11 @@
     <Compile Include="Data\HardCodedResolver.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
     <Compile Include="Bindings\Generic\ServerStepDefinitions.cs" />
+    <Compile Include="Session.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Session.feature</DependentUpon>
+    </Compile>
     <Compile Include="TeamScheduleForGroups.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -498,11 +504,6 @@
       <DependentUpon>QUnitTests.feature</DependentUpon>
     </Compile>
     <Compile Include="RoutingStepDefinition.cs" />
-    <Compile Include="Session.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Session.feature</DependentUpon>
-    </Compile>
     <Compile Include="Bindings\Generic\CookieStepDefinitions.cs" />
     <Compile Include="TeamSchedule.feature.cs">
       <AutoGen>True</AutoGen>

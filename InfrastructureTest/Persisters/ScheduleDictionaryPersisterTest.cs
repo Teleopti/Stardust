@@ -185,10 +185,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 				throw new NotImplementedException();
 			}
 
-			public IPerson CreatedBy { get { throw new NotImplementedException(); } }
-
-			public DateTime? CreatedOn { get { throw new NotImplementedException(); } }
-
 			public IPerson UpdatedBy { get { throw new NotImplementedException(); } }
 
 			public DateTime? UpdatedOn { get { throw new NotImplementedException(); } }

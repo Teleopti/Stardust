@@ -14,8 +14,6 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
     public class GetAllScheduleTagsQueryHandler : IHandleQuery<GetAllScheduleTagsDto, ICollection<ScheduleTagDto>>
     {
-        //Remember we should set a tag only when we modify the schedule.
-
         private readonly IScheduleTagRepository _scheduleTagRepository;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IAssembler<IScheduleTag, ScheduleTagDto> _assembler;
@@ -33,11 +31,6 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
             {
                 var scheduleTags = _scheduleTagRepository.FindAllScheduleTags();
                 return _assembler.DomainEntitiesToDtos(scheduleTags).ToList();
-                //var export = _scheduleTagRepository.FindAllScheduleTags().Select(
-                //                s =>
-                //                new ScheduleTagDto() { Id = s.Id, Description = s.Description})
-                //                .ToList();
-                
             }
         }
     }

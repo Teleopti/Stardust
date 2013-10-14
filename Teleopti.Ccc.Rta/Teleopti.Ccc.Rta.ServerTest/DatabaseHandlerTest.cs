@@ -117,6 +117,9 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_reader.Expect(r => r.GetOrdinal("OriginalDataSourceId")).Return(14).Repeat.Twice();
 			_reader.Expect(r => r.IsDBNull(14)).Return(false);
 			_reader.Expect(r => r.GetString(14)).Return("1");
+
+			_reader.Expect(r => r.GetOrdinal("AlarmStart")).Return(15);
+			_reader.Expect(r => r.GetDateTime(15)).Return(_dateTime);
 			
 			_reader.Expect(r => r.Dispose());
 			_connection.Expect(c => c.Dispose());
@@ -200,7 +203,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_connectionFactory.Expect(cf => cf.CreateConnection("connectionString")).Return(_connection);
 			_connection.Expect(c => c.CreateCommand()).Return(_command);
 
-			_command.CommandType = CommandType.Text;
+			_command.CommandType = CommandType.StoredProcedure;
 			_command.Expect(c => c.CommandText).SetPropertyAndIgnoreArgument();
 			_connection.Open();
 			_command.Expect(c => c.ExecuteReader(CommandBehavior.CloseConnection)).Return(_reader);
@@ -213,19 +216,26 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_reader.Expect(r => r.IsDBNull(1)).Return(false);
 			_reader.Expect(r => r.GetGuid(1)).Return(_guid);
 
-			_reader.Expect(r => r.GetOrdinal("AlarmTypeId")).Return(2);
+			_reader.Expect(r => r.GetOrdinal("AlarmTypeId")).Return(2).Repeat.Twice();
+			_reader.Expect(r => r.IsDBNull(2)).Return(false);
 			_reader.Expect(r => r.GetGuid(2)).Return(_guid);
-			_reader.Expect(r => r.GetOrdinal("StaffingEffect")).Return(3);
+			_reader.Expect(r => r.GetOrdinal("StaffingEffect")).Return(3).Repeat.Twice();
+			_reader.Expect(r => r.IsDBNull(3)).Return(false);
 			_reader.Expect(r => r.GetDouble(3)).Return(123456D);
-			_reader.Expect(r => r.GetOrdinal("DisplayColor")).Return(4);
+			_reader.Expect(r => r.GetOrdinal("DisplayColor")).Return(4).Repeat.Twice();
+			_reader.Expect(r => r.IsDBNull(4)).Return(false);
 			_reader.Expect(r => r.GetInt32(4)).Return(123456789);
 			_reader.Expect(r => r.GetOrdinal("ActivityId")).Return(5).Repeat.Twice();
 			_reader.Expect(r => r.IsDBNull(5)).Return(false);
 			_reader.Expect(r => r.GetGuid(5)).Return(_guid);
-			_reader.Expect(r => r.GetOrdinal("ThresholdTime")).Return(6);
+			_reader.Expect(r => r.GetOrdinal("ThresholdTime")).Return(6).Repeat.Twice();
+			_reader.Expect(r => r.IsDBNull(6)).Return(false);
 			_reader.Expect(r => r.GetInt64(6)).Return(123456789);
-			_reader.Expect(r => r.GetOrdinal("Name")).Return(7);
+			_reader.Expect(r => r.GetOrdinal("Name")).Return(7).Repeat.Twice();
+			_reader.Expect(r => r.IsDBNull(7)).Return(false);
 			_reader.Expect(r => r.GetString(7)).Return("name");
+			_reader.Expect(r => r.GetOrdinal("BusinessUnit")).Return(8);
+			_reader.Expect(r => r.GetGuid(8)).Return(_guid);
 			_reader.Expect(r => r.Read()).Return(false);
 			_reader.Expect(r => r.Close());
 			_connection.Expect(c => c.Dispose());

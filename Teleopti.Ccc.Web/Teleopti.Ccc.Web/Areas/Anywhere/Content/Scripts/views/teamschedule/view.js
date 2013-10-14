@@ -45,24 +45,19 @@ define([
 				    var dateClone = teamSchedule.SelectedDate().clone();
 					
 				    for (var i = 0; i < currentPersons.length; i++) {
-				    	currentPersons[i].ClearLayers();
-				    	currentPersons[i].ContractTimeMinutes(0);
-				    	currentPersons[i].WorkTimeMinutes(0);
+					    currentPersons[i].ClearData();
 
 				    	for (var j = 0; j < schedules.length; j++) {
-						    if (currentPersons[i].Id == schedules[j].Id) {
-						    	currentPersons[i].AddLayers(schedules[j].Projection, teamSchedule.TimeLine, dateClone);
-						    	currentPersons[i].AddContractTime(schedules[j].ContractTimeMinutes);
-						    	currentPersons[i].AddWorkTime(schedules[j].WorkTimeMinutes);
-								break;
+				    		if (currentPersons[i].Id == schedules[j].PersonId) {
+				    			currentPersons[i].AddData(schedules[j], teamSchedule.TimeLine, dateClone);
 							}
 						}
 					}
 
-					currentPersons.sort(function (a, b) {
-						var firstStartMinutes = a.TimeLineAffectingStartMinute();
-						var secondStartMinutes = b.TimeLineAffectingStartMinute();
-	                    return firstStartMinutes == secondStartMinutes ? (a.TimeLineAffectingEndMinute() == b.TimeLineAffectingEndMinute() ? 0 : a.TimeLineAffectingEndMinute() < b.TimeLineAffectingEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
+				    currentPersons.sort(function (first, second) {
+				    	first = first.OrderBy();
+					    second = second.OrderBy();
+					    return first == second ? 0 : (first < second ? -1 : 1);
 					});
 
 					teamSchedule.Persons.valueHasMutated();
@@ -145,7 +140,7 @@ define([
 				teamSchedule = new teamScheduleViewModel();
 
 				resize.onresize(function () {
-				    teamSchedule.TimeLine.WidthPixels($('.shift').width());
+					teamSchedule.TimeLine.WidthPixels($('.time-line-for').width());
 				});
 
 				teamSchedule.SelectedTeam.subscribe(function () {

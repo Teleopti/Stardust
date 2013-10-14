@@ -465,12 +465,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new ExistingTextRequest());
 		}
 
-		[Given(@"I have no existing requests")]
-		public void GivenIHaveNoExistingRequests()
-		{
-
-		}
-
 		[Given(@"I have a pending text request")]
 		public void GivenIHaveAPendingTextRequest()
 		{

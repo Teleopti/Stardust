@@ -49,16 +49,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private void saveReadModel(PersonScheduleDayReadModel model)
 		{
 			_currentUnitOfWork.Session().CreateSQLQuery(
-				"INSERT INTO ReadModel.PersonScheduleDay (Id,PersonId,TeamId,SiteId,BusinessUnitId,ShiftStart,ShiftEnd,BelongsToDate,Shift) VALUES (:Id,:PersonId,:TeamId,:SiteId,:BusinessUnitId,:ShiftStart,:ShiftEnd,:BelongsToDate,:Shift)")
+				"INSERT INTO ReadModel.PersonScheduleDay (Id,PersonId,TeamId,SiteId,BusinessUnitId,Start,[End],BelongsToDate,Model) VALUES (:Id,:PersonId,:TeamId,:SiteId,:BusinessUnitId,:Start,:End,:BelongsToDate,:Model)")
 			                  .SetGuid("Id", Guid.NewGuid())
 			                  .SetGuid("PersonId", model.PersonId)
 			                  .SetGuid("TeamId", model.TeamId)
 			                  .SetGuid("SiteId", model.SiteId)
 			                  .SetGuid("BusinessUnitId", model.BusinessUnitId)
-			                  .SetParameter("ShiftStart", model.ShiftStart)
-			                  .SetParameter("ShiftEnd", model.ShiftEnd)
+			                  .SetParameter("Start", model.Start)
+			                  .SetParameter("End", model.End)
 			                  .SetDateTime("BelongsToDate", model.BelongsToDate)
-			                  .SetParameter("Shift", model.Shift, NHibernateUtil.Custom(typeof(CompressedString)))
+			                  .SetParameter("Model", model.Model, NHibernateUtil.Custom(typeof(CompressedString)))
 			                  .ExecuteUpdate();
 		}
 

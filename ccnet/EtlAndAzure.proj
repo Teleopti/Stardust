@@ -33,7 +33,7 @@
 
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
 
-	<Target Name="Run" DependsOnTargets="AzureDeploy;RunETL">
+	<Target Name="Run" DependsOnTargets="SQL2005Deploy;AzureDeploy;RunETL">
 		<Message Text="All target executed!" Importance="high" />
 	</Target>
 		
@@ -163,7 +163,7 @@
 		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj"
 				Properties="Configuration=$(Configuration);Platform=AnyCPU"
 				Targets="Build">
-			<Output ItemName="DbManagerExe" TaskParameter="TargetOutputs"/>
+			<!--<Output ItemName="DbManagerExe" TaskParameter="TargetOutputs"/>-->
 		</MSBuild>
 		
 		<Message Importance="high" Text="Compile of Db Manager starting..." />

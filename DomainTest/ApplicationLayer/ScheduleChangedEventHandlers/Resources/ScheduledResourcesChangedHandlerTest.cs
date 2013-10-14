@@ -75,14 +75,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 								new ProjectionChangedEventScheduleDay
 									{
 										Date = _date,
-										Layers = new[]
+										Shift = new ProjectionChangedEventShift
 											{
-												new ProjectionChangedEventLayer
+												Layers = new[]
 													{
-														PayloadId = _skill.Activity.Id.GetValueOrDefault(),
-														StartDateTime = period.StartDateTime,
-														EndDateTime = period.EndDateTime,
-														RequiresSeat = false
+														new ProjectionChangedEventLayer
+															{
+																PayloadId = _skill.Activity.Id.GetValueOrDefault(),
+																StartDateTime = period.StartDateTime,
+																EndDateTime = period.EndDateTime,
+																RequiresSeat = false
+															}
 													}
 											}
 									}
@@ -126,8 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 							{
 								new ProjectionChangedEventScheduleDay
 									{
-										Date = _date,
-										Layers = new ProjectionChangedEventLayer[]{}
+										Date = _date
 									}
 							}
 				});
@@ -164,8 +166,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 							{
 								new ProjectionChangedEventScheduleDay
 									{
-										Date = _date,
-										Layers = new ProjectionChangedEventLayer[]{}
+										Date = _date
 									}
 							}
 			});
@@ -184,29 +185,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 										 .Return(new ProjectionChangedEventLayer[] { });
 
 			_target.Handle(new ProjectionChangedEventForScheduleProjection
-			{
-				IsInitialLoad = true,
-				PersonId = _personId,
-				ScenarioId = _scenarioId,
-				ScheduleDays =
-					new[]
+				{
+					IsInitialLoad = true,
+					PersonId = _personId,
+					ScenarioId = _scenarioId,
+					ScheduleDays =
+						new[]
 							{
 								new ProjectionChangedEventScheduleDay
 									{
 										Date = _date,
-										Layers = new[]
+										Shift = new ProjectionChangedEventShift
 											{
-												new ProjectionChangedEventLayer
-						                             {
-							                             PayloadId = _skill.Activity.Id.GetValueOrDefault(),
-							                             StartDateTime = _period.StartDateTime,
-							                             EndDateTime = _period.EndDateTime,
-							                             RequiresSeat = false
-						                             }
+												Layers = new[]
+													{
+														new ProjectionChangedEventLayer
+															{
+																PayloadId = _skill.Activity.Id.GetValueOrDefault(),
+																StartDateTime = _period.StartDateTime,
+																EndDateTime = _period.EndDateTime,
+																RequiresSeat = false
+															}
+													}
 											}
 									}
 							}
-			});
+				});
 
 			_bus.AssertWasCalled(x => x.Publish(new ScheduledResourcesChangedEvent()), o => o.IgnoreArguments());
 		}
@@ -222,28 +226,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 										 .Return(new ProjectionChangedEventLayer[]{});
 
 			_target.Handle(new ProjectionChangedEvent
-			{
-				PersonId = _personId,
-				ScenarioId = _scenarioId,
-				ScheduleDays =
-					new[]
+				{
+					PersonId = _personId,
+					ScenarioId = _scenarioId,
+					ScheduleDays = new[]
 							{
 								new ProjectionChangedEventScheduleDay
 									{
 										Date = _date,
-										Layers = new[]
+										Shift = new ProjectionChangedEventShift
 											{
-												new ProjectionChangedEventLayer
-						                             {
-							                             PayloadId = _skill.Activity.Id.GetValueOrDefault(),
-							                             StartDateTime = _period.StartDateTime,
-							                             EndDateTime = _period.EndDateTime,
-							                             RequiresSeat = false
-						                             }
+												Layers = new[]
+													{
+														new ProjectionChangedEventLayer
+															{
+																PayloadId = _skill.Activity.Id.GetValueOrDefault(),
+																StartDateTime = _period.StartDateTime,
+																EndDateTime = _period.EndDateTime,
+																RequiresSeat = false
+															}
+													}
 											}
 									}
 							}
-			});
+				});
 
 			_bus.AssertWasCalled(x => x.Publish(new ScheduledResourcesChangedEvent()), o => o.IgnoreArguments());
 		}
@@ -253,28 +259,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		{
 			_personRepository.Stub(x => x.Get(_personId)).Return(null);
 			_target.Handle(new ProjectionChangedEvent
-			{
-				PersonId = _personId,
-				ScenarioId = _scenarioId,
-				ScheduleDays =
-					new[]
+				{
+					PersonId = _personId,
+					ScenarioId = _scenarioId,
+					ScheduleDays =
+						new[]
 							{
 								new ProjectionChangedEventScheduleDay
 									{
 										Date = _date,
-										Layers = new[]
+										Shift = new ProjectionChangedEventShift
 											{
-												new ProjectionChangedEventLayer
-						                             {
-							                             PayloadId = _skill.Activity.Id.GetValueOrDefault(),
-							                             StartDateTime = _period.StartDateTime,
-							                             EndDateTime = _period.EndDateTime,
-							                             RequiresSeat = false
-						                             }
+												Layers = new[]
+													{
+														new ProjectionChangedEventLayer
+															{
+																PayloadId = _skill.Activity.Id.GetValueOrDefault(),
+																StartDateTime = _period.StartDateTime,
+																EndDateTime = _period.EndDateTime,
+																RequiresSeat = false
+															}
+													}
 											}
 									}
 							}
-			});
+				});
 
 			_bus.AssertWasNotCalled(x => x.Publish(new ScheduledResourcesChangedEvent()), o => o.IgnoreArguments());
 		}
@@ -293,28 +302,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_person.ChangeSkillProficiency(_skill,new Percent(0.8), _person.Period(_date));
 
 			_target.Handle(new ProjectionChangedEvent
-			{
-				PersonId = _personId,
-				ScenarioId = _scenarioId,
-				ScheduleDays =
-					new[]
+				{
+					PersonId = _personId,
+					ScenarioId = _scenarioId,
+					ScheduleDays =
+						new[]
 							{
 								new ProjectionChangedEventScheduleDay
 									{
 										Date = _date,
-										Layers = new[]
+										Shift = new ProjectionChangedEventShift
 											{
-												new ProjectionChangedEventLayer
-						                             {
-							                             PayloadId = _skill.Activity.Id.GetValueOrDefault(),
-							                             StartDateTime = _period.StartDateTime,
-							                             EndDateTime = _period.EndDateTime,
-							                             RequiresSeat = false
-						                             }
+												Layers = new[]
+													{
+														new ProjectionChangedEventLayer
+															{
+																PayloadId = _skill.Activity.Id.GetValueOrDefault(),
+																StartDateTime = _period.StartDateTime,
+																EndDateTime = _period.EndDateTime,
+																RequiresSeat = false
+															}
+													}
 											}
 									}
 							}
-			});
+				});
 
 			_bus.AssertWasCalled(x => x.Publish(new ScheduledResourcesChangedEvent()), o => o.IgnoreArguments());
 		}

@@ -75,14 +75,27 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 				{
 					new PersonScheduleDayReadModel
 						{
-							Shift ="{Projection:[{Start:'2013-07-08T06:30:00Z',End:'2013-07-08T08:30:00Z',Title:'Phone'}]}"
+							Model = Newtonsoft.Json.JsonConvert.SerializeObject(new Model
+								{
+									Shift = new Shift
+										{
+											Projection = new[]
+												{
+													new SimpleLayer
+														{
+															Start = new DateTime(2013, 7, 8, 6, 30, 0, DateTimeKind.Utc),
+															End = new DateTime(2013, 7, 8, 8, 30, 0, DateTimeKind.Utc),
+														}
+												}
+										}
+								}),
 						}
 				});
 			_repositoryFactory.Stub(x => x.CreatePersonScheduleDayReadModelFinder(_unitOfWork)).Return(_personScheduleDayReadModelFinder);
 			_permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
 			                   .Return(true);
 
-			var deserializer = new NewtonsoftJsonDeserializer<ExpandoObject>();
+			var deserializer = new NewtonsoftJsonDeserializer();
 			var calendarlinkid = new CalendarLinkId
 				{
 					DataSourceName = dataSourceName,
@@ -93,6 +106,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 			                                       _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider
 				);
 			var result = target.Generate(calendarlinkid);
+
 			_currentPrincipalContext.AssertWasCalled(x => x.SetCurrentPrincipal(person, _dataSource, null));
 			_roleToPrincipalCommand.AssertWasCalled(
 				x => x.Execute(Thread.CurrentPrincipal as ITeleoptiPrincipal, _unitOfWork, _personRepository));
@@ -116,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 			_repositoryFactory.Stub(x => x.CreatePersonScheduleDayReadModelFinder(_unitOfWork)).Return(_personScheduleDayReadModelFinder);
 			_permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShareCalendar))
 							   .Return(true);
-			var deserializer = new NewtonsoftJsonDeserializer<ExpandoObject>();
+			var deserializer = new NewtonsoftJsonDeserializer();
 			var target = new CalendarLinkGenerator(_repositoryFactory, _dataSourcesProvider, deserializer, new Now(),
 												   _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider
 				);
@@ -143,7 +157,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 			                   .Return(false);
 
 			var target = new CalendarLinkGenerator(_repositoryFactory, _dataSourcesProvider,
-			                                       new NewtonsoftJsonDeserializer<ExpandoObject>(), null,
+			                                       new NewtonsoftJsonDeserializer(), null,
 			                                       _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider);
 			var calendarlinkid = new CalendarLinkId
 				{
@@ -176,7 +190,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 				};
 
 			var target = new CalendarLinkGenerator(_repositoryFactory, _dataSourcesProvider,
-			                                       new NewtonsoftJsonDeserializer<ExpandoObject>(), null,
+			                                       new NewtonsoftJsonDeserializer(), null,
 			                                       _currentPrincipalContext, _roleToPrincipalCommand, _permissionProvider
 				);
 			target.Generate(calendarlinkid);

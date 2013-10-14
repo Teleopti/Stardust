@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					return;
 				}
 				checkIfAuthorized(person);
-				var period = person.SchedulePeriod(new DateOnly(command.Date.DateTime));
+				var period = person.SchedulePeriod(command.Date.ToDateOnly());
 				if (period == null)
 				{
 					command.Result = new CommandResultDto();

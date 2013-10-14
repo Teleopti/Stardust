@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -99,6 +100,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
+		public void ShouldMapDayOff()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var model = new Model
+				{
+					DayOff = new DayOff
+						{
+							Title = "Day off"
+						}
+				};
+
+			var result = target.Map(new PersonScheduleData {Model = model});
+
+			result.IsDayOff.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldMapAbsenceId()
 		{
 			var target = new PersonScheduleViewModelMapper();
@@ -109,27 +127,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			result.Absences.Single().Id.Should().Be(absence.Id.Value.ToString());
 		}
-
-		private dynamic MakeLayer(string Color = "", DateTime? Start = null, int Minutes = 0,
-		                          bool isAbsenceConfidential = false)
-		{
-			dynamic layer = new ExpandoObject();
-			layer.Color = Color;
-			layer.Start = Start.HasValue ? Start : null;
-			layer.Minutes = Minutes;
-			layer.IsAbsenceConfidential = isAbsenceConfidential;
-			return layer;
-		}
-
+		
 		[Test]
 		public void ShouldMapLayers()
 		{
 			var target = new PersonScheduleViewModelMapper();
 
-			dynamic shift = new ExpandoObject();
-			shift.Projection = new[] { MakeLayer(), MakeLayer() };
+			var model = new Model
+				{
+					Shift = new Shift
+						{
+							Projection = new[] {new SimpleLayer(), new SimpleLayer()}
+						}
+				};
 
-			var result = target.Map(new PersonScheduleData { Shift = shift });
+			var result = target.Map(new PersonScheduleData { Model = model });
 
 			result.Layers.Count().Should().Be(2);
 		}
@@ -139,10 +151,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var target = new PersonScheduleViewModelMapper();
 
-			dynamic shift = new ExpandoObject();
-			shift.Projection = new[] { MakeLayer("Green")};
+			var model = new Model
+				{
+					Shift = new Shift
+						{
+							Projection = new[] {new SimpleLayer {Color = "Green"}}
+						}
+				};
 
-			var result = target.Map(new PersonScheduleData {Shift = shift });
+			var result = target.Map(new PersonScheduleData {Model = model });
 
 			result.Layers.Single().Color.Should().Be("Green");
 		}
@@ -152,10 +169,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var target = new PersonScheduleViewModelMapper();
 
-			dynamic shift = new ExpandoObject();
-			shift.Projection = new[] {MakeLayer("Green", isAbsenceConfidential: true)};
+			var shift = new Shift {Projection = new[] {new SimpleLayer {Color = "Green", IsAbsenceConfidential = true}}};
 
-			var result = target.Map(new PersonScheduleData { Shift = shift });
+			var result = target.Map(new PersonScheduleData { Model = new Model { Shift = shift } });
 
 			result.Layers.Single().Color.Should().Be(ConfidentialPayloadValues.DisplayColor.ToHtml());
 		}
@@ -165,10 +181,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var target = new PersonScheduleViewModelMapper();
 
-			dynamic shift = new ExpandoObject();
-			shift.Projection = new[] { MakeLayer("Green", isAbsenceConfidential: true) };
+			var shift = new Shift {Projection = new[] {new SimpleLayer {Color = "Green", IsAbsenceConfidential = true}}};
 
-			var result = target.Map(new PersonScheduleData { Shift = shift, HasViewConfidentialPermission = true});
+			var result = target.Map(new PersonScheduleData { Model = new Model{ Shift = shift}, HasViewConfidentialPermission = true});
 
 			result.Layers.Single().Color.Should().Be("Green");
 		}
@@ -182,10 +197,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var person = new Person();
 			var personTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
 			person.PermissionInformation.SetDefaultTimeZone(personTimeZone);
-			dynamic shift = new ExpandoObject();
-			shift.Projection = new[] { MakeLayer("", startTime) };
+			var shift = new Shift {Projection = new[] {new SimpleLayer {Start = startTime}}};
 
-			var result = target.Map(new PersonScheduleData {Shift = shift, Person = person});
+			var result = target.Map(new PersonScheduleData {Model = new Model{Shift = shift}, Person = person});
 
 			var personStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, person.PermissionInformation.DefaultTimeZone()).ToFixedDateTimeFormat();
 			result.Layers.Single().Start.Should().Be(personStartTime);
@@ -196,10 +210,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var target = new PersonScheduleViewModelMapper();
 
-			dynamic shift = new ExpandoObject();
-			shift.Projection = new[] { MakeLayer(Color: "",Minutes: 60) };
+			var shift = new Shift {Projection = new[] {new SimpleLayer {Minutes = 60}}};
 
-			var result = target.Map(new PersonScheduleData { Shift = shift });
+			var result = target.Map(new PersonScheduleData { Model = new Model{Shift = shift} });
 
 			result.Layers.Single().Minutes.Should().Be(60);
 		}

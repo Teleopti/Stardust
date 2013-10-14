@@ -217,28 +217,6 @@ namespace Teleopti.Ccc.WinCode.Common
 			return sender != this && GetType() == sender.GetType() && !IsProjectionLayer;
 		}
 
-		public void TimeChanged(FrameworkElement parent, FrameworkElement panel, double horizontalChange)
-		{
-			if (IsMovePermitted())
-			{
-				var t = DateTimePeriodPanel.GetTimeSpanFromHorizontalChange(parent, panel, horizontalChange, _interval.TotalMinutes);
-				calculateMove(t);
-				MoveLayer(t);
-				IsChanged = true;
-			}
-		}
-
-		private void calculateMove(TimeSpan t)
-		{
-			var p = Period.MovePeriod(t);
-			var start = p.StartDateTime;
-			var end = p.EndDateTime;
-			if (start == end) end = end.Add(Interval);
-			if (TimeSpan.FromMinutes(start.Minute) == Interval) start.ToInterval((int)Interval.TotalMinutes);
-			if (TimeSpan.FromMinutes(end.Minute) == Interval) end.ToInterval((int)Interval.TotalMinutes);
-			Period = new DateTimePeriod(start, end);
-		}
-
 		//and payload....
 		public virtual void UpdatePeriod()
 		{
@@ -293,21 +271,22 @@ namespace Teleopti.Ccc.WinCode.Common
 			}
 		}
 
-		public void TimeChanged(FrameworkElement parent, double change)
+		public void TimeChanged(FrameworkElement panel, double change)
 		{
 			if (IsMovePermitted())
 			{
-				TimeSpan t = DateTimePeriodPanel.GetTimeSpanFromHorizontalChange(parent, change, _interval.TotalMinutes);
-				calculateMove(t);
-				MoveLayer(t);
-				IsChanged = true;
+				var current = Period.StartDateTime;
+				StartTimeChanged(panel, change * 0.6);
+				EndTimeChanged(panel, change * 0.6);
+				TimeSpan delta = Period.StartDateTime.Subtract(current);
+				MoveLayer(delta);
 			}
+			
 		}
 		public void EndTimeChanged(FrameworkElement parent, double change)
 		{
 			if (IsMovePermitted())
 			{
-
 				TimeSpan t = DateTimePeriodPanel.GetTimeSpanFromHorizontalChange(parent, change, _interval.TotalMinutes);
 				if (Period.EndDateTime.Add(t) >= Period.StartDateTime.Add(Interval))
 				{

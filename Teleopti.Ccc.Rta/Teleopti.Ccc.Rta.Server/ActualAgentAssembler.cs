@@ -80,10 +80,10 @@ namespace Teleopti.Ccc.Rta.Server
 				if (stateGroup != null)
 				{
 					agentState.State = stateGroup.StateGroupName;
-					foundAlarm = _alarmMapper.GetAlarm(agentState.ScheduledId, stateGroup.StateGroupId);
+					foundAlarm = _alarmMapper.GetAlarm(agentState.ScheduledId, stateGroup.StateGroupId, agentState.BusinessUnit);
 				}
 				else
-					foundAlarm = _alarmMapper.GetAlarm(agentState.ScheduledId, Guid.Empty);
+					foundAlarm = _alarmMapper.GetAlarm(agentState.ScheduledId, Guid.Empty, agentState.BusinessUnit);
 
 				if (foundAlarm != null)
 				{
@@ -214,11 +214,11 @@ namespace Teleopti.Ccc.Rta.Server
 			{
 				newState.StateId = state.StateGroupId;
 				newState.State = state.StateGroupName;
-				foundAlarm = _alarmMapper.GetAlarm(activityId, state.StateGroupId);
+				foundAlarm = _alarmMapper.GetAlarm(activityId, state.StateGroupId, businessUnitId);
 			}
 			else
-				foundAlarm = _alarmMapper.GetAlarm(activityId, Guid.Empty);
-			
+				foundAlarm = _alarmMapper.GetAlarm(activityId, Guid.Empty, businessUnitId);
+
 			if (foundAlarm != null)
 			{
 				newState.AlarmName = foundAlarm.Name;
@@ -229,10 +229,10 @@ namespace Teleopti.Ccc.Rta.Server
 				newState.State = foundAlarm.StateGroupName;
 				newState.StateId = foundAlarm.StateGroupId;
 				newState.StateStart = timestamp.Add(timeInState.Negate());
-
-				if (previousState != null && previousState.AlarmId == newState.AlarmId)
-					newState.StateStart = previousState.StateStart;
 			}
+
+			if (previousState != null && previousState.AlarmId == newState.AlarmId)
+				newState.StateStart = previousState.StateStart;
 
 			if (scheduleLayer != null)
 			{
@@ -252,10 +252,12 @@ namespace Teleopti.Ccc.Rta.Server
 			//if same don't send it, but should be saved to db to keep batch intact
 			if (previousState != null && newState.Equals(previousState))
 			{
-				LoggingSvc.InfoFormat("The new state is equal to the old state for person {0}, will not send or save",
+				LoggingSvc.InfoFormat("The new state is equal to the old state for person {0}, will send change over message broker",
 				                      newState.PersonId);
-				return null;
+				newState.SendOverMessageBroker = false;
 			}
+			else
+				newState.SendOverMessageBroker = true;
 
 			return newState;
 		}

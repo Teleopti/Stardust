@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			IList<SchedulePartDto> returnList = new List<SchedulePartDto>();
 
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(query.TimeZoneId);
-			var datePeriod = new DateOnlyPeriod(new DateOnly(query.StartDate.DateTime), new DateOnly(query.EndDate.DateTime));
+			var datePeriod = new DateOnlyPeriod(query.StartDate.ToDateOnly(), query.EndDate.ToDateOnly());
 			var period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1));
 
 			_dateTimePeriodAssembler.TimeZone = timeZone;

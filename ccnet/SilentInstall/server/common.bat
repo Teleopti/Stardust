@@ -4,16 +4,10 @@
 ::=====================
 IF %SSL% EQU 1 (
 SET DNS_ALIAS=https://%AppServer%/
-SET HTTPGETENABLED=false
-SET HTTPSGETENABLED=true
-SET SDK_SSL_MEX_BINDING=mexHttpsBinding
-SET SDK_SSL_SECURITY_MODE=Transport
+SET SDK_SSL=True
 ) ELSE (
 SET DNS_ALIAS=http://%AppServer%/
-SET HTTPGETENABLED=true
-SET HTTPSGETENABLED=false
-SET SDK_SSL_MEX_BINDING=mexHttpBinding
-SET SDK_SSL_SECURITY_MODE=TransportCredentialOnly
+SET SDK_SSL=False
 )
 
 SET SDK_CRED_PROT=Ntlm
@@ -83,4 +77,11 @@ SET PM_AUTH_MODE=Windows
 SET PM_PROCESS_CUBE=False
 SET PM_ASMX=PM not installed
 SET PM_SERVICE=PM not installed
+)
+::PM vs. ETL Service Account
+IF "%PM_INSTALL%"=="True" (
+	IF "%PM_AUTH_MODE%"=="Anonymous" (
+	SET ETLUSERNAME=%PM_ANONYMOUS_DOMAINUSER%
+	SET ETLPASSWORD=%PM_ANONYMOUS_PWD%
+	)
 )

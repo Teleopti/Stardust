@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel
@@ -15,58 +16,77 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 			_serializer = serializer;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public IEnumerable<PersonScheduleDayReadModel> GetReadModels(ProjectionChangedEventBase schedule)
+		public IEnumerable<PersonScheduleDayReadModel> MakeReadModels(ProjectionChangedEventBase schedule)
 		{
 			var person = _personRepository.Load(schedule.PersonId);
 
 			foreach (var scheduleDay in schedule.ScheduleDays)
 			{
-				if (scheduleDay.Layers.Count == 0) continue;
-
-				var ret = new PersonScheduleDayReadModel();
-
-				ret.PersonId = schedule.PersonId;
-				ret.TeamId = scheduleDay.TeamId;
-				ret.SiteId = scheduleDay.SiteId;
-				ret.BusinessUnitId = schedule.BusinessUnitId;
-				ret.Date = scheduleDay.Date;
-
-				if (scheduleDay.StartDateTime.HasValue && scheduleDay.EndDateTime.HasValue)
-				{
-					ret.ShiftStart = scheduleDay.StartDateTime;
-					ret.ShiftEnd = scheduleDay.EndDateTime;
-				}
-
-				var shift = new Shift
-				{
-					Date = scheduleDay.Date,
-					FirstName = person.Name.FirstName,
-					LastName = person.Name.LastName,
-					EmploymentNumber = person.EmploymentNumber,
-					Id = schedule.PersonId.ToString(),
-					ContractTimeMinutes = (int)scheduleDay.ContractTime.TotalMinutes,
-					WorkTimeMinutes = (int)scheduleDay.WorkTime.TotalMinutes,
-					Projection = new List<SimpleLayer>()
-				};
-
-				foreach (var layer in scheduleDay.Layers)
-				{
-					shift.Projection.Add(new SimpleLayer
+				var readModel = new PersonScheduleDayReadModel
 					{
-						Color = ColorTranslator.ToHtml(Color.FromArgb(layer.DisplayColor)),
-						Title = layer.Name,
-						Start = layer.StartDateTime,
-						End = layer.EndDateTime,
-						Minutes = (int)layer.EndDateTime.Subtract(layer.StartDateTime).TotalMinutes,
-						IsAbsenceConfidential = layer.IsAbsenceConfidential
-					});
+						PersonId = schedule.PersonId,
+						TeamId = scheduleDay.TeamId,
+						SiteId = scheduleDay.SiteId,
+						BusinessUnitId = schedule.BusinessUnitId,
+						Date = scheduleDay.Date
+					};
+
+				var layers = new List<SimpleLayer>();
+
+				if (scheduleDay.Shift != null)
+				{
+					readModel.Start = scheduleDay.Shift.StartDateTime;
+					readModel.End = scheduleDay.Shift.EndDateTime;
+
+					var ls = from layer in scheduleDay.Shift.Layers
+					         select new SimpleLayer
+						         {
+							         Color = ColorTranslator.ToHtml(Color.FromArgb(layer.DisplayColor)),
+							         Title = layer.Name,
+							         Start = layer.StartDateTime,
+							         End = layer.EndDateTime,
+							         Minutes = (int) layer.EndDateTime.Subtract(layer.StartDateTime).TotalMinutes,
+							         IsAbsenceConfidential = layer.IsAbsenceConfidential
+						         };
+
+					layers.AddRange(ls);
 				}
 
-				ret.Shift = _serializer.SerializeObject(shift);
+				if (scheduleDay.DayOff != null)
+				{
+					readModel.Start = scheduleDay.DayOff.StartDateTime;
+					readModel.End = scheduleDay.DayOff.EndDateTime;
+				}
 
-				yield return ret;
+				var model = new Model
+					{
+						Id = schedule.PersonId.ToString(),
+						Date = scheduleDay.Date,
+						FirstName = person.Name.FirstName,
+						LastName = person.Name.LastName,
+						EmploymentNumber = person.EmploymentNumber,
+						Shift = new Shift
+							{
+								ContractTimeMinutes = (int) scheduleDay.ContractTime.TotalMinutes,
+								WorkTimeMinutes = (int) scheduleDay.WorkTime.TotalMinutes,
+								Projection = layers,
+								IsFullDayAbsence = scheduleDay.IsFullDayAbsence
+							},
+						DayOff = scheduleDay.DayOff != null
+							         ? new DayOff
+								         {
+									         Title = scheduleDay.Name,
+									         Start = scheduleDay.DayOff.StartDateTime,
+									         End = scheduleDay.DayOff.EndDateTime
+								         }
+							         : null
+					};
+
+				readModel.Model = _serializer.SerializeObject(model);
+
+				yield return readModel;
 			}
 		}
+
 	}
 }

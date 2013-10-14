@@ -7,13 +7,19 @@ namespace Teleopti.Ccc.Domain.Common
 	{
 		 public bool Randomize(int seed)
 		 {
-		 	var rnd = new Random(seed);
-		 	int value = rnd.Next(0, 2);
+			 var rnd = new Random(seed);
+			 int falseCount = 0;
+			 for (int i = 0; i < 100; i++)
+			 {
+				 int value = rnd.Next(0, 2);
+				 if (value < 1)
+					 falseCount++;
+			 }
 
-		 	if (value == 0)
-				return false;
+			 if (falseCount > 50)
+				 return false;
 
-		 	return true;
+			 return true;
 		 }
 	}
 }

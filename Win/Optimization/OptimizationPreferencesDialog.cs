@@ -37,13 +37,17 @@ namespace Teleopti.Ccc.Win.Optimization
 		private readonly IList<IActivity> _availableActivity;
 
 		private readonly int _resolution;
+		private readonly IList<IActivity> _allNoneDeletedActivities;
 		private IList<IGroupPageLight> _groupPagesForTeamBlockPer;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public OptimizationPreferencesDialog(
 			IOptimizationPreferences preferences,
 			ISchedulerGroupPagesProvider groupPagesProvider,
-			IList<IScheduleTag> scheduleTags, IList<IActivity> availableActivity, int resolution)
+			IList<IScheduleTag> scheduleTags, 
+			IList<IActivity> availableActivity, 
+			int resolution, 
+			IList<IActivity> allNoneDeletedActivities )
 			: this()
 		{
 			Preferences = preferences;
@@ -57,6 +61,7 @@ namespace Teleopti.Ccc.Win.Optimization
 			_scheduleTags = scheduleTags;
 			_availableActivity = availableActivity;
 			_resolution = resolution;
+			_allNoneDeletedActivities = allNoneDeletedActivities;
 			_eventAggregator = new EventAggregator();
 		}
 
@@ -73,7 +78,7 @@ namespace Teleopti.Ccc.Win.Optimization
 			dayOffPreferencesPanel1.Initialize(Preferences.DaysOff);
 			extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _availableActivity);
 			advancedPreferencesPanel1.Initialize(Preferences.Advanced);
-			shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution);
+			shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution, _allNoneDeletedActivities);
 			panels = new List<IDataExchange> { generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, shiftsPreferencesPanel1, advancedPreferencesPanel1 };
 
 			AddToHelpContext();

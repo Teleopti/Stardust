@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		/// <summary>
 		/// The layers for this shift
 		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		public ICollection<ProjectionChangedEventScheduleDay> ScheduleDays { get; set; }
 
 		/// <summary>

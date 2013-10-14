@@ -2,7 +2,7 @@ define([
         'knockout',
         'navigation',
         'views/personschedule/layer',
-        'views/personschedule/timeline',
+        'shared/timeline',
         'views/personschedule/addfulldayabsenceform',
         'views/personschedule/absencelistitem',
         'helpers',
@@ -23,8 +23,14 @@ define([
             var self = this;
 
             this.Loading = ko.observable(false);
-
-            this.Layers = ko.observableArray();
+            
+            this.Layers = ko.observableArray([]);
+	        
+            this.IsDayOff = ko.observable(false);
+	        
+            this.IsShift = ko.computed(function () {
+            	return !self.IsDayOff();
+            });
 
             this.Absences = ko.observableArray();
 
@@ -50,7 +56,8 @@ define([
                 self.Name(data.Name);
                 self.Site(data.Site);
                 self.Team(data.Team);
-
+                self.IsDayOff(data.IsDayOff);
+	            
                 self.Layers([]);
                 var layers = ko.utils.arrayMap(data.Layers, function(l) {
                     l.Date = self.Date();

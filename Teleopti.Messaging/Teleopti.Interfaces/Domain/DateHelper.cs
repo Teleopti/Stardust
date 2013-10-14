@@ -29,7 +29,7 @@ namespace Teleopti.Interfaces.Domain
 		public static readonly IList<int> Iso8601Cultures = new List<int> { 2068, 1044, 1053, 1031, 3079, 2055, 1030, 1035, 1036, 2057, 3082 };
 
         private readonly static DateTime _minSmallDateTime = new DateTime(1901,1,1);
-        private readonly static DateTime _maxSmallDateTime = new DateTime(2078,1,1);
+        private readonly static DateTime _maxSmallDateTime = new DateTime(2077,1,1);
 
 		/// <summary>
 		/// Returns quarter from month.

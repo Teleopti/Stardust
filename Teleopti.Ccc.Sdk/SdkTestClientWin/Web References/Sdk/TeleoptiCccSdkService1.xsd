@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd0" namespace="http://schemas.ccc.teleopti.com/sdk/2010/04/" />
+  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:simpleType name="AuthenticationTypeOptionDto">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Application" />
@@ -18,6 +19,41 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ScheduleTagDto" nillable="true" type="tns:ScheduleTagDto" />
+  <xs:complexType name="ArrayOfPayrollBaseExportDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PayrollBaseExportDto" nillable="true" type="tns:PayrollBaseExportDto" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPayrollBaseExportDto" nillable="true" type="tns:ArrayOfPayrollBaseExportDto" />
+  <xs:complexType name="PayrollBaseExportDto">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q2="http://schemas.ccc.teleopti.com/sdk/2010/04/" base="q2:Dto">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AbsencePayrollCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="BusinessUnitName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ContractName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ContractTime" type="ser:duration" />
+          <xs:element minOccurs="0" name="Date" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="DayOffPayrollCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="EmploymentNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="EndDate" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PaidTime" type="ser:duration" />
+          <xs:element minOccurs="0" name="PartTimePercentageName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PartTimePercentageNumber" type="xs:int" />
+          <xs:element minOccurs="0" name="PayrollCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ShiftCategoryName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="SiteName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="TeamName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Time" type="ser:duration" />
+          <xs:element minOccurs="0" name="WorkTime" type="ser:duration" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PayrollBaseExportDto" nillable="true" type="tns:PayrollBaseExportDto" />
   <xs:simpleType name="RequestStatusDto">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Pending" />

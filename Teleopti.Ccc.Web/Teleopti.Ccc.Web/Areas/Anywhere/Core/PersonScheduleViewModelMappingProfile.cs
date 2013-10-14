@@ -16,11 +16,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				.ForMember(x => x.Name, o => o.MapFrom(s => s.Person.Name.ToString()))
 				.ForMember(x => x.Team, o => o.MapFrom(s => s.Person.MyTeam(new DateOnly(s.Date)).Description.Name))
 				.ForMember(x => x.Site, o => o.MapFrom(s => s.Person.MyTeam(new DateOnly(s.Date)).Site.Description.Name))
+				.ForMember(x => x.IsDayOff, o => o.MapFrom(s=> s.Model.DayOff != null))
 				.ForMember(x => x.Layers, o => o.ResolveUsing(s =>
 				{
-					if (s.Shift == null)
+					if (s.Model == null)
 						return null;
-					var layers = s.Shift.Projection as IEnumerable<dynamic>;
+					var layers = s.Model.Shift.Projection;
 					var result = new List<PersonScheduleViewModelLayer>();
 
 					foreach (var layer in layers)

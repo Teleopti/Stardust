@@ -30,8 +30,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public void Handle(PersonActivityStarting message)
 		{
             Logger.Info("Start consuming PersonalWithExternalLogonOn message.");
-			DateTime? startTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
-			Logger.InfoFormat("Next activity for Person: {0}, StartTime: {1}.", message.PersonId, startTime);
 			
 			try
 			{
@@ -43,19 +41,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
                 Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
 			}
 
-			if (startTime == null)
+			DateTime? startTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
+			if (!startTime.HasValue)
 			{
 				Logger.InfoFormat("No next activity found for Person: {0}. Not putting message on the queue", message.PersonId);
 				return;
 			}
+			Logger.InfoFormat("Next activity for Person: {0}, StartTime: {1}.", message.PersonId, startTime);
 
-			_serviceBus.DelaySend(startTime.Value, new PersonActivityStarting
-				{
-				Datasource = message.Datasource,
-				BusinessUnitId = message.BusinessUnitId,
-				PersonId = message.PersonId,
-				Timestamp = DateTime.Now
-			});
+			_serviceBus.DelaySend(
+				TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(startTime.Value, DateTimeKind.Unspecified), TimeZoneInfo.Local),
+				new PersonActivityStarting
+					{
+						Datasource = message.Datasource,
+						BusinessUnitId = message.BusinessUnitId,
+						PersonId = message.PersonId,
+						Timestamp = DateTime.UtcNow
+					});
 			Logger.InfoFormat("Delay Message successfully sent to ServiceBus BU: {0}, Person: {1}, SendTime: {2}.", message.BusinessUnitId, message.PersonId, startTime);
 		}
 
@@ -63,15 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public void Handle(ScheduleProjectionReadOnlyChanged message)
 		{
             Logger.Info("Start consuming ScheduleProjectionReadOnlyChanged message.");
-
-		    if (message.ActivityStartDateTime > DateTime.UtcNow.AddDays(1) || message.ActivityEndDateTime < DateTime.UtcNow)
-		    {
-				Logger.Info("Updated activity is not within the range of today or tomorow. Ignoring this update.");
-		        return;
-		    }
-
-			DateTime? startTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
-			Logger.InfoFormat("Next activity for Person: {0}, StartTime: {1}.", message.PersonId, startTime);
+			
 			try
 			{
                 _teleoptiRtaService.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
@@ -81,19 +75,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			{
                 Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
 			}
-			if (startTime == null)
+
+			DateTime? startTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
+			if (!startTime.HasValue || startTime < message.ActivityStartDateTime)
 			{
-				Logger.InfoFormat("No next activity found for Person: {0}. Not putting message on the queue", message.PersonId);
+				Logger.InfoFormat(
+					"No next activity, or schedule update is after next activity start date: {0} for Person: {1}. Not putting message on the queue",
+					message.ActivityStartDateTime,
+					message.PersonId);
 				return;
 			}
 
-			_serviceBus.DelaySend(startTime.Value, new PersonActivityStarting
-				{
-					Datasource = message.Datasource,
-					BusinessUnitId = message.BusinessUnitId,
-					PersonId = message.PersonId,
-					Timestamp = DateTime.Now
-				});
+			Logger.InfoFormat("Next activity for Person: {0}, StartTime: {1}.", message.PersonId, startTime);
+			_serviceBus.DelaySend(
+				TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(startTime.Value, DateTimeKind.Unspecified), TimeZoneInfo.Local),
+				new PersonActivityStarting
+					{
+						Datasource = message.Datasource,
+						BusinessUnitId = message.BusinessUnitId,
+						PersonId = message.PersonId,
+						Timestamp = DateTime.UtcNow
+					});
 			Logger.InfoFormat("Delay Message successfully sent to ServiceBus BU: {0}, Person: {1}, SendTime: {2}.", message.BusinessUnitId, message.PersonId, startTime);
 		}
 	}
