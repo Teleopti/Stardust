@@ -15,5 +15,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			DataMaker.Data().Apply(team);
 		}
 
+		[Given(@"there is a team named '(.*)' on site '(.*)'")]
+		[Given(@"there is a team named '(.*)' on '(.*)'")]
+		public void GivenThereIsATeamNamedOnSite(string name, string site)
+		{
+			DataMaker.Data().Apply(new TeamConfigurable
+				{
+					Name = name,
+					Site = site
+				});
+		}
+
 	}
 }

@@ -112,7 +112,12 @@
       <DependentUpon>ViewGroupSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\PartTimePercentageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\SiteStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsKnockoutExtensions.cs" />
+    <Compile Include="Data\Setups\Common\RandomName.cs" />
+    <Compile Include="Data\Setups\Generic\PartTimePercentageConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\SiteConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\OvertimeAvailabilityConfigurable.cs" />
     <Compile Include="Bindings\Generic\OvertimeAvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />

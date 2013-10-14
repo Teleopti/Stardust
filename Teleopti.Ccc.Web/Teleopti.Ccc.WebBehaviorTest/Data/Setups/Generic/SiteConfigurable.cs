@@ -1,23 +1,22 @@
-using System;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common
+namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 {
-	public class CommonSite : IDataSetup
+	public class SiteConfigurable : IDataSetup
 	{
-		public ISite Site;
+		public string Name { get; set; }
 
 		public void Apply(IUnitOfWork uow)
 		{
 			var businessUnit = GlobalDataMaker.Data().Data<CommonBusinessUnit>().BusinessUnit;
 
-			Site = SiteFactory.CreateSimpleSite(RandomName.Make("Common site"));
+			var site = SiteFactory.CreateSimpleSite(Name);
 			var siteRepository = new SiteRepository(uow);
-			siteRepository.Add(Site);
-			businessUnit.AddSite(Site);
+			siteRepository.Add(site);
+			businessUnit.AddSite(site);
 		}
 	}
 }
