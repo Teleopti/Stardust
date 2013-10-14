@@ -10,12 +10,9 @@ Background:
 	And there is a team named 'Team red' on 'The site'
 	And there is a contract named 'A contract'
 	And there is a contract named 'Another contract'
-	And there is a workflow control set with
-	| Field                      | Value              |
-	| Name                       | Published schedule |
-	| Schedule published to date | 2013-12-01         |
-	And 'Pierre Baldi' have the workflow control set 'Published schedule'
-	And 'John Smith' have the workflow control set 'Published schedule'
+	And there is a workflow control set named 'Published' publishing schedules until '2013-12-01'
+	And 'Pierre Baldi' has the workflow control set publishing schedules until '2013-12-01'
+	And 'John Smith' has the workflow control set publishing schedules until '2013-12-01'
 	And I have a role with
 	| Field              | Value                |
 	| Access to team     | Team green, Team red |
