@@ -1,8 +1,11 @@
 ﻿@ignore
 Feature: View group schedule
-	In order to know when my colleagues work
+	In order to contact agents with a specific skill
+	or beloning to specific team
+	or that are part-timers
+	or are students
 	As a team leader
-	I want to see the schedules for other groups
+	I want to see the schedules grouped by these criteria
 
 Background:
 	Given there is a site named 'The site'
@@ -10,9 +13,8 @@ Background:
 	And there is a team named 'Team red' on 'The site'
 	And there is a contract named 'A contract'
 	And there is a contract named 'Another contract'
-	And there is a workflow control set named 'Published' publishing schedules until '2013-12-01'
-	And 'Pierre Baldi' has the workflow control set publishing schedules until '2013-12-01'
-	And 'John Smith' has the workflow control set publishing schedules until '2013-12-01'
+	And 'Pierre Baldi' has a workflow control set publishing schedules until '2013-12-01'
+	And 'John Smith' has a workflow control set publishing schedules until '2013-12-01'
 	And I have a role with
 	| Field              | Value                |
 	| Access to team     | Team green, Team red |
@@ -30,6 +32,19 @@ Scenario: View group picker options
 	| Kontrakt/Another contract           |
 	| Kontraktsschema/A contract schedule |
 	| Deltidsprocent/Part time percentage |
+
+Scenario: Order groupings like business heirarchy, contract, contract schedule, part time percentage, note, shiftbag, skill
+	Given there is a contract schedule named 'A contract schedule'
+	And there is a part time percentage named 'Part time percentage'
+	When I view schedules for '2013-10-10'
+	Then I should see 'The site' before 'Kontrakt'
+	Then I should see 'Kontrakt' before 'Kontraktsschema'
+	Then I should see 'Kontraktsschema' before 'Deltidsprocent'
+
+Scenario: Order groups in alphabetical order
+	When I view schedules for '2013-10-10'
+	Then I should see 'Team green' before 'Team red'
+	Then I should see 'A contract' before 'Another contract'
 
 Scenario: View group schedule
 	And 'John Smith' has a shift on '2013-10-10'
