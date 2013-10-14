@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common
 
 		public void Apply(IUnitOfWork uow)
 		{
-			PartTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage(RandomName.Make("Common PartTimePercentage"));
+			PartTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage(DefaultName.Make("Common PartTimePercentage"));
 			var repository = new Repository(uow);
 			repository.Add(PartTimePercentage);
 		}

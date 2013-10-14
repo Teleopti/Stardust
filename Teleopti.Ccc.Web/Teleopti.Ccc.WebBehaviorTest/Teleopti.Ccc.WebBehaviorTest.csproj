@@ -115,7 +115,7 @@
     <Compile Include="Bindings\Generic\PartTimePercentageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SiteStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsKnockoutExtensions.cs" />
-    <Compile Include="Data\Setups\Common\RandomName.cs" />
+    <Compile Include="Data\Setups\DefaultName.cs" />
     <Compile Include="Data\Setups\Generic\PartTimePercentageConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\SiteConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\OvertimeAvailabilityConfigurable.cs" />

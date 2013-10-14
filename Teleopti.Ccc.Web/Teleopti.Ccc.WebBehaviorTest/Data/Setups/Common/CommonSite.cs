@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common
 		{
 			var businessUnit = GlobalDataMaker.Data().Data<CommonBusinessUnit>().BusinessUnit;
 
-			Site = SiteFactory.CreateSimpleSite(RandomName.Make("Common site"));
+			Site = SiteFactory.CreateSimpleSite(DefaultName.Make("Common site"));
 			var siteRepository = new SiteRepository(uow);
 			siteRepository.Add(Site);
 			businessUnit.AddSite(Site);
