@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			DataMaker.Person(person).Apply(userWorkflowControlSet);
 		}
 
-		[Given(@"'(.*)' has the workflow control set publishing schedules until '(.*)'")]
-		[Given(@"(I) have the workflow control set publishing schedules until '(.*)'")]
+		[Given(@"'(.*)' has a workflow control set publishing schedules until '(.*)'")]
+		[Given(@"(I) have a workflow control set publishing schedules until '(.*)'")]
 		public void GivenHaveTheWorkflowControlSetPublishingSchedulesUntil(string person, string publishedToDate)
 		{
 			var workflowControlSet = new WorkflowControlSetConfigurable {SchedulePublishedToDate = publishedToDate};
