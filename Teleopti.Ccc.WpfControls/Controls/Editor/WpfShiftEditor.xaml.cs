@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
             EditorShiftUpdated(SchedulePart);
             //Update the projection
             _model.Layers.CreateProjectionViewModels(_model.SchedulePart);
-            _model.ZoomToPeriod(_model.Layers.TotalDateTimePeriod(true));
+            _model.ZoomToPeriod(_model.Layers.TotalDateTimePeriod(false));
         }
 
         //Delegates to IShiftEditorEvent

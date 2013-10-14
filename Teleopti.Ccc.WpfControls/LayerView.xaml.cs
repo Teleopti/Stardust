@@ -40,7 +40,9 @@ namespace Teleopti.Ccc.WpfControls
         public static RoutedEvent PreviewLayerSelectedEvent = EventManager.RegisterRoutedEvent(
             "PreviewLayerSelected", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LayerView));
 
-        public event RoutedEventHandler PreviewLayerSelected
+	    private double _initalWidth;
+
+	    public event RoutedEventHandler PreviewLayerSelected
         {
             add { AddHandler(PreviewLayerSelectedEvent, value); }
             remove { RemoveHandler(PreviewLayerSelectedEvent, value); }
@@ -75,7 +77,7 @@ namespace Teleopti.Ccc.WpfControls
         private void Thumb_Start_DragDelta(object sender, DragDeltaEventArgs e)
         {
             //Problem: If somebodey implements another itemcontrol, this will not work!
-            ContentPresenter item = FindVisualParent<ContentPresenter>(this);
+			DateTimePeriodPanel item = FindVisualParent<DateTimePeriodPanel>(this);
             ILayerViewModel model = DataContext as LayerViewModel;
             if (item != null && model != null)
             {
@@ -90,19 +92,21 @@ namespace Teleopti.Ccc.WpfControls
         private void Thumb_Move_DragDelta(object sender, DragDeltaEventArgs e)
         {
             var item = FindVisualParent<ContentPresenter>(this);
-            var panel = FindVisualParent<ContentPresenter>(item);
+			var panel = FindVisualParent<DateTimePeriodPanel>(item);
             var model = DataContext as LayerViewModel;
-            
+
+	        var sizeDelta = ActualWidth - _initalWidth;
+
             if (item != null && model != null && panel !=null)
             {
-                model.TimeChanged(item, panel, e.HorizontalChange);
+                model.TimeChanged(item, panel, e.HorizontalChange - sizeDelta);
             }
         }
 
         private void Thumb_End_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            
-            ContentPresenter item = FindVisualParent<ContentPresenter>(this);
+
+			DateTimePeriodPanel item = FindVisualParent<DateTimePeriodPanel>(this);
             ILayerViewModel model = DataContext as LayerViewModel;
             if (item != null && model != null)
             {
@@ -154,6 +158,8 @@ namespace Teleopti.Ccc.WpfControls
             //take a snapshot of the period for deciding if we need to fire event for periodchanged
             ILayerViewModel model = this.DataContext as LayerViewModel;
             if (model != null) _initialPeriod = model.Period;
+
+	        _initalWidth = this.ActualWidth;
 
         }
     }

@@ -231,6 +231,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			}
 
 			var periodsExcludeAbsence = periods.Where(p => !p.IsAbsence).ToList();
+			if (periodsExcludeAbsence.IsEmpty()) return _part.Period;
 			return new DateTimePeriod(periodsExcludeAbsence.Min(p => p.Start), periodsExcludeAbsence.Max(p => p.End));
 		}
 
