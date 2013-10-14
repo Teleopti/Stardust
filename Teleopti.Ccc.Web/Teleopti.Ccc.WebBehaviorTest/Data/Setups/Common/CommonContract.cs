@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common
 
 		public void Apply(IUnitOfWork uow)
 		{
-			Contract = ContractFactory.CreateContract("Common contract");
+			Contract = ContractFactory.CreateContract(DefaultName.Make("Common contract"));
 			new ContractRepository(uow).Add(Contract);
 		}
 	}

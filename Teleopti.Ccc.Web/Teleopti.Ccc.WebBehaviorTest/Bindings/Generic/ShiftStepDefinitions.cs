@@ -1,3 +1,4 @@
+using System;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -10,22 +11,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	public class ShiftStepDefinitions
 	{
 		[Given(@"(.*) have a shift with")]
-		public void GivenIHaveAShiftWith(string userName, Table table)
+		public void GivenIHaveAShiftWith(string person, Table table)
 		{
-			var schedule = table.CreateInstance<ShiftConfigurable>();
-			DataMaker.Person(userName).Apply(schedule);
+			DataMaker.ApplyFromTable<ShiftConfigurable>(person, table);
 		}
 
-		[When(@"I am assigned this shift with")]
-		public void WhenIAmAssignedThisShiftWith(Table table)
+		[Given(@"(I) have a shift on '(.*)'")]
+		[Given(@"'(.*)' has a shift on '(.*)'")]
+		public void GivenJohnSmithHaveAShiftWithOn(string person, DateTime date)
 		{
-			var schedule = table.CreateInstance<ShiftConfigurable>();
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var user = DataMaker.Data().MePerson;
-				schedule.Apply(uow, user, user.PermissionInformation.Culture());
-				uow.PersistAll();
-			}
+			DataMaker.Person(person).Apply(new ShiftConfigurable
+				{
+					StartTime = date.AddHours(8),
+					EndTime = date.AddHours(16)
+				});
 		}
+
 	}
 }

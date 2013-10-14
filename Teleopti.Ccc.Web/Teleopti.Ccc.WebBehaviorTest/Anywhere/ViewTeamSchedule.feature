@@ -49,7 +49,6 @@ Background:
 	| Name                       | Schedule published to 0810 |
 	| Schedule published to date | 2013-08-10                 |
 	
-@ignore
 Scenario: View default time line
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for '2013-09-27'

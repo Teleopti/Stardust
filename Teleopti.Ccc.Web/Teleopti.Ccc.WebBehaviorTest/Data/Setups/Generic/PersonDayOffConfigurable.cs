@@ -23,6 +23,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			personDayOff.SetDayOff(dayOff);
 
 			var repository = new PersonAssignmentRepository(uow);
+
+			personDayOff.ScheduleChanged();
+
 			repository.Add(personDayOff);
 		}
 	}

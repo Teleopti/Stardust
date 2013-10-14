@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common
 
 		public void Apply(IUnitOfWork uow)
 		{
-			Scenario = ScenarioFactory.CreateScenarioAggregate("Common scenario", true);
+			Scenario = ScenarioFactory.CreateScenarioAggregate(DefaultName.Make("Common scenario"), true);
 			new ScenarioRepository(uow).Add(Scenario);
 		}
 	}

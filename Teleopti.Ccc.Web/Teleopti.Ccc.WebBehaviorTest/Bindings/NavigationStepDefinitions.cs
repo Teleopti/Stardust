@@ -156,7 +156,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[When(@"I navigate to the preferences page")]
-		[When(@"I navigate to preferences")]
 		public void WhenINavigateToThePreferencesPage()
 		{
 			Navigation.GotoPreference();

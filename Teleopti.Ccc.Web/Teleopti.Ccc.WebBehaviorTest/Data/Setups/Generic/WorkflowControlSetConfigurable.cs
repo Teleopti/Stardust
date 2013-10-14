@@ -26,6 +26,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string StaffingCheck { get; set; }
 		public string AutoGrant { get; set; }
 
+		public WorkflowControlSetConfigurable()
+		{
+			Name = DefaultName.Make("Workflow control set");
+		}
+
 		public void Apply(IUnitOfWork uow)
 		{
 			var workflowControlSet = new WorkflowControlSet(Name) {SchedulePublishedToDate = DateTime.Parse(SchedulePublishedToDate)};

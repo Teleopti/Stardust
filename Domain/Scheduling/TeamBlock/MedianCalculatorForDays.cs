@@ -13,11 +13,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
     public class MedianCalculatorForDays : IMedianCalculatorForDays
     {
-        private readonly IIntervalDataCalculator _intervalDataCalculator;
+        private readonly IMedianCalculatorForSkillInterval _medianCalculatorForSkillInterval;
 
-        public MedianCalculatorForDays()
+        public MedianCalculatorForDays(IMedianCalculatorForSkillInterval medianCalculatorForSkillInterval)
         {
-            _intervalDataCalculator = new IntervalDataMedianCalculator();
+            _medianCalculatorForSkillInterval = medianCalculatorForSkillInterval;
         }
 
         public Dictionary<TimeSpan, ISkillIntervalData> CalculateMedian(Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>> days, double resolution)
@@ -37,23 +37,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                     temp[intervalData.Key].Add(intervalData.Value);
                 }
             }
-
+            
             foreach (var interval in temp)
             {
-                var forecastedDemands = new List<double>();
-                var currentDemands = new List<double>();
-                forecastedDemands.AddRange(from item in interval.Value
-                                           select item.ForecastedDemand);
-                currentDemands.AddRange(from item in interval.Value
-                                        select item.ForecastedDemand);
-                if (forecastedDemands.Count == 0) continue;
-                var calculatedFDemand = _intervalDataCalculator.Calculate(forecastedDemands);
-                var calculatedCDemand = _intervalDataCalculator.Calculate(currentDemands);
-                var startTime = baseDate.Date.Add(interval.Key);
-                var endTime = startTime.AddMinutes(resolution);
-                ISkillIntervalData skillIntervalData = new SkillIntervalData(
-                    new DateTimePeriod(startTime, endTime), calculatedFDemand, calculatedCDemand, 0, 0, 0);
-                result.Add(interval.Key, skillIntervalData);
+                ISkillIntervalData skillIntervalData = _medianCalculatorForSkillInterval.CalculateMedian(interval.Key,
+                                                                                                         interval.Value,
+                                                                                                         resolution,
+                                                                                                         baseDate);
+                if(skillIntervalData != null )
+                    result.Add(interval.Key, skillIntervalData);
             }
 
             return result;

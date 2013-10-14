@@ -12895,6 +12895,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modify availabilities.
+        /// </summary>
+        public static string ModifyAvailabilities {
+            get {
+                return ResourceManager.GetString("ModifyAvailabilities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modify by entering.
         /// </summary>
         public static string ModifyByEntering {

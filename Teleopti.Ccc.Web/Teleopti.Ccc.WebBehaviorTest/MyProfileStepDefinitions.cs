@@ -103,22 +103,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			ChangeCulture(CultureInfo.GetCultureInfo(1033).DisplayName);
 		}
 
-		[When(@"I change culture to browser's default")]
-		public void WhenIChangeCultureToBrowserSDefault()
-		{
-			ChangeCulture(UserTexts.Resources.BrowserDefault);
-		}
-
 		[When(@"I change language to english")]
 		public void WhenIChangeLanguageToEnglish()
 		{
 			ChangeUiCulture(CultureInfo.GetCultureInfo(1033).DisplayName);
-		}
-
-		[When(@"I change language to browser's default")]
-		public void WhenIChangeLanguageToBrowserSDefault()
-		{
-			ChangeUiCulture(UserTexts.Resources.BrowserDefault);
 		}
 
 		[Then(@"I should see US date format"), SetCulture("en-US")]

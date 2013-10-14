@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common
 		public void Apply(IUnitOfWork uow)
 		{
 			ContractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
-			ContractSchedule.Description = new Description("Common contract schedule");
+			ContractSchedule.Description = new Description(DefaultName.Make("Common contract schedule"));
 			new ContractScheduleRepository(uow).Add(ContractSchedule);
 		}
 	}

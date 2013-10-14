@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 {
 	public interface IScheduleDictionarySaver
 	{
-		IScheduleDictionaryPersisterResult MarkForPersist(IUnitOfWork unitOfWork, IScheduleRepository scheduleRepository, DifferenceCollectionItem<IPersistableScheduleData> scheduleChange);
+		IScheduleDictionaryPersisterResult MarkForPersist(IUnitOfWork unitOfWork, IScheduleRepository scheduleRepository, IDifferenceCollection<IPersistableScheduleData> scheduleChange);
 	}
 }

@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				.ForMember(x => x.Name, o => o.MapFrom(s => s.Person.Name.ToString()))
 				.ForMember(x => x.Team, o => o.MapFrom(s => s.Person.MyTeam(new DateOnly(s.Date)).Description.Name))
 				.ForMember(x => x.Site, o => o.MapFrom(s => s.Person.MyTeam(new DateOnly(s.Date)).Site.Description.Name))
+				.ForMember(x => x.IsDayOff, o => o.MapFrom(s=> s.Model.DayOff != null))
 				.ForMember(x => x.Layers, o => o.ResolveUsing(s =>
 				{
 					if (s.Model == null)

@@ -33,18 +33,13 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 				var diff = scheduleRange.DifferenceSinceSnapshot(_differenceCollectionService);
 				if (diff.IsEmpty())
 					continue;
-				foreach (var item in diff)
+				using (var uow = makeUnitOfWork(uowFactory, scheduleRange))
 				{
-					using (var uow = makeUnitOfWork(uowFactory, scheduleRange))
-					{
-						var result = _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository, item);
+					var result = _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository, diff);
 						uow.PersistAll(_messageBrokerIdentifier);
-						if (_callback != null)
-							_callback.Callback(scheduleRange, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
-					}
+					if (_callback != null)
+						_callback.Callback(scheduleRange, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
 				}
-				//behövs nog inte men för säkerhets skull...
-				scheduleRange.TakeSnapshot();
 			}
 		}
 

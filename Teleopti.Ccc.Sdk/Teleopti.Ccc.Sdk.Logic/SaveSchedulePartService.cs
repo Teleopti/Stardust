@@ -49,10 +49,7 @@ namespace Teleopti.Ccc.Sdk.Logic
 					                          invalidList.Select(i => i.Message).Distinct().ToArray())));
 			}
 
-			foreach (var diff in dic.DifferenceSinceSnapshot())
-			{
-				_scheduleDictionarySaver.MarkForPersist(_unitOfWorkFactory.Current(), _scheduleRepository, diff);				
-			}
+			_scheduleDictionarySaver.MarkForPersist(_unitOfWorkFactory.Current(), _scheduleRepository, dic.DifferenceSinceSnapshot());
 			_personAbsenceAccountRepository.AddRange(dic.ModifiedPersonAccounts);
         }
     }

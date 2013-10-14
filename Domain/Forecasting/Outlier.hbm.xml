@@ -44,12 +44,6 @@
       <element column="Date" type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
     </bag>
 
-    <bag name="OutlierDateProviders"
-				 cascade="all-delete-orphan"
-				 inverse="true">
-      <key column="Parent" foreign-key="FK_OutlierDateProviders_Outlier"/>
-      <one-to-many class="OutlierDateProviderBase"/>
-    </bag>
     <many-to-one name="BusinessUnit"
       class="Teleopti.Ccc.Domain.Common.BusinessUnit"
       access="nosetter.camelcase-underscore"

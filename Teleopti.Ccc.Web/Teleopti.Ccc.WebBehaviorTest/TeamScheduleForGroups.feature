@@ -5,18 +5,13 @@ As an agent
 I want to see team schedule for other groups on any group page
  
 Background:
-	Given there is a team with
-	| Field | Value       |
-	| Name  | Team green  |
-	| Site  | Common Site |
-	And there is a team with
-	| Field | Value       |
-	| Name  | Team red    |
-	| Site  | Common Site |
-	And there is a contract with
-	| Field                     | Value         |
-	| Name                      | 8 hours a day |
-	| Average work time per day | 8:00          |
+	Given there is a site named 'The site'
+	And there is a team named 'Team green' on 'The site'
+	And there is a team named 'Team red' on 'The site'
+	And there is a contract named 'A contract'
+	And there is a contract named 'Another contract'
+	And there is a contract schedule named 'A contract schedule'
+	And there is a part time percentage named 'A part time percentage'
 	And there is a role with
 	| Field                          | Value                          |
 	| Name                           | Access to view all group pages |
@@ -33,47 +28,44 @@ Background:
 	| Field                      | Value              |
 	| Name                       | Published schedule |
 	| Schedule published to date | 2014-02-25         |
-	And there are shift categories
-	| Name |
-	| Day  |
+	And there is a shift category named 'Day'
 	And I have the workflow control set 'Published schedule'
-	And Pierre Baldi have the workflow control set 'Published schedule'
-	And John Smith have the workflow control set 'Published schedule'
+	And 'Pierre Baldi' has the workflow control set 'Published schedule'
+	And 'John Smith' has the workflow control set 'Published schedule'
 	And I have a person period with 
-	| Field                | Value                     |
-	| Team                 | Team green                |
-	| Start date           | 2013-03-25                |
-	| Contract             | Common contract           |
-	| Part time percentage | Common PartTimePercentage |
-	| Contract schedule    | Common contract schedule  |
-	And Pierre Baldi have a person period with
-	| Field                | Value                     |
-	| Team                 | Team green                |
-	| Start date           | 2013-03-25                |
-	| Contract             | 8 hours a day             |
-	| Part time percentage | Common PartTimePercentage |
-	| Contract schedule    | Common contract schedule  |
-	And John Smith have a person period with
-	| Field                | Value                     |
-	| Team                 | Team red                  |
-	| Start date           | 2013-03-25                |
-	| Contract             | Common contract           |
-	| Part time percentage | Common PartTimePercentage |
-	| Contract schedule    | Common contract schedule  |
-
+	| Field                | Value                  |
+	| Team                 | Team green             |
+	| Start date           | 2013-03-25             |
+	| Contract             | A contract             |
+	| Part time percentage | A part time percentage |
+	| Contract schedule    | A contract schedule    |
+	And 'Pierre Baldi' has a person period with
+	| Field                | Value                  |
+	| Team                 | Team green             |
+	| Start date           | 2013-03-25             |
+	| Contract             | Another contract       |
+	| Part time percentage | A part time percentage |
+	| Contract schedule    | A contract schedule    |
+	And 'John Smith' has a person period with
+	| Field                | Value                  |
+	| Team                 | Team red               |
+	| Start date           | 2013-03-25             |
+	| Contract             | A contract             |
+	| Part time percentage | A part time percentage |
+	| Contract schedule    | A contract schedule    |
 
 Scenario: View available custom group options
 	Given I have the role 'Access to view all group pages'
 	When I view team schedule for '2013-03-25'
 	And I open the team-picker
 	Then I should see available group options
-	| Value                                    |
-	| Common Site/Team green                   |
-	| Common Site/Team red                     |
-	| Kontrakt/Common contract                 |
-	| Kontrakt/8 hours a day                   |
-	| Kontraktsschema/Common contract schedule |
-	| Deltidsprocent/Common PartTimePercentage |
+	| Value                                 |
+	| The site/Team green                   |
+	| The site/Team red                     |
+	| Kontrakt/A contract                   |
+	| Kontrakt/Another contract             |
+	| Kontraktsschema/A contract schedule   |
+	| Deltidsprocent/A part time percentage |
 
 Scenario: View group schedule
 	Given I have the role 'Access to view all group pages'
@@ -93,7 +85,7 @@ Scenario: View group schedule
 	| EndTime        | 2013-03-25 20:00 |
 	| Shift category | Day              |
 	When I view team schedule for '2013-03-25'
-	And I select 'Kontrakt/Common contract' in the team picker
+	And I select 'Kontrakt/A contract' in the team picker
 	Then I should see my schedule in team schedule with
 	| Field     | Value |
 	| StartTime | 09:00 |
@@ -117,18 +109,18 @@ Scenario: Sort late shifts after early shifts
 	| EndTime        | 2013-03-25 17:00 |
 	| Shift category | Day              |
 	When I view team schedule for '2013-03-25'
-	And I select 'Kontrakt/Common contract' in the team picker
+	And I select 'Kontrakt/A contract' in the team picker
 	Then I should see 'John Smith' before myself
 
 Scenario: Default to my team
 	Given I have the role 'Access to view all group pages'
 	When I view team schedule for '2013-03-25'
-	Then The team picker should have 'Common Site/Team green' selected
+	Then The team picker should have 'The site/Team green' selected
 
 Scenario: Keep selected group when changing date
 	Given I have the role 'Access to view all group pages'
 	When I view team schedule for '2013-03-25'
-	And I select 'Kontrakt/8 hours a day' in the team picker
+	And I select 'Kontrakt/Another contract' in the team picker
 	And I click the next day button
 	Then I should see colleague 'Pierre Baldi'
 	And I should not see myself
@@ -144,6 +136,6 @@ Scenario: View available team options if not have view all group pages permissio
 	When I view team schedule for '2013-03-25'
 	And I open the team-picker
 	Then I should see available team options
-	| Value                  |
-	| Common Site/Team green |
-	| Common Site/Team red   |
+	| Value               |
+	| The site/Team green |
+	| The site/Team red   |

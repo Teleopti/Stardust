@@ -376,6 +376,7 @@
     <Compile Include="Scheduling\Overtime\SkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\Overtime\SkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDaysTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillIntervalTest.cs" />
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlockTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecificationTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerTest.cs" />
@@ -552,7 +553,6 @@
     <Compile Include="Forecasting\StaffingThresholdsTest.cs" />
     <Compile Include="Forecasting\TaskTimeEmailDistributionServiceTest.cs" />
     <Compile Include="Forecasting\SkillTypeEmailTest.cs" />
-    <Compile Include="Forecasting\OutlierDateProviderBaseTest.cs" />
     <Compile Include="Forecasting\DistributionPercentageTest.cs" />
     <Compile Include="Forecasting\OutlierTest.cs" />
     <Compile Include="Forecasting\StatisticHelperTest.cs" />

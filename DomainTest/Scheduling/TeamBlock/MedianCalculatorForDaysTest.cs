@@ -11,12 +11,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
     public class MedianCalculatorForDaysTest
     {
         private IMedianCalculatorForDays _target;
+        private IMedianCalculatorForSkillInterval _medianCalculatorForSkillInterval;
+        private IIntervalDataCalculator _intervalDataCalculator;
+
+
+        [SetUp]
+        public void Setup()
+        {
+            _intervalDataCalculator = new IntervalDataMedianCalculator();
+            _medianCalculatorForSkillInterval = new MedianCalculatorForSkillInterval(_intervalDataCalculator);
+        }
 
         [Test]
         public void ShouldReturnCorrectCount()
         {
             var today = new DateOnly(2013, 10, 01);
-            _target = new MedianCalculatorForDays();
+            _target = new MedianCalculatorForDays(_medianCalculatorForSkillInterval);
             var skillIntervalData0 =
                 new SkillIntervalData(
                     new DateTimePeriod(new DateTime(2013, 10, 01, 22, 0, 0, DateTimeKind.Utc),
@@ -55,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         public void ShouldReturnCorrectDataForSingleDay()
         {
             var today = new DateOnly(2013, 10, 01);
-            _target = new MedianCalculatorForDays();
+            _target = new MedianCalculatorForDays(_medianCalculatorForSkillInterval);
             var skillIntervalData0 =
                 new SkillIntervalData(
                     new DateTimePeriod(new DateTime(2013, 10, 01, 22, 0, 0, DateTimeKind.Utc),
@@ -100,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         public void ShouldReturnCorrectDataForTwoDays()
         {
             var today = new DateOnly(2013, 10, 01);
-            _target = new MedianCalculatorForDays();
+            _target = new MedianCalculatorForDays(_medianCalculatorForSkillInterval);
             var skillIntervalData0 =
                 new SkillIntervalData(
                     new DateTimePeriod(new DateTime(2013, 10, 01, 22, 0, 0, DateTimeKind.Utc),

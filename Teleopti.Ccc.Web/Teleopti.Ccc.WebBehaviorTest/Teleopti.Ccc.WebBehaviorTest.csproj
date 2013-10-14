@@ -118,9 +118,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ViewDaysOff.feature</DependentUpon>
     </Compile>
+    <Compile Include="Anywhere\ViewGroupSchedule.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ViewGroupSchedule.feature</DependentUpon>
+    </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\PartTimePercentageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NothingStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\SiteStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsKnockoutExtensions.cs" />
+    <Compile Include="Data\Setups\DefaultName.cs" />
+    <Compile Include="Data\Setups\Generic\PartTimePercentageConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\SiteConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\OvertimeAvailabilityConfigurable.cs" />
     <Compile Include="Bindings\Generic\OvertimeAvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
@@ -650,6 +660,10 @@
     <Content Include="BeforeTestRun.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Anywhere\ViewGroupSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ViewGroupSchedule.feature.cs</LastGenOutput>
+    </None>
     <None Include="Anywhere\TeamScheduleSorting.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TeamScheduleSorting.feature.cs</LastGenOutput>
