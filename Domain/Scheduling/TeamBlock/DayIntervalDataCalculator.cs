@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 {
                     var startTime = baseDate.Date.Add(interval);
                     var endTime = startTime.AddMinutes(resolution);
-                    result.Add(interval, new SkillIntervalData(new DateTimePeriod(startTime, endTime), 0, 0, 0, 0, 0));
+                    result.Add(interval, new SkillIntervalData(new DateTimePeriod(startTime, endTime), 0, 0, 0,null, null));
                 }
                 else
                 {
