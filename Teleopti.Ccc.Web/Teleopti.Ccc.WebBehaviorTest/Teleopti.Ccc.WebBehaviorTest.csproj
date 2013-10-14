@@ -638,10 +638,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewGroupSchedule.feature.cs</LastGenOutput>
     </None>
-    <None Include="Anywhere\ViewGroupScheduleK.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ViewGroupScheduleK.feature.cs</LastGenOutput>
-    </None>
     <None Include="Anywhere\TeamScheduleSorting.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TeamScheduleSorting.feature.cs</LastGenOutput>
