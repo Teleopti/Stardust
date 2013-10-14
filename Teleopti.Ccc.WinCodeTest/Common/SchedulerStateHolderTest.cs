@@ -29,8 +29,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private IList<IPerson> selectedPersons;
 	    private IPerson _person1;
 		private IPerson _person2;
+	    private IPerson _person3;
 	    private Guid _guid1;
 	    private Guid _guid2;
+		private Guid _guid3;
 
         [SetUp]
         public void Setup()
@@ -39,10 +41,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             dtp = new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2001,1,1));
             _person1 = PersonFactory.CreatePerson("first", "last");
 	        _person2 = PersonFactory.CreatePerson("firstName", "lastName");
+			_person3 = PersonFactory.CreatePerson("firstName", "lastName");
 	        _guid1 = Guid.NewGuid();
 	        _guid2 = Guid.NewGuid();
+			_guid3 = Guid.NewGuid();
 	        _person1.SetId(_guid1);
 			_person2.SetId(_guid2);
+			_person3.SetId(_guid3);
             selectedPersons = new List<IPerson>{_person1, _person2};
         	target = new SchedulerStateHolder(scenario,
         	                                  new DateOnlyPeriodAsDateTimePeriod(
@@ -308,29 +313,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			Assert.IsFalse(result);	
 		}
 
-		//[Test]
-		//public void ShouldReturnIsFilteredOnOvertimeAvailabilityWhenFilterCountNotEqualToAllPermittedCountAndIsNotEmpty()
-		//{
-		//	target.FilterPersonsOvertimeAvailability(new List<IPerson> { _person1 });
-		//	var result = target.OvertimeAvailabilityFilter();
-		//	Assert.IsTrue(result);	
-		//}
-
-		//[Test]
-		//public void ShouldReturnIsNotFilteredWhenIsEmpty()
-		//{
-		//	var result = target.OvertimeAvailabilityFilter();
-		//	Assert.IsFalse(result);	
-		//}
-
-		//[Test]
-		//public void ShouldReturnIsNotFilteredOnOvertimeAvailabilityWhenFilterCountCountEqualToAllPermittedCount()
-		//{
-		//	target.FilterPersonsOvertimeAvailability(new List<IPerson> { _person1, _person2 });
-		//	var result = target.OvertimeAvailabilityFilter();
-		//	Assert.IsFalse(result);
-		//}
-
 		[Test]
 		public void ShouldReturnFilterStatusOnOvertimeAvailability()
 		{
@@ -342,14 +324,34 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
+		public void ShouldReturnFilterStatusOnHourlyAvailability()
+		{
+			target.FilterPersonsHourlyAvailability(new List<IPerson>());
+			Assert.IsTrue(target.HourlyAvailabilityFilter());
+
+			target.ResetFilteredPersonsHourlyAvailability();
+			Assert.IsFalse(target.HourlyAvailabilityFilter());
+		}
+
+		[Test]
 		public void ShouldReturnCombinedFilterOnFilteredPersonDictionary()
 		{
 			target.FilterPersons(new List<IPerson>{_person1});
 			target.FilterPersonsOvertimeAvailability(new List<IPerson>{_person1, _person2});
+			target.FilterPersonsHourlyAvailability(new List<IPerson> { _person1, _person2, _person3 });
 			var filteredPersons = target.FilteredPersonDictionary;
 
 			Assert.AreEqual(1, filteredPersons.Count);
 			Assert.IsTrue(filteredPersons.ContainsKey(_guid1));
+
+			target.FilterPersons(new List<IPerson> { _person1, _person3 });
+			target.FilterPersonsOvertimeAvailability(new List<IPerson> { _person1, _person2, _person3 });
+			target.FilterPersonsHourlyAvailability(new List<IPerson> { _person1, _person2, _person3 });
+			filteredPersons = target.FilteredPersonDictionary;
+
+			Assert.AreEqual(2, filteredPersons.Count);
+			Assert.IsTrue(filteredPersons.ContainsKey(_guid1));
+			Assert.IsTrue(filteredPersons.ContainsKey(_guid3));
 		}
     }
 }
