@@ -13,11 +13,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private IDayIntervalDataCalculator _target;
         private IMedianCalculatorForDays _medianCalculatorForDays;
         private ITwoDaysIntervalGenerator _twoDayIntervalCalculator;
+        private IMedianCalculatorForSkillInterval _medianCalculatorForSkillInterval;
+        private IIntervalDataCalculator _intervalDataCalculator;
 
         [SetUp]
         public void Setup()
         {
-            _medianCalculatorForDays = new MedianCalculatorForDays();
+            _intervalDataCalculator = new IntervalDataMedianCalculator();
+            _medianCalculatorForSkillInterval = new MedianCalculatorForSkillInterval(_intervalDataCalculator);
+            _medianCalculatorForDays = new MedianCalculatorForDays(_medianCalculatorForSkillInterval);
             _twoDayIntervalCalculator=new TwoDaysIntervalGenerator();
             _target = new DayIntervalDataCalculator(_medianCalculatorForDays,_twoDayIntervalCalculator);
         }
