@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.Rta.Server
 					defaultStateGroupBusinessUnit = reader.GetGuid(reader.GetOrdinal("BusinessUnit"));
 				}
 				reader.Close();
-				var addRtaStateQuery = string.Format("INSERT INTO RtaState VALUES ('{0}', '{1}', '{1}', '{2}', '{3}')", stateId,
+				var addRtaStateQuery = string.Format("INSERT INTO RtaState VALUES ('{0}', N'{1}', N'{1}', '{2}', '{3}')", stateId,
 				                                     stateCode, platformTypeId, defaultStateGroupId);
 
 				command = connection.CreateCommand();
