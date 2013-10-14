@@ -67,12 +67,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				);
 		}
 
-		[Then(@"I should see schedule for me")]
-		public void ThenIShouldSeeScheduleForMe()
-		{
-			ThenIShouldSeeNoScheduleFor(DataMaker.Data().MePerson.Name.ToString());
-		}
-
 		[Then(@"I should be able to select teams")]
 		public void ThenIShouldBeAbleToSelectTeams(Table table)
 		{
@@ -135,12 +129,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void WhenISelectTeam(string teamName)
 		{
 			Browser.Interactions.SelectOptionByTextUsingJQuery("#team-selector", teamName);
-		}
-
-		[When(@"I select skill '(.*)'")]
-		public void WhenISelectSkill(string name)
-		{
-			SelectSkill(name);
 		}
 
 		public static void SelectSkill(string name)

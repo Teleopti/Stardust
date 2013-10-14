@@ -61,13 +61,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 				Browser.Interactions.Click("#Request-add-section .request-new-fullday");
 		}
 
-		[Then(@"Subject should not be empty")]
-		public void SubjectShouldNotBeEmpty()
-		{
-
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value.Trim(), Is.Not.Empty);
-		}
-
 		[Then(@"I should not be able to input values for text request at position '(.*)' in the list")]
 		public void ThenIShouldNotBeAbleToInputValuesForTextRequestAtPositionInTheList(int position)
 		{

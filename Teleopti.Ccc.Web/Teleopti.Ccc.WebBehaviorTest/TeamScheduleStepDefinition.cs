@@ -117,13 +117,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			AssertShowingDay(DateOnlyForBehaviorTests.TestToday.AddDays(1));
 		}
 
-		[Then(@"I should see date '(.*)'")]
-		public void ThenIShouldSeeDate(DateTime date)
-		{
-			AssertShowingDay(new DateOnly(date));
-		}
-
-
 		[Then(@"I should see the previous day")]
 		public void ThenIShouldSeeThePreviousDay()
 		{

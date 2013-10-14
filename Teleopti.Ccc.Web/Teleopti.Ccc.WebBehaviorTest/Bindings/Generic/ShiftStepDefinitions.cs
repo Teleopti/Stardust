@@ -27,16 +27,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				});
 		}
 
-		[When(@"I am assigned this shift with")]
-		public void WhenIAmAssignedThisShiftWith(Table table)
-		{
-			var schedule = table.CreateInstance<ShiftConfigurable>();
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var user = DataMaker.Data().MePerson;
-				schedule.Apply(uow, user, user.PermissionInformation.Culture());
-				uow.PersistAll();
-			}
-		}
 	}
 }

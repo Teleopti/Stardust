@@ -73,21 +73,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			AssertDayContainsGivenNumberOfLayers(date, 1);
 		}
 
-
-		[When(@"I hover layer '(.*)' on '(.*)'")]
-		public void WhenIHoverLayerOn(int layer, DateTime date)
-		{
-			DivCollection layers = _page.DayLayers(date);
-			layers[layer-1].FireEvent("mouseenter");
-			layers[layer-1].FireEvent("mouseover");
-		}
-
-		[Then(@"I should see the meeting details with description '(.*)' on date '(.*)'")]
-		public void ThenIShouldSeeTheMeetingDetailsWithDescriptionOnDate(string description, DateTime date)
-		{
-			EventualAssert.That(() => _page.DayLayerTooltipElement(date, description).Exists, Is.True);
-		}
-
 		[Then(@"I should see the public note on date '(.*)'")]
 		public void ThenIShouldSeeThePublicNoteOnDate(DateTime date)
 		{
@@ -225,12 +210,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldNotSeeAnyIndicationOfHowManyAgentsCanGoOnHoliday()
 		{
 			AssertAbsenceIndicators(0);
-		}
-
-		[Then(@"I should see an indication of the amount of agents that can go on holiday on each day of the week")]
-		public void ThenIShouldSeeAnIndicationOfTheAmountOfAgentsThatCanGoOnHolidayOnEachDayOfTheWeek()
-		{
-			AssertAbsenceIndicators(7);
 		}
 
 		private void AssertAbsenceIndicators(int visibleIndicatorCount)
