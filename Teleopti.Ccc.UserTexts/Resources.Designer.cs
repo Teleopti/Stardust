@@ -24999,6 +24999,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use Day of Month Seasonality.
+        /// </summary>
+        public static string UseDayOfMonthSeasonality {
+            get {
+                return ResourceManager.GetString("UseDayOfMonthSeasonality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use Day Off Per Week.
         /// </summary>
         public static string UseDaysOffPerWeek {
