@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.ServiceModel;
-using System.Timers;
 using log4net;
-using log4net.Config;
 using Teleopti.Ccc.Rta.Interfaces;
-using Teleopti.Ccc.Rta.Server;
 
 namespace Teleopti.Ccc.Rta.WebService
 {
@@ -45,76 +42,72 @@ namespace Teleopti.Ccc.Rta.WebService
 	    private int processExternalUserState(Guid messageId, string userCode, string stateCode, string stateDescription,
 	                                         bool isLoggedOn, int secondsInState, DateTime timestamp, string platformTypeId,
 	                                         string sourceId, DateTime batchId, bool isSnapshot)
-    	{
-			if (Log.IsInfoEnabled)
-			{
-				Log.InfoFormat(System.Globalization.CultureInfo.InvariantCulture,
-				               "Incoming message: MessageId = {10}, UserCode = {0}, StateCode = {1}, StateDescription = {2}, IsLoggedOn = {3}, SecondsInState = {4}, TimeStamp = {5}, PlatformTypeId = {6}, SourceId = {7}, BatchId = {8}, IsSnapshot = {9}.",
-				               userCode, stateCode, stateDescription, isLoggedOn, secondsInState, timestamp,
-				               platformTypeId, sourceId, batchId, isSnapshot, messageId);
-			}
+	    {
+		    Log.InfoFormat(System.Globalization.CultureInfo.InvariantCulture,
+		                   "Incoming message: MessageId = {10}, UserCode = {0}, StateCode = {1}, StateDescription = {2}, IsLoggedOn = {3}, SecondsInState = {4}, TimeStamp = {5}, PlatformTypeId = {6}, SourceId = {7}, BatchId = {8}, IsSnapshot = {9}.",
+		                   userCode, stateCode, stateDescription, isLoggedOn, secondsInState, timestamp,
+		                   platformTypeId, sourceId, batchId, isSnapshot, messageId);
 
-    		if (string.IsNullOrEmpty(sourceId))
-    		{
-    			Log.ErrorFormat("The source id was not valid. Supplied value was {0}. (MessageId = {1})", sourceId, messageId);
-    			return -300;
-    		}
+		    if (string.IsNullOrEmpty(sourceId))
+		    {
+			    Log.ErrorFormat("The source id was not valid. Supplied value was {0}. (MessageId = {1})", sourceId, messageId);
+			    return -300;
+		    }
 
-    		if (string.IsNullOrEmpty(platformTypeId))
-    		{
-    			Log.ErrorFormat("The platform type id cannot be empty or null. (MessageId = {0})", messageId);
-    			return -200;
-    		}
+		    if (string.IsNullOrEmpty(platformTypeId))
+		    {
+			    Log.ErrorFormat("The platform type id cannot be empty or null. (MessageId = {0})", messageId);
+			    return -200;
+		    }
 
-    		Guid parsedPlatformTypeId = new Guid(platformTypeId);
+		    var parsedPlatformTypeId = new Guid(platformTypeId);
 
-    		if (!isLoggedOn)
-    		{
-    			//If the user isn't logged on we'll substitute the stateCode to reflect this
-    			Log.InfoFormat(
-    				"This is a log out state. The original state code {0} is substituted with hardcoded state code {1}. (MessageId = {2})",
-    				stateCode, logOutStateCode, messageId);
-    			stateCode = logOutStateCode;
-    		}
+		    if (!isLoggedOn)
+		    {
+			    //If the user isn't logged on we'll substitute the stateCode to reflect this
+			    Log.InfoFormat(
+				    "This is a log out state. The original state code {0} is substituted with hardcoded state code {1}. (MessageId = {2})",
+				    stateCode, logOutStateCode, messageId);
+			    stateCode = logOutStateCode;
+		    }
 
-    		//The DateTimeKind.Utc is not set automatically when deserialising from soap message
-    		timestamp = DateTime.SpecifyKind(timestamp, DateTimeKind.Utc);
-    		if (timestamp>DateTime.UtcNow.AddMinutes(59))
-    		{
-    			Log.ErrorFormat(
-    				"The supplied time stamp cannot be sent as UTC. Current UTC time is {0} and the supplied timestamp was {1}. (MessageId = {2})",
-    				DateTime.UtcNow, timestamp, messageId);
-    			return -430;
-    		}
+		    //The DateTimeKind.Utc is not set automatically when deserialising from soap message
+		    timestamp = DateTime.SpecifyKind(timestamp, DateTimeKind.Utc);
+		    if (timestamp > DateTime.UtcNow.AddMinutes(59))
+		    {
+			    Log.ErrorFormat(
+				    "The supplied time stamp cannot be sent as UTC. Current UTC time is {0} and the supplied timestamp was {1}. (MessageId = {2})",
+				    DateTime.UtcNow, timestamp, messageId);
+			    return -430;
+		    }
 
-    		const int stateCodeMaxLength = 25;
-    		stateCode = stateCode.Trim();
-    		if (stateCode.Length > stateCodeMaxLength)
-    		{
-    			var newStateCode = stateCode.Substring(0, stateCodeMaxLength);
-    			Log.WarnFormat("The original state code {0} is too long and substituted with state code {1}. (MessageId = {2})",
-    			               stateCode, newStateCode, messageId);
-    			stateCode = newStateCode;
-    		}
+		    const int stateCodeMaxLength = 25;
+		    stateCode = stateCode.Trim();
+		    if (stateCode.Length > stateCodeMaxLength)
+		    {
+			    var newStateCode = stateCode.Substring(0, stateCodeMaxLength);
+			    Log.WarnFormat("The original state code {0} is too long and substituted with state code {1}. (MessageId = {2})",
+			                   stateCode, newStateCode, messageId);
+			    stateCode = newStateCode;
+		    }
+		    
+			Log.InfoFormat(
+			    "Message verified and validated from sender for UserCode: {0}, StateCode: {1}. (MessageId = {2})", userCode,
+			    stateCode, messageId);
+		    
+			lock (_lockObject)
+		    {
+			    _rtaDataHandler.ProcessRtaData(userCode.Trim(), stateCode, TimeSpan.FromSeconds(secondsInState), timestamp,
+			                                   parsedPlatformTypeId, sourceId, batchId, isSnapshot);
+		    }
+		    
+			Log.InfoFormat("Message handling complete for UserCode: {0}, StateCode: {1}. (MessageId = {2})", userCode,
+		                   stateCode, messageId);
 
-			if (Log.IsInfoEnabled)
-			{
-				Log.InfoFormat("Message verified and validated from sender for userCode: {0}, stateCode: {1}. (MessageId = {2})", userCode, stateCode, messageId);
-			}
-    		lock (_lockObject)
-    		{
-    			_rtaDataHandler.ProcessRtaData(userCode.Trim(), stateCode, TimeSpan.FromSeconds(secondsInState), timestamp,
-    			                               parsedPlatformTypeId, sourceId, batchId, isSnapshot);
-    		}
-			if (Log.IsInfoEnabled)
-			{
-				Log.InfoFormat("Message handled from sender for userCode: {0}, stateCode: {1}. (MessageId = {2})", userCode, stateCode, messageId);
-			}
+		    return 1;
+	    }
 
-    		return 1;
-    	}
-
-    	private void verifyAuthenticationKey(string authenticationKey, Guid messageId)
+	    private void verifyAuthenticationKey(string authenticationKey, Guid messageId)
     	{
     		if (authenticationKey != _authenticationKey)
     		{
