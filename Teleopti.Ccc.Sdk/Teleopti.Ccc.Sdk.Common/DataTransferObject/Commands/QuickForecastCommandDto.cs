@@ -83,5 +83,11 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 		/// </summary>
 		[DataMember]
 		public int IncreaseWith { get; set; }
+
+        /// <summary>
+        /// If the Index of the day of month should be used when forecasting
+        /// </summary>
+        [DataMember]
+        public bool UseDayOfMonth { get; set; }
     }
 }
