@@ -199,6 +199,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddAbsenceCommandTest.cs" />
+    <Compile Include="AddOvertimeCommandTest.cs" />
     <Compile Include="Budgeting\BudgetPermissionServiceTest.cs" />
     <Compile Include="Budgeting\BudgetDayGapFillerTest.cs" />
     <Compile Include="Budgeting\BudgetDayProviderTest.cs" />
