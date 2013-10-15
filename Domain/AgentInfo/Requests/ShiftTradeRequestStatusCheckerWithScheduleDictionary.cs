@@ -27,21 +27,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             if (shiftTradeRequest == null) return;
             if (shiftTradeRequest.Parent==null) return;
 
-            IPersonRequest parentRequest = (IPersonRequest) shiftTradeRequest.Parent;
+            var parentRequest = (IPersonRequest) shiftTradeRequest.Parent;
             if (!(parentRequest.IsPending || parentRequest.IsNew)) return;
 
-            var requestStatusChecker = new EmptyShiftTradeRequestChecker();
-            ShiftTradeStatus previousStatus = shiftTradeRequest.GetShiftTradeStatus(requestStatusChecker);
+            var requestStatusChecker = new emptyShiftTradeRequestChecker();
+            var previousStatus = shiftTradeRequest.GetShiftTradeStatus(requestStatusChecker);
             if (!ShiftTradeRequestStatusChecker.VerifyShiftTradeIsUnchanged(_scheduleDictionary, shiftTradeRequest,_authorization))
             {
-                if (_referredShiftTradeRequests.ContainsKey(shiftTradeRequest))
-                {
-                    _referredShiftTradeRequests[shiftTradeRequest] = previousStatus;
-                }
-                else
-                {
-                    _referredShiftTradeRequests.Add(shiftTradeRequest, previousStatus);
-                }
+	            if (_referredShiftTradeRequests.ContainsKey(shiftTradeRequest))
+		            _referredShiftTradeRequests[shiftTradeRequest] = previousStatus;
+
+	            else
+		            _referredShiftTradeRequests.Add(shiftTradeRequest, previousStatus);
             }
             else
             {
@@ -63,7 +60,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             _referredShiftTradeRequests.Clear();
         }
 
-        private class EmptyShiftTradeRequestChecker : IShiftTradeRequestStatusChecker
+        private class emptyShiftTradeRequestChecker : IShiftTradeRequestStatusChecker
         {
             public void Check(IShiftTradeRequest shiftTradeRequest)
             {
