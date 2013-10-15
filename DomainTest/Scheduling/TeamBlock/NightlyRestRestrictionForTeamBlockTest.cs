@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 
 			var aggRestriction = _target.AggregatedNightlyRestRestriction(_teamBlockInfo);
-			var expectedResult = new EffectiveRestriction(new StartTimeLimitation(TimeSpan.MinValue, null),
+			var expectedResult = new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromDays(-10), null),
 			                                              new EndTimeLimitation(null, new TimeSpan(1, 23, 59, 59)),
 			                                              new WorkTimeLimitation(), null, null, null,
 			                                              new List<IActivityRestriction>());
