@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Common
 
         public override bool IsSatisfiedBy(IChangeInfo obj)
         {
-            DateTime? toCompare = obj.UpdatedOn;
+            var toCompare = obj.UpdatedOn;
             if (toCompare == null) return true;
             InParameter.MustBeTrue("obj", ((DateTime)toCompare).Kind == DateTime.Kind);
             return toCompare > DateTime;

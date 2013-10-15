@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
@@ -93,5 +94,47 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _target.SetChecksum(_personRequest1.Request);
             _mockRepository.VerifyAll();
         }
+
+		[Test]
+		public void Check_ShiftTradeNotInOpenedSchedulePeriod_ReturnNotChanged()
+		{
+			var dateOnly = new DateOnly(2013, 10, 14);
+			var swapdetail = new ShiftTradeSwapDetail(_person1, _person2, dateOnly, dateOnly)
+			{
+				ChecksumFrom = -1234,
+				ChecksumTo = -5678
+			};
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { swapdetail });
+			var emptyPersonAssignment = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
+
+			_scheduleDictionary.Expect(sd => sd[_person1]).Return(_scheduleRangePerson1);
+			_scheduleDictionary.Expect(sd => sd[_person2]).Return(_scheduleRangePerson2);
+			_scheduleRangePerson1.Expect(sr => sr.ScheduledDay(dateOnly)).Return(_schedulePart1);
+			_scheduleRangePerson2.Expect(sr => sr.ScheduledDay(dateOnly)).Return(_schedulePart2);
+			_schedulePart1.Expect(sd => sd.PersonAssignment()).Return(null);
+			_schedulePart2.Expect(sd => sd.PersonAssignment()).Return(null);
+			_mockRepository.ReplayAll();
+
+			var result = shiftTradeRequestCheckerForTest.VerifyShiftTradeIsUnchangeExposer(_scheduleDictionary, shiftTradeRequest,
+																						   new PersonRequestAuthorizationCheckerForTest());
+			result.Should().Be.True();
+			_mockRepository.VerifyAll();
+		}
+
+		// ReSharper disable ClassNeverInstantiated.Local
+		private class shiftTradeRequestCheckerForTest : ShiftTradeRequestStatusChecker
+		{
+			public shiftTradeRequestCheckerForTest(ICurrentScenario scenarioRepository, IScheduleRepository scheduleRepository,
+												   IPersonRequestCheckAuthorization authorization)
+				: base(scenarioRepository, scheduleRepository, authorization)
+			{
+			}
+
+			public static bool VerifyShiftTradeIsUnchangeExposer(IScheduleDictionary scheduleDictionary, IShiftTradeRequest shiftTradeRequest, IPersonRequestCheckAuthorization authorization)
+			{
+				return VerifyShiftTradeIsUnchanged(scheduleDictionary, shiftTradeRequest, authorization);
+			}
+		}
+		// ReSharper restore ClassNeverInstantiated.Local
     }
 }
