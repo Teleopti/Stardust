@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
         public IEffectiveRestriction AggregatedNightlyRestRestriction(ITeamBlockInfo teamBlockInfo)
         {
-            TimeSpan startTime = TimeSpan.MinValue;
+            TimeSpan startTime = TimeSpan.FromDays(-10);
             TimeSpan endTime = TimeSpan.MaxValue;
             foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
             {
