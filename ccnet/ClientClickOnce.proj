@@ -37,6 +37,7 @@
       <ClickOnceInstallationFiles Include="setup.exe"/>
       <ClickOnceInstallationFiles Include="default.htm"/>
       <ClickOncePageFiles Include="$(CCNetWorkingDirectory)\BuildArtifacts\images\*.*"/>
+      <ClickOncehowToMultiSDK Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\HowToMultiSDK\*.*" />
       <ClickOnceLandingPage Include="$(CCNetWorkingDirectory)\BuildArtifacts\ClickOnceLandingPage.htm"/>
       <GetVersionAssembly Include="$(CCNetWorkingDirectory)\$(SourceDir)\$(SolutionName).exe"/>
       <NHibFiles Include="$(CCNetWorkingDirectory)\BuildArtifacts\TeleoptiCCC7.nhib.xml"/>
@@ -182,7 +183,8 @@
 				 DestinationFiles="@(ManifestFile->'$(ClickOnceRootDir)\%(RecursiveDir)%(Filename)%(Extension)')"/>
     <Copy  SourceFiles="@(ClickOncePageFiles)"
 				 DestinationFiles="@(ClickOncePageFiles->'$(ClickOnceRootDir)\%(Filename)%(Extension)')"/>
-
+    <Copy  SourceFiles="@(ClickOncehowToMultiSDK)"
+				 DestinationFiles="@(ClickOncehowToMultiSDK->'$(ClickOnceRootDir)\%(Filename)%(Extension)')"/>				 
   </Target>
 
 </Project>
