@@ -14,7 +14,9 @@ Background:
 	And there is a contract named 'A contract'
 	And there is a contract named 'Another contract'
 	And there is a contract schedule named 'A contract schedule'
+	And there is a contract schedule named 'Another contract schedule'
 	And there is a part time percentage named 'Part time percentage'
+	And there is a part time percentage named 'Another part time percentage'
 	And there is an activity named 'Phone'
 	And there is a shift category named 'Day'
 	And there is a rule set with
@@ -28,17 +30,35 @@ Background:
 		| Field    | Value       |
 		| Name     | A shift bag |
 		| Rule set | A rule set  |
+	And there is a shift bag with
+		| Field    | Value             |
+		| Name     | Another shift bag |
+		| Rule set | A rule set        |
 	And there is a skill with
 		| Field    | Value   |
 		| Name     | A skill |
 		| Activity | Phone   |
+	And there is a skill with
+		| Field    | Value         |
+		| Name     | Another skill |
+		| Activity | Phone         |
+	And there is a group page with
+		| Field | Value                  |
+		| Name  | A group page           |
+		| Group | A group, Another group |
+	And there is a group page with
+		| Field | Value              |
+		| Name  | Another group page |
+		| Group | Some other group   |
 	And 'Pierre Baldi' has a workflow control set publishing schedules until '2013-12-01'
 	And 'John Smith' has a workflow control set publishing schedules until '2013-12-01'
-	# Might be required for the shift bag and skill to display
-	#And 'John Smith' has a person period with
-	#	| Field     | Value       |
-	#	| Shift bag | A shift bag |
-	#	| Skill     | A skill     |
+	And 'John Smith' has a person period with
+		| Field     | Value       |
+		| Shift bag | A shift bag |
+		| Skill     | A skill     |
+	And 'John Smith' in on 'A group' of group page 'A group page'
+	And 'John Smith' in on 'Another group' of group page 'A group page'
+	And 'John Smith' in on 'Some other group' of group page 'Another group page'
 	And I have a role with
 		| Field              | Value                |
 		| Access to team     | Team green, Team red |
@@ -57,6 +77,9 @@ Scenario: View group picker options
 		| Part-Time Percentage/Part time percentage |
 		| Shift bag/A shift bag                     |
 		| Skill/A skill                             |
+		| A group page/A root                       |
+		| A group page/Another root                 |
+		| Another group page/Some other root        |
 
 Scenario: View group schedule
 	And 'John Smith' has a shift on '2013-10-10'
@@ -80,18 +103,24 @@ Scenario: View group schedule
 	Then I should see schedule for 'John Smith'
 	Then I should see no schedule for 'Pierre Baldi'
 
-Scenario: Order groupings like business heirarchy, contract, contract schedule, part time percentage, shiftbag, skill
+Scenario: Order group pages like business heirarchy, contract, contract schedule, part time percentage, shiftbag, skill, group page names
 	Given I viewing schedules for '2013-10-10'
 	Then I should see 'Business Hierarchy' before 'Contract'
 	And I should see 'Contract' before 'Contract Schedule'
 	And I should see 'Contract Schedule' before 'Part-Time Percentage'
 	And I should see 'Part-Time Percentage' before 'Shift Bag'
 	And I should see 'Shift bag' before 'Skill'
+	And I should see 'Skill' before 'A group page'
+	And I should see 'A group page' before 'Another group page'
 
 Scenario: Order groups in alphabetical order
 	Given I viewing schedules for '2013-10-10'
 	Then I should see 'Team green' before 'Team red'
 	And I should see 'A contract' before 'Another contract'
+	And I should see 'A contract schedule' before 'Another contract schedule'
+	And I should see 'Another Part-Time Percentage' before 'Part-Time Percentage'
+	And I should see 'Another Skill' before 'Skill'
+	And I should see 'A group' before 'Another group'
 
 Scenario: Default to my team
 	Given I have a person period with 
