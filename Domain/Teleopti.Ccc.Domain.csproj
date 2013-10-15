@@ -277,6 +277,9 @@
     <Compile Include="Common\PersonsInOrganizationProvider.cs" />
     <Compile Include="ApplicationLayer\ICommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\IHandleCommand.cs" />
+    <Compile Include="Forecasting\DayInMonth\DayInMonth.cs" />
+    <Compile Include="Forecasting\DayInMonth\DayInMonthHelper.cs" />
+    <Compile Include="Forecasting\DayInMonth\DayInMonthItem.cs" />
     <Compile Include="Forecasting\DaylightSavingTimeHelper.cs" />
     <Compile Include="Forecasting\Export\ExportForecastDataToFileSerializer.cs" />
     <Compile Include="Forecasting\Export\ExportSkillToFileCommandModel.cs" />

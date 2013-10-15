@@ -195,6 +195,8 @@
     <Compile Include="Common\PersonProviderTest.cs" />
     <Compile Include="Common\DateOnlyAsDateTimePeriodTest.cs" />
     <Compile Include="Common\PersonsInOrganizationProviderTest.cs" />
+    <Compile Include="Forecasting\DayInMonth\DayInMonthCreatorTest.cs" />
+    <Compile Include="Forecasting\DayInMonth\DayInMonthHelperTest.cs" />
     <Compile Include="Forecasting\DaylightSavingTimeHelperTest.cs" />
     <Compile Include="Forecasting\Export\ExportForecastDataToFileSerializerTest.cs" />
     <Compile Include="Forecasting\Export\ExportSkillToFileCommandModelTest.cs" />
@@ -1205,6 +1207,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Analyzer\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Forecasting\DayInMonth\DayInMonthSeasonalityData.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

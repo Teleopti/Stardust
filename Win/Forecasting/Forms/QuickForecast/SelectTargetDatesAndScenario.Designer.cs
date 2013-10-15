@@ -116,9 +116,9 @@
             this.checkBoxUseDayOfMonth.Location = new System.Drawing.Point(3, 73);
             this.checkBoxUseDayOfMonth.Name = "checkBoxUseDayOfMonth";
             this.checkBoxUseDayOfMonth.Padding = new System.Windows.Forms.Padding(7, 5, 0, 0);
-            this.checkBoxUseDayOfMonth.Size = new System.Drawing.Size(131, 24);
+            this.checkBoxUseDayOfMonth.Size = new System.Drawing.Size(190, 24);
             this.checkBoxUseDayOfMonth.TabIndex = 5;
-            this.checkBoxUseDayOfMonth.Text = "xxUseDayOfMonth";
+            this.checkBoxUseDayOfMonth.Text = "xxUseDayOfMonthSeasonality";
             this.checkBoxUseDayOfMonth.UseVisualStyleBackColor = true;
             // 
             // SelectTargetDatesAndScenario

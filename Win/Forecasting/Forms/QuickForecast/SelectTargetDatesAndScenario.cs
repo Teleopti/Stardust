@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
