@@ -94,6 +94,7 @@ namespace Teleopti.Ccc.WinCodeTest
 				Expect.Call(() => _scheduleDay.CreateAndAddOvertime(_activity, dateTimePeriod, _multiplicatorDefinitionSet));
 				Expect.Call(_schedulePresenterBase.ModifySchedulePart(_scheduleDays)).Return(true);
 				Expect.Call(()=>_scheduleViewBase.RefreshRangeForAgentPeriod(_person, dateTimePeriod));
+				Expect.Call(_person.IsAgent(_dateOnly)).Return(true);
 			}
 
 			using (_mock.Playback())
