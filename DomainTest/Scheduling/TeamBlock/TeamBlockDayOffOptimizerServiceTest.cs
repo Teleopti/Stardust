@@ -358,12 +358,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			Expect.Call(
 				() =>
-				_teamDayOffModifier.RemoveDayOff(_rollbackService, _teamInfo, DateOnly.MinValue.AddDays(1),
-				                                                     _schedulingOptions));
+				_teamDayOffModifier.RemoveDayOffForTeam(_rollbackService, _teamInfo, DateOnly.MinValue.AddDays(1)));
 			Expect.Call(
 				() =>
-				_teamDayOffModifier.AddDayOffAndResourceCalculate(_rollbackService, _teamInfo, DateOnly.MinValue,
-																	 _schedulingOptions));
+				_teamDayOffModifier.AddDayOffForTeamAndResourceCalculate(_rollbackService, _teamInfo, DateOnly.MinValue, _schedulingOptions.DayOffTemplate));
 			Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, DateOnly.MinValue.AddDays(1),
 																  _schedulingOptions.BlockFinderTypeForAdvanceScheduling, false, _matrixList))
 			      .Return(_teamBlockInfo);
