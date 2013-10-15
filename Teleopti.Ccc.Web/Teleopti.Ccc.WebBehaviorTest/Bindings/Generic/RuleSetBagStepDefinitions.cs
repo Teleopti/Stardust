@@ -2,6 +2,7 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -30,6 +31,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsARuleSetBagWith(RuleSetBagConfigurable ruleSetBag)
 		{
 			DataMaker.Data().Apply(ruleSetBag);
+		}
+
+		[Given(@"there is a shift bag named '(.*)' with rule set '(.*)'")]
+		public void GivenThereIsAShiftBagNamedWithRuleSet(string name, string ruleset)
+		{
+			DataMaker.Data().Apply(new RuleSetBagConfigurable
+				{
+					Name = name,
+					RuleSet = ruleset
+				});
 		}
 
 	}

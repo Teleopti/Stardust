@@ -24,24 +24,10 @@ Background:
 		| Name           | A rule set  |
 		| Activity       | Phone       |
 		| Shift category | Day         |
-		| Start boundry  | 8:00-8:00   |
-		| End boundry    | 17:00-17:00 |
-	And there is a shift bag with
-		| Field    | Value       |
-		| Name     | A shift bag |
-		| Rule set | A rule set  |
-	And there is a shift bag with
-		| Field    | Value             |
-		| Name     | Another shift bag |
-		| Rule set | A rule set        |
-	And there is a skill with
-		| Field    | Value   |
-		| Name     | A skill |
-		| Activity | Phone   |
-	And there is a skill with
-		| Field    | Value         |
-		| Name     | Another skill |
-		| Activity | Phone         |
+	And there is a shift bag named 'A shift bag' with rule set 'A rule set'
+	And there is a shift bag named 'Another shift bag' with rule set 'A rule set'
+	And there is a skill named 'A skill' with activity 'Phone'
+	And there is a skill named 'Another skill' with activity 'Phone'
 	And there is a group page with
 		| Field | Value                  |
 		| Name  | A group page           |

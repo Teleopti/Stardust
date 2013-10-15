@@ -13,5 +13,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			DataMaker.ApplyFromTable<SkillConfigurable>(table);
 		}
 
+		[Given(@"there is a skill named '(.*)' with activity '(.*)'")]
+		public void GivenThereIsASkillNamedWithActivity(string name, string activity)
+		{
+			DataMaker.Data().Apply(new SkillConfigurable
+				{
+					Name = name,
+					Activity = activity
+				});
+		}
+
 	}
 }
