@@ -11827,4 +11827,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Modify availabilities</value>
     <comment>Modify availabilities in scheduler</comment>
   </data>
+  <data name="UseDayOfMonthSeasonality" xml:space="preserve">
+    <value>Use Day of Month Seasonality</value>
+    <comment>Option in the last step of quick forecast</comment>
+  </data>
 </root>

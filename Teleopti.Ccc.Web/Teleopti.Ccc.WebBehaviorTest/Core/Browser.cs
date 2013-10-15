@@ -3,84 +3,90 @@ using System.Collections.Generic;
 using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using WatiN.Core;
-using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core
 {
 	public static class Browser
 	{
-		private static readonly IDictionary<string, IBrowserActivator> Activators =
-			new Dictionary<string, IBrowserActivator>
+		private class RegisteredActivator
+		{
+			public string Tag { get; set; }
+			public IBrowserActivator Activator { get; set; }
+			public bool Started { get; set; }
+		}
+
+		private static readonly IList<RegisteredActivator> Activators = 
+			new List<RegisteredActivator>
 				{
-					{"WatiN", new WatiNSingleBrowserIEActivator()}
+					new RegisteredActivator
+						{
+							Tag = "WatiN",
+							Activator = new WatiNSingleBrowserIEActivator(),
+							Started = false
+						}
 				};
 
-		private static IBrowserActivator _activator;
+		private static RegisteredActivator _activator;
 
 		static Browser()
 		{
-			_activator = Activators.First().Value;
+			_activator = Activators.First();
+		}
+
+		private static IBrowserActivator GetStartedActivator()
+		{
+			if (!_activator.Started)
+			{
+				_activator.Activator.Start(Timeouts.Timeout, Timeouts.Poll);
+				_activator.Started = true;
+			}
+			return _activator.Activator;
 		}
 
 		public static IE Current
 		{
 			get
 			{
-				var activator = _activator as WatiNSingleBrowserIEActivator;
+				var activator = GetStartedActivator() as WatiNSingleBrowserIEActivator;
 				return activator != null ? activator.Internal : null;
 			}
 		}
 
-		public static IBrowserInteractions Interactions { get { return _activator.GetInteractions(); } }
+		public static IBrowserInteractions Interactions { get { return GetStartedActivator().GetInteractions(); } }
 
-		public static void Start(TimeSpan timeout, TimeSpan retry)
+		public static void SetDefaultTimeouts(TimeSpan timeout, TimeSpan retry)
 		{
-			Activators.ForEach(a => a.Value.Start(timeout, retry));
 			Timeouts.Timeout = timeout;
 			Timeouts.Poll = retry;
 		}
 
 		public static void SelectBrowserByTag()
 		{
-			var activatorsWithMatchingTag = (
-				                        from a in Activators
-				                        let key = a.Key
-				                        where ScenarioContext.Current.IsTaggedWith(key)
-				                        select a.Value
-			                        ).ToArray();
+			var activatorsWithMatchingTag = Activators
+				.Where(a => ScenarioContext.Current.IsTaggedWith(a.Tag))
+				.ToArray();
 			_activator = activatorsWithMatchingTag.Any() ? 
 				activatorsWithMatchingTag.First() : 
-				Activators.First().Value;
+				Activators.First();
 		}
 
 		public static IDisposable TimeoutScope(TimeSpan timeout)
 		{
-			return new TimeoutScope(_activator, timeout);
-		}
-
-		public static bool IsStarted()
-		{
-			return _activator.IsRunning();
-		}
-
-		public static void NotifyBeforeTestRun()
-		{
-			_activator.NotifyBeforeTestRun();
+			return new TimeoutScope(GetStartedActivator(), timeout);
 		}
 
 		public static void NotifyBeforeScenario()
 		{
-			_activator.NotifyBeforeScenario();
+			_activator.Activator.NotifyBeforeScenario();
 		}
 
 		public static void Close()
 		{
-			Activators.ForEach(a => a.Value.Close());
+			Activators.ForEach(a => a.Activator.Close());
 		}
 
 	}
