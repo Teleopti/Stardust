@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string PartTimePercentage { get; set; }
 		public string ContractSchedule { get; set; }
 		public string Team { get; set; }
-		public string RuleSetBag { get; set; }
+		public string ShiftBag { get; set; }
 		public string PersonSkill { get; set; }
 		public string BudgetGroup { get; set; }
 		public string WorkflowControlSet { get; set; }
@@ -50,11 +50,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			                                                     personContract,
 			                                                     team);
 
-			if (!string.IsNullOrEmpty(RuleSetBag))
+			if (!string.IsNullOrEmpty(ShiftBag))
 			{
 				var bag = new RuleSetBagRepository(uow)
 					.LoadAll()
-					.Single(x => x.Description.Name == RuleSetBag);
+					.Single(x => x.Description.Name == ShiftBag);
 				personPeriod.RuleSetBag = bag;
 			}
 

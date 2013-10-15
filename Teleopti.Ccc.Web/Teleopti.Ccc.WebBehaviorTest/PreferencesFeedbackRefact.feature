@@ -24,15 +24,14 @@ Background:
 	And there is a rule set with
 	| Field          | Value       |
 	| Name           | Rule        |
-	| Test           | 8:00-8:00   |
 	| Activity       | Phone       |
 	| Shift category | Day         |
 	| Start boundry  | 8:00-9:00   |
 	| End boundry    | 16:00-17:00 |
-	And there is a rule set bag with
-	| Field | Value |
-	| Name  | Bag   |
-	| Sets  | Rule  |
+	And there is a shift bag with
+	| Field    | Value |
+	| Name     | Bag   |
+	| Rule set | Rule  |
 	And there is a contract schedule with
 	| Field              | Value     |
 	| Name               | Full week |
@@ -50,9 +49,9 @@ Background:
 
 Scenario: Feedback for a day without restrictions
 	Given I have a person period with 
-	| Field        | Value      |
-	| Start date   | 2012-10-01 |
-	| Rule set bag | Bag        |
+	| Field      | Value      |
+	| Start date | 2012-10-01 |
+	| Shift bag  | Bag        |
 	When I view preferences for date '2012-10-13'
 	Then I should see preference feedback with
 	| Field                 | Value       |
@@ -63,9 +62,9 @@ Scenario: Feedback for a day without restrictions
 
 Scenario: Feedback for a day with day off preference
 	Given I have a person period with 
-	| Field        | Value      |
-	| Start date   | 2012-10-01 |
-	| Rule set bag | Bag        |
+	| Field      | Value      |
+	| Start date | 2012-10-01 |
+	| Shift bag  | Bag        |
 	And I have a preference with
 	| Field  | Value      |
 	| Date   | 2012-10-13 |
@@ -77,7 +76,7 @@ Scenario: Feedback for a day with absence preference
 	Given I have a person period with 
 	| Field             | Value         |
 	| Start date        | 2012-10-01    |
-	| Rule set bag      | Bag           |
+	| Shift bag         | Bag           |
 	| Contract schedule | Full week     |
 	| Contract          | 8 hours a day |
 	And I have a preference with

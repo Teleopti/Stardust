@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			DataMaker.Data().Apply(workShiftRuleSet);
 		}
 
-		[Given(@"there is a rule set bag with")]
+		[Given(@"there is a shift bag with")]
 		public void GivenThereIsARuleSetBagWith(RuleSetBagConfigurable ruleSetBag)
 		{
 			DataMaker.Data().Apply(ruleSetBag);
