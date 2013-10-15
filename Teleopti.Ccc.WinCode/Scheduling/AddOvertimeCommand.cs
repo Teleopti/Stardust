@@ -54,8 +54,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (ScheduleParts.Count > 0)
             {
                 personAssignment = ScheduleParts[0].PersonAssignment();
-            } 
-            if (personAssignment != null && personAssignment.HasProjection)
+            }
+
+			//if (personAssignment != null && personAssignment.HasProjection)
+            if (personAssignment != null)
             {
                 DateTimePeriod assPeriod = personAssignment.Period;
                 if (!DefaultIsSet)
