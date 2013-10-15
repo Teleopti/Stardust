@@ -101,11 +101,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                 var partTo = rangeTo.ScheduledDay(shiftTradeSwapDetail.DateTo);
 				
 	            var checksumFrom = shiftTradeSwapDetail.ChecksumFrom;
-				if (partFrom.PersonAssignmentCollection().Any())
+				if (partFrom.PersonAssignment() != null)
 		            checksumFrom = new ShiftTradeChecksumCalculator(partFrom).CalculateChecksum();
 
 	            var checksumTo = shiftTradeSwapDetail.ChecksumTo;
-				if (partTo.PersonAssignmentCollection().Any())
+				if (partTo.PersonAssignment() != null)
 					checksumTo = new ShiftTradeChecksumCalculator(partTo).CalculateChecksum();
 
                 shiftTradeSwapDetail.SchedulePartFrom = partFrom;
