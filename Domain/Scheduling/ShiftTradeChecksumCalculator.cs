@@ -19,24 +19,21 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
             long checksum = -1; // Default checksum indicates not scheduled
 
-            if (_scheduleDay.SignificantPart() == SchedulePartView.DayOff)
-            {
-                checksum = GetDayOffChecksum();
-            }
-            else
-            {
-                foreach (IPersonAssignment personAssignment in _scheduleDay.PersonAssignmentCollection())
-                {
-                    if (hasMainShift(personAssignment))
-                    {
-                        IVisualLayerCollection visualLayerCollection =
-                            personAssignment.MainShift.ProjectionService().CreateProjection();
-                        checksum = checksum ^ GetMainShiftChecksum(visualLayerCollection);
-                    }
-                }
-            }
+	        if (_scheduleDay.SignificantPart() == SchedulePartView.DayOff)
+		        checksum = getDayOffChecksum();
+	        else
+	        {
+		        foreach (var personAssignment in _scheduleDay.PersonAssignmentCollection())
+		        {
+			        if (!hasMainShift(personAssignment)) continue;
 
-            return checksum;
+			        var visualLayerCollection =
+				        personAssignment.MainShift.ProjectionService().CreateProjection();
+			        checksum = checksum ^ getMainShiftChecksum(visualLayerCollection);
+		        }
+	        }
+
+	        return checksum;
         }
 
         private static bool hasMainShift(IPersonAssignment personAssignment)
@@ -44,10 +41,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return personAssignment.MainShift != null;
         }
 
-        private static long GetMainShiftChecksum(IEnumerable<IVisualLayer> layerCollection)
+        private static long getMainShiftChecksum(IEnumerable<IVisualLayer> layerCollection)
         {
             uint checksum = 0;
-            foreach (IVisualLayer layer in layerCollection)
+            foreach (var layer in layerCollection)
             {
                 checksum = checksum ^ 
                     Crc32.Compute(SerializationHelper.SerializeAsBinary(layer.Period.StartDateTime.Ticks)) ^
@@ -57,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return checksum;
         }
 
-        private long GetDayOffChecksum()
+        private long getDayOffChecksum()
         {
             return _scheduleDay.PersonDayOffCollection()[0].Checksum();
         }

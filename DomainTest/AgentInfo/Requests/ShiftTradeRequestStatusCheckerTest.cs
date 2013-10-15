@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
@@ -23,8 +25,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         private IScheduleDictionary _scheduleDictionary;
         private IScheduleRange _scheduleRangePerson1;
         private IScheduleRange _scheduleRangePerson2;
-        private IScheduleDay _schedulePart1;
-        private IScheduleDay _schedulePart2;
+        private IScheduleDay _scheduleDay1;
+        private IScheduleDay _scheduleDay2;
         private IPerson _person1;
         private IPerson _person2;
         private IPersonRequest _personRequest1;
@@ -47,43 +49,54 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _scheduleDictionary = _mockRepository.StrictMock<IScheduleDictionary>();
             _scheduleRangePerson1 = _mockRepository.StrictMock<IScheduleRange>();
             _scheduleRangePerson2 = _mockRepository.StrictMock<IScheduleRange>();
-            _schedulePart1 = _mockRepository.StrictMock<IScheduleDay>();
-            _schedulePart2 = _mockRepository.StrictMock<IScheduleDay>();
+            _scheduleDay1 = _mockRepository.StrictMock<IScheduleDay>();
+            _scheduleDay2 = _mockRepository.StrictMock<IScheduleDay>();
             _person1 = PersonFactory.CreatePerson();
             _person2 = PersonFactory.CreatePerson();
 
-            _personRequest1 = new PersonRequest(_person1,
-                                                              new TextRequest(new DateTimePeriod(2007, 6, 3, 2007, 7, 1)));
-            _personRequest2 = new PersonRequest(_person2,
-                                                              new ShiftTradeRequest(new List<IShiftTradeSwapDetail>{new ShiftTradeSwapDetail(_person2, _person1, new DateOnly(2009, 9, 21), new DateOnly(2009, 9, 21))}));
-            _personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person1,
-                                                                                                  _personRequest2.
-                                                                                                  Request.Period.ChangeEndTime(TimeSpan.FromHours(1)));
-            _personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person2,
-                                                                                                  _personRequest2.
-                                                                                                  Request.Period.ChangeEndTime(TimeSpan.FromHours(1)));
-            
+	        _personRequest1 = new PersonRequest(_person1,
+	                                            new TextRequest(new DateTimePeriod(2007, 6, 3, 2007, 7, 1)));
+	        _personRequest2 = new PersonRequest(_person2,
+	                                            new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
+		                                            {
+			                                            new ShiftTradeSwapDetail(_person2, _person1, new DateOnly(2009, 9, 21),
+			                                                                     new DateOnly(2009, 9, 21))
+		                                            }));
+	        _personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person1,
+	                                                                                   _personRequest2.
+		                                                                                   Request.Period.ChangeEndTime(
+			                                                                                   TimeSpan.FromHours(1)));
+	        _personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person2,
+	                                                                                   _personRequest2.
+		                                                                                   Request.Period.ChangeEndTime(
+			                                                                                   TimeSpan.FromHours(1)));
+
         }
 
         private void SetupSchedule()
         {
             Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRangePerson1).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRangePerson2).Repeat.AtLeastOnce();
-            Expect.Call(_scheduleRangePerson1.ScheduledDay(new DateOnly(2009, 9, 21))).Return(_schedulePart1).Repeat.
+            Expect.Call(_scheduleRangePerson1.ScheduledDay(new DateOnly(2009, 9, 21))).Return(_scheduleDay1).Repeat.
                 AtLeastOnce();
-            Expect.Call(_scheduleRangePerson2.ScheduledDay(new DateOnly(2009, 9, 21))).Return(_schedulePart2).Repeat.
+            Expect.Call(_scheduleRangePerson2.ScheduledDay(new DateOnly(2009, 9, 21))).Return(_scheduleDay2).Repeat.
                 AtLeastOnce();
-            Expect.Call(_schedulePart1.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>{_personAssignment1})).Repeat.AtLeastOnce();
-            Expect.Call(_schedulePart2.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment2 })).Repeat.AtLeastOnce();
-            Expect.Call(_schedulePart1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
-            Expect.Call(_schedulePart2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
+            Expect.Call(_scheduleDay1.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>{_personAssignment1})).Repeat.AtLeastOnce();
+            Expect.Call(_scheduleDay2.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment2 })).Repeat.AtLeastOnce();
+            Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
+            Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
         }
 
         [Test]
         public void VerifyChangedScheduleForOwnerRefersRequest()
         {
             Expect.Call(_scenarioRepository.Current()).Return(_scenario);
-            Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { _person2, _person1 }), new ScheduleDictionaryLoadOptions(true, true), _personRequest2.Request.Period.ChangeEndTime(TimeSpan.FromHours(25)), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
+	        Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] {_person2, _person1}),
+	                                                                       new ScheduleDictionaryLoadOptions(true, true),
+	                                                                       _personRequest2.Request.Period.ChangeEndTime(
+		                                                                       TimeSpan.FromHours(25)), _scenario))
+	              .Return(_scheduleDictionary)
+	              .IgnoreArguments();
             SetupSchedule();
 
             _mockRepository.ReplayAll();
@@ -91,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _personRequest2.Pending();
             IShiftTradeRequest shiftTradeRequest = (IShiftTradeRequest) _personRequest2.Request;
             shiftTradeRequest.ShiftTradeSwapDetails[0].ChecksumFrom = -1 ^ 
-                new ShiftTradeChecksumCalculator(_schedulePart1).CalculateChecksum();
+                new ShiftTradeChecksumCalculator(_scheduleDay1).CalculateChecksum();
             shiftTradeRequest.ShiftTradeSwapDetails[0].ChecksumTo = 100;
             _target.Check(shiftTradeRequest);
 
@@ -104,7 +117,12 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         public void VerifyChangedScheduleForRequestedRefersRequest()
         {
             Expect.Call(_scenarioRepository.Current()).Return(_scenario);
-            Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { _person2, _person1 }), new ScheduleDictionaryLoadOptions(true, true), _personRequest2.Request.Period.ChangeEndTime(TimeSpan.FromHours(25)), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
+	        Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] {_person2, _person1}),
+	                                                                       new ScheduleDictionaryLoadOptions(true, true),
+	                                                                       _personRequest2.Request.Period.ChangeEndTime(
+		                                                                       TimeSpan.FromHours(25)), _scenario))
+	              .Return(_scheduleDictionary)
+	              .IgnoreArguments();
             SetupSchedule();
 
             _mockRepository.ReplayAll();
@@ -113,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             IShiftTradeRequest shiftTradeRequest = (IShiftTradeRequest)_personRequest2.Request;
             shiftTradeRequest.ShiftTradeSwapDetails[0].ChecksumFrom = 200;
             shiftTradeRequest.ShiftTradeSwapDetails[0].ChecksumTo = -1 ^
-                new ShiftTradeChecksumCalculator(_schedulePart2).CalculateChecksum();
+                new ShiftTradeChecksumCalculator(_scheduleDay2).CalculateChecksum();
             _target.Check(shiftTradeRequest);
 
             Assert.AreEqual(ShiftTradeStatus.Referred, shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
@@ -134,12 +152,12 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
             _personRequest2.Pending();
             IShiftTradeRequest shiftTradeRequest = (IShiftTradeRequest)_personRequest2.Request;
-            shiftTradeRequest.ShiftTradeSwapDetails[0].ChecksumFrom = new ShiftTradeChecksumCalculator(_schedulePart2).CalculateChecksum();
-            shiftTradeRequest.ShiftTradeSwapDetails[0].ChecksumTo = new ShiftTradeChecksumCalculator(_schedulePart1).CalculateChecksum();
+            shiftTradeRequest.ShiftTradeSwapDetails[0].ChecksumFrom = new ShiftTradeChecksumCalculator(_scheduleDay2).CalculateChecksum();
+            shiftTradeRequest.ShiftTradeSwapDetails[0].ChecksumTo = new ShiftTradeChecksumCalculator(_scheduleDay1).CalculateChecksum();
             _target.Check(shiftTradeRequest);
 
-            Assert.AreEqual(_schedulePart2, shiftTradeRequest.ShiftTradeSwapDetails[0].SchedulePartFrom);
-            Assert.AreEqual(_schedulePart1, shiftTradeRequest.ShiftTradeSwapDetails[0].SchedulePartTo);
+            Assert.AreEqual(_scheduleDay2, shiftTradeRequest.ShiftTradeSwapDetails[0].SchedulePartFrom);
+            Assert.AreEqual(_scheduleDay1, shiftTradeRequest.ShiftTradeSwapDetails[0].SchedulePartTo);
             Assert.AreEqual(ShiftTradeStatus.OkByMe, shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
 
             _mockRepository.VerifyAll();
@@ -150,8 +168,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         {
             IRequestApprovalService requestApprovalService = _mockRepository.StrictMock<IRequestApprovalService>();
 
-            Expect.Call(_schedulePart2.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment2 })).Repeat.AtLeastOnce();
-            Expect.Call(_schedulePart2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
+            Expect.Call(_scheduleDay2.PersonAssignmentCollection()).Return(new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment2 })).Repeat.AtLeastOnce();
+            Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             Expect.Call(requestApprovalService.ApproveShiftTrade(((IShiftTradeRequest)_personRequest2.Request))).Return(
                 new List<IBusinessRuleResponse>());
             _mockRepository.ReplayAll();
@@ -159,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             IShiftTradeRequest shiftTradeRequest = (IShiftTradeRequest)_personRequest2.Request;
             shiftTradeRequest.ShiftTradeSwapDetails[0].ChecksumFrom = 100;
             shiftTradeRequest.ShiftTradeSwapDetails[0].ChecksumTo = -1 ^
-                new ShiftTradeChecksumCalculator(_schedulePart2).CalculateChecksum();
+                new ShiftTradeChecksumCalculator(_scheduleDay2).CalculateChecksum();
             _personRequest2.Request.Accept(_person1, new EmptyShiftTradeRequestSetChecksum(), _authorization);
             _personRequest2.Pending();
             _personRequest2.Approve(requestApprovalService,_authorization);
@@ -182,5 +200,47 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _target.EndBatch();
             _mockRepository.VerifyAll();
         }
+
+		[Test]
+		public void Check_ShiftTradeNotInOpenedSchedulePeriod_ReturnNotChanged()
+		{
+			var dateOnly = new DateOnly(2013, 10, 14);
+			var swapdetail = new ShiftTradeSwapDetail(_person1, _person2, dateOnly, dateOnly)
+				{
+					ChecksumFrom = -1234,
+					ChecksumTo = -5678
+				};
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>{swapdetail});
+			var emptyPersonAssignment = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>());
+
+			_scheduleDictionary.Expect(sd => sd[_person1]).Return(_scheduleRangePerson1);
+			_scheduleDictionary.Expect(sd => sd[_person2]).Return(_scheduleRangePerson2);
+			_scheduleRangePerson1.Expect(sr => sr.ScheduledDay(dateOnly)).Return(_scheduleDay1);
+			_scheduleRangePerson2.Expect(sr => sr.ScheduledDay(dateOnly)).Return(_scheduleDay2);
+			_scheduleDay1.Expect(sd => sd.PersonAssignmentCollection()).Return(emptyPersonAssignment);
+			_scheduleDay2.Expect(sd => sd.PersonAssignmentCollection()).Return(emptyPersonAssignment);
+			_mockRepository.ReplayAll();
+
+			var result = shiftTradeRequestCheckerForTest.VerifyShiftTradeIsUnchangeExposer(_scheduleDictionary, shiftTradeRequest,
+			                                                                               _authorization);
+			result.Should().Be.True();
+			_mockRepository.VerifyAll();
+		}
+
+		// ReSharper disable ClassNeverInstantiated.Local
+	    private class shiftTradeRequestCheckerForTest : ShiftTradeRequestStatusChecker
+		{
+			public shiftTradeRequestCheckerForTest(ICurrentScenario scenarioRepository, IScheduleRepository scheduleRepository,
+			                                       IPersonRequestCheckAuthorization authorization)
+				: base(scenarioRepository, scheduleRepository, authorization)
+			{
+			}
+
+			public static bool VerifyShiftTradeIsUnchangeExposer(IScheduleDictionary scheduleDictionary, IShiftTradeRequest shiftTradeRequest, IPersonRequestCheckAuthorization authorization)
+			{
+				return VerifyShiftTradeIsUnchanged(scheduleDictionary, shiftTradeRequest, authorization);
+			}
+		}
+		// ReSharper restore ClassNeverInstantiated.Local
     }
 }
