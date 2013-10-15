@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                                                                           new ResourceCalculationOnlyScheduleDayChangeCallback());
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(ApproveRequestCommandDto command)
         {
             using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
@@ -73,17 +74,16 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 {
                     throw new FaultException(e.Message);
                 }
-	            foreach (var diff in scheduleDictionary.DifferenceSinceSnapshot())
-	            {
-								var result = _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository, diff);
+                var result = _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository,
+                                                        scheduleDictionary.DifferenceSinceSnapshot());
 
-								_scheduleDictionaryModifiedCallback.Callback(scheduleDictionary, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
+                //new ScheduleDictionaryModifiedCallback().Callback(scheduleDictionary, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
+                _scheduleDictionaryModifiedCallback.Callback(scheduleDictionary, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
 
-								using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
-								{
-									uow.PersistAll();
-								}		            
-	            }
+                using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
+                {
+                    uow.PersistAll();
+                }
             }
 			command.Result = new CommandResultDto { AffectedId = command.PersonRequestId, AffectedItems = 1 };
         }

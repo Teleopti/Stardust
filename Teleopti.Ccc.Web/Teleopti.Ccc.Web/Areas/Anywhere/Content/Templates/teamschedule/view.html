@@ -43,15 +43,16 @@
             <!-- /ko -->
             <!-- ko if: !Loading() -->
             <div class="relative">
-				
-				<div class="time-line absolute">
-					<div class="relative">
-						<div data-bind="foreach: TimeLine.Times">
-							<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
-							<div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
-						</div>
-					</div>
-				</div>
+				<!-- ko with: TimeLine -->
+	            <div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime }">
+		            <div class="relative">
+			            <div data-bind="foreach: Times">
+				            <div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
+				            <div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
+			            </div>
+		            </div>
+	            </div>
+				<!-- /ko -->
 						
 				<table class="table table-hover">
 					<thead>
@@ -67,8 +68,22 @@
 								<!-- Must do it this way to get correct overflow: hidden in IE -->
 								<div class="person-name nowrap" data-bind="text: Name"></div>
 							</td>
-							<td class="shift">
-								<ul class="relative unstyled" data-bind="template: { name: 'layerTemplate', foreach: Layers }"></ul>
+							<td class="schedule">
+								<div class="relative time-line-for">
+									<!-- ko if: IsShift -->
+									<div class="shift" data-bind="template: { name: 'layerTemplate', foreach: Layers }"></div>
+									<!-- /ko -->
+									
+									<!-- ko if: IsDayOff -->
+									<!-- ko with: DayOff -->
+									<!-- ko if: OverlapsTimeLine -->
+									<div 
+										class="dayoff absolute" 
+										data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }"></div>
+									<!-- /ko -->
+									<!-- /ko -->
+									<!-- /ko -->
+								</div>
 							</td>
 							<td class="contract-time" data-bind="text: ContractTime"></td>
 						</tr>
@@ -81,8 +96,8 @@
 </div>
 
 <script id="layerTemplate" type="text/html">
-	<li class="layer absolute floatleft" data-bind="
-	if: IsVisible,
+	<!-- ko if: OverlapsTimeLine -->
+	<div class="layer absolute floatleft" data-bind="
 	style: {
 		left: StartPixels() + 'px',
 		width: LengthPixels() + 'px',
@@ -92,5 +107,6 @@
 		'data-start-time': StartTime,
 		'data-length-minutes': LengthMinutes,
 	}
-	"></li>
+	"></div>
+	<!-- /ko -->
 </script>

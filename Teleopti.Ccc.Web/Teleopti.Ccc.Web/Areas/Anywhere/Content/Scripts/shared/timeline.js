@@ -1,7 +1,7 @@
 define([
 		'knockout',
 		'helpers',
-		'views/teamschedule/timeline-time'
+		'shared/timeline-time'
 	], function (ko, helpers, timeViewModel) {
 
 		var minutes = helpers.Minutes;
@@ -21,6 +21,10 @@ define([
 					if (startMinutes < start)
 						start = startMinutes;
 				});
+
+				if (start === undefined)
+					return minutes.ForHourOfDay(8);
+				
 				return minutes.StartOfHour(start);
 			});
 
@@ -33,7 +37,19 @@ define([
 					if (endMinutes > end)
 						end = endMinutes;
 				});
+
+				if (end === undefined)
+					return minutes.ForHourOfDay(16);
+				
 				return minutes.EndOfHour(end);
+			});
+
+			this.Minutes = ko.computed(function () {
+				return self.EndMinutes() - self.StartMinutes();
+			});
+
+			this.PixelsPerMinute = ko.computed(function () {
+				return self.WidthPixels() / self.Minutes();
 			});
 
 			this.Times = ko.computed(function () {
@@ -47,12 +63,13 @@ define([
 				return times;
 			}).extend({ throttle: 1 });
 
-			this.Minutes = ko.computed(function () {
-				return self.EndMinutes() - self.StartMinutes();
+			this.StartTime = ko.computed(function() {
+				return self.Times()[0].Time();
 			});
 
-			this.PixelsPerMinute = ko.computed(function () {
-				return self.WidthPixels() / self.Minutes();
+			this.EndTime = ko.computed(function () {
+				var times = self.Times();
+				return times[times.length - 1].Time();
 			});
 		};
 	});

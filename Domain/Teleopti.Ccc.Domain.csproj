@@ -541,11 +541,14 @@
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
+    <Compile Include="Scheduling\TeamBlock\DayIntervalGenerator.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriod.cs" />
     <Compile Include="ResourceCalculation\TransformResourcesFromStorageCommand.cs" />
     <Compile Include="Scheduling\Overtime\SkillIntervalData.cs" />
     <Compile Include="Scheduling\Overtime\SkillIntervalDataDivider.cs" />
     <Compile Include="Scheduling\Overtime\SkillStaffPeriodToSkillIntervalDataMapper.cs" />
+    <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDays.cs" />
+    <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillInterval.cs" />
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlock.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftLayer.cs" />
@@ -654,7 +657,6 @@
     <Compile Include="Collection\DayOfWeekIntDictionary.cs" />
     <Compile Include="Collection\DifferenceCollection.cs" />
     <Compile Include="Collection\DifferenceEntityCollectionService.cs" />
-    <Compile Include="Collection\DuplicateElementException.cs" />
     <Compile Include="Collection\Extensions.cs" />
     <Compile Include="Collection\LayerCollection.cs">
       <SubType>Code</SubType>
@@ -941,6 +943,7 @@
     <Compile Include="Scheduling\TeamBlock\TeamInfo.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamScheduling.cs" />
+    <Compile Include="Scheduling\TeamBlock\TwoDaysIntervalGenerator.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\EqualWorkShiftValueDecider.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftLengthValueCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftPeriodValueCalculator.cs" />
@@ -1187,7 +1190,6 @@
     <Compile Include="Forecasting\MultisiteSkill.cs" />
     <Compile Include="Forecasting\MinMaxOccupancy.cs" />
     <Compile Include="Forecasting\Outlier.cs" />
-    <Compile Include="Forecasting\OutlierDateProviderBase.cs" />
     <Compile Include="Forecasting\SkillRestrictionSet.cs" />
     <Compile Include="Forecasting\DayOfWeekItem.cs" />
     <Compile Include="Forecasting\DayOfWeeks.cs" />
@@ -1594,9 +1596,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forecasting\Outlier.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Forecasting\OutlierDateProviderBase.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AgentInfo\Requests\PersonRequest.hbm.xml">

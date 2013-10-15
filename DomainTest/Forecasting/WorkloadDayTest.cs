@@ -488,6 +488,58 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.Less(diff, 0.01);
         }
 
+        [Test]
+        public void CanDistributeIfWeHaveZeroTalkTimeAndACWInTemplate()
+        {
+            DateOnly createDate = new DateOnly(2008, 01, 14);
+            string templateName = "JULDAGEN";
+            IWorkloadDayTemplate workloadDayTemplate = new WorkloadDayTemplate();
+
+            IList<TimePeriod> openHours = new List<TimePeriod>();
+            IWorkloadDay workloadDay = CreateWorkloadDay(openHours, workloadDayTemplate, templateName, createDate);
+            
+            //Add som changes to the template
+            SetWorkloadDayTemplateTalkTimeAndACW(workloadDayTemplate);
+            
+            //Set some values on the real workload
+            var originalAverageTaskTime = new TimeSpan(0, 0, 100);
+            var originalAverageAfterTaskTime = new TimeSpan(0, 0, 33);
+
+
+            workloadDay.Tasks = 10000;
+            workloadDay.AverageTaskTime = new TimeSpan(0, 0, 100);
+            workloadDay.AverageAfterTaskTime = new TimeSpan(0, 0, 33);
+            workloadDay.ChangeOpenHours(_openHours);
+
+            //Apply the template
+            workloadDay.ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
+            
+            //There is a rounding problem here checks that it is not more than 0.01 milliseconds
+            double diff = Math.Abs(originalAverageTaskTime.Milliseconds - workloadDay.AverageTaskTime.Milliseconds );
+            Assert.Less(diff, 0.01);
+
+            diff = Math.Abs(originalAverageAfterTaskTime.TotalMilliseconds - workloadDay.AverageAfterTaskTime.TotalMilliseconds);
+            Assert.Less(diff, 0.01);
+        }
+
+        private void SetWorkloadDayTemplateTalkTimeAndACW(IWorkloadDayTemplate workloadDayTemplate)
+        {
+            workloadDayTemplate.SortedTaskPeriodList[0].SetTasks(500);
+            workloadDayTemplate.SortedTaskPeriodList[0].AverageTaskTime = new TimeSpan(0, 0, 1);
+            workloadDayTemplate.SortedTaskPeriodList[0].AverageAfterTaskTime = new TimeSpan(0, 0, 2);
+
+            workloadDayTemplate.SortedTaskPeriodList[1].SetTasks(500);
+            workloadDayTemplate.SortedTaskPeriodList[1].AverageTaskTime = new TimeSpan(0, 0, 0);
+            workloadDayTemplate.SortedTaskPeriodList[1].AverageAfterTaskTime = new TimeSpan(0, 0, 0);
+
+            workloadDayTemplate.SortedTaskPeriodList[2].SetTasks(500);
+            workloadDayTemplate.SortedTaskPeriodList[2].AverageTaskTime = new TimeSpan(0, 0, 0);
+            workloadDayTemplate.SortedTaskPeriodList[2].AverageAfterTaskTime = new TimeSpan(0, 0, 0);
+
+            workloadDayTemplate.SortedTaskPeriodList[3].SetTasks(500);
+            workloadDayTemplate.SortedTaskPeriodList[3].AverageTaskTime = new TimeSpan(0, 0, 0);
+            workloadDayTemplate.SortedTaskPeriodList[3].AverageAfterTaskTime = new TimeSpan(0, 0, 0);
+        }
 
 
         [Test]

@@ -3666,7 +3666,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cancelling....
+        ///   Looks up a localized string similar to Waiting to stop....
         /// </summary>
         public static string CancellingThreeDots {
             get {
@@ -12891,6 +12891,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ModifyAssignment {
             get {
                 return ResourceManager.GetString("ModifyAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modify availabilities.
+        /// </summary>
+        public static string ModifyAvailabilities {
+            get {
+                return ResourceManager.GetString("ModifyAvailabilities", resourceCulture);
             }
         }
         
@@ -22900,6 +22909,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stop.
+        /// </summary>
+        public static string Stop {
+            get {
+                return ResourceManager.GetString("Stop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hourly availabilities.
         /// </summary>
         public static string StudentAvailabilities {
@@ -24977,6 +24995,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Used {
             get {
                 return ResourceManager.GetString("Used", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Day of Month Seasonality.
+        /// </summary>
+        public static string UseDayOfMonthSeasonality {
+            get {
+                return ResourceManager.GetString("UseDayOfMonthSeasonality", resourceCulture);
             }
         }
         

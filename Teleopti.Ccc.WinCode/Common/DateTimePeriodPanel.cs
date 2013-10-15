@@ -251,49 +251,6 @@ namespace Teleopti.Ccc.WinCode.Common
             return CalculateSnapTime(frameworkElement.ActualWidth, dateTimePeriod, change, interval);
         }
 
-        public static TimeSpan GetTimeSpanFromHorizontalChange(FrameworkElement frameworkElement, FrameworkElement panel, double change, double interval)
-        {
-            return CalculateSnapTime(frameworkElement, panel, change, interval);
-        }
-
-        private static TimeSpan CalculateSnapTime(FrameworkElement frameworkElement, FrameworkElement panel, double change, double interval)
-        {
-            var layerDateTimePeriod = GetDateTimePeriod(frameworkElement);
-            var panelDateTimePeriod = GetDateTimePeriod(panel);
-
-            var onScreenDataTimePeriod = panelDateTimePeriod.Intersection(layerDateTimePeriod);
-
-            var onScreenElapsedMilliseconds = 0d;
-           
-            if (onScreenDataTimePeriod!=null)
-            {
-                var h = (DateTimePeriod)onScreenDataTimePeriod;
-                onScreenElapsedMilliseconds = h.ElapsedTime().TotalMilliseconds;
-            }
-            
-            //Hur många "width" är 1 millisecond
-            var unit = (frameworkElement.ActualWidth/onScreenElapsedMilliseconds);
-
-            var layerMilliseconds = layerDateTimePeriod.ElapsedTime().TotalMilliseconds;
-            var realLayerWidth = layerMilliseconds * unit;
-
-            //What we did was to calculate the layers actual width even if it is outside the screen
-            var length = onScreenElapsedMilliseconds/realLayerWidth;
-
-            var t = TimeSpan.FromMilliseconds(length * (change * 0.6)); //0.6 is to add some "seghet"
-
-            if (t.TotalMinutes < 1 && t.TotalMinutes > -1) return TimeSpan.FromTicks(0L);
-
-            var minutesLeftOver = t.TotalMinutes % interval;
-            var halfInterval = interval / 2;
-
-            if (minutesLeftOver >= halfInterval)
-                return t.Add(TimeSpan.FromMinutes(interval - minutesLeftOver));
-
-            return t.Add(TimeSpan.FromMinutes(minutesLeftOver).Negate());
-        }
-
-
         protected override Size MeasureElements(Size availableSize, UIElementCollection elements)
         {
             double panelMinutes = GetDateTimePeriod(this).ElapsedTime().TotalMinutes;
@@ -385,6 +342,7 @@ namespace Teleopti.Ccc.WinCode.Common
             
             return t.Add(TimeSpan.FromMinutes(minutesLeftOver).Negate());
         }
+
 
         private double GetElementWidth(double panelMinutes, double panelWidth, UIElement element)
         {

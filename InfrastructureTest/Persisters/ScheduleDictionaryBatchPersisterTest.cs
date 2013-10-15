@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 			target.Persist(scheduleDictionary);
 
-			scheduleDictionaryPersister.AssertWasCalled(x => x.MarkForPersist(uow, null, difference.First()));
+			scheduleDictionaryPersister.AssertWasCalled(x => x.MarkForPersist(uow, null, difference));
 		}
 
 		[Test]
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 			currUowFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
 			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
-			scheduleDictionaryPersister.Stub(x => x.MarkForPersist(uow, null, new DifferenceCollectionItem<IPersistableScheduleData>())).IgnoreArguments().Return(result);
+			scheduleDictionaryPersister.Stub(x => x.MarkForPersist(uow, null, null)).IgnoreArguments().Return(result);
 
 			target.Persist(scheduleDictionary);
 

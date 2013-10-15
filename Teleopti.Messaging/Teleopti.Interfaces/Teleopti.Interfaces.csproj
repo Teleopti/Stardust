@@ -189,7 +189,6 @@
     <Compile Include="Domain\IScheduleDayRestrictionExtractor.cs" />
     <Compile Include="Domain\INow.cs" />
     <Compile Include="Domain\IOutlier.cs" />
-    <Compile Include="Domain\IOutlierDateProvider.cs" />
     <Compile Include="Domain\IJobResultProgress.cs" />
     <Compile Include="Domain\IPeriodScheduledAndRestrictionDaysOff.cs" />
     <Compile Include="Domain\IProjectionMerger.cs" />

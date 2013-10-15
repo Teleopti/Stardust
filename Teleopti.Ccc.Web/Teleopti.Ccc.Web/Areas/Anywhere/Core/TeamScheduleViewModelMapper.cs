@@ -22,19 +22,26 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					let shift = model.Shift ?? new Shift()
 					let canSeeConfidentialAbsence = data.CanSeeConfidentialAbsencesFor.Any(x => x.Id == s.PersonId)
 					let layers = mapLayers(data.UserTimeZone, shift, canSeeConfidentialAbsence)
-					select makeViewModel(s, model, shift, layers))
+					select makeViewModel(s, model, shift, layers, data.UserTimeZone))
 				.ToArray();
 		}
 
-		private static TeamScheduleShiftViewModel makeViewModel(PersonScheduleDayReadModel readModel, Model model, Shift shift, IEnumerable<TeamScheduleLayerViewModel> layers)
+		private static TeamScheduleShiftViewModel makeViewModel(PersonScheduleDayReadModel readModel, Model model, Shift shift, IEnumerable<TeamScheduleLayerViewModel> layers, TimeZoneInfo userTimeZone)
 		{
+			TeamScheduleDayOffViewModel dayOff = null;
+			if (model.DayOff != null)
+				dayOff = new TeamScheduleDayOffViewModel
+					{
+						Start = TimeZoneInfo.ConvertTimeFromUtc(model.DayOff.Start, userTimeZone).ToFixedDateTimeFormat(),
+						Minutes = (int) model.DayOff.End.Subtract(model.DayOff.Start).TotalMinutes
+					};
 			return new TeamScheduleShiftViewModel
 				{
 					ContractTimeMinutes = shift.ContractTimeMinutes,
-					FirstName = model.FirstName,
-					Id = readModel.PersonId.ToString(),
-					LastName = model.LastName,
-					Projection = layers
+					PersonId = readModel.PersonId.ToString(),
+					Projection = layers,
+					IsFullDayAbsence = model.Shift != null && model.Shift.IsFullDayAbsence,
+					DayOff = dayOff
 				};
 		}
 

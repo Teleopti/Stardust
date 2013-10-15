@@ -1017,7 +1017,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var authorization = PrincipalAuthorization.Instance();
 			toolStripMenuItemMeetingOrganizer.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyMeetings);
 			toolStripMenuItemWriteProtectSchedule.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
-			toolStripMenuItemAddOvertimeAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability);
+			toolStripMenuItemAddOvertimeAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
 
 			setPermissionOnControls();
 			
@@ -1915,7 +1915,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			clipboardSpecialOptions.ShowRestrictions = _scheduleView is RestrictionSummaryView;
 			clipboardSpecialOptions.DeleteMode = false;
 			clipboardSpecialOptions.ShowOvertimeAvailability = false;
-			clipboardSpecialOptions.ShowShiftAsOvertime = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability); ;
+			clipboardSpecialOptions.ShowShiftAsOvertime = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities); ;
 
 			var pasteSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions, MultiplicatorDefinitionSet) { Text = Resources.PasteSpecial };
 			pasteSpecial.ShowDialog();
@@ -3421,7 +3421,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var clipboardSpecialOptions = new ClipboardSpecialOptions();
 			clipboardSpecialOptions.ShowRestrictions = _scheduleView is RestrictionSummaryView;
 			clipboardSpecialOptions.DeleteMode = true;
-			clipboardSpecialOptions.ShowOvertimeAvailability = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability);
+			clipboardSpecialOptions.ShowOvertimeAvailability = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
 			clipboardSpecialOptions.ShowShiftAsOvertime = false;
 			
             using (var deleteSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions, MultiplicatorDefinitionSet))
@@ -4151,8 +4151,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var authorization = PrincipalAuthorization.Instance();
 			toolStripButtonRequestView.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler);
 			toolStripButtonOptions.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
-			toolStripButtonFilterOvertimeAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability);
-			ToolStripMenuItemScheduleOvertime.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OvertimeAvailability);
+			toolStripButtonFilterOvertimeAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
+			ToolStripMenuItemScheduleOvertime.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
 		}
 
 		private void loadAndOptimizeData(DoWorkEventArgs e)

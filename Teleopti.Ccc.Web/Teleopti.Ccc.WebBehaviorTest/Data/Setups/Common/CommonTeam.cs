@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common
 		{
 			var site = GlobalDataMaker.Data().Data<CommonSite>().Site;
 
-			Team = TeamFactory.CreateSimpleTeam("Common Team");
+			Team = TeamFactory.CreateSimpleTeam(DefaultName.Make("Common Team"));
 			site.AddTeam(Team);
 
 			var teamRepository = new TeamRepository(uow);

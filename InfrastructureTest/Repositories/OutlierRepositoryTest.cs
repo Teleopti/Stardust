@@ -117,19 +117,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        public void FindByWorkloadShouldEagerLoadAllDateProviders()
-        {
-            var newOutlier1 = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(newOutlier1);
-
-            var rep = new OutlierRepository(UnitOfWork);
-            var outliers = rep.FindByWorkload(_workload);
-
-            LazyLoadingManager.IsInitialized(outliers[0].OutlierDateProviders)
-                .Should().Be.True();
-        }
-
-        [Test]
         public void ShouldReturnUniqueOutliers()
         {
             var newOutlier1 = CreateAggregateWithCorrectBusinessUnit();

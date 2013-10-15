@@ -1,7 +1,5 @@
-using System.Threading;
-using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 {

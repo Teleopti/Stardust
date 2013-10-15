@@ -45,14 +45,35 @@
 {
 	cursor: pointer;
 }
-.team-schedule .shift 
+.team-schedule .schedule
 {
 	padding-left: 0;
 	padding-right: 0;
 	width: auto;
 }
+
+.team-schedule .dayoff 
+{
+	top: -8px;
+	height: 36px;
+    background-size: 11px 11px;
+    background-image: 
+        linear-gradient(135deg,
+        transparent,
+        transparent 7px,
+        rgba(0,0,0,0.2) 8px,
+        transparent 8px,
+        transparent
+        );
+}
+.no-cssgradients .team-schedule .dayoff 
+{
+	background-color: beige;
+}
+
 .team-schedule .shift .layer
 {
+	z-index: 10;	
 	height: 20px;
 }
 .team-schedule .shift .layer:first-of-type
@@ -73,22 +94,7 @@
 	   -moz-border-radius: 4px 4px 4px 4px;
 			border-radius: 4px 4px 4px 4px;
 }
-.team-schedule .resource-layer 
-{
-	height: 14px;
-}
-.team-schedule .resource-layer:last-of-type
-{
-	-webkit-border-radius: 0px 4px 4px 0px;
-	   -moz-border-radius: 0px 4px 4px 0px;
-			border-radius: 0px 4px 4px 0px;
-}
-.team-schedule .resource-layer:first-of-type
-{
-	-webkit-border-radius: 4px 0px 0px 4px;
-	   -moz-border-radius: 4px 0px 0px 4px;
-			border-radius: 4px 0px 0px 4px;
-}
+
 .team-schedule .resources td {
     padding-top: 3px;
 }

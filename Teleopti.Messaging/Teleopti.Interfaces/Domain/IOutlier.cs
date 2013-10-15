@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -38,15 +37,6 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         IList<DateOnly> Dates { get; }
 
-        /// <summary>
-        /// Gets all date providers.
-        /// </summary>
-        /// <value>All date providers.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-07-16
-        /// </remarks>
-        ReadOnlyCollection<IOutlierDateProvider> OutlierDateProviders { get; }
 
         /// <summary>
         /// Gets the dates.
@@ -58,26 +48,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-05-14
         /// </remarks>
         IList<DateOnly> GetDatesByPeriod(DateOnlyPeriod period);
-
-        /// <summary>
-        /// Adds the date provider.
-        /// </summary>
-        /// <param name="dateProvider">The date provider.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-05-14
-        /// </remarks>
-        void AddDateProvider(IOutlierDateProvider dateProvider);
-
-        /// <summary>
-        /// Removes the date provider.
-        /// </summary>
-        /// <param name="dateProvider">The date provider.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-05-14
-        /// </remarks>
-        void RemoveDateProvider(IOutlierDateProvider dateProvider);
 
         /// <summary>
         /// Adds the date.

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -18,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
     public class Outlier : AggregateRootWithBusinessUnit, IOutlier
     {
         private Description _description;
-        private IList<IOutlierDateProvider> _outlierDateProviders;
         private IList<DateOnly> _dates;
         private readonly IWorkload _workload;
 
@@ -45,7 +41,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             _description = description;
             _dates = new List<DateOnly>();
-            _outlierDateProviders = new List<IOutlierDateProvider>();
         }
 
         /// <summary>
@@ -101,43 +96,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual IList<DateOnly> GetDatesByPeriod(DateOnlyPeriod period)
         {
             IEnumerable<DateOnly> dates = _dates.Where(period.Contains);
-            if (_outlierDateProviders.Count > 0)
-            {
-                _outlierDateProviders.ForEach(o => dates = dates.Concat(o.GetDates(period)));
-            }
 
             return dates.ToList();
-        }
-
-        /// <summary>
-        /// Adds the date provider.
-        /// </summary>
-        /// <param name="dateProvider">The date provider.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-05-14
-        /// </remarks>
-        public virtual void AddDateProvider(IOutlierDateProvider dateProvider)
-        {
-            _outlierDateProviders.Add(dateProvider);
-            dateProvider.SetParent(this);
-        }
-
-        /// <summary>
-        /// Removes the date provider.
-        /// </summary>
-        /// <param name="dateProvider">The date provider.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-05-14
-        /// </remarks>
-        public virtual void RemoveDateProvider(IOutlierDateProvider dateProvider)
-        {
-            if (_outlierDateProviders.Contains(dateProvider))
-            {
-                dateProvider.SetParent(null);
-                _outlierDateProviders.Remove(dateProvider);
-            }
         }
 
         /// <summary>
@@ -182,19 +142,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         }
 
         /// <summary>
-        /// Gets all date providers.
-        /// </summary>
-        /// <value>All date providers.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-07-16
-        /// </remarks>
-        public virtual ReadOnlyCollection<IOutlierDateProvider> OutlierDateProviders
-        {
-            get { return new ReadOnlyCollection<IOutlierDateProvider>(_outlierDateProviders); }
-        }
-
-        /// <summary>
         /// Gets the outliers by dates.
         /// </summary>
         /// <param name="period">The period.</param>
@@ -225,13 +172,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             Outlier retobj = (Outlier)MemberwiseClone();
             retobj.SetId(null);
-            retobj._outlierDateProviders = new List<IOutlierDateProvider>();
-            foreach (IOutlierDateProvider dateProvider in _outlierDateProviders)
-            {
-                var cloneProvider = dateProvider.NoneEntityClone();
-                cloneProvider.SetParent(retobj);
-                retobj._outlierDateProviders.Add(cloneProvider);
-            }
             retobj._dates = new List<DateOnly>(_dates);
             return retobj;
         }
@@ -247,13 +187,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual IOutlier EntityClone()
         {
             Outlier retobj = (Outlier)MemberwiseClone();
-            retobj._outlierDateProviders = new List<IOutlierDateProvider>();
-            foreach (IOutlierDateProvider dateProvider in _outlierDateProviders)
-            {
-                var cloneProvider = dateProvider.EntityClone();
-                cloneProvider.SetParent(retobj);
-                retobj._outlierDateProviders.Add(cloneProvider);
-            }
             retobj._dates = new List<DateOnly>(_dates);
             return retobj;
         }
