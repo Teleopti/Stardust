@@ -12,7 +12,5 @@ namespace Teleopti.Ccc.Domain.Forecasting.DayInMonth
         public double DailyAverageTasks { get; private set; }
         public TimeSpan AverageTalkTime { get; set; }
         public TimeSpan AverageAfterWorkTime { get; set; }
-
-        public int Day { get; set; }
     }
 }

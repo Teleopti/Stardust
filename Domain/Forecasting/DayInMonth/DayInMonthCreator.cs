@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.DayInMonth
                 double index = 1;
                 if (totalAvg > 0 && tempData.AvgTasks > 0)
                     index = 1 + (tempData.AvgTasks - totalAvg) / totalAvg;
-                dayInMonth.PeriodTypeCollection.Add(tempData.Day, new DayInMonthItem { TaskIndex = index, Day = tempData.Day });
+                dayInMonth.PeriodTypeCollection.Add(tempData.Day, new DayInMonthItem { TaskIndex = index, AfterTalkTimeIndex = 1, TalkTimeIndex = 1});
             }
         }
 

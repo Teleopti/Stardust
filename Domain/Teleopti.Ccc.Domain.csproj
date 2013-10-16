@@ -278,6 +278,7 @@
     <Compile Include="ApplicationLayer\ICommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\IHandleCommand.cs" />
     <Compile Include="Forecasting\DayInMonth\DayInMonth.cs" />
+    <Compile Include="Forecasting\DayInMonth\DayInMonthCreator.cs" />
     <Compile Include="Forecasting\DayInMonth\DayInMonthHelper.cs" />
     <Compile Include="Forecasting\DayInMonth\DayInMonthItem.cs" />
     <Compile Include="Forecasting\DaylightSavingTimeHelper.cs" />

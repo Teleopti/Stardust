@@ -4,8 +4,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.DayInMonth
 {
     public class DayInMonth : VolumeYear
     {
-        public DayInMonth(ITaskOwnerPeriod taskOwnerPeriod) : base(taskOwnerPeriod)
+        public DayInMonth(ITaskOwnerPeriod taskOwnerPeriod, DayInMonthCreator creator) : base(taskOwnerPeriod)
         {
+            creator.Create(this);
         }
 
         public override void ReloadHistoricalDataDepth(ITaskOwnerPeriod taskOwnerPeriod)
@@ -15,17 +16,17 @@ namespace Teleopti.Ccc.Domain.Forecasting.DayInMonth
 
         public override double TaskIndex(DateOnly dateTime)
         {
-            throw new System.NotImplementedException();
+            return PeriodTypeCollection[DayInMonthHelper.DayIndex(dateTime)].TaskIndex;
         }
 
         public override double TalkTimeIndex(DateOnly dateTime)
         {
-            throw new System.NotImplementedException();
+            return PeriodTypeCollection[DayInMonthHelper.DayIndex(dateTime)].TalkTimeIndex;
         }
 
         public override double AfterTalkTimeIndex(DateOnly dateTime)
         {
-            throw new System.NotImplementedException();
+            return PeriodTypeCollection[DayInMonthHelper.DayIndex(dateTime)].AfterTalkTimeIndex;
         }
     }
 }
