@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.DayInMonthIndex
     {
         public DayInMonth(ITaskOwnerPeriod taskOwnerPeriod, IDayInMonthCreator creator) : base(taskOwnerPeriod)
         {
+            SetTaskOwnerDaysCollection(taskOwnerPeriod);
             creator.Create(this);
         }
 

@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.DayInMonthIndex
             {
                 var idx = DayInMonthHelper.DayIndex(taskOwner.CurrentDate);
                 var temp = temps[idx - 1];
-                temp.Tasks.Add(taskOwner.Tasks);
-                totalSum += taskOwner.Tasks;
+                temp.Tasks.Add(taskOwner.TotalStatisticCalculatedTasks);
+                totalSum += taskOwner.TotalStatisticCalculatedTasks;
             }
             double totalAvg = 0;
             if (days.Count > 0)

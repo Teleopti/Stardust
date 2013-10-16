@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.DayInMonthIndex
             {
                 var item = line.Split(';');
                 var currentDate = DateTime.Parse(item[0]);
-                var workloadDay = new TaskOwnerForTest(new DateOnly(currentDate)){Tasks = double.Parse(item[1])};
+                var workloadDay = new TaskOwnerForTest(new DateOnly(currentDate)) { TotalStatisticCalculatedTasks = double.Parse(item[1]) };
                 ret.Add(workloadDay);
             }
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.DayInMonthIndex
             _date = date;
         }
 
-        public override double Tasks { get; set; }
+        public override double TotalStatisticCalculatedTasks { get; set; }
         public override DateOnly CurrentDate { get { return _date; } }
     }
 
