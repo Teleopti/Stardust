@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string PartTimePercentage { get; set; }
 		public string ContractSchedule { get; set; }
 		public string Team { get; set; }
-		public string RuleSetBag { get; set; }
-		public string PersonSkill { get; set; }
+		public string ShiftBag { get; set; }
+		public string Skill { get; set; }
 		public string BudgetGroup { get; set; }
 		public string WorkflowControlSet { get; set; }
 
@@ -50,18 +50,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			                                                     personContract,
 			                                                     team);
 
-			if (!string.IsNullOrEmpty(RuleSetBag))
+			if (!string.IsNullOrEmpty(ShiftBag))
 			{
 				var bag = new RuleSetBagRepository(uow)
 					.LoadAll()
-					.Single(x => x.Description.Name == RuleSetBag);
+					.Single(x => x.Description.Name == ShiftBag);
 				personPeriod.RuleSetBag = bag;
 			}
 
-			if (!string.IsNullOrEmpty(PersonSkill))
+			if (!string.IsNullOrEmpty(Skill))
 			{
 				var skillRepository = new SkillRepository(uow);
-				var skill = skillRepository.LoadAll().Single(c => c.Name == PersonSkill);
+				var skill = skillRepository.LoadAll().Single(c => c.Name == Skill);
 				personPeriod.AddPersonSkill(new PersonSkill(skill,new Percent(1.0)){Active = true});
 			}
 			

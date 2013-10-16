@@ -10,12 +10,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	public class RuleSetBagConfigurable : IDataSetup
 	{
 		public string Name { get; set; }
-		public string Sets { get; set; }
+		public string RuleSet { get; set; }
 
 		public void Apply(IUnitOfWork uow)
 		{
 			var allRuleSets = new WorkShiftRuleSetRepository(uow).LoadAll();
-			var ruleSetNames = Sets.Split(',').Select(s => s.Trim());
+			var ruleSetNames = RuleSet.Split(',').Select(s => s.Trim());
 			var ruleSets = from s in ruleSetNames select allRuleSets.Single(x => x.Description.Name == s);
 
 			var ruleSetBag = new RuleSetBag {Description = new Description(Name)};

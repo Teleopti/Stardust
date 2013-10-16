@@ -124,6 +124,7 @@
       <DependentUpon>ViewGroupSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\GroupPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PartTimePercentageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NothingStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SiteStepDefinitions.cs" />

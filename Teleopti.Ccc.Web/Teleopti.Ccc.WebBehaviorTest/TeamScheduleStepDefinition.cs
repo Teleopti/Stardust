@@ -6,18 +6,20 @@ using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using Div = WatiN.Core.Div;
 
 namespace Teleopti.Ccc.WebBehaviorTest
@@ -25,6 +27,32 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class TeamScheduleStepDefinition
 	{
+		[Given(@"there is group page stuff")]
+		public void GivenThereIsGroupPageStuff()
+		{
+			DataMaker.Person("Pierre Baldi").Apply(new GroupPageStuff());
+		}
+
+		public class GroupPageStuff : IUserDataSetup
+		{
+			public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+			{
+				var page = new GroupPage("group page");
+				var root = new RootPersonGroup("root person group");
+				var child = new ChildPersonGroup("child person group");
+				child.AddPerson(user);
+				root.AddChildGroup(child);
+				page.AddRootPersonGroup(root);
+
+
+				new GroupPageRepository(uow).Add(page);
+			}
+		}
+
+
+
+
+
 		[When(@"I select the other team in the team picker")]
 		public void WhenIChooseTheOtherTeamInTheTeamPicker()
 		{
@@ -411,4 +439,5 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 	}
+
 }

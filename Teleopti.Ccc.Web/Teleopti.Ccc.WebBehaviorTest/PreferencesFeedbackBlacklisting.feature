@@ -20,7 +20,6 @@ Background:
 	And there is a rule set with
 	| Field          | Value       |
 	| Name           | Normal      |
-	| Test           | 8:00-8:00   |
 	| Activity       | Phone       |
 	| Shift category | Day         |
 	| Start boundry  | 8:00-8:00   |
@@ -42,20 +41,20 @@ Background:
 	| Start boundry  | 8:00      |
 	| End boundry    | 23:00     |
 	| Blacklisted    | false     |
-	And there is a rule set bag with
-	| Field | Value                  |
-	| Name  | Normal and blacklisted |
-	| Sets  | Normal, Blacklisted    |
-	And there is a rule set bag with
-	| Field | Value                          |
-	| Name  | Plus a long shift              |
-	| Sets  | Normal, Blacklisted, Just long |
+	And there is a shift bag with
+	| Field    | Value                  |
+	| Name     | Normal and blacklisted |
+	| Rule set | Normal, Blacklisted    |
+	And there is a shift bag with
+	| Field    | Value                          |
+	| Name     | Plus a long shift              |
+	| Rule set | Normal, Blacklisted, Just long |
 
 Scenario: Feedback from blacklisted shift with preference
 	Given I have a person period with 
-	| Field        | Value                  |
-	| Start date   | 2012-10-01             |
-	| Rule set bag | Normal and blacklisted |
+	| Field      | Value                  |
+	| Start date | 2012-10-01             |
+	| Shift bag  | Normal and blacklisted |
 	And I have a preference with
 	| Field             | Value      |
 	| Date              | 2012-10-10 |
@@ -68,9 +67,9 @@ Scenario: Feedback from blacklisted shift with preference
 
 Scenario: Feedback from blacklisted shift with availability
 	Given I have a person period with 
-	| Field        | Value                  |
-	| Start date   | 2012-10-01             |
-	| Rule set bag | Normal and blacklisted |
+	| Field      | Value                  |
+	| Start date | 2012-10-01             |
+	| Shift bag  | Normal and blacklisted |
 	And there is an availability rotation with
 	| Field             | Value        |
 	| Name              | Availability |
@@ -88,9 +87,9 @@ Scenario: Feedback from blacklisted shift with availability
 
 Scenario: No feedback from blacklisted shift without preference
 	Given I have a person period with 
-	| Field        | Value                  |
-	| Start date   | 2012-10-01             |
-	| Rule set bag | Normal and blacklisted |
+	| Field      | Value                  |
+	| Start date | 2012-10-01             |
+	| Shift bag  | Normal and blacklisted |
 	When I view preferences for date '2012-10-10'
 	Then I should see preference feedback with
 	| Field                 | Value      |
@@ -99,9 +98,9 @@ Scenario: No feedback from blacklisted shift without preference
 
 Scenario: Prioritize feedback from normal over blacklisted shift even though I have a preference
 	Given I have a person period with 
-	| Field        | Value             |
-	| Start date   | 2012-10-01        |
-	| Rule set bag | Plus a long shift |
+	| Field      | Value             |
+	| Start date | 2012-10-01        |
+	| Shift bag  | Plus a long shift |
 	And I have a preference with
 	| Field             | Value      |
 	| Date              | 2012-10-10 |
