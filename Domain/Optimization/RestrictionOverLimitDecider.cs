@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             foreach (var scheduleDayPro in matrix.EffectivePeriodDays)
             {
                 _restrictionChecker.ScheduleDay = scheduleDayPro.DaySchedulePart();
+
                 PermissionState permissionState = checkMethod();
                 if (permissionState != PermissionState.None)
                     allDays++;
@@ -80,7 +81,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private static double calculateBrokenLimit(double fulFillValue)
         {
-            return 1 - fulFillValue;
+			//have to use decimal to avoid floating point rounding errors
+            return (double)(1 - (decimal)fulFillValue);
         }
     }
 
