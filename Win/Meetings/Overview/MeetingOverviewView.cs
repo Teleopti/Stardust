@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 			{
 				toolStripComboBoxResolution.ComboBox.DisplayMember = "Resolution";
 				toolStripComboBoxResolution.ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-				toolStripComboBoxResolution.ComboBox.DataSource = GridResolution.GetCollection();
+				toolStripComboBoxResolution.ComboBox.Items.AddRange(GridResolution.GetCollection().Cast<object>().ToArray());
 				toolStripComboBoxResolution.ComboBox.SelectedIndex = 1;
 				toolStripComboBoxResolution.ComboBox.SelectedIndexChanged += comboBoxSelectedIndexChanged;
 			}
