@@ -280,6 +280,7 @@
     <Compile Include="Optimization\PeriodValueCalculatorProviderTest.cs" />
     <Compile Include="Optimization\PersonListExtractorFromSchedulePartsTest.cs" />
     <Compile Include="Optimization\RemoveGroupShiftCategoryOnBestDateServiceTest.cs" />
+    <Compile Include="Optimization\RestrictionOverLimitDeciderTest.cs" />
     <Compile Include="Optimization\RuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoaderTest.cs" />
     <Compile Include="Optimization\ScheduleResultDataExtractorProviderTest.cs" />
     <Compile Include="Optimization\ScheduleDayEquatorTest.cs" />
