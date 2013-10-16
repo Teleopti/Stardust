@@ -1,15 +1,20 @@
-﻿using System;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamDayOffModifier
 	{
-		void AddDayOffAndResourceCalculate(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		                                                   ITeamInfo teamInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions);
+		void AddDayOffForTeamAndResourceCalculate(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+														   ITeamInfo teamInfo, DateOnly dateOnly, IDayOffTemplate dayOffTemplate);
 
-		void RemoveDayOff(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		                                                      ITeamInfo teamInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions);
+		void RemoveDayOffForTeam(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+		                                                      ITeamInfo teamInfo, DateOnly dateOnly);
+
+		void RemoveDayOffForMember(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+		                                           IPerson person, DateOnly dateOnly);
+
+		void AddDayOffForMember(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IPerson person,
+		                        DateOnly dateOnly, IDayOffTemplate dayOffTemplate, bool resourceCalculate);
 	}
 
 	public class TeamDayOffModifier : ITeamDayOffModifier
@@ -23,44 +28,51 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_stateHolder = stateHolder;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
-		public void AddDayOffAndResourceCalculate(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-								   ITeamInfo teamInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions)
+		public void AddDayOffForTeamAndResourceCalculate(
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+			ITeamInfo teamInfo, DateOnly dateOnly, IDayOffTemplate dayOffTemplate)
 		{
-			IScheduleDictionary scheduleDictionary = _stateHolder.Schedules;
-			if (schedulingOptions.UseSameDayOffs) // do it on every team member
+			foreach (var person in teamInfo.GroupPerson.GroupMembers)
 			{
-				foreach (var person in teamInfo.GroupPerson.GroupMembers)
-				{
-					IScheduleRange range = scheduleDictionary[person];
-					IScheduleDay scheduleDay = range.ScheduledDay(dateOnly);
-
-					scheduleDay.DeleteMainShift(scheduleDay);
-					scheduleDay.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
-					schedulePartModifyAndRollbackService.Modify(scheduleDay);
-				}
+				AddDayOffForMember(schedulePartModifyAndRollbackService, person, dateOnly, dayOffTemplate, false);
 			}
-			_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, schedulingOptions.ConsiderShortBreaks);
+
+			_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
-		public void RemoveDayOff(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-								   ITeamInfo teamInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions)
+		public void AddDayOffForMember(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+		                               IPerson person, DateOnly dateOnly, IDayOffTemplate dayOffTemplate,
+		                               bool resourceCalculate)
 		{
-			if (schedulePartModifyAndRollbackService == null)
-				throw new ArgumentNullException("schedulePartModifyAndRollbackService");
-
 			IScheduleDictionary scheduleDictionary = _stateHolder.Schedules;
-			if (schedulingOptions.UseSameDayOffs) // do it on every team member
+			IScheduleRange range = scheduleDictionary[person];
+			IScheduleDay scheduleDay = range.ScheduledDay(dateOnly);
+			scheduleDay.DeleteMainShift(scheduleDay);
+			scheduleDay.CreateAndAddDayOff(dayOffTemplate);
+			schedulePartModifyAndRollbackService.Modify(scheduleDay);
+
+			if (resourceCalculate)
+				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
+		}
+
+		public void RemoveDayOffForTeam(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+		                                ITeamInfo teamInfo, DateOnly dateOnly)
+		{
+			foreach (var person in teamInfo.GroupPerson.GroupMembers)
 			{
-				foreach (var person in teamInfo.GroupPerson.GroupMembers)
-				{
-					IScheduleRange range = scheduleDictionary[person];
-					IScheduleDay scheduleDay = range.ScheduledDay(dateOnly);
-					scheduleDay.DeleteDayOff();
-					schedulePartModifyAndRollbackService.Modify(scheduleDay);
-				}
+				RemoveDayOffForMember(schedulePartModifyAndRollbackService, person, dateOnly);
 			}
+
+		}
+
+		public void RemoveDayOffForMember(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+										  IPerson person, DateOnly dateOnly)
+		{
+			IScheduleDictionary scheduleDictionary = _stateHolder.Schedules;
+			IScheduleRange range = scheduleDictionary[person];
+			IScheduleDay scheduleDay = range.ScheduledDay(dateOnly);
+			scheduleDay.DeleteDayOff();
+			schedulePartModifyAndRollbackService.Modify(scheduleDay);
 		}
 	}
 }
