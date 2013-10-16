@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
@@ -27,57 +26,51 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	{
 		private readonly ITeamInfoFactory _teamInfoFactory;
 		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
-		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
-		private readonly ISmartDayOffBackToLegalStateService _daysOffBackToLegal;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
-		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly ITeamDayOffModifier _teamDayOffModifier;
 		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
+		private readonly ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
 		private bool _cancelMe;
 
 		public TeamBlockDayOffOptimizerService(
 			ITeamInfoFactory teamInfoFactory,
 			ILockableBitArrayFactory lockableBitArrayFactory,
-			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
-			ISmartDayOffBackToLegalStateService daysOffBackToLegal,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			ILockableBitArrayChangesTracker lockableBitArrayChangesTracker,
 			ITeamBlockScheduler teamBlockScheduler,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			IPeriodValueCalculator periodValueCalculatorForAllSkills,
-			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			ITeamDayOffModifier teamDayOffModifier,
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockClearer teamBlockClearer,
 			ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
-			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker
+			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
+			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder
 			)
 		{
 			_teamInfoFactory = teamInfoFactory;
 			_lockableBitArrayFactory = lockableBitArrayFactory;
-			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
-			_daysOffBackToLegal = daysOffBackToLegal;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_lockableBitArrayChangesTracker = lockableBitArrayChangesTracker;
 			_teamBlockScheduler = teamBlockScheduler;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_periodValueCalculatorForAllSkills = periodValueCalculatorForAllSkills;
-			_dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_teamDayOffModifier = teamDayOffModifier;
 			_teamTeamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 			_teamBlockClearer = teamBlockClearer;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
+			_teamBlockDaysOffMoveFinder = teamBlockDaysOffMoveFinder;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -103,7 +96,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					allTeamInfoListOnStartDate.Add(teamInfo);
 			}
 
-			// find a random selected TeamInfo/matrix
 			var remainingInfoList = new List<ITeamInfo>(allTeamInfoListOnStartDate);
 
 			while (remainingInfoList.Count > 0)
@@ -173,23 +165,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 							failed = true;
 					}
 
-					double currentPeriodValue =
-							_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-
-					if (currentPeriodValue >= previousPeriodValue || failed)
-					{
-						_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-						teamInfosToRemove.Add(teamInfo);
-						currentPeriodValue =
-							_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-					}
-
-					previousPeriodValue = currentPeriodValue;
-
-					OnReportProgress(Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
-									 currentTeamInfoCounter.ToString("####") + ") " +
-									 StringHelper.DisplayString(teamInfo.GroupPerson.Name.ToString(), 20) + " (" + currentPeriodValue +
-									 ")");
+					previousPeriodValue = handleResult(rollbackService, schedulingOptions, previousPeriodValue, !failed,
+					                                   teamInfosToRemove, teamInfo, totalLiveTeamInfos, currentTeamInfoCounter);
+					
 					if (_cancelMe)
 						break;
 				}
@@ -215,7 +193,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			foreach (ITeamInfo teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true))
 			{
 				currentTeamInfoCounter++;
-				bool anySuccess = false;
 
 				if (teamInfo.GroupPerson.GroupMembers.Any())
 				{
@@ -225,78 +202,71 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						var success = runOneTeam(optimizationPreferences, rollbackService, schedulingOptions, matrix, teamInfo,
 						                           selectedPeriod, selectedPersons, allPersonMatrixList);
 
-						double currentPeriodValue =
-							_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+						previousPeriodValue = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
+						                                   teamInfosToRemove, teamInfo, totalLiveTeamInfos, currentTeamInfoCounter);
 
-						if (currentPeriodValue >= previousPeriodValue || !success)
-						{
-							_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-							currentPeriodValue =
-								_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-						}
-						else
-						{
-							anySuccess = true;
-						}
-						previousPeriodValue = currentPeriodValue;
-
-						OnReportProgress(Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
-						                 currentTeamInfoCounter.ToString("####") + ") " +
-						                 StringHelper.DisplayString(teamInfo.GroupPerson.Name.ToString(), 20) + " (" + currentPeriodValue +
-						                 ")");
 						if (_cancelMe)
 							break;
 					}
 				}
-				if (!anySuccess)
-				{
-					teamInfosToRemove.Add(teamInfo);
-				}
-				
+
+				if (_cancelMe)
+					break;
 			}
 
 			return teamInfosToRemove;
 		}
 
-		private bool runOneMatrixOnly(IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ITeamInfo teamInfo, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> allPersonMatrixList)
+		private double handleResult(ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
+		                            double previousPeriodValue, bool success, List<ITeamInfo> teamInfosToRemove, ITeamInfo teamInfo,
+		                            int totalLiveTeamInfos, int currentTeamInfoCounter)
 		{
-			bool considerWeekBefore = optimizationPreferences.DaysOff.ConsiderWeekBefore;
-			bool considerWeekAfter = optimizationPreferences.DaysOff.ConsiderWeekAfter;
-			ILockableBitArray originalArray = _lockableBitArrayFactory.ConvertFromMatrix(considerWeekBefore, considerWeekAfter,
-																						 matrix);
-			ILockableBitArray resultingArray = tryFindMoves(matrix, originalArray, optimizationPreferences);
+			double currentPeriodValue =
+				_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 
-			if (resultingArray.Equals(originalArray))
+			if (currentPeriodValue >= previousPeriodValue || !success)
+			{
+				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+				teamInfosToRemove.Add(teamInfo);
+				currentPeriodValue =
+					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+			}
+
+			previousPeriodValue = currentPeriodValue;
+
+			OnReportProgress(Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
+			                 currentTeamInfoCounter.ToString("####") + ") " +
+			                 StringHelper.DisplayString(teamInfo.GroupPerson.Name.ToString(), 20) + " (" + currentPeriodValue +
+			                 ")");
+
+			return previousPeriodValue;
+		}
+
+		private bool runOneMatrixOnly(IOptimizationPreferences optimizationPreferences,
+		                              ISchedulePartModifyAndRollbackService rollbackService, IScheduleMatrixPro matrix,
+		                              ISchedulingOptions schedulingOptions, ITeamInfo teamInfo, DateOnlyPeriod selectedPeriod,
+		                              IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> allPersonMatrixList)
+		{
+			var movedDaysOff = affectedDaysOff(optimizationPreferences, matrix);
+			if (movedDaysOff == null)
 				return false;
 
-			// find out what have changed, Does the predictor beleve in this? depends on how many members
-			IList<DateOnly> addedDaysOff = _lockableBitArrayChangesTracker.DaysOffAdded(resultingArray, originalArray, matrix,
-																						considerWeekBefore);
-			IList<DateOnly> removedDaysOff = _lockableBitArrayChangesTracker.DaysOffRemoved(resultingArray, originalArray, matrix,
-																							considerWeekBefore);
-
 			IPerson person = matrix.Person;
-			foreach (DateOnly dateOnly in removedDaysOff)
-			{
-				_teamDayOffModifier.RemoveDayOffForMember(rollbackService, person, dateOnly);
-			}
+			removeAllDecidedDaysOffForMember(rollbackService, movedDaysOff.RemovedDaysOff, person);
+			addAllDecidedDaysOffForMember(rollbackService, schedulingOptions, movedDaysOff.AddedDaysOff, person);
 
-			foreach (DateOnly dateOnly in addedDaysOff)
-			{
-				_teamDayOffModifier.AddDayOffForMember(rollbackService, person, dateOnly, schedulingOptions.DayOffTemplate, true);
-			}
-
-			bool success = reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, selectedPeriod, selectedPersons, removedDaysOff, rollbackService, allPersonMatrixList);
+			bool success = reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, selectedPeriod, selectedPersons, movedDaysOff.RemovedDaysOff,
+			                                         rollbackService, allPersonMatrixList);
 			if (!success)
 				return false;
 
-			var isMaxSeatRuleViolated = addedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions)) ||
-										 removedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions));
+			var isMaxSeatRuleViolated = movedDaysOff.AddedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions)) ||
+										movedDaysOff.RemovedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions));
 			if (isMaxSeatRuleViolated || !_restrictionOverLimitValidator.Validate(teamInfo, optimizationPreferences))
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-				lockDaysInMatrixes(addedDaysOff, teamInfo);
-				lockDaysInMatrixes(removedDaysOff, teamInfo);
+				lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
+				lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
 
 				return true;
 			}
@@ -304,20 +274,66 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return true;
 		}
 
+		private void addAllDecidedDaysOffForMember(ISchedulePartModifyAndRollbackService rollbackService,
+		                                           ISchedulingOptions schedulingOptions, IList<DateOnly> addedDaysOff, IPerson person)
+		{
+			foreach (DateOnly dateOnly in addedDaysOff)
+			{
+				_teamDayOffModifier.AddDayOffForMember(rollbackService, person, dateOnly, schedulingOptions.DayOffTemplate, true);
+			}
+		}
+
+		private void removeAllDecidedDaysOffForMember(ISchedulePartModifyAndRollbackService rollbackService,
+		                                              IList<DateOnly> removedDaysOff, IPerson person)
+		{
+			foreach (DateOnly dateOnly in removedDaysOff)
+			{
+				_teamDayOffModifier.RemoveDayOffForMember(rollbackService, person, dateOnly);
+			}
+		}
+
 		private bool runOneTeam(IOptimizationPreferences optimizationPreferences,
-		                          ISchedulePartModifyAndRollbackService rollbackService,
-		                          ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix,
-		                          ITeamInfo teamInfo, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons
-			, IList<IScheduleMatrixPro> allPersonMatrixList)
+		                        ISchedulePartModifyAndRollbackService rollbackService,
+		                        ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix,
+		                        ITeamInfo teamInfo, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
+		                        IList<IScheduleMatrixPro> allPersonMatrixList)
+		{
+			var movedDaysOff = affectedDaysOff(optimizationPreferences, matrix);
+			if (movedDaysOff == null)
+				return false;
+
+			removeAllDecidedDaysOffForTeam(rollbackService, teamInfo, movedDaysOff.RemovedDaysOff);
+			addAllDecidedDaysOffForTeam(rollbackService, schedulingOptions, teamInfo, movedDaysOff.AddedDaysOff);
+
+			bool success = reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, selectedPeriod, selectedPersons, movedDaysOff.RemovedDaysOff,
+			                                         rollbackService, allPersonMatrixList);
+			if (!success)
+				return false;
+
+			var isMaxSeatRuleViolated = movedDaysOff.AddedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions)) ||
+										movedDaysOff.RemovedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions));
+			if (isMaxSeatRuleViolated || !_restrictionOverLimitValidator.Validate(teamInfo, optimizationPreferences))
+			{
+				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+				lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
+				lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
+
+				return true;
+			}
+
+			return true;
+		}
+
+		private movedDaysOff affectedDaysOff(IOptimizationPreferences optimizationPreferences, IScheduleMatrixPro matrix)
 		{
 			bool considerWeekBefore = optimizationPreferences.DaysOff.ConsiderWeekBefore;
 			bool considerWeekAfter = optimizationPreferences.DaysOff.ConsiderWeekAfter;
 			ILockableBitArray originalArray = _lockableBitArrayFactory.ConvertFromMatrix(considerWeekBefore, considerWeekAfter,
 			                                                                             matrix);
-			ILockableBitArray resultingArray = tryFindMoves(matrix, originalArray, optimizationPreferences);
+			ILockableBitArray resultingArray = _teamBlockDaysOffMoveFinder.TryFindMoves(matrix, originalArray, optimizationPreferences);
 
 			if (resultingArray.Equals(originalArray))
-				return false;
+				return null;
 
 			// find out what have changed, Does the predictor beleve in this? depends on how many members
 			IList<DateOnly> addedDaysOff = _lockableBitArrayChangesTracker.DaysOffAdded(resultingArray, originalArray, matrix,
@@ -325,24 +341,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IList<DateOnly> removedDaysOff = _lockableBitArrayChangesTracker.DaysOffRemoved(resultingArray, originalArray, matrix,
 			                                                                                considerWeekBefore);
 
-			removeAllDecidedDaysOff(rollbackService, teamInfo, removedDaysOff);
-			addAllDecidedDaysOf(rollbackService, schedulingOptions, teamInfo, addedDaysOff);
-			bool success = reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, selectedPeriod, selectedPersons, removedDaysOff, rollbackService, allPersonMatrixList);
-			if (!success)
-				return false;
-
-			var isMaxSeatRuleViolated = addedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions)) ||
-										 removedDaysOff.Any(x => !_teamBlockMaxSeatChecker.CheckMaxSeat(x, schedulingOptions));
-			if (isMaxSeatRuleViolated || !_restrictionOverLimitValidator.Validate(teamInfo, optimizationPreferences))
-			{
-				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-				lockDaysInMatrixes(addedDaysOff, teamInfo);
-				lockDaysInMatrixes(removedDaysOff, teamInfo);
-
-				return true;
-			}
-
-			return true;
+			return new movedDaysOff
+				{
+					AddedDaysOff = addedDaysOff,
+					RemovedDaysOff = removedDaysOff
+				};
 		}
 
 		private static void lockDaysInMatrixes(IList<DateOnly> datesToLock , ITeamInfo teamInfo)
@@ -375,7 +378,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (!_teamTeamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, schedulingOptions))
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 
-				bool success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod, selectedPersons);
+				bool success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
+				                                                        selectedPersons);
 				if (!success)
 					return false;
 			}
@@ -383,17 +387,18 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return true;
 		}
 
-		private void addAllDecidedDaysOf(ISchedulePartModifyAndRollbackService rollbackService,
+		private void addAllDecidedDaysOffForTeam(ISchedulePartModifyAndRollbackService rollbackService,
 		                                 ISchedulingOptions schedulingOptions, ITeamInfo teamInfo,
 		                                 IEnumerable<DateOnly> addedDaysOff)
 		{
 			foreach (DateOnly dateOnly in addedDaysOff)
 			{
-				_teamDayOffModifier.AddDayOffForTeamAndResourceCalculate(rollbackService, teamInfo, dateOnly, schedulingOptions.DayOffTemplate);
+				_teamDayOffModifier.AddDayOffForTeamAndResourceCalculate(rollbackService, teamInfo, dateOnly,
+				                                                         schedulingOptions.DayOffTemplate);
 			}
 		}
 
-		private void removeAllDecidedDaysOff(ISchedulePartModifyAndRollbackService rollbackService,
+		private void removeAllDecidedDaysOffForTeam(ISchedulePartModifyAndRollbackService rollbackService,
 		                                     ITeamInfo teamInfo,
 		                                     IEnumerable<DateOnly> removedDaysOff)
 		{
@@ -403,37 +408,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 		}
 
-		//to new class
-		private ILockableBitArray tryFindMoves(IScheduleMatrixPro matrix, ILockableBitArray originalArray,
-		                                       IOptimizationPreferences optimizationPreferences)
+		private class movedDaysOff
 		{
-			//should use agggregated skills
-			IScheduleResultDataExtractor scheduleResultDataExtractor =
-				_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced);
-
-			// find days off to move within the common matrix period
-			IEnumerable<IDayOffDecisionMaker> decisionMakers =
-				_dayOffOptimizationDecisionMakerFactory.CreateDecisionMakers(originalArray, optimizationPreferences);
-			foreach (IDayOffDecisionMaker dayOffDecisionMaker in decisionMakers)
-			{
-				var workingBitArray = (ILockableBitArray) originalArray.Clone();
-				if (!dayOffDecisionMaker.Execute(workingBitArray, scheduleResultDataExtractor.Values()))
-				{
-					if (!_daysOffBackToLegal.Execute(_daysOffBackToLegal.BuildSolverList(workingBitArray), 100))
-						continue;
-
-					if (!dayOffDecisionMaker.Execute(workingBitArray, scheduleResultDataExtractor.Values()))
-						continue;
-				}
-
-				// DayOffBackToLegal if decisionMaker did something wrong
-				if (!_daysOffBackToLegal.Execute(_daysOffBackToLegal.BuildSolverList(workingBitArray), 100))
-					continue;
-
-				return workingBitArray;
-			}
-
-			return originalArray;
+			public IList<DateOnly> AddedDaysOff { get; set; }
+			public IList<DateOnly> RemovedDaysOff { get; set; }
 		}
 	}
 }
