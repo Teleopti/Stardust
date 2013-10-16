@@ -68,9 +68,8 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			;
 
 	    if (location.hash.length <= 1) {
-	        console.log("no hash to be found");
-		    hasher.setHash(_settings.defaultNavigation);
-		}
+	    	location.replace('#' + _settings.defaultNavigation);
+	    }
 
 		$('#asm-link').click(function (ev) {
 			$(".dropdown dd ul").hide();
@@ -103,7 +102,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	    var guidRegex = '[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}';
 	    var dateRegex = '\\d{8}';
 
-	    console.log("setupRoutes");
 
 	    crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(' + actionRegex + ')/(' + dateRegex + ')$', 'i'),
 	        function(view,action,secondAction,date) {
