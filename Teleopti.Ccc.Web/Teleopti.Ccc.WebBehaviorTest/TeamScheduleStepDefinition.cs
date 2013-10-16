@@ -27,32 +27,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class TeamScheduleStepDefinition
 	{
-		[Given(@"there is group page stuff")]
-		public void GivenThereIsGroupPageStuff()
-		{
-			DataMaker.Person("Pierre Baldi").Apply(new GroupPageStuff());
-		}
-
-		public class GroupPageStuff : IUserDataSetup
-		{
-			public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
-			{
-				var page = new GroupPage("group page");
-				var root = new RootPersonGroup("root person group");
-				var child = new ChildPersonGroup("child person group");
-				child.AddPerson(user);
-				root.AddChildGroup(child);
-				page.AddRootPersonGroup(root);
-
-
-				new GroupPageRepository(uow).Add(page);
-			}
-		}
-
-
-
-
-
 		[When(@"I select the other team in the team picker")]
 		public void WhenIChooseTheOtherTeamInTheTeamPicker()
 		{
