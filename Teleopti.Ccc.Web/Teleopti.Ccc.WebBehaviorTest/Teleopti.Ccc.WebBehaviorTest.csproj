@@ -125,6 +125,8 @@
     </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\GroupPageStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\NoteConfigurable.cs" />
+    <Compile Include="Bindings\Generic\NoteStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PartTimePercentageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NothingStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SiteStepDefinitions.cs" />

@@ -45,6 +45,8 @@ Background:
 	And 'John Smith' is on 'A group' of group page 'A group page'
 	And 'John Smith' is on 'Another group' of group page 'A group page'
 	And 'John Smith' is on 'Some other group' of group page 'Another group page'
+	And 'Pierre Baldi' have the note 'Another note'
+	And 'John Smith' have the note 'A note'
 	And I have a role with
 		| Field              | Value                |
 		| Access to team     | Team green, Team red |
@@ -62,6 +64,7 @@ Scenario: View group picker options
 		| Contract Schedule/A contract schedule     |
 		| Part-Time Percentage/Part time percentage |
 		| Shift bag/A shift bag                     |
+		| Note/A note                               |
 		| Skill/A skill                             |
 		| A group page/A root                       |
 		| A group page/Another root                 |
@@ -94,7 +97,8 @@ Scenario: Order group pages like business heirarchy, contract, contract schedule
 	Then I should see 'Business Hierarchy' before 'Contract'
 	And I should see 'Contract' before 'Contract Schedule'
 	And I should see 'Contract Schedule' before 'Part-Time Percentage'
-	And I should see 'Part-Time Percentage' before 'Shift Bag'
+	And I should see 'Part-Time Percentage' before 'Note'
+	And I should see 'Note' before 'Shift bag'
 	And I should see 'Shift bag' before 'Skill'
 	And I should see 'Skill' before 'A group page'
 	And I should see 'A group page' before 'Another group page'
@@ -105,7 +109,9 @@ Scenario: Order groups in alphabetical order
 	And I should see 'A contract' before 'Another contract'
 	And I should see 'A contract schedule' before 'Another contract schedule'
 	And I should see 'Another Part-Time Percentage' before 'Part-Time Percentage'
-	And I should see 'Another Skill' before 'Skill'
+	And I should see 'Another note' before 'A note'
+	And I should see 'Another shift bag' before 'A shift bag'
+	And I should see 'Another Skill' before 'A skill'
 	And I should see 'A group' before 'Another group'
 
 Scenario: Default to my team
