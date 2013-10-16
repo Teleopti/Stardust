@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
@@ -12,17 +13,19 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class DeletePersonAccountForPersonCommandHandler : IHandleCommand<DeletePersonAccountForPersonCommandDto>
     {
-        private readonly IPersonRepository _personRepository;
+	    private readonly ITraceableRefreshService _traceableRefreshService;
+	    private readonly IPersonRepository _personRepository;
         private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
         private readonly IAbsenceRepository _absenceRepository;
-        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+	    private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-        public DeletePersonAccountForPersonCommandHandler(IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IAbsenceRepository absenceRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+        public DeletePersonAccountForPersonCommandHandler(ITraceableRefreshService traceableRefreshService, IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IAbsenceRepository absenceRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
         {
-            _personRepository = personRepository;
+	        _traceableRefreshService = traceableRefreshService;
+	        _personRepository = personRepository;
             _personAbsenceAccountRepository = personAbsenceAccountRepository;
             _absenceRepository = absenceRepository;
-            _unitOfWorkFactory = unitOfWorkFactory;
+	        _unitOfWorkFactory = unitOfWorkFactory;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -31,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			var result = new CommandResultDto {AffectedId = command.PersonId, AffectedItems = 0};
             using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
-                var foundPerson = _personRepository.Get(command.PersonId);
+				var foundPerson = _personRepository.Get(command.PersonId);
                 if (foundPerson == null) throw new FaultException("Person does not exist.");
                 var foundAbsence = _absenceRepository.Get(command.AbsenceId);
                 if (foundAbsence == null) throw new FaultException("Absence does not exist.");
@@ -39,13 +42,18 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
                 checkIfAuthorized(foundPerson, dateFrom);
 
-                var accounts = _personAbsenceAccountRepository.Find(foundPerson);
+	            var accounts = _personAbsenceAccountRepository.Find(foundPerson);
                 var personAccount = accounts.Find(foundAbsence, dateFrom);
                 if (personAccount != null)
                 {
                 	accounts.Remove(personAccount);
 					result.AffectedItems = 1;
                 }
+				personAccount = accounts.Find(foundAbsence, dateFrom);
+				if (personAccount != null)
+				{
+					_traceableRefreshService.Refresh(personAccount);
+				}
 
                 unitOfWork.PersistAll();
             }

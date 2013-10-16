@@ -203,9 +203,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
             IScheduleRepository repository = _mocker.StrictMock<IScheduleRepository>();
             IScheduleRange rangeFromRepository = _mocker.StrictMock<IScheduleRange>();
             
-            DateTimePeriod tempAccountPeriod = _accountPeriod.ToDateTimePeriod(timeZone);
+            var tempAccountPeriod = _accountPeriod.ToDateTimePeriod(timeZone);
             var owner = new PersonAbsenceAccount(_person, absence);
-            IScheduleDay day = _mocker.StrictMock<IScheduleDay>();
+			var day = _mocker.StrictMock<IScheduleDay>();
             using (_mocker.Record())
             {
                 Expect.Call(_account.Parent).Return(_person).Repeat.Any();
@@ -217,12 +217,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
                     repository.ScheduleRangeBasedOnAbsence(
                         new DateTimePeriod(_schedulePeriod.EndDateTime, tempAccountPeriod.EndDateTime), scenario,
                         _person, absence)).Return(rangeFromRepository);
+				Expect.Call(day.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_accountPeriod.StartDate, _person.PermissionInformation.DefaultTimeZone()));
+				Expect.Call(day.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_accountPeriod.StartDate.AddDays(1), _person.PermissionInformation.DefaultTimeZone()));
 
                 //Days from repository:
-                Expect.Call(rangeFromRepository.ScheduledDay(new DateOnly())).IgnoreArguments().Return(day).Repeat.Any();
+				Expect.Call(rangeFromRepository.ScheduledDayCollection(new DateOnlyPeriod(2001,7,20,2001,10,27))).Return(new[] { day });
 
                 //Days from schedule:
-                Expect.Call(_schedule.ScheduledDay(new DateOnly())).IgnoreArguments().Return(day).Repeat.Any();
+				Expect.Call(_schedule.ScheduledDayCollection(new DateOnlyPeriod(2001,4,11,2001,7,19))).Return(new[] { day });
             }
 
             using (_mocker.Playback())
@@ -231,8 +233,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
                 var days = _target.CreateProjection(repository, scenario);
 
                 //Verify correct number of days is returned
-                Assert.AreEqual(200, days.Count);
-                
+                Assert.AreEqual(2, days.Count);
             }
         }
     }

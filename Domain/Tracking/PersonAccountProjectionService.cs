@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Tracking
@@ -9,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Tracking
         private DateTimePeriod _accountPeriod;
         private readonly IAccount _account;
         private readonly IPerson _person;
-        private DateTimePeriod _period;
         
         public PersonAccountProjectionService(IAccount account, ISchedule loadedSchedule)
         {
@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.Tracking
             _schedule = loadedSchedule;
             _person = account.Owner.Person;
             _accountPeriod = account.Period().ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone());
-            _period = _accountPeriod;
         }
 
 
@@ -60,30 +59,26 @@ namespace Teleopti.Ccc.Domain.Tracking
         public IList<IScheduleDay> CreateProjection(IScheduleRepository repository, IScenario scenario)
         {
             var scheduleDays  = new SortedList<DateOnly, IScheduleDay>();
+	        var timeZone = _person.PermissionInformation.DefaultTimeZone();
 
-            foreach(DateTimePeriod period in PeriodsToLoad())
+	        foreach(DateTimePeriod period in PeriodsToLoad())
             {
-                
-                if (_period.Intersect(period))
-                {
-                    DateTimePeriod intersection = (DateTimePeriod)_period.Intersection(period);
-                    var dateOnlyPeriod = intersection.ToDateOnlyPeriod(_person.PermissionInformation.DefaultTimeZone());
-                    IScheduleRange range = repository.ScheduleRangeBasedOnAbsence(intersection, scenario, _person, _account.Owner.Absence);
-                    foreach (DateOnly dateOnly in dateOnlyPeriod.DayCollection())
-                    {
-                        scheduleDays.Add(dateOnly, range.ScheduledDay(dateOnly));
-                    }
-                }
+	            var intersection = _accountPeriod.Intersection(period);
+	            if (!intersection.HasValue) continue;
+
+	            var dateOnlyPeriod = intersection.Value.ToDateOnlyPeriod(timeZone);
+	            var range = repository.ScheduleRangeBasedOnAbsence(intersection.Value, scenario, _person, _account.Owner.Absence);
+	            range.ScheduledDayCollection(dateOnlyPeriod)
+	                 .ForEach(d => scheduleDays.Add(d.DateOnlyAsPeriod.DateOnly, d));
             }
 
-            if (_schedule != null && PeriodToReadFromSchedule() != null)
+	        var periodToReadFromSchedule = PeriodToReadFromSchedule();
+            if (_schedule != null && periodToReadFromSchedule.HasValue)
             {
-                var sched = _schedule as IScheduleRange ?? _schedule.Owner[_person];
-                var dateOnlyPeriod = PeriodToReadFromSchedule().Value.ToDateOnlyPeriod(_person.PermissionInformation.DefaultTimeZone());
-                foreach (DateOnly dateOnly in dateOnlyPeriod.DayCollection())
-                {
-                    scheduleDays.Add(dateOnly, sched.ScheduledDay(dateOnly));
-                }
+                var range = _schedule as IScheduleRange ?? _schedule.Owner[_person];
+                var dateOnlyPeriod = periodToReadFromSchedule.Value.ToDateOnlyPeriod(timeZone);
+				range.ScheduledDayCollection(dateOnlyPeriod)
+						 .ForEach(d => scheduleDays.Add(d.DateOnlyAsPeriod.DateOnly,d));
             }
             return scheduleDays.Values;
         }
