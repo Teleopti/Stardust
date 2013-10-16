@@ -37,23 +37,31 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         {
             using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
-                var foundPerson = _personRepository.Get(command.PersonId);
-                if (foundPerson == null) throw new FaultException("Person is not exist.");
+				var foundPerson = _personRepository.Get(command.PersonId);
+                if (foundPerson == null) throw new FaultException("Person does not exist.");
                 var foundAbsence = _absenceRepository.Get(command.AbsenceId);
-                if (foundAbsence == null) throw new FaultException("Absence is not exist.");
+                if (foundAbsence == null) throw new FaultException("Absence does not exist.");
                 var dateFrom = command.DateFrom.ToDateOnly();
 
                 checkIfAuthorized(foundPerson, dateFrom);
 
-                var accounts = _personAbsenceAccountRepository.Find(foundPerson);
+				var accounts = _personAbsenceAccountRepository.Find(foundPerson);
                 var personAccount = accounts.Find(foundAbsence, dateFrom);
                 if (personAccount == null || !personAccount.StartDate.Equals(dateFrom))
-                {
-                    personAccount = createPersonAccount(foundAbsence, accounts, dateFrom);
-                }
+				{
+					var refresher = new TraceableRefreshService(_scenarioRepository.Current(), _repositoryFactory);
+	                var originalAccount = personAccount;
+					personAccount = createPersonAccount(foundAbsence, accounts, dateFrom);
+					setPersonAccount(personAccount, command);
 
-                setPersonAccount(personAccount, command);
-                            
+					if (originalAccount != null) refresher.Refresh(originalAccount, unitOfWork);
+					refresher.Refresh(personAccount, unitOfWork);
+                }
+                else
+                {
+					setPersonAccount(personAccount, command);
+                }
+				          
                 unitOfWork.PersistAll();
             }
 			command.Result = new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
@@ -83,19 +91,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 account.BalanceIn = TimeSpan.FromTicks(command.BalanceIn.Value);
             if (command.Extra.HasValue)
                 account.Extra = TimeSpan.FromTicks(command.Extra.Value);
-            if (command.Accrued.HasValue || command.BalanceIn.HasValue || command.Extra.HasValue)
-                    refreshAccount(account);
-        }
-
-        private void refreshAccount(IAccount account)
-        {
-            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
-            {
-                var refreshService = new TraceableRefreshService(_scenarioRepository.Current(),
-                                                                 _repositoryFactory);
-                refreshService.Refresh(account, unitOfWork);
-                unitOfWork.PersistAll();
-            }
         }
     }
 }

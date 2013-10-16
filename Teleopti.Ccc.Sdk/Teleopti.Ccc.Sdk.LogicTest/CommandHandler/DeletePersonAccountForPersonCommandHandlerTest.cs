@@ -2,6 +2,7 @@
 using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -28,18 +29,21 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		private readonly DateOnlyDto _dateOnydto = new DateOnlyDto { DateTime = _startDate };
         private DeletePersonAccountForPersonCommandDto _deletePersonAccountForPersonCommandDto;
         private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+	    private ICurrentScenario _currentScenario;
+	    private IRepositoryFactory _repositoryFactory;
 
-
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
             _personRepository = _mock.StrictMock<IPersonRepository>();
             _personAbsenceAccountRepository = _mock.StrictMock<IPersonAbsenceAccountRepository>();
             _absenceRepository = _mock.StrictMock<IAbsenceRepository>();
+			_currentScenario = _mock.DynamicMock<ICurrentScenario>();
+			_repositoryFactory = _mock.DynamicMock<IRepositoryFactory>();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
-            _target = new DeletePersonAccountForPersonCommandHandler(_personRepository,_personAbsenceAccountRepository,_absenceRepository,_currentUnitOfWorkFactory);
+            _target = new DeletePersonAccountForPersonCommandHandler(_personRepository,_personAbsenceAccountRepository,_absenceRepository, _currentScenario, _repositoryFactory,_currentUnitOfWorkFactory);
 
             _person = PersonFactory.CreatePerson();
             _person.SetId(Guid.NewGuid());
@@ -68,8 +72,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_personRepository.Get(_deletePersonAccountForPersonCommandDto.PersonId)).Return(_person);
                 Expect.Call(_absenceRepository.Get(_deletePersonAccountForPersonCommandDto.AbsenceId)).Return(_absence);
                 Expect.Call(_personAbsenceAccountRepository.Find(_person)).Return(personAccounts);
-                Expect.Call(personAccounts.Find(_absence, _startDate)).Return(account);
+                Expect.Call(personAccounts.Find(_absence, _startDate)).Return(account).Repeat.Twice();
                 Expect.Call(() => personAccounts.Remove(account));
+                Expect.Call(() => account.CalculateUsed(null,null,null));
             }
             using(_mock.Playback())
             {
