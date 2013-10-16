@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			DataMaker.ApplyFromTable<GroupPageConfigurable>(table);
 		}
 
-		[Given(@"'(.*)' in on '(.*)' of group page '(.*)'")]
+		[Given(@"'(.*)' is on '(.*)' of group page '(.*)'")]
 		public void GivenInOnOfGroupPage(string person, string @group, string page)
 		{
 			DataMaker.Person(person).Apply(new PersonGroupConfigurable

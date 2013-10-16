@@ -42,9 +42,9 @@ Background:
 		| Field     | Value       |
 		| Shift bag | A shift bag |
 		| Skill     | A skill     |
-	And 'John Smith' in on 'A group' of group page 'A group page'
-	And 'John Smith' in on 'Another group' of group page 'A group page'
-	And 'John Smith' in on 'Some other group' of group page 'Another group page'
+	And 'John Smith' is on 'A group' of group page 'A group page'
+	And 'John Smith' is on 'Another group' of group page 'A group page'
+	And 'John Smith' is on 'Some other group' of group page 'Another group page'
 	And I have a role with
 		| Field              | Value                |
 		| Access to team     | Team green, Team red |
