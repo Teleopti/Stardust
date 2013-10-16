@@ -163,20 +163,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             IList<IPerson> people = new List<IPerson> {person};
             ICollection<DateTimePeriod> searchPeriods = _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).AffectedPeriods(person, scenario, period, absence);
             DateTimePeriod optimizedPeriod = searchPeriods.Count>0 ? 
-                new DateTimePeriod(searchPeriods.Min(p => p.StartDateTime), searchPeriods.Max(p => p.EndDateTime).AddMonths(1)):
-                new DateTimePeriod(period.StartDateTime,period.StartDateTime.AddDays(1));
+                new DateTimePeriod(searchPeriods.Min(p => p.StartDateTime), searchPeriods.Max(p => p.EndDateTime).AddDays(1)):
+				new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddDays(1));
 
-			var longDateOnlyPeriod = new DateOnlyPeriod(new DateOnly(optimizedPeriod.StartDateTime.AddDays(-1)), new DateOnly(optimizedPeriod.EndDateTime.AddDays(1)));
+	        var timeZone = person.PermissionInformation.DefaultTimeZone();
+	        var longDateOnlyPeriod = optimizedPeriod.ToDateOnlyPeriod(timeZone);
+			longDateOnlyPeriod = new DateOnlyPeriod(longDateOnlyPeriod.StartDate.AddDays(-1),longDateOnlyPeriod.EndDate.AddDays(1));
             var retDic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(optimizedPeriod),
                                                                new DifferenceEntityCollectionService
                                                                    <IPersistableScheduleData>());
+			var personAssignmentRepository = _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork);
+					
             using(TurnoffPermissionScope.For(retDic))
             {
 				addPersonAbsences(retDic, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(people, optimizedPeriod, scenario, absence));
-				addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario), false, people);
+				addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario), true, people);
 				foreach (DateTimePeriod p in searchPeriods)
 				{
-					addPersonAssignments(retDic, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(people, p, scenario));
+					addPersonAssignments(retDic, personAssignmentRepository.Find(people, p, scenario));
 					addPersonDayOffs(retDic, _repositoryFactory.CreatePersonDayOffRepository(UnitOfWork).Find(people, p, scenario));
 				}
             }
