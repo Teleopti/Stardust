@@ -316,7 +316,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		public void FilterPersons(IList<IPerson> selectedPersons)
 		{
-			_filteredPersons =
+			_filteredAgents =
 				(from p in selectedPersons orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
 
 		}

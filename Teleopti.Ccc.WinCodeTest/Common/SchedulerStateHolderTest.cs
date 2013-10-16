@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void Setup()
         {
 	        var period = new DateTimePeriod(2000, 1, 1, 2001, 1, 1);
+			dtp = new ScheduleDateTimePeriod(period);
             scenario = ScenarioFactory.CreateScenarioAggregate("test", true);
             _person1 = PersonFactory.CreatePerson("first", "last");
 	        _person2 = PersonFactory.CreatePerson("firstName", "lastName");
@@ -47,7 +48,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	        _person1.SetId(_guid1);
 			_person2.SetId(_guid2);
             selectedPersons = new List<IPerson>{_person1, _person2};
-        	target = new SchedulerStateHolder(scenario,
+	        var schedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(period);
+	        target = new SchedulerStateHolder(scenario,
         	                                  new DateOnlyPeriodAsDateTimePeriod(
         	                                  	dtp.VisiblePeriod.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo()),
 												TimeZoneInfoFactory.UtcTimeZoneInfo()), selectedPersons, schedulingResultStateHolder);
