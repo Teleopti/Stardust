@@ -16,28 +16,30 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private MockRepository _mocks;
 		private ITeamBlockDaysOffMoveFinder _target;
 		private IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
-		private ISmartDayOffBackToLegalStateService _smartDayOffBackToLegalStateService;
 		private IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
 		private IScheduleMatrixPro _matrix;
 		private IOptimizationPreferences _optimizationPreferences;
 		private IScheduleResultDataExtractor _dataExtractor;
 		private ILockableBitArray _originalArray;
+		private ILockableBitArray _workingArray;
 		private IDayOffDecisionMaker _dayOffDecisionMaker;
 		private ISmartDayOffBackToLegalStateService _daysOffBackToLegal;
+		private IList<double?> _dataExtractorValues;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_scheduleResultDataExtractorProvider = _mocks.StrictMock<IScheduleResultDataExtractorProvider>();
-			_smartDayOffBackToLegalStateService = _mocks.StrictMock<ISmartDayOffBackToLegalStateService>();
 			_dayOffOptimizationDecisionMakerFactory = _mocks.StrictMock<IDayOffOptimizationDecisionMakerFactory>();
-			_target = new TeamBlockDaysOffMoveFinder(_scheduleResultDataExtractorProvider, _smartDayOffBackToLegalStateService, _dayOffOptimizationDecisionMakerFactory);
+			_daysOffBackToLegal = _mocks.StrictMock<ISmartDayOffBackToLegalStateService>();
+			_target = new TeamBlockDaysOffMoveFinder(_scheduleResultDataExtractorProvider, _daysOffBackToLegal, _dayOffOptimizationDecisionMakerFactory);
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_optimizationPreferences = new OptimizationPreferences();
 			_dataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
 			_dayOffDecisionMaker = _mocks.StrictMock<IDayOffDecisionMaker>();
-			_daysOffBackToLegal = _mocks.StrictMock<ISmartDayOffBackToLegalStateService>();
+			
+			_dataExtractorValues = new List<double?>();
 		}
 
 		[Test]
@@ -45,6 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		{
 			_originalArray = new LockableBitArray(2, false, false, null);
 			_originalArray.Set(0, true);
+			_workingArray = (ILockableBitArray)_originalArray.Clone();
 			_optimizationPreferences.DaysOff.ConsiderWeekBefore = false;
 			_optimizationPreferences.DaysOff.ConsiderWeekAfter = false;
 			_optimizationPreferences.Extra.UseTeamBlockOption = true;
@@ -56,8 +59,28 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.TryFindMoves(_matrix, _originalArray, _optimizationPreferences);
-				Assert.That(!result.DaysOffBitArray[0]);
-				Assert.That(result.DaysOffBitArray[1]);
+				Assert.IsNotNull(result);
+			}
+		}
+
+		[Test]
+		public void ShouldReturnOriginalArrayIfTryFailed()
+		{
+			_originalArray = new LockableBitArray(2, false, false, null);
+			_originalArray.Set(0, true);
+			_workingArray = (ILockableBitArray)_originalArray.Clone();
+			_optimizationPreferences.DaysOff.ConsiderWeekBefore = false;
+			_optimizationPreferences.DaysOff.ConsiderWeekAfter = false;
+			_optimizationPreferences.Extra.UseTeamBlockOption = true;
+			using (_mocks.Record())
+			{
+				tryFindMoveMocks(true);
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.TryFindMoves(_matrix, _originalArray, _optimizationPreferences);
+				Assert.IsNotNull(result);
 			}
 		}
 
@@ -69,22 +92,23 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			Expect.Call(_dayOffOptimizationDecisionMakerFactory.CreateDecisionMakers(_originalArray, _optimizationPreferences))
 				  .Return(new List<IDayOffDecisionMaker> { _dayOffDecisionMaker });
 
-			IList<double?> dataExtractorValues = new List<double?>();
-			Expect.Call(_dataExtractor.Values()).Return(dataExtractorValues);
-			ILockableBitArray workingArray = (ILockableBitArray)_originalArray.Clone();
-			Expect.Call(_dayOffDecisionMaker.Execute(workingArray, dataExtractorValues)).IgnoreArguments().Return(false);
+			
+			Expect.Call(_dataExtractor.Values()).Return(_dataExtractorValues);
+
+			Expect.Call(_dayOffDecisionMaker.Execute(_workingArray, _dataExtractorValues)).IgnoreArguments().Return(false);
+
 			List<IDayOffBackToLegalStateSolver> solverList = new List<IDayOffBackToLegalStateSolver>();
-			Expect.Call(_daysOffBackToLegal.BuildSolverList(workingArray)).IgnoreArguments().Return(solverList);
-			//Expect.Call(_daysOffBackToLegal.Execute(solverList, 100)).Return(true);
+			Expect.Call(_daysOffBackToLegal.BuildSolverList(_workingArray)).IgnoreArguments().Return(solverList);
+			Expect.Call(_daysOffBackToLegal.Execute(solverList, 100)).Return(true);
 
-			//Expect.Call(_dataExtractor.Values()).Return(dataExtractorValues);
-			//Expect.Call(_dayOffDecisionMaker.Execute(workingArray, dataExtractorValues)).IgnoreArguments().Return(!failOnNoMoveFound);
+			Expect.Call(_dataExtractor.Values()).Return(_dataExtractorValues);
+			Expect.Call(_dayOffDecisionMaker.Execute(_workingArray, _dataExtractorValues)).IgnoreArguments().Return(!failOnNoMoveFound);
 
-			//if (failOnNoMoveFound)
-			//	return;
+			if (failOnNoMoveFound)
+				return;
 
-			//Expect.Call(_daysOffBackToLegal.BuildSolverList(workingArray)).IgnoreArguments().Return(solverList);
-			//Expect.Call(_daysOffBackToLegal.Execute(solverList, 100)).Return(true);
+			Expect.Call(_daysOffBackToLegal.BuildSolverList(_workingArray)).IgnoreArguments().Return(solverList);
+			Expect.Call(_daysOffBackToLegal.Execute(solverList, 100)).Return(true);
 
 
 
