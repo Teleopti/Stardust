@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
-using Teleopti.Ccc.Domain.Forecasting.DayInMonth;
+using Teleopti.Ccc.Domain.Forecasting.DayInMonthIndex;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Forecasting.DayInMonth
+namespace Teleopti.Ccc.DomainTest.Forecasting.DayInMonthIndex
 {
     [TestFixture]
     public class DayInMonthHelperTest

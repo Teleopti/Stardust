@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Forecasting.DayInMonth
+namespace Teleopti.Ccc.Domain.Forecasting.DayInMonthIndex
 {
     public class DayInMonthItem : IPeriodType
     {

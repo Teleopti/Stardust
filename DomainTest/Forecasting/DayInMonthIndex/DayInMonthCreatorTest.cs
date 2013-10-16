@@ -4,10 +4,10 @@ using System.IO;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Forecasting.DayInMonth;
+using Teleopti.Ccc.Domain.Forecasting.DayInMonthIndex;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Forecasting.DayInMonth
+namespace Teleopti.Ccc.DomainTest.Forecasting.DayInMonthIndex
 {
     [TestFixture]
     public class DayInMonthCreatorTest
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.DayInMonth
 
         private IList<ITaskOwner> getWorkloadDays()
         {
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Forecasting\DayInMonth\DayInMonthSeasonalityData.txt");
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Forecasting\DayInMonthIndex\DayInMonthSeasonalityData.txt");
             var ret = new List<ITaskOwner>();
             string line;
             var file = new StreamReader(path);

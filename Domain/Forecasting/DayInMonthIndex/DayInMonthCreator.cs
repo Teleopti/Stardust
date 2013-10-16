@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Teleopti.Ccc.Domain.Forecasting.DayInMonth
+namespace Teleopti.Ccc.Domain.Forecasting.DayInMonthIndex
 {
     public interface IDayInMonthCreator
     {

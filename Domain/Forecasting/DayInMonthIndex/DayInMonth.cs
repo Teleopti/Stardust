@@ -1,17 +1,17 @@
 ﻿using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Forecasting.DayInMonth
+namespace Teleopti.Ccc.Domain.Forecasting.DayInMonthIndex
 {
     public class DayInMonth : VolumeYear
     {
-        public DayInMonth(ITaskOwnerPeriod taskOwnerPeriod, DayInMonthCreator creator) : base(taskOwnerPeriod)
+        public DayInMonth(ITaskOwnerPeriod taskOwnerPeriod, IDayInMonthCreator creator) : base(taskOwnerPeriod)
         {
             creator.Create(this);
         }
 
         public override void ReloadHistoricalDataDepth(ITaskOwnerPeriod taskOwnerPeriod)
         {
-            throw new System.NotImplementedException();
+            //throw new System.NotImplementedException();
         }
 
         public override double TaskIndex(DateOnly dateTime)
