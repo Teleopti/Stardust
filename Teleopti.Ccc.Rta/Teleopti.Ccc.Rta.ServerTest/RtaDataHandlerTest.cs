@@ -365,7 +365,12 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ShouldCheckSchedule()
 		{
-			var agentState = new ActualAgentState{SendOverMessageBroker = true};
+			var agentState = new ActualAgentState
+				{
+					SendOverMessageBroker = true,
+					PersonId = _personId,
+					BusinessUnit = _businessUnitId
+				};
 
 			_messageSender.InstantiateBrokerService();
 			_agentAssembler.Expect(a => a.InvalidateReadModelCache(_personId));
@@ -373,6 +378,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				agentState);
 			var copyState = agentState;
 			_stateCache.Expect(s => s.AddAgentStateToCache(copyState));
+			_messageSender.Expect(m => m.IsAlive).Return(true);
 			_messageSender.Expect(m => m.SendRtaData(_personId, _businessUnitId, agentState));
 			_mocks.ReplayAll();
 
@@ -402,7 +408,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_messageSender.InstantiateBrokerService();
 			_agentAssembler.Expect(a => a.GetAgentStateForScheduleUpdate(_personId, _businessUnitId, _timestamp)).IgnoreArguments().Return(null);
 			_agentAssembler.Expect(t => t.InvalidateReadModelCache(_personId));
-			_loggingSvc.Expect(l => l.InfoFormat("Schedule for {0} has not changed", _personId));
 			_mocks.ReplayAll();
 
 

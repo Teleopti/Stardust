@@ -29,20 +29,20 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         public void VerifyInnerSpecificationDateTime()
         {
             _target = new PersonRequestViewModelFilter(_timeSpan);
-            UpdatedAfterSpecification innerSpecification = (UpdatedAfterSpecification)_target.InnerSpecification; 
-            Assert.IsTrue(WithinRange(DateTime.UtcNow.Subtract(_timeSpan),innerSpecification.DateTime));
+            var innerSpecification = (UpdatedAfterSpecification)_target.InnerSpecification; 
+            Assert.IsTrue(withinRange(DateTime.UtcNow.Subtract(_timeSpan),innerSpecification.DateTime));
         }
 
         [Test]
         public void VerifyCallsInnerSpecification()
         {
-            ISpecification<IChangeInfo> inner = _mocks.StrictMock<ISpecification<IChangeInfo>>();
+            var inner = _mocks.StrictMock<ISpecification<IChangeInfo>>();
             _target = new PersonRequestViewModelFilter(inner);
            
-            PersonRequestFactory requestFactory = new PersonRequestFactory();
-            IPersonRequest request = requestFactory.CreateApprovedPersonRequest();
+            var requestFactory = new PersonRequestFactory();
+            var request = requestFactory.CreateApprovedPersonRequest();
 
-            PersonRequestViewModel model = new PersonRequestViewModel(request, new ShiftTradeRequestStatusCheckerForTestDoesNothing(),null,null, null);
+            var model = new PersonRequestViewModel(request, new ShiftTradeRequestStatusCheckerForTestDoesNothing(),null,null, null);
 
             using(_mocks.Record())
             {
@@ -60,38 +60,38 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         public void VerifyPendingDoesNotGetFiltered()
         {
             _target = new PersonRequestViewModelFilter(TimeSpan.FromDays(1));
-            DateTime longTimeAgo = new DateTime(1812,1,1,1,1,1,DateTimeKind.Utc);
-           
-            IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
-            PersonRequestFactory factory = new PersonRequestFactory();
-            IPersonRequest personRequestToOldButPending = factory.CreatePersonRequest();
-            IPersonRequest personRequestToOld = factory.CreateApprovedPersonRequest();
+            var longTimeAgo = new DateTime(1812,1,1,1,1,1,DateTimeKind.Utc);
 
+			var shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
+			var factory = new PersonRequestFactory();
+			var personRequestToOldButPending = factory.CreatePersonRequest();
+			var personRequestToOld = factory.CreateApprovedPersonRequest();
 
-            ReflectionHelper.SetUpdatedOn(personRequestToOldButPending, longTimeAgo);
+			ReflectionHelper.SetUpdatedOn(personRequestToOldButPending, longTimeAgo);
             ReflectionHelper.SetUpdatedOn(personRequestToOld, longTimeAgo);
 
             Assert.IsFalse(personRequestToOld.IsPending,"Make sure this isnt pending");
             Assert.IsTrue(personRequestToOldButPending.IsPending, "Make sure its pending");
 
-            PersonRequestViewModel modelThatShouldBeFiltered = new PersonRequestViewModel(personRequestToOld,
+			var modelThatShouldBeFiltered = new PersonRequestViewModel(personRequestToOld,
                                                                        shiftTradeRequestStatusChecker, null,null, null);
 
-            PersonRequestViewModel modelThatShouldNotBeFiltered = new PersonRequestViewModel(personRequestToOldButPending,
+			var modelThatShouldNotBeFiltered = new PersonRequestViewModel(personRequestToOldButPending,
                                                                        shiftTradeRequestStatusChecker, null, null, null);
-
 
             Assert.IsTrue(_target.IsSatisfiedBy(modelThatShouldBeFiltered));
             Assert.IsFalse(_target.IsSatisfiedBy(modelThatShouldNotBeFiltered));
-            
-
-
-            
         }
 
-        private static bool WithinRange(DateTime dateTime,DateTime dateTimeToCompare)
+		[Test]
+		public void Verify_FutureShiftTradePending_DoesNotGetFiltered()
+		{
+			
+		}
+
+        private static bool withinRange(DateTime dateTime,DateTime dateTimeToCompare)
         {
-            DateTimePeriod period = new DateTimePeriod(dateTime.Subtract(TimeSpan.FromDays(1)),dateTime.Add(TimeSpan.FromDays(1)));
+			var period = new DateTimePeriod(dateTime.Subtract(TimeSpan.FromDays(1)), dateTime.Add(TimeSpan.FromDays(1)));
             return period.Contains(dateTimeToCompare);
         }
 

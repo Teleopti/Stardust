@@ -1,4 +1,5 @@
-﻿Feature: View daily staffing metrics
+﻿@WatiN
+Feature: View daily staffing metrics
 	In order to make future staffing decisions
 	As a team leader
 	I want to see the staffing metrics for skills
@@ -25,10 +26,10 @@ Background:
 	| Access to Anywhere         | true                |
 	| View unpublished schedules | true                |
 	And 'Pierre Baldi' has a person period with
-	| Field        | Value        |
-	| Team         | Team green   |
-	| Start date   | 2013-04-08   |
-	| Person skill | Direct Sales |
+	| Field      | Value        |
+	| Team       | Team green   |
+	| Start date | 2013-04-08   |
+	| Skill      | Direct Sales |
 	And there are shift categories
 	| Name |
 	| Day  |

@@ -4,6 +4,7 @@ using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using WatiN.Core;
@@ -16,17 +17,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			public string Tag { get; set; }
 			public IBrowserActivator Activator { get; set; }
+			public bool Visible { get; set; }
 			public bool Started { get; set; }
 		}
 
-		private static readonly IList<RegisteredActivator> Activators = 
+		private static readonly IList<RegisteredActivator> Activators =
 			new List<RegisteredActivator>
 				{
+					//new RegisteredActivator
+					//	{
+					//		Tag = "PhantomJS",
+					//		Activator = new CoypuPhantomJsActivator(),
+					//		Visible = false
+					//	},
+					new RegisteredActivator
+						{
+							Tag = "Chrome",
+							Activator = new CoypuChromeActivator(),
+							Visible = true
+						},
 					new RegisteredActivator
 						{
 							Tag = "WatiN",
 							Activator = new WatiNSingleBrowserIEActivator(),
-							Started = false
+							Visible = true
 						}
 				};
 
@@ -62,6 +76,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			Timeouts.Timeout = timeout;
 			Timeouts.Poll = retry;
+		}
+
+		public static void SelectDefaultVisibleBrowser()
+		{
+			_activator = Activators.First(x => x.Visible);
 		}
 
 		public static void SelectBrowserByTag()

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Rta.Server
 	{
 		private readonly IDatabaseHandler _databaseHandler;
 		private readonly IMbCacheFactory _mbCacheFactory;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (IAlarmMapper));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(IAlarmMapper));
 
 		public AlarmMapper(IDatabaseHandler databaseHandler, IMbCacheFactory mbCacheFactory)
 		{
@@ -27,33 +27,32 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public RtaAlarmLight GetAlarm(Guid activityId, Guid stateGroupId, Guid businessUnit)
 		{
-			Logger.InfoFormat("Getting alarm for Activity: {0}, StateGroupId: {1}", activityId, stateGroupId);
 			var alarm = findAlarmForActivity(activityId, stateGroupId, _databaseHandler.ActivityAlarms(), businessUnit);
 			return alarm;
 		}
-		
+
 		private static RtaAlarmLight findAlarmForActivity(Guid activityId, Guid stateGroupId,
-		                                                  IDictionary<Guid, List<RtaAlarmLight>> allAlarms, Guid businessUnit)
+														  IDictionary<Guid, List<RtaAlarmLight>> allAlarms, Guid businessUnit)
 		{
-			Logger.InfoFormat("Trying to get alarm for Activity: {0}, StateGroupId: {1}", activityId, stateGroupId);
+			Logger.DebugFormat("Trying to get alarm for Activity: {0}, StateGroupId: {1}", activityId, stateGroupId);
 			List<RtaAlarmLight> alarmForActivity;
 			if (allAlarms.TryGetValue(activityId, out alarmForActivity))
 			{
 				var alarmForStateGroup = alarmForActivity.SingleOrDefault(a => a.StateGroupId == stateGroupId && a.BusinessUnit == businessUnit);
 				if (alarmForStateGroup != null)
-					Logger.InfoFormat("Found Alarm: {0}, AlarmId: {1}", alarmForStateGroup.AlarmTypeId, alarmForStateGroup.Name);
+					Logger.DebugFormat("Found Alarm: {0}, AlarmId: {1}", alarmForStateGroup.AlarmTypeId, alarmForStateGroup.Name);
 				else
-					Logger.InfoFormat("Could not find alarm, no matching StateGroupId");
+					Logger.DebugFormat("Could not find alarm, no matching StateGroupId");
 				return alarmForStateGroup;
 			}
 			return activityId != Guid.Empty
-				       ? findAlarmForActivity(Guid.Empty, stateGroupId, allAlarms, businessUnit)
-				       : null;
+					   ? findAlarmForActivity(Guid.Empty, stateGroupId, allAlarms, businessUnit)
+					   : null;
 		}
 
 		public RtaStateGroupLight GetStateGroup(string stateCode, Guid platformTypeId, Guid businessUnitId)
 		{
-			Logger.InfoFormat("Trying to get stategroup for StateCode: {0}, PlatformTypeId: {1}, BusinessUntiId: {2}", stateCode, platformTypeId, businessUnitId);
+			Logger.DebugFormat("Trying to get stategroup for StateCode: {0}, PlatformTypeId: {1}, BusinessUntiId: {2}", stateCode, platformTypeId, businessUnitId);
 			var allStateGroups = _databaseHandler.StateGroups();
 			List<RtaStateGroupLight> stateGroupsForStateCode;
 			if (allStateGroups.TryGetValue(stateCode, out stateGroupsForStateCode))
@@ -61,7 +60,7 @@ namespace Teleopti.Ccc.Rta.Server
 				var stateGroup = stateGroupsForStateCode.SingleOrDefault(s => s.BusinessUnitId == businessUnitId && s.PlatformTypeId == platformTypeId);
 				if (stateGroup != null)
 				{
-					Logger.InfoFormat("Found StateGroupId: {0}, StateGroupName {1}", stateGroup.StateGroupId, stateGroup.StateGroupName);
+					Logger.DebugFormat("Found StateGroupId: {0}, StateGroupName: {1}", stateGroup.StateGroupId, stateGroup.StateGroupName);
 					return stateGroup;
 				}
 				Logger.InfoFormat(
@@ -71,7 +70,7 @@ namespace Teleopti.Ccc.Rta.Server
 			else if (!string.IsNullOrEmpty(stateCode))
 			{
 				Logger.InfoFormat("Could not find SateCode: {0}, for PlatformTypeId: {1}, on BusinessUnit: {2}", stateCode, platformTypeId, businessUnitId);
-				Logger.Info("Adding StateCode to database and clearing stategroup cache");
+				Logger.Debug("Adding StateCode to database and clearing stategroup cache");
 				var newState = _databaseHandler.AddAndGetNewRtaState(stateCode, platformTypeId);
 				invalidateStateGroupCache();
 				return newState;
@@ -81,14 +80,14 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public bool IsAgentLoggedOut(Guid personId, string stateCode, Guid platformTypeId, Guid businessUnitId)
 		{
-			Logger.InfoFormat("Checking if agent is already in a stategroup marked as logged out state, personId: {0}", personId);
+			Logger.DebugFormat("Checking if agent is already in a stategroup marked as logged out state, personId: {0}", personId);
 			var state = GetStateGroup(stateCode, platformTypeId, businessUnitId);
 			if (state != null)
 			{
-				Logger.InfoFormat(state.IsLogOutState
-					                  ? "Agent: {0} is already logged out"
-					                  : "Agent: {0} is not logged out",
-				                  personId);
+				Logger.DebugFormat(state.IsLogOutState
+									  ? "Agent: {0} is already logged out"
+									  : "Agent: {0} is not logged out",
+								  personId);
 				return state.IsLogOutState;
 			}
 			return false;
@@ -96,6 +95,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 		private void invalidateStateGroupCache()
 		{
+			Logger.Debug("Clearing cache for state groups");
 			_mbCacheFactory.Invalidate(_databaseHandler, x => x.StateGroups(), false);
 		}
 	}

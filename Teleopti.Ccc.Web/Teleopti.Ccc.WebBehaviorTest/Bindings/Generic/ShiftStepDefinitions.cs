@@ -1,7 +1,5 @@
 using System;
 using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 

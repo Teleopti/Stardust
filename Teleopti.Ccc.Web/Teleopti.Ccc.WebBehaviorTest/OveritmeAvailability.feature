@@ -1,4 +1,5 @@
-﻿Feature: Overtime availability
+﻿@WatiN
+Feature: Overtime availability
 	In order to submit when I am available for overtime work
 	As an agent 
 	I want to volunteer for overtime

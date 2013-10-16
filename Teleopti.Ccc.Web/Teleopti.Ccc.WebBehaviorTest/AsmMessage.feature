@@ -1,4 +1,5 @@
-﻿Feature: ASM Message
+﻿@WatiN
+Feature: ASM Message
 	In order to communicate with supervisors
 	As an agent
 	I want to receive and send information

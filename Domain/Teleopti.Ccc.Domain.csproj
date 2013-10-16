@@ -1011,6 +1011,7 @@
     <Compile Include="Security\Authentication\EnvironmentWindowsUserProvider.cs" />
     <Compile Include="Security\Authentication\FindApplicationUser.cs" />
     <Compile Include="Security\Authentication\FindUserDetail.cs" />
+    <Compile Include="Security\Authentication\FuncTimeZone.cs" />
     <Compile Include="Security\Authentication\IApplicationDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\IAvailableDataSourcesProvider.cs" />
     <Compile Include="Security\Authentication\ICheckBruteForce.cs" />
