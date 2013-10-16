@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
 
         public string Description
         {
-            get { return string.Empty; }
-            set { }
+			get { return "<Keep existing>"; }
+			set { }
         }
 
         KeepOriginalScheduleTag()
