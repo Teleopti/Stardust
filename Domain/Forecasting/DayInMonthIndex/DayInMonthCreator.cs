@@ -58,11 +58,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.DayInMonthIndex
                     return Tasks.Sum() / Tasks.Count;
                 }
             }
-
-            public double SumTasks
-            {
-                get { return Tasks.Sum(); }
-            }
         }
     }
 }
