@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_stateHolder.Schedules).Return(_dic);
+				Expect.Call(_stateHolder.Schedules).Return(_dic).Repeat.Twice();
 
 				Expect.Call(_range1.ScheduledDay(DateOnly.MinValue)).Return(_scheduleDay1);
 				Expect.Call(() => _scheduleDay1.DeleteMainShift(_scheduleDay1));
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				_target.AddDayOffAndResourceCalculate(_rollbackService, _teamInfo, DateOnly.MinValue, _schedulingOptions);
+				_target.AddDayOffForTeamAndResourceCalculate(_rollbackService, _teamInfo, DateOnly.MinValue, _schedulingOptions.DayOffTemplate);
 			}
 		}
 
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_stateHolder.Schedules).Return(_dic);
+				Expect.Call(_stateHolder.Schedules).Return(_dic).Repeat.Twice();
 
 				Expect.Call(_range1.ScheduledDay(DateOnly.MinValue)).Return(_scheduleDay1);
 				Expect.Call(() => _scheduleDay1.DeleteDayOff());
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				_target.RemoveDayOff(_rollbackService, _teamInfo, DateOnly.MinValue, _schedulingOptions);
+				_target.RemoveDayOffForTeam(_rollbackService, _teamInfo, DateOnly.MinValue);
 			}
 		}
 

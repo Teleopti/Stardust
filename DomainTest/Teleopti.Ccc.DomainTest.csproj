@@ -321,6 +321,7 @@
     <Compile Include="Optimization\TeamBlock\LockableBitArrayFactoryTest.cs" />
     <Compile Include="Optimization\TeamBlock\OptimizationOverLimitByRestrictionDeciderFactoryTest.cs" />
     <Compile Include="Optimization\TeamBlock\ScheduleMatrixOriginalStateContainerFactoryTest.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinderTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockGeneratorTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockIntradayDecisionMakerTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockIntradayOptimizationServiceTest.cs" />
