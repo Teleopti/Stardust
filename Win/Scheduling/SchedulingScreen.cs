@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.Win.Meetings;
 using Teleopti.Ccc.Win.Optimization;
@@ -4546,7 +4547,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			try
 			{
-				doSaveProcess();
+				doSaveProcess2();
 				_lastSaved = DateTime.Now;
 				return true;
 			}
@@ -4573,6 +4574,57 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 				return false;
 			}
+		}
+
+		private void doSaveProcess2()
+		{
+			//var refreshResult = refreshEntitiesUsingMessageBroker();
+			//if (refreshResult.ConflictsFound)
+			//{
+			//	if (refreshResult.DialogResult == PersistConflictDialogResult.OK)
+			//		showPleaseSaveAgainDialog();
+			//}
+			//else
+			//{
+				//if conflicts don't exist - do the saving
+				Cursor = Cursors.WaitCursor;
+
+				_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
+
+
+			var scheduleRangePersister = new ScheduleRangePersister(_container.Resolve<IUnitOfWorkFactory>(),
+			                                                        _container.Resolve<IDifferenceCollectionService<IPersistableScheduleData>>(),
+			                                                        new ScheduleRangeConflictCollector(),
+			                                                        new ScheduleRangeSaver(_container.Resolve<IScheduleRepository>()));
+			foreach (var range in _schedulerState.Schedules.Values)
+			{
+				scheduleRangePersister.Persist(range);
+			}
+
+				//var result = _persister.TryPersist(_schedulerState.Schedules, _modifiedWriteProtections,
+				//																		_schedulerState.PersonRequests, _schedulerState.Schedules.ModifiedPersonAccounts);
+				//if (result.ScheduleDictionaryConflicts != null && result.ScheduleDictionaryConflicts.Any())
+				//{
+				//	handleConflicts(result.ScheduleDictionaryConflicts);
+				//	doSaveProcess2();
+				//}
+				//if (!result.Saved)
+				//{
+				//	appologizeAndClose();
+				//	return;
+				//}
+
+
+				if (_personAbsenceAccountPersistValidationBusinessRuleResponses.Any())
+				{
+					BusinessRuleResponseDialog.ShowDialogFromWinForms(_personAbsenceAccountPersistValidationBusinessRuleResponses);
+				}
+				_undoRedo.Clear();
+				Cursor = Cursors.Default;
+			//}
+			updateRequestCommandsAvailability();
+			updateShiftEditor();
+			RecalculateResources();
 		}
 
 		private void doSaveProcess()
