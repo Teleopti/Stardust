@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
@@ -44,8 +42,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private IEnumerable<IScheduleDay> getScheduleDaysForPeriod(DateOnlyPeriod period, IPerson person)
 		{
-			var dictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
-				new PersonProvider(new[] {person}),
+			var dictionary = _scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPerson(
+				person,
 				new ScheduleDictionaryLoadOptions(false, false),
 				period,
 				_scenario.Current());

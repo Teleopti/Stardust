@@ -120,11 +120,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			DateOnlyPeriod period,
 			IScenario scenario)
 	    {
-		    if (personsProvider == null)
-			    throw new ArgumentNullException("personsProvider");
-
-		    if (scheduleDictionaryLoadOptions == null)
-			    throw new ArgumentNullException("scheduleDictionaryLoadOptions");
+			if (personsProvider == null)
+				throw new ArgumentNullException("personsProvider");
 
 		    var dateTimePeriod = new DateTimePeriod(new DateTime(period.StartDate.Date.Ticks, DateTimeKind.Utc),
 		                                            new DateTime(period.EndDate.Date.AddDays(1).Ticks, DateTimeKind.Utc));
@@ -135,6 +132,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private IScheduleDictionary findSchedulesOnlyInGivenPeriod(IEnumerable<IPerson> people, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, DateTimePeriod dictionaryPeriod, IScenario scenario)
 		{
+			if (scheduleDictionaryLoadOptions == null)
+				throw new ArgumentNullException("scheduleDictionaryLoadOptions");
+
 			var longDateTimePeriod = new DateTimePeriod(dictionaryPeriod.StartDateTime.AddDays(-1),
 														dictionaryPeriod.EndDateTime.AddDays(1));
 
