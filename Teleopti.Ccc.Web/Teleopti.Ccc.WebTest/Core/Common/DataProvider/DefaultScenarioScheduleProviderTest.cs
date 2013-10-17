@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(user);
 			_scenarioProvider.Stub(x => x.Current()).Return(scenario);
-			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(
-				Arg<IPersonProvider>.Matches(o => o.GetPersons().Single().Equals(user)),
+			_scheduleRepository.Stub(x => x.FindSchedulesOnlyForGivenPeriodAndPersons(
+				Arg<IEnumerable<IPerson>>.Matches(o => o.Single() == user),
 				Arg<IScheduleDictionaryLoadOptions>.Is.Anything,
 				Arg<DateOnlyPeriod>.Is.Equal(period),
 				Arg<IScenario>.Is.Equal(scenario)))

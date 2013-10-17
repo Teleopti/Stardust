@@ -114,12 +114,45 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return findSchedulesOnlyInGivenPeriod(people, scheduleDictionaryLoadOptions, period, dateTimePeriod, scenario);
 		}
 
-	    public IScheduleDictionary FindSchedulesOnlyInGivenPeriod(
+	    public IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPersons(
+			IEnumerable<IPerson> persons, 
+			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, 
+			DateOnlyPeriod period, 
+			IScenario scenario)
+	    {
+
+		    DateTimePeriod scheduleDictionaryPeriod;
+
+		    if (persons.Any())
+		    {
+			    var timeZones = persons.Select(p => p.PermissionInformation.DefaultTimeZone()).Distinct();
+			    var dateTimePeriods = timeZones.Select(period.ToDateTimePeriod).ToArray();
+			    scheduleDictionaryPeriod = new DateTimePeriod(
+				    dateTimePeriods.Select(x => x.StartDateTime).Min(),
+				    dateTimePeriods.Select(x => x.EndDateTime).Max()
+				    );
+		    }
+		    else
+		    {
+				scheduleDictionaryPeriod = period.ToDateTimePeriod(TimeZoneInfo.Utc);
+			}
+
+			return findSchedulesOnlyInGivenPeriod(persons, scheduleDictionaryLoadOptions, period, scheduleDictionaryPeriod, scenario);
+	    }
+
+	    /// <summary>
+		/// DONT USE THIS FUNCTION!
+		/// It wont handle the case of the persons being in different time zones correctly!
+		/// It recreates the date only period to straight UTC time period!
+		/// Therefore the schedule dictionary will have an incorrect utc time period!
+		/// </summary>
+		public IScheduleDictionary FindSchedulesOnlyInGivenPeriod(
 			IPersonProvider personsProvider,
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			DateOnlyPeriod period,
 			IScenario scenario)
 	    {
+
 			if (personsProvider == null)
 				throw new ArgumentNullException("personsProvider");
 
@@ -129,7 +162,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		    return findSchedulesOnlyInGivenPeriod(personsProvider.GetPersons(), scheduleDictionaryLoadOptions, period, dateTimePeriod, scenario);
 	    }
 
-		private IScheduleDictionary findSchedulesOnlyInGivenPeriod(IEnumerable<IPerson> people, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, DateTimePeriod dictionaryPeriod, IScenario scenario)
+		private IScheduleDictionary findSchedulesOnlyInGivenPeriod(
+			IEnumerable<IPerson> people, 
+			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, 
+			DateOnlyPeriod period, 
+			DateTimePeriod dictionaryPeriod, 
+			IScenario scenario)
 		{
 			if (scheduleDictionaryLoadOptions == null)
 				throw new ArgumentNullException("scheduleDictionaryLoadOptions");

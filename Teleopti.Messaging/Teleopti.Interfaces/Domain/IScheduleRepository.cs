@@ -18,7 +18,6 @@ namespace Teleopti.Interfaces.Domain
         ///<param name="concreteType"></param>
         ///<param name="id"></param>
         ///<returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Get")]
         IPersistableScheduleData Get(Type concreteType, Guid id);
 
 	    IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPerson(
@@ -33,18 +32,12 @@ namespace Teleopti.Interfaces.Domain
 		    DateOnlyPeriod period,
 		    IScenario scenario);
 
-        /// <summary>
-        /// Finds schedule for the specified people only withing the given period.
-        /// </summary>
-        /// <param name="personsProvider">A people provider.</param>
-        /// <param name="scheduleDictionaryLoadOptions">A people provider.</param>
-        /// <param name="period">The period.</param>
-        /// <param name="scenario">The scenario.</param>
-        /// <returns>A schedule dictionary that can be used to view schedule, but not to modify anything.</returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2009-03-31
-        /// </remarks>
+	    IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPersons(
+		    IEnumerable<IPerson> persons,
+		    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+		    DateOnlyPeriod period,
+		    IScenario scenario);
+
 		IScheduleDictionary FindSchedulesOnlyInGivenPeriod(
 			IPersonProvider personsProvider, 
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, 
