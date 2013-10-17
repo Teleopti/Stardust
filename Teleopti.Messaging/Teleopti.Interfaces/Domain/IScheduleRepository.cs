@@ -20,7 +20,19 @@ namespace Teleopti.Interfaces.Domain
         ///<returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Get")]
         IPersistableScheduleData Get(Type concreteType, Guid id);
-        
+
+	    IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPerson(
+		    IPerson person,
+		    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+		    DateTimePeriod dateTimePeriod,
+		    IScenario scenario);
+
+	    IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPerson(
+		    IPerson person,
+		    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+		    DateOnlyPeriod period,
+		    IScenario scenario);
+
         /// <summary>
         /// Finds schedule for the specified people only withing the given period.
         /// </summary>
@@ -33,7 +45,11 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2009-03-31
         /// </remarks>
-        IScheduleDictionary FindSchedulesOnlyInGivenPeriod(IPersonProvider personsProvider, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, IScenario scenario);
+        IScheduleDictionary FindSchedulesOnlyInGivenPeriod(
+			IPersonProvider personsProvider, 
+			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, 
+			DateOnlyPeriod period, 
+			IScenario scenario);
 
         /// <summary>
         /// Finds schedules for a person where there is a certain absence

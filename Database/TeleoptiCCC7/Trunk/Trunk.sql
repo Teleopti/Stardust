@@ -419,3 +419,16 @@ set FunctionCode = 'ModifyAvailabilities' where ForeignId = '0087'
 update dbo.ApplicationFunction
 set FunctionDescription = 'xxModifyAvailabilities' where ForeignId = '0087'
 GO
+
+----------------  
+--Name: Roger Kratz
+--Date: 2013-10-17
+--Desc: Removing unused table GroupingAbsence
+---------------- 
+ALTER TABLE [dbo].[Absence] DROP CONSTRAINT [FK_Absence_GroupingAbsence]
+GO
+alter table [dbo].[Absence]
+drop column GroupingAbsence
+GO
+DROP TABLE [dbo].[GroupingAbsence]
+GO

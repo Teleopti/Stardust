@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// Created by: rogerkr
     /// Created date: 2008-02-12
     /// </remarks>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public class ScheduleRepository : Repository<IPersistableScheduleData>, IScheduleRepository
     {
         private IRepositoryFactory _repositoryFactory = new RepositoryFactory();
@@ -89,85 +88,106 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             throw new NotImplementedException("Missing repository definition for type " + scheduleDataType);
         }
 
-        /// <summary>
-        /// Finds schedule for the specified people only within the given period.
-        /// </summary>
-        /// <param name="personsProvider"></param>
-        /// <param name="scheduleDictionaryLoadOptions"></param>
-        /// <param name="period">The period.</param>
-        /// <param name="scenario">The scenario.</param>
-        /// <returns>A schedule dictionary that can be used to view schedule, but not to modify anything.</returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2009-03-31
-        /// </remarks>
-        public IScheduleDictionary FindSchedulesOnlyInGivenPeriod(IPersonProvider personsProvider,
-                                                                  IScheduleDictionaryLoadOptions
-                                                                      scheduleDictionaryLoadOptions,
-                                                                  DateOnlyPeriod period, IScenario scenario)
-        {
-            if (personsProvider == null) 
-                throw new ArgumentNullException("personsProvider");
+		public IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPerson(
+			IPerson person,
+			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			DateTimePeriod dateTimePeriod,
+			IScenario scenario
+			)
+		{
+			var people = new[] { person };
+			var period = dateTimePeriod.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
 
-            if (scheduleDictionaryLoadOptions == null) 
-                throw new ArgumentNullException("scheduleDictionaryLoadOptions");
+			return findSchedulesOnlyInGivenPeriod(people, scheduleDictionaryLoadOptions, period, dateTimePeriod, scenario);
+		}
 
-            var dateTimePeriod = new DateTimePeriod(new DateTime(period.StartDate.Date.Ticks, DateTimeKind.Utc),
-                                                    new DateTime(period.EndDate.Date.AddDays(1).Ticks, DateTimeKind.Utc));
-            var longDateTimePeriod = new DateTimePeriod(dateTimePeriod.StartDateTime.AddDays(-1),
-                                                        dateTimePeriod.EndDateTime.AddDays(1));
+		public IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPerson(
+			IPerson person,
+			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			DateOnlyPeriod period,
+			IScenario scenario
+			)
+		{
+			var people = new[] {person};
+			var dateTimePeriod = period.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 
-            var people = personsProvider.GetPersons();
-            var retDic = new ReadOnlyScheduleDictionary(scenario, new ScheduleDateTimePeriod(dateTimePeriod, people),
-                                                        new DifferenceEntityCollectionService<IPersistableScheduleData>());
+			return findSchedulesOnlyInGivenPeriod(people, scheduleDictionaryLoadOptions, period, dateTimePeriod, scenario);
+		}
 
-            using (TurnoffPermissionScope.For(retDic))
-            {
-                addPersonAbsences(retDic,
-                                  _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork)
-                                                    .Find(people, longDateTimePeriod, scenario));
-                addPersonAssignments(retDic,
-                                     _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork)
-                                                       .Find(people, period, scenario));
+	    public IScheduleDictionary FindSchedulesOnlyInGivenPeriod(
+			IPersonProvider personsProvider,
+			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			DateOnlyPeriod period,
+			IScenario scenario)
+	    {
+		    if (personsProvider == null)
+			    throw new ArgumentNullException("personsProvider");
 
-                addPersonMeetings(retDic,
-                                  _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, period, scenario),
-                                  true, people);
+		    if (scheduleDictionaryLoadOptions == null)
+			    throw new ArgumentNullException("scheduleDictionaryLoadOptions");
 
-                if (scheduleDictionaryLoadOptions.LoadNotes)
-                {
-                    addNotes(retDic, _repositoryFactory.CreateNoteRepository(UnitOfWork).Find(period, people, scenario));
-                    addPublicNotes(retDic,
-                                   _repositoryFactory.CreatePublicNoteRepository(UnitOfWork)
-                                                     .Find(period, people, scenario));
-                }
+		    var dateTimePeriod = new DateTimePeriod(new DateTime(period.StartDate.Date.Ticks, DateTimeKind.Utc),
+		                                            new DateTime(period.EndDate.Date.AddDays(1).Ticks, DateTimeKind.Utc));
+		    var people = personsProvider.GetPersons();
 
-                addAgentDayScheduleTags(retDic,
-                                        _repositoryFactory.CreateAgentDayScheduleTagRepository(UnitOfWork)
-                                                          .Find(period, people, scenario));
+		    return findSchedulesOnlyInGivenPeriod(people, scheduleDictionaryLoadOptions, period, dateTimePeriod, scenario);
+	    }
 
-                if (scheduleDictionaryLoadOptions.LoadRestrictions)
-                {
-                    addPreferencesDays(retDic,
-                                       _repositoryFactory.CreatePreferenceDayRepository(UnitOfWork).Find(period, people));
-                    addStudentAvailabilityDays(retDic,
-                                               _repositoryFactory.CreateStudentAvailabilityDayRepository(UnitOfWork)
-                                                                 .Find(period, people));
-                    addOvertimeAvailability(retDic,
-                                            _repositoryFactory.CreateOvertimeAvailabilityRepository(UnitOfWork)
-                                                              .Find(period, people));
-                    if (!scheduleDictionaryLoadOptions.LoadOnlyPreferensesAndHourlyAvailability)
-                    {
-                        addPersonAvailabilities(longDateTimePeriod, retDic, people);
-                        addPersonRotations(longDateTimePeriod, retDic, people);
-                    }
-                }
-            }
-            retDic.TakeSnapshot();
-            return retDic;
-        }
+		private IScheduleDictionary findSchedulesOnlyInGivenPeriod(IEnumerable<IPerson> people, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, DateTimePeriod dictionaryPeriod, IScenario scenario)
+		{
+			var longDateTimePeriod = new DateTimePeriod(dictionaryPeriod.StartDateTime.AddDays(-1),
+														dictionaryPeriod.EndDateTime.AddDays(1));
 
-        private void addOvertimeAvailability(IScheduleDictionary retDic, IEnumerable<IOvertimeAvailability> availabilityDays)
+			var retDic = new ReadOnlyScheduleDictionary(scenario, new ScheduleDateTimePeriod(dictionaryPeriod, people),
+														new DifferenceEntityCollectionService<IPersistableScheduleData>());
+
+			using (TurnoffPermissionScope.For(retDic))
+			{
+				addPersonAbsences(retDic,
+								  _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork)
+													.Find(people, longDateTimePeriod, scenario));
+				addPersonAssignments(retDic,
+									 _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork)
+													   .Find(people, period, scenario));
+
+				addPersonMeetings(retDic,
+								  _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, period, scenario),
+								  true, people);
+
+				if (scheduleDictionaryLoadOptions.LoadNotes)
+				{
+					addNotes(retDic, _repositoryFactory.CreateNoteRepository(UnitOfWork).Find(period, people, scenario));
+					addPublicNotes(retDic,
+								   _repositoryFactory.CreatePublicNoteRepository(UnitOfWork)
+													 .Find(period, people, scenario));
+				}
+
+				addAgentDayScheduleTags(retDic,
+										_repositoryFactory.CreateAgentDayScheduleTagRepository(UnitOfWork)
+														  .Find(period, people, scenario));
+
+				if (scheduleDictionaryLoadOptions.LoadRestrictions)
+				{
+					addPreferencesDays(retDic,
+									   _repositoryFactory.CreatePreferenceDayRepository(UnitOfWork).Find(period, people));
+					addStudentAvailabilityDays(retDic,
+											   _repositoryFactory.CreateStudentAvailabilityDayRepository(UnitOfWork)
+																 .Find(period, people));
+					addOvertimeAvailability(retDic,
+											_repositoryFactory.CreateOvertimeAvailabilityRepository(UnitOfWork)
+															  .Find(period, people));
+					if (!scheduleDictionaryLoadOptions.LoadOnlyPreferensesAndHourlyAvailability)
+					{
+						addPersonAvailabilities(longDateTimePeriod, retDic, people);
+						addPersonRotations(longDateTimePeriod, retDic, people);
+					}
+				}
+			}
+			retDic.TakeSnapshot();
+			return retDic;
+		}
+
+	    private void addOvertimeAvailability(IScheduleDictionary retDic, IEnumerable<IOvertimeAvailability> availabilityDays)
         {
             foreach (var availabilityDay in availabilityDays)
             {

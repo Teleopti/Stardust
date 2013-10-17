@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
         private BusinessUnitCreator _businessUnitCreator;
         private ApplicationRoleCreator _applicationRoleCreator;
         private AvailableDataCreator _availableDataCreator;
-        private GroupingAbsenceCreator _groupingAbsenceCreator;
         private GroupingActivityCreator _groupingActivityCreator;
         private SkillTypeCreator _skillTypeCreator;
         private KeyPerformanceIndicatorCreator _keyPerformanceIndicatorCreator;
@@ -84,10 +83,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
             IApplicationRole agentRole = _applicationRoleCreator.Create(ShippedApplicationRoleNames.AgentRole, "xxBuildInStandardAgentRole", false);
             defaultAggregateRoot.AgentRole = agentRole;
 
-            _groupingAbsenceCreator = new GroupingAbsenceCreator(_person, _sessionFactory);
-            IGroupingAbsence groupingAbsence = _groupingAbsenceCreator.Create("Default");
-            defaultAggregateRoot.GroupingAbsence = groupingAbsence;
-
             _groupingActivityCreator = new GroupingActivityCreator(_person, _sessionFactory);
             IGroupingActivity groupingActivity = _groupingActivityCreator.Create("Default");
             defaultAggregateRoot.GroupingActivity = groupingActivity;
@@ -134,10 +129,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
             _applicationRoleCreator.Save(defaultAggregateRoot.AgentRole);
             availableData = _availableDataCreator.Create(defaultAggregateRoot.AgentRole, AvailableDataRangeOption.MyTeam);
             _availableDataCreator.Save(availableData);
-
-
-            //Save GroupingAbsence
-            _groupingAbsenceCreator.Save(defaultAggregateRoot.GroupingAbsence);
 
             //Save GroupingActivity
             _groupingActivityCreator.Save(defaultAggregateRoot.GroupingActivity);

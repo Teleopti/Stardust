@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
             {
                 var helper = new AbsenceConverterHelper(_connectionString);
                 AbsenceConverter absConverter =
-                    new AbsenceConverter(uow, new AbsenceMapper(MappedObjectPair, _defaultAggregateRoot.GroupingAbsence, helper.ReadConfidentialAbsence()));
+                    new AbsenceConverter(uow, new AbsenceMapper(MappedObjectPair, helper.ReadConfidentialAbsence()));
                 absConverter.ConvertAndPersist(new AbsenceReader().GetAll().Values);
             }
         }
