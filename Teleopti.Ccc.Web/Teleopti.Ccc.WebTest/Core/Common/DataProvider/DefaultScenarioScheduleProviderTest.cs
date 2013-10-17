@@ -35,16 +35,17 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var period = new DateOnlyPeriod(2011, 5, 18, 2011, 5, 19);
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
 			var scheduleRange = MockRepository.GenerateMock<IScheduleRange>();
-			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var person = MockRepository.GenerateMock<IPerson>();
 			var scenario = MockRepository.GenerateMock<IScenario>();
 			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			_scenarioProvider.Stub(x => x.Current()).Return(scenario);
-			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(true, true),
-																			period,
-																			scenario)).Return(scheduleDictionary).IgnoreArguments();
+			_scheduleRepository.Stub(x => x.FindSchedulesOnlyForGivenPeriodAndPerson(
+				person,
+				new ScheduleDictionaryLoadOptions(true, true),
+				period,
+				scenario)).Return(scheduleDictionary).IgnoreArguments();
 			scheduleDictionary.Stub(x => x[person]).Return(scheduleRange);
 			scheduleRange.Stub(x => x.ScheduledDayCollection(period)).Return(new[] { scheduleDay, scheduleDay });
 
@@ -208,9 +209,12 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			_scenarioProvider.Stub(x => x.Current()).Return(scenario);
-			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(true, true),
-																			period,
-																			scenario)).Return(scheduleDictionary).IgnoreArguments();
+			_scheduleRepository.Stub(x => x.FindSchedulesOnlyForGivenPeriodAndPerson(
+				person,
+				new ScheduleDictionaryLoadOptions(true, true),
+				period,
+				scenario
+				)).Return(scheduleDictionary).IgnoreArguments();
 			scheduleDictionary.Stub(x => x[person]).Return(scheduleRange);
 			scheduleRange.Stub(x => x.ScheduledDayCollection(period)).Return(new[] { scheduleDay });
 

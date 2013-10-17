@@ -125,9 +125,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		    var dateTimePeriod = new DateTimePeriod(new DateTime(period.StartDate.Date.Ticks, DateTimeKind.Utc),
 		                                            new DateTime(period.EndDate.Date.AddDays(1).Ticks, DateTimeKind.Utc));
-		    var people = personsProvider.GetPersons();
 
-		    return findSchedulesOnlyInGivenPeriod(people, scheduleDictionaryLoadOptions, period, dateTimePeriod, scenario);
+		    return findSchedulesOnlyInGivenPeriod(personsProvider.GetPersons(), scheduleDictionaryLoadOptions, period, dateTimePeriod, scenario);
 	    }
 
 		private IScheduleDictionary findSchedulesOnlyInGivenPeriod(IEnumerable<IPerson> people, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, DateTimePeriod dictionaryPeriod, IScenario scenario)
