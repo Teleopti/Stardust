@@ -1,4 +1,5 @@
-﻿Feature: Security
+﻿@WatiN
+Feature: Security
 	In order to protect my information
 	As a user that is not signed in
 	I want to make sure I cant access the site

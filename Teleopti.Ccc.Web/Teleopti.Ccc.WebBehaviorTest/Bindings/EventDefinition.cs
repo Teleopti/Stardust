@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			Log.Debug("Preparing for test run");
 
+			Browser.SelectDefaultVisibleBrowser();
 			try
 			{
 				Browser.SetDefaultTimeouts(TimeSpan.FromSeconds(20), TimeSpan.FromMilliseconds(25));
@@ -57,7 +58,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Log.Debug("Preparing for scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 
-			Navigation.GotoBlank();
 			Browser.SelectBrowserByTag();
 			Browser.NotifyBeforeScenario();
 			

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Rta.Server
 		private readonly object _lockObject = new object();
 		private readonly ILog Log = LogManager.GetLogger(typeof(ActualAgentStateCache));
 		private readonly IDatabaseHandler _databaseHandler;
-		
+
 		public ActualAgentStateCache(IDatabaseHandler databaseHandler)
 		{
 			_databaseHandler = databaseHandler;
@@ -26,11 +26,11 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public void AddAgentStateToCache(IActualAgentState state)
 		{
-			Log.InfoFormat("Added state to cache: {0}", state);
+			Log.InfoFormat("Added AgentState to cache: {0}", state);
 			BatchedAgents.AddOrUpdate(state.PersonId, state,
-			                          (guid, oldState) => state.ReceivedTime > oldState.ReceivedTime
-				                                              ? state
-				                                              : oldState);
+									  (guid, oldState) => state.ReceivedTime > oldState.ReceivedTime
+															  ? state
+															  : oldState);
 		}
 
 		public void FlushCacheToDatabase()
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 		private void saveToDatabase()
 		{
-			Log.InfoFormat("Saving {0} states to database", BatchedAgents.Count);
+			Log.InfoFormat("Saving {0} AgentStates to database", BatchedAgents.Count);
 			_databaseHandler.AddOrUpdate(BatchedAgents.Values.ToList());
 		}
 
@@ -56,10 +56,10 @@ namespace Teleopti.Ccc.Rta.Server
 			{
 				IActualAgentState outAgentState;
 				if (!BatchedAgents.TryGetValue(agentState.PersonId, out outAgentState) ||
-				    agentState.ReceivedTime < outAgentState.ReceivedTime) 
+					agentState.ReceivedTime < outAgentState.ReceivedTime)
 					continue;
 
-				Log.InfoFormat("Trying to remove state from cache {0}", outAgentState);
+				Log.DebugFormat("Removing AgentState from cache {0}", outAgentState);
 				BatchedAgents.TryRemove(agentState.PersonId, out outAgentState);
 			}
 		}

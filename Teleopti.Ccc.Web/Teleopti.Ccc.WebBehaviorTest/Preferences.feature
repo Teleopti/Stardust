@@ -1,4 +1,5 @@
-﻿Feature: Preferences
+﻿@WatiN
+Feature: Preferences
 	In order to view and submit when I prefer to work
 	As an agent
 	I want to view and submit my work preferences

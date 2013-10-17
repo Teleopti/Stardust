@@ -1,4 +1,5 @@
-﻿Feature: Session
+﻿@WatiN
+Feature: Session
 	In order to be able to work with the application
 	As an agent
 	I want the application to handle my login session approprietly

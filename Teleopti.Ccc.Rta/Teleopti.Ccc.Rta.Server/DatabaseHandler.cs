@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Rta.Server
 		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IDatabaseHandler));
 
 		public DatabaseHandler(IDatabaseConnectionFactory databaseConnectionFactory,
-		                                   IDatabaseConnectionStringHandler databaseConnectionStringHandler)
+										   IDatabaseConnectionStringHandler databaseConnectionStringHandler)
 		{
 			_databaseConnectionFactory = databaseConnectionFactory;
 			_databaseConnectionStringHandler = databaseConnectionStringHandler;
@@ -39,16 +39,16 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, IList<ScheduleLayer> layers)
 		{
-			LoggingSvc.Info("Finding current layer and next");
 			if (!layers.Any())
-				return new List<ScheduleLayer> {null, null};
+				return new List<ScheduleLayer> { null, null };
+			LoggingSvc.Debug("Finding current layer and next");
 			var scheduleLayers = layers.Where(l => l.EndDateTime > onTime);
 			var enumerable = scheduleLayers as IList<ScheduleLayer> ?? scheduleLayers.ToArray();
 			ScheduleLayer scheduleLayer = null;
 			ScheduleLayer nextLayer = null;
 			if (enumerable.Any())
 				scheduleLayer = enumerable[0];
-			
+
 			// no layer now
 			if (scheduleLayer != null && scheduleLayer.StartDateTime > onTime)
 			{
@@ -65,17 +65,17 @@ namespace Teleopti.Ccc.Rta.Server
 					nextLayer = null;
 
 			if (scheduleLayer != null)
-				LoggingSvc.InfoFormat(CultureInfo.InvariantCulture, "Current layer = Name: {0}, StartTime: {1}, EndTime: {2}", scheduleLayer.Name, scheduleLayer.StartDateTime, scheduleLayer.EndDateTime);
+				LoggingSvc.DebugFormat(CultureInfo.InvariantCulture, "Current layer = Name: {0}, StartTime: {1}, EndTime: {2}", scheduleLayer.Name, scheduleLayer.StartDateTime, scheduleLayer.EndDateTime);
 			if (nextLayer != null)
-				LoggingSvc.InfoFormat(CultureInfo.InvariantCulture, "Next layer = Name: {0}, StartTime: {1}, EndTime: {2}", nextLayer.Name, nextLayer.StartDateTime, nextLayer.EndDateTime);
-			return new List<ScheduleLayer> {scheduleLayer, nextLayer};
+				LoggingSvc.DebugFormat(CultureInfo.InvariantCulture, "Next layer = Name: {0}, StartTime: {1}, EndTime: {2}", nextLayer.Name, nextLayer.StartDateTime, nextLayer.EndDateTime);
+			return new List<ScheduleLayer> { scheduleLayer, nextLayer };
 		}
 
 		public IList<ScheduleLayer> GetReadModel(Guid personId)
 		{
 			var idString = string.Format(CultureInfo.InvariantCulture, personId.ToString());
 			var query = string.Format(CultureInfo.InvariantCulture,
-			                          @"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
+									  @"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
 											FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta
 											WHERE PersonId='{0}'", idString);
 			var layers = new List<ScheduleLayer>();
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Rta.Server
 			"CA2100:Review SQL queries for security vulnerabilities")]
 		public IActualAgentState LoadOldState(Guid personToLoad)
 		{
-			LoggingSvc.InfoFormat("Getting old state for person: {0}", personToLoad);
+			LoggingSvc.DebugFormat("Getting old state for person: {0}", personToLoad);
 			var personIdString = personToLoad.ToString();
 			var query =
 				string.Format(
@@ -139,26 +139,24 @@ namespace Teleopti.Ccc.Rta.Server
 								StateStart = reader.GetDateTime(reader.GetOrdinal("StateStart")),
 								NextStart = reader.GetDateTime(reader.GetOrdinal("NextStart")),
 								BatchId = !reader.IsDBNull(reader.GetOrdinal("BatchId"))
-									          ? reader.GetDateTime(reader.GetOrdinal("BatchId"))
-									          : (DateTime?) null,
+											  ? reader.GetDateTime(reader.GetOrdinal("BatchId"))
+											  : (DateTime?)null,
 								OriginalDataSourceId = !reader.IsDBNull(reader.GetOrdinal("OriginalDataSourceId"))
-									                       ? reader.GetString(reader.GetOrdinal("OriginalDataSourceId"))
-									                       : "",
+														   ? reader.GetString(reader.GetOrdinal("OriginalDataSourceId"))
+														   : "",
 								AlarmStart = reader.GetDateTime(reader.GetOrdinal("AlarmStart"))
 							};
-						LoggingSvc.InfoFormat("Found old state for person: {0}, old statecode: {1}", personToLoad, agentState.StateCode);
+						LoggingSvc.DebugFormat("Found old state for person: {0}, AgentState: {1}", personToLoad, agentState);
 						return agentState;
 					}
 				}
 			}
-			LoggingSvc.InfoFormat("Found no state for person: {0}", personToLoad);
+			LoggingSvc.DebugFormat("Found no state for person: {0}", personToLoad);
 			return null;
 		}
 
 		public IList<IActualAgentState> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
 		{
-			LoggingSvc.InfoFormat("Getting users on DatasourceId: {0}", dataSourceId);
-
 			var missingUsers = new List<IActualAgentState>();
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
 			{
@@ -202,7 +200,7 @@ namespace Teleopti.Ccc.Rta.Server
 			var defaultStateGroupName = "";
 			var defaultStateGroupBusinessUnit = Guid.Empty;
 			const string getDefaultStateGroupQuery = @"SELECT Name, Id, BusinessUnit FROM RtaStateGroup WHERE DefaultStateGroup = 1";
-			
+
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
 			{
 				var command = connection.CreateCommand();
@@ -218,7 +216,7 @@ namespace Teleopti.Ccc.Rta.Server
 				}
 				reader.Close();
 				var addRtaStateQuery = string.Format("INSERT INTO RtaState VALUES ('{0}', N'{1}', N'{1}', '{2}', '{3}')", stateId,
-				                                     stateCode, platformTypeId, defaultStateGroupId);
+													 stateCode, platformTypeId, defaultStateGroupId);
 
 				command = connection.CreateCommand();
 				command.CommandText = addRtaStateQuery;
@@ -257,16 +255,16 @@ namespace Teleopti.Ccc.Rta.Server
 				while (reader.Read())
 				{
 					var rtaStateGroupLight = new RtaStateGroupLight
-					                         	{
+												{
 													StateGroupName = reader.GetString(reader.GetOrdinal("StateGroupName")),
-					                         		BusinessUnitId = reader.GetGuid(reader.GetOrdinal("BusinessUnitId")),
-					                         		PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
-					                         		StateCode = reader.GetString(reader.GetOrdinal("StateCode")),
-					                         		StateGroupId = reader.GetGuid(reader.GetOrdinal("StateGroupId")),
-					                         		StateId = reader.GetGuid(reader.GetOrdinal("StateId")),
-					                         		StateName = reader.GetString(reader.GetOrdinal("StateName")),
+													BusinessUnitId = reader.GetGuid(reader.GetOrdinal("BusinessUnitId")),
+													PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
+													StateCode = reader.GetString(reader.GetOrdinal("StateCode")),
+													StateGroupId = reader.GetGuid(reader.GetOrdinal("StateGroupId")),
+													StateId = reader.GetGuid(reader.GetOrdinal("StateId")),
+													StateName = reader.GetString(reader.GetOrdinal("StateName")),
 													IsLogOutState = reader.GetBoolean(reader.GetOrdinal("IsLogOutState"))
-					                         	};
+												};
 					stateGroups.Add(rtaStateGroupLight);
 				}
 				reader.Close();
@@ -289,29 +287,29 @@ namespace Teleopti.Ccc.Rta.Server
 					var rtaAlarmLight = new RtaAlarmLight
 						{
 							StateGroupName = !reader.IsDBNull(reader.GetOrdinal("StateGroupName"))
-								                 ? reader.GetString(reader.GetOrdinal("StateGroupName"))
-								                 : "",
+												 ? reader.GetString(reader.GetOrdinal("StateGroupName"))
+												 : "",
 							StateGroupId = !reader.IsDBNull(reader.GetOrdinal("StateGroupId"))
-								               ? reader.GetGuid(reader.GetOrdinal("StateGroupId"))
-								               : Guid.Empty,
+											   ? reader.GetGuid(reader.GetOrdinal("StateGroupId"))
+											   : Guid.Empty,
 							ActivityId = !reader.IsDBNull(reader.GetOrdinal("ActivityId"))
-								             ? reader.GetGuid(reader.GetOrdinal("ActivityId"))
-								             : Guid.Empty,
+											 ? reader.GetGuid(reader.GetOrdinal("ActivityId"))
+											 : Guid.Empty,
 							DisplayColor = !reader.IsDBNull(reader.GetOrdinal("DisplayColor"))
-								               ? reader.GetInt32(reader.GetOrdinal("DisplayColor"))
-								               : 0,
+											   ? reader.GetInt32(reader.GetOrdinal("DisplayColor"))
+											   : 0,
 							StaffingEffect = !reader.IsDBNull(reader.GetOrdinal("StaffingEffect"))
-								                 ? reader.GetDouble(reader.GetOrdinal("StaffingEffect"))
-								                 : 0,
+												 ? reader.GetDouble(reader.GetOrdinal("StaffingEffect"))
+												 : 0,
 							AlarmTypeId = !reader.IsDBNull(reader.GetOrdinal("AlarmTypeId"))
-								              ? reader.GetGuid(reader.GetOrdinal("AlarmTypeId"))
-								              : Guid.Empty,
+											  ? reader.GetGuid(reader.GetOrdinal("AlarmTypeId"))
+											  : Guid.Empty,
 							Name = !reader.IsDBNull(reader.GetOrdinal("Name"))
-								       ? reader.GetString(reader.GetOrdinal("Name"))
-								       : "",
+									   ? reader.GetString(reader.GetOrdinal("Name"))
+									   : "",
 							ThresholdTime = !reader.IsDBNull(reader.GetOrdinal("ThresholdTime"))
-								                ? reader.GetInt64(reader.GetOrdinal("ThresholdTime"))
-								                : 0,
+												? reader.GetInt64(reader.GetOrdinal("ThresholdTime"))
+												: 0,
 							BusinessUnit = reader.GetGuid(reader.GetOrdinal("BusinessUnit"))
 						};
 					stateGroups.Add(rtaAlarmLight);
@@ -320,7 +318,7 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 			return
 				new ConcurrentDictionary<Guid, List<RtaAlarmLight>>(stateGroups.GroupBy(g => g.ActivityId)
-				                                                               .ToDictionary(k => k.Key, v => v.ToList()));
+																			   .ToDictionary(k => k.Key, v => v.ToList()));
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
@@ -329,7 +327,7 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			if (!actualAgentStates.Any())
 				return;
-			
+
 			using (
 				var connection =
 					_databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
@@ -485,7 +483,7 @@ namespace Teleopti.Ccc.Rta.Server
 							Value = newState.OriginalDataSourceId
 						});
 					command.ExecuteNonQuery();
-					LoggingSvc.InfoFormat("Saved state: {0} to database", newState);
+					LoggingSvc.DebugFormat("Saved state: {0} to database", newState);
 				}
 			}
 		}
@@ -507,7 +505,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public DateTimePeriod Period()
 		{
-			return new DateTimePeriod(StartDateTime,EndDateTime);
+			return new DateTimePeriod(StartDateTime, EndDateTime);
 		}
 	}
 }

@@ -23,6 +23,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 		public WorkShiftRuleSetConfigurable()
 		{
+			StartBoundry = "8:00";
+			EndBoundry = "17:00";
 			Segment = "00:15";
 			Blacklisted = false;
 		}

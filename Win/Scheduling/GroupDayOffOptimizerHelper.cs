@@ -489,25 +489,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 				OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod, _stateHolder);
 			IPeriodValueCalculator periodValueCalculatorForAllSkills =
 				OptimizerHelperHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, allSkillsDataExtractor);
-			
+			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder =
+				new TeamBlockDaysOffMoveFinder(_container.Resolve<IScheduleResultDataExtractorProvider>(),
+				                               dayOffBackToLegalStateService,
+				                               _container.Resolve<IDayOffOptimizationDecisionMakerFactory>());
 
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService = 
 				new TeamBlockDayOffOptimizerService(
 					teamInfoFactory,
 					_container.Resolve<ILockableBitArrayFactory>(),
-					_container.Resolve<IScheduleResultDataExtractorProvider>(),
-					dayOffBackToLegalStateService,
 					_container.Resolve<ISchedulingOptionsCreator>(),
 					_container.Resolve<ILockableBitArrayChangesTracker>(),
 					teamBlockScheduler,
 					_container.Resolve<ITeamBlockInfoFactory>(),
 					periodValueCalculatorForAllSkills,
-					_container.Resolve<IDayOffOptimizationDecisionMakerFactory>(),
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamDayOffModifier>(),
 					_container.Resolve<ITeamBlockSteadyStateValidator>(),
 					teamBlockCleaner,
-                    teamBlockRestrictionOverLimitValidator, _container.Resolve<ITeamBlockMaxSeatChecker >()
+                    teamBlockRestrictionOverLimitValidator, 
+					_container.Resolve<ITeamBlockMaxSeatChecker>(),
+					teamBlockDaysOffMoveFinder
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs

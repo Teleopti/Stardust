@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var personPeriod = new PersonPeriodConfigurable
 				{
 					StartDate = date,
-					RuleSetBag = "Common"
+					ShiftBag = "Common"
 				};
 			DataMaker.Person(userName).Apply(personPeriod);
 		}

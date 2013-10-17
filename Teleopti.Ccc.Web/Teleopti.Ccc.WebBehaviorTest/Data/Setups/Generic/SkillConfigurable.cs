@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	{
 		public string Name { get; set; }
 		public string Activity { get; set; }
+
 		public void Apply(IUnitOfWork uow)
 		{
 			var skillType = SkillTypeFactory.CreateSkillType();
