@@ -97,19 +97,19 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
         private IScheduleDay fetchSchedulePart(SchedulePartDto schedulePartDto)
         {
-            IPerson person = PersonRepository.Load(schedulePartDto.PersonId);
-            DateTimePeriod period = partPeriod(schedulePartDto);
+            var person = PersonRepository.Load(schedulePartDto.PersonId);
+            var period = partPeriod(schedulePartDto);
 
 	        var skaVaraPersonernaIListansFullaSchemaPeriod =
 		        period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
-            IScheduleDictionary scheduleDictionary =
-                ScheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(true, false),
-                                                                     skaVaraPersonernaIListansFullaSchemaPeriod,
-                                                                     _scenarioRepository.Current());
+	        var scheduleDictionary =
+		        ScheduleRepository.FindSchedulesOnlyForGivenPeriodAndPerson(person, new ScheduleDictionaryLoadOptions(true, false),
+		                                                                    skaVaraPersonernaIListansFullaSchemaPeriod,
+		                                                                    _scenarioRepository.Current());
             //vad ska hända här?
             //TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById(schedulePartDto.TimeZoneId));
             //scheduleDictionary.SetTimeZone(timeZoneInfo);
-            DateOnly date = schedulePartDto.Date.ToDateOnly();
+            var date = schedulePartDto.Date.ToDateOnly();
             return scheduleDictionary[person].ScheduledDay(date);
         }
 
