@@ -20,19 +20,19 @@ namespace Teleopti.Interfaces.Domain
         ///<returns></returns>
         IPersistableScheduleData Get(Type concreteType, Guid id);
 
-	    IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPerson(
+	    IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(
 		    IPerson person,
 		    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 		    DateTimePeriod dateTimePeriod,
 		    IScenario scenario);
 
-	    IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPerson(
+	    IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(
 		    IPerson person,
 		    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 		    DateOnlyPeriod period,
 		    IScenario scenario);
 
-	    IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPersons(
+	    IScheduleDictionary FindSchedulesForPersonsOnlyInGivenPeriod(
 		    IEnumerable<IPerson> persons,
 		    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 		    DateOnlyPeriod period,

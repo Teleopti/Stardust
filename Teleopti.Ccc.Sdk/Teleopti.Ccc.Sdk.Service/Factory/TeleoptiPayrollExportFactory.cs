@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			{
 				var personList = _personAssembler.DtosToDomainEntities(personCollection).ToList();
 				var scheduleDictionary =
-					_scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPersons(
+					_scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
 						personList,
 						new ScheduleDictionaryLoadOptions(true, false),
 						period,

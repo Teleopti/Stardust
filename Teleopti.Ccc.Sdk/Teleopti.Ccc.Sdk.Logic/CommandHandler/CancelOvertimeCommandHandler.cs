@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var dateTimePeriod = _dateTimePeriodAssembler.DtoToDomainEntity(command.Period);
 				var startDate = command.Date.ToDateOnly();
 				var scheduleDictionary =
-					_scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPerson(
+					_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
 						person, new ScheduleDictionaryLoadOptions(false, false),
 						new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
 

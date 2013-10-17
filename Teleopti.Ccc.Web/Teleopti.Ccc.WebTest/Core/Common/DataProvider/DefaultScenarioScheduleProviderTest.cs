@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			_scenarioProvider.Stub(x => x.Current()).Return(scenario);
-			_scheduleRepository.Stub(x => x.FindSchedulesOnlyForGivenPeriodAndPerson(
+			_scheduleRepository.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(
 				person,
 				new ScheduleDictionaryLoadOptions(true, true),
 				period,
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(user);
 			_scenarioProvider.Stub(x => x.Current()).Return(scenario);
-			_scheduleRepository.Stub(x => x.FindSchedulesOnlyForGivenPeriodAndPersons(
+			_scheduleRepository.Stub(x => x.FindSchedulesForPersonsOnlyInGivenPeriod(
 				Arg<IEnumerable<IPerson>>.Matches(o => o.Single() == user),
 				Arg<IScheduleDictionaryLoadOptions>.Is.Anything,
 				Arg<DateOnlyPeriod>.Is.Equal(period),
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			_scenarioProvider.Stub(x => x.Current()).Return(scenario);
-			_scheduleRepository.Stub(x => x.FindSchedulesOnlyForGivenPeriodAndPerson(
+			_scheduleRepository.Stub(x => x.FindSchedulesForPersonOnlyInGivenPeriod(
 				person,
 				new ScheduleDictionaryLoadOptions(true, true),
 				period,

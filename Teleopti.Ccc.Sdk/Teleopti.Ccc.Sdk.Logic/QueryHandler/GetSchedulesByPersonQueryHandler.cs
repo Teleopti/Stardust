@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				var person = _personRepository.Get(query.PersonId);
 
 				IScheduleDictionary scheduleDictionary =
-					_scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPerson(person, new ScheduleDictionaryLoadOptions(true, false), period, scenario);
+					_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(true, false), period, scenario);
 
 				IScheduleRange scheduleRange = scheduleDictionary[person];
 				foreach (DateOnly dateOnly in datePeriod.DayCollection())

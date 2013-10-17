@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var endDate = startDate.AddDays(1);
 
 				var scheduleDictionary =
-					_scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPerson(
+					_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
 						person, new ScheduleDictionaryLoadOptions(false, false),
 						new DateOnlyPeriod(startDate, endDate), scenario);
 

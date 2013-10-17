@@ -57,21 +57,21 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPerson(IPerson person,
+		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(IPerson person,
 		                                                          IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 		                                                          DateTimePeriod dateTimePeriod, IScenario scenario)
 		{
 			return ScheduleDictionaryForTest.WithPersonAbsence(scenario, _personAbsence.Period, _personAbsence);
 		}
 
-		public IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPerson(IPerson person,
+		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(IPerson person,
 		                                                          IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 		                                                          DateOnlyPeriod period, IScenario scenario)
 		{
 			return ScheduleDictionaryForTest.WithPersonAbsence(scenario, _personAbsence.Period, _personAbsence);
 		}
 
-		public IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPersons(IEnumerable<IPerson> persons, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, IScenario scenario)
+		public IScheduleDictionary FindSchedulesForPersonsOnlyInGivenPeriod(IEnumerable<IPerson> persons, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, IScenario scenario)
 		{
 			return ScheduleDictionaryForTest.WithPersonAbsence(scenario, _personAbsence.Period, _personAbsence);
 		}

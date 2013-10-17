@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var person = _loggedOnUser.CurrentUser();
 			var defaultScenario = _scenarioRepository.Current();
 
-			var dictionary = _scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPerson(
+			var dictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
 				person,
 				new ScheduleDictionaryLoadOptions(true, true), 
 				period,
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		{
 			var defaultScenario = _scenarioRepository.Current();
 
-			var dictionary = _scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPersons(
+			var dictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
 				persons, 
 				new ScheduleDictionaryLoadOptions(false, false),
 				new DateOnlyPeriod(date, date),

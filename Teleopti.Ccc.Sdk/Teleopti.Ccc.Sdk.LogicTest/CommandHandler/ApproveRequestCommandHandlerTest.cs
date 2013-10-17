@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(request.Request).Return(_absenceRequest).Repeat.Times(3);
                 Expect.Call(_scenarioRepository.Current()).Return(_scenario).Repeat.Twice();
-				Expect.Call(_scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPersons(new[] { _person }, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(), null)).
+				Expect.Call(_scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { _person }, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(), null)).
                     IgnoreArguments().Return(dictionary);
                 Expect.Call(_personRequestRepository.Get(_approveRequestCommandDto.PersonRequestId)).Return(request);
                 Expect.Call(request.Approve(null, _authorization)).IgnoreArguments().Return(null);
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(request.Request).Return(_shiftTradeRequest).Repeat.Times(3);
                 Expect.Call(_scenarioRepository.Current()).Return(_scenario).Repeat.Twice();
-				Expect.Call(_scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPersons(new[] { _person }, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(), null)).
+				Expect.Call(_scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { _person }, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(), null)).
                     IgnoreArguments().Return(dictionary);
                 Expect.Call(_personRequestRepository.Get(_approveRequestCommandDto.PersonRequestId)).Return(request);
                 Expect.Call(request.Approve(null, _authorization)).IgnoreArguments().Return(null);
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(request.Request).Return(_absenceRequest).Repeat.Times(3);
                 Expect.Call(_scenarioRepository.Current()).Return(_scenario).Repeat.Twice();
-				Expect.Call(_scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPersons(
+				Expect.Call(_scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
 										new[] { _person }, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(), null)).
                     IgnoreArguments().Return(dictionary);
                 Expect.Call(_personRequestRepository.Get(_approveRequestCommandDto.PersonRequestId)).Return(request);

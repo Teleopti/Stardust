@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             var longPeriod = new DateOnlyPeriod(period.StartDate.AddDays(-1),
                                                 period.EndDate.AddDays(1));
             _scheduleDictionary =
-                _scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPersons(
+                _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
                     shiftTradeRequestPersonExtractor.Persons,
                     new ScheduleDictionaryLoadOptions(false, false),
                     longPeriod,

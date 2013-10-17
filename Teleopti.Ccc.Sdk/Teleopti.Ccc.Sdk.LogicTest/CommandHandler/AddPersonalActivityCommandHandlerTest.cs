@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
 				Expect.Call(_personRepository.Load(_person.Id.GetValueOrDefault())).Return(_person);
 				Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
-				Expect.Call(_scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPerson(null, null, _dateOnlyPeriod, _scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(null, null, _dateOnlyPeriod, _scenario)).IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(_activityRepository.Load(_activity.Id.GetValueOrDefault())).Return(_activity);
 				Expect.Call(() => scheduleDay.CreateAndAddPersonalActivity(null, new DateTimePeriod())).IgnoreArguments();
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
 				Expect.Call(_personRepository.Load(_person.Id.GetValueOrDefault())).Return(_person);
 				Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
-				Expect.Call(_scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPerson(null, null, _dateOnlyPeriod, _scenario)).IgnoreArguments().Return(dictionary);
+				Expect.Call(_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(null, null, _dateOnlyPeriod, _scenario)).IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[_person]).Return(scheduleRangeMock);
 				Expect.Call(_activityRepository.Load(_activity.Id.GetValueOrDefault())).Return(_activity);
 				Expect.Call(() => scheduleDay.CreateAndAddPersonalActivity(null, new DateTimePeriod())).IgnoreArguments();

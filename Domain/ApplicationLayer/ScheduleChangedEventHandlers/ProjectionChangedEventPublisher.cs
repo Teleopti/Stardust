@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		        return null;
 		    }
 
-			var schedule = _scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPerson(person,
+			var schedule = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				                                                   new ScheduleDictionaryLoadOptions(false, false),
 				                                                   period, 
 																   scenario);

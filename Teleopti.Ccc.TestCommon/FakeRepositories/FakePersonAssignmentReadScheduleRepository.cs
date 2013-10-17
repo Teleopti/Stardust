@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPerson(IPerson person,
+		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(IPerson person,
 		                                                                    IScheduleDictionaryLoadOptions
 			                                                                    scheduleDictionaryLoadOptions,
 		                                                                    DateTimePeriod dateTimePeriod, IScenario scenario)
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return new ScheduleDictionaryForTest(scenario, dateTimePeriod);
 		}
 
-		public IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPerson(IPerson person,
+		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(IPerson person,
 		                                                                    IScheduleDictionaryLoadOptions
 			                                                                    scheduleDictionaryLoadOptions, DateOnlyPeriod period,
 		                                                                    IScenario scenario)
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return new ScheduleDictionaryForTest(scenario, period.StartDate.Date, period.EndDate.Date);
 		}
 
-		public IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPersons(IEnumerable<IPerson> persons, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, IScenario scenario)
+		public IScheduleDictionary FindSchedulesForPersonsOnlyInGivenPeriod(IEnumerable<IPerson> persons, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, IScenario scenario)
 		{
 			if (_personAssignment != null)
 				return ScheduleDictionaryForTest.WithPersonAssignment(scenario, _personAssignment.Date, _personAssignment);

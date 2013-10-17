@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 					personList.AddRange(_personRepository.FindPeopleBelongTeam(team, datePeriod));
 				}
 
-				IScheduleDictionary scheduleDictionary = _scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPersons(personList, new ScheduleDictionaryLoadOptions(true, false), period, scenario);
+				IScheduleDictionary scheduleDictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(personList, new ScheduleDictionaryLoadOptions(true, false), period, scenario);
 				foreach (IPerson person in personList)
 				{
 					IScheduleRange scheduleRange = scheduleDictionary[person];

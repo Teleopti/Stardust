@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 	        var skaVaraPersonernaIListansFullaSchemaPeriod =
 		        period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
 	        var scheduleDictionary =
-		        ScheduleRepository.FindSchedulesOnlyForGivenPeriodAndPerson(person, new ScheduleDictionaryLoadOptions(true, false),
+		        ScheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(true, false),
 		                                                                    skaVaraPersonernaIListansFullaSchemaPeriod,
 		                                                                    _scenarioRepository.Current());
             //vad ska hända här?

@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private IEnumerable<IScheduleDay> getScheduleDaysForPeriod(DateOnlyPeriod period, IPerson person)
 		{
-			var dictionary = _scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPerson(
+			var dictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
 				person,
 				new ScheduleDictionaryLoadOptions(false, false),
 				period,

@@ -333,7 +333,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             }
             using (_mocks.Playback())
             {
-				retDic = _target.FindSchedulesOnlyForGivenPeriodAndPersons(visiblePeople, new ScheduleDictionaryLoadOptions(true, true), searchPeriod, _scenario);
+				retDic = _target.FindSchedulesForPersonsOnlyInGivenPeriod(visiblePeople, new ScheduleDictionaryLoadOptions(true, true), searchPeriod, _scenario);
             }
             Assert.AreEqual(1, retDic.Count);
             Assert.IsTrue(retDic[person1].Contains(pAss1));
@@ -752,13 +752,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldThrowExceptionOnNullPersonProviderInGivenPeriod()
         {
             var scheduleDictionaryLoadOptions = _mocks.StrictMock<IScheduleDictionaryLoadOptions>();
-			_target.FindSchedulesOnlyForGivenPeriodAndPersons(null, scheduleDictionaryLoadOptions, _longDateOnlyPeriod, _scenario);
+			_target.FindSchedulesForPersonsOnlyInGivenPeriod(null, scheduleDictionaryLoadOptions, _longDateOnlyPeriod, _scenario);
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void ShouldThrowExceptionOnNullScheduleDictionaryLoadOptionsInGivenPeriod()
         {
-			_target.FindSchedulesOnlyForGivenPeriodAndPersons(new IPerson[]{}, null, _longDateOnlyPeriod, _scenario);
+			_target.FindSchedulesForPersonsOnlyInGivenPeriod(new IPerson[]{}, null, _longDateOnlyPeriod, _scenario);
         }
     }
 

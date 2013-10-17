@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             throw new NotImplementedException("Missing repository definition for type " + scheduleDataType);
         }
 
-		public IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPerson(
+		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(
 			IPerson person,
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			DateTimePeriod dateTimePeriod,
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return findSchedulesOnlyInGivenPeriod(people, scheduleDictionaryLoadOptions, period, dateTimePeriod, scenario);
 		}
 
-		public IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPerson(
+		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(
 			IPerson person,
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			DateOnlyPeriod period,
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return findSchedulesOnlyInGivenPeriod(people, scheduleDictionaryLoadOptions, period, dateTimePeriod, scenario);
 		}
 
-	    public IScheduleDictionary FindSchedulesOnlyForGivenPeriodAndPersons(
+	    public IScheduleDictionary FindSchedulesForPersonsOnlyInGivenPeriod(
 			IEnumerable<IPerson> persons, 
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, 
 			DateOnlyPeriod period, 

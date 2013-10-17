@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             var timePeriod = personRequest.Request.Period;
 	        var dateonlyPeriod = new DateOnlyPeriod(new DateOnly(timePeriod.StartDateTime.AddDays(-1)),
 	                                                new DateOnly(timePeriod.EndDateTime.AddDays(1)));
-			var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPersons(
+			var scheduleDictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
                 personList,
 				new ScheduleDictionaryLoadOptions(true, false), 
 				dateonlyPeriod,
