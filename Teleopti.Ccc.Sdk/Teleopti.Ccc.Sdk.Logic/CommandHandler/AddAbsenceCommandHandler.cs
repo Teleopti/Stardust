@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			_scheduleTagAssembler = scheduleTagAssembler;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public void Handle(AddAbsenceCommandDto command)
         {
 			using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
@@ -47,8 +46,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var person = _personRepository.Load(command.PersonId);
 				var scenario = getDesiredScenario(command);
 				var startDate = command.Date.ToDateOnly();
-				var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
-					new PersonProvider(new[] {person}), new ScheduleDictionaryLoadOptions(false, false),
+				var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPerson(
+					person, new ScheduleDictionaryLoadOptions(false, false),
 					new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
 
 				var scheduleRange = scheduleDictionary[person];

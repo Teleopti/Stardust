@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var startDate = command.Date.ToDateOnly();
 
 				var scheduleDictionary =
-					_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
-						new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false),
+					_scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPerson(
+						person, new ScheduleDictionaryLoadOptions(false, false),
 						new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
 
 				var scheduleRange = scheduleDictionary[person];

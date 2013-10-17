@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		    _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 		    _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
 		    _personRepository.Stub(x => x.Load(_clearMainShiftDto.PersonId)).Return(_person);
-		    _scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario))
+			_scheduleRepository.Stub(x => x.FindSchedulesOnlyForGivenPeriodAndPerson(null, null, new DateOnlyPeriod(), _scenario))
 		                       .IgnoreArguments()
 		                       .Return(dictionary);
 		    dictionary.Stub(x => x[_person]).Return(scheduleRangeMock);
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		    _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 		    _currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
 		    _personRepository.Stub(x => x.Load(_clearMainShiftDto.PersonId)).Return(_person);
-		    _scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).IgnoreArguments().Return(dictionary);
+			_scheduleRepository.Stub(x => x.FindSchedulesOnlyForGivenPeriodAndPerson(null, null, new DateOnlyPeriod(), _scenario)).IgnoreArguments().Return(dictionary);
 		    dictionary.Stub(x => x[_person]).Return(scheduleRangeMock);
 		    scheduleRangeMock.Stub(x => x.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
 		    _businessRulesForPersonalAccountUpdate.Stub(x => x.FromScheduleRange(scheduleRangeMock)).Return(rules);
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			_currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
 			_personRepository.Stub(x => x.Load(_clearMainShiftDto.PersonId)).Return(_person);
-			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateOnlyPeriod(), _scenario)).IgnoreArguments().Return(dictionary);
+			_scheduleRepository.Stub(x => x.FindSchedulesOnlyForGivenPeriodAndPerson(null, null, new DateOnlyPeriod(), _scenario)).IgnoreArguments().Return(dictionary);
 			dictionary.Stub(x => x[_person]).Return(scheduleRangeMock);
 			scheduleRangeMock.Stub(x => x.ScheduledDay(new DateOnly(_startDate))).Return(schedulePart);
 			_businessRulesForPersonalAccountUpdate.Stub(x => x.FromScheduleRange(scheduleRangeMock)).Return(rules);

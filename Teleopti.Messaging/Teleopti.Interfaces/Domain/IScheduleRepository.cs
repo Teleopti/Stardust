@@ -45,7 +45,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2009-03-31
         /// </remarks>
-        IScheduleDictionary FindSchedulesOnlyInGivenPeriod(
+		IScheduleDictionary FindSchedulesOnlyInGivenPeriod(
 			IPersonProvider personsProvider, 
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, 
 			DateOnlyPeriod period, 

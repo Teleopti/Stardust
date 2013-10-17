@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			_scheduleDayAssembler = scheduleDayAssembler;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ICollection<SchedulePartDto> Handle(GetSchedulesByPersonQueryDto query)
 		{
 			IList<SchedulePartDto> returnList = new List<SchedulePartDto>();
@@ -49,8 +48,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				var person = _personRepository.Get(query.PersonId);
 
 				IScheduleDictionary scheduleDictionary =
-					_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] {person}),
-					                                                   new ScheduleDictionaryLoadOptions(true, false), period, scenario);
+					_scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPerson(person, new ScheduleDictionaryLoadOptions(true, false), period, scenario);
 
 				IScheduleRange scheduleRange = scheduleDictionary[person];
 				foreach (DateOnly dateOnly in datePeriod.DayCollection())
