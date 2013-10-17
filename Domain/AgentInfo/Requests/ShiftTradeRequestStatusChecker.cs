@@ -35,10 +35,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         private void LoadScheduleDictionary(DateTimePeriod period)
         {
-					var longPeriod = new DateOnlyPeriod(new DateOnly(period.StartDateTime.AddDays(-1)),
-																		new DateOnly(period.EndDateTime.AddDays(1)));
-            _scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(_persons),new ScheduleDictionaryLoadOptions(false, false),
-                                                           longPeriod, _scenarioRepository.Current());
+	        var longPeriod = new DateOnlyPeriod(new DateOnly(period.StartDateTime.AddDays(-1)),
+	                                            new DateOnly(period.EndDateTime.AddDays(1)));
+	        _scheduleDictionary = _scheduleRepository.FindSchedulesOnlyForGivenPeriodAndPersons(
+		        _persons,
+		        new ScheduleDictionaryLoadOptions(false, false),
+		        longPeriod, _scenarioRepository.Current());
         }
 
         public void EndBatch()
