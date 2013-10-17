@@ -38,13 +38,7 @@ namespace Teleopti.Interfaces.Domain
 		    DateOnlyPeriod period,
 		    IScenario scenario);
 
-		IScheduleDictionary FindSchedulesOnlyInGivenPeriod(
-			IPersonProvider personsProvider, 
-			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, 
-			DateOnlyPeriod period, 
-			IScenario scenario);
-
-        /// <summary>
+	    /// <summary>
         /// Finds schedules for a person where there is a certain absence
         /// </summary>
         /// <param name="period">The period.</param>
