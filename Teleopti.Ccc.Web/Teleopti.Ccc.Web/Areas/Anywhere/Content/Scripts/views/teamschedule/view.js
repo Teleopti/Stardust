@@ -3,7 +3,6 @@ define([
 		'knockout',
 		'jquery',
 		'navigation',
-		'swipeListener',
 		'moment',
 		'subscriptions',
 		'helpers',
@@ -16,7 +15,6 @@ define([
 		ko,
 		$,
 		navigation,
-		swipeListener,
 		momentX,
 		subscriptions,
 		helpers,
@@ -169,26 +167,6 @@ define([
 				});
 				
 				ko.applyBindings(teamSchedule, options.bindingElement);
-				
-				var previousOffset;
-				var teamScheduleContainer = $('.team-schedule');
-				teamScheduleContainer.swipeListener({
-					swipeLeft: function () {
-						teamSchedule.NextDay();
-					},
-					swipeRight: function () {
-						teamSchedule.PreviousDay();
-					},
-					swipeEnd: function () {
-						teamScheduleContainer.offset({ left: previousOffset });
-					},
-					swipeStart: function () {
-						previousOffset = teamScheduleContainer.offset().left;
-					},
-					swipeMove: function (movementX, movementY) {
-						teamScheduleContainer.offset({ left: -movementX });
-					}
-				});
 			},
 			
 			display: function (options) {
