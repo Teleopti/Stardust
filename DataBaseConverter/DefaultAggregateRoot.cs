@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DatabaseConverter
 {
@@ -14,7 +13,6 @@ namespace Teleopti.Ccc.DatabaseConverter
     {
         private IBusinessUnit _businessUnit;
         private IGroupingActivity _groupingActivity;
-        private IGroupingAbsence _groupingAbsence;
         private IApplicationRole _administratorRole;
         private IApplicationRole _businessUnitAdministratorRole;
         private IApplicationRole _agentRole;
@@ -51,20 +49,6 @@ namespace Teleopti.Ccc.DatabaseConverter
         {
             get { return _groupingActivity; }
             set { _groupingActivity = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the grouping absence.
-        /// </summary>
-        /// <value>The grouping absence.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2007-10-22
-        /// </remarks>
-        public IGroupingAbsence GroupingAbsence
-        {
-            get { return _groupingAbsence; }
-            set { _groupingAbsence = value; }
         }
 
         /// <summary>

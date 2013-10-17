@@ -12,36 +12,15 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
     /// </summary>
     public class AbsenceMapper : Mapper<IAbsence, global::Domain.Absence>
     {
-        private readonly IGroupingAbsence _groupingAbsence;
         private readonly IList<DataRow> _confidentialRows;
 
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AbsenceMapper"/> class.
-        /// </summary>
-        /// <param name="mappedObjectPair">The mapped object pair.</param>
-        /// <param name="groupingAbsence">The grouping absence.</param>
-        /// <param name="confidentialRows">The confidential rows.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 10/23/2007
-        /// </remarks>
-        public AbsenceMapper(MappedObjectPair mappedObjectPair, IGroupingAbsence groupingAbsence, IList<DataRow> confidentialRows)
+        public AbsenceMapper(MappedObjectPair mappedObjectPair, IList<DataRow> confidentialRows)
                             : base(mappedObjectPair, null)
         {
             _confidentialRows = confidentialRows;
-            _groupingAbsence = groupingAbsence;
+
         }
 
-        /// <summary>
-        /// Maps the specified old entity.
-        /// </summary>
-        /// <param name="oldEntity">The old entity.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 10/23/2007
-        /// </remarks>
         public override IAbsence Map(global::Domain.Absence oldEntity)
         {
             Absence newAbsence = null;
@@ -64,7 +43,6 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                         newAbsence = null;
                     }
                 }
-                newAbsence.GroupingAbsence = _groupingAbsence;
                 newAbsence.DisplayColor = oldEntity.LayoutColor;
                 newAbsence.InContractTime = oldEntity.InWorkTime;
                 newAbsence.Requestable = oldEntity.Vacation;

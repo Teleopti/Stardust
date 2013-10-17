@@ -69,9 +69,6 @@
 					 class="Teleopti.Ccc.Domain.Common.BusinessUnit"
             access="nosetter.camelcase-underscore"
 					 not-null="true" foreign-key="FK_Absence_BusinessUnit"/>
-		<many-to-one name="GroupingAbsence"
-				   class="Teleopti.Ccc.Domain.Common.GroupingAbsence"
-				   not-null="false" foreign-key="FK_Absence_GroupingAbsence" />
 		<property name="IsDeleted"
 			  type="boolean"
 			  not-null="true"/>
