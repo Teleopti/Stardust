@@ -204,6 +204,8 @@
     <Compile Include="TestData\Core\AnalyticsDataFactory.cs" />
     <Compile Include="TestData\Core\IDataSetup.cs" />
     <Compile Include="TestData\LayersExtensions.cs" />
+    <Compile Include="TestData\Setups\LicenseFromFile.cs" />
+    <Compile Include="TestData\Setups\PersonThatCreatesTestData.cs" />
     <Compile Include="UsedInTestState.cs" />
   </ItemGroup>
   <ItemGroup>
