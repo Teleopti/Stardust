@@ -125,6 +125,7 @@
     </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\GroupPageStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\AbsenceRequestConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\NoteConfigurable.cs" />
     <Compile Include="Bindings\Generic\NoteStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PartTimePercentageStepDefinitions.cs" />
@@ -336,7 +337,6 @@
     </Compile>
     <Compile Include="Data\Setups\Generic\AbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ActivityConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\AbsenceRequestConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\MessageConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\TextRequestConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PublicNoteConfigurable.cs" />
