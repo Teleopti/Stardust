@@ -270,9 +270,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             if (underStaffingHours.Length > 1)
                 underStaffingHours = underStaffingHours.Substring(0, underStaffingHours.Length - 1);
 
-           
-    
-                
             validatedRequest.IsValid = isWithinUnderStaffingLimit;
             validatedRequest.ValidationErrors = underStaffingHours;
             return validatedRequest;
@@ -359,10 +356,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             return validationError;
         }
         
-            var isWithinUnderStaffingLimit = (1 - exceededRate) >= skill.StaffingThresholds.UnderstaffingFor.Value;
-
-            validatedRequest.IsValid = isWithinUnderStaffingLimit;
-            
     	public IAbsenceRequestValidator CreateInstance()
         {
             return new StaffingThresholdValidator();
