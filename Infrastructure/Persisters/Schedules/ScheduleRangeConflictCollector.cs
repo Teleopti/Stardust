@@ -27,6 +27,8 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			_lazyLoadingManager = lazyLoadingManager;
 		}
 
+
+		//TA IN DIFFEN HÄR ISTÄLLET SEN!
 		public IEnumerable<PersistConflict> GetConflicts(IScheduleRange scheduleRange)
 		{
 			_ownMessageQueue.ReassociateDataWithAllPeople();

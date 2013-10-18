@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -26,15 +27,14 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		public IEnumerable<PersistConflict> Persist(IScheduleRange scheduleRange)
 		{
 			var diff = scheduleRange.DifferenceSinceSnapshot(_differenceCollectionService);
-			if (diff==null || !diff.Any())
+			if (diff.IsNullOrEmpty())
 			{
 				return Enumerable.Empty<PersistConflict>();
 			}
-			//ska vara serializable
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork(TransactionIsolationLevel.Serializable))
 			{
 				var conflicts = _scheduleRangeConflictCollector.GetConflicts(scheduleRange);
-				if (conflicts==null || !conflicts.Any())
+				if (conflicts.IsNullOrEmpty())
 				{
 					_scheduleRangeSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate) scheduleRange);
 				}
