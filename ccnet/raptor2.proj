@@ -336,8 +336,9 @@
 
 		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\Teleopti.Ccc.WebBehaviorTest.App.config" OverwriteReadOnlyFiles="true"
 			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config" />
+			
 		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
-			DestinationFiles="$(CCNetWorkingDirectory)\Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.config" />
+			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.config" />
 		
 		<FileUpdate Files="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config"
 			Encoding="windows-1252"
@@ -354,7 +355,7 @@
 			Regex="_replace_"
 			ReplacementText="$(InfraTestIni)"/>			
 		
-		<FileUpdate Files="$(CCNetWorkingDirectory)\Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.config"
+		<FileUpdate Files="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.config"
 			Encoding="windows-1252"
 			Regex="_replace_"
 			ReplacementText="$(InfraTestIni)"/>

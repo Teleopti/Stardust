@@ -17,7 +17,7 @@
 ..\..\..\TeleoptiCCC\Web\Web.config,BuildArtifacts\Web.Root.Web.config
 ..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config,BuildArtifacts\Teleopti.Ccc.WebBehaviorTest.App.config
 ..\..\..\InfrastructureTest\App.Config,BuildArtifacts\CruiseControl.config
-..\..\..\Analytics\Teleopti.Analytics.Etl.TransformerInfrastructure\App.Config,BuildArtifacts\CruiseControl.config
+..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.Config,BuildArtifacts\CruiseControl.config
 ..\..\..\Teleopti.Ccc.ApplicationConfigTest\App.Config,BuildArtifacts\CruiseControl.config
 c:\nhib\FixMyConfig.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
 
