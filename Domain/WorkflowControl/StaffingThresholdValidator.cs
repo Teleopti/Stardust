@@ -269,6 +269,22 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             if (underStaffingHours.Length > 1)
                 underStaffingHours = underStaffingHours.Substring(0, underStaffingHours.Length - 1);
 
+             // boundary cases when the understaffing max% is 100 and 0.
+            if (skill.StaffingThresholds.UnderstaffingFor.Value == 1.0)
+            {
+                validatedRequest.IsValid = exceededUnderstaffingList.Count <= 0;
+                validatedRequest.ValidationErrors = underStaffingHours;
+                return validatedRequest;
+            }
+
+            if (skill.StaffingThresholds.UnderstaffingFor.Value == 0.0)
+            {
+                validatedRequest.IsValid = true;
+                validatedRequest.ValidationErrors = underStaffingHours;
+                return validatedRequest;
+            }
+    
+                
             validatedRequest.IsValid = (exceededRate <= skill.StaffingThresholds.UnderstaffingFor.Value);
             validatedRequest.ValidationErrors = underStaffingHours;
             return validatedRequest;
@@ -352,7 +368,88 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
             return validationError;
         }
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "UnderStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "underStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        public string GetUnderStaffingDateString(IUnderStaffingData underStaffing, CultureInfo culture )
+        {
+            var inSufficientDates = "";
+            var criticalUnderStaffingDates = "";
+            var validationError = "";
+            var underStaffingDaysCount = 0;
+            var criticalUnderStaffingDaysCount = 0;
+            var underStaffingValidationError = UserTexts.Resources.ResourceManager.GetString("InsufficientStaffingDays", culture);
+            var criticalUnderStaffingValidationError = UserTexts.Resources.ResourceManager.GetString("SeriousUnderstaffing", culture);
+
+            foreach (var insufficientStaffDay in underStaffing.UnderStaffingDates[UnderStaffStr])
+            {
+                underStaffingDaysCount++;
+                if (underStaffingDaysCount > 5)
+                    break;
+                inSufficientDates += insufficientStaffDay + ",";
+            }
+
+            if (inSufficientDates.Length > 1)
+            {
+                inSufficientDates = inSufficientDates.Substring(0, inSufficientDates.Length - 1);
+                validationError += underStaffingValidationError + inSufficientDates + Environment.NewLine;
+            }
+
+            foreach (var criticalUnderStaffingDay in underStaffing.UnderStaffingDates[SeriousUnderStaffStr])
+            {
+                criticalUnderStaffingDaysCount++;
+                if (criticalUnderStaffingDaysCount > 5)
+                    break;
+                criticalUnderStaffingDates += criticalUnderStaffingDay + ",";
+            }
+
+            if (criticalUnderStaffingDates.Length > 1)
+            {
+                criticalUnderStaffingDates = criticalUnderStaffingDates.Substring(0, criticalUnderStaffingDates.Length - 1);
+                validationError += criticalUnderStaffingValidationError + criticalUnderStaffingDates + Environment.NewLine;
+            }
+
+            return validationError;
+        }
+
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "timeZone"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "UnderStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "underStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        public string GetUnderStaffingHourString(IUnderStaffingData underStaffing, CultureInfo culture, TimeZoneInfo timeZone, DateTime dateTime )
+        {
+            var inSufficientHours = string.Empty;
+            var criticalUnderStaffingHours = string.Empty;
+            var validationError = string.Empty;
+            var underStaffingHoursValidationError = string.Format(culture, UserTexts.Resources.ResourceManager.GetString("InsufficientStaffingHours"),
+                                                                    dateTime.ToString("d", culture));
+            var criticalUnderStaffingHoursValidationError = string.Format(culture, UserTexts.Resources.ResourceManager.GetString("SeriousUnderStaffingHours"),
+                              dateTime.ToString("d", culture));
+
+            foreach (var insufficientStaffHours in underStaffing.UnderStaffingHours[UnderStaffHoursStr])
+            {
+                inSufficientHours += insufficientStaffHours + ",";
+            }
+
+            if (inSufficientHours.Length > 1)
+            {
+                inSufficientHours = inSufficientHours.Substring(0, inSufficientHours.Length - 1);
+                validationError += underStaffingHoursValidationError + inSufficientHours + Environment.NewLine;
+            }
+
+            foreach (var criticalUnderStaffingHour in underStaffing.UnderStaffingHours[SeriousUnderStaffHoursStr])
+            {
+                criticalUnderStaffingHours += criticalUnderStaffingHour + ",";
+            }
+
+            if (criticalUnderStaffingHours.Length > 1)
+            {
+                criticalUnderStaffingHours = criticalUnderStaffingHours.Substring(0, criticalUnderStaffingHours.Length - 1);
+                validationError += criticalUnderStaffingHoursValidationError + criticalUnderStaffingHours + Environment.NewLine;
+            }
+
+            return validationError;
+        }
         
+            
     	public IAbsenceRequestValidator CreateInstance()
         {
             return new StaffingThresholdValidator();
