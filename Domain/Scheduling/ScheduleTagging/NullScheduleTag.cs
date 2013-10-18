@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
 
         public Guid? Id
         {
-            get { return null; }
+            get { return new Guid("00000000-0000-0000-0000-000000000000"); }
         }
 
         public void SetId(Guid? newId)
