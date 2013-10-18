@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
-	public class AddScheduleDataWithConflictTest : ScheduleRangePersisterIntegrationTest
+	public class AddScheduleDataNoConflictTest : ScheduleRangePersisterIntegrationTest
 	{
 		protected override IEnumerable<IPersistableScheduleData> Given()
 		{
@@ -22,10 +22,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				};
 		}
 
-		protected override void Then(IEnumerable<PersistConflict> conflicts, IScheduleRange scheduleRange)
+		protected override void Then(IEnumerable<PersistConflict> conflicts, IScheduleRange scheduleRangeInMemory, IScheduleRange scheduleRangeInDatabase)
 		{
 			conflicts.Should().Be.Empty();
-			scheduleRange.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignment().Should().Not.Be.Null();
+			scheduleRangeInMemory.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignment().Should().Not.Be.Null();
+			scheduleRangeInDatabase.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignment().Should().Not.Be.Null();
 		}
 	}
 }

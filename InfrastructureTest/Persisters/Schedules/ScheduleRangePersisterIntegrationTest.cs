@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		protected abstract IEnumerable<IPersistableScheduleData> Given();
 		protected abstract IEnumerable<IPersistableScheduleData> When();
-		protected abstract void Then(IEnumerable<PersistConflict> conflicts, IScheduleRange scheduleRange);
+		protected abstract void Then(IEnumerable<PersistConflict> conflicts, IScheduleRange scheduleRangeInMemory, IScheduleRange scheduleRangeInDatabase);
 
 		[Test]
 		public void DoTheTest()
@@ -86,7 +87,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 			var result = Target.Persist(range);
 
-			Then(result, range);
+			Then(result, range, loadScheduleRange());
+			generalAsserts(range);
+		}
+
+		private static void generalAsserts(IScheduleRange range)
+		{
+			range.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>())
+				.Should("After save, there is a diff in Snapshot and current data in ScheduleRange. Indicates that something is very wrong!").Be.Empty();
 		}
 
 		private ScheduleRange loadScheduleRange()
