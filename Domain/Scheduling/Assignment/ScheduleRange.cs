@@ -429,5 +429,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			CalculatedContractTimeHolder = null;
 			CalculatedScheduleDaysOff = null;
 		}
+
+			public bool IsEmpty()
+			{
+				return !PersistableScheduleDataInternalCollection().Any();
+			}
     }
 }

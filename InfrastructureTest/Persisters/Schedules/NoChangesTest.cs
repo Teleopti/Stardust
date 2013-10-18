@@ -1,42 +1,28 @@
-﻿using NUnit.Framework;
-using Rhino.Mocks;
+﻿using System.Collections.Generic;
+using System.Linq;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
-	[TestFixture]
-	public class NoChangesTest
+	public class NoChangesTest : ScheduleRangePersisterIntegrationTest
 	{
-		private IScheduleRange rangeWithNoChanges;
-		private IDifferenceCollectionService<IPersistableScheduleData> diffSvc;
-
-		[SetUp]
-		public void Setup()
+		protected override IEnumerable<IPersistableScheduleData> Given()
 		{
-			diffSvc = MockRepository.GenerateMock<IDifferenceCollectionService<IPersistableScheduleData>>();
-			rangeWithNoChanges = MockRepository.GenerateMock<IScheduleRange, IUnvalidatedScheduleRangeUpdate>();
-			rangeWithNoChanges.Expect(x => x.DifferenceSinceSnapshot(diffSvc))
-				 .Return(new DifferenceCollection<IPersistableScheduleData>());
+			return Enumerable.Empty<IPersistableScheduleData>();
 		}
 
-		[Test]
-		public void NoChangesShouldResultInNoConflicts()
+		protected override IEnumerable<IScheduleDay> When(IScheduleRange scheduleRange)
 		{
-			var sut = new ScheduleRangePersister(null, diffSvc, null, null);		
-			sut.Persist(rangeWithNoChanges).Should().Be.Empty();
+			return Enumerable.Empty<IScheduleDay>();
 		}
 
-		[Test]
-		public void NoChangesShouldNotTouchDatabase()
+		protected override void Then(IEnumerable<PersistConflict> conflicts, IScheduleRange scheduleRangeInMemory, IScheduleRange scheduleRangeInDatabase)
 		{
-			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var sut = new ScheduleRangePersister(uowFactory, diffSvc, null, null);
-			sut.Persist(rangeWithNoChanges);
-			uowFactory.AssertWasNotCalled(x => x.CreateAndOpenUnitOfWork());
-		} 
+			conflicts.Should().Be.Empty();
+			scheduleRangeInMemory.IsEmpty().Should().Be.True();
+			scheduleRangeInDatabase.IsEmpty().Should().Be.True();
+		}
 	}
 }

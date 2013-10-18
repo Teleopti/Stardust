@@ -1,32 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
-	public class AddScheduleDataNoConflictTest : ScheduleRangePersisterIntegrationTest
+	public class DeleteScheduleDataNoConflictTest : ScheduleRangePersisterIntegrationTest
 	{
+		private readonly DateOnly date = new DateOnly(2000, 1, 1);
+
 		protected override IEnumerable<IPersistableScheduleData> Given()
 		{
-			return Enumerable.Empty<IPersistableScheduleData>();
+			return new []{new PersonAssignment(Person, Scenario, date)};
 		}
 
 		protected override IEnumerable<IScheduleDay> When(IScheduleDictionary scheduleDictionary)
 		{
-			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			var day = scheduleDictionary[Person].ScheduledDay(new DateOnly(2000, 1, 1));
-			day.CreateAndAddActivity(Activity, new DateTimePeriod(start, start.AddHours(2)), ShiftCategory);
-			return new [] {day};
+			day.Clear<IPersonAssignment>();
+			return new[]{day};
 		}
 
 		protected override void Then(IEnumerable<PersistConflict> conflicts, IScheduleRange scheduleRangeInMemory, IScheduleRange scheduleRangeInDatabase)
 		{
 			conflicts.Should().Be.Empty();
-			scheduleRangeInMemory.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignment().Should().Not.Be.Null();
-			scheduleRangeInDatabase.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignment().Should().Not.Be.Null();
+			scheduleRangeInMemory.ScheduledDay(date).PersonAssignment().Should().Be.Null();
+			scheduleRangeInDatabase.ScheduledDay(date).PersonAssignment().Should().Be.Null();
 		}
 	}
 }

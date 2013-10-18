@@ -159,10 +159,9 @@
     <Compile Include="NHibernateConfiguration\CompressedStringTest.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriverTest.cs" />
     <Compile Include="Persisters\Schedules\AddScheduleDataNoConflictTest.cs" />
+    <Compile Include="Persisters\Schedules\DeleteScheduleDataNoConflictTest.cs" />
     <Compile Include="Persisters\Schedules\NoChangesTest.cs" />
-    <Compile Include="Persisters\Schedules\NoConflictsTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterIntegrationTest.cs" />
-    <Compile Include="Persisters\Schedules\ScheduleRangePersisterTest.cs" />
     <Compile Include="Persisters\BugTest\Bug24079.cs" />
     <Compile Include="Persisters\BugTest\Bug25007.cs" />
     <Compile Include="Persisters\PersonRequestRefresherTest.cs" />

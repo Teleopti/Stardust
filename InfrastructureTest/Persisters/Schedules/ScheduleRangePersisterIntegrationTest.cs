@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected IScenario Scenario { get; private set; }
 		protected IShiftCategory ShiftCategory { get; private set; }
 		private IScheduleRangePersister Target { get; set; }
+		private IEnumerable<IPersistableScheduleData> _givenState;
 
 		protected override void SetupForRepositoryTestWithoutTransaction()
 		{
@@ -56,7 +57,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				new ActivityRepository(unitOfWork).Add(Activity);
 				new ShiftCategoryRepository(unitOfWork).Add(ShiftCategory);
 				new ScenarioRepository(unitOfWork).Add(Scenario);
-				Given().ForEach(x => new ScheduleRepository(unitOfWork).Add(x));
+				_givenState = Given();
+				_givenState.ForEach(x => new ScheduleRepository(unitOfWork).Add(x));
 				unitOfWork.PersistAll();
 			}
 		}
@@ -70,24 +72,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				repository.Remove(Activity);
 				repository.Remove(ShiftCategory);
 				repository.Remove(Scenario);
-				Given().ForEach(repository.Remove);
+				foreach (var personAssignment in new PersonAssignmentRepository(unitOfWork).LoadAll())
+				{
+					repository.Remove(personAssignment);
+				}
 				unitOfWork.PersistAll();
 			}
 		}
 
 		protected abstract IEnumerable<IPersistableScheduleData> Given();
-		protected abstract IEnumerable<IPersistableScheduleData> When();
+		protected abstract IEnumerable<IScheduleDay> When(IScheduleRange scheduleRange);
 		protected abstract void Then(IEnumerable<PersistConflict> conflicts, IScheduleRange scheduleRangeInMemory, IScheduleRange scheduleRangeInDatabase);
 
 		[Test]
 		public void DoTheTest()
 		{
-			var range = loadScheduleRange();
-			range.AddRange(When());
+			var dic = loadScheduleDictionary();
+			dic.Modify(ScheduleModifier.Scheduler, When(dic), NewBusinessRuleCollection.Minimum(), MockRepository.GenerateMock<IScheduleDayChangeCallback>(), MockRepository.GenerateMock<IScheduleTagSetter>());
 
+			var range = dic[Person];
 			var result = Target.Persist(range);
 
-			Then(result, range, loadScheduleRange());
+			Then(result, range, loadScheduleDictionary()[Person]);
 			generalAsserts(range);
 		}
 
@@ -97,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				.Should("After save, there is a diff in Snapshot and current data in ScheduleRange. Indicates that something is very wrong!").Be.Empty();
 		}
 
-		private ScheduleRange loadScheduleRange()
+		private IScheduleDictionary loadScheduleDictionary()
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -107,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 																								 new PersonProvider(new[] { Person }),
 																								 new ScheduleDictionaryLoadOptions(false, false),
 																								 new List<IPerson> { Person });
-				return (ScheduleRange) dictionary[Person];
+				return dictionary;
 			}
 		}
 	}
