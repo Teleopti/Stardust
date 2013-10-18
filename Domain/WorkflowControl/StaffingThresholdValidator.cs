@@ -333,6 +333,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var intervalHasUnderstaffing = new IntervalHasUnderstaffing(skill);
     		var exceededUnderstaffingList = skillStaffPeriodList.Where(intervalHasUnderstaffing.IsSatisfiedBy).ToList();
             var exceededRate = exceededUnderstaffingList.Sum(t => t.Period.ElapsedTime().TotalMinutes) / skillStaffPeriodList.Sum(t => t.Period.ElapsedTime().TotalMinutes);
+            var isWithinUnderStaffingLimit = (1 - exceededRate) >= skill.StaffingThresholds.UnderstaffingFor.Value;
+
 		    var underStaffingHours = "";
 		    var count = 0;
             //get under staffing time interval.
@@ -351,23 +353,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		    if (underStaffingHours.Length > 1)
 		        underStaffingHours = underStaffingHours.Substring(0, underStaffingHours.Length - 1);
 
-
-            // boundary cases when the understaffing max% is 100 and 0.
-            if (skill.StaffingThresholds.UnderstaffingFor.Value == 1.0)
-            {
-                validatedRequest.IsValid = exceededUnderstaffingList.Count <= 0;
-                validatedRequest.ValidationErrors = underStaffingHours;
-                return validatedRequest;
-            }
-
-            if (skill.StaffingThresholds.UnderstaffingFor.Value == 0.0)
-            {
-                validatedRequest.IsValid = true;
-                validatedRequest.ValidationErrors = underStaffingHours;
-                return validatedRequest;
-            }
-
-            validatedRequest.IsValid = (exceededRate <= skill.StaffingThresholds.UnderstaffingFor.Value);
+            validatedRequest.IsValid = isWithinUnderStaffingLimit;
 		    validatedRequest.ValidationErrors = underStaffingHours;
 		    return validatedRequest;
     	}
