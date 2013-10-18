@@ -275,6 +275,8 @@
     <Compile Include="Repositories\ScheduledResourcesReadModelStorage.cs" />
     <Compile Include="UnitOfWork\EmptyMessageBrokerIdentifier.cs" />
     <Compile Include="UnitOfWork\EventExtensions.cs" />
+    <Compile Include="UnitOfWork\ISessionContextBinder.cs" />
+    <Compile Include="UnitOfWork\StaticSessionContextBinder.cs" />
     <Compile Include="UnitOfWork\TeamOrSiteChangedMessageSender.cs" />
     <Compile Include="Util\CompressionExtensions.cs" />
     <Compile Include="Repositories\CurrentUnitOfWorkExtensions.cs" />

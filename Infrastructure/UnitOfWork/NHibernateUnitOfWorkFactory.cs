@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using NHibernate;
@@ -202,7 +201,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			SessionContextBinder.Bind(session, isolationLevel);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
 		internal void Unbind(ISession session)
 		{
 			SessionContextBinder.Unbind(session);
@@ -212,49 +210,5 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			StaticSessionContextBinder.UnbindStatic(session);
 		}
-
 	}
-
-	public interface ISessionContextBinder
-	{
-		NHibernateFilterManager FilterManager(ISession session);
-		TransactionIsolationLevel IsolationLevel(ISession session);
-		void Bind(ISession session, TransactionIsolationLevel isolationLevel);
-		void Unbind(ISession session);
-	}
-
-	public class StaticSessionContextBinder : ISessionContextBinder
-	{
-		private static readonly IDictionary<Guid, NHibernateSessionRelatedData> uowRelatedData
-			 = new ConcurrentDictionary<Guid, NHibernateSessionRelatedData>(new ConcurrentDictionary<Guid, NHibernateSessionRelatedData>());
-
-		public NHibernateFilterManager FilterManager(ISession session)
-		{
-			return uowRelatedData[session.GetSessionImplementation().SessionId].FilterManager;
-		}
-
-		public TransactionIsolationLevel IsolationLevel(ISession session)
-		{
-			return uowRelatedData[session.GetSessionImplementation().SessionId].IsolationLevel;
-		}
-
-		public void Bind(ISession session, TransactionIsolationLevel isolationLevel)
-		{
-			uowRelatedData[session.GetSessionImplementation().SessionId] = new NHibernateSessionRelatedData(new NHibernateFilterManager(session), isolationLevel);
-			CurrentSessionContext.Bind(session);
-		}
-
-		public void Unbind(ISession session)
-		{
-			CurrentSessionContext.Unbind(session.SessionFactory);
-			uowRelatedData.Remove(session.GetSessionImplementation().SessionId);
-		}
-
-		public static void UnbindStatic(ISession session)
-		{
-			CurrentSessionContext.Unbind(session.SessionFactory);
-			uowRelatedData.Remove(session.GetSessionImplementation().SessionId);
-		}
-	}
-
 }
