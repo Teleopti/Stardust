@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
@@ -15,18 +16,25 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceCollectionService;
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
+		private readonly IOwnMessageQueue _ownMessageQueue;
+		private readonly ILazyLoadingManager _lazyLoadingManager;
 
 		public ScheduleRangeConflictCollector(IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService, 
 																					IScheduleRepository scheduleRepository,
-																					IPersonAssignmentRepository personAssignmentRepository)
+																					IPersonAssignmentRepository personAssignmentRepository,
+																					IOwnMessageQueue ownMessageQueue,
+																					ILazyLoadingManager lazyLoadingManager)
 		{
 			_differenceCollectionService = differenceCollectionService;
 			_scheduleRepository = scheduleRepository;
 			_personAssignmentRepository = personAssignmentRepository;
+			_ownMessageQueue = ownMessageQueue;
+			_lazyLoadingManager = lazyLoadingManager;
 		}
 
 		public IEnumerable<PersistConflict> GetConflicts(IScheduleRange scheduleRange)
 		{
+			_ownMessageQueue.ReassociateDataWithAllPeople();
 			var uow = _scheduleRepository.UnitOfWork;
 			var diff = scheduleRange.DifferenceSinceSnapshot(_differenceCollectionService);
 
@@ -59,19 +67,19 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				}
 			}
 
-			//temp fix
-			personAssignmentsInDb.ForEach(x => uow.Remove(x));
+			//temp fix - not needed when non entities are read above instead
+			personAssignmentsInDb.ForEach(uow.Remove);
 
 			return persistConflicts;
 		}
 
-		private static PersistConflict makePersistConflict(DifferenceCollectionItem<IPersistableScheduleData> clientVersion, IPersistableScheduleData databaseVersion)
+		private PersistConflict makePersistConflict(DifferenceCollectionItem<IPersistableScheduleData> clientVersion, IPersistableScheduleData databaseVersion)
 		{
-			//if (databaseVersion != null)
-			//{
-			//	_lazyLoadingManager.Initialize(databaseVersion.Person);
-			//	_lazyLoadingManager.Initialize(databaseVersion.UpdatedBy);
-			//}
+			if (databaseVersion != null)
+			{
+				_lazyLoadingManager.Initialize(databaseVersion.Person);
+				_lazyLoadingManager.Initialize(databaseVersion.UpdatedBy);
+			}
 			return new PersistConflict(clientVersion, databaseVersion);
 		}
 	}

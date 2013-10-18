@@ -8,17 +8,20 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
+using PersistConflict = Teleopti.Ccc.Infrastructure.Persisters.Schedules.PersistConflict;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
 	[TestFixture]
-	public abstract class ScheduleRangePersisterIntegrationTest : DatabaseTestWithoutTransaction
+	public abstract class ScheduleRangePersisterIntegrationTest : DatabaseTestWithoutTransaction, IOwnMessageQueue
 	{
 		protected IPerson Person { get; private set; }
 		protected IActivity Activity { get; private set; }
@@ -40,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			var scheduleRep = new ScheduleRepository(currUnitOfWork);
 			Target = new ScheduleRangePersister(UnitOfWorkFactory.Current, 
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
-				new ScheduleRangeConflictCollector(new DifferenceEntityCollectionService<IPersistableScheduleData>(), scheduleRep, new PersonAssignmentRepository(currUnitOfWork)), 
+				new ScheduleRangeConflictCollector(new DifferenceEntityCollectionService<IPersistableScheduleData>(), scheduleRep, new PersonAssignmentRepository(currUnitOfWork), this, new LazyLoadingManagerWrapper()), 
 				new ScheduleRangeSaver(scheduleRep));
 		}
 
@@ -141,6 +144,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
+				ReassociateDataWithAllPeople();
 				var rep = new ScheduleRepository(unitOfWork);
 				var dictionary = rep.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 2040, 1, 1)),
 																								 Scenario,
@@ -149,6 +153,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 																								 new List<IPerson> { Person });
 				return dictionary;
 			}
+		}
+
+		public void ReassociateDataWithAllPeople()
+		{
+			var uow = UnitOfWorkFactory.Current.CurrentUnitOfWork();
+			uow.Reassociate(Person);
+			uow.Reassociate(Activity);
+			uow.Reassociate(ShiftCategory);
+			uow.Reassociate(Scenario);
+		}
+
+		public void NotifyMessageQueueSizeChange()
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }
