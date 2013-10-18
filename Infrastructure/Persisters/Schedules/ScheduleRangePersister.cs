@@ -12,16 +12,19 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceCollectionService;
 		private readonly IScheduleRangeConflictCollector _scheduleRangeConflictCollector;
 		private readonly IScheduleRangeSaver _scheduleRangeSaver;
+		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
 
 		public ScheduleRangePersister(IUnitOfWorkFactory unitOfWorkFactory,
 		                              IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService,
 		                              IScheduleRangeConflictCollector scheduleRangeConflictCollector,
-																	IScheduleRangeSaver scheduleRangeSaver)
+																	IScheduleRangeSaver scheduleRangeSaver,
+																	IMessageBrokerIdentifier messageBrokerIdentifier)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_differenceCollectionService = differenceCollectionService;
 			_scheduleRangeConflictCollector = scheduleRangeConflictCollector;
 			_scheduleRangeSaver = scheduleRangeSaver;
+			_messageBrokerIdentifier = messageBrokerIdentifier;
 		}
 
 		public IEnumerable<PersistConflict> Persist(IScheduleRange scheduleRange)
@@ -38,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				{
 					_scheduleRangeSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate) scheduleRange);
 				}
-				uow.PersistAll();
+				uow.PersistAll(_messageBrokerIdentifier);
 				return conflicts;
 			}
 		}

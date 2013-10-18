@@ -4601,7 +4601,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 																			_container.Resolve<IPersonAssignmentRepository>(), 
 																			_schedulerMessageBrokerHandler, 
 																			_container.Resolve<ILazyLoadingManager>()),
-			                            new ScheduleRangeSaver(_container.Resolve<IScheduleRepository>()));
+			                            new ScheduleRangeSaver(_container.Resolve<IScheduleRepository>()),
+																	_schedulerMessageBrokerHandler);
 			var conflicts = new List<PersistConflict>();
 			foreach (var range in _schedulerState.Schedules.Values)
 			{

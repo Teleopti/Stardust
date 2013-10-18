@@ -16,6 +16,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using PersistConflict = Teleopti.Ccc.Infrastructure.Persisters.Schedules.PersistConflict;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
@@ -44,7 +45,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			Target = new ScheduleRangePersister(UnitOfWorkFactory.Current, 
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				new ScheduleRangeConflictCollector(new DifferenceEntityCollectionService<IPersistableScheduleData>(), scheduleRep, new PersonAssignmentRepository(currUnitOfWork), this, new LazyLoadingManagerWrapper()), 
-				new ScheduleRangeSaver(scheduleRep));
+				new ScheduleRangeSaver(scheduleRep),
+				MockRepository.GenerateMock<IMessageBrokerIdentifier>());
 		}
 
 		private void setupEntities()
