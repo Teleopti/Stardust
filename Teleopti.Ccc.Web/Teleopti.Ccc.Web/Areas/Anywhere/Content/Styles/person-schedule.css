@@ -76,6 +76,11 @@
         );
 }
 
+.no-cssgradients .person-schedule .dayoff 
+{
+	background-color: beige;
+}
+
 .person-schedule .full-day-absence-form  {
 	width: 223px;
 }
