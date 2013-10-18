@@ -18,14 +18,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
 		{
-			var day = othersScheduleRange.ScheduledDay(new DateOnly(2000, 1, 1));
+			var day = othersScheduleRange.ScheduledDay(date);
 			day.Clear<IPersonAssignment>();
 			DoModify(day);
 		}
 
 		protected override void WhenImChanging(IScheduleRange myScheduleRange)
 		{
-			var day = myScheduleRange.ScheduledDay(new DateOnly(2000, 1, 1));
+			var day = myScheduleRange.ScheduledDay(date);
 			day.Clear<IPersonAssignment>();
 			DoModify(day);
 		}
