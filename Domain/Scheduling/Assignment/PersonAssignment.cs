@@ -366,22 +366,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		#region Equals
 
-		public virtual bool Equals(IPersonAssignment other)
-		{
-			if (ReferenceEquals(null, other)) return false;
-			if (ReferenceEquals(this, other)) return true;
-			return
-				Equals(_person, other.Person) && 
-				Equals(_scenario, other.Scenario) && 
-				Date.Equals(other.Date);
-		}
-
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
 			if (obj.GetType() != this.GetType()) return false;
-			return Equals((IPersonAssignment) obj);
+			return Equals((IEntity) obj);
+		}
+
+		public override bool Equals(IEntity other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			var otherAsAss = other as IPersonAssignment;
+			return otherAsAss != null && (Equals(_person, otherAsAss.Person) &&
+			                              Equals(_scenario, otherAsAss.Scenario) &&
+			                              Date.Equals(otherAsAss.Date));
 		}
 
 		public override int GetHashCode()

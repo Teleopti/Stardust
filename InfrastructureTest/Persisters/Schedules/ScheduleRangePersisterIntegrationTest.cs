@@ -36,10 +36,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		private void makeTarget()
 		{
-			var scheduleRep = new ScheduleRepository(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())));
+			var currUnitOfWork = new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
+			var scheduleRep = new ScheduleRepository(currUnitOfWork);
 			Target = new ScheduleRangePersister(UnitOfWorkFactory.Current, 
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
-				new ScheduleRangeConflictCollector(new DifferenceEntityCollectionService<IPersistableScheduleData>(), scheduleRep), 
+				new ScheduleRangeConflictCollector(new DifferenceEntityCollectionService<IPersistableScheduleData>(), scheduleRep, new PersonAssignmentRepository(currUnitOfWork)), 
 				new ScheduleRangeSaver(scheduleRep));
 		}
 
