@@ -12,31 +12,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 
-		protected override IEnumerable<IPersistableScheduleData> Given()
+		protected override void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart)
 		{
-			return new[] { new PersonAssignment(Person, Scenario, date) };
+			scheduleDataInDatabaseAtStart.Add(new PersonAssignment(Person, Scenario, date));
 		}
 
-		protected override IEnumerable<IScheduleDay> WhenI(IScheduleRange myScheduleRange)
+		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
+		{
+		}
+
+		protected override void WhenImChanging(IScheduleRange myScheduleRange)
 		{
 			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			var day = myScheduleRange.ScheduledDay(new DateOnly(2000, 1, 1));
 			day.CreateAndAddActivity(Activity, new DateTimePeriod(start, start.AddHours(2)), ShiftCategory);
-			return new[] { day };
+			DoModify(day);
 		}
 
-		protected override IEnumerable<IScheduleDay> WhenOther(IScheduleRange othersScheduleRange)
-		{
-			return Enumerable.Empty<IScheduleDay>();
-		}
-
-		protected override void Then(IEnumerable<PersistConflict> conflicts, IScheduleRange scheduleRangeInMemory, IScheduleRange scheduleRangeInDatabase)
+		protected override void Then(IEnumerable<PersistConflict> conflicts)
 		{
 			conflicts.Should().Be.Empty();
-			var ass1 = scheduleRangeInMemory.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignment();
-			var ass2 = scheduleRangeInDatabase.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignment();
-			ass1.ShiftLayers.Count().Should().Be.EqualTo(1);
-			ass2.ShiftLayers.Count().Should().Be.EqualTo(1);
+		}
+
+		protected override void Then(IScheduleRange myScheduleRange)
+		{
+			myScheduleRange.ScheduledDay(date).PersonAssignment().ShiftLayers.Count()
+			               .Should().Be.EqualTo(1);
 		}
 	}
 }

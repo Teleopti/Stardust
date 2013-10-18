@@ -11,33 +11,36 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 
-		protected override IEnumerable<IPersistableScheduleData> Given()
+		protected override void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart)
 		{
-			return new[] { new PersonAssignment(Person, Scenario, date) };
+			scheduleDataInDatabaseAtStart.Add(new PersonAssignment(Person, Scenario, date));
 		}
 
-		protected override IEnumerable<IScheduleDay> WhenI(IScheduleRange myScheduleRange)
-		{
-			var day = myScheduleRange.ScheduledDay(new DateOnly(2000, 1, 1));
-			day.Clear<IPersonAssignment>();
-			return new[] { day };
-		}
-
-		protected override IEnumerable<IScheduleDay> WhenOther(IScheduleRange othersScheduleRange)
+		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
 		{
 			var day = othersScheduleRange.ScheduledDay(new DateOnly(2000, 1, 1));
 			day.Clear<IPersonAssignment>();
-			return new[] { day };
+			DoModify(day);
 		}
 
-		protected override void Then(IEnumerable<PersistConflict> conflicts, IScheduleRange scheduleRangeInMemory, IScheduleRange scheduleRangeInDatabase)
+		protected override void WhenImChanging(IScheduleRange myScheduleRange)
+		{
+			var day = myScheduleRange.ScheduledDay(new DateOnly(2000, 1, 1));
+			day.Clear<IPersonAssignment>();
+			DoModify(day);
+		}
+
+		protected override void Then(IEnumerable<PersistConflict> conflicts)
 		{
 			var conflict = conflicts.Single();
 			conflict.DatabaseVersion.Should().Be.Null();
 			conflict.ClientVersion.CurrentItem.Should().Be.Null();
 			conflict.ClientVersion.OriginalItem.Should().Not.Be.Null();
-			scheduleRangeInMemory.ScheduledDay(date).PersonAssignment().Should().Be.Null();
-			scheduleRangeInDatabase.ScheduledDay(date).PersonAssignment().Should().Be.Null();
+		}
+
+		protected override void Then(IScheduleRange myScheduleRange)
+		{
+			myScheduleRange.ScheduledDay(date).PersonAssignment().Should().Be.Null();
 		}
 	}
 }

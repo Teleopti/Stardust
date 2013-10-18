@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
@@ -8,26 +7,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
 	public class NoChangesTest : ScheduleRangePersisterIntegrationTest
 	{
-		protected override IEnumerable<IPersistableScheduleData> Given()
+		protected override void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart)
 		{
-			return Enumerable.Empty<IPersistableScheduleData>();
 		}
 
-		protected override IEnumerable<IScheduleDay> WhenI(IScheduleRange myScheduleRange)
+		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
 		{
-			return Enumerable.Empty<IScheduleDay>();
 		}
 
-		protected override IEnumerable<IScheduleDay> WhenOther(IScheduleRange othersScheduleRange)
+		protected override void WhenImChanging(IScheduleRange myScheduleRange)
 		{
-			return Enumerable.Empty<IScheduleDay>();
 		}
 
-		protected override void Then(IEnumerable<PersistConflict> conflicts, IScheduleRange scheduleRangeInMemory, IScheduleRange scheduleRangeInDatabase)
+		protected override void Then(IEnumerable<PersistConflict> conflicts)
 		{
 			conflicts.Should().Be.Empty();
-			scheduleRangeInMemory.IsEmpty().Should().Be.True();
-			scheduleRangeInDatabase.IsEmpty().Should().Be.True();
+		}
+
+		protected override void Then(IScheduleRange myScheduleRange)
+		{
+			myScheduleRange.IsEmpty().Should().Be.True();
 		}
 	}
 }

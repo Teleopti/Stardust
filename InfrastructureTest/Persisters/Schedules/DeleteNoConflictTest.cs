@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
@@ -11,26 +10,30 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 
-		protected override IEnumerable<IPersistableScheduleData> Given()
+		protected override void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart)
 		{
-			return new []{new PersonAssignment(Person, Scenario, date)};
+			scheduleDataInDatabaseAtStart.Add(new PersonAssignment(Person, Scenario, date));
 		}
 
-		protected override IEnumerable<IScheduleDay> WhenI(IScheduleRange myScheduleRange)
+		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
+		{
+		}
+
+		protected override void WhenImChanging(IScheduleRange myScheduleRange)
 		{
 			var day = myScheduleRange.ScheduledDay(new DateOnly(2000, 1, 1));
 			day.Clear<IPersonAssignment>();
-			return new[]{day};
+			DoModify(day);
 		}
 
-		protected override IEnumerable<IScheduleDay> WhenOther(IScheduleRange othersScheduleRange)
+		protected override void Then(IEnumerable<PersistConflict> conflicts)
 		{
-			return Enumerable.Empty<IScheduleDay>();
+			conflicts.Should().Be.Empty();
 		}
 
-		protected override void Then(IEnumerable<PersistConflict> conflicts, IScheduleRange scheduleRangeInMemory, IScheduleRange scheduleRangeInDatabase)
+		protected override void Then(IScheduleRange myScheduleRange)
 		{
-
+			myScheduleRange.ScheduledDay(date).PersonAssignment().Should().Be.Null();
 		}
 	}
 }

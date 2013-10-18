@@ -59,7 +59,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				new ActivityRepository(unitOfWork).Add(Activity);
 				new ShiftCategoryRepository(unitOfWork).Add(ShiftCategory);
 				new ScenarioRepository(unitOfWork).Add(Scenario);
-				_givenState = Given();
+				var scheduleDatas = new List<IPersistableScheduleData>();
+				Given(scheduleDatas);
+				_givenState = scheduleDatas;
 				_givenState.ForEach(x => new ScheduleRepository(unitOfWork).Add(x));
 				unitOfWork.PersistAll();
 			}
@@ -82,28 +84,38 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			}
 		}
 
-		protected abstract IEnumerable<IPersistableScheduleData> Given();
-		protected abstract IEnumerable<IScheduleDay> WhenI(IScheduleRange myScheduleRange);
-		protected abstract IEnumerable<IScheduleDay> WhenOther(IScheduleRange othersScheduleRange);
-		protected abstract void Then(IEnumerable<PersistConflict> conflicts, IScheduleRange scheduleRangeInMemory, IScheduleRange scheduleRangeInDatabase);
+		protected abstract void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart);
+		protected abstract void WhenOtherHasChanged(IScheduleRange othersScheduleRange);
+		protected abstract void WhenImChanging(IScheduleRange myScheduleRange);
+		protected abstract void Then(IEnumerable<PersistConflict> conflicts);
+		protected abstract void Then(IScheduleRange myScheduleRange);
 
 
 		[Test]
 		public void DoTheTest()
 		{
-			var myDic = loadScheduleDictionary();
-			var myRange = myDic[Person];
-			myDic.Modify(ScheduleModifier.Scheduler, WhenI(myRange), NewBusinessRuleCollection.Minimum(), MockRepository.GenerateMock<IScheduleDayChangeCallback>(), MockRepository.GenerateMock<IScheduleTagSetter>());
-
 			var otherDic = loadScheduleDictionary();
 			var otherRange = otherDic[Person];
-			otherDic.Modify(ScheduleModifier.Scheduler, WhenOther(otherRange), NewBusinessRuleCollection.Minimum(), MockRepository.GenerateMock<IScheduleDayChangeCallback>(), MockRepository.GenerateMock<IScheduleTagSetter>());
-			Target.Persist(otherRange);
+			WhenOtherHasChanged(otherRange);
 
+			var myDic = loadScheduleDictionary();
+			var myRange = myDic[Person];
+			WhenImChanging(myRange);
+
+			Target.Persist(otherRange);
 			var conflicts = Target.Persist(myRange);
 
-			Then(conflicts, myRange, loadScheduleDictionary()[Person]);
+			Then(conflicts);
+			Then(myRange);
+			Then(loadScheduleDictionary()[Person]);
 			generalAsserts(myRange, conflicts);
+		}
+
+		protected void DoModify(IScheduleDay scheduleDay)
+		{
+			scheduleDay.Owner.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(),
+			                         MockRepository.GenerateMock<IScheduleDayChangeCallback>(),
+			                         MockRepository.GenerateMock<IScheduleTagSetter>());
 		}
 
 		private static void generalAsserts(IScheduleRange range, IEnumerable<PersistConflict> conflicts)
