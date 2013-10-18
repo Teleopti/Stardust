@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Interfaces.Domain;
@@ -28,7 +29,9 @@ namespace Teleopti.Ccc.Win.Optimization
         	_eventAggregator = eventAggregator;
 
 			if(_eventAggregator != null)
-			_eventAggregator.GetEvent<GenericEvent<ExtraPreferencesPanelUseBlockScheduling>>().Subscribe(EnableDisableShiftCategoryLimitations);	
+			_eventAggregator.GetEvent<GenericEvent<ExtraPreferencesPanelUseBlockScheduling>>().Subscribe(EnableDisableShiftCategoryLimitations);
+
+	        addKeepOriginalScheduleTag(_scheduleTags);
 
             ExchangeData(ExchangeDataOption.DataSourceToControls);
             setInitialControlStatus();
@@ -111,6 +114,12 @@ namespace Teleopti.Ccc.Win.Optimization
         }
 
         #endregion
+
+		 private void addKeepOriginalScheduleTag(IList<IScheduleTag> scheduleTags)
+	    {
+			var keepOriginalScheduleTag = KeepOriginalScheduleTag.Instance;
+			scheduleTags.Insert(1, keepOriginalScheduleTag);
+	    }
 
         private void bindTagsCombo()
         {
