@@ -92,7 +92,7 @@ Scenario: View group schedule
 	Then I should see schedule for 'John Smith'
 	Then I should see no schedule for 'Pierre Baldi'
 
-Scenario: Order group pages like business heirarchy, contract, contract schedule, part time percentage, shiftbag, skill, group page names
+Scenario: Order group pages like business heirarchy, contract, contract schedule, part time percentage, notes, shiftbag, skill, group page names
 	Given I viewing schedules for '2013-10-10'
 	Then I should see 'Business Hierarchy' before 'Contract'
 	And I should see 'Contract' before 'Contract Schedule'
