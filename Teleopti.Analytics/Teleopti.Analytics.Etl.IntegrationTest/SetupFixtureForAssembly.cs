@@ -30,8 +30,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
         [SetUp]
         public void Setup()
         {
-            return;
-
             var dataSource = DataSourceHelper.CreateDataSource(new IMessageSender[]{}, "TestData");
 
             var personThatCreatesTestData = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatCreatesTestData", "password");
