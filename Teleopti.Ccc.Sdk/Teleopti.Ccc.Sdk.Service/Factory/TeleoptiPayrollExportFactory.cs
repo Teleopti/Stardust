@@ -90,9 +90,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			{
 				var personList = _personAssembler.DtosToDomainEntities(personCollection).ToList();
 				var scheduleDictionary =
-					_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList),
-					                                                   new ScheduleDictionaryLoadOptions(true, false), period,
-					                                                   _scenarioRepository.Current());
+					_scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
+						personList,
+						new ScheduleDictionaryLoadOptions(true, false),
+						period,
+						_scenarioRepository.Current()
+						);
 
 				var exportDtos = getExportDtosForPersons(personList, scheduleDictionary, datePeriod, buildExportFunction).ToList();
 				if (exportDtos.Any())

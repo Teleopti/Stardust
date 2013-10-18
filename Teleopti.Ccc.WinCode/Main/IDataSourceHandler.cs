@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Security.Authentication;
 
-namespace Teleopti.Ccc.Win.Main
+namespace Teleopti.Ccc.WinCode.Main
 {
     public interface IDataSourceHandler
     {

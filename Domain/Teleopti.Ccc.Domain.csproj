@@ -118,6 +118,7 @@
   <ItemGroup>
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriods.cs" />
     <Compile Include="AgentInfo\Requests\IBatchShiftTradeRequestStatusChecker.cs" />
+    <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
     <Compile Include="Analytics\BaseConfiguration.cs" />
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommand.cs" />
@@ -423,6 +424,7 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapper.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\StandardDeviationData.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinder.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeLengthDecider.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferences.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferencesGeneralPersonalSetting.cs" />
@@ -1199,7 +1201,6 @@
     <Compile Include="Forecasting\MonthOfYearItem.cs" />
     <Compile Include="Forecasting\SkillDayRestrictionSet.cs" />
     <Compile Include="Forecasting\SkillDayTemplate.cs" />
-    <Compile Include="Common\GroupingAbsence.cs" />
     <Compile Include="Common\EntityBaseTypes\Entity.cs" />
     <Compile Include="Common\GroupingActivity.cs" />
     <Compile Include="Common\Layer.cs" />
@@ -1453,9 +1454,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\PersonAbsence.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Common\GroupingAbsence.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Common\GroupingActivity.hbm.xml" />

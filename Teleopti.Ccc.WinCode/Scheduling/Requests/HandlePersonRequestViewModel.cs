@@ -123,9 +123,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			if (!authorization.HasViewRequestPermission(request) || request.IsNew) return;
 
 			var model = new PersonRequestViewModel(request, statusChecker, _allAccounts[request.Person], _eventAggregator, _timeZoneInfo);
-			var specification = new ShiftTradeRequestOkByMeSpecification(statusChecker);
+			var okByMeSpecification = new ShiftTradeRequestOkByMeSpecification(statusChecker);
+			var referredSpecification = new ShiftTradeRequestReferredSpecification(statusChecker);
+			var afterPeriodSpecification = new ShiftTradeRequestIsAfterLoadedPeriodSpecification(_schedulePeriod);
 
-			if (!specification.IsSatisfiedBy(request))
+			if (afterPeriodSpecification.IsSatisfiedBy(request) ||
+				(!okByMeSpecification.IsSatisfiedBy(request) &&
+				!referredSpecification.IsSatisfiedBy(request)))
 				AddPersonRequestViewModel(model);
 		}
 

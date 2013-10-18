@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
         public void CreateNewEmptyCcc7(DefaultAggregateRoot defaultAggregateRoot)
         {
             //Create standard absences
-            AbsenceCreator absenceCreator = new AbsenceCreator(defaultAggregateRoot.GroupingAbsence);
+            AbsenceCreator absenceCreator = new AbsenceCreator();
             IAbsence defaultAbsence = absenceCreator.Create(new Description("Default", "DE"), Color.DarkViolet, 1, true);
             
             //Create standard activities

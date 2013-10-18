@@ -9,10 +9,11 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Win.Common.ServiceBus;
 using Teleopti.Interfaces.Messages;
 using log4net;
 
-namespace Teleopti.Ccc.Win.Common.ServiceBus
+namespace Teleopti.Ccc.WinCode.Common.ServiceBus
 {
 	public class ServiceBusSender : IServiceBusSender
 	{

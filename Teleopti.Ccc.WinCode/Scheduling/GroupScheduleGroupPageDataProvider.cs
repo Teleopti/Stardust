@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -143,7 +144,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 {
                     using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
                     {
-                        uow.Reassociate(_stateHolder.Schedules.Keys);
+                        uow.Reassociate(_stateHolder.Schedules.Keys.Where(x => !(x is IGroupPerson)).ToList());
                         IGroupPageRepository groupPageRepository = _repositoryFactory.CreateGroupPageRepository(uow);
                         _groupPageCollection = new List<IGroupPage>(groupPageRepository.LoadAllGroupPageWhenPersonCollectionReAssociated());
                     }

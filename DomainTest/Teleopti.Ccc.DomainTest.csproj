@@ -132,6 +132,7 @@
     <Compile Include="AgentInfo\Requests\InvalidRequestStateTransitionExceptionTest.cs" />
     <Compile Include="AgentInfo\Requests\PersonRequestCheckAuthorizationTest.cs" />
     <Compile Include="AgentInfo\Requests\RequestApprovalServiceSchedulerTest.cs" />
+    <Compile Include="AgentInfo\Requests\ShiftTradeRequestWithinLoadedPeriodSpecificationTest.cs" />
     <Compile Include="Analytics\BaseConfigurationTest.cs" />
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\FakePersonScheduleDayReadModelPersister.cs" />
@@ -323,6 +324,7 @@
     <Compile Include="Optimization\StandardDeviationDataTest.cs" />
     <Compile Include="Optimization\TeamBlock\AdvancedPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\TeamBlock\LockableBitArrayFactoryTest.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinderTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockGeneratorTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockIntradayDecisionMakerTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockIntradayOptimizationServiceTest.cs" />
@@ -895,7 +897,6 @@
     <Compile Include="Common\WorkTimeTest.cs" />
     <Compile Include="Common\BusinessUnitTest.cs" />
     <Compile Include="Common\ContractTest.cs" />
-    <Compile Include="Common\GroupingAbsenceTest.cs" />
     <Compile Include="Common\GroupingActivityTest.cs" />
     <Compile Include="Common\EntityTest.cs" />
     <Compile Include="Common\LayerTest.cs" />

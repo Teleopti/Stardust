@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Constants;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Library;
 using Teleopti.Ccc.Win.Forecasting;
+using Teleopti.Ccc.WinCode.Main;
 using log4net.Config;
 using MbCache.Configuration;
 using Microsoft.Practices.CompositeUI;
@@ -110,7 +111,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         }
 
 				[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-				private static IContainer configureContainer()
+		private static IContainer configureContainer()
         {
             using (PerformanceOutput.ForOperation("Building Ioc container"))
             {
@@ -136,6 +137,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 builder.RegisterModule(new PersonSelectorModule());
                 builder.RegisterModule(new PermissionsModule());
                 builder.RegisterModule(new RequestHistoryModule());
+				builder.RegisterModule(new MainModule());
 							//hack to get old behavior work
 	            builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory()).ExternallyOwned().As<IUnitOfWorkFactory>();
 							builder.RegisterModule(new RepositoryModule() { ConstructorTypeToUse = typeof(IUnitOfWorkFactory) });

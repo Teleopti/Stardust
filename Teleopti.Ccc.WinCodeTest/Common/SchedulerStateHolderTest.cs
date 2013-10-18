@@ -4,11 +4,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -35,8 +38,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         [SetUp]
         public void Setup()
         {
-            scenario = ScenarioFactory.CreateScenarioAggregate();
-            dtp = new ScheduleDateTimePeriod(new DateTimePeriod(2000,1,1,2001,1,1));
+	        var period = new DateTimePeriod(2000, 1, 1, 2001, 1, 1);
+			dtp = new ScheduleDateTimePeriod(period);
+            scenario = ScenarioFactory.CreateScenarioAggregate("test", true);
             _person1 = PersonFactory.CreatePerson("first", "last");
 	        _person2 = PersonFactory.CreatePerson("firstName", "lastName");
 	        _guid1 = Guid.NewGuid();
@@ -44,10 +48,12 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	        _person1.SetId(_guid1);
 			_person2.SetId(_guid2);
             selectedPersons = new List<IPerson>{_person1, _person2};
-        	target = new SchedulerStateHolder(scenario,
+	        var schedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(period);
+	        target = new SchedulerStateHolder(scenario,
         	                                  new DateOnlyPeriodAsDateTimePeriod(
         	                                  	dtp.VisiblePeriod.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo()),
-        	                                  	TimeZoneInfoFactory.UtcTimeZoneInfo()), selectedPersons);
+												TimeZoneInfoFactory.UtcTimeZoneInfo()), selectedPersons, schedulingResultStateHolder);
+			target.SetRequestedScenario(scenario);
             mocks = new MockRepository();
         }
 
@@ -142,6 +148,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             personRequest.Request = new AbsenceRequest(AbsenceFactory.CreateAbsence("abs"), new DateTimePeriod(2001,1,1,2001,1,2));
             IList<IPersonRequest> requestList = new List<IPersonRequest> {personRequest};
             target.SetRequestedScenario(ScenarioFactory.CreateScenarioAggregate("test", true));
+			
             using (mocks.Record())
             {
                 Expect.Call(repositoryFactory.CreatePersonRequestRepository(unitOfWork)).Return(personRequestRepository);
@@ -154,6 +161,118 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
             Assert.AreSame(requestList[0].Id, target.PersonRequests[0].Id);
         }
+
+
+	    [Test]
+		public void LoadPersonRequests_ShiftTradeAfterLoadedPeriodAndReferred_ShouldLoad()
+		{
+			var unitOfWork = MockRepository.GenerateStrictMock<IUnitOfWork>();
+			var repositoryFactory = MockRepository.GenerateStrictMock<IRepositoryFactory>();
+			var personRequestRepository = MockRepository.GenerateStrictMock<IPersonRequestRepository>();
+			var scheduleRepository = MockRepository.GenerateStrictMock<IScheduleRepository>();
+			var person = PersonFactory.CreatePerson();
+			var person2 = PersonFactory.CreatePerson();
+			var personList = new List<IPerson> {person};
+			var dateOnly = new DateOnly(2001, 12, 31);
+		    var personRequest = new PersonRequest(person, new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
+				{
+					new ShiftTradeSwapDetail(person, person2, dateOnly, dateOnly)
+				}));
+			var requestList = new List<IPersonRequest> { personRequest };
+			personRequest.ForcePending();
+			((IShiftTradeRequest) personRequest.Request).SetShiftTradeStatus(ShiftTradeStatus.Referred, new PersonRequestAuthorizationCheckerForTest());
+
+			scheduleRepository.Expect(s => s.FindSchedulesForPersons(null, null, null, null, personList))
+							  .IgnoreArguments()
+							  .Return(new ScheduleDictionary(scenario, dtp));
+			target.LoadSchedules(scheduleRepository, null, null, dtp);
+
+		    repositoryFactory.Expect(r => r.CreatePersonRequestRepository(unitOfWork)).Return(personRequestRepository);
+		    personRequestRepository.Expect(
+			    p => p.FindAllRequestModifiedWithinPeriodOrPending(personList, new DateTimePeriod(2001, 1, 1, 2001, 1, 2)))
+		                           .Return(requestList)
+		                           .IgnoreArguments();
+			
+
+			target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest());
+
+		    target.PersonRequests.Count.Should().Be.GreaterThan(0);
+		    target.PersonRequests[0].Should().Not.Be.Null();
+		    target.PersonRequests[0].Id.Should().Be.EqualTo(requestList[0].Id);
+		}
+
+		[Test]
+		public void LoadPersonRequests_ShiftTradeWithinLoadedPeriodAndReferred_ShouldNotLoad()
+		{
+			var unitOfWork = MockRepository.GenerateStrictMock<IUnitOfWork>();
+			var repositoryFactory = MockRepository.GenerateStrictMock<IRepositoryFactory>();
+			var personRequestRepository = MockRepository.GenerateStrictMock<IPersonRequestRepository>();
+			var scheduleRepository = MockRepository.GenerateStrictMock<IScheduleRepository>();
+			var person = PersonFactory.CreatePerson();
+			var person2 = PersonFactory.CreatePerson();
+			var personList = new List<IPerson> { person };
+			var dateOnly = new DateOnly(2000, 10, 1);
+			var personRequest = new PersonRequest(person, new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
+				{
+					new ShiftTradeSwapDetail(person, person2, dateOnly, dateOnly)
+				}));
+			var requestList = new List<IPersonRequest> { personRequest };
+			personRequest.ForcePending();
+			((IShiftTradeRequest)personRequest.Request).SetShiftTradeStatus(ShiftTradeStatus.Referred, new PersonRequestAuthorizationCheckerForTest());
+
+			scheduleRepository.Expect(s => s.FindSchedulesForPersons(null, null, null, null, personList))
+							  .IgnoreArguments()
+							  .Return(new ScheduleDictionary(scenario, dtp));
+			target.LoadSchedules(scheduleRepository, null, null, dtp);
+
+			repositoryFactory.Expect(r => r.CreatePersonRequestRepository(unitOfWork)).Return(personRequestRepository);
+			personRequestRepository.Expect(
+				p => p.FindAllRequestModifiedWithinPeriodOrPending(personList, new DateTimePeriod(2000, 1, 1, 2002, 1, 1)))
+								   .Return(requestList)
+								   .IgnoreArguments();
+
+			target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest());
+
+			target.PersonRequests.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void LoadPersonRequests_ShiftTradeAfterLoadedPeriodAndOkByMe_ShouldLoad()
+		{
+			var unitOfWork = MockRepository.GenerateStrictMock<IUnitOfWork>();
+			var repositoryFactory = MockRepository.GenerateStrictMock<IRepositoryFactory>();
+			var personRequestRepository = MockRepository.GenerateStrictMock<IPersonRequestRepository>();
+			var scheduleRepository = MockRepository.GenerateStrictMock<IScheduleRepository>();
+			var person = PersonFactory.CreatePerson();
+			var person2 = PersonFactory.CreatePerson();
+			var personList = new List<IPerson> { person };
+			var dateOnly = new DateOnly(2001, 12, 31);
+			var personRequest = new PersonRequest(person, new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
+				{
+					new ShiftTradeSwapDetail(person, person2, dateOnly, dateOnly)
+				}));
+			var requestList = new List<IPersonRequest> { personRequest };
+			personRequest.ForcePending();
+			((IShiftTradeRequest)personRequest.Request).SetShiftTradeStatus(ShiftTradeStatus.OkByMe, new PersonRequestAuthorizationCheckerForTest());
+
+			scheduleRepository.Expect(s => s.FindSchedulesForPersons(null, null, null, null, personList))
+							  .IgnoreArguments()
+							  .Return(new ScheduleDictionary(scenario, dtp));
+			target.LoadSchedules(scheduleRepository, null, null, dtp);
+
+			repositoryFactory.Expect(r => r.CreatePersonRequestRepository(unitOfWork)).Return(personRequestRepository);
+			personRequestRepository.Expect(
+				p => p.FindAllRequestModifiedWithinPeriodOrPending(personList, new DateTimePeriod(2001, 1, 1, 2001, 1, 2)))
+								   .Return(requestList)
+								   .IgnoreArguments();
+
+
+			target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest());
+
+			target.PersonRequests.Count.Should().Be.GreaterThan(0);
+			target.PersonRequests[0].Should().Not.Be.Null();
+			target.PersonRequests[0].Id.Should().Be.EqualTo(requestList[0].Id);
+		}
 
         [Test]
         public void VerifyRequestUpdateFromBroker()

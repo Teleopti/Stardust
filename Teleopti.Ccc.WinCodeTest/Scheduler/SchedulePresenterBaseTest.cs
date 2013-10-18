@@ -1154,7 +1154,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				.Return(scheduleRange);
 			Expect.Call(scheduleRange.ScheduledDay(date))
 				.Return(schedulePart);
-			Expect.Call(schedulePart.HasDayOff()).Return(false).Repeat.AtLeastOnce();
+			//Expect.Call(schedulePart.HasDayOff()).Return(false).Repeat.AtLeastOnce();
 
 			Expect.Call(() => schedulePart.CreateAndAddAbsence(null)).IgnoreArguments();
 		    

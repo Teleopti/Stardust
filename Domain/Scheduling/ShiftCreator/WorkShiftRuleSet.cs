@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using InParameter = Teleopti.Interfaces.Domain.InParameter;
 
@@ -20,17 +18,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
     /// </remarks>
     public class WorkShiftRuleSet : AggregateRootWithBusinessUnit, IWorkShiftRuleSet
     {
-        private Description _description;
-        private IList<IWorkShiftExtender> _extenderCollection;
+		private IList<IWorkShiftExtender> _extenderCollection;
         private IList<IWorkShiftLimiter> _limiterCollection;
         private IList<IRuleSetBag> _ruleSetBagCollection;
         private IWorkShiftTemplateGenerator _templateGenerator;
         private DefaultAccessibility _defaultAccessibility = DefaultAccessibility.Included;
         private IList<DayOfWeek> _accessibilityDaysOfWeek = new List<DayOfWeek>(7);
         private IList<DateTime> _accessibilityDates = new List<DateTime>();
-    	private bool _onlyForRestrictions;
+		private Description _description;
+		private bool _onlyForRestrictions;
 
-    	public WorkShiftRuleSet(IWorkShiftTemplateGenerator generator)
+		public WorkShiftRuleSet(IWorkShiftTemplateGenerator generator)
         {
             InParameter.NotNull("generator", generator);
             _extenderCollection = new List<IWorkShiftExtender>();
@@ -40,27 +38,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             
         }
 
-        protected WorkShiftRuleSet()
-        {
-        }
-
-
+		protected WorkShiftRuleSet() { }
 
 		#region Properties (6) 
+		// ReSharper disable ConvertToAutoProperty
+		public virtual Description Description
+		{
+			get { return _description; }
+			set { _description = value; }
+		}
 
-        public virtual Description Description
-        {
-            get { return _description; }
-            set { _description = value; }
-        }
+		public virtual bool OnlyForRestrictions
 
-    	public virtual bool OnlyForRestrictions
-    	{
-    		get { return _onlyForRestrictions; }
+		{
+			get { return _onlyForRestrictions; }
 			set { _onlyForRestrictions = value; }
-    	}
+		}
+		// ReSharper restore ConvertToAutoProperty
 
-    	public virtual ReadOnlyCollection<IWorkShiftExtender> ExtenderCollection
+		public virtual ReadOnlyCollection<IWorkShiftExtender> ExtenderCollection
         {
             get { return new ReadOnlyCollection<IWorkShiftExtender>(_extenderCollection); }
         }
@@ -78,94 +74,43 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         public virtual void RemoveRuleSetBag(IRuleSetBag ruleSetBag)
         {
             InParameter.NotNull("ruleSetBag", ruleSetBag);
-            RuleSetBag concrete = ruleSetBag as RuleSetBag;
+            var concrete = ruleSetBag as RuleSetBag;
             if (concrete != null)
                 concrete.RuleSetCollectionWritable.Remove(this);
             _ruleSetBagCollection.Remove(ruleSetBag);
         }
 
-        /// <summary>
-        /// Gets the internal modifiable rule set bag collection.
-        /// </summary>
-        /// <value>The rule set bag collection internal.</value>
+        
         public virtual ICollection<IRuleSetBag> RuleSetBagCollectionWritable
         {
-            get
-            {
-                return _ruleSetBagCollection;   
-            }
+	        get { return _ruleSetBagCollection; }
         }
 
-        /// <summary>
-        /// Gets the template generator.
-        /// </summary>
-        /// <value>The template generator.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-03-20
-        /// </remarks>
         public virtual IWorkShiftTemplateGenerator TemplateGenerator
         {
             get { return _templateGenerator; }
             set { _templateGenerator = value; }
         }
         
-        /// <summary>
-        /// Gets the default accessibility.
-        /// </summary>
-        /// <value>The default accessibility.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-07-01
-        /// </remarks>
         public virtual DefaultAccessibility DefaultAccessibility
         {
             get { return _defaultAccessibility; }
             set { _defaultAccessibility = value; }
         }
 
-        /// <summary>
-        /// Gets the accessibility days of week.
-        /// </summary>
-        /// <value>The accessibility days of week.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-07-01
-        /// </remarks>
         public virtual ReadOnlyCollection<DayOfWeek> AccessibilityDaysOfWeek
         {
             get { return new ReadOnlyCollection<DayOfWeek>(_accessibilityDaysOfWeek); }
         }
 
-        /// <summary>
-        /// Gets the accessibility dates.
-        /// </summary>
-        /// <value>The accessibility dates.</value>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-07-01
-        /// </remarks>
         public virtual ReadOnlyCollection<DateTime> AccessibilityDates
         {
             get { return new ReadOnlyCollection<DateTime>(_accessibilityDates); }
         }
-
 		#endregion Properties 
 
 		#region Methods (4) 
-
-
-		// Public Methods (4) 
-
-        /// <summary>
-        /// Adds an extender.
-        /// </summary>
-        /// <param name="extender">The extender.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-03-20
-        /// </remarks>
-        public virtual void AddExtender(IWorkShiftExtender extender)
+		public virtual void AddExtender(IWorkShiftExtender extender)
         {
             InParameter.NotNull("extender", extender);
             if(extender.Parent != null)
@@ -174,14 +119,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             _extenderCollection.Add(extender);
         }
 
-        /// <summary>
-        /// Adds a limiter.
-        /// </summary>
-        /// <param name="limiter">The limiter.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-03-20
-        /// </remarks>
         public virtual void AddLimiter(IWorkShiftLimiter limiter)
         {
             InParameter.NotNull("limiter", limiter);
@@ -191,7 +128,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             _limiterCollection.Add(limiter);
         }
 
-        /// <summary>
+		public virtual void InsertExtender(int index, IWorkShiftExtender extender)
+		{
+			InParameter.NotNull("extender", extender);
+			if (extender.Parent != null)
+				throw new ArgumentException("extender.Parent must be null");
+			extender.SetParent(this);
+			_extenderCollection.Insert(index, extender);
+		}
+
+		/// <summary>
         /// Deletes the extender. The difference from RemoveExtender
         /// is that the DeleteExtender method does not set the Parent property to null.
         /// </summary>
@@ -211,41 +157,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             _limiterCollection.Remove(limiter);
         }
 
-        /// <summary>
-        /// Adds the accessibility day of week.
-        /// </summary>
-        /// <param name="dayOfWeek">The day of week.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-07-01
-        /// </remarks>
         public virtual void AddAccessibilityDayOfWeek(DayOfWeek dayOfWeek)
         {
             if (!_accessibilityDaysOfWeek.Contains(dayOfWeek))
                 _accessibilityDaysOfWeek.Add(dayOfWeek);
         }
 
-        /// <summary>
-        /// Removes the accessibility day of week.
-        /// </summary>
-        /// <param name="dayOfWeek">The day of week.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-07-01
-        /// </remarks>
         public virtual void RemoveAccessibilityDayOfWeek(DayOfWeek dayOfWeek)
         {
             _accessibilityDaysOfWeek.Remove(dayOfWeek);
         }
 
-        /// <summary>
-        /// Adds the accessibility date.
-        /// </summary>
-        /// <param name="dateTime">The date time.</param>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-07-01
-        /// </remarks>
         public virtual void AddAccessibilityDate(DateTime dateTime)
         {
             InParameter.VerifyDateIsUtc("dateTime",dateTime);
@@ -254,35 +176,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
                 _accessibilityDates.Add(dateTime);
         }
 
-        /// <summary>
-        /// Removes the accessibility date.
-        /// </summary>
-        /// <param name="dateTime">The date time.</param>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-07-01
-        /// </remarks>
         public virtual void RemoveAccessibilityDate(DateTime dateTime)
         {
             _accessibilityDates.Remove(DateTime.SpecifyKind(dateTime.Subtract(dateTime.TimeOfDay), DateTimeKind.Utc));
         }
 
-        /// <summary>
-        /// Determines whether [is valid date] [the specified date].
-        /// </summary>
-        /// <param name="dateToCheck">The date to check.</param>
-        /// <returns>
-        /// 	<c>true</c> if [is valid date] [the specified date]; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-07-02
-        /// </remarks>
         public virtual bool IsValidDate(DateOnly dateToCheck)
         {
-            bool dateInList = _accessibilityDates.Contains(dateToCheck.Date);
-            bool dayOfWeekInList = _accessibilityDaysOfWeek.Contains(dateToCheck.DayOfWeek);
-            bool availableByDefault = (_defaultAccessibility == DefaultAccessibility.Included);
+            var dateInList = _accessibilityDates.Contains(dateToCheck.Date);
+            var dayOfWeekInList = _accessibilityDaysOfWeek.Contains(dateToCheck.DayOfWeek);
+            var availableByDefault = (_defaultAccessibility == DefaultAccessibility.Included);
 
             if (dateInList || dayOfWeekInList)
                 availableByDefault = !availableByDefault;
@@ -290,11 +193,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             return availableByDefault;
         }
 
-        /// <summary>
-        /// Swap two extenders
-        /// </summary>
-        /// <param name="left">Left extender</param>
-        /// <param name="right">Right extender</param>
         public virtual void SwapExtenders(IWorkShiftExtender left, IWorkShiftExtender right)
         {
             int top = _extenderCollection.IndexOf(left);
@@ -307,19 +205,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             }
         }
 
-        /// <summary>
-        /// Reinitializes the fields.
-        /// </summary>
-        /// <remarks>
-        /// Created by:VirajS
-        /// Created date: 2008-09-19
-        /// </remarks>
         private void reinitializeFields()
         {
             _accessibilityDaysOfWeek = new List<DayOfWeek>();
             _accessibilityDates = new List<DateTime>();
         }
-
         #endregion Methods 
 
         #region ICloneableEntity<WorkShiftRuleSet> Members (2) 
@@ -334,7 +224,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         /// </remarks>
         public virtual IWorkShiftRuleSet NoneEntityClone()
         {
-            WorkShiftRuleSet retobj = (WorkShiftRuleSet)MemberwiseClone();
+            var retobj = (WorkShiftRuleSet)MemberwiseClone();
             retobj.SetId(null);
             retobj.reinitializeFields();
             
@@ -385,7 +275,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         /// </remarks>
         public virtual IWorkShiftRuleSet EntityClone()
         {
-            WorkShiftRuleSet retobj = (WorkShiftRuleSet)MemberwiseClone();
+            var retobj = (WorkShiftRuleSet)MemberwiseClone();
 
             if (TemplateGenerator != null)
                 retobj.TemplateGenerator = TemplateGenerator.EntityClone();
@@ -413,24 +303,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
         #endregion
 
-        #region ICloneable Members (1) 
-
-        /// <summary>
-        /// Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>
-        /// A new object that is a copy of this instance.
-        /// </returns>
-        /// <remarks>
-        /// Created by: kosalanp
-        /// Created date: 2008-06-16
-        /// </remarks>
         public virtual object Clone()
         {
             return EntityClone();
         }
-
-        #endregion
 
 	}
 
