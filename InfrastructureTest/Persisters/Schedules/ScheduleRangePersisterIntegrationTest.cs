@@ -107,7 +107,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 			Then(conflicts);
 			Then(myRange);
-			Then(loadScheduleDictionary()[Person]);
+			if (!conflicts.Any())
+			{
+				//if no conflicts, db version should be same as users schedulerange
+				Then(loadScheduleDictionary()[Person]);				
+			}
 			generalAsserts(myRange, conflicts);
 		}
 
