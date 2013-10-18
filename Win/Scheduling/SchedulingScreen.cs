@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.Win.Meetings;
@@ -82,6 +83,7 @@ using Teleopti.Ccc.WpfControls.Controls.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
+using PersistConflict = Teleopti.Ccc.Infrastructure.Persisters.Schedules.PersistConflict;
 
 #endregion
 
@@ -4594,11 +4596,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			var scheduleRangePersister = new ScheduleRangePersister(_container.Resolve<IUnitOfWorkFactory>(),
 			                            _container.Resolve<IDifferenceCollectionService<IPersistableScheduleData>>(),
-			                            new ScheduleRangeConflictCollector(_container.Resolve<IDifferenceCollectionService<IPersistableScheduleData>>(), _container.Resolve<IScheduleRepository>(), _container.Resolve<IPersonAssignmentRepository>()),
+																	new ScheduleRangeConflictCollector(_container.Resolve<IDifferenceCollectionService<IPersistableScheduleData>>(), 
+																			_container.Resolve<IScheduleRepository>(), 
+																			_container.Resolve<IPersonAssignmentRepository>(), 
+																			_schedulerMessageBrokerHandler, 
+																			_container.Resolve<ILazyLoadingManager>()),
 			                            new ScheduleRangeSaver(_container.Resolve<IScheduleRepository>()));
+			var conflicts = new List<PersistConflict>();
 			foreach (var range in _schedulerState.Schedules.Values)
 			{
-				scheduleRangePersister.Persist(range);
+				conflicts.AddRange(scheduleRangePersister.Persist(range));
+			}
+			if (conflicts.Any())
+			{
+				MessageBox.Show("Du har " + conflicts.Count + " konflikter... Inget sparat för nu");
 			}
 
 				//var result = _persister.TryPersist(_schedulerState.Schedules, _modifiedWriteProtections,

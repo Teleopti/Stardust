@@ -158,22 +158,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void ClearPersonalLayers()
 		{
-			_shiftLayers.OfType<IPersonalShiftLayer>()
-									.ToArray()
+			PersonalLayers().ToArray()
 									.ForEach(l => RemoveLayer(l));
 		}
 
 		public virtual void ClearMainLayers()
 		{
-			_shiftLayers.OfType<IMainShiftLayer>()
-									.ToArray()
+			MainLayers().ToArray()
 									.ForEach(l => RemoveLayer(l));
 		}
 
 		public virtual void ClearOvertimeLayers()
 		{
-			_shiftLayers.OfType<IOvertimeShiftLayer>()
-									.ToArray()
+			OvertimeLayers().ToArray()
 									.ForEach(l => RemoveLayer(l));
 		}
 
@@ -217,8 +214,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				return MainLayers().Any() || OvertimeLayers().Any();
 		}
 
-		#region ICloneableEntity<PersonAssignment> Members
-
 		public virtual object Clone()
 		{
 			return EntityClone();
@@ -239,7 +234,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var retobj = (PersonAssignment)MemberwiseClone();
 			retobj.SetId(null);
 			retobj._shiftLayers = new List<IShiftLayer>();
-			//todo: no need to cast here when interfaces are correct
 			foreach (var newLayer in _shiftLayers.Select(layer => layer.NoneEntityClone()))
 			{
 				newLayer.SetParent(retobj);
@@ -253,7 +247,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var retobj = (PersonAssignment)MemberwiseClone();
 			retobj._shiftLayers = new List<IShiftLayer>();
-			//todo: no need to cast here when interfaces are correct
 			foreach (var newLayer in _shiftLayers.Select(layer => layer.EntityClone()))
 			{
 				newLayer.SetParent(retobj);
@@ -262,8 +255,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			return retobj;
 		}
-
-		#endregion
 
 		public virtual IAggregateRoot MainRoot
 		{
