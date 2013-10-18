@@ -10590,6 +10590,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;Keep&gt;.
+        /// </summary>
+        public static string KeepTag {
+            get {
+                return ResourceManager.GetString("KeepTag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Keep audit trail for.
         /// </summary>
         public static string KeepTrailedSchedulesFor {

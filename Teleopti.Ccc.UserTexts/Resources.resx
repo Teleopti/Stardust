@@ -10202,7 +10202,7 @@ These options are activated:
   </data>
   <data name="DefaultTag" xml:space="preserve">
     <value>&lt;None&gt;</value>
-    <comment>&lt;None&gt;</comment>
+    <comment>Default tag</comment>
   </data>
   <data name="LockTags" xml:space="preserve">
     <value>Lock Tags</value>
@@ -11599,5 +11599,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="LengthOfActivity" xml:space="preserve">
     <value>Total time of selected activity</value>
     <comment>Total time of selected activity</comment>
+  </data>
+  <data name="KeepTag" xml:space="preserve">
+    <value>&lt;Keep&gt;</value>
+    <comment>Keeps the existing tag</comment>
   </data>
 </root>
