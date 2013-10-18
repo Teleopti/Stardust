@@ -345,15 +345,27 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 
                 var startTime = underStaffingHoursInterval.Period.StartDateTimeLocal(timeZone).ToString("t", culture);
                 var endTime = underStaffingHoursInterval.Period.EndDateTimeLocal(timeZone).ToString("t", culture);
-                underStaffingHours += startTime + "-" + endTime + ",";
-
-                
+                underStaffingHours += startTime + "-" + endTime + ",";     
             }
 
 		    if (underStaffingHours.Length > 1)
 		        underStaffingHours = underStaffingHours.Substring(0, underStaffingHours.Length - 1);
 
 
+            // boundary cases when the understaffing max% is 100 and 0.
+            if (skill.StaffingThresholds.UnderstaffingFor.Value == 1.0)
+            {
+                validatedRequest.IsValid = exceededUnderstaffingList.Count <= 0;
+                validatedRequest.ValidationErrors = underStaffingHours;
+                return validatedRequest;
+            }
+
+            if (skill.StaffingThresholds.UnderstaffingFor.Value == 0.0)
+            {
+                validatedRequest.IsValid = true;
+                validatedRequest.ValidationErrors = underStaffingHours;
+                return validatedRequest;
+            }
 
             validatedRequest.IsValid = (exceededRate <= skill.StaffingThresholds.UnderstaffingFor.Value);
 		    validatedRequest.ValidationErrors = underStaffingHours;
