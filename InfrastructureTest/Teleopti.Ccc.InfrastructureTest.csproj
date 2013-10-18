@@ -168,6 +168,8 @@
     <Compile Include="Persisters\BugTest\Bug25007.cs" />
     <Compile Include="Persisters\PersonRequestRefresherTest.cs" />
     <Compile Include="Persisters\ScheduleRefresherTest.cs" />
+    <Compile Include="Persisters\Schedules\UpdateConflictWithDeleteTest.cs" />
+    <Compile Include="Persisters\Schedules\UpdateConflictWithUpdateTest.cs" />
     <Compile Include="Persisters\Schedules\UpdateNoConflictTest.cs" />
     <Compile Include="Repositories\AbsenceRequestInfoTest.cs" />
     <Compile Include="Repositories\SkillLoaderDeciderTest.cs" />

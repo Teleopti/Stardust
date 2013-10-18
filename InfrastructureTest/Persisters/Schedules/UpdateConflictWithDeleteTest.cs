@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
-	public class UpdateNoConflictTest : ScheduleRangePersisterIntegrationTest
+	public class UpdateConflictWithDeleteTest : ScheduleRangePersisterIntegrationTest
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 
@@ -19,6 +19,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
 		{
+			var day = othersScheduleRange.ScheduledDay(date);
+			day.Clear<IPersonAssignment>();
+			DoModify(day);
 		}
 
 		protected override void WhenImChanging(IScheduleRange myScheduleRange)
@@ -31,13 +34,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		protected override void Then(IEnumerable<PersistConflict> conflicts)
 		{
-			conflicts.Should().Be.Empty();
+			var conflict = conflicts.Single();
+			conflict.ClientVersion.OriginalItem.Should().Not.Be.Null();
+			conflict.ClientVersion.CurrentItem.Should().Not.Be.Null();
+			conflict.DatabaseVersion.Should().Be.Null();
 		}
 
 		protected override void Then(IScheduleRange myScheduleRange)
 		{
 			myScheduleRange.ScheduledDay(date).PersonAssignment().ShiftLayers.Count()
-			               .Should().Be.EqualTo(1);
+										 .Should().Be.EqualTo(1);
 		}
 	}
 }
