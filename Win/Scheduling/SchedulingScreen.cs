@@ -4593,9 +4593,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 
 			var scheduleRangePersister = new ScheduleRangePersister(_container.Resolve<IUnitOfWorkFactory>(),
-			                                                        _container.Resolve<IDifferenceCollectionService<IPersistableScheduleData>>(),
-			                                                        new ScheduleRangeConflictCollector(),
-			                                                        new ScheduleRangeSaver(_container.Resolve<IScheduleRepository>()));
+			                            _container.Resolve<IDifferenceCollectionService<IPersistableScheduleData>>(),
+			                            new ScheduleRangeConflictCollector(_container.Resolve<IDifferenceCollectionService<IPersistableScheduleData>>(), _container.Resolve<IScheduleRepository>()),
+			                            new ScheduleRangeSaver(_container.Resolve<IScheduleRepository>()));
 			foreach (var range in _schedulerState.Schedules.Values)
 			{
 				scheduleRangePersister.Persist(range);

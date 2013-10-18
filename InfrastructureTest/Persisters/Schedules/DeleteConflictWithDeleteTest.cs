@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -8,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
-	public class UpdateNoConflictTest : ScheduleRangePersisterIntegrationTest
+	public class DeleteConflictWithDeleteTest : ScheduleRangePersisterIntegrationTest
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 
@@ -19,24 +18,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		protected override IEnumerable<IScheduleDay> WhenI(IScheduleRange myScheduleRange)
 		{
-			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			var day = myScheduleRange.ScheduledDay(new DateOnly(2000, 1, 1));
-			day.CreateAndAddActivity(Activity, new DateTimePeriod(start, start.AddHours(2)), ShiftCategory);
+			day.Clear<IPersonAssignment>();
 			return new[] { day };
 		}
 
 		protected override IEnumerable<IScheduleDay> WhenOther(IScheduleRange othersScheduleRange)
 		{
-			return Enumerable.Empty<IScheduleDay>();
+			var day = othersScheduleRange.ScheduledDay(new DateOnly(2000, 1, 1));
+			day.Clear<IPersonAssignment>();
+			return new[] { day };
 		}
 
 		protected override void Then(IEnumerable<PersistConflict> conflicts, IScheduleRange scheduleRangeInMemory, IScheduleRange scheduleRangeInDatabase)
 		{
-			conflicts.Should().Be.Empty();
-			var ass1 = scheduleRangeInMemory.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignment();
-			var ass2 = scheduleRangeInDatabase.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignment();
-			ass1.ShiftLayers.Count().Should().Be.EqualTo(1);
-			ass2.ShiftLayers.Count().Should().Be.EqualTo(1);
+			var conflict = conflicts.Single();
+			conflict.DatabaseVersion.Should().Be.Null();
+			conflict.ClientVersion.CurrentItem.Should().Be.Null();
+			conflict.ClientVersion.OriginalItem.Should().Not.Be.Null();
+			scheduleRangeInMemory.ScheduledDay(date).PersonAssignment().Should().Be.Null();
+			scheduleRangeInDatabase.ScheduledDay(date).PersonAssignment().Should().Be.Null();
 		}
 	}
 }

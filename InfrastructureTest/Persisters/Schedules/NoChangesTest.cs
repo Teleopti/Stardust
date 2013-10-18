@@ -13,7 +13,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			return Enumerable.Empty<IPersistableScheduleData>();
 		}
 
-		protected override IEnumerable<IScheduleDay> When(IScheduleRange scheduleRange)
+		protected override IEnumerable<IScheduleDay> WhenI(IScheduleRange myScheduleRange)
+		{
+			return Enumerable.Empty<IScheduleDay>();
+		}
+
+		protected override IEnumerable<IScheduleDay> WhenOther(IScheduleRange othersScheduleRange)
 		{
 			return Enumerable.Empty<IScheduleDay>();
 		}

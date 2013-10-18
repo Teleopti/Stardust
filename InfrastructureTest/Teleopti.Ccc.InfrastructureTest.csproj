@@ -159,6 +159,7 @@
     <Compile Include="NHibernateConfiguration\CompressedStringTest.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriverTest.cs" />
     <Compile Include="Persisters\Schedules\AddNoConflictTest.cs" />
+    <Compile Include="Persisters\Schedules\DeleteConflictWithDeleteTest.cs" />
     <Compile Include="Persisters\Schedules\DeleteNoConflictTest.cs" />
     <Compile Include="Persisters\Schedules\NoChangesTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterIntegrationTest.cs" />

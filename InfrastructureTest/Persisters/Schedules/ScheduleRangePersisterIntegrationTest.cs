@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -35,10 +36,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		private void makeTarget()
 		{
+			var scheduleRep = new ScheduleRepository(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())));
 			Target = new ScheduleRangePersister(UnitOfWorkFactory.Current, 
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
-				new ScheduleRangeConflictCollector(), 
-				new ScheduleRangeSaver(new ScheduleRepository(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())))));
+				new ScheduleRangeConflictCollector(new DifferenceEntityCollectionService<IPersistableScheduleData>(), scheduleRep), 
+				new ScheduleRangeSaver(scheduleRep));
 		}
 
 		private void setupEntities()
@@ -81,27 +83,41 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		}
 
 		protected abstract IEnumerable<IPersistableScheduleData> Given();
-		protected abstract IEnumerable<IScheduleDay> When(IScheduleRange scheduleRange);
+		protected abstract IEnumerable<IScheduleDay> WhenI(IScheduleRange myScheduleRange);
+		protected abstract IEnumerable<IScheduleDay> WhenOther(IScheduleRange othersScheduleRange);
 		protected abstract void Then(IEnumerable<PersistConflict> conflicts, IScheduleRange scheduleRangeInMemory, IScheduleRange scheduleRangeInDatabase);
 
 
 		[Test]
 		public void DoTheTest()
 		{
-			var dic = loadScheduleDictionary();
-			var range = dic[Person];
-			dic.Modify(ScheduleModifier.Scheduler, When(range), NewBusinessRuleCollection.Minimum(), MockRepository.GenerateMock<IScheduleDayChangeCallback>(), MockRepository.GenerateMock<IScheduleTagSetter>());
+			var myDic = loadScheduleDictionary();
+			var myRange = myDic[Person];
+			myDic.Modify(ScheduleModifier.Scheduler, WhenI(myRange), NewBusinessRuleCollection.Minimum(), MockRepository.GenerateMock<IScheduleDayChangeCallback>(), MockRepository.GenerateMock<IScheduleTagSetter>());
 
-			var result = Target.Persist(range);
+			var otherDic = loadScheduleDictionary();
+			var otherRange = otherDic[Person];
+			otherDic.Modify(ScheduleModifier.Scheduler, WhenOther(otherRange), NewBusinessRuleCollection.Minimum(), MockRepository.GenerateMock<IScheduleDayChangeCallback>(), MockRepository.GenerateMock<IScheduleTagSetter>());
+			Target.Persist(otherRange);
 
-			Then(result, range, loadScheduleDictionary()[Person]);
-			generalAsserts(range);
+			var conflicts = Target.Persist(myRange);
+
+			Then(conflicts, myRange, loadScheduleDictionary()[Person]);
+			generalAsserts(myRange, conflicts);
 		}
 
-		private static void generalAsserts(IScheduleRange range)
+		private static void generalAsserts(IScheduleRange range, IEnumerable<PersistConflict> conflicts)
 		{
-			range.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>())
-				.Should("After save, there is a diff in Snapshot and current data in ScheduleRange. Indicates that something is very wrong!").Be.Empty();
+			var rangeDiff = range.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>());
+	
+			if (conflicts.Any())
+			{
+				rangeDiff.Should("After save, there is a no diff in Snapshot and current data in ScheduleRange even though conflicts were found. Indicates that something is very wrong!").Not.Be.Empty();
+			}
+			else
+			{
+				rangeDiff.Should("After save, there is a diff in Snapshot and current data in ScheduleRange even though no conflicts were found. Indicates that something is very wrong!").Be.Empty();
+			}
 		}
 
 		private IScheduleDictionary loadScheduleDictionary()
