@@ -84,13 +84,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected abstract IEnumerable<IScheduleDay> When(IScheduleRange scheduleRange);
 		protected abstract void Then(IEnumerable<PersistConflict> conflicts, IScheduleRange scheduleRangeInMemory, IScheduleRange scheduleRangeInDatabase);
 
+
 		[Test]
 		public void DoTheTest()
 		{
 			var dic = loadScheduleDictionary();
-			dic.Modify(ScheduleModifier.Scheduler, When(dic), NewBusinessRuleCollection.Minimum(), MockRepository.GenerateMock<IScheduleDayChangeCallback>(), MockRepository.GenerateMock<IScheduleTagSetter>());
-
 			var range = dic[Person];
+			dic.Modify(ScheduleModifier.Scheduler, When(range), NewBusinessRuleCollection.Minimum(), MockRepository.GenerateMock<IScheduleDayChangeCallback>(), MockRepository.GenerateMock<IScheduleTagSetter>());
+
 			var result = Target.Persist(range);
 
 			Then(result, range, loadScheduleDictionary()[Person]);

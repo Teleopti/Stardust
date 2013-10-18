@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			return new []{new PersonAssignment(Person, Scenario, date)};
 		}
 
-		protected override IEnumerable<IScheduleDay> When(IScheduleDictionary scheduleDictionary)
+		protected override IEnumerable<IScheduleDay> When(IScheduleRange scheduleRange)
 		{
-			var day = scheduleDictionary[Person].ScheduledDay(new DateOnly(2000, 1, 1));
+			var day = scheduleRange.ScheduledDay(new DateOnly(2000, 1, 1));
 			day.Clear<IPersonAssignment>();
 			return new[]{day};
 		}
