@@ -2,11 +2,6 @@
 
 namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 {
-	public interface IScheduleRangeSaver
-	{
-		void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges, IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater);
-	}
-
 	public class ScheduleRangeSaver : IScheduleRangeSaver
 	{
 		private readonly IScheduleRepository _scheduleRepository;
