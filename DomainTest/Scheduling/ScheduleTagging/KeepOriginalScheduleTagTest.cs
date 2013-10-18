@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ScheduleTagging
         [Test]
         public void DescriptionShouldReturnString()
         {
-            Assert.IsEmpty(_target.Description);
+            Assert.AreEqual("<Keep>", _target.Description);
         }
 
         [Test]
@@ -37,14 +37,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ScheduleTagging
         }
 
         [Test]
-        public void SetIdShouldNotWork()
+        public void VerifyIdIsHardCodedAndSetIdShouldNotWork()
         {
-            Assert.IsNull(_target.Id);
+            Assert.AreEqual("00000000-0000-0000-0000-111111111111", _target.Id.ToString());
             _target.SetId(Guid.NewGuid());
-            Assert.IsNull(_target.Id);
-            _target.ClearId();
-            Assert.IsNull(_target.Id);
-        }
+			Assert.AreEqual("00000000-0000-0000-0000-111111111111", _target.Id.ToString());
+			_target.ClearId();
+			Assert.AreEqual("00000000-0000-0000-0000-111111111111", _target.Id.ToString());
+		}
 
         [Test]
         public void VerifyChangedInfo()

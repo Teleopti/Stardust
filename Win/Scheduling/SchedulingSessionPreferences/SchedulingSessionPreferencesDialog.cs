@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -57,9 +58,17 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _scheduleTags = scheduleTags;
             _settingValue = settingValue;
 		    _availableActivity = availableActivity;
+
+			addKeepOriginalScheduleTag(_scheduleTags);
         }
 
-        private SchedulingSessionPreferencesDialog()
+	    private void addKeepOriginalScheduleTag(IList<IScheduleTag> scheduleTags)
+	    {
+			var keepOriginalScheduleTag = KeepOriginalScheduleTag.Instance;
+			scheduleTags.Insert(1, keepOriginalScheduleTag);
+	    }
+
+	    private SchedulingSessionPreferencesDialog()
         {
             InitializeComponent();
             if (!DesignMode) SetTexts();
