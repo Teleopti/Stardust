@@ -9,8 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class StaticSessionContextBinder : ISessionContextBinder
 	{
-		private static readonly IDictionary<Guid, NHibernateSessionRelatedData> uowRelatedData
-			= new ConcurrentDictionary<Guid, NHibernateSessionRelatedData>(new ConcurrentDictionary<Guid, NHibernateSessionRelatedData>());
+		private static readonly IDictionary<Guid, NHibernateSessionRelatedData> uowRelatedData = new ConcurrentDictionary<Guid, NHibernateSessionRelatedData>();
 
 		public NHibernateFilterManager FilterManager(ISession session)
 		{
