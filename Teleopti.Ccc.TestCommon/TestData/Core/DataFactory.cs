@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data
+namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
 	public class DataFactory
 	{

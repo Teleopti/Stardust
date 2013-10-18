@@ -436,7 +436,6 @@
     <Compile Include="Data\Setups\Specific\IContractScheduleSetup.cs" />
     <Compile Include="Data\Setups\Specific\ShiftOnWeekday.cs" />
     <Compile Include="Data\Setups\Specific\SecondScenario.cs" />
-    <Compile Include="Data\DataFactory.cs" />
     <Compile Include="Data\Setups\Common\CommonContract.cs" />
     <Compile Include="Data\Setups\Specific\ContractFromTable.cs" />
     <Compile Include="Data\Setups\Common\CommonContractSchedule.cs" />
@@ -471,7 +470,6 @@
     <Compile Include="Data\Setups\Specific\AnotherTeam.cs" />
     <Compile Include="Data\Setups\Specific\GeneratedTeam.cs" />
     <Compile Include="Data\Setups\Specific\HawaiiTimeZone.cs" />
-    <Compile Include="Data\IDataSetup.cs" />
     <Compile Include="Data\Setups\Specific\NoVirtualSchedulePeriod.cs" />
     <Compile Include="Data\Setups\Specific\DayOffToday.cs" />
     <Compile Include="Data\Setups\Specific\SchedulePeriod.cs" />

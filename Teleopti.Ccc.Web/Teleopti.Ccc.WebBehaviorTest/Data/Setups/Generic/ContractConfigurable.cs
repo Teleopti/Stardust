@@ -1,6 +1,7 @@
 using System;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.WebBehaviorTest.Bindings;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
