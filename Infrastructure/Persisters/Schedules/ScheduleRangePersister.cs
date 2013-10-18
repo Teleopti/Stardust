@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				return Enumerable.Empty<PersistConflict>();
 			}
 			//ska vara serializable
-			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork(TransactionIsolationLevel.Serializable))
 			{
 				var conflicts = _scheduleRangeConflictCollector.GetConflicts(scheduleRange);
 				if (conflicts==null || !conflicts.Any())

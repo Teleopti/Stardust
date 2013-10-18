@@ -18,7 +18,7 @@ namespace Teleopti.Interfaces.Infrastructure
 		/// It's the client's responsibility to close
 		/// this UnitOfWork at appropriate time!
 		/// </remarks>
-		IUnitOfWork CreateAndOpenUnitOfWork();
+		IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.Default);
 
 		/// <summary>
 		/// Creates and opens a unit of work, and reassociates any aggregate roots
