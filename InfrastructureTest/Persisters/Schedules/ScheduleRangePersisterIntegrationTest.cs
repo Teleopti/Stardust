@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected IActivity Activity { get; private set; }
 		protected IScenario Scenario { get; private set; }
 		protected IShiftCategory ShiftCategory { get; private set; }
+		protected IAbsence Absence { get; private set; }
 		protected IScheduleRangePersister Target { get; set; }
 		private IEnumerable<IPersistableScheduleData> _givenState;
 
@@ -55,6 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			Activity = new Activity("persist test");
 			ShiftCategory = new ShiftCategory("persist test");
 			Scenario = new Scenario("scenario");
+			Absence = new Absence {Description = new Description("perist", "test")};
 		}
 
 		private void setupDatabase()
@@ -65,6 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				new ActivityRepository(unitOfWork).Add(Activity);
 				new ShiftCategoryRepository(unitOfWork).Add(ShiftCategory);
 				new ScenarioRepository(unitOfWork).Add(Scenario);
+				new AbsenceRepository(unitOfWork).Add(Absence);
 				var scheduleDatas = new List<IPersistableScheduleData>();
 				Given(scheduleDatas);
 				_givenState = scheduleDatas;
