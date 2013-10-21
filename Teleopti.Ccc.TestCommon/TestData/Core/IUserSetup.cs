@@ -2,7 +2,7 @@
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data
+namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
 	public interface IUserSetup
 	{

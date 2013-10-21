@@ -140,7 +140,6 @@
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceTemplateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\UserLogonDetailsStepDefinitions.cs" />
-    <Compile Include="Data\PersonDataFactory.cs" />
     <Compile Include="Data\Setups\Specific\GroupingReadOnlyUpdate.cs" />
     <Compile Include="Data\Setups\Specific\UserContract.cs" />
     <Compile Include="OveritmeAvailability.feature.cs">
@@ -260,7 +259,6 @@
     <Compile Include="Data\Setups\Generic\TeamConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\StudentAvailabilityPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\CreateName.cs" />
-    <Compile Include="Data\Setups\Specific\UtcTimeZone.cs" />
     <Compile Include="StudentAvailabilityMultidays.feature.cs">
       <DependentUpon>StudentAvailabilityMultidays.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -345,7 +343,6 @@
     <Compile Include="Data\Setups\Generic\ShiftCategoryConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\PreferencesPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutExtendedPreferencesAccess.cs" />
-    <Compile Include="Data\Setups\Specific\StockholmTimeZone.cs" />
     <Compile Include="Pages\Common\ComboBox.cs" />
     <Compile Include="Pages\Common\IMessageReplyPage.cs" />
     <Compile Include="Pages\MessagePage.cs" />
@@ -469,7 +466,6 @@
     <Compile Include="Data\Setups\Specific\AnotherSitesTeam.cs" />
     <Compile Include="Data\Setups\Specific\AnotherTeam.cs" />
     <Compile Include="Data\Setups\Specific\GeneratedTeam.cs" />
-    <Compile Include="Data\Setups\Specific\HawaiiTimeZone.cs" />
     <Compile Include="Data\Setups\Specific\NoVirtualSchedulePeriod.cs" />
     <Compile Include="Data\Setups\Specific\DayOffToday.cs" />
     <Compile Include="Data\Setups\Specific\SchedulePeriod.cs" />
@@ -562,10 +558,7 @@
     <Compile Include="Data\Setups\Specific\StudentAvailabilityOpenWorkflowControlSet.cs" />
     <Compile Include="Data\Setups\Specific\StudentAvailability.cs" />
     <Compile Include="Data\Setups\Specific\TwoExistingTextRequestChangedOnDifferentTimes.cs" />
-    <Compile Include="Data\Setups\Specific\USCulture.cs" />
     <Compile Include="Data\Setups\Specific\PersonPeriod.cs" />
-    <Compile Include="Data\IUserDataSetup.cs" />
-    <Compile Include="Data\IUserSetup.cs" />
     <Compile Include="Pages\Common\ICancelButton.cs" />
     <Compile Include="Pages\Common\IOkButton.cs" />
     <Compile Include="Pages\Pages.cs" />
@@ -625,7 +618,6 @@
     <Compile Include="Pages\StudentAvailabilityPage.cs" />
     <Compile Include="StudentAvailabilityStepDefinitions.cs" />
     <Compile Include="Data\TestDataSetup.cs" />
-    <Compile Include="Data\Setups\Specific\SwedishCulture.cs" />
     <Compile Include="Core\SystemLevelLock.cs" />
     <Compile Include="Data\TestSiteConfigurationSetup.cs" />
     <Compile Include="Core\Browser.cs" />

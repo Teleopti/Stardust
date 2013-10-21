@@ -5,11 +5,11 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
+using Teleopti.Ccc.TestCommon.TestData.Setups;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data
+namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
 	public class PersonDataFactory
 	{

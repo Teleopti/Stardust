@@ -1,8 +1,9 @@
 using System.Globalization;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
+namespace Teleopti.Ccc.TestCommon.TestData.Setups
 {
 	public class USCulture : IUserSetup
 	{

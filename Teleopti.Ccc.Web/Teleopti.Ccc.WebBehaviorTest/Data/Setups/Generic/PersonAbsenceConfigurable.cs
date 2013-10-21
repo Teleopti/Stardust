@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
