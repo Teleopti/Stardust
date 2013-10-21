@@ -121,6 +121,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftLayers));
         }
 
+			[Test]
+			public void TestFetchDatabaseVersion()
+			{
+				var wrongScenario = new Scenario("sdf");
+				PersistAndRemoveFromUnitOfWork(wrongScenario);
+				var ass = new PersonAssignment(_dummyAgent, _dummyScenario, new DateOnly(1900,1,1));
+				PersistAndRemoveFromUnitOfWork(ass);
+				var noHit1 = new PersonAssignment(_dummyAgent, _dummyScenario, new DateOnly(1800, 1, 1));
+				PersistAndRemoveFromUnitOfWork(noHit1);
+				var noHit2 = new PersonAssignment(_dummyAgent, wrongScenario, new DateOnly(1900, 1, 1));
+				PersistAndRemoveFromUnitOfWork(noHit2);
+				var loaded = new PersonAssignmentRepository(UnitOfWork).FetchDatabaseVersions(new DateOnlyPeriod(1880, 1, 1, 1910, 1, 1), _dummyScenario);
+				var assLoaded = loaded.Single();
+				assLoaded.Version.Should().Be.EqualTo(1);
+				assLoaded.Id.Should().Be.EqualTo(ass.Id.Value);
+			}
+
         [Test]
         public void VerifyLoadGraphByIdReturnsNullIfNotExists()
         {

@@ -61,4 +61,11 @@
 						condition="exists(select 1 from Person p where Person=p.Id and p.IsDeleted=0)"/>
 
 	</class>
+	<query name="fetchIdAndVersionPersonAssignment">
+		<query-param name="scenario" type="Teleopti.Ccc.Domain.Common.Scenario"/>
+		<query-param name="start" type="DateTime"/>
+		<query-param name="end" type="DateTime"/>
+		select Id, Version from PersonAssignment 
+			where Scenario=:scenario and Date between :start and :end
+	</query>
 </hibernate-mapping>
