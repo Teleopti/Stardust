@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				return Me().Applied
 						   .Union(_analyticsDataFactory.Setups)
 						   .Union(_delayedSetups)
-						   .Union(_dataFactory.Applied)
+						   .Union(DataFactory.Applied)
 					;
 			}
 		}
