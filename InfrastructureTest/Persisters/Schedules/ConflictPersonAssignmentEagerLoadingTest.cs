@@ -9,15 +9,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
-	public class ConflictDataEagerLoadingTest : ScheduleRangePersisterIntegrationTest
+	public class ConflictPersonAssignmentEagerLoadingTest : ScheduleRangePersisterIntegrationTest
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 
 		protected override void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart)
 		{
-			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			var ass = new PersonAssignment(Person, Scenario, date);
-			ass.AddMainLayer(Activity, new DateTimePeriod(start, start.AddHours(2)));
 			scheduleDataInDatabaseAtStart.Add(ass);
 		}
 
@@ -25,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		{
 			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			var day = othersScheduleRange.ScheduledDay(date);
-			day.CreateAndAddActivity(Activity, new DateTimePeriod(start, start.AddHours(2)), ShiftCategory);
+			day.CreateAndAddOvertime(Activity, new DateTimePeriod(start, start.AddHours(2)), DefinitionSet);
 			DoModify(day);
 		}
 
@@ -43,8 +41,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 			LazyLoadingManager.IsInitialized(dbConflict.Person).Should().Be.True();
 			LazyLoadingManager.IsInitialized(dbConflict.UpdatedBy).Should().Be.True();
-			LazyLoadingManager.IsInitialized(dbConflict.ShiftLayers.First().Payload).Should().Be.True();
+			LazyLoadingManager.IsInitialized(dbConflict.ShiftLayers.Single().Payload).Should().Be.True();
+			LazyLoadingManager.IsInitialized(dbConflict.OvertimeLayers().Single().DefinitionSet).Should().Be.True();
 			LazyLoadingManager.IsInitialized(dbConflict.ShiftCategory).Should().Be.True();
+			LazyLoadingManager.IsInitialized(dbConflict.Scenario).Should().Be.True();
 		}
 
 		protected override void Then(IScheduleRange myScheduleRange)
