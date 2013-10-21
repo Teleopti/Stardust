@@ -237,7 +237,6 @@
     <Compile Include="Persisters\Schedules\ScheduleRangePersister.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangeSaver.cs" />
     <Compile Include="Persisters\IOwnMessageQueue.cs" />
-    <Compile Include="Persisters\IPersistConflict.cs" />
     <Compile Include="Persisters\IPersonAbsenceAccountConflictCollector.cs" />
     <Compile Include="Persisters\IPersonAbsenceAccountValidator.cs" />
     <Compile Include="Persisters\IPersonRequestPersister.cs" />
@@ -254,8 +253,6 @@
     <Compile Include="Persisters\IScheduleScreenRefresher.cs" />
     <Compile Include="Persisters\IUpdateScheduleDataFromMessages.cs" />
     <Compile Include="Persisters\MeetingRefresher.cs" />
-    <Compile Include="Persisters\PersistConflictOldAndWillBeDeleted.cs" />
-    <Compile Include="Persisters\PersistConflictMessageState.cs" />
     <Compile Include="Persisters\PersonAbsenceAccountConflictCollector.cs" />
     <Compile Include="Persisters\PersonRequestPersister.cs" />
     <Compile Include="Persisters\PersonRequestRefresher.cs" />
