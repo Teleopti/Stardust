@@ -10,6 +10,12 @@ SET DNS_ALIAS=http://%AppServer%/
 SET SDK_SSL=False
 )
 
+IF %SQLSSL% EQU 1 (
+SET DBSSL=encrypt^=true;trustServerCertificate^=true
+) ELSE (
+SET DBSSL=
+)
+
 SET SDK_CRED_PROT=Ntlm
 SET SERVICEBUSENABLED=true
 SET SQL_SERVER_NAME=%DBServerInstance%
@@ -21,6 +27,8 @@ SET WISE_SQL_CONN_STR=Data Source=%DBServerInstance%;Integrated Security=SSPI
 SET SQL_SERVER_AUTH=SQL
 SET WISE_SQL_CONN_STR=Data Source=%DBServerInstance%;User Id=%DB_ADMIN_SQLLOGIN%;Password=%DB_ADMIN_PWD%
 )
+
+SET WISE_SQL_CONN_STR=%WISE_SQL_CONN_STR%;%DBSSL%
 
 IF "%DB_EndUserAccess%"=="WINAUTH" (
 SET SQL_AUTH_STRING=Data Source=%DBServerInstance%;Integrated Security=SSPI
