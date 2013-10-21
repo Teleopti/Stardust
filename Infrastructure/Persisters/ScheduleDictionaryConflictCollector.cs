@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 				_lazyLoadingManager.Initialize(databaseVersion.Person);
 				_lazyLoadingManager.Initialize(databaseVersion.UpdatedBy);
 			}
-			return new PersistConflict { ClientVersion = clientVersion, DatabaseVersion = databaseVersion };
+			return new PersistConflictOldAndWillBeDeleted { ClientVersion = clientVersion, DatabaseVersion = databaseVersion };
 		}
 	}
 }

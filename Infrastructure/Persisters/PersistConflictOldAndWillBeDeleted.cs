@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Infrastructure.Persisters
 {
-	public class PersistConflict : IPersistConflict
+	public class PersistConflictOldAndWillBeDeleted : IPersistConflict
 	{
 		public IPersistableScheduleData DatabaseVersion { get; set; }
 		public DifferenceCollectionItem<IPersistableScheduleData> ClientVersion { get; set; }

@@ -253,7 +253,7 @@
     <Compile Include="Persisters\IScheduleScreenRefresher.cs" />
     <Compile Include="Persisters\IUpdateScheduleDataFromMessages.cs" />
     <Compile Include="Persisters\MeetingRefresher.cs" />
-    <Compile Include="Persisters\PersistConflict.cs" />
+    <Compile Include="Persisters\PersistConflictOldAndWillBeDeleted.cs" />
     <Compile Include="Persisters\PersistConflictMessageState.cs" />
     <Compile Include="Persisters\PersonAbsenceAccountConflictCollector.cs" />
     <Compile Include="Persisters\PersonRequestPersister.cs" />
