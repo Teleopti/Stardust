@@ -1,7 +1,9 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.NewStuff;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
@@ -22,7 +24,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 				new FakePersonRepository(person), 
 				null,
 				new FakePersonAssignmentRepository(personAssignment), 
-				MockRepository.GenerateMock<IPersonAbsenceRepository>()
+				MockRepository.GenerateMock<IPersonAbsenceRepository>(),
+				MockRepository.GenerateMock<IMessageQueueRemoval>()
 				);
 			var scheduleDictionary = new ScheduleDictionaryForTest(personAssignment.Scenario, period);
 			var messages = new[] {new EventMessage
@@ -33,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 					EventEndDate = period.EndDateTime
 				}};
 
-			target.Refresh(scheduleDictionary, null, messages, null, null);
+			target.Refresh(scheduleDictionary, messages, null, null);
 
 			scheduleDictionary[person].ScheduledDay(new DateOnly(2013, 9, 4)).PersonAssignment().Should().Be.EqualTo(personAssignment);
 		}
@@ -48,7 +51,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 				new FakePersonRepository(person),
 				null,
 				new FakePersonAssignmentRepository(),
-				MockRepository.GenerateMock<IPersonAbsenceRepository>()
+				MockRepository.GenerateMock<IPersonAbsenceRepository>(),
+				MockRepository.GenerateMock<IMessageQueueRemoval>()
 				);
 			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(personAssignment.Scenario, period, personAssignment);
 			var messages = new[] {new EventMessage
@@ -60,9 +64,36 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 				}};
 			scheduleDictionary[person].ScheduledDay(new DateOnly(2013, 9, 4)).PersonAssignment().Should().Be.EqualTo(personAssignment);
 
-			target.Refresh(scheduleDictionary, null, messages, null, null);
+			target.Refresh(scheduleDictionary, messages, null, null);
 
 			scheduleDictionary[person].ScheduledDay(new DateOnly(2013, 9, 4)).PersonAssignment().Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldCallRemover()
+		{
+			var period = new DateTimePeriod(2013, 9, 4, 2013, 9, 5);
+			var person = PersonFactory.CreatePersonWithId();
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person, new DateOnly(2013, 9, 4));
+			var remover = MockRepository.GenerateMock<IMessageQueueRemoval>();
+			var target = new ScheduleRefresher(
+				new FakePersonRepository(person),
+				null,
+				new FakePersonAssignmentRepository(),
+				MockRepository.GenerateMock<IPersonAbsenceRepository>(),
+				remover
+				);
+			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(personAssignment.Scenario, period, personAssignment);
+			var messages = new[] {new EventMessage
+				{
+					InterfaceType = typeof (IScheduleChangedEvent), 
+					DomainObjectId = person.Id.Value, 
+					EventStartDate = period.StartDateTime, 
+					EventEndDate = period.EndDateTime
+				}};
+
+			target.Refresh(scheduleDictionary, messages, null, null);
+			remover.AssertWasCalled(x => x.Remove(messages.Single()));
 		}
 	}
 }

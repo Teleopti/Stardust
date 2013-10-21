@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Infrastructure.Persisters.NewStuff;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters
@@ -10,19 +11,21 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
     }
 
     public interface IPersonRequestRefresher {
-        void Refresh(IList<IEventMessage> messageQueue, IEnumerable<IEventMessage> meetingMessages);
+        void Refresh(IEnumerable<IEventMessage> meetingMessages);
     }
 
     public class PersonRequestRefresher : IPersonRequestRefresher
     {
         private readonly IUpdatePersonRequestsFromMessages _personRequestFromMessagesUpdater;
+	    private readonly IMessageQueueRemoval _messageQueueRemoval;
 
-        public PersonRequestRefresher(IUpdatePersonRequestsFromMessages personRequestFromMessagesUpdater)
+	    public PersonRequestRefresher(IUpdatePersonRequestsFromMessages personRequestFromMessagesUpdater, IMessageQueueRemoval messageQueueRemoval)
         {
-            _personRequestFromMessagesUpdater = personRequestFromMessagesUpdater;
+	        _personRequestFromMessagesUpdater = personRequestFromMessagesUpdater;
+	        _messageQueueRemoval = messageQueueRemoval;
         }
 
-        public void Refresh(IList<IEventMessage> messageQueue, IEnumerable<IEventMessage> requestMessages)
+	    public void Refresh(IEnumerable<IEventMessage> requestMessages)
         {
 	        var alreadyRefreshedRequestIds = new HashSet<Guid>();
 	        foreach (var requestMessage in requestMessages)
@@ -31,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		        {
 			        _personRequestFromMessagesUpdater.UpdatePersonRequest(requestMessage);
 		        }
-		        messageQueue.Remove(requestMessage);
+						_messageQueueRemoval.Remove(requestMessage);
 	        }
         }
     }

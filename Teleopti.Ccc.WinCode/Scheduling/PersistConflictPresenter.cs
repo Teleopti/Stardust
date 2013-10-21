@@ -2,6 +2,8 @@
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.NewStuff;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -10,14 +12,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     {
         private readonly IPersistConflictView _view;
         private readonly PersistConflictModel _model;
-        private readonly IList<string> _headers;
+	    private readonly IMessageQueueRemoval _messageQueueRemoval;
+	    private readonly IList<string> _headers;
 
         public PersistConflictPresenter(IPersistConflictView view,
-                                        PersistConflictModel model)
+                                        PersistConflictModel model,
+																				IMessageQueueRemoval messageQueueRemoval)
         {
             _view = view;
             _model=model;
-            _headers = new List<string> { UserTexts.Resources.Name, UserTexts.Resources.Date, UserTexts.Resources.Type, UserTexts.Resources.OtherUser };
+	        _messageQueueRemoval = messageQueueRemoval;
+	        _headers = new List<string> { UserTexts.Resources.Name, UserTexts.Resources.Date, UserTexts.Resources.Type, UserTexts.Resources.OtherUser };
         }
 
         public void Initialize()
@@ -90,11 +95,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					}
                 }
 
-                messState.RemoveFromCollection();
+							_messageQueueRemoval.Remove(messState.DatabaseVersion.Id.Value);
             }
         }
 
-        private void addToModifiedCollection(IPersistConflict messState)
+        private void addToModifiedCollection(PersistConflict messState)
         {
 			if (messState.ClientVersion.OriginalItem != null)
 				_model.ModifiedDataResult.Add(messState.ClientVersion.OriginalItem);
@@ -112,7 +117,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             _model.PersistConflicts.ForEach(messageState => _model.Data.Add(createConflictData(messageState)));
         }
 
-        private static PersistConflictData createConflictData(IPersistConflict messageState)
+        private static PersistConflictData createConflictData(PersistConflict messageState)
         {
             var clientVersion = messageState.ClientVersion.OriginalItem;
 	        if (clientVersion == null)

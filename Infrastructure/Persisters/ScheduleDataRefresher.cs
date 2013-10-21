@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Infrastructure.Persisters.NewStuff;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -8,17 +10,19 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
     {
         private readonly IScheduleRepository _scheduleRepository;
 	    private readonly IUpdateScheduleDataFromMessages _scheduleDataUpdater;
+		private readonly IMessageQueueRemoval _messageQueueRemoval;
 
-        public ScheduleDataRefresher(IScheduleRepository scheduleRepository, IUpdateScheduleDataFromMessages scheduleDataUpdater)
+		public ScheduleDataRefresher(IScheduleRepository scheduleRepository, IUpdateScheduleDataFromMessages scheduleDataUpdater, IMessageQueueRemoval messageQueueRemoval)
         {
             _scheduleRepository = scheduleRepository;
             _scheduleDataUpdater = scheduleDataUpdater;
+	        _messageQueueRemoval = messageQueueRemoval;
         }
 
-	    public void Refresh(IScheduleDictionary scheduleDictionary, IList<IEventMessage> messageQueue,
+	    public void Refresh(IScheduleDictionary scheduleDictionary, 
 	                        IEnumerable<IEventMessage> scheduleDataMessages,
 	                        ICollection<IPersistableScheduleData> refreshedEntitiesBuffer,
-	                        ICollection<PersistConflictMessageState> conflictsBuffer)
+	                        ICollection<PersistConflict> conflictsBuffer)
 	    {
 	        var myChanges = scheduleDictionary.DifferenceSinceSnapshot();
 
@@ -32,13 +36,12 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
                         _scheduleRepository.LoadScheduleDataAggregate(eventMessage.InterfaceType,
                                                                       eventMessage.DomainObjectId);
                     _scheduleDataUpdater.FillReloadedScheduleData(databaseVerionOfEntity);
-                    var state = new PersistConflictMessageState(myVersionOfEntity.Value, databaseVerionOfEntity,
-                                                                eventMessage, m => RemoveFromQueue(messageQueue, m));
+	                var state = new PersistConflict(myVersionOfEntity.Value, databaseVerionOfEntity);
                     conflictsBuffer.Add(state);
                     continue;
                 }
 
-                IPersistableScheduleData messageVersionOfEntity = eventMessage.DomainUpdateType ==
+                var messageVersionOfEntity = eventMessage.DomainUpdateType ==
                                                                   DomainUpdateType.Delete
                                                                       ? _scheduleDataUpdater.DeleteScheduleData(
                                                                           eventMessage)
@@ -46,15 +49,10 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
                                                                           eventMessage);
                 if (messageVersionOfEntity != null)
                     refreshedEntitiesBuffer.Add(messageVersionOfEntity);
-                //denna gör lite fel idag, ska ta hänsyn till både gammalt och nytt
-                messageQueue.Remove(eventMessage);
+              
+							_messageQueueRemoval.Remove(eventMessage);
+
             }
 	    }
-
-	    private void RemoveFromQueue(ICollection<IEventMessage> messageQueue, IEventMessage m) 
-		{
-            messageQueue.Remove(m);
-            _scheduleDataUpdater.NotifyMessageQueueSizeChange();
-        }
     }
 }

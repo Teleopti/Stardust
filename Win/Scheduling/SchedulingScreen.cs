@@ -4610,6 +4610,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			if (conflicts.Any())
 			{
+				
 				MessageBox.Show("Du har " + conflicts.Count + " konflikter... Inget sparat för nu");
 			}
 
@@ -4658,7 +4659,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					                                   _schedulerState.PersonRequests, _schedulerState.Schedules.ModifiedPersonAccounts);
 					if (result.ScheduleDictionaryConflicts != null && result.ScheduleDictionaryConflicts.Any())
 					{
-						var conflictHandlingResult = handleConflicts(result.ScheduleDictionaryConflicts);
+						var conflictHandlingResult = handleConflicts(new List<IPersistableScheduleData>(), result.ScheduleDictionaryConflicts);
 							if (conflictHandlingResult.DialogResult == PersistConflictDialogResult.Overwrite)
 								doSaveProcess();
 							if (conflictHandlingResult.DialogResult == PersistConflictDialogResult.OK)
@@ -6414,19 +6415,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private ConflictHandlingResult refreshEntitiesUsingMessageBroker()
 		{
-			var conflictsBuffer = new List<PersistConflictMessageState>();
+			var conflictsBuffer = new List<PersistConflict>();
 			var refreshedEntitiesBuffer = new List<IPersistableScheduleData>();
 			refreshEntitiesUsingMessageBroker(refreshedEntitiesBuffer, conflictsBuffer);
             var result = handleConflicts(refreshedEntitiesBuffer, conflictsBuffer);
 			return result;
 		}
 
-		private ConflictHandlingResult handleConflicts(IEnumerable<IPersistConflict> conflicts)
-		{
-			return handleConflicts(null, conflicts);
-		}
-
-		private ConflictHandlingResult handleConflicts(IEnumerable<IPersistableScheduleData> refreshedEntities, IEnumerable<IPersistConflict> conflicts)
+		private ConflictHandlingResult handleConflicts(IEnumerable<IPersistableScheduleData> refreshedEntities, IEnumerable<PersistConflict> conflicts)
 		{
 			List<IPersistableScheduleData> modifiedDataFromConflictResolution;
 			if (refreshedEntities == null)
@@ -6448,10 +6444,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return result;
 		}
 
-		private PersistConflictDialogResult showPersistConflictView(List<IPersistableScheduleData> modifiedData, IEnumerable<IPersistConflict> conflicts)
+		private PersistConflictDialogResult showPersistConflictView(List<IPersistableScheduleData> modifiedData, IEnumerable<PersistConflict> conflicts)
 		{
 			PersistConflictDialogResult dialogResult;
-			using (var conflictForm = new PersistConflictView(_schedulerState.Schedules, conflicts, modifiedData))
+			using (var conflictForm = new PersistConflictView(_schedulerState.Schedules, conflicts, modifiedData, _schedulerMessageBrokerHandler))
 			{
 				conflictForm.ShowDialog();
 				dialogResult = conflictForm.DialogResult;
@@ -6459,7 +6455,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return dialogResult;
 		}
 
-		private void refreshEntitiesUsingMessageBroker(ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflictMessageState> conflictsBuffer)
+		private void refreshEntitiesUsingMessageBroker(ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer)
 		{
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{

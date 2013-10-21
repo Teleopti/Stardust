@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac;
+using Teleopti.Ccc.Infrastructure.Persisters.NewStuff;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using log4net;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
@@ -15,7 +17,7 @@ using Teleopti.Messaging.Events;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	public class SchedulerMessageBrokerHandler : IMessageBrokerIdentifier, IDisposable, IOwnMessageQueue, IReassociateData, IUpdateScheduleDataFromMessages, IUpdateMeetingsFromMessages, IUpdatePersonRequestsFromMessages
+	public class SchedulerMessageBrokerHandler : IMessageBrokerIdentifier, IDisposable, IOwnMessageQueue, IReassociateData, IUpdateScheduleDataFromMessages, IUpdateMeetingsFromMessages, IUpdatePersonRequestsFromMessages, IMessageQueueRemoval
 	{
 		private SchedulingScreen _owner;
 		private readonly IScheduleScreenRefresher _scheduleScreenRefresher;
@@ -89,7 +91,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		public void Refresh(ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflictMessageState> conflictsBuffer)
+		public void Refresh(ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer)
 		{
 			_scheduleScreenRefresher.Refresh(_owner.SchedulerState.Schedules, _messageQueue, refreshedEntitiesBuffer, conflictsBuffer);
 		}
@@ -306,6 +308,25 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public void NotifyMessageQueueSizeChange()
 		{
 			_owner.SizeOfMessageBrokerQueue(_messageQueue.Count);
+		}
+
+		public void Remove(IEventMessage eventMessage)
+		{
+			_messageQueue.Remove(eventMessage);
+			NotifyMessageQueueSizeChange();
+		}
+
+		public void Remove(Guid id)
+		{
+			for (var i = _messageQueue.Count - 1; i >= 0; i--)
+			{
+				var theEvent = _messageQueue[i];
+				if (theEvent.DomainObjectId == id)
+				{
+					_messageQueue.RemoveAt(i);
+					NotifyMessageQueueSizeChange();
+				}
+			}
 		}
 	}
 }

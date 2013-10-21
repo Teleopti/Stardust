@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters 
@@ -26,14 +27,14 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			_timeZone = timeZone;
 		}
 
-		public IEnumerable<IPersistConflict> GetConflicts(IScheduleDictionary scheduleDictionary, IOwnMessageQueue messageQueueUpdater)
+		public IEnumerable<PersistConflict> GetConflicts(IScheduleDictionary scheduleDictionary, IOwnMessageQueue messageQueueUpdater)
 		{
 			messageQueueUpdater.ReassociateDataWithAllPeople();
 
 			var entityDifferencesSinceLoad = scheduleDictionary.DifferenceSinceSnapshot();
 			if (entityDifferencesSinceLoad == null)
 			{
-				return new IPersistConflict[] {};
+				return new PersistConflict[] {};
 			}
 
 			var uow = _scheduleRepository.UnitOfWork;
@@ -82,14 +83,14 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			return conflictObjects.Union(conflictingAddedPersonAssignments).ToArray();
 		}
 
-		private IPersistConflict MakePersistConflict(DifferenceCollectionItem<IPersistableScheduleData> clientVersion, IPersistableScheduleData databaseVersion)
+		private PersistConflict MakePersistConflict(DifferenceCollectionItem<IPersistableScheduleData> clientVersion, IPersistableScheduleData databaseVersion)
 		{
 			if (databaseVersion != null)
 			{
 				_lazyLoadingManager.Initialize(databaseVersion.Person);
 				_lazyLoadingManager.Initialize(databaseVersion.UpdatedBy);
 			}
-			return new PersistConflictOldAndWillBeDeleted { ClientVersion = clientVersion, DatabaseVersion = databaseVersion };
+			return new PersistConflict(clientVersion, databaseVersion);
 		}
 	}
 }

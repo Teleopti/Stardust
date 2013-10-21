@@ -9,6 +9,8 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.NewStuff;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -24,7 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private MockRepository mocks;
         private PersistConflictPresenter target;
         private PersistConflictModel model;
-        private IList<IPersistConflict> conflicts;
+        private IList<PersistConflict> conflicts;
         private IScheduleDictionary schedDic;
         private IList<IEventMessage> eventMessages;
         private IEventMessage eventMessage;
@@ -39,9 +41,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             eventMessage = mocks.StrictMock<IEventMessage>();
             schedDic = mocks.DynamicMock<IScheduleDictionary>();
             view = mocks.StrictMock<IPersistConflictView>();
-            conflicts = new List<IPersistConflict>();
+            conflicts = new List<PersistConflict>();
             model = new PersistConflictModel(schedDic, conflicts, modifiedData);
-            target = new PersistConflictPresenter(view, model);
+            target = new PersistConflictPresenter(view, model, MockRepository.GenerateMock<IMessageQueueRemoval>());
             eventMessages.Add(eventMessage);
         }
 
@@ -53,7 +55,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("sdf"), assPer, new DateTimePeriod(2000,1,1,2000,1,2));
             ReflectionHelper.SetUpdatedBy(ass, changedByPer);
-            conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(ass, ass.EntityClone()), ass.EntityClone(), eventMessage, removeMessage));
+            conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(ass, ass.EntityClone()), ass.EntityClone()));
 
             using(mocks.Record())
             {
@@ -79,7 +81,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 						var ass = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("ffsdf"), assPer, new DateOnly(2000, 1, 2), new DayOffTemplate(new Description()));
             ReflectionHelper.SetUpdatedBy(ass, changedByPer);
-            conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(ass, null), ass.EntityClone(), eventMessage, removeMessage));
+            conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(ass, null), ass.EntityClone()));
 
             using (mocks.Record())
             {
@@ -106,7 +108,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             var ass = PersonAbsenceFactory.CreatePersonAbsence(assPer, new Scenario("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
             ReflectionHelper.SetUpdatedBy(ass, changedLocallyBy);
-            conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(ass, ass.EntityClone()), null, eventMessage, removeMessage)); ;
+            conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(ass, ass.EntityClone()), null));
 
             using (mocks.Record())
             {
@@ -128,7 +130,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyInitializeWhenStrangeType()
         {
-            conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(new dummyScheduleData(), null), null, eventMessage, removeMessage)); ;
+            conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(new dummyScheduleData(), null), null));
             using (mocks.Record())
             {
                 view.SetupGridControl(model.Data);
@@ -154,7 +156,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             ReflectionHelper.SetUpdatedBy(note, changedLocallyBy);
 
-            conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(note, null), null, eventMessage, removeMessage));
+            conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(note, null), null));
               
             using (mocks.Record())
             {
@@ -180,7 +182,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             ReflectionHelper.SetUpdatedBy(note, changedLocallyBy);
 
-            conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(note, null), null, eventMessage, removeMessage));
+            conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(note, null), null));
 
             using (mocks.Record())
             {
@@ -202,7 +204,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             var pDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff();
             var dbData = pDayOff.EntityClone();
-            conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(pDayOff, pDayOff.EntityClone()), dbData, eventMessage, removeMessage));
+            conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(pDayOff, pDayOff.EntityClone()), dbData));
             ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, pDayOff);
 
             using(mocks.Record())
@@ -227,7 +229,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
 					var pDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff();
             pDayOff.SetId(Guid.NewGuid());
-            conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(pDayOff, pDayOff.EntityClone()), null, eventMessage, removeMessage));
+            conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(pDayOff, pDayOff.EntityClone()), null));
             ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, pDayOff);
             
             using (mocks.Record())
@@ -253,7 +255,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var dataCurrent = dataOrg.EntityClone();
             var dataDb = dataCurrent.EntityClone();
 
-            conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(dataOrg, dataCurrent), dataDb, eventMessage, removeMessage));
+            conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(dataOrg, dataCurrent), dataDb));
             ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, dataOrg);
 
             using (mocks.Record())
@@ -277,7 +279,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 					var dataOrg = PersonAssignmentFactory.CreateAssignmentWithDayOff();
             var dataDb = dataOrg.EntityClone();
 
-            conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(dataOrg, null), dataDb, eventMessage, removeMessage));
+            conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(dataOrg, null), dataDb));
             ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, dataOrg);
 
             using (mocks.Record())
@@ -303,7 +305,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             dataOrg.SetId(Guid.NewGuid());
             var dataCurrent = dataOrg.EntityClone();
 
-            conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(dataOrg, dataCurrent), null, eventMessage, removeMessage));
+            conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(dataOrg, dataCurrent), null));
             ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, dataOrg);
 
             using (mocks.Record())
@@ -344,7 +346,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("sdf"), assPer, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
             ReflectionHelper.SetUpdatedBy(ass, changedByPer);
-            conflicts.Add(new PersistConflictMessageState(new DifferenceCollectionItem<IPersistableScheduleData>(ass, ass.EntityClone()), ass.EntityClone(), eventMessage, removeMessage));
+            conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(ass, ass.EntityClone()), ass.EntityClone()));
 
             using (mocks.Record())
             {
@@ -376,12 +378,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             }
             Expect.Call(schedDic.DifferenceSinceSnapshot()).Return(diffRet).Repeat.Any();
         }
-
-        private void removeMessage(IEventMessage message)
-        {
-            eventMessages.Remove(message);
-        }
-
 
         private class dummyScheduleData : IPersistableScheduleData
         {
@@ -434,9 +430,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         		throw new NotImplementedException();
         	}
 
-        	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             public IAggregateRoot MainRoot { get; private set; }
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             public string FunctionPath { get; private set; }
 
             public IPersistableScheduleData CreateTransient()
@@ -444,19 +438,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 throw new NotImplementedException();
             }
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             public int? Version { get; private set; }
             public void SetVersion(int version) {
                 throw new NotImplementedException();
             }
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-            public IPerson CreatedBy { get; private set; }
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-            public DateTime? CreatedOn { get; private set; }
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             public IPerson UpdatedBy { get; private set; }
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             public DateTime? UpdatedOn { get; private set; }
         }
     }

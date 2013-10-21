@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -22,24 +23,21 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
             _personRequestRefresher = personRequestRefresher;
         }
 
-        public void Refresh(IScheduleDictionary scheduleDictionary, IList<IEventMessage> messageQueue, ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflictMessageState> conflictsBuffer)
+        public void Refresh(IScheduleDictionary scheduleDictionary, IEnumerable<IEventMessage> messageQueue, ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer)
         {
             _messageQueueUpdater.ReassociateDataWithAllPeople();
 
             var scheduleMessages = QueryMessagesByType<IScheduleChangedEvent>(messageQueue);
-            _scheduleRefresher.Refresh(scheduleDictionary, messageQueue, scheduleMessages, refreshedEntitiesBuffer,
-                                       conflictsBuffer);
+            _scheduleRefresher.Refresh(scheduleDictionary, scheduleMessages, refreshedEntitiesBuffer, conflictsBuffer);
 
             var scheduleDataMessages = QueryMessagesByType<IPersistableScheduleData>(messageQueue);
-            _scheduleDataRefresher.Refresh(scheduleDictionary, messageQueue, scheduleDataMessages, refreshedEntitiesBuffer, conflictsBuffer);
+            _scheduleDataRefresher.Refresh(scheduleDictionary, scheduleDataMessages, refreshedEntitiesBuffer, conflictsBuffer);
 
             var meetingMessages = QueryMessagesByType<IMeeting>(messageQueue);
-            _meetingRefresher.Refresh(messageQueue, meetingMessages);
+            _meetingRefresher.Refresh(meetingMessages);
 
             var personRequestMessages = QueryMessagesByType<IPersonRequest>(messageQueue);
-            _personRequestRefresher.Refresh(messageQueue, personRequestMessages);
-
-            _messageQueueUpdater.NotifyMessageQueueSizeChange();
+            _personRequestRefresher.Refresh(personRequestMessages);
         }
 
         private static IEnumerable<IEventMessage> QueryMessagesByType<T>(IEnumerable<IEventMessage> messageQueue)

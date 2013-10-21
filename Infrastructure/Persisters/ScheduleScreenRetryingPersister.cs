@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			}
 		}
 
-		private IEnumerable<IPersistConflict> GetScheduleDictionaryConflicts(IUnitOfWorkFactory unitOfWorkFactory, IScheduleDictionary scheduleDictionary)
+		private IEnumerable<PersistConflict> GetScheduleDictionaryConflicts(IUnitOfWorkFactory unitOfWorkFactory, IScheduleDictionary scheduleDictionary)
 		{
 			using (unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{

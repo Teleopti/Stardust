@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Persisters.NewStuff;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -11,19 +13,21 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 	{
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
+		private readonly IMessageQueueRemoval _messageQueueRemoval;
 		private readonly IPersonRepository _personRepository;
 		private readonly IUpdateScheduleDataFromMessages _scheduleDataUpdater;
 
-		public ScheduleRefresher(IPersonRepository personRepository, IUpdateScheduleDataFromMessages scheduleDataUpdater, IPersonAssignmentRepository personAssignmentRepository, IPersonAbsenceRepository personAbsenceRepository)
+		public ScheduleRefresher(IPersonRepository personRepository, IUpdateScheduleDataFromMessages scheduleDataUpdater, IPersonAssignmentRepository personAssignmentRepository, IPersonAbsenceRepository personAbsenceRepository, IMessageQueueRemoval messageQueueRemoval)
 		{
 			_personAssignmentRepository = personAssignmentRepository;
 			_personAbsenceRepository = personAbsenceRepository;
+			_messageQueueRemoval = messageQueueRemoval;
 			_personRepository = personRepository;
 			_scheduleDataUpdater = scheduleDataUpdater;
 		}
 
-		public void Refresh(IScheduleDictionary scheduleDictionary, IList<IEventMessage> messageQueue, IEnumerable<IEventMessage> scheduleMessages,
-							ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflictMessageState> conflictsBuffer)
+		public void Refresh(IScheduleDictionary scheduleDictionary, IEnumerable<IEventMessage> scheduleMessages,
+							ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer)
 		{
 			var myChanges = scheduleDictionary.DifferenceSinceSnapshot();
 			
@@ -33,15 +37,13 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 				var period = new DateTimePeriod(DateTime.SpecifyKind(eventMessage.EventStartDate, DateTimeKind.Utc),
 												DateTime.SpecifyKind(eventMessage.EventEndDate, DateTimeKind.Utc));
 
-				refreshThingOfType<IPersonAssignment, DateOnly>(scheduleDictionary, eventMessage, messageQueue, myChanges, conflictsBuffer, refreshedEntitiesBuffer, data => ((IPersonAssignment) data).Date,
+				refreshThingOfType<IPersonAssignment, DateOnly>(scheduleDictionary, myChanges, conflictsBuffer, refreshedEntitiesBuffer, data => ((IPersonAssignment) data).Date,
 								   () => myPersonAssignmentCollection(scheduleDictionary, person, period), () => messagePersonAssignmentCollection(scheduleDictionary, person, period));
-				refreshThingOfType<IPersonAbsence, Guid>(scheduleDictionary, eventMessage, messageQueue, myChanges, conflictsBuffer, refreshedEntitiesBuffer, data => data.Id.GetValueOrDefault(),
+				refreshThingOfType<IPersonAbsence, Guid>(scheduleDictionary, myChanges, conflictsBuffer, refreshedEntitiesBuffer, data => data.Id.GetValueOrDefault(),
 								   () => myPersonAbsenceCollection(scheduleDictionary, person, period), () => messagePersonAbsenceCollection(scheduleDictionary, person, period));
 
-				RemoveFromQueue(messageQueue, eventMessage);
+				_messageQueueRemoval.Remove(eventMessage);
 			}
-
-			NotifyMessageQueueSizeChange();
 		}
 
 		private IEnumerable<IPersistableScheduleData> myPersonAbsenceCollection(IScheduleDictionary scheduleDictionary, IPerson person, DateTimePeriod period)
@@ -74,9 +76,8 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 
 		private void refreshThingOfType<T, TKey>(
 			IScheduleDictionary scheduleDictionary, 
-			IEventMessage eventMessage, IList<IEventMessage> messageQueue, 
 			IDifferenceCollection<IPersistableScheduleData> myChanges, 
-			ICollection<PersistConflictMessageState> conflictsBuffer, ICollection<IPersistableScheduleData> refreshedEntitiesBuffer,
+			ICollection<PersistConflict> conflictsBuffer, ICollection<IPersistableScheduleData> refreshedEntitiesBuffer,
 			Func<IPersistableScheduleData, TKey> key,
 			Func<IEnumerable<IPersistableScheduleData>> myVersionCollection,
 			Func<IEnumerable<IPersistableScheduleData>> messageVersionCollection
@@ -113,7 +114,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 				if (myVersionOfEntity.HasValue)
 				{
 					_scheduleDataUpdater.FillReloadedScheduleData(versionKeyValuePair.Value.Item2);
-					var state = new PersistConflictMessageState(myVersionOfEntity.Value, versionKeyValuePair.Value.Item2, eventMessage, m => RemoveFromQueue(messageQueue, m));
+					var state = new PersistConflict(myVersionOfEntity.Value, versionKeyValuePair.Value.Item2);
 					conflictsBuffer.Add(state);
 					continue;
 				}
@@ -137,7 +138,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		}
 
 
-		private void addItemsToVersionDictionary<TKey, TVersionedItem>(
+		private static void addItemsToVersionDictionary<TKey, TVersionedItem>(
 			IDictionary<TKey, Tuple<TVersionedItem, TVersionedItem>> versionDictionary, Func<TVersionedItem,TKey> keyCreator,
 			IEnumerable<TVersionedItem> items,
 			Func<Tuple<TVersionedItem, TVersionedItem>, TVersionedItem, Tuple<TVersionedItem, TVersionedItem>> addItem)
@@ -155,19 +156,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 					versionDictionary[key] = addItem(foundItems, versionedItem);
 				}
 			}
-		}
-
-		private void RemoveFromQueue(ICollection<IEventMessage> messageQueue, IEventMessage m)
-		{
-			if (messageQueue != null)
-				messageQueue.Remove(m);
-			NotifyMessageQueueSizeChange();
-		}
-
-		private void NotifyMessageQueueSizeChange()
-		{
-			if (_scheduleDataUpdater != null)
-				_scheduleDataUpdater.NotifyMessageQueueSizeChange();
 		}
 	}
 }

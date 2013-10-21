@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
         private void MakeTarget()
         {
-            _target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleRefresher(null, MockRepository.GenerateMock<IUpdateScheduleDataFromMessages>(), null, null), new ScheduleDataRefresher(null, null), new MeetingRefresher(_meetingUpdater), new PersonRequestRefresher(null));
+            _target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleRefresher(null, MockRepository.GenerateMock<IUpdateScheduleDataFromMessages>(), null, null, null), new ScheduleDataRefresher(null, null, null), new MeetingRefresher(_meetingUpdater, null), new PersonRequestRefresher(null, null));
         }
 
         [Test]
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
             _mocks.ReplayAll();
 
-            _target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflictMessageState>());
+            _target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflict>());
 
             _mocks.VerifyAll();
         }
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
         {
             _mocks.ReplayAll();
 
-            _target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflictMessageState>());
+            _target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflict>());
 
             _mocks.VerifyAll();
 

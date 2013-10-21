@@ -4,6 +4,8 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.NewStuff;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -37,7 +39,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
         private void MakeTarget()
         {
-            _target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleRefresher(MockRepository.GenerateMock<IPersonRepository>(), _scheduleDataUpdater, MockRepository.GenerateMock<IPersonAssignmentRepository>(), MockRepository.GenerateMock<IPersonAbsenceRepository>()), new ScheduleDataRefresher(_scheduleRepository, _scheduleDataUpdater), new MeetingRefresher(null), new PersonRequestRefresher(null));
+	        var mqremover = MockRepository.GenerateMock<IMessageQueueRemoval>();
+					_target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleRefresher(MockRepository.GenerateMock<IPersonRepository>(), _scheduleDataUpdater, MockRepository.GenerateMock<IPersonAssignmentRepository>(), MockRepository.GenerateMock<IPersonAbsenceRepository>(), mqremover), new ScheduleDataRefresher(_scheduleRepository, _scheduleDataUpdater, mqremover), new MeetingRefresher(null, mqremover), new PersonRequestRefresher(null, mqremover));
         }
 
         [Test]
@@ -47,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
             _mocks.ReplayAll();
 
-            _target.Refresh(_scheduleDictionary, new List<IEventMessage>(), new List<IPersistableScheduleData>(), new List<PersistConflictMessageState>());
+            _target.Refresh(_scheduleDictionary, new List<IEventMessage>(), new List<IPersistableScheduleData>(), new List<PersistConflict>());
 
             _mocks.VerifyAll();
         }
@@ -59,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
             _mocks.ReplayAll();
 
-            _target.Refresh(_scheduleDictionary, new List<IEventMessage>(), new List<IPersistableScheduleData>(), new List<PersistConflictMessageState>());
+						_target.Refresh(_scheduleDictionary, new List<IEventMessage>(), new List<IPersistableScheduleData>(), new List<PersistConflict>());
 
             _mocks.VerifyAll();
         }

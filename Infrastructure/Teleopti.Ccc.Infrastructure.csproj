@@ -228,6 +228,7 @@
     <Compile Include="Licensing\SignatureValidationException.cs" />
     <Compile Include="Licensing\XmlLicense.cs" />
     <Compile Include="Licensing\XmlLicenseService.cs" />
+    <Compile Include="Persisters\NewStuff\IMessageQueueRemoval.cs" />
     <Compile Include="Persisters\Schedules\IScheduleRangeConflictCollector.cs" />
     <Compile Include="Persisters\Schedules\IScheduleRangePersister.cs" />
     <Compile Include="Persisters\Schedules\IScheduleRangeSaver.cs" />
