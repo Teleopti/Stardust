@@ -166,6 +166,7 @@ namespace Teleopti.Ccc.Domain.Helper
             return outList;
         }
 
+
         private static IPeriodized FindItemAtPointInTime(IEnumerable<IPeriodized> periods, DateTime time)
         {
             foreach (var periodized in periods)
@@ -267,23 +268,20 @@ namespace Teleopti.Ccc.Domain.Helper
             Percent campaignTaskTime = new Percent();
             Percent campaignAfterTaskTime = new Percent();
 
-            if (tasks > 0)
+            if (denominatorNotZero(new[]{tasks}))
             {
                 campaignTasks = new Percent(totalTasks / tasks - 1d);
 
                 averageTaskTime = TimeSpan.FromMilliseconds(taskTime * 1000 / tasks);
                 averageAfterTaskTime = TimeSpan.FromMilliseconds(afterTaskTime * 1000 / tasks);
             }
-            if (taskTime > 0)
-            {
-                campaignTaskTime = new Percent(((totalTaskTime/totalTasks) / (taskTime/tasks))-1);
-            }
-            if (afterTaskTime > 0)
-            {
-                campaignAfterTaskTime = new Percent(((totalAfterTaskTime/totalTasks) / (afterTaskTime/tasks))-1);
-            }
+	        if (denominatorNotZero(new[] {totalTasks, tasks}) && taskTime > 0)
+		        campaignTaskTime = new Percent(((totalTaskTime/totalTasks)/(taskTime/tasks)) - 1);
 
-            ITemplateTaskPeriod resultingTaskPeriod = new TemplateTaskPeriod(
+	        if (denominatorNotZero(new []{totalTasks, tasks}) && afterTaskTime > 0)
+		        campaignAfterTaskTime = new Percent(((totalAfterTaskTime/totalTasks)/(afterTaskTime/tasks)) - 1);
+
+	        var resultingTaskPeriod = new TemplateTaskPeriod(
                 new Task(tasks, averageTaskTime, averageAfterTaskTime),
                 new Campaign(campaignTasks, campaignTaskTime, campaignAfterTaskTime),
                 basePeriod);
@@ -291,5 +289,10 @@ namespace Teleopti.Ccc.Domain.Helper
 
             return resultingTaskPeriod;
         }
+
+		private static bool denominatorNotZero(IEnumerable<double> args)
+		{
+			return args.All(a => a > 0);
+		}
     }
 }

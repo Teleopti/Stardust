@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         {
             if (!string.IsNullOrEmpty(text))
             {
-                TimeSpan parsedTimeSpan = TimeSpan.MinValue;
+                TimeSpan parsedTimeSpan;
                 if (!TimeHelper.TryParse(text, out parsedTimeSpan))
                 {
 					return false;
