@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		public TestDataFactory(Action<Action<IUnitOfWork>> unitOfWorkAction)
 		{
 			_unitOfWorkAction = unitOfWorkAction;
-			_dataFactory = new DataFactory(_unitOfWorkAction);
+			DataFactory = new DataFactory(_unitOfWorkAction);
 		}
 
-		protected readonly DataFactory _dataFactory;
+		protected readonly DataFactory DataFactory;
 		private readonly IDictionary<string, PersonDataFactory> _persons = new Dictionary<string, PersonDataFactory>();
 
 		public bool HasPerson(string name)
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 
 		public void Apply(IDataSetup setup)
 		{
-			_dataFactory.Apply(setup);
+			DataFactory.Apply(setup);
 		}
 
 	}
