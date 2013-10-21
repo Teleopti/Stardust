@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return new Collection<IPersonAssignment>(_personAssignments);
 		}
 
-		public IEnumerable<VersionAndId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario)
+		public IEnumerable<DateScenarioPersonVersionId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario)
 		{
 			throw new NotImplementedException();
 		}

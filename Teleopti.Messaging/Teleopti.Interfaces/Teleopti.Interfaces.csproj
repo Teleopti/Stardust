@@ -578,7 +578,7 @@
     <Compile Include="Domain\TimeOfDay.cs" />
     <Compile Include="Domain\TimeZoneInfoExtensions.cs" />
     <Compile Include="Domain\ValidatedRequest.cs" />
-    <Compile Include="Domain\VersionAndId.cs" />
+    <Compile Include="Domain\DateScenarioPersonVersionId.cs" />
     <Compile Include="Domain\VisualLayerCollectionExtensions.cs" />
     <Compile Include="Domain\WeekNumber.cs" />
     <Compile Include="Domain\WorkShiftLengthHintOption.cs" />

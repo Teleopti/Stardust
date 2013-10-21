@@ -48,24 +48,24 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 														let databaseEntity = _scheduleRepository.LoadScheduleDataAggregate(inMemoryEntity.GetType(), inMemoryEntity.Id.Value)
 														select makePersistConflict(e, databaseEntity)).ToList();
 
-			//extremely slow currently
-			var personAssignmentsInDb = _personAssignmentRepository.Find(scheduleRange.Period.ToDateOnlyPeriod(scheduleRange.Person.PermissionInformation.DefaultTimeZone()),scheduleRange.Scenario);
+			//reuse these also above
+			var personAssignmentsInDb = _personAssignmentRepository.FetchDatabaseVersions(scheduleRange.Period.ToDateOnlyPeriod(scheduleRange.Person.PermissionInformation.DefaultTimeZone()), scheduleRange.Scenario);
 			foreach (var diffItem in diff)
 			{
 				if (diffItem.Status == DifferenceStatus.Added)
 				{
+					var currentAss = diffItem.CurrentItem as IPersonAssignment;
+					if(currentAss==null)
+						continue;
 					foreach (var assignmentInDb in personAssignmentsInDb)
 					{
-						if (assignmentInDb.Equals(diffItem.CurrentItem))
+						if (assignmentInDb.EqualWith(currentAss))
 						{
-							persistConflicts.Add(makePersistConflict(diffItem, assignmentInDb));
+							persistConflicts.Add(makePersistConflict(diffItem, _scheduleRepository.LoadScheduleDataAggregate(typeof(IPersonAssignment), assignmentInDb.Id)));
 						}
 					}
 				}
 			}
-
-			//temp fix - not needed when non entities are read above instead
-			personAssignmentsInDb.ForEach(uow.Remove);
 
 			return persistConflicts;
 		}
