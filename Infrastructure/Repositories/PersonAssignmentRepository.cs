@@ -69,23 +69,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				return crit.List<IPersonAssignment>();
 		}
 
-		public IEnumerable<DateScenarioPersonVersionId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario)
+		public IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario)
 		{
 			return Session.GetNamedQuery("fetchIdAndVersionPersonAssignment")
 			              .SetEntity("scenario", scenario)
 			              .SetDateTime("start", period.StartDate)
 			              .SetDateTime("end", period.EndDate)
 										.SetResultTransformer(
-											Transformers.AliasToBeanConstructor(typeof(DateScenarioPersonVersionId).GetConstructor(
+											Transformers.AliasToBeanConstructor(typeof(DateScenarioPersonId).GetConstructor(
 											new[]
 												{
 													typeof(Guid),
 													typeof(DateOnly), 
-													typeof(IScenario), 
-													typeof(IPerson), 
-													typeof(int)
+													typeof(Guid), 
+													typeof(Guid)
 												})))
-			              .List<DateScenarioPersonVersionId>();
+			              .List<DateScenarioPersonId>();
 		}
 
 		private ICriteria personAssignmentCriteriaLoader(DateOnlyPeriod period, IScenario scenario)

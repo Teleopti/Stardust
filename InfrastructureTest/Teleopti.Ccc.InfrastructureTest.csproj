@@ -168,6 +168,7 @@
     <Compile Include="Persisters\Schedules\DeleteConflictWithUpdateTest.cs" />
     <Compile Include="Persisters\Schedules\DeleteNoConflictTest.cs" />
     <Compile Include="Persisters\Schedules\InsertConflictWithInsertTest.cs" />
+    <Compile Include="Persisters\Schedules\ModifyNoConflictTest.cs" />
     <Compile Include="Persisters\Schedules\NoChangesTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterIntegrationTest.cs" />
     <Compile Include="Persisters\PersonRequestRefresherTest.cs" />

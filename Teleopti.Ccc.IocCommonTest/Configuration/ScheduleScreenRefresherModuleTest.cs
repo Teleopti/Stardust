@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.NewStuff;
 using Teleopti.Ccc.IocCommon.Configuration;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
@@ -33,16 +34,20 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
             var instance = _container.Resolve<IScheduleScreenRefresher>(
                 TypedParameter.From(mocks.Stub<IOwnMessageQueue>()),
                 TypedParameter.From(_container.Resolve<IScheduleRefresher>(
-                    TypedParameter.From(mocks.Stub<IUpdateScheduleDataFromMessages>())
+                    TypedParameter.From(mocks.Stub<IUpdateScheduleDataFromMessages>()),
+										TypedParameter.From(mocks.Stub<IMessageQueueRemoval>())
                     )),
                 TypedParameter.From(_container.Resolve<IScheduleDataRefresher>(
-                    TypedParameter.From(mocks.Stub<IUpdateScheduleDataFromMessages>())
+										TypedParameter.From(mocks.Stub<IUpdateScheduleDataFromMessages>()),
+										TypedParameter.From(mocks.Stub<IMessageQueueRemoval>())
                     )),
                 TypedParameter.From(_container.Resolve<IMeetingRefresher>(
-                    TypedParameter.From(mocks.Stub<IUpdateMeetingsFromMessages>())
+										TypedParameter.From(mocks.Stub<IUpdateMeetingsFromMessages>()),
+										TypedParameter.From(mocks.Stub<IMessageQueueRemoval>())
                     )),
                 TypedParameter.From(_container.Resolve<IPersonRequestRefresher>(
-                    TypedParameter.From(mocks.Stub<IUpdatePersonRequestsFromMessages>())
+										TypedParameter.From(mocks.Stub<IUpdatePersonRequestsFromMessages>()),
+										TypedParameter.From(mocks.Stub<IMessageQueueRemoval>())
                     ))
                 );
 

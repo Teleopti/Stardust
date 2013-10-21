@@ -134,7 +134,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersistAndRemoveFromUnitOfWork(noHit2);
 				var loaded = new PersonAssignmentRepository(UnitOfWork).FetchDatabaseVersions(new DateOnlyPeriod(1880, 1, 1, 1910, 1, 1), _dummyScenario);
 				var assLoaded = loaded.Single();
-				assLoaded.Version.Should().Be.EqualTo(1);
 				assLoaded.Id.Should().Be.EqualTo(ass.Id.Value);
 			}
 

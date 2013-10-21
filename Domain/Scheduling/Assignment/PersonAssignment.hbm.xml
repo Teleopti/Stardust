@@ -62,10 +62,7 @@
 
 	</class>
 	<query name="fetchIdAndVersionPersonAssignment">
-		<query-param name="scenario" type="Teleopti.Ccc.Domain.Common.Scenario"/>
-		<query-param name="start" type="DateTime"/>
-		<query-param name="end" type="DateTime"/>
-		select pa.Id, pa.Date, pa.Scenario, pa.Person, pa.Version from PersonAssignment pa
+		select pa.Id, pa.Date, pa.Scenario.Id, pa.Person.Id from PersonAssignment pa
 		where pa.Scenario=:scenario and pa.Date between :start and :end
 	</query>
 </hibernate-mapping>

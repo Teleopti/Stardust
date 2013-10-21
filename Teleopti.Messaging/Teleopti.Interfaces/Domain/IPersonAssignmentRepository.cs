@@ -34,6 +34,6 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario);
 
-	    IEnumerable<DateScenarioPersonVersionId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario);
+	    IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario);
     }
 }

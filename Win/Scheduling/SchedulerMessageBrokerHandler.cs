@@ -34,20 +34,23 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 		    if (owner == null) throw new ArgumentNullException("owner");
 		    _owner = owner;
-
 			_scheduleScreenRefresher = container.Resolve<IScheduleScreenRefresher>(
 				TypedParameter.From<IOwnMessageQueue>(this),
 				TypedParameter.From(container.Resolve<IScheduleRefresher>(
-					TypedParameter.From<IUpdateScheduleDataFromMessages>(this)
+					TypedParameter.From<IUpdateScheduleDataFromMessages>(this),
+					TypedParameter.From<IMessageQueueRemoval>(this)
 					)),
 				TypedParameter.From(container.Resolve<IScheduleDataRefresher>(
-					TypedParameter.From<IUpdateScheduleDataFromMessages>(this)
+					TypedParameter.From<IUpdateScheduleDataFromMessages>(this),
+					TypedParameter.From<IMessageQueueRemoval>(this)
 					)),
 				TypedParameter.From(container.Resolve<IMeetingRefresher>(
-					TypedParameter.From<IUpdateMeetingsFromMessages>(this)
+					TypedParameter.From<IUpdateMeetingsFromMessages>(this),
+					TypedParameter.From<IMessageQueueRemoval>(this)
 					)),
 				TypedParameter.From(container.Resolve<IPersonRequestRefresher>(
-					TypedParameter.From<IUpdatePersonRequestsFromMessages>(this)
+					TypedParameter.From<IUpdatePersonRequestsFromMessages>(this),
+					TypedParameter.From<IMessageQueueRemoval>(this)
 					))
 			);
 		}
