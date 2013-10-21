@@ -4597,8 +4597,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			var scheduleRangePersister = new ScheduleRangePersister(_container.Resolve<IUnitOfWorkFactory>(),
 			                            _container.Resolve<IDifferenceCollectionService<IPersistableScheduleData>>(),
-																	new ScheduleRangeConflictCollector(_container.Resolve<IDifferenceCollectionService<IPersistableScheduleData>>(), 
-																			_container.Resolve<IScheduleRepository>(), 
+																	new ScheduleRangeConflictCollector(_container.Resolve<IScheduleRepository>(), 
 																			_container.Resolve<IPersonAssignmentRepository>(), 
 																			_schedulerMessageBrokerHandler, 
 																			_container.Resolve<ILazyLoadingManager>()),
