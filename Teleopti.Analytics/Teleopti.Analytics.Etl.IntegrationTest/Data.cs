@@ -4,9 +4,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 {
     public static class Data
     {
-        public static void Apply(IDataSetup setup)
+		public static PersonDataFactory Person(string name)
+		{
+			DataFactoryState.TestDataFactory.Person(name);
+		}
+
+		public static void Apply(IDataSetup setup)
         {
-            DataFactoryState.DataFactory.Apply(setup);
+            DataFactoryState.TestDataFactory.Apply(setup);
         }
     }
 }

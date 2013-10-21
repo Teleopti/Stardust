@@ -285,7 +285,6 @@
     </Compile>
     <Compile Include="Data\Setups\Generic\UserLogonDetailConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PasswordPolicyConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\UserConfigurable.cs" />
     <Compile Include="Bindings\Transform.cs" />
     <Compile Include="Core\Legacy\QuicklyFind.cs" />
     <Compile Include="Data\Setups\Generic\PasswordConfigurable.cs" />

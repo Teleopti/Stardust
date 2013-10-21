@@ -206,6 +206,7 @@
     <Compile Include="TestData\Core\IUserDataSetup.cs" />
     <Compile Include="TestData\Core\IUserSetup.cs" />
     <Compile Include="TestData\Core\PersonDataFactory.cs" />
+    <Compile Include="TestData\Core\TestDataFactory.cs" />
     <Compile Include="TestData\LayersExtensions.cs" />
     <Compile Include="TestData\Setups\HawaiiTimeZone.cs" />
     <Compile Include="TestData\Setups\LicenseFromFile.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="TestData\Setups\StockholmTimeZone.cs" />
     <Compile Include="TestData\Setups\SwedishCulture.cs" />
     <Compile Include="TestData\Setups\USCulture.cs" />
+    <Compile Include="TestData\Setups\UserConfigurable.cs" />
     <Compile Include="TestData\Setups\UtcTimeZone.cs" />
     <Compile Include="UsedInTestState.cs" />
   </ItemGroup>

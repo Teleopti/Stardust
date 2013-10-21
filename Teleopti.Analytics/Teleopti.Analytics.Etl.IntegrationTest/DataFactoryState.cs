@@ -4,6 +4,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 {
     public static class DataFactoryState
     {
-        public static DataFactory DataFactory;
+		public static TestDataFactory TestDataFactory;
     }
 }
