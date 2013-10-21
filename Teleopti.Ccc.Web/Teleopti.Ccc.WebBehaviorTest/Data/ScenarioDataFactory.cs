@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
@@ -13,8 +14,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private readonly AnalyticsDataFactory _analyticsDataFactory = new AnalyticsDataFactory();
 		private readonly IList<IDelayedSetup> _delayedSetups = new List<IDelayedSetup>();
 
-		public ScenarioDataFactory() : base(ScenarioUnitOfWorkState.UnitOfWorkAction, TestData.CommonPassword)
+		public ScenarioDataFactory() : base(ScenarioUnitOfWorkState.UnitOfWorkAction)
 		{
+			AddPerson("I", new Name("The", "One")).Apply(new UserConfigurable
+			{
+				UserName = "1",
+				Password = TestData.CommonPassword
+			});
 		}
 
 		public CultureInfo MyCulture { get { return Me().Culture; } }
@@ -55,9 +61,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			get
 			{
 				return Me().Applied
-				           .Union(_analyticsDataFactory.Setups)
-				           .Union(_delayedSetups)
-				           .Union(_dataFactory.Applied)
+						   .Union(_analyticsDataFactory.Setups)
+						   .Union(_delayedSetups)
+						   .Union(_dataFactory.Applied)
 					;
 			}
 		}

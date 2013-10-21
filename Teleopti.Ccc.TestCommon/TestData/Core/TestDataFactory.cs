@@ -11,25 +11,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 	{
 		private readonly Action<Action<IUnitOfWork>> _unitOfWorkAction;
 
-		public TestDataFactory(Action<Action<IUnitOfWork>> unitOfWorkAction, string commonPassword)
+		public TestDataFactory(Action<Action<IUnitOfWork>> unitOfWorkAction)
 		{
 			_unitOfWorkAction = unitOfWorkAction;
 			_dataFactory = new DataFactory(_unitOfWorkAction);
-
-			var me = new PersonDataFactory(
-				new Name("The", "One"),
-				new[]
-					{
-						new UserConfigurable
-							{
-								UserName = "1",
-								Password = commonPassword
-							}
-					},
-				_unitOfWorkAction
-				);
-			_persons.Add("I", me);
-
 		}
 
 		protected readonly DataFactory _dataFactory;
@@ -47,17 +32,22 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 
 		public PersonDataFactory Person(string name)
 		{
-			name = trimName(name);
+			return AddPerson(name, new Name("Person", name));
+		}
 
-			if (_persons.ContainsKey(name))
-				return _persons[name];
+		protected PersonDataFactory AddPerson(string referenceName, Name actualName)
+		{
+			referenceName = trimName(referenceName);
+
+			if (_persons.ContainsKey(referenceName))
+				return _persons[referenceName];
 
 			var person = new PersonDataFactory(
-				new Name("Person", name),
-				new[] { new UserConfigurable { Name = name } },
+				actualName,
+				new[] { new UserConfigurable { Name = referenceName } },
 				_unitOfWorkAction
 				);
-			_persons.Add(name, person);
+			_persons.Add(referenceName, person);
 			return person;
 		}
 

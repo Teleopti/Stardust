@@ -208,8 +208,10 @@
     <Compile Include="TestData\Core\PersonDataFactory.cs" />
     <Compile Include="TestData\Core\TestDataFactory.cs" />
     <Compile Include="TestData\LayersExtensions.cs" />
+    <Compile Include="TestData\Setups\AbsenceRequestConfigurable.cs" />
     <Compile Include="TestData\Setups\HawaiiTimeZone.cs" />
     <Compile Include="TestData\Setups\LicenseFromFile.cs" />
+    <Compile Include="TestData\Setups\PersonPeriodConfigurable.cs" />
     <Compile Include="TestData\Setups\PersonThatCreatesTestData.cs" />
     <Compile Include="TestData\Setups\StockholmTimeZone.cs" />
     <Compile Include="TestData\Setups\SwedishCulture.cs" />

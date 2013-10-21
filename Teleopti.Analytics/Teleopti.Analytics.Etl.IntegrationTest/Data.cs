@@ -6,7 +6,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
     {
 		public static PersonDataFactory Person(string name)
 		{
-			DataFactoryState.TestDataFactory.Person(name);
+			return DataFactoryState.TestDataFactory.Person(name);
 		}
 
 		public static void Apply(IDataSetup setup)
