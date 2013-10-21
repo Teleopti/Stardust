@@ -398,6 +398,13 @@
     <Compile Include="Intraday\OpenIntradayTodayCommandTest.cs" />
     <Compile Include="Intraday\ReforecastModelTest.cs" />
     <Compile Include="Intraday\ReforecastWizardPagesTest.cs" />
+    <Compile Include="Main\LicenseStatusLoaderTest.cs" />
+    <Compile Include="Main\LoginInitializerTest.cs" />
+    <Compile Include="Main\LogonDataSourceHandlerTest.cs" />
+    <Compile Include="Main\LogonLicenseCheckerTest.cs" />
+    <Compile Include="Main\LogonMatrixTest.cs" />
+    <Compile Include="Main\LogonScreenModelTest.cs" />
+    <Compile Include="Main\LogonPresenterTest.cs" />
     <Compile Include="Matrix\MatrixNavigationModelTest.cs" />
     <Compile Include="Matrix\MatrixNavigationPresenterTest.cs" />
     <Compile Include="Meetings\AddressBookPresenterTest.cs" />
@@ -549,6 +556,7 @@
     <Compile Include="Scheduler\BusinessRuleResponseListViewModelTest.cs" />
     <Compile Include="Scheduler\BusinessRuleResponseViewModelTest.cs" />
     <Compile Include="Scheduler\CalculateMinMaxCacheDeciderTest.cs" />
+    <Compile Include="Scheduler\FilterHourlyAvailabilityPresenterTest.cs" />
     <Compile Include="Scheduler\FilterOvertimeAvailabilityPresenterTest.cs" />
     <Compile Include="Scheduler\DaysOnlyHelperTest.cs" />
     <Compile Include="Scheduler\MatrixUnselectedDaysLockerTest.cs" />
@@ -560,9 +568,9 @@
     <Compile Include="Scheduler\AgentOvertimeAvailabilityEditCommandTest.cs" />
     <Compile Include="Scheduler\AgentOvertimeAvailabilityPresenterTest.cs" />
     <Compile Include="Scheduler\AgentOvertimeAvailabilityRemoveCommandTest.cs" />
+    <Compile Include="Scheduler\Restriction\HourlyAvailabilityPersonFilterTest.cs" />
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityCreatorTest.cs" />
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityPersonFilterTest.cs" />
-    <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftCategoryDistributionExtensionsTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftCategoryDistributionModelTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryFairnessValueHelperTest.cs" />
     <Compile Include="Scheduler\SkillFullPeriodGridControlPresenterTest.cs" />
@@ -834,6 +842,10 @@
     <ProjectReference Include="..\Teleopti.Ccc.DayOffPlanning\Teleopti.Ccc.DayOffPlanning.csproj">
       <Project>{A7D4E66F-4B70-4F7A-A982-01D7E6AFDE7E}</Project>
       <Name>Teleopti.Ccc.DayOffPlanning</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{db42d973-9889-4d51-9fc5-be66aa7f117c}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Obfuscated\Teleopti.Ccc.Obfuscated.csproj">
       <Project>{5895BC02-04C8-46E1-A804-43D314A02AD9}</Project>

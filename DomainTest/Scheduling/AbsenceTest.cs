@@ -1,7 +1,6 @@
 using System;
 using System.Drawing;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
     public class AbsenceTest
     {
         private Absence target;
-        private GroupingAbsence groupingAbsence;
 
         /// <summary>
         /// Runs once for every test
@@ -27,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         public void Setup()
         {
             target = new Absence();
-            groupingAbsence = new GroupingAbsence("Test");
         }
 
         /// <summary>
@@ -59,7 +56,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             target.DisplayColor = Color.DarkSalmon;
             target.Description = new Description("Sjuk","SJ");
-            target.GroupingAbsence = groupingAbsence;
             target.Priority = 37;
             target.InWorkTime = true;
             target.InPaidTime = true;
@@ -69,7 +65,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual("Sjuk", target.Description.Name);
             Assert.AreEqual("SJ", target.Description.ShortName);
             Assert.AreSame(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
-            Assert.AreEqual("Test", target.GroupingAbsence.Description.Name);
             Assert.AreEqual(37, target.Priority);
             Assert.IsFalse(target.Requestable);
             target.Requestable = true;
@@ -90,28 +85,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                 Assert.AreEqual(ConfidentialPayloadValues.Description, target.ConfidentialDescription(null,DateOnly.Today));
                 Assert.AreEqual(ConfidentialPayloadValues.DisplayColor, target.ConfidentialDisplayColor(null,DateOnly.Today));
             }
-        }
-
-
-        /// <summary>
-        /// GroupingAbsence may not be null
-        /// </summary>
-        [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
-        public void VerifyThatExceptionIsThrownWhenGroupingAbsenceIsNotNull()
-        {
-            target.GroupingAbsence = null;
-        }
-
-        /// <summary>
-        /// Change the parent GroupingAbsence
-        /// </summary>
-        [Test]
-        public void VerifyGroupingAbsenceCanBeChanged()
-        {
-            GroupingAbsence newGroupingAbsence = new GroupingAbsence("Holiday");
-            target.GroupingAbsence = groupingAbsence;
-            target.GroupingAbsence = newGroupingAbsence;
         }
 
         /// <summary>
@@ -148,7 +121,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(target.Confidential, absenceClone.Confidential);
             Assert.AreEqual(target.Description, absenceClone.Description);
             Assert.AreEqual(target.DisplayColor, absenceClone.DisplayColor);
-            Assert.AreEqual(target.GroupingAbsence, absenceClone.GroupingAbsence);
             Assert.AreEqual(target.InPaidTime, absenceClone.InPaidTime);
             Assert.AreEqual(target.InContractTime, absenceClone.InContractTime);
             Assert.AreEqual(target.BusinessUnit, absenceClone.BusinessUnit);
@@ -164,7 +136,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(target.Confidential, absenceClone.Confidential);
             Assert.AreEqual(target.Description, absenceClone.Description);
             Assert.AreEqual(target.DisplayColor, absenceClone.DisplayColor);
-            Assert.AreEqual(target.GroupingAbsence, absenceClone.GroupingAbsence);
             Assert.AreEqual(target.InPaidTime, absenceClone.InPaidTime);
             Assert.AreEqual(target.InContractTime, absenceClone.InContractTime);
             Assert.AreEqual(target.BusinessUnit, absenceClone.BusinessUnit);
@@ -180,7 +151,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(target.Confidential, absenceClone.Confidential);
             Assert.AreEqual(target.Description, absenceClone.Description);
             Assert.AreEqual(target.DisplayColor, absenceClone.DisplayColor);
-            Assert.AreEqual(target.GroupingAbsence, absenceClone.GroupingAbsence);
             Assert.AreEqual(target.InPaidTime, absenceClone.InPaidTime);
             Assert.AreEqual(target.InContractTime, absenceClone.InContractTime);
             Assert.AreEqual(target.BusinessUnit, absenceClone.BusinessUnit);

@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var person = _personRepository.Load(command.PersonId);
                 var scenario = getDesiredScenario(command);
                 var startDate = command.Date.ToDateOnly();
-                var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
-                    new PersonProvider(new[] {person}), new ScheduleDictionaryLoadOptions(false, false),
-                    new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
+	            var scheduleDictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
+		            person, new ScheduleDictionaryLoadOptions(false, false),
+		            new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
 
 				var scheduleRange = scheduleDictionary[person];
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);

@@ -22,12 +22,8 @@ define([
 			this.WorkTimeMinutes = ko.observable(0);
 			this.ContractTimeMinutes = ko.observable(0);
 
-			this.DayOff = ko.observable(null);
+			this.DayOffs = ko.observableArray();
 			
-			this.IsDayOff = ko.computed(function() {
-				return self.DayOff() != null;
-			});
-
 			this.IsShift = ko.computed(function() {
 				return self.Layers().length > 0;
 			});
@@ -46,8 +42,8 @@ define([
 
 			this.ClearData = function() {
 				self.Layers([]);
+				self.DayOffs([]);
 				self.IsFullDayAbsence = false;
-				self.DayOff(null);
 				self.WorkTimeMinutes(0);
 				self.ContractTimeMinutes(0);
 			};
@@ -64,7 +60,7 @@ define([
 				
 				if (data.DayOff) {
 					data.DayOff.Date = date;
-					self.DayOff(new dayOff(timeline, data.DayOff));
+					self.DayOffs.push.apply(self.DayOffs, [new dayOff(timeline, data.DayOff)]);
 				}
 				
 				self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
@@ -103,8 +99,8 @@ define([
 				var value = 0;
 				value += self.TimeLineAffectingStartMinute() || 0;
 				value += self.IsFullDayAbsence ? 5000 : 0;
-				value += self.IsDayOff() ? 10000 : 0;
-				var noShift = self.Layers().length == 0 && !self.IsDayOff();
+				value += self.Layers().length == 0 && self.DayOffs().length > 0 ? 10000 : 0;
+				var noShift = self.Layers().length == 0 && self.DayOffs().length == 0;
 				value += noShift ? 20000 : 0;
 				return value;
 			};

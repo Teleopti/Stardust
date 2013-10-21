@@ -5,7 +5,13 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Security.Authentication
 {
-    public class AvailableBusinessUnitsProvider
+    public interface IAvailableBusinessUnitsProvider
+    {
+        IEnumerable<IBusinessUnit> AvailableBusinessUnits();
+        IBusinessUnit LoadHierarchyInformation(IBusinessUnit businessUnit);
+    }
+
+    public class AvailableBusinessUnitsProvider : IAvailableBusinessUnitsProvider
     {
         private readonly IDataSourceContainer _dataSourceContainer;
 

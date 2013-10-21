@@ -111,7 +111,6 @@
     <Compile Include="FakeData\DayOffFactory.cs" />
     <Compile Include="FakeData\DaysOffPreferencesFactory.cs" />
     <Compile Include="FakeData\FakeUserTextTranslator.cs" />
-    <Compile Include="FakeData\GroupingAbsenceFactory.cs" />
     <Compile Include="FakeData\GroupingActivityFactory.cs" />
     <Compile Include="FakeData\LicenseDataFactory.cs" />
     <Compile Include="FakeData\MultiplicatorDefinitionSetFactory.cs" />
@@ -200,9 +199,13 @@
     <Compile Include="TestData\Analytics\TodayDate.cs" />
     <Compile Include="TestData\Analytics\UtcAndCetTimeZones.cs" />
     <Compile Include="TestData\Analytics\WeekdayTranslations.cs" />
+    <Compile Include="TestData\Core\DataFactory.cs" />
     <Compile Include="TestData\Core\IAnalyticsDataSetup.cs" />
     <Compile Include="TestData\Core\AnalyticsDataFactory.cs" />
+    <Compile Include="TestData\Core\IDataSetup.cs" />
     <Compile Include="TestData\LayersExtensions.cs" />
+    <Compile Include="TestData\Setups\LicenseFromFile.cs" />
+    <Compile Include="TestData\Setups\PersonThatCreatesTestData.cs" />
     <Compile Include="UsedInTestState.cs" />
   </ItemGroup>
   <ItemGroup>

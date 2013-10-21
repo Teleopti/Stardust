@@ -26,11 +26,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private readonly IEnumerable<IMessageSender> _messageSenders;
 
-		protected internal NHibernateUnitOfWorkFactory(ISessionFactory sessionFactory, 
-																										IAuditSetter auditSettingProvider, 
-																										string connectionString,
-                                                                                                                                                                                                                IEnumerable<IMessageSender> messageSenders)
-                {
+			MessageId = "Denormalizers"),
+		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+			 MessageId = "0")]
+		protected internal NHibernateUnitOfWorkFactory(ISessionFactory sessionFactory,
+		                                               IAuditSetter auditSettingProvider,
+		                                               string connectionString,
+		                                               IEnumerable<IMessageSender> messageSenders)
+		{
 			ConnectionString = connectionString;
 			SessionContextBinder = new StaticSessionContextBinder();
 			InParameter.NotNull("sessionFactory", sessionFactory);
