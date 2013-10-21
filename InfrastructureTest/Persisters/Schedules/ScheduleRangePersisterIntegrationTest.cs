@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected IActivity Activity { get; private set; }
 		protected IScenario Scenario { get; private set; }
 		protected IShiftCategory ShiftCategory { get; private set; }
-		private IScheduleRangePersister Target { get; set; }
+		protected IScheduleRangePersister Target { get; set; }
 		private IEnumerable<IPersistableScheduleData> _givenState;
 
 		protected override void SetupForRepositoryTestWithoutTransaction()
@@ -105,10 +105,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			WhenOtherHasChanged(otherRange);
 
 			var myDic = loadScheduleDictionary();
+			Target.Persist(otherRange);
+			
 			var myRange = myDic[Person];
 			WhenImChanging(myRange);
 
-			Target.Persist(otherRange);
 			var conflicts = Target.Persist(myRange);
 
 			Then(conflicts);
