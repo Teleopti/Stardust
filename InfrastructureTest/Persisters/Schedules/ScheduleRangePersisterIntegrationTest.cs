@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				var dictionary = rep.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 2040, 1, 1)),
 																								 Scenario,
 																								 new PersonProvider(new[] { Person }),
-																								 new ScheduleDictionaryLoadOptions(false, false),
+																								 new ScheduleDictionaryLoadOptions(true, true),
 																								 new List<IPerson> { Person });
 				return dictionary;
 			}
