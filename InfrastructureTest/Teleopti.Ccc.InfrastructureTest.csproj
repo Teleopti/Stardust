@@ -167,8 +167,6 @@
     <Compile Include="Persisters\Schedules\InsertConflictWithInsertTest.cs" />
     <Compile Include="Persisters\Schedules\NoChangesTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterIntegrationTest.cs" />
-    <Compile Include="Persisters\BugTest\Bug24079.cs" />
-    <Compile Include="Persisters\BugTest\Bug25007.cs" />
     <Compile Include="Persisters\PersonRequestRefresherTest.cs" />
     <Compile Include="Persisters\ScheduleRefresherTest.cs" />
     <Compile Include="Persisters\Schedules\UpdateConflictWithDeleteTest.cs" />
@@ -250,7 +248,6 @@
     <Compile Include="Licensing\XmlLicenseTestSetupFixture.cs" />
     <Compile Include="Helper\DatabaseTestWithoutTransaction.cs" />
     <Compile Include="Persisters\BugTest\Bug11817.cs" />
-    <Compile Include="Persisters\BugTest\Bug12887.cs" />
     <Compile Include="Persisters\BugTest\Bug12891.cs" />
     <Compile Include="Persisters\PersistWriteProtectionTest.cs" />
     <Compile Include="Persisters\PersonAbsenceAccountConflictCollectorTest.cs" />
