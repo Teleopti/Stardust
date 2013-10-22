@@ -178,7 +178,11 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             if (e.RowIndex == 0 || e.ColIndex == 0) return;
 
             //find alarmtype
-            _alarm = _alarmTypes[e.RowIndex - 1];
+            if (_alarmTypes.Count >= 1)
+                _alarm = _alarmTypes[e.RowIndex - 1];
+            else
+                return;
+
             switch ((ColumnHeader) e.ColIndex)
             {
                 case ColumnHeader.Name:
