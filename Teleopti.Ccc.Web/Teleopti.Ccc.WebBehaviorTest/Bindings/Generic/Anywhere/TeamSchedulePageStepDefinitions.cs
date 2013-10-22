@@ -70,19 +70,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should be able to select teams")]
 		public void ThenIShouldBeAbleToSelectTeams(Table table)
 		{
-			Browser.Interactions.AssertExists("#team-selector");
+			Browser.Interactions.AssertExists("#group-picker");
 
 			var teams = table.CreateSet<TeamInfo>().ToArray();
-			teams.ForEach(t => Browser.Interactions.AssertAnyContains("#team-selector option", t.Team));
+			teams.ForEach(t => Browser.Interactions.AssertAnyContains("#group-picker option", t.Team));
 
-			Browser.Interactions.AssertNotExists("#team-selector option:nth-child(" + teams.Length + ")", "#team-selector option:nth-child(" + (teams.Length + 1) + ")");
+			Browser.Interactions.AssertNotExists("#group-picker option:nth-child(" + teams.Length + ")", "#group-picker option:nth-child(" + (teams.Length + 1) + ")");
 		}
 
 		[Then(@"I should see no team available")]
 		public void ThenIShouldSeeNoTeamAvailable()
 		{
-			Browser.Interactions.AssertExists("#team-selector");
-			Browser.Interactions.AssertNotExists("#team-selector", "#team-selector option");
+			Browser.Interactions.AssertExists("#group-picker");
+			Browser.Interactions.AssertNotExists("#group-picker", "#group-picker option");
 		}
 
 		[Then(@"I should be able to select skills")]
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I select team '(.*)'")]
 		public void WhenISelectTeam(string teamName)
 		{
-			Browser.Interactions.SelectOptionByTextUsingJQuery("#team-selector", teamName);
+			Browser.Interactions.SelectOptionByTextUsingJQuery("#group-picker", teamName);
 		}
 
 		public static void SelectSkill(string name)

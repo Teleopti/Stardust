@@ -2,14 +2,20 @@ define([
         'knockout',
         'navigation',
 		'shared/timeline',
+		'views/teamschedule/grouping',
         'resources!r',
-        'moment'
+        'moment',
+		'select2',
+		'knockoutBindings'
     ], function(
         ko,
         navigation,
         timeLineViewModel,
+	    groupingViewModel,
         resources,
-        moment
+        moment,
+	    select2,
+	    knockoutBindings
     ) {
 
         return function() {
@@ -24,20 +30,44 @@ define([
 
             this.Resources = resources;
 
-            this.Teams = ko.observableArray();
-            this.SelectedTeam = ko.observable();
+            this.Groupings = ko.observableArray();
+	        this.SelectedGroup = ko.observable();
             this.SelectedDate = ko.observable(moment());
 
             this.SetPersons = function (persons) {
                 self.Persons([]);
                 self.Persons.push.apply(self.Persons, persons);
             };
+	        
+            this.SetGroupings = function (groupings) {
+            	self.Groupings([]);
+
+            	var newItems = ko.utils.arrayMap(groupings, function (d) {
+            		return new groupingViewModel(d);
+            	});
+            	self.Groupings.push.apply(self.Groupings, newItems);
+            };
             
             this.SetTeams = function (teams) {
-                self.Teams([]);
-                self.Teams.push.apply(self.Teams, teams);
-            };
+            	
+            	self.Groupings([]);
 
+            	var groups = [];
+	            for(var i = 0; i < teams.length; i++)
+	            	groups.push({ Name: teams[i].SiteAndTeam, Id: teams[i].Id });
+
+	            var groupings = [
+		            {
+		            	Name: "",
+		            	Groups : groups
+		            }];
+
+            	var newItems = ko.utils.arrayMap(groupings, function (d) {
+            		return new groupingViewModel(d);
+            	});
+            	self.Groupings.push.apply(self.Groupings, newItems);
+            };
+	        
             this.NextDay = function() {
                 self.SelectedDate(self.SelectedDate().add('d', 1));
             };

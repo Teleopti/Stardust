@@ -26,7 +26,12 @@
 	
 	<div class="row">
 		<div class="span12 nowrap">
-			<select id="team-selector" data-bind="enable: !Loading(), options: Teams, optionsText: 'SiteAndTeam', optionsValue: 'Id', value: SelectedTeam"></select>
+			<select id="group-picker" data-bind="enable: !Loading(), foreach: Groupings, select2: { value: SelectedGroup } ">
+                    <optgroup data-bind="attr: { label: Name }, foreach: Groups">
+                        <option data-bind="text: Name, value: Id"></option>
+                    </optgroup>
+                </select>
+			
 			<div class="input-append date input-prepend pull-right" id="date-picker" data-bind="datepicker: SelectedDate, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
 				<button class="btn" data-bind="attr: {title: Resources.Previous}, click: PreviousDay"><i class="icon-chevron-left"></i></button>
 				<input class="add-on date-input" size="16" type="text" readonly="readonly"/>

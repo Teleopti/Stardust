@@ -35,7 +35,7 @@ define([
 
 		var loadSchedules = function(options) {
 		    subscriptions.subscribeTeamSchedule(
-				teamSchedule.SelectedTeam(),
+				teamSchedule.SelectedGroup(),
 				helpers.Date.ToServer(teamSchedule.SelectedDate()),
 				function (schedules) {
 					var currentPersons = teamSchedule.Persons();
@@ -80,7 +80,7 @@ define([
 				url: 'Person/PeopleInTeam',
 				data: {
 				    date: helpers.Date.ToServer(teamSchedule.SelectedDate()),
-					teamId: teamSchedule.SelectedTeam()
+					teamId: teamSchedule.SelectedGroup()
 				},
 				success: function (people, textStatus, jqXHR) {
 					var newItems = ko.utils.arrayMap(people, function (s) {
@@ -141,22 +141,22 @@ define([
 					teamSchedule.TimeLine.WidthPixels($('.time-line-for').width());
 				});
 
-				teamSchedule.SelectedTeam.subscribe(function () {
+				teamSchedule.SelectedGroup.subscribe(function () {
 					if (teamSchedule.Loading())
 						return;
-					navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
+					navigation.GoToTeamSchedule(teamSchedule.SelectedGroup(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
 				});
 
 				teamSchedule.SelectedDate.subscribe(function() {
 					if (teamSchedule.Loading())
 						return;
-					navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
+					navigation.GoToTeamSchedule(teamSchedule.SelectedGroup(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
 				});
 
 				teamSchedule.SelectedSkill.subscribe(function () {
 					if (teamSchedule.Loading())
 						return;
-					navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
+					navigation.GoToTeamSchedule(teamSchedule.SelectedGroup(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
 				});
 				
 				ko.applyBindings(teamSchedule, options.bindingElement);
@@ -164,11 +164,11 @@ define([
 			
 			display: function (options) {
 
-			    var currentTeamId = function () {
+			    var currentGroupId = function () {
 					if (options.id)
 						return options.id;
-					if (teamSchedule.Teams().length > 0)
-						return teamSchedule.Teams()[0].Id;
+					if (teamSchedule.Groupings().length > 0 && teamSchedule.Groupings()[0].Groups().length > 0)
+						return teamSchedule.Groupings()[0].Groups()[0].Id;
 					return null;
 				};
 				
@@ -206,13 +206,13 @@ define([
 
 				var deferred = $.Deferred();
 				var loadPersonsAndSchedules = function () {
-					var currentTeam = currentTeamId();
-					if (!currentTeam) {
+					var currentGroup = currentGroupId();
+					if (!currentGroup) {
 						teamSchedule.Loading(false);
 						deferred.resolve();
 						return;
 					}
-					teamSchedule.SelectedTeam(currentTeam);
+					teamSchedule.SelectedGroup(currentGroup);
 					loadPersons({
 						success: function() {
 							loadSchedules({
@@ -224,8 +224,8 @@ define([
 						}
 					});
 				};
-				
-				if (teamSchedule.Teams().length != 0) {
+
+				if (teamSchedule.Groupings().length != 0 && teamSchedule.Groupings()[0].Groups().length != 0) {
 					loadPersonsAndSchedules();
 				} else {
 					loadTeams({

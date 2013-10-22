@@ -16,7 +16,10 @@ require.config({
 		momentDatepicker: '../../../../Content/moment-datepicker/moment-datepicker',
 		momentLanguages: '../../../../Content/moment/moment.all.min',
 		momentDatepickerKo: '../../../../Content/moment-datepicker/moment-datepicker-ko-amd',
-		
+		select2: '../../../../Content/select2/select2',
+	    
+		knockoutBindings: 'knockout.bindings',
+	    
 		noext: '../../../../Content/require/noext',
 		signalrrr: 'require/signalrrr',
 		resources: 'require/resources',
@@ -34,6 +37,9 @@ require.config({
 		},
 		'jqueryui': ['jquery'],
 		'bootstrap': ['jquery'],
+		'select2': ['jquery'],
+		
+		'knockoutBindings': ['knockout'],
 
 		'signalr': ['jquery'],
 

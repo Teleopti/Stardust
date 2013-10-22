@@ -686,6 +686,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\knockout.bindings.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\pagelog.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\errorview.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline-unit.js" />
@@ -701,6 +702,8 @@
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\grouping-group.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\grouping.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\dayoff.js" />
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />
