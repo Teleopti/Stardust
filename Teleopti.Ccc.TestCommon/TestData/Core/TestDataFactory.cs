@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -61,5 +62,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			DataFactory.Apply(setup);
 		}
 
+		public DataFactory Data()
+		{
+			return DataFactory;
+		}
 	}
 }

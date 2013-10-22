@@ -182,6 +182,8 @@
     <Compile Include="TestData\Analytics\ITimeZoneData.cs" />
     <Compile Include="TestData\Analytics\IWorkloadData.cs" />
     <Compile Include="TestData\Analytics\QuarterOfAnHourInterval.cs" />
+    <Compile Include="TestData\Analytics\RequestStatus.cs" />
+    <Compile Include="TestData\Analytics\RequestType.cs" />
     <Compile Include="TestData\Analytics\Sql\Bulk.cs" />
     <Compile Include="TestData\Analytics\Tables\bridge_queue_workload.cs" />
     <Compile Include="TestData\Analytics\Tables\bridge_time_zone.cs" />
@@ -189,6 +191,8 @@
     <Compile Include="TestData\Analytics\Tables\dim_date.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_interval.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_queue.cs" />
+    <Compile Include="TestData\Analytics\Tables\dim_request_status.cs" />
+    <Compile Include="TestData\Analytics\Tables\dim_request_type.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_skill.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_time_zone.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_workload.cs" />

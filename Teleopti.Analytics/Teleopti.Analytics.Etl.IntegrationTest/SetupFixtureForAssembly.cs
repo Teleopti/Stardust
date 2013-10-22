@@ -14,6 +14,10 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
+	public class abra
+	{
+	}
+
 	[SetUpFixture]
 	public class SetupFixtureForAssembly
 	{

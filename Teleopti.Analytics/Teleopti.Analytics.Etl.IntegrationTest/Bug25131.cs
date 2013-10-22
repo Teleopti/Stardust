@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Generic;
 using Teleopti.Ccc.TestCommon.TestData.Setups;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using RequestType = Teleopti.Ccc.TestCommon.TestData.Analytics.RequestType;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
@@ -33,19 +29,24 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldWork()
 		{
-			//Arrange
-			Data.Person("Ashley Andeen").Apply(new StockholmTimeZone());
-			//Data.Person("Ashley Andeen").Apply(new +
-			//    {
-			//        StartDate = DateTime.Parse("2013-10-21")
-			//    });
-			//Data.Person("Ashley Andeen").Apply(new PersonPeriodConfigurable
-			//    {
-			//        StartDate = DateTime.Parse("2013-10-22")
-			//    });
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			var dates = new CurrentWeekDates();
+			var datasource = new  ExistingDatasources(new UtcAndCetTimeZones());
+			var businesUnit = new Ccc.Domain.Common.BusinessUnit("bu");
+			businesUnit.SetId(Guid.NewGuid());
+			var businessUnit = new BusinessUnit(businesUnit, datasource);
+			var requestType = new RequestType(1, "Absence Request", "absence");
+			var requestStatus = new RequestStatus(1, "Pending", "pending");
 
-	
-			Data.Apply(new AbsenceConfigurable{Color = "Red", Name = "Absence"});
+			analyticsDataFactory.Setup(new EternityAndNotDefinedDate());			
+			analyticsDataFactory.Setup(dates);
+			analyticsDataFactory.Setup(businessUnit);
+			analyticsDataFactory.Setup(requestType);
+			analyticsDataFactory.Setup(requestStatus);
+			analyticsDataFactory.Persist();
+
+			Data.Person("Ashley Andeen").Apply(new StockholmTimeZone());
+			Data.Apply(new AbsenceConfigurable { Color = "Red", Name = "Absence" });
 			Data.Person("Ashley Andeen").Apply(new AbsenceRequestConfigurable
 				{
 					Absence = "Absence",
@@ -56,18 +57,18 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			//Act
 			// kör etl körning här
-            JobParameters parameters = null; //= new JobParameters()
-		    var steps = new List<JobStepBase>
+			JobParameters parameters = null; //= new JobParameters()
+			var steps = new List<JobStepBase>
 		        {
 		            new IntradayStageRequestJobStep(parameters),
 		            new FactRequestJobStep(parameters, true)
 		        };
-		    //Assert
-		    // kolla att prylarna hamnade rätt i databasen här
+			//Assert
+			// kolla att prylarna hamnade rätt i databasen här
 
 
 		}
 
-	   
+
 	}
 }
