@@ -166,6 +166,8 @@
     <Compile Include="TestData\Analytics\AQueue.cs" />
     <Compile Include="TestData\Analytics\AWorkload.cs" />
     <Compile Include="TestData\Analytics\BusinessUnit.cs" />
+    <Compile Include="TestData\Analytics\Person.cs" />
+    <Compile Include="TestData\Analytics\IPersonData.cs" />
     <Compile Include="TestData\Analytics\CurrentWeekDates.cs" />
     <Compile Include="TestData\Analytics\EternityAndNotDefinedDate.cs" />
     <Compile Include="TestData\Analytics\ExistingDatasources.cs" />
@@ -185,6 +187,7 @@
     <Compile Include="TestData\Analytics\Sql\Bulk.cs" />
     <Compile Include="TestData\Analytics\Tables\bridge_queue_workload.cs" />
     <Compile Include="TestData\Analytics\Tables\bridge_time_zone.cs" />
+    <Compile Include="TestData\Analytics\Tables\dim_person.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_business_unit.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_date.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_interval.cs" />
