@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             //restriction = restriction.Combine(openHourRestriction);
 
 			// (should we cover for max seats here?) 
-			var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,
+			var shifts = _workShiftFilterService.FilterForRoleModel(datePointer, teamBlockInfo, restriction,
 			                                            schedulingOptions,
                                                         new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer), _openHourRestrictionForTeamBlock.HasSameOpeningHours(teamBlockInfo));
 			if (shifts == null || shifts.Count <= 0)
