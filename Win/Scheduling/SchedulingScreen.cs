@@ -4610,8 +4610,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			if (conflicts.Any())
 			{
-				
-				MessageBox.Show("Du har " + conflicts.Count + " konflikter... Inget sparat för nu");
+				handleConflicts(new List<IPersistableScheduleData>(), conflicts);
+				doSaveProcess2();
 			}
 
 				//var result = _persister.TryPersist(_schedulerState.Schedules, _modifiedWriteProtections,
