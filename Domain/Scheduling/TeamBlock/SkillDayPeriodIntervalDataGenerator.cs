@@ -88,11 +88,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
         private IList<ISkillStaffPeriod> getSkillIntervalBetweenOpenHours(IEnumerable<ISkillStaffPeriod> skillStaffPeriodCollection, TimePeriod openHoursPerActivity)
         {
-            return
-                skillStaffPeriodCollection.Where(
-                    o =>
-                    openHoursPerActivity.Contains(new TimePeriod(o.Period.StartDateTime.TimeOfDay,
-                                                                 o.Period.EndDateTime.TimeOfDay))).ToList();
+	        return
+		        skillStaffPeriodCollection.Where(
+			        o =>
+			        openHoursPerActivity.Contains(new TimePeriod(o.Period.StartDateTime.TimeOfDay,
+			                                                     o.Period.EndDateTime.Date > o.Period.StartDateTime.Date
+				                                                     ? o.Period.EndDateTime.TimeOfDay.Add(TimeSpan.FromDays(1))
+				                                                     : o.Period.EndDateTime.TimeOfDay))).ToList();
         }
 
         private void aggregateDataOnSkill(ISkillDay skillDayToday, ISkillDay skillDayTomorrow, 
