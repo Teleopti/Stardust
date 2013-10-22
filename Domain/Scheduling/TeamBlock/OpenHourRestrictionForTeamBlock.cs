@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             foreach (var skillDay in skillDays)
             {
                 var activity = skillDay.Skill.Activity;
+                if (skillDay.SkillStaffPeriodCollection.Count == 0) continue;
                 var openHourForSkillDay = _skillIntervalDataOpenHour.GetOpenHours(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDay.SkillStaffPeriodCollection));
                 if (!openHoursPerActivity.ContainsKey(activity))
                 {
