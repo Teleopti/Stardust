@@ -33,16 +33,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var dates = new CurrentWeekDates();
 			var datasource = new  ExistingDatasources(new UtcAndCetTimeZones());
 			var businessUnit = new BusinessUnit(TestState.BusinessUnit, datasource);
-			var requestType = new RequestType(1, "Absence Request", "absence");
-			var requestStatus = new RequestStatus(1, "Pending", "pending");
 			var person = TestState.TestDataFactory.Person("Ashley Andeen").Person;
 
 			analyticsDataFactory.Setup(new EternityAndNotDefinedDate());			
 			analyticsDataFactory.Setup(dates);
 			analyticsDataFactory.Setup(businessUnit);
-			analyticsDataFactory.Setup(requestType);
-			analyticsDataFactory.Setup(requestStatus);
-			
 			analyticsDataFactory.Setup(new Person(person, datasource, 0, new DateTime(2010, 1, 1),
 									   new DateTime(2059, 12, 31), 0, -2, 0, TestState.BusinessUnit.Id.GetValueOrDefault(),
 									   false));
