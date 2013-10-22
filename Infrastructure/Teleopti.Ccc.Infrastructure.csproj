@@ -228,7 +228,11 @@
     <Compile Include="Licensing\SignatureValidationException.cs" />
     <Compile Include="Licensing\XmlLicense.cs" />
     <Compile Include="Licensing\XmlLicenseService.cs" />
+    <Compile Include="Persisters\Account\IPersonAccountConflictCollector.cs" />
+    <Compile Include="Persisters\Account\IPersonAccountConflictResolver.cs" />
     <Compile Include="Persisters\Account\IPersonAccountPersister.cs" />
+    <Compile Include="Persisters\Account\PersonAccountConflictCollector.cs" />
+    <Compile Include="Persisters\Account\PersonAccountConflictResolver.cs" />
     <Compile Include="Persisters\Account\PersonAccountPersister.cs" />
     <Compile Include="Persisters\NewStuff\IMessageQueueRemoval.cs" />
     <Compile Include="Persisters\Schedules\IScheduleRangeConflictCollector.cs" />

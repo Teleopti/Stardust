@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			return false;
 		}
 
-		protected override void WhenImChanging(IPersonAbsenceAccount myPersonAbsenseAccount)
+		protected override void WhenImChanging(IPersonAbsenceAccount myPersonAbsenceAccount)
 		{
-			myPersonAbsenseAccount.AccountCollection().Single().BalanceIn = TimeSpan.FromHours(11);
+			myPersonAbsenceAccount.AccountCollection().Single().BalanceIn = TimeSpan.FromHours(11);
 		}
 
 		protected override void Then(IPersonAbsenceAccount myPersonAbsenceAccount)
