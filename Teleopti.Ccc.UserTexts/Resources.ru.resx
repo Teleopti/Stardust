@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Absence" xml:space="preserve">
     <value>Отсутствие</value>
@@ -10595,5 +10595,236 @@ Teleopti R&amp;D</value>
   </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
     <value>Выполнение почасовой доступности</value>
+  </data>
+  <data name="SingleAgentTeam" xml:space="preserve">
+    <value>Отдельная группа операторов</value>
+  </data>
+  <data name="HourShort" xml:space="preserve">
+    <value>ч</value>
+  </data>
+  <data name="TeamBlockNotInLegalState" xml:space="preserve">
+    <value>Период планирования по группе не в legal state.</value>
+  </data>
+  <data name="SelectAtleastOneBlockOption" xml:space="preserve">
+    <value>Пожалуйста, выберите хотя бы одну из опций "категория смен", "время начала" или "одинаковые смены" при планировании блоками.</value>
+  </data>
+  <data name="FilterOvertimeAvailability" xml:space="preserve">
+    <value>Фильтр сверхурочной доступности</value>
+  </data>
+  <data name="AssignmentOptions" xml:space="preserve">
+    <value>Опции назначения</value>
+  </data>
+  <data name="OvertimeDuration" xml:space="preserve">
+    <value>Продолжительность сверхурочного времени</value>
+  </data>
+  <data name="ScheduleOvertime" xml:space="preserve">
+    <value>Планирование сверхурочного времени</value>
+  </data>
+  <data name="ScheduleOvertimeOptions" xml:space="preserve">
+    <value>Опции планирования сверхурочного времени</value>
+  </data>
+  <data name="SkillActivity" xml:space="preserve">
+    <value>Активность навыка</value>
+  </data>
+  <data name="TagChangesWithWithColon" xml:space="preserve">
+    <value>Тег изменения:</value>
+  </data>
+  <data name="TypeOfOvertime" xml:space="preserve">
+    <value>Тип сверхурочного времени</value>
+  </data>
+  <data name="AllowBreakContractMaxWorkTimePerWeek" xml:space="preserve">
+    <value>Позволять нарушать макисмальное время контракта в неделю </value>
+  </data>
+  <data name="AllowBreakContractNightlyRest" xml:space="preserve">
+    <value>Позволять нарушать время отдыха между сменами по контракту</value>
+  </data>
+  <data name="AllowBreakContractWeeklyRest" xml:space="preserve">
+    <value>Позволять нарушать недельное время отдыха по контракту</value>
+  </data>
+  <data name="ExtendTheEndOfExistingShiftsColon" xml:space="preserve">
+    <value>Сдвинуть время завершения существующих смен:</value>
+  </data>
+  <data name="OvertimeDurationColon" xml:space="preserve">
+    <value>Продолжительность сверхурочного времени:</value>
+  </data>
+  <data name="SkillActivityColon" xml:space="preserve">
+    <value>Активность навыка:</value>
+  </data>
+  <data name="TypeOfOvertimeColon" xml:space="preserve">
+    <value>Тип сверхурочного времени:</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>Текущая страница</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Экспорт</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Найти</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Найти следующий</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Найти текст в отчете</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>Первая страница</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Последняя страница</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Следующий</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Следующая страница</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>Больше совпадений не найдено.</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Настройки страницы</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Ширина страницы</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Предыдущая страница</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Печать макета</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Печать</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Остановить</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Текст не найден</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Всего страниц</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Целая страница</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Увеличить</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Время запроса к базе данных истекло, попробуйте ограничить условия поиска.</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Выполнено</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Выполнено (%)</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Обязательные предпочтения</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Не выполнено</value>
+  </data>
+  <data name="ShiftCategoryHeader" xml:space="preserve">
+    <value>Категория смены</value>
+  </data>
+  <data name="SwitchToViewPointOfSelectedAgent" xml:space="preserve">
+    <value>Переключить вид выделенного оператора</value>
+  </data>
+  <data name="ShareCalendar" xml:space="preserve">
+    <value>Открыть календарь</value>
+  </data>
+  <data name="ShareMyCalendar" xml:space="preserve">
+    <value>Открыть мой календарь</value>
+  </data>
+  <data name="Revoke" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="ShareMyCalendarHint" xml:space="preserve">
+    <value>Чтобы подписаться на свое расписание из приложения календаря, используйте URL ниже. Чтобы получить инструкцию, перейдите</value>
+  </data>
+  <data name="SendAgain" xml:space="preserve">
+    <value>Отправить повторно</value>
+  </data>
+  <data name="OvertimeAvailabilityWeb" xml:space="preserve">
+    <value>Сверхурочная доступность</value>
+  </data>
+  <data name="PaidTimeHeader" xml:space="preserve">
+    <value>Оплаченное время</value>
+  </data>
+  <data name="PartTimePercentageHeader" xml:space="preserve">
+    <value>Процент неполной занятости</value>
+  </data>
+  <data name="RuleSetBagLower" xml:space="preserve">
+    <value>Контейнер смен</value>
+  </data>
+  <data name="TrackerTypeHeader" xml:space="preserve">
+    <value>Тип отслеживания</value>
+  </data>
+  <data name="WorkflowControlSetHeader" xml:space="preserve">
+    <value>Набор правил рабочего процесса</value>
+  </data>
+  <data name="WorkTimeHeader" xml:space="preserve">
+    <value>Рабочее время</value>
+  </data>
+  <data name="FilterHourlyAvailability" xml:space="preserve">
+    <value>Фильтр почасовой доступности</value>
+  </data>
+  <data name="HourlyAvailability" xml:space="preserve">
+    <value>Почасовая доступность</value>
+  </data>
+  <data name="InfoPanel" xml:space="preserve">
+    <value>Панель информации</value>
+  </data>
+  <data name="SubjectTooLong" xml:space="preserve">
+    <value>Тема очень длинная</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Среднее</value>
+  </data>
+  <data name="Distribution" xml:space="preserve">
+    <value>Распределение</value>
+  </data>
+  <data name="ShiftAsOvertime" xml:space="preserve">
+    <value>Смена как сверхурочное время</value>
+  </data>
+  <data name="PerDate" xml:space="preserve">
+    <value>По дате</value>
+  </data>
+  <data name="ShiftCategoryDistribution" xml:space="preserve">
+    <value>Распределение категорий смен</value>
+  </data>
+  <data name="PerAgent" xml:space="preserve">
+    <value>По оператору</value>
+  </data>
+  <data name="PerShiftCategory" xml:space="preserve">
+    <value>По категории смены</value>
+  </data>
+  <data name="AnalysisInfo" xml:space="preserve">
+    <value>Информация по анализу</value>
+  </data>
+  <data name="Here" xml:space="preserve">
+    <value>здесь</value>
+  </data>
+  <data name="LengthOfActivity" xml:space="preserve">
+    <value>Общее время выделенной активности</value>
+  </data>
+  <data name="PleaseChooseSDK" xml:space="preserve">
+    <value>Пожалуйста, выберите SDK</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Стоп</value>
+  </data>
+  <data name="ModifyAvailabilities" xml:space="preserve">
+    <value>Изменить доступности</value>
   </data>
 </root>
