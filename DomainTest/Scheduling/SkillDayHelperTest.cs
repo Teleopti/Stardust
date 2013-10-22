@@ -105,8 +105,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             List<ISkillStaffPeriod> periodlist1 = new List<ISkillStaffPeriod>(baseData[0].SkillStaffPeriodCollection);
             List<ISkillStaffPeriod> periodlist2 = new List<ISkillStaffPeriod>(baseData[1].SkillStaffPeriodCollection);
 
-            Assert.AreEqual(1.894d, periodlist1[0].Payload.ForecastedIncomingDemand, 0.01);
-            Assert.AreEqual(3.093d, periodlist2[0].Payload.ForecastedIncomingDemand, 0.01);
+            Assert.AreEqual(2.435d, periodlist1[0].Payload.ForecastedIncomingDemand, 0.01);
+            Assert.AreEqual(3.764d, periodlist2[0].Payload.ForecastedIncomingDemand, 0.01);
 
             SkillStaffPeriodFactory.InjectEstimatedServiceLevel((SkillStaffPeriod)periodlist1[0], new Percent(0.9));
             SkillStaffPeriodFactory.InjectEstimatedServiceLevel((SkillStaffPeriod)periodlist2[0], new Percent(0.4));
