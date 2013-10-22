@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
-	public class AddNoConflictTest : ScheduleRangePersisterIntegrationTest
+	public class InsertNoConflictTest : ScheduleRangePersisterIntegrationTest
 	{
 		protected override void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart)
 		{

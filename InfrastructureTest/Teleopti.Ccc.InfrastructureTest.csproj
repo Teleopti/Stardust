@@ -158,9 +158,11 @@
     <Compile Include="Foundation\ThreadPrincipalContextTest.cs" />
     <Compile Include="NHibernateConfiguration\CompressedStringTest.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriverTest.cs" />
+    <Compile Include="Persisters\Account\UpdateNoConflictTest.cs" />
+    <Compile Include="Persisters\Account\PersonAccountPersisterIntegrationTest.cs" />
     <Compile Include="Persisters\Schedules\ConflictNoteEagerLoadingTest.cs" />
     <Compile Include="Persisters\Schedules\ConflictPersonAbsenceEagerLoadingTest.cs" />
-    <Compile Include="Persisters\Schedules\AddNoConflictTest.cs" />
+    <Compile Include="Persisters\Schedules\InsertNoConflictTest.cs" />
     <Compile Include="Persisters\Schedules\Bug25007.cs" />
     <Compile Include="Persisters\Schedules\ConflictPersonAssignmentEagerLoadingTest.cs" />
     <Compile Include="Persisters\Schedules\ConflictPreferenceDayEagerLoadingTest.cs" />
