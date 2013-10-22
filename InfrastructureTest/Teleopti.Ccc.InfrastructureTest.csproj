@@ -259,8 +259,6 @@
     </Compile>
     <Compile Include="Licensing\XmlLicenseTestSetupFixture.cs" />
     <Compile Include="Helper\DatabaseTestWithoutTransaction.cs" />
-    <Compile Include="Persisters\BugTest\Bug11817.cs" />
-    <Compile Include="Persisters\BugTest\Bug12891.cs" />
     <Compile Include="Persisters\PersistWriteProtectionTest.cs" />
     <Compile Include="Persisters\PersonAbsenceAccountConflictCollectorTest.cs" />
     <Compile Include="Persisters\PersonRequestPersisterTest.cs" />
