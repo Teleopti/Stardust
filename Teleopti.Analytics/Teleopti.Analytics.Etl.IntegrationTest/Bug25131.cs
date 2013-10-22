@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
+using Teleopti.Analytics.Etl.Transformer.Job;
+using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
@@ -47,9 +50,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			//Act
 			// kör etl körning här
-
-			//Assert
-			// kolla att prylarna hamnade rätt i databasen här
+            JobParameters parameters = null; //= new JobParameters()
+		    var steps = new List<JobStepBase>
+		        {
+		            new IntradayStageRequestJobStep(parameters),
+		            new FactRequestJobStep(parameters, true)
+		        };
+		    //Assert
+		    // kolla att prylarna hamnade rätt i databasen här
 
 
 		}

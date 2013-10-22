@@ -210,6 +210,7 @@
     <Compile Include="TestData\Generic\AbsenceConfigurable.cs" />
     <Compile Include="TestData\LayersExtensions.cs" />
     <Compile Include="TestData\Setups\AbsenceRequestConfigurable.cs" />
+    <Compile Include="TestData\Setups\BusinessUnitFromFakeState.cs" />
     <Compile Include="TestData\Setups\HawaiiTimeZone.cs" />
     <Compile Include="TestData\Setups\LicenseFromFile.cs" />
     <Compile Include="TestData\Setups\PersonPeriodConfigurable.cs" />

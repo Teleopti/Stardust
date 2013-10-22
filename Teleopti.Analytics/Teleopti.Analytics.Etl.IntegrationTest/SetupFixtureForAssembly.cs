@@ -47,11 +47,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		    
 			Data.Apply(new PersonThatCreatesTestData(personThatCreatesTestData));
 			Data.Apply(new LicenseFromFile());
-            using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
-            {
-                new BusinessUnitRepository(uow).Add(businessUnitFromFakeState);
-                uow.PersistAll();
-            }
+            Data.Apply(new BusinessUnitFromFakeState(businessUnitFromFakeState));
+            
 			_Ccc7DataBackup = DataSourceHelper.BackupCcc7DataByFileCopy("Teleopti.Analytics.Etl.IntegrationTest");
 		}
 

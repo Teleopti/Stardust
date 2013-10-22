@@ -70,6 +70,14 @@
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics.Etl.Interfaces\Teleopti.Analytics.Etl.Interfaces.csproj">
+      <Project>{172807BD-AC1D-4E6D-9013-2D30DCF5B961}</Project>
+      <Name>Teleopti.Analytics.Etl.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics.Etl.Transformer\Teleopti.Analytics.Etl.Transformer.csproj">
+      <Project>{B9465B16-1563-4F16-BCD6-353551B0AA20}</Project>
+      <Name>Teleopti.Analytics.Etl.Transformer</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="License.xml">
