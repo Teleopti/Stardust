@@ -9,8 +9,8 @@ define([
 		'views/teamschedule/vm',
 		'views/teamschedule/person',
 		'text!templates/teamschedule/view.html',
-        'resizeevent',
-        'ajax'
+		'resizeevent',
+		'ajax'
 	], function (
 		ko,
 		$,
@@ -21,8 +21,8 @@ define([
 		teamScheduleViewModel,
 		personViewModel,
 		view,
-	    resize,
-	    ajax
+		resize,
+		ajax
 	) {
 
 		var teamSchedule;
@@ -30,56 +30,56 @@ define([
 		var events = new ko.subscribable();
 
 		events.subscribe(function (personId) {
-		    navigation.GotoPersonSchedule(personId, teamSchedule.SelectedDate());
+			navigation.GotoPersonSchedule(personId, teamSchedule.SelectedDate());
 		}, null, "gotoperson");
 
 		var loadSchedules = function(options) {
-		    subscriptions.subscribeTeamSchedule(
+			subscriptions.subscribeTeamSchedule(
 				teamSchedule.SelectedGroup(),
 				helpers.Date.ToServer(teamSchedule.SelectedDate()),
 				function (schedules) {
 					var currentPersons = teamSchedule.Persons();
 					
-				    var dateClone = teamSchedule.SelectedDate().clone();
+					var dateClone = teamSchedule.SelectedDate().clone();
 					
-				    for (var i = 0; i < currentPersons.length; i++) {
-					    currentPersons[i].ClearData();
+					for (var i = 0; i < currentPersons.length; i++) {
+						currentPersons[i].ClearData();
 
-				    	for (var j = 0; j < schedules.length; j++) {
-				    		if (currentPersons[i].Id == schedules[j].PersonId) {
-				    			currentPersons[i].AddData(schedules[j], teamSchedule.TimeLine, dateClone);
+						for (var j = 0; j < schedules.length; j++) {
+							if (currentPersons[i].Id == schedules[j].PersonId) {
+								currentPersons[i].AddData(schedules[j], teamSchedule.TimeLine, dateClone);
 							}
 						}
 					}
 
-				    currentPersons.sort(function (first, second) {
-				    	first = first.OrderBy();
-					    second = second.OrderBy();
-					    return first == second ? 0 : (first < second ? -1 : 1);
+					currentPersons.sort(function (first, second) {
+						first = first.OrderBy();
+						second = second.OrderBy();
+						return first == second ? 0 : (first < second ? -1 : 1);
 					});
 
 					teamSchedule.Persons.valueHasMutated();
 
 					options.success();
-				    
+					
 					resize.notify();
 				},
-			    function (notification) {
-				    for (var i = 0; i < teamSchedule.Persons().length; i++) {
-					    if (notification.DomainReferenceId == teamSchedule.Persons()[i].Id) {
-						    return true;
-					    }
-				    }
-				    return false;
-			    }
-		    );
+				function (notification) {
+					for (var i = 0; i < teamSchedule.Persons().length; i++) {
+						if (notification.DomainReferenceId == teamSchedule.Persons()[i].Id) {
+							return true;
+						}
+					}
+					return false;
+				}
+			);
 		};
 
 		var loadPersons = function (options) {
-		    ajax.ajax({
+			ajax.ajax({
 				url: 'Person/PeopleInTeam',
 				data: {
-				    date: helpers.Date.ToServer(teamSchedule.SelectedDate()),
+					date: helpers.Date.ToServer(teamSchedule.SelectedDate()),
 					teamId: teamSchedule.SelectedGroup()
 				},
 				success: function (people, textStatus, jqXHR) {
@@ -118,10 +118,10 @@ define([
 				});
 		};
 		var loadTeams = function (options) {
-		    ajax.ajax({
+			ajax.ajax({
 				url: 'Person/AvailableTeams',
 				data: {
-				    date: helpers.Date.ToServer(teamSchedule.SelectedDate()),
+					date: helpers.Date.ToServer(teamSchedule.SelectedDate()),
 				},
 				success: function (data, textStatus, jqXHR) {
 					teamSchedule.SetTeams(data.Teams);
@@ -164,11 +164,11 @@ define([
 			
 			display: function (options) {
 
-			    var currentGroupId = function () {
+				var currentGroupId = function () {
 					if (options.id)
 						return options.id;
-					if (teamSchedule.Groupings().length > 0 && teamSchedule.Groupings()[0].Groups().length > 0)
-						return teamSchedule.Groupings()[0].Groups()[0].Id;
+					if (teamSchedule.GroupPages().length > 0 && teamSchedule.GroupPages()[0].Groups().length > 0)
+						return teamSchedule.GroupPages()[0].Groups()[0].Id;
 					return null;
 				};
 				
@@ -184,7 +184,7 @@ define([
 				var currentDate = function () {
 					var date = options.date;
 					if (date == undefined) {
-		                return moment().startOf('day');
+						return moment().startOf('day');
 					} else {
 						return moment(date, 'YYYYMMDD');
 					}
@@ -217,15 +217,15 @@ define([
 						success: function() {
 							loadSchedules({
 								success: function () {
-								    teamSchedule.Loading(false);
-								    deferred.resolve();
+									teamSchedule.Loading(false);
+									deferred.resolve();
 								}
 							});
 						}
 					});
 				};
 
-				if (teamSchedule.Groupings().length != 0 && teamSchedule.Groupings()[0].Groups().length != 0) {
+				if (teamSchedule.GroupPages().length != 0 && teamSchedule.GroupPages()[0].Groups().length != 0) {
 					loadPersonsAndSchedules();
 				} else {
 					loadTeams({
@@ -233,17 +233,17 @@ define([
 					});
 				}
 
-			    return deferred.promise();
+				return deferred.promise();
 			},
 			
 			dispose: function (options) {
 				subscriptions.unsubscribeTeamSchedule();
 				subscriptions.unsubscribeDailyStaffingMetrics();
-			    $(".datepicker.dropdown-menu").remove();
+				$(".datepicker.dropdown-menu").remove();
 			},
 			
 			setDateFromTest: function (date) {
-			    teamSchedule.SelectedDate(moment(date));
+				teamSchedule.SelectedDate(moment(date));
 			}
 			
 		};

@@ -26,7 +26,7 @@
 	
 	<div class="row">
 		<div class="span12 nowrap">
-			<select id="group-picker" data-bind="enable: !Loading(), foreach: Groupings, select2: { value: SelectedGroup } ">
+			<select id="group-picker" data-bind="enable: !Loading(), foreach: GroupPages, select2: { value: SelectedGroup } ">
                     <optgroup data-bind="attr: { label: Name }, foreach: Groups">
                         <option data-bind="text: Name, value: Id"></option>
                     </optgroup>

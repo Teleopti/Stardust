@@ -30,7 +30,7 @@ define([
 
             this.Resources = resources;
 
-            this.Groupings = ko.observableArray();
+            this.GroupPages = ko.observableArray();
 	        this.SelectedGroup = ko.observable();
             this.SelectedDate = ko.observable(moment());
 
@@ -40,17 +40,17 @@ define([
             };
 	        
             this.SetGroupings = function (groupings) {
-            	self.Groupings([]);
+            	self.GroupPages([]);
 
             	var newItems = ko.utils.arrayMap(groupings, function (d) {
             		return new groupingViewModel(d);
             	});
-            	self.Groupings.push.apply(self.Groupings, newItems);
+            	self.GroupPages.push.apply(self.GroupPages, newItems);
             };
             
             this.SetTeams = function (teams) {
             	
-            	self.Groupings([]);
+            	self.GroupPages([]);
 
             	var groups = [];
 	            for(var i = 0; i < teams.length; i++)
@@ -65,7 +65,7 @@ define([
             	var newItems = ko.utils.arrayMap(groupings, function (d) {
             		return new groupingViewModel(d);
             	});
-            	self.Groupings.push.apply(self.Groupings, newItems);
+            	self.GroupPages.push.apply(self.GroupPages, newItems);
             };
 	        
             this.NextDay = function() {
