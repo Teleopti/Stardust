@@ -29,11 +29,14 @@ Scenario: View full day absence in team schedule
 	| Field      | Value            |
 	| Name       | Vacation         |
 	| Start time | 2013-10-22 00:00 |
-	| End time   | 2013-10-22 00:00 |
+	| End time   | 2013-10-22 23:59 |
 	When I view schedules for '2013-10-22'
-	Then I should see 'Pierre Baldi' with absence
-	| Field | Value |
-	| Color | Red   |
+	Then I should see 'Pierre Baldi' with absence 
+	| Field       | Value    |
+	| Start time  | 08:00    |
+	| End time    | 16:00    |
+	| Color       | Red      |
+#	| Description | Vacation |
 
 Scenario: View full day absence for person
 	Given I have the role 'Anywhere Team Green'
@@ -41,16 +44,17 @@ Scenario: View full day absence for person
 	| Field      | Value            |
 	| Name       | Vacation         |
 	| Start time | 2013-10-22 00:00 |
-	| End time   | 2013-10-22 00:00 |
+	| End time   | 2013-10-22 23:59 |
 	When I view person schedule for 'Pierre Baldi' on '2013-10-22'
 	Then I should see a shift layer with
-	| Field      | Value |
-	| Start time | 08:00 |
-	| End time   | 16:00 |
-	| Color      | Red   |
+	| Field       | Value    |
+	| Start time  | 08:00    |
+	| End time    | 16:00    |
+	| Color       | Red      |
+#	| Description | Vacation |
 	And I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
 	| Color      | Red              |
-	| Start time | 2013-08-10 00:00 |
-	| End time   | 2013-08-10 23:59 |
+	| Start time | 2013-10-22 00:00 |
+	| End time   | 2013-10-22 23:59 |

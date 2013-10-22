@@ -37,11 +37,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		private static void AssertShiftLayer(ShiftLayerInfo shiftLayer)
 		{
-			Browser.Interactions.AssertExists(
-				string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}'][style*='background-color: {2}']",
-				              shiftLayer.StartTime,
-				              shiftLayer.LengthMinutes(),
-				               ColorNameToCss(shiftLayer.Color)));
+			var selector = string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}'][style*='background-color: {2}']",
+			                             shiftLayer.StartTime,
+			                             shiftLayer.LengthMinutes(),
+			                             ColorNameToCss(shiftLayer.Color));
+
+			if (shiftLayer.Description != null)
+				Browser.Interactions.AssertFirstContains(selector, shiftLayer.Description);
+			else
+				Browser.Interactions.AssertExists(selector);
 		}
 
 		[Then(@"I should not see a shift layer with")]
@@ -166,6 +170,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			public string StartTime { get; set; }
 			public string EndTime { get; set; }
 			public string Color { get; set; }
+			public string Description { get; set; }
 
 			public int LengthMinutes()
 			{
