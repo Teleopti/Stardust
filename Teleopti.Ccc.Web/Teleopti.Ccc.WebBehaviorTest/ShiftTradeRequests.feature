@@ -50,6 +50,7 @@ Scenario: Default to first day of open shift trade period
 	And the current time is '2030-01-01'
 	When I view Add Shift Trade Request
 	Then the selected date should be '2030-01-02'
+	And I should see the shift trade page for '2030-01-02'
 
 Scenario: Trades can not be made outside the shift trade period
 	Given I have the role 'Full access to mytime'

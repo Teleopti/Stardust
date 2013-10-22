@@ -89,29 +89,32 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	}
 
-	// Bind an event to window.onhashchange that, when the history state changes,
-	// iterates over all tab widgets, changing the current tab as necessary.
-	/*$(window)
-		.bind('hashchange', function (e) {
-
-		});*/
-
 	function _setupRoutes() {
 	    var viewRegex = '[a-z]+';
 	    var actionRegex = '[a-z]+';
 	    var guidRegex = '[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}';
 	    var dateRegex = '\\d{8}';
-
-
+		
+	    crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(ShiftTrade)/(' + dateRegex + ')$', 'i'),
+	        function (view, action, secondAction, date) {
+	        	var hashInfo = _parseHash('#' + view + '/' + action);
+	        	_invokeDisposeCallback(currentViewId);
+	        	_adjustTabs(hashInfo);
+	        	_loadContent(hashInfo,
+	            		function () {
+	            			Teleopti.MyTimeWeb.Request.ShiftTradeRequest(date);
+	            		});
+	        });
+		
 	    crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(' + actionRegex + ')/(' + dateRegex + ')$', 'i'),
-	        function(view,action,secondAction,date) {
-	            var hashInfo = _parseHash('#' + view + '/' + action);
+	        function (view, action, secondAction, date) {
+	        	var hashInfo = _parseHash('#' + view + '/' + action);
 	            _invokeDisposeCallback(currentViewId);
 	            _adjustTabs(hashInfo);
-	            _loadContent(hashInfo);
+		        _loadContent(hashInfo);
 	        });
 	    crossroads.addRoute(new RegExp('^(.*)$', 'i'),
-	        function(hash) {
+	        function (hash) {
 	            var hashInfo = _parseHash('#' + hash);
 	            _invokeDisposeCallback(currentViewId);
 	            _adjustTabs(hashInfo);
@@ -186,7 +189,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	    $('a[href="' + tabHref + '"]').parent().addClass('active');
 	}
 
-	function _loadContent(hashInfo) {
+	function _loadContent(hashInfo, secondAction) {
 		_disablePortalControls();
 
 		ajax.Ajax({
@@ -195,7 +198,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			success: function (html) {
 				var viewId = hashInfo.actionHash; //gröt
 				$('#body-inner').html(html);
-				_invokeInitCallback(viewId);
+				_invokeInitCallback(viewId, secondAction);
 				currentViewId = viewId;
 			}
 		});
@@ -207,11 +210,14 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			partialDispose();
 	}
 
-	function _invokeInitCallback(viewId) {
+	function _invokeInitCallback(viewId,secondAction) {
 		var partialInit = _partialViewInitCallback[viewId];
 		if ($.isFunction(partialInit))
 			partialInit(_readyForInteraction, _completelyLoaded);
 		Teleopti.MyTimeWeb.Common.PartialInit();
+		if ($.isFunction(secondAction)) {
+			secondAction();
+		}
 	}
 
 	function _readyForInteraction() {

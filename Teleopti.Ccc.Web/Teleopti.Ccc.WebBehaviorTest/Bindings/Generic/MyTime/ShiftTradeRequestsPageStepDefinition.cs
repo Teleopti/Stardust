@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
         public void ThenIShouldSeeTheShiftTradePageFor(DateTime date)
         {
             Browser.Interactions.AssertUrlContains("ShiftTrade/"+date.ToString("yyyyMMdd"));
-            Browser.Interactions.AssertFirstContains(".shift-trade-date", date.ToShortDateString(DataMaker.Me().Culture));
+			Browser.Interactions.AssertFirstContains(".add-shifttrade-datepicker", date.ToShortDateString(DataMaker.Me().Culture));
         }
 	}
 }
