@@ -41,13 +41,12 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private readonly IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
-		private readonly IOpenHoursToEffectiveRestrictionConverter _openHoursToEffectiveRestrictionConverter;
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private BackgroundWorker _backgroundWorker;
 		private int _scheduledCount;
 		private ISchedulingOptions _schedulingOptions;
-	    private IOpenHourRestrictionForTeamBlock _openHourRestrictionForTeamBlock;
+	    private readonly ISameOpenHoursInTeamBlockSpecification _sameOpenHoursInTeamBlockSpecification;
 
 	    public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
 			ISchedulerStateHolder schedulerStateHolder,
@@ -67,8 +66,7 @@ namespace Teleopti.Ccc.Win.Commands
 			IWorkShiftFinderResultHolder workShiftFinderResultHolder,
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
-			IOpenHoursToEffectiveRestrictionConverter openHoursToEffectiveRestrictionConverter,
-			ITeamBlockClearer teamBlockClearer, IOpenHourRestrictionForTeamBlock openHourRestrictionForTeamBlock)
+			ITeamBlockClearer teamBlockClearer,  ISameOpenHoursInTeamBlockSpecification sameOpenHoursInTeamBlockSpecification)
 		{
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -88,9 +86,8 @@ namespace Teleopti.Ccc.Win.Commands
 			_workShiftFinderResultHolder = workShiftFinderResultHolder;
 			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
-			_openHoursToEffectiveRestrictionConverter = openHoursToEffectiveRestrictionConverter;
 			_teamBlockClearer = teamBlockClearer;
-	        _openHourRestrictionForTeamBlock = openHourRestrictionForTeamBlock;
+	        _sameOpenHoursInTeamBlockSpecification = sameOpenHoursInTeamBlockSpecification;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedSchedules)
@@ -194,8 +191,7 @@ namespace Teleopti.Ccc.Win.Commands
 									   _restrictionAggregator,
 									   _workShiftFilterService, 
 									   teamScheduling,
-									   _workShiftSelector,
-									   _openHoursToEffectiveRestrictionConverter, _teamBlockClearer, rollbackService,_openHourRestrictionForTeamBlock);
+									   _workShiftSelector, _teamBlockClearer, rollbackService,_sameOpenHoursInTeamBlockSpecification);
 
 			var advanceSchedulingService =
 				new TeamBlockSchedulingService(schedulingOptions,

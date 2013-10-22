@@ -39,10 +39,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IGroupPerson _groupPerson;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IScheduleRange _scheduleRange;
-		private IOpenHoursToEffectiveRestrictionConverter _openHoursToEffectiveRestrictionConverter;
 		private ITeamBlockClearer _teamBlockCleaner;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
-	    private IOpenHourRestrictionForTeamBlock _openHourRestrictionforTeamBlock;
+	    private ISameOpenHoursInTeamBlockSpecification _sameOpenHoursInTeamBlockSpecification;
 
 	    [SetUp]
 		public void Setup()
@@ -56,8 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_scheduleRange = _mocks.StrictMock<IScheduleRange>();
 			_mocks.StrictMock<IShiftProjectionCache>();
-
-	        _openHourRestrictionforTeamBlock = _mocks.StrictMock<IOpenHourRestrictionForTeamBlock>();
+	        _sameOpenHoursInTeamBlockSpecification = _mocks.StrictMock<ISameOpenHoursInTeamBlockSpecification>();
 			_schedulingOptions = new SchedulingOptions();
 			_dateOnly = new DateOnly(2013, 4, 8);
 			var zone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
@@ -72,12 +70,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var blockInfo = new BlockInfo(_selectedPeriod);
 			_teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
-			_openHoursToEffectiveRestrictionConverter = _mocks.StrictMock<IOpenHoursToEffectiveRestrictionConverter>();
 			_teamBlockCleaner = _mocks.StrictMock<ITeamBlockClearer>();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_target = new TeamBlockScheduler(_skillDayPeriodIntervalDataGenerator, _restrictionAggregator,
-											 _workShiftFilterService, _teamScheduling, _workShiftSelector,
-											 _openHoursToEffectiveRestrictionConverter, _teamBlockCleaner, _rollbackService,_openHourRestrictionforTeamBlock );
+											 _workShiftFilterService, _teamScheduling, _workShiftSelector, _teamBlockCleaner, _rollbackService, _sameOpenHoursInTeamBlockSpecification);
 		}
 
 		[Test]
@@ -104,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 														   new WorkShiftFinderResult(_groupPerson, _dateOnly), true)).Return(null);
 				Expect.Call(_groupPerson.Id).Return(Guid.Empty).Repeat.AtLeastOnce();
-                Expect.Call(_openHourRestrictionforTeamBlock.HasSameOpeningHours(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+                Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy (_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
@@ -131,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 														   new WorkShiftFinderResult(_groupPerson, _dateOnly), true))
 					  .Return(new List<IShiftProjectionCache>());
-                Expect.Call(_openHourRestrictionforTeamBlock.HasSameOpeningHours(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+                Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
@@ -164,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																		  _schedulingOptions.WorkShiftLengthHintOption,
 																		  _schedulingOptions.UseMinimumPersons,
 																		  _schedulingOptions.UseMaximumPersons)).Return(shifts[0]);
-                Expect.Call(_openHourRestrictionforTeamBlock.HasSameOpeningHours(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+                Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
@@ -211,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				expectCallForChecker(scheduleDay);
 
 				Expect.Call(scheduleDay.IsScheduled()).Return(true);
-                Expect.Call(_openHourRestrictionforTeamBlock.HasSameOpeningHours(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+                Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
@@ -277,7 +273,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 				expectCallForChecker(scheduleDay);
 				Expect.Call(scheduleDay.IsScheduled()).Return(true);
-                Expect.Call(_openHourRestrictionforTeamBlock.HasSameOpeningHours(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+                Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
@@ -321,7 +317,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 				expectCallForChecker(scheduleDay);
 				Expect.Call(scheduleDay.IsScheduled()).Return(true);
-                Expect.Call(_openHourRestrictionforTeamBlock.HasSameOpeningHours(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+                Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
@@ -374,7 +370,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleDay.IsScheduled()).Return(false);
 
 				Expect.Call(_matrix1.Person).Return(_person).Repeat.Twice();
-                Expect.Call(_openHourRestrictionforTeamBlock.HasSameOpeningHours(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+                Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
@@ -410,7 +406,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleDay.IsScheduled()).Return(true);
 
 				expectCallForChecker(scheduleDay);
-                Expect.Call(_openHourRestrictionforTeamBlock.HasSameOpeningHours(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+                Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
@@ -459,7 +455,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 				expectCallForChecker(scheduleDay);
 				Expect.Call(scheduleDay.IsScheduled()).Return(true);
-                Expect.Call(_openHourRestrictionforTeamBlock.HasSameOpeningHours(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+                Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
@@ -509,7 +505,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleDay.IsScheduled()).Return(true);
 
 				expectCallForChecker(scheduleDay);
-                Expect.Call(_openHourRestrictionforTeamBlock.HasSameOpeningHours(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+                Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
@@ -561,7 +557,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleDay.IsScheduled()).Return(false);
 
 				Expect.Call(_matrix1.Person).Return(_person).Repeat.Twice();
-                Expect.Call(_openHourRestrictionforTeamBlock.HasSameOpeningHours(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+                Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
@@ -618,7 +614,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_matrix1.Person).Return(_person).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(scheduleDay).Repeat.AtLeastOnce();
 				Expect.Call(() => _teamBlockCleaner.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
-			    Expect.Call(_openHourRestrictionforTeamBlock.HasSameOpeningHours(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce() ;
+                Expect.Call(_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
