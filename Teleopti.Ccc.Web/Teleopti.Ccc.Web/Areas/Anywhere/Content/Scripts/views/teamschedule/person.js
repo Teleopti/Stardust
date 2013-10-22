@@ -114,7 +114,7 @@ define([
 
 				var visibleDayOffs = function() {
 					return ko.utils.arrayFilter(self.DayOffs(), function (l) {
-						return l.OverlapsTimeLine;
+						return l.OverlapsTimeLine();
 					});
 				};
 				
