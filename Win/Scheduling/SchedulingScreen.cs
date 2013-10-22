@@ -4628,6 +4628,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				//}
 
 
+			//Denna sätts i längre inne i save-loopen. fixa på annat sätt!
 				if (_personAbsenceAccountPersistValidationBusinessRuleResponses.Any())
 				{
 					BusinessRuleResponseDialog.ShowDialogFromWinForms(_personAbsenceAccountPersistValidationBusinessRuleResponses);
