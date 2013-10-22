@@ -273,6 +273,8 @@
     <Compile Include="Persisters\ScheduleScreenRefresher.cs" />
     <Compile Include="Persisters\ScheduleScreenRetryingPersister.cs" />
     <Compile Include="Persisters\VersionTupleExtensions.cs" />
+    <Compile Include="Persisters\WriteProtection\IWriteProtectionPersister.cs" />
+    <Compile Include="Persisters\WriteProtection\WriteProtectionPersister.cs" />
     <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelPersister.cs" />
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
