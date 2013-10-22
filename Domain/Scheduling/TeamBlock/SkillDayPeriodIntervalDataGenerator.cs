@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
@@ -22,15 +23,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
+	    private readonly IOpenHourRestrictionForTeamBlock _openHourRestrictionForTeamBlock;
 
-		public SkillDayPeriodIntervalDataGenerator(ISkillIntervalDataSkillFactorApplier skillIntervalDataSkillFactorApplier,
+	    public SkillDayPeriodIntervalDataGenerator(ISkillIntervalDataSkillFactorApplier skillIntervalDataSkillFactorApplier,
 			ISkillResolutionProvider resolutionProvider,
 			ISkillIntervalDataDivider intervalDataDivider,
 			ISkillIntervalDataAggregator intervalDataAggregator,
 			IDayIntervalDataCalculator dayIntervalDataCalculator,
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IGroupPersonSkillAggregator groupPersonSkillAggregator)
+			IGroupPersonSkillAggregator groupPersonSkillAggregator, IOpenHourRestrictionForTeamBlock openHourRestrictionForTeamBlock )
 		{
 			_skillIntervalDataSkillFactorApplier = skillIntervalDataSkillFactorApplier;
 			_resolutionProvider = resolutionProvider;
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
+		    _openHourRestrictionForTeamBlock = openHourRestrictionForTeamBlock;
 		}
 
 
@@ -53,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyList);
             var dateOnlyPeriod = new DateOnlyPeriod(dateOnlyList.Min(), dateOnlyList.Max());
             var skills = _groupPersonSkillAggregator.AggregatedSkills(groupPerson, dateOnlyPeriod).ToList();
-
+		    var openHoursPerActivity = _openHourRestrictionForTeamBlock.GetOpenHoursPerActivity(teamBlockInfo);
             var minimumResolution = _resolutionProvider.MinimumResolution(skills);
             var activityData = new Dictionary<IActivity, IDictionary<DateOnly, IList<ISkillIntervalData>>>();
             for (var i = 0; i < skillDays.Count; i++)
@@ -62,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 ISkillDay skillDayTomorrow;
                 getTwoConsectiveDays(i, out skillDayToday, out skillDayTomorrow, skillDays);
 
-                aggregateDataOnSkill(skillDayToday, skillDayTomorrow, skills, minimumResolution, activityData);
+                aggregateDataOnSkill(skillDayToday, skillDayTomorrow, skills, minimumResolution, activityData, openHoursPerActivity);
             }
 
             foreach (var activityBasedData in activityData)
@@ -83,18 +86,34 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 tomorrow = new SkillDay();
         }
 
-        private void aggregateDataOnSkill(ISkillDay skillDayToday, ISkillDay skillDayTomorrow, List<ISkill> skills, int minimumResolution, Dictionary<IActivity, IDictionary<DateOnly, IList<ISkillIntervalData>>> activityData)
+        private IList<ISkillStaffPeriod> getSkillIntervalBetweenOpenHours(IEnumerable<ISkillStaffPeriod> skillStaffPeriodCollection, TimePeriod openHoursPerActivity)
+        {
+            return
+                skillStaffPeriodCollection.Where(
+                    o =>
+                    openHoursPerActivity.Contains(new TimePeriod(o.Period.StartDateTime.TimeOfDay,
+                                                                 o.Period.EndDateTime.TimeOfDay))).ToList();
+        }
+
+        private void aggregateDataOnSkill(ISkillDay skillDayToday, ISkillDay skillDayTomorrow, 
+                                        List<ISkill> skills, int minimumResolution, Dictionary<IActivity, IDictionary<DateOnly, IList<ISkillIntervalData>>> activityData, 
+                                        IDictionary<IActivity, TimePeriod> openHoursPerActivity)
 	    {
             var currentDate = skillDayToday.CurrentDate;
             var skill = skillDayToday.Skill;
 	        if (!skills.Contains(skill)) return;
 	        var activity = skill.Activity;
             if (skillDayToday.SkillStaffPeriodCollection.Count == 0) return;
-            List<ISkillIntervalData> mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDayToday.SkillStaffPeriodCollection).ToList();
-            if (skillDayTomorrow.Id != null)
+            var skillIntervalBetweenOpenHour = getSkillIntervalBetweenOpenHours(skillDayToday.SkillStaffPeriodCollection, openHoursPerActivity[activity ] );
+            List<ISkillIntervalData> mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillIntervalBetweenOpenHour).ToList();
+            if (skillDayTomorrow.Id != null && openHoursPerActivity[activity ].EndTime > TimeSpan.FromDays(1))
+            {
+                skillIntervalBetweenOpenHour = getSkillIntervalBetweenOpenHours(skillDayTomorrow.SkillStaffPeriodCollection, openHoursPerActivity[activity]);
                 mappedData.AddRange(
-                    _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDayTomorrow.SkillStaffPeriodCollection)
+                    _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillIntervalBetweenOpenHour)
                                                               .ToList());
+            }
+                
             mappedData = _intervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution).ToList();
 	        var adjustedMapedData = new List<ISkillIntervalData>();
 	        foreach (var data in mappedData)
@@ -125,5 +144,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	            }
 	        }
 	    }
+
+	   
 	}
 }

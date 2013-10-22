@@ -47,8 +47,9 @@ namespace Teleopti.Ccc.Win.Commands
 		private BackgroundWorker _backgroundWorker;
 		private int _scheduledCount;
 		private ISchedulingOptions _schedulingOptions;
+	    private IOpenHourRestrictionForTeamBlock _openHourRestrictionForTeamBlock;
 
-		public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
+	    public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
 			ISchedulerStateHolder schedulerStateHolder,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Win.Commands
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			IOpenHoursToEffectiveRestrictionConverter openHoursToEffectiveRestrictionConverter,
-			ITeamBlockClearer teamBlockClearer)
+			ITeamBlockClearer teamBlockClearer, IOpenHourRestrictionForTeamBlock openHourRestrictionForTeamBlock)
 		{
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -89,6 +90,7 @@ namespace Teleopti.Ccc.Win.Commands
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 			_openHoursToEffectiveRestrictionConverter = openHoursToEffectiveRestrictionConverter;
 			_teamBlockClearer = teamBlockClearer;
+	        _openHourRestrictionForTeamBlock = openHourRestrictionForTeamBlock;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedSchedules)
@@ -193,7 +195,7 @@ namespace Teleopti.Ccc.Win.Commands
 									   _workShiftFilterService, 
 									   teamScheduling,
 									   _workShiftSelector,
-									   _openHoursToEffectiveRestrictionConverter, _teamBlockClearer, rollbackService);
+									   _openHoursToEffectiveRestrictionConverter, _teamBlockClearer, rollbackService,_openHourRestrictionForTeamBlock);
 
 			var advanceSchedulingService =
 				new TeamBlockSchedulingService(schedulingOptions,

@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         {
             IDictionary<DateOnly, IList<ISkillIntervalData>> list = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
             var result = _target.Calculate(15, list);
-            Assert.AreEqual(result.Count(), 192);
+            Assert.AreEqual(result.Count(), 0);
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 
             var result = _target.Calculate(60, list);
-            Assert.AreEqual(result.Count, 48);
+            Assert.AreEqual(result.Count, 6);
             Assert.AreEqual(result[new TimeSpan(0, 22, 0, 0)].ForecastedDemand, 3);
             Assert.AreEqual(result[new TimeSpan(0, 23, 0, 0)].ForecastedDemand, 4);
             Assert.AreEqual(result[new TimeSpan(1, 0, 0, 0)].ForecastedDemand, 5);
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 
             var result = _target.Calculate(60, list);
-            Assert.AreEqual(result.Count, 48);
+            Assert.AreEqual(result.Count, 8);
             Assert.AreEqual(result[new TimeSpan(0, 22, 0, 0)].ForecastedDemand, 5);
             Assert.AreEqual(result[new TimeSpan(0, 23, 0, 0)].ForecastedDemand, 3);
             Assert.AreEqual(result[new TimeSpan(1, 0, 0, 0)].ForecastedDemand, 5);
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 
             var result = _target.Calculate(60, list);
-            Assert.AreEqual(result.Count, 48);
+            Assert.AreEqual(result.Count, 7);
             Assert.AreEqual(result[new TimeSpan(0, 15, 0, 0)].ForecastedDemand, 4);
             Assert.AreEqual(result[new TimeSpan(0, 16, 0, 0)].ForecastedDemand, 4);
             Assert.AreEqual(result[new TimeSpan(0, 17, 0, 0)].ForecastedDemand, 9);
