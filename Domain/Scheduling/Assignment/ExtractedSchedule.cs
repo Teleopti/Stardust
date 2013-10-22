@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public ReadOnlyCollection<IPersonAssignment> PersonAssignmentCollection()
         {
-            List<IPersonAssignment> retList =
+            var retList =
                 new List<IPersonAssignment>(ScheduleDataInternalCollection().OfType<IPersonAssignment>());
             retList.Sort(new PersonAssignmentByDateSorter());
             return new ReadOnlyCollection<IPersonAssignment>(retList);
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
             IEnumerable<PreferenceDay> persistRestrictions = scheduleDataInternalCollection.OfType<PreferenceDay>();
             IEnumerable<StudentAvailabilityDay> studentRestrictions = scheduleDataInternalCollection.OfType<StudentAvailabilityDay>();
-            List<IScheduleData> ret = new List<IScheduleData>();
+            var ret = new List<IScheduleData>();
 
             foreach (var dataRestriction in dataRestrictions)
             {
@@ -448,19 +448,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             List<IPersonAbsence> addList = new List<IPersonAbsence>();
             TimeSpan diff = CalculatePeriodOffset(source.Period);
             IVisualLayerCollection layerCollection = source.ProjectionService().CreateProjection();
+            var layerCollectionPeriod = layerCollection.Period();
 
             foreach (IPersonAbsence sourceAbsence in source.PersonAbsenceCollection())
             {
                 if (layerCollection.HasLayers)
                 {
-                    if (sourceAbsence.Layer.Period.Contains(layerCollection.Period().Value))
+                    if (sourceAbsence.Layer.Period.Contains(layerCollectionPeriod.Value))
                     {
                         if (!all)
                             addList.Clear();
 
                         addList.Add(sourceAbsence.NoneEntityClone());
                     }
-
                 }
                 else
                 {
@@ -487,11 +487,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             IVisualLayerCollection layerCollection = ProjectionService().CreateProjection();
             IList<IPersonAbsence> removeList = new List<IPersonAbsence>();
 
+            var layerCollectionPeriod = layerCollection.Period();
             foreach (IPersonAbsence personAbsence in PersonAbsenceCollection(true).Reverse())
             {
                 if (layerCollection.HasLayers)
                 {
-                    if (!personAbsence.Layer.Period.Contains(layerCollection.Period().Value))
+                    if (!personAbsence.Layer.Period.Contains(layerCollectionPeriod.Value))
                     {
                         if (!all)
                             removeList.Clear();
@@ -499,7 +500,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                         removeList.Add(personAbsence);
                     }
                 }
-				else
+                else
 				{
 					if (!all)
 					{
@@ -550,6 +551,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             IList<IPersonAssignment> assignmentsToDelete = new List<IPersonAssignment>();
             ((List<IPersonAssignment>)assignments).AddRange(PersonAssignmentCollection());
 
+            var mainShiftPeriod = mainShift.LayerCollection.Period();
+
             foreach (IPersonAssignment assignment in assignments)
             {
                 if (currentAss == null || assignment == currentAss)
@@ -557,7 +560,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 IList<IPersonalShift> shiftsToMove = new List<IPersonalShift>();
                 foreach (IPersonalShift shift in assignment.PersonalShiftCollection)
                 {
-                    if (mainShift.LayerCollection.Period().Value.ContainsPart(shift.LayerCollection.Period().Value) || mainShift.LayerCollection.Period().Value.Adjacent(shift.LayerCollection.Period().Value))
+                    var currentShiftPeriod = shift.LayerCollection.Period();
+                    if (mainShiftPeriod.Value.ContainsPart(currentShiftPeriod.Value) || mainShiftPeriod.Value.Adjacent(currentShiftPeriod.Value))
                         shiftsToMove.Add(shift);
                 }
                 foreach (IPersonalShift shift in shiftsToMove)
@@ -623,8 +627,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
             IMainShift workingCopyOfMainShift = (IMainShift)sourceMainShift.NoneEntityClone();
             var sourceShiftPeriod = source.Period;
-            if (workingCopyOfMainShift.LayerCollection.Period().HasValue)
-                sourceShiftPeriod = workingCopyOfMainShift.LayerCollection.Period().Value;
+            var workingCopyShiftPeriod = workingCopyOfMainShift.LayerCollection.Period();
+            if (workingCopyShiftPeriod.HasValue)
+                sourceShiftPeriod = workingCopyShiftPeriod.Value;
             IPeriodOffsetCalculator periodOffsetCalculator = new PeriodOffsetCalculator();
             TimeSpan periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, sourceShiftPeriod);
             workingCopyOfMainShift.LayerCollection.MoveAllLayers(periodOffset);
@@ -688,11 +693,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             IList<IPersonAbsence> splitList = new List<IPersonAbsence>();
             IList<IPersonAbsence> deleteList = new List<IPersonAbsence>();
             IVisualLayerCollection layerCollection = ProjectionService().CreateProjection();
+            var dateTimePeriod = layerCollection.Period().Value;
 
             //loop absences in source
             foreach (IPersonAbsence personAbsence in PersonAbsenceCollection())
             {
-                if (personAbsence.Layer.Period.Contains(layerCollection.Period().Value))
+                if (personAbsence.Layer.Period.Contains(dateTimePeriod))
                 {
                     //try to split them
                     personAbsence.Split(period).ForEach(splitList.Add);
@@ -760,9 +766,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                         TimeSpan diff = CalculatePeriodOffset(source.Period);
                         destPersonalShift.LayerCollection.MoveAllLayers(diff);
 
-                        if (destPersonalShift.LayerCollection.Period().HasValue)
+                        var period = destPersonalShift.LayerCollection.Period();
+                        if (period.HasValue)
                         {
-                            if (destAss.Period.Contains((DateTimePeriod)destPersonalShift.LayerCollection.Period()))
+                            if (destAss.Period.Contains(period.Value))
                                 destAss.AddPersonalShift(destPersonalShift);
                         }
                     }

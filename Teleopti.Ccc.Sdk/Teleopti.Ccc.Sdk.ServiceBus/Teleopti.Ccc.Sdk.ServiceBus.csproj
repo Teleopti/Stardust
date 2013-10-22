@@ -164,7 +164,9 @@
     <Compile Include="BudgetGroupHeadCountSpecification.cs" />
     <Compile Include="BusStartup.cs" />
     <Compile Include="ConfigFileDefaultHost.cs" />
+    <Compile Include="GetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="LocalServiceBusPublisher.cs" />
+    <Compile Include="LocalServiceBusPublisherModule.cs" />
     <Compile Include="NewtonsoftJsonSerializer.cs" />
     <Compile Include="Notification\SmsNotification.cs" />
     <Compile Include="RtaBusBootStrapper.cs" />

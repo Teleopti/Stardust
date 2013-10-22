@@ -131,16 +131,28 @@
   <ItemGroup>
     <Compile Include="ActualAgentAssembler.cs" />
     <Compile Include="AlarmMapper.cs" />
-    <Compile Include="DatabaseHandler.cs" />
+    <Compile Include="CurrentAndNextLayerExtractor.cs" />
+    <Compile Include="DatabaseReader.cs" />
     <Compile Include="DatabaseConnectionStringHandler.cs" />
     <Compile Include="ActualAgentStateCache.cs" />
+    <Compile Include="DatabaseWriter.cs" />
+    <Compile Include="IActualAgentAssembler.cs" />
+    <Compile Include="IActualAgentStateCache.cs" />
+    <Compile Include="IAlarmMapper.cs" />
+    <Compile Include="ICurrentAndNextLayerExtractor.cs" />
+    <Compile Include="IDatabaseReader.cs" />
+    <Compile Include="IDatabaseWriter.cs" />
+    <Compile Include="IRtaDataHandlerCache.cs" />
     <Compile Include="Resolvers\PersonResolver.cs" />
     <Compile Include="Resolvers\DataSourceResolver.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="PersonStateHolder.cs" />
     <Compile Include="RealTimeContainerInstaller.cs" />
+    <Compile Include="RtaAlarmLight.cs" />
     <Compile Include="RtaDataHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RtaStateGroupLight.cs" />
+    <Compile Include="ScheduleLayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="CodeAnalysisDictionary.xml" />
