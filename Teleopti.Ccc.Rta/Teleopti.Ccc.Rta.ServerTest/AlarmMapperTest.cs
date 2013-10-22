@@ -14,24 +14,26 @@ namespace Teleopti.Ccc.Rta.ServerTest
 	public class AlarmMapperTest
 	{
 		private IAlarmMapper _target;
-		private IDatabaseHandler _databaseHandler;
+		private IDatabaseReader _databaseReader;
 		private IMbCacheFactory _cacheFactory;
 
 		private Guid _platFormTypeId, _activityId, _stateId, _businessUnitId, _stateGroupId, _personId;
 		private string _stateCode;
 
-		private ConcurrentDictionary<string, List<RtaStateGroupLight>> _stateGroupDictionary;
-		private ConcurrentDictionary<Guid, List<RtaAlarmLight>> _alarmDictionary;
+		private ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>> _stateGroupDictionary;
+		private ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>> _alarmDictionary;
 		private RtaAlarmLight _rtaAlarm;
 		private RtaStateGroupLight _rtaStateGroup;
+	    private IDatabaseWriter _databaseWriter;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
-			_databaseHandler = MockRepository.GenerateStrictMock<IDatabaseHandler>();
+			_databaseReader = MockRepository.GenerateStrictMock<IDatabaseReader>();
+			_databaseWriter = MockRepository.GenerateStrictMock<IDatabaseWriter>();
 			_cacheFactory = MockRepository.GenerateStrictMock<IMbCacheFactory>();
 
-			_target = new AlarmMapper(_databaseHandler, _cacheFactory);
+			_target = new AlarmMapper(_databaseReader, _databaseWriter, _cacheFactory);
 
 			_platFormTypeId = Guid.NewGuid();
 			_activityId = Guid.NewGuid();
@@ -51,8 +53,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 					StateId = _stateId,
 					StateName = "Ready"
 				};
-			_stateGroupDictionary = new ConcurrentDictionary<string, List<RtaStateGroupLight>>();
-			_stateGroupDictionary.TryAdd(_stateCode, new List<RtaStateGroupLight>{_rtaStateGroup});
+			_stateGroupDictionary = new ConcurrentDictionary<Tuple<string,Guid,Guid>, List<RtaStateGroupLight>>();
+			_stateGroupDictionary.TryAdd(new Tuple<string, Guid, Guid>(_stateCode,_platFormTypeId,_businessUnitId), new List<RtaStateGroupLight>{_rtaStateGroup});
 
 			_rtaAlarm = new RtaAlarmLight
 			{
@@ -62,14 +64,14 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				AlarmTypeId = Guid.NewGuid(),
 				BusinessUnit = _businessUnitId
 			};
-			_alarmDictionary = new ConcurrentDictionary<Guid, List<RtaAlarmLight>>();
-			_alarmDictionary.TryAdd(_activityId, new List<RtaAlarmLight> {_rtaAlarm});
+			_alarmDictionary = new ConcurrentDictionary<Tuple<Guid,Guid,Guid>, List<RtaAlarmLight>>();
+			_alarmDictionary.TryAdd(new Tuple<Guid,Guid,Guid>(_activityId,_stateGroupId,_businessUnitId), new List<RtaAlarmLight> {_rtaAlarm});
 		}
 
 		[Test]
 		public void GetAlarm_ReturnValidAlarm()
 		{
-			_databaseHandler.Expect(d => d.ActivityAlarms()).Return(_alarmDictionary);
+			_databaseReader.Expect(d => d.ActivityAlarms()).Return(_alarmDictionary);
 			var result = _target.GetAlarm(_activityId, _stateGroupId, _businessUnitId);
 			result.Should().Be.EqualTo(_rtaAlarm);
 		}
@@ -83,9 +85,9 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				StateGroupId = _stateGroupId,
 				BusinessUnit = _businessUnitId
 			};
-			_alarmDictionary.TryAdd(Guid.Empty, new List<RtaAlarmLight>{rtaAlarmForNoActivity});
+			_alarmDictionary.TryAdd(new Tuple<Guid, Guid, Guid>(Guid.Empty,_stateGroupId,_businessUnitId), new List<RtaAlarmLight>{rtaAlarmForNoActivity});
 
-			_databaseHandler.Expect(d => d.ActivityAlarms()).Return(_alarmDictionary);
+			_databaseReader.Expect(d => d.ActivityAlarms()).Return(_alarmDictionary);
 
 			var result = _target.GetAlarm(Guid.NewGuid(), _stateGroupId, _businessUnitId);
 			result.Should().Be.EqualTo(rtaAlarmForNoActivity);
@@ -103,9 +105,9 @@ namespace Teleopti.Ccc.Rta.ServerTest
 							BusinessUnit = _businessUnitId
 						}
 				};
-			_alarmDictionary.AddOrUpdate(_activityId, alarmForNoStateGroup, (guid, list) => alarmForNoStateGroup);
+			_alarmDictionary.AddOrUpdate(new Tuple<Guid, Guid, Guid>(_activityId,Guid.Empty,_businessUnitId), alarmForNoStateGroup, (guid, list) => alarmForNoStateGroup);
 
-			_databaseHandler.Expect(d => d.ActivityAlarms()).Return(_alarmDictionary);
+			_databaseReader.Expect(d => d.ActivityAlarms()).Return(_alarmDictionary);
 			var result = _target.GetAlarm(_activityId, Guid.Empty, _businessUnitId);
 			result.Should().Be.EqualTo(alarmForNoStateGroup.First());
 		}
@@ -113,7 +115,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void GetAlarm_NoMatchingStateGroup_NoMatchingEmptyStateGroupAlarm_ReturnNull()
 		{
-			_databaseHandler.Expect(d => d.ActivityAlarms()).Return(_alarmDictionary);
+			_databaseReader.Expect(d => d.ActivityAlarms()).Return(_alarmDictionary);
 			var result = _target.GetAlarm(_activityId, Guid.NewGuid(), _businessUnitId);
 			result.Should().Be.Null();
 		}
@@ -121,17 +123,35 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void GetStateGroup_ReturnValidStateGroup()
 		{
-			_databaseHandler.Expect(d => d.StateGroups()).Return(_stateGroupDictionary);
+			_databaseReader.Expect(d => d.StateGroups()).Return(_stateGroupDictionary);
 			var result = _target.GetStateGroup(_stateCode, _platFormTypeId, _businessUnitId);
 			result.Should().Be.EqualTo(_rtaStateGroup);
 		}
 
 		[Test]
-		public void GetStateGroup_NoMatchForBusinessUnit_ReturnNull()
-		{
-			_databaseHandler.Expect(d => d.StateGroups()).Return(_stateGroupDictionary);
-			var result = _target.GetStateGroup(_stateCode, Guid.Empty, Guid.Empty);
-			result.Should().Be.Null();
+		public void GetStateGroup_NoMatchForStateCodeInBusinessUnit_ReturnTheNewState()
+        {
+            var fictionarlDefaultStateGroup = new RtaStateGroupLight
+            {
+                BusinessUnitId = Guid.Empty,
+                PlatformTypeId = _platFormTypeId,
+                StateCode = _stateCode,
+                StateGroupId = Guid.NewGuid(),
+                StateGroupName = "a_new_state_group_name",
+                StateName = _stateCode,
+                StateId = Guid.NewGuid()
+            };
+            var stateDictionary = new ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>();
+            stateDictionary.TryAdd(new Tuple<string, Guid, Guid>(_stateCode, _platFormTypeId, Guid.Empty), new List<RtaStateGroupLight> { fictionarlDefaultStateGroup });
+
+			_databaseReader.Expect(d => d.StateGroups()).Return(_stateGroupDictionary);
+            _databaseWriter.Expect(d => d.AddAndGetNewRtaState(_stateCode, _platFormTypeId, Guid.Empty)).Return(fictionarlDefaultStateGroup);
+            _cacheFactory.Expect(c => c.Invalidate(_databaseReader, d => d.StateGroups(), false)).IgnoreArguments();
+            _databaseReader.Expect(d => d.StateGroups()).Return(stateDictionary);
+
+			var result = _target.GetStateGroup(_stateCode, _platFormTypeId, Guid.Empty);
+			result.BusinessUnitId.Should().Be.EqualTo(Guid.Empty);
+			result.StateGroupId.Should().Be.EqualTo(fictionarlDefaultStateGroup.StateGroupId);
 		}
 
 		[Test]
@@ -148,13 +168,13 @@ namespace Teleopti.Ccc.Rta.ServerTest
 					StateName = newStateCode,
 					StateId = Guid.NewGuid()
 				};
-			var stateDictionary = new ConcurrentDictionary<string, List<RtaStateGroupLight>>();
-			stateDictionary.TryAdd(newStateCode, new List<RtaStateGroupLight> {fictionarlDefaultStateGroup});
+			var stateDictionary = new ConcurrentDictionary<Tuple<string,Guid,Guid>, List<RtaStateGroupLight>>();
+			stateDictionary.TryAdd(new Tuple<string, Guid, Guid>(newStateCode,_platFormTypeId,_businessUnitId), new List<RtaStateGroupLight> {fictionarlDefaultStateGroup});
 
-			_databaseHandler.Expect(d => d.StateGroups()).Return(new ConcurrentDictionary<string, List<RtaStateGroupLight>>());
-			_databaseHandler.Expect(d => d.AddAndGetNewRtaState(newStateCode, _platFormTypeId)).Return(fictionarlDefaultStateGroup);
-			_cacheFactory.Expect(c => c.Invalidate(_databaseHandler, d => d.StateGroups(), false)).IgnoreArguments();
-			_databaseHandler.Expect(d => d.StateGroups()).Return(stateDictionary);
+			_databaseReader.Expect(d => d.StateGroups()).Return(new ConcurrentDictionary<Tuple<string,Guid,Guid>, List<RtaStateGroupLight>>());
+			_databaseWriter.Expect(d => d.AddAndGetNewRtaState(newStateCode, _platFormTypeId,_businessUnitId)).Return(fictionarlDefaultStateGroup);
+			_cacheFactory.Expect(c => c.Invalidate(_databaseReader, d => d.StateGroups(), false)).IgnoreArguments();
+			_databaseReader.Expect(d => d.StateGroups()).Return(stateDictionary);
 
 			var result = _target.GetStateGroup(newStateCode, _platFormTypeId, _businessUnitId);
 			result.BusinessUnitId.Should().Be.EqualTo(fictionarlDefaultStateGroup.BusinessUnitId);
@@ -165,8 +185,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			result.StateGroupName.Should().Be.EqualTo(fictionarlDefaultStateGroup.StateGroupName);
 			result.StateId.Should().Be.EqualTo(fictionarlDefaultStateGroup.StateId);
 			
-			_databaseHandler.AssertWasCalled(d => d.AddAndGetNewRtaState(newStateCode, _platFormTypeId));
-			_cacheFactory.AssertWasCalled(c => c.Invalidate(_databaseHandler, d => d.StateGroups(), false), a => a.IgnoreArguments());
+			_databaseWriter.AssertWasCalled(d => d.AddAndGetNewRtaState(newStateCode, _platFormTypeId,_businessUnitId));
+			_cacheFactory.AssertWasCalled(c => c.Invalidate(_databaseReader, d => d.StateGroups(), false), a => a.IgnoreArguments());
 		}
 
 		[Test]
@@ -179,10 +199,10 @@ namespace Teleopti.Ccc.Rta.ServerTest
 					StateGroupId = _stateGroupId,
 					IsLogOutState = true
 				};
-			var stateDictionary = new ConcurrentDictionary<string, List<RtaStateGroupLight>>();
-			stateDictionary.TryAdd("stateCode", new List<RtaStateGroupLight> { stateGroup });
+			var stateDictionary = new ConcurrentDictionary<Tuple<string,Guid,Guid>, List<RtaStateGroupLight>>();
+			stateDictionary.TryAdd(new Tuple<string, Guid, Guid>("stateCode",_platFormTypeId,_businessUnitId), new List<RtaStateGroupLight> { stateGroup });
 
-			_databaseHandler.Expect(d => d.StateGroups()).Return(stateDictionary);
+			_databaseReader.Expect(d => d.StateGroups()).Return(stateDictionary);
 			
 			var result = _target.IsAgentLoggedOut(_personId, "stateCode", _platFormTypeId, _businessUnitId);
 			result.Should().Be.True();
@@ -192,10 +212,10 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void IsAgentLoggedOut_NoStateGroupFound_ReturnFalse()
 		{
 			var stateGroup = new RtaStateGroupLight();
-			var stateDictionary = new ConcurrentDictionary<string, List<RtaStateGroupLight>>();
-			stateDictionary.TryAdd("stateCode", new List<RtaStateGroupLight> {stateGroup});
+            var stateDictionary = new ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>();
+            stateDictionary.TryAdd(new Tuple<string, Guid, Guid>("stateCode", _platFormTypeId, _businessUnitId), new List<RtaStateGroupLight> { stateGroup });
 
-			_databaseHandler.Expect(d => d.StateGroups()).Return(stateDictionary);
+			_databaseReader.Expect(d => d.StateGroups()).Return(stateDictionary);
 
 			var result = _target.IsAgentLoggedOut(_personId, "", _platFormTypeId, _businessUnitId);
 			result.Should().Be.False();
@@ -210,11 +230,11 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				PlatformTypeId = _platFormTypeId,
 				StateGroupId = _stateGroupId
 			};
-			var stateDictionary = new ConcurrentDictionary<string, List<RtaStateGroupLight>>();
-			stateDictionary.TryAdd("stateCode", new List<RtaStateGroupLight> { stateGroup });
+            var stateDictionary = new ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>();
+			stateDictionary.TryAdd(new Tuple<string, Guid, Guid>("stateCode",_platFormTypeId,_businessUnitId), new List<RtaStateGroupLight> { stateGroup });
 
-			_databaseHandler.Expect(d => d.StateGroups()).Return(stateDictionary);
-			_databaseHandler.Expect(d => d.ActivityAlarms()).Return(new ConcurrentDictionary<Guid, List<RtaAlarmLight>>());
+			_databaseReader.Expect(d => d.StateGroups()).Return(stateDictionary);
+			_databaseReader.Expect(d => d.ActivityAlarms()).Return(new ConcurrentDictionary<Tuple<Guid,Guid,Guid>, List<RtaAlarmLight>>());
 
 			var result = _target.IsAgentLoggedOut(_personId, "stateCode", _platFormTypeId, _businessUnitId);
 			result.Should().Be.False();
