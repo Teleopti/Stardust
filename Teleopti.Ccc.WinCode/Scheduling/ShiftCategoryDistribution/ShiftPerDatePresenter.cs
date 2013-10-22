@@ -60,6 +60,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
 			if (colIndex > 0 && rowIndex > 0)
 			{
+				if (!_model.ShouldUpdateViews) return;
+
 				var dateOnly = _sortedDates[rowIndex - 1];
 				style.CellType = "IntegerReadOnlyCell";
 				var shiftCategory = columnTag as IShiftCategory;

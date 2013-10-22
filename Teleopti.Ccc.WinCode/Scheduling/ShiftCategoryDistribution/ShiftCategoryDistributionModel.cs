@@ -32,8 +32,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		IList<IPerson> GetAgentsSortedByNumberOfShiftCategories(IShiftCategory shiftCategory, bool ascending);
 		IList<DateOnly> GetDatesSortedByNumberOfShiftCategories(IShiftCategory shiftCategory, bool ascending);
 		ICachedShiftCategoryDistribution CachedShiftCategoryDistribution { get; }
-
-		
+		event EventHandler ChartUpdateNeeded;
+		void OnChartUpdateNeeded();
+		bool ShouldUpdateViews { get; set; }
 	}
 
 	public class ShiftCategoryDistributionModel : IShiftCategoryDistributionModel
@@ -57,11 +58,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			_populationStatisticsCalculator = populationStatisticsCalculator;
 		}
 
+		public bool ShouldUpdateViews { get; set; }
+
 		public ICachedShiftCategoryDistribution CachedShiftCategoryDistribution
 		{
 			get { return _cachedShiftCategoryDistribution; }
 		}
-		
+
 		public MinMax<int> GetMinMaxForShiftCategory(IShiftCategory shiftCategory)
 		{
 			var dic = _cachedShiftCategoryDistribution.GetMinMaxDictionary(_filteredPersons);
@@ -101,6 +104,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		}
 
 		public event EventHandler ResetNeeded;
+		public event EventHandler ChartUpdateNeeded;
 
 		public void SetFilteredPersons(IEnumerable<IPerson> filteredPersons)
 		{
@@ -238,6 +242,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			var tmp = ResetNeeded;
 			if(tmp != null)
 				ResetNeeded(this, new EventArgs());
+		}
+
+		public virtual void OnChartUpdateNeeded()
+		{
+			var tmp = ChartUpdateNeeded;
+			if(tmp != null)
+				ChartUpdateNeeded(this, new EventArgs());
 		}
 
 		public IList<IPerson> GetSortedPersons(bool ascending)
