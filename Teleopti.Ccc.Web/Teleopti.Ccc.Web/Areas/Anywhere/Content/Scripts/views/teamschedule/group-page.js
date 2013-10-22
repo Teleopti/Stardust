@@ -1,6 +1,6 @@
 define([
 		'knockout',
-		'views/teamschedule/grouping-group'
+		'views/teamschedule/group-page-group'
 	], function (
 		ko,
 		group

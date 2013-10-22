@@ -2,7 +2,7 @@ define([
         'knockout',
         'navigation',
 		'shared/timeline',
-		'views/teamschedule/grouping',
+		'views/teamschedule/group-page',
         'resources!r',
         'moment',
 		'select2',
@@ -11,7 +11,7 @@ define([
         ko,
         navigation,
         timeLineViewModel,
-	    groupingViewModel,
+	    groupPageViewModel,
         resources,
         moment,
 	    select2,
@@ -43,7 +43,7 @@ define([
             	self.GroupPages([]);
 
             	var newItems = ko.utils.arrayMap(groupings, function (d) {
-            		return new groupingViewModel(d);
+            		return new groupPageViewModel(d);
             	});
             	self.GroupPages.push.apply(self.GroupPages, newItems);
             };
@@ -63,7 +63,7 @@ define([
 		            }];
 
             	var newItems = ko.utils.arrayMap(groupings, function (d) {
-            		return new groupingViewModel(d);
+            		return new groupPageViewModel(d);
             	});
             	self.GroupPages.push.apply(self.GroupPages, newItems);
             };
