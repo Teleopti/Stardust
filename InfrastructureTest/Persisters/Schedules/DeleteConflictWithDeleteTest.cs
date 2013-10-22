@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
-	public class DeleteConflictWithDeleteTest : ScheduleRangePersisterIntegrationTest
+	public class DeleteConflictWithDeleteTest : ScheduleRangePersisterBaseTest
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 

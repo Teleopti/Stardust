@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 {
-	public class ConflictEagerLoadingTest : PersonAccountPersisterIntegrationTest
+	public class ConflictEagerLoadingTest : PersonAccountPersisterBaseTest
 	{
 		protected override bool GivenOtherHasChanged(IPersonAbsenceAccount othersPersonAccount)
 		{

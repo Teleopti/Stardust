@@ -20,7 +20,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 {
 	[TestFixture]
-	public abstract class PersonAccountPersisterIntegrationTest : DatabaseTestWithoutTransaction
+	public abstract class PersonAccountPersisterBaseTest : DatabaseTestWithoutTransaction
 	{
 		private IPersonAbsenceAccount personAbsenceAccount;
 		private IPersonAccountPersister target;

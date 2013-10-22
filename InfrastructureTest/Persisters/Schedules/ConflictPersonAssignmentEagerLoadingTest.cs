@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
-	public class ConflictPersonAssignmentEagerLoadingTest : ScheduleRangePersisterIntegrationTest
+	public class ConflictPersonAssignmentEagerLoadingTest : ScheduleRangePersisterBaseTest
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 

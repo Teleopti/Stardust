@@ -23,7 +23,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
 	[TestFixture]
-	public abstract class ScheduleRangePersisterIntegrationTest : DatabaseTestWithoutTransaction, IOwnMessageQueue
+	public abstract class ScheduleRangePersisterBaseTest : DatabaseTestWithoutTransaction, IOwnMessageQueue
 	{
 		protected IPerson Person { get; private set; }
 		protected IActivity Activity { get; private set; }
