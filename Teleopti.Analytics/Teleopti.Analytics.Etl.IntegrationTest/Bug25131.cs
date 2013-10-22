@@ -44,11 +44,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			analyticsDataFactory.Setup(requestStatus);
 			
 			analyticsDataFactory.Setup(new Person(person, datasource, 0, new DateTime(2010, 1, 1),
-									   new DateTime(2059, 12, 31), 0, -2, 0, TestState.BusinessUnit.Id.Value,
+									   new DateTime(2059, 12, 31), 0, -2, 0, TestState.BusinessUnit.Id.GetValueOrDefault(),
 									   false));
 			analyticsDataFactory.Setup(new Person(person, datasource, 1, new DateTime(2011, 1, 1),
-                                       new DateTime(2059, 12, 31), 0, -2, 0, TestState.BusinessUnit.Id.Value,
-                                       true));
+									   new DateTime(2059, 12, 31), 0, -2, 0, TestState.BusinessUnit.Id.GetValueOrDefault(),
+									   true));
+			analyticsDataFactory.Setup(new StageRequest(Guid.NewGuid(),person.Id.GetValueOrDefault(),DateTime.Now,1,0, 
+											Guid.NewGuid(),TestState.BusinessUnit.Id.GetValueOrDefault(),datasource));
 			analyticsDataFactory.Persist();
 				
 
@@ -58,7 +60,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(new AbsenceConfigurable { Color = "Red", Name = "Absence" });
 			
 
-            //Valid from date id måste vi veta här när vi insertar så dom måste insertas först
+			//Valid from date id måste vi veta här när vi insertar så dom måste insertas först
 			
 			
 			//Act
