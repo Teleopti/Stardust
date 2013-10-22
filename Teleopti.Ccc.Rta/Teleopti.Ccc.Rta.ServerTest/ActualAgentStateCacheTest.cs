@@ -13,15 +13,15 @@ namespace Teleopti.Ccc.Rta.ServerTest
 	public class ActualAgentStateCacheTest
 	{
 		private actualAgentStateCacheForTest _target;
-		private IDatabaseHandler _databaseHandler;
+		private IDatabaseWriter _databaseWriter;
 		private IActualAgentState _agentState;
 		private readonly Guid _personId = Guid.NewGuid();
 
 		[SetUp]
 		public void Setup()
 		{
-			_databaseHandler = MockRepository.GenerateStrictMock<IDatabaseHandler>();
-			_target = new actualAgentStateCacheForTest(_databaseHandler);
+			_databaseWriter = MockRepository.GenerateStrictMock<IDatabaseWriter>();
+			_target = new actualAgentStateCacheForTest(_databaseWriter);
 			_agentState = new ActualAgentState
 				{
 					PersonId = _personId
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void FlushCacheToDataBase_NoBatchedAgents_ReturnNoAction()
 		{
 			_target.FlushCacheToDatabase();
-			_databaseHandler.AssertWasNotCalled(d => d.AddOrUpdate(null), a => a.IgnoreArguments());
+			_databaseWriter.AssertWasNotCalled(d => d.AddOrUpdate(null), a => a.IgnoreArguments());
 		}
 
 		[Test]
@@ -83,19 +83,45 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_agentState.StateId = stateId;
 			_target.AddAgentStateToCache(_agentState);
 
-			_databaseHandler.Expect(d => d.AddOrUpdate(null)).IgnoreArguments();
+			_databaseWriter.Expect(d => d.AddOrUpdate(null)).IgnoreArguments();
 
 			_target.FlushCacheToDatabase();
-			var args = _databaseHandler.GetArgumentsForCallsMadeOn(d => d.AddOrUpdate(null));
+			var args = _databaseWriter.GetArgumentsForCallsMadeOn(d => d.AddOrUpdate(null));
 			((List<IActualAgentState>) args[0][0])[0].StateId.Should().Be.EqualTo(stateId);
 		}
+
+        [Test]
+        public void TryGetShouldGetReturnFoundHit()
+        {
+            var personId = Guid.NewGuid();
+            _agentState.PersonId = personId;
+            _target.AddAgentStateToCache(_agentState);
+
+            IActualAgentState state;
+            var result = _target.TryGetLatestState(personId, out state);
+            result.Should().Be.True();
+            state.Should().Be.EqualTo(_agentState);
+        }
+
+        [Test]
+        public void TryGetShouldGetReturnNullWhenNoHitFound()
+        {
+            var personId = Guid.NewGuid();
+            _agentState.PersonId = personId;
+            _target.AddAgentStateToCache(_agentState);
+
+            IActualAgentState state;
+            var result = _target.TryGetLatestState(Guid.Empty, out state);
+            result.Should().Be.False();
+            state.Should().Be.Null();
+        }
 
 		[Test]
 		public void FlushCacheToDataBase_RemoveSavedStates()
 		{
 			_target.AddAgentStateToCache(_agentState);
 
-			_databaseHandler.Expect(d => d.AddOrUpdate(null)).IgnoreArguments();
+			_databaseWriter.Expect(d => d.AddOrUpdate(null)).IgnoreArguments();
 			_target.FlushCacheToDatabase();
 
 			_target.batchedAgents.Count.Should().Be.EqualTo(0);
@@ -103,7 +129,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 		private class actualAgentStateCacheForTest :ActualAgentStateCache
 		{
-			public actualAgentStateCacheForTest(IDatabaseHandler databaseHandler) : base(databaseHandler)
+			public actualAgentStateCacheForTest(IDatabaseWriter databaseWriter) : base(databaseWriter)
 			{
 			}
 
@@ -111,8 +137,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			{
 				get { return BatchedAgents; }
 			}
-				
-			
 		}
 	}
 }

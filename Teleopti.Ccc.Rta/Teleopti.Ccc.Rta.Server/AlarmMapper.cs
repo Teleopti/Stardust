@@ -6,61 +6,62 @@ using log4net;
 
 namespace Teleopti.Ccc.Rta.Server
 {
-	public interface IAlarmMapper
+    public class AlarmMapper : IAlarmMapper
 	{
-		RtaAlarmLight GetAlarm(Guid activityId, Guid stateGroupId, Guid businessUnit);
-		RtaStateGroupLight GetStateGroup(string stateCode, Guid platformTypeId, Guid businessUnitId);
-		bool IsAgentLoggedOut(Guid personId, string stateCode, Guid platformTypeId, Guid businessUnitId);
-	}
-
-	public class AlarmMapper : IAlarmMapper
-	{
-		private readonly IDatabaseHandler _databaseHandler;
-		private readonly IMbCacheFactory _mbCacheFactory;
+		private readonly IDatabaseReader _databaseReader;
+        private readonly IDatabaseWriter _databaseWriter;
+        private readonly IMbCacheFactory _mbCacheFactory;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(IAlarmMapper));
 
-		public AlarmMapper(IDatabaseHandler databaseHandler, IMbCacheFactory mbCacheFactory)
+		public AlarmMapper(IDatabaseReader databaseReader, IDatabaseWriter databaseWriter, IMbCacheFactory mbCacheFactory)
 		{
-			_databaseHandler = databaseHandler;
-			_mbCacheFactory = mbCacheFactory;
+			_databaseReader = databaseReader;
+		    _databaseWriter = databaseWriter;
+		    _mbCacheFactory = mbCacheFactory;
 		}
 
 		public RtaAlarmLight GetAlarm(Guid activityId, Guid stateGroupId, Guid businessUnit)
 		{
-			var alarm = findAlarmForActivity(activityId, stateGroupId, _databaseHandler.ActivityAlarms(), businessUnit);
+			var alarm = findAlarmForActivity(activityId, stateGroupId, businessUnit, _databaseReader.ActivityAlarms());
 			return alarm;
 		}
 
-		private static RtaAlarmLight findAlarmForActivity(Guid activityId, Guid stateGroupId,
-														  IDictionary<Guid, List<RtaAlarmLight>> allAlarms, Guid businessUnit)
+        private static RtaAlarmLight findAlarmForActivity(Guid activityId, Guid stateGroupId, Guid businessUnit,
+                                                          IDictionary<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>> allAlarms)
 		{
 			Logger.DebugFormat("Trying to get alarm for Activity: {0}, StateGroupId: {1}", activityId, stateGroupId);
 			List<RtaAlarmLight> alarmForActivity;
-			if (allAlarms.TryGetValue(activityId, out alarmForActivity))
+			if (allAlarms.TryGetValue(new Tuple<Guid, Guid, Guid>(activityId,stateGroupId,businessUnit), out alarmForActivity))
 			{
-				var alarmForStateGroup = alarmForActivity.SingleOrDefault(a => a.StateGroupId == stateGroupId && a.BusinessUnit == businessUnit);
-				if (alarmForStateGroup != null)
-					Logger.DebugFormat("Found Alarm: {0}, AlarmId: {1}", alarmForStateGroup.AlarmTypeId, alarmForStateGroup.Name);
-				else
-					Logger.DebugFormat("Could not find alarm, no matching StateGroupId");
-				return alarmForStateGroup;
+				var alarmForStateGroup = alarmForActivity.FirstOrDefault();
+			    if (Logger.IsDebugEnabled)
+			    {
+			        if (alarmForStateGroup != null)
+			            Logger.DebugFormat("Found Alarm: {0}, AlarmId: {1}", alarmForStateGroup.AlarmTypeId, alarmForStateGroup.Name);
+			        else
+			            Logger.DebugFormat("Could not find alarm, no matching StateGroupId");
+			    }
+			    return alarmForStateGroup;
 			}
 			return activityId != Guid.Empty
-					   ? findAlarmForActivity(Guid.Empty, stateGroupId, allAlarms, businessUnit)
+					   ? findAlarmForActivity(Guid.Empty, stateGroupId, businessUnit, allAlarms)
 					   : null;
 		}
 
 		public RtaStateGroupLight GetStateGroup(string stateCode, Guid platformTypeId, Guid businessUnitId)
 		{
 			Logger.DebugFormat("Trying to get stategroup for StateCode: {0}, PlatformTypeId: {1}, BusinessUntiId: {2}", stateCode, platformTypeId, businessUnitId);
-			var allStateGroups = _databaseHandler.StateGroups();
+			var allStateGroups = _databaseReader.StateGroups();
 			List<RtaStateGroupLight> stateGroupsForStateCode;
-			if (allStateGroups.TryGetValue(stateCode, out stateGroupsForStateCode))
+            if (allStateGroups.TryGetValue(new Tuple<string, Guid, Guid>(stateCode, platformTypeId, businessUnitId), out stateGroupsForStateCode))
 			{
-				var stateGroup = stateGroupsForStateCode.SingleOrDefault(s => s.BusinessUnitId == businessUnitId && s.PlatformTypeId == platformTypeId);
+				var stateGroup = stateGroupsForStateCode.FirstOrDefault();
 				if (stateGroup != null)
 				{
-					Logger.DebugFormat("Found StateGroupId: {0}, StateGroupName: {1}", stateGroup.StateGroupId, stateGroup.StateGroupName);
+                    if (Logger.IsDebugEnabled)
+                    {
+                        Logger.DebugFormat("Found StateGroupId: {0}, StateGroupName: {1}", stateGroup.StateGroupId, stateGroup.StateGroupName);
+                    }
 					return stateGroup;
 				}
 				Logger.InfoFormat(
@@ -69,9 +70,11 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 			else if (!string.IsNullOrEmpty(stateCode))
 			{
-				Logger.InfoFormat("Could not find SateCode: {0}, for PlatformTypeId: {1}, on BusinessUnit: {2}", stateCode, platformTypeId, businessUnitId);
+                if (Logger.IsInfoEnabled)
+				    Logger.InfoFormat("Could not find StateCode: {0}, for PlatformTypeId: {1}, on BusinessUnit: {2}", stateCode, platformTypeId, businessUnitId);
+
 				Logger.Debug("Adding StateCode to database and clearing stategroup cache");
-				var newState = _databaseHandler.AddAndGetNewRtaState(stateCode, platformTypeId);
+				var newState = _databaseWriter.AddAndGetNewRtaState(stateCode, platformTypeId,businessUnitId);
 				invalidateStateGroupCache();
 				return newState;
 			}
@@ -96,32 +99,7 @@ namespace Teleopti.Ccc.Rta.Server
 		private void invalidateStateGroupCache()
 		{
 			Logger.Debug("Clearing cache for state groups");
-			_mbCacheFactory.Invalidate(_databaseHandler, x => x.StateGroups(), false);
+			_mbCacheFactory.Invalidate(_databaseReader, x => x.StateGroups(), false);
 		}
-	}
-
-	public class RtaStateGroupLight
-	{
-		public Guid StateId { get; set; }
-		public string StateName { get; set; }
-		public string StateGroupName { get; set; }
-		public Guid PlatformTypeId { get; set; }
-		public string StateCode { get; set; }
-		public Guid StateGroupId { get; set; }
-		public Guid BusinessUnitId { get; set; }
-		public bool IsLogOutState { get; set; }
-	}
-
-	public class RtaAlarmLight
-	{
-		public Guid StateGroupId { get; set; }
-		public string StateGroupName { get; set; }
-		public Guid ActivityId { get; set; }
-		public string Name { get; set; }
-		public Guid AlarmTypeId { get; set; }
-		public int DisplayColor { get; set; }
-		public double StaffingEffect { get; set; }
-		public long ThresholdTime { get; set; }
-		public Guid BusinessUnit { get; set; }
 	}
 }
