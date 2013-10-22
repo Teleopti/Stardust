@@ -103,6 +103,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="Anywhere\ViewFullDayAbsence.feature.cs">
+      <DependentUpon>ViewFullDayAbsence.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Anywhere\TeamScheduleSorting.feature.cs">
       <DependentUpon>TeamScheduleSorting.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -651,6 +656,10 @@
     <Content Include="BeforeTestRun.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Anywhere\ViewFullDayAbsence.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ViewFullDayAbsence.feature.cs</LastGenOutput>
+    </None>
     <None Include="Anywhere\ViewGroupSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewGroupSchedule.feature.cs</LastGenOutput>
