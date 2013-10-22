@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
         {
             Assert.AreEqual(6.4359, _calculatorService.AgentsUseOccupancy(_sla, _serviceTime, _calls,
                                                                              _averageHandlingTime, _periodLength,
-                                                                             _minOcc, _maxOcc,1), 3));
+                                                                             _minOcc, _maxOcc,1), 3);
         }
 		
         [Test]
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		[Test]
 		public void ShouldDivideAgentsWithParallelTasks()
 		{
-			var expected =  Math.Round(6.142 /3,3);
+			var expected =  Math.Round(6.435 / 3, 3);
 
 			var result = Math.Round(_calculatorService.AgentsUseOccupancy(_sla, _serviceTime, _calls,
 																		_averageHandlingTime, _periodLength,
