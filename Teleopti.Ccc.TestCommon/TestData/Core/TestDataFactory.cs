@@ -20,8 +20,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		protected readonly DataFactory DataFactory;
 		private readonly IDictionary<string, PersonDataFactory> _persons = new Dictionary<string, PersonDataFactory>();
 
-	    public IBusinessUnit BusinessUnit { get; set; }
-
 	    public bool HasPerson(string name)
 		{
 			return _persons.ContainsKey(trimName(name));
