@@ -6,12 +6,12 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
     {
 		public static PersonDataFactory Person(string name)
 		{
-			return DataFactoryState.TestDataFactory.Person(name);
+			return TestState.TestDataFactory.Person(name);
 		}
 
 		public static void Apply(IDataSetup setup)
         {
-            DataFactoryState.TestDataFactory.Apply(setup);
+            TestState.TestDataFactory.Apply(setup);
         }
     }
 }
