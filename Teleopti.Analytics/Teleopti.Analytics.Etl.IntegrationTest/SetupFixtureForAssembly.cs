@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -37,16 +38,20 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			var businessUnitFromFakeState = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
 			businessUnitFromFakeState.Name = "BusinessUnit";
-
+            
 			StateHolderProxyHelper.SetupFakeState(dataSource, personThatCreatesTestData, businessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
 
 			_unitOfWorkFactory = UnitOfWorkFactory.CurrentUnitOfWorkFactory();
 
 			DataFactoryState.TestDataFactory = new TestDataFactory(UnitOfWorkAction);
-
+		    
 			Data.Apply(new PersonThatCreatesTestData(personThatCreatesTestData));
 			Data.Apply(new LicenseFromFile());
-
+            using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            {
+                new BusinessUnitRepository(uow).Add(businessUnitFromFakeState);
+                uow.PersistAll();
+            }
 			_Ccc7DataBackup = DataSourceHelper.BackupCcc7DataByFileCopy("Teleopti.Analytics.Etl.IntegrationTest");
 		}
 

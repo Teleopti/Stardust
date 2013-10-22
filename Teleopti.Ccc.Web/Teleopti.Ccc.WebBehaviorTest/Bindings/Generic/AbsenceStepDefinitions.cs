@@ -1,4 +1,5 @@
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.TestData.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 

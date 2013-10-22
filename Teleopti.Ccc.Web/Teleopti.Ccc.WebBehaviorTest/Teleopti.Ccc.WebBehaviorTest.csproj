@@ -332,7 +332,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Data\Setups\Generic\AbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ActivityConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\MessageConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\TextRequestConfigurable.cs" />
