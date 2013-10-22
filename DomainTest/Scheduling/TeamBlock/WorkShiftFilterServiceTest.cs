@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			var dateOnly = new DateOnly(2012, 12, 12);
 
-			var retShift = _target.Filter(dateOnly, _teamBlockInfo, null,
+			var retShift = _target.FilterForRoleModel(dateOnly, _teamBlockInfo, null,
 			                              _schedulingOptions, _finderResult, true);
 			Assert.IsNull(retShift);
 		}
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			var dateOnly = new DateOnly(2012, 12, 12);
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-			var retShift = _target.Filter(dateOnly, null, effectiveRestriction,
+			var retShift = _target.FilterForRoleModel(dateOnly, null, effectiveRestriction,
 			                              _schedulingOptions, _finderResult, true);
 			Assert.IsNull(retShift);
 		}
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
 			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-			var retShift = _target.Filter(dateOnly, teamBlockInfo, effectiveRestriction,
+			var retShift = _target.FilterForRoleModel(dateOnly, teamBlockInfo, effectiveRestriction,
 										  _schedulingOptions, _finderResult, true);
 			Assert.IsNull(retShift);
 		}
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			var dateOnly = new DateOnly(2012, 12, 12);
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-			var retShift = _target.Filter(dateOnly, _teamBlockInfo, effectiveRestriction,
+			var retShift = _target.FilterForRoleModel(dateOnly, _teamBlockInfo, effectiveRestriction,
 			                              _schedulingOptions, _finderResult, true);
 			Assert.IsNull(retShift);
 		}
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var retShift = _target.Filter(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
+				var retShift = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
 				Assert.IsNotNull(retShift);
 			}
 		}
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var retShift = _target.Filter(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
+				var retShift = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
 				Assert.IsNull(retShift);
 			}
 		}
@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var retShift = _target.Filter(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
+				var retShift = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
 				Assert.IsNull(retShift);
 			}
 		}
@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var retShift = _target.Filter(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
+				var retShift = _target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
 				Assert.IsNull(retShift);
 			}
 		}
@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				_target.Filter(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
+				_target.FilterForRoleModel(_dateOnly, _teamBlockInfo, effectiveRestriction, _schedulingOptions, _finderResult, true);
 			}
 		}
 
