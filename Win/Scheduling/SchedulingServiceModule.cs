@@ -255,6 +255,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<MedianCalculatorForDays>().As<IMedianCalculatorForDays>();
             builder.RegisterType<TwoDaysIntervalGenerator>().As<ITwoDaysIntervalGenerator>();
             builder.RegisterType<MedianCalculatorForSkillInterval>().As<IMedianCalculatorForSkillInterval>();
+            builder.RegisterType<OpenHourRestrictionForTeamBlock>().As<IOpenHourRestrictionForTeamBlock>();
+            builder.RegisterType<SkillIntervalDataOpenHour>().As<ISkillIntervalDataOpenHour>();
 		}
 
 		private static void registerTeamBlockSchedulingService(ContainerBuilder builder)

@@ -65,6 +65,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			    return null;
 		    if (effectiveRestriction != null)
 			    effectiveRestriction = effectiveRestriction.Combine(restrictionFromSchedules);
+	        
+            //var openHourRestriction = null;
+            //if(openHourRestriction != null)
+            //    effectiveRestriction = effectiveRestriction.Combine(openHourRestriction);
 
 		    return effectiveRestriction;
 	    }

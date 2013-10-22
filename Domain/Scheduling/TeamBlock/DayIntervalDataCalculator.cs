@@ -29,28 +29,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         {
             if (dayIntervalData == null) return null;
             InParameter.ValueMustBeLargerThanZero("resolution", resolution);
-            var baseDate = DateTime.SpecifyKind(SkillDayTemplate.BaseDate, DateTimeKind.Utc);
             var twoDayIntervalsForAllDays =_twoDaysIntervalGenerator.GenerateTwoDaysInterval( dayIntervalData, resolution);
-            var result = new Dictionary<TimeSpan, ISkillIntervalData>();
 
-            var temp = _medianCalculatorForDays.CalculateMedian(twoDayIntervalsForAllDays, resolution);
-
-            //adding the missing interval which should not be included in median calculation
-            foreach (var interval in DayIntervalGenerator.IntervalForTwoDays(resolution))
-            {
-                if (!temp.ContainsKey(interval))
-                {
-                    var startTime = baseDate.Date.Add(interval);
-                    var endTime = startTime.AddMinutes(resolution);
-                    result.Add(interval, new SkillIntervalData(new DateTimePeriod(startTime, endTime), 0, 0, 0,null, null));
-                }
-                else
-                {
-                    result.Add(interval, temp[interval]);
-                }
-            }
-
-            return result;
+            return _medianCalculatorForDays.CalculateMedian(twoDayIntervalsForAllDays, resolution);;
         }
         
     }
