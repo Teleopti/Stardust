@@ -21,7 +21,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[SetUp]
 		public void Setup()
 		{
-			SetupFixtureForAssembly.SetupDatabase();
+			SetupFixtureForAssembly.BeginTest();
+		}
+
+		[TearDown]
+		public void TearDown()
+		{
+			SetupFixtureForAssembly.EndTest();
 		}
 
 		[Test]

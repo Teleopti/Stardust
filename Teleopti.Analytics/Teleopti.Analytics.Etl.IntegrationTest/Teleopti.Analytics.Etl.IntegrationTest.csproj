@@ -48,7 +48,7 @@
   <ItemGroup>
     <Compile Include="Bug25131.cs" />
     <Compile Include="Data.cs" />
-    <Compile Include="DataFactoryState.cs" />
+    <Compile Include="TestState.cs" />
     <Compile Include="SanityTest.cs" />
     <Compile Include="SetupFixtureForAssembly.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
