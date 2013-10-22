@@ -163,13 +163,17 @@
     <Compile Include="Persisters\Schedules\AddNoConflictTest.cs" />
     <Compile Include="Persisters\Schedules\Bug25007.cs" />
     <Compile Include="Persisters\Schedules\ConflictPersonAssignmentEagerLoadingTest.cs" />
+    <Compile Include="Persisters\Schedules\ConflictPreferenceDayEagerLoadingTest.cs" />
+    <Compile Include="Persisters\Schedules\ConflictPublicNoteEagerLoadingTest.cs" />
     <Compile Include="Persisters\Schedules\ConflictScheduleTagEagerLoadingTest.cs" />
+    <Compile Include="Persisters\Schedules\ConflictStudentAvailabilityDayEagerLoadingTest.cs" />
     <Compile Include="Persisters\Schedules\DeleteConflictWithDeleteTest.cs" />
     <Compile Include="Persisters\Schedules\DeleteConflictWithUpdateTest.cs" />
     <Compile Include="Persisters\Schedules\DeleteNoConflictTest.cs" />
     <Compile Include="Persisters\Schedules\InsertConflictWithInsertTest.cs" />
     <Compile Include="Persisters\Schedules\ModifyNoConflictTest.cs" />
     <Compile Include="Persisters\Schedules\NoChangesTest.cs" />
+    <Compile Include="Persisters\Schedules\NoConflictForOvertimeAvailabilityTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterIntegrationTest.cs" />
     <Compile Include="Persisters\PersonRequestRefresherTest.cs" />
     <Compile Include="Persisters\ScheduleRefresherTest.cs" />

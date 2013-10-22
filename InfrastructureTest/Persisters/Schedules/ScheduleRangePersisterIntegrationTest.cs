@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected IMultiplicatorDefinitionSet DefinitionSet { get; private set; }
 		protected IScheduleRangePersister Target { get; set; }
 		protected IScheduleTag ScheduleTag { get; private set; }
+		protected IDayOffTemplate DayOffTemplate { get; private set; }
 		private IEnumerable<IPersistableScheduleData> _givenState;
 
 		protected override void SetupForRepositoryTestWithoutTransaction()
@@ -62,6 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			Absence = new Absence {Description = new Description("perist", "test")};
 			DefinitionSet = new MultiplicatorDefinitionSet("persist test", MultiplicatorType.Overtime);
 			ScheduleTag = new ScheduleTag {Description = "persist test"};
+			DayOffTemplate = new DayOffTemplate(new Description("persist test"));
 		}
 
 		private void setupDatabase()
@@ -75,6 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				new AbsenceRepository(unitOfWork).Add(Absence);
 				new MultiplicatorDefinitionSetRepository(unitOfWork).Add(DefinitionSet);
 				new ScheduleTagRepository(unitOfWork).Add(ScheduleTag);
+				new DayOffTemplateRepository(unitOfWork).Add(DayOffTemplate);
 				var scheduleDatas = new List<IPersistableScheduleData>();
 				Given(scheduleDatas);
 				_givenState = scheduleDatas;
@@ -101,6 +104,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				repository.Remove(Activity);
 				repository.Remove(ShiftCategory);
 				repository.Remove(Scenario);
+				repository.Remove(DayOffTemplate);
+				repository.Remove(Absence);
 				unitOfWork.PersistAll();
 			}
 		}
