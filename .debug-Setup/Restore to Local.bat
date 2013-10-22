@@ -222,6 +222,13 @@ ECHO Restoring baselines. Done!
 ECHO ------
 ECHO.
 
+::set sa as owner
+SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"dbo.sp_changedbowner @loginame = N'sa', @map = false"
+SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiCCC7 -Q"dbo.sp_changedbowner @loginame = N'sa', @map = false"
+SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiCCCAgg -Q"dbo.sp_changedbowner @loginame = N'sa', @map = false"
+GO
+
+
 ::Check if stat Databases exists, in that case leave as is
 ::else, create via DBManager
 ECHO.
