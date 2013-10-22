@@ -4671,6 +4671,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_grid.Cursor = Cursors.WaitCursor;
 				_grid.Enabled = false;
 				_grid.Cursor = Cursors.WaitCursor;
+				schedulerSplitters1.DisableViewShiftCategoryDistribution();
 				schedulerSplitters1.ElementHost1.Enabled = false; //shifteditor
 				toggleQuickButtonEnabledState(toolStripButtonQuickAccessCancel, true);
 				ribbonControlAdv1.Cursor = Cursors.AppStarting;
@@ -4678,6 +4679,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					toolStripSpinningProgressControl1 = new Common.Controls.SpinningProgress.ToolStripSpinningProgressControl();
 				toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = true;
 				disableSave();
+				
 			}
 		}
 
@@ -4703,6 +4705,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//av nån #%¤#¤%#¤% anledning tänds alla knappar i toggleQuick... ovan. Måste explicit tända/släcka igen.
 			_schedulerMessageBrokerHandler.NotifyMessageQueueSizeChange();
 			disableButtonsIfTeamLeaderMode();
+			schedulerSplitters1.EnableViewShiftCategoryDistribution();
 		}
 
 		private void disableButtonsIfTeamLeaderMode()
