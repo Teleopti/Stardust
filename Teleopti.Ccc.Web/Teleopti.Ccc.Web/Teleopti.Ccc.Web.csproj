@@ -232,6 +232,7 @@
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\SubscriptionPassThrough.cs">
       <Link>Core\MessageBroker\SubscriptionPassThrough.cs</Link>
     </Compile>
+    <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
     <Compile Include="Areas\Anywhere\Core\ITeamScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\ITeamScheduleViewModelMapper.cs" />
