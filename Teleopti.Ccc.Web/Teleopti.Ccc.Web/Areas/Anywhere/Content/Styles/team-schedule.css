@@ -74,7 +74,8 @@
 .team-schedule .shift .layer
 {
 	z-index: 10;	
-	height: 20px;
+	height: 22px;
+	text-align: center;
 }
 .team-schedule .shift .layer:first-of-type
 {
