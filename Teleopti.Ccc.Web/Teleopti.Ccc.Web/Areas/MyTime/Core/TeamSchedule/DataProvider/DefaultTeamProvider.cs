@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -5,20 +6,20 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 {
-	public class DefaultTeamCalculator : IDefaultTeamCalculator
+	public class DefaultTeamProvider : IDefaultTeamProvider
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ITeamProvider _teamProvider;
 
-		public DefaultTeamCalculator(ILoggedOnUser loggedOnUser, IPermissionProvider permissionProvider, ITeamProvider teamProvider)
+		public DefaultTeamProvider(ILoggedOnUser loggedOnUser, IPermissionProvider permissionProvider, ITeamProvider teamProvider)
 		{
 			_loggedOnUser = loggedOnUser;
 			_permissionProvider = permissionProvider;
 			_teamProvider = teamProvider;
 		}
 
-		public ITeam Calculate(DateOnly date)
+		public ITeam DefaultTeam(DateOnly date)
 		{
 			var myTeam = _loggedOnUser.CurrentUser().MyTeam(date);
 			if (myTeam != null && _permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule, date, myTeam))
@@ -27,6 +28,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 			if (team == null)
 				return myTeam;
 			return team;
+		}
+
+		public Guid? DefaultTeamId(DateOnly date)
+		{
+			var myTeam = _loggedOnUser.CurrentUser().MyTeam(date);
+			if (myTeam != null && _permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere, date, myTeam))
+				return myTeam.Id;			
+			return null;
 		}
 	}
 }
