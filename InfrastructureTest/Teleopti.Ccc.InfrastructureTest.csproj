@@ -183,6 +183,7 @@
     <Compile Include="Persisters\Schedules\ModifyNoConflictTest.cs" />
     <Compile Include="Persisters\Schedules\NoChangesTest.cs" />
     <Compile Include="Persisters\Schedules\NoConflictForOvertimeAvailabilityTest.cs" />
+    <Compile Include="Persisters\Schedules\ScheduleDictionaryPersisterTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterBaseTest.cs" />
     <Compile Include="Persisters\PersonRequestRefresherTest.cs" />
     <Compile Include="Persisters\ScheduleRefresherTest.cs" />
