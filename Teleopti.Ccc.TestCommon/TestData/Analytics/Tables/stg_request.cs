@@ -7,8 +7,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 	{
 		public static DataTable CreateTable()
 		{
-			var table = new DataTable("mart.stg_request");
-			table.Columns.Add("request_code", typeof (Guid));
+			var table = new DataTable("stage.stg_request");
+			table.Columns.Add("request_code", typeof(Guid));
 			table.Columns.Add("person_code", typeof(Guid));
 			table.Columns.Add("application_datetime", typeof (DateTime));
 			table.Columns.Add("request_date", typeof (DateTime));
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			int datasourceId )
 		{
 			var row = dataTable.NewRow();
-			row["person_id"] = requestCode;
+			row["request_code"] = requestCode;
 			row["person_code"] = personCode;
 			row["application_datetime"] = DateTime.Now;
 			row["request_date"] = requestDate;

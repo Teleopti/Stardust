@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 
 		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
 		{
-			using (var table = dim_person.CreateTable())
+			using (var table = stg_request.CreateTable())
 			{
 				table.AddStageRequest(_requestCode, _personCode, _requestDate, _requestType, _requestStatus, _businessUnitCode, _absenceCode, _datasource.RaptorDefaultDatasourceId);
 

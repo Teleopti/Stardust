@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
+using Teleopti.Analytics.Etl.TransformerInfrastructure;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Generic;
 using Teleopti.Ccc.TestCommon.TestData.Setups;
+using Teleopti.Interfaces.Domain;
 using RequestType = Teleopti.Ccc.TestCommon.TestData.Analytics.RequestType;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
@@ -26,7 +29,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			SetupFixtureForAssembly.EndTest();
 		}
 
-		[Test]
+        [Test, ExpectedException(typeof(System.Data.SqlClient.SqlException))]
 		public void ShouldWork()
 		{
 			var analyticsDataFactory = new AnalyticsDataFactory();
@@ -47,12 +50,12 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			analyticsDataFactory.Setup(new StageRequest(Guid.NewGuid(),person.Id.GetValueOrDefault(),DateTime.Now,1,0, 
 											Guid.NewGuid(),TestState.BusinessUnit.Id.GetValueOrDefault(),datasource));
 			analyticsDataFactory.Persist();
-				
 
-			
+            var raptorRep = new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix,"");
+            raptorRep.FillIntradayFactRequestMart(TestState.BusinessUnit);
 			// sätt upp analytics data här
-			Data.Person("Ashley Andeen").Apply(new StockholmTimeZone());
-			Data.Apply(new AbsenceConfigurable { Color = "Red", Name = "Absence" });
+            //Data.Person("Ashley Andeen").Apply(new StockholmTimeZone());
+            //Data.Apply(new AbsenceConfigurable { Color = "Red", Name = "Absence" });
 			
 
 			//Valid from date id måste vi veta här när vi insertar så dom måste insertas först
