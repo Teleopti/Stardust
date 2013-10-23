@@ -2,14 +2,14 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.NewStuff;
+using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.Events;
 
-namespace Teleopti.Ccc.InfrastructureTest.Persisters
+namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 {
 	[TestFixture]
 	public class ScheduleRefresherTest

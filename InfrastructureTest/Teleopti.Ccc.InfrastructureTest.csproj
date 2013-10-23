@@ -184,8 +184,8 @@
     <Compile Include="Persisters\Schedules\NoConflictForOvertimeAvailabilityTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleDictionaryPersisterTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterBaseTest.cs" />
-    <Compile Include="Persisters\PersonRequestRefresherTest.cs" />
-    <Compile Include="Persisters\ScheduleRefresherTest.cs" />
+    <Compile Include="Persisters\Refresh\PersonRequestRefresherTest.cs" />
+    <Compile Include="Persisters\Refresh\ScheduleRefresherTest.cs" />
     <Compile Include="Persisters\Schedules\UpdateConflictWithDeleteTest.cs" />
     <Compile Include="Persisters\Schedules\UpdateConflictWithUpdateTest.cs" />
     <Compile Include="Persisters\Schedules\UpdateNoConflictTest.cs" />
@@ -268,10 +268,10 @@
     <Compile Include="Persisters\ScheduleDictionaryBatchPersisterTest.cs" />
     <Compile Include="Persisters\ScheduleDictionaryModifiedCallbackTest.cs" />
     <Compile Include="Persisters\ScheduleScreenDerivedScheduleDataTest.cs" />
-    <Compile Include="Persisters\ScheduleScreenRefresherMeetingTest.cs" />
-    <Compile Include="Persisters\ScheduleScreenRefresherPersonRequestTest.cs" />
-    <Compile Include="Persisters\ScheduleScreenRefresherScheduleDataTest.cs" />
-    <Compile Include="Persisters\ScheduleScreenRefresherTest.cs" />
+    <Compile Include="Persisters\Refresh\ScheduleScreenRefresherMeetingTest.cs" />
+    <Compile Include="Persisters\Refresh\ScheduleScreenRefresherPersonRequestTest.cs" />
+    <Compile Include="Persisters\Refresh\ScheduleScreenRefresherScheduleDataTest.cs" />
+    <Compile Include="Persisters\Refresh\ScheduleScreenRefresherTest.cs" />
     <Compile Include="Repositories\AbsenceRepositoryTest.cs" />
     <Compile Include="Repositories\ActivityRepositoryTest.cs" />
     <Compile Include="Repositories\AgentDayScheduleTagRepositoryTest.cs" />

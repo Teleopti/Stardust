@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Infrastructure.Persisters
+namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 {
     internal static class VersionTupleExtensions
     {

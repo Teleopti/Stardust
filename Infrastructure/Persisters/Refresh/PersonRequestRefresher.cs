@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Infrastructure.Persisters.NewStuff;
 using Teleopti.Interfaces.MessageBroker.Events;
 
-namespace Teleopti.Ccc.Infrastructure.Persisters
+namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 {
     public interface IUpdatePersonRequestsFromMessages
     {
