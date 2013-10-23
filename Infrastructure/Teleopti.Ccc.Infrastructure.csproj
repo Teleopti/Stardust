@@ -241,6 +241,7 @@
     <Compile Include="Persisters\Schedules\IScheduleRangeConflictCollector.cs" />
     <Compile Include="Persisters\Schedules\IScheduleRangePersister.cs" />
     <Compile Include="Persisters\Schedules\IScheduleDifferenceSaver.cs" />
+    <Compile Include="Persisters\Schedules\NoScheduleRangeConflictCollector.cs" />
     <Compile Include="Persisters\Schedules\PersistConflict.cs" />
     <Compile Include="Persisters\Schedules\ScheduleDictionaryPersister.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangeConflictCollector.cs" />

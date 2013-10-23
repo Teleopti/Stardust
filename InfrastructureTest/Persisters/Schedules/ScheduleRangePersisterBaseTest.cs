@@ -47,9 +47,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		{
 			var currUnitOfWork = new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
 			var scheduleRep = new ScheduleRepository(currUnitOfWork);
-			Target = new ScheduleRangePersister(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()), 
+			Target = new ScheduleRangePersister(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()),
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
-				new ScheduleRangeConflictCollector(scheduleRep, new PersonAssignmentRepository(currUnitOfWork), this, new LazyLoadingManagerWrapper()), 
+				ConflictCollector(),
 				new ScheduleDifferenceSaver(scheduleRep),
 				MockRepository.GenerateMock<IMessageBrokerIdentifier>());
 		}
@@ -60,9 +60,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			Activity = new Activity("persist test");
 			ShiftCategory = new ShiftCategory("persist test");
 			Scenario = new Scenario("scenario");
-			Absence = new Absence {Description = new Description("perist", "test")};
+			Absence = new Absence { Description = new Description("perist", "test") };
 			DefinitionSet = new MultiplicatorDefinitionSet("persist test", MultiplicatorType.Overtime);
-			ScheduleTag = new ScheduleTag {Description = "persist test"};
+			ScheduleTag = new ScheduleTag { Description = "persist test" };
 			DayOffTemplate = new DayOffTemplate(new Description("persist test"));
 		}
 
@@ -126,35 +126,41 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 			var myDic = loadScheduleDictionary();
 			Target.Persist(otherRange);
-			
+
 			var myRange = myDic[Person];
 			WhenImChanging(myRange);
 
-			var conflicts = Target.Persist(myRange);
-
-			Then(conflicts);
-			Then(myRange);
-
-			var canLoadAfterChangeDicVerifier = loadScheduleDictionary()[Person];
-			if (!conflicts.Any())
+			if (ExpectOptimistLockException)
 			{
-				//if no conflicts, db version should be same as users schedulerange
-				Then(canLoadAfterChangeDicVerifier);				
+				Assert.Throws<OptimisticLockException>(() => Target.Persist(myRange));
 			}
-			generalAsserts(myRange, conflicts);
+			else
+			{
+				var conflicts = Target.Persist(myRange);
+				Then(conflicts);
+				Then(myRange);
+
+				var canLoadAfterChangeDicVerifier = loadScheduleDictionary()[Person];
+				if (!conflicts.Any())
+				{
+					//if no conflicts, db version should be same as users schedulerange
+					Then(canLoadAfterChangeDicVerifier);
+				}
+				generalAsserts(myRange, conflicts);
+			}
 		}
 
 		protected void DoModify(IScheduleDay scheduleDay)
 		{
 			scheduleDay.Owner.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(),
-			                         MockRepository.GenerateMock<IScheduleDayChangeCallback>(),
-			                         MockRepository.GenerateMock<IScheduleTagSetter>());
+															 MockRepository.GenerateMock<IScheduleDayChangeCallback>(),
+															 MockRepository.GenerateMock<IScheduleTagSetter>());
 		}
 
 		private static void generalAsserts(IScheduleRange range, IEnumerable<PersistConflict> conflicts)
 		{
 			var rangeDiff = range.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>());
-	
+
 			if (conflicts.Any())
 			{
 				rangeDiff.Should("After save, there is a no diff in Snapshot and current data in ScheduleRange even though conflicts were found. Indicates that something is very wrong!").Not.Be.Empty();
@@ -192,6 +198,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		public void NotifyMessageQueueSizeChange()
 		{
 			throw new System.NotImplementedException();
+		}
+
+		protected virtual bool ExpectOptimistLockException
+		{
+			get { return false; }
+		}
+
+		protected virtual IScheduleRangeConflictCollector ConflictCollector()
+		{
+			var currUnitOfWork = new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
+			var scheduleRep = new ScheduleRepository(currUnitOfWork);
+			return new ScheduleRangeConflictCollector(scheduleRep, new PersonAssignmentRepository(currUnitOfWork), this, new LazyLoadingManagerWrapper());
 		}
 	}
 }
