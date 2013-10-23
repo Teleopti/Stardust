@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldReturnMyTeamAsDefaultGroup()
 		{
 			var site = SiteFactory.CreateSimpleSite(" ");
-			site.SetId(Guid.NewGuid());
 			var team = new Team() { Site = site, Description = new Description("Team red")};
 			team.SetId(Guid.NewGuid());
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.Today, team);
@@ -57,8 +56,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			var secondGroup = new ReadOnlyGroupDetail()
 				{
-					GroupId = Guid.Empty,
-					GroupName = person.MyTeam(DateOnly.Today).Description.Name
+					GroupId = team.Id.Value,
+					GroupName = team.Description.Name
 				};
 
 			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new ReadOnlyGroupPage(), new List<ReadOnlyGroupDetail>() { firstGroup, secondGroup }), loggedOnUser);
@@ -66,7 +65,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
 
 			dynamic gp = result;
-			((object)gp.SelectedGroupId).Should().Be.EqualTo(loggedOnUser.CurrentUser().MyTeam(new DateOnly(DateTime.Now)));
+			((object)gp.SelectedGroupId).Should().Be.EqualTo(secondGroup.GroupId);
+		}
+
+		[Test]
+		public void ShouldReturnNoDefaultGroupIfIHaveNoTeam()
+		{
+			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new ReadOnlyGroupPage(), new List<ReadOnlyGroupDetail>() { new ReadOnlyGroupDetail() }), new FakeLoggedOnUser());
+
+			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
+
+			dynamic gp = result;
+			((object) gp.SelectedGroupId).Should().Be.Null();
 		}
 	}
 

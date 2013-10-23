@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: View group schedule
+﻿Feature: View group schedule
 	In order to contact agents with a specific skill
 	or belonging to a specific team
 	or that are part-timers
@@ -39,9 +38,10 @@ Background:
 	And 'Pierre Baldi' has a workflow control set publishing schedules until '2013-12-01'
 	And 'John Smith' has a workflow control set publishing schedules until '2013-12-01'
 	And 'John Smith' has a person period with
-		| Field     | Value       |
-		| Shift bag | A shift bag |
-		| Skill     | A skill     |
+		| Field      | Value       |
+		| Shift bag  | A shift bag |
+		| Skill      | A skill     |
+		| Start date | 2013-10-10  |
 	And 'John Smith' is on 'A group' of group page 'A group page'
 	And 'John Smith' is on 'Another group' of group page 'A group page'
 	And 'John Smith' is on 'Some other group' of group page 'Another group page'
@@ -53,6 +53,7 @@ Background:
 		| Access to Anywhere | true                 |
 	And I am american
 
+@ignore
 Scenario: View group picker options
 	Given I viewing schedules for '2013-10-10'
 	Then I should be able to select groups
@@ -70,6 +71,7 @@ Scenario: View group picker options
 		| A group page/Another group                |
 		| Another group page/Some other group       |
 
+@ignore
 Scenario: View group schedule
 	And 'John Smith' has a shift on '2013-10-10'
 	And 'John Smith' has a person period with
@@ -92,6 +94,7 @@ Scenario: View group schedule
 	Then I should see schedule for 'John Smith'
 	Then I should see no schedule for 'Pierre Baldi'
 
+@ignore
 Scenario: Order group pages like business heirarchy, contract, contract schedule, part time percentage, notes, shiftbag, skill, group page names
 	Given I viewing schedules for '2013-10-10'
 	Then I should see 'Business Hierarchy' before 'Contract'
@@ -103,6 +106,7 @@ Scenario: Order group pages like business heirarchy, contract, contract schedule
 	And I should see 'Skill' before 'A group page'
 	And I should see 'A group page' before 'Another group page'
 
+@ignore
 Scenario: Order groups in alphabetical order
 	Given I viewing schedules for '2013-10-10'
 	Then I should see 'Team green' before 'Team red'
@@ -114,6 +118,7 @@ Scenario: Order groups in alphabetical order
 	And I should see 'Another skill' before 'A skill'
 	And I should see 'A group' before 'Another group'
 
+@ignore
 Scenario: Search groups
 	Given I viewing schedules for '2013-10-10'
 	When I search for group 'contract'
@@ -130,6 +135,7 @@ Scenario: Default to my team
 	When I view schedules for '2013-10-10'
 	Then the group picker should have 'The site/Team red' selected	
 
+@ignore
 Scenario: Default to first option if I have no team
 	Given I have no team
 	When I view schedules for '2013-10-10'

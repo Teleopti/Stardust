@@ -39,10 +39,13 @@ define([
                 self.Persons.push.apply(self.Persons, persons);
             };
 	        
-            this.SetGroupings = function (groupings) {
+            this.SetGroupPages = function (data) {
             	self.GroupPages([]);
-
-            	var newItems = ko.utils.arrayMap(groupings, function (d) {
+	            
+            	var groupPages = data.GroupPages;
+            	self.SelectedGroup(data.SelectedGroupId);
+	            
+            	var newItems = ko.utils.arrayMap(groupPages, function (d) {
             		return new groupPageViewModel(d);
             	});
             	self.GroupPages.push.apply(self.GroupPages, newItems);

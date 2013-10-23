@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
@@ -67,6 +68,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				);
 		}
 
+		[Then(@"I should be able to select groups")]
+		public void ThenIShouldBeAbleToSelectGroups(Table table)
+		{
+			var options = table.CreateSet<GroupInfo>();
+
+			foreach (var option in options)
+			{
+				Select2Box.AssertOptionExist("group-picker", option.Group);
+			}
+		}
+
+		[Then(@"the group picker should have '(.*)' selected")]
+		public void ThenTheGroupPickerShouldHaveSelected(string option)
+		{
+			Select2Box.AssertSelectedOptionText("group-picker", option);
+		}
+
 		[Then(@"I should be able to select teams")]
 		public void ThenIShouldBeAbleToSelectTeams(Table table)
 		{
@@ -111,6 +129,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public class TeamInfo
 		{
 			public string Team { get; set; }
+		}
+
+		public class GroupInfo
+		{
+			public string Group { get; set; }
 		}
 
 		public class AbsenceInfo
