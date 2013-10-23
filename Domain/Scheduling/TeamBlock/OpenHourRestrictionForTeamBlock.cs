@@ -56,21 +56,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyList);
             if (skillDays.Count > 0)
             {
-                var sampleHour =
+                if (skillDays[0].SkillStaffPeriodCollection.Count > 0)
+                {
+                    var sampleHour =
                     _skillIntervalDataOpenHour.GetOpenHours(
                         _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(
                             skillDays[0].SkillStaffPeriodCollection));
-                foreach (var skillDay in skillDays)
-                {
-                    var openHourForSkillDay =
-                        _skillIntervalDataOpenHour.GetOpenHours(
-                            _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(
-                                skillDay.SkillStaffPeriodCollection));
-                    if (sampleHour != openHourForSkillDay)
-                        return false;
+                    foreach (var skillDay in skillDays)
+                    {
+                        if (skillDay.SkillStaffPeriodCollection.Count == 0) continue;
+                        var openHourForSkillDay =
+                            _skillIntervalDataOpenHour.GetOpenHours(
+                                _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(
+                                    skillDay.SkillStaffPeriodCollection));
+                        if (sampleHour != openHourForSkillDay)
+                            return false;
+                    }
                 }
             }
-            
+
             return true;
         }
 
