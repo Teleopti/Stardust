@@ -1,0 +1,37 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.TestCommon.TestData.Analytics.Sql;
+using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.TestCommon.TestData.Analytics
+{
+	public class CurrentBeforeAndAfterWeekDates : IDateData
+	{
+		public IEnumerable<DataRow> Rows { get; set; }
+
+		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
+		{
+			var table = dim_date.CreateTable();
+
+			var startDate = DateHelper.GetFirstDateInWeek(DateTime.Now.Date, userCulture).AddDays(-7);
+			var dates = startDate.DateRange(21);
+
+			var id = 0;
+			dates.ForEach(date =>
+			              	{
+								table.AddDate(id, date, analyticsDataCulture);
+			              		id++;
+			              	});
+
+			Bulk.Insert(connection, table);
+
+			Rows = table.AsEnumerable();
+		}
+	}
+
+}

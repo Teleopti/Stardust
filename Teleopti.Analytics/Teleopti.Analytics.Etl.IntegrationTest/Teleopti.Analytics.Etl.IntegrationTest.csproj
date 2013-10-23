@@ -50,8 +50,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bug25126.cs" />
     <Compile Include="Bug25131.cs" />
     <Compile Include="Data.cs" />
+    <Compile Include="TestData\ShiftForDate.cs" />
     <Compile Include="TestState.cs" />
     <Compile Include="SanityTest.cs" />
     <Compile Include="SetupFixtureForAssembly.cs" />
