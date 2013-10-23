@@ -210,7 +210,7 @@ Scenario: Invalid dates
 
 Scenario: Backward from browser works with person schedule view
 	Given I have the role 'Anywhere Team Green'
-	When I view schedules for '2013-04-08'
+	When I view schedules for 'Team green' on '2013-04-08'
 	And I click person 'Pierre Baldi'
 	And I click 'add full day absence'
 	And I input these full day absence values

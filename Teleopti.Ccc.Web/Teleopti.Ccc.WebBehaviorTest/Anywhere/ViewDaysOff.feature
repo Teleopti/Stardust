@@ -27,7 +27,7 @@ Scenario: View day off in team schedule
 	| Field | Value      |
 	| Name  | Day off    |
 	| Date  | 2013-09-27 |
-	When I view schedules for '2013-09-27'
+	When I view schedules for 'Team green' on '2013-09-27'
 	Then I should see a day off for 'Pierre Baldi'
 
 Scenario: View day off in person schedule

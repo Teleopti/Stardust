@@ -62,7 +62,7 @@ Scenario: Order like shift start, full day absence, day off, no shift
 	| Name  | Day off    |
 	| Date  | 2013-09-27 |
 	And 'Pierre Andeen' has no shift
-	When I view schedules for '2013-09-27'
+	When I view schedules for 'Team green' on '2013-09-27'
 	Then I should see 'Pierre Baldi' before 'Ashley Andeen'
 	And I should see 'Ashley Andeen' before 'John King'
 	And I should see 'John King' before 'Pierre Andeen'
@@ -88,5 +88,5 @@ Scenario: Order by shift start when person has both shift and day off
 	| Activity       | Phone            |
 	| Start time     | 2013-09-27 08:00 |
 	| End time       | 2013-09-27 17:00 |
-	When I view schedules for '2013-09-27'
+	When I view schedules for 'Team green' on '2013-09-27'
 	Then I should see 'Pierre Baldi' before 'Ashley Andeen'	
