@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -6,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -28,22 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 
 			actual.Should().Be(myTeam);
 		}
-
-		[Test]
-		public void ShouldReturnDefaultTeamId()
-		{
-			var myTeam = TeamFactory.CreateSimpleTeam();
-			myTeam.SetId(Guid.Empty);
-			
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(createPersonWithTeam(myTeam));
-			var target = new DefaultTeamProvider(loggedOnUser, new FakePermissionProvider(), null);
-
-			var actual = target.DefaultTeamId(DateOnly.Today);
-
-			actual.Should().Be(myTeam.Id);
-		}
-
+		
 		[Test]
 		public void ShouldDefaultToFirstAvailableTeamIfMyTeamNotPermitted()
 		{

@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -28,14 +27,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 			if (team == null)
 				return myTeam;
 			return team;
-		}
-
-		public Guid? DefaultTeamId(DateOnly date)
-		{
-			var myTeam = _loggedOnUser.CurrentUser().MyTeam(date);
-			if (myTeam != null && _permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere, date, myTeam))
-				return myTeam.Id;			
-			return null;
 		}
 	}
 }
