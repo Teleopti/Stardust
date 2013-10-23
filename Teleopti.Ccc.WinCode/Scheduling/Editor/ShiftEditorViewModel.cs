@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
             }
             set
             {
-                if (_category != null && _category.Equals(value))
+                if (_category != null && _category.Equals(value) || value == null)
                     return;
 
                 _category = value;

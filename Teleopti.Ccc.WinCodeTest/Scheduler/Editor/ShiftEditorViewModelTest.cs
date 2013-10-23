@@ -42,6 +42,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             _partForTest = new SchedulePartFactoryForDomain().CreatePartWithMainShift();
         }
 
+		[Test]
+		public void ShouldNotSetShiftCategoryIfValueIsNull()
+		{
+			var shiftCategory = _mocker.StrictMock<IShiftCategory>();
+			_target.Category = shiftCategory;
+			_target.Category = null;
+			Assert.AreEqual(shiftCategory, _target.Category);
+		}
+
         [Test]
         public void VerifyPropertiesOnAreasAreSet()
         {
