@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	{
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private const string PageMain = "6CE00B41-0722-4B36-91DD-0A3B63C545CF";
 
 		public GroupPageController(IGroupingReadOnlyRepository groupingReadOnlyRepository, ILoggedOnUser loggedOnUser)
 		{
@@ -23,14 +24,18 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		public JsonResult AvailableGroupPages(DateTime date)
 		{
 			var actualGroupPages =
-				_groupingReadOnlyRepository.AvailableGroupPages().Select(gp => new
+				_groupingReadOnlyRepository.AvailableGroupPages().Select(gp =>
 					{
-						Name = gp.PageName.StartsWith("xx", StringComparison.OrdinalIgnoreCase) ? Resources.ResourceManager.GetString(gp.PageName.Substring(2)) : gp.PageName,
-						Groups = _groupingReadOnlyRepository.AvailableGroups(gp, new DateOnly(date)).Select(g => new
+						var name = gp.PageName.StartsWith("xx", StringComparison.OrdinalIgnoreCase) ? Resources.ResourceManager.GetString(gp.PageName.Substring(2)) : gp.PageName;
+						return new
 							{
-								Name = g.GroupName,
-								Id = g.GroupId
-							}).Distinct().ToList()
+								Name = name,
+								Groups = _groupingReadOnlyRepository.AvailableGroups(gp, new DateOnly(date)).Select(g => new
+									{
+										Name = gp.PageId.ToString().ToUpperInvariant() == PageMain ? g.GroupName : name + "/" + g.GroupName,
+										Id = g.GroupId
+									}).Distinct().ToList()
+							};
 					});
 
 			var team = _loggedOnUser.CurrentUser().MyTeam(new DateOnly(date));
