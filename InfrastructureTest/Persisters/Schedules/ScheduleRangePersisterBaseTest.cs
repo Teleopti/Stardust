@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		{
 			var currUnitOfWork = new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
 			var scheduleRep = new ScheduleRepository(currUnitOfWork);
-			Target = new ScheduleRangePersister(UnitOfWorkFactory.Current, 
+			Target = new ScheduleRangePersister(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()), 
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				new ScheduleRangeConflictCollector(scheduleRep, new PersonAssignmentRepository(currUnitOfWork), this, new LazyLoadingManagerWrapper()), 
 				new ScheduleRangeSaver(scheduleRep),

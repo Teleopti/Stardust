@@ -7,19 +7,19 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 {
 	public class PersonAccountPersister : IPersonAccountPersister
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
 		private readonly IPersonAccountConflictCollector _personAccountConflictCollector;
 		private readonly IPersonAccountConflictResolver _personAccountConflictResolver;
 
-		public PersonAccountPersister(IUnitOfWorkFactory unitOfWorkFactory, 
+		public PersonAccountPersister(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
 																IPersonAbsenceAccountRepository personAbsenceAccountRepository,
 																IMessageBrokerIdentifier messageBrokerIdentifier,
 																IPersonAccountConflictCollector personAccountConflictCollector,
 																IPersonAccountConflictResolver personAccountConflictResolver)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 			_messageBrokerIdentifier = messageBrokerIdentifier;
 			_personAccountConflictCollector = personAccountConflictCollector;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 
 		public void Persist(ICollection<IPersonAbsenceAccount> personAbsenceAccounts)
 		{
-			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork(TransactionIsolationLevel.Serializable))
+			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork(TransactionIsolationLevel.Serializable))
 			{
 				var conflictingPersonAccounts = _personAccountConflictCollector.GetConflicts(personAbsenceAccounts);
 				_personAccountConflictResolver.Resolve(conflictingPersonAccounts);

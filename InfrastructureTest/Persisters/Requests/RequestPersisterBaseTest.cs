@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 
 		private void makeTarget()
 		{
-			target = new RequestPersister(UnitOfWorkFactory.Current,
+			target = new RequestPersister(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()), 
 														PersonRequestRepository,
 														this,
 														MockRepository.GenerateMock<IMessageBrokerIdentifier>(),

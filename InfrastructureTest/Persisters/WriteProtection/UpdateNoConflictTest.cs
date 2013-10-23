@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.WriteProtection
 		{
 			//something is really wrong with the writeprotection mapping
 			repository = new WriteProtectionRepository(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())));
-			target = new WriteProtectionPersister(UnitOfWorkFactory.Current, repository, MockRepository.GenerateMock<IMessageBrokerIdentifier>());
+			target = new WriteProtectionPersister(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()), repository, MockRepository.GenerateMock<IMessageBrokerIdentifier>());
 			var person = PersonFactory.CreatePerson("persist test");
 			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2000,1,1);
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())

@@ -8,19 +8,19 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 {
 	public class ScheduleRangePersister : IScheduleRangePersister
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceCollectionService;
 		private readonly IScheduleRangeConflictCollector _scheduleRangeConflictCollector;
 		private readonly IScheduleRangeSaver _scheduleRangeSaver;
 		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
 
-		public ScheduleRangePersister(IUnitOfWorkFactory unitOfWorkFactory,
+		public ScheduleRangePersister(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 		                              IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService,
 		                              IScheduleRangeConflictCollector scheduleRangeConflictCollector,
 																	IScheduleRangeSaver scheduleRangeSaver,
 																	IMessageBrokerIdentifier messageBrokerIdentifier)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_differenceCollectionService = differenceCollectionService;
 			_scheduleRangeConflictCollector = scheduleRangeConflictCollector;
 			_scheduleRangeSaver = scheduleRangeSaver;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			{
 				return Enumerable.Empty<PersistConflict>();
 			}
-			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork(TransactionIsolationLevel.Serializable))
+			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork(TransactionIsolationLevel.Serializable))
 			{
 				var period = scheduleRange.Period.ToDateOnlyPeriod(scheduleRange.Person.PermissionInformation.DefaultTimeZone());
 				var conflicts = _scheduleRangeConflictCollector.GetConflicts(diff, scheduleRange.Scenario, period);

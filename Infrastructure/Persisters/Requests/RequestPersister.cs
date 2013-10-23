@@ -10,19 +10,19 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Requests
 {
 	public class RequestPersister : IRequestPersister
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IClearReferredShiftTradeRequests _clearReferredRequests;
 		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
 		private readonly IPrincipalAuthorization _principalAuthorization;
 
-		public RequestPersister(IUnitOfWorkFactory unitOfWorkFactory, 
+		public RequestPersister(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
 												IPersonRequestRepository personRequestRepository,
 												IClearReferredShiftTradeRequests clearReferredRequests,
 												IMessageBrokerIdentifier messageBrokerIdentifier,
 												IPrincipalAuthorization principalAuthorization)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_personRequestRepository = personRequestRepository;
 			_clearReferredRequests = clearReferredRequests;
 			_messageBrokerIdentifier = messageBrokerIdentifier;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Requests
 			if (!_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
 				return;
 
-			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				foreach (var personRequest in requests)
 				{

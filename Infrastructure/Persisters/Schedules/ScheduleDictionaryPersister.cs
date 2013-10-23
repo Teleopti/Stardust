@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			_scheduleRangePersister = scheduleRangePersister;
 		}
 
-
 		public IEnumerable<PersistConflict> Persist(IScheduleDictionary scheduleDictionary)
 		{
 			var conflicts = new List<PersistConflict>();

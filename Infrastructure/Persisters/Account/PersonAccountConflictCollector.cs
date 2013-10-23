@@ -7,16 +7,16 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 {
 	public class PersonAccountConflictCollector : IPersonAccountConflictCollector
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
-		public PersonAccountConflictCollector(IUnitOfWorkFactory unitOfWorkFactory)
+		public PersonAccountConflictCollector(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
 		public IEnumerable<IPersonAbsenceAccount> GetConflicts(IEnumerable<IPersonAbsenceAccount> personAbsenceAccounts)
 		{
-			var unitOfWork = _unitOfWorkFactory.CurrentUnitOfWork();
+			var unitOfWork = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CurrentUnitOfWork();
 			return (from e in personAbsenceAccounts
 							let databaseVersion = unitOfWork.DatabaseVersion(e)
 							where e.Version != databaseVersion

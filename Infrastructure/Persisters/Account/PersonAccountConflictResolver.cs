@@ -10,22 +10,22 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 {
 	public class PersonAccountConflictResolver : IPersonAccountConflictResolver
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly ITraceableRefreshService _traceableRefreshService;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 
-		public PersonAccountConflictResolver(IUnitOfWorkFactory unitOfWorkFactory,
+		public PersonAccountConflictResolver(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 																					ITraceableRefreshService traceableRefreshService, 
 																					IPersonAbsenceAccountRepository personAbsenceAccountRepository)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_traceableRefreshService = traceableRefreshService;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 		}
 
 		public void Resolve(IEnumerable<IPersonAbsenceAccount> conflictingPersonAccounts)
 		{
-			var uow = _unitOfWorkFactory.CurrentUnitOfWork();
+			var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CurrentUnitOfWork();
 			conflictingPersonAccounts.ForEach(paa =>
 			{
 				var foundAccount = _personAbsenceAccountRepository.Get(paa.Id.GetValueOrDefault());

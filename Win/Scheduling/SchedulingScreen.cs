@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.Win.Meetings;
@@ -4594,7 +4595,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
 
-
 			var scheduleRangePersister = new ScheduleRangePersister(_container.Resolve<IUnitOfWorkFactory>(),
 			                            _container.Resolve<IDifferenceCollectionService<IPersistableScheduleData>>(),
 																	new ScheduleRangeConflictCollector(_container.Resolve<IScheduleRepository>(), 
@@ -4603,6 +4603,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 																			_container.Resolve<ILazyLoadingManager>()),
 			                            new ScheduleRangeSaver(_container.Resolve<IScheduleRepository>()),
 																	_schedulerMessageBrokerHandler);
+
+
 			var conflicts = new List<PersistConflict>();
 			foreach (var range in _schedulerState.Schedules.Values)
 			{

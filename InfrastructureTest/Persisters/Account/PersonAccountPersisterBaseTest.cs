@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 		private void makeTarget()
 		{
 			var currUnitOfWork = new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
-			var uowFactory = UnitOfWorkFactory.Current;
+			var uowFactory = new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal());
 			var rep = new PersonAbsenceAccountRepository(currUnitOfWork);
 			target = new PersonAccountPersister(uowFactory, 
 																	rep, 

@@ -7,22 +7,22 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.WriteProtection
 {
 	public class WriteProtectionPersister : IWriteProtectionPersister
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IWriteProtectionRepository _writeProtectionRepository;
 		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
 
-		public WriteProtectionPersister(IUnitOfWorkFactory unitOfWorkFactory, 
+		public WriteProtectionPersister(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
 																	IWriteProtectionRepository writeProtectionRepository,
 																	IMessageBrokerIdentifier messageBrokerIdentifier)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_writeProtectionRepository = writeProtectionRepository;
 			_messageBrokerIdentifier = messageBrokerIdentifier;
 		}
 
 		public void Persist(ICollection<IPersonWriteProtectionInfo> writeProtections)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				_writeProtectionRepository.AddRange(writeProtections);
 				unitOfWork.PersistAll(_messageBrokerIdentifier);
