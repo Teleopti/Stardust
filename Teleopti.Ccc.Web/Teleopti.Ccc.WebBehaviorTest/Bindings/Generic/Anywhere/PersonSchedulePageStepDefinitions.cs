@@ -139,6 +139,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExists(".dayoff");
 		}
 
+		[Then(@"I should see a day off named '(.*)'")]
+		public void ThenIShouldSeeADayOff(string dayOff)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(".dayoff:contains('{0}')", dayOff);
+		}
+
 		[Then(@"I should see the time line with")]
 		public void ThenIShouldSeeTheTimeLineWith(Table table)
 		{
