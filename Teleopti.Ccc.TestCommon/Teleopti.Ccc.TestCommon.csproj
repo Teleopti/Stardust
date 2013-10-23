@@ -226,6 +226,7 @@
     <Compile Include="TestData\Generic\AbsenceConfigurable.cs" />
     <Compile Include="TestData\Generic\ActivityConfigurable.cs" />
     <Compile Include="TestData\Generic\ShiftCategoryConfigurable.cs" />
+    <Compile Include="TestData\Generic\SiteConfigurable.cs" />
     <Compile Include="TestData\LayersExtensions.cs" />
     <Compile Include="TestData\Setups\AbsenceRequestConfigurable.cs" />
     <Compile Include="TestData\Setups\BusinessUnitFromFakeState.cs" />

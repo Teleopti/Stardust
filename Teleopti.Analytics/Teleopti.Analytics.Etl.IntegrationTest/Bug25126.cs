@@ -43,10 +43,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
             analyticsDataFactory.Persist();
 
+            var site = new SiteConfigurable {BusinessUnit = TestState.BusinessUnit, Name = "Västerhaninge"};
+
             var scenario = new CommonScenario();
             var cat = new ShiftCategoryConfigurable{Name = "Kattegat"};
             var act = new ActivityConfigurable{Name = "Phone"};
             var act2 = new ActivityConfigurable{Name = "Lunch"};
+            Data.Apply(site);
             Data.Apply(scenario);
             Data.Apply(cat);
             Data.Apply(act);
