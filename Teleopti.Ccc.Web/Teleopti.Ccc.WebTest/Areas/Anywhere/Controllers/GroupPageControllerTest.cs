@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Interfaces.Domain;
 
@@ -77,6 +78,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			dynamic gp = result;
 			((object) gp.SelectedGroupId).Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldReplaceGroupPageNameFromResourceMangerIfItStartsWithXx()
+		{
+			var groupPage = new ReadOnlyGroupPage()
+				{
+					PageName = "xxMain"
+				};
+
+			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(groupPage, new List<ReadOnlyGroupDetail>() { }), new FakeLoggedOnUser());
+
+			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
+
+			dynamic gp = result.GroupPages[0];
+			((object)gp.Name).Should().Be.EqualTo(Resources.ResourceManager.GetString(groupPage.PageName.Substring(2)));
 		}
 	}
 

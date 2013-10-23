@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			var actualGroupPages =
 				_groupingReadOnlyRepository.AvailableGroupPages().Select(gp => new
 					{
-						Name = gp.PageName,
+						Name = gp.PageName.StartsWith("xx", StringComparison.OrdinalIgnoreCase) ? Resources.ResourceManager.GetString(gp.PageName.Substring(2)) : gp.PageName,
 						Groups = _groupingReadOnlyRepository.AvailableGroups(gp, new DateOnly(date)).Select(g => new
 							{
 								Name = g.GroupName,
