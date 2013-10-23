@@ -15,7 +15,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 namespace Teleopti.Ccc.InfrastructureTest.Persisters
 {
     [TestFixture]
-    public class ScheduleScreenRefresherScheduleDataTest
+    public class ScheduleScreenRefresherScheduleDataTest : IMessageQueueRemoval
     {
         private MockRepository _mocks;
         private ScheduleScreenRefresher _target;
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
         private void MakeTarget()
         {
-	        var mqremover = MockRepository.GenerateMock<IMessageQueueRemoval>();
+	        var mqremover = this;
 					_target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleRefresher(MockRepository.GenerateMock<IPersonRepository>(), _scheduleDataUpdater, MockRepository.GenerateMock<IPersonAssignmentRepository>(), MockRepository.GenerateMock<IPersonAbsenceRepository>(), mqremover), new ScheduleDataRefresher(_scheduleRepository, _scheduleDataUpdater, mqremover), new MeetingRefresher(null, mqremover), new PersonRequestRefresher(null, mqremover));
         }
 
@@ -223,5 +223,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
             _mocks.VerifyAll();
         }
 
+	    public void Remove(IEventMessage eventMessage)
+	    {
+		    _messages.Remove(eventMessage);
+	    }
+
+	    public void Remove(Guid id)
+	    {
+		    throw new NotImplementedException();
+	    }
     }
 }

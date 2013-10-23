@@ -54,18 +54,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
             _mocks.VerifyAll();
         }
-
-        [Test]
-        public void ShouldAlwaysReportSizeOfMessageBrokerQueue()
-        {
-            Expect.Call(() => _messageQueueUpdater.NotifyMessageQueueSizeChange());
-
-            _mocks.ReplayAll();
-
-						_target.Refresh(_scheduleDictionary, new List<IEventMessage>(), new List<IPersistableScheduleData>(), new List<PersistConflict>());
-
-            _mocks.VerifyAll();
-        }
-
     }
 }

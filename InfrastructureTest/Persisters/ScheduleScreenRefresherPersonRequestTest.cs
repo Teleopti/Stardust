@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.NewStuff;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -10,7 +11,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 namespace Teleopti.Ccc.InfrastructureTest.Persisters
 {
     [TestFixture]
-    public class ScheduleScreenRefresherPersonRequestTest
+	public class ScheduleScreenRefresherPersonRequestTest : IMessageQueueRemoval
     {
         private MockRepository _mocks;
         private ScheduleScreenRefresher _target;
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
         private void MakeTarget()
         {
-            _target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleRefresher(null, MockRepository.GenerateMock<IUpdateScheduleDataFromMessages>(), null, null, null), new ScheduleDataRefresher(null, null, null), new MeetingRefresher(null, null), new PersonRequestRefresher(_personRequestUpdater, null));
+            _target = new ScheduleScreenRefresher(_messageQueueUpdater, new ScheduleRefresher(null, MockRepository.GenerateMock<IUpdateScheduleDataFromMessages>(), null, null, this), new ScheduleDataRefresher(null, null, this), new MeetingRefresher(null, this), new PersonRequestRefresher(_personRequestUpdater, this));
         }
 
         [Test]
@@ -73,5 +74,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
             CollectionAssert.DoesNotContain(_messages, _personRequestMessage);
         }
+
+				public void Remove(IEventMessage eventMessage)
+				{
+					_messages.Remove(eventMessage);
+				}
+
+				public void Remove(Guid id)
+				{
+					throw new NotImplementedException();
+				}
     }
 }
