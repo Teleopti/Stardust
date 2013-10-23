@@ -163,6 +163,10 @@
     <Compile Include="Persisters\Account\UpdateConflictWithUpdateTest.cs" />
     <Compile Include="Persisters\Account\UpdateNoConflictTest.cs" />
     <Compile Include="Persisters\Account\PersonAccountPersisterBaseTest.cs" />
+    <Compile Include="Persisters\Requests\DontPersistIfNoChangesTest.cs" />
+    <Compile Include="Persisters\Requests\DontPersistIfNoPermissionTest.cs" />
+    <Compile Include="Persisters\Requests\UpdateNoConflictTest.cs" />
+    <Compile Include="Persisters\Requests\RequestPersisterBaseTest.cs" />
     <Compile Include="Persisters\Schedules\ConflictNoteEagerLoadingTest.cs" />
     <Compile Include="Persisters\Schedules\ConflictPersonAbsenceEagerLoadingTest.cs" />
     <Compile Include="Persisters\Schedules\InsertNoConflictTest.cs" />
