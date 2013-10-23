@@ -4567,7 +4567,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 																			_container.Resolve<IPersonAssignmentRepository>(),
 																			_schedulerMessageBrokerHandler,
 																			_container.Resolve<ILazyLoadingManager>()),
-																	new ScheduleRangeSaver(_container.Resolve<IScheduleRepository>()),
+																	new ScheduleDifferenceSaver(_container.Resolve<IScheduleRepository>()),
 																	_schedulerMessageBrokerHandler);
 			var scheduleScreenPersister = new SchedulingScreenPersister(
 									new ScheduleDictionaryPersister(scheduleRangePersister),

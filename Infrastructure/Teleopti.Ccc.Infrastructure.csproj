@@ -240,12 +240,12 @@
     <Compile Include="Persisters\Schedules\IScheduleDictionaryPersister.cs" />
     <Compile Include="Persisters\Schedules\IScheduleRangeConflictCollector.cs" />
     <Compile Include="Persisters\Schedules\IScheduleRangePersister.cs" />
-    <Compile Include="Persisters\Schedules\IScheduleRangeSaver.cs" />
+    <Compile Include="Persisters\Schedules\IScheduleDifferenceSaver.cs" />
     <Compile Include="Persisters\Schedules\PersistConflict.cs" />
     <Compile Include="Persisters\Schedules\ScheduleDictionaryPersister.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangeConflictCollector.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersister.cs" />
-    <Compile Include="Persisters\Schedules\ScheduleRangeSaver.cs" />
+    <Compile Include="Persisters\Schedules\ScheduleDifferenceSaver.cs" />
     <Compile Include="Persisters\IOwnMessageQueue.cs" />
     <Compile Include="Persisters\IReassociateData.cs" />
     <Compile Include="Persisters\IScheduleDictionaryBatchPersister.cs" />

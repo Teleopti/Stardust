@@ -2,11 +2,11 @@
 
 namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 {
-	public class ScheduleRangeSaver : IScheduleRangeSaver
+	public class ScheduleDifferenceSaver : IScheduleDifferenceSaver
 	{
 		private readonly IScheduleRepository _scheduleRepository;
 
-		public ScheduleRangeSaver(IScheduleRepository scheduleRepository)
+		public ScheduleDifferenceSaver(IScheduleRepository scheduleRepository)
 		{
 			_scheduleRepository = scheduleRepository;
 		}

@@ -11,19 +11,19 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceCollectionService;
 		private readonly IScheduleRangeConflictCollector _scheduleRangeConflictCollector;
-		private readonly IScheduleRangeSaver _scheduleRangeSaver;
+		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
 
 		public ScheduleRangePersister(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 		                              IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService,
 		                              IScheduleRangeConflictCollector scheduleRangeConflictCollector,
-																	IScheduleRangeSaver scheduleRangeSaver,
+																	IScheduleDifferenceSaver scheduleDifferenceSaver,
 																	IMessageBrokerIdentifier messageBrokerIdentifier)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_differenceCollectionService = differenceCollectionService;
 			_scheduleRangeConflictCollector = scheduleRangeConflictCollector;
-			_scheduleRangeSaver = scheduleRangeSaver;
+			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 			_messageBrokerIdentifier = messageBrokerIdentifier;
 		}
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				var conflicts = _scheduleRangeConflictCollector.GetConflicts(diff, scheduleRange.Scenario, period);
 				if (conflicts.IsNullOrEmpty())
 				{
-					_scheduleRangeSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate) scheduleRange);
+					_scheduleDifferenceSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate) scheduleRange);
 				}
 				uow.PersistAll(_messageBrokerIdentifier);
 				return conflicts;

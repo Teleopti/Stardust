@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 {
-	public interface IScheduleRangeSaver
+	public interface IScheduleDifferenceSaver
 	{
 		void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges, IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater);
 	}

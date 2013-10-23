@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			Target = new ScheduleRangePersister(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()), 
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				new ScheduleRangeConflictCollector(scheduleRep, new PersonAssignmentRepository(currUnitOfWork), this, new LazyLoadingManagerWrapper()), 
-				new ScheduleRangeSaver(scheduleRep),
+				new ScheduleDifferenceSaver(scheduleRep),
 				MockRepository.GenerateMock<IMessageBrokerIdentifier>());
 		}
 
