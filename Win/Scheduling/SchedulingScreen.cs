@@ -4595,7 +4595,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
 
-			var scheduleRangePersister = new ScheduleRangePersister(_container.Resolve<IUnitOfWorkFactory>(),
+			var scheduleRangePersister = new ScheduleRangePersister(_container.Resolve<ICurrentUnitOfWorkFactory>(),
 			                            _container.Resolve<IDifferenceCollectionService<IPersistableScheduleData>>(),
 																	new ScheduleRangeConflictCollector(_container.Resolve<IScheduleRepository>(), 
 																			_container.Resolve<IPersonAssignmentRepository>(), 
