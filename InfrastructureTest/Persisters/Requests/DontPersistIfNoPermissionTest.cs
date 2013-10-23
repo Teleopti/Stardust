@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 		protected override void Then(IPersonRequest yourRequest)
 		{
 			PersonRequestRepository.AssertWasNotCalled(x => x.Add(yourRequest));
-			clearRefferedRequestsWasCalled.Should().Be.False();
+			ClearRefferedRequestsWasCalled.Should().Be.False();
 		}
 	}
 }

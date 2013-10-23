@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 		protected override void Then(IPersonRequest yourRequest)
 		{
 			yourRequest.GetMessage(new NoFormatting()).Should().Be.EqualTo("yes");
-			clearRefferedRequestsWasCalled.Should().Be.True();
+			ClearRefferedRequestsWasCalled.Should().Be.True();
 			yourRequest.Changed.Should().Be.False();
 		}
 	}

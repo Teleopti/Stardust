@@ -24,9 +24,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 		protected abstract void Then(IPersonRequest yourRequest);
 		protected IPersonRequestRepository PersonRequestRepository { get; set; }
 		protected IPrincipalAuthorization PrincipalAuthorization { get; set; }
-		protected bool clearRefferedRequestsWasCalled { get; private set; }
+		protected bool ClearRefferedRequestsWasCalled { get; private set; }
 
 		private IRequestPersister target;
+		private IPersonRequest requestToRemove;
 
 		[Test]
 		public void TheTest()
@@ -51,6 +52,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 			{
 				Then(rep.Find(request.Id.Value));
 			}
+
+			requestToRemove = request;
 		}
 
 		private void setState()
@@ -86,13 +89,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 			{
 				var rep = new Repository(uow);
 				rep.Remove(Person);
+				rep.Remove(requestToRemove);
 				uow.PersistAll();
 			}
 		}
 
 		public void ClearReferredShiftTradeRequests()
 		{
-			clearRefferedRequestsWasCalled = true;
+			ClearRefferedRequestsWasCalled = true;
 		}
 	}
 }

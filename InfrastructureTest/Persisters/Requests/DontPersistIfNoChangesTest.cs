@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 		{
 			PersonRequestRepository.AssertWasNotCalled(x => x.Add(yourRequest));
 			//don't understand why - but this is how it worked before...
-			clearRefferedRequestsWasCalled.Should().Be.True();
+			ClearRefferedRequestsWasCalled.Should().Be.True();
 		}
 	}
 }
