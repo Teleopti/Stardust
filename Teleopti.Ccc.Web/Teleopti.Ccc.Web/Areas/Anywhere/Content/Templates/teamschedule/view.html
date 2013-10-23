@@ -79,22 +79,6 @@
 									<div 
 										class="dayoff absolute" 
 								        data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }">
-								        <!-- ko if: false -->
-								            <span class="dayoff-description1 badge floatleft" data-bind="text: DayOffName"></span>
-								            <span class="dayoff-description1 badge floatright" data-bind="text: DayOffName"></span>
-	                                    <!-- /ko -->
-								        <!-- ko if: false -->
-								            <span class="dayoff-description2 badge" data-bind="text: DayOffName"></span>
-	                                    <!-- /ko -->
-									    <!-- ko if: true -->
-									        <!-- ko if: $parent.IsShift -->
-								            <span class="dayoff-description3 label floatleft" data-bind="text: DayOffName"></span>
-								            <span class="dayoff-description3 label floatright" data-bind="text: DayOffName"></span>
-									        <!-- /ko -->
-									        <!-- ko if: !$parent.IsShift() -->
-								            <span class="dayoff-description3 label" data-bind="text: DayOffName"></span>
-									        <!-- /ko -->
-	                                    <!-- /ko -->
 								    </div>
 									<!-- /ko -->
 									<!-- /ko -->
@@ -124,25 +108,8 @@
 	}
 	">
         <!-- ko if: IsFullDayAbsence -->
-        <!-- ko if: false -->
-        <span class="layer-description1 floatleft" data-bind="text: FullDayAbsenceName"></span>
-        <!-- /ko -->
-        <!-- ko if: false -->
-        <span class="badge layer-description2 floatleft" data-bind="text: FullDayAbsenceName"></span>
-        <!-- /ko -->
-        <!-- ko if: false -->
-        <span class="label label-inverse layer-description3" data-bind="text: FullDayAbsenceName"></span>
-	    <!-- /ko -->
-        <!-- ko if: false -->
-        <span class="label layer-description4" data-bind="text: FullDayAbsenceName"></span>
-	    <!-- /ko -->
-        <!-- ko if: false -->
-        <span class="layer-description5" data-bind="text: FullDayAbsenceName"></span>
-	    <!-- /ko -->
-        <!-- ko if: true -->
-        <span class="label layer-description6" data-bind="text: FullDayAbsenceName"></span>
-	    <!-- /ko -->
-	<!-- /ko -->
+        <span class="label layer-description" data-bind="text: Description"></span>
+    	<!-- /ko -->
     </div>
 	<!-- /ko -->
 </script>
