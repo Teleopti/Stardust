@@ -44,19 +44,25 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
             analyticsDataFactory.Persist();
 
             var site = new SiteConfigurable {BusinessUnit = TestState.BusinessUnit, Name = "Västerhaninge"};
-
+            var team = new TeamConfigurable {Name = "Yellow", Site = "Västerhaninge"};
+            var contract = new CommonContract();
+            var cc = new CommonContractSchedule();
             var scenario = new CommonScenario();
             var cat = new ShiftCategoryConfigurable{Name = "Kattegat"};
             var act = new ActivityConfigurable{Name = "Phone"};
             var act2 = new ActivityConfigurable{Name = "Lunch"};
             Data.Apply(site);
+            Data.Apply(team);
+            Data.Apply(contract);
+            Data.Apply(cc);
             Data.Apply(scenario);
             Data.Apply(cat);
             Data.Apply(act);
             Data.Apply(act2);
 
             var shift = new ShiftForDate(DateTime.Today, 9, scenario.Scenario, cat.ShiftCategory, act.Activity, act2.Activity);
-
+            //var pp = new PersonPeriodConfigurable{BudgetGroup = "",Contract = contract.Contract.Description.Name, ContractSchedule = cc.ContractSchedule.Description.Name,ppp}
+            
             Data.Person("Ola H").Apply(new StockholmTimeZone());
             Data.Person("Ola H").Apply(shift);
 
