@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
+using Teleopti.Ccc.TestCommon.TestData.Common;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Generic;
 using Teleopti.Ccc.TestCommon.TestData.Setups;
@@ -31,7 +32,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
             var dataSource = new ExistingDatasources(timeZones);
 			var businessUnit = new BusinessUnit(TestState.BusinessUnit, dataSource);
             var intervals = new QuarterOfAnHourInterval();
-			var person = TestState.TestDataFactory.Person("Ashley Andeen").Person;
+			//var person = TestState.TestDataFactory.Person("Ashley Andeen").Person;
 
             analyticsDataFactory.Setup(timeZones);
 			analyticsDataFactory.Setup(new EternityAndNotDefinedDate());			
@@ -42,10 +43,15 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
             analyticsDataFactory.Persist();
 
+            var contract = new CommonContract();
+            var contractSchedule = new CommonContractSchedule();
+            Data.Apply(contract);
+            Data.Apply(contractSchedule);
+            
             //var shift = new ShiftForDate(DateTime.Today, 9, scenario, category, activityPhone, activityLunch);
 
             //Data.Person("Ashley Andeen").Apply(shift);
-			
+
         }
     }
 }

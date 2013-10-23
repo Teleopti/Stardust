@@ -1,6 +1,6 @@
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
+namespace Teleopti.Ccc.TestCommon.TestData.Common
 {
 	public interface IContractScheduleSetup
 	{

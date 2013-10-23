@@ -1,7 +1,7 @@
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
+namespace Teleopti.Ccc.TestCommon.TestData.Common
 {
 	public interface IContractSetup : IDataSetup
 	{

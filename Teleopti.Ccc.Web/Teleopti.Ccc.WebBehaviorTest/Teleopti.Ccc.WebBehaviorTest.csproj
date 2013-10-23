@@ -433,14 +433,10 @@
     <Compile Include="Data\Setups\Common\CommonScenario.cs" />
     <Compile Include="Data\Setups\Specific\ContractScheduleFromTable.cs" />
     <Compile Include="Data\Setups\Specific\DayOffPreferenceOnWeekday.cs" />
-    <Compile Include="Data\Setups\Specific\IContractScheduleSetup.cs" />
     <Compile Include="Data\Setups\Specific\ShiftOnWeekday.cs" />
     <Compile Include="Data\Setups\Specific\SecondScenario.cs" />
-    <Compile Include="Data\Setups\Common\CommonContract.cs" />
     <Compile Include="Data\Setups\Specific\ContractFromTable.cs" />
-    <Compile Include="Data\Setups\Common\CommonContractSchedule.cs" />
     <Compile Include="Data\Setups\Specific\DayOffScheduled.cs" />
-    <Compile Include="Data\Setups\Specific\IContractSetup.cs" />
     <Compile Include="Data\Setups\Specific\ShiftCategoryPreferenceOnWeekday.cs" />
     <Compile Include="Data\Setups\Specific\UserContractSchedule.cs" />
     <Compile Include="PreferencesPeriodFeedbackStepDefinition.cs" />

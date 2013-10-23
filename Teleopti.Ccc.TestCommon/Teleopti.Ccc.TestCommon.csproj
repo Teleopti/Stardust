@@ -210,6 +210,10 @@
     <Compile Include="TestData\Analytics\TodayDate.cs" />
     <Compile Include="TestData\Analytics\UtcAndCetTimeZones.cs" />
     <Compile Include="TestData\Analytics\WeekdayTranslations.cs" />
+    <Compile Include="TestData\Common\CommonContract.cs" />
+    <Compile Include="TestData\Common\CommonContractSchedule.cs" />
+    <Compile Include="TestData\Common\IContractScheduleSetup.cs" />
+    <Compile Include="TestData\Common\IContractSetup.cs" />
     <Compile Include="TestData\Core\DataFactory.cs" />
     <Compile Include="TestData\Core\IAnalyticsDataSetup.cs" />
     <Compile Include="TestData\Core\AnalyticsDataFactory.cs" />
@@ -222,6 +226,7 @@
     <Compile Include="TestData\LayersExtensions.cs" />
     <Compile Include="TestData\Setups\AbsenceRequestConfigurable.cs" />
     <Compile Include="TestData\Setups\BusinessUnitFromFakeState.cs" />
+    <Compile Include="TestData\Setups\DefaultName.cs" />
     <Compile Include="TestData\Setups\HawaiiTimeZone.cs" />
     <Compile Include="TestData\Setups\LicenseFromFile.cs" />
     <Compile Include="TestData\Setups\PersonAbsenceConfigurable.cs" />
