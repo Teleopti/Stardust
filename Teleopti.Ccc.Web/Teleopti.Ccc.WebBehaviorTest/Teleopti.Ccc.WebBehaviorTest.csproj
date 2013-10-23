@@ -343,7 +343,6 @@
     <Compile Include="Data\Setups\Generic\PublicNoteConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\MeetingConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\DayOffTemplateConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\ShiftCategoryConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\PreferencesPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutExtendedPreferencesAccess.cs" />
     <Compile Include="Pages\Common\ComboBox.cs" />

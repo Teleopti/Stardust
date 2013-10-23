@@ -2,22 +2,25 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
+namespace Teleopti.Ccc.TestCommon.TestData.Generic
 {
 	public class ShiftCategoryConfigurable : IDataSetup
 	{
 		public string Name { get; set; }
 		public string Color { get; set; }
 
+		public IShiftCategory ShiftCategory;
+
 		public void Apply(IUnitOfWork uow)
 		{
-			var shiftCategory = new ShiftCategory(Name);
+			ShiftCategory = new ShiftCategory(Name);
 			if (Color != null)
-				shiftCategory.DisplayColor = System.Drawing.Color.FromName(Color);
+				ShiftCategory.DisplayColor = System.Drawing.Color.FromName(Color);
 			var shiftCategoryRepository = new ShiftCategoryRepository(uow);
-			shiftCategoryRepository.Add(shiftCategory);
+			shiftCategoryRepository.Add(ShiftCategory);
 		}
 
 	}

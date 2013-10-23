@@ -44,11 +44,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
             analyticsDataFactory.Persist();
 
             var scenario = new CommonScenario();
+            var cat = new ShiftCategoryConfigurable{Name = "Kattegat"};
             Data.Apply(scenario);
-            
-            
-            
-            //var shift = new ShiftForDate(DateTime.Today, 9, scenario.Scenario, category, activityPhone, activityLunch);
+            Data.Apply(cat);
+
+
+
+            //var shift = new ShiftForDate(DateTime.Today, 9, scenario.Scenario, cat.ShiftCategory, activityPhone, activityLunch);
 
             //Data.Person("Ashley Andeen").Apply(shift);
 
