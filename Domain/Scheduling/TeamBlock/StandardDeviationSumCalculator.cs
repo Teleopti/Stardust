@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -11,9 +12,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	}
 	public class StandardDeviationSumCalculator : IStandardDeviationSumCalculator
 	{
-		private readonly IScheduleResultDataExtractorProvider _dataExtractorProvider;
+        private readonly IRelativeDailyValueCalculatorForTeamBlock _dataExtractorProvider;
 
-		public StandardDeviationSumCalculator(IScheduleResultDataExtractorProvider dataExtractorProvider)
+        public StandardDeviationSumCalculator(IRelativeDailyValueCalculatorForTeamBlock dataExtractorProvider)
 		{
 			_dataExtractorProvider = dataExtractorProvider;
 		}
@@ -22,24 +23,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public double Calculate(DateOnlyPeriod dateOnlyPeriod, IList<IScheduleMatrixPro> scheduleMatrixes,
 								IOptimizationPreferences optimizerPreferences, ISchedulingOptions schedulingOptions)
 		{
-			var standardDeviationData = new StandardDeviationData();
+			var periodIntervalData = new PeriodIntervalData();
 			var sum = 0.0;
 			foreach (var matrix in scheduleMatrixes)
 			{
-				var scheduleResultDataExtractor =
-					_dataExtractorProvider.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(matrix, schedulingOptions);
-				var values = scheduleResultDataExtractor.Values();
+                var values = _dataExtractorProvider.Values(matrix, optimizerPreferences.Advanced);
 				var periodDays = matrix.EffectivePeriodDays;
 				for (var i = 0; i < periodDays.Count; i++)
 				{
-					if (!standardDeviationData.Data.ContainsKey(periodDays[i].Day))
-							standardDeviationData.Add(periodDays[i].Day, values[i]);
+					if (!periodIntervalData.Data.ContainsKey(periodDays[i].Day))
+							periodIntervalData.Add(periodDays[i].Day, values[i]);
 				}
 			}
 			foreach (var visibleDay in dateOnlyPeriod.DayCollection())
 			{
-				if (!standardDeviationData.Data.ContainsKey(visibleDay)) continue;
-				var value = standardDeviationData.Data[visibleDay];
+				if (!periodIntervalData.Data.ContainsKey(visibleDay)) continue;
+				var value = periodIntervalData.Data[visibleDay];
 				if (value.HasValue)
 					sum += value.Value;
 			}
