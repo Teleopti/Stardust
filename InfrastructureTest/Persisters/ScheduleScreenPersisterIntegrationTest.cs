@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 	{
 		private IClearReferredShiftTradeRequests _clearReferredShiftTradeRequests;
 		private IMessageBrokerIdentifier _messageBrokerIdentifier;
-		private IPersonAbsenceAccountValidator _personAbsenceAccountValidator;
 	    private ICurrentScenario _currentScenario;
 
 	    protected IScheduleDictionaryConflictCollector ScheduleDictionaryConflictCollector { get; set; }
@@ -131,7 +130,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 			_clearReferredShiftTradeRequests = Mocks.DynamicMock<IClearReferredShiftTradeRequests>();
 			_messageBrokerIdentifier = Mocks.DynamicMock<IMessageBrokerIdentifier>();
-			_personAbsenceAccountValidator = Mocks.DynamicMock<IPersonAbsenceAccountValidator>();
 			ScheduleRepository = new ScheduleRepository(UnitOfWorkFactory.Current);
 			PersonAssignmentRepository = new PersonAssignmentRepository(UnitOfWorkFactory.Current);
 			ScheduleDictionaryConflictCollector = Mocks.DynamicMock<IScheduleDictionaryConflictCollector>();
@@ -156,7 +154,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 													   new PersonRequestPersister(_clearReferredShiftTradeRequests),
 													   new PersonAbsenceAccountConflictCollector(),
 													   new TraceableRefreshService(_currentScenario,new ScheduleRepository(UnitOfWorkFactory.Current)), 
-													   _personAbsenceAccountValidator,
 													   ScheduleDictionaryConflictCollector,
 													   _messageBrokerIdentifier,
 													   new ScheduleDictionaryBatchPersister(

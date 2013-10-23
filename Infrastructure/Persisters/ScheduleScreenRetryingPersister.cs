@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		private readonly IPersonRequestPersister _personRequestPersister;
 		private readonly IPersonAbsenceAccountConflictCollector _personAbsenceAccountConflictCollector;
         private readonly ITraceableRefreshService _traceableRefreshService;
-		private readonly IPersonAbsenceAccountValidator _personAbsenceAccountValidator;
 		private readonly IScheduleDictionaryConflictCollector _scheduleDictionaryConflictCollector;
 		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
 		private readonly IScheduleDictionaryBatchPersister _scheduleDictionaryBatchPersister;
@@ -33,7 +32,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		                                       IPersonRequestPersister personRequestPersister,
 		                                       IPersonAbsenceAccountConflictCollector personAbsenceAccountConflictCollector,
 		                                       ITraceableRefreshService traceableRefreshService,
-		                                       IPersonAbsenceAccountValidator personAbsenceAccountValidator,
 		                                       IScheduleDictionaryConflictCollector scheduleDictionaryConflictCollector,
 		                                       IMessageBrokerIdentifier messageBrokerIdentifier,
 												IScheduleDictionaryBatchPersister scheduleDictionaryBatchPersister,
@@ -46,7 +44,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			_personRequestPersister = personRequestPersister;
 			_personAbsenceAccountConflictCollector = personAbsenceAccountConflictCollector;
 			_traceableRefreshService = traceableRefreshService;
-			_personAbsenceAccountValidator = personAbsenceAccountValidator;
 			_scheduleDictionaryConflictCollector = scheduleDictionaryConflictCollector;
 			_messageBrokerIdentifier = messageBrokerIdentifier;
         	_scheduleDictionaryBatchPersister = scheduleDictionaryBatchPersister;
@@ -190,7 +187,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 					unitOfWork.Refresh(paa);
 				}
 				paa.AccountCollection().ForEach(_traceableRefreshService.Refresh);
-				_personAbsenceAccountValidator.Validate(paa);
 			});
 		}
 

@@ -248,7 +248,6 @@
     <Compile Include="Persisters\Schedules\ScheduleRangeSaver.cs" />
     <Compile Include="Persisters\IOwnMessageQueue.cs" />
     <Compile Include="Persisters\IPersonAbsenceAccountConflictCollector.cs" />
-    <Compile Include="Persisters\IPersonAbsenceAccountValidator.cs" />
     <Compile Include="Persisters\IPersonRequestPersister.cs" />
     <Compile Include="Persisters\IReassociateData.cs" />
     <Compile Include="Persisters\IScheduleDictionaryBatchPersister.cs" />

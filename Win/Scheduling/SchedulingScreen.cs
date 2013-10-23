@@ -527,21 +527,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_persister = _container.Resolve<IScheduleScreenPersister>(
 				TypedParameter.From<IPersonRequestPersister>(
 					new PersonRequestPersister((IClearReferredShiftTradeRequests)_schedulerState)),
-				TypedParameter.From<IPersonAbsenceAccountValidator>(
-					new AnonymousPersonAbsenceAccountValidator(a =>
-																	 {
-																		 foreach (var account in a.AccountCollection())
-																		 {
-																			 var response =
-																				 validatePersonAccounts(
-																					 account.Owner.Person);
-																			 if (response != null)
-																			 {
-																				 _personAbsenceAccountPersistValidationBusinessRuleResponses
-																					 .Add(response);
-																			 }
-																		 }
-																	 })),
+				
 								TypedParameter.From<IMessageBrokerIdentifier>(_schedulerMessageBrokerHandler),
 				TypedParameter.From(scheduleDictionaryBatchingPersister),
 				TypedParameter.From<IOwnMessageQueue>(_schedulerMessageBrokerHandler)
@@ -568,22 +554,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		private readonly List<IBusinessRuleResponse> _personAbsenceAccountPersistValidationBusinessRuleResponses = new List<IBusinessRuleResponse>();
-
-		//TODO: Should probably be refactored away with the new validation refact. And if not, we should do it anyway... =P
-		private class AnonymousPersonAbsenceAccountValidator : IPersonAbsenceAccountValidator
-		{
-			private readonly Action<IPersonAbsenceAccount> _validateMethod;
-
-			public AnonymousPersonAbsenceAccountValidator(Action<IPersonAbsenceAccount> validateMethod)
-			{
-				_validateMethod = validateMethod;
-			}
-
-			public void Validate(IPersonAbsenceAccount personAbsenceAccount)
-			{
-				_validateMethod.Invoke(personAbsenceAccount);
-			}
-		}
 
 		private void setLoadingOptions()
 		{
