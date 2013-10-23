@@ -745,7 +745,6 @@
     <Content Include="Areas\Anywhere\Content\Styles\helpers.css" />
     <Content Include="Areas\Anywhere\Content\Styles\main.css" />
     <Content Include="Areas\Anywhere\Content\Styles\team-schedule.css" />
-    <Content Include="Areas\Anywhere\Content\Templates\index.html" />
     <Content Include="Areas\MobileReports\Content\Css\mobile.custom.css" />
     <Content Include="Areas\MobileReports\Content\Images\ajax-loader.gif" />
     <Content Include="Areas\MobileReports\Content\Images\logo.png" />
