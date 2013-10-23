@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
+﻿using Teleopti.Ccc.TestCommon.TestData.Common;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 {

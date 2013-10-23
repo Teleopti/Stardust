@@ -43,12 +43,12 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
             analyticsDataFactory.Persist();
 
-            var contract = new CommonContract();
-            var contractSchedule = new CommonContractSchedule();
-            Data.Apply(contract);
-            Data.Apply(contractSchedule);
+            var scenario = new CommonScenario();
+            Data.Apply(scenario);
             
-            //var shift = new ShiftForDate(DateTime.Today, 9, scenario, category, activityPhone, activityLunch);
+            
+            
+            //var shift = new ShiftForDate(DateTime.Today, 9, scenario.Scenario, category, activityPhone, activityLunch);
 
             //Data.Person("Ashley Andeen").Apply(shift);
 

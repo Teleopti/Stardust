@@ -430,7 +430,6 @@
     <Compile Include="QUnitTestsStepDefinition.cs" />
     <Compile Include="Data\Setups\Specific\AbsencePreferenceInContractTimeOnWeekday.cs" />
     <Compile Include="Data\Setups\Specific\AbsencePreferenceOnWeekday.cs" />
-    <Compile Include="Data\Setups\Common\CommonScenario.cs" />
     <Compile Include="Data\Setups\Specific\ContractScheduleFromTable.cs" />
     <Compile Include="Data\Setups\Specific\DayOffPreferenceOnWeekday.cs" />
     <Compile Include="Data\Setups\Specific\ShiftOnWeekday.cs" />
