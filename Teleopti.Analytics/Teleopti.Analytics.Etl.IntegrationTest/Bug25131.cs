@@ -29,7 +29,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			SetupFixtureForAssembly.EndTest();
 		}
 
-        [Test, ExpectedException(typeof(System.Data.SqlClient.SqlException))]
+        [Test]
 		public void ShouldWork()
 		{
 			var analyticsDataFactory = new AnalyticsDataFactory();
@@ -52,6 +52,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			analyticsDataFactory.Persist();
 
             var raptorRep = new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix,"");
+            //so we have a NULL absence
+            raptorRep.FillAbsenceDataMart(TestState.BusinessUnit);
             raptorRep.FillIntradayFactRequestMart(TestState.BusinessUnit);
 			// sätt upp analytics data här
             //Data.Person("Ashley Andeen").Apply(new StockholmTimeZone());
