@@ -6,22 +6,16 @@ using log4net;
 
 namespace Teleopti.Ccc.Rta.Server
 {
-	public interface IActualAgentStateCache
-	{
-		void FlushCacheToDatabase();
-		void AddAgentStateToCache(IActualAgentState state);
-	}
-
-	public class ActualAgentStateCache : IActualAgentStateCache
+    public class ActualAgentStateCache : IActualAgentStateCache
 	{
 		protected readonly ConcurrentDictionary<Guid, IActualAgentState> BatchedAgents = new ConcurrentDictionary<Guid, IActualAgentState>();
 		private readonly object _lockObject = new object();
 		private readonly ILog Log = LogManager.GetLogger(typeof(ActualAgentStateCache));
-		private readonly IDatabaseHandler _databaseHandler;
+		private readonly IDatabaseWriter _databaseWriter;
 
-		public ActualAgentStateCache(IDatabaseHandler databaseHandler)
+		public ActualAgentStateCache(IDatabaseWriter databaseWriter)
 		{
-			_databaseHandler = databaseHandler;
+			_databaseWriter = databaseWriter;
 		}
 
 		public void AddAgentStateToCache(IActualAgentState state)
@@ -33,7 +27,12 @@ namespace Teleopti.Ccc.Rta.Server
 															  : oldState);
 		}
 
-		public void FlushCacheToDatabase()
+        public bool TryGetLatestState(Guid personId, out IActualAgentState actualAgentState)
+        {
+            return BatchedAgents.TryGetValue(personId, out actualAgentState);
+        }
+
+        public void FlushCacheToDatabase()
 		{
 			if (!BatchedAgents.Any())
 				return;
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.Rta.Server
 		private void saveToDatabase()
 		{
 			Log.InfoFormat("Saving {0} AgentStates to database", BatchedAgents.Count);
-			_databaseHandler.AddOrUpdate(BatchedAgents.Values.ToList());
+			_databaseWriter.AddOrUpdate(BatchedAgents.Values.ToList());
 		}
 
 		private void resetBatchedAgents()
