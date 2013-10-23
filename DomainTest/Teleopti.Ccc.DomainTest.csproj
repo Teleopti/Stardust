@@ -327,7 +327,7 @@
     <Compile Include="Optimization\TeamBlock\DailyTargetValueCalculatorForTeamBlockTest.cs" />
     <Compile Include="Optimization\TeamBlock\LockableBitArrayFactoryTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinderTest.cs" />
-	<Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlockTest.cs" />
+    <Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlockTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockTargetValueCalculatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockGeneratorTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockIntradayDecisionMakerTest.cs" />
@@ -397,7 +397,6 @@
     <Compile Include="Scheduling\Assignment\PersonalShiftLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\ReplaceLayerInScheduleTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataOpenHourTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculatorTest.cs" />
     <Compile Include="Scheduling\LoadSchedulesForRequestWithoutResourceCalculationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayCheckerTest.cs" />

@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	[TestFixture]
 	public class StandardDeviationDataTest
 	{
-		private IPeriodIntervalData _target;
+        private IStandardDeviationData _target;
 
 		[SetUp]
 		public void Setup()
 		{
-			_target = new PeriodIntervalData();
+            _target = new StandardDeviationData();
 		}
 		
 		[Test]
