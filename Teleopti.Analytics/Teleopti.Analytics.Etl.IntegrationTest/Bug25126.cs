@@ -45,14 +45,18 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
             var scenario = new CommonScenario();
             var cat = new ShiftCategoryConfigurable{Name = "Kattegat"};
+            var act = new ActivityConfigurable{Name = "Phone"};
+            var act2 = new ActivityConfigurable{Name = "Lunch"};
             Data.Apply(scenario);
             Data.Apply(cat);
+            Data.Apply(act);
+            Data.Apply(act2);
 
+            var shift = new ShiftForDate(DateTime.Today, 9, scenario.Scenario, cat.ShiftCategory, act.Activity, act2.Activity);
 
+            Data.Person("Ola H").Apply(new StockholmTimeZone());
+            Data.Person("Ola H").Apply(shift);
 
-            //var shift = new ShiftForDate(DateTime.Today, 9, scenario.Scenario, cat.ShiftCategory, activityPhone, activityLunch);
-
-            //Data.Person("Ashley Andeen").Apply(shift);
 
         }
     }
