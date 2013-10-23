@@ -65,6 +65,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			TestState.TestDataFactory = new TestDataFactory(UnitOfWorkAction);
 			DataSourceHelper.RestoreCcc7DataByFileCopy(TestState.Ccc7DataBackup);
+            DataSourceHelper.ClearAnalyticsData();
 			OpenUnitOfWork();
 		}
 
