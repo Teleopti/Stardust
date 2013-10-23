@@ -74,7 +74,7 @@
 .team-schedule .shift .layer
 {
 	z-index: 10;	
-	height: 20px;
+	height: 22px;
 }
 .team-schedule .shift .layer:first-of-type
 {
@@ -94,6 +94,52 @@
 	   -moz-border-radius: 4px 4px 4px 4px;
 			border-radius: 4px 4px 4px 4px;
 }
+
+
+.team-schedule .shift {
+	text-align: center;
+}
+.team-schedule .shift .layer-description1 {
+	font-size: 12px;
+	font-weight: 900;
+	margin-left: 20px;
+	color: white;
+	text-shadow: 1px 2px #000000;
+}
+.team-schedule .shift .layer-description2 {
+	margin-left: 7px;
+	margin-top: 7px;
+}
+.team-schedule .shift .layer-description3 {
+	border: 1px solid white;
+}
+.team-schedule .shift .layer-description4 {
+	background-color: white;
+	color: #606060;
+	text-shadow: none;
+}
+.team-schedule .shift .layer-description5 {
+	font-size: 12px;
+	font-weight: 900;
+	margin-left: 20px;
+	color: white;
+}
+.team-schedule .shift .layer-description6 {
+}
+.team-schedule .dayoff {
+	text-align: center;
+}
+.team-schedule .dayoff .dayoff-description1 {
+	margin: 10px;
+}
+.team-schedule .dayoff .dayoff-description2 {
+	margin: 10px;
+}
+.team-schedule .dayoff .dayoff-description3 {
+	margin: 9px;
+}
+
+
 
 .team-schedule .resources td {
     padding-top: 3px;
