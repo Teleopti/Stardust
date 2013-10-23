@@ -265,19 +265,13 @@
     </Compile>
     <Compile Include="Licensing\XmlLicenseTestSetupFixture.cs" />
     <Compile Include="Helper\DatabaseTestWithoutTransaction.cs" />
-    <Compile Include="Persisters\PersistWriteProtectionTest.cs" />
-    <Compile Include="Persisters\PersonAbsenceAccountConflictCollectorTest.cs" />
-    <Compile Include="Persisters\PersonRequestPersisterTest.cs" />
     <Compile Include="Persisters\ScheduleDictionaryBatchPersisterTest.cs" />
-    <Compile Include="Persisters\ScheduleDictionaryConflictCollectorTest.cs" />
     <Compile Include="Persisters\ScheduleDictionaryModifiedCallbackTest.cs" />
     <Compile Include="Persisters\ScheduleScreenDerivedScheduleDataTest.cs" />
-    <Compile Include="Persisters\ScheduleScreenPersisterIntegrationTest.cs" />
     <Compile Include="Persisters\ScheduleScreenRefresherMeetingTest.cs" />
     <Compile Include="Persisters\ScheduleScreenRefresherPersonRequestTest.cs" />
     <Compile Include="Persisters\ScheduleScreenRefresherScheduleDataTest.cs" />
     <Compile Include="Persisters\ScheduleScreenRefresherTest.cs" />
-    <Compile Include="Persisters\ScheduleScreenRetryingPersisterIntegrationTest.cs" />
     <Compile Include="Repositories\AbsenceRepositoryTest.cs" />
     <Compile Include="Repositories\ActivityRepositoryTest.cs" />
     <Compile Include="Repositories\AgentDayScheduleTagRepositoryTest.cs" />

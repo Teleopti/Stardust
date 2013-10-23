@@ -99,7 +99,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 	{
 		#region Fields
 		private readonly ILifetimeScope _container;
-		private IScheduleScreenPersister _persister;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(SchedulingScreen));
 		private ISchedulerStateHolder _schedulerState;
 		private readonly ClipHandler<IScheduleDay> _clipHandlerSchedule;
@@ -523,14 +522,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var scheduleDictionaryBatchingPersister = _container.Resolve<IScheduleDictionaryBatchPersister>(
 				TypedParameter.From<IMessageBrokerIdentifier>(_schedulerMessageBrokerHandler),
 				TypedParameter.From<IReassociateData>(_schedulerMessageBrokerHandler)
-				);
-			_persister = _container.Resolve<IScheduleScreenPersister>(
-				TypedParameter.From<IPersonRequestPersister>(
-					new PersonRequestPersister((IClearReferredShiftTradeRequests)_schedulerState)),
-				
-								TypedParameter.From<IMessageBrokerIdentifier>(_schedulerMessageBrokerHandler),
-				TypedParameter.From(scheduleDictionaryBatchingPersister),
-				TypedParameter.From<IOwnMessageQueue>(_schedulerMessageBrokerHandler)
 				);
 
 			_scheduleDayListFactory = _container.Resolve<IScheduleDayListFactory>();
@@ -4648,50 +4639,50 @@ namespace Teleopti.Ccc.Win.Scheduling
 			RecalculateResources();
 		}
 
-		private void doSaveProcess()
-		{
-			var refreshResult = refreshEntitiesUsingMessageBroker();
-			if (refreshResult.ConflictsFound)
-			{
-				if (refreshResult.DialogResult == PersistConflictDialogResult.OK)
-					showPleaseSaveAgainDialog();
-			}
-			else
-			{
-				//if conflicts don't exist - do the saving
-				Cursor = Cursors.WaitCursor;
-				using (PerformanceOutput.ForOperation("Persisting changes"))
-				{
-					_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
-					var result = _persister.TryPersist(_schedulerState.Schedules, _modifiedWriteProtections,
-																						 _schedulerState.PersonRequests, _schedulerState.Schedules.ModifiedPersonAccounts);
-					if (result.ScheduleDictionaryConflicts != null && result.ScheduleDictionaryConflicts.Any())
-					{
-						var conflictHandlingResult = handleConflicts(new List<IPersistableScheduleData>(), result.ScheduleDictionaryConflicts);
-						if (conflictHandlingResult.DialogResult == PersistConflictDialogResult.Overwrite)
-							doSaveProcess();
-						if (conflictHandlingResult.DialogResult == PersistConflictDialogResult.OK)
-							showPleaseSaveAgainDialog();
-						return;
-					}
-					if (!result.Saved)
-					{
-						appologizeAndClose();
-						return;
-					}
-					if (_personAbsenceAccountPersistValidationBusinessRuleResponses.Any())
-					{
-						BusinessRuleResponseDialog.ShowDialogFromWinForms(_personAbsenceAccountPersistValidationBusinessRuleResponses);
-					}
-				}
-				_undoRedo.Clear();
-				enableUndoRedoButtons();
-				Cursor = Cursors.Default;
-			}
-			updateRequestCommandsAvailability();
-			updateShiftEditor();
-			RecalculateResources();
-		}
+		//private void doSaveProcess()
+		//{
+		//	var refreshResult = refreshEntitiesUsingMessageBroker();
+		//	if (refreshResult.ConflictsFound)
+		//	{
+		//		if (refreshResult.DialogResult == PersistConflictDialogResult.OK)
+		//			showPleaseSaveAgainDialog();
+		//	}
+		//	else
+		//	{
+		//		//if conflicts don't exist - do the saving
+		//		Cursor = Cursors.WaitCursor;
+		//		using (PerformanceOutput.ForOperation("Persisting changes"))
+		//		{
+		//			_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
+		//			var result = _persister.TryPersist(_schedulerState.Schedules, _modifiedWriteProtections,
+		//																				 _schedulerState.PersonRequests, _schedulerState.Schedules.ModifiedPersonAccounts);
+		//			if (result.ScheduleDictionaryConflicts != null && result.ScheduleDictionaryConflicts.Any())
+		//			{
+		//				var conflictHandlingResult = handleConflicts(new List<IPersistableScheduleData>(), result.ScheduleDictionaryConflicts);
+		//				if (conflictHandlingResult.DialogResult == PersistConflictDialogResult.Overwrite)
+		//					doSaveProcess();
+		//				if (conflictHandlingResult.DialogResult == PersistConflictDialogResult.OK)
+		//					showPleaseSaveAgainDialog();
+		//				return;
+		//			}
+		//			if (!result.Saved)
+		//			{
+		//				appologizeAndClose();
+		//				return;
+		//			}
+		//			if (_personAbsenceAccountPersistValidationBusinessRuleResponses.Any())
+		//			{
+		//				BusinessRuleResponseDialog.ShowDialogFromWinForms(_personAbsenceAccountPersistValidationBusinessRuleResponses);
+		//			}
+		//		}
+		//		_undoRedo.Clear();
+		//		enableUndoRedoButtons();
+		//		Cursor = Cursors.Default;
+		//	}
+		//	updateRequestCommandsAvailability();
+		//	updateShiftEditor();
+		//	RecalculateResources();
+		//}
 
 		private void showPleaseSaveAgainDialog()
 		{

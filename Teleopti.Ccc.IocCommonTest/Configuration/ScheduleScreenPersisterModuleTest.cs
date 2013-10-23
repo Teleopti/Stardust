@@ -28,26 +28,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
             _container = _containerBuilder.Build();
         }
 
-        [Test]
-        public void ShouldResolveScheduleScreenRetryingPersisterAsFarAsPossible()
-        {
-            var mocks = new MockRepository();
-
-        	var scheduleDictionaryBatchingPersister = _container.Resolve<IScheduleDictionaryBatchPersister>(
-        		TypedParameter.From(mocks.Stub<IMessageBrokerIdentifier>()),
-				TypedParameter.From(mocks.Stub<IReassociateData>())
-        		);
-            var instance = _container.Resolve<IScheduleScreenPersister>(
-                TypedParameter.From(mocks.Stub<IPersonRequestPersister>()),
-                TypedParameter.From(mocks.Stub<ITraceableRefreshService>()),
-				TypedParameter.From(mocks.Stub<IMessageBrokerIdentifier>()),
-				TypedParameter.From(mocks.Stub<IOwnMessageQueue>()),
-                TypedParameter.From(scheduleDictionaryBatchingPersister)
-                ); 
-
-            Assert.That(instance, Is.InstanceOf<ScheduleScreenRetryingPersister>());
-        }
-
 		 [Test]
 		 public void ShouldNotReuseBatchPersister()
 		 {
