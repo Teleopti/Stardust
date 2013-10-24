@@ -399,12 +399,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.AssertExists("#Request-add-loaded-ready");
 			Browser.Interactions.AssertFirstContains("#Request-add-loaded-date", dateAsSwedishString);
 		}
-
-		[Then(@"Shifttrade button should be disabled")]
-		public void ThenShifttradeButtonShouldBeDisabled()
-		{
-			Browser.Interactions.AssertExists(".btn[disabled]>.icon-random");
-		}
         
         [When(@"I initialize a shift trade")]
         public void WhenIInitializeAShiftTrade()
@@ -415,7 +409,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
         [Then(@"I should not be able to initialize a shift trade")]
         public void ThenIShouldNotBeAbleToInitializeAShiftTrade()
         {
-            ScenarioContext.Current.Pending();
+			//Browser.Interactions.AssertExists(".btn[disabled]>.initialize-shift-trade");
+			Browser.Interactions.AssertNotExists(".navbar-text", ".initialize-shift-trade");
         }
 
 		private static void AssertAgentIsDisplayed(string name)

@@ -224,11 +224,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.Click(".cancel-button");
 		}
 
-        [Then(@"I should see the shift trade page for '(.*)'")]
-        public void ThenIShouldSeeTheShiftTradePageFor(DateTime date)
+		[Then(@"I should navigate to shift trade for '(.*)'")]
+        public void ThenIShouldNavigateToShiftTradeFor(DateTime date)
         {
             Browser.Interactions.AssertUrlContains("ShiftTrade/"+date.ToString("yyyyMMdd"));
-			Browser.Interactions.AssertFirstContains(".add-shifttrade-datepicker", date.ToShortDateString(DataMaker.Me().Culture));
         }
+
+		[Then(@"I should see the shift trade page for '(.*)'")]
+		public void ThenIShouldSeeTheShiftTradePageFor(DateTime date)
+		{
+			Browser.Interactions.AssertFirstContains(".add-shifttrade-datepicker", date.ToShortDateString(DataMaker.Me().Culture));
+
+		}
+
 	}
 }

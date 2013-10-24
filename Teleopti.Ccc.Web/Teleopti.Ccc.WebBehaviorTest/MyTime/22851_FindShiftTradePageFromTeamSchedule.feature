@@ -23,7 +23,7 @@ Scenario: Initialize a shift trade from team schedule
 	Given I have the role 'Agent'
 	And I am viewing team schedule for '2013-10-07'
 	When I initialize a shift trade
-	Then I should see the shift trade page for '2013-10-07'
+	Then I should navigate to shift trade for '2013-10-07'
 
 Scenario: Can not see shift trade button if no permission
 	Given I have the role 'No shift trade access'

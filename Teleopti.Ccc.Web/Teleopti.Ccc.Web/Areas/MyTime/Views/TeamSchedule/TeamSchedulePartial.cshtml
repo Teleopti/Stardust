@@ -21,26 +21,30 @@
         <ul class="nav" data-bind="if: showTeamPicker">
             <li class="divider-vertical"></li>
         </ul>
-        <div class="navbar-text" data-bind="if: showTeamPicker">
-            <span data-bind="if: showGroupings">
-                <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
-                    <optgroup data-bind="attr: { label: text }, foreach: children">
-                        <option data-bind="text: text, value: id"></option>
-                    </optgroup>
-                </select>
-            </span>
-            <span data-bind="if: !showGroupings()">
-                <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
-                    <option data-bind="text: text, value: id"></option>
-                </select>
-            </span>
-        </div>
-        <ul class="nav">
+	    <div class="navbar-text" data-bind="if: showTeamPicker">
+		    <span data-bind="if: showGroupings">
+			    <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
+				    <optgroup data-bind="attr: { label: text }, foreach: children">
+					    <option data-bind="text: text, value: id"></option>
+				    </optgroup>
+			    </select>
+		    </span>
+		    <span data-bind="if: !showGroupings()">
+			    <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
+				    <option data-bind="text: text, value: id"></option>
+			    </select>
+		    </span>
+	    </div>
+		
+		@if (Model.ShiftTradePermisssion)
+		{
+		<ul class="nav">
             <li>
                 <a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="icon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
             </li>
         </ul>
-       
+		}
+	   
     </div>
 </div>
 <div id="TeamSchedule-body" class="body-teamschedule" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>

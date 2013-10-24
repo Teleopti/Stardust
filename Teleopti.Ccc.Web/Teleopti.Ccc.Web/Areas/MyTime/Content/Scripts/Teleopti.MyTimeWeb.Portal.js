@@ -48,7 +48,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 						'height': $(bodyInner).height() + 10
 					})
 					.show()
-					;
+				;
 				$('img', this)
 					.css({
 						'top': 50 + $(window).scrollTop()
@@ -60,16 +60,16 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _initNavigation() {
-	    $('.dropdown-menu a[data-mytime-action]')
+		$('.dropdown-menu a[data-mytime-action]')
 			.click(function (e) {
-			    e.preventDefault();
+				e.preventDefault();
 				_navigateTo($(this).data('mytime-action'));
 			})
-			;
+		;
 
-	    if (location.hash.length <= 1) {
-	    	location.replace('#' + _settings.defaultNavigation);
-	    }
+		if (location.hash.length <= 1) {
+			location.replace('#' + _settings.defaultNavigation);
+		}
 
 		$('#asm-link').click(function (ev) {
 			$(".dropdown dd ul").hide();
@@ -90,12 +90,12 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _setupRoutes() {
-	    var viewRegex = '[a-z]+';
-	    var actionRegex = '[a-z]+';
-	    var guidRegex = '[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}';
-	    var dateRegex = '\\d{8}';
+		var viewRegex = '[a-z]+';
+		var actionRegex = '[a-z]+';
+		var guidRegex = '[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}';
+		var dateRegex = '\\d{8}';
 		
-	    crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(ShiftTrade)/(' + dateRegex + ')$', 'i'),
+		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(ShiftTrade)/(' + dateRegex + ')$', 'i'),
 	        function (view, action, secondAction, date) {
 	        	var hashInfo = _parseHash('#' + view + '/' + action);
 	        	_invokeDisposeCallback(currentViewId);
@@ -106,30 +106,30 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	            		});
 	        });
 		
-	    crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(' + actionRegex + ')/(' + dateRegex + ')$', 'i'),
+		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(' + actionRegex + ')/(' + dateRegex + ')$', 'i'),
 	        function (view, action, secondAction, date) {
 	        	var hashInfo = _parseHash('#' + view + '/' + action);
-	            _invokeDisposeCallback(currentViewId);
-	            _adjustTabs(hashInfo);
-		        _loadContent(hashInfo);
+	        	_invokeDisposeCallback(currentViewId);
+	        	_adjustTabs(hashInfo);
+	        	_loadContent(hashInfo);
 	        });
-	    crossroads.addRoute(new RegExp('^(.*)$', 'i'),
+		crossroads.addRoute(new RegExp('^(.*)$', 'i'),
 	        function (hash) {
-	            var hashInfo = _parseHash('#' + hash);
-	            _invokeDisposeCallback(currentViewId);
-	            _adjustTabs(hashInfo);
-	            _loadContent(hashInfo);
+	        	var hashInfo = _parseHash('#' + hash);
+	        	_invokeDisposeCallback(currentViewId);
+	        	_adjustTabs(hashInfo);
+	        	_loadContent(hashInfo);
 	        });
 	}
 
 	function _initializeHasher() {
-	    hasher.prependHash = '';
-	    var parseHash = function (newHash, oldHash) {
-	        crossroads.parse(newHash);
-	    };
-	    hasher.initialized.add(parseHash);
-	    hasher.changed.add(parseHash);
-	    hasher.init();
+		hasher.prependHash = '';
+		var parseHash = function (newHash, oldHash) {
+			crossroads.parse(newHash);
+		};
+		hasher.initialized.add(parseHash);
+		hasher.changed.add(parseHash);
+		hasher.init();
 	}
 
 	function _navigateTo(action, date, id) {
@@ -144,7 +144,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		if (id) {
 			hash += "/" + id;
 		}
-	    hasher.setHash(hash);
+		hasher.setHash(hash);
 	}
 
 	function _endsWith(str, suffix) {
@@ -184,9 +184,9 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _adjustTabs(hashInfo) {
-	    var tabHref = '#' + hashInfo.controller + 'Tab';
-	    $('.bdd-mytime-top-menu .nav li').removeClass('active');
-	    $('a[href="' + tabHref + '"]').parent().addClass('active');
+		var tabHref = '#' + hashInfo.controller + 'Tab';
+		$('.bdd-mytime-top-menu .nav li').removeClass('active');
+		$('a[href="' + tabHref + '"]').parent().addClass('active');
 	}
 
 	function _loadContent(hashInfo, secondAction) {
@@ -229,8 +229,8 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	return {
-	    Init: function (settings) {
-	        Teleopti.MyTimeWeb.AjaxSettings = settings;
+		Init: function (settings) {
+			Teleopti.MyTimeWeb.AjaxSettings = settings;
 			Teleopti.MyTimeWeb.Common.Init(settings);
 			Teleopti.MyTimeWeb.Test.Init(settings);
 			_settings = settings;
@@ -239,7 +239,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			_initNavigation();
 			_setupRoutes();
 			_initializeHasher();
-	    },
+		},
 
 		NavigateTo: function (action, date, id) {
 			_navigateTo(action, date, id);
