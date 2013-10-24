@@ -38,12 +38,23 @@ Background:
 	And 'Pierre Baldi' has a workflow control set publishing schedules until '2013-12-01'
 	And 'John Smith' has a workflow control set publishing schedules until '2013-12-01'
 	And 'John Smith' has a person period with
-		| Field      | Value       |
-		| Shift bag  | A shift bag |
-		| Skill      | A skill     |
-		| Team       | Team green  |
-		| Start date | 2013-10-10  |
-		| Contract   | A contract  |
+		| Field                | Value                |
+		| Shift bag            | A shift bag          |
+		| Skill                | A skill              |
+		| Team                 | Team green           |
+		| Start date           | 2013-10-10           |
+		| Contract             | A contract           |
+		| Contract schedule    | A contract schedule  |
+		| Part time percentage | Part time percentage |
+	And 'John King' has a person period with
+         | Field                | Value                        |
+         | Shift bag            | Another shift bag            |
+         | Skill                | Another skill                |
+         | Team                 | Team red                     |
+         | Start date           | 2013-10-10                   |
+         | Contract             | Another contract             |
+         | Contract schedule    | Another contract schedule    |
+         | Part time percentage | Another part time percentage |
 	And 'John Smith' is on 'A group' of group page 'A group page'
 	And 'John Smith' is on 'Another group' of group page 'A group page'
 	And 'John Smith' is on 'Some other group' of group page 'Another group page'
@@ -99,26 +110,26 @@ Scenario: View group schedule
 @ignore
 Scenario: Order group pages like business heirarchy, contract, contract schedule, part time percentage, notes, shiftbag, skill, group page names
 	Given I viewing schedules for '2013-10-10'
-	Then I should see 'Business Hierarchy' before 'Contract'
-	And I should see 'Contract' before 'Contract Schedule'
-	And I should see 'Contract Schedule' before 'Part-Time Percentage'
-	And I should see 'Part-Time Percentage' before 'Note'
-	And I should see 'Note' before 'Shift bag'
-	And I should see 'Shift bag' before 'Skill'
-	And I should see 'Skill' before 'A group page'
-	And I should see 'A group page' before 'Another group page'
+	Then I should see group 'Business Hierarchy' before 'Contract'
+	And I should see group 'Contract' before 'Contract Schedule'
+	And I should see group 'Contract Schedule' before 'Part-Time Percentage'
+	#And I should see group 'Part-Time Percentage' before 'Note'
+	#And I should see group 'Note' before 'Shift bag'
+	And I should see group 'Shift bag' before 'Skill'
+	And I should see group 'Skill' before 'A group page'
+	And I should see group 'A group page' before 'Another group page'
 
 @ignore
 Scenario: Order groups in alphabetical order
 	Given I viewing schedules for '2013-10-10'
-	Then I should see 'Team green' before 'Team red'
-	And I should see 'A contract' before 'Another contract'
-	And I should see 'A contract schedule' before 'Another contract schedule'
-	And I should see 'Another Part-Time Percentage' before 'Part-Time Percentage'
-	And I should see 'Another note' before 'A note'
-	And I should see 'Another shift bag' before 'A shift bag'
-	And I should see 'Another skill' before 'A skill'
-	And I should see 'A group' before 'Another group'
+	Then I should see option 'Team green' before 'Team red'
+	And I should see option 'A contract' before 'Another contract'
+	And I should see option 'A contract schedule' before 'Another contract schedule'
+	And I should see option 'Another part time percentage' before 'Part time percentage'
+	#And I should see option 'Another note' before 'A note'
+	And I should see option 'A shift bag' before 'Another shift bag'
+	And I should see option 'A skill' before 'Another skill'
+	And I should see option 'A group' before 'Another group'
 
 @ignore
 Scenario: Search groups

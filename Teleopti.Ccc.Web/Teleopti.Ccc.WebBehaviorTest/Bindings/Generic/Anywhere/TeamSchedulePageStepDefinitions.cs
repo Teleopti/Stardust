@@ -191,6 +191,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.Javascript(string.Format("test.callViewMethodWhenReady('teamschedule', 'setDateFromTest', '{0}');", date));
 		}
 
+		[Then(@"I should see group '(.*)' before '(.*)'")]
+		public void ThenIShouldSeeGroupBefore(string group1, string group2)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery("optgroup[label*='{0}'] + optgroup[label*='{1}']", group1, group2);
+		}
+
+		[Then(@"I should see option '(.*)' before '(.*)'")]
+		public void ThenIShouldSeeOptionBefore(string option1, string option2)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery("option:contains('{0}') + option:contains('{1}')", option1, option2);
+		}
+
 		[Then(@"I should see staffing metrics for skill '(.*)'")]
 		public void ThenIShouldSeeStaffingMetricsForSkill(string name)
 		{
