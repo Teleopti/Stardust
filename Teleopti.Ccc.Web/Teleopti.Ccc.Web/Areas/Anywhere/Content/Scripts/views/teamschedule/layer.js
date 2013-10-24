@@ -28,15 +28,5 @@ define([
             this.Color = data.Color;
             this.Description = data.Title;
             this.IsFullDayAbsence = data.IsFullDayAbsence;
-
-            this.ColorIsDark = function() {
-                var hex = self.Color.substr(1, 6);
-                var r = parseInt(hex.substr(0 * 2, 2), 16);
-                var g = parseInt(hex.substr(1 * 2, 2), 16);
-                var b = parseInt(hex.substr(2 * 2, 2), 16);
-                var brightness = r * 0.299 + g * 0.587 + b * 0.114;
-                return brightness < 100;
-            };
-
         };
     });
