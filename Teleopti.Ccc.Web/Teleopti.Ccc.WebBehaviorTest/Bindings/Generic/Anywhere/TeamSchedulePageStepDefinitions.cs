@@ -70,7 +70,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				                         PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color));
 			}
 			if (layer.Description != null)
+			{
+				Browser.Interactions.Click(".toggle-descriptions");
 				Browser.Interactions.AssertFirstContainsUsingJQuery(selector, layer.Description);
+			}
 			else
 				Browser.Interactions.AssertExistsUsingJQuery(selector);
 		}
