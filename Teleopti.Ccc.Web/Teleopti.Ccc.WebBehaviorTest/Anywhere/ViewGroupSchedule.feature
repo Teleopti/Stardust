@@ -77,8 +77,8 @@ Scenario: View group picker options
 		| Contract/Another contract                 |
 		| Contract Schedule/A contract schedule     |
 		| Part-Time Percentage/Part time percentage |
-		| Shift bag/A shift bag                     |
-		| Note/A note                               |
+		| Shift Bag/A shift bag                     |
+		#| Note/A note                               |
 		| Skill/A skill                             |
 		| A group page/A group                      |
 		| A group page/Another group                |

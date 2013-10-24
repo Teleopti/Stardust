@@ -86,6 +86,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var options = table.CreateSet<GroupInfo>();
 
+			Select2Box.Open("group-picker");
 			foreach (var option in options)
 			{
 				Select2Box.AssertOptionExist("group-picker", option.Group);

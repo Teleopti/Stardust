@@ -1394,8 +1394,7 @@ Date</value>
     <comment>Page setup</comment>
   </data>
   <data name="PartTimePercentage" xml:space="preserve">
-    <value>Part-Time
-Percentage</value>
+    <value>Part-Time Percentage</value>
     <comment>Part time percentage ribbon item</comment>
   </data>
   <data name="PartTimepercentages" xml:space="preserve">
