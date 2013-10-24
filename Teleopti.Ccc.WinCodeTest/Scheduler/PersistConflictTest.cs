@@ -398,7 +398,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 get { return new Person{Name=new Name("Arne", "weise")}; }
             }
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             public IScenario Scenario { get; private set; }
             public object Clone()
             {
@@ -461,7 +460,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 	    public void Remove(PersistConflict persistConflict)
 	    {
-		    
+		    eventMessageIds.Remove(persistConflict.InvolvedId());
 	    }
     }
 }
