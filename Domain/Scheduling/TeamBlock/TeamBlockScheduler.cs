@@ -291,8 +291,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return null;
 
 			var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(teamBlockInfo);
-			
-            var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,
+
+			var shifts = _workShiftFilterService.FilterForRoleModel(datePointer, teamBlockInfo, restriction,
 			                                            schedulingOptions,
                                                         new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer), _sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy( teamBlockInfo));
 			if (shifts == null || shifts.Count <= 0)
