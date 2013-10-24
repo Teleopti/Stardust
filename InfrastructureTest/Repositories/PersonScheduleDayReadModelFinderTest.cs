@@ -108,6 +108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				clearReadModel(personId1, businessUnitId, new DateTime(2012, 8, 29));
+				clearReadModel(personId2, businessUnitId, new DateTime(2012, 8, 29));
 				uow.PersistAll();
 			}
 		}
