@@ -80,7 +80,7 @@ define([
 				url: 'Person/PeopleInGroup',
 				data: {
 					date: helpers.Date.ToServer(teamSchedule.SelectedDate()),
-					teamId: teamSchedule.SelectedGroup()
+					groupId: teamSchedule.SelectedGroup()
 				},
 				success: function (people, textStatus, jqXHR) {
 					var newItems = ko.utils.arrayMap(people, function (s) {

@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[UnitOfWorkAction,HttpGet]
-		public JsonResult PeopleInGroup(DateTime date, Guid teamId)
+		public JsonResult PeopleInGroup(DateTime date, Guid groupId)
 		{
-			var people = _schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(date), teamId,
+			var people = _schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(date), groupId,
 			                                                                DefinedRaptorApplicationFunctionPaths.
 			                                                                	SchedulesAnywhere);
 			return Json(people.Select(p => new {p.Id, p.Name.FirstName, p.Name.LastName, p.EmploymentNumber}).ToList(),
