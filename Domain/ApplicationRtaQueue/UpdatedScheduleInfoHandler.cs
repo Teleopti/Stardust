@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationRtaQueue
 			try
 			{
 				_teleoptiRtaService.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
-				Logger.InfoFormat("Message successfully send to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.",
+				Logger.InfoFormat("Message successfully sent to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.",
 				                  message.BusinessUnitId, message.PersonId, DateTime.UtcNow);
 			}
 			catch (Exception exception)

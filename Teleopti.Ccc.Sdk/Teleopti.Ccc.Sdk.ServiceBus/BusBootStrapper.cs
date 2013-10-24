@@ -1,21 +1,16 @@
 ﻿using System;
 using Autofac;
-using Autofac.Core;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Autofac;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.MessageModules;
 using Rhino.ServiceBus.Sagas.Persisters;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
-using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -27,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     	{
     		var reader = new ConfigurationReaderFactory();
     		var configurationReader = reader.Reader();
-			configurationReader.ReadConfiguration(new MessageSenderCreator(new InternalServiceBusSender(()=>Container.Resolve<IServiceBus>(),()=>Container.Resolve<ICurrentIdentity>())));
+			configurationReader.ReadConfiguration(new MessageSenderCreator(new InternalServiceBusSender(() => Container.Resolve<IServiceBus>(), ()=>Container.Resolve<ICurrentIdentity>())));
     	}
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -77,35 +72,4 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         	return true;
         }
     }
-
-	public class LocalServiceBusPublisherModule : Module
-	{
-		protected override void Load(ContainerBuilder builder)
-		{
-			builder.RegisterType<LocalServiceBusPublisher>()
-			       .As<IPublishEventsFromEventHandlers>()
-			       .As<ISendDelayedMessages>()
-			       .SingleInstance();
-			builder.RegisterType<GetUpdatedScheduleChangeFromTeleoptiRtaService>()
-			       .As<IGetUpdatedScheduleChangeFromTeleoptiRtaService>()
-			       .SingleInstance();
-		}
-	}
-
-	public class GetUpdatedScheduleChangeFromTeleoptiRtaService : IGetUpdatedScheduleChangeFromTeleoptiRtaService
-	{
-		private readonly IChannelCreator _channelCreator;
-
-		public GetUpdatedScheduleChangeFromTeleoptiRtaService(IChannelCreator channelCreator)
-		{
-			_channelCreator = channelCreator;
-		}
-
-		public void GetUpdatedScheduleChange(Guid personId, Guid businessUnitId, DateTime timestamp)
-		{
-			var channel = _channelCreator.CreateChannel<ITeleoptiRtaService>();
-			channel.GetUpdatedScheduleChange(personId, businessUnitId, timestamp);
-		}
-	}
-
 }

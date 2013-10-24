@@ -552,6 +552,7 @@
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDays.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillInterval.cs" />
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlock.cs" />
+    <Compile Include="Scheduling\TeamBlock\OpenHourRestrictionForTeamBlock.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftLayer.cs" />
     <Compile Include="Scheduling\Assignment\EditableShift.cs" />
@@ -563,6 +564,7 @@
     <Compile Include="Scheduling\Assignment\ReplaceLayerInSchedule.cs" />
     <Compile Include="Scheduling\Assignment\ShiftLayer.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailability.cs" />
+    <Compile Include="Scheduling\TeamBlock\SkillIntervalDataOpenHour.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayChecker.cs" />

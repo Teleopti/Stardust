@@ -20,10 +20,22 @@ BEGIN
 	NOUNLOAD,
 	REPLACE,
 	STATS = 10
+
+	--waitfor database to open
+	DECLARE @MultiUserError int
+	SET @MultiUserError = 1
+	WHILE @MultiUserError <> 0
+	BEGIN
+		PRINT 'waiting for $(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics database to recover ...'
+		ALTER DATABASE [$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics] SET  MULTI_USER
+		SET @MultiUserError = @@error
+		IF @MultiUserError = 0 BREAK
+		WAITFOR DELAY '00:00:05.000'
+	END
+
+	print 'done!'
+
 END
-GO
-IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = '$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics')
-ALTER DATABASE [$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics] SET  MULTI_USER
 GO
 ---
 IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = '$(BRANCH)_$(CUSTOMER)_TeleoptiCCCAgg')
@@ -42,12 +54,25 @@ BEGIN
 	NOUNLOAD,
 	REPLACE,
 	STATS = 10
+
+	--waitfor database to open
+	DECLARE @MultiUserError int
+	SET @MultiUserError = 1
+	WHILE @MultiUserError <> 0
+	BEGIN
+		PRINT 'waiting for $(BRANCH)_$(CUSTOMER)_TeleoptiCCCAgg database to recover ...'
+		ALTER DATABASE [$(BRANCH)_$(CUSTOMER)_TeleoptiCCCAgg] SET  MULTI_USER
+		SET @MultiUserError = @@error
+		IF @MultiUserError = 0 BREAK
+		WAITFOR DELAY '00:00:05.000'
+	END
+
+	print 'done!'
+
 END
 
 GO
-IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = '$(BRANCH)_$(CUSTOMER)_TeleoptiCCCAgg')
-ALTER DATABASE [$(BRANCH)_$(CUSTOMER)_TeleoptiCCCAgg] SET  MULTI_USER
-GO
+
 --
 IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = '$(BRANCH)_$(CUSTOMER)_TeleoptiCCC7')
 ALTER DATABASE [$(BRANCH)_$(CUSTOMER)_TeleoptiCCC7] SET  SINGLE_USER WITH ROLLBACK IMMEDIATE
@@ -63,7 +88,20 @@ NOUNLOAD,
 REPLACE,
 STATS = 10
 GO
-ALTER DATABASE [$(BRANCH)_$(CUSTOMER)_TeleoptiCCC7] SET  MULTI_USER
+
+--waitfor database to open
+DECLARE @MultiUserError int
+SET @MultiUserError = 1
+WHILE @MultiUserError <> 0
+BEGIN
+	PRINT 'waiting for $(BRANCH)_$(CUSTOMER)_TeleoptiCCC7 database to recover ...'
+	ALTER DATABASE [$(BRANCH)_$(CUSTOMER)_TeleoptiCCC7] SET  MULTI_USER
+	SET @MultiUserError = @@error
+	IF @MultiUserError = 0 BREAK
+	WAITFOR DELAY '00:00:05.000'
+END
+
+print 'done!'
 GO
 
 --Adding current windows user to the SuperUser

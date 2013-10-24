@@ -38,22 +38,41 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see '(.*)' with the schedule")]
 		public void ThenIShouldSeeWithTheSchedule(string personName, Table table)
 		{
-			var schedule = table.CreateInstance<ScheduleInfo>();
+			var layer = table.CreateInstance<LayerInfo>();
 
 			Browser.Interactions.AssertExistsUsingJQuery(
-				string.Format(
 					".person:contains('{0}') .shift .layer[data-start-time='{1}'][data-length-minutes='{2}'][style*='background-color: {3}']",
 					personName,
-					schedule.StartTime,
-					schedule.LengthMinutes(),
-					PersonSchedulePageStepDefinitions.ColorNameToCss(schedule.Color)));
+					layer.StartTime,
+					layer.LengthMinutes(),
+					PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color)
+					);
 		}
 		
 		[Then(@"I should see '(.*)' with absence")]
 		public void ThenIShouldSeeWithAbsence(string personName, Table table)
 		{
-			var absence = table.CreateInstance<AbsenceInfo>();
-			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift .layer[style*='background-color: {1}']", personName, PersonSchedulePageStepDefinitions.ColorNameToCss(absence.Color));
+			var layer = table.CreateInstance<LayerInfo>();
+			string selector;
+
+			if (layer.StartTime != null)
+			{
+				selector = string.Format(".person:contains('{0}') .shift .layer[data-start-time='{1}'][data-length-minutes='{2}'][style*='background-color: {3}']",
+				                         personName,
+				                         layer.StartTime,
+				                         layer.LengthMinutes(),
+				                         PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color));
+			}
+			else
+			{
+				selector = string.Format(".person:contains('{0}') .shift .layer[style*='background-color: {1}']",
+				                         personName,
+				                         PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color));
+			}
+			if (layer.Description != null)
+				Browser.Interactions.AssertFirstContainsUsingJQuery(selector, layer.Description);
+			else
+				Browser.Interactions.AssertExistsUsingJQuery(selector);
 		}
 
 		[Then(@"I should see '(.*)' with no schedule")]
@@ -96,10 +115,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertNotExists("#skill-selector li:nth-child(" + skills.Length + ")", "#skill-selector li:nth-child(" + (skills.Length + 1) + ")");
 		}
 
-		[Then(@"I should see a day off for '(.*)'")]
+		[Then(@"I should see '(.*)' with a day off")]
 		public void ThenIShouldSeeADayOffFor(string personName)
 		{
 			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .dayoff", personName);
+		}
+
+		[Then(@"I should see '(.*)' with a day off named '(.*)'")]
+		public void ThenIShouldSeeADayOffFor(string personName, string dayOff)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .dayoff:contains('{1}')", personName, dayOff);
 		}
 
 		[Then(@"I should see '(.*)' before '(.*)'")]
@@ -113,21 +138,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			public string Team { get; set; }
 		}
 
-		public class AbsenceInfo
-		{
-			public string Color { get; set; }
-		}
-
 		public class SkillInfo
 		{
 			public string Skill { get; set; }
 		}
 
-		public class ScheduleInfo
+		public class LayerInfo
 		{
 			public string Color { get; set; }
 			public string StartTime { get; set; }
 			public string EndTime { get; set; }
+			public string Description { get; set; }
 
 			public int LengthMinutes()
 			{

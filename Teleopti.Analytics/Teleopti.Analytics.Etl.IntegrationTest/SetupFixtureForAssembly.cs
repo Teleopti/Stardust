@@ -1,50 +1,77 @@
-﻿//using System;
-//using NUnit.Framework;
-//using Teleopti.Ccc.Domain.Common;
-//using Teleopti.Ccc.Domain.Security.Principal;
-//using Teleopti.Ccc.Infrastructure.Foundation;
-//using Teleopti.Ccc.Infrastructure.UnitOfWork;
-//using Teleopti.Ccc.TestCommon;
-//using Teleopti.Ccc.TestCommon.FakeData;
-//using Teleopti.Ccc.TestCommon.TestData.Core;
-//using Teleopti.Ccc.TestCommon.TestData.Setups;
-//using Teleopti.Interfaces.Domain;
-//using Teleopti.Interfaces.Infrastructure;
+﻿using System;
+using NUnit.Framework;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.TestCommon.TestData.Setups;
+using Teleopti.Interfaces.Infrastructure;
 
-//namespace Teleopti.Analytics.Etl.IntegrationTest
-//{
-//    [SetUpFixture]
-//    public class SetupFixtureForAssembly
-//    {
-//        private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+namespace Teleopti.Analytics.Etl.IntegrationTest
+{
+	public class abra
+	{
+	}
 
-//        private void UnitOfWorkAction(Action<IUnitOfWork> action)
-//        {
-//            using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
-//            {
-//                action(uow);
-//                uow.PersistAll();
-//            }
-//        }
+	[SetUpFixture]
+	public class SetupFixtureForAssembly
+	{
+		[SetUp]
+		public void Setup()
+		{
+			var dataSource = DataSourceHelper.CreateDataSource(new IMessageSender[] { }, "TestData");
 
-//        [SetUp]
-//        public void Setup()
-//        {
-//            var dataSource = DataSourceHelper.CreateDataSource(new IMessageSender[] { }, "TestData");
+			var personThatCreatesTestData = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatCreatesTestData", "password");
 
-//            var personThatCreatesTestData = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatCreatesTestData", "password");
+			TestState.BusinessUnit = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
+			TestState.BusinessUnit.Name = "BusinessUnit";
 
-//            var businessUnitFromFakeState = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
-//            businessUnitFromFakeState.Name = "BusinessUnit";
+			StateHolderProxyHelper.SetupFakeState(dataSource, personThatCreatesTestData, TestState.BusinessUnit, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
 
-//            StateHolderProxyHelper.SetupFakeState(dataSource, personThatCreatesTestData, businessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			{
+				var testDataFactory = new TestDataFactory(action =>
+					{
+						action.Invoke(uow);
+						uow.PersistAll();
+					});
+				testDataFactory.Apply(new PersonThatCreatesTestData(personThatCreatesTestData));
+				testDataFactory.Apply(new LicenseFromFile());
+				testDataFactory.Apply(new BusinessUnitFromFakeState(TestState.BusinessUnit));
+			}
 
-//            _unitOfWorkFactory = UnitOfWorkFactory.CurrentUnitOfWorkFactory();
+			TestState.Ccc7DataBackup = DataSourceHelper.BackupCcc7DataByFileCopy("Teleopti.Analytics.Etl.IntegrationTest");
+		}
 
-//            DataFactoryState.DataFactory = new DataFactory(UnitOfWorkAction);
+		private static void DisposeUnitOfWork()
+		{
+			TestState.UnitOfWork.Dispose();
+			TestState.UnitOfWork = null;
+		}
 
-//            Data.Apply(new PersonThatCreatesTestData(personThatCreatesTestData));
-//            Data.Apply(new LicenseFromFile());
-//        }
-//    }
-//}
+		private static void OpenUnitOfWork()
+		{
+			TestState.UnitOfWork = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
+		}
+
+		private static void UnitOfWorkAction(Action<IUnitOfWork> action)
+		{
+			action(TestState.UnitOfWork);
+			TestState.UnitOfWork.PersistAll();
+		}
+
+		public static void BeginTest()
+		{
+			TestState.TestDataFactory = new TestDataFactory(UnitOfWorkAction);
+			DataSourceHelper.RestoreCcc7DataByFileCopy(TestState.Ccc7DataBackup);
+            DataSourceHelper.ClearAnalyticsData();
+			OpenUnitOfWork();
+		}
+
+		public static void EndTest()
+		{
+			DisposeUnitOfWork();
+		}
+	}
+}

@@ -208,6 +208,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			shiftCategoryDistributionControl.SetModel(model);
 		}
 
+		public void DisableViewShiftCategoryDistribution()
+		{
+			var shiftCategoryDistributionControl = (ShiftCategoryDistributionControl)tabInfoPanels.TabPages[1].Controls[0];
+			shiftCategoryDistributionControl.DisableViewShiftCategoryDistribution();
+		}
+
+		public void EnableViewShiftCategoryDistribution()
+		{
+			var shiftCategoryDistributionControl = (ShiftCategoryDistributionControl)tabInfoPanels.TabPages[1].Controls[0];
+			shiftCategoryDistributionControl.EnableViewShiftCategoryDistribution();
+		}
+
 		public void RefreshTabInfoPanels()
 		{
 			tabInfoPanels.Refresh();

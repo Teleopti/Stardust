@@ -432,3 +432,19 @@ drop column GroupingAbsence
 GO
 DROP TABLE [dbo].[GroupingAbsence]
 GO
+
+----------------  
+--Name: David J
+--Date: 2013-10-22
+--Desc: Bug #24969: Timeout during upgrade when running EXEC [dbo].[DayOffConverter]
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonAssignment]') AND name = N'IX_PersonAssignment_Scenario_UpdatedBy_UpdatedOn')
+CREATE NONCLUSTERED INDEX [IX_PersonAssignment_Scenario_UpdatedBy_UpdatedOn]
+ON [dbo].[PersonAssignment] ([Scenario])
+INCLUDE ([UpdatedBy],[UpdatedOn])
+
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonDayOff]') AND name = N'IX_PersonDayOff_BU_Name_Anchor_Person_Scenario')
+CREATE NONCLUSTERED INDEX [IX_PersonDayOff_BU_Name_Anchor_Person_Scenario]
+ON [dbo].[PersonDayOff] ([BusinessUnit],[Name])
+INCLUDE ([Anchor],[Person],[Scenario])
+GO
