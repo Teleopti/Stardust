@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         public void ShouldNotContinueIfRollbackIsNull()
         {
            Assert.IsFalse( _target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _teamSteadyStateHolder, null));
-            }
+        }
 
         [Test]
         public void ShouldContinueIfTeamNotInSteadyState()

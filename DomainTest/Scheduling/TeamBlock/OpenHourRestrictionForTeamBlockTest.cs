@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private ISkill _skill1;
         private ISkill _skill2;
         private readonly DateOnly _today = new DateOnly(2013,10,17);
+        private ISkillStaffPeriod _sampleSkillStaffPeriod;
 
         [SetUp]
         public void Setup()
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
             _skill1 = _mock.StrictMock<ISkill>();
             _skill2 = _mock.StrictMock<ISkill>();
+            _sampleSkillStaffPeriod = _mock.StrictMock<ISkillStaffPeriod>();
             _target = new OpenHourRestrictionForTeamBlock(_scheduleResultStartHolder, _skillIntervalDataOpenHour, _skillStaffPeriodMapper);
 
         }
@@ -55,11 +57,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private void expectCallForDay(IList<ISkillIntervalData> dayInterval, ISkillDay  skillDay, ISkill skill, IActivity activity)
         {
             var readOnlyListOfSkillInterval =
-                   new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>());
+                   new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>{_sampleSkillStaffPeriod});
             Expect.Call(skillDay.Skill).Return(skill);
             Expect.Call(skill.Activity).Return(activity);
-            Expect.Call(skillDay.SkillStaffPeriodCollection).Return(readOnlyListOfSkillInterval).IgnoreArguments();
-            Expect.Call(_skillStaffPeriodMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>()))
+            Expect.Call(skillDay.SkillStaffPeriodCollection).Return(readOnlyListOfSkillInterval).IgnoreArguments().Repeat.AtLeastOnce();
+            Expect.Call(_skillStaffPeriodMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments()
                   .Return(dayInterval);
         }
 
@@ -169,6 +171,46 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             Assert.AreEqual(result[_baseLineData.Activity1].EndTime, TimeSpan.FromHours(10));
             Assert.AreEqual(result[_baseLineData.Activity2].StartTime, TimeSpan.FromHours(9));
             Assert.AreEqual(result[_baseLineData.Activity2].EndTime, TimeSpan.FromHours(11));
+
+        }
+
+        [Test]
+        public void ShouldNotContinueWithEmptySkillStaff()
+        {
+
+
+            IList<ISkillDay> skillDays = new List<ISkillDay> { _skillDay1, _skillDay2, _skillDay3 };
+            var readOnlyListOfSkillInterval =
+                    new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>());
+
+            using (_mock.Record())
+            {
+                Expect.Call(_teamBlockInfo.BlockInfo).Return(_baseLineData.BlockOfThreeDays);
+                Expect.Call(
+                    _scheduleResultStartHolder.SkillDaysOnDateOnly(
+                        _baseLineData.BlockOfThreeDays.BlockPeriod.DayCollection())).Return(skillDays);
+
+                Expect.Call(_skillDay1.Skill).Return(_skill1);
+                Expect.Call(_skill1.Activity).Return(_baseLineData.Activity1);
+                Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(readOnlyListOfSkillInterval);
+                Expect.Call(_skillStaffPeriodMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>()))
+                      .Return(new List<ISkillIntervalData>());
+
+                Expect.Call(_skillDay2.Skill).Return(_skill1);
+                Expect.Call(_skill1.Activity).Return(_baseLineData.Activity1);
+                Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(readOnlyListOfSkillInterval).IgnoreArguments();
+                Expect.Call(_skillStaffPeriodMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>()))
+                      .Return(new List<ISkillIntervalData>());
+
+                Expect.Call(_skillDay3.Skill).Return(_skill1);
+                Expect.Call(_skill1.Activity).Return(_baseLineData.Activity1);
+                Expect.Call(_skillDay3.SkillStaffPeriodCollection).Return(readOnlyListOfSkillInterval).IgnoreArguments();
+                Expect.Call(_skillStaffPeriodMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>()))
+                      .Return(new List<ISkillIntervalData>());
+
+            }
+            var result = _target.GetOpenHoursPerActivity(_teamBlockInfo);
+            Assert.AreEqual(result.Count(), 0);
 
         }
 
