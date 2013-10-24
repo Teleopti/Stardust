@@ -225,6 +225,7 @@
     <Compile Include="Core\BrowserDriver\Retrying.cs" />
     <Compile Include="Data\CryptoCreator.cs" />
     <Compile Include="Data\HardCodedResolver.cs" />
+    <Compile Include="Data\Setups\Specific\AbsenceInContractTimeToday.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
     <Compile Include="Bindings\Generic\ServerStepDefinitions.cs" />
     <Compile Include="Session.feature.cs">

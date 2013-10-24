@@ -49,7 +49,10 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 		$.each(self.DayViewModels, function (index, day) {
 			var value = day.PossibleContractTimeMinutesLower();
 			if (value)
-				sum += parseInt(value);
+			    sum += parseInt(value);
+		    var absenceValue = day.AbsenceContractTimeMinutes();
+		    if (absenceValue)
+		        sum += parseInt(absenceValue);
 			sum += day.ContractTimeMinutes();
 		});
 		return sum;
@@ -60,7 +63,10 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 		$.each(self.DayViewModels, function (index, day) {
 			var value = day.PossibleContractTimeMinutesUpper();
 			if (value)
-				sum += parseInt(value);
+			    sum += parseInt(value);
+			var absenceValue = day.AbsenceContractTimeMinutes();
+		    if (absenceValue)
+		        sum += parseInt(absenceValue);
 			sum += day.ContractTimeMinutes();
 		});
 		return sum;
