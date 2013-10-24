@@ -423,7 +423,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"I have a full-day contract time absence today")]
 		public void GivenIHaveAFull_DayContractTimeAbsenceToday()
 		{
-			UserFactory.User().Setup(new AbsenceInContractTimeToday());
+			DataMaker.Data().Apply(new AbsenceInContractTimeToday());
 		}
 
 		[Given(@"I have a full-day absence today with")]
