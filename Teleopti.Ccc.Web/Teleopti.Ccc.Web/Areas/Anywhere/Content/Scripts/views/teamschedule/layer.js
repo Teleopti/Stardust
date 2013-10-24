@@ -37,11 +37,5 @@ define([
 		        return brightness < 100;
 		    };
 		    
-			this.FullDayAbsenceName = ko.computed(function() {
-				if (data.Color == "#FFB6C1")
-					return "Vacation";
-				if (data.Color == "#000000")
-					return "Illness";
-			});
 		};
 	});

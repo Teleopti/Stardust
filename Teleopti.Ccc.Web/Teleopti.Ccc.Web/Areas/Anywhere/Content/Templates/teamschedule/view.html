@@ -34,7 +34,7 @@
 				<button class="btn" data-bind="attr: {title: Resources.Next}, click: NextDay"><i class="icon-chevron-right"></i></button>
 			</div>
 		    <div class="pull-right">
-		        <button type="button" class="btn" data-toggle="button" data-bind="click: ToggleDisplayDescriptions"><i class="icon-question-sign"></i></button>
+		        <button type="button" class="btn" data-toggle="button" disabled data-bind="enable: !Loading(), click: ToggleDisplayDescriptions"><i class="icon-question-sign"></i></button>
                 &nbsp;&nbsp;&nbsp;&nbsp;
 		    </div>
 		</div>
@@ -113,24 +113,7 @@
 	">
     <!-- ko if: IsFullDayAbsence -->
     <!-- ko if: $root.DisplayDescriptions -->
-        <!-- ko if: false -->
-        <span class="layer-description1 floatleft" data-bind="text: FullDayAbsenceName"></span>
-        <!-- /ko -->
-        <!-- ko if: false -->
-        <span class="badge layer-description2 floatleft" data-bind="text: FullDayAbsenceName"></span>
-        <!-- /ko -->
-        <!-- ko if: false -->
-        <span class="label label-inverse layer-description3" data-bind="text: FullDayAbsenceName"></span>
-	    <!-- /ko -->
-        <!-- ko if: false -->
-        <span class="label layer-description4" data-bind="text: FullDayAbsenceName"></span>
-	    <!-- /ko -->
-        <!-- ko if: true -->
-        <span class="layer-description5" data-bind="text: FullDayAbsenceName, css: {'layer-description5-light': ColorIsDark()}"></span>
-	    <!-- /ko -->
-        <!-- ko if: false -->
-        <span class="label layer-description6" data-bind="text: FullDayAbsenceName"></span>
-	    <!-- /ko -->
+        <span class="label layer-description" data-bind="text: Color"></span>
 	<!-- /ko -->
 	<!-- /ko -->
     </div>
