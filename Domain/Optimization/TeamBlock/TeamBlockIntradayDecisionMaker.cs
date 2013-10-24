@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                                           IOptimizationPreferences optimizationPreferences,
 		                                           ISchedulingOptions schedulingOptions)
 		{
-			var standardDeviationData = new StandardDeviationData();
+            var standardDeviationData = new StandardDeviationData();
 
 			foreach (var matrix in teamBlock.TeamInfo.MatrixesForGroup())
 			{
