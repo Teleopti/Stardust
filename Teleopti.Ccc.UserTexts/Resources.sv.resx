@@ -11310,4 +11310,41 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="Here" xml:space="preserve">
     <value>här</value>
   </data>
+  <data name="Average" xml:space="preserve">
+    <value>Genomsnitt</value>
+  </data>
+  <data name="PerAgent" xml:space="preserve">
+    <value>Per agent</value>
+  </data>
+  <data name="PerShiftCategory" xml:space="preserve">
+    <value>Per skiftkategori</value>
+  </data>
+  <data name="AnalysisInfo" xml:space="preserve">
+    <value>Analysinfo</value>
+  </data>
+  <data name="PleaseChooseSDK" xml:space="preserve">
+    <value>Välj ett SDK</value>
+    <comment>When having more than one in config when logging on</comment>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Avbryt</value>
+    <comment>Stop current background operation in scheduler</comment>
+  </data>
+  <data name="PleaseChooseSDK" xml:space="preserve">
+    <value>Välj ett SDK</value>
+    <comment>When having more than one in config when logging on</comment>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Avbryt</value>
+    <comment>Stop current background operation in scheduler</comment>
+  </data>
+  <data name="KeepTag" xml:space="preserve">
+    <value>&lt;Behåll&gt;</value>
+  </data>
+  <data name="ModifyAvailabilities" xml:space="preserve">
+    <value>Ändra tillgänglighet</value>
+  </data>
+  <data name="UseDayOfMonthSeasonality" xml:space="preserve">
+    <value>Använd säsongsvariation för dagar i månad</value>
+  </data>
 </root>

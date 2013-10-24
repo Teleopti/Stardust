@@ -208,7 +208,11 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             _model.SetValuesToPreference();
             if (Validate())
             {
-                _cellData.Preference = _model.Preference;
+                if (!_cellData.Enabled) return;
+
+	            var previousStateMustHave = _cellData.Preference != null && _cellData.Preference.MustHave;
+                _cellData.Preference = (Preference) _model.Preference.Clone();
+	            _cellData.Preference.MustHave = previousStateMustHave;
 				_cellData.Preference.TemplateName = null; 
                 OnSavePreferenceCellData();
                 _view.SaveButtonEnabled = false;

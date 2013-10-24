@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			ScheduleDictionarySaver = Mocks.StrictMock<IScheduleDictionarySaver>();
 			MakeTarget();
 
-			Expect.Call(() => ScheduleDictionarySaver.MarkForPersist(null, null, new DifferenceCollectionItem<IPersistableScheduleData>())).IgnoreArguments().Throw(new OptimisticLockException());
+			Expect.Call(() => ScheduleDictionarySaver.MarkForPersist(null, null, null)).IgnoreArguments().Throw(new OptimisticLockException());
 
 			Mocks.ReplayAll();
 

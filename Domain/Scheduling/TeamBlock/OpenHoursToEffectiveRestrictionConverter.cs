@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			if (!intervalDatasForSkill.Any())
 				return null;
-
 			var firstStart = intervalDatasForSkill.First().Value.Period.StartDateTime;
 			var lastEnd = intervalDatasForSkill.Last().Value.Period.EndDateTime;
 			var startTime = firstStart.TimeOfDay;

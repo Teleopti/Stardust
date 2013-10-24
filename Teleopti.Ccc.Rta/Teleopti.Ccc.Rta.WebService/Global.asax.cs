@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Rta.WebService
 			}
 			catch (PolicyException policyException)
 			{
-				Logger.Info("Failed to set thread principal for app domain, because it was already set.", policyException);
+				Logger.Debug("Failed to set thread principal for app domain, because it was already set.", policyException);
 			}
 		}
 

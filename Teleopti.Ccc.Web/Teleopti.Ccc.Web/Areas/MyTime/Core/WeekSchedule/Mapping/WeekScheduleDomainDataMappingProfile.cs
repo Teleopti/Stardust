@@ -1,9 +1,11 @@
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -25,9 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly IAllowanceProvider _allowanceProvider;
 		private readonly IAbsenceTimeProvider _absenceTimeProvider;
 
-		public WeekScheduleDomainDataMappingProfile(IScheduleProvider scheduleProvider, IProjectionProvider projectionProvider, 
-			IPersonRequestProvider personRequestProvider, IUserTimeZone userTimeZone, IPermissionProvider permissionProvider, INow now, IAllowanceProvider allowanceProvider,
-			IAbsenceTimeProvider absenceTimeProvider)
+		public WeekScheduleDomainDataMappingProfile(IScheduleProvider scheduleProvider, IProjectionProvider projectionProvider, IPersonRequestProvider personRequestProvider, IUserTimeZone userTimeZone, IPermissionProvider permissionProvider, INow now, IAllowanceProvider allowanceProvider, IAbsenceTimeProvider absenceTimeProvider)
 		{
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
@@ -64,11 +64,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												   	var earlyStart = new TimeSpan(23, 59, 59);
 													if (period != null && _projectionProvider.Projection(x).HasLayers)
 													{
-														var startTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).StartTime;
-														var endTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).EndTime;
-														var localEndDate =
-															new DateOnly(period.Value.EndDateTimeLocal(
-																TeleoptiPrincipal.Current.Regional.TimeZone).Date);
+														var startTime = period.Value.TimePeriod(_userTimeZone.TimeZone()).StartTime;
+														var endTime = period.Value.TimePeriod(_userTimeZone.TimeZone()).EndTime;
+														var localEndDate = new DateOnly(period.Value.EndDateTimeLocal(_userTimeZone.TimeZone()).Date);
 														if (endTime.Days > startTime.Days && week.Contains(localEndDate))
 															earlyStart = TimeSpan.Zero;
 														else if (x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
@@ -89,6 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 														earlyStartOvertimeAvailability = overtimeAvailabilityStart;
 													return earlyStart < earlyStartOvertimeAvailability ? earlyStart : earlyStartOvertimeAvailability;
 												});
+
 									var latest =
 										scheduleDays.Max(
 											x =>
@@ -97,8 +96,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												    var lateEnd = new TimeSpan(0, 0, 0);
 													if (period != null && _projectionProvider.Projection(x).HasLayers)
 													{
-														var startTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).StartTime;
-														var endTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).EndTime;
+														var startTime = period.Value.TimePeriod(_userTimeZone.TimeZone()).StartTime;
+														var endTime = period.Value.TimePeriod(_userTimeZone.TimeZone()).EndTime;
 														if (endTime.Days > startTime.Days && x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
 															lateEnd = new TimeSpan(23, 59, 59);
 														else

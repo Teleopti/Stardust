@@ -1,4 +1,5 @@
-﻿Feature: Preferences feedback pre scheduled
+﻿@WatiN
+Feature: Preferences feedback pre scheduled
 	In order to clearly see preferences that collide with the pre scheduled personal shift or meeting.
 	As an agent
 	I want good feedback about personal shifts, meetings and the the preferences in collision   
@@ -30,10 +31,10 @@ Background:
 	| Shift category | Day         |
 	| Start boundry  | 8:00-9:00   |
 	| End boundry    | 17:00-18:00 |
-	And there is a rule set bag with
-	| Field | Value  |
-	| Name  | Common |
-	| Sets  | Common |
+	And there is a shift bag with
+	| Field    | Value  |
+	| Name     | Common |
+	| Rule set | Common |
 
 
 Scenario: See indication of a pre-scheduled meeting

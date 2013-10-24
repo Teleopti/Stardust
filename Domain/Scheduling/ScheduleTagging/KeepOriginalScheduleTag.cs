@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
 
         public string Description
         {
-            get { return string.Empty; }
-            set { }
+			get { return UserTexts.Resources.KeepTag;  }
+			set { }
         }
 
         KeepOriginalScheduleTag()
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
 
         public Guid? Id
         {
-            get { return null; }
+			get { return new Guid("00000000-0000-0000-0000-111111111111"); }
         }
 
         public void SetId(Guid? newId)

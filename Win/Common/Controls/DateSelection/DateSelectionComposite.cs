@@ -143,5 +143,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 			//tableLayoutPanel1.RowStyles.Add(tableLayoutPanel1.RowStyles[row - 1]);
 		}
 
+        internal void SetSelectedDates(IList<DateOnlyPeriod> selectedDates)
+        {
+            periodListSelectionBox1.SetSelectedDates(selectedDates);
+        }
+
     }
 }

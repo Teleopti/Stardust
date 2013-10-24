@@ -277,14 +277,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void CreateAgentPersons(IUnitOfWork uow)
 		{
-			UserTestData.UserWithNoPermission = new Person();
-		    UserTestData.UserWithNoPermission.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
-		                                                                            {
-		                                                                                ApplicationLogOnName =
-		                                                                                    UserTestData.
-		                                                                                    UserWithNoPermissionUserName,
-		                                                                                Password = TestData.CommonPassword
-		                                                                            };
             var personRepository = new PersonRepository(uow);
 			personRepository.Add(TestData.PersonThatCreatesTestData);
 		}

@@ -878,6 +878,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 				foreach (IPersonPeriod period in personPeriods)
 				{
+					if (period.RuleSetBag==null) continue;
 					foreach (IShiftCategory category in period.RuleSetBag.ShiftCategoriesInBag())
 					{
 						IShiftCategory shiftCategory = category;
@@ -1969,7 +1970,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				{
 					IRepositoryFactory repositoryFactory = new RepositoryFactory();
 					IPersonRepository personRep = repositoryFactory.CreatePersonRepository(unitOfWork);
-					ICollection<IPerson> memberList = personRep.FindAllSortByName();
+					ICollection<IPerson> memberList = personRep.FindAllSortByName().ToList();
 
 
 					// Remove logged person

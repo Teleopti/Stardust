@@ -100,6 +100,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
+		public void ShouldMapDayOff()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var model = new Model
+				{
+					DayOff = new DayOff
+						{
+							Title = "Day off"
+						}
+				};
+
+			var result = target.Map(new PersonScheduleData {Model = model});
+
+			result.IsDayOff.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldMapAbsenceId()
 		{
 			var target = new PersonScheduleViewModelMapper();

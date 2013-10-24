@@ -78,6 +78,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
         public void Warning(string warning)
         {
+            Warning(warning,"");
+        }
+
+        public void Warning(string warning, string caption)
+        {
             _logger.Warn(warning);
         }
 

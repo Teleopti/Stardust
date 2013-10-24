@@ -251,6 +251,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             var intervalHasUnderstaffing = new IntervalHasUnderstaffing(skill);
             var exceededUnderstaffingList = skillStaffPeriodList.Where(intervalHasUnderstaffing.IsSatisfiedBy).ToList();
             var exceededRate = exceededUnderstaffingList.Sum(t => t.Period.ElapsedTime().TotalMinutes) / skillStaffPeriodList.Sum(t => t.Period.ElapsedTime().TotalMinutes);
+            var isWithinUnderStaffingLimit = (1 - exceededRate) >= skill.StaffingThresholds.UnderstaffingFor.Value;
             var underStaffingHours = "";
             var count = 0;
             //get under staffing time interval.
@@ -269,7 +270,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             if (underStaffingHours.Length > 1)
                 underStaffingHours = underStaffingHours.Substring(0, underStaffingHours.Length - 1);
 
-            validatedRequest.IsValid = (exceededRate <= skill.StaffingThresholds.UnderstaffingFor.Value);
+            validatedRequest.IsValid = isWithinUnderStaffingLimit;
             validatedRequest.ValidationErrors = underStaffingHours;
             return validatedRequest;
         }
@@ -316,6 +317,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             return validationError;
         }
 
+
+       
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "timeZone"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "UnderStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "underStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public string GetUnderStaffingHourString(IUnderStaffingData underStaffing, CultureInfo culture, TimeZoneInfo timeZone, DateTime dateTime )

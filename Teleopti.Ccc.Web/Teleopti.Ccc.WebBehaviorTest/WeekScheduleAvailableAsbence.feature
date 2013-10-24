@@ -1,4 +1,5 @@
-﻿Feature: View available absences
+﻿@WatiN
+Feature: View available absences
 	In order to pick a good day for absence
 	As an agent
 	I want to see an indication of possibilities to get a day off

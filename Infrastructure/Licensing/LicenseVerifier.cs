@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 						string warningMessage =
 							String.Format(CultureInfo.CurrentCulture, Resources.YourLicensWillExpireDoNotForgetToRenewItInTime,
 										  licenseService.ExpirationDate);
-						_licenseFeedback.Warning(warningMessage);
+                        _licenseFeedback.Warning(warningMessage, Resources.LogOn);
 					}
 				}
 				catch (LicenseMissingException)

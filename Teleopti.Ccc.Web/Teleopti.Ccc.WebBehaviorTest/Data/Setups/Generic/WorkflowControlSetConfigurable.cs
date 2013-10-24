@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -25,6 +26,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string AbsenceRequestPreferencePeriodEnd { get; set; }
 		public string StaffingCheck { get; set; }
 		public string AutoGrant { get; set; }
+
+		public WorkflowControlSetConfigurable()
+		{
+			Name = DefaultName.Make("Workflow control set");
+		}
 
 		public void Apply(IUnitOfWork uow)
 		{

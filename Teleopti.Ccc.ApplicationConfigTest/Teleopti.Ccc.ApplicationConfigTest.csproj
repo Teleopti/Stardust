@@ -111,7 +111,6 @@
     <Compile Include="Creators\BusinessUnitCreatorTest.cs" />
     <Compile Include="Common\CommandLineArgumentTest.cs" />
     <Compile Include="Creators\DefaultDataCreatorTest.cs" />
-    <Compile Include="Creators\GroupingAbsenceCreatorTest.cs" />
     <Compile Include="Creators\PersonCreatorTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

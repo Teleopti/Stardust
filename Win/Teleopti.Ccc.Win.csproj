@@ -232,6 +232,8 @@
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -611,15 +613,18 @@
     <Compile Include="Common\PropertyPageAndWizard\WizardNoRoot.designer.cs">
       <DependentUpon>WizardNoRoot.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\PropertyPanel\AgentInfoControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\AgentInfoControl.Designer.cs">
+      <DependentUpon>AgentInfoControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Common\SearchPerson.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Common\SearchPerson.Designer.cs">
       <DependentUpon>SearchPerson.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\ServiceBus\DateOnlyPeriodSerializer.cs" />
-    <Compile Include="Common\ServiceBus\LargeGuidCollectionSerializer.cs" />
-    <Compile Include="Common\ServiceBus\ServiceBusSender.cs" />
     <Compile Include="Common\TextBoxNameExtender.cs" />
     <Compile Include="Common\VirtualSkill.cs" />
     <Compile Include="Common\VirtualSkillSetting.cs" />
@@ -833,7 +838,6 @@
     <Compile Include="Main\ActiveAgents.Designer.cs">
       <DependentUpon>ActiveAgents.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\IDataSourceHandler.cs" />
     <Compile Include="Main\Legal.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -846,6 +850,38 @@
     <Compile Include="Main\LicenseAgreementForm.Designer.cs">
       <DependentUpon>LicenseAgreementForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Main\LogonScreens\SelectBuScreen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Main\LogonScreens\SelectBuScreen.Designer.cs">
+      <DependentUpon>SelectBuScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\LogonView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\LogonView.Designer.cs">
+      <DependentUpon>LogonView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\LogonScreens\ILogonStep.cs" />
+    <Compile Include="Main\LogonScreens\LoginScreen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Main\LogonScreens\LoginScreen.Designer.cs">
+      <DependentUpon>LoginScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\LogonScreens\SelectDatasourceScreen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Main\LogonScreens\SelectDatasourceScreen.Designer.cs">
+      <DependentUpon>SelectDatasourceScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\LogonScreens\SelectSdkScreen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Main\LogonScreens\SelectSdkScreen.Designer.cs">
+      <DependentUpon>SelectSdkScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\MainModule.cs" />
     <Compile Include="Main\NavigationModule.cs" />
     <Compile Include="Main\NavigationPanelProvider.cs" />
     <Compile Include="Main\PortalSettings.cs" />
@@ -1029,9 +1065,6 @@
     <Compile Include="Main\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\LogOnInitializeStateHolder.cs" />
-    <Compile Include="Main\LogOnAuthorize.cs" />
-    <Compile Include="Main\LogOnMatrix.cs" />
     <Compile Include="Meetings\WeeklyRecurrenceView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1113,12 +1146,6 @@
     <Compile Include="PeopleAdmin\Controls\PeopleNavigator.Designer.cs">
       <DependentUpon>PeopleNavigator.cs</DependentUpon>
     </Compile>
-    <Compile Include="PeopleAdmin\Controls\ShiftCategoryLimitationView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="PeopleAdmin\Controls\ShiftCategoryLimitationView.Designer.cs">
-      <DependentUpon>ShiftCategoryLimitationView.cs</DependentUpon>
-    </Compile>
     <Compile Include="PeopleAdmin\GuiHelpers\DatabaseLostConnectionHandler.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\FilteredPeopleAccountUpdater.cs" />
     <Compile Include="PeopleAdmin\GuiHelpers\PeriodDateDictionaryBuilder.cs" />
@@ -1130,6 +1157,12 @@
     </Compile>
     <Compile Include="PeopleAdmin\Views\PersonFinderView.Designer.cs">
       <DependentUpon>PersonFinderView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PeopleAdmin\Views\ShiftCategoryLimitationView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PeopleAdmin\Views\ShiftCategoryLimitationView.Designer.cs">
+      <DependentUpon>ShiftCategoryLimitationView.cs</DependentUpon>
     </Compile>
     <Compile Include="PeopleAdmin\Views\UserCredentialConflicts.cs">
       <SubType>Form</SubType>
@@ -1284,6 +1317,12 @@
     <Compile Include="Scheduling\AgentOvertimeAvailabilityView.Designer.cs">
       <DependentUpon>AgentOvertimeAvailabilityView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\FilterHourlyAvailabilityView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\FilterHourlyAvailabilityView.Designer.cs">
+      <DependentUpon>FilterHourlyAvailabilityView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\FilterOvertimeAvailabilityView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1299,6 +1338,9 @@
     <Compile Include="Scheduling\FindMatchingNew.Designer.cs">
       <DependentUpon>FindMatchingNew.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\LockMenuBuilders\LockAbsencesMenuBuilder.cs" />
+    <Compile Include="Scheduling\LockMenuBuilders\LockDaysOffMenuBuilder.cs" />
+    <Compile Include="Scheduling\LockMenuBuilders\LockShiftCategoriesMenuBuilder.cs" />
     <Compile Include="Scheduling\OvertimePreferencesDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1314,6 +1356,37 @@
     <Compile Include="Scheduling\PermissionClipboardRestrictionControl.cs" />
     <Compile Include="Scheduling\PermissionEditControl.cs" />
     <Compile Include="Scheduling\PermissionEditRestrictionControl.cs" />
+    <Compile Include="Scheduling\PropertyPanel\PerShiftCategoryChart.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\PerShiftCategoryChartControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ScheduleDayListFactory.cs" />
+    <Compile Include="Scheduling\PropertyPanel\ShiftCategoryDistributionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftCategoryDistributionControl.Designer.cs">
+      <DependentUpon>ShiftCategoryDistributionControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftPerAgentControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftPerAgentControl.Designer.cs">
+      <DependentUpon>ShiftPerAgentControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftPerDateControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftPerDateControl.Designer.cs">
+      <DependentUpon>ShiftPerDateControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftStatisticsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\ShiftStatisticsControl.Designer.cs">
+      <DependentUpon>ShiftStatisticsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\QuickAccessState.cs" />
     <Compile Include="Scheduling\ScheduleOvertimeCommand.cs" />
     <Compile Include="Scheduling\SchedulerRibbonHelper.cs" />
@@ -1467,12 +1540,6 @@
     <Compile Include="Scheduling\SchedulingSessionPreferences\ResourceOptimizerDayOffPreferencesPanel.Designer.cs">
       <DependentUpon>ResourceOptimizerDayOffPreferencesPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\FormAgentInfo.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Scheduling\FormAgentInfo.Designer.cs">
-      <DependentUpon>FormAgentInfo.cs</DependentUpon>
-    </Compile>
     <Compile Include="Scheduling\ScheduleViewBase.cs" />
     <Compile Include="Scheduling\SchedulingResult.cs">
       <SubType>Form</SubType>
@@ -1504,7 +1571,7 @@
     </Compile>
     <Compile Include="Scheduling\Swapper.cs" />
     <Compile Include="Scheduling\TagsMenuLoader.cs" />
-    <Compile Include="Scheduling\UpdateSelectionInfo.cs" />
+    <Compile Include="Scheduling\PropertyPanel\UpdateSelectionForAgentInfo.cs" />
     <Compile Include="Scheduling\VirtualSkillHelper.cs" />
     <Compile Include="SearchPersonView.cs">
       <SubType>UserControl</SubType>
@@ -2252,12 +2319,6 @@
     <Compile Include="Scheduling\SchedulingScreen.Designer.cs">
       <DependentUpon>SchedulingScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\LogOnScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Main\LogOnScreen.Designer.cs">
-      <DependentUpon>LogOnScreen.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\MoreOrLessButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2505,6 +2566,21 @@
     <EmbeddedResource Include="Main\LicenseAgreementForm.resx">
       <DependentUpon>LicenseAgreementForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Main\LogonScreens\SelectBuScreen.resx">
+      <DependentUpon>SelectBuScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\LogonView.resx">
+      <DependentUpon>LogonView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\LogonScreens\LoginScreen.resx">
+      <DependentUpon>LoginScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\LogonScreens\SelectDatasourceScreen.resx">
+      <DependentUpon>SelectDatasourceScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\LogonScreens\SelectSdkScreen.resx">
+      <DependentUpon>SelectSdkScreen.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Meetings\Overview\CalendarAndTextPanel.resx">
       <DependentUpon>CalendarAndTextPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -2582,6 +2658,9 @@
     <EmbeddedResource Include="PeopleAdmin\Views\PersonFinderView.resx">
       <DependentUpon>PersonFinderView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PeopleAdmin\Views\ShiftCategoryLimitationView.resx">
+      <DependentUpon>ShiftCategoryLimitationView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PeopleAdmin\Views\UserCredentialConflicts.resx">
       <DependentUpon>UserCredentialConflicts.cs</DependentUpon>
     </EmbeddedResource>
@@ -2656,6 +2735,13 @@
     <EmbeddedResource Include="Scheduling\AuditHistoryView.resx">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\FilterHourlyAvailabilityView.resx">
+      <DependentUpon>FilterHourlyAvailabilityView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PropertyPanel\AgentInfoControl.resx">
+      <DependentUpon>AgentInfoControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\FilterOvertimeAvailabilityView.resx">
       <DependentUpon>FilterOvertimeAvailabilityView.cs</DependentUpon>
     </EmbeddedResource>
@@ -2670,6 +2756,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PersonsFilterView.resx">
       <DependentUpon>PersonsFilterView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PropertyPanel\PerShiftCategoryChartControl.resx">
+      <DependentUpon>PerShiftCategoryChartControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftCategoryDistributionControl.resx">
+      <DependentUpon>ShiftCategoryDistributionControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftPerAgentControl.resx">
+      <DependentUpon>ShiftPerAgentControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftPerDateControl.resx">
+      <DependentUpon>ShiftPerDateControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\PropertyPanel\ShiftStatisticsControl.resx">
+      <DependentUpon>ShiftStatisticsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\RequestHistoryView.resx">
       <DependentUpon>RequestHistoryView.cs</DependentUpon>
@@ -2693,10 +2794,6 @@
     <EmbeddedResource Include="Scheduling\SchedulingScreen.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SchedulingScreen.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Main\LogOnScreen.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>LogOnScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\WorkloadPages\WorkloadGeneral.resx">
       <DependentUpon>WorkloadGeneral.cs</DependentUpon>
@@ -2764,7 +2861,6 @@
     <Compile Include="Scheduling\OverViewView.cs" />
     <Compile Include="Scheduling\PeriodView.cs" />
     <Compile Include="Scheduling\WeekView.cs" />
-    <Compile Include="Services\StateManager.cs" />
     <EmbeddedResource Include="licenses.licx" />
   </ItemGroup>
   <ItemGroup>
@@ -3027,9 +3123,6 @@
     <EmbeddedResource Include="Payroll\PayrollExportNavigator.resx">
       <DependentUpon>PayrollExportNavigator.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PeopleAdmin\Controls\ShiftCategoryLimitationView.resx">
-      <DependentUpon>ShiftCategoryLimitationView.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="PerformanceManager\PerformanceManagerNavigator.resx">
       <DependentUpon>PerformanceManagerNavigator.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -3069,10 +3162,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\ResourceOptimizerDayOffPreferencesPanel.resx">
       <DependentUpon>ResourceOptimizerDayOffPreferencesPanel.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\FormAgentInfo.resx">
-      <DependentUpon>FormAgentInfo.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulingResult.resx">

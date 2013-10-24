@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.ResourceCalculation;
+﻿using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -135,6 +137,21 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.UseTeamBlockSameStartTime = optimizationPreferences.Extra.UseTeamBlockSameStartTime;
             schedulingOptions.UseTeamBlockSameShift = optimizationPreferences.Extra.UseTeamBlockSameShift;
             schedulingOptions.UseTeamBlockSameShiftCategory = optimizationPreferences.Extra.UseTeamBlockSameShiftCategory;
+
+	        if (!optimizationPreferences.Extra.UseTeams)
+	        {
+		        schedulingOptions.GroupOnGroupPageForTeamBlockPer = new GroupPageLight
+			        {
+				        Key = "SingleAgentTeam",
+				        Name = Resources.SingleAgentTeam
+			        };
+	        }
+
+			if (!optimizationPreferences.Extra.UseTeamBlockOption)
+			{
+				schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
+			}
+		        
         }
     }
 }

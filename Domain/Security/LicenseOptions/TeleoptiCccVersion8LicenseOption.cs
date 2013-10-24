@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 			EnabledApplicationFunctions.Add(function);
 
 			function = ApplicationFunction.FindByPath(allApplicationFunctions,
-													  DefinedRaptorApplicationFunctionPaths.OvertimeAvailability);
+													  DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
 			function.IsPreliminary = false;
 			EnabledApplicationFunctions.Add(function);
 

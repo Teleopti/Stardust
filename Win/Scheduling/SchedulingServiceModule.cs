@@ -23,6 +23,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.Win.Commands;
+using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -227,6 +228,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			registerTeamBlockSchedulingService(builder);
 
             builder.RegisterType<ScheduleOvertimeCommand>().As<IScheduleOvertimeCommand>();
+            builder.RegisterType<ScheduleDayListFactory>().As<IScheduleDayListFactory>();
             builder.RegisterType<OvertimeLengthDecider>().As<IOvertimeLengthDecider>();
             builder.RegisterType<ResourceCalculateDelayer>().As<IResourceCalculateDelayer>();
             builder.RegisterType<OvertimeSkillIntervalData>().As<IOvertimeSkillIntervalData>();
@@ -252,6 +254,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<MatrixListFactory>().As<IMatrixListFactory>();
 			builder.RegisterType<TeamBlockMaxSeatChecker>().As<ITeamBlockMaxSeatChecker>();
             builder.RegisterType<NightlyRestRestrictionForTeamBlock>().As<INightlyRestRestrictionForTeamBlock>();
+            builder.RegisterType<MedianCalculatorForDays>().As<IMedianCalculatorForDays>();
+            builder.RegisterType<TwoDaysIntervalGenerator>().As<ITwoDaysIntervalGenerator>();
+            builder.RegisterType<MedianCalculatorForSkillInterval>().As<IMedianCalculatorForSkillInterval>();
+            builder.RegisterType<OpenHourRestrictionForTeamBlock>().As<IOpenHourRestrictionForTeamBlock>();
+            builder.RegisterType<SkillIntervalDataOpenHour>().As<ISkillIntervalDataOpenHour>();
 		}
 
 		private static void registerTeamBlockSchedulingService(ContainerBuilder builder)

@@ -9,17 +9,21 @@ define(
 
         return {
             Minutes: {
-                FromHours: function(hours) {
+            	FromHours: function (hours) {
                     return hours * 60;
+                },
+
+                ForHourOfDay: function (hour) {
+                	return hour * 60;
                 },
 
                 StartOfHour: function(minutes) {
                     return minutes - (minutes % 60);
                 },
 
-                EndOfHour: function(minutes) {
-                    var reminder = (minutes % 60);
-                    if (reminder == 0)
+                EndOfHour: function (minutes) {
+	                var reminder = (minutes % 60);
+	                if (reminder == 0)
                         return minutes;
                     return minutes + (60 - reminder);
                 },

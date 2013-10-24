@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1CD76BD0-DBBB-42E8-9BD6-D5FE4F0AA2C6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Teleopti.Analytics.Etl.IntegrationTest</RootNamespace>
+    <AssemblyName>Teleopti.Analytics.Etl.IntegrationTest</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Teleopti.Support.CodeTest\bin\Debug\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bug25126.cs" />
+    <Compile Include="Bug25131.cs" />
+    <Compile Include="Data.cs" />
+    <Compile Include="TestData\ShiftForDate.cs" />
+    <Compile Include="TestState.cs" />
+    <Compile Include="SanityTest.cs" />
+    <Compile Include="SetupFixtureForAssembly.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
+      <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
+      <Name>Teleopti.Ccc.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
+      <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
+      <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
+      <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>
+      <Name>Teleopti.Ccc.TestCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
+      <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
+      <Name>Teleopti.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics.Etl.Interfaces\Teleopti.Analytics.Etl.Interfaces.csproj">
+      <Project>{172807BD-AC1D-4E6D-9013-2D30DCF5B961}</Project>
+      <Name>Teleopti.Analytics.Etl.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics.Etl.TransformerInfrastructure\Teleopti.Analytics.Etl.TransformerInfrastructure.csproj">
+      <Project>{7193C0D2-2B91-4E92-9C47-620095255EDC}</Project>
+      <Name>Teleopti.Analytics.Etl.TransformerInfrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics.Etl.Transformer\Teleopti.Analytics.Etl.Transformer.csproj">
+      <Project>{B9465B16-1563-4F16-BCD6-353551B0AA20}</Project>
+      <Name>Teleopti.Analytics.Etl.Transformer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="License.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -81,13 +81,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
                 Logger.InfoFormat("Person not found (Id: {0})", @event.PersonId);
 		        return null;
 		    }
-                    
-		    var timeZone = person.PermissionInformation.DefaultTimeZone();
-			var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
-			var schedule =
-				_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] {person}) {DoLoadByPerson = true},
+
+			var schedule = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				                                                   new ScheduleDictionaryLoadOptions(false, false),
-				                                                   dateOnlyPeriod, scenario);
+				                                                   period, 
+																   scenario);
 
 			var range = schedule[person];
 
@@ -95,6 +93,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 			if (!actualPeriod.HasValue) return null;
 
+			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var realPeriod = actualPeriod.Value.ToDateOnlyPeriod(timeZone);
 
 			return new range

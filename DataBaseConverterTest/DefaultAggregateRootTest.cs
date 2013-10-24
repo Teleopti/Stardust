@@ -57,21 +57,6 @@ namespace Teleopti.Ccc.DatabaseConverterTest
             Assert.AreSame(ga, target.GroupingActivity);
         }
 
-        /// <summary>
-        /// Verifies the grouping absence property.
-        /// </summary>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2007-10-22
-        /// </remarks>
-        [Test]
-        public void VerifyGroupingAbsenceProperty()
-        {
-            GroupingAbsence ga = GroupingAbsenceFactory.CreateSimpleGroupingAbsence();
-            target.GroupingAbsence = ga;
-            Assert.AreSame(ga, target.GroupingAbsence);
-        }
-
         [Test]
         public void VerifyApplicationRoleProperty()
         {

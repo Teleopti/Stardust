@@ -250,6 +250,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
             ApplySmoothing(cmbAverageAfterCallWorkRunningSmoothning, TaskPeriodType.AverageAfterTaskTime);
         }
 
+        public bool HasFilteredData()
+        {
+            if (dateSelectionComposite1.SelectedDatesCount != 0)
+                return true;
+            return false;
+        }
+
         private void dateSelectionComposite1_DateRangeChanged(object sender, DateRangeChangedEventArgs e)
         {
             DateRangeChangedEventArgs dateRangeChangedEventArgs = new DateRangeChangedEventArgs(e.SelectedDates);
@@ -301,6 +308,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 				workloadDayTemplate.RefreshUpdatedDate();
 			}
     	}
+
+        internal void SetSelectedDates(IList<DateOnlyPeriod> selectedDates)
+        {
+            dateSelectionComposite1.SetSelectedDates(selectedDates);
+        }
 
         public void UpdateFilteredWorkloadDays(IFilteredData filteredDates)
 		{

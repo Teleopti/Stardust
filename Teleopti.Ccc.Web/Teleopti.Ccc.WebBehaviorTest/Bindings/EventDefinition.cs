@@ -1,5 +1,6 @@
 ﻿using System;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.TestData.Common;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -17,20 +18,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[BeforeTestRun]
 		public static void BeforeTestRun()
 		{
+			log4net.Config.XmlConfigurator.Configure();
+
 			Log.Debug("Preparing for test run");
 
-			Browser.NotifyBeforeTestRun();
-
+			Browser.SelectDefaultVisibleBrowser();
 			try
 			{
-				if (!Browser.IsStarted())
-					Browser.Start(TimeSpan.FromSeconds(20), TimeSpan.FromMilliseconds(25));
+				Browser.SetDefaultTimeouts(TimeSpan.FromSeconds(20), TimeSpan.FromMilliseconds(25));
 
 				TestControllerMethods.BeforeTestRun();
 
 				TestSiteConfigurationSetup.RecycleApplication();
-
-				log4net.Config.XmlConfigurator.Configure();
 
 				TestDataSetup.CreateDataSource();
 
@@ -60,7 +59,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Log.Debug("Preparing for scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 
-			Navigation.GotoBlank();
 			Browser.SelectBrowserByTag();
 			Browser.NotifyBeforeScenario();
 			
@@ -91,8 +89,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Log.Debug("Cleaing up after test run");
 
-			if (Browser.IsStarted())
-				Browser.Close();
+			Browser.Close();
 			ServiceBusSetup.TearDown();
 			TestSiteConfigurationSetup.TearDown();
 
@@ -121,7 +118,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		private static void HandleScenarioException()
 		{
-			if (!Browser.IsStarted()) return;
 			if (ScenarioContext.Current.TestError != null)
 			{
 				Log.Error("Scenario exception occurred, dumping info here.");

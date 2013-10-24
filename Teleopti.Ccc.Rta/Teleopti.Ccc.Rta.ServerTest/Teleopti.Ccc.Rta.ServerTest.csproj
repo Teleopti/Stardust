@@ -141,12 +141,13 @@
     <Compile Include="ActualAgentAssemblerTest.cs" />
     <Compile Include="ActualAgentStateCacheTest.cs" />
     <Compile Include="AlarmMapperTest.cs" />
+    <Compile Include="CurrentAndNextLayerExtractorTest.cs" />
     <Compile Include="DatabaseHandlerTest.cs" />
     <Compile Include="DatabaseConnectionStringHandlerTest.cs" />
+    <Compile Include="DatabaseWriterTest.cs" />
     <Compile Include="Resolvers\DataSourceResolverTest.cs" />
     <Compile Include="InvalidateRtaDataHandlerCacheTest.cs" />
     <Compile Include="Resolvers\PersonResolverTest.cs" />
-    <Compile Include="PersonStateHolderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RtaDataHandlerTest.cs" />
     <Compile Include="ScheduleLayerTest.cs" />

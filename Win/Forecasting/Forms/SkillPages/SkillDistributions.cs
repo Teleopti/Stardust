@@ -77,6 +77,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             Percent percent;
             if (!Percent.TryParse(serviceLevelPercentTextBox.Text, out percent)) return false;
 
+            //service level should have a value between 1 and 100
+            if (percent.Value <= 0.0 || percent.Value > 1.0) return false;
+
             var serviceLevel = new ServiceLevel(percent,
                                                          Convert.ToDouble(
                                                              integerTextBoxServiceLevelSeconds.IntegerValue,

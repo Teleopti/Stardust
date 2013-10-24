@@ -203,7 +203,6 @@
     <Compile Include="EntityMapper\PersonalShiftMapper.cs" />
     <Compile Include="EntityMapper\ScenarioMapper.cs" />
     <Compile Include="EntityMapper\ShiftCategoryMapper.cs" />
-    <Compile Include="EntityMapper\WorkShiftMapper.cs" />
     <Compile Include="EntityMapper\WorkShiftRuleSetMapper.cs" />
     <Compile Include="FakeOldEntityRuleSetBag.cs" />
     <Compile Include="MappedObjectPair.cs" />

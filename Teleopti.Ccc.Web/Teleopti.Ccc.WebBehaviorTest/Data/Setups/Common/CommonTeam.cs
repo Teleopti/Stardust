@@ -1,5 +1,6 @@
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common
 		{
 			var site = GlobalDataMaker.Data().Data<CommonSite>().Site;
 
-			Team = TeamFactory.CreateSimpleTeam("Common Team");
+			Team = TeamFactory.CreateSimpleTeam(DefaultName.Make("Common Team"));
 			site.AddTeam(Team);
 
 			var teamRepository = new TeamRepository(uow);

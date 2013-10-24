@@ -23,8 +23,7 @@ namespace Teleopti.Ccc.WinCode.Common
         bool IsMovePermitted();
         bool IsPayloadChangePermitted { get; }
         void StartTimeChanged(FrameworkElement parent, double change);
-        void TimeChanged(FrameworkElement parent, double change);
-        void TimeChanged(FrameworkElement parent, FrameworkElement panel, double horizontalChange);
+        void TimeChanged(FrameworkElement panel, double change);
         void EndTimeChanged(FrameworkElement parent, double change);
         bool CanMoveAll{get; set;}
         bool IsProjectionLayer { get; }

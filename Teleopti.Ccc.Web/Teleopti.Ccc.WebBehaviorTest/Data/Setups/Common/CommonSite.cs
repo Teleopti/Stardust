@@ -1,5 +1,7 @@
+using System;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -13,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common
 		{
 			var businessUnit = GlobalDataMaker.Data().Data<CommonBusinessUnit>().BusinessUnit;
 
-			Site = SiteFactory.CreateSimpleSite("Common Site");
+			Site = SiteFactory.CreateSimpleSite(DefaultName.Make("Common site"));
 			var siteRepository = new SiteRepository(uow);
 			siteRepository.Add(Site);
 			businessUnit.AddSite(Site);

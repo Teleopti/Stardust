@@ -1,4 +1,5 @@
-﻿Feature: Student availability for multiple days
+﻿@WatiN
+Feature: Student availability for multiple days
 	In order to view and submit when I am available for work
 	As a student agent
 	I want to view and submit my availability

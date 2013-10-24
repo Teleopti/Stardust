@@ -353,12 +353,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             checkBoxMustHaves.Checked = _localSchedulingOptions.UsePreferencesMustHaveOnly;
             checkBoxMustHaves.Enabled = _localSchedulingOptions.UsePreferences;
 
-            if (mustHaveSetAndOnlyPreferenceDaysVisible())
-            {
-                checkBoxOnlyPreferenceDays.Checked = true;
-                checkBoxOnlyPreferenceDays.Enabled = false;
-            }
-
             checkBoxUseMaximumPersons.Checked = _localSchedulingOptions.UseMaximumPersons;
             checkBoxUseMinimumPersons.Checked = _localSchedulingOptions.UseMinimumPersons;
 
@@ -482,6 +476,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         private void checkBoxOnlyPreferenceDaysCheckedChanged(object sender, EventArgs e)
         {
+			if (checkBoxOnlyPreferenceDays.Checked) checkBoxMustHaves.Checked = false;
+
             if (_dataLoaded)
             {
                 getDataFromControls();
@@ -500,6 +496,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         private void checkBoxMustHavesCheckedChanged(object sender, EventArgs e)
         {
+			if (checkBoxMustHaves.Checked) checkBoxOnlyPreferenceDays.Checked = false;
+
             if (_dataLoaded)
             {
                 getDataFromControls();

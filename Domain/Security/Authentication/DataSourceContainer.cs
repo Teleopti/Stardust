@@ -26,10 +26,18 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 
         public IPerson User { get; private set; }
 
-        public AvailableBusinessUnitsProvider AvailableBusinessUnitProvider
+        public IAvailableBusinessUnitsProvider AvailableBusinessUnitProvider
         {
             get { return new AvailableBusinessUnitsProvider(this); }
         }
+
+        public string DataSourceName 
+        {
+            get
+            {
+                return DataSource != null ? DataSource.DataSourceName : "";
+            }
+        } 
 
         public void SetUser(IPerson person)
         {

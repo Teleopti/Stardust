@@ -747,11 +747,11 @@ Date</value>
     <comment>Edit workload templates</comment>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>E-mail</value>
+    <value>Email</value>
     <comment>E-mail</comment>
   </data>
   <data name="EmailResult" xml:space="preserve">
-    <value>E-mail result</value>
+    <value>Email result</value>
     <comment>E-mail result</comment>
   </data>
   <data name="EmployeeNo" xml:space="preserve">
@@ -3454,7 +3454,7 @@ Columns</value>
     <comment>Agents inc with shrinkage</comment>
   </data>
   <data name="Emails" xml:space="preserve">
-    <value>E-mails</value>
+    <value>Emails</value>
     <comment>E-mails</comment>
   </data>
   <data name="HandledWithin" xml:space="preserve">
@@ -3478,7 +3478,7 @@ Columns</value>
     <comment>Total AEW</comment>
   </data>
   <data name="TotalEmails" xml:space="preserve">
-    <value>Total e-mails</value>
+    <value>Total emails</value>
     <comment>Total e-mails</comment>
   </data>
   <data name="TotalHandledWithin" xml:space="preserve">
@@ -3490,7 +3490,7 @@ Columns</value>
     <comment>Total handling time</comment>
   </data>
   <data name="AbandonedEmails" xml:space="preserve">
-    <value>Abandoned e-mails</value>
+    <value>Abandoned emails</value>
     <comment>Abandoned e-mails</comment>
   </data>
   <data name="AbandonedFacsimiles" xml:space="preserve">
@@ -3506,7 +3506,7 @@ Columns</value>
     <comment>AFW</comment>
   </data>
   <data name="AnsweredEmails" xml:space="preserve">
-    <value>Answered e-mails</value>
+    <value>Answered emails</value>
     <comment>Answered e-mails</comment>
   </data>
   <data name="AnsweredFacsimiles" xml:space="preserve">
@@ -3522,7 +3522,7 @@ Columns</value>
     <comment>ATW</comment>
   </data>
   <data name="CalculatedEmails" xml:space="preserve">
-    <value>Calculated e-mails</value>
+    <value>Calculated emails</value>
     <comment>Calculated e-mails</comment>
   </data>
   <data name="CalculatedFacsimiles" xml:space="preserve">
@@ -3546,11 +3546,11 @@ Columns</value>
     <comment>Campaign ATW %</comment>
   </data>
   <data name="CampaignEmailsHandlingtimePercent" xml:space="preserve">
-    <value>Campaign e-mails handling time %</value>
+    <value>Campaign emails handling time %</value>
     <comment>Campaign e-mails handling time %</comment>
   </data>
   <data name="CampaignEmailsPercent" xml:space="preserve">
-    <value>Campaign e-mails %</value>
+    <value>Campaign emails %</value>
     <comment>Campaign e-mails %</comment>
   </data>
   <data name="CampaignFacsimilesHandlingtime" xml:space="preserve">
@@ -3586,7 +3586,7 @@ Columns</value>
     <comment>Index ATW</comment>
   </data>
   <data name="IndexEmails" xml:space="preserve">
-    <value>Index e-mails</value>
+    <value>Index emails</value>
     <comment>Index e-mails</comment>
   </data>
   <data name="IndexFacsimiles" xml:space="preserve">
@@ -3622,7 +3622,7 @@ Columns</value>
     <comment>Average facsimiles</comment>
   </data>
   <data name="AverageEmails" xml:space="preserve">
-    <value>Average e-mails</value>
+    <value>Average emails</value>
     <comment>Average e-mails</comment>
   </data>
   <data name="AverageHandlingTime" xml:space="preserve">
@@ -3646,7 +3646,7 @@ Columns</value>
     <comment>Original handling time</comment>
   </data>
   <data name="OriginalOfferedEmails" xml:space="preserve">
-    <value>Original offered e-mails</value>
+    <value>Original offered emails</value>
     <comment>Original offered e-mails</comment>
   </data>
   <data name="OriginalOfferedFacsimiles" xml:space="preserve">
@@ -3658,7 +3658,7 @@ Columns</value>
     <comment>Original offered tasks</comment>
   </data>
   <data name="ValidatedEmails" xml:space="preserve">
-    <value>Validated e-mails</value>
+    <value>Validated emails</value>
     <comment>Validated e-mails</comment>
   </data>
   <data name="ValidatedFacsimiles" xml:space="preserve">
@@ -4203,7 +4203,7 @@ Accounts</value>
     <comment>Forecasted distributed demand</comment>
   </data>
   <data name="ForecastedEmails" xml:space="preserve">
-    <value>Forecasted e-mails</value>
+    <value>Forecasted emails</value>
     <comment>Forecasted e-mails</comment>
   </data>
   <data name="ForecastedFacsimiles" xml:space="preserve">
@@ -4223,7 +4223,7 @@ Accounts</value>
     <comment>Offered calls</comment>
   </data>
   <data name="OfferedEmails" xml:space="preserve">
-    <value>Offered e-mails</value>
+    <value>Offered emails</value>
     <comment>Offered e-mails</comment>
   </data>
   <data name="OfferedFacsimiles" xml:space="preserve">
@@ -4708,11 +4708,11 @@ Standard</value>
     <comment>Organisation structure</comment>
   </data>
   <data name="SkillTypeBackoffice" xml:space="preserve">
-    <value>Backoffice</value>
+    <value>Back office</value>
     <comment>Skilltype Backoffice</comment>
   </data>
   <data name="SkillTypeEmail" xml:space="preserve">
-    <value>E-mail</value>
+    <value>Email</value>
     <comment>SkillTrype E-mail</comment>
   </data>
   <data name="SkillTypeFax" xml:space="preserve">
@@ -6439,7 +6439,7 @@ Meeting</value>
     <comment>Scheduling {0} day(s)</comment>
   </data>
   <data name="CancellingThreeDots" xml:space="preserve">
-    <value>Cancelling...</value>
+    <value>Waiting to stop...</value>
     <comment>Cancelling...</comment>
   </data>
   <data name="NewReport" xml:space="preserve">
@@ -7494,11 +7494,11 @@ Updated on: {1}</value>
     <comment>Exception handler</comment>
   </data>
   <data name="SendEmail" xml:space="preserve">
-    <value>Send E-mail</value>
+    <value>Send Email</value>
     <comment>Exception handler</comment>
   </data>
   <data name="SupportEmailAddress" xml:space="preserve">
-    <value>Support e-mail address</value>
+    <value>Support email address</value>
     <comment>System setting</comment>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
@@ -7525,7 +7525,7 @@ Teleopti R&amp;D</value>
     <comment>Error handling</comment>
   </data>
   <data name="SendEmailReport" xml:space="preserve">
-    <value>Send e-mail report</value>
+    <value>Send email report</value>
     <comment>Error handling</comment>
   </data>
   <data name="UnhandledExceptionEmailBody" xml:space="preserve">
@@ -7756,7 +7756,7 @@ Weekday</value>
     <value>Deviation ATW:</value>
   </data>
   <data name="DeviationEmailsColon" xml:space="preserve">
-    <value>Devaiation e-mails:</value>
+    <value>Deviation emails:</value>
   </data>
   <data name="DeviationFacsimilesColon" xml:space="preserve">
     <value>Deviation facsimiles:</value>
@@ -9271,7 +9271,7 @@ Longterm</value>
     <comment>Optimizing intraday</comment>
   </data>
   <data name="CampaignEmailsHandlingtime" xml:space="preserve">
-    <value>Campaign e-mails handling time</value>
+    <value>Campaign emails handling time</value>
   </data>
   <data name="AccessibilityDatesGrid" xml:space="preserve">
     <value>Accessibility Dates</value>
@@ -10194,7 +10194,7 @@ These options are activated:
   </data>
   <data name="DefaultTag" xml:space="preserve">
     <value>&lt;None&gt;</value>
-    <comment>&lt;None&gt;</comment>
+    <comment>Default tag</comment>
   </data>
   <data name="LockTags" xml:space="preserve">
     <value>Lock Tags</value>
@@ -11777,6 +11777,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Subject too long</value>
     <comment>Invalid field info</comment>
   </data>
+  <data name="Average" xml:space="preserve">
+    <value>Average</value>
+    <comment>Average</comment>
+  </data>
   <data name="Distribution" xml:space="preserve">
     <value>Distribution</value>
     <comment>Distribution</comment>
@@ -11793,6 +11797,16 @@ Reduce the complexity to use these shifts.</value>
     <value>Shift Category Distribution</value>
     <comment>Header for distributions of shift categories in scheduler</comment>
   </data>
+  <data name="PerAgent" xml:space="preserve">
+    <value>Per Agent</value>
+  </data>
+  <data name="PerShiftCategory" xml:space="preserve">
+    <value>Per Shift Category</value>
+  </data>
+  <data name="AnalysisInfo" xml:space="preserve">
+    <value>Analysis Info</value>
+    <comment>Use for the property panel shown on scheduling screen</comment>
+  </data>
   <data name="Here" xml:space="preserve">
     <value>here</value>
     <comment>here</comment>
@@ -11801,8 +11815,24 @@ Reduce the complexity to use these shifts.</value>
     <value>Total time of selected activity</value>
     <comment>Total time of selected activity</comment>
   </data>
-  <data name="LengthOfActivity" xml:space="preserve">
-    <value>Total time of selected activity</value>
-    <comment>Total time of selected activity</comment>
+  <data name="PleaseChooseSDK" xml:space="preserve">
+    <value>Please choose SDK</value>
+    <comment>When having more than one in config when logging on</comment>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+    <comment>Stop current background operation in scheduler</comment>
+  </data>
+  <data name="KeepTag" xml:space="preserve">
+    <value>&lt;Keep&gt;</value>
+    <comment>Keeps the existing tag</comment>
+  </data>
+  <data name="ModifyAvailabilities" xml:space="preserve">
+    <value>Modify availabilities</value>
+    <comment>Modify availabilities in scheduler</comment>
+  </data>
+  <data name="UseDayOfMonthSeasonality" xml:space="preserve">
+    <value>Use Day of Month Seasonality</value>
+    <comment>Option in the last step of quick forecast</comment>
   </data>
 </root>

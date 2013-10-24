@@ -39,13 +39,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			var addedEntity = _mocks.DynamicMock<IPersistableScheduleData>();
 			var addedEntityClone = _mocks.DynamicMock<IPersistableScheduleData>();
 			var addedItem = new DifferenceCollectionItem<IPersistableScheduleData>(null, addedEntity);
+			var differenceCollection = new DifferenceCollection<IPersistableScheduleData>() { addedItem };
 
 			Expect.Call(addedEntity.Clone()).Return(addedEntityClone);
 			Expect.Call(() => _scheduleRepository.Add(addedEntityClone));
 
 			_mocks.ReplayAll();
 
-			_target.MarkForPersist(_unitOfWork, _scheduleRepository, addedItem);
+			_target.MarkForPersist(_unitOfWork, _scheduleRepository, differenceCollection);
 
 			_mocks.VerifyAll();
 		}
@@ -57,12 +58,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 			var deletedEntity = _mocks.DynamicMock<IPersistableScheduleData>();
 			var deletedItem = new DifferenceCollectionItem<IPersistableScheduleData>(deletedEntity, null);
+			var differenceCollection = new DifferenceCollection<IPersistableScheduleData> { deletedItem };
 
 			Expect.Call(() => _scheduleRepository.Remove(deletedEntity));
 
 			_mocks.ReplayAll();
 
-			_target.MarkForPersist(_unitOfWork, _scheduleRepository, deletedItem);
+			_target.MarkForPersist(_unitOfWork, _scheduleRepository, differenceCollection);
 
 			_mocks.VerifyAll();
 		}
@@ -72,13 +74,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 		{
 			var modifiedEntity = new ScheduleDataStub {Id = Guid.NewGuid()};
 			var modifiedItem = new DifferenceCollectionItem<IPersistableScheduleData>(modifiedEntity, modifiedEntity);
+			var differenceCollection = new DifferenceCollection<IPersistableScheduleData>() { modifiedItem };
 
 			_unitOfWork.Reassociate(modifiedEntity);
 			Expect.Call(_unitOfWork.Merge<IPersistableScheduleData>(modifiedEntity)).Return(modifiedEntity);
 
 			_mocks.ReplayAll();
 
-			_target.MarkForPersist(_unitOfWork, _scheduleRepository, modifiedItem);
+			_target.MarkForPersist(_unitOfWork, _scheduleRepository, differenceCollection);
 
 			_mocks.VerifyAll();
 		}
@@ -88,6 +91,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 		{
 			var modifiedEntity = new ScheduleDataStub() { Id = Guid.NewGuid() };
 			var modifiedItem = new DifferenceCollectionItem<IPersistableScheduleData>(modifiedEntity, modifiedEntity);
+			var differenceCollection = new DifferenceCollection<IPersistableScheduleData>() { modifiedItem };
 			var parameters = MockRepository.GenerateMock<IScheduleParameters>();
 			var person = PersonFactory.CreatePerson();
 			parameters.Stub(x => x.Person).Return(person);
@@ -101,7 +105,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 			_mocks.ReplayAll();
 
-			var result = _target.MarkForPersist(_unitOfWork, _scheduleRepository, modifiedItem);
+			var result = _target.MarkForPersist(_unitOfWork, _scheduleRepository, differenceCollection);
 
 			Assert.That(result.ModifiedEntities.Single(), Is.SameAs(modifiedEntity));
 		}
@@ -111,6 +115,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 		{
 			var addedEntity = _mocks.DynamicMock<IPersistableScheduleData>();
 			var addedItem = new DifferenceCollectionItem<IPersistableScheduleData>(null, addedEntity);
+			var differenceCollection = new DifferenceCollection<IPersistableScheduleData>() { addedItem };
 			var parameters = MockRepository.GenerateMock<IScheduleParameters>();
 			var person = PersonFactory.CreatePerson();
 			parameters.Stub(x => x.Person).Return(person);
@@ -122,7 +127,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 			_mocks.ReplayAll();
 
-			var result = _target.MarkForPersist(_unitOfWork, _scheduleRepository, addedItem);
+			var result = _target.MarkForPersist(_unitOfWork, _scheduleRepository, differenceCollection);
 
 			Assert.That(result.AddedEntities.Single(), Is.SameAs(addedEntity));
 		}
@@ -179,10 +184,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			{
 				throw new NotImplementedException();
 			}
-
-			public IPerson CreatedBy { get { throw new NotImplementedException(); } }
-
-			public DateTime? CreatedOn { get { throw new NotImplementedException(); } }
 
 			public IPerson UpdatedBy { get { throw new NotImplementedException(); } }
 

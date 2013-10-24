@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void CanSetProperties()
         {
-            Description desc = new Description("asldökf");
+            var desc = new Description("asldökf");
             _target.Description = desc;
             Assert.AreEqual(desc, _target.Description);
 
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void VerifyCanDeleteExtender()
         {
-            IWorkShiftExtender ext = _mocks.StrictMock<IWorkShiftExtender>();
+            var ext = _mocks.StrictMock<IWorkShiftExtender>();
             using (_mocks.Record())
             {
                 Expect.Call(ext.Parent).Return(null);
@@ -132,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void VerifyCanDeleteLimiter()
         {
-            IWorkShiftLimiter limiter = _mocks.StrictMock<IWorkShiftLimiter>();
+            var limiter = _mocks.StrictMock<IWorkShiftLimiter>();
             using (_mocks.Record())
             {
                 Expect.Call(limiter.Parent).Return(null);
@@ -189,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 
             IWorkShiftExtender ext = new ActivityRelativeEndExtender(ActivityFactory.CreateActivity("sample"), new TimePeriodWithSegment(2, 0, 5, 0, 10), new TimePeriodWithSegment(9, 0, 10, 0, 10));
             IWorkShiftLimiter limiter = new ContractTimeLimiter(new TimePeriod(11, 12, 13, 15), TimeSpan.FromMinutes(15));
-            RuleSetBag rsBag = new RuleSetBag();
+            var rsBag = new RuleSetBag();
 
             _target.AddExtender(ext);
             _target.AddLimiter(limiter);
@@ -197,12 +198,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 
             // Entity clone testing.
             IWorkShiftRuleSet targetCloned = _target.EntityClone();
-            DoAssertsForCollectionsCloned(_target, targetCloned, true);
+            doAssertsForCollectionsCloned(_target, targetCloned, true);
 
             // None entity clone testing.
 
             targetCloned = _target.NoneEntityClone();
-            DoAssertsForCollectionsCloned(_target, targetCloned, false);
+            doAssertsForCollectionsCloned(_target, targetCloned, false);
         }
 
         [Test]
@@ -267,8 +268,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void VerifyCanAddDatesToDefaultAvailability()
         {
-            DateTime date1 = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime date2 = new DateTime(2008, 8, 1, 0, 0, 0, DateTimeKind.Utc);
+            var date1 = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
+            var date2 = new DateTime(2008, 8, 1, 0, 0, 0, DateTimeKind.Utc);
 
             _target.AddAccessibilityDate(date1);
             _target.AddAccessibilityDate(date2);
@@ -281,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void VerifyCannotAddSameDateTwice()
         {
-            DateTime date1 = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
+            var date1 = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
             _target.AddAccessibilityDate(date1);
             _target.AddAccessibilityDate(date1);
 
@@ -291,8 +292,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void VerifyCanRemoveDate()
         {
-            DateTime date1 = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime date2 = new DateTime(2008, 8, 1, 0, 0, 0, DateTimeKind.Utc);
+            var date1 = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
+            var date2 = new DateTime(2008, 8, 1, 0, 0, 0, DateTimeKind.Utc);
 
             _target.AddAccessibilityDate(date1);
             _target.AddAccessibilityDate(date2);
@@ -309,7 +310,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void VerifyCanRemoveNonExistingDate()
         {
-            DateTime date1 = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
+            var date1 = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
             _target.RemoveAccessibilityDate(date1);
 
             Assert.AreEqual(0, _target.AccessibilityDates.Count);
@@ -318,8 +319,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void VerifyCanAddDatesWithTimeToDefaultAvailability()
         {
-            DateTime date1 = new DateTime(2008, 7, 1, 10, 0, 0, DateTimeKind.Utc);
-            DateTime date2 = new DateTime(2008, 8, 1, 7, 0, 0, DateTimeKind.Utc);
+            var date1 = new DateTime(2008, 7, 1, 10, 0, 0, DateTimeKind.Utc);
+            var date2 = new DateTime(2008, 8, 1, 7, 0, 0, DateTimeKind.Utc);
 
             _target.AddAccessibilityDate(date1);
             _target.AddAccessibilityDate(date2);
@@ -333,9 +334,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         public void VerifyDateIsValidForWorkShiftRuleSet()
         {
 
-            DateOnly date1 = new DateOnly(2008, 7, 1);
-            DateTime date11 = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateOnly date2 = new DateOnly(2008, 8, 1);
+            var date1 = new DateOnly(2008, 7, 1);
+            var date11 = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
+            var date2 = new DateOnly(2008, 8, 1);
 
             _target.AddAccessibilityDate(date11);
             _target.DefaultAccessibility = DefaultAccessibility.Included;
@@ -353,8 +354,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void VerifyDayIsValidForWorkShiftRuleSet()
         {
-            DateOnly date1 = new DateOnly(2008, 7, 1);
-            DateOnly date2 = new DateOnly(2008, 8, 1);
+            var date1 = new DateOnly(2008, 7, 1);
+            var date2 = new DateOnly(2008, 8, 1);
 
             _target.AddAccessibilityDayOfWeek(DayOfWeek.Tuesday);
             _target.DefaultAccessibility = DefaultAccessibility.Included;
@@ -371,10 +372,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         [Test]
         public void VerifyDayAndDateIsValidForWorkShiftRuleSet()
         {
-            DateOnly date1 = new DateOnly(2008, 7, 1);
-            DateOnly date2 = new DateOnly(2008, 8, 1);
-            DateOnly date3 = new DateOnly(2008, 8, 2);
-            DateTime date31 = new DateTime(2008, 8, 2, 0, 0, 0, DateTimeKind.Utc);
+            var date1 = new DateOnly(2008, 7, 1);
+            var date2 = new DateOnly(2008, 8, 1);
+            var date3 = new DateOnly(2008, 8, 2);
+            var date31 = new DateTime(2008, 8, 2, 0, 0, 0, DateTimeKind.Utc);
             _target.AddAccessibilityDayOfWeek(DayOfWeek.Tuesday);
             _target.AddAccessibilityDate(date31);
             _target.DefaultAccessibility = DefaultAccessibility.Included;
@@ -390,10 +391,39 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             Assert.IsFalse(_target.IsValidDate(date2));
         }
 
+	    [Test]
+	    public void InsertExtender_ShouldInsertToExtenderCollection()
+	    {
+		    var activity = new Activity("name");
+		    var periodSegment = new TimePeriodWithSegment();
+			IWorkShiftExtender otherExtender = new ActivityRelativeEndExtender(activity, periodSegment, periodSegment);
+			IWorkShiftExtender extender = new ActivityAbsoluteStartExtender(activity, periodSegment, periodSegment);
+			
+			_target.AddExtender(otherExtender);
+			_target.InsertExtender(0, extender);
+		    _target.ExtenderCollection[0].Should().Be.EqualTo(extender);
+	    }
 
-        private static void DoAssertsForCollectionsCloned(IWorkShiftRuleSet target, IWorkShiftRuleSet cloned, bool checkForRuleSetBags)
+		[Test]
+		[ExpectedException(typeof(ArgumentNullException))]
+		public void InsertExtender_InsertNull_ThrowArgumentNullException()
+		{
+			_target.InsertExtender(0, null);
+		}
+
+	    [Test]
+	    [ExpectedException(typeof (ArgumentException))]
+	    public void InsertExtender_ParentNotNull_ThrowArgumentException()
+	    {
+		    IWorkShiftExtender extender = new ActivityAbsoluteStartExtender(ActivityFactory.CreateActivity("Hepp"),
+		                                                                    new TimePeriodWithSegment(),
+		                                                                    new TimePeriodWithSegment());
+			extender.SetParent(WorkShiftRuleSetFactory.Create());
+		    _target.InsertExtender(0, extender);
+	    }
+
+	    private static void doAssertsForCollectionsCloned(IWorkShiftRuleSet target, IWorkShiftRuleSet cloned, bool checkForRuleSetBags)
         {
-
             Assert.AreEqual(1, cloned.ExtenderCollection.Count);
             Assert.AreNotSame(target.ExtenderCollection[0], cloned.ExtenderCollection[0]);
             Assert.AreEqual(cloned, cloned.ExtenderCollection[0].Parent);

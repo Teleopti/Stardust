@@ -1,6 +1,7 @@
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
@@ -9,6 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	{
 		public string Name { get; set; }
 		public string Activity { get; set; }
+
 		public void Apply(IUnitOfWork uow)
 		{
 			var skillType = SkillTypeFactory.CreateSkillType();

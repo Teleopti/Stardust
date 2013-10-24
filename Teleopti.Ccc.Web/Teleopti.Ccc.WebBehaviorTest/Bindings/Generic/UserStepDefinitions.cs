@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var personPeriod = new PersonPeriodConfigurable
 				{
 					StartDate = date,
-					RuleSetBag = "Common"
+					ShiftBag = "Common"
 				};
 			DataMaker.Person(userName).Apply(personPeriod);
 		}
@@ -75,7 +75,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		// the ones below here does not belong here!
 
 		[Given(@"I have a pre-scheduled meeting with")]
-		[Given(@"I have a meeting scheduled")]
 		public void GivenIHaveAMeetingScheduled(Table table)
 		{
 			var meeting = table.CreateInstance<MeetingConfigurable>();

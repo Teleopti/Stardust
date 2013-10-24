@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Drawing;
+using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
+using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction;
 using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Ccc.WpfControls.Controls.Requests.Views;
 using Teleopti.Interfaces.Domain;
 
@@ -34,7 +37,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             chbSchedules.Checked = true;
             _pinnedSkillHelper = new PinnedSkillHelper();
             tabSkillData.TabStyle = typeof(SkillTabRenderer);
-            tabSkillData.TabPanelBackColor = Color.FromArgb(199, 216, 237);    
+            tabSkillData.TabPanelBackColor = Color.FromArgb(199, 216, 237);
         }
 
         public WpfControls.Common.Interop.MultipleHostControl MultipleHostControl3
@@ -44,6 +47,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         public TeleoptiLessIntelligentSplitContainer SplitContainerAdvMain
         {
             get { return lessIntellegentSplitContainerAdvMain; }
+        }
+		
+		public TeleoptiLessIntelligentSplitContainer SplitContainerAdvMainContainer
+        {
+            get { return lessIntellegentSplitContainerAdvMainContainer; }
         }
         public TeleoptiLessIntelligentSplitContainer SplitContainerAdvResultGraph
         {
@@ -64,6 +72,11 @@ namespace Teleopti.Ccc.Win.Scheduling
         public TabControlAdv TabSkillData
         {
             get { return tabSkillData; }
+        }
+		
+		public TabControlAdv TabInfoPanels
+        {
+            get { return tabInfoPanels; }
         }
 
         public ElementHost ElementHostRequests
@@ -176,5 +189,40 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             _pinnedSkillHelper.ReplaceOldWithNew(newSkill, oldSkill);
         }
+
+        public void ToggelPropertyPanel(bool value)
+        {
+            lessIntellegentSplitContainerAdvMainContainer.Panel2Collapsed = value;
+        }
+
+		public void InsertAgentInfoControl(AgentInfoControl agentInfoControl)
+		{
+			tabInfoPanels.TabPages[0].Controls.Add(agentInfoControl);
+			agentInfoControl.Dock = DockStyle.Fill;
+			tabInfoPanels.Refresh();
+		}
+
+		public void InsertShiftCategoryDistributionModel(IShiftCategoryDistributionModel model)
+		{
+			var shiftCategoryDistributionControl = (ShiftCategoryDistributionControl)tabInfoPanels.TabPages[1].Controls[0];
+			shiftCategoryDistributionControl.SetModel(model);
+		}
+
+		public void DisableViewShiftCategoryDistribution()
+		{
+			var shiftCategoryDistributionControl = (ShiftCategoryDistributionControl)tabInfoPanels.TabPages[1].Controls[0];
+			shiftCategoryDistributionControl.DisableViewShiftCategoryDistribution();
+		}
+
+		public void EnableViewShiftCategoryDistribution()
+		{
+			var shiftCategoryDistributionControl = (ShiftCategoryDistributionControl)tabInfoPanels.TabPages[1].Controls[0];
+			shiftCategoryDistributionControl.EnableViewShiftCategoryDistribution();
+		}
+
+		public void RefreshTabInfoPanels()
+		{
+			tabInfoPanels.Refresh();
+		}
     }
 }

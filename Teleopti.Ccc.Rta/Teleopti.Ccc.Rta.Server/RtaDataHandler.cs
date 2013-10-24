@@ -24,14 +24,14 @@ namespace Teleopti.Ccc.Rta.Server
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
 		private readonly IDataSourceResolver _dataSourceResolver;
 		private readonly IPersonResolver _personResolver;
-		
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
 			MessageId = "1")]
 		protected RtaDataHandler(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
-		                         IDatabaseConnectionFactory databaseConnectionFactory,
-		                         IDataSourceResolver dataSourceResolver,
-		                         IPersonResolver personResolver,
-		                         IActualAgentStateCache stateCache)
+								 IDatabaseConnectionFactory databaseConnectionFactory,
+								 IDataSourceResolver dataSourceResolver,
+								 IPersonResolver personResolver,
+								 IActualAgentStateCache stateCache)
 		{
 			_loggingSvc = loggingSvc;
 			_messageSender = messageSender;
@@ -56,11 +56,11 @@ namespace Teleopti.Ccc.Rta.Server
 		}
 
 		public RtaDataHandler(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
-		                      IDatabaseConnectionFactory databaseConnectionFactory,
-		                      IDataSourceResolver dataSourceResolver,
-		                      IPersonResolver personResolver,
-		                      IActualAgentAssembler agentAssembler,
-		                      IActualAgentStateCache stateCache)
+							  IDatabaseConnectionFactory databaseConnectionFactory,
+							  IDataSourceResolver dataSourceResolver,
+							  IPersonResolver personResolver,
+							  IActualAgentAssembler agentAssembler,
+							  IActualAgentStateCache stateCache)
 		{
 			_loggingSvc = loggingSvc;
 			_messageSender = messageSender;
@@ -84,10 +84,10 @@ namespace Teleopti.Ccc.Rta.Server
 					ex);
 			}
 		}
-		
+
 		public RtaDataHandler(IActualAgentAssembler agentAssembler, IActualAgentStateCache stateCache)
 			: this(
-				LogManager.GetLogger(typeof (RtaDataHandler)),
+				LogManager.GetLogger(typeof(RtaDataHandler)),
 				MessageSenderFactory.CreateMessageSender(ConfigurationManager.AppSettings["MessageBroker"]),
 				ConfigurationManager.AppSettings["DataStore"], new DatabaseConnectionFactory(), null, null, null, null)
 		{
@@ -127,15 +127,10 @@ namespace Teleopti.Ccc.Rta.Server
 				var agentState = _agentAssembler.GetAgentStateForScheduleUpdate(personId, businessUnitId, timestamp);
 
 				if (agentState == null)
-				{
-					_loggingSvc.InfoFormat("Schedule for {0} has not changed", personId);
 					return;
-				}
 
 				_stateCache.AddAgentStateToCache(agentState);
-
-				_loggingSvc.InfoFormat("Trying to send object {0} through Message Broker", agentState);
-				_messageSender.SendRtaData(personId, businessUnitId, agentState);
+				sendRtaState(agentState);
 			}
 			catch (SocketException exception)
 			{
@@ -162,14 +157,14 @@ namespace Teleopti.Ccc.Rta.Server
 		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"
 			 )]
 		public void ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp,
-		                           Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
+								   Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
 		{
 			try
 			{
 				int dataSourceId;
 				var batch = isSnapshot
-					            ? batchId
-					            : (DateTime?) null;
+								? batchId
+								: (DateTime?)null;
 
 				if (string.IsNullOrEmpty(_connectionStringDataStore))
 				{
@@ -187,7 +182,7 @@ namespace Teleopti.Ccc.Rta.Server
 				if (isSnapshot && string.IsNullOrEmpty(logOn))
 				{
 					_loggingSvc.InfoFormat("Last of batch detected, initializing handling for batch id: {0}, source id: {1}", batchId,
-					                       sourceId);
+										   sourceId);
 					handleLastOfBatch(batchId, sourceId);
 					return;
 				}
@@ -203,16 +198,16 @@ namespace Teleopti.Ccc.Rta.Server
 
 				foreach (var personWithBusinessUnit in personWithBusinessUnits)
 				{
-					_loggingSvc.InfoFormat("ACD-Logon: {0} is connected to PersonId: {1}", logOn, personWithBusinessUnit.PersonId);
+					_loggingSvc.DebugFormat("ACD-Logon: {0} is connected to PersonId: {1}", logOn, personWithBusinessUnit.PersonId);
 
 					var agentState = _agentAssembler.GetAgentState(personWithBusinessUnit.PersonId,
-					                                               personWithBusinessUnit.BusinessUnitId,
-					                                               platformTypeId,
-					                                               stateCode,
-					                                               timestamp,
-					                                               timeInState,
-					                                               batch,
-					                                               sourceId);
+																   personWithBusinessUnit.BusinessUnitId,
+																   platformTypeId,
+																   stateCode,
+																   timestamp,
+																   timeInState,
+																   batch,
+																   sourceId);
 					if (agentState == null)
 					{
 						_loggingSvc.WarnFormat(
@@ -221,7 +216,7 @@ namespace Teleopti.Ccc.Rta.Server
 							timeInState, batchId, sourceId);
 						continue;
 					}
-
+					_loggingSvc.InfoFormat("AgentState built for UserCode: {0}, StateCode: {1}, AgentState: {2}", logOn, stateCode, agentState);
 					_stateCache.AddAgentStateToCache(agentState);
 					if (agentState.SendOverMessageBroker)
 						sendRtaState(agentState);
@@ -248,9 +243,13 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			try
 			{
-				_loggingSvc.InfoFormat("Sending AgentState: {0} through Message Broker", agentState);
 				if (_messageSender.IsAlive)
+				{
+					_loggingSvc.InfoFormat("Sending message through message broker AgentState: {0} ", agentState);
 					_messageSender.SendRtaData(agentState.PersonId, agentState.BusinessUnit, agentState);
+				}
+				else
+					_loggingSvc.Warn("Message broker is not alive");
 			}
 			catch (SocketException exception)
 			{

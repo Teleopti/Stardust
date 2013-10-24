@@ -37,11 +37,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		private static void AssertShiftLayer(ShiftLayerInfo shiftLayer)
 		{
-			Browser.Interactions.AssertExists(
-				string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}'][style*='background-color: {2}']",
-				              shiftLayer.StartTime,
-				              shiftLayer.LengthMinutes(),
-				               ColorNameToCss(shiftLayer.Color)));
+			var selector = string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}'][style*='background-color: {2}']",
+			                             shiftLayer.StartTime,
+			                             shiftLayer.LengthMinutes(),
+			                             ColorNameToCss(shiftLayer.Color));
+
+			if (shiftLayer.Description != null)
+				Browser.Interactions.AssertFirstContains(selector, shiftLayer.Description);
+			else
+				Browser.Interactions.AssertExists(selector);
 		}
 
 		[Then(@"I should not see a shift layer with")]
@@ -135,11 +139,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExists(".dayoff");
 		}
 
+		[Then(@"I should see a day off named '(.*)'")]
+		public void ThenIShouldSeeADayOff(string dayOff)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(".dayoff:contains('{0}')", dayOff);
+		}
+
 		[Then(@"I should see the time line with")]
 		public void ThenIShouldSeeTheTimeLineWith(Table table)
 		{
 			var timeLineInfo = table.CreateInstance<TimeLineInfo>();
-			Browser.Interactions.AssertExists(".time-line[data-start-time='{0}'][data-end-time='{0}']", timeLineInfo.StartTime, timeLineInfo.EndTime);
+			Browser.Interactions.AssertExists(".time-line[data-start-time='{0}'][data-end-time='{1}']", timeLineInfo.StartTime, timeLineInfo.EndTime);
 		}
 
 		[When(@"I click '(.*)' on absence named '(.*)'")]
@@ -166,6 +176,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			public string StartTime { get; set; }
 			public string EndTime { get; set; }
 			public string Color { get; set; }
+			public string Description { get; set; }
 
 			public int LengthMinutes()
 			{

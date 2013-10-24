@@ -1,4 +1,5 @@
-﻿Feature: Preferences feedback
+﻿@WatiN
+Feature: Preferences feedback
 	In order to know at which times I might work
 	As an agent
 	I want feedback for my preferences
@@ -126,3 +127,25 @@ Scenario: Feedback from a deleted preference
 	When I select an editable day with standard preference
 	And I click the delete preference button
 	Then I should see the preference feedback
+
+Scenario: Feedback for a day with a shift
+	Given I am an agent
+	And I have a shift bag
+	And I have a shift from 9:00 to 17:00
+	When I view preferences
+	Then I should see the contract time of '8' hours
+
+Scenario: Feedback for a day with a contract time absence
+	Given I am an agent
+	And I have a scheduling period of 1 week
+	And I have a scheduled shift of 8 hours on weekday 1
+	And I have a scheduled shift of 8 hours on weekday 2
+	And I have a scheduled shift of 8 hours on weekday 3
+	And I have a scheduled shift of 8 hours on weekday 4
+	And I have a scheduled shift of 8 hours on weekday 5
+	And I have a scheduled day off on weekday 6
+	And I have a scheduled day off on weekday 7
+	And I have a full-day contract time absence today
+	When I view preferences
+	Then I should see the absence contract time of '8' hours
+	And I should see a message that my preferences can result in 40 hours

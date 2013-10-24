@@ -20,6 +20,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GotoAsm();
 		}
+		
+		[When(@"I am still viewing ASM")]
+		public void WhenIAmStillViewingASM()
+		{
+			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Asm.MakeSureWeAreLoggedOn();");
+		}
 
 		[When(@"Someone is viewing sharing link")]
 		public void WhenSomeoneIsViewingSharingLink()
@@ -91,6 +97,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToPerformanceTool();
 		}
 
+		[Given(@"I viewing schedules for '([0-9\-\\\/]*)'")]
 		[When(@"I view schedules for '([0-9\-\\\/]*)'")]
 		[When(@"I view team schedules staffing metrics for '([0-9\-\\\/]*)'")]
 		public void WhenIViewSchedulesForDate(DateTime date)
@@ -150,7 +157,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[When(@"I navigate to the preferences page")]
-		[When(@"I navigate to preferences")]
 		public void WhenINavigateToThePreferencesPage()
 		{
 			Navigation.GotoPreference();

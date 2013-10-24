@@ -122,16 +122,16 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyGetValidDateOnly()
         {
-            target = new DateOnly(1900, 12, 31);
+            target = new DateOnly(1900, 4, 29);
             Assert.AreEqual(new DateOnly(DateHelper.MinSmallDateTime), target.ValidDateOnly);
 
             target = new DateOnly(1901, 1, 1);
             Assert.AreEqual(target, target.ValidDateOnly);
 
-            target = new DateOnly(2077, 1, 1);
+            target = new DateOnly(DateHelper.MaxSmallDateTime).AddDays(1);
             Assert.AreEqual(new DateOnly(DateHelper.MaxSmallDateTime), target.ValidDateOnly);
-            
-            target = new DateOnly(2076, 12, 31);
+
+            target = new DateOnly(DateHelper.MaxSmallDateTime);
             Assert.AreEqual(target, target.ValidDateOnly);
         }
 

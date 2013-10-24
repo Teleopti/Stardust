@@ -116,13 +116,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems.Last().Text, Is.EqualTo(timeLineHourTo));
 		}
 
-		[Then(@"I should not see the datepicker")]
-		public void ThenIShouldNotSeeTheDatepicker()
-		{
-			Browser.Interactions.AssertNotExists("#Request-add-shift-trade-missing-wcs-message", ".add-shifttrade-datepicker ");
-			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeDatePicker.Parent.DisplayVisible(), Is.False);
-		}
-
 		[Then(@"I should see my scheduled day off '(.*)'")]
 		public void ThenIShouldSeeMyScheduledDayOff(string dayOffName)
 		{

@@ -112,41 +112,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(DataMaker.Data().MyCulture));
 		}
 
-		[Then(@"I should see the absence request's edit values at position '(.*)' in the list")]
-		public void ThenIShouldSeeTheAbsenceRequestSEditValuesAtPositionInTheList(int position)
-		{
-			var request = DataMaker.Data().UserData<ExistingAbsenceRequest>();
-
-			Browser.Interactions.AssertInputValueUsingJQuery(
-				string.Format(".request-list .request:nth-child({0}) .request-edit-subject", position),
-				request.PersonRequest.GetSubject(new NoFormatting()));
-			Browser.Interactions.AssertInputValueUsingJQuery(
-				string.Format(".request-list .request:nth-child({0}) .request-edit-message", position),
-				request.PersonRequest.GetMessage(new NoFormatting()));
-
-			Browser.Interactions.AssertFirstContains(
-				string.Format(".request-list .request:nth-child({0}) .request-edit-absence option:checked", position),
-				request.AbsenceRequest.Absence.Description.Name);
-
-			Browser.Interactions.AssertInputValueUsingJQuery(
-				string.Format(".request-list .request:nth-child({0}) .request-edit-datefrom", position),
-				request.PersonRequest.Request.Period.StartDateTime.Date.ToShortDateString(DataMaker.Data().MyCulture));
-			Browser.Interactions.AssertInputValueUsingJQuery(
-				string.Format(".request-list .request:nth-child({0}) .request-edit-timefrom", position),
-				request.PersonRequest.Request.Period.StartDateTime.ToShortTimeString(DataMaker.Data().MyCulture));
-
-			Browser.Interactions.AssertInputValueUsingJQuery(
-				string.Format(".request-list .request:nth-child({0}) .request-edit-dateto", position),
-				request.PersonRequest.Request.Period.EndDateTime.Date.ToShortDateString(DataMaker.Data().MyCulture));
-			Browser.Interactions.AssertInputValueUsingJQuery(
-				string.Format(".request-list .request:nth-child({0}) .request-edit-timeto", position),
-				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(DataMaker.Data().MyCulture));
-
-			Browser.Interactions.AssertFirstContains(
-				string.Format(".request-list .request:nth-child({0}) .request-edit-fullday checkbox:checked", position),
-				request.AbsenceRequest.Absence.Description.Name);
-		}
-
 		[Given(@"I have a denied absence request beacuse of missing workflow control set")]
 		public void GivenIHaveADeniedAbsenceRequestBeacuseOfMissingWorkflowControlSet()
 		{

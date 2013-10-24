@@ -32,8 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			)
 		{
 			DoUnsafeSnapshotUpdate(e => (ScheduleRange) scheduleRange, modifiedEntities, addedEntities, deletedEntities);
-			//fixa sen - görs nu istället i scheduledictionarybatchpersister
-			//scheduleRange.TakeSnapshot();
+			scheduleRange.TakeSnapshot();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "deletedEntities")]

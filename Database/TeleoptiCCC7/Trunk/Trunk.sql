@@ -386,3 +386,65 @@ ALTER COLUMN [DateOfOvertime] [datetime] NOT NULL
 ---------------- 
 ALTER TABLE dbo.StateGroupActivityAlarm ALTER COLUMN AlarmType uniqueidentifier NULL
 GO
+
+
+----------------  
+--Name: Mathias Stenbom
+--Date: 2013-10-08
+--Desc: Renaming ReadModel.PersonScheduleDay.ShiftStart to Start to match class property name
+---------------- 
+
+EXEC sp_rename 'ReadModel.PersonScheduleDay.ShiftStart','Start','COLUMN'
+GO
+EXEC sp_rename 'ReadModel.PersonScheduleDay.ShiftEnd','End','COLUMN'
+GO
+
+----------------  
+--Name: Roger Kratz
+--Date: 2013-10-11
+--Desc: Removing unused table
+---------------- 
+
+DROP TABLE [dbo].[OutlierDateProviderBase]
+GO
+
+----------------  
+--Name:CS
+--Date: 2013-10-11
+--Desc: Bug #25079 - Unclear permission setting for overtime availability
+---------------- 
+update dbo.ApplicationFunction
+set FunctionCode = 'ModifyAvailabilities' where ForeignId = '0087'
+
+update dbo.ApplicationFunction
+set FunctionDescription = 'xxModifyAvailabilities' where ForeignId = '0087'
+GO
+
+----------------  
+--Name: Roger Kratz
+--Date: 2013-10-17
+--Desc: Removing unused table GroupingAbsence
+---------------- 
+ALTER TABLE [dbo].[Absence] DROP CONSTRAINT [FK_Absence_GroupingAbsence]
+GO
+alter table [dbo].[Absence]
+drop column GroupingAbsence
+GO
+DROP TABLE [dbo].[GroupingAbsence]
+GO
+
+----------------  
+--Name: David J
+--Date: 2013-10-22
+--Desc: Bug #24969: Timeout during upgrade when running EXEC [dbo].[DayOffConverter]
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonAssignment]') AND name = N'IX_PersonAssignment_Scenario_UpdatedBy_UpdatedOn')
+CREATE NONCLUSTERED INDEX [IX_PersonAssignment_Scenario_UpdatedBy_UpdatedOn]
+ON [dbo].[PersonAssignment] ([Scenario])
+INCLUDE ([UpdatedBy],[UpdatedOn])
+
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonDayOff]') AND name = N'IX_PersonDayOff_BU_Name_Anchor_Person_Scenario')
+CREATE NONCLUSTERED INDEX [IX_PersonDayOff_BU_Name_Anchor_Person_Scenario]
+ON [dbo].[PersonDayOff] ([BusinessUnit],[Name])
+INCLUDE ([Anchor],[Person],[Scenario])
+GO

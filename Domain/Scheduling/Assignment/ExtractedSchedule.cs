@@ -427,19 +427,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             var addList = new List<IPersonAbsence>();
             var diff = CalculatePeriodOffset(source.Period);
             var layerCollection = source.ProjectionService().CreateProjection();
+            var layerCollectionPeriod = layerCollection.Period();
 
             foreach (var sourceAbsence in source.PersonAbsenceCollection())
             {
                 if (layerCollection.HasLayers)
                 {
-                    if (sourceAbsence.Layer.Period.Contains(layerCollection.Period().Value))
+                    if (sourceAbsence.Layer.Period.Contains(layerCollectionPeriod.Value))
                     {
                         if (!all)
                             addList.Clear();
 
                         addList.Add(sourceAbsence.NoneEntityClone());
                     }
-
                 }
                 else
                 {
@@ -469,11 +469,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             IVisualLayerCollection layerCollection = ProjectionService().CreateProjection();
             IList<IPersonAbsence> removeList = new List<IPersonAbsence>();
 
+            var layerCollectionPeriod = layerCollection.Period();
             foreach (IPersonAbsence personAbsence in PersonAbsenceCollection(true).Reverse())
             {
                 if (layerCollection.HasLayers)
                 {
-                    if (!personAbsence.Layer.Period.Contains(layerCollection.Period().Value))
+                    if (!personAbsence.Layer.Period.Contains(layerCollectionPeriod.Value))
                     {
                         if (!all)
                             removeList.Clear();
@@ -481,7 +482,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                         removeList.Add(personAbsence);
                     }
                 }
-				else
+                else
 				{
 					if (!all)
 					{
@@ -580,11 +581,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             IList<IPersonAbsence> splitList = new List<IPersonAbsence>();
             IList<IPersonAbsence> deleteList = new List<IPersonAbsence>();
             IVisualLayerCollection layerCollection = ProjectionService().CreateProjection();
+            var dateTimePeriod = layerCollection.Period().Value;
 
             //loop absences in source
             foreach (IPersonAbsence personAbsence in PersonAbsenceCollection())
             {
-                if (personAbsence.Layer.Period.Contains(layerCollection.Period().Value))
+                if (personAbsence.Layer.Period.Contains(dateTimePeriod))
                 {
                     //try to split them
                     personAbsence.Split(period).ForEach(splitList.Add);
@@ -678,30 +680,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					foundPersonAssignment.AddOvertimeLayer(activity, period, definitionSet);
         }
 
-				public void MergeOvertime(IScheduleDay source)
-        {
-            var timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
-            var dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, timeZoneInfo));
-            var period = Person.Period(dateOnlyPerson);
-            var diff = CalculatePeriodOffset(source.Period);
+	    public void MergeOvertime(IScheduleDay source)
+	    {
+		    var timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
+		    var dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, timeZoneInfo));
+		    var period = Person.Period(dateOnlyPerson);
+		    var diff = CalculatePeriodOffset(source.Period);
 
-            if (period != null)
-            {
-	            var personAss = source.PersonAssignment();
-							if (personAss != null)
-							{
-								foreach (var layer in personAss.OvertimeLayers())
-								{
-									if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
-									{
-										CreateAndAddOvertime(layer.Payload, layer.Period.MovePeriod(diff), layer.DefinitionSet);
-									}
-								}
-							}
-            }
-        }
+		    if (period != null)
+		    {
+			    var personAss = source.PersonAssignment();
+			    if (personAss != null)
+			    {
+				    foreach (var layer in personAss.OvertimeLayers())
+				    {
+					    if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
+					    {
+						    CreateAndAddOvertime(layer.Payload, layer.Period.MovePeriod(diff), layer.DefinitionSet);
+					    }
+				    }
+			    }
+		    }
+	    }
 
-				public void CreateAndAddActivity(IActivity activity, DateTimePeriod period, IShiftCategory shiftCategory)
+	    public void CreateAndAddActivity(IActivity activity, DateTimePeriod period, IShiftCategory shiftCategory)
         {
             var authorization = PrincipalAuthorization.Instance();
             if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
