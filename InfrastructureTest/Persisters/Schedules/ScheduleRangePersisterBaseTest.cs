@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			uow.Reassociate(Scenario);
 		}
 
-		public void NotifyMessageQueueSizeChange()
+		public IEnumerable<IAggregateRoot>[] DataToReassociate(IPerson personToReassociate)
 		{
 			throw new System.NotImplementedException();
 		}

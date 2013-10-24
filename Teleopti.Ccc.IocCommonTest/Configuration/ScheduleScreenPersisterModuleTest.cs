@@ -35,12 +35,12 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 
 			 var instance1 = _container.Resolve<IScheduleDictionaryBatchPersister>(
 				TypedParameter.From(mocks.Stub<IMessageBrokerIdentifier>()),
-				TypedParameter.From(mocks.Stub<IReassociateData>())
+				TypedParameter.From(mocks.Stub<IOwnMessageQueue>())
 				);
 
 			 var instance2 = _container.Resolve<IScheduleDictionaryBatchPersister>(
 				TypedParameter.From(mocks.Stub<IMessageBrokerIdentifier>()),
-				TypedParameter.From(mocks.Stub<IReassociateData>())
+				TypedParameter.From(mocks.Stub<IOwnMessageQueue>())
 				);
 
 		 	instance1.Should().Not.Be.SameInstanceAs(instance2);

@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			var scheduleDictionaryPersister = MockRepository.GenerateMock<IScheduleDictionarySaver>();
-			var reassociateData = MockRepository.GenerateMock<IReassociateData>();
+			var reassociateData = MockRepository.GenerateMock<IOwnMessageQueue>();
 			var data = new[] { new[] { MockRepository.GenerateMock<IAggregateRoot>(), MockRepository.GenerateMock<IAggregateRoot>() } };
 			var target = new ScheduleDictionaryBatchPersister(currUowFactory, null, scheduleDictionaryPersister, null, null, reassociateData, null);
 

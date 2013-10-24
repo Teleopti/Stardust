@@ -248,7 +248,6 @@
     <Compile Include="Persisters\Schedules\ScheduleRangePersister.cs" />
     <Compile Include="Persisters\Schedules\ScheduleDifferenceSaver.cs" />
     <Compile Include="Persisters\IOwnMessageQueue.cs" />
-    <Compile Include="Persisters\IReassociateData.cs" />
     <Compile Include="Persisters\IScheduleDictionaryBatchPersister.cs" />
     <Compile Include="Persisters\Refresh\IScheduleDataRefresher.cs" />
     <Compile Include="Persisters\IScheduleDictionaryModifiedCallback.cs" />

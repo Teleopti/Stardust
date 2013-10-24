@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -49,8 +52,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 			}
 
-			public void NotifyMessageQueueSizeChange()
+			public IEnumerable<IAggregateRoot>[] DataToReassociate(IPerson personToReassociate)
 			{
+				return new IEnumerable<IAggregateRoot>[0];
 			}
 		}
 	}

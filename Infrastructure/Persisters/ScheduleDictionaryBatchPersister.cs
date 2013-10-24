@@ -11,10 +11,10 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		private readonly IScheduleDictionarySaver _scheduleDictionarySaver;
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceCollectionService;
 		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
-		private readonly IReassociateData _reassociateData;
+		private readonly IOwnMessageQueue _reassociateData;
 		private readonly IScheduleDictionaryModifiedCallback _callback;
 
-		public ScheduleDictionaryBatchPersister(ICurrentUnitOfWorkFactory uowFactory, IScheduleRepository scheduleRepository, IScheduleDictionarySaver scheduleDictionarySaver, IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService, IMessageBrokerIdentifier messageBrokerIdentifier, IReassociateData reassociateData, IScheduleDictionaryModifiedCallback callback)
+		public ScheduleDictionaryBatchPersister(ICurrentUnitOfWorkFactory uowFactory, IScheduleRepository scheduleRepository, IScheduleDictionarySaver scheduleDictionarySaver, IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService, IMessageBrokerIdentifier messageBrokerIdentifier, IOwnMessageQueue reassociateData, IScheduleDictionaryModifiedCallback callback)
 		{
 			_uowFactory = uowFactory;
 			_scheduleRepository = scheduleRepository;

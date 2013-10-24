@@ -1,10 +1,12 @@
-﻿using Autofac;
+﻿using System.Collections.Generic;
+using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
@@ -99,7 +101,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				throw new System.NotImplementedException();
 			}
 
-			public void NotifyMessageQueueSizeChange()
+			public IEnumerable<IAggregateRoot>[] DataToReassociate(IPerson personToReassociate)
 			{
 				throw new System.NotImplementedException();
 			}
