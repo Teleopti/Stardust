@@ -225,6 +225,7 @@
     <Compile Include="TestData\Core\TestDataFactory.cs" />
     <Compile Include="TestData\Generic\AbsenceConfigurable.cs" />
     <Compile Include="TestData\Generic\ActivityConfigurable.cs" />
+    <Compile Include="TestData\Generic\PartTimePercentageConfigurable.cs" />
     <Compile Include="TestData\Generic\ShiftCategoryConfigurable.cs" />
     <Compile Include="TestData\Generic\SiteConfigurable.cs" />
     <Compile Include="TestData\Generic\TeamConfigurable.cs" />
@@ -283,7 +284,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="TestData\Special\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

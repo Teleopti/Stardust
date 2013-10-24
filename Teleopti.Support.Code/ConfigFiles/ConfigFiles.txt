@@ -1,5 +1,6 @@
 ﻿..\..\..\AgentPortal\Teleopti.Ccc.AgentPortal\app.config,BuildArtifacts\AppMytime.config
 ..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\App.config,BuildArtifacts\AppETLTool.config
+..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.config,BuildArtifacts\AppETLIntegrationTest.config
 ..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\App.config,BuildArtifacts\AppETLService.config
 ..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\debug\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
 ..\..\..\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\web.config,BuildArtifacts\PMWeb.config

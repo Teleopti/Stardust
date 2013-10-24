@@ -3,7 +3,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
+namespace Teleopti.Ccc.TestCommon.TestData.Generic
 {
 	public class PartTimePercentageConfigurable : IDataSetup
 	{
