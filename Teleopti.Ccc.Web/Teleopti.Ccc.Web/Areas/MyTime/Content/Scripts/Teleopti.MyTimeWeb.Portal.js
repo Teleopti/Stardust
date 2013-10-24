@@ -89,6 +89,14 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	}
 
+	function pareseUrlDate(str) {
+		if (!/^(\d){8}$/.test(str)) return undefined;
+		var y = str.substr(0, 4),
+			m = str.substr(4, 2),
+			d = str.substr(6, 2);
+		return new Date(y, m, d);
+	}
+
 	function _setupRoutes() {
 		var viewRegex = '[a-z]+';
 		var actionRegex = '[a-z]+';
@@ -98,12 +106,22 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(ShiftTrade)/(' + dateRegex + ')$', 'i'),
 	        function (view, action, secondAction, date) {
 	        	var hashInfo = _parseHash('#' + view + '/' + action);
-	        	_invokeDisposeCallback(currentViewId);
-	        	_adjustTabs(hashInfo);
-	        	_loadContent(hashInfo,
-	            		function () {
-	            			Teleopti.MyTimeWeb.Request.ShiftTradeRequest(date);
-	            		});
+
+		        var parsedDate;
+		        if (/^(\d){8}$/.test(date)) {
+			        var y = date.substr(0, 4),
+			            m = date.substr(4, 2) - 1,
+			            d = date.substr(6, 2);
+			        parsedDate = new Date(y, m, d);
+			       
+		        }
+		        _invokeDisposeCallback(currentViewId);
+		        _adjustTabs(hashInfo);
+		        _loadContent(hashInfo,
+					   function () {
+					   	Teleopti.MyTimeWeb.Request.ShiftTradeRequest(parsedDate);
+					   });
+	        	
 	        });
 		
 		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(' + actionRegex + ')/(' + dateRegex + ')$', 'i'),
