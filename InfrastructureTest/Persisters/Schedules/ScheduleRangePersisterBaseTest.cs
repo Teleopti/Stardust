@@ -23,7 +23,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
 	[TestFixture]
-	public abstract class ScheduleRangePersisterBaseTest : DatabaseTestWithoutTransaction, IOwnMessageQueue
+	public abstract class ScheduleRangePersisterBaseTest : DatabaseTestWithoutTransaction, IReassociateDataForSchedules
 	{
 		protected IPerson Person { get; private set; }
 		protected IActivity Activity { get; private set; }
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				ReassociateDataWithAllPeople();
+				ReassociateDataForAllPeople();
 				var rep = new ScheduleRepository(unitOfWork);
 				var dictionary = rep.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 2040, 1, 1)),
 																								 Scenario,
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			}
 		}
 
-		public void ReassociateDataWithAllPeople()
+		public void ReassociateDataForAllPeople()
 		{
 			var uow = UnitOfWorkFactory.Current.CurrentUnitOfWork();
 			uow.Reassociate(Person);

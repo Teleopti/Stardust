@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly IUnitOfWorkFactory _uowFactory;
 		private readonly IMoveDataBetweenSchedules _moveSchedules;
-		private readonly IOwnMessageQueue _callback;
+		private readonly IReassociateDataForSchedules _callback;
 		private readonly IEnumerable<IPerson> _fullyLoadedPersonsToMove;
 		private readonly IEnumerable<IScheduleDay> _schedulePartsToExport;
 		private readonly IScheduleDictionaryBatchPersister _scheduleDictionaryBatchPersister;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 												IExportToScenarioResultView view,
 												IScheduleRepository scheduleRepository,
 												IMoveDataBetweenSchedules moveSchedules,
-												IOwnMessageQueue callback,
+												IReassociateDataForSchedules callback,
 												IEnumerable<IPerson> fullyLoadedPersonsToMove,
 												IEnumerable<IScheduleDay> schedulePartsToExport,
 												IScenario exportScenario,
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             {
                 var personProvider = new PersonProvider(_fullyLoadedPersonsToMove);
                 var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
-                _callback.ReassociateDataWithAllPeople();
+                _callback.ReassociateDataForAllPeople();
                 ScheduleDictionaryToPersist =
                     _scheduleRepository.FindSchedulesForPersons(new ScheduleDateTimePeriod(schedulePartPeriod(), _fullyLoadedPersonsToMove), _exportScenario, personProvider, scheduleDictionaryLoadOptions, _fullyLoadedPersonsToMove);
                 return _moveSchedules.CopySchedulePartsToAnotherDictionary(ScheduleDictionaryToPersist, _schedulePartsToExport);

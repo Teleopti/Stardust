@@ -17,14 +17,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		private readonly bool _checkConflicts;
 		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
-		private readonly IOwnMessageQueue _ownMessageQueue;
+		private readonly IReassociateDataForSchedules _reassociateDataForSchedules;
 
 		//todo: försök att bli av med dessa beroende - bara bool:en ska vara kvar
-		public SchedulePersistModule(IMessageBrokerIdentifier messageBrokerIdentifier, IOwnMessageQueue ownMessageQueue, bool checkConflicts)
+		public SchedulePersistModule(IMessageBrokerIdentifier messageBrokerIdentifier, IReassociateDataForSchedules reassociateDataForSchedules, bool checkConflicts)
 		{
 			_checkConflicts = checkConflicts;
 			_messageBrokerIdentifier = messageBrokerIdentifier ?? new EmptyMessageBrokerIdentifier();
-			_ownMessageQueue = ownMessageQueue ?? new nullOwnMessageQueue();
+			_reassociateDataForSchedules = reassociateDataForSchedules ?? new nullReassociateDataForSchedules();
 		}
 
 		protected override void Load(ContainerBuilder builder)
@@ -43,12 +43,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleDifferenceSaver>().As<IScheduleDifferenceSaver>().SingleInstance();
 			builder.RegisterType<LazyLoadingManagerWrapper>().As<ILazyLoadingManager>().SingleInstance();
 			builder.Register(c => _messageBrokerIdentifier).As<IMessageBrokerIdentifier>();
-			builder.Register(c => _ownMessageQueue).As<IOwnMessageQueue>();
+			builder.Register(c => _reassociateDataForSchedules).As<IReassociateDataForSchedules>();
 		}
 
-		private class nullOwnMessageQueue : IOwnMessageQueue
+		private class nullReassociateDataForSchedules : IReassociateDataForSchedules
 		{
-			public void ReassociateDataWithAllPeople()
+			public void ReassociateDataForAllPeople()
 			{
 			}
 

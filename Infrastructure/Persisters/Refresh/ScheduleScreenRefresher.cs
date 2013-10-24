@@ -8,13 +8,13 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 {
 	public class ScheduleScreenRefresher : IScheduleScreenRefresher
     {
-        private readonly IOwnMessageQueue _messageQueueUpdater;
+        private readonly IReassociateDataForSchedules _messageQueueUpdater;
 	    private readonly IScheduleRefresher _scheduleRefresher;
 	    private readonly IScheduleDataRefresher _scheduleDataRefresher;
         private readonly IMeetingRefresher _meetingRefresher;
         private readonly IPersonRequestRefresher _personRequestRefresher;
 
-        public ScheduleScreenRefresher(IOwnMessageQueue messageQueueUpdater, IScheduleRefresher scheduleRefresher, IScheduleDataRefresher scheduleDataRefresher, IMeetingRefresher meetingRefresher, IPersonRequestRefresher personRequestRefresher) 
+        public ScheduleScreenRefresher(IReassociateDataForSchedules messageQueueUpdater, IScheduleRefresher scheduleRefresher, IScheduleDataRefresher scheduleDataRefresher, IMeetingRefresher meetingRefresher, IPersonRequestRefresher personRequestRefresher) 
 		{
             _messageQueueUpdater = messageQueueUpdater;
             _scheduleRefresher = scheduleRefresher;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 
         public void Refresh(IScheduleDictionary scheduleDictionary, IEnumerable<IEventMessage> messageQueue, ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer)
         {
-            _messageQueueUpdater.ReassociateDataWithAllPeople();
+            _messageQueueUpdater.ReassociateDataForAllPeople();
 
             var scheduleMessages = QueryMessagesByType<IScheduleChangedEvent>(messageQueue);
             _scheduleRefresher.Refresh(scheduleDictionary, scheduleMessages, refreshedEntitiesBuffer, conflictsBuffer);

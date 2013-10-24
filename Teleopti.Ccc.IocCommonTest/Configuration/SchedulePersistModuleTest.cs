@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			containerBuilder.RegisterModule(new SchedulePersistModule(null, ownMessage, false));
 			using (var container = containerBuilder.Build())
 			{
-				container.Resolve<IOwnMessageQueue>()
+				container.Resolve<IReassociateDataForSchedules>()
 								 .Should().Be.OfType<ownMessageImpl>();
 			}
 		}
@@ -94,9 +94,9 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			}
 		}
 
-		private class ownMessageImpl : IOwnMessageQueue
+		private class ownMessageImpl : IReassociateDataForSchedules
 		{
-			public void ReassociateDataWithAllPeople()
+			public void ReassociateDataForAllPeople()
 			{
 				throw new System.NotImplementedException();
 			}

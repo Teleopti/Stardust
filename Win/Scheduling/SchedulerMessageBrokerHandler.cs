@@ -18,7 +18,7 @@ using Teleopti.Messaging.Events;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	public class SchedulerMessageBrokerHandler : IMessageBrokerIdentifier, IDisposable, IOwnMessageQueue, IUpdateScheduleDataFromMessages, IUpdateMeetingsFromMessages, IUpdatePersonRequestsFromMessages, IMessageQueueRemoval
+	public class SchedulerMessageBrokerHandler : IMessageBrokerIdentifier, IDisposable, IReassociateDataForSchedules, IUpdateScheduleDataFromMessages, IUpdateMeetingsFromMessages, IUpdatePersonRequestsFromMessages, IMessageQueueRemoval
 	{
 		private SchedulingScreen _owner;
 		private readonly IScheduleScreenRefresher _scheduleScreenRefresher;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		    if (owner == null) throw new ArgumentNullException("owner");
 		    _owner = owner;
 			_scheduleScreenRefresher = container.Resolve<IScheduleScreenRefresher>(
-				TypedParameter.From<IOwnMessageQueue>(this),
+				TypedParameter.From<IReassociateDataForSchedules>(this),
 				TypedParameter.From(container.Resolve<IScheduleRefresher>(
 					TypedParameter.From<IUpdateScheduleDataFromMessages>(this),
 					TypedParameter.From<IMessageQueueRemoval>(this)
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				LazyLoadingManager.Initialize(changeInfo.UpdatedBy);
 		}
 
-	    public void ReassociateDataWithAllPeople()
+	    public void ReassociateDataForAllPeople()
 		{
 			var uow = UnitOfWorkFactory.Current.CurrentUnitOfWork();
 			uow.Reassociate(_owner.SchedulerState.SchedulingResultState.PersonsInOrganization);

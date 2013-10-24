@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IScheduleDictionaryBatchPersister scheduleDictionaryBatchPersister;
 		private IUnitOfWorkFactory uowFactory;
 		private List<IPerson> persons;
-		private IOwnMessageQueue callback;
+		private IReassociateDataForSchedules callback;
 
 		[SetUp]
 		public void Setup()
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			moveSvc = mocks.StrictMock<IMoveDataBetweenSchedules>();
 			uowFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
 			scheduleDictionaryBatchPersister = mocks.DynamicMock<IScheduleDictionaryBatchPersister>();
-			callback = mocks.DynamicMock<IOwnMessageQueue>();
+			callback = mocks.DynamicMock<IReassociateDataForSchedules>();
 			partsToMove = new List<IScheduleDay>();
 			persons = new List<IPerson>();
 			exportScenario = new Scenario("export");
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (mocks.Record())
 			{
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(null);
-				callback.ReassociateDataWithAllPeople();
+				callback.ReassociateDataForAllPeople();
 				Expect.Call(scheduleRepository.FindSchedulesForPersons(null, null, null, null, null)).IgnoreArguments()
 					.Return(dictionaryToExportTo);
 				LastCall.IgnoreArguments();
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (mocks.Record())
 			{
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(null);
-				callback.ReassociateDataWithAllPeople();
+				callback.ReassociateDataForAllPeople();
 				Expect.Call(scheduleRepository.FindSchedulesForPersons(null, null, null, null, null)).Return(dictionaryToExportTo);
 				LastCall.IgnoreArguments();
 				Expect.Call(moveSvc.CopySchedulePartsToAnotherDictionary(dictionaryToExportTo, partsToMove)).Return(warnings);
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             persons.Add(person);
             var err = new DataSourceException();
             Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(null);
-            Expect.Call(() => callback.ReassociateDataWithAllPeople()).Throw(err);
+            Expect.Call(() => callback.ReassociateDataForAllPeople()).Throw(err);
             Expect.Call(() => view.ShowDataSourceException(err));
             Expect.Call(() => view.CloseForm());
             mocks.ReplayAll();
@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 		private class Presenter : ExportToScenarioResultPresenter
 		{
-			public Presenter(IUnitOfWorkFactory uowFactory, IExportToScenarioResultView view, IScheduleRepository scheduleRepository, IMoveDataBetweenSchedules moveSchedules, IOwnMessageQueue callback, IEnumerable<IPerson> persons, IEnumerable<IScheduleDay> schedulePartsToExport, IScenario exportScenario, IScheduleDictionaryBatchPersister scheduleDictionaryBatchPersister)
+			public Presenter(IUnitOfWorkFactory uowFactory, IExportToScenarioResultView view, IScheduleRepository scheduleRepository, IMoveDataBetweenSchedules moveSchedules, IReassociateDataForSchedules callback, IEnumerable<IPerson> persons, IEnumerable<IScheduleDay> schedulePartsToExport, IScenario exportScenario, IScheduleDictionaryBatchPersister scheduleDictionaryBatchPersister)
 				: base(uowFactory, view, scheduleRepository, moveSchedules, callback, persons, schedulePartsToExport, exportScenario, scheduleDictionaryBatchPersister)
 			{
 			}

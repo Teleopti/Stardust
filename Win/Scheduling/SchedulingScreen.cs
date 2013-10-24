@@ -521,7 +521,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//todo: move more of this stuff to ioc
 			var scheduleDictionaryBatchingPersister = _container.Resolve<IScheduleDictionaryBatchPersister>(
 				TypedParameter.From<IMessageBrokerIdentifier>(_schedulerMessageBrokerHandler),
-				TypedParameter.From<IOwnMessageQueue>(_schedulerMessageBrokerHandler)
+				TypedParameter.From<IReassociateDataForSchedules>(_schedulerMessageBrokerHandler)
 				);
 
 			_scheduleDayListFactory = _container.Resolve<IScheduleDayListFactory>();

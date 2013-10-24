@@ -9,23 +9,23 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 	{
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
-		private readonly IOwnMessageQueue _ownMessageQueue;
+		private readonly IReassociateDataForSchedules _reassociateDataForSchedules;
 		private readonly ILazyLoadingManager _lazyLoadingManager;
 
 		public ScheduleRangeConflictCollector(IScheduleRepository scheduleRepository,
 																					IPersonAssignmentRepository personAssignmentRepository,
-																					IOwnMessageQueue ownMessageQueue,
+																					IReassociateDataForSchedules reassociateDataForSchedules,
 																					ILazyLoadingManager lazyLoadingManager)
 		{
 			_scheduleRepository = scheduleRepository;
 			_personAssignmentRepository = personAssignmentRepository;
-			_ownMessageQueue = ownMessageQueue;
+			_reassociateDataForSchedules = reassociateDataForSchedules;
 			_lazyLoadingManager = lazyLoadingManager;
 		}
 
 		public IEnumerable<PersistConflict> GetConflicts(IDifferenceCollection<IPersistableScheduleData> differences, IScenario scenario, DateOnlyPeriod period)
 		{
-			_ownMessageQueue.ReassociateDataWithAllPeople();
+			_reassociateDataForSchedules.ReassociateDataForAllPeople();
 			var uow = _scheduleRepository.UnitOfWork;
 
 			var modifiedAndDeletedEntities = from e in differences

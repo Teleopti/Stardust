@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
         private MockRepository _mocks;
         private ScheduleScreenRefresher _target;
         private IScheduleRepository _scheduleRepository;
-        private IOwnMessageQueue _messageQueueUpdater;
+        private IReassociateDataForSchedules _messageQueueUpdater;
         private List<IEventMessage> _messages;
         private IScheduleDictionary _scheduleDictionary;
         private IUpdateScheduleDataFromMessages _scheduleDataUpdater;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
             _mocks = new MockRepository();
 
             _scheduleRepository = _mocks.DynamicMock<IScheduleRepository>();
-            _messageQueueUpdater = _mocks.DynamicMock<IOwnMessageQueue>();
+            _messageQueueUpdater = _mocks.DynamicMock<IReassociateDataForSchedules>();
             _scheduleDataUpdater = _mocks.DynamicMock<IUpdateScheduleDataFromMessages>();
 
             _refreshedDerivedFromScheduleDataEntityId = Guid.NewGuid();

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public ExportToScenarioResultView(IUnitOfWorkFactory uowFactory,
 											IScheduleRepository scheduleRepository,
 											IMoveDataBetweenSchedules moveDataBetweenSchedules,
-											IOwnMessageQueue callback,
+											IReassociateDataForSchedules callback,
 											IEnumerable<IPerson> fullyLoadedPersonsToMove,
 											IEnumerable<IScheduleDay> schedulePartsToExport,
 											IScenario exportScenario,
