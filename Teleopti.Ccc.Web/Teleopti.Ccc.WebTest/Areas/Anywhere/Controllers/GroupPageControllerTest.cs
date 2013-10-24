@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				{
 					PageName = "Skill"
 				};
-			
-			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(groupPage, new List<ReadOnlyGroupDetail>()), new FakeLoggedOnUser());
+
+			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new[] { groupPage }, new List<ReadOnlyGroupDetail>()), new FakeLoggedOnUser());
 
 			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 					GroupName = team.Description.Name
 				};
 
-			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new ReadOnlyGroupPage { PageName = ""}, new List<ReadOnlyGroupDetail> { firstGroup, secondGroup }), loggedOnUser);
+			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new[] { new ReadOnlyGroupPage { PageName = "" } }, new []{ firstGroup, secondGroup }), loggedOnUser);
 
 			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		[Test]
 		public void ShouldReturnNoDefaultGroupIfIHaveNoTeam()
 		{
-			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new ReadOnlyGroupPage { PageName = ""}, new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail() }), new FakeLoggedOnUser());
+			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new[] { new ReadOnlyGroupPage { PageName = "" } }, new []{ new ReadOnlyGroupDetail() }), new FakeLoggedOnUser());
 
 			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
 
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 					PageName = "xxMain"
 				};
 
-			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(groupPage, new List<ReadOnlyGroupDetail>()), new FakeLoggedOnUser());
+			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new[] { groupPage }, new List<ReadOnlyGroupDetail>()), new FakeLoggedOnUser());
 
 			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
 
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				GroupName = "Team green"
 			};
 
-			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(groupPage, new List<ReadOnlyGroupDetail> { firstGroup }), new FakeLoggedOnUser());
+			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new[] { groupPage }, new []{ firstGroup }), new FakeLoggedOnUser());
 
 			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
 
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				GroupName = "Team green"
 			};
 
-			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(groupPage, new List<ReadOnlyGroupDetail> { firstGroup }), new FakeLoggedOnUser());
+			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new[] { groupPage }, new []{ firstGroup }), new FakeLoggedOnUser());
 
 			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
 
@@ -132,16 +132,74 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			((object)gp.Groups[0].Name).Should().Be.EqualTo(firstGroup.GroupName);
 		}
 
+		[Test]
+		public void ShouldOrderBuildInGroupPageByName()
+		{
+			var groupPage1 = new ReadOnlyGroupPage
+			{
+				PageName = "xxContract"
+			};
+			var groupPage2 = new ReadOnlyGroupPage
+			{
+				PageId = new Guid("6CE00B41-0722-4B36-91DD-0A3B63C545CF"),
+				PageName = "xxMain"
+			};
+
+			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new[] { groupPage1, groupPage2 }, new List<ReadOnlyGroupDetail>()), new FakeLoggedOnUser());
+
+			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
+			(result.GroupPages[0].Name as string).Should().Be.EqualTo(Resources.ResourceManager.GetString(groupPage2.PageName.Substring(2)));
+			(result.GroupPages[1].Name as string).Should().Be.EqualTo(Resources.ResourceManager.GetString(groupPage1.PageName.Substring(2)));
+		}
+
+		[Test]
+		public void ShouldOrderCustomGroupPageByName()
+		{
+			var groupPage1 = new ReadOnlyGroupPage
+			{
+				PageName = "B group Page"
+			};
+			var groupPage2 = new ReadOnlyGroupPage
+			{
+				PageName = "A group Page"
+			};
+
+			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new[] { groupPage1, groupPage2 }, new List<ReadOnlyGroupDetail>()), new FakeLoggedOnUser());
+
+			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
+			(result.GroupPages[0].Name as string).Should().Be.EqualTo(groupPage2.PageName);
+			(result.GroupPages[1].Name as string).Should().Be.EqualTo(groupPage1.PageName);
+		}
+
+		[Test]
+		public void ShouldOrderCustomGroupPageAfterBuildInGroupPage()
+		{
+			var groupPage1 = new ReadOnlyGroupPage
+			{
+				PageName = "A group Page"
+			};
+			var groupPage2 = new ReadOnlyGroupPage
+			{
+				PageName = "xxContract"
+			};
+
+			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new[] { groupPage1, groupPage2 }, new List<ReadOnlyGroupDetail>()), new FakeLoggedOnUser());
+
+			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
+			(result.GroupPages[0].Name as string).Should().Be.EqualTo(Resources.ResourceManager.GetString(groupPage2.PageName.Substring(2)));
+			(result.GroupPages[1].Name as string).Should().Be.EqualTo(groupPage1.PageName);
+		}
+
 	}
 
 	public class FakeGroupingReadOnlyRepository : IGroupingReadOnlyRepository
 	{
-		public IList<ReadOnlyGroupPage> ReadOnlyGroupPages = new List<ReadOnlyGroupPage>();
-		public IList<ReadOnlyGroupDetail> ReadOnlyGroupDetails;
+		private readonly IList<ReadOnlyGroupPage> ReadOnlyGroupPages;
+		private readonly IList<ReadOnlyGroupDetail> ReadOnlyGroupDetails;
 
-		public FakeGroupingReadOnlyRepository(ReadOnlyGroupPage readOnlyGroupPage, List<ReadOnlyGroupDetail> readOnlyGroupDetails)
+		public FakeGroupingReadOnlyRepository(IList<ReadOnlyGroupPage> readOnlyGroupPages, IList<ReadOnlyGroupDetail> readOnlyGroupDetails)
 		{
-			ReadOnlyGroupPages.Add(readOnlyGroupPage);
+			ReadOnlyGroupPages = readOnlyGroupPages;
 			ReadOnlyGroupDetails = readOnlyGroupDetails;
 		}
 

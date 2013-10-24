@@ -23,10 +23,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[UnitOfWorkAction, HttpGet]
 		public JsonResult AvailableGroupPages(DateTime date)
 		{
+			var allGroupPages = _groupingReadOnlyRepository.AvailableGroupPages().ToArray();
+			var buildInGroupPages = allGroupPages.Where(pg => pg.PageName.StartsWith("xx", StringComparison.OrdinalIgnoreCase));
+			var customGroupPages = allGroupPages.Where(pg => !pg.PageName.StartsWith("xx", StringComparison.OrdinalIgnoreCase));
 			var actualGroupPages =
-				_groupingReadOnlyRepository.AvailableGroupPages().Select(gp =>
+				buildInGroupPages.Select(gp =>
 					{
-						var name = gp.PageName.StartsWith("xx", StringComparison.OrdinalIgnoreCase) ? Resources.ResourceManager.GetString(gp.PageName.Substring(2)) : gp.PageName;
+						var name = Resources.ResourceManager.GetString(gp.PageName.Substring(2));
 						return new
 							{
 								Name = name,
@@ -34,14 +37,27 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 									{
 										Name = gp.PageId.ToString().ToUpperInvariant() == PageMain ? g.GroupName : name + "/" + g.GroupName,
 										Id = g.GroupId
-									}).Distinct().ToList()
+									}).Distinct().ToArray()
 							};
-					});
+					}).OrderBy(x => x.Name).ToList();
+			actualGroupPages.AddRange(customGroupPages.Select(gp =>
+				{
+					var name = gp.PageName;
+					return new
+						{
+							Name = name,
+							Groups = _groupingReadOnlyRepository.AvailableGroups(gp, new DateOnly(date)).Select(g => new
+								{
+									Name = name + "/" + g.GroupName,
+									Id = g.GroupId
+								}).Distinct().ToArray()
+						};
+				}).OrderBy(x => x.Name).ToList());
 
 			var team = _loggedOnUser.CurrentUser().MyTeam(new DateOnly(date));
 			var selectedGroupId = team != null ? team.Id : null;
 
-			return Json(new {GroupPages = actualGroupPages.ToList(), SelectedGroupId = selectedGroupId}, JsonRequestBehavior.AllowGet);
+			return Json(new {GroupPages = actualGroupPages, SelectedGroupId = selectedGroupId}, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

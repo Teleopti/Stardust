@@ -115,7 +115,7 @@ Scenario: Order group pages like business heirarchy, contract, contract schedule
 	And I should see group 'Contract Schedule' before 'Part-Time Percentage'
 	#And I should see group 'Part-Time Percentage' before 'Note'
 	#And I should see group 'Note' before 'Shift bag'
-	And I should see group 'Shift bag' before 'Skill'
+	And I should see group 'Shift Bag' before 'Skill'
 	And I should see group 'Skill' before 'A group page'
 	And I should see group 'A group page' before 'Another group page'
 
