@@ -49,6 +49,11 @@ define([
 
             this.AddingFullDayAbsence = ko.observable(false);
 
+            this.DisplayDescriptions = ko.observable(false);
+            this.ToggleDisplayDescriptions = function () {
+                self.DisplayDescriptions(!self.DisplayDescriptions());
+            };
+
             this.SetData = function(data) {
                 data.Date = self.Date();
                 data.PersonId = self.Id();

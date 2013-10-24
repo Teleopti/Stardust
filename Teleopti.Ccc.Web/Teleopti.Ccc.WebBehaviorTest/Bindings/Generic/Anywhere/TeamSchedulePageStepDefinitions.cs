@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			}
 			if (layer.Description != null)
 			{
-				Browser.Interactions.Click(".toggle-descriptions");
+				Browser.Interactions.Click(".toggle-descriptions:enabled");
 				Browser.Interactions.AssertFirstContainsUsingJQuery(selector, layer.Description);
 			}
 			else

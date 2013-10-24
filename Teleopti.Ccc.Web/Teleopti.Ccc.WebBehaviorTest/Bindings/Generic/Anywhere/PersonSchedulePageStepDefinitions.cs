@@ -43,7 +43,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			                             ColorNameToCss(shiftLayer.Color));
 
 			if (shiftLayer.Description != null)
+			{
+				Browser.Interactions.Click(".toggle-descriptions:enabled");
 				Browser.Interactions.AssertFirstContains(selector, shiftLayer.Description);
+			}
 			else
 				Browser.Interactions.AssertExists(selector);
 		}

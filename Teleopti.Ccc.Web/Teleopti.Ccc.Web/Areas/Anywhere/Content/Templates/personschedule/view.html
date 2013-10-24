@@ -8,7 +8,13 @@
 					\ 
 					<span data-bind="text: Team"></span>
 				</small>
+				
+				<div class="pull-right">
+					<button class="btn toggle-descriptions" data-toggle="button" disabled data-bind="enable: !Loading(), click: ToggleDisplayDescriptions"><i class="icon-question-sign"></i></button>
+				</div>
+
 			</h1>
+			
 		</div>
 	</div>
 
@@ -64,7 +70,9 @@
 										}
 										">
 											<!-- ko if: IsFullDayAbsence -->
-											<span class="label" data-bind="text: Description"></span>
+												<!-- ko if: $root.DisplayDescriptions -->
+													<span class="label layer-description" data-bind="text: Description"></span>
+												<!-- /ko -->
 											<!-- /ko -->
 										</div>
 										<!-- /ko -->

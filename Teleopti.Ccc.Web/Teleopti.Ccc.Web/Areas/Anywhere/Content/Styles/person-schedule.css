@@ -38,6 +38,7 @@
 
 .person-schedule .layer {
 	height: 40px;
+	text-align: center;
 }
 
 .person-schedule .layer:first-of-type
@@ -58,6 +59,11 @@
 	-webkit-border-radius: 4px 4px 4px 4px;
 	   -moz-border-radius: 4px 4px 4px 4px;
 			border-radius: 4px 4px 4px 4px;
+}
+.person-schedule .layer .layer-description {
+	background-color: white;
+	color: #606060;
+	text-shadow: none;
 }
 
 .person-schedule .dayoff 
