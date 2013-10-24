@@ -255,6 +255,8 @@ namespace Teleopti.Ccc.Win.Meetings
 					personViewDataList
 					);
 
+			_gridHelper.SetSourceList(personViewDataList);
+
             // Overrides grid styles.
             gridControlPeople.ActivateCurrentCellBehavior = GridCellActivateAction.None;
             gridControlPeople.ListBoxSelectionMode = SelectionMode.MultiExtended;
@@ -371,6 +373,8 @@ namespace Teleopti.Ccc.Win.Meetings
 
         private void gridControlPeople_CellDoubleClick(object sender, GridCellClickEventArgs e)
         {
+	        if (gridControlPeople.CurrentCell.RowIndex < 1) return;
+
             if (_isRequired)
             {
                 _presenter.AddRequiredParticipants(_gridHelper.FindSelectedItems());
