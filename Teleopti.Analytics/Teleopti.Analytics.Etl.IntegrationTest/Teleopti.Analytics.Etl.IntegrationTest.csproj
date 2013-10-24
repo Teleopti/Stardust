@@ -36,6 +36,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Teleopti.Support.CodeTest\bin\Debug\Rhino.Mocks.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -48,7 +52,7 @@
   <ItemGroup>
     <Compile Include="Bug25131.cs" />
     <Compile Include="Data.cs" />
-    <Compile Include="DataFactoryState.cs" />
+    <Compile Include="TestState.cs" />
     <Compile Include="SanityTest.cs" />
     <Compile Include="SetupFixtureForAssembly.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,6 +77,10 @@
     <ProjectReference Include="..\Teleopti.Analytics.Etl.Interfaces\Teleopti.Analytics.Etl.Interfaces.csproj">
       <Project>{172807BD-AC1D-4E6D-9013-2D30DCF5B961}</Project>
       <Name>Teleopti.Analytics.Etl.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Analytics.Etl.TransformerInfrastructure\Teleopti.Analytics.Etl.TransformerInfrastructure.csproj">
+      <Project>{7193C0D2-2B91-4E92-9C47-620095255EDC}</Project>
+      <Name>Teleopti.Analytics.Etl.TransformerInfrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Analytics.Etl.Transformer\Teleopti.Analytics.Etl.Transformer.csproj">
       <Project>{B9465B16-1563-4F16-BCD6-353551B0AA20}</Project>

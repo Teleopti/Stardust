@@ -1,34 +1,22 @@
 ﻿using System;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
+	public class abra
+	{
+	}
+
 	[SetUpFixture]
 	public class SetupFixtureForAssembly
 	{
-		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-		private static DatabaseHelper.Backup _Ccc7DataBackup;
-
-		private void UnitOfWorkAction(Action<IUnitOfWork> action)
-		{
-			using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
-			{
-				action(uow);
-				uow.PersistAll();
-			}
-		}
-
 		[SetUp]
 		public void Setup()
 		{
@@ -36,25 +24,53 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			var personThatCreatesTestData = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatCreatesTestData", "password");
 
-			var businessUnitFromFakeState = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
-			businessUnitFromFakeState.Name = "BusinessUnit";
-            
-			StateHolderProxyHelper.SetupFakeState(dataSource, personThatCreatesTestData, businessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
+			TestState.BusinessUnit = BusinessUnitFactory.CreateBusinessUnitWithSitesAndTeams();
+			TestState.BusinessUnit.Name = "BusinessUnit";
 
-			_unitOfWorkFactory = UnitOfWorkFactory.CurrentUnitOfWorkFactory();
+			StateHolderProxyHelper.SetupFakeState(dataSource, personThatCreatesTestData, TestState.BusinessUnit, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
 
-			DataFactoryState.TestDataFactory = new TestDataFactory(UnitOfWorkAction);
-		    
-			Data.Apply(new PersonThatCreatesTestData(personThatCreatesTestData));
-			Data.Apply(new LicenseFromFile());
-            Data.Apply(new BusinessUnitFromFakeState(businessUnitFromFakeState));
-            
-			_Ccc7DataBackup = DataSourceHelper.BackupCcc7DataByFileCopy("Teleopti.Analytics.Etl.IntegrationTest");
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			{
+				var testDataFactory = new TestDataFactory(action =>
+					{
+						action.Invoke(uow);
+						uow.PersistAll();
+					});
+				testDataFactory.Apply(new PersonThatCreatesTestData(personThatCreatesTestData));
+				testDataFactory.Apply(new LicenseFromFile());
+				testDataFactory.Apply(new BusinessUnitFromFakeState(TestState.BusinessUnit));
+			}
+
+			TestState.Ccc7DataBackup = DataSourceHelper.BackupCcc7DataByFileCopy("Teleopti.Analytics.Etl.IntegrationTest");
 		}
 
-		public static void SetupDatabase()
+		private static void DisposeUnitOfWork()
 		{
-			DataSourceHelper.RestoreCcc7DataByFileCopy(_Ccc7DataBackup);
+			TestState.UnitOfWork.Dispose();
+			TestState.UnitOfWork = null;
+		}
+
+		private static void OpenUnitOfWork()
+		{
+			TestState.UnitOfWork = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
+		}
+
+		private static void UnitOfWorkAction(Action<IUnitOfWork> action)
+		{
+			action(TestState.UnitOfWork);
+			TestState.UnitOfWork.PersistAll();
+		}
+
+		public static void BeginTest()
+		{
+			TestState.TestDataFactory = new TestDataFactory(UnitOfWorkAction);
+			DataSourceHelper.RestoreCcc7DataByFileCopy(TestState.Ccc7DataBackup);
+			OpenUnitOfWork();
+		}
+
+		public static void EndTest()
+		{
+			DisposeUnitOfWork();
 		}
 	}
 }

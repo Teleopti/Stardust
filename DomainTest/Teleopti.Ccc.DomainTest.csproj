@@ -236,6 +236,7 @@
     <Compile Include="GroupPageCreator\SkillGroupPageTest.cs" />
     <Compile Include="ApplicationLayer\AddFullDayAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\DenormalizeScheduleProjectionTest.cs" />
+    <Compile Include="Helper\StaffingCalculatorServiceModelTest.cs" />
     <Compile Include="Helper\GroupPageChangedMessageTest.cs" />
     <Compile Include="Helper\InitialLoadScheduleProjectionTest.cs" />
     <Compile Include="Helper\LogPointOutputTest.cs" />
@@ -396,6 +397,7 @@
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculatorTest.cs" />
     <Compile Include="Scheduling\LoadSchedulesForRequestWithoutResourceCalculationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatCheckerTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamBlockRoleModelSelectorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreatorTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\AdvanceDayOffSchedulingServiceTest.cs" />
@@ -1173,6 +1175,7 @@
     <None Include="..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
+    <None Include="Helper\StaffingCalculatorServiceModel.xlsm" />
     <None Include="Optimization\RelativeBoostedDailyDifferencesAndPeriodValue.xlsm" />
     <None Include="Optimization\ScheduleDayEquatorTest.doc" />
     <None Include="packages.config" />

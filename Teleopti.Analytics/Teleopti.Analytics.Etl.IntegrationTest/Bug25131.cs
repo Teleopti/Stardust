@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Generic;
 using Teleopti.Ccc.TestCommon.TestData.Setups;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using RequestType = Teleopti.Ccc.TestCommon.TestData.Analytics.RequestType;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
@@ -21,47 +20,62 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[SetUp]
 		public void Setup()
 		{
-			SetupFixtureForAssembly.SetupDatabase();
+			SetupFixtureForAssembly.BeginTest();
 		}
 
-		[Test]
+		[TearDown]
+		public void TearDown()
+		{
+			SetupFixtureForAssembly.EndTest();
+		}
+
+        [Test, ExpectedException(typeof(System.Data.SqlClient.SqlException))]
 		public void ShouldWork()
 		{
-			//Arrange
-			Data.Person("Ashley Andeen").Apply(new StockholmTimeZone());
-			//Data.Person("Ashley Andeen").Apply(new +
-			//    {
-			//        StartDate = DateTime.Parse("2013-10-21")
-			//    });
-			//Data.Person("Ashley Andeen").Apply(new PersonPeriodConfigurable
-			//    {
-			//        StartDate = DateTime.Parse("2013-10-22")
-			//    });
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			var dates = new CurrentWeekDates();
+			var datasource = new  ExistingDatasources(new UtcAndCetTimeZones());
+			var businessUnit = new BusinessUnit(TestState.BusinessUnit, datasource);
+			var person = TestState.TestDataFactory.Person("Ashley Andeen").Person;
 
-	
-			Data.Apply(new AbsenceConfigurable{Color = "Red", Name = "Absence"});
-			Data.Person("Ashley Andeen").Apply(new AbsenceRequestConfigurable
-				{
-					Absence = "Absence",
-					StartTime = DateTime.Parse("2013-10-22 00:00"),
-					EndTime = DateTime.Parse("2013-10-23 00:00")
-				});
-			// sätt upp analytics data här??
+			analyticsDataFactory.Setup(new EternityAndNotDefinedDate());			
+			analyticsDataFactory.Setup(dates);
+			analyticsDataFactory.Setup(businessUnit);
+			analyticsDataFactory.Setup(new Person(person, datasource, 0, new DateTime(2010, 1, 1),
+									   new DateTime(2059, 12, 31), 0, -2, 0, TestState.BusinessUnit.Id.GetValueOrDefault(),
+									   false));
+			analyticsDataFactory.Setup(new Person(person, datasource, 1, new DateTime(2011, 1, 1),
+									   new DateTime(2059, 12, 31), 0, -2, 0, TestState.BusinessUnit.Id.GetValueOrDefault(),
+									   true));
+			analyticsDataFactory.Setup(new StageRequest(Guid.NewGuid(),person.Id.GetValueOrDefault(),DateTime.Now,1,0, 
+											Guid.NewGuid(),TestState.BusinessUnit.Id.GetValueOrDefault(),datasource));
+			analyticsDataFactory.Persist();
 
+            var raptorRep = new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix,"");
+            raptorRep.FillIntradayFactRequestMart(TestState.BusinessUnit);
+			// sätt upp analytics data här
+            //Data.Person("Ashley Andeen").Apply(new StockholmTimeZone());
+            //Data.Apply(new AbsenceConfigurable { Color = "Red", Name = "Absence" });
+			
+
+			//Valid from date id måste vi veta här när vi insertar så dom måste insertas först
+			
+			
 			//Act
 			// kör etl körning här
-            JobParameters parameters = null; //= new JobParameters()
-		    var steps = new List<JobStepBase>
-		        {
-		            new IntradayStageRequestJobStep(parameters),
-		            new FactRequestJobStep(parameters, true)
-		        };
-		    //Assert
-		    // kolla att prylarna hamnade rätt i databasen här
+			JobParameters parameters = null; //= new JobParameters()
+			var steps = new List<JobStepBase>
+				{
+					new IntradayStageRequestJobStep(parameters),
+					new FactRequestJobStep(parameters, true)
+				};
+
+			//Assert
+			// kolla att prylarna hamnade rätt i databasen här
 
 
 		}
 
-	   
+
 	}
 }
