@@ -151,4 +151,4 @@ Scenario: Default to my team
 Scenario: Default to first option if I have no team
 	Given I have no team
 	When I view schedules for '2013-10-10'
-	Then the group picker should have 'A group page/A group' selected	
+	Then the group picker should have 'The site/Team green' selected	
