@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 forecastedDemands.AddRange(from item in interval.Value 
                                            select item.ForecastedDemand );
                 currentDemands.AddRange(from item in interval.Value
-                                        select item.ForecastedDemand);
+                                        select item.CurrentDemand);
                 if (forecastedDemands.Count == 0) continue;
                 var calculatedFDemand = _intervalDataCalculator.Calculate(forecastedDemands);
                 var calculatedCDemand = _intervalDataCalculator.Calculate(currentDemands);
