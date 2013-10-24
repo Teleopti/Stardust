@@ -20,6 +20,12 @@ Background:
 	| Access to Anywhere         | true            |
 	| View unpublished schedules | true            |
 	And there is a role with
+	| Field                      | Value            |
+	| Name                       | Anywhere No Data |
+	| No Data Access             | true             |
+	| Access to Anywhere         | true             |
+	| View unpublished schedules | true             |
+	And there is a role with
 	| Field              | Value                   |
 	| Name               | Cannot View Unpublished |
 	| Access to team     | Team green              |
@@ -56,11 +62,32 @@ Scenario: View default time line
 	| Field      | Value |
 	| Start time | 08:00 |
 	| End time   | 16:00 |
-	
-Scenario: View empty when no team available
+
+Scenario: View my own data
 	Given I have the role 'Anywhere My Own'
+	And I have a person period with
+	| Field      | Value      |
+	| Team       | Team green |
+	| Start date | 2012-12-01 |
+	And I have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-08-10 08:00 |
+	| End time       | 2013-08-10 17:00 |
+	And 'Pierre Baldi' has a person period with
+	| Field      | Value      |
+	| Team       | Team green |
+	| Start date | 2012-12-01 |
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-08-10 08:00 |
+	| End time       | 2013-08-10 17:00 |
 	When I view schedules for '2013-08-10'
-	Then I should see no team available
+	Then I should see myself
+	Then I should not see person 'Pierre Baldi'
 
 Scenario: View team schedule
 	Given I have the role 'Anywhere Team Green'

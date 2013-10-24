@@ -33,13 +33,17 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var people = _schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(date), groupId,
 			                                                                 DefinedRaptorApplicationFunctionPaths.
 																				 SchedulesAnywhere).ToArray();
+			var emptyReadModel = new PersonScheduleDayReadModel[] {};
 			var data = new TeamScheduleData
 				{
 					Date = date,
 					UserTimeZone = _user.CurrentUser().PermissionInformation.DefaultTimeZone(),
-					Schedules = _personScheduleDayReadModelRepository.ForPeople(dateTimePeriod, people.Select(x=>x.Id.GetValueOrDefault()).ToArray()) ?? new PersonScheduleDayReadModel[] { },
-					CanSeeUnpublishedSchedules = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules),
-					CanSeeConfidentialAbsencesFor = _schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(date), groupId, DefinedRaptorApplicationFunctionPaths.ViewConfidential),
+					Schedules = people.Length == 0 ? emptyReadModel : _personScheduleDayReadModelRepository.ForPeople(dateTimePeriod, people.Select(x => x.Id.GetValueOrDefault()).ToArray()) ?? emptyReadModel,
+					CanSeeUnpublishedSchedules =
+						_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules),
+					CanSeeConfidentialAbsencesFor =
+						_schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(date), groupId,
+						                                                    DefinedRaptorApplicationFunctionPaths.ViewConfidential),
 					CanSeePersons = people
 				};
 			return _mapper.Map(data);
