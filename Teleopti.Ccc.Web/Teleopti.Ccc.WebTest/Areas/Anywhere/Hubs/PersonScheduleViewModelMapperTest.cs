@@ -165,6 +165,33 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
+		public void ShouldMapLayerDescription()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			var data = new PersonScheduleData
+				{
+					Model = new Model
+						{
+							Shift = new Shift
+								{
+									Projection = new[]
+										{
+											new SimpleLayer
+												{
+													Title = "Vacation"
+												}
+										}
+								}
+						}
+				};
+
+			var result = target.Map(data);
+
+			result.Layers.Single().Description.Should().Be("Vacation");
+		}
+
+		[Test]
 		public void ShouldMapLayerColorForConfidentialAbsence()
 		{
 			var target = new PersonScheduleViewModelMapper();
@@ -215,6 +242,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var result = target.Map(new PersonScheduleData { Model = new Model{Shift = shift} });
 
 			result.Layers.Single().Minutes.Should().Be(60);
+		}
+
+		[Test]
+		public void ShouldMapIsFullDayAbsence()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var data = new PersonScheduleData
+				{
+					Model = new Model
+						{
+							Shift = new Shift { IsFullDayAbsence = true }
+						}
+				};
+
+			var result = target.Map(data);
+
+			result.IsFullDayAbsence.Should().Be.True();
 		}
 
 		[Test]
@@ -375,5 +419,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			result.PersonAbsences.Single().Id.Should().Be(personAbsence.Id.Value.ToString());
 		}
+
 	}
 }

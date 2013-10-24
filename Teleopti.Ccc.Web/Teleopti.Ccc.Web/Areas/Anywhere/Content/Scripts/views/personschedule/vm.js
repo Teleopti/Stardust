@@ -57,10 +57,11 @@ define([
                 self.Site(data.Site);
                 self.Team(data.Team);
                 self.IsDayOff(data.IsDayOff);
-	            
+
                 self.Layers([]);
                 var layers = ko.utils.arrayMap(data.Layers, function(l) {
                     l.Date = self.Date();
+                    l.IsFullDayAbsence = data.IsFullDayAbsence;
                     return new layerViewModel(self.TimeLine, l);
                 });
                 self.Layers.push.apply(self.Layers, layers);
