@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 										{
 											new SimpleLayer
 												{
-													Title = "Vacation"
+													Description = "Vacation"
 												}
 										}
 								}

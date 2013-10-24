@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 							                                                           ? null
 							                                                           : TimeZoneInfo.ConvertTimeFromUtc(layer.Start, s.Person.PermissionInformation.DefaultTimeZone()).ToFixedDateTimeFormat(),
 						                                                   Minutes = layer.Minutes,
-						                                                   Description = layer.Title
+						                                                   Description = layer.Description
 					                                                   }))
 				.ForMember(x => x.PersonAbsences, o => o.ResolveUsing(
 					s => (from personAbsence in s.PersonAbsences
