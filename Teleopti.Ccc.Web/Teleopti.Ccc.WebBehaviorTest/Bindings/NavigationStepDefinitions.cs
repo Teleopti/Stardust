@@ -255,6 +255,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnywhere();
 		}
 
+		[When(@"I navigate to shift trade for '(.*)'")]
+		public void WhenINavigateToShiftTradeFor(DateTime date)
+		{
+			Navigation.GotoRequestsShiftTrade(date);
+		}
+
+
 
 	}
 }

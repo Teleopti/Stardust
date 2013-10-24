@@ -625,10 +625,9 @@ Scenario: Navigate to shifttrade with url
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And the current time is '2030-01-01'
-	When I navigate to the team schedule
-	And I initialize a shift trade
-	Then I should see the shift trade url for '2030-01-02'
-	And I should see the shift trade page for '2030-01-02'
+	When I am viewing preferences
+	And I navigate to shift trade for '2030-01-05'
+	Then I should see the shift trade page for '2030-01-05'
 
 
 
