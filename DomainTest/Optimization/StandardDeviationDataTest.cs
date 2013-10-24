@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	[TestFixture]
 	public class StandardDeviationDataTest
 	{
-		private IStandardDeviationData _target;
+        private IStandardDeviationData _target;
 
 		[SetUp]
 		public void Setup()
 		{
-			_target = new StandardDeviationData();
+            _target = new StandardDeviationData();
 		}
 		
 		[Test]
