@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 		    _messages.Remove(eventMessage);
 	    }
 
-	    public void Remove(Guid id)
+	    public void Remove(PersistConflict persistConflict)
 	    {
 		    throw new NotImplementedException();
 	    }

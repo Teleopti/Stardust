@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.NewStuff;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.TestCommon;
@@ -20,7 +19,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
     [TestFixture]
-    public class PersistConflictTest
+	public class PersistConflictTest : IMessageQueueRemoval
     {
         private IPersistConflictView view;
         private MockRepository mocks;
@@ -28,23 +27,20 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private PersistConflictModel model;
         private IList<PersistConflict> conflicts;
         private IScheduleDictionary schedDic;
-        private IList<IEventMessage> eventMessages;
-        private IEventMessage eventMessage;
+        private IList<Guid> eventMessageIds;
         private IList<IPersistableScheduleData> modifiedData;
 
         [SetUp]
         public void Setup()
         {
             modifiedData = new List<IPersistableScheduleData>();
-            eventMessages = new List<IEventMessage>();
+						eventMessageIds = new List<Guid>();
             mocks=new MockRepository();
-            eventMessage = mocks.StrictMock<IEventMessage>();
             schedDic = mocks.DynamicMock<IScheduleDictionary>();
             view = mocks.StrictMock<IPersistConflictView>();
             conflicts = new List<PersistConflict>();
             model = new PersistConflictModel(schedDic, conflicts, modifiedData);
-            target = new PersistConflictPresenter(view, model, MockRepository.GenerateMock<IMessageQueueRemoval>());
-            eventMessages.Add(eventMessage);
+            target = new PersistConflictPresenter(view, model, this);
         }
 
         [Test]
@@ -202,8 +198,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyUndoClientChangesWhenModified()
         {
+	        var id = Guid.NewGuid();
+					eventMessageIds.Add(id);
             var pDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff();
-            var dbData = pDayOff.EntityClone();
+					pDayOff.SetId(id);
+					var dbData = pDayOff.EntityClone();
             conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(pDayOff, pDayOff.EntityClone()), dbData));
             ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, pDayOff);
 
@@ -218,7 +217,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             {
                 target.OnDiscardMyChanges();
             }
-            Assert.AreEqual(0, eventMessages.Count);
+            Assert.AreEqual(0, eventMessageIds.Count);
             Assert.AreEqual(2, modifiedData.Count);
             CollectionAssert.Contains(modifiedData, pDayOff);
             CollectionAssert.Contains(modifiedData, dbData);
@@ -227,8 +226,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyUndoClientChangesWhenDeletedInDatabase()
         {
+					var id = Guid.NewGuid();
+					eventMessageIds.Add(id);
 					var pDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff();
-            pDayOff.SetId(Guid.NewGuid());
+            pDayOff.SetId(id);
             conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(pDayOff, pDayOff.EntityClone()), null));
             ScheduleRange range = mocks.PartialMock<ScheduleRange>(schedDic, pDayOff);
             
@@ -243,7 +244,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             {
                 target.OnDiscardMyChanges();
             }
-            Assert.AreEqual(0, eventMessages.Count);
+            Assert.AreEqual(0, eventMessageIds.Count);
             Assert.AreEqual(1, modifiedData.Count);
             CollectionAssert.Contains(modifiedData, pDayOff);
         }
@@ -251,7 +252,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyOverwriteServerChangesWhenModified()
         {
+					var id = Guid.NewGuid();
+					eventMessageIds.Add(id);
 					var dataOrg = PersonAssignmentFactory.CreateAssignmentWithDayOff();
+					dataOrg.SetId(id);
             var dataCurrent = dataOrg.EntityClone();
             var dataDb = dataCurrent.EntityClone();
 
@@ -269,14 +273,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             {
                 target.OnOverwriteServerChanges();
             }
-            Assert.AreEqual(0, eventMessages.Count);
+            Assert.AreEqual(0, eventMessageIds.Count);
             Assert.AreEqual(0, modifiedData.Count);
         }
 
         [Test]
         public void VerifyOverwriteServerChangesWhenDeletedOnClient()
         {
+					var id = Guid.NewGuid();
+					eventMessageIds.Add(id);
 					var dataOrg = PersonAssignmentFactory.CreateAssignmentWithDayOff();
+					dataOrg.SetId(id);
             var dataDb = dataOrg.EntityClone();
 
             conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(dataOrg, null), dataDb));
@@ -293,16 +300,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             {
                 target.OnOverwriteServerChanges();
             }
-            Assert.AreEqual(0, eventMessages.Count);
-            Assert.AreEqual(0, eventMessages.Count);
+            Assert.AreEqual(0, eventMessageIds.Count);
             Assert.AreEqual(0, modifiedData.Count);
         }
 
         [Test]
         public void VerifyOverwriteServerChangesWhenDeletedOnDatabase()
         {
+					var id = Guid.NewGuid();
+					eventMessageIds.Add(id);
 					var dataOrg = PersonAssignmentFactory.CreateAssignmentWithDayOff();
-            dataOrg.SetId(Guid.NewGuid());
+            dataOrg.SetId(id);
             var dataCurrent = dataOrg.EntityClone();
 
             conflicts.Add(new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(dataOrg, dataCurrent), null));
@@ -319,8 +327,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             {
                 target.OnOverwriteServerChanges();
             }
-            Assert.AreEqual(0, eventMessages.Count);
-            Assert.AreEqual(0, eventMessages.Count);
+            Assert.AreEqual(0, eventMessageIds.Count);
             Assert.AreEqual(0, modifiedData.Count);
         }
 
@@ -446,5 +453,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             public IPerson UpdatedBy { get; private set; }
             public DateTime? UpdatedOn { get; private set; }
         }
+
+	    public void Remove(IEventMessage eventMessage)
+	    {
+		    
+	    }
+
+	    public void Remove(PersistConflict persistConflict)
+	    {
+		    
+	    }
     }
 }

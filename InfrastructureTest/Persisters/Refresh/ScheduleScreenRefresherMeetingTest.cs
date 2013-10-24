@@ -76,14 +76,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
             CollectionAssert.DoesNotContain(_messages, _meetingMessage);
         }
 
+
+			//move this logic out!
 	    public void Remove(IEventMessage eventMessage)
 	    {
 		    _messages.Remove(eventMessage);
 	    }
 
-	    public void Remove(Guid id)
+	    public void Remove(PersistConflict persistConflict)
 	    {
-		    throw new NotImplementedException();
+		    var involvedId = persistConflict.InvolvedId();
+		    for (var i = _messages.Count - 1; i >= 0; i--)
+		    {
+			    var eventMessage = _messages[i];
+					if (eventMessage.DomainObjectId == involvedId)
+					{
+						_messages.Remove(eventMessage);
+						return;
+					}
+		    }
 	    }
     }
 }

@@ -320,8 +320,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			NotifyMessageQueueSizeChange();
 		}
 
-		public void Remove(Guid id)
+		public void Remove(PersistConflict persistConflict)
 		{
+			var id = persistConflict.InvolvedId();
 			for (var i = _messageQueue.Count - 1; i >= 0; i--)
 			{
 				var theEvent = _messageQueue[i];
