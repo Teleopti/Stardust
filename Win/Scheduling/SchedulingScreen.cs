@@ -532,7 +532,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 															IClearReferredShiftTradeRequests clearReferredShiftTradeRequests)
 		{
 			var updater = new ContainerBuilder();
-			updater.RegisterModule(new SchedulePersistModule(messageBrokerIdentifier, reassociateDataForSchedules, true));
+			updater.RegisterModule(SchedulePersistModule.ForScheduler(messageBrokerIdentifier, reassociateDataForSchedules));
 			updater.RegisterType<SchedulingScreenPersister>().As<ISchedulingScreenPersister>().InstancePerLifetimeScope();
 			updater.RegisterType<PersonAccountPersister>().As<IPersonAccountPersister>().InstancePerLifetimeScope();
 			updater.RegisterType<PersonAccountConflictCollector>().As<IPersonAccountConflictCollector>().InstancePerLifetimeScope();

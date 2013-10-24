@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Autofac;
+﻿using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Persisters;
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldGetScheduleRangePersister()
 		{
-			containerBuilder.RegisterModule(new SchedulePersistModule(null, null, false));
+			containerBuilder.RegisterModule(SchedulePersistModule.ForOtherModules());
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IScheduleRangePersister>()
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldGetScheduleDictionaryPersister()
 		{
-			containerBuilder.RegisterModule(new SchedulePersistModule(null, null, false));
+			containerBuilder.RegisterModule(SchedulePersistModule.ForOtherModules());
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IScheduleDictionaryPersister>()
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldGetConflictChecker()
 		{
-			containerBuilder.RegisterModule(new SchedulePersistModule(null, null, true));
+			containerBuilder.RegisterModule(SchedulePersistModule.ForScheduler(null, null));
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IScheduleRangeConflictCollector>()
@@ -61,7 +60,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldGetNonConflictChecker()
 		{
-			containerBuilder.RegisterModule(new SchedulePersistModule(null, null, false));
+			containerBuilder.RegisterModule(SchedulePersistModule.ForOtherModules());
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IScheduleRangeConflictCollector>()
@@ -69,24 +68,22 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			}
 		}
 
-		//rk: don't like
 		[Test]
 		public void ShouldGetExplicitSetOwnMessage()
 		{
-			var ownMessage = new ownMessageImpl();
-			containerBuilder.RegisterModule(new SchedulePersistModule(null, ownMessage, false));
+			var reassociater = new reassociater();
+			containerBuilder.RegisterModule(SchedulePersistModule.ForScheduler(null, reassociater));
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IReassociateDataForSchedules>()
-								 .Should().Be.OfType<ownMessageImpl>();
+								 .Should().Be.OfType<reassociater>();
 			}
 		}
 
-		//rk: don't like
 		[Test]
 		public void ShouldGetExplicitSeMessageBrokerIdentifier()
 		{
-			containerBuilder.RegisterModule(new SchedulePersistModule(new FakeMessageBrokerIdentifier(), null, false));
+			containerBuilder.RegisterModule(SchedulePersistModule.ForScheduler(new FakeMessageBrokerIdentifier(), null));
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IMessageBrokerIdentifier>()
@@ -94,7 +91,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			}
 		}
 
-		private class ownMessageImpl : IReassociateDataForSchedules
+		private class reassociater : IReassociateDataForSchedules
 		{
 			public void ReassociateDataForAllPeople()
 			{

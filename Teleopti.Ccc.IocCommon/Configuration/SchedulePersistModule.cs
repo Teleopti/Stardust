@@ -16,11 +16,21 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		private readonly IReassociateDataForSchedules _reassociateDataForSchedules;
 
 		//todo: försök att bli av med dessa beroende - bara bool:en ska vara kvar
-		public SchedulePersistModule(IMessageBrokerIdentifier messageBrokerIdentifier, IReassociateDataForSchedules reassociateDataForSchedules, bool checkConflicts)
+		private SchedulePersistModule(IMessageBrokerIdentifier messageBrokerIdentifier, IReassociateDataForSchedules reassociateDataForSchedules, bool checkConflicts)
 		{
 			_checkConflicts = checkConflicts;
 			_messageBrokerIdentifier = messageBrokerIdentifier ?? new EmptyMessageBrokerIdentifier();
 			_reassociateDataForSchedules = reassociateDataForSchedules ?? new nullReassociateDataForSchedules();
+		}
+
+		public static SchedulePersistModule ForScheduler(IMessageBrokerIdentifier messageBrokerIdentifier, IReassociateDataForSchedules reassociateDataForSchedules)
+		{
+			return new SchedulePersistModule(messageBrokerIdentifier, reassociateDataForSchedules, true);
+		}
+
+		public static SchedulePersistModule ForOtherModules()
+		{
+			return new SchedulePersistModule(null, null, false);
 		}
 
 		protected override void Load(ContainerBuilder builder)
