@@ -154,14 +154,17 @@
 									<!-- /ko -->
 
 									<!-- ko if: HasAbsence -->
-									<div class="absence" data-bind="text: Absence"></div>
+                                    <div class="absence">
+										<span class="displayblock fullwidth" data-bind="text: Absence"></span>
+									    <span class="absence-contract-time displayblock fullwidth" data-bind="text: AbsenceContractTime"></span>
+									</div>
 									<!-- /ko -->
 
 									<!-- ko if: HasPersonAssignmentShiftCategory -->
 									<div class="scheduled">
 										<span class="displayblock fullwidth" data-bind="text: PersonAssignmentShiftCategory"></span>
 										<strong class="displayblock fullwidth" data-bind="text: PersonAssignmentTimeSpan"></strong>
-										<span class="displayblock fullwidth" data-bind="text: PersonAssignmentContractTime"></span>
+										<span class="schedule-contract-time displayblock fullwidth" data-bind="text: PersonAssignmentContractTime"></span>
 									</div>
 									<!-- /ko -->
 								@if (day.InPeriod)

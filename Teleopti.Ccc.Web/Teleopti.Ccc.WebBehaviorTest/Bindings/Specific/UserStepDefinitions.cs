@@ -1,14 +1,20 @@
 using System;
+using System.Drawing;
+using System.Globalization;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 {
@@ -405,6 +411,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new AbsenceToday());
 		}
 
+		[Given(@"I have a full-day contract time absence today")]
+		public void GivenIHaveAFull_DayContractTimeAbsenceToday()
+		{
+			UserFactory.User().Setup(new AbsenceInContractTimeToday());
+		}
+
 		[Given(@"I have a full-day absence today with")]
 		[Given(@"I have a full-day absence with")]
 		public void GivenIHaveAFull_DayAbsenceTodayWith(Table table)
@@ -621,7 +633,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			var names = name.Split(' ');
 			return names.Length > 1 ? PersonFactory.CreatePerson(names[0], names[1]) : PersonFactory.CreatePerson(name);
 		}
-
 	}
 }
 
