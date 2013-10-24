@@ -122,8 +122,15 @@
 	font-size: 12px;
 	font-weight: 900;
 	margin-left: 20px;
+	color: black;
+}
+.team-schedule .shift .layer-description5-light {
+	font-size: 12px;
+	font-weight: 900;
+	margin-left: 20px;
 	color: white;
 }
+
 .team-schedule .shift .layer-description6 {
 }
 .team-schedule .dayoff {

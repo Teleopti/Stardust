@@ -26,13 +26,17 @@
 	
 	<div class="row">
 		<div class="span12 nowrap">
-			<select id="team-selector" data-bind="enable: !Loading(), options: Teams, optionsText: 'SiteAndTeam', optionsValue: 'Id', value: SelectedTeam"></select>
+		    <select id="team-selector" data-bind="enable: !Loading(), options: Teams, optionsText: 'SiteAndTeam', optionsValue: 'Id', value: SelectedTeam"></select>
 			<div class="input-append date input-prepend pull-right" id="date-picker" data-bind="datepicker: SelectedDate, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
 				<button class="btn" data-bind="attr: {title: Resources.Previous}, click: PreviousDay"><i class="icon-chevron-left"></i></button>
 				<input class="add-on date-input" size="16" type="text" readonly="readonly"/>
 				<span class="add-on"><i class="icon-calendar"></i></span>
 				<button class="btn" data-bind="attr: {title: Resources.Next}, click: NextDay"><i class="icon-chevron-right"></i></button>
 			</div>
+		    <div class="pull-right">
+		        <button type="button" class="btn" data-toggle="button" data-bind="click: ToggleDisplayDescriptions"><i class="icon-question-sign"></i></button>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+		    </div>
 		</div>
 	</div>
 
@@ -76,25 +80,9 @@
 									
 									<!-- ko foreach: DayOffs -->
 									<!-- ko if: OverlapsTimeLine -->
-									<div 
-										class="dayoff absolute" 
+								    <div 
+								        class="dayoff absolute" 
 								        data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }">
-								        <!-- ko if: false -->
-								            <span class="dayoff-description1 badge floatleft" data-bind="text: DayOffName"></span>
-								            <span class="dayoff-description1 badge floatright" data-bind="text: DayOffName"></span>
-	                                    <!-- /ko -->
-								        <!-- ko if: false -->
-								            <span class="dayoff-description2 badge" data-bind="text: DayOffName"></span>
-	                                    <!-- /ko -->
-									    <!-- ko if: true -->
-									        <!-- ko if: $parent.IsShift -->
-								            <span class="dayoff-description3 label floatleft" data-bind="text: DayOffName"></span>
-								            <span class="dayoff-description3 label floatright" data-bind="text: DayOffName"></span>
-									        <!-- /ko -->
-									        <!-- ko if: !$parent.IsShift() -->
-								            <span class="dayoff-description3 label" data-bind="text: DayOffName"></span>
-									        <!-- /ko -->
-	                                    <!-- /ko -->
 								    </div>
 									<!-- /ko -->
 									<!-- /ko -->
@@ -123,7 +111,8 @@
 		'data-length-minutes': LengthMinutes,
 	}
 	">
-        <!-- ko if: IsFullDayAbsence -->
+    <!-- ko if: IsFullDayAbsence -->
+    <!-- ko if: $root.DisplayDescriptions -->
         <!-- ko if: false -->
         <span class="layer-description1 floatleft" data-bind="text: FullDayAbsenceName"></span>
         <!-- /ko -->
@@ -136,12 +125,13 @@
         <!-- ko if: false -->
         <span class="label layer-description4" data-bind="text: FullDayAbsenceName"></span>
 	    <!-- /ko -->
-        <!-- ko if: false -->
-        <span class="layer-description5" data-bind="text: FullDayAbsenceName"></span>
-	    <!-- /ko -->
         <!-- ko if: true -->
+        <span class="layer-description5" data-bind="text: FullDayAbsenceName, css: {'layer-description5-light': ColorIsDark()}"></span>
+	    <!-- /ko -->
+        <!-- ko if: false -->
         <span class="label layer-description6" data-bind="text: FullDayAbsenceName"></span>
 	    <!-- /ko -->
+	<!-- /ko -->
 	<!-- /ko -->
     </div>
 	<!-- /ko -->
