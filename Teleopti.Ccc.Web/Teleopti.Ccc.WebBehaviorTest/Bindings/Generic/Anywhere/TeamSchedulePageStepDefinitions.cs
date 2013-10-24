@@ -173,6 +173,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			}
 		}
 
+		[When(@"I select group '(.*)'")]
 		[When(@"I select team '(.*)'")]
 		public void WhenISelectTeam(string teamName)
 		{
