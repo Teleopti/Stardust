@@ -134,21 +134,6 @@ Scenario: Feedback for a day with a shift
 	When I view preferences
 	Then I should see the contract time of '8' hours
 
-Scenario: Feedback for a day with a non-contract time absence
-	Given I am an agent
-	And I have a scheduling period of 1 week
-	And I have a scheduled shift of 8 hours on weekday 1
-	And I have a scheduled shift of 8 hours on weekday 2
-	And I have a scheduled shift of 8 hours on weekday 3
-	And I have a scheduled shift of 8 hours on weekday 4
-	And I have a scheduled shift of 8 hours on weekday 5
-	And I have a scheduled day off on weekday 6
-	And I have a scheduled day off on weekday 7
-	And I have a full-day absence today
-	When I view preferences
-	Then I should not see any absence contract time
-	And I should see a message that my preferences can result in 32 hours
-
 Scenario: Feedback for a day with a contract time absence
 	Given I am an agent
 	And I have a scheduling period of 1 week
