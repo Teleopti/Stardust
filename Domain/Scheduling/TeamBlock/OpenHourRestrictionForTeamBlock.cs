@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -11,7 +7,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     public interface IOpenHourRestrictionForTeamBlock
     {
         IDictionary<IActivity, TimePeriod> GetOpenHoursPerActivity(ITeamBlockInfo teamBlock);
-        bool HasSameOpeningHours(ITeamBlockInfo teamBlock);
     }
 
     public class OpenHourRestrictionForTeamBlock : IOpenHourRestrictionForTeamBlock
@@ -49,35 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             }
             return openHoursPerActivity;
         }
-
-        public bool HasSameOpeningHours(ITeamBlockInfo teamBlockInfo)
-        {
-            var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
-            var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyList);
-            if (skillDays.Count > 0)
-            {
-                if (skillDays[0].SkillStaffPeriodCollection.Count > 0)
-                {
-                    var sampleHour =
-                    _skillIntervalDataOpenHour.GetOpenHours(
-                        _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(
-                            skillDays[0].SkillStaffPeriodCollection));
-                    foreach (var skillDay in skillDays)
-                    {
-                        if (skillDay.SkillStaffPeriodCollection.Count == 0) continue;
-                        var openHourForSkillDay =
-                            _skillIntervalDataOpenHour.GetOpenHours(
-                                _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(
-                                    skillDay.SkillStaffPeriodCollection));
-                        if (sampleHour != openHourForSkillDay)
-                            return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
+        
         private TimePeriod getNarrowTimePeriod(TimePeriod existingTimePeriod, TimePeriod newTimePeriod)
         {
             var startTime = existingTimePeriod.StartTime;
