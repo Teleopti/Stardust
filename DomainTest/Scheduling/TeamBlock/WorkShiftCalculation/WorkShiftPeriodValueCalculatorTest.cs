@@ -38,13 +38,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			Assert.AreEqual(12.5, result, 0.01);
 		}
 
-		[Test]
-		public void ShouldCalculateAsBeforeWhenUnderstaffedShouldBoostIntervalWithNearToZeroScheduled()
-		{
-			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 13.33, 13.33, 0, null, null);
-			double result = _target.PeriodValue(skillIntervalData, 15, false, false);
-			Assert.AreEqual(100028.87, result, 0.01);
-		}
+		//[Test]
+		//public void ShouldCalculateAsBeforeWhenUnderstaffedShouldBoostIntervalWithNearToZeroScheduled()
+		//{
+		//	ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 13.33, 13.33, 0, null, null);
+		//	double result = _target.PeriodValue(skillIntervalData, 15, false, false);
+		//	Assert.AreEqual(100028.87, result, 0.01);
+		//}
 
 		[Test]
 		public void ShouldCalculateAsBeforeWhenUnderstaffedShouldNotBoostIntervalWithNotThatNearToZeroScheduled()
