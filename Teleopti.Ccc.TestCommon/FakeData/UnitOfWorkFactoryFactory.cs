@@ -51,11 +51,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                 throw new NotImplementedException();
             }
 
-        	public IUnitOfWork CreateAndOpenUnitOfWork(params IEnumerable<IAggregateRoot>[] rootCollectionsCollection)
-        	{
-        		throw new NotImplementedException();
-        	}
-
         	public IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork()
             {
                 throw new NotImplementedException();

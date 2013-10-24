@@ -107,11 +107,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 				LazyLoadingManager.Initialize(changeInfo.UpdatedBy);
 		}
 
-	    public void ReassociateDataForAllPeople()
+	  public void ReassociateDataForAllPeople()
 		{
 			var uow = UnitOfWorkFactory.Current.CurrentUnitOfWork();
 			uow.Reassociate(_owner.SchedulerState.SchedulingResultState.PersonsInOrganization);
-			uow.Reassociate(DataToReassociate(null));
+			reassociateScheduleStuff(uow);
+		}
+
+		public void ReassociateDataFor(IPerson person)
+		{
+			var uow = UnitOfWorkFactory.Current.CurrentUnitOfWork();
+			uow.Reassociate(person);
+			reassociateScheduleStuff(uow);
+		}
+
+		private void reassociateScheduleStuff(IUnitOfWork unitOfWork)
+		{
+			unitOfWork.Reassociate(_owner.SchedulerState.RequestedScenario);
+			unitOfWork.Reassociate(_owner.MultiplicatorDefinitionSet);
+			unitOfWork.Reassociate(_owner.SchedulerState.CommonStateHolder.Absences);
+			unitOfWork.Reassociate(_owner.SchedulerState.CommonStateHolder.DayOffs);
+			unitOfWork.Reassociate(_owner.SchedulerState.CommonStateHolder.Activities);
+			unitOfWork.Reassociate(_owner.SchedulerState.CommonStateHolder.ShiftCategories);
 		}
 
 		public IEnumerable<IAggregateRoot>[] DataToReassociate(IPerson personToReassociate)

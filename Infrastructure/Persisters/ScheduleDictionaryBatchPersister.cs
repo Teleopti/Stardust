@@ -45,8 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 
 		private IUnitOfWork makeUnitOfWork(IUnitOfWorkFactory unitOfWorkFactory, IScheduleRange scheduleRange)
 		{
-			return _reassociateData != null ? unitOfWorkFactory.CreateAndOpenUnitOfWork(_reassociateData.DataToReassociate(scheduleRange.Person)) :
-																			unitOfWorkFactory.CreateAndOpenUnitOfWork();
+			return unitOfWorkFactory.CreateAndOpenUnitOfWork();
 		}
 	}
 }

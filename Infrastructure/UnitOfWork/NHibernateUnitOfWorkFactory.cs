@@ -132,13 +132,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return uow;
 		}
 
-		public IUnitOfWork CreateAndOpenUnitOfWork(params IEnumerable<IAggregateRoot>[] reassociate)
-		{
-			var uow = CreateAndOpenUnitOfWork();
-			uow.Reassociate(reassociate);
-			return uow;
-		}
-
 		private ISession createNhibSession(IInterceptor interceptor, Guid buId, TransactionIsolationLevel isolationLevel)
 		{
 			var nhibSession = _factory.OpenSession(interceptor);

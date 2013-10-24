@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				throw new System.NotImplementedException();
 			}
 
-			public IEnumerable<IAggregateRoot>[] DataToReassociate(IPerson personToReassociate)
+			public void ReassociateDataFor(IPerson person)
 			{
 				throw new System.NotImplementedException();
 			}

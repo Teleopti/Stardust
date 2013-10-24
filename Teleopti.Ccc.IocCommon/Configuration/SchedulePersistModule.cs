@@ -52,9 +52,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 			}
 
-			public IEnumerable<IAggregateRoot>[] DataToReassociate(IPerson personToReassociate)
+			public void ReassociateDataFor(IPerson person)
 			{
-				return new IEnumerable<IAggregateRoot>[0];
 			}
 		}
 	}

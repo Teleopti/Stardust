@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			uow.Reassociate(Scenario);
 		}
 
-		public IEnumerable<IAggregateRoot>[] DataToReassociate(IPerson personToReassociate)
+		public void ReassociateDataFor(IPerson person)
 		{
 			throw new System.NotImplementedException();
 		}

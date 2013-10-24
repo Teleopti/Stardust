@@ -77,27 +77,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 			uowFactory.AssertWasNotCalled(x => x.CreateAndOpenUnitOfWork());
 		}
 
-		[Test]
-		public void ShouldReassociate()
-		{
-			var currUowFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var uow = MockRepository.GenerateMock<IUnitOfWork>();
-			var scheduleDictionaryPersister = MockRepository.GenerateMock<IScheduleDictionarySaver>();
-			var reassociateData = MockRepository.GenerateMock<IReassociateDataForSchedules>();
-			var data = new[] { new[] { MockRepository.GenerateMock<IAggregateRoot>(), MockRepository.GenerateMock<IAggregateRoot>() } };
-			var target = new ScheduleDictionaryBatchPersister(currUowFactory, null, scheduleDictionaryPersister, null, null, reassociateData, null);
-
-			var scheduleDictionary = stubScheduleDictionary();
-
-			currUowFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
-			reassociateData.Stub(x => x.DataToReassociate(scheduleDictionary.Values.Single().Person)).Return(data);
-			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork(data)).Return(uow);
-
-			target.Persist(scheduleDictionary);
-
-			uowFactory.AssertWasCalled(x => x.CreateAndOpenUnitOfWork(data));
-		}
 
 		[Test]
 		public void ShouldCallbackOnModified() 
