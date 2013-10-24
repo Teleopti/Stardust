@@ -3,6 +3,5 @@
 	public interface IOwnMessageQueue
 	{
 		void ReassociateDataWithAllPeople();
-		void NotifyMessageQueueSizeChange();
 	}
 }
