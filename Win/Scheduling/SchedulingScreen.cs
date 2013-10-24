@@ -12,6 +12,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Autofac;
+using Autofac.Core;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
@@ -23,6 +24,7 @@ using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.Infrastructure.Persisters.Requests;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Persisters.WriteProtection;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.Win.Meetings;
 using Teleopti.Ccc.Win.Optimization;
@@ -414,6 +416,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_skillResultHighlightGridControl = new SkillResultHighlightGridControl();
 
 			setUpZomMenu();
+
 			var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
 			_container = lifetimeScope.BeginLifetimeScope();
 			_optimizerOriginalPreferences = new OptimizerOriginalPreferences(new SchedulingOptions());
@@ -431,6 +434,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulerState.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(loadingPeriod, TeleoptiPrincipal.Current.Regional.TimeZone);
 			_schedulerState.UndoRedoContainer = _undoRedo;
 			_schedulerMessageBrokerHandler = new SchedulerMessageBrokerHandler(this, _container);
+			updateContainer(_container.ComponentRegistry, _schedulerMessageBrokerHandler, _schedulerMessageBrokerHandler, (IClearReferredShiftTradeRequests) _schedulerState);
 			_schedulerMeetingHelper = new SchedulerMeetingHelper(_schedulerMessageBrokerHandler, _schedulerState);
 			//Using the same module id when saving meeting changes to avoid getting them via MB as well
 			_schedulerMeetingHelper.ModificationOccured += _schedulerMeetingHelper_ModificationOccured;
@@ -517,14 +521,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setShowRibbonTexts();
 
 			_personRequestAuthorizationChecker = new PersonRequestCheckAuthorization();
-
-			//todo: move more of this stuff to ioc
-			var scheduleDictionaryBatchingPersister = _container.Resolve<IScheduleDictionaryBatchPersister>(
-				TypedParameter.From<IMessageBrokerIdentifier>(_schedulerMessageBrokerHandler),
-				TypedParameter.From<IReassociateDataForSchedules>(_schedulerMessageBrokerHandler)
-				);
-
+			
 			_scheduleDayListFactory = _container.Resolve<IScheduleDayListFactory>();
+		}
+
+		//flytta ut till modul
+		private static void updateContainer(IComponentRegistry componentRegistry, 
+															IMessageBrokerIdentifier messageBrokerIdentifier, 
+															IReassociateDataForSchedules reassociateDataForSchedules,
+															IClearReferredShiftTradeRequests clearReferredShiftTradeRequests)
+		{
+			var updater = new ContainerBuilder();
+			updater.RegisterModule(new SchedulePersistModule(messageBrokerIdentifier, reassociateDataForSchedules, true));
+			updater.RegisterType<SchedulingScreenPersister>().As<ISchedulingScreenPersister>().InstancePerLifetimeScope();
+			updater.RegisterType<PersonAccountPersister>().As<IPersonAccountPersister>().InstancePerLifetimeScope();
+			updater.RegisterType<PersonAccountConflictCollector>().As<IPersonAccountConflictCollector>().InstancePerLifetimeScope();
+			updater.RegisterType<PersonAccountConflictResolver>().As<IPersonAccountConflictResolver>().InstancePerLifetimeScope();
+			updater.RegisterType<RequestPersister>().As<IRequestPersister>().InstancePerLifetimeScope();
+			updater.RegisterType<WriteProtectionPersister>().As<IWriteProtectionPersister>().InstancePerLifetimeScope();
+			updater.Register(c => clearReferredShiftTradeRequests).As<IClearReferredShiftTradeRequests>().InstancePerLifetimeScope();
+			updater.Update(componentRegistry);
 		}
 
 		private void loadSchedulingScreenSettings()
@@ -4497,7 +4513,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-
 		//fix for sunkfusion clickevent fires twice in this method, will be some issues when debugging
 		private bool save()
 		{
@@ -4516,7 +4531,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			try
 			{
-				doSaveProcess2();
+				doSaveProcess();
 				_lastSaved = DateTime.Now;
 				return true;
 			}
@@ -4545,86 +4560,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void doSaveProcess2()
+		private void doSaveProcess()
 		{
-			//var refreshResult = refreshEntitiesUsingMessageBroker();
-			//if (refreshResult.ConflictsFound)
-			//{
-			//	if (refreshResult.DialogResult == PersistConflictDialogResult.OK)
-			//		showPleaseSaveAgainDialog();
-			//}
-			//else
-			//{
-			//if conflicts don't exist - do the saving
 			Cursor = Cursors.WaitCursor;
 
 			_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
 
-			var uowFactory = _container.Resolve<ICurrentUnitOfWorkFactory>();
-			var scheduleRangePersister = new ScheduleRangePersister(uowFactory,
-																	_container.Resolve<IDifferenceCollectionService<IPersistableScheduleData>>(),
-																	new ScheduleRangeConflictCollector(_container.Resolve<IScheduleRepository>(),
-																			_container.Resolve<IPersonAssignmentRepository>(),
-																			_schedulerMessageBrokerHandler,
-																			_container.Resolve<ILazyLoadingManager>()),
-																	new ScheduleDifferenceSaver(_container.Resolve<IScheduleRepository>()),
-																	_schedulerMessageBrokerHandler);
-			var scheduleScreenPersister = new SchedulingScreenPersister(
-									new ScheduleDictionaryPersister(scheduleRangePersister),
-									new PersonAccountPersister(uowFactory,
-										_container.Resolve<IPersonAbsenceAccountRepository>(),
-										_schedulerMessageBrokerHandler,
-										new PersonAccountConflictCollector(uowFactory),
-										new PersonAccountConflictResolver(uowFactory,
-												_container.Resolve<ITraceableRefreshService>(),
-												_container.Resolve<IPersonAbsenceAccountRepository>()
-										)
-									),
-									new RequestPersister(uowFactory,
-										_container.Resolve<IPersonRequestRepository>(),
-										(IClearReferredShiftTradeRequests)_schedulerState,
-										_schedulerMessageBrokerHandler,
-										_container.Resolve<IPrincipalAuthorization>()),
-										new WriteProtectionPersister(uowFactory,
-											_container.Resolve<IWriteProtectionRepository>(), 
-											_schedulerMessageBrokerHandler
-										)
-									);
 			IEnumerable<PersistConflict> foundConflicts;
-			if (!scheduleScreenPersister.TryPersist(_schedulerState.Schedules,
+			if (!_container.Resolve<ISchedulingScreenPersister>().TryPersist(_schedulerState.Schedules,
 																						_schedulerState.Schedules.ModifiedPersonAccounts,
 																						_schedulerState.PersonRequests,
 																						_modifiedWriteProtections,
 																						out foundConflicts))
 			{
 				handleConflicts(new List<IPersistableScheduleData>(), foundConflicts);
-				doSaveProcess2();
+				doSaveProcess();
 			}
-
-			//var conflicts = new List<PersistConflict>();
-			//foreach (var range in _schedulerState.Schedules.Values)
-			//{
-			//	conflicts.AddRange(scheduleRangePersister.Persist(range));
-			//}
-			//if (conflicts.Any())
-			//{
-			//	handleConflicts(new List<IPersistableScheduleData>(), conflicts);
-			//	doSaveProcess2();
-			//}
-
-			//var result = _persister.TryPersist(_schedulerState.Schedules, _modifiedWriteProtections,
-			//																		_schedulerState.PersonRequests, _schedulerState.Schedules.ModifiedPersonAccounts);
-			//if (result.ScheduleDictionaryConflicts != null && result.ScheduleDictionaryConflicts.Any())
-			//{
-			//	handleConflicts(result.ScheduleDictionaryConflicts);
-			//	doSaveProcess2();
-			//}
-			//if (!result.Saved)
-			//{
-			//	appologizeAndClose();
-			//	return;
-			//}
-
 
 			//Denna sätts i längre inne i save-loopen. fixa på annat sätt!
 			if (_personAbsenceAccountPersistValidationBusinessRuleResponses.Any())
@@ -4633,67 +4584,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			_undoRedo.Clear();
 			Cursor = Cursors.Default;
-			//}
 			updateRequestCommandsAvailability();
 			updateShiftEditor();
 			RecalculateResources();
-		}
-
-		//private void doSaveProcess()
-		//{
-		//	var refreshResult = refreshEntitiesUsingMessageBroker();
-		//	if (refreshResult.ConflictsFound)
-		//	{
-		//		if (refreshResult.DialogResult == PersistConflictDialogResult.OK)
-		//			showPleaseSaveAgainDialog();
-		//	}
-		//	else
-		//	{
-		//		//if conflicts don't exist - do the saving
-		//		Cursor = Cursors.WaitCursor;
-		//		using (PerformanceOutput.ForOperation("Persisting changes"))
-		//		{
-		//			_personAbsenceAccountPersistValidationBusinessRuleResponses.Clear();
-		//			var result = _persister.TryPersist(_schedulerState.Schedules, _modifiedWriteProtections,
-		//																				 _schedulerState.PersonRequests, _schedulerState.Schedules.ModifiedPersonAccounts);
-		//			if (result.ScheduleDictionaryConflicts != null && result.ScheduleDictionaryConflicts.Any())
-		//			{
-		//				var conflictHandlingResult = handleConflicts(new List<IPersistableScheduleData>(), result.ScheduleDictionaryConflicts);
-		//				if (conflictHandlingResult.DialogResult == PersistConflictDialogResult.Overwrite)
-		//					doSaveProcess();
-		//				if (conflictHandlingResult.DialogResult == PersistConflictDialogResult.OK)
-		//					showPleaseSaveAgainDialog();
-		//				return;
-		//			}
-		//			if (!result.Saved)
-		//			{
-		//				appologizeAndClose();
-		//				return;
-		//			}
-		//			if (_personAbsenceAccountPersistValidationBusinessRuleResponses.Any())
-		//			{
-		//				BusinessRuleResponseDialog.ShowDialogFromWinForms(_personAbsenceAccountPersistValidationBusinessRuleResponses);
-		//			}
-		//		}
-		//		_undoRedo.Clear();
-		//		enableUndoRedoButtons();
-		//		Cursor = Cursors.Default;
-		//	}
-		//	updateRequestCommandsAvailability();
-		//	updateShiftEditor();
-		//	RecalculateResources();
-		//}
-
-		private void showPleaseSaveAgainDialog()
-		{
-			ShowInformationMessage(Resources.PleaseSaveAgainWhenYouHaveReviewedTheAppliedChanges, Resources.NotSaved);
-		}
-
-		private void appologizeAndClose()
-		{
-			ShowInformationMessage(Resources.SorryForTheInconvenianceButSchedulerHasToCloseNowEtc, "  ");
-			_forceClose = true;
-			Close();
 		}
 
 		private void updateRibbon(ControlType controlType)
