@@ -164,15 +164,13 @@ define([
 			
 			display: function (options) {
 
-				var currentGroupId = function () {
+				var currentGroupId = function() {
 					if (options.id)
 						return options.id;
-					
-					if (!teamSchedule.SelectedGroup()) {
-						if (teamSchedule.GroupPages().length > 0 && teamSchedule.GroupPages()[0].Groups().length > 0)
-							return teamSchedule.GroupPages()[0].Groups()[0].Id;
-					}
-					
+					if (teamSchedule.SelectedGroup())
+						return teamSchedule.SelectedGroup();
+					if (teamSchedule.GroupPages().length > 0 && teamSchedule.GroupPages()[0].Groups().length > 0)
+						return teamSchedule.GroupPages()[0].Groups()[0].Id;
 					return null;
 				};
 				
