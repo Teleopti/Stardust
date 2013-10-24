@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldCreateViewModelByTwoStepMapping()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var target = new TeamScheduleViewModelFactory(mapper, null, null, null);
+			var target = new TeamScheduleViewModelFactory(mapper, null,new FakePermissionProvider(), null);
 			var viewModel = new TeamScheduleViewModel();
 			var data = new TeamScheduleDomainData();
 			var id = Guid.NewGuid();
