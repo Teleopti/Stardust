@@ -35,10 +35,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				           o =>
 				           o.MapFrom(s => s.PersonDayOffCollection() == null ? null : s.PersonDayOffCollection().SingleOrDefault()))
 				.ForMember(s => s.Absence, o => o.MapFrom(s => (s.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence ||
-				                                                s.SignificantPartForDisplay() == SchedulePartView.ContractDayOff) &&
-				                                               s.PersonAbsenceCollection() != null
-					                                               ? s.PersonAbsenceCollection().First()
-					                                               : null))
+																s.SignificantPartForDisplay() == SchedulePartView.ContractDayOff) &&
+															   s.PersonAbsenceCollection() != null
+																   ? s
+																   : null))
 				.ForMember(s => s.PersonAssignment,
 				           o => o.MapFrom(s => s.SignificantPartForDisplay() == SchedulePartView.MainShift ? s : null))
 				.ForMember(d => d.Feedback, o => o.MapFrom(s => s == null || !s.IsScheduled()))
@@ -111,8 +111,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.DayOff, o => o.MapFrom(s => s.DayOff.Description.Name))
 				;
 
-			CreateMap<IPersonAbsence, AbsenceDayViewModel>()
-				.ForMember(s => s.Absence, o => o.MapFrom(s => s.Layer.Payload.Description.Name))
+			CreateMap<IScheduleDay, AbsenceDayViewModel>()
+				.ForMember(s => s.Absence, o => o.MapFrom(s => s.PersonAbsenceCollection().FirstOrDefault().Layer.Payload.Description.Name))
+				.ForMember(s => s.AbsenceContractTime, o => o.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(_projectionProvider.Projection(s).ContractTime(), CultureInfo.CurrentUICulture)))
+				.ForMember(d => d.AbsenceContractTimeMinutes, o => o.MapFrom(s => _projectionProvider.Projection(s).ContractTime().TotalMinutes))
 				;
 
 			CreateMap<IScheduleDay, PersonAssignmentDayViewModel>()
