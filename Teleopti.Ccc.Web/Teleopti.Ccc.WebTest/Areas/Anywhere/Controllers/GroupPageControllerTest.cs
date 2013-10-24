@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -19,12 +18,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		[Test]
 		public void ShouldReturnAvailableGroupPages()
 		{
-			var groupPage = new ReadOnlyGroupPage()
+			var groupPage = new ReadOnlyGroupPage
 				{
 					PageName = "Skill"
 				};
 			
-			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(groupPage, new List<ReadOnlyGroupDetail>(){ }), new FakeLoggedOnUser());
+			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(groupPage, new List<ReadOnlyGroupDetail>()), new FakeLoggedOnUser());
 
 			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
 
@@ -36,24 +35,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldReturnMyTeamAsDefaultGroup()
 		{
 			var site = SiteFactory.CreateSimpleSite(" ");
-			var team = new Team() { Site = site, Description = new Description("Team red")};
+			var team = new Team { Site = site, Description = new Description("Team red")};
 			team.SetId(Guid.NewGuid());
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.Today, team);
 			var loggedOnUser = new FakeLoggedOnUser(person);
 
-			var firstGroup = new ReadOnlyGroupDetail()
+			var firstGroup = new ReadOnlyGroupDetail
 				{
 					GroupId = Guid.Empty,
 					GroupName = "Team green"
 				};
 
-			var secondGroup = new ReadOnlyGroupDetail()
+			var secondGroup = new ReadOnlyGroupDetail
 				{
 					GroupId = team.Id.Value,
 					GroupName = team.Description.Name
 				};
 
-			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new ReadOnlyGroupPage(){ PageName = ""}, new List<ReadOnlyGroupDetail>() { firstGroup, secondGroup }), loggedOnUser);
+			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new ReadOnlyGroupPage { PageName = ""}, new List<ReadOnlyGroupDetail> { firstGroup, secondGroup }), loggedOnUser);
 
 			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
 
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		[Test]
 		public void ShouldReturnNoDefaultGroupIfIHaveNoTeam()
 		{
-			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new ReadOnlyGroupPage(){ PageName = ""}, new List<ReadOnlyGroupDetail>() { new ReadOnlyGroupDetail() }), new FakeLoggedOnUser());
+			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(new ReadOnlyGroupPage { PageName = ""}, new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail() }), new FakeLoggedOnUser());
 
 			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
 
@@ -75,12 +74,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		[Test]
 		public void ShouldReplaceGroupPageNameFromResourceMangerIfItStartsWithXx()
 		{
-			var groupPage = new ReadOnlyGroupPage()
+			var groupPage = new ReadOnlyGroupPage
 				{
 					PageName = "xxMain"
 				};
 
-			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(groupPage, new List<ReadOnlyGroupDetail>() { }), new FakeLoggedOnUser());
+			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(groupPage, new List<ReadOnlyGroupDetail>()), new FakeLoggedOnUser());
 
 			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
 
@@ -91,18 +90,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		[Test]
 		public void ShouldReturnGroupNameWithGroupPageName()
 		{
-			var groupPage = new ReadOnlyGroupPage()
-			{
+			var groupPage = new ReadOnlyGroupPage
+				{
 				PageName = "A group"
 			};
 
-			var firstGroup = new ReadOnlyGroupDetail()
-			{
+			var firstGroup = new ReadOnlyGroupDetail
+				{
 				GroupId = Guid.Empty,
 				GroupName = "Team green"
 			};
 
-			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(groupPage, new List<ReadOnlyGroupDetail>() { firstGroup }), new FakeLoggedOnUser());
+			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(groupPage, new List<ReadOnlyGroupDetail> { firstGroup }), new FakeLoggedOnUser());
 
 			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
 
@@ -113,19 +112,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		[Test]
 		public void ShouldReturnGroupNameWithoutGroupPageNameForBusinessHierarchy()
 		{
-			var groupPage = new ReadOnlyGroupPage()
-			{
+			var groupPage = new ReadOnlyGroupPage
+				{
 				PageId = new Guid("6CE00B41-0722-4B36-91DD-0A3B63C545CF"),
 				PageName = "xxMain"
 			};
 
-			var firstGroup = new ReadOnlyGroupDetail()
-			{
+			var firstGroup = new ReadOnlyGroupDetail
+				{
 				GroupId = Guid.Empty,
 				GroupName = "Team green"
 			};
 
-			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(groupPage, new List<ReadOnlyGroupDetail>() { firstGroup }), new FakeLoggedOnUser());
+			var target = new GroupPageController(new FakeGroupingReadOnlyRepository(groupPage, new List<ReadOnlyGroupDetail> { firstGroup }), new FakeLoggedOnUser());
 
 			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
 

@@ -77,7 +77,7 @@ define([
 
 		var loadPersons = function (options) {
 			ajax.ajax({
-				url: 'Person/PeopleInTeam',
+				url: 'Person/PeopleInGroup',
 				data: {
 					date: helpers.Date.ToServer(teamSchedule.SelectedDate()),
 					teamId: teamSchedule.SelectedGroup()
