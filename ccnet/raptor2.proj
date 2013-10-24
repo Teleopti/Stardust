@@ -337,7 +337,7 @@
 		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\Teleopti.Ccc.WebBehaviorTest.App.config" OverwriteReadOnlyFiles="true"
 			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config" />
 			
-		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
+		<Copy SourceFiles="$(CCNetWorkingDirectory)\BuildArtifacts\AppETLIntegrationTest.config" OverwriteReadOnlyFiles="true"
 			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.config" />
 		
 		<FileUpdate Files="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config"
