@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
+namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 {
 	public class ShiftToday : ShiftForDate
 	{

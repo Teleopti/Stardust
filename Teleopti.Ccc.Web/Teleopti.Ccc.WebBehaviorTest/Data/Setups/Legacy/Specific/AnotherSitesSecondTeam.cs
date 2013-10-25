@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
+namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 {
 	public class AnotherSitesSecondTeam : GeneratedTeam
 	{

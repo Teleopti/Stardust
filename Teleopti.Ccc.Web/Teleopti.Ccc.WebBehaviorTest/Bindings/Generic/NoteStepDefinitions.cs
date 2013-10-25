@@ -1,6 +1,6 @@
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {

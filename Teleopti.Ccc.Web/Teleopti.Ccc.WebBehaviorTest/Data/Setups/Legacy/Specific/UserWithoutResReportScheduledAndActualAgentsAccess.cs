@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Infrastructure;
 using System.Globalization;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
+namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 {
 	public class UserWithoutResReportScheduledAndActualAgentsAccess : IUserSetup
 	{

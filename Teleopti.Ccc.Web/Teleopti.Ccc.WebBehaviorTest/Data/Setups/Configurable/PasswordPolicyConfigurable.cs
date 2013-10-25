@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
+namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 {
 	public class PasswordPolicyConfigurable
 	{

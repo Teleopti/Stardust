@@ -4,9 +4,9 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
-using AbsenceRequestConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic.AbsenceRequestConfigurable;
-using PersonPeriodConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic.PersonPeriodConfigurable;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using AbsenceRequestConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.AbsenceRequestConfigurable;
+using PersonPeriodConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.PersonPeriodConfigurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {

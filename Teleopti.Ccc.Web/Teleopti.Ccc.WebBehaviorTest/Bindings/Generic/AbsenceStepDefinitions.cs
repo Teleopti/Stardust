@@ -1,7 +1,7 @@
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using PersonAbsenceConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic.PersonAbsenceConfigurable;
+using PersonAbsenceConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.PersonAbsenceConfigurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
