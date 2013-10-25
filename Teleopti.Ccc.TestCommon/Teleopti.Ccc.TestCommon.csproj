@@ -221,9 +221,13 @@
     <Compile Include="TestData\Core\TestDataFactory.cs" />
     <Compile Include="TestData\Setups\Configurable\AbsenceConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\ActivityConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\BusinessUnitConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\ContractConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\ContractScheduleConfigurable.cs" />
     <Compile Include="TestData\Extensions.cs" />
+    <Compile Include="TestData\Setups\Configurable\DayOffTemplateConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\NoteConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\OvertimeAvailabilityConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PartTimePercentageConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\ScenarioConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\ShiftCategoryConfigurable.cs" />

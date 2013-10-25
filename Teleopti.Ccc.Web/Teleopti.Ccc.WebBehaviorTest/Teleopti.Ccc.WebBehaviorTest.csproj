@@ -139,14 +139,12 @@
     <Compile Include="Data\Setups\Legacy\Common\CommonContractSchedule.cs" />
     <Compile Include="Data\Setups\Legacy\Common\CommonScenario.cs" />
     <Compile Include="Data\Setups\Configurable\AbsenceRequestConfigurable.cs" />
-    <Compile Include="Data\Setups\Configurable\NoteConfigurable.cs" />
     <Compile Include="Bindings\Generic\NoteStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PartTimePercentageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NothingStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SiteStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsKnockoutExtensions.cs" />
     <Compile Include="Data\Setups\Configurable\SiteConfigurable.cs" />
-    <Compile Include="Data\Setups\Configurable\OvertimeAvailabilityConfigurable.cs" />
     <Compile Include="Bindings\Generic\OvertimeAvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceTemplateStepDefinitions.cs" />
@@ -349,7 +347,6 @@
     <Compile Include="Data\Setups\Configurable\TextRequestConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\PublicNoteConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\MeetingConfigurable.cs" />
-    <Compile Include="Data\Setups\Configurable\DayOffTemplateConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\PreferencesPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutExtendedPreferencesAccess.cs" />
     <Compile Include="Pages\Common\ComboBox.cs" />
@@ -396,7 +393,6 @@
     <Compile Include="Data\Setups\Configurable\SchedulePeriodConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\RoleForUser.cs" />
     <Compile Include="Data\Setups\Configurable\WorkflowControlSetForUser.cs" />
-    <Compile Include="Data\Setups\Configurable\BusinessUnitConfigurable.cs" />
     <Compile Include="Bindings\Specific\ColleagueStepDefinitions.cs" />
     <Compile Include="AbsenceRequestFromScheduleStepDefinitions.cs" />
     <Compile Include="Data\Setups\Configurable\WorkflowControlSetConfigurable.cs" />
