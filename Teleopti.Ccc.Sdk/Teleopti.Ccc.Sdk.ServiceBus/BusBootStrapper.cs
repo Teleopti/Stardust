@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		    build.RegisterModule<EventHandlersModule>();
 		    build.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>();
 		    build.RegisterType<DoNotifySmsLink>().As<IDoNotifySmsLink>();
+				build.RegisterModule(SchedulePersistModule.ForOtherModules());
 
 		    build.Update(Container);
 	    }

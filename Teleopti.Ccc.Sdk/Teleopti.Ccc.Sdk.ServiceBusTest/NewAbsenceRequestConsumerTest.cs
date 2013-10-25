@@ -11,7 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
@@ -41,14 +41,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         private IAbsenceRequestOpenPeriodMerger _merger;
         private IScheduleDictionary _scheduleDictionary;
         private IPersonAbsenceAccountProvider _personAbsenceAccountProvider;
-        private IScheduleRepository _scheduleRepository;
         private IRequestApprovalService _requestApprovalService;
         private IRequestFactory _factory;
-        private IScheduleDictionarySaver _scheduleDictionarySaver;
+				private IScheduleDifferenceSaver _scheduleDictionarySaver;
         private IPersonRequestCheckAuthorization _authorization;
         private ICurrentScenario _scenarioRepository;
         private IScheduleIsInvalidSpecification _scheduleIsInvalidSpecification;
-        private IScheduleDictionaryModifiedCallback _scheduleDictionaryModifiedCallback;
         private IAlreadyAbsentSpecification _alreadyAbsentSpecification;
         private IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
         private IBudgetGroupHeadCountSpecification _budgetGroupHeadCountSpecification;
@@ -72,7 +70,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             
             _scenarioRepository = _mockRepository.StrictMock<ICurrentScenario>();
             _scheduleIsInvalidSpecification = _mockRepository.DynamicMock<IScheduleIsInvalidSpecification>();
-            _scheduleDictionaryModifiedCallback = _mockRepository.DynamicMock<IScheduleDictionaryModifiedCallback>();
             
             _alreadyAbsentSpecification = _mockRepository.DynamicMock<IAlreadyAbsentSpecification>();
             _loader = _mockRepository.DynamicMock<ILoadSchedulingStateHolderForResourceCalculation>();
@@ -87,11 +84,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
     	    _validatedRequest.ValidationErrors = "";
 
             Expect.Call(_absenceRequest.Person).Return(_person).Repeat.Any();
-            _target = new NewAbsenceRequestConsumer(_unitOfWorkFactory, _scheduleRepository, _personAbsenceAccountProvider,
+            _target = new NewAbsenceRequestConsumer(_unitOfWorkFactory, _personAbsenceAccountProvider,
                                                     _scenarioRepository, _personRequestRepository,
                                                     _schedulingResultStateHolder, _merger, _factory,
                                                     _scheduleDictionarySaver, _scheduleIsInvalidSpecification,
-                                                    _authorization, _scheduleDictionaryModifiedCallback, _resourceOptimizationHelper, 
+                                                    _authorization, _resourceOptimizationHelper, 
                                                     _updateScheduleProjectionReadModel, _budgetGroupAllowanceSpecification, _loader, _loaderWithoutResourceCalculation, _alreadyAbsentSpecification, 
                                                     _budgetGroupHeadCountSpecification);
         }
@@ -124,13 +121,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         {
             _schedulingResultStateHolder = new SchedulingResultStateHolder();
             _scheduleDictionary = _mockRepository.DynamicMock<IScheduleDictionary>();
-            _scheduleDictionarySaver = _mockRepository.StrictMock<IScheduleDictionarySaver>();
+						_scheduleDictionarySaver = _mockRepository.StrictMock<IScheduleDifferenceSaver>();
             _schedulingResultStateHolder.Schedules = _scheduleDictionary;
         }
 
         private void CreateRepositories()
         {
-            _scheduleRepository = _mockRepository.StrictMock<IScheduleRepository>();
             _personRequestRepository = _mockRepository.StrictMock<IPersonRequestRepository>();
             _personAbsenceAccountProvider = _mockRepository.StrictMock<IPersonAbsenceAccountProvider>();
         }
@@ -513,7 +509,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
                 Expect.Call(_scheduleIsInvalidSpecification.IsSatisfiedBy(_schedulingResultStateHolder)).Return(false);
             	Expect.Call(_scheduleDictionary.DifferenceSinceSnapshot()).Return(changes);
-				Expect.Call(_scheduleDictionarySaver.MarkForPersist(_unitOfWork, _scheduleRepository, changes)).Throw(new ValidationException());
+				Expect.Call(() => _scheduleDictionarySaver.SaveChanges(changes, null)).IgnoreArguments().Throw(new ValidationException());
                 Expect.Call(_personRequest.IsApproved).Return(true);
             }
             using (_mockRepository.Playback())
@@ -578,7 +574,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
         private void ExpectLoadOfSchedules()
         {
-            _scheduleRange = _mockRepository.StrictMock<IScheduleRange>();
+            _scheduleRange = _mockRepository.StrictMultiMock<IScheduleRange>(typeof(IUnvalidatedScheduleRangeUpdate));
             Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange).Repeat.Any();
             Expect.Call(_scheduleRange.ScheduledDayCollection(new DateOnlyPeriod())).IgnoreArguments().Return(
                 new List<IScheduleDay>()).Repeat.Any();
@@ -589,8 +585,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         {
         	var changes = new DifferenceCollection<IPersistableScheduleData>();
         	Expect.Call(_scheduleDictionary.DifferenceSinceSnapshot()).Return(changes);
-			_scheduleDictionarySaver.MarkForPersist(_unitOfWork, _scheduleRepository, changes);
-            LastCall.Return(new ScheduleDictionaryPersisterResult { ModifiedEntities = new IPersistableScheduleData[] { }, AddedEntities = new IPersistableScheduleData[] { }, DeletedEntities = new IPersistableScheduleData[] { } });
+			Expect.Call(() => _scheduleDictionarySaver.SaveChanges(changes,null)).IgnoreArguments();
         }
 
         [Test]
