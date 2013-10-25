@@ -12,12 +12,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 {
     public class BudgetdayConfigurable : IUserDataSetup
     {
-
 		public string BudgetGroup { get; set; }
 		public DateTime Date { get; set; }
 		public int Allowance { get; set; }
 		public int FulltimeEquivalentHours { get; set; }
-
 
 	    public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 	    {

@@ -8,9 +8,9 @@ using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
+namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 {
-	public class AbsenceTimeConfigurable : IDelayedSetup
+	public class ScheduleProjectionReadOnlyThing : IDelayedSetup
 	{
 		public DateTime Date { get; set; }
 		public int Hours { get; set; }
