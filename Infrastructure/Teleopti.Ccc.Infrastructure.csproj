@@ -251,7 +251,6 @@
     <Compile Include="Persisters\Refresh\IScheduleDataRefresher.cs" />
     <Compile Include="Persisters\IScheduleDictionaryModifiedCallback.cs" />
     <Compile Include="Persisters\Refresh\IScheduleRefresher.cs" />
-    <Compile Include="Persisters\IScheduleScreenPersisterResult.cs" />
     <Compile Include="Persisters\Refresh\IScheduleScreenRefresher.cs" />
     <Compile Include="Persisters\Refresh\IUpdateScheduleDataFromMessages.cs" />
     <Compile Include="Persisters\Refresh\MeetingRefresher.cs" />
@@ -260,7 +259,6 @@
     <Compile Include="Persisters\ScheduleDictionaryModifiedCallback.cs" />
     <Compile Include="Persisters\ScheduleEntityLoader.cs" />
     <Compile Include="Persisters\Refresh\ScheduleRefresher.cs" />
-    <Compile Include="Persisters\ScheduleScreenPersisterResult.cs" />
     <Compile Include="Persisters\Refresh\ScheduleScreenRefresher.cs" />
     <Compile Include="Persisters\Refresh\VersionTupleExtensions.cs" />
     <Compile Include="Persisters\WriteProtection\IWriteProtectionPersister.cs" />
