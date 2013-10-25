@@ -194,6 +194,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.AssertNotExists(".navbar-inner", "[href*='#PreferenceTab']");
 		}
 
+		[Then(@"I should see the contract time of '(.*)' hours")]
+		public void ThenIShouldSeeTheContractTimeOfHours(string hours)
+		{
+			Browser.Interactions.AssertFirstContains(".schedule-contract-time", hours);
+		}
+
+		[Then(@"I should see the absence contract time of '(.*)' hours")]
+		public void ThenIShouldSeeTheAbsenceContractTimeOfHours(string hours)
+		{
+			Browser.Interactions.AssertFirstContains(".absence-contract-time", hours);
+		}
+
 		[Then(@"I should see the start time boundry (.*) to (.*)")]
 		public void ThenIShouldSeeTheStartTimeBoundryTo(string earliest, string latest)
 		{

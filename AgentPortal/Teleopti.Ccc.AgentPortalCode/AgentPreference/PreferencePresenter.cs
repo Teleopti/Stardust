@@ -614,6 +614,8 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
                     IPreferenceCellData cellData;
                     if (CellDataCollection.TryGetValue(index, out cellData))
                     {
+                        if (!cellData.Enabled) continue;
+
 						var previousStateMustHave = cellData.Preference != null && cellData.Preference.MustHave;
 						var clonedPreference = (Preference)preference.Clone();
 						cellData.Preference = clonedPreference;
