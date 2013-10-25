@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Generic
     public class SiteConfigurable : IDataSetup
     {
         public string Name { get; set; }
+
         public IBusinessUnit BusinessUnit;
 
         public void Apply(IUnitOfWork uow)

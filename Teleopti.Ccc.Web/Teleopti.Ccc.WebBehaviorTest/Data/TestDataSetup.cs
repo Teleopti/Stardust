@@ -3,12 +3,10 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -476,18 +474,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static DateTime FirstDayOfAnyWeekInCurrentMonth(CultureInfo culture)
 		{
             return FirstDayOfCurrentWeek(culture).Month == DateOnlyForBehaviorTests.TestToday.Date.Month ? FirstDayOfCurrentWeek(culture) : FirstDayOfNextWeek(culture);
-		}
-
-	}
-
-	public static class Extensions
-	{
-
-		public static void SetBusinessUnit(this IBelongsToBusinessUnit aggregateRootWithBusinessUnit, IBusinessUnit businessUnit)
-		{
-			var type = typeof(AggregateRootWithBusinessUnit);
-			var privateField = type.GetField("_businessUnit", BindingFlags.NonPublic | BindingFlags.Instance);
-			privateField.SetValue(aggregateRootWithBusinessUnit, businessUnit);
 		}
 
 	}

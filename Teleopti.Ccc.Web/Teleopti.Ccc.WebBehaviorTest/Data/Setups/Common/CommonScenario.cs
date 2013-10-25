@@ -1,20 +1,18 @@
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.TestCommon.TestData.Setups;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.TestCommon.TestData.Common
+namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common
 {
 	public class CommonScenario : IDataSetup
 	{
 		public IScenario Scenario;
-	    public bool EnableReporting;
 
 		public void Apply(IUnitOfWork uow)
 		{
-			Scenario = ScenarioFactory.CreateScenario(DefaultName.Make("Common scenario"), true, EnableReporting);
+			Scenario = ScenarioFactory.CreateScenario(TestCommon.TestData.Setups.DefaultName.Make("Common scenario"), true, false);
 			new ScenarioRepository(uow).Add(Scenario);
 		}
 	}

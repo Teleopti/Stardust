@@ -135,6 +135,9 @@
     </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\GroupPageStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Common\CommonContract.cs" />
+    <Compile Include="Data\Setups\Common\CommonContractSchedule.cs" />
+    <Compile Include="Data\Setups\Common\CommonScenario.cs" />
     <Compile Include="Data\Setups\Generic\AbsenceRequestConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\NoteConfigurable.cs" />
     <Compile Include="Bindings\Generic\NoteStepDefinitions.cs" />
@@ -142,7 +145,6 @@
     <Compile Include="Bindings\Generic\NothingStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SiteStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsKnockoutExtensions.cs" />
-    <Compile Include="Data\Setups\DefaultName.cs" />
     <Compile Include="Data\Setups\Generic\SiteConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\OvertimeAvailabilityConfigurable.cs" />
     <Compile Include="Bindings\Generic\OvertimeAvailabilityStepDefinitions.cs" />
@@ -279,7 +281,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Data\Setups\Generic\ScenarioConfigurable.cs" />
     <Compile Include="Bindings\Generic\ScenarioStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
@@ -313,8 +314,6 @@
     <Compile Include="Data\Setups\Generic\AvailabilityRotationConfigurable.cs" />
     <Compile Include="Bindings\Generic\AvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Generic\ContractConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\ContractScheduleConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonalShiftConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonAvailabilityConfigurable.cs" />
     <Compile Include="Bindings\Generic\AsmMessageStepDefinition.cs" />

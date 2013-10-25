@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups
 	{
 		public static string Make(string name)
 		{
-			return name + new Random().Next(0, 50) + "~";
+			return name + " " + new Random().Next(0, 50) + "~";
 		}
 	}
 }

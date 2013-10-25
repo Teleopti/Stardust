@@ -2,11 +2,10 @@ using System;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.WebBehaviorTest.Bindings;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
+namespace Teleopti.Ccc.TestCommon.TestData.Generic
 {
 	public class ContractConfigurable : IDataSetup
 	{
@@ -18,6 +17,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string NegativeTargetTolerance { get; set; }
 		public string AverageWorkTimePerDay { get; set; }
 
+		public IContract Contract;
+
 		public ContractConfigurable()
 		{
 			EmploymentType = EmploymentType.FixedStaffNormalWorkTime;
@@ -26,16 +27,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 		public void Apply(IUnitOfWork uow)
 		{
-			var contract = ContractFactory.CreateContract(Name);
-			contract.EmploymentType = EmploymentType;
-			contract.WorkTime = new WorkTime(Transform.ToTimeSpan(AverageWorkTimePerDay));
-			contract.PositiveDayOffTolerance = PositiveDayOffTolerance;
-			contract.NegativeDayOffTolerance = NegativeDayOffTolerance;
+			Contract = ContractFactory.CreateContract(Name);
+			Contract.EmploymentType = EmploymentType;
+			Contract.WorkTime = new WorkTime(TimeSpan.Parse(AverageWorkTimePerDay));
+			Contract.PositiveDayOffTolerance = PositiveDayOffTolerance;
+			Contract.NegativeDayOffTolerance = NegativeDayOffTolerance;
 			if (PositiveTargetTolerance != null)
-				contract.PositivePeriodWorkTimeTolerance = Transform.ToTimeSpan(PositiveTargetTolerance);
+				Contract.PositivePeriodWorkTimeTolerance = TimeSpan.Parse(PositiveTargetTolerance);
 			if (NegativeTargetTolerance != null)
-				contract.NegativePeriodWorkTimeTolerance = Transform.ToTimeSpan(NegativeTargetTolerance);
-			new ContractRepository(uow).Add(contract);
+				Contract.NegativePeriodWorkTimeTolerance = TimeSpan.Parse(NegativeTargetTolerance);
+			new ContractRepository(uow).Add(Contract);
 		}
 	}
 }

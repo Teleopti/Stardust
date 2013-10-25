@@ -211,11 +211,6 @@
     <Compile Include="TestData\Analytics\TodayDate.cs" />
     <Compile Include="TestData\Analytics\UtcAndCetTimeZones.cs" />
     <Compile Include="TestData\Analytics\WeekdayTranslations.cs" />
-    <Compile Include="TestData\Common\CommonContract.cs" />
-    <Compile Include="TestData\Common\CommonContractSchedule.cs" />
-    <Compile Include="TestData\Common\CommonScenario.cs" />
-    <Compile Include="TestData\Common\IContractScheduleSetup.cs" />
-    <Compile Include="TestData\Common\IContractSetup.cs" />
     <Compile Include="TestData\Core\DataFactory.cs" />
     <Compile Include="TestData\Core\IAnalyticsDataSetup.cs" />
     <Compile Include="TestData\Core\AnalyticsDataFactory.cs" />
@@ -226,7 +221,11 @@
     <Compile Include="TestData\Core\TestDataFactory.cs" />
     <Compile Include="TestData\Generic\AbsenceConfigurable.cs" />
     <Compile Include="TestData\Generic\ActivityConfigurable.cs" />
+    <Compile Include="TestData\Generic\ContractConfigurable.cs" />
+    <Compile Include="TestData\Generic\ContractScheduleConfigurable.cs" />
+    <Compile Include="TestData\Extensions.cs" />
     <Compile Include="TestData\Generic\PartTimePercentageConfigurable.cs" />
+    <Compile Include="TestData\Generic\ScenarioConfigurable.cs" />
     <Compile Include="TestData\Generic\ShiftCategoryConfigurable.cs" />
     <Compile Include="TestData\Generic\SiteConfigurable.cs" />
     <Compile Include="TestData\Generic\TeamConfigurable.cs" />

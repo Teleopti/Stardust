@@ -3,9 +3,10 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
+namespace Teleopti.Ccc.TestCommon.TestData.Generic
 {
 	public class ContractScheduleConfigurable : IDataSetup
 	{
@@ -21,6 +22,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public bool SaturdayWorkDay { get; set; }
 		public bool SundayWorkDay { get; set; }
 
+		public IContractSchedule ContractSchedule;
+
 		public ContractScheduleConfigurable()
 		{
 			SundayWorkDay = false;
@@ -34,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 		public void Apply(IUnitOfWork uow)
 		{
-			var contractSchedule = ContractScheduleFactory.CreateContractSchedule(Name);
+			ContractSchedule = ContractScheduleFactory.CreateContractSchedule(Name);
 			var week = new ContractScheduleWeek();
 			week.Add(DayOfWeek.Monday, MondayWorkDay);
 			week.Add(DayOfWeek.Tuesday, TuesdayWorkDay);
@@ -43,8 +46,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			week.Add(DayOfWeek.Friday, FridayWorkDay);
 			week.Add(DayOfWeek.Saturday, SaturdayWorkDay);
 			week.Add(DayOfWeek.Sunday, SundayWorkDay);
-			contractSchedule.AddContractScheduleWeek(week);
-			new ContractScheduleRepository(uow).Add(contractSchedule);
+			ContractSchedule.AddContractScheduleWeek(week);
+			new ContractScheduleRepository(uow).Add(ContractSchedule);
 		}
 
 	}
