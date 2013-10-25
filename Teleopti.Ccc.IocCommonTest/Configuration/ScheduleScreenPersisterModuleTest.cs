@@ -1,11 +1,6 @@
 ﻿using Autofac;
 using NUnit.Framework;
-using Rhino.Mocks;
-using SharpTestsEx;
-using Teleopti.Ccc.Domain.Tracking;
-using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
@@ -28,22 +23,5 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
             _container = _containerBuilder.Build();
         }
 
-		 [Test]
-		 public void ShouldNotReuseBatchPersister()
-		 {
-			 var mocks = new MockRepository();
-
-			 var instance1 = _container.Resolve<IScheduleDictionaryBatchPersister>(
-				TypedParameter.From(mocks.Stub<IMessageBrokerIdentifier>()),
-				TypedParameter.From(mocks.Stub<IReassociateDataForSchedules>())
-				);
-
-			 var instance2 = _container.Resolve<IScheduleDictionaryBatchPersister>(
-				TypedParameter.From(mocks.Stub<IMessageBrokerIdentifier>()),
-				TypedParameter.From(mocks.Stub<IReassociateDataForSchedules>())
-				);
-
-		 	instance1.Should().Not.Be.SameInstanceAs(instance2);
-		 }
     }
 }

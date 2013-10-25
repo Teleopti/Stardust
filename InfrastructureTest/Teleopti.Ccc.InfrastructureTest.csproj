@@ -267,7 +267,6 @@
     </Compile>
     <Compile Include="Licensing\XmlLicenseTestSetupFixture.cs" />
     <Compile Include="Helper\DatabaseTestWithoutTransaction.cs" />
-    <Compile Include="Persisters\ScheduleDictionaryBatchPersisterTest.cs" />
     <Compile Include="Persisters\ScheduleDictionaryModifiedCallbackTest.cs" />
     <Compile Include="Persisters\ScheduleScreenDerivedScheduleDataTest.cs" />
     <Compile Include="Persisters\Refresh\ScheduleScreenRefresherMeetingTest.cs" />

@@ -248,7 +248,6 @@
     <Compile Include="Persisters\Schedules\ScheduleRangePersister.cs" />
     <Compile Include="Persisters\Schedules\ScheduleDifferenceSaver.cs" />
     <Compile Include="Persisters\IReassociateDataForSchedules.cs" />
-    <Compile Include="Persisters\IScheduleDictionaryBatchPersister.cs" />
     <Compile Include="Persisters\Refresh\IScheduleDataRefresher.cs" />
     <Compile Include="Persisters\IScheduleDictionaryModifiedCallback.cs" />
     <Compile Include="Persisters\IScheduleDictionarySaver.cs" />
@@ -259,7 +258,6 @@
     <Compile Include="Persisters\Refresh\IUpdateScheduleDataFromMessages.cs" />
     <Compile Include="Persisters\Refresh\MeetingRefresher.cs" />
     <Compile Include="Persisters\Refresh\PersonRequestRefresher.cs" />
-    <Compile Include="Persisters\ScheduleDictionaryBatchPersister.cs" />
     <Compile Include="Persisters\Refresh\ScheduleDataRefresher.cs" />
     <Compile Include="Persisters\ScheduleDictionaryModifiedCallback.cs" />
     <Compile Include="Persisters\ScheduleDictionaryPersisterResult.cs" />
