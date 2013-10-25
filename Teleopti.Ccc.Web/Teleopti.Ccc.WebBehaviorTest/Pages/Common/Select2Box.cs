@@ -1,3 +1,4 @@
+using SharpTestsEx;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 
@@ -17,10 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 
 		public static void AssertOptionExist(string select2Id, string optionText)
 		{
-			AssertIsOpen(select2Id);
-			Browser.Interactions.Javascript("$('.select2-input').focus().val('').trigger('keyup-change');");
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format("#{0} option:contains('{1}')", select2Id, optionText));
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".select2-result-selectable .select2-result-label:contains('{0}')", optionText));
 		}
 
 		public static string FirstOptionText
@@ -46,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		public static void Open(string select2Id)
 		{
 			AssertIsClosed(select2Id);
-			Browser.Interactions.Javascript(string.Format("$('#{0}').select2('open')", select2Id));
+			Browser.Interactions.Javascript(string.Format("$('#{0}').select2('open');", select2Id));
 			AssertIsOpen(select2Id);
 		}
 

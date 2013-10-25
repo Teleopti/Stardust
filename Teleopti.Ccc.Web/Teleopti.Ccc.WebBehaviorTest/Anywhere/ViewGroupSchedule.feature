@@ -58,15 +58,12 @@ Background:
 	And 'John Smith' is on 'A group' of group page 'A group page'
 	And 'John Smith' is on 'Another group' of group page 'A group page'
 	And 'John Smith' is on 'Some other group' of group page 'Another group page'
-	And 'Pierre Baldi' have the note 'Another note'
-	And 'John Smith' have the note 'A note'
 	And I have a role with
 		| Field              | Value                |
 		| Access to team     | Team green, Team red |
 		| Access to Anywhere | true                 |
 	And I am american
 
-@ignore
 Scenario: View group picker options
 	Given I viewing schedules for '2013-10-10'
 	Then I should be able to select groups
@@ -78,7 +75,6 @@ Scenario: View group picker options
 		| Contract Schedule/A contract schedule     |
 		| Part-Time Percentage/Part time percentage |
 		| Shift Bag/A shift bag                     |
-		#| Note/A note                               |
 		| Skill/A skill                             |
 		| A group page/A group                      |
 		| A group page/Another group                |
@@ -107,26 +103,22 @@ Scenario: View group schedule
 	Then I should see schedule for 'John Smith'
 	And I should not see person 'Pierre Baldi'
 
-@ignore
-Scenario: Order group pages like business heirarchy, contract, contract schedule, part time percentage, notes, shiftbag, skill, group page names
+Scenario: Order group pages like business heirarchy, contract, contract schedule, part time percentage, shiftbag, skill, group page names
 	Given I viewing schedules for '2013-10-10'
 	Then I should see group 'Business Hierarchy' before 'Contract'
 	And I should see group 'Contract' before 'Contract Schedule'
 	And I should see group 'Contract Schedule' before 'Part-Time Percentage'
-	#And I should see group 'Part-Time Percentage' before 'Note'
-	#And I should see group 'Note' before 'Shift bag'
+	And I should see group 'Part-Time Percentage' before 'Shift Bag'
 	And I should see group 'Shift Bag' before 'Skill'
 	And I should see group 'Skill' before 'A group page'
 	And I should see group 'A group page' before 'Another group page'
 
-@ignore
 Scenario: Order groups in alphabetical order
 	Given I viewing schedules for '2013-10-10'
 	Then I should see option 'Team green' before 'Team red'
 	And I should see option 'A contract' before 'Another contract'
 	And I should see option 'A contract schedule' before 'Another contract schedule'
 	And I should see option 'Another part time percentage' before 'Part time percentage'
-	#And I should see option 'Another note' before 'A note'
 	And I should see option 'A shift bag' before 'Another shift bag'
 	And I should see option 'A skill' before 'Another skill'
 	And I should see option 'A group' before 'Another group'

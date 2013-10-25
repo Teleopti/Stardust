@@ -85,8 +85,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void ThenIShouldBeAbleToSelectGroups(Table table)
 		{
 			var options = table.CreateSet<GroupInfo>();
-
-			Select2Box.Open("group-picker");
 			foreach (var option in options)
 			{
 				Select2Box.AssertOptionExist("group-picker", option.Group);
