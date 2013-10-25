@@ -168,7 +168,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
                 .As<IWindowsUserProvider>()
                 .InstancePerDependency();
 					builder.RegisterModule(SchedulePersistModule.ForOtherModules());
-            builder.RegisterType<ScheduleDictionarySaver>().As<IScheduleDictionarySaver>();
 
             registerSdkFactories(builder);
 

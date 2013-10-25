@@ -142,7 +142,6 @@
     <Compile Include="Configuration\LogModule.cs" />
     <Compile Include="Configuration\RepositoryModule.cs" />
     <Compile Include="Configuration\SchedulePersistModule.cs" />
-    <Compile Include="Configuration\ScheduleScreenPersisterModule.cs" />
     <Compile Include="Configuration\ScheduleScreenRefresherModule.cs" />
     <Compile Include="Configuration\ShiftTradeModule.cs" />
     <Compile Include="Configuration\TeleoptiCacheKey.cs" />
