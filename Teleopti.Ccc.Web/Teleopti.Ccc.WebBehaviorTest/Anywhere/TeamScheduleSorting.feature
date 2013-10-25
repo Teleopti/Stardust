@@ -89,4 +89,4 @@ Scenario: Order by shift start when person has both shift and day off
 	| Start time     | 2013-09-27 08:00 |
 	| End time       | 2013-09-27 17:00 |
 	When I view schedules for '2013-09-27'
-	Then I should see 'Pierre Baldi' before 'Ashley Andeen'	
+	Then I should see 'Pierre Baldi' before 'Ashley Andeen'
