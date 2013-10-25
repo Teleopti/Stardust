@@ -4,13 +4,13 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.TestCommon.TestData.Setups
+namespace Teleopti.Ccc.TestCommon.TestData.Setups.Specific
 {
-	public class BrasilianTimeZone : IUserSetup
+	public class HawaiiTimeZone : IUserSetup
 	{
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			user.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.BrazilTimeZoneInfo());
+			user.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
 		}
 	}
 }

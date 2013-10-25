@@ -219,31 +219,31 @@
     <Compile Include="TestData\Core\IUserSetup.cs" />
     <Compile Include="TestData\Core\PersonDataFactory.cs" />
     <Compile Include="TestData\Core\TestDataFactory.cs" />
-    <Compile Include="TestData\Generic\AbsenceConfigurable.cs" />
-    <Compile Include="TestData\Generic\ActivityConfigurable.cs" />
-    <Compile Include="TestData\Generic\ContractConfigurable.cs" />
-    <Compile Include="TestData\Generic\ContractScheduleConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\AbsenceConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\ActivityConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\ContractConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\ContractScheduleConfigurable.cs" />
     <Compile Include="TestData\Extensions.cs" />
-    <Compile Include="TestData\Generic\PartTimePercentageConfigurable.cs" />
-    <Compile Include="TestData\Generic\ScenarioConfigurable.cs" />
-    <Compile Include="TestData\Generic\ShiftCategoryConfigurable.cs" />
-    <Compile Include="TestData\Generic\SiteConfigurable.cs" />
-    <Compile Include="TestData\Generic\TeamConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\PartTimePercentageConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\ScenarioConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\ShiftCategoryConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\SiteConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\TeamConfigurable.cs" />
     <Compile Include="TestData\LayersExtensions.cs" />
-    <Compile Include="TestData\Generic\AbsenceRequestConfigurable.cs" />
-    <Compile Include="TestData\Setups\BusinessUnitFromFakeState.cs" />
-    <Compile Include="TestData\Setups\BrasilianTimeZone.cs" />
+    <Compile Include="TestData\Setups\Configurable\AbsenceRequestConfigurable.cs" />
+    <Compile Include="TestData\Setups\Specific\BusinessUnitFromFakeState.cs" />
+    <Compile Include="TestData\Setups\Specific\BrasilianTimeZone.cs" />
     <Compile Include="TestData\DefaultName.cs" />
-    <Compile Include="TestData\Setups\HawaiiTimeZone.cs" />
-    <Compile Include="TestData\Setups\LicenseFromFile.cs" />
-    <Compile Include="TestData\Generic\PersonAbsenceConfigurable.cs" />
-    <Compile Include="TestData\Generic\PersonPeriodConfigurable.cs" />
-    <Compile Include="TestData\Setups\PersonThatCreatesTestData.cs" />
-    <Compile Include="TestData\Setups\StockholmTimeZone.cs" />
-    <Compile Include="TestData\Setups\SwedishCulture.cs" />
-    <Compile Include="TestData\Setups\USCulture.cs" />
-    <Compile Include="TestData\Generic\UserConfigurable.cs" />
-    <Compile Include="TestData\Setups\UtcTimeZone.cs" />
+    <Compile Include="TestData\Setups\Specific\HawaiiTimeZone.cs" />
+    <Compile Include="TestData\Setups\Specific\LicenseFromFile.cs" />
+    <Compile Include="TestData\Setups\Configurable\PersonAbsenceConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\PersonPeriodConfigurable.cs" />
+    <Compile Include="TestData\Setups\Specific\PersonThatCreatesTestData.cs" />
+    <Compile Include="TestData\Setups\Specific\StockholmTimeZone.cs" />
+    <Compile Include="TestData\Setups\Specific\SwedishCulture.cs" />
+    <Compile Include="TestData\Setups\Specific\USCulture.cs" />
+    <Compile Include="TestData\Setups\Configurable\UserConfigurable.cs" />
+    <Compile Include="TestData\Setups\Specific\UtcTimeZone.cs" />
     <Compile Include="UsedInTestState.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -285,9 +285,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="TestData\Special\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

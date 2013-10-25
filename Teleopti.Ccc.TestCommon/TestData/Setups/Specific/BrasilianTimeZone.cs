@@ -1,16 +1,16 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.TestCommon.TestData.Setups
+namespace Teleopti.Ccc.TestCommon.TestData.Setups.Specific
 {
-	public class UtcTimeZone : IUserSetup
+	public class BrasilianTimeZone : IUserSetup
 	{
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			user.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			user.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.BrazilTimeZoneInfo());
 		}
 	}
 }

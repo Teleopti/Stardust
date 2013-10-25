@@ -3,7 +3,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.TestCommon.TestData.Setups
+namespace Teleopti.Ccc.TestCommon.TestData.Setups.Specific
 {
 	public class SwedishCulture : IUserSetup
 	{

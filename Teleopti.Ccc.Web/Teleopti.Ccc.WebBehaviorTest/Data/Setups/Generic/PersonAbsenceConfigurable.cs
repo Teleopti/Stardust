@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 {
-	public class PersonAbsenceConfigurable : TestCommon.TestData.Generic.PersonAbsenceConfigurable
+	public class PersonAbsenceConfigurable : TestCommon.TestData.Setups.Configurable.PersonAbsenceConfigurable
 	{
 		public PersonAbsenceConfigurable()
 		{
