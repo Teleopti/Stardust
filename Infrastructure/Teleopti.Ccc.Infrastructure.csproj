@@ -250,7 +250,6 @@
     <Compile Include="Persisters\IReassociateDataForSchedules.cs" />
     <Compile Include="Persisters\Refresh\IScheduleDataRefresher.cs" />
     <Compile Include="Persisters\IScheduleDictionaryModifiedCallback.cs" />
-    <Compile Include="Persisters\IScheduleDictionaryPersisterResult.cs" />
     <Compile Include="Persisters\Refresh\IScheduleRefresher.cs" />
     <Compile Include="Persisters\IScheduleScreenPersisterResult.cs" />
     <Compile Include="Persisters\Refresh\IScheduleScreenRefresher.cs" />
@@ -259,7 +258,6 @@
     <Compile Include="Persisters\Refresh\PersonRequestRefresher.cs" />
     <Compile Include="Persisters\Refresh\ScheduleDataRefresher.cs" />
     <Compile Include="Persisters\ScheduleDictionaryModifiedCallback.cs" />
-    <Compile Include="Persisters\ScheduleDictionaryPersisterResult.cs" />
     <Compile Include="Persisters\ScheduleEntityLoader.cs" />
     <Compile Include="Persisters\Refresh\ScheduleRefresher.cs" />
     <Compile Include="Persisters\ScheduleScreenPersisterResult.cs" />
