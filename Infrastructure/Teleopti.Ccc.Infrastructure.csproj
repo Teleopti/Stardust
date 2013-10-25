@@ -249,14 +249,12 @@
     <Compile Include="Persisters\Schedules\ScheduleDifferenceSaver.cs" />
     <Compile Include="Persisters\IReassociateDataForSchedules.cs" />
     <Compile Include="Persisters\Refresh\IScheduleDataRefresher.cs" />
-    <Compile Include="Persisters\IScheduleDictionaryModifiedCallback.cs" />
     <Compile Include="Persisters\Refresh\IScheduleRefresher.cs" />
     <Compile Include="Persisters\Refresh\IScheduleScreenRefresher.cs" />
     <Compile Include="Persisters\Refresh\IUpdateScheduleDataFromMessages.cs" />
     <Compile Include="Persisters\Refresh\MeetingRefresher.cs" />
     <Compile Include="Persisters\Refresh\PersonRequestRefresher.cs" />
     <Compile Include="Persisters\Refresh\ScheduleDataRefresher.cs" />
-    <Compile Include="Persisters\ScheduleDictionaryModifiedCallback.cs" />
     <Compile Include="Persisters\ScheduleEntityLoader.cs" />
     <Compile Include="Persisters\Refresh\ScheduleRefresher.cs" />
     <Compile Include="Persisters\Refresh\ScheduleScreenRefresher.cs" />
