@@ -18,24 +18,27 @@ namespace Teleopti.Interfaces.Domain
         ///<param name="concreteType"></param>
         ///<param name="id"></param>
         ///<returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Get")]
         IPersistableScheduleData Get(Type concreteType, Guid id);
-        
-        /// <summary>
-        /// Finds schedule for the specified people only withing the given period.
-        /// </summary>
-        /// <param name="personsProvider">A people provider.</param>
-        /// <param name="scheduleDictionaryLoadOptions">A people provider.</param>
-        /// <param name="period">The period.</param>
-        /// <param name="scenario">The scenario.</param>
-        /// <returns>A schedule dictionary that can be used to view schedule, but not to modify anything.</returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2009-03-31
-        /// </remarks>
-        IScheduleDictionary FindSchedulesOnlyInGivenPeriod(IPersonProvider personsProvider, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, IScenario scenario);
 
-        /// <summary>
+	    IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(
+		    IPerson person,
+		    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+		    DateTimePeriod dateTimePeriod,
+		    IScenario scenario);
+
+	    IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(
+		    IPerson person,
+		    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+		    DateOnlyPeriod period,
+		    IScenario scenario);
+
+	    IScheduleDictionary FindSchedulesForPersonsOnlyInGivenPeriod(
+		    IEnumerable<IPerson> persons,
+		    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+		    DateOnlyPeriod period,
+		    IScenario scenario);
+
+	    /// <summary>
         /// Finds schedules for a person where there is a certain absence
         /// </summary>
         /// <param name="period">The period.</param>

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter
 	{
-		IList<IShiftProjectionCache> Filter(DateOnly scheduleDateOnly, IPerson person, bool forRestrictionsOnly);
+		IList<IShiftProjectionCache> Filter(DateOnly scheduleDateOnly, IPerson person, bool forRestrictionsOnly, BlockFinderType blockFinderTypeForAdvanceScheduling);
 	}
 
 	public class ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter : IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_ruleSetSkillActivityChecker = ruleSetSkillActivityChecker;
 		}
 
-		public IList<IShiftProjectionCache> Filter(DateOnly scheduleDateOnly, IPerson person,  bool forRestrictionsOnly)
+		public IList<IShiftProjectionCache> Filter(DateOnly scheduleDateOnly, IPerson person, bool forRestrictionsOnly, BlockFinderType blockFinderTypeForAdvanceScheduling)
 		{
 			if (person == null)
 				return null;
@@ -42,7 +42,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 			foreach (IWorkShiftRuleSet ruleSet in ruleSets)
 			{
-				if (!ruleSet.IsValidDate(scheduleDateOnly))
+				
+                if (blockFinderTypeForAdvanceScheduling==BlockFinderType.SingleDay   && !ruleSet.IsValidDate(scheduleDateOnly))
 					continue;
 
 				if (_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet))

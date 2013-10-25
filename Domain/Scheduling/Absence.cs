@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
     /// </summary>
     public class Absence : Payload, IAbsence
     {
-        private IGroupingAbsence _groupingAbsence;
         private byte _priority = 100;
         private bool _requestable;
         private string _payrollCode;
@@ -20,23 +19,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private bool _confidential;
 
         #region Properties
-
-
-        /// <summary>
-        /// Parent grouping Absence
-        /// </summary>
-        public virtual IGroupingAbsence GroupingAbsence
-        {
-            get { return _groupingAbsence; }
-            set
-            {
-                InParameter.NotNull("value", value);
-                if (_groupingAbsence == value) return;
-                if (_groupingAbsence != null) _groupingAbsence.RemoveAbsence(this);
-                _groupingAbsence = value;
-                _groupingAbsence.AddAbsence(this);
-            }
-        }
 
         /// <summary>
         /// Gets or sets the priority.

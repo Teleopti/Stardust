@@ -1,11 +1,18 @@
 using System;
+using System.Drawing;
+using System.Globalization;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
+using Teleopti.Ccc.TestCommon.TestData.Setups;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 {
@@ -129,7 +136,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"I am an agent in a team without access to shift trade requests")]
 		public void GivenIAmAnAgentInATeamWithoutAccessToShiftTradeRequests()
 		{
-			DataMaker.Data().Apply(new Agent());
+			DataMaker.Data().Apply(new AgentWithoutRequestsAccess());
 			var team = new Team();
 			DataMaker.Data().Apply(team);
 			DataMaker.Data().Apply(new SchedulePeriod());
@@ -411,6 +418,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		public void GivenIHaveAFull_DayAbsenceToday()
 		{
 			DataMaker.Data().Apply(new AbsenceToday());
+		}
+
+		[Given(@"I have a full-day contract time absence today")]
+		public void GivenIHaveAFull_DayContractTimeAbsenceToday()
+		{
+			DataMaker.Data().Apply(new AbsenceInContractTimeToday());
 		}
 
 		[Given(@"I have a full-day absence today with")]

@@ -602,7 +602,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Domain\IForecastTemplateOwner.cs" />
-    <Compile Include="Domain\IGroupingAbsence.cs" />
     <Compile Include="Domain\IGroupingActivity.cs" />
     <Compile Include="Domain\ILayer.cs" />
     <Compile Include="Domain\ILayerCollection.cs" />

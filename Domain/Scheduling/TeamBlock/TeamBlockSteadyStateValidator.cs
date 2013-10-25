@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				    {
 					    var mainShiftPeriod = scheduleDay.GetEditorShift().ProjectionService().CreateProjection().Period();
 					    var mainShiftEndTime = mainShiftPeriod.GetValueOrDefault().EndDateTime;
-					    if (mainShiftEndTime != sampleEndTime)
+					    if (mainShiftEndTime.TimeOfDay  != sampleEndTime.TimeOfDay )
 						    return false;
 				    }
 			    }
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				    {
 					    var mainShiftPeriod = scheduleDay.GetEditorShift().ProjectionService().CreateProjection().Period();
 					    var mainShiftStartTime = mainShiftPeriod.GetValueOrDefault().StartDateTime;
-					    if (mainShiftStartTime != sampleStartTime)
+					    if (mainShiftStartTime.TimeOfDay != sampleStartTime.TimeOfDay )
 						    return false;
 				    }
 			    }

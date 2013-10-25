@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         public void Setup()
         {
             confidentials = new List<DataRow>();
-            target = new AbsenceMapper(new MappedObjectPair(), new GroupingAbsence("test"), confidentials);
+            target = new AbsenceMapper(new MappedObjectPair(), confidentials);
         }
 
         /// <summary>

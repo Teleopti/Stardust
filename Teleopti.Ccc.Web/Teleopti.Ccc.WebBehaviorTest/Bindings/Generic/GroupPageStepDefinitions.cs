@@ -4,6 +4,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			DataMaker.ApplyFromTable<GroupPageConfigurable>(table);
 		}
 
-		[Given(@"'(.*)' in on '(.*)' of group page '(.*)'")]
+		[Given(@"'(.*)' is on '(.*)' of group page '(.*)'")]
 		public void GivenInOnOfGroupPage(string person, string @group, string page)
 		{
 			DataMaker.Person(person).Apply(new PersonGroupConfigurable

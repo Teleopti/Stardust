@@ -95,6 +95,9 @@
     <Reference Include="Autofac.Configuration">
       <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.Configuration.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Logging">
+      <HintPath>..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="LinFu.DynamicProxy">
       <HintPath>..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
     </Reference>
@@ -127,6 +130,15 @@
     </Reference>
     <Reference Include="Rhino.Mocks">
       <HintPath>..\packages\RhinoMocks.3.6\lib\Rhino.Mocks.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.ServiceBus">
+      <HintPath>..\packages\Rhino.ServiceBus.3.0.2\lib\4.0\Rhino.ServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.ServiceBus.Autofac">
+      <HintPath>..\packages\Rhino.ServiceBus.Autofac.3.0.2\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.ServiceBus.SqlQueues">
+      <HintPath>..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.8\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Chart.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\packages\Syncfusion.Chart.Win.10.2.81\lib\4.0\Syncfusion.Chart.Base.dll</HintPath>
@@ -171,6 +183,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -339,6 +352,9 @@
     <Compile Include="Common\PropertyPageAndWizard\AbstractWizardPagesNoRoot.cs" />
     <Compile Include="Common\PropertyPageAndWizard\IAbstractPropertyPagesNoRoot.cs" />
     <Compile Include="Common\PropertyPageAndWizard\IPropertyPageNoRoot.cs" />
+    <Compile Include="Common\ServiceBus\DateOnlyPeriodSerializer.cs" />
+    <Compile Include="Common\ServiceBus\LargeGuidCollectionSerializer.cs" />
+    <Compile Include="Common\ServiceBus\ServiceBusSender.cs" />
     <Compile Include="Converters\DateTimeConverter\TimeSpanToStringConverter.cs" />
     <Compile Include="Forecasting\CopyToSkillCommand.cs" />
     <Compile Include="Forecasting\CopyToSkillModel.cs" />
@@ -417,6 +433,17 @@
     <Compile Include="Intraday\OpenIntradayTodayCommand.cs" />
     <Compile Include="Intraday\ReforecastModel.cs" />
     <Compile Include="Intraday\ReforecastWizardPages.cs" />
+    <Compile Include="Main\IDataSourceHandler.cs" />
+    <Compile Include="Main\ILogonView.cs" />
+    <Compile Include="Main\LicenseStatusLoader.cs" />
+    <Compile Include="Main\LoginInitializer.cs" />
+    <Compile Include="Main\LogonDataSourceHandler.cs" />
+    <Compile Include="Main\LogonInitializeStateHolder.cs" />
+    <Compile Include="Main\LogonLicenseChecker.cs" />
+    <Compile Include="Main\LogonMatrix.cs" />
+    <Compile Include="Main\LogonModel.cs" />
+    <Compile Include="Main\LogonPresenter.cs" />
+    <Compile Include="Main\ServerEndpointSelector.cs" />
     <Compile Include="Meetings\Commands\AddMeetingFromPanelCommand.cs" />
     <Compile Include="Meetings\Commands\FetchMeetingForCurrentUserChangeCommand.cs" />
     <Compile Include="Meetings\Commands\OpenMeetingsOverviewCommand.cs" />
@@ -567,6 +594,7 @@
     <Compile Include="Scheduling\AgentOvertimeAvailabilityAddCommand.cs" />
     <Compile Include="Scheduling\AgentOvertimeAvailabilityEditCommand.cs" />
     <Compile Include="Scheduling\AgentOvertimeAvailabilityRemoveCommand.cs" />
+    <Compile Include="Scheduling\FilterHourlyAvailabilityPresenter.cs" />
     <Compile Include="Scheduling\FilterOvertimeAvailabilityPresenter.cs" />
     <Compile Include="Scheduling\HandleBusinessRules.cs" />
     <Compile Include="Scheduling\IAgentOvertimeAvailabilityView.cs" />
@@ -574,6 +602,7 @@
     <Compile Include="Scheduling\IAgentStudentAvailabilityView.cs" />
     <Compile Include="Scheduling\ISchedulePresenterBase.cs" />
     <Compile Include="Scheduling\PasteAsOvertime.cs" />
+    <Compile Include="Scheduling\Restriction\HourlyAvailabilityPersonFilter.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailabilityPersonFilter.cs" />
     <Compile Include="Scheduling\ScheduleReporting\IReportData.cs" />
     <Compile Include="Scheduling\ScheduleReporting\ScheduledTimePerActivityModel.cs" />
@@ -581,7 +610,6 @@
     <Compile Include="Scheduling\Requests\HandlePersonRequestComparer.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailabilityCreator.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\INeedShiftCategoryDistributionModel.cs" />
-    <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftCategoryDistributionExtensions.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftCategoryDistributionModel.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftPerAgentPresenter.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftPerDatePresenter.cs" />
@@ -972,6 +1000,7 @@
     <Compile Include="Scheduling\SmartDayOffBackToLegalStateSolverContainer.cs" />
     <Compile Include="Scheduling\WorkShiftMasterActivityChecker.cs" />
     <Compile Include="Security\PasswordPolicyServiceViewModel.cs" />
+    <Compile Include="Services\StateManager.cs" />
     <Compile Include="Settings\AbsenceView.cs" />
     <Compile Include="Settings\PageHelper.cs" />
     <Compile Include="Settings\TrackerView.cs" />
@@ -1267,6 +1296,10 @@
     <ProjectReference Include="..\Teleopti.Ccc.Obfuscated\Teleopti.Ccc.Obfuscated.csproj">
       <Project>{5895BC02-04C8-46E1-A804-43D314A02AD9}</Project>
       <Name>Teleopti.Ccc.Obfuscated</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ClientProxies\Teleopti.Ccc.Sdk.ClientProxies.csproj">
+      <Project>{6116fc80-2475-447e-a90a-14b4db59e2a7}</Project>
+      <Name>Teleopti.Ccc.Sdk.ClientProxies</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Common\Teleopti.Ccc.Sdk.Common.csproj">
       <Project>{43BE4B89-AF3F-439E-9C44-58AE0672E410}</Project>

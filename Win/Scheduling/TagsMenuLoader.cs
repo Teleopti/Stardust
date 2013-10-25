@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -13,32 +14,32 @@ namespace Teleopti.Ccc.Win.Scheduling
     {
         private readonly ToolStripMenuItem _toolStripMenuItemRibbon;
         private readonly ToolStripMenuItem _toolStripMenuItemGrid;
-        private readonly ToolStripMenuItem _toolStripMenuItemEditGrid;
-        private readonly ToolStripSplitButton _toolStripSplitButton;
-        private readonly ToolStripComboBox _toolStripComboBox;
+        private readonly ToolStripMenuItem _toolStripMenuItemSetTagOnContextMenu;
+        private readonly ToolStripSplitButton _toolStripSetTagOnRibbonButton;
+        private readonly ToolStripComboBox _toolStripAutoTagOnRibbonComboBox;
         private readonly IList<IScheduleTag> _tags;
         private readonly MouseEventHandler _eventHandler;
         private readonly MouseEventHandler _eventHandlerChangeTag;
         private readonly IScheduleTag _autoTag;
 
         public TagsMenuLoader(ToolStripMenuItem toolStripMenuItemRibbon, ToolStripMenuItem toolStripMenuItemGrid, IList<IScheduleTag> tags, 
-            MouseEventHandler eventHandler, ToolStripSplitButton splitButton, MouseEventHandler eventHandlerChangeTag, ToolStripComboBox toolStripComboBox, IScheduleTag autoTag, ToolStripMenuItem toolStripMenuItemEditGrid)
+            MouseEventHandler eventHandler, ToolStripSplitButton setTagOnRibbonButton, MouseEventHandler eventHandlerChangeTag, ToolStripComboBox toolStripAutoTagOnRibbonComboBox, IScheduleTag autoTag, ToolStripMenuItem toolStripMenuItemSetTagOnContextMenu)
         {
             if(toolStripMenuItemRibbon == null) throw new ArgumentNullException("toolStripMenuItemRibbon");
             if(toolStripMenuItemGrid == null) throw new ArgumentNullException("toolStripMenuItemGrid");
-            if (toolStripMenuItemEditGrid == null) throw new ArgumentNullException("toolStripMenuItemEditGrid");
-            if(splitButton == null) throw new ArgumentNullException("splitButton");
+            if (toolStripMenuItemSetTagOnContextMenu == null) throw new ArgumentNullException("toolStripMenuItemSetTagOnContextMenu");
+            if(setTagOnRibbonButton == null) throw new ArgumentNullException("setTagOnRibbonButton");
             if(tags == null) throw new ArgumentNullException("tags");
             if(eventHandler == null) throw new ArgumentNullException("eventHandler");
             if (eventHandlerChangeTag == null) throw new ArgumentNullException("eventHandlerChangeTag");
-            if(toolStripComboBox == null) throw new ArgumentNullException("toolStripComboBox");
+            if(toolStripAutoTagOnRibbonComboBox == null) throw new ArgumentNullException("toolStripAutoTagOnRibbonComboBox");
             if(autoTag == null) throw new ArgumentNullException("autoTag");
 
             _toolStripMenuItemRibbon = toolStripMenuItemRibbon;
             _toolStripMenuItemGrid = toolStripMenuItemGrid;
-            _toolStripMenuItemEditGrid = toolStripMenuItemEditGrid;
-            _toolStripSplitButton = splitButton;
-            _toolStripComboBox = toolStripComboBox;
+            _toolStripMenuItemSetTagOnContextMenu = toolStripMenuItemSetTagOnContextMenu;
+            _toolStripSetTagOnRibbonButton = setTagOnRibbonButton;
+            _toolStripAutoTagOnRibbonComboBox = toolStripAutoTagOnRibbonComboBox;
             _autoTag = autoTag;
             _tags = tags;
             _eventHandler = eventHandler;
@@ -52,45 +53,47 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 if (tag.IsDeleted) continue;
 
-                var toolStripMenuItemRibbonTag = new ToolStripMenuItem();
-                var toolStripMenuItemGridTag = new ToolStripMenuItem();
-                var toolStripMenuItemEditGridTag = new ToolStripMenuItem();
-                var toolStripMenuItemEditRibbon = new ToolStripMenuItem();
-
-                toolStripMenuItemRibbonTag.Text = tag.Description;
-                toolStripMenuItemGridTag.Text = tag.Description;
-                toolStripMenuItemEditGridTag.Text = tag.Description;
-                toolStripMenuItemEditRibbon.Text = tag.Description;
-
-                toolStripMenuItemRibbonTag.Tag = tag;
-                toolStripMenuItemGridTag.Tag = tag;
-                toolStripMenuItemEditGridTag.Tag = tag;
-                toolStripMenuItemEditRibbon.Tag = tag;
-
-                toolStripMenuItemRibbonTag.MouseUp += _eventHandler;
-                toolStripMenuItemGridTag.MouseUp += _eventHandler;
-                toolStripMenuItemEditGridTag.MouseUp += _eventHandlerChangeTag;
-                toolStripMenuItemEditRibbon.MouseUp += _eventHandlerChangeTag;
-                
+				var toolStripMenuItemRibbonTag = createToolStripMenuItemAndRegisterTagToIt(tag, _eventHandler);
+				var toolStripMenuItemGridTag = createToolStripMenuItemAndRegisterTagToIt(tag, _eventHandler);
+				var toolStripMenuItemOnContextMenu = createToolStripMenuItemAndRegisterTagToIt(tag, _eventHandlerChangeTag);
+				var toolStripMenuItemSetTagOmRibbon = createToolStripMenuItemAndRegisterTagToIt(tag, _eventHandlerChangeTag);
 
                 _toolStripMenuItemRibbon.DropDownItems.Add(toolStripMenuItemRibbonTag);
                 _toolStripMenuItemGrid.DropDownItems.Add(toolStripMenuItemGridTag);
-                _toolStripMenuItemEditGrid.DropDownItems.Add(toolStripMenuItemEditGridTag);
-                _toolStripSplitButton.DropDownItems.Add(toolStripMenuItemEditRibbon);
-                _toolStripComboBox.Items.Add(tag);
+				_toolStripMenuItemSetTagOnContextMenu.DropDownItems.Add(toolStripMenuItemOnContextMenu);
+                _toolStripSetTagOnRibbonButton.DropDownItems.Add(toolStripMenuItemSetTagOmRibbon);
+                _toolStripAutoTagOnRibbonComboBox.Items.Add(tag);
             }
 
-            if (_toolStripComboBox.ComboBox != null && _toolStripComboBox.Items.Count > 0)
+			var keepOriginalTag = KeepOriginalScheduleTag.Instance;
+			_toolStripAutoTagOnRibbonComboBox.Items.Insert(1, keepOriginalTag);
+			
+            if (_toolStripAutoTagOnRibbonComboBox.ComboBox != null)
             {
-                _toolStripComboBox.ComboBox.DisplayMember = "Description";
-                _toolStripComboBox.SelectedItem = _autoTag;
+                _toolStripAutoTagOnRibbonComboBox.ComboBox.DisplayMember = "Description";
+                _toolStripAutoTagOnRibbonComboBox.SelectedItem = _autoTag;
             }
 
-            LoadDeletedTags(); 
+            loadDeletedTags(); 
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        private void LoadDeletedTags()
+		private static ToolStripMenuItem createToolStripMenuItemAndRegisterTagToIt(IScheduleTag tag, MouseEventHandler mouseEventHandler)
+	    {
+			var toolStripMenuItem = new ToolStripMenuItem();
+			registerTagToToolStripMenuItem(toolStripMenuItem, tag, mouseEventHandler);
+			return toolStripMenuItem;
+	    }
+
+		private static void registerTagToToolStripMenuItem(ToolStripMenuItem toolStripMenuItem, IScheduleTag tag, MouseEventHandler mouseEventHandler)
+		{
+			toolStripMenuItem.Text = tag.Description;
+			toolStripMenuItem.Tag = tag;
+			if(mouseEventHandler != null)
+				toolStripMenuItem.MouseUp += mouseEventHandler;
+		}
+
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        private void loadDeletedTags()
         {
             var deleted = from t in _tags
                           where t.IsDeleted

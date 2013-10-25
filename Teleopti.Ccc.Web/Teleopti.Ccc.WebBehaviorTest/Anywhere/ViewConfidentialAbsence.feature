@@ -31,7 +31,6 @@ Background:
 	| Confidential | true            |
 	| Color        | Red             |
 	
-#team schedule view
 Scenario: Cannot view confidential absence in team view when no permission
 	Given I have the role 'Cannot View Confidential'
 	And 'Pierre Baldi' has an absence with
@@ -41,8 +40,9 @@ Scenario: Cannot view confidential absence in team view when no permission
 	| End time   | 2013-08-10 23:59 |
 	When I view schedules for '2013-08-10'
 	Then I should see 'Pierre Baldi' with absence
-	| Field | Value |
-	| Color | gray  |
+	| Field       | Value  |
+	| Color       | gray   |
+#	| Description | Övrigt |
 
 Scenario: View confidential absence in team view when permitted
 	Given I have the role 'Can View Confidential'
@@ -53,11 +53,10 @@ Scenario: View confidential absence in team view when permitted
 	| End time   | 2013-08-10 23:59 |
 	When I view schedules for '2013-08-10'
 	Then I should see 'Pierre Baldi' with absence
-	| Field | Value |
-	| Color | Red   |
+	| Field       | Value           |
+	| Color       | Red             |
+#	| Description | Mental disorder |
 
-
-#person schedule view
 Scenario: Cannot view confidential absence in person view when no permission
 	Given I have the role 'Cannot View Confidential'
 	And 'Pierre Baldi' has an absence with
@@ -67,10 +66,11 @@ Scenario: Cannot view confidential absence in person view when no permission
 	| End time   | 2013-08-10 23:59 |
 	When I view person schedule for 'Pierre Baldi' on '2013-08-10'
 	Then I should see a shift layer with
-	| Field      | Value |
-	| Start time | 08:00 |
-	| End time   | 16:00 |
-	| Color      | gray  |
+	| Field       | Value  |
+	| Start time  | 08:00  |
+	| End time    | 16:00  |
+	| Color       | gray   |
+#	| Description | Övrigt |
 	And I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Övrigt           |
@@ -87,10 +87,11 @@ Scenario: View confidential absence in person view when permitted
 	| End time   | 2013-08-10 23:59 |
 	When I view person schedule for 'Pierre Baldi' on '2013-08-10'
 	Then I should see a shift layer with
-	| Field      | Value |
-	| Start time | 08:00 |
-	| End time   | 16:00 |
-	| Color      | Red   |
+	| Field       | Value           |
+	| Start time  | 08:00           |
+	| End time    | 16:00           |
+	| Color       | Red             |
+#	| Description | Mental disorder |
 	And I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Mental disorder  |

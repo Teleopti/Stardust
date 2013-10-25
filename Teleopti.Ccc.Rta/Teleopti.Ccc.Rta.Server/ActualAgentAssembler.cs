@@ -8,46 +8,32 @@ using log4net;
 
 namespace Teleopti.Ccc.Rta.Server
 {
-	public interface IRtaDataHandlerCache
+    public class ActualAgentAssembler : IActualAgentAssembler
 	{
-		void InvalidateReadModelCache(Guid personId);
-	}
-
-	public interface IActualAgentAssembler : IRtaDataHandlerCache
-	{
-		IActualAgentState GetAgentState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode,
-										DateTime timestamp,
-										TimeSpan timeInState,
-										DateTime? batchId, string originalSourceId);
-
-		IEnumerable<IActualAgentState> GetAgentStatesForMissingAgents(DateTime batchId, string sourceId);
-		IActualAgentState GetAgentStateForScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp);
-	}
-
-	public class ActualAgentAssembler : IActualAgentAssembler
-	{
-		private readonly IDatabaseHandler _databaseHandler;
-		private readonly IMbCacheFactory _mbCacheFactory;
+		private readonly IDatabaseReader _databaseReader;
+        private readonly ICurrentAndNextLayerExtractor _currentAndNextLayerExtractor;
+        private readonly IMbCacheFactory _mbCacheFactory;
 		private readonly IAlarmMapper _alarmMapper;
 		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IActualAgentAssembler));
 		private const string notInBatchStatecode = "CCC Logged out";
 
-		public ActualAgentAssembler(IDatabaseHandler databaseHandler, IMbCacheFactory mbCacheFactory, IAlarmMapper alarmMapper)
+		public ActualAgentAssembler(IDatabaseReader databaseReader, ICurrentAndNextLayerExtractor currentAndNextLayerExtractor, IMbCacheFactory mbCacheFactory, IAlarmMapper alarmMapper)
 		{
-			_databaseHandler = databaseHandler;
-			_mbCacheFactory = mbCacheFactory;
+			_databaseReader = databaseReader;
+		    _currentAndNextLayerExtractor = currentAndNextLayerExtractor;
+		    _mbCacheFactory = mbCacheFactory;
 			_alarmMapper = alarmMapper;
 		}
 
-		protected IDatabaseHandler DatabaseHandler
+		protected IDatabaseReader DatabaseReader
 		{
-			get { return _databaseHandler; }
+			get { return _databaseReader; }
 		}
 
 		public IEnumerable<IActualAgentState> GetAgentStatesForMissingAgents(DateTime batchId, string sourceId)
 		{
 			LoggingSvc.InfoFormat("Getting missing agent states from from batch: {0}, sourceId: {1}", batchId, sourceId);
-			var missingAgentStates = DatabaseHandler.GetMissingAgentStatesFromBatch(batchId, sourceId);
+			var missingAgentStates = DatabaseReader.GetMissingAgentStatesFromBatch(batchId, sourceId);
 			if (!missingAgentStates.Any())
 			{
 				LoggingSvc.Info("Did not find any missing agent states, all were included in batch");
@@ -121,14 +107,14 @@ namespace Teleopti.Ccc.Rta.Server
 			var originalSourceId = string.Empty;
 
 			LoggingSvc.DebugFormat("Getting readmodel for person: {0}", personId);
-			var readModelLayers = DatabaseHandler.GetReadModel(personId);
+			var readModelLayers = DatabaseReader.GetReadModel(personId);
 			if (readModelLayers.Any())
 				LoggingSvc.DebugFormat("Found {0} layers", readModelLayers.Count);
 			else
 				LoggingSvc.DebugFormat("No readmodel found for Person: {0}", personId);
 
-			var scheduleLayers = DatabaseHandler.CurrentLayerAndNext(timestamp, readModelLayers);
-			var previousState = DatabaseHandler.LoadOldState(personId);
+			var scheduleLayers = _currentAndNextLayerExtractor.CurrentLayerAndNext(timestamp, readModelLayers);
+			var previousState = DatabaseReader.LoadOldState(personId);
 
 			if (previousState == null)
 				return buildAgentState(scheduleLayers, null, personId, platformId, stateCode, timestamp, new TimeSpan(0),
@@ -149,18 +135,18 @@ namespace Teleopti.Ccc.Rta.Server
 								   businessUnitId, batchId, originalSourceId);
 		}
 
-		private static bool isScheduleSame(IList<ScheduleLayer> layers, IActualAgentState oldState)
+        private static bool isScheduleSame(Tuple<ScheduleLayer, ScheduleLayer> layers, IActualAgentState oldState)
 		{
 			// It might seem strange to check both current.EndDateTime and next.StartDateTime against oldState
 			// But either they are the same or some layer will be null.
-			var currentSame = layers[0] != null
-										? layers[0].PayloadId == oldState.ScheduledId &&
-										  layers[0].EndDateTime == oldState.NextStart
+			var currentSame = layers.Item1 != null
+										? layers.Item1.PayloadId == oldState.ScheduledId &&
+										  layers.Item1.EndDateTime == oldState.NextStart
 										: oldState.ScheduledId == Guid.Empty;
 
-			var nextSame = layers[1] != null
-										 ? layers[1].PayloadId == oldState.ScheduledNextId &&
-										   layers[1].StartDateTime == oldState.NextStart
+			var nextSame = layers.Item2 != null
+										 ? layers.Item2.PayloadId == oldState.ScheduledNextId &&
+										   layers.Item2.StartDateTime == oldState.NextStart
 										 : oldState.ScheduledNextId == Guid.Empty;
 
 			return currentSame && nextSame;
@@ -171,28 +157,28 @@ namespace Teleopti.Ccc.Rta.Server
 											   TimeSpan timeInState, DateTime? batchId, string originalSourceId)
 		{
 			LoggingSvc.DebugFormat("Getting readmodel for person: {0}", personId);
-			var readModelLayers = DatabaseHandler.GetReadModel(personId);
+			var readModelLayers = DatabaseReader.GetReadModel(personId);
 			if (readModelLayers.Any())
 				LoggingSvc.DebugFormat("Found {0} layers", readModelLayers.Count);
 			else
 				LoggingSvc.DebugFormat("No readmodel found for Person: {0}", personId);
 
-			var scheduleLayers = DatabaseHandler.CurrentLayerAndNext(timestamp, readModelLayers);
-			var previousState = DatabaseHandler.LoadOldState(personId);
+			var scheduleLayers = _currentAndNextLayerExtractor.CurrentLayerAndNext(timestamp, readModelLayers);
+			var previousState = DatabaseReader.LoadOldState(personId);
 			return buildAgentState(scheduleLayers, previousState, personId, platformTypeId, stateCode, timestamp, timeInState,
 								   businessUnitId, batchId, originalSourceId);
 		}
 
 
-		private IActualAgentState buildAgentState(IList<ScheduleLayer> scheduleLayers, IActualAgentState previousState,
+        private IActualAgentState buildAgentState(Tuple<ScheduleLayer, ScheduleLayer> currentAndNextScheduleLayers, IActualAgentState previousState,
 												  Guid personId, Guid platformTypeId,
 												  string stateCode, DateTime timestamp, TimeSpan timeInState,
 												  Guid businessUnitId, DateTime? batchId, string originalSourceId)
 		{
 			RtaAlarmLight foundAlarm;
 			LoggingSvc.DebugFormat("Starting to build ActualAgentState for personId: {0}", personId);
-			var scheduleLayer = scheduleLayers.FirstOrDefault();
-			var nextLayer = scheduleLayers.LastOrDefault();
+			var scheduleLayer = currentAndNextScheduleLayers.Item1;
+			var nextLayer = currentAndNextScheduleLayers.Item2;
 			var activityId = scheduleLayer != null ? scheduleLayer.PayloadId : Guid.Empty;
 
 			var newState = new ActualAgentState
@@ -266,7 +252,7 @@ namespace Teleopti.Ccc.Rta.Server
 		public void InvalidateReadModelCache(Guid personId)
 		{
 			LoggingSvc.DebugFormat("Clearing ReadModel cache for Person: {0}", personId);
-			_mbCacheFactory.Invalidate(DatabaseHandler, x => x.GetReadModel(personId), true);
+			_mbCacheFactory.Invalidate(DatabaseReader, x => x.GetReadModel(personId), true);
 		}
 	}
 }

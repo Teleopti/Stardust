@@ -103,6 +103,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="Anywhere\ViewFullDayAbsence.feature.cs">
+      <DependentUpon>ViewFullDayAbsence.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Anywhere\TeamScheduleSorting.feature.cs">
       <DependentUpon>TeamScheduleSorting.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -125,21 +130,27 @@
     </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\GroupPageStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\AbsenceRequestConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\NoteConfigurable.cs" />
+    <Compile Include="Bindings\Generic\NoteStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PartTimePercentageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NothingStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SiteStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsKnockoutExtensions.cs" />
     <Compile Include="Data\Setups\DefaultName.cs" />
-    <Compile Include="Data\Setups\Generic\PartTimePercentageConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\SiteConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\OvertimeAvailabilityConfigurable.cs" />
     <Compile Include="Bindings\Generic\OvertimeAvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceTemplateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\UserLogonDetailsStepDefinitions.cs" />
-    <Compile Include="Data\PersonDataFactory.cs" />
     <Compile Include="Data\Setups\Specific\GroupingReadOnlyUpdate.cs" />
     <Compile Include="Data\Setups\Specific\UserContract.cs" />
+    <Compile Include="MyTime\22851_FindShiftTradePageFromTeamSchedule.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>22851_FindShiftTradePageFromTeamSchedule.feature</DependentUpon>
+    </Compile>
     <Compile Include="OveritmeAvailability.feature.cs">
       <DependentUpon>OveritmeAvailability.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -218,6 +229,7 @@
     <Compile Include="Core\BrowserDriver\Retrying.cs" />
     <Compile Include="Data\CryptoCreator.cs" />
     <Compile Include="Data\HardCodedResolver.cs" />
+    <Compile Include="Data\Setups\Specific\AbsenceInContractTimeToday.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
     <Compile Include="Bindings\Generic\ServerStepDefinitions.cs" />
     <Compile Include="Session.feature.cs">
@@ -257,7 +269,6 @@
     <Compile Include="Data\Setups\Generic\TeamConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\StudentAvailabilityPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\CreateName.cs" />
-    <Compile Include="Data\Setups\Specific\UtcTimeZone.cs" />
     <Compile Include="StudentAvailabilityMultidays.feature.cs">
       <DependentUpon>StudentAvailabilityMultidays.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -284,7 +295,6 @@
     </Compile>
     <Compile Include="Data\Setups\Generic\UserLogonDetailConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PasswordPolicyConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\UserConfigurable.cs" />
     <Compile Include="Bindings\Transform.cs" />
     <Compile Include="Core\Legacy\QuicklyFind.cs" />
     <Compile Include="Data\Setups\Generic\PasswordConfigurable.cs" />
@@ -332,18 +342,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Data\Setups\Generic\AbsenceConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\ActivityConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\AbsenceRequestConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\MessageConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\TextRequestConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PublicNoteConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\MeetingConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\DayOffTemplateConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\ShiftCategoryConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\PreferencesPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutExtendedPreferencesAccess.cs" />
-    <Compile Include="Data\Setups\Specific\StockholmTimeZone.cs" />
     <Compile Include="Pages\Common\ComboBox.cs" />
     <Compile Include="Pages\Common\IMessageReplyPage.cs" />
     <Compile Include="Pages\MessagePage.cs" />
@@ -428,18 +433,12 @@
     <Compile Include="QUnitTestsStepDefinition.cs" />
     <Compile Include="Data\Setups\Specific\AbsencePreferenceInContractTimeOnWeekday.cs" />
     <Compile Include="Data\Setups\Specific\AbsencePreferenceOnWeekday.cs" />
-    <Compile Include="Data\Setups\Common\CommonScenario.cs" />
     <Compile Include="Data\Setups\Specific\ContractScheduleFromTable.cs" />
     <Compile Include="Data\Setups\Specific\DayOffPreferenceOnWeekday.cs" />
-    <Compile Include="Data\Setups\Specific\IContractScheduleSetup.cs" />
     <Compile Include="Data\Setups\Specific\ShiftOnWeekday.cs" />
     <Compile Include="Data\Setups\Specific\SecondScenario.cs" />
-    <Compile Include="Data\DataFactory.cs" />
-    <Compile Include="Data\Setups\Common\CommonContract.cs" />
     <Compile Include="Data\Setups\Specific\ContractFromTable.cs" />
-    <Compile Include="Data\Setups\Common\CommonContractSchedule.cs" />
     <Compile Include="Data\Setups\Specific\DayOffScheduled.cs" />
-    <Compile Include="Data\Setups\Specific\IContractSetup.cs" />
     <Compile Include="Data\Setups\Specific\ShiftCategoryPreferenceOnWeekday.cs" />
     <Compile Include="Data\Setups\Specific\UserContractSchedule.cs" />
     <Compile Include="PreferencesPeriodFeedbackStepDefinition.cs" />
@@ -468,8 +467,6 @@
     <Compile Include="Data\Setups\Specific\AnotherSitesTeam.cs" />
     <Compile Include="Data\Setups\Specific\AnotherTeam.cs" />
     <Compile Include="Data\Setups\Specific\GeneratedTeam.cs" />
-    <Compile Include="Data\Setups\Specific\HawaiiTimeZone.cs" />
-    <Compile Include="Data\IDataSetup.cs" />
     <Compile Include="Data\Setups\Specific\NoVirtualSchedulePeriod.cs" />
     <Compile Include="Data\Setups\Specific\DayOffToday.cs" />
     <Compile Include="Data\Setups\Specific\SchedulePeriod.cs" />
@@ -562,10 +559,7 @@
     <Compile Include="Data\Setups\Specific\StudentAvailabilityOpenWorkflowControlSet.cs" />
     <Compile Include="Data\Setups\Specific\StudentAvailability.cs" />
     <Compile Include="Data\Setups\Specific\TwoExistingTextRequestChangedOnDifferentTimes.cs" />
-    <Compile Include="Data\Setups\Specific\USCulture.cs" />
     <Compile Include="Data\Setups\Specific\PersonPeriod.cs" />
-    <Compile Include="Data\IUserDataSetup.cs" />
-    <Compile Include="Data\IUserSetup.cs" />
     <Compile Include="Pages\Common\ICancelButton.cs" />
     <Compile Include="Pages\Common\IOkButton.cs" />
     <Compile Include="Pages\Pages.cs" />
@@ -625,7 +619,6 @@
     <Compile Include="Pages\StudentAvailabilityPage.cs" />
     <Compile Include="StudentAvailabilityStepDefinitions.cs" />
     <Compile Include="Data\TestDataSetup.cs" />
-    <Compile Include="Data\Setups\Specific\SwedishCulture.cs" />
     <Compile Include="Core\SystemLevelLock.cs" />
     <Compile Include="Data\TestSiteConfigurationSetup.cs" />
     <Compile Include="Core\Browser.cs" />
@@ -661,6 +654,10 @@
     <Content Include="BeforeTestRun.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Anywhere\ViewFullDayAbsence.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ViewFullDayAbsence.feature.cs</LastGenOutput>
+    </None>
     <None Include="Anywhere\ViewGroupSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewGroupSchedule.feature.cs</LastGenOutput>
@@ -699,6 +696,10 @@
     <None Include="CalendarShare.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>CalendarShare.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\22851_FindShiftTradePageFromTeamSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>22851_FindShiftTradePageFromTeamSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="OveritmeAvailability.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

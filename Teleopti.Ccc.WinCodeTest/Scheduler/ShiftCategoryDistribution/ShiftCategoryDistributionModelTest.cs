@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 		private ICachedShiftCategoryDistribution _cachedShiftCategoryDistribution;
 		private ISchedulerStateHolder _schedulerStateHolder;
 	    private IPopulationStatisticsCalculator _populationStatisticsCalculator;
+		private bool _chartUpdateNeeded;
 
 	    [SetUp]
 		public void Setup()
@@ -34,6 +35,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
             _populationStatisticsCalculator = new PopulationStatisticsCalculator(true );
 			_target = new ShiftCategoryDistributionModel(_cachedShiftCategoryDistribution, _cachedNumberOfEachCategoryPerDate, _cachedNumberOfEachCategoryPerPerson,
 														 new DateOnlyPeriod(2013, 09, 16, 2013, 09, 17), _schedulerStateHolder, _populationStatisticsCalculator);
+			_target.ChartUpdateNeeded += targetChartUpdateNeeded;
+		}
+
+		void targetChartUpdateNeeded(object sender, System.EventArgs e)
+		{
+			_chartUpdateNeeded = true;
 		}
 
 		[Test]
@@ -338,6 +345,21 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 				_target.SetFilteredPersons(filteredPersons);
 				Assert.AreEqual(new DateOnly(2013, 9, 17), _target.GetDatesSortedByNumberOfShiftCategories(cat1, false)[0]);
 			}
+		}
+
+		[Test]
+		public void ShouldRaiseEventOnChartUpdateNeeded()
+		{
+			_target.OnChartUpdateNeeded();
+			Assert.IsTrue(_chartUpdateNeeded);
+		}
+
+		[Test]
+		public void ShouldGetSetIfShouldUpdateViews()
+		{
+			Assert.IsFalse(_target.ShouldUpdateViews);
+			_target.ShouldUpdateViews = true;
+			Assert.IsTrue(_target.ShouldUpdateViews);
 		}
 	}
 }

@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			_presenter.SetCellInfo(e.Style, e.RowIndex, e.ColIndex, null);
 		}
 
+
 		private void gridControl1_CellDoubleClick(object sender, GridCellClickEventArgs e)
 		{
 			if (e.RowIndex == 0 && e.ColIndex > -1)

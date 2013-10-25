@@ -74,13 +74,11 @@
 									<div class="shift" data-bind="template: { name: 'layerTemplate', foreach: Layers }"></div>
 									<!-- /ko -->
 									
-									<!-- ko if: IsDayOff -->
-									<!-- ko with: DayOff -->
+									<!-- ko foreach: DayOffs -->
 									<!-- ko if: OverlapsTimeLine -->
 									<div 
 										class="dayoff absolute" 
 										data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }"></div>
-									<!-- /ko -->
 									<!-- /ko -->
 									<!-- /ko -->
 								</div>

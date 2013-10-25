@@ -9,7 +9,7 @@ define([
 		return function (timeLineLayers) {
 
 			var self = this;
-
+			
 			this.WidthPixels = ko.observable();
 
 			this.StartMinutes = ko.computed(function () {
@@ -63,13 +63,18 @@ define([
 				return times;
 			}).extend({ throttle: 1 });
 
-			this.StartTime = ko.computed(function() {
-				return self.Times()[0].Time();
+			this.StartTime = ko.computed(function () {
+				var times = self.Times();
+				if (times.length > 0)
+					return self.Times()[0].Time();
+				return "";
 			});
 
 			this.EndTime = ko.computed(function () {
 				var times = self.Times();
-				return times[times.length - 1].Time();
+				if (times.length > 0)
+					return times[times.length - 1].Time();
+				return "";
 			});
 		};
 	});

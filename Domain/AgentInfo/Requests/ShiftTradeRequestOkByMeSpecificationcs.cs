@@ -3,25 +3,25 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
-    public class ShiftTradeRequestOkByMeSpecification : Specification<IPersonRequest>
-    {
-        private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
+	public class ShiftTradeRequestOkByMeSpecification : Specification<IPersonRequest>
+	{
+		private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 
-        public ShiftTradeRequestOkByMeSpecification(IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker)
-        {
-            _shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
-        }
+		public ShiftTradeRequestOkByMeSpecification(IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker)
+		{
+			_shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
+		}
 
-        public override bool IsSatisfiedBy(IPersonRequest obj)
-        {
-            bool isRefered = false;
-            if (obj != null)
-            {
-                IShiftTradeRequest shiftTradeRequest = obj.Request as IShiftTradeRequest;
-                if (shiftTradeRequest != null)
-                    isRefered = shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker) == ShiftTradeStatus.OkByMe;
-            }
-            return isRefered;
-        }
-    }
+		public override bool IsSatisfiedBy(IPersonRequest obj)
+		{
+			var isOkByMe = false;
+			if (obj != null)
+			{
+				var shiftTradeRequest = obj.Request as IShiftTradeRequest;
+				if (shiftTradeRequest != null)
+					isOkByMe = shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker) == ShiftTradeStatus.OkByMe;
+			}
+			return isOkByMe;
+		}
+	}
 }

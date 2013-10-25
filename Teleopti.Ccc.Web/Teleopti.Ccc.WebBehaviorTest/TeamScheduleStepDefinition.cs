@@ -27,32 +27,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class TeamScheduleStepDefinition
 	{
-		[Given(@"there is group page stuff")]
-		public void GivenThereIsGroupPageStuff()
-		{
-			DataMaker.Person("Pierre Baldi").Apply(new GroupPageStuff());
-		}
-
-		public class GroupPageStuff : IUserDataSetup
-		{
-			public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
-			{
-				var page = new GroupPage("group page");
-				var root = new RootPersonGroup("root person group");
-				var child = new ChildPersonGroup("child person group");
-				child.AddPerson(user);
-				root.AddChildGroup(child);
-				page.AddRootPersonGroup(root);
-
-
-				new GroupPageRepository(uow).Add(page);
-			}
-		}
-
-
-
-
-
 		[When(@"I select the other team in the team picker")]
 		public void WhenIChooseTheOtherTeamInTheTeamPicker()
 		{
@@ -420,13 +394,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.AssertExists("#Request-add-loaded-ready");
 			Browser.Interactions.AssertFirstContains("#Request-add-loaded-date", dateAsSwedishString);
 		}
+        
+        [When(@"I initialize a shift trade")]
+        public void WhenIInitializeAShiftTrade()
+        {
+            Browser.Interactions.Click(".initialize-shift-trade");
+        }
+        
+        [Then(@"I should not be able to initialize a shift trade")]
+        public void ThenIShouldNotBeAbleToInitializeAShiftTrade()
+        {
+			//Browser.Interactions.AssertExists(".btn[disabled]>.initialize-shift-trade");
+			Browser.Interactions.AssertNotExists(".navbar-text", ".initialize-shift-trade");
+        }
 
-		[Then(@"Shifttrade button should be disabled")]
-		public void ThenShifttradeButtonShouldBeDisabled()
-		{
-			Browser.Interactions.AssertExists(".btn[disabled]>.icon-random");
-		}
-		
 		private static void AssertAgentIsDisplayed(string name)
 		{
 			Browser.Interactions.AssertAnyContains(".teamschedule-agent-name", name);

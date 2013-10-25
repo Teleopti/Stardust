@@ -625,9 +625,6 @@
     <Compile Include="Common\SearchPerson.Designer.cs">
       <DependentUpon>SearchPerson.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\ServiceBus\DateOnlyPeriodSerializer.cs" />
-    <Compile Include="Common\ServiceBus\LargeGuidCollectionSerializer.cs" />
-    <Compile Include="Common\ServiceBus\ServiceBusSender.cs" />
     <Compile Include="Common\TextBoxNameExtender.cs" />
     <Compile Include="Common\VirtualSkill.cs" />
     <Compile Include="Common\VirtualSkillSetting.cs" />
@@ -841,7 +838,6 @@
     <Compile Include="Main\ActiveAgents.Designer.cs">
       <DependentUpon>ActiveAgents.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\IDataSourceHandler.cs" />
     <Compile Include="Main\Legal.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -854,6 +850,38 @@
     <Compile Include="Main\LicenseAgreementForm.Designer.cs">
       <DependentUpon>LicenseAgreementForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Main\LogonScreens\SelectBuScreen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Main\LogonScreens\SelectBuScreen.Designer.cs">
+      <DependentUpon>SelectBuScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\LogonView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\LogonView.Designer.cs">
+      <DependentUpon>LogonView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\LogonScreens\ILogonStep.cs" />
+    <Compile Include="Main\LogonScreens\LoginScreen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Main\LogonScreens\LoginScreen.Designer.cs">
+      <DependentUpon>LoginScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\LogonScreens\SelectDatasourceScreen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Main\LogonScreens\SelectDatasourceScreen.Designer.cs">
+      <DependentUpon>SelectDatasourceScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\LogonScreens\SelectSdkScreen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Main\LogonScreens\SelectSdkScreen.Designer.cs">
+      <DependentUpon>SelectSdkScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Main\MainModule.cs" />
     <Compile Include="Main\NavigationModule.cs" />
     <Compile Include="Main\NavigationPanelProvider.cs" />
     <Compile Include="Main\PortalSettings.cs" />
@@ -1037,9 +1065,6 @@
     <Compile Include="Main\About.Designer.cs">
       <DependentUpon>About.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\LogOnInitializeStateHolder.cs" />
-    <Compile Include="Main\LogOnAuthorize.cs" />
-    <Compile Include="Main\LogOnMatrix.cs" />
     <Compile Include="Meetings\WeeklyRecurrenceView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1291,6 +1316,12 @@
     </Compile>
     <Compile Include="Scheduling\AgentOvertimeAvailabilityView.Designer.cs">
       <DependentUpon>AgentOvertimeAvailabilityView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Scheduling\FilterHourlyAvailabilityView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\FilterHourlyAvailabilityView.Designer.cs">
+      <DependentUpon>FilterHourlyAvailabilityView.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\FilterOvertimeAvailabilityView.cs">
       <SubType>Form</SubType>
@@ -2288,12 +2319,6 @@
     <Compile Include="Scheduling\SchedulingScreen.Designer.cs">
       <DependentUpon>SchedulingScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\LogOnScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Main\LogOnScreen.Designer.cs">
-      <DependentUpon>LogOnScreen.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\MoreOrLessButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2541,6 +2566,21 @@
     <EmbeddedResource Include="Main\LicenseAgreementForm.resx">
       <DependentUpon>LicenseAgreementForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Main\LogonScreens\SelectBuScreen.resx">
+      <DependentUpon>SelectBuScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\LogonView.resx">
+      <DependentUpon>LogonView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\LogonScreens\LoginScreen.resx">
+      <DependentUpon>LoginScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\LogonScreens\SelectDatasourceScreen.resx">
+      <DependentUpon>SelectDatasourceScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\LogonScreens\SelectSdkScreen.resx">
+      <DependentUpon>SelectSdkScreen.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Meetings\Overview\CalendarAndTextPanel.resx">
       <DependentUpon>CalendarAndTextPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -2695,6 +2735,9 @@
     <EmbeddedResource Include="Scheduling\AuditHistoryView.resx">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\FilterHourlyAvailabilityView.resx">
+      <DependentUpon>FilterHourlyAvailabilityView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\PropertyPanel\AgentInfoControl.resx">
       <DependentUpon>AgentInfoControl.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -2751,10 +2794,6 @@
     <EmbeddedResource Include="Scheduling\SchedulingScreen.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SchedulingScreen.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Main\LogOnScreen.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>LogOnScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\WorkloadPages\WorkloadGeneral.resx">
       <DependentUpon>WorkloadGeneral.cs</DependentUpon>
@@ -2822,7 +2861,6 @@
     <Compile Include="Scheduling\OverViewView.cs" />
     <Compile Include="Scheduling\PeriodView.cs" />
     <Compile Include="Scheduling\WeekView.cs" />
-    <Compile Include="Services\StateManager.cs" />
     <EmbeddedResource Include="licenses.licx" />
   </ItemGroup>
   <ItemGroup>

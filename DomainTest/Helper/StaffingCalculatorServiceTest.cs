@@ -78,11 +78,9 @@ namespace Teleopti.Ccc.DomainTest.Helper
         [Test]
         public void VerifyAgentsUseOccupancy()
         {
-            Assert.AreEqual(6.142,
-                            Math.Round(
-                                _calculatorService.AgentsUseOccupancy(_sla, _serviceTime, _calls,
+            Assert.AreEqual(6.4359, _calculatorService.AgentsUseOccupancy(_sla, _serviceTime, _calls,
                                                                              _averageHandlingTime, _periodLength,
-                                                                             _minOcc, _maxOcc,1), 3));
+                                                                             _minOcc, _maxOcc,1), 0.001);
         }
 		
         [Test]
@@ -109,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
         [Test]
         public void VerifyTeleoptiErgBExtended()
         {
-            Assert.AreEqual(0.095,
+            Assert.AreEqual(0.187d,
                            Math.Round(_calculatorService.TeleoptiErgBExtended(_servers, _intensity), 3));
             Assert.AreEqual(0,
                            Math.Round(_calculatorService.TeleoptiErgBExtended(-1, _intensity), 3));
@@ -118,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
         [Test]
         public void VerifyTeleoptiErgCExtended()
         {
-            Assert.AreEqual(0.219,
+            Assert.AreEqual(0.381d,
                            Math.Round(_calculatorService.TeleoptiErgCExtended(_servers, _intensity), 3));
             Assert.AreEqual(0,
                            Math.Round(_calculatorService.TeleoptiErgCExtended(-1, _intensity), 3));
@@ -127,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
         [Test]
         public void VerifyServiceLevelAchieved()
         {
-            Assert.AreEqual(0.849,
+            Assert.AreEqual(0.793,
                          Math.Round(_calculatorService.ServiceLevelAchieved(_agents, _serviceTime, _calls, _averageHandlingTime, _periodLength, _orderedSla), 3));
             Assert.AreEqual(1,
                         Math.Round(_calculatorService.ServiceLevelAchieved(_agents, _serviceTime, _calls, 0, _periodLength, _orderedSla), 3));
@@ -146,20 +144,11 @@ namespace Teleopti.Ccc.DomainTest.Helper
                          Math.Round(_calculatorService.Utilization(_agents, _calls, _averageHandlingTime, _periodLength), 3));
         }
 
-		[Test]
-		public void TeleoptiAgentsShouldCalculateAlmostTheSameValueAsAgents()
-		{
-			Assert.AreEqual(6.101, Math.Round(_calculatorService.TeleoptiAgents(_sla, _serviceTime, _calls, _averageHandlingTime, _periodLength), 3));
-			Assert.AreEqual(31.982d, Math.Round(_calculatorService.TeleoptiAgents(0.7, 60, 456, 120, TimeSpan.FromMinutes(30)), 3));
-			Assert.AreEqual(6601.87d, Math.Round(_calculatorService.TeleoptiAgents(1, 20, 380, 30000, TimeSpan.FromMinutes(30)), 3));
-			Assert.AreEqual(4056.904d, Math.Round(_calculatorService.TeleoptiAgents(_sla, 20, 1000, 3601, _periodLength), 3));
-			Assert.AreEqual(224.621d, Math.Round(_calculatorService.TeleoptiAgents(0.6, 120, 500, 400, _periodLength), 3));
-		}
 
 		[Test]
 		public void ShouldDivideAgentsWithParallelTasks()
 		{
-			var expected =  Math.Round(6.142 /3,3);
+			var expected =  Math.Round(6.435 / 3, 3);
 
 			var result = Math.Round(_calculatorService.AgentsUseOccupancy(_sla, _serviceTime, _calls,
 																		_averageHandlingTime, _periodLength,

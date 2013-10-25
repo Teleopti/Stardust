@@ -24,6 +24,6 @@ define([
 			this.StartTime = unit.StartTime;
 
 			this.Color = data.Color;
-			
+			this.IsFullDayAbsence = data.IsFullDayAbsence;
 		};
 	});

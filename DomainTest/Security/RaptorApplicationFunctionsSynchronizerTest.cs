@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Security
         private IApplicationFunctionRepository _applicationFunctionRepository;
         private IApplicationRoleRepository _applicationRoleRepository;
         private IAvailableDataRepository _availableDataRepository;
-        private IUnitOfWorkFactory _unitOfWorkFactory;
+        private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private IUnitOfWork _unitOfWork;
 
         private IAvailableData _adminAvailableData;
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Security
             _applicationFunctionRepository = _mocks.StrictMock<IApplicationFunctionRepository>();
             _applicationRoleRepository = _mocks.StrictMock<IApplicationRoleRepository>();
             _availableDataRepository = _mocks.StrictMock<IAvailableDataRepository>();
-            _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
+            _unitOfWorkFactory = _mocks.StrictMock<ICurrentUnitOfWorkFactory>();
             _unitOfWork = _mocks.StrictMock<IUnitOfWork>();
 
             _target = new RaptorApplicationFunctionsSynchronizerTestClass(_repositoryFactory, _unitOfWorkFactory);
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Security
             Expect.Call(_repositoryFactory.CreateApplicationFunctionRepository(_unitOfWork)).Return(_applicationFunctionRepository).Repeat.Once();
 
             Expect.Call(_applicationFunctionRepository.GetAllApplicationFunctionSortedByCode()).Return(_databaseApplicationFunctions).Repeat.Once();
-            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork).Repeat.Once();
+			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(_unitOfWork).Repeat.Once();
             _unitOfWork.Dispose();
             LastCall.Repeat.Once();
 
@@ -293,7 +293,7 @@ namespace Teleopti.Ccc.DomainTest.Security
             Expect.Call(_repositoryFactory.CreateApplicationFunctionRepository(_unitOfWork)).Return(_applicationFunctionRepository).Repeat.Once();
 
             Expect.Call(_applicationFunctionRepository.GetAllApplicationFunctionSortedByCode()).Return(_databaseApplicationFunctions).Repeat.Once();
-            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork).Repeat.Once();
+			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(_unitOfWork).Repeat.Once();
             _unitOfWork.Dispose();
             LastCall.Repeat.Once();
 
@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.DomainTest.Security
             Expect.Call(_availableDataRepository.LoadAllAvailableData()).Return(_availableDataList).Repeat.Once();
             Expect.Call(_applicationFunctionRepository.GetAllApplicationFunctionSortedByCode()).Return(_databaseApplicationFunctions).Repeat.Once();
             Expect.Call(_applicationRoleRepository.LoadAllApplicationRolesSortedByName()).Return(_applicationRoles).Repeat.Once();
-            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork).Repeat.Once();
+			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(_unitOfWork).Repeat.Once();
             _unitOfWork.Dispose();
             LastCall.Repeat.Once();
             _applicationFunctionRepository.Remove(null);

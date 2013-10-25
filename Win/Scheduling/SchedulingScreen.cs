@@ -4153,6 +4153,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripButtonOptions.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 			toolStripButtonFilterOvertimeAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
 			ToolStripMenuItemScheduleOvertime.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
+			toolStripButtonFilterStudentAvailability.Visible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
 		}
 
 		private void loadAndOptimizeData(DoWorkEventArgs e)
@@ -4671,6 +4672,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_grid.Cursor = Cursors.WaitCursor;
 				_grid.Enabled = false;
 				_grid.Cursor = Cursors.WaitCursor;
+				schedulerSplitters1.DisableViewShiftCategoryDistribution();
 				schedulerSplitters1.ElementHost1.Enabled = false; //shifteditor
 				toggleQuickButtonEnabledState(toolStripButtonQuickAccessCancel, true);
 				ribbonControlAdv1.Cursor = Cursors.AppStarting;
@@ -4678,6 +4680,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					toolStripSpinningProgressControl1 = new Common.Controls.SpinningProgress.ToolStripSpinningProgressControl();
 				toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = true;
 				disableSave();
+				
 			}
 		}
 
@@ -4703,6 +4706,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//av nån #%¤#¤%#¤% anledning tänds alla knappar i toggleQuick... ovan. Måste explicit tända/släcka igen.
 			_schedulerMessageBrokerHandler.NotifyMessageQueueSizeChange();
 			disableButtonsIfTeamLeaderMode();
+			schedulerSplitters1.EnableViewShiftCategoryDistribution();
 		}
 
 		private void disableButtonsIfTeamLeaderMode()
@@ -7008,6 +7012,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
+		private void toolStripButtonFilterStudentAvailability_Click(object sender, EventArgs e)
+		{
+			if (toolStripButtonFilterStudentAvailability.Checked)
+			{
+				toolStripButtonFilterStudentAvailability.Checked = false;
+				_schedulerState.ResetFilteredPersonsHourlyAvailability();
+				reloadFilteredPeople();
+				return;
+			}
+
+			var defaultDate = _scheduleView.SelectedDateLocal();
+			using (var view = new FilterHourlyAvailabilityView(defaultDate, _schedulerState))
+			{
+				if (view.ShowDialog() == DialogResult.OK)
+				{
+					toolStripButtonFilterStudentAvailability.Checked = true;
+					reloadFilteredPeople();
+				}
+			}
+		}
+
 		private void reloadFilteredPeople()
 		{
 			toolStripButtonFilterAgents.Checked = SchedulerState.AgentFilter();
@@ -7175,7 +7200,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                
             updateSelectionInfo(_scheduleView.SelectedSchedules());
 	    }
-        
+   
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 

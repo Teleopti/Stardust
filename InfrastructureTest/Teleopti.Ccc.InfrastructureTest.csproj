@@ -149,6 +149,7 @@
     <Compile Include="Bugs\Bug11558.cs" />
     <Compile Include="Bugs\Bug22329.cs" />
     <Compile Include="Bugs\Bug22600.cs" />
+    <Compile Include="Bugs\Bug25172.cs" />
     <Compile Include="Bugs\Bug7871.cs" />
     <Compile Include="Config\LoadPasswordPolicyServiceTest.cs" />
     <Compile Include="Config\XmlDefaultsTest.cs" />
@@ -347,7 +348,6 @@
     <Compile Include="Repositories\WebReportRepositoryTest.cs" />
     <Compile Include="Repositories\WorkflowControlSetRepositoryTest.cs" />
     <Compile Include="Repositories\WorkloadRepositoryTest.cs" />
-    <Compile Include="Repositories\GroupingAbsenceRepositoryTest.cs" />
     <Compile Include="Repositories\GroupingActivityRepositoryTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\ExecuteTarget.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\FetchPersonIdAndTimeZoneTest.cs" />
