@@ -298,7 +298,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Data\Setups\Configurable\UserLogonDetailConfigurable.cs" />
-    <Compile Include="Data\Setups\Configurable\PasswordPolicyConfigurable.cs" />
     <Compile Include="Bindings\Transform.cs" />
     <Compile Include="Core\Legacy\QuicklyFind.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ExistingShiftTradeRequest.cs" />
