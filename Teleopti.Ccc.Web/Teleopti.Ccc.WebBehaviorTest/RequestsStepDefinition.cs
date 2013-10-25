@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
@@ -225,6 +226,24 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			Browser.Interactions.AssertNotExists(".request:nth-child(" + position + ")", ".request:nth-child(" + position + ") .btn[data-bind*='reSend']");
 
+		}
+
+		[Then(@"I should see a shift trade with start time '(.*)'")]
+		public void ThenIShouldSeeAShiftTradeWithStartTime(TimeSpan startTime)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[Then(@"I should see a shift trade with end time '(.*)'")]
+		public void ThenIShouldSeeAShiftTradeWithEndTime(TimeSpan endTime)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[Then(@"I should not see any shifts to trade with")]
+		public void ThenIShouldNotSeeAnyShiftsToTradeWith()
+		{
+			ScenarioContext.Current.Pending();
 		}
 
 	}

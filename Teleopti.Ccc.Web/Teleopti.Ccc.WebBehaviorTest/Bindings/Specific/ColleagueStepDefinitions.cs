@@ -77,5 +77,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Person(TeamColleagueName).Apply(new ShiftWithConfidentialAbsence());
 		}
 
+
+		[Given(@"My colleague have a shift with")]
+		public void GivenMyColleagueHaveAShiftWith(Table table)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[Given(@"I have a colleague with a '(.*)' hour diff timezone")]
+		public void GivenIHaveAColleagueWithAHourDiffTimezone(int diff)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+
 	}
 }
