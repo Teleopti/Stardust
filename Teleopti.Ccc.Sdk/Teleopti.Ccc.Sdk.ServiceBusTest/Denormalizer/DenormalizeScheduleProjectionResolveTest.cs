@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			}
 		}
 
-		[Test, Ignore("Failar på not implemented in som fake oject")]
+		[Test]
 		public void ShouldResolveScheduleDayReadModelHandlerConsumer()
 		{
 			var builder = new ContainerBuilder();
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			}
 		}
 
-        [Test, Ignore("Failar på not implemented in som fake oject")]
+        [Test]
 		public void ShouldResolvePersonScheduleDayReadModelHandlerConsumer()
 		{
 			var builder = new ContainerBuilder();
