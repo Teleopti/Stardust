@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.TestCommon.TestData.Setups
+namespace Teleopti.Ccc.TestCommon.TestData
 {
 	// used to prevent common and default named entities be referenced from scenarios.
 	// shouldnt they be explicit, if relevant?

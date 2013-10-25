@@ -233,7 +233,7 @@
     <Compile Include="TestData\Setups\AbsenceRequestConfigurable.cs" />
     <Compile Include="TestData\Setups\BusinessUnitFromFakeState.cs" />
     <Compile Include="TestData\Setups\BrasilianTimeZone.cs" />
-    <Compile Include="TestData\Setups\DefaultName.cs" />
+    <Compile Include="TestData\DefaultName.cs" />
     <Compile Include="TestData\Setups\HawaiiTimeZone.cs" />
     <Compile Include="TestData\Setups\LicenseFromFile.cs" />
     <Compile Include="TestData\Setups\PersonAbsenceConfigurable.cs" />
