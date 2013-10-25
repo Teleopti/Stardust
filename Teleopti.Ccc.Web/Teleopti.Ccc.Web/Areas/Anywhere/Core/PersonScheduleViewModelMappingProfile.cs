@@ -12,8 +12,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		private class MapContext<TParent, TChild>
 		{
-			public TParent Parent;
-			public TChild Child;
+			public MapContext(TParent parent, TChild child)
+			{
+				Parent = parent;
+				Child = child;
+			}
+
+			public readonly TParent Parent;
+			public readonly TChild Child;
 		}
 
 		protected override void Configure()
@@ -24,19 +30,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				.ForMember(x => x.Site, o => o.MapFrom(s => s.Person.MyTeam(new DateOnly(s.Date)).Site.Description.Name))
 				.ForMember(x => x.IsDayOff, o => o.MapFrom(s => s.Model.DayOff != null))
 				.ForMember(x => x.IsFullDayAbsence, o => o.MapFrom(s => s.Model.Shift.IsFullDayAbsence))
-				.ForMember(x => x.Layers, o => o.MapFrom(s => from p in s.Model.Shift.Projection ?? new SimpleLayer[] { }
-				                                                   select new MapContext<PersonScheduleData, SimpleLayer>
-					                                                   {
-						                                                   Parent = s,
-						                                                   Child = p
-					                                                   }))
+				.ForMember(x => x.Layers, o => o.MapFrom(s => from p in s.Model.Shift.Projection ?? new SimpleLayer[] {}
+				                                              select new MapContext<PersonScheduleData, SimpleLayer>(s, p)
+					                               ))
 				.ForMember(x => x.PersonAbsences, o => o.MapFrom(
-					s => from p in s.PersonAbsences ?? new IPersonAbsence[] { }
-					     select new MapContext<PersonScheduleData, IPersonAbsence>
-						     {
-							     Parent = s,
-							     Child = p
-						     }))
+					s => from p in s.PersonAbsences ?? new IPersonAbsence[] {}
+					     select new MapContext<PersonScheduleData, IPersonAbsence>(s, p)
+					                                       ))
 				;
 
 			CreateMap<MapContext<PersonScheduleData, SimpleLayer>, PersonScheduleViewModelLayer>()
