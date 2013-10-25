@@ -2,7 +2,7 @@ using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 {
-	public class PersonPeriodConfigurable : TestCommon.TestData.Setups.PersonPeriodConfigurable
+	public class PersonPeriodConfigurable : TestCommon.TestData.Generic.PersonPeriodConfigurable
 	{
 		public PersonPeriodConfigurable()
 		{

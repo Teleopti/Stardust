@@ -7,7 +7,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.TestCommon.TestData.Setups
+namespace Teleopti.Ccc.TestCommon.TestData.Generic
 {
 	public class AbsenceRequestConfigurable : IUserDataSetup
 	{

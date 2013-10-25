@@ -230,19 +230,19 @@
     <Compile Include="TestData\Generic\SiteConfigurable.cs" />
     <Compile Include="TestData\Generic\TeamConfigurable.cs" />
     <Compile Include="TestData\LayersExtensions.cs" />
-    <Compile Include="TestData\Setups\AbsenceRequestConfigurable.cs" />
+    <Compile Include="TestData\Generic\AbsenceRequestConfigurable.cs" />
     <Compile Include="TestData\Setups\BusinessUnitFromFakeState.cs" />
     <Compile Include="TestData\Setups\BrasilianTimeZone.cs" />
     <Compile Include="TestData\DefaultName.cs" />
     <Compile Include="TestData\Setups\HawaiiTimeZone.cs" />
     <Compile Include="TestData\Setups\LicenseFromFile.cs" />
-    <Compile Include="TestData\Setups\PersonAbsenceConfigurable.cs" />
-    <Compile Include="TestData\Setups\PersonPeriodConfigurable.cs" />
+    <Compile Include="TestData\Generic\PersonAbsenceConfigurable.cs" />
+    <Compile Include="TestData\Generic\PersonPeriodConfigurable.cs" />
     <Compile Include="TestData\Setups\PersonThatCreatesTestData.cs" />
     <Compile Include="TestData\Setups\StockholmTimeZone.cs" />
     <Compile Include="TestData\Setups\SwedishCulture.cs" />
     <Compile Include="TestData\Setups\USCulture.cs" />
-    <Compile Include="TestData\Setups\UserConfigurable.cs" />
+    <Compile Include="TestData\Generic\UserConfigurable.cs" />
     <Compile Include="TestData\Setups\UtcTimeZone.cs" />
     <Compile Include="UsedInTestState.cs" />
   </ItemGroup>
