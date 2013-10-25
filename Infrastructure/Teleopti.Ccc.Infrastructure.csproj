@@ -250,7 +250,6 @@
     <Compile Include="Persisters\IReassociateDataForSchedules.cs" />
     <Compile Include="Persisters\Refresh\IScheduleDataRefresher.cs" />
     <Compile Include="Persisters\IScheduleDictionaryModifiedCallback.cs" />
-    <Compile Include="Persisters\IScheduleDictionarySaver.cs" />
     <Compile Include="Persisters\IScheduleDictionaryPersisterResult.cs" />
     <Compile Include="Persisters\Refresh\IScheduleRefresher.cs" />
     <Compile Include="Persisters\IScheduleScreenPersisterResult.cs" />
@@ -315,7 +314,6 @@
     <Compile Include="Repositories\UserDetailRepository.cs" />
     <Compile Include="Repositories\NoteRepository.cs" />
     <Compile Include="Repositories\PersonAbsenceAccountRepository.cs" />
-    <Compile Include="Persisters\ScheduleDictionarySaver.cs" />
     <Compile Include="Repositories\StudentAvailabilityDayRepository.cs" />
     <Compile Include="Repositories\PreferenceDayRepository.cs" />
     <Compile Include="Repositories\RotationRepository.cs" />
