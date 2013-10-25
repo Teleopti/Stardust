@@ -9,7 +9,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
-	public class BrasilianTimeZone : IAnalyticsDataSetup
+	public class BrasilTimeZone : IAnalyticsDataSetup
 	{
 		
 		public IEnumerable<DataRow> Rows { get; set; }
