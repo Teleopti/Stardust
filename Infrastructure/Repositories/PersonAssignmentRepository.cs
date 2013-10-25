@@ -82,7 +82,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 													typeof(Guid),
 													typeof(DateOnly), 
 													typeof(Guid), 
-													typeof(Guid)
+													typeof(Guid),
+													typeof(int)
 												})))
 			              .List<DateScenarioPersonId>();
 		}

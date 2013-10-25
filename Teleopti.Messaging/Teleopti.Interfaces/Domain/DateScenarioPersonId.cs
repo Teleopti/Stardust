@@ -8,15 +8,17 @@ namespace Teleopti.Interfaces.Domain
 		private readonly Guid _scenarioId;
 		private readonly Guid _personId;
 
-		public DateScenarioPersonId(Guid id, DateOnly date, Guid scenarioId, Guid personId)
+		public DateScenarioPersonId(Guid id, DateOnly date, Guid scenarioId, Guid personId, int version)
 		{
 			Id = id;
 			_date = date;
 			_scenarioId = scenarioId;
 			_personId = personId;
+			Version = version;
 		}
 
 		public Guid Id { get; private set; }
+		public int Version { get; private set; }
 
 		public bool EqualWith(IPersonAssignment assignment)
 		{
