@@ -123,14 +123,13 @@ Scenario: Order groups in alphabetical order
 	And I should see option 'A skill' before 'Another skill'
 	And I should see option 'A group' before 'Another group'
 
-@ignore
 Scenario: Search groups
 	Given I viewing schedules for '2013-10-10'
 	When I search for group 'contract'
 	Then I should see 'A contract'
 	Then I should see 'Another contract'
-	Then I should not see 'A note'
-	Then I should not see 'Another note'
+	Then I should not see 'A skill'
+	Then I should not see 'Another group'
 
 Scenario: Default to my team
 	Given I have a person period with 

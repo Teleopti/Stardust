@@ -1,14 +1,11 @@
 using System;
 using System.Linq;
-using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
-using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
@@ -17,6 +14,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 	[Binding]
 	public class TeamSchedulePageStepDefinitions
 	{
+		[When(@"I search for group '(.*)'")]
+		public void WhenISearchForGroup(string searchText)
+		{
+			Select2Box.Open("group-picker");
+			Browser.Interactions.Javascript("$('.select2-input').focus().val('" + searchText + "').trigger('keyup-change');");
+		}
+
+		[Then(@"I should see '(.*)'")]
+		public void ThenIShouldSee(string text)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".select2-result .select2-result-label:contains('{0}')", text));
+		}
+
+		[Then(@"I should not see '(.*)'")]
+		public void ThenIShouldNotSee(string text)
+		{
+			Browser.Interactions.AssertNotExistsUsingJQuery(".select2-results", string.Format(".select2-result .select2-result-label:contains('{0}')", text));
+		}
+
 		[Then(@"I should be viewing schedules for '(.*)'")]
 		public void ThenIShouldSeePersonScheduleForPersonOnDate(string date)
 		{
@@ -84,6 +100,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should be able to select groups")]
 		public void ThenIShouldBeAbleToSelectGroups(Table table)
 		{
+			Select2Box.Open("group-picker");
 			var options = table.CreateSet<GroupInfo>();
 			foreach (var option in options)
 			{

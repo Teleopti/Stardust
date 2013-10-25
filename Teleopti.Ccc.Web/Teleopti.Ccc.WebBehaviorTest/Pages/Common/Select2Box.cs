@@ -18,7 +18,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 
 		public static void AssertOptionExist(string select2Id, string optionText)
 		{
+			AssertIsOpen(select2Id);
+			Browser.Interactions.Javascript("$('.select2-input').focus().val('').trigger('keyup-change');");
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format("#{0} option:contains('{1}')", select2Id, optionText));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".select2-result-selectable .select2-result-label:contains('{0}')", optionText));
 		}
 
 		public static string FirstOptionText
@@ -38,22 +41,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 
 		public static void AssertIsClosed(string select2Id)
 		{
+			Browser.Interactions.AssertExists(string.Format("#{0}:enabled", select2Id));
 			Browser.Interactions.AssertNotExists(string.Format("#s2id_{0}", select2Id), string.Format("#s2id_{0}.select2-dropdown-open", select2Id));
 		}
 
 		public static void Open(string select2Id)
 		{
 			AssertIsClosed(select2Id);
-			Browser.Interactions.Javascript(string.Format("$('#{0}').select2('open');", select2Id));
+			Browser.Interactions.Click(string.Format("#s2id_{0}", select2Id)); // for chrome
+			Browser.Interactions.Javascript(string.Format("$('#{0}').select2('open');", select2Id)); // for IE
 			AssertIsOpen(select2Id);
 		}
 
 		public static void OpenWhenOptionsAreLoaded(string select2Id)
 		{
 			AssertIsClosed(select2Id);
-			//Browser.Interactions.WaitUntilEnabled(string.Format("#{0}", select2Id));
 			Browser.Interactions.AssertExists(string.Format("#{0} > option", select2Id));
-			Browser.Interactions.Javascript(string.Format("$('#{0}').select2('open')", select2Id));
+			Browser.Interactions.Click(string.Format("#s2id_{0}", select2Id)); // for chrome
+			Browser.Interactions.Javascript(string.Format("$('#{0}').select2('open');", select2Id)); // for IE
 			AssertIsOpen(select2Id);
 		}
 		
