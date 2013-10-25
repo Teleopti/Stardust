@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 {
 	public class NoScheduleRangeConflictCollector : IScheduleRangeConflictCollector
 	{
-		public IEnumerable<PersistConflict> GetConflicts(IDifferenceCollection<IPersistableScheduleData> differences, IScenario scenario, DateOnlyPeriod period)
+		public IEnumerable<PersistConflict> GetConflicts(IDifferenceCollection<IPersistableScheduleData> differences, IScheduleParameters scheduleParameters)
 		{
-			return new List<PersistConflict>();
+			return Enumerable.Empty<PersistConflict>();
 		}
 	}
 }

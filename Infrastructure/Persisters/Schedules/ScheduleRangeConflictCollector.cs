@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			_lazyLoadingManager = lazyLoadingManager;
 		}
 
-		public IEnumerable<PersistConflict> GetConflicts(IDifferenceCollection<IPersistableScheduleData> differences, IScenario scenario, DateOnlyPeriod period)
+		public IEnumerable<PersistConflict> GetConflicts(IDifferenceCollection<IPersistableScheduleData> differences, IScheduleParameters scheduleParameters)
 		{
-			_reassociateDataForSchedules.ReassociateDataForAllPeople();
+			_reassociateDataForSchedules.ReassociateDataFor(scheduleParameters.Person);
 			var uow = _scheduleRepository.UnitOfWork;
 
 			var modifiedAndDeletedEntities = from e in differences
@@ -42,7 +42,9 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 														select makePersistConflict(e, databaseEntity)).ToList();
 
 			//reuse these also above
-			var personAssignmentsInDb = _personAssignmentRepository.FetchDatabaseVersions(period, scenario);
+			var dateOnlyPeriod =
+				scheduleParameters.Period.ToDateOnlyPeriod(scheduleParameters.Person.PermissionInformation.DefaultTimeZone());
+			var personAssignmentsInDb = _personAssignmentRepository.FetchDatabaseVersions(dateOnlyPeriod, scheduleParameters.Scenario);
 			foreach (var diffItem in differences)
 			{
 				if (diffItem.Status == DifferenceStatus.Added)

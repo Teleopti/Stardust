@@ -36,8 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			}
 			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork(TransactionIsolationLevel.Serializable))
 			{
-				var period = scheduleRange.Period.ToDateOnlyPeriod(scheduleRange.Person.PermissionInformation.DefaultTimeZone());
-				var conflicts = _scheduleRangeConflictCollector.GetConflicts(diff, scheduleRange.Scenario, period);
+				var conflicts = _scheduleRangeConflictCollector.GetConflicts(diff, scheduleRange);
 				if (conflicts.IsNullOrEmpty())
 				{
 					_scheduleDifferenceSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate) scheduleRange);

@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 {
 	public interface IScheduleRangeConflictCollector
 	{
-		IEnumerable<PersistConflict> GetConflicts(IDifferenceCollection<IPersistableScheduleData> differences, IScenario scenario, DateOnlyPeriod period);
+		IEnumerable<PersistConflict> GetConflicts(IDifferenceCollection<IPersistableScheduleData> differences, IScheduleParameters scheduleParameters);
 	}
 }
