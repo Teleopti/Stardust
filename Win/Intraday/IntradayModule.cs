@@ -10,6 +10,8 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
@@ -24,6 +26,9 @@ namespace Teleopti.Ccc.Win.Intraday
             groupMain(builder);
             commandWiring(builder);
             intradayGlobalWiring(builder);
+	        builder.RegisterType<noMessageQueueRemoval>().As<IMessageQueueRemoval>().InstancePerLifetimeScope();
+	        builder.RegisterType<LazyLoadingManagerWrapper>().As<ILazyLoadingManager>().InstancePerLifetimeScope();
+	        builder.RegisterModule(SchedulePersistModule.ForOtherModules());
         }
 
         private static void intradayGlobalWiring(ContainerBuilder builder)
@@ -125,5 +130,16 @@ namespace Teleopti.Ccc.Win.Intraday
                 innerScopes.Remove(form);
             }
         }
+
+			private class noMessageQueueRemoval :IMessageQueueRemoval
+			{
+				public void Remove(IEventMessage eventMessage)
+				{
+				}
+
+				public void Remove(PersistConflict persistConflict)
+				{
+				}
+			}
     }
 }

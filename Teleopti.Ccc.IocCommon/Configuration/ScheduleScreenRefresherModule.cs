@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
