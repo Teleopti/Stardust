@@ -21,14 +21,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.Javascript("$('.select2-input').focus().val('" + searchText + "').trigger('keyup-change');");
 		}
 
-		[Then(@"I should see '(.*)'")]
-		public void ThenIShouldSee(string text)
+		[Then(@"I should see options include '(.*)'")]
+		public void ThenIShouldSeeOptionsInclude(string text)
 		{
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".select2-result .select2-result-label:contains('{0}')", text));
 		}
 
-		[Then(@"I should not see '(.*)'")]
-		public void ThenIShouldNotSee(string text)
+		[Then(@"I should see options not include '(.*)'")]
+		public void ThenIShouldSeeOptionsNotInclude(string text)
 		{
 			Browser.Interactions.AssertNotExistsUsingJQuery(".select2-results", string.Format(".select2-result .select2-result-label:contains('{0}')", text));
 		}

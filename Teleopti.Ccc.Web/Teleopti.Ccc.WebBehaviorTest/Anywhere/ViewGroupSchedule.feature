@@ -126,10 +126,10 @@ Scenario: Order groups in alphabetical order
 Scenario: Search groups
 	Given I viewing schedules for '2013-10-10'
 	When I search for group 'contract'
-	Then I should see 'A contract'
-	Then I should see 'Another contract'
-	Then I should not see 'A skill'
-	Then I should not see 'Another group'
+	Then I should see options include 'A contract'
+	Then I should see options include 'Another contract'
+	Then I should see options not include 'A skill'
+	Then I should see options not include 'Another group'
 
 Scenario: Default to my team
 	Given I have a person period with 
