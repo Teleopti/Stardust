@@ -34,6 +34,15 @@ CREATE TABLE #stg_schedule(
 	[person_id] [int] NOT NULL
 )
 
+--remove dates from utc tables that does not exist in stage tables, so that we don't delete more daus than we can handle
+DELETE FROM utc
+FROM Stage.stg_schedule_updated_ShiftStartDateUTC utc
+INNER JOIN mart.dim_date d
+	ON d.date_id = utc.shift_startdate_id
+LEFT OUTER JOIN stage.stg_schedule stg
+	ON stg.schedule_date  = d.date_date
+WHERE stg.schedule_date IS NULL
+
 --Get first row scenario in stage table, currently this must(!) be the default scenario, else RAISERROR
 if (select count(*)
 	from mart.dim_scenario
