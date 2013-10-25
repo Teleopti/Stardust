@@ -16,7 +16,7 @@ define([
 			var self = this;
 
 			this.Id = data.Id;
-			this.Name = ko.observable(data.FirstName + ' ' + data.LastName);
+			this.Name = data.FirstName + ' ' + data.LastName;
 			
 			this.Layers = ko.observableArray();
 			this.WorkTimeMinutes = ko.observable(0);
