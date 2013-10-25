@@ -24,24 +24,4 @@ namespace Teleopti.Ccc.TestCommon.TestData.Generic
 		}
 
 	}
-
-	public class ShiftCategoryDataSetup : IDataSetup
-	{
-		private readonly IEnumerable<ShiftCategoryConfigurable> _set;
-
-		public ShiftCategoryDataSetup(IEnumerable<ShiftCategoryConfigurable> set)
-		{
-			_set = set;
-		}
-
-		public void Apply(IUnitOfWork uow)
-		{
-			var shiftCategoryRepository = new ShiftCategoryRepository(uow);
-			foreach (var shiftCategoryConfigurable in _set)
-			{
-				var shiftCategory = new ShiftCategory(shiftCategoryConfigurable.Name);
-				shiftCategoryRepository.Add(shiftCategory);
-			}
-		}
-	}
 }
