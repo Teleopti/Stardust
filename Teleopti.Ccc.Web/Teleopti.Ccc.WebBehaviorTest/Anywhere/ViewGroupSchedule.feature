@@ -65,7 +65,7 @@ Background:
 	And I am american
 
 Scenario: View group picker options
-	Given I viewing schedules for '2013-10-10'
+	Given I view schedules for '2013-10-10'
 	Then I should be able to select groups
 		| Group                                     |
 		| The site/Team green                       |
@@ -104,7 +104,7 @@ Scenario: View group schedule
 	And I should not see person 'Pierre Baldi'
 
 Scenario: Order group pages like business heirarchy, contract, contract schedule, part time percentage, shiftbag, skill, group page names
-	Given I viewing schedules for '2013-10-10'
+	Given I view schedules for '2013-10-10'
 	Then I should see group 'Business Hierarchy' before 'Contract'
 	And I should see group 'Contract' before 'Contract Schedule'
 	And I should see group 'Contract Schedule' before 'Part-Time Percentage'
@@ -114,7 +114,7 @@ Scenario: Order group pages like business heirarchy, contract, contract schedule
 	And I should see group 'A group page' before 'Another group page'
 
 Scenario: Order groups in alphabetical order
-	Given I viewing schedules for '2013-10-10'
+	Given I view schedules for '2013-10-10'
 	Then I should see option 'Team green' before 'Team red'
 	And I should see option 'A contract' before 'Another contract'
 	And I should see option 'A contract schedule' before 'Another contract schedule'
@@ -124,7 +124,7 @@ Scenario: Order groups in alphabetical order
 	And I should see option 'A group' before 'Another group'
 
 Scenario: Search groups
-	Given I viewing schedules for '2013-10-10'
+	Given I view schedules for '2013-10-10'
 	When I search for group 'contract'
 	Then I should see options include 'A contract'
 	Then I should see options include 'Another contract'

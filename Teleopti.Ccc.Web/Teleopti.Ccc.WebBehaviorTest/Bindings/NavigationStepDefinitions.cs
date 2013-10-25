@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToPerformanceTool();
 		}
 
-		[Given(@"I viewing schedules for '([0-9\-\\\/]*)'")]
+		[Given(@"I view schedules for '([0-9\-\\\/]*)'")]
 		[When(@"I view schedules for '([0-9\-\\\/]*)'")]
 		[When(@"I view team schedules staffing metrics for '([0-9\-\\\/]*)'")]
 		public void WhenIViewSchedulesForDate(DateTime date)
