@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	{
 		public SiteConfigurable()
 		{
-			BusinessUnit = GlobalDataMaker.Data().Data<CommonBusinessUnit>().BusinessUnit;
+			BusinessUnit = GlobalDataMaker.Data().Data<CommonBusinessUnit>().BusinessUnit.Name;
 		}
 	}
 }

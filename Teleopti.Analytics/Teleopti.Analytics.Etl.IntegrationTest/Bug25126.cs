@@ -43,7 +43,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
 
-			var site = new SiteConfigurable {BusinessUnit = TestState.BusinessUnit, Name = "Västerhaninge"};
+			var site = new SiteConfigurable {BusinessUnit = TestState.BusinessUnit.Name, Name = "Västerhaninge"};
 			var team = new TeamConfigurable {Name = "Yellow", Site = "Västerhaninge"};
 			var contract = new ContractConfigurable {Name = "Kontrakt"};
 			var cc = new ContractScheduleConfigurable {Name = "Kontraktsschema"};
@@ -149,7 +149,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var brasilTimeZone = new BrasilTimeZone {TimeZoneId = 2};
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>{brasilTimeZone});
 
-			var site = new SiteConfigurable { BusinessUnit = TestState.BusinessUnit, Name = "Brasilia" };
+			var site = new SiteConfigurable { BusinessUnit = TestState.BusinessUnit.Name, Name = "Brasilia" };
 			var team = new TeamConfigurable { Name = "Yellow", Site = "Brasilia" };
 			var contract = new ContractConfigurable { Name = "Kontrakt" };
 			var cc = new ContractScheduleConfigurable { Name = "Kontraktsschema" };
