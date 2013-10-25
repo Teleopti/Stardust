@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -175,7 +176,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				ReassociateDataForAllPeople();
+				ReassociateDataFor(Person);
 				var rep = new ScheduleRepository(unitOfWork);
 				var dictionary = rep.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 2040, 1, 1)),
 																								 Scenario,
@@ -188,16 +189,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		public void ReassociateDataForAllPeople()
 		{
-			var uow = UnitOfWorkFactory.Current.CurrentUnitOfWork();
-			uow.Reassociate(Person);
-			uow.Reassociate(Activity);
-			uow.Reassociate(ShiftCategory);
-			uow.Reassociate(Scenario);
+			throw new NotImplementedException();
 		}
 
 		public void ReassociateDataFor(IPerson person)
 		{
-			throw new System.NotImplementedException();
+			var uow = UnitOfWorkFactory.Current.CurrentUnitOfWork();
+			uow.Reassociate(person);
+			uow.Reassociate(Activity);
+			uow.Reassociate(ShiftCategory);
+			uow.Reassociate(Scenario);
 		}
 
 		protected virtual bool ExpectOptimistLockException
