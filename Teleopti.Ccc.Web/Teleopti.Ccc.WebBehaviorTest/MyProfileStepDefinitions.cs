@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I change my password in my profile with")]
 		public void WhenIChangeMyPasswordInMyProfileWith(Table table)
 		{
-			var password = table.CreateInstance<PasswordConfigurable>();
+			var password = table.CreateInstance<PasswordInfo>();
 			var page = Browser.Current.Page<PasswordPage>();
 			page.Password.Value = password.Password;
 			page.PasswordValidation.Value = password.ConfirmedPassword;
@@ -61,6 +61,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			page.ConfirmButton.EventualClick();
 		}
 
+		public class PasswordInfo
+		{
+			public string Password { get; set; }
+			public string ConfirmedPassword { get; set; }
+			public string OldPassword { get; set; }
+		}
 
 		[When(@"I change my password using incorrect current password")]
 		public void WhenIChangeMyPasswordUsingIncorrectCurrentPassword()

@@ -303,7 +303,6 @@
     <Compile Include="Data\Setups\Configurable\PasswordPolicyConfigurable.cs" />
     <Compile Include="Bindings\Transform.cs" />
     <Compile Include="Core\Legacy\QuicklyFind.cs" />
-    <Compile Include="Data\Setups\Configurable\PasswordConfigurable.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ExistingShiftTradeRequest.cs" />
     <Compile Include="PasswordPolicy.feature.cs">
       <DependentUpon>PasswordPolicy.feature</DependentUpon>
