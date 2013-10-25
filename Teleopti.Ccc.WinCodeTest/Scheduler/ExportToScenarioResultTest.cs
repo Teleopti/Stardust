@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IScenario exportScenario;
 		private IScenario orginalScenario;
 		private IList<IScheduleDay> partsToMove;
-		private IScheduleDictionaryBatchPersister scheduleDictionaryBatchPersister;
+		private IScheduleDictionaryPersister scheduleDictionaryPersister;
 		private IUnitOfWorkFactory uowFactory;
 		private List<IPerson> persons;
 		private IReassociateDataForSchedules callback;
@@ -41,13 +42,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			scheduleRepository = mocks.StrictMock<IScheduleRepository>();
 			moveSvc = mocks.StrictMock<IMoveDataBetweenSchedules>();
 			uowFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-			scheduleDictionaryBatchPersister = mocks.DynamicMock<IScheduleDictionaryBatchPersister>();
+			scheduleDictionaryPersister = mocks.DynamicMock<IScheduleDictionaryPersister>();
 			callback = mocks.DynamicMock<IReassociateDataForSchedules>();
 			partsToMove = new List<IScheduleDay>();
 			persons = new List<IPerson>();
 			exportScenario = new Scenario("export");
 			orginalScenario = new Scenario("original");
-			target = new Presenter(uowFactory, view, scheduleRepository, moveSvc, callback, persons, partsToMove, exportScenario, scheduleDictionaryBatchPersister);
+			target = new Presenter(uowFactory, view, scheduleRepository, moveSvc, callback, persons, partsToMove, exportScenario, scheduleDictionaryPersister);
 		}
 
 		[Test]
@@ -145,7 +146,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (mocks.Record())
 			{
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.Any();
-				scheduleDictionaryBatchPersister.Persist(target.ScheduleDictionaryToPersist);
+				scheduleDictionaryPersister.Persist(target.ScheduleDictionaryToPersist);
 				view.CloseForm();
 			}
 			using (mocks.Playback())
@@ -161,7 +162,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             target.SetPersistingDic(dic);
             var err = new DataSourceException();
 
-            Expect.Call(() => scheduleDictionaryBatchPersister.Persist(target.ScheduleDictionaryToPersist)).Throw(err);
+            Expect.Call(() => scheduleDictionaryPersister.Persist(target.ScheduleDictionaryToPersist)).Throw(err);
             Expect.Call(() => view.ShowDataSourceException(err));
             Expect.Call(() => view.CloseForm());
             mocks.ReplayAll();
@@ -241,8 +242,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 		private class Presenter : ExportToScenarioResultPresenter
 		{
-			public Presenter(IUnitOfWorkFactory uowFactory, IExportToScenarioResultView view, IScheduleRepository scheduleRepository, IMoveDataBetweenSchedules moveSchedules, IReassociateDataForSchedules callback, IEnumerable<IPerson> persons, IEnumerable<IScheduleDay> schedulePartsToExport, IScenario exportScenario, IScheduleDictionaryBatchPersister scheduleDictionaryBatchPersister)
-				: base(uowFactory, view, scheduleRepository, moveSchedules, callback, persons, schedulePartsToExport, exportScenario, scheduleDictionaryBatchPersister)
+			public Presenter(IUnitOfWorkFactory uowFactory, IExportToScenarioResultView view, IScheduleRepository scheduleRepository, IMoveDataBetweenSchedules moveSchedules, IReassociateDataForSchedules callback, IEnumerable<IPerson> persons, IEnumerable<IScheduleDay> schedulePartsToExport, IScenario exportScenario, IScheduleDictionaryPersister scheduleDictionaryPersister)
+				: base(uowFactory, view, scheduleRepository, moveSchedules, callback, persons, schedulePartsToExport, exportScenario, scheduleDictionaryPersister)
 			{
 			}
 

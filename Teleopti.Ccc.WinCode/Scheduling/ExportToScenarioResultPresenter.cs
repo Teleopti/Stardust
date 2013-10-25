@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IReassociateDataForSchedules _callback;
 		private readonly IEnumerable<IPerson> _fullyLoadedPersonsToMove;
 		private readonly IEnumerable<IScheduleDay> _schedulePartsToExport;
-		private readonly IScheduleDictionaryBatchPersister _scheduleDictionaryBatchPersister;
+		private readonly IScheduleDictionaryPersister _scheduleDictionaryPersister;
 
 		public IScheduleDictionary ScheduleDictionaryToPersist { get; private set; }
 
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 												IEnumerable<IPerson> fullyLoadedPersonsToMove,
 												IEnumerable<IScheduleDay> schedulePartsToExport,
 												IScenario exportScenario,
-												IScheduleDictionaryBatchPersister scheduleDictionaryBatchPersister)
+												IScheduleDictionaryPersister scheduleDictionaryPersister)
 		{
 			_uowFactory = uowFactory;
 			_moveSchedules = moveSchedules;
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_view = view;
 			_exportScenario = exportScenario;
 			_schedulePartsToExport = schedulePartsToExport;
-			_scheduleDictionaryBatchPersister = scheduleDictionaryBatchPersister;
+			_scheduleDictionaryPersister = scheduleDictionaryPersister;
 		}
 
 		protected void SetScheduleDictionaryToPersist(IScheduleDictionary dictionary)
@@ -98,7 +99,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 		    try
 		    {
-                _scheduleDictionaryBatchPersister.Persist(ScheduleDictionaryToPersist);
+                _scheduleDictionaryPersister.Persist(ScheduleDictionaryToPersist);
 		    }
 		    catch (DataSourceException exception)
 		    {

@@ -5169,7 +5169,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 															ScheduleViewBase.AllSelectedPersons(selectedSchedules),
 															selectedSchedules,
 															scenario,
-															new ScheduleDictionaryBatchPersister(UnitOfWorkFactory.CurrentUnitOfWorkFactory(), scheduleRepository, new ScheduleDictionarySaver(), new DifferenceEntityCollectionService<IPersistableScheduleData>(), _schedulerMessageBrokerHandler, null, null)))
+															_container.Resolve<IScheduleDictionaryPersister>()))
 			{
 				exportForm.ShowDialog(this);
 			}

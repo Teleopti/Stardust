@@ -4,6 +4,7 @@ using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 											IEnumerable<IPerson> fullyLoadedPersonsToMove,
 											IEnumerable<IScheduleDay> schedulePartsToExport,
 											IScenario exportScenario,
-											IScheduleDictionaryBatchPersister scheduleDictionaryBatchPersister)
+											IScheduleDictionaryPersister scheduleDictionaryPersister)
 		{
 			InitializeComponent();
 			if (!DesignMode)
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_presenter = new ExportToScenarioResultPresenter(uowFactory, this,
 										scheduleRepository, moveDataBetweenSchedules, callback,
 										fullyLoadedPersonsToMove, schedulePartsToExport,
-										exportScenario, scheduleDictionaryBatchPersister);
+										exportScenario, scheduleDictionaryPersister);
 			}
 		}
 
