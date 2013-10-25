@@ -166,6 +166,7 @@
     <Compile Include="TestData\Analytics\AQueue.cs" />
     <Compile Include="TestData\Analytics\AWorkload.cs" />
     <Compile Include="TestData\Analytics\BusinessUnit.cs" />
+    <Compile Include="TestData\Analytics\BrasilianTimeZone.cs" />
     <Compile Include="TestData\Analytics\CurrentBeforeAndAfterWeekDates.cs" />
     <Compile Include="TestData\Analytics\IStageRequest.cs" />
     <Compile Include="TestData\Analytics\StageRequest.cs" />
@@ -232,6 +233,7 @@
     <Compile Include="TestData\LayersExtensions.cs" />
     <Compile Include="TestData\Setups\AbsenceRequestConfigurable.cs" />
     <Compile Include="TestData\Setups\BusinessUnitFromFakeState.cs" />
+    <Compile Include="TestData\Setups\BrasilianTimeZone.cs" />
     <Compile Include="TestData\Setups\DefaultName.cs" />
     <Compile Include="TestData\Setups\HawaiiTimeZone.cs" />
     <Compile Include="TestData\Setups\LicenseFromFile.cs" />
