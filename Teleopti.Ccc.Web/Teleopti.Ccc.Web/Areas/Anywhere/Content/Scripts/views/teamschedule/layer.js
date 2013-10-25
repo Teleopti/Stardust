@@ -12,8 +12,6 @@ define([
 
         return function(timeline, data) {
 
-            var self = this;
-
             var unit = new unitViewModel(timeline, data);
 
             this.LengthMinutes = unit.LengthMinutes;
@@ -28,5 +26,7 @@ define([
             this.Color = data.Color;
             this.Description = data.Description;
             this.IsFullDayAbsence = data.IsFullDayAbsence;
+
+            console.log(data);
         };
     });

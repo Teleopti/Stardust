@@ -27,8 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			Mapper.Initialize(c => c.AddProfile(new PersonScheduleViewModelMappingProfile()));
 		}
 
-		// cant get this green with dynamics involved
-		[Test, Ignore]
+		[Test]
 		public void ShouldConfigureCorrectly()
 		{
 			Mapper.AssertConfigurationIsValid();
@@ -196,9 +195,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var target = new PersonScheduleViewModelMapper();
 
-			var shift = new Shift {Projection = new[] {new SimpleLayer {Color = "Green", IsAbsenceConfidential = true}}};
+			var data = new PersonScheduleData
+				{
+					Model = new Model
+						{
+							Shift = new Shift
+								{
+									Projection = new[]
+										{
+											new SimpleLayer {Color = "Green", IsAbsenceConfidential = true}
+										}
+								}
+						}
+				};
 
-			var result = target.Map(new PersonScheduleData { Model = new Model { Shift = shift } });
+			var result = target.Map(data);
 
 			result.Layers.Single().Color.Should().Be(ConfidentialPayloadValues.DisplayColor.ToHtml());
 		}
@@ -208,12 +219,69 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var target = new PersonScheduleViewModelMapper();
 
-			var shift = new Shift {Projection = new[] {new SimpleLayer {Color = "Green", IsAbsenceConfidential = true}}};
+			var data = new PersonScheduleData
+				{
+					Model = new Model
+						{
+							Shift = new Shift
+								{
+									Projection = new[] {new SimpleLayer {Color = "Green", IsAbsenceConfidential = true}}
+								}
+						},
+					HasViewConfidentialPermission = true
+				};
 
-			var result = target.Map(new PersonScheduleData { Model = new Model{ Shift = shift}, HasViewConfidentialPermission = true});
+			var result = target.Map(data);
 
 			result.Layers.Single().Color.Should().Be("Green");
 		}
+
+		[Test]
+		public void ShouldMapLayerDescriptionForConfidentialAbsence()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			var data = new PersonScheduleData
+				{
+					Model = new Model
+						{
+							Shift = new Shift
+								{
+									Projection = new[]
+										{
+											new SimpleLayer {Description = "Mental Disorder", IsAbsenceConfidential = true}
+										}
+								}
+						}
+				};
+
+			var result = target.Map(data);
+
+			result.Layers.Single().Description.Should().Be(ConfidentialPayloadValues.Description.Name);
+		}
+
+		[Test]
+		public void ShouldMapLayerDescriptionForConfidentialAbsenceButHavePermission()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			var data = new PersonScheduleData
+			{
+				Model = new Model
+				{
+					Shift = new Shift
+					{
+						Projection = new[] { new SimpleLayer { Description = "Mental Disorder", IsAbsenceConfidential = true } }
+					}
+				},
+				HasViewConfidentialPermission = true
+			};
+
+			var result = target.Map(data);
+
+			result.Layers.Single().Description.Should().Be("Mental Disorder");
+		}
+
 
 		[Test]
 		public void ShouldMapLayerStartTimeInPersonsTimeZone()
