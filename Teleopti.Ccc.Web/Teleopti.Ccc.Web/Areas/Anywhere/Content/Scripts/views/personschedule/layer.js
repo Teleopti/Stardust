@@ -29,7 +29,5 @@ define([
 			this.Color = function () { return data.Color; };
 			this.Description = data.Description;
 			this.IsFullDayAbsence = data.IsFullDayAbsence;
-
-			console.log(data);
 		};
 	});

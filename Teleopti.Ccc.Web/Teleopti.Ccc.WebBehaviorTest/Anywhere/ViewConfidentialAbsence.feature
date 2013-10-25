@@ -33,6 +33,7 @@ Background:
 	
 Scenario: Cannot view confidential absence in team view when no permission
 	Given I have the role 'Cannot View Confidential'
+	And I am american
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Mental disorder  |
@@ -40,9 +41,9 @@ Scenario: Cannot view confidential absence in team view when no permission
 	| End time   | 2013-10-25 23:59 |
 	When I view schedules for '2013-10-25'
 	Then I should see 'Pierre Baldi' with absence
-	| Field       | Value  |
-	| Color       | gray   |
-	| Description | Övrigt |
+	| Field       | Value |
+	| Color       | gray  |
+	| Description | Other |
 
 Scenario: View confidential absence in team view when permitted
 	Given I have the role 'Can View Confidential'
@@ -59,6 +60,7 @@ Scenario: View confidential absence in team view when permitted
 
 Scenario: Cannot view confidential absence in person view when no permission
 	Given I have the role 'Cannot View Confidential'
+	And I am american
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Mental disorder  |
@@ -66,14 +68,14 @@ Scenario: Cannot view confidential absence in person view when no permission
 	| End time   | 2013-10-25 23:59 |
 	When I view person schedule for 'Pierre Baldi' on '2013-10-25'
 	Then I should see a shift layer with
-	| Field       | Value  |
-	| Start time  | 08:00  |
-	| End time    | 16:00  |
-	| Color       | gray   |
-	| Description | Övrigt |
+	| Field       | Value |
+	| Start time  | 08:00 |
+	| End time    | 16:00 |
+	| Color       | gray  |
+	| Description | Other |
 	And I should see an absence in the absence list with
 	| Field      | Value            |
-	| Name       | Övrigt           |
+	| Name       | Other            |
 	| Color      | gray             |
 	| Start time | 2013-10-25 00:00 |
 	| End time   | 2013-10-25 23:59 |
