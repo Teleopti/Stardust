@@ -2,12 +2,11 @@ using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
+namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
 	public class WorkflowControlSetConfigurable : IDataSetup
 	{

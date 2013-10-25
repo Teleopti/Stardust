@@ -135,6 +135,8 @@
     </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\GroupPageStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Configurable\PersonalShiftConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\PersonDayOffConfigurable.cs" />
     <Compile Include="Data\Setups\Legacy\Common\CommonContract.cs" />
     <Compile Include="Data\Setups\Legacy\Common\CommonContractSchedule.cs" />
     <Compile Include="Data\Setups\Legacy\Common\CommonScenario.cs" />
@@ -249,7 +251,6 @@
     </Compile>
     <Compile Include="Bindings\Generic\BudgetStepDefinitions.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ScheduleProjectionReadOnlyThing.cs" />
-    <Compile Include="Data\Setups\Configurable\PreferenceTemplateConfigurable.cs" />
     <Compile Include="Bindings\Generic\UIStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\TeamSchedulePageStepDefinitions.cs" />
@@ -269,8 +270,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Data\Setups\Configurable\PersonAbsenceConfigurable.cs" />
-    <Compile Include="Data\Setups\Configurable\PersonDayOffConfigurable.cs" />
-    <Compile Include="Data\Setups\Configurable\SkillConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\TeamConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\StudentAvailabilityPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\CreateName.cs" />
@@ -310,10 +309,7 @@
     <Compile Include="Data\Setups\Configurable\AvailabilityRotationConfigurable.cs" />
     <Compile Include="Bindings\Generic\AvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Configurable\PersonalShiftConfigurable.cs" />
-    <Compile Include="Data\Setups\Configurable\PersonAvailabilityConfigurable.cs" />
     <Compile Include="Bindings\Generic\AsmMessageStepDefinition.cs" />
-    <Compile Include="Data\Setups\Configurable\RuleSetBagConfigurable.cs" />
     <Compile Include="Bindings\Generic\RuleSetBagStepDefinitions.cs" />
     <Compile Include="Data\Setups\Configurable\WorkShiftRuleSetConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\WeekScheduleTimeIndicatorStepDefinitions.cs" />
@@ -389,15 +385,12 @@
     <Compile Include="Data\Setups\Legacy\Common\CommonSite.cs" />
     <Compile Include="Data\Setups\Legacy\Common\CommonTeam.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\SecondBusinessUnit.cs" />
-    <Compile Include="Data\Setups\Configurable\SchedulePeriodConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\RoleForUser.cs" />
     <Compile Include="Data\Setups\Configurable\WorkflowControlSetForUser.cs" />
     <Compile Include="Bindings\Specific\ColleagueStepDefinitions.cs" />
     <Compile Include="AbsenceRequestFromScheduleStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Configurable\WorkflowControlSetConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\RoleConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\PersonPeriodConfigurable.cs" />
-    <Compile Include="Data\Setups\Configurable\PreferenceConfigurable.cs" />
     <Compile Include="Core\BrowserDriver\ProcessHelpers.cs" />
     <Compile Include="Core\BrowserDriver\WatiNIE\WatiNSingleBrowserFireFoxActivator.cs" />
     <Compile Include="Core\BrowserDriver\IBrowserActivator.cs" />

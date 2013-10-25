@@ -4,11 +4,10 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.WebBehaviorTest.Bindings;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
+namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
 	public class PreferenceConfigurable : IUserDataSetup
 	{
@@ -60,12 +59,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			restriction.MustHave = MustHave;
 
 			if (WorkTimeMinimum != null || WorkTimeMaximum != null)
-				restriction.WorkTimeLimitation = new WorkTimeLimitation(Transform.ToNullableTimeSpan(WorkTimeMinimum), Transform.ToNullableTimeSpan(WorkTimeMaximum));
+				restriction.WorkTimeLimitation = new WorkTimeLimitation(toNullableTimeSpan(WorkTimeMinimum), toNullableTimeSpan(WorkTimeMaximum));
 
 			var preferenceDay = new PreferenceDay(user, new DateOnly(Date), restriction);
 
 			var preferenceDayRepository = new PreferenceDayRepository(uow);
 			preferenceDayRepository.Add(preferenceDay);
+		}
+
+		private static TimeSpan? toNullableTimeSpan(string value)
+		{
+			if (value == null)
+				return null;
+			return TimeSpan.Parse(value);
 		}
 	}
 }
