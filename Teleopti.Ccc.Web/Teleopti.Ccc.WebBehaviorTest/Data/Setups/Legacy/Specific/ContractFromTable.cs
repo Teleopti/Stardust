@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 {
-	public class ContractFromTable : IDataSetup, IContractSetup
+	public class ContractFromTable : IDataSetup
 	{
 		public EmploymentType EmploymentType { get; set; }
 		public int PositiveDayOffTolerance { get; set; }

@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 {
-	public class ContractScheduleFromTable : IDataSetup, IContractScheduleSetup
+	public class ContractScheduleFromTable : IDataSetup
 	{
 		public IContractSchedule ContractSchedule { get; set; }
 
