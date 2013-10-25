@@ -10,134 +10,39 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     public interface ITeamBlockSchedulingService
     {
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ITeamSteadyStateHolder teamSteadyStateHolder, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
+		bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
     }
 
     public class TeamBlockSchedulingService : ITeamBlockSchedulingService
     {
 	    private readonly ITeamInfoFactory _teamInfoFactory;
-	    private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 	    private readonly ITeamBlockScheduler _teamBlockScheduler;
-        private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 	    private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 	    private readonly ISchedulingOptions _schedulingOptions;
 	    private bool _cancelMe;
         private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private readonly List<IWorkShiftFinderResult> _advanceSchedulingResults;
         private readonly ITeamBlockMaxSeatChecker  _teamBlockMaxSeat;
+        private readonly IValidatedTeamBlockInfoExtractor  _validatedTeamBlockExtractor;
 
         public TeamBlockSchedulingService
-		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockScheduler teamBlockScheduler, ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator, ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, List<IWorkShiftFinderResult> advanceSchedulingResults, ITeamBlockMaxSeatChecker teamBlockMaxSeat)
+		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockScheduler teamBlockScheduler,  ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, List<IWorkShiftFinderResult> advanceSchedulingResults, ITeamBlockMaxSeatChecker teamBlockMaxSeat, IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor)
 	    {
 		    _teamInfoFactory = teamInfoFactory;
-		    _teamBlockInfoFactory = teamBlockInfoFactory;
 		    _teamBlockScheduler = teamBlockScheduler;
-	        _teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 		    _safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
             _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
             _advanceSchedulingResults = advanceSchedulingResults;
             _teamBlockMaxSeat = teamBlockMaxSeat;
+            _validatedTeamBlockExtractor = validatedTeamBlockExtractor;
             _schedulingOptions = schedulingOptions;
 	    }
 
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-        
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ITeamSteadyStateHolder teamSteadyStateHolder,ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
-		{
-		    return ScheduleSelectedRefactored(allPersonMatrixList, selectedPeriod,selectedPersons, teamSteadyStateHolder,
-		                               schedulePartModifyAndRollbackService);
-		    //_teamBlockScheduler.DayScheduled += dayScheduled;
-		    //if (schedulePartModifyAndRollbackService == null) return false;
-		    //var dateOnlySkipList = new List<DateOnly>();
-		    //foreach (var datePointer in selectedPeriod.DayCollection())
-		    //{
-		    //    if (dateOnlySkipList.Contains(datePointer)) continue;
-		    //    var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
-		    //    foreach (var selectedPerson in selectedPersons)
-		    //    {
-		    //        var teamInfo = _teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod, allPersonMatrixList);
-		    //        if (teamInfo != null)
-		    //            allTeamInfoListOnStartDate.Add(teamInfo);
-		    //    }
-
-		    //    foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))
-		    //    {
-
-		    //        if (teamInfo == null) continue;
-		    //        if (!teamSteadyStateHolder.IsSteadyState(teamInfo.GroupPerson))
-		    //            continue;
-
-		    //        bool singleAgentTeam = _schedulingOptions.GroupOnGroupPageForTeamBlockPer != null &&
-		    //                               _schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key == "SingleAgentTeam";
-		    //        ITeamBlockInfo teamBlockInfo;
-		    //        if (_schedulingOptions.UseTeamBlockPerOption)
-		    //            teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
-		    //                                                                                 _schedulingOptions
-		    //                                                                                     .BlockFinderTypeForAdvanceScheduling, singleAgentTeam, allPersonMatrixList);
-		    //        else
-		    //            teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,BlockFinderType.SingleDay, singleAgentTeam,allPersonMatrixList);
-		    //        if (teamBlockInfo == null) continue;
-		    //        if (TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, datePointer)) continue;
-
-
-		    //        if (_teamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, _schedulingOptions))
-		    //        {
-		    //            schedulePartModifyAndRollbackService.ClearModificationCollection();
-		    //            if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions,
-		    //                                                          selectedPeriod, selectedPersons))
-		    //            {
-		    //                var rollbackExecuted = false;
-		    //                foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(datePointer))
-		    //                {
-		    //                    if (_cancelMe)
-		    //                        break;
-
-		    //                    if (!selectedPersons.Contains(matrix.Person)) continue;
-		    //                    _workShiftMinMaxCalculator.ResetCache();
-		    //                    if (!_workShiftMinMaxCalculator.IsPeriodInLegalState(matrix, _schedulingOptions))
-		    //                    {
-		    //                        var workShiftFinderResult = new WorkShiftFinderResult(teamInfo.GroupPerson, datePointer);
-		    //                        workShiftFinderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.TeamBlockNotInLegalState, 0, 0));
-		    //                        _advanceSchedulingResults.Add(workShiftFinderResult);
-
-		    //                        _safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService,
-		    //                                                                    _schedulingOptions);
-		    //                        rollbackExecuted = true;
-		    //                        break;
-		    //                    }
-		    //                }
-
-		    //                if (!_teamBlockMaxSeat.CheckMaxSeat(datePointer, _schedulingOptions))
-		    //                {
-		    //                   _safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService,
-		    //                                                                    _schedulingOptions);
-		    //                    rollbackExecuted = true;
-		    //                }
-
-		    //                if (rollbackExecuted)
-		    //                {
-		    //                    //should skip the whole block
-		    //                    dateOnlySkipList.AddRange(teamBlockInfo.BlockInfo.BlockPeriod.DayCollection());
-		    //                    //break; Removed this to schedule all the remaining teams if this block failed.
-		    //                }
-		    //            }
-		    //        }
-
-
-		    //        if (_cancelMe)
-		    //            break;
-		    //    }
-		//}
-
-			//_teamBlockScheduler.DayScheduled -= dayScheduled;
-		    //return true;
-	    }
-
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-        public bool ScheduleSelectedRefactored(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ITeamSteadyStateHolder teamSteadyStateHolder, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+        public bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
         {
             _teamBlockScheduler.DayScheduled += dayScheduled;
             if (schedulePartModifyAndRollbackService == null) return false;
@@ -148,8 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
                 var allTeamInfoListOnStartDate = getAllTeamInfoList(allPersonMatrixList, selectedPeriod, selectedPersons);
 
-                runSchedulingForAllTeamInfoOnStartDate(allPersonMatrixList, selectedPeriod, selectedPersons,
-                                                       teamSteadyStateHolder, schedulePartModifyAndRollbackService,
+                runSchedulingForAllTeamInfoOnStartDate(allPersonMatrixList, selectedPeriod, selectedPersons, schedulePartModifyAndRollbackService,
                                                        allTeamInfoListOnStartDate, datePointer, dateOnlySkipList);
             }
 
@@ -158,13 +62,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         }
 
         private void runSchedulingForAllTeamInfoOnStartDate(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
-                                     ITeamSteadyStateHolder teamSteadyStateHolder,
                                      ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
                                      HashSet<ITeamInfo> allTeamInfoListOnStartDate, DateOnly datePointer, List<DateOnly> dateOnlySkipList)
         {
             foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))
             {
-                var teamBlockInfo = getTeamBlockInfo(teamInfo,datePointer, allPersonMatrixList,teamSteadyStateHolder);
+                var teamBlockInfo = _validatedTeamBlockExtractor.GetTeamBlockInfo(teamInfo,datePointer, allPersonMatrixList,_schedulingOptions );
                 if (teamBlockInfo == null) continue;
 
                 schedulePartModifyAndRollbackService.ClearModificationCollection();
@@ -174,19 +77,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 if (_cancelMe)
                     break;
             }
-        }
-
-        private ITeamBlockInfo getTeamBlockInfo(ITeamInfo teamInfo, DateOnly datePointer, IList<IScheduleMatrixPro> allPersonMatrixList, ITeamSteadyStateHolder teamSteadyStateHolder)
-        {
-            if (teamInfo == null) return null ;
-            if (!teamSteadyStateHolder.IsSteadyState(teamInfo.GroupPerson)) return null;
-            var teamBlockInfo = createTeamBlockInfo(allPersonMatrixList, datePointer, teamInfo);
-            if (teamBlockInfo == null) return null;
-            if (TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, datePointer))
-                return null;
-            if (!_teamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, _schedulingOptions))
-                return null;
-            return teamBlockInfo;
         }
 
         private void verfiyScheduledTeamBlock(IList<IPerson> selectedPersons,
@@ -227,22 +117,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         {
             _safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService,
                                                         _schedulingOptions);
-        }
-
-        private ITeamBlockInfo createTeamBlockInfo(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnly datePointer, ITeamInfo teamInfo)
-        {
-            bool singleAgentTeam = _schedulingOptions.GroupOnGroupPageForTeamBlockPer != null &&
-                                       _schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key == "SingleAgentTeam";
-            ITeamBlockInfo teamBlockInfo;
-            if (_schedulingOptions.UseTeamBlockPerOption)
-                teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
-                                                                          _schedulingOptions
-                                                                              .BlockFinderTypeForAdvanceScheduling,
-                                                                          singleAgentTeam, allPersonMatrixList);
-            else
-                teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer, BlockFinderType.SingleDay,
-                                                                          singleAgentTeam, allPersonMatrixList);
-            return teamBlockInfo;
         }
 
         private HashSet<ITeamInfo> getAllTeamInfoList(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
