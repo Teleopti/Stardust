@@ -17,7 +17,6 @@ using Teleopti.Ccc.TestCommon.TestData.Common;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Generic;
 using Teleopti.Ccc.TestCommon.TestData.Setups;
-using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
@@ -36,7 +35,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			SetupFixtureForAssembly.EndTest();
 		}
 		 
-		[Test, Ignore("This is failing as it should now, removing too many days before the insert")]
+		[Test, Ignore("just temp")]
 		public void ShouldWorkForStockholm()
 		{
 			// run this to get a date and time in mart.LastUpdatedPerStep
