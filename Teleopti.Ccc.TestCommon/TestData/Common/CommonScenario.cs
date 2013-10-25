@@ -10,10 +10,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Common
 	public class CommonScenario : IDataSetup
 	{
 		public IScenario Scenario;
+	    public bool EnableReporting;
 
 		public void Apply(IUnitOfWork uow)
 		{
-			Scenario = ScenarioFactory.CreateScenarioAggregate(DefaultName.Make("Common scenario"), true);
+			Scenario = ScenarioFactory.CreateScenario(DefaultName.Make("Common scenario"), true, EnableReporting);
 			new ScenarioRepository(uow).Add(Scenario);
 		}
 	}

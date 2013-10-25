@@ -28,8 +28,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void Setup()
 		{
 			_scheduleDate = new DateTime(2013, 3, 4, 0, 0, 0);
-
-
 		}
 
 		private static string MakeJsonModel(SimpleLayer layer)

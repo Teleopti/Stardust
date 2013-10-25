@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"I am an agent in a team without access to shift trade requests")]
 		public void GivenIAmAnAgentInATeamWithoutAccessToShiftTradeRequests()
 		{
-			DataMaker.Data().Apply(new Agent());
+			DataMaker.Data().Apply(new AgentWithoutRequestsAccess());
 			var team = new Team();
 			DataMaker.Data().Apply(team);
 			DataMaker.Data().Apply(new SchedulePeriod());

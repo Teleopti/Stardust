@@ -138,7 +138,6 @@
     <Compile Include="Bindings\Generic\SiteStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsKnockoutExtensions.cs" />
     <Compile Include="Data\Setups\DefaultName.cs" />
-    <Compile Include="Data\Setups\Generic\PartTimePercentageConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\SiteConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\OvertimeAvailabilityConfigurable.cs" />
     <Compile Include="Bindings\Generic\OvertimeAvailabilityStepDefinitions.cs" />
@@ -147,6 +146,11 @@
     <Compile Include="Bindings\Generic\UserLogonDetailsStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\GroupingReadOnlyUpdate.cs" />
     <Compile Include="Data\Setups\Specific\UserContract.cs" />
+    <Compile Include="MyTime\22851_FindShiftTradePageFromTeamSchedule.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>22851_FindShiftTradePageFromTeamSchedule.feature</DependentUpon>
+    </Compile>
     <Compile Include="OveritmeAvailability.feature.cs">
       <DependentUpon>OveritmeAvailability.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -692,6 +696,10 @@
     <None Include="CalendarShare.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>CalendarShare.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\22851_FindShiftTradePageFromTeamSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>22851_FindShiftTradePageFromTeamSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="OveritmeAvailability.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

@@ -11,7 +11,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
     {
         public static void BulkWrite(DataTable dataTable, String connectionString, String tableName)
         {
-            using (SqlConnection destinationConnection = new SqlConnection(connectionString))
+            using (var destinationConnection = new SqlConnection(connectionString))
             {
                 destinationConnection.Open();
             /*
@@ -20,14 +20,17 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
                 match the column positions in the destination table, 
                 so there is no need to map columns.
              */
-                using (SqlBulkCopy _sqlBulkCopy = new SqlBulkCopy(destinationConnection))
+                using (var sqlBulkCopy = new SqlBulkCopy(destinationConnection))
                 {
                     DateTime startTime = DateTime.Now;
-                    _sqlBulkCopy.DestinationTableName = tableName;
+                    sqlBulkCopy.DestinationTableName = tableName;
                     //_sqlBulkCopy.NotifyAfter = 10000;
-                    _sqlBulkCopy.BulkCopyTimeout = int.Parse(ConfigurationManager.AppSettings["databaseTimeout"], CultureInfo.InvariantCulture);
+                    var timeout = 60;
+                    if (ConfigurationManager.AppSettings["databaseTimeout"] != null)
+                        timeout = int.Parse(ConfigurationManager.AppSettings["databaseTimeout"], CultureInfo.InvariantCulture);
+                    sqlBulkCopy.BulkCopyTimeout = timeout;
                     // Write from the source to the destination.
-                    _sqlBulkCopy.WriteToServer(dataTable);
+                    sqlBulkCopy.WriteToServer(dataTable);
                     DateTime endTime = DateTime.Now;
                     double duration = endTime.Subtract(startTime).TotalMilliseconds/1000;
                     Trace.WriteLine(string.Concat("Bulk-insert duration: ", duration.ToString("0.00", CultureInfo.CurrentCulture)));
