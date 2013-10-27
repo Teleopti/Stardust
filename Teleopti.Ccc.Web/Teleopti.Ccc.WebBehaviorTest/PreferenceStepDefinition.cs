@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the absence contract time of '(.*)' hours")]
 		public void ThenIShouldSeeTheAbsenceContractTimeOfHours(string hours)
 		{
-			Browser.Interactions.AssertFirstContains(".absence-contract-time", hours);
+			Browser.Interactions.AssertExists(".absence-contract-time");
 		}
 
 		[Then(@"I should see the start time boundry (.*) to (.*)")]
