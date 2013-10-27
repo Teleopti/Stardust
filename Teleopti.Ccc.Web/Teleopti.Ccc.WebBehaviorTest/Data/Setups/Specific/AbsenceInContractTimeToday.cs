@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Common;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 		public AbsenceInContractTimeToday()
 		{
-			Date = DateOnly.Today.ToShortDateString(swedishCulture);
+			Date = DateOnlyForBehaviorTests.TestToday.ToShortDateString(swedishCulture);
 		}
 
 		public string Date { get; set; }
