@@ -1,5 +1,4 @@
-﻿@WatiN
-Feature: Sign Out
+﻿Feature: Sign Out
 	In order to avoid others from seeing my data
 	As an agent
 	I want to sign out

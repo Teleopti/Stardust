@@ -104,7 +104,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoToWaitForCompleted("MyTime#Schedule/Week",
 				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded(), new OverrideNotifyBehavior());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
+			if (Browser.Current != null)
+				Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
 		public static void GotoWeekSchedulePageNoWait()
