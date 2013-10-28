@@ -5,7 +5,6 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
@@ -55,6 +54,59 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
         }
 
+        [Test]
+        public void ShouldNotContinueIfNoActivityFound()
+        {
+            IList<ISkillDay> skillDays = new List<ISkillDay> { _skillDay1 };
+            using (_mock.Record())
+            {
+                Expect.Call(_teamBlockInfo.BlockInfo).Return(_baseLineData.BlockOfThreeDays);
+                Expect.Call(
+                    _scheduleResultStartHolder.SkillDaysOnDateOnly(
+                        _baseLineData.BlockOfThreeDays.BlockPeriod.DayCollection())).Return(skillDays);
+
+                Expect.Call(_skillDay1.Skill).Return(_skill1);
+                Expect.Call(_skill1.Activity).Return(null);
+
+            }
+            var result = _target.GetOpenHoursPerActivity(_teamBlockInfo);
+            using (_mock.Playback())
+            {
+                Assert.AreEqual(result.Count(), 0);
+            }
+            
+        }
+
+        [Test]
+        public void ShouldSelectValidSampleDay()
+        {
+            var day2Interval = generateIntervalForDay(new DateOnly(2013, 10, 18), 9, 11);
+            IList<ISkillDay> skillDays = new List<ISkillDay> { _skillDay1, _skillDay2, _skillDay3 };
+            var readOnlyListOfSkillInterval =
+                    new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { _sampleSkillStaff });
+
+            using (_mock.Record())
+            {
+                Expect.Call(_teamBlockInfo.BlockInfo).Return(_baseLineData.BlockOfThreeDays);
+                Expect.Call(
+                    _scheduleResultStartHolder.SkillDaysOnDateOnly(
+                        _baseLineData.BlockOfThreeDays.BlockPeriod.DayCollection())).Return(skillDays);
+
+                Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>())).IgnoreArguments().Repeat.Twice();
+
+                Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(readOnlyListOfSkillInterval).IgnoreArguments().Repeat.AtLeastOnce();
+                Expect.Call(_skillStaffPeriodMapper.MapSkillIntervalData(new List<ISkillStaffPeriod> { _sampleSkillStaff })).IgnoreArguments()
+                      .Return(day2Interval).Repeat.AtLeastOnce() ;
+
+                Expect.Call(_skillDay3.SkillStaffPeriodCollection).Return(readOnlyListOfSkillInterval).IgnoreArguments().Repeat.AtLeastOnce();
+
+            }
+            using (_mock.Playback())
+            {
+                Assert.IsTrue( _target.HasSameOpeningHours(_teamBlockInfo));
+            }
+            
+        }
 
         [Test]
         public void DifferentOpenHourForBlock()
@@ -105,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             Assert.AreEqual(result[_baseLineData.Activity1].EndTime,TimeSpan.FromHours(10 ));
             
         }
-
+        
         [Test]
         public void ShouldNotContinueWithEmptySkillStaff()
         {
