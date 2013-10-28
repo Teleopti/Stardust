@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
@@ -32,6 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			if (model.DayOff != null)
 				dayOff = new TeamScheduleDayOffViewModel
 					{
+						DayOffName = model.DayOff.Title,
 						Start = TimeZoneInfo.ConvertTimeFromUtc(model.DayOff.Start, userTimeZone).ToFixedDateTimeFormat(),
 						Minutes = (int) model.DayOff.End.Subtract(model.DayOff.Start).TotalMinutes
 					};
