@@ -65,8 +65,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 
-			var startTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(StartTime);
-			var endTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(EndTime);
+			var timeZone = user.PermissionInformation.DefaultTimeZone();
+			var startTimeUtc = timeZone.SafeConvertTimeToUtc(StartTime);
+			var endTimeUtc = timeZone.SafeConvertTimeToUtc(EndTime);
 
 			_assignmentPeriod = new DateTimePeriod(startTimeUtc, endTimeUtc);
 			var scenario = new ScenarioRepository(uow).LoadAll().Single(x => x.Description.Name == Scenario);
@@ -77,8 +78,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			DateTimePeriod? lunchPeriod = null;
 			if (LunchStartTime != DateTime.MinValue)
 			{
-				var lunchStartTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(LunchStartTime);
-				var lunchEndTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(LunchEndTime);
+				var lunchStartTimeUtc = timeZone.SafeConvertTimeToUtc(LunchStartTime);
+				var lunchEndTimeUtc = timeZone.SafeConvertTimeToUtc(LunchEndTime);
 				lunchPeriod = new DateTimePeriod(lunchStartTimeUtc, lunchEndTimeUtc);
 			}
 			else if (Lunch3HoursAfterStart)
