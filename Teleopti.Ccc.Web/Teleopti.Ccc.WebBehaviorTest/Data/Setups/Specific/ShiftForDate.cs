@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
@@ -43,19 +41,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		{
 			Date = ApplyDate(cultureInfo);
 			ShiftCategory = TestData.ShiftCategory;
-			var dateUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(Date);
+		    var timeZone = user.PermissionInformation.DefaultTimeZone();
+		    var shiftStartUtc = timeZone.SafeConvertTimeToUtc(Date.Add(StartTime));
+		    var shiftEndUtc = timeZone.SafeConvertTimeToUtc(Date.Add(EndTime));
 
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 
 			// create main shift
-			_assignmentPeriod = new DateTimePeriod(dateUtc.Add(StartTime), dateUtc.Add(EndTime));
+            _assignmentPeriod = new DateTimePeriod(shiftStartUtc, shiftEndUtc);
 			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario, new DateOnly(Date));
 			assignment.AddMainLayer(TestData.ActivityPhone, _assignmentPeriod);
 
 			// add lunch
 			if (_withLunch)
 			{
-				var lunchPeriod = new DateTimePeriod(dateUtc.Add(StartTime).AddHours(3), dateUtc.Add(StartTime).AddHours(4));
+                var lunchPeriod = new DateTimePeriod(shiftStartUtc.AddHours(3), shiftStartUtc.AddHours(4));
 				assignment.AddMainLayer(TestData.ActivityLunch, lunchPeriod);
 			}
 
