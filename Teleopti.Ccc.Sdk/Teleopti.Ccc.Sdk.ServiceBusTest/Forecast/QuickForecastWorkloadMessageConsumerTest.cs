@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 
 			_jobId = Guid.NewGuid();
 			_statPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 31);
-			_mess = new QuickForecastWorkloadMessage {JobId = _jobId,StatisticPeriod = _statPeriod, SmoothingStyle = 3};
+			_mess = new QuickForecastWorkloadMessage {JobId = _jobId,StatisticPeriod = _statPeriod, SmoothingStyle = 3,UseDayOfMonth = true};
 		}
 
 		[Test]
