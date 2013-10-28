@@ -52,12 +52,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					   from l in layers
 					   let canSeeLayerInfo = CanSeeLayerInfo(canSeeConfidentialAbsence, l)
 					   let color = canSeeLayerInfo ? l.Color : ConfidentialPayloadValues.DisplayColor.ToHtml()
-					   let title = canSeeLayerInfo ? l.Title : ConfidentialPayloadValues.Description.Name
+					   let description = canSeeLayerInfo ? l.Description : ConfidentialPayloadValues.Description.Name
 					   let start = TimeZoneInfo.ConvertTimeFromUtc(l.Start, userTimeZone)
 				       select new TeamScheduleLayerViewModel
 					       {
 						       Color = color,
-							   Title = title,
+							   Description = description,
 							   Start = start.ToFixedDateTimeFormat(),
 						       Minutes = l.Minutes
 					       })

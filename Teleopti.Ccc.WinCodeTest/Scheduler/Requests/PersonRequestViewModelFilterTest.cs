@@ -29,20 +29,20 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         public void VerifyInnerSpecificationDateTime()
         {
             _target = new PersonRequestViewModelFilter(_timeSpan);
-            var innerSpecification = (UpdatedAfterSpecification)_target.InnerSpecification; 
-            Assert.IsTrue(withinRange(DateTime.UtcNow.Subtract(_timeSpan),innerSpecification.DateTime));
+            UpdatedAfterSpecification innerSpecification = (UpdatedAfterSpecification)_target.InnerSpecification; 
+            Assert.IsTrue(WithinRange(DateTime.UtcNow.Subtract(_timeSpan),innerSpecification.DateTime));
         }
 
         [Test]
         public void VerifyCallsInnerSpecification()
         {
-            var inner = _mocks.StrictMock<ISpecification<IChangeInfo>>();
+            ISpecification<IChangeInfo> inner = _mocks.StrictMock<ISpecification<IChangeInfo>>();
             _target = new PersonRequestViewModelFilter(inner);
            
-            var requestFactory = new PersonRequestFactory();
-            var request = requestFactory.CreateApprovedPersonRequest();
+            PersonRequestFactory requestFactory = new PersonRequestFactory();
+            IPersonRequest request = requestFactory.CreateApprovedPersonRequest();
 
-            var model = new PersonRequestViewModel(request, new ShiftTradeRequestStatusCheckerForTestDoesNothing(),null,null, null);
+            PersonRequestViewModel model = new PersonRequestViewModel(request, new ShiftTradeRequestStatusCheckerForTestDoesNothing(),null,null, null);
 
             using(_mocks.Record())
             {
@@ -60,38 +60,38 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         public void VerifyPendingDoesNotGetFiltered()
         {
             _target = new PersonRequestViewModelFilter(TimeSpan.FromDays(1));
-            var longTimeAgo = new DateTime(1812,1,1,1,1,1,DateTimeKind.Utc);
+            DateTime longTimeAgo = new DateTime(1812,1,1,1,1,1,DateTimeKind.Utc);
+           
+            IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
+            PersonRequestFactory factory = new PersonRequestFactory();
+            IPersonRequest personRequestToOldButPending = factory.CreatePersonRequest();
+            IPersonRequest personRequestToOld = factory.CreateApprovedPersonRequest();
 
-			var shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
-			var factory = new PersonRequestFactory();
-			var personRequestToOldButPending = factory.CreatePersonRequest();
-			var personRequestToOld = factory.CreateApprovedPersonRequest();
 
-			ReflectionHelper.SetUpdatedOn(personRequestToOldButPending, longTimeAgo);
+            ReflectionHelper.SetUpdatedOn(personRequestToOldButPending, longTimeAgo);
             ReflectionHelper.SetUpdatedOn(personRequestToOld, longTimeAgo);
 
             Assert.IsFalse(personRequestToOld.IsPending,"Make sure this isnt pending");
             Assert.IsTrue(personRequestToOldButPending.IsPending, "Make sure its pending");
 
-			var modelThatShouldBeFiltered = new PersonRequestViewModel(personRequestToOld,
+            PersonRequestViewModel modelThatShouldBeFiltered = new PersonRequestViewModel(personRequestToOld,
                                                                        shiftTradeRequestStatusChecker, null,null, null);
 
-			var modelThatShouldNotBeFiltered = new PersonRequestViewModel(personRequestToOldButPending,
+            PersonRequestViewModel modelThatShouldNotBeFiltered = new PersonRequestViewModel(personRequestToOldButPending,
                                                                        shiftTradeRequestStatusChecker, null, null, null);
+
 
             Assert.IsTrue(_target.IsSatisfiedBy(modelThatShouldBeFiltered));
             Assert.IsFalse(_target.IsSatisfiedBy(modelThatShouldNotBeFiltered));
+            
+
+
+            
         }
 
-		[Test]
-		public void Verify_FutureShiftTradePending_DoesNotGetFiltered()
-		{
-			
-		}
-
-        private static bool withinRange(DateTime dateTime,DateTime dateTimeToCompare)
+        private static bool WithinRange(DateTime dateTime,DateTime dateTimeToCompare)
         {
-			var period = new DateTimePeriod(dateTime.Subtract(TimeSpan.FromDays(1)), dateTime.Add(TimeSpan.FromDays(1)));
+            DateTimePeriod period = new DateTimePeriod(dateTime.Subtract(TimeSpan.FromDays(1)),dateTime.Add(TimeSpan.FromDays(1)));
             return period.Contains(dateTimeToCompare);
         }
 

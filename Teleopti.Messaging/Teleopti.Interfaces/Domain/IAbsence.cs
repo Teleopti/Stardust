@@ -13,11 +13,6 @@ namespace Teleopti.Interfaces.Domain
                                     
     {
         /// <summary>
-        /// Parent grouping Absence
-        /// </summary>
-        IGroupingAbsence GroupingAbsence { get; set; }
-
-        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>

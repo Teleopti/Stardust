@@ -118,6 +118,7 @@
   <ItemGroup>
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriods.cs" />
     <Compile Include="AgentInfo\Requests\IBatchShiftTradeRequestStatusChecker.cs" />
+    <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
     <Compile Include="Analytics\BaseConfiguration.cs" />
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommand.cs" />
@@ -262,6 +263,7 @@
     <Compile Include="Common\Logging\SystemInformationHelper.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Common\SpecificBusinessUnit.cs" />
+    <Compile Include="Common\ThisCurrentScenario.cs" />
     <Compile Include="Common\Time\INowExtensions.cs" />
     <Compile Include="Common\Time\MutableNow.cs" />
     <Compile Include="Common\Time\ThisIsNow.cs" />
@@ -351,6 +353,12 @@
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
+    <Compile Include="Optimization\StandardDeviationData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Optimization\TeamBlock\DailyTargetValueCalculatorForTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockTargetValueCalculator.cs" />
+    <Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffOptimizerService.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
@@ -426,7 +434,7 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapFinder.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapper.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettings.cs" />
-    <Compile Include="Optimization\StandardDeviationData.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinder.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeLengthDecider.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferences.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferencesGeneralPersonalSetting.cs" />
@@ -554,6 +562,7 @@
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDays.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillInterval.cs" />
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlock.cs" />
+    <Compile Include="Scheduling\TeamBlock\OpenHourRestrictionForTeamBlock.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftLayer.cs" />
     <Compile Include="Scheduling\Assignment\EditableShift.cs" />
@@ -565,7 +574,7 @@
     <Compile Include="Scheduling\Assignment\ReplaceLayerInSchedule.cs" />
     <Compile Include="Scheduling\Assignment\ShiftLayer.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailability.cs" />
-    <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculator.cs" />
+    <Compile Include="Scheduling\TeamBlock\SkillIntervalDataOpenHour.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreator.cs" />
@@ -1203,7 +1212,6 @@
     <Compile Include="Forecasting\MonthOfYearItem.cs" />
     <Compile Include="Forecasting\SkillDayRestrictionSet.cs" />
     <Compile Include="Forecasting\SkillDayTemplate.cs" />
-    <Compile Include="Common\GroupingAbsence.cs" />
     <Compile Include="Common\EntityBaseTypes\Entity.cs" />
     <Compile Include="Common\GroupingActivity.cs" />
     <Compile Include="Common\Layer.cs" />
@@ -1457,9 +1465,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\PersonAbsence.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Common\GroupingAbsence.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Common\GroupingActivity.hbm.xml" />

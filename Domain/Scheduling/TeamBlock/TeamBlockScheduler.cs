@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IOpenHoursToEffectiveRestrictionConverter _openHoursToEffectiveRestrictionConverter;
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
-		private bool _cancelMe;
+	    private readonly IOpenHourRestrictionForTeamBlock _openHourRestrictionForTeamBlock;
+	    private bool _cancelMe;
 
 		public TeamBlockScheduler(ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
 		                          IRestrictionAggregator restrictionAggregator,
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                          IWorkShiftSelector workShiftSelector,
 		                          IOpenHoursToEffectiveRestrictionConverter openHoursToEffectiveRestrictionConverter,
 		                          ITeamBlockClearer teamBlockClearer,
-		                          ISchedulePartModifyAndRollbackService rollbackService)
+		                          ISchedulePartModifyAndRollbackService rollbackService, IOpenHourRestrictionForTeamBlock openHourRestrictionForTeamBlock )
 		{
 			_skillDayPeriodIntervalDataGenerator = skillDayPeriodIntervalDataGenerator;
 			_restrictionAggregator = restrictionAggregator;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_openHoursToEffectiveRestrictionConverter = openHoursToEffectiveRestrictionConverter;
 			_teamBlockClearer = teamBlockClearer;
 			_rollbackService = rollbackService;
+		    _openHourRestrictionForTeamBlock = openHourRestrictionForTeamBlock;
 		}
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
@@ -184,7 +186,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				                                                                  suggestedShiftProjectionCache, isTeamScheduling);
 				var shifts = _workShiftFilterService.Filter(day, person, dailyTeamBlockInfo, restriction, roleModelShift,
 				                                            schedulingOptions,
-				                                            new WorkShiftFinderResult(dailyTeamBlockInfo.TeamInfo.GroupPerson, day));
+                                                            new WorkShiftFinderResult(dailyTeamBlockInfo.TeamInfo.GroupPerson, day));
 				if (shifts == null || shifts.Count <= 0)
 					continue;
 				var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(dailyTeamBlockInfo);
@@ -256,7 +258,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					                                                                  null, isTeamScheduling);
 					var shifts = _workShiftFilterService.Filter(day, person, dailyTeamBlockInfo, restriction, roleModelShift,
 					                                            schedulingOptions,
-					                                            new WorkShiftFinderResult(dailyTeamBlockInfo.TeamInfo.GroupPerson, day));
+                                                                new WorkShiftFinderResult(dailyTeamBlockInfo.TeamInfo.GroupPerson, day));
 					if (shifts == null || shifts.Count <= 0)
 						continue;
 					var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(dailyTeamBlockInfo);
@@ -287,19 +289,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			if (teamBlockInfo == null) return null;
 
-			var restriction = _restrictionAggregator.Aggregate(teamBlockInfo, schedulingOptions);
+            var restriction = _restrictionAggregator.Aggregate(teamBlockInfo, schedulingOptions);
 			if (restriction == null)
 				return null;
 
 			var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(teamBlockInfo);
 			//This code has timezone problem
-			//var openHourRestriction = _openHoursToEffectiveRestrictionConverter.Convert(activityInternalData);
-			//restriction = restriction.Combine(openHourRestriction);
+            //var openHourRestriction = _openHoursToEffectiveRestrictionConverter.Convert(activityInternalData);
+            //restriction = restriction.Combine(openHourRestriction);
 
 			// (should we cover for max seats here?) 
-			var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,
+			var shifts = _workShiftFilterService.FilterForRoleModel(datePointer, teamBlockInfo, restriction,
 			                                            schedulingOptions,
-			                                            new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer));
+                                                        new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer), _openHourRestrictionForTeamBlock.HasSameOpeningHours(teamBlockInfo));
 			if (shifts == null || shifts.Count <= 0)
 				return null;
 

@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 		protected override void Configure()
 		{
 			CreateMap<TeamScheduleDomainData, TeamScheduleViewModel>()
+				.ForMember(d=>d.ShiftTradePermisssion, o => o.UseValue(false))
 				.ForMember(d => d.AgentSchedules, o => o.MapFrom(s => s.Days))
 				.ForMember(d => d.PeriodSelection, o => o.MapFrom(s => s))
 				.ForMember(d => d.TeamSelection, o => o.MapFrom(s => s.TeamOrGroupId))

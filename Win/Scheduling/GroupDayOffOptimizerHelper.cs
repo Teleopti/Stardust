@@ -473,7 +473,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 									   teamScheduling,
 									   _container.Resolve<IWorkShiftSelector>(),
 									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>(),
-										teamBlockCleaner, schedulePartModifyAndRollbackService);
+										teamBlockCleaner, schedulePartModifyAndRollbackService,_container.Resolve<IOpenHourRestrictionForTeamBlock  >());
 
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
 				= new SmartDayOffBackToLegalStateService(
@@ -489,25 +489,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 				OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod, _stateHolder);
 			IPeriodValueCalculator periodValueCalculatorForAllSkills =
 				OptimizerHelperHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, allSkillsDataExtractor);
-			
+			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder =
+				new TeamBlockDaysOffMoveFinder(_container.Resolve<IScheduleResultDataExtractorProvider>(),
+				                               dayOffBackToLegalStateService,
+				                               _container.Resolve<IDayOffOptimizationDecisionMakerFactory>());
 
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService = 
 				new TeamBlockDayOffOptimizerService(
 					teamInfoFactory,
 					_container.Resolve<ILockableBitArrayFactory>(),
-					_container.Resolve<IScheduleResultDataExtractorProvider>(),
-					dayOffBackToLegalStateService,
 					_container.Resolve<ISchedulingOptionsCreator>(),
 					_container.Resolve<ILockableBitArrayChangesTracker>(),
 					teamBlockScheduler,
 					_container.Resolve<ITeamBlockInfoFactory>(),
 					periodValueCalculatorForAllSkills,
-					_container.Resolve<IDayOffOptimizationDecisionMakerFactory>(),
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamDayOffModifier>(),
 					_container.Resolve<ITeamBlockSteadyStateValidator>(),
 					teamBlockCleaner,
-                    teamBlockRestrictionOverLimitValidator, _container.Resolve<ITeamBlockMaxSeatChecker >()
+                    teamBlockRestrictionOverLimitValidator, 
+					_container.Resolve<ITeamBlockMaxSeatChecker>(),
+					teamBlockDaysOffMoveFinder
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs
@@ -549,7 +551,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                        _container.Resolve<IWorkShiftFilterService>(), teamScheduling,
                                        _container.Resolve<IWorkShiftSelector>(),
 									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>(),
-										teamBlockCleaner, schedulePartModifyAndRollbackService);
+										teamBlockCleaner, schedulePartModifyAndRollbackService,_container.Resolve<IOpenHourRestrictionForTeamBlock  >());
     
             var groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
@@ -563,9 +565,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamBlockIntradayDecisionMaker>(),
 					teamBlockRestrictionOverLimitValidator,
-					teamBlockCleaner,
-                    _container.Resolve<IStandardDeviationSumCalculator>(), _container.Resolve<ITeamBlockMaxSeatChecker >()
-                    );
+					teamBlockCleaner, _container.Resolve<ITeamBlockMaxSeatChecker >(),_container.Resolve<IDailyTargetValueCalculatorForTeamBlock  >());
 
 	        teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
             teamBlockIntradayOptimizationService.Optimize(

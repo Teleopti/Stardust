@@ -219,8 +219,8 @@ function Test-SitesAndServicesOk {
         #start system
 		It "should start SDK" {
 			start-AppPool -PoolName "Teleopti ASP.NET v4.0 SDK"
-			
-			$temp = Check-HttpStatus -url $global:BaseURL + "TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc" -credentials $cred
+			$SDKUrl = $global:BaseURL + "TeleoptiCCC/SDK/TeleoptiCCCSdkService.svc"
+			$temp = Check-HttpStatus -url $SDKUrl -credentials $cred
 			$temp | Should be $True
 		}
 		

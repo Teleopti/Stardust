@@ -4,7 +4,7 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			if (File.Exists(targetTestPasswordPolicyFile))
 				return;
 			var contents = File.ReadAllText("Data\\PasswordPolicy.xml");
-			var passwordPolicy = table.CreateInstance<PasswordPolicyConfigurable>();
+			var passwordPolicy = table.CreateInstance<PasswordPolicyInfo>();
 
 			contents = contents.Replace("_MaxNumberOfAttempts_", passwordPolicy.MaxNumberOfAttempts.ToString());
 			contents = contents.Replace("_InvalidAttemptWindow_", passwordPolicy.InvalidAttemptWindow.ToString());
@@ -50,6 +50,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 			File.WriteAllText(targetTestPasswordPolicyFile, contents);
 		}
+
+		public class PasswordPolicyInfo
+		{
+			public int MaxNumberOfAttempts { get; set; }
+			public int InvalidAttemptWindow { get; set; }
+			public int PasswordValidForDayCount { get; set; }
+			public int PasswordExpireWarningDayCount { get; set; }
+			public string Rule1 { get; set; }
+		}
+
 
 	}
 }

@@ -1,7 +1,7 @@
 ﻿@ignore
 Feature: View group schedule
 	In order to contact agents with a specific skill
-	or beloning to specific team
+	or belonging to a specific team
 	or that are part-timers
 	or are students
 	As a team leader
@@ -66,9 +66,9 @@ Scenario: View group picker options
 		| Shift bag/A shift bag                     |
 		| Note/A note                               |
 		| Skill/A skill                             |
-		| A group page/A root                       |
-		| A group page/Another root                 |
-		| Another group page/Some other root        |
+		| A group page/A group                      |
+		| A group page/Another group                |
+		| Another group page/Some other group       |
 
 Scenario: View group schedule
 	And 'John Smith' has a shift on '2013-10-10'
@@ -92,7 +92,7 @@ Scenario: View group schedule
 	Then I should see schedule for 'John Smith'
 	Then I should see no schedule for 'Pierre Baldi'
 
-Scenario: Order group pages like business heirarchy, contract, contract schedule, part time percentage, shiftbag, skill, group page names
+Scenario: Order group pages like business heirarchy, contract, contract schedule, part time percentage, notes, shiftbag, skill, group page names
 	Given I viewing schedules for '2013-10-10'
 	Then I should see 'Business Hierarchy' before 'Contract'
 	And I should see 'Contract' before 'Contract Schedule'
@@ -111,8 +111,16 @@ Scenario: Order groups in alphabetical order
 	And I should see 'Another Part-Time Percentage' before 'Part-Time Percentage'
 	And I should see 'Another note' before 'A note'
 	And I should see 'Another shift bag' before 'A shift bag'
-	And I should see 'Another Skill' before 'A skill'
+	And I should see 'Another skill' before 'A skill'
 	And I should see 'A group' before 'Another group'
+
+Scenario: Search groups
+	Given I viewing schedules for '2013-10-10'
+	When I search for group 'contract'
+	Then I should see 'A contract'
+	Then I should see 'Another contract'
+	Then I should not see 'A note'
+	Then I should not see 'Another note'
 
 Scenario: Default to my team
 	Given I have a person period with 

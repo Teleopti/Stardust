@@ -984,4 +984,85 @@
   <data name="ResShiftStartDateToColon" xml:space="preserve">
     <value>Fecha hasta (turnos con inicio en):</value>
   </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>Página actual</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Exportar</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Encontrar</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Encontrar siguiente</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Encontrar texto en reporte</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>Página inicial</value>
+  </data>
+  <data name="RepViewerInvalidPageNumber" xml:space="preserve">
+    <value>Número de página inválido</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Página final</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Siguiente</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Página siguiente</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>No se han encontrado más resultados.</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>de</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Configuración de la página</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Ancho de la Página</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Página anterior</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Diseño de impresión</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Imprimir</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Actualizar</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Cancelar presentación</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Text no encontrado.</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Total de páginas</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Página completa</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Disponibilidad por Agente</value>
+  </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>Fechas disponibles</value>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>Tiempo disponible</value>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>Días planificados</value>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>Utilización</value>
+  </data>
 </root>

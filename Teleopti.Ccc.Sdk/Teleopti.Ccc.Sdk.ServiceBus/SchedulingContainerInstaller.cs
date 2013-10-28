@@ -26,14 +26,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<SwapService>().As<ISwapService>();
 			builder.RegisterType<SwapAndModifyService>().As<ISwapAndModifyService>();
 			builder.RegisterType<ResourceCalculationOnlyScheduleDayChangeCallback>().As<IScheduleDayChangeCallback>();
-			builder.RegisterType<ScheduleDictionarySaver>().As<IScheduleDictionarySaver>();
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>();
 			builder.RegisterType<SkillVisualLayerCollectionDictionaryCreator>().As<ISkillVisualLayerCollectionDictionaryCreator>();
 			builder.RegisterType<SeatImpactOnPeriodForProjection>().As<ISeatImpactOnPeriodForProjection>();
 			builder.RegisterType<NonBlendSkillCalculator>().As<INonBlendSkillCalculator>();
 			builder.RegisterType<NonBlendSkillImpactOnPeriodForProjection>().As<INonBlendSkillImpactOnPeriodForProjection>();
 			builder.RegisterType<PersonAbsenceAccountProvider>().As<IPersonAbsenceAccountProvider>();
-			builder.RegisterType<ScheduleDictionaryModifiedCallback>().As<IScheduleDictionaryModifiedCallback>();
 			builder.RegisterType<ScheduleIsInvalidSpecification>().As<IScheduleIsInvalidSpecification>();
 			builder.RegisterType<PeopleAndSkillLoaderDecider>().As<IPeopleAndSkillLoaderDecider>();
 			builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>();

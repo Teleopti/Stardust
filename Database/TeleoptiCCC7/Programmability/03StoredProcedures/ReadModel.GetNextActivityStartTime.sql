@@ -12,3 +12,4 @@ SELECT TOP 1 StartDateTime,EndDateTime
 FROM [ReadModel].[ScheduleProjectionReadOnly]
 WHERE EndDateTime > @UtcNow
 AND PersonID = @personId
+ORDER BY StartDateTime

@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var periodFromSchedules = new SetupDateTimePeriodToSchedulesIfTheyExist(selectedSchedules, fallbackDefaultHours);
 			ISetupDateTimePeriod periodSetup = new SetupDateTimePeriodToDefaultPeriod(DefaultPeriod, periodFromSchedules);
 
-            if (!IsMultipleAgentsRequest(selectedSchedules))
+            if (!IsMultipleAgentsRequest(selectedSchedules) && DefaultPeriod == null)
             {
                 periodSetup = getDefaultDateTimePeriod(selectedSchedules);
             }

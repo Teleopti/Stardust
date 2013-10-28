@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			}
 		}
 
-		[Test]
+        [Test]
 		public void ShouldResolvePersonScheduleDayReadModelHandlerConsumer()
 		{
 			var builder = new ContainerBuilder();

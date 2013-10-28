@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -36,10 +35,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         private void LoadScheduleDictionary(DateTimePeriod period)
         {
-					var longPeriod = new DateOnlyPeriod(new DateOnly(period.StartDateTime.AddDays(-1)),
-																		new DateOnly(period.EndDateTime.AddDays(1)));
-            _scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(_persons),new ScheduleDictionaryLoadOptions(false, false),
-                                                           longPeriod, _scenarioRepository.Current());
+	        var longPeriod = new DateOnlyPeriod(new DateOnly(period.StartDateTime.AddDays(-1)),
+	                                            new DateOnly(period.EndDateTime.AddDays(1)));
+	        _scheduleDictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
+		        _persons,
+		        new ScheduleDictionaryLoadOptions(false, false),
+		        longPeriod, _scenarioRepository.Current());
         }
 
         public void EndBatch()
@@ -89,33 +90,28 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             VerifyShiftTradeIsUnchanged(_scheduleDictionary, shiftTradeRequest, _authorization);
         }
 
-        protected internal static bool VerifyShiftTradeIsUnchanged(IScheduleDictionary scheduleDictionary, IShiftTradeRequest shiftTradeRequest, IPersonRequestCheckAuthorization authorization)
+        internal static bool VerifyShiftTradeIsUnchanged(IScheduleDictionary scheduleDictionary, IShiftTradeRequest shiftTradeRequest, IPersonRequestCheckAuthorization authorization)
         {
-            var scheduleUnchanged = true;
-            foreach (var shiftTradeSwapDetail in shiftTradeRequest.ShiftTradeSwapDetails)
+            bool scheduleUnchanged = true;
+            foreach (IShiftTradeSwapDetail shiftTradeSwapDetail in shiftTradeRequest.ShiftTradeSwapDetails)
             {
-                var rangeFrom = scheduleDictionary[shiftTradeSwapDetail.PersonFrom];
-                var rangeTo = scheduleDictionary[shiftTradeSwapDetail.PersonTo];
+                IScheduleRange rangeFrom = scheduleDictionary[shiftTradeSwapDetail.PersonFrom];
+                IScheduleRange rangeTo = scheduleDictionary[shiftTradeSwapDetail.PersonTo];
 
-                var partFrom = rangeFrom.ScheduledDay(shiftTradeSwapDetail.DateFrom);
-                var partTo = rangeTo.ScheduledDay(shiftTradeSwapDetail.DateTo);
-				
-	            var checksumFrom = shiftTradeSwapDetail.ChecksumFrom;
-				if (partFrom.PersonAssignment() != null)
-		            checksumFrom = new ShiftTradeChecksumCalculator(partFrom).CalculateChecksum();
-
-	            var checksumTo = shiftTradeSwapDetail.ChecksumTo;
-				if (partTo.PersonAssignment() != null)
-					checksumTo = new ShiftTradeChecksumCalculator(partTo).CalculateChecksum();
+                IScheduleDay partFrom = rangeFrom.ScheduledDay(shiftTradeSwapDetail.DateFrom);
+                IScheduleDay partTo = rangeTo.ScheduledDay(shiftTradeSwapDetail.DateTo);
+                long checksumFrom = new ShiftTradeChecksumCalculator(partFrom).CalculateChecksum();
+                long checksumTo = new ShiftTradeChecksumCalculator(partTo).CalculateChecksum();
 
                 shiftTradeSwapDetail.SchedulePartFrom = partFrom;
                 shiftTradeSwapDetail.SchedulePartTo = partTo;
 
-	            if (shiftTradeSwapDetail.ChecksumFrom == checksumFrom && shiftTradeSwapDetail.ChecksumTo == checksumTo)
-		            continue;
-
-	            shiftTradeRequest.Refer(authorization);
-	            scheduleUnchanged = false;
+                if (shiftTradeSwapDetail.ChecksumFrom != checksumFrom ||
+                    shiftTradeSwapDetail.ChecksumTo != checksumTo)
+                {
+                    shiftTradeRequest.Refer(authorization);
+                    scheduleUnchanged = false;
+                }
             }
             return scheduleUnchanged;
         }

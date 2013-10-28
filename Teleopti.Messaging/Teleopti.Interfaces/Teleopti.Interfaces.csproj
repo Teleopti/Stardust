@@ -326,6 +326,7 @@
     <Compile Include="Domain\ISwapServiceNew.cs" />
     <Compile Include="Domain\ISystemCheck.cs" />
     <Compile Include="Domain\IExtendedPreferenceTemplate.cs" />
+    <Compile Include="Domain\ITeamBlockTargetValueCalculator.cs" />
     <Compile Include="Domain\IterationOperationOption.cs" />
     <Compile Include="Domain\ITextFormatter.cs" />
     <Compile Include="Domain\ITimeZoneDim.cs" />
@@ -334,6 +335,7 @@
     <Compile Include="Domain\IUniqueSchedulePartExtractor.cs" />
     <Compile Include="Domain\IUnsafePersonProvider.cs" />
     <Compile Include="Domain\IUnsavedDaysInfo.cs" />
+    <Compile Include="Domain\IUnvalidatedScheduleRangeUpdate.cs" />
     <Compile Include="Domain\IUserCulture.cs" />
     <Compile Include="Domain\IUserDetail.cs" />
     <Compile Include="Domain\IUserTimeZone.cs" />
@@ -577,6 +579,7 @@
     <Compile Include="Domain\TimeOfDay.cs" />
     <Compile Include="Domain\TimeZoneInfoExtensions.cs" />
     <Compile Include="Domain\ValidatedRequest.cs" />
+    <Compile Include="Domain\DateScenarioPersonId.cs" />
     <Compile Include="Domain\VisualLayerCollectionExtensions.cs" />
     <Compile Include="Domain\WeekNumber.cs" />
     <Compile Include="Domain\WorkShiftLengthHintOption.cs" />
@@ -602,7 +605,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Domain\IForecastTemplateOwner.cs" />
-    <Compile Include="Domain\IGroupingAbsence.cs" />
     <Compile Include="Domain\IGroupingActivity.cs" />
     <Compile Include="Domain\ILayer.cs" />
     <Compile Include="Domain\ILayerCollection.cs" />
@@ -733,6 +735,7 @@
     <Compile Include="Domain\WorkTimeDirective.cs" />
     <Compile Include="Infrastructure\IMessageBrokerIdentifier.cs" />
     <Compile Include="Infrastructure\ISessionData.cs" />
+    <Compile Include="Infrastructure\TransactionIsolationLevel.cs" />
     <Compile Include="Infrastructure\IStatelessUnitOfWork.cs" />
     <Compile Include="Infrastructure\IUnitOfWork.cs" />
     <Compile Include="Infrastructure\IUnitOfWorkFactory.cs" />

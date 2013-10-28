@@ -39,10 +39,15 @@ namespace Teleopti.Ccc.Web.Core.Startup.VerifyLicense
 
 		public void Warning(string warning)
 		{
-			_logger.Warn(warning);
+			Warning(warning, "");
 		}
 
-		public void Error(string error)
+	    public void Warning(string warning, string caption)
+	    {
+            _logger.Warn(warning);
+	    }
+
+	    public void Error(string error)
 		{
 			_logger.Error(error);
 			throw new PermissionException(error);
