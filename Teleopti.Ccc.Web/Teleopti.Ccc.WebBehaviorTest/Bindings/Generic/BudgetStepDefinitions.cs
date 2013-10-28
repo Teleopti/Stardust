@@ -1,7 +1,8 @@
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"there is absence time for")]
 		public void GivenThereIsAbsenceTimeForTo(Table table)
 		{
-			var absenceTimeConfigurable = table.CreateInstance<AbsenceTimeConfigurable>();
+			var absenceTimeConfigurable = table.CreateInstance<ScheduleProjectionReadOnlyThing>();
 			DataMaker.Data().ApplyLater(absenceTimeConfigurable);
 		}
 	}

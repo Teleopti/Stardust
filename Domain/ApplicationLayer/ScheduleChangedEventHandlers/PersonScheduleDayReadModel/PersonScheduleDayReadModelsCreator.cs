@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 					         select new SimpleLayer
 						         {
 							         Color = ColorTranslator.ToHtml(Color.FromArgb(layer.DisplayColor)),
-							         Title = layer.Name,
+							         Description = layer.Name,
 							         Start = layer.StartDateTime,
 							         End = layer.EndDateTime,
 							         Minutes = (int) layer.EndDateTime.Subtract(layer.StartDateTime).TotalMinutes,

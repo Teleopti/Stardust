@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 				c => c.AddProfile(new TeamScheduleViewModelMappingProfile(() => userTimeZone)));
 		}
 		
-		[Test,Ignore("Need to map permissionProvider here")]
+		[Test]
 		public void ShouldConfigure()
 		{
 			Mapper.AssertConfigurationIsValid(); 

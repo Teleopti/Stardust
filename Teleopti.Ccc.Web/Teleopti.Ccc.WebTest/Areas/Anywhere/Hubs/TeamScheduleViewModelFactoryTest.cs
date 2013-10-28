@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IPermissionProvider>(), schedulePersonProvider);
 
 			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
-			result.Single().Projection.Single().Title.Should().Be.EqualTo(ConfidentialPayloadValues.Description.Name);
+			result.Single().Projection.Single().Description.Should().Be.EqualTo(ConfidentialPayloadValues.Description.Name);
 			result.Single().Projection.Single().Color.Should().Be.EqualTo(ColorTranslator.ToHtml(ConfidentialPayloadValues.DisplayColor));
 		}
 
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 							PersonId = person.Id.Value,
 							Model = MakeJsonModel(new SimpleLayer
 								{
-									Title = "Vacation",
+									Description = "Vacation",
 									Color = "Red",
 									IsAbsenceConfidential = false
 								})
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
 
-			result.Single().Projection.Single().Title.Should().Be.EqualTo("Vacation");
+			result.Single().Projection.Single().Description.Should().Be.EqualTo("Vacation");
 			result.Single().Projection.Single().Color.Should().Be.EqualTo("Red");
 		}
 
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 							PersonId = person.Id.Value,
 							Model = MakeJsonModel(new SimpleLayer
 								{
-									Title = "Vacation",
+									Description = "Vacation",
 									Color = "Red",
 									IsAbsenceConfidential = true
 								})
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
 
-			result.Single().Projection.Single().Title.Should().Be.EqualTo("Vacation");
+			result.Single().Projection.Single().Description.Should().Be.EqualTo("Vacation");
 			result.Single().Projection.Single().Color.Should().Be.EqualTo(ColorTranslator.ToHtml(Color.Red));
 		}
 	}

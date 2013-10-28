@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
         {
         }
 
-        public override IUnitOfWork CreateAndOpenUnitOfWork()
+        public override IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel)
         {
             throw new NotSupportedException(notStatefulSupport);
         }

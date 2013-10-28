@@ -43,7 +43,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			                             ColorNameToCss(shiftLayer.Color));
 
 			if (shiftLayer.Description != null)
+			{
+				Browser.Interactions.Click(".toggle-descriptions:enabled");
 				Browser.Interactions.AssertFirstContains(selector, shiftLayer.Description);
+			}
 			else
 				Browser.Interactions.AssertExists(selector);
 		}
@@ -119,8 +122,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExistsUsingJQuery(
 				string.Format(".absence-list .absence:contains('{0}'):contains('{1}'):contains('{2}')",
 				              absenceListItemInfo.Name,
-				              absenceListItemInfo.StartTime,
-				              absenceListItemInfo.EndTime)
+				              absenceListItemInfo.StartTimeFormatted(),
+				              absenceListItemInfo.EndTimeFormatted())
 				);
 		}
 
@@ -169,6 +172,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			public string Name { get; set; }
 			public string StartTime { get; set; }
 			public string EndTime { get; set; }
+
+
+			public string StartTimeFormatted()
+			{
+				var format = DataMaker.Me().Culture.DateTimeFormat.ShortDatePattern + " " + DataMaker.Me().Culture.DateTimeFormat.ShortTimePattern;
+				return DateTime.Parse(StartTime).ToString(format);
+			}
+
+			public string EndTimeFormatted()
+			{
+				var format = DataMaker.Me().Culture.DateTimeFormat.ShortDatePattern + " " + DataMaker.Me().Culture.DateTimeFormat.ShortTimePattern;
+				return DateTime.Parse(EndTime).ToString(format);
+			}
+
 		}
 
 		public class ShiftLayerInfo

@@ -6,9 +6,8 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic
 {
@@ -19,17 +18,13 @@ namespace Teleopti.Ccc.Sdk.Logic
 
     public class SaveSchedulePartService : ISaveSchedulePartService
     {
-        private readonly IScheduleDictionarySaver _scheduleDictionarySaver;
-        private readonly IScheduleRepository _scheduleRepository;
+        private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
     	private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
-        private readonly ICurrentUnitOfWork _unitOfWorkFactory;
 
-    	public SaveSchedulePartService(IScheduleDictionarySaver scheduleDictionarySaver, IScheduleRepository scheduleRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, ICurrentUnitOfWork unitOfWorkFactory)
+    	public SaveSchedulePartService(IScheduleDifferenceSaver scheduleDictionarySaver, IPersonAbsenceAccountRepository personAbsenceAccountRepository)
         {
             _scheduleDictionarySaver = scheduleDictionarySaver;
-            _scheduleRepository = scheduleRepository;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
-    		_unitOfWorkFactory = unitOfWorkFactory;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
@@ -48,8 +43,7 @@ namespace Teleopti.Ccc.Sdk.Logic
 					              string.Join(Environment.NewLine,
 					                          invalidList.Select(i => i.Message).Distinct().ToArray())));
 			}
-
-			_scheduleDictionarySaver.MarkForPersist(_unitOfWorkFactory.Current(), _scheduleRepository, dic.DifferenceSinceSnapshot());
+			_scheduleDictionarySaver.SaveChanges(dic.DifferenceSinceSnapshot(), (IUnvalidatedScheduleRangeUpdate) dic[scheduleDay.Person]);
 			_personAbsenceAccountRepository.AddRange(dic.ModifiedPersonAccounts);
         }
     }

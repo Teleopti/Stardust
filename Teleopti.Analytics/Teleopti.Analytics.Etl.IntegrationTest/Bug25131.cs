@@ -22,8 +22,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			SetupFixtureForAssembly.EndTest();
 		}
 
-        // this is a way of just test an insert via a sp not a "real" integration test
-        [Test]
+		// this is a way of just test an insert via a sp not a "real" integration test
+		[Test]
 		public void ShouldWork()
 		{
 			var analyticsDataFactory = new AnalyticsDataFactory();
@@ -45,10 +45,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 											Guid.NewGuid(),TestState.BusinessUnit.Id.GetValueOrDefault(),datasource));
 			analyticsDataFactory.Persist();
 
-            var raptorRep = new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix,"");
-            //so we have a NULL absence
-            raptorRep.FillAbsenceDataMart(TestState.BusinessUnit);
-            raptorRep.FillIntradayFactRequestMart(TestState.BusinessUnit);
+			var raptorRep = new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix,"");
+			//so we have a NULL absence
+			raptorRep.FillAbsenceDataMart(TestState.BusinessUnit);
+			raptorRep.FillIntradayFactRequestMart(TestState.BusinessUnit);
 			
 
 		}

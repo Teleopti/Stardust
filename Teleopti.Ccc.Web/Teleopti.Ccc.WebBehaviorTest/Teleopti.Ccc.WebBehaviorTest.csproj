@@ -93,15 +93,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbsenceRequestFromRequests.feature.cs">
+    <Compile Include="MyTime\AbsenceRequestFromRequests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromRequests.feature</DependentUpon>
     </Compile>
-    <Compile Include="AbsenceRequestFromSchedule.feature.cs">
+    <Compile Include="MyTime\AbsenceRequestFromSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Anywhere\ViewFullDayAbsenceOnDayOff.feature.cs">
+      <DependentUpon>ViewFullDayAbsenceOnDayOff.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Anywhere\ViewFullDayAbsence.feature.cs">
       <DependentUpon>ViewFullDayAbsence.feature</DependentUpon>
@@ -130,35 +135,36 @@
     </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\GroupPageStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Generic\AbsenceRequestConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\NoteConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\PersonalShiftConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\PersonDayOffConfigurable.cs" />
+    <Compile Include="Data\Setups\Legacy\Common\CommonContract.cs" />
+    <Compile Include="Data\Setups\Legacy\Common\CommonContractSchedule.cs" />
+    <Compile Include="Data\Setups\Legacy\Common\CommonScenario.cs" />
+    <Compile Include="Data\Setups\Configurable\AbsenceRequestConfigurable.cs" />
     <Compile Include="Bindings\Generic\NoteStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PartTimePercentageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NothingStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SiteStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsKnockoutExtensions.cs" />
-    <Compile Include="Data\Setups\DefaultName.cs" />
-    <Compile Include="Data\Setups\Generic\PartTimePercentageConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\SiteConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\OvertimeAvailabilityConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\SiteConfigurable.cs" />
     <Compile Include="Bindings\Generic\OvertimeAvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PerformanceTool\PerformanceViewPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceTemplateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\UserLogonDetailsStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Specific\GroupingReadOnlyUpdate.cs" />
-    <Compile Include="Data\Setups\Specific\UserContract.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\GroupingReadOnlyUpdate.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\UserContract.cs" />
     <Compile Include="MyTime\22851_FindShiftTradePageFromTeamSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>22851_FindShiftTradePageFromTeamSchedule.feature</DependentUpon>
-    </Compile>
-    <Compile Include="MyTime\24394_ShifTradesBetweenAgentsInDifferentTimeZones.feature.cs">
+    </Compile>  
+ <Compile Include="MyTime\24394_ShifTradesBetweenAgentsInDifferentTimeZones.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>24394_ShifTradesBetweenAgentsInDifferentTimeZones.feature</DependentUpon>
     </Compile>
-    <Compile Include="OveritmeAvailability.feature.cs">
-      <DependentUpon>OveritmeAvailability.feature</DependentUpon>
+      <Compile Include="MyTime\OveritmeAvailability.feature.cs">
+        <DependentUpon>OveritmeAvailability.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -169,14 +175,14 @@
     <Compile Include="Core\BrowserDriver\BrowserInteractionsImplementationHelper.cs" />
     <Compile Include="Bindings\Generic\MyTime\SettingsPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\MyTime\ShareLinkPageStepDefinitions.cs" />
-    <Compile Include="CalendarShare.feature.cs">
+    <Compile Include="MyTime\CalendarShare.feature.cs">
       <DependentUpon>CalendarShare.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuChromeActivator.cs" />
     <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuPhantomJsActivator.cs" />
-    <Compile Include="Data\Setups\Generic\CalendarLinkConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\CalendarLinkConfigurable.cs" />
     <Compile Include="Data\ScenarioDataFactory.cs" />
     <Compile Include="PerformanceTool\PerformanceView.feature.cs">
       <DependentUpon>PerformanceView.feature</DependentUpon>
@@ -208,21 +214,21 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ViewTeamSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="AsmSummerToWinter.feature.cs">
+    <Compile Include="MyTime\AsmSummerToWinter.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AsmSummerToWinter.feature</DependentUpon>
     </Compile>
-    <Compile Include="AsmWinterToSummer.feature.cs">
+    <Compile Include="MyTime\AsmWinterToSummer.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AsmWinterToSummer.feature</DependentUpon>
     </Compile>
     <Compile Include="Bindings\Generic\AbsenceStepDefinitions.cs" />
-    <Compile Include="AsmStepDefinition.cs" />
+    <Compile Include="MyTime\AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ForecastStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Generic\ForecastConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\ForecastConfigurable.cs" />
     <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsOverloadExtensions.cs" />
     <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuBrowserActivator.cs" />
@@ -235,7 +241,7 @@
     <Compile Include="Core\BrowserDriver\Retrying.cs" />
     <Compile Include="Data\CryptoCreator.cs" />
     <Compile Include="Data\HardCodedResolver.cs" />
-    <Compile Include="Data\Setups\Specific\AbsenceInContractTimeToday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AbsenceInContractTimeToday.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
     <Compile Include="Bindings\Generic\ServerStepDefinitions.cs" />
     <Compile Include="Session.feature.cs">
@@ -243,14 +249,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Session.feature</DependentUpon>
     </Compile>
-    <Compile Include="TeamScheduleForGroups.feature.cs">
+    <Compile Include="MyTime\TeamScheduleForGroups.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TeamScheduleForGroups.feature</DependentUpon>
     </Compile>
     <Compile Include="Bindings\Generic\BudgetStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Generic\AbsenceTimeConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\PreferenceTemplateConfigurable.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ScheduleProjectionReadOnlyThing.cs" />
     <Compile Include="Bindings\Generic\UIStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\TeamSchedulePageStepDefinitions.cs" />
@@ -258,29 +263,26 @@
     <Compile Include="Bindings\Generic\ShiftTradeRequestFromRequestStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Start\SignInPageStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Generic\BudgetdayConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\BudgetGroupConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\BudgetdayConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\BudgetGroupConfigurable.cs" />
     <Compile Include="Data\AllTags.cs" />
     <Compile Include="Data\FileConfigurator.cs" />
     <Compile Include="Data\Paths.cs" />
     <Compile Include="Data\ServiceBusSetup.cs" />
-    <Compile Include="PreferencesExtendedTemplate.feature.cs">
+    <Compile Include="MyTime\PreferencesExtendedTemplate.feature.cs">
       <DependentUpon>PreferencesExtendedTemplate.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Data\Setups\Generic\PersonAbsenceConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\PersonDayOffConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\SkillConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\TeamConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\PersonAbsenceConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\TeamConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\StudentAvailabilityPageStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Specific\CreateName.cs" />
-    <Compile Include="StudentAvailabilityMultidays.feature.cs">
+    <Compile Include="Data\Setups\Legacy\Specific\CreateName.cs" />
+    <Compile Include="MyTime\StudentAvailabilityMultidays.feature.cs">
       <DependentUpon>StudentAvailabilityMultidays.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Data\Setups\Generic\ScenarioConfigurable.cs" />
     <Compile Include="Bindings\Generic\ScenarioStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
@@ -299,29 +301,22 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Data\Setups\Generic\UserLogonDetailConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\PasswordPolicyConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\UserLogonDetailConfigurable.cs" />
     <Compile Include="Bindings\Transform.cs" />
     <Compile Include="Core\Legacy\QuicklyFind.cs" />
-    <Compile Include="Data\Setups\Generic\PasswordConfigurable.cs" />
-    <Compile Include="Data\Setups\Specific\ExistingShiftTradeRequest.cs" />
-    <Compile Include="PasswordPolicy.feature.cs">
+    <Compile Include="Data\Setups\Legacy\Specific\ExistingShiftTradeRequest.cs" />
+    <Compile Include="MyTime\PasswordPolicy.feature.cs">
       <DependentUpon>PasswordPolicy.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Core\BrowserDriver\WatiNIE\WatiNIEExceptionCatcher.cs" />
-    <Compile Include="Data\Setups\Generic\AvailabilityRotationConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\AvailabilityRotationConfigurable.cs" />
     <Compile Include="Bindings\Generic\AvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Generic\ContractConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\ContractScheduleConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\PersonalShiftConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\PersonAvailabilityConfigurable.cs" />
     <Compile Include="Bindings\Generic\AsmMessageStepDefinition.cs" />
-    <Compile Include="Data\Setups\Generic\RuleSetBagConfigurable.cs" />
     <Compile Include="Bindings\Generic\RuleSetBagStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Generic\WorkShiftRuleSetConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\WorkShiftRuleSetConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\WeekScheduleTimeIndicatorStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\DayOffStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceStepDefinitions.cs" />
@@ -332,80 +327,75 @@
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
     <Compile Include="ConfigSanityCheck.cs" />
     <Compile Include="Bindings\Generic\MyTime\PortalPageStepDefinitions.cs" />
-    <Compile Include="PreferencesFeedbackRefact.feature.cs">
+    <Compile Include="MyTime\PreferencesFeedbackRefact.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesFeedbackRefact.feature</DependentUpon>
     </Compile>
-    <Compile Include="AsmMessage.feature.cs">
+    <Compile Include="MyTime\AsmMessage.feature.cs">
       <DependentUpon>AsmMessage.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="PreferencesFollowUpStepDefinition.cs" />
-    <Compile Include="PreferencesFollowUp.feature.cs">
+    <Compile Include="MyTime\PreferencesFollowUpStepDefinition.cs" />
+    <Compile Include="MyTime\PreferencesFollowUp.feature.cs">
       <DependentUpon>PreferencesFollowUp.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Data\Setups\Generic\MessageConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\TextRequestConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\PublicNoteConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\MeetingConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\DayOffTemplateConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\MessageConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\TextRequestConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\PublicNoteConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\MeetingConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\PreferencesPageStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Specific\AgentWithoutExtendedPreferencesAccess.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutExtendedPreferencesAccess.cs" />
     <Compile Include="Pages\Common\ComboBox.cs" />
     <Compile Include="Pages\Common\IMessageReplyPage.cs" />
     <Compile Include="Pages\MessagePage.cs" />
     <Compile Include="Pages\GlobalMenuPage.cs" />
-    <Compile Include="PreferencesFeedbackBlacklisting.feature.cs">
+    <Compile Include="MyTime\PreferencesFeedbackBlacklisting.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesFeedbackBlacklisting.feature</DependentUpon>
     </Compile>
-    <Compile Include="PreferencesFeedbackPreSchedule.feature.cs">
+    <Compile Include="MyTime\PreferencesFeedbackPreSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesFeedbackPreSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="ShiftTradeRequests.feature.cs">
+    <Compile Include="MyTime\ShiftTradeRequests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ShiftTradeRequests.feature</DependentUpon>
     </Compile>
-    <Compile Include="WeekScheduleAvailableAsbence.feature.cs">
+    <Compile Include="MyTime\WeekScheduleAvailableAsbence.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>WeekScheduleAvailableAsbence.feature</DependentUpon>
     </Compile>
-    <Compile Include="WeekScheduleTimeIndicator.feature.cs">
+    <Compile Include="MyTime\WeekScheduleTimeIndicator.feature.cs">
       <DependentUpon>WeekScheduleTimeIndicator.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Asm.feature.cs">
+    <Compile Include="MyTime\Asm.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Asm.feature</DependentUpon>
     </Compile>
-    <Compile Include="Data\Setups\Generic\ShiftConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\ShiftConfigurable.cs" />
     <Compile Include="Pages\AsmPage.cs" />
-    <Compile Include="Data\Setups\Specific\AnotherSite.cs" />
-    <Compile Include="Data\Setups\Common\CommonBusinessUnit.cs" />
-    <Compile Include="Data\Setups\Common\CommonSite.cs" />
-    <Compile Include="Data\Setups\Common\CommonTeam.cs" />
-    <Compile Include="Data\Setups\Specific\SecondBusinessUnit.cs" />
-    <Compile Include="Data\Setups\Generic\SchedulePeriodConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\RoleForUser.cs" />
-    <Compile Include="Data\Setups\Generic\WorkflowControlSetForUser.cs" />
-    <Compile Include="Data\Setups\Generic\BusinessUnitConfigurable.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AnotherSite.cs" />
+    <Compile Include="Data\Setups\Legacy\Common\CommonBusinessUnit.cs" />
+    <Compile Include="Data\Setups\Legacy\Common\CommonSite.cs" />
+    <Compile Include="Data\Setups\Legacy\Common\CommonTeam.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\SecondBusinessUnit.cs" />
+    <Compile Include="Data\Setups\Configurable\RoleForUser.cs" />
+    <Compile Include="Data\Setups\Configurable\WorkflowControlSetForUser.cs" />
     <Compile Include="Bindings\Specific\ColleagueStepDefinitions.cs" />
-    <Compile Include="AbsenceRequestFromScheduleStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Generic\WorkflowControlSetConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\RoleConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\PersonPeriodConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\PreferenceConfigurable.cs" />
+    <Compile Include="MyTime\AbsenceRequestFromScheduleStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Configurable\RoleConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\PersonPeriodConfigurable.cs" />
     <Compile Include="Core\BrowserDriver\ProcessHelpers.cs" />
     <Compile Include="Core\BrowserDriver\WatiNIE\WatiNSingleBrowserFireFoxActivator.cs" />
     <Compile Include="Core\BrowserDriver\IBrowserActivator.cs" />
@@ -415,86 +405,86 @@
     <Compile Include="Data\GlobalPrincipalState.cs" />
     <Compile Include="Data\GlobalUnitOfWorkState.cs" />
     <Compile Include="Data\ScenarioUnitOfWorkState.cs" />
-    <Compile Include="Data\Setups\Specific\AgentSecondBusinessUnit.cs" />
-    <Compile Include="Data\Setups\Specific\AgentWithAnotherSiteAccess.cs" />
-    <Compile Include="Data\Setups\Common\CommonPartTimePercentage.cs" />
-    <Compile Include="Data\Setups\Specific\IUserRoleSetup.cs" />
-    <Compile Include="Data\Setups\Specific\SupervisorSecondBusinessUnit.cs" />
-    <Compile Include="Data\Setups\Specific\UserNoPermission.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AgentSecondBusinessUnit.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AgentWithAnotherSiteAccess.cs" />
+    <Compile Include="Data\Setups\Legacy\Common\CommonPartTimePercentage.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\IUserRoleSetup.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\SupervisorSecondBusinessUnit.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\UserNoPermission.cs" />
     <Compile Include="Pages\jQuery\JQueryElementExtensions.cs" />
-    <Compile Include="PreferencesExtended.feature.cs">
+    <Compile Include="MyTime\PreferencesExtended.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesExtended.feature</DependentUpon>
     </Compile>
-    <Compile Include="AbsenceRequestFromRequestStepDefinitions.cs" />
+    <Compile Include="MyTime\AbsenceRequestFromRequestStepDefinitions.cs" />
     <Compile Include="ManageRequestStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Specific\DoNotHavePersonPeriods.cs" />
-    <Compile Include="Data\Setups\Specific\DoNotHaveSchedulePeriods.cs" />
-    <Compile Include="PreferencesMustHave.feature.cs">
+    <Compile Include="Data\Setups\Legacy\Specific\DoNotHavePersonPeriods.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\DoNotHaveSchedulePeriods.cs" />
+    <Compile Include="MyTime\PreferencesMustHave.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesMustHave.feature</DependentUpon>
     </Compile>
-    <Compile Include="QUnitTestsStepDefinition.cs" />
-    <Compile Include="Data\Setups\Specific\AbsencePreferenceInContractTimeOnWeekday.cs" />
-    <Compile Include="Data\Setups\Specific\AbsencePreferenceOnWeekday.cs" />
-    <Compile Include="Data\Setups\Specific\ContractScheduleFromTable.cs" />
-    <Compile Include="Data\Setups\Specific\DayOffPreferenceOnWeekday.cs" />
-    <Compile Include="Data\Setups\Specific\ShiftOnWeekday.cs" />
-    <Compile Include="Data\Setups\Specific\SecondScenario.cs" />
-    <Compile Include="Data\Setups\Specific\ContractFromTable.cs" />
-    <Compile Include="Data\Setups\Specific\DayOffScheduled.cs" />
-    <Compile Include="Data\Setups\Specific\ShiftCategoryPreferenceOnWeekday.cs" />
-    <Compile Include="Data\Setups\Specific\UserContractSchedule.cs" />
-    <Compile Include="PreferencesPeriodFeedbackStepDefinition.cs" />
+    <Compile Include="MyTime\QUnitTestsStepDefinition.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AbsencePreferenceInContractTimeOnWeekday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AbsencePreferenceOnWeekday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ContractScheduleFromTable.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\DayOffPreferenceOnWeekday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ShiftOnWeekday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\SecondScenario.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ContractFromTable.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\DayOffScheduled.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ShiftCategoryPreferenceOnWeekday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\UserContractSchedule.cs" />
+    <Compile Include="MyTime\PreferencesPeriodFeedbackStepDefinition.cs" />
     <Compile Include="Core\TestControllerMethods.cs" />
-    <Compile Include="Data\Setups\Specific\AgentWithoutAbsenceRequestsAccess.cs" />
-    <Compile Include="Data\Setups\Specific\AbsencePreferenceToday.cs" />
-    <Compile Include="Data\Setups\Specific\ExistingAbsenceRequest.cs" />
-    <Compile Include="Data\Setups\Specific\ExistingAvailability.cs" />
-    <Compile Include="Data\Setups\Specific\ExistingLunchPreferenceToday.cs" />
-    <Compile Include="Data\Setups\Specific\RuleSetBagWithTwoShiftsAndLunch.cs" />
-    <Compile Include="Data\Setups\Specific\AdministratorRoleWithEveryoneData.cs" />
-    <Compile Include="Data\Setups\Specific\AgentThatLeavesTomorrow.cs" />
-    <Compile Include="Data\Setups\Specific\ShiftCategoryPreferenceToday.cs" />
-    <Compile Include="Data\Setups\Specific\SecondShiftCategory.cs" />
-    <Compile Include="Data\Setups\Specific\FirstShiftCategory.cs" />
-    <Compile Include="Data\Setups\Specific\RuleSetBagWithTwoCategories.cs" />
-    <Compile Include="Data\Setups\Specific\ExistingExtendedPreferenceToday.cs" />
-    <Compile Include="Data\Setups\Specific\ExistingPreference.cs" />
-    <Compile Include="Data\Setups\Specific\RuleSetBag.cs" />
-    <Compile Include="Data\Setups\Specific\BaseShiftCategory.cs" />
-    <Compile Include="Data\Setups\Specific\UserWithoutResReportScheduledAndActualAgentsAccess.cs" />
-    <Compile Include="Data\Setups\Specific\AbsenceToday.cs" />
-    <Compile Include="Data\Setups\Specific\AgentWithoutTeamDataAccess.cs" />
-    <Compile Include="Data\Setups\Specific\AgentWithSiteAccess.cs" />
-    <Compile Include="Data\Setups\Specific\AnotherSitesSecondTeam.cs" />
-    <Compile Include="Data\Setups\Specific\AnotherSitesTeam.cs" />
-    <Compile Include="Data\Setups\Specific\AnotherTeam.cs" />
-    <Compile Include="Data\Setups\Specific\GeneratedTeam.cs" />
-    <Compile Include="Data\Setups\Specific\NoVirtualSchedulePeriod.cs" />
-    <Compile Include="Data\Setups\Specific\DayOffToday.cs" />
-    <Compile Include="Data\Setups\Specific\SchedulePeriod.cs" />
-    <Compile Include="Data\Setups\Specific\ShiftToday.cs" />
-    <Compile Include="Data\Setups\Specific\ShiftWithConfidentialAbsence.cs" />
-    <Compile Include="Data\Setups\Specific\Team.cs" />
-    <Compile Include="Data\Setups\Specific\TwoWeeksAbsence.cs" />
-    <Compile Include="MyProfile.feature.cs">
+    <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutAbsenceRequestsAccess.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AbsencePreferenceToday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ExistingAbsenceRequest.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ExistingAvailability.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ExistingLunchPreferenceToday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\RuleSetBagWithTwoShiftsAndLunch.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AdministratorRoleWithEveryoneData.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AgentThatLeavesTomorrow.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ShiftCategoryPreferenceToday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\SecondShiftCategory.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\FirstShiftCategory.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\RuleSetBagWithTwoCategories.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ExistingExtendedPreferenceToday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ExistingPreference.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\RuleSetBag.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\BaseShiftCategory.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\UserWithoutResReportScheduledAndActualAgentsAccess.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AbsenceToday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutTeamDataAccess.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AgentWithSiteAccess.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AnotherSitesSecondTeam.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AnotherSitesTeam.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AnotherTeam.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\GeneratedTeam.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\NoVirtualSchedulePeriod.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\DayOffToday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\SchedulePeriod.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ShiftToday.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ShiftWithConfidentialAbsence.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\Team.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\TwoWeeksAbsence.cs" />
+    <Compile Include="MyTime\MyProfile.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MyProfile.feature</DependentUpon>
     </Compile>
-    <Compile Include="MyProfileStepDefinitions.cs" />
+    <Compile Include="MyTime\MyProfileStepDefinitions.cs" />
     <Compile Include="Pages\Common\SelectBox.cs" />
     <Compile Include="Pages\MobileGlobalMenuPage.cs" />
     <Compile Include="Pages\PasswordPage.cs" />
     <Compile Include="Pages\RegionalSettingsPage.cs" />
     <Compile Include="Pages\TeamSchedulePage.cs" />
-    <Compile Include="Data\Setups\Specific\AgentWithoutTeamScheduleAccess.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutTeamScheduleAccess.cs" />
     <Compile Include="Bindings\NavigationStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Specific\Administrator.cs" />
-    <Compile Include="Data\Setups\Specific\Supervisor.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\Administrator.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\Supervisor.cs" />
     <Compile Include="MobileReports\MobileReports.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -502,77 +492,77 @@
     </Compile>
     <Compile Include="MobileReports\MobileReportsStepDefinitions.cs" />
     <Compile Include="Pages\Common\IEditRequestPage.cs" />
-    <Compile Include="PreferencesPeriodFeedback.feature.cs">
+    <Compile Include="MyTime\PreferencesPeriodFeedback.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesPeriodFeedback.feature</DependentUpon>
     </Compile>
-    <Compile Include="PreferencesScheduleStepDefinition.cs" />
-    <Compile Include="PreferencesFeedback.feature.cs">
+    <Compile Include="MyTime\PreferencesScheduleStepDefinition.cs" />
+    <Compile Include="MyTime\PreferencesFeedback.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesFeedback.feature</DependentUpon>
     </Compile>
-    <Compile Include="PreferencesSchedule.feature.cs">
+    <Compile Include="MyTime\PreferencesSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="Data\Setups\Specific\RequestableAbsenceType.cs" />
-    <Compile Include="QUnitTests.feature.cs">
+    <Compile Include="Data\Setups\Legacy\Specific\RequestableAbsenceType.cs" />
+    <Compile Include="MyTime\QUnitTests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>QUnitTests.feature</DependentUpon>
     </Compile>
     <Compile Include="RoutingStepDefinition.cs" />
     <Compile Include="Bindings\Generic\CookieStepDefinitions.cs" />
-    <Compile Include="TeamSchedule.feature.cs">
+    <Compile Include="MyTime\TeamSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TeamSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="TeamScheduleStepDefinition.cs" />
-    <Compile Include="TextRequestFromRequests.feature.cs">
+    <Compile Include="MyTime\TeamScheduleStepDefinition.cs" />
+    <Compile Include="MyTime\TextRequestFromRequests.feature.cs">
       <DependentUpon>TextRequestFromRequests.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Data\Setups\Specific\AgentWithoutRequestsAccess.cs" />
-    <Compile Include="Data\Setups\Specific\ExistingTextRequest.cs" />
-    <Compile Include="Data\Setups\Specific\AgentWithoutPreferencesAccess.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutRequestsAccess.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ExistingTextRequest.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutPreferencesAccess.cs" />
     <Compile Include="Core\Legacy\EventualElementWaits.cs" />
     <Compile Include="Core\Extensions\LogExtensions.cs" />
-    <Compile Include="Data\Setups\Specific\Agent.cs" />
-    <Compile Include="Data\Setups\Specific\AgentWithoutStudentAvailabilityAccess.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\Agent.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutStudentAvailabilityAccess.cs" />
     <Compile Include="Data\TestData.cs" />
-    <Compile Include="Data\Setups\Specific\AnotherStandardPreference.cs" />
-    <Compile Include="Data\Setups\Specific\BasePreference.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AnotherStandardPreference.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\BasePreference.cs" />
     <Compile Include="Data\IDelayedSetup.cs" />
-    <Compile Include="Data\Setups\Specific\MoreThanOnePageOfRequests.cs" />
-    <Compile Include="Data\Setups\Specific\PreferenceClosedWorkflowControlSet.cs" />
-    <Compile Include="Data\Setups\Specific\PreferenceOpenNextMonthWorkflowControlSet.cs" />
-    <Compile Include="Data\Setups\Specific\ExistingWorkflowControlSet.cs" />
-    <Compile Include="Data\Setups\Specific\PreferenceOpenWorkflowControlSet.cs" />
-    <Compile Include="Data\Setups\Specific\DayOffPreference.cs" />
-    <Compile Include="Data\Setups\Specific\AbsencePreference.cs" />
-    <Compile Include="Data\Setups\Specific\DoNotHaveVirtualSchedulePeriods.cs" />
-    <Compile Include="Data\Setups\Specific\NoWorkflowControlSet.cs" />
-    <Compile Include="Data\Setups\Specific\PreferenceOpenWithAllowedPreferencesWorkflowControlSet.cs" />
-    <Compile Include="Data\Setups\Specific\ShiftCategoryPreference.cs" />
-    <Compile Include="Data\Setups\Specific\StandardPreference.cs" />
-    <Compile Include="Data\Setups\Specific\StudentAvailabilityClosedWorkflowControlSet.cs" />
-    <Compile Include="Data\Setups\Specific\StudentAvailabilityOpenNextMonthWorkflowControlSet.cs" />
-    <Compile Include="Data\Setups\Specific\StudentAvailabilityOpenWorkflowControlSet.cs" />
-    <Compile Include="Data\Setups\Specific\StudentAvailability.cs" />
-    <Compile Include="Data\Setups\Specific\TwoExistingTextRequestChangedOnDifferentTimes.cs" />
-    <Compile Include="Data\Setups\Specific\PersonPeriod.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\MoreThanOnePageOfRequests.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\PreferenceClosedWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\PreferenceOpenNextMonthWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ExistingWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\PreferenceOpenWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\DayOffPreference.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AbsencePreference.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\DoNotHaveVirtualSchedulePeriods.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\NoWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\PreferenceOpenWithAllowedPreferencesWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ShiftCategoryPreference.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\StandardPreference.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\StudentAvailabilityClosedWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\StudentAvailabilityOpenNextMonthWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\StudentAvailabilityOpenWorkflowControlSet.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\StudentAvailability.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\TwoExistingTextRequestChangedOnDifferentTimes.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\PersonPeriod.cs" />
     <Compile Include="Pages\Common\ICancelButton.cs" />
     <Compile Include="Pages\Common\IOkButton.cs" />
     <Compile Include="Pages\Pages.cs" />
     <Compile Include="Pages\Common\CalendarCellsPage.cs" />
     <Compile Include="Pages\Common\DatePicker.cs" />
-    <Compile Include="Data\Setups\Specific\ScheduleIsPublished.cs" />
-    <Compile Include="Data\Setups\Specific\StudentAgent.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\ScheduleIsPublished.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\StudentAgent.cs" />
     <Compile Include="Pages\Common\IDateRangeSelector.cs" />
     <Compile Include="Core\Legacy\ElementExtensions.cs" />
     <Compile Include="Pages\jQuery\IJQueryExpression.cs" />
@@ -582,23 +572,23 @@
     <Compile Include="Pages\PreferencePage.cs" />
     <Compile Include="Pages\Common\SplitButton.cs" />
     <Compile Include="Core\ScenarioContextLazy.cs" />
-    <Compile Include="Preferences.feature.cs">
+    <Compile Include="MyTime\Preferences.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Preferences.feature</DependentUpon>
     </Compile>
-    <Compile Include="PreferenceStepDefinition.cs" />
+    <Compile Include="MyTime\PreferenceStepDefinition.cs" />
     <Compile Include="Core\Extensions\ScenarioContextExtensions.cs" />
     <Compile Include="Bindings\SharedStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Specific\ShiftForDate.cs" />
-    <Compile Include="Requests.feature.cs">
+    <Compile Include="Data\Setups\Legacy\Specific\ShiftForDate.cs" />
+    <Compile Include="MyTime\Requests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Requests.feature</DependentUpon>
     </Compile>
     <Compile Include="Pages\RequestsPage.cs" />
-    <Compile Include="RequestsStepDefinition.cs" />
-    <Compile Include="StudentAvailability.feature.cs">
+    <Compile Include="MyTime\RequestsStepDefinition.cs" />
+    <Compile Include="MyTime\StudentAvailability.feature.cs">
       <DependentUpon>StudentAvailability.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -623,7 +613,7 @@
       <DependentUpon>SignOut.feature</DependentUpon>
     </Compile>
     <Compile Include="Pages\StudentAvailabilityPage.cs" />
-    <Compile Include="StudentAvailabilityStepDefinitions.cs" />
+    <Compile Include="MyTime\StudentAvailabilityStepDefinitions.cs" />
     <Compile Include="Data\TestDataSetup.cs" />
     <Compile Include="Core\SystemLevelLock.cs" />
     <Compile Include="Data\TestSiteConfigurationSetup.cs" />
@@ -634,19 +624,19 @@
     <Compile Include="Core\BrowserDriver\TimeoutScope.cs" />
     <Compile Include="Data\DataMaker.cs" />
     <Compile Include="Bindings\Specific\UserStepDefinitions.cs" />
-    <Compile Include="TextRequestFromSchedule.feature.cs">
+    <Compile Include="MyTime\TextRequestFromSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TextRequestFromSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="TextRequestStepDefinitions.cs" />
+    <Compile Include="MyTime\TextRequestStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\MyTime\EditRequestPageStepDefinitions.cs" />
-    <Compile Include="WeekSchedule.feature.cs">
+    <Compile Include="MyTime\WeekSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>WeekSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="WeekScheduleStepDefinitions.cs" />
+    <Compile Include="MyTime\WeekScheduleStepDefinitions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\packages\phantomjs.exe.1.8.1\tools\phantomjs\phantomjs.exe">
@@ -660,6 +650,10 @@
     <Content Include="BeforeTestRun.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Anywhere\ViewFullDayAbsenceOnDayOff.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ViewFullDayAbsenceOnDayOff.feature.cs</LastGenOutput>
+    </None>
     <None Include="Anywhere\ViewFullDayAbsence.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewFullDayAbsence.feature.cs</LastGenOutput>
@@ -699,7 +693,7 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewConfidentialAbsence.feature.cs</LastGenOutput>
     </None>
-    <None Include="CalendarShare.feature">
+    <None Include="MyTime\CalendarShare.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>CalendarShare.feature.cs</LastGenOutput>
     </None>
@@ -711,7 +705,7 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>24394_ShifTradesBetweenAgentsInDifferentTimeZones.feature.cs</LastGenOutput>
     </None>
-    <None Include="OveritmeAvailability.feature">
+    <None Include="MyTime\OveritmeAvailability.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>OveritmeAvailability.feature.cs</LastGenOutput>
     </None>
@@ -739,15 +733,15 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewTeamSchedule.feature.cs</LastGenOutput>
     </None>
-    <None Include="TeamScheduleForGroups.feature">
+    <None Include="MyTime\TeamScheduleForGroups.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TeamScheduleForGroups.feature.cs</LastGenOutput>
     </None>
-    <None Include="PreferencesExtendedTemplate.feature">
+    <None Include="MyTime\PreferencesExtendedTemplate.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesExtendedTemplate.feature.cs</LastGenOutput>
     </None>
-    <None Include="StudentAvailabilityMultidays.feature">
+    <None Include="MyTime\StudentAvailabilityMultidays.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>StudentAvailabilityMultidays.feature.cs</LastGenOutput>
     </None>
@@ -759,65 +753,65 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SignIn.feature.cs</LastGenOutput>
     </None>
-    <None Include="PasswordPolicy.feature">
+    <None Include="MyTime\PasswordPolicy.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PasswordPolicy.feature.cs</LastGenOutput>
     </None>
-    <None Include="PreferencesFeedbackRefact.feature">
+    <None Include="MyTime\PreferencesFeedbackRefact.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackRefact.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="AbsenceRequestFromRequests.feature">
+    <None Include="MyTime\AbsenceRequestFromRequests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AbsenceRequestFromRequests.feature.cs</LastGenOutput>
     </None>
-    <None Include="AbsenceRequestFromSchedule.feature">
+    <None Include="MyTime\AbsenceRequestFromSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AbsenceRequestFromSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="App.config" />
-    <None Include="PreferencesFollowUp.feature">
+    <None Include="MyTime\PreferencesFollowUp.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFollowUp.feature.cs</LastGenOutput>
     </None>
-    <None Include="PreferencesFeedbackBlacklisting.feature">
+    <None Include="MyTime\PreferencesFeedbackBlacklisting.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackBlacklisting.feature.cs</LastGenOutput>
     </None>
-    <None Include="AsmMessage.feature">
+    <None Include="MyTime\AsmMessage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AsmMessage.feature.cs</LastGenOutput>
     </None>
-    <None Include="PreferencesFeedbackPreSchedule.feature">
+    <None Include="MyTime\PreferencesFeedbackPreSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackPreSchedule.feature.cs</LastGenOutput>
     </None>
-    <None Include="ShiftTradeRequests.feature">
+    <None Include="MyTime\ShiftTradeRequests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ShiftTradeRequests.feature.cs</LastGenOutput>
     </None>
     <None Include="Testing\specflow.exe.config" />
     <None Include="Testing\TestExecutionReport.bat" />
     <None Include="Testing\StepDefinitionReport.bat" />
-    <None Include="WeekScheduleAvailableAsbence.feature">
+    <None Include="MyTime\WeekScheduleAvailableAsbence.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>WeekScheduleAvailableAsbence.feature.cs</LastGenOutput>
     </None>
-    <None Include="WeekScheduleTimeIndicator.feature">
+    <None Include="MyTime\WeekScheduleTimeIndicator.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>WeekScheduleTimeIndicator.feature.cs</LastGenOutput>
     </None>
-    <None Include="Asm.feature">
+    <None Include="MyTime\Asm.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Asm.feature.cs</LastGenOutput>
     </None>
-    <None Include="AsmSummerToWinter.feature">
+    <None Include="MyTime\AsmSummerToWinter.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AsmSummerToWinter.feature.cs</LastGenOutput>
     </None>
-    <None Include="AsmWinterToSummer.feature">
+    <None Include="MyTime\AsmWinterToSummer.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AsmWinterToSummer.feature.cs</LastGenOutput>
     </None>
@@ -825,30 +819,30 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MobileReports.feature.cs</LastGenOutput>
     </None>
-    <None Include="MyProfile.feature">
+    <None Include="MyTime\MyProfile.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MyProfile.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="PreferencesExtended.feature">
+    <None Include="MyTime\PreferencesExtended.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesExtended.feature.cs</LastGenOutput>
     </None>
-    <None Include="PreferencesMustHave.feature">
+    <None Include="MyTime\PreferencesMustHave.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesMustHave.feature.cs</LastGenOutput>
     </None>
-    <None Include="PreferencesPeriodFeedback.feature">
+    <None Include="MyTime\PreferencesPeriodFeedback.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesPeriodFeedback.feature.cs</LastGenOutput>
     </None>
-    <None Include="PreferencesSchedule.feature">
+    <None Include="MyTime\PreferencesSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesSchedule.feature.cs</LastGenOutput>
     </None>
-    <None Include="QUnitTests.feature">
+    <None Include="MyTime\QUnitTests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>QUnitTests.feature.cs</LastGenOutput>
     </None>
@@ -856,26 +850,26 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Session.feature.cs</LastGenOutput>
     </None>
-    <None Include="TeamSchedule.feature">
+    <None Include="MyTime\TeamSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TeamSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="Testing\TestRunParallel.appconfig" />
     <None Include="Testing\TestRunParallel.bat" />
     <None Include="Testing\TestRun.bat" />
-    <None Include="TextRequestFromRequests.feature">
+    <None Include="MyTime\TextRequestFromRequests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TextRequestFromRequests.feature.cs</LastGenOutput>
     </None>
-    <None Include="Preferences.feature">
+    <None Include="MyTime\Preferences.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Preferences.feature.cs</LastGenOutput>
     </None>
-    <None Include="Requests.feature">
+    <None Include="MyTime\Requests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Requests.feature.cs</LastGenOutput>
     </None>
-    <None Include="StudentAvailability.feature">
+    <None Include="MyTime\StudentAvailability.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>StudentAvailability.feature.cs</LastGenOutput>
     </None>
@@ -891,15 +885,15 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SignOut.feature.cs</LastGenOutput>
     </None>
-    <None Include="TextRequestFromSchedule.feature">
+    <None Include="MyTime\TextRequestFromSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TextRequestFromSchedule.feature.cs</LastGenOutput>
     </None>
-    <None Include="PreferencesFeedback.feature">
+    <None Include="MyTime\PreferencesFeedback.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedback.feature.cs</LastGenOutput>
     </None>
-    <None Include="WeekSchedule.feature">
+    <None Include="MyTime\WeekSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>WeekSchedule.feature.cs</LastGenOutput>
     </None>

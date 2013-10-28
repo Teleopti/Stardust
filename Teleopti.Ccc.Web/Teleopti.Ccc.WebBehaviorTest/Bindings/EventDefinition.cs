@@ -1,11 +1,10 @@
 ﻿using System;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.TestCommon.TestData.Common;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using log4net;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings

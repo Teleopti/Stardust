@@ -26,10 +26,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly ITeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
 		private readonly ITeamBlockClearer _teamBlockClearer;
-		private readonly IStandardDeviationSumCalculator _standardDeviationSumCalculator;
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private readonly ITeamBlockGenerator _teamBlockGenerator;
 		private readonly ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
+	    private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private bool _cancelMe;
 
 		public TeamBlockIntradayOptimizationService(ITeamBlockGenerator teamBlockGenerator,
@@ -39,17 +39,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                                            ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
 		                                            ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
 		                                            ITeamBlockClearer teamBlockClearer,
-		                                            IStandardDeviationSumCalculator standardDeviationSumCalculator,
-													ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker)
+													ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker, IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_teamBlockIntradayDecisionMaker = teamBlockIntradayDecisionMaker;
 			_teamBlockClearer = teamBlockClearer;
-			_standardDeviationSumCalculator = standardDeviationSumCalculator;
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
-			_teamBlockGenerator = teamBlockGenerator;
+		    _dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
+		    _teamBlockGenerator = teamBlockGenerator;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 		}
 
@@ -65,7 +64,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			var teamBlocks = _teamBlockGenerator.Generate(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
-			var allMatrixesOfOnePerson = allPersonMatrixList.Where(x => x.Person.Equals(selectedPersons.First())).ToList();
 			var remainingInfoList = new List<ITeamBlockInfo>(teamBlocks);
 			
 			while (remainingInfoList.Count > 0)
@@ -73,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (_cancelMe)
 					break;
 				var teamBlocksToRemove = optimizeOneRound(selectedPeriod, selectedPersons, optimizationPreferences,
-														  schedulingOptions, remainingInfoList, allMatrixesOfOnePerson,
+														  schedulingOptions, remainingInfoList, 
 				                                          schedulePartModifyAndRollbackService);
 				foreach (var teamBlock in teamBlocksToRemove)
 				{
@@ -98,7 +96,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private IEnumerable<ITeamBlockInfo> optimizeOneRound(DateOnlyPeriod selectedPeriod,
 							 IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
 									  ISchedulingOptions schedulingOptions, IList<ITeamBlockInfo> allTeamBlockInfos,
-										IList<IScheduleMatrixPro> allMatrixesOfOnePerson,
 										ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
 			var teamBlockToRemove = new List<ITeamBlockInfo>();
@@ -115,8 +112,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					break;
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
 
-				var previousStandardDevationSum  = _standardDeviationSumCalculator.Calculate(selectedPeriod, allMatrixesOfOnePerson,
-																							optimizationPreferences, schedulingOptions);
+                var previousTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo,
+			                                                                                          optimizationPreferences
+			                                                                                              .Advanced);
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
 				var firstSelectedDay = selectedPeriod.DayCollection().First();
 				var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
@@ -135,9 +133,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					continue;
 				}
 
-				var newStandardDeviationSum = _standardDeviationSumCalculator.Calculate(selectedPeriod, allMatrixesOfOnePerson,
-																								optimizationPreferences, schedulingOptions);
-				var isWorse = newStandardDeviationSum >= previousStandardDevationSum;
+                var newTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo,
+                                                                                                      optimizationPreferences
+                                                                                                          .Advanced);
+				var isWorse = newTargetValue >= previousTargetValue;
 				string teamName = StringHelper.DisplayString(teamBlockInfo.TeamInfo.GroupPerson.Name.ToString(), 20);
 				string commonProgress = Resources.OptimizingIntraday + Resources.Colon + "(" + totalTeamBlockInfos + ")(" +
 				                        runningTeamBlockCounter + ") " + teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " +
@@ -145,12 +144,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (isWorse)
 				{
 					teamBlockToRemove.Add(teamBlockInfo);
-					OnReportProgress(commonProgress + previousStandardDevationSum + "(" + newStandardDeviationSum + ")");
+					OnReportProgress(commonProgress + previousTargetValue + "(" + newTargetValue + ")");
 					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
 				}
 				else
 				{
-					OnReportProgress(commonProgress + newStandardDeviationSum + " - " + Resources.Improved);
+					OnReportProgress(commonProgress + newTargetValue + " - " + Resources.Improved);
 				}
 			}
 			return teamBlockToRemove;
