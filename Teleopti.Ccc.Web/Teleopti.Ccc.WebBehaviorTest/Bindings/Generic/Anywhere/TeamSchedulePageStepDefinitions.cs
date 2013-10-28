@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should be able to select skills")]
 		public void ThenIShouldBeAbleToSelectSkills(Table table)
 		{
-			Browser.Interactions.AssertExists("#skill-selector");
+			Browser.Interactions.Click("#skill-selector");
 
 			var skills = table.CreateSet<SkillInfo>().ToArray();
 			skills.ForEach(s => Browser.Interactions.AssertAnyContains("#skill-selector li", s.Skill));
@@ -169,6 +169,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		public static void SelectSkill(string name)
 		{
+			Browser.Interactions.Click("#skill-selector");
 			Browser.Interactions.ClickContaining("#skill-selector li a", name);
 		}
 

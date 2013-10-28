@@ -261,6 +261,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				"Anywhere#personschedule",
 				new ApplicationStartupTimeout());
 		}
+
+		public static void GotoRequestsShiftTrade(DateTime date)
+		{
+			GoToWaitForCompleted(
+				string.Format("MyTime#Requests/Index/ShiftTrade/{0}{1}{2}",
+				date.Year.ToString("0000"),
+				date.Month.ToString("00"),
+				date.Day.ToString("00")),
+				new BustCache(), 
+				new ApplicationStartupTimeout(), 
+				new WaitUntilReadyForInteraction());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<RequestsPage>());
+		}
 	}
 
 	public class GotoArgs

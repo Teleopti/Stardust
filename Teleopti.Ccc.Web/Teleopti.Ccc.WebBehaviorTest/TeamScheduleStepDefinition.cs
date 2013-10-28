@@ -14,8 +14,8 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Teleopti.Interfaces.Domain;
@@ -394,13 +394,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.AssertExists("#Request-add-loaded-ready");
 			Browser.Interactions.AssertFirstContains("#Request-add-loaded-date", dateAsSwedishString);
 		}
+        
+        [When(@"I initialize a shift trade")]
+        public void WhenIInitializeAShiftTrade()
+        {
+            Browser.Interactions.Click(".initialize-shift-trade");
+        }
+        
+        [Then(@"I should not be able to initialize a shift trade")]
+        public void ThenIShouldNotBeAbleToInitializeAShiftTrade()
+        {
+			//Browser.Interactions.AssertExists(".btn[disabled]>.initialize-shift-trade");
+			Browser.Interactions.AssertNotExists(".navbar-text", ".initialize-shift-trade");
+        }
 
-		[Then(@"Shifttrade button should be disabled")]
-		public void ThenShifttradeButtonShouldBeDisabled()
-		{
-			Browser.Interactions.AssertExists(".btn[disabled]>.icon-random");
-		}
-		
 		private static void AssertAgentIsDisplayed(string name)
 		{
 			Browser.Interactions.AssertAnyContains(".teamschedule-agent-name", name);

@@ -33,8 +33,9 @@ namespace Teleopti.Ccc.Rta.Server
 									{
 										var mbcache = c.Resolve<IMbCacheFactory>();
 										var connStringHandler = c.Resolve<IDatabaseConnectionStringHandler>();
-										var connFac = c.Resolve<IDatabaseConnectionFactory>();							
-										var instance = mbcache.Create<IDatabaseReader>(connFac, connStringHandler);
+										var connFac = c.Resolve<IDatabaseConnectionFactory>();
+										var actualAgentStateCache = c.Resolve<IActualAgentStateCache>();
+										var instance = mbcache.Create<IDatabaseReader>(connFac, connStringHandler, actualAgentStateCache);
 										return instance;
 									});
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance();

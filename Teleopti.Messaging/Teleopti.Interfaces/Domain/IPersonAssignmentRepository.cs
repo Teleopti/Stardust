@@ -33,5 +33,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2007-11-12
         /// </remarks>
         ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario);
+
+	    IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario);
     }
 }

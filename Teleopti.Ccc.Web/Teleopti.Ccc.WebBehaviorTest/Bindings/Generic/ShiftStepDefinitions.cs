@@ -1,7 +1,7 @@
 using System;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -9,8 +9,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	public class ShiftStepDefinitions
 	{
 		[Given(@"(I) have a shift with")]
-		[Given(@"'?(.*)'`? has a shift with")]
-		[Given(@"'?(.*)'`? have a shift with")] // wrong!
+		[Given(@"'?(.*)'? has a shift with")]
+		[Given(@"'?(.*)'? have a shift with")] // wrong!
 		public void GivenIHaveAShiftWith(string person, Table table)
 		{
 			DataMaker.ApplyFromTable<ShiftConfigurable>(person, table);

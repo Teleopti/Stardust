@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return (IPersistableScheduleData) Session.Get(concreteType, id);
         }
 
+			//todo: Fixa lazy-problem utanför! inte ladda andra rötter här inne!
         public IPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id)
         {
             if (typeof(IPersonAssignment).IsAssignableFrom(scheduleDataType))

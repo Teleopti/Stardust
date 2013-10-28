@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using NHibernate;
@@ -27,10 +26,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private readonly IEnumerable<IMessageSender> _messageSenders;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly",
-			MessageId = "Denormalizers"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-			 MessageId = "0")]
 		protected internal NHibernateUnitOfWorkFactory(ISessionFactory sessionFactory,
 		                                               IAuditSetter auditSettingProvider,
 		                                               string connectionString,
@@ -85,7 +80,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return MakeUnitOfWork(
 				session, 
 				StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging,
-				SessionContextBinder.FilterManager(session)
+				SessionContextBinder.FilterManager(session),
+				SessionContextBinder.IsolationLevel(session)
 				);
 		}
 
@@ -101,30 +97,31 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public string ConnectionString { get; private set; }
 
-		protected virtual IUnitOfWork MakeUnitOfWork(ISession session, IMessageBroker messaging, NHibernateFilterManager filterManager)
+		protected virtual IUnitOfWork MakeUnitOfWork(ISession session, IMessageBroker messaging, NHibernateFilterManager filterManager, TransactionIsolationLevel isolationLevel)
 		{
 			return new NHibernateUnitOfWork(session,
 			                                messaging,
 											_messageSenders,
 											filterManager,
 											new SendPushMessageWhenRootAlteredService(),
-											SessionContextBinder.Unbind
+											SessionContextBinder.Unbind,
+											isolationLevel
 											);
 		}
 
-		public virtual IUnitOfWork CreateAndOpenUnitOfWork()
+		public virtual IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.Default)
 		{
-			return CreateAndOpenUnitOfWork(StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging);
+			return CreateAndOpenUnitOfWork(StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging, isolationLevel);
 		}
 
-		public IUnitOfWork CreateAndOpenUnitOfWork(IMessageBroker messageBroker)
+		public IUnitOfWork CreateAndOpenUnitOfWork(IMessageBroker messageBroker, TransactionIsolationLevel isolationLevel)
 		{
 			var identity = Thread.CurrentPrincipal.Identity as ITeleoptiIdentity;
 			var buId = (identity !=null && identity.BusinessUnit!=null) ? identity.BusinessUnit.Id.GetValueOrDefault() : Guid.Empty;
 			var interceptor = new AggregateRootInterceptor();
-			var nhibSession = createNhibSession(interceptor, buId);
+			var nhibSession = createNhibSession(interceptor, buId, isolationLevel);
 
-			var nhUow = MakeUnitOfWork(nhibSession, messageBroker, SessionContextBinder.FilterManager(nhibSession));
+			var nhUow = MakeUnitOfWork(nhibSession, messageBroker, SessionContextBinder.FilterManager(nhibSession), isolationLevel);
 			return nhUow;
 		}
 
@@ -135,22 +132,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return uow;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration", MessageId = "0#")]
-		public IUnitOfWork CreateAndOpenUnitOfWork(params IEnumerable<IAggregateRoot>[] reassociate)
+		private ISession createNhibSession(IInterceptor interceptor, Guid buId, TransactionIsolationLevel isolationLevel)
 		{
-			var uow = CreateAndOpenUnitOfWork();
-			uow.Reassociate(reassociate);
-			return uow;
-		}
-
-		private ISession createNhibSession(IInterceptor interceptor, Guid buId)
-		{
-			ISession nhibSession = _factory.OpenSession(interceptor);
+			var nhibSession = _factory.OpenSession(interceptor);
 			nhibSession.FlushMode = FlushMode.Never;
 			nhibSession.EnableFilter("businessUnitFilter").SetParameter("businessUnitParameter", buId);
 			nhibSession.EnableFilter("deletedFlagFilter");
 			nhibSession.EnableFilter("deletedPeopleFilter");
-			Bind(nhibSession);
+			Bind(nhibSession, isolationLevel);
 			return nhibSession;
 		}
 
@@ -200,12 +189,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		#endregion
 
-		internal void Bind(ISession session)
+		internal void Bind(ISession session, TransactionIsolationLevel isolationLevel)
 		{
-			SessionContextBinder.Bind(session);
+			SessionContextBinder.Bind(session, isolationLevel);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
 		internal void Unbind(ISession session)
 		{
 			SessionContextBinder.Unbind(session);
@@ -215,48 +203,5 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			StaticSessionContextBinder.UnbindStatic(session);
 		}
-
 	}
-
-	public interface ISessionContextBinder
-	{
-		NHibernateFilterManager FilterManager(ISession session);
-		void Bind(ISession session);
-		void Unbind(ISession session);
-	}
-
-	public class StaticSessionContextBinder : ISessionContextBinder
-	{
-		//todo: byt till ConcurrentDictionary n?r vi uppgraderar till .net 4.0!
-		private static readonly IDictionary<Guid, NHibernateSessionRelatedData> uowRelatedData
-			 = new ConcurrentDictionary<Guid, NHibernateSessionRelatedData>(new ConcurrentDictionary<Guid, NHibernateSessionRelatedData>());
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public NHibernateFilterManager FilterManager(ISession session)
-		{
-			return uowRelatedData[session.GetSessionImplementation().SessionId].FilterManager;
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Bind(ISession session)
-		{
-			uowRelatedData[session.GetSessionImplementation().SessionId] = new NHibernateSessionRelatedData(new NHibernateFilterManager(session));
-			CurrentSessionContext.Bind(session);
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Unbind(ISession session)
-		{
-			CurrentSessionContext.Unbind(session.SessionFactory);
-			uowRelatedData.Remove(session.GetSessionImplementation().SessionId);
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public static void UnbindStatic(ISession session)
-		{
-			CurrentSessionContext.Unbind(session.SessionFactory);
-			uowRelatedData.Remove(session.GetSessionImplementation().SessionId);
-		}
-	}
-
 }

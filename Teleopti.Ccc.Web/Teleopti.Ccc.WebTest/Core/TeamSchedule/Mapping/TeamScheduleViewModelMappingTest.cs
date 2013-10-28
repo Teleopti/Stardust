@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			userTimeZone.Stub(x => x.TimeZone()).Do((Func<TimeZoneInfo>)(() => timeZone));
 
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new TeamScheduleViewModelMappingProfile(() => userTimeZone)));
+			Mapper.Initialize(
+				c => c.AddProfile(new TeamScheduleViewModelMappingProfile(() => userTimeZone)));
 		}
 		
 		[Test]

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 

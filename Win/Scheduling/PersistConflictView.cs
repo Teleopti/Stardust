@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Syncfusion.Drawing;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -13,17 +14,18 @@ namespace Teleopti.Ccc.Win.Scheduling
     public partial class PersistConflictView : BaseRibbonForm, 
                                                 IPersistConflictView
     {
-        private readonly PersistConflictPresenter _presenter;
+	    private readonly PersistConflictPresenter _presenter;
 
 		public PersistConflictView(IScheduleDictionary scheduleDictionary,
-								IEnumerable<IPersistConflict> conflicts,
-								ICollection<IPersistableScheduleData> modifiedDataResult)
+								IEnumerable<PersistConflict> conflicts,
+								ICollection<IPersistableScheduleData> modifiedDataResult,
+								IMessageQueueRemoval messageQueueRemoval)
 		{
 			InitializeComponent();
 			if (!DesignMode)
 				SetTexts();
 			var model = new PersistConflictModel(scheduleDictionary, conflicts, modifiedDataResult);
-			_presenter = new PersistConflictPresenter(this, model);
+			_presenter = new PersistConflictPresenter(this, model, messageQueueRemoval);
 		}
 
 		public new PersistConflictDialogResult DialogResult { get; set; }
