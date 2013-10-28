@@ -35,7 +35,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			SetupFixtureForAssembly.EndTest();
 		}
 		 
-		[Test, Ignore("just temp")]
+		[Test]
 		public void ShouldWorkForStockholm()
 		{
 			// run this to get a date and time in mart.LastUpdatedPerStep
