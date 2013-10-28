@@ -59,12 +59,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				lunchActivity.DisplayColor = Color.FromName(AllActivityColor);
 			}
 
-
-
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 
-			var startTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(StartTime);
-			var endTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(EndTime);
+		    var timeZone = user.PermissionInformation.DefaultTimeZone();
+		    var startTimeUtc = timeZone.SafeConvertTimeToUtc(StartTime);
+			var endTimeUtc = timeZone.SafeConvertTimeToUtc(EndTime);
 
 			_assignmentPeriod = new DateTimePeriod(startTimeUtc, endTimeUtc);
 			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario, new DateOnly(StartTime));
@@ -74,8 +73,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			DateTimePeriod? lunchPeriod = null;
 			if (LunchStartTime != DateTime.MinValue)
 			{
-				var lunchStartTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(LunchStartTime);
-				var lunchEndTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(LunchEndTime);
+				var lunchStartTimeUtc = timeZone.SafeConvertTimeToUtc(LunchStartTime);
+				var lunchEndTimeUtc = timeZone.SafeConvertTimeToUtc(LunchEndTime);
 				lunchPeriod = new DateTimePeriod(lunchStartTimeUtc, lunchEndTimeUtc);
 			}
 			else if (Lunch3HoursAfterStart)
