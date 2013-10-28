@@ -9,11 +9,12 @@ GO
 --				to data mart table 'fact_schedule'.
 -- Updates:
 ------------------------------------------------
---	Date	Who		Why
-
+--	Date		Who		Why
+--	2013-10-25	DJ		#25126 - Remove unwanted UTC days from stg_schedule_updated_ShiftStartDateUTC
+--	2013-10-25	DJ		#25309 - improve performance in mart.etl_fact_schedule_intraday_load
 -- =============================================
 --exec mart.etl_fact_schedule_intraday_load '2009-02-02','2009-02-03'
---exec mart.etl_fact_schedule_intraday_load 'CEC854E6-B4A8-4BD5-BB12-26E8A3D9E0BA'
+--exec mart.etl_fact_schedule_intraday_load '928DD0BC-BF40-412E-B970-9B5E015AADEA'
 CREATE PROCEDURE [mart].[etl_fact_schedule_intraday_load]
 @business_unit_code uniqueidentifier
 AS
@@ -41,7 +42,7 @@ CREATE TABLE #stg_schedule_changed(
 	[scenario_id] [smallint] NOT NULL
 )
 
---remove dates from utc tables that does not exist in stage tables, so that we don't delete more daus than we can handle
+--remove dates from utc tables that does not exist in stage tables, so that we don't delete more rows than we can handle
 DELETE FROM utc
 FROM Stage.stg_schedule_updated_ShiftStartDateUTC utc
 INNER JOIN mart.dim_date d
@@ -69,14 +70,18 @@ SELECT DISTINCT dd.person_id, dd.shift_startdate_id, ds.scenario_id
 FROM	Stage.stg_schedule_changed stg
 INNER JOIN Stage.stg_schedule_updated_personLocal dp
 	ON stg.person_code		=	dp.person_code
-	AND ((stg.schedule_date	>= dp.valid_from_date_local) AND
-				(stg.schedule_date <= dp.valid_to_date_local))
+	AND --trim
+		(
+				(stg.schedule_date	>= dp.valid_from_date_local)
+
+			AND
+				(stg.schedule_date <= dp.valid_to_date_local)
+		)
 INNER JOIN mart.dim_scenario ds
 	ON stg.scenario_code = ds.scenario_code
 	AND stg.scenario_code = @scenario_code  --remove this if we are to handle multiple scenarios
 INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC dd
 		ON dd.person_id = dp.person_id
-WHERE stg.business_unit_code = @business_unit_code
 
 -- special delete if something is left, a shift over midninght for example
 INSERT INTO #stg_schedule
