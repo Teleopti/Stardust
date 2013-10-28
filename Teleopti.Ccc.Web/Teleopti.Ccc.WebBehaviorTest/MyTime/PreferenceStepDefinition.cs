@@ -9,14 +9,13 @@ using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebBehaviorTest
+namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
 	[Binding]
 	public class PreferenceStepDefinition

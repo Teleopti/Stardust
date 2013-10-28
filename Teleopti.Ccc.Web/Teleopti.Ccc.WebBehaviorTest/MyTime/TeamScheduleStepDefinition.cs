@@ -6,11 +6,8 @@ using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Specific;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -19,10 +16,11 @@ using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-using Div = WatiN.Core.Div;
+using WatiN.Core;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
+using Table = TechTalk.SpecFlow.Table;
 
-namespace Teleopti.Ccc.WebBehaviorTest
+namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
 	[Binding]
 	public class TeamScheduleStepDefinition

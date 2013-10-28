@@ -9,7 +9,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 
-namespace Teleopti.Ccc.WebBehaviorTest
+namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
 	[Binding]
 	public class TextRequestStepDefinitions

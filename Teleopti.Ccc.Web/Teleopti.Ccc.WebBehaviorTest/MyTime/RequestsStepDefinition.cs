@@ -10,7 +10,7 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 
-namespace Teleopti.Ccc.WebBehaviorTest
+namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
 	[Binding]
 	public class RequestsStepDefinition

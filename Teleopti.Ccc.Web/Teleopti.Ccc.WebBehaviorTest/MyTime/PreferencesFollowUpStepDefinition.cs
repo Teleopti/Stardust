@@ -2,10 +2,9 @@ using System;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 
-namespace Teleopti.Ccc.WebBehaviorTest
+namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
 	[Binding]
 	public class PreferencesFollowUpStepDefinition
