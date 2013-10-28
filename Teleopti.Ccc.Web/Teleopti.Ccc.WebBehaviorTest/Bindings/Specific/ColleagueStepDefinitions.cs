@@ -78,12 +78,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Person(TeamColleagueName).Apply(new ShiftWithConfidentialAbsence());
 		}
 
-		[Given(@"My colleague have a shift with")]
-		public void GivenMyColleagueHaveAShiftWith(Table table)
-		{
-			ScenarioContext.Current.Pending();
-		}
-		
 		[Given(@"I have a colleague located in '(.*)'")]
 		public void GivenIHaveAColleagueLocatedIn(string location)
 		{

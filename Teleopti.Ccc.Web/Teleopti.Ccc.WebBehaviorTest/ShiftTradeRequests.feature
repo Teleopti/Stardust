@@ -84,7 +84,7 @@ Scenario: Show possible shift trades
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And 'OtherAgent' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -113,7 +113,7 @@ Scenario: Do not show person that agent has no permission to
 	Given I am an agent in a team with access only to my own data
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And OtherAgent have a shift with
+	And 'OtherAgent' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -143,7 +143,7 @@ Scenario: Time line should cover all scheduled shifts
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And 'OtherAgent' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -165,12 +165,12 @@ Scenario: When clicking an agent i shift trade list, the other agent's should be
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent2 have a shift with
+	And 'OtherAgent2' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 07:00 |
 	| EndTime               | 2030-01-01 20:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And 'OtherAgent' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -201,7 +201,7 @@ Scenario: Sending shift trade request closes the Add Shift Trade Request view
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And 'OtherAgent' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -228,12 +228,12 @@ Scenario: Cancel a shift trade request before sending
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent2 have a shift with
+	And 'OtherAgent2' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 07:00 |
 	| EndTime               | 2030-01-01 20:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And 'OtherAgent' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -345,7 +345,7 @@ Scenario: Show name of sender of a received shifttrade
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 12:00 |
 	| EndTime               | 2030-01-01 22:00 |
@@ -372,7 +372,7 @@ Scenario: Show name of the person of a shifttrade that I have created
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 12:00 |
 	| EndTime               | 2030-01-01 22:00 |
@@ -400,7 +400,7 @@ Given I have the role 'Full access to mytime'
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
 	| Lunch3HoursAfterStart | True             |
-	And Ashley Andeen have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 12:00 |
 	| EndTime               | 2030-01-01 22:00 |
@@ -466,7 +466,7 @@ Given I have the role 'Full access to mytime'
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 12:00 |
 	| EndTime               | 2030-01-01 22:00 |
@@ -518,7 +518,7 @@ Scenario: Resend referred shifttrade
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 12:00 |
 	| EndTime               | 2030-01-01 22:00 |
@@ -548,7 +548,7 @@ Scenario: Cancel referred shifttrade
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 12:00 |
 	| EndTime               | 2030-01-01 22:00 |
@@ -577,7 +577,7 @@ Scenario: Do not show rerred shifttrade to reciever
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 12:00 |
 	| EndTime               | 2030-01-01 22:00 |
@@ -604,7 +604,7 @@ Scenario: Do not show resend and cancelbuttons to sender when shifttrade is not 
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 12:00 |
 	| EndTime               | 2030-01-01 22:00 |
