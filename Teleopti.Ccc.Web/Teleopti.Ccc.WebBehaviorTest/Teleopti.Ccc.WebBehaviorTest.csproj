@@ -157,14 +157,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>22851_FindShiftTradePageFromTeamSchedule.feature</DependentUpon>
-    </Compile>  
- <Compile Include="MyTime\24394_ShifTradesBetweenAgentsInDifferentTimeZones.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>24394_ShifTradesBetweenAgentsInDifferentTimeZones.feature</DependentUpon>
     </Compile>
-      <Compile Include="MyTime\OveritmeAvailability.feature.cs">
-        <DependentUpon>OveritmeAvailability.feature</DependentUpon>
+    <Compile Include="MyTime\OveritmeAvailability.feature.cs">
+      <DependentUpon>OveritmeAvailability.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -700,10 +695,6 @@
     <None Include="MyTime\22851_FindShiftTradePageFromTeamSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>22851_FindShiftTradePageFromTeamSchedule.feature.cs</LastGenOutput>
-    </None>
-    <None Include="MyTime\24394_ShifTradesBetweenAgentsInDifferentTimeZones.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>24394_ShifTradesBetweenAgentsInDifferentTimeZones.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\OveritmeAvailability.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

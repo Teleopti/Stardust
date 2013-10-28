@@ -30,6 +30,7 @@ Background:
 	| Day   |
 	| Night |
 
+
 Scenario: No access to make shift trade reuquests
 	Given there is a role with
 	| Field								| Value						|
@@ -619,6 +620,106 @@ Scenario: Do not show resend and cancelbuttons to sender when shifttrade is not 
 	And I am viewing requests
 	When I click on the request at position '1' in the list
 	Then I should not see resend shifttrade button for request at position '1'
+
+Scenario: See shifts from users in other timezones
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And I am located in Stockholm
+	And 'OtherAgent' has a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And 'OtherAgent' is located in 'Hawaii'
+	And the current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I should see OtherAgent in the shift trade list
+
+Scenario: Show other shifts to trade with from users in other timezones translated to my timezone
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And I am located in Stockholm
+	And 'OtherAgent' has a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And 'OtherAgent' is located in 'Moscow'
+	And the current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I should see a possible schedule trade with
+	| Field			| Value |
+	| Start time	| 09:00 |
+	| End time		| 19:00 |
+
+Scenario: Show shifts in ongoing trades from users in other timezone translated to my timezone
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category        | Day              |
+	| Lunch3HoursAfterStart | True             |
+	And I am located in Stockholm
+	And 'Ashley Andeen' has a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And 'Ashley Andeen' is located in 'Moscow'
+	And I have created a shift trade request
+	| Field    | Value         |
+	| To       | Ashley Andeen	|
+	| DateTo   | 2030-01-01    |
+	| DateFrom | 2030-01-01    |
+	| Pending  | True          |
+	And I am viewing requests
+	When I click on the request at position '1' in the list
+	Then I should see details with a schedule from
+	| Field			| Value |
+	| Start time	| 06:00 |
+	| End time		| 16:00 |
+	And I should see details with a schedule to
+	| Field			| Value |
+	| Start time	| 04:00 |
+	| End time		| 14:00 |
+
+Scenario: Do not show shifts from other timezones if they star in a different day than mine
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 22:00 |
+	| EndTime               | 2030-01-02 04:00 |
+	| Shift category		| Day	           |
+	And I am located in Stockholm
+	And 'OtherAgent' has a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 22:00 |
+	| EndTime               | 2030-01-02 04:00 |
+	| Shift category		| Day	           |
+	And 'OtherAgent' is located in 'Hawaii'
+	And the current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I should not see a possible schedule to trade with
 	
 
 Scenario: Navigate to shifttrade with url

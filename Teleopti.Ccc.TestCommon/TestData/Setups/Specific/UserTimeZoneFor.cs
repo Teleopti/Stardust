@@ -6,11 +6,19 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Specific
 {
-	public class HawaiiTimeZone : IUserSetup
+	public class UserTimeZoneFor : IUserSetup
 	{
+		private readonly string _timeZone;
+
+		public UserTimeZoneFor(string timeZone)
+		{
+			_timeZone = timeZone;
+		}
+
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			user.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
+			user.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.TimeZone(_timeZone));
+
 		}
 	}
 }

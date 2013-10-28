@@ -257,6 +257,7 @@
     <Compile Include="TestData\Setups\Specific\SwedishCulture.cs" />
     <Compile Include="TestData\Setups\Specific\USCulture.cs" />
     <Compile Include="TestData\Setups\Configurable\UserConfigurable.cs" />
+    <Compile Include="TestData\Setups\Specific\UserTimeZoneFor.cs" />
     <Compile Include="TestData\Setups\Specific\UtcTimeZone.cs" />
     <Compile Include="UsedInTestState.cs" />
   </ItemGroup>
