@@ -553,6 +553,7 @@
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillInterval.cs" />
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlock.cs" />
     <Compile Include="Scheduling\TeamBlock\OpenHourRestrictionForTeamBlock.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\SameShiftRestriction.cs" />
     <Compile Include="Scheduling\TeamBlock\SameOpenHoursInTeamBlockSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftLayer.cs" />
