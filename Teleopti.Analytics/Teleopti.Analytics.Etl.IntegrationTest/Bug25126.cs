@@ -35,7 +35,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			SetupFixtureForAssembly.EndTest();
 		}
 		 
-		[Test, Ignore("just temp")]
+		[Test]
 		public void ShouldWorkForStockholm()
 		{
 			// run this to get a date and time in mart.LastUpdatedPerStep
@@ -123,6 +123,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			step = new FactScheduleJobStep(jobParameters,false);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
+            step = new FactScheduleDayCountJobStep(jobParameters);
+            step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+
 			// now it should have data on all three dates 96 interval
 			var db = new AnalyticsContext(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
 			
@@ -138,6 +141,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			// still it should have data on all three dates 96 interval, in the bug only 64 one day before deleted
 			Assert.That(query.Count(), Is.EqualTo(96));
+
+            step = new FactScheduleDayCountJobStep(jobParameters, true);
+            step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 		}
 
 		[Test]
