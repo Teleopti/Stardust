@@ -9,15 +9,17 @@ GO
 --				to data mart table 'fact_schedule'.
 -- Updates:
 ------------------------------------------------
---	Date	Who		Why
-
+--	Date		Who		Why
+--	2013-10-25	DJ		#25126 - Remove unwanted UTC days from stg_schedule_updated_ShiftStartDateUTC
+--	2013-10-25	DJ		#25309 - improve performance in mart.etl_fact_schedule_intraday_load
 -- =============================================
 --exec mart.etl_fact_schedule_intraday_load '2009-02-02','2009-02-03'
---exec mart.etl_fact_schedule_intraday_load 'CEC854E6-B4A8-4BD5-BB12-26E8A3D9E0BA''
+--exec mart.etl_fact_schedule_intraday_load '928DD0BC-BF40-412E-B970-9B5E015AADEA'
 CREATE PROCEDURE [mart].[etl_fact_schedule_intraday_load]
 @business_unit_code uniqueidentifier
 AS
 
+SET NOCOUNT ON
 --if no @scenario, no data then break
 DECLARE @scenario_code uniqueidentifier
 SELECT TOP 1 @scenario_code=scenario_code FROM Stage.stg_schedule_changed
@@ -34,6 +36,21 @@ CREATE TABLE #stg_schedule(
 	[person_id] [int] NOT NULL
 )
 
+CREATE TABLE #stg_schedule_changed(
+	[person_id] [int] NOT NULL,
+	[shift_startdate_id] [int] NOT NULL,
+	[scenario_id] [smallint] NOT NULL
+)
+
+--remove dates from utc tables that does not exist in stage tables, so that we don't delete more rows than we can handle
+DELETE FROM utc
+FROM Stage.stg_schedule_updated_ShiftStartDateUTC utc
+INNER JOIN mart.dim_date d
+	ON d.date_id = utc.shift_startdate_id
+LEFT OUTER JOIN stage.stg_schedule stg
+	ON stg.schedule_date  = d.date_date
+WHERE stg.schedule_date IS NULL
+
 --Get first row scenario in stage table, currently this must(!) be the default scenario, else RAISERROR
 if (select count(*)
 	from mart.dim_scenario
@@ -47,8 +64,10 @@ BEGIN
 	RETURN 0
 END
 
-DELETE fs
-FROM Stage.stg_schedule_changed stg
+--prepare a temp table for better performance on delete
+INSERT INTO #stg_schedule_changed
+SELECT DISTINCT dd.person_id, dd.shift_startdate_id, ds.scenario_id 
+FROM	Stage.stg_schedule_changed stg
 INNER JOIN Stage.stg_schedule_updated_personLocal dp
 	ON stg.person_code		=	dp.person_code
 	AND --trim
@@ -61,12 +80,8 @@ INNER JOIN Stage.stg_schedule_updated_personLocal dp
 INNER JOIN mart.dim_scenario ds
 	ON stg.scenario_code = ds.scenario_code
 	AND stg.scenario_code = @scenario_code  --remove this if we are to handle multiple scenarios
-INNER JOIN mart.fact_schedule fs
-	ON dp.person_id = fs.person_id
- 	AND ds.scenario_id = fs.scenario_id
 INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC dd
-	ON dd.shift_startdate_id = fs.shift_startdate_id 
-	AND dd.person_id = fs.person_id
+		ON dd.person_id = dp.person_id
 
 -- special delete if something is left, a shift over midninght for example
 INSERT INTO #stg_schedule
@@ -90,6 +105,16 @@ INNER JOIN mart.dim_date AS dsd
 ON stg.schedule_date = dsd.date_date
 INNER JOIN mart.dim_scenario ds
 	ON stg.scenario_code = ds.scenario_code
+
+--return rows to ETL
+SET NOCOUNT OFF
+
+DELETE fs
+FROM mart.fact_schedule fs
+INNER JOIN #stg_schedule_changed a
+	ON	a.person_id = fs.person_id
+	AND a.scenario_id = fs.scenario_id
+	AND a.shift_startdate_id = fs.shift_startdate_id
 
 DELETE fs
 FROM #stg_schedule tmp
