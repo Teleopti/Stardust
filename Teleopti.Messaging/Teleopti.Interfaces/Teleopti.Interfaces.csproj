@@ -256,6 +256,7 @@
     <Compile Include="Domain\IProcessAbsenceRequest.cs" />
     <Compile Include="Domain\IQueueStatisticsProvider.cs" />
     <Compile Include="Domain\ISchedulePeriodTargetDayOffCalculator.cs" />
+    <Compile Include="Domain\IScheduleRestrictionStrategy.cs" />
     <Compile Include="Domain\IScheduleResultDailyValueCalculator.cs" />
     <Compile Include="Domain\IRootPersonGroup.cs" />
     <Compile Include="Domain\IScheduleAuditTrailReportData.cs" />

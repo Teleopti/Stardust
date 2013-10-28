@@ -552,8 +552,12 @@
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDays.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillInterval.cs" />
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlock.cs" />
-    <Compile Include="Scheduling\TeamBlock\OpenHourRestrictionForTeamBlock.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\OpenHourRestrictionForTeamBlock.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\NightlyRestRestrcition.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\SameEndTimeRestriction.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\SameShiftCategoryRestriction.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameShiftRestriction.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\SameStartTimeRestriction.cs" />
     <Compile Include="Scheduling\TeamBlock\SameOpenHoursInTeamBlockSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftLayer.cs" />
@@ -929,7 +933,7 @@
     <Compile Include="Scheduling\TeamBlock\GroupPersonSkillAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\IntervalDataMedianCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\MaxMovedDaysOverLimitValidator.cs" />
-    <Compile Include="Scheduling\TeamBlock\OpenHoursToEffectiveRestrictionConverter.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\OpenHoursToEffectiveRestrictionConverter.cs" />
     <Compile Include="Scheduling\TeamBlock\RestrictionAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\SafeRollbackAndResourceCalculation.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleRestrictionExtractor.cs" />
@@ -940,7 +944,7 @@
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataSkillFactorApplyer.cs" />
     <Compile Include="Scheduling\SkillResolutionProvider.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillStaffPeriodToSkillIntervalDataMapper.cs" />
-    <Compile Include="Scheduling\TeamBlock\SuggestedShiftRestrictionExtractor.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\SuggestedShiftRestrictionExtractor.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockClearer.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockFinderTypeCreator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfo.cs" />

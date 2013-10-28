@@ -382,8 +382,12 @@
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDaysTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillIntervalTest.cs" />
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlockTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\OpenHourRestrictionForTeamBlockTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\OpenHourRestrictionForTeamBlockTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\NightlyRestRestrcitionTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\SameEndTimeRestrictionTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\SameShiftCategoryRestrictionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameShiftRestrictionTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\SameStartTimeRestrictionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecificationTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
@@ -743,7 +747,7 @@
     <Compile Include="Scheduling\TeamBlock\EqualWorkShiftValueDeciderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\GroupPersonSkillAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\IntervalDataMedianCalculatorTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\OpenHoursToEffectiveRestrictionConverterTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\OpenHoursToEffectiveRestrictionConverterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\RestrictionAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SafeRollbackAndResourceCalculationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleRestrictionExtractorTest.cs" />
@@ -754,7 +758,7 @@
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\SkillResolutionProviderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\SuggestedShiftRestrictionExtractorTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\SuggestedShiftRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfoFactoryTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfoTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamDayOffModifierTest.cs" />

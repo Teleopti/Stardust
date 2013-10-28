@@ -1,28 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 {
-    public class SameShiftRestriction : IScheduleRestrictionStrategy
+    public class SameShiftCategoryRestriction : IScheduleRestrictionStrategy
     {
-        private readonly IScheduleDayEquator _scheduleDayEquator;
-
-        public SameShiftRestriction(IScheduleDayEquator scheduleDayEquator)
-        {
-            _scheduleDayEquator = scheduleDayEquator;
-        }
-
         public IEffectiveRestriction ExtractRestriction(IList<DateOnly> dateOnlyList, IList<IScheduleMatrixPro> matrixList)
         {
             var restriction = new EffectiveRestriction(new StartTimeLimitation(),
-                                                       new EndTimeLimitation(),
-                                                       new WorkTimeLimitation(), null, null, null,
-                                                       new List<IActivityRestriction>());
+                                                        new EndTimeLimitation(),
+                                                        new WorkTimeLimitation(), null, null, null,
+                                                        new List<IActivityRestriction>());
             foreach (var matrix in matrixList)
             {
                 foreach (var dateOnly in dateOnlyList)
@@ -34,15 +24,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
                     var schedulePart = schedule.DaySchedulePart();
                     if (schedulePart.SignificantPart() == SchedulePartView.MainShift)
                     {
-                        var mainShift = schedulePart.GetEditorShift();
-                        if (mainShift == null) continue;
-                        if (restriction.CommonMainShift == null)
+                        var assignment = schedulePart.PersonAssignment();
+                        if (assignment == null) continue;
+                        var shiftCategory = assignment.ShiftCategory;
+                        if (shiftCategory == null)
+                            continue;
+                        if (restriction.ShiftCategory == null)
                         {
-                            restriction.CommonMainShift = mainShift;
+                            restriction.ShiftCategory = shiftCategory;
                         }
                         else
                         {
-                            if (!_scheduleDayEquator.MainShiftBasicEquals(mainShift, restriction.CommonMainShift))
+                            if (restriction.ShiftCategory != shiftCategory)
                                 return null;
                         }
                     }
