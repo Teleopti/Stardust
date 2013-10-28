@@ -24,7 +24,7 @@ BEGIN
 	CREATE TABLE #temppersonbudgetgroup
 	(
 		personid uniqueidentifier not null,
-		budgetgroupid uniqueidentifier not null,
+		budgetgroupid uniqueidentifier null,
 		startdate smalldatetime not null,
 		enddate smalldatetime null
 	);
@@ -40,7 +40,6 @@ BEGIN
 	INNER JOIN dbo.PersonPeriodWithEndDate pp
 		ON pp.parent=p.id
 	WHERE p.isdeleted=0
-	AND pp.budgetgroup=@BudgetGroupId
 
 	--Return calculated result to client
 	SELECT
@@ -50,6 +49,7 @@ BEGIN
 	FROM ReadModel.ScheduleProjectionReadOnly sp
 	INNER JOIN #temppersonbudgetgroup t	
 		ON t.PersonId = sp.PersonId
+		AND t.budgetgroupid=@BudgetGroupId
 		AND sp.BelongsToDate BETWEEN t.startdate AND t.enddate
 		AND EXISTS (
 			SELECT DISTINCT Absence
@@ -61,6 +61,7 @@ BEGIN
 	WHERE sp.ScenarioId=@ScenarioId
 	AND sp.BelongsToDate BETWEEN @DateFrom AND @DateTo
 	GROUP BY sp.BelongsToDate,sp.PayloadId
+
 END
 
 GO
