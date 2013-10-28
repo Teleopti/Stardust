@@ -67,7 +67,7 @@ Scenario: Order like shift start, full day absence, day off, no shift
 	And I should see 'Ashley Andeen' before 'John King'
 	And I should see 'John King' before 'Pierre Andeen'
 
-Scenario: Order by shift start when person has both shift and day off
+Scenario: Order by shift start when shift and day off in view
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Hawaii
 	And 'Pierre Baldi' is located in Stockholm

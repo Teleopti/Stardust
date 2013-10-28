@@ -4,6 +4,7 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using PersonDayOffConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.PersonDayOffConfigurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {

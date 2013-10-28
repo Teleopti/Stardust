@@ -263,6 +263,7 @@
     <Compile Include="Common\Logging\SystemInformationHelper.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Common\SpecificBusinessUnit.cs" />
+    <Compile Include="Common\ThisCurrentScenario.cs" />
     <Compile Include="Common\Time\INowExtensions.cs" />
     <Compile Include="Common\Time\MutableNow.cs" />
     <Compile Include="Common\Time\ThisIsNow.cs" />

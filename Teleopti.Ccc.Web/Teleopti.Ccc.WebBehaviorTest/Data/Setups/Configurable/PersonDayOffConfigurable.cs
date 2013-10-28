@@ -1,33 +1,13 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon.TestData.Core;
+﻿using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 {
-	public class PersonDayOffConfigurable : IUserDataSetup
+	public class PersonDayOffConfigurable : TestCommon.TestData.Setups.Configurable.PersonDayOffConfigurable
 	{
-		public string Name { get; set; }
-		public DateTime Date { get; set; }
-
-		public IScenario Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario;
-
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public PersonDayOffConfigurable()
 		{
-			var dayOff = new DayOffTemplateRepository(uow).LoadAll().Single(dayOffTemplate => dayOffTemplate.Description.Name.Equals(Name));
-			var personDayOff = new PersonAssignment(user, Scenario, new DateOnly(Date));
-			personDayOff.SetDayOff(dayOff);
-
-			var repository = new PersonAssignmentRepository(uow);
-
-			personDayOff.ScheduleChanged();
-
-			repository.Add(personDayOff);
+			Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario.Description.Name;
 		}
 	}
 }
