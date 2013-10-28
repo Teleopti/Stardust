@@ -4,7 +4,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Common;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
