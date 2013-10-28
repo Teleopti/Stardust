@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see MyTime")]
 		public void ThenIShouldSeeMyTime()
 		{
-			EventualAssert.That(() => Pages.Pages.WeekSchedulePage.InnerBody.Exists, Is.True);
+			Browser.Interactions.AssertExists(".body-weekview-inner");
 		}
 
 		[Then(@"I should see Mobile Reports")]

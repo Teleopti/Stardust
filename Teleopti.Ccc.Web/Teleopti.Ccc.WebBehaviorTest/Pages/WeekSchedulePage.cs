@@ -182,10 +182,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			return Document.Div(Find.BySelector(DateSelector(date) + " .weekview-day-schedule-layer[tooltip-text*='" + tooltipContent + "']"));
 		}
-
-		public Div InnerBody
-		{
-			get { return Document.Div(Find.BySelector(".body-weekview-inner")); }
-		}
 	}
 }
