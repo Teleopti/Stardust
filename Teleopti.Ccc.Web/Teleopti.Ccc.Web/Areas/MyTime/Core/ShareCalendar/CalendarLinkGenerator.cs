@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 
 					evt.Start = new iCalDateTime(layer.Start);
 					evt.End = new iCalDateTime(layer.End);
-					evt.Summary = layer.Title;
+					evt.Summary = layer.Description;
 				}
 			}
 

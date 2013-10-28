@@ -19,5 +19,9 @@ define([
 
 		this.OverlapsTimeLine = unit.OverlapsTimeLine;
 
+		this.DayOffName = ko.computed(function () {
+		    return "Day off";
+		});
+	    
 	};
 });

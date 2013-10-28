@@ -326,6 +326,7 @@
     <Compile Include="Domain\ISwapServiceNew.cs" />
     <Compile Include="Domain\ISystemCheck.cs" />
     <Compile Include="Domain\IExtendedPreferenceTemplate.cs" />
+    <Compile Include="Domain\ITeamBlockTargetValueCalculator.cs" />
     <Compile Include="Domain\IterationOperationOption.cs" />
     <Compile Include="Domain\ITextFormatter.cs" />
     <Compile Include="Domain\ITimeZoneDim.cs" />

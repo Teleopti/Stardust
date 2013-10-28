@@ -13,10 +13,10 @@ using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
-using Teleopti.Ccc.TestCommon.TestData.Common;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.TestCommon.TestData.Generic;
 using Teleopti.Ccc.TestCommon.TestData.Setups;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
@@ -44,12 +44,12 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
 
-			var site = new SiteConfigurable {BusinessUnit = TestState.BusinessUnit, Name = "Västerhaninge"};
+			var site = new SiteConfigurable {BusinessUnit = TestState.BusinessUnit.Name, Name = "Västerhaninge"};
 			var team = new TeamConfigurable {Name = "Yellow", Site = "Västerhaninge"};
-			var contract = new CommonContract();
-			var cc = new CommonContractSchedule();
+			var contract = new ContractConfigurable {Name = "Kontrakt"};
+			var cc = new ContractScheduleConfigurable {Name = "Kontraktsschema"};
 			var ppp = new PartTimePercentageConfigurable{Name = "ppp"};
-			var scenario = new CommonScenario{EnableReporting = true};
+			var scenario = new ScenarioConfigurable {EnableReporting = true, Name = "Scenario", BusinessUnit = TestState.BusinessUnit.Name};
 			var cat = new ShiftCategoryConfigurable{Name = "Kattegat"};
 			var act = new ActivityConfigurable{Name = "Phone"};
 			var act2 = new ActivityConfigurable{Name = "Lunch"};
@@ -156,12 +156,12 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var brasilTimeZone = new BrasilTimeZone {TimeZoneId = 2};
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>{brasilTimeZone});
 
-			var site = new SiteConfigurable { BusinessUnit = TestState.BusinessUnit, Name = "Brasilia" };
+			var site = new SiteConfigurable { BusinessUnit = TestState.BusinessUnit.Name, Name = "Brasilia" };
 			var team = new TeamConfigurable { Name = "Yellow", Site = "Brasilia" };
-			var contract = new CommonContract();
-			var cc = new CommonContractSchedule();
+			var contract = new ContractConfigurable { Name = "Kontrakt" };
+			var cc = new ContractScheduleConfigurable { Name = "Kontraktsschema" };
 			var ppp = new PartTimePercentageConfigurable { Name = "ppp" };
-			var scenario = new CommonScenario { EnableReporting = true };
+			var scenario = new ScenarioConfigurable { EnableReporting = true, Name = "Scenario", BusinessUnit = TestState.BusinessUnit.Name };
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat" };
 			var act = new ActivityConfigurable { Name = "Phone" };
 			var act2 = new ActivityConfigurable { Name = "Lunch" };
