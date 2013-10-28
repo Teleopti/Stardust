@@ -77,7 +77,6 @@ INNER JOIN mart.dim_scenario ds
 	AND stg.scenario_code = @scenario_code  --remove this if we are to handle multiple scenarios
 INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC dd
 		ON dd.person_id = dp.person_id
-WHERE stg.business_unit_code = @business_unit_code
 
 -- special delete if something is left, a shift over midninght for example
 INSERT INTO #stg_schedule
