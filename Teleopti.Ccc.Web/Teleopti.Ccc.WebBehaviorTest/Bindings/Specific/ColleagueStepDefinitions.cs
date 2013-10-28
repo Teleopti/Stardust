@@ -1,5 +1,6 @@
 using System;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.TestData.Setups;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 
@@ -77,19 +78,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Person(TeamColleagueName).Apply(new ShiftWithConfidentialAbsence());
 		}
 
-
 		[Given(@"My colleague have a shift with")]
 		public void GivenMyColleagueHaveAShiftWith(Table table)
 		{
 			ScenarioContext.Current.Pending();
 		}
-
-		[Given(@"I have a colleague with a '(.*)' hour diff timezone")]
-		public void GivenIHaveAColleagueWithAHourDiffTimezone(int diff)
+		
+		[Given(@"I have a colleague located in '(.*)'")]
+		public void GivenIHaveAColleagueLocatedIn(string location)
 		{
-			ScenarioContext.Current.Pending();
-		}
 
+			DataMaker.Person(TeamColleagueName).Apply(new Agent());
+			DataMaker.Person(TeamColleagueName).Apply(new SchedulePeriod());
+			DataMaker.Person(TeamColleagueName).Apply(new UserTimeZone(location));
+			if (DataMaker.Data().HasSetup<Team>())
+			{
+				var team = DataMaker.Data().UserData<Team>().TheTeam;
+				DataMaker.Person(TeamColleagueName).Apply(new PersonPeriod(team));
+			}
+			else
+			{
+				DataMaker.Person(TeamColleagueName).Apply(new PersonPeriod());
+			}
+			DataMaker.Person(TeamColleagueName).Apply(new ScheduleIsPublished());
+		}
 
 	}
 }

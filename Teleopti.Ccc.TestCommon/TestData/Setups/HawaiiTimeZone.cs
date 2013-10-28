@@ -13,4 +13,22 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups
 			user.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
 		}
 	}
+
+	//henke, refact out.....
+	public class UserTimeZone : IUserSetup
+	{
+		private readonly string _timeZone;
+
+		public UserTimeZone(string timeZone)
+		{
+			_timeZone = timeZone;
+		}
+
+		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		{
+			user.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.TimeZone(_timeZone));
+
+		}
+	}
+
 }

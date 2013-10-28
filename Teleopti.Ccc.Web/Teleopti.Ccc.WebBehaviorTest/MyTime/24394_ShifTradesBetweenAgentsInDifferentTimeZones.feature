@@ -5,12 +5,14 @@
 
 Scenario: See shifts from colleagues in other timezone
 	Given I am an agent in a team with access to the whole site
+	And I am located in Stockholm
+	And there is a shift category named 'Day'
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-10-14 06:00 |
 	| EndTime               | 2030-10-14 16:00 |
 	| Shift category		| Day	           |
-	And I have a colleague with a '+1' hour diff timezone 
+	And I have a colleague located in 'Cairo'
 	And My colleague have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-10-14 08:00 |
