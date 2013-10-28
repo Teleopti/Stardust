@@ -6,14 +6,14 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 {
-    public class ScheduleDayReadModelSetup: IDataSetup
-    {
-        public ScheduleDayReadModel Model;
+	public class ScheduleDayReadModelSetup: IDataSetup
+	{
+		public ScheduleDayReadModel Model;
 
-        public void Apply(IUnitOfWork uow)
-        {
-            var rep = new ScheduleDayReadModelRepository(new FixedCurrentUnitOfWork(uow));
-            rep.SaveReadModel(Model);
-        }
-    }
+		public void Apply(IUnitOfWork uow)
+		{
+			var rep = new ScheduleDayReadModelRepository(new FixedCurrentUnitOfWork(uow));
+			rep.SaveReadModel(Model);
+		}
+	}
 }

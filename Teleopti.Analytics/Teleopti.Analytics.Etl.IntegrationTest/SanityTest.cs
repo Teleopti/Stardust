@@ -15,7 +15,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
         [Test]
         public void ShouldLoadConfig()
         {
-            Assert.That(ConfigurationManager.AppSettings["configSanityCheck"],
+			Assert.That(ConfigurationManager.AppSettings["configSanityCheck"],
                 Is.EqualTo("Yes, configuration is loaded!"),
                 "No! Configuration is not loaded!!!");
         }
