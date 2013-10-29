@@ -308,3 +308,50 @@ GO
 ---------------- 
 ALTER TABLE dbo.StateGroupActivityAlarm ALTER COLUMN AlarmType uniqueidentifier NULL
 GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-10-29
+--Desc: Bug #25358 - re-design clustered key on ReadModel.PersonScheduleDay
+----------------
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[ReadModel].[PersonScheduleDay]') AND name = N'CIX_PersonScheduleDay')
+BEGIN
+	CREATE TABLE [ReadModel].[New_PersonScheduleDay](
+		[Id] [uniqueidentifier] NOT NULL,
+		[PersonId] [uniqueidentifier] NOT NULL,
+		[TeamId] [uniqueidentifier] NOT NULL,
+		[BelongsToDate] [smalldatetime] NOT NULL,
+		[ShiftStart] [datetime] NULL,
+		[ShiftEnd] [datetime] NULL,
+		[SiteId] [uniqueidentifier] NOT NULL,
+		[BusinessUnitId] [uniqueidentifier] NOT NULL,
+		[InsertedOn] [datetime] NOT NULL,
+		[Shift] [nvarchar](max) NOT NULL
+	)
+
+	ALTER TABLE [ReadModel].[New_PersonScheduleDay] ADD  CONSTRAINT [new_PK_PersonScheduleDay] PRIMARY KEY NONCLUSTERED 
+	(
+		[Id] ASC
+	)
+
+	CREATE CLUSTERED INDEX [CIX_PersonScheduleDay] ON [ReadModel].[New_PersonScheduleDay]
+	(
+		[PersonId] ASC,
+		[BelongsToDate] ASC
+	)
+
+	ALTER TABLE [ReadModel].[PersonScheduleDay] DROP CONSTRAINT [DF_PersonScheduleDay_InsertedOn]
+	ALTER TABLE [ReadModel].[New_PersonScheduleDay] ADD  CONSTRAINT [DF_PersonScheduleDay_InsertedOn]  DEFAULT (getutcdate()) FOR [InsertedOn]
+
+	--Re-create data
+	INSERT INTO [ReadModel].[New_PersonScheduleDay]
+	SELECT * FROM [ReadModel].[PersonScheduleDay]
+
+	--drop old table
+	DROP TABLE [ReadModel].[PersonScheduleDay]
+
+	EXEC dbo.sp_rename @objname = N'[ReadModel].[New_PersonScheduleDay]', @newname = N'PersonScheduleDay', @objtype = N'OBJECT'
+	EXEC dbo.sp_rename @objname = N'[ReadModel].[PersonScheduleDay].[new_PK_PersonScheduleDay]', @newname = N'PK_PersonScheduleDay', @objtype =N'INDEX'
+END
+GO
+
