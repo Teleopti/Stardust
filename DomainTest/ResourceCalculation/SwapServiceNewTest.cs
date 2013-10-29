@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_p1D1.Add(PersonDayOffFactory.CreatePersonDayOff(_person1, _scenario, new DateOnly(_d1.StartDateTime), TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12)));
 			
 			_list.Add(_p1D1);
-			_list.Add(_p2D1);
+			_list.Add(_p2D1); // empty day
 
 			var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
 			_dictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period));
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             service.Init(_list);
             service.Swap(_dictionary);
         }
-        
+
         private void SetupForAssignmentSwap()
         {
             _list = new List<IScheduleDay>();
@@ -219,5 +219,127 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         	((ScheduleRange)_dictionary[_person2]).AddRange(assignments);
 
         }
+
+		/// <summary>
+		/// WHEN swapping an absence day with a shift day, THEN full day absence should not disappear
+		/// </summary>
+		[Test]
+		public void ShouldNotDisappearFullDayAbsence()
+		{
+			IList<IScheduleDay> _list = new List<IScheduleDay>();
+			_p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person1, _d1));
+			_p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person2, _d1));
+			_list.Add(_p1D1);
+			_list.Add(_p2D1);
+
+			var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
+			_dictionary =
+				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
+			IList<IPersonAssignment> assignments = new List<IPersonAssignment> { _p1D1.PersonAssignmentCollection()[0] };
+			((ScheduleRange)_dictionary[_person1]).AddRange(assignments);
+			assignments = new List<IPersonAssignment> { _p2D1.PersonAssignmentCollection()[0] };
+			((ScheduleRange)_dictionary[_person2]).AddRange(assignments);
+
+			var service = new SwapServiceNew();
+			service.Init(_list);
+
+			using (_mocks.Record())
+			{
+				_mocks.BackToRecord(_dic);
+				Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
+			}
+			Assert.IsTrue(service.CanSwapAssignments());
+			var retList = service.Swap(_dictionary);
+
+			Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
+			
+		}
+
+		/// <summary>
+		/// WHEN swapping an absence day with a shift day, THEN short absence should not disappear
+		/// </summary>
+		[Test]
+		public void ShouldNotDisappearShortAbsence()
+		{
+		}
+
+		/// <summary>
+		/// WHEN swapping an absence day with a shift day, THEN overtime should not disappear
+		/// </summary>
+		[Test]
+		public void ShouldNotDisappearOvertime()
+		{
+		}
+
+		/// <summary>
+		/// WHEN swapping an day with another shift day, THEN the overtime should move
+		/// </summary>
+		[Test]
+		public void ShouldMoveOvertime()
+		{
+			IList<IScheduleDay> _list = new List<IScheduleDay>();
+			_p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(_scenario, _person1, _d1));
+			_p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person2, _d1));
+			_list.Add(_p1D1);
+			_list.Add(_p2D1);
+
+			var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
+			_dictionary =
+				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
+			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignmentCollection()[0] };
+			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
+			IList<IPersonAssignment> p2assignments = new List<IPersonAssignment> { _p2D1.PersonAssignmentCollection()[0] };
+			((ScheduleRange)_dictionary[_person2]).AddRange(p2assignments);
+
+			Assert.AreEqual(1, p1assignments[0].OvertimeShiftCollection.Count());
+			Assert.AreEqual(0, p2assignments[0].OvertimeShiftCollection.Count());
+
+			var service = new SwapServiceNew();
+			service.Init(_list);
+
+			using (_mocks.Record())
+			{
+				_mocks.BackToRecord(_dic);
+				Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
+			}
+			Assert.IsTrue(service.CanSwapAssignments());
+			var retList = service.Swap(_dictionary);
+
+			Assert.AreEqual(_person1.Name.LastName, retList[0].Person.Name.LastName);
+			Assert.AreEqual(_person2.Name.LastName, retList[1].Person.Name.LastName);
+
+			var p1assignmentsAfterSwap = retList[0].PersonAssignmentCollection()[0];
+			var p2assignmentsAfterSwap = retList[1].PersonAssignmentCollection()[0];
+
+			Assert.AreEqual(0, p1assignmentsAfterSwap.OvertimeShiftCollection.Count());
+			Assert.AreEqual(1, p2assignmentsAfterSwap.OvertimeShiftCollection.Count());
+		}
+
+		/// <summary>
+		/// WHEN swapping an day with another shift day, THEN the short absence should move
+		/// </summary>
+		[Test]
+		public void ShouldMoveShortAbsence()
+		{
+		}
+
+		/// <summary>
+		/// WHEN swapping more a set of absence days with a set of shift days, THEN full day absence should not disappear from the last day
+		/// </summary>
+		[Test]
+		public void ShouldNotDisappearFullDayAbsenceFromTheLastDay()
+		{
+		}
+
+		/// <summary>
+		/// WHEN swapping more a set of absence days with a set of shift days, THEN full day absences should not get doubled on the first day
+		/// </summary>
+		[Test]
+		public void ShouldNotHaveDoubleFullDayAbsenceOnTheFirstDay()
+		{
+		}
+
     }
 }

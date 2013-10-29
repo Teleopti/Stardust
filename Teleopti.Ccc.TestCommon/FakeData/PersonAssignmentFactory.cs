@@ -140,6 +140,33 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return CreateAssignmentWithPersonalShift(new Activity("Activity"), person, period,new Scenario("Scenario"));
         }
 
+		/// <summary>
+		/// Creates an assignment with main shift and an overtime shift.
+		/// </summary>
+		/// <param name="activity">The activity.</param>
+		/// <param name="agent">The agent.</param>
+		/// <param name="period">The period.</param>
+		/// <param name="category">The category</param>
+		/// <param name="scenario">The scenario</param>
+		/// <returns></returns>
+		public static IPersonAssignment CreateAssignmentWithMainShiftAndOvertimeShift(IScenario scenario,
+															 IPerson person,
+															 DateTimePeriod period)
+		{
+			var activity = ActivityFactory.CreateActivity("sdf");
+			var category = ShiftCategoryFactory.CreateShiftCategory("sdf");
+			var ass = CreateAssignmentWithMainShift(activity,
+												 person,
+												 period,
+												 category,
+												 scenario);
+			ass.SetMainShift(MainShiftFactory.CreateMainShift(activity, period, category));
+			IMultiplicatorDefinitionSet multiplicatorDefinitionSet =
+				MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("a", MultiplicatorType.Overtime);
+			OvertimeShiftFactory.CreateOvertimeShift(activity, period, multiplicatorDefinitionSet, ass);
+			return ass;
+		}
+		
 		public static IPersonAssignment CreateAssignmentWithOvertimeShift(IActivity activity,
 																		IPerson person,
 																		DateTimePeriod period,
