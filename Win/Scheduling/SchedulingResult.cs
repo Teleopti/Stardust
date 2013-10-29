@@ -49,6 +49,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             return _workShiftFinderResultHolder.GetResults(_latestOnly, true);
         }
 
+        private void buttonAdvCloseClick(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
         #region set up grid
 
         private void SetColorAndColumName()
