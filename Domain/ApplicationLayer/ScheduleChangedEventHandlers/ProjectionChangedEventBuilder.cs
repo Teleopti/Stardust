@@ -21,9 +21,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					if (personPeriod == null) continue;
 
 					var projection = scheduleDay.ProjectionService().CreateProjection();
+					
 					var significantPart = scheduleDay.SignificantPart();
 					if (emptyScheduleOnInitialLoad(message, significantPart)) continue;
-
+					
 					var eventScheduleDay = new ProjectionChangedEventScheduleDay
 						{
 							TeamId = personPeriod.Team.Id.GetValueOrDefault(),
@@ -58,6 +59,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							var dayOff = scheduleDay.PersonAssignment().DayOff();
 							eventScheduleDay.ShortName = dayOff.Description.ShortName;
 							eventScheduleDay.Name = dayOff.Description.Name;
+							if (projection.HasLayers)
+								eventScheduleDay.IsFullDayAbsence = true;
 							break;
 						case SchedulePartView.None:
 							eventScheduleDay.ShortName = "";
