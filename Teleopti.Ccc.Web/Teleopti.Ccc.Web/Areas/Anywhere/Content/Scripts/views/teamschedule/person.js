@@ -50,7 +50,6 @@ define([
 				var newItems = ko.utils.arrayMap(layers, function (p) {
 					p.Date = date;
 					p.IsFullDayAbsence = data.IsFullDayAbsence;
-				    console.log(p);
 					return new layer(timeline, p);
 				});
 				self.Layers.push.apply(self.Layers, newItems);
