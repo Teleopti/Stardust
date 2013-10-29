@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         }
 
 		/// <summary>
-		/// WHEN swapping an absence day with a shift day, THEN full day absence should remain
+		/// WHEN swapping an absence day with a shift day, THEN full day absence should not disappear, but stay
 		/// </summary>
 		[Test]
 		public void ShouldRemainFullDayAbsence()
@@ -270,10 +270,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		/// <summary>
-		/// WHEN swapping an absence day with a shift day, THEN short absence should not disappear
+		/// WHEN swapping an absence day with a shift day, THEN short absence should not disappear, but stay
 		/// </summary>
 		[Test]
-		public void ShouldRemainShortAbsence()
+		public void ShouldStayShortAbsence()
 		{
 			IList<IScheduleDay> _list = new List<IScheduleDay>();
 
@@ -321,6 +321,51 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		/// <summary>
+		/// WHEN swapping an day with another shift day, THEN the personal shift should stay
+		/// </summary>
+		[Test]
+		public void ShouldStayPersonalShift()
+		{
+			IList<IScheduleDay> _list = new List<IScheduleDay>();
+			_p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_scenario, _person1, _d1));
+			_p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person2, _d1));
+			_list.Add(_p1D1);
+			_list.Add(_p2D1);
+
+			var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
+			_dictionary =
+				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
+			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignmentCollection()[0] };
+			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
+			IList<IPersonAssignment> p2assignments = new List<IPersonAssignment> { _p2D1.PersonAssignmentCollection()[0] };
+			((ScheduleRange)_dictionary[_person2]).AddRange(p2assignments);
+
+			Assert.AreEqual(1, p1assignments[0].PersonalShiftCollection.Count());
+			Assert.AreEqual(0, p2assignments[0].PersonalShiftCollection.Count());
+
+			var service = new SwapServiceNew();
+			service.Init(_list);
+
+			using (_mocks.Record())
+			{
+				_mocks.BackToRecord(_dic);
+				Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
+			}
+			Assert.IsTrue(service.CanSwapAssignments());
+			var retList = service.Swap(_dictionary);
+
+			Assert.AreEqual(_person1.Name.LastName, retList[0].Person.Name.LastName);
+			Assert.AreEqual(_person2.Name.LastName, retList[1].Person.Name.LastName);
+
+			var p1assignmentsAfterSwap = retList[0].PersonAssignmentCollection()[0];
+			var p2assignmentsAfterSwap = retList[1].PersonAssignmentCollection()[0];
+
+			Assert.AreEqual(1, p1assignmentsAfterSwap.PersonalShiftCollection.Count());
+			Assert.AreEqual(0, p2assignmentsAfterSwap.PersonalShiftCollection.Count());
+		}
+
+		/// <summary>
 		/// WHEN swapping an day with another shift day, THEN the overtime should move
 		/// </summary>
 		[Test]
@@ -364,6 +409,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.AreEqual(0, p1assignmentsAfterSwap.OvertimeShiftCollection.Count());
 			Assert.AreEqual(1, p2assignmentsAfterSwap.OvertimeShiftCollection.Count());
 		}
+
 
 		/// <summary>
 		/// WHEN swapping an day with another shift day, THEN the short absence should move
