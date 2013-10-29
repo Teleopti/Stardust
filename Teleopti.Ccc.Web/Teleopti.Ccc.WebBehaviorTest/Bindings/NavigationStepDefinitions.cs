@@ -5,8 +5,8 @@ using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
@@ -184,8 +184,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoTeamSchedule(DateOnlyForBehaviorTests.TestToday.Date.AddDays(1));
 		}
 
-		[When(@"I view team schedule for '(.*)'")]
-		public void WhenIViewTeamScheduleFor(DateTime date)
+        [When(@"I view team schedule for '(.*)'")]
+        [Given(@"I am viewing team schedule for '(.*)'")]
+        public void WhenIViewTeamScheduleFor(DateTime date)
 		{
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
@@ -262,6 +263,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoAnywhere();
 		}
+
+		[When(@"I navigate to shift trade for '(.*)'")]
+		public void WhenINavigateToShiftTradeFor(DateTime date)
+		{
+			Navigation.GotoRequestsShiftTrade(date);
+		}
+
 
 
 	}

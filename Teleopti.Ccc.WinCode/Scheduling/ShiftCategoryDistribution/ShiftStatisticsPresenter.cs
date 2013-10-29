@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
 		public void SetCellInfo(GridStyleInfo style, int rowIndex, int colIndex, object columnTag)
 		{
+			
 			if (colIndex == 0 && rowIndex == 0)
 				return;
 
@@ -72,6 +73,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 				}
 				else
 				{
+					if (!_model.ShouldUpdateViews) return;
 					style.CellType = "NumericReadOnlyCell";
 					style.CellValue = _model.GetSumOfDeviations();
 				}
@@ -81,12 +83,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
 		private void setValues(GridStyleInfo style, int rowIndex, int colIndex, IList<IShiftCategory> sortedCategories)
 		{
+			if (!_model.ShouldUpdateViews) return;
+
 			var category = sortedCategories[rowIndex - 1];
 			if (colIndex == 1 || colIndex == 2)
 			{
+				var tempCellValue = style.CellValue;
 				MinMax<int> minMax = _model.GetMinMaxForShiftCategory(category);
 				style.CellType = "IntegerReadOnlyCell";
 				style.CellValue = colIndex == 1 ? minMax.Minimum : minMax.Maximum;
+				if(style.CellValue != tempCellValue)
+					_model.OnChartUpdateNeeded();
 			}
 			else
 			{

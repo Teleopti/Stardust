@@ -29,7 +29,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
         }
         this.selectedTeam = ko.observable();
         this.availableTeams = ko.observableArray();
-        
+
         this.displayDate = ko.observable($('#TeamSchedule-body').data('mytime-periodselection').Display);
 
         this.selectableTeams = ko.computed(function() {
@@ -99,7 +99,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
         });
 
         this.initializeShiftTrade = function () {
-	        //henke: todo
+            portal.NavigateTo("Requests/Index/ShiftTrade/", self.selectedDate().format('YYYYMMDD'));
 	    };
     };
 

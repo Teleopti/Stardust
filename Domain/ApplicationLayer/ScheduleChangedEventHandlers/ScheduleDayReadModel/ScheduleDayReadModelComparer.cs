@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		public string FindSignificantChanges(ScheduleDayReadModel newReadModel, ScheduleDayReadModel existingReadModel, CultureInfo cultureInfo, DateOnly currentDate)
         {
             string message = null;
-            string weekDayName;
+            string weekDayName = cultureInfo.DateTimeFormat.GetDayName(currentDate.DayOfWeek);;
 
 			string currentDateFormat = currentDate.ToShortDateString(cultureInfo);
 
@@ -25,12 +25,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
             //if new ReadModel is NULL and existing Read Model is not NULL  (From Working Day to an OFF Day)
             if(newReadModel==null)
             {
-                weekDayName = cultureInfo.DateTimeFormat.GetDayName(currentDate.DayOfWeek);
 				message = weekDayName + " " + currentDateFormat + UserTexts.Resources.ResourceManager.GetString("NotWorking", cultureInfo);
                 return message;
             }
 
-			weekDayName = cultureInfo.DateTimeFormat.GetDayName(newReadModel.StartDateTime.DayOfWeek);
 			string startDateTime = newReadModel.StartDateTime.ToString(cultureInfo.DateTimeFormat.ShortTimePattern, cultureInfo);
 			string endDateTime = newReadModel.EndDateTime.ToString(cultureInfo.DateTimeFormat.ShortTimePattern, cultureInfo);
                

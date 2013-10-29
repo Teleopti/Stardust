@@ -1017,4 +1017,73 @@
   <data name="ResUtilization" xml:space="preserve">
     <value>Utilisation</value>
   </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>Page Courante</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Exporter</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Trouver</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Trouver Suivant</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Trouver Texte dans le Rapport</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>Première Page</value>
+  </data>
+  <data name="RepViewerInvalidPageNumber" xml:space="preserve">
+    <value>Numéro de Page invalide</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Dernière Page</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Suivant</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Page Suivante</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>Pas d'autres correspondances trouvées</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>de</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Paramètres de page</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Largeur de Page</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Page précédente</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Imprimer Disposition</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Imprimer</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Rafraîchir</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Stopper le Rendu</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Texte non-trouvé</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Total Pages</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Page Entière</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
 </root>

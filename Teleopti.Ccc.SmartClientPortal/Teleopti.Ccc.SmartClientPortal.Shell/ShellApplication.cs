@@ -128,7 +128,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 builder.RegisterModule(new BudgetModule());
                 builder.RegisterModule<IntradayModule>();
                 builder.RegisterModule<ForecasterModule>();
-                builder.RegisterModule(new ScheduleScreenPersisterModule());
                 builder.RegisterModule(new PersonAccountModule());
                 builder.RegisterModule(new ScheduleScreenRefresherModule());
                 builder.RegisterModule(new MeetingOverviewModule());

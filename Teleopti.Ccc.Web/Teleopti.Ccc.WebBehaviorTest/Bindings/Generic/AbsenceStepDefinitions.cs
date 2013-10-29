@@ -1,6 +1,9 @@
+using System;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
+using PersonAbsenceConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.PersonAbsenceConfigurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -11,6 +14,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsAnActivity(Table table)
 		{
 			DataMaker.ApplyFromTable<AbsenceConfigurable>(table);
+		}
+		
+		[Given(@"there is an absence named '(.*)'")]
+		public void GivenThereIsAnAbsenceNamed(string name)
+		{
+			DataMaker.Data().Apply(new AbsenceConfigurable{Name = name});
+		}
+
+		[Given(@"'?(I)'? have a full day absence named '(.*)' on '(.*)'")]
+		[Given(@"'?(.*)'? has a full day absence named '(.*)' on '(.*)'")]
+		public void GivenHaveAAbsenceWith(string userName, string name, DateTime date)
+		{
+			DataMaker.Data().Apply(new FullDayAbsenceConfigurable
+				{
+					Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario.Description.Name,
+					Name = name,
+					Date = date
+				});
 		}
 
 		[Given(@"'?(I)'? have a absence with")]

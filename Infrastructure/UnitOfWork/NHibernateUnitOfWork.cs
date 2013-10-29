@@ -15,6 +15,7 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
+using IsolationLevel = System.Data.IsolationLevel;
 using TransactionException = NHibernate.TransactionException;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private NHibernateFilterManager _filterManager;
 		private IEnumerable<IMessageSender> _messageSenders;
 		private readonly Action<ISession> _unbind;
+		private readonly TransactionIsolationLevel _isolationLevel;
 		private ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
 	    private static readonly EmptyMessageBrokerIdentifier EmptyMessageBrokerIdentifier = new EmptyMessageBrokerIdentifier();
 
@@ -42,7 +44,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                        IEnumerable<IMessageSender> messageSenders,
 		                                        NHibernateFilterManager filterManager,
 		                                        ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService,
-		                                        Action<ISession> unbind)
+		                                        Action<ISession> unbind,
+																						TransactionIsolationLevel isolationLevel)
 		{
 			InParameter.NotNull("session", session);
 			_session = session;
@@ -50,7 +53,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_filterManager = filterManager;
 			_sendPushMessageWhenRootAlteredService = sendPushMessageWhenRootAlteredService;
 			_unbind = unbind;
-			_messageSenders = messageSenders;
+		    _isolationLevel = isolationLevel;
+		    _messageSenders = messageSenders;
 		}
 
 		protected internal AggregateRootInterceptor Interceptor
@@ -80,7 +84,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				try
 				{
-					_transaction = _session.BeginTransaction();				
+					_transaction = _isolationLevel==TransactionIsolationLevel.Default ? 
+						_session.BeginTransaction() : 
+						_session.BeginTransaction(IsolationLevel.Serializable);
 				}
 				catch (TransactionException transactionException)
 				{

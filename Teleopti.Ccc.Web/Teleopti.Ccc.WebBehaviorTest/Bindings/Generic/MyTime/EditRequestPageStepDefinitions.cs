@@ -7,6 +7,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.MyTime;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
@@ -51,8 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I unchecked the full day checkbox")]
 		public void WhenIUncheckedTheFullDayCheckbox()
 		{
-			if (Browser.Interactions.Javascript("return $('#Request-add-section .request-new-fullday:enabled').prop('checked')").ToString() == "true")
-				Browser.Interactions.Click("#Request-add-section .request-new-fullday");
+			TextRequestStepDefinitions.UncheckFullDayCheckbox();
 		}
 
 		[When(@"I checked the full day checkbox")]

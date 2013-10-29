@@ -62,6 +62,47 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
+        public void VerifyCalculationOvernightShiftForSingleDayWithoutnIghtShift()
+        {
+
+            var skillIntervalData0 =
+                new SkillIntervalData(
+                    new DateTimePeriod(new DateTime(2013, 10, 01, 10, 0, 0, DateTimeKind.Utc),
+                                       new DateTime(2013, 10, 01, 11, 0, 0, DateTimeKind.Utc)), 3, 3, 0, null, null);
+
+            var skillIntervalData1 =
+                new SkillIntervalData(
+                    new DateTimePeriod(new DateTime(2013, 10, 01, 11, 0, 0, DateTimeKind.Utc),
+                                       new DateTime(2013, 10, 01, 12, 0, 0, DateTimeKind.Utc)), 4, 4, 0, null, null);
+            var skillIntervalData2 =
+                new SkillIntervalData(
+                    new DateTimePeriod(new DateTime(2013, 10, 02, 12, 0, 0, DateTimeKind.Utc),
+                                       new DateTime(2013, 10, 02, 13, 0, 0, DateTimeKind.Utc)), 5, 5, 0, null, null);
+            var skillIntervalData3 =
+                new SkillIntervalData(
+                    new DateTimePeriod(new DateTime(2013, 10, 02, 13, 0, 0, DateTimeKind.Utc),
+                                       new DateTime(2013, 10, 02, 14, 0, 0, DateTimeKind.Utc)), 6, 6, 0, null, null);
+            IDictionary<DateOnly, IList<ISkillIntervalData>> list = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
+            list.Add(new DateOnly(2013, 10, 01), new List<ISkillIntervalData> { skillIntervalData0, skillIntervalData1 });
+            list.Add(new DateOnly(2013, 10, 02), new List<ISkillIntervalData> { skillIntervalData2, skillIntervalData3 });
+
+
+            var result = _target.GenerateTwoDaysInterval(list, 60);
+            Assert.AreEqual(result.Count, 2);
+            var firstDay = result[new DateOnly(2013, 10, 01)];
+            var secDay = result[new DateOnly(2013, 10, 02)];
+            Assert.AreEqual(firstDay.Count, 2);
+            Assert.AreEqual(secDay.Count, 2);
+            Assert.AreEqual(firstDay[new TimeSpan(0, 10, 0, 0)].ForecastedDemand, 3);
+            Assert.AreEqual(firstDay[new TimeSpan(0, 11, 0, 0)].ForecastedDemand, 4);
+            //Assert.AreEqual(firstDay[new TimeSpan(1, 0, 0, 0)].ForecastedDemand, 5);
+            //Assert.AreEqual(firstDay[new TimeSpan(1, 1, 0, 0)].ForecastedDemand, 6);
+            Assert.AreEqual(secDay[new TimeSpan(0, 12, 0, 0)].ForecastedDemand, 5);
+            Assert.AreEqual(secDay[new TimeSpan(0, 13, 0, 0)].ForecastedDemand, 6);
+
+        }
+
+        [Test]
         public void VerifyCalculationOvernightShiftForTwoDays()
         {
 

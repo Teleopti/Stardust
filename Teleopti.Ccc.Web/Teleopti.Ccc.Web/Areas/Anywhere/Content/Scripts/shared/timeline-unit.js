@@ -102,7 +102,7 @@ define([
 
 		this.StartTime = ko.computed(function () {
 			var time = moment().startOf('day').add('minutes', self.StartMinutes());
-			return time.format(resources.TimeFormatForMoment);
+			return time.format(resources.FixedTimeFormat);
 		});
 
 	};

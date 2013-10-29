@@ -28,8 +28,6 @@ define([
 				return self.Layers().length > 0;
 			});
 
-			this.IsFullDayAbsence = false;
-			
 			this.ContractTime = ko.computed(function() {
 				var time = moment().startOf('day').add('minutes', self.ContractTimeMinutes());
 				return time.format("H:mm");
@@ -43,7 +41,6 @@ define([
 			this.ClearData = function() {
 				self.Layers([]);
 				self.DayOffs([]);
-				self.IsFullDayAbsence = false;
 				self.WorkTimeMinutes(0);
 				self.ContractTimeMinutes(0);
 			};
@@ -52,11 +49,10 @@ define([
 				var layers = data.Projection;
 				var newItems = ko.utils.arrayMap(layers, function (p) {
 					p.Date = date;
+					p.IsFullDayAbsence = data.IsFullDayAbsence;
 					return new layer(timeline, p);
 				});
 				self.Layers.push.apply(self.Layers, newItems);
-
-				self.IsFullDayAbsence = data.IsFullDayAbsence;
 				
 				if (data.DayOff) {
 					data.DayOff.Date = date;
@@ -96,13 +92,62 @@ define([
 			};
 
 			this.OrderBy = function () {
-				var value = 0;
-				value += self.TimeLineAffectingStartMinute() || 0;
-				value += self.IsFullDayAbsence ? 5000 : 0;
-				value += self.Layers().length == 0 && self.DayOffs().length > 0 ? 10000 : 0;
-				var noShift = self.Layers().length == 0 && self.DayOffs().length == 0;
-				value += noShift ? 20000 : 0;
-				return value;
+				
+				var visibleLayers = function() {
+					return ko.utils.arrayFilter(self.Layers(), function(l) {
+						return l.OverlapsTimeLine();
+					});
+				};
+
+				var visibleFullDayAbsences = function() {
+					return ko.utils.arrayFilter(visibleLayers(), function(l) {
+						return l.IsFullDayAbsence;
+					});
+				};
+				
+
+				var visibleShiftLayers = function () {
+					return ko.utils.arrayFilter(visibleLayers(), function (l) {
+						return !l.IsFullDayAbsence;
+					});
+				};
+
+				var visibleDayOffs = function() {
+					return ko.utils.arrayFilter(self.DayOffs(), function (l) {
+						return l.OverlapsTimeLine();
+					});
+				};
+				
+				var earliestMinute = function(layers) {
+					var start = undefined;
+					ko.utils.arrayForEach(layers, function (l) {
+						var startMinutes = l.StartMinutes();
+						if (start === undefined)
+							start = startMinutes;
+						if (startMinutes < start)
+							start = startMinutes;
+					});
+					return start;
+				};
+
+				//var sortAsShift = sortera på tiden på alla lager som inte är full day absence som syns
+				var layers = visibleShiftLayers();
+				if (layers.length > 0)
+					return earliestMinute(layers) || 0;
+				
+				//var sortedAsFullDayAbsence = sortera på tiden på alla lager som är full day absence som syns
+				layers = visibleFullDayAbsences();
+				if (layers.length > 0)
+					return 5000 + (earliestMinute(layers) || 0);
+				
+				// var sortedAsDayoff = sortera på tiden på alla day offs som syns om det inte finns lager
+				// include only visible day offs?
+				var dayOffs = visibleDayOffs();
+				if (dayOffs.length > 0)
+					return 10000;
+
+				// var sortedAsNothing = inga synliga lager eller synliga day offs
+				return 20000;
 			};
 		};
 	});

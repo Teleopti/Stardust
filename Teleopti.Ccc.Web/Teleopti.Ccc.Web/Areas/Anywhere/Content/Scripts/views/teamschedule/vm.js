@@ -34,6 +34,11 @@ define([
 	        this.SelectedGroup = ko.observable();
             this.SelectedDate = ko.observable(moment());
 
+            this.DisplayDescriptions = ko.observable(false);
+            this.ToggleDisplayDescriptions = function() {
+                self.DisplayDescriptions(!self.DisplayDescriptions());
+            };
+            
             this.SetPersons = function (persons) {
                 self.Persons([]);
                 self.Persons.push.apply(self.Persons, persons);

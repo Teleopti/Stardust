@@ -208,6 +208,8 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             _model.SetValuesToPreference();
             if (Validate())
             {
+                if (!_cellData.Enabled) return;
+
 	            var previousStateMustHave = _cellData.Preference != null && _cellData.Preference.MustHave;
                 _cellData.Preference = (Preference) _model.Preference.Clone();
 	            _cellData.Preference.MustHave = previousStateMustHave;

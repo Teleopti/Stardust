@@ -38,6 +38,7 @@
 
 .person-schedule .layer {
 	height: 40px;
+	text-align: center;
 }
 
 .person-schedule .layer:first-of-type
@@ -59,6 +60,12 @@
 	   -moz-border-radius: 4px 4px 4px 4px;
 			border-radius: 4px 4px 4px 4px;
 }
+.person-schedule .layer .layer-description {
+	margin-top: 11px;
+	background-color: white;
+	color: #606060;
+	text-shadow: none;
+}
 
 .person-schedule .dayoff 
 {
@@ -74,6 +81,11 @@
         transparent 8px,
         transparent
         );
+}
+
+.no-cssgradients .person-schedule .dayoff 
+{
+	background-color: beige;
 }
 
 .person-schedule .full-day-absence-form  {

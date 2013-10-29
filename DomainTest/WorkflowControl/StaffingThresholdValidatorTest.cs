@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		                                                                                               [0]
 		                                                                                               }, _person);
 
-            Assert.IsTrue(validateUnderStaffingSkillDay1.IsValid);
+            Assert.IsFalse(validateUnderStaffingSkillDay1.IsValid);
             Assert.IsTrue(validatedUnderStaffingSkillDay2.IsValid);
 		}
 
@@ -437,7 +437,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		                                                                                      },
 		                                                                                  _person);
 
-			Assert.IsFalse(validatedUnderStaffing.IsValid);
+			Assert.IsTrue(validatedUnderStaffing.IsValid);
 		}
 
         [Test]

@@ -1,4 +1,4 @@
-﻿using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
+﻿using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data

@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return ((NHibernateUnitOfWork) unitOfWork.Current()).Session;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
 		internal static ISession Session(this IUnitOfWorkFactory unitOfWorkFactory)
 		{
 			return ((NHibernateUnitOfWork) unitOfWorkFactory.CurrentUnitOfWork()).Session;

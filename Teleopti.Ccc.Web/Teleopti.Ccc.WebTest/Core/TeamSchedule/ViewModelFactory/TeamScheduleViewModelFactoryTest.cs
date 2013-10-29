@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldCreateViewModelByTwoStepMapping()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var target = new TeamScheduleViewModelFactory(mapper, null, null, null);
+			var target = new TeamScheduleViewModelFactory(mapper, null,new FakePermissionProvider(), null);
 			var viewModel = new TeamScheduleViewModel();
 			var data = new TeamScheduleDomainData();
 			var id = Guid.NewGuid();
@@ -96,6 +96,38 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			result.FirstOrDefault().children.FirstOrDefault().id.Should().Be.EqualTo(teamId.ToString());
 			result.FirstOrDefault().children.FirstOrDefault().text.Should().Be.EqualTo("Contract/full time");
 			result.FirstOrDefault().text.Should().Be.EqualTo("Contract");
+		}
+
+		[Test]
+		public void PermissionForShiftTrade_WhenAgentHasNoPermissionToViewShiftTrade_ShouldBFalse()
+		{
+			var target = new TeamScheduleViewModelFactory(createMappingEngine(), null, new FakePermissionProvider(), null);
+
+			var result = target.CreateViewModel(DateOnly.Today, new Guid());
+			Assert.That(result.ShiftTradePermisssion, Is.True);			
+		}
+
+		[Test]
+		public void PermissionForShiftTrade_WhenAgentHasPermissionToViewShiftTrade_ShouldBeTrue()
+		{
+			var target = new TeamScheduleViewModelFactory(createMappingEngine(), null, new FakePermissionProvider(), null);
+
+			var result = target.CreateViewModel(DateOnly.Today, new Guid());
+			Assert.That(result.ShiftTradePermisssion, Is.True);
+		}
+
+		private static IMappingEngine createMappingEngine()
+		{
+			var mapper = MockRepository.GenerateMock<IMappingEngine>();
+			var viewModel = new TeamScheduleViewModel();
+
+			mapper.Stub(x => x.Map<Tuple<DateOnly, Guid>, TeamScheduleDomainData>(new Tuple<DateOnly, Guid>(DateOnly.Today, new Guid())))
+				  .Return(new TeamScheduleDomainData())
+			      .IgnoreArguments();
+			mapper.Stub(x => x.Map<TeamScheduleDomainData, TeamScheduleViewModel>(null))
+				.IgnoreArguments()
+				.Return(viewModel);
+			return mapper;
 		}
 	}
 }

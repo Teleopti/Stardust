@@ -82,6 +82,7 @@
 	<Name>Teleopti.Analytics.Etl.Interfaces</Name>
 	<Name>Teleopti.Ccc.Rta.Interfaces</Name>
 	<Name>Teleopti.Analytics.ReportTexts</Name>
+	<Name>Teleopti.Analytics.Etl.IntegrationTest</Name>
   </Assemblies>
   <FrameworkAssemblies>
     <Name>nunit.framework</Name>
@@ -172,6 +173,7 @@
     <Name>AjaxControlToolkit</Name>
     <Name>System.Web.ApplicationServices</Name>
     <Name>Contrib.SignalR.SignalRMessageBus.Backend</Name>
+	<Name>EntityFramework</Name>
   </FrameworkAssemblies>
   <Dirs>
     <Dir>C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319</Dir>

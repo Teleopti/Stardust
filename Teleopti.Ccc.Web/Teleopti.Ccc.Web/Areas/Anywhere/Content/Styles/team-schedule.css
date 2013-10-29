@@ -74,7 +74,8 @@
 .team-schedule .shift .layer
 {
 	z-index: 10;	
-	height: 20px;
+	height: 22px;
+	text-align: center;
 }
 .team-schedule .shift .layer:first-of-type
 {
@@ -94,7 +95,11 @@
 	   -moz-border-radius: 4px 4px 4px 4px;
 			border-radius: 4px 4px 4px 4px;
 }
-
+.team-schedule .shift .layer .layer-description {
+	background-color: white;
+	color: #606060;
+	text-shadow: none;
+}
 .team-schedule .resources td {
     padding-top: 3px;
 }

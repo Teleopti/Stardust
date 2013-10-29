@@ -3,66 +3,24 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
-	public class ScenarioDataFactory
+	public class ScenarioDataFactory : TestDataFactory
 	{
-		private readonly DataFactory _dataFactory = new DataFactory(ScenarioUnitOfWorkState.UnitOfWorkAction);
 		private readonly AnalyticsDataFactory _analyticsDataFactory = new AnalyticsDataFactory();
 		private readonly IList<IDelayedSetup> _delayedSetups = new List<IDelayedSetup>();
 
-		private readonly IDictionary<string, PersonDataFactory> _persons = new Dictionary<string, PersonDataFactory>();
-
-		public ScenarioDataFactory()
+		public ScenarioDataFactory() : base(ScenarioUnitOfWorkState.UnitOfWorkAction)
 		{
-			var me = new PersonDataFactory(
-				new Name("The", "One"),
-				new[]
-					{
-						new UserConfigurable
-							{
-								UserName = "1",
-								Password = TestData.CommonPassword
-							}
-					},
-				ScenarioUnitOfWorkState.UnitOfWorkAction
-				);
-			_persons.Add("I", me);
-		}
-
-		public bool HasPerson(string name)
-		{
-			return _persons.ContainsKey(trimName(name));
-		}
-
-		public PersonDataFactory Person(string name)
-		{
-			name = trimName(name);
-
-			if (_persons.ContainsKey(name))
-				return _persons[name];
-
-			var person = new PersonDataFactory(
-				new Name("Person", name),
-				new[] {new UserConfigurable {Name = name}},
-				ScenarioUnitOfWorkState.UnitOfWorkAction
-				);
-			_persons.Add(name, person);
-			return person;
-		}
-
-		private static string trimName(string name)
-		{
-			return name.Trim('\'');
-		}
-
-		public PersonDataFactory Me()
-		{
-			return _persons.First().Value;
+			AddPerson("I", new Name("The", "One")).Apply(new UserConfigurable
+			{
+				UserName = "1",
+				Password = TestData.CommonPassword
+			});
 		}
 
 		public CultureInfo MyCulture { get { return Me().Culture; } }
@@ -81,11 +39,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public void Apply(IUserDataSetup setup)
 		{
 			Me().Apply(setup);
-		}
-
-		public void Apply(IDataSetup setup)
-		{
-			_dataFactory.Apply(setup);
 		}
 
 		public void ApplyLater(IDelayedSetup delayedSetup)
@@ -108,9 +61,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			get
 			{
 				return Me().Applied
-				           .Union(_analyticsDataFactory.Setups)
-				           .Union(_delayedSetups)
-				           .Union(_dataFactory.Applied)
+						   .Union(_analyticsDataFactory.Setups)
+						   .Union(_delayedSetups)
+						   .Union(DataFactory.Applied)
 					;
 			}
 		}

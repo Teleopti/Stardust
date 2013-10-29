@@ -58,7 +58,7 @@ namespace Teleopti.Support.Security
 					using (var cmd = new SqlCommand(proc, conn, tx))
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
-						cmd.CommandTimeout = 120;
+						cmd.CommandTimeout = 1800; //30 min timeout + an additional 30 min rollback = 1 h
 						cmd.ExecuteNonQuery();
 					}
 					tx.Commit();

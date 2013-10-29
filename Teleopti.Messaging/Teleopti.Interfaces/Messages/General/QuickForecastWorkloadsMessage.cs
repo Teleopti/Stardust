@@ -49,7 +49,7 @@ namespace Teleopti.Interfaces.Messages.General
 		public int SmoothingStyle { get; set; }
 
 		/// <summary>
-		/// The period to get the temlplates from
+		/// The period to get the templates from
 		/// </summary>
 		public DateOnlyPeriod TemplatePeriod { get; set; }
 
@@ -57,5 +57,10 @@ namespace Teleopti.Interfaces.Messages.General
 		/// How much the progress bar should increase for every step
 		/// </summary>
 		public int IncreaseWith { get; set; }
+
+        /// <summary>
+        /// If the Index of the day of month should be used when forecasting
+        /// </summary>
+        public bool UseDayOfMonth { get; set; }
 	}
 }

@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 		private QuickForecastCommandDto _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
         private IList<IScenario> _scenarios;
-		
-        public SelectTargetDatesAndScenario()
+	   
+	    public SelectTargetDatesAndScenario()
         {
             InitializeComponent();
 	        if (DesignMode) return;
@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 			TargetFromTo.EnableNullDates = false;
 			TargetFromTo.WorkPeriodStart = new DateOnly(_stateObj.TargetPeriod.StartDate.DateTime);
 			TargetFromTo.WorkPeriodEnd = new DateOnly(_stateObj.TargetPeriod.EndDate.DateTime);
+		    checkBoxUseDayOfMonth.Checked = stateObj.UseDayOfMonth;
         }
         
         protected override void OnLoad(EventArgs e)
@@ -70,6 +71,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 				EndDate = new DateOnlyDto { DateTime = TargetFromTo.WorkPeriodEnd }
 			};
 			stateObj.ScenarioId = ((IScenario)comboBoxScenario.SelectedItem).Id.GetValueOrDefault();
+		    stateObj.UseDayOfMonth = checkBoxUseDayOfMonth.Checked;
 			return true;
         }
 

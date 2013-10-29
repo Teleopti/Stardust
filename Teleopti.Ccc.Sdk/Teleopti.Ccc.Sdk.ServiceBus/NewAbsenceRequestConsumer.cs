@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using System.Linq;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using log4net;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
@@ -24,14 +25,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     {
         private readonly static ILog Logger = LogManager.GetLogger(typeof(NewAbsenceRequestConsumer));
 	    private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-	    private readonly IScheduleRepository _scheduleRepository;
         private readonly IPersonAbsenceAccountProvider _personAbsenceAccountProvider;
         private readonly ICurrentScenario _scenarioRepository;
         private readonly IPersonRequestRepository _personRequestRepository;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly IAbsenceRequestOpenPeriodMerger _absenceRequestOpenPeriodMerger;
         private readonly IRequestFactory _factory;
-        private readonly IScheduleDictionarySaver _scheduleDictionarySaver;
+				private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
         private readonly IScheduleIsInvalidSpecification _scheduleIsInvalidSpecification;
 
         private IPersonRequest _personRequest;
@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
         private readonly IList<LoadDataAction> _loadDataActions;
         private readonly IPersonRequestCheckAuthorization _authorization;
-        private readonly IScheduleDictionaryModifiedCallback _scheduleDictionaryModifiedCallback;
         private readonly IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
     	private readonly IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
     	private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
@@ -55,15 +54,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private IProcessAbsenceRequest _process;
     	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCount")]
-		public NewAbsenceRequestConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, IScheduleRepository scheduleRepository, IPersonAbsenceAccountProvider personAbsenceAccountProvider, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, ISchedulingResultStateHolder schedulingResultStateHolder, 
+		public NewAbsenceRequestConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonAbsenceAccountProvider personAbsenceAccountProvider, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, ISchedulingResultStateHolder schedulingResultStateHolder, 
                                          IAbsenceRequestOpenPeriodMerger absenceRequestOpenPeriodMerger, IRequestFactory factory,
-                                         IScheduleDictionarySaver scheduleDictionarySaver, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback, 
+																				 IScheduleDifferenceSaver scheduleDictionarySaver, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, 
                                          IResourceOptimizationHelper resourceOptimizationHelper, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, 
                                          ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation, IAlreadyAbsentSpecification alreadyAbsentSpecification, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification)
         {
 	        _unitOfWorkFactory = unitOfWorkFactory;
-	        _scheduleRepository = scheduleRepository;
             _personAbsenceAccountProvider = personAbsenceAccountProvider;
             _scenarioRepository = scenarioRepository;
             _personRequestRepository = personRequestRepository;
@@ -73,7 +70,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             _scheduleDictionarySaver = scheduleDictionarySaver;
             _scheduleIsInvalidSpecification = scheduleIsInvalidSpecification;
             _authorization = authorization;
-            _scheduleDictionaryModifiedCallback = scheduleDictionaryModifiedCallback;
     		_resourceOptimizationHelper = resourceOptimizationHelper;
             _updateScheduleProjectionReadModel = updateScheduleProjectionReadModel;
     		_budgetGroupAllowanceSpecification = budgetGroupAllowanceSpecification;
@@ -243,7 +239,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 {
                     try
                     {
-                        PersistScheduleChanges(unitOfWork);
+											PersistScheduleChanges(_absenceRequest.Person);
                     }
                     catch (ValidationException validationException)
                     {
@@ -291,11 +287,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_process = _denyAbsenceRequest;
     	}
 
-    	private void PersistScheduleChanges(IUnitOfWork unitOfWork)
+    	private void PersistScheduleChanges(IPerson person)
         {
-            var persistResult = _scheduleDictionarySaver.MarkForPersist(unitOfWork, _scheduleRepository,
-																	 _schedulingResultStateHolder.Schedules.DifferenceSinceSnapshot());
-            _scheduleDictionaryModifiedCallback.Callback(_schedulingResultStateHolder.Schedules, persistResult.ModifiedEntities, persistResult.AddedEntities, persistResult.DeletedEntities);
+					_scheduleDictionarySaver.SaveChanges(_schedulingResultStateHolder.Schedules.DifferenceSinceSnapshot(), (IUnvalidatedScheduleRangeUpdate) _schedulingResultStateHolder.Schedules[person]);
         }
 
         private void HandleInvalidSchedule()

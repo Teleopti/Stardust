@@ -473,7 +473,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 									   teamScheduling,
 									   _container.Resolve<IWorkShiftSelector>(),
 									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>(),
-										teamBlockCleaner, schedulePartModifyAndRollbackService);
+										teamBlockCleaner, schedulePartModifyAndRollbackService,_container.Resolve<IOpenHourRestrictionForTeamBlock  >());
 
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
 				= new SmartDayOffBackToLegalStateService(
@@ -551,7 +551,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                        _container.Resolve<IWorkShiftFilterService>(), teamScheduling,
                                        _container.Resolve<IWorkShiftSelector>(),
 									   _container.Resolve<IOpenHoursToEffectiveRestrictionConverter>(),
-										teamBlockCleaner, schedulePartModifyAndRollbackService);
+										teamBlockCleaner, schedulePartModifyAndRollbackService,_container.Resolve<IOpenHourRestrictionForTeamBlock  >());
     
             var groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
@@ -565,9 +565,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamBlockIntradayDecisionMaker>(),
 					teamBlockRestrictionOverLimitValidator,
-					teamBlockCleaner,
-                    _container.Resolve<IStandardDeviationSumCalculator>(), _container.Resolve<ITeamBlockMaxSeatChecker >()
-                    );
+					teamBlockCleaner, _container.Resolve<ITeamBlockMaxSeatChecker >(),_container.Resolve<IDailyTargetValueCalculatorForTeamBlock  >());
 
 	        teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
             teamBlockIntradayOptimizationService.Optimize(

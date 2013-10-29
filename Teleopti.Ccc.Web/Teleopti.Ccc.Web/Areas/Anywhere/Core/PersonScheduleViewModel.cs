@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public string Site { get; set; }
 		public string Team { get; set; }
 		public bool IsDayOff { get; set; }
+		public bool IsFullDayAbsence { get; set; }
 		public IEnumerable<PersonScheduleViewModelLayer> Layers { get; set; }
 		public IEnumerable<PersonScheduleViewModelAbsence> Absences { get; private set; }
 		public IEnumerable<PersonScheduleViewModelPersonAbsence> PersonAbsences  { get; private set; }
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	public class PersonScheduleViewModelLayer
 	{
 		public string Color { get; set; }
+		public string Description { get; set; }
 		public string Start { get; set; }
 		public int Minutes { get; set; }
 	}
