@@ -701,6 +701,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shift.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\dayoff.js" />
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />

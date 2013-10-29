@@ -77,8 +77,8 @@
 							</td>
 							<td class="schedule">
 								<div class="relative time-line-for">
-									<!-- ko if: IsShift -->
-									<div class="shift" data-bind="template: { name: 'layerTemplate', foreach: Layers }"></div>
+									<!-- ko foreach: Shifts -->
+									<div class="shift" data-bind="template: { name: 'layerTemplate', foreach: Layers }, click: Select"></div>
 									<!-- /ko -->
 									
 									<!-- ko foreach: DayOffs -->

@@ -3,7 +3,8 @@ require.config({
 
 	paths: {
 	    jquery: '../../../../Content/jquery/jquery-1.10.2',
-		knockout: '../../../../Content/Scripts/knockout-2.2.1',
+	    lazy: '../../../../Content/lazy/lazy.min',
+	    knockout: '../../../../Content/Scripts/knockout-2.2.1',
 		modernizr: '../../../../Content/modernizr/modernizr-2.6.2.min',
 		respond: '../../../../Content/respondjs/respond.min',
 		moment: '../../../../Content/moment/moment',
@@ -33,6 +34,9 @@ require.config({
 			exports: 'jQuery'
 		},
 		'jqueryui': ['jquery'],
+		'lazy': {
+		    exports: 'Lazy'
+		},
 		'bootstrap': ['jquery'],
 
 		'signalr': ['jquery'],
