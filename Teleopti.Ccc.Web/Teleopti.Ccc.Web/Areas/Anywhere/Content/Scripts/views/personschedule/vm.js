@@ -27,6 +27,7 @@ define([
             this.Layers = ko.observableArray([]);
 	        
             this.IsDayOff = ko.observable(false);
+            this.DayOffName = ko.observable("");
 	        
             this.IsShift = ko.computed(function () {
             	return !self.IsDayOff();
@@ -62,7 +63,7 @@ define([
                 self.Site(data.Site);
                 self.Team(data.Team);
                 self.IsDayOff(data.IsDayOff);
-
+                self.DayOffName(data.DayOffName);
                 self.Layers([]);
                 var layers = ko.utils.arrayMap(data.Layers, function(l) {
                     l.Date = self.Date();

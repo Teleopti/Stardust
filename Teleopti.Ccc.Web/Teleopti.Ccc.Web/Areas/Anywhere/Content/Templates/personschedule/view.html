@@ -80,7 +80,11 @@
 									<!-- /ko -->
 									
 									<!-- ko if: IsDayOff -->
-									<div class="dayoff absolute"></div>
+									<div class="dayoff absolute">
+										<!-- ko if: $root.DisplayDescriptions -->
+										<span class="label layer-description" data-bind="text: DayOffName"></span>
+										<!-- /ko -->
+									</div>
 									<!-- /ko -->
 								</div>
 
