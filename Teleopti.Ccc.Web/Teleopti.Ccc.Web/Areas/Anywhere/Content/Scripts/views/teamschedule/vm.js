@@ -51,6 +51,23 @@ define([
                 self.SelectedDate(self.SelectedDate().add('d', -1));
             };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	        
             this.Skills = ko.observableArray();
             this.SetSkills = function (skills) {

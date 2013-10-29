@@ -70,7 +70,7 @@
 						</tr>
 					</thead>
 					<tbody data-bind="foreach: Persons">
-						<tr class="person" data-bind="attr: { 'data-person-id': Id }, click: Select">
+						<tr class="person" data-bind="attr: { 'data-person-id': Id }">
 							<td class="person-name">
 								<!-- Must do it this way to get correct overflow: hidden in IE -->
 								<div class="person-name nowrap" data-bind="text: Name"></div>

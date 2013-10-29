@@ -27,12 +27,6 @@ define([
 
 		var teamSchedule;
 
-		var events = new ko.subscribable();
-
-		events.subscribe(function (personId) {
-		    navigation.GotoPersonSchedule(personId, teamSchedule.SelectedDate());
-		}, null, "gotoperson");
-
 		var loadSchedules = function(options) {
 		    subscriptions.subscribeTeamSchedule(
 				teamSchedule.SelectedTeam(),
@@ -84,7 +78,7 @@ define([
 				},
 				success: function (people, textStatus, jqXHR) {
 					var newItems = ko.utils.arrayMap(people, function (s) {
-						return new personViewModel(s, events);
+						return new personViewModel(s);
 					});
 					teamSchedule.SetPersons(newItems);
 					options.success();

@@ -12,7 +12,7 @@ define([
 		resources
 	) {
 
-		return function(data, events) {
+		return function(data) {
 			var self = this;
 
 			this.Id = data.Id;
@@ -86,10 +86,6 @@ define([
 				});
 				return end;
 			});
-
-			this.Select = function() {
-				events.notifySubscribers(self.Id, "gotoperson");
-			};
 
 			this.OrderBy = function () {
 				
