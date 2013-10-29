@@ -388,6 +388,7 @@
     <Compile Include="Scheduling\TeamBlock\Restriction\SameShiftCategoryRestrictionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameShiftRestrictionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameStartTimeRestrictionTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockEffectiveRestrcitionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecificationTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />

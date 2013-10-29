@@ -558,6 +558,7 @@
     <Compile Include="Scheduling\TeamBlock\Restriction\SameShiftCategoryRestriction.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameShiftRestriction.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameStartTimeRestriction.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockEffectiveRestrcition.cs" />
     <Compile Include="Scheduling\TeamBlock\SameOpenHoursInTeamBlockSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftLayer.cs" />
