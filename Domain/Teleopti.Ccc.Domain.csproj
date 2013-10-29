@@ -103,6 +103,9 @@
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\DomainTest\bin\Debug\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -492,6 +495,7 @@
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryChecker.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
+    <Compile Include="Scheduling\PersonToSingleAgentTeamRootPersonGroupConverter.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalGenerator.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriod.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDays.cs" />
