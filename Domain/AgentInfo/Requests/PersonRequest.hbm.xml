@@ -101,4 +101,17 @@ where pr.Person = :person and
 order by pr.UpdatedOn desc		
 		]]>
 	</query>
+
+	<query name="findPersonRequestsWithinPeriod">
+		<query-param name="start" type="Datetime"/>
+		<query-param name="end" type="Datetime"/>
+<![CDATA[
+select pr from PersonRequest pr
+join fetch pr.requests r
+left outer join fetch r.ShiftTradeSwapDetails
+join fetch pr.Person p
+where pr.requestStatus <> 3
+and r.Period.period.Minimum between :start and :end
+]]>
+	</query>
 </hibernate-mapping>
