@@ -42,9 +42,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             Grid.Location = new System.Drawing.Point(0, 0);
             Grid.Visible = true;
 
-            Grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanHourMinutesOrEmptyCell, new TimeSpanHourMinutesOrEmptyCellModel(Grid.Model));
-			Grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanLongHourMinutesOrEmptyCell, new TimeSpanLongHourMinutesOrEmptyCellModel(Grid.Model));
-			Grid.CellModels.Add("NumericCell", new NumericCellModel(Grid.Model));
+
+            if (!Grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeTimeSpanHourMinutesOrEmptyCell))
+                Grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanHourMinutesOrEmptyCell, new TimeSpanHourMinutesOrEmptyCellModel(Grid.Model));
+            if (!Grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeTimeSpanLongHourMinutesOrEmptyCell))
+                Grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanLongHourMinutesOrEmptyCell, new TimeSpanLongHourMinutesOrEmptyCellModel(Grid.Model));
+            if (!Grid.CellModels.ContainsKey("NumericCell"))
+			    Grid.CellModels.Add("NumericCell", new NumericCellModel(Grid.Model));
             Grid.ReadOnly = !PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications); 
         }
