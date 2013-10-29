@@ -221,25 +221,34 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         }
 
 		/// <summary>
-		/// WHEN swapping an absence day with a shift day, THEN full day absence should not disappear
+		/// WHEN swapping an absence day with a shift day, THEN full day absence should remain
 		/// </summary>
 		[Test]
-		public void ShouldNotDisappearFullDayAbsence()
+		public void ShouldRemainFullDayAbsence()
 		{
+
 			IList<IScheduleDay> _list = new List<IScheduleDay>();
+
+			var absencePeriod = new DateTimePeriod(_d1.StartDateTime, _d1.EndDateTime);
 			_p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person1, _d1));
-			_p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person2, _d1));
+			_p2D1.Add(PersonAbsenceFactory.CreatePersonAbsence(_person2, _scenario, absencePeriod));
 			_list.Add(_p1D1);
 			_list.Add(_p2D1);
 
 			var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
+
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
 									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
-			IList<IPersonAssignment> assignments = new List<IPersonAssignment> { _p1D1.PersonAssignmentCollection()[0] };
-			((ScheduleRange)_dictionary[_person1]).AddRange(assignments);
-			assignments = new List<IPersonAssignment> { _p2D1.PersonAssignmentCollection()[0] };
-			((ScheduleRange)_dictionary[_person2]).AddRange(assignments);
+			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignmentCollection()[0] };
+			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
+			IList<IPersonAbsence> p2absences = new List<IPersonAbsence> { _p2D1.PersonAbsenceCollection()[0] };
+			((ScheduleRange)_dictionary[_person2]).AddRange(p2absences);
+
+			Assert.AreEqual(1, _p1D1.PersonAssignmentCollection().Count);
+			Assert.AreEqual(0, _p1D1.PersonAbsenceCollection().Count);
+			Assert.AreEqual(0, _p2D1.PersonAssignmentCollection().Count);
+			Assert.AreEqual(1, _p2D1.PersonAbsenceCollection().Count);
 
 			var service = new SwapServiceNew();
 			service.Init(_list);
@@ -247,13 +256,17 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			using (_mocks.Record())
 			{
 				_mocks.BackToRecord(_dic);
+				Expect.Call(_dic.PermissionsEnabled).Return(true).Repeat.Any();
 				Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
 			}
 			Assert.IsTrue(service.CanSwapAssignments());
 			var retList = service.Swap(_dictionary);
 
-			Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
-			
+			Assert.AreEqual(_person1.Name.LastName, retList[0].Person.Name.LastName);
+			Assert.AreEqual(_person2.Name.LastName, retList[1].Person.Name.LastName);
+
+			Assert.AreEqual(1, retList[0].PersonAbsenceCollection().Count());
+			Assert.AreEqual(0, retList[1].PersonAbsenceCollection().Count());		
 		}
 
 		/// <summary>
