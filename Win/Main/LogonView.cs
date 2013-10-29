@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Win.Main
 			buttonLogOnCancel.Text = Resources.Cancel;
 			buttonLogOnOK.Text = Resources.Ok;
 			btnBack.Text = Resources.Back;
+			label1.Text = string.Concat("Build ", Application.ProductVersion);
 		}
 
 		public bool StartLogon()

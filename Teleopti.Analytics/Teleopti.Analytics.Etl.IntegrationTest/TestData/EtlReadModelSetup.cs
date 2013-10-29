@@ -6,16 +6,16 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 {
-    public class EtlReadModelSetup: IDataSetup
-    {
-        public IBusinessUnit BusinessUnit;
-        public string StepName;
+	public class EtlReadModelSetup: IDataSetup
+	{
+		public IBusinessUnit BusinessUnit;
+		public string StepName;
 
-        public void Apply(IUnitOfWork uow)
-        {
-            var d = new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc);
-            var rep = new EtlReadModelRepository(uow);
-            rep.LastChangedDate(BusinessUnit, StepName,new DateTimePeriod(d.AddDays(-10),d.AddDays(10)));
-        }
-    }
+		public void Apply(IUnitOfWork uow)
+		{
+			var d = new DateTime(DateTime.Today.Ticks, DateTimeKind.Utc);
+			var rep = new EtlReadModelRepository(uow);
+			rep.LastChangedDate(BusinessUnit, StepName,new DateTimePeriod(d.AddDays(-10),d.AddDays(10)));
+		}
+	}
 }

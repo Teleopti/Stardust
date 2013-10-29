@@ -55,5 +55,10 @@ namespace Teleopti.Interfaces.Messages.General
 		/// How much the progress bar should increase for every step
 		/// </summary>
 		public int IncreaseWith { get; set; }
+
+        /// <summary>
+        /// If the Index of the day of month should be used when forecasting
+        /// </summary>
+        public bool UseDayOfMonth { get; set; }
 	}
 }
