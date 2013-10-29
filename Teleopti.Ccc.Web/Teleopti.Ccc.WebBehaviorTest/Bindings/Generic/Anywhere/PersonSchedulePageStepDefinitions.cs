@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should not see any shift")]
 		public void ThenIShouldNotSeeAnyShift()
 		{
-			Browser.Interactions.AssertNotExists(".shift", ".shift .layer");
+			Browser.Interactions.AssertNotExists(".schedule", ".shift");
 		}
 
 		[Then(@"I should see the add full day absence form with")]
