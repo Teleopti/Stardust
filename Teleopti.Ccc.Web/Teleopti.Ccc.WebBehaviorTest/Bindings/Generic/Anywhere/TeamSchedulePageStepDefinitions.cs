@@ -127,6 +127,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see '(.*)' with a day off named '(.*)'")]
 		public void ThenIShouldSeeADayOffFor(string personName, string dayOff)
 		{
+			Browser.Interactions.Click(".toggle-descriptions:enabled");
 			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .dayoff:contains('{1}')", personName, dayOff);
 		}
 
