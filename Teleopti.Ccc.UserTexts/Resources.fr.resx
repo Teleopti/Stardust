@@ -712,7 +712,7 @@
     <value>Agents Maximum</value>
   </data>
   <data name="MaximumOccupancy" xml:space="preserve">
-    <value>Taux d'activité maximum</value>
+    <value>Taux d'occupation maximum</value>
   </data>
   <data name="MaxTime" xml:space="preserve">
     <value>Max</value>
@@ -1024,7 +1024,7 @@
     <value>Sauvegarder</value>
   </data>
   <data name="SaveAs" xml:space="preserve">
-    <value>Sauvegarder comme</value>
+    <value>Enregistrer sous</value>
   </data>
   <data name="Scenario" xml:space="preserve">
     <value>Scénario</value>
@@ -1231,7 +1231,7 @@
     <value>Utiliser Moyenne</value>
   </data>
   <data name="UseOccupancyAdjustment" xml:space="preserve">
-    <value>Utiliser Ajustement de taux d'activité</value>
+    <value>Utiliser Ajustement de taux d'occupation</value>
   </data>
   <data name="UseTrend" xml:space="preserve">
     <value>Utiliser Tendance</value>
@@ -1840,7 +1840,7 @@
     <value>Groupes de statuts</value>
   </data>
   <data name="ManageStateGroupsAndStates" xml:space="preserve">
-    <value>Gérer groupes de statuts et status</value>
+    <value>Gérer groupes de statuts et statuts</value>
   </data>
   <data name="RealTimeAdherence" xml:space="preserve">
     <value>Adhérence en Temps Réel</value>
@@ -2203,7 +2203,7 @@
     <value>Agents Minimum</value>
   </data>
   <data name="MinimumOccupancy" xml:space="preserve">
-    <value>Taux d'activité minimum</value>
+    <value>Taux d'occupation minimum</value>
   </data>
   <data name="MultipleValuesParanteses" xml:space="preserve">
     <value>(valeurs multiples)</value>
@@ -2224,10 +2224,10 @@
     <value>Aucune règle d'horaires disponible</value>
   </data>
   <data name="OccupancyAdjustment" xml:space="preserve">
-    <value>Ajustement du taux d'activité</value>
+    <value>Ajustement du taux d'occupation</value>
   </data>
   <data name="OccupancySettings" xml:space="preserve">
-    <value>Réglages de taux d'activité</value>
+    <value>Réglages de taux d'occupation</value>
   </data>
   <data name="Properties" xml:space="preserve">
     <value>Propriétés</value>
@@ -2620,10 +2620,10 @@
     <value>Niveau de service en secondes</value>
   </data>
   <data name="MaximumOccupancyColon" xml:space="preserve">
-    <value>Taux d'activité maximum:</value>
+    <value>Taux d'occupation maximum:</value>
   </data>
   <data name="MinimumOccupancyColon" xml:space="preserve">
-    <value>Taux d'activité minimum:</value>
+    <value>Taux d'occupation minimum:</value>
   </data>
   <data name="ServiceLevelPercentSignColon" xml:space="preserve">
     <value>Niveau de service %:</value>
@@ -2935,10 +2935,10 @@
     <value>Nouveau Rôle</value>
   </data>
   <data name="MaximumOccupancyPercentSignColon" xml:space="preserve">
-    <value>Taux d'activité maximum %:</value>
+    <value>Taux d'occupation maximum %:</value>
   </data>
   <data name="MinimumOccupancyPercentSignColon" xml:space="preserve">
-    <value>Taux d'activité minimum %:</value>
+    <value>Taux d'occupation minimum %:</value>
   </data>
   <data name="OpenScheduler" xml:space="preserve">
     <value>Ouvrir Plannings</value>
@@ -4558,7 +4558,7 @@
     <value>Priorité:</value>
   </data>
   <data name="WorkflowControlSet" xml:space="preserve">
-    <value>Propriétés Flux d'Activités</value>
+    <value>Contrôle de flux d'activités</value>
   </data>
   <data name="ModifySelection" xml:space="preserve">
     <value>Modifier Sélection</value>
@@ -5047,7 +5047,7 @@
     <value>Horaires dans la journée</value>
   </data>
   <data name="TimeBetweenDays" xml:space="preserve">
-    <value>Durée entre jours</value>
+    <value>Longueur d'horaires</value>
   </data>
   <data name="AreYouSureYouWantToDeleteItem" xml:space="preserve">
     <value>Êtes-vous sûr de supprimer l'élément '{0}'?</value>
@@ -5509,7 +5509,7 @@
     <value>Et ensuite selon</value>
   </data>
   <data name="BudgetForecasting" xml:space="preserve">
-    <value>Budget prévisionnel</value>
+    <value>Prévisions Budget Long-Terme</value>
   </data>
   <data name="DetailedForecastSmartPart" xml:space="preserve">
     <value>Prévisions détaillées</value>
@@ -5686,10 +5686,10 @@
     <value>Traité en (hh:mm)</value>
   </data>
   <data name="MaximumOccupancyParenthesisPercentSign" xml:space="preserve">
-    <value>Taux d'activité maximum (%)</value>
+    <value>Taux d'occupation maximum (%)</value>
   </data>
   <data name="MinimumOccupancyParenthesisPercentSign" xml:space="preserve">
-    <value>Taux d'activité minimum (%)</value>
+    <value>Taux d'occupation minimum (%)</value>
   </data>
   <data name="ShrinkageParenthesisPercentSign" xml:space="preserve">
     <value>Réduction (%)</value>
@@ -8546,7 +8546,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>La distribution entre sub compétences doit être égale à 100%</value>
   </data>
   <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy" xml:space="preserve">
-    <value>Le taux d'activité maximum doit être supérieur ou égal au taux d'activité minimum</value>
+    <value>Le taux d'occupation maximum doit être supérieur ou égal au taux d'activité minimum</value>
   </data>
   <data name="MaximumAgentsMustBeLargerOrEqualToMinimumAgents" xml:space="preserve">
     <value>Agents Maximum doit être suérieur à Agents Minimum</value>
@@ -8912,5 +8912,224 @@ Réduisez la complexité pour utiliser ces horaires.</value>
   </data>
   <data name="TotalChatTime" xml:space="preserve">
     <value>Total temps chat</value>
+  </data>
+  <data name="FilterOvertimeAvailability" xml:space="preserve">
+    <value>Filtrer disponibilité Heures Supplémentaires</value>
+  </data>
+  <data name="AssignmentOptions" xml:space="preserve">
+    <value>Options d'Assignation</value>
+  </data>
+  <data name="OvertimeDuration" xml:space="preserve">
+    <value>Durée des Heures Supplémentaires</value>
+  </data>
+  <data name="ScheduleOvertime" xml:space="preserve">
+    <value>Planifier Heures Supplémentaires</value>
+  </data>
+  <data name="ScheduleOvertimeOptions" xml:space="preserve">
+    <value>Options de planification d'Heures Supplémentaires</value>
+  </data>
+  <data name="SkillActivity" xml:space="preserve">
+    <value>Activité de Compétence</value>
+  </data>
+  <data name="TagChangesWithWithColon" xml:space="preserve">
+    <value>Libeller les changements avec:</value>
+  </data>
+  <data name="TypeOfOvertime" xml:space="preserve">
+    <value>Type d'heures supplémentaires</value>
+  </data>
+  <data name="AllowBreakContractMaxWorkTimePerWeek" xml:space="preserve">
+    <value>Permettre de supplanter le temps de travail max par semaine</value>
+  </data>
+  <data name="AllowBreakContractNightlyRest" xml:space="preserve">
+    <value>Permettre de supplanter le temps contrat de repos par nuit</value>
+  </data>
+  <data name="AllowBreakContractWeeklyRest" xml:space="preserve">
+    <value>Permettre de supplanter le temps contrat de repos hebdomadaire</value>
+  </data>
+  <data name="ExtendTheEndOfExistingShiftsColon" xml:space="preserve">
+    <value>Étendre la longueur des horaires existants</value>
+  </data>
+  <data name="OvertimeDurationColon" xml:space="preserve">
+    <value>Durée d'Heures Supplémentaires</value>
+  </data>
+  <data name="SkillActivityColon" xml:space="preserve">
+    <value>Activité compétence:</value>
+  </data>
+  <data name="TypeOfOvertimeColon" xml:space="preserve">
+    <value>Type d'heures supplémentaires</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>Page Courante</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Exporter</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Trouver</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Trouver Suivant</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Trouver Texte dans le Rapport</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>Première Page</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Dernière Page</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Suivant</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Page Suivante</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>Pas de correspondance trouvée</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>de</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Paramètres Page</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Largeur Page</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Page Précédente</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Imprimer la Disposition</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Imprimer</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Rafraîchir</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Stopper le Rendu</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Texte non trouvé.</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Total Pages</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Page entières</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Connexion à la base de données perdue, essayez de limiter vos conditions de recherche.</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Exaucées</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Taux d'Exaucées (%)</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Doit Avoir</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Non Exaucées</value>
+  </data>
+  <data name="ShiftCategoryHeader" xml:space="preserve">
+    <value>Catégorie d'Horaires</value>
+  </data>
+  <data name="SwitchToViewPointOfSelectedAgent" xml:space="preserve">
+    <value>Voir le Point de Vue de l'Agent sélectionné</value>
+  </data>
+  <data name="ShareCalendar" xml:space="preserve">
+    <value>Partager calendrier</value>
+  </data>
+  <data name="ShareMyCalendar" xml:space="preserve">
+    <value>Partager mon calendrier</value>
+  </data>
+  <data name="Revoke" xml:space="preserve">
+    <value>Révoquer</value>
+  </data>
+  <data name="ShareMyCalendarHint" xml:space="preserve">
+    <value>Pour souscrire à votre planning depuis une app calendrier, utilisez l'URL ci-dessous. Póur des instructions sur comment réaliser ceci avec les apps calendrier les plus communes, voir:</value>
+  </data>
+  <data name="SendAgain" xml:space="preserve">
+    <value>Ré-envoyer</value>
+  </data>
+  <data name="OvertimeAvailabilityWeb" xml:space="preserve">
+    <value>Disponibilité Heures Supplémentaires</value>
+  </data>
+  <data name="PaidTimeHeader" xml:space="preserve">
+    <value>Temps Payé</value>
+  </data>
+  <data name="PartTimePercentageHeader" xml:space="preserve">
+    <value>Pourcentage Temps Partiel</value>
+  </data>
+  <data name="RuleSetBagLower" xml:space="preserve">
+    <value>Banque d'Horaires</value>
+  </data>
+  <data name="TrackerTypeHeader" xml:space="preserve">
+    <value>Type de Tracker</value>
+  </data>
+  <data name="WorkflowControlSetHeader" xml:space="preserve">
+    <value>Propriété de Flux d'Activités</value>
+  </data>
+  <data name="WorkTimeHeader" xml:space="preserve">
+    <value>Temps Travaillé</value>
+  </data>
+  <data name="FilterHourlyAvailability" xml:space="preserve">
+    <value>Filtrer Disponibilité Horaire</value>
+  </data>
+  <data name="HourlyAvailability" xml:space="preserve">
+    <value>Disponibilité Horaire</value>
+  </data>
+  <data name="InfoPanel" xml:space="preserve">
+    <value>Panneau d'Infos</value>
+  </data>
+  <data name="SubjectTooLong" xml:space="preserve">
+    <value>Sujet trop long</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Moyenne</value>
+  </data>
+  <data name="Distribution" xml:space="preserve">
+    <value>Distribution</value>
+  </data>
+  <data name="ShiftAsOvertime" xml:space="preserve">
+    <value>Changer en Heures Supplémentaires</value>
+  </data>
+  <data name="PerDate" xml:space="preserve">
+    <value>Par Date</value>
+  </data>
+  <data name="ShiftCategoryDistribution" xml:space="preserve">
+    <value>Distribution des Catégories d'Horaires</value>
+  </data>
+  <data name="PerAgent" xml:space="preserve">
+    <value>Par Agent</value>
+  </data>
+  <data name="PerShiftCategory" xml:space="preserve">
+    <value>Par Catégorie d'Horaires</value>
+  </data>
+  <data name="AnalysisInfo" xml:space="preserve">
+    <value>Infos d'Analyse</value>
+  </data>
+  <data name="Here" xml:space="preserve">
+    <value>ici</value>
+  </data>
+  <data name="LengthOfActivity" xml:space="preserve">
+    <value>Temps total d'activité sélectionnée</value>
+  </data>
+  <data name="PleaseChooseSDK" xml:space="preserve">
+    <value>Merci de choisir SDK</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stopper</value>
+  </data>
+  <data name="ModifyAvailabilities" xml:space="preserve">
+    <value>Modifier les disponibilités dans le planificateur</value>
   </data>
 </root>
