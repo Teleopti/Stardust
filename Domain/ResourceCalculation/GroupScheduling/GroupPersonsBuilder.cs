@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
@@ -29,9 +31,29 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
 		public IList<IGroupPerson> BuildListOfGroupPersons(DateOnly dateOnly, IEnumerable<IPerson> selectedPersons, bool checkShiftCategoryConsistency, ISchedulingOptions schedulingOptions)
 		{
-            _selectedPersons = selectedPersons;
+			_selectedPersons = selectedPersons;
 			var pageOnDate = _groupPagePerDateHolder.GroupPersonGroupPagePerDate.GetGroupPageByDate(dateOnly);
-			var rootGroups = pageOnDate.RootGroupCollection;
+			var rootGroups = new List<IRootPersonGroup>();
+			rootGroups.AddRange(pageOnDate.RootGroupCollection);
+			var personsInSelectedGroupPage = new List<IPerson>();
+			var dic = _resultStateHolder.Schedules;
+			var keys = dic.Keys;
+			foreach (var personGroup in pageOnDate.RootGroupCollection)
+			{
+				var personsInDictionary = personGroup.PersonCollection.Where(keys.Contains).ToList();
+				personsInSelectedGroupPage.AddRange(personsInDictionary);
+			}
+			var ungroupedPersons = _selectedPersons.Where(x => !personsInSelectedGroupPage.Contains(x)).ToList();
+			if (ungroupedPersons.Count > 0)
+			{
+				var converter = new PersonToSingleAgentTeamRootPersonGroupConverter(new SingleAgentTeamGroupPage());
+				foreach (var ungroupedPerson in ungroupedPersons)
+				{
+					var personGroup = converter.Convert(ungroupedPerson, dateOnly);
+					rootGroups.Add(personGroup);
+				}
+			}
+
 			var retLis = new List<IGroupPerson>();
 			var personGroups = new List<IPersonGroup>();
 			foreach (var rootPersonGroup in rootGroups)
