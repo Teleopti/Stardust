@@ -265,24 +265,59 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.AreEqual(_person1.Name.LastName, retList[0].Person.Name.LastName);
 			Assert.AreEqual(_person2.Name.LastName, retList[1].Person.Name.LastName);
 
-			Assert.AreEqual(1, retList[0].PersonAbsenceCollection().Count());
-			Assert.AreEqual(0, retList[1].PersonAbsenceCollection().Count());		
+			Assert.AreEqual(0, retList[0].PersonAbsenceCollection().Count());
+			Assert.AreEqual(1, retList[1].PersonAbsenceCollection().Count());		
 		}
 
 		/// <summary>
 		/// WHEN swapping an absence day with a shift day, THEN short absence should not disappear
 		/// </summary>
 		[Test]
-		public void ShouldNotDisappearShortAbsence()
+		public void ShouldRemainShortAbsence()
 		{
-		}
+			IList<IScheduleDay> _list = new List<IScheduleDay>();
 
-		/// <summary>
-		/// WHEN swapping an absence day with a shift day, THEN overtime should not disappear
-		/// </summary>
-		[Test]
-		public void ShouldNotDisappearOvertime()
-		{
+			var absencePeriod = new DateTimePeriod(_d1.StartDateTime.AddHours(3), _d1.StartDateTime.AddHours(4));
+			_p1D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person1, _d1));
+			_p1D1.Add(PersonAbsenceFactory.CreatePersonAbsence(_person1, _scenario, absencePeriod));
+			_p2D1.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _person2, _d1));
+			_list.Add(_p1D1);
+			_list.Add(_p2D1);
+
+			var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
+
+			_dictionary =
+				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
+			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignmentCollection()[0] };
+			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
+			IList<IPersonAbsence> p1absences = new List<IPersonAbsence> { _p1D1.PersonAbsenceCollection()[0] };
+			((ScheduleRange)_dictionary[_person1]).AddRange(p1absences);
+			IList<IPersonAssignment> p2assignments = new List<IPersonAssignment> { _p2D1.PersonAssignmentCollection()[0] };
+			((ScheduleRange)_dictionary[_person2]).AddRange(p2assignments);
+
+			Assert.AreEqual(1, _p1D1.PersonAssignmentCollection().Count);
+			Assert.AreEqual(1, _p1D1.PersonAbsenceCollection().Count);
+			Assert.AreEqual(1, _p2D1.PersonAssignmentCollection().Count);
+			Assert.AreEqual(0, _p2D1.PersonAbsenceCollection().Count);
+
+			var service = new SwapServiceNew();
+			service.Init(_list);
+
+			using (_mocks.Record())
+			{
+				_mocks.BackToRecord(_dic);
+				Expect.Call(_dic.PermissionsEnabled).Return(true).Repeat.Any();
+				Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
+			}
+			Assert.IsTrue(service.CanSwapAssignments());
+			var retList = service.Swap(_dictionary);
+
+			Assert.AreEqual(_person1.Name.LastName, retList[0].Person.Name.LastName);
+			Assert.AreEqual(_person2.Name.LastName, retList[1].Person.Name.LastName);
+
+			Assert.AreEqual(1, retList[0].PersonAbsenceCollection().Count());
+			Assert.AreEqual(0, retList[1].PersonAbsenceCollection().Count());	
 		}
 
 		/// <summary>
