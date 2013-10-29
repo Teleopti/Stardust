@@ -1039,6 +1039,8 @@
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Content\lazy\lazy.js" />
+    <Content Include="Content\lazy\lazy.min.js" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
