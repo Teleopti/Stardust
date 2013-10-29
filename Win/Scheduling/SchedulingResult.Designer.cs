@@ -33,13 +33,17 @@
             this.masterGrid = new Syncfusion.Windows.Forms.Grid.Grouping.GridGroupingControl();
             this.detailGrid = new Syncfusion.Windows.Forms.Grid.Grouping.GridGroupingControl();
             this.splitContainerAdv1 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
+            this.gradientPanelSchedulingResult = new Syncfusion.Windows.Forms.Tools.GradientPanel();
+            this.buttonAdvClose = new Syncfusion.Windows.Forms.ButtonAdv();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.masterGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.detailGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gradientPanelSchedulingResult)).BeginInit();
             this.splitContainerAdv1.Panel1.SuspendLayout();
             this.splitContainerAdv1.Panel2.SuspendLayout();
             this.splitContainerAdv1.SuspendLayout();
+            this.gradientPanelSchedulingResult.SuspendLayout();
             this.SuspendLayout();
             // 
             // ribbonControlAdv1
@@ -122,6 +126,36 @@
             this.splitContainerAdv1.TabIndex = 6;
             this.splitContainerAdv1.Text = "splitContainerAdv1";
             this.splitContainerAdv1.ThemesEnabled = true;
+
+            // 
+            // gradientPanelSchedulingResult
+            // 
+            this.gradientPanelSchedulingResult.BackColor = System.Drawing.Color.Transparent;
+            this.gradientPanelSchedulingResult.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255))))), System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252))))));
+            this.gradientPanelSchedulingResult.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
+            this.gradientPanelSchedulingResult.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.gradientPanelSchedulingResult.Controls.Add(this.buttonAdvClose);
+            this.gradientPanelSchedulingResult.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.gradientPanelSchedulingResult.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.gradientPanelSchedulingResult.Location = new System.Drawing.Point(6, 350);
+            this.gradientPanelSchedulingResult.Margin = new System.Windows.Forms.Padding(0);
+            this.gradientPanelSchedulingResult.Name = "gradientPanelSchedulingResult";
+            this.gradientPanelSchedulingResult.Size = new System.Drawing.Size(657, 36);
+            this.gradientPanelSchedulingResult.TabIndex = 7;
+            // 
+            // buttonAdvClose
+            // 
+            this.buttonAdvClose.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+            this.buttonAdvClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonAdvClose.Location = new System.Drawing.Point(539, 7);
+            this.buttonAdvClose.Name = "buttonAdvClose";
+            this.buttonAdvClose.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+            this.buttonAdvClose.Size = new System.Drawing.Size(87, 23);
+            this.buttonAdvClose.TabIndex = 1;
+            this.buttonAdvClose.Text = "xxClose";
+            this.buttonAdvClose.UseVisualStyle = true;
+            this.buttonAdvClose.Click += new System.EventHandler(this.buttonAdvCloseClick);
+
             // 
             // SchedulingResult
             // 
@@ -130,6 +164,7 @@
             this.ClientSize = new System.Drawing.Size(669, 392);
             this.Controls.Add(this.splitContainerAdv1);
             this.Controls.Add(this.ribbonControlAdv1);
+            this.Controls.Add(this.gradientPanelSchedulingResult);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SchedulingResult";
             this.Text = "xxSchedulingResult";
@@ -137,8 +172,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.masterGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.detailGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gradientPanelSchedulingResult)).EndInit();
             this.splitContainerAdv1.Panel1.ResumeLayout(false);
             this.splitContainerAdv1.Panel2.ResumeLayout(false);
+            this.gradientPanelSchedulingResult.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv1)).EndInit();
             this.splitContainerAdv1.ResumeLayout(false);
             this.splitContainerAdv1.PerformLayout();
@@ -152,7 +189,8 @@
         private Syncfusion.Windows.Forms.Grid.Grouping.GridGroupingControl masterGrid;
         private Syncfusion.Windows.Forms.Grid.Grouping.GridGroupingControl detailGrid;
         private Syncfusion.Windows.Forms.Tools.SplitContainerAdv splitContainerAdv1;
-
+        private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelSchedulingResult;
+        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvClose;
 
 
     }
