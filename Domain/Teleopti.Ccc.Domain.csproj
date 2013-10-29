@@ -538,6 +538,7 @@
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryChecker.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
+	<Compile Include="Scheduling\PersonToSingleAgentTeamRootPersonGroupConverter.cs" />
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalGenerator.cs" />
     <Compile Include="Scheduling\TeamBlock\IntervalDataEntendedMedianCalculator.cs" />
