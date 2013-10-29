@@ -55,6 +55,27 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			Mapper.Initialize(c => c.AddProfile(new ShiftTradeScheduleViewModelMappingProfile(_shiftTradeRequestProvider, _projectionProvider, _timelineFactory, _userCulture, _possibleShiftTradePersonsProvider)));
 		}
 
+		#region henke - use timezones
+		[Test]
+		public void MinutesSinceTimeLineStart_WhenTradeVictimIsInAnotherTimeZone_ShouldBeTranslatedToTheUsersTimeZone()
+		{
+			
+		}
+
+		[Test]
+		public void StartTime_WhenTradeVictimIsInAnotherTimeZone_ShouldBeTranslatedToTheUsersTimeZone()
+		{
+			
+		}
+
+		[Test]
+		public void EndTiem_WhenTradeVictimIsInAnotherTimeZone_ShouldBeTranslatedToTheUsersTimeZone()
+		{
+			
+		}
+
+		#endregion
+
 		[Test]
 		public void ShouldMapScheduleDayTextFromName()
 		{
