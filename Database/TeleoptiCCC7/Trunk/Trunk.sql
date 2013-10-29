@@ -461,12 +461,12 @@ BEGIN
 		[PersonId] [uniqueidentifier] NOT NULL,
 		[TeamId] [uniqueidentifier] NOT NULL,
 		[BelongsToDate] [smalldatetime] NOT NULL,
-		[ShiftStart] [datetime] NULL,
-		[ShiftEnd] [datetime] NULL,
+		[Start] [datetime] NULL,
+		[End] [datetime] NULL,
 		[SiteId] [uniqueidentifier] NOT NULL,
 		[BusinessUnitId] [uniqueidentifier] NOT NULL,
 		[InsertedOn] [datetime] NOT NULL,
-		[Shift] [nvarchar](max) NOT NULL
+		[Model] [nvarchar](max) NOT NULL
 	)
 
 	ALTER TABLE [ReadModel].[New_PersonScheduleDay] ADD  CONSTRAINT [new_PK_PersonScheduleDay] PRIMARY KEY NONCLUSTERED 
