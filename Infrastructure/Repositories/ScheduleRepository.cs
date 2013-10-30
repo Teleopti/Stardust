@@ -215,7 +215,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence)
         {
             IList<IPerson> people = new List<IPerson> {person};
-            ICollection<DateTimePeriod> searchPeriods = _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).AffectedPeriods(person, scenario, period, absence);
+            var personAbsenceRepository = _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork);
+            ICollection<DateTimePeriod> searchPeriods = personAbsenceRepository.AffectedPeriods(person, scenario, period, absence);
             DateTimePeriod optimizedPeriod = searchPeriods.Count>0 ? 
                 new DateTimePeriod(searchPeriods.Min(p => p.StartDateTime), searchPeriods.Max(p => p.EndDateTime).AddDays(1)):
 				new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddDays(1));
@@ -228,16 +229,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             using (TurnoffPermissionScope.For(retDic))
             {
-                addPersonAbsences(retDic, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(people, optimizedPeriod, scenario, absence));
+                addPersonAbsences(retDic, personAbsenceRepository.Find(people, optimizedPeriod, scenario, absence));
                 addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario), true, people);
-					var personAssignments = personAssignmentRepository.Find(people, longDateOnlyPeriod, scenario);
-					foreach (var personAssignment in personAssignments)
-					{
-						IScheduleRange range = retDic[personAssignment.Person];
-						IScheduleDay scheduleDay = range.ScheduledDay(personAssignment.Date);
-						if(scheduleDay.PersonAssignment(false) == null)
-							addPersonAssignments(retDic, new List<IPersonAssignment>{ personAssignment });
-					}
+                var personAssignments = personAssignmentRepository.Find(people, longDateOnlyPeriod, scenario);
+                foreach (var personAssignment in personAssignments)
+                {
+                    IScheduleRange range = retDic[personAssignment.Person];
+                    IScheduleDay scheduleDay = range.ScheduledDay(personAssignment.Date);
+                    if (scheduleDay.PersonAssignment(false) == null)
+                        addPersonAssignments(retDic, new List<IPersonAssignment> {personAssignment});
+                }
             }
 
             return retDic[person];
