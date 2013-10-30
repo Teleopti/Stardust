@@ -5,12 +5,12 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.TestCommon.TestData.Common;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
+namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 {
 	public class AbsenceTimeConfigurable : IUserDataSetup
 	{

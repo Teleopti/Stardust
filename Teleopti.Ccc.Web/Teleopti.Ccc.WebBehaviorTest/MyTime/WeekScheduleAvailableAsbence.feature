@@ -1,5 +1,4 @@
-﻿
-Feature: View available absences
+﻿Feature: View available absences
 	In order to pick a good day for absence
 	As an agent
 	I want to see an indication of possibilities to get a day off
@@ -77,7 +76,6 @@ Scenario: Show the user a green indication when allowance exceeds used absence
 	And I have the workflow control set 'Open absence period'
 	When I view my week schedule for date '2013-04-01'
 	Then I should see an 'green' indication for chance of absence request on '2013-04-01'
-
 
 Scenario: Show the user a yellow indication when there is a fair amount of allowance compared to used absence
 	Given there is a budgetday

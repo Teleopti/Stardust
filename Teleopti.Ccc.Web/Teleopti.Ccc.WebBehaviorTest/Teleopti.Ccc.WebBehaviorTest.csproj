@@ -256,7 +256,7 @@
       <DependentUpon>TeamScheduleForGroups.feature</DependentUpon>
     </Compile>
     <Compile Include="Bindings\Generic\BudgetStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\ScheduleProjectionReadOnlyThing.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AbsenceTimeConfigurable.cs" />
     <Compile Include="Bindings\Generic\UIStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\TeamSchedulePageStepDefinitions.cs" />
