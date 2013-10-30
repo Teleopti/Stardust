@@ -495,3 +495,10 @@ BEGIN
 END
 GO
 
+----------------  
+--Name: David Jonsson
+--Date: 2013-10-29
+--Desc: Bug #25370 - re-design clustered key on dbo.OvertimeShiftActivityLayer
+----------------
+--No, not on this version. Tables is removed as part of "0000000386.sql"
+GO
