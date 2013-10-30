@@ -1,5 +1,4 @@
-﻿@WatiN
-Feature: Absence request from requests
+﻿Feature: Absence request from requests
 	In order to make requests to my superior
 	As an agent
 	I want to be able to submit requests as absence

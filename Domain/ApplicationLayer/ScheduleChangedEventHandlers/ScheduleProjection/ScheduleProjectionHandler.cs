@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			var nextActivityStartTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
 			                                                                                           @event.PersonId);
 			if (NotifyRtaDecider.ShouldSendMessage(closestLayer.Value, nextActivityStartTime) &&
-			    @event.ScheduleDays.Any(d => d.Date >= DateTime.Today))
+				@event.ScheduleDays.Any(d => d.Date >= DateTime.UtcNow.Date))
 			{
 				_serviceBus.Publish(new UpdatedScheduleDay
 					{

@@ -63,19 +63,3 @@ Scenario: View full day absence on day off for person
 	| Color      | Red              |
 	| Start time | 2013-10-25 00:00 |
 	| End time   | 2013-10-25 23:59 |
-
-Scenario: Order as full day absence when on day off
-	Given I have the role 'Anywhere Team Green'
-	And 'Ashley Andeen' have a shift with
-	| Field          | Value            |
-	| Shift category | Day              |
-	| Activity       | Phone            |
-	| Start time     | 2013-10-28 02:00 |
-	| End time       | 2013-10-28 10:00 |
-	And 'Ashley Andeen' has a full day absence named 'Vacation' on '2013-10-28'
-	And 'Pierre Baldi' has a day off named 'Day off' on '2013-10-28'
-	And 'Pierre Baldi' has a full day absence named 'Vacation' on '2013-10-28'
-	And 'John King' has a day off named 'Day off' on '2013-10-28'
-	When I view schedules for '2013-10-28'
-	Then I should see 'Ashley Andeen' before 'Pierre Baldi'
-	Then I should see 'Pierre Baldi' before 'John King'

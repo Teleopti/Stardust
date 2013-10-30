@@ -39,6 +39,7 @@
 .person-schedule .layer {
 	height: 40px;
 	text-align: center;
+	z-index: 10;	
 }
 
 .person-schedule .layer:first-of-type

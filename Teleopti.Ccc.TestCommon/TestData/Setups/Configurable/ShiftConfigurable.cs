@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public DateTime LunchEndTime { get; set; }
 
 		public string ShiftColor { get; set; }	// this should not be here. this exists on the ShiftCategoryConfigurable
-		public string AllActivityColor { get; set; }// this should not be here. this should exist on the ActivityConfigurable
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
@@ -37,31 +36,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			if (ShiftColor != null)
 				shiftCategory.DisplayColor = Color.FromName(ShiftColor);
 
-			IActivity activity;
-			if (AllActivityColor != null)
-			{
-				activity = new Activity("Phone");
-				new ActivityRepository(uow).Add(activity);
-				activity.DisplayColor = Color.FromName(AllActivityColor);
-			}
-			else
-			{
-				activity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
-			}
-
-			IActivity lunchActivity;
-			if (AllActivityColor != null)
-			{
-				lunchActivity = new Activity("Lunch");
-				new ActivityRepository(uow).Add(lunchActivity);
-				lunchActivity.DisplayColor = Color.FromName(AllActivityColor);
-			}
-			else
-			{
-				lunchActivity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(LunchActivity));
-			}
-
-
+			var activity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
+			var lunchActivity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(LunchActivity));
 
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 

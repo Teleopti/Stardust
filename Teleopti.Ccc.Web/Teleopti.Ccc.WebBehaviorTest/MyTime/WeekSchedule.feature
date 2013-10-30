@@ -31,6 +31,10 @@ Background:
 	| Night |
 	| Day   |
 	| Late  |
+	And there are activities
+	| Name           | Color |
+	| White activity | White |
+	| Black activity | Black |
 
 Scenario: View current week
 	Given I have the role 'Full access to mytime'
@@ -288,11 +292,11 @@ Scenario: Show black activity text when activity background color is white
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
 	And I have a shift with
-    | Field                 | Value            |
-	| StartTime             | 2013-01-30 08:00 |
-	| EndTime               | 2013-01-30 18:00 |
-	| Shift category        | Day              |
-	| All activity color    | White            |
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | White activity   |
+	| StartTime      | 2013-01-30 08:00 |
+	| EndTime        | 2013-01-30 18:00 |
 	When I view my week schedule for date '2013-01-30'
 	Then I should see the text for date '2013-01-30' in 'black'
 
@@ -300,11 +304,11 @@ Scenario: Show white activity text when activity background color is black
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
 	And I have a shift with
-    | Field                 | Value            |
-	| StartTime             | 2013-01-30 08:00 |
-	| EndTime               | 2013-01-30 18:00 |
-	| Shift category        | Day              |
-	| All activity color    | Black            |
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Black activity   |
+	| Start time     | 2013-01-30 08:00 |
+	| End time       | 2013-01-30 18:00 |
 	When I view my week schedule for date '2013-01-30'
 	Then I should see the text for date '2013-01-30' in 'white'
 

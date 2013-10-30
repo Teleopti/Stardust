@@ -30,9 +30,9 @@ define([
             this.DayOffName = ko.observable("");
 	        
             this.IsShift = ko.computed(function () {
-            	return !self.IsDayOff();
+            	return self.Layers().length > 0;
             });
-
+	        
             this.Absences = ko.observableArray();
 
             this.TimeLine = new timeLineViewModel(this.Layers);

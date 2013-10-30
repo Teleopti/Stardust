@@ -1,11 +1,9 @@
-﻿@WatiN
-Feature: 22851 - Find Shift Trade Page from Team Schedule
+﻿Feature: 22851 - Find Shift Trade Page from Team Schedule
 	As an agent I need to easily find the shift trade page,
 	so that I find where to look for trade candidates.
-	
 
 Scenario: Initialize a shift trade from team schedule
-Given I am an agent in a team with access to the whole site
+	Given I am an agent in a team with access to the whole site
 	And I am viewing team schedule for '2013-10-07'
 	When I initialize a shift trade
 	Then I should navigate to shift trade for '2013-10-07'
