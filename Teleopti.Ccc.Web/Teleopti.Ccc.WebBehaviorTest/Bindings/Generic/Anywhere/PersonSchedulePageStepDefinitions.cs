@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 			if (shiftLayer.Description != null)
 			{
-				Browser.Interactions.Click(".toggle-descriptions:enabled");
+				DescriptionToggle.EnsureIsOn();
 				Browser.Interactions.AssertFirstContains(selector, shiftLayer.Description);
 			}
 			else
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see a day off named '(.*)'")]
 		public void ThenIShouldSeeADayOff(string dayOff)
 		{
-			Browser.Interactions.Click(".toggle-descriptions:enabled");
+			DescriptionToggle.EnsureIsOn();
 			Browser.Interactions.AssertExistsUsingJQuery(".dayoff:contains('{0}')", dayOff);
 		}
 
