@@ -166,20 +166,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	        var timeZone = person.PermissionInformation.DefaultTimeZone();
 	        var longDateOnlyPeriod = optimizedPeriod.ToDateOnlyPeriod(timeZone);
 			longDateOnlyPeriod = new DateOnlyPeriod(longDateOnlyPeriod.StartDate.AddDays(-1),longDateOnlyPeriod.EndDate.AddDays(1));
-            var retDic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(optimizedPeriod),
-                                                               new DifferenceEntityCollectionService
-                                                                   <IPersistableScheduleData>());
+            var retDic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(optimizedPeriod), new DifferenceEntityCollectionService<IPersistableScheduleData>());
 			var personAssignmentRepository = _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork);
-					
-            using(TurnoffPermissionScope.For(retDic))
+
+            using (TurnoffPermissionScope.For(retDic))
             {
-				addPersonAbsences(retDic, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(people, optimizedPeriod, scenario, absence));
-				addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario), true, people);
-				foreach (DateTimePeriod p in searchPeriods)
-				{
-					var longDateOnlyP = new DateOnlyPeriod(new DateOnly(p.StartDateTime.AddDays(-1)), new DateOnly(p.EndDateTime.AddDays(1)));
-					addPersonAssignments(retDic, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(people, longDateOnlyP, scenario));
-				}
+                addPersonAbsences(retDic, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(people, optimizedPeriod, scenario, absence));
+                addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario), true, people);
+                addPersonAssignments(retDic, personAssignmentRepository.Find(people, longDateOnlyPeriod, scenario));
             }
 
             return retDic[person];
