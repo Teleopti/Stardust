@@ -152,3 +152,20 @@ CREATE CLUSTERED INDEX [CIX_DBA_VirtualFileStatsHistory_RecordedDateTime] ON [db
 )
 END
 GO
+
+----------------------
+--- Name: Talha M
+--- Ddate: 2013-10-25
+--- Desc : PBI  #25059: Add new column Active to stage.stg_agent_skill
+----------------------
+IF NOT EXISTS(
+  SELECT TOP 1 1
+  FROM INFORMATION_SCHEMA.COLUMNS
+  WHERE 
+    [TABLE_NAME] = 'stage.stg_agent_skill'
+    AND [COLUMN_NAME] = 'Active')
+BEGIN
+  ALTER TABLE [stage].[stg_agent_skill]
+    ADD [Active] bit NULL
+END
+GO
