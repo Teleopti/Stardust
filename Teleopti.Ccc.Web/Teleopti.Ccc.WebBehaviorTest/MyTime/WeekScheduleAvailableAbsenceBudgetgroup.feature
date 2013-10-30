@@ -24,6 +24,13 @@ Background:
 	| Schedule published to date | 2040-06-24				|
 	| Available absence          | holiday					|
 	| StaffingCheck				 | budgetgroup				|
+	#Ska tas bort! /MariaS
+	And there is a workflow control set with
+	| Field							| Value							|
+	| Name							| Budgetgroup head count check	|
+	| Schedule published to date	| 2040-06-24					|
+	| Available absence				| holiday						|
+	| StaffingCheck					| budgetgroup head count		|
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |

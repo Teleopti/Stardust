@@ -54,74 +54,76 @@ Background:
 	| Start date | 2012-06-18 |
 	| BudgetGroup| TheBudgetGroup |
 
-
-Scenario: Show the user a green indication at head count staffing check when one agent has an absence of one hour
-	Given there is a budgetday
-	| Field						| Value                |
-	| BudgetGroup				| TheBudgetGroup	   |
-	| Date						| 2013-04-01           |
-	| Allowance					| 3                    |
-	| FulltimeEquivalentHours	| 8                    |
+Scenario: Show the user a green indication at head count staffing check when allowance exceeds used absence
+	Given the current time is '2023-05-25 20:00'
+	And there is a budgetday
+	| Field						| Value					|
+	| BudgetGroup				| TheBudgetGroup		|
+	| Date						| 2023-05-28			|
+	| Allowance					| 3						|
+	| FulltimeEquivalentHours	| 8						|
 	And I have the role 'Full access to mytime'
 	And I have the workflow control set 'Budgetgroup head count check'
 	And I have absence time for
 	| Field			| Value					|
-	| Date			| 2013-04-01			|
+	| Date			| 2023-05-28			|
 	| Hours			| 1						|
 	| Absence		| holiday				|
-	When I view my week schedule for date '2013-04-01'
-	Then I should see an 'green' indication for chance of absence request on '2013-04-01'
+	When I view my week schedule for date '2023-05-28'
+	Then I should see an 'green' indication for chance of absence request on '2023-05-28'
 
-Scenario: Show the user a yellow indication at head count staffing check when two agents have absences of one hour each
-	Given there is a budgetday
-	| Field						| Value                |
-	| BudgetGroup				| TheBudgetGroup	   |
-	| Date						| 2013-04-01           |
-	| Allowance					| 3                    |
-	| FulltimeEquivalentHours	| 8                    |
+Scenario: Show the user a yellow indication at head count staffing check when one allowance is left
+	Given the current time is '2023-05-25 20:00'
+	And there is a budgetday
+	| Field						| Value					|
+	| BudgetGroup				| TheBudgetGroup		|
+	| Date						| 2023-05-28			|
+	| Allowance					| 3						|
+	| FulltimeEquivalentHours	| 8						|
 	And I have the role 'Full access to mytime'
 	And I have the workflow control set 'Budgetgroup head count check'
 	And Ashley Andeen has the workflow control set 'Budgetgroup head count check'
 	And I have absence time for
 	| Field			| Value					|
-	| Date			| 2013-04-01			|
+	| Date			| 2023-05-28			|
 	| Hours			| 1						|
 	| Absence		| holiday				|
 	And Ashley Andeen has absence time for
 	| Field			| Value					|
-	| Date			| 2013-04-01			|
+	| Date			| 2023-05-28			|
 	| Hours			| 1						|
 	| Absence		| holiday				|
-	When I view my week schedule for date '2013-04-01'
-	Then I should see an 'yellow' indication for chance of absence request on '2013-04-01'
+	When I view my week schedule for date '2023-05-28'
+	Then I should see an 'yellow' indication for chance of absence request on '2023-05-28'
 
-Scenario: Show the user a red indication at head count staffing check when three agents have absences of one hour each
-	Given there is a budgetday
-	| Field						| Value                |
-	| BudgetGroup				| TheBudgetGroup	   |
-	| Date						| 2013-04-01           |
-	| Allowance					| 3                    |
-	| FulltimeEquivalentHours	| 8                    |
+Scenario: Show the user a red indication at head count staffing check when the allowance is used up
+	Given the current time is '2023-05-25 20:00'
+	And there is a budgetday
+	| Field						| Value					|
+	| BudgetGroup				| TheBudgetGroup		|
+	| Date						| 2023-05-28			|
+	| Allowance					| 3						|
+	| FulltimeEquivalentHours	| 8						|
 	And I have the role 'Full access to mytime'
 	And I have the workflow control set 'Budgetgroup head count check'
 	And Ashley Andeen has the workflow control set 'Budgetgroup head count check'
 	And Pierre Baldi has the workflow control set 'Budgetgroup head count check'
 	And I have absence time for
 	| Field			| Value					|
-	| Date			| 2013-04-01			|
+	| Date			| 2023-05-28			|
 	| Hours			| 1						|
 	| Absence		| holiday				|
 	And Ashley Andeen has absence time for
 	| Field			| Value					|
-	| Date			| 2013-04-01			|
+	| Date			| 2023-05-28			|
 	| Hours			| 1						|
 	| Absence		| holiday				|
 	And Pierre Baldi has absence time for
 	| Field			| Value					|
-	| Date			| 2013-04-01			|
+	| Date			| 2023-05-28			|
 	| Hours			| 1						|
 	| Absence		| holiday				|
-	When I view my week schedule for date '2013-04-01'
-	Then I should see an 'red' indication for chance of absence request on '2013-04-01'
+	When I view my week schedule for date '2023-05-28'
+	Then I should see an 'red' indication for chance of absence request on '2023-05-28'
 
 
