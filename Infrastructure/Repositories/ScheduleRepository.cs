@@ -230,8 +230,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             {
                 addPersonAbsences(retDic, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(people, optimizedPeriod, scenario, absence));
                 addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario), true, people);
-					var personAssignments = 
-						_repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario);
+					var personAssignments = personAssignmentRepository.Find(people, longDateOnlyPeriod, scenario);
 					foreach (var personAssignment in personAssignments)
 					{
 						IScheduleRange range = retDic[personAssignment.Person];
