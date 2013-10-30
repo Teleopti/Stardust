@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: View full day absence on day off
+﻿Feature: View full day absence on day off
 	In order to see that the person is on holiday and that the day is counted as a day off
 	As a team leader
 	I want to see the scheduled absences and day off for the person
