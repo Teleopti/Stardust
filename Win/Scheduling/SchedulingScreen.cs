@@ -589,7 +589,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-
 				uow.Reassociate(_schedulerState.SchedulingResultState.PersonsInOrganization);
 				_schedulerMessageBrokerHandler.HandleMeetingChange(e.ModifiedMeeting, e.Delete);
 			}
@@ -608,11 +607,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 	        var affectedScheduleDays = new List<IScheduleDay>();
 	        while (startDate <= e.ModifiedMeeting.EndDate)
 	        {
-	            foreach (var meetingPerson in e.ModifiedMeeting.MeetingPersons)
-	            {
-	                var range = SchedulerState.SchedulingResultState.Schedules[meetingPerson.Person];
-	                affectedScheduleDays.Add(range.ScheduledDay(startDate));
-	            }
+	            affectedScheduleDays.AddRange(
+	                e.ModifiedMeeting.MeetingPersons.Where(meetingPerson => SchedulerState.SchedulingResultState.PersonsInOrganization.Contains(meetingPerson.Person))
+	                 .Select(meetingPerson => SchedulerState.SchedulingResultState.Schedules[meetingPerson.Person])
+	                 .Select(range => range.ScheduledDay(startDate)));
 	            startDate = startDate.AddDays(1);
 	        }
 	        _scheduleView.Presenter.ModifySchedulePart(affectedScheduleDays, true);
