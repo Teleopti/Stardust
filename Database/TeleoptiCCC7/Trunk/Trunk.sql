@@ -355,3 +355,57 @@ BEGIN
 END
 GO
 
+----------------  
+--Name: David Jonsson
+--Date: 2013-10-29
+--Desc: Bug #25370 - re-design clustered key on dbo.OvertimeShiftActivityLayer
+----------------
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[OvertimeShiftActivityLayer]') AND name = N'CIX_OvertimeShiftActivityLayer_Parent')
+BEGIN
+	ALTER TABLE [dbo].[OvertimeShiftActivityLayer] DROP CONSTRAINT [FK_OvertimeShiftActivityLayer_Activity]
+	ALTER TABLE [dbo].[OvertimeShiftActivityLayer] DROP CONSTRAINT [FK_OvertimeShiftActivityLayer_DefinitionSet]
+	ALTER TABLE [dbo].[OvertimeShiftActivityLayer] DROP CONSTRAINT [FK_OvertimeShiftActivityLayer_OvertimeShift]
+
+	CREATE TABLE [dbo].[New_OvertimeShiftActivityLayer](
+		[Id] [uniqueidentifier] NOT NULL,
+		[payLoad] [uniqueidentifier] NOT NULL,
+		[Minimum] [datetime] NOT NULL,
+		[Maximum] [datetime] NOT NULL,
+		[DefinitionSet] [uniqueidentifier] NOT NULL,
+		[Parent] [uniqueidentifier] NOT NULL,
+		[OrderIndex] [int] NOT NULL,
+	CONSTRAINT [New_PK_OvertimeShiftActivityLayer] PRIMARY KEY NONCLUSTERED 
+	(
+		[Id]
+	)
+	)
+
+	CREATE CLUSTERED INDEX [CIX_OvertimeShiftActivityLayer_Parent] ON [dbo].[New_OvertimeShiftActivityLayer]
+	(
+		[Parent] ASC
+	)
+
+	INSERT INTO [dbo].[New_OvertimeShiftActivityLayer]
+	SELECT * FROM [dbo].[OvertimeShiftActivityLayer]
+
+	DROP TABLE [dbo].[OvertimeShiftActivityLayer]
+
+	EXEC dbo.sp_rename @objname = N'[dbo].[New_OvertimeShiftActivityLayer]', @newname = N'OvertimeShiftActivityLayer', @objtype = N'OBJECT'
+	EXEC dbo.sp_rename @objname = N'[dbo].[OvertimeShiftActivityLayer].[New_PK_OvertimeShiftActivityLayer]', @newname = N'PK_OvertimeShiftActivityLayer', @objtype =N'INDEX'
+
+
+	ALTER TABLE [dbo].[OvertimeShiftActivityLayer]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeShiftActivityLayer_Activity] FOREIGN KEY([payLoad])
+	REFERENCES [dbo].[Activity] ([Id])
+	ALTER TABLE [dbo].[OvertimeShiftActivityLayer] CHECK CONSTRAINT [FK_OvertimeShiftActivityLayer_Activity]
+
+	ALTER TABLE [dbo].[OvertimeShiftActivityLayer]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeShiftActivityLayer_DefinitionSet] FOREIGN KEY([DefinitionSet])
+	REFERENCES [dbo].[MultiplicatorDefinitionSet] ([Id])
+	ALTER TABLE [dbo].[OvertimeShiftActivityLayer] CHECK CONSTRAINT [FK_OvertimeShiftActivityLayer_DefinitionSet]
+
+
+	ALTER TABLE [dbo].[OvertimeShiftActivityLayer]  WITH CHECK ADD  CONSTRAINT [FK_OvertimeShiftActivityLayer_OvertimeShift] FOREIGN KEY([Parent])
+	REFERENCES [dbo].[OvertimeShift] ([Id])
+	ON DELETE CASCADE
+	ALTER TABLE [dbo].[OvertimeShiftActivityLayer] CHECK CONSTRAINT [FK_OvertimeShiftActivityLayer_OvertimeShift]
+END
+GO
