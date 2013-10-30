@@ -19,9 +19,12 @@ define([
             	window.location.replace('#personschedule/' + id + '/' + toDateString(date))	;
             },
             GotoPersonScheduleAddFullDayAbsenceForm: function (id, date) {
-            	window.location.replace('#personschedule/' + id + '/' + toDateString(date) + '/addfulldayabsence');
+                window.location.hash = 'personschedule/' + id + '/' + toDateString(date) + '/addfulldayabsence';
             },
-            GoToTeamSchedule: function(id, date, skill) {
+            GotoPersonScheduleAddFullDayAbsenceFormWithoutHistory: function (id, date) {
+                window.location.replace('#personschedule/' + id + '/' + toDateString(date) + '/addfulldayabsence');
+            },
+            GoToTeamSchedule: function (id, date, skill) {
             	window.location.hash = 'teamschedule/' + id + '/' + toDateString(date) + ((skill) ? '/' + skill.Id : '');
             }
         };

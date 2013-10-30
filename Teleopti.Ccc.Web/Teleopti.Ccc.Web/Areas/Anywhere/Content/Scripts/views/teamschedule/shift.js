@@ -31,9 +31,23 @@ define([
 			self.Layers.push.apply(self.Layers, newItems);
 		};
 		
+		this.Selected = ko.observable(false);
+
 		this.Select = function () {
+		    self.Selected(!self.Selected());
+		};
+
+		this.ShowDetails = function () {
 		    navigation.GotoPersonSchedule(personId, date);
 		};
+
+	    this.AddFullDayAbsence = function() {
+	        navigation.GotoPersonScheduleAddFullDayAbsenceForm(personId, date);
+	    };
+
+	    this.AddActivity = function () {
+	        navigation.GotoPersonSchedule(personId, date);
+	    };
 
 	};
 });

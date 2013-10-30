@@ -19,7 +19,7 @@
 				<th><span id="forecasted-hours" data-bind="visible: !LoadingStaffingMetrics(), text: ForecastedHoursDisplay"></span></th>
 				<th><span id="scheduled-hours" data-bind="visible: !LoadingStaffingMetrics(), text: ScheduledHoursDisplay"></span></th>
 				<th><span id="difference-forecasted-scheduled" class="text-error" data-bind="visible: !LoadingStaffingMetrics(), text: DifferenceDisplay"></span></th>
-				<th><span id="estimated-service-level" class="text-warning" data-bind="visible: !LoadingStaffingMetrics(), text: ESLDisplay"></span></th>
+			    <th><span id="estimated-service-level" class="text-warning" data-bind="visible: !LoadingStaffingMetrics(), text: ESLDisplay"></span></th>
 			</tr>
 		</thead>
 	</table>
@@ -42,8 +42,8 @@
 			</form>
 		</div>
 	</div>
-
-	<div class="row">
+    
+    <div class="row">
 		<div class="span12">
 			<!-- ko if: Loading -->
 			<div><span data-bind="text: Resources.LoadingThreeDots"></span></div>
@@ -70,29 +70,60 @@
 						</tr>
 					</thead>
 					<tbody data-bind="foreach: Persons">
-						<tr class="person" data-bind="attr: { 'data-person-id': Id }">
-							<td class="person-name">
-								<!-- Must do it this way to get correct overflow: hidden in IE -->
-								<div class="person-name nowrap" data-bind="text: Name"></div>
-							</td>
-							<td class="schedule">
-								<div class="relative time-line-for">
-									<!-- ko foreach: Shifts -->
-									<div class="shift" data-bind="template: { name: 'layerTemplate', foreach: Layers }, click: Select"></div>
-									<!-- /ko -->
+					    <tr class="person" data-bind="attr: { 'data-person-id': Id }">
+					        <td class="first-column person-name">
+					            <!-- Must do it this way to get correct overflow: hidden in IE -->
+					            <div class="person-name nowrap" data-bind="text: Name"></div>
+					        </td>
+					        <td class="schedule">
+					            <div class="relative time-line-for">
+					                <!-- ko foreach: Shifts -->
+					                <div class="shift" data-bind="
+                                        template: { 
+                                            name: 'layerTemplate', 
+                                            foreach: Layers
+                                        }, 
+                                        click: Select
+                                        "></div>
+					                <!-- /ko -->
 									
-									<!-- ko foreach: DayOffs -->
-									<!-- ko if: OverlapsTimeLine -->
-									<div 
-										class="dayoff absolute" 
-										data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }">
-									</div>
-									<!-- /ko -->
-									<!-- /ko -->
-								</div>
-							</td>
-							<td class="contract-time" data-bind="text: ContractTime"></td>
-						</tr>
+					                <!-- ko foreach: DayOffs -->
+					                <!-- ko if: OverlapsTimeLine -->
+					                <div 
+					                    class="dayoff absolute" 
+					                    data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }">
+					                </div>
+					                <!-- /ko -->
+					                <!-- /ko -->
+					            </div>
+					        </td>
+					        <td class="last-column contract-time" data-bind="text: ContractTime"></td>
+					    </tr>
+                        
+					    <!-- ko foreach: Shifts -->
+					    <!-- ko if: Selected -->
+					    <tr>
+					        <td class="first-column shift-menu-background"></td>
+					        <td class="shift-menu-background">
+
+					            <div class="shift-menu" data-bind="
+	                                            style: {
+		                                            'margin-left': Layers()[0].StartPixels() + 'px'
+	                                            }
+                                                ">
+					                <div class="btn-group">
+					                    <a href="#" class="btn btn-small show-details" data-bind="click: ShowDetails"><i class="icon-eye-open"></i></a>
+					                    <a href="#" class="btn btn-small add-full-day-absence" data-bind="click: AddFullDayAbsence"><i class="icon-plus"></i><span data-bind="text: $root.Resources.FullDayAbsence"></span></a>
+					                    <a href="#" class="btn btn-small add-activity" data-bind="click: AddActivity"><i class="icon-plus"></i><span data-bind="text: $root.Resources.Activity"></span></a>
+					                </div>
+					            </div>
+
+					        </td>
+					        <td class="last-column shift-menu-background"></td>
+					    </tr>
+					    <!-- /ko -->
+					    <!-- /ko -->
+
 					</tbody>
 				</table>
 			</div>

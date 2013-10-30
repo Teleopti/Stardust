@@ -31,15 +31,21 @@
 .team-schedule .person
 {
 }
-.team-schedule .person:last-child
-{
-}
-.team-schedule .person-name 
-{
+
+.team-schedule .first-column {
 	max-width: 105px !important;
 	min-width: 105px !important;
 	width: 105px !important;
 	overflow: hidden;
+}
+.team-schedule .last-column {
+	max-width: 100px !important;
+	min-width: 100px !important;
+	width: 100px !important;
+}
+
+.team-schedule .person-name 
+{
 }
 .team-schedule tbody tr
 {
@@ -70,6 +76,19 @@
 {
 	background-color: beige;
 }
+
+
+
+
+.team-schedule .shift-menu-background {
+	background: #eeeeee;
+}
+.team-schedule .shift-menu
+{
+}
+
+
+
 
 .team-schedule .shift .layer
 {
@@ -106,16 +125,6 @@
 .team-schedule .contract-time 
 {
 	text-align: right;
-	max-width: 100px !important;
-	min-width: 100px !important;
-	width: 100px !important;
-	overflow: hidden;
-}
-.team-schedule .work-time {
-	text-align: right;
-	max-width: 100px !important;
-	min-width: 100px !important;
-	width: 100px !important;
 	overflow: hidden;
 }
 
