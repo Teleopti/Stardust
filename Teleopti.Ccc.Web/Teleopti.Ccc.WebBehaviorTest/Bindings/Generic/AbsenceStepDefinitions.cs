@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			DataMaker.Data().Apply(new AbsenceConfigurable{Name = name});
 		}
 
-		[Given(@"'?(I)'? have a absence with")]
+		[Given(@"'?(I)'? have an absence with")]
 		[Given(@"'?(.*)'? has an absence with")]
 		public void GivenHaveAAbsenceWith(string userName, Table table)
 		{

@@ -26,8 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				});
 		}
 
-		[Given(@"'(.*)' has the workflow control set '(.*)'")]
-		[Given(@"(.*) have the workflow control set '(.*)'")]
+		[Given(@"'?(.*)'? (?:has|have) the workflow control set '(.*)'")]
 		public void GivenIHaveTheWorkflowControlSetPublishedSchedule(string person, string name)
 		{
 			var userWorkflowControlSet = new WorkflowControlSetForUser { Name = name };
