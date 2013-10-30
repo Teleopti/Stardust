@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -59,11 +60,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				else
 					_selectedSchedules[0].Merge(schedulePart1, false);
 
+
 				if(schedulePart2.PersistableScheduleDataCollection().Count() == 0)
 					_selectedSchedules[1].Merge(_selectedSchedules[1], true);
 				else
 					_selectedSchedules[1].Merge(schedulePart2, false);
 			}
+
+			((ExtractedSchedule)_selectedSchedules[1]).DeleteOvertime();
+			((ExtractedSchedule)_selectedSchedules[1]).MergeOvertime(schedulePart2);
+			((ExtractedSchedule)_selectedSchedules[0]).DeleteOvertime();
+			((ExtractedSchedule)_selectedSchedules[0]).MergeOvertime(schedulePart1);
+			
 
 			retList.AddRange(_selectedSchedules);
 			return retList;

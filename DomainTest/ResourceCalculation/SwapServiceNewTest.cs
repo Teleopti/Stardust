@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -390,6 +391,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			Assert.AreEqual(1, p1assignments[0].OvertimeShiftCollection.Count());
 			Assert.AreEqual(0, p2assignments[0].OvertimeShiftCollection.Count());
+
+			var p1Period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_d1.StartDateTime.AddDays(-1)));
+			_person1.AddPersonPeriod(p1Period);
+			var p2Period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_d1.StartDateTime.AddDays(-1)));
+			_person2.AddPersonPeriod(p2Period);
+
+			var definitionSet = ((IOvertimeShiftActivityLayer)p1assignments[0].OvertimeShiftCollection[0].LayerCollection[0]).DefinitionSet;
+			_person1.PersonPeriodCollection[0].PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
+			_person2.PersonPeriodCollection[0].PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
 
 			var service = new SwapServiceNew();
 			service.Init(_list);
