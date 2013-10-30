@@ -94,13 +94,42 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
         private TimePeriod getNarrowTimePeriod(TimePeriod existingTimePeriod, TimePeriod newTimePeriod)
         {
-            var startTime = existingTimePeriod.StartTime;
-            var endTime = existingTimePeriod.EndTime;
-            if (existingTimePeriod.StartTime < newTimePeriod.StartTime)
-                startTime = newTimePeriod.StartTime;
-            if (existingTimePeriod.EndTime > newTimePeriod.EndTime)
-                endTime = newTimePeriod.EndTime;
-            return new TimePeriod(startTime,endTime );
+			if (existingTimePeriod.EndTime.Days > 0 && newTimePeriod.EndTime.Days == 0)
+			{
+				var temp = new TimePeriod(newTimePeriod.StartTime.Add(TimeSpan.FromDays(1)),
+										  newTimePeriod.EndTime.Add(TimeSpan.FromDays(1)));
+
+				var startTime = existingTimePeriod.StartTime;
+				var endTime = existingTimePeriod.EndTime;
+				if (existingTimePeriod.StartTime < temp.StartTime)
+					startTime = temp.StartTime.Add(TimeSpan.FromDays(-1));
+				if (existingTimePeriod.EndTime > temp.EndTime)
+					endTime = temp.EndTime.Add(TimeSpan.FromDays(-1));
+				return new TimePeriod(startTime, endTime);
+			}
+			if (newTimePeriod.EndTime.Days > 0 && existingTimePeriod.EndTime.Days == 0)
+			{
+				var temp = new TimePeriod(existingTimePeriod.StartTime.Add(TimeSpan.FromDays(1)),
+										  existingTimePeriod.EndTime.Add(TimeSpan.FromDays(1)));
+				var startTime = newTimePeriod.StartTime;
+				var endTime = newTimePeriod.EndTime;
+				if (temp.StartTime > newTimePeriod.StartTime)
+					startTime = temp.StartTime.Add(TimeSpan.FromDays(-1));
+				if (temp.EndTime < newTimePeriod.EndTime)
+					endTime = temp.EndTime.Add(TimeSpan.FromDays(-1));
+				return new TimePeriod(startTime, endTime);
+			}
+			else
+			{
+				var startTime = existingTimePeriod.StartTime;
+				var endTime = existingTimePeriod.EndTime;
+				if (existingTimePeriod.StartTime < newTimePeriod.StartTime)
+					startTime = newTimePeriod.StartTime;
+				if (existingTimePeriod.EndTime > newTimePeriod.EndTime)
+					endTime = newTimePeriod.EndTime;
+				return new TimePeriod(startTime, endTime);
+			}
+
         }
         
     }
