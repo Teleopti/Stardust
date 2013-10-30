@@ -164,6 +164,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>22851_FindShiftTradePageFromTeamSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyTime\WeekScheduleAvailableAbsenceHeadCount.feature.cs">
+      <DependentUpon>WeekScheduleAvailableAbsenceHeadCount.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="MyTime\OveritmeAvailability.feature.cs">
       <DependentUpon>OveritmeAvailability.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -369,10 +374,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ShiftTradeRequests.feature</DependentUpon>
     </Compile>
-    <Compile Include="MyTime\WeekScheduleAvailableAsbence.feature.cs">
+    <Compile Include="MyTime\WeekScheduleAvailableAbsenceBudgetgroup.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>WeekScheduleAvailableAsbence.feature</DependentUpon>
+      <DependentUpon>WeekScheduleAvailableAbsenceBudgetgroup.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\WeekScheduleTimeIndicator.feature.cs">
       <DependentUpon>WeekScheduleTimeIndicator.feature</DependentUpon>
@@ -706,6 +711,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>22851_FindShiftTradePageFromTeamSchedule.feature.cs</LastGenOutput>
     </None>
+    <None Include="MyTime\WeekScheduleAvailableAbsenceHeadCount.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>WeekScheduleAvailableAbsenceHeadCount.feature.cs</LastGenOutput>
+    </None>
     <None Include="MyTime\OveritmeAvailability.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>OveritmeAvailability.feature.cs</LastGenOutput>
@@ -796,9 +805,9 @@
     <None Include="Testing\specflow.exe.config" />
     <None Include="Testing\TestExecutionReport.bat" />
     <None Include="Testing\StepDefinitionReport.bat" />
-    <None Include="MyTime\WeekScheduleAvailableAsbence.feature">
+    <None Include="MyTime\WeekScheduleAvailableAbsenceBudgetgroup.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>WeekScheduleAvailableAsbence.feature.cs</LastGenOutput>
+      <LastGenOutput>WeekScheduleAvailableAbsenceBudgetgroup.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\WeekScheduleTimeIndicator.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
