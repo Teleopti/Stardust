@@ -57,7 +57,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 						SmoothingStyle = command.SmoothingStyle,
 						TemplatePeriod = command.TemplatePeriod.ToDateOnlyPeriod(),
 						WorkloadIds = command.WorkloadIds,
-						IncreaseWith = command.IncreaseWith
+						IncreaseWith = command.IncreaseWith,
+                        UseDayOfMonth = command.UseDayOfMonth
 					};
 
 				_busSender.Send(message);

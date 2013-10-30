@@ -1,8 +1,8 @@
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
-using Teleopti.Ccc.TestCommon.TestData.Generic;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -21,6 +21,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var activity = new ActivityConfigurable {Name = name};
 			DataMaker.Data().Apply(activity);
+		}
+
+		[Given(@"there are activities")]
+		public void GivenThereAreShiftCategories(Table table)
+		{
+			var shiftCategories = table.CreateSet<ActivityConfigurable>();
+			shiftCategories.ForEach(x => DataMaker.Data().Apply(x));
 		}
 	}
 

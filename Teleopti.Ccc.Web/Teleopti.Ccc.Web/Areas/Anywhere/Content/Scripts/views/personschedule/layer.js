@@ -26,7 +26,8 @@ define([
 
 			this.StartTime = unit.StartTime;
 
-			this.Color = function() { return data.Color; };
-
+			this.Color = function () { return data.Color; };
+			this.Description = data.Description;
+			this.IsFullDayAbsence = data.IsFullDayAbsence;
 		};
 	});

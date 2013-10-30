@@ -110,7 +110,7 @@
     <Compile Include="Configuration\LogModuleTest.cs" />
     <Compile Include="Configuration\RepositoryModuleTest.cs" />
     <Compile Include="Configuration\RuleSetTest.cs" />
-    <Compile Include="Configuration\ScheduleScreenPersisterModuleTest.cs" />
+    <Compile Include="Configuration\SchedulePersistModuleTest.cs" />
     <Compile Include="Configuration\ScheduleScreenRefresherModuleTest.cs" />
     <Compile Include="Configuration\ShiftTradeModuleTest.cs" />
     <Compile Include="Configuration\TeleoptiCacheKeyTest.cs" />

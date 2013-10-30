@@ -17,8 +17,7 @@ namespace Teleopti.Interfaces.Domain
                                             IChangeInfo,
                                             IRestrictionChecker<IPersonAssignment>, 
                                             IProjectionSource, 
-                                            ICloneableEntity<IPersonAssignment>,
-											IEquatable<IPersonAssignment>
+                                            ICloneableEntity<IPersonAssignment>
     {
         /// <summary>
         /// Clears the personal shift.

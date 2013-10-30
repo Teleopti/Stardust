@@ -7,10 +7,10 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Setups;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 

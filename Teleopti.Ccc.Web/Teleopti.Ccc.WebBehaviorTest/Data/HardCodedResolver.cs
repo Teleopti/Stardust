@@ -54,7 +54,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			if (type == typeof (IEnumerable<IHandleEvent<PersonAbsenceAddedEvent>>))
 				return new[]
 					{
-						new ScheduleChangedEventPublisher(new EventPublisher(this, new CurrentIdentity())),
+						new ScheduleChangedEventPublisher(new EventPublisher(this, new CurrentIdentity()))
+					};
+			if (type == typeof(IEnumerable<IHandleEvent<FullDayAbsenceAddedEvent>>))
+				return new[]
+					{
+						new ScheduleChangedEventPublisher(new EventPublisher(this, new CurrentIdentity()))
 					};
 			if (type == typeof (IEnumerable<IHandleEvent<ProjectionChangedEvent>>))
 				return new IHandleEvent<ProjectionChangedEvent>[]

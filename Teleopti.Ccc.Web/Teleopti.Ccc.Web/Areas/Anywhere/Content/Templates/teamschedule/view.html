@@ -25,33 +25,40 @@
 	</table>
 	
 	<div class="row">
-		<div class="span12 nowrap">
-			<select id="team-selector" data-bind="enable: !Loading(), options: Teams, optionsText: 'SiteAndTeam', optionsValue: 'Id', value: SelectedTeam"></select>
-			<div class="input-append date input-prepend pull-right" id="date-picker" data-bind="datepicker: SelectedDate, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
-				<button class="btn" data-bind="attr: {title: Resources.Previous}, click: PreviousDay"><i class="icon-chevron-left"></i></button>
-				<input class="add-on date-input" size="16" type="text" readonly="readonly"/>
-				<span class="add-on"><i class="icon-calendar"></i></span>
-				<button class="btn" data-bind="attr: {title: Resources.Next}, click: NextDay"><i class="icon-chevron-right"></i></button>
-			</div>
+		<div class="span12">
+			<form class="form-inline">
+				<div class="control-group">
+					<select id="team-selector" data-bind="enable: !Loading(), options: Teams, optionsText: 'SiteAndTeam', optionsValue: 'Id', value: SelectedTeam"></select>
+					<div class="pull-right">
+						<div class="input-append date input-prepend" id="date-picker" data-bind="datepicker: SelectedDate, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
+							<button class="btn" data-bind="attr: {title: Resources.Previous}, click: PreviousDay"><i class="icon-chevron-left"></i></button>
+							<input class="add-on date-input" size="16" type="text" readonly="readonly"/>
+							<span class="add-on"><i class="icon-calendar"></i></span>
+							<button class="btn" data-bind="attr: {title: Resources.Next}, click: NextDay"><i class="icon-chevron-right"></i></button>
+						</div>
+						<button class="btn toggle-descriptions" data-toggle="button" disabled data-bind="enable: !Loading(), click: ToggleDisplayDescriptions"><i class="icon-question-sign"></i></button>
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 
 	<div class="row">
 		<div class="span12">
-            <!-- ko if: Loading -->
-            <div><span data-bind="text: Resources.LoadingThreeDots"></span></div>
-            <!-- /ko -->
-            <!-- ko if: !Loading() -->
-            <div class="relative">
+			<!-- ko if: Loading -->
+			<div><span data-bind="text: Resources.LoadingThreeDots"></span></div>
+			<!-- /ko -->
+			<!-- ko if: !Loading() -->
+			<div class="relative">
 				<!-- ko with: TimeLine -->
-	            <div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime }">
-		            <div class="relative">
-			            <div data-bind="foreach: Times">
-				            <div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
-				            <div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
-			            </div>
-		            </div>
-	            </div>
+				<div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime }">
+					<div class="relative">
+						<div data-bind="foreach: Times">
+							<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
+							<div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
+						</div>
+					</div>
+				</div>
 				<!-- /ko -->
 						
 				<table class="table table-hover">
@@ -77,8 +84,18 @@
 									<!-- ko foreach: DayOffs -->
 									<!-- ko if: OverlapsTimeLine -->
 									<div 
-										class="dayoff absolute" 
-										data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }"></div>
+										class="dayoff absolute"
+										data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px'}">
+										<!-- ko if: $root.DisplayDescriptions -->
+										<!-- ko if: $parent.IsShift() && $parent.TimeLineAffectingEndMinute() > StartMinutes()-->
+										<span class="label layer-description floatleft" data-bind="text: DayOffName"></span>
+										<span class="label layer-description floatright" data-bind="text: DayOffName"></span>
+										<!-- /ko -->
+										<!-- ko ifnot: $parent.IsShift() && $parent.TimeLineAffectingEndMinute() > StartMinutes()-->
+										<span class="label layer-description" data-bind="text: DayOffName"></span>
+										<!-- /ko -->
+										<!-- /ko -->
+									</div>
 									<!-- /ko -->
 									<!-- /ko -->
 								</div>
@@ -88,7 +105,7 @@
 					</tbody>
 				</table>
 			</div>
-            <!-- /ko -->
+			<!-- /ko -->
 		</div>
 	</div>
 </div>
@@ -105,6 +122,12 @@
 		'data-start-time': StartTime,
 		'data-length-minutes': LengthMinutes,
 	}
-	"></div>
+	">
+	<!-- ko if: IsFullDayAbsence -->
+		<!-- ko if: $root.DisplayDescriptions -->
+			<span class="label layer-description" data-bind="text: Description"></span>
+		<!-- /ko -->
+	<!-- /ko -->
+	</div>
 	<!-- /ko -->
 </script>

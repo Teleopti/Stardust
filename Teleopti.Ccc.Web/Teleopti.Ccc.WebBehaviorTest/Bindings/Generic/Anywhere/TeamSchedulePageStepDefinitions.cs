@@ -1,13 +1,9 @@
 using System;
 using System.Linq;
-using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
-using Teleopti.Ccc.WebBehaviorTest.Data;
-using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
@@ -70,7 +66,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				                         PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color));
 			}
 			if (layer.Description != null)
+			{
+				DescriptionToggle.EnsureIsOn();
 				Browser.Interactions.AssertFirstContainsUsingJQuery(selector, layer.Description);
+			}
 			else
 				Browser.Interactions.AssertExistsUsingJQuery(selector);
 		}
@@ -107,7 +106,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should be able to select skills")]
 		public void ThenIShouldBeAbleToSelectSkills(Table table)
 		{
-			Browser.Interactions.AssertExists("#skill-selector");
+			Browser.Interactions.Click("#skill-selector");
 
 			var skills = table.CreateSet<SkillInfo>().ToArray();
 			skills.ForEach(s => Browser.Interactions.AssertAnyContains("#skill-selector li", s.Skill));
@@ -124,6 +123,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see '(.*)' with a day off named '(.*)'")]
 		public void ThenIShouldSeeADayOffFor(string personName, string dayOff)
 		{
+			DescriptionToggle.EnsureIsOn();
 			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .dayoff:contains('{1}')", personName, dayOff);
 		}
 
@@ -166,6 +166,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		public static void SelectSkill(string name)
 		{
+			Browser.Interactions.Click("#skill-selector");
 			Browser.Interactions.ClickContaining("#skill-selector li a", name);
 		}
 

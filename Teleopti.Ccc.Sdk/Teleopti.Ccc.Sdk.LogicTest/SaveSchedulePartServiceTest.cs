@@ -5,10 +5,9 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.LogicTest
 {
@@ -16,27 +15,22 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 	public class SaveSchedulePartServiceTest
 	{
 		private MockRepository mocks;
-		private IScheduleDictionarySaver scheduleDictionarySaver;
-		private IScheduleRepository scheduleRepository;
+		private IScheduleDifferenceSaver scheduleDictionarySaver;
 		private ISaveSchedulePartService target;
 		private IPersonAbsenceAccountRepository personAbsenceAccountRepository;
-	    private ICurrentUnitOfWork currentUnitOfWork;
 
 	    [SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			scheduleDictionarySaver = mocks.DynamicMock<IScheduleDictionarySaver>();
-			scheduleRepository = mocks.DynamicMock<IScheduleRepository>();
+			scheduleDictionarySaver = mocks.DynamicMock<IScheduleDifferenceSaver>();
 			personAbsenceAccountRepository = mocks.DynamicMock<IPersonAbsenceAccountRepository>();
-			currentUnitOfWork = mocks.DynamicMock<ICurrentUnitOfWork>();
-			target = new SaveSchedulePartService(scheduleDictionarySaver, scheduleRepository, personAbsenceAccountRepository, currentUnitOfWork);
+			target = new SaveSchedulePartService(scheduleDictionarySaver, personAbsenceAccountRepository);
 		}
 
 		[Test]
 		public void ShouldSaveSchedulePart()
 		{
-			var unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 			var scheduleDay = mocks.DynamicMock<IScheduleDay>();
 			var differenceCollectionItems = mocks.DynamicMock<IDifferenceCollection<IPersistableScheduleData>>();
 			var response = new List<IBusinessRuleResponse>();
@@ -44,11 +38,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 
 			using (mocks.Record())
 			{
-				Expect.Call(currentUnitOfWork.Current()).Return(unitOfWork);
 				Expect.Call(dictionary.DifferenceSinceSnapshot()).Return(differenceCollectionItems);
 				Expect.Call(scheduleDay.Owner).Return(dictionary);
 				Expect.Call(dictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, null, null, null)).IgnoreArguments().Return(response);
-				Expect.Call(scheduleDictionarySaver.MarkForPersist(unitOfWork, scheduleRepository, differenceCollectionItems)).Return(null);
+				Expect.Call(() => scheduleDictionarySaver.SaveChanges(differenceCollectionItems, null)).IgnoreArguments();
 				Expect.Call(dictionary.MakeEditable);
 			}
 			using (mocks.Playback())

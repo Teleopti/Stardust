@@ -1,66 +1,239 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using NUnit.Framework;
+using Teleopti.Analytics.Etl.IntegrationTest.Models;
+using Teleopti.Analytics.Etl.IntegrationTest.TestData;
+using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Transformer.Job;
+using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
+using Teleopti.Analytics.Etl.Transformer.Job.Steps;
+using Teleopti.Analytics.Etl.TransformerInfrastructure;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
-using Teleopti.Ccc.TestCommon.TestData.Common;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.TestCommon.TestData.Generic;
-using Teleopti.Ccc.TestCommon.TestData.Setups;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
-    [TestFixture]
-    public class Bug25126
-    {
-        [SetUp]
-        public void Setup()
-        {
-            SetupFixtureForAssembly.BeginTest();
-        }
+	[TestFixture]
+	public class Bug25126
+	{
+		[SetUp]
+		public void Setup()
+		{
+			SetupFixtureForAssembly.BeginTest();
+		}
 
-        [TearDown]
-        public void TearDown()
-        {
-            SetupFixtureForAssembly.EndTest();
-        }
-         
-        [Test]
-        public void ShouldWork()
-        {
-            var analyticsDataFactory = new AnalyticsDataFactory();
-            var timeZones = new UtcAndCetTimeZones();
-            var dates = new CurrentBeforeAndAfterWeekDates();
-            var dataSource = new ExistingDatasources(timeZones);
-			var businessUnit = new BusinessUnit(TestState.BusinessUnit, dataSource);
-            var intervals = new QuarterOfAnHourInterval();
-			//var person = TestState.TestDataFactory.Person("Ashley Andeen").Person;
+		[TearDown]
+		public void TearDown()
+		{
+			SetupFixtureForAssembly.EndTest();
+		}
+		 
+		[Test]
+		public void ShouldWorkForStockholm()
+		{
+			// run this to get a date and time in mart.LastUpdatedPerStep
+			var etlUpdateDate = new EtlReadModelSetup { BusinessUnit = TestState.BusinessUnit, StepName = "Schedules" };
+			Data.Apply(etlUpdateDate);
 
-            analyticsDataFactory.Setup(timeZones);
-			analyticsDataFactory.Setup(new EternityAndNotDefinedDate());			
-			analyticsDataFactory.Setup(dates);
-			analyticsDataFactory.Setup(businessUnit);
-            analyticsDataFactory.Setup(intervals);
-            analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones, dataSource));
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
 
-            analyticsDataFactory.Persist();
+			IPerson person;
+			SetupBasicForShifts(out person);
 
-            var site = new SiteConfigurable {BusinessUnit = TestState.BusinessUnit, Name = "Västerhaninge"};
+			var readModel = new ScheduleDayReadModel
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				ColorCode = 0,
+				ContractTimeTicks = 500,
+				Date = DateTime.Today,
+				StartDateTime = DateTime.Today.AddDays(-15).AddHours(8),
+				EndDateTime = DateTime.Today.AddDays(-15).AddHours(17),
+				Label = "LABEL",
+				NotScheduled = false,
+				Workday = true,
+				WorkTimeTicks = 600
+			};
 
-            var scenario = new CommonScenario();
-            var cat = new ShiftCategoryConfigurable{Name = "Kattegat"};
-            var act = new ActivityConfigurable{Name = "Phone"};
-            var act2 = new ActivityConfigurable{Name = "Lunch"};
-            Data.Apply(site);
-            Data.Apply(scenario);
-            Data.Apply(cat);
-            Data.Apply(act);
-            Data.Apply(act2);
+			// we must manipulate readmodel so it "knows" that the dates on the person are updated
+			var readM = new ScheduleDayReadModelSetup { Model = readModel };
+			Data.Apply(readM);
+			//readModel.Date = DateTime.Today.AddDays(-1);
+			//readM = new ScheduleDayReadModelSetup { Model = readModel };
+			//Data.Apply(readM);
+			readModel.Date = DateTime.Today.AddDays(1);
+			readM = new ScheduleDayReadModelSetup { Model = readModel };
+			Data.Apply(readM);
 
-            var shift = new ShiftForDate(DateTime.Today, 9, scenario.Scenario, cat.ShiftCategory, act.Activity, act2.Activity);
+			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			dateList.Add(DateTime.Today.AddDays(-3),DateTime.Today.AddDays(3),JobCategoryType.Schedule);
+			var jobParameters = new JobParameters(dateList, 1, "UTC",15,"","False",CultureInfo.CurrentCulture)
+				{
+					Helper =
+						new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""),null,null)
+				};
 
-            Data.Person("Ola H").Apply(new StockholmTimeZone());
-            Data.Person("Ola H").Apply(shift);
+			//transfer site, team contract etc from app to analytics
+			var result = StepRunner.RunBasicStepsBeforeSchedule(jobParameters);
 
+			
+			JobStepBase step = new StageScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
-        }
-    }
+			step = new FactScheduleJobStep(jobParameters,false);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+
+			step = new FactScheduleDayCountJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+
+			// now it should have data on all three dates 96 interval
+			var db = new AnalyticsContext(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+			
+			var factSchedules = from s in db.fact_schedule select s;
+
+			Assert.That(factSchedules.Count(), Is.EqualTo(96));
+			step = new IntradayStageScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+
+			step = new FactScheduleJobStep(jobParameters, true);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			factSchedules = from s in db.fact_schedule select s;
+
+			// still it should have data on all three dates 96 interval, in the bug only 64 one day extra before the two was deleted
+			Assert.That(factSchedules.Count(), Is.EqualTo(96));
+
+			step = new FactScheduleDayCountJobStep(jobParameters, true);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+		}
+
+		
+
+		[Test]
+		public void ShouldWorkForBrasil()
+		{
+			// run this to get a date and time in mart.LastUpdatedPerStep
+			var etlUpdateDate = new EtlReadModelSetup { BusinessUnit = TestState.BusinessUnit, StepName = "Schedules" };
+			Data.Apply(etlUpdateDate);
+
+			var brasilTimeZone = new BrasilTimeZone {TimeZoneId = 2};
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>{brasilTimeZone});
+
+			IPerson person;
+			SetupBasicForShifts(out person);
+
+			Data.Person("Ola H").Apply(new BrasilianTimeZone());
+
+			var readModel = new ScheduleDayReadModel
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				ColorCode = 0,
+				ContractTimeTicks = 500,
+				Date = DateTime.Today,
+				StartDateTime = DateTime.Today.AddDays(-15).AddHours(8),
+				EndDateTime = DateTime.Today.AddDays(-15).AddHours(17),
+				Label = "LABEL",
+				NotScheduled = false,
+				Workday = true,
+				WorkTimeTicks = 600
+			};
+
+			// we must manipulate readmodel so it "knows" that the dates on the person are updated
+			var readM = new ScheduleDayReadModelSetup { Model = readModel };
+			Data.Apply(readM);
+			readModel.Date = DateTime.Today.AddDays(-1);
+			readM = new ScheduleDayReadModelSetup { Model = readModel };
+			Data.Apply(readM);
+			//readModel.Date = DateTime.Today.AddDays(1);
+			//readM = new ScheduleDayReadModelSetup { Model = readModel };
+			//Data.Apply(readM);
+
+			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			dateList.Add(DateTime.Today.AddDays(-3), DateTime.Today.AddDays(3), JobCategoryType.Schedule);
+			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
+			{
+				Helper =
+					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null)
+			};
+
+			//transfer site, team contract etc from app to analytics
+			var result = StepRunner.RunBasicStepsBeforeSchedule(jobParameters);
+
+			JobStepBase step = new StageScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+
+			step = new FactScheduleJobStep(jobParameters, false);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+
+			// now it should have data on all three dates 96 interval
+			var db = new AnalyticsContext(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+
+			var factSchedules = from s in db.fact_schedule select s;
+
+			Assert.That(factSchedules.Count(), Is.EqualTo(96));
+			step = new IntradayStageScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+
+			step = new FactScheduleJobStep(jobParameters, true);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			factSchedules = from s in db.fact_schedule select s;
+
+			
+			Assert.That(factSchedules.Count(), Is.EqualTo(96));
+		}
+
+		private static void SetupBasicForShifts(out IPerson person)
+		{
+			var site = new SiteConfigurable { BusinessUnit = TestState.BusinessUnit.Name, Name = "Västerhaninge" };
+			var team = new TeamConfigurable { Name = "Yellow", Site = "Västerhaninge" };
+			var contract = new ContractConfigurable { Name = "Kontrakt" };
+			var cc = new ContractScheduleConfigurable { Name = "Kontraktsschema" };
+			var ppp = new PartTimePercentageConfigurable { Name = "ppp" };
+			var scenario = new ScenarioConfigurable
+			{
+				EnableReporting = true,
+				Name = "Scenario",
+				BusinessUnit = TestState.BusinessUnit.Name
+			};
+			var cat = new ShiftCategoryConfigurable { Name = "Kattegat" };
+			var act = new ActivityConfigurable { Name = "Phone" };
+			var act2 = new ActivityConfigurable { Name = "Lunch" };
+			Data.Apply(site);
+			Data.Apply(team);
+			Data.Apply(contract);
+			Data.Apply(cc);
+			Data.Apply(ppp);
+			Data.Apply(scenario);
+			Data.Apply(cat);
+			Data.Apply(act);
+			Data.Apply(act2);
+
+			var shift = new ShiftForDate(DateTime.Today.AddDays(-1), 9, scenario.Scenario, cat.ShiftCategory, act.Activity,
+										 act2.Activity);
+			var shift2 = new ShiftForDate(DateTime.Today, 9, scenario.Scenario, cat.ShiftCategory, act.Activity, act2.Activity);
+			var shift3 = new ShiftForDate(DateTime.Today.AddDays(1), 9, scenario.Scenario, cat.ShiftCategory, act.Activity,
+										  act2.Activity);
+			var pp = new PersonPeriodConfigurable
+			{
+				BudgetGroup = "",
+				Contract = contract.Contract.Description.Name,
+				ContractSchedule = cc.ContractSchedule.Description.Name,
+				PartTimePercentage = ppp.Name,
+				Team = team.Name,
+				StartDate = DateTime.Today.AddDays(-6)
+			};
+
+			person = TestState.TestDataFactory.Person("Ola H").Person;
+			Data.Person("Ola H").Apply(shift);
+			Data.Person("Ola H").Apply(shift2);
+			Data.Person("Ola H").Apply(shift3);
+			Data.Person("Ola H").Apply(pp);
+			Data.Person("Ola H").Apply(new StockholmTimeZone());
+		}
+	}
 }

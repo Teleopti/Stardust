@@ -35,7 +35,7 @@ Scenario: View full day absence in team schedule
 	| Start time  | 08:00    |
 	| End time    | 16:00    |
 	| Color       | Red      |
-#	| Description | Vacation |
+	| Description | Vacation |
 
 Scenario: View full day absence for person
 	Given I have the role 'Anywhere Team Green'
@@ -50,7 +50,7 @@ Scenario: View full day absence for person
 	| Start time  | 08:00    |
 	| End time    | 16:00    |
 	| Color       | Red      |
-#	| Description | Vacation |
+	| Description | Vacation |
 	And I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |

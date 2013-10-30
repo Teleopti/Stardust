@@ -1,21 +1,20 @@
 using System;
 using System.Globalization;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.TestCommon.TestData.Setups
+namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 {
 	public class ShiftForDate : IUserDataSetup
 	{
 		public DateTime Date;
 		public IScenario Scenario;
 		public IShiftCategory ShiftCategory;
-        public IActivity ActivityPhone;
-        public IActivity ActivityLunch;
+		public IActivity ActivityPhone;
+		public IActivity ActivityLunch;
 		public readonly TimeSpan StartTime;
 		public readonly TimeSpan EndTime;
 
@@ -23,33 +22,33 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups
 		private DateTimePeriod _assignmentPeriod;
 
 
-        public ShiftForDate(DateTime date, TimeSpan startTime, TimeSpan endTime, IScenario scenario, IShiftCategory shiftCategory, IActivity activityPhone, IActivity activityLunch)
-            : this(date, startTime, endTime, true, scenario, shiftCategory, activityPhone, activityLunch) { }
+		public ShiftForDate(DateTime date, TimeSpan startTime, TimeSpan endTime, IScenario scenario, IShiftCategory shiftCategory, IActivity activityPhone, IActivity activityLunch)
+			: this(date, startTime, endTime, true, scenario, shiftCategory, activityPhone, activityLunch) { }
 
-        public ShiftForDate(DateTime date, int startHour, IScenario scenario, IShiftCategory shiftCategory, IActivity activityPhone, IActivity activityLunch)
-            : this(date, TimeSpan.FromHours(startHour), TimeSpan.FromHours(startHour + 8), scenario, shiftCategory, activityPhone, activityLunch) { }
+		public ShiftForDate(DateTime date, int startHour, IScenario scenario, IShiftCategory shiftCategory, IActivity activityPhone, IActivity activityLunch)
+			: this(date, TimeSpan.FromHours(startHour), TimeSpan.FromHours(startHour + 8), scenario, shiftCategory, activityPhone, activityLunch) { }
 
-        public ShiftForDate(DateTime date, TimeSpan startTime, TimeSpan endTime, bool withLunch, IScenario scenario, IShiftCategory shiftCategory, IActivity activityPhone, IActivity activityLunch)
+		public ShiftForDate(DateTime date, TimeSpan startTime, TimeSpan endTime, bool withLunch, IScenario scenario, IShiftCategory shiftCategory, IActivity activityPhone, IActivity activityLunch)
 		{
 			StartTime = startTime;
 			EndTime = endTime;
 			_withLunch = withLunch;
-            ShiftCategory = shiftCategory;
-            ActivityPhone = activityPhone;
-            Scenario = scenario;
-            ActivityLunch = activityLunch;
-            Date = date;
+			ShiftCategory = shiftCategory;
+			ActivityPhone = activityPhone;
+			Scenario = scenario;
+			ActivityLunch = activityLunch;
+			Date = date;
 		}
 
 		public void Apply(IUnitOfWork uow, IPerson person, CultureInfo cultureInfo)
 		{
-            var dateUtc = person.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(Date);
+			var dateUtc = person.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(Date);
 
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 
 			// create main shift
 			_assignmentPeriod = new DateTimePeriod(dateUtc.Add(StartTime), dateUtc.Add(EndTime));
-            var assignment = PersonAssignmentFactory.CreatePersonAssignment(person, Scenario, new DateOnly(Date));
+			var assignment = PersonAssignmentFactory.CreatePersonAssignment(person, Scenario, new DateOnly(Date));
 			assignment.AddMainLayer(ActivityPhone, _assignmentPeriod);
 
 			// add lunch

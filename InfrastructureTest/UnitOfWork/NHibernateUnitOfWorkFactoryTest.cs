@@ -280,37 +280,5 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				target.CreateAndOpenUnitOfWork(root);
 			}
 		}
-
-		[Test]
-		public void ShouldReassociateCollectionOnCreateAndOpenUnitOfWork()
-		{
-			var roots = new[] { MockRepository.GenerateMock<IAggregateRoot>(), MockRepository.GenerateMock<IAggregateRoot>() };
-			stateMock = mocks.StrictMock<IState>();
-			StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
-			using (mocks.Record())
-			{
-				Expect.On(stateMock)
-					.Call(stateMock.IsLoggedIn)
-					.Return(false)
-					.Repeat.Any();
-				var session = createSessionMock(factoryMock, Guid.Empty);
-				Expect.On(session)
-					.Call(session.BeginTransaction())
-					.Return(mocks.DynamicMock<ITransaction>())
-					.IgnoreArguments();
-				Expect.Call(stateMock.ApplicationScopeData)
-					.Return(SetupFixtureForAssembly.ApplicationData)
-					.Repeat.Any();
-				Expect.Call(() => session.Lock(roots[0], LockMode.None));
-				Expect.Call(() => session.Lock(roots[1], LockMode.None));
-			}
-			using (mocks.Playback())
-			{
-				target = new NHibernateUnitOfWorkFactoryFake(factoryMock);
-				target.CreateAndOpenUnitOfWork(roots);
-			}
-		}
-
-
 	}
 }

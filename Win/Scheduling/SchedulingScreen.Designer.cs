@@ -46,8 +46,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _clipboardControl.Dispose();
                 if (_editControl != null)
                     _editControl.Dispose();
-
-                _persister = null;
             }
             base.Dispose(disposing);
         }
