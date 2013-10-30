@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 		[Given(@"'?(I)'? have a full day absence named '(.*)' on '(.*)'")]
 		[Given(@"'?(.*)'? has a full day absence named '(.*)' on '(.*)'")]
-		public void GivenHaveAAbsenceWith(string userName, string name, DateTime date)
+		public void GivenHaveAAbsenceWith(string person, string name, DateTime date)
 		{
-			DataMaker.Data().Apply(new FullDayAbsenceConfigurable
+			DataMaker.Person(person).Apply(new FullDayAbsenceConfigurable
 				{
 					Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario.Description.Name,
 					Name = name,

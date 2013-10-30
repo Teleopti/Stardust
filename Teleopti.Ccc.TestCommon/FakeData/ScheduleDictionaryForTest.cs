@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -62,6 +63,24 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 
 
+		public static IScheduleDictionary WithScheduleData(IScenario scenario, DateTimePeriod period, params IScheduleData[] data)
+		{
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period);
+			scheduleDictionary.AddScheduleData(data);
+			return scheduleDictionary;
+		}
+
+		public void AddScheduleData(params IScheduleData[] data)
+		{
+			var person = data.First().Person;
+			var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, person, Period.VisiblePeriod));
+			scheduleRange.AddRange(data);
+			BaseDictionary.Add(person, scheduleRange);
+			TakeSnapshot();
+		}
+
+
+
 		public void AddTestItem(IPerson person, IScheduleRange range)
 		{
 			BaseDictionary.Add(person, range);
@@ -71,8 +90,5 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second, DateTimeKind.Utc);
 		}
-
-
-
 	}
 }

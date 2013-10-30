@@ -113,6 +113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var result = target.Map(new PersonScheduleData {Model = model});
 
 			result.IsDayOff.Should().Be.True();
+			result.DayOffName.Should().Be.EqualTo("Day off");
 		}
 
 		[Test]

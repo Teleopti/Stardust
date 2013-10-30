@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 			if (shiftLayer.Description != null)
 			{
-				Browser.Interactions.Click(".toggle-descriptions:enabled");
+				DescriptionToggle.EnsureIsOn();
 				Browser.Interactions.AssertFirstContains(selector, shiftLayer.Description);
 			}
 			else
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should not see any shift")]
 		public void ThenIShouldNotSeeAnyShift()
 		{
-			Browser.Interactions.AssertNotExists(".shift", ".shift .layer");
+			Browser.Interactions.AssertNotExists(".schedule", ".shift");
 		}
 
 		[Then(@"I should see the add full day absence form with")]
@@ -145,6 +145,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see a day off named '(.*)'")]
 		public void ThenIShouldSeeADayOff(string dayOff)
 		{
+			DescriptionToggle.EnsureIsOn();
 			Browser.Interactions.AssertExistsUsingJQuery(".dayoff:contains('{0}')", dayOff);
 		}
 

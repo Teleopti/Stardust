@@ -335,7 +335,7 @@ BEGIN
 	--Move discarded messages
 	SELECT @DiscardedQueueId = QueueId
 	FROM Queue.Queues
-	WHERE [Endpoint] = @Endpoint + N'\Discarded'
+	WHERE [Endpoint] = @Endpoint + N'/Discarded'
 	AND QueueName = @Queue
 
 	DELETE FROM Queue.Messages

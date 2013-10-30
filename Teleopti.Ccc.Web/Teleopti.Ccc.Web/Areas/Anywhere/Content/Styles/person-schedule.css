@@ -39,6 +39,7 @@
 .person-schedule .layer {
 	height: 40px;
 	text-align: center;
+	z-index: 10;	
 }
 
 .person-schedule .layer:first-of-type
@@ -69,6 +70,7 @@
 
 .person-schedule .dayoff 
 {
+	text-align: center;
 	width: 100%;
 	top: -8px;
 	height: 57px;
@@ -81,6 +83,10 @@
         transparent 8px,
         transparent
         );
+}
+.person-schedule .dayoff .layer-description {
+	margin-top: 18px;
+	text-shadow: none;
 }
 
 .no-cssgradients .person-schedule .dayoff 

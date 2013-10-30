@@ -4,7 +4,6 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
@@ -101,7 +100,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			}
 			if (layer.Description != null)
 			{
-				Browser.Interactions.Click(".toggle-descriptions:enabled");
+				DescriptionToggle.EnsureIsOn();
 				Browser.Interactions.AssertFirstContainsUsingJQuery(selector, layer.Description);
 			}
 			else
@@ -174,6 +173,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see '(.*)' with a day off named '(.*)'")]
 		public void ThenIShouldSeeADayOffFor(string personName, string dayOff)
 		{
+			DescriptionToggle.EnsureIsOn();
 			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .dayoff:contains('{1}')", personName, dayOff);
 		}
 
