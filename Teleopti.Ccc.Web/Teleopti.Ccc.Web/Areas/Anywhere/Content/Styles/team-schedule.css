@@ -119,6 +119,77 @@
 	color: #606060;
 	text-shadow: none;
 }
+
+.team-schedule .shift .layer .handle1 {
+    float: left;
+    top: 22px;
+    left: -10px;
+    width: 20px;
+    height: 20px;
+    border: 1px solid rgba(255,0,0, 0.5);
+    background-color: white;
+    border-radius: 10px;
+}
+.team-schedule .shift .layer .handle1 .inner {
+    top: 3px;
+    left: 3px;
+    width: 14px;
+    height: 14px;
+    background: #515151;
+    border-radius: 8px;
+}
+.team-schedule .shift .layer .handle2 {
+    float: left;
+    top: 22px;
+    left: -9px;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 10px;
+}
+.team-schedule .shift .layer .handle3 {
+    float: left;
+    left: -18px;
+}
+.team-schedule .shift .layer .handle3 .bar {
+    background-color: rgb(48, 159, 251);
+    width: 3px;
+    left: 16px;
+    height: 30px;
+}
+.team-schedule .shift .layer .handle3 .arrow {
+    top: 2px;
+    width: 3px;
+    height: 3px;
+    border-left: 16px solid transparent;
+    border-bottom: 16px solid rgb(48, 159, 251);
+    border-right: 16px solid transparent;
+    border-top: 16px solid transparent;
+}
+.team-schedule .shift .layer .handle4 {
+    float: left;
+    top: 22px;
+}
+.team-schedule .shift .layer .handle4 .arrow {
+    left: -8px;
+    top: -8px;
+    border-left: 8px solid transparent;
+    border-bottom: 8px solid #515151;
+    border-right: 8px solid transparent;
+    border-top: 8px solid transparent;
+}
+.team-schedule .shift .layer .handle4 .circle {
+    top: 5px;
+    left: -12px;
+    width: 10px;
+    height: 10px;
+    border: 7px solid #515151;
+    background-color: white;
+    border-radius: 12px;
+}
+
+
+
 .team-schedule .resources td {
     padding-top: 3px;
 }

@@ -105,12 +105,51 @@
 					    <tr>
 					        <td class="first-column shift-menu-background"></td>
 					        <td class="shift-menu-background">
-
+                                
 					            <div class="shift-menu" data-bind="
 	                                            style: {
 		                                            'margin-left': Layers()[0].StartPixels() + 'px'
 	                                            }
                                                 ">
+					                <!-- ko if: true -->
+					                <!-- ko if: $root.DisplayDescriptions -->
+					                <div style="margin-bottom: 5px;">
+					                    <span class="label" style="background: green">Phone</span>
+					                    <span class="label" style="background: yellow; color: black">Lunch</span>
+					                    <span class="label" style="background: red">Break</span>
+					                </div>
+					                <!-- /ko -->
+					                <!-- /ko -->
+					                <!-- ko if: false -->
+					                <div style="margin-bottom: 5px;">
+					                    <span class="label" style="background: green">Phone 9:00-13:00</span>
+					                    <span class="label" style="background: yellow; color: black">Lunch 13:00-14:00</span>
+					                    <span class="label" style="background: green">14:00-15:00</span>
+					                    <span class="label" style="background: red">Phone 15:00-15:05</span>
+					                    <span class="label" style="background: green">15:05-18:00</span>
+					                </div>
+					                <!-- /ko -->
+					                <!-- ko if: false -->
+					                <div style="margin-bottom: 5px;">
+					                    <span class="label" style="background: green">Phone</span>
+					                    <span class="label" style="background: yellow; color: black">Lunch</span>
+					                    <span class="label" style="background: red">Break</span>
+					                </div>
+					                <div style="margin-bottom: 5px;">
+					                    <span class="label" style="background: green">9:00-13:00</span>
+					                    <span class="label" style="background: yellow; color: black">13:00-14:00</span>
+					                    <span class="label" style="background: green">14:00-15:00</span>
+					                    <span class="label" style="background: red">15:00-15:05</span>
+					                    <span class="label" style="background: green">15:05-18:00</span>
+					                </div>
+					                <!-- /ko -->
+					                <!-- ko ifnot: $root.DisplayDescriptions -->
+                                        <!-- ko foreach: Layers -->
+    					                    <!-- ko if: LengthPixels() < 10 -->
+					                            <div style="height: 15px"></div>
+                                            <!-- /ko -->
+                                        <!-- /ko -->
+                                    <!-- /ko -->
 					                <div class="btn-group">
 					                    <a href="#" class="btn btn-small show-details" data-bind="click: ShowDetails"><i class="icon-eye-open"></i></a>
 					                    <a href="#" class="btn btn-small add-full-day-absence" data-bind="click: AddFullDayAbsence"><i class="icon-plus"></i><span data-bind="text: $root.Resources.FullDayAbsence"></span></a>
@@ -133,8 +172,8 @@
 </div>
 
 <script id="layerTemplate" type="text/html">
-	<!-- ko if: OverlapsTimeLine -->
-	<div class="layer absolute floatleft" data-bind="
+    <!-- ko if: OverlapsTimeLine -->
+    <div class="layer absolute floatleft" data-bind="
 	style: {
 		left: StartPixels() + 'px',
 		width: LengthPixels() + 'px',
@@ -145,11 +184,27 @@
 		'data-length-minutes': LengthMinutes,
 	}
 	">
-	<!-- ko if: IsFullDayAbsence -->
-		<!-- ko if: $root.DisplayDescriptions -->
-			<span class="label layer-description" data-bind="text: Description"></span>
-		<!-- /ko -->
-	<!-- /ko -->
-	</div>
+        <!-- ko if: $parent.Selected -->
+        <!-- ko if: LengthPixels() < 30 -->
+        <!-- ko if: false -->
+        <div class="handle1 absolute"><div class="inner absolute"></div></div>
+        <!-- /ko -->
+        <!-- ko if: false -->
+        <div class="handle2 absolute"></div>
+        <!-- /ko -->
+        <!-- ko if: false -->
+        <div class="handle3 absolute"><div class="bar absolute"></div><div class="arrow absolute"></div></div>
+        <!-- /ko -->
+        <!-- ko if: true -->
+        <div class="handle4 absolute"><div class="arrow absolute"></div><div class="circle absolute"></div></div>
+        <!-- /ko -->
+        <!-- /ko -->
+    <!-- /ko -->
+    <!-- ko if: IsFullDayAbsence -->
+        <!-- ko if: $root.DisplayDescriptions -->
+            <span class="label layer-description" data-bind="text: Description"></span>
+        <!-- /ko -->
+    <!-- /ko -->
+    </div>
 	<!-- /ko -->
 </script>
