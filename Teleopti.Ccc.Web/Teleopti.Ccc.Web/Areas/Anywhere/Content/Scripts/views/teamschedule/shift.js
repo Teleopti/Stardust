@@ -2,12 +2,14 @@ define([
 		'knockout',
 		'moment',
 		'navigation',
+        'lazy',
 		'views/teamschedule/layer',
 		'resources!r'
 ], function (
 	ko,
 	moment,
 	navigation,
+    lazy,
 	layer,
 	resources
 	) {
@@ -30,8 +32,10 @@ define([
 			});
 			self.Layers.push.apply(self.Layers, newItems);
 		};
-		
-		this.Selected = ko.observable(false);
+
+		this.Selected = ko.computed(function () {
+	        return lazy(self.Layers()).some(function(x) { return x.Selected(); });
+	    });
 
 		this.ShowDetails = function () {
 		    navigation.GotoPersonSchedule(personId, date);

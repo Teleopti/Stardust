@@ -33,16 +33,14 @@ define([
             this.Selected = ko.observable(false);
 
             this.Select = function () {
-                if (shift.Selected()) {
-                    shift.Selected(false);
-                    if (self.Selected()) {
-                        self.Selected(false);
-                    } else {
-                        self.Selected(true);
+                var set = !self.Selected();
+                if (set) {
+                    var layers = shift.Layers();
+                    for (var i = 0; i < layers.length ; i++) {
+                        layers[i].Selected(false);
                     }
                 }
-                else
-                    shift.Selected(true);
+                self.Selected(set);
             };
             
             this.DeleteLayer = function() {
