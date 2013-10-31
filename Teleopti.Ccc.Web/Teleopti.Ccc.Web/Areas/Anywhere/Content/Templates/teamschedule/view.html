@@ -144,7 +144,7 @@
 					                <!-- /ko -->
 					                <!-- ko ifnot: $root.DisplayDescriptions -->
                                         <!-- ko foreach: Layers -->
-    					                    <!-- ko if: LengthPixels() < 10 -->
+    					                    <!-- ko if: LengthPixels() < 20 -->
 					                            <div style="height: 15px"></div>
                                             <!-- /ko -->
                                         <!-- /ko -->
@@ -212,7 +212,7 @@
     click: Select
 	">
         <!-- ko if: $parent.Selected -->
-        <!-- ko if: LengthPixels() < 30 -->
+        <!-- ko if: LengthPixels() < 20 -->
         <!-- ko if: false -->
         <div class="handle1 absolute"><div class="inner absolute"></div></div>
         <!-- /ko -->
