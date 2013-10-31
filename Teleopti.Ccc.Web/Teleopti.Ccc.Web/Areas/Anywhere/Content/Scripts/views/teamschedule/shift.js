@@ -26,16 +26,12 @@ define([
 			    date = date || moment(l.Start).startOf('day');
 				l.Date = data.Date;
 				l.IsFullDayAbsence = data.IsFullDayAbsence;
-				return new layer(timeline, l);
+				return new layer(timeline, l, self);
 			});
 			self.Layers.push.apply(self.Layers, newItems);
 		};
 		
 		this.Selected = ko.observable(false);
-
-		this.Select = function () {
-		    self.Selected(!self.Selected());
-		};
 
 		this.ShowDetails = function () {
 		    navigation.GotoPersonSchedule(personId, date);

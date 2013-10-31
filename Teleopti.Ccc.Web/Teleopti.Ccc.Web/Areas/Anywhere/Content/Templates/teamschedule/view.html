@@ -82,8 +82,7 @@
                                         template: { 
                                             name: 'layerTemplate', 
                                             foreach: Layers
-                                        }, 
-                                        click: Select
+                                        }
                                         "></div>
 					                <!-- /ko -->
 									
@@ -161,6 +160,33 @@
 					        <td class="last-column shift-menu-background"></td>
 					    </tr>
 					    <!-- /ko -->
+
+                        <!-- ko foreach: Layers -->
+					    <!-- ko if: Selected -->
+					    <tr>
+					        <td class="first-column shift-menu-background"></td>
+					        <td class="shift-menu-background">
+                                
+					            <div class="shift-menu" data-bind="
+                                    style: {
+                                        'margin-left': StartPixels() + 'px'
+                                    }
+                                                ">
+					                <div style="margin-bottom: 5px;">
+					                    <span class="label" data-bind="style: { 'background-color': Color }, text: Description + ' ' + StartTime() + '-' + EndTime()"></span>
+					                </div>
+					                <div class="btn-group">
+					                    <a href="#" class="btn btn-small delete-layer" data-bind="click: DeleteLayer"><i class="icon-trash"></i><span data-bind="text: $root.Resources.Activity"></span></a>
+					                    <a href="#" class="btn btn-small move-layer" data-bind="click: MoveLayer"><i class="icon-pencil"></i><span data-bind="text: $root.Resources.Activity"></span></a>
+					                </div>
+					            </div>
+
+					        </td>
+					        <td class="last-column shift-menu-background"></td>
+					    </tr>
+                        <!-- /ko -->
+                        <!-- /ko -->
+
 					    <!-- /ko -->
 
 					</tbody>
@@ -182,7 +208,8 @@
 	attr: {
 		'data-start-time': StartTime,
 		'data-length-minutes': LengthMinutes,
-	}
+	},
+    click: Select
 	">
         <!-- ko if: $parent.Selected -->
         <!-- ko if: LengthPixels() < 30 -->

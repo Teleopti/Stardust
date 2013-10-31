@@ -101,5 +101,10 @@ define([
 			return time.format(resources.FixedTimeFormat);
 		});
 
+		this.EndTime = ko.computed(function () {
+		    var time = moment().startOf('day').add('minutes', self.EndMinutes());
+		    return time.format(resources.FixedTimeFormat);
+		});
+
 	};
 });
