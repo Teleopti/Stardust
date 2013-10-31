@@ -140,8 +140,6 @@ namespace Teleopti.Ccc.Win.Commands
 												  matrixesOfSelectedScheduleDays.Select(x => x.Person).Distinct().ToList(), rollbackService);
 				advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
                 _workShiftFinderResultHolder.AddResults(new List<IWorkShiftFinderResult>(schedulingResults.Values), DateTime.Now);
-				//if (schedulingOptions.RotationDaysOnly)
-				//    schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
 
                 _workShiftFinderResultHolder.AddResults(advanceSchedulingResults, DateTime.Now);
 			}
