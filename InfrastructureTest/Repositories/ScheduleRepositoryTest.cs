@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -505,10 +506,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IList<IPerson> people = new List<IPerson> { person };
            
             var period1 = new DateTimePeriod(2000,2,1,2000,2,10);
-	        var longPeriod1 = new DateOnlyPeriod(new DateOnly(period1.StartDateTime.AddDays(-1)), new DateOnly(period1.EndDateTime.AddDays(1)));
+            var longPeriod1 = new DateOnlyPeriod(2000, 1, 31, 2000, 3, 11);
 
             var period2 = new DateTimePeriod(2000, 3, 1, 2000, 3, 10);
-						var longPeriod2 = new DateOnlyPeriod(new DateOnly(period2.StartDateTime.AddDays(-1)), new DateOnly(period2.EndDateTime.AddDays(1)));
 						var period3 = new DateTimePeriod(2000, 2, 1, 2000, 3, 11);
            
             ICollection<DateTimePeriod> absencePeriods = new List<DateTimePeriod> {period1,period2};
@@ -522,8 +522,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 				Expect.Call(_absRep.Find(people, period3, _scenario, absenceToLookFor)).Return(_absences);
                 Expect.Call(_assRep.Find(people, longPeriod1, _scenario)).Return(_assignments);
-                Expect.Call(_meetingRepository.Find(people, new DateOnlyPeriod(2000,1,31,2000,3,11), _scenario)).Return(_meetings);
-								Expect.Call(_assRep.Find(people, longPeriod2, _scenario)).Return(new List<IPersonAssignment>());
+                Expect.Call(_meetingRepository.Find(people, longPeriod1, _scenario)).Return(_meetings);
             }
             using (_mocks.Playback())
             {
@@ -544,9 +543,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		    var searchPeriod = new DateTimePeriod(2000, 1, 1, 2200, 1, 1);
 		    var period1 = new DateTimePeriod(2000, 2, 1, 2000, 2, 10);
-		    var longPeriod1 = new DateOnlyPeriod(new DateOnly(period1.StartDateTime.AddDays(-1)), new DateOnly(period1.EndDateTime.AddDays(1)));
+	        var longPeriod1 = new DateOnlyPeriod(2000, 1, 31, 2001, 3, 11);
 		    var period2 = new DateTimePeriod(2000, 3, 1, 2001, 3, 10);
-		    var longPeriod2 = new DateOnlyPeriod(new DateOnly(period2.StartDateTime.AddDays(-1)), new DateOnly(period2.EndDateTime.AddDays(1)));
 		    var period3 = new DateTimePeriod(2000, 2, 1, 2001, 3, 11);
 		    //Returnvalues:
 		    ICollection<DateTimePeriod> absencePeriods = new List<DateTimePeriod> {period1, period2};
@@ -557,8 +555,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			    Expect.Call(_absRep.Find(people, period3, _scenario, absenceToLookFor)).Return(_absences);
 			    Expect.Call(_assRep.Find(people, longPeriod1, _scenario)).Return(_assignments);
-			    Expect.Call(_meetingRepository.Find(people, new DateOnlyPeriod(2000, 1, 31, 2001, 3, 11), _scenario)).Return(_meetings);
-			    Expect.Call(_assRep.Find(people, longPeriod2, _scenario)).Return(new List<IPersonAssignment>());
+			    Expect.Call(_meetingRepository.Find(people, longPeriod1, _scenario)).Return(_meetings);
 		    }
 		    using (_mocks.Playback())
 		    {
@@ -575,14 +572,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IAbsence absenceToLookFor = AbsenceFactory.CreateAbsence("for test");
             IPerson person = PersonFactory.CreatePerson("gfsegfwegtwer");
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+            var longPeriod = new DateOnlyPeriod(1999, 12, 31, 2000, 1, 2);
             ICollection<DateTimePeriod> absencePeriods = new List<DateTimePeriod>();
 			var searchPeriod = new DateTimePeriod(2000, 1, 1, 2001, 1, 1);
             using (_mocks.Record())
             {
                 Expect.Call(_absRep.AffectedPeriods(person, _scenario, searchPeriod, absenceToLookFor)).Return(absencePeriods);
 				Expect.Call(_absRep.Find(new List<IPerson>{person}, period, _scenario, absenceToLookFor)).Return(_absences);
-				Expect.Call(_meetingRepository.Find(new List<IPerson> { person }, new DateOnlyPeriod(1999, 12, 31, 2000, 1, 2), _scenario)).Return(_meetings);
-               
+                Expect.Call(_meetingRepository.Find(new List<IPerson> { person }, longPeriod, _scenario)).Return(_meetings);
+                Expect.Call(_assRep.Find(new List<IPerson> { person }, longPeriod, _scenario)).Return(new Collection<IPersonAssignment>());
             }
             using (_mocks.Playback())
             {
