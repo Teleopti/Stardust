@@ -45,9 +45,9 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
 <table class="table-condensed preference-input-container">
     <tr>
         <td>
-            <table class="table-condensed" data-bind="visible: IsPreferenceInputVisible">
+            <table class="table-condensed preference-input-container" data-bind="visible: IsPreferenceInputVisible">
                 <tr>
-                    <td>
+                    <td class="preference-input-icon-cell">
                         <i class="icon-edit" title="@Resources.Preference"></i>
                     </td>
                     <td colspan="3">
@@ -62,6 +62,7 @@ var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, 
                             </select>
                         </span>
                     </td>
+                    <td></td>
                 </tr>
                 <tr class="form-inline" data-bind="if: IsTimeInputVisible">
                     <td>
