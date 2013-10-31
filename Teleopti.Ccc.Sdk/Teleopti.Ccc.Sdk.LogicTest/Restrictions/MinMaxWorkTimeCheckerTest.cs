@@ -195,6 +195,42 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         }
 
         [Test]
+        public void ShouldGetMinMaxWorkTimeFromContractTimeOnAbsenceNotInWorkTime()
+        {
+            var effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
+	        var absence = AbsenceFactory.CreateAbsence("Holiday");
+			absence.InContractTime = true;
+	        absence.InWorkTime = false;
+
+			var dateOnly = new DateOnly(2011, 1, 1);
+			_person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(dateOnly));
+			var dateTime = new DateTime(2011, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+			var projectionService = _mocks.StrictMock<IProjectionService>();
+			var payload1 = ActivityFactory.CreateActivity("Phone");
+			payload1.InWorkTime = true;
+			payload1.InContractTime = true;
+	        var layer = new VisualLayer(payload1, new DateTimePeriod(dateTime, dateTime.AddHours(8)), payload1, _person);
+	        layer.HighestPriorityAbsence = absence;
+			var layerCollection = new List<IVisualLayer>{layer};
+			var projection = new VisualLayerCollection(_person, layerCollection, new ProjectionPayloadMerger());
+
+            using (_mocks.Record())
+            {
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.FullDayAbsence);
+				Expect.Call(effectiveRestriction.NotAvailable).Return(false);
+				Expect.Call(_scheduleDay.TimeZone).Return(_person.PermissionInformation.DefaultTimeZone());
+				Expect.Call(_scheduleDay.ProjectionService()).Return(projectionService);
+				Expect.Call(projectionService.CreateProjection()).Return(projection);
+            }
+
+            using (_mocks.Playback())
+            {
+                var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, effectiveRestriction);
+                Assert.That(result.WorkTimeLimitation.StartTime, Is.EqualTo(TimeSpan.FromHours(8)));
+            }
+        }
+
+        [Test]
         public void ShouldGetMinMaxWorkTimeZeroOnAbsencePreferenceOnNonWorkdays()
         {
             var dateOnlyAsPeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
