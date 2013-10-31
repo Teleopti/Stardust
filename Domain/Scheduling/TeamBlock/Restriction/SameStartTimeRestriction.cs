@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 {
-    public class SameStartTimeRestriction : IScheduleRestrictionStrategy 
+    public class SameStartTimeRestriction : IScheduleRestrictionStrategy
     {
         private readonly TimeZoneInfo _timeZone;
 
@@ -16,28 +14,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
             _timeZone = timeZone;
         }
 
-        public IEffectiveRestriction ExtractRestriction(IList<DateOnly> dateOnlyList, IList<IScheduleMatrixPro> matrixList)
+        public IEffectiveRestriction ExtractRestriction(IList<DateOnly> dateOnlyList,
+                                                        IList<IScheduleMatrixPro> matrixList)
         {
             var startTimeLimitation = new StartTimeLimitation();
-            foreach (var matrix in matrixList)
+            foreach (IScheduleMatrixPro matrix in matrixList)
             {
-                foreach (var dateOnly in dateOnlyList)
+                foreach (DateOnly dateOnly in dateOnlyList)
                 {
-                    var schedule = matrix.GetScheduleDayByKey(dateOnly);
+                    IScheduleDayPro schedule = matrix.GetScheduleDayByKey(dateOnly);
                     if (schedule == null)
                         continue;
 
-                    var period = schedule.DaySchedulePart().ProjectionService().CreateProjection().Period();
+                    DateTimePeriod? period = schedule.DaySchedulePart().ProjectionService().CreateProjection().Period();
                     if (period == null) continue;
                     if (startTimeLimitation.StartTime == null && startTimeLimitation.EndTime == null)
                     {
-                        var timePeriod = period.Value.TimePeriod(_timeZone);
+                        TimePeriod timePeriod = period.Value.TimePeriod(_timeZone);
                         startTimeLimitation = new StartTimeLimitation(timePeriod.StartTime, timePeriod.StartTime);
                     }
                     else
                     {
-                        var timePeriod = period.Value.TimePeriod(_timeZone);
-                        if (startTimeLimitation.StartTime != timePeriod.StartTime || startTimeLimitation.EndTime != timePeriod.StartTime)
+                        TimePeriod timePeriod = period.Value.TimePeriod(_timeZone);
+                        if (startTimeLimitation.StartTime != timePeriod.StartTime ||
+                            startTimeLimitation.EndTime != timePeriod.StartTime)
                             return null;
                     }
                 }
