@@ -165,6 +165,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertNotExists("#skill-selector li:nth-child(" + skills.Length + ")", "#skill-selector li:nth-child(" + (skills.Length + 1) + ")");
 		}
 
+		[When(@"I click description toggle button")]
+		public void WhenIClickDescriptionToggleButton()
+		{
+			DescriptionToggle.EnsureIsOn();
+		}
+
 		[Then(@"I should see '(.*)' with a day off")]
 		public void ThenIShouldSeeADayOffFor(string personName)
 		{
@@ -174,7 +180,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see '(.*)' with a day off named '(.*)'")]
 		public void ThenIShouldSeeADayOffFor(string personName, string dayOff)
 		{
-			DescriptionToggle.EnsureIsOn();
 			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .dayoff:contains('{1}')", personName, dayOff);
 		}
 
