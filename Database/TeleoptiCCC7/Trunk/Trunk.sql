@@ -110,3 +110,29 @@ GO
 ----------------
 --No, not on this version. Tables is removed as part of "0000000386.sql"
 GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-11-01
+--Desc: Bug #25310 - Crash In ETL tool on stg_request, timout
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[Request]') AND name = N'IX_Request_StartDateTime_Id_Parent')
+CREATE NONCLUSTERED INDEX [IX_Request_StartDateTime_Id_Parent] ON [dbo].[Request]
+(
+	[StartDateTime] ASC
+)
+INCLUDE (
+[Id],
+[Parent]
+)
+GO
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[Request]') AND name = N'IX_Request_Parent')
+CREATE NONCLUSTERED INDEX [IX_Request_Parent] ON [dbo].[Request]
+(
+	[Parent] ASC
+)
+INCLUDE ( 	[Id],
+	[StartDateTime],
+	[EndDateTime]
+	)
+GO
