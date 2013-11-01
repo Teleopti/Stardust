@@ -545,11 +545,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				using (new CustomAuthorizationContext(_principalAuthorization))
 				{
 					var preferenceDay1 = new PreferenceDay(_person, new DateOnly(2000, 1, 1), new PreferenceRestriction());
-					_target.Add(preferenceDay1);
+                    preferenceDay1.SetId(Guid.NewGuid());
+                    _target.Add(preferenceDay1);
 
 					var preferenceDay2 = new PreferenceDay(_person, new DateOnly(2000, 1, 1), new PreferenceRestriction());
-					preferenceDay2.SetId(Guid.NewGuid());
 					_target.Add(preferenceDay2);
+                    _target.Add(preferenceDay1);
 
 					var coll = _target.ScheduledDay(new DateOnly(2000, 1, 1)).RestrictionCollection();
 
