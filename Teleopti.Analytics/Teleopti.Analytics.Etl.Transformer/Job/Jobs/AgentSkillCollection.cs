@@ -23,6 +23,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
             Add(new DimSkillSetJobStep(jobParameters));
             Add(new DimPersonJobStep(jobParameters));                        
             Add(new BridgeSkillSetSkillJobStep(jobParameters));
+            Add(new FactAgentSkillJobStep(jobParameters));
         }
     }
 }

@@ -11,8 +11,6 @@ CREATE PROCEDURE [mart].[etl_fact_agent_skill_load]
 @business_unit_code uniqueidentifier
 WITH EXECUTE AS OWNER	
 AS
-SET NOCOUNT ON 
-
 
 /*Get business unit id*/
 DECLARE @business_unit_id int
