@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote, IEnumerable<IPersonMeeting> meetings, DateTimePeriod? totalPeriod)
 		{
-			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			                       
 			var dateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(date), timeZone);
 			var scheduleDay = MockRepository.GenerateStub<IScheduleDay>();

@@ -6,7 +6,6 @@ using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			CreateMap<IScheduleDay, ShiftTradePersonScheduleViewModel>()
 				.ConvertUsing(o =>
 					                {
-
+											
 											 var myScheduleDay = createPersonDay(o.Person, o);
 											 var timeLineRangeTot = setTimeLineRange(o.DateOnlyAsPeriod.DateOnly, myScheduleDay.ScheduleLayers, new List<ShiftTradePersonDayData>(), myScheduleDay.PersonTimeZone);
 											 var myScheduleViewModel = new ShiftTradePersonScheduleViewModel
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ConvertUsing(dateOnly =>
 					{
 						var myDomainScheduleDay = _shiftTradeRequestProvider.RetrieveMyScheduledDay(dateOnly);
-						var myScheduleDay = createPersonDay(myDomainScheduleDay.Person, myDomainScheduleDay);
+						ShiftTradePersonDayData myScheduleDay = createPersonDay(myDomainScheduleDay.Person, myDomainScheduleDay);
 						var possibleShiftTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(dateOnly);
 
 						var possibleTradePersonsSchedule = _shiftTradeRequestProvider.RetrievePossibleTradePersonsScheduleDay(dateOnly, possibleShiftTradePersons);
@@ -93,6 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 																								{
 																									PersonId = personDay.PersonId,
 																									Name = personDay.Name,
+																									//ScheduleLayers = createShiftTradeLayers(personDay, personDay.PersonTimeZone, timeLineRangeTot),
 																									ScheduleLayers = createShiftTradeLayers(personDay, myScheduleDay.PersonTimeZone, timeLineRangeTot),
 																									MinutesSinceTimeLineStart =
 																										personDay.ScheduleLayers.Any() ?

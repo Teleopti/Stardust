@@ -645,24 +645,24 @@ Scenario: Show other shifts to trade with from users in other timezones translat
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I am located in Stockholm
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And I am located in Stockholm
+	And 'OtherAgent' is located in 'Moscow'
 	And 'OtherAgent' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And 'OtherAgent' is located in 'Moscow'
 	And the current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see a possible schedule trade with
 	| Field			| Value |
-	| Start time	| 09:00 |
-	| End time		| 19:00 |
+	| Start time	| 03:00 |
+	| End time		| 13:00 |
 
 Scenario: Show shifts in ongoing trades from users in other timezone translated to my timezone
 	Given I have the role 'Full access to mytime'
@@ -671,19 +671,19 @@ Scenario: Show shifts in ongoing trades from users in other timezone translated 
 	And Ashley Andeen has a person period with
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
+	And I am located in Stockholm
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
 	| Lunch3HoursAfterStart | True             |
-	And I am located in Stockholm
+	And 'Ashley Andeen' is located in 'Moscow'
 	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And 'Ashley Andeen' is located in 'Moscow'
 	And I have created a shift trade request
 	| Field    | Value         |
 	| To       | Ashley Andeen	|
@@ -698,25 +698,25 @@ Scenario: Show shifts in ongoing trades from users in other timezone translated 
 	| End time		| 16:00 |
 	And I should see details with a schedule to
 	| Field			| Value |
-	| Start time	| 04:00 |
-	| End time		| 14:00 |
+	| Start time	| 03:00 |
+	| End time		| 13:00 |
 
 Scenario: Do not show shifts from other timezones if they start in a different day than mine
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I am located in Stockholm
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 22:00 |
 	| EndTime               | 2030-01-02 04:00 |
 	| Shift category		| Day	           |
-	And I am located in Stockholm
+	And 'OtherAgent' is located in 'Hawaii'	
 	And 'OtherAgent' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 22:00 |
 	| EndTime               | 2030-01-02 04:00 |
 	| Shift category		| Day	           |
-	And 'OtherAgent' is located in 'Hawaii'
 	And the current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should not see a possible schedule to trade with

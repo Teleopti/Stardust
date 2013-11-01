@@ -61,8 +61,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				lunchActivity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(LunchActivity));
 			}
 
-
-
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 
 			var timeZone = user.PermissionInformation.DefaultTimeZone();

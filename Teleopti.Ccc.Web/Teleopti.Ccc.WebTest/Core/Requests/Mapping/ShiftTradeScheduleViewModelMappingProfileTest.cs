@@ -10,13 +10,14 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
@@ -28,7 +29,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IPerson _person;
 		private IProjectionProvider _projectionProvider;
 		private StubFactory _scheduleFactory;
-		private IShiftTradeTimeLineHoursViewModelFactory _timelineFactory;
 		private IUserCulture _userCulture;
 		private IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
 
@@ -40,42 +40,22 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_userCulture = MockRepository.GenerateMock<IUserCulture>();
 			_userCulture.Expect(c => c.GetCulture()).Return(CultureInfo.GetCultureInfo("sv-SE"));
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			var userCultureStub = MockRepository.GenerateStub<IUserCulture>();
+			var createHourText = new CreateHourText(userCultureStub, new SpecificTimeZone(timeZone));
+			var timeLineHoursFactory = new ShiftTradeTimeLineHoursViewModelFactory(createHourText);
 			_person = new Person {Name = new Name("John", "Doe")};
 			_person.PermissionInformation.SetDefaultTimeZone(timeZone);
-			var userCultureStub = MockRepository.GenerateStub<IUserCulture>();
 			var userTimeZoneStub = MockRepository.GenerateStub<IUserTimeZone>();
 			userTimeZoneStub.Expect(u => u.TimeZone()).Repeat.Any().Return(timeZone);
-			ICreateHourText createHourText2 = new CreateHourText(userCultureStub, userTimeZoneStub);
-			_timelineFactory = new ShiftTradeTimeLineHoursViewModelFactory(createHourText2);
 			_possibleShiftTradePersonsProvider = MockRepository.GenerateMock<IPossibleShiftTradePersonsProvider>();
 
 			_scheduleFactory = new StubFactory();
 			
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new ShiftTradeScheduleViewModelMappingProfile(_shiftTradeRequestProvider, _projectionProvider, _timelineFactory, _userCulture, _possibleShiftTradePersonsProvider)));
+			Mapper.Initialize(c => c.AddProfile(new ShiftTradeScheduleViewModelMappingProfile(_shiftTradeRequestProvider, _projectionProvider, timeLineHoursFactory, _userCulture, _possibleShiftTradePersonsProvider)));
 		}
 
-		#region henke - use timezones
-		[Test]
-		public void MinutesSinceTimeLineStart_WhenTradeVictimIsInAnotherTimeZone_ShouldBeTranslatedToTheUsersTimeZone()
-		{
-			
-		}
-
-		[Test]
-		public void StartTime_WhenTradeVictimIsInAnotherTimeZone_ShouldBeTranslatedToTheUsersTimeZone()
-		{
-			
-		}
-
-		[Test]
-		public void EndTiem_WhenTradeVictimIsInAnotherTimeZone_ShouldBeTranslatedToTheUsersTimeZone()
-		{
-			
-		}
-
-		#endregion
-
+	
 		[Test]
 		public void ShouldMapScheduleDayTextFromName()
 		{
@@ -113,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var startDate = new DateTime(2000, 1, 1, 8, 15, 0, DateTimeKind.Utc);
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(startDate, _person);
-
+			
 			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(new DateOnly(startDate))).Return(scheduleDay);
 			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(Arg<DateOnly>.Is.Anything, Arg<IEnumerable<IPerson>>.Is.Anything)).Return(new List<IScheduleDay>());
 			_projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(_scheduleFactory.ProjectionStub(new[]
@@ -741,6 +721,54 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(date);
 
 			result.PossibleTradePersons.First().HasUnderlyingDayOff.Should().Be.True();
+		}
+
+		[Test]
+		public void ShiftStart_WhenVictimHasAnotherTimeZoneButSameTimeInUtc_ShouldBeSameAsTheUsers()
+		{
+			var startDateUtc = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+			var theDate = new DateOnly(startDateUtc);
+			const int timeZoneDiffInMinutes = 30;
+
+			var userTimeZone = TimeZoneInfo.CreateCustomTimeZone("Somewhere", TimeSpan.FromMinutes(0), "Somewhere", "Somewhere");
+			_person.PermissionInformation.SetDefaultTimeZone(userTimeZone);
+			createTradeableShift(startDateUtc, startDateUtc.AddHours(3));
+
+			var victim = PersonFactory.CreatePerson("ShiftTrade", "Victim");
+			var victimsTimeZone = TimeZoneInfo.CreateCustomTimeZone("Göteborg", TimeSpan.FromMinutes(timeZoneDiffInMinutes), "Göteborg", "Göteborg");
+			victim.PermissionInformation.SetDefaultTimeZone(victimsTimeZone);
+			createAPossibleShiftTrade(victim, startDateUtc, startDateUtc.AddHours(3));
+
+			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(theDate);
+
+			var minutesSinceTimelineStartForMyShift = result.MySchedule.MinutesSinceTimeLineStart;
+			var minutesSinceTimelineStartForVictimsShift = result.PossibleTradePersons.First().MinutesSinceTimeLineStart;
+
+			Assert.That(minutesSinceTimelineStartForMyShift, Is.EqualTo(minutesSinceTimelineStartForVictimsShift));
+		}
+
+		private void createAPossibleShiftTrade(IPerson person, DateTime scheduleStartsUtc, DateTime scheduleEndsUtc)
+		{
+			var theDate = new DateOnly(scheduleStartsUtc);
+			var scheduleDay = _scheduleFactory.ScheduleDayStub(scheduleStartsUtc, person);
+			var possibleTradeVictims = new List<IPerson>() { person };
+			_possibleShiftTradePersonsProvider.Expect(x => x.RetrievePersons(theDate)).Return(possibleTradeVictims);
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(theDate, possibleTradeVictims)).Return(new List<IScheduleDay>() { scheduleDay });
+			_projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(_scheduleFactory.ProjectionStub(new[]
+		                                                {
+		                                                    _scheduleFactory.VisualLayerStub(new DateTimePeriod(scheduleStartsUtc, scheduleEndsUtc))
+		                                                }));
+		}
+
+		private void createTradeableShift(DateTime scheduleStartsUtc, DateTime scheduleEndsUtc)
+		{
+			var theDate = new DateOnly(scheduleStartsUtc);
+			var myScheduleDay = _scheduleFactory.ScheduleDayStub(scheduleStartsUtc, _person);
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(theDate)).Return(myScheduleDay);
+			_projectionProvider.Expect(p => p.Projection(myScheduleDay)).Return(_scheduleFactory.ProjectionStub(new[]
+		                                                {
+		                                                    _scheduleFactory.VisualLayerStub(new DateTimePeriod(scheduleStartsUtc, scheduleEndsUtc))
+		                                                }));
 		}
 	}
 }
