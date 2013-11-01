@@ -101,6 +101,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.AbsenceAgents, c => c.MapFrom(s => s.AbsenceTime))
 				.ForMember(d => d.Availability, c => c.MapFrom(s => s.Availability))
 				.ForMember(d => d.FulltimeEquivalent, c => c.MapFrom(s => s.FulltimeEquivalent))
+				.ForMember(d => d.ProbabilityClass, c => c.MapFrom(s => s.ProbabilityClass))
+				.ForMember(d => d.ProbabilityText, c => c.MapFrom(s => s.ProbabilityText))
 
 				.ForMember(d => d.State, o => o.ResolveUsing(s =>
 															{

@@ -91,5 +91,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				select new Tuple<DateOnly, TimeSpan, TimeSpan, bool>
 					(g.Key, TimeSpan.FromTicks(g.Sum(p => p.Time.Ticks)), TimeSpan.FromTicks(g.Sum(p => p.Heads.Ticks)), g.First(o => o.Date == g.Key).Availability);
 		}
+
+		
+
 	}
 }

@@ -1,8 +1,8 @@
-$(SQL_AUTH_STRING)|Data Source=.;Integrated Security=SSPI
-$(AS_SERVER_NAME)|ARES\PSTECH
-$(DB_CCC7)|Telia_TeleoptiCCC7
-$(DB_ANALYTICS)|Telia_Analytics
-$(AS_DATABASE)|Telia_Analytics
+﻿$(SQL_AUTH_STRING)|Data Source=.;Integrated Security=SSPI
+$(AS_SERVER_NAME)|.
+$(DB_CCC7)|PBI23619_Demoreg_TeleoptiCCC7
+$(DB_ANALYTICS)|PBI23619_Demoreg_TeleoptiAnalytics
+$(AS_DATABASE)|PBI23619_Demoreg_TeleoptiAnalytics
 $(IIS_AUTH)|Windows
 $(LOCAL_WIKI)|c:\temp
 $(PM_ASMX)|http://localhost/analyzer/services/Analyzer2005.asmx

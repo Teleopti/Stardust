@@ -313,6 +313,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.absenceAgents = ko.observable(day.AbsenceAgents);
 		self.fullTimeEquivalent = ko.observable(day.FulltimeEquivalent);
 		self.overtimeAvailability = ko.observable(day.OvertimeAvailabililty);
+		self.probabilityClass = ko.observable(day.ProbabilityClass);
+		self.probabilityText = ko.observable(day.ProbabilityText);
 
 		self.basedOnAllowanceChance = function (options) {
 			var percent;
@@ -330,12 +332,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		self.holidayChanceText = ko.computed(function () {
-			return parent.userTexts.chanceOfGettingAbsencerequestGranted + self.basedOnAllowanceChance([parent.userTexts.poor, parent.userTexts.fair, parent.userTexts.good]);
+			return parent.userTexts.chanceOfGettingAbsencerequestGranted + self.probabilityText();
 		});
 		
 		self.holidayChanceColor = ko.computed(function () {
-
-			return self.basedOnAllowanceChance(["red", "yellow", "green"]);
+			return self.probabilityClass();
 		});
 		
 		self.hasTextRequest = ko.computed(function () {

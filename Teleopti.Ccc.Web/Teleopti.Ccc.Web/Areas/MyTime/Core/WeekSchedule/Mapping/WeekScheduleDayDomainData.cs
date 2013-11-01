@@ -18,5 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		public double FulltimeEquivalent { get; set; }
 		public IOvertimeAvailability OvertimeAvailability { get; set; }
 		public IOvertimeAvailability OvertimeAvailabilityYesterday { get; set; }
+		public string ProbabilityClass { get; set; }
+		public string ProbabilityText { get; set; }
 	}
 }

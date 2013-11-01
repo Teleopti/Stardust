@@ -68,6 +68,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		{
 			get { return Note != null && !string.IsNullOrWhiteSpace(Note.Message); }
 		}
+
+		public string ProbabilityClass { get; set; }
+		public string ProbabilityText { get; set; }
 	}
 
 	public class OvertimeAvailabilityViewModel
