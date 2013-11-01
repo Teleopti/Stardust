@@ -71,11 +71,11 @@
 					</thead>
 					<tbody data-bind="foreach: Persons">
 					    <tr class="person" data-bind="attr: { 'data-person-id': Id }">
-					        <td class="first-column person-name">
+					        <td class="person-name person-name-column">
 					            <!-- Must do it this way to get correct overflow: hidden in IE -->
 					            <div class="person-name nowrap" data-bind="text: Name"></div>
 					        </td>
-					        <td class="schedule">
+					        <td class="schedule schedule-column">
 					            <div class="relative time-line-for">
 					                <!-- ko foreach: Shifts -->
 					                <div class="shift" data-bind="
@@ -96,50 +96,36 @@
 					                <!-- /ko -->
 					            </div>
 					        </td>
-					        <td class="last-column contract-time" data-bind="text: ContractTime"></td>
+					        <td class="contract-time contract-time-column" data-bind="text: ContractTime"></td>
 					    </tr>
                         
 					    <!-- ko foreach: Shifts -->
-					    
                         <!-- ko foreach: Layers -->
 					    <!-- ko if: Selected -->
 					    <tr>
-					        <td class="first-column shift-menu-background"></td>
-					        <td class="shift-menu-background">
+					        <td class="shift-menu-background person-name-column"></td>
+					        <td class="shift-menu-background schedule-column">
                                 
-                                <!-- ko foreach: $parent.Layers() -->
-    					            <!-- ko if: LengthPixels() < 20 -->
-					                    <div style="height: 15px"></div>
-                                    <!-- /ko -->
+    					        <!-- ko if: $parent.MakeSpaceForDrop -->
+					                <div style="height: 13px"></div>
                                 <!-- /ko -->
 
-					            <div class="shift-menu" data-bind="
-                                    style: {
-                                        'margin-left': StartPixels() + 'px'
-                                    }
-                                                ">
-					                <div style="margin-bottom: 5px;">
-					                    <div class="btn-group">
-					                        <a href="#" class="btn btn-small delete-layer" data-bind="click: DeleteLayer"><i class="icon-trash"></i></a>
-					                        <a href="#" class="btn btn-small move-layer" data-bind="click: MoveLayer"><i class="icon-pencil"></i></a>
-					                    </div>
-					                    <span class="label" data-bind="style: { 'background-color': Color }, text: Description + ' ' + StartTime() + '-' + EndTime()"></span>
-					                </div>
-					                <div>
-					                    <div class="btn-group">
-					                        <a href="#" class="btn btn-small show-details" data-bind="click: $parent.ShowDetails"><i class="icon-eye-open"></i></a>
-					                        <a href="#" class="btn btn-small add-full-day-absence" data-bind="click: $parent.AddFullDayAbsence"><i class="icon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
-					                        <a href="#" class="btn btn-small add-activity" data-bind="click: $parent.AddActivity"><i class="icon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
-					                    </div>
+					            <div class="shift-menu" data-bind="style: {'margin-left': StartPixels() + 'px'}">
+					                <p>
+    					                <span class="label" data-bind="style: { 'background-color': Color }, text: Description + ' ' + StartTime() + '-' + EndTime()"></span>
+					                </p>
+					                <div class="btn-group">
+					                    <a href="#" class="btn btn-small show-details" data-bind="click: $parent.ShowDetails"><i class="icon-eye-open"></i></a>
+					                    <a href="#" class="btn btn-small add-full-day-absence" data-bind="click: $parent.AddFullDayAbsence"><i class="icon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
+					                    <a href="#" class="btn btn-small add-activity" data-bind="click: $parent.AddActivity"><i class="icon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
 					                </div>
 					            </div>
 
 					        </td>
-					        <td class="last-column shift-menu-background"></td>
+					        <td class="shift-menu-background contract-time-column"></td>
 					    </tr>
                         <!-- /ko -->
                         <!-- /ko -->
-
 					    <!-- /ko -->
 
 					</tbody>
@@ -162,23 +148,10 @@
 		'data-start-time': StartTime,
 		'data-length-minutes': LengthMinutes,
 	},
-    click: Select
+    click: $root.SelectLayer
 	">
-    <!-- ko if: $parent.Selected() -->
-        <!-- ko if: LengthPixels() < 20 -->
-        <!-- ko if: false -->
-        <div class="handle1 absolute"><div class="inner absolute"></div></div>
-        <!-- /ko -->
-        <!-- ko if: false -->
-        <div class="handle2 absolute"></div>
-        <!-- /ko -->
-        <!-- ko if: false -->
-        <div class="handle3 absolute"><div class="bar absolute"></div><div class="arrow absolute"></div></div>
-        <!-- /ko -->
-        <!-- ko if: true -->
-        <div class="handle4 absolute"><div class="arrow absolute"></div><div class="circle absolute"></div></div>
-        <!-- /ko -->
-        <!-- /ko -->
+    <!-- ko if: DisplayDrop -->
+        <div class="drop absolute"><div class="arrow absolute"></div><div class="circle absolute"></div></div>
     <!-- /ko -->
     <!-- ko if: IsFullDayAbsence -->
         <!-- ko if: $root.DisplayDescriptions -->

@@ -1,12 +1,14 @@
 define([
         'knockout',
         'navigation',
+        'lazy',
 		'shared/timeline',
         'resources!r',
         'moment'
     ], function(
         ko,
         navigation,
+        lazy,
         timeLineViewModel,
         resources,
         moment
@@ -51,6 +53,22 @@ define([
                 self.SelectedDate(self.SelectedDate().add('d', -1));
             };
 
+            this.SelectLayer = function (layer) {
+                var selectedLayers = lazy(self.Persons())
+                    .map(function(x) { return x.Shifts(); })
+                    .flatten()
+                    .map(function(x) { return x.Layers(); })
+                    .flatten()
+                    .filter(function (x) {
+                        if (x === layer)
+                            return false;
+                        return x.Selected();
+                    });
+                selectedLayers.each(function (x) {
+                    x.Selected(false);
+                });
+                layer.Selected(!layer.Selected());
+            };
 
 
 

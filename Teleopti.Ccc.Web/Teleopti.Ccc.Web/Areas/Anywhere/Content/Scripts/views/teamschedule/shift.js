@@ -33,8 +33,15 @@ define([
 			self.Layers.push.apply(self.Layers, newItems);
 		};
 
-		this.Selected = ko.computed(function () {
-	        return lazy(self.Layers()).some(function(x) { return x.Selected(); });
+		this.AnyLayerSelected = ko.computed(function () {
+		    return lazy(self.Layers()).some(function (x) { return x.Selected(); });
+		});
+
+	    this.MakeSpaceForDrop = ko.computed(function() {
+	        if (!self.AnyLayerSelected())
+	            return false;
+	        var aDropWillBeDisplayed = lazy(self.Layers()).some(function (x) { return x.DisplayDrop(); });
+	        return aDropWillBeDisplayed;
 	    });
 
 		this.ShowDetails = function () {

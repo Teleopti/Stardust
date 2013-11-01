@@ -1,11 +1,13 @@
 define([
         'knockout',
         'moment',
+        'lazy',
         'resources!r',
         'shared/timeline-unit'
     ], function(
         ko,
         moment,
+        lazy,
         resources,
         unitViewModel
     ) {
@@ -30,26 +32,13 @@ define([
             this.Description = data.Description;
             this.IsFullDayAbsence = data.IsFullDayAbsence;
 
+            this.DisplayDrop = ko.computed(function () {
+                if (self.LengthPixels() > 30)
+                    return false;
+                return shift.AnyLayerSelected();
+            });
+            
             this.Selected = ko.observable(false);
 
-            this.Select = function () {
-                var set = !self.Selected();
-                if (set) {
-                    var layers = shift.Layers();
-                    for (var i = 0; i < layers.length ; i++) {
-                        layers[i].Selected(false);
-                    }
-                }
-                self.Selected(set);
-            };
-            
-            this.DeleteLayer = function() {
-
-            };
-            
-            this.MoveLayer = function () {
-
-            };
-            
         };
     });
