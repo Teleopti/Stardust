@@ -18,7 +18,7 @@ define([
 			var self = this;
 
 			this.Id = data.Id;
-			this.Name = ko.observable(data.FirstName + ' ' + data.LastName);
+			this.Name = data.FirstName + ' ' + data.LastName;
 			
 			this.WorkTimeMinutes = ko.observable(0);
 			this.ContractTimeMinutes = ko.observable(0);
@@ -73,7 +73,7 @@ define([
 			this.TimeLineAffectingStartMinute = ko.computed(function() {
 			    var start = undefined;
 			    layersSeq().each(function (l) {
-			        var startMinutes = l.StartMinutes();
+					var startMinutes = l.TimeLineAffectingStartMinute();
 			        if (start === undefined)
 			            start = startMinutes;
 			        if (startMinutes < start)
@@ -82,10 +82,10 @@ define([
 				return start;
 			});
 
-			this.TimeLineAffectingEndMinute = ko.computed(function() {
+			this.TimeLineAffectingEndMinute = ko.computed(function () {
 				var end = undefined;
 				layersSeq().each(function (l) {
-				    var endMinutes = l.EndMinutes();
+					var endMinutes = l.TimeLineAffectingEndMinute();
 					if (end === undefined)
 						end = endMinutes;
 					if (endMinutes > end)

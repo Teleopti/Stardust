@@ -62,6 +62,7 @@
 
 .team-schedule .dayoff 
 {
+	text-align: center;
 	top: -8px;
 	height: 36px;
     background-size: 11px 11px;
@@ -119,6 +120,10 @@
 .team-schedule .shift .layer .layer-description {
 	background-color: white;
 	color: #606060;
+	text-shadow: none;
+}
+.team-schedule .dayoff .layer-description {
+	margin: 9px;
 	text-shadow: none;
 }
 .team-schedule .shift .layer .drop {

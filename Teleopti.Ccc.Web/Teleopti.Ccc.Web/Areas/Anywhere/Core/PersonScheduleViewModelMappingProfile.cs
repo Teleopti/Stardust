@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				.ForMember(x => x.Team, o => o.MapFrom(s => s.Person.MyTeam(new DateOnly(s.Date)).Description.Name))
 				.ForMember(x => x.Site, o => o.MapFrom(s => s.Person.MyTeam(new DateOnly(s.Date)).Site.Description.Name))
 				.ForMember(x => x.IsDayOff, o => o.MapFrom(s => s.Model.DayOff != null))
+				.ForMember(x => x.DayOffName, o => o.MapFrom(s => s.Model.DayOff.Title))
 				.ForMember(x => x.IsFullDayAbsence, o => o.MapFrom(s => s.Model.Shift.IsFullDayAbsence))
 				.ForMember(x => x.Layers, o => o.MapFrom(s => from p in s.Model.Shift.Projection ?? new SimpleLayer[] {}
 				                                              select new MapContext<PersonScheduleData, SimpleLayer>(s, p)

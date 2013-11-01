@@ -21,6 +21,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
@@ -562,6 +563,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			DefinedLicenseDataFactory.LicenseActivator = licenseActivator;
 			requestContainer.Resolve<ILicenseActivator>().Should().Be(licenseActivator);
 			DefinedLicenseDataFactory.LicenseActivator = null;
+		}
+
+		[Test]
+		public void ShouldResolveGroupController()
+		{
+			requestContainer.Resolve<GroupPageController>()
+				.Should().Not.Be.Null();
 		}
 	}
 }

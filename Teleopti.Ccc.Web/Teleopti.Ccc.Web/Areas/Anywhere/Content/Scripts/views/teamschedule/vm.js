@@ -3,15 +3,21 @@ define([
         'navigation',
         'lazy',
 		'shared/timeline',
+		'views/teamschedule/group-page',
         'resources!r',
-        'moment'
+        'moment',
+		'select2',
+		'knockoutBindings'
     ], function(
         ko,
         navigation,
         lazy,
         timeLineViewModel,
+	    groupPageViewModel,
         resources,
-        moment
+        moment,
+	    select2,
+	    knockoutBindings
     ) {
 
         return function() {
@@ -26,8 +32,8 @@ define([
 
             this.Resources = resources;
 
-            this.Teams = ko.observableArray();
-            this.SelectedTeam = ko.observable();
+            this.GroupPages = ko.observableArray();
+	        this.SelectedGroup = ko.observable();
             this.SelectedDate = ko.observable(moment());
 
             this.DisplayDescriptions = ko.observable(false);
@@ -39,12 +45,39 @@ define([
                 self.Persons([]);
                 self.Persons.push.apply(self.Persons, persons);
             };
+	        
+            this.SetGroupPages = function (data) {
+            	self.GroupPages([]);
+	            
+            	var groupPages = data.GroupPages;
+            	self.SelectedGroup(data.SelectedGroupId);
+	            
+            	var newItems = ko.utils.arrayMap(groupPages, function (d) {
+            		return new groupPageViewModel(d);
+            	});
+            	self.GroupPages.push.apply(self.GroupPages, newItems);
+            };
             
             this.SetTeams = function (teams) {
-                self.Teams([]);
-                self.Teams.push.apply(self.Teams, teams);
-            };
+            	
+            	self.GroupPages([]);
 
+            	var groups = [];
+	            for(var i = 0; i < teams.length; i++)
+	            	groups.push({ Name: teams[i].SiteAndTeam, Id: teams[i].Id });
+
+	            var groupings = [
+		            {
+		            	Name: "",
+		            	Groups : groups
+		            }];
+
+            	var newItems = ko.utils.arrayMap(groupings, function (d) {
+            		return new groupPageViewModel(d);
+            	});
+            	self.GroupPages.push.apply(self.GroupPages, newItems);
+            };
+	        
             this.NextDay = function() {
                 self.SelectedDate(self.SelectedDate().add('d', 1));
             };

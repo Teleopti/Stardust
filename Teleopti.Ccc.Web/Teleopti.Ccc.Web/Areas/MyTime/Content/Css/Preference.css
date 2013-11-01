@@ -238,3 +238,7 @@ div.qtip-content {
 .preference-input-container {
 	width: 100%;
 }
+
+.preference-input-icon-cell {
+    width: 16px;
+}

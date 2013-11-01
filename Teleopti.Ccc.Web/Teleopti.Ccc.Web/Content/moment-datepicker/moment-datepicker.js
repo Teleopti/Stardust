@@ -27,7 +27,7 @@
         this.format = options.format || this.element.data('datepicker-format') || moment.langData().longDateFormat('L');
         this.calendarPlacement = options.calendarPlacement || this.element.data('datepicker-calendarplacement') || 'right';
         this.picker = $(DPGlobal.template)
-							.appendTo('body')
+							.appendTo(options.container)
 							.on({
 							    click: $.proxy(this.click, this),
 							    mousedown: $.proxy(this.mousedown, this)
@@ -229,7 +229,7 @@
             var i = 0
             var monthsShort = $.proxy(moment.langData().monthsShort, moment.langData());
             while (i < 12) {
-                html += '<span class="month">' + monthsShort(moment().month(i++)) + '</span>';
+            	html += '<span class="month">' + monthsShort(moment().startOf('month').month(i++)) + '</span>';
             }
             this.picker.find('.datepicker-months td').append(html);
         },
@@ -243,7 +243,7 @@
             var currentMonth = currentMoment ? currentMoment.month() : null;
 
             this.picker.find('.datepicker-days th:eq(1)')
-						.text(moment.langData().months(moment().month(month)) + ' ' + year);
+						.text(moment.langData().months(moment().startOf('month').month(month)) + ' ' + year);
 
             var prevMonth = moment([year, month, 0]);
             prevMonth.day(prevMonth.day() - (prevMonth.day() - this.weekStart + 7) % 7);
@@ -418,6 +418,7 @@
     };
 
     $.fn.datepicker.defaults = {
+    	container : 'body'
     };
     $.fn.datepicker.Constructor = Datepicker;
 

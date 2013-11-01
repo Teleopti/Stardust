@@ -20,6 +20,12 @@ Background:
 	| Access to Anywhere         | true            |
 	| View unpublished schedules | true            |
 	And there is a role with
+	| Field                      | Value            |
+	| Name                       | Anywhere No Data |
+	| No Data Access             | true             |
+	| Access to Anywhere         | true             |
+	| View unpublished schedules | true             |
+	And there is a role with
 	| Field              | Value                   |
 	| Name               | Cannot View Unpublished |
 	| Access to team     | Team green              |
@@ -56,11 +62,32 @@ Scenario: View default time line
 	| Field      | Value |
 	| Start time | 08:00 |
 	| End time   | 16:00 |
-	
-Scenario: View empty when no team available
+
+Scenario: View my own data
 	Given I have the role 'Anywhere My Own'
+	And I have a person period with
+	| Field      | Value      |
+	| Team       | Team green |
+	| Start date | 2012-12-01 |
+	And I have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-08-10 08:00 |
+	| End time       | 2013-08-10 17:00 |
+	And 'Pierre Baldi' has a person period with
+	| Field      | Value      |
+	| Team       | Team green |
+	| Start date | 2012-12-01 |
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-08-10 08:00 |
+	| End time       | 2013-08-10 17:00 |
 	When I view schedules for '2013-08-10'
-	Then I should see no team available
+	Then I should see myself
+	Then I should not see person 'Pierre Baldi'
 
 Scenario: View team schedule
 	Given I have the role 'Anywhere Team Green'
@@ -72,7 +99,7 @@ Scenario: View team schedule
 	| End time                  | 2012-12-02 17:00 |
 	| Lunch activity            | Lunch            |
 	| Lunch 3 hours after start | true             |
-	When I view schedules for '2012-12-02'
+	When I view schedules for 'Team green' on '2012-12-02'
 	Then I should see schedule for 'Pierre Baldi'
 
 Scenario: View team schedule in my time zone
@@ -85,7 +112,7 @@ Scenario: View team schedule in my time zone
 	| Activity       | Phone            |
 	| Start time     | 2013-09-20 22:00 |
 	| End time       | 2013-09-21 05:00 |
-	When I view schedules for '2013-09-20'
+	When I view schedules for 'Team green' on '2013-09-20'
 	Then I should see a shift layer with
 	| Field      | Value |
 	| Start time | 10:00 |
@@ -102,18 +129,22 @@ Scenario: View team schedule with night shift from yesterday
 	| Activity                  | Phone            |
 	| Lunch activity            | Lunch            |
 	| Lunch 3 hours after start | true             |
-	When I view schedules for '2012-12-03'
+	When I view schedules for 'Team green' on '2012-12-03'
 	Then I should see schedule for 'Pierre Baldi'
 	
 Scenario: View team schedule, no shift
 	Given I have the role 'Anywhere Team Green'
-	When I view schedules for '2012-12-03'
+	When I view schedules for 'Team green' on '2012-12-03'
 	Then I should see no schedule for 'Pierre Baldi'
 	
 Scenario: View team selection
 	Given there is a team with
 	| Field | Value      |
 	| Name  | Team other |
+	And 'Ashley Andeen' has a person period with
+	| Field      | Value      |
+	| Team       | Team other |
+	| Start date | 2012-12-01 |
 	And there is a role with
 	| Field                      | Value                         |
 	| Name                       | Anywhere Team Green And Other |
@@ -154,7 +185,7 @@ Scenario: Select date
 
 Scenario: Select person
 	Given I have the role 'Anywhere Team Green'
-	When I view schedules for '2012-12-02'
+	When I view schedules for 'Team green' on '2012-12-02'
 	And I click person 'Pierre Baldi'
 	Then I should be viewing person schedule for 'Pierre Baldi' on '2012-12-02'
 
@@ -178,7 +209,7 @@ Scenario: Only view published schedule
 	| Activity       | Phone            |
 	| Start time     | 2013-08-10 08:00 |
 	| End time       | 2013-08-10 17:00 |
-	When I view schedules for '2013-08-10'
+	When I view schedules for 'Team green' on '2013-08-10'
 	Then I should see 'Pierre Baldi' with schedule
 	And I should see 'John Smith' with no schedule 
 
@@ -191,7 +222,7 @@ Scenario: View unpublished schedule when permitted
 	| Activity       | Phone            |
 	| Start time     | 2013-08-10 08:00 |
 	| End time       | 2013-08-10 17:00 |
-	When I view schedules for '2013-08-10'
+	When I view schedules for 'Team green' on '2013-08-10'
 	Then I should see 'Pierre Baldi' with schedule
 	
 Scenario: Push team schedule changes
@@ -206,7 +237,7 @@ Scenario: Push team schedule changes
 	| Field | Value    |
 	| Name  | Vacation |
 	| Color | Red      |
-	When I view schedules for '2013-09-10'
+	When I view schedules for 'Team green' on '2013-09-10'
 	Then I should see 'Pierre Baldi' with the schedule
 	| Field      | Value |
 	| Start time | 08:00 |

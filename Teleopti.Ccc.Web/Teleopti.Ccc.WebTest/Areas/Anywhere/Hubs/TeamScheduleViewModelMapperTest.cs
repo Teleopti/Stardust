@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 												{
 													Start = startTime,
 													End = endTime,
-													Title = "Day off"
+													Title = "Day off1"
 												}
 										})
 								}
@@ -87,9 +87,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var result = target.Map(data);
 
 			var startTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(startTime, userTimeZone).ToFixedDateTimeFormat();
+			result.Single().DayOff.DayOffName.Should().Be("Day off1");
 			result.Single().DayOff.Start.Should().Be(startTimeInUserTimeZone);
 			result.Single().DayOff.Minutes.Should().Be(endTime.Subtract(startTime).TotalMinutes);
 		}
+
 
 		[Test]
 		public void ShouldMapFullDayAbsence()

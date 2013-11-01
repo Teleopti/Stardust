@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		}
 
 		[UnitOfWork]
-		public virtual void SubscribeTeamSchedule(Guid teamId, DateTime date)
+		public virtual void SubscribeTeamSchedule(Guid groupId, DateTime date)
 		{
-			pushSchedule(Clients.Caller, teamId, date);
+			pushSchedule(Clients.Caller, groupId, date);
 		}
 
-		private void pushSchedule(dynamic target, Guid teamId, DateTime date)
+		private void pushSchedule(dynamic target, Guid groupId, DateTime date)
 		{
-			target.incomingTeamSchedule(_teamScheduleViewModelFactory.CreateViewModel(teamId, date));
+			target.incomingTeamSchedule(_teamScheduleViewModelFactory.CreateViewModel(groupId, date));
 		}
 	}
 }

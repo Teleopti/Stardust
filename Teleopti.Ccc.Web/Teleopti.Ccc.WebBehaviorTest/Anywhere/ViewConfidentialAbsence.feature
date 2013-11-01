@@ -39,7 +39,7 @@ Scenario: Cannot view confidential absence in team view when no permission
 	| Name       | Mental disorder  |
 	| Start time | 2013-10-25 00:00 |
 	| End time   | 2013-10-25 23:59 |
-	When I view schedules for '2013-10-25'
+	When I view schedules for 'Team green' on '2013-10-25'
 	Then I should see 'Pierre Baldi' with absence
 	| Field       | Value |
 	| Color       | gray  |
@@ -52,7 +52,7 @@ Scenario: View confidential absence in team view when permitted
 	| Name       | Mental disorder  |
 	| Start time | 2013-10-25 00:00 |
 	| End time   | 2013-10-25 23:59 |
-	When I view schedules for '2013-10-25'
+	When I view schedules for 'Team green' on '2013-10-25'
 	Then I should see 'Pierre Baldi' with absence
 	| Field       | Value           |
 	| Color       | Red             |

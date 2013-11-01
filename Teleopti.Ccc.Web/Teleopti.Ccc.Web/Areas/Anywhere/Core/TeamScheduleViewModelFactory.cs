@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -25,18 +26,25 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			_schedulePersonProvider = schedulePersonProvider;
 		}
 
-		public IEnumerable<TeamScheduleShiftViewModel> CreateViewModel(Guid teamId, DateTime date)
+		public IEnumerable<TeamScheduleShiftViewModel> CreateViewModel(Guid groupId, DateTime date)
 		{
 			date = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, DateTimeKind.Utc);
 			var dateTimePeriod = new DateTimePeriod(date, date.AddHours(25));
+			var people = _schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(date), groupId,
+			                                                                 DefinedRaptorApplicationFunctionPaths.
+																				 SchedulesAnywhere).ToArray();
+			var emptyReadModel = new PersonScheduleDayReadModel[] {};
 			var data = new TeamScheduleData
 				{
 					Date = date,
 					UserTimeZone = _user.CurrentUser().PermissionInformation.DefaultTimeZone(),
-					Schedules = _personScheduleDayReadModelRepository.ForTeam(dateTimePeriod, teamId) ?? new PersonScheduleDayReadModel[] {},
-					CanSeeUnpublishedSchedules = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules),
-					CanSeeConfidentialAbsencesFor = _schedulePersonProvider.GetPermittedPersonsForTeam(new DateOnly(date), teamId, DefinedRaptorApplicationFunctionPaths.ViewConfidential),
-					CanSeePersons = _schedulePersonProvider.GetPermittedPersonsForTeam(new DateOnly(date), teamId, DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere)
+					Schedules = people.Length == 0 ? emptyReadModel : _personScheduleDayReadModelRepository.ForPeople(dateTimePeriod, people.Select(x => x.Id.GetValueOrDefault()).ToArray()) ?? emptyReadModel,
+					CanSeeUnpublishedSchedules =
+						_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules),
+					CanSeeConfidentialAbsencesFor =
+						_schedulePersonProvider.GetPermittedPersonsForGroup(new DateOnly(date), groupId,
+						                                                    DefinedRaptorApplicationFunctionPaths.ViewConfidential),
+					CanSeePersons = people
 				};
 			return _mapper.Map(data);
 		}

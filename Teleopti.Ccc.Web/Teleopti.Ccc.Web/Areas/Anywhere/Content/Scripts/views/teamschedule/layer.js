@@ -19,7 +19,7 @@ define([
             var unit = new unitViewModel(timeline, data);
 
             this.LengthMinutes = unit.LengthMinutes;
-            this.StartMinutes = unit.CutInsideDayStartMinutes;
+            this.StartMinutes = unit.StartMinutes;
             this.EndMinutes = unit.EndMinutes;
             this.StartPixels = unit.CutInsideDayStartPixels;
             this.LengthPixels = unit.CutInsideDayLengthPixels;
@@ -31,6 +31,9 @@ define([
             this.Color = data.Color;
             this.Description = data.Description;
             this.IsFullDayAbsence = data.IsFullDayAbsence;
+            
+            this.TimeLineAffectingStartMinute = unit.CutInsideDayStartMinutes;
+            this.TimeLineAffectingEndMinute = unit.CutInsideDayEndMinutes;
 
             this.DisplayDrop = ko.computed(function () {
                 if (self.LengthPixels() > 30)
