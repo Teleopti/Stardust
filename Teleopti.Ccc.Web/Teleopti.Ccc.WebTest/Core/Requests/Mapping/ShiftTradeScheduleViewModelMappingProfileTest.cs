@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				c.AddProfile(new ShiftTradeScheduleViewModelMappingProfile(_shiftTradeRequestProvider, _projectionProvider,
 				                                                           _timelineFactory, _loggedOnUser,
 				                                                           _possibleShiftTradePersonsProvider, _mapper)));
+				                                                           //_possibleShiftTradePersonsProvider, new Lazy<IMappingEngine>(() => Mapper.Engine))));
 		}
 		[Test]
 		public void ShouldMapMyScheduleFromReadModel()

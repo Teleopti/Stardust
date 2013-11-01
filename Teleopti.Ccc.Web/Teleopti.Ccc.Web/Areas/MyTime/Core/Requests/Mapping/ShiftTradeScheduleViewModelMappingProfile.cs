@@ -19,12 +19,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly IShiftTradeTimeLineHoursViewModelFactory _shiftTradeTimelineHoursViewModelFactory;
 		private readonly IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
 		private const int timeLineOffset = 15;
-		private readonly Lazy<IMappingEngine> _mapper;
+		private readonly IMappingEngine _mapper;
 		private readonly ILoggedOnUser _loggedOnUser;
 
 		public ShiftTradeScheduleViewModelMappingProfile(IShiftTradeRequestProvider shiftTradeRequestProvider, IProjectionProvider projectionProvider,
 														IShiftTradeTimeLineHoursViewModelFactory shiftTradeTimelineHoursViewModelFactory, ILoggedOnUser loggedOnUser,
-														IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, Lazy<IMappingEngine> mapper)
+														IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, IMappingEngine mapper)
 		{
 			_mapper = mapper;
 			_shiftTradeRequestProvider = shiftTradeRequestProvider;
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						var myScheduleDayReadModel = _shiftTradeRequestProvider.RetrieveMySchedule(source.ShiftTradeDate);
 						var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(source);
 
-						ShiftTradePersonScheduleViewModel mySchedule = _mapper.Value.Map<IPersonScheduleDayReadModel, ShiftTradePersonScheduleViewModel>(myScheduleDayReadModel);
+						ShiftTradePersonScheduleViewModel mySchedule = _mapper.Map<IPersonScheduleDayReadModel, ShiftTradePersonScheduleViewModel>(myScheduleDayReadModel);
 						IEnumerable<ShiftTradePersonScheduleViewModel> possibleTradeSchedule = getPossibleTradeSchedules(possibleTradePersons);
 
 						IEnumerable<ShiftTradeTimeLineHoursViewModel> timeLineHours = createTimeLineHours(getTimeLinePeriod(mySchedule, possibleTradeSchedule, source.ShiftTradeDate));
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 							PersonId = personScheduleReadModel.PersonId,
 							StartTimeUtc = personScheduleReadModel.ShiftStart.Value,
 							Name = UserTexts.Resources.MySchedule,
-							ScheduleLayers = _mapper.Value.Map<IEnumerable<SimpleLayer>, IEnumerable<ShiftTradeScheduleLayerViewModel>>(shiftReadModel.Shift.Projection)
+							ScheduleLayers = _mapper.Map<IEnumerable<SimpleLayer>, IEnumerable<ShiftTradeScheduleLayerViewModel>>(shiftReadModel.Shift.Projection)
 						};
 					});
 		}
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (datePersons.Persons.Any())
 			{
 				var schedules = _shiftTradeRequestProvider.RetrievePossibleTradeSchedules(datePersons.Date, datePersons.Persons);
-				return _mapper.Value.Map<IEnumerable<IPersonScheduleDayReadModel>, IEnumerable<ShiftTradePersonScheduleViewModel>>(schedules);
+				return _mapper.Map<IEnumerable<IPersonScheduleDayReadModel>, IEnumerable<ShiftTradePersonScheduleViewModel>>(schedules);
 			}
 
 			return new List<ShiftTradePersonScheduleViewModel>();
