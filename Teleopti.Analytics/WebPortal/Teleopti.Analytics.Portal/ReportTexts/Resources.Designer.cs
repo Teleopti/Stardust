@@ -1790,6 +1790,15 @@ namespace Teleopti.Analytics.ReportTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only active skills.
+        /// </summary>
+        public static string ResOnlyActiveSkill {
+            get {
+                return ResourceManager.GetString("ResOnlyActiveSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only active skills:.
         /// </summary>
         public static string ResOnlyActiveSkillColon {

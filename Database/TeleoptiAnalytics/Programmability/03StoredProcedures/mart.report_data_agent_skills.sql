@@ -80,61 +80,45 @@ SET NOCOUNT ON;
 	INNER JOIN #rights_agents a
 		ON a.right_id = dp.person_id
 
---DEBUG
+	/*INCLUDE ALL SELECTED AGENTS AND SKILLS*/
+	INSERT #RESULT(person_id, skill_id)
+	SELECT p.* ,s.*
+	FROM #person_id p
+	CROSS JOIN #skills s
+	WHERE s.id<>-1 --Skip Not Defined Skill
 
---select * from #person_id
+	UPDATE #RESULT
+	SET person_name =dp.person_name,
+		skill_name  =ds.skill_name, 
+		hide_time_zone = @hide_time_zone
+	FROM #RESULT r
+	INNER JOIN  mart.dim_person dp
+		ON dp.person_id=r.person_id
+	INNER JOIN mart.dim_skill ds 
+		ON r.skill_id=ds.skill_id
+
 
 IF @active =1 --ONLY INCLUDE SKILLS THAT ARE ACTIVE
 BEGIN
+	UPDATE #RESULT
+	SET has_skill = fas.has_skill, active =fas.active
+	FROM #RESULT r
+	INNER JOIN mart.fact_agent_skill fas 
+	ON r.person_id=fas.person_id AND r.skill_id=fas.skill_id AND fas.active = 1
 
-INSERT #RESULT( person_id, person_name,skill_id,skill_name, has_skill, active, hide_time_zone)
-	SELECT	dp.person_id,
-			dp.person_name, 
-			ds.skill_id,
-			ds.skill_name, 
-			ISNULL(fas.has_skill,0),
-			ISNULL(fas.active, 0),
-			@hide_time_zone
-	FROM #person_id p
-	INNER JOIN mart.dim_person dp
-		ON dp.person_id=p.person_id
-	LEFT JOIN mart.fact_agent_skill fas 
-		ON p.person_id=fas.person_id AND fas.active = 1
-	INNER JOIN #skills s 
-		on s.id=fas.skill_id
-	INNER JOIN mart.dim_skill ds 
-		ON s.id=ds.skill_id
-	
 END 
 ELSE
-
-
 BEGIN
-INSERT #RESULT( person_id, person_name, skill_id,skill_name, has_skill, active,hide_time_zone)
-	SELECT	p.person_id,
-			dp.person_name,
-			ds.skill_id,
-			ds.skill_name,
-			ISNULL(fas.has_skill,0),
-			ISNULL(fas.active, 0),
-			@hide_time_zone
-	FROM #person_id p
-	INNER JOIN mart.dim_person dp
-		ON dp.person_id=p.person_id
-	LEFT JOIN mart.fact_agent_skill fas 
-		ON p.person_id=fas.person_id
-	INNER JOIN #skills s 
-		ON s.id=fas.skill_id
-	INNER JOIN mart.dim_skill ds 
-		ON s.id=ds.skill_id
-
+	UPDATE #RESULT
+	SET has_skill = fas.has_skill,active =fas.active
+	FROM #RESULT r
+	INNER JOIN mart.fact_agent_skill fas 
+	ON r.person_id=fas.person_id AND r.skill_id=fas.skill_id
 END
-
 
 SELECT * 
 FROM #result 
 ORDER BY person_name, skill_name
-
 END
 
 GO

@@ -1325,6 +1325,10 @@
     <value>Zooma</value>
     <comment>Report Viewer Toolbar</comment>
   </data>
+  <data name="ResOnlyActiveSkill" xml:space="preserve">
+    <value>Endast aktiva kompetenser</value>
+    <comment>Endast aktiva kompetenser</comment>
+  </data>
   <data name="ResOnlyActiveSkillColon" xml:space="preserve">
     <value>Inkludera endast aktiva kompetenser:</value>
     <comment>Inkludera endast aktiva kompetenser:</comment>
