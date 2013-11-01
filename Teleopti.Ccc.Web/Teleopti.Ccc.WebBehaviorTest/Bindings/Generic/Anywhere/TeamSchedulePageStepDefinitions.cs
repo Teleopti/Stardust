@@ -21,6 +21,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.Javascript("$('.select2-input').focus().val('" + searchText + "').trigger('keyup-change');");
 		}
 
+		[When(@"I click description toggle button")]
+		public void WhenIClickDescriptionToggleButton()
+		{
+			DescriptionToggle.EnsureIsOn();
+		}
+
+		[When(@"I select the schedule activity for '(.*)' with start time '(.*)'")]
+		public void WhenISelectTheScheduleActivityForWithStartTime(string name, string startTime)
+		{
+			Browser.Interactions.ClickUsingJQuery(string.Format(".person:contains('{0}') .shift .layer[data-start-time~='{1}']", name, startTime));
+		}
+
+		[Then(@"I should see schedule activity details for '(.*)' with")]
+		public void ThenIShouldSeeScheduleActivityDetailsForWith(string name, Table table)
+		{
+			var scheduleActivity = table.CreateInstance<ScheduleActivityInfo>();
+			var selector = string.Format(".person:contains('{0}') .activity-details", name);
+			Browser.Interactions.AssertAnyContains(selector, scheduleActivity.Name);
+			Browser.Interactions.AssertAnyContains(selector, scheduleActivity.StartTime);
+			Browser.Interactions.AssertAnyContains(selector, scheduleActivity.EndTime);
+		}
+
 		[Then(@"I should see options include '(.*)'")]
 		public void ThenIShouldSeeOptionsInclude(string text)
 		{
@@ -165,11 +187,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertNotExists("#skill-selector li:nth-child(" + skills.Length + ")", "#skill-selector li:nth-child(" + (skills.Length + 1) + ")");
 		}
 
-		[When(@"I click description toggle button")]
-		public void WhenIClickDescriptionToggleButton()
-		{
-			DescriptionToggle.EnsureIsOn();
-		}
 
 		[Then(@"I should see '(.*)' with a day off")]
 		public void ThenIShouldSeeADayOffFor(string personName)
@@ -269,6 +286,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertAnyContains("#difference-forecasted-scheduled", staffingMetric.DifferencePercentage);
 			Browser.Interactions.AssertAnyContains("#estimated-service-level", staffingMetric.EstimatedServiceLevel);
 		}
+	}
+
+	public class ScheduleActivityInfo
+	{
+		public string Name { get; set; }
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
 	}
 
 	public class StaffingMetricInfo

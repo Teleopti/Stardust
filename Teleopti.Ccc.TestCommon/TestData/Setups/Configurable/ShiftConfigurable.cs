@@ -22,6 +22,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Activity { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
+		public string PersonalActivity { get; set; }
+		public DateTime PersonalActivityStartTime { get; set; }
+		public DateTime PersonalActivityEndTime { get; set; }
 
 		public string LunchActivity { get; set; }
 		public bool Lunch3HoursAfterStart { get; set; }
@@ -67,6 +70,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			new EditableShiftMapper().SetMainShiftLayers(assignment, mainShift);
 
+			if (PersonalActivity != null)
+			{
+				var personalActivity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(PersonalActivity));
+				var personalActivityStartTimeUtc = timeZone.SafeConvertTimeToUtc(PersonalActivityStartTime);
+				var personalActivityEndTimeUtc = timeZone.SafeConvertTimeToUtc(PersonalActivityEndTime);
+				var personalActivityPeriod = new DateTimePeriod(personalActivityStartTimeUtc, personalActivityEndTimeUtc);
+				assignment.AddPersonalLayer(personalActivity, personalActivityPeriod);
+			}
 
 			// simply publish the schedule changed event so that the read model is updated
 			assignment.ScheduleChanged();
