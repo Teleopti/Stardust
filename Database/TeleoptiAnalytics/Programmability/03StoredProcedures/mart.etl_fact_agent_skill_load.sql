@@ -1,4 +1,5 @@
 /****** Object:  StoredProcedure [mart].[etl_fact_agent_skill_load]    Script Date: 2013-11-01 10:08:17 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_fact_agent_skill_load]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[etl_fact_agent_skill_load]
 GO
 -- =============================================

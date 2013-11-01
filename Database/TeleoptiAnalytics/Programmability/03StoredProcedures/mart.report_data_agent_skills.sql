@@ -1,4 +1,5 @@
 /****** Object:  StoredProcedure [mart].[report_data_agent_skills]    Script Date: 2013-11-01 10:14:35 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_data_agent_skills]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[report_data_agent_skills]
 GO
 -- =============================================
