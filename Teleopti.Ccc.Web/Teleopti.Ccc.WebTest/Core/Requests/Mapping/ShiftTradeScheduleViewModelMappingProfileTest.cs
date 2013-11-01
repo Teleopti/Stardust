@@ -9,11 +9,9 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
@@ -31,10 +29,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private StubFactory _scheduleFactory;
 		private IUserCulture _userCulture;
 		private IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
+		private IUserTimeZone _userTimeZone;
 
 		[SetUp]
 		public void Setup()
 		{
+			_userTimeZone = MockRepository.GenerateStub<IUserTimeZone>();
+			setUserTimeZoneTo(TimeZoneInfo.Utc);
 			_shiftTradeRequestProvider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
 			_userCulture = MockRepository.GenerateMock<IUserCulture>();
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_scheduleFactory = new StubFactory();
 			
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new ShiftTradeScheduleViewModelMappingProfile(_shiftTradeRequestProvider, _projectionProvider, timeLineHoursFactory, _userCulture, _possibleShiftTradePersonsProvider)));
+			Mapper.Initialize(c => c.AddProfile(new ShiftTradeScheduleViewModelMappingProfile(_shiftTradeRequestProvider, _projectionProvider, timeLineHoursFactory, _userCulture, _possibleShiftTradePersonsProvider,_userTimeZone)));
 		}
 
 	
@@ -101,7 +102,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                    _scheduleFactory.VisualLayerStub(new DateTimePeriod(startDate, startDate.AddHours(3)))
 		                                                }));
 			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(scheduleDay);
-			var expectedDate = TimeZoneHelper.ConvertFromUtc(startDate, _person.PermissionInformation.DefaultTimeZone());
+			var expectedDate = TimeZoneHelper.ConvertFromUtc(startDate, _userTimeZone.TimeZone());
 			result.ScheduleLayers.First().Title.Should().Contain(expectedDate.ToString("HH:mm"));
 		}
 
@@ -120,7 +121,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(scheduleDay);
 
-			var expectedDate = TimeZoneHelper.ConvertFromUtc(endDate, _person.PermissionInformation.DefaultTimeZone());
+			var expectedDate = TimeZoneHelper.ConvertFromUtc(endDate, _userTimeZone.TimeZone());
 			result.ScheduleLayers.First().Title.Should().Contain(expectedDate.ToString("HH:mm"));
 		}
 
@@ -329,7 +330,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                }));
 			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(startDate));
 
-			var expectedDate = TimeZoneHelper.ConvertFromUtc(startDate, _person.PermissionInformation.DefaultTimeZone());
+			var expectedDate = TimeZoneHelper.ConvertFromUtc(startDate, _userTimeZone.TimeZone());
 			result.MySchedule.ScheduleLayers.First().Title.Should().Contain(expectedDate.ToString("HH:mm"));
 		}
 
@@ -348,7 +349,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(endDate));
 
-			var expectedDate = TimeZoneHelper.ConvertFromUtc(endDate, _person.PermissionInformation.DefaultTimeZone());
+			var expectedDate = TimeZoneHelper.ConvertFromUtc(endDate, _userTimeZone.TimeZone());
 			result.MySchedule.ScheduleLayers.First().Title.Should().Contain(expectedDate.ToString("HH:mm"));
 		}
 
@@ -389,7 +390,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(date);
 
-			result.MySchedule.ScheduleLayers.First().Title.Should().Be.EqualTo("11:00-14:00");
+			result.MySchedule.ScheduleLayers.First().Title.Should().Be.EqualTo("10:00-13:00");
 		}
 
 		[Test]
@@ -411,7 +412,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(date);
 
-			result.MySchedule.ScheduleLayers.First().Title.Should().Be.EqualTo("11:00 AM-2:00 PM");
+			result.MySchedule.ScheduleLayers.First().Title.Should().Be.EqualTo("10:00 AM-1:00 PM");
 		}
 
 		[Test]
@@ -728,14 +729,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var startDateUtc = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			var theDate = new DateOnly(startDateUtc);
-			const int timeZoneDiffInMinutes = 30;
 
 			var userTimeZone = TimeZoneInfo.CreateCustomTimeZone("Somewhere", TimeSpan.FromMinutes(0), "Somewhere", "Somewhere");
 			_person.PermissionInformation.SetDefaultTimeZone(userTimeZone);
 			createTradeableShift(startDateUtc, startDateUtc.AddHours(3));
 
 			var victim = PersonFactory.CreatePerson("ShiftTrade", "Victim");
-			var victimsTimeZone = TimeZoneInfo.CreateCustomTimeZone("Göteborg", TimeSpan.FromMinutes(timeZoneDiffInMinutes), "Göteborg", "Göteborg");
+			var victimsTimeZone = TimeZoneInfo.CreateCustomTimeZone("Göteborg", TimeSpan.FromMinutes(30), "Göteborg", "Göteborg");
 			victim.PermissionInformation.SetDefaultTimeZone(victimsTimeZone);
 			createAPossibleShiftTrade(victim, startDateUtc, startDateUtc.AddHours(3));
 
@@ -745,6 +745,31 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var minutesSinceTimelineStartForVictimsShift = result.PossibleTradePersons.First().MinutesSinceTimeLineStart;
 
 			Assert.That(minutesSinceTimelineStartForMyShift, Is.EqualTo(minutesSinceTimelineStartForVictimsShift));
+		}
+
+		[Test]
+		public void ShiftTradePersonSchedules_Always_ShouldBeInTheLoggedOnUsersTimeZone()
+		{
+			_userCulture.Expect(c => c.GetCulture()).Return(CultureInfo.GetCultureInfo("sv-SE"));
+			var personTimeZone = createTimeZoneInfo(TimeSpan.FromMinutes(10));
+			_person.PermissionInformation.SetDefaultTimeZone(personTimeZone);
+			setUserTimeZoneTo(createTimeZoneInfo(TimeSpan.FromMinutes(20)));
+
+			var date = new DateOnly(2000, 1, 1);
+			var layerPeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc));
+			var scheduleDay = _scheduleFactory.ScheduleDayStub(new DateTime(), _person);
+
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(new DateOnly(layerPeriod.StartDateTime))).Return(scheduleDay);
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(Arg<DateOnly>.Is.Anything, Arg<IEnumerable<IPerson>>.Is.Anything)).Return(new List<IScheduleDay>());
+
+			_projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(_scheduleFactory.ProjectionStub(new[]
+		                                                {
+		                                                    _scheduleFactory.VisualLayerStub(layerPeriod)
+		                                                }));
+
+			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(date);
+
+			result.MySchedule.ScheduleLayers.First().Title.Should().Be.EqualTo("10:20-13:20");
 		}
 
 		private void createAPossibleShiftTrade(IPerson person, DateTime scheduleStartsUtc, DateTime scheduleEndsUtc)
@@ -769,6 +794,19 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                {
 		                                                    _scheduleFactory.VisualLayerStub(new DateTimePeriod(scheduleStartsUtc, scheduleEndsUtc))
 		                                                }));
+		}
+
+		private static TimeZoneInfo createTimeZoneInfo(TimeSpan diffFromUtc)
+		{
+			return TimeZoneInfo.CreateCustomTimeZone("Somewhere", diffFromUtc, "Somewhere", "Somewhere");
+		}
+
+		private void setUserTimeZoneTo(TimeZoneInfo timeZoneInfo)
+		{
+			_userTimeZone.BackToRecord(BackToRecordOptions.All);
+			_userTimeZone.Expect(t => t.TimeZone()).Return(timeZoneInfo).Repeat.Any();
+			_userTimeZone.Replay();
+		
 		}
 	}
 }

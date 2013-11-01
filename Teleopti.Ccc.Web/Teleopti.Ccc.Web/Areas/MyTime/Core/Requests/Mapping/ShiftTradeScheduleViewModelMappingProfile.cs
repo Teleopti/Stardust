@@ -17,19 +17,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly IShiftTradeTimeLineHoursViewModelFactory _shiftTradeTimelineHoursViewModelFactory;
 		private readonly IUserCulture _userCulture;
 		private readonly IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
+		private readonly IUserTimeZone _userTimeZone;
 		private const int TimeLineOffset = 15;
 
-		public ShiftTradeScheduleViewModelMappingProfile(IShiftTradeRequestProvider shiftTradeRequestProvider, 
-																										IProjectionProvider projectionProvider, 
-																										IShiftTradeTimeLineHoursViewModelFactory shiftTradeTimelineHoursViewModelFactory,
-																										IUserCulture userCulture,
-																										IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider)
+		public ShiftTradeScheduleViewModelMappingProfile(IShiftTradeRequestProvider shiftTradeRequestProvider, IProjectionProvider projectionProvider, IShiftTradeTimeLineHoursViewModelFactory shiftTradeTimelineHoursViewModelFactory, IUserCulture userCulture, IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, IUserTimeZone userTimeZone)
 		{
 			_shiftTradeRequestProvider = shiftTradeRequestProvider;
 			_projectionProvider = projectionProvider;
 			_shiftTradeTimelineHoursViewModelFactory = shiftTradeTimelineHoursViewModelFactory;
 			_userCulture = userCulture;
 			_possibleShiftTradePersonsProvider = possibleShiftTradePersonsProvider;
+			_userTimeZone = userTimeZone;
 		}
 
 		protected override void Configure()
@@ -39,11 +37,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					                {
 											
 											 var myScheduleDay = createPersonDay(o.Person, o);
-											 var timeLineRangeTot = setTimeLineRange(o.DateOnlyAsPeriod.DateOnly, myScheduleDay.ScheduleLayers, new List<ShiftTradePersonDayData>(), myScheduleDay.PersonTimeZone);
+											 var timeLineRangeTot = setTimeLineRange(o.DateOnlyAsPeriod.DateOnly, myScheduleDay.ScheduleLayers, new List<ShiftTradePersonDayData>(), _userTimeZone.TimeZone());
 											 var myScheduleViewModel = new ShiftTradePersonScheduleViewModel
 											 {
 												 Name = o.Person.Name.ToString(),
-												 ScheduleLayers = createShiftTradeLayers(myScheduleDay, myScheduleDay.PersonTimeZone, timeLineRangeTot),
+												 ScheduleLayers = createShiftTradeLayers(myScheduleDay, _userTimeZone.TimeZone(), timeLineRangeTot),
 												 HasUnderlyingDayOff = myScheduleDay.SignificantPartForDisplay == SchedulePartView.ContractDayOff,
 												  DayOffText = myScheduleDay.DayOffText,
 											 };
@@ -75,7 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						var myScheduleViewModel = new ShiftTradePersonScheduleViewModel
 							{
 								Name = UserTexts.Resources.MySchedule,
-								ScheduleLayers = createShiftTradeLayers(myScheduleDay, myScheduleDay.PersonTimeZone, timeLineRangeTot),
+								ScheduleLayers = createShiftTradeLayers(myScheduleDay, _userTimeZone.TimeZone(), timeLineRangeTot),
 								MinutesSinceTimeLineStart =
 									myScheduleDay.ScheduleLayers.Any() ? 
 										(int) myScheduleDay.ScheduleLayers.First()
@@ -92,8 +90,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 																								{
 																									PersonId = personDay.PersonId,
 																									Name = personDay.Name,
-																									//ScheduleLayers = createShiftTradeLayers(personDay, personDay.PersonTimeZone, timeLineRangeTot),
-																									ScheduleLayers = createShiftTradeLayers(personDay, myScheduleDay.PersonTimeZone, timeLineRangeTot),
+																									ScheduleLayers = createShiftTradeLayers(personDay, _userTimeZone.TimeZone(), timeLineRangeTot),
 																									MinutesSinceTimeLineStart =
 																										personDay.ScheduleLayers.Any() ?
 																											(int)personDay.ScheduleLayers.First()
