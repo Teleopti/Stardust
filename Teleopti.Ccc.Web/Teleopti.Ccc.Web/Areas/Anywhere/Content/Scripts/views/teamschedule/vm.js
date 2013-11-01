@@ -53,6 +53,10 @@ define([
                 self.SelectedDate(self.SelectedDate().add('d', -1));
             };
 
+            this.SelectPerson = function(person) {
+                navigation.GotoPersonSchedule(person.Id, self.SelectedDate());
+            };
+            
             this.SelectLayer = function (layer) {
                 var selectedLayers = lazy(self.Persons())
                     .map(function(x) { return x.Shifts(); })

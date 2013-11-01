@@ -70,7 +70,7 @@
 						</tr>
 					</thead>
 					<tbody data-bind="foreach: Persons">
-					    <tr class="person" data-bind="attr: { 'data-person-id': Id }">
+					    <tr class="person" data-bind="attr: { 'data-person-id': Id }, click: $root.SelectPerson">
 					        <td class="person-name person-name-column">
 					            <!-- Must do it this way to get correct overflow: hidden in IE -->
 					            <div class="person-name nowrap" data-bind="text: Name"></div>
@@ -147,8 +147,7 @@
 	attr: {
 		'data-start-time': StartTime,
 		'data-length-minutes': LengthMinutes,
-	},
-    click: $root.SelectLayer
+	}
 	">
     <!-- ko if: DisplayDrop -->
         <div class="drop absolute"><div class="arrow absolute"></div><div class="circle absolute"></div></div>
