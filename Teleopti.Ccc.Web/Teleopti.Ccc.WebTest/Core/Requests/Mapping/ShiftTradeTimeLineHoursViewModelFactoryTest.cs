@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			
 			var period = new DateTimePeriod(new DateTime(2013, 9, 30, 8, 0, 0, DateTimeKind.Utc),
 											new DateTime(2013, 9, 30, 17, 15, 0, DateTimeKind.Utc));
-			createHourText.Stub(x => x.CreateText(period.EndDateTime)).Return("19");
+			createHourText.Stub(x => x.CreateText(period.EndDateTime.AddMinutes(-15))).Return("19");
 			var result = _target.CreateTimeLineHours(period);
 
 			var lastHour = result.Last();

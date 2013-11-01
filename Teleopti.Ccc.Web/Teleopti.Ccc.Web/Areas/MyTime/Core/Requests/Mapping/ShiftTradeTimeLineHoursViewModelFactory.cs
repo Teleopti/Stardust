@@ -40,14 +40,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 			if (timeLinePeriod.EndDateTime.Minute != 0)
 			{
+				shiftEndRounded = timeLinePeriod.EndDateTime.AddMinutes(-timeLinePeriod.EndDateTime.Minute);
 				lastHour = new ShiftTradeTimeLineHoursViewModel
 					           {
-						           HourText = _createHourText.CreateText(timeLinePeriod.EndDateTime),
+								   HourText = _createHourText.CreateText(shiftEndRounded),
 						           LengthInMinutesToDisplay = timeLinePeriod.EndDateTime.Minute,
 								   StartTime = TimeZoneHelper.ConvertFromUtc(timeLinePeriod.EndDateTime.AddMinutes(-timeLinePeriod.EndDateTime.Minute), timeZone),
 								   EndTime = TimeZoneHelper.ConvertFromUtc(timeLinePeriod.EndDateTime, timeZone)
 					           };
-				shiftEndRounded = timeLinePeriod.EndDateTime.AddMinutes(-timeLinePeriod.EndDateTime.Minute);
 			}
 
 			for (var time = shiftStartRounded; time < shiftEndRounded; time = time.AddHours(1))
