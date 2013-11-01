@@ -68,6 +68,37 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
+        public void ShouldSelectValidSampleDay()
+        {
+            var day2Interval = generateIntervalForDay(new DateOnly(2013, 10, 18), 9, 11);
+            IList<ISkillDay> skillDays = new List<ISkillDay> { _skillDay1, _skillDay2, _skillDay3 };
+            var readOnlyListOfSkillInterval =
+                    new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { _sampleSkillStaffPeriod  });
+
+            using (_mock.Record())
+            {
+                Expect.Call(_teamBlockInfo.BlockInfo).Return(_baseLineData.BlockOfThreeDays);
+                Expect.Call(
+                    _scheduleResultStartHolder.SkillDaysOnDateOnly(
+                        _baseLineData.BlockOfThreeDays.BlockPeriod.DayCollection())).Return(skillDays);
+
+                Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>())).IgnoreArguments().Repeat.Twice();
+
+                Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(readOnlyListOfSkillInterval).IgnoreArguments().Repeat.AtLeastOnce();
+                Expect.Call(_skillStaffPeriodMapper.MapSkillIntervalData(new List<ISkillStaffPeriod> { _sampleSkillStaffPeriod })).IgnoreArguments()
+                      .Return(day2Interval).Repeat.AtLeastOnce();
+
+                Expect.Call(_skillDay3.SkillStaffPeriodCollection).Return(readOnlyListOfSkillInterval).IgnoreArguments().Repeat.AtLeastOnce();
+
+            }
+            using (_mock.Playback())
+            {
+                Assert.IsTrue(_target.IsSatisfiedBy(_teamBlockInfo));
+            }
+
+        }
+
+        [Test]
         public void HasDifferentOpenHourForTeamBlock()
         {
             var day1Interval = generateIntervalForDay(new DateOnly(2013, 10, 17), 8, 11);
