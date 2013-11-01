@@ -261,6 +261,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<OpenHourRestrictionForTeamBlock>().As<IOpenHourRestrictionForTeamBlock>();
             builder.RegisterType<SkillIntervalDataOpenHour>().As<ISkillIntervalDataOpenHour>();
             builder.RegisterType<SameOpenHoursInTeamBlockSpecification>().As<ISameOpenHoursInTeamBlockSpecification>();
+		    builder.RegisterType<TeamBlockSameEndTimeSpecification>().As<ITeamBlockSameEndTimeSpecification>();
+            builder.RegisterType<TeamBlockSameShiftCategorySpecification>().As<ITeamBlockSameShiftCategorySpecification>();
+            builder.RegisterType<TeamBlockSameStartTimeSpecification>().As<ITeamBlockSameStartTimeSpecification>();
+            builder.RegisterType<TeamBlockSameShiftSpecification>().As<ITeamBlockSameShiftSpecification>();
+            builder.RegisterType<ValidSampleDayPickerFromTeamBlock>().As<IValidSampleDayPickerFromTeamBlock>();
 		}
 
 		private static void registerTeamBlockSchedulingService(ContainerBuilder builder)

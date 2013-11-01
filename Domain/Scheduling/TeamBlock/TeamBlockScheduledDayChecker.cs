@@ -11,19 +11,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly))
 			{
-				IScheduleRange rangeForPerson = matrix.SchedulingStateHolder.Schedules[matrix.Person];
-				IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(dateOnly);
-				if (!scheduleDay.IsScheduled())
-				{
-					return false;
-				}
+				if (!checkScheduleStatus(dateOnly, matrix)) return false;
 			}
 
 			return true;
 
 		}
 
-		public static bool IsDayScheduledInTeamBlockForSelectedPersons(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly,
+	    private static bool checkScheduleStatus(DateOnly dateOnly, IScheduleMatrixPro matrix)
+	    {
+	        IScheduleRange rangeForPerson = matrix.SchedulingStateHolder.Schedules[matrix.Person];
+	        IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(dateOnly);
+	        if (!scheduleDay.IsScheduled())
+	        {
+	            return false;
+	        }
+	        return true;
+	    }
+
+	    public static bool IsDayScheduledInTeamBlockForSelectedPersons(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly,
 		                                                               IList<IPerson> selectedPersons)
 		{
 			if (teamBlockInfo == null) return false;
@@ -31,12 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly))
 			{
 				if (!selectedPersons.Contains(matrix.Person)) continue;
-				IScheduleRange rangeForPerson = matrix.SchedulingStateHolder.Schedules[matrix.Person];
-				IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(dateOnly);
-				if (!scheduleDay.IsScheduled())
-				{
-					return false;
-				}
+                if (!checkScheduleStatus(dateOnly, matrix)) return false;
 			}
 
 			return true;
@@ -52,12 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly))
 				{
 					if (!selectedPersons.Contains(matrix.Person)) continue;
-					IScheduleRange rangeForPerson = matrix.SchedulingStateHolder.Schedules[matrix.Person];
-					IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(dateOnly);
-					if (!scheduleDay.IsScheduled())
-					{
-						return false;
-					}
+                    if (!checkScheduleStatus(dateOnly, matrix)) return false;
 				}
 			}
 			return true;

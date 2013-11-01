@@ -575,6 +575,10 @@
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockRoleModelSelector.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamBlockSameEndTimeSpecification.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamBlockSameShiftCategorySpecification.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamBlockSameShiftSpecification.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamBlockSameStartTimeSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingOptions.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreator.cs" />
@@ -958,6 +962,7 @@
     <Compile Include="Scheduling\TeamBlock\TeamScheduling.cs" />
     <Compile Include="Scheduling\TeamBlock\TwoDaysIntervalGenerator.cs" />
     <Compile Include="Scheduling\TeamBlock\ValidatedTeamBlockInfoExtractor.cs" />
+    <Compile Include="Scheduling\TeamBlock\ValidSampleDayPickerFromTeamBlock.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\EqualWorkShiftValueDecider.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftLengthValueCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftPeriodValueCalculator.cs" />

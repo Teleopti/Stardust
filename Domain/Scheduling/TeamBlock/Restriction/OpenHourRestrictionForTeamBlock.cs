@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
@@ -29,11 +30,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
             foreach (var skillDay in skillDays)
             {
                 var activity = skillDay.Skill.Activity;
+                if (activity == null) continue;
                 if (skillDay.SkillStaffPeriodCollection.Count == 0) continue;
                 var openHourForSkillDay = _skillIntervalDataOpenHour.GetOpenHours(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDay.SkillStaffPeriodCollection));
                 if (!openHoursPerActivity.ContainsKey(activity))
                 {
-                    openHoursPerActivity.Add(activity,openHourForSkillDay );
+                    openHoursPerActivity.Add(activity, openHourForSkillDay);
                 }
                 else
                 {
@@ -43,17 +45,45 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
             }
             return openHoursPerActivity;
         }
-        
+
         private TimePeriod getNarrowTimePeriod(TimePeriod existingTimePeriod, TimePeriod newTimePeriod)
         {
-            var startTime = existingTimePeriod.StartTime;
-            var endTime = existingTimePeriod.EndTime;
-            if (existingTimePeriod.StartTime < newTimePeriod.StartTime)
-                startTime = newTimePeriod.StartTime;
-            if (existingTimePeriod.EndTime > newTimePeriod.EndTime)
-                endTime = newTimePeriod.EndTime;
-            return new TimePeriod(startTime,endTime );
+            if (existingTimePeriod.EndTime.Days > 0 && newTimePeriod.EndTime.Days == 0)
+            {
+                var temp = new TimePeriod(newTimePeriod.StartTime.Add(TimeSpan.FromDays(1)),
+                                          newTimePeriod.EndTime.Add(TimeSpan.FromDays(1)));
+
+                var extractedTimePeriod = getFinalTimePeriod(existingTimePeriod, temp);
+                return new TimePeriod(extractedTimePeriod.StartTime.Add(TimeSpan.FromDays(-1)), extractedTimePeriod.EndTime.Add(TimeSpan.FromDays(-1)));
+            }
+            if (newTimePeriod.EndTime.Days > 0 && existingTimePeriod.EndTime.Days == 0)
+            {
+                var temp = new TimePeriod(existingTimePeriod.StartTime.Add(TimeSpan.FromDays(1)),
+                                          existingTimePeriod.EndTime.Add(TimeSpan.FromDays(1)));
+                var extractedTimePeriod = getFinalTimePeriod(newTimePeriod, temp);
+                return new TimePeriod(extractedTimePeriod.StartTime.Add(TimeSpan.FromDays(-1)), extractedTimePeriod.EndTime.Add(TimeSpan.FromDays(-1)));
+            }
+            else
+            {
+                var extractedTimePeriod = getFinalTimePeriod(existingTimePeriod, newTimePeriod);
+                return new TimePeriod(extractedTimePeriod.StartTime, extractedTimePeriod.EndTime);
+            }
+
+        }
+
+        private TimePeriod getFinalTimePeriod(TimePeriod source, TimePeriod destination)
+        {
+            var startTime = source.StartTime;
+            var endTime = source.EndTime;
+            if (source.StartTime < destination.StartTime)
+                startTime = destination.StartTime;
+            if (source.EndTime > destination.EndTime)
+                endTime = destination.EndTime;
+            return new TimePeriod(startTime, endTime);
         }
         
     }
+
+
+
 }

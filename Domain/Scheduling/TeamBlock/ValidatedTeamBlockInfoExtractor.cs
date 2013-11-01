@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     public class ValidatedTeamBlockInfoExtractor : IValidatedTeamBlockInfoExtractor
     {
         private readonly ITeamBlockSteadyStateValidator  _teamBlockSteadyStateValidator;
-        //private readonly ISchedulingOptions _schedulingOptions;
         private readonly ITeamBlockInfoFactory  _teamBlockInfoFactory;
         private readonly ITeamSteadyStateHolder _teamSteadyStateHolder;
 
@@ -27,15 +26,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
         public ITeamBlockInfo GetTeamBlockInfo(ITeamInfo teamInfo, DateOnly datePointer, IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions )
         {
-            if (teamInfo == null) return null;
-            if (schedulingOptions == null) return null;
+            if (teamInfo == null || schedulingOptions == null) return null;
             if (!_teamSteadyStateHolder.IsSteadyState(teamInfo.GroupPerson)) return null;
             var teamBlockInfo = createTeamBlockInfo(allPersonMatrixList, datePointer, teamInfo, schedulingOptions);
             if (teamBlockInfo == null) return null;
-            if (TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, datePointer))
-                return null;
-            if (!_teamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, schedulingOptions))
-                return null;
+            if (TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, datePointer)) return null;
+            if (!_teamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, schedulingOptions)) return null;
+
             return teamBlockInfo;
         }
 
