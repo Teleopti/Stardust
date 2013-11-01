@@ -74,6 +74,12 @@ define([
 			return self.StartMinutes();
 		});
 
+		this.CutInsideDayEndMinutes = ko.computed(function () {
+			if (self.StartMinutes() >= 25 * 60)
+				return 0;
+			return self.EndMinutes();
+		});
+		
 		this.CutInsideDayLengthMinutes = ko.computed(function () {
 			if (self.StartMinutes() < 0)
 				return self.LengthMinutes() - (self.StartMinutes() * -1);

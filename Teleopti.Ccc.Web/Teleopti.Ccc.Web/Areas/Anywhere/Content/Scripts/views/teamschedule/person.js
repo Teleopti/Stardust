@@ -66,7 +66,7 @@ define([
 			this.TimeLineAffectingStartMinute = ko.computed(function() {
 				var start = undefined;
 				ko.utils.arrayForEach(self.Layers(), function(l) {
-					var startMinutes = l.StartMinutes();
+					var startMinutes = l.TimeLineAffectingStartMinute();
 					if (start === undefined)
 						start = startMinutes;
 					if (startMinutes < start)
@@ -75,10 +75,10 @@ define([
 				return start;
 			});
 
-			this.TimeLineAffectingEndMinute = ko.computed(function() {
+			this.TimeLineAffectingEndMinute = ko.computed(function () {
 				var end = undefined;
 				ko.utils.arrayForEach(self.Layers(), function(l) {
-					var endMinutes = l.EndMinutes();
+					var endMinutes = l.TimeLineAffectingEndMinute();
 					if (end === undefined)
 						end = endMinutes;
 					if (endMinutes > end)

@@ -39,12 +39,11 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             _helper = _mock.StrictMock<IDataHelper>();
             _view = _mock.StrictMock<IExplorerView>();
 
-            _ruleSetCollection = new List<IWorkShiftRuleSet>();
-            _ruleSetCollection.Add(WorkShiftRuleSetFactory.Create());
+	        _ruleSetCollection = new List<IWorkShiftRuleSet> {WorkShiftRuleSetFactory.Create()};
 
-            _activity = ActivityFactory.CreateActivity("Test");
+	        _activity = ActivityFactory.CreateActivity("Test");
             
-            AutoPositionedActivityExtender auto = new AutoPositionedActivityExtender(_activity, 
+            var auto = new AutoPositionedActivityExtender(_activity, 
                                                                                      _activityLengthWithSegment,
                                                                                      TimeSpan.FromMinutes(15));
 
@@ -57,51 +56,6 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
 
             _ruleSetCollection[0].AddExtender(auto);
             _ruleSetCollection[0].AddExtender(absolute);
-            
-            /*using (_mock.Record())
-            {
-                Expect
-                    .On(_model)
-                    .Call(_model.ActivityCollection)
-                    .Return(activities)
-                    .Repeat.Any();
-
-                Expect
-                    .On(_model)
-                    .Call(_model.DefaultSegment)
-                    .Return(15)
-                    .Repeat.Any();
-
-                Expect
-                    .On(_model)
-                    .Call(_model.RuleSetCollection)
-                    .Return(new ReadOnlyCollection<IWorkShiftRuleSet>(_ruleSetCollection))
-                    .Repeat.Any();
-
-                Expect
-                    .On(_model)
-                    .Call(_model.FilteredRuleSetCollection)
-                    .Return(new ReadOnlyCollection<IWorkShiftRuleSet>(_ruleSetCollection))
-                    .Repeat.Any();
-
-                Expect
-                    .On(_explorer)
-                    .Call(_explorer.DataWorkHelper)
-                    .Return(_helper)
-                    .Repeat.Any();
-
-                Expect
-                    .On(_explorer)
-                    .Call(_explorer.Model)
-                    .Return(_model)
-                    .Repeat.Any();
-
-                
-                    .Repeat.Any();
-
-                
-                LastCall.IgnoreArguments().Repeat.Any();
-            }*/
             _target = new ActivityPresenter(_explorer,_helper);
         }
 
@@ -129,10 +83,9 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
         [Test]
         public void VerifyAddAbsolutePositionActivity()
         {
-            TypedBindingCollection<IActivity> activities = new TypedBindingCollection<IActivity>();
-            activities.Add(_activity);
+            var activities = new TypedBindingCollection<IActivity> {_activity};
 
-            using (_mock.Record())
+	        using (_mock.Record())
             {
                 Expect
                     .Call(_explorer.Model)
