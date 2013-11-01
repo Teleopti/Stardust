@@ -35,18 +35,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			var retList = new List<IScheduleDay>();
 
+			var schedulePart0 = schedules[_selectedSchedules[0].Person].ReFetch(_selectedSchedules[0]);
 			var schedulePart1 = schedules[_selectedSchedules[1].Person].ReFetch(_selectedSchedules[1]);
-			var schedulePart2 = schedules[_selectedSchedules[0].Person].ReFetch(_selectedSchedules[0]);
-			if ((schedulePart1.PersonAssignmentCollection().Count == 0 || schedulePart2.PersonAssignmentCollection().Count == 0) &&
-				(schedulePart1.PersonDayOffCollection().Count == 0 && schedulePart2.PersonDayOffCollection().Count == 0))
+			if ((schedulePart1.PersonAssignmentCollection().Count == 0 || schedulePart0.PersonAssignmentCollection().Count == 0) &&
+				(schedulePart1.PersonDayOffCollection().Count == 0 && schedulePart0.PersonDayOffCollection().Count == 0))
 			{
 				if (schedulePart1.PersonAssignmentCollection().Count == 0)
 				{
-					_selectedSchedules[1].Merge(schedulePart2, false);
+					_selectedSchedules[1].Merge(schedulePart0, false);
 					_selectedSchedules[1].DeletePersonalStuff();
-					_selectedSchedules[0].DeleteMainShift(schedulePart2);
+					_selectedSchedules[0].DeleteMainShift(schedulePart0);
 				}
-				else if (schedulePart2.PersonAssignmentCollection().Count == 0)
+				else if (schedulePart0.PersonAssignmentCollection().Count == 0)
 				{
 					_selectedSchedules[0].Merge(schedulePart1, false);
 					_selectedSchedules[0].DeletePersonalStuff();
@@ -61,14 +61,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					_selectedSchedules[0].Merge(schedulePart1, false);
 
 
-				if(schedulePart2.PersistableScheduleDataCollection().Count() == 0)
+				if(schedulePart0.PersistableScheduleDataCollection().Count() == 0)
 					_selectedSchedules[1].Merge(_selectedSchedules[1], true);
 				else
-					_selectedSchedules[1].Merge(schedulePart2, false);
+					_selectedSchedules[1].Merge(schedulePart0, false);
 			}
 
 			((ExtractedSchedule)_selectedSchedules[1]).DeleteOvertime();
-			((ExtractedSchedule)_selectedSchedules[1]).MergeOvertime(schedulePart2);
+			((ExtractedSchedule)_selectedSchedules[1]).MergeOvertime(schedulePart0);
 			((ExtractedSchedule)_selectedSchedules[0]).DeleteOvertime();
 			((ExtractedSchedule)_selectedSchedules[0]).MergeOvertime(schedulePart1);
 			
