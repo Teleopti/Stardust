@@ -11330,4 +11330,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Avbryt</value>
     <comment>Stop current background operation in scheduler</comment>
   </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Agent Kompetenser</value>
+    <comment>Agent Kompetenser</comment>
+  </data>
 </root>
