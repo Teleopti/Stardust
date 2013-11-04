@@ -97,10 +97,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						return periodsViewModels.Concat(overtimeAvailabilityPeriodViewModels);
 					}))
 				.ForMember(d => d.TextRequestCount, o => o.ResolveUsing(s => s.PersonRequests == null ? 0 : s.PersonRequests.Count(r => (r.Request is TextRequest || r.Request is AbsenceRequest))))
-				.ForMember(d => d.Allowance, c => c.MapFrom(s => s.Allowance))
-				.ForMember(d => d.AbsenceAgents, c => c.MapFrom(s => s.AbsenceTime))
-				.ForMember(d => d.Availability, c => c.MapFrom(s => s.Availability))
-				.ForMember(d => d.FulltimeEquivalent, c => c.MapFrom(s => s.FulltimeEquivalent))
 				.ForMember(d => d.ProbabilityClass, c => c.MapFrom(s => s.ProbabilityClass))
 				.ForMember(d => d.ProbabilityText, c => c.MapFrom(s => s.ProbabilityText))
 

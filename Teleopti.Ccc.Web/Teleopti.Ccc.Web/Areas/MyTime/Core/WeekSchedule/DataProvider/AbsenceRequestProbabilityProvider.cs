@@ -8,13 +8,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 {
 	public interface IAbsenceRequestProbabilityProvider
 	{
-		List<Tuple<DateOnly, string, string>> GetAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period);
+		List<Tuple<DateOnly, string, string, bool>> GetAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period);
 	}
 	public class AbsenceRequestProbabilityProvider : IAbsenceRequestProbabilityProvider
 	{
 		private readonly IAllowanceProvider _allowanceProvider;
 		private readonly IAbsenceTimeProvider _absenceTimeProvider;
-		readonly string[] texts = {UserTexts.Resources.Poor, UserTexts.Resources.Fair, UserTexts.Resources.Good};
+		private string[] texts;
 		readonly string[] cssClass = {"red", "yellow", "green"};
 
 		public AbsenceRequestProbabilityProvider(IAllowanceProvider allowanceProvider,
@@ -24,12 +24,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 			_absenceTimeProvider = absenceTimeProvider;
 		}
 
-		public List<Tuple<DateOnly, string, string>> GetAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period)
+		public List<Tuple<DateOnly, string, string, bool>> GetAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period)
 		{
+			texts = new[] { UserTexts.Resources.Poor, UserTexts.Resources.Fair, UserTexts.Resources.Good };
+
 			var absenceTimeCollection = _absenceTimeProvider.GetAbsenceTimeForPeriod(period);
 			var allowanceCollection = _allowanceProvider.GetAllowanceForPeriod(period);
 
-			var ret = new List<Tuple<DateOnly, string, string>>();
+			var ret = new List<Tuple<DateOnly, string, string, bool>>();
 
 			foreach (var dateOnly in period.DayCollection())
 			{
@@ -64,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 				if (allowanceDay != null && allowanceDay.Item6.Equals(true))
 				{
 					if (allowanceForDay > absenceHeadsForDay)
-						percent = 100 * ( absenceHeadsForDay/ allowanceForDay);
+						percent = 100 -( 100 * ( absenceHeadsForDay/ allowanceForDay));
 					
 					if (allowanceForDay - absenceHeadsForDay >= 1)
 						index = 1;
@@ -83,9 +85,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 					if (percent > 0 && (allowanceMinutesForDay - absenceTimeForDay) >= fulltimeEquivalentForDay)
 						index = percent > 30 && (allowanceMinutesForDay - absenceTimeForDay) >= 2 * fulltimeEquivalentForDay ? 2 : 1;
 				}
-				
 
-				ret.Add(new Tuple<DateOnly, string, string>(dateOnly, cssClass[index], texts[index]));
+
+				ret.Add(new Tuple<DateOnly, string, string, bool>(dateOnly, cssClass[index], texts[index], allowanceDay.Item5));
 			}
 
 			return ret;

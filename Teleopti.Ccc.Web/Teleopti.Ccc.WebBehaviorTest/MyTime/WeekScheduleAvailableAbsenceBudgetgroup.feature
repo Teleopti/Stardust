@@ -240,20 +240,6 @@ Scenario: Show the user a green indication when there is budgetgroup check for t
 	And I have the workflow control set 'Budgetgroup staffing check'
 	When I view my week schedule for date '2023-05-28'
 	Then I should see an 'green' indication for chance of absence request on '2023-05-28'
-
-#Ska tas bort! /MariaS
-Scenario: Do not show the user any indication when there is budgetgroup head count check for that day
-	Given the current time is '2023-05-25 20:00'
-	And there is a budgetday
-	| Field						| Value					|
-	| BudgetGroup				| TheBudgetGroup		|
-	| Date						| 2023-05-28			|
-	| Allowance					| 2						|
-	| FulltimeEquivalentHours	| 8						|
-	And I have the role 'Full access to mytime'
-	And I have the workflow control set 'Budgetgroup head count check'
-	When I view my week schedule for date '2023-05-28'
-	Then I should not see any indication of how many agents can go on holiday
 	
 Scenario: Show the user a green indication when there is no auto grant for absence requests for that day
 	Given the current time is '2023-05-25 20:00'
