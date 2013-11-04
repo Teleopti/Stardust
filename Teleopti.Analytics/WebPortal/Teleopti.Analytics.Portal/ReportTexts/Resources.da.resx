@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string"/>
-              <xsd:attribute name="type" type="xsd:string"/>
-              <xsd:attribute name="mimetype" type="xsd:string"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string"/>
-              <xsd:attribute name="name" type="xsd:string"/>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -130,10 +130,10 @@
     <value>Du har ikke indtastet noget i: </value>
   </data>
   <data name="ResAbandonedCalls" xml:space="preserve">
-    <value>Annullerede Opkald</value>
+    <value>Tabte Opkald</value>
   </data>
   <data name="ResAbandonRate" xml:space="preserve">
-    <value>Annulleringshyppighed</value>
+    <value>Frekvens for tabte opkald</value>
   </data>
   <data name="ResAgentName" xml:space="preserve">
     <value>Medarbejder</value>
@@ -142,11 +142,11 @@
     <value>Besvarede Opkald</value>
   </data>
   <data name="ResAnsweredCallsAfterSL" xml:space="preserve">
-    <value>Besvaret Efter Serviceniveau</value>
+    <value>Besvaret Efter Service Level</value>
     <comment>Answered After Service Level</comment>
   </data>
   <data name="ResAnsweredCallsWithinSL" xml:space="preserve">
-    <value>Besvaret Inden For Serviceniveau</value>
+    <value>Besvaret Inden For Service Level</value>
     <comment>Answered Within Service Level</comment>
   </data>
   <data name="ResDate" xml:space="preserve">
@@ -174,7 +174,7 @@
     <value>Planlagt Tid</value>
   </data>
   <data name="ResServiceLevelPercent" xml:space="preserve">
-    <value>Serviceniveau (%)</value>
+    <value>Service Level (%)</value>
     <comment>Service Level (%)</comment>
   </data>
   <data name="ResSiteNameColon" xml:space="preserve">
@@ -214,7 +214,7 @@
     <comment>Answered Calls per Scheduled Phone Hour</comment>
   </data>
   <data name="KpiAverageAfterCallWork" xml:space="preserve">
-    <value>Gennemsnitligt Arbejde Efter Opkald (s)</value>
+    <value>Gennemsnitligt Efterbehandllings tid (s)</value>
     <comment>Average After Call Work (s)</comment>
   </data>
   <data name="KpiAverageHandleTime" xml:space="preserve">
@@ -269,7 +269,7 @@
     <value>Husk mig næste gang</value>
   </data>
   <data name="LogInSuccessTitleText" xml:space="preserve">
-    <value/>
+    <value>Login lykkedes</value>
   </data>
   <data name="LogInTitle" xml:space="preserve">
     <value>Log Ind</value>
@@ -284,10 +284,10 @@
     <value>Scenarie:</value>
   </data>
   <data name="ResAbandonRateExclShortCallsPercent" xml:space="preserve">
-    <value>Annulleringshyppighed ekskl Korte Opkald (%)</value>
+    <value>Frekvens for tabte opkald ekskl Korte Opkald (%)</value>
   </data>
   <data name="ResAbandonRatePercent" xml:space="preserve">
-    <value>Annulleringshyppighed (%)</value>
+    <value>Frekvens for tabte opkald (%)</value>
   </data>
   <data name="ResAnswerRatePercent" xml:space="preserve">
     <value>Svarfrekvens (%)</value>
@@ -297,13 +297,13 @@
     <value>Gennemsnitlig Svarhastighed (s)</value>
   </data>
   <data name="ResAverageTimeToAbandonSec" xml:space="preserve">
-    <value>Gennemsnitlig Tid til Annullering (s)</value>
+    <value>Gennemsnitlig Tid før Tabt Opkald (s)</value>
   </data>
   <data name="ResDatePeriodColon" xml:space="preserve">
     <value>Datoperiode:</value>
   </data>
   <data name="ResLongestTimeToAbandonSec" xml:space="preserve">
-    <value>Længste Ventetid i Køen, Annulleret (s)</value>
+    <value>Længste Ventetid i Køen, Tabte Opkald (s)</value>
     <comment>Longest Delay in Queue, Abandoned (s)</comment>
   </data>
   <data name="ResLongestTimeToAnswerSec" xml:space="preserve">
@@ -314,30 +314,30 @@
     <value>Periode</value>
   </data>
   <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
-    <value>Annullering og Svarhastighed</value>
+    <value>Tabte opkald og Svarhastighed</value>
   </data>
   <data name="ResSeconds" xml:space="preserve">
     <value>Sekunder</value>
   </data>
   <data name="ResTimeToAbandon" xml:space="preserve">
-    <value>Tid til Annullering</value>
+    <value>Tid før Tabt opkald</value>
   </data>
   <data name="ResTotalsColon" xml:space="preserve">
-    <value>Summer:</value>
+    <value>Totaler:</value>
   </data>
   <data name="ResPercent" xml:space="preserve">
     <value>Procent</value>
   </data>
   <data name="ResActualACW" xml:space="preserve">
-    <value>Aktuelt ACW</value>
+    <value>Aktuel ACW</value>
     <comment>Actual ACW</comment>
   </data>
   <data name="ResActualATT" xml:space="preserve">
-    <value>Aktuelt ATT</value>
+    <value>Aktuel ATT</value>
     <comment>Actual ATT</comment>
   </data>
   <data name="ResACW" xml:space="preserve">
-    <value>Arbejde Efter Opkald (ACW - After Call Work)</value>
+    <value>Efterbehandling (ACW - After Call Work)</value>
     <comment>After Call Work (ACW)</comment>
   </data>
   <data name="ResATT" xml:space="preserve">
@@ -353,15 +353,15 @@
     <comment>Calls</comment>
   </data>
   <data name="ResForecastedACW" xml:space="preserve">
-    <value>Prognose for ACW</value>
+    <value>Prognosticeret ACW</value>
     <comment>Forecasted ACW</comment>
   </data>
   <data name="ResForecastedATT" xml:space="preserve">
-    <value>Prognose for ATT</value>
+    <value>Prognosticeret ATT</value>
     <comment>Forecasted ATT</comment>
   </data>
   <data name="ResForecastedCalls" xml:space="preserve">
-    <value>Prognose for Opkald</value>
+    <value>Prognosticeret Opkald</value>
     <comment>Forecasted Calls</comment>
   </data>
   <data name="ResNumberOf" xml:space="preserve">
@@ -385,19 +385,19 @@
     <comment>Relative Difference (%)</comment>
   </data>
   <data name="ResForecastedTimeH" xml:space="preserve">
-    <value>Prognose for Tid (tt:mm)</value>
+    <value>Prognosticeret Tid (tt:mm)</value>
     <comment>Forecasted Time (hh:mm)</comment>
   </data>
   <data name="ResOfferedCalls" xml:space="preserve">
-    <value>Udbudte Opkald</value>
+    <value>Tilbudte Opkald</value>
     <comment>Offered Calls</comment>
   </data>
   <data name="ResOfferedCallsPerAgentReady" xml:space="preserve">
-    <value>Udbudte Opkald / Medarbejder Parat</value>
+    <value>Tilbudte Opkald / Medarbejder Parat</value>
     <comment>Offered Calls/Agent Ready</comment>
   </data>
   <data name="ResOfferedCallsPerScheduledAgent" xml:space="preserve">
-    <value>Udbudte Opkald / Planlagt Medarbejder Parat</value>
+    <value>Tilbudte Opkald / Planlagt Medarbejder Parat</value>
     <comment>Offered Calls / Scheduled Agent Ready</comment>
   </data>
   <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
@@ -405,7 +405,7 @@
     <comment>Forecast vs Scheduled Hours</comment>
   </data>
   <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
-    <value>Serviceniveau og Parate Medarbejdere</value>
+    <value>Service Level og Parate Medarbejdere</value>
     <comment>Service Level  and Agents Ready</comment>
   </data>
   <data name="ResScheduledReadyTime" xml:space="preserve">
@@ -469,15 +469,15 @@
     <comment>Adherence Calculation:</comment>
   </data>
   <data name="ResOfferedCallsPerAgent" xml:space="preserve">
-    <value>Udbudte Opkald / Medarbejder</value>
+    <value>Tilbudte Opkald / Medarbejder</value>
     <comment>Offered Calls / Agent</comment>
   </data>
   <data name="ResServiceLevel" xml:space="preserve">
-    <value>Serviceniveau (%)</value>
+    <value>Service Level (%)</value>
     <comment>Service Level</comment>
   </data>
   <data name="ResServiceLevelCalcColon" xml:space="preserve">
-    <value>Beregning af Serviceniveau:</value>
+    <value>Beregning af Service Level:</value>
     <comment>Service Level Calculation:</comment>
   </data>
   <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
@@ -525,11 +525,11 @@
     <comment>Queue Statistics</comment>
   </data>
   <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
-    <value>Annulleret Inden For Serviceniveau</value>
+    <value>Tabte opkald Inden For Service Level</value>
     <comment>Abandoned Within Service Level</comment>
   </data>
   <data name="ResAbandonedShortCalls" xml:space="preserve">
-    <value>Annullerede Korte Opkald</value>
+    <value>Tabt Korte Opkald</value>
     <comment>Abandoned Short Calls</comment>
   </data>
   <data name="ResHandleTime" xml:space="preserve">
@@ -557,7 +557,7 @@
     <comment>Time Zone:</comment>
   </data>
   <data name="ResLongestTimeToAbandon" xml:space="preserve">
-    <value>Længste Ventetid i Køen, Annulleret</value>
+    <value>Længste Ventetid i Køen, Tabte Opkald</value>
     <comment>Longest Delay in Queue, Abandoned</comment>
   </data>
   <data name="ResLongestTimeToAnswer" xml:space="preserve">
@@ -565,7 +565,7 @@
     <comment>Longest Delay in Queue, Answered</comment>
   </data>
   <data name="ResTimeToAbandonSec" xml:space="preserve">
-    <value>Tid til Annullering (s)</value>
+    <value>Tid før Tabt opkald (s)</value>
     <comment>Time to Abandon (s)</comment>
   </data>
   <data name="ResHelp" xml:space="preserve">
@@ -605,11 +605,11 @@
     <comment>Direct Outbound Calls Talk Time</comment>
   </data>
   <data name="ResIdleTime" xml:space="preserve">
-    <value>Inaktiv Tid</value>
+    <value>Klar Tid</value>
     <comment>Idle Time</comment>
   </data>
   <data name="ResLoggedInTime" xml:space="preserve">
-    <value>Tid Logget Ind</value>
+    <value>Indmeldt Tid</value>
     <comment>Logged In Time</comment>
   </data>
   <data name="ResNotReadyTime" xml:space="preserve">
@@ -633,7 +633,7 @@
     <comment>Overflow Out Calls</comment>
   </data>
   <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
-    <value>Prognose for Tid inkl. Spildtid (tt:mm)</value>
+    <value>Prognosticeret Tid inkl. Spildtid (tt:mm)</value>
     <comment>Forecasted Time incl. Shrinkage (hh:mm)</comment>
   </data>
   <data name="ResScheduledTimeH" xml:space="preserve">
@@ -669,7 +669,7 @@
     <comment>Activity:</comment>
   </data>
   <data name="ResForecastedHoursH" xml:space="preserve">
-    <value>Prognose for Timer (tt:mm)</value>
+    <value>Prognosticeret Timer (tt:mm)</value>
     <comment>Forecasted Hours (hh:mm)</comment>
   </data>
   <data name="ResScheduledHoursH" xml:space="preserve">
@@ -677,7 +677,7 @@
     <comment>Scheduled Hours (hh:mm)</comment>
   </data>
   <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
-    <value>Prognose for Timer (spildtid) (tt:mm)</value>
+    <value>Prognosticeret Timer (spildtid) (tt:mm)</value>
     <comment>Prognostiserade timmar (shrinkage) (hh:mm)</comment>
   </data>
   <data name="ResRelativeDifferenceInclShrinkagePercent" xml:space="preserve">
@@ -737,31 +737,31 @@
     <comment>Work Time (hh:mm)</comment>
   </data>
   <data name="ResPreferencesAccepted" xml:space="preserve">
-    <value>Præferencer Accepteret</value>
+    <value>Ønsker Accepteret</value>
     <comment>Preferences Accepted</comment>
   </data>
   <data name="ResPreferencesAcceptedPercent" xml:space="preserve">
-    <value>Præferencer Accepteret (%)</value>
+    <value>Ønsker Accepteret (%)</value>
     <comment>Preferences Accepted (%)</comment>
   </data>
   <data name="ResPreferencesDeclined" xml:space="preserve">
-    <value>Præferencer Afslået</value>
+    <value>Ønsker Afslået</value>
     <comment>Preferences Declined</comment>
   </data>
   <data name="ResPreferencesRequested" xml:space="preserve">
-    <value>Præferencer Ønsket</value>
+    <value>Ønsker forespurgtt</value>
     <comment>Preferences Requested</comment>
   </data>
   <data name="ResPreferenceCategory" xml:space="preserve">
-    <value>Præferencekategori</value>
+    <value>Ønske kategori</value>
     <comment>Preference Category</comment>
   </data>
   <data name="ResReportPreferencesPerDay" xml:space="preserve">
-    <value>Præference pr. Dag</value>
+    <value>Ønsker pr. Dag</value>
     <comment>Preference per Day</comment>
   </data>
   <data name="ResReportPreferencesPerAgent" xml:space="preserve">
-    <value>Præference Pr. Medarbejder</value>
+    <value>Ønsker Pr. Medarbejder</value>
     <comment>Preference Per Agent</comment>
   </data>
   <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
@@ -769,7 +769,7 @@
     <comment>Scheduled Agents per Interval and Team</comment>
   </data>
   <data name="ResReportImprove" xml:space="preserve">
-    <value>FORBEDR</value>
+    <value>FORBEDRE</value>
     <comment>IMPROVE</comment>
   </data>
   <data name="ResHandlingTimePerPaidTime" xml:space="preserve">
@@ -869,7 +869,7 @@
     <comment>Absence Time per Agent</comment>
   </data>
   <data name="ResAbsenceDayCount" xml:space="preserve">
-    <value>Hel Dag</value>
+    <value>Heldags</value>
     <comment>Full Day Absence</comment>
   </data>
   <data name="ResAbsencePartDayCount" xml:space="preserve">
@@ -877,11 +877,11 @@
     <comment>Part of Day Absence</comment>
   </data>
   <data name="AuthenticationFailedForUser" xml:space="preserve">
-    <value>Autenticering mislykkedes for bruger</value>
+    <value>Autentificering mislykkedes for bruger</value>
     <comment>Authentication failed for user</comment>
   </data>
   <data name="AuthenticationMixedFailure" xml:space="preserve">
-    <value>Når der anvendes Windows-autenticering ved web-applikationen, er det ikke gyldigt at anvende Applikations-autenticering på klientsiden.</value>
+    <value>Når der anvendes Windows-autentificering ved web-applikationen, er det ikke gyldigt at anvende Applikations-autentificering på klientsiden.</value>
     <comment>When using Windows authentication at the web application it is not valid to use Application authentication at the client side.</comment>
   </data>
   <data name="PleaseUseApplicationLoginInstead" xml:space="preserve">
@@ -897,7 +897,7 @@
     <comment>Make sure the permissions are synchronized properly with the ETL service.</comment>
   </data>
   <data name="PossibleSolution2" xml:space="preserve">
-    <value>Enten lukkes klienten, og der logges ind igen ved brug af Windows-autenticering eller en systemadministrator kan ændre web-autenticeringen til Formularer.</value>
+    <value>Enten lukkes klienten, og der logges ind igen ved brug af Windows-autenticering eller en systemadministrator kan ændre web-autentificeringen til Formularer.</value>
     <comment>Either close the client and log back on using Windows authentication or a system administrator can change web authentication to Forms.</comment>
   </data>
   <data name="TechnicalInformation" xml:space="preserve">
@@ -925,15 +925,15 @@
     <comment>All</comment>
   </data>
   <data name="ResAnswCallsWithinSLPerAnswCalls" xml:space="preserve">
-    <value>Besvarede Opkald Inden For Serviceniveaugrænse / Besvarede Opkald</value>
+    <value>Besvarede Opkald Indenfor Service Level / Besvarede Opkald</value>
     <comment>Answered Calls Within Service Level Threshold / Answered Calls</comment>
   </data>
   <data name="ResAnsweredAndAbndCallsWithinSLPerOfferedCalls" xml:space="preserve">
-    <value>Besvarede og Annullerede Opkald Inden For Serviceniveaugrænse / Udbudte Opkald</value>
+    <value>Besvarede og Tabte Opkald Indenfor Service Level / Tilbudte Opkald</value>
     <comment>Answered and Abandoned Calls Within Service Level Threshold / Offered Calls</comment>
   </data>
   <data name="ResAnsweredCallsWithinSLPerOfferedCalls" xml:space="preserve">
-    <value>Besvarede Opkald Inden For Serviceniveaugrænse / Udbudte Opkald</value>
+    <value>Besvarede Opkald Indenfor Service Level / Tilbudte Opkald</value>
     <comment>Answered Calls Within Service Level Threshold / Offered Calls</comment>
   </data>
   <data name="ResDay" xml:space="preserve">
@@ -945,7 +945,7 @@
     <comment>Day Off</comment>
   </data>
   <data name="ResExtendedPreference" xml:space="preserve">
-    <value>Udvidet Præference</value>
+    <value>Udvidet Ønsker</value>
     <comment>Extended Preference</comment>
   </data>
   <data name="ResFirstName" xml:space="preserve">
@@ -1031,5 +1031,245 @@
   <data name="ResAgentColon" xml:space="preserve">
     <value>Medarbejder:</value>
     <comment>Agent:</comment>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Opfyldt</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Opfyldelse (%)</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Veto</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Uopfyldte</value>
+  </data>
+  <data name="ResNoScorecardAvailable" xml:space="preserve">
+    <value>Der er ingen scorecard tilgængelig</value>
+  </data>
+  <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
+    <value>Fraværs Tid pr. Fravær</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>Forretnings Hiraki</value>
+  </data>
+  <data name="Contracts" xml:space="preserve">
+    <value>Kontrakt</value>
+  </data>
+  <data name="ContractSchedule" xml:space="preserve">
+    <value>Kontraksplan</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="PartTimepercentages" xml:space="preserve">
+    <value>Deltids procent</value>
+  </data>
+  <data name="RuleSetBag" xml:space="preserve">
+    <value>Vagt samling</value>
+  </data>
+  <data name="ResGroupPageColon" xml:space="preserve">
+    <value>Gruppe side:</value>
+  </data>
+  <data name="ResGroupPageGroupColon" xml:space="preserve">
+    <value>Gruppe:</value>
+  </data>
+  <data name="Skill" xml:space="preserve">
+    <value>Kompetance</value>
+  </data>
+  <data name="ResReportScheduledOvertimePerAgent" xml:space="preserve">
+    <value>Planlagt Overarbejde pr. Medarbejder</value>
+  </data>
+  <data name="ResOvertimeColon" xml:space="preserve">
+    <value>Overarbejde:</value>
+  </data>
+  <data name="ResOvertimeTypeColon" xml:space="preserve">
+    <value>Overarbejds type:</value>
+  </data>
+  <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
+    <value>Gennemsnitlig efterbehandlings tid (s)</value>
+  </data>
+  <data name="ResKpiAverageHandleTime" xml:space="preserve">
+    <value>Gennemsnitlig Håndterings Tid (s)</value>
+  </data>
+  <data name="ResKpiAverageTalkTime" xml:space="preserve">
+    <value>Gennemsnitlig Tale Tid (s)</value>
+  </data>
+  <data name="ResReportAgentQueueMetrics" xml:space="preserve">
+    <value>Medarbejer Målværdier pr. Kø</value>
+  </data>
+  <data name="ResReportActivityTimePerAgent" xml:space="preserve">
+    <value>Aktivitetstid pr. Medarbejder</value>
+  </data>
+  <data name="ResOvertimeH" xml:space="preserve">
+    <value>Overarbejde (tt:mm)</value>
+  </data>
+  <data name="ResShiftEndTime" xml:space="preserve">
+    <value>Vagt slut tid</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
+    <value>Vagtkategori og heldags fravær vist pr. dag</value>
+  </data>
+  <data name="ResRequestTypeAbsence" xml:space="preserve">
+    <value>Fravær</value>
+  </data>
+  <data name="ResRequestTypeShiftTrade" xml:space="preserve">
+    <value>Vagtbytte</value>
+  </data>
+  <data name="ResRequestTypeText" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="ResReportRequestsPerAgent" xml:space="preserve">
+    <value>Forespørgelser pr. agent</value>
+  </data>
+  <data name="ResRequestStatusApproved" xml:space="preserve">
+    <value>Godkendt</value>
+  </data>
+  <data name="ResRequestStatusDenied" xml:space="preserve">
+    <value>Afvist</value>
+  </data>
+  <data name="ResRequestStatusPending" xml:space="preserve">
+    <value>Afventer</value>
+  </data>
+  <data name="ResRequestTypeColon" xml:space="preserve">
+    <value>Ansøgt type:</value>
+  </data>
+  <data name="ResRequestStatusColon" xml:space="preserve">
+    <value>Status:</value>
+  </data>
+  <data name="ResRequestStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="ResRequestsDayCount" xml:space="preserve">
+    <value>Ansøgte dage</value>
+  </data>
+  <data name="ResRequestsStartDayCount" xml:space="preserve">
+    <value>Forespørgelse</value>
+  </data>
+  <data name="ResRequestType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="ResApplicationDate" xml:space="preserve">
+    <value>Ansøgningstidspunktet</value>
+  </data>
+  <data name="ResRequestPeriod" xml:space="preserve">
+    <value>Forespørgelses periode</value>
+  </data>
+  <data name="RedirectNow" xml:space="preserve">
+    <value>Omdirigere nu</value>
+  </data>
+  <data name="SessionExpiredHeader" xml:space="preserve">
+    <value>Siden er udløbet</value>
+  </data>
+  <data name="SessionExpiredText" xml:space="preserve">
+    <value>Siden er udløbet på grund af længere tids inaktivitet. Du vil blive sendt videre for at logge på igen.</value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Overholdelse pr. Medarbejer</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Overholdelse pr. dag</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Planlagte Medarbejere pr. Aktivitet</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Totaler</value>
+  </data>
+  <data name="ResSignOut" xml:space="preserve">
+    <value>Logge Ud</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Dato (vagt start):</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Dtao Fra (vagt start):</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Dtao Til (vagt start):</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>Denne side</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Eksport</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Find</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Find Næste</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Find tekst i rapport</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>Første Side</value>
+  </data>
+  <data name="RepViewerInvalidPageNumber" xml:space="preserve">
+    <value>Ugyldig side nummer</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Sidste Pide</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Næste</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Næste side</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>Der er ikke fundet flere match</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>af</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Sideopsætning</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Side bredde</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Forrige side</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Udskrivnings layout</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Udskrivning</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Opdater</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Stop Gentagelse</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Teksten ikke fundet</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Total Sider</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Hele Siden</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Tilgængelighed Pr. Medarbejder</value>
+  </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>Tilgængelige dage</value>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>Tilgængelig tid</value>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>Planlagte dage</value>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>Udnyttelse</value>
   </data>
 </root>

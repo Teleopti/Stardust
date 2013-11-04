@@ -39,6 +39,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public string ShiftColor { get; set; }	// this should not be here. this exists on the ShiftCategoryConfigurable
 
+		public bool ShortBreakAfternoon { get; set; }
+
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var shiftCategory = new ShiftCategoryRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
@@ -73,6 +75,15 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			}
 			if (lunchPeriod.HasValue)
 				mainShift.LayerCollection.Add(new EditableShiftLayer(lunchActivity, lunchPeriod.Value));
+
+			if (ShortBreakAfternoon)
+			{
+				var breakActivity = new Activity("Break");
+				breakActivity.DisplayColor = Color.Red;
+				new ActivityRepository(uow).Add(breakActivity);
+				var start = _assignmentPeriod.StartDateTime.AddHours(6);
+				mainShift.LayerCollection.Add(new EditableShiftLayer(breakActivity, new DateTimePeriod(start, start.AddMinutes(5))));
+			}
 
 			new EditableShiftMapper().SetMainShiftLayers(assignment, mainShift);
 

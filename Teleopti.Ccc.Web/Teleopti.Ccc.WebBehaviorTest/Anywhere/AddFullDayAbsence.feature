@@ -208,7 +208,7 @@ Scenario: Invalid dates
 	| End date | 2012-12-01 |
 	Then I should see the alert 'Invalid end date'
 
-Scenario: Backward from browser works with person schedule view
+Scenario: Back to viewing schedule after adding a full day absence
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for 'Team green' on '2013-04-08'
 	And I click person 'Pierre Baldi'

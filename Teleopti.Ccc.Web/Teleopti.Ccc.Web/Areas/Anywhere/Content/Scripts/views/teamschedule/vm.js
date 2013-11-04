@@ -1,6 +1,7 @@
 define([
         'knockout',
         'navigation',
+        'lazy',
 		'shared/timeline',
 		'views/teamschedule/group-page',
         'resources!r',
@@ -10,6 +11,7 @@ define([
     ], function(
         ko,
         navigation,
+        lazy,
         timeLineViewModel,
 	    groupPageViewModel,
         resources,
@@ -83,6 +85,43 @@ define([
             this.PreviousDay = function() {
                 self.SelectedDate(self.SelectedDate().add('d', -1));
             };
+
+            this.SelectPerson = function(person) {
+                navigation.GotoPersonSchedule(person.Id, self.SelectedDate());
+            };
+            
+            this.SelectLayer = function (layer) {
+                var selectedLayers = lazy(self.Persons())
+                    .map(function(x) { return x.Shifts(); })
+                    .flatten()
+                    .map(function(x) { return x.Layers(); })
+                    .flatten()
+                    .filter(function (x) {
+                        if (x === layer)
+                            return false;
+                        return x.Selected();
+                    });
+                selectedLayers.each(function (x) {
+                    x.Selected(false);
+                });
+                layer.Selected(!layer.Selected());
+            };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	        
             this.Skills = ko.observableArray();

@@ -84,7 +84,7 @@ define([
             };
 
             this.AddFullDayAbsence = function() {
-                navigation.GotoPersonScheduleAddFullDayAbsenceForm(self.Id(), self.Date());
+                navigation.GotoPersonScheduleAddFullDayAbsenceFormWithoutHistory(self.Id(), self.Date());
             };
 
         };

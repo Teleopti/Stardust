@@ -27,12 +27,6 @@ define([
 
 		var teamSchedule;
 
-		var events = new ko.subscribable();
-
-		events.subscribe(function (personId) {
-			navigation.GotoPersonSchedule(personId, teamSchedule.SelectedDate());
-		}, null, "gotoperson");
-
 		var loadSchedules = function(options) {
 			subscriptions.subscribeTeamSchedule(
 				teamSchedule.SelectedGroup(),
@@ -47,7 +41,8 @@ define([
 
 						for (var j = 0; j < schedules.length; j++) {
 							if (currentPersons[i].Id == schedules[j].PersonId) {
-								currentPersons[i].AddData(schedules[j], teamSchedule.TimeLine, dateClone);
+				    	        schedules[j].Date = dateClone;
+				    			currentPersons[i].AddData(schedules[j], teamSchedule.TimeLine);
 							}
 						}
 					}
@@ -84,7 +79,7 @@ define([
 				},
 				success: function (people, textStatus, jqXHR) {
 					var newItems = ko.utils.arrayMap(people, function (s) {
-						return new personViewModel(s, events);
+						return new personViewModel(s);
 					});
 					teamSchedule.SetPersons(newItems);
 					options.success();

@@ -19,7 +19,7 @@
 				<th><span id="forecasted-hours" data-bind="visible: !LoadingStaffingMetrics(), text: ForecastedHoursDisplay"></span></th>
 				<th><span id="scheduled-hours" data-bind="visible: !LoadingStaffingMetrics(), text: ScheduledHoursDisplay"></span></th>
 				<th><span id="difference-forecasted-scheduled" class="text-error" data-bind="visible: !LoadingStaffingMetrics(), text: DifferenceDisplay"></span></th>
-				<th><span id="estimated-service-level" class="text-warning" data-bind="visible: !LoadingStaffingMetrics(), text: ESLDisplay"></span></th>
+			    <th><span id="estimated-service-level" class="text-warning" data-bind="visible: !LoadingStaffingMetrics(), text: ESLDisplay"></span></th>
 			</tr>
 		</thead>
 	</table>
@@ -47,8 +47,8 @@
 			</form>
 		</div>
 	</div>
-
-	<div class="row">
+    
+    <div class="row">
 		<div class="span12">
 			<!-- ko if: Loading -->
 			<div><span data-bind="text: Resources.LoadingThreeDots"></span></div>
@@ -75,20 +75,25 @@
 						</tr>
 					</thead>
 					<tbody data-bind="foreach: Persons">
-						<tr class="person" data-bind="attr: { 'data-person-id': Id }, click: Select">
-							<td class="person-name">
-								<!-- Must do it this way to get correct overflow: hidden in IE -->
-								<div class="person-name nowrap" data-bind="text: Name"></div>
-							</td>
-							<td class="schedule">
-								<div class="relative time-line-for">
-									<!-- ko if: IsShift -->
-									<div class="shift" data-bind="template: { name: 'layerTemplate', foreach: Layers }"></div>
-									<!-- /ko -->
+					    <tr class="person" data-bind="attr: { 'data-person-id': Id }, click: $root.SelectPerson">
+					        <td class="person-name person-name-column">
+					            <!-- Must do it this way to get correct overflow: hidden in IE -->
+					            <div class="person-name nowrap" data-bind="text: Name"></div>
+					        </td>
+					        <td class="schedule schedule-column">
+					            <div class="relative time-line-for">
+					                <!-- ko foreach: Shifts -->
+					                <div class="shift" data-bind="
+                                        template: { 
+                                            name: 'layerTemplate', 
+                                            foreach: Layers
+                                        }
+                                        "></div>
+					                <!-- /ko -->
 									
-									<!-- ko foreach: DayOffs -->
-									<!-- ko if: OverlapsTimeLine -->
-									<div 
+					                <!-- ko foreach: DayOffs -->
+					                <!-- ko if: OverlapsTimeLine -->
+					                <div 
 										class="dayoff absolute"
 										data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px'}">
 										<!-- ko if: $root.DisplayDescriptions -->
@@ -100,13 +105,43 @@
 										<span class="label layer-description" data-bind="text: DayOffName"></span>
 										<!-- /ko -->
 										<!-- /ko -->
-									</div>
-									<!-- /ko -->
-									<!-- /ko -->
-								</div>
-							</td>
-							<td class="contract-time" data-bind="text: ContractTime"></td>
-						</tr>
+					                </div>
+					                <!-- /ko -->
+					                <!-- /ko -->
+					            </div>
+					        </td>
+					        <td class="contract-time contract-time-column" data-bind="text: ContractTime"></td>
+					    </tr>
+                        
+					    <!-- ko foreach: Shifts -->
+                        <!-- ko foreach: Layers -->
+					    <!-- ko if: Selected -->
+					    <tr>
+					        <td class="shift-menu-background person-name-column"></td>
+					        <td class="shift-menu-background schedule-column">
+                                
+    					        <!-- ko if: $parent.MakeSpaceForDrop -->
+					                <div style="height: 13px"></div>
+                                <!-- /ko -->
+
+					            <div class="shift-menu" data-bind="style: {'margin-left': StartPixels() + 'px'}">
+					                <p>
+    					                <span class="label" data-bind="style: { 'background-color': Color }, text: Description + ' ' + StartTime() + '-' + EndTime()"></span>
+					                </p>
+					                <div class="btn-group">
+					                    <a href="#" class="btn btn-small show-details" data-bind="click: $parent.ShowDetails"><i class="icon-eye-open"></i></a>
+					                    <a href="#" class="btn btn-small add-full-day-absence" data-bind="click: $parent.AddFullDayAbsence"><i class="icon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
+					                    <a href="#" class="btn btn-small add-activity" data-bind="click: $parent.AddActivity"><i class="icon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
+					                </div>
+					            </div>
+
+					        </td>
+					        <td class="shift-menu-background contract-time-column"></td>
+					    </tr>
+                        <!-- /ko -->
+                        <!-- /ko -->
+					    <!-- /ko -->
+
 					</tbody>
 				</table>
 			</div>
@@ -116,8 +151,8 @@
 </div>
 
 <script id="layerTemplate" type="text/html">
-	<!-- ko if: OverlapsTimeLine -->
-	<div class="layer absolute floatleft" data-bind="
+    <!-- ko if: OverlapsTimeLine -->
+    <div class="layer absolute floatleft" data-bind="
 	style: {
 		left: StartPixels() + 'px',
 		width: LengthPixels() + 'px',
@@ -128,11 +163,14 @@
 		'data-length-minutes': LengthMinutes(),
 	}
 	">
-	<!-- ko if: IsFullDayAbsence -->
-		<!-- ko if: $root.DisplayDescriptions -->
-			<span class="label layer-description" data-bind="text: Description"></span>
-		<!-- /ko -->
-	<!-- /ko -->
-	</div>
+    <!-- ko if: DisplayDrop -->
+        <div class="drop absolute"><div class="arrow absolute"></div><div class="circle absolute"></div></div>
+    <!-- /ko -->
+    <!-- ko if: IsFullDayAbsence -->
+        <!-- ko if: $root.DisplayDescriptions -->
+            <span class="label layer-description" data-bind="text: Description"></span>
+        <!-- /ko -->
+    <!-- /ko -->
+    </div>
 	<!-- /ko -->
 </script>

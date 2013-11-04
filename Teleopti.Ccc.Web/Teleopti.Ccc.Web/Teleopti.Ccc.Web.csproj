@@ -704,6 +704,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\group-page-group.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shift.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\group-page.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\dayoff.js" />
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
@@ -1043,6 +1044,8 @@
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Content\lazy\lazy.js" />
+    <Content Include="Content\lazy\lazy.min.js" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
