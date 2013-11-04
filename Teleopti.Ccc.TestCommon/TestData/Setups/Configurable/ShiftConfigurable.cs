@@ -32,14 +32,17 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public DateTime OvertimeStartTime { get; set; }
 		public DateTime OvertimeEndTime { get; set; }
 
-		public string LunchActivity { get; set; }
 		public bool Lunch3HoursAfterStart { get; set; }
+		public string LunchActivity { get; set; }
 		public DateTime LunchStartTime { get; set; }
 		public DateTime LunchEndTime { get; set; }
 
 		public string ShiftColor { get; set; }	// this should not be here. this exists on the ShiftCategoryConfigurable
 
 		public bool ShortBreakAfternoon { get; set; }
+		public string BreakActivity { get; set; }
+		public DateTime BreakStartTime { get; set; }
+		public DateTime BreakEndTime { get; set; }
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
@@ -83,6 +86,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				new ActivityRepository(uow).Add(breakActivity);
 				var start = _assignmentPeriod.StartDateTime.AddHours(6);
 				mainShift.LayerCollection.Add(new EditableShiftLayer(breakActivity, new DateTimePeriod(start, start.AddMinutes(5))));
+			}
+			if (BreakActivity!=null)
+			{
+				var breakActivity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(BreakActivity));
+				var breakStartTimeUtc = timeZone.SafeConvertTimeToUtc(BreakStartTime);
+				var breakEndTimeUtc = timeZone.SafeConvertTimeToUtc(BreakEndTime);
+				var breakPeriod = new DateTimePeriod(breakStartTimeUtc, breakEndTimeUtc);
+				mainShift.LayerCollection.Add(new EditableShiftLayer(breakActivity, breakPeriod));
 			}
 
 			new EditableShiftMapper().SetMainShiftLayers(assignment, mainShift);
