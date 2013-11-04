@@ -27,12 +27,23 @@ Background:
 	And there are shift categories
 	| Name  |
 	| Day  |
+	And there is an activity with
+	 | Field | Value |
+	 | Name  | Phone |
+	 | Color | Green |
+	And there is an activity with
+	 | Field | Value  |
+	 | Name  | Lunch  |
+	 | Color | Yellow |
 	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 08:00 |
-	| EndTime               | 2030-01-01 17:00 |
-	| Shift category		| Day	           |
-	| Lunch3HoursAfterStart | true             |
+	| Field                         | Value            |
+	| Shift category                | Day              |
+	| Activity                      | Phone            |
+	| StartTime                     | 2030-01-01 08:00 |
+	| EndTime                       | 2030-01-01 17:00 |
+	| Scheduled activity            | Lunch            |
+	| Scheduled activity start time | 2030-01-01 11:00 |
+	| Scheduled activity end time   | 2030-01-01 12:00 |
 
 Scenario: No permission to ASM module
 	Given I have the role 'No access to ASM'
