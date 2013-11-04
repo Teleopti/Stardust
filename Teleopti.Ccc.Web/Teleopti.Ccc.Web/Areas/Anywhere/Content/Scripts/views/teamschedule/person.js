@@ -3,14 +3,12 @@ define([
 		'moment',
 		'lazy',
 		'views/teamschedule/shift',
-		'views/teamschedule/layer',
 		'views/teamschedule/dayoff'
 ], function (
 		ko,
 		moment,
 		lazy,
 		shift,
-		layer,
 		dayOff
 	) {
 

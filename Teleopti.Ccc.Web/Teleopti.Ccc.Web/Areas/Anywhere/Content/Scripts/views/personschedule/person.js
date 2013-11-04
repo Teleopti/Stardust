@@ -2,15 +2,13 @@ define([
 		'knockout',
 		'moment',
 		'lazy',
-		'views/teamschedule/shift',
-		'views/teamschedule/layer',
-		'views/teamschedule/dayoff'
+		'views/personschedule/shift',
+		'views/personschedule/dayoff'
 ], function (
 		ko,
 		moment,
 		lazy,
 		shift,
-		layer,
 		dayOff
 	) {
 
