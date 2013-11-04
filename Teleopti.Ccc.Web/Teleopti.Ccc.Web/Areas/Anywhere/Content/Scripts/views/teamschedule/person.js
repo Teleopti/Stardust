@@ -90,17 +90,11 @@ define([
 
 		this.OrderBy = function () {
 
-			var visibleFullDayAbsences = function () {
-				return visibleLayers().filter(function(x) { return x.IsFullDayAbsence; });
-			};
-
-			var visibleShiftLayers = function () {
-				return visibleLayers().filter(function (x) { return !x.IsFullDayAbsence; });
-			};
-
+			var visibleShiftLayers = visibleLayers().filter(function (x) { return !x.IsFullDayAbsence; });
 			if (visibleShiftLayers().some())
 				return visibleShiftLayers().map(function (x) { return x.StartMinutes(); }).min();
 			
+			var visibleFullDayAbsences = visibleLayers().filter(function (x) { return x.IsFullDayAbsence; });
 			if (visibleFullDayAbsences().some())
 				return 5000 + visibleFullDayAbsences().map(function (x) { return x.StartMinutes(); }).min();
 			
