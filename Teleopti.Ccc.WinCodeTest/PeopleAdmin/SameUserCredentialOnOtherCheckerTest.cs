@@ -41,6 +41,23 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
             _mock.VerifyAll();
         }
 
+		[Test]
+		public void ShouldFindDuplicatesWhenSameDomainNameAndEmptyLogOnName()
+		{
+			var p1 = createPerson("", "domain", "a");
+			var p2 = createPerson("", "domain", "b");
+
+			var persons = new List<IPerson> {p1, p2};
+			var savedPersonsConflicting = new List<IPerson>();
+			
+			Expect.Call(_personRepository.FindPersonsWithGivenUserCredentials(persons)).Return(savedPersonsConflicting);
+			_mock.ReplayAll();
+			var ret = _target.CheckConflictsBeforeSave(persons);
+
+			Assert.That(ret.Count, Is.EqualTo(1));
+			_mock.VerifyAll();
+		}
+
         [Test]
         public void ShouldFindDuplicatesInSavedData()
         {
