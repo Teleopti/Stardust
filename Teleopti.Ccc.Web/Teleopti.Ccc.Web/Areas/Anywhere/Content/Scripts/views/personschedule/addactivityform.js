@@ -19,14 +19,14 @@ define([
 		this.Activity = ko.observable("");
 
 		this.Date = ko.observable();
-		this.StartTime = ko.observable(moment());
-		this.EndTime = ko.observable(moment());
+		this.StartTime = ko.observable("16:00");
+		this.EndTime = ko.observable("18:00");
 
 		var personId;
 
 		this.SetData = function (data) {
 			personId = data.PersonId;
-			self.Date = data.Date;
+			self.Date(data.Date);
 			self.ActivityTypes([
 				{
 					Id: 1,
@@ -44,6 +44,7 @@ define([
 		this.ActivityTypes = ko.observableArray();
 
 		this.Apply = function () {
+			navigation.GotoPersonScheduleWithoutHistory(personId, self.Date());
 		};
 
 	};

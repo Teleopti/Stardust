@@ -20,6 +20,16 @@
 	
 	<div class="row">
 		<div class="span12">
+			<form action="#">
+				<div class="btn-group">
+					<button class="btn btn-large add-full-day-absence" data-bind="css: { active: AddingFullDayAbsence }, click: AddFullDayAbsence"><i class="icon-plus"></i> <span data-bind="text: Resources.AddFullDayAbsence"></span></button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="span12">
 			
 			<div class="relative">
 				
@@ -87,6 +97,9 @@
 		</div>
 	</div>
 	
+	
+	
+
 	<!-- ko if: AddingFullDayAbsence -->
 	<!-- ko with: AddFullDayAbsenceForm -->
 	
@@ -131,7 +144,7 @@
 	<div class="row">
 		<div class="span3">
 			<blockquote>
-				<form action="#" class="full-day-absence-form">
+				<form action="#" class="activity-form">
 					<select id="activity-type" class="activity-type" data-bind="enable: !$root.Loading(), options: ActivityTypes, optionsText: 'Name', optionsValue: 'Id', value: Activity">
 					</select>
 
@@ -139,12 +152,12 @@
 						<span class="add-on"><i class="icon-step-backward"></i></span>
 						<input type="text" class="start-time" data-bind="value: StartTime" />
 					</div>
-					<div class="input-prepend input-append">
+					<div class="input-prepend">
 						<span class="add-on"><i class="icon-step-forward"></i></span>
 						<input type="text" class="end-time" data-bind="value: EndTime" />
 					</div>
 
-					<button class="btn btn-large btn-success apply btn-block" style="margin-top: 10px" data-bind="enable: !InvalidEndDate() && !$root.Loading(), text: $root.Resources.Apply, click: Apply"></button>
+					<button class="btn btn-large btn-success apply btn-block" style="margin-top: 10px" data-bind="enable: !$root.Loading(), text: $root.Resources.Apply, click: Apply"></button>
 					
 				</form>
 			</blockquote>
