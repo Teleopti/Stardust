@@ -52,6 +52,14 @@ namespace Teleopti.Interfaces.Domain
         {
             _understaffingTimes.Add(period);
         }
+
+        public bool IsNotUnderstaffed()
+        {
+            return _understaffingDays.Count == 0 &&
+                   _understaffingTimes.Count == 0 &&
+                   _seriousUnderstaffingDays.Count == 0 &&
+                   _seriousUnderstaffingTimes.Count == 0;
+        }
     }
 }
  

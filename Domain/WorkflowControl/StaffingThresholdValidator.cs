@@ -32,11 +32,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             var result = new UnderstaffingDetails();
             var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
             var localPeriod = absenceRequest.Period.ToDateOnlyPeriod(timeZone);
+            var schedules = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Schedules[absenceRequest.Person].ScheduledDayCollection(localPeriod);
 
-            foreach (DateOnly dateTime in localPeriod.DayCollection())
+            foreach (var scheduleDay in schedules)
             {
                 //As the resource calculation currently always being made from the viewpoint timezone, this is what we need here!
-                var dayPeriod = new DateOnlyPeriod(dateTime, dateTime).ToDateTimePeriod(timeZone);
+                var dayPeriod = scheduleDay.DateOnlyAsPeriod.Period();
                 var datesToResourceCalculate = dayPeriod.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
                 
                 foreach (DateOnly dateOnly in datesToResourceCalculate.DayCollection())
@@ -45,7 +46,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 }
                 
                 var calculatedPeriod = datesToResourceCalculate.ToDateTimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
-                var scheduleDay = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Schedules[absenceRequest.Person].ScheduledDay(dateTime);
                 var absenceLayers = scheduleDay.ProjectionService().CreateProjection().FilterLayers(absenceRequest.Absence);
 
                 foreach (var absenceLayer in absenceLayers)
@@ -55,26 +55,24 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                     {
                         foreach (var skill in requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Skills)
                         {
+                            if (skill == null) continue;
+
                             var skillStaffPeriodList = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, sharedPeriod.Value);
                             if (skillStaffPeriodList == null || skillStaffPeriodList.Count == 0)
                             {
-                                return result;
+                                continue;
                             }
 
-                            if (skill == null) continue;
-
-                            var validatedUnderStaffingResult = ValidateUnderstaffing(skill, skillStaffPeriodList, absenceRequest.Person, result);
-
+                            var validatedUnderStaffingResult = ValidateUnderstaffing(skill, skillStaffPeriodList, timeZone, result);
                             if (!validatedUnderStaffingResult.IsValid)
                             {
-                                result.AddUnderstaffingDay(dateTime);
+                                result.AddUnderstaffingDay(scheduleDay.DateOnlyAsPeriod.DateOnly);
                             }
 
-                            var validatedSeriousUnderStaffingResult = ValidateSeriousUnderstaffing(skill,skillStaffPeriodList, absenceRequest.Person, result);
-
+                            var validatedSeriousUnderStaffingResult = ValidateSeriousUnderstaffing(skill,skillStaffPeriodList, timeZone, result);
                             if (!validatedSeriousUnderStaffingResult.IsValid)
                             {
-                                result.AddSeriousUnderstaffingDay(dateTime);
+                                result.AddSeriousUnderstaffingDay(scheduleDay.DateOnlyAsPeriod.DateOnly);
                             }
                         }
                     }
@@ -84,118 +82,26 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             return result;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        private bool isUnderStaffing(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
-        {
-            InParameter.NotNull("SchedulingResultStateHolder", requiredForHandlingAbsenceRequest.SchedulingResultStateHolder);
-            InParameter.NotNull("ResourceOptimizationHelper", requiredForHandlingAbsenceRequest.ResourceOptimizationHelper);
-            
-            var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
-            var localPeriod = absenceRequest.Period.ToDateOnlyPeriod(timeZone);
-
-            foreach (DateOnly dateTime in localPeriod.DayCollection())
-            {
-                //As the resource calculation currently always being made from the viewpoint timezone, this is what we need here!
-                var dayPeriod = new DateOnlyPeriod(dateTime, dateTime).ToDateTimePeriod(timeZone);
-                var datesToResourceCalculate = dayPeriod.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
-                foreach (DateOnly dateOnly in datesToResourceCalculate.DayCollection())
-                {
-                    requiredForHandlingAbsenceRequest.ResourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
-                }
-                var calculatedPeriod = datesToResourceCalculate.ToDateTimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
-                var scheduleDay = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Schedules[absenceRequest.Person].ScheduledDay(dateTime);
-                var absenceLayers = scheduleDay.ProjectionService().CreateProjection().FilterLayers(absenceRequest.Absence);
-
-                var skillCollection = absenceRequest.Person.Period(dateTime).PersonSkillCollection.Select(p =>p.Skill);
-
-                if (!IsSkillOpenForDateOnly(dateTime, skillCollection))
-                    continue; 
-
-                foreach (var absenceLayer in absenceLayers)
-                {
-                    var sharedPeriod = calculatedPeriod.Intersection(absenceLayer.Period);
-                    if (sharedPeriod.HasValue && absenceRequest.Period.Contains(sharedPeriod.Value))
-                    {
-                        foreach (var skill in requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Skills)
-                        {
-                            var skillStaffPeriodList = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, sharedPeriod.Value);
-                            if (skillStaffPeriodList == null || skillStaffPeriodList.Count == 0)
-                                return true;
-                            if (skill == null) continue;
-
-                            var validatedUnderStaffingResult = ValidateUnderstaffing(skill, skillStaffPeriodList, absenceRequest.Person, new UnderstaffingDetails());
-                            
-                            if (!validatedUnderStaffingResult.IsValid)
-                            {
-                                return false;
-                            }
-
-                            var validatedSeriousUnderStaffingResult = ValidateSeriousUnderstaffing(skill, skillStaffPeriodList, absenceRequest.Person, new UnderstaffingDetails());
-                            
-                            if (!validatedSeriousUnderStaffingResult.IsValid)
-                            {
-                               return false;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return true;
-        }
-
         public IValidatedRequest Validate(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
-        {
-            var isUnderStaffed = isUnderStaffing(absenceRequest, requiredForHandlingAbsenceRequest);
-
-            if (!isUnderStaffed)
-            {
-                var result = GetValidationErrors(absenceRequest, requiredForHandlingAbsenceRequest);
-                return new ValidatedRequest { IsValid = false, ValidationErrors = result.ValidationErrors};
-            }
-
-            return new ValidatedRequest
-                                        {
-                                            IsValid = true, 
-                                            ValidationErrors = string.Empty
-                                        };
-        }
-
-        public IValidatedRequest GetValidationErrors(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
         {
             var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
             var culture = absenceRequest.Person.PermissionInformation.Culture();
             var uiCulture = absenceRequest.Person.PermissionInformation.UICulture();
             var numberOfRequestedDays = absenceRequest.Period.ToDateOnlyPeriod(timeZone).DayCollection().Count;
-
-            if (numberOfRequestedDays > 1)
+            var underStaffingResultDict = getUnderStaffingDays(absenceRequest, requiredForHandlingAbsenceRequest);
+            
+            if (underStaffingResultDict.IsNotUnderstaffed())
             {
-                var underStaffingResultDict = getUnderStaffingDays(absenceRequest, requiredForHandlingAbsenceRequest);
-                var underStaffingDateValidationError = GetUnderStaffingDateString(underStaffingResultDict, culture, uiCulture);
-
-                return new ValidatedRequest
+                return new ValidatedRequest {IsValid = true, ValidationErrors = string.Empty};
+            }
+            string validationError = numberOfRequestedDays > 1
+                                         ? GetUnderStaffingDateString(underStaffingResultDict, culture, uiCulture)
+                                         : GetUnderStaffingHourString(underStaffingResultDict, culture, uiCulture, timeZone, absenceRequest.Period.StartDateTimeLocal(timeZone));
+            return new ValidatedRequest
                 {
                     IsValid = false,
-                    ValidationErrors = underStaffingDateValidationError
+                    ValidationErrors = validationError
                 };
-            }
-            else
-            {
-               var underStaffingResultDict = getUnderStaffingDays(absenceRequest, requiredForHandlingAbsenceRequest);
-                var underStaffingHourValidationError = GetUnderStaffingHourString(underStaffingResultDict, culture, uiCulture,
-                                                                                  timeZone,
-                                                                                  absenceRequest.Period
-                                                                                                .StartDateTimeLocal(
-                                                                                                    timeZone));
-
-
-                
-                return new ValidatedRequest
-                {
-                    IsValid = false,
-                    ValidationErrors = underStaffingHourValidationError
-                };
-            }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "UnderStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "underStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -240,13 +146,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             return validationError;
         }
 
-        public static IValidatedRequest ValidateSeriousUnderstaffing(ISkill skill, IEnumerable<ISkillStaffPeriod> skillStaffPeriodList, IPerson requestingAgent, UnderstaffingDetails result)
+        public static IValidatedRequest ValidateSeriousUnderstaffing(ISkill skill, IEnumerable<ISkillStaffPeriod> skillStaffPeriodList, TimeZoneInfo timeZone, UnderstaffingDetails result)
     	{
     		if (skillStaffPeriodList == null) throw new ArgumentNullException("skillStaffPeriodList");
     		var intervalHasSeriousUnderstaffing = new IntervalHasSeriousUnderstaffing(skill);
             var seriousUnderStaffPeriods = skillStaffPeriodList.Where(intervalHasSeriousUnderstaffing.IsSatisfiedBy).ToArray();
-            var timeZone = requestingAgent.PermissionInformation.DefaultTimeZone();
-
+            
             if (seriousUnderStaffPeriods.Any())
             {
                 seriousUnderStaffPeriods.Select(s => s.Period.TimePeriod(timeZone)).ForEach(result.AddSeriousUnderstaffingTime);
@@ -257,11 +162,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
     	}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public static IValidatedRequest ValidateUnderstaffing(ISkill skill, IEnumerable<ISkillStaffPeriod> skillStaffPeriodList, IPerson requestingAgent, UnderstaffingDetails result)
+        public static IValidatedRequest ValidateUnderstaffing(ISkill skill, IEnumerable<ISkillStaffPeriod> skillStaffPeriodList, TimeZoneInfo timeZone, UnderstaffingDetails result)
     	{
     		if (skillStaffPeriodList == null) throw new ArgumentNullException("skillStaffPeriodList");
 
-		    var timeZone = requestingAgent.PermissionInformation.DefaultTimeZone();
 		    var validatedRequest = new ValidatedRequest();
 			var intervalHasUnderstaffing = new IntervalHasUnderstaffing(skill);
     		var exceededUnderstaffingList = skillStaffPeriodList.Where(intervalHasUnderstaffing.IsSatisfiedBy).ToList();
