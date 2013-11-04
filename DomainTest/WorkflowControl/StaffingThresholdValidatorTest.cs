@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -316,8 +317,59 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.IsTrue(result.IsValid);
         }
 
+        [Test]
+        public void CanValidateIfNotUnderstaffedWithSameAbsenceInPeriodSinceBefore()
+        {
+            DateTimePeriod requestedDateTimePeriod = new DateTimePeriod(new DateTime(2010, 02, 01, 1, 0, 0, DateTimeKind.Utc), new DateTime(2010, 02, 01, 3, 0, 0, DateTimeKind.Utc));
+            IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
+            var absenceRequest = GetAbsenceRequest(absence, requestedDateTimePeriod);
+            var date = new DateOnly(2010, 02, 01);
+            var existingLayerWithSameAbsence = new VisualLayer(absence, new DateTimePeriod(new DateTime(2010, 02, 01, 3, 0, 0, DateTimeKind.Utc), new DateTime(2010, 02, 01, 4, 0, 0, DateTimeKind.Utc)),
+                                 ActivityFactory.CreateActivity("Phone"), _person);
+
+            _validatedRequest.IsValid = true;
+            _validatedRequest.ValidationErrors = "";
+
+            createSkill();
+
+            _skillDay = SkillDayFactory.CreateSkillDay(_skill, requestedDateTimePeriod.StartDateTime);
+
+            ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
+                requestedDateTimePeriod, new Task(0, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(0)),
+                ServiceAgreement.DefaultValues());
+
+            ISkillStaffPeriod skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
+                existingLayerWithSameAbsence.Period, new Task(100, TimeSpan.FromSeconds(100), TimeSpan.FromSeconds(0)),
+                ServiceAgreement.DefaultValues());
+
+            skillStaffPeriod1.IsAvailable = true;
+            _skillDay.SkillDayCalculator = new SkillDayCalculator(_skill, new List<ISkillDay> { _skillDay },
+                                                                  requestedDateTimePeriod.ToDateOnlyPeriod(
+                                                                      _skill.TimeZone));
+
+            var updatedValues = new NewSkillStaffPeriodValues(new List<ISkillStaffPeriod> { skillStaffPeriod1,skillStaffPeriod2 });
+            _skillDay.SetCalculatedStaffCollection(updatedValues);
+            updatedValues.BatchCompleted();
+
+            var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod,
+                                                                                            _skill,
+                                                                                            new List<ISkillDay>
+                                                                                                {
+                                                                                                    _skillDay
+                                                                                                });
+            stateHolder.Schedules = _dictionary;
+
+            using (_mocks.Record())
+            {
+                getExpectationsIfNotUnderStaffed(date, absenceRequest, absence, requestedDateTimePeriod, existingLayerWithSameAbsence);
+            }
+
+            var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
+            Assert.IsTrue(result.IsValid);
+        }
+
         private void getExpectationsIfNotUnderStaffed(DateOnly date, IAbsenceRequest absenceRequest, IAbsence absence,
-                                                      DateTimePeriod requestedDateTimePeriod)
+                                                      DateTimePeriod requestedDateTimePeriod, IVisualLayer extraLayer = null)
         {
             IScheduleRange range = _mocks.StrictMock<IScheduleRange>();
             IScheduleDay scheduleDay = _mocks.StrictMock<IScheduleDay>();
@@ -326,6 +378,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             var filteredVisualLayers = _mocks.StrictMock<IFilteredVisualLayerCollection>();
             IVisualLayer visualLayer = _mocks.StrictMock<IVisualLayer>();
             IList<IVisualLayer> visualLayers = new List<IVisualLayer> {visualLayer};
+            if (extraLayer!=null)
+                visualLayers.Add(extraLayer);
 
             _resourceOptimizationHelper.ResourceCalculateDate(date, true, true);
             _resourceOptimizationHelper.ResourceCalculateDate(date, true, true);
@@ -335,9 +389,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(2), true, true);
             _resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(3), true, true);
             Expect.Call(_dictionary[absenceRequest.Person]).Return(range).Repeat.AtLeastOnce();
-            Expect.Call(range.ScheduledDay(date)).Return(scheduleDay);
-            Expect.Call(range.ScheduledDay(date.AddDays(1))).Return(scheduleDay);
-            Expect.Call(range.ScheduledDay(date.AddDays(2))).Return(scheduleDay);
+            Expect.Call(range.ScheduledDay(date)).Return(scheduleDay).Repeat.AtLeastOnce();
+            Expect.Call(range.ScheduledDay(date.AddDays(1))).Return(scheduleDay).Repeat.AtLeastOnce();
+            Expect.Call(range.ScheduledDay(date.AddDays(2))).Return(scheduleDay).Repeat.AtLeastOnce();
             Expect.Call(scheduleDay.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
             Expect.Call(visualLayerCollection.FilterLayers(absence))

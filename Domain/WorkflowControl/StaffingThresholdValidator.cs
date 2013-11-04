@@ -29,6 +29,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private IUnderStaffingData getUnderStaffingDays(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
         {
+            InParameter.NotNull("SchedulingResultStateHolder", requiredForHandlingAbsenceRequest.SchedulingResultStateHolder);
+            InParameter.NotNull("ResourceOptimizationHelper", requiredForHandlingAbsenceRequest.ResourceOptimizationHelper);
+
             var underStaffingDaysDict = new Dictionary<string, IList<string>>();
             var underStaffingHoursDict = new Dictionary<string, IList<string>>();
             var underStaffDaysList = new List<string>();
@@ -40,9 +43,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             underStaffingDaysDict.Add(SeriousUnderStaffStr, new List<string>());
             underStaffingHoursDict.Add(UnderStaffHoursStr, new List<string>());
             underStaffingHoursDict.Add(SeriousUnderStaffHoursStr, new List<string>());
-
-            InParameter.NotNull("SchedulingResultStateHolder", requiredForHandlingAbsenceRequest.SchedulingResultStateHolder);
-            InParameter.NotNull("ResourceOptimizationHelper", requiredForHandlingAbsenceRequest.ResourceOptimizationHelper);
 
             var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
             var culture = absenceRequest.Person.PermissionInformation.Culture();
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 foreach (var absenceLayer in absenceLayers)
                 {
                     var sharedPeriod = calculatedPeriod.Intersection(absenceLayer.Period);
-                    if (sharedPeriod.HasValue)
+                    if (sharedPeriod.HasValue && absenceRequest.Period.Contains(sharedPeriod.Value))
                     {
                         foreach (var skill in requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Skills)
                         {
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 foreach (var absenceLayer in absenceLayers)
                 {
                     var sharedPeriod = calculatedPeriod.Intersection(absenceLayer.Period);
-                    if (sharedPeriod.HasValue)
+                    if (sharedPeriod.HasValue && absenceRequest.Period.Contains(sharedPeriod.Value))
                     {
                         foreach (var skill in requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Skills)
                         {
@@ -276,9 +276,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             var inSufficientHours = string.Empty;
             var criticalUnderStaffingHours = string.Empty;
             var validationError = string.Empty;
-            var underStaffingHoursValidationError = string.Format(culture, UserTexts.Resources.ResourceManager.GetString("InsufficientStaffingHours"),
+            var underStaffingHoursValidationError = string.Format(culture, UserTexts.Resources.ResourceManager.GetString("InsufficientStaffingHours", culture),
                                                                     dateTime.ToString("d", culture));
-            var criticalUnderStaffingHoursValidationError = string.Format(culture, UserTexts.Resources.ResourceManager.GetString("SeriousUnderStaffingHours"),
+            var criticalUnderStaffingHoursValidationError = string.Format(culture, UserTexts.Resources.ResourceManager.GetString("SeriousUnderStaffingHours", culture),
                               dateTime.ToString("d", culture));
 
             foreach (var insufficientStaffHours in underStaffing.UnderStaffingHours[UnderStaffHoursStr])
