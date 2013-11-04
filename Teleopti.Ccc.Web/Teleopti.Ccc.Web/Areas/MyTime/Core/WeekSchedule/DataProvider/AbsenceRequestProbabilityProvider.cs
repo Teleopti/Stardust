@@ -86,7 +86,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 						index = percent > 30 && (allowanceMinutesForDay - absenceTimeForDay) >= 2 * fulltimeEquivalentForDay ? 2 : 1;
 				}
 
-
+				if (dateOnly < DateTime.Today)
+					index = 0;
 				ret.Add(new Tuple<DateOnly, string, string, bool>(dateOnly, cssClass[index], texts[index], allowanceDay.Item5));
 			}
 
