@@ -34,27 +34,56 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 			foreach (var dateOnly in period.DayCollection())
 			{
 
+				var allowanceDay = allowanceCollection == null
+										  ? null
+										  : allowanceCollection.First(a => a.Item1 == dateOnly);
+
 				var absenceTimeForDay = absenceTimeCollection == null
 					                        ? 0
 					                        : absenceTimeCollection.First(a => a.Date == dateOnly).AbsenceTime;
 
-				var fulltimeEquivalentForDay = allowanceCollection == null
+				var absenceHeadsForDay = absenceTimeCollection == null
+											? 0
+											: absenceTimeCollection.First(a => a.Date == dateOnly).HeadCounts;
+
+				var fulltimeEquivalentForDay = allowanceDay == null
 					                               ? 0
-					                               : allowanceCollection.First(a => a.Item1 == dateOnly).Item3.TotalMinutes;
+												   : allowanceDay.Item3.TotalMinutes;
 
-				var allowanceForDay = allowanceCollection == null
+				var allowanceMinutesForDay = allowanceDay == null
 					                      ? 0
-					                      : allowanceCollection.First(a => a.Item1 == dateOnly).Item2.TotalMinutes;
+										  : allowanceDay.Item2.TotalMinutes;
 
+				var allowanceForDay = allowanceDay == null
+										  ? 0
+										  : allowanceDay.Item4;
 
 				var percent = 0d;
-				if (!Equals(allowanceForDay, .0))
-					percent = 100*((allowanceForDay - absenceTimeForDay)/allowanceForDay);
-
-
 				var index = 0;
-				if (percent > 0 && (allowanceForDay - absenceTimeForDay) >= fulltimeEquivalentForDay)
-					index = percent > 30 && (allowanceForDay - absenceTimeForDay) >= 2*fulltimeEquivalentForDay ? 2 : 1;
+				//UseHeadCount
+				if (allowanceDay != null && allowanceDay.Item6.Equals(true))
+				{
+					if (allowanceForDay > absenceHeadsForDay)
+						percent = 100 * ( absenceHeadsForDay/ allowanceForDay);
+					
+					if (allowanceForDay - absenceHeadsForDay >= 1)
+						index = 1;
+
+					if (percent > 30 && allowanceForDay - absenceHeadsForDay >= 2)
+						index = 2;
+					
+				}
+				else
+				{
+					if (!Equals(allowanceMinutesForDay, .0))
+						percent = 100 * ((allowanceMinutesForDay - absenceTimeForDay) / allowanceMinutesForDay);
+
+
+
+					if (percent > 0 && (allowanceMinutesForDay - absenceTimeForDay) >= fulltimeEquivalentForDay)
+						index = percent > 30 && (allowanceMinutesForDay - absenceTimeForDay) >= 2 * fulltimeEquivalentForDay ? 2 : 1;
+				}
+				
 
 				ret.Add(new Tuple<DateOnly, string, string>(dateOnly, cssClass[index], texts[index]));
 			}

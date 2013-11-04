@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public IEnumerable<IAbsenceAgents> GetAbsenceTimeForPeriod(DateOnlyPeriod period)
 		{
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
-			List<AbsenceAgents> absenceDays = period.DayCollection().Select(d => new AbsenceAgents() { Date = d, AbsenceTime = 0 }).ToList();
+			List<AbsenceAgents> absenceDays = period.DayCollection().Select(d => new AbsenceAgents() { Date = d, AbsenceTime = 0, HeadCounts = 0 }).ToList();
 
 			var budgetGroupsPeriod = _extractBudgetGroupPeriod.BudgetGroupsForPeriod(_loggedOnUser.CurrentUser(), period);
 			foreach (var tuple in budgetGroupsPeriod)
@@ -45,6 +45,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			foreach (var payloadWorkTime in absenceTime)
 			{
 				target.First(a => a.Date == payloadWorkTime.BelongsToDate).AbsenceTime = TimeSpan.FromTicks(payloadWorkTime.TotalContractTime).TotalMinutes;
+			}
+
+			foreach (var absenceAgent in target)
+			{
+				absenceAgent.HeadCounts = _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(budgetGroup.Id.GetValueOrDefault(),
+				                                                                              new DateOnly( absenceAgent.Date));
 			}
 		}
 	}

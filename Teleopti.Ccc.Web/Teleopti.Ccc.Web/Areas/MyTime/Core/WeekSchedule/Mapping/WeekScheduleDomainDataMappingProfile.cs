@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												let personRequestsForDay = personRequests == null ? null : (from i in personRequests where TimeZoneInfo.ConvertTimeFromUtc(i.Request.Period.StartDateTime, _userTimeZone.TimeZone()).Date == day select i).ToArray()
 												let allowanceForDay = allowanceCollection == null ? 0 : allowanceCollection.First(a => a.Item1 == day).Item2.TotalMinutes
 												let fulltimeEquivalentForDay = allowanceCollection == null ? 0 : allowanceCollection.First(a => a.Item1 == day).Item3.TotalMinutes
-												let availabilityForDay = allowanceCollection != null && allowanceCollection.First(a => a.Item1 == day).Item4
+												let availabilityForDay = allowanceCollection != null && allowanceCollection.First(a => a.Item1 == day).Item5
 												let absenceTimeForDay = absenceTimeCollection == null ? 0 : absenceTimeCollection.First(a => a.Date == day).AbsenceTime
 												let probabilityClass = requestProbability == null ? "" : requestProbability.First(a => a.Item1 == day).Item2
 												let probabilityText = requestProbability == null ? "" : requestProbability.First(a => a.Item1 == day).Item3

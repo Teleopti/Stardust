@@ -19,6 +19,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Interfaces.Domain;
 using IAllowanceProvider = Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider.IAllowanceProvider;
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		private INow now;
 		private IAllowanceProvider allowanceProvider;
 		private IAbsenceTimeProvider absenceTimeProvider;
+		private IAbsenceRequestProbabilityProvider probabilityProvider;
 
 		[SetUp]
 		public void Setup()
@@ -49,6 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			now = MockRepository.GenerateMock<INow>();
 			allowanceProvider = MockRepository.GenerateMock<IAllowanceProvider>();
 			absenceTimeProvider = MockRepository.GenerateMock<IAbsenceTimeProvider>();
+			probabilityProvider = MockRepository.GenerateMock<IAbsenceRequestProbabilityProvider>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(
@@ -60,7 +63,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 					permissionProvider,
 					now,
 					allowanceProvider,
-					absenceTimeProvider
+					absenceTimeProvider,
+					probabilityProvider
 					)));
 		}
 

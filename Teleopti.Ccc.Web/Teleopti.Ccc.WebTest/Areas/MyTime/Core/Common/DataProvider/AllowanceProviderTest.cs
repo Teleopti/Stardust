@@ -432,7 +432,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenHeadCountStaffingCheck_ShouldSetAvailabilityToFalse()
+		public void GetAllowanceForPeriod_WhenHeadCountStaffingCheck_ShouldSetAvailabilityToTrue()
 		{
 			var workflowControlSet = new WorkflowControlSet("_workflowControlSet");
 			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod()
@@ -466,7 +466,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods(), _now);
 			var result = target.GetAllowanceForPeriod(period);
-			Assert.That(result.First().Item4, Is.EqualTo(false));
+			Assert.That(result.First().Item4, Is.EqualTo(true));
 		}
 
 

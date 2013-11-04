@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -26,13 +25,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			_now = now;
 		}
 
-		public IEnumerable<Tuple<DateOnly, TimeSpan, TimeSpan, bool>> GetAllowanceForPeriod(DateOnlyPeriod period)
+		public IEnumerable<Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>> GetAllowanceForPeriod(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
 
 			var allowanceList =
 				from d in period.DayCollection()
-				select new { Date = d, Time = TimeSpan.Zero, Heads = TimeSpan.Zero, Availability = false };
+				select new { Date = d, Time = TimeSpan.Zero, Heads = TimeSpan.Zero, Allowance = .0, Availability = false, UseHeadCount = false};
 
 			var budgetGroupPeriods = _extractBudgetGroupPeriods.BudgetGroupsForPeriod(person, period);
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
@@ -44,14 +43,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 				var validOpenPeriods = openPeriods.Where(
 					absenceRequestOpenPeriod => 
-					absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() == typeof(BudgetGroupAllowanceValidator)).ToList();
+					absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() == typeof(BudgetGroupAllowanceValidator) ||
+					absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() == typeof(BudgetGroupHeadCountValidator)).ToList();
 
 				var invalidOpenPeriods = openPeriods.Where(
 					absenceRequestOpenPeriod =>
-					absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() != typeof(BudgetGroupAllowanceValidator)).ToList();
+					absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() != typeof(BudgetGroupAllowanceValidator) &&
+					absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() != typeof(BudgetGroupHeadCountValidator)).ToList();
 
 				if (validOpenPeriods.Count != 0)
- 				{
+				{
 					allowanceList =
 						from d in period.DayCollection()
 						select new
@@ -59,37 +60,43 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 								Date = d,
 								Time = TimeSpan.Zero,
 								Heads = TimeSpan.Zero,
-								Availability = (invalidOpenPeriods.Count <= 0 || !invalidOpenPeriods.Any(x => x.GetPeriod(_now.LocalDateOnly()).Contains(d)))
+								Allowance = .0,
+								Availability = (invalidOpenPeriods.Count <= 0 || !invalidOpenPeriods.Any(x => x.GetPeriod(_now.LocalDateOnly()).Contains(d))),
+								UseHeadCount = false
 							};
 
 
- 					foreach (var openPeriod in validOpenPeriods)
- 					{
- 						var allowanceFromBudgetDays =
- 							from budgetGroupPeriod in budgetGroupPeriods
- 							from budgetDay in _budgetDayRepository.Find(defaultScenario, budgetGroupPeriod.Item2, budgetGroupPeriod.Item1)
- 							where openPeriod.GetPeriod(_now.LocalDateOnly()).Contains(budgetDay.Day)
+					foreach (var thePeriod in validOpenPeriods)
+					{
+						var openPeriod = thePeriod;
+						var allowanceFromBudgetDays =
+							from budgetGroupPeriod in budgetGroupPeriods
+							from budgetDay in _budgetDayRepository.Find(defaultScenario, budgetGroupPeriod.Item2, budgetGroupPeriod.Item1)
+							where openPeriod.GetPeriod(_now.LocalDateOnly()).Contains(budgetDay.Day)
 							where openPeriod.OpenForRequestsPeriod.Contains(_now.LocalDateOnly())
- 							where openPeriod.AbsenceRequestProcess.GetType() != typeof (DenyAbsenceRequest)
- 							select
- 								new
- 									{
- 										Date = budgetDay.Day,
- 										Time = TimeSpan.FromHours(Math.Max(budgetDay.Allowance*budgetDay.FulltimeEquivalentHours, 0)),
+							where openPeriod.AbsenceRequestProcess.GetType() != typeof (DenyAbsenceRequest)
+							select
+								new
+									{
+										Date = budgetDay.Day,
+										Time = TimeSpan.FromHours(Math.Max(budgetDay.Allowance*budgetDay.FulltimeEquivalentHours, 0)),
 										Heads = TimeSpan.FromHours(Math.Max(budgetDay.FulltimeEquivalentHours, 0)),
-										Availability = (invalidOpenPeriods.Count <= 0 || !invalidOpenPeriods.Any(x => x.GetPeriod(_now.LocalDateOnly()).Contains(budgetDay.Day)))
- 									};
- 						allowanceList = allowanceList.Concat(allowanceFromBudgetDays);
- 					}
- 				}
+										Allowance = budgetDay.Allowance,
+										Availability = (invalidOpenPeriods.Count <= 0 || !invalidOpenPeriods.Any(x => x.GetPeriod(_now.LocalDateOnly()).Contains(budgetDay.Day))),
+										UseHeadCount = openPeriod.StaffingThresholdValidator.GetType() == typeof(BudgetGroupHeadCountValidator)
+									};
+						allowanceList = allowanceList.Concat(allowanceFromBudgetDays);
+					}
+				}
 			}
 
 			return 
 				from p in allowanceList
 				group p by p.Date into g
 				orderby g.Key
-				select new Tuple<DateOnly, TimeSpan, TimeSpan, bool>
-					(g.Key, TimeSpan.FromTicks(g.Sum(p => p.Time.Ticks)), TimeSpan.FromTicks(g.Sum(p => p.Heads.Ticks)), g.First(o => o.Date == g.Key).Availability);
+				select new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>
+					(g.Key, TimeSpan.FromTicks(g.Sum(p => p.Time.Ticks)), TimeSpan.FromTicks(g.Sum(p => p.Heads.Ticks)), g.Last(o => o.Date == g.Key).Allowance,
+					g.First(o => o.Date == g.Key).Availability, g.Last(o => o.Date == g.Key).UseHeadCount);
 		}
 
 		
