@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -113,6 +115,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			Assert.AreEqual(1, scheduleDay.PersistableScheduleDataCollection().OfType<PersonAssignment>().Count());
 			Assert.AreEqual(1, scheduleDay.PersistableScheduleDataCollection().OfType<PersonAbsence>().Count());
 		}
+
+			[Test]
+			public void ShouldReplaceAssignmentIfSameDatePersonScenario()
+			{
+				var person = PersonFactory.CreatePerson("person");
+				var date = new DateOnly(2000, 1, 1);
+				var orgAss = new PersonAssignment(person, destination.Scenario, date);
+				orgAss.SetId(Guid.NewGuid());
+				putScheduleDataToDic(orgAss);
+
+				var newAss = new PersonAssignment(person, destination.Scenario, date);
+				newAss.SetId(Guid.NewGuid());
+				newAss.AddMainLayer(new Activity("dsf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+				var schedulePart = createPartWithData(newAss, date);
+
+				target.CopySchedulePartsToAnotherDictionary(destination, new[] {schedulePart});
+				var modifiedPart = destination[person].ScheduledDay(date);
+				var assResult = modifiedPart.PersonAssignment();
+				assResult.Id.Should().Be.EqualTo(orgAss.Id.Value);
+				assResult.ShiftLayers.Count().Should().Be.EqualTo(1);
+			}
 
 
         private static IScheduleDay createPartWithData(IScheduleData data, DateOnly dateOnly)
