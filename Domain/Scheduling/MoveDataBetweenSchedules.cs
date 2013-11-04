@@ -23,22 +23,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			foreach (var sourcePart in sourceParts)
 			{
 				var destinationDay = destination[sourcePart.Person].ScheduledDay(sourcePart.DateOnlyAsPeriod.DateOnly);
-				var absencesNextDay = new List<IPersistableScheduleData>();
 				var currentDestinationAss = destinationDay.PersonAssignment(true);
 
-				foreach (var dataInDestination in destinationDay.PersistableScheduleDataCollection())
-				{
-					if (dataInDestination is IPersonAbsence && !dataInDestination.Period.Intersect(sourcePart.Period))
-					{
-						absencesNextDay.Add(dataInDestination);
-					}
-				}
+				//put aside absence outside current day
+				var absencesNextDay = destinationDay.PersonAbsenceCollection(true)
+					.Where(dataInDestination => isAbsenceInsideScheduleDay(dataInDestination, sourcePart)).ToList();
 
 				destinationDay.Clear<IExportToAnotherScenario>();
 				foreach (var dataToExport in sourcePart.PersistableScheduleDataCollection().OfType<IExportToAnotherScenario>())
 				{
-					// bug #22073, the part contains PersonsAbsence for the next day too, for some reason, so we skip them
-					if (dataToExport is PersonAbsence && !dataToExport.Period.Intersect(sourcePart.Period))
+					if (isAbsenceInsideScheduleDay(dataToExport, sourcePart))
 						continue;
 					//remove me when #25559 is fixed////
 					var dataToExportAsAss = dataToExport as IPersonAssignment;
@@ -53,18 +47,20 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					destinationDay.Add(clonedWithNewParameters);
 				}
 
-				foreach (var dataInDestination in absencesNextDay.OfType<IExportToAnotherScenario>())
+				//put back absence outside current day
+				foreach (var clonedWithNewParameters in absencesNextDay.Select(dataInDestination => dataInDestination.CloneAndChangeParameters(destinationDay)))
 				{
-					if (dataInDestination is IPersonAbsence)
-					{
-						var clonedWithNewParameters = dataInDestination.CloneAndChangeParameters(destinationDay);
-						destinationDay.Add(clonedWithNewParameters);
-					}
+					destinationDay.Add(clonedWithNewParameters);
 				}
 
 				ruleBreaks.AddRange(modifyDestination(destination, destinationDay));
 			}
 			return ruleBreaks;
+		}
+
+		private static bool isAbsenceInsideScheduleDay(IPersistableScheduleData dataInDestination, IScheduleDay scheduleDay)
+		{
+			return dataInDestination is IPersonAbsence && !dataInDestination.Period.Intersect(scheduleDay.Period);
 		}
 
 		private IEnumerable<IBusinessRuleResponse> modifyDestination(IScheduleDictionary destination, IScheduleDay sourceData)
