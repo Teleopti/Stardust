@@ -91,12 +91,12 @@ define([
 		this.OrderBy = function () {
 
 			var visibleShiftLayers = visibleLayers().filter(function (x) { return !x.IsFullDayAbsence; });
-			if (visibleShiftLayers().some())
-				return visibleShiftLayers().map(function (x) { return x.StartMinutes(); }).min();
+			if (visibleShiftLayers.some())
+				return visibleShiftLayers.map(function (x) { return x.StartMinutes(); }).min();
 			
 			var visibleFullDayAbsences = visibleLayers().filter(function (x) { return x.IsFullDayAbsence; });
-			if (visibleFullDayAbsences().some())
-				return 5000 + visibleFullDayAbsences().map(function (x) { return x.StartMinutes(); }).min();
+			if (visibleFullDayAbsences.some())
+				return 5000 + visibleFullDayAbsences.map(function (x) { return x.StartMinutes(); }).min();
 			
 			if (visibleDayOffs().some())
 				return 10000;
