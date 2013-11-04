@@ -208,7 +208,6 @@ ko.bindingHandlers.tooltip = new TooltipBinding();
 ko.bindingHandlers.select2 = {
 	init: function (element, valueAccessor) {
 		var options = valueAccessor();
-        options['escapeMarkup'] = function (m) { return m; };
         options['width'] = 'resolve';
         
 		var observable = options.value;
