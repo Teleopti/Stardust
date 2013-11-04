@@ -8,12 +8,13 @@ Background:
 	| Field                    | Value                 |
 	| Name                     | Full access to mytime |
 	And there is an absence with
-	| Field                    | Value   |
-	| Name                     | holiday |
+	| Field				| Value		|
+	| Name				| holiday	|
+	| Requestable		| true		|
 	And there is a budgetgroup with
-	| Field		| Value   |
-	| Name		| TheBudgetGroup |
-	| Absence   | holiday |
+	| Field		| Value			|
+	| Name		| TheBudgetGroup|
+	| Absence   | holiday		|
 	And there is a workflow control set with
 	| Field                      | Value					|
 	| Name                       | Open absence period		|
