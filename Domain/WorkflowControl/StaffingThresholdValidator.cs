@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -30,12 +31,18 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             InParameter.NotNull("ResourceOptimizationHelper", requiredForHandlingAbsenceRequest.ResourceOptimizationHelper);
 
             var result = new UnderstaffingDetails();
+            var personSkillProvider = new PersonSkillProvider();
             var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
             var localPeriod = absenceRequest.Period.ToDateOnlyPeriod(timeZone);
             var schedules = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Schedules[absenceRequest.Person].ScheduledDayCollection(localPeriod);
 
             foreach (var scheduleDay in schedules)
             {
+                var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
+                var skills = personSkillProvider.SkillsOnPersonDate(absenceRequest.Person, date);
+                if (!IsSkillOpenForDateOnly(date, skills.Skills))
+                    continue;
+
                 //As the resource calculation currently always being made from the viewpoint timezone, this is what we need here!
                 var dayPeriod = scheduleDay.DateOnlyAsPeriod.Period();
                 var datesToResourceCalculate = dayPeriod.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
@@ -66,13 +73,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                             var validatedUnderStaffingResult = ValidateUnderstaffing(skill, skillStaffPeriodList, timeZone, result);
                             if (!validatedUnderStaffingResult.IsValid)
                             {
-                                result.AddUnderstaffingDay(scheduleDay.DateOnlyAsPeriod.DateOnly);
+                                result.AddUnderstaffingDay(date);
                             }
 
                             var validatedSeriousUnderStaffingResult = ValidateSeriousUnderstaffing(skill,skillStaffPeriodList, timeZone, result);
                             if (!validatedSeriousUnderStaffingResult.IsValid)
                             {
-                                result.AddSeriousUnderstaffingDay(scheduleDay.DateOnlyAsPeriod.DateOnly);
+                                result.AddSeriousUnderstaffingDay(date);
                             }
                         }
                     }

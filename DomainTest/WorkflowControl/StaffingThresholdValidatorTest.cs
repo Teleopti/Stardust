@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             }
 
             skill.AddWorkload(wl);
-            personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.5)));
+            personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.5)){Active = true});
             absenceRequest.Person.AddPersonPeriod(personPeriod);
             return absenceRequest;
         }
