@@ -45,7 +45,7 @@ Scenario: Add on empty day
 	| Absence  | Vacation   |
 	| End date | 2013-04-08 |
 	And I click 'apply'
-	Then I should see a shift layer with
+	Then I should see a scheduled activity with
 	| Field      | Value |
 	| Start time | 08:00 |
 	| End time   | 16:00 |
@@ -70,7 +70,7 @@ Scenario: Add on shift
 	| Absence  | Vacation   |
 	| End date | 2013-04-08 |
 	And I click 'apply'
-	Then I should see a shift layer with
+	Then I should see a scheduled activity with
 	| Field      | Value |
 	| Start time | 08:00 |
 	| End time   | 17:00 |
@@ -161,7 +161,7 @@ Scenario: Add on shift ending tomorrow
 	| Absence  | Vacation   |
 	| End date | 2013-05-23 |
 	And I click 'apply'
-	Then I should see a shift layer with
+	Then I should see a scheduled activity with
 	| Field      | Value |
 	| Start time | 22:00 |
 	| End time   | 07:00 |
