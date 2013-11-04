@@ -497,7 +497,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				new TeamBlockDayOffOptimizerService(
 					teamInfoFactory,
 					_container.Resolve<ILockableBitArrayFactory>(),
-					_container.Resolve<ISchedulingOptionsCreator>(),
 					_container.Resolve<ILockableBitArrayChangesTracker>(),
 					teamBlockScheduler,
 					_container.Resolve<ITeamBlockInfoFactory>(),
@@ -518,13 +517,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			((List<IDayOffTemplate>)dayOffTemplates).Sort(new DayOffTemplateSorter());
 
 			teamBlockDayOffOptimizerService.ReportProgress += resourceOptimizerPersonOptimized;
-			teamBlockDayOffOptimizerService.OptimizeDaysOff(
+		    schedulingOptions.DayOffTemplate = dayOffTemplates[0];
+            teamBlockDayOffOptimizerService.OptimizeDaysOff(
 				allMatrixes, 
 				selectedPeriod, 
 				selectedPersons, 
 				optimizationPreferences,
 				schedulePartModifyAndRollbackService,
-				dayOffTemplates[0]);
+                schedulingOptions);
 			teamBlockDayOffOptimizerService.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 

@@ -4055,7 +4055,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     {
                         IList<IPerson> selectedPersons =
                             new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
-                        _container.Resolve<ITeamBlockOptimizationCommand>().TeamGroupReOptimize(_backgroundWorkerOptimization, selectedPeriod, selectedPersons, optimizerPreferences);
+                        _container.Resolve<ITeamBlockOptimizationCommand>().Execute(_backgroundWorkerOptimization, selectedPeriod, selectedPersons, optimizerPreferences);
                         break;
                     }
 

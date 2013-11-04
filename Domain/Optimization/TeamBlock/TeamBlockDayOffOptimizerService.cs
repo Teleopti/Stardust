@@ -16,8 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                     DateOnlyPeriod selectedPeriod,
 		                     IList<IPerson> selectedPersons,
 		                     IOptimizationPreferences optimizationPreferences,
-		                     ISchedulePartModifyAndRollbackService rollbackService,
-		                     IDayOffTemplate dayOffTemplate);
+		                     ISchedulePartModifyAndRollbackService rollbackService,ISchedulingOptions schedulingOptions );
 
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	{
 		private readonly ITeamInfoFactory _teamInfoFactory;
 		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
-		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
@@ -43,7 +41,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		public TeamBlockDayOffOptimizerService(
 			ITeamInfoFactory teamInfoFactory,
 			ILockableBitArrayFactory lockableBitArrayFactory,
-			ISchedulingOptionsCreator schedulingOptionsCreator,
 			ILockableBitArrayChangesTracker lockableBitArrayChangesTracker,
 			ITeamBlockScheduler teamBlockScheduler,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
@@ -59,7 +56,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			_teamInfoFactory = teamInfoFactory;
 			_lockableBitArrayFactory = lockableBitArrayFactory;
-			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_lockableBitArrayChangesTracker = lockableBitArrayChangesTracker;
 			_teamBlockScheduler = teamBlockScheduler;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
@@ -81,12 +77,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			DateOnlyPeriod selectedPeriod,
 			IList<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
-			ISchedulePartModifyAndRollbackService rollbackService,
-			IDayOffTemplate dayOffTemplate
+			ISchedulePartModifyAndRollbackService rollbackService,ISchedulingOptions schedulingOptions 
 			)
 		{
-			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-			schedulingOptions.DayOffTemplate = dayOffTemplate;
+			
 			// create a list of all teamInfos
 			var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			foreach (var selectedPerson in selectedPersons)

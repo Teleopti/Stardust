@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Win.Commands
     public interface ITeamBlockOptimizationCommand
     {
         [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
-        void TeamGroupReOptimize(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod,
+        void Execute(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod,
                                  IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences);
     }
 
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Win.Commands
         }
 
         [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
-        public void TeamGroupReOptimize(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod,
+        public void Execute(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod,
                                         IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
         {
             _backgroundWorker = backgroundWorker;
@@ -215,7 +215,6 @@ namespace Teleopti.Ccc.Win.Commands
                 new TeamBlockDayOffOptimizerService(
                     teamInfoFactory,
                     _lockableBitArrayFactory,
-                    _schedulingOptionsCreator,
                     _lockableBitArrayChangesTracker,
                     teamBlockScheduler,
                     _teamBlockInfoFactory,
@@ -236,13 +235,13 @@ namespace Teleopti.Ccc.Win.Commands
             ((List<IDayOffTemplate>) dayOffTemplates).Sort(new DayOffTemplateSorter());
 
             teamBlockDayOffOptimizerService.ReportProgress += resourceOptimizerPersonOptimized;
+            schedulingOptions.DayOffTemplate = dayOffTemplates[0];
             teamBlockDayOffOptimizerService.OptimizeDaysOff(
                 allMatrixes,
                 selectedPeriod,
                 selectedPersons,
                 optimizationPreferences,
-                schedulePartModifyAndRollbackService,
-                dayOffTemplates[0]);
+                schedulePartModifyAndRollbackService,schedulingOptions);
             teamBlockDayOffOptimizerService.ReportProgress -= resourceOptimizerPersonOptimized;
         }
 
