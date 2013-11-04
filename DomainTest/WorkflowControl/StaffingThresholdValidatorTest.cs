@@ -437,7 +437,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		                                                                                                  skillDay1
 		                                                                                              .SkillStaffPeriodCollection
 		                                                                                              [0]
-		                                                                                              }, _person);
+		                                                                                              }, _person, new UnderstaffingDetails());
 
 		    var validatedUnderStaffingSkillDay2 = StaffingThresholdValidator.ValidateUnderstaffing(_skill,
 		                                                                                           new List<ISkillStaffPeriod>
@@ -445,7 +445,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		                                                                                                   skillDay2
 		                                                                                               .SkillStaffPeriodCollection
 		                                                                                               [0]
-		                                                                                               }, _person);
+		                                                                                               }, _person, new UnderstaffingDetails());
 
             Assert.IsFalse(validateUnderStaffingSkillDay1.IsValid);
             Assert.IsTrue(validatedUnderStaffingSkillDay2.IsValid);
@@ -489,7 +489,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		                                                                                          skillDay2
 		                                                                                      .SkillStaffPeriodCollection[0]
 		                                                                                      },
-		                                                                                  _person);
+		                                                                                  _person, new UnderstaffingDetails());
 
 			Assert.IsTrue(validatedUnderStaffing.IsValid);
 		}
@@ -515,11 +515,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             var validatedUnderStaffing = StaffingThresholdValidator.ValidateUnderstaffing(_skill,
                                                                                           new List<ISkillStaffPeriod>
-		                                                                                      {
-		                                                                                          skillDay1
-		                                                                                      .SkillStaffPeriodCollection[0]
-		                                                                                      },
-                                                                                          _person);
+                                                                                              {
+                                                                                                  skillDay1
+                                                                                              .SkillStaffPeriodCollection[0]
+                                                                                              },
+                                                                                          _person, new UnderstaffingDetails());
 
             Assert.IsFalse(validatedUnderStaffing.IsValid);
         }
@@ -631,26 +631,25 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         public void ShouldThrowExceptionIfSkillStaffPeriodListIsNull()
         {
             var skill = SkillFactory.CreateSkill("test");
-            StaffingThresholdValidator.ValidateSeriousUnderstaffing(skill, null, _person);
+            StaffingThresholdValidator.ValidateSeriousUnderstaffing(skill, null, _person, new UnderstaffingDetails());
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void ShouldThrowExceptionIfSkillStaffPeriodListArgumentIsNull()
         {
             var skill = SkillFactory.CreateSkill("test");
-            StaffingThresholdValidator.ValidateUnderstaffing(skill, null, _person);
+            StaffingThresholdValidator.ValidateUnderstaffing(skill, null, _person, new UnderstaffingDetails());
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void VerifyUnderstaffingDateString()
         {
-            var underStaffDict = new UnderStaffingData();
-            underStaffDict.UnderStaffingDates = new Dictionary<string, IList<string>>();
-            underStaffDict.UnderStaffingDates.Add("UnderStaffing", new List<string>(){"2012-12-01, 2012-12-02, 2012-12-03,2012-12,04,2012-12-05,2012-12-06"});
-            underStaffDict.UnderStaffingDates.Add("SeriousUnderStaffing", new List<string>() { "2012-12-01, 2012-12-02,2012-12-03,2012-12,04,2012-12-05,2012-12-06" });
-
+            var underStaffDict = new UnderstaffingDetails();
+            underStaffDict.AddUnderstaffingDay(new DateOnly(2012,12,01));
+            underStaffDict.AddSeriousUnderstaffingDay(new DateOnly(2012,12,01));
+            
             var target = new StaffingThresholdValidator();
-            var result = target.GetUnderStaffingDateString(underStaffDict, new CultureInfo(1033));
+            var result = target.GetUnderStaffingDateString(underStaffDict, new CultureInfo(1033), new CultureInfo(1033));
 
             Assert.IsNotNullOrEmpty(result);
         }
@@ -658,16 +657,14 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         [Test]
         public void VerifyUnderstaffingHourString()
         {
-            var underStaffDict = new UnderStaffingData();
-            underStaffDict.UnderStaffingHours = new Dictionary<string, IList<string>>();
-            underStaffDict.UnderStaffingHours.Add("UnderStaffingHours", new List<string>() { "10:00-10:15, 10:15-10:30, 10:30-10:45, 10:45-11:00, 11:00-11:15, 11:15-11:30" });
-            underStaffDict.UnderStaffingHours.Add("SeriousUnderStaffingHours", new List<string>() { "10:00-10:15, 10:15-10:30, 10:30-10:45, 10:45-11:00, 11:00-11:15, 11:15-11:30" });
-
+            var underStaffDict = new UnderstaffingDetails();
+            underStaffDict.AddUnderstaffingTime(new TimePeriod(10,00,10,15));
+            underStaffDict.AddSeriousUnderstaffingTime(new TimePeriod(10,00,10,15));
+            
             var target = new StaffingThresholdValidator();
-            var result = target.GetUnderStaffingHourString(underStaffDict, new CultureInfo(1033),_person.PermissionInformation.DefaultTimeZone(), new DateTime(2012,01,01));
+            var result = target.GetUnderStaffingHourString(underStaffDict, new CultureInfo(1033), new CultureInfo(1033), _person.PermissionInformation.DefaultTimeZone(), new DateTime(2012,01,01));
 
             Assert.IsNotNullOrEmpty(result);
         }
-        
      }
 }

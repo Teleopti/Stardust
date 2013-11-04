@@ -130,7 +130,7 @@
     <Compile Include="Domain\IMoveLayerVertical.cs" />
     <Compile Include="Domain\IOvertimeShiftLayer.cs" />
     <Compile Include="Domain\IPersonalShiftLayer.cs" />
-	<Compile Include="Domain\IOvertimePreferences.cs" />
+    <Compile Include="Domain\IOvertimePreferences.cs" />
     <Compile Include="Domain\IOvertimeAvailability.cs" />
     <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />
     <Compile Include="Domain\IActivityNormalExtender.cs" />
@@ -333,7 +333,6 @@
     <Compile Include="Domain\ITextFormatter.cs" />
     <Compile Include="Domain\ITimeZoneDim.cs" />
     <Compile Include="Domain\ITrueFalseRandomizer.cs" />
-    <Compile Include="Domain\IUnderStaffingData.cs" />
     <Compile Include="Domain\IUniqueSchedulePartExtractor.cs" />
     <Compile Include="Domain\IUnsafePersonProvider.cs" />
     <Compile Include="Domain\IUnsavedDaysInfo.cs" />
@@ -793,7 +792,7 @@
     <Compile Include="Messages\Requests\NewAbsenceRequestCreated.cs" />
     <Compile Include="Messages\RaptorDomainMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Domain\UnderStaffingData.cs" />
+    <Compile Include="Domain\UnderstaffingDetails.cs" />
     <Compile Include="Messages\Rta\BusinessUnitInfo.cs" />
     <Compile Include="ReadModel\IScheduleChangedReadModel.cs" />
   </ItemGroup>
