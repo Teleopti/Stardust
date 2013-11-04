@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 foreach (var absenceLayer in absenceLayers)
                 {
                     var sharedPeriod = calculatedPeriod.Intersection(absenceLayer.Period);
-                    if (sharedPeriod.HasValue)
+                    if (sharedPeriod.HasValue && absenceRequest.Period.Contains(sharedPeriod.Value))
                     {
                         foreach (var skill in requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Skills)
                         {
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 foreach (var absenceLayer in absenceLayers)
                 {
                     var sharedPeriod = calculatedPeriod.Intersection(absenceLayer.Period);
-                    if (sharedPeriod.HasValue)
+                    if (sharedPeriod.HasValue && absenceRequest.Period.Contains(sharedPeriod.Value))
                     {
                         foreach (var skill in requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Skills)
                         {
