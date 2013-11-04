@@ -1164,7 +1164,7 @@
     <Compile Include="WorkflowControl\ShiftTrades\ShouldShiftTradeBeAutoGrantedSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\TargetTimeFlexibilitySpecificationTest.cs" />
     <Compile Include="WorkflowControl\StaffingThresholdValidatorTest.cs" />
-    <Compile Include="WorkflowControl\UnderStaffingDataTest.cs" />
+    <Compile Include="WorkflowControl\UnderstaffingDetailsTest.cs" />
     <Compile Include="WorkflowControl\ValidatedRequestTest.cs" />
     <Compile Include="WorkflowControl\WorkflowControlSetTest.cs" />
   </ItemGroup>
