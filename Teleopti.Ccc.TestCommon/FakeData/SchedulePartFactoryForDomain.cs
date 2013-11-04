@@ -33,8 +33,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             CurrentPerson = PersonFactory.CreatePersonWithPersonPeriod(person,new DateOnly(CurrentPeriod.StartDateTime), new List<ISkill> { CurrentSkill });
             CurrentPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
             _part = createPart(new DateOnly(CurrentPeriod.StartDateTime));
-
         }
+
+		public SchedulePartFactoryForDomain(IPerson person, DateTimePeriod period)
+			: this(person, ScenarioFactory.CreateScenarioAggregate("For test", true), period, SkillFactory.CreateSkill("Skill"))
+		{	
+		}
 
         public SchedulePartFactoryForDomain()
             : this(PersonFactory.CreatePerson(), ScenarioFactory.CreateScenarioAggregate("For test",true), new DateTimePeriod(2001, 1, 1, 2001, 1, 3), SkillFactory.CreateSkill("Skill")) {}
@@ -161,6 +165,18 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	        _part.CreateAndAddActivity(ActivityFactory.CreateActivity("Main"), CurrentPeriod, ShiftCategoryFactory.CreateShiftCategory("Shiftcategory"));
             return this;
         }
+
+		public SchedulePartFactoryForDomain AddMainShiftLayerBetween(TimeSpan startTime, TimeSpan endTime)
+	    {
+		    var start = new DateTime(CurrentPeriod.StartDateTime.Year, CurrentPeriod.StartDateTime.Month,
+		                             CurrentPeriod.StartDateTime.Day, startTime.Hours, startTime.Minutes, startTime.Seconds,
+		                             DateTimeKind.Utc);
+			var end = new DateTime(CurrentPeriod.StartDateTime.Year, CurrentPeriod.StartDateTime.Month,
+									CurrentPeriod.StartDateTime.Day, endTime.Hours, endTime.Minutes, endTime.Seconds,
+									DateTimeKind.Utc);
+			_part.CreateAndAddActivity(ActivityFactory.CreateActivity("Main"), new DateTimePeriod(start,end), ShiftCategoryFactory.CreateShiftCategory("Shiftcategory"));
+			return this;
+	    }
     }
 }
 

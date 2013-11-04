@@ -34,4 +34,17 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			return true;
 		}
 	}
+
+	public class ShiftTradeMustBeSameDateInLocalTime : ShiftTradeSpecification
+	{
+		public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
+		{
+			return obj.All(shiftTradeSwapDetail => shiftTradeSwapDetail.SchedulePartFrom.DateOnlyAsPeriod.DateOnly == shiftTradeSwapDetail.SchedulePartTo.DateOnlyAsPeriod.DateOnly);
+		}
+
+		public override string DenyReason
+		{
+			get { throw new NotImplementedException(); }
+		}
+	}
 }

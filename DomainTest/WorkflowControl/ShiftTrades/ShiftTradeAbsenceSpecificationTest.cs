@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Rhino.Mocks;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
@@ -117,5 +120,78 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 				Assert.IsFalse(_target.IsSatisfiedBy(_details));
 			}
 		}
+	}
+
+	[TestFixture]
+	public class ShiftTradeMustBeSameDateInLocalTimeTest
+	{
+		[Test]
+		public void IsSatsifiedBy_WhenBothSchedulesAreOnSameDayInSameTimeZone_ShouldBeTrue()
+		{
+			var scheduleFactory = new StubFactory();
+			var target = new ShiftTradeMustBeSameDateInLocalTime();
+			var personFrom = new Person(){Name=new Name("Ashley","Andeen")};
+			var personTo = new Person(){Name=new Name("Bengt","Magnusson")};
+			var date = new DateTime(2001, 1, 12);
+			var scheduleFrom = scheduleFactory.ScheduleDayStub(date, personFrom);
+			var scheduleTo = scheduleFactory.ScheduleDayStub(date,personTo);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(date), new DateOnly(date)) { SchedulePartFrom = scheduleFrom, SchedulePartTo = scheduleTo };
+			var details = new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail };
+		
+			Assert.That(target.IsSatisfiedBy(details));
+		}
+
+		[Test]
+		public void IsSatisfiedBy_WhenScheduleToStartsOnDifferentDateThanScheduleFrom_ShouldBeFalse()
+		{
+			var scheduleFactory = new StubFactory();
+			var target = new ShiftTradeMustBeSameDateInLocalTime();
+			var personFrom = new Person() { Name = new Name("Ashley", "Andeen") };
+			var personTo = new Person() { Name = new Name("Bengt", "Magnusson") };
+			var dateFrom = new DateTime(2001, 1, 12);
+			var dateTo = new DateTime(2001, 1, 13);
+			var scheduleFrom = scheduleFactory.ScheduleDayStub(dateFrom, personFrom);
+			var scheduleTo = scheduleFactory.ScheduleDayStub(dateTo, personTo);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(dateFrom), new DateOnly(dateTo)) { SchedulePartFrom = scheduleFrom, SchedulePartTo = scheduleTo };
+			var details = new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail };
+
+			Assert.That(target.IsSatisfiedBy(details),Is.False);
+		}
+
+		[Test]
+		public void IsSatisfiedBy_WhenScheduleToStartsOnDifferentDateThanScheduleFromAccordingToSendersTimeZone_ShouldBeFalse()
+		{
+			
+			var target = new ShiftTradeMustBeSameDateInLocalTime();
+			var personFrom = new Person() { Name = new Name("Ashley", "Andeen") };
+			var personTo = new Person() { Name = new Name("Bengt", "Magnusson") };
+			var dateFrom = new DateTime(2001, 1, 12);
+			var dateTo = new DateTime(2001, 1, 12);
+			var period = new DateTimePeriod(new DateTime(2001, 1, 12, 0, 0, 0, DateTimeKind.Utc),
+			                                new DateTime(2001, 1, 12, 0, 0, 0, DateTimeKind.Utc));
+			personFrom.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.CreateCustomTimeZone("x",TimeSpan.Zero,"x","x"));
+			personTo.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.CreateCustomTimeZone("x",TimeSpan.FromHours(-10),"x","x"));
+
+			var scheduleFactoryForSender = new SchedulePartFactoryForDomain(personFrom,period);
+			var scheduleFactoryForReciever = new SchedulePartFactoryForDomain(personTo,period);
+
+			var scheduleFrom = scheduleFactoryForSender.AddMainShiftLayerBetween(TimeSpan.FromHours(1),TimeSpan.FromHours(7)).CreatePart();
+			var scheduleTo = scheduleFactoryForReciever.AddMainShiftLayerBetween(TimeSpan.FromHours(1), TimeSpan.FromHours(7)).CreatePart();
+
+			var d1 = scheduleFrom.DateOnlyAsPeriod.DateOnly;
+			var d2 = scheduleTo.DateOnlyAsPeriod.DateOnly;
+
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(dateFrom), new DateOnly(dateTo)) { SchedulePartFrom = scheduleFrom, SchedulePartTo = scheduleTo };
+			var details = new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail };
+
+			Assert.That(target.IsSatisfiedBy(details), Is.False);
+		}
+
+		[Test]
+		public void IsSatisfiedBy_WhenScheduleToStartsOnDifferentDateThanScheduleFromAccordingToRecieversTimeZone_ShouldBeFalse()
+		{
+			
+		}
+
 	}
 }
