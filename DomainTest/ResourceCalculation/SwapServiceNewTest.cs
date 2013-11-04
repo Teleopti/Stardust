@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		/// </summary>
 		/// <remarks>Bug 24260</remarks>
 		[Test]
-		public void ShouldRemainFullDayAbsenceWhenAbsencePeriodJustOneMinuteShorterAsDayPeriod()
+		public void ShouldStayFullDayAbsenceWhenAbsencePeriodIsShort()
 		{
 
 			IList<IScheduleDay> _list = new List<IScheduleDay>();
@@ -322,6 +322,59 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.AreEqual(0, retList[0].PersonAbsenceCollection().Count());
 			Assert.AreEqual(1, retList[1].PersonAbsenceCollection().Count());
 		}
+
+		/// <summary>
+		/// WHEN swapping an absence day with an empty day, THEN absence should stay
+		/// </summary>
+		/// <remarks>Bug 24260</remarks>
+		[Test]
+		public void ShouldStayAbsenceWhenSwapWithEmptyDay()
+		{
+
+			IList<IScheduleDay> _list = new List<IScheduleDay>();
+			_d1 = new DateTimePeriod(new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddHours(-9), new DateTime(2008, 1, 2, 0, 0, 0, DateTimeKind.Utc).AddHours(-9));
+
+			var absencePeriod = new DateTimePeriod(_d1.StartDateTime, _d1.EndDateTime.AddMinutes(-1));
+
+			_p1D1.Add(PersonAbsenceFactory.CreatePersonAbsence(_person1, _scenario, absencePeriod));
+			_list.Add(_p1D1);
+			_list.Add(_p2D1); // empty day
+
+			var period = new DateTimePeriod(_d1.StartDateTime, _d1.EndDateTime);
+
+			_dictionary =
+				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
+			IList<IPersonAbsence> p1absences = new List<IPersonAbsence> { _p1D1.PersonAbsenceCollection()[0] };
+			((ScheduleRange)_dictionary[_person1]).AddRange(p1absences);
+
+			IList<IPersonAssignment> personAssignments = new List<IPersonAssignment>();
+			((ScheduleRange)_dictionary[_person2]).AddRange(personAssignments);
+
+			Assert.AreEqual(0, _p1D1.PersonAssignmentCollection().Count);
+			Assert.AreEqual(1, _p1D1.PersonAbsenceCollection().Count);
+			Assert.AreEqual(0, _p2D1.PersonAssignmentCollection().Count);
+			Assert.AreEqual(0, _p2D1.PersonAbsenceCollection().Count);
+
+			var service = new SwapServiceNew();
+			service.Init(_list);
+
+			using (_mocks.Record())
+			{
+				_mocks.BackToRecord(_dic);
+				Expect.Call(_dic.PermissionsEnabled).Return(true).Repeat.Any();
+				Expect.Call(_dic[null]).IgnoreArguments().Return(_range).Repeat.AtLeastOnce();
+			}
+			Assert.IsTrue(service.CanSwapAssignments());
+			var retList = service.Swap(_dictionary);
+
+			Assert.AreEqual(_person1.Name.LastName, retList[0].Person.Name.LastName);
+			Assert.AreEqual(_person2.Name.LastName, retList[1].Person.Name.LastName);
+
+			Assert.AreEqual(1, retList[0].PersonAbsenceCollection().Count());
+			Assert.AreEqual(0, retList[1].PersonAbsenceCollection().Count());
+		}
+
 
 		/// <summary>
 		/// WHEN swapping an absence day with a shift day, THEN short absence should not disappear, but stay

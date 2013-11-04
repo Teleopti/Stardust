@@ -661,7 +661,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 }
             }
 
-            SplitAbsences(period);
+            //SplitAbsences(period);
             UpdateDateOnlyAsPeriod(workingCopyOfMainShift);
         }
 
