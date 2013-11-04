@@ -36,6 +36,10 @@ Background:
 	| Field | Value |
 	| Name  | Phone |
 	| Color | Green |
+	And there is an activity with
+	| Field | Value |
+	| Name  | Break |
+	| Color | Red   |
 	
 Scenario: Prototype
 	Given I have the role 'Anywhere Team Green'
@@ -55,15 +59,14 @@ Scenario: Prototype
 	| Lunch Start time | 2013-10-29 11:00 |
 	| Lunch End time   | 2013-10-29 12:00 |
 	And 'Ashley Andeen' has a shift with
-	| Field               | Value            |
-	| Shift category      | Day              |
-	| Activity            | Phone            |
-	| Start time          | 2013-10-29 09:00 |
-	| End time            | 2013-10-29 18:00 |
-	| Lunch activity      | Lunch            |
-	| Lunch Start time    | 2013-10-29 13:00 |
-	| Lunch End time      | 2013-10-29 14:00 |
-	| ShortBreakAfternoon | true             |
+	| Field                | Value            |
+	| Shift category       | Day              |
+	| Activity             | Phone            |
+	| Start time           | 2013-10-29 09:00 |
+	| End time             | 2013-10-29 18:00 |
+	| Scheduled activity   | Break            |
+	| Scheduled start time | 2013-10-29 15:00 |
+	| Scheduled end time   | 2013-10-29 15:10 |
 	And 'John King' has a shift with
 	| Field            | Value            |
 	| Shift category   | Day              |

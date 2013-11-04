@@ -92,13 +92,11 @@ Scenario: View my own data
 Scenario: View team schedule
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
-	| Field                     | Value            |
-	| Shift category            | Day              |
-	| Activity                  | Phone            |
-	| Start time                | 2012-12-02 08:00 |
-	| End time                  | 2012-12-02 17:00 |
-	| Lunch activity            | Lunch            |
-	| Lunch 3 hours after start | true             |
+	| Field                | Value            |
+	| Shift category       | Day              |
+	| Activity             | Phone            |
+	| Start time           | 2012-12-02 08:00 |
+	| End time             | 2012-12-02 17:00 |
 	When I view schedules for 'Team green' on '2012-12-02'
 	Then I should see schedule for 'Pierre Baldi'
 
@@ -127,8 +125,6 @@ Scenario: View team schedule with night shift from yesterday
 	| Start time                | 2012-12-02 20:00 |
 	| End time                  | 2012-12-03 04:00 |
 	| Activity                  | Phone            |
-	| Lunch activity            | Lunch            |
-	| Lunch 3 hours after start | true             |
 	When I view schedules for 'Team green' on '2012-12-03'
 	Then I should see schedule for 'Pierre Baldi'
 	

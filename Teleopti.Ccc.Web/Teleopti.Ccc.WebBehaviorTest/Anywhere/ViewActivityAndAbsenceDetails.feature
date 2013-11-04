@@ -42,13 +42,14 @@ Background:
 Scenario: View activity details in team schedule
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
-	| Field                     | Value            |
-	| Shift category            | Day              |
-	| Activity                  | Phone            |
-	| Start time                | 2013-10-10 08:00 |
-	| End time                  | 2013-10-10 17:00 |
-	| Lunch activity            | Lunch            |
-	| Lunch 3 hours after start | true             |
+	| Field                | Value            |
+	| Shift category       | Day              |
+	| Activity             | Phone            |
+	| Start time           | 2013-10-10 08:00 |
+	| End time             | 2013-10-10 17:00 |
+	| Scheduled activity   | Lunch            |
+	| Scheduled start time | 2013-10-10 11:00 |
+	| Scheduled end time   | 2013-10-10 12:00 |
 	When I view schedules for 'Team green' on '2013-10-10'
 	And I select the schedule activity for 'Pierre Baldi' with start time '08:00'
 	Then I should see schedule activity details for 'Pierre Baldi' with
