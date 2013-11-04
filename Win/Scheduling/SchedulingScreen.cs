@@ -4051,34 +4051,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 					break;
 				case OptimizationMethod.ReOptimize:
 
-					
-					if (!optimizerPreferences.Extra.UseTeamBlockOption && optimizerPreferences.Extra.UseTeams)
-					{
-						var originalBlockType = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
-						schedulingOptions.BlockFinderTypeForAdvanceScheduling= BlockFinderType.SingleDay;
-
-						IList<IPerson> selectedPersons =
-							new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
-						_groupDayOffOptimizerHelper.TeamGroupReOptimize(_backgroundWorkerOptimization, selectedPeriod, selectedPersons,
-																		_container.Resolve<IOptimizationPreferences>());
-						schedulingOptions.BlockFinderTypeForAdvanceScheduling = originalBlockType;
-						break;
-					}
-
-					if (optimizerPreferences.Extra.UseTeamBlockOption)
-					{
-						IList<IPerson> selectedPersons =
-							new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
-						_groupDayOffOptimizerHelper.TeamGroupReOptimize(_backgroundWorkerOptimization, selectedPeriod, selectedPersons,
-						                                                _container.Resolve<IOptimizationPreferences>());
-						break;
-					}
+                    if (optimizerPreferences.Extra.UseTeamBlockOption || optimizerPreferences.Extra.UseTeams)
+                    {
+                        IList<IPerson> selectedPersons =
+                            new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
+                        _container.Resolve<ITeamBlockOptimizationCommand>().TeamGroupReOptimize(_backgroundWorkerOptimization, selectedPeriod, selectedPersons, optimizerPreferences);
+                        break;
+                    }
 
 					// we need it here for fairness opt. for example
 					_groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
 					_scheduleOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules);
-
-					break;
+                    break;
 			}
 
 			_undoRedo.CommitBatch();

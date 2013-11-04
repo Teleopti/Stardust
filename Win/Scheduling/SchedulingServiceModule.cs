@@ -227,6 +227,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			registerTeamBlockDayOffOptimizerService(builder);
 			registerTeamBlockIntradayOptimizerService(builder);
 			registerTeamBlockSchedulingService(builder);
+            registerTeamBlockOptimizationService(builder);
 
             builder.RegisterType<ScheduleOvertimeCommand>().As<IScheduleOvertimeCommand>();
             builder.RegisterType<ScheduleDayListFactory>().As<IScheduleDayListFactory>();
@@ -239,7 +240,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<NightlyRestRule>().As<IAssignmentPeriodRule>();
         }
 
-		private static void registerTeamBlockCommon(ContainerBuilder builder)
+        
+
+        private static void registerTeamBlockCommon(ContainerBuilder builder)
 		{
 			builder.RegisterType<GroupPersonSkillAggregator>().As<IGroupPersonSkillAggregator>();
 			builder.RegisterType<DynamicBlockFinder>().As<IDynamicBlockFinder>();
@@ -272,6 +275,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			builder.RegisterType<TeamBlockScheduleCommand>().As<ITeamBlockScheduleCommand>();
 		}
+
+        private void registerTeamBlockOptimizationService(ContainerBuilder builder)
+        {
+            builder.RegisterType<TeamBlockOptimizationCommand>().As<ITeamBlockOptimizationCommand>();
+        }
 
 		private static void registerTeamBlockIntradayOptimizerService(ContainerBuilder builder)
 		{

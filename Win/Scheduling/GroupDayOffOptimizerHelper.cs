@@ -70,362 +70,362 @@ namespace Teleopti.Ccc.Win.Scheduling
 				optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences, teamBlockRestrictionOverLimitValidator);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "matrixListForIntradayOptimization"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays, IList<IScheduleMatrixPro> allMatrixes )
-        {
-            _backgroundWorker = backgroundWorker;
-            var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
-            var onlyShiftsWhenUnderstaffed = optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
-            optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = false;
-            IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(selectedDays));
-			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(selectedDays);
-			IList<IScheduleMatrixPro> matrixListForWorkShiftOptimization = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
-			IList<IScheduleMatrixPro> matrixListForDayOffOptimization = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
-			IList<IScheduleMatrixPro> matrixListForIntradayOptimization = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "matrixListForIntradayOptimization"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        //public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays, IList<IScheduleMatrixPro> allMatrixes )
+        //{
+        //    _backgroundWorker = backgroundWorker;
+        //    var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
+        //    var onlyShiftsWhenUnderstaffed = optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
+        //    optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = false;
+        //    IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(selectedDays));
+        //    var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(selectedDays);
+        //    IList<IScheduleMatrixPro> matrixListForWorkShiftOptimization = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
+        //    IList<IScheduleMatrixPro> matrixListForDayOffOptimization = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
+        //    IList<IScheduleMatrixPro> matrixListForIntradayOptimization = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
 
-			//IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForWorkShiftOptimization = createMatrixContainerList(matrixListForWorkShiftOptimization);
-            IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization = createMatrixContainerList(matrixListForDayOffOptimization);
-			IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForIntradayOptimization = createMatrixContainerList(matrixListForIntradayOptimization);
+        //    //IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForWorkShiftOptimization = createMatrixContainerList(matrixListForWorkShiftOptimization);
+        //    IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization = createMatrixContainerList(matrixListForDayOffOptimization);
+        //    IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForIntradayOptimization = createMatrixContainerList(matrixListForIntradayOptimization);
 
-			var openPeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
+        //    var openPeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
 
-            IGroupPageDataProvider groupPageDataProvider = _container.Resolve<IGroupScheduleGroupPageDataProvider>();
-            var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
+        //    IGroupPageDataProvider groupPageDataProvider = _container.Resolve<IGroupScheduleGroupPageDataProvider>();
+        //    var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
 
-			groupPagePerDateHolder.GroupPersonGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
-					.CreateGroupPagePerDate(openPeriod.DayCollection(), groupPageDataProvider,
-					optimizerPreferences.Extra.GroupPageOnTeam);
+        //    groupPagePerDateHolder.GroupPersonGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
+        //            .CreateGroupPagePerDate(openPeriod.DayCollection(), groupPageDataProvider,
+        //            optimizerPreferences.Extra.GroupPageOnTeam);
 			
-            OptimizerHelperHelper.SetConsiderShortBreaks(selectedPersons, selectedPeriod, optimizerPreferences.Rescheduling, _container);
-            var tagSetter = _container.Resolve<IScheduleTagSetter>();
-            tagSetter.ChangeTagToSet(optimizerPreferences.General.ScheduleTag);
+        //    OptimizerHelperHelper.SetConsiderShortBreaks(selectedPersons, selectedPeriod, optimizerPreferences.Rescheduling, _container);
+        //    var tagSetter = _container.Resolve<IScheduleTagSetter>();
+        //    tagSetter.ChangeTagToSet(optimizerPreferences.General.ScheduleTag);
 
-            using (PerformanceOutput.ForOperation("Optimizing " + matrixListForWorkShiftOptimization.Count + " matrixes"))
-            {
-				var schedulingOptionsCreator = new SchedulingOptionsCreator();
-				var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
-				var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
-				var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
-            	var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
-				var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, allMatrixes, groupPersonsBuilder, schedulingOptions);
-				IDictionary<Guid, bool> teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
-                if (optimizerPreferences.General.OptimizationStepDaysOff)
-					runDayOffOptimization(optimizerPreferences, matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod, teamSteadyStateDictionary);
-                if (optimizerPreferences.General.OptimizationStepTimeBetweenDays)
-					runMoveTimeOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences, teamSteadyStateDictionary);
-                if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
-                    runIntradayOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
+        //    using (PerformanceOutput.ForOperation("Optimizing " + matrixListForWorkShiftOptimization.Count + " matrixes"))
+        //    {
+        //        var schedulingOptionsCreator = new SchedulingOptionsCreator();
+        //        var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
+        //        var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
+        //        var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
+        //        var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
+        //        var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, allMatrixes, groupPersonsBuilder, schedulingOptions);
+        //        IDictionary<Guid, bool> teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
+        //        if (optimizerPreferences.General.OptimizationStepDaysOff)
+        //            runDayOffOptimization(optimizerPreferences, matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod, teamSteadyStateDictionary);
+        //        if (optimizerPreferences.General.OptimizationStepTimeBetweenDays)
+        //            runMoveTimeOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences, teamSteadyStateDictionary);
+        //        if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
+        //            runIntradayOptimization(matrixOriginalStateContainerListForIntradayOptimization, optimizerPreferences);
 
-				var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new ResourceCalculationOnlyScheduleDayChangeCallback(), tagSetter);
-				if (optimizerPreferences.General.OptimizationStepFairness)
-					runFairness(selectedPersons, selectedDays, rollbackService, optimizerPreferences);
-            }
-            if (optimizerPreferences.General.UseShiftCategoryLimitations)
-            {
-                var schedulingOptionsCreator = new SchedulingOptionsCreator();
-                var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
-                RemoveShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker,
-                                                    optimizerPreferences, schedulingOptions, selectedPeriod, allMatrixes);
-            }
-            optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
-        }
+        //        var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new ResourceCalculationOnlyScheduleDayChangeCallback(), tagSetter);
+        //        if (optimizerPreferences.General.OptimizationStepFairness)
+        //            runFairness(selectedPersons, selectedDays, rollbackService, optimizerPreferences);
+        //    }
+        //    if (optimizerPreferences.General.UseShiftCategoryLimitations)
+        //    {
+        //        var schedulingOptionsCreator = new SchedulingOptionsCreator();
+        //        var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
+        //        RemoveShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker,
+        //                                            optimizerPreferences, schedulingOptions, selectedPeriod, allMatrixes);
+        //    }
+        //    optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
+        //}
 
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public void RemoveShiftCategoryBackToLegalState(
-            IList<IScheduleMatrixPro> matrixList,
-			BackgroundWorker backgroundWorker, IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, 
-			DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes)
-        {
-            if (matrixList == null) throw new ArgumentNullException("matrixList");
-            if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
-            using (PerformanceOutput.ForOperation("GroupShiftCategoryLimitations"))
-            {
-                var backToLegalStateServicePro =
-                    _container.Resolve<IGroupListShiftCategoryBackToLegalStateService>();
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        //public void RemoveShiftCategoryBackToLegalState(
+        //    IList<IScheduleMatrixPro> matrixList,
+        //    BackgroundWorker backgroundWorker, IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, 
+        //    DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes)
+        //{
+        //    if (matrixList == null) throw new ArgumentNullException("matrixList");
+        //    if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
+        //    using (PerformanceOutput.ForOperation("GroupShiftCategoryLimitations"))
+        //    {
+        //        var backToLegalStateServicePro =
+        //            _container.Resolve<IGroupListShiftCategoryBackToLegalStateService>();
 
-                if (backgroundWorker.CancellationPending)
-                    return;
-                var groupOptimizerFindMatrixesForGroup =
-                    new GroupOptimizerFindMatrixesForGroup(_groupPersonBuilderForOptimization, matrixList);
+        //        if (backgroundWorker.CancellationPending)
+        //            return;
+        //        var groupOptimizerFindMatrixesForGroup =
+        //            new GroupOptimizerFindMatrixesForGroup(_groupPersonBuilderForOptimization, matrixList);
 
-				var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
-				var coherentChecker = new TeamSteadyStateCoherentChecker();
-				var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-				var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
-				var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
-				var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
-            	var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
-				var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, allMatrixes, groupPersonsBuilder, schedulingOptions);
-				IDictionary<Guid, bool> teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
-            	var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
-				IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = new GroupPersonBuilderForOptimization(_stateHolder, _container.Resolve<IGroupPersonFactory>(), _container.Resolve<IGroupPagePerDateHolder>());
+        //        var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
+        //        var coherentChecker = new TeamSteadyStateCoherentChecker();
+        //        var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
+        //        var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
+        //        var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
+        //        var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
+        //        var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
+        //        var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, allMatrixes, groupPersonsBuilder, schedulingOptions);
+        //        IDictionary<Guid, bool> teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
+        //        var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
+        //        IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = new GroupPersonBuilderForOptimization(_stateHolder, _container.Resolve<IGroupPersonFactory>(), _container.Resolve<IGroupPagePerDateHolder>());
 
-                backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences,
-                                                   groupOptimizerFindMatrixesForGroup, teamSteadyStateHolder, teamSteadyStateMainShiftScheduler, groupPersonBuilderForOptimization);
+        //        backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences,
+        //                                           groupOptimizerFindMatrixesForGroup, teamSteadyStateHolder, teamSteadyStateMainShiftScheduler, groupPersonBuilderForOptimization);
 
-            }
-        }
+        //    }
+        //}
 
-		private void runFairness(IList<IPerson> selectedPersons, IList<IScheduleDay> selectedDays, 
-			SchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences)
-		{
-			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(selectedDays);
+        //private void runFairness(IList<IPerson> selectedPersons, IList<IScheduleDay> selectedDays, 
+        //    SchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences)
+        //{
+        //    var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(selectedDays);
 
-			var matrixListForFairness = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
-			var fairnessOpt = _container.Resolve<IShiftCategoryFairnessOptimizer>();
+        //    var matrixListForFairness = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
+        //    var fairnessOpt = _container.Resolve<IShiftCategoryFairnessOptimizer>();
 			
-			fairnessOpt.ReportProgress += resourceOptimizerPersonOptimized;
-			fairnessOpt.Execute(_backgroundWorker, selectedPersons, selectedPeriod.DayCollection(), matrixListForFairness, optimizationPreferences, 
-				rollbackService, optimizationPreferences.Advanced.UseAverageShiftLengths);
-			fairnessOpt.ReportProgress -= resourceOptimizerPersonOptimized;
+        //    fairnessOpt.ReportProgress += resourceOptimizerPersonOptimized;
+        //    fairnessOpt.Execute(_backgroundWorker, selectedPersons, selectedPeriod.DayCollection(), matrixListForFairness, optimizationPreferences, 
+        //        rollbackService, optimizationPreferences.Advanced.UseAverageShiftLengths);
+        //    fairnessOpt.ReportProgress -= resourceOptimizerPersonOptimized;
 			
-		}
+        //}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		private void runMoveTimeOptimization(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences,
-			IDictionary<Guid, bool> teamSteadyStateDictionary)
-        {
-            var schedulingOptionsCreator = new SchedulingOptionsCreator();
-            IList<IGroupMoveTimeOptimizer> optimizers = new List<IGroupMoveTimeOptimizer>();
-            extractOptimizer(originalStateContainers, optimizationPreferences, optimizers);
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        //private void runMoveTimeOptimization(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences,
+        //    IDictionary<Guid, bool> teamSteadyStateDictionary)
+        //{
+        //    var schedulingOptionsCreator = new SchedulingOptionsCreator();
+        //    IList<IGroupMoveTimeOptimizer> optimizers = new List<IGroupMoveTimeOptimizer>();
+        //    extractOptimizer(originalStateContainers, optimizationPreferences, optimizers);
 
-            IDeleteSchedulePartService deleteSchedulePartService;
-            MainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter;
-            IList<IScheduleMatrixPro> allMatrix;
-            ISchedulePartModifyAndRollbackService rollbackService;
-            IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup;
-			var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
-            var groupPersonBuilderForOptimization = teamOptimizerHelper(originalStateContainers, optimizationPreferences,
-                                                                        out deleteSchedulePartService,
-                                                                        out mainShiftOptimizeActivitySpecificationSetter,
-                                                                        out allMatrix, out rollbackService,
-                                                                        out groupOptimizerFindMatrixesForGroup);
+        //    IDeleteSchedulePartService deleteSchedulePartService;
+        //    MainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter;
+        //    IList<IScheduleMatrixPro> allMatrix;
+        //    ISchedulePartModifyAndRollbackService rollbackService;
+        //    IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup;
+        //    var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
+        //    var groupPersonBuilderForOptimization = teamOptimizerHelper(originalStateContainers, optimizationPreferences,
+        //                                                                out deleteSchedulePartService,
+        //                                                                out mainShiftOptimizeActivitySpecificationSetter,
+        //                                                                out allMatrix, out rollbackService,
+        //                                                                out groupOptimizerFindMatrixesForGroup);
 
-            var groupMatrixHelper = new GroupMatrixHelper(_container.Resolve<IGroupMatrixContainerCreator>(),
-                                                                         _container.Resolve<IGroupPersonConsistentChecker>(),
-                                                                         OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(_container),
-                                                                         resourceOptimizationHelper,
-                                                                         mainShiftOptimizeActivitySpecificationSetter);
-            var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
-			var groupMoveTimeResourceHelper = new GroupMoveTimeOptimizationResourceHelper(_resourceOptimizationHelper);
-            var groupMoveTimeOptimizerExecuter = new GroupMoveTimeOptimizationExecuter(rollbackService,
-                                                            deleteSchedulePartService, schedulingOptionsCreator, optimizationPreferences,
-                                                            mainShiftOptimizeActivitySpecificationSetter,
-                                                            groupMatrixHelper, groupSchedulingService,
-															groupPersonBuilderForOptimization, groupMoveTimeResourceHelper);
-            var groupMoveTimeValidatorRunner =
-                new GroupMoveTimeValidatorRunner(new GroupOptimizerValidateProposedDatesInSameMatrix(groupOptimizerFindMatrixesForGroup),
-                                                 new GroupOptimizerValidateProposedDatesInSameGroup(groupPersonBuilderForOptimization, groupOptimizerFindMatrixesForGroup));
-            var service = new GroupMoveTimeOptimizerService(optimizers, groupOptimizerFindMatrixesForGroup, groupMoveTimeOptimizerExecuter, groupMoveTimeValidatorRunner);
+        //    var groupMatrixHelper = new GroupMatrixHelper(_container.Resolve<IGroupMatrixContainerCreator>(),
+        //                                                                 _container.Resolve<IGroupPersonConsistentChecker>(),
+        //                                                                 OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(_container),
+        //                                                                 resourceOptimizationHelper,
+        //                                                                 mainShiftOptimizeActivitySpecificationSetter);
+        //    var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
+        //    var groupMoveTimeResourceHelper = new GroupMoveTimeOptimizationResourceHelper(_resourceOptimizationHelper);
+        //    var groupMoveTimeOptimizerExecuter = new GroupMoveTimeOptimizationExecuter(rollbackService,
+        //                                                    deleteSchedulePartService, schedulingOptionsCreator, optimizationPreferences,
+        //                                                    mainShiftOptimizeActivitySpecificationSetter,
+        //                                                    groupMatrixHelper, groupSchedulingService,
+        //                                                    groupPersonBuilderForOptimization, groupMoveTimeResourceHelper);
+        //    var groupMoveTimeValidatorRunner =
+        //        new GroupMoveTimeValidatorRunner(new GroupOptimizerValidateProposedDatesInSameMatrix(groupOptimizerFindMatrixesForGroup),
+        //                                         new GroupOptimizerValidateProposedDatesInSameGroup(groupPersonBuilderForOptimization, groupOptimizerFindMatrixesForGroup));
+        //    var service = new GroupMoveTimeOptimizerService(optimizers, groupOptimizerFindMatrixesForGroup, groupMoveTimeOptimizerExecuter, groupMoveTimeValidatorRunner);
 
 
-			var coherentChecker = new TeamSteadyStateCoherentChecker();
-			var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-			var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
-			var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
+        //    var coherentChecker = new TeamSteadyStateCoherentChecker();
+        //    var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
+        //    var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
+        //    var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
 
-            service.ReportProgress += resourceOptimizerPersonOptimized;
-			service.Execute(allMatrix, teamSteadyStateMainShiftScheduler, teamSteadyStateHolder, _stateHolder.Schedules);
-            service.ReportProgress -= resourceOptimizerPersonOptimized;
-        }
+        //    service.ReportProgress += resourceOptimizerPersonOptimized;
+        //    service.Execute(allMatrix, teamSteadyStateMainShiftScheduler, teamSteadyStateHolder, _stateHolder.Schedules);
+        //    service.ReportProgress -= resourceOptimizerPersonOptimized;
+        //}
 
-        private IGroupPersonBuilderForOptimization teamOptimizerHelper(IEnumerable<IScheduleMatrixOriginalStateContainer> originalStateContainers,
-                                                                       IOptimizationPreferences optimizationPreferences,
-                                                                       out IDeleteSchedulePartService deleteSchedulePartService,
-                                                                       out MainShiftOptimizeActivitySpecificationSetter
-                                                                           mainShiftOptimizeActivitySpecificationSetter,
-                                                                       out IList<IScheduleMatrixPro> allMatrix,
-                                                                       out ISchedulePartModifyAndRollbackService rollbackService,
-                                                                       out IGroupOptimizerFindMatrixesForGroup
-                                                                           groupOptimizerFindMatrixesForGroup)
-        {
-            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
-                new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState,
-                                                      _container.Resolve<IGroupPersonFactory>(),
-                                                      _container.Resolve<IGroupPagePerDateHolder>());
-            allMatrix = originalStateContainers.Select(container => container.ScheduleMatrix).ToList();
-            groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization,
-                                                                                        allMatrix);
-            rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder,
-                                                                       _scheduleDayChangeCallback,
-                                                                       new ScheduleTagSetter
-                                                                           (optimizationPreferences
-                                                                                .General.
-                                                                                ScheduleTag));
-            deleteSchedulePartService = _container.Resolve<IDeleteSchedulePartService>();
-            mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
-            return groupPersonBuilderForOptimization;
-        }
+        //private IGroupPersonBuilderForOptimization teamOptimizerHelper(IEnumerable<IScheduleMatrixOriginalStateContainer> originalStateContainers,
+        //                                                               IOptimizationPreferences optimizationPreferences,
+        //                                                               out IDeleteSchedulePartService deleteSchedulePartService,
+        //                                                               out MainShiftOptimizeActivitySpecificationSetter
+        //                                                                   mainShiftOptimizeActivitySpecificationSetter,
+        //                                                               out IList<IScheduleMatrixPro> allMatrix,
+        //                                                               out ISchedulePartModifyAndRollbackService rollbackService,
+        //                                                               out IGroupOptimizerFindMatrixesForGroup
+        //                                                                   groupOptimizerFindMatrixesForGroup)
+        //{
+        //    IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+        //        new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState,
+        //                                              _container.Resolve<IGroupPersonFactory>(),
+        //                                              _container.Resolve<IGroupPagePerDateHolder>());
+        //    allMatrix = originalStateContainers.Select(container => container.ScheduleMatrix).ToList();
+        //    groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization,
+        //                                                                                allMatrix);
+        //    rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder,
+        //                                                               _scheduleDayChangeCallback,
+        //                                                               new ScheduleTagSetter
+        //                                                                   (optimizationPreferences
+        //                                                                        .General.
+        //                                                                        ScheduleTag));
+        //    deleteSchedulePartService = _container.Resolve<IDeleteSchedulePartService>();
+        //    mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+        //    return groupPersonBuilderForOptimization;
+        //}
 
-        private static void extractOptimizer(IEnumerable<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences, ICollection<IGroupMoveTimeOptimizer> optimizers)
-        {
-            foreach (var originalStateContainer in originalStateContainers)
-            {
-                var matrix = originalStateContainer.ScheduleMatrix;
+        //private static void extractOptimizer(IEnumerable<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences, ICollection<IGroupMoveTimeOptimizer> optimizers)
+        //{
+        //    foreach (var originalStateContainer in originalStateContainers)
+        //    {
+        //        var matrix = originalStateContainer.ScheduleMatrix;
 
-                var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(matrix, new RestrictionChecker(),
-                                                                                              optimizationPreferences,
-                                                                                              originalStateContainer);
-                var dataExtractorProvider = new ScheduleResultDataExtractorProvider();
-				var personalSkillsDataExtractor = dataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced);
-                IPeriodValueCalculatorProvider periodValueCalculatorProvider = new PeriodValueCalculatorProvider();
-                var periodValueCalculator = periodValueCalculatorProvider.CreatePeriodValueCalculator(optimizationPreferences.Advanced, personalSkillsDataExtractor);
+        //        var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(matrix, new RestrictionChecker(),
+        //                                                                                      optimizationPreferences,
+        //                                                                                      originalStateContainer);
+        //        var dataExtractorProvider = new ScheduleResultDataExtractorProvider();
+        //        var personalSkillsDataExtractor = dataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced);
+        //        IPeriodValueCalculatorProvider periodValueCalculatorProvider = new PeriodValueCalculatorProvider();
+        //        var periodValueCalculator = periodValueCalculatorProvider.CreatePeriodValueCalculator(optimizationPreferences.Advanced, personalSkillsDataExtractor);
 
-                var lockableBitArrayConverter =
-                    new ScheduleMatrixLockableBitArrayConverter(matrix);
+        //        var lockableBitArrayConverter =
+        //            new ScheduleMatrixLockableBitArrayConverter(matrix);
                 
-                var optimizer = new GroupMoveTimeOptimizer(periodValueCalculator, lockableBitArrayConverter, new MoveTimeDecisionMaker2(),
-                                                           personalSkillsDataExtractor,
-                                                           optimizerOverLimitDecider);
-                optimizers.Add(optimizer);
-            }
-        }
+        //        var optimizer = new GroupMoveTimeOptimizer(periodValueCalculator, lockableBitArrayConverter, new MoveTimeDecisionMaker2(),
+        //                                                   personalSkillsDataExtractor,
+        //                                                   optimizerOverLimitDecider);
+        //        optimizers.Add(optimizer);
+        //    }
+        //}
 
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		private void runIntradayOptimization(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences)
-		{
-			var schedulingOptionsCreator = new SchedulingOptionsCreator();
-			var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-			var restrictionChecker = new RestrictionChecker();
-			var decisionMaker = new IntradayDecisionMaker();
-			IList<IGroupIntradayOptimizer> optimizers = new List<IGroupIntradayOptimizer>();
-			foreach (var originalStateContainer in originalStateContainers)
-			{
-				var matrix = originalStateContainer.ScheduleMatrix;
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        //private void runIntradayOptimization(IList<IScheduleMatrixOriginalStateContainer> originalStateContainers, IOptimizationPreferences optimizationPreferences)
+        //{
+        //    var schedulingOptionsCreator = new SchedulingOptionsCreator();
+        //    var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+        //    var restrictionChecker = new RestrictionChecker();
+        //    var decisionMaker = new IntradayDecisionMaker();
+        //    IList<IGroupIntradayOptimizer> optimizers = new List<IGroupIntradayOptimizer>();
+        //    foreach (var originalStateContainer in originalStateContainers)
+        //    {
+        //        var matrix = originalStateContainer.ScheduleMatrix;
 
-				var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(matrix, restrictionChecker,
-				                                                                              optimizationPreferences,
-				                                                                              originalStateContainer);
-				var relativeDailyStandardDeviationsByAllSkillsExtractor =
-					new RelativeDailyStandardDeviationsByAllSkillsExtractor(matrix, schedulingOptions);
-				IScheduleMatrixLockableBitArrayConverter lockableBitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(matrix);
-                var relativeDailyValueByPersonalSkillsExtractor = new RelativeDailyValueByPersonalSkillsExtractor(matrix,
-                                                                                                          optimizationPreferences
-                                                                                                              .Advanced);
+        //        var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(matrix, restrictionChecker,
+        //                                                                                      optimizationPreferences,
+        //                                                                                      originalStateContainer);
+        //        var relativeDailyStandardDeviationsByAllSkillsExtractor =
+        //            new RelativeDailyStandardDeviationsByAllSkillsExtractor(matrix, schedulingOptions);
+        //        IScheduleMatrixLockableBitArrayConverter lockableBitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(matrix);
+        //        var relativeDailyValueByPersonalSkillsExtractor = new RelativeDailyValueByPersonalSkillsExtractor(matrix,
+        //                                                                                                  optimizationPreferences
+        //                                                                                                      .Advanced);
                 
-                 var optimizer = new GroupIntradayOptimizer(lockableBitArrayConverter, decisionMaker,
-                                                           relativeDailyStandardDeviationsByAllSkillsExtractor,
-                                                           optimizerOverLimitDecider, relativeDailyValueByPersonalSkillsExtractor);
-				optimizers.Add(optimizer);
-			}
+        //         var optimizer = new GroupIntradayOptimizer(lockableBitArrayConverter, decisionMaker,
+        //                                                   relativeDailyStandardDeviationsByAllSkillsExtractor,
+        //                                                   optimizerOverLimitDecider, relativeDailyValueByPersonalSkillsExtractor);
+        //        optimizers.Add(optimizer);
+        //    }
 
-			var groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
-			var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
-			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
-        		new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
-			IList<IScheduleMatrixPro> allMatrix = originalStateContainers.Select(container => container.ScheduleMatrix).ToList();
-			IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrix);
-			ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder,
-			                                                                                                 _scheduleDayChangeCallback,
-			                                                                                                 new ScheduleTagSetter
-			                                                                                                 	(optimizationPreferences
-			                                                                                                 	 	.General.
-			                                                                                                 	 	ScheduleTag));
-            var deleteAndResourceCalculateService = _container.Resolve<IDeleteAndResourceCalculateService >();
-			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
-			var groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
-			var groupPersonConsistentChecker =
-				_container.Resolve<IGroupPersonConsistentChecker>();
-			var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
-			IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
-			   OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
+        //    var groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
+        //    var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
+        //    IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+        //        new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
+        //    IList<IScheduleMatrixPro> allMatrix = originalStateContainers.Select(container => container.ScheduleMatrix).ToList();
+        //    IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrix);
+        //    ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder,
+        //                                                                                                     _scheduleDayChangeCallback,
+        //                                                                                                     new ScheduleTagSetter
+        //                                                                                                        (optimizationPreferences
+        //                                                                                                            .General.
+        //                                                                                                            ScheduleTag));
+        //    var deleteAndResourceCalculateService = _container.Resolve<IDeleteAndResourceCalculateService >();
+        //    var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+        //    var groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
+        //    var groupPersonConsistentChecker =
+        //        _container.Resolve<IGroupPersonConsistentChecker>();
+        //    var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
+        //    IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
+        //       OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
 
-			IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,
-			                                                             groupPersonConsistentChecker,
-			                                                             workShiftBackToLegalStateService,
-			                                                             resourceOptimizationHelper, 
-																		 mainShiftOptimizeActivitySpecificationSetter);
-			var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
-			IGroupIntradayOptimizerExecuter groupIntradayOptimizerExecuter = new GroupIntradayOptimizerExecuter(rollbackService,
-                                                            deleteAndResourceCalculateService, schedulingOptionsCreator, optimizationPreferences,
-			                                                mainShiftOptimizeActivitySpecificationSetter,
-			                                                groupMatrixHelper, groupSchedulingService,
-			                                                groupPersonBuilderForOptimization, _resourceOptimizationHelper);
-			var service = new GroupIntradayOptimizerService(optimizers, groupOptimizerFindMatrixesForGroup, groupIntradayOptimizerExecuter);
+        //    IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,
+        //                                                                 groupPersonConsistentChecker,
+        //                                                                 workShiftBackToLegalStateService,
+        //                                                                 resourceOptimizationHelper, 
+        //                                                                 mainShiftOptimizeActivitySpecificationSetter);
+        //    var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
+        //    IGroupIntradayOptimizerExecuter groupIntradayOptimizerExecuter = new GroupIntradayOptimizerExecuter(rollbackService,
+        //                                                    deleteAndResourceCalculateService, schedulingOptionsCreator, optimizationPreferences,
+        //                                                    mainShiftOptimizeActivitySpecificationSetter,
+        //                                                    groupMatrixHelper, groupSchedulingService,
+        //                                                    groupPersonBuilderForOptimization, _resourceOptimizationHelper);
+        //    var service = new GroupIntradayOptimizerService(optimizers, groupOptimizerFindMatrixesForGroup, groupIntradayOptimizerExecuter);
 
-			service.ReportProgress += resourceOptimizerPersonOptimized;
-			service.Execute(allMatrix);
-			service.ReportProgress -= resourceOptimizerPersonOptimized;
-		}
+        //    service.ReportProgress += resourceOptimizerPersonOptimized;
+        //    service.Execute(allMatrix);
+        //    service.ReportProgress -= resourceOptimizerPersonOptimized;
+        //}
 
-        private IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)
-        {
-	        IScheduleDayEquator scheduleDayEquator = _container.Resolve<IScheduleDayEquator>();
-            IList<IScheduleMatrixOriginalStateContainer> result =
-                matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, scheduleDayEquator))
-                .Cast<IScheduleMatrixOriginalStateContainer>().ToList();
-            return result;
-        }
+        //private IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)
+        //{
+        //    IScheduleDayEquator scheduleDayEquator = _container.Resolve<IScheduleDayEquator>();
+        //    IList<IScheduleMatrixOriginalStateContainer> result =
+        //        matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, scheduleDayEquator))
+        //        .Cast<IScheduleMatrixOriginalStateContainer>().ToList();
+        //    return result;
+        //}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        private void runDayOffOptimization(IOptimizationPreferences optimizerPreferences,
-            IList<IScheduleMatrixOriginalStateContainer> matrixContainerList, DateOnlyPeriod selectedPeriod,
-			IDictionary<Guid, bool> teamSteadyStateDictionary)
-        {
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        //private void runDayOffOptimization(IOptimizationPreferences optimizerPreferences,
+        //    IList<IScheduleMatrixOriginalStateContainer> matrixContainerList, DateOnlyPeriod selectedPeriod,
+        //    IDictionary<Guid, bool> teamSteadyStateDictionary)
+        //{
 
-            if (_backgroundWorker.CancellationPending)
-                return;
+        //    if (_backgroundWorker.CancellationPending)
+        //        return;
 
-            IList<IScheduleMatrixPro> matrixList =
-                matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
+        //    IList<IScheduleMatrixPro> matrixList =
+        //        matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
 
-            OptimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, _container, selectedPeriod);
+        //    OptimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, _container, selectedPeriod);
 
-            IList<IDayOffTemplate> displayList = (from item in _schedulerState.CommonStateHolder.DayOffs
-                                                  where ((IDeleteTag)item).IsDeleted == false
-                                                  select item).ToList();
+        //    IList<IDayOffTemplate> displayList = (from item in _schedulerState.CommonStateHolder.DayOffs
+        //                                          where ((IDeleteTag)item).IsDeleted == false
+        //                                          select item).ToList();
 
-            var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.Rescheduling + Resources.ThreeDots);
-            resourceOptimizerPersonOptimized(this, e);
+        //    var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.Rescheduling + Resources.ThreeDots);
+        //    resourceOptimizerPersonOptimized(this, e);
 
-            // Schedule White Spots after back to legal state
-            var scheduleService = _container.Resolve<IScheduleService>();
+        //    // Schedule White Spots after back to legal state
+        //    var scheduleService = _container.Resolve<IScheduleService>();
 
-			//ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
+        //    //ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
 
-			//// schedule those are the white spots after back to legal state
-			//// ??? check if all white spots could be scheduled ??????
-			//OptimizerHelperHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container, rollbackService);
+        //    //// schedule those are the white spots after back to legal state
+        //    //// ??? check if all white spots could be scheduled ??????
+        //    //OptimizerHelperHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container, rollbackService);
 
             
-			//bool found = false;
-			//foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixContainerList)
-			//{
-			//    if (!matrixOriginalStateContainer.IsFullyScheduled())
-			//    {
-			//        found = true;
-			//        rollbackMatrixChanges(matrixOriginalStateContainer, rollbackService);
-			//    }
-			//}
+        //    //bool found = false;
+        //    //foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixContainerList)
+        //    //{
+        //    //    if (!matrixOriginalStateContainer.IsFullyScheduled())
+        //    //    {
+        //    //        found = true;
+        //    //        rollbackMatrixChanges(matrixOriginalStateContainer, rollbackService);
+        //    //    }
+        //    //}
 
-			//if (found)
-			//{
-			//    foreach (var dateOnly in selectedPeriod.DayCollection())
-			//    {
-			//        _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, optimizerPreferences.Rescheduling.ConsiderShortBreaks);
-			//    }
-			//}
+        //    //if (found)
+        //    //{
+        //    //    foreach (var dateOnly in selectedPeriod.DayCollection())
+        //    //    {
+        //    //        _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, optimizerPreferences.Rescheduling.ConsiderShortBreaks);
+        //    //    }
+        //    //}
 
-            // day off optimization
+        //    // day off optimization
 
-            optimizeDaysOff(matrixContainerList,
-                            optimizerPreferences,
-                            displayList[0],
-                            selectedPeriod,
-                            scheduleService,
-							teamSteadyStateDictionary);
+        //    optimizeDaysOff(matrixContainerList,
+        //                    optimizerPreferences,
+        //                    displayList[0],
+        //                    selectedPeriod,
+        //                    scheduleService,
+        //                    teamSteadyStateDictionary);
 
 
-            // we create a rollback service and do the changes and check for the case that not all white spots can be scheduled
-			//rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
-			//foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixContainerList)
-			//{
-			//    if (!matrixOriginalStateContainer.IsFullyScheduled())
-			//        rollbackMatrixChanges(matrixOriginalStateContainer, rollbackService);
-			//}
-        }
+        //    // we create a rollback service and do the changes and check for the case that not all white spots can be scheduled
+        //    //rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+        //    //foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixContainerList)
+        //    //{
+        //    //    if (!matrixOriginalStateContainer.IsFullyScheduled())
+        //    //        rollbackMatrixChanges(matrixOriginalStateContainer, rollbackService);
+        //    //}
+        //}
 
 		private IGroupPersonBuilderForOptimization callGroupPage(ISchedulingOptions schedulingOptions)
 		{
@@ -453,7 +453,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
 		{
 			var allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);  //this one handles userlocks as well
-			OptimizerHelperHelper.LockDaysForDayOffOptimization(allMatrixes, _container, selectedPeriod);
+            OptimizerHelperHelper.LockDaysForDayOffOptimization(allMatrixes, _container.Resolve<IRestrictionExtractor>(), optimizationPreferences, selectedPeriod);
 
 			var schedulingOptionsCreator = new SchedulingOptionsCreator();
 			var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
@@ -578,52 +578,52 @@ namespace Teleopti.Ccc.Win.Scheduling
 	        teamBlockIntradayOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		private void optimizeDaysOff(
-            IList<IScheduleMatrixOriginalStateContainer> matrixContainerList,
-            IOptimizationPreferences optimizerPreferences, 
-            IDayOffTemplate dayOffTemplate,
-            DateOnlyPeriod selectedPeriod, 
-            IScheduleService scheduleService,
-			IDictionary<Guid, bool> teamSteadyStateDictionary)
-        {
-            var rollbackService = _container.Resolve<ISchedulePartModifyAndRollbackService>();
-            ISchedulePartModifyAndRollbackService rollbackServiceDayOffConflict =
-                new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
-            IList<IGroupDayOffOptimizerContainer> optimizerContainers = new List<IGroupDayOffOptimizerContainer>();
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        //private void optimizeDaysOff(
+        //    IList<IScheduleMatrixOriginalStateContainer> matrixContainerList,
+        //    IOptimizationPreferences optimizerPreferences, 
+        //    IDayOffTemplate dayOffTemplate,
+        //    DateOnlyPeriod selectedPeriod, 
+        //    IScheduleService scheduleService,
+        //    IDictionary<Guid, bool> teamSteadyStateDictionary)
+        //{
+        //    var rollbackService = _container.Resolve<ISchedulePartModifyAndRollbackService>();
+        //    ISchedulePartModifyAndRollbackService rollbackServiceDayOffConflict =
+        //        new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
+        //    IList<IGroupDayOffOptimizerContainer> optimizerContainers = new List<IGroupDayOffOptimizerContainer>();
 
-			IList<IScheduleMatrixPro> allMatrix = matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
+        //    IList<IScheduleMatrixPro> allMatrix = matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
 
-        	for (int index = 0; index < matrixContainerList.Count; index++)
-            {
-                IScheduleMatrixOriginalStateContainer matrixContainer = matrixContainerList[index];
-                IScheduleMatrixPro matrix = matrixContainer.ScheduleMatrix;
+        //    for (int index = 0; index < matrixContainerList.Count; index++)
+        //    {
+        //        IScheduleMatrixOriginalStateContainer matrixContainer = matrixContainerList[index];
+        //        IScheduleMatrixPro matrix = matrixContainer.ScheduleMatrix;
 
-                IScheduleResultDataExtractor personalSkillsDataExtractor = OptimizerHelperHelper.CreatePersonalSkillsDataExtractor(optimizerPreferences.Advanced, matrix);
-                IPeriodValueCalculator localPeriodValueCalculator = OptimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, personalSkillsDataExtractor);
+        //        IScheduleResultDataExtractor personalSkillsDataExtractor = OptimizerHelperHelper.CreatePersonalSkillsDataExtractor(optimizerPreferences.Advanced, matrix);
+        //        IPeriodValueCalculator localPeriodValueCalculator = OptimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, personalSkillsDataExtractor);
 
-                IGroupDayOffOptimizerContainer optimizerContainer =
-                    createOptimizer(matrixContainer, optimizerPreferences.DaysOff, optimizerPreferences,
-                    rollbackService, dayOffTemplate, scheduleService, localPeriodValueCalculator,
-					rollbackServiceDayOffConflict, allMatrix, teamSteadyStateDictionary);
-                optimizerContainers.Add(optimizerContainer);
-            }
+        //        IGroupDayOffOptimizerContainer optimizerContainer =
+        //            createOptimizer(matrixContainer, optimizerPreferences.DaysOff, optimizerPreferences,
+        //            rollbackService, dayOffTemplate, scheduleService, localPeriodValueCalculator,
+        //            rollbackServiceDayOffConflict, allMatrix, teamSteadyStateDictionary);
+        //        optimizerContainers.Add(optimizerContainer);
+        //    }
 
-            IScheduleResultDataExtractor allSkillsDataExtractor =
-                OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizerPreferences.Advanced, selectedPeriod, _stateHolder);
-            IPeriodValueCalculator periodValueCalculator = OptimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, allSkillsDataExtractor);
-			var groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
-			var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
-			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
-        		new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
-			IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrix);
-			IGroupDayOffOptimizationResourceHelper groupDayOffOptimizationResourceHelper = new GroupDayOffOptimizationResourceHelper(_resourceOptimizationHelper);
-			var service = new GroupDayOffOptimizationService(periodValueCalculator, rollbackService, groupOptimizerFindMatrixesForGroup, optimizerPreferences.DaysOff, groupDayOffOptimizationResourceHelper);
+        //    IScheduleResultDataExtractor allSkillsDataExtractor =
+        //        OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizerPreferences.Advanced, selectedPeriod, _stateHolder);
+        //    IPeriodValueCalculator periodValueCalculator = OptimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, allSkillsDataExtractor);
+        //    var groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
+        //    var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
+        //    IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+        //        new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
+        //    IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrix);
+        //    IGroupDayOffOptimizationResourceHelper groupDayOffOptimizationResourceHelper = new GroupDayOffOptimizationResourceHelper(_resourceOptimizationHelper);
+        //    var service = new GroupDayOffOptimizationService(periodValueCalculator, rollbackService, groupOptimizerFindMatrixesForGroup, optimizerPreferences.DaysOff, groupDayOffOptimizationResourceHelper);
 
-			service.ReportProgress += resourceOptimizerPersonOptimized;
-            service.Execute(optimizerContainers, optimizerPreferences.Extra.KeepSameDaysOffInTeam);
-            service.ReportProgress -= resourceOptimizerPersonOptimized;
-        }
+        //    service.ReportProgress += resourceOptimizerPersonOptimized;
+        //    service.Execute(optimizerContainers, optimizerPreferences.Extra.KeepSameDaysOffInTeam);
+        //    service.ReportProgress -= resourceOptimizerPersonOptimized;
+        //}
 
 		//[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ResourceOptimizerProgressEventArgs.#ctor(Teleopti.Interfaces.Domain.IPerson,System.Double,System.Double,System.String)")]
 		//private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService)
@@ -649,128 +649,128 @@ namespace Teleopti.Ccc.Win.Scheduling
             _backgroundWorker.ReportProgress(1, e);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        private IGroupDayOffOptimizerContainer createOptimizer(
-            IScheduleMatrixOriginalStateContainer originalStateContainer,
-            IDaysOffPreferences dayOffPreferences,
-            IOptimizationPreferences optimizerPreferences,
-            ISchedulePartModifyAndRollbackService rollbackService,
-            IDayOffTemplate dayOffTemplate,
-            IScheduleService scheduleService,
-            IPeriodValueCalculator periodValueCalculatorForAllSkills,
-            ISchedulePartModifyAndRollbackService rollbackServiceDayOffConflict,
-            IList<IScheduleMatrixPro> allMatrixes,
-			IDictionary<Guid, bool> teamSteadyStateDictionary)
-        {
-            IScheduleMatrixPro scheduleMatrix = originalStateContainer.ScheduleMatrix;
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        //private IGroupDayOffOptimizerContainer createOptimizer(
+        //    IScheduleMatrixOriginalStateContainer originalStateContainer,
+        //    IDaysOffPreferences dayOffPreferences,
+        //    IOptimizationPreferences optimizerPreferences,
+        //    ISchedulePartModifyAndRollbackService rollbackService,
+        //    IDayOffTemplate dayOffTemplate,
+        //    IScheduleService scheduleService,
+        //    IPeriodValueCalculator periodValueCalculatorForAllSkills,
+        //    ISchedulePartModifyAndRollbackService rollbackServiceDayOffConflict,
+        //    IList<IScheduleMatrixPro> allMatrixes,
+        //    IDictionary<Guid, bool> teamSteadyStateDictionary)
+        //{
+        //    IScheduleMatrixPro scheduleMatrix = originalStateContainer.ScheduleMatrix;
 
-            IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
-               OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
+        //    IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
+        //       OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
 
-            IScheduleMatrixLockableBitArrayConverter scheduleMatrixArrayConverter =
-                new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix);
-			ILockableBitArray scheduleMatrixArray =
-				scheduleMatrixArrayConverter.Convert(dayOffPreferences.ConsiderWeekBefore, dayOffPreferences.ConsiderWeekAfter);
+        //    IScheduleMatrixLockableBitArrayConverter scheduleMatrixArrayConverter =
+        //        new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix);
+        //    ILockableBitArray scheduleMatrixArray =
+        //        scheduleMatrixArrayConverter.Convert(dayOffPreferences.ConsiderWeekBefore, dayOffPreferences.ConsiderWeekAfter);
             
-            // create decisionmakers
+        //    // create decisionmakers
 
-            IEnumerable<IDayOffDecisionMaker> decisionMakers =
-                OptimizerHelperHelper.CreateDecisionMakers(scheduleMatrixArray, optimizerPreferences, _container);
+        //    IEnumerable<IDayOffDecisionMaker> decisionMakers =
+        //        OptimizerHelperHelper.CreateDecisionMakers(scheduleMatrixArray, optimizerPreferences, _container);
 
-            IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions = new DayOffBackToLegalStateFunctions();
-			IDayOffDecisionMaker cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(new OfficialWeekendDays(), new TrueFalseRandomizer());
-            ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
-                = new SmartDayOffBackToLegalStateService(dayOffBackToLegalStateFunctions, dayOffPreferences, 25, cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker);
+        //    IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions = new DayOffBackToLegalStateFunctions();
+        //    IDayOffDecisionMaker cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(new OfficialWeekendDays(), new TrueFalseRandomizer());
+        //    ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
+        //        = new SmartDayOffBackToLegalStateService(dayOffBackToLegalStateFunctions, dayOffPreferences, 25, cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker);
 
-            var effectiveRestrictionCreator = _container.Resolve<IEffectiveRestrictionCreator>();
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);
-            var dayOffOptimizerConflictHandler = new DayOffOptimizerConflictHandler(scheduleMatrix, scheduleService,
-                                                                                    effectiveRestrictionCreator,
-                                                                                    rollbackServiceDayOffConflict,
-																					resourceCalculateDelayer);
+        //    var effectiveRestrictionCreator = _container.Resolve<IEffectiveRestrictionCreator>();
+        //    var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);
+        //    var dayOffOptimizerConflictHandler = new DayOffOptimizerConflictHandler(scheduleMatrix, scheduleService,
+        //                                                                            effectiveRestrictionCreator,
+        //                                                                            rollbackServiceDayOffConflict,
+        //                                                                            resourceCalculateDelayer);
 
-            var dayOffOptimizerValidator = _container.Resolve<IDayOffOptimizerValidator>();
-            var resourceCalculateDaysDecider = _container.Resolve<IResourceCalculateDaysDecider>();
-            var restrictionChecker = new RestrictionChecker();
-            var optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
-	        var scheduleResultDataExtractorProvider = _container.Resolve<IScheduleResultDataExtractorProvider>();
-        	var lockableBitArrayChangesTracker = _container.Resolve<ILockableBitArrayChangesTracker>();
-			var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
-        	var groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
-        	var groupPersonConsistentChecker = _container.Resolve<IGroupPersonConsistentChecker>();
-        	var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
-			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
-        	IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,
-        	                                                             groupPersonConsistentChecker,
-        	                                                             workShiftBackToLegalStateService,
-        	                                                             resourceOptimizationHelper,
-        	                                                             mainShiftOptimizeActivitySpecificationSetter);
-			var groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
-        	var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
-        	IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
-        		new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
-			IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrixes);
-			IGroupDayOffOptimizerValidateDayOffToRemove groupDayOffOptimizerValidateDayOffToRemove = new GroupDayOffOptimizerValidateDayOffToRemove(groupOptimizerFindMatrixesForGroup);
-			IGroupDayOffOptimizerValidateDayOffToAdd groupDayOffOptimizerValidateDayOffToAdd = new GroupDayOffOptimizerValidateDayOffToAdd(groupOptimizerFindMatrixesForGroup);
-			IGroupOptimizerValidateProposedDatesInSameMatrix groupOptimizerValidateProposedDatesInSameMatrix = new GroupOptimizerValidateProposedDatesInSameMatrix(groupOptimizerFindMatrixesForGroup);
-			IGroupOptimizerValidateProposedDatesInSameGroup groupOptimizerValidateProposedDatesInSameGroup = new GroupOptimizerValidateProposedDatesInSameGroup(groupPersonBuilderForOptimization, groupOptimizerFindMatrixesForGroup);
-			IGroupOptimizationValidatorRunner groupOptimizationValidatorRunner = new GroupOptimizationValidatorRunner(groupDayOffOptimizerValidateDayOffToRemove,
-				groupDayOffOptimizerValidateDayOffToAdd, groupOptimizerValidateProposedDatesInSameMatrix, groupOptimizerValidateProposedDatesInSameGroup);
+        //    var dayOffOptimizerValidator = _container.Resolve<IDayOffOptimizerValidator>();
+        //    var resourceCalculateDaysDecider = _container.Resolve<IResourceCalculateDaysDecider>();
+        //    var restrictionChecker = new RestrictionChecker();
+        //    var optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
+        //    var scheduleResultDataExtractorProvider = _container.Resolve<IScheduleResultDataExtractorProvider>();
+        //    var lockableBitArrayChangesTracker = _container.Resolve<ILockableBitArrayChangesTracker>();
+        //    var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
+        //    var groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
+        //    var groupPersonConsistentChecker = _container.Resolve<IGroupPersonConsistentChecker>();
+        //    var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
+        //    var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
+        //    IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,
+        //                                                                 groupPersonConsistentChecker,
+        //                                                                 workShiftBackToLegalStateService,
+        //                                                                 resourceOptimizationHelper,
+        //                                                                 mainShiftOptimizeActivitySpecificationSetter);
+        //    var groupPersonFactory = _container.Resolve<IGroupPersonFactory>();
+        //    var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
+        //    IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+        //        new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory, groupPagePerDateHolder);
+        //    IGroupOptimizerFindMatrixesForGroup groupOptimizerFindMatrixesForGroup = new GroupOptimizerFindMatrixesForGroup(groupPersonBuilderForOptimization, allMatrixes);
+        //    IGroupDayOffOptimizerValidateDayOffToRemove groupDayOffOptimizerValidateDayOffToRemove = new GroupDayOffOptimizerValidateDayOffToRemove(groupOptimizerFindMatrixesForGroup);
+        //    IGroupDayOffOptimizerValidateDayOffToAdd groupDayOffOptimizerValidateDayOffToAdd = new GroupDayOffOptimizerValidateDayOffToAdd(groupOptimizerFindMatrixesForGroup);
+        //    IGroupOptimizerValidateProposedDatesInSameMatrix groupOptimizerValidateProposedDatesInSameMatrix = new GroupOptimizerValidateProposedDatesInSameMatrix(groupOptimizerFindMatrixesForGroup);
+        //    IGroupOptimizerValidateProposedDatesInSameGroup groupOptimizerValidateProposedDatesInSameGroup = new GroupOptimizerValidateProposedDatesInSameGroup(groupPersonBuilderForOptimization, groupOptimizerFindMatrixesForGroup);
+        //    IGroupOptimizationValidatorRunner groupOptimizationValidatorRunner = new GroupOptimizationValidatorRunner(groupDayOffOptimizerValidateDayOffToRemove,
+        //        groupDayOffOptimizerValidateDayOffToAdd, groupOptimizerValidateProposedDatesInSameMatrix, groupOptimizerValidateProposedDatesInSameGroup);
 
-        	IGroupDayOffOptimizerCreator groupDayOffOptimizerCreator =
-        		new GroupDayOffOptimizerCreator(scheduleResultDataExtractorProvider, lockableBitArrayChangesTracker,
-        		                                rollbackService, groupSchedulingService,
-												groupMatrixHelper, groupOptimizationValidatorRunner, groupPersonBuilderForOptimization);
-            var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizationPreferences, originalStateContainer);
+        //    IGroupDayOffOptimizerCreator groupDayOffOptimizerCreator =
+        //        new GroupDayOffOptimizerCreator(scheduleResultDataExtractorProvider, lockableBitArrayChangesTracker,
+        //                                        rollbackService, groupSchedulingService,
+        //                                        groupMatrixHelper, groupOptimizationValidatorRunner, groupPersonBuilderForOptimization);
+        //    var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizationPreferences, originalStateContainer);
 
-            var schedulingOptionsCreator = new SchedulingOptionsCreator();
-        	var coherentChecker = new TeamSteadyStateCoherentChecker();
-        	var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-        	var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
-        	var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
+        //    var schedulingOptionsCreator = new SchedulingOptionsCreator();
+        //    var coherentChecker = new TeamSteadyStateCoherentChecker();
+        //    var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
+        //    var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
+        //    var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
 			
 
-			var dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(_stateHolder);
-			var populationStatisticsCalculator = new PopulationStatisticsCalculator();
-			var deviationStatisticData = new DeviationStatisticData();
-			var dayOffOptimizerPreMoveResultPredictor =
-				new DayOffOptimizerPreMoveResultPredictor(dailySkillForecastAndScheduledValueCalculator,
-														  populationStatisticsCalculator, deviationStatisticData);
+        //    var dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(_stateHolder);
+        //    var populationStatisticsCalculator = new PopulationStatisticsCalculator();
+        //    var deviationStatisticData = new DeviationStatisticData();
+        //    var dayOffOptimizerPreMoveResultPredictor =
+        //        new DayOffOptimizerPreMoveResultPredictor(dailySkillForecastAndScheduledValueCalculator,
+        //                                                  populationStatisticsCalculator, deviationStatisticData);
 
-            IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
-                = new DayOffDecisionMakerExecuter(rollbackService,
-                                                  dayOffBackToLegalStateService,
-                                                  dayOffTemplate,
-                                                  scheduleService,
-                                                  optimizerPreferences,
-                                                  periodValueCalculatorForAllSkills,
-                                                  workShiftBackToLegalStateService,
-                                                  effectiveRestrictionCreator,
-                                                  _resourceOptimizationHelper,
-                                                  resourceCalculateDaysDecider,
-                                                  dayOffOptimizerValidator,
-                                                  dayOffOptimizerConflictHandler, 
-                                                  originalStateContainer,
-                                                  optimizerOverLimitDecider,
-                                                  null,
-                                                  schedulingOptionsCreator,
-												  mainShiftOptimizeActivitySpecificationSetter,
-												  dayOffOptimizerPreMoveResultPredictor
-                                                  );
+        //    IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
+        //        = new DayOffDecisionMakerExecuter(rollbackService,
+        //                                          dayOffBackToLegalStateService,
+        //                                          dayOffTemplate,
+        //                                          scheduleService,
+        //                                          optimizerPreferences,
+        //                                          periodValueCalculatorForAllSkills,
+        //                                          workShiftBackToLegalStateService,
+        //                                          effectiveRestrictionCreator,
+        //                                          _resourceOptimizationHelper,
+        //                                          resourceCalculateDaysDecider,
+        //                                          dayOffOptimizerValidator,
+        //                                          dayOffOptimizerConflictHandler, 
+        //                                          originalStateContainer,
+        //                                          optimizerOverLimitDecider,
+        //                                          null,
+        //                                          schedulingOptionsCreator,
+        //                                          mainShiftOptimizeActivitySpecificationSetter,
+        //                                          dayOffOptimizerPreMoveResultPredictor
+        //                                          );
 
-            var optimizerContainer =
-                new GroupDayOffOptimizerContainer(scheduleMatrixArrayConverter,
-                                             decisionMakers,
-                                             optimizerPreferences,
-                                             scheduleMatrix,
-                                             dayOffDecisionMakerExecuter,
-                                             allMatrixes,
-                                             groupDayOffOptimizerCreator, 
-                                             schedulingOptionsCreator,
-											 teamSteadyStateMainShiftScheduler,
-											 teamSteadyStateHolder,
-											 _stateHolder.Schedules);
-            return optimizerContainer;
-        }
+        //    var optimizerContainer =
+        //        new GroupDayOffOptimizerContainer(scheduleMatrixArrayConverter,
+        //                                     decisionMakers,
+        //                                     optimizerPreferences,
+        //                                     scheduleMatrix,
+        //                                     dayOffDecisionMakerExecuter,
+        //                                     allMatrixes,
+        //                                     groupDayOffOptimizerCreator, 
+        //                                     schedulingOptionsCreator,
+        //                                     teamSteadyStateMainShiftScheduler,
+        //                                     teamSteadyStateHolder,
+        //                                     _stateHolder.Schedules);
+        //    return optimizerContainer;
+        //}
     }
 }
