@@ -48,7 +48,7 @@
 					@foreach (var time in Model.TimeLine)
 					{
 						<li class="teamschedule-timeline-time @(time.ShortTime.Contains(":") ? "minute" : "hour") absolute" style="@left: @(Math.Round(scheduleWidth*time.PositionPercent))px;">
-							<div class="teamschedule-timeline-label ui-corner-all" title="@time.LongTime">@time.ShortTime</div>
+							<div class="teamschedule-timeline-label ui-corner-all">@time.ShortTime</div>
 						</li>
 					}
 				</ul>
