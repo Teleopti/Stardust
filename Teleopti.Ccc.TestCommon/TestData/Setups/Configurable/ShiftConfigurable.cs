@@ -22,9 +22,15 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Activity { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
+
 		public string PersonalActivity { get; set; }
 		public DateTime PersonalActivityStartTime { get; set; }
 		public DateTime PersonalActivityEndTime { get; set; }
+
+		public string Overtime { get; set; }
+		public string OvertimeMultiplicatorDefinitionSet { get; set; }
+		public DateTime OvertimeStartTime { get; set; }
+		public DateTime OvertimeEndTime { get; set; }
 
 		public string LunchActivity { get; set; }
 		public bool Lunch3HoursAfterStart { get; set; }
@@ -77,6 +83,15 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				var personalActivityEndTimeUtc = timeZone.SafeConvertTimeToUtc(PersonalActivityEndTime);
 				var personalActivityPeriod = new DateTimePeriod(personalActivityStartTimeUtc, personalActivityEndTimeUtc);
 				assignment.AddPersonalLayer(personalActivity, personalActivityPeriod);
+			}
+
+			if (Overtime != null)
+			{
+				var multiplicatorDefinitionSet = new MultiplicatorDefinitionSetRepository(uow).LoadAll().Single(x => x.Name.Equals(OvertimeMultiplicatorDefinitionSet));
+				var overtimeStartTimeUtc = timeZone.SafeConvertTimeToUtc(OvertimeStartTime);
+				var overtimeEndTimeUtc = timeZone.SafeConvertTimeToUtc(OvertimeEndTime);
+				var overtimePeriod = new DateTimePeriod(overtimeStartTimeUtc, overtimeEndTimeUtc);
+				assignment.AddOvertimeLayer(activity, overtimePeriod, multiplicatorDefinitionSet);
 			}
 
 			// simply publish the schedule changed event so that the read model is updated

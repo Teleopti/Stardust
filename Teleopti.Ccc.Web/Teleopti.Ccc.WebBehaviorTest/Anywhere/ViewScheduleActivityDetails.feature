@@ -57,6 +57,42 @@ Scenario: View activity details in team schedule
 	| Start time | 08:00 |
 	| End time   | 11:00 |
 
+Scenario: View activity details in team schedule with night shift from yesterday
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' have a shift with
+	| Field                     | Value            |
+	| Shift category            | Day              |
+	| Activity                  | Phone            |
+	| Start time                | 2013-10-09 22:00 |
+	| End time                  | 2013-10-10 06:00 |
+	| Lunch activity            | Lunch            |
+	| Lunch 3 hours after start | true             |
+	When I view schedules for 'Team green' on '2013-10-10'
+	And I select the schedule activity for 'Pierre Baldi' with start time '00:00'
+	Then I should see schedule activity details for 'Pierre Baldi' with
+	| Field      | Value    |
+	| Name       | Phone    |
+	| Start time | 22:00 -1 |
+	| End time   | 01:00    |
+
+Scenario: View activity details in team schedule with night shift ending tomorrow
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' have a shift with
+	| Field                     | Value            |
+	| Shift category            | Day              |
+	| Activity                  | Phone            |
+	| Start time                | 2013-10-10 22:00 |
+	| End time                  | 2013-10-11 06:00 |
+	| Lunch activity            | Lunch            |
+	| Lunch 3 hours after start | true             |
+	When I view schedules for 'Team green' on '2013-10-10'
+	And I select the schedule activity for 'Pierre Baldi' with start time '02:00'
+	Then I should see schedule activity details for 'Pierre Baldi' with
+	| Field      | Value    |
+	| Name       | Phone    |
+	| Start time | 02:00 +1 |
+	| End time   | 06:00 +1 |
+
 Scenario: View personal activity details in team schedule
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
@@ -78,6 +114,31 @@ Scenario: View personal activity details in team schedule
 	| Is Personal | true     |
 	| Start time  | 14:00    |
 	| End time    | 15:00    |
+
+Scenario: View overtime details in team schedule
+	Given I have the role 'Anywhere Team Green'
+	And there is a multiplicator definition set named "Overtime After work"
+	And 'Pierre Baldi' have a shift with
+	| Field                                 | Value               |
+	| Shift category                        | Day                 |
+	| Activity                              | Phone               |
+	| Start time                            | 2013-10-10 08:00    |
+	| End time                              | 2013-10-10 17:00    |
+	| Lunch activity                        | Lunch               |
+	| Lunch 3 hours after start             | true                |
+	| Overtime                              | Phone               |
+	| Overtime multiplicator definition set | Overtime After work |
+	| Overtime start time                   | 2013-10-10 17:00    |
+	| Overtime end time                     | 2013-10-10 18:00    |
+	When I view schedules for 'Team green' on '2013-10-10'
+	And I select the schedule activity for 'Pierre Baldi' with start time '17:00'
+	Then I should see schedule activity details for 'Pierre Baldi' with
+	| Field                        | Value               |
+	| Name                         | Phone               |
+	| Is Overtime                  | true                |
+	| Start time                   | 17:00               |
+	| End time                     | 18:00               |
+	| Multiplicator definition set | Overtime After work |
 
 Scenario: View absence details in team schedule
 	Given I have the role 'Anywhere Team Green'
