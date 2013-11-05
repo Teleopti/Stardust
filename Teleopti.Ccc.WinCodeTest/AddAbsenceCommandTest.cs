@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -186,6 +187,29 @@ namespace Teleopti.Ccc.WinCodeTest
 			                                  .Constraints(
 				                                  Rhino.Mocks.Constraints.Is.Matching<IAbsenceLayer>(
 					                                  p => p.Period.StartDateTime == period.StartDateTime)));
+		}
+
+
+		[Test]
+		public void ShouldUseDefaultPeriodInDialogIfIsSingelAgentRequest()
+		{
+			var viewBase = MockRepository.GenerateMock<IScheduleViewBase>();
+			var start = new DateTime(2012, 7, 16, 10, 0, 0, DateTimeKind.Utc);
+			var end = new DateTime(2012, 7, 16, 12, 0, 0, DateTimeKind.Utc);
+			var defaultPeriod = new DateTimePeriod(start, end);
+			var dialog = MockRepository.GenerateMock<IAddLayerViewModel<IAbsence>>();
+			_target = new AddAbsenceCommand(_schedulerStateHolder, viewBase, _schedulePresenterBase, _selectedSchedules, _principalAuthorization);
+
+			viewBase.Stub(x => x.SelectedSchedules()).Return(_selectedSchedules);
+			viewBase.Stub(x => x.CreateAddAbsenceViewModel(null, null, TimeZoneInfoFactory.StockholmTimeZoneInfo()))
+						.Constraints(Rhino.Mocks.Constraints.Is.Anything(),
+						new Rhino.Mocks.Constraints.PredicateConstraint<ISetupDateTimePeriod>(period => period.Period == defaultPeriod),
+						Rhino.Mocks.Constraints.Is.Anything()).Return(dialog);
+
+			dialog.Stub(x => x.Result).Return(false);
+
+			_target.DefaultPeriod = defaultPeriod;
+			_target.Execute();
 		}
 	}
 }
