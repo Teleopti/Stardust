@@ -93,8 +93,8 @@
 
 			this.button = $("<button type='button'>&nbsp;</button>")
 				.attr("tabIndex", -1)
-				.attr("title", "Show All Items")
 				.addClass("ui-combobox-button")
+				.attr("title", select.attr('title'))
 				.insertAfter(input)
 				.button({
 					icons: {
