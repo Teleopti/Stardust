@@ -67,6 +67,7 @@ Scenario: View shift details in team schedule
 	| Break end time   | 2013-10-10 14:15 |
 	When I view schedules for 'Team green' on '2013-10-10'
 	And I select any schedule activity for 'Pierre Baldi'
+	And I click description toggle button
 	Then I should see schedule shift details for 'Pierre Baldi' with
 	| Name        | Color  |
 	| Phone       | Green  |
