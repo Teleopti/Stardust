@@ -326,3 +326,16 @@ CREATE CLUSTERED INDEX [CIX_DBA_VirtualFileStatsHistory_RecordedDateTime] ON [db
 )
 END
 GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-11-05
+--Desc: Bug #25601 - Missing index to support Megamart integration
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[mart].[dim_acd_login]') AND name = N'IX_dim_acd_login_time_zone_id')
+CREATE NONCLUSTERED INDEX [IX_dim_acd_login_time_zone_id]
+ON [mart].[dim_acd_login] ([time_zone_id])
+
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[mart].[dim_person]') AND name = N'IX_dim_person_time_zone_id')
+CREATE NONCLUSTERED INDEX [IX_dim_person_time_zone_id]
+ON [mart].[dim_person] ([time_zone_id])
