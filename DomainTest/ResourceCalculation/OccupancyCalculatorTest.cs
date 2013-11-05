@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _skill2 = SkillFactory.CreateSkill("s2");
             _skill3 = SkillFactory.CreateSkill("s3");
             _relevantSkillStaffPeriods = createSkillStaffPeriodsForTest();
-            _relativeKeyedSkillResourceResources = CreatePersonSkillResourcesForTest();
+            _relativeKeyedSkillResourceResources = createPersonSkillResourcesForTest();
 
             _target = new OccupancyCalculator(_relevantSkillStaffPeriods, _relativeKeyedSkillResourceResources);
         }
@@ -89,17 +88,20 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var task1 = new Task(150,TimeSpan.FromSeconds(110), TimeSpan.FromSeconds(10));
             var serviceAgreement = new ServiceAgreement(new ServiceLevel(new Percent(0.8), 20), new Percent(0), new Percent(1));
             var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod, task1, serviceAgreement);
-			ssp1.SetSkillDay(SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("skill"),dtp.StartDateTime));
+			skillStaffPeriod1.SetSkillDay(SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("skill"), dateTimePeriod.StartDateTime));
+			skillStaffPeriod1.CalculateStaff();
             skillPeriodDictionary.Add(_skill1, skillStaffPeriod1);
 
             var task2 = new Task(100, TimeSpan.FromSeconds(170), TimeSpan.FromSeconds(10));
             var skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod, task2, serviceAgreement);
-			ssp2.SetSkillDay(SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("skill"), dtp.StartDateTime));
+			skillStaffPeriod2.SetSkillDay(SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("skill"), dateTimePeriod.StartDateTime));
+			skillStaffPeriod2.CalculateStaff();
             skillPeriodDictionary.Add(_skill2, skillStaffPeriod2);
 
             var task3 = new Task(50, TimeSpan.FromSeconds(50), TimeSpan.FromSeconds(10));
             var skillStaffPeriod3 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod, task3, serviceAgreement);
-			ssp3.SetSkillDay(SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("skill"), dtp.StartDateTime));
+			skillStaffPeriod3.SetSkillDay(SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("skill"), dateTimePeriod.StartDateTime));
+			skillStaffPeriod3.CalculateStaff();
             skillPeriodDictionary.Add(_skill3, skillStaffPeriod3);
 
             return skillPeriodDictionary;
@@ -112,49 +114,39 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         /// NOTE: See the OccupancyCalculatorTestSet.xls excel sheet for source of data.
         /// The test data constructed here is the same as has been defined on the excel sheet.
         /// </remarks>
-        private KeyedSkillResourceDictionary CreatePersonSkillResourcesForTest()
+        private KeyedSkillResourceDictionary createPersonSkillResourcesForTest()
         {
-            KeyedSkillResourceDictionary ret = new KeyedSkillResourceDictionary();
+			var personSkillDictionary = new KeyedSkillResourceDictionary();
 
-            var p1 = new Person();
             var d1 = new Dictionary<ISkill, double> {{_skill1, 0.33}};
-	        personSkillDictionary.Add(p1, d1);
+	        personSkillDictionary.Add("p1", d1);
 
-            var p2 = new Person();
             var d2 = new Dictionary<ISkill, double> {{_skill2, 0.66}, {_skill3, 0.66}};
-	        personSkillDictionary.Add(p2, d2);
+	        personSkillDictionary.Add("p2", d2);
 
-            var p3 = new Person();
             var d3 = new Dictionary<ISkill, double> {{_skill2, 1}};
-	        personSkillDictionary.Add(p3, d3);
+	        personSkillDictionary.Add("p3", d3);
 
-            var p4 = new Person();
             var d4 = new Dictionary<ISkill, double> {{_skill1, 1}, {_skill2, 1}, {_skill3, 1}};
-	        personSkillDictionary.Add(p4, d4);
+	        personSkillDictionary.Add("p4", d4);
 
-			var p5 = new Person();
-            var d5 = new Dictionary<ISkill, double> {{_skill1, 0.33}, {_skill2, 0.33}, {_skill3, 0.33}};
-	        personSkillDictionary.Add(p5, d5);
+			var d5 = new Dictionary<ISkill, double> {{_skill1, 0.33}, {_skill2, 0.33}, {_skill3, 0.33}};
+	        personSkillDictionary.Add("p5", d5);
 
-			var p6 = new Person();
-            var d6 = new Dictionary<ISkill, double> {{_skill1, 1}, {_skill2, 1}};
-	        personSkillDictionary.Add(p6, d6);
+			var d6 = new Dictionary<ISkill, double> {{_skill1, 1}, {_skill2, 1}};
+	        personSkillDictionary.Add("p6", d6);
 
-			var p7 = new Person();
-            var d7 = new Dictionary<ISkill, double> {{_skill1, 0.66}};
-	        personSkillDictionary.Add(p7, d7);
+			var d7 = new Dictionary<ISkill, double> {{_skill1, 0.66}};
+	        personSkillDictionary.Add("p7", d7);
 
-			var p8 = new Person();
-            var d8 = new Dictionary<ISkill, double> {{_skill3, 1}};
-	        personSkillDictionary.Add(p8, d8);
+			var d8 = new Dictionary<ISkill, double> {{_skill3, 1}};
+	        personSkillDictionary.Add("p8", d8);
 
-			var p9 = new Person();
-            var d9 = new Dictionary<ISkill, double> {{_skill2, 1}, {_skill3, 1}};
-	        personSkillDictionary.Add(p9, d9);
+			var d9 = new Dictionary<ISkill, double> {{_skill2, 1}, {_skill3, 1}};
+	        personSkillDictionary.Add("p9", d9);
 
-			var p10 = new Person();
             var d10 = new Dictionary<ISkill, double> {{_skill1, 1}};
-	        personSkillDictionary.Add(p10, d10);
+	        personSkillDictionary.Add("p10", d10);
 
             return personSkillDictionary;
         }
