@@ -41,10 +41,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 				var openPeriods = person.WorkflowControlSet.AbsenceRequestOpenPeriods;
 
-				var validOpenPeriods = openPeriods.Where(
+				var unSorted = openPeriods.Where(
 					absenceRequestOpenPeriod => 
 					absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() == typeof(BudgetGroupAllowanceValidator) ||
 					absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() == typeof(BudgetGroupHeadCountValidator)).ToList();
+
+				var validOpenPeriods = (from p in unSorted
+							 orderby p.StaffingThresholdValidatorList.IndexOf(p.StaffingThresholdValidator)
+							 select p).ToList();
 
 				var invalidOpenPeriods = openPeriods.Where(
 					absenceRequestOpenPeriod =>
@@ -96,7 +100,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				orderby g.Key
 				select new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>
 					(g.Key, TimeSpan.FromTicks(g.Sum(p => p.Time.Ticks)), TimeSpan.FromTicks(g.Sum(p => p.Heads.Ticks)), g.Last(o => o.Date == g.Key).Allowance,
-					g.First(o => o.Date == g.Key).Availability, g.Last(o => o.Date == g.Key).UseHeadCount);
+					g.Last(o => o.Date == g.Key).Availability, g.Last(o => o.Date == g.Key).UseHeadCount);
 		}
 
 		
