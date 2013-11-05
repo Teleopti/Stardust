@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -14,8 +13,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 	[TestFixture]
 	public class AbsenceRequestProbabilityProviderTest
 	{
-		private AbsenceRequestProbabilityProvider _target;
-
+		
 		[Test]
 		public void ShouldCalculateYellowIfOneLeft()
 		{
