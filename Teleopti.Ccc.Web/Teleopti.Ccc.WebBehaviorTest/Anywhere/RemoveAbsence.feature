@@ -118,7 +118,7 @@ Scenario: Remove one of two absences
 	| Start time | 2013-05-06 10:00 |
 	| End time   | 2013-05-06 11:00 |
 	And I should see 1 absences in the absence list
-	And I should not see a shift layer with
+	And I should not see a scheduled activity with
 	| Field      | Value |
 	| Start time | 15:00 |
 	| End time   | 16:00 |
