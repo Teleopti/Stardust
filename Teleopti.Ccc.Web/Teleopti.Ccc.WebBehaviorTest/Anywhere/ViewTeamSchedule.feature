@@ -134,7 +134,6 @@ Scenario: View team schedule with night shift from yesterday
 	| Start time | End time | Color  |
 	| 00:00      | 04:00    | Green  |
 
-@ignore
 Scenario: View team schedule with night shift ending tomorrow
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
