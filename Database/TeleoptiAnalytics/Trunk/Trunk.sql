@@ -302,3 +302,13 @@ INSERT INTO mart.report (
 		@CollectionId)
 END
 GO
+
+----------------  
+--Name: KJ
+--Date: 2013-11-05
+--Desc: New jobstep for mart.fact_agent_skill
+----------------
+IF NOT EXISTS (SELECT 1 FROM [mart].[etl_jobstep] WHERE jobstep_name=N'fact_agent_skill' AND jobstep_id=83)
+INSERT [mart].[etl_jobstep] ([jobstep_id], [jobstep_name]) VALUES(83,N'fact_agent_skill')
+GO
+
