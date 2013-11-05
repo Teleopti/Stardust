@@ -592,7 +592,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripButtonMainSave.ToolTipText = "xxSave";
 			this.ribbonControlWorksheet.SetUseInCustomQuickAccessDialog(this.toolStripButtonMainSave, true);
 			this.ribbonControlWorksheet.SetUseInQuickAccessMenu(this.toolStripButtonMainSave, false);
-			this.toolStripButtonMainSave.Click += new System.EventHandler(this.toolStripButtonMainSave_Click);
+			this.toolStripButtonMainSave.MouseUp += toolStripButtonMainSave_MouseUp;
 			// 
 			// toolStripButtonMainNew
 			// 

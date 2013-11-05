@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                         break;
 
                     case Keys.Control | Keys.S:
-                        toolStripButtonMainSave_Click(this, null);
+		                toolStripButtonMainSave_MouseUp(this, null);
                         break;
 
 					case Keys.Control | Keys.N:
@@ -516,61 +516,56 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             _gridConstructor.View.Grid.CurrentCell.MoveTo(currentRow, currentCol);
         }
 
-	    private DateTime _lastClickSaved;
-        private void toolStripButtonMainSave_Click(object sender, EventArgs e)
-        {
-            if(_readOnly) return;
-			// bloody syncfusion bug that fires click event twice in quick access toolbar
-			if (_lastClickSaved.AddSeconds(1) > DateTime.Now) return;
-	        _lastClickSaved = DateTime.Now;
-            Cursor.Current = Cursors.WaitCursor;
+		private void toolStripButtonMainSave_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+		{
+			if (_readOnly) return;
+		
+			Cursor.Current = Cursors.WaitCursor;
 
-            //Set current cell out of focus to make changes reflect to the data.
-            SetCurrentCellOutOfFocus();
+			//Set current cell out of focus to make changes reflect to the data.
+			SetCurrentCellOutOfFocus();
 			if (KillMode) return;
-            try
-            {
-                // Add Person rotations and Availability to Repository
-                _filteredPeopleHolder.AddRootsToRepository();
+			try
+			{
+				// Add Person rotations and Availability to Repository
+				_filteredPeopleHolder.AddRootsToRepository();
 
                 if (!_filteredPeopleHolder.GetUnitOfWork.IsDirty())
-                {
-                    _filteredPeopleHolder.ResetBoldProperty();
+				{
+					_filteredPeopleHolder.ResetBoldProperty();
 					_gridConstructor.View.Invalidate();
-                    return;
-                }
+					return;
+				}
 
-                if (!_gridConstructor.View.ValidateBeforeSave())
+				if (!_gridConstructor.View.ValidateBeforeSave())
                 {
-					_lastClickSaved = DateTime.Now;
-	                return;
+					return;
                 }
 
-                Persist();
-            }
-            catch (DataSourceException ex)
-            {
-                DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
-                FormKill();
-                return;
-            }
-            if (KillMode) return;
+				Persist();
+			}
+			catch (DataSourceException ex)
+			{
+				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
+				FormKill();
+				return;
+			}
+			if (KillMode) return;
 
-            //Clear validate user credential collection.
-            _filteredPeopleHolder.ValidateUserCredentialsCollection.Clear();
+			//Clear validate user credential collection.
+			_filteredPeopleHolder.ValidateUserCredentialsCollection.Clear();
 
-            //Clear
-            _filteredPeopleHolder.ValidatePasswordPolicy.Clear();
+			//Clear
+			_filteredPeopleHolder.ValidatePasswordPolicy.Clear();
 
-            //View data saved.
-            _gridConstructor.View.ViewDataSaved(_gridConstructor.View, new EventArgs());
+			//View data saved.
+			_gridConstructor.View.ViewDataSaved(_gridConstructor.View, new EventArgs());
 
-            //Refresh grid control
-            _gridConstructor.View.Invalidate();
+			//Refresh grid control
+			_gridConstructor.View.Invalidate();
 
-            Cursor.Current = Cursors.Default;
-        }
-
+			Cursor.Current = Cursors.Default;
+		}
 
         private void notifySaveChanges()
         {
