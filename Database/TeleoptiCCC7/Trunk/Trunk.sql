@@ -528,3 +528,21 @@ INCLUDE ( 	[Id],
 	[EndDateTime]
 	)
 GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-11-05
+--Desc: Bug #25599 - ReadModel.GetNextActivityStartTime is super sloooow
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[ReadModel].[ScheduleProjectionReadOnly]') AND name = N'IX_ScheduleProjectionReadOnly_PersonId_EndDateTime_StartDateTime')
+CREATE NONCLUSTERED INDEX IX_ScheduleProjectionReadOnly_PersonId_EndDateTime_StartDateTime
+ON [ReadModel].[ScheduleProjectionReadOnly]
+(
+	[PersonId],
+	[EndDateTime]
+)
+INCLUDE
+(
+	[StartDateTime]
+)
+GO
