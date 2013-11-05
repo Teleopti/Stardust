@@ -17,6 +17,9 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             labelLogOn.Text = Resources.PleaseEnterYourLogonCredentials;
             labelLoginName.Text = Resources.LoginNameColon;
             labelPassword.Text = Resources.PasswordColon;
+			buttonLogOnCancel.Text = Resources.Cancel;
+			buttonLogOnOK.Text = Resources.Ok;
+			btnBack.Text = Resources.Back;
 		}
 
         public void SetData()
@@ -35,7 +38,12 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 	        _model = null;
 	    }
 
-        private void LoginScreen_Enter(object sender, System.EventArgs e)
+		public void SetBackButtonVisible(bool visible)
+		{
+			btnBack.Visible = visible;
+		}
+
+		private void LoginScreen_Enter(object sender, System.EventArgs e)
         {
             textBoxLogOnName.Select(0, textBoxLogOnName.Text.Length);
             textBoxLogOnName.Focus();
@@ -45,6 +53,21 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		{
 			_logonView.HandleKeyPress(msg, keyData, textBoxLogOnName.Focused || textBoxPassword.Focused);
 			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
+		private void btnBack_Click(object sender, System.EventArgs e)
+		{
+			_logonView.BtnBackClick(sender, e);
+		}
+
+		private void buttonLogOnOK_Click(object sender, System.EventArgs e)
+		{
+			_logonView.ButtonLogOnOkClick(sender, e);
+		}
+
+		private void buttonLogOnCancel_Click(object sender, System.EventArgs e)
+		{
+			_logonView.ButtonLogOnCancelClick(sender, e);
 		}
 	}
 }
