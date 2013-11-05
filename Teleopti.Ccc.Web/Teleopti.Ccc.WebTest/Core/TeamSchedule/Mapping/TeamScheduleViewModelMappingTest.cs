@@ -303,8 +303,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
-			var sep = CultureInfo.CurrentUICulture.DateTimeFormat.TimeSeparator;
-			var expected = new[] {sep + "45", "09", "10", "11", sep + "15"};
+			var expected = new[] {"08:45", "09", "10", "11", "11:15"};
 			result.TimeLine.Select(t => t.ShortTime).Should().Have.SameSequenceAs(expected);
 		}
 
@@ -317,8 +316,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
-			var sep = CultureInfo.CurrentUICulture.DateTimeFormat.TimeSeparator;
-			var expected = new[] { sep + "45", "9 AM", "10 AM", "11 AM", "12 PM", sep + "15" };
+			var expected = new[] { "08:45", "9 AM", "10 AM", "11 AM", "12 PM", "12:15" };
 			result.TimeLine.Select(t => t.ShortTime).Should().Have.SameSequenceAs(expected);
 		}
 
@@ -332,7 +330,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
-			var expected = new[] { ":45", "10", "11", "12", ":15" };
+			var expected = new[] { "09:45", "10", "11", "12", "12:15" };
 			result.TimeLine.Select(t => t.ShortTime).Should().Have.SameSequenceAs(expected);
 		}
 
