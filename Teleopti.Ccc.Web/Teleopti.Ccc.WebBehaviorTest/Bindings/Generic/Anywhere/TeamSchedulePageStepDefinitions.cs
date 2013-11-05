@@ -30,7 +30,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I select the schedule activity for '(.*)' with start time '(.*)'")]
 		public void WhenISelectTheScheduleActivityForWithStartTime(string name, string startTime)
 		{
-			Browser.Interactions.ClickUsingJQuery(string.Format(".person:contains('{0}') .shift .layer[data-start-time~='{1}']", name, startTime));
+			if (startTime.StartsWith("00:00"))
+				Browser.Interactions.ClickUsingJQuery(string.Format(".person:contains('{0}') .shift .layer:first-child", name));
+			else
+				Browser.Interactions.ClickUsingJQuery(string.Format(".person:contains('{0}') .shift .layer[data-start-time~='{1}']", name, startTime));
 		}
 
 		[When(@"I select any schedule activity for '(.*)'")]
@@ -44,22 +47,36 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void ThenIShouldSeeScheduleActivityDetailsForWith(string name, Table table)
 		{
 			var scheduleActivity = table.CreateInstance<ScheduleActivityInfo>();
-			var selector = string.Format(".person:contains('{0}') .activity-details", name);
-			Browser.Interactions.AssertAnyContains(selector, scheduleActivity.Name);
-			Browser.Interactions.AssertAnyContains(selector, scheduleActivity.StartTime);
-			Browser.Interactions.AssertAnyContains(selector, scheduleActivity.EndTime);
+			const string selector = ".person:contains('{0}') ~ tr .activity-details:contains('{1}')";
+			Browser.Interactions.AssertExistsUsingJQuery(selector, name, scheduleActivity.Name);
+			Browser.Interactions.AssertExistsUsingJQuery(selector, name, scheduleActivity.StartTime);
+			Browser.Interactions.AssertExistsUsingJQuery(selector, name, scheduleActivity.EndTime);
+			if(!string.IsNullOrEmpty(scheduleActivity.TextColor))
+				Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') ~ tr .activity-details[style*='color: {1}']", name, colorNameToCss(scheduleActivity.TextColor));
 		}
 
 		[Then(@"I should see schedule shift details for '(.*)' with")]
 		public void ThenIShouldSeeScheduleShiftDetailsForWith(string name, Table table)
 		{
 			var scheduleShiftInfos = table.CreateSet<ScheduleShiftInfo>();
-			var selector = string.Format(".person:contains('{0}') .shift-details", name);
+			var selector = string.Format(".person:contains('{0}') ~ tr .shift-details", name);
 			foreach (var scheduleShiftInfo in scheduleShiftInfos)
 			{
-				Browser.Interactions.AssertExistsUsingJQuery(selector + "[style*='background-color:" +
-				                                             colorNameToCss(scheduleShiftInfo.Color) + "']:contains('" +
-				                                             scheduleShiftInfo.Name + "')");
+				if (!string.IsNullOrEmpty(scheduleShiftInfo.TextColor))
+				{
+					Browser.Interactions.AssertExistsUsingJQuery(
+						string.Format(selector + " .label[style*='background-color: {0}; color: {1}']:contains('{2}')",
+						              colorNameToCss(scheduleShiftInfo.Color),
+						              colorNameToCss(scheduleShiftInfo.TextColor),
+						              scheduleShiftInfo.Name)
+						);
+				}
+				else
+				{
+					Browser.Interactions.AssertExistsUsingJQuery(selector + " .label[style*='background-color: " +
+					                                             colorNameToCss(scheduleShiftInfo.Color) + "']:contains('" +
+					                                             scheduleShiftInfo.Name + "')");
+				}
 			}
 		}
 
@@ -331,12 +348,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public string Name { get; set; }
 		public string StartTime { get; set; }
 		public string EndTime { get; set; }
+		public string TextColor { get; set; }
 	}
 
 	public class ScheduleShiftInfo
 	{
 		public string Name { get; set; }
 		public string Color { get; set; }
+		public string TextColor { get; set; }
 	}
 
 
