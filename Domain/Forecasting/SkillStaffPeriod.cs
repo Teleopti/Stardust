@@ -478,15 +478,25 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
 
         	var castedPayLoad = ((SkillStaff) Payload);
-
+	        double demandWithoutEfficiency;
 	        if (!Payload.ManualAgents.HasValue && !Payload.NoneBlendDemand.HasValue)
+	        {
 		        castedPayLoad.ForecastedIncomingDemand = traffic;
+		        demandWithoutEfficiency = traffic;
+	        }
 	        else
-		        castedPayLoad.ForecastedIncomingDemand = Payload.ManualAgents.HasValue
-			                                                 ? Payload.ManualAgents.Value
-			                                                 : Payload.NoneBlendDemand.Value;
-
-	        var demandWithoutEfficiency = castedPayLoad.ForecastedIncomingDemand*castedPayLoad.Efficiency.Value;
+			{
+				if (Payload.ManualAgents.HasValue)
+				{
+					castedPayLoad.ForecastedIncomingDemand = Payload.ManualAgents.Value;
+					demandWithoutEfficiency = Payload.ManualAgents.Value;
+				}
+				else
+				{
+					castedPayLoad.ForecastedIncomingDemand = Payload.NoneBlendDemand.Value;
+					demandWithoutEfficiency = Payload.NoneBlendDemand.Value;
+				}
+			}
 
 			castedPayLoad.CalculatedOccupancy = _staffingCalculatorService.Utilization(demandWithoutEfficiency, Payload.TaskData.Tasks,
                                                       Payload.TaskData.AverageTaskTime.TotalSeconds +
