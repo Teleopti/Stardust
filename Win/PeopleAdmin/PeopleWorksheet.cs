@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                         break;
 
                     case Keys.Control | Keys.S:
-                        toolStripButtonMainSave_Click(this, null);
+		                toolStripButtonMainSave_MouseUp(this, null);
                         break;
 
 					case Keys.Control | Keys.N:
@@ -529,54 +529,53 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             _gridConstructor.View.Grid.CurrentCell.MoveTo(currentRow, currentCol);
         }
 
-        private void toolStripButtonMainSave_Click(object sender, EventArgs e)
-        {
-            if(_readOnly) return;
-            Cursor.Current = Cursors.WaitCursor;
+		private void toolStripButtonMainSave_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+		{
+			if (_readOnly) return;
+			Cursor.Current = Cursors.WaitCursor;
 
-            //Set current cell out of focus to make changes reflect to the data.
-            SetCurrentCellOutOfFocus();
+			//Set current cell out of focus to make changes reflect to the data.
+			SetCurrentCellOutOfFocus();
 			if (KillMode) return;
-            try
-            {
-                // Add Person rotations and Availability to Repository
-                _filteredPeopleHolder.AddRootsToRepository();
+			try
+			{
+				// Add Person rotations and Availability to Repository
+				_filteredPeopleHolder.AddRootsToRepository();
 
-                if (!_filteredPeopleHolder.UnitOfWork.IsDirty())
-                {
-                    _filteredPeopleHolder.ResetBoldProperty();
+				if (!_filteredPeopleHolder.UnitOfWork.IsDirty())
+				{
+					_filteredPeopleHolder.ResetBoldProperty();
 					_gridConstructor.View.Invalidate();
-                    return;
-                }
+					return;
+				}
 
-                if (!_gridConstructor.View.ValidateBeforeSave())
-                    return;
+				if (!_gridConstructor.View.ValidateBeforeSave())
+					return;
 
-                Persist();
-            }
-            catch (DataSourceException ex)
-            {
-                DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
-                FormKill();
-                return;
-            }
-            if (KillMode) return;
+				Persist();
+			}
+			catch (DataSourceException ex)
+			{
+				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
+				FormKill();
+				return;
+			}
+			if (KillMode) return;
 
-            //Clear validate user credential collection.
-            _filteredPeopleHolder.ValidateUserCredentialsCollection.Clear();
+			//Clear validate user credential collection.
+			_filteredPeopleHolder.ValidateUserCredentialsCollection.Clear();
 
-            //Clear
-            _filteredPeopleHolder.ValidatePasswordPolicy.Clear();
+			//Clear
+			_filteredPeopleHolder.ValidatePasswordPolicy.Clear();
 
-            //View data saved.
-            _gridConstructor.View.ViewDataSaved(_gridConstructor.View, new EventArgs());
+			//View data saved.
+			_gridConstructor.View.ViewDataSaved(_gridConstructor.View, new EventArgs());
 
-            //Refresh grid control
-            _gridConstructor.View.Invalidate();
+			//Refresh grid control
+			_gridConstructor.View.Invalidate();
 
-            Cursor.Current = Cursors.Default;
-        }
-
+			Cursor.Current = Cursors.Default;
+		}
 
         private void notifySaveChanges()
         {
