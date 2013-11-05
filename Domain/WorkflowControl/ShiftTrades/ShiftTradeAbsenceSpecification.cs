@@ -39,12 +39,33 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 	{
 		public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
 		{
-			return obj.All(shiftTradeSwapDetail => shiftTradeSwapDetail.SchedulePartFrom.DateOnlyAsPeriod.DateOnly == shiftTradeSwapDetail.SchedulePartTo.DateOnlyAsPeriod.DateOnly);
+			foreach (var shiftTradeSwapDetail in obj)
+			{				
+				var fromStartUtc = shiftTradeSwapDetail.SchedulePartFrom.Period.StartDateTime;
+				var toStartUtc = shiftTradeSwapDetail.SchedulePartTo.Period.StartDateTime;
+
+				var sendersTimeZone = shiftTradeSwapDetail.PersonFrom.PermissionInformation.DefaultTimeZone();
+				var recieversTimeZone = shiftTradeSwapDetail.PersonFrom.PermissionInformation.DefaultTimeZone();
+
+				var myStartMyShift = TimeZoneInfo.ConvertTimeFromUtc(fromStartUtc, sendersTimeZone).Date;
+				var myStartOtherShift = TimeZoneInfo.ConvertTimeFromUtc(toStartUtc, sendersTimeZone).Date;
+
+				var otherStartHisShift = TimeZoneInfo.ConvertTimeFromUtc(toStartUtc, recieversTimeZone).Date;
+				var otherStartMysShift = TimeZoneInfo.ConvertTimeFromUtc(fromStartUtc, recieversTimeZone).Date;
+
+				if (myStartMyShift != myStartOtherShift || otherStartHisShift != otherStartMysShift) return false;
+
+
+
+			}
+			return true;
 		}
 
 		public override string DenyReason
 		{
-			get { throw new NotImplementedException(); }
+			get { return "TODO"; }
 		}
+
+		
 	}
 }
