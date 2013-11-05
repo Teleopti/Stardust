@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 					{
 						var localTime = TimeZoneInfo.ConvertTimeFromUtc(s.Time, _userTimeZone().TimeZone());
 						if (localTime.TimeOfDay.Minutes != 0)
-							return localTime.TimeOfDay.Minutes.ToString(CultureInfo.CurrentCulture.DateTimeFormat.TimeSeparator + "00");
+							return localTime.ToString("HH:mm");
 
 						var timeFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
 						timeFormat = timeFormat.Replace(CultureInfo.CurrentCulture.DateTimeFormat.TimeSeparator, string.Empty);
