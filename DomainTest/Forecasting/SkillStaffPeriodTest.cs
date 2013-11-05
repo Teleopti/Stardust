@@ -515,7 +515,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			                                  calcService) {Payload = {Efficiency = new Percent(0.9)}};
 			var periods = new List<ISkillStaffPeriod> {period};
 
-			calcService.Expect(c => c.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments().Return(0);
+			calcService.Expect(c => c.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments().Return(100);
 			calcService.Expect(c => c.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(83);
 
 			period.CalculateStaff(periods);
