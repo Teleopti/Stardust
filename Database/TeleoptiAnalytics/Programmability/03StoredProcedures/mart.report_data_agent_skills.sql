@@ -55,7 +55,7 @@ SET NOCOUNT ON;
 
 	/* Check if time zone will be hidden (if only one exist then hide) */
 	DECLARE @hide_time_zone bit
-	IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') < 2
+	IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC' AND to_be_deleted <> 1 ) < 2
 		SET @hide_time_zone = 1
 	ELSE
 		SET @hide_time_zone = 0
