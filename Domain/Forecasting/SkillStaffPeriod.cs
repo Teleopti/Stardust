@@ -418,25 +418,18 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 
             }
 
-        	SkillStaff castedPayLoad = ((SkillStaff) Payload);
+        	var castedPayLoad = ((SkillStaff) Payload);
 
-			if (!Payload.ManualAgents.HasValue && !Payload.NoneBlendDemand.HasValue)
-			{
-				castedPayLoad.ForecastedIncomingDemand = traffic;
-			}
-			else
-			{
-				if(Payload.ManualAgents.HasValue)
-				{
-					castedPayLoad.ForecastedIncomingDemand = Payload.ManualAgents.Value;
-				}
-				else
-				{
-					castedPayLoad.ForecastedIncomingDemand = Payload.NoneBlendDemand.Value;
-				}
-			}
+	        if (!Payload.ManualAgents.HasValue && !Payload.NoneBlendDemand.HasValue)
+		        castedPayLoad.ForecastedIncomingDemand = traffic;
+	        else
+		        castedPayLoad.ForecastedIncomingDemand = Payload.ManualAgents.HasValue
+			                                                 ? Payload.ManualAgents.Value
+			                                                 : Payload.NoneBlendDemand.Value;
 
-            castedPayLoad.CalculatedOccupancy = _staffingCalculatorService.Utilization(Payload.ForecastedIncomingDemand, Payload.TaskData.Tasks,
+	        var demandWithoutEfficiency = castedPayLoad.ForecastedIncomingDemand*castedPayLoad.Efficiency.Value;
+
+			castedPayLoad.CalculatedOccupancy = _staffingCalculatorService.Utilization(demandWithoutEfficiency, Payload.TaskData.Tasks,
                                                       Payload.TaskData.AverageTaskTime.TotalSeconds +
                                                       Payload.TaskData.AverageAfterTaskTime.TotalSeconds, Period.ElapsedTime());
             if (periods != null)
