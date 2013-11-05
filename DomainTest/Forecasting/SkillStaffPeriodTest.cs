@@ -513,11 +513,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			                                  _task,
 			                                  ServiceAgreement.DefaultValues(),
 			                                  calcService) {Payload = {Efficiency = new Percent(0.9)}};
+			period.SetSkillDay(_skillDay);
 			var periods = new List<ISkillStaffPeriod> {period};
 
-			calcService.Expect(c => c.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2)).IgnoreArguments().Return(100);
+			calcService.Expect(c => c.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments().Return(100);
 			calcService.Expect(c => c.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(83);
-
+			
 			period.CalculateStaff(periods);
 
 			var args = calcService.GetArgumentsForCallsMadeOn(c => c.Utilization(1, 1, 1, TimeSpan.MinValue), s => s.IgnoreArguments());
