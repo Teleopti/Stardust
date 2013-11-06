@@ -165,3 +165,157 @@ ON [mart].[dim_acd_login] ([time_zone_id])
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[mart].[dim_person]') AND name = N'IX_dim_person_time_zone_id')
 CREATE NONCLUSTERED INDEX [IX_dim_person_time_zone_id]
 ON [mart].[dim_person] ([time_zone_id])
+GO
+----------------------
+--- Name: Talha M
+--- Ddate: 2013-10-25
+--- Desc : PBI  #25059: Add new column Active to stage.stg_agent_skill
+----------------------
+TRUNCATE TABLE [stage].[stg_agent_skill]
+GO
+ALTER TABLE [stage].[stg_agent_skill]
+ADD [Active] bit NULL
+GO
+
+----------------  
+--Name: Karin
+--Date: 2013-10-30
+--Desc: #25058 New Fact Table Agent Skills
+-----------------
+
+CREATE TABLE [mart].[fact_agent_skill](
+	[person_id] [int] NOT NULL,
+	[skill_id] [int] NOT NULL,
+	[has_skill] [int] NULL,
+	[active] [bit] NULL,
+	[business_unit_id] [int] NOT NULL,
+	[datasource_id] [smallint] NOT NULL
+ CONSTRAINT [PK_fact_agent_skill] PRIMARY KEY CLUSTERED 
+(
+	[person_id] ASC,
+	[skill_id] ASC
+)
+)
+
+GO
+
+ALTER TABLE [mart].[fact_agent_skill] ADD  CONSTRAINT [DF_fact_agent_skill_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+GO
+ALTER TABLE [mart].[fact_agent_skill] ADD  CONSTRAINT [DF_fact_agent_has_skill]  DEFAULT ((1)) FOR [has_skill]
+GO
+
+ALTER TABLE [mart].[fact_agent_skill]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_skill_dim_person] FOREIGN KEY([person_id])
+REFERENCES [mart].[dim_person] ([person_id])
+GO
+
+ALTER TABLE [mart].[fact_agent_skill]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_skill_dim_skill] FOREIGN KEY([skill_id])
+REFERENCES [mart].[dim_skill] ([skill_id])
+GO
+
+----------------  
+--Name: Karin
+--Date: 2013-10-30
+--Desc: #25061 New Report Control collection
+-----------------
+--ADD NEW CONTROL
+IF NOT EXISTS(SELECT 1 FROM mart.report_control where control_id=43)
+BEGIN
+	INSERT mart.report_control(Id, control_id, control_name, fill_proc_name)
+	SELECT NEWID(), 43, 'chkActive','1'
+END
+
+
+--ADD REPORT CONTROL COLLECTION
+IF NOT EXISTS(SELECT 1 FROM mart.report_control_collection where CollectionId='AD5D0F25-32A9-4433-AC7F-3B926CE5FFD0')
+BEGIN
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT 'FD57025C-5818-458C-8999-6571E3F72B68',	mart.report_control.Id,	'AD5D0F25-32A9-4433-AC7F-3B926CE5FFD0',486,46,1,6,'12:00','ResDateColon',NULL,'@date_from',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+	FROM mart.report_control WHERE control_id=6
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT 'E6818734-D9A9-4A7B-AA80-C4489C4458DF',mart.report_control.Id,	'AD5D0F25-32A9-4433-AC7F-3B926CE5FFD0',487,46,2,29,'-2','ResGroupPageColon',NULL,'@group_page_code',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+	FROM mart.report_control WHERE control_id=29
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT 'E15DF32C-3BF3-4D25-BEE7-28E4602B9B52',mart.report_control.Id,	'AD5D0F25-32A9-4433-AC7F-3B926CE5FFD0',488,46,3,35,'-99','ResGroupPageGroupColon',NULL,'@group_page_group_set',487,NULL,NULL,	NULL,'E6818734-D9A9-4A7B-AA80-C4489C4458DF',NULL,NULL,NULL
+	FROM mart.report_control WHERE control_id=35
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT '1D2C9295-E251-4D46-AB34-BFE4847796FC',mart.report_control.Id,	'AD5D0F25-32A9-4433-AC7F-3B926CE5FFD0',489,46,4,37,'-2','ResAgentColon',NULL,'@group_page_agent_code',486,487,488,	NULL,'FD57025C-5818-458C-8999-6571E3F72B68', 'E6818734-D9A9-4A7B-AA80-C4489C4458DF','E15DF32C-3BF3-4D25-BEE7-28E4602B9B52',NULL
+	FROM mart.report_control WHERE control_id=37
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT '64FE4A56-78AF-4AAE-8EFD-478FB86959E0',mart.report_control.Id,'AD5D0F25-32A9-4433-AC7F-3B926CE5FFD0',490,46,5,3,'-2','ResSiteNameColon',NULL,'@site_id',486,487,NULL,NULL,'FD57025C-5818-458C-8999-6571E3F72B68','E6818734-D9A9-4A7B-AA80-C4489C4458DF',NULL,NULL
+	FROM mart.report_control WHERE control_id=3
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT 'DB97F211-9F62-4C06-933C-C6CE67391446',mart.report_control.Id,'AD5D0F25-32A9-4433-AC7F-3B926CE5FFD0',491,46,6,34,'-99','ResTeamNameColon',NULL,'@team_set',486,487,490,NULL,'FD57025C-5818-458C-8999-6571E3F72B68', 'E6818734-D9A9-4A7B-AA80-C4489C4458DF','64FE4A56-78AF-4AAE-8EFD-478FB86959E0',NULL
+	FROM mart.report_control WHERE control_id=34
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT 'BEB00922-AF40-4816-8AC6-2B1287E6BC98',mart.report_control.Id,'AD5D0F25-32A9-4433-AC7F-3B926CE5FFD0',492,46,7,36,'-2','ResAgentsColon',NULL,'@agent_person_code',486,490,491,NULL,'FD57025C-5818-458C-8999-6571E3F72B68'	,'64FE4A56-78AF-4AAE-8EFD-478FB86959E0','DB97F211-9F62-4C06-933C-C6CE67391446',	NULL
+	FROM mart.report_control WHERE control_id=36
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT 'C306C730-5A4A-4BE7-91D4-632A5F49DF02',mart.report_control.Id,'AD5D0F25-32A9-4433-AC7F-3B926CE5FFD0',493,46,8,15,'-99','ResSkillColon',NULL,'@skill_set',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+	FROM mart.report_control WHERE control_id=15
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT '44452980-96D8-4B67-8D80-8BBCFFF966DD',mart.report_control.Id,'AD5D0F25-32A9-4433-AC7F-3B926CE5FFD0',494,46,9,43,'1','ResOnlyActiveSkillColon',NULL,	'@active',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+	FROM mart.report_control WHERE control_id=43
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT 'CC62C6CC-2816-496F-9345-D02BC84D4204',mart.report_control.Id,'AD5D0F25-32A9-4433-AC7F-3B926CE5FFD0',495,46,10,22,'-95','ResTimeZoneColon',NULL,	'@time_zone_id',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+	FROM mart.report_control WHERE control_id=22
+END
+
+----ADD REPORT
+DECLARE @newreportid uniqueidentifier
+SET  @newreportid= '047B138C-DE3A-426A-99B0-00C5BA826AF2'
+DECLARE @CollectionId uniqueidentifier
+SELECT DISTINCT @CollectionId = CollectionId FROM mart.report_control_collection WHERE collection_id=46
+IF NOT EXISTS(SELECT 1 FROM mart.report where Id='047B138C-DE3A-426A-99B0-00C5BA826AF2')
+BEGIN
+INSERT INTO mart.report (
+		Id, 
+		report_id, 
+		control_collection_id, 
+		url, 
+		target, 
+		report_name, 
+		report_name_resource_key, 
+		visible, 
+		rpt_file_name, 
+		proc_name, 
+		help_key, 
+		sub1_name, 
+		sub1_proc_name, 
+		sub2_name, 
+		sub2_proc_name, 
+		ControlCollectionId)
+		VALUES(
+		@newreportid,
+		31,
+		46,
+		'~/Selection.aspx?ReportId=047B138C-DE3A-426A-99B0-00C5BA826AF2',
+		'_blank',
+		'Agent Skills',
+		'ResReportAgentSkills',
+		1,
+		'~/Reports/CCC/report_agent_skills.rdlc',
+		'mart.report_data_agent_skills',
+		'f01:Report+AgentSkills',
+		'','','','',
+		@CollectionId)
+END
+GO
+
+----------------  
+--Name: KJ
+--Date: 2013-11-05
+--Desc: New jobstep for mart.fact_agent_skill
+----------------
+IF NOT EXISTS (SELECT 1 FROM [mart].[etl_jobstep] WHERE jobstep_name=N'fact_agent_skill' AND jobstep_id=83)
+INSERT [mart].[etl_jobstep] ([jobstep_id], [jobstep_name]) VALUES(83,N'fact_agent_skill')
+GO
+

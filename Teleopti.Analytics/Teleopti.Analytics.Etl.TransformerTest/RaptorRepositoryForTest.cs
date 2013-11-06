@@ -452,6 +452,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             return Ret;
         }
 
+        public int FillFactAgentSkillDataMart(IBusinessUnit businessUnit)
+        {
+            return Ret;
+        }
+
         public IList<IPerson> LoadUser()
         {
             return new List<IPerson>();
