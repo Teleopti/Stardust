@@ -28,8 +28,8 @@ AS
 BEGIN
 SET NOCOUNT ON;
 	
-	DECLARE @date_to datetime = @date_from
-
+	DECLARE @date_to datetime 
+	SET @date_to = @date_from
 
 
 	CREATE TABLE #RESULT(
