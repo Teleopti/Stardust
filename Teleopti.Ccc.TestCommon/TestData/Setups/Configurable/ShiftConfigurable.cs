@@ -33,10 +33,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string LunchActivity { get; set; }
 		public DateTime LunchStartTime { get; set; }
 		public DateTime LunchEndTime { get; set; }
-
-		public string BreakActivity { get; set; }
-		public DateTime BreakStartTime { get; set; }
-		public DateTime BreakEndTime { get; set; }
 		
 		public string Overtime { get; set; }
 		public string OvertimeMultiplicatorDefinitionSet { get; set; }
@@ -87,14 +83,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				scheduledActivityStartTime = LunchStartTime;
 				scheduledActivityEndTime = LunchEndTime;
 			}
-			if (BreakActivity!=null)
-			{
-				var breakActivity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(BreakActivity));
-				var breakStartTimeUtc = timeZone.SafeConvertTimeToUtc(BreakStartTime);
-				var breakEndTimeUtc = timeZone.SafeConvertTimeToUtc(BreakEndTime);
-				var breakPeriod = new DateTimePeriod(breakStartTimeUtc, breakEndTimeUtc);
-				mainShift.LayerCollection.Add(new EditableShiftLayer(breakActivity, breakPeriod));
-			}
 
 			if (scheduledActivityName == null)
 				return;
@@ -111,16 +99,16 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				var overtimeEndTimeUtc = timeZone.SafeConvertTimeToUtc(OvertimeEndTime);
 				var overtimePeriod = new DateTimePeriod(overtimeStartTimeUtc, overtimeEndTimeUtc);
 				personAssignment.AddOvertimeLayer(scheduledActivity, overtimePeriod, multiplicatorDefinitionSet);
-
-				var startTimeUtc = timeZone.SafeConvertTimeToUtc(scheduledActivityStartTime);
-				var endTimeUtc = timeZone.SafeConvertTimeToUtc(scheduledActivityEndTime);
-				var period = new DateTimePeriod(startTimeUtc, endTimeUtc);
-
-				if (ScheduledActivityIsPersonal)
-					personAssignment.AddPersonalLayer(scheduledActivity, period);
-				else
-					mainShift.LayerCollection.Add(new EditableShiftLayer(scheduledActivity, period));
 			}
+
+			var startTimeUtc = timeZone.SafeConvertTimeToUtc(scheduledActivityStartTime);
+			var endTimeUtc = timeZone.SafeConvertTimeToUtc(scheduledActivityEndTime);
+			var period = new DateTimePeriod(startTimeUtc, endTimeUtc);
+
+			if (ScheduledActivityIsPersonal)
+				personAssignment.AddPersonalLayer(scheduledActivity, period);
+			else
+				mainShift.LayerCollection.Add(new EditableShiftLayer(scheduledActivity, period));
 		}
 	}
 }

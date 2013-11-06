@@ -133,13 +133,14 @@ Scenario: View team schedule with night shift from yesterday
 Scenario: View team schedule with night shift ending tomorrow
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
-	| Field                     | Value            |
-	| Shift category            | Night            |
-	| Start time                | 2013-11-04 22:00 |
-	| End time                  | 2013-11-05 06:00 |
-	| Activity                  | Phone            |
-	| Lunch activity            | Lunch            |
-	| Lunch 3 hours after start | true             |
+	| Field            | Value            |
+	| Shift category   | Night            |
+	| Start time       | 2013-11-04 22:00 |
+	| End time         | 2013-11-05 06:00 |
+	| Activity         | Phone            |
+	| Lunch activity   | Lunch            |
+	| Lunch start time | 2013-11-05 01:00 |
+	| Lunch end time   | 2013-11-05 02:00 |
 	When I view schedules for 'Team green' on '2013-11-04'
 	Then I should see 'Pierre Baldi' with the scheduled activities
 	| Start time | End time | Color  |

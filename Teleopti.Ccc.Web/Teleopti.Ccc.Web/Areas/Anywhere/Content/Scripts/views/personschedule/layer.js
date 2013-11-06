@@ -29,7 +29,7 @@ define([
 		this.IsFullDayAbsence = data.IsFullDayAbsence;
 
 		this.TimeLineAffectingStartMinute = unit.CutInsideDayStartMinutes;
-		this.TimeLineAffectingEndMinute = unit.CutInsideDayEndMinutes;
+		this.TimeLineAffectingEndMinute = unit.EndMinutes;
 
 	};
 });

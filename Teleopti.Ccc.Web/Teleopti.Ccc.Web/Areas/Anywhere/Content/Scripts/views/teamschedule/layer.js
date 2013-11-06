@@ -33,12 +33,12 @@ define([
 		this.IsFullDayAbsence = data.IsFullDayAbsence;
 
 		this.TimeLineAffectingStartMinute = unit.CutInsideDayStartMinutes;
-            
-            this.TimeLineAffectingEndMinute = ko.computed(function () {
-            	if (shift.StartsOnSelectedDay())
-            		return unit.EndMinutes();
-	            return 0;
-	        });
+
+		this.TimeLineAffectingEndMinute = ko.computed(function() {
+			if (shift.StartsOnSelectedDay())
+				return unit.EndMinutes();
+			return 0;
+		});
             
 		this.DisplayDrop = ko.computed(function () {
 			if (self.LengthPixels() > 30)
