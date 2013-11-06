@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.Win.Commands
         private readonly IWorkShiftFilterService _workShiftFilterService;
         private readonly IWorkShiftSelector _workShiftSelector;
         private BackgroundWorker _backgroundWorker;
+        private readonly ITeamBlockSchedulingOptions _teamBlockScheudlingOptions;
 
         public TeamBlockOptimizationCommand(IScheduleDayChangeCallback scheduleDayChangeCallback,
                                             IResourceOptimizationHelper resourceOptimizationHelper,
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.Win.Commands
                                             ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
                                             IStandardDeviationSumCalculator standardDeviationSumCalculator,
                                             IRestrictionExtractor restrictionExtractor,
-                                            IMatrixListFactory matrixListFactory)
+                                            IMatrixListFactory matrixListFactory, ITeamBlockSchedulingOptions teamBlockScheudlingOptions)
         {
             _scheduleDayChangeCallback = scheduleDayChangeCallback;
             _resourceOptimizationHelper = resourceOptimizationHelper;
@@ -125,6 +126,7 @@ namespace Teleopti.Ccc.Win.Commands
             _standardDeviationSumCalculator = standardDeviationSumCalculator;
             _restrictionExtractor = restrictionExtractor;
             _matrixListFactory = matrixListFactory;
+            _teamBlockScheudlingOptions = teamBlockScheudlingOptions;
 
             _stateHolder = _schedulerState.SchedulingResultState;
         }
@@ -225,7 +227,7 @@ namespace Teleopti.Ccc.Win.Commands
                     _teamBlockCleaner,
                     teamBlockRestrictionOverLimitValidator,
                     _teamBlockMaxSeatChecker,
-                    teamBlockDaysOffMoveFinder
+                    teamBlockDaysOffMoveFinder,_teamBlockScheudlingOptions
                     );
 
             IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs
@@ -260,7 +262,7 @@ namespace Teleopti.Ccc.Win.Commands
 
             IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
-            var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory);
+            var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,_teamBlockScheudlingOptions);
 
             ITeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService =
                 new TeamBlockIntradayOptimizationService(

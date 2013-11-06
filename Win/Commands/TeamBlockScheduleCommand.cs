@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Win.Commands
 		private int _scheduledCount;
 		private ISchedulingOptions _schedulingOptions;
 	    private readonly ISameOpenHoursInTeamBlockSpecification _sameOpenHoursInTeamBlockSpecification;
+	    private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 
 	    public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
 			ISchedulerStateHolder schedulerStateHolder,
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.Win.Commands
 			IWorkShiftFinderResultHolder workShiftFinderResultHolder,
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
-			ITeamBlockClearer teamBlockClearer,  ISameOpenHoursInTeamBlockSpecification sameOpenHoursInTeamBlockSpecification)
+			ITeamBlockClearer teamBlockClearer,  ISameOpenHoursInTeamBlockSpecification sameOpenHoursInTeamBlockSpecification, ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
 		{
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -88,6 +89,7 @@ namespace Teleopti.Ccc.Win.Commands
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 			_teamBlockClearer = teamBlockClearer;
 	        _sameOpenHoursInTeamBlockSpecification = sameOpenHoursInTeamBlockSpecification;
+	        _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedSchedules)
@@ -190,7 +192,7 @@ namespace Teleopti.Ccc.Win.Commands
 									   teamScheduling,
 									   _workShiftSelector, _teamBlockClearer, rollbackService,_sameOpenHoursInTeamBlockSpecification);
 
-            IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor = new ValidatedTeamBlockInfoExtractor(_teamBlockSteadyStateValidator, _teamBlockInfoFactory, teamSteadyStateHolder);
+            IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor = new ValidatedTeamBlockInfoExtractor(_teamBlockSteadyStateValidator, _teamBlockInfoFactory, teamSteadyStateHolder,_teamBlockSchedulingOptions);
 		    var advanceSchedulingService =
 				new TeamBlockSchedulingService(schedulingOptions,
 											 teamInfoFactory,

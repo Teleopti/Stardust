@@ -46,11 +46,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IVirtualSchedulePeriod _schedulePeriod;
 		private ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
+	    private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
+            _teamBlockSchedulingOptions = new TeamBlockSchedulingOptions();
 			_teamBlockDaysOffMoveFinder = _mocks.StrictMock<ITeamBlockDaysOffMoveFinder>();
 			_teamInfoFactory = _mocks.StrictMock<ITeamInfoFactory>();
 			_lockableBitArrayFactory = _mocks.StrictMock<ILockableBitArrayFactory>();
@@ -90,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			                                              _safeRollbackAndResourceCalculation, _teamDayOffModifier,
 			                                              _teamTeamBlockSteadyStateValidator, _teamBlockClearer,
 														  _restrictionOverLimitValidator, _teamBlockMaxSeatChecker,
-														  _teamBlockDaysOffMoveFinder);
+                                                          _teamBlockDaysOffMoveFinder, _teamBlockSchedulingOptions);
 		}
 
 		[Test]

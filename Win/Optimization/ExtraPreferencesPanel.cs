@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Win.Optimization
         {
             Preferences = extraPreferences;
 			_groupPageOnTeams = groupPagesProvider.GetGroups(false);
-        	//_eventAggregator = eventAggregator;
 		    _availableActivity = availableActivity;
 			_groupPageOnCompareWith = groupPagesProvider.GetGroups(false);
 			_groupPageOnTeamsTeamBlockPer  = groupPagesProvider.GetGroups(false);

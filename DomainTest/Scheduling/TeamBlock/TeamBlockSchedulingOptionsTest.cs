@@ -1,6 +1,8 @@
 ﻿using NUnit.Framework;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
@@ -140,5 +142,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			Assert.IsTrue(result);
 		}
+
+        [Test]
+        public void ShouldReturnFalseIfNotSingleAgentTeam()
+        {
+            IGroupPageLight singleAgentTeam = new GroupPageLight();
+            singleAgentTeam.Key = "BusinessUnit";
+            singleAgentTeam.Name = "BusinessUnit";
+            _schedulingOptions.GroupOnGroupPageForTeamBlockPer = singleAgentTeam;
+            var result = _target.IsSingleAgentTeam(_schedulingOptions);
+            Assert.IsFalse(result);
+        }
+
+        [Test]
+        public void ShouldReturnTrueIfSingleAgentTeam()
+        {
+            IGroupPageLight singleAgentTeam = new GroupPageLight();
+            singleAgentTeam.Key = "SingleAgentTeam";
+            singleAgentTeam.Name = "SingleAgentTeam";
+            _schedulingOptions.GroupOnGroupPageForTeamBlockPer = singleAgentTeam;
+            var result = _target.IsSingleAgentTeam(_schedulingOptions);
+            Assert.IsTrue(result);
+        }
 	}
 }

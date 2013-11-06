@@ -507,7 +507,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					teamBlockCleaner,
                     teamBlockRestrictionOverLimitValidator, 
 					_container.Resolve<ITeamBlockMaxSeatChecker>(),
-					teamBlockDaysOffMoveFinder
+					teamBlockDaysOffMoveFinder,_container.Resolve<ITeamBlockSchedulingOptions  >()
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs
@@ -553,7 +553,7 @@ namespace Teleopti.Ccc.Win.Scheduling
     
             var groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
-			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _container.Resolve<ITeamBlockInfoFactory>());
+			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _container.Resolve<ITeamBlockInfoFactory>(),_container.Resolve<ITeamBlockSchedulingOptions  >());
 
             ITeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService =
                 new TeamBlockIntradayOptimizationService(

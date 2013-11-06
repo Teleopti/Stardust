@@ -16,12 +16,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         private readonly ITeamBlockSteadyStateValidator  _teamBlockSteadyStateValidator;
         private readonly ITeamBlockInfoFactory  _teamBlockInfoFactory;
         private readonly ITeamSteadyStateHolder _teamSteadyStateHolder;
+        private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 
-        public ValidatedTeamBlockInfoExtractor(ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,  ITeamBlockInfoFactory teamBlockInfoFactory, ITeamSteadyStateHolder teamSteadyStateHolder)
+        public ValidatedTeamBlockInfoExtractor(ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,  ITeamBlockInfoFactory teamBlockInfoFactory, ITeamSteadyStateHolder teamSteadyStateHolder, ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
         {
             _teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
             _teamBlockInfoFactory = teamBlockInfoFactory;
             _teamSteadyStateHolder = teamSteadyStateHolder;
+            _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
         }
 
         public ITeamBlockInfo GetTeamBlockInfo(ITeamInfo teamInfo, DateOnly datePointer, IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions )
@@ -38,17 +40,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
         private ITeamBlockInfo createTeamBlockInfo(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnly datePointer, ITeamInfo teamInfo, ISchedulingOptions schedulingOptions)
         {
-            bool singleAgentTeam = schedulingOptions.GroupOnGroupPageForTeamBlockPer != null &&
-                                       schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key == "SingleAgentTeam";
             ITeamBlockInfo teamBlockInfo;
             if (schedulingOptions.UseTeamBlockPerOption)
                 teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
                                                                           schedulingOptions
                                                                               .BlockFinderTypeForAdvanceScheduling,
-                                                                          singleAgentTeam, allPersonMatrixList);
+                                                                          _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions), allPersonMatrixList);
             else
                 teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer, BlockFinderType.SingleDay,
-                                                                          singleAgentTeam, allPersonMatrixList);
+                                                                           _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions), allPersonMatrixList);
             return teamBlockInfo;
         }
     }

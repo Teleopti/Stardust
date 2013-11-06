@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private IList<IScheduleTag> _scheduleTags;
     	private ISchedulerGroupPagesProvider _groupPagesProvider;
         private GroupPageLight _singleAgentEntry;
-        //private TeamBlockPerConfiguration _teamBlockConfiguartion;
 
         public SchedulingSessionPreferencesTabPanel()
         {
@@ -255,7 +254,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _schedulingOptions.Fairness = _localSchedulingOptions.Fairness;
             _schedulingOptions.UseShiftCategoryLimitations = _localSchedulingOptions.UseShiftCategoryLimitations;
             _schedulingOptions.UsePreferencesMustHaveOnly = _localSchedulingOptions.UsePreferencesMustHaveOnly;
-            //_schedulingOptions.UseBlockScheduling = _localSchedulingOptions.UseBlockScheduling;
             _schedulingOptions.BlockFinderTypeForAdvanceScheduling =
                 _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling;
         	_schedulingOptions.UseGroupScheduling = _localSchedulingOptions.UseGroupScheduling;
@@ -266,7 +264,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         	_schedulingOptions.UseMaxSeats = _localSchedulingOptions.UseMaxSeats;
         	_schedulingOptions.DoNotBreakMaxSeats = _localSchedulingOptions.DoNotBreakMaxSeats;
             _schedulingOptions.UseSameDayOffs = _localSchedulingOptions.UseSameDayOffs;
-            //_schedulingOptions.UseBlockOptimizing = _localSchedulingOptions.UseBlockScheduling;
             _schedulingOptions.TagToUseOnScheduling = _localSchedulingOptions.TagToUseOnScheduling;
         	_schedulingOptions.ResourceCalculateFrequency = _localSchedulingOptions.ResourceCalculateFrequency;
 			_schedulingOptions.ShowTroubleshot = _localSchedulingOptions.ShowTroubleshot;
@@ -312,7 +309,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_localSchedulingOptions.UseGroupScheduling = checkBoxUseGroupScheduling.Checked;
         	_localSchedulingOptions.GroupOnGroupPage = (IGroupPageLight)comboBoxGrouping.SelectedItem;
             _localSchedulingOptions.GroupPageForShiftCategoryFairness = (IGroupPageLight)comboBoxGroupingFairness.SelectedItem;
-            //_localSchedulingOptions.GroupOnGroupPageForTeamBlockPer  = (IGroupPageLight)comboBoxGroupingTeamBlockPer .SelectedItem;
 			_localSchedulingOptions.DoNotBreakMaxStaffing = checkBoxDoNotBreakMaxSeats.Checked;
         	_localSchedulingOptions.UseMaxSeats = checkBoxUseMaxSeats.Checked;
         	_localSchedulingOptions.DoNotBreakMaxSeats = checkBoxDoNotBreakMaxSeats.Checked;
@@ -390,11 +386,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
             checkBoxTeamBlockPerBlockScheduling.Checked = _localSchedulingOptions.UseTeamBlockPerOption;
             setTeamBlockPerDataToSave();
-        }
-
-        private bool mustHaveSetAndOnlyPreferenceDaysVisible()
-        {
-            return checkBoxMustHaves.Checked && checkBoxOnlyPreferenceDays.Visible && checkBoxOnlyRotationDays.Enabled;
         }
 
         private void checkBoxUseRotationsCheckedChanged(object sender, EventArgs e)

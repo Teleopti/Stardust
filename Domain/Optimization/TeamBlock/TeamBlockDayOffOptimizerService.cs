@@ -37,8 +37,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private readonly ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
 		private bool _cancelMe;
+	    private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 
-		public TeamBlockDayOffOptimizerService(
+	    public TeamBlockDayOffOptimizerService(
 			ITeamInfoFactory teamInfoFactory,
 			ILockableBitArrayFactory lockableBitArrayFactory,
 			ILockableBitArrayChangesTracker lockableBitArrayChangesTracker,
@@ -51,8 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamBlockClearer teamBlockClearer,
 			ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
-			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder
-			)
+			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder, ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
 		{
 			_teamInfoFactory = teamInfoFactory;
 			_lockableBitArrayFactory = lockableBitArrayFactory;
@@ -67,6 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 			_teamBlockDaysOffMoveFinder = teamBlockDaysOffMoveFinder;
+	        _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -360,13 +361,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			foreach (DateOnly dateOnly in removedDaysOff)
 			{
-                bool singleAgentTeam = schedulingOptions.GroupOnGroupPageForTeamBlockPer != null &&
-                                           schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key == "SingleAgentTeam";
-
                 ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,
 				                                                                        schedulingOptions
                                                                                             .BlockFinderTypeForAdvanceScheduling, 
-																							singleAgentTeam,
+																							_teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions) ,
 																							allPersonMatrixList);
 				if (teamBlockInfo == null) continue;
 				if (!_teamTeamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, schedulingOptions))

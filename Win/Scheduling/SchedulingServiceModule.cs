@@ -269,6 +269,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<TeamBlockSameStartTimeSpecification>().As<ITeamBlockSameStartTimeSpecification>();
             builder.RegisterType<TeamBlockSameShiftSpecification>().As<ITeamBlockSameShiftSpecification>();
             builder.RegisterType<ValidSampleDayPickerFromTeamBlock>().As<IValidSampleDayPickerFromTeamBlock>();
+            builder.RegisterType<TeamBlockSchedulingOptions>().As<ITeamBlockSchedulingOptions>();
 		}
 
 		private static void registerTeamBlockSchedulingService(ContainerBuilder builder)
