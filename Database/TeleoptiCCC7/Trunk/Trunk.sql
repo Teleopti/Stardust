@@ -138,13 +138,70 @@ INCLUDE ( 	[Id],
 GO
 
 ----------------  
---Name: Erik Sundberg
+--Name: David Jonsson
 --Date: 2013-11-06
---Desc: Moved from 386 to main due to bug 25359. 
+--Desc: removed from 386 to main due to bug 25359. 
 --Original details:
 	--Name: Robin Karlsson
 	--Date: 2013-08-28
 	--Desc: Truncate read model for projected layers to force load of scheduled resources
 ---------------- 
-TRUNCATE TABLE [ReadModel].[ScheduleProjectionReadOnly]
+-- Don't truncate yet - leave as is until we have decided on when to deploy "AnyWhere"
+--TRUNCATE TABLE [ReadModel].[ScheduleProjectionReadOnly]
+--GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-11-05
+--Desc: Bug #25359 - Prepare (redesign) the tables and optimize for the initial load of [ReadModel].[ScheduledResources] and [ReadModel].[ActivitySkillCombination]
+-- Intial load of theese are disabled until we need decided on when to deploy "AnyWhere"
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[ReadModel].[ScheduledResources]') AND name = N'CIX_ScheduledResources')
+BEGIN
+	CREATE TABLE [ReadModel].[ScheduledResources_new](
+		[Id] [bigint] IDENTITY(1,1) NOT NULL,
+		[ActivitySkillCombinationId] [int] NOT NULL,
+		[Resources] [float] NOT NULL,
+		[Heads] [float] NOT NULL,
+		[PeriodStart] [datetime] NOT NULL,
+		[PeriodEnd] [datetime] NOT NULL,
+	 CONSTRAINT [PK_ScheduledResources_new] PRIMARY KEY NONCLUSTERED 
+	(
+		[Id] ASC
+	)
+	)
+
+	CREATE CLUSTERED INDEX [CIX_ScheduledResources] ON [ReadModel].[ScheduledResources_new]
+	(
+		[ActivitySkillCombinationId] ASC,
+		[PeriodStart] ASC
+	)
+
+	ALTER TABLE [ReadModel].[ScheduledResources] DROP CONSTRAINT [DF_ScheduledResources_Resources]
+	ALTER TABLE [ReadModel].[ScheduledResources_new] ADD  CONSTRAINT [DF_ScheduledResources_Resources]  DEFAULT ((0)) FOR [Resources]
+
+	ALTER TABLE [ReadModel].[ScheduledResources] DROP CONSTRAINT [DF_ScheduledResources_Heads]
+	ALTER TABLE [ReadModel].[ScheduledResources_new] ADD  CONSTRAINT [DF_ScheduledResources_Heads]  DEFAULT ((0)) FOR [Heads]
+
+	--Re-create data
+	SET IDENTITY_INSERT [ReadModel].[ScheduledResources_new] ON
+	INSERT INTO [ReadModel].[ScheduledResources_new](Id, ActivitySkillCombinationId, Resources, Heads, PeriodStart, PeriodEnd)
+	SELECT Id, ActivitySkillCombinationId, Resources, Heads, PeriodStart, PeriodEnd
+	FROM [ReadModel].[ScheduledResources]
+	SET IDENTITY_INSERT [ReadModel].[ScheduledResources_new] OFF
+	
+	--drop old table
+	DROP TABLE [ReadModel].[ScheduledResources]
+
+	EXEC dbo.sp_rename @objname = N'[ReadModel].[ScheduledResources_new]', @newname = N'ScheduledResources', @objtype = N'OBJECT'
+	EXEC dbo.sp_rename @objname = N'[ReadModel].[ScheduledResources].[PK_ScheduledResources_new]', @newname = N'PK_ScheduledResources', @objtype =N'INDEX'
+END
+GO
+--And a supporting index on [ReadModel].[ActivitySkillCombination]
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[ReadModel].[ActivitySkillCombination]') AND name = N'IX_ActivitySkillCombination')
+	CREATE NONCLUSTERED INDEX [IX_ActivitySkillCombination] ON [ReadModel].[ActivitySkillCombination]
+	(
+		[Activity] ASC
+	)
+	INCLUDE ([Skills]) 
 GO
