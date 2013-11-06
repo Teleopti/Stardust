@@ -205,3 +205,77 @@ IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[ReadMode
 	)
 	INCLUDE ([Skills]) 
 GO
+
+--Re-design indexes on [dbo].[PersonAbsence]
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonAbsence]') AND name = N'CIX_PersonAbsence')
+BEGIN
+	CREATE TABLE [dbo].[PersonAbsence_new](
+		[Id] [uniqueidentifier] NOT NULL,
+		[Version] [int] NOT NULL,
+		[CreatedBy] [uniqueidentifier] NOT NULL,
+		[UpdatedBy] [uniqueidentifier] NOT NULL,
+		[CreatedOn] [datetime] NOT NULL,
+		[UpdatedOn] [datetime] NOT NULL,
+		[LastChange] [datetime] NULL,
+		[Person] [uniqueidentifier] NOT NULL,
+		[Scenario] [uniqueidentifier] NOT NULL,
+		[PayLoad] [uniqueidentifier] NOT NULL,
+		[Minimum] [datetime] NOT NULL,
+		[Maximum] [datetime] NOT NULL,
+		[BusinessUnit] [uniqueidentifier] NOT NULL,
+	 CONSTRAINT [PK_PersonAbsence_new] PRIMARY KEY NONCLUSTERED 
+	(
+		[Id] ASC
+	)
+	)
+
+	CREATE CLUSTERED INDEX [CIX_PersonAbsence] ON [dbo].[PersonAbsence_new]
+	(
+		[Person] ASC
+	)
+
+	--Re-create data
+	INSERT INTO [dbo].[PersonAbsence_new]
+	SELECT * FROM [dbo].[PersonAbsence]
+	
+	--drop old table
+	DROP TABLE [dbo].[PersonAbsence]
+
+	EXEC dbo.sp_rename @objname = N'[dbo].[PersonAbsence_new]', @newname = N'PersonAbsence', @objtype = N'OBJECT'
+	EXEC dbo.sp_rename @objname = N'[dbo].[PersonAbsence].[PK_PersonAbsence_new]', @newname = N'PK_PersonAbsence', @objtype =N'INDEX'
+
+	--Add additional indexes
+	CREATE NONCLUSTERED INDEX [IX_PersonAbsence_BusinessUnit] ON [dbo].[PersonAbsence]
+	(
+		[BusinessUnit] ASC
+	)
+
+	CREATE NONCLUSTERED INDEX [IX_PersonAbsence_Scenario] ON [dbo].[PersonAbsence]
+	(
+		[Scenario] ASC
+	)
+
+	ALTER TABLE [dbo].[PersonAbsence]  WITH CHECK ADD  CONSTRAINT [FK_PersonAbsence_Absence] FOREIGN KEY([PayLoad])
+	REFERENCES [dbo].[Absence] ([Id])
+	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_Absence]
+
+	ALTER TABLE [dbo].[PersonAbsence]  WITH CHECK ADD  CONSTRAINT [FK_PersonAbsence_BusinessUnit] FOREIGN KEY([BusinessUnit])
+	REFERENCES [dbo].[BusinessUnit] ([Id])
+	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_BusinessUnit]
+
+	ALTER TABLE [dbo].[PersonAbsence]  WITH CHECK ADD  CONSTRAINT [FK_PersonAbsence_Person_CreatedBy] FOREIGN KEY([CreatedBy])
+	REFERENCES [dbo].[Person] ([Id])
+	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_Person_CreatedBy]
+
+	ALTER TABLE [dbo].[PersonAbsence]  WITH CHECK ADD  CONSTRAINT [FK_PersonAbsence_Person_UpdatedBy] FOREIGN KEY([UpdatedBy])
+	REFERENCES [dbo].[Person] ([Id])
+	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_Person_UpdatedBy]
+
+	ALTER TABLE [dbo].[PersonAbsence]  WITH CHECK ADD  CONSTRAINT [FK_PersonAbsence_Person3] FOREIGN KEY([Person])
+	REFERENCES [dbo].[Person] ([Id])
+	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_Person3]
+
+	ALTER TABLE [dbo].[PersonAbsence]  WITH CHECK ADD  CONSTRAINT [FK_PersonAbsence_Scenario] FOREIGN KEY([Scenario])
+	REFERENCES [dbo].[Scenario] ([Id])
+	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_Scenario]
+END
