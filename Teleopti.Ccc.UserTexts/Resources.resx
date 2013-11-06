@@ -11789,4 +11789,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Modify availabilities</value>
     <comment>Modify availabilities in scheduler</comment>
   </data>
+  <data name="BudgetGroupMissing" xml:space="preserve">
+    <value>There is no budget group for you.</value>
+    <comment>There is no budget group for you.</comment>
+  </data>
 </root>

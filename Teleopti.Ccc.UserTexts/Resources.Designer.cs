@@ -3108,6 +3108,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is no budget group for you..
+        /// </summary>
+        public static string BudgetGroupMissing {
+            get {
+                return ResourceManager.GetString("BudgetGroupMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Budgeting.
         /// </summary>
         public static string Budgeting {
