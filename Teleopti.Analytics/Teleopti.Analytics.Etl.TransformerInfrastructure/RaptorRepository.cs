@@ -1088,7 +1088,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		public IList<IPersonRequest> LoadRequest(DateTimePeriod period)
 		{
 		    IList<IPersonRequest> personRequests;
-			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CurrentUnitOfWork())
+            using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var rep = new PersonRequestRepository(uow);
                 uow.Reassociate(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit);
