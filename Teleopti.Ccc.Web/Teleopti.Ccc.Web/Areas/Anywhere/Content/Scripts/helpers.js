@@ -10,7 +10,6 @@ define(
     	return {
     		TextColor: {
     			BasedOnBackgroundColor: function (backgroundColor) {
-    				console.log(backgroundColor);
     				backgroundColor = backgroundColor.slice(backgroundColor.indexOf('(') + 1, backgroundColor.indexOf(')'));
 
     				var backgroundColorArr = backgroundColor.split(',');
