@@ -30,10 +30,7 @@ namespace Teleopti.Ccc.Win.Main
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogonView));
 			this.pnlContent = new System.Windows.Forms.Panel();
-			this.buttonLogOnCancel = new System.Windows.Forms.Button();
-			this.buttonLogOnOK = new System.Windows.Forms.Button();
 			this.labelStatusText = new System.Windows.Forms.Label();
-			this.btnBack = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
@@ -47,31 +44,6 @@ namespace Teleopti.Ccc.Win.Main
 			this.pnlContent.Size = new System.Drawing.Size(481, 295);
 			this.pnlContent.TabIndex = 0;
 			// 
-			// buttonLogOnCancel
-			// 
-			this.buttonLogOnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonLogOnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonLogOnCancel.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.buttonLogOnCancel.Location = new System.Drawing.Point(398, 315);
-			this.buttonLogOnCancel.Name = "buttonLogOnCancel";
-			this.buttonLogOnCancel.Size = new System.Drawing.Size(75, 23);
-			this.buttonLogOnCancel.TabIndex = 2;
-			this.buttonLogOnCancel.Text = "xxCancel";
-			this.buttonLogOnCancel.UseVisualStyleBackColor = true;
-			this.buttonLogOnCancel.Click += new System.EventHandler(this.buttonLogOnCancelClick);
-			// 
-			// buttonLogOnOK
-			// 
-			this.buttonLogOnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonLogOnOK.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.buttonLogOnOK.Location = new System.Drawing.Point(310, 315);
-			this.buttonLogOnOK.Name = "buttonLogOnOK";
-			this.buttonLogOnOK.Size = new System.Drawing.Size(75, 23);
-			this.buttonLogOnOK.TabIndex = 1;
-			this.buttonLogOnOK.Text = "xxOK";
-			this.buttonLogOnOK.UseVisualStyleBackColor = true;
-			this.buttonLogOnOK.Click += new System.EventHandler(this.buttonLogOnOkClick);
-			// 
 			// labelStatusText
 			// 
 			this.labelStatusText.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -82,17 +54,6 @@ namespace Teleopti.Ccc.Win.Main
 			this.labelStatusText.TabIndex = 42;
 			this.labelStatusText.Text = "xxSearching for data sources...";
 			this.labelStatusText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// btnBack
-			// 
-			this.btnBack.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.btnBack.Location = new System.Drawing.Point(222, 315);
-			this.btnBack.Name = "btnBack";
-			this.btnBack.Size = new System.Drawing.Size(75, 23);
-			this.btnBack.TabIndex = 3;
-			this.btnBack.Text = "xxBack";
-			this.btnBack.UseVisualStyleBackColor = true;
-			this.btnBack.Click += new System.EventHandler(this.btnBackClick);
 			// 
 			// label1
 			// 
@@ -111,10 +72,7 @@ namespace Teleopti.Ccc.Win.Main
 			this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
 			this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
 			this.ClientSize = new System.Drawing.Size(483, 345);
-			this.Controls.Add(this.buttonLogOnCancel);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.buttonLogOnOK);
-			this.Controls.Add(this.btnBack);
 			this.Controls.Add(this.labelStatusText);
 			this.Controls.Add(this.pnlContent);
 			this.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -134,9 +92,6 @@ namespace Teleopti.Ccc.Win.Main
 
 		private System.Windows.Forms.Panel pnlContent;
 		private System.Windows.Forms.Label labelStatusText;
-		private System.Windows.Forms.Button buttonLogOnCancel;
-		private System.Windows.Forms.Button buttonLogOnOK;
-		private System.Windows.Forms.Button btnBack;
 		private System.Windows.Forms.Label label1;
 	}
 }

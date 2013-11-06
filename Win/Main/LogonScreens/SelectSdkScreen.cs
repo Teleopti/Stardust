@@ -15,6 +15,9 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		    _model = model;
             InitializeComponent();
 	        labelChooseSDK.Text = Resources.PleaseChooseSDK;
+			buttonLogOnCancel.Text = Resources.Cancel;
+			buttonLogOnOK.Text = Resources.Ok;
+			btnBack.Text = Resources.Back;
 		}
 
         public void SetData()
@@ -33,10 +36,30 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 	        lbxSelectSDK.DataSource = null;
 	    }
 
+		public void SetBackButtonVisible(bool visible)
+		{
+			btnBack.Visible = visible;
+		}
+
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			_logonView.HandleKeyPress(msg, keyData, lbxSelectSDK.Focused);
 			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
+		private void btnBack_Click(object sender, System.EventArgs e)
+		{
+			_logonView.BtnBackClick(sender, e);
+		}
+
+		private void buttonLogOnOK_Click(object sender, System.EventArgs e)
+		{
+			_logonView.ButtonLogOnOkClick(sender, e);
+		}
+
+		private void buttonLogOnCancel_Click(object sender, System.EventArgs e)
+		{
+			_logonView.ButtonLogOnCancelClick(sender, e);
 		}
 	}
 }

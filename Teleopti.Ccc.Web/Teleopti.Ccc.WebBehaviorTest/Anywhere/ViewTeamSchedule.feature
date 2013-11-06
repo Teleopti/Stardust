@@ -111,7 +111,7 @@ Scenario: View team schedule in my time zone
 	| Start time     | 2013-09-20 22:00 |
 	| End time       | 2013-09-21 05:00 |
 	When I view schedules for 'Team green' on '2013-09-20'
-	Then I should see a shift layer with
+	Then I should see a scheduled activity with
 	| Field      | Value |
 	| Start time | 10:00 |
 	| End time   | 17:00 |
@@ -126,7 +126,26 @@ Scenario: View team schedule with night shift from yesterday
 	| End time                  | 2012-12-03 04:00 |
 	| Activity                  | Phone            |
 	When I view schedules for 'Team green' on '2012-12-03'
-	Then I should see schedule for 'Pierre Baldi'
+	Then I should see 'Pierre Baldi' with the scheduled activity
+	| Start time | End time | Color  |
+	| 00:00      | 04:00    | Green  |
+
+Scenario: View team schedule with night shift ending tomorrow
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' have a shift with
+	| Field                     | Value            |
+	| Shift category            | Night            |
+	| Start time                | 2013-11-04 22:00 |
+	| End time                  | 2013-11-05 06:00 |
+	| Activity                  | Phone            |
+	| Lunch activity            | Lunch            |
+	| Lunch 3 hours after start | true             |
+	When I view schedules for 'Team green' on '2013-11-04'
+	Then I should see 'Pierre Baldi' with the scheduled activities
+	| Start time | End time | Color  |
+	| 22:00      | 01:00    | Green  |
+	| 01:00      | 02:00    | Yellow |
+	| 02:00      | 06:00    | Green  |
 	
 Scenario: View team schedule, no shift
 	Given I have the role 'Anywhere Team Green'
@@ -234,7 +253,7 @@ Scenario: Push team schedule changes
 	| Name  | Vacation |
 	| Color | Red      |
 	When I view schedules for 'Team green' on '2013-09-10'
-	Then I should see 'Pierre Baldi' with the schedule
+	Then I should see 'Pierre Baldi' with the scheduled activity
 	| Field      | Value |
 	| Start time | 08:00 |
 	| End time   | 17:00 |
@@ -244,9 +263,8 @@ Scenario: Push team schedule changes
 	| Name       | Vacation         |
 	| Start time | 2013-09-10 00:00 |
 	| End time   | 2013-09-11 00:00 |
-	Then I should see 'Pierre Baldi' with the schedule
+	Then I should see 'Pierre Baldi' with the scheduled activity
 	| Field      | Value |
 	| Start time | 08:00 |
 	| End time   | 17:00 |
 	| Color      | Red   |
-

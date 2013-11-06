@@ -26,7 +26,7 @@
 
 	<div class="row">
 		<div class="span12">
-			<form class="form-inline">
+			<form>
 				<div class="control-group">
 					<select id="group-picker" class="span4" data-bind="enable: !Loading(), foreach: GroupPages, select2: { value: SelectedGroup } ">
 						<optgroup data-bind="attr: { label: Name }, foreach: Groups">
@@ -41,7 +41,9 @@
 							<span class="add-on"><i class="icon-calendar"></i></span>
 							<button class="btn" data-bind="attr: { title: Resources.Next }, click: NextDay"><i class="icon-chevron-right"></i></button>
 						</div>
-						<button class="btn toggle-descriptions" data-toggle="button" disabled data-bind="enable: !Loading(), click: ToggleDisplayDescriptions"><i class="icon-question-sign"></i></button>
+						<div class="input-append">
+							<button class="btn toggle-descriptions" data-toggle="button" disabled data-bind="enable: !Loading(), click: ToggleDisplayDescriptions"><i class="icon-question-sign"></i></button>
+						</div>
 					</div>
 				</div>
 			</form>
@@ -56,7 +58,7 @@
 			<!-- ko if: !Loading() -->
 			<div class="relative">
 				<!-- ko with: TimeLine -->
-				<div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime }">
+				<div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime }, if: $parent.Persons().length>0">
 					<div class="relative">
 						<div data-bind="foreach: Times">
 							<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
@@ -66,7 +68,7 @@
 				</div>
 				<!-- /ko -->
 
-				<table class="table table-hover">
+				<table class="table table-hover" data-bind="if: Persons().length>0">
 					<thead>
 						<tr>
 							<th></th>

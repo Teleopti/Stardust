@@ -5,5 +5,6 @@
 		void SetData();
 	    void GetData();
 	    void Release();
+		void SetBackButtonVisible(bool visible);
 	}
 }

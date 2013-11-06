@@ -98,12 +98,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Anywhere\ViewActivityAndAbsenceDetails.feature.cs">
-      <DependentUpon>ViewActivityAndAbsenceDetails.feature</DependentUpon>
+    <Compile Include="Anywhere\ViewScheduleActivityDetails.feature.cs">
+      <DependentUpon>ViewScheduleActivityDetails.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Bindings\Generic\Anywhere\DescriptionToggle.cs" />
+    <Compile Include="Bindings\Generic\MultiplicatorDefinitionSetStepDefinitions.cs" />
     <Compile Include="MyTime\AbsenceRequestFromRequests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -660,9 +661,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AddActivityOnShift.feature.cs</LastGenOutput>
     </None>
-    <None Include="Anywhere\ViewActivityAndAbsenceDetails.feature">
+    <None Include="Anywhere\ViewScheduleActivityDetails.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ViewActivityAndAbsenceDetails.feature.cs</LastGenOutput>
+      <LastGenOutput>ViewScheduleActivityDetails.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\ViewFullDayAbsenceOnDayOff.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

@@ -56,5 +56,9 @@ define([
 			navigation.GotoPersonScheduleAddActivityForm(personId, date);
 		};
 
+	    this.StartsOnSelectedDay = ko.computed(function () {
+	    	return self.Layers().length > 0 && self.Layers()[0].StartMinutes() < 25 * 60;
+	    });
+
 	};
 });

@@ -33,6 +33,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.ClickUsingJQuery(string.Format(".person:contains('{0}') .shift .layer[data-start-time~='{1}']", name, startTime));
 		}
 
+		[When(@"I select any schedule activity for '(.*)'")]
+		public void WhenISelectAnyScheduleActivityFor(string name)
+		{
+			Browser.Interactions.ClickUsingJQuery(string.Format(".person:contains('{0}') .shift .layer:first-child", name));
+		}
+
+
 		[Then(@"I should see schedule activity details for '(.*)' with")]
 		public void ThenIShouldSeeScheduleActivityDetailsForWith(string name, Table table)
 		{
@@ -41,6 +48,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertAnyContains(selector, scheduleActivity.Name);
 			Browser.Interactions.AssertAnyContains(selector, scheduleActivity.StartTime);
 			Browser.Interactions.AssertAnyContains(selector, scheduleActivity.EndTime);
+		}
+
+		[Then(@"I should see schedule shift details for '(.*)' with")]
+		public void ThenIShouldSeeScheduleShiftDetailsForWith(string name, Table table)
+		{
+			var scheduleShiftInfos = table.CreateSet<ScheduleShiftInfo>();
+			var selector = string.Format(".person:contains('{0}') .shift-details", name);
+			foreach (var scheduleShiftInfo in scheduleShiftInfos)
+			{
+				Browser.Interactions.AssertExistsUsingJQuery(selector + "[style*='background-color:" +
+				                                             colorNameToCss(scheduleShiftInfo.Color) + "']:contains('" +
+				                                             scheduleShiftInfo.Name + "')");
+			}
+		}
+
+		private static string colorNameToCss(string colorName)
+		{
+			var color = System.Drawing.Color.FromName(colorName);
+			return string.Format("rgb({0}, {1}, {2})", color.R, color.G, color.B);
 		}
 
 		[Then(@"I should see options include '(.*)'")]
@@ -87,24 +113,36 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift .layer", personName);
 		}
 
-		[Then(@"I should see '(.*)' with the schedule")]
-		public void ThenIShouldSeeWithTheSchedule(string personName, Table table)
+		[Then(@"I should see '(.*)' with the scheduled activity")]
+		public void ThenIShouldSeeWithTheScheduledActivity(string personName, Table table)
 		{
-			var layer = table.CreateInstance<LayerInfo>();
+			var scheduledActivity = table.CreateInstance<ScheduledActivityInfo>();
 
+			assertScheduledActivity(personName, scheduledActivity);
+		}
+
+		[Then(@"I should see '(.*)' with the scheduled activities")]
+		public void ThenIShouldSeeWithTheScheduledActivities(string personName, Table table)
+		{
+			var scheduledActivity = table.CreateSet<ScheduledActivityInfo>();
+			scheduledActivity.ForEach(sa => assertScheduledActivity(personName, sa));
+		}
+
+		private static void assertScheduledActivity(string personName, ScheduledActivityInfo layer)
+		{
 			Browser.Interactions.AssertExistsUsingJQuery(
-					".person:contains('{0}') .shift .layer[data-start-time='{1}'][data-length-minutes='{2}'][style*='background-color: {3}']",
-					personName,
-					layer.StartTime,
-					layer.LengthMinutes(),
-					PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color)
-					);
+				".person:contains('{0}') .shift .layer[data-start-time='{1}'][data-length-minutes='{2}'][style*='background-color: {3}']",
+				personName,
+				layer.StartTime,
+				layer.LengthMinutes(),
+				PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color)
+				);
 		}
 		
 		[Then(@"I should see '(.*)' with absence")]
 		public void ThenIShouldSeeWithAbsence(string personName, Table table)
 		{
-			var layer = table.CreateInstance<LayerInfo>();
+			var layer = table.CreateInstance<ScheduledActivityInfo>();
 			string selector;
 
 			if (layer.StartTime != null)
@@ -221,7 +259,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			public string Skill { get; set; }
 		}
 
-		public class LayerInfo
+		public class ScheduledActivityInfo
 		{
 			public string Color { get; set; }
 			public string StartTime { get; set; }
@@ -294,6 +332,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public string StartTime { get; set; }
 		public string EndTime { get; set; }
 	}
+
+	public class ScheduleShiftInfo
+	{
+		public string Name { get; set; }
+		public string Color { get; set; }
+	}
+
 
 	public class StaffingMetricInfo
 	{

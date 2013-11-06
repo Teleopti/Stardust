@@ -60,7 +60,7 @@ Scenario: View shift
 	| Lunch start time | 2012-12-02 11:30 |
 	| Lunch end time   | 2012-12-02 12:15 |
 	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
-	Then I should see these shift layers
+	Then I should see these scheduled activities
 	| Start time | End time | Color  |
 	| 08:00      | 11:30    | Green  |
 	| 11:30      | 12:15    | Yellow |
@@ -94,7 +94,7 @@ Scenario: View unpublished schedule when permitted
 	| Lunch start time | 2013-08-10 11:30 |
 	| Lunch end time   | 2013-08-10 12:15 |
 	When I view person schedule for 'Pierre Baldi' on '2013-08-10'
-	Then I should see these shift layers
+	Then I should see these scheduled activities
 	| Start time | End time | Color  |
 	| 08:00      | 11:30    | Green  |
 	| 11:30      | 12:15    | Yellow |
@@ -120,7 +120,7 @@ Scenario: View night shift from today
 	| Start time     | 2012-12-02 20:00 |
 	| End time       | 2012-12-03 04:00 |
 	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
-	Then I should see a shift layer with
+	Then I should see a scheduled activity with
 	| Field      | Value   |
 	| Start time | 20:00   |
 	| End time   | 1.04:00 |
@@ -137,7 +137,7 @@ Scenario: View schedule in persons time zone
 	| Start time     | 2012-12-02 08:00 |
 	| End time       | 2012-12-02 17:00 |
 	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
-	Then I should see a shift layer with
+	Then I should see a scheduled activity with
 	| Field      | Value |
 	| Start time | 08:00 |
 	| End time   | 17:00 |

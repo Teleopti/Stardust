@@ -78,11 +78,28 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				scheduledActivityStartTime = LunchStartTime;
 				scheduledActivityEndTime = LunchEndTime;
 			}
+			if (BreakActivity!=null)
+			{
+				var breakActivity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(BreakActivity));
+				var breakStartTimeUtc = timeZone.SafeConvertTimeToUtc(BreakStartTime);
+				var breakEndTimeUtc = timeZone.SafeConvertTimeToUtc(BreakEndTime);
+				var breakPeriod = new DateTimePeriod(breakStartTimeUtc, breakEndTimeUtc);
+				mainShift.LayerCollection.Add(new EditableShiftLayer(breakActivity, breakPeriod));
+			}
 
 			if (scheduledActivityName == null)
 				return;
 
 			var scheduledActivity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(scheduledActivityName));
+			}
+
+			if (Overtime != null)
+			{
+				var multiplicatorDefinitionSet = new MultiplicatorDefinitionSetRepository(uow).LoadAll().Single(x => x.Name.Equals(OvertimeMultiplicatorDefinitionSet));
+				var overtimeStartTimeUtc = timeZone.SafeConvertTimeToUtc(OvertimeStartTime);
+				var overtimeEndTimeUtc = timeZone.SafeConvertTimeToUtc(OvertimeEndTime);
+				var overtimePeriod = new DateTimePeriod(overtimeStartTimeUtc, overtimeEndTimeUtc);
+				assignment.AddOvertimeLayer(activity, overtimePeriod, multiplicatorDefinitionSet);
 
 			var startTimeUtc = timeZone.SafeConvertTimeToUtc(scheduledActivityStartTime);
 			var endTimeUtc = timeZone.SafeConvertTimeToUtc(scheduledActivityEndTime);
