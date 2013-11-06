@@ -86,7 +86,7 @@
 	
 	</Target>
 
-	<Target Name="Compile" DependsOnTargets="PreCompile;CreateAnalyticsDb;BuildSSASXmla">
+	<Target Name="Compile" DependsOnTargets="CreateAnalyticsDb;BuildSSASXmla;PreCompile">
 		<Message Importance="high" Text="Compile starting..." />
 
 		<MSBuild Projects="@(SolutionFile)"
