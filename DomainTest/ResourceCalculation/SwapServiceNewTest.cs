@@ -4,13 +4,11 @@ using System.Data;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -328,7 +326,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		/// </summary>
 		/// <remarks>Bug 24260</remarks>
 		[Test]
-		public void ShouldStayAbsenceWhenSwapWithEmptyDay()
+		public void ShouldStayShortAbsenceWhenSwapWithEmptyDay()
 		{
 
 			IList<IScheduleDay> _list = new List<IScheduleDay>();

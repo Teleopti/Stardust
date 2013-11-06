@@ -42,13 +42,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				if (schedulePart1.PersonAssignmentCollection().Count == 0)
 				{
-					_selectedSchedules[1].Merge(schedulePart0, false);
+					_selectedSchedules[1].Swap(schedulePart0, false);
 					_selectedSchedules[1].DeletePersonalStuff();
 					_selectedSchedules[0].DeleteMainShift(schedulePart0);
 				}
 				else if (schedulePart0.PersonAssignmentCollection().Count == 0)
 				{
-					_selectedSchedules[0].Merge(schedulePart1, false);
+					_selectedSchedules[0].Swap(schedulePart1, false);
 					_selectedSchedules[0].DeletePersonalStuff();
 					_selectedSchedules[1].DeleteMainShift(schedulePart1);
 				}
@@ -56,15 +56,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			else
 			{
 				if (schedulePart1.PersistableScheduleDataCollection().Count() == 0)
-					_selectedSchedules[0].Merge(_selectedSchedules[0], true);
+					_selectedSchedules[0].Swap(_selectedSchedules[0], true);
 				else
-					_selectedSchedules[0].Merge(schedulePart1, false);
+					_selectedSchedules[0].Swap(schedulePart1, false);
 
 
 				if(schedulePart0.PersistableScheduleDataCollection().Count() == 0)
-					_selectedSchedules[1].Merge(_selectedSchedules[1], true);
+					_selectedSchedules[1].Swap(_selectedSchedules[1], true);
 				else
-					_selectedSchedules[1].Merge(schedulePart0, false);
+					_selectedSchedules[1].Swap(schedulePart0, false);
 			}
 
 			((ExtractedSchedule)_selectedSchedules[1]).DeleteOvertime();
