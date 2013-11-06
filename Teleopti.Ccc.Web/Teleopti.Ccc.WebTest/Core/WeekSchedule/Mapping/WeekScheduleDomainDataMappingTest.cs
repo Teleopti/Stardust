@@ -35,8 +35,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		private TimeZoneInfo timeZone;
 		private IPermissionProvider permissionProvider;
 		private INow now;
-		private IAllowanceProvider allowanceProvider;
-		private IAbsenceTimeProvider absenceTimeProvider;
 		private IAbsenceRequestProbabilityProvider probabilityProvider;
 
 		[SetUp]
@@ -49,8 +47,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			now = MockRepository.GenerateMock<INow>();
-			allowanceProvider = MockRepository.GenerateMock<IAllowanceProvider>();
-			absenceTimeProvider = MockRepository.GenerateMock<IAbsenceTimeProvider>();
 			probabilityProvider = MockRepository.GenerateMock<IAbsenceRequestProbabilityProvider>();
 
 			Mapper.Reset();
@@ -62,8 +58,6 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 					new FuncTimeZone(() => timeZone), 
 					permissionProvider,
 					now,
-					allowanceProvider,
-					absenceTimeProvider,
 					probabilityProvider
 					)));
 		}
@@ -237,10 +231,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
 
 			result.Days.Single(d => d.Date == date).PersonRequests.Single().Should().Be.SameInstanceAs(personRequest);
-		}
+		}	
 
 		[Test]
-		public void ShouldMapAllowances()
+		public void ShouldMapClass()
 		{
 			var date = DateOnly.Today;
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
@@ -253,85 +247,87 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(weekWithPreviousDay)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
-			var allowance = TimeSpan.FromHours(4);
-			var fulltimeEquivalents = TimeSpan.FromHours(0);
-			var allowanceDay1 = new Tuple<DateOnly, TimeSpan, TimeSpan,double, bool, bool>(week.StartDate, allowance, fulltimeEquivalents, 0, true, false);
-			var allowanceDay2 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool,bool>(week.StartDate.AddDays(1), allowance,fulltimeEquivalents,0, true,false);
-			var allowanceDay3 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool,bool>(week.StartDate.AddDays(2), allowance, fulltimeEquivalents,0, true, false);
-			var allowanceDay4 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool,bool>(week.StartDate.AddDays(3), allowance, fulltimeEquivalents, 0,true, false);
-			var allowanceDay5 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool,bool>(week.StartDate.AddDays(4), allowance, fulltimeEquivalents, 0,true, false);
-			var allowanceDay6 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool,bool>(week.StartDate.AddDays(5), allowance, fulltimeEquivalents, 0,true, false);
-			var allowanceDay7 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool,bool>(week.StartDate.AddDays(6), allowance.Add(TimeSpan.FromHours(1)), fulltimeEquivalents, 0,true,false);
- 
-			allowanceProvider.Stub(x => x.GetAllowanceForPeriod(week)).Return(new[] { allowanceDay1, allowanceDay2, allowanceDay3, allowanceDay4, allowanceDay5, allowanceDay6, allowanceDay7 });
-
-			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
-			result.Days.Single(d => d.Date == lastDayOfWeek).Allowance.Should().Be.EqualTo(allowanceDay7.Item2.TotalMinutes);
-		}
-
-		[Test]
-		public void ShouldMapAvailabilities()
-		{
-			var date = DateOnly.Today;
-			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
-			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
-			var week = new DateOnlyPeriod(firstDayOfWeek, lastDayOfWeek);
-			var weekWithPreviousDay = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
-			var scheduleDay = new StubFactory().ScheduleDayStub(date);
-			var projection = new StubFactory().ProjectionStub();
-
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(weekWithPreviousDay)).Return(new[] { scheduleDay });
-			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
-
-			var allowance = TimeSpan.FromHours(4);
+			const string theClass = "red";
 			const bool availability = false;
-			var fulltimeEquivalents = TimeSpan.FromHours(0);
+		    const string text = "poor";
 
-			var availabilityDay1 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>(week.StartDate, allowance, fulltimeEquivalents, 0, availability, false);
-			var availabilityDay2 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>(week.StartDate.AddDays(1), allowance, fulltimeEquivalents, 0, availability, false);
-			var availabilityDay3 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>(week.StartDate.AddDays(2), allowance, fulltimeEquivalents, 0, availability, false);
-			var availabilityDay4 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>(week.StartDate.AddDays(3), allowance, fulltimeEquivalents, 0, availability, false);
-			var availabilityDay5 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>(week.StartDate.AddDays(4), allowance, fulltimeEquivalents, 0, availability, false);
-			var availabilityDay6 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>(week.StartDate.AddDays(5), allowance, fulltimeEquivalents, 0, availability, false);
-			var availabilityDay7 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>(week.StartDate.AddDays(6), allowance.Add(TimeSpan.FromHours(1)), fulltimeEquivalents, 0, availability, false);
-			
-			allowanceProvider.Stub(x => x.GetAllowanceForPeriod(week)).Return(new[] { availabilityDay1, availabilityDay2, availabilityDay3, availabilityDay4, availabilityDay5, availabilityDay6, availabilityDay7 });
+            var probDay1 = new Tuple<DateOnly, string, string, bool>(week.StartDate, theClass, text, availability);
+            var probDay2 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(1), theClass, text, availability);
+            var probDay3 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(2), theClass, text, availability);
+            var probDay4 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(3), theClass, text, availability);
+            var probDay5 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(4), theClass, text, availability);
+            var probDay6 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(5), theClass, text, availability);
+            var probDay7 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(6), theClass, text, availability);
 
-			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
-			result.Days.Single(d => d.Date == lastDayOfWeek).Availability.Should().Be.EqualTo(availabilityDay7.Item5);
-		}
-
-		[Test]
-		public void ShouldMapFulltimeEquivalents()
-		{
-			var date = DateOnly.Today;
-			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
-			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
-			var week = new DateOnlyPeriod(firstDayOfWeek, lastDayOfWeek);
-			var weekWithPreviousDay = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
-			var scheduleDay = new StubFactory().ScheduleDayStub(date);
-			var projection = new StubFactory().ProjectionStub();
-
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(weekWithPreviousDay)).Return(new[] { scheduleDay });
-			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
-
-			var allowance = TimeSpan.FromHours(4);
-			const bool availability = false;
-			var fulltimeEquivalents = TimeSpan.FromHours(4);
-
-			var availabilityDay1 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>(week.StartDate, allowance, fulltimeEquivalents, 0, availability, false);
-			var availabilityDay2 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>(week.StartDate.AddDays(1), allowance, fulltimeEquivalents, 0, availability, false);
-			var availabilityDay3 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>(week.StartDate.AddDays(2), allowance, fulltimeEquivalents, 0, availability, false);
-			var availabilityDay4 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>(week.StartDate.AddDays(3), allowance, fulltimeEquivalents, 0, availability, false);
-			var availabilityDay5 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>(week.StartDate.AddDays(4), allowance, fulltimeEquivalents, 0, availability, false);
-			var availabilityDay6 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>(week.StartDate.AddDays(5), allowance, fulltimeEquivalents, 0, availability, false);
-			var availabilityDay7 = new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>(week.StartDate.AddDays(6), allowance.Add(TimeSpan.FromHours(1)), fulltimeEquivalents, 0, availability, false);
-
-			allowanceProvider.Stub(x => x.GetAllowanceForPeriod(week)).Return(new[] { availabilityDay1, availabilityDay2, availabilityDay3, availabilityDay4, availabilityDay5, availabilityDay6, availabilityDay7 });
+            probabilityProvider.Stub(x => x.GetAbsenceRequestProbabilityForPeriod(week)).Return(new List<Tuple<DateOnly, string, string, bool>> { probDay1, probDay2, probDay3, probDay4, probDay5, probDay6, probDay7 });
 
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
-			result.Days.Single(d => d.Date == lastDayOfWeek).FulltimeEquivalent.Should().Be.EqualTo(availabilityDay7.Item3.TotalMinutes);
+			result.Days.Single(d => d.Date == lastDayOfWeek).ProbabilityClass.Should().Be.EqualTo(probDay7.Item2);
 		}
+
+        [Test]
+        public void ShouldMapText()
+        {
+            var date = DateOnly.Today;
+            var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
+            var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
+            var week = new DateOnlyPeriod(firstDayOfWeek, lastDayOfWeek);
+            var weekWithPreviousDay = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
+            var scheduleDay = new StubFactory().ScheduleDayStub(date);
+            var projection = new StubFactory().ProjectionStub();
+
+            scheduleProvider.Stub(x => x.GetScheduleForPeriod(weekWithPreviousDay)).Return(new[] { scheduleDay });
+            projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
+
+            const string theClass = "red";
+            const bool availability = false;
+            const string text = "poor";
+
+            var probDay1 = new Tuple<DateOnly, string, string, bool>(week.StartDate, theClass, text, availability);
+            var probDay2 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(1), theClass, text, availability);
+            var probDay3 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(2), theClass, text, availability);
+            var probDay4 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(3), theClass, text, availability);
+            var probDay5 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(4), theClass, text, availability);
+            var probDay6 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(5), theClass, text, availability);
+            var probDay7 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(6), theClass, text, availability);
+
+            probabilityProvider.Stub(x => x.GetAbsenceRequestProbabilityForPeriod(week)).Return(new List<Tuple<DateOnly, string, string, bool>> { probDay1, probDay2, probDay3, probDay4, probDay5, probDay6, probDay7 });
+
+            var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
+            result.Days.Single(d => d.Date == lastDayOfWeek).ProbabilityText.Should().Be.EqualTo(probDay7.Item3);
+        }
+
+        [Test]
+        public void ShouldMapAvailability()
+        {
+            var date = DateOnly.Today;
+            var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
+            var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
+            var week = new DateOnlyPeriod(firstDayOfWeek, lastDayOfWeek);
+            var weekWithPreviousDay = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
+            var scheduleDay = new StubFactory().ScheduleDayStub(date);
+            var projection = new StubFactory().ProjectionStub();
+
+            scheduleProvider.Stub(x => x.GetScheduleForPeriod(weekWithPreviousDay)).Return(new[] { scheduleDay });
+            projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
+
+            const string theClass = "red";
+            const bool availability = true;
+            const string text = "poor";
+
+            var probDay1 = new Tuple<DateOnly, string, string, bool>(week.StartDate, theClass, text, availability);
+            var probDay2 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(1), theClass, text, availability);
+            var probDay3 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(2), theClass, text, availability);
+            var probDay4 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(3), theClass, text, availability);
+            var probDay5 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(4), theClass, text, availability);
+            var probDay6 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(5), theClass, text, availability);
+            var probDay7 = new Tuple<DateOnly, string, string, bool>(week.StartDate.AddDays(6), theClass, text, availability);
+
+            probabilityProvider.Stub(x => x.GetAbsenceRequestProbabilityForPeriod(week)).Return(new List<Tuple<DateOnly, string, string, bool>> { probDay1, probDay2, probDay3, probDay4, probDay5, probDay6, probDay7 });
+
+            var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
+            result.Days.Single(d => d.Date == lastDayOfWeek).Availability.Should().Be.EqualTo(probDay7.Item4);
+        }
 
 		[Test]
 		public void ShouldMapPersonRequestsStartingAtMidnight()

@@ -25,13 +25,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly INow _now;
-		private readonly IAllowanceProvider _allowanceProvider;
-		private readonly IAbsenceTimeProvider _absenceTimeProvider;
 		private readonly IAbsenceRequestProbabilityProvider _absenceRequestProbabilityProvider;
 
 		public WeekScheduleDomainDataMappingProfile(IScheduleProvider scheduleProvider, IProjectionProvider projectionProvider, 
 			IPersonRequestProvider personRequestProvider, IUserTimeZone userTimeZone, IPermissionProvider permissionProvider, INow now, 
-			IAllowanceProvider allowanceProvider, IAbsenceTimeProvider absenceTimeProvider, IAbsenceRequestProbabilityProvider absenceRequestProbabilityProvider)
+			IAbsenceRequestProbabilityProvider absenceRequestProbabilityProvider)
 		{
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
@@ -39,8 +37,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_userTimeZone = userTimeZone;
 			_permissionProvider = permissionProvider;
 			_now = now;
-			_allowanceProvider = allowanceProvider;
-			_absenceTimeProvider = absenceTimeProvider;
 			_absenceRequestProbabilityProvider = absenceRequestProbabilityProvider;
 		}
 
