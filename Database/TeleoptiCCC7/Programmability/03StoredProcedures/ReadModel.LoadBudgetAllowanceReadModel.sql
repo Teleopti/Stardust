@@ -45,7 +45,8 @@ BEGIN
 	SELECT
 		sp.PayloadId,
 		sp.BelongsToDate,
-		SUM(sp.ContractTime) as TotalContractTime
+		SUM(sp.ContractTime) as TotalContractTime,
+		Count(*) as HeadCounts
 	FROM ReadModel.ScheduleProjectionReadOnly sp
 	INNER JOIN #temppersonbudgetgroup t	
 		ON t.PersonId = sp.PersonId
