@@ -34,40 +34,4 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			return true;
 		}
 	}
-
-	public class ShiftTradeMustBeSameDateInLocalTime : ShiftTradeSpecification
-	{
-		public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
-		{
-			foreach (var shiftTradeSwapDetail in obj)
-			{				
-				if (shiftTradeSwapDetail.SchedulePartFrom.PersonAssignment() != null &&
-				    shiftTradeSwapDetail.SchedulePartTo.PersonAssignment() != null)
-				{
-					var fromStartUtc = shiftTradeSwapDetail.SchedulePartFrom.PersonAssignment().Period.StartDateTime;
-					var toStartUtc = shiftTradeSwapDetail.SchedulePartTo.PersonAssignment().Period.StartDateTime;
-
-					var sendersTimeZone = shiftTradeSwapDetail.PersonFrom.PermissionInformation.DefaultTimeZone();
-					var recieversTimeZone = shiftTradeSwapDetail.PersonTo.PermissionInformation.DefaultTimeZone();
-
-					var myStartMyShift = TimeZoneInfo.ConvertTimeFromUtc(fromStartUtc, sendersTimeZone);
-					var myStartOtherShift = TimeZoneInfo.ConvertTimeFromUtc(toStartUtc, sendersTimeZone);
-
-					var otherStartHisShift = TimeZoneInfo.ConvertTimeFromUtc(toStartUtc, recieversTimeZone);
-					var otherStartMysShift = TimeZoneInfo.ConvertTimeFromUtc(fromStartUtc, recieversTimeZone);
-
-					if (myStartMyShift.Date != myStartOtherShift.Date || otherStartHisShift.Date != otherStartMysShift.Date) return false;
-				}
-				
-			}
-			return true;
-		}
-
-		public override string DenyReason
-		{
-			get { return "TODO"; }
-		}
-
-		
-	}
 }

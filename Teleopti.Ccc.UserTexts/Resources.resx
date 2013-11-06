@@ -11835,4 +11835,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Use Day of Month Seasonality</value>
     <comment>Option in the last step of quick forecast</comment>
   </data>
+  <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
+    <value>Shifttrade denied because target shift is for another date.</value>
+    <comment>denymessage when trading shifts on different dates</comment>
+  </data>
 </root>
