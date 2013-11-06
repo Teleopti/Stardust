@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldRegisterShiftTradeSpecifications()
 		{
-			const int noOfSpecs = 4;
+			const int noOfSpecs = 5;
 			using (var ioc = containerBuilder.Build())
 			{
 				var specs = ioc.Resolve<IEnumerable<IShiftTradeSpecification>>().ToArray();
