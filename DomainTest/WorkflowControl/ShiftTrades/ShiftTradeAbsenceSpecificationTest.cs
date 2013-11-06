@@ -123,13 +123,29 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 	}
 
 	[TestFixture]
-	public class ShiftTradeMustBeSameDateInLocalTimeTest
+	public class ShiftTradeShouldNotChangeStartDateTest
 	{
+		private Person _personFrom;
+		private Person _personTo;
+		private ShiftTradeShouldNotChangeStartDate _target;
+		private DateTime _dateFrom;
+		private DateTime _dateTime;
+		private DateTimePeriod _periodFrom;
+		private DateTimePeriod _periodTo;
+		private SchedulePartFactoryForDomain _scheduleFactoryForSender;
+		private SchedulePartFactoryForDomain _scheduleFactoryForReciever;
+
+		[SetUp]
+		public void Setup()
+		{
+			
+		}
+
+
 		[Test]
 		public void IsSatsifiedBy_WhenBothSchedulesAreOnSameDayInSameTimeZone_ShouldBeTrue()
 		{
-			var scheduleFactory = new StubFactory();
-			var target = new ShiftTradeMustBeSameDateInLocalTime();
+			var target = new ShiftTradeShouldNotChangeStartDate();
 			var personFrom = new Person(){Name=new Name("Ashley","Andeen")};
 			var personTo = new Person(){Name=new Name("Bengt","Magnusson")};
 			var date = new DateTime(2001, 1, 12);
@@ -144,8 +160,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		[Test]
 		public void IsSatisfiedBy_WhenScheduleToStartsOnDifferentDateThanScheduleFrom_ShouldBeFalse()
 		{
-			var scheduleFactory = new StubFactory();
-			var target = new ShiftTradeMustBeSameDateInLocalTime();
+			var target = new ShiftTradeShouldNotChangeStartDate();
 			var personFrom = new Person() { Name = new Name("Ashley", "Andeen") };
 			var personTo = new Person() { Name = new Name("Bengt", "Magnusson") };
 			var dateFrom = new DateTime(2001, 1, 12);
@@ -158,39 +173,58 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			Assert.That(target.IsSatisfiedBy(details),Is.False);
 		}
 
-		[Test, Ignore("Henke: todo")]
-		public void IsSatisfiedBy_WhenScheduleToStartsOnDifferentDateThanScheduleFromAccordingToSendersTimeZone_ShouldBeFalse()
+		[Test]
+		public void IsSatisfiedBy_WhenTheNewShiftIsAnotherDateFromMyTimeZone_ShouldBeFalse()
 		{
+
+			_target = new ShiftTradeShouldNotChangeStartDate();
+			_personFrom = new Person() { Name = new Name("Ashley", "Andeen") };
+			_personTo = new Person() { Name = new Name("Bengt", "Magnusson") };
+			_dateFrom = new DateTime(2001, 1, 12);
+			_dateTime = new DateTime(2001, 1, 12);
+			_periodFrom = new DateTimePeriod(new DateTime(2001, 1, 12, 0, 0, 0, DateTimeKind.Utc),
+			                                 new DateTime(2001, 1, 12, 0, 0, 0, DateTimeKind.Utc));
+			_periodTo = new DateTimePeriod(new DateTime(2001, 1, 11, 0, 0, 0, DateTimeKind.Utc),
+			                               new DateTime(2001, 1, 11, 0, 0, 0, DateTimeKind.Utc));
+
+			_scheduleFactoryForSender = new SchedulePartFactoryForDomain(_personFrom,_periodFrom);
+			_scheduleFactoryForReciever = new SchedulePartFactoryForDomain(_personTo, _periodTo);
+
+			_scheduleFactoryForSender.CurrentPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.CreateCustomTimeZone("x",TimeSpan.Zero,"x","x"));
+			_scheduleFactoryForReciever.CurrentPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.CreateCustomTimeZone("x", TimeSpan.FromHours(3), "x", "x"));
 			
-			var target = new ShiftTradeMustBeSameDateInLocalTime();
+			var scheduleTo = _scheduleFactoryForReciever.AddMainShiftLayerBetween(TimeSpan.FromHours(22), TimeSpan.FromHours(23)).CreatePart(); 
+
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(_personFrom, _personTo, new DateOnly(_dateFrom), new DateOnly(_dateTime)) { SchedulePartFrom = scheduleFrom, SchedulePartTo = scheduleTo };
+			var details = new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail };
+
+			Assert.That(_target.IsSatisfiedBy(details), Is.False);
+		}
+
+		[Test]
+		public void IsSatisfiedBy_WhenScheduleToStartsOnDifferentDateThanScheduleFromAccordingToRecieversTimeZone_ShouldBeFalse()
+		{
+			var target = new ShiftTradeShouldNotChangeStartDate();
 			var personFrom = new Person() { Name = new Name("Ashley", "Andeen") };
 			var personTo = new Person() { Name = new Name("Bengt", "Magnusson") };
-			var dateFrom = new DateTime(2001, 1, 12);
-			var dateTo = new DateTime(2001, 1, 12);
-			var period = new DateTimePeriod(new DateTime(2001, 1, 12, 0, 0, 0, DateTimeKind.Utc),
-			                                new DateTime(2001, 1, 12, 0, 0, 0, DateTimeKind.Utc));
-			personFrom.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.CreateCustomTimeZone("x",TimeSpan.Zero,"x","x"));
-			personTo.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.CreateCustomTimeZone("x",TimeSpan.FromHours(-10),"x","x"));
+			var periodFrom = new DateTimePeriod(new DateTime(2001, 1, 12, 0, 0, 0, DateTimeKind.Utc),
+											new DateTime(2001, 1, 12, 0, 0, 0, DateTimeKind.Utc));
+			var periodTo = new DateTimePeriod(new DateTime(2001, 1, 12, 0, 0, 0, DateTimeKind.Utc),
+											new DateTime(2001, 1, 12, 0, 0, 0, DateTimeKind.Utc));
 
-			var scheduleFactoryForSender = new SchedulePartFactoryForDomain(personFrom,period);
-			var scheduleFactoryForReciever = new SchedulePartFactoryForDomain(personTo,period);
+			var scheduleFactoryForSender = new SchedulePartFactoryForDomain(personFrom, periodFrom);
+			var scheduleFactoryForReciever = new SchedulePartFactoryForDomain(personTo, periodTo);
 
-			var scheduleFrom = scheduleFactoryForSender.AddMainShiftLayerBetween(TimeSpan.FromHours(1),TimeSpan.FromHours(7)).CreatePart();
-			var scheduleTo = scheduleFactoryForReciever.AddMainShiftLayerBetween(TimeSpan.FromHours(1), TimeSpan.FromHours(7)).CreatePart();
+			scheduleFactoryForSender.CurrentPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.CreateCustomTimeZone("x", TimeSpan.FromHours(-4), "x", "x"));
+			scheduleFactoryForReciever.CurrentPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.CreateCustomTimeZone("x", TimeSpan.FromHours(6), "x", "x"));
 
-			var d1 = scheduleFrom.DateOnlyAsPeriod.DateOnly;
-			var d2 = scheduleTo.DateOnlyAsPeriod.DateOnly;
+			var scheduleFrom = scheduleFactoryForSender.AddMainShiftLayerBetween(TimeSpan.FromHours(19), TimeSpan.FromHours(22)).CreatePart(); 
+			var scheduleTo = scheduleFactoryForReciever.AddMainShiftLayerBetween(TimeSpan.FromHours(13), TimeSpan.FromHours(16)).CreatePart(); 
 
-			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(dateFrom), new DateOnly(dateTo)) { SchedulePartFrom = scheduleFrom, SchedulePartTo = scheduleTo };
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(periodFrom.StartDateTime), new DateOnly(periodTo.StartDateTime)) { SchedulePartFrom = scheduleFrom, SchedulePartTo = scheduleTo };
 			var details = new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail };
 
 			Assert.That(target.IsSatisfiedBy(details), Is.False);
-		}
-
-		[Test,Ignore("Henke: todo")]
-		public void IsSatisfiedBy_WhenScheduleToStartsOnDifferentDateThanScheduleFromAccordingToRecieversTimeZone_ShouldBeFalse()
-		{
-			
 		}
 
 	}

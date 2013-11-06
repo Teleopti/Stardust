@@ -41,22 +41,24 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 		{
 			foreach (var shiftTradeSwapDetail in obj)
 			{				
-				var fromStartUtc = shiftTradeSwapDetail.SchedulePartFrom.Period.StartDateTime;
-				var toStartUtc = shiftTradeSwapDetail.SchedulePartTo.Period.StartDateTime;
+				if (shiftTradeSwapDetail.SchedulePartFrom.PersonAssignment() != null &&
+				    shiftTradeSwapDetail.SchedulePartTo.PersonAssignment() != null)
+				{
+					var fromStartUtc = shiftTradeSwapDetail.SchedulePartFrom.PersonAssignment().Period.StartDateTime;
+					var toStartUtc = shiftTradeSwapDetail.SchedulePartTo.PersonAssignment().Period.StartDateTime;
 
-				var sendersTimeZone = shiftTradeSwapDetail.PersonFrom.PermissionInformation.DefaultTimeZone();
-				var recieversTimeZone = shiftTradeSwapDetail.PersonFrom.PermissionInformation.DefaultTimeZone();
+					var sendersTimeZone = shiftTradeSwapDetail.PersonFrom.PermissionInformation.DefaultTimeZone();
+					var recieversTimeZone = shiftTradeSwapDetail.PersonTo.PermissionInformation.DefaultTimeZone();
 
-				var myStartMyShift = TimeZoneInfo.ConvertTimeFromUtc(fromStartUtc, sendersTimeZone).Date;
-				var myStartOtherShift = TimeZoneInfo.ConvertTimeFromUtc(toStartUtc, sendersTimeZone).Date;
+					var myStartMyShift = TimeZoneInfo.ConvertTimeFromUtc(fromStartUtc, sendersTimeZone);
+					var myStartOtherShift = TimeZoneInfo.ConvertTimeFromUtc(toStartUtc, sendersTimeZone);
 
-				var otherStartHisShift = TimeZoneInfo.ConvertTimeFromUtc(toStartUtc, recieversTimeZone).Date;
-				var otherStartMysShift = TimeZoneInfo.ConvertTimeFromUtc(fromStartUtc, recieversTimeZone).Date;
+					var otherStartHisShift = TimeZoneInfo.ConvertTimeFromUtc(toStartUtc, recieversTimeZone);
+					var otherStartMysShift = TimeZoneInfo.ConvertTimeFromUtc(fromStartUtc, recieversTimeZone);
 
-				if (myStartMyShift != myStartOtherShift || otherStartHisShift != otherStartMysShift) return false;
-
-
-
+					if (myStartMyShift.Date != myStartOtherShift.Date || otherStartHisShift.Date != otherStartMysShift.Date) return false;
+				}
+				
 			}
 			return true;
 		}
