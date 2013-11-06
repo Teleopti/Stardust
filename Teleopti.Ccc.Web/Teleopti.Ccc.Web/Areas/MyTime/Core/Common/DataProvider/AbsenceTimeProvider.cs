@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			if (absenceTime == null) return;
 			foreach (var payloadWorkTime in absenceTime)
 			{
-				target.First(a => a.Date == payloadWorkTime.BelongsToDate).AbsenceTime = TimeSpan.FromTicks(payloadWorkTime.TotalContractTime).TotalMinutes;
+				target.First(a => a.Date == payloadWorkTime.BelongsToDate).AbsenceTime += TimeSpan.FromTicks(payloadWorkTime.TotalContractTime).TotalMinutes;
 			}
 
 			foreach (var absenceAgent in target)
