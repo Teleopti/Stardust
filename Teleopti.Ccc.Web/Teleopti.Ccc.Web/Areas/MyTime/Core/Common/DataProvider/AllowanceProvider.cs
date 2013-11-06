@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				group p by p.Date into g
 				orderby g.Key
 				select new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>
-					(g.Key, TimeSpan.FromTicks(g.Sum(p => p.Time.Ticks)), TimeSpan.FromTicks(g.Sum(p => p.Heads.Ticks)), g.Last(o => o.Date == g.Key).Allowance,
+                    (g.Key, TimeSpan.FromTicks(g.Last(o => o.Date == g.Key).Time.Ticks), TimeSpan.FromTicks(g.Last().Heads.Ticks), g.Last(o => o.Date == g.Key).Allowance,
 					g.Last(o => o.Date == g.Key).Availability, g.Last(o => o.Date == g.Key).UseHeadCount);
 		}
 
