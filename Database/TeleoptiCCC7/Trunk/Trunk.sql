@@ -136,3 +136,15 @@ INCLUDE ( 	[Id],
 	[EndDateTime]
 	)
 GO
+
+----------------  
+--Name: Erik Sundberg
+--Date: 2013-11-06
+--Desc: Moved from 386 to main due to bug 25359. 
+--Original details:
+	--Name: Robin Karlsson
+	--Date: 2013-08-28
+	--Desc: Truncate read model for projected layers to force load of scheduled resources
+---------------- 
+TRUNCATE TABLE [ReadModel].[ScheduleProjectionReadOnly]
+GO

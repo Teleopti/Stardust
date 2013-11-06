@@ -3,10 +3,8 @@ using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 
@@ -17,9 +15,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterAssemblyTypes(typeof(IHandleEvent<>).Assembly)
-			       .Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleEvent<>)))
-			       .As(t => t.GetInterfaces().Where(i => i.GetGenericTypeDefinition() == typeof (IHandleEvent<>)))
-				;
+				   .Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleEvent<>)))
+				   .As(t => t.GetInterfaces().Where(i => i.GetGenericTypeDefinition() == typeof(IHandleEvent<>)));
 
 			builder.RegisterType<UnitOfWorkTransactionEventSyncronization>().As<IEventSyncronization>().SingleInstance();
 
@@ -30,12 +27,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<UpdateScheduleProjectionReadModel>().As<IUpdateScheduleProjectionReadModel>().SingleInstance();
 			builder.RegisterType<PersonScheduleDayReadModelPersister>().As<IPersonScheduleDayReadModelPersister>().SingleInstance();
 			builder.RegisterType<PersonScheduleDayReadModelFinder>().As<IPersonScheduleDayReadModelFinder>().SingleInstance();
-			builder.RegisterType<ScheduledResourcesReadModelStorage>()
-				   .As<IScheduledResourcesReadModelPersister>()
-				   .As<IScheduledResourcesReadModelReader>()
-				   .SingleInstance();
-
-			builder.RegisterType<ScheduledResourcesReadModelUpdater>().As<IScheduledResourcesReadModelUpdater>().SingleInstance();
 		}
 	}
 

@@ -1148,9 +1148,10 @@ GO
 --Name: Robin Karlsson
 --Date: 2013-08-28
 --Desc: Truncate read model for projected layers to force load of scheduled resources
+--Edit: Erik Sundberg -> Moved this truncate to 389(default) due to bug: 25359
 ---------------- 
-TRUNCATE TABLE [ReadModel].[ScheduleProjectionReadOnly]
-GO
+--TRUNCATE TABLE [ReadModel].[ScheduleProjectionReadOnly]
+--GO
 
 ----------------  
 --Name: tamasb
