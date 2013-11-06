@@ -1498,6 +1498,15 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 								_dataMartConnectionString);
 		}
 
+        public int FillFactAgentSkillDataMart(IBusinessUnit businessUnit)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+
+            return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_skill_load", parameterList,
+                                _dataMartConnectionString);
+        }
+
 		public DateTime GetMaxDateInDimDate()
 		{
 			return

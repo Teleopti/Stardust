@@ -19100,6 +19100,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agent Skills.
+        /// </summary>
+        public static string ResReportAgentSkills {
+            get {
+                return ResourceManager.GetString("ResReportAgentSkills", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Agent Statistics.
         /// </summary>
         public static string ResReportAgentStatistics {

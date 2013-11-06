@@ -11834,4 +11834,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Use Day of Month Seasonality</value>
     <comment>Option in the last step of quick forecast</comment>
   </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Agent Skills</value>
+    <comment>Agent Skills</comment>
+  </data>
 </root>
