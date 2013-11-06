@@ -34,6 +34,15 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public DateTime LunchStartTime { get; set; }
 		public DateTime LunchEndTime { get; set; }
 
+		public string BreakActivity { get; set; }
+		public DateTime BreakStartTime { get; set; }
+		public DateTime BreakEndTime { get; set; }
+		
+		public string Overtime { get; set; }
+		public string OvertimeMultiplicatorDefinitionSet { get; set; }
+		public DateTime OvertimeStartTime { get; set; }
+		public DateTime OvertimeEndTime { get; set; }
+
 		// this should not be here. this exists on the ShiftCategoryConfigurable
 		public string ShiftColor { get; set; }	
 
@@ -91,24 +100,27 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				return;
 
 			var scheduledActivity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(scheduledActivityName));
-			}
+
 
 			if (Overtime != null)
 			{
-				var multiplicatorDefinitionSet = new MultiplicatorDefinitionSetRepository(uow).LoadAll().Single(x => x.Name.Equals(OvertimeMultiplicatorDefinitionSet));
+				var multiplicatorDefinitionSet =
+					new MultiplicatorDefinitionSetRepository(uow).LoadAll()
+					                                             .Single(x => x.Name.Equals(OvertimeMultiplicatorDefinitionSet));
 				var overtimeStartTimeUtc = timeZone.SafeConvertTimeToUtc(OvertimeStartTime);
 				var overtimeEndTimeUtc = timeZone.SafeConvertTimeToUtc(OvertimeEndTime);
 				var overtimePeriod = new DateTimePeriod(overtimeStartTimeUtc, overtimeEndTimeUtc);
-				assignment.AddOvertimeLayer(activity, overtimePeriod, multiplicatorDefinitionSet);
+				personAssignment.AddOvertimeLayer(scheduledActivity, overtimePeriod, multiplicatorDefinitionSet);
 
-			var startTimeUtc = timeZone.SafeConvertTimeToUtc(scheduledActivityStartTime);
-			var endTimeUtc = timeZone.SafeConvertTimeToUtc(scheduledActivityEndTime);
-			var period = new DateTimePeriod(startTimeUtc, endTimeUtc);
+				var startTimeUtc = timeZone.SafeConvertTimeToUtc(scheduledActivityStartTime);
+				var endTimeUtc = timeZone.SafeConvertTimeToUtc(scheduledActivityEndTime);
+				var period = new DateTimePeriod(startTimeUtc, endTimeUtc);
 
-			if (ScheduledActivityIsPersonal)
-				personAssignment.AddPersonalLayer(scheduledActivity, period);
-			else
-				mainShift.LayerCollection.Add(new EditableShiftLayer(scheduledActivity, period));
+				if (ScheduledActivityIsPersonal)
+					personAssignment.AddPersonalLayer(scheduledActivity, period);
+				else
+					mainShift.LayerCollection.Add(new EditableShiftLayer(scheduledActivity, period));
+			}
 		}
 	}
 }
