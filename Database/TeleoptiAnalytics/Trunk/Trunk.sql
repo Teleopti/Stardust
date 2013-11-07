@@ -319,3 +319,167 @@ IF NOT EXISTS (SELECT 1 FROM [mart].[etl_jobstep] WHERE jobstep_name=N'fact_agen
 INSERT [mart].[etl_jobstep] ([jobstep_id], [jobstep_name]) VALUES(83,N'fact_agent_skill')
 GO
 
+----------------  
+--Name: Karin
+--Date: 2013-11-07
+--Desc: #24978 New dimension and fact table for state groups and agent time in state
+-----------------
+CREATE TABLE [mart].[dim_state_group](
+	[state_group_id] [int] IDENTITY(1,1) NOT NULL,
+	[state_group_code] [uniqueidentifier] NULL,
+	[state_group_name] [nvarchar](100) NOT NULL,
+	[business_unit_id] [int] NULL,
+	[datasource_id] [smallint] NOT NULL,
+	[insert_date] [smalldatetime] NOT NULL,
+	[update_date] [smalldatetime] NOT NULL,
+	[datasource_update_date] [smalldatetime] NULL,
+	[is_deleted] [bit] NOT NULL	
+ CONSTRAINT [PK_dim_state_group] PRIMARY KEY CLUSTERED 
+(
+	[state_group_id] ASC
+) )
+
+GO
+
+ALTER TABLE [mart].[dim_state_group] ADD  CONSTRAINT [DF_dim_state_group_state_group_name]  DEFAULT ('Not Defined') FOR [state_group_name]
+GO
+
+ALTER TABLE [mart].[dim_state_group] ADD  CONSTRAINT [DF_dim_state_group_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+GO
+
+ALTER TABLE [mart].[dim_state_group] ADD  CONSTRAINT [DF_dim_state_group_insert_date]  DEFAULT (getdate()) FOR [insert_date]
+GO
+
+ALTER TABLE [mart].[dim_state_group] ADD  CONSTRAINT [DF_dim_state_group_update_date]  DEFAULT (getdate()) FOR [update_date]
+GO
+
+ALTER TABLE [mart].[dim_state_group] ADD  CONSTRAINT [DF_dim_state_group_is_deleted]  DEFAULT ((0)) FOR [is_deleted]
+GO
+
+CREATE TABLE [mart].[fact_agent_state](
+	[date_id] [int] NOT NULL,
+	[interval_id][smallint] NOT NULL, 
+	[person_id] [int] NOT NULL,
+	[state_group_id] [int] NOT NULL,
+	[time_in_state_s] [int] NULL,
+	[business_unit_id] [int] NOT NULL,
+	[datasource_id] [smallint] NOT NULL,
+ CONSTRAINT [PK_fact_agent_state] PRIMARY KEY CLUSTERED 
+(
+	[date_id] ASC,
+	[interval_id] ASC,
+	[person_id] ASC,
+	[state_group_id] ASC
+)) 
+
+GO
+
+ALTER TABLE [mart].[fact_agent_state] ADD  CONSTRAINT [DF_fact_agent_state_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+GO
+ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_date] FOREIGN KEY([date_id])
+REFERENCES [mart].[dim_date] ([date_id])
+GO
+ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_interval] FOREIGN KEY([interval_id])
+REFERENCES [mart].[dim_interval] ([interval_id])
+GO
+ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_person] FOREIGN KEY([person_id])
+REFERENCES [mart].[dim_person] ([person_id])
+GO
+----------------  
+--Name: Karin
+--Date: 2013-11-07
+--Desc: #24978 New report and report collection and control
+-----------------
+--ADD NEW CONTROL
+IF NOT EXISTS(SELECT 1 FROM mart.report_control where control_id=44)
+BEGIN
+	INSERT mart.report_control(Id, control_id, control_name, fill_proc_name)
+	SELECT NEWID(), 44, 'twolistStateGroup','mart.report_control_twolist_state_group_get'
+END
+
+--ADD REPORT CONTROL COLLECTION
+IF NOT EXISTS(SELECT 1 FROM mart.report_control_collection where CollectionId='F775ED72-5B41-4FEA-87DB-04AD347D4537')
+BEGIN
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT '0405D0BA-37C2-49BF-8E4F-B18EEB82A8AF',	mart.report_control.Id,	'F775ED72-5B41-4FEA-87DB-04AD347D4537',496,47,1,1,'12:00','ResDateFromColon',NULL,'@date_from',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+	FROM mart.report_control WHERE control_id=1
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT '3BF4D1B4-6DBA-4F9B-B5F5-631D1FAB725D',	mart.report_control.Id,	'F775ED72-5B41-4FEA-87DB-04AD347D4537',497,47,2,2,'12:00','ResDateToColon',NULL,'@date_to',496,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+	FROM mart.report_control WHERE control_id=2
+
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT '040C01EE-7596-4F2C-A5C8-DA62DFF1F599',mart.report_control.Id,	'F775ED72-5B41-4FEA-87DB-04AD347D4537',498,47,3,29,'-2','ResGroupPageColon',NULL,'@group_page_code',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+	FROM mart.report_control WHERE control_id=29
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT '6D3A4EA0-CBEB-42A7-B37C-15E009308D8A',mart.report_control.Id,	'F775ED72-5B41-4FEA-87DB-04AD347D4537',499,47,4,35,'-99','ResGroupPageGroupColon',NULL,'@group_page_group_set',498,NULL,NULL,	NULL,'040C01EE-7596-4F2C-A5C8-DA62DFF1F599',NULL,NULL,NULL
+	FROM mart.report_control WHERE control_id=35
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT 'A0906C71-4202-4469-88C1-364FCA39CFB7',mart.report_control.Id,	'F775ED72-5B41-4FEA-87DB-04AD347D4537',500,47,5,37,'-2','ResAgentColon',NULL,'@group_page_agent_code',496,497,498,499,'0405D0BA-37C2-49BF-8E4F-B18EEB82A8AF', '3BF4D1B4-6DBA-4F9B-B5F5-631D1FAB725D','040C01EE-7596-4F2C-A5C8-DA62DFF1F599','6D3A4EA0-CBEB-42A7-B37C-15E009308D8A'
+	FROM mart.report_control WHERE control_id=37
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT '475CE887-4C4A-4C44-9D21-7D68DADC77B9',mart.report_control.Id,'F775ED72-5B41-4FEA-87DB-04AD347D4537',500,47,6,3,'-2','ResSiteNameColon',NULL,'@site_id',496,497,NULL,NULL,'0405D0BA-37C2-49BF-8E4F-B18EEB82A8AF', '3BF4D1B4-6DBA-4F9B-B5F5-631D1FAB725D',NULL,NULL
+	FROM mart.report_control WHERE control_id=3
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT '0B726A61-DDD9-4E01-A4E1-55FE6A877E17',mart.report_control.Id,'F775ED72-5B41-4FEA-87DB-04AD347D4537',501,47,7,34,'-99','ResTeamNameColon',NULL,'@team_set',496,497,498,500,'0405D0BA-37C2-49BF-8E4F-B18EEB82A8AF', '3BF4D1B4-6DBA-4F9B-B5F5-631D1FAB725D','040C01EE-7596-4F2C-A5C8-DA62DFF1F599','475CE887-4C4A-4C44-9D21-7D68DADC77B9'
+	FROM mart.report_control WHERE control_id=34
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT 'FDF243DB-C6F0-4E15-B520-D6A50C2862C8',mart.report_control.Id,'F775ED72-5B41-4FEA-87DB-04AD347D4537',502,47,8,36,'-2','ResAgentsColon',NULL,'@agent_person_code',496,497,500,501,'0405D0BA-37C2-49BF-8E4F-B18EEB82A8AF', '3BF4D1B4-6DBA-4F9B-B5F5-631D1FAB725D','475CE887-4C4A-4C44-9D21-7D68DADC77B9','0B726A61-DDD9-4E01-A4E1-55FE6A877E17'
+	FROM mart.report_control WHERE control_id=36
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT 'A5E64353-0866-450D-A9E5-27169160DA6F',mart.report_control.Id,'F775ED72-5B41-4FEA-87DB-04AD347D4537',503,47,9,44,'-99','ResStateGroupColon',NULL,'@state_group_set',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+	FROM mart.report_control WHERE control_id=44
+
+	INSERT INTO mart.report_control_collection(Id, ControlId, CollectionId, control_collection_id, collection_id, print_order, control_id, default_value, control_name_resource_key, fill_proc_param, param_name, depend_of1, depend_of2, depend_of3, depend_of4, DependOf1, DependOf2, DependOf3, DependOf4)
+	SELECT '7D54C15F-E46E-42ED-99B8-9C90B32E0EB8',mart.report_control.Id,'F775ED72-5B41-4FEA-87DB-04AD347D4537',504,47,10,22,'-95','ResTimeZoneColon',NULL,	'@time_zone_id',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+	FROM mart.report_control WHERE control_id=22
+END
+
+----ADD REPORT
+DECLARE @newreportid uniqueidentifier
+SET  @newreportid= 'BB8C21BA-0756-4DDC-8B26-C9D5715A3443'
+DECLARE @CollectionId uniqueidentifier
+SELECT DISTINCT @CollectionId = CollectionId FROM mart.report_control_collection WHERE collection_id=46
+IF NOT EXISTS(SELECT 1 FROM mart.report where Id='BB8C21BA-0756-4DDC-8B26-C9D5715A3443')
+BEGIN
+INSERT INTO mart.report (
+		Id, 
+		report_id, 
+		control_collection_id, 
+		url, 
+		target, 
+		report_name, 
+		report_name_resource_key, 
+		visible, 
+		rpt_file_name, 
+		proc_name, 
+		help_key, 
+		sub1_name, 
+		sub1_proc_name, 
+		sub2_name, 
+		sub2_proc_name, 
+		ControlCollectionId)
+		VALUES(
+		@newreportid,
+		32,
+		47,
+		'~/Selection.aspx?ReportId=BB8C21BA-0756-4DDC-8B26-C9D5715A3443',
+		'_blank',
+		'Time in State per Agent',
+		'ResReportTimeInStatePerAgent',
+		1,
+		'~/Reports/CCC/report_time_in_state_per_agent.rdlc',
+		'mart.report_data_time_in_state_per_agent',
+		'f01:Report+TimeInStatePerAgent',
+		'','','','',
+		@CollectionId)
+END
+GO
+
