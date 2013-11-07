@@ -648,10 +648,6 @@ BEGIN
 	REFERENCES [dbo].[Absence] ([Id])
 	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_Absence]
 
-	ALTER TABLE [dbo].[PersonAbsence]  WITH CHECK ADD  CONSTRAINT [FK_PersonAbsence_BusinessUnit] FOREIGN KEY([BusinessUnit])
-	REFERENCES [dbo].[BusinessUnit] ([Id])
-	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_BusinessUnit]
-
 	ALTER TABLE [dbo].[PersonAbsence]  WITH CHECK ADD  CONSTRAINT [FK_PersonAbsence_Person_UpdatedBy] FOREIGN KEY([UpdatedBy])
 	REFERENCES [dbo].[Person] ([Id])
 	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_Person_UpdatedBy]
