@@ -546,3 +546,133 @@ INCLUDE
 	[StartDateTime]
 )
 GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-11-05
+--Desc: Bug #25359 - Prepare (redesign) the tables and optimize for the initial load of [ReadModel].[ScheduledResources] and [ReadModel].[ActivitySkillCombination]
+-- Intial load of theese are disabled until we need decided on when to deploy "AnyWhere"
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[ReadModel].[ScheduledResources]') AND name = N'CIX_ScheduledResources')
+BEGIN
+	CREATE TABLE [ReadModel].[ScheduledResources_new](
+		[Id] [bigint] IDENTITY(1,1) NOT NULL,
+		[ActivitySkillCombinationId] [int] NOT NULL,
+		[Resources] [float] NOT NULL,
+		[Heads] [float] NOT NULL,
+		[PeriodStart] [datetime] NOT NULL,
+		[PeriodEnd] [datetime] NOT NULL,
+	 CONSTRAINT [PK_ScheduledResources_new] PRIMARY KEY NONCLUSTERED 
+	(
+		[Id] ASC
+	)
+	)
+
+	CREATE CLUSTERED INDEX [CIX_ScheduledResources] ON [ReadModel].[ScheduledResources_new]
+	(
+		[ActivitySkillCombinationId] ASC,
+		[PeriodStart] ASC
+	)
+
+	ALTER TABLE [ReadModel].[ScheduledResources] DROP CONSTRAINT [DF_ScheduledResources_Resources]
+	ALTER TABLE [ReadModel].[ScheduledResources_new] ADD  CONSTRAINT [DF_ScheduledResources_Resources]  DEFAULT ((0)) FOR [Resources]
+
+	ALTER TABLE [ReadModel].[ScheduledResources] DROP CONSTRAINT [DF_ScheduledResources_Heads]
+	ALTER TABLE [ReadModel].[ScheduledResources_new] ADD  CONSTRAINT [DF_ScheduledResources_Heads]  DEFAULT ((0)) FOR [Heads]
+
+	--Re-create data
+	SET IDENTITY_INSERT [ReadModel].[ScheduledResources_new] ON
+	INSERT INTO [ReadModel].[ScheduledResources_new](Id, ActivitySkillCombinationId, Resources, Heads, PeriodStart, PeriodEnd)
+	SELECT Id, ActivitySkillCombinationId, Resources, Heads, PeriodStart, PeriodEnd
+	FROM [ReadModel].[ScheduledResources]
+	SET IDENTITY_INSERT [ReadModel].[ScheduledResources_new] OFF
+	
+	--drop old table
+	DROP TABLE [ReadModel].[ScheduledResources]
+
+	EXEC dbo.sp_rename @objname = N'[ReadModel].[ScheduledResources_new]', @newname = N'ScheduledResources', @objtype = N'OBJECT'
+	EXEC dbo.sp_rename @objname = N'[ReadModel].[ScheduledResources].[PK_ScheduledResources_new]', @newname = N'PK_ScheduledResources', @objtype =N'INDEX'
+END
+GO
+--And a supporting index on [ReadModel].[ActivitySkillCombination]
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[ReadModel].[ActivitySkillCombination]') AND name = N'IX_ActivitySkillCombination')
+	CREATE NONCLUSTERED INDEX [IX_ActivitySkillCombination] ON [ReadModel].[ActivitySkillCombination]
+	(
+		[Activity] ASC
+	)
+	INCLUDE ([Skills]) 
+GO
+
+--Re-design indexes on [dbo].[PersonAbsence]
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonAbsence]') AND name = N'CIX_PersonAbsence')
+BEGIN
+	CREATE TABLE [dbo].[PersonAbsence_new](
+		[Id] [uniqueidentifier] NOT NULL,
+		[Version] [int] NOT NULL,
+		[CreatedBy] [uniqueidentifier] NOT NULL,
+		[UpdatedBy] [uniqueidentifier] NOT NULL,
+		[CreatedOn] [datetime] NOT NULL,
+		[UpdatedOn] [datetime] NOT NULL,
+		[LastChange] [datetime] NULL,
+		[Person] [uniqueidentifier] NOT NULL,
+		[Scenario] [uniqueidentifier] NOT NULL,
+		[PayLoad] [uniqueidentifier] NOT NULL,
+		[Minimum] [datetime] NOT NULL,
+		[Maximum] [datetime] NOT NULL,
+		[BusinessUnit] [uniqueidentifier] NOT NULL,
+	 CONSTRAINT [PK_PersonAbsence_new] PRIMARY KEY NONCLUSTERED 
+	(
+		[Id] ASC
+	)
+	)
+
+	CREATE CLUSTERED INDEX [CIX_PersonAbsence] ON [dbo].[PersonAbsence_new]
+	(
+		[Person] ASC
+	)
+
+	--Re-create data
+	INSERT INTO [dbo].[PersonAbsence_new]
+	SELECT * FROM [dbo].[PersonAbsence]
+	
+	--drop old table
+	DROP TABLE [dbo].[PersonAbsence]
+
+	EXEC dbo.sp_rename @objname = N'[dbo].[PersonAbsence_new]', @newname = N'PersonAbsence', @objtype = N'OBJECT'
+	EXEC dbo.sp_rename @objname = N'[dbo].[PersonAbsence].[PK_PersonAbsence_new]', @newname = N'PK_PersonAbsence', @objtype =N'INDEX'
+
+	--Add additional indexes
+	CREATE NONCLUSTERED INDEX [IX_PersonAbsence_BusinessUnit] ON [dbo].[PersonAbsence]
+	(
+		[BusinessUnit] ASC
+	)
+
+	CREATE NONCLUSTERED INDEX [IX_PersonAbsence_Scenario] ON [dbo].[PersonAbsence]
+	(
+		[Scenario] ASC
+	)
+
+	ALTER TABLE [dbo].[PersonAbsence]  WITH CHECK ADD  CONSTRAINT [FK_PersonAbsence_Absence] FOREIGN KEY([PayLoad])
+	REFERENCES [dbo].[Absence] ([Id])
+	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_Absence]
+
+	ALTER TABLE [dbo].[PersonAbsence]  WITH CHECK ADD  CONSTRAINT [FK_PersonAbsence_BusinessUnit] FOREIGN KEY([BusinessUnit])
+	REFERENCES [dbo].[BusinessUnit] ([Id])
+	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_BusinessUnit]
+
+	ALTER TABLE [dbo].[PersonAbsence]  WITH CHECK ADD  CONSTRAINT [FK_PersonAbsence_Person_CreatedBy] FOREIGN KEY([CreatedBy])
+	REFERENCES [dbo].[Person] ([Id])
+	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_Person_CreatedBy]
+
+	ALTER TABLE [dbo].[PersonAbsence]  WITH CHECK ADD  CONSTRAINT [FK_PersonAbsence_Person_UpdatedBy] FOREIGN KEY([UpdatedBy])
+	REFERENCES [dbo].[Person] ([Id])
+	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_Person_UpdatedBy]
+
+	ALTER TABLE [dbo].[PersonAbsence]  WITH CHECK ADD  CONSTRAINT [FK_PersonAbsence_Person3] FOREIGN KEY([Person])
+	REFERENCES [dbo].[Person] ([Id])
+	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_Person3]
+
+	ALTER TABLE [dbo].[PersonAbsence]  WITH CHECK ADD  CONSTRAINT [FK_PersonAbsence_Scenario] FOREIGN KEY([Scenario])
+	REFERENCES [dbo].[Scenario] ([Id])
+	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_Scenario]
+END
