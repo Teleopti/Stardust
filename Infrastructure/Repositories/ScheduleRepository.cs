@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					
             using(TurnoffPermissionScope.For(retDic))
             {
-				addPersonAbsences(retDic, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(people, optimizedPeriod, scenario, absence));
+				addPersonAbsences(retDic, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(people, optimizedPeriod, scenario));
 				addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario), true, people);
 				foreach (DateTimePeriod p in searchPeriods)
 				{
