@@ -864,11 +864,14 @@ SELECT
 	[Minimum]	= o.[Minimum],
 	[Maximum]	= o.[Maximum],
 	[Parent]	= o.[Parent] ,
-	[OrderIndex]= o.[OrderIndex] + s.OrderIndex + 1,
+	[OrderIndex]=
+		CASE WHEN s.Parent IS NULL THEN o.[OrderIndex]
+			ELSE o.[OrderIndex] + s.OrderIndex + 1
+		END,
 	[LayerType]	= 2,
 	[DefinitionSet] = o.DefinitionSet
 FROM dbo.OvertimeShiftActivityLayer o
-INNER JOIN
+LEFT OUTER JOIN
 	(
 	SELECT Parent,MAX(OrderIndex) AS OrderIndex
 	FROM [dbo].[ShiftLayer]
@@ -883,11 +886,15 @@ SELECT
 	[Minimum]	= p.[Minimum],
 	[Maximum]	= p.[Maximum],
 	[Parent]	= p.[Parent] ,
-	[OrderIndex]= p.[OrderIndex] + s.OrderIndex + 1,
+	[OrderIndex]=
+		CASE WHEN s.Parent IS NULL THEN p.[OrderIndex]
+			ELSE p.[OrderIndex] + s.OrderIndex + 1
+		END,
+
 	[LayerType]	= 3,
 	[DefinitionSet] = NULL
 FROM dbo.PersonalShiftActivityLayer p
-INNER JOIN
+LEFT OUTER JOIN
 	(
 	SELECT Parent,MAX(OrderIndex) AS OrderIndex
 	FROM [dbo].[ShiftLayer]

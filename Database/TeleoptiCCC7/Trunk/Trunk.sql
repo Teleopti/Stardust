@@ -502,3 +502,47 @@ GO
 ----------------
 --No, not on this version. Tables is removed as part of "0000000386.sql"
 GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-11-01
+--Desc: Bug #25310 - Crash In ETL tool on stg_request, timout
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[Request]') AND name = N'IX_Request_StartDateTime_Id_Parent')
+CREATE NONCLUSTERED INDEX [IX_Request_StartDateTime_Id_Parent] ON [dbo].[Request]
+(
+	[StartDateTime] ASC
+)
+INCLUDE (
+[Id],
+[Parent]
+)
+GO
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[Request]') AND name = N'IX_Request_Parent')
+CREATE NONCLUSTERED INDEX [IX_Request_Parent] ON [dbo].[Request]
+(
+	[Parent] ASC
+)
+INCLUDE ( 	[Id],
+	[StartDateTime],
+	[EndDateTime]
+	)
+GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-11-05
+--Desc: Bug #25599 - ReadModel.GetNextActivityStartTime is super sloooow
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[ReadModel].[ScheduleProjectionReadOnly]') AND name = N'IX_ScheduleProjectionReadOnly_PersonId_EndDateTime_StartDateTime')
+CREATE NONCLUSTERED INDEX IX_ScheduleProjectionReadOnly_PersonId_EndDateTime_StartDateTime
+ON [ReadModel].[ScheduleProjectionReadOnly]
+(
+	[PersonId],
+	[EndDateTime]
+)
+INCLUDE
+(
+	[StartDateTime]
+)
+GO

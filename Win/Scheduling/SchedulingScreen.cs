@@ -2387,6 +2387,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void grid_CurrentCellKeyDown(object sender, KeyEventArgs e)
 		{
+			if (e.Control && e.KeyCode == Keys.A)
+			{
+				if(!(_scheduleView is AgentRestrictionsDetailView))
+				{
+					GridHelper.HandleSelectAllSchedulingView((GridControl)sender);
+					return;
+				}
+			}
+
 			GridHelper.HandleSelectionKeys((GridControl)sender, e);
 		}
 

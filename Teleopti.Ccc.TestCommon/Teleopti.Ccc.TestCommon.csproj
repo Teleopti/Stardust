@@ -228,6 +228,7 @@
     <Compile Include="TestData\Extensions.cs" />
     <Compile Include="TestData\Setups\Configurable\DayOffTemplateConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\FullDayAbsenceConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\MultiplicatorDefinitionSetConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\NoteConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\OvertimeAvailabilityConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PartTimePercentageConfigurable.cs" />

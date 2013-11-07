@@ -97,11 +97,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToPerformanceTool();
 		}
 
-		[Given(@"I viewing schedules for '([0-9\-\\\/]*)'")]
+		[Given(@"I view schedules for '([0-9\-\\\/]*)'")]
 		[When(@"I view schedules for '([0-9\-\\\/]*)'")]
 		[When(@"I view team schedules staffing metrics for '([0-9\-\\\/]*)'")]
 		public void WhenIViewSchedulesForDate(DateTime date)
 		{
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereTeamSchedule(date);
 		}
@@ -109,6 +110,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view schedules for '(.*)' on '(.*)'")]
 		public void WhenIViewSchedulesWithTeamAndDate(string teamName, DateTime date)
 		{
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereTeamSchedule(date, IdForTeam(teamName));
 		}
@@ -135,6 +137,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view team schedules staffing metrics for '(.*)' and '([0-9\-\\\/]*)' and '(.*)'")]
 		public void WhenIViewTeamSchedulesStaffingMetricsForDateAndTeam(string team, DateTime date, string skill)
 		{
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereTeamSchedule(date, IdForTeam(team));
 			TeamSchedulePageStepDefinitions.SelectSkill(skill);

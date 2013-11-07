@@ -1,91 +1,95 @@
 define([
-        'knockout',
-        'navigation',
-        'views/personschedule/layer',
-        'shared/timeline',
-        'views/personschedule/addfulldayabsenceform',
-        'views/personschedule/absencelistitem',
-        'helpers',
-        'resources!r'
-    ], function(
-        ko,
-        navigation,
-        layerViewModel,
-        timeLineViewModel,
-        addFullDayAbsenceFormViewModel,
-        absenceListItemViewModel,
-        helpers,
-        resources
+	'knockout',
+	'navigation',
+	'views/personschedule/layer',
+	'shared/timeline',
+	'views/personschedule/addactivityform',
+	'views/personschedule/addfulldayabsenceform',
+	'views/personschedule/absencelistitem',
+	'helpers',
+	'resources!r'
+], function (
+	ko,
+	navigation,
+	layerViewModel,
+	timeLineViewModel,
+	addActivityFormViewModel,
+	addFullDayAbsenceFormViewModel,
+	absenceListItemViewModel,
+	helpers,
+	resources
     ) {
 
-        return function() {
+	return function () {
 
-            var self = this;
+		var self = this;
 
-            this.Loading = ko.observable(false);
-            
-            this.Layers = ko.observableArray([]);
-	        
-            this.IsDayOff = ko.observable(false);
-            this.DayOffName = ko.observable("");
-	        
-            this.IsShift = ko.computed(function () {
-            	return self.Layers().length > 0;
-            });
-	        
-            this.Absences = ko.observableArray();
+		this.Loading = ko.observable(false);
 
-            this.TimeLine = new timeLineViewModel(this.Layers);
+		this.Layers = ko.observableArray([]);
 
-            this.Resources = resources;
+		this.IsDayOff = ko.observable(false);
+		this.DayOffName = ko.observable("");
 
-            this.Id = ko.observable("");
-            this.Date = ko.observable();
+		this.IsShift = ko.computed(function () {
+			return self.Layers().length > 0;
+		});
 
-            this.Name = ko.observable("");
-            this.Site = ko.observable("");
-            this.Team = ko.observable("");
+		this.Absences = ko.observableArray();
 
-            this.AddFullDayAbsenceForm = new addFullDayAbsenceFormViewModel();
+		this.TimeLine = new timeLineViewModel(this.Layers);
 
-            this.AddingFullDayAbsence = ko.observable(false);
+		this.Resources = resources;
 
-            this.DisplayDescriptions = ko.observable(false);
-            this.ToggleDisplayDescriptions = function () {
-                self.DisplayDescriptions(!self.DisplayDescriptions());
-            };
+		this.Id = ko.observable("");
+		this.Date = ko.observable();
 
-            this.SetData = function(data) {
-                data.Date = self.Date();
-                data.PersonId = self.Id();
+		this.Name = ko.observable("");
+		this.Site = ko.observable("");
+		this.Team = ko.observable("");
 
-                self.Name(data.Name);
-                self.Site(data.Site);
-                self.Team(data.Team);
-                self.IsDayOff(data.IsDayOff);
-                self.DayOffName(data.DayOffName);
-                self.Layers([]);
-                var layers = ko.utils.arrayMap(data.Layers, function(l) {
-                    l.Date = self.Date();
-                    l.IsFullDayAbsence = data.IsFullDayAbsence;
-                    return new layerViewModel(self.TimeLine, l);
-                });
-                self.Layers.push.apply(self.Layers, layers);
+		this.AddFullDayAbsenceForm = new addFullDayAbsenceFormViewModel();
+		this.AddingFullDayAbsence = ko.observable(false);
+		this.AddActivityForm = new addActivityFormViewModel();
+		this.AddingActivity = ko.observable(false);
 
-                self.Absences([]);
-                var absences = ko.utils.arrayMap(data.PersonAbsences, function(a) {
-                    a.PersonId = self.Id();
-                    a.Date = self.Date();
-                    return new absenceListItemViewModel(a);
-                });
-                self.Absences.push.apply(self.Absences, absences);
+		this.DisplayDescriptions = ko.observable(false);
+		this.ToggleDisplayDescriptions = function () {
+			self.DisplayDescriptions(!self.DisplayDescriptions());
+		};
 
-                self.AddFullDayAbsenceForm.SetData(data);
-            };
+		this.SetData = function (data) {
+			data.Date = self.Date();
+			data.PersonId = self.Id();
 
-            this.AddFullDayAbsence = function() {
-                navigation.GotoPersonScheduleAddFullDayAbsenceForm(self.Id(), self.Date());
-            };
+			self.Name(data.Name);
+			self.Site(data.Site);
+			self.Team(data.Team);
+			self.IsDayOff(data.IsDayOff);
+			self.DayOffName(data.DayOffName);
+			self.Layers([]);
+			var layers = ko.utils.arrayMap(data.Layers, function (l) {
+				l.Date = self.Date();
+				l.IsFullDayAbsence = data.IsFullDayAbsence;
+				return new layerViewModel(self.TimeLine, l);
+			});
+			self.Layers.push.apply(self.Layers, layers);
 
-        };
-    });
+			self.Absences([]);
+			var absences = ko.utils.arrayMap(data.PersonAbsences, function (a) {
+				a.PersonId = self.Id();
+				a.Date = self.Date();
+				return new absenceListItemViewModel(a);
+			});
+			self.Absences.push.apply(self.Absences, absences);
+
+			self.AddFullDayAbsenceForm.SetData(data);
+			self.AddActivityForm.SetData(data);
+		};
+
+		this.AddFullDayAbsence = function () {
+			navigation.GotoPersonScheduleAddFullDayAbsenceFormWithoutHistory(self.Id(), self.Date());
+		};
+
+	};
+});

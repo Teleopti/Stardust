@@ -1088,7 +1088,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		public IList<IPersonRequest> LoadRequest(DateTimePeriod period)
 		{
 		    IList<IPersonRequest> personRequests;
-			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CurrentUnitOfWork())
+            using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var rep = new PersonRequestRepository(uow);
                 uow.Reassociate(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit);
@@ -1497,6 +1497,15 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_bridge_skillset_skill_load", parameterList,
 								_dataMartConnectionString);
 		}
+
+        public int FillFactAgentSkillDataMart(IBusinessUnit businessUnit)
+        {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+
+            return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_skill_load", parameterList,
+                                _dataMartConnectionString);
+        }
 
 		public DateTime GetMaxDateInDimDate()
 		{

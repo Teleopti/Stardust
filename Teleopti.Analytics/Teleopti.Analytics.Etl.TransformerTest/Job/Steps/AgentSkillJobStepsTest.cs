@@ -35,7 +35,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
                 IJobStepResult jobStepResult = jobStep.Run(new List<IJobStep>(), null, null, false);
                 Assert.IsNotNull(jobStepResult);
             }
-            Assert.AreEqual(13, jobStepList.Count);
+            Assert.AreEqual(14, jobStepList.Count);
         }
 
         [Test]

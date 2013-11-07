@@ -420,6 +420,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="Reports\Ccc\report_agent_skills.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Ccc\report_availability_per_agent.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

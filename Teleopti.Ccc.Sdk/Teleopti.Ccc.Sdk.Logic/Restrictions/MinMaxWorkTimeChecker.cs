@@ -35,10 +35,15 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             if (significant == SchedulePartView.DayOff || significant == SchedulePartView.ContractDayOff || (effectiveRestriction!=null && effectiveRestriction.NotAvailable))
                 return new WorkTimeMinMax();
 
-            if (significant == SchedulePartView.MainShift || significant == SchedulePartView.FullDayAbsence)
+            if (significant == SchedulePartView.MainShift)
             {
                 return GetWorkTime(scheduleDay);
             }
+
+			if (significant == SchedulePartView.FullDayAbsence)
+			{
+				return GetContractTime(scheduleDay);
+			}
 
             if (effectiveRestriction != null && effectiveRestriction.Absence != null)
             {
@@ -89,6 +94,33 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             IProjectionService projSvc = scheduleDay.ProjectionService();
             var proj = projSvc.CreateProjection();
             TimeSpan workTime = proj.WorkTime();
+            minMaxLength.WorkTimeLimitation = new WorkTimeLimitation(workTime, workTime);
+            
+			var workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
+	        var shiftStartTime = workTimeStartEndExtractor.WorkTimeStart(proj);
+	        var shiftEndTime = workTimeStartEndExtractor.WorkTimeEnd(proj);
+
+			if (shiftStartTime.HasValue && shiftEndTime.HasValue)
+			{
+	            var localStartDateTime = TimeZoneHelper.ConvertFromUtc(shiftStartTime.Value,timeZoneInfo);
+				var endTime = TimeZoneHelper.ConvertFromUtc(shiftEndTime.Value, timeZoneInfo).Subtract(localStartDateTime.Date);
+                minMaxLength.StartTimeLimitation = new StartTimeLimitation(localStartDateTime.TimeOfDay, localStartDateTime.TimeOfDay);
+                minMaxLength.EndTimeLimitation = new EndTimeLimitation(endTime, endTime);
+            }
+
+            return minMaxLength;
+        }
+		
+		public static IWorkTimeMinMax GetContractTime(IScheduleDay scheduleDay)
+        {
+            if (scheduleDay == null)
+                throw new ArgumentNullException("scheduleDay");
+
+            TimeZoneInfo timeZoneInfo = scheduleDay.TimeZone;
+            IWorkTimeMinMax minMaxLength = new WorkTimeMinMax();
+            IProjectionService projSvc = scheduleDay.ProjectionService();
+            var proj = projSvc.CreateProjection();
+            TimeSpan workTime = proj.ContractTime();
             minMaxLength.WorkTimeLimitation = new WorkTimeLimitation(workTime, workTime);
             
 			var workTimeStartEndExtractor = new WorkTimeStartEndExtractor();

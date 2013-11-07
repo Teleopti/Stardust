@@ -800,7 +800,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
         private void comboBoxAgentGrouping_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (_dataLoaded)
+            if (_dataLoaded && _selectedPerson!= null)
             {
                 updateFairnessInfo(_selectedPerson, _dateOnlyList.First(), _stateHolder);
             }
