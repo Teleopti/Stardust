@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-    class TeleoptiProgressChangeMessage
+    public class TeleoptiProgressChangeMessage
     {
         public string Message { get; set; }
 

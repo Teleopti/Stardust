@@ -1474,7 +1474,7 @@
     </Compile>
     <Compile Include="Scheduling\Swapper.cs" />
     <Compile Include="Scheduling\TagsMenuLoader.cs" />
-    <Compile Include="Scheduling\TeleoptiProgressChangedEventArgs.cs" />
+    <Compile Include="Scheduling\TeleoptiProgressChangeMessage.cs" />
     <Compile Include="Scheduling\UpdateSelectionInfo.cs" />
     <Compile Include="Scheduling\VirtualSkillHelper.cs" />
     <Compile Include="SearchPersonView.cs">
