@@ -74,7 +74,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 							return $('<div/>').text(item.text).html();
 						},
 						formatSelection: function(item) {
-							return $('<div/>').text(item.text).html();
+							return $('<div/>').text(item.text).text();
 						}
 					}
 				);
