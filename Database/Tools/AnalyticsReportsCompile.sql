@@ -64,6 +64,7 @@ BEGIN TRY
 	declare @request_type_id int = -2
 	declare @date_from_id int = 200
 	declare @date_to_id int = 300
+	declare @active bit = 1
 
 
 	--All stored procedures used(?)
@@ -184,6 +185,7 @@ BEGIN TRY
 							WHEN  @param_name = '@date_from_id' THEN CAST(@date_from_id AS nvarchar(50))
 							WHEN  @param_name = '@date_to_id' THEN CAST(@date_to_id AS nvarchar(50))
 							WHEN  @param_name = '@scheduling_type_id' THEN CAST(@scheduling_type_id AS nvarchar(50))
+							WHEN  @param_name = '@active' THEN CAST(@active AS nvarchar(50))
 						
 							ELSE 'noDataTypeFound'
 						END

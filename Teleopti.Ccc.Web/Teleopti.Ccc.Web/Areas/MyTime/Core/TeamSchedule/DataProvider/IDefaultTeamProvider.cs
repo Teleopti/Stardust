@@ -2,8 +2,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider
 {
-	public interface IDefaultTeamCalculator
+	public interface IDefaultTeamProvider
 	{
-		ITeam Calculate(DateOnly date);
+		ITeam DefaultTeam(DateOnly date);
 	}
 }

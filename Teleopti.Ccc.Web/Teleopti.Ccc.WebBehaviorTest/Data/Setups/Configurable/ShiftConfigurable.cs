@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		{
 			Scenario = GlobalDataMaker.Data().Data<CommonScenario>().Scenario.Description.Name;
 			Activity = TestData.ActivityPhone.Name;
-			LunchActivity = TestData.ActivityLunch.Name;
 		}
 	}
 }

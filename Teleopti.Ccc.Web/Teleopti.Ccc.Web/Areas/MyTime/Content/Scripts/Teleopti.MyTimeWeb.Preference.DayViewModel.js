@@ -54,6 +54,11 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	self.PersonAssignmentTimeSpan = ko.observable('');
 	self.PersonAssignmentContractTime = ko.observable('');
 	self.ContractTimeMinutes = ko.observable(0);
+
+    self.HasPreferenceCategory = ko.computed(function() {
+        return self.Preference() != undefined && self.Preference() != '';
+    });
+
 	self.tooltipText = ko.computed(function () {
 	    var text = '';
 	    if (self.Extended()) {

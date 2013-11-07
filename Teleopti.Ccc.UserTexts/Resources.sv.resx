@@ -11334,9 +11334,17 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Välj ett SDK</value>
     <comment>When having more than one in config when logging on</comment>
   </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Agent Kompetenser</value>
+    <comment>Agent Kompetenser</comment>
+  </data>
   <data name="Stop" xml:space="preserve">
     <value>Avbryt</value>
     <comment>Stop current background operation in scheduler</comment>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Agent Kompetenser</value>
+    <comment>Agent Kompetenser</comment>
   </data>
   <data name="KeepTag" xml:space="preserve">
     <value>&lt;Behåll&gt;</value>
@@ -11346,5 +11354,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="UseDayOfMonthSeasonality" xml:space="preserve">
     <value>Använd säsongsvariation för dagar i månad</value>
+  </data>
+  <data name="BudgetGroupMissing" xml:space="preserve">
+    <value>Det finns ingen budgetgrupp för dig.</value>
   </data>
 </root>

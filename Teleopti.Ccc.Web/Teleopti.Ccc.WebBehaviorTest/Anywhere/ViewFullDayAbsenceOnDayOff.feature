@@ -32,6 +32,7 @@ Scenario: View full day absence on day off in team schedule
 	| Start time | 2013-10-25 00:00 |
 	| End time   | 2013-10-25 23:59 |
 	When I view schedules for '2013-10-25'
+	And I click description toggle button
 	Then I should see 'Pierre Baldi' with a day off named 'Day off'
 	And I should see 'Pierre Baldi' with absence 
 	| Field       | Value    |
@@ -49,8 +50,9 @@ Scenario: View full day absence on day off for person
 	| Start time | 2013-10-25 00:00 |
 	| End time   | 2013-10-25 23:59 |
 	When I view person schedule for 'Pierre Baldi' on '2013-10-25'
+	And I click description toggle button
 	Then I should see a day off named 'Day off'
-	And I should see a shift layer with
+	And I should see a scheduled activity with
 	| Field       | Value    |
 	| Start time  | 08:00    |
 	| End time    | 16:00    |

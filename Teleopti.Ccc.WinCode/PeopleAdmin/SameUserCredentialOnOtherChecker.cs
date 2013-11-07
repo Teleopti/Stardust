@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
                 var logOnName = person.WindowsAuthenticationInfo == null ? "" : person.WindowsAuthenticationInfo.WindowsLogOnName;
                 var appLogOnName = person.ApplicationAuthenticationInfo == null ? "" : person.ApplicationAuthenticationInfo.ApplicationLogOnName;
 
-                if ((!string.IsNullOrEmpty(domain) && !string.IsNullOrEmpty(logOnName)) || !string.IsNullOrEmpty(appLogOnName))
+                if ((!string.IsNullOrEmpty(domain)) || !string.IsNullOrEmpty(appLogOnName))
                 {
                     foreach (var conflictPerson in potentialConlicts)
                     {
@@ -55,7 +55,8 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
                             conflicts.Add(conflictPerson);
                             continue;
                         }
-                        if(!string.IsNullOrEmpty(domain) && !string.IsNullOrEmpty(logOnName))
+						
+                        if(!string.IsNullOrEmpty(domain))
                         {
                             if (domain.ToUpperInvariant().Equals(conflictdomain) && logOnName.ToUpperInvariant().Equals(conflictlogOnName))
                             {

@@ -143,6 +143,10 @@ Scenario: Remember skill selection when changing team
 	Given there is a team with
 	| Field | Value      |
 	| Name  | Team other |
+	And 'Ashley Andeen' has a person period with
+	| Field      | Value        |
+	| Team       | Team other   |
+	| Start date | 2013-04-08   |	
 	And there is a forecast with
 	| Field    | Value         |
 	| Skill    | Channel Sales |

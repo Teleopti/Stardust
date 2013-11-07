@@ -232,6 +232,7 @@
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\SubscriptionPassThrough.cs">
       <Link>Core\MessageBroker\SubscriptionPassThrough.cs</Link>
     </Compile>
+    <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
     <Compile Include="Areas\Anywhere\Core\ITeamScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\ITeamScheduleViewModelMapper.cs" />
@@ -475,8 +476,8 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayFeedbackViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\Mapping\SettingsMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamCalculator.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\IDefaultTeamCalculator.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\IDefaultTeamProvider.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamScheduleController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ILinkProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ISchedulePersonProvider.cs" />
@@ -687,6 +688,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\knockout.bindings.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\pagelog.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\errorview.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline-unit.js" />
@@ -697,11 +699,16 @@
     <Content Include="Areas\Anywhere\Content\Scripts\menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addfulldayabsenceform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addactivityform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\layer.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline-time.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\person.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\group-page-group.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shift.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\group-page.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\dayoff.js" />
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />
@@ -924,6 +931,7 @@
     <Content Include="Areas\MyTime\Content\Images\view_ul_states_sprite.png" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.extensions.js" />
     <Content Include="Content\moment-datepicker\moment-datepicker-ko-amd.js" />
+    <Content Include="Content\select2\select2-bootstrap.css" />
     <Content Include="favicon.ico" />
     <Content Include="Content\bootstrap\images\glyphicons-halflings-white.png" />
     <Content Include="Content\bootstrap\images\glyphicons-halflings.png" />
@@ -1040,6 +1048,8 @@
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Content\lazy\lazy.js" />
+    <Content Include="Content\lazy\lazy.min.js" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>

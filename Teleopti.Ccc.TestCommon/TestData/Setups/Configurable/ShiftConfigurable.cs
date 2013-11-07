@@ -19,16 +19,28 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Scenario { get; set; }
 
 		public string ShiftCategory { get; set; }
+
 		public string Activity { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 
+		public string ScheduledActivity { get; set; }
+		public bool ScheduledActivityIsPersonal { get; set; }
+		public DateTime ScheduledActivityStartTime { get; set; }
+		public DateTime ScheduledActivityEndTime { get; set; }
+
+		// backward compatibility
 		public string LunchActivity { get; set; }
-		public bool Lunch3HoursAfterStart { get; set; }
 		public DateTime LunchStartTime { get; set; }
 		public DateTime LunchEndTime { get; set; }
+		
+		public string Overtime { get; set; }
+		public string OvertimeMultiplicatorDefinitionSet { get; set; }
+		public DateTime OvertimeStartTime { get; set; }
+		public DateTime OvertimeEndTime { get; set; }
 
-		public string ShiftColor { get; set; }	// this should not be here. this exists on the ShiftCategoryConfigurable
+		// this should not be here. this exists on the ShiftCategoryConfigurable
+		public string ShiftColor { get; set; }	
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
@@ -37,7 +49,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				shiftCategory.DisplayColor = Color.FromName(ShiftColor);
 
 			var activity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
-			var lunchActivity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(LunchActivity));
 
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 
@@ -47,31 +58,57 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			_assignmentPeriod = new DateTimePeriod(startTimeUtc, endTimeUtc);
 			var scenario = new ScenarioRepository(uow).LoadAll().Single(x => x.Description.Name == Scenario);
-			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, scenario, new DateOnly(StartTime));
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(user, scenario, new DateOnly(StartTime));
 			var mainShift = EditableShiftFactory.CreateEditorShift(activity, _assignmentPeriod, shiftCategory);
 
-			// add lunch
-			DateTimePeriod? lunchPeriod = null;
-			if (LunchStartTime != DateTime.MinValue)
-			{
-				var lunchStartTimeUtc = timeZone.SafeConvertTimeToUtc(LunchStartTime);
-				var lunchEndTimeUtc = timeZone.SafeConvertTimeToUtc(LunchEndTime);
-				lunchPeriod = new DateTimePeriod(lunchStartTimeUtc, lunchEndTimeUtc);
-			}
-			else if (Lunch3HoursAfterStart)
-			{
-				lunchPeriod = new DateTimePeriod(startTimeUtc.AddHours(3), startTimeUtc.AddHours(4));
-			}
-			if (lunchPeriod.HasValue)
-				mainShift.LayerCollection.Add(new EditableShiftLayer(lunchActivity, lunchPeriod.Value));
+			addScheduleActivity(timeZone, mainShift, personAssignment, uow);
 
-			new EditableShiftMapper().SetMainShiftLayers(assignment, mainShift);
-
+			new EditableShiftMapper().SetMainShiftLayers(personAssignment, mainShift);
 
 			// simply publish the schedule changed event so that the read model is updated
-			assignment.ScheduleChanged();
+			personAssignment.ScheduleChanged();
 
-			assignmentRepository.Add(assignment);
+			assignmentRepository.Add(personAssignment);
+		}
+
+		private void addScheduleActivity(TimeZoneInfo timeZone, IEditableShift mainShift, IPersonAssignment personAssignment, IUnitOfWork uow)
+		{
+			var scheduledActivityName = ScheduledActivity;
+			var scheduledActivityStartTime = ScheduledActivityStartTime;
+			var scheduledActivityEndTime = ScheduledActivityEndTime;
+
+			if (LunchActivity != null)
+			{
+				scheduledActivityName = LunchActivity;
+				scheduledActivityStartTime = LunchStartTime;
+				scheduledActivityEndTime = LunchEndTime;
+			}
+
+			if (scheduledActivityName == null)
+				return;
+
+			var scheduledActivity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(scheduledActivityName));
+
+
+			if (Overtime != null)
+			{
+				var multiplicatorDefinitionSet =
+					new MultiplicatorDefinitionSetRepository(uow).LoadAll()
+					                                             .Single(x => x.Name.Equals(OvertimeMultiplicatorDefinitionSet));
+				var overtimeStartTimeUtc = timeZone.SafeConvertTimeToUtc(OvertimeStartTime);
+				var overtimeEndTimeUtc = timeZone.SafeConvertTimeToUtc(OvertimeEndTime);
+				var overtimePeriod = new DateTimePeriod(overtimeStartTimeUtc, overtimeEndTimeUtc);
+				personAssignment.AddOvertimeLayer(scheduledActivity, overtimePeriod, multiplicatorDefinitionSet);
+			}
+
+			var startTimeUtc = timeZone.SafeConvertTimeToUtc(scheduledActivityStartTime);
+			var endTimeUtc = timeZone.SafeConvertTimeToUtc(scheduledActivityEndTime);
+			var period = new DateTimePeriod(startTimeUtc, endTimeUtc);
+
+			if (ScheduledActivityIsPersonal)
+				personAssignment.AddPersonalLayer(scheduledActivity, period);
+			else
+				mainShift.LayerCollection.Add(new EditableShiftLayer(scheduledActivity, period));
 		}
 	}
 }
