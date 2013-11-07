@@ -50,11 +50,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 							 orderby p.StaffingThresholdValidatorList.IndexOf(p.StaffingThresholdValidator)
 							 select p).ToList();
 
-				var invalidOpenPeriods = openPeriods.Where(
-					absenceRequestOpenPeriod =>
-					absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() != typeof(BudgetGroupAllowanceValidator) &&
-					absenceRequestOpenPeriod.StaffingThresholdValidator.GetType() != typeof(BudgetGroupHeadCountValidator)).ToList();
-
 				if (validOpenPeriods.Count != 0)
 				{
 					allowanceList =
@@ -65,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 								Time = TimeSpan.Zero,
 								Heads = TimeSpan.Zero,
 								Allowance = .0,
-								Availability = (invalidOpenPeriods.Count <= 0 || !invalidOpenPeriods.Any(x => x.GetPeriod(_now.LocalDateOnly()).Contains(d))),
+								Availability = true,
 								UseHeadCount = false
 							};
 
@@ -86,7 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 										Time = TimeSpan.FromHours(Math.Max(budgetDay.Allowance*budgetDay.FulltimeEquivalentHours, 0)),
 										Heads = TimeSpan.FromHours(Math.Max(budgetDay.FulltimeEquivalentHours, 0)),
 										Allowance = budgetDay.Allowance,
-										Availability = (invalidOpenPeriods.Count <= 0 || !invalidOpenPeriods.Any(x => x.GetPeriod(_now.LocalDateOnly()).Contains(budgetDay.Day))),
+										Availability = true,
 										UseHeadCount = openPeriod.StaffingThresholdValidator.GetType() == typeof(BudgetGroupHeadCountValidator)
 									};
 						allowanceList = allowanceList.Concat(allowanceFromBudgetDays);

@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -99,46 +101,23 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 						workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
 						break;
 					case "mix":
-						workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
+						var mixedList = new List<IAbsenceRequestValidator>(){
+							new BudgetGroupAllowanceValidator(), 
+							new BudgetGroupHeadCountValidator(),
+							new StaffingThresholdValidator()
+						};
 
-						//var absences = new AbsenceRepository(uow).LoadAll();
-
-						//foreach (var allowedAbsence in absences)
-						//{
-						//	workflowControlSet.AddAllowedPreferenceAbsence(allowedAbsence);
-						//}
-
-						//var allowedPeriods = workflowControlSet.AbsenceRequestOpenPeriods;
-
-						//foreach (var requestOpenPeriod in allowedPeriods)
-						//{
-						//	requestOpenPeriod.StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
-						//}
-
-						var secondAbsence = new AbsenceRepository(uow).LoadAll().Single(c => c.Description.Name == "illness");
-						workflowControlSet.AddAllowedPreferenceAbsence(secondAbsence);
-
-						var thirdAbsence = new AbsenceRepository(uow).LoadAll().Single(c => c.Description.Name == "vacation");
-						workflowControlSet.AddAllowedPreferenceAbsence(thirdAbsence);
-						
-						workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+						foreach (var absenceRequestValidator in mixedList)
 						{
-							Absence = secondAbsence,
-							OpenForRequestsPeriod =
-								new DateOnlyPeriod(absenceRequestOpenPeriodStart, absenceRequestOpenPeriodEnd),
-							Period = new DateOnlyPeriod(absenceRequestPreferencePeriodStart, absenceRequestPreferencePeriodEnd)
-						});
-
-						workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
-						{
-							Absence = thirdAbsence,
-							OpenForRequestsPeriod =
-								new DateOnlyPeriod(absenceRequestOpenPeriodStart, absenceRequestOpenPeriodEnd),
-							Period = new DateOnlyPeriod(absenceRequestPreferencePeriodStart, absenceRequestPreferencePeriodEnd)
-						});
-
-						workflowControlSet.AbsenceRequestOpenPeriods[1].StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
-						workflowControlSet.AbsenceRequestOpenPeriods[2].StaffingThresholdValidator = new StaffingThresholdValidator();
+							workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+							{
+								Absence = absence,
+								OpenForRequestsPeriod =
+									new DateOnlyPeriod(absenceRequestOpenPeriodStart, absenceRequestOpenPeriodEnd),
+								Period = new DateOnlyPeriod(absenceRequestPreferencePeriodStart, absenceRequestPreferencePeriodEnd)
+							});
+							workflowControlSet.AbsenceRequestOpenPeriods[workflowControlSet.AbsenceRequestOpenPeriods.Count - 1].StaffingThresholdValidator = absenceRequestValidator;
+						}
 						break;
 				}
 

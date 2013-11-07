@@ -11,14 +11,6 @@ Background:
 	| Field				| Value		|
 	| Name				| holiday	|
 	| Requestable		| true		|
-	And there is an absence with
-	| Field				| Value		|
-	| Name				| illness	|
-	| Requestable		| true		|
-	And there is an absence with
-	| Field				| Value		|
-	| Name				| vacation	|
-	| Requestable		| true		|
 	And there is a budgetgroup with
 	| Field		| Value			|
 	| Name		| TheBudgetGroup|
