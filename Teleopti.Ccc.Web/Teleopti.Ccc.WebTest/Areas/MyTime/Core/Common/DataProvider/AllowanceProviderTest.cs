@@ -375,35 +375,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenIntradayStaffingCheckNextToBudgetgroupStaffingCheck_ShouldSetAvailabilityToFalse()
-		{
-			createValidAndInvalidAbsenceForAvailability();
-
-			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
-
-			var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-3), DateOnly.Today.AddDays(-3));
-
-			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
-
-			var budgetGroup = new BudgetGroup();
-			personPeriod1.BudgetGroup = budgetGroup;
-
-			var budgetDays = new List<IBudgetDay>();
-			var allowance = TimeSpan.FromHours(40);
-
-			var budgetDay = createBudgetDayWithAllowance(budgetGroup, period.StartDate, allowance.TotalHours);
-			budgetDays.Add(budgetDay);
-
-			_user.AddPersonPeriod(personPeriod1);
-			budgetDayRepository.Stub(x => x.Find(_scenario, budgetGroup, period)).Return(budgetDays);
-
-			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods(), _now);
-			var result = target.GetAllowanceForPeriod(period);
-			Assert.That(result.First().Item3, Is.EqualTo(TimeSpan.Zero));
-			Assert.That(result.First().Item5, Is.EqualTo(false));
-		}
-
-		[Test]
 		public void GetAllowanceForPeriod_WhenBudgetgroupStaffingCheckNextToIntradayStaffingCheck_ShouldSetAvailabilityToTrue()
 		{
 			createValidAndInvalidAbsenceForAvailability();

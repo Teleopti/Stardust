@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 			var budgetGroupPeriods = _extractBudgetGroupPeriods.BudgetGroupsForPeriod(person, period);
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
-
+			var showAvailability = false;
 			if (person.WorkflowControlSet != null && person.WorkflowControlSet.AbsenceRequestOpenPeriods != null)
 			{
 
@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				
 				if (validOpenPeriods.Count != 0)
 				{
+					showAvailability = true;
 					foreach (var thePeriod in validOpenPeriods)
 					{
 						var openPeriod = thePeriod;
@@ -82,7 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				orderby g.Key
 				select new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>
 					(g.Key, TimeSpan.FromTicks(g.Last(o => o.Date == g.Key).Time.Ticks), TimeSpan.FromTicks(g.Last().Heads.Ticks), g.Last(o => o.Date == g.Key).AllowanceHeads,
-					g.Last(o => o.Date == g.Key).Availability, g.Last(o => o.Date == g.Key).UseHeadCount);
+					showAvailability, g.Last(o => o.Date == g.Key).UseHeadCount);
 		}
 
 		
