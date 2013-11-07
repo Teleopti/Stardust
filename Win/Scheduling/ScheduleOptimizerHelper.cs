@@ -319,14 +319,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 		            _allResults.AddResults(fixedStaffSchedulingService.FinderResults, schedulingTime);
 		            fixedStaffSchedulingService.FinderResults.Clear();
 
+                var progressChangeEvent = new TeleoptiProgressChangeMessage(Resources.TryingToResolveUnscheduledDaysDotDotDot);
 		            foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)
 		            {
 		                int iterations = 0;
+
+                    _backgroundWorker.ReportProgress(0, progressChangeEvent );
 		                while (nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix, schedulingOptions, rollbackService) && iterations < 10)
 		                {
+                        if (_backgroundWorker.CancellationPending)
+                            break;
 		                    iterations++;
 		                }
-
+                    if (_backgroundWorker.CancellationPending)
+                        break;
 		            }
 
 		            if (schedulingOptions.RotationDaysOnly || schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly || schedulingOptions.AvailabilityDaysOnly)
