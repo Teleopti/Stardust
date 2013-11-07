@@ -46,14 +46,30 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             bool success = false;
             IPerson person = matrix.Person;
+
+		    var daysInConsideration = solverResult.DaysToReschedule();
             foreach (var dateOnly in solverResult.DaysToReschedule())
             {
+                if (!daysInConsideration.Contains(dateOnly)) continue;
+                daysInConsideration.Remove(dateOnly );
                 _workShiftFinderResultHolder.Clear(person, dateOnly);
-
-				if (_scheduleService.SchedulePersonOnDay(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart(), schedulingOptions, _resourceCalculateDelayer, null, schedulePartModifyAndRollbackService))
+                if (_scheduleService.SchedulePersonOnDay(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart(), schedulingOptions, _resourceCalculateDelayer, null, schedulePartModifyAndRollbackService))
                 {
                     success = true;
                 }
+				else if(!solverResult.DaysToDelete.Contains(dateOnly ) )
+				{
+				    success = false;
+                    if (solverResult.DaysToReschedule().Contains(dateOnly.AddDays(-1)))
+                    {
+                        _scheduleService.SchedulePersonOnDay(matrix.GetScheduleDayByKey(dateOnly.AddDays(-1)).DaySchedulePart(),
+                                                         schedulingOptions, _resourceCalculateDelayer, null,
+                                                         schedulePartModifyAndRollbackService);
+                        daysInConsideration.Remove(dateOnly.AddDays(-1));
+                    }
+                    if (daysInConsideration.Count == 0)
+                        break;   
+				}
             }
 
             return success;
