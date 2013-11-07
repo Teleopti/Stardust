@@ -3591,14 +3591,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 				BeginInvoke(new EventHandler<ProgressChangedEventArgs>(_backgroundWorkerScheduling_ProgressChanged), sender, e);
 			else
 			{
-				if (e.ProgressPercentage <= 0)
+				if(e.UserState is TeleoptiProgressChangedMessage)
 				{
-					schedulingProgress(Math.Abs(e.ProgressPercentage));
-				}
-				else
-				{
-					schedulingProgress(null);
-				}
+                    var arg = (TeleoptiProgressChangedMessage)e.UserState;
+                    scheduleStatusBarUpdate(arg.Message );
+			    }
+                else{
+                    if (e.ProgressPercentage <= 0)
+				    {
+					    schedulingProgress(Math.Abs(e.ProgressPercentage));
+				    }
+                    else
+				    {
+					    schedulingProgress(null);
+				    }
+                }
 			}
 		}
 
@@ -3772,6 +3779,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 				optimizationProgress(e);
 			}
 		}
+
+        private void scheduleStatusBarUpdate(string message)
+        {
+            toolStripStatusLabelStatus.Text = message;
+            statusStrip1.Refresh();
+            Application.DoEvents();
+        }
 
 		private void schedulingProgress(int? percent)
 		{

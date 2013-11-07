@@ -24557,6 +24557,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Trying to resolve unscheduled days....
+        /// </summary>
+        public static string TryingToResolveUnscheduledDaysDotDotDot {
+            get {
+                return ResourceManager.GetString("TryingToResolveUnscheduledDaysDotDotDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tuesday.
         /// </summary>
         public static string Tuesday {
