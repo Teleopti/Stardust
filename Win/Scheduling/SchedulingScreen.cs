@@ -3646,21 +3646,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 				BeginInvoke(new EventHandler<ProgressChangedEventArgs>(_backgroundWorkerScheduling_ProgressChanged), sender, e);
 			else
 			{
-				if(e.UserState is TeleoptiProgressChangedMessage)
+				if (e.UserState is TeleoptiProgressChangeMessage)
 				{
-                    var arg = (TeleoptiProgressChangedMessage)e.UserState;
-                    scheduleStatusBarUpdate(arg.Message );
-			    }
-                else{
-                    if (e.ProgressPercentage <= 0)
-				    {
-					    schedulingProgress(Math.Abs(e.ProgressPercentage));
-				    }
-                    else
-				    {
-					    schedulingProgress(null);
-				    }
-                }
+					var arg = (TeleoptiProgressChangeMessage)e.UserState;
+					scheduleStatusBarUpdate(arg.Message);
+				}
+				else
+				{
+					if (e.ProgressPercentage <= 0)
+					{
+						schedulingProgress(Math.Abs(e.ProgressPercentage));
+					}
+					else
+					{
+						schedulingProgress(null);
+					}
+				}
 			}
 		}
 
