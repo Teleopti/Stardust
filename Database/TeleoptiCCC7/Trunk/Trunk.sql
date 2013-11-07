@@ -157,19 +157,6 @@ GO
 
 ----------------  
 --Name: David Jonsson
---Date: 2013-11-06
---Desc: removed from 386 to main due to bug 25359. 
---Original details:
-	--Name: Robin Karlsson
-	--Date: 2013-08-28
-	--Desc: Truncate read model for projected layers to force load of scheduled resources
----------------- 
--- Don't truncate yet - leave as is until we have decided on when to deploy "AnyWhere"
---TRUNCATE TABLE [ReadModel].[ScheduleProjectionReadOnly]
---GO
-
-----------------  
---Name: David Jonsson
 --Date: 2013-11-05
 --Desc: Bug #25359 - Prepare (redesign) the tables and optimize for the initial load of [ReadModel].[ScheduledResources] and [ReadModel].[ActivitySkillCombination]
 -- Intial load of theese are disabled until we need decided on when to deploy "AnyWhere"
