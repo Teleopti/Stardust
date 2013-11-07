@@ -11793,4 +11793,8 @@ Reduce the complexity to use these shifts.</value>
     <value>There is no budget group for you.</value>
     <comment>There is no budget group for you.</comment>
   </data>
+  <data name="TryingToResolveUnscheduledDaysDotDotDot" xml:space="preserve">
+    <value>Trying to resolve unscheduled days...</value>
+    <comment>This message is shown when scheduling is finished and the scheduler tries to resolve the white spots.</comment>
+  </data>
 </root>
