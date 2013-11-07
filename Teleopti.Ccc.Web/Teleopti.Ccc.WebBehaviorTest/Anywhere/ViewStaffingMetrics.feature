@@ -54,7 +54,8 @@ Scenario: View skill selection
 	| Skill         |
 	| Direct Sales  |
 	| Channel Sales |
-
+# Bug 25359 re-enable with PBI 25562
+@ignore
 Scenario: View staffing metrics
 	Given I have the role 'Anywhere Team Green'
 	And I have a shift with
