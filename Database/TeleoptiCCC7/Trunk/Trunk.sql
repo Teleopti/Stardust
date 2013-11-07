@@ -609,9 +609,7 @@ BEGIN
 	CREATE TABLE [dbo].[PersonAbsence_new](
 		[Id] [uniqueidentifier] NOT NULL,
 		[Version] [int] NOT NULL,
-		[CreatedBy] [uniqueidentifier] NOT NULL,
 		[UpdatedBy] [uniqueidentifier] NOT NULL,
-		[CreatedOn] [datetime] NOT NULL,
 		[UpdatedOn] [datetime] NOT NULL,
 		[LastChange] [datetime] NULL,
 		[Person] [uniqueidentifier] NOT NULL,
@@ -619,7 +617,6 @@ BEGIN
 		[PayLoad] [uniqueidentifier] NOT NULL,
 		[Minimum] [datetime] NOT NULL,
 		[Maximum] [datetime] NOT NULL,
-		[BusinessUnit] [uniqueidentifier] NOT NULL,
 	 CONSTRAINT [PK_PersonAbsence_new] PRIMARY KEY NONCLUSTERED 
 	(
 		[Id] ASC
@@ -642,11 +639,6 @@ BEGIN
 	EXEC dbo.sp_rename @objname = N'[dbo].[PersonAbsence].[PK_PersonAbsence_new]', @newname = N'PK_PersonAbsence', @objtype =N'INDEX'
 
 	--Add additional indexes
-	CREATE NONCLUSTERED INDEX [IX_PersonAbsence_BusinessUnit] ON [dbo].[PersonAbsence]
-	(
-		[BusinessUnit] ASC
-	)
-
 	CREATE NONCLUSTERED INDEX [IX_PersonAbsence_Scenario] ON [dbo].[PersonAbsence]
 	(
 		[Scenario] ASC
@@ -659,10 +651,6 @@ BEGIN
 	ALTER TABLE [dbo].[PersonAbsence]  WITH CHECK ADD  CONSTRAINT [FK_PersonAbsence_BusinessUnit] FOREIGN KEY([BusinessUnit])
 	REFERENCES [dbo].[BusinessUnit] ([Id])
 	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_BusinessUnit]
-
-	ALTER TABLE [dbo].[PersonAbsence]  WITH CHECK ADD  CONSTRAINT [FK_PersonAbsence_Person_CreatedBy] FOREIGN KEY([CreatedBy])
-	REFERENCES [dbo].[Person] ([Id])
-	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_Person_CreatedBy]
 
 	ALTER TABLE [dbo].[PersonAbsence]  WITH CHECK ADD  CONSTRAINT [FK_PersonAbsence_Person_UpdatedBy] FOREIGN KEY([UpdatedBy])
 	REFERENCES [dbo].[Person] ([Id])
