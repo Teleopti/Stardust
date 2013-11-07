@@ -63,6 +63,7 @@ Scenario: View staffing metrics
 # Bug 25359 re-enable with PBI 25562
 @ignore
 Scenario: Push staffing metrics changes
+
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |
