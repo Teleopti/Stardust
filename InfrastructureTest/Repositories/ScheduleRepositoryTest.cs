@@ -528,7 +528,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             {
                 Expect.Call(_absRep.AffectedPeriods(person, _scenario, _longPeriod, absenceToLookFor)).Return(absencePeriods);
 
-				Expect.Call(_absRep.Find(people, period3, _scenario, absenceToLookFor)).Return(_absences);
+				Expect.Call(_absRep.Find(people, period3, _scenario)).Return(_absences);
                 Expect.Call(_assRep.Find(people, period1, _scenario)).Return(_assignments);
                 Expect.Call(_dayOffRep.Find(people, period1, _scenario)).Return(_dayOffs);
                 Expect.Call(_meetingRepository.Find(people, new DateOnlyPeriod(2000,1,31,2000,3,11), _scenario)).Return(_meetings);
@@ -564,7 +564,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             {
                 Expect.Call(_absRep.AffectedPeriods(person, _scenario, searchPeriod, absenceToLookFor)).Return(absencePeriods);
 
-				Expect.Call(_absRep.Find(people, period3, _scenario, absenceToLookFor)).Return(_absences);
+				Expect.Call(_absRep.Find(people, period3, _scenario)).Return(_absences);
                 Expect.Call(_assRep.Find(people, period1, _scenario)).Return(_assignments);
                 Expect.Call(_dayOffRep.Find(people, period1, _scenario)).Return(_dayOffs);
                 Expect.Call(_meetingRepository.Find(people, new DateOnlyPeriod(2000,1,31,2001,3,11), _scenario)).Return(_meetings);
@@ -591,7 +591,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             using (_mocks.Record())
             {
                 Expect.Call(_absRep.AffectedPeriods(person, _scenario, _longPeriod, absenceToLookFor)).Return(absencePeriods);
-				Expect.Call(_absRep.Find(new List<IPerson>{person}, period, _scenario, absenceToLookFor)).Return(_absences);
+				Expect.Call(_absRep.Find(new List<IPerson>{person}, period, _scenario)).Return(_absences);
 				Expect.Call(_meetingRepository.Find(new List<IPerson> { person }, new DateOnlyPeriod(1999, 12, 31, 2000, 1, 2), _scenario)).Return(_meetings);
                
             }
