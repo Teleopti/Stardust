@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -43,13 +44,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				if (ass1==null)
 				{
-					_selectedSchedules[1].Merge(schedulePart2, false);
+					_selectedSchedules[1].Swap(schedulePart2, false);
 					_selectedSchedules[1].DeletePersonalStuff();
 					_selectedSchedules[0].DeleteMainShift(schedulePart2);
 				}
 				else
 				{
-					_selectedSchedules[0].Merge(schedulePart1, false);
+					_selectedSchedules[0].Swap(schedulePart1, false);
 					_selectedSchedules[0].DeletePersonalStuff();
 					_selectedSchedules[1].DeleteMainShift(schedulePart1);
 				}
@@ -57,15 +58,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			else
 			{
 				if (!schedulePart1.PersistableScheduleDataCollection().Any())
-					_selectedSchedules[0].Merge(_selectedSchedules[0], true);
+					_selectedSchedules[0].Swap(_selectedSchedules[0], true);
 				else
-					_selectedSchedules[0].Merge(schedulePart1, false);
+					_selectedSchedules[0].Swap(schedulePart1, false);
 
 				if(!schedulePart2.PersistableScheduleDataCollection().Any())
-					_selectedSchedules[1].Merge(_selectedSchedules[1], true);
+					_selectedSchedules[1].Swap(_selectedSchedules[1], true);
 				else
-					_selectedSchedules[1].Merge(schedulePart2, false);
+					_selectedSchedules[1].Swap(schedulePart2, false);
 			}
+
+			((ExtractedSchedule)_selectedSchedules[1]).DeleteOvertime();
+			((ExtractedSchedule)_selectedSchedules[1]).MergeOvertime(schedulePart2);
+			((ExtractedSchedule)_selectedSchedules[0]).DeleteOvertime();
+			((ExtractedSchedule)_selectedSchedules[0]).MergeOvertime(schedulePart1);
+			
 
 			retList.AddRange(_selectedSchedules);
 			return retList;
