@@ -380,7 +380,7 @@ END
 DECLARE @newreportid uniqueidentifier
 SET  @newreportid= 'BB8C21BA-0756-4DDC-8B26-C9D5715A3443'
 DECLARE @CollectionId uniqueidentifier
-SELECT DISTINCT @CollectionId = CollectionId FROM mart.report_control_collection WHERE collection_id=46
+SELECT DISTINCT @CollectionId = CollectionId FROM mart.report_control_collection WHERE collection_id=47
 IF NOT EXISTS(SELECT 1 FROM mart.report where Id='BB8C21BA-0756-4DDC-8B26-C9D5715A3443')
 BEGIN
 INSERT INTO mart.report (
