@@ -359,6 +359,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				string overnightTime;
 				if (earlyEndSelected)
 				{
+					overnightTime = ScheduleRestrictionBaseView.ToOvernight(view.LateEndTime);
+					view.LateEndTime = overnightTime;
+
 					overnightTime = ScheduleRestrictionBaseView.ToOvernight(view.EarlyEndTime);
 					view.EarlyEndTime = overnightTime;
 				}
@@ -437,9 +440,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 							};
 
 			_earlyStartTimeColumn = new SFGridTimeOfDayColumn<RotationRestrictionView>("EarlyStartTime",
-																					   UserTexts.Resources.EarlyStartTime);
+																						UserTexts.Resources.EarlyStartTime);
 			_gridColumns.Add(_earlyStartTimeColumn);
-   
+	
 			_lateStartTimeColumn = new SFGridTimeOfDayColumn<RotationRestrictionView>("LateStartTime",
 																					  UserTexts.Resources.LateStartTime);
 			_gridColumns.Add(_lateStartTimeColumn);
@@ -455,13 +458,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_gridColumns.Add(new SFGridHourMinutesOrEmptyColumn<RotationRestrictionView>("MaximumWorkTime",
 																						 UserTexts.Resources.MaxWorkTime));
 			_shiftCategoriesColumn = new SFGridDropDownColumn<RotationRestrictionView, IShiftCategory>("ShiftCategory",
-																									   UserTexts.Resources.ShiftCategoryHeader,
-																									   _shiftCategoryList,
-																									   "Description",
-																									   null,
-																									   typeof (
-																										   ShiftCategory
-																										   ));
+																										UserTexts.Resources.ShiftCategoryHeader,
+																										_shiftCategoryList,
+																										"Description",
+																										null,
+																										typeof (
+																											ShiftCategory
+																											));
 			_shiftCategoriesColumn.QueryComboItems += ShiftCategoriesColumnQueryComboItems;
 			_gridColumns.Add(_shiftCategoriesColumn);
 			_dayOffsColumn = new SFGridDropDownColumn<RotationRestrictionView, IDayOffTemplate>("DayOffTemplate",
@@ -645,8 +648,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			IList<IDayOffTemplate> list = repository.LoadAll();
 			IEnumerable<IDayOffTemplate> sortedList = (from d in list
-													   orderby d.Description.ShortName
-													   select d).ToList();
+														orderby d.Description.ShortName
+														select d).ToList();
 
 			_dayOffList.AddRange(sortedList);
 		}
