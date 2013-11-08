@@ -77,6 +77,22 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return ass;
         }
 
+		/// <summary>
+		/// Creates an assignment with personal and main shift.
+		/// </summary>
+		public static IPersonAssignment CreateAssignmentWithMainShiftAndPersonalShift(
+															 IScenario scenario,
+															 IPerson person,
+															 DateTimePeriod period)
+		{
+			var activity = ActivityFactory.CreateActivity("sdf");
+			var category = ShiftCategoryFactory.CreateShiftCategory("sdf");
+			IPersonAssignment ass = new PersonAssignment(person, scenario);
+			ass.AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(activity, period));
+			ass.SetMainShift(MainShiftFactory.CreateMainShift(activity, period, category));
+			return ass;
+		}
+
         /// <summary>
         /// Creates an assignment with main shift.
         /// </summary>
@@ -140,6 +156,28 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return CreateAssignmentWithPersonalShift(new Activity("Activity"), person, period,new Scenario("Scenario"));
         }
 
+		/// <summary>
+		/// Creates an assignment with main shift and an overtime shift.
+		/// </summary>
+		public static IPersonAssignment CreateAssignmentWithMainShiftAndOvertimeShift(
+															 IScenario scenario,
+															 IPerson person,
+															 DateTimePeriod period)
+		{
+			var activity = ActivityFactory.CreateActivity("sdf");
+			var category = ShiftCategoryFactory.CreateShiftCategory("sdf");
+			var ass = CreateAssignmentWithMainShift(activity,
+												 person,
+												 period,
+												 category,
+												 scenario);
+			ass.SetMainShift(MainShiftFactory.CreateMainShift(activity, period, category));
+			IMultiplicatorDefinitionSet multiplicatorDefinitionSet =
+				MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("a", MultiplicatorType.Overtime);
+			OvertimeShiftFactory.CreateOvertimeShift(activity, period, multiplicatorDefinitionSet, ass);
+			return ass;
+		}
+		
 		public static IPersonAssignment CreateAssignmentWithOvertimeShift(IActivity activity,
 																		IPerson person,
 																		DateTimePeriod period,
