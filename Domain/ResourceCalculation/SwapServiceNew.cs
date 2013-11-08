@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 
 			((ExtractedSchedule)_selectedSchedules[1]).DeleteOvertime();
-			((ExtractedSchedule)_selectedSchedules[1]).MergeOvertime(schedulePart0);
+			((ExtractedSchedule)_selectedSchedules[1]).MergeOvertime(schedulePart2);
 			((ExtractedSchedule)_selectedSchedules[0]).DeleteOvertime();
 			((ExtractedSchedule)_selectedSchedules[0]).MergeOvertime(schedulePart1);
 			

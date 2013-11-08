@@ -255,14 +255,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 
 				case SchedulePartView.DayOff:
-					if (isDelete) DeleteDayOff(); else MergeDayOff(source, false); break;
+					if (isDelete) DeleteDayOff(); else mergeDayOff(source, false); break;
 
 				case SchedulePartView.ContractDayOff:
 					// do nothing
 					break;
 
 				case SchedulePartView.MainShift:
-					if (isDelete) DeleteMainShift(source); else MergeMainShift(source, false, false);
+					if (isDelete) DeleteMainShift(source); else mergeMainShift(source, false, false);
 					break;
 
 				case SchedulePartView.Absence:
