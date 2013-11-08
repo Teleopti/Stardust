@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [SetUp]
         public void Setup()
         {
-             var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time");
+             var timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
             _mocks = new MockRepository();
             _scenario = new Scenario("hej");
             _dic = _mocks.StrictMock<IScheduleDictionary>();
@@ -136,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
             _dictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period));
-            IList<IPersonAssignment> assignments = new List<IPersonAssignment> {_p1D1.PersonAssignment()};
+            IList<IPersonAssignment> assignments = new List<IPersonAssignment> {_p1D1.PersonAssignmentCollection()[0]};
         	((ScheduleRange)_dictionary[_person1]).AddRange(assignments);
             assignments = new List<IPersonAssignment>();
             ((ScheduleRange)_dictionary[_person2]).AddRange(assignments);
@@ -152,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var retList = service.Swap(_dictionary);
 
             Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
-						Assert.AreEqual(0, retList[0].PersonAssignment().MainLayers().Count());
+            Assert.AreEqual(0, retList[0].PersonAssignmentCollection().Count);
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -160,15 +159,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_list = new List<IScheduleDay>();
 
-			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person1, new DateOnly(_d1.StartDateTime), TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12));
-			_p1D1.Add(dayOff);
+			_p1D1.Add(PersonDayOffFactory.CreatePersonDayOff(_person1, _scenario, new DateOnly(_d1.StartDateTime), TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12)));
 			
 			_list.Add(_p1D1);
 			_list.Add(_p2D1); // empty day
 
 			var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
 			_dictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period));
-			((ScheduleRange)_dictionary[_person1]).Add(dayOff);
+			IList<IPersonDayOff> personDayOffs = new List<IPersonDayOff> {_p1D1.PersonDayOffCollection()[0]};
+			((ScheduleRange)_dictionary[_person1]).AddRange(personDayOffs);
 			
 			IList<IPersonAssignment> personAssignments = new List<IPersonAssignment>();
 			((ScheduleRange)_dictionary[_person2]).AddRange(personAssignments);
@@ -176,8 +175,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var service = new SwapServiceNew();
 			service.Init(_list);
 			Assert.AreEqual("kalle", _list[0].Person.Name.LastName);
-			Assert.IsNotNull(_list[0].PersonAssignment().DayOff());
-		
+			Assert.AreEqual(1, _list[0].PersonDayOffCollection().Count());
+
 			using (_mocks.Record())
 			{
 				_mocks.BackToRecord(_dic);
@@ -187,8 +186,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var retList = service.Swap(_dictionary);
 
 			Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
-			retList[0].HasDayOff().Should().Be.False();
-			retList[1].HasDayOff().Should().Be.True();		
+			Assert.AreEqual(0, retList[0].PersonDayOffCollection().Count);
+			Assert.AreEqual(1, retList[1].PersonDayOffCollection().Count);		
 		}
 
         [Test, ExpectedException(typeof(ConstraintException))]
@@ -213,9 +212,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _dictionary = 
                 new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
                                        new DifferenceEntityCollectionService<IPersistableScheduleData>());
-            IList<IPersonAssignment> assignments = new List<IPersonAssignment> {_p1D1.PersonAssignment()};
+            IList<IPersonAssignment> assignments = new List<IPersonAssignment> {_p1D1.PersonAssignmentCollection()[0]};
         	((ScheduleRange)_dictionary[_person1]).AddRange(assignments);
-            assignments = new List<IPersonAssignment> {_p2D1.PersonAssignment()};
+            assignments = new List<IPersonAssignment> {_p2D1.PersonAssignmentCollection()[0]};
         	((ScheduleRange)_dictionary[_person2]).AddRange(assignments);
 
         }
@@ -240,14 +239,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
 									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
-			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignment() };
+			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignmentCollection()[0] };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
 			IList<IPersonAbsence> p2absences = new List<IPersonAbsence> { _p2D1.PersonAbsenceCollection()[0] };
 			((ScheduleRange)_dictionary[_person2]).AddRange(p2absences);
 
-			Assert.IsNotNull(_p1D1.PersonAssignment());
+			Assert.AreEqual(1, _p1D1.PersonAssignmentCollection().Count);
 			Assert.AreEqual(0, _p1D1.PersonAbsenceCollection().Count);
-			Assert.IsNull(_p2D1.PersonAssignment());
+			Assert.AreEqual(0, _p2D1.PersonAssignmentCollection().Count);
 			Assert.AreEqual(1, _p2D1.PersonAbsenceCollection().Count);
 
 			var service = new SwapServiceNew();
@@ -293,14 +292,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
 									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
-			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignment() };
+			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignmentCollection()[0] };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
 			IList<IPersonAbsence> p2absences = new List<IPersonAbsence> { _p2D1.PersonAbsenceCollection()[0] };
 			((ScheduleRange)_dictionary[_person2]).AddRange(p2absences);
 
-			Assert.IsNotNull(_p1D1.PersonAssignment());
+			Assert.AreEqual(1, _p1D1.PersonAssignmentCollection().Count);
 			Assert.AreEqual(0, _p1D1.PersonAbsenceCollection().Count);
-			Assert.IsNull(_p2D1.PersonAssignment());
+			Assert.AreEqual(0, _p2D1.PersonAssignmentCollection().Count);
 			Assert.AreEqual(1, _p2D1.PersonAbsenceCollection().Count);
 
 			var service = new SwapServiceNew();
@@ -350,9 +349,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IList<IPersonAssignment> personAssignments = new List<IPersonAssignment>();
 			((ScheduleRange)_dictionary[_person2]).AddRange(personAssignments);
 
-			Assert.IsNull(_p1D1.PersonAssignment());
+			Assert.AreEqual(0, _p1D1.PersonAssignmentCollection().Count);
 			Assert.AreEqual(1, _p1D1.PersonAbsenceCollection().Count);
-			Assert.IsNull(_p2D1.PersonAssignment());
+			Assert.AreEqual(0, _p2D1.PersonAssignmentCollection().Count);
 			Assert.AreEqual(0, _p2D1.PersonAbsenceCollection().Count);
 
 			var service = new SwapServiceNew();
@@ -396,16 +395,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
 									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
-			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignment() };
+			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignmentCollection()[0] };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
 			IList<IPersonAbsence> p1absences = new List<IPersonAbsence> { _p1D1.PersonAbsenceCollection()[0] };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1absences);
-			IList<IPersonAssignment> p2assignments = new List<IPersonAssignment> { _p2D1.PersonAssignment() };
+			IList<IPersonAssignment> p2assignments = new List<IPersonAssignment> { _p2D1.PersonAssignmentCollection()[0] };
 			((ScheduleRange)_dictionary[_person2]).AddRange(p2assignments);
 
-			Assert.IsNotNull(_p1D1.PersonAssignment());
+			Assert.AreEqual(1, _p1D1.PersonAssignmentCollection().Count);
 			Assert.AreEqual(1, _p1D1.PersonAbsenceCollection().Count);
-			Assert.IsNotNull(_p2D1.PersonAssignment());
+			Assert.AreEqual(1, _p2D1.PersonAssignmentCollection().Count);
 			Assert.AreEqual(0, _p2D1.PersonAbsenceCollection().Count);
 
 			var service = new SwapServiceNew();
@@ -443,13 +442,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
 									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
-			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignment() };
+			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignmentCollection()[0] };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
-			IList<IPersonAssignment> p2assignments = new List<IPersonAssignment> { _p2D1.PersonAssignment() };
+			IList<IPersonAssignment> p2assignments = new List<IPersonAssignment> { _p2D1.PersonAssignmentCollection()[0] };
 			((ScheduleRange)_dictionary[_person2]).AddRange(p2assignments);
 
-			Assert.AreEqual(1, p1assignments[0].PersonalLayers().Count());
-			Assert.AreEqual(0, p2assignments[0].PersonalLayers().Count());
+			Assert.AreEqual(1, p1assignments[0].PersonalShiftCollection.Count());
+			Assert.AreEqual(0, p2assignments[0].PersonalShiftCollection.Count());
 
 			var service = new SwapServiceNew();
 			service.Init(_list);
@@ -465,11 +464,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.AreEqual(_person1.Name.LastName, retList[0].Person.Name.LastName);
 			Assert.AreEqual(_person2.Name.LastName, retList[1].Person.Name.LastName);
 
-			var p1assignmentsAfterSwap = retList[0].PersonAssignment();
-			var p2assignmentsAfterSwap = retList[1].PersonAssignment();
+			var p1assignmentsAfterSwap = retList[0].PersonAssignmentCollection()[0];
+			var p2assignmentsAfterSwap = retList[1].PersonAssignmentCollection()[0];
 
-			Assert.AreEqual(1, p1assignmentsAfterSwap.PersonalLayers().Count());
-			Assert.AreEqual(0, p2assignmentsAfterSwap.PersonalLayers().Count());
+			Assert.AreEqual(1, p1assignmentsAfterSwap.PersonalShiftCollection.Count());
+			Assert.AreEqual(0, p2assignmentsAfterSwap.PersonalShiftCollection.Count());
 		}
 
 		/// <summary>
@@ -488,20 +487,20 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
 									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
-			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignment() };
+			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignmentCollection()[0] };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
-			IList<IPersonAssignment> p2assignments = new List<IPersonAssignment> { _p2D1.PersonAssignment() };
+			IList<IPersonAssignment> p2assignments = new List<IPersonAssignment> { _p2D1.PersonAssignmentCollection()[0] };
 			((ScheduleRange)_dictionary[_person2]).AddRange(p2assignments);
 
-			Assert.AreEqual(1, p1assignments[0].OvertimeLayers().Count());
-			Assert.AreEqual(0, p2assignments[0].OvertimeLayers().Count());
+			Assert.AreEqual(1, p1assignments[0].OvertimeShiftCollection.Count());
+			Assert.AreEqual(0, p2assignments[0].OvertimeShiftCollection.Count());
 
 			var p1Period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_d1.StartDateTime.AddDays(-1)));
 			_person1.AddPersonPeriod(p1Period);
 			var p2Period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_d1.StartDateTime.AddDays(-1)));
 			_person2.AddPersonPeriod(p2Period);
 
-			var definitionSet = ((IOvertimeShiftLayer)p1assignments[0].OvertimeLayers().ToList()[0]).DefinitionSet;
+			var definitionSet = ((IOvertimeShiftActivityLayer)p1assignments[0].OvertimeShiftCollection[0].LayerCollection[0]).DefinitionSet;
 			_person1.PersonPeriodCollection[0].PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
 			_person2.PersonPeriodCollection[0].PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
 
@@ -519,11 +518,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.AreEqual(_person1.Name.LastName, retList[0].Person.Name.LastName);
 			Assert.AreEqual(_person2.Name.LastName, retList[1].Person.Name.LastName);
 
-			var p1assignmentsAfterSwap = retList[0].PersonAssignment();
-			var p2assignmentsAfterSwap = retList[1].PersonAssignment();
+			var p1assignmentsAfterSwap = retList[0].PersonAssignmentCollection()[0];
+			var p2assignmentsAfterSwap = retList[1].PersonAssignmentCollection()[0];
 
-			Assert.AreEqual(0, p1assignmentsAfterSwap.OvertimeLayers().Count());
-			Assert.AreEqual(1, p2assignmentsAfterSwap.OvertimeLayers().Count());
+			Assert.AreEqual(0, p1assignmentsAfterSwap.OvertimeShiftCollection.Count());
+			Assert.AreEqual(1, p2assignmentsAfterSwap.OvertimeShiftCollection.Count());
 		}
 
 		/// <summary>
@@ -549,14 +548,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
 									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
-			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignment() };
+			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignmentCollection()[0] };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
 			IList<IPersonAbsence> p2absences = new List<IPersonAbsence> { _p2D1.PersonAbsenceCollection()[0] };
 			((ScheduleRange)_dictionary[_person2]).AddRange(p2absences);
 
-			Assert.AreEqual(1, _p1D1.PersonAssignment());
+			Assert.AreEqual(1, _p1D1.PersonAssignmentCollection().Count);
 			Assert.AreEqual(0, _p1D1.PersonAbsenceCollection().Count);
-			Assert.AreEqual(0, _p2D1.PersonAssignment());
+			Assert.AreEqual(0, _p2D1.PersonAssignmentCollection().Count);
 			Assert.AreEqual(1, _p2D1.PersonAbsenceCollection().Count);
 
 			var service = new SwapServiceNew();
