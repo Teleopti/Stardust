@@ -319,3 +319,82 @@ IF NOT EXISTS (SELECT 1 FROM [mart].[etl_jobstep] WHERE jobstep_name=N'fact_agen
 INSERT [mart].[etl_jobstep] ([jobstep_id], [jobstep_name]) VALUES(83,N'fact_agent_skill')
 GO
 
+----------------  
+--Name: David J
+--Date: 2013-11-07
+--Desc: new tables for RTA state report
+----------------
+--trim datatypes in current live table
+ALTER TABLE [RTA].[ActualAgentState] ALTER COLUMN [StateCode] nvarchar(25)
+ALTER TABLE [RTA].[ActualAgentState] ALTER COLUMN [State] nvarchar(50)
+ALTER TABLE [RTA].[ActualAgentState] ALTER COLUMN [Scheduled] nvarchar(50)
+ALTER TABLE [RTA].[ActualAgentState] ALTER COLUMN [ScheduledNext] nvarchar(50)
+ALTER TABLE [RTA].[ActualAgentState] ALTER COLUMN [AlarmName] nvarchar(50)
+
+--new stage table
+CREATE TABLE [stage].[stg_agent_state](
+	[person_code] uniqueidentifier NOT NULL,
+	[state_code] nvarchar(25) NOT NULL,
+	[state_group_name] nvarchar(50) NOT NULL,
+	[state_group_code] uniqueidentifier NOT NULL,
+	[state_start] datetime NOT NULL,
+	[time_in_state_s] int NOT NULL
+)
+CREATE CLUSTERED INDEX [CIX_stg_agent_state] ON [stage].[stg_agent_state]
+(
+	[state_start] ASC
+)
+
+CREATE TABLE [stage].[stg_agent_state_loading](
+	[person_code] uniqueidentifier NOT NULL,
+	[state_group_code] uniqueidentifier NOT NULL,
+	[time_in_state_s] int NOT NULL,
+	[state_start] datetime NOT NULL
+	)
+CREATE CLUSTERED INDEX [CIX_stg_agent_state_loading] ON [stage].[stg_agent_state_loading]
+(
+	[person_code] ASC
+)
+
+--new dimension table
+CREATE TABLE [mart].[dim_state_group](
+	[state_group_id] int IDENTITY(1,1) NOT NULL,
+	[state_group_code] uniqueidentifier NULL,
+	[state_group_name] nvarchar(50) NOT NULL,
+	[business_unit_id] int NULL,
+	[datasource_id] smallint NOT NULL,
+	[insert_date] smalldatetime NOT NULL,
+	[update_date] smalldatetime NOT NULL,
+	[datasource_update_date] smalldatetime NOT NULL
+)
+
+ALTER TABLE [mart].[dim_state_group] ADD  CONSTRAINT [PK_dim_state_group] PRIMARY KEY CLUSTERED 
+(
+	[state_group_id] ASC
+)
+
+ALTER TABLE [mart].[dim_state_group]  WITH NOCHECK ADD  CONSTRAINT [FK_dim_state_group_dim_business_unit] FOREIGN KEY([business_unit_id])
+REFERENCES [mart].[dim_business_unit] ([business_unit_id])
+ALTER TABLE [mart].[dim_state_group] CHECK CONSTRAINT [FK_dim_state_group_dim_business_unit]
+GO
+
+--new fact table
+CREATE TABLE [mart].[fact_agent_state](
+	[date_id] int NOT NULL,
+	[person_id] int NOT NULL,
+	[interval_id] smallint NOT NULL,
+	[state_start] datetime NOT NULL,
+	[state_group_id] int NOT NULL,
+	[time_in_state_s] int NOT NULL,
+	[datasource_id] smallint NOT NULL,
+	[insert_date] smalldatetime NOT NULL
+)
+
+ALTER TABLE [mart].[fact_agent_state] ADD  CONSTRAINT [PK_fact_agent_state] PRIMARY KEY CLUSTERED 
+(
+	[date_id] ASC,
+	[person_id] ASC,
+	[interval_id] ASC,
+	[state_start] ASC
+)
+GO
