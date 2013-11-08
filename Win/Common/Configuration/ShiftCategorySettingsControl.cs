@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
@@ -140,7 +141,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
             _gridHelper = new SFGridColumnGridHelper<ShiftCategoryModel>(gridControlShiftCategory,
                                             shiftCatColumns,
-                                            GetSource<ShiftCategoryModel>()) {AllowExtendedCopyPaste = true};
+                                            GetSource<ShiftCategoryModel>() ) {AllowExtendedCopyPaste = true};
 
         	gridControlShiftCategory.ColWidths[1] = NameColumnWidth;
             gridControlShiftCategory.ColWidths[2] = ShortNameColumnWidth;
@@ -231,7 +232,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private void LoadSourceList()
         {
-            var shiftCatList = ShiftCatReposiroty.LoadAll();
+            var shiftCatList = ShiftCatReposiroty.LoadAll().OrderBy(s => s.Description.Name).ToList();
 			_shiftCatAdapterList.Clear();
 
             foreach (IShiftCategory category in shiftCatList)
@@ -240,9 +241,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             }
         }
 
-        private List<T> GetSource<T>()
+        private IList<T> GetSource<T>()
         {
-            var source = (List<T>)_shiftCatAdapterList;
+            var source = (IList<T>)_shiftCatAdapterList;
             return source;
         }
 

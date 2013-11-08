@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             ReadOnlyCollection<SFGridColumnBase<IActivity>> activityColumns = ConfigureActivityGrid();
             _gridColumnHelper = new SFGridColumnGridHelper<IActivity>(gridControlActivities,
                                 activityColumns,
-                                GetSource<IActivity>(GridType.Activity)) {AllowExtendedCopyPaste = true};
+                                GetSource<IActivity>(GridType.Activity).OrderBy(a => a.Description.Name).ToList()) {AllowExtendedCopyPaste = true};
 
         	_gridColumnHelper.NewSourceEntityWanted += ColumnGridHelperNewSourceEntityWanted;
 
