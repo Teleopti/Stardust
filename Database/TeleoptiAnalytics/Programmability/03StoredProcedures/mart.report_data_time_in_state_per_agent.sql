@@ -113,11 +113,14 @@ SET NOCOUNT ON;
 	ON b.local_interval_id = i.interval_id
 	WHERE d.date_date BETWEEN @date_from AND @date_to
 	GROUP BY r.person_code, r.state_group_id
+	
 
 	UPDATE #RESULT 
-	SET time_in_state_m=isnull(time_in_state_s/60,0)
+	SET time_in_state_m=isnull(time_in_state_s,0)/60
 	from #time_in_state t 
-	inner join #RESULT r on r.person_code=t.person_code and t.time_in_state_s=r.state_group_id
+	inner join #RESULT r on r.person_code=t.person_code and t.state_group_id=r.state_group_id
+
+	/*todo join data from stage not yet in fact table*/
 
 
 SELECT person_code,person_name, state_group_id, state_group_name, time_in_state_m, hide_time_zone
