@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 				ColorHolidayCell = ColorHelper.GridControlGridHolidayCellColor(),
 				ColorHolidayHeader = ColorHelper.GridControlGridHolidayHeaderColor(),
 				ReadOnlyBackgroundBrush = ColorHelper.ReadOnlyBackgroundBrush,
-				ColorReadOnlyCell = Color.DimGray
+				ColorReadOnlyCell = Color.Black
 			};
 			_entityBinder.AddRow(new GridRow<IBudgetGroupDayDetailModel>
 			{
