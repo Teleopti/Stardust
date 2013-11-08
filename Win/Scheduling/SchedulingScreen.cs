@@ -4882,10 +4882,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 				new CachedNumberOfEachCategoryPerPerson(_schedulerState.Schedules, _schedulerState.RequestedPeriod.DateOnlyPeriod);
 			ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate =
 				new CachedNumberOfEachCategoryPerDate(_schedulerState.Schedules, _schedulerState.RequestedPeriod.DateOnlyPeriod);
-			ICachedShiftCategoryDistribution cachedShiftCategoryDistribution =
+		    var allowedSc = new List<IShiftCategory>();
+            foreach (var shiftCategory in _schedulerState.CommonStateHolder.ShiftCategories)
+            {
+                var sc = shiftCategory as IDeleteTag;
+                if(sc!=null && !sc.IsDeleted)
+                    allowedSc.Add(shiftCategory );
+            }
+            ICachedShiftCategoryDistribution cachedShiftCategoryDistribution =
 				new CachedShiftCategoryDistribution(_schedulerState.Schedules, _schedulerState.RequestedPeriod.DateOnlyPeriod,
 																						cachedNumberOfEachCategoryPerPerson,
-																						_schedulerState.CommonStateHolder.ShiftCategories);
+                                                                                        allowedSc);
 			_shiftCategoryDistributionModel = new ShiftCategoryDistributionModel(cachedShiftCategoryDistribution,
 																																					 cachedNumberOfEachCategoryPerDate,
 																																					 cachedNumberOfEachCategoryPerPerson,
