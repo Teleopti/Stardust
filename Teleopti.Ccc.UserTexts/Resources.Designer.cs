@@ -6583,6 +6583,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Detailed Adherence.
+        /// </summary>
+        public static string DetailedAdherence {
+            get {
+                return ResourceManager.GetString("DetailedAdherence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Detailed Forecasting.
         /// </summary>
         public static string DetailedForecastSmartPart {
@@ -19294,6 +19303,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ResReportTeamMetrics {
             get {
                 return ResourceManager.GetString("ResReportTeamMetrics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time in State per Agent.
+        /// </summary>
+        public static string ResReportTimeInStatePerAgent {
+            get {
+                return ResourceManager.GetString("ResReportTimeInStatePerAgent", resourceCulture);
             }
         }
         

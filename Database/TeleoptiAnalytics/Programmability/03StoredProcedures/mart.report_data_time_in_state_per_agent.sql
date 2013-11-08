@@ -8,6 +8,7 @@ GO
 -- Description:	<Agent State Report>
 -- =============================================
 --exec mart.report_data_time_in_state_per_agent @date_from='2013-10-31 00:00:00',@date_to='2013-10-31 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'7',@agent_person_code=N'00000000-0000-0000-0000-000000000002',@state_group_set=N'2,3,4',@time_zone_id=N'1',@person_code='18037D35-73D5-4211-A309-9B5E015B2B5C',@report_id='BB8C21BA-0756-4DDC-8B26-C9D5715A3443',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+--exec mart.report_data_time_in_state_per_agent @date_from='2013-11-08 00:00:00',@date_to='2013-11-08 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'13',@agent_person_code=N'00000000-0000-0000-0000-000000000002',@state_group_set=N'11,9,8,13,7,12,6,5,10,4',@time_zone_id=N'2',@person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@report_id='BB8C21BA-0756-4DDC-8B26-C9D5715A3443',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 
 CREATE PROCEDURE [mart].[report_data_time_in_state_per_agent] 
 @date_from datetime,
@@ -36,7 +37,7 @@ SET NOCOUNT ON;
 	state_group_id int, 
 	state_group_code uniqueidentifier,
 	state_group_name nvarchar(50),
-	time_in_state int, 
+	time_in_state_m decimal(18,3), 
 	hide_time_zone bit
 	)
 
@@ -46,6 +47,7 @@ SET NOCOUNT ON;
 	--Table to hold agents to view
 	CREATE TABLE #person_id (person_id int)
 	CREATE TABLE #stategroups(id int)
+	CREATE TABLE #time_in_state(person_code uniqueidentifier, state_group_id int, time_in_state_s int)
 
 	/*Split string of skill id:s*/
 	INSERT INTO #stategroups
@@ -57,8 +59,6 @@ SET NOCOUNT ON;
 		SET @hide_time_zone = 1
 	ELSE
 		SET @hide_time_zone = 0
-
-
 
 	INSERT INTO #rights_agents
 	SELECT * FROM mart.ReportAgentsMultipleTeams(@date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_person_code, @person_code, @report_id, @business_unit_code)
@@ -88,30 +88,39 @@ SET NOCOUNT ON;
 
 	UPDATE #RESULT
 	SET person_name =dp.person_name,
+		person_code= dp.person_code,
 		state_group_name  =ds.state_group_name, 
-		hide_time_zone = @hide_time_zone
+		state_group_code = ds.state_group_code,
+		hide_time_zone = @hide_time_zone,
+		time_in_state_m=0
 	FROM #RESULT r
 	INNER JOIN  mart.dim_person dp
 		ON dp.person_id=r.person_id
 	INNER JOIN mart.dim_state_group ds 
 		ON r.state_group_id=ds.state_group_id
 
-UPDATE #RESULT
-SET time_in_state=0
+	INSERT #time_in_state(person_code, state_group_id, time_in_state_s)
+	SELECT r.person_code, r.state_group_id, sum(isnull(fas.time_in_state_s,0))
+	FROM mart.fact_agent_state fas 
+	INNER JOIN #RESULT r 
+	ON fas.person_id=r.person_id AND  r.state_group_id=fas.state_group_id 
+	INNER JOIN mart.bridge_time_zone b
+	ON	fas.interval_id= b.interval_id
+	AND fas.date_id= b.date_id AND B.time_zone_id=@time_zone_id
+	INNER JOIN mart.dim_date d 
+	ON b.local_date_id = d.date_id
+	INNER JOIN mart.dim_interval i
+	ON b.local_interval_id = i.interval_id
+	WHERE d.date_date BETWEEN @date_from AND @date_to
+	GROUP BY r.person_code, r.state_group_id
 
-	--UPDATE #RESULT
-	--SET time_in_state = sum(fas.time_in_state_s)
-	--FROM #RESULT r
-	--INNER JOIN mart.fact_agent_state fas 
-	--ON r.person_id=fas.person_id AND r.state_group_id=fas.state_group_id 
-	--INNER JOIN mart.bridge_time_zone bt
-	--ON bt.date_id=fas.date_id and bt.interval_id=fas.interval_id
-	--INNER JOIN mart.dim_date dd ON bt.local_date_id=dd.date_id AND bt.time_zone_id=@time_zone_id
-	--INNER JOIN mart.dim_interval di on bt.local_interval_id=di.interval_id
-	--WHERE dd.date_date between @date_from AND @date_to
+	UPDATE #RESULT 
+	SET time_in_state_m=isnull(time_in_state_s/60,0)
+	from #time_in_state t 
+	inner join #RESULT r on r.person_code=t.person_code and t.time_in_state_s=r.state_group_id
 
 
-SELECT * 
+SELECT person_code,person_name, state_group_id, state_group_name, time_in_state_m, hide_time_zone
 FROM #result 
 ORDER BY person_name, state_group_name
 END

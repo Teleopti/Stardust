@@ -457,6 +457,9 @@
     <EmbeddedResource Include="Reports\Ccc\report_shift_category_per_day.rdlc" />
     <EmbeddedResource Include="Reports\Ccc\report_scheduled_time_per_agent.rdlc" />
     <EmbeddedResource Include="Reports\Ccc\report_team_metrics.rdlc" />
+    <EmbeddedResource Include="Reports\Ccc\report_time_in_state_per_agent.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
