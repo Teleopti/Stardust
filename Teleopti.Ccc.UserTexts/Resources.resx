@@ -627,7 +627,7 @@ Date</value>
     <comment>Days off</comment>
   </data>
   <data name="DayView" xml:space="preserve">
-    <value>Day view</value>
+    <value>Day View</value>
     <comment>Day view</comment>
   </data>
   <data name="DefaultColor" xml:space="preserve">
@@ -1170,7 +1170,7 @@ Date</value>
     <comment>Months</comment>
   </data>
   <data name="MonthView" xml:space="preserve">
-    <value>Month view</value>
+    <value>Month View</value>
     <comment>Month view</comment>
   </data>
   <data name="MoreDoubleArrow" xml:space="preserve">
@@ -2014,7 +2014,7 @@ Periods</comment>
     <comment>Team members</comment>
   </data>
   <data name="TeamView" xml:space="preserve">
-    <value>Team view</value>
+    <value>Team View</value>
     <comment>Team view</comment>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
