@@ -322,72 +322,6 @@ GO
 ----------------  
 --Name: Karin
 --Date: 2013-11-07
---Desc: #24978 New dimension and fact table for state groups and agent time in state
------------------
-CREATE TABLE [mart].[dim_state_group](
-	[state_group_id] [int] IDENTITY(1,1) NOT NULL,
-	[state_group_code] [uniqueidentifier] NULL,
-	[state_group_name] [nvarchar](100) NOT NULL,
-	[business_unit_id] [int] NULL,
-	[datasource_id] [smallint] NOT NULL,
-	[insert_date] [smalldatetime] NOT NULL,
-	[update_date] [smalldatetime] NOT NULL,
-	[datasource_update_date] [smalldatetime] NULL,
-	[is_deleted] [bit] NOT NULL	
- CONSTRAINT [PK_dim_state_group] PRIMARY KEY CLUSTERED 
-(
-	[state_group_id] ASC
-) )
-
-GO
-
-ALTER TABLE [mart].[dim_state_group] ADD  CONSTRAINT [DF_dim_state_group_state_group_name]  DEFAULT ('Not Defined') FOR [state_group_name]
-GO
-
-ALTER TABLE [mart].[dim_state_group] ADD  CONSTRAINT [DF_dim_state_group_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
-GO
-
-ALTER TABLE [mart].[dim_state_group] ADD  CONSTRAINT [DF_dim_state_group_insert_date]  DEFAULT (getdate()) FOR [insert_date]
-GO
-
-ALTER TABLE [mart].[dim_state_group] ADD  CONSTRAINT [DF_dim_state_group_update_date]  DEFAULT (getdate()) FOR [update_date]
-GO
-
-ALTER TABLE [mart].[dim_state_group] ADD  CONSTRAINT [DF_dim_state_group_is_deleted]  DEFAULT ((0)) FOR [is_deleted]
-GO
-
-CREATE TABLE [mart].[fact_agent_state](
-	[date_id] [int] NOT NULL,
-	[interval_id][smallint] NOT NULL, 
-	[person_id] [int] NOT NULL,
-	[state_group_id] [int] NOT NULL,
-	[time_in_state_s] [int] NULL,
-	[business_unit_id] [int] NOT NULL,
-	[datasource_id] [smallint] NOT NULL,
- CONSTRAINT [PK_fact_agent_state] PRIMARY KEY CLUSTERED 
-(
-	[date_id] ASC,
-	[interval_id] ASC,
-	[person_id] ASC,
-	[state_group_id] ASC
-)) 
-
-GO
-
-ALTER TABLE [mart].[fact_agent_state] ADD  CONSTRAINT [DF_fact_agent_state_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
-GO
-ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_date] FOREIGN KEY([date_id])
-REFERENCES [mart].[dim_date] ([date_id])
-GO
-ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_interval] FOREIGN KEY([interval_id])
-REFERENCES [mart].[dim_interval] ([interval_id])
-GO
-ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_person] FOREIGN KEY([person_id])
-REFERENCES [mart].[dim_person] ([person_id])
-GO
-----------------  
---Name: Karin
---Date: 2013-11-07
 --Desc: #24978 New report and report collection and control
 -----------------
 --ADD NEW CONTROL
@@ -504,6 +438,7 @@ CREATE TABLE [stage].[stg_agent_state](
 	[state_start] datetime NOT NULL,
 	[time_in_state_s] int NOT NULL
 )
+
 CREATE CLUSTERED INDEX [CIX_stg_agent_state] ON [stage].[stg_agent_state]
 (
 	[state_start] ASC
@@ -529,7 +464,8 @@ CREATE TABLE [mart].[dim_state_group](
 	[datasource_id] smallint NOT NULL,
 	[insert_date] smalldatetime NOT NULL,
 	[update_date] smalldatetime NOT NULL,
-	[datasource_update_date] smalldatetime NOT NULL
+	[datasource_update_date] smalldatetime NOT NULL,
+	[is_deleted] [bit] NOT NULL
 )
 
 ALTER TABLE [mart].[dim_state_group] ADD  CONSTRAINT [PK_dim_state_group] PRIMARY KEY CLUSTERED 
@@ -547,18 +483,30 @@ CREATE TABLE [mart].[fact_agent_state](
 	[date_id] int NOT NULL,
 	[person_id] int NOT NULL,
 	[interval_id] smallint NOT NULL,
-	[state_start] datetime NOT NULL,
 	[state_group_id] int NOT NULL,
 	[time_in_state_s] int NOT NULL,
 	[datasource_id] smallint NOT NULL,
 	[insert_date] smalldatetime NOT NULL
 )
 
-ALTER TABLE [mart].[fact_agent_state] ADD  CONSTRAINT [PK_fact_agent_state] PRIMARY KEY CLUSTERED 
+ALTER TABLE [mart].[fact_agent_state] ADD CONSTRAINT [PK_fact_agent_state] PRIMARY KEY CLUSTERED 
 (
 	[date_id] ASC,
 	[person_id] ASC,
 	[interval_id] ASC,
-	[state_start] ASC
+	[state_group_id] ASC
 )
+GO
+
+ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_date] FOREIGN KEY([date_id])
+REFERENCES [mart].[dim_date] ([date_id])
+GO
+ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_interval] FOREIGN KEY([interval_id])
+REFERENCES [mart].[dim_interval] ([interval_id])
+GO
+ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_person] FOREIGN KEY([person_id])
+REFERENCES [mart].[dim_person] ([person_id])
+GO
+ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_state_group] FOREIGN KEY([state_group_id])
+REFERENCES [mart].[dim_state_group] ([state_group_id])
 GO

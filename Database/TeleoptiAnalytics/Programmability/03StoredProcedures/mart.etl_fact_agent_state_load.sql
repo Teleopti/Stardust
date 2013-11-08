@@ -30,15 +30,15 @@ INNER JOIN mart.dim_state_group d
 	ON d.state_group_code = stg.state_group_code
 
 SET NOCOUNT OFF
+
 INSERT INTO mart.fact_agent_state
 SELECT 
 date_id			= d.date_id,
 person_id		= dp.person_id,
 interval_id		= i.interval_id,
-state_start		= stg.state_start,
 state_group_id	= sg.state_group_id,
-time_in_state_s	= stg.time_in_state_s,
-datasource_id	= sg.datasource_id,
+time_in_state_s	= sum(stg.time_in_state_s),
+datasource_id	= 1,
 insert_date		= getdate()
 FROM [stage].[stg_agent_state_loading] stg
 INNER JOIN mart.dim_person dp
@@ -56,6 +56,7 @@ INNER JOIN mart.dim_date d
 INNER JOIN mart.dim_interval i
 	ON dateadd(MINUTE,(DATEPART(HOUR,stg.state_start)*60+DATEPART(MINUTE,stg.state_start)),'1900-01-01') BETWEEN i.interval_start AND i.interval_end
 WHERE stg.time_in_state_s > 0
+GROUP BY date_id,person_id,interval_id,state_group_id
 
 --truncate "temporary" data
 TRUNCATE TABLE [stage].[stg_agent_state_loading]

@@ -29,7 +29,8 @@ INSERT INTO mart.dim_state_group
 	datasource_id,
 	insert_date,
 	update_date,
-	datasource_update_date
+	datasource_update_date,
+	is_deleted
 	)
 SELECT 
 	state_group_id				= -1, 
@@ -39,7 +40,8 @@ SELECT
 	datasource_id				= -1,
 	insert_date					= @mindate,
 	update_date					= @mindate,
-	datasource_update_date		= @mindate
+	datasource_update_date		= @mindate,
+	is_deleted					= 0
 WHERE NOT EXISTS (SELECT * FROM mart.dim_state_group where state_group_id = -1)
 
 SET IDENTITY_INSERT mart.dim_state_group OFF
@@ -65,7 +67,8 @@ INSERT INTO mart.dim_state_group
 	datasource_id,
 	insert_date,
 	update_date,
-	datasource_update_date
+	datasource_update_date,
+	is_deleted
 	)
 SELECT 
 	state_group_code			= state_group_code, 
@@ -74,7 +77,8 @@ SELECT
 	datasource_id				= datasource_id,
 	insert_date					= getdate(),
 	update_date					= getdate(),
-	datasource_update_date		= getdate()
+	datasource_update_date		= getdate(),
+	is_deleted					= 0
 FROM stage.v_stg_state_group s
 WHERE 
 	NOT EXISTS (SELECT state_group_id FROM mart.dim_state_group d WHERE d.state_group_code = s.state_group_code and d.datasource_id = s.datasource_id)
