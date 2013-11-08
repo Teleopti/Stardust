@@ -32,6 +32,8 @@ namespace Teleopti.Ccc.Win.Shifts
         private IDictionary<ShiftCreatorViewType, ToolStripButton> _viewButtonDictionary;
         private readonly IEventAggregator _eventAggregator;
         private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
+		
+		private bool ruleSetBagCopyClicked, ruleSetCopyClicked;
 
         public WorkShiftsExplorer(IEventAggregator eventAggregator)
         {
@@ -55,7 +57,7 @@ namespace Teleopti.Ccc.Win.Shifts
             base.OnLoad(e);
             if (DesignMode) return;
 			
-            Presenter.Model.SetRightToLeft((base.RightToLeft == RightToLeft.Yes) ? true : false);
+            Presenter.Model.SetRightToLeft((base.RightToLeft == RightToLeft.Yes));
             Presenter.Model.SetSelectedView(ShiftCreatorViewType.RuleSet);
 
             _navigationView = new NavigationView(Presenter, _eventAggregator);
@@ -92,11 +94,14 @@ namespace Teleopti.Ccc.Win.Shifts
             tcViews.Size = tcViews.PreferredSize;
 
             _navigationView.ShowModifyCollection +=
-                delegate
-                    {
-                        if (_navigationView.DefaultTreeView.SelectedNodes != null)
-                            toolStripButtonAddRuleSet.Enabled = _navigationView.DefaultTreeView.SelectedNodes.Count > 0;
-                    };
+	            (sender, args) =>
+		            {
+			            if (_navigationView.DefaultTreeView.SelectedNodes == null) return;
+						var anythingSelected = _navigationView.DefaultTreeView.SelectedNodes.Count > 0;
+						toolStripButtonAddRuleSet.Enabled = anythingSelected;
+						_clipboardControl.SetButtonState(ClipboardAction.Paste, anythingSelected && getCurrentViewClickStatus());
+			            
+		            };
 			KeyDown += WorkShiftsExplorer_KeyDown;
 			KeyPress += WorkShiftsExplorer_KeyPress;
 		}
@@ -271,18 +276,44 @@ namespace Teleopti.Ccc.Win.Shifts
                 case ShiftCreatorViewType.RuleSet:
                 case ShiftCreatorViewType.RuleSetBag:
                     _navigationView.Copy();
-                    _clipboardControl.SetButtonState(ClipboardAction.Paste, true);
-                    break;
+		            if (_navigationView.DefaultTreeView.SelectedNodes.Count > 0)
+			            _clipboardControl.SetButtonState(ClipboardAction.Paste, true);
+		            else
+			            _clipboardControl.SetButtonState(ClipboardAction.Paste, false);
+		            setClickedStatus();
+		            break;
                 case ShiftCreatorViewType.Activities:
                 case ShiftCreatorViewType.Limitation:
                 case ShiftCreatorViewType.DateExclusion:
-                    _generalView.Copy();
+                    _generalView.Copy();					
                     _clipboardControl.SetButtonState(ClipboardAction.Paste, true);
                     break;
             }
         }
 
-        private void toolStripButtonTemplateViewClick(object sender, EventArgs e)
+		private void setClickedStatus()
+		{
+			if (_navigationView.CurrentView == ShiftCreatorViewType.RuleSet)
+			{
+				ruleSetCopyClicked = true;
+				ruleSetBagCopyClicked = false;
+			}
+
+			if (_navigationView.CurrentView == ShiftCreatorViewType.RuleSetBag)
+			{
+				ruleSetBagCopyClicked = true;
+				ruleSetCopyClicked = false;
+			}
+		}
+
+		private bool getCurrentViewClickStatus()
+		{
+			if (_navigationView.CurrentView == ShiftCreatorViewType.RuleSet) return ruleSetCopyClicked;
+			if (_navigationView.CurrentView == ShiftCreatorViewType.RuleSetBag) return ruleSetBagCopyClicked;
+			return false;
+		}
+
+	    private void toolStripButtonTemplateViewClick(object sender, EventArgs e)
         {
             loadView(ShiftCreatorViewType.General);
         }
@@ -298,6 +329,7 @@ namespace Teleopti.Ccc.Win.Shifts
         }
 
 	    private DateTime _lastSaveClick;
+
         private void toolStripButtonSaveClick(object sender, EventArgs e)
         {
 			// fix for bug in syncfusion that shoots click event twice on buttons in quick access
