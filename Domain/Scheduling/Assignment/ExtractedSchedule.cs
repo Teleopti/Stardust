@@ -17,7 +17,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public class ExtractedSchedule : Schedule, IScheduleDay
     {
         public ISignificantPartService ServiceForSignificantPart  { get; set; }
@@ -74,39 +73,42 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return ServiceForSignificantPartForDisplay.SignificantPart();
         }
 
-    	public bool IsScheduled()
+	    public IEditableShift GetEditorShift()
+	    {
+		    var personAssignment = PersonAssignment();
+		    if (personAssignment == null)
+			    return null;
+
+		    return new EditableShiftMapper().CreateEditorShift(personAssignment);
+	    }
+
+	    public bool IsScheduled()
     	{
     		SchedulePartView partView = SignificantPart();
     		return (partView == SchedulePartView.FullDayAbsence || partView == SchedulePartView.DayOff ||
     		        partView == SchedulePartView.ContractDayOff || partView == SchedulePartView.MainShift);
     	}
 
-    	public IPersonAssignment AssignmentHighZOrder()
-        {
-            IPersonAssignment ret = null;
+			public IPersonAssignment PersonAssignment(bool createIfNotExists = false)
+			{
+				var currentAss = ScheduleDataInternalCollection().OfType<IPersonAssignment>().SingleOrDefault();
+				if (createIfNotExists)
+				{
+					if (currentAss == null)
+					{
+						currentAss = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
+						Add(currentAss);
+					}
+				}
+				return currentAss;
+			}
 
-            IList<IPersonAssignment> assColl = PersonAssignmentCollection();
+	    public IScheduleDay ReFetch()
+	    {
+		    return Owner[Person].ReFetch(this);
+	    }
 
-            if (assColl.Count > 0)
-            {
-                ret = assColl[0];
-
-                foreach (IPersonAssignment pa in assColl)
-                {
-                    if (pa.ZOrder > ret.ZOrder)
-                    {
-                        ret = pa;
-                    }
-                }
-            }
-
-            if(ret != null && ret.ZOrder == DateTime.MinValue)
-                ret.ZOrder = DateTime.Now;
-
-            return ret;
-        }
-
-        public ReadOnlyCollection<IPersonAbsence> PersonAbsenceCollection()
+	    public ReadOnlyCollection<IPersonAbsence> PersonAbsenceCollection()
         {
             return PersonAbsenceCollection(false);
         }
@@ -141,7 +143,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     		return PersonMeetingCollection(false);
     	}
 
-		public ReadOnlyCollection<IPersonMeeting> PersonMeetingCollection(bool includeOutsideActualDay)
+	    public ReadOnlyCollection<IOvertimeAvailability> OvertimeAvailablityCollection()
+	    {
+			var scheduleDataInternalCollection = ScheduleDataInternalCollection().ToList();
+
+			var overtimeRestrictions = scheduleDataInternalCollection.OfType<IOvertimeAvailability>();
+			var ret = new List<IOvertimeAvailability>();
+
+			foreach (var overtimeRestriction in overtimeRestrictions)
+			{
+				ret.Add(overtimeRestriction);
+			}
+			return ret.AsReadOnly();
+	    }
+
+	    public ReadOnlyCollection<IPersonMeeting> PersonMeetingCollection(bool includeOutsideActualDay)
 		{
 			var sorter = new PersonMeetingByDateSorter();
 			var org = new List<IPersonMeeting>(ScheduleDataInternalCollection().OfType<IPersonMeeting>());
@@ -151,19 +167,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return excludeDataOutsideDayOrShift(org, sorter);
 		}
 
-        public ReadOnlyCollection<IPersonAssignment> PersonAssignmentCollection()
-        {
-            var retList =
-                new List<IPersonAssignment>(ScheduleDataInternalCollection().OfType<IPersonAssignment>());
-            retList.Sort(new PersonAssignmentByDateSorter());
-            return new ReadOnlyCollection<IPersonAssignment>(retList);
-        }
-
-        public ReadOnlyCollection<IScheduleData> PersonRestrictionCollection()
+	    public ReadOnlyCollection<IScheduleData> PersonRestrictionCollection()
         {
             // temporärt så länge båda finns
-            var scheduleDataInternalCollection = ScheduleDataInternalCollection();
-            //IEnumerable<IPersonRestriction> personRestrictions = scheduleDataInternalCollection.OfType<IPersonRestriction>();
+            var scheduleDataInternalCollection = ScheduleDataInternalCollection().ToList();
             IEnumerable<IScheduleDataRestriction> dataRestrictions = scheduleDataInternalCollection.OfType<IScheduleDataRestriction>();
 
             IEnumerable<PreferenceDay> persistRestrictions = scheduleDataInternalCollection.OfType<PreferenceDay>();
@@ -193,32 +200,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return retList;
         }
 
-        public IList<IPersonAssignment> PersonAssignmentConflictCollection
-        {
-            get
-            {
-                return PersonAssignmentConflictInternalCollection;
-            }
-        }
-
-        public ReadOnlyCollection<IPersonDayOff> PersonDayOffCollection()
-        {
-            //todo - when only ScheduleDay, no need to sort this one
-            var retList = new List<IPersonDayOff>(ScheduleDataInternalCollection().OfType<IPersonDayOff>());
-            //retList.Sort(new PersonDayOffByDateSorter());
-            return new ReadOnlyCollection<IPersonDayOff>(retList);
-        }
-
         public ReadOnlyCollection<INote> NoteCollection()
         {
-            List<INote> retList = new List<INote>(ScheduleDataInternalCollection().OfType<INote>());
+            var retList = new List<INote>(ScheduleDataInternalCollection().OfType<INote>());
             retList.Sort(new NoteByDateSorter());
             return new ReadOnlyCollection<INote>(retList);
         }
 
         public ReadOnlyCollection<IPublicNote> PublicNoteCollection()
         {
-            List<IPublicNote> retList = new List<IPublicNote>(ScheduleDataInternalCollection().OfType<IPublicNote>());
+            var retList = new List<IPublicNote>(ScheduleDataInternalCollection().OfType<IPublicNote>());
             retList.Sort(new PublicNoteByDateSorter());
             return new ReadOnlyCollection<IPublicNote>(retList);
         } 
@@ -264,14 +255,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 
 				case SchedulePartView.DayOff:
-					if (isDelete) DeleteDayOff(); else MergeDayOff(source, false); break;
+					if (isDelete) DeleteDayOff(); else mergeDayOff(source, false); break;
 
 				case SchedulePartView.ContractDayOff:
 					// do nothing
 					break;
 
 				case SchedulePartView.MainShift:
-					if (isDelete) DeleteMainShift(source); else MergeMainShift(source, false, false);
+					if (isDelete) DeleteMainShift(source); else mergeMainShift(source, false, false);
 					break;
 
 				case SchedulePartView.Absence:
@@ -296,31 +287,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             switch (view)
             {
                 case SchedulePartView.DayOff:
-                    if (isDelete) DeleteDayOff(); else MergeDayOff(source, true); break;
+                    if (isDelete) DeleteDayOff(); else mergeDayOff(source, true); break;
 
                 case SchedulePartView.ContractDayOff:
-                    if (isDelete) DeleteFullDayAbsence(source); else MergeFullDayAbsence(source);
+                    if (isDelete) DeleteFullDayAbsence(source); else mergeFullDayAbsence(source);
                     break;
 
                 case SchedulePartView.FullDayAbsence:
-                    if (isDelete) DeleteFullDayAbsence(source); else MergeFullDayAbsence(source); break;
+                    if (isDelete) DeleteFullDayAbsence(source); else mergeFullDayAbsence(source); break;
 
                 case SchedulePartView.Absence:
-                    if (isDelete) DeleteAbsence(false); else MergeAbsence(source); break;
+                    if (isDelete) DeleteAbsence(false); else mergeAbsence(source); break;
 
                 case SchedulePartView.MainShift:
-                    if (isDelete) DeleteMainShift(source); else MergeMainShift(source, ignoreTimeZoneChanges, true); break;
+                    if (isDelete) DeleteMainShift(source); else mergeMainShift(source, ignoreTimeZoneChanges, true); break;
 
                 case SchedulePartView.PersonalShift:
-                    if (isDelete) DeletePersonalStuff(); else MergePersonalStuff(source); break;
+                    if (isDelete) DeletePersonalStuff(); else mergePersonalStuff(source); break;
 
                 case SchedulePartView.PreferenceRestriction:
                     if (isDelete) DeletePreferenceRestriction(); else MergePreferenceRestriction(source); break;
 
                 case SchedulePartView.StudentAvailabilityRestriction:
                     if (isDelete) DeleteStudentAvailabilityRestriction(); else MergeStudentAvailabilityRestriction(source); break;
-
-                default: break;
             }
         }
 
@@ -339,11 +328,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             Clear<IPublicNote>();
         }
 
-        public void MergePreferenceRestriction(ISchedulePart source)
+	    public bool HasDayOff()
+	    {
+		    var ass = PersonAssignment();
+		    return ass != null && ass.DayOff() != null;
+	    }
+
+	    private void MergePreferenceRestriction(IScheduleDay source)
         {
             TimeSpan diff = CalculatePeriodOffset(source.Period);
             DateTimePeriod period = source.Period.MovePeriod(diff);
-            DateOnly date = new DateOnly(period.StartDateTimeLocal(TimeZone));
+            var date = new DateOnly(period.StartDateTimeLocal(TimeZone));
 
 			foreach (IPreferenceRestriction preferenceRestriction in source.RestrictionCollection().OfType<IPreferenceRestriction>())
 			{
@@ -357,20 +352,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             Clear<IStudentAvailabilityDay>();
         }
 
-        public void RemoveEmptyAssignments()
-        {
-            foreach (var assignment in PersonAssignmentCollection())
-            {
-                if (assignment.PersonalShiftCollection.Count == 0 && assignment.OvertimeShiftCollection.Count == 0 && assignment.MainShift == null)
-                    Remove(assignment);
-            }
-        }
+		public void DeleteOvertimeAvailability()
+		{
+			Clear<IOvertimeAvailability>();
+		}
 
-        public void MergeStudentAvailabilityRestriction(ISchedulePart source)
+	    private void MergeStudentAvailabilityRestriction(IScheduleDay source)
         {
             TimeSpan diff = CalculatePeriodOffset(source.Period);
             DateTimePeriod period = source.Period.MovePeriod(diff);
-            DateOnly date = new DateOnly(period.StartDateTimeLocal(TimeZone));
+            var date = new DateOnly(period.StartDateTimeLocal(TimeZone));
 
 			foreach (IStudentAvailabilityRestriction studentAvailabilityRestriction in source.RestrictionCollection().OfType<IStudentAvailabilityRestriction>())
             {
@@ -379,56 +370,49 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
         }
 
+			//borde tas bort!
         public void DeleteDayOff()
         {
-            Clear<IPersonDayOff>();
+	        var ass = PersonAssignment();
+					if (ass != null)
+					{
+						ass.SetDayOff(null);
+					}
         }
 
-        private void MergeDayOff(IScheduleDay source, bool deleteAbsence)
+        private void mergeDayOff(IScheduleDay source, bool deleteAbsence)
         {
             var authorization = PrincipalAuthorization.Instance();
-            if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff))
-                return;
-
-            if (!PersonAssignmentCollection().IsEmpty() && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
+			if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
                 return;
 
             if (!PersonAbsenceCollection().IsEmpty() && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
                 return;
 
-            IPersonDayOff workingCopyOfDayOff = source.PersonDayOffCollection()[0].NoneEntityClone();
             TimeSpan diff = CalculatePeriodOffset(source.Period);
+            IList<IPersonAbsence> splitList = new List<IPersonAbsence>();
             DateTimePeriod period = source.Period.MovePeriod(diff);
 
-			IList<IPersonAbsence> splitList = new List<IPersonAbsence>();
-	        if (deleteAbsence)
-	        {
-		        foreach (IPersonAbsence personAbsence in PersonAbsenceCollection())
-		        {
-			        personAbsence.Split(period).ForEach(splitList.Add);
-		        }
+            if (deleteAbsence)
+            {
+            //loop absences
+            foreach (IPersonAbsence personAbsence in PersonAbsenceCollection())
+            {
+                personAbsence.Split(period).ForEach(splitList.Add);
+            }
+            IList<IPersonAbsence> filterList = new List<IPersonAbsence>(ScheduleDataInternalCollection().OfType<IPersonAbsence>());
+            foreach (IPersonAbsence data in filterList)
+            {
+                if (data.Period.Intersect(Period))
+                    Remove(data);
+            }
 
+            splitList.ForEach(Add);
+            }
 
-		        IList<IPersonAbsence> filterList =
-			        new List<IPersonAbsence>(ScheduleDataInternalCollection().OfType<IPersonAbsence>());
-		        foreach (IPersonAbsence data in filterList)
-		        {
-			        if (data.Period.Intersect(Period))
-				        Remove(data);
-		        }
-				splitList.ForEach(Add);
-	        }
-
-	        Clear<IPersonDayOff>(); ;
-            Clear<IPersonAssignment>();
-
-            DateOnly date = new DateOnly(Period.StartDateTimeLocal(TimeZone));
-            TimeZoneInfo timeZoneInfo = workingCopyOfDayOff.Person.PermissionInformation.DefaultTimeZone();
-            if (workingCopyOfDayOff.UsedTimeZone != null)
-                timeZoneInfo = workingCopyOfDayOff.UsedTimeZone;
-            PersonDayOff personDayOff = new PersonDayOff(Person, Scenario, workingCopyOfDayOff.DayOff, date, timeZoneInfo);
-
-            Add(personDayOff);     
+			var thisAss = PersonAssignment(true);
+			thisAss.ClearMainLayers();
+			source.PersonAssignment().SetThisAssignmentsDayOffOn(thisAss);
         }
 
         public void DeleteFullDayAbsence(IScheduleDay source)
@@ -443,8 +427,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 if (personAbsenceUpForDelete == null) continue;
 
                 IList<IPersonAbsence> splitList = new List<IPersonAbsence>();
-                var assignment = AssignmentHighZOrder();
-                if (assignment != null && assignment.MainShift != null && assignment.MainShift.HasProjection)
+                var assignment = PersonAssignment();
+                if (assignment != null && assignment.ShiftCategory != null)
                 {
                     if (assignment.Period != personAbsenceUpForDelete.Period)
                     {
@@ -461,24 +445,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
         }
 
-        private void MergeAbsence(IScheduleDay source)
+        private void mergeAbsence(IScheduleDay source)
         {
             MergeAbsences(source, false);
         }
 
-        private void MergeFullDayAbsence(IScheduleDay source)
+        private void mergeFullDayAbsence(IScheduleDay source)
         {
             MergeAbsences(source, false);
         }
 
         public void MergeAbsences(IScheduleDay source, bool all)
         {
-            List<IPersonAbsence> addList = new List<IPersonAbsence>();
-            TimeSpan diff = CalculatePeriodOffset(source.Period);
-            IVisualLayerCollection layerCollection = source.ProjectionService().CreateProjection();
+            var addList = new List<IPersonAbsence>();
+            var diff = CalculatePeriodOffset(source.Period);
+            var layerCollection = source.ProjectionService().CreateProjection();
             var layerCollectionPeriod = layerCollection.Period();
 
-            foreach (IPersonAbsence sourceAbsence in source.PersonAbsenceCollection())
+            foreach (var sourceAbsence in source.PersonAbsenceCollection())
             {
                 if (layerCollection.HasLayers)
                 {
@@ -500,12 +484,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 }
             }
 
-            foreach(IPersonAbsence personAbsence in addList)
+            foreach(var personAbsence in addList)
             {
-                personAbsence.Layer.MoveLayer(diff);
-                IPersonAbsence newAbsence = new PersonAbsence(Person,Scenario,personAbsence.Layer);
-                newAbsence.LastChange = personAbsence.LastChange;
-                Add(newAbsence);
+	            var oldLayer = personAbsence.Layer;
+	            var newLayer = new AbsenceLayer(oldLayer.Payload, oldLayer.Period.MovePeriod(diff));
+				var newAbsence = new PersonAbsence(Person, Scenario, newLayer)
+	                {
+		                LastChange = personAbsence.LastChange
+	                };
+	            Add(newAbsence);
             }   
         }
 
@@ -547,156 +534,61 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
         }
 
-        public void DeleteOvertime()
-        {
-            IList<IOvertimeShift> overtimeShiftsToRemoveList = new List<IOvertimeShift>();
-            IList<IPersonAssignment> personAssToRemoveList = new List<IPersonAssignment>();
+	    public void DeleteOvertime()
+	    {
+		    IPersonAssignment highAss = PersonAssignment();
 
-            foreach (IPersonAssignment assignment in PersonAssignmentCollection())
-            {
-                foreach (IOvertimeShift overtimeShift in assignment.OvertimeShiftCollection)
-                {
-                    overtimeShiftsToRemoveList.Add(overtimeShift);
-                }
+		    if (highAss != null)
+			    highAss.ClearOvertimeLayers();
+	    }
 
-                foreach (IOvertimeShift overTime in overtimeShiftsToRemoveList)
-                {
-                    assignment.RemoveOvertimeShift(overTime);
-                }
-
-                if (assignment.PersonalShiftCollection.Count == 0 && assignment.MainShift == null)
-                    personAssToRemoveList.Add(assignment);
-            }
-
-            foreach (IPersonAssignment pAss in personAssToRemoveList)
-                Remove(pAss);
-        }
-
-        public void MergePersonalShiftsToOneAssignment(IMainShift mainShift)
-        {
-            IPersonAssignment currentAss = AssignmentHighZOrder();
-            IList<IPersonAssignment> assignments = new List<IPersonAssignment>();
-            IList<IPersonAssignment> assignmentsToDelete = new List<IPersonAssignment>();
-            ((List<IPersonAssignment>)assignments).AddRange(PersonAssignmentCollection());
-
-            var mainShiftPeriod = mainShift.LayerCollection.Period();
-
-            foreach (IPersonAssignment assignment in assignments)
-            {
-                if (currentAss == null || assignment == currentAss)
-                    continue;
-                IList<IPersonalShift> shiftsToMove = new List<IPersonalShift>();
-                foreach (IPersonalShift shift in assignment.PersonalShiftCollection)
-                {
-                    var currentShiftPeriod = shift.LayerCollection.Period();
-                    if (mainShiftPeriod.Value.ContainsPart(currentShiftPeriod.Value) || mainShiftPeriod.Value.Adjacent(currentShiftPeriod.Value))
-                        shiftsToMove.Add(shift);
-                }
-                foreach (IPersonalShift shift in shiftsToMove)
-                {
-                    assignment.RemovePersonalShift(shift);
-                    currentAss.AddPersonalShift((IPersonalShift)shift.NoneEntityClone());
-                    if (!assignmentsToDelete.Contains(assignment))
-                        assignmentsToDelete.Add(assignment);
-                }
-            }
-            RemoveEmptyAssignments();
-        }
-
-		public void DeleteMainShift(IScheduleDay source)
+	    public void DeleteMainShift(IScheduleDay source)
 		{
-			IPersonAssignment destAss = new PersonAssignment(Person, Scenario);
-			IPersonAssignment highAss = AssignmentHighZOrder();
+			IPersonAssignment highAss = PersonAssignment();
 
 			if (highAss != null)
 			{
-				foreach (IPersonalShift personalShift in highAss.PersonalShiftCollection)
-				{
-					IPersonalShift destPersonalShift = (IPersonalShift)personalShift.NoneEntityClone();
-					TimeSpan diff = CalculatePeriodOffset(source.Period);
-					((LayerCollection<IActivity>)destPersonalShift.LayerCollection).MoveAllLayers(diff);
-
-					destAss.AddPersonalShift(destPersonalShift);
-				}
-
-                //foreach (IOvertimeShift overtimeShift in highAss.OvertimeShiftCollection)
-                //{
-                //    IOvertimeShift destOvertimeShift = (IOvertimeShift)overtimeShift.NoneEntityClone();
-                //    TimeSpan diff = CalculatePeriodOffset(source.Period);
-                //    ((LayerCollection<IActivity>)destOvertimeShift.LayerCollection).MoveAllLayers(diff);
-
-                //    destAss.AddOvertimeShift(destOvertimeShift);
-                //}
-
-				RemovePersonAssignment(AssignmentHighZOrder());
-
-				if (destAss.PersonalShiftCollection.Count > 0)
-					Add(destAss);
+				highAss.ClearMainLayers();
+				highAss.ClearOvertimeLayers();
 			}
+				
 		}
 
-    	public TimeSpan CalculatePeriodOffset(DateTimePeriod sourcePeriod)
+	    public TimeSpan CalculatePeriodOffset(DateTimePeriod sourcePeriod)
         {
-            IPeriodOffsetCalculator periodOffsetCalculator = new PeriodOffsetCalculator();
+            var periodOffsetCalculator = new PeriodOffsetCalculator();
             return periodOffsetCalculator.CalculatePeriodOffset(sourcePeriod, Period);
 
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        private void MergeMainShift(IScheduleDay source, bool ignoreTimeZoneChanges, bool splitAbsence)
+        private void mergeMainShift(IScheduleDay source, bool ignoreTimeZoneChanges, bool splitAbsence)
         {
-        	IPersonAssignment personAssignment = source.AssignmentHighZOrder();
-			if (personAssignment == null)
-				return;
+					var sourceAssignment = source.PersonAssignment();
+					if (sourceAssignment == null)
+						return;
 
-        	IMainShift sourceMainShift = personAssignment.MainShift;
-			if (sourceMainShift == null)
-				return;
+					var periodOffsetCalculator = new PeriodOffsetCalculator();
+					var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, source.Period);
 
-            IMainShift workingCopyOfMainShift = (IMainShift)sourceMainShift.NoneEntityClone();
-            var sourceShiftPeriod = source.Period;
-            var workingCopyShiftPeriod = workingCopyOfMainShift.LayerCollection.Period();
-            if (workingCopyShiftPeriod.HasValue)
-                sourceShiftPeriod = workingCopyShiftPeriod.Value;
-            IPeriodOffsetCalculator periodOffsetCalculator = new PeriodOffsetCalculator();
-            TimeSpan periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, sourceShiftPeriod);
-            workingCopyOfMainShift.LayerCollection.MoveAllLayers(periodOffset);
-            DateTimePeriod period = source.Period.MovePeriod(periodOffset);
+					var workingCopyOfAssignment = sourceAssignment.NoneEntityClone();
+					workingCopyOfAssignment.Clear();
+					workingCopyOfAssignment.SetShiftCategory(sourceAssignment.ShiftCategory);
+					foreach (var layer in sourceAssignment.MainLayers())
+					{
+						workingCopyOfAssignment.AddMainLayer(layer.Payload, layer.Period.MovePeriod(periodOffset));
+					}
 
-            if (PersonAssignmentCollection().Count == 0)
-            {
-                if (SignificantPart() == SchedulePartView.DayOff)
-                {
-                    if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff))
-                        return;
+					var period = source.Period.MovePeriod(periodOffset);
+					if (PersonAssignment()==null && SignificantPart() == SchedulePartView.DayOff)
+					{
+						DeleteDayOff();
+					}
 
-                    IPersonDayOff dayOff = PersonDayOffCollection()[0];
-                    Remove(dayOff);
-                }
-
-                IPersonAssignment ass = new PersonAssignment(Person, Scenario);
-                ass.SetMainShift(workingCopyOfMainShift);
-                Add(ass);
-            }
-            else
-            {
-                MergePersonalShiftsToOneAssignment(workingCopyOfMainShift);
-                IPersonAssignment destAss = AssignmentHighZOrder();
-
-                if (destAss.MainShift == null)
-                {
-                    destAss.SetMainShift(workingCopyOfMainShift);
-                }
-                else
-                {
-                    destAss.MainShift.Transform(workingCopyOfMainShift);
-                    destAss.MainShift.ShiftCategory = workingCopyOfMainShift.ShiftCategory;
-                }
-            }
-
-			if(splitAbsence)
-				SplitAbsences(period);
-            UpdateDateOnlyAsPeriod(workingCopyOfMainShift);
+	        var currentAssignment = PersonAssignment(true);
+					currentAssignment.SetMainLayersAndShiftCategoryFrom(workingCopyOfAssignment);
+					if(splitAbsence) SplitAbsences(period);
+					updateDateOnlyAsPeriod(workingCopyOfAssignment);
         }
 
         /// <summary>
@@ -706,16 +598,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         /// we also check the property even if the ignoretimechanges is false. 
         /// </summary>
         /// <param name="mainShift"></param>
-        private void UpdateDateOnlyAsPeriod(IMainShift mainShift)
-        {
-            DateTimePeriod? mainShiftPeriod = mainShift.LayerCollection.Period();
-            if(mainShiftPeriod.HasValue)
-            {
-                DateTime dateTime = mainShiftPeriod.Value.StartDateTime;
-                DateTime localDateTime = TimeZoneHelper.ConvertFromUtc(dateTime, Person.PermissionInformation.DefaultTimeZone());
-                DateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(localDateTime.Date), this.Person.PermissionInformation.DefaultTimeZone());
-            }
-        }
+				private void updateDateOnlyAsPeriod(IPersonAssignment mainShift)
+				{
+					if (mainShift.MainLayers().Any())
+					{
+						DateTimePeriod mainShiftPeriod = mainShift.Period;
+						DateTime dateTime = mainShiftPeriod.StartDateTime;
+						DateTime localDateTime = TimeZoneHelper.ConvertFromUtc(dateTime, Person.PermissionInformation.DefaultTimeZone());
+						DateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(localDateTime.Date), Person.PermissionInformation.DefaultTimeZone());
+					}
+				}
+
 
         public void SplitAbsences(DateTimePeriod period)
         {
@@ -754,56 +647,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public void DeletePersonalStuff()
         {
-            IPersonAssignment ass = AssignmentHighZOrder();
+            IPersonAssignment ass = PersonAssignment();
             if (ass != null)
-            {
-                ass.ClearPersonalShift();
-                if (!ass.HasProjection)
-                    Remove(ass);
-            }
+                ass.ClearPersonalLayers();
         }
 
-        private void MergePersonalStuff(IScheduleDay source)
+        private void mergePersonalStuff(IScheduleDay source)
         {
-            IPersonAssignment sourceAss = source.AssignmentHighZOrder();
-            IPersonAssignment destAss = AssignmentHighZOrder();
+            IPersonAssignment sourceAss = source.PersonAssignment();
 
-            if (sourceAss != null)
-            {
-                if (destAss == null)
-                {
-                    destAss = new PersonAssignment(Person, Scenario);
+	        if (sourceAss != null)
+	        {
+		        var destAss = PersonAssignment(true);
 
-                    foreach (IPersonalShift personalShift in sourceAss.PersonalShiftCollection)
-                    {
-                        IPersonalShift destPersonalShift = (IPersonalShift)personalShift.NoneEntityClone();
-                        //TimeSpan diff = Period.StartDateTimeLocal(source.TimeZone).Subtract(source.Period.StartDateTimeLocal(source.TimeZone));
-                        TimeSpan diff = CalculatePeriodOffset(source.Period);
-                        destPersonalShift.LayerCollection.MoveAllLayers(diff);
+				IPeriodOffsetCalculator periodOffsetCalculator = new PeriodOffsetCalculator();
+				
+		        foreach (var personalLayer in sourceAss.PersonalLayers())
+		        {
+					TimeSpan periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source.Period, Period);
+			        destAss.AddPersonalLayer(personalLayer.Payload, personalLayer.Period.MovePeriod(periodOffset));
+		        }
 
-                        destAss.AddPersonalShift(destPersonalShift);
-                    }
-
-                    Add(destAss);
-                }
-                else
-                {
-                    foreach (IPersonalShift personalShift in sourceAss.PersonalShiftCollection)
-                    {
-                        IPersonalShift destPersonalShift = (IPersonalShift)personalShift.NoneEntityClone();
-                        //TimeSpan diff = Period.StartDateTimeLocal(source.TimeZone).Date.Subtract(source.Period.StartDateTimeLocal(source.TimeZone).Date);
-                        TimeSpan diff = CalculatePeriodOffset(source.Period);
-                        destPersonalShift.LayerCollection.MoveAllLayers(diff);
-
-                        var period = destPersonalShift.LayerCollection.Period();
-                        if (period.HasValue)
-                        {
-                            if (destAss.Period.Contains(period.Value))
-                                destAss.AddPersonalShift(destPersonalShift);
-                        }
-                    }
-                }
-            }         
+	        }
         }
 
         public IScheduleTag ScheduleTag()
@@ -817,185 +682,116 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public void CreateAndAddDayOff(IDayOffTemplate dayOff)
         {
-            //TimeZoneInfo timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
-            DateOnly dateOnly = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, TimeZone));
-            PersonDayOff personDayOff = new PersonDayOff(Person, Scenario, dayOff, dateOnly);
-            // clear if there already is one
-            DeleteDayOff();
-            Add(personDayOff);           
+					var foundPersonAssignment = PersonAssignment(true);
+					foundPersonAssignment.SetDayOff(dayOff);
         }
+
          public void CreateAndAddNote(string text)
          {
-             DateOnly dateOnly = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, Person.PermissionInformation.DefaultTimeZone() ));
-             INote note = new Note(Person, dateOnly, Scenario, text);
+             var dateOnly = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, Person.PermissionInformation.DefaultTimeZone() ));
+             var note = new Note(Person, dateOnly, Scenario, text);
              DeleteNote();
              Add(note);
          }
 
          public void CreateAndAddPublicNote(string text)
          {
-             DateOnly dateOnly = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, Person.PermissionInformation.DefaultTimeZone()));
-             IPublicNote publicNote = new PublicNote(Person, dateOnly, Scenario, text);
+             var dateOnly = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, Person.PermissionInformation.DefaultTimeZone()));
+             var publicNote = new PublicNote(Person, dateOnly, Scenario, text);
              DeletePublicNote();
              Add(publicNote);
          }
 
         public void CreateAndAddAbsence(IAbsenceLayer layer)
         {
-            IPersonAbsence personAbsence = new PersonAbsence(Person, Scenario, layer);
-            personAbsence.LastChange = DateTime.UtcNow;
-            Add(personAbsence);
-        }
-
-        private bool CanCreateAndAddOvertime(IOvertimeShiftActivityLayer overtimeShiftActivityLayer)
-        {
-            var periodContainsOvertimeTime = Period.Contains(overtimeShiftActivityLayer.Period.StartDateTime);
-            var canFindPossiblePersonAssignment = FindPersonAssignmentToConnectOvertimeTo(overtimeShiftActivityLayer) != null;
-            return periodContainsOvertimeTime || canFindPossiblePersonAssignment;
+            var personAbsence = new PersonAbsence(Person, Scenario, layer) {LastChange = DateTime.UtcNow};
+	        Add(personAbsence);
         }
        
-        public void CreateAndAddOvertime(IOvertimeShiftActivityLayer overtimeShiftActivityLayer)
+        public void CreateAndAddOvertime(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet definitionSet)
         {
-            if (CanCreateAndAddOvertime(overtimeShiftActivityLayer))
-            {
-				var overtimeShift = new OvertimeShift();
-                var foundPersonAssignment = FindPersonAssignmentToConnectOvertimeTo(overtimeShiftActivityLayer);
-                if(foundPersonAssignment!=null)
-                {		
-					foundPersonAssignment.AddOvertimeShift(overtimeShift);
-					overtimeShift.LayerCollection.Add(overtimeShiftActivityLayer);
-	                return;
-                }
-
-				foundPersonAssignment = new PersonAssignment(Person, Scenario);	
-                foundPersonAssignment.AddOvertimeShift(overtimeShift);
-				overtimeShift.LayerCollection.Add(overtimeShiftActivityLayer);
-                Add(foundPersonAssignment);
-            }
+					var foundPersonAssignment = PersonAssignment(true);
+					foundPersonAssignment.AddOvertimeLayer(activity, period, definitionSet);
         }
 
-        private IPersonAssignment FindPersonAssignmentToConnectOvertimeTo(IOvertimeShiftActivityLayer overtimeShiftActivityLayer)
-        {
-            var personAssignments = from personAssignment in PersonAssignmentCollection()
-                                    where OvertimeCanBeConnectedToPersonAssignment(personAssignment, overtimeShiftActivityLayer)
-                                    select personAssignment;
-            return personAssignments.FirstOrDefault();
-        }
+	    public void MergeOvertime(IScheduleDay source)
+	    {
+		    var timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
+		    var dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, timeZoneInfo));
+		    var period = Person.Period(dateOnlyPerson);
+		    var diff = CalculatePeriodOffset(source.Period);
 
-        private static bool OvertimeCanBeConnectedToPersonAssignment(IPersonAssignment personAssignment, IOvertimeShiftActivityLayer overtimeShiftActivityLayer)
-        {
-            return personAssignment.Period.Adjacent(overtimeShiftActivityLayer.Period) ||
-                   personAssignment.Period.Intersect(overtimeShiftActivityLayer.Period);
-        }
+		    if (period != null)
+		    {
+			    var personAss = source.PersonAssignment();
+			    if (personAss != null)
+			    {
+				    foreach (var layer in personAss.OvertimeLayers())
+				    {
+					    if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
+					    {
+						    CreateAndAddOvertime(layer.Payload, layer.Period.MovePeriod(diff), layer.DefinitionSet);
+					    }
+				    }
+			    }
+		    }
+	    }
 
-        public void MergeOvertime(ISchedulePart source)
-        {
-            TimeZoneInfo timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
-            DateOnly dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, timeZoneInfo));
-            IPersonPeriod period = Person.Period(dateOnlyPerson);
-            TimeSpan diff = CalculatePeriodOffset(source.Period);
-
-            if (period != null)
-            {
-                foreach (IPersonAssignment personAss in source.PersonAssignmentCollection())
-                {
-                    foreach (IOvertimeShift overtime in personAss.OvertimeShiftCollection)
-                    {
-                        foreach (IOvertimeShiftActivityLayer layer in overtime.LayerCollection)
-                        {
-                            if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
-                            {
-                                IOvertimeShiftActivityLayer clonedLayer = (IOvertimeShiftActivityLayer)layer.NoneEntityClone();
-                                clonedLayer.MoveLayer(diff);
-                                CreateAndAddOvertime(clonedLayer);
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        public void CreateAndAddActivity(IMainShiftActivityLayer layer, IShiftCategory shiftCategory)
+	    public void CreateAndAddActivity(IActivity activity, DateTimePeriod period, IShiftCategory shiftCategory)
         {
             var authorization = PrincipalAuthorization.Instance();
             if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
                 return;
 
-            if(SignificantPart() == SchedulePartView.DayOff && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff))
+            if(SignificantPart() == SchedulePartView.DayOff)
                 return;
 
-			IMainShift mainShift = new MainShift(shiftCategory);
-			mainShift.LayerCollection.Add(layer);
-			MergePersonalShiftsToOneAssignment(mainShift);
-			foreach (IPersonAssignment personAssignment in PersonAssignmentCollection())
-			{
-				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.Adjacent(layer.Period))
+					var ass = PersonAssignment();
+					if (ass != null && 
+						(DateOnlyAsPeriod.Period().Contains(period.StartDateTime) || ass.Period.Intersect(period) || ass.Period.AdjacentTo(period))) //should not start before day I presume? Fix later - will be handled inside PersonAssignment/AgentDay instead...
 				{
-					if (personAssignment.MainShift == null)
+					ass.AddMainLayer(activity, period);
+					if (ass.ShiftCategory == null)
 					{
-						personAssignment.SetMainShift(mainShift);
-					}
-					else
-					{
-						personAssignment.MainShift.LayerCollection.Add(layer);
+						ass.SetShiftCategory(shiftCategory);
 					}
 					return;
 				}
-			}
-
-			Clear<IPersonDayOff>();
 
 			//TODO create inparameters to check on if to create new personassignment
-			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario);
-			newPersonAssignment.SetMainShift(new MainShift(shiftCategory));
-			newPersonAssignment.MainShift.LayerCollection.Add(layer);
+			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
+					newPersonAssignment.AddMainLayer(activity, period);
+					newPersonAssignment.SetShiftCategory(shiftCategory);
 			Add(newPersonAssignment);
 
 			SplitAbsences(Period);
 		}
 
-		public void CreateAndAddPersonalActivity(IPersonalShiftActivityLayer layer)
+		public void CreateAndAddPersonalActivity(IActivity activity, DateTimePeriod period)
 		{
-			IPersonalShift personalShift = new PersonalShift();
-			personalShift.LayerCollection.Add(layer);
-
-			foreach (IPersonAssignment personAssignment in PersonAssignmentCollection())
-			{
-				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.Adjacent(layer.Period))
-				{
-					personAssignment.AddPersonalShift(personalShift);
-					return;
-				}
-			}
-
-			//TODO create inparameters to check on if to create new personassignment
-			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario);
-			newPersonAssignment.AddPersonalShift(personalShift);
-			Add(newPersonAssignment);
+			var ass = PersonAssignment(true);
+			ass.AddPersonalLayer(activity, period);
 		}
 
-        public void AddMainShift(IMainShift mainShift)
+			//will be removed
+        public void AddMainShift(IEditableShift mainShift)
         {
-            IPersonAssignment currentAss = AssignmentHighZOrder();
-            MergePersonalShiftsToOneAssignment(mainShift);
-            if (currentAss == null)
-            {
-                IPersonAssignment personAssignment = new PersonAssignment(Person, Scenario);
-                personAssignment.SetMainShift(mainShift);
-                Add(personAssignment);
-            }
-            else
-            {
-                currentAss.SetMainShift(mainShift);
-            }
+            IPersonAssignment currentAss = PersonAssignment(true);
+
+			new EditableShiftMapper().SetMainShiftLayers(currentAss, mainShift);
         }
+
+			public void AddMainShift(IPersonAssignment mainShiftSource)
+			{
+				var currentAss = PersonAssignment(true);
+				currentAss.SetMainLayersAndShiftCategoryFrom(mainShiftSource);
+			}
 
         #endregion Methods
 
         public void Restore(IScheduleDay previousState)
         {
-            Owner.Modify(ScheduleModifier.UndoRedo, previousState, null, new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+            Owner.Modify(ScheduleModifier.UndoRedo, previousState, null, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
         }
 
         public IMemento CreateMemento()
@@ -1041,6 +837,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
             if (options.StudentAvailability)
                 DeleteStudentAvailabilityRestriction();
+            
+            if(options.OvertimeAvailability)
+                DeleteOvertimeAvailability();
         }
     }
 }
