@@ -135,7 +135,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 					//Load (or create) workload days
 					// Here we could split it in smaller chunks so we don't lock the tables too long
 					var skillDays = _skillDayRepository.FindRange(message.TargetPeriod, skill, scenario);
-					skillDays = _skillDayRepository.GetAllSkillDays(message.TargetPeriod, skillDays, skill, scenario, true);
+					skillDays = _skillDayRepository.GetAllSkillDays(message.TargetPeriod, skillDays, skill, scenario,
+					                                                _skillDayRepository.AddRange);
 					var calculator = _forecastClassesCreator.CreateSkillDayCalculator(skill, skillDays.ToList(), message.TargetPeriod);
 
 					var workloadDays =

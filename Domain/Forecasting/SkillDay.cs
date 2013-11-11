@@ -432,7 +432,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual void MergeSkillDataPeriods(IList<ISkillDataPeriod> list)
         {
             ISkillDataPeriod newSkillDataPeriod = SkillDataPeriod.Merge(list, this);
-            list.ForEach(i => _skillDataPeriodCollection.Remove(i));
+            list.ForEach(i =>
+	            {
+		            _skillDataPeriodCollection.Remove(i);
+	            });
             _skillDataPeriodCollection.Add(newSkillDataPeriod);
             aggregateTaskPeriods();
             recalculateStaff();

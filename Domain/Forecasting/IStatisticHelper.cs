@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// <param name="period">The period.</param>
         /// <param name="skill">The skill.</param>
         /// <param name="scenario">The scenario.</param>
-        /// <param name="addToRepository">if set to <c>true</c> [add to repository].</param>
         /// <param name="longterm">if set to <c>true</c> [longterm].</param>
         /// <returns></returns>
         /// <remarks>
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
             DateOnlyPeriod period,
             ISkill skill,
             IScenario scenario,
-            bool addToRepository,
             bool longterm);
 
         /// <summary>

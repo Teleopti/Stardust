@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
             var dateOnly = new DateOnly(_date);
-            ICollection<ISkillDay> skillDays = skillDayRepository.GetAllSkillDays(new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1)), new List<ISkillDay>(), _skill, _scenario, false);
+            ICollection<ISkillDay> skillDays = skillDayRepository.GetAllSkillDays(new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1)), new List<ISkillDay>(), _skill, _scenario, _ => {});
             Assert.AreEqual(2, skillDays.Count);
             Assert.IsNull(skillDays.ElementAt(0).Id);
             Assert.IsNull(skillDays.ElementAt(1).Id);
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             ICollection<ISkillDay> skillDays =
                 skillDayRepository.GetAllSkillDays(new DateOnlyPeriod(new DateOnly(2011, 3, 30), new DateOnly(2011,4,3)),
-                    new List<ISkillDay>(), _skill, _scenario, false);
+                    new List<ISkillDay>(), _skill, _scenario, _ => {});
             skillDays.FirstOrDefault(s => s.CurrentDate == new DateOnly(2011, 4, 1)).Should().Not.Be.Null();
         }
 
@@ -387,7 +387,40 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1, skillDay.SkillDataPeriodCollection.Count);
         }
 
-        private static SkillDay createSkillDay(DateOnly skillDate, IWorkload workload, ISkill skill, IScenario scenario)
+	    [Test]
+	    public void VerifyIntervalsAreRemovedWhenSplitting()
+	    {
+			SkipRollback();
+
+		    ISkillDay skillDay = CreateAggregateWithCorrectBusinessUnit();
+		    skillDay.SetupSkillDay();
+		    skillDay.SkillDayCalculator = new SkillDayCalculator(_skill, new List<ISkillDay> {skillDay},
+		                                                         new DateOnlyPeriod());
+
+			skillDay.SplitSkillDataPeriods(new List<ISkillDataPeriod>(skillDay.SkillDataPeriodCollection));
+			new Repository(UnitOfWork).Add(skillDay);
+
+		    UnitOfWork.PersistAll();
+		    UnitOfWork.Clear();
+
+		    var skillDayRepository = TestRepository(UnitOfWork);
+		    skillDay = skillDayRepository.Get(skillDay.Id.Value);
+
+		    Assert.AreEqual(96, skillDay.SkillDataPeriodCollection.Count);
+
+			IRepository rep = new Repository(UnitOfWork);
+			rep.Remove(new SkillRepository(UnitOfWork).Load(_skill.Id.Value));
+			rep.Remove(new SkillTypeRepository(UnitOfWork).Load(_skillType.Id.Value));
+			rep.Remove(new ScenarioRepository(UnitOfWork).Load(_scenario.Id.Value));
+			rep.Remove(new WorkloadRepository(UnitOfWork).Load(_skill.WorkloadCollection.First().Id.Value));
+			rep.Remove(new GroupingActivityRepository(UnitOfWork).Load(_skill.Activity.GroupingActivity.Id.Value));
+			rep.Remove(new ActivityRepository(UnitOfWork).Load(_skill.Activity.Id.Value));
+			rep.Remove(skillDayRepository.Load(skillDay.Id.Value));
+
+			UnitOfWork.PersistAll();
+	    }
+
+	    private static SkillDay createSkillDay(DateOnly skillDate, IWorkload workload, ISkill skill, IScenario scenario)
         {
             IList<TimePeriod> openHourPeriods = new List<TimePeriod>();
             openHourPeriods.Add(new TimePeriod("12:30-17:30"));
@@ -431,7 +464,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var startDateTime = new DateOnly(2011, 4, 1);
             DateOnlyPeriod period = new DateOnlyPeriod(startDateTime, startDateTime.AddDays(1));
             ICollection<ISkillDay> skilldays = skillDayRepository.GetAllSkillDays(period, new Collection<ISkillDay>(),
-                                                                                  _skill, _scenario, false);
+                                                                                  _skill, _scenario, _ => {});
             Assert.AreEqual(2, skilldays.Count);
             ISkillDay skillDay1 = skilldays.FirstOrDefault();
             Assert.AreEqual(new DateOnly(2011, 4, 1), skillDay1.CurrentDate);
@@ -445,12 +478,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var startDateTime = new DateOnly(2011, 4, 1);
 			DateOnlyPeriod period = new DateOnlyPeriod(startDateTime, startDateTime);
 			ICollection<ISkillDay> skilldays = skillDayRepository.GetAllSkillDays(period, new Collection<ISkillDay>(),
-																				  _skill, _scenario, false);
+																				  _skill, _scenario, _ => { });
 
 			skilldays.First().WorkloadDayCollection.Count.Should().Be.EqualTo(0);
 			_skill.AddWorkload(WorkloadFactory.CreateWorkload("New WL", _skill));
 
-			skilldays = skillDayRepository.GetAllSkillDays(period, skilldays, _skill, _scenario, false);
+			skilldays = skillDayRepository.GetAllSkillDays(period, skilldays, _skill, _scenario, _ => { });
 			skilldays.First().WorkloadDayCollection.Count.Should().Be.EqualTo(1);
 		}
 
