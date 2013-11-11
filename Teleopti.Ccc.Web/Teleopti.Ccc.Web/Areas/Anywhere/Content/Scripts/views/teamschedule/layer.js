@@ -3,16 +3,16 @@ define([
 	'moment',
 	'lazy',
 	'resources!r',
-        'shared/timeline-unit',
-		'helpers'
+	'shared/timeline-unit',
+	'helpers'
 ], function (
 	ko,
 	moment,
 	lazy,
 	resources,
-        unitViewModel,
-	    helpers
-    ) {
+		unitViewModel,
+		helpers
+	) {
 
 	return function (timeline, data, shift) {
 
@@ -31,7 +31,7 @@ define([
 		this.EndTime = unit.EndTime;
 
 		this.Color = data.Color;
-            this.TextColor = helpers.TextColor.BasedOnBackgroundColor(helpers.TextColor.HexToRgb(self.Color));
+		this.TextColor = helpers.TextColor.BasedOnBackgroundColor(helpers.TextColor.HexToRgb(self.Color));
 		this.Description = data.Description;
 		this.IsFullDayAbsence = data.IsFullDayAbsence;
 
@@ -42,7 +42,7 @@ define([
 				return unit.EndMinutes();
 			return 0;
 		});
-            
+			
 		this.DisplayDrop = ko.computed(function () {
 			if (self.LengthPixels() > 30)
 				return false;

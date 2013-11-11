@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
 			result.Single().Projection.Single().Description.Should().Be.EqualTo(ConfidentialPayloadValues.Description.Name);
-			result.Single().Projection.Single().Color.Should().Be.EqualTo(ColorTranslator.ToHtml(ConfidentialPayloadValues.DisplayColor));
+			result.Single().Projection.Single().Color.Should().Be.EqualTo(ConfidentialPayloadValues.DisplayColorHex);
 		}
 
 		[Test]

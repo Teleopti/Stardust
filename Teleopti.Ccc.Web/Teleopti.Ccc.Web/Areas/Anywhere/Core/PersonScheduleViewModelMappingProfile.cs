@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			CreateMap<MapContext<PersonScheduleData, SimpleLayer>, PersonScheduleViewModelLayer>()
 				.ForMember(x => x.Start, o => o.MapFrom(s => TimeZoneInfo.ConvertTimeFromUtc(s.Child.Start, s.Parent.Person.PermissionInformation.DefaultTimeZone()).ToFixedDateTimeFormat()))
 				.ForMember(x => x.Minutes, o => o.MapFrom(s => s.Child.Minutes))
-				.ForMember(x => x.Color, o => o.MapFrom(s => (s.Child.IsAbsenceConfidential && !s.Parent.HasViewConfidentialPermission) ? ConfidentialPayloadValues.DisplayColor.ToHtml() : s.Child.Color))
+				.ForMember(x => x.Color, o => o.MapFrom(s => (s.Child.IsAbsenceConfidential && !s.Parent.HasViewConfidentialPermission) ? ConfidentialPayloadValues.DisplayColorHex : s.Child.Color))
 				.ForMember(x => x.Description, o => o.MapFrom(s => (s.Child.IsAbsenceConfidential && !s.Parent.HasViewConfidentialPermission) ? ConfidentialPayloadValues.Description.Name : s.Child.Description))
 				;
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				.ForMember(x => x.StartTime, o => o.MapFrom(s => TimeZoneInfo.ConvertTimeFromUtc(s.Child.Layer.Period.StartDateTime, s.Child.Person.PermissionInformation.DefaultTimeZone()).ToFixedDateTimeFormat()))
 				.ForMember(x => x.EndTime, o => o.MapFrom(s => TimeZoneInfo.ConvertTimeFromUtc(s.Child.Layer.Period.EndDateTime, s.Child.Person.PermissionInformation.DefaultTimeZone()).ToFixedDateTimeFormat()))
 				.ForMember(x => x.Name, o => o.MapFrom(s => (s.Child.Layer.Payload.Confidential && !s.Parent.HasViewConfidentialPermission) ? ConfidentialPayloadValues.Description.Name : s.Child.Layer.Payload.Description.Name))
-				.ForMember(x => x.Color, o => o.MapFrom(s => (s.Child.Layer.Payload.Confidential && !s.Parent.HasViewConfidentialPermission) ? ConfidentialPayloadValues.DisplayColor.ToHtml() : s.Child.Layer.Payload.DisplayColor.ToHtml()))
+				.ForMember(x => x.Color, o => o.MapFrom(s => (s.Child.Layer.Payload.Confidential && !s.Parent.HasViewConfidentialPermission) ? ConfidentialPayloadValues.DisplayColorHex : s.Child.Layer.Payload.DisplayColor.ToHtml()))
 				;
 
 			CreateMap<IAbsence, PersonScheduleViewModelAbsence>();

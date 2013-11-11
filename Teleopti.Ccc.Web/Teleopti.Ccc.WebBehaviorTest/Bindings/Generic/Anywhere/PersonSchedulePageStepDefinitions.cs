@@ -65,8 +65,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		public static string ColorNameToCss(string colorName)
 		{
-			if (colorName.StartsWith("gray"))
-				return "gray";
 			var color = System.Drawing.Color.FromName(colorName);
 			return string.Format("rgb({0}, {1}, {2})", color.R, color.G, color.B);
 		}
