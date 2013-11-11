@@ -379,7 +379,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private void LoadSkillDays(IUnitOfWork unitOfWork, StatisticHelper statHelper)
         {
             var periodToLoad = SkillDayCalculator.GetPeriodToLoad(_dateTimePeriod);
-            IList<ISkillDay> skillDays = statHelper.LoadStatisticData(periodToLoad, _skill, _scenario, false,
+            IList<ISkillDay> skillDays = statHelper.LoadStatisticData(periodToLoad, _skill, _scenario,
                                                                       _longterm);
             if (IsMultisiteSkill)
             {
@@ -394,7 +394,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 {
                     multisiteCalculator.SetChildSkillDays(childSkill,
                                                           statHelper.LoadStatisticData(periodToLoad, childSkill,
-                                                                                       _scenario, false, _longterm));
+                                                                                       _scenario, _longterm));
                 }
 					
                 _skillDayCalculator = multisiteCalculator;
