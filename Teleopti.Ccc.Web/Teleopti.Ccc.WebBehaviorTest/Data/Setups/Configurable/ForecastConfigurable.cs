@@ -45,7 +45,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			var date = new DateOnly(Date);
 			var skillDayRepository = new SkillDayRepository(uow);
-			var skillDays = skillDayRepository.GetAllSkillDays(new DateOnlyPeriod(date, date), new Collection<ISkillDay>(), skill, defaultScenario, true);
+			var skillDays = skillDayRepository.GetAllSkillDays(new DateOnlyPeriod(date, date), new Collection<ISkillDay>(), skill,
+			                                                   defaultScenario, s => skillDayRepository.AddRange(s));
 			var skillDay = skillDays.First();
 			skillDay.MergeSkillDataPeriods(skillDay.SkillDataPeriodCollection.ToList());
 			var workloadDay = skillDay.WorkloadDayCollection[0];
