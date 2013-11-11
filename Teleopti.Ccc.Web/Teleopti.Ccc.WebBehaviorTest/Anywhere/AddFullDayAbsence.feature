@@ -211,7 +211,7 @@ Scenario: Invalid dates
 Scenario: Back to viewing schedule after adding a full day absence
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for 'Team green' on '2013-04-08'
-	And I click person 'Pierre Baldi'
+	And I click person name 'Pierre Baldi'
 	And I click 'add full day absence'
 	And I input these full day absence values
 	| Field    | Value      |

@@ -202,7 +202,7 @@ Scenario: Select date
 Scenario: Select person
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for 'Team green' on '2012-12-02'
-	And I click person 'Pierre Baldi'
+	And I click person name 'Pierre Baldi'
 	Then I should be viewing person schedule for 'Pierre Baldi' on '2012-12-02'
 
 Scenario: Only view published schedule
