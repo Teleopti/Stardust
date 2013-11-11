@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 			var allowanceList =
 				from d in period.DayCollection()
-				select new { Date = d, Time = TimeSpan.Zero, Heads = TimeSpan.Zero, Allowance = .0, Availability = false, UseHeadCount = false};
+				select new { Date = d, Time = TimeSpan.Zero, Heads = TimeSpan.Zero, AllowanceHeads = .0, Availability = false, UseHeadCount = false};
 
 			var budgetGroupPeriods = _extractBudgetGroupPeriods.BudgetGroupsForPeriod(person, period);
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
@@ -59,11 +59,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 								Date = d,
 								Time = TimeSpan.Zero,
 								Heads = TimeSpan.Zero,
-								Allowance = .0,
+								AllowanceHeads = .0,
 								Availability = true,
 								UseHeadCount = false
 							};
-
 
 					foreach (var thePeriod in validOpenPeriods)
 					{
@@ -80,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 										Date = budgetDay.Day,
 										Time = TimeSpan.FromHours(Math.Max(budgetDay.Allowance*budgetDay.FulltimeEquivalentHours, 0)),
 										Heads = TimeSpan.FromHours(Math.Max(budgetDay.FulltimeEquivalentHours, 0)),
-										Allowance = budgetDay.Allowance,
+										AllowanceHeads = budgetDay.Allowance,
 										Availability = true,
 										UseHeadCount = openPeriod.StaffingThresholdValidator.GetType() == typeof(BudgetGroupHeadCountValidator)
 									};
@@ -94,7 +93,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				group p by p.Date into g
 				orderby g.Key
 				select new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>
-                    (g.Key, TimeSpan.FromTicks(g.Last(o => o.Date == g.Key).Time.Ticks), TimeSpan.FromTicks(g.Last().Heads.Ticks), g.Last(o => o.Date == g.Key).Allowance,
+						  (g.Key, TimeSpan.FromTicks(g.Last(o => o.Date == g.Key).Time.Ticks), TimeSpan.FromTicks(g.Last().Heads.Ticks), g.Last(o => o.Date == g.Key).AllowanceHeads,
 					g.Last(o => o.Date == g.Key).Availability, g.Last(o => o.Date == g.Key).UseHeadCount);
 		}
 
