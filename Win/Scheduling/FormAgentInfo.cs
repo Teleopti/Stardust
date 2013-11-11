@@ -8,6 +8,7 @@ using Autofac;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -378,8 +379,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             helper.SchedulePeriodData();
 
-            var perPeriod = helper.SchedulePeriod.ShiftCategoryLimitationCollection().Where(l => !l.Weekly).ToList();
-            var perWeek = helper.SchedulePeriod.ShiftCategoryLimitationCollection().Where(l => l.Weekly).ToList();
+            var shiftCategoryCollection = helper.SchedulePeriod.ShiftCategoryLimitationCollection();
+            var undeletedShiftCategories = new List<IShiftCategoryLimitation>();
+            foreach (var shiftCategoryLimitation  in shiftCategoryCollection)
+            {
+                if(!((IDeleteTag) shiftCategoryLimitation.ShiftCategory).IsDeleted )
+                    undeletedShiftCategories.Add(shiftCategoryLimitation);
+            }
+            var perPeriod = undeletedShiftCategories.Where(l => !l.Weekly).ToList();
+            var perWeek = undeletedShiftCategories.Where(l => l.Weekly).ToList();
             if (perWeek.Any())
             {
                 createAndAddItem(listViewRestrictions, Resources.PerWeek,
