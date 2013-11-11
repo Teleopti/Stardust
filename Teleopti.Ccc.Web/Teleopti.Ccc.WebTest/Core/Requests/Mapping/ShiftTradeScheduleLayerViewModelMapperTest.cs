@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				End = DateTime.Now.AddHours(1),
 				Minutes = 60,
 				Color = "green",
-				Title = "Phone",
+				Description = "Phone",
 				IsAbsenceConfidential = false
 			};
 
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			mappedlayer.End.Should().Be.EqualTo(readModelLayer.End);
 			mappedlayer.LengthInMinutes.Should().Be.EqualTo(readModelLayer.Minutes);
 			mappedlayer.Color.Should().Be.EqualTo(readModelLayer.Color);
-			mappedlayer.Title.Should().Be.EqualTo(readModelLayer.Title);
+			mappedlayer.Title.Should().Be.EqualTo(readModelLayer.Description);
 			mappedlayer.IsAbsenceConfidential.Should().Be.EqualTo(readModelLayer.IsAbsenceConfidential);
 		}
 	}

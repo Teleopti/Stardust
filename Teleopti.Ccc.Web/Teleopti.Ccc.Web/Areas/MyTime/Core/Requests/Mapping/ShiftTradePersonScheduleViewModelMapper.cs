@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return new ShiftTradePersonScheduleViewModel
 			{
 				PersonId = scheduleReadModel.PersonId,
-				StartTimeUtc = scheduleReadModel.ShiftStart.Value,
+				StartTimeUtc = scheduleReadModel.Start.Value,
 				Name = UserTexts.Resources.MySchedule,
 				ScheduleLayers = _layerMapper.Map(shiftReadModel.Shift.Projection)
 			};

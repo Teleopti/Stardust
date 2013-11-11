@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					End = sourceLayer.End,
 					LengthInMinutes = sourceLayer.Minutes,
 					Color = sourceLayer.Color,
-					Title = sourceLayer.Title,
+					Title = sourceLayer.Description,
 					IsAbsenceConfidential = sourceLayer.IsAbsenceConfidential
 				};
 		}

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var readModel = new PersonScheduleDayReadModel
 			{
 				PersonId = Guid.NewGuid(),
-				ShiftStart = DateTime.Now,
+				Start = DateTime.Now,
 				Model = JsonConvert.SerializeObject(model)
 			};
 			var layerViewModels = new List<ShiftTradeScheduleLayerViewModel>();
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = target.Map(readModel);
 
 			result.PersonId.Should().Be.EqualTo(readModel.PersonId);
-			result.StartTimeUtc.Should().Be.EqualTo(readModel.ShiftStart);
+			result.StartTimeUtc.Should().Be.EqualTo(readModel.Start);
 			result.ScheduleLayers.Should().Be.SameInstanceAs(layerViewModels);
 			result.Name.Should().Be.EqualTo(UserTexts.Resources.MySchedule);
 		}
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var readModel = new PersonScheduleDayReadModel
 			{
 				PersonId = Guid.NewGuid(),
-				ShiftStart = DateTime.Now,
+				Start = DateTime.Now,
 				Model = JsonConvert.SerializeObject(model)
 			};
 			var layerViewModels = new List<ShiftTradeScheduleLayerViewModel>();

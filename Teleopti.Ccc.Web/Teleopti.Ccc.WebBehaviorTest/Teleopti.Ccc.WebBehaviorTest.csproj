@@ -385,11 +385,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesFeedbackPreSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="MyTime\ShiftTradeRequests.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ShiftTradeRequestAdd.feature</DependentUpon>
-    </Compile>
     <Compile Include="MyTime\WeekScheduleAvailableAbsenceBudgetgroup.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
