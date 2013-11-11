@@ -121,8 +121,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var businessUnitId = Guid.NewGuid();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				createAndSaveReadModel(personId1, teamId, businessUnitId, new DateTime(2012, 8, 29));
-				createAndSaveReadModel(personId2, teamId, businessUnitId, new DateTime(2012, 8, 29));
+				createAndSaveReadModel(personId1, teamId, businessUnitId, new DateTime(2012, 8, 29),10);
+				createAndSaveReadModel(personId2, teamId, businessUnitId, new DateTime(2012, 8, 29),10);
 				uow.PersistAll();
 			}
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -155,8 +155,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				TeamId = teamId,
 				BusinessUnitId = businessUnitId,
 				PersonId = personId,
-				ShiftStart = date.AddHours(shiftStartHour),
-				ShiftEnd = date.AddHours(shiftStartHour + 8),
+				Start = date.AddHours(shiftStartHour),
+				End = date.AddHours(shiftStartHour + 8),
 				Model = "{shift: blablabla}",
 			};
 

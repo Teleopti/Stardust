@@ -170,17 +170,22 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>22851_FindShiftTradePageFromTeamSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyTime\ShiftTradeRequestAdd.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShiftTradeRequestAdd.feature</DependentUpon>
+    </Compile>
     <Compile Include="MyTime\WeekScheduleAvailableAbsenceHeadCount.feature.cs">
       <DependentUpon>WeekScheduleAvailableAbsenceHeadCount.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="MyTime\OveritmeAvailability.feature.cs">
-      <DependentUpon>OveritmeAvailability.feature</DependentUpon>      
+      <DependentUpon>OveritmeAvailability.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="ShiftTradeRequestEdit.feature.cs">
+    <Compile Include="MyTime\ShiftTradeRequestEdit.feature.cs">
       <DependentUpon>ShiftTradeRequestEdit.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -726,6 +731,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>22851_FindShiftTradePageFromTeamSchedule.feature.cs</LastGenOutput>
     </None>
+    <None Include="MyTime\ShiftTradeRequestAdd.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ShiftTradeRequestAdd.feature.cs</LastGenOutput>
+    </None>
     <None Include="MyTime\WeekScheduleAvailableAbsenceHeadCount.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>WeekScheduleAvailableAbsenceHeadCount.feature.cs</LastGenOutput>
@@ -734,7 +743,7 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>OveritmeAvailability.feature.cs</LastGenOutput>
     </None>
-    <None Include="ShiftTradeRequestEdit.feature">
+    <None Include="MyTime\ShiftTradeRequestEdit.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ShiftTradeRequestEdit.feature.cs</LastGenOutput>
     </None>
@@ -816,10 +825,6 @@
     <None Include="MyTime\PreferencesFeedbackPreSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackPreSchedule.feature.cs</LastGenOutput>
-    </None>
-    <None Include="MyTime\ShiftTradeRequests.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ShiftTradeRequestAdd.feature.cs</LastGenOutput>
     </None>
     <None Include="Testing\specflow.exe.config" />
     <None Include="Testing\TestExecutionReport.bat" />

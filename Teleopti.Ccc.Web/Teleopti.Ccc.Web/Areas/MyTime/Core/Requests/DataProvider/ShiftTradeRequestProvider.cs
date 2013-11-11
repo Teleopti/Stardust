@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		{
 			IEnumerable<Guid> personIdList = (from person in possibleShiftTradePersons
 			                                 select person.Id.Value).ToList();
-			return _scheduleDayReadModelFinder.ForPersons(date, personIdList);
+			return _scheduleDayReadModelFinder.ForPeople(new DateTimePeriod(date, date), personIdList);
 		}
 	}
 }
