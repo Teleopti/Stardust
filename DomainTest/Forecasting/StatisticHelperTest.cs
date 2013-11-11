@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Expect.Call(_skillDayRep.FindRange(_period, _skill, _scenario)).
                 Return(skillDayList).Repeat.Once();
 			Expect.Call(_skillDayRep.GetAllSkillDays(_period, skillDayList, _skill, _scenario, _skillDayRep.AddRange)).
-                Return(skillDayList).Repeat.Once();
+                Return(skillDayList).Repeat.Once().IgnoreArguments();
             Expect.Call(_statisticTaskRep.LoadSpecificDates(_workload.QueueSourceCollection, period)).
                 Return(emptyStatisticTaskList).Repeat.Once();
 

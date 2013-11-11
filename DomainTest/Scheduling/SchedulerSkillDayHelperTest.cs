@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Expect.Call(skill.SkillType).Return(skillType);
             Expect.Call(skillType.ForecastSource).Return(ForecastSource.NonBlendSkill);
             Expect.Call(_skillDayRepository.GetAllSkillDays(_dateTimePeriod, new List<ISkillDay>(), skill, _scenario,
-                                                            null)).Return(new List<ISkillDay>{skillDay});
+                                                            _ => { })).Return(new List<ISkillDay>{skillDay}).IgnoreArguments();
             Expect.Call(skillDay.SkillStaffPeriodCollection).Return(
                 new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> {skillStaffPeriod}));
             Expect.Call(skillStaffPeriod.Payload).Return(payLoad);
