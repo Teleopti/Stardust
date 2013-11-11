@@ -4,8 +4,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
-using Newtonsoft.Json;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -19,12 +17,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly IShiftTradeTimeLineHoursViewModelFactory _shiftTradeTimelineHoursViewModelFactory;
 		private readonly IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
 		private const int timeLineOffset = 15;
-		private readonly Lazy<IMappingEngine> _mapper;
+		private readonly IMappingEngine _mapper;
 		private readonly ILoggedOnUser _loggedOnUser;
 
 		public ShiftTradeScheduleViewModelMappingProfile(IShiftTradeRequestProvider shiftTradeRequestProvider, IProjectionProvider projectionProvider,
 														IShiftTradeTimeLineHoursViewModelFactory shiftTradeTimelineHoursViewModelFactory, ILoggedOnUser loggedOnUser,
-														IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, Lazy<IMappingEngine> mapper)
+														IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, IMappingEngine mapper)
 		{
 			_mapper = mapper;
 			_shiftTradeRequestProvider = shiftTradeRequestProvider;
@@ -61,106 +59,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 										return myScheduleViewModel;
 									});
-
-
-			CreateMap<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>()
-				.ConvertUsing(source =>
-					{
-						var myScheduleDayReadModel = _shiftTradeRequestProvider.RetrieveMySchedule(source.ShiftTradeDate);
-						var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(source);
-
-						ShiftTradePersonScheduleViewModel mySchedule = _mapper.Value.Map<IPersonScheduleDayReadModel, ShiftTradePersonScheduleViewModel>(myScheduleDayReadModel);
-						IEnumerable<ShiftTradePersonScheduleViewModel> possibleTradeSchedule = getPossibleTradeSchedules(possibleTradePersons);
-
-						IEnumerable<ShiftTradeTimeLineHoursViewModel> timeLineHours = createTimeLineHours(getTimeLinePeriod(mySchedule, possibleTradeSchedule, source.ShiftTradeDate));
-
-						return new ShiftTradeScheduleViewModel
-							{
-								MySchedule = mySchedule,
-								PossibleTradeSchedules = possibleTradeSchedule,
-								TimeLineHours = timeLineHours
-							};
-					});
-
-			CreateMap<SimpleLayer, ShiftTradeScheduleLayerViewModel>()
-				.ForMember(d => d.LengthInMinutes, o => o.MapFrom(s => s.Minutes));
-
-			CreateMap<IPersonScheduleDayReadModel, ShiftTradePersonScheduleViewModel>()
-				.ConvertUsing(personScheduleReadModel =>
-					{
-						if (personScheduleReadModel == null)
-							return null;
-
-						var shiftReadModel = JsonConvert.DeserializeObject<Model>(personScheduleReadModel.Model);
-						return new ShiftTradePersonScheduleViewModel
-						{
-							PersonId = personScheduleReadModel.PersonId,
-							StartTimeUtc = personScheduleReadModel.Start.Value,
-							Name = UserTexts.Resources.MySchedule,
-							ScheduleLayers = _mapper.Value.Map<IEnumerable<SimpleLayer>, IEnumerable<ShiftTradeScheduleLayerViewModel>>(shiftReadModel.Shift.Projection)
-						};
-					});
 		}
-
-		private IEnumerable<ShiftTradePersonScheduleViewModel> getPossibleTradeSchedules(DatePersons datePersons)
-		{
-			if (datePersons.Persons.Any())
-			{
-				var schedules = _shiftTradeRequestProvider.RetrievePossibleTradeSchedules(datePersons.Date, datePersons.Persons);
-				return _mapper.Value.Map<IEnumerable<IPersonScheduleDayReadModel>, IEnumerable<ShiftTradePersonScheduleViewModel>>(schedules);
-			}
-
-			return new List<ShiftTradePersonScheduleViewModel>();
-		}
-
-		private DateTimePeriod getTimeLinePeriod(ShiftTradePersonScheduleViewModel mySchedule, IEnumerable<ShiftTradePersonScheduleViewModel> possibleTradeSchedules, DateOnly shiftTradeDate)
-		{
-			DateTimePeriod? myScheduleMinMax = getMyScheduleMinMax(mySchedule);
-			DateTimePeriod? possibleTradeScheduleMinMax = getpossibleTradeScheduleMinMax(possibleTradeSchedules);
-
-			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-
-			var returnPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(shiftTradeDate.Date.AddHours(8),
-				                                                                    shiftTradeDate.Date.AddHours(17), timeZone);
-
-			if (myScheduleMinMax.HasValue)
-				returnPeriod = possibleTradeScheduleMinMax.HasValue
-					               ? myScheduleMinMax.Value.MaximumPeriod(possibleTradeScheduleMinMax.Value)
-					               : myScheduleMinMax.Value;
-			else if (possibleTradeScheduleMinMax.HasValue)
-				returnPeriod = possibleTradeScheduleMinMax.Value;
-
-			returnPeriod = returnPeriod.ChangeStartTime(new TimeSpan(0, -15, 0));
-			returnPeriod = returnPeriod.ChangeEndTime(new TimeSpan(0, 15, 0));
-			return returnPeriod;
-		}
-
-		private DateTimePeriod? getMyScheduleMinMax(ShiftTradePersonScheduleViewModel mySchedule)
-		{
-			if (mySchedule == null)
-				return null;
-
-			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-
-			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(mySchedule.ScheduleLayers.First().Start,
-			                                                            mySchedule.ScheduleLayers.Last().End, timeZone);
-		}
-
-		private DateTimePeriod? getpossibleTradeScheduleMinMax(IEnumerable<ShiftTradePersonScheduleViewModel> possibleTradeSchedules)
-		{
-			var schedules = possibleTradeSchedules as IList<ShiftTradePersonScheduleViewModel> ?? possibleTradeSchedules.ToList();
-
-			if (!schedules.Any())
-				return null;
-
-			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			
-			var startTime = schedules.Min(l => l.ScheduleLayers.First().Start);
-			var endTime = schedules.Max(l => l.ScheduleLayers.Last().End);
-
-			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startTime, endTime, timeZone);
-		}
-
+		
 		private static string dayOffText(IScheduleDay scheduleDay)
 		{
 			return scheduleDay.SignificantPartForDisplay() == SchedulePartView.DayOff ?
@@ -224,12 +124,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			return returnDay;
 		}
-
-		private IEnumerable<ShiftTradeTimeLineHoursViewModel> createTimeLineHours(DateTimePeriod timeLinePeriod)
-		{
-			return _shiftTradeTimelineHoursViewModelFactory.CreateTimeLineHours(timeLinePeriod);
-		}
-
 
 		private IEnumerable<ShiftTradeScheduleLayerViewModel> createShiftTradeLayers(ShiftTradePersonDayData personDay, TimeZoneInfo timeZone, DateTimePeriod timeLineRange)
 		{

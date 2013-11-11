@@ -246,6 +246,14 @@
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DatePersons.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradePersonScheduleViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeScheduleLayerViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeScheduleViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeTimeLineHoursViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradePersonScheduleViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeScheduleLayerViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeScheduleViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IOvertimeAvailabilityPersister.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityViewModelMappingProfile.cs" />

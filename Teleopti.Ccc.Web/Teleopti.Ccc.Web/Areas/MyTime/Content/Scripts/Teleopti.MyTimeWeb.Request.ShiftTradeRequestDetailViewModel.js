@@ -152,7 +152,11 @@ Teleopti.MyTimeWeb.Request.TimeLineHourViewModel = function (hour, parentViewMod
     self.leftPos = ko.computed(function() {
         var minutesSinceTimeLineStart = parentViewModel.timeLineStartTime().diff(self.startTime, 'minutes');
         return minutesSinceTimeLineStart * parentViewModel.pixelPerMinute();
-     });
+    });
+
+    self.showHourLine = ko.computed(function() {
+        return self.hourText.length > 0;
+    });
 };
 
 Teleopti.MyTimeWeb.Request.LayerViewModel = function(layer, minutesSinceTimeLineStart, pixelPerMinute) {

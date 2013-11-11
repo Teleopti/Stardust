@@ -360,8 +360,16 @@
 	background-color: rgba(0,0,0,0.2);
 	z-index: 100;
 }
-.shift-trade-timeline .label {
+/*.shift-trade-timeline .label {
 	font-size: xx-small;
 	height: 12px !important;
 	z-index: 111;
- }
+ }*/
+.shift-trade-label
+{
+	font-size: xx-small;
+	height: 12px !important;
+	z-index: 111;
+	text-align: center;
+	width: 26px;
+}

@@ -138,6 +138,10 @@
     <Compile Include="Areas\Anywhere\Controllers\GroupPageControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecificationTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />
+    <Compile Include="Core\Requests\Mapping\ShiftTradePersonScheduleViewModelMapperTest.cs" />
+    <Compile Include="Core\Requests\Mapping\ShiftTradeScheduleLayerViewModelMapperTest.cs" />
+    <Compile Include="Core\Requests\Mapping\ShiftTradeScheduleViewModelMapperTest.cs" />
+    <Compile Include="Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelMapperTest.cs" />
     <Compile Include="FakeSchedulePersonProvider.cs" />
     <Compile Include="Areas\Anywhere\Hubs\TeamScheduleViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\TeamScheduleViewModelMapperTest.cs" />

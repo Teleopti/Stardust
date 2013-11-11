@@ -197,6 +197,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					self.setScheduleLoadedReady();
 					self.isReadyLoaded(true);
 				},
+				error: function(e) {
+				    console.log(e);
+				},
 				complete: function() {
 					self.IsLoading(false);
 				}
