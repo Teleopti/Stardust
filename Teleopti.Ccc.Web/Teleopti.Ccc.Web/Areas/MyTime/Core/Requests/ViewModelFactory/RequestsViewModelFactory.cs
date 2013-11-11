@@ -25,8 +25,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 		private readonly INow _now;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IShiftTradeScheduleViewModelMapper _shiftTradeScheduleViewModelMapper;
 
-		public RequestsViewModelFactory(IPersonRequestProvider personRequestProvider, IMappingEngine mapper, IAbsenceTypesProvider absenceTypesProvider, IPermissionProvider permissionProvider, IShiftTradeRequestProvider shiftTradeRequestprovider, IShiftTradePeriodViewModelMapper shiftTradeRequestsPeriodViewModelMapper, IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker, INow now, ILoggedOnUser loggedOnUser)
+		public RequestsViewModelFactory(IPersonRequestProvider personRequestProvider, IMappingEngine mapper, IAbsenceTypesProvider absenceTypesProvider, 
+										IPermissionProvider permissionProvider, IShiftTradeRequestProvider shiftTradeRequestprovider, 
+										IShiftTradePeriodViewModelMapper shiftTradeRequestsPeriodViewModelMapper, 
+										IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker, INow now, ILoggedOnUser loggedOnUser, 
+										IShiftTradeScheduleViewModelMapper shiftTradeScheduleViewModelMapper)
 		{
 			_personRequestProvider = personRequestProvider;
 			_mapper = mapper;
@@ -37,6 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
 			_now = now;
 			_loggedOnUser = loggedOnUser;
+			_shiftTradeScheduleViewModelMapper = shiftTradeScheduleViewModelMapper;
 		}
 
 		public RequestsViewModel CreatePageViewModel()
@@ -88,7 +94,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 		public ShiftTradeScheduleViewModel CreateShiftTradeScheduleViewModel(ShiftTradeScheduleViewModelData data)
 		{
-			return _mapper.Map<ShiftTradeScheduleViewModelData, ShiftTradeScheduleViewModel>(data);
+			return _shiftTradeScheduleViewModelMapper.Map(data);
 		}
 
 		public ShiftTradeSwapDetailsViewModel CreateShiftTradeRequestSwapDetails(Guid id)
