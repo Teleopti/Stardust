@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 {
 	public class ScheduleDayReadModelsCreator : IScheduleDayReadModelsCreator
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public ScheduleDayReadModel GetReadModel(ProjectionChangedEventScheduleDay schedule, IPerson person)
 		{
 			var ret = new ScheduleDayReadModel();
@@ -16,10 +15,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			ret.PersonId = person.Id.GetValueOrDefault();
 			ret.Date = new DateOnly(schedule.Date);
 
-			if (schedule.StartDateTime.HasValue && schedule.EndDateTime.HasValue)
+			if (schedule.Shift != null)
 			{
-				ret.StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(schedule.StartDateTime.Value, tz);
-				ret.EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(schedule.EndDateTime.Value, tz);
+				ret.StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(schedule.Shift.StartDateTime, tz);
+				ret.EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(schedule.Shift.EndDateTime, tz);
 			}
 
 			ret.Label = schedule.ShortName;

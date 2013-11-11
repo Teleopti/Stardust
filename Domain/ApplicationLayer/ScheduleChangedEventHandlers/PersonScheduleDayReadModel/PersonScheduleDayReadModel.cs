@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public Guid BusinessUnitId { get; set; }
 		public DateTime Date { get; set; }
 		public DateOnly BelongsToDate { get { return new DateOnly(Date); } }
-		public DateTime? ShiftStart { get; set; }
-		public DateTime? ShiftEnd { get; set; }
+		public DateTime? Start { get; set; }
+		public DateTime? End { get; set; }
 		public string Model { get; set; }
 	}
 
@@ -31,12 +31,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 	public class DayOff
 	{
 		public string Title { get; set; }
+		public DateTime Start { get; set; }
+		public DateTime End { get; set; }
 	}
 
 	public class Shift
 	{
 		public int WorkTimeMinutes { get; set; }
 		public int ContractTimeMinutes { get; set; }
+		public bool IsFullDayAbsence { get; set; }
 		public IList<SimpleLayer> Projection { get; set; }
 	}
 
@@ -46,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public DateTime Start { get; set; }
 		public DateTime End { get; set; }
 		public int Minutes { get; set; }
-		public string Title { get; set; }
+		public string Description { get; set; }
 		public bool IsAbsenceConfidential { get; set; }
 	}
 

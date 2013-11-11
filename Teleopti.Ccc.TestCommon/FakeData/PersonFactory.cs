@@ -125,6 +125,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return person;
 		}
 
+		public static IPerson CreatePersonWithPersonPeriodFromTeam(DateOnly personPeriodStart, Team team)
+		{
+			var person = CreatePersonWithPersonPeriod(new Person(), personPeriodStart, new ISkill[] { }, team);
+			person.SetId(Guid.NewGuid());
+			return person;
+		}
+
 	    public static IPerson CreatePersonWithPersonPeriod(DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod)
         {
             return CreatePersonWithPersonPeriod(new Person(), personPeriodStart, skillsInPersonPeriod);

@@ -16,7 +16,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -45,45 +45,44 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         private IRepositoryFactory _repositoryFactory;
         private IScenario _scenario;
         private IEventAggregator _eventAggregator;
-        private IScheduleDictionarySaver _scheduleDictionarySaver;
-        private IScheduleRepository _scheduleRepository;
+				private IScheduleDifferenceSaver _scheduleDictionarySaver;
         private OnEventScheduleMessageCommand _scheduleCommand;
         private OnEventForecastDataMessageCommand _forecastCommand;
         private OnEventStatisticMessageCommand _statisticCommand;
         private LoadStatisticsAndActualHeadsCommand _loadStatisticCommand;
         private OnEventMeetingMessageCommand _meetingCommand;
+	    private IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
-        public void Setup()
-        {
-            _eventAggregator = new EventAggregator();
-            _view = MockRepository.GenerateMock<IIntradayView>();
-            _scenario = ScenarioFactory.CreateScenarioAggregate();
-            _persons = new List<IPerson> { PersonFactory.CreatePerson() };
-            _schedulingResultLoader = MockRepository.GenerateMock<ISchedulingResultLoader>();
-            _messageBroker = MockRepository.GenerateMock<IMessageBroker>();
-            _rtaStateHolder = MockRepository.GenerateMock<IRtaStateHolder>();
-            _unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-            _repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
-            _scheduleDictionarySaver = MockRepository.GenerateMock<IScheduleDictionarySaver>();
-            _scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
-            _schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.Current.Regional.TimeZone), _persons);
-			_statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
+				[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
+				public void Setup()
+				{
+					_eventAggregator = new EventAggregator();
+					_view = MockRepository.GenerateMock<IIntradayView>();
+					_scenario = ScenarioFactory.CreateScenarioAggregate();
+					_persons = new List<IPerson> { PersonFactory.CreatePerson() };
+					_schedulingResultLoader = MockRepository.GenerateMock<ISchedulingResultLoader>();
+					_messageBroker = MockRepository.GenerateMock<IMessageBroker>();
+					_rtaStateHolder = MockRepository.GenerateMock<IRtaStateHolder>();
+					_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+					_repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
+					_scheduleDictionarySaver = MockRepository.GenerateMock<IScheduleDifferenceSaver>();
+					_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.Current.Regional.TimeZone), _persons);
+					_statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
+					_differenceService = MockRepository.GenerateMock<IDifferenceCollectionService<IPersistableScheduleData>>();
+					_scheduleCommand = MockRepository.GenerateMock<OnEventScheduleMessageCommand>();
+					_meetingCommand = MockRepository.GenerateMock<OnEventMeetingMessageCommand>();
+					_forecastCommand = MockRepository.GenerateMock<OnEventForecastDataMessageCommand>();
+					_statisticCommand = MockRepository.GenerateMock<OnEventStatisticMessageCommand>();
+					_loadStatisticCommand = MockRepository.GenerateMock<LoadStatisticsAndActualHeadsCommand>((IStatisticRepository)null);
 
-            _scheduleCommand = MockRepository.GenerateMock<OnEventScheduleMessageCommand>();
-            _meetingCommand = MockRepository.GenerateMock<OnEventMeetingMessageCommand>();
-            _forecastCommand = MockRepository.GenerateMock<OnEventForecastDataMessageCommand>();
-            _statisticCommand = MockRepository.GenerateMock<OnEventStatisticMessageCommand>();
-            _loadStatisticCommand = MockRepository.GenerateMock<LoadStatisticsAndActualHeadsCommand>((IStatisticRepository)null);
+					_schedulingResultLoader.Stub(x => x.SchedulerState).Return(_schedulerStateHolder);
 
-            _schedulingResultLoader.Stub(x => x.SchedulerState).Return(_schedulerStateHolder);
-
-            _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker,
-                                            _rtaStateHolder, _eventAggregator,
-                                            _scheduleDictionarySaver, _scheduleRepository, _unitOfWorkFactory,
-                                            _repositoryFactory, _statisticCommand, _forecastCommand,
-                                            _scheduleCommand, _meetingCommand, _loadStatisticCommand);
-        }
+					_target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker,
+																					_rtaStateHolder, _eventAggregator,
+																					_scheduleDictionarySaver, _unitOfWorkFactory,
+																					_repositoryFactory, _differenceService, _statisticCommand, _forecastCommand,
+																					_scheduleCommand, _meetingCommand, _loadStatisticCommand);
+				}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyHandlesDateIfTodayIsIncludedInSelection()
@@ -92,8 +91,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _schedulingResultLoader.Stub(x => x.SchedulerState).Return(new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_periodNow, TeleoptiPrincipal.Current.Regional.TimeZone), _persons)).Repeat.AtLeastOnce();
 
             _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder, _eventAggregator,
-                                            _scheduleDictionarySaver, _scheduleRepository, _unitOfWorkFactory,
-                                            _repositoryFactory, _statisticCommand, _forecastCommand,
+																						_scheduleDictionarySaver, _unitOfWorkFactory, 
+                                            _repositoryFactory, _differenceService, _statisticCommand, _forecastCommand,
                                             _scheduleCommand, _meetingCommand, _loadStatisticCommand);
 
             Assert.AreEqual(DateOnly.Today, _target.IntradayDate);
@@ -382,7 +381,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			using (new CustomAuthorizationContext(authorization))
 			{
 				_target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder,
-												_eventAggregator, null, null, _unitOfWorkFactory, _repositoryFactory,
+												_eventAggregator, null, _unitOfWorkFactory, _repositoryFactory, _differenceService,
 												_statisticCommand, _forecastCommand, _scheduleCommand, _meetingCommand, _loadStatisticCommand);
 				_target.Initialize();
 			}
@@ -400,8 +399,10 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             IUnitOfWork uow = MockRepository.GenerateMock<IUnitOfWork>();
             IScheduleDictionary scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
             _schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
+						scheduleDictionary.Expect(x => x.Values).Return(new[] { MockRepository.GenerateMock<IScheduleRange, IUnvalidatedScheduleRangeUpdate>() });
 
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+						scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(new DifferenceCollection<IPersistableScheduleData>{new DifferenceCollectionItem<IPersistableScheduleData>()});
             uow.Expect(x => x.PersistAll(_target)).Return(new List<IRootChangeInfo>()).Repeat.Once();
             uow.Expect(x => x.PersistAll(_target)).Throw(new OptimisticLockException());
 
@@ -425,6 +426,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
             var differenceCollection = new DifferenceCollection<IPersistableScheduleData>();
 
+	        scheduleDictionary.Expect(x => x.Values).Return(new[]{MockRepository.GenerateMock<IScheduleRange, IUnvalidatedScheduleRangeUpdate>()});
+
             scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(differenceCollection).Repeat.Once();
             scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(differenceCollection).Repeat.Once();
             _view.Stub(x => x.ShowConfirmationMessage("", "")).IgnoreArguments().Return(DialogResult.Cancel).Repeat.Once();
@@ -432,6 +435,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _view.Stub(x => x.ShowConfirmationMessage("", "")).IgnoreArguments().Return(DialogResult.No).Repeat.Once();
             scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(differenceCollection).Repeat.Once();
             _view.Stub(x => x.ShowConfirmationMessage("", "")).IgnoreArguments().Return(DialogResult.Yes).Repeat.Once();
+						scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(new DifferenceCollection<IPersistableScheduleData>()).Repeat.Once();
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow).Repeat.Once();
             uow.Stub(x => x.PersistAll(_target)).Return(new List<IRootChangeInfo>()).Repeat.Once();
 

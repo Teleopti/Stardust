@@ -31,29 +31,73 @@
 .team-schedule .person
 {
 }
-.team-schedule .person:last-child
-{
-}
-.team-schedule .person-name 
-{
+
+.team-schedule .person-name-column {
 	max-width: 105px !important;
 	min-width: 105px !important;
 	width: 105px !important;
 	overflow: hidden;
 }
-.team-schedule tbody tr
-{
-	cursor: pointer;
+.team-schedule .contract-time-column {
+	max-width: 100px !important;
+	min-width: 100px !important;
+	width: 100px !important;
 }
-.team-schedule .shift 
-{
+.team-schedule .schedule-column {
 	padding-left: 0;
 	padding-right: 0;
 	width: auto;
 }
+
+.team-schedule .person-name 
+{
+}
+.team-schedule tbody tr
+{
+	cursor: pointer;
+}
+.team-schedule .schedule
+{
+}
+
+.team-schedule .dayoff 
+{
+	text-align: center;
+	top: -8px;
+	height: 36px;
+    background-size: 11px 11px;
+    background-image: 
+        linear-gradient(135deg,
+        transparent,
+        transparent 7px,
+        rgba(0,0,0,0.2) 8px,
+        transparent 8px,
+        transparent
+        );
+}
+.no-cssgradients .team-schedule .dayoff 
+{
+	background-color: beige;
+}
+
+
+
+
+.team-schedule .shift-menu-background {
+	background: #eeeeee;
+}
+.team-schedule .shift-menu
+{
+}
+
+
+
+
 .team-schedule .shift .layer
 {
-	height: 20px;
+	z-index: 10;	
+	height: 22px;
+	text-align: center;
 }
 .team-schedule .shift .layer:first-of-type
 {
@@ -73,38 +117,43 @@
 	   -moz-border-radius: 4px 4px 4px 4px;
 			border-radius: 4px 4px 4px 4px;
 }
-.team-schedule .resource-layer 
-{
-	height: 14px;
+.team-schedule .shift .layer .layer-description {
+	background-color: white;
+	color: #606060;
+	text-shadow: none;
 }
-.team-schedule .resource-layer:last-of-type
-{
-	-webkit-border-radius: 0px 4px 4px 0px;
-	   -moz-border-radius: 0px 4px 4px 0px;
-			border-radius: 0px 4px 4px 0px;
+.team-schedule .dayoff .layer-description {
+	margin: 9px;
+	text-shadow: none;
 }
-.team-schedule .resource-layer:first-of-type
-{
-	-webkit-border-radius: 4px 0px 0px 4px;
-	   -moz-border-radius: 4px 0px 0px 4px;
-			border-radius: 4px 0px 0px 4px;
+.team-schedule .shift .layer .drop {
+    top: 21px;
 }
+.team-schedule .shift .layer .drop .arrow {
+    left: -8px;
+    top: -8px;
+    border-left: 8px solid transparent;
+    border-bottom: 8px solid red;
+    border-right: 8px solid transparent;
+    border-top: 8px solid transparent;
+}
+.team-schedule .shift .layer .drop .circle {
+    top: 4px;
+    left: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 10px;
+}
+
+
+
 .team-schedule .resources td {
     padding-top: 3px;
 }
 .team-schedule .contract-time 
 {
 	text-align: right;
-	max-width: 100px !important;
-	min-width: 100px !important;
-	width: 100px !important;
-	overflow: hidden;
-}
-.team-schedule .work-time {
-	text-align: right;
-	max-width: 100px !important;
-	min-width: 100px !important;
-	width: 100px !important;
 	overflow: hidden;
 }
 

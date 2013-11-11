@@ -651,9 +651,7 @@ namespace Teleopti.Interfaces.Domain
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public TimePeriod TimePeriod(TimeZoneInfo timeZone)
         {
-        	TimeSpan startTimeOfDay = timeZone.Id == TimeZoneInfo.Utc.Id
-        	                          	? StartDateTime.TimeOfDay
-        	                          	: TimeZoneHelper.ConvertFromUtc(StartDateTime, timeZone).TimeOfDay;
+        	TimeSpan startTimeOfDay = StartDateTimeLocal(timeZone).TimeOfDay;
 
         	return new TimePeriod(startTimeOfDay, startTimeOfDay.Add(ElapsedTime()));
         }

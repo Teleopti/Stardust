@@ -72,6 +72,7 @@ ON
 			AND
 				(stg.request_date < dp.valid_to_date)
 		)
+	AND dp.to_be_deleted = 0
 INNER JOIN mart.dim_request_type rt
 	ON rt.request_type_id = stg.request_type_code
 INNER JOIN mart.dim_request_status rs
@@ -80,7 +81,7 @@ LEFT JOIN
 	mart.dim_absence	ab
 ON
 	stg.absence_code = ab.absence_code
-	AND dp.to_be_deleted = 0
+	
 
 --update the count
 update mart.fact_request

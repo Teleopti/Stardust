@@ -158,22 +158,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void ClearPersonalLayers()
 		{
-			_shiftLayers.OfType<IPersonalShiftLayer>()
-									.ToArray()
+			PersonalLayers().ToArray()
 									.ForEach(l => RemoveLayer(l));
 		}
 
 		public virtual void ClearMainLayers()
 		{
-			_shiftLayers.OfType<IMainShiftLayer>()
-									.ToArray()
+			MainLayers().ToArray()
 									.ForEach(l => RemoveLayer(l));
 		}
 
 		public virtual void ClearOvertimeLayers()
 		{
-			_shiftLayers.OfType<IOvertimeShiftLayer>()
-									.ToArray()
+			OvertimeLayers().ToArray()
 									.ForEach(l => RemoveLayer(l));
 		}
 
@@ -217,8 +214,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				return MainLayers().Any() || OvertimeLayers().Any();
 		}
 
-		#region ICloneableEntity<PersonAssignment> Members
-
 		public virtual object Clone()
 		{
 			return EntityClone();
@@ -239,7 +234,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var retobj = (PersonAssignment)MemberwiseClone();
 			retobj.SetId(null);
 			retobj._shiftLayers = new List<IShiftLayer>();
-			//todo: no need to cast here when interfaces are correct
 			foreach (var newLayer in _shiftLayers.Select(layer => layer.NoneEntityClone()))
 			{
 				newLayer.SetParent(retobj);
@@ -253,7 +247,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var retobj = (PersonAssignment)MemberwiseClone();
 			retobj._shiftLayers = new List<IShiftLayer>();
-			//todo: no need to cast here when interfaces are correct
 			foreach (var newLayer in _shiftLayers.Select(layer => layer.EntityClone()))
 			{
 				newLayer.SetParent(retobj);
@@ -262,8 +255,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			return retobj;
 		}
-
-		#endregion
 
 		public virtual IAggregateRoot MainRoot
 		{
@@ -328,7 +319,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			if (template != null)
 			{
-				ClearMainLayers();				
+				ClearMainLayers();
 			}
 			_dayOffTemplate = template;
 		}
@@ -366,22 +357,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		#region Equals
 
-		public virtual bool Equals(IPersonAssignment other)
-		{
-			if (ReferenceEquals(null, other)) return false;
-			if (ReferenceEquals(this, other)) return true;
-			return
-				Equals(_person, other.Person) && 
-				Equals(_scenario, other.Scenario) && 
-				Date.Equals(other.Date);
-		}
-
 		public override bool Equals(object obj)
 		{
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
 			if (obj.GetType() != this.GetType()) return false;
-			return Equals((IPersonAssignment) obj);
+			return Equals((IEntity) obj);
+		}
+
+		public override bool Equals(IEntity other)
+		{
+			if (ReferenceEquals(null, other)) return false;
+			if (ReferenceEquals(this, other)) return true;
+			var otherAsAss = other as IPersonAssignment;
+			return otherAsAss != null && (Equals(_person, otherAsAss.Person) &&
+			                              Equals(_scenario, otherAsAss.Scenario) &&
+			                              Date.Equals(otherAsAss.Date));
 		}
 
 		public override int GetHashCode()

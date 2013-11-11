@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -15,18 +14,14 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class SetPersonAccountForPersonCommandHandler : IHandleCommand<SetPersonAccountForPersonCommandDto>
     {
-        private readonly IRepositoryFactory _repositoryFactory;
-        private readonly ICurrentScenario _scenarioRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
         private readonly IAbsenceRepository _absenceRepository;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ITraceableRefreshService _traceableRefreshService;
 
-        public SetPersonAccountForPersonCommandHandler(IRepositoryFactory repositoryFactory, ICurrentScenario scenarioRepository, IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IAbsenceRepository absenceRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ITraceableRefreshService traceableRefreshService)
+        public SetPersonAccountForPersonCommandHandler(IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IAbsenceRepository absenceRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ITraceableRefreshService traceableRefreshService)
         {
-            _repositoryFactory = repositoryFactory;
-            _scenarioRepository = scenarioRepository;
             _personRepository = personRepository;
             _personAbsenceAccountRepository = personAbsenceAccountRepository;
             _absenceRepository = absenceRepository;
@@ -39,23 +34,30 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         {
             using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
-                var foundPerson = _personRepository.Get(command.PersonId);
-                if (foundPerson == null) throw new FaultException("Person is not exist.");
+				var foundPerson = _personRepository.Get(command.PersonId);
+                if (foundPerson == null) throw new FaultException("Person does not exist.");
                 var foundAbsence = _absenceRepository.Get(command.AbsenceId);
-                if (foundAbsence == null) throw new FaultException("Absence is not exist.");
+                if (foundAbsence == null) throw new FaultException("Absence does not exist.");
                 var dateFrom = command.DateFrom.ToDateOnly();
 
                 checkIfAuthorized(foundPerson, dateFrom);
 
-                var accounts = _personAbsenceAccountRepository.Find(foundPerson);
+				var accounts = _personAbsenceAccountRepository.Find(foundPerson);
                 var personAccount = accounts.Find(foundAbsence, dateFrom);
                 if (personAccount == null || !personAccount.StartDate.Equals(dateFrom))
-                {
-                    personAccount = createPersonAccount(foundAbsence, accounts, dateFrom);
-                }
+				{
+					var originalAccount = personAccount;
+					personAccount = createPersonAccount(foundAbsence, accounts, dateFrom);
+					setPersonAccount(personAccount, command);
 
-                setPersonAccount(personAccount, command);
-                            
+					if (originalAccount != null) _traceableRefreshService.Refresh(originalAccount);
+					_traceableRefreshService.Refresh(personAccount);
+                }
+                else
+                {
+					setPersonAccount(personAccount, command);
+                }
+				          
                 unitOfWork.PersistAll();
             }
 			command.Result = new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
@@ -85,13 +87,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 account.BalanceIn = TimeSpan.FromTicks(command.BalanceIn.Value);
             if (command.Extra.HasValue)
                 account.Extra = TimeSpan.FromTicks(command.Extra.Value);
-            if (command.Accrued.HasValue || command.BalanceIn.HasValue || command.Extra.HasValue)
-                    refreshAccount(account);
-        }
-
-        private void refreshAccount(IAccount account)
-        {
-            _traceableRefreshService.Refresh(account);
         }
     }
 }

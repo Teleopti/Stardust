@@ -1,15 +1,23 @@
 define([
         'knockout',
         'navigation',
-		'views/personschedule/timeline',
+        'lazy',
+		'shared/timeline',
+		'views/teamschedule/group-page',
         'resources!r',
         'moment',
+		'select2',
+		'knockoutBindings'
     ], function(
         ko,
         navigation,
+        lazy,
         timeLineViewModel,
+	    groupPageViewModel,
         resources,
-        moment
+        moment,
+	    select2,
+	    knockoutBindings
     ) {
 
         return function() {
@@ -24,20 +32,52 @@ define([
 
             this.Resources = resources;
 
-            this.Teams = ko.observableArray();
-            this.SelectedTeam = ko.observable();
+            this.GroupPages = ko.observableArray();
+	        this.SelectedGroup = ko.observable();
             this.SelectedDate = ko.observable(moment());
 
+            this.DisplayDescriptions = ko.observable(false);
+            this.ToggleDisplayDescriptions = function() {
+                self.DisplayDescriptions(!self.DisplayDescriptions());
+            };
+            
             this.SetPersons = function (persons) {
                 self.Persons([]);
                 self.Persons.push.apply(self.Persons, persons);
             };
+	        
+            this.SetGroupPages = function (data) {
+            	self.GroupPages([]);
+	            
+            	var groupPages = data.GroupPages;
+            	self.SelectedGroup(data.SelectedGroupId);
+	            
+            	var newItems = ko.utils.arrayMap(groupPages, function (d) {
+            		return new groupPageViewModel(d);
+            	});
+            	self.GroupPages.push.apply(self.GroupPages, newItems);
+            };
             
             this.SetTeams = function (teams) {
-                self.Teams([]);
-                self.Teams.push.apply(self.Teams, teams);
-            };
+            	
+            	self.GroupPages([]);
 
+            	var groups = [];
+	            for(var i = 0; i < teams.length; i++)
+	            	groups.push({ Name: teams[i].SiteAndTeam, Id: teams[i].Id });
+
+	            var groupings = [
+		            {
+		            	Name: "",
+		            	Groups : groups
+		            }];
+
+            	var newItems = ko.utils.arrayMap(groupings, function (d) {
+            		return new groupPageViewModel(d);
+            	});
+            	self.GroupPages.push.apply(self.GroupPages, newItems);
+            };
+	        
             this.NextDay = function() {
                 self.SelectedDate(self.SelectedDate().add('d', 1));
             };
@@ -45,6 +85,43 @@ define([
             this.PreviousDay = function() {
                 self.SelectedDate(self.SelectedDate().add('d', -1));
             };
+
+            this.SelectPerson = function(person) {
+                navigation.GotoPersonSchedule(person.Id, self.SelectedDate());
+            };
+            
+            this.SelectLayer = function (layer) {
+                var selectedLayers = lazy(self.Persons())
+                    .map(function(x) { return x.Shifts(); })
+                    .flatten()
+                    .map(function(x) { return x.Layers(); })
+                    .flatten()
+                    .filter(function (x) {
+                        if (x === layer)
+                            return false;
+                        return x.Selected();
+                    });
+                selectedLayers.each(function (x) {
+                    x.Selected(false);
+                });
+                layer.Selected(!layer.Selected());
+            };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	        
             this.Skills = ko.observableArray();

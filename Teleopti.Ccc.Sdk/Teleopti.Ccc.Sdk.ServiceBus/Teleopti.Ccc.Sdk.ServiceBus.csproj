@@ -153,6 +153,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\ITeleoptiRtaService.cs">
+      <Link>Rta\ITeleoptiRtaService.cs</Link>
+    </Compile>
     <Compile Include="ApplicationInfrastructureContainerInstaller.cs" />
     <Compile Include="ApplicationLayer\EventsConsumer.cs" />
     <Compile Include="AuthenticationContainerInstaller.cs" />
@@ -161,8 +164,10 @@
     <Compile Include="BudgetGroupHeadCountSpecification.cs" />
     <Compile Include="BusStartup.cs" />
     <Compile Include="ConfigFileDefaultHost.cs" />
+    <Compile Include="GetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="LocalServiceBusPublisher.cs" />
     <Compile Include="Notification\ISignificantChangeChecker.cs" />
+    <Compile Include="LocalServiceBusPublisherModule.cs" />
     <Compile Include="Notification\SmsNotification.cs" />
     <Compile Include="RtaBusBootStrapper.cs" />
     <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />
@@ -248,11 +253,6 @@
     <Compile Include="SchedulingContainerInstaller.cs" />
     <Compile Include="SdkConfigurationReader.cs" />
     <Compile Include="SerializationContainerInstaller.cs" />
-    <Compile Include="Service References\TeleoptiRtaService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="ServiceBusRunner.cs" />
     <Compile Include="ShiftTrade\ShiftTradeRequestSaga.cs" />
   </ItemGroup>
@@ -273,16 +273,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService.wsdl" />
-    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService2.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
@@ -344,27 +334,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\TeleoptiRtaService\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\TeleoptiRtaService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\TeleoptiRtaService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\TeleoptiRtaService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

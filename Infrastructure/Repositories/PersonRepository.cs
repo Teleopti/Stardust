@@ -728,7 +728,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                                                  ApplicationAuthentication = p.ApplicationAuthenticationInfo == null ? "" : p.ApplicationAuthenticationInfo.ApplicationLogOnName, p.Id
                                                              }).ToList();
 
-	            string[] windowsLogOns = personInfoList.Where(p => !String.IsNullOrEmpty(p.WindowsAuthenticationName)).Select(p=>p.WindowsAuthenticationName).ToArray();
+				string[] windowsLogOns = personInfoList.Where(p => !String.IsNullOrEmpty(p.WindowsAuthenticationDomain)).Select(p => p.WindowsAuthenticationName).ToArray();
 	            string[] domains = personInfoList.Where(p => !String.IsNullOrEmpty(p.WindowsAuthenticationDomain)).Select(p=>p.WindowsAuthenticationDomain).ToArray();
 				string[] applicationLogOns = personInfoList.Where(p => !String.IsNullOrEmpty(p.ApplicationAuthentication)).Select(p => p.ApplicationAuthentication).ToArray();
                 Guid[] winlogonNullIds =
@@ -737,7 +737,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                      select p.Id.GetValueOrDefault()).ToArray();
                 Guid[] ids = (from p in personInfoList
                               where
-                                  p.Id.HasValue && !String.IsNullOrEmpty(p.WindowsAuthenticationName) &&
+                                  p.Id.HasValue && 
                                   !String.IsNullOrEmpty(p.WindowsAuthenticationDomain)
                               select p.Id.GetValueOrDefault()).ToArray();
 

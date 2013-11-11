@@ -36,10 +36,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 						new DateOnlyPeriod(date, date), @event.ScenarioId, @event.PersonId);
 				}
 
-				foreach (var layer in scheduleDay.Layers)
+				if (scheduleDay.Shift == null) continue;
+				foreach (var layer in scheduleDay.Shift.Layers)
 				{
-					if (isLayerRightNow(layer) || 
-						isCurrentLayerCloser(layer, closestLayerToNow))
+					if (isLayerRightNow(layer) ||
+					    isCurrentLayerCloser(layer, closestLayerToNow))
 						closestLayerToNow = layer;
 					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, @event.ScenarioId, @event.PersonId, layer);
 				}
@@ -64,9 +65,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			var nextActivityStartTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
 			                                                                                           @event.PersonId);
 			var layerPeriod = new DateTimePeriod(DateTime.SpecifyKind(closestLayer.StartDateTime, DateTimeKind.Utc),
-			                                     DateTime.SpecifyKind(closestLayer.EndDateTime, DateTimeKind.Utc));
+				DateTime.SpecifyKind(closestLayer.EndDateTime, DateTimeKind.Utc));
 			if (NotifyRtaDecider.ShouldSendMessage(layerPeriod, nextActivityStartTime) &&
-			    @event.ScheduleDays.Any(d => d.Date >= DateTime.Today))
+				@event.ScheduleDays.Any(d => d.Date >= DateTime.UtcNow.Date))
 			{
 				_serviceBus.Publish(new ScheduleProjectionReadOnlyChanged
 					{

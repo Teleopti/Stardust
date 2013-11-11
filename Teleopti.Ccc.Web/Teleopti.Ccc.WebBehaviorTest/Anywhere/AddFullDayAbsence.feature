@@ -45,7 +45,7 @@ Scenario: Add on empty day
 	| Absence  | Vacation   |
 	| End date | 2013-04-08 |
 	And I click 'apply'
-	Then I should see a shift layer with
+	Then I should see a scheduled activity with
 	| Field      | Value |
 	| Start time | 08:00 |
 	| End time   | 16:00 |
@@ -70,7 +70,7 @@ Scenario: Add on shift
 	| Absence  | Vacation   |
 	| End date | 2013-04-08 |
 	And I click 'apply'
-	Then I should see a shift layer with
+	Then I should see a scheduled activity with
 	| Field      | Value |
 	| Start time | 08:00 |
 	| End time   | 17:00 |
@@ -161,7 +161,7 @@ Scenario: Add on shift ending tomorrow
 	| Absence  | Vacation   |
 	| End date | 2013-05-23 |
 	And I click 'apply'
-	Then I should see a shift layer with
+	Then I should see a scheduled activity with
 	| Field      | Value |
 	| Start time | 22:00 |
 	| End time   | 07:00 |
@@ -208,9 +208,9 @@ Scenario: Invalid dates
 	| End date | 2012-12-01 |
 	Then I should see the alert 'Invalid end date'
 
-Scenario: Backward from browser works with person schedule view
+Scenario: Back to viewing schedule after adding a full day absence
 	Given I have the role 'Anywhere Team Green'
-	When I view schedules for '2013-04-08'
+	When I view schedules for 'Team green' on '2013-04-08'
 	And I click person 'Pierre Baldi'
 	And I click 'add full day absence'
 	And I input these full day absence values

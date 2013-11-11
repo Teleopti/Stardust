@@ -27,8 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			Mapper.Initialize(c => c.AddProfile(new PersonScheduleViewModelMappingProfile()));
 		}
 
-		// cant get this green with dynamics involved
-		[Test, Ignore]
+		[Test]
 		public void ShouldConfigureCorrectly()
 		{
 			Mapper.AssertConfigurationIsValid();
@@ -100,6 +99,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
+		public void ShouldMapDayOff()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var model = new Model
+				{
+					DayOff = new DayOff
+						{
+							Title = "Day off"
+						}
+				};
+
+			var result = target.Map(new PersonScheduleData {Model = model});
+
+			result.IsDayOff.Should().Be.True();
+			result.DayOffName.Should().Be.EqualTo("Day off");
+		}
+
+		[Test]
 		public void ShouldMapAbsenceId()
 		{
 			var target = new PersonScheduleViewModelMapper();
@@ -148,13 +165,52 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
+		public void ShouldMapLayerDescription()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			var data = new PersonScheduleData
+				{
+					Model = new Model
+						{
+							Shift = new Shift
+								{
+									Projection = new[]
+										{
+											new SimpleLayer
+												{
+													Description = "Vacation"
+												}
+										}
+								}
+						}
+				};
+
+			var result = target.Map(data);
+
+			result.Layers.Single().Description.Should().Be("Vacation");
+		}
+
+		[Test]
 		public void ShouldMapLayerColorForConfidentialAbsence()
 		{
 			var target = new PersonScheduleViewModelMapper();
 
-			var shift = new Shift {Projection = new[] {new SimpleLayer {Color = "Green", IsAbsenceConfidential = true}}};
+			var data = new PersonScheduleData
+				{
+					Model = new Model
+						{
+							Shift = new Shift
+								{
+									Projection = new[]
+										{
+											new SimpleLayer {Color = "Green", IsAbsenceConfidential = true}
+										}
+								}
+						}
+				};
 
-			var result = target.Map(new PersonScheduleData { Model = new Model { Shift = shift } });
+			var result = target.Map(data);
 
 			result.Layers.Single().Color.Should().Be(ConfidentialPayloadValues.DisplayColor.ToHtml());
 		}
@@ -164,12 +220,69 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var target = new PersonScheduleViewModelMapper();
 
-			var shift = new Shift {Projection = new[] {new SimpleLayer {Color = "Green", IsAbsenceConfidential = true}}};
+			var data = new PersonScheduleData
+				{
+					Model = new Model
+						{
+							Shift = new Shift
+								{
+									Projection = new[] {new SimpleLayer {Color = "Green", IsAbsenceConfidential = true}}
+								}
+						},
+					HasViewConfidentialPermission = true
+				};
 
-			var result = target.Map(new PersonScheduleData { Model = new Model{ Shift = shift}, HasViewConfidentialPermission = true});
+			var result = target.Map(data);
 
 			result.Layers.Single().Color.Should().Be("Green");
 		}
+
+		[Test]
+		public void ShouldMapLayerDescriptionForConfidentialAbsence()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			var data = new PersonScheduleData
+				{
+					Model = new Model
+						{
+							Shift = new Shift
+								{
+									Projection = new[]
+										{
+											new SimpleLayer {Description = "Mental Disorder", IsAbsenceConfidential = true}
+										}
+								}
+						}
+				};
+
+			var result = target.Map(data);
+
+			result.Layers.Single().Description.Should().Be(ConfidentialPayloadValues.Description.Name);
+		}
+
+		[Test]
+		public void ShouldMapLayerDescriptionForConfidentialAbsenceButHavePermission()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			var data = new PersonScheduleData
+			{
+				Model = new Model
+				{
+					Shift = new Shift
+					{
+						Projection = new[] { new SimpleLayer { Description = "Mental Disorder", IsAbsenceConfidential = true } }
+					}
+				},
+				HasViewConfidentialPermission = true
+			};
+
+			var result = target.Map(data);
+
+			result.Layers.Single().Description.Should().Be("Mental Disorder");
+		}
+
 
 		[Test]
 		public void ShouldMapLayerStartTimeInPersonsTimeZone()
@@ -198,6 +311,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var result = target.Map(new PersonScheduleData { Model = new Model{Shift = shift} });
 
 			result.Layers.Single().Minutes.Should().Be(60);
+		}
+
+		[Test]
+		public void ShouldMapIsFullDayAbsence()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var data = new PersonScheduleData
+				{
+					Model = new Model
+						{
+							Shift = new Shift { IsFullDayAbsence = true }
+						}
+				};
+
+			var result = target.Map(data);
+
+			result.IsFullDayAbsence.Should().Be.True();
 		}
 
 		[Test]
@@ -358,5 +488,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			result.PersonAbsences.Single().Id.Should().Be(personAbsence.Id.Value.ToString());
 		}
+
 	}
 }

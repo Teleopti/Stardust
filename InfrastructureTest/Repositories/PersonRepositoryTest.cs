@@ -1447,6 +1447,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.That(returned.Count(), Is.GreaterThan(0));
 		}
 
+		[Test]
+		public void ShouldFindPersonsWithGivenUseCredentialsWithEmptyLogOnName()
+		{
+			IPerson person1 = PersonFactory.CreatePersonWithWindowsPermissionInfo("sunil", "toptinet1");
+			PersistAndRemoveFromUnitOfWork(person1);
+			IPerson person2 = PersonFactory.CreatePersonWithWindowsPermissionInfo("", "toptinet1");
+			PersistAndRemoveFromUnitOfWork(person2);
+			IPerson person3 = PersonFactory.CreatePersonWithWindowsPermissionInfo("nimal", "toptinet1");
+			PersistAndRemoveFromUnitOfWork(person3);
+
+			var pr = new PersonRepository(UnitOfWork);
+
+			IList<IPerson> personList = new List<IPerson>(1);
+			person1.WindowsAuthenticationInfo.WindowsLogOnName = "";
+			personList.Add(person1);
+
+			var returned = pr.FindPersonsWithGivenUserCredentials(personList);
+			Assert.That(returned.Count(), Is.EqualTo(1));
+		}
+
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Samisk")]
 		[Test, Explicit("This one fails on some enviroments. Xp os? Bug id 6318. Have a look at this again when NH is upgraded to 3.x ")]

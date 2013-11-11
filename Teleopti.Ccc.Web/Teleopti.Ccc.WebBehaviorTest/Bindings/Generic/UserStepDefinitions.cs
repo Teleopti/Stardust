@@ -1,9 +1,12 @@
 using System;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using AbsenceRequestConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.AbsenceRequestConfigurable;
+using PersonPeriodConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.PersonPeriodConfigurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -30,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var personPeriod = new PersonPeriodConfigurable
 				{
 					StartDate = date,
-					RuleSetBag = "Common"
+					ShiftBag = "Common"
 				};
 			DataMaker.Person(userName).Apply(personPeriod);
 		}
@@ -75,7 +78,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		// the ones below here does not belong here!
 
 		[Given(@"I have a pre-scheduled meeting with")]
-		[Given(@"I have a meeting scheduled")]
 		public void GivenIHaveAMeetingScheduled(Table table)
 		{
 			var meeting = table.CreateInstance<MeetingConfigurable>();

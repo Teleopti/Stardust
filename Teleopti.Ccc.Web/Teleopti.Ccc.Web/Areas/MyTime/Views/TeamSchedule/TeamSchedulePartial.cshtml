@@ -9,33 +9,46 @@
 	var left = Html.HtmlStyleLeft();
 }
 <div class="navbar">
-    <div class="navbar-inner">
-        <form class="navbar-form pull-left">
-            <div class="input-append input-prepend">
-                <button class="btn" data-bind="click: previousDay"><i class="icon-arrow-left"></i></button>
-                <input data-bind="value: displayDate" type="text" class="span2 text-center" readonly="readonly"/>
-                <button class="btn" data-bind="mytimeDatePicker: selectedDate"><i class="icon-th"></i></button>
-                <button class="btn" data-bind="click: nextDay"><i class="icon-arrow-right"></i></button>
-            </div>
-        </form>
-        <ul class="nav" data-bind="if: showTeamPicker">
-            <li class="divider-vertical"></li>
-        </ul>
-        <div class="navbar-text" data-bind="if: showTeamPicker">
-            <span data-bind="if: showGroupings">
-                <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
-                    <optgroup data-bind="attr: { label: text }, foreach: children">
-                        <option data-bind="text: text, value: id"></option>
-                    </optgroup>
-                </select>
-            </span>
-            <span data-bind="if: !showGroupings()">
-                <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
-                    <option data-bind="text: text, value: id"></option>
-                </select>
-            </span>
-        </div>
-    </div>
+	<div class="navbar-inner">
+		<form class="navbar-form pull-left">
+			<div class="input-append input-prepend">
+				<button class="btn" data-bind="click: previousDay"><i class="icon-arrow-left"></i></button>
+				<input data-bind="value: displayDate" type="text" class="span2 text-center" readonly="readonly"/>
+				<button class="btn" data-bind="mytimeDatePicker: selectedDate"><i class="icon-th"></i></button>
+				<button class="btn" data-bind="click: nextDay"><i class="icon-arrow-right"></i></button>
+			</div>
+		</form>
+		<ul class="nav" data-bind="if: showTeamPicker">
+			<li class="divider-vertical"></li>
+		</ul>
+		<div class="navbar-text" data-bind="if: showTeamPicker">
+			<span data-bind="if: showGroupings">
+				<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
+					<optgroup data-bind="attr: { label: text }, foreach: children">
+						<option data-bind="text: text, value: id"></option>
+					</optgroup>
+				</select>
+			</span>
+			<span data-bind="if: !showGroupings()">
+				<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
+					<option data-bind="text: text, value: id"></option>
+				</select>
+			</span>
+			@if (Model.ShiftTradePermisssion)
+			{
+			<div style="float: right">
+				<ul class="nav" data-bind="if: showTeamPicker">
+					<li class="divider-vertical"></li>
+				</ul>
+				<ul class="nav">
+					<li>
+						<a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="icon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+					</li>
+				</ul>
+			</div>
+			}
+		</div>
+	</div>
 </div>
 <div id="TeamSchedule-body" class="body-teamschedule" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
 	<div class="body-teamschedule-inner">
@@ -48,7 +61,7 @@
 					@foreach (var time in Model.TimeLine)
 					{
 						<li class="teamschedule-timeline-time @(time.ShortTime.Contains(":") ? "minute" : "hour") absolute" style="@left: @(Math.Round(scheduleWidth*time.PositionPercent))px;">
-							<div class="teamschedule-timeline-label ui-corner-all" title="@time.LongTime">@time.ShortTime</div>
+							<div class="teamschedule-timeline-label ui-corner-all">@time.ShortTime</div>
 						</li>
 					}
 				</ul>
@@ -74,10 +87,10 @@
 									var widthPixel = rightPixel - leftPixel;
 									var IEString = "filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='" + layer.Color + "',GradientType=0 ); /* IE6-9 */";
 									<li class="layer absolute qtip-tooltip @(agentSchedule.HasDayOffUnder ? StyleClasses.Striped : "gradient")" tooltip-title="@Html.AttributeEncode(layer.ActivityName)" tooltip-text="@layer.StartTime &ndash; @layer.EndTime"
-									    style="width: @(widthPixel)px;
-	                                                                                                                                      @left: @(leftPixel)px;
-	                                                                                                                                      background-color: @layer.Color;
-	                                                                                                                                      @(!agentSchedule.HasDayOffUnder ? IEString : "")"> </li>
+										style="width: @(widthPixel)px;
+																																		  @left: @(leftPixel)px;
+																																		  background-color: @layer.Color;
+																																		  @(!agentSchedule.HasDayOffUnder ? IEString : "")"> </li>
 								}
 							}
 						</ul>

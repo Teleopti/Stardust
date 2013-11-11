@@ -13,9 +13,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
     /// </summary>
     public class SkillStaffPeriod : Layer<ISkillStaff>, ISkillStaffPeriod, IAggregateSkillStaffPeriod
     {
-
-		#region Fields (3) 
-
         private readonly SortedList<DateTime, ISkillStaffSegmentPeriod> _sortedSegmentCollection;
         private IList<ISkillStaffSegmentPeriod> _segmentInThisCollection;
         private readonly IStaffingCalculatorService _staffingCalculatorService;
@@ -24,41 +21,18 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private bool _isAggregate;
         private double _aggregatedFStaff;
         private double _aggregatedCalculatedResources;
-        private Percent _aggregatedEstimatedServiceLevel;
-        private double _aggregatedForecastedIncomingDemand;
-        private Percent _estimatedServiceLevel;
+	    private Percent _estimatedServiceLevel;
         private IPeriodDistribution _periodDistribution;
-        private MinMaxStaffBroken _aggregatedMinMaxStaffAlarm;
-        private StaffingThreshold _aggregatedStaffingThreshold = StaffingThreshold.Ok;
 
-        private static readonly object Locker = new object();
+	    private static readonly object Locker = new object();
 	    
-	    #endregion Fields 
-
-		#region Constructors (2) 
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SkillStaffPeriod"/> class.
-        /// Used by tests
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <param name="taskData">The task data.</param>
-        /// <param name="serviceAgreementData">The service agreement data.</param>
-        /// <param name="staffingCalculatorService">The staffing calculator service.</param>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-01-24
-        /// </remarks>
         public SkillStaffPeriod(DateTimePeriod period, ITask taskData, ServiceAgreement serviceAgreementData, IStaffingCalculatorService staffingCalculatorService) : base(new SkillStaff(taskData, serviceAgreementData), period)
         {
-            _sortedSegmentCollection = new SortedList<DateTime, ISkillStaffSegmentPeriod>();
+	        AggregatedStaffingThreshold = StaffingThreshold.Ok;
+	        _sortedSegmentCollection = new SortedList<DateTime, ISkillStaffSegmentPeriod>();
             _staffingCalculatorService = staffingCalculatorService;
             _segmentInThisCollection = new List<ISkillStaffSegmentPeriod>();
         }
-
-		#endregion Constructors 
-
-		#region Properties (3) 
 
         public IStatisticTask StatisticTask { get; set; }
 
@@ -180,12 +154,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     if (_isAggregate)
 							  return ((IAggregateSkillStaffPeriod)this).AggregatedFStaff;
 
-                    double ret = 0;
-                    foreach (ISkillStaffSegmentPeriod ySegment in _segmentInThisCollection)
-                    {
-                        ret += ySegment.FStaff();
-                    }
-                    return ret;
+	                return _segmentInThisCollection.Sum(ySegment => ySegment.FStaff());
                 }
             }
         }
@@ -225,8 +194,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 return new DeviationStatisticData(FStaff, CalculatedResource).RelativeDeviationForDisplayOnly;
             }
         }
-
-        
 
         public double RelativeDifferenceIncoming
         {
@@ -353,10 +320,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 	    public ISkillDay SkillDay { get; private set; }
 
-	    #endregion Properties 
-
-		#region Methods 
-
         private void CalculateEstimatedServiceLevel()
         {
             var parent = SkillDay;
@@ -413,43 +376,16 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-		// Public Methods (8) 
-
-        /// <summary>
-        /// Gets the calculated staff time during this period.
-        /// </summary>
-        /// <value>The calculated staff minutes.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-01-24
-        /// </remarks>
         public TimeSpan ForecastedIncomingDemand()
         {
             return TimeSpan.FromMinutes(Payload.ForecastedIncomingDemand*Period.ElapsedTime().TotalMinutes);
         }
 
-
-        /// <summary>
-        /// Calculateds the staff time with shrinkage.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-08-08
-        /// </remarks>
         public TimeSpan ForecastedIncomingDemandWithShrinkage()
         {
             return TimeSpan.FromMinutes(ForecastedIncomingDemand().TotalMinutes / (1 - Payload.Shrinkage.Value));
         }
 
-        /// <summary>
-        /// Calculates the staff and distributes the traff down to segmentPeriods.
-        /// </summary>
-        /// <param name="periods">The periods.</param>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-04-18
-        /// </remarks>
         public void CalculateStaff(IList<ISkillStaffPeriod> periods)
         {
             if (Payload.IsCalculated) return;
@@ -482,25 +418,28 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 
             }
 
-        	SkillStaff castedPayLoad = ((SkillStaff) Payload);
-
-			if (!Payload.ManualAgents.HasValue && !Payload.NoneBlendDemand.HasValue)
+        	var castedPayLoad = ((SkillStaff) Payload);
+	        double demandWithoutEfficiency;
+	        if (!Payload.ManualAgents.HasValue && !Payload.NoneBlendDemand.HasValue)
+	        {
+		        castedPayLoad.ForecastedIncomingDemand = traffic;
+		        demandWithoutEfficiency = traffic;
+	        }
+	        else
 			{
-				castedPayLoad.ForecastedIncomingDemand = traffic;
-			}
-			else
-			{
-				if(Payload.ManualAgents.HasValue)
+				if (Payload.ManualAgents.HasValue)
 				{
 					castedPayLoad.ForecastedIncomingDemand = Payload.ManualAgents.Value;
+					demandWithoutEfficiency = Payload.ManualAgents.Value;
 				}
 				else
 				{
 					castedPayLoad.ForecastedIncomingDemand = Payload.NoneBlendDemand.Value;
+					demandWithoutEfficiency = Payload.NoneBlendDemand.Value;
 				}
 			}
 
-            castedPayLoad.CalculatedOccupancy = _staffingCalculatorService.Utilization(Payload.ForecastedIncomingDemand, Payload.TaskData.Tasks,
+			castedPayLoad.CalculatedOccupancy = _staffingCalculatorService.Utilization(demandWithoutEfficiency, Payload.TaskData.Tasks,
                                                       Payload.TaskData.AverageTaskTime.TotalSeconds +
                                                       Payload.TaskData.AverageAfterTaskTime.TotalSeconds, Period.ElapsedTime());
             if (periods != null)
@@ -517,7 +456,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         private void RemoveExistingSegments(IList<ISkillStaffPeriod> skillStaffPeriods, int currentIndex)
         {
-
             _sortedSegmentCollection.Clear();
             for (int i = currentIndex; i < skillStaffPeriods.Count; i++)
             {
@@ -535,28 +473,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        /// <summary>
-        /// Calculates the staff.
-        /// </summary>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-04-18
-        /// </remarks>
         public void CalculateStaff()
         {
             CalculateStaff(new List<ISkillStaffPeriod> { this });
         }
 
-        /// <summary>
-        /// Combines the specified skill staff periods. ServiceLevels are weighted according to number of tasks.
-        /// All periods must be the of the same length.
-        /// </summary>
-        /// <param name="skillStaffPeriods">The skill staff periods.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-03-06
-        /// </remarks>
         public static ISkillStaffPeriod Combine(IList<ISkillStaffPeriod> skillStaffPeriods)
         {
             if (skillStaffPeriods.Count < 1)
@@ -618,14 +539,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return ret;
         }
 
-        /// <summary>
-        /// Returns the sum if all forecasted distributed demands
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-08-28
-        /// </remarks>
         public double ForecastedDistributedDemand
         {
             get
@@ -647,29 +560,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        /// <summary>
-        /// Gets the forecasted distributed demand with shrinkage.
-        /// </summary>
-        /// <value>The forecasted distributed demand with shrinkage.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-09-05
-        /// </remarks>
         public double ForecastedDistributedDemandWithShrinkage
         {
             get { return ForecastedDistributedDemand * (1d + Payload.Shrinkage.Value); }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is available.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance is available; otherwise, <c>false</c>.
-        /// </value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-09-08
-        /// </remarks>
         public bool IsAvailable
         {
             get { return _isAvailable; }
@@ -696,9 +591,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             foreach (ISkillStaffSegmentPeriod xSegment in SortedSegmentCollection)
             {
                 xSegment.BookedResource65 = 0;
-                //if(thisSkillStaff.CalculatedResource == 0)
-                //    continue;
-
+                
                 double diff = Payload.ForecastedIncomingDemand - Payload.BookedAgainstIncomingDemand65;
                 if (diff > 0)
                 {
@@ -723,25 +616,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 }
             }
 
-            //if(thisSkillStaff.CalculatedResource == 0)
-            //{
-            //    _estimatedServiceLevel = new Percent(0);
-            //    return;
-            //}
-
             CalculateEstimatedServiceLevel();
         }
 
-        /// <summary>
-        /// Returns a SkillStaffPeriod containing the amount of calls that corresponds to the intersection of skillStaffPeriod and period.
-        /// The length of the period will be the same as the supplied period.
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-03-26
-        /// </remarks>
         public ISkillStaffPeriod IntersectingResult(DateTimePeriod period)
         {
             if (!Period.Intersect(period))
@@ -773,8 +650,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return skillStaffPeriod;
         }
 
-		// Private Methods (4) 
-
         private static void AddToLists(double traffToDistribute, ISkillStaffPeriod currentPeriod, ISkillStaffPeriod ourPeriod)
         {
             ISkillStaffSegment newSegment = new SkillStaffSegment(traffToDistribute);
@@ -783,81 +658,20 @@ namespace Teleopti.Ccc.Domain.Forecasting
             ((SkillStaffPeriod)currentPeriod)._segmentInThisCollection.Add(newSegmentPeriod);
         }
 
-        //private TimeSpan adjustTotalLength(IList<ISkillStaffPeriod> sortedPeriods, int currentIndex)
-        //{
-        //    TimeSpan originalLength = TimeSpan.FromSeconds(Payload.ServiceAgreementData.ServiceLevel.Seconds);
-        //    TimeSpan currentLength = TimeSpan.Zero;
-
-        //    while (currentLength <= originalLength)
-        //    {
-        //        if (currentIndex == sortedPeriods.Count)
-        //        {
-        //            return currentLength;
-        //        }
-        //        ISkillStaffPeriod currentPeriod = sortedPeriods[currentIndex];
-        //        currentLength = currentLength.Add(currentPeriod.Period.ElapsedTime());
-        //        currentIndex++;
-        //    }
-
-        //    return originalLength;
-        //}
-
-        //private void createSkillStaffSegments(IList<ISkillStaffPeriod> sortedPeriods,
-        //                                        int currentIndex)
-        //{
-        //    ISkillStaffPeriod ourPeriod = sortedPeriods[currentIndex];
-        //    double timeLeftToDistribute = Payload.ForecastedIncomingDemand;
-        //    double totalLength = adjustTotalLength(sortedPeriods, currentIndex).TotalSeconds;
-
-
-        //    ISkillStaffPeriod currentPeriod = sortedPeriods[currentIndex];
-        //    double periodLength = currentPeriod.Period.ElapsedTime().TotalSeconds;
-        //    double distrPercent = periodLength / totalLength;
-        //    double traffToDistribute = Payload.ForecastedIncomingDemand * distrPercent;
-
-        //    if (traffToDistribute > timeLeftToDistribute)
-        //        traffToDistribute = timeLeftToDistribute;
-        //    AddToLists(traffToDistribute, currentPeriod, ourPeriod);
-
-        //    currentIndex++;
-        //    timeLeftToDistribute -= traffToDistribute;
-
-        //    while ((timeLeftToDistribute > 0.00001) && (currentIndex < sortedPeriods.Count))
-        //    {
-        //        currentPeriod = sortedPeriods[currentIndex];
-        //        periodLength = currentPeriod.Period.ElapsedTime().TotalSeconds;
-        //        distrPercent = periodLength / totalLength;
-        //        traffToDistribute = Payload.ForecastedIncomingDemand * distrPercent;
-                
-        //        if (traffToDistribute > timeLeftToDistribute)
-        //            traffToDistribute = timeLeftToDistribute;
-        //        AddToLists(traffToDistribute, currentPeriod, ourPeriod);
-
-        //        currentIndex++;
-        //        timeLeftToDistribute -= traffToDistribute;
-        //    }   
-        //}
-
-        private void CreateSkillStaffSegments65(IList<ISkillStaffPeriod> sortedPeriods,
-                                                int currentIndex)
+        private void CreateSkillStaffSegments65(IList<ISkillStaffPeriod> sortedPeriods, int currentIndex)
         {
             ISkillStaffPeriod ourPeriod = sortedPeriods[currentIndex];
-            ISkillStaffPeriod currentPeriod;
-            TimeSpan sa = TimeSpan.FromSeconds(Payload.ServiceAgreementData.ServiceLevel.Seconds);
+	        TimeSpan sa = TimeSpan.FromSeconds(Payload.ServiceAgreementData.ServiceLevel.Seconds);
 
             while ((sa.TotalSeconds > 0.1) && (currentIndex < sortedPeriods.Count))
             {
-                currentPeriod = sortedPeriods[currentIndex];
+                ISkillStaffPeriod currentPeriod = sortedPeriods[currentIndex];
                 TimeSpan currentLength = currentPeriod.Period.ElapsedTime();
-                //double distrPercent = currentLength.TotalSeconds/Payload.ServiceAgreementData.ServiceLevel.Seconds;
-                //AddToLists(Payload.ForecastedIncomingDemand * distrPercent, currentPeriod, ourPeriod);
                 AddToLists(0, currentPeriod, ourPeriod);
-
 
                 currentIndex++;
                 sa = sa.Add(-currentLength);
             }
-
         }
 
         public void Reset()
@@ -873,28 +687,16 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return base.ToString() + ", " + Period;
         }
 
-		#endregion Methods 
-
-        #region IAggregateSkillStaffPeriod members
-
-        
         bool IAggregateSkillStaffPeriod.IsAggregate
         {
             get { return _isAggregate; }
             set { _isAggregate = value; }
         }
 
-
         double IAggregateSkillStaffPeriod.AggregatedFStaff
         {
-            get
-            {
-                return _aggregatedFStaff;
-            }
-            set
-            {
-                _aggregatedFStaff = value;
-            }
+            get { return _aggregatedFStaff; }
+            set { _aggregatedFStaff = value; }
         }
 
         double IAggregateSkillStaffPeriod.AggregatedCalculatedLoggedOn
@@ -908,10 +710,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
             {
                 _aggregatedFStaff += aggregateSkillStaffPeriod.AggregatedFStaff;
                 _aggregatedCalculatedResources += aggregateSkillStaffPeriod.AggregatedCalculatedResource;
-                _aggregatedEstimatedServiceLevel = CombineEstimatedServiceLevel(aggregateSkillStaffPeriod);
-                _aggregatedForecastedIncomingDemand += aggregateSkillStaffPeriod.AggregatedForecastedIncomingDemand;
-                _aggregatedMinMaxStaffAlarm = combineMinMaxStaffAlarm(aggregateSkillStaffPeriod);
-                _aggregatedStaffingThreshold = combineStaffingTreshold(aggregateSkillStaffPeriod);
+                AggregatedEstimatedServiceLevel = CombineEstimatedServiceLevel(aggregateSkillStaffPeriod);
+                AggregatedForecastedIncomingDemand += aggregateSkillStaffPeriod.AggregatedForecastedIncomingDemand;
+                AggregatedMinMaxStaffAlarm = combineMinMaxStaffAlarm(aggregateSkillStaffPeriod);
+                AggregatedStaffingThreshold = combineStaffingTreshold(aggregateSkillStaffPeriod);
             }
             else
             {
@@ -921,91 +723,62 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         private StaffingThreshold combineStaffingTreshold(IAggregateSkillStaffPeriod aggregateSkillStaffPeriod)
         {
-            int thisStatus = (int) _aggregatedStaffingThreshold;
+            int thisStatus = (int) AggregatedStaffingThreshold;
             int otherStatus = (int) aggregateSkillStaffPeriod.AggregatedStaffingThreshold;
             return (StaffingThreshold) Math.Max(thisStatus, otherStatus);
         }
 
         private MinMaxStaffBroken combineMinMaxStaffAlarm(IAggregateSkillStaffPeriod aggregateSkillStaffPeriod)
         {
-            if (_aggregatedMinMaxStaffAlarm == MinMaxStaffBroken.BothBroken)
-                return _aggregatedMinMaxStaffAlarm;
+            if (AggregatedMinMaxStaffAlarm == MinMaxStaffBroken.BothBroken)
+                return AggregatedMinMaxStaffAlarm;
 
-            if (_aggregatedMinMaxStaffAlarm == MinMaxStaffBroken.Ok && aggregateSkillStaffPeriod.AggregatedMinMaxStaffAlarm != MinMaxStaffBroken.Ok)
+            if (AggregatedMinMaxStaffAlarm == MinMaxStaffBroken.Ok && aggregateSkillStaffPeriod.AggregatedMinMaxStaffAlarm != MinMaxStaffBroken.Ok)
                 return aggregateSkillStaffPeriod.AggregatedMinMaxStaffAlarm;
 
             if(aggregateSkillStaffPeriod.AggregatedMinMaxStaffAlarm == MinMaxStaffBroken.BothBroken)
                 return aggregateSkillStaffPeriod.AggregatedMinMaxStaffAlarm;
 
-            if (_aggregatedMinMaxStaffAlarm == MinMaxStaffBroken.MinStaffBroken && aggregateSkillStaffPeriod.AggregatedMinMaxStaffAlarm == MinMaxStaffBroken.MaxStaffBroken)
+            if (AggregatedMinMaxStaffAlarm == MinMaxStaffBroken.MinStaffBroken && aggregateSkillStaffPeriod.AggregatedMinMaxStaffAlarm == MinMaxStaffBroken.MaxStaffBroken)
                 return MinMaxStaffBroken.BothBroken;
 
-            if (_aggregatedMinMaxStaffAlarm == MinMaxStaffBroken.MaxStaffBroken && aggregateSkillStaffPeriod.AggregatedMinMaxStaffAlarm == MinMaxStaffBroken.MinStaffBroken)
+            if (AggregatedMinMaxStaffAlarm == MinMaxStaffBroken.MaxStaffBroken && aggregateSkillStaffPeriod.AggregatedMinMaxStaffAlarm == MinMaxStaffBroken.MinStaffBroken)
                 return MinMaxStaffBroken.BothBroken;
 
-            return _aggregatedMinMaxStaffAlarm;
+            return AggregatedMinMaxStaffAlarm;
         }
 
         private Percent CombineEstimatedServiceLevel(IAggregateSkillStaffPeriod aggregateSkillStaffPeriod)
         {
-            double value = (_aggregatedForecastedIncomingDemand*_aggregatedEstimatedServiceLevel.Value) + 
+            double value = (AggregatedForecastedIncomingDemand*AggregatedEstimatedServiceLevel.Value) + 
                 (aggregateSkillStaffPeriod.AggregatedForecastedIncomingDemand * aggregateSkillStaffPeriod.AggregatedEstimatedServiceLevel.Value);
-            double demand = _aggregatedForecastedIncomingDemand +
+            double demand = AggregatedForecastedIncomingDemand +
                             aggregateSkillStaffPeriod.AggregatedForecastedIncomingDemand;
             if (demand == 0)
                 return new Percent(1);
             return new Percent(value / demand);
         }
 
-        /// <summary>
-        /// Gets or sets the calculated resource.
-        /// </summary>
-        /// <value>The calculated resource.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2009-02-13
-        /// </remarks>
         double IAggregateSkillStaffPeriod.AggregatedCalculatedResource
         {
             get { return _aggregatedCalculatedResources; }
             set { _aggregatedCalculatedResources = value; }
         }
 
-        public Percent AggregatedEstimatedServiceLevel
-        {
-            get { return _aggregatedEstimatedServiceLevel; }
-            set { _aggregatedEstimatedServiceLevel = value; }
-        }
+	    public Percent AggregatedEstimatedServiceLevel { get; set; }
 
-        public double AggregatedForecastedIncomingDemand
-        {
-            get { return _aggregatedForecastedIncomingDemand; }
-            set { _aggregatedForecastedIncomingDemand = value; }
-        }
+	    public double AggregatedForecastedIncomingDemand { get; set; }
 
-        public MinMaxStaffBroken AggregatedMinMaxStaffAlarm
-        {
-            get { return _aggregatedMinMaxStaffAlarm; }
-            set { _aggregatedMinMaxStaffAlarm = value; }
-        }
+	    public MinMaxStaffBroken AggregatedMinMaxStaffAlarm { get; set; }
 
-        public StaffingThreshold AggregatedStaffingThreshold
-        {
-            get { return _aggregatedStaffingThreshold; }
-            set { _aggregatedStaffingThreshold = value; }
-        }
+	    public StaffingThreshold AggregatedStaffingThreshold { get; set; }
 
-        public IPeriodDistribution PeriodDistribution
+	    public IPeriodDistribution PeriodDistribution
         {
             get
             {
                 return _periodDistribution;
             }
         }
-
-
-
-
-        #endregion
     }
 }

@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_dateToTest = new DateOnly();
 			_groupPage = _mock.StrictMock<IGroupPage>();
 			_person = PersonFactory.CreatePerson();
+			_person.SetId(Guid.Empty);
 			_rootPersonGroup = _mock.StrictMock<IRootPersonGroup>();
 			_childPersonGroup = _mock.StrictMock<IChildPersonGroup>();
 			_scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
@@ -44,8 +45,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void ShouldReturnNullIfPersonNotBelongsToAGroup()
+		public void ShouldReturnSingleAgentTeamIfPersonNotBelongsToAGroup()
 		{
+			var groupPerson = _mock.StrictMock<IGroupPerson>();
 			using (_mock.Record())
 			{
 				Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate.GetGroupPageByDate(_dateToTest)).Return(_groupPage);
@@ -57,15 +59,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_childPersonGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(new List<IPerson>()));
 				Expect.Call(_childPersonGroup.ChildGroupCollection).Return(
 					new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary.Keys).Return(new Collection<IPerson> { _person });
+				Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person }, _dateToTest, "arne-arne", Guid.Empty)).Return(groupPerson);
 			}
 
-			IGroupPerson groupPerson;
 			using (_mock.Playback())
 			{
-				groupPerson = _target.BuildGroupPerson(_person, _dateToTest);
-			}
+				var result = _target.BuildGroupPerson(_person, _dateToTest);
 
-			Assert.IsNull(groupPerson);
+				Assert.That(result, Is.EqualTo(groupPerson));
+			}
 		}
 
 		[Test]

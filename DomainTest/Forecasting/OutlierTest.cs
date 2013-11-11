@@ -104,7 +104,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(_description, _target.Description);
             Assert.IsNull(_target.Workload);
             Assert.AreEqual(0, _target.Dates.Count);
-            Assert.AreEqual(0, _target.OutlierDateProviders.Count);
         }
 
         /// <summary>
@@ -153,54 +152,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(1, dateList.Count);
             Assert.AreEqual(3, _target.Dates.Count);
             Assert.AreEqual(_target.Dates[1], dateList[0]);
-        }
-
-        /// <summary>
-        /// Verifies the can add date provider.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-05-14
-        /// </remarks>
-        [Test]
-        public void VerifyCanAddDateProvider()
-        {
-            MockRepository mocks = new MockRepository();
-            OutlierDateProviderBase dateProvider = mocks.StrictMock<OutlierDateProviderBase>("name");
-            Expect.Call(dateProvider.GetDates(_period)).Return(new List<DateOnly> { _period.StartDate }).Repeat.Once();
-            dateProvider.GetType().GetMethod("SetParent", BindingFlags.NonPublic | BindingFlags.Instance)
-                .Invoke(dateProvider, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.InvokeMethod, null,new object[]{ _target}, CultureInfo.InvariantCulture);
-            LastCall.Repeat.Once();
-            mocks.ReplayAll();
-
-            _target.AddDateProvider(dateProvider);
-            Assert.AreEqual(1,_target.OutlierDateProviders.Count);
-            IList<DateOnly> result = _target.GetDatesByPeriod(_period);
-
-            mocks.VerifyAll();
-
-            Assert.AreEqual(1, result.Count);
-            Assert.AreEqual(_period.StartDate, result[0]);
-        }
-
-        /// <summary>
-        /// Verifies the can remove date provider.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-05-14
-        /// </remarks>
-        [Test]
-        public void VerifyCanRemoveDateProvider()
-        {
-            OutlierDateProviderBase dateProvider = new TestDateProvider("test");
-
-            _target.AddDateProvider(dateProvider);
-            _target.RemoveDateProvider(dateProvider);
-            _target.RemoveDateProvider(dateProvider);
-            IList<DateOnly> result = _target.GetDatesByPeriod(_period);
-
-            Assert.AreEqual(0, result.Count);
         }
 
         /// <summary>
@@ -278,28 +229,20 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _target.AddDate(new DateOnly(2007, 12, 25));
             _target.AddDate(new DateOnly(2008, 12, 25));
             _target.AddDate(new DateOnly(2009, 12, 25));
-            _target.AddDateProvider(new TestDateProvider("test"));
             Guid theId = Guid.NewGuid();
             _target.SetId(theId);
-            _target.OutlierDateProviders[0].SetId(Guid.NewGuid());
 
             IOutlier outlier = _target.EntityClone();
 
             Assert.AreEqual(_target.Id,outlier.Id);
             Assert.AreEqual(_target.Dates.Count, outlier.Dates.Count);
             Assert.AreEqual(_target.Dates[1], outlier.Dates[1]);
-            Assert.AreEqual(_target.OutlierDateProviders.Count,outlier.OutlierDateProviders.Count);
-            Assert.AreEqual(_target.OutlierDateProviders[0],outlier.OutlierDateProviders[0]);
-            Assert.AreNotSame(_target.OutlierDateProviders[0], outlier.OutlierDateProviders[0]);
 
             outlier = (IOutlier) _target.Clone();
 
             Assert.AreEqual(_target.Id, outlier.Id);
             Assert.AreEqual(_target.Dates.Count, outlier.Dates.Count);
             Assert.AreEqual(_target.Dates[1], outlier.Dates[1]);
-            Assert.AreEqual(_target.OutlierDateProviders.Count, outlier.OutlierDateProviders.Count);
-            Assert.AreEqual(_target.OutlierDateProviders[0], outlier.OutlierDateProviders[0]);
-            Assert.AreNotSame(_target.OutlierDateProviders[0], outlier.OutlierDateProviders[0]);
         }
 
         [Test]
@@ -308,7 +251,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _target.AddDate(new DateOnly(2007, 12, 25));
             _target.AddDate(new DateOnly(2008, 12, 25));
             _target.AddDate(new DateOnly(2009, 12, 25));
-            _target.AddDateProvider(new TestDateProvider("test"));
             Guid theId = Guid.NewGuid();
             _target.SetId(theId);
 
@@ -317,38 +259,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.IsFalse(outlier.Id.HasValue);
             Assert.AreEqual(_target.Dates.Count, outlier.Dates.Count);
             Assert.AreEqual(_target.Dates[1], outlier.Dates[1]);
-            Assert.AreEqual(_target.OutlierDateProviders.Count, outlier.OutlierDateProviders.Count);
-            Assert.AreNotSame(_target.OutlierDateProviders[0], outlier.OutlierDateProviders[0]);
-        }
-
-        private class TestDateProvider : OutlierDateProviderBase
-        {
-            public TestDateProvider(string name)
-                : base(name)
-            {
-            }
-
-            public override IList<DateOnly> GetDates(DateOnlyPeriod period)
-            {
-                return new List<DateOnly>();
-            }
-
-            public override object Clone()
-            {
-                return NoneEntityClone();
-            }
-
-            public override IOutlierDateProvider NoneEntityClone()
-            {
-                var clone = (IOutlierDateProvider)MemberwiseClone();
-                clone.SetId(null);
-                return clone;
-            }
-
-            public override IOutlierDateProvider EntityClone()
-            {
-                return (IOutlierDateProvider) MemberwiseClone();
-            }
         }
     }
 }

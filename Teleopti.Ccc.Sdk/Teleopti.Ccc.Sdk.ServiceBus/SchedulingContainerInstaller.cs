@@ -10,7 +10,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
-using Teleopti.Ccc.Sdk.ServiceBus.TeleoptiRtaService;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -27,14 +26,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<SwapService>().As<ISwapService>();
 			builder.RegisterType<SwapAndModifyService>().As<ISwapAndModifyService>();
 			builder.RegisterType<ResourceCalculationOnlyScheduleDayChangeCallback>().As<IScheduleDayChangeCallback>();
-			builder.RegisterType<ScheduleDictionarySaver>().As<IScheduleDictionarySaver>();
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>();
 			builder.RegisterType<SkillVisualLayerCollectionDictionaryCreator>().As<ISkillVisualLayerCollectionDictionaryCreator>();
 			builder.RegisterType<SeatImpactOnPeriodForProjection>().As<ISeatImpactOnPeriodForProjection>();
 			builder.RegisterType<NonBlendSkillCalculator>().As<INonBlendSkillCalculator>();
 			builder.RegisterType<NonBlendSkillImpactOnPeriodForProjection>().As<INonBlendSkillImpactOnPeriodForProjection>();
 			builder.RegisterType<PersonAbsenceAccountProvider>().As<IPersonAbsenceAccountProvider>();
-			builder.RegisterType<ScheduleDictionaryModifiedCallback>().As<IScheduleDictionaryModifiedCallback>();
 			builder.RegisterType<ScheduleIsInvalidSpecification>().As<IScheduleIsInvalidSpecification>();
 			builder.RegisterType<PeopleAndSkillLoaderDecider>().As<IPeopleAndSkillLoaderDecider>();
 			builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>();
@@ -46,7 +43,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<NotificationSenderFactory>().As<INotificationSenderFactory>();
 			builder.RegisterType<NotificationConfigReader>().As<INotificationConfigReader>();
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>();
-			builder.RegisterType<TeleoptiRtaServiceClient>().As<ITeleoptiRtaService>().SingleInstance();
 			builder.RegisterType<CurrentTeleoptiPrincipal>().As<ICurrentTeleoptiPrincipal>().SingleInstance();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>();
 		}

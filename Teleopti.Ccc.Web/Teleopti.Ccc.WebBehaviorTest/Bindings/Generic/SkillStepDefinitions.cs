@@ -1,7 +1,7 @@
 using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -11,8 +11,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"there is a skill with")]
 		public void GivenThereIsASkillWith(Table table)
 		{
-			var skill = table.CreateInstance<SkillConfigurable>();
-			DataMaker.Data().Apply(skill);
+			DataMaker.ApplyFromTable<SkillConfigurable>(table);
+		}
+
+		[Given(@"there is a skill named '(.*)' with activity '(.*)'")]
+		public void GivenThereIsASkillNamedWithActivity(string name, string activity)
+		{
+			DataMaker.Data().Apply(new SkillConfigurable
+				{
+					Name = name,
+					Activity = activity
+				});
 		}
 
 	}

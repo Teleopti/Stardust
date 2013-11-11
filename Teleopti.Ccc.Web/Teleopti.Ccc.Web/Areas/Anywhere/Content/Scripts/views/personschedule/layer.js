@@ -1,47 +1,35 @@
 define([
 		'knockout',
 		'moment',
-        'resources!r'
-    ], function (
+		'resources!r',
+		'shared/timeline-unit'
+], function (
 		ko,
 		moment,
-		resources
+		resources,
+		unitViewModel
 	) {
 
-		return function (timeline, data) {
+	return function (timeline, data) {
 
-			var self = this;
+		var unit = new unitViewModel(timeline, data);
 
-			var startTime = moment(data.Start, resources.FixedDateTimeFormatForMoment);
-			var layerStartMinutes = startTime.diff(data.Date, 'minutes');
+		this.LengthMinutes = unit.LengthMinutes;
+		this.StartMinutes = unit.StartMinutes;
+		this.EndMinutes = unit.EndMinutes;
+		this.StartPixels = unit.CutInsideDayStartPixels;
+		this.LengthPixels = unit.CutInsideDayLengthPixels;
+		this.OverlapsTimeLine = unit.OverlapsTimeLine;
 
-			this.StartMinutes = ko.observable(layerStartMinutes);
-			this.LengthMinutes = ko.observable(data.Minutes);
-			this.Color = ko.observable(data.Color);
+		this.StartTime = unit.StartTime;
+		this.EndTime = unit.EndTime;
 
-			this.StartTime = ko.computed(function () {
-				var time = moment().startOf('day').add('minutes', self.StartMinutes());
-				return time.format(resources.TimeFormatForMoment);
-			});
+		this.Color = data.Color;
+		this.Description = data.Description;
+		this.IsFullDayAbsence = data.IsFullDayAbsence;
 
-			this.EndMinutes = ko.computed(function () {
-				return self.StartMinutes() + self.LengthMinutes();
-			});
+		this.TimeLineAffectingStartMinute = unit.CutInsideDayStartMinutes;
+		this.TimeLineAffectingEndMinute = unit.EndMinutes;
 
-			this.TimeLineAffectingStartMinute = this.StartMinutes;
-			this.TimeLineAffectingEndMinute = this.EndMinutes;
-
-			this.StartPixels = ko.computed(function () {
-				var startMinutes = self.StartMinutes() - timeline.StartMinutes();
-				var pixels = startMinutes * timeline.PixelsPerMinute();
-				return Math.round(pixels);
-			});
-
-			this.LengthPixels = ko.computed(function () {
-				var lengthMinutes = self.LengthMinutes();
-				var pixels = lengthMinutes * timeline.PixelsPerMinute();
-				return Math.round(pixels);
-			});
-
-		};
-	});
+	};
+});

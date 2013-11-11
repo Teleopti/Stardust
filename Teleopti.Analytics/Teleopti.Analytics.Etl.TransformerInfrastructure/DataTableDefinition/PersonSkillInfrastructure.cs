@@ -21,6 +21,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition
             table.Columns.Add("datasource_id", typeof(int));
             table.Columns.Add("insert_date", typeof(DateTime));
             table.Columns.Add("update_date", typeof(DateTime));
+            table.Columns.Add("active", typeof (bool));
         }
     }
 }

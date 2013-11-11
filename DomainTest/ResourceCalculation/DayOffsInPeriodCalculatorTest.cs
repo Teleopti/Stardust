@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
@@ -75,14 +77,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void HasCorrectNumberOfDaysOffShouldReturnTrueIfEmploymentTypeIsHourly()
 		{
-            //var personPeriod = _mocks.StrictMock<IPersonPeriod>();
-            //var personContract = _mocks.StrictMock<IPersonContract>();
             var contract = _mocks.StrictMock<IContract>();
 
 		    Expect.Call(_virtualSchedulePeriod.Contract).Return(contract);
-			//Expect.Call(_virtualSchedulePeriod.PersonPeriod).Return(personPeriod);
-			//Expect.Call(personPeriod.PersonContract).Return(personContract);
-			//Expect.Call(personContract.Contract).Return(contract);
 			Expect.Call(contract.EmploymentType).Return(EmploymentType.HourlyStaff);
 			_mocks.ReplayAll();
 			int targetDaysOff;
@@ -95,14 +92,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void HasCorrectNumberOfDaysOffShouldReturnFalseWhenNotEnoughDayOffs()
 		{
-            //var personPeriod = _mocks.StrictMock<IPersonPeriod>();
-            //var personContract = _mocks.StrictMock<IPersonContract>();
 			var contract = _mocks.StrictMock<IContract>();
 
             Expect.Call(_virtualSchedulePeriod.Contract).Return(contract);
-			//Expect.Call(_virtualSchedulePeriod.PersonPeriod).Return(personPeriod);
-			//Expect.Call(personPeriod.PersonContract).Return(personContract);
-			//Expect.Call(personContract.Contract).Return(contract);
 			Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
 			Expect.Call(_virtualSchedulePeriod.DaysOff()).Return(5);
             Expect.Call(contract.NegativeDayOffTolerance).Return(1);
@@ -131,14 +123,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void HasCorrectNumberOfDaysOffShouldReturnFalseWhenTooManyDayOffs()
 		{
-            //var personPeriod = _mocks.StrictMock<IPersonPeriod>();
-            //var personContract = _mocks.StrictMock<IPersonContract>();
 			var contract = _mocks.StrictMock<IContract>();
 
             Expect.Call(_virtualSchedulePeriod.Contract).Return(contract);
-			//Expect.Call(_virtualSchedulePeriod.PersonPeriod).Return(personPeriod);
-			//Expect.Call(personPeriod.PersonContract).Return(personContract);
-			//Expect.Call(personContract.Contract).Return(contract);
 			Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
 			Expect.Call(_virtualSchedulePeriod.DaysOff()).Return(2);
             Expect.Call(contract.NegativeDayOffTolerance).Return(1);
@@ -165,14 +152,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void HasCorrectNumberOfDaysOffShouldReturnTrueWhenCorrectNumberOffDayOffs()
 		{
-            //var personPeriod = _mocks.StrictMock<IPersonPeriod>();
-            //var personContract = _mocks.StrictMock<IPersonContract>();
 			var contract = _mocks.StrictMock<IContract>();
 
             Expect.Call(_virtualSchedulePeriod.Contract).Return(contract);
-			//Expect.Call(_virtualSchedulePeriod.PersonPeriod).Return(personPeriod);
-			//Expect.Call(personPeriod.PersonContract).Return(personContract);
-			//Expect.Call(personContract.Contract).Return(contract);
 			Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffNormalWorkTime);
 			Expect.Call(_virtualSchedulePeriod.DaysOff()).Return(3);
             Expect.Call(contract.NegativeDayOffTolerance).Return(1);
@@ -188,7 +170,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			_mocks.ReplayAll();
 			int targetDaysOff;
-			//int current;
 			IList<IScheduleDay> current = new List<IScheduleDay>();
 			var ret = _target.HasCorrectNumberOfDaysOff(_virtualSchedulePeriod, out targetDaysOff, out current);
 			Assert.That(ret, Is.True);
@@ -442,47 +423,86 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         }
 
 		[Test]
-		public void ShouldReturnDayOffInSameWeek()
+		public void ShouldReturnSortedWeekPeriods()
 		{
-			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			var dayOffScheduleDay = _mocks.StrictMock<IScheduleDay>();
-			var dateOnlyPeriodAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-
+			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			var scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
+			var scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
+			var scheduleDayPro3 = _mocks.StrictMock<IScheduleDayPro>();
+			var dateOnly1 = new DateOnly(2000, 1, 1);
+			var dateOnly2 = new DateOnly(2000, 1, 2);
+			var dateOnly3 = new DateOnly(2000, 2, 3);
+			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+			var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
+			var scheduleDay3 = _mocks.StrictMock<IScheduleDay>();
 
 			using (_mocks.Record())
 			{
-				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(dateOnlyPeriodAsDateTimePeriod);
-				Expect.Call(dayOffScheduleDay.DateOnlyAsPeriod).Return(dateOnlyPeriodAsDateTimePeriod);
-				Expect.Call(dateOnlyPeriodAsDateTimePeriod.DateOnly).Return(_date1).Repeat.Twice();
+				Expect.Call(scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {scheduleDayPro1, scheduleDayPro2, scheduleDayPro3})).Repeat.AtLeastOnce();
+				Expect.Call(scheduleMatrixPro.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {scheduleDayPro1, scheduleDayPro2, scheduleDayPro3})).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDayPro1.Day).Return(dateOnly1).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDayPro2.Day).Return(dateOnly2).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDayPro3.Day).Return(dateOnly3).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
+				Expect.Call(scheduleDayPro2.DaySchedulePart()).Return(scheduleDay2);
+				Expect.Call(scheduleDayPro3.DaySchedulePart()).Return(scheduleDay3);
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.ContractDayOff);
+				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.ContractDayOff);
+				Expect.Call(scheduleDay3.SignificantPart()).Return(SchedulePartView.ContractDayOff);
 			}
+
 			using (_mocks.Playback())
 			{
-				var result = _target.DayOffInScheduleDayWeek(scheduleDay, new List<IScheduleDay> {dayOffScheduleDay});
-				Assert.AreEqual(result, dayOffScheduleDay);
-			}			
+				var periods = _target.WeekPeriodsSortedOnDayOff(scheduleMatrixPro);
+				Assert.AreEqual(2, periods.Count);
+				Assert.AreEqual(1, periods[0].DaysOffCount);
+				Assert.AreEqual(2, periods[1].DaysOffCount);
+
+				var expectedPeriod1 = DateHelper.GetWeekPeriod(dateOnly3, CultureInfo.CurrentCulture);
+				var expectedPeriod2 = DateHelper.GetWeekPeriod(dateOnly1, CultureInfo.CurrentCulture);
+
+				Assert.AreEqual(expectedPeriod1, periods[0].Period);
+				Assert.AreEqual(expectedPeriod2, periods[1].Period);
+			}
 		}
 
 		[Test]
-		public void ShouldReturnNullWhenNoDayOffInSameWeek()
+		public void ShouldReturnNumberOfDayOffsOnPeriod()
 		{
+			var dateOnly = new DateOnly(2013, 1, 1);
+			var dateOnlyNoDayOff = new DateOnly(2013, 1, 2);
+			var dateOnlyOutside = new DateOnly(2013, 1, 3);
+			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnlyOutside);
+			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
+			var scheduleDayProNoDayOff = _mocks.StrictMock<IScheduleDayPro>();
 			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			var dayOffScheduleDay = _mocks.StrictMock<IScheduleDay>();
-			var dateOnlyPeriodAsDateTimePeriod1 = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-			var dateOnlyPeriodAsDateTimePeriod2 = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-
+			var scheduleDayNoDayOff = _mocks.StrictMock<IScheduleDay>();
+			var scheduleDayOutside = _mocks.StrictMock<IScheduleDay>();
+			var scheduleDayProOutside = _mocks.StrictMock<IScheduleDayPro>();
 
 			using (_mocks.Record())
 			{
-				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(dateOnlyPeriodAsDateTimePeriod1);
-				Expect.Call(dayOffScheduleDay.DateOnlyAsPeriod).Return(dateOnlyPeriodAsDateTimePeriod2);
-				Expect.Call(dateOnlyPeriodAsDateTimePeriod1.DateOnly).Return(_date1);
-				Expect.Call(dateOnlyPeriodAsDateTimePeriod2.DateOnly).Return(_date2);
+				Expect.Call(scheduleMatrixPro.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {scheduleDayPro, scheduleDayProNoDayOff})).Repeat.AtLeastOnce();
+				Expect.Call(scheduleMatrixPro.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {scheduleDayPro, scheduleDayProNoDayOff, scheduleDayProOutside}));
+				Expect.Call(scheduleDayPro.Day).Return(dateOnly);
+				Expect.Call(scheduleDayProNoDayOff.Day).Return(dateOnlyNoDayOff);
+				Expect.Call(scheduleDayProOutside.Day).Return(dateOnlyOutside);
+				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay);
+				Expect.Call(scheduleDayProNoDayOff.DaySchedulePart()).Return(scheduleDayNoDayOff);
+				Expect.Call(scheduleDayProOutside.DaySchedulePart()).Return(scheduleDayOutside);
+				Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.ContractDayOff);
+				Expect.Call(scheduleDayNoDayOff.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(scheduleDayOutside.SignificantPart()).Return(SchedulePartView.ContractDayOff);
 			}
+
 			using (_mocks.Playback())
 			{
-				var result = _target.DayOffInScheduleDayWeek(scheduleDay, new List<IScheduleDay> { dayOffScheduleDay });
-				Assert.IsNull(result);
-			}			
+				var periods = _target.CountDayOffsOnPeriod(scheduleMatrixPro, dateOnlyPeriod);
+				Assert.AreEqual(2, periods.DaysOffCount);
+				Assert.AreEqual(2, periods.ScheduleDays.Count);
+				Assert.IsFalse(periods.ScheduleDays.Contains(scheduleDayOutside));
+			}
 		}
 	}	
 }

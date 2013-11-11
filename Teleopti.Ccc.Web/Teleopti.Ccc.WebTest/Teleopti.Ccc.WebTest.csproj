@@ -135,7 +135,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Anywhere\Controllers\GroupPageControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecificationTest.cs" />
+    <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />
     <Compile Include="FakeSchedulePersonProvider.cs" />
     <Compile Include="Areas\Anywhere\Hubs\TeamScheduleViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\TeamScheduleViewModelMapperTest.cs" />
@@ -244,7 +246,7 @@
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjectionProviderTest.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamCalculatorTest.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamProviderTest.cs" />
     <Compile Include="Areas\MyTime\Models\LayoutBase\OptionSplitTest.cs" />
     <Compile Include="Areas\MyTime\Models\Portal\CultureSpecificViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Controllers\MenuControllerTest.cs" />

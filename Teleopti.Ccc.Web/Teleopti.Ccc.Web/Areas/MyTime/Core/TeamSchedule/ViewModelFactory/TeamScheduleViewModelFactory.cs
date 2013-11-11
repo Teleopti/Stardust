@@ -31,10 +31,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 		}
 
+
 		public TeamScheduleViewModel CreateViewModel(DateOnly date, Guid id)
 		{
 			var domainData = _mapper.Map<Tuple<DateOnly, Guid>, TeamScheduleDomainData>(new Tuple<DateOnly, Guid>(date, id));
-			return _mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(domainData);
+			var viewmodel = _mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(domainData);
+			viewmodel.ShiftTradePermisssion =
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
+			return viewmodel;
 		}
 
 		public IEnumerable<ISelectOption> CreateTeamOrGroupOptionsViewModel(DateOnly date)

@@ -58,16 +58,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public OvertimeAvailabilityViewModel OvertimeAvailabililty { get; set; }
 		public PeriodViewModel Summary { get; set; }
 		public IEnumerable<PeriodViewModel> Periods { get; set; }
-		public int Allowance { get; set; }
-		public int AbsenceAgents { get; set; }
 		public int DayOfWeekNumber { get; set; }
 		public bool Availability { get; set; }
-		public int FulltimeEquivalent { get; set; }
 
 		public bool HasNote
 		{
 			get { return Note != null && !string.IsNullOrWhiteSpace(Note.Message); }
 		}
+
+		public string ProbabilityClass { get; set; }
+		public string ProbabilityText { get; set; }
 	}
 
 	public class OvertimeAvailabilityViewModel

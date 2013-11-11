@@ -26,8 +26,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 		internal ISessionFactory SessFactory { get { return SessionFactory; } }
 
-		protected override IUnitOfWork MakeUnitOfWork(ISession session, IMessageBroker messaging, NHibernateFilterManager filterManager) {
-			return _makeUnitOfWork != null ? _makeUnitOfWork.Invoke() : base.MakeUnitOfWork(session, messaging, filterManager);
+		protected override IUnitOfWork MakeUnitOfWork(ISession session, IMessageBroker messaging, NHibernateFilterManager filterManager, TransactionIsolationLevel isolationLevel) 
+		{
+			return _makeUnitOfWork != null ? _makeUnitOfWork.Invoke() : base.MakeUnitOfWork(session, messaging, filterManager, isolationLevel);
 		}
 
 	}

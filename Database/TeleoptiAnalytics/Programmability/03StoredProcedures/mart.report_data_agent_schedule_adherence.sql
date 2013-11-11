@@ -95,7 +95,6 @@ CREATE TABLE #team_adh_tot(
 )
 
 CREATE TABLE #team_adh(
-	[date_id] [int] NULL,
 	[interval_id] [int] NULL,
 	[adherence_calc_s] [decimal](38, 3) NULL,
 	[deviation_s] [decimal](38, 3) NULL
@@ -548,9 +547,9 @@ INNER JOIN #result r ON r.shift_startdate_id=a.date_id AND r.person_id=a.person_
 
 --per interval
 INSERT INTO #team_adh
-SELECT date_id,interval_id,sum(adherence_calc_s)'adherence_calc_s',sum(deviation_s)'deviation_s'
+SELECT interval_id,sum(adherence_calc_s)'adherence_calc_s',sum(deviation_s)'deviation_s'
 FROM #result
-GROUP by date_id,interval_id
+GROUP by interval_id
 
 UPDATE #result
 SET team_adherence=
@@ -562,7 +561,7 @@ SET team_adherence=
 	END
 ,team_deviation_s=a.deviation_s
 FROM #team_adh a
-INNER JOIN #result r ON r.interval_id=a.interval_id AND r.date_id=a.date_id
+INNER JOIN #result r ON r.interval_id=a.interval_id
 
 --total(for all selected)
 INSERT INTO #team_adh_tot

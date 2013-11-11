@@ -8,6 +8,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
+using Teleopti.Ccc.WebBehaviorTest.Data;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
@@ -141,13 +142,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems.Last().Text, Is.EqualTo(timeLineHourTo));
 		}
 
-		[Then(@"I should not see the datepicker")]
-		public void ThenIShouldNotSeeTheDatepicker()
-		{
-			Browser.Interactions.AssertNotExists("#Request-add-shift-trade-missing-wcs-message", ".add-shifttrade-datepicker ");
-			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeDatePicker.Parent.DisplayVisible(), Is.False);
-		}
-
 		[Then(@"I should see my scheduled day off '(.*)'")]
 		public void ThenIShouldSeeMyScheduledDayOff(string dayOffName)
 		{
@@ -248,5 +242,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.Click(".cancel-button");
 		}
+
+		[Then(@"I should navigate to shift trade for '(.*)'")]
+        public void ThenIShouldNavigateToShiftTradeFor(DateTime date)
+        {
+            Browser.Interactions.AssertUrlContains("ShiftTrade/"+date.ToString("yyyyMMdd"));
+        }
+
 	}
 }

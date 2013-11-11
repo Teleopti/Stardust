@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac;
+using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using log4net;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
@@ -15,7 +17,7 @@ using Teleopti.Messaging.Events;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	public class SchedulerMessageBrokerHandler : IMessageBrokerIdentifier, IDisposable, IOwnMessageQueue, IReassociateData, IUpdateScheduleDataFromMessages, IUpdateMeetingsFromMessages, IUpdatePersonRequestsFromMessages
+	public class SchedulerMessageBrokerHandler : IMessageBrokerIdentifier, IDisposable, IReassociateDataForSchedules, IUpdateScheduleDataFromMessages, IUpdateMeetingsFromMessages, IUpdatePersonRequestsFromMessages, IMessageQueueRemoval
 	{
 		private SchedulingScreen _owner;
 		private readonly IScheduleScreenRefresher _scheduleScreenRefresher;
@@ -32,20 +34,23 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 		    if (owner == null) throw new ArgumentNullException("owner");
 		    _owner = owner;
-
 			_scheduleScreenRefresher = container.Resolve<IScheduleScreenRefresher>(
-				TypedParameter.From<IOwnMessageQueue>(this),
+				TypedParameter.From<IReassociateDataForSchedules>(this),
 				TypedParameter.From(container.Resolve<IScheduleRefresher>(
-					TypedParameter.From<IUpdateScheduleDataFromMessages>(this)
+					TypedParameter.From<IUpdateScheduleDataFromMessages>(this),
+					TypedParameter.From<IMessageQueueRemoval>(this)
 					)),
 				TypedParameter.From(container.Resolve<IScheduleDataRefresher>(
-					TypedParameter.From<IUpdateScheduleDataFromMessages>(this)
+					TypedParameter.From<IUpdateScheduleDataFromMessages>(this),
+					TypedParameter.From<IMessageQueueRemoval>(this)
 					)),
 				TypedParameter.From(container.Resolve<IMeetingRefresher>(
-					TypedParameter.From<IUpdateMeetingsFromMessages>(this)
+					TypedParameter.From<IUpdateMeetingsFromMessages>(this),
+					TypedParameter.From<IMessageQueueRemoval>(this)
 					)),
 				TypedParameter.From(container.Resolve<IPersonRequestRefresher>(
-					TypedParameter.From<IUpdatePersonRequestsFromMessages>(this)
+					TypedParameter.From<IUpdatePersonRequestsFromMessages>(this),
+					TypedParameter.From<IMessageQueueRemoval>(this)
 					))
 			);
 		}
@@ -89,7 +94,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		public void Refresh(ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflictMessageState> conflictsBuffer)
+		public void Refresh(ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer)
 		{
 			_scheduleScreenRefresher.Refresh(_owner.SchedulerState.Schedules, _messageQueue, refreshedEntitiesBuffer, conflictsBuffer);
 		}
@@ -101,11 +106,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 				LazyLoadingManager.Initialize(changeInfo.UpdatedBy);
 		}
 
-	    public void ReassociateDataWithAllPeople()
+	  public void ReassociateDataForAllPeople()
 		{
 			var uow = UnitOfWorkFactory.Current.CurrentUnitOfWork();
 			uow.Reassociate(_owner.SchedulerState.SchedulingResultState.PersonsInOrganization);
-			uow.Reassociate(DataToReassociate(null));
+			reassociateScheduleStuff(uow);
+		}
+
+		public void ReassociateDataFor(IPerson person)
+		{
+			var uow = UnitOfWorkFactory.Current.CurrentUnitOfWork();
+			uow.Reassociate(person);
+			reassociateScheduleStuff(uow);
+		}
+
+		private void reassociateScheduleStuff(IUnitOfWork unitOfWork)
+		{
+			unitOfWork.Reassociate(_owner.SchedulerState.RequestedScenario);
+			unitOfWork.Reassociate(_owner.MultiplicatorDefinitionSet);
+			unitOfWork.Reassociate(_owner.SchedulerState.CommonStateHolder.Absences);
+			unitOfWork.Reassociate(_owner.SchedulerState.CommonStateHolder.DayOffs);
+			unitOfWork.Reassociate(_owner.SchedulerState.CommonStateHolder.Activities);
+			unitOfWork.Reassociate(_owner.SchedulerState.CommonStateHolder.ShiftCategories);
 		}
 
 		public IEnumerable<IAggregateRoot>[] DataToReassociate(IPerson personToReassociate)
@@ -306,6 +328,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public void NotifyMessageQueueSizeChange()
 		{
 			_owner.SizeOfMessageBrokerQueue(_messageQueue.Count);
+		}
+
+		public void Remove(IEventMessage eventMessage)
+		{
+			_messageQueue.Remove(eventMessage);
+			NotifyMessageQueueSizeChange();
+		}
+
+		public void Remove(PersistConflict persistConflict)
+		{
+			var id = persistConflict.InvolvedId();
+			for (var i = _messageQueue.Count - 1; i >= 0; i--)
+			{
+				var theEvent = _messageQueue[i];
+				if (theEvent.DomainObjectId == id)
+				{
+					_messageQueue.RemoveAt(i);
+					NotifyMessageQueueSizeChange();
+				}
+			}
 		}
 	}
 }

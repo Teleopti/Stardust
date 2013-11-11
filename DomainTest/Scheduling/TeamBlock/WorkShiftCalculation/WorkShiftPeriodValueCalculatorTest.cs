@@ -6,138 +6,182 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 {
-	[TestFixture]
-	public class WorkShiftPeriodValueCalculatorTest
-	{
-		private IWorkShiftPeriodValueCalculator _target;
-		private DateTimePeriod _period;
+    [TestFixture]
+    public class WorkShiftPeriodValueCalculatorTest
+    {
+        private IWorkShiftPeriodValueCalculator _target;
+        private DateTimePeriod _period;
 
-		[SetUp]
-		public void Setup()
-		{
-			_target = new WorkShiftPeriodValueCalculator();
-			DateTime start = new DateTime(2009, 02, 02, 8, 0, 0, DateTimeKind.Utc);
-			DateTime end = new DateTime(2009, 02, 02, 8, 30, 0, DateTimeKind.Utc);
+        [SetUp]
+        public void Setup()
+        {
+            _target = new WorkShiftPeriodValueCalculator();
+            DateTime start = new DateTime(2009, 02, 02, 8, 0, 0, DateTimeKind.Utc);
+            DateTime end = new DateTime(2009, 02, 02, 8, 30, 0, DateTimeKind.Utc);
 
-			_period = new DateTimePeriod(start, end);
-		}
+            _period = new DateTimePeriod(start, end);
+        }
 
-		[Test]
-		public void ShouldReturnZeroIfIntervalDataIsNull()
-		{
-			ISkillIntervalData skillIntervalData = null;
-			double result = _target.PeriodValue(skillIntervalData, 15, false, false);
-			Assert.AreEqual(0, result);
-		}
+        [Test]
+        public void ShouldReturnZeroIfIntervalDataIsNull()
+        {
+            ISkillIntervalData skillIntervalData = null;
+            double result = _target.PeriodValue(skillIntervalData, 15, false, false);
+            Assert.AreEqual(0, result);
+        }
 
-		[Test]
-		public void ShouldCalculateAsBeforeWhenUnderstaffed()
-		{
-			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 10.80, 5, 0, null, null);
-			double result = _target.PeriodValue(skillIntervalData, 15, false, false);
-			Assert.AreEqual(7.18, result, 0.01);
-		}
+        [Test]
+        public void ShouldCalculateAsBeforeWhenUnderstaffed()
+        {
+            ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 10.80, 5, 0, null, null);
+            double result = _target.PeriodValue(skillIntervalData, 30, false, false);
+            Assert.AreEqual(7.72, result, 0.01);
+        }
 
-		[Test]
-		public void ShouldCalculateAsBeforeWhenUnderstaffedShouldBoostIntervalWithNearToZeroScheduled()
-		{
-			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 13.33, 13.33, 0, null, null);
-			double result = _target.PeriodValue(skillIntervalData, 15, false, false);
-			Assert.AreEqual(100003.82, result, 0.01);
-		}
+        //[Test]
+        //public void ShouldCalculateAsBeforeWhenUnderstaffedShouldBoostIntervalWithNearToZeroScheduled()
+        //{
+        //	ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 13.33, 13.33, 0, null, null);
+        //	double result = _target.PeriodValue(skillIntervalData, 15, false, false);
+        //	Assert.AreEqual(100003.82, result, 0.01);
+        //}
 
-		[Test]
-		public void ShouldCalculateAsBeforeWhenUnderstaffedShouldNotBoostIntervalWithNotThatNearToZeroScheduled()
-		{
-			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 13.33, 13, 0, null, null);
-			double result = _target.PeriodValue(skillIntervalData, 15, false, false);
-			Assert.AreEqual(3.87, result, 0.01);
-		}
+        //[Test]
+        //public void ShouldCalculateAsBeforeWhenUnderstaffedShouldNotBoostIntervalWithNotThatNearToZeroScheduled()
+        //{
+        //	ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 13.33, 13, 0, null, null);
+        //	double result = _target.PeriodValue(skillIntervalData, 30, false, false);
+        //	Assert.AreEqual(3.87, result, 0.01);
+        //}
 
-		[Test]
-		public void ShouldCalculateAsBeforeWhenOverstaffed()
-		{
-			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 13.33, -13.33, 0, null, null);
-			double result = _target.PeriodValue(skillIntervalData, 15, false, false);
-			Assert.AreEqual(-3.68, result, 0.01);
-		}
+        [Test]
+        public void ShouldCalculateAsBeforeWhenOverstaffed()
+        {
+            ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 13.33, -13.33, 0, null, null);
+            double result = _target.PeriodValue(skillIntervalData, 30, false, false);
+            Assert.AreEqual(-15.57, result, 0.01);
+        }
 
-		[Test]
-		public void ShouldHandleZeroForecasted()
-		{
-			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 0, -1, 0, null, null);
-			double result = _target.PeriodValue(skillIntervalData, 15, false, false);
-			Assert.AreEqual(-414.21, result, 0.01);
-		}
+        [Test]
+        public void ShouldHandleZeroForecasted()
+        {
+            ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 0, -1, 0, null, null);
+            double result = _target.PeriodValue(skillIntervalData, 30, false, false);
+            Assert.AreEqual(-3000000, result, 0.01);
+        }
 
-		[Test]
-		public void ShouldHandleZeroCurrentDemand()
-		{
-			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 0, 0, null, null);
-			double result = _target.PeriodValue(skillIntervalData, 15, false, false);
-			Assert.AreEqual(-25.82, result, 0.01);
-		}
-
-		
-		[Test]
-		public void ShouldBoostIfUnderMinHeads()
-		{
-			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 5, 0, null, null);
-			double result = _target.PeriodValue(skillIntervalData, 15, true, true);
-			Assert.AreEqual(6.09, result, 0.01);
-
-			skillIntervalData = new SkillIntervalData(_period, 15, 5, 9, 11, null);
-			result = _target.PeriodValue(skillIntervalData, 15, true, true);
-			Assert.AreEqual(200006.09, result, 0.01);
-
-			skillIntervalData = new SkillIntervalData(_period, 15, 5, 10, 11, null);
-			result = _target.PeriodValue(skillIntervalData, 15, true, true);
-			Assert.AreEqual(100006.09, result, 0.01);
-
-			skillIntervalData = new SkillIntervalData(_period, 15, 5, 11, 11, null);
-			result = _target.PeriodValue(skillIntervalData, 15, true, true);
-			Assert.AreEqual(6.09, result, 0.01);
-		}
-
-		[Test]
-		public void ShouldPunishIfOverMaxHeads()
-		{
-			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 5, 10, null, 11);
-			double result = _target.PeriodValue(skillIntervalData, 15, true, true);
-			Assert.AreEqual(6.09, result, 0.01);
-
-			skillIntervalData = new SkillIntervalData(_period, 15, 5, 11, null, 11);
-			result = _target.PeriodValue(skillIntervalData, 15, true, true);
-			Assert.AreEqual(6.09-100000, result, 0.01);
-
-			skillIntervalData = new SkillIntervalData(_period, 15, 5, 12, null, 11);
-			result = _target.PeriodValue(skillIntervalData, 15, true, true);
-			Assert.AreEqual(6.09-200000, result, 0.01);
-		}
-
-		[Test]
-		public void ShouldPunishAndBoostIfNeeded()
-		{
-			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 5, 11, 13, 11);
-			double result = _target.PeriodValue(skillIntervalData, 15, true, true);
-			Assert.AreEqual(6.09 + 100000, result, 0.01);
-		}
+        [Test]
+        public void ShouldHandleZeroCurrentDemand()
+        {
+            ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 0, 0, null, null);
+            double result = _target.PeriodValue(skillIntervalData, 30, false, false);
+            Assert.AreEqual(-0.44, result, 0.01);
+        }
 
 
-		[Test]
-		public void ShouldHandleZeroAdditionalResource()
-		{
-			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 5, 10, null, 11);
-			double result = _target.PeriodValue(skillIntervalData, 0, true, true);
-			Assert.AreEqual(0, result, 0.01);
-		}
+        [Test]
+        public void ShouldBoostIfUnderMinHeads()
+        {
+            ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 5, 0, null, null);
+            double rawResult = _target.PeriodValue(skillIntervalData, 30, true, true);
+            Assert.AreEqual(4, rawResult, 0.01);
 
-		[Test]
-		public void ShouldHandleOptionUseBothMinMaxButNoValues()
-		{
-			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 5, 10, null, null);
-			double result = _target.PeriodValue(skillIntervalData, 15, true, true);
-			Assert.AreEqual(6.09, result, 0.01);
-		}
-	}
+            skillIntervalData = new SkillIntervalData(_period, 15, 5, 9, 11, null);
+            double result = _target.PeriodValue(skillIntervalData, 30, true, true);
+            Assert.AreEqual(200000 + rawResult, result, 0.01);
+
+            skillIntervalData = new SkillIntervalData(_period, 15, 5, 10, 11, null);
+            result = _target.PeriodValue(skillIntervalData, 30, true, true);
+            Assert.AreEqual(100000 + rawResult, result, 0.01);
+
+            skillIntervalData = new SkillIntervalData(_period, 15, 5, 11, 11, null);
+            result = _target.PeriodValue(skillIntervalData, 30, true, true);
+            Assert.AreEqual(rawResult, result, 0.01);
+        }
+
+        [Test]
+        public void ShouldPunishIfOverMaxHeads()
+        {
+            ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 5, 10, null, 11);
+            double rawResult = _target.PeriodValue(skillIntervalData, 30, true, true);
+            Assert.AreEqual(4, rawResult, 0.01);
+
+            skillIntervalData = new SkillIntervalData(_period, 15, 5, 11, null, 11);
+            double result = _target.PeriodValue(skillIntervalData, 30, true, true);
+            Assert.AreEqual(rawResult - 100000, result, 0.01);
+
+            skillIntervalData = new SkillIntervalData(_period, 15, 5, 12, null, 11);
+            result = _target.PeriodValue(skillIntervalData, 30, true, true);
+            Assert.AreEqual(rawResult - 200000, result, 0.01);
+        }
+
+        [Test]
+        public void ShouldPunishAndBoostIfNeeded()
+        {
+            ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 5, 11, 13, 11);
+            double result = _target.PeriodValue(skillIntervalData, 30, true, true);
+            Assert.AreEqual(4 + 100000, result, 0.01);
+        }
+
+        [Test]
+        public void ShouldHandleZeroAdditionalResource()
+        {
+            ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 5, 10, null, 11);
+            double result = _target.PeriodValue(skillIntervalData, 0, true, true);
+            Assert.AreEqual(0, result, 0.01);
+        }
+
+        [Test]
+        public void ShouldHandleOptionUseBothMinMaxButNoValues()
+        {
+            ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 5, 10, null, null);
+            double result = _target.PeriodValue(skillIntervalData, 30, true, true);
+            Assert.AreEqual(4, result, 0.01);
+        }
+
+        [Test]
+        public void PeriodWithHigherDiffShouldHaveHigherValueIfForecastIsSame()
+        {
+            var skillIntervalDataLow = new SkillIntervalData(_period, 15, 4, 10, null, null);
+            var skillIntervalDataHigh = new SkillIntervalData(_period, 15, 5, 10, null, null);
+            double resultLow = _target.PeriodValue(skillIntervalDataLow, 30, true, true);
+            double resultHigh = _target.PeriodValue(skillIntervalDataHigh, 30, true, true);
+            Assert.That(resultHigh > resultLow);
+        }
+
+        [Test]
+        public void PeriodWithLowerForecastShouldHaveHigherValueIfDiffIsSame()
+        {
+            var skillIntervalDataLow = new SkillIntervalData(_period, 16, 11, 10, null, null);
+            var skillIntervalDataHigh = new SkillIntervalData(_period, 15, 10, 10, null, null);
+            double resultLow = _target.PeriodValue(skillIntervalDataLow, 30, true, true);
+            double resultHigh = _target.PeriodValue(skillIntervalDataHigh, 30, true, true);
+            Assert.That(resultHigh > resultLow);
+        }
+
+        [Test]
+        public void PeriodWithFiveMinutesCoveredByShiftShouldBeLowerThanPeriodCoveredWithTenMinutes()
+        {
+            var skillIntervalData = new SkillIntervalData(_period, 15, 10, 10, null, null);
+            double resultLow = _target.PeriodValue(skillIntervalData, 5, true, true);
+            double resultHigh = _target.PeriodValue(skillIntervalData, 10, true, true);
+            Assert.That(resultHigh > resultLow);
+        }
+
+        [Test]
+        public void PeriodValueShouldBePositiveIfUnderstaffingDecreases()
+        {
+            var skillIntervalData = new SkillIntervalData(_period, 5, 4, 1, null, null);
+            double result = _target.PeriodValue(skillIntervalData, 30, true, true);
+            Assert.AreEqual(28, result, 0.01);
+        }
+
+        [Test]
+        public void PeriodValueShouldBeNegativeIfOverstaffingIncreases()
+        {
+            var skillIntervalData = new SkillIntervalData(_period, 5, -16, 21, null, null);
+            double result = _target.PeriodValue(skillIntervalData, 30, true, true);
+            Assert.AreEqual(-132, result, 0.01);
+        }
+    }
 }

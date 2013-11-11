@@ -118,9 +118,9 @@
 			// 
 			// buttonAdvOvernight
 			// 
-			this.buttonAdvOvernight.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonAdvOvernight.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonAdvOvernight.BackColor = System.Drawing.Color.White;
 			this.buttonAdvOvernight.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_SkillTime_16x16;
 			this.buttonAdvOvernight.ImeMode = System.Windows.Forms.ImeMode.NoControl;
@@ -211,6 +211,7 @@
 			// 
 			// textBoxDescription
 			// 
+			this.textBoxDescription.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxDescription.Location = new System.Drawing.Point(128, 28);
 			this.textBoxDescription.MaxLength = 50;
 			this.textBoxDescription.Name = "textBoxDescription";
@@ -236,7 +237,7 @@
 			this.numericUpDownWeek.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(177)))), ((int)(((byte)(197)))), ((int)(((byte)(218)))));
 			this.numericUpDownWeek.Location = new System.Drawing.Point(128, 53);
 			this.numericUpDownWeek.Maximum = new decimal(new int[] {
-            48,
+            59,
             0,
             0,
             0});
@@ -277,9 +278,9 @@
 			// 
 			// buttonDelete
 			// 
-			this.buttonDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_delete_32x32;
 			this.buttonDelete.ImeMode = System.Windows.Forms.ImeMode.NoControl;
 			this.buttonDelete.Location = new System.Drawing.Point(722, 1);
@@ -292,9 +293,9 @@
 			// 
 			// buttonNew
 			// 
-			this.buttonNew.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonNew.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonNew.BackColor = System.Drawing.Color.White;
 			this.buttonNew.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_add2;
 			this.buttonNew.ImeMode = System.Windows.Forms.ImeMode.NoControl;

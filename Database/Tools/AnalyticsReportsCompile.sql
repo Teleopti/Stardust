@@ -13,6 +13,7 @@ BEGIN TRY
 
 
 	--test data
+	declare @scheduling_type_id int = 1
 	declare @scenario_code uniqueidentifier = 'C2BAEB11-9E91-40FA-AA5A-1DD963BF834D'
 	declare @time_zone_code nvarchar(20) = 'W. Europe Standard Time'
 	declare @dateFrom smalldatetime ='2013-01-04 00:00:00'
@@ -63,6 +64,7 @@ BEGIN TRY
 	declare @request_type_id int = -2
 	declare @date_from_id int = 200
 	declare @date_to_id int = 300
+	declare @active bit = 1
 
 
 	--All stored procedures used(?)
@@ -182,6 +184,8 @@ BEGIN TRY
 							WHEN  @param_name = '@request_type_id' THEN CAST(@request_type_id AS nvarchar(50))
 							WHEN  @param_name = '@date_from_id' THEN CAST(@date_from_id AS nvarchar(50))
 							WHEN  @param_name = '@date_to_id' THEN CAST(@date_to_id AS nvarchar(50))
+							WHEN  @param_name = '@scheduling_type_id' THEN CAST(@scheduling_type_id AS nvarchar(50))
+							WHEN  @param_name = '@active' THEN CAST(@active AS nvarchar(50))
 						
 							ELSE 'noDataTypeFound'
 						END

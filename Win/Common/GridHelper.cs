@@ -837,12 +837,14 @@ namespace Teleopti.Ccc.Win.Common
             gridControl.ResizeRowsBehavior = GridResizeCellsBehavior.None;
             gridControl.Properties.MarkRowHeader = true;
             gridControl.Properties.MarkColHeader = true;
+	        gridControl.Properties.BackgroundColor = SystemColors.Window;
         }
 
         #endregion
 
         #region Selection
 
+		
         public static void HandleSelectionKeys(GridControl gridControl, KeyEventArgs e)
         {
             GridRangeInfo newGridRangeInfo = null;
@@ -983,6 +985,29 @@ namespace Teleopti.Ccc.Win.Common
                 gridControl.Selections.Add(dataOnlyGridRangeInfo);
             }
         }
+
+		public static void HandleSelectAllSchedulingView(GridControl gridControl)
+		{
+			var dataOnlyGridRangeInfo = GridRangeInfo.Auto(gridControl.Rows.HeaderCount + 1, (int)ColumnType.StartScheduleColumns, gridControl.RowCount, gridControl.ColCount);
+			var dataAndHeadersGridRangeInfo = GridRangeInfo.Auto(0, 0, gridControl.RowCount, gridControl.ColCount);
+			if (gridControl.Selections.Count == 1)
+			{
+				var existingGridRangeInfo = gridControl.Selections.Ranges[0];
+				gridControl.Selections.Clear();
+
+				if (existingGridRangeInfo == dataOnlyGridRangeInfo)
+					gridControl.Selections.Add(dataAndHeadersGridRangeInfo);
+
+				else if (existingGridRangeInfo != dataOnlyGridRangeInfo && existingGridRangeInfo != dataAndHeadersGridRangeInfo)
+					gridControl.Selections.Add(dataOnlyGridRangeInfo);
+			}
+			else
+			{
+				gridControl.Selections.Clear();
+				gridControl.Selections.Add(dataOnlyGridRangeInfo);
+			}
+		}
+
 
         #endregion
 

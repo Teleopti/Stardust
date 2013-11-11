@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -112,6 +113,21 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			ISkillSkillStaffPeriodExtendedDictionary outDic = _target.SchedulingResult(_inPeriod);
 			Assert.AreEqual(outDic, _skillStaffPeriods);
+		}
+
+		[Test]
+		public void ShouldNotCrashIfNoSkills()
+		{
+			var mock = new MockRepository();
+			var stateHolder = mock.DynamicMock<ISchedulingResultStateHolder>();
+			var holder = mock.DynamicMock<ISkillStaffPeriodHolder>();
+
+			Expect.Call(stateHolder.SkillStaffPeriodHolder).Return(holder);
+			Expect.Call(holder.SkillSkillStaffPeriodDictionary).Return(_skillStaffPeriods);
+			mock.ReplayAll();
+			_target = new SchedulingResultService(stateHolder, new List<ISkill>(), false, _personSkillProvider);
+			Assert.IsNotNull(_target);
+			mock.VerifyAll();
 		}
 	}
 }

@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
-    public partial class CopyToSkillView : BaseRibbonForm, ICopyToSkillView
+    public partial class CopyToSkillView : BaseDialogForm, ICopyToSkillView
     {
         public CopyToSkillPresenter Presenter { get; set; }
 

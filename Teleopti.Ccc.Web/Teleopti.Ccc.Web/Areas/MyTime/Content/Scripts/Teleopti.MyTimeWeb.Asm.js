@@ -202,11 +202,29 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		}
 		return false;
 	}
-
+    
+	function _makeSureWeAreLoggedOn() {
+	    var ajax = new Teleopti.MyTimeWeb.Ajax();
+	    ajax.Ajax({
+	        url: 'MessageBroker/FetchUserData',
+	        dataType: "json",
+	        async: false,
+	        type: 'GET',
+	        success: function () {
+	            setTimeout(_makeSureWeAreLoggedOn, 20 * 60 * 1000);
+	        }
+	    });
+	}
+    
+    function _startPollingToAvoidLogOut() {
+        setTimeout(_makeSureWeAreLoggedOn, 20 * 60 * 1000);
+    }
+	
 	return {
 		ShowAsm: function (settings) {
 			_settings = settings;
 			_showAsm();
+		    _startPollingToAvoidLogOut();
 		},
 		ListenForScheduleChanges: function (options, eventListeners) {
 			notifyOptions = options;
@@ -228,6 +246,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			if (vm) {
 				vm.unreadMessageCount(data.UnreadMessagesCount);				
 			}
-		}
+		},
+	    MakeSureWeAreLoggedOn: _makeSureWeAreLoggedOn
 	};
 })(jQuery);

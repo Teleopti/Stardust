@@ -1,7 +1,8 @@
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereAreShiftCategories(Table table)
 		{
 			var shiftCategories = table.CreateSet<ShiftCategoryConfigurable>();
-			DataMaker.Data().Apply(new ShiftCategoryDataSetup(shiftCategories));
+			shiftCategories.ForEach(x => DataMaker.Data().Apply(x));
 		}
 
 	}

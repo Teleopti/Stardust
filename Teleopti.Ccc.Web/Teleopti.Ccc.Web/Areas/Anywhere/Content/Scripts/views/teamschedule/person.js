@@ -1,80 +1,105 @@
 define([
-        'knockout',
-        'moment',
-        'views/teamschedule/layer',
-        'resources!r'
-    ], function(
-        ko,
-        moment,
-        layer,
-        resources
-    ) {
+		'knockout',
+		'moment',
+		'lazy',
+		'views/teamschedule/shift',
+		'views/teamschedule/dayoff'
+], function (
+		ko,
+		moment,
+		lazy,
+		shift,
+		dayOff
+	) {
 
-        return function(data, events) {
-            var self = this;
+	return function (data) {
+		var self = this;
 
-            this.Id = data.Id;
-            this.Name = ko.observable(data.FirstName + ' ' + data.LastName);
+		this.Id = data.Id;
+		this.Name = data.FirstName + ' ' + data.LastName;
 
-            this.Layers = ko.observableArray();
-            this.WorkTimeMinutes = ko.observable(0);
-            this.ContractTimeMinutes = ko.observable(0);
+		this.WorkTimeMinutes = ko.observable(0);
+		this.ContractTimeMinutes = ko.observable(0);
 
-            this.ContractTime = ko.computed(function() {
-                var time = moment().startOf('day').add('minutes', self.ContractTimeMinutes());
-                return time.format("H:mm");
-            });
+		this.DayOffs = ko.observableArray();
+		this.Shifts = ko.observableArray();
 
-            this.WorkTime = ko.computed(function() {
-                var time = moment().startOf('day').add('minutes', self.WorkTimeMinutes());
-                return time.format("H:mm");
-            });
+		this.IsShift = ko.computed(function () {
+			return self.Shifts().length > 0;
+		});
 
-	        this.ClearLayers = function() {
-	        	self.Layers([]);
-	        };
-	        
-            this.AddLayers = function(layers, timeline, date) {
-                var newItems = ko.utils.arrayMap(layers, function(p) {
-                    return new layer(timeline, p, date);
-                });
-                self.Layers.push.apply(self.Layers, newItems);
-            };
+		this.ContractTime = ko.computed(function () {
+			var time = moment().startOf('day').add('minutes', self.ContractTimeMinutes());
+			return time.format("H:mm");
+		});
 
-            this.AddContractTime = function(minutes) {
-                self.ContractTimeMinutes(self.ContractTimeMinutes() + minutes);
-            };
+		this.WorkTime = ko.computed(function () {
+			var time = moment().startOf('day').add('minutes', self.WorkTimeMinutes());
+			return time.format("H:mm");
+		});
 
-            this.AddWorkTime = function(minutes) {
-                self.WorkTimeMinutes(self.WorkTimeMinutes() + minutes);
-            };
+		this.ClearData = function () {
+			self.Shifts([]);
+			self.DayOffs([]);
+			self.WorkTimeMinutes(0);
+			self.ContractTimeMinutes(0);
+		};
 
-            this.TimeLineAffectingStartMinute = ko.computed(function() {
-                var start = undefined;
-                ko.utils.arrayForEach(self.Layers(), function(l) {
-                    var startMinutes = l.StartMinutes();
-                    if (start === undefined)
-                        start = startMinutes;
-                    if (startMinutes < start)
-                        start = startMinutes;
-                });
-                return start;
-            });
+		this.AddData = function (data, timeline) {
+			if (data.Projection.length > 0) {
+				var newShift = new shift(timeline);
+				newShift.AddLayers(data);
+				self.Shifts.push(newShift);
+			}
 
-            this.TimeLineAffectingEndMinute = ko.computed(function() {
-                var end = undefined;
-                ko.utils.arrayForEach(self.Layers(), function(l) {
-                    var endMinutes = l.EndMinutes();
-                    if (end === undefined)
-                        end = endMinutes;
-                    if (endMinutes > end)
-                        end = endMinutes;
-                });
-                return end;
-            });
+			if (data.DayOff) {
+				data.DayOff.Date = data.Date;
+				var newDayOff = new dayOff(timeline, data.DayOff);
+				self.DayOffs.push(newDayOff);
+			}
 
-            this.Select = function() {
-                events.notifySubscribers(self.Id, "gotoperson");
-            };
-        };
-    });
+			self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
+			self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
+		};
+
+		var layers = function () {
+			return lazy(self.Shifts())
+		            .map(function (x) { return x.Layers(); })
+		            .flatten();
+		};
+
+		var visibleLayers = function () {
+			return layers()
+				.select(function(x) { return x.OverlapsTimeLine(); });
+		};
+
+		var visibleDayOffs = function () {
+			return lazy(self.DayOffs())
+				.filter(function (x) { return x.OverlapsTimeLine(); });
+		};
+
+		this.TimeLineAffectingStartMinute = ko.computed(function () {
+			return layers().map(function(x) { return x.TimeLineAffectingStartMinute(); }).min();
+		});
+
+		this.TimeLineAffectingEndMinute = ko.computed(function () {
+			return layers().map(function(x) { return x.TimeLineAffectingEndMinute(); }).max();
+		});
+
+		this.OrderBy = function () {
+
+			var visibleShiftLayers = visibleLayers().filter(function (x) { return !x.IsFullDayAbsence; });
+			if (visibleShiftLayers.some())
+				return visibleShiftLayers.map(function (x) { return x.StartMinutes(); }).min();
+			
+			var visibleFullDayAbsences = visibleLayers().filter(function (x) { return x.IsFullDayAbsence; });
+			if (visibleFullDayAbsences.some())
+				return 5000 + visibleFullDayAbsences.map(function (x) { return x.StartMinutes(); }).min();
+			
+			if (visibleDayOffs().some())
+				return 10000;
+			
+			return 20000;
+		};
+	};
+});

@@ -44,6 +44,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			if (_stateHolder.SkipResourceCalculation)
 				return;
 
+			if (_stateHolder.Skills.Count.Equals(0))
+				return;
+
 			using (PerformanceOutput.ForOperation("ResourceCalculate " + localDate.ToShortDateString()))
 			{
 			    IResourceCalculationDataContainerWithSingleOperation relevantProjections;

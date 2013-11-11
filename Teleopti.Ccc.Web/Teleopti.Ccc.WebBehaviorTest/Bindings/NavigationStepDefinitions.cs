@@ -5,8 +5,8 @@ using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
@@ -19,6 +19,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoAsm();
+		}
+		
+		[When(@"I am still viewing ASM")]
+		public void WhenIAmStillViewingASM()
+		{
+			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Asm.MakeSureWeAreLoggedOn();");
 		}
 
 		[When(@"Someone is viewing sharing link")]
@@ -91,10 +97,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToPerformanceTool();
 		}
 
+		[Given(@"I view schedules for '([0-9\-\\\/]*)'")]
 		[When(@"I view schedules for '([0-9\-\\\/]*)'")]
 		[When(@"I view team schedules staffing metrics for '([0-9\-\\\/]*)'")]
 		public void WhenIViewSchedulesForDate(DateTime date)
 		{
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereTeamSchedule(date);
 		}
@@ -102,6 +110,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view schedules for '(.*)' on '(.*)'")]
 		public void WhenIViewSchedulesWithTeamAndDate(string teamName, DateTime date)
 		{
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereTeamSchedule(date, IdForTeam(teamName));
 		}
@@ -128,6 +137,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view team schedules staffing metrics for '(.*)' and '([0-9\-\\\/]*)' and '(.*)'")]
 		public void WhenIViewTeamSchedulesStaffingMetricsForDateAndTeam(string team, DateTime date, string skill)
 		{
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereTeamSchedule(date, IdForTeam(team));
 			TeamSchedulePageStepDefinitions.SelectSkill(skill);
@@ -150,7 +160,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[When(@"I navigate to the preferences page")]
-		[When(@"I navigate to preferences")]
 		public void WhenINavigateToThePreferencesPage()
 		{
 			Navigation.GotoPreference();
@@ -175,8 +184,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoTeamSchedule(DateOnlyForBehaviorTests.TestToday.Date.AddDays(1));
 		}
 
-		[When(@"I view team schedule for '(.*)'")]
-		public void WhenIViewTeamScheduleFor(DateTime date)
+        [When(@"I view team schedule for '(.*)'")]
+        [Given(@"I am viewing team schedule for '(.*)'")]
+        public void WhenIViewTeamScheduleFor(DateTime date)
 		{
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
@@ -253,6 +263,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoAnywhere();
 		}
+
+		[When(@"I navigate to shift trade for '(.*)'")]
+		public void WhenINavigateToShiftTradeFor(DateTime date)
+		{
+			Navigation.GotoRequestsShiftTrade(date);
+		}
+
 
 
 	}

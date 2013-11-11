@@ -1,14 +1,8 @@
-﻿using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
+﻿using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
-	public static class UserTestData
-	{
-		public static IPerson UserWithNoPermission;
-		public static string UserWithNoPermissionUserName = "noPermission";
-	}
-
 	public static class TestData
 	{
 

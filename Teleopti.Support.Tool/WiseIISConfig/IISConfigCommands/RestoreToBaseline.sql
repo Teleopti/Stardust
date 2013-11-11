@@ -11,7 +11,7 @@ DECLARE @dataFolderRelease nvarchar(4000) = 'D:\SQLData\CCC\MSSQL10_50.CCC\MSSQL
 DECLARE @backupFolder nvarchar(4000) = 'D:\SQLData\CCC\MSSQL10_50.CCC\MSSQL\Backup\QA Baselines\'
 
 IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = @ana)
-  --exec ('ALTER DATABASE ' + @ana + ' SET  SINGLE_USER WITH ROLLBACK IMMEDIATE')
+exec ('ALTER DATABASE ' + @ana + ' SET  SINGLE_USER WITH ROLLBACK IMMEDIATE')
 
 PRINT 'Restoring ' + @ana
 

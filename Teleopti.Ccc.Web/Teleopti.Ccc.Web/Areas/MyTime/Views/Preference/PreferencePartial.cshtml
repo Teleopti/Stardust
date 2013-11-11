@@ -124,7 +124,7 @@
                     <li class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-mytime-date="@date" data-mytime-editable="@day.Editable" data-bind="css: StyleClassName, css: { editable: Editable, 'non-editable': !Editable(), feedback: Feedback }">
                         <div>
                             <div class="day-header">
-                                <span class="floatleft day-header-left badge day-header-text">@day.Header.DayDescription</span><span class="floatright day-header-right badge day-header-text">@day.Header.DayNumber</span>
+                                <span class="day-header-left badge day-header-text @(day.Header.DayDescription == "" ? "hide" : "floatleft")" >@day.Header.DayDescription</span><span class="floatright day-header-right badge day-header-text">@day.Header.DayNumber</span>
                             </div>
                             <div class="day-content">
                                 <img data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
@@ -138,7 +138,7 @@
                                         <div class="preference-indicator">
                                             <div class="preference-must-have" data-bind="css: {'icon-heart': MustHave}"></div>
                                         </div>
-                                        <div class="label preference-text" data-bind="text: Preference, attr: { title: Preference }, style: { color: TextColor(), 'background-color': Color(), opacity: Editable()? 1:0.2 }"/>
+                                        <div class="label preference-text" data-bind="text: Preference, attr: { title: Preference }, style: { color: TextColor(), 'background-color': Color(), opacity: Editable() ? 1 : 0.2 }, css: { hide: !HasPreferenceCategory() }"/>
                                         <div class="preference-indicator">
 				                            <!-- ko if: Extended -->
                                             <div class="extended-indication" style="display: none" data-bind="visible: Extended, tooltip: { title: tooltipText, html: true }">&raquo;</div>
@@ -194,14 +194,17 @@
                                 <!-- /ko -->
 
                                 <!-- ko if: HasAbsence -->
-                                <div class="absence" data-bind="text: Absence"></div>
+                                    <div class="absence">
+										<span class="displayblock fullwidth" data-bind="text: Absence"></span>
+									    <span class="absence-contract-time displayblock fullwidth" data-bind="text: AbsenceContractTime"></span>
+									</div>
                                 <!-- /ko -->
 
                                 <!-- ko if: HasPersonAssignmentShiftCategory -->
                                 <div class="scheduled day-content-text">
                                     <span class="displayblock fullwidth day-content-text" data-bind="text: PersonAssignmentShiftCategory"></span>
                                     <strong class="displayblock fullwidth day-content-text" data-bind="text: PersonAssignmentTimeSpan"></strong>
-                                    <span class="displayblock fullwidth day-content-text" data-bind="text: PersonAssignmentContractTime"></span>
+                                    <span class="schedule-contract-time displayblock fullwidth day-content-text" data-bind="text: PersonAssignmentContractTime"></span>
                                 </div>
                                 <!-- /ko -->
                                 @if (day.InPeriod)

@@ -9,7 +9,7 @@ using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
@@ -34,12 +34,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Pages.Pages.CurrentDateRangeSelector.ClickPrevious();
 		}
 
-		[When(@"I click the OK button")]
-		public void WhenIClickTheOKButton()
-		{
-			Pages.Pages.CurrentOkButton.OkButton.EventualClick();
-		}
-		
 		[Then(@"I should see an error message")]
 		public void ThenIShouldSeeAnErrorMessage()
 		{
@@ -75,13 +69,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			var formattedDate = date.ToString(CultureInfo.GetCultureInfo("sv-SE").DateTimeFormat.ShortDatePattern);
 			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format(".weekview-day[data-mytime-date={0}] .overtime-availability-symbol", formattedDate));
-		}
-
-		[Then(@"I should see an indication that no agents that can go on holiday for date '(.*)'")]
-		public void ThenIShouldSeeAnIndicationThatNoAgentsThatCanGoOnHolidayForDate(DateTime date)
-		{
-			var holidayAgentsSymbol = Pages.Pages.WeekSchedulePage.HolidayAgentsForDate(date);
-			EventualAssert.That(() => holidayAgentsSymbol.DisplayHidden(), Is.True);
 		}
 
 		[Then(@"I should see current or first future virtual schedule period \+/- 1 week")]

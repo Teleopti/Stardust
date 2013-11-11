@@ -15,7 +15,7 @@
 						</ul>
 					</span>
 				</th>
-				<th data-bind="visible: LoadingStaffingMetrics"><span class="" data-bind="text: Resources.LoadingThreeDots"></span></th>
+				<th data-bind="visible: LoadingStaffingMetrics"><span class="" data-bind="	text: Resources.LoadingThreeDots"></span></th>
 				<th><span id="forecasted-hours" data-bind="visible: !LoadingStaffingMetrics(), text: ForecastedHoursDisplay"></span></th>
 				<th><span id="scheduled-hours" data-bind="visible: !LoadingStaffingMetrics(), text: ScheduledHoursDisplay"></span></th>
 				<th><span id="difference-forecasted-scheduled" class="text-error" data-bind="visible: !LoadingStaffingMetrics(), text: DifferenceDisplay"></span></th>
@@ -23,37 +23,52 @@
 			</tr>
 		</thead>
 	</table>
-	
+
 	<div class="row">
-		<div class="span12 nowrap">
-			<select id="team-selector" data-bind="enable: !Loading(), options: Teams, optionsText: 'SiteAndTeam', optionsValue: 'Id', value: SelectedTeam"></select>
-			<div class="input-append date input-prepend pull-right" id="date-picker" data-bind="datepicker: SelectedDate, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
-				<button class="btn" data-bind="attr: {title: Resources.Previous}, click: PreviousDay"><i class="icon-chevron-left"></i></button>
-				<input class="add-on date-input" size="16" type="text" readonly="readonly"/>
-				<span class="add-on"><i class="icon-calendar"></i></span>
-				<button class="btn" data-bind="attr: {title: Resources.Next}, click: NextDay"><i class="icon-chevron-right"></i></button>
-			</div>
+		<div class="span12">
+			<form>
+				<div class="control-group">
+					<select id="group-picker" class="span4" data-bind="enable: !Loading(), foreach: GroupPages, select2: { value: SelectedGroup } ">
+						<optgroup data-bind="attr: { label: Name }, foreach: Groups">
+							<option data-bind="text: Name, value: Id"></option>
+						</optgroup>
+					</select>
+					<div class="pull-right">
+						<div class="input-append date input-prepend" id="date-picker" data-bind="datepicker: SelectedDate, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
+
+							<button class="btn" data-bind="attr: { title: Resources.Previous }, click: PreviousDay"><i class="icon-chevron-left"></i></button>
+							<input class="add-on date-input" size="16" type="text" readonly="readonly" />
+							<span class="add-on"><i class="icon-calendar"></i></span>
+							<button class="btn" data-bind="attr: { title: Resources.Next }, click: NextDay"><i class="icon-chevron-right"></i></button>
+						</div>
+						<div class="input-append">
+							<button class="btn toggle-descriptions" data-toggle="button" disabled data-bind="enable: !Loading(), click: ToggleDisplayDescriptions"><i class="icon-question-sign"></i></button>
+						</div>
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 
 	<div class="row">
 		<div class="span12">
-            <!-- ko if: Loading -->
-            <div><span data-bind="text: Resources.LoadingThreeDots"></span></div>
-            <!-- /ko -->
-            <!-- ko if: !Loading() -->
-            <div class="relative">
-				
-				<div class="time-line absolute">
+			<!-- ko if: Loading -->
+			<div><span data-bind="text: Resources.LoadingThreeDots"></span></div>
+			<!-- /ko -->
+			<!-- ko if: !Loading() -->
+			<div class="relative">
+				<!-- ko with: TimeLine -->
+				<div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime }, if: $parent.Persons().length>0">
 					<div class="relative">
-						<div data-bind="foreach: TimeLine.Times">
+						<div data-bind="foreach: Times">
 							<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
 							<div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
 						</div>
 					</div>
 				</div>
-						
-				<table class="table table-hover">
+				<!-- /ko -->
+
+				<table class="table table-hover" data-bind="if: Persons().length>0">
 					<thead>
 						<tr>
 							<th></th>
@@ -62,27 +77,84 @@
 						</tr>
 					</thead>
 					<tbody data-bind="foreach: Persons">
-						<tr class="person" data-bind="attr: { 'data-person-id': Id }, click: Select">
-							<td class="person-name">
+						<tr class="person" data-bind="attr: { 'data-person-id': Id }, click: $root.SelectPerson">
+							<td class="person-name person-name-column">
 								<!-- Must do it this way to get correct overflow: hidden in IE -->
 								<div class="person-name nowrap" data-bind="text: Name"></div>
 							</td>
-							<td class="shift">
-								<ul class="relative unstyled" data-bind="template: { name: 'layerTemplate', foreach: Layers }"></ul>
+							<td class="schedule schedule-column">
+								<div class="relative time-line-for">
+									<!-- ko foreach: Shifts -->
+									<div class="shift" data-bind="
+									template: {
+										name: 'layerTemplate',
+										foreach: Layers
+									}
+									"></div>
+									<!-- /ko -->
+
+									<!-- ko foreach: DayOffs -->
+									<!-- ko if: OverlapsTimeLine -->
+									<div
+										class="dayoff absolute"
+										data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }">
+										<!-- ko if: $root.DisplayDescriptions -->
+										<!-- ko if: $parent.IsShift() && $parent.TimeLineAffectingEndMinute() > StartMinutes()-->
+										<span class="label layer-description floatleft" data-bind="text: DayOffName"></span>
+										<span class="label layer-description floatright" data-bind="text: DayOffName"></span>
+										<!-- /ko -->
+										<!-- ko ifnot: $parent.IsShift() && $parent.TimeLineAffectingEndMinute() > StartMinutes()-->
+										<span class="label layer-description" data-bind="text: DayOffName"></span>
+										<!-- /ko -->
+										<!-- /ko -->
+									</div>
+									<!-- /ko -->
+									<!-- /ko -->
+								</div>
 							</td>
-							<td class="contract-time" data-bind="text: ContractTime"></td>
+							<td class="contract-time contract-time-column" data-bind="text: ContractTime"></td>
 						</tr>
+
+						<!-- ko foreach: Shifts -->
+						<!-- ko foreach: Layers -->
+						<!-- ko if: Selected -->
+						<tr>
+							<td class="shift-menu-background person-name-column"></td>
+							<td class="shift-menu-background schedule-column">
+
+								<!-- ko if: $parent.MakeSpaceForDrop -->
+								<div style="height: 13px"></div>
+								<!-- /ko -->
+
+								<div class="shift-menu" data-bind="style: { 'margin-left': StartPixels() + 'px' }">
+									<p>
+										<span class="label" data-bind="style: { 'background-color': Color }, text: Description + ' ' + StartTime() + '-' + EndTime()"></span>
+									</p>
+									<div class="btn-group">
+										<a href="#" class="btn btn-small show-details" data-bind="click: $parent.ShowDetails"><i class="icon-eye-open"></i></a>
+										<a href="#" class="btn btn-small add-full-day-absence" data-bind="click: $parent.AddFullDayAbsence"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.FullDayAbsence"></span></a>
+										<a href="#" class="btn btn-small add-activity" data-bind="click: $parent.AddActivity"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.Activity"></span></a>
+									</div>
+								</div>
+
+							</td>
+							<td class="shift-menu-background contract-time-column"></td>
+						</tr>
+						<!-- /ko -->
+						<!-- /ko -->
+						<!-- /ko -->
+
 					</tbody>
 				</table>
 			</div>
-            <!-- /ko -->
+			<!-- /ko -->
 		</div>
 	</div>
 </div>
 
 <script id="layerTemplate" type="text/html">
-	<li class="layer absolute floatleft" data-bind="
-	if: IsVisible,
+	<!-- ko if: OverlapsTimeLine -->
+	<div class="layer absolute floatleft" data-bind="
 	style: {
 		left: StartPixels() + 'px',
 		width: LengthPixels() + 'px',
@@ -90,7 +162,20 @@
 	},
 	attr: {
 		'data-start-time': StartTime,
-		'data-length-minutes': LengthMinutes,
+		'data-length-minutes': LengthMinutes(),
 	}
-	"></li>
+	">
+		<!-- ko if: DisplayDrop -->
+		<div class="drop absolute">
+			<div class="arrow absolute"></div>
+			<div class="circle absolute"></div>
+		</div>
+		<!-- /ko -->
+		<!-- ko if: IsFullDayAbsence -->
+		<!-- ko if: $root.DisplayDescriptions -->
+		<span class="label layer-description" data-bind="text: Description"></span>
+		<!-- /ko -->
+		<!-- /ko -->
+	</div>
+	<!-- /ko -->
 </script>

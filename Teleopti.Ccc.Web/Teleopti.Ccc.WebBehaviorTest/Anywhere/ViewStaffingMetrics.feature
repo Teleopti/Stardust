@@ -25,14 +25,16 @@ Background:
 	| Access to Anywhere         | true                |
 	| View unpublished schedules | true                |
 	And 'Pierre Baldi' has a person period with
-	| Field        | Value        |
-	| Team         | Team green   |
-	| Start date   | 2013-04-08   |
-	| Person skill | Direct Sales |
+	| Field      | Value        |
+	| Team       | Team green   |
+	| Start date | 2013-04-08   |
+	| Skill      | Direct Sales |
 	And there are shift categories
 	| Name |
 	| Day  |
 
+# Bug 25359 re-enable with PBI 25562
+@ignore
 Scenario: View staffing metrics
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
@@ -58,8 +60,10 @@ Scenario: View staffing metrics
 	| Difference hours        | -4.49  |
 	| Difference percentage   | -39.10 |
 	| Estimated service level | 0.00   |
-
+# Bug 25359 re-enable with PBI 25562
+@ignore
 Scenario: Push staffing metrics changes
+
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |
@@ -143,6 +147,10 @@ Scenario: Remember skill selection when changing team
 	Given there is a team with
 	| Field | Value      |
 	| Name  | Team other |
+	And 'Ashley Andeen' has a person period with
+	| Field      | Value        |
+	| Team       | Team other   |
+	| Start date | 2013-04-08   |	
 	And there is a forecast with
 	| Field    | Value         |
 	| Skill    | Channel Sales |

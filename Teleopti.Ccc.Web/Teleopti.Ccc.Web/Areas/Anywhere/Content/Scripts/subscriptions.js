@@ -122,11 +122,11 @@ define([
 	    		});
 	    	},
 
-	        subscribeTeamSchedule: function (teamId, date, callback, isApplicableNotification) {
+	    	subscribeTeamSchedule: function (groupId, date, callback, isApplicableNotification) {
 		        unsubscribeTeamSchedule();
 	            incomingTeamSchedule = callback;
 	            startPromise.done(function() {
-	            	teamScheduleHub.server.subscribeTeamSchedule(teamId, date);
+	            	teamScheduleHub.server.subscribeTeamSchedule(groupId, date);
 
 	            	teamScheduleSubscription = messagebroker.subscribe({
 		            	domainReferenceType: 'Person',
@@ -136,7 +136,7 @@ define([
 		            			return;
 		            		}
 		            		if (isMatchingDates(date, notification.StartDate, notification.EndDate)) {
-		            			teamScheduleHub.server.subscribeTeamSchedule(teamId, date);
+		            			teamScheduleHub.server.subscribeTeamSchedule(groupId, date);
 		            		}
 		            	}
 		            });

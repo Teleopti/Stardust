@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
 using Teleopti.Ccc.WinCode.Shifts.Models;
@@ -25,13 +26,14 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
                 }
             }
             ClearModelCollection();
-            foreach (IWorkShiftRuleSet ruleSet in Explorer.Model.FilteredRuleSetCollection)
+            foreach (var ruleSet in Explorer.Model.FilteredRuleSetCollection)
             {
-                foreach (IWorkShiftExtender extender in ruleSet.ExtenderCollection)
+                foreach (var extender in ruleSet.ExtenderCollection)
                 {
                     IActivityViewModel model;
-                    if (typeof(AutoPositionedActivityExtender).IsInstanceOfType(extender))
-                        model = new AutoPositionViewModel(ruleSet, (AutoPositionedActivityExtender)extender);
+	                var activityExtender = extender as AutoPositionedActivityExtender;
+	                if (activityExtender != null)
+                        model = new AutoPositionViewModel(ruleSet, activityExtender);
                     else
                         model = new AbsolutePositionViewModel(ruleSet, (ActivityNormalExtender)extender);
 
@@ -43,21 +45,20 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
 
         public void AddAbsolutePositionActivity()
         {
-            if (Explorer.Model.FilteredRuleSetCollection.Count > 0)
-            {
-                IActivity activity = Explorer.Model.ActivityCollection[0];
-                var activityLengthWithSegment = new TimePeriodWithSegment(8, 0, 9, 0, Explorer.Model.DefaultSegment);
-                var activityPositionWithSegment = new TimePeriodWithSegment(8, 0, 9, 0, Explorer.Model.DefaultSegment);
-                foreach (IWorkShiftRuleSet ruleSet in Explorer.Model.FilteredRuleSetCollection)
-                {
-                    var extender = new ActivityAbsoluteStartExtender(activity, activityLengthWithSegment, activityPositionWithSegment);
-                    ActivityViewModel<ActivityNormalExtender> model = new AbsolutePositionViewModel(ruleSet, extender);
-                    model.ActivityTypeChanged += activityTypeChanged;
+	        if (Explorer.Model.FilteredRuleSetCollection.Count <= 0) return;
+
+	        var activity = Explorer.Model.ActivityCollection[0];
+	        var activityLengthWithSegment = new TimePeriodWithSegment(8, 0, 9, 0, Explorer.Model.DefaultSegment);
+	        var activityPositionWithSegment = new TimePeriodWithSegment(8, 0, 9, 0, Explorer.Model.DefaultSegment);
+	        foreach (var ruleSet in Explorer.Model.FilteredRuleSetCollection)
+	        {
+		        var extender = new ActivityAbsoluteStartExtender(activity, activityLengthWithSegment, activityPositionWithSegment);
+		        ActivityViewModel<ActivityNormalExtender> model = new AbsolutePositionViewModel(ruleSet, extender);
+		        model.ActivityTypeChanged += activityTypeChanged;
                     
-                    ruleSet.AddExtender(extender);
-                    AddToModelCollection(model);
-                }
-            }
+		        ruleSet.AddExtender(extender);
+		        AddToModelCollection(model);
+	        }
         }
 
         public void ChangeExtenderType(IActivityViewModel<ActivityNormalExtender> model, 
@@ -68,14 +69,14 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
             newAdapter.ActivityTypeChanged += activityTypeChanged;
             ReplaceModel(model, newAdapter);
 
-            foreach (IWorkShiftRuleSet ruleSet in Explorer.Model.FilteredRuleSetCollection)
+            foreach (var ruleSet in Explorer.Model.FilteredRuleSetCollection)
             {
-                if (ruleSet.ExtenderCollection.IndexOf(model.ContainedEntity) != -1)
-                {
-                    ruleSet.DeleteExtender(model.ContainedEntity);
-                    ruleSet.AddExtender(anExtender);
-                    break;
-                }
+	            var indexOfExtender = ruleSet.ExtenderCollection.IndexOf(model.ContainedEntity);
+	            if (indexOfExtender == -1) continue;
+
+	            ruleSet.DeleteExtender(model.ContainedEntity);
+	            ruleSet.InsertExtender(indexOfExtender, anExtender);
+	            break;
             }
         }
 
@@ -85,23 +86,19 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
             {
                 if (ModelCollection.Count > 0)
                 {
-                    IList<IActivityViewModel> toBeDeleted = new List<IActivityViewModel>();
-                    foreach (int index in selected)
+                    IList<IActivityViewModel> toBeDeleted = selected.Select(index => ModelCollection[index - 1]).ToList();
+	                foreach (var item in toBeDeleted)
                     {
-                        IActivityViewModel item = ModelCollection[index - 1];
-                        toBeDeleted.Add(item);
-                    }
-                    foreach (IActivityViewModel dItem in toBeDeleted)
-                    {
-                        RemoveFromCollection(dItem);
-                        if (typeof(AbsolutePositionViewModel).IsInstanceOfType(dItem))
+                        RemoveFromCollection(item);
+	                    var absolutePositionViewModel = item as AbsolutePositionViewModel;
+	                    if (absolutePositionViewModel != null)
                         {
-                            var absView = (AbsolutePositionViewModel)dItem;
+                            var absView = absolutePositionViewModel;
                             absView.WorkShiftRuleSet.DeleteExtender(absView.ContainedEntity);
                         }
                         else
                         {
-                            var autoView = (AutoPositionViewModel)dItem;
+                            var autoView = (AutoPositionViewModel)item;
                             autoView.WorkShiftRuleSet.DeleteExtender(autoView.ContainedEntity);
                         }
                     }
@@ -111,18 +108,15 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
 
         public void ReOrderActivities(ReadOnlyCollection<int> adapterIndexList, MoveType moveType)
         {
-            foreach (int adapterIndex in adapterIndexList)
+            foreach (var adapterIndex in adapterIndexList)
             {
-                int newIndex = (adapterIndex - 1);
-
-                int leftIndex = (moveType == MoveType.MoveUp) ? (newIndex - 1) : (newIndex + 1);
-                IActivityViewModel leftView = ModelCollection[leftIndex];
-                IActivityViewModel rightView = ModelCollection[newIndex];
+				var newIndex = (adapterIndex - 1);
+				var leftIndex = (moveType == MoveType.MoveUp) ? (newIndex - 1) : (newIndex + 1);
+				var leftView = ModelCollection[leftIndex];
+				var rightView = ModelCollection[newIndex];
 
                 SwapModels(leftView, rightView);
-
                 rightView.WorkShiftRuleSet.SwapExtenders(rightView.WorkShiftExtender, leftView.WorkShiftExtender);
-
             }
         }
 
@@ -156,9 +150,9 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
                 var adapter = new AbsolutePositionViewModel(autoPos.WorkShiftRuleSet, extender);
                 adapter.ActivityTypeChanged += activityTypeChanged;
 
-                autoPos.WorkShiftRuleSet.DeleteExtender(autoPos.ContainedEntity);
-                autoPos.WorkShiftRuleSet.AddExtender(extender);
-
+	            var index = autoPos.WorkShiftRuleSet.ExtenderCollection.IndexOf(autoPos.ContainedEntity);
+				autoPos.WorkShiftRuleSet.DeleteExtender(autoPos.ContainedEntity);
+                autoPos.WorkShiftRuleSet.InsertExtender(index, extender);
                 ReplaceModel(autoPos, adapter);
             }
             else
@@ -177,11 +171,10 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
                 var autoPositionAdapter = new AutoPositionViewModel(absPos.WorkShiftRuleSet, autoPositionedActivityExtender);
                 autoPositionAdapter.ActivityTypeChanged += activityTypeChanged;
 
-                if (ModelCollection.IndexOf(absPos) >= 0)
-                    ReplaceModel(absPos, autoPositionAdapter);
-                
+	            var index = absPos.WorkShiftRuleSet.ExtenderCollection.IndexOf(absPos.ContainedEntity);
                 absPos.WorkShiftRuleSet.DeleteExtender(absPos.ContainedEntity);
-                absPos.WorkShiftRuleSet.AddExtender(autoPositionedActivityExtender);
+	            absPos.WorkShiftRuleSet.InsertExtender(index, autoPositionedActivityExtender);
+				ReplaceModel(absPos, autoPositionAdapter);
             }
             Explorer.View.RefreshActivityGridView();
         }

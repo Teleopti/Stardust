@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
@@ -22,19 +21,27 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					let shift = model.Shift ?? new Shift()
 					let canSeeConfidentialAbsence = data.CanSeeConfidentialAbsencesFor.Any(x => x.Id == s.PersonId)
 					let layers = mapLayers(data.UserTimeZone, shift, canSeeConfidentialAbsence)
-					select makeViewModel(s, model, shift, layers))
+					select makeViewModel(s, model, shift, layers, data.UserTimeZone))
 				.ToArray();
 		}
 
-		private static TeamScheduleShiftViewModel makeViewModel(PersonScheduleDayReadModel readModel, Model model, Shift shift, IEnumerable<TeamScheduleLayerViewModel> layers)
+		private static TeamScheduleShiftViewModel makeViewModel(PersonScheduleDayReadModel readModel, Model model, Shift shift, IEnumerable<TeamScheduleLayerViewModel> layers, TimeZoneInfo userTimeZone)
 		{
+			TeamScheduleDayOffViewModel dayOff = null;
+			if (model.DayOff != null)
+				dayOff = new TeamScheduleDayOffViewModel
+					{
+						DayOffName = model.DayOff.Title,
+						Start = TimeZoneInfo.ConvertTimeFromUtc(model.DayOff.Start, userTimeZone).ToFixedDateTimeFormat(),
+						Minutes = (int) model.DayOff.End.Subtract(model.DayOff.Start).TotalMinutes
+					};
 			return new TeamScheduleShiftViewModel
 				{
 					ContractTimeMinutes = shift.ContractTimeMinutes,
-					FirstName = model.FirstName,
-					Id = readModel.PersonId.ToString(),
-					LastName = model.LastName,
-					Projection = layers
+					PersonId = readModel.PersonId.ToString(),
+					Projection = layers,
+					IsFullDayAbsence = model.Shift != null && model.Shift.IsFullDayAbsence,
+					DayOff = dayOff
 				};
 		}
 
@@ -45,12 +52,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					   from l in layers
 					   let canSeeLayerInfo = CanSeeLayerInfo(canSeeConfidentialAbsence, l)
 					   let color = canSeeLayerInfo ? l.Color : ConfidentialPayloadValues.DisplayColor.ToHtml()
-					   let title = canSeeLayerInfo ? l.Title : ConfidentialPayloadValues.Description.Name
+					   let description = canSeeLayerInfo ? l.Description : ConfidentialPayloadValues.Description.Name
 					   let start = TimeZoneInfo.ConvertTimeFromUtc(l.Start, userTimeZone)
 				       select new TeamScheduleLayerViewModel
 					       {
 						       Color = color,
-							   Title = title,
+							   Description = description,
 							   Start = start.ToFixedDateTimeFormat(),
 						       Minutes = l.Minutes
 					       })

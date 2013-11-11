@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<TeamScheduleViewModelFactory>().As<ITeamScheduleViewModelFactory>();
 			builder.RegisterType<TeamScheduleProjectionProvider>().As<ITeamScheduleProjectionProvider>();
 			builder.RegisterType<TeamProvider>().As<ITeamProvider>();
-			builder.RegisterType<DefaultTeamCalculator>().As<IDefaultTeamCalculator>();
+			builder.RegisterType<DefaultTeamProvider>().As<IDefaultTeamProvider>();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>();
 		}
 
@@ -197,6 +197,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ServiceBusSender>().As<IServiceBusSender>().SingleInstance();
 			builder.RegisterType<AllowanceProvider>().As<IAllowanceProvider>();
 			builder.RegisterType<AbsenceTimeProvider>().As<IAbsenceTimeProvider>();
+			builder.RegisterType<AbsenceRequestProbabilityProvider>().As<IAbsenceRequestProbabilityProvider>();
 		}
 	}
 }

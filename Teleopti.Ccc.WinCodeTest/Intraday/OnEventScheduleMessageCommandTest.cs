@@ -7,6 +7,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
@@ -24,7 +26,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		private IScenario _scenario;
 		private ISchedulingResultLoader _schedulingResultLoader;
 		private IUnitOfWorkFactory _unitOfWorkFactory;
-		private IRepositoryFactory _repositoryFactory;
 		private ISchedulerStateHolder _schedulerStateHolder;
 		private OnEventScheduleMessageCommand target;
 		private readonly DateOnlyPeriod _period = new DateOnlyPeriod(2008, 10, 20, 2008, 10, 20);
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _schedulingResultLoader = MockRepository.GenerateMock<ISchedulingResultLoader>();
             _unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
             _unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
-            _repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
+            MockRepository.GenerateMock<IRepositoryFactory>();
             _scheduleRefresher = MockRepository.GenerateMock<IScheduleRefresher>();
 			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period,TeleoptiPrincipal.Current.Regional.TimeZone), new[]{_person});
 			_schedulerStateHolder.SchedulingResultState.PersonsInOrganization = _schedulerStateHolder.AllPermittedPersons;
@@ -61,8 +62,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		    refreshedEntity.Stub(x => x.Person).Return(_person);
 		    _scheduleRefresher.Stub(
 		        x =>
-		        x.Refresh(_schedulerStateHolder.Schedules, new List<IEventMessage>(), new List<IEventMessage>(), new Collection<IPersistableScheduleData>(), new Collection<PersistConflictMessageState>()))
-                              .IgnoreArguments().WhenCalled(x => ((ICollection<IPersistableScheduleData>)x.Arguments[3]).Add(refreshedEntity));
+		        x.Refresh(_schedulerStateHolder.Schedules, new List<IEventMessage>(), new List<IPersistableScheduleData>(), new List<PersistConflict>()))
+                              .IgnoreArguments().WhenCalled(x => ((ICollection<IPersistableScheduleData>)x.Arguments[2]).Add(refreshedEntity));
 
 			target.Execute(new EventMessage { InterfaceType = typeof(IScheduleChangedEvent), DomainObjectId = _person.Id.GetValueOrDefault(), DomainUpdateType = DomainUpdateType.NotApplicable, ReferenceObjectId = _scenario.Id.GetValueOrDefault()});
 

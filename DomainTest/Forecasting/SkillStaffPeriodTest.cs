@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -503,6 +504,26 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreSame(stPeriod1.SortedSegmentCollection[1], stPeriod2.SegmentInThisCollection[0]);
         }
 
+		[Test]
+		public void CalculateStaff_EfficiencyShouldNotAffectCalculatedOccupancy()
+		{
+			var calcService = MockRepository.GenerateStrictMock<IStaffingCalculatorService>();
+			var dateTimePeriod = new DateTimePeriod(2013, 11, 04, 2013, 11, 04);
+			var period = new SkillStaffPeriod(dateTimePeriod,
+			                                  _task,
+			                                  ServiceAgreement.DefaultValues(),
+			                                  calcService) {Payload = {Efficiency = new Percent(0.9)}};
+			period.SetSkillDay(_skillDay);
+			var periods = new List<ISkillStaffPeriod> {period};
+
+			calcService.Expect(c => c.AgentsUseOccupancy(1, 1, 1, 1, new TimeSpan(), 2, 2, 1)).IgnoreArguments().Return(100);
+			calcService.Expect(c => c.Utilization(1, 1, 1, TimeSpan.MinValue)).IgnoreArguments().Return(83);
+			
+			period.CalculateStaff(periods);
+
+			var args = calcService.GetArgumentsForCallsMadeOn(c => c.Utilization(1, 1, 1, TimeSpan.MinValue), s => s.IgnoreArguments());
+			args[0][0].Should().Be.EqualTo(100d);
+		}
        
 
         [Test]

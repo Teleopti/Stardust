@@ -29,14 +29,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnly startDate, DateOnly endDate, Guid personId)
 		{
 			return _unitOfWork.Session().CreateSQLQuery(
-				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Model FROM ReadModel.PersonScheduleDay WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate")
+				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, Start, [End], Model FROM ReadModel.PersonScheduleDay WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate")
 			                  .AddScalar("PersonId", NHibernateUtil.Guid)
 			                  .AddScalar("TeamId", NHibernateUtil.Guid)
 			                  .AddScalar("SiteId", NHibernateUtil.Guid)
 			                  .AddScalar("BusinessUnitId", NHibernateUtil.Guid)
 			                  .AddScalar("Date", NHibernateUtil.DateTime)
-			                  .AddScalar("ShiftStart", NHibernateUtil.DateTime)
-			                  .AddScalar("ShiftEnd", NHibernateUtil.DateTime)
+			                  .AddScalar("Start", NHibernateUtil.DateTime)
+			                  .AddScalar("End", NHibernateUtil.DateTime)
 			                  .AddScalar("Model", NHibernateUtil.Custom(typeof (CompressedString)))
 			                  .SetDateTime("startdate", startDate)
 			                  .SetDateTime("enddate", endDate)
@@ -54,14 +54,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<PersonScheduleDayReadModel> ForTeam(DateTimePeriod period, Guid teamId)
 		{
 			return _unitOfWork.Session().CreateSQLQuery(
-				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Model FROM ReadModel.PersonScheduleDay WHERE TeamId=:TeamId AND ShiftStart IS NOT NULL AND ShiftStart < :DateEnd AND ShiftEnd > :DateStart")
+				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, Start, [End], Model FROM ReadModel.PersonScheduleDay WHERE TeamId=:TeamId AND Start IS NOT NULL AND Start < :DateEnd AND [End] > :DateStart")
 			                  .AddScalar("PersonId", NHibernateUtil.Guid)
 			                  .AddScalar("TeamId", NHibernateUtil.Guid)
 			                  .AddScalar("SiteId", NHibernateUtil.Guid)
 			                  .AddScalar("BusinessUnitId", NHibernateUtil.Guid)
 			                  .AddScalar("Date", NHibernateUtil.DateTime)
-			                  .AddScalar("ShiftStart", NHibernateUtil.DateTime)
-			                  .AddScalar("ShiftEnd", NHibernateUtil.DateTime)
+			                  .AddScalar("Start", NHibernateUtil.DateTime)
+			                  .AddScalar("End", NHibernateUtil.DateTime)
 			                  .AddScalar("Model", NHibernateUtil.Custom(typeof (CompressedString)))
 			                  .SetGuid("TeamId", teamId)
 			                  .SetDateTime("DateStart", period.StartDateTime)
@@ -69,6 +69,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			                  .SetResultTransformer(Transformers.AliasToBean(typeof (PersonScheduleDayReadModel)))
 			                  .SetReadOnly(true)
 			                  .List<PersonScheduleDayReadModel>();
+		}
+
+		public IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTimePeriod period, IEnumerable<Guid> personIds)
+		{
+			return _unitOfWork.Session().CreateSQLQuery(
+				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, Start, [End], Model FROM ReadModel.PersonScheduleDay WHERE PersonId In (:PersonIds) AND Start IS NOT NULL AND Start < :DateEnd AND [End] > :DateStart")
+							  .AddScalar("PersonId", NHibernateUtil.Guid)
+							  .AddScalar("TeamId", NHibernateUtil.Guid)
+							  .AddScalar("SiteId", NHibernateUtil.Guid)
+							  .AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+							  .AddScalar("Date", NHibernateUtil.DateTime)
+							  .AddScalar("Start", NHibernateUtil.DateTime)
+							  .AddScalar("End", NHibernateUtil.DateTime)
+							  .AddScalar("Model", NHibernateUtil.Custom(typeof(CompressedString)))
+							  .SetParameterList("PersonIds", personIds)
+							  .SetDateTime("DateStart", period.StartDateTime)
+							  .SetDateTime("DateEnd", period.EndDateTime)
+							  .SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
+							  .SetReadOnly(true)
+							  .List<PersonScheduleDayReadModel>();
 		}
 
 		public IEnumerable<PersonScheduleDayReadModel> ForPersons(DateOnly date, IEnumerable<Guid> personIdList)

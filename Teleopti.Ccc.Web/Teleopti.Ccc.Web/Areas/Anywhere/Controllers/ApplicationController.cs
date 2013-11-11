@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.Previous,
 					UserTexts.Resources.LoadingThreeDots,
 					UserTexts.Resources.AddFullDayAbsence,
+					UserTexts.Resources.AddActivity,
 					UserTexts.Resources.Apply,
 					UserTexts.Resources.InvalidEndDate,
 					UserTexts.Resources.Forecasted,
@@ -60,6 +61,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.HourShort,
 					UserTexts.Resources.Remove,
 					UserTexts.Resources.ConfirmRemoval,
+					UserTexts.Resources.Show,
+					UserTexts.Resources.FullDayAbsence,
+					UserTexts.Resources.Activity,
 					
 					DateAndTimeFormatExtensions.FixedDateFormat,
 					DateAndTimeFormatExtensions.FixedDateTimeFormat,

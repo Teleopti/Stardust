@@ -232,17 +232,20 @@
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\SubscriptionPassThrough.cs">
       <Link>Core\MessageBroker\SubscriptionPassThrough.cs</Link>
     </Compile>
+    <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
     <Compile Include="Areas\Anywhere\Core\ITeamScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\ITeamScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecification.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamScheduleData.cs" />
+    <Compile Include="Areas\Anywhere\Core\TeamScheduleDayOffViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamScheduleLayerViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamScheduleShiftViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DatePersons.cs" />
+    <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IOvertimeAvailabilityPersister.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityViewModelMappingProfile.cs" />
@@ -475,8 +478,8 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceFeedbackProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayFeedbackViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\Mapping\SettingsMappingProfile.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamCalculator.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\IDefaultTeamCalculator.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\IDefaultTeamProvider.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamScheduleController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ILinkProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ISchedulePersonProvider.cs" />
@@ -687,8 +690,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\knockout.bindings.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\pagelog.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\errorview.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline-unit.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\signalrhubs.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\resizeevent.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\messagebroker.js" />
@@ -696,20 +701,28 @@
     <Content Include="Areas\Anywhere\Content\Scripts\menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addfulldayabsenceform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addactivityform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\layer.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\timeline-time.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\timeline.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline-time.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\person.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\group-page-group.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shift.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\group-page.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\dayoff.js" />
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />
+    <Content Include="Areas\Anywhere\Views\Application\index.aspx" />
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.js" />
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.min.js" />
     <Content Include="Areas\MobileReports\Content\moment\moment.js" />
     <Content Include="Areas\MobileReports\Content\moment\moment.min.js" />
     <Content Include="Areas\MobileReports\Content\Scripts\json2.js" />
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
+    <Content Include="Areas\MyTime\Content\Images\stripe.png" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.RequestViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.SelectionViewModel.Tests.js" />
@@ -737,14 +750,11 @@
     <Content Include="Areas\Anywhere\Content\Scripts\navigation.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\person.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\layer.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\timeline-time.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\timeline.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\vm.js" />
     <Content Include="Areas\Anywhere\Content\Styles\helpers.css" />
     <Content Include="Areas\Anywhere\Content\Styles\main.css" />
     <Content Include="Areas\Anywhere\Content\Styles\team-schedule.css" />
-    <Content Include="Areas\Anywhere\Content\Templates\index.html" />
     <Content Include="Areas\MobileReports\Content\Css\mobile.custom.css" />
     <Content Include="Areas\MobileReports\Content\Images\ajax-loader.gif" />
     <Content Include="Areas\MobileReports\Content\Images\logo.png" />
@@ -923,6 +933,7 @@
     <Content Include="Areas\MyTime\Content\Images\view_ul_states_sprite.png" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.extensions.js" />
     <Content Include="Content\moment-datepicker\moment-datepicker-ko-amd.js" />
+    <Content Include="Content\select2\select2-bootstrap.css" />
     <Content Include="favicon.ico" />
     <Content Include="Content\bootstrap\images\glyphicons-halflings-white.png" />
     <Content Include="Content\bootstrap\images\glyphicons-halflings.png" />
@@ -1039,6 +1050,8 @@
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Content\lazy\lazy.js" />
+    <Content Include="Content\lazy\lazy.min.js" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1134,7 +1147,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Anywhere\Models\" />
-    <Folder Include="Areas\Anywhere\Views\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
   </ItemGroup>
   <ItemGroup>

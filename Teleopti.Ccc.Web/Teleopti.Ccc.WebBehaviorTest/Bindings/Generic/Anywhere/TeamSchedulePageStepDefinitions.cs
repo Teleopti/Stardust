@@ -1,12 +1,11 @@
 using System;
 using System.Linq;
-using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
-using WatiN.Core;
+using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
@@ -15,6 +14,73 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 	[Binding]
 	public class TeamSchedulePageStepDefinitions
 	{
+		[When(@"I search for group '(.*)'")]
+		public void WhenISearchForGroup(string searchText)
+		{
+			Select2Box.Open("group-picker");
+			Browser.Interactions.Javascript("$('.select2-input').focus().val('" + searchText + "').trigger('keyup-change');");
+		}
+
+		[When(@"I click description toggle button")]
+		public void WhenIClickDescriptionToggleButton()
+		{
+			DescriptionToggle.EnsureIsOn();
+		}
+
+		[When(@"I select the schedule activity for '(.*)' with start time '(.*)'")]
+		public void WhenISelectTheScheduleActivityForWithStartTime(string name, string startTime)
+		{
+			Browser.Interactions.ClickUsingJQuery(string.Format(".person:contains('{0}') .shift .layer[data-start-time~='{1}']", name, startTime));
+		}
+
+		[When(@"I select any schedule activity for '(.*)'")]
+		public void WhenISelectAnyScheduleActivityFor(string name)
+		{
+			Browser.Interactions.ClickUsingJQuery(string.Format(".person:contains('{0}') .shift .layer:first-child", name));
+		}
+
+
+		[Then(@"I should see schedule activity details for '(.*)' with")]
+		public void ThenIShouldSeeScheduleActivityDetailsForWith(string name, Table table)
+		{
+			var scheduleActivity = table.CreateInstance<ScheduleActivityInfo>();
+			var selector = string.Format(".person:contains('{0}') .activity-details", name);
+			Browser.Interactions.AssertAnyContains(selector, scheduleActivity.Name);
+			Browser.Interactions.AssertAnyContains(selector, scheduleActivity.StartTime);
+			Browser.Interactions.AssertAnyContains(selector, scheduleActivity.EndTime);
+		}
+
+		[Then(@"I should see schedule shift details for '(.*)' with")]
+		public void ThenIShouldSeeScheduleShiftDetailsForWith(string name, Table table)
+		{
+			var scheduleShiftInfos = table.CreateSet<ScheduleShiftInfo>();
+			var selector = string.Format(".person:contains('{0}') .shift-details", name);
+			foreach (var scheduleShiftInfo in scheduleShiftInfos)
+			{
+				Browser.Interactions.AssertExistsUsingJQuery(selector + "[style*='background-color:" +
+				                                             colorNameToCss(scheduleShiftInfo.Color) + "']:contains('" +
+				                                             scheduleShiftInfo.Name + "')");
+			}
+		}
+
+		private static string colorNameToCss(string colorName)
+		{
+			var color = System.Drawing.Color.FromName(colorName);
+			return string.Format("rgb({0}, {1}, {2})", color.R, color.G, color.B);
+		}
+
+		[Then(@"I should see options include '(.*)'")]
+		public void ThenIShouldSeeOptionsInclude(string text)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".select2-result .select2-result-label:contains('{0}')", text));
+		}
+
+		[Then(@"I should see options not include '(.*)'")]
+		public void ThenIShouldSeeOptionsNotInclude(string text)
+		{
+			Browser.Interactions.AssertNotExistsUsingJQuery(".select2-results", string.Format(".select2-result .select2-result-label:contains('{0}')", text));
+		}
+
 		[Then(@"I should be viewing schedules for '(.*)'")]
 		public void ThenIShouldSeePersonScheduleForPersonOnDate(string date)
 		{
@@ -27,32 +93,91 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertAnyContains(".person", personName);
 		}
 
+		[Then(@"I should see myself")]
+		public void ThenIShouldSeeMyself()
+		{
+			Browser.Interactions.AssertAnyContains(".person", DataMaker.Data().MePerson.Name.ToString());
+		}
+
+		[Then(@"I should not see person '(.*)'")]
+		public void ThenIShouldSeeNotPerson(string personName)
+		{
+			Browser.Interactions.AssertNotExists(".person", personName);
+		}
+
+
 		[Then(@"I should see '(.*)' with schedule")]
 		[Then(@"I should see schedule for '(.*)'")]
 		public void ThenIShouldSeeScheduleFor(string personName)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift li", personName);
+			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift .layer", personName);
 		}
 
-		[Then(@"I should see '(.*)' with the schedule")]
-		public void ThenIShouldSeeWithTheSchedule(string personName, Table table)
+		[Then(@"I should see '(.*)' with the scheduled activity")]
+		public void ThenIShouldSeeWithTheScheduledActivity(string personName, Table table)
 		{
-			var schedule = table.CreateInstance<ScheduleInfo>();
+			var scheduledActivity = table.CreateInstance<ScheduledActivityInfo>();
 
-			Browser.Interactions.AssertExistsUsingJQuery(
-				string.Format(
+			assertScheduledActivity(personName, scheduledActivity);
+		}
+
+		[Then(@"I should see '(.*)' with the scheduled activities")]
+		public void ThenIShouldSeeWithTheScheduledActivities(string personName, Table table)
+		{
+			var scheduledActivity = table.CreateSet<ScheduledActivityInfo>();
+			scheduledActivity.ForEach(sa => assertScheduledActivity(personName, sa));
+		}
+
+		private static void assertScheduledActivity(string personName, ScheduledActivityInfo layer)
+		{
+			if (layer.StartTime.Equals("00:00"))
+			{
+				// not sure how to assert the length for the night shift starting from yesterday
+				Browser.Interactions.AssertExistsUsingJQuery(
+					".person:contains('{0}') .shift .layer[style*='background-color: {1}'][style*='left: 0px']",
+					personName,
+					PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color)
+					);
+			}
+			else
+			{
+				Browser.Interactions.AssertExistsUsingJQuery(
 					".person:contains('{0}') .shift .layer[data-start-time='{1}'][data-length-minutes='{2}'][style*='background-color: {3}']",
 					personName,
-					schedule.StartTime,
-					schedule.LengthMinutes(),
-					PersonSchedulePageStepDefinitions.ColorNameToCss(schedule.Color)));
+					layer.StartTime,
+					layer.LengthMinutes(),
+					PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color)
+					);
+			}
 		}
 		
 		[Then(@"I should see '(.*)' with absence")]
 		public void ThenIShouldSeeWithAbsence(string personName, Table table)
 		{
-			var absence = table.CreateInstance<AbsenceInfo>();
-			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .shift li[style*='background-color: {1}']", personName, PersonSchedulePageStepDefinitions.ColorNameToCss(absence.Color));
+			var layer = table.CreateInstance<ScheduledActivityInfo>();
+			string selector;
+
+			if (layer.StartTime != null)
+			{
+				selector = string.Format(".person:contains('{0}') .shift .layer[data-start-time='{1}'][data-length-minutes='{2}'][style*='background-color: {3}']",
+				                         personName,
+				                         layer.StartTime,
+				                         layer.LengthMinutes(),
+				                         PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color));
+			}
+			else
+			{
+				selector = string.Format(".person:contains('{0}') .shift .layer[style*='background-color: {1}']",
+				                         personName,
+				                         PersonSchedulePageStepDefinitions.ColorNameToCss(layer.Color));
+			}
+			if (layer.Description != null)
+			{
+				DescriptionToggle.EnsureIsOn();
+				Browser.Interactions.AssertFirstContainsUsingJQuery(selector, layer.Description);
+			}
+			else
+				Browser.Interactions.AssertExistsUsingJQuery(selector);
 		}
 
 		[Then(@"I should see '(.*)' with no schedule")]
@@ -61,33 +186,50 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			Browser.Interactions.AssertNotExistsUsingJQuery(
 				".person:contains('{0}')",
-				".person:contains('{0}') .shift li",
+				".person:contains('{0}') .shift .layer",
 				personName
 				);
+		}
+
+		[Then(@"I should be able to select groups")]
+		public void ThenIShouldBeAbleToSelectGroups(Table table)
+		{
+			Select2Box.Open("group-picker");
+			var options = table.CreateSet<GroupInfo>();
+			foreach (var option in options)
+			{
+				Select2Box.AssertOptionExist("group-picker", option.Group);
+			}
+		}
+
+		[Then(@"the group picker should have '(.*)' selected")]
+		public void ThenTheGroupPickerShouldHaveSelected(string option)
+		{
+			Select2Box.AssertSelectedOptionText("group-picker", option);
 		}
 
 		[Then(@"I should be able to select teams")]
 		public void ThenIShouldBeAbleToSelectTeams(Table table)
 		{
-			Browser.Interactions.AssertExists("#team-selector");
+			Browser.Interactions.AssertExists("#group-picker");
 
 			var teams = table.CreateSet<TeamInfo>().ToArray();
-			teams.ForEach(t => Browser.Interactions.AssertAnyContains("#team-selector option", t.Team));
+			teams.ForEach(t => Browser.Interactions.AssertAnyContains("#group-picker option", t.Team));
 
-			Browser.Interactions.AssertNotExists("#team-selector option:nth-child(" + teams.Length + ")", "#team-selector option:nth-child(" + (teams.Length + 1) + ")");
+			Browser.Interactions.AssertNotExists("#group-picker option:nth-child(" + teams.Length + ")", "#group-picker option:nth-child(" + (teams.Length + 1) + ")");
 		}
 
 		[Then(@"I should see no team available")]
 		public void ThenIShouldSeeNoTeamAvailable()
 		{
-			Browser.Interactions.AssertExists("#team-selector");
-			Browser.Interactions.AssertNotExists("#team-selector", "#team-selector option");
+			Browser.Interactions.AssertExists("#group-picker");
+			Browser.Interactions.AssertNotExists("#group-picker", "#group-picker option");
 		}
 
 		[Then(@"I should be able to select skills")]
 		public void ThenIShouldBeAbleToSelectSkills(Table table)
 		{
-			Browser.Interactions.AssertExists("#skill-selector");
+			Browser.Interactions.Click("#skill-selector");
 
 			var skills = table.CreateSet<SkillInfo>().ToArray();
 			skills.ForEach(s => Browser.Interactions.AssertAnyContains("#skill-selector li", s.Skill));
@@ -95,10 +237,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertNotExists("#skill-selector li:nth-child(" + skills.Length + ")", "#skill-selector li:nth-child(" + (skills.Length + 1) + ")");
 		}
 
-		[Then(@"I should see a day off for '(.*)'")]
+
+		[Then(@"I should see '(.*)' with a day off")]
 		public void ThenIShouldSeeADayOffFor(string personName)
 		{
 			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .dayoff", personName);
+		}
+
+		[Then(@"I should see '(.*)' with a day off named '(.*)'")]
+		public void ThenIShouldSeeADayOffFor(string personName, string dayOff)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .dayoff:contains('{1}')", personName, dayOff);
 		}
 
 		[Then(@"I should see '(.*)' before '(.*)'")]
@@ -112,9 +261,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			public string Team { get; set; }
 		}
 
-		public class AbsenceInfo
+		public class GroupInfo
 		{
-			public string Color { get; set; }
+			public string Group { get; set; }
 		}
 
 		public class SkillInfo
@@ -122,11 +271,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			public string Skill { get; set; }
 		}
 
-		public class ScheduleInfo
+		public class ScheduledActivityInfo
 		{
 			public string Color { get; set; }
 			public string StartTime { get; set; }
 			public string EndTime { get; set; }
+			public string Description { get; set; }
 
 			public int LengthMinutes()
 			{
@@ -136,20 +286,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			}
 		}
 
+		[When(@"I select group '(.*)'")]
 		[When(@"I select team '(.*)'")]
 		public void WhenISelectTeam(string teamName)
 		{
-			Browser.Interactions.SelectOptionByTextUsingJQuery("#team-selector", teamName);
-		}
-
-		[When(@"I select skill '(.*)'")]
-		public void WhenISelectSkill(string name)
-		{
-			SelectSkill(name);
+			Browser.Interactions.SelectOptionByTextUsingJQuery("#group-picker", teamName);
 		}
 
 		public static void SelectSkill(string name)
 		{
+			Browser.Interactions.Click("#skill-selector");
 			Browser.Interactions.ClickContaining("#skill-selector li a", name);
 		}
 
@@ -157,6 +303,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void WhenISelectDate(DateTime date)
 		{
 			Browser.Interactions.Javascript(string.Format("test.callViewMethodWhenReady('teamschedule', 'setDateFromTest', '{0}');", date));
+		}
+
+		[Then(@"I should see group '(.*)' before '(.*)'")]
+		public void ThenIShouldSeeGroupBefore(string group1, string group2)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery("optgroup[label*='{0}'] + optgroup[label*='{1}']", group1, group2);
+		}
+
+		[Then(@"I should see option '(.*)' before '(.*)'")]
+		public void ThenIShouldSeeOptionBefore(string option1, string option2)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery("option:contains('{0}') + option:contains('{1}')", option1, option2);
 		}
 
 		[Then(@"I should see staffing metrics for skill '(.*)'")]
@@ -179,6 +337,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertAnyContains("#estimated-service-level", staffingMetric.EstimatedServiceLevel);
 		}
 	}
+
+	public class ScheduleActivityInfo
+	{
+		public string Name { get; set; }
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
+	}
+
+	public class ScheduleShiftInfo
+	{
+		public string Name { get; set; }
+		public string Color { get; set; }
+	}
+
 
 	public class StaffingMetricInfo
 	{

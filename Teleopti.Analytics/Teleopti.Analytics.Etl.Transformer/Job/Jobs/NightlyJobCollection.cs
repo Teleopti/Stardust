@@ -95,6 +95,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
             Add(new FactKpiTargetTeamJobStep(jobParameters));
             Add(new FactRequestJobStep(jobParameters));
             Add(new FactRequestedDaysJobStep(jobParameters));
+            Add(new FactAgentSkillJobStep(jobParameters));
             Add(new PermissionReportJobStep(jobParameters));
             
             // If PM is installed then show PM job steps

@@ -1,18 +1,15 @@
-﻿using NUnit.Framework;
-using TechTalk.SpecFlow;
+﻿using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
 	[Binding]
 	public class RoutingStepDefinition
 	{
-
 		[Then(@"I should see MyTime")]
 		public void ThenIShouldSeeMyTime()
 		{
-			EventualAssert.That(() => Pages.Pages.WeekSchedulePage.InnerBody.Exists, Is.True);
+			Browser.Interactions.AssertExists(".body-weekview-inner");
 		}
 
 		[Then(@"I should see Mobile Reports")]

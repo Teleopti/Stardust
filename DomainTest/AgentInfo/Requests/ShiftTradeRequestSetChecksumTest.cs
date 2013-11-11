@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         [Test]
         public void VerifyCanFindScheduleAndSetChecksums()
         {
-            Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { _person2, _person1 }), new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(new DateOnly(_personRequest2.Request.Period.StartDateTime.AddDays(-1)), new DateOnly(_personRequest2.Request.Period.EndDateTime.AddDays(1))), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
+			Expect.Call(_scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { _person2, _person1 }, new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(new DateOnly(_personRequest2.Request.Period.StartDateTime.AddDays(-1)), new DateOnly(_personRequest2.Request.Period.EndDateTime.AddDays(1))), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
             Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRangePerson1).Repeat.AtLeastOnce();
             Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRangePerson2).Repeat.AtLeastOnce();
             Expect.Call(_scheduleRangePerson1.ScheduledDay(new DateOnly(2009, 9, 21))).Return(_schedulePart1).Repeat.

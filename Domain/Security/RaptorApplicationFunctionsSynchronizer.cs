@@ -10,16 +10,54 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Security
 {
-    /// <summary>
+	public interface IRaptorApplicationFunctionsSynchronizer
+	{
+		/// <summary>
+		/// Digests the reports from matrix.
+		/// </summary>
+		CheckRaptorApplicationFunctionsResult CheckRaptorApplicationFunctions();
+
+		/// <summary>
+		/// Digests the reports from matrix.
+		/// </summary>
+		void DigestApplicationFunctions();
+
+		/// <summary>
+		/// Yield enumeration on every defined application function where no matching database
+		/// pair found 
+		/// </summary>
+		/// <param name="databaseFunctions">The database functions.</param>
+		/// <param name="definedFunctions">The defined functions.</param>
+		/// <returns></returns>
+		IEnumerable<IApplicationFunction> AddedRaptorApplicationFunctions(ICollection<IApplicationFunction> databaseFunctions, IEnumerable<IApplicationFunction> definedFunctions);
+
+		/// <summary>
+		/// Yield enumeration on every application function in the database where no matching pre-defined
+		/// pair found 
+		/// </summary>
+		/// <param name="definedFunctions">The defined functions.</param>
+		/// <param name="databaseFunctions">The database functions.</param>
+		/// <returns></returns>
+		IEnumerable<IApplicationFunction> DeletedRaptorApplicationFunctions(ICollection<IApplicationFunction> definedFunctions, IEnumerable<IApplicationFunction> databaseFunctions);
+
+		/// <summary>
+		/// Filters to the existing pre-defined application functions.
+		/// </summary>
+		/// <param name="applicationFunctions">All application functions.</param>
+		/// <returns></returns>
+		IList<IApplicationFunction> FilterExistingDefinedRaptorApplicationFunctions(IEnumerable<IApplicationFunction> applicationFunctions);
+	}
+
+	/// <summary>
     /// Synchronizes the code-defined application functions with the application functions in
     /// the database, using the code-defined functions as master. If there is a new code-defined 
     /// function then adds to the database and sets its permissions. If a function has been deleted
     /// from the code, it removes it from the database. 
     /// </summary>
-    public class RaptorApplicationFunctionsSynchronizer
-    {
+    public class RaptorApplicationFunctionsSynchronizer : IRaptorApplicationFunctionsSynchronizer
+	{
         private readonly IRepositoryFactory _repFactory;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
         private  IApplicationFunctionRepository _applicationFunctionRepository;
         private  IApplicationRoleRepository _applicationRoleRepository;
@@ -30,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Security
         /// </summary>
         /// <param name="repFactory">The rep factory.</param>
         /// <param name="unitOfWorkFactory">The unit of work factory.</param>
-        public RaptorApplicationFunctionsSynchronizer(IRepositoryFactory repFactory, IUnitOfWorkFactory unitOfWorkFactory)
+        public RaptorApplicationFunctionsSynchronizer(IRepositoryFactory repFactory, ICurrentUnitOfWorkFactory unitOfWorkFactory)
         {
             _repFactory = repFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -41,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Security
         /// </summary>
 		public CheckRaptorApplicationFunctionsResult CheckRaptorApplicationFunctions()
         {
-            using (IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (IUnitOfWork unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 
                 _applicationFunctionRepository = _repFactory.CreateApplicationFunctionRepository(unitOfWork);
@@ -70,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Security
         /// </summary>
         public void DigestApplicationFunctions()
         {
-            using (IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (IUnitOfWork unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 CreateLocalRepositories(unitOfWork);
 

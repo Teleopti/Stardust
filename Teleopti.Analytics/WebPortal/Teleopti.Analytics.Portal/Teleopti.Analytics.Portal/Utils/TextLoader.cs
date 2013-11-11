@@ -6,8 +6,6 @@ using System.Globalization;
 using System.Reflection;
 using System.Resources;
 
-
-
 namespace Teleopti.Analytics.Portal.Utils
 {
     public class TextLoader : MatrixBasePage
@@ -48,7 +46,12 @@ namespace Teleopti.Analytics.Portal.Utils
                     foreach (DictionaryEntry resourceSet in resorces)
                     {
                         string englishText = englishResorces.GetString((string)resourceSet.Key) ?? "";
-                        sqlCommand.CommandText = string.Format(insertSql, s, info.LCID, resourceSet.Key, resourceSet.Value.ToString().Replace("'", "''"), englishText.Replace("'","''"));
+	                    string value = "";
+						if (resourceSet.Value != null)
+						{
+							value = (string) resourceSet.Value;
+						}
+                        sqlCommand.CommandText = string.Format(insertSql, s, info.LCID, resourceSet.Key, value.Replace("'", "''"), englishText.Replace("'","''"));
                         sqlCommand.ExecuteNonQuery();
                     }
                 }

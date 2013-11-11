@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private ISkill _skill2;
         private Activity _activity1;
         private Activity _activity2;
+        private IOpenHourRestrictionForTeamBlock _openHourrestrcitionForTeamBlock;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
@@ -61,10 +62,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_groupPerson = _mock.StrictMock<IGroupPerson>();
 			_date = DateTime.SpecifyKind(SkillDayTemplate.BaseDate.Date, DateTimeKind.Utc);
             _skillStaffPeriodCollection = new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>{_skillStaffPeriod});
+            _openHourrestrcitionForTeamBlock = _mock.StrictMock<IOpenHourRestrictionForTeamBlock>();
 		    _target = new SkillDayPeriodIntervalDataGenerator(_factorApplier, _resolutionProvider, _intervalDivider,
 		                                                      _intervalDataAggregator,
 		                                                      _dayIntervalDataCalculator, _intervalMapper,
-		                                                      _schedulingResultStateHolder, _groupPersonSkillAggregator);
+		                                                      _schedulingResultStateHolder, _groupPersonSkillAggregator,_openHourrestrcitionForTeamBlock);
 		    _blockInfo = new BlockInfo(new DateOnlyPeriod(new DateOnly(_date), new DateOnly(_date)));
 
             _baseLineData = new BaseLineData();
@@ -88,7 +90,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldReturnForEmptySkillStaffPeriodCollection()
         {
-            
+            var openHour = new Dictionary<IActivity, TimePeriod>();
+            openHour.Add(_activity1,new TimePeriod(0,0,0,0));
             using (_mock.Record())
             {
                 Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
@@ -104,6 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_skillDay2.CurrentDate).Return(new DateOnly());
                 Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>())).Repeat.AtLeastOnce();
                 Expect.Call(_resolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
+                Expect.Call(_openHourrestrcitionForTeamBlock.GetOpenHoursPerActivity(_teamBlockInfo2)).Return(openHour);
 
             }
             using (_mock.Playback())
@@ -116,6 +120,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldNotSkipSkills()
         {
+            var openHour = new Dictionary<IActivity, TimePeriod>();
+            openHour.Add(_activity1, new TimePeriod(_date.Hour , _date.Minute , _date.Hour , _date.AddMinutes(15).Minute  ));
             var skillIntervalData1 = createSkillIntervalData(6.0);
             var skillIntervalData2 = createSkillIntervalData(12.0);
             var intervalData1 = getIntervalData(_date.TimeOfDay, skillIntervalData1);
@@ -140,6 +146,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
                 Expect.Call(_skillDay1.CurrentDate).Return(new DateOnly()).Repeat.AtLeastOnce();
                 Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();
+                Expect.Call(_skillDay2.Id).Return(null);
                 Expect.Call(_skillDay2.Skill).Return(skill2).Repeat.AtLeastOnce();
                 Expect.Call(_skillDay2.CurrentDate).Return(new DateOnly()).Repeat.AtLeastOnce();
                 Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();
@@ -159,6 +166,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_intervalDataAggregator.AggregateSkillIntervalData(new List<IList<ISkillIntervalData>>(0)))
                       .IgnoreArguments()
                       .Return(skillIntervalDataList);
+                Expect.Call(_openHourrestrcitionForTeamBlock.GetOpenHoursPerActivity(_teamBlockInfo2)).Return(openHour);
+                Expect.Call(_skillStaffPeriod.Period).Return(new DateTimePeriod(_date, _date.AddMinutes(15))).Repeat.AtLeastOnce()  ;
             }
             using (_mock.Playback())
             {
@@ -190,6 +199,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldCreateIntervalsFromSkillDay()
         {
+            var openHour = new Dictionary<IActivity, TimePeriod>();
+            openHour.Add(_activity1, new TimePeriod(_date.Hour, _date.Minute, _date.Hour, _date.AddMinutes(15).Minute));
+            openHour.Add(_activity2, new TimePeriod(_date.Hour, _date.Minute, _date.Hour, _date.AddMinutes(15).Minute));
             var skillIntervalData1 = createSkillIntervalData(6.0);
             var skillIntervalData2 = createSkillIntervalData(12.0);
             var intervalData1 = getIntervalData(_date.TimeOfDay, skillIntervalData1);
@@ -231,6 +243,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                        IgnoreArguments().Return(intervalData1);
                 Expect.Call(_dayIntervalDataCalculator.Calculate(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
                        IgnoreArguments().Return(intervalData2);
+                Expect.Call(_openHourrestrcitionForTeamBlock.GetOpenHoursPerActivity(_teamBlockInfo2)).Return(openHour);
+                Expect.Call(_skillStaffPeriod.Period).Return(new DateTimePeriod(_date, _date.AddMinutes(15))).Repeat.AtLeastOnce();
             }
             using(_mock.Playback())
             {
@@ -245,6 +259,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldSkipSkillsNotInAggregatedSkills()
 		{
+            var openHour = new Dictionary<IActivity, TimePeriod>();
+            openHour.Add(_activity1, new TimePeriod(_date.Hour, _date.Minute, _date.Hour, _date.AddMinutes(15).Minute));
+            openHour.Add(_activity2, new TimePeriod(_date.Hour, _date.Minute, _date.Hour, _date.AddMinutes(15).Minute));
             var skillIntervalData1 = createSkillIntervalData(6.0);
             var skillIntervalData2 = createSkillIntervalData(12.0);
 			var intervalData1 = getIntervalData(_date.TimeOfDay, skillIntervalData1);
@@ -282,6 +299,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
                 Expect.Call(_dayIntervalDataCalculator.Calculate(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
                        IgnoreArguments().Return(intervalData1);
+                Expect.Call(_openHourrestrcitionForTeamBlock.GetOpenHoursPerActivity(_teamBlockInfo2)).Return(openHour);
+                Expect.Call(_skillStaffPeriod.Period).Return(new DateTimePeriod(_date, _date.AddMinutes(15))).Repeat.AtLeastOnce();
 			}
 			using (_mock.Playback())
 			{

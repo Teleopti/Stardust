@@ -195,8 +195,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                         break;
 
                     case Keys.Control | Keys.S:
-                        toolStripButtonMainSave_Click(this, null);
+		                toolStripButtonMainSave_MouseUp(this, null);
                         break;
+
+					case Keys.Control | Keys.N:
+		                handleControlNCmdKey();
+						break;
 
                     case Keys.Escape:
                         _findAndReplaceForm.Hide();
@@ -207,7 +211,45 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private void panelConstructor_GridViewChanged(object sender, EventArgs e)
+	    private void handleControlNCmdKey()
+	    {
+		    if (toolStripExEdit.Enabled)
+		    {
+			    var viewType = _gridConstructor.View.Type;
+
+			    ToolStripItem theButton = null;
+			    switch (viewType)
+			    {
+				    case ViewType.GeneralView:
+					    theButton = _editControl.NewSpecialItems.FirstOrDefault(c => c.Text == UserTexts.Resources.NewPerson);
+					    break;
+				    case ViewType.PeoplePeriodView:
+					    theButton = _editControl.NewSpecialItems.FirstOrDefault(c => c.Text == UserTexts.Resources.NewPersonPeriod);
+					    break;
+				    case ViewType.SchedulePeriodView:
+					    theButton = _editControl.NewSpecialItems.FirstOrDefault(c => c.Text == UserTexts.Resources.NewSchedulePeriod);
+					    break;
+				    case ViewType.PersonRotationView:
+					    theButton = _editControl.NewSpecialItems.FirstOrDefault(c => c.Text == UserTexts.Resources.NewPersonRotation);
+					    break;
+				    case ViewType.PersonalAccountGridView:
+					    theButton = _editControl.NewSpecialItems.FirstOrDefault(c => c.Text == UserTexts.Resources.NewPersonAccount);
+					    break;
+				    case ViewType.PersonAvailabilityView:
+					    theButton =
+						    _editControl.NewSpecialItems.FirstOrDefault(c => c.Text == UserTexts.Resources.NewPersonAvailability);
+					    break;
+			    }
+
+			    if (theButton != null)
+			    {
+				    var theEvent = new ToolStripItemClickedEventArgs(theButton);
+				    EditControl_NewSpecialClicked(theButton, theEvent);
+			    }
+		    }
+	    }
+
+	    private void panelConstructor_GridViewChanged(object sender, EventArgs e)
         {
             InParameter.NotNull("sender", sender);
 
@@ -474,61 +516,56 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             _gridConstructor.View.Grid.CurrentCell.MoveTo(currentRow, currentCol);
         }
 
-	    private DateTime _lastClickSaved;
-        private void toolStripButtonMainSave_Click(object sender, EventArgs e)
-        {
-            if(_readOnly) return;
-			// bloody syncfusion bug that fires click event twice in quick access toolbar
-			if (_lastClickSaved.AddSeconds(1) > DateTime.Now) return;
-	        _lastClickSaved = DateTime.Now;
-            Cursor.Current = Cursors.WaitCursor;
+		private void toolStripButtonMainSave_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+		{
+			if (_readOnly) return;
+		
+			Cursor.Current = Cursors.WaitCursor;
 
-            //Set current cell out of focus to make changes reflect to the data.
-            SetCurrentCellOutOfFocus();
+			//Set current cell out of focus to make changes reflect to the data.
+			SetCurrentCellOutOfFocus();
 			if (KillMode) return;
-            try
-            {
-                // Add Person rotations and Availability to Repository
-                _filteredPeopleHolder.AddRootsToRepository();
+			try
+			{
+				// Add Person rotations and Availability to Repository
+				_filteredPeopleHolder.AddRootsToRepository();
 
                 if (!_filteredPeopleHolder.GetUnitOfWork.IsDirty())
-                {
-                    _filteredPeopleHolder.ResetBoldProperty();
+				{
+					_filteredPeopleHolder.ResetBoldProperty();
 					_gridConstructor.View.Invalidate();
-                    return;
-                }
+					return;
+				}
 
-                if (!_gridConstructor.View.ValidateBeforeSave())
+				if (!_gridConstructor.View.ValidateBeforeSave())
                 {
-					_lastClickSaved = DateTime.Now;
-	                return;
+					return;
                 }
 
-                Persist();
-            }
-            catch (DataSourceException ex)
-            {
-                DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
-                FormKill();
-                return;
-            }
-            if (KillMode) return;
+				Persist();
+			}
+			catch (DataSourceException ex)
+			{
+				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
+				FormKill();
+				return;
+			}
+			if (KillMode) return;
 
-            //Clear validate user credential collection.
-            _filteredPeopleHolder.ValidateUserCredentialsCollection.Clear();
+			//Clear validate user credential collection.
+			_filteredPeopleHolder.ValidateUserCredentialsCollection.Clear();
 
-            //Clear
-            _filteredPeopleHolder.ValidatePasswordPolicy.Clear();
+			//Clear
+			_filteredPeopleHolder.ValidatePasswordPolicy.Clear();
 
-            //View data saved.
-            _gridConstructor.View.ViewDataSaved(_gridConstructor.View, new EventArgs());
+			//View data saved.
+			_gridConstructor.View.ViewDataSaved(_gridConstructor.View, new EventArgs());
 
-            //Refresh grid control
-            _gridConstructor.View.Invalidate();
+			//Refresh grid control
+			_gridConstructor.View.Invalidate();
 
-            Cursor.Current = Cursors.Default;
-        }
-
+			Cursor.Current = Cursors.Default;
+		}
 
         private void notifySaveChanges()
         {
@@ -924,7 +961,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             _editControl.DeleteClicked += (EditControl_DeleteClicked);
 
             //Set generalToolStripButton to add new person when press CTRL + N.
-            SetShortcut(generalToolStripButton, ((Keys.Control | Keys.N)));
+            //SetShortcut(generalToolStripButton, ((Keys.Control | Keys.N)));
             toolStripExEdit.Enabled = PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
         }

@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Win.PeopleAdmin
+﻿using Teleopti.Ccc.Win.PeopleAdmin.Views;
+
+namespace Teleopti.Ccc.Win.PeopleAdmin
 {
     partial class PeopleWorksheet
     {
@@ -73,7 +75,7 @@
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.externalFilteringLabel = new System.Windows.Forms.Label();
 			this.externalFilteringTextBox = new System.Windows.Forms.TextBox();
-			this.shiftCategoryLimitationView = new Teleopti.Ccc.Win.PeopleAdmin.Controls.ShiftCategoryLimitationView();
+			this.shiftCategoryLimitationView = new ShiftCategoryLimitationView();
 			this.contextMenuStripGridView = new Syncfusion.Windows.Forms.Tools.ContextMenuStripEx();
 			this.statusStripEx1 = new Syncfusion.Windows.Forms.Tools.StatusStripEx();
 			this.contextMenuStripExExternalLogOn = new Syncfusion.Windows.Forms.Tools.ContextMenuStripEx();
@@ -590,7 +592,7 @@
 			this.toolStripButtonMainSave.ToolTipText = "xxSave";
 			this.ribbonControlWorksheet.SetUseInCustomQuickAccessDialog(this.toolStripButtonMainSave, true);
 			this.ribbonControlWorksheet.SetUseInQuickAccessMenu(this.toolStripButtonMainSave, false);
-			this.toolStripButtonMainSave.Click += new System.EventHandler(this.toolStripButtonMainSave_Click);
+			this.toolStripButtonMainSave.MouseUp += toolStripButtonMainSave_MouseUp;
 			// 
 			// toolStripButtonMainNew
 			// 
@@ -896,7 +898,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSortAsc;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSortDesc;
         private System.Windows.Forms.ToolStripButton toolStripButtonMainHelp;
-        private Teleopti.Ccc.Win.PeopleAdmin.Controls.ShiftCategoryLimitationView shiftCategoryLimitationView;
+        private ShiftCategoryLimitationView shiftCategoryLimitationView;
         private Syncfusion.Windows.Forms.Tools.ContextMenuStripEx contextMenuStripExExternalLogOn;
         private System.Windows.Forms.ToolStripMenuItem xxSearchThreeDotsToolStripMenuItem;
     	private System.Windows.Forms.TextBox externalFilteringTextBox;

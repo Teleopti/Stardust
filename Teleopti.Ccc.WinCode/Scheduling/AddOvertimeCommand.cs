@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	    private readonly IEditableShiftMapper _editableShiftMapper;
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public AddOvertimeCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, SchedulePresenterBase presenter, IList<IMultiplicatorDefinitionSet> definitionSets, IList<IScheduleDay> scheduleParts, IEditableShiftMapper editableShiftMapper)
+		public AddOvertimeCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, ISchedulePresenterBase presenter, IList<IMultiplicatorDefinitionSet> definitionSets, IList<IScheduleDay> scheduleParts, IEditableShiftMapper editableShiftMapper)
             : base(schedulerStateHolder, scheduleViewBase, presenter, scheduleParts ?? scheduleViewBase.SelectedSchedules())
 		{
 		    DefaultIsSet = false;
@@ -54,8 +54,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (ScheduleParts.Count > 0)
             {
                 personAssignment = ScheduleParts[0].PersonAssignment();
-            } 
-            if (personAssignment != null)
+            }
+
+			//if (personAssignment != null && personAssignment.HasProjection)
+            if (personAssignment != null && (personAssignment.MainLayers().Any() || personAssignment.OvertimeLayers().Any()))
             {
                 DateTimePeriod assPeriod = personAssignment.Period;
                 if (!DefaultIsSet)

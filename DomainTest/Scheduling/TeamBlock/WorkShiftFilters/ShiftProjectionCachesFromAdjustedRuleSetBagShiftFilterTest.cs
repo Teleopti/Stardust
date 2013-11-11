@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			var result = _target.Filter(_dateOnly, null, false);
+			var result = _target.Filter(_dateOnly, null, false,BlockFinderType.SingleDay );
 			Assert.IsNull(result);
 		}
 
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Filter(_dateOnly, _person, false);
+                var result = _target.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay);
 
 				Assert.That(result.Count, Is.EqualTo(3));
 			}
@@ -103,12 +103,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Filter(_dateOnly, _person, false);
+                var result = _target.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay);
 
 				Assert.That(result.Count, Is.EqualTo(0));
 			}
 		}
 
+       
 		[Test]
 		public void ShouldNotGenerateAnyShiftsIfRuleSetContainsDeletedActivity()
 		{
@@ -129,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Filter(_dateOnly, _person, false);
+                var result = _target.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay);
 
 				Assert.That(result.Count, Is.EqualTo(0));
 			}
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Filter(_dateOnly, _person, false);
+                var result = _target.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay);
 
 				Assert.That(result.Count, Is.EqualTo(0));
 			}
@@ -183,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Filter(_dateOnly, _person, false);
+                var result = _target.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay);
 
 				Assert.That(result.Count, Is.EqualTo(0));
 			}

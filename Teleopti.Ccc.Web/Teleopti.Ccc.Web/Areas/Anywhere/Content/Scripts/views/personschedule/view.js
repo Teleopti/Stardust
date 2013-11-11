@@ -5,8 +5,8 @@ define([
 		'subscriptions',
 		'helpers',
 		'text!templates/personschedule/view.html',
-        'resizeevent'
-	], function (
+	'resizeevent'
+], function (
 		ko,
 		personScheduleViewModel,
 		subscriptions,
@@ -15,67 +15,73 @@ define([
 	    resize
 	) {
 
-	    var personSchedule;
-	    
-		return {
-			initialize: function (options) {
+	var personSchedule;
 
-				options.renderHtml(view);
+	return {
+		initialize: function (options) {
 
-				personSchedule = new personScheduleViewModel();
+			options.renderHtml(view);
 
-			    resize.onresize(function() {
-			        personSchedule.TimeLine.WidthPixels($('.shift').width());
-			    });
-			    
-				ko.applyBindings(personSchedule, options.bindingElement);
+			personSchedule = new personScheduleViewModel();
 
-			},
-		    
-			display: function(options) {
+			resize.onresize(function () {
+				personSchedule.TimeLine.WidthPixels($('.time-line-for').width());
 
-			    var deferred = $.Deferred();
+			});
 
-			    var date = moment(options.date, 'YYYYMMDD');
-			    
-			    if (personSchedule.Id() == options.id && personSchedule.Date().diff(date) == 0)
-			        return;
+			ko.applyBindings(personSchedule, options.bindingElement);
 
-			    personSchedule.Loading(true);
-			    
-			    personSchedule.Id(options.id);
-			    personSchedule.Date(date);
+		},
 
-			    subscriptions.subscribePersonSchedule(
-					options.id,
-					helpers.Date.ToServer(personSchedule.Date()),
-					function (data) {
-					    resize.notify();
-					    personSchedule.SetData(data);
-					    personSchedule.Loading(false);
-					    deferred.resolve();
-					}
-				);
+		display: function (options) {
 
-			    return deferred.promise();
-			},
+			var deferred = $.Deferred();
 
-            dispose: function(options) {
-                subscriptions.unsubscribePersonSchedule();
-                $(".datepicker.dropdown-menu").remove();
-            },
-			
-            clearaction: function(options) {
-                personSchedule.AddingFullDayAbsence(false);
-            },
-			
-            addfulldayabsence: function(options) {
-                personSchedule.AddingFullDayAbsence(true);
-            },
-			
-            setDateFromTest: function (date) {
-                personSchedule.AddFullDayAbsenceForm.EndDate(moment(date));
-            }
-		};
-	});
+			var date = moment(options.date, 'YYYYMMDD');
+
+			if (personSchedule.Id() == options.id && personSchedule.Date().diff(date) == 0)
+				return;
+
+			personSchedule.Loading(true);
+
+			personSchedule.Id(options.id);
+			personSchedule.Date(date);
+
+			subscriptions.subscribePersonSchedule(
+				    options.id,
+				    helpers.Date.ToServer(personSchedule.Date()),
+				    function (data) {
+				    	resize.notify();
+				    	personSchedule.SetData(data);
+				    	personSchedule.Loading(false);
+				    	deferred.resolve();
+				    }
+			    );
+
+			return deferred.promise();
+		},
+
+		dispose: function (options) {
+			subscriptions.unsubscribePersonSchedule();
+			$(".datepicker.dropdown-menu").remove();
+		},
+
+		clearaction: function (options) {
+			personSchedule.AddingFullDayAbsence(false);
+			personSchedule.AddingActivity(false);
+		},
+
+		addfulldayabsence: function (options) {
+			personSchedule.AddingFullDayAbsence(true);
+		},
+
+		addactivity: function (options) {
+			personSchedule.AddingActivity(true);
+		},
+
+		setDateFromTest: function (date) {
+			personSchedule.AddFullDayAbsenceForm.EndDate(moment(date));
+		}
+	};
+});
 

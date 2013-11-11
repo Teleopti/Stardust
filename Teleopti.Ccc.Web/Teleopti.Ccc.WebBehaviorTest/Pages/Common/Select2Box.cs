@@ -1,7 +1,6 @@
-using System.Threading;
-using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
+using SharpTestsEx;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 {
@@ -42,22 +41,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 
 		public static void AssertIsClosed(string select2Id)
 		{
+			Browser.Interactions.AssertExists(string.Format("#{0}:enabled", select2Id));
 			Browser.Interactions.AssertNotExists(string.Format("#s2id_{0}", select2Id), string.Format("#s2id_{0}.select2-dropdown-open", select2Id));
 		}
 
 		public static void Open(string select2Id)
 		{
 			AssertIsClosed(select2Id);
-			Browser.Interactions.Javascript(string.Format("$('#{0}').select2('open')", select2Id));
+			Browser.Interactions.Click(string.Format("#s2id_{0}", select2Id)); // for chrome
+			Browser.Interactions.Javascript(string.Format("$('#{0}').select2('open');", select2Id)); // for IE
 			AssertIsOpen(select2Id);
 		}
 
 		public static void OpenWhenOptionsAreLoaded(string select2Id)
 		{
 			AssertIsClosed(select2Id);
-			//Browser.Interactions.WaitUntilEnabled(string.Format("#{0}", select2Id));
 			Browser.Interactions.AssertExists(string.Format("#{0} > option", select2Id));
-			Browser.Interactions.Javascript(string.Format("$('#{0}').select2('open')", select2Id));
+			Browser.Interactions.Click(string.Format("#s2id_{0}", select2Id)); // for chrome
+			Browser.Interactions.Javascript(string.Format("$('#{0}').select2('open');", select2Id)); // for IE
 			AssertIsOpen(select2Id);
 		}
 		

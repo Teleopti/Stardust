@@ -37,9 +37,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     		_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-			MessageId = "0"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public void Handle(CancelOvertimeCommandDto command)
 		{
 			using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
@@ -49,8 +46,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var dateTimePeriod = _dateTimePeriodAssembler.DtoToDomainEntity(command.Period);
 				var startDate = command.Date.ToDateOnly();
 				var scheduleDictionary =
-					_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
-						new PersonProvider(new[] {person}), new ScheduleDictionaryLoadOptions(false, false),
+					_scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(
+						person, new ScheduleDictionaryLoadOptions(false, false),
 						new DateOnlyPeriod(startDate, startDate.AddDays(1)), scenario);
 
 				var scheduleRange = scheduleDictionary[person];

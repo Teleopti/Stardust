@@ -74,11 +74,18 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			Grid.ColWidths[4] = _gridColumns[4].PreferredWidth;
 			Grid.Name = "PersonalSkillView";
 			HideRowHeaderColumn();
-		}
+			Grid.ClipboardPaste += gridWorksheet_ClipboardPaste;
+        }
 
 		public override void Invalidate()
 		{
 			Grid.Invalidate();
+		}
+
+		private void gridWorksheet_ClipboardPaste(object sender, GridCutPasteEventArgs e)
+		{
+			ClipboardPaste(e);
+			e.Handled = true;
 		}
 
 		private void activeCheckBoxColumnCellChanged(object sender, ColumnCellChangedEventArgs<PersonSkillModel> e)
@@ -99,10 +106,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             else
             {
                 WorksheetStateHolder.ChangePersonSkillActiveState(FilteredPeopleHolder.SelectedPeoplePeriodGridCollection, e.DataItem.PersonSkill, false);    
-            }
-			
-            
-            //WorksheetStateHolder.ChangePersonSkillActiveState(FilteredPeopleHolder.SelectedPeoplePeriodGridCollection, e.DataItem.PersonSkill, e.DataItem.ActiveTriState == 1);
+            }            
 		}
 
 		private void checkBoxColumnCellChanged(object sender, ColumnCellChangedEventArgs<PersonSkillModel> e)

@@ -1,14 +1,17 @@
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Interfaces.Domain;
 using IAllowanceProvider = Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider.IAllowanceProvider;
 
@@ -22,12 +25,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly INow _now;
-		private readonly IAllowanceProvider _allowanceProvider;
-		private readonly IAbsenceTimeProvider _absenceTimeProvider;
+		private readonly IAbsenceRequestProbabilityProvider _absenceRequestProbabilityProvider;
 
 		public WeekScheduleDomainDataMappingProfile(IScheduleProvider scheduleProvider, IProjectionProvider projectionProvider, 
-			IPersonRequestProvider personRequestProvider, IUserTimeZone userTimeZone, IPermissionProvider permissionProvider, INow now, IAllowanceProvider allowanceProvider,
-			IAbsenceTimeProvider absenceTimeProvider)
+			IPersonRequestProvider personRequestProvider, IUserTimeZone userTimeZone, IPermissionProvider permissionProvider, INow now, 
+			IAbsenceRequestProbabilityProvider absenceRequestProbabilityProvider)
 		{
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
@@ -35,8 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_userTimeZone = userTimeZone;
 			_permissionProvider = permissionProvider;
 			_now = now;
-			_allowanceProvider = allowanceProvider;
-			_absenceTimeProvider = absenceTimeProvider;
+			_absenceRequestProbabilityProvider = absenceRequestProbabilityProvider;
 		}
 
 		protected override void Configure()
@@ -49,26 +50,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 									var date = s;
 									var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
 									var week = new DateOnlyPeriod(firstDayOfWeek, firstDayOfWeek.AddDays(6));
-                                    var weekWithPreviousDay = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), firstDayOfWeek.AddDays(6));
+									var weekWithPreviousDay = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), firstDayOfWeek.AddDays(6));
 
-                                    var scheduleDays = _scheduleProvider.GetScheduleForPeriod(weekWithPreviousDay) ?? new IScheduleDay[] { };
+									var scheduleDays = _scheduleProvider.GetScheduleForPeriod(weekWithPreviousDay) ?? new IScheduleDay[] { };
 									var personRequests = _personRequestProvider.RetrieveRequests(week);
-									var allowanceCollection = _allowanceProvider.GetAllowanceForPeriod(week);
-									var absenceTimeCollection = _absenceTimeProvider.GetAbsenceTimeForPeriod(week);
-
+									var requestProbability = _absenceRequestProbabilityProvider.GetAbsenceRequestProbabilityForPeriod(week);
 									var earliest =
 										scheduleDays.Min(
 											x =>
 												{
 													var period = _projectionProvider.Projection(x).Period();
-												   	var earlyStart = new TimeSpan(23, 59, 59);
+													var earlyStart = new TimeSpan(23, 59, 59);
 													if (period != null && _projectionProvider.Projection(x).HasLayers)
 													{
-														var startTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).StartTime;
-														var endTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).EndTime;
-														var localEndDate =
-															new DateOnly(period.Value.EndDateTimeLocal(
-																TeleoptiPrincipal.Current.Regional.TimeZone).Date);
+														var startTime = period.Value.TimePeriod(_userTimeZone.TimeZone()).StartTime;
+														var endTime = period.Value.TimePeriod(_userTimeZone.TimeZone()).EndTime;
+														var localEndDate = new DateOnly(period.Value.EndDateTimeLocal(_userTimeZone.TimeZone()).Date);
 														if (endTime.Days > startTime.Days && week.Contains(localEndDate))
 															earlyStart = TimeSpan.Zero;
 														else if (x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
@@ -89,16 +86,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 														earlyStartOvertimeAvailability = overtimeAvailabilityStart;
 													return earlyStart < earlyStartOvertimeAvailability ? earlyStart : earlyStartOvertimeAvailability;
 												});
+
 									var latest =
 										scheduleDays.Max(
 											x =>
 												{
 													var period = _projectionProvider.Projection(x).Period();
-												    var lateEnd = new TimeSpan(0, 0, 0);
+													var lateEnd = new TimeSpan(0, 0, 0);
 													if (period != null && _projectionProvider.Projection(x).HasLayers)
 													{
-														var startTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).StartTime;
-														var endTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).EndTime;
+														var startTime = period.Value.TimePeriod(_userTimeZone.TimeZone()).StartTime;
+														var endTime = period.Value.TimePeriod(_userTimeZone.TimeZone()).EndTime;
 														if (endTime.Days > startTime.Days && x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
 															lateEnd = new TimeSpan(23, 59, 59);
 														else
@@ -145,11 +143,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												let overtimeAvailability = scheduleDay == null || scheduleDay.OvertimeAvailablityCollection() == null ? null : scheduleDay.OvertimeAvailablityCollection().FirstOrDefault()
 												let overtimeAvailabilityYesterday = scheduleYesterday == null || scheduleYesterday.OvertimeAvailablityCollection() == null ? null : scheduleYesterday.OvertimeAvailablityCollection().FirstOrDefault()
 												let personRequestsForDay = personRequests == null ? null : (from i in personRequests where TimeZoneInfo.ConvertTimeFromUtc(i.Request.Period.StartDateTime, _userTimeZone.TimeZone()).Date == day select i).ToArray()
-												let allowanceForDay = allowanceCollection == null ? 0 : allowanceCollection.First(a => a.Item1 == day).Item2.TotalMinutes
-												let fulltimeEquivalentForDay = allowanceCollection == null ? 0 : allowanceCollection.First(a => a.Item1 == day).Item3.TotalMinutes
-												let availabilityForDay = allowanceCollection != null && allowanceCollection.First(a => a.Item1 == day).Item4
-												let absenceTimeForDay = absenceTimeCollection == null ? 0 : absenceTimeCollection.First(a => a.Date == day).AbsenceTime
-
+												let availabilityForDay = requestProbability != null && requestProbability.First(a => a.Item1 == day).Item4
+												let probabilityClass = requestProbability == null ? "" : requestProbability.First(a => a.Item1 == day).Item2
+												let probabilityText = requestProbability == null ? "" : requestProbability.First(a => a.Item1 == day).Item3
+												
 												select new WeekScheduleDayDomainData
 														{
 															Date = new DateOnly(day),
@@ -160,18 +157,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 															OvertimeAvailabilityYesterday = overtimeAvailabilityYesterday,
 															ScheduleDay = scheduleDay,
 															MinMaxTime = minMaxTime,
-															Allowance = allowanceForDay,
-															FulltimeEquivalent = fulltimeEquivalentForDay,
-															AbsenceTime = absenceTimeForDay,
-															Availability = availabilityForDay
+															Availability = availabilityForDay,
+															ProbabilityClass = probabilityClass,
+															ProbabilityText = probabilityText
 														}
 											   ).ToArray();
 
 									var colorSource = new ScheduleColorSource
-									                  	{
+														{
 															ScheduleDays = scheduleDays,
 															Projections = (from d in days where d.Projection != null select d.Projection).ToArray()
-									                  	};
+														};
 
 									var asmPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
 									var absenceRequestPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
