@@ -91,7 +91,12 @@
 }
 
 
-
+.team-schedule .shift-details .label {
+	text-shadow: none;
+}
+.team-schedule .activity-details {
+	text-shadow: none;
+}
 
 .team-schedule .shift .layer
 {

@@ -60,5 +60,18 @@ define([
 	    	return self.Layers().length > 0 && self.Layers()[0].StartMinutes() < 25 * 60;
 	    });
 
+		this.DistinctLayers = ko.computed(function() {
+			var array = self.Layers();
+			var result = [];
+			var names = [];
+			for (var i = 0, j = array.length; i < j; i++) {
+				if (ko.utils.arrayIndexOf(names, array[i].Description) < 0) {
+					result.push(array[i]);
+					names.push(array[i].Description);
+				}
+			}
+			return result;
+		});
+
 	};
 });

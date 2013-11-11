@@ -3,13 +3,15 @@ define([
 	'moment',
 	'lazy',
 	'resources!r',
-	'shared/timeline-unit'
+        'shared/timeline-unit',
+		'helpers'
 ], function (
 	ko,
 	moment,
 	lazy,
 	resources,
-	unitViewModel
+        unitViewModel,
+	    helpers
     ) {
 
 	return function (timeline, data, shift) {
@@ -29,6 +31,7 @@ define([
 		this.EndTime = unit.EndTime;
 
 		this.Color = data.Color;
+            this.TextColor = helpers.TextColor.BasedOnBackgroundColor(helpers.TextColor.HexToRgb(self.Color));
 		this.Description = data.Description;
 		this.IsFullDayAbsence = data.IsFullDayAbsence;
 
