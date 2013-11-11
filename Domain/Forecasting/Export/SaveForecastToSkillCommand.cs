@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
             {
                 var newSkillDayList = _skillDayRepository.GetAllSkillDays(dateOnlyPeriod,
                                                                           skillDayList.Value, skillDayList.Key,
-                                                                          defaultScenario, false);
+                                                                          defaultScenario, _ => {});
                 var workloadDays = _workloadDayHelper.GetWorkloadDaysFromSkillDays(newSkillDayList,
                                                                                    targetSkill.WorkloadCollection.First());
 

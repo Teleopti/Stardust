@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 				Expect.Call(_scenarioRepository.LoadDefaultScenario(secondBusinessUnit)).Return(targetScenario);
 				Expect.Call(_skillDayLoadHelper.LoadSchedulerSkillDays(period, new[] { _targetSkill }, targetScenario)).Return(
 					new Dictionary<ISkill, IList<ISkillDay>> { { _targetSkill, new[] { skillDay } } });
-				Expect.Call(_skillDayRepository.GetAllSkillDays(period, new[] { skillDay }, _targetSkill, targetScenario, false)).
+				Expect.Call(_skillDayRepository.GetAllSkillDays(period, new[] { skillDay }, _targetSkill, targetScenario, null)).
 					Return(new[] { skillDay });
 			}
 			using (_mocks.Playback())
