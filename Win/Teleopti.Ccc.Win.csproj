@@ -1438,6 +1438,7 @@
     <Compile Include="Scheduling\Swapper.cs" />
     <Compile Include="Scheduling\TagsMenuLoader.cs" />
     <Compile Include="Scheduling\PropertyPanel\UpdateSelectionForAgentInfo.cs" />
+    <Compile Include="Scheduling\TeleoptiProgressChangeMessage.cs" />
     <Compile Include="Scheduling\VirtualSkillHelper.cs" />
     <Compile Include="SearchPersonView.cs">
       <SubType>UserControl</SubType>

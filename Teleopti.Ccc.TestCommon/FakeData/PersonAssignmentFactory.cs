@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public static IPersonAssignment CreatePersonAssignmentWithId(IPerson agent)
 		{
-			var personAssignment =  CreatePersonAssignment(agent, ScenarioFactory.CreateScenarioAggregate());
+			var personAssignment = CreatePersonAssignment(agent, ScenarioFactory.CreateScenarioAggregate());
 			personAssignment.SetId(Guid.NewGuid());
 			return personAssignment;
 		}
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public static IPersonAssignment CreatePersonAssignment(IPerson agent, IScenario scenario)
 		{
-			return CreatePersonAssignment(agent, scenario, new DateOnly(2000,1,1));
+			return CreatePersonAssignment(agent, scenario, new DateOnly(2000, 1, 1));
 		}
 
 		public static IPersonAssignment CreatePersonAssignment(IPerson agent, IScenario scenario, DateOnly date)
@@ -62,9 +62,26 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 																					IScenario scenario)
 		{
 			IPersonAssignment ass = new PersonAssignment(agent, scenario, new DateOnly(period.LocalStartDateTime));
-					ass.AddPersonalLayer(activity, period);
-					ass.AddMainLayer(activity, period);
-					ass.SetShiftCategory(category);
+			ass.AddPersonalLayer(activity, period);
+			ass.AddMainLayer(activity, period);
+			ass.SetShiftCategory(category);
+			return ass;
+		}
+
+		/// <summary>
+		/// Creates an assignment with personal and main shift.
+		/// </summary>
+		public static IPersonAssignment CreateAssignmentWithMainShiftAndPersonalShift(
+															 IScenario scenario,
+															 IPerson person,
+															 DateTimePeriod period)
+		{
+			var activity = ActivityFactory.CreateActivity("sdf");
+			var category = ShiftCategoryFactory.CreateShiftCategory("sdf");
+			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.LocalStartDateTime));
+			ass.AddPersonalLayer(activity, period);
+			ass.AddMainLayer(activity, period);
+			ass.SetShiftCategory(category);
 			return ass;
 		}
 
@@ -83,10 +100,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 																	IShiftCategory category,
 																	IScenario scenario)
 		{
-			var date =new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
+			var date = new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
 			var ass = new PersonAssignment(agent, scenario, date);
-						ass.AddMainLayer(activity, period);
-					ass.SetShiftCategory(category);
+			ass.AddMainLayer(activity, period);
+			ass.SetShiftCategory(category);
 			return ass;
 		}
 
@@ -99,7 +116,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 
 		public static IPersonAssignment CreateAssignmentWithMainShift(IScenario scenario,
-																	 IPerson person, 
+																	 IPerson person,
 																	 DateTimePeriod period)
 		{
 			return CreateAssignmentWithMainShift(scenario,
@@ -108,17 +125,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 												 ShiftCategoryFactory.CreateShiftCategory("sdf"));
 		}
 
-				public static IPersonAssignment CreateAssignmentWithMainShift(IScenario scenario,
-																															 IPerson person,
-																															 DateTimePeriod period,
-																															IShiftCategory shiftCategory)
-				{
-					return CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdf"),
-																							 person,
-																							 period,
-																							 shiftCategory,
-																							 scenario);
-				}
+		public static IPersonAssignment CreateAssignmentWithMainShift(IScenario scenario,
+																													 IPerson person,
+																													 DateTimePeriod period,
+																													IShiftCategory shiftCategory)
+		{
+			return CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdf"),
+																					 person,
+																					 period,
+																					 shiftCategory,
+																					 scenario);
+		}
 
 		/// <summary>
 		/// Creates an assignment with personal shift.
@@ -133,15 +150,36 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 																		DateTimePeriod period,
 																		IScenario scenario)
 		{
-					IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.LocalStartDateTime));
-					ass.AddPersonalLayer(activity, period);
+			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.LocalStartDateTime));
+			ass.AddPersonalLayer(activity, period);
 			return ass;
 		}
 
 		public static IPersonAssignment CreateAssignmentWithPersonalShift(IPerson person,
 																	   DateTimePeriod period)
 		{
-			return CreateAssignmentWithPersonalShift(new Activity("Activity"), person, period,new Scenario("Scenario"));
+			return CreateAssignmentWithPersonalShift(new Activity("Activity"), person, period, new Scenario("Scenario"));
+		}
+
+		/// <summary>
+		/// Creates an assignment with main shift and an overtime shift.
+		/// </summary>
+		public static IPersonAssignment CreateAssignmentWithMainShiftAndOvertimeShift(
+															 IScenario scenario,
+															 IPerson person,
+															 DateTimePeriod period)
+		{
+			var activity = ActivityFactory.CreateActivity("sdf");
+			var category = ShiftCategoryFactory.CreateShiftCategory("sdf");
+			var ass = CreateAssignmentWithMainShift(activity,
+												 person,
+												 period,
+												 category,
+												 scenario);
+			IMultiplicatorDefinitionSet multiplicatorDefinitionSet =
+				MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("a", MultiplicatorType.Overtime);
+			ass.AddOvertimeLayer(activity, period, multiplicatorDefinitionSet);
+			return ass;
 		}
 
 		public static IPersonAssignment CreateAssignmentWithOvertimeShift(IActivity activity,
@@ -164,7 +202,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			IPerson agent = PersonFactory.CreatePerson("grisisi");
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate("Heja Gnaget!", false);
-			IPersonAssignment ass = new PersonAssignment(agent, scenario, new DateOnly(2000,1,1));
+			IPersonAssignment ass = new PersonAssignment(agent, scenario, new DateOnly(2000, 1, 1));
 			return ass;
 		}
 
@@ -183,7 +221,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			IPersonContract personContract = PersonContractFactory.CreatePersonContract();
 
-			IScheduleDictionary dic = new ScheduleDictionary(scDefault, new ScheduleDateTimePeriod(new DateTimePeriod(1900,1,1,2200,1,1)));
+			IScheduleDictionary dic = new ScheduleDictionary(scDefault, new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)));
 
 
 			// create activities
@@ -196,10 +234,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			CreatePersonsAndAddToContainer(container);
 
 			// assignments
-			IPersonAssignment assignment1 = new PersonAssignment(container.ContainedPersons["Person1"], scDefault, new DateOnly(2008,1,2));
-						IPersonAssignment assignment2 = new PersonAssignment(container.ContainedPersons["Person2"], scDefault, new DateOnly(2008, 1, 2));
-						IPersonAssignment assignment3 = new PersonAssignment(container.ContainedPersons["Person3"], scDefault, new DateOnly(2008, 1, 2));
-						IPersonAssignment assignment4 = new PersonAssignment(container.ContainedPersons["Person4"], scDefault, new DateOnly(2008, 1, 2));
+			IPersonAssignment assignment1 = new PersonAssignment(container.ContainedPersons["Person1"], scDefault, new DateOnly(2008, 1, 2));
+			IPersonAssignment assignment2 = new PersonAssignment(container.ContainedPersons["Person2"], scDefault, new DateOnly(2008, 1, 2));
+			IPersonAssignment assignment3 = new PersonAssignment(container.ContainedPersons["Person3"], scDefault, new DateOnly(2008, 1, 2));
+			IPersonAssignment assignment4 = new PersonAssignment(container.ContainedPersons["Person4"], scDefault, new DateOnly(2008, 1, 2));
 
 			// periods
 			DateTimePeriod prdPerson1Phone = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 9, 30, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 5, 0, DateTimeKind.Utc));
@@ -211,29 +249,29 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			DateTimePeriod prdPerson4Office = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 10, 10, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 45, 0, DateTimeKind.Utc));
 
 			// activity layers
-						assignment1.AddMainLayer(container.ContainedActivities["Phone"], prdPerson1Phone);
-						assignment1.AddMainLayer(container.ContainedActivities["Break"], prdPerson1Break);
-						assignment1.AddMainLayer(container.ContainedActivities["Office"], prdPerson1Office);
-					assignment1.SetShiftCategory(caMorning);
+			assignment1.AddMainLayer(container.ContainedActivities["Phone"], prdPerson1Phone);
+			assignment1.AddMainLayer(container.ContainedActivities["Break"], prdPerson1Break);
+			assignment1.AddMainLayer(container.ContainedActivities["Office"], prdPerson1Office);
+			assignment1.SetShiftCategory(caMorning);
 
-					assignment2.AddMainLayer(container.ContainedActivities["Phone"], prdPerson2Phone);
-					assignment2.SetShiftCategory(caMorning);
+			assignment2.AddMainLayer(container.ContainedActivities["Phone"], prdPerson2Phone);
+			assignment2.SetShiftCategory(caMorning);
 
-					assignment3.AddMainLayer(container.ContainedActivities["Lunch"], prdPerson3Lunch);
-					assignment3.SetShiftCategory(caMorning);
+			assignment3.AddMainLayer(container.ContainedActivities["Lunch"], prdPerson3Lunch);
+			assignment3.SetShiftCategory(caMorning);
 
-					assignment4.AddMainLayer(container.ContainedActivities["Phone"], prdPerson4Phone);
-					assignment4.AddMainLayer(container.ContainedActivities["Office"], prdPerson4Office);
-					assignment4.SetShiftCategory(caMorning);
+			assignment4.AddMainLayer(container.ContainedActivities["Phone"], prdPerson4Phone);
+			assignment4.AddMainLayer(container.ContainedActivities["Office"], prdPerson4Office);
+			assignment4.SetShiftCategory(caMorning);
 
-					
+
 			// Person Periods
 			IPersonPeriod ppPerson1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
 			container.ContainedPersons["Person1"].AddPersonPeriod(ppPerson1);
-			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneA"], 2),ppPerson1);
-			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1),ppPerson1);
-			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["OfficeA"], 1),ppPerson1);
-			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["OfficeB"], 1),ppPerson1);
+			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneA"], 2), ppPerson1);
+			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1), ppPerson1);
+			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["OfficeA"], 1), ppPerson1);
+			container.ContainedPersons["Person1"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["OfficeB"], 1), ppPerson1);
 			IPersonPeriod ppPerson2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
 			container.ContainedPersons["Person2"].AddPersonPeriod(ppPerson2);
 			container.ContainedPersons["Person2"].AddSkill(
@@ -244,10 +282,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			container.ContainedPersons["Person3"].AddPersonPeriod(ppPerson3);
 			IPersonPeriod ppPerson4 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), personContract, team);
 			container.ContainedPersons["Person4"].AddPersonPeriod(ppPerson4);
-			container.ContainedPersons["Person4"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1),ppPerson4);
-			
+			container.ContainedPersons["Person4"].AddSkill(PersonSkillFactory.CreatePersonSkill(container.ContainedSkills["PhoneB"], 1), ppPerson4);
+
 			// create list
-			var scheduleRange = ExtractedSchedule.CreateScheduleDay(dic, container.ContainedPersons["Person1"], new DateOnly(2008,1,2));
+			var scheduleRange = ExtractedSchedule.CreateScheduleDay(dic, container.ContainedPersons["Person1"], new DateOnly(2008, 1, 2));
 			scheduleRange.Add(assignment1);
 			container.PersonAssignmentListForActivityDividerTest.Add(assignment1);
 			IProjectionService svc = scheduleRange.ProjectionService();
@@ -354,61 +392,61 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var ret = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000, 1, 1));
-				ret.AddMainLayer(new Activity("1"), new DateTimePeriod(start, start.AddHours(1)));
-				ret.AddMainLayer(new Activity("2"), new DateTimePeriod(start, start.AddHours(2)));
-				ret.AddMainLayer(new Activity("3"), new DateTimePeriod(start, start.AddHours(3)));
-				ret.SetShiftCategory(new ShiftCategory("test"));
+			ret.AddMainLayer(new Activity("1"), new DateTimePeriod(start, start.AddHours(1)));
+			ret.AddMainLayer(new Activity("2"), new DateTimePeriod(start, start.AddHours(2)));
+			ret.AddMainLayer(new Activity("3"), new DateTimePeriod(start, start.AddHours(3)));
+			ret.SetShiftCategory(new ShiftCategory("test"));
 			return ret;
 		}
 
-			public static IPersonAssignment CreateAssignmentWithThreePersonalLayers()
-			{
-				var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
-				var ret = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000, 1, 1));
-				ret.AddPersonalLayer(new Activity("1"), new DateTimePeriod(start, start.AddHours(1)));
-				ret.AddPersonalLayer(new Activity("2"), new DateTimePeriod(start, start.AddHours(2)));
-				ret.AddPersonalLayer(new Activity("3"), new DateTimePeriod(start, start.AddHours(3)));
-				return ret;
-			}
+		public static IPersonAssignment CreateAssignmentWithThreePersonalLayers()
+		{
+			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+			var ret = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000, 1, 1));
+			ret.AddPersonalLayer(new Activity("1"), new DateTimePeriod(start, start.AddHours(1)));
+			ret.AddPersonalLayer(new Activity("2"), new DateTimePeriod(start, start.AddHours(2)));
+			ret.AddPersonalLayer(new Activity("3"), new DateTimePeriod(start, start.AddHours(3)));
+			return ret;
+		}
 
-			public static IPersonAssignment CreateAssignmentWithThreeOvertimeLayers()
-			{
-				var p = new Person();
-				var contract = new Contract("sdf");
-				var multi = new MultiplicatorDefinitionSet("sdfsdf", MultiplicatorType.Overtime);
-				contract.AddMultiplicatorDefinitionSetCollection(multi);
-				p.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1),
-												   new PersonContract(contract, new PartTimePercentage("d"),
-																	  new ContractSchedule("d")), new Team()));
-				var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
-				var ret = new PersonAssignment(p, new Scenario("d"), new DateOnly(2000, 1, 1));
-				var act = new Activity("overtime");
-				ret.AddOvertimeLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(6)), multi);
-				ret.AddOvertimeLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(7)), multi);
-				ret.AddOvertimeLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(8)), multi);
-				return ret;
-			}
+		public static IPersonAssignment CreateAssignmentWithThreeOvertimeLayers()
+		{
+			var p = new Person();
+			var contract = new Contract("sdf");
+			var multi = new MultiplicatorDefinitionSet("sdfsdf", MultiplicatorType.Overtime);
+			contract.AddMultiplicatorDefinitionSetCollection(multi);
+			p.AddPersonPeriod(new PersonPeriod(new DateOnly(1900, 1, 1),
+											   new PersonContract(contract, new PartTimePercentage("d"),
+																  new ContractSchedule("d")), new Team()));
+			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+			var ret = new PersonAssignment(p, new Scenario("d"), new DateOnly(2000, 1, 1));
+			var act = new Activity("overtime");
+			ret.AddOvertimeLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(6)), multi);
+			ret.AddOvertimeLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(7)), multi);
+			ret.AddOvertimeLayer(act, new DateTimePeriod(start.AddHours(5), start.AddHours(8)), multi);
+			return ret;
+		}
 
-			public static IPersonAssignment CreateAssignmentWithDayOff(IScenario scenario, IPerson person, DateOnly date, TimeSpan length, TimeSpan flexibility, TimeSpan anchor)
-			{
-				var ass = new PersonAssignment(person, scenario, date);
-				var dayOffTemplate = DayOffFactory.CreateDayOff(new Description("test"));
-				dayOffTemplate.Anchor = anchor;
-				dayOffTemplate.SetTargetAndFlexibility(length, flexibility);
-				ass.SetDayOff(dayOffTemplate);
-				return ass;
-			}
+		public static IPersonAssignment CreateAssignmentWithDayOff(IScenario scenario, IPerson person, DateOnly date, TimeSpan length, TimeSpan flexibility, TimeSpan anchor)
+		{
+			var ass = new PersonAssignment(person, scenario, date);
+			var dayOffTemplate = DayOffFactory.CreateDayOff(new Description("test"));
+			dayOffTemplate.Anchor = anchor;
+			dayOffTemplate.SetTargetAndFlexibility(length, flexibility);
+			ass.SetDayOff(dayOffTemplate);
+			return ass;
+		}
 
-			public static IPersonAssignment CreateAssignmentWithDayOff(IScenario scenario, IPerson person, DateOnly date, IDayOffTemplate template)
-			{
-				var ass = new PersonAssignment(person, scenario, date);
-				ass.SetDayOff(template);
-				return ass;
-			}
-			public static IPersonAssignment CreateAssignmentWithDayOff()
-			{
-				return CreateAssignmentWithDayOff(new Scenario(" "), new Person(), new DateOnly(2000, 1, 1), new DayOffTemplate(new Description("for", "test")));
-			}
+		public static IPersonAssignment CreateAssignmentWithDayOff(IScenario scenario, IPerson person, DateOnly date, IDayOffTemplate template)
+		{
+			var ass = new PersonAssignment(person, scenario, date);
+			ass.SetDayOff(template);
+			return ass;
+		}
+		public static IPersonAssignment CreateAssignmentWithDayOff()
+		{
+			return CreateAssignmentWithDayOff(new Scenario(" "), new Person(), new DateOnly(2000, 1, 1), new DayOffTemplate(new Description("for", "test")));
+		}
 	}
 
 	/// <summary>

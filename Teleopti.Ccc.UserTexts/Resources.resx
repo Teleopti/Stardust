@@ -627,7 +627,7 @@ Date</value>
     <comment>Days off</comment>
   </data>
   <data name="DayView" xml:space="preserve">
-    <value>Day view</value>
+    <value>Day View</value>
     <comment>Day view</comment>
   </data>
   <data name="DefaultColor" xml:space="preserve">
@@ -1170,7 +1170,7 @@ Date</value>
     <comment>Months</comment>
   </data>
   <data name="MonthView" xml:space="preserve">
-    <value>Month view</value>
+    <value>Month View</value>
     <comment>Month view</comment>
   </data>
   <data name="MoreDoubleArrow" xml:space="preserve">
@@ -2014,7 +2014,7 @@ Periods</comment>
     <comment>Team members</comment>
   </data>
   <data name="TeamView" xml:space="preserve">
-    <value>Team view</value>
+    <value>Team View</value>
     <comment>Team view</comment>
   </data>
   <data name="TeleoptiRaptorColonForecaster" xml:space="preserve">
@@ -11841,5 +11841,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="BudgetGroupMissing" xml:space="preserve">
     <value>There is no budget group for you.</value>
     <comment>There is no budget group for you.</comment>
+  </data>
+  <data name="TryingToResolveUnscheduledDaysDotDotDot" xml:space="preserve">
+    <value>Trying to resolve unscheduled days...</value>
+    <comment>This message is shown when scheduling is finished and the scheduler tries to resolve the white spots.</comment>
   </data>
 </root>

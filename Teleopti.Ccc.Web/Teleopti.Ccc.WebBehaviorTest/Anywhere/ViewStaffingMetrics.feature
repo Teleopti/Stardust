@@ -33,6 +33,8 @@ Background:
 	| Name |
 	| Day  |
 
+# Bug 25359 re-enable with PBI 25562
+@ignore
 Scenario: View staffing metrics
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
@@ -58,8 +60,10 @@ Scenario: View staffing metrics
 	| Difference hours        | -4.49  |
 	| Difference percentage   | -39.10 |
 	| Estimated service level | 0.00   |
-
+# Bug 25359 re-enable with PBI 25562
+@ignore
 Scenario: Push staffing metrics changes
+
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |

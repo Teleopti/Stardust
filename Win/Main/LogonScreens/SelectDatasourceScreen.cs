@@ -38,9 +38,14 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
                 if(idx > -1)
                     tabControlChooseDataSource.TabPages.RemoveAt(idx);
 				tabControlChooseDataSource.SelectedIndex = 0;
+				listBoxApplicationDataSources.Focus();
 			}
-
+			else
+			{
+				listBoxWindowsDataSources.Focus();
+			}
             tabControlChooseDataSource.Visible = true;
+			
 		}
 
 		public void GetData()
