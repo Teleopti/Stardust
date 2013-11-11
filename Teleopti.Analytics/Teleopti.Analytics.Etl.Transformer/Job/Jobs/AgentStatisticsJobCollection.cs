@@ -28,6 +28,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new FactScheduleDeviationJobStep(jobParameters));
             Add(new FactAgentQueueJobStep(jobParameters));
             Add(new FactQualityLoadJobStep(jobParameters));
+			Add(new FactAgentStateJobStep(jobParameters));
         }
     }
 }

@@ -1597,6 +1597,16 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return HelperFunctions.BulkInsert(dataTable, "stage.stg_kpi_targets_team", _dataMartConnectionString);
 		}
 
+		public int AggregateFactAgentStateDataMart(IBusinessUnit businessUnit)
+		{
+			List<SqlParameter> parameterList = new List<SqlParameter>();
+			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_state_load", parameterList,
+											  _dataMartConnectionString);
+		}
+
 		public int FillKpiTargetTeamDataMart(IBusinessUnit businessUnit)
 		{
             List<SqlParameter> parameterList = new List<SqlParameter>();

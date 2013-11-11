@@ -509,3 +509,12 @@ GO
 ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_state_group] FOREIGN KEY([state_group_id])
 REFERENCES [mart].[dim_state_group] ([state_group_id])
 GO
+
+----------------  
+--Name: DJ
+--Date: 2013-11-08
+--Desc: New jobstep for mart.fact_agent_state
+----------------
+IF NOT EXISTS (SELECT 1 FROM [mart].[etl_jobstep] WHERE jobstep_name=N'fact_agent_state' AND jobstep_id=84)
+INSERT [mart].[etl_jobstep] ([jobstep_id], [jobstep_name]) VALUES(84,N'fact_agent_state')
+GO

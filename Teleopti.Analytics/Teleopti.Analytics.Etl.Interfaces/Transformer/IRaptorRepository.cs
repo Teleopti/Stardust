@@ -104,6 +104,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         int FillFactAgentQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
         int FillAcdLogOnDataMart(int dataSourceId);
         int FillScheduleDeviationDataMart(DateTimePeriod period, IBusinessUnit businessUnit, TimeZoneInfo defaultTimeZone, bool isIntraday);
+		int AggregateFactAgentStateDataMart(IBusinessUnit businessUnit);
 
         //KPI
         IList<IKeyPerformanceIndicator> LoadKpi();
