@@ -839,68 +839,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        public void GroupSchedule(BackgroundWorker backgroundWorker, IList<IScheduleDay> scheduleDays, IList<IScheduleMatrixPro> matrixList, 
-			IList<IScheduleMatrixPro> matrixListAll, ISchedulingOptions schedulingOptions, IGroupPageHelper groupPageHelper, IList<IScheduleMatrixPro> allMatrixes)
-        {
-            if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
-
-            var unlockedSchedules = (from scheduleMatrixPro in matrixList
-                                     from scheduleDayPro in scheduleMatrixPro.UnlockedDays
-                                     select scheduleDayPro.DaySchedulePart()).ToList();
-
-            if (!unlockedSchedules.Any()) return;
-
-            _sendEventEvery = schedulingOptions.RefreshRate;
-            _backgroundWorker = backgroundWorker;
-
-            DateOnlyPeriod selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
-
-            IGroupPageDataProvider groupPageDataProvider = _container.Resolve<IGroupScheduleGroupPageDataProvider>();
-            var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
-            groupPagePerDateHolder.GroupPersonGroupPagePerDate = _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(selectedPeriod.DayCollection(),
-                                                                                          groupPageDataProvider,
-																						  schedulingOptions.GroupOnGroupPage);
-
-
-            var selectedPersons = matrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).ToList();
-
-            _allResults.Clear();
-
-            var fixedStaffSchedulingService = _container.Resolve<IFixedStaffSchedulingService>();
-            fixedStaffSchedulingService.ClearFinderResults();
-
-            var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
-            var tagSetter = _container.Resolve<IScheduleTagSetter>();
-            tagSetter.ChangeTagToSet(schedulingOptions.TagToUseOnScheduling);
-            fixedStaffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceforContractDaysOff = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-			_daysOffSchedulingService.Execute(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceforContractDaysOff, schedulingOptions);
-
-			var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
-			var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
-			var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
-			var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, allMatrixes, groupPersonsBuilder, schedulingOptions);
-			var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
-
-			var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
-			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState, _container.Resolve<IGroupPersonFactory>(), _container.Resolve<IGroupPagePerDateHolder>());
-			var coherentChecker = new TeamSteadyStateCoherentChecker();
-			var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-			var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
-			var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
-			
-            fixedStaffSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
-            groupSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-			groupSchedulingService.Execute(selectedPeriod, matrixList, schedulingOptions, selectedPersons, backgroundWorker, teamSteadyStateHolder, teamSteadyStateMainShiftScheduler, groupPersonBuilderForOptimization);
-			
-            groupSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
-
-            _allResults.AddResults(fixedStaffSchedulingService.FinderResults, DateTime.Now);
-
-            if (schedulingOptions.RotationDaysOnly)
-                schedulePartModifyAndRollbackServiceforContractDaysOff.Rollback();
-        }
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void BlockSchedule(IList<IScheduleDay> allScheduleDays, IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions)
         {
