@@ -9,12 +9,27 @@
 					<span data-bind="text: Team"></span>
 				</small>
 				
-				<div class="pull-right">
-					<button class="btn toggle-descriptions" data-toggle="button" disabled data-bind="enable: !Loading(), click: ToggleDisplayDescriptions"><i class="icon-question-sign"></i></button>
-				</div>
-
 			</h1>
 			
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="span12">
+			<form>
+				<div class="control-group">
+					<select id="group-picker" class="span4" data-bind="enable: !Loading(), foreach: GroupPages, select2: { value: SelectedGroup } ">
+						<optgroup data-bind="attr: { label: Name }, foreach: Groups">
+							<option data-bind="text: Name, value: Id"></option>
+						</optgroup>
+					</select>
+					<div class="pull-right">
+						<div class="input-append">
+							<button class="btn toggle-descriptions" data-toggle="button" disabled data-bind="enable: !Loading(), click: ToggleDisplayDescriptions"><i class="icon-question-sign"></i></button>
+						</div>
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 	

@@ -7,6 +7,7 @@ define([
 	'views/personschedule/addfulldayabsenceform',
 	'views/personschedule/absencelistitem',
 	'views/personschedule/addabsenceform',
+	'shared/group-page',
 	'helpers',
 	'resources!r'
 ], function (
@@ -18,6 +19,7 @@ define([
 	addFullDayAbsenceFormViewModel,
 	absenceListItemViewModel,
 	addAbsenceFormViewModel,
+	groupPageViewModel,
 	helpers,
 	resources
     ) {
@@ -28,13 +30,23 @@ define([
 
 		this.Loading = ko.observable(false);
 
-		this.Layers = ko.observableArray([]);
+		this.Id = ko.observable("");
+		this.Date = ko.observable();
+
+		this.Name = ko.observable("");
+		this.Site = ko.observable("");
+		this.Team = ko.observable("");
 
 		this.IsDayOff = ko.observable(false);
 		this.DayOffName = ko.observable("");
+		
+		this.SelectedGroup = ko.observable();
 
 		this.DayOffs = ko.observableArray();
 		this.Shifts = ko.observableArray();
+		this.GroupPages = ko.observableArray();
+		this.Absences = ko.observableArray();
+		this.PersonsInGroup = ko.observableArray();
 
 		this.IsShift = ko.computed(function () {
 			return self.Shifts().length > 0;
@@ -52,20 +64,10 @@ define([
 			var time = moment().startOf('day').add('minutes', self.WorkTimeMinutes());
 			return time.format("H:mm");
 		});
-
-		this.Absences = ko.observableArray();
-		this.PersonsInGroup = ko.observableArray();
-
+		
 		this.TimeLine = new timeLineViewModel(this.PersonsInGroup);
 
 		this.Resources = resources;
-
-		this.Id = ko.observable("");
-		this.Date = ko.observable();
-
-		this.Name = ko.observable("");
-		this.Site = ko.observable("");
-		this.Team = ko.observable("");
 
 		this.AddFullDayAbsenceForm = new addFullDayAbsenceFormViewModel();
 		this.AddingFullDayAbsence = ko.observable(false);
@@ -83,6 +85,19 @@ define([
 		this.SetPersonsInGroup = function(persons) {
 			self.PersonsInGroup([]);
 			self.PersonsInGroup.push.apply(self.PersonsInGroup, persons);
+		};
+		
+		this.SetGroupPages = function (data) {
+			self.GroupPages([]);
+
+			var groupPages = data.GroupPages;
+			
+			var newItems = ko.utils.arrayMap(groupPages, function (d) {
+				return new groupPageViewModel(d);
+			});
+			self.GroupPages.push.apply(self.GroupPages, newItems);
+			
+			self.SelectedGroup(data.SelectedGroupId);
 		};
 
 		this.SetData = function (data) {

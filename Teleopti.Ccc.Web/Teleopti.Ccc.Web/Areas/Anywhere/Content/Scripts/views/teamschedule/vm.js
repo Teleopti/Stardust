@@ -3,7 +3,7 @@ define([
         'navigation',
         'lazy',
 		'shared/timeline',
-		'views/teamschedule/group-page',
+		'shared/group-page',
         'resources!r',
         'moment',
 		'select2',

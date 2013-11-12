@@ -33,6 +33,10 @@ define([
             GotoPersonScheduleAddAbsenceForm: function (groupid, personid, date) {
             	window.location.hash = 'personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/addabsence';
             },
+        	
+            GotoPersonScheduleWithAction: function (groupid, personid, date, action) {
+            	window.location.hash = 'personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/' + action;
+            },
             
             GoToTeamSchedule: function (id, date, skill) {
             	window.location.hash = 'teamschedule/' + id + '/' + toDateString(date) + ((skill) ? '/' + skill.Id : '');
