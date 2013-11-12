@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Budgeting;
@@ -787,5 +788,25 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
             const string result = "2010";
             target.Year.Should().Be.EqualTo(result);
         }
+
+	    [Test]
+	    public void StudenHours_ShouldOnlyDistributeOverOpenDays()
+	    {
+		    target.BudgetDays.Skip(20).ForEach(weekend => weekend.IsClosed = true);
+		    target.StudentsHours = 400;
+		    target.BudgetDays.Take(20).ForEach(weekday => weekday.StudentsHours.Should().Be.EqualTo(20));
+		    target.BudgetDays.Skip(20).ForEach(weekend => weekend.StudentsHours.Should().Be.EqualTo(0));
+		    target.StudentsHours.Should().Be.EqualTo(400);
+	    }
+
+	    [Test]
+	    public void OvertimeHours_ShouldOnlyDisitributeOverOpenDays()
+	    {
+		    target.BudgetDays.Skip(20).ForEach(weekend => weekend.IsClosed = true);
+		    target.OvertimeHours = 400;
+		    target.BudgetDays.Take(20).ForEach(weekday => weekday.OvertimeHours.Should().Be.EqualTo(20));
+		    target.BudgetDays.Skip(20).ForEach(weekend => weekend.OvertimeHours.Should().Be.EqualTo(0));
+		    target.OvertimeHours.Should().Be.EqualTo(400);
+	    }
     }
 }

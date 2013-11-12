@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Budgeting;
@@ -716,5 +717,38 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
             //"June 2010"
             target.MonthYear.Should().Be.EqualTo(result);
         }
+
+		[Test]
+		public void StudenHours_ShouldOnlyDistributeOverOpenDays()
+		{
+			using (mocks.Record())
+			{
+				ExpectBatch();
+			}
+			using (mocks.Playback())
+			{
+				target.BudgetDays.Skip(5).ForEach(b => b.IsClosed = true);
+				target.StudentsHours = 100;
+				target.BudgetDays.Take(5).ForEach(b => b.StudentsHours.Should().Be.EqualTo(20));
+				target.BudgetDays.Skip(5).ForEach(b => b.StudentsHours.Should().Be.EqualTo(0));
+
+				target.StudentsHours.Should().Be.EqualTo(100);
+			}
+		}
+
+		[Test]
+		public void OvertimeHours_ShouldOnlyDistributeOverOpenDays()
+		{
+			using (mocks.Record())
+				ExpectBatch();
+			using (mocks.Playback())
+			{
+				target.BudgetDays.Skip(5).ForEach(b => b.IsClosed = true);
+				target.OvertimeHours = 100;
+				target.BudgetDays.Take(5).ForEach(b => b.OvertimeHours.Should().Be.EqualTo(20));
+				target.BudgetDays.Skip(5).Take(2).ForEach(b => b.OvertimeHours.Should().Be.EqualTo(0));
+				target.OvertimeHours.Should().Be.EqualTo(100);
+			}
+		}
     }
 }
