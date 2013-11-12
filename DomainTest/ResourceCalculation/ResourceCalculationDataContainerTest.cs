@@ -234,5 +234,36 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			result.Item2.Should().Be.EqualTo(0);
 			result.Item1.Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldGetFractionResourcesOnResourceWithPartOfInterval()
+		{
+
+			_target.AddResources(_person, _date,
+								 new ResourceLayer
+								 {
+									 PayloadId = _activity.Id.GetValueOrDefault(),
+									 Period = _period,
+									 RequiresSeat = false,
+									 Resource = 0.8,
+									 FractionPeriod = _period.ChangeStartTime(TimeSpan.FromMinutes(3))
+								 });
+			_target.AddResources(_person, _date,
+								 new ResourceLayer
+								 {
+									 PayloadId = _activity.Id.GetValueOrDefault(),
+									 Period = _period.MovePeriod(TimeSpan.FromMinutes(15)),
+									 RequiresSeat = false,
+									 Resource = 0.6,
+									 FractionPeriod = _period.MovePeriod(TimeSpan.FromMinutes(15)).ChangeStartTime(TimeSpan.FromMinutes(-6))
+								 });
+			var result = _target.IntraIntervalResources(_skill, _period.ChangeEndTime(TimeSpan.FromMinutes(15)));
+			result.Should()
+			      .Have.SameValuesAs(new[]
+				      {
+					      _period.ChangeStartTime(TimeSpan.FromMinutes(3)),
+					      _period.MovePeriod(TimeSpan.FromMinutes(15)).ChangeStartTime(TimeSpan.FromMinutes(-6))
+				      });
+		}
     }
 }

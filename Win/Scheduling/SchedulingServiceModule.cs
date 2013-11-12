@@ -82,6 +82,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().InstancePerLifetimeScope();
             builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>().InstancePerLifetimeScope();
             builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().InstancePerLifetimeScope();
+            builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>().SingleInstance();
 
             builder.RegisterType<NonBlendSkillCalculator>().As<INonBlendSkillCalculator>().InstancePerLifetimeScope();
             builder.RegisterType<RestrictionExtractor>().As<IRestrictionExtractor>().InstancePerDependency();

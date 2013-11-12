@@ -810,9 +810,7 @@ namespace Teleopti.Ccc.DomainTest.Time
             
             periods = new DateTimePeriod(baseDateTime, baseDateTime.Add(TimeSpan.FromHours(1))).Intervals(TimeSpan.FromHours(2));
             Assert.AreEqual(new DateTimePeriod(baseDateTime, baseDateTime.Add(TimeSpan.FromHours(2))), periods[0],"Minium interval is the length of the interval, not the period");
-
         }
-
 
         [Test]
         public void VerifyMergedList1()

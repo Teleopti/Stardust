@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					new DeleteSchedulePartService(_schedulingResultStateHolder);
 				IResourceOptimizationHelper resourceOptimizationHelper =
 					new ResourceOptimizationHelper(_schedulingResultStateHolder,
-                                                   new OccupiedSeatCalculator(), nonBlendSkillCalculator, _personSkillProvider, _currentTeleoptiPrincipal);
+                                                   new OccupiedSeatCalculator(), nonBlendSkillCalculator, _personSkillProvider, new PeriodDistributionService(), _currentTeleoptiPrincipal);
 				IRestrictionExtractor restrictionExtractor =
 					new RestrictionExtractor(_schedulingResultStateHolder);
 				IEffectiveRestrictionCreator effectiveRestrictionCreator =

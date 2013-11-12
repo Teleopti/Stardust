@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private MockRepository _mocks;
 		private IOccupiedSeatCalculator _occupiedSeatCalculator;
 		private IPersonSkillProvider _personSkillProvider;
+		private IPeriodDistributionService _periodDistributionService;
 
 		[SetUp]
 		public void Setup()
@@ -28,9 +29,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_occupiedSeatCalculator = _mocks.StrictMock<IOccupiedSeatCalculator>();
 			_personSkillProvider = _mocks.DynamicMock<IPersonSkillProvider>();
+			_periodDistributionService = _mocks.DynamicMock<IPeriodDistributionService>();
 			_target = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator,
 													 new NonBlendSkillCalculator(),
-														 _personSkillProvider,
+														 _personSkillProvider, _periodDistributionService,
 														 new CurrentTeleoptiPrincipal());
 		}
 
@@ -92,9 +94,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 											 visualLayerCollection, service2, service3, skillStaffPeriodDictionary);
 				Expect.Call(skill1.SkillType).Return(skillType).Repeat.AtLeastOnce();
 				Expect.Call(skillType.ForecastSource).Return(ForecastSource.Email).Repeat.AtLeastOnce();
-				Expect.Call(() => _occupiedSeatCalculator.Calculate(new DateOnly(), _mocks.DynamicMock<IResourceCalculationDataContainer>(), new SkillSkillStaffPeriodExtendedDictionary())).IgnoreArguments();
+				Expect.Call(() => _occupiedSeatCalculator.Calculate(new DateOnly(), null, skillStaffPeriodDictionary)).IgnoreArguments();
 				Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
-
+				Expect.Call(()=> _periodDistributionService.CalculateDay(null, skillStaffPeriodDictionary)).IgnoreArguments();
 			}
 
 			using (_mocks.Playback())

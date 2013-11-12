@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				_activityRequiresSeat.Add(resourceLayer.PayloadId);
 			}
-			resources.AppendResource(key, skills, 1d, resourceLayer.Resource);
+			resources.AppendResource(key, skills, 1d, resourceLayer.Resource, resourceLayer.FractionPeriod);
 		}
 
 		public void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
@@ -75,7 +75,29 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var skills = _personSkillProvider.SkillsOnPersonDate(person, personDate);
 			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills).GenerateKey();
 
-			resources.RemoveResource(key, skills, resourceLayer.Resource);
+			resources.RemoveResource(key, skills, resourceLayer.Resource, resourceLayer.FractionPeriod);
+		}
+
+		public IEnumerable<DateTimePeriod> IntraIntervalResources(ISkill skill, DateTimePeriod period)
+		{
+			var skillKey = skill.Id.GetValueOrDefault();
+			var activityKey = string.Empty;
+			if (skill.Activity != null)
+			{
+				activityKey = skill.Activity.Id.GetValueOrDefault().ToString();
+			}
+
+			var result = new List<DateTimePeriod>();
+			var periodSplit = period.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
+			foreach (var dateTimePeriod in periodSplit)
+			{
+				PeriodResource interval;
+				if (!_dictionary.TryGetValue(dateTimePeriod, out interval)) continue;
+
+				var detail = interval.GetFractionResources(activityKey, skillKey);
+				result.AddRange(detail);
+			}
+			return result;
 		}
 
 		public Tuple<double,double> SkillResources(ISkill skill, DateTimePeriod period)
