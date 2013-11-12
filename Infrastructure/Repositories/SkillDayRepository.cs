@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// </remarks>
 		public ICollection<ISkillDay> GetAllSkillDays(DateOnlyPeriod period, ICollection<ISkillDay> skillDays, ISkill skill, IScenario scenario)
 		{
-			return GetAllSkillDays(period, skillDays, skill, scenario, true);
+			return GetAllSkillDays(period, skillDays, skill, scenario, AddRange);
 		}
 
 		/// <summary>
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// Created by: robink
 		/// Created date: 2008-01-25
 		/// </remarks>
-		public ICollection<ISkillDay> GetAllSkillDays(DateOnlyPeriod period, ICollection<ISkillDay> skillDays, ISkill skill, IScenario scenario, bool addToRepository)
+		public ICollection<ISkillDay> GetAllSkillDays(DateOnlyPeriod period, ICollection<ISkillDay> skillDays, ISkill skill, IScenario scenario, Action<IEnumerable<ISkillDay>> optionalAction)
 		{
 		    var uniqueDays = period.DayCollection();
 
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					skillDays.Add(skillDay);
 					skillDaysToRepository.Add(skillDay);
 				}
-				if (addToRepository) AddRange(skillDaysToRepository);
+				if (optionalAction!=null) optionalAction(skillDaysToRepository);
 			}
 
 			_workloadDayHelper.CreateLongtermWorkloadDays(skill, skillDays);

@@ -1,13 +1,17 @@
-﻿using System.Dynamic;
+﻿using System.Configuration;
+using System.Dynamic;
 using System.Reflection;
 using Autofac;
 using Autofac.Configuration;
 using Autofac.Integration.Mvc;
 using MbCache.Configuration;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
@@ -75,6 +79,28 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<DoNotNotifySmsLink>().As<IDoNotifySmsLink>().SingleInstance();
 			builder.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>().SingleInstance();
 			builder.RegisterType<NewtonsoftJsonDeserializer<ExpandoObject>>().As<IJsonDeserializer<ExpandoObject>>().SingleInstance();
+
+			// ErikS: Bug 25359
+			var useNewResourceCalculationConfiguration = ConfigurationManager.AppSettings["EnableNewResourceCalculation"];
+			if (useNewResourceCalculationConfiguration != null && bool.Parse(useNewResourceCalculationConfiguration))
+			{
+				builder.RegisterType<ScheduledResourcesReadModelStorage>()
+					   .As<IScheduledResourcesReadModelPersister>()
+					   .As<IScheduledResourcesReadModelReader>()
+					   .SingleInstance();
+				builder.RegisterType<ScheduledResourcesReadModelUpdater>()
+					.As<IScheduledResourcesReadModelUpdater>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<DisabledScheduledResourcesReadModelStorage>()
+					   .As<IScheduledResourcesReadModelPersister>()
+					   .As<IScheduledResourcesReadModelReader>()
+					   .SingleInstance();
+				builder.RegisterType<DisabledScheduledResourcesReadModelUpdater>()
+					.As<IScheduledResourcesReadModelUpdater>().SingleInstance();
+			}
+
 
 			builder.RegisterModule(new ConfigurationSettingsReader());
 

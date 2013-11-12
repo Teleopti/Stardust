@@ -267,6 +267,7 @@
     <Compile Include="Persisters\ScheduleScreenRetryingPersister.cs" />
     <Compile Include="Persisters\VersionTupleExtensions.cs" />
     <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
+    <Compile Include="Repositories\DisabledScheduledResourcesReadModelStorage.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelPersister.cs" />
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
     <Compile Include="Repositories\ScheduledResourcesReadModelStorage.cs" />

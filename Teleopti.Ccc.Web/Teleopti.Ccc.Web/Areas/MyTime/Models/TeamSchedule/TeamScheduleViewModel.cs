@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 	public class TimeLineViewModel
 	{
 		public string ShortTime { get; set; }
-		public string LongTime { get; set; }
 		public decimal PositionPercent { get; set; }
 	}
 

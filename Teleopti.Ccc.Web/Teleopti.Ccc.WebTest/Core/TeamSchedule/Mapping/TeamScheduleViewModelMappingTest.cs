@@ -294,8 +294,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			result.AgentSchedules.First().DayOffText.Should().Be.EqualTo("long");
 		}
 
-		[Test]
-		public void ShouldMapTimeLineShortTime()
+		[Test, SetCulture("sv-SE")]
+		public void ShouldMapTimeLineShortTimeForSwedishCulture()
 		{
 			var start = new DateTime(2012, 1, 3, 8, 45, 0, DateTimeKind.Utc);
 			var end = new DateTime(2012, 1, 3, 11, 15, 0, DateTimeKind.Utc);
@@ -303,25 +303,24 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
-			var sep = CultureInfo.CurrentUICulture.DateTimeFormat.TimeSeparator;
-			var expected = new[] {sep + "45", "09", "10", "11", sep + "15"};
+			var expected = new[] {"08:45", "09", "10", "11", "11:15"};
 			result.TimeLine.Select(t => t.ShortTime).Should().Have.SameSequenceAs(expected);
 		}
 
-		[Test]
-		public void ShouldMapTimeLineLongTime()
+		[Test, SetCulture("en-US")]
+		public void ShouldMapTimeLineShortTimeForUsaCulture()
 		{
 			var start = new DateTime(2012, 1, 3, 8, 45, 0, DateTimeKind.Utc);
-			var end = new DateTime(2012, 1, 3, 11, 15, 0, DateTimeKind.Utc);
+			var end = new DateTime(2012, 1, 3, 12, 15, 0, DateTimeKind.Utc);
 			data.DisplayTimePeriod = new DateTimePeriod(start, end);
 
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
-			var expected = new[] { "08:45", "09:00", "10:00", "11:00", "11:15" };
-			result.TimeLine.Select(t => t.LongTime).Should().Have.SameSequenceAs(expected);
+			var expected = new[] { "08:45", "9 AM", "10 AM", "11 AM", "12 PM", "12:15" };
+			result.TimeLine.Select(t => t.ShortTime).Should().Have.SameSequenceAs(expected);
 		}
 
-		[Test]
+		[Test, SetCulture("sv-SE")]
 		public void ShouldMapTimeLineUsingCurrentUsersTimeZone()
 		{
 			var start = new DateTime(2012, 1, 3, 8, 45, 0, DateTimeKind.Utc);
@@ -331,8 +330,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
-			var expected = new[] { "09:45", "10:00", "11:00", "12:00", "12:15" };
-			result.TimeLine.Select(t => t.LongTime).Should().Have.SameSequenceAs(expected);
+			var expected = new[] { "09:45", "10", "11", "12", "12:15" };
+			result.TimeLine.Select(t => t.ShortTime).Should().Have.SameSequenceAs(expected);
 		}
 
 		[Test]

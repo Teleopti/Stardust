@@ -2438,6 +2438,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void grid_CurrentCellKeyDown(object sender, KeyEventArgs e)
 		{
+			if (e.Control && e.KeyCode == Keys.A)
+			{
+				if(!(_scheduleView is AgentRestrictionsDetailView))
+				{
+					GridHelper.HandleSelectAllSchedulingView((GridControl)sender);
+					return;
+				}
+			}
+
 			GridHelper.HandleSelectionKeys((GridControl)sender, e);
 		}
 
@@ -3637,13 +3646,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 				BeginInvoke(new EventHandler<ProgressChangedEventArgs>(_backgroundWorkerScheduling_ProgressChanged), sender, e);
 			else
 			{
-				if (e.ProgressPercentage <= 0)
+				if (e.UserState is TeleoptiProgressChangeMessage)
 				{
-					schedulingProgress(Math.Abs(e.ProgressPercentage));
+					var arg = (TeleoptiProgressChangeMessage)e.UserState;
+					scheduleStatusBarUpdate(arg.Message);
 				}
 				else
 				{
-					schedulingProgress(null);
+					if (e.ProgressPercentage <= 0)
+					{
+						schedulingProgress(Math.Abs(e.ProgressPercentage));
+					}
+					else
+					{
+						schedulingProgress(null);
+					}
 				}
 			}
 		}
@@ -3818,6 +3835,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 				optimizationProgress(e);
 			}
 		}
+
+        private void scheduleStatusBarUpdate(string message)
+        {
+            toolStripStatusLabelStatus.Text = message;
+            statusStrip1.Refresh();
+            Application.DoEvents();
+        }
 
 		private void schedulingProgress(int? percent)
 		{

@@ -13,16 +13,27 @@ CREATE PROCEDURE ReadModel.AddResources
 AS
 BEGIN
 	DECLARE @ActivitySkillCombination int
-	
-	SELECT @ActivitySkillCombination=Id FROM ReadModel.ActivitySkillCombination WHERE Activity=@Activity AND Skills=@Skills
+	DECLARE @PeriodResourceId bigint
+
+	--insert ReadModel.ActivitySkillCombination
+	SELECT @ActivitySkillCombination=Id
+	FROM ReadModel.ActivitySkillCombination
+	WHERE Activity=@Activity
+	AND Skills=@Skills
+
 	IF (@ActivitySkillCombination IS NULL)
 		begin
 			INSERT INTO ReadModel.ActivitySkillCombination (Activity,Skills,ActivityRequiresSeat) VALUES (@Activity,@Skills,@ActivityRequiresSeat)
 			SELECT @ActivitySkillCombination=SCOPE_IDENTITY()
 		end
-	
-	DECLARE @PeriodResourceId bigint
-	SELECT @PeriodResourceId = Id FROM ReadModel.ScheduledResources WHERE ActivitySkillCombinationId = @ActivitySkillCombination AND PeriodStart = @PeriodStart
+	--ELSE?
+
+	--insert/update ReadModel.ScheduledResources
+	SELECT @PeriodResourceId = Id
+	FROM ReadModel.ScheduledResources
+	WHERE ActivitySkillCombinationId = @ActivitySkillCombination
+	AND PeriodStart = @PeriodStart
+
 	IF (@PeriodResourceId IS NULL)
 		begin
 			INSERT INTO ReadModel.ScheduledResources (ActivitySkillCombinationId,Resources,Heads,PeriodStart,PeriodEnd) VALUES (@ActivitySkillCombination,@Resources,@Heads,@PeriodStart,@PeriodEnd)
@@ -30,7 +41,12 @@ BEGIN
 		end
 	ELSE
 		begin
-			UPDATE ReadModel.ScheduledResources SET Resources=Resources+@Resources,Heads=Heads+1 WHERE Id=@PeriodResourceId
+			UPDATE ReadModel.ScheduledResources
+			SET
+				Resources	= Resources+@Resources,
+				Heads		= Heads+1
+			WHERE ActivitySkillCombinationId = @ActivitySkillCombination
+			AND PeriodStart = @PeriodStart
 		end
 		
 	SELECT @PeriodResourceId

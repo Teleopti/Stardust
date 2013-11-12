@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 				  .Return(teskOwners);
 			Expect.Call(_forecastClassesCreator.GetNewTaskOwnerPeriod(teskOwners)).Return(taskOwnerPeriod);
 			Expect.Call(_outlierRep.FindByWorkload(workload)).Return(new List<IOutlier>());
-			Expect.Call(_skillDayRep.GetAllSkillDays(_statPeriod, new List<ISkillDay>(), null, scenario,false)).IgnoreArguments()
+			Expect.Call(_skillDayRep.GetAllSkillDays(_statPeriod, new List<ISkillDay>(), null, scenario, _ => { })).IgnoreArguments()
 			      .Return(new Collection<ISkillDay>());
 			Expect.Call(_forecastClassesCreator.CreateSkillDayCalculator(null, new List<ISkillDay>(), _statPeriod))
 			      .IgnoreArguments()

@@ -21,6 +21,11 @@ namespace Teleopti.Ccc.Win.Shifts
         private TreeViewAdv _defaultTreeView;
         private ShiftCreatorViewType _currentView = ShiftCreatorViewType.RuleSet;
 
+		public ShiftCreatorViewType CurrentView
+		{
+			get { return _currentView; }
+		}
+
         public TreeViewAdv DefaultTreeView
         {
             get { return _defaultTreeView; }
