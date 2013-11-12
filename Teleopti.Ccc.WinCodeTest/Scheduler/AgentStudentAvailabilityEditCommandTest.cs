@@ -19,16 +19,18 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private TimeSpan _endTime;
 		private IStudentAvailabilityDay _studentAvailabilityDay;
 		private IAgentStudentAvailabilityDayCreator _studentAvailabilityDayCreator;
+	    private IScheduleDictionary _scheduleDictionary;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_mock = new MockRepository();
 			_studentAvailabilityDayCreator = _mock.StrictMock<IAgentStudentAvailabilityDayCreator>();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
+            _scheduleDictionary = _mock.DynamicMock<IScheduleDictionary>();
 			_startTime = TimeSpan.FromHours(8);
 			_endTime = TimeSpan.FromHours(10);
-			_target = new AgentStudentAvailabilityEditCommand(_scheduleDay, _startTime, _endTime, _studentAvailabilityDayCreator);
+			_target = new AgentStudentAvailabilityEditCommand(_scheduleDay, _startTime, _endTime, _studentAvailabilityDayCreator,_scheduleDictionary);
 			_studentAvailabilityDay = _mock.StrictMock<IStudentAvailabilityDay>();
 		}
 

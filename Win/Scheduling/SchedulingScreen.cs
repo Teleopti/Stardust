@@ -581,7 +581,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-
 				uow.Reassociate(_schedulerState.SchedulingResultState.PersonsInOrganization);
 				_schedulerMessageBrokerHandler.HandleMeetingChange(e.ModifiedMeeting, e.Delete);
 			}
@@ -600,11 +599,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var affectedScheduleDays = new List<IScheduleDay>();
 			while (startDate <= e.ModifiedMeeting.EndDate)
 			{
-				foreach (var meetingPerson in e.ModifiedMeeting.MeetingPersons)
-				{
-					var range = SchedulerState.SchedulingResultState.Schedules[meetingPerson.Person];
-					affectedScheduleDays.Add(range.ScheduledDay(startDate));
-				}
+	            affectedScheduleDays.AddRange(
+	                e.ModifiedMeeting.MeetingPersons.Where(meetingPerson => SchedulerState.SchedulingResultState.PersonsInOrganization.Contains(meetingPerson.Person))
+	                 .Select(meetingPerson => SchedulerState.SchedulingResultState.Schedules[meetingPerson.Person])
+	                 .Select(range => range.ScheduledDay(startDate)));
 				startDate = startDate.AddDays(1);
 			}
 			_scheduleView.Presenter.ModifySchedulePart(affectedScheduleDays, true);
@@ -2389,6 +2387,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void grid_CurrentCellKeyDown(object sender, KeyEventArgs e)
 		{
+			if (e.Control && e.KeyCode == Keys.A)
+			{
+				if(!(_scheduleView is AgentRestrictionsDetailView))
+				{
+					GridHelper.HandleSelectAllSchedulingView((GridControl)sender);
+					return;
+				}
+			}
+
 			GridHelper.HandleSelectionKeys((GridControl)sender, e);
 		}
 
@@ -3584,13 +3591,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 				BeginInvoke(new EventHandler<ProgressChangedEventArgs>(_backgroundWorkerScheduling_ProgressChanged), sender, e);
 			else
 			{
-				if (e.ProgressPercentage <= 0)
+				if (e.UserState is TeleoptiProgressChangeMessage)
 				{
-					schedulingProgress(Math.Abs(e.ProgressPercentage));
+					var arg = (TeleoptiProgressChangeMessage)e.UserState;
+					scheduleStatusBarUpdate(arg.Message);
 				}
 				else
 				{
-					schedulingProgress(null);
+					if (e.ProgressPercentage <= 0)
+					{
+						schedulingProgress(Math.Abs(e.ProgressPercentage));
+					}
+					else
+					{
+						schedulingProgress(null);
+					}
 				}
 			}
 		}
@@ -3765,6 +3780,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 				optimizationProgress(e);
 			}
 		}
+
+        private void scheduleStatusBarUpdate(string message)
+        {
+            toolStripStatusLabelStatus.Text = message;
+            statusStrip1.Refresh();
+            Application.DoEvents();
+        }
 
 		private void schedulingProgress(int? percent)
 		{
@@ -4860,10 +4882,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 				new CachedNumberOfEachCategoryPerPerson(_schedulerState.Schedules, _schedulerState.RequestedPeriod.DateOnlyPeriod);
 			ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate =
 				new CachedNumberOfEachCategoryPerDate(_schedulerState.Schedules, _schedulerState.RequestedPeriod.DateOnlyPeriod);
-			ICachedShiftCategoryDistribution cachedShiftCategoryDistribution =
+		    var allowedSc = new List<IShiftCategory>();
+            foreach (var shiftCategory in _schedulerState.CommonStateHolder.ShiftCategories)
+            {
+                var sc = shiftCategory as IDeleteTag;
+                if(sc!=null && !sc.IsDeleted)
+                    allowedSc.Add(shiftCategory );
+            }
+            ICachedShiftCategoryDistribution cachedShiftCategoryDistribution =
 				new CachedShiftCategoryDistribution(_schedulerState.Schedules, _schedulerState.RequestedPeriod.DateOnlyPeriod,
 																						cachedNumberOfEachCategoryPerPerson,
-																						_schedulerState.CommonStateHolder.ShiftCategories);
+                                                                                        allowedSc);
 			_shiftCategoryDistributionModel = new ShiftCategoryDistributionModel(cachedShiftCategoryDistribution,
 																																					 cachedNumberOfEachCategoryPerDate,
 																																					 cachedNumberOfEachCategoryPerPerson,
@@ -6895,25 +6924,23 @@ namespace Teleopti.Ccc.Win.Scheduling
 			using (var view = new AgentPreferenceView(selectedDay, WorkflowControlSets, _schedulerState.SchedulingResultState))
 			{
 				view.ShowDialog(this);
-				updateRestrictions(view.ScheduleDay);
+                updateRestrictions(_scheduleView.SelectedSchedules()[0]);
 			}
 		}
 
 		private void addStudentAvailabilityToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			var selectedDay = _scheduleView.SelectedSchedules()[0];
-			using (var view = new AgentStudentAvailabilityView(selectedDay))
+			using (var view = new AgentStudentAvailabilityView(selectedDay,_schedulerState.SchedulingResultState))
 			{
 				view.ShowDialog(this);
-				updateRestrictions(view.ScheduleDay);
+                updateRestrictions(_scheduleView.SelectedSchedules()[0]);
 			}
 		}
 
 		private void updateRestrictions(IScheduleDay scheduleDay)
 		{
 			if (_scheduleView == null || scheduleDay == null) return;
-			_scheduleView.Presenter.LastUnsavedSchedulePart = scheduleDay;
-			_scheduleView.Presenter.UpdateRestriction();
 			if (_scheduleView is AgentRestrictionsDetailView)
 			{
 				schedulerSplitters1.RecalculateRestrictions();
@@ -6930,15 +6957,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			using (var view = new AgentOvertimeAvailabilityView(selectedDay))
 			{
 				view.ShowDialog(this);
-				updateOvertimeAvailability(view.ScheduleDay);
+                updateOvertimeAvailability();
 			}
 		}
 
-		private void updateOvertimeAvailability(IScheduleDay scheduleDay)
+		private void updateOvertimeAvailability()
 		{
-			if (_scheduleView == null || scheduleDay == null) return;
-			_scheduleView.Presenter.LastUnsavedSchedulePart = scheduleDay;
-			_scheduleView.Presenter.UpdateOvertimeAvailability();
+			if (_scheduleView == null) return;
 			enableSave();
 		}
 

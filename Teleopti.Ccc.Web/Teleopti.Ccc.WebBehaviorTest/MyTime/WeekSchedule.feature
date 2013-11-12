@@ -31,6 +31,11 @@ Background:
 	| Night |
 	| Day   |
 	| Late  |
+	And there are activities
+	| Name           | Color  |
+	| Lunch          | Yellow |
+	| White activity | White  |
+	| Black activity | Black  |
 
 Scenario: View current week
 	Given I have the role 'Full access to mytime'
@@ -42,11 +47,13 @@ Scenario: View night shift
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
 	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2012-08-27 20:00 |
-	| EndTime               | 2012-08-28 04:00 |
-	| Lunch3HoursAfterStart | true             |
-	| Shift category		| Night	           |
+	| Field                         | Value            |
+	| Shift category                | Night            |
+	| StartTime                     | 2012-08-27 20:00 |
+	| EndTime                       | 2012-08-28 04:00 |
+	| Scheduled activity            | Lunch            |
+	| Scheduled activity start time | 2012-08-27 23:00 |
+	| Scheduled activity end time   | 2012-08-28 00:00 |
 	When I view my week schedule for date '2012-08-27'
 	Then I should not see the end of the shift on date '2012-08-27'
 	And I should see the the shift ending at '04:00' on date '2012-08-28'
@@ -225,11 +232,13 @@ Scenario: Show activity at correct times
 	And I am swedish
 	And I have the workflow control set 'Published schedule'
 	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2012-08-27 08:00 |
-	| EndTime               | 2012-08-27 18:00 |
-	| Lunch3HoursAfterStart | true             |
-	| Shift category		| Day	           |
+	| Field                         | Value            |
+	| Shift category                | Day              |
+	| StartTime                     | 2012-08-27 08:00 |
+	| EndTime                       | 2012-08-27 18:00 |
+	| Scheduled activity            | Lunch            |
+	| Scheduled activity start time | 2012-08-27 11:00 |
+	| Scheduled activity end time   | 2012-08-27 12:00 |
 	When I view my week schedule for date '2012-08-27'
 	Then I should see activities on date '2012-08-27' with:
 	| Field                 | Value         |
@@ -288,11 +297,11 @@ Scenario: Show black activity text when activity background color is white
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
 	And I have a shift with
-    | Field                 | Value            |
-	| StartTime             | 2013-01-30 08:00 |
-	| EndTime               | 2013-01-30 18:00 |
-	| Shift category        | Day              |
-	| All activity color    | White            |
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | White activity   |
+	| StartTime      | 2013-01-30 08:00 |
+	| EndTime        | 2013-01-30 18:00 |
 	When I view my week schedule for date '2013-01-30'
 	Then I should see the text for date '2013-01-30' in 'black'
 
@@ -300,11 +309,11 @@ Scenario: Show white activity text when activity background color is black
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
 	And I have a shift with
-    | Field                 | Value            |
-	| StartTime             | 2013-01-30 08:00 |
-	| EndTime               | 2013-01-30 18:00 |
-	| Shift category        | Day              |
-	| All activity color    | Black            |
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Black activity   |
+	| Start time     | 2013-01-30 08:00 |
+	| End time       | 2013-01-30 18:00 |
 	When I view my week schedule for date '2013-01-30'
 	Then I should see the text for date '2013-01-30' in 'white'
 

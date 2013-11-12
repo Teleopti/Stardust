@@ -14,13 +14,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IScheduleDay _scheduleDay;
 		private MockRepository _mock;
 		private IOvertimeAvailability _overtimeAvailabilityDay;
+	    private IScheduleDictionary _scheduleDictionary;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_mock = new MockRepository();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
-			_target = new AgentOvertimeAvailabilityRemoveCommand(_scheduleDay);
+			_scheduleDictionary = _mock.DynamicMock<IScheduleDictionary>();
+			_target = new AgentOvertimeAvailabilityRemoveCommand(_scheduleDay,_scheduleDictionary);
 			_overtimeAvailabilityDay = _mock.StrictMock<IOvertimeAvailability>();
 		}
 

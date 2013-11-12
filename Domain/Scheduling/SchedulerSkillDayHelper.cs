@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 {
                     ICollection<ISkillDay> skillDays =
                     _skillDayRepository.GetAllSkillDays(_dateTimePeriod, new List<ISkillDay>(), skill,
-                                                       _scenario, false);
+                                                       _scenario, _ => {});
                     foreach (ISkillDay skillDay in skillDays)
                     {
                         var sDay = skillDay as IMaxSeatSkillDay;

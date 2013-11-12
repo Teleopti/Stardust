@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var date = DateOnly.Today.AddDays(1);
 			personPeriodProvider.Stub(x => x.HasPersonPeriod(date)).Return(true);
 			var id = Guid.NewGuid();
-			var target = new TeamScheduleController(viewModelFactory, MockRepository.GenerateMock<IDefaultTeamCalculator>());
+			var target = new TeamScheduleController(viewModelFactory, MockRepository.GenerateMock<IDefaultTeamProvider>());
 
 			viewModelFactory.Stub(x => x.CreateViewModel(date, id)).Return(new TeamScheduleViewModel());
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
 			var personPeriodProvider = MockRepository.GenerateMock<IPersonPeriodProvider>();
 			personPeriodProvider.Stub(x => x.HasPersonPeriod(DateOnly.Today)).Return(true);
-			var target = new TeamScheduleController(viewModelFactory, MockRepository.GenerateMock<IDefaultTeamCalculator>());
+			var target = new TeamScheduleController(viewModelFactory, MockRepository.GenerateMock<IDefaultTeamProvider>());
 
 			target.Index(null, Guid.Empty);
 
@@ -51,12 +51,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldUseMyTeamsIdWhenNoIdSpecified()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
-			var defaultTeamCalculator = MockRepository.GenerateMock<IDefaultTeamCalculator>();
+			var defaultTeamCalculator = MockRepository.GenerateMock<IDefaultTeamProvider>();
 			var personPeriodProvider = MockRepository.GenerateMock<IPersonPeriodProvider>();
 			personPeriodProvider.Stub(x => x.HasPersonPeriod(DateOnly.Today)).Return(true);
 			var team = new Domain.AgentInfo.Team();
 			team.SetId(Guid.NewGuid());
-			defaultTeamCalculator.Stub(x => x.Calculate(DateOnly.Today)).Return(team);
+			defaultTeamCalculator.Stub(x => x.DefaultTeam(DateOnly.Today)).Return(team);
 
 			var target = new TeamScheduleController(viewModelFactory, defaultTeamCalculator);
 

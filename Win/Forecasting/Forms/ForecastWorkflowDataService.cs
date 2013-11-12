@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 var skillRepository = _repositoryFactory.CreateSkillRepository(uow);
 				uow.Reassociate(workload.Skill);
                 var skillDays = skillDayRepository.FindRange(period, skillRepository.LoadSkill(workload.Skill), scenario);
-                skillDays = skillDayRepository.GetAllSkillDays(period, skillDays, workload.Skill, scenario, false);
+                skillDays = skillDayRepository.GetAllSkillDays(period, skillDays, workload.Skill, scenario, _ => {});
 
                 //todo: Hmm, InitializeWorkPeriod, 
                 var calculator = new SkillDayCalculator(workload.Skill, skillDays.ToList(), InitializeWorkPeriod(scenario, workload));

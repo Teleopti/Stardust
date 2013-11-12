@@ -199,7 +199,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see an '(.*)' indication for chance of absence request on '(.*)'")]
 		public void ThenIShouldSeeAnIndicationForChanceOfAbsenceRequestOn(string color, DateTime date)
 		{
-			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .small-circle[style*='{1}']", date.ToString("yyyy-MM-dd"), color));
+			Browser.Interactions.AssertNotExists(
+				string.Format(".weekview-day[data-mytime-date='{0}'] .small-circle[style*='{1}']", date.ToString("yyyy-MM-dd"), color), 
+				string.Format(".weekview-day[data-mytime-date='{0}'] .holiday-agents[style*='none']", date.ToString("yyyy-MM-dd")));
 		}
 
 		[Then(@"I should not see any indication of how many agents can go on holiday")]

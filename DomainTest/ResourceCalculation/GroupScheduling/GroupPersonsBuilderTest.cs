@@ -59,13 +59,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			var rootGroup = _mocks.StrictMock<IRootPersonGroup>();
 			var selectedPersons = new List<IPerson> {_person1, _person2, _person3};
 			var groupPerson = _mocks.StrictMock<IGroupPerson>();
-		    Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
+		    Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
 		    Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
 			Expect.Call(_groupPagePerDate.GetGroupPageByDate(date)).Return(groupPage);
 			Expect.Call(groupPage.RootGroupCollection).Return(
-				new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup }));
-			Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(_allPerson));
-		    Expect.Call(_scheduleDictionary.Keys).Return(_allPerson);
+				new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup })).Repeat.AtLeastOnce();
+			Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(_allPerson)).Repeat.AtLeastOnce();
+		    Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.AtLeastOnce();
 			Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup> ()));
 			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, selectedPersons,date, _schedulingOptions)).Return(true).IgnoreArguments();
 			Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
@@ -104,11 +104,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
 			Expect.Call(_groupPagePerDate.GetGroupPageByDate(date)).Return(groupPage);
 			Expect.Call(groupPage.RootGroupCollection).Return(
-				new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup, rootGroup2 }));
-            Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
-            Expect.Call(_scheduleDictionary.Keys).Return(_allPerson);
-			Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(personColl1));
-			Expect.Call(rootGroup2.PersonCollection).Return(new ReadOnlyCollection<IPerson>(personColl2));
+				new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup, rootGroup2 })).Repeat.AtLeastOnce();
+            Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+			Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.AtLeastOnce();
+			Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(personColl1)).Repeat.AtLeastOnce();
+			Expect.Call(rootGroup2.PersonCollection).Return(new ReadOnlyCollection<IPerson>(personColl2)).Repeat.AtLeastOnce();
 			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, personColl1, date,_schedulingOptions)).Return(true);
 			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, personColl2, date, _schedulingOptions)).Return(true);
 			Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
@@ -150,10 +150,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
 			Expect.Call(_groupPagePerDate.GetGroupPageByDate(date)).Return(groupPage);
 			Expect.Call(groupPage.RootGroupCollection).Return(
-				new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup }));
-			Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(_allPerson));
-            Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
-            Expect.Call(_scheduleDictionary.Keys).Return(_allPerson);
+				new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup })).Repeat.AtLeastOnce();
+			Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(_allPerson)).Repeat.AtLeastOnce();
+			Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+			Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.AtLeastOnce();
 			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, _allPerson, date, _schedulingOptions)).Return(false);
 			Expect.Call(rootGroup.Description).Return(new Description("RootGroup"));
 			_mocks.ReplayAll();
@@ -185,11 +185,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
 			Expect.Call(_groupPagePerDate.GetGroupPageByDate(date)).Return(groupPage);
 			Expect.Call(groupPage.RootGroupCollection).Return(
-				new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup, rootGroup2 }));
-			Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(personColl1));
-			Expect.Call(rootGroup2.PersonCollection).Return(new ReadOnlyCollection<IPerson>(personColl2));
-            Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
-            Expect.Call(_scheduleDictionary.Keys).Return(_allPerson);
+				new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup, rootGroup2 })).Repeat.AtLeastOnce();
+			Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(personColl1)).Repeat.AtLeastOnce();
+			Expect.Call(rootGroup2.PersonCollection).Return(new ReadOnlyCollection<IPerson>(personColl2)).Repeat.AtLeastOnce();
+			Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+			Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.AtLeastOnce();
 			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, personColl1, date, _schedulingOptions)).Return(true);
 			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, personColl2, date, _schedulingOptions)).Return(true);
 			Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
@@ -229,36 +229,53 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			var childPersonGroup = _mocks.StrictMock<IChildPersonGroup>();
 			var personColl1 = new List<IPerson> { _person1, _person4, _person5 };
 			var personColl2 = new List<IPerson> { _person2, _person3 };
+			var personColl3 = new List<IPerson> { _person2 };
+			var personColl4 = new List<IPerson> { _person3 };
 			var members1 = new List<IPerson> { _person1 };
 			var members2 = new List<IPerson> { _person2, _person3 };
 
 			var selectedPersons = new List<IPerson> { _person1, _person2, _person3 };
 			var groupPerson = _mocks.StrictMock<IGroupPerson>();
 			var groupPerson2 = _mocks.StrictMock<IGroupPerson>();
+			var groupPerson3 = _mocks.StrictMock<IGroupPerson>();
+			var groupPerson4 = _mocks.StrictMock<IGroupPerson>();
 
             Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
 			Expect.Call(_groupPagePerDate.GetGroupPageByDate(date)).Return(groupPage);
 			Expect.Call(groupPage.RootGroupCollection).Return(
-				new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup }));
+				new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup })).Repeat.AtLeastOnce();
 			Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup> { childPersonGroup }));
-			Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(personColl1));
-			Expect.Call(childPersonGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(personColl2));
-            Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.Twice();
-            Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.Twice();
+			Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(personColl1)).Repeat.AtLeastOnce();
+			Expect.Call(childPersonGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(personColl2)).Repeat.AtLeastOnce();
+			Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+			Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.AtLeastOnce();
 			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, personColl1, date, _schedulingOptions)).Return(true);
 			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, personColl2, date, _schedulingOptions)).Return(true);
+			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, personColl3, date, _schedulingOptions)).Return(true);
+			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, personColl4, date, _schedulingOptions)).Return(true);
 			Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
 			Expect.Call(childPersonGroup.Description).Return(new Description("CHILD"));
 
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person1 }, date, "ROOT", _guid)).Return(groupPerson);
-
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person2, _person3 }, date, "CHILD", _guid)).Return(groupPerson2);
+			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person2 }, date, "a-a", _guid)).Return(groupPerson3);
+			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person3 }, date, "b-b", _guid)).Return(groupPerson4);
 
-			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members1));
-			Expect.Call(groupPerson2.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members2));
-			Expect.Call(_groupPersonConsistentChecker.CommonPossibleStartEndCategory).Return(null).Repeat.Twice();
-			Expect.Call(() => groupPerson.CommonPossibleStartEndCategory = null);
-			Expect.Call(() => groupPerson2.CommonPossibleStartEndCategory = null);
+			Expect.Call(_person2.Name).Return(new Name("a","a")).Repeat.AtLeastOnce();
+			Expect.Call(_person3.Name).Return(new Name("b","b")).Repeat.AtLeastOnce();
+			Expect.Call(_person2.Id).Return(_guid);
+			Expect.Call(_person3.Id).Return(_guid);
+
+			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members1)).Repeat.AtLeastOnce();
+			Expect.Call(groupPerson2.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members2)).Repeat.AtLeastOnce();
+			Expect.Call(groupPerson3.GroupMembers).Return(new ReadOnlyCollection<IPerson>(personColl3)).Repeat.AtLeastOnce();
+			Expect.Call(groupPerson4.GroupMembers).Return(new ReadOnlyCollection<IPerson>(personColl4)).Repeat.AtLeastOnce();
+			Expect.Call(_groupPersonConsistentChecker.CommonPossibleStartEndCategory).Return(null).Repeat.AtLeastOnce();
+			
+			Expect.Call(() => groupPerson.CommonPossibleStartEndCategory = null).Repeat.AtLeastOnce();
+			Expect.Call(() => groupPerson2.CommonPossibleStartEndCategory = null).Repeat.AtLeastOnce();
+			Expect.Call(() => groupPerson3.CommonPossibleStartEndCategory = null).Repeat.AtLeastOnce();
+			Expect.Call(() => groupPerson4.CommonPossibleStartEndCategory = null).Repeat.AtLeastOnce();
 
 			Expect.Call(childPersonGroup.ChildGroupCollection).Return(
 				new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
@@ -271,7 +288,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
             var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
 
-			Assert.That(ret.Count, Is.EqualTo(2));
+			Assert.That(ret.Count, Is.EqualTo(4));
 			_mocks.VerifyAll();
 		}
 
@@ -289,10 +306,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
             Expect.Call(_groupPagePerDate.GetGroupPageByDate(date)).Return(groupPage);
             Expect.Call(groupPage.RootGroupCollection).Return(
-                new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup }));
-            Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(_allPerson));
-            Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
-            Expect.Call(_scheduleDictionary.Keys).Return(_allPerson);
+                new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup })).Repeat.AtLeastOnce();
+            Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(_allPerson)).Repeat.AtLeastOnce();
+            Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+            Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.AtLeastOnce();
             Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
 			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, _allPerson, date, _schedulingOptions)).Return(true);
             Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
@@ -301,6 +318,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             Expect.Call(_groupPersonConsistentChecker.CommonPossibleStartEndCategory).Return(null);
             Expect.Call(() => groupPerson.CommonPossibleStartEndCategory = null);
 			Expect.Call(rootGroup.Id).Return(_guid);
+			Expect.Call(_person1.Name).Return(new Name("a", "a")).Repeat.AtLeastOnce();
+			Expect.Call(_person1.Id).Return(_guid);
 
             _mocks.ReplayAll();
             _groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory, 
@@ -328,10 +347,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
             Expect.Call(_groupPagePerDate.GetGroupPageByDate(date)).Return(groupPage);
             Expect.Call(groupPage.RootGroupCollection).Return(
-                new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup }));
-            Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(_allPerson));
-            Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
-            Expect.Call(_scheduleDictionary.Keys).Return(_allPerson);
+                new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup })).Repeat.AtLeastOnce();
+            Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(_allPerson)).Repeat.AtLeastOnce();
+            Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+            Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.AtLeastOnce();
             Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
             Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(selectedAndInDictionary, date, "ROOT", _guid)).Return(groupPerson);
@@ -339,7 +358,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             Expect.Call(_groupPersonConsistentChecker.CommonPossibleStartEndCategory).Return(null);
             Expect.Call(() => groupPerson.CommonPossibleStartEndCategory = null);
 			Expect.Call(rootGroup.Id).Return(_guid);
-			
+			Expect.Call(_person1.Name).Return(new Name("a", "a")).Repeat.AtLeastOnce();
+			Expect.Call(_person1.Id).Return(_guid);
+
             _mocks.ReplayAll();
             _groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory, 
                 _groupPersonConsistentChecker, _schedulingResults, _groupPagePerDateHolder);

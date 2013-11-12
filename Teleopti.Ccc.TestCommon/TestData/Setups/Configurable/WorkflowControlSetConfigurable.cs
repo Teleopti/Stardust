@@ -1,5 +1,8 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -14,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string SchedulePublishedToDate { get; set; }
 		public string AvailableShiftCategory { get; set; }
 		public string AvailableDayOff { get; set; }
-		public string AvailableAbsence{ get; set; }
+		public string AvailableAbsence { get; set; }
 		public string AvailableActivity { get; set; }
 		public bool PreferencePeriodIsClosed { get; set; }
 		public bool StudentAvailabilityPeriodIsClosed { get; set; }
@@ -34,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(IUnitOfWork uow)
 		{
-			var workflowControlSet = new WorkflowControlSet(Name) {SchedulePublishedToDate = DateTime.Parse(SchedulePublishedToDate)};
+			var workflowControlSet = new WorkflowControlSet(Name) { SchedulePublishedToDate = DateTime.Parse(SchedulePublishedToDate) };
 
 			if (PreferencePeriodIsClosed)
 				workflowControlSet.PreferencePeriod = new DateOnlyPeriod(1900, 1, 1, 1900, 1, 1);
@@ -59,26 +62,26 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				workflowControlSet.AddAllowedPreferenceAbsence(absence);
 
 				var absenceRequestOpenPeriodStart = String.IsNullOrEmpty(AbsenceRequestOpenPeriodStart)
-					                                    ? new DateOnly(1900, 1, 1)
-					                                    : new DateOnly(DateTime.Parse(AbsenceRequestOpenPeriodStart));
+														? new DateOnly(1900, 1, 1)
+														: new DateOnly(DateTime.Parse(AbsenceRequestOpenPeriodStart));
 
 				var absenceRequestOpenPeriodEnd = String.IsNullOrEmpty(AbsenceRequestOpenPeriodEnd)
 											? new DateOnly(2040, 12, 31)
 											: new DateOnly(DateTime.Parse(AbsenceRequestOpenPeriodEnd));
-				
+
 				var absenceRequestPreferencePeriodStart = String.IsNullOrEmpty(AbsenceRequestPreferencePeriodStart)
-					                                    ? new DateOnly(1900, 1, 1)
+														? new DateOnly(1900, 1, 1)
 														: new DateOnly(DateTime.Parse(AbsenceRequestPreferencePeriodStart));
 
 				var absenceRequestPreferencePeriodEnd = String.IsNullOrEmpty(AbsenceRequestPreferencePeriodEnd)
 											? new DateOnly(2040, 12, 31)
 											: new DateOnly(DateTime.Parse(AbsenceRequestPreferencePeriodEnd));
-				
+
 				var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod
 				{
 					Absence = absence,
 					OpenForRequestsPeriod =
-						new DateOnlyPeriod(absenceRequestOpenPeriodStart,absenceRequestOpenPeriodEnd),
+						new DateOnlyPeriod(absenceRequestOpenPeriodStart, absenceRequestOpenPeriodEnd),
 					Period = new DateOnlyPeriod(absenceRequestPreferencePeriodStart, absenceRequestPreferencePeriodEnd)
 				};
 				workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenPeriod);
@@ -96,6 +99,25 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 						break;
 					case "budgetgroup head count":
 						workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
+						break;
+					case "mix":
+						var mixedList = new List<IAbsenceRequestValidator>(){
+							new BudgetGroupAllowanceValidator(), 
+							new BudgetGroupHeadCountValidator(),
+							new StaffingThresholdValidator()
+						};
+
+						foreach (var absenceRequestValidator in mixedList)
+						{
+							workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+							{
+								Absence = absence,
+								OpenForRequestsPeriod =
+									new DateOnlyPeriod(absenceRequestOpenPeriodStart, absenceRequestOpenPeriodEnd),
+								Period = new DateOnlyPeriod(absenceRequestPreferencePeriodStart, absenceRequestPreferencePeriodEnd)
+							});
+							workflowControlSet.AbsenceRequestOpenPeriods[workflowControlSet.AbsenceRequestOpenPeriods.Count - 1].StaffingThresholdValidator = absenceRequestValidator;
+						}
 						break;
 				}
 

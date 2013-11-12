@@ -169,6 +169,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ControllableEventSyncronization.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\IEventSyncronization.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventDayOff.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\DisabledScheduledResourcesReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventShift.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\IScheduledResourcesReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonReactivatedHandler.cs" />
@@ -552,6 +553,7 @@
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryChecker.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
+    <Compile Include="Scheduling\PersonToSingleAgentTeamRootPersonGroupConverter.cs" />
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalGenerator.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriod.cs" />

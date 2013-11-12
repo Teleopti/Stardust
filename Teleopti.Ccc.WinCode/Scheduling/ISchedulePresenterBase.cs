@@ -54,8 +54,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         bool TryModify(IList<IScheduleDay> scheduleParts);
         bool TryModify(IList<IScheduleDay> scheduleParts, IScheduleTag scheduleTag);
 
-        void UpdateRestriction();
-        void UpdateOvertimeAvailability();
         void UpdateNoteFromEditor();
         void UpdatePublicNoteFromEditor();
         void UpdateFromEditor();

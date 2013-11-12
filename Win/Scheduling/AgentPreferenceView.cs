@@ -16,11 +16,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 	{
 		private readonly IAgentPreferenceDayCreator _dayCreator;
 		private readonly AgentPreferencePresenter _presenter;
-		private bool _isDirty;
 		private readonly IList<IWorkflowControlSet> _workflowControlSets;
 		private bool _isInitialized;
 
-		public AgentPreferenceView(IScheduleDay scheduleDay, IList<IWorkflowControlSet> workflowControlSets, ISchedulingResultStateHolder schedulingResultStateHolder)
+	    public AgentPreferenceView(IScheduleDay scheduleDay, IList<IWorkflowControlSet> workflowControlSets, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			InitializeComponent();
 			SetTexts();
@@ -29,11 +28,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_dayCreator = new AgentPreferenceDayCreator();
 			_presenter = new AgentPreferencePresenter(this, scheduleDay, schedulingResultStateHolder);
 			_workflowControlSets = workflowControlSets;
-		}
-
-		public IScheduleDay ScheduleDay
-		{
-			get { return _isDirty ? _presenter.ScheduleDay : null; }
 		}
 
 		public void UpdateShiftCategory(IShiftCategory shiftCategory)
@@ -202,7 +196,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public void PopulateShiftCategories()
 		{
 			
-			var workflowControlSet = _presenter.ScheduleDay.Person.WorkflowControlSet;
+			var workflowControlSet = _presenter.WorkflowControlSet;
 			var comboCategories = new List<ComboBoxAdvShiftCategory>();
 
 			foreach (var controlSet in _workflowControlSets)
@@ -234,7 +228,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void PopulateAbsences()
 		{
-			var workflowControlSet = _presenter.ScheduleDay.Person.WorkflowControlSet;
+			var workflowControlSet = _presenter.WorkflowControlSet;
 			var absences = new List<IAbsence>();
 
 			foreach (var controlSet in _workflowControlSets)
@@ -266,7 +260,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void PopulateDayOffs()
 		{
-			var workflowControlSet = _presenter.ScheduleDay.Person.WorkflowControlSet;
+			var workflowControlSet = _presenter.WorkflowControlSet;
 			var comboDayOffs = new List<ComboBoxAdvDayOffTemplate>();
 
 			foreach (var controlSet in _workflowControlSets)
@@ -299,7 +293,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void PopulateActivities()
 		{
-			var workflowControlSet = _presenter.ScheduleDay.Person.WorkflowControlSet;
+			var workflowControlSet = _presenter.WorkflowControlSet;
 			var activities = new List<IActivity>();
 
 			foreach (var controlSet in _workflowControlSets)
@@ -388,59 +382,31 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var data = viewData();
 			var result = validateTimes(data);
 			var commandToExecute = _presenter.CommandToExecute(data, _dayCreator);
-			
-			if (commandToExecute == AgentPreferenceExecuteCommand.None)
-			{
-				if (result.ExtendedTimesError)
-				{
-					tabControlAgentInfo.SelectedIndex = 1;
-					return;
-				}
 
-				if (result.ActivityTimesError)
-				{
-					tabControlAgentInfo.SelectedIndex = 2;
-					return;
-				}
+		    if (commandToExecute != null)
+		    {
+		        _presenter.RunCommand(commandToExecute);
+		        Hide();
+                return;
+		    }
+		    
+            if (result.ExtendedTimesError)
+		    {
+		        tabControlAgentInfo.SelectedIndex = 1;
+		        return;
+		    }
 
-				_isDirty = false;
-				Hide();
-				return;
-			}
+		    if (result.ActivityTimesError)
+		    {
+		        tabControlAgentInfo.SelectedIndex = 2;
+		        return;
+		    }
 
-			if (commandToExecute == AgentPreferenceExecuteCommand.Remove)
-			{
-				var removeCommand = new AgentPreferenceRemoveCommand(_presenter.ScheduleDay);
-				_presenter.Remove(removeCommand);
-				_isDirty = true;
-				Hide();
-				return;
-			}
-
-			if (commandToExecute == AgentPreferenceExecuteCommand.Add)
-			{
-				var addCommand = new AgentPreferenceAddCommand(_presenter.ScheduleDay, data, _dayCreator);
-				_presenter.Add(addCommand);
-				_isDirty = true;
-				Hide();
-				return;
-			}
-
-			if (commandToExecute == AgentPreferenceExecuteCommand.Edit)
-			{
-				var editCommand = new AgentPreferenceEditCommand(_presenter.ScheduleDay, data, _dayCreator);
-				_presenter.Edit(editCommand);
-				_isDirty = true;
-				Hide();
-				return;
-			}
-
-			_isDirty = false;
+		    Hide();
 		}
 
 		private void buttonAdvCancelClick(object sender, EventArgs e)
 		{
-			_isDirty = false;
 			Hide();
 		}
 
@@ -711,7 +677,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				currentShiftCategory = null;
 			}
 
-			var currentAbsence = comboBoxAdvAbsence.SelectedItem as Absence;
+			var currentAbsence = comboBoxAdvAbsence.SelectedItem as IAbsence;
 			if (currentAbsence.Id == null)
 			{
 				currentAbsence = null;
@@ -724,7 +690,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				currentDayOff = null;
 			}
 
-			var currentActivity = comboBoxAdvActivity.SelectedItem as Activity;
+			var currentActivity = comboBoxAdvActivity.SelectedItem as IActivity;
 			if (currentActivity.Id == null)
 			{
 				currentActivity = null;

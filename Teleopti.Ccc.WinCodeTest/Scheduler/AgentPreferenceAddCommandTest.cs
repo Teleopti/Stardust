@@ -17,12 +17,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IPreferenceDay _preferenceDay;
 		private IAgentPreferenceDayCreator _preferenceDayCreator;
 		private IAgentPreferenceData _data;
-		
-		[SetUp]
+	    private IScheduleDictionary _scheduleDictionary;
+
+	    [SetUp]
 		public void Setup()
 		{
 			_mock = new MockRepository();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
+            _scheduleDictionary = _mock.DynamicMock<IScheduleDictionary>();
 			
 			_data = new AgentPreferenceData
 				{
@@ -35,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				};
 
 			_preferenceDayCreator = _mock.StrictMock<IAgentPreferenceDayCreator>();
-			_target = new AgentPreferenceAddCommand(_scheduleDay,_data, _preferenceDayCreator);
+			_target = new AgentPreferenceAddCommand(_scheduleDay,_data, _preferenceDayCreator, _scheduleDictionary);
 			_preferenceDay = _mock.StrictMock<IPreferenceDay>();	
 		}
 

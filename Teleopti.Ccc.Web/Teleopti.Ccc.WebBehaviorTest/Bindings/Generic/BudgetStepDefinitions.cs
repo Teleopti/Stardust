@@ -23,11 +23,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			DataMaker.Data().Apply(budgetday);
 		}
 
-		[Given(@"there is absence time for")]
-		public void GivenThereIsAbsenceTimeForTo(Table table)
+		[Given(@"(I) have absence time for")]
+		[Given(@"'?(.*)'? has absence time for")]
+		public void GivenHasAbsenceTimeFor(string userName, Table table)
 		{
-			var absenceTimeConfigurable = table.CreateInstance<ScheduleProjectionReadOnlyThing>();
-			DataMaker.Data().ApplyLater(absenceTimeConfigurable);
+			DataMaker.ApplyFromTable<AbsenceTimeConfigurable>(userName, table);
 		}
 	}
 }

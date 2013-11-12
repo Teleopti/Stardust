@@ -62,7 +62,7 @@ Scenario: Order like shift start, full day absence, day off, no shift
 	| Name  | Day off    |
 	| Date  | 2013-09-27 |
 	And 'Pierre Andeen' has no shift
-	When I view schedules for '2013-09-27'
+	When I view schedules for 'Team green' on '2013-09-27'
 	Then I should see 'Pierre Baldi' before 'Ashley Andeen'
 	And I should see 'Ashley Andeen' before 'John King'
 	And I should see 'John King' before 'Pierre Andeen'
@@ -88,5 +88,32 @@ Scenario: Order by shift start when shift and day off in view
 	| Activity       | Phone            |
 	| Start time     | 2013-09-27 08:00 |
 	| End time       | 2013-09-27 17:00 |
-	When I view schedules for '2013-09-27'
+	When I view schedules for 'Team green' on '2013-09-27'
 	Then I should see 'Pierre Baldi' before 'Ashley Andeen'
+
+Scenario: Order as full day absence when on day off
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Andeen' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-10-28 15:00 |
+	| End time       | 2013-10-28 23:00 |
+	And 'Ashley Andeen' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-10-28 14:00 |
+	| End time       | 2013-10-28 22:00 |	
+	And 'Ashley Andeen' has a full day absence named 'Vacation' on '2013-10-28'	
+	And 'Pierre Baldi' has a day off named 'Day off' on '2013-10-28'
+	And 'Pierre Baldi' has an absence with
+	| Field      | Value            |
+	| Name       | Vacation         |
+	| Start time | 2013-10-28 00:00 |
+	| End time   | 2013-10-28 23:59 |
+	And 'John King' has a day off named 'Day off' on '2013-10-28'
+	When I view schedules for '2013-10-28'
+	Then I should see 'Pierre Andeen' before 'Pierre Baldi'
+	And I should see 'Pierre Baldi' before 'Ashley Andeen'
+	And I should see 'Ashley Andeen' before 'John King'

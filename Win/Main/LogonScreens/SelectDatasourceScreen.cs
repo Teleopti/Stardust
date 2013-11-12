@@ -20,6 +20,9 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
             labelChooseDataSource.Text = Resources.PleaseChooseADatasource;
             tabPageWindowsDataSources.Text = Resources.WindowsLogon;
             tabPageApplicationDataSources.Text = Resources.ApplicationLogon;
+			buttonLogOnCancel.Text = Resources.Cancel;
+			buttonLogOnOK.Text = Resources.Ok;
+			btnBack.Text = Resources.Back;
 		}
 
 		public void SetData()
@@ -35,9 +38,14 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
                 if(idx > -1)
                     tabControlChooseDataSource.TabPages.RemoveAt(idx);
 				tabControlChooseDataSource.SelectedIndex = 0;
+				listBoxApplicationDataSources.Focus();
 			}
-
+			else
+			{
+				listBoxWindowsDataSources.Focus();
+			}
             tabControlChooseDataSource.Visible = true;
+			
 		}
 
 		public void GetData()
@@ -54,10 +62,30 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 	        listBoxApplicationDataSources.DataSource = null;
 	    }
 
+		public void SetBackButtonVisible(bool visible)
+		{
+			btnBack.Visible = visible;
+		}
+
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			_logonView.HandleKeyPress(msg, keyData, listBoxWindowsDataSources.Focused || listBoxApplicationDataSources.Focused);
 			return base.ProcessCmdKey(ref msg, keyData);
+		}
+
+		private void buttonLogOnOK_Click(object sender, System.EventArgs e)
+		{
+			_logonView.ButtonLogOnOkClick(sender, e);
+		}
+
+		private void buttonLogOnCancel_Click(object sender, System.EventArgs e)
+		{
+			_logonView.ButtonLogOnCancelClick(sender, e);		
+		}
+
+		private void btnBack_Click(object sender, System.EventArgs e)
+		{
+			_logonView.BtnBackClick(sender, e);
 		}
 	}
 }

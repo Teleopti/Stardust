@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Configuration;
 using Autofac;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Forecasting.Export;
@@ -36,10 +38,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>().SingleInstance();
 			builder.RegisterType<InternalServiceBusSender>().As<IServiceBusSender>().SingleInstance();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>().SingleInstance();
-			builder.RegisterType<ScheduledResourcesReadModelStorage>()
-				.As<IScheduledResourcesReadModelPersister>()
-				.As<IScheduledResourcesReadModelReader>()
-				.SingleInstance();
+
+			var useNewResourceCalculationConfiguration = ConfigurationManager.AppSettings["EnableNewResourceCalculation"];
+			if (useNewResourceCalculationConfiguration != null && bool.Parse(useNewResourceCalculationConfiguration))
+			{
+				builder.RegisterType<ScheduledResourcesReadModelStorage>()
+				       .As<IScheduledResourcesReadModelPersister>()
+				       .As<IScheduledResourcesReadModelReader>()
+				       .SingleInstance();
+				builder.RegisterType<ScheduledResourcesReadModelUpdater>()
+					.As<IScheduledResourcesReadModelUpdater>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<DisabledScheduledResourcesReadModelStorage>()
+				       .As<IScheduledResourcesReadModelPersister>()
+				       .As<IScheduledResourcesReadModelReader>()
+				       .SingleInstance();
+				builder.RegisterType<DisabledScheduledResourcesReadModelUpdater>()
+					.As<IScheduledResourcesReadModelUpdater>().SingleInstance();
+			}
 		}
 
     	private static IJobResultFeedback getThreadJobResultFeedback(IComponentContext componentContext)

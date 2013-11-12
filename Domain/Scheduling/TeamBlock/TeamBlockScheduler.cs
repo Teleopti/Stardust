@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			if (teamBlockInfo == null) throw new ArgumentNullException("teamBlockInfo");
 
-			if (schedulingOptions.UseTeamBlockSameShiftCategory)
+			if (schedulingOptions.UseTeamBlockSameShiftCategory || (schedulingOptions.UseGroupScheduling && schedulingOptions.UseGroupSchedulingCommonCategory))
 			{
 				var result = scheduleAttempts(teamBlockInfo, datePointer, schedulingOptions, selectedPeriod, selectedPersons);
 				schedulingOptions.NotAllowedShiftCategories.Clear();

@@ -113,6 +113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var result = target.Map(new PersonScheduleData {Model = model});
 
 			result.IsDayOff.Should().Be.True();
+			result.DayOffName.Should().Be.EqualTo("Day off");
 		}
 
 		[Test]
@@ -211,7 +212,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var result = target.Map(data);
 
-			result.Layers.Single().Color.Should().Be(ConfidentialPayloadValues.DisplayColor.ToHtml());
+			result.Layers.Single().Color.Should().Be(ConfidentialPayloadValues.DisplayColorHex);
 		}
 
 		[Test]
@@ -370,7 +371,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
 
-			result.PersonAbsences.Single().Color.Should().Be.EqualTo(ConfidentialPayloadValues.DisplayColor.ToHtml());
+			result.PersonAbsences.Single().Color.Should().Be.EqualTo(ConfidentialPayloadValues.DisplayColorHex);
 		}
 
 		[Test]

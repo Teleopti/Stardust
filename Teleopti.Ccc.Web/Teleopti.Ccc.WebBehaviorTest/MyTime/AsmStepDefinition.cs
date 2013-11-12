@@ -24,10 +24,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExists("span.asm-layer");
 		}
 
-		[Then(@"I should see Phone as current activity")]
-		public void ThenIShouldSeePhoneAsCurrentActivity()
+		[Then(@"I should see (.*) as current activity")]
+		public void ThenIShouldSeePhoneAsCurrentActivity(string activity)
 		{
-			Browser.Interactions.AssertFirstContains("div.asm-info-canvas-column-current", TestData.ActivityPhone.Description.Name);
+			Browser.Interactions.AssertFirstContains("div.asm-info-canvas-column-current", activity);
 		}
 
 		[Then(@"I should not see a current activity")]

@@ -450,7 +450,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             this.toolStripButtonRequests.Name = "toolStripButtonRequests";
             this.SetShortcut(this.toolStripButtonRequests, System.Windows.Forms.Keys.None);
             this.toolStripButtonRequests.Size = new System.Drawing.Size(95, 0);
-            this.toolStripButtonRequests.Text = "xxRequestStatus";
+            this.toolStripButtonRequests.Text = "xxRequests";
             this.toolStripButtonRequests.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonRequests, false);
             this.toolStripButtonRequests.Click += new System.EventHandler(this.toolStripButtonRequests_Click);

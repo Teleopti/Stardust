@@ -11,8 +11,7 @@ GO
 -- Interface:	smalldatetime, with only datepart! No time allowed
 -- =============================================
 CREATE PROCEDURE [mart].[etl_fact_schedule_day_count_intraday_load] 
---exec [mart].[etl_fact_schedule_day_count_intraday_load]  @business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@scenario_code='E21D813C-238C-4C3F-9B49-9B5E015AB432'
-
+--exec [mart].[etl_fact_schedule_day_count_intraday_load]  @business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@scenario_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 @business_unit_code uniqueidentifier,
 @scenario_code uniqueidentifier
 AS
@@ -105,11 +104,12 @@ DELETE fs
 FROM mart.fact_schedule_day_count fs
 INNER JOIN #stg_schedule_changed a
 	ON	a.person_id = fs.person_id
+	AND a.shift_startdate_id = fs.date_id
 	AND a.scenario_id = fs.scenario_id
 
 DELETE fs
-FROM #stg_schedule_day_off_count tmp
-INNER JOIN mart.fact_schedule_day_count fs 
+FROM mart.fact_schedule_day_count fs 
+INNER JOIN #stg_schedule_day_off_count tmp
 	ON tmp.person_id	= fs.person_id
 	AND tmp.date_id		= fs.date_id
 	AND tmp.scenario_id = fs.scenario_id
@@ -132,7 +132,6 @@ INSERT INTO mart.fact_schedule_day_count
 	datasource_id, 
 	datasource_update_date
 	)
-
 SELECT
 	date_id					= f.shift_startdate_id, 
 	start_interval_id		= f.shift_startinterval_id,

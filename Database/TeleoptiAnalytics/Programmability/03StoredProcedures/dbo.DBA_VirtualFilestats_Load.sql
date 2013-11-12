@@ -11,7 +11,7 @@ GO
 -- Example call: EXEC [dbo].[DBA_VirtualFilestats_Load] @Duration='00:00:10',@IntervalInSeconds=1
 -- =============================================
 CREATE PROC [dbo].[DBA_VirtualFilestats_Load]
-@Duration          DATETIME = '24:00:00', --run for 24 hours
+@Duration          DATETIME = '23:59:59', --run for 24 hours
 @IntervalInSeconds INT = 900 --Samle every 15 min
 WITH EXECUTE AS OWNER
 AS

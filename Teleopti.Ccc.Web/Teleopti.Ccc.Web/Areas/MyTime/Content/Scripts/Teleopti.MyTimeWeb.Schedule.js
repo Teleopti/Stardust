@@ -309,33 +309,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return $('<div/>').text(day.Note.Message).html();
 		});
 		self.textRequestCount = ko.observable(day.TextRequestCount);
-		self.allowance = ko.observable(day.Allowance);
-		self.absenceAgents = ko.observable(day.AbsenceAgents);
-		self.fullTimeEquivalent = ko.observable(day.FulltimeEquivalent);
 		self.overtimeAvailability = ko.observable(day.OvertimeAvailabililty);
-
-		self.basedOnAllowanceChance = function (options) {
-			var percent;
-			if (self.allowance() != 0)
-				percent = 100 * ((self.allowance() - self.absenceAgents()) / self.allowance());
-			else {
-				percent = 0;
-			}
-			
-			var index = 0;
-			if (percent > 0 && (self.allowance() - self.absenceAgents()) >= self.fullTimeEquivalent()) {
-			    index = percent > 30 && (self.allowance() - self.absenceAgents()) >= 2 * self.fullTimeEquivalent() ? 2 : 1;
-			}		
-			return options[index];
-		};
+		self.probabilityClass = ko.observable(day.ProbabilityClass);
+		self.probabilityText = ko.observable(day.ProbabilityText);
 
 		self.holidayChanceText = ko.computed(function () {
-			return parent.userTexts.chanceOfGettingAbsencerequestGranted + self.basedOnAllowanceChance([parent.userTexts.poor, parent.userTexts.fair, parent.userTexts.good]);
+			return parent.userTexts.chanceOfGettingAbsencerequestGranted + self.probabilityText();
 		});
 		
 		self.holidayChanceColor = ko.computed(function () {
-
-			return self.basedOnAllowanceChance(["red", "yellow", "green"]);
+			return self.probabilityClass();
 		});
 		
 		self.hasTextRequest = ko.computed(function () {

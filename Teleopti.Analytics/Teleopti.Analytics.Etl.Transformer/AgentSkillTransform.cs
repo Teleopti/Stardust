@@ -38,6 +38,7 @@ namespace Teleopti.Analytics.Etl.Transformer
             row["date_from"] = TimeZoneInfo.SafeConvertTimeToUtc(personPeriod.StartDate.Date);
             row["date_to"] = TimeZoneInfo.SafeConvertTimeToUtc(personPeriod.EndDate().Date);
             row["datasource_id"] = 1;
+            row["active"] = personSkill.Active;
 
             table.Rows.Add(row);
         }

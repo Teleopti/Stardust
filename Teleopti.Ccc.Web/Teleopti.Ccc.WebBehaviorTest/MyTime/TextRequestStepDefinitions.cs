@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 		private void SetValuesForDateAndTime(DateTime fromDate, DateTime toDate, DateTime fromTime, DateTime toTime)
 		{
-			EnableTimePickersByUncheckingFullDayCheckbox();
+			UncheckFullDayCheckbox();
 
 			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-datefrom').datepicker('set', '{0}');",
 							  fromDate.ToShortDateString(DataMaker.Data().MyCulture)));
@@ -172,11 +172,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			SetValuesForDateAndTime(DateOnlyForBehaviorTests.TestToday.Date.AddDays(1), DateOnlyForBehaviorTests.TestToday.Date, DateOnlyForBehaviorTests.TestToday.Date, DateOnlyForBehaviorTests.TestToday.Date.AddHours(-2));
 		}
-		
-		private void EnableTimePickersByUncheckingFullDayCheckbox()
+
+		public static void UncheckFullDayCheckbox()
 		{
-			if (Browser.Interactions.Javascript("return $('#Request-add-section .request-new-fullday:enabled').prop('checked');").ToString() == "true")
-				Browser.Interactions.Click("#Request-add-section .request-new-fullday");
+			var script = "var jq = $('#Request-add-section .request-new-fullday:enabled');" +
+			 "if (jq.length > 0) {" +
+				 "if (jq.is(':checked')) {" +
+					 "jq.click();" +
+				 "}" +
+				 "return 'unchecked';" +
+			 "} else {" +
+				 "throw \"Cannot find checkbox\";" +
+			 "}";
+			Browser.Interactions.AssertJavascriptResultContains(script, "unchecked");
 		}
 
         [When(@"I input later start time than end time for date '(.*)'")]

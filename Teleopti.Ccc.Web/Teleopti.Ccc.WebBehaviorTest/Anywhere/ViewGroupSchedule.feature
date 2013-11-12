@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: View group schedule
+﻿Feature: View group schedule
 	In order to contact agents with a specific skill
 	or belonging to a specific team
 	or that are part-timers
@@ -39,14 +38,26 @@ Background:
 	And 'Pierre Baldi' has a workflow control set publishing schedules until '2013-12-01'
 	And 'John Smith' has a workflow control set publishing schedules until '2013-12-01'
 	And 'John Smith' has a person period with
-		| Field     | Value       |
-		| Shift bag | A shift bag |
-		| Skill     | A skill     |
+		| Field                | Value                |
+		| Shift bag            | A shift bag          |
+		| Skill                | A skill              |
+		| Team                 | Team green           |
+		| Start date           | 2013-10-10           |
+		| Contract             | A contract           |
+		| Contract schedule    | A contract schedule  |
+		| Part time percentage | Part time percentage |
+	And 'John King' has a person period with
+         | Field                | Value                        |
+         | Shift bag            | Another shift bag            |
+         | Skill                | Another skill                |
+         | Team                 | Team red                     |
+         | Start date           | 2013-10-10                   |
+         | Contract             | Another contract             |
+         | Contract schedule    | Another contract schedule    |
+         | Part time percentage | Another part time percentage |
 	And 'John Smith' is on 'A group' of group page 'A group page'
 	And 'John Smith' is on 'Another group' of group page 'A group page'
 	And 'John Smith' is on 'Some other group' of group page 'Another group page'
-	And 'Pierre Baldi' have the note 'Another note'
-	And 'John Smith' have the note 'A note'
 	And I have a role with
 		| Field              | Value                |
 		| Access to team     | Team green, Team red |
@@ -54,7 +65,7 @@ Background:
 	And I am american
 
 Scenario: View group picker options
-	Given I viewing schedules for '2013-10-10'
+	Given I view schedules for '2013-10-10'
 	Then I should be able to select groups
 		| Group                                     |
 		| The site/Team green                       |
@@ -63,64 +74,62 @@ Scenario: View group picker options
 		| Contract/Another contract                 |
 		| Contract Schedule/A contract schedule     |
 		| Part-Time Percentage/Part time percentage |
-		| Shift bag/A shift bag                     |
-		| Note/A note                               |
+		| Shift Bag/A shift bag                     |
 		| Skill/A skill                             |
 		| A group page/A group                      |
 		| A group page/Another group                |
 		| Another group page/Some other group       |
 
 Scenario: View group schedule
-	And 'John Smith' has a shift on '2013-10-10'
-	And 'John Smith' has a person period with
-		| Field      | Value      |
-		| Team       | Team green |
-		| Start date | 2013-10-10 |
-		| Contract   | A contract |
-	And 'Pierre Baldi' has a shift on '2013-10-10'
+	Given 'John Smith' have a shift with
+		| Field          | Value            |
+		| Shift category | Day              |
+		| Activity       | Phone            |
+		| Start time     | 2013-10-10 09:00 |
+		| End time       | 2013-10-10 16:00 |
 	And 'Pierre Baldi' has a person period with
 		| Field      | Value            |
 		| Team       | Team green       |
 		| Start date | 2013-10-10       |
 		| Contract   | Another contract |
-	Given I have a role with
-		| Field              | Value                |
-		| Access to team     | Team green, Team red |
-		| Access to Anywhere | true                 |
+	And 'Pierre Baldi' have a shift with
+		| Field          | Value            |
+		| Shift category | Day              |
+		| Activity       | Phone            |
+		| Start time     | 2013-10-10 09:00 |
+		| End time       | 2013-10-10 16:00 |
 	When I view schedules for '2013-10-10'
 	And I select group 'Contract/A contract'
 	Then I should see schedule for 'John Smith'
-	Then I should see no schedule for 'Pierre Baldi'
+	And I should not see person 'Pierre Baldi'
 
-Scenario: Order group pages like business heirarchy, contract, contract schedule, part time percentage, notes, shiftbag, skill, group page names
-	Given I viewing schedules for '2013-10-10'
-	Then I should see 'Business Hierarchy' before 'Contract'
-	And I should see 'Contract' before 'Contract Schedule'
-	And I should see 'Contract Schedule' before 'Part-Time Percentage'
-	And I should see 'Part-Time Percentage' before 'Note'
-	And I should see 'Note' before 'Shift bag'
-	And I should see 'Shift bag' before 'Skill'
-	And I should see 'Skill' before 'A group page'
-	And I should see 'A group page' before 'Another group page'
+Scenario: Order group pages like business heirarchy, contract, contract schedule, part time percentage, shiftbag, skill, group page names
+	Given I view schedules for '2013-10-10'
+	Then I should see group 'Business Hierarchy' before 'Contract'
+	And I should see group 'Contract' before 'Contract Schedule'
+	And I should see group 'Contract Schedule' before 'Part-Time Percentage'
+	And I should see group 'Part-Time Percentage' before 'Shift Bag'
+	And I should see group 'Shift Bag' before 'Skill'
+	And I should see group 'Skill' before 'A group page'
+	And I should see group 'A group page' before 'Another group page'
 
 Scenario: Order groups in alphabetical order
-	Given I viewing schedules for '2013-10-10'
-	Then I should see 'Team green' before 'Team red'
-	And I should see 'A contract' before 'Another contract'
-	And I should see 'A contract schedule' before 'Another contract schedule'
-	And I should see 'Another Part-Time Percentage' before 'Part-Time Percentage'
-	And I should see 'Another note' before 'A note'
-	And I should see 'Another shift bag' before 'A shift bag'
-	And I should see 'Another skill' before 'A skill'
-	And I should see 'A group' before 'Another group'
+	Given I view schedules for '2013-10-10'
+	Then I should see option 'Team green' before 'Team red'
+	And I should see option 'A contract' before 'Another contract'
+	And I should see option 'A contract schedule' before 'Another contract schedule'
+	And I should see option 'Another part time percentage' before 'Part time percentage'
+	And I should see option 'A shift bag' before 'Another shift bag'
+	And I should see option 'A skill' before 'Another skill'
+	And I should see option 'A group' before 'Another group'
 
 Scenario: Search groups
-	Given I viewing schedules for '2013-10-10'
+	Given I view schedules for '2013-10-10'
 	When I search for group 'contract'
-	Then I should see 'A contract'
-	Then I should see 'Another contract'
-	Then I should not see 'A note'
-	Then I should not see 'Another note'
+	Then I should see options include 'A contract'
+	Then I should see options include 'Another contract'
+	Then I should see options not include 'A skill'
+	Then I should see options not include 'Another group'
 
 Scenario: Default to my team
 	Given I have a person period with 

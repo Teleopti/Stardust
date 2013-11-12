@@ -21,52 +21,50 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertUrlContains(date.Replace("-", ""));
 		}
 
-		[Then(@"I should see these shift layers")]
-		public void ThenIShouldSeeTheseShiftLayers(Table table)
+		[Then(@"I should see a scheduled activity with")]
+		public void ThenIShouldSeeAScheduledActivityWith(Table table)
 		{
-			var shiftLayers = table.CreateSet<ShiftLayerInfo>();
-			shiftLayers.ForEach(AssertShiftLayer);
+			var scheduledActivity = table.CreateInstance<ScheduledActivityInfo>();
+			assertScheduledActivity(scheduledActivity);
 		}
 
-		[Then(@"I should see a shift layer with")]
-		public void ThenIShouldSeeAShiftLayerWith(Table table)
+		[Then(@"I should see these scheduled activities")]
+		public void ThenIShouldTheseScheduledActivities(Table table)
 		{
-			var shiftLayer = table.CreateInstance<ShiftLayerInfo>();
-			AssertShiftLayer(shiftLayer);
+			var scheduledActivity = table.CreateSet<ScheduledActivityInfo>();
+			scheduledActivity.ForEach(assertScheduledActivity);
 		}
 
-		private static void AssertShiftLayer(ShiftLayerInfo shiftLayer)
+		private static void assertScheduledActivity(ScheduledActivityInfo scheduledActivity)
 		{
 			var selector = string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}'][style*='background-color: {2}']",
-			                             shiftLayer.StartTime,
-			                             shiftLayer.LengthMinutes(),
-			                             ColorNameToCss(shiftLayer.Color));
+			                             scheduledActivity.StartTime,
+			                             scheduledActivity.LengthMinutes(),
+			                             ColorNameToCss(scheduledActivity.Color));
 
-			if (shiftLayer.Description != null)
+			if (scheduledActivity.Description != null)
 			{
-				Browser.Interactions.Click(".toggle-descriptions:enabled");
-				Browser.Interactions.AssertFirstContains(selector, shiftLayer.Description);
+				DescriptionToggle.EnsureIsOn();
+				Browser.Interactions.AssertFirstContains(selector, scheduledActivity.Description);
 			}
 			else
 				Browser.Interactions.AssertExists(selector);
 		}
 
-		[Then(@"I should not see a shift layer with")]
-		public void ThenIShouldNotSeeAShiftLayerWith(Table table)
+		[Then(@"I should not see a scheduled activity with")]
+		public void ThenIShouldNotSeeAscheduledActivityWith(Table table)
 		{
-			var shiftLayer = table.CreateInstance<ShiftLayerInfo>();
+			var scheduledActivity = table.CreateInstance<ScheduledActivityInfo>();
 			Browser.Interactions.AssertNotExists(
 				".shift",
 				string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}'][style*='background-color: {2}']",
-				              shiftLayer.StartTime,
-				              shiftLayer.LengthMinutes(),
-				              ColorNameToCss(shiftLayer.Color)));
+				              scheduledActivity.StartTime,
+				              scheduledActivity.LengthMinutes(),
+				              ColorNameToCss(scheduledActivity.Color)));
 		}
 
 		public static string ColorNameToCss(string colorName)
 		{
-			if (colorName.StartsWith("gray"))
-				return "gray";
 			var color = System.Drawing.Color.FromName(colorName);
 			return string.Format("rgb({0}, {1}, {2})", color.R, color.G, color.B);
 		}
@@ -80,7 +78,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should not see any shift")]
 		public void ThenIShouldNotSeeAnyShift()
 		{
-			Browser.Interactions.AssertNotExists(".shift", ".shift .layer");
+			Browser.Interactions.AssertNotExists(".schedule", ".shift");
 		}
 
 		[Then(@"I should see the add full day absence form with")]
@@ -188,7 +186,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		}
 
-		public class ShiftLayerInfo
+		public class ScheduledActivityInfo
 		{
 			public string StartTime { get; set; }
 			public string EndTime { get; set; }

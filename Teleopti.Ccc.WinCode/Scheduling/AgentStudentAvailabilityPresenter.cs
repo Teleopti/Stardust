@@ -4,33 +4,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public enum AgentStudentAvailabilityExecuteCommand
-	{
-		Add,
-		Edit,
-		Remove,
-		None
-	}
-
-	public interface IAgentStudentAvailabilityPresenter
-	{
-		void Add(IAgentStudentAvailabilityAddCommand addCommand);
-		void Edit(IAgentStudentAvailabilityEditCommand editCommand);
-		void Remove(IAgentStudentAvailabilityRemoveCommand removeCommand);
-		void UpdateView();
-		IScheduleDay ScheduleDay { get; }
-		AgentStudentAvailabilityExecuteCommand CommandToExecute(TimeSpan? startTime, TimeSpan? endTime, IAgentStudentAvailabilityDayCreator dayCreator);
-	}
-
-	public class AgentStudentAvailabilityPresenter : IAgentStudentAvailabilityPresenter
+	public class AgentStudentAvailabilityPresenter
 	{
 		private readonly IAgentStudentAvailabilityView _view;
 		private readonly IScheduleDay _scheduleDay;
-		
-		public AgentStudentAvailabilityPresenter(IAgentStudentAvailabilityView view, IScheduleDay scheduleDay)
+	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+
+	    public AgentStudentAvailabilityPresenter(IAgentStudentAvailabilityView view, IScheduleDay scheduleDay, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_view = view;
 			_scheduleDay = scheduleDay;
+		    _schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
 		public IAgentStudentAvailabilityView View
@@ -43,29 +27,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			get { return _scheduleDay; }
 		}
 
-		public void Add(IAgentStudentAvailabilityAddCommand addCommand)
+		public void RunCommand(IExecutableCommand command)
 		{
-			if(addCommand == null) throw new ArgumentNullException("addCommand");
+			if(command == null) throw new ArgumentNullException("command");
 
-			addCommand.Execute();
-			UpdateView();
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-		public void Remove(IAgentStudentAvailabilityRemoveCommand removeCommand)
-		{
-			if(removeCommand == null) throw new ArgumentNullException("removeCommand");
-
-			removeCommand.Execute();
-			UpdateView();
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-		public void Edit(IAgentStudentAvailabilityEditCommand editCommand)
-		{
-			if(editCommand == null) throw new ArgumentNullException("editCommand");
-
-			editCommand.Execute();
+			command.Execute();
 			UpdateView();
 		}
 
@@ -74,7 +40,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			TimeSpan? startTime = null;
 			TimeSpan? endTime = null;
 
-			var availiabilityRestriction = _scheduleDay.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>().Select(studentAvailabilityDay => studentAvailabilityDay.RestrictionCollection.FirstOrDefault()).FirstOrDefault(restriction => restriction != null);
+			var availiabilityRestriction = _scheduleDay.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>().SelectMany(studentAvailabilityDay => studentAvailabilityDay.RestrictionCollection).FirstOrDefault(restriction => restriction != null);
 			if (availiabilityRestriction != null)
 			{
 				startTime = availiabilityRestriction.StartTimeLimitation.StartTime;
@@ -84,7 +50,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_view.Update(startTime, endTime);
 		}
 
-		public AgentStudentAvailabilityExecuteCommand CommandToExecute(TimeSpan? startTime, TimeSpan? endTime, IAgentStudentAvailabilityDayCreator dayCreator)
+		public IExecutableCommand CommandToExecute(TimeSpan? startTime, TimeSpan? endTime, IAgentStudentAvailabilityDayCreator dayCreator)
 		{
 			if(dayCreator == null) throw new ArgumentNullException("dayCreator");
 
@@ -94,15 +60,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var canCreate = dayCreator.CanCreate(startTime, endTime, out startError, out endError);
 			
 			if (studentAvailabilityday != null && !canCreate && startError && endError)
-				return AgentStudentAvailabilityExecuteCommand.Remove;
+				return new AgentStudentAvailabilityRemoveCommand(_scheduleDay,_schedulingResultStateHolder.Schedules);
 
 			if (studentAvailabilityday == null && canCreate)
-				return AgentStudentAvailabilityExecuteCommand.Add;
+				return new AgentStudentAvailabilityAddCommand(_scheduleDay,startTime,endTime,dayCreator,_schedulingResultStateHolder.Schedules);
 
 			if (studentAvailabilityday != null && canCreate)
-				return AgentStudentAvailabilityExecuteCommand.Edit;
+				return new AgentStudentAvailabilityEditCommand(_scheduleDay,startTime,endTime,dayCreator,_schedulingResultStateHolder.Schedules);
 
-			return AgentStudentAvailabilityExecuteCommand.None;
+			return null;
 		}
 	}
 }

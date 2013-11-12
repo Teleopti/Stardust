@@ -119,12 +119,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
             DateOnlyPeriod period,
             ISkill skill,
             IScenario scenario,
-            bool addToRepository,
             bool longterm)
         {
             IList<ISkillDay> skillDays = new List<ISkillDay>(_skillDayRepository.FindRange(period, skill, scenario));
             OnStatusChanged(new StatusChangedEventArgs("xxLoadedSkillDaysFromDatasource"));
-            skillDays = (IList<ISkillDay>)_skillDayRepository.GetAllSkillDays(period, skillDays, skill, scenario, addToRepository);
+            skillDays = (IList<ISkillDay>)_skillDayRepository.GetAllSkillDays(period, skillDays, skill, scenario, _ => {});
             OnStatusChanged(new StatusChangedEventArgs("xxCreatedNewSkillDays"));
 			_workloadDayHelper.CreateLongtermWorkloadDays(skill, skillDays);
 			OnStatusChanged(new StatusChangedEventArgs("xxCreatedNewWorkloadDays"));

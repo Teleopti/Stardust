@@ -93,6 +93,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Anywhere\AddActivityOnShift.feature.cs">
+      <DependentUpon>AddActivityOnShift.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Anywhere\ViewScheduleActivityDetails.feature.cs">
+      <DependentUpon>ViewScheduleActivityDetails.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Bindings\Generic\Anywhere\DescriptionToggle.cs" />
+    <Compile Include="Bindings\Generic\MultiplicatorDefinitionSetStepDefinitions.cs" />
     <Compile Include="MyTime\AbsenceRequestFromRequests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -157,6 +169,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>22851_FindShiftTradePageFromTeamSchedule.feature</DependentUpon>
+    </Compile>
+    <Compile Include="MyTime\WeekScheduleAvailableAbsenceHeadCount.feature.cs">
+      <DependentUpon>WeekScheduleAvailableAbsenceHeadCount.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="MyTime\OveritmeAvailability.feature.cs">
       <DependentUpon>OveritmeAvailability.feature</DependentUpon>
@@ -250,7 +267,7 @@
       <DependentUpon>TeamScheduleForGroups.feature</DependentUpon>
     </Compile>
     <Compile Include="Bindings\Generic\BudgetStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Legacy\Specific\ScheduleProjectionReadOnlyThing.cs" />
+    <Compile Include="Data\Setups\Legacy\Specific\AbsenceTimeConfigurable.cs" />
     <Compile Include="Bindings\Generic\UIStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\TeamSchedulePageStepDefinitions.cs" />
@@ -363,10 +380,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ShiftTradeRequests.feature</DependentUpon>
     </Compile>
-    <Compile Include="MyTime\WeekScheduleAvailableAsbence.feature.cs">
+    <Compile Include="MyTime\WeekScheduleAvailableAbsenceBudgetgroup.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>WeekScheduleAvailableAsbence.feature</DependentUpon>
+      <DependentUpon>WeekScheduleAvailableAbsenceBudgetgroup.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\WeekScheduleTimeIndicator.feature.cs">
       <DependentUpon>WeekScheduleTimeIndicator.feature</DependentUpon>
@@ -645,6 +662,14 @@
     <Content Include="BeforeTestRun.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Anywhere\AddActivityOnShift.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AddActivityOnShift.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\ViewScheduleActivityDetails.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ViewScheduleActivityDetails.feature.cs</LastGenOutput>
+    </None>
     <None Include="Anywhere\ViewFullDayAbsenceOnDayOff.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewFullDayAbsenceOnDayOff.feature.cs</LastGenOutput>
@@ -695,6 +720,10 @@
     <None Include="MyTime\22851_FindShiftTradePageFromTeamSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>22851_FindShiftTradePageFromTeamSchedule.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\WeekScheduleAvailableAbsenceHeadCount.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>WeekScheduleAvailableAbsenceHeadCount.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\OveritmeAvailability.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -786,9 +815,9 @@
     <None Include="Testing\specflow.exe.config" />
     <None Include="Testing\TestExecutionReport.bat" />
     <None Include="Testing\StepDefinitionReport.bat" />
-    <None Include="MyTime\WeekScheduleAvailableAsbence.feature">
+    <None Include="MyTime\WeekScheduleAvailableAbsenceBudgetgroup.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>WeekScheduleAvailableAsbence.feature.cs</LastGenOutput>
+      <LastGenOutput>WeekScheduleAvailableAbsenceBudgetgroup.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\WeekScheduleTimeIndicator.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

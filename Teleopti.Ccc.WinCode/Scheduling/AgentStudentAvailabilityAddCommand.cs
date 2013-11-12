@@ -1,26 +1,26 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public interface IAgentStudentAvailabilityAddCommand : IExecutableCommand, ICanExecute
-	{
-		//	
-	}
-
-	public class AgentStudentAvailabilityAddCommand : IAgentStudentAvailabilityAddCommand
+    public class AgentStudentAvailabilityAddCommand : IAgentStudentAvailabilityCommand
 	{
 		private readonly IScheduleDay _scheduleDay;
 		private readonly TimeSpan? _startTime;
 		private readonly TimeSpan? _endTime;
 		private readonly IAgentStudentAvailabilityDayCreator _studentAvailabilityDayCreator;
+        private readonly IScheduleDictionary _scheduleDictionary;
 
-		public AgentStudentAvailabilityAddCommand(IScheduleDay scheduleDay, TimeSpan? startTime, TimeSpan? endTime, IAgentStudentAvailabilityDayCreator studentAvailabilityDayCreator)
+        public AgentStudentAvailabilityAddCommand(IScheduleDay scheduleDay, TimeSpan? startTime, TimeSpan? endTime, IAgentStudentAvailabilityDayCreator studentAvailabilityDayCreator, IScheduleDictionary scheduleDictionary)
 		{
 			_scheduleDay = scheduleDay;
 			_startTime = startTime;
 			_endTime = endTime;
 			_studentAvailabilityDayCreator = studentAvailabilityDayCreator;
+		    _scheduleDictionary = scheduleDictionary;
 		}
 
 		public void Execute()
@@ -28,8 +28,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if (CanExecute())
 			{
 				var studentAvailabilityDay = _studentAvailabilityDayCreator.Create(_scheduleDay, _startTime, _endTime);
-				if(studentAvailabilityDay != null)
-					_scheduleDay.Add(studentAvailabilityDay);
+				if (studentAvailabilityDay != null)
+				{
+				    _scheduleDay.Add(studentAvailabilityDay);
+
+                    _scheduleDictionary.Modify(ScheduleModifier.Scheduler, _scheduleDay, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(),
+                                                  new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+				}
 			}
 		}
 

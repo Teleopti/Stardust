@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Color { get; set; }
 		public bool? InContractTime { get; set; }
 		public bool? Confidential { get; set; }
+		public bool? Requestable { get; set; }
 
 		public Absence Absence;
 
@@ -27,6 +28,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (Confidential.HasValue)
 				Absence.Confidential = Confidential.Value;
+
+			if (Requestable.HasValue)
+				Absence.Requestable = Requestable.Value;
+
 			var absenceRepository = new AbsenceRepository(uow);
 			absenceRepository.Add(Absence);
 		}

@@ -264,7 +264,7 @@ Scenario: Show my full day absence
 	| Field | Value   |
 	| Name  | Vacation |
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And I have a absence with
+	And I have an absence with
 	| Field		| Value            |
 	| Name      | Vacation         |
 	| StartTime | 2030-01-02 00:00 |

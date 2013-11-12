@@ -20,7 +20,7 @@ Scenario: Default configuration for scenario add full day absences
 	When I am viewing the performance view
 	And I select scenario 'Add full day absence -> PersonScheduleDayReadModel'
 	Then I should see a default configuration in json format
-
+	
 Scenario: Measure PersonScheduleDayReadModel by adding full day absences
 	When I am viewing the performance view
 	And I select scenario 'Add full day absence -> PersonScheduleDayReadModel'
@@ -31,7 +31,8 @@ Scenario: Measure PersonScheduleDayReadModel by adding full day absences
 	And I should see total run time
 	And I should see total time to send commands
 	And I should see scenarios per second
-
+# Bug 25359 re-enable with PBI 25562
+@ignore
 Scenario: Measure ScheduledResourcesReadModel by adding full day absences
 	When I am viewing the performance view
 	And I select scenario 'Add full day absence -> ScheduledResourcesReadModel'

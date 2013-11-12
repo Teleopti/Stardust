@@ -19,16 +19,18 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private TimeSpan _endTime;
 		private IOvertimeAvailability _overtimeAvailabilityDay;
 		private IOvertimeAvailabilityCreator _overtimeAvailabilityDayCreator;
+	    private IScheduleDictionary _scheduleDictionary;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_mock = new MockRepository();
 			_overtimeAvailabilityDayCreator = _mock.StrictMock<IOvertimeAvailabilityCreator>();
-			_scheduleDay = _mock.StrictMock<IScheduleDay>();
+            _scheduleDay = _mock.StrictMock<IScheduleDay>(); 
+            _scheduleDictionary = _mock.DynamicMock<IScheduleDictionary>();
 			_startTime = TimeSpan.FromHours(8);
 			_endTime = TimeSpan.FromHours(10);
-			_target = new AgentOvertimeAvailabilityAddCommand(_scheduleDay, _startTime, _endTime, _overtimeAvailabilityDayCreator);
+			_target = new AgentOvertimeAvailabilityAddCommand(_scheduleDay, _startTime, _endTime, _overtimeAvailabilityDayCreator, _scheduleDictionary);
 			_overtimeAvailabilityDay = _mock.StrictMock<IOvertimeAvailability>();
 		}
 

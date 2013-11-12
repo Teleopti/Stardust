@@ -378,6 +378,7 @@
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffTest.cs" />
+    <Compile Include="Scheduling\PersonToSingleAgentTeamRootPersonGroupConverterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalGeneratorTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriodTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerFromStorageTest.cs" />
@@ -1129,7 +1130,7 @@
     <Compile Include="WorkflowControl\ShiftTrades\ShouldShiftTradeBeAutoGrantedSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\TargetTimeFlexibilitySpecificationTest.cs" />
     <Compile Include="WorkflowControl\StaffingThresholdValidatorTest.cs" />
-    <Compile Include="WorkflowControl\UnderStaffingDataTest.cs" />
+    <Compile Include="WorkflowControl\UnderstaffingDetailsTest.cs" />
     <Compile Include="WorkflowControl\ValidatedRequestTest.cs" />
     <Compile Include="WorkflowControl\WorkflowControlSetTest.cs" />
   </ItemGroup>
