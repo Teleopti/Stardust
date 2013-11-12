@@ -347,8 +347,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     DateOnly dateOnly = new DateOnly(2000, 1, 2);
                     _target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
 
-                    _target.TimeZone =
-                        (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
                     _target.ScheduledDay(dateOnly.AddDays(-1)).PersonAssignment().Should().Be.Null();
 										_target.ScheduledDay(dateOnly).PersonAssignment().Should().Not.Be.Null();
 										_target.ScheduledDay(dateOnly.AddDays(1)).PersonAssignment().Should().Be.Null();
@@ -387,7 +385,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
             using (_mocks.Record())
             {
-                _target.TimeZone = (TimeZoneInfo.Utc);
                 fullPermission(true);
             }
             using (_mocks.Playback())
@@ -541,7 +538,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(_parameters.Period, targetTemp.Period);
 			Assert.AreSame(_parameters.Person, targetTemp.Person);
 			Assert.AreSame(_parameters.Scenario, targetTemp.Scenario);
-			Assert.AreSame(StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone, _target.TimeZone);
 		}
 
 		[Test]

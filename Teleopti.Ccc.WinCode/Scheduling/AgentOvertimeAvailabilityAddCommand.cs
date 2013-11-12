@@ -1,26 +1,27 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.WinCode.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public interface IAgentOvertimeAvailabilityAddCommand : IExecutableCommand, ICanExecute
-	{
-	}
-
-	public class AgentOvertimeAvailabilityAddCommand : IAgentOvertimeAvailabilityAddCommand
+    public class AgentOvertimeAvailabilityAddCommand : IAgentOvertimeAvailabilityCommand
 	{
 		private readonly IScheduleDay _scheduleDay;
 		private readonly TimeSpan? _startTime;
 		private readonly TimeSpan? _endTime;
 		private readonly IOvertimeAvailabilityCreator _overtimeAvailabilityDayCreator;
+        private readonly IScheduleDictionary _scheduleDictionary;
 
-		public AgentOvertimeAvailabilityAddCommand(IScheduleDay scheduleDay, TimeSpan? startTime, TimeSpan? endTime, IOvertimeAvailabilityCreator overtimeAvailabilityDayCreator)
+        public AgentOvertimeAvailabilityAddCommand(IScheduleDay scheduleDay, TimeSpan? startTime, TimeSpan? endTime, IOvertimeAvailabilityCreator overtimeAvailabilityDayCreator, IScheduleDictionary scheduleDictionary)
 		{
 			_scheduleDay = scheduleDay;
 			_startTime = startTime;
 			_endTime = endTime;
 			_overtimeAvailabilityDayCreator = overtimeAvailabilityDayCreator;
+		    _scheduleDictionary = scheduleDictionary;
 		}
 
 		public void Execute()
@@ -28,7 +29,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if (!CanExecute()) return;
 			var overtimeAvailabilityDay = _overtimeAvailabilityDayCreator.Create(_scheduleDay, _startTime, _endTime);
 			if (overtimeAvailabilityDay != null)
-				_scheduleDay.Add(overtimeAvailabilityDay);
+			{
+			    _scheduleDay.Add(overtimeAvailabilityDay);
+
+                _scheduleDictionary.Modify(ScheduleModifier.Scheduler, _scheduleDay, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(),
+                                              new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+			}
 		}
 
 		public bool CanExecute()
