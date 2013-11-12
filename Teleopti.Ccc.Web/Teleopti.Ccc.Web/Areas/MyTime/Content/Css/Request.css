@@ -179,7 +179,8 @@
 	position: relative;
 	/*margin-top: 18px;*/
 }
-.shift-trade-my-schedule-row 
+
+tr.shift-trade-my-schedule-row
 {
 	/*margin-top: 4px;
 	height: 34px;
@@ -193,7 +194,7 @@
     top:0; 
     left:0;
 }
-.shift-trade-person-schedule-row 
+.shift-trade-person-schedule-row
 {
 	/*margin-top: 2px;
 	height: 18px;
@@ -215,7 +216,7 @@
 .shift-trade-timeline 
 {
 	height: 100%;
-	width: 100%;
+	/*width: 100%;*/
 	position: absolute;
 	left: 166px; /* 150 + 8 + 8 , padding in first column*/
 }

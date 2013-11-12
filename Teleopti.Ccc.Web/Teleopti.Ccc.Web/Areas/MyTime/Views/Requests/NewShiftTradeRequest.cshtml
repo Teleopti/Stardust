@@ -46,8 +46,8 @@
                     <tr class="shift-trade-my-schedule-row">
                         <td class="shift-trade-agent-name">@Resources.MySchedule</td>
                         <td class="shift-trade-my-schedule" data-bind="foreach: mySchedule().layers">
-                            <div class="shift-trade-layer-container">
-                                <div class="shift-trade-layer absolute floatleft" data-bind="style: { left: leftPos, width: widthPx, backgroundColor: backgroundColor }, tooltip: { title: tooltipText, html: true }"></div>                                
+                            <div class="shift-trade-layer-container floatleft">
+                                <div class="shift-trade-layer absolute" data-bind="style: { left: leftPos, width: widthPx, backgroundColor: backgroundColor }, tooltip: { title: tooltipText, html: true }"></div>                                
                             </div>
                         </td>
                     </tr>
@@ -55,9 +55,11 @@
                 <tbody data-bind="foreach: possibleTradeSchedules">
                     <tr class="shift-trade-person-schedule-row" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
                         <td class="shift-trade-agent-name" data-bind="text: agentName"></td>
-                        <td class="shift-trade-possible-trade-schedule" data-bind="foreach: $data.layers">
-                            <div class="shift-trade-layer-container">
-                                <div class="shift-trade-layer absolute floatleft" data-bind="style: { left: leftPos, width: widthPx, backgroundColor: backgroundColor }, tooltip: { title: tooltipText, html: true }"></div>
+                        <td class="shift-trade-possible-trade-schedule">
+                            <div class="hejsan" style="height: 22px;width: 100%;" data-bind="foreach: $data.layers">
+                                <div class="shift-trade-layer-container floatleft">
+                                    <div class="shift-trade-layer absolute" data-bind="style: { left: leftPos, width: widthPx, backgroundColor: backgroundColor }, tooltip: { title: tooltipText, html: true }"></div>
+                                </div>
                             </div>
                         </td>
                     </tr>
