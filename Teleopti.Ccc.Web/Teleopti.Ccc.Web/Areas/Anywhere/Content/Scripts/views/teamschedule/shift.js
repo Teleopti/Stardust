@@ -14,14 +14,16 @@ define([
 	resources
 	) {
 
-	return function(timeline) {
+	return function(timeline, selectedGroup) {
 
 		var self = this;
 
 		this.Layers = ko.observableArray();
 		var date, personId;
 
-		this.AddLayers = function(data) {
+		var groupId = selectedGroup;
+
+		this.AddLayers = function (data) {
 			personId = data.PersonId;
 			var layers = data.Projection;
 			var newItems = ko.utils.arrayMap(layers, function(l) {
@@ -45,15 +47,19 @@ define([
 		});
 
 		this.ShowDetails = function() {
-			navigation.GotoPersonSchedule(personId, date);
+			navigation.GotoPersonSchedule(groupId, personId, date);
 		};
 
 		this.AddFullDayAbsence = function() {
-			navigation.GotoPersonScheduleAddFullDayAbsenceForm(personId, date);
+			navigation.GotoPersonScheduleAddFullDayAbsenceForm(groupId, personId, date);
 		};
 
 		this.AddActivity = function() {
-			navigation.GotoPersonScheduleAddActivityForm(personId, date);
+			navigation.GotoPersonScheduleAddActivityForm(groupId, personId, date);
+		};
+		
+		this.AddAbsence = function () {
+			navigation.GotoPersonScheduleAddAbsenceForm(groupId, personId, date);
 		};
 
 	    this.StartsOnSelectedDay = ko.computed(function () {

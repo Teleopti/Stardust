@@ -1,21 +1,23 @@
 define([
 	'knockout',
 	'navigation',
-	'views/personschedule/layer',
+	'views/personschedule/shift',
 	'shared/timeline',
 	'views/personschedule/addactivityform',
 	'views/personschedule/addfulldayabsenceform',
 	'views/personschedule/absencelistitem',
+	'views/personschedule/addabsenceform',
 	'helpers',
 	'resources!r'
 ], function (
 	ko,
 	navigation,
-	layerViewModel,
+	shiftViewModel,
 	timeLineViewModel,
 	addActivityFormViewModel,
 	addFullDayAbsenceFormViewModel,
 	absenceListItemViewModel,
+	addAbsenceFormViewModel,
 	helpers,
 	resources
     ) {
@@ -31,13 +33,30 @@ define([
 		this.IsDayOff = ko.observable(false);
 		this.DayOffName = ko.observable("");
 
+		this.DayOffs = ko.observableArray();
+		this.Shifts = ko.observableArray();
+
 		this.IsShift = ko.computed(function () {
-			return self.Layers().length > 0;
+			return self.Shifts().length > 0;
+		});
+
+		this.WorkTimeMinutes = ko.observable(0);
+		this.ContractTimeMinutes = ko.observable(0);
+
+		this.ContractTime = ko.computed(function () {
+			var time = moment().startOf('day').add('minutes', self.ContractTimeMinutes());
+			return time.format("H:mm");
+		});
+
+		this.WorkTime = ko.computed(function () {
+			var time = moment().startOf('day').add('minutes', self.WorkTimeMinutes());
+			return time.format("H:mm");
 		});
 
 		this.Absences = ko.observableArray();
+		this.PersonsInGroup = ko.observableArray();
 
-		this.TimeLine = new timeLineViewModel(this.Layers);
+		this.TimeLine = new timeLineViewModel(this.PersonsInGroup);
 
 		this.Resources = resources;
 
@@ -52,10 +71,18 @@ define([
 		this.AddingFullDayAbsence = ko.observable(false);
 		this.AddActivityForm = new addActivityFormViewModel();
 		this.AddingActivity = ko.observable(false);
+		
+		this.AddAbsenceForm = new addAbsenceFormViewModel();
+		this.AddingAbsence = ko.observable(false);
 
 		this.DisplayDescriptions = ko.observable(false);
 		this.ToggleDisplayDescriptions = function () {
 			self.DisplayDescriptions(!self.DisplayDescriptions());
+		};
+
+		this.SetPersonsInGroup = function(persons) {
+			self.PersonsInGroup([]);
+			self.PersonsInGroup.push.apply(self.PersonsInGroup, persons);
 		};
 
 		this.SetData = function (data) {
@@ -67,13 +94,21 @@ define([
 			self.Team(data.Team);
 			self.IsDayOff(data.IsDayOff);
 			self.DayOffName(data.DayOffName);
-			self.Layers([]);
-			var layers = ko.utils.arrayMap(data.Layers, function (l) {
-				l.Date = self.Date();
-				l.IsFullDayAbsence = data.IsFullDayAbsence;
-				return new layerViewModel(self.TimeLine, l);
-			});
-			self.Layers.push.apply(self.Layers, layers);
+
+			if (data.Layers.length > 0) {
+				var newShift = new shiftViewModel(self.TimeLine);
+				newShift.AddLayers(data);
+				self.Shifts.push(newShift);
+			}
+
+			if (data.DayOff) {
+				data.DayOff.Date = data.Date;
+				var newDayOff = new dayOff(self.TimeLine, data.DayOff);
+				self.DayOffs.push(newDayOff);
+			}
+			
+			self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
+			self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
 
 			self.Absences([]);
 			var absences = ko.utils.arrayMap(data.PersonAbsences, function (a) {
@@ -85,6 +120,7 @@ define([
 
 			self.AddFullDayAbsenceForm.SetData(data);
 			self.AddActivityForm.SetData(data);
+			self.AddAbsenceForm.SetData(data);
 		};
 
 		this.AddFullDayAbsence = function () {

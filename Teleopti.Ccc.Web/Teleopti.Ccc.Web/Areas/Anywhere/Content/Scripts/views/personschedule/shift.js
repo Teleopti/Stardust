@@ -3,7 +3,7 @@ define([
 	'moment',
 	'navigation',
 	'lazy',
-	'views/teamschedule/layer',
+	'views/personschedule/layer',
 	'resources!r'
 ], function (
 	ko,
@@ -23,7 +23,7 @@ define([
 
 		this.AddLayers = function (data) {
 			personId = data.PersonId;
-			var layers = data.Projection;
+			var layers = data.Projection != undefined ? data.Projection : data.Layers;
 			var newItems = ko.utils.arrayMap(layers, function (l) {
 				date = date || moment(l.Start).startOf('day');
 				l.Date = data.Date;

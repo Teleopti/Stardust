@@ -57,26 +57,6 @@ define([
             	});
             	self.GroupPages.push.apply(self.GroupPages, newItems);
             };
-            
-            this.SetTeams = function (teams) {
-            	
-            	self.GroupPages([]);
-
-            	var groups = [];
-	            for(var i = 0; i < teams.length; i++)
-	            	groups.push({ Name: teams[i].SiteAndTeam, Id: teams[i].Id });
-
-	            var groupings = [
-		            {
-		            	Name: "",
-		            	Groups : groups
-		            }];
-
-            	var newItems = ko.utils.arrayMap(groupings, function (d) {
-            		return new groupPageViewModel(d);
-            	});
-            	self.GroupPages.push.apply(self.GroupPages, newItems);
-            };
 	        
             this.NextDay = function() {
                 self.SelectedDate(self.SelectedDate().add('d', 1));
@@ -87,7 +67,7 @@ define([
             };
 
             this.SelectPerson = function(person) {
-                navigation.GotoPersonSchedule(person.Id, self.SelectedDate());
+                navigation.GotoPersonSchedule(self.SelectedGroup(), person.Id, self.SelectedDate());
             };
             
             this.SelectLayer = function (layer) {

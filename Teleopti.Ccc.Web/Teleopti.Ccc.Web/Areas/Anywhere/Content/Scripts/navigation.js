@@ -12,22 +12,26 @@ define([
         };
 
         return {
-            GotoPersonSchedule: function (id, date) {
-                window.location.hash = 'personschedule/' + id + '/' + toDateString(date);
+        	GotoPersonSchedule: function (groupid, personid, date) {
+        		window.location.hash = 'personschedule/' + groupid + '/' + personid + '/' + toDateString(date);
             },
-            GotoPersonScheduleWithoutHistory: function (id, date) {
-            	window.location.replace('#personschedule/' + id + '/' + toDateString(date))	;
+            GotoPersonScheduleWithoutHistory: function (groupid, personid, date) {
+            	window.location.replace('#personschedule/' + groupid + '/' + personid + '/' + toDateString(date));
             },
             
-            GotoPersonScheduleAddFullDayAbsenceForm: function (id, date) {
-                window.location.hash = 'personschedule/' + id + '/' + toDateString(date) + '/addfulldayabsence';
+            GotoPersonScheduleAddFullDayAbsenceForm: function (groupid, personid, date) {
+            	window.location.hash = 'personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/addfulldayabsence';
             },
-            GotoPersonScheduleAddFullDayAbsenceFormWithoutHistory: function (id, date) {
-                window.location.replace('#personschedule/' + id + '/' + toDateString(date) + '/addfulldayabsence');
+            GotoPersonScheduleAddFullDayAbsenceFormWithoutHistory: function (groupid, personid, date) {
+            	window.location.replace('#personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/addfulldayabsence');
             },
 
-            GotoPersonScheduleAddActivityForm: function (id, date) {
-            	window.location.hash = 'personschedule/' + id + '/' + toDateString(date) + '/addactivity';
+            GotoPersonScheduleAddActivityForm: function (groupid, personid, date) {
+            	window.location.hash = 'personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/addactivity';
+            },
+            
+            GotoPersonScheduleAddAbsenceForm: function (groupid, personid, date) {
+            	window.location.hash = 'personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/addabsence';
             },
             
             GoToTeamSchedule: function (id, date, skill) {
