@@ -8,10 +8,25 @@ END
 ELSE
 	ALTER LOGIN [TeleoptiDemoUser] WITH PASSWORD=N'TeleoptiDemoPwd2', DEFAULT_LANGUAGE=[us_english]
 
+DECLARE @max_compatibility_level tinyint
+DECLARE @DBName sysname;
+DECLARE @SQL nvarchar(1000);
+SELECT @max_compatibility_level=max(compatibility_level) FROM sys.databases
+
 --Re-move TeleoptiDemoUser
 USE [TeleoptiAnalytics_Demo]
 IF  EXISTS (SELECT * FROM sys.database_principals WHERE name = N'TeleoptiDemoUser')
 DROP USER [TeleoptiDemoUser]
+
+SET @DBName = (SELECT db_name());
+SELECT @SQL = 'ALTER DATABASE ' +@DBName +' SET COMPATIBILITY_LEVEL = ' + cast(@max_compatibility_level as varchar(10))
+
+--Change demo databases to highest available compatibility_level. RTA needs this => MERGE statment is used (is under v8 licenses => SQL 2012)
+IF (@max_compatibility_level) > (SELECT compatibility_level FROM sys.databases WHERE name = DB_NAME())
+BEGIN
+	EXEC sp_executesql @statement=@SQL
+END
+
 
 USE [TeleoptiCCC7Agg_Demo]
 IF  EXISTS (SELECT * FROM sys.database_principals WHERE name = N'TeleoptiDemoUser')

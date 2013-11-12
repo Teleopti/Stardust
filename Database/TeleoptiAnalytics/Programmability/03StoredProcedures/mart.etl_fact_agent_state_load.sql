@@ -17,47 +17,23 @@ SET NOCOUNT ON
 --load dim_state_group
 EXEC [mart].[etl_dim_state_group]
 
---delete and load into intermediate table in the same command
-DELETE stg
-OUTPUT
-	deleted.person_code,
-	deleted.state_group_code,
-	deleted.time_in_state_s,
-	deleted.state_start
-INTO [stage].[stg_agent_state_loading](person_code,state_group_code,time_in_state_s,state_start)
-FROM stage.stg_agent_state stg
-INNER JOIN mart.dim_state_group d
-	ON d.state_group_code = stg.state_group_code
-
+--
 SET NOCOUNT OFF
 
-INSERT INTO mart.fact_agent_state
-SELECT 
-date_id			= d.date_id,
-person_id		= dp.person_id,
-interval_id		= i.interval_id,
-state_group_id	= sg.state_group_id,
-time_in_state_s	= sum(stg.time_in_state_s),
-datasource_id	= 1,
-insert_date		= getdate()
-FROM [stage].[stg_agent_state_loading] stg
-INNER JOIN mart.dim_person dp
-	ON stg.person_code = dp.person_code
-	AND --trim
-		(
-			(stg.state_start >= dp.valid_from_date)
-		AND
-			(stg.state_start < dp.valid_to_date)
-		)
-INNER JOIN mart.dim_state_group sg
-	ON sg.state_group_code = stg.state_group_code
-INNER JOIN mart.dim_date d
-	ON DATEADD(dd, DATEDIFF(dd, 0, getdate()), 0) = d.date_date
-INNER JOIN mart.dim_interval i
-	ON dateadd(MINUTE,(DATEPART(HOUR,stg.state_start)*60+DATEPART(MINUTE,stg.state_start)),'1900-01-01') BETWEEN i.interval_start AND i.interval_end
-WHERE stg.time_in_state_s > 0
-GROUP BY date_id,person_id,interval_id,state_group_id
+MERGE mart.fact_agent_state AS f
+USING mart.v_fact_agent_state_merge AS v
+ON (
+		f.date_id		= v.date_id
+	AND f.person_id		= v.person_id
+	AND f.interval_id	= v.interval_id
+	AND f.state_group_id= v.state_group_id
+	)
+WHEN MATCHED
+    THEN
+	UPDATE SET f.time_in_state_s = f.time_in_state_s + v.time_in_state_s
+WHEN NOT MATCHED THEN
+    INSERT (date_id, person_id, interval_id, state_group_id, time_in_state_s, datasource_id, insert_date)
+        VALUES (v.date_id, v.person_id, v.interval_id, v.state_group_id, v.time_in_state_s, v.datasource_id, v.insert_date);
 
---truncate "temporary" data
-TRUNCATE TABLE [stage].[stg_agent_state_loading]
+TRUNCATE TABLE [stage].[stg_agent_state]
 GO

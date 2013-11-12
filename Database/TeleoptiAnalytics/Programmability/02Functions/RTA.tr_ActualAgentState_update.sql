@@ -34,9 +34,9 @@ BEGIN
 	SELECT
 		person_code		= d.PersonId,
 		state_code		= d.StateCode,
-		state_group		= d.[State],
 		state_group_code= d.StateId,
-		state_start		= d.StateStart,
+		[date]			= cast(DATEADD(dd, DATEDIFF(dd, 0, d.StateStart), 0) as smalldatetime),
+		interval		= cast(dateadd(MINUTE,(DATEPART(HOUR,d.StateStart)*60+DATEPART(MINUTE,d.StateStart)),'1900-01-01') as smalldatetime),
 		time_in_state_s = datediff(ss,d.StateStart,i.StateStart)
 	FROM DELETED d
 	INNER JOIN INSERTED i
