@@ -7,7 +7,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Budgeting;
-using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Budgeting;
 using Teleopti.Ccc.WinCode.Budgeting.Models;
@@ -23,20 +23,14 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
         private IList<IBudgetGroupDayDetailModel> budgetDays;
         private ICustomShrinkage customShrinkage;
         private ICustomEfficiencyShrinkage customEfficiencyShrinkage;
-    	private MockRepository mocks;
     	private IBudgetDayProvider budgetDayProvider;
-    	private IDisposable batch;
-        private IBudgetPermissionService budgetPermissionService;
+	    private IBudgetPermissionService budgetPermissionService;
 
         [SetUp]
         public void Setup()
         {
-        	mocks = new MockRepository();
-
-            var budgetGroup = new BudgetGroup();
-            budgetGroup.Name = "BG";
-            budgetGroup.TimeZone = (TimeZoneInfo.GetSystemTimeZones()[7]);
-            budgetGroup.TrySetDaysPerYear(365);
+            var budgetGroup = new BudgetGroup {Name = "BG", TimeZone = (TimeZoneInfo.GetSystemTimeZones()[7])};
+	        budgetGroup.TrySetDaysPerYear(365);
             customShrinkage = new CustomShrinkage("Gaffa");
             var customShrinkageGuid = Guid.NewGuid();
             customShrinkage.SetId(customShrinkageGuid);
@@ -47,22 +41,15 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
             customEfficiencyShrinkage.SetId(customEfficencyShrinkageGuid);
             budgetGroup.AddCustomEfficiencyShrinkage(customEfficiencyShrinkage);
 
-            CreateBudgetDayList(budgetGroup, customShrinkageGuid, customEfficencyShrinkageGuid);
+            createBudgetDayList(budgetGroup, customShrinkageGuid, customEfficencyShrinkageGuid);
 
-    		budgetDayProvider = mocks.StrictMock<IBudgetDayProvider>();
-    		batch = mocks.StrictMock<IDisposable>();
+    		budgetDayProvider = MockRepository.GenerateMock<IBudgetDayProvider>();
             budgetPermissionService = MockRepository.GenerateMock<IBudgetPermissionService>();
             budgetPermissionService.Stub(x => x.IsAllowancePermitted).Return(true);
         	target = new BudgetGroupMonthDetailModel(budgetDays, budgetDayProvider, budgetPermissionService);
         }
 
-		private void ExpectBatch()
-		{
-			Expect.Call(budgetDayProvider.BatchUpdater()).Return(batch);
-			Expect.Call(batch.Dispose);
-		}
-
-    	private void CreateBudgetDayList(BudgetGroup budgetGroup, Guid customShrinkageGuid, Guid customEfficencyShrinkageGuid)
+    	private void createBudgetDayList(BudgetGroup budgetGroup, Guid customShrinkageGuid, Guid customEfficencyShrinkageGuid)
     	{
     		var scenario = ScenarioFactory.CreateScenarioAggregate();
     		var startDay = new DateOnly(2010, 6, 1);
@@ -185,80 +172,80 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
     			list.Add(budgetDay);
     		}
 
-    		budgetDays = new List<IBudgetGroupDayDetailModel>();
-    		budgetDays.Add(new BudgetGroupDayDetailModel(budgetDay1)
-    		               	{
-    		               		NetStaff = 12,
-    		               		GrossStaff = 17d,
-    		               		ForecastedStaff = 2,
-    		               		BudgetedStaff = 19,
-                                BudgetedLeave = 10,
-                                BudgetedSurplus = 6,
-                                TotalAllowance = 10,
-                                Allowance = 8
-    		               	});
-
-    		budgetDays.Add(new BudgetGroupDayDetailModel(budgetDay2)
-    		               	{
-    		               		NetStaff = 22,
-    		               		GrossStaff = 12d,
-    		               		BudgetedStaff = 11,
-                                BudgetedLeave = 10,
-                                BudgetedSurplus = 6,
-                                TotalAllowance = 10,
-                                Allowance = 8
-    		               	});
-    		budgetDays.Add(new BudgetGroupDayDetailModel(budgetDay3)
-    		               	{
-    		               		NetStaff = 45,
-    		               		GrossStaff = 3d,
-    		               		BudgetedStaff = 19,
-                                BudgetedLeave = 10,
-                                BudgetedSurplus = 6,
-                                TotalAllowance = 10,
-                                Allowance = 8
-    		               	});
-    		budgetDays.Add(new BudgetGroupDayDetailModel(budgetDay4)
-    		               	{
-    		               		NetStaff = 72,
-    		               		GrossStaff = 45d,
-    		               		BudgetedStaff = 12,
-                                BudgetedLeave = 10,
-                                BudgetedSurplus = 6,
-                                TotalAllowance = 10,
-                                Allowance = 8
-    		               	});
-    		budgetDays.Add(new BudgetGroupDayDetailModel(budgetDay5)
-    		               	{
-    		               		NetStaff = 88,
-    		               		GrossStaff = 6d,
-    		               		BudgetedStaff = 11,
-                                BudgetedLeave = 10,
-                                BudgetedSurplus = 6,
-                                TotalAllowance = 10,
-                                Allowance = 8
-    		               	});
-    		budgetDays.Add(new BudgetGroupDayDetailModel(budgetDay6)
-    		               	{
-    		               		NetStaff = 19,
-    		               		GrossStaff = 9d,
-    		               		BudgetedStaff = 19,
-                                BudgetedLeave = 10,
-                                BudgetedSurplus = 6,
-                                TotalAllowance = 10,
-                                Allowance = 8
-    		               	});
-
-    		budgetDays.Add(new BudgetGroupDayDetailModel(budgetDay7)
-    		               	{
-    		               		NetStaff = 13,
-    		               		GrossStaff = 2d,
-    		               		BudgetedStaff = 19,
-                                BudgetedLeave = 10,
-                                BudgetedSurplus = 6,
-                                TotalAllowance = 10,
-                                Allowance = 8
-    		               	});
+    		budgetDays = new List<IBudgetGroupDayDetailModel>
+    			{
+    				new BudgetGroupDayDetailModel(budgetDay1)
+    					{
+    						NetStaff = 12,
+    						GrossStaff = 17d,
+    						ForecastedStaff = 2,
+    						BudgetedStaff = 19,
+    						BudgetedLeave = 10,
+    						BudgetedSurplus = 6,
+    						TotalAllowance = 10,
+    						Allowance = 8
+    					},
+    				new BudgetGroupDayDetailModel(budgetDay2)
+    					{
+    						NetStaff = 22,
+    						GrossStaff = 12d,
+    						BudgetedStaff = 11,
+    						BudgetedLeave = 10,
+    						BudgetedSurplus = 6,
+    						TotalAllowance = 10,
+    						Allowance = 8
+    					},
+    				new BudgetGroupDayDetailModel(budgetDay3)
+    					{
+    						NetStaff = 45,
+    						GrossStaff = 3d,
+    						BudgetedStaff = 19,
+    						BudgetedLeave = 10,
+    						BudgetedSurplus = 6,
+    						TotalAllowance = 10,
+    						Allowance = 8
+    					},
+    				new BudgetGroupDayDetailModel(budgetDay4)
+    					{
+    						NetStaff = 72,
+    						GrossStaff = 45d,
+    						BudgetedStaff = 12,
+    						BudgetedLeave = 10,
+    						BudgetedSurplus = 6,
+    						TotalAllowance = 10,
+    						Allowance = 8
+    					},
+    				new BudgetGroupDayDetailModel(budgetDay5)
+    					{
+    						NetStaff = 88,
+    						GrossStaff = 6d,
+    						BudgetedStaff = 11,
+    						BudgetedLeave = 10,
+    						BudgetedSurplus = 6,
+    						TotalAllowance = 10,
+    						Allowance = 8
+    					},
+    				new BudgetGroupDayDetailModel(budgetDay6)
+    					{
+    						NetStaff = 19,
+    						GrossStaff = 9d,
+    						BudgetedStaff = 19,
+    						BudgetedLeave = 10,
+    						BudgetedSurplus = 6,
+    						TotalAllowance = 10,
+    						Allowance = 8
+    					},
+    				new BudgetGroupDayDetailModel(budgetDay7)
+    					{
+    						NetStaff = 13,
+    						GrossStaff = 2d,
+    						BudgetedStaff = 19,
+    						BudgetedLeave = 10,
+    						BudgetedSurplus = 6,
+    						TotalAllowance = 10,
+    						Allowance = 8
+    					}
+    			};
 
     		foreach (var t in list)
     		{
@@ -285,7 +272,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
         [Test]
         public void ShouldHandleLockOnUpdate()
         {
-            var lockable = new LockClassForTest();
+            var lockable = new lockClassForTest();
             target.PropertyChanged += lockable.Update;
             target.DisablePropertyChangedInvocation();
             target.EnablePropertyChangedInvocation();
@@ -294,11 +281,11 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
             Assert.AreEqual(1,lockable.ReleaseCount);
         }
 
-        private class LockClassForTest : ILockable
+        private class lockClassForTest : ILockable
         {
             public int LockCount { get; private set; }
             public int ReleaseCount { get; private set; }
-            public int UpdateCount { get; private set; }
+	        private int UpdateCount { get; set; }
 
             public void Lock()
             {
@@ -523,121 +510,67 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 
     	[Test]
         public void ShouldDistributeForecastedHoursToDaysFromMonth()
-        {
-			using (mocks.Record())
-        	{
-        		ExpectBatch();
-        	}
-			using (mocks.Playback())
-			{
-				var notification = false; //hmm
-				target.PropertyChanged += (sender, e) =>
-				                          	{
-				                          		if (e.PropertyName == "ForecastedHours")
-				                          			notification = true;
-				                          	};
+    	{
+    		var notification = false; //hmm
+    		target.PropertyChanged += (sender, e) =>
+    			{
+    				if (e.PropertyName == "ForecastedHours")
+    					notification = true;
+    			};
 
-				target.ForecastedHours = 3000;
-				for (var i = 0; i < 30; i++)
-				{
-					Assert.AreEqual(100, budgetDays[i].ForecastedHours);
-				}
-				Assert.AreEqual(3000, target.ForecastedHours);
-				Assert.IsTrue(notification);
-			}
-        }
+    		target.ForecastedHours = 3000;
+    		for (var i = 0; i < 30; i++)
+    			Assert.AreEqual(100, budgetDays[i].ForecastedHours);
+    		Assert.AreEqual(3000, target.ForecastedHours);
+    		Assert.IsTrue(notification);
+    	}
 
-        [Test]
+	    [Test]
         public void ShouldDistributeFte()
         {
-			using (mocks.Record())
-        	{
-        		ExpectBatch();
-        	}
-			using (mocks.Playback())
-			{
-				target.FulltimeEquivalentHours = 10;
-				for (var i = 0; i < 30; i++)
-				{
-					Assert.AreEqual(10, budgetDays[i].FulltimeEquivalentHours);
-				}
-				Assert.AreEqual(10, target.FulltimeEquivalentHours);
-			}
+	        target.FulltimeEquivalentHours = 10;
+		    for (var i = 0; i < 30; i++)
+			    Assert.AreEqual(10, budgetDays[i].FulltimeEquivalentHours);
+		    Assert.AreEqual(10, target.FulltimeEquivalentHours);
         }
 
-        [Test]
+	    [Test]
         public void ShouldDistributeAttritionRate()
         {
-			using (mocks.Record())
-        	{
-        		ExpectBatch();
-        	}
-			using (mocks.Playback())
-			{
-				target.AttritionRate = new Percent(0.25);
-				for (var i = 0; i < 30; i++)
-				{
-					Assert.AreEqual(new Percent(0.25), budgetDays[i].AttritionRate);
-				}
-				Assert.AreEqual(new Percent(0.25), target.AttritionRate);
-			}
+	        target.AttritionRate = new Percent(0.25);
+		    for (var i = 0; i < 30; i++)
+			    Assert.AreEqual(new Percent(0.25), budgetDays[i].AttritionRate);
+		    Assert.AreEqual(new Percent(0.25), target.AttritionRate);
         }
 
-        [Test]
+	    [Test]
         public void ShouldDistributeAbsenceExtra()
         {
-            using (mocks.Record())
-            {
-                ExpectBatch();
-            }
-            using (mocks.Playback())
-            {
-                target.AbsenceExtra = 2d;
-                for (var i = 0; i < 30; i++)
-                {
-                    Assert.AreEqual(2d, budgetDays[i].AbsenceExtra);
-                }
-                Assert.AreEqual(2d, target.AbsenceExtra);
-            }
+	        target.AbsenceExtra = 2d;
+		    for (var i = 0; i < 30; i++)
+			    Assert.AreEqual(2d, budgetDays[i].AbsenceExtra);
+		    Assert.AreEqual(2d, target.AbsenceExtra);
         }
 
-        [Test]
+	    [Test]
         public void ShouldDistributeAbsenceOverride()
         {
-            using (mocks.Record())
-            {
-                ExpectBatch();
-            }
-            using (mocks.Playback())
-            {
-                target.AbsenceOverride = 2d;
-                for (var i = 0; i < 30; i++)
-                {
-                    Assert.AreEqual(2d, budgetDays[i].AbsenceOverride);
-                }
-                Assert.AreEqual(2d, target.AbsenceOverride);
-            }
+	        target.AbsenceOverride = 2d;
+		    for (var i = 0; i < 30; i++)
+			    Assert.AreEqual(2d, budgetDays[i].AbsenceOverride);
+		    Assert.AreEqual(2d, target.AbsenceOverride);
         }
 
-        [Test]
+	    [Test]
         public void ShouldDistributeAbsenceThreshold()
         {
-            using (mocks.Record())
-            {
-                ExpectBatch();
-            }
-            using (mocks.Playback())
-            {
-                target.AbsenceThreshold = new Percent(0.25);
-                for (var i = 0; i < 30; i++)
-                {
-                    Assert.AreEqual(new Percent(0.25), budgetDays[i].AbsenceThreshold);
-                }
-                Assert.AreEqual(new Percent(0.25), target.AbsenceThreshold);
-            }
+	        target.AbsenceThreshold = new Percent(0.25);
+		    for (var i = 0; i < 30; i++)
+			    Assert.AreEqual(new Percent(0.25), budgetDays[i].AbsenceThreshold);
+		    Assert.AreEqual(new Percent(0.25), target.AbsenceThreshold);
         }
 
-        [Test]
+	    [Test]
         public void ShouldHaveAverageTotalAllowance()
         {
             var totalAllowance = Math.Round(target.TotalAllowance, 2);
@@ -654,129 +587,70 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
         [Test]
         public void ShouldSetRecruitmentOnFirstDay()
         {
-			using (mocks.Record())
-			{
-				ExpectBatch();
-			}
-			using (mocks.Playback())
-			{
-				foreach (var day in budgetDays)
-				{
-					day.Recruitment = 0d;
-				}
+	        foreach (var day in budgetDays)
+		        day.Recruitment = 0d;
 
-				target.Recruitment = 360d;
-				Assert.AreEqual(360d, budgetDays[0].Recruitment);
-				for (var i = 1; i < 30; i++)
-				{
-					Assert.AreEqual(0d, budgetDays[i].Recruitment);
-				}
-				Assert.AreEqual(360d, target.Recruitment);
-			}
+	        target.Recruitment = 360d;
+	        Assert.AreEqual(360d, budgetDays[0].Recruitment);
+	        for (var i = 1; i < 30; i++)
+		        Assert.AreEqual(0d, budgetDays[i].Recruitment);
+	        Assert.AreEqual(360d, target.Recruitment);
         }
 
-        [Test]
+	    [Test]
         public void ShouldDistributeContractors()
         {
-			using (mocks.Record())
-        	{
-        		ExpectBatch();
-        	}
-        	using (mocks.Playback())
-        	{
-        		target.Contractors = 45;
-        		for (var i = 0; i < 30; i++)
-        		{
-        			Assert.AreEqual(1.5, budgetDays[i].Contractors);
-        		}
-        		Assert.AreEqual(45, target.Contractors);
-        	}
+	        target.Contractors = 45;
+		    for (var i = 0; i < 30; i++)
+			    Assert.AreEqual(1.5, budgetDays[i].Contractors);
+		    Assert.AreEqual(45, target.Contractors);
         }
 
-        [Test]
+	    [Test]
         public void ShouldDistributeDaysOfPerWeek()
         {
-			using (mocks.Record())
-        	{
-        		ExpectBatch();
-        	}
-			using (mocks.Playback())
-			{
-				target.DaysOffPerWeek = 90;
-				for (var i = 0; i < 30; i++)
-				{
-					Assert.AreEqual(90, budgetDays[i].DaysOffPerWeek);
-				}
-				Assert.AreEqual(90, target.DaysOffPerWeek);
-			}
+	        target.DaysOffPerWeek = 90;
+		    for (var i = 0; i < 30; i++)
+			    Assert.AreEqual(90, budgetDays[i].DaysOffPerWeek);
+		    Assert.AreEqual(90, target.DaysOffPerWeek);
         }
 
-        [Test]
+	    [Test]
         public void ShouldDistributeOvertime()
         {
-			using (mocks.Record())
-        	{
-        		ExpectBatch();
-        	}
-			using (mocks.Playback())
-			{
-				target.OvertimeHours = 270;
-				for (var i = 0; i < 30; i++)
-				{
-					Assert.AreEqual(9, budgetDays[i].OvertimeHours);
-				}
-				Assert.AreEqual(270, target.OvertimeHours);
-			}
+	        target.OvertimeHours = 270;
+		    for (var i = 0; i < 30; i++)
+			    Assert.AreEqual(9, budgetDays[i].OvertimeHours);
+		    Assert.AreEqual(270, target.OvertimeHours);
         }
 
-        [Test]
+	    [Test]
         public void ShouldDistributeStudents()
         {
-			using (mocks.Record())
-        	{
-        		ExpectBatch();
-        	}
-			using (mocks.Playback())
-			{
-				target.StudentsHours = 240;
-				for (var i = 0; i < 30; i++)
-				{
-					Assert.AreEqual(8, budgetDays[i].StudentsHours);
-				}
-				Assert.AreEqual(240, target.StudentsHours);
-			}
+	        target.StudentsHours = 240;
+		    for (var i = 0; i < 30; i++)
+			    Assert.AreEqual(8, budgetDays[i].StudentsHours);
+		    Assert.AreEqual(240, target.StudentsHours);
         }
 
-        [Test]
+	    [Test]
         public void ShouldSetStaffEmployedOnFirstDay()
         {
-			using (mocks.Record())
-        	{
-        		ExpectBatch();
-        	}
-			using (mocks.Playback())
-			{
-				//Reset staff employed
-				foreach (var day in budgetDays)
-				{
-					day.StaffEmployed = 0;
-				}
+	        //Reset staff employed
+		    foreach (var day in budgetDays)
+			    day.StaffEmployed = 0;
 
-				target.StaffEmployed = 300;
-				Assert.AreEqual(300, budgetDays[0].StaffEmployed);
-				for (var i = 1; i < 30; i++)
-				{
-					Assert.AreEqual(0, budgetDays[i].StaffEmployed);
-				}
-				Assert.AreEqual(300, target.StaffEmployed);
-			}
+		    target.StaffEmployed = 300;
+	        Assert.AreEqual(300, budgetDays[0].StaffEmployed);
+		    for (var i = 1; i < 30; i++)
+			    Assert.AreEqual(0, budgetDays[i].StaffEmployed);
+		    Assert.AreEqual(300, target.StaffEmployed);
         }
 
-        [Test]
+	    [Test]
         public void ShouldShowMonthHeader()
         {
             var result = CultureInfo.CurrentUICulture.DateTimeFormat.GetMonthName(budgetDays.First().BudgetDay.Day.Date.Month);
-
             //"June"
             target.Month.Should().Be.EqualTo(result);
         }
@@ -787,5 +661,25 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
             const string result = "2010";
             target.Year.Should().Be.EqualTo(result);
         }
+
+	    [Test]
+	    public void StudenHours_ShouldOnlyDistributeOverOpenDays()
+	    {
+		    target.BudgetDays.Skip(20).ForEach(weekend => weekend.IsClosed = true);
+		    target.StudentsHours = 400;
+		    target.BudgetDays.Take(20).ForEach(weekday => weekday.StudentsHours.Should().Be.EqualTo(20));
+		    target.BudgetDays.Skip(20).ForEach(weekend => weekend.StudentsHours.Should().Be.EqualTo(0));
+		    target.StudentsHours.Should().Be.EqualTo(400);
+	    }
+
+	    [Test]
+	    public void OvertimeHours_ShouldOnlyDisitributeOverOpenDays()
+	    {
+		    target.BudgetDays.Skip(20).ForEach(weekend => weekend.IsClosed = true);
+		    target.OvertimeHours = 400;
+		    target.BudgetDays.Take(20).ForEach(weekday => weekday.OvertimeHours.Should().Be.EqualTo(20));
+		    target.BudgetDays.Skip(20).ForEach(weekend => weekend.OvertimeHours.Should().Be.EqualTo(0));
+		    target.OvertimeHours.Should().Be.EqualTo(400);
+	    }
     }
 }
