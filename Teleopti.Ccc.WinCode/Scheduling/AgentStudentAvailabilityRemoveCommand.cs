@@ -1,26 +1,29 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public interface IAgentStudentAvailabilityRemoveCommand : IExecutableCommand, ICanExecute
-	{
-		//	
-	}
-
-	public class AgentStudentAvailabilityRemoveCommand : IAgentStudentAvailabilityRemoveCommand
+	public class AgentStudentAvailabilityRemoveCommand : IAgentStudentAvailabilityCommand
 	{
 		private readonly IScheduleDay _scheduleDay;
+	    private readonly IScheduleDictionary _scheduleDictionary;
 
-		public AgentStudentAvailabilityRemoveCommand(IScheduleDay scheduleDay)
+	    public AgentStudentAvailabilityRemoveCommand(IScheduleDay scheduleDay, IScheduleDictionary scheduleDictionary)
 		{
-			_scheduleDay = scheduleDay;
+		    _scheduleDay = scheduleDay;
+		    _scheduleDictionary = scheduleDictionary;
 		}
 
-		public void Execute()
+	    public void Execute()
 		{
 			if (CanExecute())
 			{
 				_scheduleDay.DeleteStudentAvailabilityRestriction();
+
+                _scheduleDictionary.Modify(ScheduleModifier.Scheduler, _scheduleDay, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(),
+                                              new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 			}
 		}
 

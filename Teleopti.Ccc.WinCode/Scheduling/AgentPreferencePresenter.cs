@@ -1,22 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public enum AgentPreferenceExecuteCommand
-	{
-		Add,
-		Edit,
-		Remove,
-		None
-	}
-
 	public class AgentPreferencePresenter
 	{
 		private readonly IAgentPreferenceView _view;
-		private readonly IScheduleDay _scheduleDay;
+		private IScheduleDay _scheduleDay;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 		public AgentPreferencePresenter(IAgentPreferenceView view, IScheduleDay scheduleDay, ISchedulingResultStateHolder schedulingResultStateHolder)
@@ -31,41 +22,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			get { return _view; }
 		}
 
-		public IScheduleDay ScheduleDay
+	    public IWorkflowControlSet WorkflowControlSet { get { return _scheduleDay.Person.WorkflowControlSet; } }
+
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
+		public void RunCommand(IExecutableCommand command)
 		{
-			get { return _scheduleDay; }
-		}
+			InParameter.NotNull("command", command);
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-		public void Remove(IAgentPreferenceRemoveCommand removeCommand)
-		{
-			InParameter.NotNull("removeCommand", removeCommand);
-
-			removeCommand.Execute();
-			UpdateView();
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-		public void Add(IAgentPreferenceAddCommand addCommand)
-		{
-			InParameter.NotNull("addCommand", addCommand);
-
-			addCommand.Execute();
-			UpdateView();
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-		public void Edit(IAgentPreferenceEditCommand editCommand)
-		{
-			InParameter.NotNull("editCommand", editCommand);
-
-			editCommand.Execute();
+			command.Execute();
 			UpdateView();
 		}
 
 		public IPreferenceRestriction PreferenceRestriction()
 		{
-			foreach (var persistableScheduleData in _scheduleDay.PersistableScheduleDataCollection())
+            foreach (var persistableScheduleData in _scheduleDay.PersistableScheduleDataCollection())
 			{
 				var preferenceDay = persistableScheduleData as IPreferenceDay;
 				if (preferenceDay == null) continue;
@@ -162,20 +132,19 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public int MaxMustHaves()
 		{
-			var schedulePeriod = _scheduleDay.Person.VirtualSchedulePeriod(ScheduleDay.DateOnlyAsPeriod.DateOnly);
+			var schedulePeriod = _scheduleDay.Person.VirtualSchedulePeriod(_scheduleDay.DateOnlyAsPeriod.DateOnly);
 			return schedulePeriod.MustHavePreference;
 		}
 
 		public int CurrentMustHaves()
 		{
-			var schedulePeriod = _scheduleDay.Person.VirtualSchedulePeriod(ScheduleDay.DateOnlyAsPeriod.DateOnly);
-			var person = _scheduleDay.Person;
+            var person = _scheduleDay.Person;
+            var schedulePeriod = person.VirtualSchedulePeriod(_scheduleDay.DateOnlyAsPeriod.DateOnly);
 			int currentMustHaves = 0;
 
-			foreach (var dateOnly in schedulePeriod.DateOnlyPeriod.DayCollection())
+            var scheduleDays = _schedulingResultStateHolder.Schedules[person].ScheduledDayCollection(schedulePeriod.DateOnlyPeriod);
+			foreach (var scheduleDay in scheduleDays)
 			{
-				var scheduleDay = _schedulingResultStateHolder.Schedules[person].ScheduledDay(dateOnly);
-
 				foreach (var restrictionBase in scheduleDay.RestrictionCollection())
 				{
 					var preferenceRestriction = restrictionBase as IPreferenceRestriction;
@@ -190,7 +159,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			return currentMustHaves;
 		}
 
-		public AgentPreferenceExecuteCommand CommandToExecute(IAgentPreferenceData data, IAgentPreferenceDayCreator dayCreator)
+		public IExecutableCommand CommandToExecute(IAgentPreferenceData data, IAgentPreferenceDayCreator dayCreator)
 		{
 			InParameter.NotNull("dayCreator", dayCreator);
 
@@ -199,15 +168,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var canCreate = dayCreator.CanCreate(data);
 
 			if (preferenceDay == null && canCreate.Result)
-				return AgentPreferenceExecuteCommand.Add;
+				return new AgentPreferenceAddCommand(_scheduleDay,data,dayCreator,_schedulingResultStateHolder.Schedules);
 			
 			if(preferenceDay != null && canCreate.Result)
-				return AgentPreferenceExecuteCommand.Edit;
+				return new AgentPreferenceEditCommand(_scheduleDay,data,dayCreator,_schedulingResultStateHolder.Schedules);
 
 			if(preferenceDay != null && !canCreate.Result && canCreate.EmptyError)
-				return AgentPreferenceExecuteCommand.Remove;
+				return new AgentPreferenceRemoveCommand(_scheduleDay,_schedulingResultStateHolder.Schedules);
 
-			return AgentPreferenceExecuteCommand.None;
+			return null;
 		}
 	}
 }

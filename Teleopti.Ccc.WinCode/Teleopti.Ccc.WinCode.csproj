@@ -573,8 +573,11 @@
     <Compile Include="Scheduling\AgentOvertimeAvailabilityRemoveCommand.cs" />
     <Compile Include="Scheduling\FilterOvertimeAvailabilityPresenter.cs" />
     <Compile Include="Scheduling\HandleBusinessRules.cs" />
+    <Compile Include="Scheduling\IAgentOvertimeAvailabilityCommand.cs" />
     <Compile Include="Scheduling\IAgentOvertimeAvailabilityView.cs" />
+    <Compile Include="Scheduling\IAgentPreferenceCommand.cs" />
     <Compile Include="Scheduling\IAgentPreferenceView.cs" />
+    <Compile Include="Scheduling\IAgentStudentAvailabilityCommand.cs" />
     <Compile Include="Scheduling\IAgentStudentAvailabilityView.cs" />
     <Compile Include="Scheduling\ISchedulePresenterBase.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailabilityPersonFilter.cs" />

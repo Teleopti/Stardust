@@ -1,22 +1,23 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public interface IAgentPreferenceEditCommand : IExecutableCommand, ICanExecute
-	{
-		//	
-	}
-	public class AgentPreferenceEditCommand : IAgentPreferenceEditCommand
+	public class AgentPreferenceEditCommand : IAgentPreferenceCommand
 	{
 		private readonly IScheduleDay _scheduleDay;
 		private readonly IAgentPreferenceDayCreator _agentPreferenceDayCreator;
-		private readonly IAgentPreferenceData _data;
+	    private readonly IScheduleDictionary _scheduleDictionary;
+	    private readonly IAgentPreferenceData _data;
 
-		public AgentPreferenceEditCommand(IScheduleDay scheduleDay, IAgentPreferenceData data, IAgentPreferenceDayCreator agentPreferenceDayCreator)
+		public AgentPreferenceEditCommand(IScheduleDay scheduleDay, IAgentPreferenceData data, IAgentPreferenceDayCreator agentPreferenceDayCreator, IScheduleDictionary scheduleDictionary)
 		{
 			_scheduleDay = scheduleDay;
 			_agentPreferenceDayCreator = agentPreferenceDayCreator;
-			_data = data;
+		    _scheduleDictionary = scheduleDictionary;
+		    _data = data;
 		}
 
 		public void Execute()
@@ -28,6 +29,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				{
 					_scheduleDay.DeletePreferenceRestriction();
 					_scheduleDay.Add(preferenceDay);
+
+				    _scheduleDictionary.Modify(ScheduleModifier.Scheduler, _scheduleDay, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(),
+				                                  new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 				}
 			}
 		}

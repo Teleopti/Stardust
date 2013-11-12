@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -10,22 +11,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 {
 	public partial class AgentOvertimeAvailabilityView : BaseRibbonForm, IAgentOvertimeAvailabilityView
 	{
-		private readonly IAgentOvertimeAvailabilityPresenter _presenter;
+		private readonly AgentOvertimeAvailabilityPresenter _presenter;
 		private readonly IOvertimeAvailabilityCreator _dayCreator;
-		private bool _isDirty;
 
 		public AgentOvertimeAvailabilityView(IScheduleDay scheduleDay)
 		{
 			InitializeComponent();
 			SetTexts();
 			_dayCreator = new OvertimeAvailabilityCreator();
-			_presenter = new AgentOvertimeAvailabilityPresenter(this, scheduleDay);
+			_presenter = new AgentOvertimeAvailabilityPresenter(this, scheduleDay, new SchedulingResultStateHolder());
 			_presenter.Initialize();
-		}
-
-		public IScheduleDay ScheduleDay
-		{
-			get{return _isDirty ? _presenter.ScheduleDay : null;}
 		}
 
 		public void Update(TimeSpan? startTime, TimeSpan? endTime)
@@ -59,43 +54,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (checkBoxAdvNextDay.Checked && endTime.HasValue)
 				endTime = endTime.Value.Add(TimeSpan.FromDays(1));
 
+            if (!validateTimes()) return;
+
 			var commandToExecute = _presenter.CommandToExecute(startTime, endTime, _dayCreator);
-
-			if (commandToExecute == AgentOvertimeAvailabilityExecuteCommand.Remove)
-			{
-				var removeCommand = new AgentOvertimeAvailabilityRemoveCommand(_presenter.ScheduleDay);
-				_presenter.Remove(removeCommand);
-				_isDirty = true;
-				Close();
-				return;	
-			}
-
-			if (!validateTimes()) return;
-
-			if (commandToExecute == AgentOvertimeAvailabilityExecuteCommand.Add)
-			{
-				var addCommand = new AgentOvertimeAvailabilityAddCommand(_presenter.ScheduleDay, startTime, endTime, _dayCreator);
-				_presenter.Add(addCommand);
-				_isDirty = true;
-				Close();
-				return;
-			}
-
-			if (commandToExecute == AgentOvertimeAvailabilityExecuteCommand.Edit)
-			{
-				var editCommand = new AgentOvertimeAvailabilityEditCommand(_presenter.ScheduleDay, startTime, endTime, _dayCreator);
-				_presenter.Edit(editCommand);
-				_isDirty = true;
-				Close();
-				return;
-			}
-
-			_isDirty = false;
+		    if (commandToExecute == null) return;
+		    
+            _presenter.RunCommand(commandToExecute);
+		    Close();
 		}
 
 		private void buttonAdvCancelClick(object sender, EventArgs e)
 		{
-			_isDirty = false;
 			Close();
 		}
 

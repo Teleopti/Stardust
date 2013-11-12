@@ -1,24 +1,25 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public interface IAgentPreferenceAddCommand : IExecutableCommand, ICanExecute
-	{
-		//	
-	}
-	public class AgentPreferenceAddCommand : IAgentPreferenceAddCommand
+    public class AgentPreferenceAddCommand : IAgentPreferenceCommand
 	{
 		private readonly IScheduleDay _scheduleDay;
 		private readonly IAgentPreferenceDayCreator _agentPreferenceDayCreator;
-		private readonly IAgentPreferenceData _data;
+	    private readonly IScheduleDictionary _scheduleDictionary;
+	    private readonly IAgentPreferenceData _data;
 
 
-		public AgentPreferenceAddCommand(IScheduleDay scheduleDay, IAgentPreferenceData data, IAgentPreferenceDayCreator agentPreferenceDayCreator)
+		public AgentPreferenceAddCommand(IScheduleDay scheduleDay, IAgentPreferenceData data, IAgentPreferenceDayCreator agentPreferenceDayCreator, IScheduleDictionary scheduleDictionary)
 		{
 			_scheduleDay = scheduleDay;
 			_agentPreferenceDayCreator = agentPreferenceDayCreator;
-			_data = data;
+		    _scheduleDictionary = scheduleDictionary;
+		    _data = data;
 		}
 
 		public void Execute()
@@ -27,7 +28,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				var preferenceDay = _agentPreferenceDayCreator.Create(_scheduleDay, _data);
 				if (preferenceDay != null)
-					_scheduleDay.Add(preferenceDay);
+				{
+				    _scheduleDay.Add(preferenceDay);
+
+                    _scheduleDictionary.Modify(ScheduleModifier.Scheduler, _scheduleDay, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(),
+                                                  new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+				}
 			}
 		}
 

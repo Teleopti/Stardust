@@ -9,21 +9,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 {
 	public partial class AgentStudentAvailabilityView : BaseRibbonForm, IAgentStudentAvailabilityView
 	{
-		private readonly IAgentStudentAvailabilityPresenter _presenter;
+		private readonly AgentStudentAvailabilityPresenter _presenter;
 		private readonly IAgentStudentAvailabilityDayCreator _dayCreator;
-		private bool _isDirty;
 
-		public AgentStudentAvailabilityView(IScheduleDay scheduleDay)
+		public AgentStudentAvailabilityView(IScheduleDay scheduleDay, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			InitializeComponent();
 			SetTexts();
 			_dayCreator = new AgentStudentAvailabilityDayCreator();
-			_presenter = new AgentStudentAvailabilityPresenter(this, scheduleDay);
-		}
-
-		public IScheduleDay ScheduleDay
-		{
-			get{return _isDirty ? _presenter.ScheduleDay : null;}
+			_presenter = new AgentStudentAvailabilityPresenter(this, scheduleDay, schedulingResultStateHolder);
 		}
 
 		public void Update(TimeSpan? startTime, TimeSpan? endTime)
@@ -57,44 +51,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (checkBoxAdvNextDay.Checked && endTime.HasValue)
 				endTime = endTime.Value.Add(TimeSpan.FromDays(1));
 
+            if (!validateTimes()) return;
+
 			var commandToExecute = _presenter.CommandToExecute(startTime, endTime, _dayCreator);
-
-			if (commandToExecute == AgentStudentAvailabilityExecuteCommand.Remove)
+			if (commandToExecute != null)
 			{
-				var removeCommand = new AgentStudentAvailabilityRemoveCommand(_presenter.ScheduleDay);
-				_presenter.Remove(removeCommand);
-				_isDirty = true;
-				Hide();
-				return;	
+				_presenter.RunCommand(commandToExecute);
+				Close();
 			}
-
-			if (!validateTimes()) return;
-
-			if (commandToExecute == AgentStudentAvailabilityExecuteCommand.Add)
-			{
-				var addCommand = new AgentStudentAvailabilityAddCommand(_presenter.ScheduleDay, startTime, endTime, _dayCreator);
-				_presenter.Add(addCommand);
-				_isDirty = true;
-				Hide();
-				return;
-			}
-
-			if (commandToExecute == AgentStudentAvailabilityExecuteCommand.Edit)
-			{
-				var editCommand = new AgentStudentAvailabilityEditCommand(_presenter.ScheduleDay, startTime, endTime, _dayCreator);
-				_presenter.Edit(editCommand);
-				_isDirty = true;
-				Hide();
-				return;
-			}
-
-			_isDirty = false;
 		}
 
 		private void buttonAdvCancelClick(object sender, EventArgs e)
 		{
-			_isDirty = false;
-			Hide();
+			Close();
 		}
 
 		private bool validateTimes()

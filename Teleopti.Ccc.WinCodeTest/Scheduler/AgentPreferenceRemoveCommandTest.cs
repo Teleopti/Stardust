@@ -14,14 +14,16 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private MockRepository _mock;
 		private IScheduleDay _scheduleDay;
 		private IPreferenceDay _preferenceDay;
+	    private IScheduleDictionary _scheduleDictionary;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_mock = new MockRepository();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
+			_scheduleDictionary = _mock.DynamicMock<IScheduleDictionary>();
 			_preferenceDay = _mock.StrictMock<IPreferenceDay>();
-			_removeCommand = new AgentPreferenceRemoveCommand(_scheduleDay);
+			_removeCommand = new AgentPreferenceRemoveCommand(_scheduleDay, _scheduleDictionary);
 		}
 
 		[Test]

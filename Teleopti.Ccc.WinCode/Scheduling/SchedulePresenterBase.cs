@@ -700,34 +700,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		    return TryModify(scheduleParts, DefaultScheduleTag);
 		}
 
-        public void UpdateRestriction()
-        {
-            if (LastUnsavedSchedulePart == null) return;
-            IList<IScheduleDay> theParts =  new List<IScheduleDay> { LastUnsavedSchedulePart };
-
-            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer ?? new UndoRedoContainer(500);
-            undoRedoContainer.CreateBatch("Saving restriction");
-
-            _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, theParts, NewBusinessRuleCollection.AllForScheduling(_schedulerState.SchedulingResultState), _scheduleDayChangeCallback, new ScheduleTagSetter(DefaultScheduleTag));
-
-            undoRedoContainer.CommitBatch();
-            LastUnsavedSchedulePart = null;
-        }
-		
-		public void UpdateOvertimeAvailability()
-        {
-            if (LastUnsavedSchedulePart == null) return;
-            IList<IScheduleDay> theParts =  new List<IScheduleDay> { LastUnsavedSchedulePart };
-
-            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer ?? new UndoRedoContainer(500);
-            undoRedoContainer.CreateBatch("Saving overtime availability");
-
-            _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, theParts, NewBusinessRuleCollection.AllForScheduling(_schedulerState.SchedulingResultState), _scheduleDayChangeCallback, new ScheduleTagSetter(DefaultScheduleTag));
-
-            undoRedoContainer.CommitBatch();
-            LastUnsavedSchedulePart = null;
-        }
-
         public void UpdateNoteFromEditor()
         {
             if (LastUnsavedSchedulePart == null) return;
