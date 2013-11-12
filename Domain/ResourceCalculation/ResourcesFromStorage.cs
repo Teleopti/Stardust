@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				periodResource.AppendResource(combination.Activity.ToString() + "|" + combination.Skills,
 											  new SkillCombination(combination.Skills, new ISkill[0], new DateOnlyPeriod(),
-				                                                   foundEfficiencies), resourcesForCombinationFromStorage.Heads, resourcesForCombinationFromStorage.Resources);
+											                       foundEfficiencies), resourcesForCombinationFromStorage.Heads, resourcesForCombinationFromStorage.Resources, null);
 			}
 		}
 

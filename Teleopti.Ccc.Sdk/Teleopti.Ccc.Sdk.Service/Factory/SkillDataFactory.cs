@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 					var personSkillProvider = new PersonSkillProvider();
 					var resourceOptimizationHelper = new ResourceOptimizationHelper(schedulingResultStateHolder,
 																					new OccupiedSeatCalculator(),
-																					new NonBlendSkillCalculator(), personSkillProvider,
+																					new NonBlendSkillCalculator(), personSkillProvider, new PeriodDistributionService(), 
 					                                                                new CurrentTeleoptiPrincipal());
 					foreach (DateOnly dateTime in dateOnlyPeriodForResourceCalc.DayCollection())
 					{
