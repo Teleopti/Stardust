@@ -8,16 +8,20 @@ GO
 -- Update date: 
 -- =============================================
 --EXEC [mart].[etl_fact_agent_state_load] '00000000-0000-0000-0000-000000000000'
+IF (SELECT compatibility_level FROM sys.databases WHERE name = DB_NAME()) > 90
+BEGIN
+EXEC dbo.sp_executesql @statement = N'
 CREATE PROCEDURE [mart].[etl_fact_agent_state_load] 
 @business_unit_code uniqueidentifier
 WITH EXECUTE AS OWNER	
 AS
 SET NOCOUNT ON
 
+
 --load dim_state_group
 EXEC [mart].[etl_dim_state_group]
 
---
+--continue
 SET NOCOUNT OFF
 
 MERGE mart.fact_agent_state AS f
@@ -36,4 +40,23 @@ WHEN NOT MATCHED THEN
         VALUES (v.date_id, v.person_id, v.interval_id, v.state_group_id, v.time_in_state_s, v.datasource_id, v.insert_date);
 
 TRUNCATE TABLE [stage].[stg_agent_state]
+' 
+END
+ELSE
+BEGIN
+EXEC dbo.sp_executesql @statement = N'
+CREATE PROCEDURE [mart].[etl_fact_agent_state_load] 
+@business_unit_code uniqueidentifier
+WITH EXECUTE AS OWNER
+AS
+--if we you see this version of the SP; we have the wrong compabilty level on the database
+--We flush the data until compability level is fixed
+IF (SELECT compatibility_level FROM sys.databases WHERE name = DB_NAME()) > 90
+BEGIN
+	TRUNCATE TABLE [stage].[stg_agent_state]
+END
+' 
+END
 GO
+
+
