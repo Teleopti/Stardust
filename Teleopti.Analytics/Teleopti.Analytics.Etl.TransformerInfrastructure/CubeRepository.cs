@@ -11,14 +11,14 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         private string _ASserver;
         private string _ASdatabaseName;
     	private readonly int _defaultTimeZoneId;
-    	private string _ASCubeName;
+    	//private string _ASCubeName;
 
         public CubeRepository(string server, string databaseName, int defaultTimeZoneId)
         {
             _ASserver = server;
             _ASdatabaseName = databaseName;
         	_defaultTimeZoneId = defaultTimeZoneId;
-        	_ASCubeName = "Teleopti Analytics";
+        	//_ASCubeName = "Teleopti Analytics";
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
