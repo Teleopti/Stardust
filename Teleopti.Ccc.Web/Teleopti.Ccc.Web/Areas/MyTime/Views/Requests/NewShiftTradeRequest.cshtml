@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <table>
+            <table style="width: 100%">
                 <thead>
                     <tr>
                         <td>&nbsp;</td>
@@ -44,53 +44,25 @@
                 </thead>
                 <tbody>
                     <tr class="shift-trade-my-schedule-row">
-                        <td>@Resources.MySchedule</td>
+                        <td class="shift-trade-agent-name">@Resources.MySchedule</td>
                         <td class="shift-trade-my-schedule" data-bind="foreach: mySchedule().layers">
-                            <div class="shift-trade-layer" data-bind="style: { left: leftPx, width: widthPx, backgroundColor: backgroundColor }, attr: { 'title': title }"></div>
+                            <div class="shift-trade-layer-container">
+                                <div class="shift-trade-layer absolute floatleft" data-bind="style: { left: leftPos, width: widthPx, backgroundColor: backgroundColor }, tooltip: { title: tooltipText, html: true }"></div>                                
+                            </div>
                         </td>
                     </tr>
                 </tbody>
                 <tbody data-bind="foreach: possibleTradeSchedules">
-                    <tr class="shift-trade-person-schedule-row" data-bind="visible: isVisible, click: $parent.chooseAgent">
+                    <tr class="shift-trade-person-schedule-row" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
                         <td class="shift-trade-agent-name" data-bind="text: agentName"></td>
                         <td class="shift-trade-possible-trade-schedule" data-bind="foreach: $data.layers">
-                            <div class="shift-trade-layer" data-bind="style: { left: leftPx, width: widthPx, backgroundColor: backgroundColor }, attr: { 'title': title }"></div>
+                            <div class="shift-trade-layer-container">
+                                <div class="shift-trade-layer absolute floatleft" data-bind="style: { left: leftPos, width: widthPx, backgroundColor: backgroundColor }, tooltip: { title: tooltipText, html: true }"></div>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            
-
-            @*<div class="shift-trade-timeline" data-bind="foreach: hours">
-                <span class="shift-trade-timeline-line" data-bind="style: { width : hourWidth }">
-                    <span class="shift-trade-timeline-number ui-corner-all" data-bind="text: hourText, style: {left: leftPx}"></span>
-                </span>
-            </div>
-            <div class="relative" >
-                <div class="shift-trade-my-schedule-row">
-                    <span style="width: 150px; float: left" data-bind="text: mySchedule().agentName"></span>
-                    <div class="shift-trade-my-schedule" data-bind="foreach: mySchedule().layers">
-                        <span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}, css:{ dayoff : $parent.mySchedule().showDayOffStyle() }">
-                            <span class="shift-trade-dayoff-name" data-bind="text: $parent.mySchedule().dayOffText"></span>
-                        </span>
-                    </div>
-                </div>
-                <div class="shift-trade-schedule-loading">
-                    <div class="loading-gradient"  data-bind="visible: IsLoading, fadeInDuration: 900, fadeOutDuration: 10, hideWhenFadedOut: true" style="pointer-events:none" >
-                        <div class="loading"></div>
-                    </div>
-                </div>
-            </div>
-            <div data-bind="foreach: possibleTradeSchedules">
-                <div class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
-                    <span class="shift-trade-agent-name" data-bind="text: agentName"></span>
-                    <div class="shift-trade-possible-trade-schedule" data-bind="foreach: $data.layers">
-                        <span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}, css:{ striped : $parent.showDayOffStyle(), dayoff : $parent.showDayOffStyle() }">
-                            <span class="shift-trade-dayoff-name" data-bind="text: $parent.dayOffText"></span>
-                        </span>					
-                    </div>
-                </div>
-            </div>*@
         </div>
 		
         <p></p>

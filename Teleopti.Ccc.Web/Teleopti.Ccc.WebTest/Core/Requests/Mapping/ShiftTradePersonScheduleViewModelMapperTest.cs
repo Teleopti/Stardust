@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using NUnit.Framework;
 using Newtonsoft.Json;
 using Rhino.Mocks;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.PersonId.Should().Be.EqualTo(readModel.PersonId);
 			result.StartTimeUtc.Should().Be.EqualTo(readModel.Start);
 			result.ScheduleLayers.Should().Be.SameInstanceAs(layerViewModels);
-			result.Name.Should().Be.EqualTo(UserTexts.Resources.MySchedule);
+			result.Name.Should().Be.EqualTo(string.Format(CultureInfo.InvariantCulture, "{0} {1}", model.FirstName, model.LastName));
 		}
 
 		[Test]

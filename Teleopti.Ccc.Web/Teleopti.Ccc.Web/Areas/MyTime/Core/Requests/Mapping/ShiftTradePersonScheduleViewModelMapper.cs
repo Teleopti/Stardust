@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				PersonId = scheduleReadModel.PersonId,
 				StartTimeUtc = scheduleReadModel.Start.Value,
-				Name = UserTexts.Resources.MySchedule,
+				Name = string.Format(CultureInfo.InvariantCulture, "{0} {1}", shiftReadModel.FirstName, shiftReadModel.LastName),
 				ScheduleLayers = _layerMapper.Map(shiftReadModel.Shift.Projection)
 			};
 		}

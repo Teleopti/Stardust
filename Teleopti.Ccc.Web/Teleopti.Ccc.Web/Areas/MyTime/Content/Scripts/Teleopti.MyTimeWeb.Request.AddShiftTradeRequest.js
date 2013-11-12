@@ -47,7 +47,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 	    self.setTimeLineLengthInMinutes = function(firstHour, lastHour) {
 	        self.timeLineStartTime(firstHour);
-	        self.timeLineLengthInMinutes(firstHour.diff(lastHour, 'minutes'));
+	        self.timeLineLengthInMinutes(lastHour.diff(firstHour, 'minutes'));
 	    };
 		self.pixelPerMinute = ko.computed(function () {
 			return layerCanvasPixelWidth / self.timeLineLengthInMinutes();
@@ -56,18 +56,20 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self._createMySchedule = function (myScheduleObject) {
 		    var mappedlayers = [];
 		    if (myScheduleObject != null) {
-		        mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function(layer) {
-		            return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
+		        mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
+		            var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
+		            return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());
 		        });
 		    }
 		    self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedlayers, myScheduleObject));
 		};
 
-		self._createPossibleTradeSchedules = function (possibleTradePersons) {
-			var mappedPersonsSchedule = ko.utils.arrayMap(possibleTradePersons, function (personSchedule) {
+		self._createPossibleTradeSchedules = function (possibleTradeSchedules) {
+			var mappedPersonsSchedule = ko.utils.arrayMap(possibleTradeSchedules, function (personSchedule) {
 
-				var mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function (layer) {
-					return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, personSchedule.MinutesSinceTimeLineStart, self.pixelPerMinute());
+			    var mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function (layer) {
+			        var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
+			        return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());
 				});
 
 				return new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedLayers, personSchedule);
@@ -193,7 +195,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				success: function (data, textStatus, jqXHR) {
 				    self._createTimeLine(data.TimeLineHours);
 					self._createMySchedule(data.MySchedule);
-					self._createPossibleTradeSchedules(data.PossibleTradePersons);
+					self._createPossibleTradeSchedules(data.PossibleTradeSchedules);
 					self.setScheduleLoadedReady();
 					self.isReadyLoaded(true);
 				},

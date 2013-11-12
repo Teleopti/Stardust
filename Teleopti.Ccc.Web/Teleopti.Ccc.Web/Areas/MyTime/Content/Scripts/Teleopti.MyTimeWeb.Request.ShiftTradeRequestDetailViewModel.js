@@ -150,7 +150,7 @@ Teleopti.MyTimeWeb.Request.TimeLineHourViewModel = function (hour, parentViewMod
 	});
     
     self.leftPos = ko.computed(function() {
-        var minutesSinceTimeLineStart = parentViewModel.timeLineStartTime().diff(self.startTime, 'minutes');
+        var minutesSinceTimeLineStart = self.startTime.diff(parentViewModel.timeLineStartTime(), 'minutes');
         return minutesSinceTimeLineStart * parentViewModel.pixelPerMinute();
     });
 
@@ -169,7 +169,10 @@ Teleopti.MyTimeWeb.Request.LayerViewModel = function(layer, minutesSinceTimeLine
 		var timeLineoffset = minutesSinceTimeLineStart;
 		return (layer.ElapsedMinutesSinceShiftStart + timeLineoffset) * pixelPerMinute + 'px';
 	});
-	self.paddingLeft = ko.computed(function() {
+	self.leftPos = ko.computed(function () {
+	    return (minutesSinceTimeLineStart * pixelPerMinute) + 'px';
+	});
+	self.widthPx = ko.computed(function () {
 		return self.lengthInMinutes * pixelPerMinute + 'px';
 	});
 	self.title = ko.computed(function() {
@@ -177,6 +180,9 @@ Teleopti.MyTimeWeb.Request.LayerViewModel = function(layer, minutesSinceTimeLine
 			return layer.Title + ' ' + self.payload;
 		}
 		return '';
+	});
+	self.tooltipText = ko.computed(function () {
+        return layer.Title;
 	});
 };
 
