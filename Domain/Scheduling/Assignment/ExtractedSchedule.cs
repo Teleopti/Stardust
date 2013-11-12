@@ -805,7 +805,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         protected override void CloneDerived(Schedule clone)
         {
-            ((ExtractedSchedule)clone).ServiceForSignificantPart = null;
+            var thisClone = ((ExtractedSchedule)clone);
+            thisClone.ServiceForSignificantPart = null;
+            thisClone.ServiceForSignificantPartForDisplay = null;
         }
 
         public void Remove(DeleteOption options)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -21,10 +22,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IPerson _person;
 		private DateOnly _dateOnly;
 		private IScheduleDay _scheduleDay;
-		private IAgentOvertimeAvailabilityAddCommand _addCommand;
-		private IAgentOvertimeAvailabilityRemoveCommand _removeCommand;
+		private IAgentOvertimeAvailabilityCommand _command;
 		private IOvertimeAvailability _overtimeAvailabilityDay;
-		private IAgentOvertimeAvailabilityEditCommand _editCommand;
 		private IOvertimeAvailabilityCreator _dayCreator;
 		private IProjectionService _projectionService;
 		private IVisualLayerCollection _visualLayerCollection;
@@ -38,10 +37,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
 			_dateOnly = new DateOnly(2013, 1, 1);
 			_overtimeAvailabilityDay = new OvertimeAvailability(_person, _dateOnly, TimeSpan.FromHours(8), TimeSpan.FromHours(18));
-			_presenter = new AgentOvertimeAvailabilityPresenter(_view, _scheduleDay);
-			_addCommand = _mock.StrictMock<IAgentOvertimeAvailabilityAddCommand>();
-			_removeCommand = _mock.StrictMock<IAgentOvertimeAvailabilityRemoveCommand>();
-			_editCommand = _mock.StrictMock<IAgentOvertimeAvailabilityEditCommand>();
+			_presenter = new AgentOvertimeAvailabilityPresenter(_view, _scheduleDay, new SchedulingResultStateHolder());
+			_command = _mock.StrictMock<IAgentOvertimeAvailabilityCommand>();
 			_dayCreator = _mock.StrictMock<IOvertimeAvailabilityCreator>();
 			_projectionService = _mock.StrictMock<IProjectionService>();
 			_visualLayerCollection = _mock.StrictMock<IVisualLayerCollection>();
@@ -71,7 +68,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-		public void ShouldAddOvertimeAvailabilityDay()
+		public void ShouldRunOvertimeAvailabilityDayCommand()
 		{
 			addPeriodAndContractToPerson();
 			using (_mock.Record())
@@ -79,104 +76,22 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
 				Expect.Call(_visualLayerCollection.Period()).Return(null);
-				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.FindSystemTimeZoneById("UTC")));
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.Utc));
 				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(() => _addCommand.Execute());
+				Expect.Call(() => _command.Execute());
 			}
 
 			using (_mock.Playback())
 			{
 				_presenter.Initialize();
-				_presenter.Add(_addCommand);	
+				_presenter.RunCommand(_command);
 			}
 		}
 	
-		[Test]
-		public void ShouldAddOvertimeAvailabilityDayWorkTimeFromSchedulePeriod()
-		{
-			addPeriodAndContractToPersonWorkTimeFromSchedulePeriod();
-			using (_mock.Record())
-			{
-				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
-				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
-				Expect.Call(_visualLayerCollection.Period()).Return(null);
-				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.FindSystemTimeZoneById("UTC")));
-				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(() => _addCommand.Execute());
-			}
-
-			using (_mock.Playback())
-			{
-				_presenter.Initialize();
-				_presenter.Add(_addCommand);	
-			}
-		}
-
-		[Test]
-		public void ShouldAddOvertimeAvailabilityDayForExistingShift()
-		{
-			addPeriodAndContractToPerson();
-			using (_mock.Record())
-			{
-				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfo.FindSystemTimeZoneById("UTC")));
-				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(() => _addCommand.Execute());
-				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
-				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
-				Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod());
-			}
-
-			using (_mock.Playback())
-			{
-				_presenter.Initialize();
-				_presenter.Add(_addCommand);	
-			}
-		}
-
-		[Test]
-		public void ShouldRemoveOvertimeAvailabilityDay()
-		{
-			using (_mock.Record())
-			{
-				Expect.Call(() => _removeCommand.Execute());
-			}
-
-			using (_mock.Playback())
-			{
-				_presenter.Remove(_removeCommand);
-			}
-		}
-
-		[Test]
-		public void ShouldEditOvertimeAvailabilityDay()
-		{
-			using (_mock.Record())
-			{
-				Expect.Call(() => _editCommand.Execute());
-			}
-
-			using (_mock.Playback())
-			{
-				_presenter.Edit(_editCommand);
-			}
-		}
-
 		[Test, ExpectedException(typeof(ArgumentNullException))]
-		public void ShouldThrowExceptionWhenNullCommandEdit()
+		public void ShouldThrowExceptionWhenNullCommand()
 		{
-			_presenter.Edit(null);	
-		}
-
-		[Test, ExpectedException(typeof(ArgumentNullException))]
-		public void ShouldThrowExceptionWhenNullCommandAdd()
-		{
-			_presenter.Add(null);
-		}
-
-		[Test, ExpectedException(typeof(ArgumentNullException))]
-		public void ShouldThrowExceptionWhenNullCommandRemove()
-		{
-			_presenter.Remove(null);
+			_presenter.RunCommand(null);	
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]
@@ -200,7 +115,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (_mock.Playback())
 			{
 				var toExecute = _presenter.CommandToExecute(null, null, _dayCreator);
-				Assert.AreEqual(AgentOvertimeAvailabilityExecuteCommand.Remove, toExecute);
+				Assert.IsInstanceOf<AgentOvertimeAvailabilityRemoveCommand>(toExecute);
 			}
 		}
 
@@ -221,7 +136,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (_mock.Playback())
 			{
 				var toExecute = _presenter.CommandToExecute(startTime, endTime, _dayCreator);
-				Assert.AreEqual(AgentOvertimeAvailabilityExecuteCommand.Add, toExecute);
+				Assert.IsInstanceOf<AgentOvertimeAvailabilityAddCommand>(toExecute);
 			}	
 		}
 
@@ -242,7 +157,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (_mock.Playback())
 			{
 				var toExecute = _presenter.CommandToExecute(startTime, endTime, _dayCreator);
-				Assert.AreEqual(AgentOvertimeAvailabilityExecuteCommand.Edit, toExecute);
+				Assert.IsInstanceOf<AgentOvertimeAvailabilityEditCommand>(toExecute);
 			}		
 		}
 
@@ -263,7 +178,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (_mock.Playback())
 			{
 				var toExecute = _presenter.CommandToExecute(startTime, endTime, _dayCreator);
-				Assert.AreEqual(AgentOvertimeAvailabilityExecuteCommand.None, toExecute);
+				Assert.IsNull(toExecute);
 			}	
 		}
 
@@ -273,22 +188,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1999, 1, 1));
 			_person.AddPersonPeriod(period);
 			period.PersonContract.ContractSchedule.AddContractScheduleWeek(schedWeek);
-			schedWeek.Add(DayOfWeek.Monday, true);
-			schedWeek.Add(DayOfWeek.Tuesday, true);
-			schedWeek.Add(DayOfWeek.Wednesday, true);
-			schedWeek.Add(DayOfWeek.Thursday, true);
-			schedWeek.Add(DayOfWeek.Friday, true);
-			schedWeek.Add(DayOfWeek.Saturday, true);
-			schedWeek.Add(DayOfWeek.Sunday, true);
-		}
-	
-		private void addPeriodAndContractToPersonWorkTimeFromSchedulePeriod()
-		{
-			var schedWeek = new ContractScheduleWeek();
-			var period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1999, 1, 1));
-			_person.AddPersonPeriod(period);
-			period.PersonContract.ContractSchedule.AddContractScheduleWeek(schedWeek);
-			period.PersonContract.Contract.WorkTimeSource = WorkTimeSource.FromSchedulePeriod;
 			schedWeek.Add(DayOfWeek.Monday, true);
 			schedWeek.Add(DayOfWeek.Tuesday, true);
 			schedWeek.Add(DayOfWeek.Wednesday, true);

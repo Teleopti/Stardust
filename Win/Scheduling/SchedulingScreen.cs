@@ -6924,25 +6924,23 @@ namespace Teleopti.Ccc.Win.Scheduling
 			using (var view = new AgentPreferenceView(selectedDay, WorkflowControlSets, _schedulerState.SchedulingResultState))
 			{
 				view.ShowDialog(this);
-				updateRestrictions(view.ScheduleDay);
+                updateRestrictions(_scheduleView.SelectedSchedules()[0]);
 			}
 		}
 
 		private void addStudentAvailabilityToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			var selectedDay = _scheduleView.SelectedSchedules()[0];
-			using (var view = new AgentStudentAvailabilityView(selectedDay))
+			using (var view = new AgentStudentAvailabilityView(selectedDay,_schedulerState.SchedulingResultState))
 			{
 				view.ShowDialog(this);
-				updateRestrictions(view.ScheduleDay);
+                updateRestrictions(_scheduleView.SelectedSchedules()[0]);
 			}
 		}
 
 		private void updateRestrictions(IScheduleDay scheduleDay)
 		{
 			if (_scheduleView == null || scheduleDay == null) return;
-			_scheduleView.Presenter.LastUnsavedSchedulePart = scheduleDay;
-			_scheduleView.Presenter.UpdateRestriction();
 			if (_scheduleView is AgentRestrictionsDetailView)
 			{
 				schedulerSplitters1.RecalculateRestrictions();
@@ -6959,15 +6957,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			using (var view = new AgentOvertimeAvailabilityView(selectedDay))
 			{
 				view.ShowDialog(this);
-				updateOvertimeAvailability(view.ScheduleDay);
+                updateOvertimeAvailability();
 			}
 		}
 
-		private void updateOvertimeAvailability(IScheduleDay scheduleDay)
+		private void updateOvertimeAvailability()
 		{
-			if (_scheduleView == null || scheduleDay == null) return;
-			_scheduleView.Presenter.LastUnsavedSchedulePart = scheduleDay;
-			_scheduleView.Presenter.UpdateOvertimeAvailability();
+			if (_scheduleView == null) return;
 			enableSave();
 		}
 
