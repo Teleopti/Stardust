@@ -104,8 +104,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         int FillFactAgentQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
         int FillAcdLogOnDataMart(int dataSourceId);
         int FillScheduleDeviationDataMart(DateTimePeriod period, IBusinessUnit businessUnit, TimeZoneInfo defaultTimeZone, bool isIntraday);
-		int AggregateFactAgentStateDataMart(IBusinessUnit businessUnit);
-
+		
         //KPI
         IList<IKeyPerformanceIndicator> LoadKpi();
         int PersistKpi(DataTable dataTable);
@@ -134,6 +133,12 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         int FillSkillSetDataMart(IBusinessUnit businessUnit);
         int FillBridgeAgentSkillSetDataMart(IBusinessUnit businessUnit);
         int FillFactAgentSkillDataMart(IBusinessUnit businessUnit);
+
+		//RTA
+		IList<IRtaStateGroup> LoadRtaStateGroups(IBusinessUnit businessUnit);
+		int PersistStateGroup(DataTable dataTable);
+		int FillStateGroupDataMart(IBusinessUnit businessUnit);
+		int AggregateFactAgentStateDataMart(IBusinessUnit businessUnit);
 
         //Users
         IList<IPerson> LoadUser();

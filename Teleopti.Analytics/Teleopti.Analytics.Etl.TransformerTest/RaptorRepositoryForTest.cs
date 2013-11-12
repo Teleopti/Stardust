@@ -35,6 +35,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             return 0;
         }
 
+		public int FillStateGroupDataMart(IBusinessUnit businessUnit)
+		{
+			return 0;
+		}
+
         public IList<IShiftCategory> LoadShiftCategory()
         {
             return new List<IShiftCategory>();
@@ -240,6 +245,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         {
             return 0;
         }
+
+		public int AggregateFactAgentStateDataMart(IBusinessUnit businessUnit)
+		{
+			return 0;
+		}
 
         public int FillFactSchedulePreferenceMart(DateOnlyPeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
         {

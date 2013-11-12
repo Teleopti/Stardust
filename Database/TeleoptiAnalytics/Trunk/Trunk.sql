@@ -454,6 +454,22 @@ CREATE CLUSTERED INDEX [CIX_stg_agent_state_loading] ON [stage].[stg_agent_state
 	[person_code] ASC
 )
 
+--new stage table
+CREATE TABLE [stage].[stg_state_group](
+	[state_group_code] uniqueidentifier NOT NULL,
+	[state_group_name] nvarchar(50) NOT NULL,
+	[business_unit_code] uniqueidentifier NULL,
+	[datasource_id] smallint NOT NULL,
+	[insert_date] smalldatetime NOT NULL,
+	[update_date] smalldatetime NOT NULL,
+	[datasource_update_date] smalldatetime NOT NULL,
+	[is_deleted] [bit] NOT NULL
+)
+ALTER TABLE [stage].[stg_state_group] ADD  CONSTRAINT [PK_stage_state_group] PRIMARY KEY CLUSTERED
+(
+	[state_group_code] ASC
+)
+
 --new dimension table
 CREATE TABLE [mart].[dim_state_group](
 	[state_group_id] int IDENTITY(1,1) NOT NULL,
@@ -513,8 +529,14 @@ GO
 ----------------  
 --Name: DJ
 --Date: 2013-11-08
---Desc: New jobstep for mart.fact_agent_state
+--Desc: New jobsteps for stg_state_group and fact_agent_state
 ----------------
+IF NOT EXISTS (SELECT 1 FROM [mart].[etl_jobstep] WHERE jobstep_name=N'stg_state_group' AND jobstep_id=84)
+INSERT [mart].[etl_jobstep] ([jobstep_id], [jobstep_name]) VALUES(84,N'stg_state_group')
+GO
+IF NOT EXISTS (SELECT 1 FROM [mart].[etl_jobstep] WHERE jobstep_name=N'dim_state_group' AND jobstep_id=84)
+INSERT [mart].[etl_jobstep] ([jobstep_id], [jobstep_name]) VALUES(85,N'dim_state_group')
+GO
 IF NOT EXISTS (SELECT 1 FROM [mart].[etl_jobstep] WHERE jobstep_name=N'fact_agent_state' AND jobstep_id=84)
-INSERT [mart].[etl_jobstep] ([jobstep_id], [jobstep_name]) VALUES(84,N'fact_agent_state')
+INSERT [mart].[etl_jobstep] ([jobstep_id], [jobstep_name]) VALUES(86,N'fact_agent_state')
 GO
