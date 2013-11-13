@@ -106,7 +106,7 @@
 								<div class="shift-menu" data-bind="style: { 'margin-left': ShiftStartPixels() + 'px' }">
 									<div class="btn-group">
 										<a href="#" class="btn btn-small add-full-day-absence" data-bind="click: AddFullDayAbsence, css: { 'active' : $root.AddingFullDayAbsence }"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.FullDayAbsence"></span></a>
-										<a href="#" class="btn btn-small add-absence" data-bind="click: AddAbsence, css: { 'active': $root.AddingAbsence }"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.Absence"></span></a>
+										<a href="#" class="btn btn-small add-absence" data-bind="click: AddAbsence, css: { 'active': $root.AddingAbsence }"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.IntradayAbsence"></span></a>
 										<a href="#" class="btn btn-small add-activity" data-bind="click: AddActivity, css: { 'active': $root.AddingActivity }"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.Activity"></span></a>
 									</div>
 								</div>
@@ -132,7 +132,7 @@
 											<label class="checkbox"><input type="checkbox"> Next day
 											</label>
 
-											<button class="btn btn-success apply" style="margin-top: 10px" data-bind="enable: !$root.Loading(), text: $root.Resources.AddAbsence, click: Apply"></button>
+											<button class="btn btn-success apply" style="margin-top: 10px" data-bind="enable: !$root.Loading(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
 					
 										</form>
 										<!-- /ko -->

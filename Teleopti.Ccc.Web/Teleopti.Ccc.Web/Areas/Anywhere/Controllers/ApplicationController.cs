@@ -64,8 +64,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.Show,
 					UserTexts.Resources.FullDayAbsence,
 					UserTexts.Resources.Activity,
-					UserTexts.Resources.Absence,
-					UserTexts.Resources.AddAbsence,
+					UserTexts.Resources.AddIntradayAbsence,
+					UserTexts.Resources.IntradayAbsence,
 					
 					DateAndTimeFormatExtensions.FixedDateFormat,
 					DateAndTimeFormatExtensions.FixedDateTimeFormat,
