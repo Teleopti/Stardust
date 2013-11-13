@@ -433,14 +433,14 @@ CREATE TABLE [stage].[stg_agent_state](
 	[person_code] uniqueidentifier NOT NULL,
 	[state_group_name] nvarchar(50) NOT NULL,
 	[state_group_code] uniqueidentifier NOT NULL,
-	[date] smalldatetime NOT NULL,
-	[interval] smalldatetime NOT NULL,
+	[StateStart] datetime NOT NULL,
+--	[interval] smalldatetime NOT NULL,
 	[time_in_state_s] int NOT NULL
 )
 
 CREATE CLUSTERED INDEX [CIX_stg_agent_state] ON [stage].[stg_agent_state]
 (
-	[interval] ASC
+	[person_code] ASC
 )
 
 CREATE TABLE [stage].[stg_agent_state_loading](
@@ -497,7 +497,7 @@ GO
 CREATE TABLE [mart].[fact_agent_state](
 	[date_id] int NOT NULL,
 	[person_id] int NOT NULL,
-	[interval_id] smallint NOT NULL,
+--	[interval_id] smallint NOT NULL,
 	[state_group_id] int NOT NULL,
 	[time_in_state_s] int NOT NULL,
 	[datasource_id] smallint NOT NULL,
@@ -508,7 +508,7 @@ ALTER TABLE [mart].[fact_agent_state] ADD CONSTRAINT [PK_fact_agent_state] PRIMA
 (
 	[date_id] ASC,
 	[person_id] ASC,
-	[interval_id] ASC,
+--	[interval_id] ASC,
 	[state_group_id] ASC
 )
 GO
@@ -516,8 +516,8 @@ GO
 ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_date] FOREIGN KEY([date_id])
 REFERENCES [mart].[dim_date] ([date_id])
 GO
-ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_interval] FOREIGN KEY([interval_id])
-REFERENCES [mart].[dim_interval] ([interval_id])
+--ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_interval] FOREIGN KEY([interval_id])
+--REFERENCES [mart].[dim_interval] ([interval_id])
 GO
 ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_person] FOREIGN KEY([person_id])
 REFERENCES [mart].[dim_person] ([person_id])

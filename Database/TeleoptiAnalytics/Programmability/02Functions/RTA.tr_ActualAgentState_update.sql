@@ -35,11 +35,11 @@ BEGIN
 		person_code		= d.PersonId,
 		state_code		= d.StateCode,
 		state_group_code= d.StateId,
-		[date]			= cast(DATEADD(dd, DATEDIFF(dd, 0, d.StateStart), 0) as smalldatetime),
-		interval		= cast(dateadd(MINUTE,(DATEPART(HOUR,d.StateStart)*60+DATEPART(MINUTE,d.StateStart)),'1900-01-01') as smalldatetime),
+		StateStart		= d.StateStart,
+--		interval		= cast(dateadd(MINUTE,(DATEPART(HOUR,d.StateStart)*60+DATEPART(MINUTE,d.StateStart)),'1900-01-01') as smalldatetime),
 		time_in_state_s = datediff(ss,d.StateStart,i.StateStart)
 	FROM DELETED d
 	INNER JOIN INSERTED i
-		ON d.PersonId=i.PersonId
+		ON d.StateStart<>i.StateStart  --Only if time have changed
 END
 GO

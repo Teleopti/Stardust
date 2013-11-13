@@ -5,6 +5,7 @@ GO
 -- Author:		David J
 -- Create date: 2013-11-08
 -- Description:	Loads agent states
+-- Had to write a IF to handle SQL 2005
 -- Update date: 
 -- =============================================
 --EXEC [mart].[etl_fact_agent_state_load] '00000000-0000-0000-0000-000000000000'
@@ -18,8 +19,8 @@ AS
 SET NOCOUNT ON
 
 
---load dim_state_group
-EXEC [mart].[etl_dim_state_group]
+--re-load dim_state_group with state groups that might have poped in between ETL.dim_state_group and now()
+EXEC [mart].[etl_dim_state_group_load_livefeed]
 
 --continue
 SET NOCOUNT OFF
@@ -29,15 +30,19 @@ USING mart.v_fact_agent_state_merge AS v
 ON (
 		f.date_id		= v.date_id
 	AND f.person_id		= v.person_id
-	AND f.interval_id	= v.interval_id
+--	AND f.interval_id	= v.interval_id
 	AND f.state_group_id= v.state_group_id
 	)
 WHEN MATCHED
     THEN
 	UPDATE SET f.time_in_state_s = f.time_in_state_s + v.time_in_state_s
 WHEN NOT MATCHED THEN
-    INSERT (date_id, person_id, interval_id, state_group_id, time_in_state_s, datasource_id, insert_date)
-        VALUES (v.date_id, v.person_id, v.interval_id, v.state_group_id, v.time_in_state_s, v.datasource_id, v.insert_date);
+    INSERT (date_id, person_id,
+	--interval_id,
+	state_group_id, time_in_state_s, datasource_id, insert_date)
+        VALUES (v.date_id, v.person_id,
+		--v.interval_id,
+		v.state_group_id, v.time_in_state_s, v.datasource_id, v.insert_date);
 
 TRUNCATE TABLE [stage].[stg_agent_state]
 ' 
