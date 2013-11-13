@@ -207,7 +207,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private bool isWindowLoaded = false;
 		private ScheduleTimeType _scheduleTimeType;
 		private DateTime _lastSaved = DateTime.Now;
-		private IScheduleDayListFactory _scheduleDayListFactory;
 
 		#region enums
 		private enum ZoomLevel
@@ -522,8 +521,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setShowRibbonTexts();
 
 			_personRequestAuthorizationChecker = new PersonRequestCheckAuthorization();
-			
-			_scheduleDayListFactory = _container.Resolve<IScheduleDayListFactory>();
 		}
 
 		//flytta ut till modul

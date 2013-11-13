@@ -229,7 +229,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			registerTeamBlockSchedulingService(builder);
 
             builder.RegisterType<ScheduleOvertimeCommand>().As<IScheduleOvertimeCommand>();
-            builder.RegisterType<ScheduleDayListFactory>().As<IScheduleDayListFactory>();
             builder.RegisterType<OvertimeLengthDecider>().As<IOvertimeLengthDecider>();
             builder.RegisterType<ResourceCalculateDelayer>().As<IResourceCalculateDelayer>();
             builder.RegisterType<OvertimeSkillIntervalData>().As<IOvertimeSkillIntervalData>();
