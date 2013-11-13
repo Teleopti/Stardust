@@ -15,6 +15,7 @@ using Autofac;
 using Autofac.Core;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -33,6 +34,7 @@ using Teleopti.Ccc.Win.Scheduling.LockMenuBuilders;
 using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
+using Teleopti.Interfaces.MessageBroker.Events;
 using log4net;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms;
@@ -121,7 +123,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ResourceOptimizationHelperWin _optimizationHelperWin;
 		private ScheduleOptimizerHelper _scheduleOptimizerHelper;
 		private GroupDayOffOptimizerHelper _groupDayOffOptimizerHelper;
-		//private BlockOptimizerHelper _blockOptimizerHelper;
 		private readonly IVirtualSkillHelper _virtualSkillHelper;
 		private SchedulerMeetingHelper _schedulerMeetingHelper;
 		private readonly IGridlockManager _gridLockManager;
@@ -577,7 +578,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Text = string.Format(currentCultureInfo, Resources.TeleoptiCCCColonModuleColonFromToDateScenarioColon, Resources.Schedules, startDate, endDate, _scenario.Description.Name);
 		}
 
-		private void _schedulerMeetingHelper_ModificationOccured(object sender, Meetings.ModifyMeetingEventArgs e)
+		private void _schedulerMeetingHelper_ModificationOccured(object sender, ModifyMeetingEventArgs e)
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -588,25 +589,25 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_scheduleView.ViewGrid != null)
 			{
 				_scheduleView.ViewGrid.InvalidateRange(_scheduleView.ViewGrid.ViewLayout.VisibleCellsRange);
-				updateScheduleParts(e);
+			    invalidateAfterMeetingChange(e);
 				RecalculateResources();
 			}
 		}
 
-		private void updateScheduleParts(ModifyMeetingEventArgs e)
+	    private void invalidateAfterMeetingChange(ModifyMeetingEventArgs e)
 		{
-			var startDate = e.ModifiedMeeting.StartDate;
-			var affectedScheduleDays = new List<IScheduleDay>();
-			while (startDate <= e.ModifiedMeeting.EndDate)
-			{
-	            affectedScheduleDays.AddRange(
-	                e.ModifiedMeeting.MeetingPersons.Where(meetingPerson => SchedulerState.SchedulingResultState.PersonsInOrganization.Contains(meetingPerson.Person))
-	                 .Select(meetingPerson => SchedulerState.SchedulingResultState.Schedules[meetingPerson.Person])
-	                 .Select(range => range.ScheduledDay(startDate)));
-				startDate = startDate.AddDays(1);
-			}
-			_scheduleView.Presenter.ModifySchedulePart(affectedScheduleDays, true);
-		}
+		    var changeProvider = (IProvideCustomChangeInfo) e.ModifiedMeeting;
+			var tracker = new MeetingChangeTracker();
+			tracker.TakeSnapshot((IMeeting)changeProvider.BeforeChanges());
+		    var changes = tracker.CustomChanges(e.ModifiedMeeting, e.Delete ? DomainUpdateType.Delete : DomainUpdateType.Update).Select(r => (MeetingChangedEntity)r.Root);
+		    changes.ForEach(c =>
+			    {
+				    var period = c.Period.ToDateOnlyPeriod(_schedulerState.TimeZoneInfo);
+				    period = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate.AddDays(1));
+				    period.DayCollection().ForEach(_schedulerState.MarkDateToBeRecalculated);
+			    });
+			_schedulerState.Schedules.Where(s => changes.Any(c => s.Key.Equals(c.MainRoot))).ForEach(p => p.Value.ForceRecalculationOfContractTimeAndDaysOff());
+	    }
 
 		private void permittedPersonsToSelectedList()
 		{
@@ -698,9 +699,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_scheduleView.Presenter.AddOvertime(definitionSets.ToList());
 						break;
 					case ClipboardItems.Absence:
-						if (!(from a in SchedulerState.CommonStateHolder.Absences
-									where !((IDeleteTag)a).IsDeleted
-									select a).Any())
+						if (!SchedulerState.CommonStateHolder.ActiveAbsences.Any())
 						{
 							ShowInformationMessage(Resources.NoAbsenceDefined, Resources.NoAbsenceDefinedCaption);
 							return;
@@ -1091,14 +1090,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region Toolstrip events
 
-		private IList<IActivity> getNonDeletedActivty()
-		{
-			var finalAvailableActivity = new List<IActivity>();
-			foreach (var activity in SchedulerState.CommonStateHolder.Activities.Where(activity => !activity.IsDeleted))
-				finalAvailableActivity.Add(activity);
-			return finalAvailableActivity;
-		}
-
 		private void toolStripMenuItemBackToLegalStateClick(object sender, EventArgs e)
 		{
 			if (_backgroundWorkerRunning)
@@ -1112,8 +1103,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
 			using (
-				var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences, _schedulerState.CommonStateHolder.ShiftCategories, false,
-															 true, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "SchedulingOptions", getNonDeletedActivty()))
+				var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences, _schedulerState.CommonStateHolder.ActiveShiftCategories, false,
+														   true, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptions", _schedulerState.CommonStateHolder.ActiveActivities))
 			{
 				if (options.ShowDialog(this) == DialogResult.OK)
 				{
@@ -1139,7 +1130,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					return;
 
 				using (var optimizationPreferencesDialog =
-					new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, getNonDeletedActivty(), SchedulerState.DefaultSegmentLength, getNonDeletedActivty()))
+					new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, _schedulerState.CommonStateHolder.ActiveActivities, SchedulerState.DefaultSegmentLength))
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{
@@ -1365,9 +1356,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				if (SchedulerState.FilteredPersonDictionary.Count > 0)
 				{
-					IList<IDayOffTemplate> displayList = (from item in _schedulerState.CommonStateHolder.DayOffs
-																								where ((IDeleteTag)item).IsDeleted == false
-																								select item).ToList();
+					IList<IDayOffTemplate> displayList = _schedulerState.CommonStateHolder.ActiveDayOffs.ToList();
 					if (displayList.Count > 0)
 					{
 						// todo: remove comment when the user warning is ready for the other activities(delete, paste, swap etc.)
@@ -2753,11 +2742,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_splitContainerAdvMain.Visible = true;
 			_grid.Cursor = Cursors.WaitCursor;
 			wpfShiftEditor1.LoadFromStateHolder(_schedulerState.CommonStateHolder);
-			IList<IDayOffTemplate> displayList = (from item in _schedulerState.CommonStateHolder.DayOffs
-																						where ((IDeleteTag)item).IsDeleted == false
-																						select item).ToList();
+			var displayList = _schedulerState.CommonStateHolder.ActiveDayOffs.ToList();
+			displayList.Sort(new DayOffTemplateSorter());
 
-			((List<IDayOffTemplate>)displayList).Sort(new DayOffTemplateSorter());
 			_dayOffTemplate = displayList[0];
 			wpfShiftEditor1.Interval = _currentSchedulingScreenSettings.EditorSnapToResolution;
 
@@ -3487,8 +3474,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				try
 				{
 					using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences,
-																			_schedulerState.CommonStateHolder.ShiftCategories,
-																			 false, false, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "SchedulingOptions", getNonDeletedActivty()))
+																			_schedulerState.CommonStateHolder.ActiveShiftCategories,
+																			 false, false, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptions", _schedulerState.CommonStateHolder.ActiveActivities))
 					{
 						if (options.ShowDialog(this) == DialogResult.OK)
 						{
@@ -3519,8 +3506,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_optimizerOriginalPreferences.SchedulingOptions.ScheduleEmploymentType = ScheduleEmploymentType.HourlyStaff;
 				_optimizerOriginalPreferences.SchedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Free;
 				IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
-				using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences, _schedulerState.CommonStateHolder.ShiftCategories,
-						false, false, _groupPagesProvider, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "SchedulingOptionsActivities", getNonDeletedActivty()))
+				using (var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions, daysOffPreferences, _schedulerState.CommonStateHolder.ActiveShiftCategories,
+						false, false, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptionsActivities", _schedulerState.CommonStateHolder.ActiveActivities))
 				{
 					if (options.ShowDialog(this) == DialogResult.OK)
 					{
@@ -4033,9 +4020,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 
 				case OptimizationMethod.BackToLegalState:
-					IList<IDayOffTemplate> displayList = (from item in _schedulerState.CommonStateHolder.DayOffs
-																								where ((IDeleteTag)item).IsDeleted == false
-																								select item).ToList();
+					IList<IDayOffTemplate> displayList = _schedulerState.CommonStateHolder.ActiveDayOffs.ToList();
 					_scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,
 																													 _backgroundWorkerOptimization, displayList[0], false,
 																													 _optimizerOriginalPreferences.SchedulingOptions,
@@ -4240,7 +4225,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			SchedulerState.SchedulingResultState.Schedules.ModifiedPersonAccounts.Clear();
 			permittedPersonsToSelectedList();
 
-			foreach (var tag in _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted)
+			foreach (var tag in _schedulerState.CommonStateHolder.ActiveScheduleTags)
 			{
 				if (tag.Id != _currentSchedulingScreenSettings.DefaultScheduleTag) continue;
 				_defaultScheduleTag = tag;
@@ -4509,7 +4494,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private static void loadCommonStateHolder(IUnitOfWork uow, ISchedulerStateHolder stateHolder, IPeopleAndSkillLoaderDecider decider)
 		{
 			stateHolder.LoadCommonState(uow, new RepositoryFactory());
-			if (stateHolder.CommonStateHolder.DayOffs.Count == 0)
+			if (!stateHolder.CommonStateHolder.DayOffs.Any())
 				throw new StateHolderException("You must create at least one Day Off in Options!");
 		}
 
@@ -7094,25 +7079,23 @@ namespace Teleopti.Ccc.Win.Scheduling
 				IOvertimePreferences overtimePreferences = new OvertimePreferences();
 				try
 				{
-					var definitionSets = (from set in MultiplicatorDefinitionSet
-																where set.MultiplicatorType == MultiplicatorType.Overtime
-																select set).AsEnumerable().ToList();
+                    var definitionSets = MultiplicatorDefinitionSet.Where(set => set.MultiplicatorType == MultiplicatorType.Overtime).ToList();
 
 					var resolution = 15;
-					if (_scheduleView.SelectedSchedules().Count > 0)
+	                var schedules = _scheduleView.SelectedSchedules();
+                    if (schedules.Count > 0)
 					{
-						var tempScheduleDay = _scheduleView.SelectedSchedules()[0];
+                       var tempScheduleDay = schedules[0];
 						var person = tempScheduleDay.Person;
 						var skills = aggregateSkills(person, tempScheduleDay.DateOnlyAsPeriod.DateOnly).ToList();
-						if (skills.Count != 0)
+                       if (skills.Count > 0)
 						{
 							var skillResolutionProvider = _container.Resolve<ISkillResolutionProvider>();
 							resolution = skillResolutionProvider.MinimumResolution(skills);
 						}
 					}
 
-
-					using (var options = new OvertimePreferencesDialog(overtimePreferences, _schedulerState.CommonStateHolder.ScheduleTagsNotDeleted, "OvertimePreferences", getNonDeletedActivty(), resolution, definitionSets))
+                    using (var options = new OvertimePreferencesDialog(overtimePreferences, _schedulerState.CommonStateHolder.ActiveScheduleTags, "OvertimePreferences", _schedulerState.CommonStateHolder.ActiveActivities, resolution, definitionSets))
 					{
 						if (options.ShowDialog(this) == DialogResult.OK)
 						{

@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	[Serializable]
 	public class ShiftsPreferencesPersonalSettings : SettingValue
 	{
-		
 		private bool _keepShiftCategories;
 		private bool _keepStartTimes;
         private bool _keepEndTimes;
@@ -26,10 +25,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public void MapTo(IShiftPreferences target,IList< IActivity > activityList )
+		public void MapTo(IShiftPreferences target,IEnumerable< IActivity > activityList )
 		{
-			
-
 			target.KeepShiftCategories = _keepShiftCategories;
             target.KeepStartTimes = _keepStartTimes;
             target.KeepEndTimes = _keepEndTimes;
@@ -43,7 +40,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			target.KeepActivityLength = _keepActivityLength;
             if (activityList!=null)
             {
-                
                 foreach (var activity in activityList)
                 {
                     if(_selectedActivities.Contains(activity.Id.Value) )
@@ -54,12 +50,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 	                if (_selectedActivityToKeepLenghtOn.Equals(activity.Id.Value))
 		                target.ActivityToKeepLengthOn = activity;
                 }
-               
             }
 			target.KeepShiftsValue = _keepShiftsValue;
 		    target.SelectedTimePeriod = _selectedTimePeriod;
 		    target.AlterBetween = _alterBetween;
-			
 		}
 
         public void MapFrom(IShiftPreferences source)
@@ -92,14 +86,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
 		}
 
-		
-
-		
-
 		private void SetDefaultValues()
 		{
 			_keepShiftsValue = 0.8d;
 		}
-
 	}
 }

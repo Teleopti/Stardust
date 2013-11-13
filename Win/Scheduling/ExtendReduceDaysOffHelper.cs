@@ -129,9 +129,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 IDayOffsInPeriodCalculator dayOffsInPeriodCalculator = new DayOffsInPeriodCalculator(schedulerStateHolder.SchedulingResultState);
 
-                IList<IDayOffTemplate> displayList = (from item in schedulerStateHolder.CommonStateHolder.DayOffs
-                                                  where ((IDeleteTag)item).IsDeleted == false
-                                                  select item).ToList();
+                IList<IDayOffTemplate> displayList = schedulerStateHolder.CommonStateHolder.ActiveDayOffs.ToList();
 
                 IDayOffOptimizerConflictHandler conflictHandler = new DayOffOptimizerConflictHandler(scheduleMatrixPro,
                                                                                                      scheduleServiceForFlexibleAgents,

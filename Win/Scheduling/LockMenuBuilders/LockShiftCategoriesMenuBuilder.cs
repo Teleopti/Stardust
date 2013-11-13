@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Win.Scheduling.LockMenuBuilders
 {
 	public class LockShiftCategoriesMenuBuilder
 	{
-		public void Build(IList<IShiftCategory> shiftCategories, EventHandler toolStripMenuItemLockShiftCategoryDaysClick,
+		public void Build(IEnumerable<IShiftCategory> shiftCategories, EventHandler toolStripMenuItemLockShiftCategoryDaysClick,
 		                  MouseEventHandler toolStripMenuItemLockShiftCategoryDaysMouseUp,
 		                  ToolStripMenuItem toolStripMenuItemLockShiftCategory,
 		                  ToolStripMenuItem toolStripMenuItemLockShiftCategoriesRm,

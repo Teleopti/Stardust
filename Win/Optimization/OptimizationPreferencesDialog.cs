@@ -10,7 +10,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
@@ -33,21 +32,19 @@ namespace Teleopti.Ccc.Win.Optimization
 
 		private readonly IList<IGroupPageLight> _groupPages;
 		private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
-		private readonly IList<IScheduleTag> _scheduleTags;
-		private readonly IList<IActivity> _availableActivity;
+		private readonly IEnumerable<IScheduleTag> _scheduleTags;
+		private readonly IEnumerable<IActivity> _availableActivity;
 
 		private readonly int _resolution;
-		private readonly IList<IActivity> _allNoneDeletedActivities;
 		private IList<IGroupPageLight> _groupPagesForTeamBlockPer;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public OptimizationPreferencesDialog(
 			IOptimizationPreferences preferences,
 			ISchedulerGroupPagesProvider groupPagesProvider,
-			IList<IScheduleTag> scheduleTags, 
-			IList<IActivity> availableActivity, 
-			int resolution, 
-			IList<IActivity> allNoneDeletedActivities )
+			IEnumerable<IScheduleTag> scheduleTags, 
+			IEnumerable<IActivity> availableActivity, 
+			int resolution)
 			: this()
 		{
 			Preferences = preferences;
@@ -61,7 +58,6 @@ namespace Teleopti.Ccc.Win.Optimization
 			_scheduleTags = scheduleTags;
 			_availableActivity = availableActivity;
 			_resolution = resolution;
-			_allNoneDeletedActivities = allNoneDeletedActivities;
 			_eventAggregator = new EventAggregator();
 		}
 
@@ -78,7 +74,7 @@ namespace Teleopti.Ccc.Win.Optimization
 			dayOffPreferencesPanel1.Initialize(Preferences.DaysOff);
 			extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _availableActivity);
 			advancedPreferencesPanel1.Initialize(Preferences.Advanced);
-			shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution, _allNoneDeletedActivities);
+			shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution);
 			panels = new List<IDataExchange> { generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, shiftsPreferencesPanel1, advancedPreferencesPanel1 };
 
 			AddToHelpContext();

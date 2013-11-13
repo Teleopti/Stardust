@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         selectedPersons.Add(schedulePart.Person);
                 }
 
-                if (_schedulerStateHolder.CommonStateHolder.Activities.Count == 0 || selectedPersons.Count == 0) return;
+                if (!_schedulerStateHolder.CommonStateHolder.ActiveActivities.Any() || selectedPersons.Count == 0) return;
 
                 using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
@@ -169,6 +169,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             using (MeetingComposerView meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator()))
             {
+				meetingComposerView.SetInstanceId(_messageBrokerIdentifier.InstanceId);
                 meetingComposerView.ModificationOccurred += meetingComposerView_ModificationOccurred;
                 meetingComposerView.ShowDialog();
                 meetingComposerView.ModificationOccurred -= meetingComposerView_ModificationOccurred;

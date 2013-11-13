@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.ServiceModel.Channels;
 using Autofac;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Common;
@@ -24,7 +23,6 @@ using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
@@ -373,9 +371,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             OptimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, _container, selectedPeriod);
 
-            IList<IDayOffTemplate> displayList = (from item in _schedulerState.CommonStateHolder.DayOffs
-                                                  where ((IDeleteTag)item).IsDeleted == false
-                                                  select item).ToList();
+            IList<IDayOffTemplate> displayList = _schedulerState.CommonStateHolder.ActiveDayOffs.ToList();
 
             var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.Rescheduling + Resources.ThreeDots);
             resourceOptimizerPersonOptimized(this, e);
@@ -383,48 +379,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             // Schedule White Spots after back to legal state
             var scheduleService = _container.Resolve<IScheduleService>();
 
-			//ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
-
-			//// schedule those are the white spots after back to legal state
-			//// ??? check if all white spots could be scheduled ??????
-			//OptimizerHelperHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container, rollbackService);
-
-            
-			//bool found = false;
-			//foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixContainerList)
-			//{
-			//    if (!matrixOriginalStateContainer.IsFullyScheduled())
-			//    {
-			//        found = true;
-			//        rollbackMatrixChanges(matrixOriginalStateContainer, rollbackService);
-			//    }
-			//}
-
-			//if (found)
-			//{
-			//    foreach (var dateOnly in selectedPeriod.DayCollection())
-			//    {
-			//        _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, optimizerPreferences.Rescheduling.ConsiderShortBreaks);
-			//    }
-			//}
-
-            // day off optimization
-
             optimizeDaysOff(matrixContainerList,
                             optimizerPreferences,
                             displayList[0],
                             selectedPeriod,
                             scheduleService,
 							teamSteadyStateDictionary);
-
-
-            // we create a rollback service and do the changes and check for the case that not all white spots can be scheduled
-			//rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
-			//foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixContainerList)
-			//{
-			//    if (!matrixOriginalStateContainer.IsFullyScheduled())
-			//        rollbackMatrixChanges(matrixOriginalStateContainer, rollbackService);
-			//}
         }
 
 		private IGroupPersonBuilderForOptimization callGroupPage(ISchedulingOptions schedulingOptions)
@@ -512,9 +472,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					teamBlockDaysOffMoveFinder
 					);
 
-			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs
-												  where ((IDeleteTag)item).IsDeleted == false
-												  select item).ToList();
+			IList<IDayOffTemplate> dayOffTemplates = _schedulerState.CommonStateHolder.ActiveDayOffs.ToList();
 
 			((List<IDayOffTemplate>)dayOffTemplates).Sort(new DayOffTemplateSorter());
 

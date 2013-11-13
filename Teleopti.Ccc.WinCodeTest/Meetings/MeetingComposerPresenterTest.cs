@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -290,7 +289,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(_personRep);
             Expect.Call(_personRep.FindPeople(new List<IPerson>())).Return(new List<IPerson>()).IgnoreArguments();
-            //Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
             Expect.Call(unitOfWork.Dispose);
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(_repositoryFactory.CreateMeetingRepository(unitOfWork)).Return(meetingRepository);
@@ -344,7 +342,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(_personRep);
             Expect.Call(_personRep.FindPeople(new List<IPerson>())).Return(new List<IPerson>()).IgnoreArguments();
-            //Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
             Expect.Call(unitOfWork.Dispose);
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(_repositoryFactory.CreateMeetingRepository(unitOfWork)).Return(meetingRepository);
@@ -372,7 +369,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(_personRep);
                 Expect.Call(_personRep.FindPeople(new List<IPerson>())).Return(new List<IPerson> { _person }).IgnoreArguments();
-                //Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
                 Expect.Call(authorization.IsPermitted("", new DateOnly(), _person)).IgnoreArguments()
                    .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(unitOfWork.Dispose).IgnoreArguments();
@@ -395,7 +391,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(_personRep);
             Expect.Call(_personRep.FindPeople(new List<IPerson>())).Return(new List<IPerson>()).IgnoreArguments();
-            //Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
             Expect.Call(unitOfWork.Dispose);
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(_repositoryFactory.CreateMeetingRepository(unitOfWork)).Return(meetingRepository);
@@ -419,7 +414,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(_personRep);
             Expect.Call(_personRep.FindPeople(new List<IPerson>())).Return(new List<IPerson>()).IgnoreArguments();
-            //Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
             Expect.Call(unitOfWork.Dispose);
 
             _model.Subject = "";
@@ -438,7 +432,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(_personRep);
             Expect.Call(_personRep.FindPeople(new List<IPerson>())).Return(new List<IPerson>()).IgnoreArguments();
-            //Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
             Expect.Call(unitOfWork.Dispose);
 
             _model.Activity = null;
@@ -465,7 +458,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(_personRep);
             Expect.Call(_personRep.FindPeople(new List<IPerson>())).Return(new List<IPerson>()).IgnoreArguments();
-            //Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
             Expect.Call(unitOfWork.Dispose);
             _view.ShowErrorMessage("", "");
             LastCall.IgnoreArguments();
@@ -523,8 +515,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void ShouldUseAnActiveActivityAsDefaultActivityForMeeting()
         {
-            var commonStateHolder = new CommonStateHolder();
-            commonStateHolder.ActiveActivities.Add(_activity);
+            var commonStateHolder = _mocks.DynamicMock<ICommonStateHolder>();
+            Expect.Call(commonStateHolder.ActiveActivities).Return(new [] {_activity});
 
             Expect.Call(_schedulerStateHolder.RequestedScenario).Return(_scenario);
             Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(_timeZone);

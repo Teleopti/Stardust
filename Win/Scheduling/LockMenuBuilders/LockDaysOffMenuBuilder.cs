@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Win.Scheduling.LockMenuBuilders
 {
 	public class LockDaysOffMenuBuilder
 	{
-		public void Build(IList<IDayOffTemplate> dayOffList, EventHandler clickEvent, EventHandler otherClickEvent, MouseEventHandler mouseUpEvent, ToolStripMenuItem toolStripMenuItemLockDayOff, ToolStripMenuItem toolStripMenuItemLockFreeDaysRm)
+		public void Build(IEnumerable<IDayOffTemplate> dayOffList, EventHandler clickEvent, EventHandler otherClickEvent, MouseEventHandler mouseUpEvent, ToolStripMenuItem toolStripMenuItemLockDayOff, ToolStripMenuItem toolStripMenuItemLockFreeDaysRm)
 		{
 			IList<Description> descriptions = new List<Description>();
 			ToolStripMenuItem toolStripMenuItemDayOffLockRibbon;
