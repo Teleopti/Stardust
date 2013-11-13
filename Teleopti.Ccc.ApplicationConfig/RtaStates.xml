@@ -532,4 +532,7 @@
     <state name="Busy Other">7</state>
 	<state name="Reserved">8</state>
   </RtaState>
+	<RtaState name="TeleoptiCCC" platformTypeId="00000000-0000-0000-0000-000000000000">
+		<state name="CCC Logged out">CCC Logged out</state>
+	</RtaState>
 </Rta>
