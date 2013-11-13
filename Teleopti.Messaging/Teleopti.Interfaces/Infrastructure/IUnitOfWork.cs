@@ -112,15 +112,6 @@ namespace Teleopti.Interfaces.Infrastructure
         void Remove(IAggregateRoot root);
 
         /// <summary>
-        /// Cancels the last query.
-        /// </summary>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-10-13
-        /// </remarks>
-        void CancelQuery();
-
-        /// <summary>
         /// Gets current db version 
         /// </summary>
         /// <param name="root">The root.</param>
