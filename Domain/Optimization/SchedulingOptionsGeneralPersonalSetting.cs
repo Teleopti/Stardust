@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private bool _showTroubleshotInformation;
         
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void MapTo(ISchedulingOptions schedulingOptions, IList<IScheduleTag> scheduleTags)
+		public void MapTo(ISchedulingOptions schedulingOptions, IEnumerable<IScheduleTag> scheduleTags)
 		{
 			foreach (var scheduleTag in scheduleTags)
 			{

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -126,7 +125,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			get { return SchedulingResultState.Schedules; }
 		}
 
-		public CommonStateHolder CommonStateHolder
+		public ICommonStateHolder CommonStateHolder
 		{
 			get { return _commonStateHolder; }
 		}

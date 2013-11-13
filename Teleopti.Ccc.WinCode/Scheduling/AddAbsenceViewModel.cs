@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     public class AddAbsenceViewModel : AddLayerViewModel<IAbsence>
     {
 
-        public AddAbsenceViewModel(IList<IAbsence> absences, ISetupDateTimePeriod period, TimeSpan interval)
+        public AddAbsenceViewModel(IEnumerable<IAbsence> absences, ISetupDateTimePeriod period, TimeSpan interval)
             : base(absences, period, UserTexts.Resources.AddAbsence, interval)
         {
 

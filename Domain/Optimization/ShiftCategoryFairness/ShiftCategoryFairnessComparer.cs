@@ -95,13 +95,13 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 
 	public interface IShiftCategoryFairnessComparer
 	{
-		ShiftCategoryFairnessCompareResult Compare(IShiftCategoryFairnessHolder original, IShiftCategoryFairnessHolder compareTo, IList<IShiftCategory> shiftCategories);
+		ShiftCategoryFairnessCompareResult Compare(IShiftCategoryFairnessHolder original, IShiftCategoryFairnessHolder compareTo, IEnumerable<IShiftCategory> shiftCategories);
 	}
 
 	public class ShiftCategoryFairnessComparer : IShiftCategoryFairnessComparer
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public ShiftCategoryFairnessCompareResult Compare(IShiftCategoryFairnessHolder original, IShiftCategoryFairnessHolder compareTo, IList<IShiftCategory> shiftCategories)
+		public ShiftCategoryFairnessCompareResult Compare(IShiftCategoryFairnessHolder original, IShiftCategoryFairnessHolder compareTo, IEnumerable<IShiftCategory> shiftCategories)
 		{
 			var totalOriginal = original.ShiftCategoryFairnessDictionary.Values.Sum();
 			var totalCompare = compareTo.ShiftCategoryFairnessDictionary.Values.Sum();

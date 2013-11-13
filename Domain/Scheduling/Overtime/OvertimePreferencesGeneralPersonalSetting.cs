@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         private bool _doNotBreakNightlyRest = false;
         private bool _doNotBreakWeeklyRest =  false;
 
-        public void MapTo(IOvertimePreferences overtimePreferences , IList<IScheduleTag> scheduleTags,IList<IActivity> activityList,IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets  )
+        public void MapTo(IOvertimePreferences overtimePreferences , IEnumerable<IScheduleTag> scheduleTags,IEnumerable<IActivity> activityList,IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets  )
         {
             foreach (var scheduleTag in scheduleTags)
             {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
@@ -21,7 +22,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private readonly ICollection<IContractSchedule> _contractScheduleColl = new List<IContractSchedule>();
 
         private CommonStateHolder _commonStateHolder;
-
 
         [SetUp]
         public void Setup()
@@ -69,11 +69,16 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _mockRep.ReplayAll();
             _commonStateHolder.LoadCommonStateHolder(repositoryFactory,unitOfWork);
 
-            Assert.AreEqual(1, _commonStateHolder.Absences.Count);
-            Assert.AreEqual(2, _commonStateHolder.Activities.Count);
-            Assert.AreEqual(1, _commonStateHolder.ActiveActivities.Count);
-            Assert.AreEqual(1, _commonStateHolder.DayOffs.Count);
-            Assert.AreEqual(1, _commonStateHolder.ShiftCategories.Count);
+            Assert.AreEqual(1, _commonStateHolder.Absences.Count());
+            Assert.AreEqual(1, _commonStateHolder.ActiveAbsences.Count());
+            Assert.AreEqual(2, _commonStateHolder.Activities.Count());
+            Assert.AreEqual(1, _commonStateHolder.ActiveActivities.Count());
+            Assert.AreEqual(1, _commonStateHolder.DayOffs.Count());
+            Assert.AreEqual(1, _commonStateHolder.ActiveDayOffs.Count());
+            Assert.AreEqual(1, _commonStateHolder.ScheduleTags.Count());
+            Assert.AreEqual(1, _commonStateHolder.ActiveScheduleTags.Count());
+            Assert.AreEqual(1, _commonStateHolder.ShiftCategories.Count());
+            Assert.AreEqual(1, _commonStateHolder.ActiveShiftCategories.Count());
             _mockRep.VerifyAll();
         }
 

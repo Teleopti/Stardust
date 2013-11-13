@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
@@ -40,22 +38,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			if (!VerifySelectedSchedule(filteredScheduleParts)) return;
 
-			var nonDeletedShiftCategories = (from c in SchedulerStateHolder.CommonStateHolder.ShiftCategories
-											 where ((IDeleteTag)c).IsDeleted == false
-											 select c).ToList();
-
-
 			DateTimePeriod defaultDateTimePeriod = DefaultPeriod ?? filteredScheduleParts[0].Period;
 
 			//Pick the first one instead (alphabetic)
-			if (nonDeletedShiftCategories.Count > 0)
-			{
-				nonDeletedShiftCategories = new List<IShiftCategory> { nonDeletedShiftCategories.OrderBy(s => s.Description.Name).First() };
-			}
+			var activeShiftCategories = SchedulerStateHolder.CommonStateHolder.ActiveShiftCategories.Take(1).ToArray();
 
 			IAddActivityViewModel dialog1 =
 				ScheduleViewBase.CreateAddActivityViewModel(SchedulerStateHolder.CommonStateHolder.ActiveActivities,
-															nonDeletedShiftCategories,
+															activeShiftCategories,
 															defaultDateTimePeriod,
 															SchedulerStateHolder.TimeZoneInfo);
 

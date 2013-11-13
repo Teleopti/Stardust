@@ -10,7 +10,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
@@ -33,8 +32,8 @@ namespace Teleopti.Ccc.Win.Optimization
 
 		private readonly IList<IGroupPageLight> _groupPages;
 		private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
-		private readonly IList<IScheduleTag> _scheduleTags;
-		private readonly IList<IActivity> _availableActivity;
+		private readonly IEnumerable<IScheduleTag> _scheduleTags;
+		private readonly IEnumerable<IActivity> _availableActivity;
 
 		private readonly int _resolution;
 		private IList<IGroupPageLight> _groupPagesForTeamBlockPer;
@@ -43,8 +42,8 @@ namespace Teleopti.Ccc.Win.Optimization
 		public OptimizationPreferencesDialog(
 			IOptimizationPreferences preferences,
 			ISchedulerGroupPagesProvider groupPagesProvider,
-			IList<IScheduleTag> scheduleTags, 
-			IList<IActivity> availableActivity, 
+			IEnumerable<IScheduleTag> scheduleTags, 
+			IEnumerable<IActivity> availableActivity, 
 			int resolution)
 			: this()
 		{

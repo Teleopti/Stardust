@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Win.Common;
 
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Optimization
 {
-	
     public partial class ShiftsPreferencesPanel : BaseUserControl, IDataExchange
     {
         public IShiftPreferences Preferences { get; private set; }
-        private IList<IActivity> _availableActivity;
+        private IEnumerable<IActivity> _availableActivity;
         private int _resolution;
 
         public ShiftsPreferencesPanel()
@@ -23,7 +20,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Initialize(
-            IShiftPreferences extraPreferences, IList<IActivity > availableActivity , int resolution)
+            IShiftPreferences extraPreferences, IEnumerable<IActivity> availableActivity , int resolution)
 		{
 
 		    _availableActivity = availableActivity;

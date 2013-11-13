@@ -15,12 +15,12 @@ namespace Teleopti.Ccc.Win.Scheduling
         private OvertimePreferencesGeneralPersonalSetting _defaultOvertimeGeneralSettings;
 	    private readonly IOvertimePreferences _overtimePreferences;
         private readonly string _settingValue;
-	    private readonly IList<IActivity> _availableActivity;
+	    private readonly IEnumerable<IActivity> _availableActivity;
 	    private readonly int _resolution;
 	    private readonly IList<IMultiplicatorDefinitionSet> _definitionSets;
-	    private readonly IList<IScheduleTag> _scheduleTags;
+	    private readonly IEnumerable<IScheduleTag> _scheduleTags;
 
-        public OvertimePreferencesDialog(IOvertimePreferences overtimePreferences, IList<IScheduleTag> scheduleTags, string settingValue, IList<IActivity> availableActivity, int resolution, IList<IMultiplicatorDefinitionSet> definitionSets)
+        public OvertimePreferencesDialog(IOvertimePreferences overtimePreferences, IEnumerable<IScheduleTag> scheduleTags, string settingValue, IEnumerable<IActivity> availableActivity, int resolution, IList<IMultiplicatorDefinitionSet> definitionSets)
             : this()
         {
             _scheduleTags = scheduleTags;

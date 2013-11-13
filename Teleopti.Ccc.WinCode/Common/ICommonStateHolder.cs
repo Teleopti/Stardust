@@ -26,12 +26,12 @@ namespace Teleopti.Ccc.WinCode.Common
         /// Created by: zoet
         /// Created date: 2007-11-08
         /// </remarks>
-        IList<IAbsence> Absences { get; }
+		IEnumerable<IAbsence> Absences { get; }
 
         /// <summary>
         /// Gets the dayOffs
         /// </summary>
-        IList<IDayOffTemplate> DayOffs { get; }
+		IEnumerable<IDayOffTemplate> DayOffs { get; }
 
         /// <summary>
         /// Gets the activities.
@@ -41,12 +41,12 @@ namespace Teleopti.Ccc.WinCode.Common
         /// Created by: robink
         /// Created date: 2007-11-15
         /// </remarks>
-        IList<IActivity> Activities { get; }
+		IEnumerable<IActivity> Activities { get; }
 
         /// <summary>
         /// Gets the active activities (ie nondeleted).
         /// </summary>
-        IList<IActivity> ActiveActivities { get; }
+		IEnumerable<IActivity> ActiveActivities { get; }
 
         /// <summary>
         /// Gets the shift categories.
@@ -56,6 +56,12 @@ namespace Teleopti.Ccc.WinCode.Common
         /// Created by: robink
         /// Created date: 2007-11-16
         /// </remarks>
-        IList<IShiftCategory> ShiftCategories { get; }
+		IEnumerable<IShiftCategory> ShiftCategories { get; }
+
+	    IEnumerable<IScheduleTag> ScheduleTags { get; }
+	    IEnumerable<IScheduleTag> ActiveScheduleTags { get; }
+	    IEnumerable<IAbsence> ActiveAbsences { get; }
+	    IEnumerable<IDayOffTemplate> ActiveDayOffs { get; }
+	    IEnumerable<IShiftCategory> ActiveShiftCategories { get; }
     }
 }

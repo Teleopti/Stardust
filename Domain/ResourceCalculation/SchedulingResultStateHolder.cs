@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             PersonsInOrganization = new List<IPerson>();
         }
         
-        public IList<IShiftCategory> ShiftCategories { get; set; }
+        public IEnumerable<IShiftCategory> ShiftCategories { get; set; }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		public IList<IOptionalColumn> OptionalColumns { get; set; } 

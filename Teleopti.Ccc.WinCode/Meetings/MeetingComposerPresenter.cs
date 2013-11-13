@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
         private readonly IMeetingViewModel _model;
         private readonly DateOnly _minDate = new DateOnly(DateHelper.MinSmallDateTime);
         private readonly DateOnly _maxDate = new DateOnly(DateHelper.MaxSmallDateTime);
-        private readonly Guid _instanceId = Guid.NewGuid();
+        private Guid _instanceId = Guid.NewGuid();
         protected static CommonNameDescriptionSetting CommonNameDescription;
         private bool _canClose = true;
         private bool _isDirty;
@@ -240,24 +240,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
             _view.OnModificationOccurred(_model.Meeting, true);
         }
 
-        //private bool ValidationOnPermittedList()
-        //{
-        //    foreach (IPerson person in _model.Meeting.MeetingPersons.Select(m => m.Person))
-        //    {
-        //        if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyMeetings,Model.StartDate,person))
-        //        {
-        //            string message = string.Format(System.Globalization.CultureInfo.CurrentUICulture,
-        //                                             UserTexts.Resources.MeetingErrorMessageWithOneParameter, person.Name);
-
-        //            _view.ShowErrorMessage(message, UserTexts.Resources.Permissions);
-
-        //            return false;
-        //        }
-        //    }
-
-        //    return true;
-        //}
-
         public void SaveMeeting()
         {
             using (var unitOfWork = UnitOfWorkFactory.CreateAndOpenUnitOfWork())
@@ -265,7 +247,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 var persons = _model.Meeting.MeetingPersons.Select(m => m.Person);
                 //Reload So all data is there
                 persons = RepositoryFactory.CreatePersonRepository(unitOfWork).FindPeople(persons);
-                //unitOfWork.Reassociate(persons);
                 var checker = new MeetingParticipantPermittedChecker();
                 if (!checker.ValidatePermittedPersons(persons, Model.StartDate, _view, PrincipalAuthorization.Instance()))
                     return;
@@ -449,5 +430,10 @@ namespace Teleopti.Ccc.WinCode.Meetings
 					UserTexts.Resources.InvalidRequest);
 			}
     	}
+
+	    public void SetInstanceId(Guid newInstanceId)
+	    {
+		    _instanceId = newInstanceId;
+	    }
     }
 }

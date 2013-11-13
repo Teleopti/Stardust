@@ -138,15 +138,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				if (_owner.IsDisposed) return;
 				Log.Debug("Message broker - catched event");
-				if (eventMessage.ModuleId != InstanceId)
+
+				deleteMeetingOnEvent(eventMessage);
+				if (eventMessage.DomainUpdateType != DomainUpdateType.Delete)
 				{
-					deleteMeetingOnEvent(eventMessage);
-					if (eventMessage.DomainUpdateType != DomainUpdateType.Delete)
-					{
-						updateInsertOnEventMeetings(eventMessage);
-					}
-					NotifySchedulesUpdated();
+					updateInsertOnEventMeetings(eventMessage);
 				}
+				NotifySchedulesUpdated();
 			}
 		}
 
