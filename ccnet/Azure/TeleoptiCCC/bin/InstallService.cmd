@@ -1,32 +1,47 @@
+@ECHO OFF
 ECHO Starting Startup task > Install.log
 ECHO. >> Install.log
 
-SET ServiceStartError=0
+SET ETLService=AnalyticsEtlService
+SET ServiceBus=TeleoptiServiceBus
 
 SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-1%
+SET DRIVE=%ROOTDIR:~0,2%
+%DRIVE%
+CD %ROOTDIR%
+
 ECHO Rootdir is: "%ROOTDIR%" >> Install.log
 
 ::================
 ::Install Services
 ::================
 ECHO --------------------- >> Install.log
-ECHO Start Service install >> Install.log
-SC QUERY AnalyticsEtlService
+ECHO Service status before install [%ETLService%] >> Install.log
+SC QUERY %ETLService%  >> Install.log
+SC QUERY %ETLService%
 IF NOT ERRORLEVEL 1060 (
-	SC DELETE AnalyticsEtlService
-	SC QUERY AnalyticsEtlService
+	NET STOP %ETLService%
+	SC DELETE %ETLService%
+	SC QUERY %ETLService%
 	IF NOT ERRORLEVEL 1060 CALL :ServiceError
 )
 "%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" "..\Services\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe" >> Install.log
-
-SC QUERY TeleoptiServiceBus
+ECHO Service status after install [%ETLService%] >> Install.log
+SC QUERY %ETLService%  >> Install.log
+ECHO --------------------- >> Install.log
+ECHO Service status before install [%ServiceBus%] >> Install.log
+SC QUERY %ServiceBus%  >> Install.log
+SC QUERY %ServiceBus%
 IF NOT ERRORLEVEL 1060 (
-	SC DELETE TeleoptiServiceBus
-	SC QUERY TeleoptiServiceBus
+	NET STOP %ServiceBus%
+	SC DELETE %ServiceBus%
+	SC QUERY %ServiceBus%
 	IF NOT ERRORLEVEL 1060 CALL :ServiceError
 )
 "%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe" "..\Services\ServiceBus\Teleopti.CCC.Sdk.ServiceBus.Host.exe" >> Install.log
+ECHO Service status after install [%ServiceBus%] >> Install.log
+SC QUERY %ServiceBus%  >> Install.log
 
 ECHO. >> Install.log
 ECHO Done install! >> Install.log
@@ -77,26 +92,29 @@ ping 127.0.0.1 -n 5 > nul
 ECHO. >> Install.log
 ECHO Starting services... >> Install.log
 
-NET START AnalyticsEtlService
-IF %ERRORLEVEL% NEQ 0 ECHO Error: ETL services could not be started!! >> Install.log
+NET START %ETLService%
+SC QUERY %ETLService% | find /i "RUNNING"
+if not ERRORLEVEL 1 (
+    echo %ETLService% is running. >> Install.log
+) else (
+    echo %ETLService% is not running >> Install.log
+)
 
-NET START TeleoptiServiceBus
-IF %ERRORLEVEL% NEQ 0 ECHO Error: Service bus could not be started!! >> Install.log
+NET START %ServiceBus%
+SC QUERY %ServiceBus% | find /i "RUNNING"
+if not ERRORLEVEL 1 (
+    echo %ServiceBus% is running. >> Install.log
+) else (
+    echo %ServiceBus% is not running >> Install.log
+)
+
 
 ECHO.
-ECHO Done!
+ECHO Done! >> Install.log
 ECHO --------------------- >> Install.log
 
 GOTO :eof
 
-:ServiceStartError
-ECHO The service %1 could not be started! >> Install.log
-ECHO Please check the Windows eventlog for errors. >> Install.log
-SET ServiceStartError=1
-exit /b
-
 :ServiceError
 ECHO Failed to install one or more services! >> Install.log
 exit /b
-
-GOTO :eof
