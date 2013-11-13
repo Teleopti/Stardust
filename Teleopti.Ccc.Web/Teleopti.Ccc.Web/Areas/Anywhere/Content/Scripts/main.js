@@ -18,6 +18,7 @@ require.config({
 		momentLanguages: '../../../../Content/moment/moment.all.min',
 		momentDatepickerKo: '../../../../Content/moment-datepicker/moment-datepicker-ko-amd',
 		select2: '../../../../Content/select2/select2',
+		timepicker: '../../../../Content/bootstrap-timepicker/js/bootstrap-timepicker',
 	    
 		knockoutBindings: 'knockout.bindings',
 	    
@@ -41,9 +42,10 @@ require.config({
 		    exports: 'Lazy'
 		},
 		'bootstrap': ['jquery'],
-		'select2': ['jquery'],
 		
 		'knockoutBindings': ['knockout'],
+		'select2': ['jquery', 'knockoutBindings'],
+		'timepicker': ['bootstrap', 'knockoutBindings'],
 
 		'signalr': ['jquery'],
 

@@ -6,8 +6,7 @@ define([
 		'shared/group-page',
         'resources!r',
         'moment',
-		'select2',
-		'knockoutBindings'
+		'select2'
     ], function(
         ko,
         navigation,
@@ -16,13 +15,12 @@ define([
 	    groupPageViewModel,
         resources,
         moment,
-	    select2,
-	    knockoutBindings
+	    select2
     ) {
 
-        return function() {
+    	return function () {
 
-            var self = this;
+    		var self = this;
             
             this.Loading = ko.observable(false);
             

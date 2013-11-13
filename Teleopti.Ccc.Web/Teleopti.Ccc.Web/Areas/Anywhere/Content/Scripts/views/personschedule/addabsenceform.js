@@ -3,13 +3,15 @@ define([
 	'moment',
 	'navigation',
 	'ajax',
-	'resources!r'
+	'resources!r',
+	'timepicker'
 ], function (
 	ko,
 	moment,
 	navigation,
 	ajax,
-	resources
+	resources,
+	timepicker
     ) {
 
 	return function () {
@@ -19,7 +21,7 @@ define([
 		this.Absence = ko.observable("");
 
 		this.Date = ko.observable();
-		this.StartTime = ko.observable("16:00");
+		this.StartTime = ko.observable("17:00");
 		this.EndTime = ko.observable("18:00");
 
 		var personId;

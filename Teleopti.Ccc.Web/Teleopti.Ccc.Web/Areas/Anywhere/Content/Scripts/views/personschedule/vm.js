@@ -9,7 +9,8 @@ define([
 	'views/personschedule/addabsenceform',
 	'shared/group-page',
 	'helpers',
-	'resources!r'
+	'resources!r',
+	'select2'
 ], function (
 	ko,
 	navigation,
@@ -21,7 +22,8 @@ define([
 	addAbsenceFormViewModel,
 	groupPageViewModel,
 	helpers,
-	resources
+	resources,
+	select2
     ) {
 
 	return function () {
