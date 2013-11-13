@@ -41,9 +41,9 @@ define([
 			self.ContractTimeMinutes(0);
 		};
 
-		this.AddData = function (data, timeline) {
+		this.AddData = function (data, timeline, selectedGroup) {
 			if (data.Projection.length > 0) {
-				var newShift = new shift(timeline);
+				var newShift = new shift(timeline, selectedGroup);
 				newShift.AddLayers(data);
 				self.Shifts.push(newShift);
 			}

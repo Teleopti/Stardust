@@ -2,7 +2,7 @@ define([
 		'knockout',
 		'moment',
 		'navigation',
-	'lazy',
+		'lazy',
 		'views/teamschedule/layer',
 		'resources!r'
 ], function (

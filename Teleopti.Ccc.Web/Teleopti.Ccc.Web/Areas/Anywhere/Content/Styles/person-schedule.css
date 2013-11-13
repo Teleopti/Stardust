@@ -12,7 +12,7 @@
 .person-schedule .time-line div
 {
 	height: 100%;
-    z-index: -10;
+	z-index: -10;
 }
 
 .person-schedule .time-line .ruler {
@@ -26,9 +26,21 @@
 	height: 12px;
 	z-index: 111;
  }
- 
-.person-schedule .person
+
+.person-schedule .person td
 {
+	height: 13px;
+	line-height: 13px;	
+}
+ 
+.person-schedule .person.selected-person
+{
+	height: 57px;
+}
+
+.person-schedule .person.selected-person .layer
+{
+	height: 40px;
 }
 
 .person-schedule .person-name-column {
@@ -36,11 +48,13 @@
 	min-width: 105px !important;
 	width: 105px !important;
 	overflow: hidden;
+	vertical-align: middle;
 }
 .person-schedule .contract-time-column {
 	max-width: 100px !important;
 	min-width: 100px !important;
 	width: 100px !important;
+	vertical-align: middle;
 }
 .person-schedule .schedule-column {
 	padding-left: 0;
@@ -53,26 +67,30 @@
 }
 .person-schedule tbody tr
 {
-	cursor: pointer;
+	
 }
 .person-schedule .schedule
 {
 }
 
-.person-schedule .dayoff 
+.person-schedule .dayoff
 {
 	text-align: center;
 	top: -8px;
-	height: 36px;
-    background-size: 11px 11px;
-    background-image: 
-        linear-gradient(135deg,
-        transparent,
-        transparent 7px,
-        rgba(0,0,0,0.2) 8px,
-        transparent 8px,
-        transparent
-        );
+	height: 29px;
+	background-size: 11px 11px;
+	background-image: 
+		linear-gradient(135deg,
+		transparent,
+		transparent 7px,
+		rgba(0,0,0,0.2) 8px,
+		transparent 8px,
+		transparent
+		);
+}
+.no-cssgradients .person-schedule .person.selected-person.dayoff 
+{
+	background-color: beige;
 }
 .no-cssgradients .person-schedule .dayoff 
 {
@@ -100,9 +118,10 @@
 .person-schedule .shift .layer
 {
 	z-index: 10;	
-	height: 22px;
+	height: 14px;
 	text-align: center;
 }
+
 .person-schedule .shift .layer:first-of-type
 {
 	-webkit-border-radius: 4px 0px 0px 4px;
@@ -131,29 +150,11 @@
 	text-shadow: none;
 }
 .person-schedule .shift .layer .drop {
-    top: 21px;
+	top: 21px;
 }
-.person-schedule .shift .layer .drop .arrow {
-    left: -8px;
-    top: -8px;
-    border-left: 8px solid transparent;
-    border-bottom: 8px solid red;
-    border-right: 8px solid transparent;
-    border-top: 8px solid transparent;
-}
-.person-schedule .shift .layer .drop .circle {
-    top: 4px;
-    left: -10px;
-    width: 20px;
-    height: 20px;
-    background-color: red;
-    border-radius: 10px;
-}
-
-
 
 .person-schedule .resources td {
-    padding-top: 3px;
+	padding-top: 3px;
 }
 .person-schedule .contract-time 
 {
@@ -162,8 +163,8 @@
 }
 
 .person-schedule .date-input {
-    cursor: pointer;
-    background-color: #FFFFFF;
+	cursor: pointer;
+	background-color: #FFFFFF;
 }
 
 @media (max-width: 1199px) {
@@ -180,7 +181,8 @@
 	width: 223px;
 }
 
-	.person-schedule .full-day-absence-form .start-date {
+	.person-schedule .full-day-absence-form .start-date
+	{
 		width: 180px;
 		margin-bottom: 10px;
 	}
@@ -197,9 +199,12 @@
 	vertical-align: middle;
 }
 
+.person-schedule .space {
+	margin-top: 15px;
+}
 
 .person-schedule .activity-form {
-	width: 223px;
+	/*width: 223px;*/
 }
 
 .person-schedule .activity-form .start-time{
@@ -211,5 +216,5 @@
 }
 
 .person-schedule .activity-form-row {
-	background-color: #FFFFFF;
+	
 }

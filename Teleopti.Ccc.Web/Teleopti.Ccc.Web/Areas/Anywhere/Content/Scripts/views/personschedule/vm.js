@@ -24,7 +24,7 @@ define([
 	helpers,
 	resources,
 	select2
-    ) {
+	) {
 
 	return function () {
 
@@ -102,7 +102,7 @@ define([
 			self.SelectedGroup(data.SelectedGroupId);
 		};
 
-		this.SetData = function (data) {
+		this.SetData = function (data, groupid) {
 			data.Date = self.Date();
 			data.PersonId = self.Id();
 
@@ -113,7 +113,7 @@ define([
 			self.DayOffName(data.DayOffName);
 
 			if (data.Layers.length > 0) {
-				var newShift = new shiftViewModel(self.TimeLine);
+				var newShift = new shiftViewModel(self.TimeLine, groupid);
 				newShift.AddLayers(data);
 				self.Shifts.push(newShift);
 			}
@@ -139,10 +139,12 @@ define([
 			self.AddActivityForm.SetData(data);
 			self.AddAbsenceForm.SetData(data);
 		};
-
-		this.AddFullDayAbsence = function () {
-			navigation.GotoPersonScheduleAddFullDayAbsenceFormWithoutHistory(self.Id(), self.Date());
+		
+		this.ClearData = function () {
+			self.Shifts([]);
+			self.DayOffs([]);
+			self.WorkTimeMinutes(0);
+			self.ContractTimeMinutes(0);
 		};
-
 	};
 });

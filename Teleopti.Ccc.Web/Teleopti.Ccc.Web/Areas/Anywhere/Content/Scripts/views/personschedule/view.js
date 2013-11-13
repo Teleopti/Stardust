@@ -37,7 +37,7 @@ define([
 					for (var j = 0; j < schedules.length; j++) {
 						if (currentPersons[i].Id == schedules[j].PersonId) {
 							schedules[j].Date = date;
-							currentPersons[i].AddData(schedules[j], personSchedule.TimeLine);//, personSchedule.SelectedGroup()
+							currentPersons[i].AddData(schedules[j], personSchedule.TimeLine, personSchedule.SelectedGroup());
 						}
 					}
 				}
@@ -164,7 +164,8 @@ define([
 				    helpers.Date.ToServer(personSchedule.Date()),
 				    function (data) {
 				    	resize.notify();
-				    	personSchedule.SetData(data);
+					    personSchedule.ClearData();
+					    personSchedule.SetData(data, options.groupid);
 				    	personSchedule.Loading(false);
 				    	deferred.resolve();
 				    }
