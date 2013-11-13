@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Rta.Server
             var stateId = Guid.NewGuid();
             var defaultStateGroupId = Guid.Empty;
             var defaultStateGroupName = "";
-            string getDefaultStateGroupQuery = string.Format(@"SELECT Name, Id, BusinessUnit FROM RtaStateGroup WHERE DefaultStateGroup = 1 AND BusinessUnit = {0}", businessUnit);
+            string getDefaultStateGroupQuery = string.Format(@"SELECT Name, Id, BusinessUnit FROM RtaStateGroup WHERE DefaultStateGroup = 1 AND BusinessUnit = '{0}'", businessUnit);
             const string insert = @"INSERT INTO RtaState VALUES ('{0}', N'{1}', N'{1}', '{2}', '{3}')";
 
             using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
