@@ -265,6 +265,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					// do nothing
 					break;
 
+				case SchedulePartView.FullDayAbsence:
+					// do nothing
+					break;
+
 				default: 
 					Merge(source, isDelete);
 					break;
