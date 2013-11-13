@@ -105,12 +105,12 @@ SET NOCOUNT ON;
 	INNER JOIN #RESULT r 
 	ON fas.person_id=r.person_id AND  r.state_group_id=fas.state_group_id 
 	INNER JOIN mart.bridge_time_zone b
-	ON	fas.interval_id= b.interval_id
-	AND fas.date_id= b.date_id AND B.time_zone_id=@time_zone_id
+--	ON	fas.interval_id= b.interval_id
+	ON fas.date_id= b.date_id AND B.time_zone_id=@time_zone_id
 	INNER JOIN mart.dim_date d 
 	ON b.local_date_id = d.date_id
-	INNER JOIN mart.dim_interval i
-	ON b.local_interval_id = i.interval_id
+--	INNER JOIN mart.dim_interval i
+--	ON b.local_interval_id = i.interval_id
 	WHERE d.date_date BETWEEN @date_from AND @date_to
 	GROUP BY r.person_code, r.state_group_id
 	
