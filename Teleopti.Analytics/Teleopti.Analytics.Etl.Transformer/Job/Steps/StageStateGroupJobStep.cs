@@ -14,6 +14,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
             : base(jobParameters)
         {
 			Name = "stg_state_group";
+			IsBusinessUnitIndependent = true;
 			StateGroupInfrastructure.AddColumnsToDataTable(BulkInsertDataTable1);
         }
 

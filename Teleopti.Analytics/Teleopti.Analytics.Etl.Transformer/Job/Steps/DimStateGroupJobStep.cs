@@ -11,6 +11,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
             : base(jobParameters)
         {
             Name = "dim_state_group";
+			IsBusinessUnitIndependent = true;
         }
 
         protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)

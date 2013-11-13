@@ -11,6 +11,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
             : base(jobParameters)
         {
             Name = "fact_agent_state";
+			IsBusinessUnitIndependent = true;
         }
 
 
