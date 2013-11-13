@@ -278,6 +278,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					// do nothing
 					break;
 
+				case SchedulePartView.FullDayAbsence:
+					// do nothing
+					break;
+
 				default: 
 					Merge(source, isDelete);
 					break;
@@ -618,15 +622,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 					destAss.AddPersonalShift(destPersonalShift);
 				}
-
-                //foreach (IOvertimeShift overtimeShift in highAss.OvertimeShiftCollection)
-                //{
-                //    IOvertimeShift destOvertimeShift = (IOvertimeShift)overtimeShift.NoneEntityClone();
-                //    TimeSpan diff = CalculatePeriodOffset(source.Period);
-                //    ((LayerCollection<IActivity>)destOvertimeShift.LayerCollection).MoveAllLayers(diff);
-
-                //    destAss.AddOvertimeShift(destOvertimeShift);
-                //}
 
 				RemovePersonAssignment(AssignmentHighZOrder());
 
