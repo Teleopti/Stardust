@@ -28,8 +28,7 @@ CREATE PROCEDURE [mart].[report_data_time_in_state_per_agent]
 AS
 BEGIN
 SET NOCOUNT ON;
-	
-	
+
 	CREATE TABLE #RESULT(
 	person_id int, 
 	person_code uniqueidentifier,
@@ -43,6 +42,12 @@ SET NOCOUNT ON;
 
 	CREATE TABLE #rights_agents (right_id int)
 	CREATE TABLE #rights_teams (right_id int)
+
+	--use local_date_id
+	DECLARE @from_date_id int
+	DECLARE @to_date_id int
+	SELECT @from_date_id=date_id FROM mart.dim_date d WHERE d.date_date = @date_from 
+	SELECT @to_date_id=date_id FROM mart.dim_date d WHERE d.date_date = @date_to
 
 	--Table to hold agents to view
 	CREATE TABLE #person_id (person_id int)
@@ -100,35 +105,56 @@ SET NOCOUNT ON;
 		ON r.state_group_id=ds.state_group_id
 
 	INSERT #time_in_state(person_code, state_group_id, time_in_state_s)
-	SELECT r.person_code, r.state_group_id, sum(isnull(fas.time_in_state_s,0))
-	FROM mart.fact_agent_state fas 
-	INNER JOIN #RESULT r 
-	ON fas.person_id=r.person_id AND  r.state_group_id=fas.state_group_id 
-	INNER JOIN mart.bridge_time_zone b
---	ON	fas.interval_id= b.interval_id
-	ON fas.date_id= b.date_id AND B.time_zone_id=@time_zone_id
-	INNER JOIN mart.dim_date d 
-	ON b.local_date_id = d.date_id
---	INNER JOIN mart.dim_interval i
---	ON b.local_interval_id = i.interval_id
-	WHERE d.date_date BETWEEN @date_from AND @date_to
-	GROUP BY r.person_code, r.state_group_id
 	
+	SELECT
+		r.person_code as 'person_code',
+		r.state_group_id as 'state_group_id',
+		sum(isnull(fas.time_in_state_s,0)) as 'time_in_state_s'
+	FROM 
+	(
+		--already agregated data by ETL
+		SELECT
+			fas.person_id,
+			fas.date_id,
+			fas.state_group_id,
+			sum(isnull(fas.time_in_state_s,0)) as 'time_in_state_s'
+		FROM mart.fact_agent_state fas
+		WHERE date_id BETWEEN @from_date_id AND @to_date_id
+		GROUP BY
+			fas.person_id,
+			fas.date_id,
+			fas.state_group_id
 
+		UNION ALL
+
+		--completed states, but not yet agregated
+		SELECT
+			fas.person_id,
+			fas.date_id,
+			fas.state_group_id,
+			sum(isnull(fas.time_in_state_s,0)) as 'time_in_state_s'
+		FROM mart.v_fact_agent_state_merge fas
+		WHERE date_id BETWEEN @from_date_id AND @to_date_id
+		GROUP BY
+			fas.person_id,
+			fas.date_id,
+			fas.state_group_id
+	) as fas
+	INNER JOIN #RESULT r 
+		ON fas.person_id=r.person_id
+		AND r.state_group_id=fas.state_group_id 
+	GROUP BY
+		r.person_code,
+		r.state_group_id
+	
 	UPDATE #RESULT 
 	SET time_in_state_m=isnull(time_in_state_s,0)/60
 	from #time_in_state t 
 	inner join #RESULT r on r.person_code=t.person_code and t.state_group_id=r.state_group_id
-
-	/*todo join data from stage not yet in fact table*/
-
 
 SELECT person_code,person_name, state_group_id, state_group_name, time_in_state_m, hide_time_zone
 FROM #result 
 ORDER BY person_name, state_group_name
 END
 
-
 GO
-
-

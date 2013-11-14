@@ -1,12 +1,13 @@
 IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[mart].[v_fact_agent_state_merge]'))
 DROP VIEW [mart].[v_fact_agent_state_merge]
 GO
+--SELECT * FROM mart.v_fact_agent_state_merge
 CREATE VIEW mart.v_fact_agent_state_merge
 AS
 SELECT 
-date_id			= d.date_id,
+date_id			= btz.local_date_id,
 person_id		= ISNULL(dp.person_id,-1),
---interval_id		= i.interval_id,
+--interval_id		= btz.local_interval_id,
 state_group_id	= sg.state_group_id,
 time_in_state_s	= sum(stg.time_in_state_s),
 datasource_id	= 1,
@@ -24,9 +25,14 @@ INNER JOIN mart.dim_state_group sg
 	ON sg.state_group_code = stg.state_group_code
 INNER JOIN mart.dim_date d
 	ON cast(DATEADD(dd, DATEDIFF(dd, 0, stg.StateStart), 0) as smalldatetime) = d.date_date
---INNER JOIN mart.dim_interval i
---	ON stg.interval BETWEEN i.interval_start AND i.interval_end
-GROUP BY date_id,person_id,
---interval_id,
-state_group_id
+INNER JOIN mart.dim_interval i
+	ON cast(dateadd(MINUTE,(DATEPART(HOUR,stg.StateStart)*60+DATEPART(MINUTE,stg.StateStart)),'1900-01-01') as smalldatetime)=i.interval_start
+INNER JOIN mart.bridge_time_zone btz
+	ON btz.date_id = d.date_id
+	AND btz.interval_id = i.interval_id
+GROUP BY
+	btz.local_date_id,
+	person_id,
+--	btz.local_interval_id,
+	state_group_id
 GO
