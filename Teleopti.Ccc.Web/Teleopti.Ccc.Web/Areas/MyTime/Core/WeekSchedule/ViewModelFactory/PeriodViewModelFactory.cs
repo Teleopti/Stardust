@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
                                     Title = visualLayer.DisplayDescription().Name,
                                     TimeSpan =
                                         visualLayer.Period.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).
-                                        ToShortTimeString(CultureInfo.CurrentUICulture),
+                                        ToShortTimeString(),
                                     StyleClassName = colorToString(visualLayer.DisplayColor()),
                                     Meeting = meetingModel,
                                     Color = visualLayer.DisplayColor().ToCSV(),
