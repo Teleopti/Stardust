@@ -157,7 +157,7 @@ define([
         }
 
         function _initMomentLanguageWithFallback() {
-            var ietfLanguageTag = resources.LanguageCode;
+        	var ietfLanguageTag = resources.LanguageCode.toLowerCase();;
             var baseLang = 'en'; //Base
             var languages = [ietfLanguageTag, ietfLanguageTag.split('-')[0], baseLang];
 
