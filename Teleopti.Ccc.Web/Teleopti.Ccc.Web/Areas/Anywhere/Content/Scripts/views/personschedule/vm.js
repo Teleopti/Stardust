@@ -66,8 +66,8 @@ define([
 			var time = moment().startOf('day').add('minutes', self.WorkTimeMinutes());
 			return time.format("H:mm");
 		});
-		
-		this.TimeLine = new timeLineViewModel(this.PersonsInGroup);
+
+		this.TimeLine = new timeLineViewModel(this.PersonsInGroup); //Needs to work with only selected persons layers as well
 
 		this.Resources = resources;
 

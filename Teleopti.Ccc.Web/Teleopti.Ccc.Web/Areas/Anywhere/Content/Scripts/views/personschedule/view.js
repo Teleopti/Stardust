@@ -164,7 +164,7 @@ define([
 				    helpers.Date.ToServer(personSchedule.Date()),
 				    function (data) {
 				    	resize.notify();
-					    personSchedule.ClearData();
+				    	personSchedule.ClearData();
 					    personSchedule.SetData(data, options.groupid);
 				    	personSchedule.Loading(false);
 				    	deferred.resolve();
