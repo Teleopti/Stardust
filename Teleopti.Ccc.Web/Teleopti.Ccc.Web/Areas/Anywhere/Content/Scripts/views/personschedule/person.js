@@ -2,7 +2,7 @@ define([
 		'knockout',
 		'moment',
 		'lazy',
-		'views/personschedule/shift',
+		'shared/shift',
 		'shared/dayoff'
 ], function (
 		ko,

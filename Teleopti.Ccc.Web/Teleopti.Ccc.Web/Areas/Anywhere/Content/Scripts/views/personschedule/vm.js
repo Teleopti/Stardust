@@ -1,7 +1,7 @@
 define([
 	'knockout',
 	'navigation',
-	'views/personschedule/shift',
+	'shared/shift',
 	'shared/timeline',
 	'views/personschedule/addactivityform',
 	'views/personschedule/addfulldayabsenceform',

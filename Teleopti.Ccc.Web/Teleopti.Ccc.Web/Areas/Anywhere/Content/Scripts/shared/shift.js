@@ -23,8 +23,8 @@ define([
 		this.ShiftMenu = new shiftMenu(groupid, personid, date);
 
 		this.AddLayers = function (data) {
-			var layers = data.Projection;
-			var newItems = ko.utils.arrayMap(layers, function(l) {
+			var layers = data.Projection != undefined ? data.Projection : data.Layers;
+			var newItems = ko.utils.arrayMap(layers, function (l) {
 				l.Date = data.Date;
 				l.IsFullDayAbsence = data.IsFullDayAbsence;
 				return new layer(timeline, l, self);
