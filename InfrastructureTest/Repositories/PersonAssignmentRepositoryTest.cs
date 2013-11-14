@@ -121,6 +121,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftLayers));
         }
 
+	    [Test]
+	    public void ShouldLoadGraphByKey()
+	    {
+		    IPersonAssignment ass = CreateAggregateWithCorrectBusinessUnit();
+		    PersistAndRemoveFromUnitOfWork(ass);
+
+		    IPersonAssignment loaded = new PersonAssignmentRepository(UnitOfWork).LoadAggregate(new PersonAssignmentKey
+			    {
+				    Date = ass.Date,
+				    Scenario = ass.Scenario,
+				    Person = ass.Person
+			    });
+		    Assert.AreEqual(ass.Id, loaded.Id);
+		    Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory.DayOfWeekJusticeValues));
+		    Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftLayers));
+	    }
+
 			[Test]
 			public void TestFetchDatabaseVersion()
 			{

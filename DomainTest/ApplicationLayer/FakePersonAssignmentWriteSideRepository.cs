@@ -1,14 +1,51 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
-	public class FakePersonAssignmentWriteSideRepository : FakeWriteSideRepository<IPersonAssignment>, IPersonAssignmentWriteSideRepository
+	public class FakePersonAssignmentWriteSideRepository :
+		IEnumerable<IPersonAssignment>,
+		IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>,
+		IProxyForId<IPersonAssignment>
 	{
-		public IPersonAssignment Load(Guid personId, DateOnly date)
+		private readonly IList<IPersonAssignment> _entities = new List<IPersonAssignment>();
+
+		public void Add(IPersonAssignment entity)
 		{
-			return Entities.Single(e => e.Person.Id.Equals(personId) && e.Date.Equals(date));
+			if (!entity.Id.HasValue)
+				entity.SetId(Guid.NewGuid());
+			_entities.Add(entity);
 		}
+
+		public void Remove(IPersonAssignment entity)
+		{
+			_entities.Remove(entity);
+		}
+
+		public IPersonAssignment Load(Guid id)
+		{
+			return _entities.Single(e => e.Id.Equals(id));
+		}
+
+		public IPersonAssignment LoadAggregate(PersonAssignmentKey id)
+		{
+			return _entities.Single(e => e.Person.Equals(id.Person) &&
+			                             e.Scenario.Equals(id.Scenario) &&
+			                             e.Date.Equals(id.Date));
+		}
+
+		public IEnumerator<IPersonAssignment> GetEnumerator()
+		{
+			return _entities.GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return _entities.GetEnumerator();
+		}
+
 	}
 }

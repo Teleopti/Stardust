@@ -419,7 +419,7 @@ namespace Teleopti.Ccc.Domain.Collection
         /// Created by: rogerkr
         /// Created date: 2008-06-12
         /// </remarks>
-        public IPersistableScheduleData UpdateFromBroker<T>(ILoadAggregateById<T> repository, Guid id) where T : IPersistableScheduleData
+	public IPersistableScheduleData UpdateFromBroker<T>(ILoadAggregateFromBroker<T> repository, Guid id) where T : IPersistableScheduleData
         {
             IPersistableScheduleData updatedData = repository.LoadAggregate(id);
             IPersistableScheduleData returnData=null;
@@ -441,7 +441,7 @@ namespace Teleopti.Ccc.Domain.Collection
             return returnData;
         }
 
-        public void MeetingUpdateFromBroker<T>(ILoadAggregateById<T> repository, Guid id) where T : IMeeting
+	public void MeetingUpdateFromBroker<T>(ILoadAggregateFromBroker<T> repository, Guid id) where T : IMeeting
         {
             IMeeting updatedData = repository.LoadAggregate(id);
             if (updatedData == null) return;

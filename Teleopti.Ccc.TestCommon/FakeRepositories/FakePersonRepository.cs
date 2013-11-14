@@ -170,5 +170,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return new List<IPerson> { _person }.GetEnumerator();
 		}
+
+		public IPerson LoadAggregate(Guid id)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

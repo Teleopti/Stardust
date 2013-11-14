@@ -163,7 +163,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-06-12
         /// </remarks>
         //todo: Change this one to accept an IMessage and IScheduleRepository instead!
-        IPersistableScheduleData UpdateFromBroker<T>(ILoadAggregateById<T> personAssignmentRepository, Guid id) where T : IPersistableScheduleData;
+	IPersistableScheduleData UpdateFromBroker<T>(ILoadAggregateFromBroker<T> personAssignmentRepository, Guid id) where T : IPersistableScheduleData;
 
         /// <summary>
         /// Updates this instance from data source (Meeting)
@@ -171,7 +171,7 @@ namespace Teleopti.Interfaces.Domain
         /// <typeparam name="T"></typeparam>
         /// <param name="meetingRepository"></param>
         /// <param name="id"></param>
-        void MeetingUpdateFromBroker<T>(ILoadAggregateById<T> meetingRepository, Guid id) where T : IMeeting;
+	void MeetingUpdateFromBroker<T>(ILoadAggregateFromBroker<T> meetingRepository, Guid id) where T : IMeeting;
 
         /// <summary>
         /// Deletes from data source.

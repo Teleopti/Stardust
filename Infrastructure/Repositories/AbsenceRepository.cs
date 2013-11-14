@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// <summary>
     /// Repository for absences
     /// </summary>
-    public class AbsenceRepository : Repository<IAbsence>, IAbsenceRepository, IWriteSideRepository<IAbsence>
+	public class AbsenceRepository : Repository<IAbsence>, IAbsenceRepository, IWriteSideRepository<IAbsence>, IProxyForId<IAbsence>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AbsenceRepository"/> class.

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// Created by: rogerkr
     /// Created date: 2007-11-28
     /// </remarks>
-    public class PersonRepository : Repository<IPerson>, IPersonRepository, IWriteSideRepository<IPerson>
+	public class PersonRepository : Repository<IPerson>, IPersonRepository, IWriteSideRepository<IPerson>, IProxyForId<IPerson>
     {
         public PersonRepository(IUnitOfWork unitOfWork)
             : base(unitOfWork)

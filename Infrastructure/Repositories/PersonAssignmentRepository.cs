@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	///<summary>
 	/// Repository for PersonAssignment aggregate
 	///</summary>
-	public class PersonAssignmentRepository : Repository<IPersonAssignment>, IPersonAssignmentRepository, IPersonAssignmentWriteSideRepository
+	public class PersonAssignmentRepository : Repository<IPersonAssignment>, IPersonAssignmentRepository, IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>
 	{
 		public PersonAssignmentRepository(IUnitOfWork unitOfWork)
 			: base(unitOfWork)
@@ -140,5 +140,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return ass;
 		}
 
+		public IPersonAssignment LoadAggregate(PersonAssignmentKey id)
+		{
+			return Session.CreateCriteria(typeof(PersonAssignment))
+						       .SetFetchMode("ShiftLayers", FetchMode.Join)
+						       .Add(Restrictions.Eq("Scenario", id.Scenario))
+						       .Add(Restrictions.Eq("Person", id.Person))
+						       .Add(Restrictions.Eq("Date", id.Date))
+						       .UniqueResult<IPersonAssignment>();
+		}
 	}
 }
