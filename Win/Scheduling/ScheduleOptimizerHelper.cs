@@ -319,11 +319,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 		            fixedStaffSchedulingService.FinderResults.Clear();
 
                 var progressChangeEvent = new TeleoptiProgressChangeMessage(Resources.TryingToResolveUnscheduledDaysDotDotDot);
+                _backgroundWorker.ReportProgress(0, progressChangeEvent );
 		            foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)
 		            {
 		                int iterations = 0;
-
-                    _backgroundWorker.ReportProgress(0, progressChangeEvent );
 		                while (nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix, schedulingOptions, rollbackService) && iterations < 10)
 		                {
                         if (_backgroundWorker.CancellationPending)
