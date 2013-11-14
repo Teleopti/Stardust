@@ -17,60 +17,68 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRaiseActivityAddedEvent()
 		{
-			var person = PersonFactory.CreatePersonWithId();
+			var scenario = ScenarioFactory.CreateScenarioAggregate(" ", true);
+			var personRepository = new FakeWriteSideRepository<IPerson> {PersonFactory.CreatePersonWithId()};
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var addingActivity = ActivityFactory.CreateActivity("Space out");
 			var activityRepository = new FakeWriteSideRepository<IActivity> {mainActivity, addingActivity};
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
 				{
 					PersonAssignmentFactory.CreateAssignmentWithMainShift(
-						mainActivity, person,
+						mainActivity, personRepository.Single(),
 						new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16),
-						ShiftCategoryFactory.CreateShiftCategory("  "), ScenarioFactory.CreateScenarioAggregate(" ", true))
+						ShiftCategoryFactory.CreateShiftCategory("  "), 
+						scenario)
 				};
-			var target = new AddActivityCommandHandler(activityRepository, personAssignmentRepository);
+			var target = new AddActivityCommandHandler(personAssignmentRepository, activityRepository,
+			                                           new FakeWriteSideRepository<IScenario> {scenario},
+								   personRepository);
 
 			var command = new AddActivityCommand
 				{
-					PersonId = person.Id.Value,
+					ScenarioId = scenario.Id.Value,
+					PersonId = personRepository.Single().Id.Value,
 					Date = new DateOnly(2013, 11, 14),
 					ActivityId = addingActivity.Id.Value,
-					StartTime = new DateTime(2013, 11, 14, 14, 00, 00),
-					EndTime = new DateTime(2013, 11, 14, 15, 00, 00),
+					StartTime = new DateTime(2013, 11, 14, 14, 00, 00, DateTimeKind.Utc),
+					EndTime = new DateTime(2013, 11, 14, 15, 00, 00, DateTimeKind.Utc),
 				};
-
 			target.Handle(command);
 
 			var @event = personAssignmentRepository.Single().PopAllEvents().OfType<ActivityAddedEvent>().Single(e => e.ActivityId == addingActivity.Id.Value);
-			@event.PersonId.Should().Be(person.Id.Value);
+			@event.PersonId.Should().Be(personRepository.Single().Id.Value);
 			@event.Date.Should().Be(new DateOnly(2013, 11, 14));
 		}
 
 		[Test]
 		public void ShouldSetupEntityState()
 		{
-			var person = PersonFactory.CreatePersonWithId();
+			var scenario = ScenarioFactory.CreateScenarioAggregate(" ", true);
+			var personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var addingActivity = ActivityFactory.CreateActivity("Space out");
 			var activityRepository = new FakeWriteSideRepository<IActivity> { mainActivity, addingActivity };
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
 				{
 					PersonAssignmentFactory.CreateAssignmentWithMainShift(
-						mainActivity, person,
+						mainActivity, personRepository.Single(),
 						new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16),
-						ShiftCategoryFactory.CreateShiftCategory("  "), ScenarioFactory.CreateScenarioAggregate(" ", true))
+						ShiftCategoryFactory.CreateShiftCategory("  "), 
+						scenario)
 				};
-			var target = new AddActivityCommandHandler(activityRepository, personAssignmentRepository);
+			var target = new AddActivityCommandHandler(personAssignmentRepository, activityRepository,
+								   new FakeWriteSideRepository<IScenario> { scenario },
+								   personRepository);
 
 			var command = new AddActivityCommand
 			{
-				PersonId = person.Id.Value,
+				ScenarioId = scenario.Id.Value,
+				PersonId = personRepository.Single().Id.Value,
 				Date = new DateOnly(2013, 11, 14),
 				ActivityId = addingActivity.Id.Value,
 				StartTime = new DateTime(2013, 11, 14, 14, 00, 00, DateTimeKind.Utc),
 				EndTime = new DateTime(2013, 11, 14, 15, 00, 00, DateTimeKind.Utc),
 			};
-
 			target.Handle(command);
 
 			var personAssignment = personAssignmentRepository.Single();
@@ -85,20 +93,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 	public class AddActivityCommandHandler : IHandleCommand<AddActivityCommand>
 	{
-		private readonly IWriteSideRepository<IActivity> _activityRepository;
-		private readonly IPersonAssignmentWriteSideRepository _personAssignmentRepository;
+		private readonly IProxyForId<IActivity> _activityRepository;
+		private readonly IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> _personAssignmentRepository;
+		private readonly IProxyForId<IScenario> _scenarioForId;
+		private readonly IProxyForId<IPerson> _personForId;
 
-		public AddActivityCommandHandler(IWriteSideRepository<IActivity> activityRepository,
-						 IPersonAssignmentWriteSideRepository personAssignmentRepository)
+		public AddActivityCommandHandler(IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> personAssignmentRepository, IProxyForId<IActivity> activityRepository, IProxyForId<IScenario> scenarioForId, IProxyForId<IPerson> personForId)
 		{
 			_activityRepository = activityRepository;
 			_personAssignmentRepository = personAssignmentRepository;
+			_scenarioForId = scenarioForId;
+			_personForId = personForId;
 		}
 
 		public void Handle(AddActivityCommand command)
 		{
+			var scenario = _scenarioForId.Load(command.ScenarioId);
 			var activity = _activityRepository.Load(command.ActivityId);
-			var personAssignment = _personAssignmentRepository.Load(command.PersonId, command.Date);
+			var personAssignment = _personAssignmentRepository.LoadAggregate(new PersonAssignmentKey
+				{
+					Date = command.Date,
+					Scenario = scenario,
+					Person = _personForId.Load(command.PersonId)
+				});
 			var period = new DateTimePeriod(TimeZoneInfo.ConvertTimeToUtc(command.StartTime), TimeZoneInfo.ConvertTimeToUtc(command.EndTime));
 
 			personAssignment.AddMainLayer(activity, period);
