@@ -2,6 +2,11 @@ using System;
 
 namespace Teleopti.Interfaces.Domain
 {
+	public interface IPersonAssignmentWriteSideRepository : IWriteSideRepository<IPersonAssignment>
+	{
+		IPersonAssignment Load(Guid personId, DateOnly date);
+	}
+
 	/// <summary>
 	/// Generic interface for write side repositories
 	/// </summary>

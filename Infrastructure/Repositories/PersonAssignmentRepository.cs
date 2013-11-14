@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	///<summary>
 	/// Repository for PersonAssignment aggregate
 	///</summary>
-	public class PersonAssignmentRepository : Repository<IPersonAssignment>, IPersonAssignmentRepository
+	public class PersonAssignmentRepository : Repository<IPersonAssignment>, IPersonAssignmentRepository, IPersonAssignmentWriteSideRepository
 	{
 		public PersonAssignmentRepository(IUnitOfWork unitOfWork)
 			: base(unitOfWork)
@@ -32,6 +32,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			: base(currentUnitOfWork)
 		{
 
+		}
+
+		public IPersonAssignment Load(Guid personId, DateOnly date)
+		{
+			throw new NotImplementedException();
 		}
 
 		/// <summary>
@@ -134,5 +139,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return ass;
 		}
+
 	}
 }

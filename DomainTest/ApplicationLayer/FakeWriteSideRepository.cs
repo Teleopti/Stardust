@@ -6,9 +6,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
-	public class TestWriteSideRepository<T> : IEnumerable<T>, IWriteSideRepository<T> where T : IAggregateRoot
+	public class FakeWriteSideRepository<T> : IEnumerable<T>, IWriteSideRepository<T> where T : IAggregateRoot
 	{
-		private readonly IList<T> _entities = new List<T>();
+		protected readonly IList<T> _entities = new List<T>();
 
 		public void Add(T entity)
 		{

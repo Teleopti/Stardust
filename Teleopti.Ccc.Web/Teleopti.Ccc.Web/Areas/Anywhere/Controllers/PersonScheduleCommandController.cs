@@ -39,8 +39,4 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Json(new object(), JsonRequestBehavior.DenyGet);
 		}
 	}
-
-	public class AddActivityCommand
-	{
-	}
 }
