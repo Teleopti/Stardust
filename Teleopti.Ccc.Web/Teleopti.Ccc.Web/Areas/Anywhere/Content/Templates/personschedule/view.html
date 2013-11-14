@@ -117,8 +117,36 @@
 										
 										<!-- ko if: $root.AddingAbsence -->
 										<!-- ko with: $root.AddAbsenceForm -->
-										<form action="#" class="activity-form">
+										<form action="#" class="form activity-form">
 											<select id="Select1" class="absence-type" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: Absence">
+											</select>
+											<div class="input-append input-prepend bootstrap-timepicker">
+												<span class="add-on"><i class="icon-step-backward"></i></span>
+												<input type="text" class="start-time input-mini" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: false, allowEmpty: true }" />
+												<span class="add-on"><i class="icon-time"></i></span>
+												<label class="checkbox inline" style="margin-left:5px;"><input type="checkbox">Previous
+												</label>
+											</div>
+											
+											<div class="input-append input-prepend bootstrap-timepicker">
+												<span class="add-on"><i class="icon-step-forward"></i></span>
+												<input type="text" class="start-time input-mini" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: false, allowEmpty: true }" />
+												<span class="add-on"><i class="icon-time"></i></span>
+												<label class="checkbox inline" style="margin-left:5px;"><input type="checkbox">Next
+												</label>
+											</div>
+											
+											<button class="btn btn-success apply" data-bind="enable: !$root.Loading(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
+					
+										</form>
+										<!-- /ko -->
+										<!-- /ko -->
+										
+										<!--TOP DOWN -->
+										<!-- ko if: $root.AddingAbsence -->
+										<!-- ko with: $root.AddAbsenceForm -->
+										<!--form action="#" class="activity-form">
+											<select id="Select2" class="absence-type" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: Absence">
 											</select>
 											<div class="input-append bootstrap-timepicker">
 												<input type="text" class="start-time" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: false, allowEmpty: true }" />
@@ -135,7 +163,7 @@
 
 											<button class="btn btn-success apply" style="margin-top: 10px" data-bind="enable: !$root.Loading(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
 					
-										</form>
+										</!--form-->
 										<!-- /ko -->
 										<!-- /ko -->
 										

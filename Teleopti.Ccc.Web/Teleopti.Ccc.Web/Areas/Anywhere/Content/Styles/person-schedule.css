@@ -208,13 +208,13 @@
 }
 
 .person-schedule .activity-form .start-time{
-	width: 180px;
+	
 }
 
 .person-schedule .activity-form .end-time {
-	width: 180px;
+	/*'width: 180px;*/
 }
 
 .person-schedule .activity-form-row {
-	
+	/*'width: 180px;*/
 }
