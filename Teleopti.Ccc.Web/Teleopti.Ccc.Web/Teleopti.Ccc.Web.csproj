@@ -703,7 +703,6 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addabsenceform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline-time.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\person.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page-group.js" />
@@ -747,7 +746,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\layout.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\main.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\navigation.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\person.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\shared\person.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\layer.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\vm.js" />

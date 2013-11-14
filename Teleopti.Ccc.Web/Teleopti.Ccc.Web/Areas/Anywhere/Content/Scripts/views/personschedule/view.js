@@ -6,7 +6,7 @@ define([
 		'helpers',
 		'text!templates/personschedule/view.html',
 		'resizeevent',
-		'views/personschedule/person',
+		'shared/person',
 		'ajax',
 		'navigation'
 ], function (
@@ -165,7 +165,7 @@ define([
 				    function (data) {
 				    	resize.notify();
 				    	personSchedule.ClearData();
-					    personSchedule.SetData(data, options.groupid);
+				    	personSchedule.SetData(data, options.groupid);
 				    	personSchedule.Loading(false);
 				    	deferred.resolve();
 				    }
