@@ -48,7 +48,15 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	        selectionViewModel.selectedPreference(availablePreferences[0]);
 	    }
 
-	    ko.applyBindings(selectionViewModel, $('div.navbar')[1]);
+	    ajax.Ajax({
+	    	url: 'UserInfo/Culture',
+	    	dataType: "json",
+	    	type: 'GET',
+	    	success: function (data) {
+	    		$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
+	    		ko.applyBindings(selectionViewModel, $('div.navbar')[1]);
+	    	}
+	    });
 	}
 
     function _deletePreference() {
