@@ -253,7 +253,6 @@ ko.bindingHandlers.mytimeDatePicker = {
 			success: function (data) {
 				allBindingsAccessor().datepickerOptions = { autoHide: true, weekStart: data.WeekStart };
 				ko.bindingHandlers.datepicker.init(element, valueAccessor, allBindingsAccessor, viewModel);
-
 				if (!isDisabled) $(element).removeAttr('disabled');
 			}
 		});

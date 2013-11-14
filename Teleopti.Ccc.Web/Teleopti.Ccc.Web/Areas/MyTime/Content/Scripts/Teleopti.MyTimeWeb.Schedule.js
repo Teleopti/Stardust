@@ -25,17 +25,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
 	var completelyLoaded;
-	var weekStart = 3;
-    
-	ajax.Ajax({
-	    url: 'UserInfo/Culture',
-	    dataType: "json",
-	    type: 'GET',
-	    success: function (data) {
-	        weekStart = data.WeekStart;
-	    }
-	});
-    
+	
 	function _bindData(data) {
 		vm.Initialize(data);
 		_initTimeIndicator();
@@ -520,15 +510,23 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			completelyLoaded = completelyLoadedCallback;
 		},
 		SetupViewModel: function (userTexts, defaultDateTimes) {
-		    var addRequestViewModel = function () {
-		        var model = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, weekStart, defaultDateTimes);
-		        model.AddRequestCallback = _displayRequest;
-		        return model;
-		    };
+			ajax.Ajax({
+				url: 'UserInfo/Culture',
+				dataType: "json",
+				type: 'GET',
+				success: function (data) {
+					var addRequestViewModel = function () {
+						var model = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, data.WeekStart, defaultDateTimes);
+						model.AddRequestCallback = _displayRequest;
+						return model;
+					};
 
-			vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests);
-			
-		    ko.applyBindings(vm, $('#page')[0]);
+					vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests);
+
+					$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
+					ko.applyBindings(vm, $('#page')[0]);
+				}
+			});
 		},
 		LoadAndBindData: function () {
 			ajax.Ajax({
