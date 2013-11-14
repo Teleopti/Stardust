@@ -47,7 +47,7 @@
                         <td class="shift-trade-agent-name">@Resources.MySchedule</td>
                         <td class="shift-trade-my-schedule" data-bind="foreach: mySchedule().layers">
                             <div class="shift-trade-layer-container floatleft">
-                                <div class="shift-trade-layer absolute" data-bind="style: { left: leftPos, width: widthPx, backgroundColor: backgroundColor }, tooltip: { title: tooltipText, html: true }"></div>                                
+                                <div class="shift-trade-layer absolute" data-bind="style: { left: leftPos, width: widthPx, backgroundColor: backgroundColor }, tooltip: { title: tooltipText, html: true, container: '.tooltipContainer' }"></div>                                
                             </div>
                         </td>
                     </tr>
@@ -58,13 +58,14 @@
                         <td class="shift-trade-possible-trade-schedule">
                             <div class="hejsan" style="height: 22px;width: 100%;" data-bind="foreach: $data.layers">
                                 <div class="shift-trade-layer-container floatleft">
-                                    <div class="shift-trade-layer absolute" data-bind="style: { left: leftPos, width: widthPx, backgroundColor: backgroundColor }, tooltip: { title: tooltipText, html: true }"></div>
+                                    <div class="shift-trade-layer absolute" data-bind="style: { left: leftPos, width: widthPx, backgroundColor: backgroundColor }, tooltip: { title: tooltipText, html: true, container: '.tooltipContainer' }"></div>
                                 </div>
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <div class="tooltipContainer"></div>
         </div>
 		
         <p></p>

@@ -182,7 +182,7 @@ Teleopti.MyTimeWeb.Request.LayerViewModel = function(layer, minutesSinceTimeLine
 		return '';
 	});
 	self.tooltipText = ko.computed(function () {
-        return layer.Title;
+	    return "<div>{0}</div>{1}".format(layer.TitleHeader, layer.TitleTime);
 	});
 };
 

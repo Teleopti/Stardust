@@ -11,7 +11,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public DateTime End { get; set; }
 		public int LengthInMinutes { get; set; }
 		public string Color { get; set; }
-		public string Title { get; set; }
+		public string TitleHeader { get; set; }
 		public bool IsAbsenceConfidential { get; set; }
+		public string TitleTime { get; set; }
 	}
 }

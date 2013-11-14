@@ -15,15 +15,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private static ShiftTradeScheduleLayerViewModel mapLayer(SimpleLayer sourceLayer)
 		{
-			var expectedTitle = string.Format(CultureInfo.CurrentCulture, "{0}\n{1}-{2}", sourceLayer.Description,
-											  sourceLayer.Start.ToShortTimeString(), sourceLayer.End.ToShortTimeString());
+			var expectedTime = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", 
+												sourceLayer.Start.ToShortTimeString(),
+												sourceLayer.End.ToShortTimeString());
 			return new ShiftTradeScheduleLayerViewModel
 				{
 					Start = sourceLayer.Start,
 					End = sourceLayer.End,
 					LengthInMinutes = sourceLayer.Minutes,
 					Color = sourceLayer.Color,
-					Title = expectedTitle,
+					TitleHeader = sourceLayer.Description,
+					TitleTime = expectedTime,
 					IsAbsenceConfidential = sourceLayer.IsAbsenceConfidential
 				};
 		}

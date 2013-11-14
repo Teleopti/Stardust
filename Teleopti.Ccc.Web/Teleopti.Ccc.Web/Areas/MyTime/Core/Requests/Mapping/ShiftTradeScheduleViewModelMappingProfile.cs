@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 									  Payload = visualLayer.DisplayDescription().Name,
 									  LengthInMinutes = (int)length,
 									  Color = ColorTranslator.ToHtml(visualLayer.DisplayColor()),
-									  Title = createTitle(startDate, endDate),
+									  TitleHeader = createTitle(startDate, endDate),
 									  ElapsedMinutesSinceShiftStart = (int)startDate.Subtract(TimeZoneHelper.ConvertFromUtc(shiftStartTime, timeZone)).TotalMinutes
 								  }).ToList();
 			return scheduleLayers;

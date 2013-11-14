@@ -49,9 +49,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var target = new ShiftTradeScheduleLayerViewModelMapper();
 			var result = target.Map(new[] { readModelLayer });
 
-			var expectedTitle = string.Format(CultureInfo.CurrentCulture, "{0}\n{1}-{2}", readModelLayer.Description,
-			                                  readModelLayer.Start.ToShortTimeString(), readModelLayer.End.ToShortTimeString());
-			result.First().Title.Should().Be.EqualTo(expectedTitle);
+			var expectedTimeString = string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
+			                                       readModelLayer.Start.ToShortTimeString(),
+			                                       readModelLayer.End.ToShortTimeString());
+
+			var mappedlayer = result.First();
+			mappedlayer.TitleHeader.Should().Be.EqualTo(readModelLayer.Description);
+			mappedlayer.TitleTime.Should().Be.EqualTo(expectedTimeString);
 		}
 
 		[Test, SetCulture("sv-SE")]
@@ -68,9 +72,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var target = new ShiftTradeScheduleLayerViewModelMapper();
 			var result = target.Map(new[] { readModelLayer });
 
-			var expectedTitle = string.Format(CultureInfo.CurrentCulture, "{0}\n{1}-{2}", readModelLayer.Description,
-											  readModelLayer.Start.ToShortTimeString(), readModelLayer.End.ToShortTimeString());
-			result.First().Title.Should().Be.EqualTo(expectedTitle);
+			var expectedTimeString = string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
+												   readModelLayer.Start.ToShortTimeString(),
+												   readModelLayer.End.ToShortTimeString());
+			var mappedlayer = result.First();
+			mappedlayer.TitleHeader.Should().Be.EqualTo(readModelLayer.Description);
+			mappedlayer.TitleTime.Should().Be.EqualTo(expectedTimeString);
 		}
 	}
 }
