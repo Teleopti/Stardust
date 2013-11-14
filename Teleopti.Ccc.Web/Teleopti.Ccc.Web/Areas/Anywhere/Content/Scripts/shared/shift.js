@@ -20,6 +20,12 @@ define([
 
 		this.Layers = ko.observableArray();
 
+		this.IsAnyLayerSelected = function () {
+			return $(self.Layers()).is(function (index) {
+				return this.Selected();
+			});
+		};
+
 		this.ShiftMenu = new shiftMenu(groupid, personid, date);
 
 		this.AddLayers = function (data) {
