@@ -8,23 +8,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	public class FakeWriteSideRepository<T> : IEnumerable<T>, IWriteSideRepository<T> where T : IAggregateRoot
 	{
-		protected readonly IList<T> _entities = new List<T>();
+		protected readonly IList<T> Entities = new List<T>();
 
 		public void Add(T entity)
 		{
 			if (!entity.Id.HasValue)
 				entity.SetId(Guid.NewGuid());
-			_entities.Add(entity);
+			Entities.Add(entity);
 		}
 
 		public void Remove(T entity)
 		{
-			_entities.Remove(entity);
+			Entities.Remove(entity);
 		}
 
 		public T Load(Guid id)
 		{
-			return _entities.Single(e => e.Id.Equals(id));
+			return Entities.Single(e => e.Id.Equals(id));
 		}
 
 		public T LoadAggregate(Guid id)
@@ -34,12 +34,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		public IEnumerator<T> GetEnumerator()
 		{
-			return _entities.GetEnumerator();
+			return Entities.GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return _entities.GetEnumerator();
+			return Entities.GetEnumerator();
 		}
 
 	}

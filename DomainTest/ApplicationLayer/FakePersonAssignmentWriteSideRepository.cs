@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	{
 		public IPersonAssignment Load(Guid personId, DateOnly date)
 		{
-			return _entities.Single(e => e.Person.Id.Equals(personId) && e.Date.Equals(date));
+			return Entities.Single(e => e.Person.Id.Equals(personId) && e.Date.Equals(date));
 		}
 	}
 }
