@@ -8,13 +8,16 @@
 					\ 
 					<span data-bind="text: Team"></span>
 				</small>
-				
+				<div class="pull-right">
+					<div class="input-append">
+						<button class="btn toggle-descriptions" data-toggle="button" disabled data-bind="enable: !Loading(), click: ToggleDisplayDescriptions"><i class="icon-question-sign"></i></button>
+					</div>
+				</div>
 			</h1>
-			
 		</div>
 	</div>
 	
-	<div class="row">
+	<!--<div class="row">
 		<div class="span12">
 			<form>
 				<div class="control-group">
@@ -23,15 +26,11 @@
 							<option data-bind="text: Name, value: Id"></option>
 						</optgroup>
 					</select>
-					<div class="pull-right">
-						<div class="input-append">
-							<button class="btn toggle-descriptions" data-toggle="button" disabled data-bind="enable: !Loading(), click: ToggleDisplayDescriptions"><i class="icon-question-sign"></i></button>
-						</div>
-					</div>
+					
 				</div>
 			</form>
 		</div>
-	</div>
+	</div>-->
 	
 	<div class="row">
 		<div class="span12">
@@ -139,6 +138,8 @@
 											<button class="btn btn-success apply" data-bind="enable: !$root.Loading(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
 					
 										</form>
+										
+										
 										<!-- /ko -->
 										<!-- /ko -->
 										
@@ -163,7 +164,7 @@
 
 											<button class="btn btn-success apply" style="margin-top: 10px" data-bind="enable: !$root.Loading(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
 					
-										</!--form-->
+											</!--form-->
 										<!-- /ko -->
 										<!-- /ko -->
 										
@@ -219,12 +220,29 @@
 					
 										</form>
 										
-									<!-- /ko -->
-									<!-- /ko -->
+										<!-- /ko -->
+										<!-- /ko -->
 									</div>
+									
+									
 								</div>
+								
 							</td>
 							<td class="shift-menu-background contract-time-column"></td>
+						</tr>
+						<tr >
+							<td colspan="3" style="background-color: white;" >
+								<br />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3" style="background-color: white; border: none">
+								<select id="Select2" data-bind="enable: !$root.Loading(), foreach: $root.GroupPages, select2: { value: $root.SelectedGroup } ">
+									<optgroup data-bind="attr: { label: Name }, foreach: Groups">
+										<option data-bind="text: Name, value: Id"></option>
+									</optgroup>
+								</select>
+							</td>
 						</tr>
 						<!-- /ko -->
 
