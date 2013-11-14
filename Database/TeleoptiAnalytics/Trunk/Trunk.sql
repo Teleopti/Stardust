@@ -467,7 +467,7 @@ CREATE TABLE [stage].[stg_state_group](
 	[datasource_update_date] smalldatetime NOT NULL,
 	[is_deleted] [bit] NOT NULL
 )
-ALTER TABLE [stage].[stg_state_group] ADD  CONSTRAINT [PK_stage_state_group] PRIMARY KEY CLUSTERED
+ALTER TABLE [stage].[stg_state_group] ADD  CONSTRAINT [PK_state_group] PRIMARY KEY CLUSTERED
 (
 	[state_group_code] ASC
 )
