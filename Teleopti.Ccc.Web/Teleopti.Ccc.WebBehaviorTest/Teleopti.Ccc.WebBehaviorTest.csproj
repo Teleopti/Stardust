@@ -256,6 +256,7 @@
     <Compile Include="Data\Setups\Legacy\Specific\AbsenceInContractTimeToday.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
     <Compile Include="Bindings\Generic\ServerStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\Anywhere\ApplicationPageStepDefinition.cs" />
     <Compile Include="Session.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -430,7 +431,7 @@
       <DependentUpon>PreferencesExtended.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\AbsenceRequestFromRequestStepDefinitions.cs" />
-    <Compile Include="ManageRequestStepDefinitions.cs" />
+    <Compile Include="MyTime\ManageRequestStepDefinitions.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\DoNotHavePersonPeriods.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\DoNotHaveSchedulePeriods.cs" />
     <Compile Include="MyTime\PreferencesMustHave.feature.cs">
@@ -526,7 +527,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>QUnitTests.feature</DependentUpon>
     </Compile>
-    <Compile Include="RoutingStepDefinition.cs" />
     <Compile Include="Bindings\Generic\CookieStepDefinitions.cs" />
     <Compile Include="MyTime\TeamSchedule.feature.cs">
       <AutoGen>True</AutoGen>
@@ -610,7 +610,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>License.feature</DependentUpon>
     </Compile>
-    <Compile Include="SignOutStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\BrowserStepDefinitions.cs" />
     <Compile Include="Bindings\EventDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security.feature.cs">
@@ -618,7 +618,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="SecurityStepDefinitions.cs" />
     <Compile Include="SignOut.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
