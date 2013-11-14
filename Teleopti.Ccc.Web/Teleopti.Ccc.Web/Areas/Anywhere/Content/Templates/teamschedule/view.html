@@ -119,36 +119,34 @@
 						<!-- ko if: Selected -->
 						<tr>
 							<td class="shift-menu-background person-name-column"></td>
-							<td class="shift-menu-background schedule-column">
+							<td class="shift-menu-background schedule-column" colspan="2">
 
-								<!-- ko if: $parent.MakeSpaceForDrop -->
-								<div style="height: 13px"></div>
-								<!-- /ko -->
-								
 								<div class="shift-menu" data-bind="style: {'margin-left': StartPixels() + 'px'}">
 									<!-- ko if: $root.DisplayDescriptions -->
 									<div class="shift-details">
 										<!-- ko foreach: $parent.DistinctLayers -->
 										<span class="label" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description"></span>
 										<!-- /ko -->
-									</div>
+									</div>s
 									<!-- /ko -->
 									<p>
 										<span class="label activity-details" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description + ' ' + StartTime() + '-' + EndTime()"></span>
 									</p>
+									<!-- ko with: $parent.ShiftMenu -->
 									<div class="btn-group">
-										<a href="#" class="btn btn-small add-full-day-absence" data-bind="click: $parent.AddFullDayAbsence"><i class="icon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
-										<a href="#" class="btn btn-small add-absence" data-bind="click: $parent.AddAbsence"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.IntradayAbsence"></span></a>
-										<a href="#" class="btn btn-small add-activity" data-bind="click: $parent.AddActivity"><i class="icon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
+										<a href="#" class="btn btn-small show-details" data-bind="click: ShowDetails"><i class="icon-eye-open"></i></a>
+										<a href="#" class="btn btn-small add-full-day-absence" data-bind="click: AddFullDayAbsence"><i class="icon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
+										<a href="#" class="btn btn-small add-absence" data-bind="click: AddAbsence"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.IntradayAbsence"></span></a>
+										<a href="#" class="btn btn-small add-activity" data-bind="click: AddActivity"><i class="icon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
 									</div>
+									<!-- /ko -->
 								</div>
 							</td>
-							<td class="shift-menu-background contract-time-column"></td>
 						</tr>
 						<!-- /ko -->
 						<!-- /ko -->
 						<!-- /ko -->
-
+						
 					</tbody>
 				</table>
 			</div>

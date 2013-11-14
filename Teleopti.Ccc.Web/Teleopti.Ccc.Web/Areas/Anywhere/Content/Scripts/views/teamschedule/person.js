@@ -3,7 +3,7 @@ define([
 		'moment',
 		'lazy',
 		'views/teamschedule/shift',
-		'views/teamschedule/dayoff'
+		'shared/dayoff'
 ], function (
 		ko,
 		moment,
@@ -47,7 +47,7 @@ define([
 
 		this.AddData = function (data, timeline, selectedGroup) {
 			if (data.Projection.length > 0) {
-				var newShift = new shift(timeline, selectedGroup);
+				var newShift = new shift(timeline, selectedGroup, self.Id, data.Date);
 				newShift.AddLayers(data);
 				self.Shifts.push(newShift);
 			}

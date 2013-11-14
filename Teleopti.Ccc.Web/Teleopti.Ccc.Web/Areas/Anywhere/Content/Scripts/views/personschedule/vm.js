@@ -113,7 +113,7 @@ define([
 			self.DayOffName(data.DayOffName);
 
 			if (data.Layers.length > 0) {
-				var newShift = new shiftViewModel(self.TimeLine, groupid);
+				var newShift = new shiftViewModel(self.TimeLine, groupid, self.Id(), data.Date);
 				newShift.AddLayers(data);
 				self.Shifts.push(newShift);
 			}
