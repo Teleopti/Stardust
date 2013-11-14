@@ -65,6 +65,8 @@ BEGIN TRY
 	declare @date_from_id int = 200
 	declare @date_to_id int = 300
 	declare @active bit = 1
+	declare @state_group_set nvarchar(100) = '3,4,5'
+
 
 
 	--All stored procedures used(?)
@@ -186,6 +188,7 @@ BEGIN TRY
 							WHEN  @param_name = '@date_to_id' THEN CAST(@date_to_id AS nvarchar(50))
 							WHEN  @param_name = '@scheduling_type_id' THEN CAST(@scheduling_type_id AS nvarchar(50))
 							WHEN  @param_name = '@active' THEN CAST(@active AS nvarchar(50))
+							WHEN  @param_name = '@state_group_set' THEN CAST(@state_group_set AS nvarchar(50))
 						
 							ELSE 'noDataTypeFound'
 						END

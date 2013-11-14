@@ -11846,4 +11846,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Trying to resolve unscheduled days...</value>
     <comment>This message is shown when scheduling is finished and the scheduler tries to resolve the white spots.</comment>
   </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Time in State per Agent</value>
+    <comment>Time in State per Agent</comment>
+  </data>
+  <data name="DetailedAdherence" xml:space="preserve">
+    <value>Detailed Adherence</value>
+    <comment>Detailed Adherence Report Group</comment>
+  </data>
 </root>

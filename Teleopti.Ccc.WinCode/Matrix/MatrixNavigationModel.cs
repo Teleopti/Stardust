@@ -130,6 +130,11 @@ namespace Teleopti.Ccc.WinCode.Matrix
 //27
 //29 
 //"C052796F-1C8A-4905-9246-FF1FF8BD30E5"
+        private static IEnumerable<string> detailedAdherenceReports()
+        {
+                return new[]{
+              "BB8C21BA-0756-4DDC-8B26-C9D5715A3443"};
+        }
         private static IEnumerable<string> analysisReports()
         {
             // old "21", "18", "17", "19", "26", "29"
@@ -174,7 +179,8 @@ namespace Teleopti.Ccc.WinCode.Matrix
                 "4F5DDE81-C264-4756-B1F1-F65BFE54B16B",
                 "80D31D84-68DB-45A7-977F-75C3250BB37C",
                 "047B138C-DE3A-426A-99B0-00C5BA826AF2",
-                "479809D8-4DAE-4852-BF67-C98C3744918D"};
+                "479809D8-4DAE-4852-BF67-C98C3744918D"
+                };
         }
 
         private static IEnumerable<string> forecastReports()
@@ -235,6 +241,14 @@ namespace Teleopti.Ccc.WinCode.Matrix
                                             where agentReports().Contains(a.ForeignId)
                                             select a
                                     },
+                                    new MatrixFunctionGroup
+                                    {
+                                        LocalizedDescription = Resources.DetailedAdherence,
+                                        ApplicationFunctions =
+                                            from a in PermittedMatrixFunctions
+                                            where detailedAdherenceReports().Contains(a.ForeignId)
+                                            select a
+                                    },
                                 new MatrixFunctionGroup
                                     {
                                         LocalizedDescription = Resources.ForecastingPerformance,
@@ -251,6 +265,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
                                             where serviceLevelReports().Contains(a.ForeignId)
                                             select a
                                     },
+                                
                                 new MatrixFunctionGroup
                                     {
                                         LocalizedDescription = Resources.Improve,

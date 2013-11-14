@@ -98,6 +98,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataTableDefinition\StateGroupInfrastructure.cs" />
     <Compile Include="DataTableDefinition\HourlyAvailabilityInfrastructure.cs" />
     <Compile Include="DataTableDefinition\ScheduleChangedInfrastructure.cs" />
     <Compile Include="DataTableDefinition\RequestInfrastructure.cs" />
