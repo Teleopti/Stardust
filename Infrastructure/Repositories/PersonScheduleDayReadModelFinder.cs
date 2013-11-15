@@ -4,6 +4,7 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -91,10 +92,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							  .List<PersonScheduleDayReadModel>();
 		}
 
-		public IEnumerable<PersonScheduleDayReadModel> ForPersons(DateOnly date, IEnumerable<Guid> personIdList)
+		public IEnumerable<PersonScheduleDayReadModel> ForPersons(DateOnly shiftTradeDate, IEnumerable<Guid> personIdList, Paging paging)
 		{
+			var idlist = string.Join(",", personIdList);
 			return _unitOfWork.Session().CreateSQLQuery(
-				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, Start, [End], Model FROM ReadModel.PersonScheduleDay WHERE PersonId IN (:personIdList) AND BelongsToDate=:date ORDER BY Start")
+				"EXEC  [ReadModel].[LoadPossibleShiftTradeSchedules] @shiftTradeDate=:shiftTradeDate, @personList=:personIdList, @skip=:skip, @take=:take")
 							  .AddScalar("PersonId", NHibernateUtil.Guid)
 							  .AddScalar("TeamId", NHibernateUtil.Guid)
 							  .AddScalar("SiteId", NHibernateUtil.Guid)
@@ -103,11 +105,32 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							  .AddScalar("Start", NHibernateUtil.DateTime)
 							  .AddScalar("End", NHibernateUtil.DateTime)
 							  .AddScalar("Model", NHibernateUtil.Custom(typeof(CompressedString)))
-							  .SetDateTime("date", date)
-							  .SetParameterList("personIdList", personIdList)
+							  .SetDateTime("shiftTradeDate", shiftTradeDate)
+							  .SetParameter("personIdList", idlist,NHibernateUtil.StringClob)
+							  .SetParameter("skip", paging.Skip)
+							  .SetParameter("take", paging.Take)
 							  .SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
 							  .SetReadOnly(true)
 							  .List<PersonScheduleDayReadModel>();
 		}
+
+		//public IEnumerable<PersonScheduleDayReadModel> ForPersons(DateOnly date, IEnumerable<Guid> personIdList)
+		//{
+		//	return _unitOfWork.Session().CreateSQLQuery(
+		//		"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, Start, [End], Model FROM ReadModel.PersonScheduleDay WHERE PersonId IN (:personIdList) AND BelongsToDate=:date ORDER BY Start")
+		//					  .AddScalar("PersonId", NHibernateUtil.Guid)
+		//					  .AddScalar("TeamId", NHibernateUtil.Guid)
+		//					  .AddScalar("SiteId", NHibernateUtil.Guid)
+		//					  .AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+		//					  .AddScalar("Date", NHibernateUtil.DateTime)
+		//					  .AddScalar("Start", NHibernateUtil.DateTime)
+		//					  .AddScalar("End", NHibernateUtil.DateTime)
+		//					  .AddScalar("Model", NHibernateUtil.Custom(typeof(CompressedString)))
+		//					  .SetDateTime("date", date)
+		//					  .SetParameterList("personIdList", personIdList)
+		//					  .SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
+		//					  .SetReadOnly(true)
+		//					  .List<PersonScheduleDayReadModel>();
+		//}
 	}
 }

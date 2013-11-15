@@ -1,5 +1,6 @@
 
 /****** Object:  StoredProcedure [ReadModel].[LoadPossibleShiftTradeSchedules]    Script Date: 2013-11-14 13:35:09 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[LoadPossibleShiftTradeSchedules]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [ReadModel].[LoadPossibleShiftTradeSchedules]
 GO
 
@@ -40,18 +41,18 @@ AS
 	SET ROWCOUNT @take;
 	WITH Ass AS
 	(
-		SELECT *,
-		ROW_NUMBER() OVER (ORDER BY BelongsToDate) AS 'RowNumber'
+		SELECT TOP (1000000) *, 
+		ROW_NUMBER() OVER (ORDER BY sd.Start) AS 'RowNumber'
 		FROM ReadModel.PersonScheduleDay sd
 		INNER JOIN @TempList t ON t.Person = sd.PersonId
 		WHERE [BelongsToDate] = @shiftTradeDate
-	
+		AND sd.Start IS NOT NULL
+		AND DATEDIFF(MINUTE,Start, [End] ) < 1440
+		ORDER BY sd.Start
 	) 
 	SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS [Date], Start, [End], Model 
 	FROM Ass 
 	WHERE RowNumber > @skip
-
-
 GO
 
 

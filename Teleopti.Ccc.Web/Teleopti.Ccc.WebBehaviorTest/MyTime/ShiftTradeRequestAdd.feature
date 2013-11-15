@@ -1,5 +1,4 @@
-﻿@WatiN
-Feature: Shift Trade Request Add
+﻿Feature: Shift Trade Request Add
 	In order to avoid unwanted scheduled shifts
 	As an agent
 	I want to be able to trade shifts with other agents

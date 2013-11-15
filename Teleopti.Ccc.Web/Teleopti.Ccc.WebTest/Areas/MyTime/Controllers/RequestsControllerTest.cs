@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var target = new RequestsController(modelFactory, null, null, null, null);
 			
-			var result = target.ShiftTradeRequestSchedule(DateOnly.Today, true);
+			var result = target.ShiftTradeRequestSchedule(DateOnly.Today, true,new Paging());
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
 		

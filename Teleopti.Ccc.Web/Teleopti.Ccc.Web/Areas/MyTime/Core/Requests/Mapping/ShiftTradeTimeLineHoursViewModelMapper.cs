@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			if (mySchedule == null)
 				return null;
+			if (!mySchedule.ScheduleLayers.Any())
+				return null;
 
 			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 
@@ -68,6 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (!schedules.Any())
 				return null;
 
+			
 			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 
 			var startTime = schedules.Min(l => l.ScheduleLayers.First().Start);

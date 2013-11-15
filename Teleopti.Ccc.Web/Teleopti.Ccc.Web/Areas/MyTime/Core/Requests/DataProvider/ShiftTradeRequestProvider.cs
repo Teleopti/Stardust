@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
@@ -28,11 +29,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			return _scheduleDayReadModelFinder.ForPerson(date, person.Id.Value);
 		}
 
-		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedules(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons)
+		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedules(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons, Paging paging)
 		{
 			IEnumerable<Guid> personIdList = (from person in possibleShiftTradePersons
 			                                 select person.Id.Value).ToList();
-			return _scheduleDayReadModelFinder.ForPersons(date, personIdList);
+			return _scheduleDayReadModelFinder.ForPersons(date, personIdList, paging);
 		}
 	}
 }

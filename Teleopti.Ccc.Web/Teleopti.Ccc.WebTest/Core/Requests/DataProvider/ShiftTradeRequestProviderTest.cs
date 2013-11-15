@@ -62,11 +62,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			person2.SetId(Guid.NewGuid());
 			var scheduleReadModels = new[] {new PersonScheduleDayReadModel(), new PersonScheduleDayReadModel()};
 
-			scheduleDayReadModelFinder.Stub(x => x.ForPersons(date, new[] { person1.Id.Value, person2.Id.Value })).Return(scheduleReadModels);
+			scheduleDayReadModelFinder.Stub(x => x.ForPersons(date, new[] { person1.Id.Value, person2.Id.Value }, new Paging())).Return(scheduleReadModels);
 
 			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleDayReadModelFinder);
 
-			var result = target.RetrievePossibleTradeSchedules(date, new[] { person1, person2 });
+			var result = target.RetrievePossibleTradeSchedules(date, new[] { person1, person2 }, new Paging());
 
 			result.Should().Be.SameInstanceAs(scheduleReadModels);
 		}

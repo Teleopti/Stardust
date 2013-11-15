@@ -21,6 +21,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.openPeriodEndDate = ko.observable(moment().startOf('year').add('days', -1));
 		self.requestedDate = ko.observable(moment().startOf('day'));
 		self.missingWorkflowControlSet = ko.observable(true);
+		
 		self.noPossibleShiftTrades = ko.observable(false);
 		//self.timeLineLengthInMinutes = ko.observable(0);
 		self.hours = ko.observableArray();
@@ -68,15 +69,16 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			var mappedPersonsSchedule = ko.utils.arrayMap(possibleTradeSchedules, function (personSchedule) {
 
 			    var mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function (layer) {
-			        var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
-			        return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());
-				});
-
-				return new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedLayers, personSchedule);
+			    	var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
+			    	return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());;
+			    });
+			    var model = new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedLayers, personSchedule);
+				 self.possibleTradeSchedules.push(model);
+				 return model;
 			});
 
 			self.noPossibleShiftTrades(mappedPersonsSchedule.length == 0 ? true : false);
-			self.possibleTradeSchedules(mappedPersonsSchedule);
+			//self.possibleTradeSchedules.push(mappedPersonsSchedule);
 		};
 
 		self.chooseAgent = function (agent) {
@@ -129,7 +131,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                 return self.requestedDateInternal();
             },
             write: function (value) {
-                if (self.requestedDateInternal().diff(value) == 0) return;
+            	if (self.requestedDateInternal().diff(value) == 0) return;
+            	self.possibleTradeSchedules.removeAll();
                 self.chooseAgent(null);
                 self.requestedDateInternal(value);
                 self.loadSchedule();
@@ -180,6 +183,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 		self.loadSchedule = function () {
+			var skip = self.possibleTradeSchedules().length;
+			var take = 20;
+		
 			ajax.Ajax({
 				url: "Requests/ShiftTradeRequestSchedule",
 				dataType: "json",
@@ -187,7 +193,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				contentType: 'application/json; charset=utf-8',
 				data: {
 				    selectedDate: self.requestedDateInternal().toDate().toJSON(),
-				    loadOnlyMyTeam: self.myTeamFilter()
+				    loadOnlyMyTeam: self.myTeamFilter(),
+				    Take: take,
+				    Skip: skip
 				},
 				beforeSend: function () {
 					self.IsLoading(true);
@@ -209,9 +217,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 		self.changeRequestedDate = function (movement) {
-	        var date = moment(self.requestedDateInternal()).add('days', movement);
-	        if (self.isRequestedDateValid(date))
-	            self.requestedDate(date);
+			var date = moment(self.requestedDateInternal()).add('days', movement);
+	      if (self.isRequestedDateValid(date))
+	          self.requestedDate(date);
 		};
 
 		self.nextDate = function () {

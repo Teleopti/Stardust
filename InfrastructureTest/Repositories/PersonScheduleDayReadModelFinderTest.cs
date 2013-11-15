@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				createAndSaveReadModel(personSortedSecond, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 8);
 
 				var result = _target.ForPersons(new DateOnly(2012, 8, 28),
-				                                new[] {personSortedFirst, personSortedSecond, personSortedThird});
+				                                new[] {personSortedFirst, personSortedSecond, personSortedThird}, new Paging());
 
 				var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
 				Assert.That(scheduleReadModels.ElementAt(0).PersonId, Is.EqualTo(personSortedFirst));
