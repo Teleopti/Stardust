@@ -279,8 +279,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(vPeriod1.DateOnlyPeriod).Return(dateOnlyPeriod);
 				Expect.Call(vPeriod2.DateOnlyPeriod).Return(dateOnlyPeriod);
 
-				Expect.Call(vPeriod1.Person).Return(person).Repeat.Twice();
-				Expect.Call(vPeriod2.Person).Return(person);
+				Expect.Call(vPeriod1.Person).Return(person).Repeat.Times(4);
+				Expect.Call(vPeriod2.Person).Return(person).Repeat.Times(3);
 
 				Expect.Call(vPeriod1.ShiftCategoryLimitationCollection()).Return(_limitations);
 				Expect.Call(vPeriod2.ShiftCategoryLimitationCollection()).Return(_limitations);
