@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 	{
 		public Task Execute()
 		{
+			BundleTable.Bundles.IgnoreList.Ignore("*Tests.js");
 			var cssBundle = new StyleBundle("~/MyTimeCss")
 				.IncludeDirectory("~/Areas/MyTime/Content/Css", "*.css")
 				.Include(
@@ -20,6 +21,9 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/bootstrap-timepicker/css/bootstrap-timepicker.min.css",
 					"~/Content/Scripts/pinify/content/jquery.pinify.min.css"
 				);
+			var jsBundle = new ScriptBundle("~/MyTimeJs")
+				.IncludeDirectory("~/Areas/MyTime/Content/Scripts", "*.js", true);
+			BundleTable.Bundles.Add(jsBundle);
 			BundleTable.Bundles.Add(cssBundle);
 			return null;
 		}

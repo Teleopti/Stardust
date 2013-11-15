@@ -846,7 +846,6 @@
     <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_55_fbf9ee_1x400.png" />
     <Content Include="Areas\MyTime\Content\Images\ui-bg_glass_65_ffffff_1x400.png" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamSchedule.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\jquery.ui.connector.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.RequestDetail.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.List.js" />
     <Content Include="Areas\Start\Content\Css\Site.css" />

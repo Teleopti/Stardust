@@ -7,6 +7,16 @@
 /// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
 /// <reference path="~/Content/moment/moment.js" />
 
+if (typeof (Teleopti) === 'undefined') {
+	Teleopti = {};
+}
+if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
+	Teleopti.MyTimeWeb = {};
+}
+if (typeof (Teleopti.MyTimeWeb.Request) === 'undefined') {
+	Teleopti.MyTimeWeb.Request = {};
+}
+
 Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
