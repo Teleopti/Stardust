@@ -270,6 +270,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<TeamBlockSameShiftSpecification>().As<ITeamBlockSameShiftSpecification>();
             builder.RegisterType<ValidSampleDayPickerFromTeamBlock>().As<IValidSampleDayPickerFromTeamBlock>();
             builder.RegisterType<TeamBlockSchedulingOptions>().As<ITeamBlockSchedulingOptions>();
+			builder.RegisterType<TeamBlockRoleModelSelector>().As<ITeamBlockRoleModelSelector>();
+			builder.RegisterType<TeamBlockSchedulingCompletionChecker>().As<ITeamBlockSchedulingCompletionChecker>();
+			builder.RegisterType<ProposedRestrictionAggregator>().As<IProposedRestrictionAggregator>();
+			builder.RegisterType<TeamBlockRestrictionAggregator>().As<ITeamBlockRestrictionAggregator>();
+			builder.RegisterType<TeamRestrictionAggregator>().As<ITeamRestrictionAggregator>();
+			builder.RegisterType<BlockRestrictionAggregator>().As<IBlockRestrictionAggregator>();
 		}
 
 		private static void registerTeamBlockSchedulingService(ContainerBuilder builder)
