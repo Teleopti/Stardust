@@ -3,9 +3,19 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	public static class TeamBlockScheduledDayChecker
+	public interface ITeamBlockSchedulingCompletionChecker
 	{
-		public static bool IsDayScheduledInTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly)
+		bool IsDayScheduledInTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly);
+
+		bool IsDayScheduledInTeamBlockForSelectedPersons(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly,
+																		 IList<IPerson> selectedPersons);
+
+		bool IsTeamBlockScheduledForSelectedPersons(ITeamBlockInfo teamBlockInfo, IList<IPerson> selectedPersons);
+	}
+
+	public class TeamBlockSchedulingCompletionChecker : ITeamBlockSchedulingCompletionChecker
+	{
+		public bool IsDayScheduledInTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly)
 		{
 			if (teamBlockInfo == null) return false;
 
@@ -15,10 +25,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 
 			return true;
-
 		}
 
-	    private static bool checkScheduleStatus(DateOnly dateOnly, IScheduleMatrixPro matrix)
+	    private bool checkScheduleStatus(DateOnly dateOnly, IScheduleMatrixPro matrix)
 	    {
 	        IScheduleRange rangeForPerson = matrix.SchedulingStateHolder.Schedules[matrix.Person];
 	        IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(dateOnly);
@@ -29,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        return true;
 	    }
 
-	    public static bool IsDayScheduledInTeamBlockForSelectedPersons(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly,
+	    public bool IsDayScheduledInTeamBlockForSelectedPersons(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly,
 		                                                               IList<IPerson> selectedPersons)
 		{
 			if (teamBlockInfo == null) return false;
@@ -44,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		}
 
-		public static bool IsTeamBlockScheduledForSelectedPersons(ITeamBlockInfo teamBlockInfo, IList<IPerson> selectedPersons)
+		public bool IsTeamBlockScheduledForSelectedPersons(ITeamBlockInfo teamBlockInfo, IList<IPerson> selectedPersons)
 		{
 			if (teamBlockInfo == null) return false;
 
@@ -57,7 +66,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				}
 			}
 			return true;
-
 		}
 	}
 }

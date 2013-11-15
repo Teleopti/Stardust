@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IScheduleRange _scheduleRange;
         private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
+   		private ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 
         [SetUp ]
         public void Setup()
@@ -48,7 +49,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _schedulingOptions = new SchedulingOptions();
             _teamSteadyStateHolder = _mocks.StrictMock<ITeamSteadyStateHolder>();
             _teamBlockSchedulingOptions = new TeamBlockSchedulingOptions();
-            _target = new ValidatedTeamBlockInfoExtractor(_teamBlockSteadyStateValidator,_teamBlockInfoFactory,_teamSteadyStateHolder,_teamBlockSchedulingOptions);
+			_teamBlockSchedulingCompletionChecker = _mocks.StrictMock<ITeamBlockSchedulingCompletionChecker>();
+            _target = new ValidatedTeamBlockInfoExtractor(_teamBlockSteadyStateValidator,_teamBlockInfoFactory,_teamSteadyStateHolder,_teamBlockSchedulingOptions,_teamBlockSchedulingCompletionChecker);
 
             _date = new DateOnly(2013, 02, 22);
             _person = PersonFactory.CreatePerson();
