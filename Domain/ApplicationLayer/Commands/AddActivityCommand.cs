@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class AddActivityCommand
 	{
-		public Guid ScenarioId { get; set; }
 		public Guid PersonId { get; set; }
 		public DateOnly Date { get; set; }
 		public Guid ActivityId { get; set; }
