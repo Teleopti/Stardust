@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -19,16 +16,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 
-        public ValidatedTeamBlockInfoExtractor(ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,  ITeamBlockInfoFactory teamBlockInfoFactory, ITeamSteadyStateHolder teamSteadyStateHolder, ITeamBlockSchedulingOptions teamBlockSchedulingOptions,, ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker)
-        {
-            _teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
-            _teamBlockInfoFactory = teamBlockInfoFactory;
-            _teamSteadyStateHolder = teamSteadyStateHolder;
-            _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
-			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
-        }
+	    public ValidatedTeamBlockInfoExtractor(ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
+	                                           ITeamBlockInfoFactory teamBlockInfoFactory,
+	                                           ITeamSteadyStateHolder teamSteadyStateHolder,
+	                                           ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
+	                                           ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker)
+	    {
+		    _teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
+		    _teamBlockInfoFactory = teamBlockInfoFactory;
+		    _teamSteadyStateHolder = teamSteadyStateHolder;
+		    _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
+		    _teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
+	    }
 
-        public ITeamBlockInfo GetTeamBlockInfo(ITeamInfo teamInfo, DateOnly datePointer, IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions )
+	    public ITeamBlockInfo GetTeamBlockInfo(ITeamInfo teamInfo, DateOnly datePointer, IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions )
         {
             if (teamInfo == null || schedulingOptions == null) return null;
             if (!_teamSteadyStateHolder.IsSteadyState(teamInfo.GroupPerson)) return null;

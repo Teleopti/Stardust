@@ -24,8 +24,12 @@ namespace Teleopti.Ccc.Win.Commands
     public interface ITeamBlockOptimizationCommand
     {
         [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
-        void Execute(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod,
-                                 IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences);
+		void Execute(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod,
+							IList<IPerson> selectedPersons,
+							IOptimizationPreferences optimizationPreferences,
+							ISchedulePartModifyAndRollbackService rollbackService,
+							ISchedulingOptions schedulingOptions,
+							ITeamBlockScheduler teamBlockScheduler);
     }
 
     public class TeamBlockOptimizationCommand : ITeamBlockOptimizationCommand
@@ -133,7 +137,11 @@ namespace Teleopti.Ccc.Win.Commands
 
         [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
         public void Execute(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod,
-                                        IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
+							IList<IPerson> selectedPersons,
+							IOptimizationPreferences optimizationPreferences, 
+							ISchedulePartModifyAndRollbackService rollbackService,
+							ISchedulingOptions schedulingOptions,
+							ITeamBlockScheduler teamBlockScheduler)
         {
             _backgroundWorker = backgroundWorker;
 
@@ -151,10 +159,10 @@ namespace Teleopti.Ccc.Win.Commands
             //this one handles userlocks as well
             if (optimizationPreferences.General.OptimizationStepDaysOff)
                 optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences,
-                                         teamBlockRestrictionOverLimitValidator, allMatrixes);
+										 teamBlockRestrictionOverLimitValidator, allMatrixes, rollbackService, schedulingOptions, teamBlockScheduler);
             if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
                 optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences,
-                                          teamBlockRestrictionOverLimitValidator, allMatrixes);
+										  teamBlockRestrictionOverLimitValidator, allMatrixes, rollbackService, schedulingOptions, teamBlockScheduler);
         }
 
         private IGroupPersonBuilderForOptimization callGroupPage(ISchedulingOptions schedulingOptions)
@@ -181,16 +189,13 @@ namespace Teleopti.Ccc.Win.Commands
                                               IOptimizationPreferences optimizationPreferences,
                                               ITeamBlockRestrictionOverLimitValidator
                                                   teamBlockRestrictionOverLimitValidator,
-                                              IList<IScheduleMatrixPro> allMatrixes)
+                                              IList<IScheduleMatrixPro> allMatrixes,
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+			ISchedulingOptions schedulingOptions,
+			ITeamBlockScheduler teamBlockScheduler)
         {
             OptimizerHelperHelper.LockDaysForDayOffOptimization(allMatrixes, _restrictionExtractor,
                                                                 optimizationPreferences, selectedPeriod);
-
-            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService;
-            ITeamBlockScheduler teamBlockScheduler;
-            ISchedulingOptions schedulingOptions = initializeSharedFields(optimizationPreferences,
-                                                                          out schedulePartModifyAndRollbackService,
-                                                                          out teamBlockScheduler);
 
             ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
                 = new SmartDayOffBackToLegalStateService(
@@ -252,14 +257,11 @@ namespace Teleopti.Ccc.Win.Commands
                                                IOptimizationPreferences optimizationPreferences,
                                                ITeamBlockRestrictionOverLimitValidator
                                                    teamBlockRestrictionOverLimitValidator,
-                                               IList<IScheduleMatrixPro> allMatrixes)
+											   IList<IScheduleMatrixPro> allMatrixes, 
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+			ISchedulingOptions schedulingOptions,
+			ITeamBlockScheduler teamBlockScheduler)
         {
-            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService;
-            ITeamBlockScheduler teamBlockScheduler;
-            ISchedulingOptions schedulingOptions = initializeSharedFields(optimizationPreferences,
-                                                                          out schedulePartModifyAndRollbackService,
-                                                                          out teamBlockScheduler);
-
             IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
             var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,_teamBlockScheudlingOptions);
@@ -286,32 +288,6 @@ namespace Teleopti.Ccc.Win.Commands
                 );
             teamBlockIntradayOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
         }
-
-        private ISchedulingOptions initializeSharedFields(IOptimizationPreferences optimizationPreferences,
-                                                          out ISchedulePartModifyAndRollbackService
-                                                              schedulePartModifyAndRollbackService,
-                                                          out ITeamBlockScheduler teamBlockScheduler)
-        {
-            ISchedulingOptions schedulingOptions =
-                _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-
-            var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
-                                                                        schedulingOptions.ConsiderShortBreaks);
-            schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(_stateHolder,
-                                                                                            _scheduleDayChangeCallback,
-                                                                                            new ScheduleTagSetter(
-                                                                                                schedulingOptions
-                                                                                                    .TagToUseOnScheduling));
-            var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
-            teamBlockScheduler = new TeamBlockScheduler(_skillDayPeriodIntervalDataGenerator,
-                                                        _restrictionAggregator,
-                                                        _workShiftFilterService, teamScheduling,
-                                                        _workShiftSelector,
-                                                        _teamBlockCleaner, schedulePartModifyAndRollbackService,
-                                                        _sameOpenHoursInTeamBlockSpecification);
-            return schedulingOptions;
-        }
-
 
         private void resourceOptimizerPersonOptimized(object sender, ResourceOptimizerProgressEventArgs e)
         {

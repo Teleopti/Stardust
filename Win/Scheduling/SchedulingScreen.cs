@@ -4080,13 +4080,42 @@ namespace Teleopti.Ccc.Win.Scheduling
 					break;
 				case OptimizationMethod.ReOptimize:
 
-                    if (optimizerPreferences.Extra.UseTeamBlockOption || optimizerPreferences.Extra.UseTeams)
-                    {
-                        IList<IPerson> selectedPersons =
-                            new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
-                        _container.Resolve<ITeamBlockOptimizationCommand>().Execute(_backgroundWorkerOptimization, selectedPeriod, selectedPersons, optimizerPreferences);
-                        break;
-                    }
+					if (optimizerPreferences.Extra.UseTeamBlockOption || optimizerPreferences.Extra.UseTeams)
+					{
+						var teamBlockSchedulingChecker = _container.Resolve<ITeamBlockSchedulingOptions>();
+						var roleModelSelector = _container.Resolve<ITeamBlockRoleModelSelector>();
+						var completionChecker = _container.Resolve<ITeamBlockSchedulingCompletionChecker>();
+						var resourceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1,
+						                                                            true,
+						                                                            schedulingOptions.ConsiderShortBreaks);
+
+						var rollbackService = new SchedulePartModifyAndRollbackService(_schedulerState.SchedulingResultState,
+							                                                           _container.Resolve<IScheduleDayChangeCallback>(),
+							                                                           new ScheduleTagSetter(
+								                                                           schedulingOptions.TagToUseOnScheduling));
+						var teamScheduling = new TeamScheduling(resourceCalculateDelayer, rollbackService);
+						var teamBlockCleaner = _container.Resolve<ITeamBlockClearer>();
+						var singleDayScheduler = new TeamBlockSingleDayScheduler(completionChecker,
+						                                                         _container.Resolve<IProposedRestrictionAggregator>(),
+						                                                         _container.Resolve<IWorkShiftFilterService>(),
+						                                                         _container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
+						                                                         _container.Resolve<IWorkShiftSelector>(),
+						                                                         teamScheduling, teamBlockSchedulingChecker
+							);
+						var sameShiftCategoryBlockScheduler = new SameShiftCategoryBlockScheduler(roleModelSelector,
+						                                                                          singleDayScheduler,
+						                                                                          completionChecker,
+						                                                                          teamBlockCleaner,
+						                                                                          rollbackService);
+						var teamBlockScheduler = new TeamBlockScheduler(sameShiftCategoryBlockScheduler,
+						                                                                teamBlockSchedulingChecker,
+						                                                                singleDayScheduler, roleModelSelector);
+						var selectedPersons = new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
+						_container.Resolve<ITeamBlockOptimizationCommand>()
+						          .Execute(_backgroundWorkerOptimization, selectedPeriod, selectedPersons, optimizerPreferences,
+						                   rollbackService, schedulingOptions, teamBlockScheduler);
+						break;
+					}
 
 					// we need it here for fairness opt. for example
 					_groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;

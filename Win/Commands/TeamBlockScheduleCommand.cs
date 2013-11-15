@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Win.Commands
 {
 	public interface ITeamBlockScheduleCommand
 	{
-		void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedSchedules);
+		void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedSchedules, ITeamBlockScheduler teamBlockScheduler, ISchedulePartModifyAndRollbackService rollbackService);
 	}
 
 	public class TeamBlockScheduleCommand : ITeamBlockScheduleCommand
@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private readonly IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
-		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private BackgroundWorker _backgroundWorker;
 		private int _scheduledCount;
@@ -163,7 +162,7 @@ namespace Teleopti.Ccc.Win.Commands
 		private TeamBlockSchedulingService callAdvanceSchedulingService(ISchedulingOptions schedulingOptions, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization, ITeamBlockScheduler teamBlockScheduler, List<IWorkShiftFinderResult> advanceSchedulingResults, ITeamSteadyStateHolder teamSteadyStateHolder)
 		{
 			ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
-			IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor = new ValidatedTeamBlockInfoExtractor(_teamBlockSteadyStateValidator, _teamBlockInfoFactory, teamSteadyStateHolder, _teamBlockSchedulingCompletionChecker);    
+			IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor = new ValidatedTeamBlockInfoExtractor(_teamBlockSteadyStateValidator, _teamBlockInfoFactory, teamSteadyStateHolder, _teamBlockSchedulingOptions, _teamBlockSchedulingCompletionChecker);    
 			var advanceSchedulingService =
 				new TeamBlockSchedulingService(schedulingOptions,
 											 teamInfoFactory,
