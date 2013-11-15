@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -185,7 +186,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				AuditType = Resources.AuditingReportModified,
 				ShiftType = Resources.AuditingReportShift,
-				Detail = string.Empty,
+				Detail = Resources.PersonalShift,
 				ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value, regional.TimeZone),
 				ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
 				ScheduledAgent = PersonAssignment.Person.Name.ToString(NameOrderOption.FirstNameLastName),
@@ -339,6 +340,182 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 								  PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local),
 								  new List<IPerson> { PersonAssignment.Person });
 				res.Should().Be.Empty();
+			}
+		}
+
+		[Test]
+		public void ShouldHaveDetailShiftCategoryWhenHasShiftCategory()
+		{
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var res = target.Report(personProvider.CurrentUser(),new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+
+				Assert.AreEqual(res.ElementAt(0).Detail, PersonAssignment.ShiftCategory.Description.Name);
+			}
+		}
+
+		[Test]
+		public void ShouldHaveDetailShiftCategoryWhenHasShiftCategoryAndOtherLayers()
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				uow.Reassociate(PersonAssignment);
+				PersonAssignment.AddPersonalLayer(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period);
+				PersonAssignment.AddOvertimeLayer(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period, MultiplicatorDefinitionSet);
+				uow.Merge(PersonAssignment);
+				uow.PersistAll();
+			}
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+
+				Assert.AreEqual(res.ElementAt(1).Detail, PersonAssignment.ShiftCategory.Description.Name);
+			}
+		}
+
+		[Test]
+		public void ShouldHaveDetailDayOffWhenDayOff()
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				uow.Reassociate(PersonAssignment);
+				PersonAssignment.SetDayOff(DayOffTemplate);
+				uow.Merge(PersonAssignment);
+				uow.PersistAll();
+			}
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+
+				Assert.AreEqual(res.ElementAt(1).Detail, DayOffTemplate.Description.Name);
+			}
+		}
+
+		[Test]
+		public void ShouldHaveDetailDayOffWhenDayOffAndPersonalShift()
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				uow.Reassociate(PersonAssignment);
+				PersonAssignment.AddPersonalLayer(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period);
+				PersonAssignment.SetDayOff(DayOffTemplate);
+				uow.Merge(PersonAssignment);
+				uow.PersistAll();
+			}
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+
+				Assert.AreEqual(res.ElementAt(1).Detail, DayOffTemplate.Description.Name);
+			}	
+		}
+
+		[Test]
+		public void ShouldHaveDetailDayOffWhenDayOffAndOvertimeShift()
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				uow.Reassociate(PersonAssignment);
+				PersonAssignment.AddOvertimeLayer(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period, MultiplicatorDefinitionSet);
+				PersonAssignment.SetDayOff(DayOffTemplate);
+				uow.Merge(PersonAssignment);
+				uow.PersistAll();
+			}
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+
+				Assert.AreEqual(res.ElementAt(1).Detail, DayOffTemplate.Description.Name);
+			}		
+		}
+
+		[Test]
+		public void ShouldHaveDetailPersonalShiftWhenOnlyPersonalShift()
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				uow.Reassociate(PersonAssignment);
+				PersonAssignment.AddPersonalLayer(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period);
+				PersonAssignment.ClearMainLayers();
+				uow.PersistAll();
+			}
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+
+				Assert.AreEqual(res.ElementAt(1).Detail, Resources.PersonalShift);
+			}
+		}
+
+		[Test]
+		public void ShouldHaveDetailOvertimeShiftWhenOnlyOvertimeShift()
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				uow.Reassociate(PersonAssignment);
+				PersonAssignment.AddOvertimeLayer(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period, MultiplicatorDefinitionSet);
+				PersonAssignment.ClearMainLayers();
+				uow.PersistAll();
+			}
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+
+				Assert.AreEqual(res.ElementAt(1).Detail, Resources.Overtime);
+			}
+		}
+
+		[Test]
+		public void ShouldHaveDetailEmptyWhenEmptyPersonAssignment()
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				uow.Reassociate(PersonAssignment);
+				PersonAssignment.ClearMainLayers();
+				uow.PersistAll();
+			}
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+
+				Assert.AreEqual(res.ElementAt(1).Detail, string.Empty);
+			}
+		}
+
+		[Test]
+		public void ShouldHaveDetailEmptyWhenOverTimeAndPersonalShift()
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				uow.Reassociate(PersonAssignment);
+				PersonAssignment.AddPersonalLayer(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period);
+				PersonAssignment.AddOvertimeLayer(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period, MultiplicatorDefinitionSet);
+				PersonAssignment.ClearMainLayers();
+				uow.Merge(PersonAssignment);
+				uow.PersistAll();
+			}
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+
+				Assert.AreEqual(res.ElementAt(1).Detail, string.Empty);
 			}
 		}
 	}
