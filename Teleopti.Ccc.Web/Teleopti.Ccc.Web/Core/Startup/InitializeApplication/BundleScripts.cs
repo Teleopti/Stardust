@@ -43,7 +43,8 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/signalr/jquery.signalR-1.1.2.js",
 					"~/Content/signalr/broker-hubs.js",
 					"~/Content/select2/select2.js",
-					"~/Content/bootstrap-timepicker/js/bootstrap-timepicker.js"
+					"~/Content/bootstrap-timepicker/js/bootstrap-timepicker.js",
+					"~/Content/scripts/pinify/scripts/jquery.pinify.min.js" //I wonder if this will be read...
 				)
 				.IncludeDirectory("~/Areas/MyTime/Content/Scripts", "*.js", true);
 			BundleTable.Bundles.Add(jsBundle);
