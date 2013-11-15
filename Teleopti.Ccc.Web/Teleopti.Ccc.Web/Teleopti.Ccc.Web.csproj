@@ -708,7 +708,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page-group.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\shared\shiftmenu.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shiftmenu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\dayoff.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\person.js" />
