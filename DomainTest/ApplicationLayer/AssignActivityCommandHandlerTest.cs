@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				});
 			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, _timeZone.TimeZone()), TimeZoneHelper.ConvertToUtc(command.EndTime, _timeZone.TimeZone()));
 
-			personAssignment.AddMainLayer(activity, period);
+			personAssignment.AssignActivity(activity, period);
 		}
 	}
 }

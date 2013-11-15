@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_shiftLayers.Add(layer);
 		}
 
-		public virtual void AddMainLayer(IActivity activity, DateTimePeriod period)
+		public virtual void AssignActivity(IActivity activity, DateTimePeriod period)
 		{
 			var layer = new MainShiftLayer(activity, period);
 			layer.SetParent(this);
@@ -304,7 +304,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			SetShiftCategory(assignment.ShiftCategory);
 			foreach (var mainLayer in assignment.MainLayers())
 			{
-				AddMainLayer(mainLayer.Payload, mainLayer.Period);
+				AssignActivity(mainLayer.Payload, mainLayer.Period);
 			}
 		}
 
@@ -354,7 +354,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			SetShiftCategory(personAssignmentSource.ShiftCategory);
 			foreach (var mainLayer in personAssignmentSource.MainLayers())
 			{
-				AddMainLayer(mainLayer.Payload, mainLayer.Period);
+				AssignActivity(mainLayer.Payload, mainLayer.Period);
 			}
 			foreach (var personalLayer in personAssignmentSource.PersonalLayers())
 			{
