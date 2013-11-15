@@ -21,6 +21,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		protected DateTime Today { get; private set; }
 		protected IScenario Scenario { get; private set; }
 		protected IRepository Repository { get; private set; }
+		protected IDayOffTemplate DayOffTemplate { get; private set; }
+		protected IMultiplicatorDefinitionSet MultiplicatorDefinitionSet { get; private set; }
 	
 
 		protected override sealed void SetupForRepositoryTestWithoutTransaction()
@@ -33,6 +35,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			Scenario.DefaultScenario = true;
 			PersonAbsence = PersonAbsenceFactory.CreatePersonAbsence(Agent, Scenario, new DateTimePeriod(Today, Today.AddDays(1)));
 			Repository = new Repository(UnitOfWorkFactory.Current);
+			DayOffTemplate = DayOffFactory.CreateDayOff(new Description("AuditTestDayOff", "ATDO"));
+			MultiplicatorDefinitionSet = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("AuditTestMultiplicatorDefinitionSet", MultiplicatorType.Overtime);
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -45,6 +49,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 				Repository.Add(PersonAssignment);
 				Repository.Add(PersonAbsence);
+				Repository.Add(DayOffTemplate);
+				Repository.Add(MultiplicatorDefinitionSet);
 				uow.PersistAll();
 			}
 			AuditSetup();
@@ -97,6 +103,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				session.CreateQuery(@"update Activity p set p.IsDeleted = 1").ExecuteUpdate();
 				session.CreateQuery(@"update GroupingActivity p set p.IsDeleted = 1").ExecuteUpdate();
 				session.CreateQuery(@"update Absence p set p.IsDeleted = 1").ExecuteUpdate();
+				session.CreateQuery(@"update DayOffTemplate p set p.IsDeleted = 1").ExecuteUpdate();
+				session.CreateQuery(@"update MultiplicatorDefinitionSet p set p.IsDeleted = 1").ExecuteUpdate();
 				uow.PersistAll();
 			}
 			turnOffAudit();
