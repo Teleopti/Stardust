@@ -282,13 +282,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_shiftLayers.Add(layer);
 			SetDayOff(null);
 
-			if (Person.Id.HasValue && activity.Id.HasValue)
-				AddEvent(new ActivityAddedEvent
-					{
-						Date = Date,
-						PersonId = Person.Id.Value,
-						ActivityId = activity.Id.Value
-					});
+			AddEvent(() => new ActivityAddedEvent
+				{
+					Date = Date,
+					PersonId = Person.Id.Value,
+					ActivityId = activity.Id.Value
+				});
 		}
 		
 		public virtual void SetShiftCategory(IShiftCategory shiftCategory)

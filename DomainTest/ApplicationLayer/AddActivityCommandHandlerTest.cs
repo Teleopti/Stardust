@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -20,8 +19,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var scenario = ScenarioFactory.CreateScenarioAggregate(" ", true);
 			var personRepository = new FakeWriteSideRepository<IPerson> {PersonFactory.CreatePersonWithId()};
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
-			var addingActivity = ActivityFactory.CreateActivity("Space out");
-			var activityRepository = new FakeWriteSideRepository<IActivity> {mainActivity, addingActivity};
+			var addingActivity = ActivityFactory.CreateActivity("Added activity");
+			var activityRepository = new FakeWriteSideRepository<IActivity> { mainActivity, addingActivity };
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
 				{
 					PersonAssignmentFactory.CreateAssignmentWithMainShift(
@@ -56,8 +55,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var scenario = ScenarioFactory.CreateScenarioAggregate(" ", true);
 			var personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
-			var addingActivity = ActivityFactory.CreateActivity("Space out");
-			var activityRepository = new FakeWriteSideRepository<IActivity> { mainActivity, addingActivity };
+			var addedActivity = ActivityFactory.CreateActivity("Added activity");
+			var activityRepository = new FakeWriteSideRepository<IActivity> { mainActivity, addedActivity };
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
 				{
 					PersonAssignmentFactory.CreateAssignmentWithMainShift(
@@ -75,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				ScenarioId = scenario.Id.Value,
 				PersonId = personRepository.Single().Id.Value,
 				Date = new DateOnly(2013, 11, 14),
-				ActivityId = addingActivity.Id.Value,
+				ActivityId = addedActivity.Id.Value,
 				StartTime = new DateTime(2013, 11, 14, 14, 00, 00, DateTimeKind.Utc),
 				EndTime = new DateTime(2013, 11, 14, 15, 00, 00, DateTimeKind.Utc),
 			};
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var personAssignment = personAssignmentRepository.Single();
 			var addedLayer = from l in personAssignment.ShiftLayers
-			                 where l.Payload.Equals(addingActivity) &&
+			                 where l.Payload.Equals(addedActivity) &&
 			                       l.Period.StartDateTime.Equals(command.StartTime) &&
 			                       l.Period.EndDateTime.Equals(command.EndTime)
 			                 select l;

@@ -2,7 +2,10 @@
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -17,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	[TestFixture]
 	public class EventsMessageSenderTest
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void ShouldPopEventsFromAggregates()
 		{
 			var target = new EventsMessageSender(MockRepository.GenerateMock<IEventsPublisher>());
@@ -30,22 +33,31 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			root.AssertWasCalled(x => x.PopAllEvents());
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void ShouldPublishEvents()
 		{
-			var eventsPublisher = MockRepository.GenerateMock<IEventsPublisher>();
+			var eventsPublisher = new FakeEventsPublisher();
 			var target = new EventsMessageSender(eventsPublisher);
 
 			var root = new PersonAbsence(new FakeCurrentScenario().Current());
 			var dateTimeperiod =
 				new DateOnlyPeriod(DateOnly.Today, DateOnly.Today).ToDateTimePeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
 			root.FullDayAbsence(PersonFactory.CreatePersonWithId(), AbsenceFactory.CreateAbsenceWithId(), dateTimeperiod.StartDateTime, dateTimeperiod.EndDateTime);
-			var expected = root.AllEvents();
 			var roots = new IRootChangeInfo[] { new RootChangeInfo(root, DomainUpdateType.Insert) };
 
 			target.Execute(null, roots);
 
-			eventsPublisher.AssertWasCalled(x => x.Publish(Arg<IEnumerable<IEvent>>.List.ContainsAll(expected)));
+			eventsPublisher.PublishedEvents.Single().Should().Be.OfType<FullDayAbsenceAddedEvent>();
+		}
+	}
+
+	public class FakeEventsPublisher : IEventsPublisher
+	{
+		public IList<IEvent> PublishedEvents = new List<IEvent>();
+ 
+		public void Publish(IEnumerable<IEvent> events)
+		{
+			events.ForEach(PublishedEvents.Add);
 		}
 	}
 }
