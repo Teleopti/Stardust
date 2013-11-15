@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_shiftLayers.Add(layer);
 			SetDayOff(null);
 
-			AddEvent(() => new ActivityAddedEvent
+			AddEvent(() => new ActivityAssignedEvent
 				{
 					Date = Date,
 					PersonId = Person.Id.Value,

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 		[HttpPost]
 		[UnitOfWorkAction]
-		public JsonResult AddActivity(AddActivityCommand command)
+		public JsonResult AssignActivity(AssignActivityCommand command)
 		{
 			_commandDispatcher.Execute(command);
 			return Json(new object(), JsonRequestBehavior.DenyGet);
