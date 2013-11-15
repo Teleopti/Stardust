@@ -811,7 +811,6 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Init.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MessageBroker.js" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Signalr.Hubs.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Test.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Ajax.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Settings.js" />
