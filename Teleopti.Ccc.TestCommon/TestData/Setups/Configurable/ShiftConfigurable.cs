@@ -54,11 +54,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			_assignmentPeriod = new DateTimePeriod(startTimeUtc, endTimeUtc);
 			var scenario = new ScenarioRepository(uow).LoadAll().Single(x => x.Description.Name == Scenario);
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(user, scenario, new DateOnly(StartTime));
-			var mainShift = EditableShiftFactory.CreateEditorShift(activity, _assignmentPeriod, shiftCategory);
-
-			addScheduleActivity(timeZone, mainShift, personAssignment, uow);
-
-			new EditableShiftMapper().SetMainShiftLayers(personAssignment, mainShift);
+			personAssignment.SetShiftCategory(shiftCategory);
+			personAssignment.AddMainLayer(activity, _assignmentPeriod);
+			addScheduleActivity(timeZone, personAssignment, uow);
 
 			// simply publish the schedule changed event so that the read model is updated
 			personAssignment.ScheduleChanged();
@@ -66,7 +64,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			assignmentRepository.Add(personAssignment);
 		}
 
-		private void addScheduleActivity(TimeZoneInfo timeZone, IEditableShift mainShift, IPersonAssignment personAssignment, IUnitOfWork uow)
+		private void addScheduleActivity(TimeZoneInfo timeZone, IPersonAssignment personAssignment, IUnitOfWork uow)
 		{
 			if (ScheduledActivity == null)
 				return;
@@ -80,7 +78,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			if (ScheduledActivityIsPersonal)
 				personAssignment.AddPersonalLayer(scheduledActivity, period);
 			else
-				mainShift.LayerCollection.Add(new EditableShiftLayer(scheduledActivity, period));
+				personAssignment.AddMainLayer(scheduledActivity, period);
 		}
 	}
 }
