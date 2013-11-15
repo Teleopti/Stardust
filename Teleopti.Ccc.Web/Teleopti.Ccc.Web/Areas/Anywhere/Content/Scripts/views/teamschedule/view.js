@@ -7,7 +7,7 @@ define([
 		'subscriptions',
 		'helpers',
 		'views/teamschedule/vm',
-		'shared/person',
+		'views/teamschedule/person',
 		'text!templates/teamschedule/view.html',
 		'resizeevent',
 		'ajax'

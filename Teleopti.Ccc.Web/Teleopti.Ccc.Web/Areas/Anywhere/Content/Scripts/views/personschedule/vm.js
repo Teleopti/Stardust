@@ -1,7 +1,7 @@
 define([
 	'knockout',
 	'navigation',
-	'shared/shift',
+	'views/personschedule/shift',
 	'shared/timeline',
 	'views/personschedule/addactivityform',
 	'views/personschedule/addfulldayabsenceform',
@@ -113,7 +113,7 @@ define([
 			self.DayOffName(data.DayOffName);
 
 			if (data.Layers.length > 0) {
-				var newShift = new shiftViewModel(self.TimeLine, groupid, self.Id(), data.Date);
+				var newShift = new shiftViewModel(self.TimeLine);
 				newShift.AddLayers(data);
 				self.Shifts.push(newShift);
 			}

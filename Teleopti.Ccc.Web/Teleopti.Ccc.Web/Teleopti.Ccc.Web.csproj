@@ -703,13 +703,16 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addabsenceform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline-time.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\person.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\shift.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page-group.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\shared\shift.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\shiftmenu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\dayoff.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\person.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shift.js" />
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />
@@ -746,7 +749,6 @@
     <Content Include="Areas\Anywhere\Content\Scripts\layout.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\main.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\navigation.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\shared\person.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\layer.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\vm.js" />

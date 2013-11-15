@@ -6,7 +6,7 @@ define([
 		'helpers',
 		'text!templates/personschedule/view.html',
 		'resizeevent',
-		'shared/person',
+		'views/personschedule/person',
 		'ajax',
 		'navigation'
 ], function (
@@ -37,7 +37,7 @@ define([
 					for (var j = 0; j < schedules.length; j++) {
 						if (currentPersons[i].Id == schedules[j].PersonId) {
 							schedules[j].Date = date;
-							currentPersons[i].AddData(schedules[j], personSchedule.TimeLine, personSchedule.SelectedGroup());
+							currentPersons[i].AddData(schedules[j], personSchedule.TimeLine); //personSchedule.SelectedGroup());
 						}
 					}
 				}
