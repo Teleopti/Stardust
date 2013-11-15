@@ -71,6 +71,7 @@
 
     <!--Standard rowstyle for rta grid-->
     <Style TargetType="{x:Type Controls:DataGridRow}" BasedOn="{StaticResource RowStyle}" x:Key="RtaScheduleRowStyle">
+		<Setter Property="Height" Value="22"></Setter>
         <Style.Triggers>
             <DataTrigger Binding="{Binding Path=Color, Converter={StaticResource isNullConverter}}" Value="False">
                 <Setter Property="Background" Value="{Binding Path=Color, Converter={StaticResource colorConverter}}"/>
