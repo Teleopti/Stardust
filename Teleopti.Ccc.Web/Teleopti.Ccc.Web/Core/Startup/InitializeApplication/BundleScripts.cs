@@ -22,6 +22,29 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/Scripts/pinify/content/jquery.pinify.min.css"
 				);
 			var jsBundle = new ScriptBundle("~/MyTimeJs")
+				.Include(
+					"~/Content/jquery/jquery-1.10.2.js",
+					"~/Content/Scripts/knockout-2.2.1.js",
+					"~/Content/moment/moment.js",
+					"~/Content/moment/moment.all.js",
+					"~/Content/moment-datepicker/moment-datepicker.js",
+					"~/Content/moment-datepicker/moment-datepicker-ko.js",
+					"~/Content/signals/signals.js",
+					"~/Content/hasher/hasher.js",
+					"~/Content/crossroads/crossroads.js",
+					"~/Content/Scripts/modernizr-2.6.2.js",
+					"~/Content/bootstrap/bootstrap.js",
+					"~/Content/jqueryui/jquery-ui-1.10.2.custom.js",
+					"~/Content/Scripts/json2.js",
+					"~/Content/Scripts/jquery.hoverIntent.js",
+					"~/Content/jquery-plugin/jquery.placeholder.min.js",
+					"~/Content/Scripts/jquery.qtip.js",
+					"~/Content/Scripts/indexOf.js",
+					"~/Content/signalr/jquery.signalR-1.1.2.js",
+					"~/Content/signalr/broker-hubs.js",
+					"~/Content/select2/select2.js",
+					"~/Content/bootstrap-timepicker/js/bootstrap-timepicker.js"
+				)
 				.IncludeDirectory("~/Areas/MyTime/Content/Scripts", "*.js", true);
 			BundleTable.Bundles.Add(jsBundle);
 			BundleTable.Bundles.Add(cssBundle);
