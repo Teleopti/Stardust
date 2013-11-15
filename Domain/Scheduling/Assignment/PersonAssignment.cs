@@ -281,8 +281,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
 			SetDayOff(null);
-		}
 
+			AddEvent(() => new ActivityAddedEvent
+				{
+					Date = Date,
+					PersonId = Person.Id.Value,
+					ActivityId = activity.Id.Value
+				});
+		}
+		
 		public virtual void SetShiftCategory(IShiftCategory shiftCategory)
 		{
 			_shiftCategory = shiftCategory;
@@ -304,6 +311,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			layer.SetParent(this);
 			_shiftLayers.Insert(index,layer);
 			SetDayOff(null);
+
 		}
 
 		public virtual IDayOff DayOff()

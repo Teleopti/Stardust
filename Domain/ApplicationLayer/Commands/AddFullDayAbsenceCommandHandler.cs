@@ -10,12 +10,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	public class AddFullDayAbsenceCommandHandler : IHandleCommand<AddFullDayAbsenceCommand>
 	{
 		private readonly ICurrentScenario _scenario;
-		private readonly IWriteSideRepository<IPerson> _personRepository;
-		private readonly IWriteSideRepository<IAbsence> _absenceRepository;
+		private readonly IProxyForId<IPerson> _personRepository;
+		private readonly IProxyForId<IAbsence> _absenceRepository;
 		private readonly IWriteSideRepository<IPersonAbsence> _personAbsenceRepository;
 		private readonly IScheduleRepository _scheduleRepository;
 
-		public AddFullDayAbsenceCommandHandler(IScheduleRepository scheduleRepository, IWriteSideRepository<IPerson> personRepository, IWriteSideRepository<IAbsence> absenceRepository, IWriteSideRepository<IPersonAbsence> personAbsenceRepository, ICurrentScenario scenario)
+		public AddFullDayAbsenceCommandHandler(IScheduleRepository scheduleRepository, IProxyForId<IPerson> personRepository, IProxyForId<IAbsence> absenceRepository, IWriteSideRepository<IPersonAbsence> personAbsenceRepository, ICurrentScenario scenario)
 		{
 			_scenario = scenario;
 			_personRepository = personRepository;

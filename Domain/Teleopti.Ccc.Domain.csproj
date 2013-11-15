@@ -121,6 +121,8 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
     <Compile Include="Analytics\BaseConfiguration.cs" />
+    <Compile Include="ApplicationLayer\Commands\AddActivityCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\AddActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\CannotSendDelayedMessages.cs" />
@@ -437,6 +439,7 @@
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinder.cs" />
     <Compile Include="ResourceCalculation\IPeriodDistributionService.cs" />
+    <Compile Include="ApplicationLayer\Events\ActivityAddedEvent.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeLengthDecider.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferences.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferencesGeneralPersonalSetting.cs" />

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 	[TestFixture]
 	public class PersonScheduleCommandControllerTest
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[Test]
 		public void ShouldDispatchAddFullDayAbsenceCommand()
 		{
 			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
@@ -34,5 +34,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			commandDispatcher.AssertWasCalled(x => x.Execute(command));
 		}
+
+		[Test]
+		public void ShouldDispatchAddActivity()
+		{
+			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
+			var target = new PersonScheduleCommandController(commandDispatcher);
+
+			var command = new AddActivityCommand();
+
+			target.AddActivity(command);
+
+			commandDispatcher.AssertWasCalled(x => x.Execute(command));
+		}
+
 	}
+
 }

@@ -14,20 +14,23 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		private IPerson _updatedBy;
 		private DateTime? _updatedOn;
 		private readonly LocalizedUpdateInfo _localizedUpdateInfo = new LocalizedUpdateInfo();
-		private readonly IList<IEvent> _events = new List<IEvent>();
+		private readonly IList<Func<IEvent>> _events = new List<Func<IEvent>>();
 
 		public virtual IEnumerable<IEvent> PopAllEvents()
 		{
-			var allEvents = _events.ToArray();
+			var allEvents = _events.Select(e => e.Invoke()).ToArray();
 			_events.Clear();
 			return allEvents;
 		}
 
-		public virtual IEnumerable<IEvent> AllEvents() { return _events; }
+		protected void AddEvent(Func<IEvent> @event)
+		{
+			_events.Add(@event);
+		}
 
 		protected void AddEvent(IEvent @event)
 		{
-			_events.Add(@event);
+			_events.Add(() => @event);
 		}
 
 

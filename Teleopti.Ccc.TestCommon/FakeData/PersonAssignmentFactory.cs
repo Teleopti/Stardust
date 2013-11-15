@@ -85,25 +85,26 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return ass;
 		}
 
-		/// <summary>
-		/// Creates an assignment with main shift.
-		/// </summary>
-		/// <param name="activity">The activity.</param>
-		/// <param name="agent">The agent.</param>
-		/// <param name="period">The period.</param>
-		/// <param name="category">The category</param>
-		/// <param name="scenario">The scenario</param>
-		/// <returns></returns>
 		public static IPersonAssignment CreateAssignmentWithMainShift(IActivity activity,
-																	IPerson agent,
-																	DateTimePeriod period,
-																	IShiftCategory category,
-																	IScenario scenario)
+		                                                              IPerson agent,
+		                                                              DateTimePeriod period,
+		                                                              IShiftCategory category,
+		                                                              IScenario scenario)
 		{
 			var date = new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
 			var ass = new PersonAssignment(agent, scenario, date);
 			ass.AddMainLayer(activity, period);
 			ass.SetShiftCategory(category);
+			return ass;
+		}
+
+
+		public static IPersonAssignment CreateAssignmentWithMainShift(IActivity activity, IPerson agent, DateTimePeriod period)
+		{
+			var date = new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
+			var ass = new PersonAssignment(agent, ScenarioFactory.CreateScenarioAggregate(), date);
+			ass.AddMainLayer(activity, period);
+			ass.SetShiftCategory(ShiftCategoryFactory.CreateShiftCategory("   "));
 			return ass;
 		}
 

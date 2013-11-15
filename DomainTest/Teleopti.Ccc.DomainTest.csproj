@@ -134,6 +134,8 @@
     <Compile Include="AgentInfo\Requests\RequestApprovalServiceSchedulerTest.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestWithinLoadedPeriodSpecificationTest.cs" />
     <Compile Include="Analytics\BaseConfigurationTest.cs" />
+    <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\FakePersonAssignmentWriteSideRepository.cs" />
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\FakePersonScheduleDayReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\FakePublishEventsFromEventHandlers.cs" />
@@ -154,7 +156,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesChangedHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedNotifierTest.cs" />
     <Compile Include="ApplicationLayer\SyncEventsPublisherTest.cs" />
-    <Compile Include="ApplicationLayer\TestWriteSideRepository.cs" />
+    <Compile Include="ApplicationLayer\FakeWriteSideRepository.cs" />
     <Compile Include="Auditing\AuditSettingTest.cs" />
     <Compile Include="Auditing\RevisionTest.cs" />
     <Compile Include="Budgeting\BudgetCalculatorTest.cs" />

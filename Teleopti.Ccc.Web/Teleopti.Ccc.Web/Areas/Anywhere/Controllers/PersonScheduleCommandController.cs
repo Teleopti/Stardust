@@ -15,20 +15,28 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_commandDispatcher = commandDispatcher;
 		}
 
-		[HttpPostOrPut]
+		[HttpPost]
 		[UnitOfWorkAction]
 		public JsonResult AddFullDayAbsence(AddFullDayAbsenceCommand command)
 		{
 			_commandDispatcher.Execute(command);
-			return Json(new object(), JsonRequestBehavior.AllowGet);
+			return Json(new object(), JsonRequestBehavior.DenyGet);
 		}
 
-		[HttpPostOrPut]
+		[HttpPost]
 		[UnitOfWorkAction]
 		public JsonResult RemovePersonAbsence(RemovePersonAbsenceCommand command)
 		{
 			_commandDispatcher.Execute(command);
-			return Json(new object(), JsonRequestBehavior.AllowGet);
+			return Json(new object(), JsonRequestBehavior.DenyGet);
+		}
+
+		[HttpPost]
+		[UnitOfWorkAction]
+		public JsonResult AddActivity(AddActivityCommand command)
+		{
+			_commandDispatcher.Execute(command);
+			return Json(new object(), JsonRequestBehavior.DenyGet);
 		}
 	}
 }

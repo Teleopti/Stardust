@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters
 {
-    internal class ScheduleEntityLoader : ILoadAggregateById<IPersistableScheduleData>
+	internal class ScheduleEntityLoader : ILoadAggregateFromBroker<IPersistableScheduleData>
     {
         private readonly Func<IPersistableScheduleData> _scehduleEntityFinder;
 
