@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
@@ -466,13 +467,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 															 schedulingOptions.TagToUseOnScheduling));
 			var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
 			var teamBlockCleaner = _container.Resolve<ITeamBlockClearer>();
-			ITeamBlockScheduler teamBlockScheduler =
-				new TeamBlockScheduler(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
-									   _container.Resolve<IRestrictionAggregator>(),
-									   _container.Resolve<IWorkShiftFilterService>(), 
-									   teamScheduling,
-									   _container.Resolve<IWorkShiftSelector>(),
-                                        teamBlockCleaner, schedulePartModifyAndRollbackService, _container.Resolve<ISameOpenHoursInTeamBlockSpecification>());
+			var teamBlockSchedulingChecker = _container.Resolve<ITeamBlockSchedulingOptions>();
+			var roleModelSelector = _container.Resolve<ITeamBlockRoleModelSelector>();
+			var completionChecker = _container.Resolve<ITeamBlockSchedulingCompletionChecker>();
+			var singleDayScheduler = new TeamBlockSingleDayScheduler(completionChecker,
+																	 _container.Resolve<IProposedRestrictionAggregator>(),
+																	 _container.Resolve<IWorkShiftFilterService>(),
+																	 _container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
+																	 _container.Resolve<IWorkShiftSelector>(),
+																	 teamScheduling, teamBlockSchedulingChecker
+				);
+			var sameShiftCategoryBlockScheduler = new SameShiftCategoryBlockScheduler(roleModelSelector, singleDayScheduler,
+																					  completionChecker, teamBlockCleaner,
+																					  schedulePartModifyAndRollbackService);
+			ITeamBlockScheduler teamBlockScheduler = new TeamBlockScheduler(sameShiftCategoryBlockScheduler,
+																			teamBlockSchedulingChecker,
+																			singleDayScheduler, roleModelSelector);
 
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
 				= new SmartDayOffBackToLegalStateService(
@@ -543,13 +553,23 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                          new ScheduleTagSetter(
                                                              schedulingOptions.TagToUseOnScheduling));
             var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
-				var teamBlockCleaner = _container.Resolve<ITeamBlockClearer>();
-            ITeamBlockScheduler teamBlockScheduler =
-                new TeamBlockScheduler(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
-                                       _container.Resolve<IRestrictionAggregator>(),
-                                       _container.Resolve<IWorkShiftFilterService>(), teamScheduling,
-                                       _container.Resolve<IWorkShiftSelector>(),
-                                        teamBlockCleaner, schedulePartModifyAndRollbackService, _container.Resolve<ISameOpenHoursInTeamBlockSpecification>());
+			var teamBlockCleaner = _container.Resolve<ITeamBlockClearer>();
+			var teamBlockSchedulingChecker = _container.Resolve<ITeamBlockSchedulingOptions>();
+			var roleModelSelector = _container.Resolve<ITeamBlockRoleModelSelector>();
+			var completionChecker = _container.Resolve<ITeamBlockSchedulingCompletionChecker>();
+			var singleDayScheduler = new TeamBlockSingleDayScheduler(completionChecker,
+																	 _container.Resolve<IProposedRestrictionAggregator>(),
+																	 _container.Resolve<IWorkShiftFilterService>(),
+																	 _container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
+																	 _container.Resolve<IWorkShiftSelector>(),
+																	 teamScheduling, teamBlockSchedulingChecker
+				);
+			var sameShiftCategoryBlockScheduler = new SameShiftCategoryBlockScheduler(roleModelSelector, singleDayScheduler,
+																					  completionChecker, teamBlockCleaner,
+																					  schedulePartModifyAndRollbackService);
+			ITeamBlockScheduler teamBlockScheduler = new TeamBlockScheduler(sameShiftCategoryBlockScheduler,
+																			teamBlockSchedulingChecker,
+																			singleDayScheduler, roleModelSelector);
     
             var groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);

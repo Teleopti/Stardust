@@ -6,8 +6,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 {
     public class SameShiftCategoryRestriction : IScheduleRestrictionStrategy
     {
-        public IEffectiveRestriction ExtractRestriction(IList<DateOnly> dateOnlyList,
-                                                        IList<IScheduleMatrixPro> matrixList)
+		public IEffectiveRestriction ExtractRestriction(IList<DateOnly> dateOnlyList,
+														IList<IScheduleMatrixPro> matrixList)
         {
             var restriction = new EffectiveRestriction(new StartTimeLimitation(),
                                                        new EndTimeLimitation(),

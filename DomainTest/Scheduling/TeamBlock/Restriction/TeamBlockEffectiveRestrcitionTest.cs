@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
             _groupPerson = _mock.StrictMock<IGroupPerson>();
             _scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
 
-            _target = new TeamBlockEffectiveRestrcition(_effectiveRestrcitionCreator, _groupPerson,
+            _target = new TeamBlockEffectiveRestrcition(_effectiveRestrcitionCreator, _groupPerson.GroupMembers,
                                                         new SchedulingOptions(), _scheduleDictionary);
         }
 

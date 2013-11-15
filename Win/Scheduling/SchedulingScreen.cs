@@ -15,6 +15,9 @@ using MbCache.Core;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.Win.Meetings;
@@ -3684,7 +3687,33 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (schedulingOptions.UseTeamBlockPerOption || schedulingOptions.UseGroupScheduling)
                 {
                     //when the advance scheduling is required
-					_container.Resolve<ITeamBlockScheduleCommand>().Execute(schedulingOptions, _backgroundWorkerScheduling, scheduleDays);
+					var teamBlockSchedulingChecker = _container.Resolve<ITeamBlockSchedulingOptions>();
+					var roleModelSelector = _container.Resolve<ITeamBlockRoleModelSelector>();
+					var completionChecker = _container.Resolve<ITeamBlockSchedulingCompletionChecker>();
+					var resourceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1, true,
+																		schedulingOptions.ConsiderShortBreaks);
+	                ISchedulePartModifyAndRollbackService rollbackService =
+		                new SchedulePartModifyAndRollbackService(_schedulerState.SchedulingResultState,
+		                                                         _container.Resolve<IScheduleDayChangeCallback>(),
+		                                                         new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+					var teamScheduling = new TeamScheduling(resourceCalculateDelayer, rollbackService);
+					var teamBlockCleaner = _container.Resolve<ITeamBlockClearer>();
+					var singleDayScheduler = new TeamBlockSingleDayScheduler(completionChecker,
+																			 _container.Resolve<IProposedRestrictionAggregator>(),
+																			 _container.Resolve<IWorkShiftFilterService>(),
+																			 _container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
+																			 _container.Resolve<IWorkShiftSelector>(),
+																			 teamScheduling, teamBlockSchedulingChecker
+						);
+	                var sameShiftCategoryBlockScheduler = new SameShiftCategoryBlockScheduler(roleModelSelector,
+	                                                                                          singleDayScheduler,
+	                                                                                          completionChecker,
+	                                                                                          teamBlockCleaner,
+	                                                                                          rollbackService);
+					ITeamBlockScheduler teamBlockScheduler = new TeamBlockScheduler(sameShiftCategoryBlockScheduler,
+																					teamBlockSchedulingChecker,
+																					singleDayScheduler, roleModelSelector);
+					_container.Resolve<ITeamBlockScheduleCommand>().Execute(schedulingOptions, _backgroundWorkerScheduling, scheduleDays, teamBlockScheduler, rollbackService);
 
                     
                 }

@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	{
 		private ITeamBlockRoleModelSelector _target;
 		private MockRepository _mocks;
-		private IRestrictionAggregator _restrictionAggregator;
+		private ITeamBlockRestrictionAggregator _restrictionAggregator;
 		private ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
 		private IWorkShiftFilterService _workShiftFilterService;
 		private DateOnly _dateOnly;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_restrictionAggregator = _mocks.StrictMock<IRestrictionAggregator>();
+			_restrictionAggregator = _mocks.StrictMock<ITeamBlockRestrictionAggregator>();
 			_skillDayPeriodIntervalDataGenerator = _mocks.StrictMock<ISkillDayPeriodIntervalDataGenerator>();
 			_workShiftFilterService = _mocks.StrictMock<IWorkShiftFilterService>();
 			_sameOpenHoursInTeamBlockSpecification = _mocks.StrictMock<ISameOpenHoursInTeamBlockSpecification>();

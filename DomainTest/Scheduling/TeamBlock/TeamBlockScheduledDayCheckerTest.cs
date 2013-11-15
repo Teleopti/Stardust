@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	    private IVirtualSchedulePeriod _schedulePeriod;
 	    private DateOnly _dateOnly;
 	    private DateOnlyPeriod _dateOnlyPeriod;
+	    private ITeamBlockSchedulingCompletionChecker _target;
 
 	    [SetUp]
         public void Setup()
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_dateOnly = new DateOnly(2013, 04, 10);
 		    _dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
+		    _target = new TeamBlockSchedulingCompletionChecker();
         }
 
         [Test]
@@ -55,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                Expect.Call(scheduleDay.IsScheduled()).Return(true);
            }
 
-           Assert.IsTrue(TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, _dateOnly));
+		   Assert.IsTrue(_target.IsDayScheduledInTeamBlock(teamBlockInfo, _dateOnly));
         }
 
         [Test]
@@ -88,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             }
 
-            Assert.IsFalse(TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlockForSelectedPersons( teamBlockInfo, _dateOnly, new List<IPerson>{person2 }));
+			Assert.IsFalse(_target.IsDayScheduledInTeamBlockForSelectedPersons(teamBlockInfo, _dateOnly, new List<IPerson> { person2 }));
         }
 
         [Test]
@@ -120,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(scheduleDay.IsScheduled()).Return(true);
 
             }
-            Assert.IsTrue(TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlockForSelectedPersons(teamBlockInfo, _dateOnly, new List<IPerson> { person2 }));
+			Assert.IsTrue(_target.IsDayScheduledInTeamBlockForSelectedPersons(teamBlockInfo, _dateOnly, new List<IPerson> { person2 }));
         }
 
         [Test]
@@ -141,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(scheduleDay.IsScheduled()).Return(false );
             }
 
-            Assert.IsFalse(TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, dateOnly));
+			Assert.IsFalse(_target.IsDayScheduledInTeamBlock(teamBlockInfo, dateOnly));
         }
 
 
@@ -193,14 +195,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_matrix2.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
             }
 
-            Assert.IsFalse(TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, dateOnly));
+			Assert.IsFalse(_target.IsDayScheduledInTeamBlock(teamBlockInfo, dateOnly));
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void ShouldReturnFalseIfTeamBlockIsNull()
         {
             var dateOnly = new DateOnly(2013, 04, 10);
-            Assert.IsFalse(TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(null, dateOnly));
+			Assert.IsFalse(_target.IsDayScheduledInTeamBlock(null, dateOnly));
         }
 
 		  [Test]
@@ -238,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				  Expect.Call(scheduleDay1.IsScheduled()).Return(true);
 				  Expect.Call(scheduleDay2.IsScheduled()).Return(true);
 			  }
-			  Assert.IsTrue(TeamBlockScheduledDayChecker.IsTeamBlockScheduledForSelectedPersons(teamBlockInfo, new List<IPerson> { person2 }));
+			  Assert.IsTrue(_target.IsTeamBlockScheduledForSelectedPersons(teamBlockInfo, new List<IPerson> { person2 }));
 		  }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -11,19 +12,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	public class TeamBlockRoleModelSelector : ITeamBlockRoleModelSelector
 	{
-		private readonly IRestrictionAggregator _restrictionAggregator;
+		private readonly ITeamBlockRestrictionAggregator _teamBlockRestrictionAggregator;
 		private readonly ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
 		private readonly IWorkShiftFilterService _workShiftFilterService;
 		private readonly ISameOpenHoursInTeamBlockSpecification _sameOpenHoursInTeamBlockSpecification;
 		private readonly IWorkShiftSelector _workShiftSelector;
 
-		public TeamBlockRoleModelSelector(IRestrictionAggregator restrictionAggregator,
+		public TeamBlockRoleModelSelector(ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator,
 										  ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
 										  IWorkShiftFilterService workShiftFilterService,
 										  ISameOpenHoursInTeamBlockSpecification sameOpenHoursInTeamBlockSpecification,
 										  IWorkShiftSelector workShiftSelector)
 		{
-			_restrictionAggregator = restrictionAggregator;
+			_teamBlockRestrictionAggregator = teamBlockRestrictionAggregator;
 			_skillDayPeriodIntervalDataGenerator = skillDayPeriodIntervalDataGenerator;
 			_workShiftFilterService = workShiftFilterService;
 			_sameOpenHoursInTeamBlockSpecification = sameOpenHoursInTeamBlockSpecification;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return null;
 			if (schedulingOptions == null)
 				return null;
-			var restriction = _restrictionAggregator.Aggregate(teamBlockInfo, schedulingOptions);
+			var restriction = _teamBlockRestrictionAggregator.Aggregate(teamBlockInfo, schedulingOptions);
 			if (restriction == null)
 				return null;
 			var shifts = _workShiftFilterService.FilterForRoleModel(datePointer, teamBlockInfo, restriction,

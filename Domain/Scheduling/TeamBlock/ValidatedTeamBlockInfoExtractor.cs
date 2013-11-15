@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -16,12 +13,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         private readonly ITeamBlockSteadyStateValidator  _teamBlockSteadyStateValidator;
         private readonly ITeamBlockInfoFactory  _teamBlockInfoFactory;
         private readonly ITeamSteadyStateHolder _teamSteadyStateHolder;
+	    private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 
-        public ValidatedTeamBlockInfoExtractor(ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,  ITeamBlockInfoFactory teamBlockInfoFactory, ITeamSteadyStateHolder teamSteadyStateHolder)
+	    public ValidatedTeamBlockInfoExtractor(ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,  ITeamBlockInfoFactory teamBlockInfoFactory, ITeamSteadyStateHolder teamSteadyStateHolder, ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker)
         {
             _teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
             _teamBlockInfoFactory = teamBlockInfoFactory;
             _teamSteadyStateHolder = teamSteadyStateHolder;
+	        _teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
         }
 
         public ITeamBlockInfo GetTeamBlockInfo(ITeamInfo teamInfo, DateOnly datePointer, IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions )
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             if (!_teamSteadyStateHolder.IsSteadyState(teamInfo.GroupPerson)) return null;
             var teamBlockInfo = createTeamBlockInfo(allPersonMatrixList, datePointer, teamInfo, schedulingOptions);
             if (teamBlockInfo == null) return null;
-            if (TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, datePointer)) return null;
+			if (_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlock(teamBlockInfo, datePointer)) return null;
             if (!_teamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, schedulingOptions)) return null;
 
             return teamBlockInfo;
