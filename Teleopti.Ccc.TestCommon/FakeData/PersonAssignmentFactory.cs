@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public static IPersonAssignment CreateAssignmentWithMainShift(IActivity activity, IPerson agent, DateTimePeriod period)
 		{
 			var date = new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
-			var ass = new PersonAssignment(agent, ScenarioFactory.CreateScenarioAggregate(), date);
+			var ass = new PersonAssignment(agent, ScenarioFactory.CreateScenarioWithId("   ", true), date);
 			ass.AddMainLayer(activity, period);
 			ass.SetShiftCategory(ShiftCategoryFactory.CreateShiftCategory("   "));
 			return ass;

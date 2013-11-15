@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var absenceRepository = new FakeWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
 			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence>();
 			var currentScenario = new FakeCurrentScenario();
-			var target = new AddFullDayAbsenceCommandHandler(new FakePersonAssignmentReadScheduleRepository(), personRepository, absenceRepository, personAbsenceRepository, currentScenario);
+			var target = new AddFullDayAbsenceCommandHandler(new FakePersonAssignmentReadScheduleRepository(), personRepository,
+			                                                 absenceRepository, personAbsenceRepository, currentScenario);
 
 			var command = new AddFullDayAbsenceCommand
 				{

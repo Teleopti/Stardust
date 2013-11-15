@@ -286,7 +286,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				{
 					Date = Date,
 					PersonId = Person.Id.Value,
-					ActivityId = activity.Id.Value
+					ActivityId = activity.Id.Value,
+					StartDateTime = period.StartDateTime,
+					EndDateTime = period.EndDateTime,
+					ScenarioId = Scenario.Id.Value
 				});
 		}
 		

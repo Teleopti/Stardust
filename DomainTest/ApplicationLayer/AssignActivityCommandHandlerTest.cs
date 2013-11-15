@@ -45,6 +45,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var @event = personAssignmentRepository.Single().PopAllEvents().OfType<ActivityAssignedEvent>().Single(e => e.ActivityId == addedActivity.Id.Value);
 			@event.PersonId.Should().Be(personRepository.Single().Id.Value);
 			@event.Date.Should().Be(new DateOnly(2013, 11, 14));
+			@event.StartDateTime.Should().Be(command.StartTime);
+			@event.EndDateTime.Should().Be(command.EndTime);
+			@event.ScenarioId.Should().Be(personAssignmentRepository.Single().Scenario.Id.Value);
 		}
 
 		[Test]
