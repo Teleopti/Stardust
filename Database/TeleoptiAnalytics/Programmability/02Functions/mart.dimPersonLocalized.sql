@@ -45,12 +45,6 @@ DECLARE @dim_person_local TABLE (
 	[valid_to_interval_id_local] [smallint] NOT NULL
 )
 
---Declare
-DECLARE @IntervalMinutes AS INT
-
---Init
-SELECT @IntervalMinutes = 1440/Max(interval_id) FROM mart.dim_interval
-
 INSERT INTO @dim_person_local
 SELECT 	dp.person_id,
 	dp.valid_from_date,
@@ -85,7 +79,6 @@ INSERT INTO @dim_person_localized
 SELECT 
 	localized.person_id,
 	d1.date_date + i1.interval_start as valid_from_date_local,
-	--dateadd(MINUTE,@IntervalMinutes,(d2.date_date + i2.interval_start)) as valid_to_date_local --Adds one intervall
 	d2.date_date + i2.interval_start as valid_to_date_local
 FROM @dim_person_local localized
 --From date
