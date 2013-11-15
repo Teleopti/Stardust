@@ -769,7 +769,6 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TimeLimitationShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TimeLimitsRestrictionShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\WorkTimeLimitationShiftFilterTest.cs" />
-    <Compile Include="Scheduling\TeamSteadyStateDictionaryCreatorTest.cs" />
     <Compile Include="Scheduling\TeamSteadyStateHolderTest.cs" />
     <Compile Include="Scheduling\TeamSteadyStatePersonPeriodTest.cs" />
     <Compile Include="Scheduling\TeamSteadyStateRunnerTest.cs" />

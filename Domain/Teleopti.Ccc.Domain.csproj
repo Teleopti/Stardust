@@ -957,7 +957,6 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ValidDateTimePeriodShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\WorkTimeLimitationShiftFilter.cs" />
     <Compile Include="Scheduling\TeamSteadyState.cs" />
-    <Compile Include="Scheduling\TeamSteadyStateDictionaryCreator.cs" />
     <Compile Include="Scheduling\TeamSteadyStateHolder.cs" />
     <Compile Include="Scheduling\TeamSteadyStatePersonPeriod.cs" />
     <Compile Include="Scheduling\TeamSteadyStateRunner.cs" />
