@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
@@ -86,30 +87,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                     DateOnlyPeriod scheduleDateOnlyPeriod = schedulePeriod.DateOnlyPeriod;
                     var person = schedulePeriod.Person;
                     
-                    
                     foreach (var shiftCategoryLimitation in schedulePeriod.ShiftCategoryLimitationCollection())
                     {
                         if (shiftCategoryLimitation.Weekly)
                         {
                             foreach (PersonWeek personWeek in personWeeks)
                             {
-                                
                                 // vi måste kanske gör ngt annat om en vecka ligger i 2 olika schemaperioder (kan ju ha helt olika regler)
                                 if (personWeek.Week.Intersection(scheduleDateOnlyPeriod) != null && personWeek.Person.Equals(person))
                                 {
-                                    IList<DateOnly> datesWithCategory;
-                                    if (_limitationChecker.IsShiftCategoryOverWeekLimit(shiftCategoryLimitation, currentSchedules, personWeek.Week, out datesWithCategory))
-                                    {
-                                        string message = string.Format(TeleoptiPrincipal.Current.Regional.Culture,
-                                                            UserTexts.Resources.BusinessRuleShiftCategoryLimitationErrorMessage,
-                                                            shiftCategoryLimitation.ShiftCategory.Description.Name);
-                                        foreach (DateOnly dateOnly in datesWithCategory)
-                                        {
-                                            if (!ForDelete)
-                                                responseList.Add(createResponse(person, dateOnly, message, typeof(WeekShiftCategoryLimitationRule)));
-                                            oldResponses.Add(createResponse(person, dateOnly, message, typeof(WeekShiftCategoryLimitationRule)));
-                                        }
-                                    }
+	                                foreach (var schedule in rangeClones.Values)
+									{
+										IList<DateOnly> datesWithCategory;
+										if (_limitationChecker.IsShiftCategoryOverWeekLimit(shiftCategoryLimitation, schedule, personWeek.Week, out datesWithCategory))
+										{
+											string message = string.Format(TeleoptiPrincipal.Current.Regional.Culture,
+											                               Resources.BusinessRuleShiftCategoryLimitationErrorMessage,
+											                               shiftCategoryLimitation.ShiftCategory.Description.Name);
+											foreach (DateOnly dateOnly in datesWithCategory)
+											{
+												if (!ForDelete)
+													responseList.Add(createResponse(person, dateOnly, message, typeof(WeekShiftCategoryLimitationRule)));
+												oldResponses.Add(createResponse(person, dateOnly, message, typeof(WeekShiftCategoryLimitationRule)));
+											}
+										}
+									}
                                 }
                             }
                         }
