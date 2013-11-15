@@ -7,7 +7,6 @@ define([
 		var minutes = helpers.Minutes;
 
 		return function (timeLineLayers) {
-
 			var self = this;
 			
 			this.WidthPixels = ko.observable();

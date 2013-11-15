@@ -3,11 +3,10 @@ define([
         'navigation',
         'lazy',
 		'shared/timeline',
-		'views/teamschedule/group-page',
+		'shared/group-page',
         'resources!r',
         'moment',
-		'select2',
-		'knockoutBindings'
+		'select2'
     ], function(
         ko,
         navigation,
@@ -16,13 +15,12 @@ define([
 	    groupPageViewModel,
         resources,
         moment,
-	    select2,
-	    knockoutBindings
+	    select2
     ) {
 
-        return function() {
+    	return function () {
 
-            var self = this;
+    		var self = this;
             
             this.Loading = ko.observable(false);
             
@@ -57,26 +55,6 @@ define([
             	});
             	self.GroupPages.push.apply(self.GroupPages, newItems);
             };
-            
-            this.SetTeams = function (teams) {
-            	
-            	self.GroupPages([]);
-
-            	var groups = [];
-	            for(var i = 0; i < teams.length; i++)
-	            	groups.push({ Name: teams[i].SiteAndTeam, Id: teams[i].Id });
-
-	            var groupings = [
-		            {
-		            	Name: "",
-		            	Groups : groups
-		            }];
-
-            	var newItems = ko.utils.arrayMap(groupings, function (d) {
-            		return new groupPageViewModel(d);
-            	});
-            	self.GroupPages.push.apply(self.GroupPages, newItems);
-            };
 	        
             this.NextDay = function() {
                 self.SelectedDate(self.SelectedDate().add('d', 1));
@@ -87,7 +65,7 @@ define([
             };
 
             this.SelectPerson = function(person) {
-                navigation.GotoPersonSchedule(person.Id, self.SelectedDate());
+                navigation.GotoPersonSchedule(self.SelectedGroup(), person.Id, self.SelectedDate());
             };
             
             this.SelectLayer = function (layer) {

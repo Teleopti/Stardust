@@ -77,7 +77,7 @@
 						</tr>
 					</thead>
 					<tbody data-bind="foreach: Persons">
-					    <tr class="person" data-bind="attr: { 'data-person-id': Id }">
+						<tr class="person" data-bind="attr: { 'data-person-id': Id }">
 							<td class="person-name person-name-column" data-bind="click: $root.SelectPerson">
 								<!-- Must do it this way to get correct overflow: hidden in IE -->
 								<div class="person-name nowrap" data-bind="text: Name"></div>
@@ -119,35 +119,35 @@
 						<!-- ko if: Selected -->
 						<tr>
 							<td class="shift-menu-background person-name-column"></td>
-							<td class="shift-menu-background schedule-column">
-
-								<!-- ko if: $parent.MakeSpaceForDrop -->
-								<div style="height: 13px"></div>
-								<!-- /ko -->
+							<td class="shift-menu-background schedule-column" colspan="2">
+								<div class="activity-details" data-bind="style: {'margin-left': StartPixels() + 'px'}">
+									<p>
+										<span class="label" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description + ' ' + StartTime() + '-' + EndTime()"></span>
+									</p>
+								</div>
 								
-								<div class="shift-menu" data-bind="style: {'margin-left': StartPixels() + 'px'}">
-									<!-- ko if: $root.DisplayDescriptions -->
-									<div class="shift-details">
-										<!-- ko foreach: $parent.DistinctLayers -->
-										<span class="label" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description"></span>
-										<!-- /ko -->
+								<div class="shift-details" data-bind="if: $parent.IsAnyLayerSelected() && $root.DisplayDescriptions, style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
+									<!-- ko foreach: $parent.DistinctLayers -->
+									<span class="label" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description"></span>
+									<!-- /ko -->
+								</div>
+								
+								<div class="shift-menu" data-bind="if: $parent.IsAnyLayerSelected(), style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
+									<!-- ko with: $parent.ShiftMenu -->
+									<div class="btn-group">
+										<a href="#" class="btn btn-small show-details" data-bind="click: ShowDetails"><i class="icon-eye-open"></i></a>
+										<a href="#" class="btn btn-small add-full-day-absence" data-bind="click: $data.AddFullDayAbsence"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.FullDayAbsence"></span></a>
+										<a href="#" class="btn btn-small add-absence" data-bind="click: $data.AddAbsence"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.IntradayAbsence"></span></a>
+										<a href="#" class="btn btn-small add-activity" data-bind="click: $data.AddActivity"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.Activity"></span></a>
 									</div>
 									<!-- /ko -->
-									<p>
-										<span class="label activity-details" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description + ' ' + StartTime() + '-' + EndTime()"></span>
-									</p>
-									<div class="btn-group">
-										<a href="#" class="btn btn-small show-details" data-bind="click: $parent.ShowDetails"><i class="icon-eye-open"></i></a>
-										<a href="#" class="btn btn-small add-full-day-absence" data-bind="click: $parent.AddFullDayAbsence"><i class="icon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
-									</div>
 								</div>
 							</td>
-							<td class="shift-menu-background contract-time-column"></td>
 						</tr>
 						<!-- /ko -->
 						<!-- /ko -->
 						<!-- /ko -->
-
+						
 					</tbody>
 				</table>
 			</div>
@@ -170,12 +170,6 @@
 	},
 	click: $root.SelectLayer
 	">
-		<!-- ko if: DisplayDrop -->
-		<div class="drop absolute">
-			<div class="arrow absolute"></div>
-			<div class="circle absolute"></div>
-		</div>
-		<!-- /ko -->
 		<!-- ko if: IsFullDayAbsence -->
 		<!-- ko if: $root.DisplayDescriptions -->
 		<span class="label layer-description" data-bind="text: Description"></span>

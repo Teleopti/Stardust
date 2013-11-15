@@ -42,7 +42,7 @@ define([
 						for (var j = 0; j < schedules.length; j++) {
 							if (currentPersons[i].Id == schedules[j].PersonId) {
 				    	        schedules[j].Date = dateClone;
-				    			currentPersons[i].AddData(schedules[j], teamSchedule.TimeLine);
+				    	        currentPersons[i].AddData(schedules[j], teamSchedule.TimeLine, teamSchedule.SelectedGroup());
 							}
 						}
 					}

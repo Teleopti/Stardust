@@ -3,7 +3,7 @@ define([
 		'moment',
 		'lazy',
 		'views/personschedule/shift',
-		'views/personschedule/dayoff'
+		'shared/dayoff'
 ], function (
 		ko,
 		moment,
@@ -18,8 +18,25 @@ define([
 		this.Id = data.Id;
 		this.Name = data.FirstName + ' ' + data.LastName;
 
+		this.WorkTimeMinutes = ko.observable(0);
+		this.ContractTimeMinutes = ko.observable(0);
+
 		this.DayOffs = ko.observableArray();
 		this.Shifts = ko.observableArray();
+
+		this.IsShift = ko.computed(function () {
+			return self.Shifts().length > 0;
+		});
+
+		this.ContractTime = ko.computed(function () {
+			var time = moment().startOf('day').add('minutes', self.ContractTimeMinutes());
+			return time.format("H:mm");
+		});
+
+		this.WorkTime = ko.computed(function () {
+			var time = moment().startOf('day').add('minutes', self.WorkTimeMinutes());
+			return time.format("H:mm");
+		});
 
 		this.ClearData = function () {
 			self.Shifts([]);
@@ -40,6 +57,9 @@ define([
 				var newDayOff = new dayOff(timeline, data.DayOff);
 				self.DayOffs.push(newDayOff);
 			}
+
+			self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
+			self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
 		};
 
 		var layers = function () {
@@ -50,7 +70,7 @@ define([
 
 		var visibleLayers = function () {
 			return layers()
-				.select(function (x) { return x.OverlapsTimeLine(); });
+				.select(function(x) { return x.OverlapsTimeLine(); });
 		};
 
 		var visibleDayOffs = function () {
@@ -59,26 +79,27 @@ define([
 		};
 
 		this.TimeLineAffectingStartMinute = ko.computed(function () {
-			return layers().map(function (x) { return x.TimeLineAffectingStartMinute(); }).min();
+			return layers().map(function(x) { return x.TimeLineAffectingStartMinute(); }).min();
 		});
 
 		this.TimeLineAffectingEndMinute = ko.computed(function () {
-			return layers().map(function (x) { return x.TimeLineAffectingEndMinute(); }).max();
+			return layers().map(function(x) { return x.TimeLineAffectingEndMinute(); }).max();
 		});
 
 		this.OrderBy = function () {
 
 			var visibleShiftLayers = visibleLayers().filter(function (x) { return !x.IsFullDayAbsence; });
-			if (visibleShiftLayers().some())
-				return visibleShiftLayers().map(function (x) { return x.StartMinutes(); }).min();
-
+			
+			if (visibleShiftLayers.some())
+				return visibleShiftLayers.map(function (x) { return x.StartMinutes(); }).min();
+			
 			var visibleFullDayAbsences = visibleLayers().filter(function (x) { return x.IsFullDayAbsence; });
-			if (visibleFullDayAbsences().some())
-				return 5000 + visibleFullDayAbsences().map(function (x) { return x.StartMinutes(); }).min();
-
+			if (visibleFullDayAbsences.some())
+				return 5000 + visibleFullDayAbsences.map(function (x) { return x.StartMinutes(); }).min();
+			
 			if (visibleDayOffs().some())
 				return 10000;
-
+			
 			return 20000;
 		};
 	};
