@@ -339,3 +339,74 @@ ON [mart].[dim_acd_login] ([time_zone_id])
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[mart].[dim_person]') AND name = N'IX_dim_person_time_zone_id')
 CREATE NONCLUSTERED INDEX [IX_dim_person_time_zone_id]
 ON [mart].[dim_person] ([time_zone_id])
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-11-15
+--Desc: Bug #25718 - reduce the number of functions on dim_person
+----------------
+IF NOT EXISTS (SELECT name FROM sys.columns WHERE object_id=OBJECT_ID('mart.dim_person') AND name = 'valid_to_date_id_maxDate')
+BEGIN
+
+	ALTER TABLE mart.dim_person
+	ADD
+		valid_to_date_id_maxDate int NULL,
+		valid_to_interval_id_maxDate int NULL,
+		valid_from_date_id_local int NULL,
+		valid_from_interval_id_local int NULL,
+		valid_to_date_id_local int NULL,
+		valid_to_interval_id_local int NULL
+END
+GO
+
+DECLARE @maxDate int
+SELECT @maxDate=ISNULL(max(date_id),-1) FROM mart.dim_date
+
+DECLARE @maxInterval int
+SELECT @maxInterval=ISNULL(max(interval_id),-1) FROM mart.dim_interval
+
+UPDATE mart.dim_person
+SET valid_to_date_id_maxDate=
+CASE WHEN valid_to_date_id=-2
+	THEN @maxDate-1 --seems like bridge_time_zone is missing one day from dim_date
+	ELSE valid_to_date_id
+END
+
+UPDATE mart.dim_person
+SET valid_to_interval_id_maxDate=
+CASE WHEN valid_to_date_id=-2
+	THEN @maxInterval
+	ELSE valid_to_interval_id
+END
+
+UPDATE dp
+SET
+	valid_from_date_id_local	 = isnull(b1.local_date_id,-1),
+	valid_from_interval_id_local = isnull(b1.local_interval_id,0),
+	valid_to_date_id_local		 = isnull(b2.local_date_id,-2),
+	valid_to_interval_id_local	 = isnull(b2.local_interval_id,0)
+FROM mart.dim_person dp
+--From Date	
+LEFT OUTER JOIN mart.bridge_time_zone b1
+	ON
+	b1.time_zone_id = dp.time_zone_id
+	AND dp.valid_from_date_id = b1.date_id
+	AND dp.valid_from_interval_id = b1.interval_id
+--To Date	
+LEFT OUTER JOIN mart.bridge_time_zone b2
+	ON
+	b2.time_zone_id = dp.time_zone_id
+	AND dp.valid_to_date_id_maxDate = b2.date_id
+	AND dp.valid_to_interval_id_maxDate = b2.interval_id
+GO
+
+IF EXISTS (SELECT name FROM sys.columns WHERE object_id=OBJECT_ID('mart.dim_person') AND name = 'valid_to_date_id_maxDate')
+BEGIN
+	ALTER TABLE mart.dim_person ALTER COLUMN valid_to_date_id_maxDate int NOT NULL
+	ALTER TABLE mart.dim_person ALTER COLUMN valid_to_interval_id_maxDate int NOT NULL
+	ALTER TABLE mart.dim_person ALTER COLUMN valid_from_date_id_local int NOT NULL
+	ALTER TABLE mart.dim_person ALTER COLUMN valid_from_interval_id_local int NOT NULL
+	ALTER TABLE mart.dim_person ALTER COLUMN valid_to_date_id_local int NOT NULL
+	ALTER TABLE mart.dim_person ALTER COLUMN valid_to_interval_id_local int NOT NULL
+END
+GO
