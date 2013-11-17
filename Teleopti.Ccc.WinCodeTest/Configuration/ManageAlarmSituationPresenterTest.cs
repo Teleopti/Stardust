@@ -8,6 +8,7 @@ using Syncfusion.Styles;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Ccc.WinCode.Intraday;
@@ -62,10 +63,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                                                         _messageBroker, _manageAlarmSituationView);
             _target.Load();
 
-            Assert.AreEqual(0, alarmTypes.Count);
             _target.OnAlarmEvent(null, new EventMessageArgs(eventMessage));
-            Assert.AreEqual(1, alarmTypes.Count);
-
+            
             mocks.VerifyAll();
         }
 
@@ -79,7 +78,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(eventMessage.DomainObjectId).Return(alarmTypeId).Repeat.AtLeastOnce();
             Expect.Call(alarmType.Id).Return(alarmTypeId).Repeat.AtLeastOnce();
 
-            IList<IAlarmType> alarmTypes = new List<IAlarmType>();
+			IList<IAlarmType> alarmTypes = new List<IAlarmType>();
+			alarmTypes.Add(alarmType);
             PrepareMockForLoad(new List<IRtaStateGroup>(), alarmTypes, new List<IActivity>(), new List<IStateGroupActivityAlarm>());
             Expect.Call(_alarmTypeRepository.Get(alarmTypeId)).Return(alarmType);
             _manageAlarmSituationView.RefreshGrid();
@@ -90,7 +90,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                                                         _activityRepository, _stateGroupActvityAlarmRepository,
                                                         _messageBroker, _manageAlarmSituationView);
             _target.Load();
-			alarmTypes.Add(alarmType);
 
             Assert.AreEqual(1, alarmTypes.Count);
             _target.OnAlarmEvent(null, new EventMessageArgs(eventMessage));
@@ -120,10 +119,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                                                         _messageBroker, _manageAlarmSituationView);
             _target.Load();
 
-            Assert.AreEqual(1, alarmTypes.Count);
             _target.OnAlarmEvent(null, new EventMessageArgs(eventMessage));
-            Assert.AreEqual(0, alarmTypes.Count);
-
+            
             mocks.VerifyAll();
         }
 
@@ -148,9 +145,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                                                         _messageBroker, _manageAlarmSituationView);
             _target.Load();
 
-            Assert.AreEqual(1, rtaStateGroups.Count);
+            Assert.AreEqual(1, _target.ColCount);
             _target.OnRtaStateGroupEvent(null, new EventMessageArgs(eventMessage));
-            Assert.AreEqual(2, rtaStateGroups.Count);
+            Assert.AreEqual(2, _target.ColCount);
 
 			_target.OnSave();
 
@@ -168,7 +165,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(rtaStateGroup.Id).Return(rtaStateGroupId).Repeat.AtLeastOnce();
 
             IList<IRtaStateGroup> rtaStateGroups = new List<IRtaStateGroup>();
-            PrepareMockForLoad(rtaStateGroups, new List<IAlarmType>(), new List<IActivity>(), new List<IStateGroupActivityAlarm>());
+			rtaStateGroups.Add(rtaStateGroup);
+			PrepareMockForLoad(rtaStateGroups, new List<IAlarmType>(), new List<IActivity>(), new List<IStateGroupActivityAlarm>());
             Expect.Call(_rtaStateGroupRepository.Get(rtaStateGroupId)).Return(rtaStateGroup);
             _manageAlarmSituationView.RefreshGrid();
 
@@ -178,11 +176,10 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                                                         _activityRepository, _stateGroupActvityAlarmRepository,
                                                         _messageBroker, _manageAlarmSituationView);
             _target.Load();
-			rtaStateGroups.Add(rtaStateGroup);
-
-            Assert.AreEqual(2, rtaStateGroups.Count);
+			
+            Assert.AreEqual(2, _target.ColCount);
             _target.OnRtaStateGroupEvent(null, new EventMessageArgs(eventMessage));
-            Assert.AreEqual(2, rtaStateGroups.Count);
+            Assert.AreEqual(2, _target.ColCount);
 
             mocks.VerifyAll();
         }
@@ -208,9 +205,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                                                         _messageBroker, _manageAlarmSituationView);
             _target.Load();
 
-            Assert.AreEqual(2, rtaStateGroups.Count);
+            Assert.AreEqual(2, _target.ColCount);
             _target.OnRtaStateGroupEvent(null, new EventMessageArgs(eventMessage));
-            Assert.AreEqual(1, rtaStateGroups.Count);
+            Assert.AreEqual(1, _target.ColCount);
 
             mocks.VerifyAll();
         }
@@ -236,9 +233,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                                                         _messageBroker, _manageAlarmSituationView);
             _target.Load();
 
-            Assert.AreEqual(1,activities.Count);
+            Assert.AreEqual(1,_target.RowCount);
             _target.OnActivityEvent(null,new EventMessageArgs(eventMessage));
-            Assert.AreEqual(2, activities.Count);
+            Assert.AreEqual(2, _target.RowCount);
 
             mocks.VerifyAll();
         }
@@ -253,7 +250,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(eventMessage.DomainObjectId).Return(activityId).Repeat.AtLeastOnce();
             Expect.Call(activity.Id).Return(activityId).Repeat.AtLeastOnce();
 
-            IList<IActivity> activities = new List<IActivity>();
+			IList<IActivity> activities = new List<IActivity> { activity };
             PrepareMockForLoad(new List<IRtaStateGroup>(), new List<IAlarmType>(), activities, new List<IStateGroupActivityAlarm>());
             Expect.Call(_activityRepository.Get(activityId)).Return(activity);
             _manageAlarmSituationView.RefreshGrid();
@@ -264,11 +261,10 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                                                         _activityRepository, _stateGroupActvityAlarmRepository,
                                                         _messageBroker, _manageAlarmSituationView);
             _target.Load();
-			activities.Add(activity);
 
-            Assert.AreEqual(2, activities.Count);
+			Assert.AreEqual(2, _target.RowCount);
             _target.OnActivityEvent(null, new EventMessageArgs(eventMessage));
-            Assert.AreEqual(2, activities.Count);
+			Assert.AreEqual(2, _target.RowCount);
 
             mocks.VerifyAll();
         }
@@ -294,9 +290,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                                                         _messageBroker, _manageAlarmSituationView);
             _target.Load();
 
-            Assert.AreEqual(2, activities.Count);
+            Assert.AreEqual(2, _target.RowCount);
             _target.OnActivityEvent(null, new EventMessageArgs(eventMessage));
-            Assert.AreEqual(1, activities.Count);
+            Assert.AreEqual(1, _target.RowCount);
 
             mocks.VerifyAll();
         }
@@ -350,17 +346,14 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void QueryCountReturnCount()
         {
-            var activities = mocks.StrictMock<IList<IActivity>>();
-            var rtagroups = mocks.StrictMock<IList<IRtaStateGroup>>();
+            var activities = new List<IActivity>();
+            var rtagroups = new List<IRtaStateGroup>();
 
+			activities.Add(new Activity("Test"));
+			rtagroups.Add(new RtaStateGroup("in",false,true));
+			rtagroups.Add(new RtaStateGroup("out",false,false));
             using (mocks.Record())
             {
-                Expect.Call(activities.Count).Return(2).Repeat.Twice();
-                activities.Add(null);
-
-                Expect.Call(rtagroups.Count).Return(3).Repeat.Twice();
-                rtagroups.Add(null);
-
                 PrepareMockForLoad(rtagroups, new List<IAlarmType>(), activities, new List<IStateGroupActivityAlarm>());
             }
 
@@ -489,22 +482,19 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 _stateGroupActvityAlarmRepository.Add(null);
                 LastCall.IgnoreArguments();
 
-                var activities = mocks.StrictMock<IList<IActivity>>();
+				var activity = mocks.StrictMock<IActivity>();
+				Expect.Call(activity.Name).Return("activity").Repeat.AtLeastOnce();
+				
+				var activities = new List<IActivity>();
+				activities.Add(activity);
 
-                Expect.Call(activities.Count).Return(1).Repeat.AtLeastOnce();
-                var activity = mocks.StrictMock<IActivity>();
-                Expect.Call(activity.Name).Return("activity").Repeat.AtLeastOnce();
-                Expect.Call(activities[0]).Return(activity).Repeat.AtLeastOnce();
-                activities.Add(null);
-                activities.Add(null);
-                var rtagroups = mocks.StrictMock<IList<IRtaStateGroup>>();
-                Expect.Call(rtagroups.Count).Return(1).Repeat.AtLeastOnce();
-                var rtaitem = mocks.StrictMock<IRtaStateGroup>();
-                Expect.Call(rtagroups[0]).Return(rtaitem).Repeat.AtLeastOnce();
-                Expect.Call(rtaitem.Name).Return("stategroup").Repeat.AtLeastOnce();
-                rtagroups.Add(null);
-
-                PrepareMockForLoad(rtagroups, alarms, activities, new List<IStateGroupActivityAlarm>());
+				var rtaitem = mocks.StrictMock<IRtaStateGroup>();
+				Expect.Call(rtaitem.Name).Return("stategroup").Repeat.AtLeastOnce();
+				
+				var rtagroups = new List<IRtaStateGroup>();
+                rtagroups.Add(rtaitem);
+                
+				PrepareMockForLoad(rtagroups, alarms, activities, new List<IStateGroupActivityAlarm>());
             }
 
             mocks.ReplayAll();
@@ -530,26 +520,17 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             alarms.Add(new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8));
             alarms.Add(new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1),
                                      AlarmTypeMode.Unknown, 0.8));
-            var activities = mocks.StrictMock<IList<IActivity>>();
+
+			var activity = ActivityFactory.CreateActivity("activity");
+			var activities = new List<IActivity>();
+			activities.Add(activity);
+
+			var rtaitem = new RtaStateGroup("stategroup", true, false);
+			var rtagroups = new List<IRtaStateGroup>();
+	        rtagroups.Add(rtaitem);
 
             using (mocks.Record())
             {
-                Expect.Call(activities.Count).Return(1);
-
-                var activity = ActivityFactory.CreateActivity("activity");
-
-                Expect.Call(activities[0]).Return(activity).Repeat.Any();
-                activities.Add(null);
-                LastCall.Repeat.AtLeastOnce();
-
-                var rtagroups = mocks.StrictMock<IList<IRtaStateGroup>>();
-                Expect.Call(rtagroups.Count).Return(1);
-
-                var rtaitem = new RtaStateGroup("stategroup", true, false);
-                Expect.Call(rtagroups[0]).Return(rtaitem).Repeat.Any();
-                rtagroups.Add(null);
-                LastCall.Repeat.AtLeastOnce();
-
                 var stategroupactivityalarm = new StateGroupActivityAlarm(rtaitem, activity);
                 stategroupactivityalarm.AlarmType = alarms[1];
 
@@ -589,24 +570,13 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             alarms.Add(new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8));
             alarms.Add(new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Unknown, 0.8));
 
-            var activities = mocks.StrictMock<IList<IActivity>>();
-            Expect.Call(activities.Count).Return(1);
-
+            var activities = new List<IActivity>();
             var activity = ActivityFactory.CreateActivity("activity");
+			activities.Add(activity);
 
-            Expect.Call(activities[0]).Return(activity).Repeat.AtLeastOnce();
-
-            activities.Add(null);
-            LastCall.Repeat.AtLeastOnce();
-
-            var rtagroups = mocks.StrictMock<IList<IRtaStateGroup>>();
-            Expect.Call(rtagroups.Count).Return(1);
-
+            var rtagroups = new List<IRtaStateGroup>();
             var rtaitem = new RtaStateGroup("stategroup", true, false);
-            Expect.Call(rtagroups[0]).Return(rtaitem).Repeat.AtLeastOnce();
-
-            rtagroups.Add(null);
-            LastCall.Repeat.AtLeastOnce();
+            rtagroups.Add(rtaitem);
 
             var stategroupactivityalarm = new StateGroupActivityAlarm(rtaitem, activity);
             stategroupactivityalarm.AlarmType = alarms[1];
@@ -635,24 +605,12 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             alarms.Add(new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8));
             alarms.Add(new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Unknown, 0.8));
 
-            var activities = mocks.StrictMock<IList<IActivity>>();
-            Expect.Call(activities.Count).Return(1);
-
+            var activities = new List<IActivity>();
             var activity = ActivityFactory.CreateActivity("activity");
-
-            Expect.Call(activities[0]).Return(activity).Repeat.AtLeastOnce();
-
-            activities.Add(null);
-            LastCall.Repeat.AtLeastOnce();
-
-            var rtagroups = mocks.StrictMock<IList<IRtaStateGroup>>();
-            Expect.Call(rtagroups.Count).Return(1);
-
-            Expect.Call(rtagroups[0]).Return(null).Repeat.AtLeastOnce();
-
-            rtagroups.Add(null);
-            LastCall.Repeat.AtLeastOnce();
-
+			activities.Add(activity);
+            
+            var rtagroups = new List<IRtaStateGroup>();
+            
             var stategroupactivityalarm = new StateGroupActivityAlarm(null, activity);
             stategroupactivityalarm.AlarmType = alarms[1];
 
@@ -680,23 +638,12 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             alarms.Add(new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8));
             alarms.Add(new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Unknown, 0.8));
 
-            var activities = mocks.StrictMock<IList<IActivity>>();
-            Expect.Call(activities.Count).Return(1);
-
-            Expect.Call(activities[0]).Return(null).Repeat.AtLeastOnce();
-
-            activities.Add(null);
-            LastCall.Repeat.AtLeastOnce();
-
-            var rtagroups = mocks.StrictMock<IList<IRtaStateGroup>>();
-            Expect.Call(rtagroups.Count).Return(1);
-
+            var activities = new List<IActivity>();
+        
+			var rtagroups = new List<IRtaStateGroup>();
             var rtaitem = new RtaStateGroup("stategroup", true, false);
-            Expect.Call(rtagroups[0]).Return(rtaitem).Repeat.AtLeastOnce();
-
-            rtagroups.Add(null);
-            LastCall.Repeat.AtLeastOnce();
-
+            rtagroups.Add(rtaitem);
+            
             var stategroupactivityalarm = new StateGroupActivityAlarm(rtaitem, null);
             stategroupactivityalarm.AlarmType = alarms[1];
 
