@@ -3722,7 +3722,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 			_undoRedo.CommitBatch();
+
+            //TODO this line should be removed or should be under some IF
+		    runFairnessOptimization(selectedPeriod, _selectedPersons, scheduleDays);
+
 		}
+
+	    private void runFairnessOptimization(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IList<IScheduleDay> scheduleDays)
+	    {
+            var fairnessOptimizationCommand = _container.Resolve<IFairnessOptimizationCommand>();
+            fairnessOptimizationCommand.Execute(selectedPeriod, selectedPersons, scheduleDays, _schedulerState.CommonStateHolder.ShiftCategories);
+	    }
+
 
 		private void turnOffCalculateMinMaxCacheIfNeeded(ISchedulingOptions schedulingOptions)
 		{
