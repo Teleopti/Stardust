@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Optimization;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 
@@ -20,7 +22,6 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		private static void registerMyTimeScripts()
 		{
 			var cssBundle = new StyleBundle("~/MyTimeCss")
-				.IncludeDirectory("~/Areas/MyTime/Content/Css", "*.css")
 				.Include(
 					"~/Content/bootstrap/bootstrap.css",
 					"~/Content/moment-datepicker/datepicker.css",
@@ -29,7 +30,8 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/select2/select2.css",
 					"~/Content/bootstrap-timepicker/css/bootstrap-timepicker.css",
 					"~/Content/Scripts/pinify/content/jquery.pinify.min.css"
-				);
+				)
+				.IncludeDirectory("~/Areas/MyTime/Content/Css", "*.css");
 			var jsBundle = new ScriptBundle("~/MyTimeJs")
 				.Include(
 					"~/Content/jquery/jquery-1.10.2.js",
@@ -53,9 +55,10 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/signalr/broker-hubs.js",
 					"~/Content/select2/select2.js",
 					"~/Content/bootstrap-timepicker/js/bootstrap-timepicker.js",
-					"~/Content/scripts/pinify/scripts/jquery.pinify.min.js" //I wonder if this will be read...
+					"~/Content/scripts/pinify/scripts/jquery.pinify.min.js"
 				)
 				.IncludeDirectory("~/Areas/MyTime/Content/Scripts", "*.js", true);
+			jsBundle.Orderer = new TeleoptiScriptsOrderedByNumberOfDots();
 			BundleTable.Bundles.Add(cssBundle);
 			BundleTable.Bundles.Add(jsBundle);
 		}
@@ -84,6 +87,17 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 				.IncludeDirectory("~/Areas/Start/Content/Scripts", "*.js");
 			BundleTable.Bundles.Add(cssBundle);
 			BundleTable.Bundles.Add(jsBundle);
+		}
+
+		private class TeleoptiScriptsOrderedByNumberOfDots : IBundleOrderer
+		{
+			public IEnumerable<BundleFile> OrderFiles(BundleContext context, IEnumerable<BundleFile> files)
+			{
+				const string teleoptiPattern = "Teleopti.";
+				var teleoptiScripts = files.Where(x => x.VirtualFile.Name.Contains(teleoptiPattern));
+				var teleoptiScriptsOrdered = teleoptiScripts.OrderBy(x => x.VirtualFile.Name.Split('.').Length);
+				return files.Except(teleoptiScripts).Concat(teleoptiScriptsOrdered);
+			}
 		}
 	}
 }
