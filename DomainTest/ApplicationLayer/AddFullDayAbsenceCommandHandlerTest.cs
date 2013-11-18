@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -20,11 +18,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRaiseFullDayAbsenceAddedEvent()
 		{
-			var personRepository = new TestWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
-			var absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
-			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
+			var personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
+			var absenceRepository = new FakeWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
+			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence>();
 			var currentScenario = new FakeCurrentScenario();
-			var target = new AddFullDayAbsenceCommandHandler(new FakePersonAssignmentReadScheduleRepository(), personRepository, absenceRepository, personAbsenceRepository, currentScenario);
+			var target = new AddFullDayAbsenceCommandHandler(new FakePersonAssignmentReadScheduleRepository(), personRepository,
+			                                                 absenceRepository, personAbsenceRepository, currentScenario);
 
 			var command = new AddFullDayAbsenceCommand
 				{
@@ -46,9 +45,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldSetupEntityState()
 		{ 
-			var personRepository = new TestWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
-			var absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
-			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
+			var personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
+			var absenceRepository = new FakeWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
+			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence>();
 			var currentScenario = new FakeCurrentScenario();
 			var target = new AddFullDayAbsenceCommandHandler(new FakePersonAssignmentReadScheduleRepository(), personRepository, absenceRepository, personAbsenceRepository, currentScenario);
 
@@ -75,9 +74,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var person = PersonFactory.CreatePersonWithId();
 			var agentsTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
 			person.PermissionInformation.SetDefaultTimeZone(agentsTimeZone);
-			var personRepository = new TestWriteSideRepository<IPerson> { person };
-			var absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
-			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
+			var personRepository = new FakeWriteSideRepository<IPerson> { person };
+			var absenceRepository = new FakeWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
+			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence>();
 			var currentScenario = new FakeCurrentScenario();
 			var target = new AddFullDayAbsenceCommandHandler(new FakePersonAssignmentReadScheduleRepository(), personRepository, absenceRepository, personAbsenceRepository, currentScenario);
 
@@ -103,9 +102,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldOverlapShift()
 		{
 			var person = PersonFactory.CreatePersonWithId();
-			var personRepository = new TestWriteSideRepository<IPerson> { person };
-			var absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
-			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
+			var personRepository = new FakeWriteSideRepository<IPerson> { person };
+			var absenceRepository = new FakeWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
+			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence>();
 			var currentScenario = new FakeCurrentScenario();
 			var personAssignmentPeriod = new DateTimePeriod(2013, 3, 25, 10, 2013, 3, 25, 15);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(currentScenario.Current(), person, personAssignmentPeriod);
@@ -132,9 +131,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldNotOverlapNightShiftFromDayBeforeStartDate()
 		{
 			var person = PersonFactory.CreatePersonWithId();
-			var personRepository = new TestWriteSideRepository<IPerson> { person };
-			var absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
-			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
+			var personRepository = new FakeWriteSideRepository<IPerson> { person };
+			var absenceRepository = new FakeWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
+			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence>();
 			var currentScenario = new FakeCurrentScenario();
 			var personAssignmentPeriod = new DateTimePeriod(2013, 3, 24, 18, 2013, 3, 25, 5);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(currentScenario.Current(), person, personAssignmentPeriod);
@@ -159,9 +158,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldFullyOverlapNightShiftOnEndDate()
 		{
 			var person = PersonFactory.CreatePersonWithId();
-			var personRepository = new TestWriteSideRepository<IPerson> { person };
-			var absenceRepository = new TestWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
-			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
+			var personRepository = new FakeWriteSideRepository<IPerson> { person };
+			var absenceRepository = new FakeWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
+			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence>();
 			var currentScenario = new FakeCurrentScenario();
 			var personAssignmentPeriod = new DateTimePeriod(2013, 3, 25, 18, 2013, 3, 26, 5);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(currentScenario.Current(), person, personAssignmentPeriod);

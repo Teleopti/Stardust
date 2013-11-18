@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
     /// <summary>
     /// Class describing an PersonAbsence
     /// </summary>
-    public class PersonAbsence : AggregateRoot, 
+    public class PersonAbsence : VersionedAggregateRoot, 
                                     IPersonAbsence
     {
         private IPerson _person;
@@ -139,12 +139,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
             get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence; }
         }
 
-        public virtual IPersistableScheduleData CreateTransient()
+        public virtual INonversionedPersistableScheduleData CreateTransient()
         {
             return NoneEntityClone();
         }
 
-        public virtual IPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
+        public virtual INonversionedPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
         {
             var retObj = (PersonAbsence)NoneEntityClone();
             retObj._scenario = parameters.Scenario;

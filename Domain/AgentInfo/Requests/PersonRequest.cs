@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
-    public class PersonRequest : AggregateRootWithBusinessUnit,
+    public class PersonRequest : VersionedAggregateRootWithBusinessUnit,
                                  IPersonRequest, IDeleteTag, IPushMessageWhenRootAltered
     {
         private const int messageLength = 2000;

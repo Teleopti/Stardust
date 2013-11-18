@@ -9,13 +9,13 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 	public class ScheduleRangePersister : IScheduleRangePersister
 	{
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceCollectionService;
+		private readonly IDifferenceCollectionService<INonversionedPersistableScheduleData> _differenceCollectionService;
 		private readonly IScheduleRangeConflictCollector _scheduleRangeConflictCollector;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
 
 		public ScheduleRangePersister(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
-		                              IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService,
+									  IDifferenceCollectionService<INonversionedPersistableScheduleData> differenceCollectionService,
 		                              IScheduleRangeConflictCollector scheduleRangeConflictCollector,
 																	IScheduleDifferenceSaver scheduleDifferenceSaver,
 																	IMessageBrokerIdentifier messageBrokerIdentifier)

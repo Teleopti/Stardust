@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 				private IScheduleDifferenceSaver scheduleDictionarySaver;
         private IPersonRequestCheckAuthorization personRequestCheckAuthorization;
     	private ILoadSchedulesForRequestWithoutResourceCalculation loader;
-	    private IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService;
+		private IDifferenceCollectionService<INonversionedPersistableScheduleData> differenceCollectionService;
 
 			[SetUp]
 			public void Setup()
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 				CreateRepositories();
 
 				scheduleDictionarySaver = mocker.StrictMock<IScheduleDifferenceSaver>();
-				differenceCollectionService = mocker.DynamicMock<IDifferenceCollectionService<IPersistableScheduleData>>();
+				differenceCollectionService = mocker.DynamicMock<IDifferenceCollectionService<INonversionedPersistableScheduleData>>();
 				unitOfWorkFactory = mocker.StrictMock<ICurrentUnitOfWorkFactory>();
 				requestFactory = mocker.StrictMock<IRequestFactory>();
 				personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerForTest();

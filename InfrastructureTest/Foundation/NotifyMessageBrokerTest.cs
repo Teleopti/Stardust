@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         }
 
         //denna är gjord här för det finns inga rötter som har denna komb
-        private class RootWithPeriodButNoMainReference : AggregateRootWithBusinessUnit, IPeriodized
+        private class RootWithPeriodButNoMainReference : VersionedAggregateRootWithBusinessUnit, IPeriodized
         {
             private readonly DateTimePeriod _period;
 
@@ -344,7 +344,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         }
 
         //denna är gjord här för det finns inga rötter som har denna komb
-        private class RootWithoutPeriodButMainReference : AggregateRootWithBusinessUnit, IMainReference
+        private class RootWithoutPeriodButMainReference : VersionedAggregateRootWithBusinessUnit, IMainReference
         {
             private readonly IAggregateRoot _refRoot;
 
@@ -359,7 +359,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             }
         }
 
-        private class InternalTestObjectWithNoValidInterface : AggregateRootWithBusinessUnit
+        private class InternalTestObjectWithNoValidInterface : VersionedAggregateRootWithBusinessUnit
         {
 
         }

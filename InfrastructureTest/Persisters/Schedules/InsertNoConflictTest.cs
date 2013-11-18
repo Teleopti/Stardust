@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
 	public class InsertNoConflictTest : ScheduleRangePersisterBaseTest
 	{
-		protected override void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart)
+		protected override void Given(ICollection<INonversionedPersistableScheduleData> scheduleDataInDatabaseAtStart)
 		{
 		}
 

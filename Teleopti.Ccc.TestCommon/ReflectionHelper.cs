@@ -73,11 +73,5 @@ namespace Teleopti.Ccc.TestCommon
         {
 					aggregateRoot.GetType().GetProperty("CreatedBy", BindingFlags.Instance | BindingFlags.Public).SetValue(aggregateRoot, person, null);
         }
-
-        public static void SetBusinessUnit(IAggregateRoot aggregateRoot, IBusinessUnit businessUnit)
-        {
-            typeof(AggregateRootWithBusinessUnit).GetField("_businessUnit", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(
-                aggregateRoot, businessUnit);
-        }
     }
 }

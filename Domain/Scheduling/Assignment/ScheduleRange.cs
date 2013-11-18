@@ -143,10 +143,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return personMeetings;
 		}
 
-		public IDifferenceCollection<IPersistableScheduleData> DifferenceSinceSnapshot(IDifferenceCollectionService<IPersistableScheduleData> differenceService)
+		public IDifferenceCollection<INonversionedPersistableScheduleData> DifferenceSinceSnapshot(IDifferenceCollectionService<INonversionedPersistableScheduleData> differenceService)
 		{
-			var org = new List<IPersistableScheduleData>(Snapshot.PersistableScheduleDataInternalCollection());
-			var current = new List<IPersistableScheduleData>(PersistableScheduleDataInternalCollection());
+			var org = new List<INonversionedPersistableScheduleData>(Snapshot.PersistableScheduleDataInternalCollection());
+			var current = new List<INonversionedPersistableScheduleData>(PersistableScheduleDataInternalCollection());
 
 			return differenceService.Difference(org, current);
 		}
@@ -156,10 +156,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 		    var authorization = PrincipalAuthorization.Instance();
 
-		    ICollection<IPersistableScheduleData> permittedData = new List<IPersistableScheduleData>();
-            IEnumerable<IPersistableScheduleData> fullData = PersistableScheduleDataInternalCollection();
+			ICollection<INonversionedPersistableScheduleData> permittedData = new List<INonversionedPersistableScheduleData>();
+			IEnumerable<INonversionedPersistableScheduleData> fullData = PersistableScheduleDataInternalCollection();
 
-		    foreach (IPersistableScheduleData persistableScheduleData in fullData)
+			foreach (INonversionedPersistableScheduleData persistableScheduleData in fullData)
 		    {
                 var forAuthorization = new PersistableScheduleDataForAuthorization(persistableScheduleData);
 		        if(persistableScheduleData.BelongsToPeriod(part.DateOnlyAsPeriod)
@@ -191,9 +191,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         private class PersistableScheduleDataForAuthorization
         {
-            private readonly IPersistableScheduleData _persistableScheduleData;
+			private readonly INonversionedPersistableScheduleData _persistableScheduleData;
 
-            public PersistableScheduleDataForAuthorization(IPersistableScheduleData persistableScheduleData)
+			public PersistableScheduleDataForAuthorization(INonversionedPersistableScheduleData persistableScheduleData)
             {
                 _persistableScheduleData = persistableScheduleData;
             }

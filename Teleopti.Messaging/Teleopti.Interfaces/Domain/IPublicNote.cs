@@ -4,7 +4,7 @@ namespace Teleopti.Interfaces.Domain
     /// Interface supporting a scheduleNote
     /// for a specific day
     /// </summary>
-    public interface IPublicNote : IExportToAnotherScenario
+    public interface IPublicNote : IPersistableScheduleData, IExportToAnotherScenario
     {
     	/// <summary>
     	/// Gets the scheduleNote. Eg "Agent Kalle went home"

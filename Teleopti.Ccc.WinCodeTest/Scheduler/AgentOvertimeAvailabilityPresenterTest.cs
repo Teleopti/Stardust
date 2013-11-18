@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var overtimeAvailabilityDay = new OvertimeAvailability(_person, _dateOnly, TimeSpan.FromHours(8), TimeSpan.FromHours(20));
 			using (_mock.Record())
 			{
-				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { overtimeAvailabilityDay }));
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<INonversionedPersistableScheduleData>(new List<INonversionedPersistableScheduleData> { overtimeAvailabilityDay }));
 				Expect.Call(() => _view.Update(TimeSpan.FromHours(8), TimeSpan.FromHours(20))).IgnoreArguments();
 			}
 
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				bool startError;
 				bool endError;
 
-				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _overtimeAvailabilityDay }));
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<INonversionedPersistableScheduleData>(new List<INonversionedPersistableScheduleData> { _overtimeAvailabilityDay }));
 				Expect.Call(_dayCreator.CanCreate(null, null, out startError, out endError)).OutRef(true, true).Return(false);
 			}
 
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				bool startError;
 				bool endError;
-				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _overtimeAvailabilityDay }));
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<INonversionedPersistableScheduleData>(new List<INonversionedPersistableScheduleData> { _overtimeAvailabilityDay }));
 				Expect.Call(_dayCreator.CanCreate(startTime, endTime, out startError, out endError)).Return(true);
 			}
 
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				bool startError;
 				bool endError;
-				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _overtimeAvailabilityDay }));
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<INonversionedPersistableScheduleData>(new List<INonversionedPersistableScheduleData> { _overtimeAvailabilityDay }));
 				Expect.Call(_dayCreator.CanCreate(startTime, endTime, out startError, out endError)).OutRef(true, false).Return(false);
 			}
 

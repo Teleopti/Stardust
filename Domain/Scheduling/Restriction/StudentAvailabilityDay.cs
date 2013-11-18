@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 {
-    public class StudentAvailabilityDay : AggregateRootWithBusinessUnit, IRestrictionOwner, IStudentAvailabilityDay
+    public class StudentAvailabilityDay : VersionedAggregateRootWithBusinessUnit, IRestrictionOwner, IStudentAvailabilityDay
     {
         private  IList<IStudentAvailabilityRestriction> _restrictionCollection;
         private readonly IPerson _person;
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
             get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction; }
         }
 
-        public virtual IPersistableScheduleData CreateTransient()
+        public virtual INonversionedPersistableScheduleData CreateTransient()
         {
             var ret = (IStudentAvailabilityDay) Clone();
             ret.SetId(null);

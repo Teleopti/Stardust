@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return ruleBreaks;
 		}
 
-		private static bool isAbsenceInsideScheduleDay(IPersistableScheduleData dataInDestination, IScheduleDay scheduleDay)
+		private static bool isAbsenceInsideScheduleDay(INonversionedPersistableScheduleData dataInDestination, IScheduleDay scheduleDay)
 		{
 			return dataInDestination is IPersonAbsence && !dataInDestination.Period.Intersect(scheduleDay.Period);
 		}

@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Budgeting
 {
-    public class BudgetDay : AggregateRootWithBusinessUnit, IBudgetDay
+    public class BudgetDay : VersionedAggregateRootWithBusinessUnit, IBudgetDay
     {
         private IBudgetGroup _budgetGroup;
         private readonly IScenario _scenario;

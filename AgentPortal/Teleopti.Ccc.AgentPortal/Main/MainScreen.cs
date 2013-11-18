@@ -128,6 +128,8 @@ namespace Teleopti.Ccc.AgentPortal.Main
             toolStripExMessages.Text = Resources.Messages;
 
 			Resize += MainScreen_Resize;
+
+			RefreshTab();
             ResumeLayout();
         }
 

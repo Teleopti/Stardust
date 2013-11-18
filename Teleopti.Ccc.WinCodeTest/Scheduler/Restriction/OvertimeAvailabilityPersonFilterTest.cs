@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -20,9 +19,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
         private IScheduleDay _scheduleDay1;
         private IScheduleDay _scheduleDay2;
         private IScheduleDay _scheduleDay3;
-        private IEnumerable<IPersistableScheduleData> _persistableScheduleData1;
-        private IEnumerable<IPersistableScheduleData> _persistableScheduleData2;
-        private IEnumerable<IPersistableScheduleData> _persistableScheduleData3;
+		private IEnumerable<INonversionedPersistableScheduleData> _persistableScheduleData1;
+		private IEnumerable<INonversionedPersistableScheduleData> _persistableScheduleData2;
+		private IEnumerable<INonversionedPersistableScheduleData> _persistableScheduleData3;
         private IOvertimeAvailability _overtimeAvailability1;
         private IOvertimeAvailability _overtimeAvailability2;
         private IOvertimeAvailability _overtimeAvailability3;
@@ -41,9 +40,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
             _scheduleDay2 = _mock.StrictMock<IScheduleDay>();
             _scheduleDay3 = _mock.StrictMock<IScheduleDay>();
             _scheduleDaysList = new List<IScheduleDay>{_scheduleDay1,_scheduleDay2,_scheduleDay3 };
-            _persistableScheduleData1 = new List<IPersistableScheduleData>();
-            _persistableScheduleData2 = new List<IPersistableScheduleData>();
-            _persistableScheduleData3 = new List<IPersistableScheduleData>();
             _filterStartTime = TimeSpan.FromHours(8);
             _filterEndTime = TimeSpan.FromHours(16);
             _person1 = PersonFactory.CreatePerson("p1");
@@ -57,9 +53,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
             _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(4),
                                                               TimeSpan.FromHours(6));
 
-            _persistableScheduleData1 = new List<IPersistableScheduleData>{_overtimeAvailability1};
-            _persistableScheduleData2 = new List<IPersistableScheduleData>{_overtimeAvailability2};
-            _persistableScheduleData3 = new List<IPersistableScheduleData>{_overtimeAvailability3};
+			_persistableScheduleData1 = new List<INonversionedPersistableScheduleData> { _overtimeAvailability1 };
+			_persistableScheduleData2 = new List<INonversionedPersistableScheduleData> { _overtimeAvailability2 };
+			_persistableScheduleData3 = new List<INonversionedPersistableScheduleData> { _overtimeAvailability3 };
         }
 
         [Test]
@@ -94,7 +90,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
         {
             _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
                                                               TimeSpan.FromHours(17));
-            _persistableScheduleData3 = new List<IPersistableScheduleData> { _overtimeAvailability3 };
+			_persistableScheduleData3 = new List<INonversionedPersistableScheduleData> { _overtimeAvailability3 };
 
             using (_mock.Record())
             {
@@ -115,9 +111,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
                                                               TimeSpan.FromHours(17));
             _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
                                                               TimeSpan.FromHours(16));
-            _persistableScheduleData1 = new List<IPersistableScheduleData> { _overtimeAvailability1 };
-            _persistableScheduleData2 = new List<IPersistableScheduleData> { _overtimeAvailability2 };
-            _persistableScheduleData3 = new List<IPersistableScheduleData> { _overtimeAvailability3 };
+			_persistableScheduleData1 = new List<INonversionedPersistableScheduleData> { _overtimeAvailability1 };
+			_persistableScheduleData2 = new List<INonversionedPersistableScheduleData> { _overtimeAvailability2 };
+			_persistableScheduleData3 = new List<INonversionedPersistableScheduleData> { _overtimeAvailability3 };
 
             using (_mock.Record())
             {
@@ -140,9 +136,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
                                                              time2);
            _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
                                                              time3);
-           _persistableScheduleData1 = new List<IPersistableScheduleData> { _overtimeAvailability1 };
-           _persistableScheduleData2 = new List<IPersistableScheduleData> { _overtimeAvailability2 };
-           _persistableScheduleData3 = new List<IPersistableScheduleData> { _overtimeAvailability3 };
+		   _persistableScheduleData1 = new List<INonversionedPersistableScheduleData> { _overtimeAvailability1 };
+		   _persistableScheduleData2 = new List<INonversionedPersistableScheduleData> { _overtimeAvailability2 };
+		   _persistableScheduleData3 = new List<INonversionedPersistableScheduleData> { _overtimeAvailability3 };
 
            using (_mock.Record())
            {
@@ -163,9 +159,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
                                                              TimeSpan.FromHours(5));
            _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
                                                              TimeSpan.FromHours(16));
-           _persistableScheduleData1 = new List<IPersistableScheduleData> { _overtimeAvailability1 };
-           _persistableScheduleData2 = new List<IPersistableScheduleData> { _overtimeAvailability2 };
-           _persistableScheduleData3 = new List<IPersistableScheduleData> { _overtimeAvailability3 };
+		   _persistableScheduleData1 = new List<INonversionedPersistableScheduleData> { _overtimeAvailability1 };
+		   _persistableScheduleData2 = new List<INonversionedPersistableScheduleData> { _overtimeAvailability2 };
+		   _persistableScheduleData3 = new List<INonversionedPersistableScheduleData> { _overtimeAvailability3 };
 
            using (_mock.Record())
            {
@@ -188,9 +184,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
                                                              time2);
            _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
                                                              TimeSpan.FromHours(16));
-           _persistableScheduleData1 = new List<IPersistableScheduleData> { _overtimeAvailability1 };
-           _persistableScheduleData2 = new List<IPersistableScheduleData> { _overtimeAvailability2 };
-           _persistableScheduleData3 = new List<IPersistableScheduleData> { _overtimeAvailability3 };
+		   _persistableScheduleData1 = new List<INonversionedPersistableScheduleData> { _overtimeAvailability1 };
+		   _persistableScheduleData2 = new List<INonversionedPersistableScheduleData> { _overtimeAvailability2 };
+		   _persistableScheduleData3 = new List<INonversionedPersistableScheduleData> { _overtimeAvailability3 };
 
            using (_mock.Record())
            {

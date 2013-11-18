@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 
-		protected override void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart)
+		protected override void Given(ICollection<INonversionedPersistableScheduleData> scheduleDataInDatabaseAtStart)
 		{
 			scheduleDataInDatabaseAtStart.Add(new PersonAssignment(Person, Scenario, date));
 		}
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		{
 			var start = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 			var day = othersScheduleRange.ScheduledDay(date);
-			day.PersonAssignment().AddMainLayer(Activity, new DateTimePeriod(start, start.AddHours(3)));
+			day.PersonAssignment().AssignActivity(Activity, new DateTimePeriod(start, start.AddHours(3)));
 			DoModify(day);
 		}
 

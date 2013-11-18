@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         [Test]
         public void VerifyInheritance()
         {
-            Assert.IsInstanceOf<AggregateRootWithBusinessUnit>(_target);
+            Assert.IsInstanceOf<VersionedAggregateRootWithBusinessUnit>(_target);
         }
 
         [Test]

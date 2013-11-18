@@ -231,7 +231,10 @@
 			// ribbonControlAdvSearch
 			// 
 			this.ribbonControlAdvSearch.Location = new System.Drawing.Point(1, 0);
+			this.ribbonControlAdvSearch.MaximizeToolTip = "Maximize Ribbon";
+			this.ribbonControlAdvSearch.MenuButtonText = "";
 			this.ribbonControlAdvSearch.MenuButtonVisible = false;
+			this.ribbonControlAdvSearch.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlAdvSearch.Name = "ribbonControlAdvSearch";
 			// 
 			// ribbonControlAdvSearch.OfficeMenu
@@ -259,7 +262,7 @@
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 281F));
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanelMain.Size = new System.Drawing.Size(459, 309);
+			this.tableLayoutPanelMain.Size = new System.Drawing.Size(574, 311);
 			this.tableLayoutPanelMain.TabIndex = 21;
 			// 
 			// tableLayoutPanelTopMain
@@ -274,7 +277,7 @@
 			this.tableLayoutPanelTopMain.RowCount = 2;
 			this.tableLayoutPanelTopMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 220F));
 			this.tableLayoutPanelTopMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelTopMain.Size = new System.Drawing.Size(453, 275);
+			this.tableLayoutPanelTopMain.Size = new System.Drawing.Size(568, 275);
 			this.tableLayoutPanelTopMain.TabIndex = 1;
 			// 
 			// panel1
@@ -285,9 +288,9 @@
 			this.panel1.Controls.Add(this.buttonAdvFindNext);
 			this.panel1.Controls.Add(this.buttonAdvClose);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
-			this.panel1.Location = new System.Drawing.Point(13, 223);
+			this.panel1.Location = new System.Drawing.Point(25, 223);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(437, 52);
+			this.panel1.Size = new System.Drawing.Size(540, 52);
 			this.panel1.TabIndex = 0;
 			// 
 			// buttonAdvReplaceAll
@@ -295,7 +298,7 @@
 			this.buttonAdvReplaceAll.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonAdvReplaceAll.Location = new System.Drawing.Point(3, 15);
 			this.buttonAdvReplaceAll.Name = "buttonAdvReplaceAll";
-			this.buttonAdvReplaceAll.Size = new System.Drawing.Size(75, 23);
+			this.buttonAdvReplaceAll.Size = new System.Drawing.Size(95, 23);
 			this.buttonAdvReplaceAll.TabIndex = 11;
 			this.buttonAdvReplaceAll.Text = "xxReplaceAmpersandAll";
 			this.buttonAdvReplaceAll.UseVisualStyle = true;
@@ -304,9 +307,9 @@
 			// buttonAdvReplace
 			// 
 			this.buttonAdvReplace.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonAdvReplace.Location = new System.Drawing.Point(82, 15);
+			this.buttonAdvReplace.Location = new System.Drawing.Point(108, 15);
 			this.buttonAdvReplace.Name = "buttonAdvReplace";
-			this.buttonAdvReplace.Size = new System.Drawing.Size(75, 23);
+			this.buttonAdvReplace.Size = new System.Drawing.Size(95, 23);
 			this.buttonAdvReplace.TabIndex = 10;
 			this.buttonAdvReplace.Text = "xxAmpersandReplace";
 			this.buttonAdvReplace.UseVisualStyle = true;
@@ -315,9 +318,9 @@
 			// buttonAdvFindAll
 			// 
 			this.buttonAdvFindAll.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonAdvFindAll.Location = new System.Drawing.Point(176, 15);
+			this.buttonAdvFindAll.Location = new System.Drawing.Point(223, 15);
 			this.buttonAdvFindAll.Name = "buttonAdvFindAll";
-			this.buttonAdvFindAll.Size = new System.Drawing.Size(75, 23);
+			this.buttonAdvFindAll.Size = new System.Drawing.Size(95, 23);
 			this.buttonAdvFindAll.TabIndex = 9;
 			this.buttonAdvFindAll.Text = "xxFAmpersandindAll";
 			this.buttonAdvFindAll.UseVisualStyle = true;
@@ -326,9 +329,9 @@
 			// buttonAdvFindNext
 			// 
 			this.buttonAdvFindNext.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonAdvFindNext.Location = new System.Drawing.Point(257, 15);
+			this.buttonAdvFindNext.Location = new System.Drawing.Point(324, 15);
 			this.buttonAdvFindNext.Name = "buttonAdvFindNext";
-			this.buttonAdvFindNext.Size = new System.Drawing.Size(75, 23);
+			this.buttonAdvFindNext.Size = new System.Drawing.Size(95, 23);
 			this.buttonAdvFindNext.TabIndex = 8;
 			this.buttonAdvFindNext.Text = "xxAmpersandFindNext";
 			this.buttonAdvFindNext.UseVisualStyle = true;
@@ -337,9 +340,9 @@
 			// buttonAdvClose
 			// 
 			this.buttonAdvClose.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonAdvClose.Location = new System.Drawing.Point(348, 15);
+			this.buttonAdvClose.Location = new System.Drawing.Point(438, 15);
 			this.buttonAdvClose.Name = "buttonAdvClose";
-			this.buttonAdvClose.Size = new System.Drawing.Size(75, 23);
+			this.buttonAdvClose.Size = new System.Drawing.Size(95, 23);
 			this.buttonAdvClose.TabIndex = 12;
 			this.buttonAdvClose.Text = "xxClose";
 			this.buttonAdvClose.UseVisualStyle = true;
@@ -362,7 +365,7 @@
 			this.tabControlAdvMain.Name = "tabControlAdvMain";
 			this.tabControlAdvMain.PersistTabState = true;
 			this.tabControlAdvMain.ShowToolTips = true;
-			this.tabControlAdvMain.Size = new System.Drawing.Size(437, 204);
+			this.tabControlAdvMain.Size = new System.Drawing.Size(552, 204);
 			this.tabControlAdvMain.TabIndex = 1;
 			this.tabControlAdvMain.TabPanelBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(224)))), ((int)(((byte)(250)))));
 			this.tabControlAdvMain.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererIE7);
@@ -377,7 +380,8 @@
 			this.tabPageAdvFind.ImageSize = new System.Drawing.Size(16, 16);
 			this.tabPageAdvFind.Location = new System.Drawing.Point(2, 34);
 			this.tabPageAdvFind.Name = "tabPageAdvFind";
-			this.tabPageAdvFind.Size = new System.Drawing.Size(433, 168);
+			this.tabPageAdvFind.ShowCloseButton = true;
+			this.tabPageAdvFind.Size = new System.Drawing.Size(548, 168);
 			this.tabPageAdvFind.TabIndex = 1;
 			this.tabPageAdvFind.Text = "xxFinAmpersandd";
 			this.tabPageAdvFind.ThemesEnabled = true;
@@ -394,7 +398,7 @@
 			this.tableLayoutPanelFindTabMain.RowCount = 2;
 			this.tableLayoutPanelFindTabMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
 			this.tableLayoutPanelFindTabMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelFindTabMain.Size = new System.Drawing.Size(433, 168);
+			this.tableLayoutPanelFindTabMain.Size = new System.Drawing.Size(548, 168);
 			this.tableLayoutPanelFindTabMain.TabIndex = 0;
 			// 
 			// tableLayoutPanelFindTabTop
@@ -411,7 +415,7 @@
 			this.tableLayoutPanelFindTabTop.RowCount = 2;
 			this.tableLayoutPanelFindTabTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanelFindTabTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanelFindTabTop.Size = new System.Drawing.Size(427, 69);
+			this.tableLayoutPanelFindTabTop.Size = new System.Drawing.Size(542, 69);
 			this.tableLayoutPanelFindTabTop.TabIndex = 0;
 			// 
 			// comboDropDownFindSearchText
@@ -419,7 +423,7 @@
 			this.comboDropDownFindSearchText.Dock = System.Windows.Forms.DockStyle.Top;
 			this.comboDropDownFindSearchText.Location = new System.Drawing.Point(108, 8);
 			this.comboDropDownFindSearchText.Name = "comboDropDownFindSearchText";
-			this.comboDropDownFindSearchText.Size = new System.Drawing.Size(312, 21);
+			this.comboDropDownFindSearchText.Size = new System.Drawing.Size(426, 21);
 			this.comboDropDownFindSearchText.TabIndex = 2;
 			// 
 			// autoLabel1
@@ -444,14 +448,14 @@
 			this.tableLayoutPanelFindTabBottom.RowCount = 1;
 			this.tableLayoutPanelFindTabBottom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanelFindTabBottom.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanelFindTabBottom.Size = new System.Drawing.Size(427, 106);
+			this.tableLayoutPanelFindTabBottom.Size = new System.Drawing.Size(542, 106);
 			this.tableLayoutPanelFindTabBottom.TabIndex = 1;
 			// 
 			// panel2
 			// 
 			this.panel2.Controls.Add(this.buttonAdvFindOptions);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
-			this.panel2.Location = new System.Drawing.Point(347, 3);
+			this.panel2.Location = new System.Drawing.Point(462, 3);
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(77, 100);
 			this.panel2.TabIndex = 4;
@@ -547,7 +551,8 @@
 			this.tabPageAdvReplace.Location = new System.Drawing.Point(2, 34);
 			this.tabPageAdvReplace.Name = "tabPageAdvReplace";
 			this.tabPageAdvReplace.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.tabPageAdvReplace.Size = new System.Drawing.Size(433, 168);
+			this.tabPageAdvReplace.ShowCloseButton = true;
+			this.tabPageAdvReplace.Size = new System.Drawing.Size(548, 168);
 			this.tabPageAdvReplace.TabIndex = 1;
 			this.tabPageAdvReplace.Text = "xxReAmpersandplace";
 			this.tabPageAdvReplace.ThemesEnabled = true;
@@ -564,7 +569,7 @@
 			this.tableLayoutPanelReplaceMain.RowCount = 2;
 			this.tableLayoutPanelReplaceMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
 			this.tableLayoutPanelReplaceMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelReplaceMain.Size = new System.Drawing.Size(433, 168);
+			this.tableLayoutPanelReplaceMain.Size = new System.Drawing.Size(548, 168);
 			this.tableLayoutPanelReplaceMain.TabIndex = 0;
 			// 
 			// tableLayoutPanel1
@@ -580,14 +585,14 @@
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(427, 106);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(542, 106);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// panel13
 			// 
 			this.panel13.Controls.Add(this.buttonAdvReplaceOptions);
 			this.panel13.Dock = System.Windows.Forms.DockStyle.Right;
-			this.panel13.Location = new System.Drawing.Point(347, 3);
+			this.panel13.Location = new System.Drawing.Point(462, 3);
 			this.panel13.Name = "panel13";
 			this.panel13.Size = new System.Drawing.Size(77, 100);
 			this.panel13.TabIndex = 4;
@@ -687,7 +692,7 @@
 			this.tableLayoutPanel15.RowCount = 2;
 			this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel15.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel15.Size = new System.Drawing.Size(427, 69);
+			this.tableLayoutPanel15.Size = new System.Drawing.Size(542, 69);
 			this.tableLayoutPanel15.TabIndex = 1;
 			// 
 			// comboDropDownReplaceReplaceText
@@ -695,7 +700,7 @@
 			this.comboDropDownReplaceReplaceText.Dock = System.Windows.Forms.DockStyle.Top;
 			this.comboDropDownReplaceReplaceText.Location = new System.Drawing.Point(108, 37);
 			this.comboDropDownReplaceReplaceText.Name = "comboDropDownReplaceReplaceText";
-			this.comboDropDownReplaceReplaceText.Size = new System.Drawing.Size(312, 21);
+			this.comboDropDownReplaceReplaceText.Size = new System.Drawing.Size(426, 21);
 			this.comboDropDownReplaceReplaceText.TabIndex = 14;
 			// 
 			// comboDropDownReplaceSearchText
@@ -703,7 +708,7 @@
 			this.comboDropDownReplaceSearchText.Dock = System.Windows.Forms.DockStyle.Top;
 			this.comboDropDownReplaceSearchText.Location = new System.Drawing.Point(108, 8);
 			this.comboDropDownReplaceSearchText.Name = "comboDropDownReplaceSearchText";
-			this.comboDropDownReplaceSearchText.Size = new System.Drawing.Size(312, 21);
+			this.comboDropDownReplaceSearchText.Size = new System.Drawing.Size(426, 21);
 			this.comboDropDownReplaceSearchText.TabIndex = 13;
 			// 
 			// autoLabel17
@@ -734,7 +739,7 @@
 			this.gridListControlSearchResults.Office2007ScrollBars = true;
 			this.gridListControlSearchResults.RowCount = 0;
 			this.gridListControlSearchResults.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridListControlSearchResults.Size = new System.Drawing.Size(443, 1);
+			this.gridListControlSearchResults.Size = new System.Drawing.Size(558, 1);
 			this.gridListControlSearchResults.SmartSizeBox = false;
 			this.gridListControlSearchResults.TabIndex = 2;
 			this.gridListControlSearchResults.Text = "gridControl1";
@@ -746,9 +751,9 @@
 			// statusStripExFindReplace
 			// 
 			this.statusStripExFindReplace.Dock = Syncfusion.Windows.Forms.Tools.DockStyleEx.Fill;
-			this.statusStripExFindReplace.Location = new System.Drawing.Point(0, 289);
+			this.statusStripExFindReplace.Location = new System.Drawing.Point(0, 291);
 			this.statusStripExFindReplace.Name = "statusStripExFindReplace";
-			this.statusStripExFindReplace.Size = new System.Drawing.Size(459, 20);
+			this.statusStripExFindReplace.Size = new System.Drawing.Size(574, 20);
 			this.statusStripExFindReplace.TabIndex = 23;
 			// 
 			// tabPageAdvMain
@@ -757,6 +762,7 @@
 			this.tabPageAdvMain.ImageSize = new System.Drawing.Size(16, 16);
 			this.tabPageAdvMain.Location = new System.Drawing.Point(0, 0);
 			this.tabPageAdvMain.Name = "tabPageAdvMain";
+			this.tabPageAdvMain.ShowCloseButton = true;
 			this.tabPageAdvMain.Size = new System.Drawing.Size(200, 100);
 			this.tabPageAdvMain.TabFont = null;
 			this.tabPageAdvMain.TabIndex = 0;
@@ -1446,13 +1452,13 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(459, 309);
+			this.ClientSize = new System.Drawing.Size(574, 311);
 			this.Controls.Add(this.tableLayoutPanelMain);
 			this.Controls.Add(this.ribbonControlAdvSearch);
 			this.HelpButton = false;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(460, 345);
+			this.MinimumSize = new System.Drawing.Size(590, 345);
 			this.Name = "FindAndReplaceForm";
 			this.ShowIcon = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

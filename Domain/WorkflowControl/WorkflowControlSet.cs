@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
-    public class WorkflowControlSet : AggregateRootWithBusinessUnit, IWorkflowControlSet, IDeleteTag
+    public class WorkflowControlSet : VersionedAggregateRootWithBusinessUnit, IWorkflowControlSet, IDeleteTag
     {
         private string _name = string.Empty;
         private bool _isDeleted;

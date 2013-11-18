@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Payroll
 {
-    public class PayrollExport : AggregateRootWithBusinessUnit, IPayrollExport, IDeleteTag
+    public class PayrollExport : VersionedAggregateRootWithBusinessUnit, IPayrollExport, IDeleteTag
     {
         private string _name;
         private IList<IPerson> _persons = new List<IPerson>();

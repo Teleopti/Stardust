@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Scheduling;
+﻿using System;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public void Handle(RemovePersonAbsenceCommand command)
 		{
-			var personAbsence = (PersonAbsence) _personAbsenceRepository.Load(command.PersonAbsenceId);
+			var personAbsence = (PersonAbsence)_personAbsenceRepository.LoadAggregate(command.PersonAbsenceId);
 
 			personAbsence.RemovePersonAbsence();
 

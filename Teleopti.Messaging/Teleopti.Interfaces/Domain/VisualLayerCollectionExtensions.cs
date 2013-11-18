@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -51,7 +52,7 @@ namespace Teleopti.Interfaces.Domain
 								Period = currentIntervalPeriod,
 								FractionPeriod = fractionPeriod
 							};
-					if (currentIntervalPeriod.EndDateTime >= layer.Period.EndDateTime)
+					if (currentIntervalPeriod.EndDateTime > layer.Period.EndDateTime)
 					{
 						break;
 					}
@@ -66,16 +67,24 @@ namespace Teleopti.Interfaces.Domain
 			       currentIntervalPeriod.EndDateTime > layer.Period.EndDateTime;
 		}
 
-		public static void AddScheduleDayToContainer(this IResourceCalculationDataContainerWithSingleOperation resources, IScheduleDay scheduleDay, int minutesSplit)
+		public static Task AddScheduleDayToContainer(this IResourceCalculationDataContainerWithSingleOperation resources, IScheduleDay scheduleDay, int minutesSplit)
 		{
-            if (!scheduleDay.HasProjection()) return;
+            if (!scheduleDay.HasProjection())
+            {
+	            var emptyTask = new TaskCompletionSource<object>();
+				emptyTask.SetResult(null);
+	            return emptyTask.Task;
+            }
 
-			var projection = scheduleDay.ProjectionService().CreateProjection();
-			var resourceLayers = projection.ToResourceLayers(minutesSplit);
-			foreach (var resourceLayer in resourceLayers)
-			{
-				resources.AddResources(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, resourceLayer);
-			}
+			return Task.Factory.StartNew(() =>
+				{
+					var projection = scheduleDay.ProjectionService().CreateProjection();
+					var resourceLayers = projection.ToResourceLayers(minutesSplit);
+					foreach (var resourceLayer in resourceLayers)
+					{
+						resources.AddResources(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, resourceLayer);
+					}
+				});
 		}
 
 		public static void RemoveScheduleDayFromContainer(this IResourceCalculationDataContainerWithSingleOperation resources, IScheduleDay scheduleDay, int minutesSplit)

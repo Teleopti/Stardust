@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
                         };
 
             _scheduleDictionary = _mocks.DynamicMock<IScheduleDictionary>();
-            Expect.Call(_scheduleDictionary.DifferenceSinceSnapshot()).Return(new DifferenceCollection<IPersistableScheduleData>());
+			Expect.Call(_scheduleDictionary.DifferenceSinceSnapshot()).Return(new DifferenceCollection<INonversionedPersistableScheduleData>());
 
             MakeTarget();
         }
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
             _mocks.ReplayAll();
 
-            _target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflict>());
+			_target.Refresh(_scheduleDictionary, _messages, new List<INonversionedPersistableScheduleData>(), new List<PersistConflict>());
 
             _mocks.VerifyAll();
         }

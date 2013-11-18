@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			IPersonAssignment ass = new PersonAssignment(agent, scenario, new DateOnly(period.LocalStartDateTime));
 			ass.AddPersonalLayer(activity, period);
-			ass.AddMainLayer(activity, period);
+			ass.AssignActivity(activity, period);
 			ass.SetShiftCategory(category);
 			return ass;
 		}
@@ -80,30 +80,31 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			var category = ShiftCategoryFactory.CreateShiftCategory("sdf");
 			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.LocalStartDateTime));
 			ass.AddPersonalLayer(activity, period);
-			ass.AddMainLayer(activity, period);
+			ass.AssignActivity(activity, period);
 			ass.SetShiftCategory(category);
 			return ass;
 		}
 
-		/// <summary>
-		/// Creates an assignment with main shift.
-		/// </summary>
-		/// <param name="activity">The activity.</param>
-		/// <param name="agent">The agent.</param>
-		/// <param name="period">The period.</param>
-		/// <param name="category">The category</param>
-		/// <param name="scenario">The scenario</param>
-		/// <returns></returns>
 		public static IPersonAssignment CreateAssignmentWithMainShift(IActivity activity,
-																	IPerson agent,
-																	DateTimePeriod period,
-																	IShiftCategory category,
-																	IScenario scenario)
+		                                                              IPerson agent,
+		                                                              DateTimePeriod period,
+		                                                              IShiftCategory category,
+		                                                              IScenario scenario)
 		{
 			var date = new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
 			var ass = new PersonAssignment(agent, scenario, date);
-			ass.AddMainLayer(activity, period);
+			ass.AssignActivity(activity, period);
 			ass.SetShiftCategory(category);
+			return ass;
+		}
+
+
+		public static IPersonAssignment CreateAssignmentWithMainShift(IActivity activity, IPerson agent, DateTimePeriod period)
+		{
+			var date = new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
+			var ass = new PersonAssignment(agent, ScenarioFactory.CreateScenarioWithId("   ", true), date);
+			ass.AssignActivity(activity, period);
+			ass.SetShiftCategory(ShiftCategoryFactory.CreateShiftCategory("   "));
 			return ass;
 		}
 
@@ -249,19 +250,19 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			DateTimePeriod prdPerson4Office = DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 1, 2, 10, 10, 0, DateTimeKind.Utc), new DateTime(2008, 1, 2, 10, 45, 0, DateTimeKind.Utc));
 
 			// activity layers
-			assignment1.AddMainLayer(container.ContainedActivities["Phone"], prdPerson1Phone);
-			assignment1.AddMainLayer(container.ContainedActivities["Break"], prdPerson1Break);
-			assignment1.AddMainLayer(container.ContainedActivities["Office"], prdPerson1Office);
+			assignment1.AssignActivity(container.ContainedActivities["Phone"], prdPerson1Phone);
+			assignment1.AssignActivity(container.ContainedActivities["Break"], prdPerson1Break);
+			assignment1.AssignActivity(container.ContainedActivities["Office"], prdPerson1Office);
 			assignment1.SetShiftCategory(caMorning);
 
-			assignment2.AddMainLayer(container.ContainedActivities["Phone"], prdPerson2Phone);
+			assignment2.AssignActivity(container.ContainedActivities["Phone"], prdPerson2Phone);
 			assignment2.SetShiftCategory(caMorning);
 
-			assignment3.AddMainLayer(container.ContainedActivities["Lunch"], prdPerson3Lunch);
+			assignment3.AssignActivity(container.ContainedActivities["Lunch"], prdPerson3Lunch);
 			assignment3.SetShiftCategory(caMorning);
 
-			assignment4.AddMainLayer(container.ContainedActivities["Phone"], prdPerson4Phone);
-			assignment4.AddMainLayer(container.ContainedActivities["Office"], prdPerson4Office);
+			assignment4.AssignActivity(container.ContainedActivities["Phone"], prdPerson4Phone);
+			assignment4.AssignActivity(container.ContainedActivities["Office"], prdPerson4Office);
 			assignment4.SetShiftCategory(caMorning);
 
 
@@ -392,9 +393,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var ret = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000, 1, 1));
-			ret.AddMainLayer(new Activity("1"), new DateTimePeriod(start, start.AddHours(1)));
-			ret.AddMainLayer(new Activity("2"), new DateTimePeriod(start, start.AddHours(2)));
-			ret.AddMainLayer(new Activity("3"), new DateTimePeriod(start, start.AddHours(3)));
+			ret.AssignActivity(new Activity("1"), new DateTimePeriod(start, start.AddHours(1)));
+			ret.AssignActivity(new Activity("2"), new DateTimePeriod(start, start.AddHours(2)));
+			ret.AssignActivity(new Activity("3"), new DateTimePeriod(start, start.AddHours(3)));
 			ret.SetShiftCategory(new ShiftCategory("test"));
 			return ret;
 		}

@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 {
-    public class OvertimeAvailability : AggregateRootWithBusinessUnit, IOvertimeAvailability, IDeleteTag
+    public class OvertimeAvailability : NonversionedAggregateRootWithBusinessUnit, IOvertimeAvailability, IDeleteTag
     {
         private readonly IPerson _person;
         private DateOnly _dateOfOvertime;
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
             get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction; }
         }
 
-        public virtual IPersistableScheduleData CreateTransient()
+        public virtual INonversionedPersistableScheduleData CreateTransient()
         {
             var ret = (OvertimeAvailability )Clone();
             ret.SetId(null);

@@ -94,12 +94,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		public void Refresh(ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer)
+		public void Refresh(ICollection<INonversionedPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer)
 		{
 			_scheduleScreenRefresher.Refresh(_owner.SchedulerState.Schedules, _messageQueue, refreshedEntitiesBuffer, conflictsBuffer);
 		}
 
-		public void FillReloadedScheduleData(IPersistableScheduleData databaseVersionOfEntity)
+		public void FillReloadedScheduleData(INonversionedPersistableScheduleData databaseVersionOfEntity)
 		{
 			var changeInfo = databaseVersionOfEntity as IChangeInfo;
 			if (changeInfo != null)
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		public IPersistableScheduleData DeleteScheduleData(IEventMessage eventMessage)
+		public INonversionedPersistableScheduleData DeleteScheduleData(IEventMessage eventMessage)
 		{
 			if (Log.IsInfoEnabled)
 				Log.Info("Message broker - Removing " + eventMessage.DomainObjectType + " [" + eventMessage.DomainObjectId + "]");
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return _owner.SchedulerState.RequestDeleteFromBroker(message.DomainObjectId);
 		}
 
-		public IPersistableScheduleData UpdateInsertScheduleData(IEventMessage eventMessage)
+		public INonversionedPersistableScheduleData UpdateInsertScheduleData(IEventMessage eventMessage)
 			{
 			var unitOfWorkFactory = UnitOfWorkFactory.Current;
 

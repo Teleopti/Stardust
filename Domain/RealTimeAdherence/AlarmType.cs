@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence
 {
-    public class AlarmType : AggregateRootWithBusinessUnit, IAlarmType, IDeleteTag
+    public class AlarmType : VersionedAggregateRootWithBusinessUnit, IAlarmType, IDeleteTag
     {
         private Description _description;
         private Color _displayColor;

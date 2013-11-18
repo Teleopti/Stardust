@@ -64,7 +64,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	    	type: 'GET',
 	    	success: function (data) {
 	    		$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
-	    		ko.applyBindings(vm, $('#page')[0]);
+	    		ko.applyBindings(vm, $('div.navbar')[1]);
 	    	}
 	    });
 	}

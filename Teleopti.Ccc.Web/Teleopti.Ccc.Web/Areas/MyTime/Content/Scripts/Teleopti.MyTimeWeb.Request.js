@@ -93,7 +93,6 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 	        requestNavigationViewModel.resetToolbarActiveButtons();
 	    },
 	    ShiftTradeRequest: function (date) {
-		    	Teleopti.MyTimeWeb.Request.RequestPartialInit();
 		    	requestNavigationViewModel.addShiftTradeRequest(date);
 	    }
 	};

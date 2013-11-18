@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
 {
-    public class AgentDayScheduleTag : AggregateRootWithBusinessUnit, IAgentDayScheduleTag
+    public class AgentDayScheduleTag : VersionedAggregateRootWithBusinessUnit, IAgentDayScheduleTag
 
     {
         private readonly IPerson _person;
@@ -96,13 +96,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
             get { return _tagDate; }
         }
 
-        public virtual IPersistableScheduleData CreateTransient()
+        public virtual INonversionedPersistableScheduleData CreateTransient()
         {
             return NoneEntityClone();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public virtual IPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
+        public virtual INonversionedPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
         {
             var retObj = (AgentDayScheduleTag)NoneEntityClone();
             retObj._scenario = parameters.Scenario;

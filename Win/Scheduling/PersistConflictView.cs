@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public PersistConflictView(IScheduleDictionary scheduleDictionary,
 								IEnumerable<PersistConflict> conflicts,
-								ICollection<IPersistableScheduleData> modifiedDataResult,
+								ICollection<INonversionedPersistableScheduleData> modifiedDataResult,
 								IMessageQueueRemoval messageQueueRemoval)
 		{
 			InitializeComponent();

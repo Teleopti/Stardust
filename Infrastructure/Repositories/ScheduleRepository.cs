@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// Created by: rogerkr
     /// Created date: 2008-02-12
     /// </remarks>
-    public class ScheduleRepository : Repository<IPersistableScheduleData>, IScheduleRepository
+    public class ScheduleRepository : Repository<INonversionedPersistableScheduleData>, IScheduleRepository
     {
         private IRepositoryFactory _repositoryFactory = new RepositoryFactory();
 
@@ -44,13 +44,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             _repositoryFactory = repositoryFactory;
         }
 
-        public IPersistableScheduleData Get(Type concreteType, Guid id)
+        public INonversionedPersistableScheduleData Get(Type concreteType, Guid id)
         {
-            return (IPersistableScheduleData) Session.Get(concreteType, id);
+            return (INonversionedPersistableScheduleData) Session.Get(concreteType, id);
         }
 
 			//todo: Fixa lazy-problem utanför! inte ladda andra rötter här inne!
-        public IPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id)
+        public INonversionedPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id)
         {
             if (typeof(IPersonAssignment).IsAssignableFrom(scheduleDataType))
             {
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 														dictionaryPeriod.EndDateTime.AddDays(1));
 
 			var retDic = new ReadOnlyScheduleDictionary(scenario, new ScheduleDateTimePeriod(dictionaryPeriod, people),
-														new DifferenceEntityCollectionService<IPersistableScheduleData>());
+														new DifferenceEntityCollectionService<INonversionedPersistableScheduleData>());
 
 			using (TurnoffPermissionScope.For(retDic))
 			{
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	        var timeZone = person.PermissionInformation.DefaultTimeZone();
 	        var longDateOnlyPeriod = optimizedPeriod.ToDateOnlyPeriod(timeZone);
 			longDateOnlyPeriod = new DateOnlyPeriod(longDateOnlyPeriod.StartDate.AddDays(-1),longDateOnlyPeriod.EndDate.AddDays(1));
-            var retDic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(optimizedPeriod), new DifferenceEntityCollectionService<IPersistableScheduleData>());
+			var retDic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(optimizedPeriod), new DifferenceEntityCollectionService<INonversionedPersistableScheduleData>());
 			var personAssignmentRepository = _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork);
 
             using (TurnoffPermissionScope.For(retDic))
@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             if (personsProvider == null) throw new ArgumentNullException("personsProvider");
             if (scheduleDictionaryLoadOptions == null) throw new ArgumentNullException("scheduleDictionaryLoadOptions");
 
-            var scheduleDictionary = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>());
+			var scheduleDictionary = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<INonversionedPersistableScheduleData>());
             IList<IPerson> personsInOrganization = personsProvider.GetPersons();
             
             // ugly to be safe to get all
