@@ -31,15 +31,15 @@ Background:
 Scenario: Prevent assigning if no permission
 
 Scenario: View form
-Given I have the role 'Anywhere Team Green'
+	Given I have the role 'Anywhere Team Green'
 	When I view schedules for 'Team green' on '2013-11-18'
 	And I select any schedule activity for 'Pierre Baldi'
 	And I initiate 'assign activity'
 	Then I should see the assign activity form
 
 Scenario: View team mates schedules
-Given I have the role 'Anywhere Team Green'
-And 'John King' has a person period with
+	Given I have the role 'Anywhere Team Green'
+	And 'John King' has a person period with
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2013-11-18 |
