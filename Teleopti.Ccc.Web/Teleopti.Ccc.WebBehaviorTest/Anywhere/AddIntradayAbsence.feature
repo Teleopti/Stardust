@@ -48,7 +48,7 @@ Background:
 
 
 
-Scenario: Hide function if no permission
+Scenario: Prevent adding if no permission
 	Given I have a role with
 	| Field                      | Value                 |
 	| Name                       | Cannot Modify Absence |
