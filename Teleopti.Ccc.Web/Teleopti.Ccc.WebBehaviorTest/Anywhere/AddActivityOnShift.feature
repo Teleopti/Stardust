@@ -23,7 +23,6 @@ Background:
 Scenario: Prevent assigning if no permission
 Scenario: View form
 Scenario: View team mates schedules
-Scenario: View activity selection in alphabetical order
 Scenario: Default times today
 Scenario: Default times tomorrow
 

@@ -79,7 +79,7 @@ Scenario: View selection in alphabetical order
 	Then I should see absence type 'Illness' before 'Mental disorder'
 	And I should see absence type 'Mental disorder' before 'Vacation'
 
-Scenario: Hide confidential if no permission
+Scenario: Prevent selection of confidential if no permission
 	Given I have a role with
 	| Field                      | Value                    |
 	| Name                       | Cannot view confidential |
