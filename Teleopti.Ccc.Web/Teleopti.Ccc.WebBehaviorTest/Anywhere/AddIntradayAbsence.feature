@@ -48,7 +48,7 @@ Background:
 
 
 
-Scenario: Cannot see add intraday absence button if no permission
+Scenario: Hide function if no permission
 	Given I have a role with
 	| Field                      | Value                 |
 	| Name                       | Cannot Modify Absence |
@@ -73,13 +73,13 @@ Scenario: View team mates schedules
 	Then I should see schedule for 'John King' in team mates schedules
 	And I should not see schedule for 'Ashley Andeen' in team mates schedules
 
-Scenario: View absence types in alphabetical order
+Scenario: View selection in alphabetical order
 	Given I have the role 'Anywhere Team Green'
 	When I view person schedules add intraday day absence form for 'Pierre Baldi' and 'Team green' on '2013-11-15'
 	Then I should see absence type 'Illness' before 'Mental disorder'
 	And I should see absence type 'Mental disorder' before 'Vacation'
 
-Scenario: Cannot view confidential absence types if no permission
+Scenario: Hide confidential if no permission
 	Given I have a role with
 	| Field                      | Value                    |
 	| Name                       | Cannot view confidential |
@@ -90,14 +90,8 @@ Scenario: Cannot view confidential absence types if no permission
 	| View confidential          | false                    |
 	When I view person schedules add intraday day absence form for 'Pierre Baldi' and 'Team green' on '2013-11-15'
 	Then I should not see absence type 'Mental disorder'
-	
-Scenario: Add intraday absence on late night shift ??
 
-Scenario: Add intraday absence on empty day ??
-
-Scenario: Add intraday absence on 26 hour shift ??
-
-Scenario: Default times adding intraday absence on shift today
+Scenario: Default times today
 	Given I have the role 'Anywhere Team Green'
 	And the current time is '2013-11-15 13:20'
 	And 'Pierre Baldi' have a shift with
@@ -113,7 +107,7 @@ Scenario: Default times adding intraday absence on shift today
 	| Start time   | 13:20   |
 	| End time     | 17:00   |
 
-Scenario: Default times adding intraday absence on shift tomorrow
+Scenario: Default times tomorrow
 	Given I have the role 'Anywhere Team Green'
 	And the current time is '2013-11-14 08:00'
 	And 'Pierre Baldi' have a shift with
@@ -127,3 +121,9 @@ Scenario: Default times adding intraday absence on shift tomorrow
 	| Field        | Value   |
 	| Start time   | 11:00   |
 	| End time     | 12:00   |
+
+Scenario: Add on shift
+	
+Scenario: Add on late night shift
+
+Scenario: Prevent add outside shift
