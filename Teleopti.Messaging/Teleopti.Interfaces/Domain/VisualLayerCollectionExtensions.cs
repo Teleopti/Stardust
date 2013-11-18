@@ -51,7 +51,7 @@ namespace Teleopti.Interfaces.Domain
 								Period = currentIntervalPeriod,
 								FractionPeriod = fractionPeriod
 							};
-					if (currentIntervalPeriod.EndDateTime >= layer.Period.EndDateTime)
+					if (currentIntervalPeriod.EndDateTime > layer.Period.EndDateTime)
 					{
 						break;
 					}

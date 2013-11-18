@@ -15,7 +15,30 @@ namespace Teleopti.Ccc.DomainTest.Helper
 	{
 		private readonly IPerson person = PersonFactory.CreatePerson();
 		private readonly IActivity activity = ActivityFactory.CreateActivity("Phone");
-			
+		private readonly IActivity secondActivity = ActivityFactory.CreateActivity("Break");
+
+		[Test]
+		public void ShouldReturnFractionOfResourceWhenStartWithinIntervalWithTwoLayers()
+		{
+			var visualLayer1 = new VisualLayer(secondActivity, new DateTimePeriod(new DateTime(2001, 1, 1, 9, 45, 0, DateTimeKind.Utc),
+																		   new DateTime(2001, 1, 1, 10, 12, 0, DateTimeKind.Utc)),
+											  secondActivity, person);
+			var visualLayer2 = new VisualLayer(activity, new DateTimePeriod(new DateTime(2001, 1, 1, 10, 12, 0, DateTimeKind.Utc),
+																		   new DateTime(2001, 1, 1, 10, 15, 0, DateTimeKind.Utc)),
+											  activity, person);
+			var visualLayer3 = new VisualLayer(secondActivity, new DateTimePeriod(new DateTime(2001, 1, 1, 10, 15, 0, DateTimeKind.Utc),
+																		   new DateTime(2001, 1, 1, 10, 30, 0, DateTimeKind.Utc)),
+											  secondActivity, person);
+
+			var layers = new List<IVisualLayer> { visualLayer1, visualLayer2, visualLayer3 };
+			var visualLayers = new VisualLayerCollection(person, layers, new ProjectionPayloadMerger());
+
+			var result = visualLayers.ToResourceLayers(15).ToArray();
+
+			result.First(r => r.Period.StartDateTime == new DateTime(2001, 1, 1, 10, 0, 0, DateTimeKind.Utc)).Resource.Should().Be.EqualTo(0.8);
+			result.Last(r => r.Period.StartDateTime == new DateTime(2001, 1, 1, 10, 0, 0, DateTimeKind.Utc)).Resource.Should().Be.EqualTo(0.2);
+		}
+	
 		[Test]
 		public void ShouldReturnFractionOfResourceWhenStartWithinInterval()
 		{
