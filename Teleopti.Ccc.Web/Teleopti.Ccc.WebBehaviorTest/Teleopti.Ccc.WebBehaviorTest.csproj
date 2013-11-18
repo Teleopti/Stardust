@@ -98,6 +98,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Anywhere\AddIntradayAbsence.feature.cs">
+      <DependentUpon>AddIntradayAbsence.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Anywhere\ViewScheduleActivityDetails.feature.cs">
       <DependentUpon>ViewScheduleActivityDetails.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -664,6 +669,10 @@
     <None Include="Anywhere\AddActivityOnShift.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AddActivityOnShift.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\AddIntradayAbsence.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AddIntradayAbsence.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\ViewScheduleActivityDetails.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

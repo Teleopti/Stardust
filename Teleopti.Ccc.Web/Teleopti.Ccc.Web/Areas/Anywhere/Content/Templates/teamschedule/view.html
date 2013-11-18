@@ -135,7 +135,7 @@
 								<div class="shift-menu" data-bind="if: $parent.IsAnyLayerSelected(), style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
 									<!-- ko with: $parent.ShiftMenu -->
 									<div class="btn-group">
-										<a href="#" class="btn btn-small show-details" data-bind="click: ShowDetails"><i class="icon-eye-open"></i></a>
+										<a href="#" class="btn btn-small show-details" data-bind="click: $data.ShowDetails"><i class="icon-eye-open"></i></a>
 										<a href="#" class="btn btn-small add-full-day-absence" data-bind="click: $data.AddFullDayAbsence"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.FullDayAbsence"></span></a>
 										<a href="#" class="btn btn-small add-absence" data-bind="click: $data.AddAbsence"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.IntradayAbsence"></span></a>
 										<a href="#" class="btn btn-small add-activity" data-bind="click: $data.AddActivity"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.Activity"></span></a>

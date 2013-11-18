@@ -109,8 +109,10 @@ define([
 			personSchedule.SelectedGroup.subscribe(function () {
 				if (personSchedule.Loading())
 					return;
-
-				navigation.GotoPersonScheduleWithAction(personSchedule.SelectedGroup(), options.personid, options.date, options.action);
+				if (!options.action)
+					navigation.GotoPersonSchedule(personSchedule.SelectedGroup(), options.personid, options.date);
+				else
+					navigation.GotoPersonScheduleWithAction(personSchedule.SelectedGroup(), options.personid, options.date, options.action);
 			});
 
 			ko.applyBindings(personSchedule, options.bindingElement);
