@@ -20,7 +20,7 @@ Background:
 	| Start date | 2013-11-18 |
 	And there is a shift category named 'Day'
 	
-Scenario: Prevent adding if no permission
+Scenario: Prevent assigning if no permission
 Scenario: View form
 Scenario: View team mates schedules
 Scenario: View activity selection in alphabetical order
