@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -80,7 +81,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				return resources;
 
 			int minutesSplit = _allSkills.Min(s => s.DefaultResolution);
-					
+
+			var tasks = new List<Task>();
 			foreach (var person in scheduleDictionary.Keys)
 			{
 				var range = scheduleDictionary[person];
@@ -91,9 +93,11 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 					range.ScheduledDayCollection(period.Value.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()));
 				foreach (var scheduleDay in scheduleDays)
 				{
-					resources.AddScheduleDayToContainer(scheduleDay, minutesSplit);
+					tasks.Add(resources.AddScheduleDayToContainer(scheduleDay, minutesSplit));
 				}
 			}
+
+			Task.WaitAll(tasks.ToArray());
 			return resources;
 		}
 	}
