@@ -29,7 +29,7 @@ define([
 	return function () {
 
 		var self = this;
-
+		
 		this.Loading = ko.observable(false);
 
 		this.Id = ko.observable("");
@@ -88,19 +88,6 @@ define([
 			self.PersonsInGroup([]);
 			self.PersonsInGroup.push.apply(self.PersonsInGroup, persons);
 		};
-		
-		this.SetGroupPages = function (data) {
-			self.GroupPages([]);
-
-			var groupPages = data.GroupPages;
-			
-			var newItems = ko.utils.arrayMap(groupPages, function (d) {
-				return new groupPageViewModel(d);
-			});
-			self.GroupPages.push.apply(self.GroupPages, newItems);
-			
-			self.SelectedGroup(data.SelectedGroupId);
-		};
 
 		this.SetData = function (data, groupid) {
 			data.Date = self.Date();
@@ -137,7 +124,7 @@ define([
 
 			self.AddFullDayAbsenceForm.SetData(data);
 			self.AddActivityForm.SetData(data);
-			self.AddAbsenceForm.SetData(data);
+			self.AddAbsenceForm.SetData(data, groupid);
 		};
 		
 		this.ClearData = function () {

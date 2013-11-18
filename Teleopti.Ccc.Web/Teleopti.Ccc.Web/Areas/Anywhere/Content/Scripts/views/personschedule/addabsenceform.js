@@ -17,16 +17,17 @@ define([
 	return function () {
 
 		var self = this;
-
+		
 		this.Absence = ko.observable("");
 
 		this.Date = ko.observable();
 		this.StartTime = ko.observable("17:00");
 		this.EndTime = ko.observable("18:00");
 
+		var groupid;
 		var personId;
 
-		this.SetData = function (data) {
+		this.SetData = function (data, groupId) {
 			personId = data.PersonId;
 			self.Date(data.Date);
 			self.AbsenceTypes([
@@ -41,12 +42,13 @@ define([
 					Name: "Illness"
 				}
 			]);
+			groupid = groupId;
 		};
 
 		this.AbsenceTypes = ko.observableArray();
 
 		this.Apply = function () {
-			navigation.GotoPersonScheduleWithoutHistory(personId, self.Date());
+			navigation.GoToTeamSchedule(groupid, self.Date());
 		};
 
 	};
