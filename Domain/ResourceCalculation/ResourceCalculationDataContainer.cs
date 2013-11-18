@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
@@ -8,8 +9,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class ResourceCalculationDataContainer : IResourceCalculationDataContainerWithSingleOperation
 	{
 		private readonly IPersonSkillProvider _personSkillProvider;
-		private readonly IDictionary<DateTimePeriod, PeriodResource> _dictionary = new Dictionary<DateTimePeriod, PeriodResource>();
-		private readonly IDictionary<string,IEnumerable<ISkill>> _skills = new Dictionary<string, IEnumerable<ISkill>>();
+		private readonly ConcurrentDictionary<DateTimePeriod, PeriodResource> _dictionary = new ConcurrentDictionary<DateTimePeriod, PeriodResource>();
+		private readonly ConcurrentDictionary<string, IEnumerable<ISkill>> _skills = new ConcurrentDictionary<string, IEnumerable<ISkill>>();
 		private readonly HashSet<Guid> _activityRequiresSeat = new HashSet<Guid>();
 		
 		private int _minSkillResolution = 60;
@@ -36,13 +37,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void AddResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
 		{
-			PeriodResource resources;
-			if (!_dictionary.TryGetValue(resourceLayer.Period, out resources))
-			{
-				resources = new PeriodResource();
-				_dictionary.Add(resourceLayer.Period, resources);
-			}
-
+			PeriodResource resources = _dictionary.GetOrAdd(resourceLayer.Period, new PeriodResource());
+			
 			var skills = _personSkillProvider.SkillsOnPersonDate(person, personDate);
 			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills).GenerateKey();
 			if (!_skills.ContainsKey(skills.Key))
@@ -55,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						_minSkillResolution = minResolution;
 					}
 				}
-				_skills.Add(skills.Key,skills.Skills);
+				_skills.TryAdd(skills.Key,skills.Skills);
 			}
 			if (resourceLayer.RequiresSeat)
 			{

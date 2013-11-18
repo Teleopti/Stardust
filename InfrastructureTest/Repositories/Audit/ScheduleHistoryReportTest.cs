@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				PersonAssignment.AddMainLayer(PersonAssignment.MainLayers().First().Payload, new DateTimePeriod(Today, Today.AddDays(1)));
+				PersonAssignment.AssignActivity(PersonAssignment.MainLayers().First().Payload, new DateTimePeriod(Today, Today.AddDays(1)));
 				uow.Merge(PersonAssignment);
 				uow.PersistAll();
 			}
