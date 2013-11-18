@@ -98,15 +98,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(schedulePeriod2.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
 
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_groupPerson.GroupMembers, _dateOnly,
-																				 _schedulingOptions, scheduleDictionary)).IgnoreArguments()
+																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestrictionForDayOne);
-				
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson>{_person1},_dateOnly,
+																				 _schedulingOptions, scheduleDictionary))
+					  .Return(effectiveRestrictionForDayOne);
+
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_scheduleMatrixPro1.ActiveScheduleRange).Return(range1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.ActiveScheduleRange).Return(range2).Repeat.AtLeastOnce();
 				Expect.Call(range1.ScheduledDay(_dateOnly)).Return(scheduleDay1);
@@ -119,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Aggregate(_teamBlockInfo, _schedulingOptions, null);
+				var result = _target.Aggregate(_dateOnly, _person1, _teamBlockInfo, _schedulingOptions, null);
 				Assert.That(result, Is.EqualTo(expectedResult));
 			}
 		}
@@ -154,20 +157,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			{
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(schedulePeriod1).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_person1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.Person).Return(_person2).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.SchedulePeriod).Return(schedulePeriod2).Repeat.AtLeastOnce();
 				Expect.Call(schedulePeriod1.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
 				Expect.Call(schedulePeriod2.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
-
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_groupPerson.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestrictionForDayOne);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(true);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson> { _person1 }, _dateOnly,
+																				 _schedulingOptions, scheduleDictionary))
+					  .Return(effectiveRestrictionForDayOne);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_scheduleMatrixPro1.ActiveScheduleRange).Return(range1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.ActiveScheduleRange).Return(range2).Repeat.AtLeastOnce();
 				Expect.Call(range1.ScheduledDay(_dateOnly)).Return(scheduleDay1);
@@ -175,17 +181,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(scheduleDay1.IsScheduled()).Return(true);
 				Expect.Call(scheduleDay2.IsScheduled()).Return(false);
 				Expect.Call(_nightlyRestRule.LongestDateTimePeriodForAssignment(range2, _dateOnly)).Return(dateTimePeriod);
-				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro1);
-				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null);
-				Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService1);
-				Expect.Call(projectionService1.CreateProjection()).Return(visualLayerCollection1);
-				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
-				Expect.Call(visualLayerCollection1.Period()).Return(period1);
+				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro1).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService1).Repeat.AtLeastOnce();
+				Expect.Call(projectionService1.CreateProjection()).Return(visualLayerCollection1).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1).Repeat.AtLeastOnce();
+				Expect.Call(visualLayerCollection1.Period()).Return(period1).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Aggregate(_teamBlockInfo, _schedulingOptions, null);
+				var result = _target.Aggregate(_dateOnly, _person1, _teamBlockInfo, _schedulingOptions, null);
 				Assert.That(result.StartTimeLimitation, Is.EqualTo(expectedResult.StartTimeLimitation));
 			}
 		}
@@ -220,6 +226,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			{
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(schedulePeriod1).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_person1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.Person).Return(_person2).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.SchedulePeriod).Return(schedulePeriod2).Repeat.AtLeastOnce();
 				Expect.Call(schedulePeriod1.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
@@ -228,12 +235,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_groupPerson.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestrictionForDayOne);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(true);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson> { _person1 }, _dateOnly,
+																				 _schedulingOptions, scheduleDictionary))
+					  .Return(effectiveRestrictionForDayOne);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(true);
 				Expect.Call(_scheduleMatrixPro1.ActiveScheduleRange).Return(range1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.ActiveScheduleRange).Return(range2).Repeat.AtLeastOnce();
 				Expect.Call(range1.ScheduledDay(_dateOnly)).Return(scheduleDay1);
@@ -251,7 +261,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Aggregate(_teamBlockInfo, _schedulingOptions, null);
+				var result = _target.Aggregate(_dateOnly, _person1, _teamBlockInfo, _schedulingOptions, null);
 				Assert.That(result.EndTimeLimitation, Is.EqualTo(expectedResult.EndTimeLimitation));
 			}
 		}
@@ -287,6 +297,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			{
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(schedulePeriod1).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_person1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.Person).Return(_person2).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.SchedulePeriod).Return(schedulePeriod2).Repeat.AtLeastOnce();
 				Expect.Call(schedulePeriod1.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
@@ -295,12 +306,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_groupPerson.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestrictionForDayOne);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(true);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson> { _person1 }, _dateOnly,
+																				 _schedulingOptions, scheduleDictionary))
+					  .Return(effectiveRestrictionForDayOne);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_scheduleMatrixPro1.ActiveScheduleRange).Return(range1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.ActiveScheduleRange).Return(range2).Repeat.AtLeastOnce();
 				Expect.Call(range1.ScheduledDay(_dateOnly)).Return(scheduleDay1);
@@ -309,7 +323,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(scheduleDay2.IsScheduled()).Return(false);
 				Expect.Call(_nightlyRestRule.LongestDateTimePeriodForAssignment(range2, _dateOnly)).Return(dateTimePeriod);
 				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro1);
-				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null);
 				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
 				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(scheduleDay1.GetEditorShift()).Return(mainShift);
@@ -317,7 +330,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Aggregate(_teamBlockInfo, _schedulingOptions, null);
+				var result = _target.Aggregate(_dateOnly, _person1, _teamBlockInfo, _schedulingOptions, null);
 				Assert.That(result.CommonMainShift, Is.EqualTo(expectedResult.CommonMainShift));
 			}
 		}
@@ -351,6 +364,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			{
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(schedulePeriod1).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_person1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.Person).Return(_person2).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.SchedulePeriod).Return(schedulePeriod2).Repeat.AtLeastOnce();
 				Expect.Call(schedulePeriod1.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
@@ -359,12 +373,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_groupPerson.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestrictionForDayOne);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(true);
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson> { _person1 }, _dateOnly,
+																				 _schedulingOptions, scheduleDictionary))
+					  .Return(effectiveRestrictionForDayOne);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_scheduleMatrixPro1.ActiveScheduleRange).Return(range1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.ActiveScheduleRange).Return(range2).Repeat.AtLeastOnce();
 				Expect.Call(range1.ScheduledDay(_dateOnly)).Return(scheduleDay1);
@@ -372,17 +389,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(scheduleDay1.IsScheduled()).Return(true);
 				Expect.Call(scheduleDay2.IsScheduled()).Return(false);
 				Expect.Call(_nightlyRestRule.LongestDateTimePeriodForAssignment(range2, _dateOnly)).Return(dateTimePeriod);
-				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro1);
-				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null);
-				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
-				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(scheduleDay1.PersonAssignment()).Return(personAssignment1);
-				Expect.Call(personAssignment1.ShiftCategory).Return(shiftCat);
+				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro1).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDay1.PersonAssignment()).Return(personAssignment1).Repeat.AtLeastOnce();
+				Expect.Call(personAssignment1.ShiftCategory).Return(shiftCat).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Aggregate(_teamBlockInfo, _schedulingOptions, null);
+				var result = _target.Aggregate(_dateOnly, _person1, _teamBlockInfo, _schedulingOptions, null);
 				Assert.That(result.ShiftCategory, Is.EqualTo(expectedResult.ShiftCategory));
 			}
 		}
@@ -419,6 +436,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			{
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
 				Expect.Call(_scheduleMatrixPro1.SchedulePeriod).Return(schedulePeriod1).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleMatrixPro1.Person).Return(_person1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.Person).Return(_person2).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.SchedulePeriod).Return(schedulePeriod2).Repeat.AtLeastOnce();
 				Expect.Call(schedulePeriod1.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
@@ -427,12 +445,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_groupPerson.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestrictionForDayOne);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(true).Repeat.Twice();
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(true).Repeat.Twice();
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(true).Repeat.Twice();
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson> { _person1 }, _dateOnly,
+																				 _schedulingOptions, scheduleDictionary))
+					  .Return(effectiveRestrictionForDayOne);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(true);
 				Expect.Call(_scheduleMatrixPro1.ActiveScheduleRange).Return(range1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.ActiveScheduleRange).Return(range2).Repeat.AtLeastOnce();
 				Expect.Call(range1.ScheduledDay(_dateOnly)).Return(scheduleDay1);
@@ -457,7 +481,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Aggregate(_teamBlockInfo, _schedulingOptions, _shift);
+				var result = _target.Aggregate(_dateOnly, _person1, _teamBlockInfo, _schedulingOptions, _shift);
 				Assert.That(result, Is.EqualTo(expectedResult));
 			}
 		}

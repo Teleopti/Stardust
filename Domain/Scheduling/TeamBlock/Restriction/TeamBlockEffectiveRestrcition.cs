@@ -11,6 +11,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 		private readonly ISchedulingOptions _schedulingOptions;
 
 		public TeamBlockEffectiveRestrcition(IEffectiveRestrictionCreator effectiveRestrictionCreator,
+		                                     IPerson person, ISchedulingOptions schedulingOptions,
+		                                     IScheduleDictionary scheduleDictionary)
+			: this(effectiveRestrictionCreator, new List<IPerson> {person}, schedulingOptions, scheduleDictionary)
+		{
+
+		}
+
+		public TeamBlockEffectiveRestrcition(IEffectiveRestrictionCreator effectiveRestrictionCreator,
 											 IEnumerable<IPerson> persons, ISchedulingOptions schedulingOptions,
 											 IScheduleDictionary scheduleDictionary)
 		{

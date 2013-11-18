@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var allSelectedDaysAreScheduled = false;
 			while (!allSelectedDaysAreScheduled)
 			{
-				var roleModelShift = _roleModelSelector.Select(teamBlockInfo, dateOnly, schedulingOptions);
+				var roleModelShift = _roleModelSelector.Select(teamBlockInfo, dateOnly, selectedPersons.First(),  schedulingOptions);
 				if (roleModelShift == null)
 					return false;
 				var shiftCategoryToBeBlocked = roleModelShift.TheWorkShift.ShiftCategory;

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamBlockRoleModelSelector
 	{
-		IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly dateTime, ISchedulingOptions schedulingOptions);
+		IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly dateTime, IPerson person, ISchedulingOptions schedulingOptions);
 	}
 
 	public class TeamBlockRoleModelSelector : ITeamBlockRoleModelSelector
@@ -31,13 +31,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_workShiftSelector = workShiftSelector;
 		}
 
-		public IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions)
+		public IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, IPerson person, ISchedulingOptions schedulingOptions)
 		{
 			if (teamBlockInfo == null)
 				return null;
 			if (schedulingOptions == null)
 				return null;
-			var restriction = _teamBlockRestrictionAggregator.Aggregate(teamBlockInfo, schedulingOptions);
+			var restriction = _teamBlockRestrictionAggregator.Aggregate(datePointer, person, teamBlockInfo, schedulingOptions);
 			if (restriction == null)
 				return null;
 			var shifts = _workShiftFilterService.FilterForRoleModel(datePointer, teamBlockInfo, restriction,

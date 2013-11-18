@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private bool scheduleSelectedDays(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions,
 								  DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
 		{
-			var roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, schedulingOptions);
+			var roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedPersons.First(), schedulingOptions);
 			if (roleModelShift == null)
 				return false;
 

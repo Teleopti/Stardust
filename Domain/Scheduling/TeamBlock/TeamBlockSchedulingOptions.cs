@@ -14,6 +14,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		bool IsTeamSchedulingWithSameEndTime(ISchedulingOptions schedulingOptions);
 		bool IsTeamSchedulingWithSameShiftCategory(ISchedulingOptions schedulingOptions);
 	    bool IsSingleAgentTeam(ISchedulingOptions schedulingOptions);
+		bool IsBlockSameStartTimeInTeamBlock(ISchedulingOptions schedulingOptions);
+		bool IsTeamSameStartTimeInTeamBlock(ISchedulingOptions schedulingOptions);
+		bool IsBlockSameShiftCategoryInTeamBlock(ISchedulingOptions schedulingOptions);
+		bool IsTeamSameEndTimeInTeamBlock(ISchedulingOptions schedulingOptions);
+		bool IsBlockSameShiftInTeamBlock(ISchedulingOptions schedulingOptions);
+		bool IsTeamSameShiftCategoryInTeamBlock(ISchedulingOptions schedulingOptions);
 	}
 
 	public class TeamBlockSchedulingOptions : ITeamBlockSchedulingOptions
@@ -36,54 +42,75 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public bool IsBlockSchedulingWithSameShift(ISchedulingOptions schedulingOptions)
 		{
 			return IsBlockScheduling(schedulingOptions) &&
-				   schedulingOptions.UseTeamBlockSameShift &&
-				   !schedulingOptions.UseTeamBlockSameStartTime &&
-				   !schedulingOptions.UseTeamBlockSameShiftCategory &&
-				   !schedulingOptions.UseTeamBlockSameEndTime;
+				   schedulingOptions.UseTeamBlockSameShift;
 		}
 
 		public bool IsBlockSchedulingWithSameShiftCategory(ISchedulingOptions schedulingOptions)
 		{
 			return IsBlockScheduling(schedulingOptions) &&
-				   !schedulingOptions.UseTeamBlockSameShift &&
-				   !schedulingOptions.UseTeamBlockSameStartTime &&
-				   schedulingOptions.UseTeamBlockSameShiftCategory &&
-				   !schedulingOptions.UseTeamBlockSameEndTime;
+				   schedulingOptions.UseTeamBlockSameShiftCategory;
 		}
 
 		public bool IsBlockSchedulingWithSameStartTime(ISchedulingOptions schedulingOptions)
 		{
 			return IsBlockScheduling(schedulingOptions) &&
-				   !schedulingOptions.UseTeamBlockSameShift &&
-				   schedulingOptions.UseTeamBlockSameStartTime &&
-				   !schedulingOptions.UseTeamBlockSameShiftCategory &&
-				   !schedulingOptions.UseTeamBlockSameEndTime;
+				   schedulingOptions.UseTeamBlockSameStartTime;
 		}
 
 		public bool IsTeamSchedulingWithSameStartTime(ISchedulingOptions schedulingOptions)
 		{
 			return IsTeamScheduling(schedulingOptions) &&
-				   !schedulingOptions.UseGroupSchedulingCommonCategory &&
-				   !schedulingOptions.UseGroupSchedulingCommonEnd &&
 				   schedulingOptions.UseGroupSchedulingCommonStart;
 		}
 
 		public bool IsTeamSchedulingWithSameEndTime(ISchedulingOptions schedulingOptions)
 		{
 			return IsTeamScheduling(schedulingOptions) &&
-				   !schedulingOptions.UseGroupSchedulingCommonCategory &&
-				   schedulingOptions.UseGroupSchedulingCommonEnd &&
-				   !schedulingOptions.UseGroupSchedulingCommonStart;
+				   schedulingOptions.UseGroupSchedulingCommonEnd;
 		}
 
 		public bool IsTeamSchedulingWithSameShiftCategory(ISchedulingOptions schedulingOptions)
 		{
 			return IsTeamScheduling(schedulingOptions) &&
-				   schedulingOptions.UseGroupSchedulingCommonCategory &&
-				   !schedulingOptions.UseGroupSchedulingCommonEnd &&
-				   !schedulingOptions.UseGroupSchedulingCommonStart;
+				   schedulingOptions.UseGroupSchedulingCommonCategory;
 		}
 
+		public bool IsBlockSameStartTimeInTeamBlock(ISchedulingOptions schedulingOptions)
+		{
+			return IsTeamBlockScheduling(schedulingOptions) &&
+			       schedulingOptions.UseTeamBlockSameStartTime;
+		}
+
+		public bool IsTeamSameStartTimeInTeamBlock(ISchedulingOptions schedulingOptions)
+		{
+			return IsTeamBlockScheduling(schedulingOptions) &&
+			       schedulingOptions.UseGroupSchedulingCommonStart;
+		}
+	
+		public bool IsBlockSameShiftCategoryInTeamBlock(ISchedulingOptions schedulingOptions)
+		{
+			return IsTeamBlockScheduling(schedulingOptions) &&
+			       schedulingOptions.UseTeamBlockSameShiftCategory;
+		}
+
+		public bool IsTeamSameEndTimeInTeamBlock(ISchedulingOptions schedulingOptions)
+		{
+			return IsTeamBlockScheduling(schedulingOptions) &&
+			       schedulingOptions.UseGroupSchedulingCommonEnd;
+		}
+	
+		public bool IsBlockSameShiftInTeamBlock(ISchedulingOptions schedulingOptions)
+		{
+			return IsTeamBlockScheduling(schedulingOptions) &&
+			       schedulingOptions.UseTeamBlockSameShift;
+		}
+
+		public bool IsTeamSameShiftCategoryInTeamBlock(ISchedulingOptions schedulingOptions)
+		{
+			return IsTeamBlockScheduling(schedulingOptions) &&
+			       schedulingOptions.UseGroupSchedulingCommonCategory;
+		}
+		
         public bool IsSingleAgentTeam(ISchedulingOptions schedulingOptions)
         {
             return schedulingOptions.GroupOnGroupPageForTeamBlockPer != null &&
