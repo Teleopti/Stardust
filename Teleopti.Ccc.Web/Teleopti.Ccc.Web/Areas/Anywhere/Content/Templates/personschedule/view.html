@@ -17,21 +17,6 @@
 		</div>
 	</div>
 	
-	<!--<div class="row">
-		<div class="span12">
-			<form>
-				<div class="control-group">
-					<select id="group-picker" class="span4" data-bind="enable: !Loading(), foreach: GroupPages, select2: { value: SelectedGroup } ">
-						<optgroup data-bind="attr: { label: Name }, foreach: Groups">
-							<option data-bind="text: Name, value: Id"></option>
-						</optgroup>
-					</select>
-					
-				</div>
-			</form>
-		</div>
-	</div>-->
-	
 	<div class="row">
 		<div class="span12">
 			
@@ -231,15 +216,6 @@
 						</tr>
 						
 						<!-- ko if: true -->
-						<tr>
-							<td colspan="3" style="background-color: white; border: none">
-								<select id="Select2" data-bind="enable: !$root.Loading(), foreach: $root.GroupPages, select2: { value: $root.SelectedGroup } ">
-									<optgroup data-bind="attr: { label: Name }, foreach: Groups">
-										<option data-bind="text: Name, value: Id"></option>
-									</optgroup>
-								</select>
-							</td>
-						</tr>
 						
 						<!-- ko foreach: PersonsInGroup -->
 						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.Id() != Id">

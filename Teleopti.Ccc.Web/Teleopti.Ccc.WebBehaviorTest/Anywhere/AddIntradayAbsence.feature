@@ -93,9 +93,6 @@ Scenario: Cannot view confidential absence types if no permission
 	
 Scenario: Add intraday absence on late night shift ??
 
-Scenario: Add intraday absence on empty day ??
-
-Scenario: Add intraday absence on 26 hour shift ??
 
 Scenario: Default times adding intraday absence on shift today
 	Given I have the role 'Anywhere Team Green'
