@@ -52,8 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see my existing text request")]
 		public void ThenIShouldSeeMyExistingTextRequest()
 		{
-			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
-			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(DataMaker.Data().UserData<ExistingTextRequest>().PersonRequest.GetSubject(new NoFormatting())));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request-data-subject:first:contains('{0}')", DataMaker.Data().UserData<ExistingTextRequest>().PersonRequest.GetSubject(new NoFormatting())));
 		}
 
 		[Then(@"I should see a shift trade request in the list with subject '(.*)'")]
