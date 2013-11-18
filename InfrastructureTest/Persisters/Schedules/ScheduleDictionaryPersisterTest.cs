@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		private PersistConflict createConflict()
 		{
-			return new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(), new PersonAssignment(new Person(), new Scenario("d"), new DateOnly()));
+			return new PersistConflict(new DifferenceCollectionItem<INonversionedPersistableScheduleData>(), new PersonAssignment(new Person(), new Scenario("d"), new DateOnly()));
 		}
 
 		private static IScheduleDictionary createScheduleDictionaryWith(params IScheduleRange[] ranges)

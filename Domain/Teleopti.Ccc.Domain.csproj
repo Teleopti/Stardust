@@ -1274,7 +1274,6 @@
     <Compile Include="Repositories\ISkillDayRepository.cs" />
     <Compile Include="Repositories\ISkillRepository.cs" />
     <Compile Include="Repositories\IStatisticRepository.cs" />
-    <Compile Include="Repositories\ISystemRoleApplicationRoleMapperRepository.cs" />
     <Compile Include="Repositories\IApplicationFunctionRepository.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1338,7 +1337,6 @@
     <Compile Include="Security\AuthorizationEntities\TeamAuthorizationEntityConverter.cs" />
     <Compile Include="Security\Matrix\MatrixReportsSynchronizer.cs" />
     <Compile Include="Security\AuthorizationEntities\MatrixReportInfo.cs" />
-    <Compile Include="Security\AuthorizationEntities\SystemRoleApplicationRoleMapper.cs" />
     <Compile Include="Security\AuthorizationEntities\SystemRole.cs" />
     <Compile Include="Security\AuthorizationEntities\PermissionInformation.cs" />
     <Compile Include="Repositories\IPersonAvailabilityRepository.cs" />
@@ -1546,9 +1544,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Infrastructure\Filters.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Security\AuthorizationEntities\SystemRoleApplicationRoleMapper.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\ShiftCreator\WorkShiftRuleSet.hbm.xml" />

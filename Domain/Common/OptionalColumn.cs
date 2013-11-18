@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-    public class OptionalColumn : AggregateRootWithBusinessUnit, IOptionalColumn
+    public class OptionalColumn : VersionedAggregateRootWithBusinessUnit, IOptionalColumn
     {
         protected OptionalColumn()
         {}

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         private OnEventStatisticMessageCommand _statisticCommand;
         private LoadStatisticsAndActualHeadsCommand _loadStatisticCommand;
         private OnEventMeetingMessageCommand _meetingCommand;
-	    private IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
+		private IDifferenceCollectionService<INonversionedPersistableScheduleData> _differenceService;
 
 				[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 				public void Setup()
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 					_scheduleDictionarySaver = MockRepository.GenerateMock<IScheduleDifferenceSaver>();
 					_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.Current.Regional.TimeZone), _persons);
 					_statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
-					_differenceService = MockRepository.GenerateMock<IDifferenceCollectionService<IPersistableScheduleData>>();
+					_differenceService = MockRepository.GenerateMock<IDifferenceCollectionService<INonversionedPersistableScheduleData>>();
 					_scheduleCommand = MockRepository.GenerateMock<OnEventScheduleMessageCommand>();
 					_meetingCommand = MockRepository.GenerateMock<OnEventMeetingMessageCommand>();
 					_forecastCommand = MockRepository.GenerateMock<OnEventForecastDataMessageCommand>();
@@ -402,7 +402,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 						scheduleDictionary.Expect(x => x.Values).Return(new[] { MockRepository.GenerateMock<IScheduleRange, IUnvalidatedScheduleRangeUpdate>() });
 
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
-						scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(new DifferenceCollection<IPersistableScheduleData>{new DifferenceCollectionItem<IPersistableScheduleData>()});
+			scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(new DifferenceCollection<INonversionedPersistableScheduleData> { new DifferenceCollectionItem<INonversionedPersistableScheduleData>() });
             uow.Expect(x => x.PersistAll(_target)).Return(new List<IRootChangeInfo>()).Repeat.Once();
             uow.Expect(x => x.PersistAll(_target)).Throw(new OptimisticLockException());
 
@@ -424,7 +424,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             IUnitOfWork uow = MockRepository.GenerateMock<IUnitOfWork>();
             IScheduleDictionary scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
             _schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
-            var differenceCollection = new DifferenceCollection<IPersistableScheduleData>();
+			var differenceCollection = new DifferenceCollection<INonversionedPersistableScheduleData>();
 
 	        scheduleDictionary.Expect(x => x.Values).Return(new[]{MockRepository.GenerateMock<IScheduleRange, IUnvalidatedScheduleRangeUpdate>()});
 
@@ -435,12 +435,12 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _view.Stub(x => x.ShowConfirmationMessage("", "")).IgnoreArguments().Return(DialogResult.No).Repeat.Once();
             scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(differenceCollection).Repeat.Once();
             _view.Stub(x => x.ShowConfirmationMessage("", "")).IgnoreArguments().Return(DialogResult.Yes).Repeat.Once();
-						scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(new DifferenceCollection<IPersistableScheduleData>()).Repeat.Once();
+			scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot()).Return(new DifferenceCollection<INonversionedPersistableScheduleData>()).Repeat.Once();
             _unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow).Repeat.Once();
             uow.Stub(x => x.PersistAll(_target)).Return(new List<IRootChangeInfo>()).Repeat.Once();
 
             Assert.IsFalse(_target.CheckIfUserWantsToSaveUnsavedData());
-            differenceCollection.Add(new DifferenceCollectionItem<IPersistableScheduleData>());
+			differenceCollection.Add(new DifferenceCollectionItem<INonversionedPersistableScheduleData>());
             Assert.IsTrue(_target.CheckIfUserWantsToSaveUnsavedData());
             Assert.IsFalse(_target.CheckIfUserWantsToSaveUnsavedData());
             Assert.IsFalse(_target.CheckIfUserWantsToSaveUnsavedData());

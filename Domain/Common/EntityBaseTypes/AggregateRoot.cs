@@ -5,12 +5,26 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 {
-	public abstract class AggregateRoot : Entity,
-		IAggregateRoot,
-		IChangeInfo,
+	public abstract class VersionedAggregateRoot : AggregateRoot,
 		IVersioned
 	{
 		private int? _version;
+
+		public virtual int? Version
+		{
+			get { return _version; }
+		}
+
+		public virtual void SetVersion(int version)
+		{
+			_version = version;
+		}
+	}
+
+	public abstract class AggregateRoot : Entity,
+		IAggregateRoot,
+		IChangeInfo
+	{
 		private IPerson _updatedBy;
 		private DateTime? _updatedOn;
 		private readonly LocalizedUpdateInfo _localizedUpdateInfo = new LocalizedUpdateInfo();
@@ -32,19 +46,6 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		{
 			_events.Add(() => @event);
 		}
-
-
-
-		public virtual int? Version
-		{
-			get { return _version; }
-		}
-
-		public virtual void SetVersion(int version)
-		{
-			_version = version;
-		}
-
 
 		public virtual IPerson UpdatedBy
 		{

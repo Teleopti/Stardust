@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         public virtual void Execute(IEventMessage eventMessage)
         {
             var conflicts = new List<PersistConflict>();
-            var refreshedEntitiesBuffer = new Collection<IPersistableScheduleData>();
+			var refreshedEntitiesBuffer = new Collection<INonversionedPersistableScheduleData>();
 
             using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {

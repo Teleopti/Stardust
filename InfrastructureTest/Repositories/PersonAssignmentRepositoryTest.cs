@@ -11,8 +11,8 @@ using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -377,7 +377,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				var bu = new BusinessUnit("wrong bu");
 				PersistAndRemoveFromUnitOfWork(bu);
 				var scenarioWrongBu = new Scenario("wrong");
-				scenarioWrongBu.HackToSetBusinessUnit(bu);
+				scenarioWrongBu.SetBusinessUnit(bu);
 				PersistAndRemoveFromUnitOfWork(scenarioWrongBu);
 				var ass = new PersonAssignment(_dummyAgent, scenarioWrongBu, new DateOnly(2000, 1, 1));
 				PersistAndRemoveFromUnitOfWork(ass);

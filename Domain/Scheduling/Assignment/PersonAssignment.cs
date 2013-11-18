@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public class PersonAssignment : AggregateRoot, 
+	public class PersonAssignment : VersionedAggregateRoot, 
 									IPersonAssignment,
 									IExportToAnotherScenario
 	{
@@ -85,12 +85,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment; }
 		}
 
-		public virtual IPersistableScheduleData CreateTransient()
+		public virtual INonversionedPersistableScheduleData CreateTransient()
 		{
 			return NoneEntityClone();
 		}
 
-		public virtual IPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
+		public virtual INonversionedPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
 		{
 			var retObj = (PersonAssignment)NoneEntityClone();
 			retObj._scenario = parameters.Scenario;

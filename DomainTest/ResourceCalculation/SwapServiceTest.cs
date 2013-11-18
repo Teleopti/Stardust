@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -182,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
             _dictionary = 
                 new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
-                                       new DifferenceEntityCollectionService<IPersistableScheduleData>());
+                                       new DifferenceEntityCollectionService<INonversionedPersistableScheduleData>());
             IList<IPersonAssignment> assignments = new List<IPersonAssignment>();
             assignments.Add(_p1D1.PersonAssignment());
             ((ScheduleRange)_dictionary[_person1]).AddRange(assignments);

@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			_scheduleRepository = scheduleRepository;
 		}
 
-		public void SaveChanges(IDifferenceCollection<IPersistableScheduleData> scheduleChanges, IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater)
+		public void SaveChanges(IDifferenceCollection<INonversionedPersistableScheduleData> scheduleChanges, IUnvalidatedScheduleRangeUpdate stateInMemoryUpdater)
 		{
 			foreach (var scheduleChange in scheduleChanges)
 			{

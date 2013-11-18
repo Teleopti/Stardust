@@ -1,12 +1,11 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-    public class Note : AggregateRootWithBusinessUnit, INote
+    public class Note : VersionedAggregateRootWithBusinessUnit, INote
     {
         private readonly IPerson _person;
         private IScenario _scenario;
@@ -126,12 +125,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
             get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment; }
         }
 
-        public virtual IPersistableScheduleData CreateTransient()
+        public virtual INonversionedPersistableScheduleData CreateTransient()
         {
             return NoneEntityClone();
         }
 
-        public virtual IPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
+        public virtual INonversionedPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
         {
             var retObj = (Note)NoneEntityClone();
             retObj._scenario = parameters.Scenario;

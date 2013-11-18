@@ -11,7 +11,7 @@ using InParameter=Teleopti.Interfaces.Domain.InParameter;
 namespace Teleopti.Ccc.Domain.Common
 {
 
-    public class ContractSchedule : AggregateRootWithBusinessUnit, IContractSchedule, IDeleteTag
+    public class ContractSchedule : VersionedAggregateRootWithBusinessUnit, IContractSchedule, IDeleteTag
     {
         private Description _description;
 		private readonly Iesi.Collections.Generic.ISet<IContractScheduleWeek> _contractScheduleWeeks; //byt till BCL's ISet<T> när vi går över till .net 4.0!

@@ -4,8 +4,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -45,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         [Test]
         public void VerifyInheritance()
         {
-            Assert.IsInstanceOf<AggregateRootWithBusinessUnit>(_target);
+            Assert.IsInstanceOf<VersionedAggregateRootWithBusinessUnit>(_target);
         }
 
         [Test]

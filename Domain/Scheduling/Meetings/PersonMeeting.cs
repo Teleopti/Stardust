@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
     /// <summary>
     /// class for meeting to be used in schedule
     /// </summary>
-    public class PersonMeeting : AggregateRootWithBusinessUnit, IPersonMeeting
+    public class PersonMeeting : VersionedAggregateRootWithBusinessUnit, IPersonMeeting
     {
         private readonly IMeetingPerson _meetingPerson;
         private readonly IMeeting _belongsToMeeting;

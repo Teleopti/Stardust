@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 
 	    private static void setTargetBusinessUnit(ISkillDay skillDay, IBusinessUnit businessUnit)
 		{
-			typeof(AggregateRootWithBusinessUnit).GetField("_businessUnit", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(
+			typeof(VersionedAggregateRootWithBusinessUnit).GetField("_businessUnit", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy).SetValue(
 				skillDay, businessUnit);
 		}
 	}

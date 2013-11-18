@@ -15,7 +15,7 @@ namespace Teleopti.Interfaces.Domain
     /// IPersonAbsenceAccount
     ///</summary>
     public interface IPersonAbsenceAccount 
-        : IVersionedAggregateRoot, IAggregateRoot, IOriginator<IPersonAbsenceAccount>, ICloneableEntity<IPersonAbsenceAccount>
+        : IVersionedAggregateRoot, IOriginator<IPersonAbsenceAccount>, ICloneableEntity<IPersonAbsenceAccount>
     {
         ///<summary>
         ///</summary>

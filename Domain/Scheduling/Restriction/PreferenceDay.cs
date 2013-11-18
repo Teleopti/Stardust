@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 {
-    public class PreferenceDay : AggregateRootWithBusinessUnit, IRestrictionOwner, IPreferenceDay
+    public class PreferenceDay : VersionedAggregateRootWithBusinessUnit, IRestrictionOwner, IPreferenceDay
     {
         private IPreferenceRestriction _restriction;
         private readonly IPerson _person;
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
             get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction; }
         }
 
-        public virtual IPersistableScheduleData CreateTransient()
+        public virtual INonversionedPersistableScheduleData CreateTransient()
         {
             IPreferenceDay ret = (IPreferenceDay)Clone();
             ret.SetId(null);

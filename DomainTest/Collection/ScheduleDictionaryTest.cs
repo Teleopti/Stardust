@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		private IScheduleRange _dummyScheduleRange;
 		private TimeSpan _nightlyRest;
 		private IDictionary<IPerson, IScheduleRange> dictionary;
-		private IDifferenceCollectionService<IPersistableScheduleData> diffSvc;
+		private IDifferenceCollectionService<INonversionedPersistableScheduleData> diffSvc;
 		private string dummyFunction;
 		private IPerson dummyPerson;
 		private bool eventFired;
@@ -49,12 +49,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		{
 			mocks = new MockRepository();
 			dictionary = mocks.StrictMock<IDictionary<IPerson, IScheduleRange>>();
-			diffSvc = mocks.StrictMock<IDifferenceCollectionService<IPersistableScheduleData>>();
+			diffSvc = mocks.StrictMock<IDifferenceCollectionService<INonversionedPersistableScheduleData>>();
 			principalAuthorization = mocks.StrictMock<IPrincipalAuthorization>();
 			scheduleDayChangeCallback = mocks.DynamicMock<IScheduleDayChangeCallback>();
 			period = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			scenario = ScenarioFactory.CreateScenarioAggregate();
-			target = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>());
+			target = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<INonversionedPersistableScheduleData>());
 			dummyPerson = PersonFactory.CreatePerson();
 			IScheduleRange justToCreateTheScheduleRangeForTests = target[dummyPerson];
 			dummyFunction = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
@@ -274,10 +274,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				Expect.Call(diffSvc.Difference(null, null))
 				    .IgnoreArguments()
 				    .Constraints(
-					    List.Equal(new List<IPersistableScheduleData> { pAss }),
-					    List.ContainsAll(new List<IPersistableScheduleData> { pAss, pAbs })
+						List.Equal(new List<INonversionedPersistableScheduleData> { pAss }),
+						List.ContainsAll(new List<INonversionedPersistableScheduleData> { pAss, pAbs })
 						)
-				    .Return(new DifferenceCollection<IPersistableScheduleData>());
+					.Return(new DifferenceCollection<INonversionedPersistableScheduleData>());
 			}
 			using (mocks.Playback())
 			{
@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					Assert.IsFalse(target[dummyPerson].Contains(ass));
 					Assert.IsFalse(target[dummyPerson].Contains(abs));
 
-					IDifferenceCollection<IPersistableScheduleData> diff = target.DifferenceSinceSnapshot();
+					var diff = target.DifferenceSinceSnapshot();
 					Assert.AreEqual(0, diff.Count());
 
 					Assert.IsTrue(eventFired);
@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				target.DeleteMeetingFromBroker(meetingId);
 				var partNew = target[dummyPerson].ScheduledDay(date);
 				Assert.AreEqual(0, partNew.PersonMeetingCollection().Count);
-				IDifferenceCollection<IPersistableScheduleData> diff = target.DifferenceSinceSnapshot();
+				var diff = target.DifferenceSinceSnapshot();
 				Assert.AreEqual(0, diff.Count());
 
 				Assert.IsTrue(eventFired);
@@ -428,7 +428,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					((Schedule)part).Add(pAss);
 					target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 
-					IDifferenceCollection<IPersistableScheduleData> diff = target.DifferenceSinceSnapshot();
+					var diff = target.DifferenceSinceSnapshot();
 					Assert.AreEqual(1, diff.Count());
 					Assert.AreEqual(DifferenceStatus.Added, diff.First().Status);
 				}

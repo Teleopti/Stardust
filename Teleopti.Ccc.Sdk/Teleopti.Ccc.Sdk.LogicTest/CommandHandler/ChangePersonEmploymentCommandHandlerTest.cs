@@ -5,14 +5,13 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -290,7 +289,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var unitOfWork = _mock.StrictMock<IUnitOfWork>();
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
             personPeriod.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true));
-            ReflectionHelper.SetBusinessUnit(_team.Site, new BusinessUnit("asdf"));
+            _team.Site.SetBusinessUnit(new BusinessUnit("asdf"));
             _team.Site.BusinessUnit.SetId(Guid.NewGuid());
 
             using (_mock.Record())

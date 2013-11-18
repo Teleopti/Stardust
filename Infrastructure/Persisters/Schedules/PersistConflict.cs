@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 	{
 		private const string exMessage = "Incorrect conflict. DatabaseVersion = {0}, OrgItem = {1}, CurrentItem = {2}.";
 
-		public PersistConflict(DifferenceCollectionItem<IPersistableScheduleData> clientVersion, IPersistableScheduleData databaseVersion)
+		public PersistConflict(DifferenceCollectionItem<INonversionedPersistableScheduleData> clientVersion, INonversionedPersistableScheduleData databaseVersion)
 		{
 			ClientVersion = clientVersion;
 			DatabaseVersion = databaseVersion;
 		}
 
-		public DifferenceCollectionItem<IPersistableScheduleData> ClientVersion { get; private set; }
-		public IPersistableScheduleData DatabaseVersion { get; private set; }
+		public DifferenceCollectionItem<INonversionedPersistableScheduleData> ClientVersion { get; private set; }
+		public INonversionedPersistableScheduleData DatabaseVersion { get; private set; }
 
 		public Guid InvolvedId()
 		{

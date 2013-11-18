@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
 {
-    public class Team : AggregateRoot, ITeam, IAggregateRootWithEvents, IDeleteTag
+    public class Team : VersionedAggregateRoot, ITeam, IAggregateRootWithEvents, IDeleteTag
     {
         private Description _description;
         private ISite _site;

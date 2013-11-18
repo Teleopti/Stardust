@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.Messaging
 {
-    public class PushMessageDialogue : AggregateRootWithBusinessUnit, IPushMessageDialogue
+    public class PushMessageDialogue : VersionedAggregateRootWithBusinessUnit, IPushMessageDialogue
     {
         private static readonly string _defaultReply = string.Empty;
         private readonly IPushMessage _pushMessage;

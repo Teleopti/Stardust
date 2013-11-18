@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected IScheduleRangePersister Target { get; set; }
 		protected IScheduleTag ScheduleTag { get; private set; }
 		protected IDayOffTemplate DayOffTemplate { get; private set; }
-		private IEnumerable<IPersistableScheduleData> _givenState;
+		private IEnumerable<INonversionedPersistableScheduleData> _givenState;
 
 		protected override void SetupForRepositoryTestWithoutTransaction()
 		{
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			var currUnitOfWork = new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
 			var scheduleRep = new ScheduleRepository(currUnitOfWork);
 			Target = new ScheduleRangePersister(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()),
-				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
+				new DifferenceEntityCollectionService<INonversionedPersistableScheduleData>(),
 				ConflictCollector(),
 				new ScheduleDifferenceSaver(scheduleRep),
 				MockRepository.GenerateMock<IMessageBrokerIdentifier>());
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				new MultiplicatorDefinitionSetRepository(unitOfWork).Add(DefinitionSet);
 				new ScheduleTagRepository(unitOfWork).Add(ScheduleTag);
 				new DayOffTemplateRepository(unitOfWork).Add(DayOffTemplate);
-				var scheduleDatas = new List<IPersistableScheduleData>();
+				var scheduleDatas = new List<INonversionedPersistableScheduleData>();
 				Given(scheduleDatas);
 				_givenState = scheduleDatas;
 				_givenState.ForEach(x => new ScheduleRepository(unitOfWork).Add(x));
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			}
 		}
 
-		protected abstract void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart);
+		protected abstract void Given(ICollection<INonversionedPersistableScheduleData> scheduleDataInDatabaseAtStart);
 		protected abstract void WhenOtherHasChanged(IScheduleRange othersScheduleRange);
 		protected abstract void WhenImChanging(IScheduleRange myScheduleRange);
 		protected abstract void Then(IEnumerable<PersistConflict> conflicts);
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		private static void generalAsserts(IScheduleRange range, IEnumerable<PersistConflict> conflicts)
 		{
-			var rangeDiff = range.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>());
+			var rangeDiff = range.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<INonversionedPersistableScheduleData>());
 
 			if (conflicts.Any())
 			{

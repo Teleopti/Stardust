@@ -10,7 +10,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: rogerkr
     /// Created date: 2008-02-19
     /// </remarks>
-    public interface IScheduleRepository : IRepository<IPersistableScheduleData> 
+    public interface IScheduleRepository : IRepository<INonversionedPersistableScheduleData> 
 		{
 			  ///<summary>
         /// Gets the entity of the specified type using the specified id
@@ -18,7 +18,7 @@ namespace Teleopti.Interfaces.Domain
         ///<param name="concreteType"></param>
         ///<param name="id"></param>
         ///<returns></returns>
-        IPersistableScheduleData Get(Type concreteType, Guid id);
+        INonversionedPersistableScheduleData Get(Type concreteType, Guid id);
 
 	    IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(
 		    IPerson person,
@@ -81,6 +81,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2009-11-18
         /// </remarks>
-        IPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id);
+        INonversionedPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id);
     }
 }

@@ -6,7 +6,8 @@ namespace Teleopti.Interfaces.Domain
     /// <summary>
     /// Class describing an PersonAbsence
     /// </summary>
-	public interface IPersonAbsence : IExportToAnotherScenario,
+	public interface IPersonAbsence :	IPersistableScheduleData,
+										IExportToAnotherScenario,
 										IAggregateRootWithEvents,
                                         ICloneableEntity<IPersonAbsence>,
 										ILayerCollectionOwner<ISkillStaff>

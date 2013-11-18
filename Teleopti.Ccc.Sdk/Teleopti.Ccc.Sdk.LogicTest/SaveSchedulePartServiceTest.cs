@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 		public void ShouldSaveSchedulePart()
 		{
 			var scheduleDay = mocks.DynamicMock<IScheduleDay>();
-			var differenceCollectionItems = mocks.DynamicMock<IDifferenceCollection<IPersistableScheduleData>>();
+			var differenceCollectionItems = mocks.DynamicMock<IDifferenceCollection<INonversionedPersistableScheduleData>>();
 			var response = new List<IBusinessRuleResponse>();
 			var dictionary = mocks.DynamicMock<IReadOnlyScheduleDictionary>();
 

@@ -11,8 +11,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 	public class Bug25007 : ScheduleRangePersisterBaseTest
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
-		
-		protected override void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart)
+
+		protected override void Given(ICollection<INonversionedPersistableScheduleData> scheduleDataInDatabaseAtStart)
 		{
 		}
 
