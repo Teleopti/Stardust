@@ -29,8 +29,8 @@
 
 .person-schedule .person td
 {
-	height: 13px;
-	line-height: 13px;	
+	height: 14px;
+	line-height: 14px;	
 }
  
 .person-schedule .person.selected-person
@@ -103,6 +103,7 @@
 .person-schedule .shift-menu-background {
 	background: #eeeeee;
 }
+
 .person-schedule .shift-menu
 {
 }
@@ -118,7 +119,7 @@
 .person-schedule .shift .layer
 {
 	z-index: 10;	
-	height: 14px;
+	height: 22px;
 	text-align: center;
 }
 

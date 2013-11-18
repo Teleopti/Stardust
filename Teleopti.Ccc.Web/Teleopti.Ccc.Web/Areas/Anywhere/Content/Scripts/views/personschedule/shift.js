@@ -24,11 +24,14 @@ define([
 			});
 		};
 		
+		this.IsFullDayAbsence = ko.observable();
+		
 		this.AddLayers = function (data) {
 			var layers = data.Projection != undefined ? data.Projection : data.Layers;
 			var newItems = ko.utils.arrayMap(layers, function (l) {
 				l.Date = data.Date;
 				l.IsFullDayAbsence = data.IsFullDayAbsence;
+				self.IsFullDayAbsence(data.IsFullDayAbsence);
 				return new layer(timeline, l, self);
 			});
 			self.Layers.push.apply(self.Layers, newItems);

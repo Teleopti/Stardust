@@ -61,7 +61,7 @@
 						<tr class="person selected-person" data-bind="attr: { 'data-person-id': Id }">
 							<td class="person-name person-name-column">
 								<!-- Must do it this way to get correct overflow: hidden in IE -->
-								<div class="person-name nowrap" data-bind="text: Name"></div>
+								<div class="person-name nowrap"></div>
 							</td>
 							<td class="schedule schedule-column">
 								<div class="relative time-line-for">
@@ -97,13 +97,14 @@
 						</tr>
 						
 						<!-- ko foreach: Shifts -->
+						<!-- ko ifnot: IsFullDayAbsence -->
 						<tr>
 							<td class="shift-menu-background person-name-column"></td>
 							<td class="shift-menu-background schedule-column">
 								
 								<div class="row-fluid space" data-bind="style: { 'margin-left': ShiftStartPixels() + 'px' }">
 									<div class="span3">
-										
+										<!--<blockquote>-->
 										<!-- ko if: $root.AddingAbsence -->
 										<!-- ko with: $root.AddAbsenceForm -->
 										<form action="#" class="form activity-form">
@@ -135,25 +136,25 @@
 										<!--TOP DOWN -->
 										<!-- ko if: $root.AddingAbsence -->
 										<!-- ko with: $root.AddAbsenceForm -->
-										<!--form action="#" class="activity-form">
-											<select id="Select2" class="absence-type" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: Absence">
-											</select>
-											<div class="input-append bootstrap-timepicker">
-												<input type="text" class="start-time" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: false, allowEmpty: true }" />
-												<span class="add-on"><i class="icon-time"></i></span>
-											</div>
+										<!--<form action="#" class="activity-form">
+											    <select id="Select2" class="absence-type" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: Absence">
+											    </select>
+											    <div class="input-append bootstrap-timepicker">
+												    <input type="text" class="start-time" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: false, allowEmpty: true }" />
+												    <span class="add-on"><i class="icon-time"></i></span>
+											    </div>
 											
-											<div class="input-append bootstrap-timepicker">
-												<input type="text" class="start-time" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: false, allowEmpty: true }" />
-												<span class="add-on"><i class="icon-time"></i></span>
-											</div>
+											    <div class="input-append bootstrap-timepicker">
+												    <input type="text" class="start-time" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: false, allowEmpty: true }" />
+												    <span class="add-on"><i class="icon-time"></i></span>
+											    </div>
 					
-											<label class="checkbox"><input type="checkbox"> Next day
-											</label>
+											    <label class="checkbox"><input type="checkbox"> Next day
+											    </label>
 
-											<button class="btn btn-success apply" style="margin-top: 10px" data-bind="enable: !$root.Loading(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
+											    <button class="btn btn-success apply" style="margin-top: 10px" data-bind="enable: !$root.Loading(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
 					
-											</!--form-->
+										    </form>-->
 										<!-- /ko -->
 										<!-- /ko -->
 										
@@ -208,9 +209,9 @@
 											<button class="btn btn-success apply" style="margin-top: 10px" data-bind="enable: !InvalidEndDate() && !$root.Loading(), text: $root.Resources.AddFullDayAbsence, click: Apply"></button>
 					
 										</form>
-										
 										<!-- /ko -->
 										<!-- /ko -->
+										<!--</blockquote>-->
 									</div>
 									
 									
@@ -219,11 +220,17 @@
 							</td>
 							<td class="shift-menu-background contract-time-column"></td>
 						</tr>
+						<!-- /ko -->
+						<!-- /ko -->
+						
+
 						<tr >
 							<td colspan="3" style="background-color: white;" >
 								<br />
 							</td>
 						</tr>
+						
+						<!-- ko if: true -->
 						<tr>
 							<td colspan="3" style="background-color: white; border: none">
 								<select id="Select2" data-bind="enable: !$root.Loading(), foreach: $root.GroupPages, select2: { value: $root.SelectedGroup } ">
@@ -233,16 +240,14 @@
 								</select>
 							</td>
 						</tr>
-						<!-- /ko -->
-
-
+						
 						<!-- ko foreach: PersonsInGroup -->
 						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.Id() != Id">
 							<td class="person-name person-name-column">
 								<!-- Must do it this way to get correct overflow: hidden in IE -->
 								<div class="person-name nowrap" data-bind="text: Name"></div>
 							</td>
-							<td class="schedule schedule-column">
+							<td class="schedule schedule-column" style="padding-top: 4px">
 								<div class="relative time-line-for">
 									<!-- ko foreach: Shifts -->
 									<div class="shift" data-bind="
@@ -274,6 +279,7 @@
 							</td>
 							<td class="contract-time contract-time-column" data-bind="text: ContractTime"></td>
 						</tr>
+						<!-- /ko -->
 						<!-- /ko -->
 						
 					</tbody>
