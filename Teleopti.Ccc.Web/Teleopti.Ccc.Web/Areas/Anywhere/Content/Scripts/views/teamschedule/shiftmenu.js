@@ -21,5 +21,9 @@ define([
 		this.AddAbsence = function () {
 			navigation.GotoPersonScheduleAddAbsenceForm(groupid, personid, date);
 		};
+		
+		this.RemoveAbsence = function () {
+			navigation.GotoPersonScheduleAddAbsenceForm(groupid, personid, date);
+		};
 	};
 });
