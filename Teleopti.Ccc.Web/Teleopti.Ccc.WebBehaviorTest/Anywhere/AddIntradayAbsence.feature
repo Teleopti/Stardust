@@ -2,7 +2,7 @@
 Feature: Add intraday absence
 	In order to keep track of persons absences
 	As a team leader
-	I want to add that an agent is absent for a part of his shift
+	I want to add that an agent is absent for a part of his/her shift
 	
 Background:
 	Given there is a team with
@@ -16,20 +16,13 @@ Background:
 	| View unpublished schedules | true                |
 	| Modify Absence             | true                |
 	| View confidential          | true                |
-	And there is a role with
-	| Field                      | Value                       |
-	| Name                       | Anywhere Team Green and Red |
-	| Access to team             | Team green,Team red         |
-	| Access to Anywhere         | true                        |
-	| View unpublished schedules | true                        |
-	| Modify Absence             | true                        |
 	And 'Pierre Baldi' has a person period with
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2013-11-15 |
 	And 'John King' has a person period with
 	| Field      | Value      |
-	| Team       | Team green   |
+	| Team       | Team green |
 	| Start date | 2013-11-15 |
 	And 'Ashley Andeen' has a person period with
 	| Field      | Value      |
@@ -68,7 +61,13 @@ Scenario: View form
 	Then I should see the add intraday absence form
 	
 Scenario: View team mates schedules
-	Given I have the role 'Anywhere Team Green and Red'
+	Given I have a role with
+	| Field                      | Value                       |
+	| Name                       | Anywhere Team Green and Red |
+	| Access to team             | Team green,Team red         |
+	| Access to Anywhere         | true                        |
+	| View unpublished schedules | true                        |
+	| Modify Absence             | true                        |
 	When I view person schedules add intraday absence form for 'Pierre Baldi' and 'Team green' on '2013-11-15'
 	Then I should see schedule for 'John King' in team mates schedules
 	And I should not see schedule for 'Ashley Andeen' in team mates schedules
@@ -121,6 +120,22 @@ Scenario: Default times tomorrow
 	| Field        | Value   |
 	| Start time   | 11:00   |
 	| End time     | 12:00   |
+
+Scenario: Invalid times
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-11-15 11:00 |
+	| End time       | 2013-11-15 17:00 |
+	When I view person schedules add intraday day absence form for 'Pierre Baldi' and 'Team green' on '2013-11-15'
+	And I input these intraday absence values
+	| Field      | Value |
+	| Start time | 09:00 |
+	| End time   | 10:00 |
+	Then I should see the alert 'Invalid time'
+	# is 16:00 to 19:00 valid?
 
 Scenario: Add on shift
 	
