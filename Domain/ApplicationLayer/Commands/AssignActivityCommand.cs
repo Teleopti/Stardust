@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	public class AddActivityCommand
+	public class AssignActivityCommand
 	{
 		public Guid PersonId { get; set; }
 		public DateOnly Date { get; set; }

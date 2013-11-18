@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var activityToLookFor = new Activity("d");
 			var target = new MoveLayerVertical();
 			var ass = new PersonAssignment(new Person(), new Scenario("sd"), new DateOnly(2000, 1, 1));
-			ass.AddMainLayer(new Activity("d"), new DateTimePeriod());
+			ass.AssignActivity(new Activity("d"), new DateTimePeriod());
 			ass.AddPersonalLayer(activityToLookFor, new DateTimePeriod());
 			ass.AddPersonalLayer(new Activity("d"), new DateTimePeriod());
 
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var activityToLookFor = new Activity("d");
 			var target = new MoveLayerVertical();
 			var ass = new PersonAssignment(new Person(), new Scenario("sd"), new DateOnly(2000, 1, 1));
-			ass.AddMainLayer(new Activity("d"), new DateTimePeriod());
+			ass.AssignActivity(new Activity("d"), new DateTimePeriod());
 			ass.AddOvertimeLayer(activityToLookFor, new DateTimePeriod(),null);
 			ass.AddOvertimeLayer(new Activity("d"), new DateTimePeriod(), null);
 

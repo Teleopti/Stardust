@@ -1,3 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
@@ -10,6 +16,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     {
 	    private readonly int _minResolution;
 	    private readonly ResourceCalculationDataContainer retList;
+		private readonly ICollection<Task> _extractionTasks = new Collection<Task>();
 
 	    public ScheduleProjectionExtractor(IPersonSkillProvider personSkillProvider, int minResolution)
 	    {
@@ -30,11 +37,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
 		    using (PerformanceOutput.ForOperation("Creating projection"))
 		    {
-			    retList.Clear();
 #pragma warning disable 618
-			    scheduleDictionary.ExtractAllScheduleData(this);
+
+				retList.Clear();
+				_extractionTasks.Clear();
+				scheduleDictionary.ExtractAllScheduleData(this);
+
+				Task.WaitAll(_extractionTasks.ToArray());
+				return retList;
+
 #pragma warning restore 618
-			    return retList;
 		    }
         }
 
@@ -53,7 +65,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        using (PerformanceOutput.ForOperation("Creating projection"))
 	        {
 		        retList.Clear();
+				_extractionTasks.Clear();
 		        scheduleDictionary.ExtractAllScheduleData(this, period);
+
+		        Task.WaitAll(_extractionTasks.ToArray());
+
 		        return retList;
 	        }
         }
@@ -62,8 +78,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
 	        using (PerformanceOutput.ForOperation("Adding schedule part"))
 	        {
-                retList.AddScheduleDayToContainer(schedulePart,_minResolution);
-			}
+		        var task = retList.AddScheduleDayToContainer(schedulePart, _minResolution);
+                _extractionTasks.Add(task);
+	        }
         }
     }
 }

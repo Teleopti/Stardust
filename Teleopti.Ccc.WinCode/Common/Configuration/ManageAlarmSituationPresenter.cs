@@ -16,10 +16,10 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 {
     public class ManageAlarmSituationPresenter : IDisposable
     {
-        private IList<IAlarmType> _alarmTypes;
-        private IList<IActivity> _activities;
-        private IList<IRtaStateGroup> _rtaStateGroups;
-        private IList<IStateGroupActivityAlarm> _stateGroupActivityAlarms;
+        private readonly List<IAlarmType> _alarmTypes = new List<IAlarmType>();
+        private readonly List<IActivity> _activities = new List<IActivity>();
+        private readonly List<IRtaStateGroup> _rtaStateGroups = new List<IRtaStateGroup>();
+        private readonly List<IStateGroupActivityAlarm> _stateGroupActivityAlarms = new List<IStateGroupActivityAlarm>();
         private readonly IList<IStateGroupActivityAlarm> _stateGroupActivityAlarmsToAdd = new List<IStateGroupActivityAlarm>();
         private readonly IList<IStateGroupActivityAlarm> _stateGroupActivityAlarmsToRemove = new List<IStateGroupActivityAlarm>();
         private readonly IStateGroupActivityAlarmRepository _stateGroupActivityAlarmRepository;
@@ -28,6 +28,8 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         private readonly IRtaStateGroupRepository _rtaStateGroupRepository;
         private readonly IActivityRepository _activityRepository;
         private readonly IAlarmTypeRepository _alarmTypeRepository;
+
+		private readonly object StateGroupLock = new object();
 
         public ManageAlarmSituationPresenter(IAlarmTypeRepository alarmTypeRepository, IRtaStateGroupRepository rtaStateGroupRepository, IActivityRepository activityRepository, IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository, IMessageBroker messageBroker, IManageAlarmSituationView manageAlarmSituationView)
         {
@@ -41,20 +43,28 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
         public void Load()
         {
-            _alarmTypes = _alarmTypeRepository.LoadAll();
-            _rtaStateGroups = _rtaStateGroupRepository.LoadAllCompleteGraph();
+	        lock (StateGroupLock)
+	        {
+			_alarmTypes.Clear();
+            _alarmTypes.AddRange(_alarmTypeRepository.LoadAll());
+			_rtaStateGroups.Clear();
+            _rtaStateGroups.AddRange(_rtaStateGroupRepository.LoadAllCompleteGraph());
             _rtaStateGroups.Add(null);
-            _activities = _activityRepository.LoadAll();
+			_activities.Clear();
+            _activities.AddRange(_activityRepository.LoadAll());
             _activities.Add(null);
-            _stateGroupActivityAlarms = _stateGroupActivityAlarmRepository.LoadAllCompleteGraph();
+            _stateGroupActivityAlarms.AddRange(_stateGroupActivityAlarmRepository.LoadAllCompleteGraph());
             _messageBroker.RegisterEventSubscription(OnRtaStateGroupEvent, typeof(IRtaStateGroup));
             _messageBroker.RegisterEventSubscription(OnActivityEvent, typeof(IActivity));
             _messageBroker.RegisterEventSubscription(OnAlarmEvent, typeof(IAlarmType));
-        }
+			}
+		}
 
         public void OnAlarmEvent(object sender, EventMessageArgs e)
         {
-            if (e.Message.DomainUpdateType == DomainUpdateType.Update ||
+	        lock (StateGroupLock)
+	        {
+			if (e.Message.DomainUpdateType == DomainUpdateType.Update ||
                 e.Message.DomainUpdateType == DomainUpdateType.Delete)
             {
                 IAlarmType alarmType = _alarmTypes.FirstOrDefault(s => s!=null && s.Id == e.Message.DomainObjectId);
@@ -70,11 +80,14 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
                 IAlarmType alarmType = _alarmTypeRepository.Get(e.Message.DomainObjectId);
                 if (alarmType != null) _alarmTypes.Add(alarmType);
             }
-            _manageAlarmSituationView.RefreshGrid();
+			_manageAlarmSituationView.RefreshGrid();
+			}
         }
 
         public void OnActivityEvent(object sender, EventMessageArgs e)
         {
+	        lock (StateGroupLock)
+	        {
             if (e.Message.DomainUpdateType == DomainUpdateType.Update ||
                 e.Message.DomainUpdateType == DomainUpdateType.Delete)
             {
@@ -91,11 +104,14 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
                 IActivity activity = _activityRepository.Get(e.Message.DomainObjectId);
                 if (activity != null) _activities.Add(activity);
             }
-            _manageAlarmSituationView.RefreshGrid();
+			_manageAlarmSituationView.RefreshGrid();
+			}
         }
 
         public void OnRtaStateGroupEvent(object sender, EventMessageArgs e)
         {
+	        lock (StateGroupLock)
+	        {
             if (e.Message.DomainUpdateType == DomainUpdateType.Update ||
                 e.Message.DomainUpdateType == DomainUpdateType.Delete)
             {
@@ -112,7 +128,8 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
                 IRtaStateGroup stateGroup = _rtaStateGroupRepository.Get(e.Message.DomainObjectId);
                 if (stateGroup != null) _rtaStateGroups.Add(stateGroup);
             }
-            _manageAlarmSituationView.RefreshGrid();
+			_manageAlarmSituationView.RefreshGrid();
+			}
         }
 
 		public void OnSave()

@@ -6936,7 +6936,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void addOvertimeAvailabilityToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			var selectedDay = _scheduleView.SelectedSchedules()[0];
-			using (var view = new AgentOvertimeAvailabilityView(selectedDay))
+			using (var view = new AgentOvertimeAvailabilityView(selectedDay,_schedulerState.SchedulingResultState ))
 			{
 				view.ShowDialog(this);
                 updateOvertimeAvailability();

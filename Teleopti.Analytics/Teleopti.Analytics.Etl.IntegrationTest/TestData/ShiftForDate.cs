@@ -49,13 +49,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			// create main shift
 			_assignmentPeriod = new DateTimePeriod(dateUtc.Add(StartTime), dateUtc.Add(EndTime));
 			var assignment = PersonAssignmentFactory.CreatePersonAssignment(person, Scenario, new DateOnly(Date));
-			assignment.AddMainLayer(ActivityPhone, _assignmentPeriod);
+			assignment.AssignActivity(ActivityPhone, _assignmentPeriod);
 
 			// add lunch
 			if (_withLunch)
 			{
 				var lunchPeriod = new DateTimePeriod(dateUtc.Add(StartTime).AddHours(3), dateUtc.Add(StartTime).AddHours(4));
-				assignment.AddMainLayer(ActivityLunch, lunchPeriod);
+				assignment.AssignActivity(ActivityLunch, lunchPeriod);
 			}
 
 			assignment.SetShiftCategory(ShiftCategory);

@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override IPersonAssignment CreateAggregateWithCorrectBusinessUnit()
         {
 	        var ass = new PersonAssignment(_dummyAgent, _dummyScenario, new DateOnly(2000, 1, 1));
-	        ass.AddMainLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+	        ass.AssignActivity(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 					ass.SetShiftCategory(_dummyCat);
 					ass.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2000,1,1,2000,1,2));
 	        ass.AddOvertimeLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), _definitionSet);

@@ -72,13 +72,13 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
                                                        new DateTime(2007, 1, 2, 1, 40, 0, DateTimeKind.Utc));
             //43 - SUM = 77
             // Add activity periods to a Layer
-						personAssignment.AddMainLayer(ActivityCollection[0], phone1);
-						personAssignment.AddMainLayer(ActivityCollection[2], shortBreak1);
-						personAssignment.AddMainLayer(ActivityCollection[0], phone2);
-						personAssignment.AddMainLayer(ActivityCollection[1], lunchBreak1);
-						personAssignment.AddMainLayer(ActivityCollection[0], phone3);
-						personAssignment.AddMainLayer(ActivityCollection[2], shortbreak2);
-						personAssignment.AddMainLayer(ActivityCollection[2], phone4);
+						personAssignment.AssignActivity(ActivityCollection[0], phone1);
+						personAssignment.AssignActivity(ActivityCollection[2], shortBreak1);
+						personAssignment.AssignActivity(ActivityCollection[0], phone2);
+						personAssignment.AssignActivity(ActivityCollection[1], lunchBreak1);
+						personAssignment.AssignActivity(ActivityCollection[0], phone3);
+						personAssignment.AssignActivity(ActivityCollection[2], shortbreak2);
+						personAssignment.AssignActivity(ActivityCollection[2], phone4);
 						personAssignment.SetShiftCategory(_shiftCategoryCollection[0]);
 
             RaptorTransformerHelper.SetUpdatedOn(personAssignment, DateTime.Now);
