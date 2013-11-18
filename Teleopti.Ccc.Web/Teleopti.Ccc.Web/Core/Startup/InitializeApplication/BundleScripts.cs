@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/jqueryui/smoothness/jquery-ui-1.10.2.custom.css",
 					"~/Content/Scripts/jquery.qtip.css",
 					"~/Content/select2/select2.css",
-					"~/Content/bootstrap-timepicker/css/bootstrap-timepicker.min.css",
+					"~/Content/bootstrap-timepicker/css/bootstrap-timepicker.css",
 					"~/Content/Scripts/pinify/content/jquery.pinify.min.css"
 				);
 			var jsBundle = new ScriptBundle("~/MyTimeJs")
