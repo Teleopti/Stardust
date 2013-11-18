@@ -10,6 +10,15 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		public Task Execute()
 		{
 			BundleTable.Bundles.IgnoreList.Ignore("*Tests.js");
+
+			registerMyTimeScripts();
+			registerSigninScripts();
+
+			return null;
+		}
+
+		private static void registerMyTimeScripts()
+		{
 			var cssBundle = new StyleBundle("~/MyTimeCss")
 				.IncludeDirectory("~/Areas/MyTime/Content/Css", "*.css")
 				.Include(
@@ -47,9 +56,34 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/scripts/pinify/scripts/jquery.pinify.min.js" //I wonder if this will be read...
 				)
 				.IncludeDirectory("~/Areas/MyTime/Content/Scripts", "*.js", true);
-			BundleTable.Bundles.Add(jsBundle);
 			BundleTable.Bundles.Add(cssBundle);
-			return null;
+			BundleTable.Bundles.Add(jsBundle);
+		}
+
+		private static void registerSigninScripts()
+		{
+			//use requiresJs here instead?
+			var cssBundle = new StyleBundle("~/SignInCss")
+				.Include(
+					"~/Content/bootstrap/bootstrap.css",
+					"~/Content/bootstrap/bootstrap-responsive.css",
+					"~/Areas/Start/Content/Css/Login.css",
+					"~/Areas/Start/Content/Css/Site.css"
+				);
+			var jsBundle = new ScriptBundle("~/SignInJs")
+				.Include(
+					"~/Content/jquery/jquery-1.10.2.js",
+					"~/Content/Scripts/jquery.ba-hashchange.js",
+					"~/Content/Scripts/modernizr-2.6.2.js",
+					"~/Content/jquery-plugin/jquery.placeholder.js",
+					"~/Content/bootstrap/bootstrap.js",
+					"~/Content/Scripts/knockout-2.2.1.js",
+					"~/Content/signals/signals.js",
+					"~/Content/hasher/hasher.js",
+					"~/Content/crossroads/crossroads.js")
+				.IncludeDirectory("~/Areas/Start/Content/Scripts", "*.js");
+			BundleTable.Bundles.Add(cssBundle);
+			BundleTable.Bundles.Add(jsBundle);
 		}
 	}
 }

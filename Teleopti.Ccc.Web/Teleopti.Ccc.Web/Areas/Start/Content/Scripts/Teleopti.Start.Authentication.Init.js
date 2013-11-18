@@ -5,16 +5,7 @@
 /// <reference path="~/Areas/Start/Content/Scripts/Teleopti.Start.Common.js" />
 /// <reference path="~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ChangePasswordView.js" />
 
-
-if (typeof (Teleopti) === 'undefined') {
-	Teleopti = {};
-
-	if (typeof (Teleopti.Start) === 'undefined') {
-		Teleopti.Start = {};
-	}
-}
-
-Teleopti.Start.Authentication = function () {
+Teleopti.Start.Authentication.Init = function () {
 
 	var defaultView = "signin";
 

@@ -1,38 +1,16 @@
-﻿@using Teleopti.Ccc.UserTexts
+﻿@using System.Web.Optimization
+@using Teleopti.Ccc.UserTexts
 @section head {
-	<link href="@Url.Content("~/Content/bootstrap/bootstrap.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Content/bootstrap/bootstrap-responsive.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Areas/Start/Content/Css/Login.css")" rel="stylesheet" type="text/css" />
+	@Styles.Render("~/SignInCss")
+	@Scripts.Render("~/SignInJs")
 	
-	<script src="@Url.Content("~/Content/bootstrap/bootstrap.js")"></script>
-	<script src="@Url.Content("~/Content/Scripts/knockout-2.2.1.js")"></script>
-	<script src="@Url.Content("~/Content/signals/signals.js")"></script>
-	<script src="@Url.Content("~/Content/hasher/hasher.js")"></script>
-	<script src="@Url.Content("~/Content/crossroads/crossroads.js")"></script>
-    
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.JQueryAjaxViewModel.js")"></script>
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.AuthenticationState.js")"></script>
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.Navigation.js")"></script>
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.Settings.js")"></script>
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.SignInView.js")"></script>
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.SignInViewModel.js")"></script>
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.DataSourceViewModel.js")"></script>
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.BusinessUnitSelectionView.js")"></script>
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.BusinessUnitSelectionViewModel.js")"></script>
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.BusinessUnitViewModel.js")"></script>
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.MenuView.js")"></script>
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.MenuViewModel.js")"></script>
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ApplicationViewModel.js")"></script>
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ChangePasswordView.js")"></script>
-	<script src="@Url.Content("~/Areas/Start/Content/Scripts/Teleopti.Start.Authentication.ChangePasswordViewModel.js")"></script>
-    
 	<script type="text/javascript">
 		var authentication;
 		$(function () {
 			Teleopti.Start.Authentication.Settings = {
 				baseUrl: '@Url.Content("~/")'
 			};
-			authentication = new Teleopti.Start.Authentication();
+			authentication = new Teleopti.Start.Authentication.Init();
 		});
 	</script>
 }
