@@ -3,6 +3,7 @@ using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.Fairness;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -226,6 +227,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			registerTeamBlockDayOffOptimizerService(builder);
 			registerTeamBlockIntradayOptimizerService(builder);
 			registerTeamBlockSchedulingService(builder);
+            registerFairnessOptimizationService(builder);
 
             builder.RegisterType<ScheduleOvertimeCommand>().As<IScheduleOvertimeCommand>();
             builder.RegisterType<ScheduleDayListFactory>().As<IScheduleDayListFactory>();
@@ -238,7 +240,19 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<NightlyRestRule>().As<IAssignmentPeriodRule>();
         }
 
-		private static void registerTeamBlockCommon(ContainerBuilder builder)
+        private void registerFairnessOptimizationService(ContainerBuilder builder)
+        {
+            builder.RegisterType<FairnessOptimization>().As<IFairnessOptimization>();
+            builder.RegisterType<PriortiseShiftCategory>().As<IPriortiseShiftCategory>();
+            builder.RegisterType<ScheduleDayFinderWithLeastShiftCategory>().As<IScheduleDayFinderWithLeastShiftCategory>();
+            builder.RegisterType<PrioritiseAgentByContract>().As<IPrioritiseAgentByContract>();
+            builder.RegisterType<PriortiseWeekDay>().As<IPriortiseWeekDay>();
+            builder.RegisterType<SwapScheduleDays>().As<ISwapScheduleDays>();
+            builder.RegisterType<ValidateScheduleDays>().As<IValidateScheduleDays>();
+            builder.RegisterType<FairnessOptimizationCommand>().As<IFairnessOptimizationCommand>();
+        }
+
+        private static void registerTeamBlockCommon(ContainerBuilder builder)
 		{
 			builder.RegisterType<GroupPersonSkillAggregator>().As<IGroupPersonSkillAggregator>();
 			builder.RegisterType<DynamicBlockFinder>().As<IDynamicBlockFinder>();

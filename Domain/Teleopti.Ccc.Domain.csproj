@@ -354,6 +354,13 @@
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
+    <Compile Include="Optimization\Fairness\FairnessOptimization.cs" />
+    <Compile Include="Optimization\Fairness\PrioritiseAgentByContract.cs" />
+    <Compile Include="Optimization\Fairness\PriortiseShiftCategory.cs" />
+    <Compile Include="Optimization\Fairness\PriortiseWeekDay.cs" />
+    <Compile Include="Optimization\Fairness\ScheduleDayFinderWithLeastShiftCategory.cs" />
+    <Compile Include="Optimization\Fairness\SwapScheduleDays.cs" />
+    <Compile Include="Optimization\Fairness\ValidateScheduleDays.cs" />
     <Compile Include="Optimization\StandardDeviationData.cs">
       <SubType>Code</SubType>
     </Compile>
