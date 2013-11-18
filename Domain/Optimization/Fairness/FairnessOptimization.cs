@@ -109,10 +109,14 @@ namespace Teleopti.Ccc.Domain.Optimization.Fairness
                     if (getLowAndHighPriorityDaysOnDate(hightPriorityDate, lowPriorityDate, scheduleDays,
                                                         personHighPriority, lowestPriorityOfPerson,
                                                         out highPriorityScheduleDay, out lowPriorirtyShceudleDay))
+                    {
+                        personHighPriority--;
                         continue;
+                    }
                     if (_validateScheduleDays.Validate(highPriorityScheduleDay, lowPriorirtyShceudleDay))
                     {
                         _swapScheduleDays.Swap(highPriorityScheduleDay, lowPriorirtyShceudleDay);
+                        break;
                     }
                     personHighPriority--;
                 }

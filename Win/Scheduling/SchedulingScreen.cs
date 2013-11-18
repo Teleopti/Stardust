@@ -3731,7 +3731,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    private void runFairnessOptimization(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IList<IScheduleDay> scheduleDays)
 	    {
             var fairnessOptimizationCommand = _container.Resolve<IFairnessOptimizationCommand>();
-            fairnessOptimizationCommand.Execute(selectedPeriod, selectedPersons, scheduleDays, _schedulerState.CommonStateHolder.ShiftCategories);
+            fairnessOptimizationCommand.Execute(selectedPeriod, selectedPersons, scheduleDays, _schedulerState.CommonStateHolder.ShiftCategories.ToList());
 	    }
 
 

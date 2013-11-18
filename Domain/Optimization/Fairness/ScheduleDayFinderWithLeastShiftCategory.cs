@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization.Fairness
                  priority++)
             {
                 IShiftCategory shiftCategory = priortiseShiftCategory.ShiftCategoryOnPriority(priority);
-                finalScheduleDays = scheduleListOnDate.Where(s => s.GetEditorShift().ShiftCategory == shiftCategory);
+                finalScheduleDays = scheduleListOnDate.Where(s => s.GetEditorShift().ShiftCategory == shiftCategory).ToList();
                 if (!finalScheduleDays.ToList().Any()) continue;
                 break;
             }
