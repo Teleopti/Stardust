@@ -41,7 +41,7 @@ Background:
 
 
 
-Scenario: Hide function if no permission
+Scenario: Prevent adding if no permission
 	Given I have a role with
 	| Field                      | Value                 |
 	| Name                       | Cannot Modify Absence |
@@ -60,7 +60,7 @@ Scenario: View form
 	And I click 'add intraday absence'
 	Then I should see the add intraday absence form
 
-Scenario: Hide confidential if no permission
+Scenario: Prevent selection of confidential if no permission
 	Given I have a role with
 	| Field                      | Value                    |
 	| Name                       | Cannot view confidential |
