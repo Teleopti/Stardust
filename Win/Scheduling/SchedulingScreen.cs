@@ -207,6 +207,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private bool isWindowLoaded = false;
 		private ScheduleTimeType _scheduleTimeType;
 		private DateTime _lastSaved = DateTime.Now;
+		private bool _useSeniorityFairness;
 
 		#region enums
 		private enum ZoomLevel
@@ -775,6 +776,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' '), SchedulerState.FilteredPersonDictionary);
 				e.Handled = true;
 				e.SuppressKeyPress = true;
+			}
+
+			//for prototype, should be in workflow control set in live environment
+			if (e.KeyCode == Keys.S && e.Control && e.Shift && e.Alt)
+			{
+				_useSeniorityFairness = !_useSeniorityFairness;
+				var output = string.Format("Seniority = {0}", _useSeniorityFairness);
+				ShowInformationMessage(output, "Prototype - Seniority");
 			}
 
 			base.OnKeyDown(e);
