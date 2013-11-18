@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
@@ -157,6 +158,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(name).Person.Id.Value;
 			Navigation.GotoAnywherePersonScheduleFullDayAbsenceForm(personId, date);
+		}
+
+		[When(@"I view person schedules assign activity form for '(.*)' and '(.*)' on '(.*)'")]
+		public void WhenIViewPersonSchedulesAssignActivityFormForAndOn(string name, string team, DateTime date)
+		{
+			TestControllerMethods.Logon();
+			var personId = DataMaker.Person(name).Person.Id.Value;
+			Guid groupid = Guid.Empty;
+			ScenarioUnitOfWorkState.UnitOfWorkAction(uow =>
+				{
+
+					groupid = (from p in new GroupPageRepository(uow).LoadAll()
+					           from g in p.RootGroupCollection
+					           where g.Description.Name.Equals(team)
+					           select g.Id.Value).Single();
+
+				});
+			Navigation.GotoAnywherePersonScheduleAssignActivityForm(personId, groupid, date);
 		}
 
 		[When(@"I navigate to the preferences page")]

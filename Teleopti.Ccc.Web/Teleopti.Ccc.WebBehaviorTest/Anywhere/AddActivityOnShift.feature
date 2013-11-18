@@ -44,7 +44,7 @@ Scenario: View team mates schedules
 	| Team       | Team green |
 	| Start date | 2013-11-18 |
 	When I view person schedules assign activity form for 'Pierre Baldi' and 'Team green' on '2013-11-18'
-	Then I should see schedule for 'John King' in team mates schedules
+	Then I should see schedule for 'John King'
 
 Scenario: Default times today
 	Given I have the role 'Anywhere Team Green'

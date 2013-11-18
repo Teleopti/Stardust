@@ -96,6 +96,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExists(".full-day-absence-form");
 		}
 
+		[Then(@"I should see the assign activity form")]
+		public void ThenIShouldSeeTheAssignActivityForm()
+		{
+			Browser.Interactions.AssertExists(".assign-activity-form");
+		}
+
 		[When(@"I input these full day absence values")]
 		public void WhenIInputTheseFullDayAbsenceValues(Table table)
 		{
