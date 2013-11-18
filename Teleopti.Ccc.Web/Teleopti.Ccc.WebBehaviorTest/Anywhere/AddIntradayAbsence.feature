@@ -59,24 +59,6 @@ Scenario: View form
 	And I select any schedule activity for 'Pierre Baldi'
 	And I click 'add intraday absence'
 	Then I should see the add intraday absence form
-	
-Scenario: View team mates schedules
-	Given I have a role with
-	| Field                      | Value                       |
-	| Name                       | Anywhere Team Green and Red |
-	| Access to team             | Team green,Team red         |
-	| Access to Anywhere         | true                        |
-	| View unpublished schedules | true                        |
-	| Modify Absence             | true                        |
-	When I view person schedules add intraday absence form for 'Pierre Baldi' and 'Team green' on '2013-11-15'
-	Then I should see schedule for 'John King' in team mates schedules
-	And I should not see schedule for 'Ashley Andeen' in team mates schedules
-
-Scenario: View selection in alphabetical order
-	Given I have the role 'Anywhere Team Green'
-	When I view person schedules add intraday day absence form for 'Pierre Baldi' and 'Team green' on '2013-11-15'
-	Then I should see absence type 'Illness' before 'Mental disorder'
-	And I should see absence type 'Mental disorder' before 'Vacation'
 
 Scenario: Hide confidential if no permission
 	Given I have a role with
