@@ -25,15 +25,20 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         public ISkill CurrentSkill { get; set; }
         private readonly IScheduleDay _part;
 
-        public SchedulePartFactoryForDomain(IPerson person,IScenario scenario,DateTimePeriod period,ISkill skill)
+		public SchedulePartFactoryForDomain(IPerson person, IScenario scenario, DateTimePeriod period, ISkill skill)
+			: this(person, scenario, period, skill, TimeZoneInfo.Utc)
         {
-            CurrentScenario = scenario;
-            CurrentPeriod = period;
-            CurrentSkill = skill;
-            CurrentPerson = PersonFactory.CreatePersonWithPersonPeriod(person,new DateOnly(CurrentPeriod.StartDateTime), new List<ISkill> { CurrentSkill });
-            CurrentPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-            _part = createPart(new DateOnly(CurrentPeriod.StartDateTime));
         }
+
+		public SchedulePartFactoryForDomain(IPerson person, IScenario scenario, DateTimePeriod period, ISkill skill,TimeZoneInfo timeZone)
+		{
+			CurrentScenario = scenario;
+			CurrentPeriod = period;
+			CurrentSkill = skill;
+			CurrentPerson = PersonFactory.CreatePersonWithPersonPeriod(person, new DateOnly(CurrentPeriod.StartDateTime), new List<ISkill> { CurrentSkill });
+			CurrentPerson.PermissionInformation.SetDefaultTimeZone(timeZone);
+			_part = createPart(new DateOnly(CurrentPeriod.StartDateTime));
+		}
 
 		public SchedulePartFactoryForDomain(IPerson person, DateTimePeriod period)
 			: this(person, ScenarioFactory.CreateScenarioAggregate("For test", true), period, SkillFactory.CreateSkill("Skill"))

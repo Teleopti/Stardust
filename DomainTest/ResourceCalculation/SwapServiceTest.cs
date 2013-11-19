@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -160,6 +159,53 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 						Assert.AreEqual(0, retList[0].PersonAssignment().MainLayers().Count());
         }
 
+		[Test]
+		public void Swap_WhenTheAssignmentsAreInDifferentTimeZones_ShouldNotAffectTheAssignments()
+		{
+
+			var scenario = new Scenario("scenario");
+			var skill = SkillFactory.CreateSkill("skill");
+			var firstTimeZone = TimeZoneInfo.CreateCustomTimeZone("first", TimeSpan.Zero, "first", "second");
+			var secondTimeZone = TimeZoneInfo.CreateCustomTimeZone("second", TimeSpan.FromHours(5), "second", "second");
+
+			var firstPerson = PersonFactory.CreatePerson("FirstPerson");
+			var secondPerson = PersonFactory.CreatePerson("SecondPerson");
+
+			var period = new DateTimePeriod(new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+			                                new DateTime(2001, 1, 2, 0, 0, 0, DateTimeKind.Utc));
+			var scheduleFactory1 = new SchedulePartFactoryForDomain(firstPerson,scenario,period,skill,firstTimeZone);
+			var scheduleFactory2 = new SchedulePartFactoryForDomain(secondPerson,scenario,period,skill,secondTimeZone);
+			var scheduleDay1 = scheduleFactory1.CreatePartWithMainShift();
+			var scheduleDay2 = scheduleFactory2.CreatePartWithMainShift();
+			var target = new SwapService();
+
+			var schedules = new List<IScheduleDay>() {scheduleDay1, scheduleDay2};
+			target.Init(schedules);
+
+			verifyAllSchedulesStartAtTheSameUtcTime(schedules);
+
+			var dic = new ScheduleDictionaryForTest(scenario, period);
+			
+			dic.AddPersonAssignment(scheduleDay1.PersonAssignment());
+			dic.AddPersonAssignment(scheduleDay2.PersonAssignment());
+			IList<IScheduleDay> swapped = target.SwapAssignments(dic);
+
+			verifyAllSchedulesStartAtTheSameUtcTime(swapped);
+
+		}
+
+		private static void verifyAllSchedulesStartAtTheSameUtcTime(IEnumerable<IScheduleDay> schedules)
+		{
+			var mainShifts = from s in schedules
+			                 select s.PersonAssignment().MainLayers().First().Period.StartDateTime;
+			
+			Assert.That(mainShifts.Distinct().Count(),Is.EqualTo(1),"All mainshiftlayers expected to start at the same time");
+		}
+
+		private static DateTimePeriod firstMainShiftPeriodFor(IScheduleDay scheduleDay)
+		{
+			return scheduleDay.PersonAssignment().MainLayers().First().Period;
+		}
 
         [Test, ExpectedException(typeof(ConstraintException))]
         public void VerifyInvalidList()
@@ -193,4 +239,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         }
 
     }
+
+
+	
 }
