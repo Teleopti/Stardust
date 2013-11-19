@@ -10,21 +10,19 @@ define([
 
         return function(timeline, minutes) {
 
-            var self = this;
+	        var time = moment().startOf('day').add('minutes', minutes);
+	        var formattedTime = time.format(resources.TimeFormatForMoment);
 
-            this.Minutes = ko.observable(minutes);
+            this.Minutes = function() {
+	            return minutes;
+            };
 
-            this.Time = ko.computed(function() {
-                var time = moment().startOf('day').add('minutes', self.Minutes());
-                return time.format(resources.TimeFormatForMoment);
-            });
+            this.Time = formattedTime;
 
             this.Pixel = ko.computed(function() {
-                var startMinutes = self.Minutes() - timeline.StartMinutes();
+                var startMinutes = minutes - timeline.StartMinutes();
                 var pixels = startMinutes * timeline.PixelsPerMinute();
                 return Math.round(pixels);
-            });
-
+            }).extend({throttle: 10});
         };
-
     });

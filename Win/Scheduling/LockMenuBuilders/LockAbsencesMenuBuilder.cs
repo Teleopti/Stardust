@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Win.Scheduling.LockMenuBuilders
 {
 	public class LockAbsencesMenuBuilder
 	{
-		public void Build(IList<IAbsence> absences, EventHandler toolStripMenuItemLockAbsenceDaysClick,
+		public void Build(IEnumerable<IAbsence> absences, EventHandler toolStripMenuItemLockAbsenceDaysClick,
 		                  MouseEventHandler toolStripMenuItemLockAbsenceDaysMouseUp,
 		                  ToolStripMenuItem toolStripMenuItemLockAbsence, ToolStripMenuItem toolStripMenuItemLockAbsencesRm,
 		                  EventHandler toolStripMenuItemLockAbsencesClick,

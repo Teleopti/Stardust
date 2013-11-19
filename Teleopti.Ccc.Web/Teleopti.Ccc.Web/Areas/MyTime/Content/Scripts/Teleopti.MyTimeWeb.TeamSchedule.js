@@ -23,14 +23,15 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
     var teamScheduleViewModel = function (urlDate) {
         var self = this;
 
-        this.selectedDate = ko.observable(moment().startOf('day'));
+        var periodData = $('#TeamSchedule-body').data('mytime-periodselection');
+        this.selectedDate = ko.observable(moment(periodData.Date));
         if (urlDate) {
             this.selectedDate(moment(urlDate));
         }
         this.selectedTeam = ko.observable();
         this.availableTeams = ko.observableArray();
-        
-        this.displayDate = ko.observable($('#TeamSchedule-body').data('mytime-periodselection').Display);
+
+        this.displayDate = ko.observable(periodData.Display);
 
         this.selectableTeams = ko.computed(function() {
             if (self.availableTeams()[0] && self.availableTeams()[0].children) {
@@ -99,7 +100,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
         });
 
         this.initializeShiftTrade = function () {
-	        //henke: todo
+            portal.NavigateTo("Requests/Index/ShiftTrade/", self.selectedDate().format('YYYYMMDD'));
 	    };
     };
 
@@ -178,7 +179,16 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	}
 
 	function _bindData() {
-	    ko.applyBindings(vm, $('#page')[0]);
+		var ajax = new Teleopti.MyTimeWeb.Ajax();
+		ajax.Ajax({
+			url: 'UserInfo/Culture',
+			dataType: "json",
+			type: 'GET',
+			success: function (data) {
+				$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
+				ko.applyBindings(vm, $('#page')[0]);
+			}
+		});
 	};
     
 	function _cleanBindings() {

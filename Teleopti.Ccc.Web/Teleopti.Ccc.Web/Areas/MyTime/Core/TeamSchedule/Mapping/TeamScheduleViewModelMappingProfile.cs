@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 		protected override void Configure()
 		{
 			CreateMap<TeamScheduleDomainData, TeamScheduleViewModel>()
+				.ForMember(d=>d.ShiftTradePermisssion, o => o.UseValue(false))
 				.ForMember(d => d.AgentSchedules, o => o.MapFrom(s => s.Days))
 				.ForMember(d => d.PeriodSelection, o => o.MapFrom(s => s))
 				.ForMember(d => d.TeamSelection, o => o.MapFrom(s => s.TeamOrGroupId))
@@ -61,8 +62,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				;
 
 			CreateMap<TimeLineMappingData, TimeLineViewModel>()
-                .ForMember(d => d.ShortTime, o => o.MapFrom(s => s.Time.TimeOfDay.Minutes != 0 ? s.Time.TimeOfDay.Minutes.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.TimeSeparator + "00") : TimeZoneInfo.ConvertTimeFromUtc(s.Time, _userTimeZone().TimeZone()).TimeOfDay.Hours.ToString("00")))
-				.ForMember(d => d.LongTime, o => o.MapFrom(s => TimeHelper.TimeOfDayFromTimeSpan(TimeZoneInfo.ConvertTimeFromUtc(s.Time, _userTimeZone().TimeZone()).TimeOfDay)))
+				.ForMember(d => d.ShortTime, o => o.ResolveUsing(s =>
+					{
+						var localTime = TimeZoneInfo.ConvertTimeFromUtc(s.Time, _userTimeZone().TimeZone());
+						if (localTime.TimeOfDay.Minutes != 0)
+							return localTime.ToString("HH:mm");
+
+						var timeFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
+						timeFormat = timeFormat.Replace(CultureInfo.CurrentCulture.DateTimeFormat.TimeSeparator, string.Empty);
+						timeFormat = timeFormat.Replace("m", string.Empty);
+						return localTime.ToString(timeFormat);
+					}))
 				.ForMember(d => d.PositionPercent, o => o.ResolveUsing(s =>
 																					{
 																						var displayedTicks = (decimal)s.DisplayTimePeriod.EndDateTime.Ticks - s.DisplayTimePeriod.StartDateTime.Ticks;

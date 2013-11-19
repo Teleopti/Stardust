@@ -121,9 +121,11 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
     <Compile Include="Analytics\BaseConfiguration.cs" />
+    <Compile Include="ApplicationLayer\Commands\AssignActivityCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\CannotSendDelayedMessages.cs" />
+    <Compile Include="ApplicationLayer\Commands\AssignActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Event.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
@@ -169,6 +171,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ControllableEventSyncronization.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\IEventSyncronization.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventDayOff.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\DisabledScheduledResourcesReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventShift.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\IScheduledResourcesReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonReactivatedHandler.cs" />
@@ -263,6 +266,7 @@
     <Compile Include="Common\Logging\SystemInformationHelper.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Common\SpecificBusinessUnit.cs" />
+    <Compile Include="Common\ThisCurrentScenario.cs" />
     <Compile Include="Common\Time\INowExtensions.cs" />
     <Compile Include="Common\Time\MutableNow.cs" />
     <Compile Include="Common\Time\ThisIsNow.cs" />
@@ -278,6 +282,10 @@
     <Compile Include="Common\PersonsInOrganizationProvider.cs" />
     <Compile Include="ApplicationLayer\ICommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\IHandleCommand.cs" />
+    <Compile Include="Forecasting\DayInMonthIndex\DayInMonth.cs" />
+    <Compile Include="Forecasting\DayInMonthIndex\DayInMonthCreator.cs" />
+    <Compile Include="Forecasting\DayInMonthIndex\DayInMonthHelper.cs" />
+    <Compile Include="Forecasting\DayInMonthIndex\DayInMonthItem.cs" />
     <Compile Include="Forecasting\DaylightSavingTimeHelper.cs" />
     <Compile Include="Forecasting\Export\ExportForecastDataToFileSerializer.cs" />
     <Compile Include="Forecasting\Export\ExportSkillToFileCommandModel.cs" />
@@ -348,6 +356,12 @@
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
+    <Compile Include="Optimization\StandardDeviationData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Optimization\TeamBlock\DailyTargetValueCalculatorForTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockTargetValueCalculator.cs" />
+    <Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffOptimizerService.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
@@ -423,8 +437,9 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapFinder.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapper.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettings.cs" />
-    <Compile Include="Optimization\StandardDeviationData.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinder.cs" />
+    <Compile Include="ResourceCalculation\IPeriodDistributionService.cs" />
+    <Compile Include="ApplicationLayer\Events\ActivityAssignedEvent.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeLengthDecider.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferences.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferencesGeneralPersonalSetting.cs" />
@@ -542,6 +557,7 @@
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryChecker.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
+    <Compile Include="Scheduling\PersonToSingleAgentTeamRootPersonGroupConverter.cs" />
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalGenerator.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriod.cs" />
@@ -579,7 +595,6 @@
     <Compile Include="Scheduling\Assignment\ShiftLayer.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailability.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataOpenHour.cs" />
-    <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockRoleModelSelector.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameEndTimeTeamSpecification.cs" />
@@ -1283,7 +1298,6 @@
     <Compile Include="Repositories\ISkillDayRepository.cs" />
     <Compile Include="Repositories\ISkillRepository.cs" />
     <Compile Include="Repositories\IStatisticRepository.cs" />
-    <Compile Include="Repositories\ISystemRoleApplicationRoleMapperRepository.cs" />
     <Compile Include="Repositories\IApplicationFunctionRepository.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1347,7 +1361,6 @@
     <Compile Include="Security\AuthorizationEntities\TeamAuthorizationEntityConverter.cs" />
     <Compile Include="Security\Matrix\MatrixReportsSynchronizer.cs" />
     <Compile Include="Security\AuthorizationEntities\MatrixReportInfo.cs" />
-    <Compile Include="Security\AuthorizationEntities\SystemRoleApplicationRoleMapper.cs" />
     <Compile Include="Security\AuthorizationEntities\SystemRole.cs" />
     <Compile Include="Security\AuthorizationEntities\PermissionInformation.cs" />
     <Compile Include="Repositories\IPersonAvailabilityRepository.cs" />
@@ -1555,9 +1568,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Infrastructure\Filters.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Security\AuthorizationEntities\SystemRoleApplicationRoleMapper.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\ShiftCreator\WorkShiftRuleSet.hbm.xml" />

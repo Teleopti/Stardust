@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
-using Teleopti.Analytics.Etl.Transformer.Job;
-using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.TestCommon.TestData.Generic;
-using Teleopti.Ccc.TestCommon.TestData.Setups;
-using Teleopti.Interfaces.Domain;
-using RequestType = Teleopti.Ccc.TestCommon.TestData.Analytics.RequestType;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
@@ -29,7 +22,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			SetupFixtureForAssembly.EndTest();
 		}
 
-        [Test, ExpectedException(typeof(System.Data.SqlClient.SqlException))]
+		// this is a way of just test an insert via a sp not a "real" integration test
+		[Test]
 		public void ShouldWork()
 		{
 			var analyticsDataFactory = new AnalyticsDataFactory();
@@ -51,28 +45,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 											Guid.NewGuid(),TestState.BusinessUnit.Id.GetValueOrDefault(),datasource));
 			analyticsDataFactory.Persist();
 
-            var raptorRep = new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix,"");
-            raptorRep.FillIntradayFactRequestMart(TestState.BusinessUnit);
-			// sätt upp analytics data här
-            //Data.Person("Ashley Andeen").Apply(new StockholmTimeZone());
-            //Data.Apply(new AbsenceConfigurable { Color = "Red", Name = "Absence" });
+			var raptorRep = new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix,"");
+			//so we have a NULL absence
+			raptorRep.FillAbsenceDataMart(TestState.BusinessUnit);
+			raptorRep.FillIntradayFactRequestMart(TestState.BusinessUnit);
 			
-
-			//Valid from date id måste vi veta här när vi insertar så dom måste insertas först
-			
-			
-			//Act
-			// kör etl körning här
-			JobParameters parameters = null; //= new JobParameters()
-			var steps = new List<JobStepBase>
-				{
-					new IntradayStageRequestJobStep(parameters),
-					new FactRequestJobStep(parameters, true)
-				};
-
-			//Assert
-			// kolla att prylarna hamnade rätt i databasen här
-
 
 		}
 

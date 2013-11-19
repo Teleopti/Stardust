@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			forecastCommand = mocks.StrictMock < OnEventForecastDataMessageCommand>();
 			scheduleCommand = mocks.StrictMock < OnEventScheduleMessageCommand>();
 			meetingCommand = mocks.StrictMock < OnEventMeetingMessageCommand>();
-            target = new IntradayPresenter(view, schedulingResultLoader, null, null, null, null, null, unitOfWorkFactory,
+            target = new IntradayPresenter(view, schedulingResultLoader, null, null, null, null, unitOfWorkFactory, null,
                                            null,statisticCommand,forecastCommand,scheduleCommand, meetingCommand, null);
         }
 

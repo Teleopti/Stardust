@@ -8,16 +8,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     public interface IAddScheduleLayers
     {
  
-        IAddLayerViewModel<IAbsence> CreateAddAbsenceViewModel(IList<IAbsence> bindingList, ISetupDateTimePeriod period, TimeZoneInfo timeZoneInfo);
+        IAddLayerViewModel<IAbsence> CreateAddAbsenceViewModel(IEnumerable<IAbsence> bindingList, ISetupDateTimePeriod period, TimeZoneInfo timeZoneInfo);
 
-        IAddActivityViewModel CreateAddActivityViewModel(IList<IActivity> activities,IList<IShiftCategory> shiftCategories,DateTimePeriod period, TimeZoneInfo timeZoneInfo);
+        IAddActivityViewModel CreateAddActivityViewModel(IEnumerable<IActivity> activities,IList<IShiftCategory> shiftCategories,DateTimePeriod period, TimeZoneInfo timeZoneInfo);
 
-        IAddLayerViewModel<IActivity> CreateAddPersonalActivityViewModel(IList<IActivity> activities, DateTimePeriod period, TimeZoneInfo timeZoneInfo);
+        IAddLayerViewModel<IActivity> CreateAddPersonalActivityViewModel(IEnumerable<IActivity> activities, DateTimePeriod period, TimeZoneInfo timeZoneInfo);
 
-        IAddOvertimeViewModel CreateAddOvertimeViewModel(IScheduleDay selectedSchedule,IList<IActivity> activities,
+        IAddOvertimeViewModel CreateAddOvertimeViewModel(IScheduleDay selectedSchedule,IEnumerable<IActivity> activities,
                                                          IList<IMultiplicatorDefinitionSet> definitionSets,
                                                          IActivity defaultActivity, DateTimePeriod period, TimeZoneInfo timeZoneInfo);
 
-        IAddLayerViewModel<IDayOffTemplate> CreateAddDayOffViewModel(IList<IDayOffTemplate> dayOffTemplates, TimeZoneInfo timeZoneInfo, DateTimePeriod period);
+        IAddLayerViewModel<IDayOffTemplate> CreateAddDayOffViewModel(IEnumerable<IDayOffTemplate> dayOffTemplates, TimeZoneInfo timeZoneInfo, DateTimePeriod period);
     }
 }

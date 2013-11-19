@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
@@ -17,12 +15,12 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly ToolStripMenuItem _toolStripMenuItemSetTagOnContextMenu;
         private readonly ToolStripSplitButton _toolStripSetTagOnRibbonButton;
         private readonly ToolStripComboBox _toolStripAutoTagOnRibbonComboBox;
-        private readonly IList<IScheduleTag> _tags;
+        private readonly IEnumerable<IScheduleTag> _tags;
         private readonly MouseEventHandler _eventHandler;
         private readonly MouseEventHandler _eventHandlerChangeTag;
         private readonly IScheduleTag _autoTag;
 
-        public TagsMenuLoader(ToolStripMenuItem toolStripMenuItemRibbon, ToolStripMenuItem toolStripMenuItemGrid, IList<IScheduleTag> tags, 
+        public TagsMenuLoader(ToolStripMenuItem toolStripMenuItemRibbon, ToolStripMenuItem toolStripMenuItemGrid, IEnumerable<IScheduleTag> tags, 
             MouseEventHandler eventHandler, ToolStripSplitButton setTagOnRibbonButton, MouseEventHandler eventHandlerChangeTag, ToolStripComboBox toolStripAutoTagOnRibbonComboBox, IScheduleTag autoTag, ToolStripMenuItem toolStripMenuItemSetTagOnContextMenu)
         {
             if(toolStripMenuItemRibbon == null) throw new ArgumentNullException("toolStripMenuItemRibbon");
@@ -95,11 +93,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private void loadDeletedTags()
         {
-            var deleted = from t in _tags
-                          where t.IsDeleted
-                          select t;
-
-            if (deleted.Count() <= 0) return;
+            var deleted = _tags.Where (t => t.IsDeleted).ToArray();
+            if (!deleted.Any()) return;
 
             var toolStripMenuItemRibbonDeletedTag = new ToolStripMenuItem();
             var toolStripMenuItemGridDeletedTag = new ToolStripMenuItem();

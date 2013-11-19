@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             : base(presenter)
         { }
 
-        public IAddLayerViewModel<IAbsence> CreateAddAbsenceViewModel(IList<IAbsence> bindingList, ISetupDateTimePeriod period, TimeZoneInfo timeZoneInfo)
+        public IAddLayerViewModel<IAbsence> CreateAddAbsenceViewModel(IEnumerable<IAbsence> bindingList, ISetupDateTimePeriod period, TimeZoneInfo timeZoneInfo)
         {
             var model = new AddAbsenceViewModel(bindingList, period, WorkingInterval);
             model.PeriodViewModel.Min = Presenter.SelectedPeriod.Period().StartDateTime;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             return composer.Result();
         }
 
-        public IAddLayerViewModel<IActivity> CreateAddPersonalActivityViewModel(IList<IActivity> activities, DateTimePeriod period, TimeZoneInfo timeZoneInfo)
+        public IAddLayerViewModel<IActivity> CreateAddPersonalActivityViewModel(IEnumerable<IActivity> activities, DateTimePeriod period, TimeZoneInfo timeZoneInfo)
         {
             var model = new AddPersonalActivityViewModel(activities, period, WorkingInterval);
             SetBoundary(model);
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             return composer.Result();
         }
 
-        public IAddOvertimeViewModel CreateAddOvertimeViewModel(IScheduleDay selectedSchedule, IList<IActivity> activities, IList<IMultiplicatorDefinitionSet> definitionSets, IActivity defaultActivity, DateTimePeriod period, TimeZoneInfo timeZoneInfo)
+        public IAddOvertimeViewModel CreateAddOvertimeViewModel(IScheduleDay selectedSchedule, IEnumerable<IActivity> activities, IList<IMultiplicatorDefinitionSet> definitionSets, IActivity defaultActivity, DateTimePeriod period, TimeZoneInfo timeZoneInfo)
         {
             var dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(period.LocalStartDateTime, period.LocalEndDateTime);
             var fallbackDefaultHours = new SetupDateTimePeriodDefaultLocalHoursForActivities(selectedSchedule, new CurrentTeleoptiPrincipal(), dateTimePeriod);
@@ -45,14 +45,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             return new AddDialogComposer<AddOvertimeViewModel>(model, timeZoneInfo).Result();
         }
 
-        public IAddLayerViewModel<IDayOffTemplate> CreateAddDayOffViewModel(IList<IDayOffTemplate> dayOffTemplates, TimeZoneInfo timeZoneInfo, DateTimePeriod period)
+        public IAddLayerViewModel<IDayOffTemplate> CreateAddDayOffViewModel(IEnumerable<IDayOffTemplate> dayOffTemplates, TimeZoneInfo timeZoneInfo, DateTimePeriod period)
         {
             var model = new AddDayOffViewModel(dayOffTemplates, period);
             SetBoundary(model);
             return new AddDialogComposer<AddDayOffViewModel>(model, timeZoneInfo).Result();
         }
 
-        public IAddActivityViewModel CreateAddActivityViewModel(IList<IActivity> activities, IList<IShiftCategory> shiftCategories, DateTimePeriod period, TimeZoneInfo timeZoneInfo)
+        public IAddActivityViewModel CreateAddActivityViewModel(IEnumerable<IActivity> activities, IList<IShiftCategory> shiftCategories, DateTimePeriod period, TimeZoneInfo timeZoneInfo)
         {
             var model = new AddActivityViewModel(activities, shiftCategories, period, WorkingInterval);
             SetBoundary(model);

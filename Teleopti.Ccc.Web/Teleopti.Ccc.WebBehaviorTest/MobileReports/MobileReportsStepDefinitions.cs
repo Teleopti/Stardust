@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.UserTexts;
@@ -9,7 +8,6 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages.jQuery;
-using Teleopti.Interfaces.Domain;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
@@ -19,6 +17,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MobileReports
 	public class MobileReportsStepDefinitions
 	{
 		private DateTime _clickedDateInDatePicker;
+
+		[Then(@"I should see Mobile Reports")]
+		public void ThenIShouldSeeMobileReports()
+		{
+			Browser.Interactions.AssertExists("#report-settings-view");
+		}
 
 		[Given(@"I have skill analytics data")]
 		public void GivenIHaveSkillAnalyticsData()

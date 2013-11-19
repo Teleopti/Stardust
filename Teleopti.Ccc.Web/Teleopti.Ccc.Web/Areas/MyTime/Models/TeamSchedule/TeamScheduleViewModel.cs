@@ -10,12 +10,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public Guid TeamSelection { get; set; }
 		public IEnumerable<AgentScheduleViewModel> AgentSchedules { get; set; }
 		public IEnumerable<TimeLineViewModel> TimeLine { get; set; }
+		public bool ShiftTradePermisssion { get; set; }
 	}
 
 	public class TimeLineViewModel
 	{
 		public string ShortTime { get; set; }
-		public string LongTime { get; set; }
 		public decimal PositionPercent { get; set; }
 	}
 

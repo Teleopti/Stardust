@@ -7,7 +7,7 @@ namespace Teleopti.Interfaces.Domain
     /// <summary>
     /// ContractSchedule 
     /// </summary>
-    public interface IContractSchedule : IAggregateRoot
+	public interface IContractSchedule : IAggregateRoot, IBelongsToBusinessUnit
     {
         /// <summary>
         /// Description of ContractSchedule

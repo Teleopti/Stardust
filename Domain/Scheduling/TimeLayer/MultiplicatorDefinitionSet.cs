@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
 {
-    public class MultiplicatorDefinitionSet : AggregateRootWithBusinessUnit, IMultiplicatorDefinitionSet, IDeleteTag
+    public class MultiplicatorDefinitionSet : VersionedAggregateRootWithBusinessUnit, IMultiplicatorDefinitionSet, IDeleteTag
     {
         private IList<IMultiplicatorDefinition> _definitionCollection;
         private string _name;

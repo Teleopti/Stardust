@@ -74,9 +74,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			var ret = new ScheduleAuditingReportData { ShiftType = Resources.AuditingReportShift};
 			addCommonScheduleData(ret, auditedAssignment.Entity, auditedAssignment.RevisionEntity, auditedAssignment.Operation);
 
-			ret.Detail = auditedAssignment.Entity.ShiftCategory == null ? 
-							string.Empty : 
-							auditedAssignment.Entity.ShiftCategory.Description.Name;
+
+			ret.Detail = string.Empty;
+			var personAssignment = auditedAssignment.Entity;
+
+			if(personAssignment.ShiftCategory != null)
+				ret.Detail = personAssignment.ShiftCategory.Description.Name;
+
+			if (personAssignment.DayOff() != null)
+				ret.Detail = personAssignment.DayOff().Description.Name;
+
+			if (personAssignment.ShiftCategory == null && personAssignment.DayOff() == null)
+			{
+				if (personAssignment.OvertimeLayers().IsEmpty() && !personAssignment.PersonalLayers().IsEmpty())
+					ret.Detail = Resources.PersonalShift;
+
+				if (personAssignment.PersonalLayers().IsEmpty() && !personAssignment.OvertimeLayers().IsEmpty())
+					ret.Detail = Resources.Overtime;
+
+			}
 
 			var period = auditedAssignment.Entity.Period;
 

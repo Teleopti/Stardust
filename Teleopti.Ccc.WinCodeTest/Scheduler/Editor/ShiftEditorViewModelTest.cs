@@ -51,7 +51,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
             Assert.AreEqual(_target.Layers, _target.AllLayers.Layers);
         }
 
-       
+		[Test]
+		public void ShouldNotSetShiftCategoryIfValueIsNull()
+		{
+			var shiftCategory = _mocker.StrictMock<IShiftCategory>();
+			_target.Category = shiftCategory;
+			_target.Category = null;
+			Assert.AreEqual(shiftCategory, _target.Category);
+		}
+ 
         [Test]
         public void VerifyObservers()
         {

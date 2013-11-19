@@ -25,17 +25,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
 	var completelyLoaded;
-	var weekStart = 3;
-    
-	ajax.Ajax({
-	    url: 'UserInfo/Culture',
-	    dataType: "json",
-	    type: 'GET',
-	    success: function (data) {
-	        weekStart = data.WeekStart;
-	    }
-	});
-    
+	
 	function _bindData(data) {
 		vm.Initialize(data);
 		_initTimeIndicator();
@@ -309,33 +299,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return $('<div/>').text(day.Note.Message).html();
 		});
 		self.textRequestCount = ko.observable(day.TextRequestCount);
-		self.allowance = ko.observable(day.Allowance);
-		self.absenceAgents = ko.observable(day.AbsenceAgents);
-		self.fullTimeEquivalent = ko.observable(day.FulltimeEquivalent);
 		self.overtimeAvailability = ko.observable(day.OvertimeAvailabililty);
-
-		self.basedOnAllowanceChance = function (options) {
-			var percent;
-			if (self.allowance() != 0)
-				percent = 100 * ((self.allowance() - self.absenceAgents()) / self.allowance());
-			else {
-				percent = 0;
-			}
-			
-			var index = 0;
-			if (percent > 0 && (self.allowance() - self.absenceAgents()) >= self.fullTimeEquivalent()) {
-			    index = percent > 30 && (self.allowance() - self.absenceAgents()) >= 2 * self.fullTimeEquivalent() ? 2 : 1;
-			}		
-			return options[index];
-		};
+		self.probabilityClass = ko.observable(day.ProbabilityClass);
+		self.probabilityText = ko.observable(day.ProbabilityText);
 
 		self.holidayChanceText = ko.computed(function () {
-			return parent.userTexts.chanceOfGettingAbsencerequestGranted + self.basedOnAllowanceChance([parent.userTexts.poor, parent.userTexts.fair, parent.userTexts.good]);
+			return parent.userTexts.chanceOfGettingAbsencerequestGranted + self.probabilityText();
 		});
 		
 		self.holidayChanceColor = ko.computed(function () {
-
-			return self.basedOnAllowanceChance(["red", "yellow", "green"]);
+			return self.probabilityClass();
 		});
 		
 		self.hasTextRequest = ko.computed(function () {
@@ -614,15 +587,23 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			completelyLoaded = completelyLoadedCallback;
 		},
 		SetupViewModel: function (userTexts, defaultDateTimes) {
-		    var addRequestViewModel = function () {
-		        var model = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, weekStart, defaultDateTimes);
-		        model.AddRequestCallback = _displayRequest;
-		        return model;
-		    };
+			ajax.Ajax({
+				url: 'UserInfo/Culture',
+				dataType: "json",
+				type: 'GET',
+				success: function (data) {
+					var addRequestViewModel = function () {
+						var model = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, data.WeekStart, defaultDateTimes);
+						model.AddRequestCallback = _displayRequest;
+						return model;
+					};
 
-			vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests);
-			
-		    ko.applyBindings(vm, $('#page')[0]);
+					vm = new WeekScheduleViewModel(userTexts, addRequestViewModel, _navigateToRequests);
+
+					$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
+					ko.applyBindings(vm, $('#page')[0]);
+				}
+			});
 		},
 		LoadAndBindData: function () {
 			ajax.Ajax({

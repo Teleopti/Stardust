@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 }
             }
 
-            return absenceViewCollection;
+            return absenceViewCollection.OrderBy(a => a.Description.Name).ToList();
         }
 
 
@@ -396,6 +396,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
             gridControlAbsences.BackColor = ColorHelper.GridControlGridInteriorColor();
             gridControlAbsences.Properties.BackgroundColor = ColorHelper.WizardBackgroundColor();
+			  
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]

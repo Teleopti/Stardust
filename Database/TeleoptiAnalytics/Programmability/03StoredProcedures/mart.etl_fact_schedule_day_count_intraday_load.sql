@@ -15,6 +15,7 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_day_count_intraday_load]
 @business_unit_code uniqueidentifier,
 @scenario_code uniqueidentifier
 AS
+SET NOCOUNT ON
 
 if (select count(*)
 	from mart.dim_scenario
@@ -38,13 +39,27 @@ CREATE TABLE #fact_schedule_day_off_count (
 	scenario_code uniqueidentifier,
 	)
 
+--temp table for perf.
+CREATE TABLE #stg_schedule_day_off_count(
+	[scenario_id] [smallint] NOT NULL,
+	[interval_id] [int] NOT NULL,
+	[date_id] [int] NOT NULL,
+	[person_id] [int] NOT NULL
+)
+
+CREATE TABLE #stg_schedule_changed(
+	[person_id] [int] NOT NULL,
+	[shift_startdate_id] [int] NOT NULL,
+	[scenario_id] [smallint] NOT NULL
+)
 --Get scenario_id
 DECLARE @scenario_id int 
 SELECT @scenario_id = scenario_id FROM mart.dim_scenario WHERE scenario_code= @scenario_code
 
---delete days changed from mart.fact_schedule_day_count (new, updated or deleted)
-DELETE fs
-FROM Stage.stg_schedule_changed stg
+--prepare a temp table for better performance on delete
+INSERT INTO #stg_schedule_changed
+SELECT DISTINCT dd.person_id, dd.shift_startdate_id, ds.scenario_id 
+FROM	Stage.stg_schedule_changed stg
 INNER JOIN Stage.stg_schedule_updated_personLocal dp
 	ON stg.person_code		=	dp.person_code
 	AND --trim
@@ -56,36 +71,48 @@ INNER JOIN Stage.stg_schedule_updated_personLocal dp
 		)
 INNER JOIN mart.dim_scenario ds
 	ON stg.scenario_code = ds.scenario_code
-	AND stg.scenario_code = @scenario_code  --remove this if we are to handle multiple scenarios
-INNER JOIN mart.fact_schedule_day_count fs
-	ON fs.person_id= dp.person_id
- 	--AND ds.scenario_id = fs.scenario_id
-INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC utc
-	ON utc.shift_startdate_id = fs.date_id
-	AND utc.person_id = fs.person_id
+INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC dd
+		ON dd.person_id = dp.person_id
 
 -- special delete if something is left, a shift over midninght for example
-DELETE fs
-FROM Stage.stg_schedule stg
+INSERT INTO #stg_schedule_day_off_count
+SELECT
+	ds.scenario_id,
+	stg.start_interval_id,
+	dsd.date_id,
+	dp.person_id
+FROM Stage.stg_schedule_day_off_count stg
 INNER JOIN
 	mart.dim_person		dp
 ON
 	stg.person_code		=			dp.person_code
 	AND --trim
 		(
-				(stg.shift_start	>= dp.valid_from_date)
+				(stg.starttime	>= dp.valid_from_date)
 			AND
-				(stg.shift_start < dp.valid_to_date)
+				(stg.starttime < dp.valid_to_date)
 		)
 INNER JOIN mart.dim_date AS dsd 
-ON stg.schedule_date = dsd.date_date
+	ON stg.date = dsd.date_date
 INNER JOIN mart.dim_scenario ds
 	ON stg.scenario_code = ds.scenario_code
-INNER JOIN mart.fact_schedule_day_count fs
-	ON dp.person_id = fs.person_id
-	AND fs.date_id = dsd.date_id
-	AND fs.start_interval_id = stg.interval_id
-	AND ds.scenario_id = fs.scenario_id
+
+--return numbers of rows to ETL from here
+SET NOCOUNT OFF
+
+DELETE fs
+FROM mart.fact_schedule_day_count fs
+INNER JOIN #stg_schedule_changed a
+	ON	a.person_id = fs.person_id
+	AND a.shift_startdate_id = fs.date_id
+	AND a.scenario_id = fs.scenario_id
+
+DELETE fs
+FROM mart.fact_schedule_day_count fs 
+INNER JOIN #stg_schedule_day_off_count tmp
+	ON tmp.person_id	= fs.person_id
+	AND tmp.date_id		= fs.date_id
+	AND tmp.scenario_id = fs.scenario_id
 
 ----------------------------------------------------------------------------------
 -- Insert shift_category_count rows
@@ -105,7 +132,6 @@ INSERT INTO mart.fact_schedule_day_count
 	datasource_id, 
 	datasource_update_date
 	)
-
 SELECT
 	date_id					= f.shift_startdate_id, 
 	start_interval_id		= f.shift_startinterval_id,

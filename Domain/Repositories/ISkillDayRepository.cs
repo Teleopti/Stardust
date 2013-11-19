@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// Created by: robink
         /// Created date: 2008-01-25
         /// </remarks>
-        ICollection<ISkillDay> GetAllSkillDays(DateOnlyPeriod period, ICollection<ISkillDay> skillDays, ISkill skill, IScenario scenario, bool addToRepository);
+        ICollection<ISkillDay> GetAllSkillDays(DateOnlyPeriod period, ICollection<ISkillDay> skillDays, ISkill skill, IScenario scenario, Action<IEnumerable<ISkillDay>> optionalAction);
 
         /// <summary>
         /// Deletes the specified date time period.

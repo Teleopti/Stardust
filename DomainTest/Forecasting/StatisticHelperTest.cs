@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -249,8 +248,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             Expect.Call(_skillDayRep.FindRange(_period, _skill, _scenario)).
                 Return(skillDayList).Repeat.Once();
-            Expect.Call(_skillDayRep.GetAllSkillDays(_period, skillDayList, _skill, _scenario, true)).
-                Return(skillDayList).Repeat.Once();
+			Expect.Call(_skillDayRep.GetAllSkillDays(_period, skillDayList, _skill, _scenario, _skillDayRep.AddRange)).
+                Return(skillDayList).Repeat.Once().IgnoreArguments();
             Expect.Call(_statisticTaskRep.LoadSpecificDates(_workload.QueueSourceCollection, period)).
                 Return(emptyStatisticTaskList).Repeat.Once();
 
@@ -264,7 +263,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 statusChangedCount++;
             };
 
-            IList<ISkillDay> result = target.LoadStatisticData(_period, _skill, _scenario, true, true);
+            IList<ISkillDay> result = target.LoadStatisticData(_period, _skill, _scenario, true);
             mocks.VerifyAll();
             Assert.AreEqual(1, result.Count);
             Assert.AreEqual(5, statusChangedCount);

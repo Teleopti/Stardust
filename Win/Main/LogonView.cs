@@ -21,9 +21,7 @@ namespace Teleopti.Ccc.Win.Main
 		{
 			_model = model;
 			InitializeComponent();
-			buttonLogOnCancel.Text = Resources.Cancel;
-			buttonLogOnOK.Text = Resources.Ok;
-			btnBack.Text = Resources.Back;
+			label1.Text = string.Concat("Build ", Application.ProductVersion);
 		}
 
 		public bool StartLogon()
@@ -45,9 +43,8 @@ namespace Teleopti.Ccc.Win.Main
 			currentStep.SetData();
 			updatePanel((UserControl) currentStep);
 			labelStatusText.Visible = false;
-			buttonLogOnCancel.Visible = true;
-			buttonLogOnOK.Visible = true;
-			btnBack.Visible = showBackButton;
+			currentStep.SetBackButtonVisible(showBackButton);
+			
 			Refresh();
 
 		}
@@ -57,9 +54,7 @@ namespace Teleopti.Ccc.Win.Main
 			pnlContent.Controls.Clear();
 			labelStatusText.Text = labelText;
 			labelStatusText.Visible = labelText != "";
-			buttonLogOnCancel.Visible = false;
-			buttonLogOnOK.Visible = false;
-			btnBack.Visible = false;
+			
 			Refresh();
 		}
 
@@ -163,18 +158,18 @@ namespace Teleopti.Ccc.Win.Main
 			MessageDialogs.ShowWarning(this, message, caption);
 		}
 
-		private void buttonLogOnOkClick(object sender, EventArgs e)
+		public void ButtonLogOnOkClick(object sender, EventArgs e)
 		{
 			_logonSteps[(int) Presenter.CurrentStep].GetData();
 			Presenter.OkbuttonClicked();
 		}
 
-		private void buttonLogOnCancelClick(object sender, EventArgs e)
+		public void ButtonLogOnCancelClick(object sender, EventArgs e)
 		{
 			Exit(DialogResult.Cancel);
 		}
 
-		private void btnBackClick(object sender, EventArgs e)
+		public void BtnBackClick(object sender, EventArgs e)
 		{
 			Presenter.BackButtonClicked();
 		}
@@ -196,8 +191,8 @@ namespace Teleopti.Ccc.Win.Main
 			switch (keyData)
 			{
 				case Keys.Enter:
-					if (shouldGoFoward || buttonLogOnOK.Focused)
-						buttonLogOnOkClick(this, EventArgs.Empty);
+					if (shouldGoFoward)
+						ButtonLogOnOkClick(this, EventArgs.Empty);
 
 					break;
 			}

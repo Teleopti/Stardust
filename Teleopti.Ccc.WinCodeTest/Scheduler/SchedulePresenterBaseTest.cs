@@ -852,40 +852,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         }
 
         [Test]
-        public void VerifyUpdateRestriction()
-        {
-            IScheduleDay schedulePart = _mocks.StrictMock<IScheduleDay>();
-            IList<IBusinessRuleResponse> businessRuleResponses = new List<IBusinessRuleResponse>();
-            IScheduleDictionary scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-            Expect.Call(scheduleDictionary.Modify(ScheduleModifier.Scheduler, (IEnumerable<IScheduleDay>)null, null, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).IgnoreArguments().Return(
-                businessRuleResponses);
-
-            _mocks.ReplayAll();
-            _target.SchedulerState.SchedulingResultState.Schedules = scheduleDictionary;
-            _target.LastUnsavedSchedulePart = schedulePart;
-            _target.UpdateRestriction();
-            _mocks.VerifyAll();
-            Assert.IsNull(_target.LastUnsavedSchedulePart);
-        }
-
-        [Test]
-        public void VerifyUpdateOvertimeAvailability()
-        {
-            IScheduleDay schedulePart = _mocks.StrictMock<IScheduleDay>();
-            IList<IBusinessRuleResponse> businessRuleResponses = new List<IBusinessRuleResponse>();
-            IScheduleDictionary scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-            Expect.Call(scheduleDictionary.Modify(ScheduleModifier.Scheduler, (IEnumerable<IScheduleDay>)null, null, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).IgnoreArguments().Return(
-                businessRuleResponses);
-
-            _mocks.ReplayAll();
-            _target.SchedulerState.SchedulingResultState.Schedules = scheduleDictionary;
-            _target.LastUnsavedSchedulePart = schedulePart;
-            _target.UpdateOvertimeAvailability();
-            _mocks.VerifyAll();
-            Assert.IsNull(_target.LastUnsavedSchedulePart);
-        }
-
-        [Test]
         public void VerifyUpdateNoteFromEditor()
         {
             IScheduleDay schedulePart = _mocks.StrictMock<IScheduleDay>();
@@ -927,7 +893,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_target.UpdateFromEditor();
 			_target.UpdateNoteFromEditor();
 			_target.UpdatePublicNoteFromEditor();
-			_target.UpdateRestriction();
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]
@@ -1728,20 +1693,5 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				_target.SortOnTime(dateOnly);	
 			}	
 		}
-
-        [Test]
-        public void VerifyModifySchedulePartWithoutUndoCommit()
-        {
-            IScheduleDay schedulePart = _mocks.StrictMock<IScheduleDay>();
-            IPerson person = _mocks.StrictMock<IPerson>();
-            IScheduleDictionary scheduleDictionary = CreateExpectationForModifySchedulePart(schedulePart, person);
-            Expect.Call(_viewBase.TheGrid).Return(_grid);
-
-            _mocks.ReplayAll();
-            _gridlockManager.AddLock(person, new DateOnly(_date), LockType.Normal, schedulePart.DateOnlyAsPeriod.Period());
-            _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
-            Assert.IsTrue(_target.ModifySchedulePart(new List<IScheduleDay> { schedulePart },true ));
-            _mocks.VerifyAll();
-        }
     }
 }

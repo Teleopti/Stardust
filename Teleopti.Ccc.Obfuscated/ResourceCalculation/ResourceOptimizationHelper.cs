@@ -15,18 +15,21 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		private readonly IOccupiedSeatCalculator _occupiedSeatCalculator;
 		private readonly INonBlendSkillCalculator _nonBlendSkillCalculator;
 		private readonly IPersonSkillProvider _personSkillProvider;
+		private readonly IPeriodDistributionService _periodDistributionService;
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 
 		public ResourceOptimizationHelper(ISchedulingResultStateHolder stateHolder,
 			IOccupiedSeatCalculator occupiedSeatCalculator,
 			INonBlendSkillCalculator nonBlendSkillCalculator,
 			IPersonSkillProvider personSkillProvider,
+			IPeriodDistributionService periodDistributionService,
 			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
 		{
 			_stateHolder = stateHolder;
 			_occupiedSeatCalculator = occupiedSeatCalculator;
 			_nonBlendSkillCalculator = nonBlendSkillCalculator;
 			_personSkillProvider = personSkillProvider;
+			_periodDistributionService = periodDistributionService;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 		}
 
@@ -42,6 +45,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				return;
 
 			if (_stateHolder.SkipResourceCalculation)
+				return;
+
+			if (_stateHolder.Skills.Count.Equals(0))
 				return;
 
 			using (PerformanceOutput.ForOperation("ResourceCalculate " + localDate.ToShortDateString()))
@@ -99,8 +105,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 			if (considerShortBreaks)
 			{
-				var periodDistributionService = new PeriodDistributionService(relevantProjections, 5);
-				periodDistributionService.CalculateDay(relevantSkillStaffPeriods);
+				_periodDistributionService.CalculateDay(relevantProjections, relevantSkillStaffPeriods);
 			}
 
 			calculateMaxSeatsAndNonBlend(relevantProjections, localDate, timePeriod);

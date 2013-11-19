@@ -26,6 +26,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using ConstraintViolationException = Teleopti.Ccc.Infrastructure.Foundation.ConstraintViolationException;
@@ -1447,6 +1448,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.That(returned.Count(), Is.GreaterThan(0));
 		}
 
+		[Test]
+		public void ShouldFindPersonsWithGivenUseCredentialsWithEmptyLogOnName()
+		{
+			IPerson person1 = PersonFactory.CreatePersonWithWindowsPermissionInfo("sunil", "toptinet1");
+			PersistAndRemoveFromUnitOfWork(person1);
+			IPerson person2 = PersonFactory.CreatePersonWithWindowsPermissionInfo("", "toptinet1");
+			PersistAndRemoveFromUnitOfWork(person2);
+			IPerson person3 = PersonFactory.CreatePersonWithWindowsPermissionInfo("nimal", "toptinet1");
+			PersistAndRemoveFromUnitOfWork(person3);
+
+			var pr = new PersonRepository(UnitOfWork);
+
+			IList<IPerson> personList = new List<IPerson>(1);
+			person1.WindowsAuthenticationInfo.WindowsLogOnName = "";
+			personList.Add(person1);
+
+			var returned = pr.FindPersonsWithGivenUserCredentials(personList);
+			Assert.That(returned.Count(), Is.EqualTo(1));
+		}
+
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Samisk")]
 		[Test, Explicit("This one fails on some enviroments. Xp os? Bug id 6318. Have a look at this again when NH is upgraded to 3.x ")]
@@ -1652,7 +1673,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(businessUnit);
 			var site = SiteFactory.CreateSimpleSite("d");
-			ReflectionHelper.SetBusinessUnit(site,businessUnit);
+			site.SetBusinessUnit(businessUnit);
 			PersistAndRemoveFromUnitOfWork(site);
 			var team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
@@ -1707,12 +1728,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	  
 		private IPersonContract createPersonContract(IBusinessUnit otherBusinessUnit = null)
 		{
-			IPersonContract pContract = PersonContractFactory.CreatePersonContract();
+			var pContract = PersonContractFactory.CreatePersonContract();
 			if (otherBusinessUnit != null)
 			{
-				ReflectionHelper.SetBusinessUnit(pContract.Contract,otherBusinessUnit);
-				ReflectionHelper.SetBusinessUnit(pContract.ContractSchedule,otherBusinessUnit);
-				ReflectionHelper.SetBusinessUnit(pContract.PartTimePercentage,otherBusinessUnit);
+				pContract.Contract.SetBusinessUnit(otherBusinessUnit);
+				pContract.ContractSchedule.SetBusinessUnit(otherBusinessUnit);
+				pContract.PartTimePercentage.SetBusinessUnit(otherBusinessUnit);
 			}
 			PersistAndRemoveFromUnitOfWork(pContract.Contract);
 			PersistAndRemoveFromUnitOfWork(pContract.ContractSchedule);

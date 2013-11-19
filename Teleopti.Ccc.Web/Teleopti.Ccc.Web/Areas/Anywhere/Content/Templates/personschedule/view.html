@@ -1,149 +1,196 @@
 <div class="person-schedule container">
-    <div class="row">
-        <div class="span12 page-header">
-            <h1>
-                <span data-bind="text: Name"></span>
-                <small>
-                    <span data-bind="text: Site"></span>
-                    \ 
-                    <span data-bind="text: Team"></span>
-                </small>
-            </h1>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="span12">
-            <form action="#">
-                <div class="btn-group">
-                    <button class="btn btn-large add-full-day-absence" data-bind="css: { active: AddingFullDayAbsence }, click: AddFullDayAbsence"><i class="icon-plus"></i> <span data-bind="    text: Resources.AddFullDayAbsence"></span></button>
-                </div>
-            </form>
-
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="span12">
-			
-            <div class="relative">
+	<div class="row">
+		<div class="span12 page-header">
+			<h1>
+				<span data-bind="text: Name"></span>
+				<small>
+					<span data-bind="text: Site"></span>
+					\ 
+					<span data-bind="text: Team"></span>
+				</small>
 				
-                <!-- ko with: TimeLine -->
-                <div class="time-line absolute" data-bind="attr: {'data-start-time': StartTime, 'data-end-time': EndTime}">
-                    <div class="relative">
-                        <!-- ko foreach: Times -->
-                        <div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
-                        <div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
-                        <!-- /ko -->
-                    </div>
-                </div>
-                <!-- /ko -->
+				<div class="pull-right">
+					<button class="btn toggle-descriptions" data-toggle="button" disabled data-bind="enable: !Loading(), click: ToggleDisplayDescriptions"><i class="icon-question-sign"></i></button>
+				</div>
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-	                    <tr class="schedule-row">
-		                    <td class="schedule">
-			                    <div class="relative time-line-for">
-				                    <!-- ko if: IsShift -->
-				                    <div class="shift">
-			                    <!-- ko foreach: Layers -->
-			                    <div class="layer absolute" data-bind="
+			</h1>
+			
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="span12">
+			<form action="#">
+				<div class="btn-group">
+					<button class="btn btn-large add-full-day-absence" data-bind="css: { active: AddingFullDayAbsence }, click: AddFullDayAbsence"><i class="icon-plus"></i> <span data-bind="text: Resources.AddFullDayAbsence"></span></button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="span12">
+			
+			<div class="relative">
+				
+				<!-- ko with: TimeLine -->
+				<div class="time-line absolute" data-bind="attr: {'data-start-time': StartTime, 'data-end-time': EndTime}">
+					<div class="relative">
+						<!-- ko foreach: Times -->
+						<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
+						<div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
+						<!-- /ko -->
+					</div>
+				</div>
+				<!-- /ko -->
+
+				<table class="table">
+					<thead>
+						<tr>
+							<th>&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="schedule-row">
+							<td class="schedule">
+								<div class="relative time-line-for">
+									<!-- ko if: IsShift -->
+									<div class="shift">
+										<!-- ko foreach: Layers -->
+										<div class="layer absolute" data-bind="
 										style: {
 											left: StartPixels() + 'px',
 											width: LengthPixels() + 'px',
-											backgroundColor: Color()
+											backgroundColor: Color
 										},
 										attr: {
 											'data-start-time': StartTime,
-											'data-length-minutes': LengthMinutes,
+											'data-length-minutes': LengthMinutes(),
 										}
-										"></div>
-			                    <!-- /ko -->
-				                    </div>
-				                    <!-- /ko -->
+										">
+											<!-- ko if: IsFullDayAbsence -->
+												<!-- ko if: $root.DisplayDescriptions -->
+													<span class="label layer-description" data-bind="text: Description"></span>
+												<!-- /ko -->
+											<!-- /ko -->
+										</div>
+										<!-- /ko -->
+									</div>
+									<!-- /ko -->
 									
-				                    <!-- ko if: IsDayOff -->
-				                    <div class="dayoff absolute"></div>
-				                    <!-- /ko -->
-			                    </div>
+									<!-- ko if: IsDayOff -->
+									<div class="dayoff absolute">
+										<!-- ko if: $root.DisplayDescriptions -->
+										<span class="label layer-description" data-bind="text: DayOffName"></span>
+										<!-- /ko -->
+									</div>
+									<!-- /ko -->
+								</div>
 
-		                    </td>
-	                    </tr>
-                    </tbody>
-                </table>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 				
-            </div>
+			</div>
 
-        </div>
-    </div>
-    
-    <!-- ko if: AddingFullDayAbsence -->
-    <!-- ko with: AddFullDayAbsenceForm -->
-    
-    <div class="row">
-        <div class="span3">
-            <blockquote>
-                <form action="#" class="full-day-absence-form">
-                    <select id="absence-type" class="absence-type" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: AbsenceType">
-                    </select>
+		</div>
+	</div>
+	
+	
+	
 
-                    <div class="input-prepend">
-                        <span class="add-on"><i class="icon-step-backward"></i></span>
-                        <input type="text" class="start-date" readonly="readonly" data-bind="value: StartDateFormatted" />
-                    </div>
-                    <div class="input-prepend input-append">
-                        <span class="add-on"><i class="icon-step-forward"></i></span>
-                        <span class="date" data-bind="datepicker: EndDate, datepickerOptions: { format: $root.Resources.DateFormatForMoment, weekStart: $root.Resources.FirstDayOfWeek, autoclose: true }">
-                            <input type="text" class="add-on end-date" readonly="readonly"/>
-                            <span class="add-on"><i class="icon-calendar"></i></span>
-                        </span>
-                    </div>
-                    
-                    <!-- ko if: InvalidEndDate -->
-                    <div class="alert">
-                        <span data-bind="text: $root.Resources.InvalidEndDate"></span>
-                    </div>
-                    <!-- /ko -->
+	<!-- ko if: AddingFullDayAbsence -->
+	<!-- ko with: AddFullDayAbsenceForm -->
+	
+	<div class="row">
+		<div class="span3">
+			<blockquote>
+				<form action="#" class="full-day-absence-form">
+					<select id="absence-type" class="absence-type" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: AbsenceType">
+					</select>
 
-                    <button class="btn btn-large btn-success apply btn-block" style="margin-top: 10px" data-bind="enable: !InvalidEndDate() && !$root.Loading(), text: $root.Resources.Apply, click: Apply"></button>
-                    
-                </form>
-            </blockquote>
-        </div>
-    </div>
+					<div class="input-prepend">
+						<span class="add-on"><i class="icon-step-backward"></i></span>
+						<input type="text" class="start-date" readonly="readonly" data-bind="value: StartDateFormatted" />
+					</div>
+					<div class="input-prepend input-append">
+						<span class="add-on"><i class="icon-step-forward"></i></span>
+						<span class="date" data-bind="datepicker: EndDate, datepickerOptions: { format: $root.Resources.DateFormatForMoment, weekStart: $root.Resources.FirstDayOfWeek, autoclose: true }">
+							<input type="text" class="add-on end-date" readonly="readonly"/>
+							<span class="add-on"><i class="icon-calendar"></i></span>
+						</span>
+					</div>
+					
+					<!-- ko if: InvalidEndDate -->
+					<div class="alert">
+						<span data-bind="text: $root.Resources.InvalidEndDate"></span>
+					</div>
+					<!-- /ko -->
 
-    <!-- /ko -->
-    <!-- /ko -->
-    
-    
-    <div class="row">
-        <div class="span8">
-            <table class="table absence-list">
-                <tbody data-bind="foreach: Absences">
-                    <tr class="absence">
-                        <td class="absence-item" data-bind="style: { backgroundColor: BackgroundColor()}">
-                        <td class="absence-item"><span class="absence-name" data-bind="text: Name"></span></td>
-                        <td class="absence-item"><i class="icon-step-backward"></i><span data-bind="text: StartTime"></span></td>
-                        <td class="absence-item"><i class="icon-minus"></i></td>
-                        <td class="absence-item"><span data-bind="text: EndTime"></span><i class="icon-step-forward"></i></td>
-                        <td class="absence-item">
-                            <!-- ko if: !AboutToRemove() -->
-                                <button class="btn remove" data-bind="click: Remove, text: $root.Resources.Remove" />
-                            <!-- /ko -->
-                            <!-- ko if: AboutToRemove -->
-                                <button class="btn btn-danger confirm-removal" data-bind="enable: !Removing(), click: ConfirmRemoval, text: $root.Resources.ConfirmRemoval" />
-                            <!-- /ko -->
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="span4"></div>
-    </div>
+					<button class="btn btn-large btn-success apply btn-block" style="margin-top: 10px" data-bind="enable: !InvalidEndDate() && !$root.Loading(), text: $root.Resources.Apply, click: Apply"></button>
+					
+				</form>
+			</blockquote>
+		</div>
+	</div>
+
+	<!-- /ko -->
+	<!-- /ko -->
+	
+	<!-- ko if: AddingActivity -->
+	<!-- ko with: AddActivityForm -->
+	
+	<div class="row">
+		<div class="span3">
+			<blockquote>
+				<form action="#" class="activity-form">
+					<select id="activity-type" class="activity-type" data-bind="enable: !$root.Loading(), options: ActivityTypes, optionsText: 'Name', optionsValue: 'Id', value: Activity">
+					</select>
+
+					<div class="input-prepend">
+						<span class="add-on"><i class="icon-step-backward"></i></span>
+						<input type="text" class="start-time" data-bind="value: StartTime" />
+					</div>
+					<div class="input-prepend">
+						<span class="add-on"><i class="icon-step-forward"></i></span>
+						<input type="text" class="end-time" data-bind="value: EndTime" />
+					</div>
+
+					<button class="btn btn-large btn-success apply btn-block" style="margin-top: 10px" data-bind="enable: !$root.Loading(), text: $root.Resources.Apply, click: Apply"></button>
+					
+				</form>
+			</blockquote>
+		</div>
+	</div>
+
+	<!-- /ko -->
+	<!-- /ko -->
+	
+	
+	<div class="row">
+		<div class="span8">
+			<table class="table absence-list">
+				<tbody data-bind="foreach: Absences">
+					<tr class="absence">
+						<td class="absence-item" data-bind="style: { backgroundColor: BackgroundColor()}">
+						<td class="absence-item"><span class="absence-name" data-bind="text: Name"></span></td>
+						<td class="absence-item"><i class="icon-step-backward"></i><span data-bind="text: StartTime"></span></td>
+						<td class="absence-item"><i class="icon-minus"></i></td>
+						<td class="absence-item"><span data-bind="text: EndTime"></span><i class="icon-step-forward"></i></td>
+						<td class="absence-item">
+							<!-- ko if: !AboutToRemove() -->
+								<button class="btn remove" data-bind="click: Remove, text: $root.Resources.Remove" />
+							<!-- /ko -->
+							<!-- ko if: AboutToRemove -->
+								<button class="btn btn-danger confirm-removal" data-bind="enable: !Removing(), click: ConfirmRemoval, text: $root.Resources.ConfirmRemoval" />
+							<!-- /ko -->
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="span4"></div>
+	</div>
 </div>
 

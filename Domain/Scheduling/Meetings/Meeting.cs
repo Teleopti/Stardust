@@ -9,7 +9,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 {
-	public class Meeting : AggregateRootWithBusinessUnit, IMeeting, IProvideCustomChangeInfo
+	public class Meeting : VersionedAggregateRootWithBusinessUnit, IMeeting, IProvideCustomChangeInfo
 	{
 		private IPerson _organizer;
 		private Iesi.Collections.Generic.ISet<IMeetingPerson> _meetingPersons;

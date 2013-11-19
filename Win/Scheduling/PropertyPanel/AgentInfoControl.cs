@@ -384,8 +384,15 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
             helper.SchedulePeriodData();
 
-            var perPeriod = helper.SchedulePeriod.ShiftCategoryLimitationCollection().Where(l => !l.Weekly);
-            var perWeek = helper.SchedulePeriod.ShiftCategoryLimitationCollection().Where(l => l.Weekly);
+            var shiftCategoryCollection = helper.SchedulePeriod.ShiftCategoryLimitationCollection();
+            var undeletedShiftCategories = new List<IShiftCategoryLimitation>();
+            foreach (var shiftCategoryLimitation  in shiftCategoryCollection)
+            {
+                if(!((IDeleteTag) shiftCategoryLimitation.ShiftCategory).IsDeleted )
+                    undeletedShiftCategories.Add(shiftCategoryLimitation);
+            }
+            var perPeriod = undeletedShiftCategories.Where(l => !l.Weekly).ToList();
+            var perWeek = undeletedShiftCategories.Where(l => l.Weekly).ToList();
             if (perWeek.Any())
             {
                 createAndAddItem(listViewRestrictions, Resources.PerWeek,
@@ -787,7 +794,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
        
         private void comboBoxAgentGrouping_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (_dataLoaded)
+            if (_dataLoaded && _selectedPerson!= null)
             {
                 updateFairnessInfo(_selectedPerson, _dateOnlyList.First(), _stateHolder);
             }

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     /// <summary>
     /// Source class
     /// </summary>
-    public class QueueSource : AggregateRoot, IQueueSource, IDeleteTag
+    public class QueueSource : VersionedAggregateRoot, IQueueSource, IDeleteTag
     {
         private string _name = string.Empty;
         private string _description = string.Empty;

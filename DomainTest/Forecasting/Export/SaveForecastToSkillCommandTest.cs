@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
@@ -72,15 +73,15 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
                                         }
                                 };
 
-			ReflectionHelper.SetBusinessUnit(_targetSkill, secondBusinessUnit);
-			ReflectionHelper.SetBusinessUnit(skillDay, secondBusinessUnit);
+			_targetSkill.SetBusinessUnit(secondBusinessUnit);
+			skillDay.SetBusinessUnit(secondBusinessUnit);
 
 			using (_mocks.Record())
 			{
 				Expect.Call(_scenarioRepository.LoadDefaultScenario(secondBusinessUnit)).Return(targetScenario);
 				Expect.Call(_skillDayLoadHelper.LoadSchedulerSkillDays(period, new[] { _targetSkill }, targetScenario)).Return(
 					new Dictionary<ISkill, IList<ISkillDay>> { { _targetSkill, new[] { skillDay } } });
-				Expect.Call(_skillDayRepository.GetAllSkillDays(period, new[] { skillDay }, _targetSkill, targetScenario, false)).
+				Expect.Call(_skillDayRepository.GetAllSkillDays(period, new[] { skillDay }, _targetSkill, targetScenario, null)).IgnoreArguments().
 					Return(new[] { skillDay });
 			}
 			using (_mocks.Playback())

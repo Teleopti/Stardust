@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Domain.Common
 {
     [Serializable]
-    public class GroupingActivity : AggregateRoot, IGroupingActivity, IDeleteTag
+    public class GroupingActivity : VersionedAggregateRoot, IGroupingActivity, IDeleteTag
     {
         #region Fields
 

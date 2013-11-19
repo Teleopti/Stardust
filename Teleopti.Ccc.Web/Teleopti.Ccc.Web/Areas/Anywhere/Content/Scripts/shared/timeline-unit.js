@@ -12,6 +12,10 @@ define([
 
 		var self = this;
 
+		var startTime = moment(data.Start, resources.FixedDateTimeFormatForMoment);
+		var startTimeMinutes = startTime.diff(data.Date, 'minutes');
+		var lengthMinutes = data.Minutes;
+
 		var startMinutesToPixels = function (minutes) {
 			var start = minutes - timeline.StartMinutes();
 			var pixels = start * timeline.PixelsPerMinute();
@@ -23,18 +27,17 @@ define([
 			return Math.round(pixels);
 		};
 
-
-
 		this.StartMinutes = function() {
-			var startTime = moment(data.Start, resources.FixedDateTimeFormatForMoment);
-			return startTime.diff(data.Date, 'minutes');
+			return startTimeMinutes;
 		};
 
-		this.LengthMinutes = ko.observable(data.Minutes);
+		this.LengthMinutes = function() {
+			return lengthMinutes;
+		};
 
-		this.EndMinutes = ko.computed(function () {
-			return self.StartMinutes() + self.LengthMinutes();
-		});
+		this.EndMinutes = function () {
+			return startTimeMinutes + lengthMinutes;
+		};
 
 		this.StartPixels = ko.computed(function () {
 			return startMinutesToPixels(self.StartMinutes());
@@ -99,7 +102,12 @@ define([
 
 		this.StartTime = ko.computed(function () {
 			var time = moment().startOf('day').add('minutes', self.StartMinutes());
-			return time.format(resources.TimeFormatForMoment);
+			return time.format(resources.FixedTimeFormat);
+		});
+
+		this.EndTime = ko.computed(function () {
+		    var time = moment().startOf('day').add('minutes', self.EndMinutes());
+		    return time.format(resources.FixedTimeFormat);
 		});
 
 	};

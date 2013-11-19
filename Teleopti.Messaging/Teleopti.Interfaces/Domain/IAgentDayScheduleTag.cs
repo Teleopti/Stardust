@@ -3,7 +3,7 @@ namespace Teleopti.Interfaces.Domain
     /// <summary>
     /// The tag for a specific date
     /// </summary>
-    public interface IAgentDayScheduleTag : IExportToAnotherScenario
+    public interface IAgentDayScheduleTag : IExportToAnotherScenario, IVersioned
     {
         /// <summary>
         /// Gets or sets the schedule tag.

@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 
 			_jobId = Guid.NewGuid();
 			_statPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 31);
-			_mess = new QuickForecastWorkloadMessage {JobId = _jobId,StatisticPeriod = _statPeriod, SmoothingStyle = 3};
+			_mess = new QuickForecastWorkloadMessage {JobId = _jobId,StatisticPeriod = _statPeriod, SmoothingStyle = 3,UseDayOfMonth = true};
 		}
 
 		[Test]
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 				  .Return(teskOwners);
 			Expect.Call(_forecastClassesCreator.GetNewTaskOwnerPeriod(teskOwners)).Return(taskOwnerPeriod);
 			Expect.Call(_outlierRep.FindByWorkload(workload)).Return(new List<IOutlier>());
-			Expect.Call(_skillDayRep.GetAllSkillDays(_statPeriod, new List<ISkillDay>(), null, scenario,false)).IgnoreArguments()
+			Expect.Call(_skillDayRep.GetAllSkillDays(_statPeriod, new List<ISkillDay>(), null, scenario, _ => { })).IgnoreArguments()
 			      .Return(new Collection<ISkillDay>());
 			Expect.Call(_forecastClassesCreator.CreateSkillDayCalculator(null, new List<ISkillDay>(), _statPeriod))
 			      .IgnoreArguments()

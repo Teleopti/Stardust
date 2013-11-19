@@ -87,10 +87,14 @@ namespace Teleopti.Ccc.Win.Meetings
             BackColor = ColorHelper.ControlPanelColor;
         }
 
-		
 		private void toolStripButtonMainSave_Click(object sender, EventArgs e)
 		{
 			SaveValidMeeting();
+		}
+
+		public void SetInstanceId(Guid id)
+		{
+			_meetingComposerPresenter.SetInstanceId(id);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
@@ -227,6 +231,9 @@ namespace Teleopti.Ccc.Win.Meetings
             toolStripButtonMainAddressBook.Enabled = false;
             toolStripButtonSchedules.Enabled = false;
             toolStripButtonImpact.Enabled = false;
+	        toolStripButtonMainDelete.Enabled = false;
+	        toolStripButtonMainSave.Enabled = false;
+	       
             foreach (IMeetingDetailView meetingDetailView in _meetingDetailViews)
             {
                 meetingDetailView.OnDisableWhileLoadingStateHolder();
@@ -238,6 +245,9 @@ namespace Teleopti.Ccc.Win.Meetings
             toolStripButtonMainAddressBook.Enabled = true;
             toolStripButtonSchedules.Enabled = _viewSchedulesPermission;
             toolStripButtonImpact.Enabled = true;
+			toolStripButtonMainDelete.Enabled = true;
+			toolStripButtonMainSave.Enabled = true;
+	
             foreach (IMeetingDetailView meetingDetailView in _meetingDetailViews)
             {
                 meetingDetailView.OnEnableAfterLoadingStateHolder();

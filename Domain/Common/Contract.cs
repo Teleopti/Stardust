@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-    public class Contract : AggregateRootWithBusinessUnit, IContract, IDeleteTag
+    public class Contract : VersionedAggregateRootWithBusinessUnit, IContract, IDeleteTag
     {
         private Description _description;
         private EmploymentType _employmentType;

@@ -9,7 +9,6 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 {
@@ -17,13 +16,13 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
     {
          private ISchedulingOptions _localSchedulingOptions;
         private ISchedulingOptions _schedulingOptions;
-        private IList<IShiftCategory> _shiftCategories;
+        private IEnumerable<IShiftCategory> _shiftCategories;
         private bool _dataLoaded;
     	private IList<IGroupPageLight> _groupPages;
-        private IList<IActivity> _availableActivity;
+        private IEnumerable<IActivity> _availableActivity;
 		private IList<IGroupPageLight> _groupPagesFairness;
         private IList<IGroupPageLight> _groupPagesTeamBlockPer;
-        private IList<IScheduleTag> _scheduleTags;
+        private IEnumerable<IScheduleTag> _scheduleTags;
     	private ISchedulerGroupPagesProvider _groupPagesProvider;
         private GroupPageLight _singleAgentEntry;
 
@@ -34,8 +33,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Initialize(ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories, bool reschedule, bool backToLegal, ISchedulerGroupPagesProvider groupPagesProvider,
-            IList<IScheduleTag> scheduleTags, IList<IActivity> availableActivity)
+		public void Initialize(ISchedulingOptions schedulingOptions, IEnumerable<IShiftCategory> shiftCategories, bool reschedule, bool backToLegal, ISchedulerGroupPagesProvider groupPagesProvider,
+            IEnumerable<IScheduleTag> scheduleTags, IEnumerable<IActivity> availableActivity)
         {
 			_groupPagesProvider = groupPagesProvider;
             _availableActivity = availableActivity;
@@ -66,7 +65,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			}
 
             _schedulingOptions = schedulingOptions;
-            _shiftCategories = (from s in shiftCategories where ((IDeleteTag)s).IsDeleted == false select s).ToList();
+            _shiftCategories = shiftCategories;
             _scheduleTags = scheduleTags;
 			// inga skill
 			_groupPages = _groupPagesProvider.GetGroups(false);
@@ -584,16 +583,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         }
 
 		private void checkBoxCommonActivity_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBoxCommonActivity.Checked)
-                comboBoxActivity .Enabled = true;
-            else
-            {
-                comboBoxActivity.Enabled = false;
-            }
-        }
+		{
+			comboBoxActivity.Enabled = checkBoxCommonActivity.Checked;
+		}
 
-        private void checkBoxTeamBlockPerBlockScheduling_CheckedChanged(object sender, EventArgs e)
+	    private void checkBoxTeamBlockPerBlockScheduling_CheckedChanged(object sender, EventArgs e)
         {
             checkBoxTeamBlockSameStartTime.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
 			checkBoxLevellingSameShift.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -17,22 +18,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IActivity _activity;
         private readonly DateTimePeriod _period;
         private readonly int _lengthToSplitOn;
-        double[] _splittedValues;
-        private int[] _splittedPeriodLength;
-        private double _demandedTraff;
+	    readonly double[] _splittedValues;
+        private readonly double _demandedTraff;
+	    private readonly IList<DateTimePeriod> _periods;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PeriodDistribution"/> class.
-        /// </summary>
-        /// <param name="activity">The activity.</param>
-        /// <param name="period">The period start.</param>
-        /// <param name="lengthToSplitOn">The length to split on.</param>
-        /// <param name="demandedTraff">The demanded traff.</param>
-        /// <remarks>
-        /// Created by: Ola
-        /// Created date: 2008-10-27
-        /// </remarks>
-        public PeriodDistribution(ISkillStaffPeriod skillStaffPeriod, IActivity activity, DateTimePeriod period, int lengthToSplitOn, double demandedTraff)
+	    /// <summary>
+	    /// Initializes a new instance of the <see cref="PeriodDistribution"/> class.
+	    /// </summary>
+	    /// <param name="skillStaffPeriod"></param>
+	    /// <param name="activity">The activity.</param>
+	    /// <param name="period">The period start.</param>
+	    /// <param name="lengthToSplitOn">The length to split on.</param>
+	    /// <param name="demandedTraff">The demanded traff.</param>
+	    /// <remarks>
+	    /// Created by: Ola
+	    /// Created date: 2008-10-27
+	    /// </remarks>
+	    public PeriodDistribution(ISkillStaffPeriod skillStaffPeriod, IActivity activity, DateTimePeriod period, int lengthToSplitOn, double demandedTraff)
         {
             InParameter.NotNull("period", period);
             InParameter.ValueMustBeLargerThanZero("lengthToSplitOn", lengthToSplitOn);
@@ -43,72 +45,47 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _lengthToSplitOn = lengthToSplitOn;
             _demandedTraff = demandedTraff;
 
-            int overflow;
-            int cnt = Math.DivRem((int)period.ElapsedTime().TotalMinutes, lengthToSplitOn, out overflow);
-            if (overflow > 0)
-                cnt++;
-
-            _splittedValues = new double[cnt];
-            _splittedPeriodLength = new int[cnt];
-            for (int i = 0; i < _splittedPeriodLength.Length; i++)
-            {
-                _splittedPeriodLength[i] = lengthToSplitOn;
-            }
-            if (overflow > 0)
-            {
-                _splittedPeriodLength[_splittedPeriodLength.Length - 1] = overflow;
-            }
-
+            _periods = period.Intervals(TimeSpan.FromMinutes(lengthToSplitOn));
+		    var lastItemIndex = _periods.Count - 1;
+			if (lastItemIndex >= 0)
+			{
+				_periods[lastItemIndex] = new DateTimePeriod(_periods[lastItemIndex].StartDateTime,period.EndDateTime);
+			}
+            
+            _splittedValues = new double[_periods.Count];
         }
 
-        /// <summary>
-        /// Processes the layers and splittes them into smaller pieces.
-        /// </summary>
-        /// <param name="layerCollectionFilteredByPeriod">The layer collection.</param>
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2008-10-27    
-        ///  Changed:
-        ///  RK, 090227
-        ///  Filter layercollection by activity once and
-        ///  leave early if possible
-        /// </remarks>
-		public void ProcessLayers(IVisualLayerCollection layerCollectionFilteredByPeriod)
+		public void ProcessLayers(IResourceCalculationDataContainerWithSingleOperation resourceCalculationDataContainer)
 		{
-			_splittedValues = FillInValuesFromLayers(layerCollectionFilteredByPeriod, _splittedValues);
-			if (!diffFound(_splittedValues))
-				return;
-
-			IPopulationStatisticsCalculator calculator =
-				new PopulationStatisticsCalculator(CalculateSplitPeriodRelativeValues());
-			_skillStaffPeriod.SetDistributionValues(calculator, this);
-		}
-
-		private static bool diffFound(double[] splittedValues)
-		{
-			double? lastValue = null;
-			for (int i = 0; i < splittedValues.Length; i++)
+			for (int i = 0; i < _splittedValues.Length; i++)
 			{
-				if (!lastValue.HasValue)
-					lastValue = splittedValues[i];
-
-				if (Math.Abs(splittedValues[i] - lastValue.Value) > 0.001)
-					return true;
-
-				lastValue = splittedValues[i];
+				_splittedValues[i] = 0;
 			}
 
-			return false;
+			var intraIntervalValues = resourceCalculationDataContainer.IntraIntervalResources(_skillStaffPeriod.SkillDay.Skill, _period);
+			foreach (var resourcePeriod in intraIntervalValues)
+			{
+				for (int i = 0; i < _periods.Count; i++)
+				{
+					var intersection = _periods[i].Intersection(resourcePeriod);
+					if (intersection.HasValue)
+					{
+						_splittedValues[i] += intersection.Value.ElapsedTime().TotalMinutes;
+					}
+				}
+			}
+			
+			IPopulationStatisticsCalculator calculator = new PopulationStatisticsCalculator(CalculateSplitPeriodRelativeValues());
+			_skillStaffPeriod.SetDistributionValues(calculator, this);
 		}
 
         public double[] CalculateSplitPeriodRelativeValues()
         {
-            DeviationStatisticData stat;
-            var ret = new double[_splittedValues.Length];
+	        var ret = new double[_splittedValues.Length];
             for (int i = 0; i < _splittedValues.Length; i++)
             {
-                double traff = _splittedValues[i]/_splittedPeriodLength[i];
-                stat= new DeviationStatisticData(_demandedTraff, traff);
+                double traff = _splittedValues[i]/_periods[i].ElapsedTime().TotalMinutes;
+                DeviationStatisticData stat = new DeviationStatisticData(_demandedTraff, traff);
                 ret[i] = stat.RelativeDeviation;
             }
             return ret;
@@ -116,19 +93,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public double DeviationAfterNewLayers(IVisualLayerCollection layerCollection)
         {
-            double[] tmp = FillInValuesFromLayers(layerCollection.FilterLayers(_period), _splittedValues);
+            var tmp = fillInValuesFromLayers(layerCollection.FilterLayers(_period), _splittedValues);
             return new PopulationStatisticsCalculator(tmp).StandardDeviation;
         }
 
-        private double[] FillInValuesFromLayers(IVisualLayerCollection layerCollectionFilteredByPeriod, double[] splittedValues)
+        private IEnumerable<double> fillInValuesFromLayers(IVisualLayerCollection layerCollectionFilteredByPeriod, double[] splittedValues)
         {
             if (!layerCollectionFilteredByPeriod.HasLayers)
                 return splittedValues;
 
             IVisualLayerCollection layerCollectionFilteredByPeriodAndActivity = layerCollectionFilteredByPeriod.FilterLayers(_activity);
             if (!layerCollectionFilteredByPeriodAndActivity.HasLayers) return splittedValues;
-
-            //layerCollectionFilteredByPeriodAndActivity = layerCollectionFilteredByPeriodAndActivity.FilterLayers(_period);
 
             for (int i = 0; i < splittedValues.Length; i++)
             {
@@ -184,12 +159,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
             get
             {
-                double ret = 0;
-                foreach (double detail in _splittedValues)
-                {
-                    ret += detail;
-                }
-                return ret;
+	            return _splittedValues.Sum();
             }
         }
 

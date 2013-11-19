@@ -5,7 +5,12 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeLoggedOnUser : ILoggedOnUser
 	{
-		private readonly Person _person;
+		private readonly IPerson _person;
+
+		public FakeLoggedOnUser(IPerson person)
+		{
+			_person = person;
+		}
 
 		public FakeLoggedOnUser()
 		{

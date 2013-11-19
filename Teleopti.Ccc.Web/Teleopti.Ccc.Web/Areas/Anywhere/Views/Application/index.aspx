@@ -17,6 +17,7 @@
 		<link rel="stylesheet" href="Content/bootstrap/bootstrap.css" />
 		<link rel="stylesheet" href="Content/bootstrap/bootstrap-responsive.css" />
 		<link rel="stylesheet" href="Content/moment-datepicker/datepicker.css" />
+		<link rel="stylesheet" href="Content/select2/select2.css"/>
 
 		<link rel="stylesheet" href="Areas/Anywhere/Content/Styles/helpers.css" />
 		<link rel="stylesheet" href="Areas/Anywhere/Content/Styles/main.css" />

@@ -2,17 +2,7 @@
 
 namespace Teleopti.Interfaces.Domain
 {
-	/// <summary>
-	/// Data in a schedule that also exists in db and is persistable
-	/// </summary>
-	/// <remarks>
-	/// Created by: rogerkr
-	/// Created date: 2008-05-29
-	/// </remarks>
-	public interface IPersistableScheduleData : IScheduleData, IVersioned, IVersionedAggregateRoot,
-													IChangeInfo,
-													IAggregateRoot,
-													IMainReference
+	public interface IPersistableScheduleData : IScheduleData, IAggregateRoot, IChangeInfo, IMainReference
 	{
 		/// <summary>
 		/// Gets the function path.

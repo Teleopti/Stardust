@@ -5,32 +5,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 {
-	public abstract class AggregateRoot : Entity,
-		IAggregateRoot,
-		IChangeInfo,
+	public abstract class VersionedAggregateRoot : AggregateRoot,
 		IVersioned
 	{
 		private int? _version;
-		private IPerson _updatedBy;
-		private DateTime? _updatedOn;
-		private readonly LocalizedUpdateInfo _localizedUpdateInfo = new LocalizedUpdateInfo();
-		private readonly IList<IEvent> _events = new List<IEvent>();
-
-		public virtual IEnumerable<IEvent> PopAllEvents()
-		{
-			var allEvents = _events.ToArray();
-			_events.Clear();
-			return allEvents;
-		}
-
-		public virtual IEnumerable<IEvent> AllEvents() { return _events; }
-
-		protected void AddEvent(IEvent @event)
-		{
-			_events.Add(@event);
-		}
-
-
 
 		public virtual int? Version
 		{
@@ -41,7 +19,33 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		{
 			_version = version;
 		}
+	}
 
+	public abstract class AggregateRoot : Entity,
+		IAggregateRoot,
+		IChangeInfo
+	{
+		private IPerson _updatedBy;
+		private DateTime? _updatedOn;
+		private readonly LocalizedUpdateInfo _localizedUpdateInfo = new LocalizedUpdateInfo();
+		private readonly IList<Func<IEvent>> _events = new List<Func<IEvent>>();
+
+		public virtual IEnumerable<IEvent> PopAllEvents()
+		{
+			var allEvents = _events.Select(e => e.Invoke()).ToArray();
+			_events.Clear();
+			return allEvents;
+		}
+
+		protected void AddEvent(Func<IEvent> @event)
+		{
+			_events.Add(@event);
+		}
+
+		protected void AddEvent(IEvent @event)
+		{
+			_events.Add(() => @event);
+		}
 
 		public virtual IPerson UpdatedBy
 		{

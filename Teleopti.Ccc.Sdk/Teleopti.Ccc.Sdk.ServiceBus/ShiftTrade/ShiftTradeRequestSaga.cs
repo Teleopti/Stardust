@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using log4net;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -12,7 +13,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Requests;
@@ -29,9 +29,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         private readonly IPersonRequestRepository _personRequestRepository;
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IPersonRepository _personRepository;
-        private readonly IScheduleDictionarySaver _scheduleDictionarySaver;
+				private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
     	private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulingDataForRequestWithoutResourceCalculation;
-    	private readonly static ILog Logger = LogManager.GetLogger(typeof(ShiftTradeRequestSaga));
+		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
+	    private readonly static ILog Logger = LogManager.GetLogger(typeof(ShiftTradeRequestSaga));
         private IPersonRequest _personRequest;
         private ShiftTradeRequestValidationResult _validationResult;
         private IShiftTradeRequest _shiftTradeRequest;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         private IPersonRequestCheckAuthorization _authorization;
     	private IScenario _defaultScenario;
 
-		public ShiftTradeRequestSaga(ICurrentUnitOfWorkFactory unitOfWorkFactory, ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDictionarySaver scheduleDictionarySaver, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation)
+		public ShiftTradeRequestSaga(ICurrentUnitOfWorkFactory unitOfWorkFactory, ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDifferenceSaver scheduleDictionarySaver, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation, IDifferenceCollectionService<IPersistableScheduleData> differenceService)
         {
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
@@ -58,8 +59,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
             _personRepository = personRepository;
             _scheduleDictionarySaver = scheduleDictionarySaver;
     	    _loadSchedulingDataForRequestWithoutResourceCalculation = loadSchedulingDataForRequestWithoutResourceCalculation;
+				_differenceService = differenceService;
 
-    		Logger.Info("New instance of Shift Trade saga was created");
+				Logger.Info("New instance of Shift Trade saga was created");
         }
 
         public void Consume(NewShiftTradeRequestCreated message)
@@ -146,9 +148,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
                             Logger.DebugFormat("Approving ShiftTrade: {0}", _personRequest.GetSubject(new NormalizeText()));
                             var brokenBusinessRules = _personRequest.Approve(approvalService, _authorization, true);
                             HandleBrokenBusinessRules(brokenBusinessRules);
-							var result = _scheduleDictionarySaver.MarkForPersist(unitOfWork, _scheduleRepository, _schedulingResultStateHolder.Schedules.DifferenceSinceSnapshot());
-
-                            new ScheduleDictionaryModifiedCallback().Callback(_schedulingResultStateHolder.Schedules, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
+	                        foreach (var range in _schedulingResultStateHolder.Schedules.Values)
+	                        {
+		                        var diff = range.DifferenceSinceSnapshot(_differenceService);
+														_scheduleDictionarySaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate) range);
+	                        }
                         }
                     }
                     catch (ShiftTradeRequestStatusException exception)

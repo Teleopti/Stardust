@@ -2,6 +2,9 @@
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
+/// <reference path="~/Content/Crossroads/crossroads.js" />
+/// <reference path="~/Content/hasher/hasher.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -46,7 +49,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 						'height': $(bodyInner).height() + 10
 					})
 					.show()
-					;
+				;
 				$('img', this)
 					.css({
 						'top': 50 + $(window).scrollTop()
@@ -58,17 +61,15 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _initNavigation() {
-	    $('.dropdown-menu a[data-mytime-action]')
+		$('.dropdown-menu a[data-mytime-action]')
 			.click(function (e) {
-			    e.preventDefault();
+				e.preventDefault();
 				_navigateTo($(this).data('mytime-action'));
 			})
-			;
+		;
 
 		if (location.hash.length <= 1) {
 			location.replace('#' + _settings.defaultNavigation);
-		} else {
-			$(window).trigger('hashchange');
 		}
 
 		$('#asm-link').click(function (ev) {
@@ -89,15 +90,66 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	}
 
-	// Bind an event to window.onhashchange that, when the history state changes,
-	// iterates over all tab widgets, changing the current tab as necessary.
-	$(window)
-		.bind('hashchange', function (e) {
-		    var hashInfo = _parseHash();
-		    _invokeDisposeCallback(currentViewId);
-			_adjustTabs(hashInfo);
-			_loadContent(hashInfo);
-		});
+	function pareseUrlDate(str) {
+		if (!/^(\d){8}$/.test(str)) return undefined;
+		var y = str.substr(0, 4),
+			m = str.substr(4, 2),
+			d = str.substr(6, 2);
+		return new Date(y, m, d);
+	}
+
+	function _setupRoutes() {
+		var viewRegex = '[a-z]+';
+		var actionRegex = '[a-z]+';
+		var guidRegex = '[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}';
+		var dateRegex = '\\d{8}';
+		
+		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(ShiftTrade)/(' + dateRegex + ')$', 'i'),
+	        function (view, action, secondAction, date) {
+	        	var hashInfo = _parseHash('#' + view + '/' + action);
+
+		        var parsedDate;
+		        if (/^(\d){8}$/.test(date)) {
+			        var y = date.substr(0, 4),
+			            m = date.substr(4, 2) - 1,
+			            d = date.substr(6, 2);
+			        parsedDate = new Date(y, m, d);
+			       
+		        }
+		        _invokeDisposeCallback(currentViewId);
+		        _adjustTabs(hashInfo);
+		        _loadContent(hashInfo,
+					   function () {
+					   	Teleopti.MyTimeWeb.Request.ShiftTradeRequest(parsedDate);
+					   });
+	        	
+	        });
+		
+		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(' + actionRegex + ')/(' + dateRegex + ')$', 'i'),
+	        function (view, action, secondAction, date) {
+	        	var hashInfo = _parseHash('#' + view + '/' + action);
+	        	_invokeDisposeCallback(currentViewId);
+	        	_adjustTabs(hashInfo);
+	        	_loadContent(hashInfo);
+	        });
+		crossroads.addRoute(new RegExp('^(.*)$', 'i'),
+	        function (hash) {
+	        	var hashInfo = _parseHash('#' + hash);
+	        	_invokeDisposeCallback(currentViewId);
+	        	_adjustTabs(hashInfo);
+	        	_loadContent(hashInfo);
+	        });
+	}
+
+	function _initializeHasher() {
+		hasher.prependHash = '';
+		var parseHash = function (newHash, oldHash) {
+			crossroads.parse(newHash);
+		};
+		hasher.initialized.add(parseHash);
+		hasher.changed.add(parseHash);
+		hasher.init();
+	}
 
 	function _navigateTo(action, date, id) {
 
@@ -111,20 +163,14 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		if (id) {
 			hash += "/" + id;
 		}
-		_pushHash(hash);
-	}
-
-	function _pushHash(hash) {
-		// this will trigger the hashchange event, which we listen for
-		location.hash = hash;
+		hasher.setHash(hash);
 	}
 
 	function _endsWith(str, suffix) {
 		return str.indexOf(suffix, str.length - suffix.length) !== -1;
 	}
 
-	function _parseHash() {
-		var hash = location.hash || '';
+	function _parseHash(hash) {
 		if (_endsWith(hash, 'Tab')) {
 			if (hash.indexOf('#Schedule') == 0) {
 				hash = hash.substring(0, hash.length - 'Tab'.length) + '/Week';
@@ -133,6 +179,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			}
 		}
 		if (hash.length > 0) { hash = hash.substring(1); }
+
 		var parts = $.merge(hash.split('/'), [null, null, null, null, null, null, null, null]);
 		parts.length = 8;
 
@@ -156,12 +203,12 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	}
 
 	function _adjustTabs(hashInfo) {
-	    var tabHref = '#' + hashInfo.controller + 'Tab';
-	    $('.bdd-mytime-top-menu .nav li').removeClass('active');
-	    $('a[href="' + tabHref + '"]').parent().addClass('active');
+		var tabHref = '#' + hashInfo.controller + 'Tab';
+		$('.bdd-mytime-top-menu .nav li').removeClass('active');
+		$('a[href="' + tabHref + '"]').parent().addClass('active');
 	}
 
-	function _loadContent(hashInfo) {
+	function _loadContent(hashInfo, secondAction) {
 		_disablePortalControls();
 
 		ajax.Ajax({
@@ -170,7 +217,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			success: function (html) {
 				var viewId = hashInfo.actionHash; //gröt
 				$('#body-inner').html(html);
-				_invokeInitCallback(viewId);
+				_invokeInitCallback(viewId, secondAction);
 				currentViewId = viewId;
 			}
 		});
@@ -182,11 +229,14 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			partialDispose();
 	}
 
-	function _invokeInitCallback(viewId) {
+	function _invokeInitCallback(viewId,secondAction) {
 		var partialInit = _partialViewInitCallback[viewId];
 		if ($.isFunction(partialInit))
 			partialInit(_readyForInteraction, _completelyLoaded);
 		Teleopti.MyTimeWeb.Common.PartialInit();
+		if ($.isFunction(secondAction)) {
+			secondAction();
+		}
 	}
 
 	function _readyForInteraction() {
@@ -206,13 +256,15 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			_layout();
 			_attachAjaxEvents();
 			_initNavigation();
+			_setupRoutes();
+			_initializeHasher();
 		},
 
 		NavigateTo: function (action, date, id) {
 			_navigateTo(action, date, id);
 		},
 		ParseHash: function () {
-			return _parseHash();
+			return _parseHash(location.hash);
 		},
 		RegisterPartialCallBack: function (viewId, callBack, disposeCallback) {
 			_registerPartialCallback(viewId, callBack, disposeCallback);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Win.Common;
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.Win.Optimization
     public partial class GeneralPreferencesPanel : BaseUserControl, IDataExchange
     {
         private IGeneralPreferences _generalPreferences;
-        private IList<IScheduleTag> _scheduleTags;
+        private IEnumerable<IScheduleTag> _scheduleTags;
     	private IEventAggregator _eventAggregator;
 
         public GeneralPreferencesPanel()
@@ -21,17 +22,15 @@ namespace Teleopti.Ccc.Win.Optimization
 
         public void Initialize(
             IGeneralPreferences generalPreferences, 
-            IList<IScheduleTag> scheduleTags,
+            IEnumerable<IScheduleTag> scheduleTags,
 			IEventAggregator eventAggregator)
         {
             _generalPreferences = generalPreferences;
-            _scheduleTags = scheduleTags;
+	        _scheduleTags = addKeepOriginalScheduleTag(scheduleTags);
         	_eventAggregator = eventAggregator;
 
 			if(_eventAggregator != null)
 			_eventAggregator.GetEvent<GenericEvent<ExtraPreferencesPanelUseBlockScheduling>>().Subscribe(EnableDisableShiftCategoryLimitations);
-
-	        addKeepOriginalScheduleTag(_scheduleTags);
 
             ExchangeData(ExchangeDataOption.DataSourceToControls);
             setInitialControlStatus();
@@ -115,11 +114,13 @@ namespace Teleopti.Ccc.Win.Optimization
 
         #endregion
 
-		 private void addKeepOriginalScheduleTag(IList<IScheduleTag> scheduleTags)
-	    {
+		 private IEnumerable<IScheduleTag> addKeepOriginalScheduleTag(IEnumerable<IScheduleTag> scheduleTags)
+		 {
+			 var list = scheduleTags.ToList();
 			var keepOriginalScheduleTag = KeepOriginalScheduleTag.Instance;
-			scheduleTags.Insert(1, keepOriginalScheduleTag);
-	    }
+			list.Insert(1, keepOriginalScheduleTag);
+			 return list;
+		 }
 
         private void bindTagsCombo()
         {

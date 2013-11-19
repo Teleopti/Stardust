@@ -6,37 +6,20 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public enum AgentOvertimeAvailabilityExecuteCommand
-	{
-		Add,
-		Edit,
-		Remove,
-		None
-	}
-
-	public interface IAgentOvertimeAvailabilityPresenter
-	{
-		void Add(IAgentOvertimeAvailabilityAddCommand addCommand);
-		void Edit(IAgentOvertimeAvailabilityEditCommand editCommand);
-		void Remove(IAgentOvertimeAvailabilityRemoveCommand removeCommand);
-		void UpdateView();
-		void Initialize();
-		IScheduleDay ScheduleDay { get; }
-		AgentOvertimeAvailabilityExecuteCommand CommandToExecute(TimeSpan? startTime, TimeSpan? endTime, IOvertimeAvailabilityCreator dayCreator);
-	}
-
-	public class AgentOvertimeAvailabilityPresenter : IAgentOvertimeAvailabilityPresenter
+	public class AgentOvertimeAvailabilityPresenter
 	{
 		private readonly IAgentOvertimeAvailabilityView _view;
 		private readonly IScheduleDay _scheduleDay;
-		private TimePeriod? _existingShiftTimePeriod;
+	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+	    private TimePeriod? _existingShiftTimePeriod;
 		private TimeSpan _startTime = new TimeSpan(8, 0, 0);
 		private TimeSpan _endTime = new TimeSpan(17, 0, 0);
 
-		public AgentOvertimeAvailabilityPresenter(IAgentOvertimeAvailabilityView view, IScheduleDay scheduleDay)
+		public AgentOvertimeAvailabilityPresenter(IAgentOvertimeAvailabilityView view, IScheduleDay scheduleDay, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_view = view;
 			_scheduleDay = scheduleDay;
+		    _schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
 		public void Initialize()
@@ -70,27 +53,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			get { return _scheduleDay; }
 		}
 
-		public void Add(IAgentOvertimeAvailabilityAddCommand addCommand)
+		public void RunCommand(IExecutableCommand command)
 		{
-			if(addCommand == null) throw new ArgumentNullException("addCommand");
+			if(command == null) throw new ArgumentNullException("command");
 
-			addCommand.Execute();
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-		public void Remove(IAgentOvertimeAvailabilityRemoveCommand removeCommand)
-		{
-			if(removeCommand == null) throw new ArgumentNullException("removeCommand");
-
-			removeCommand.Execute();
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-		public void Edit(IAgentOvertimeAvailabilityEditCommand editCommand)
-		{
-			if(editCommand == null) throw new ArgumentNullException("editCommand");
-
-			editCommand.Execute();
+			command.Execute();
 		}
 
 		public void UpdateView()
@@ -114,7 +81,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_view.Update(_startTime, _endTime);
 		}
 
-		public AgentOvertimeAvailabilityExecuteCommand CommandToExecute(TimeSpan? startTime, TimeSpan? endTime, IOvertimeAvailabilityCreator dayCreator)
+		public IExecutableCommand CommandToExecute(TimeSpan? startTime, TimeSpan? endTime, IOvertimeAvailabilityCreator dayCreator)
 		{
 			if(dayCreator == null) throw new ArgumentNullException("dayCreator");
 
@@ -124,15 +91,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var canCreate = dayCreator.CanCreate(startTime, endTime, out startError, out endError);
 			
 			if (overtimeAvailabilityday != null && !canCreate && startError && endError)
-				return AgentOvertimeAvailabilityExecuteCommand.Remove;
+				return new AgentOvertimeAvailabilityRemoveCommand(_scheduleDay, _schedulingResultStateHolder.Schedules);
 
 			if (overtimeAvailabilityday == null && canCreate)
-				return AgentOvertimeAvailabilityExecuteCommand.Add;
+                return new AgentOvertimeAvailabilityAddCommand(_scheduleDay, startTime, endTime, dayCreator, _schedulingResultStateHolder.Schedules);
 
 			if (overtimeAvailabilityday != null && canCreate)
-				return AgentOvertimeAvailabilityExecuteCommand.Edit;
+                return new AgentOvertimeAvailabilityEditCommand(_scheduleDay, startTime, endTime, dayCreator, _schedulingResultStateHolder.Schedules);
 
-			return AgentOvertimeAvailabilityExecuteCommand.None;
+			return null;
 		}
 	}
 }

@@ -128,15 +128,15 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		});
 
         self.isRequestedDateValid = function (date) {
-	        if (date.diff(self.openPeriodStartDate()) < 0) {
+        	if (date.diff(self.openPeriodStartDate()) < 0) {
 	            return false;
-	        } else if (self.openPeriodEndDate().diff(date) < 0) {
+        	} else if (self.openPeriodEndDate().diff(date) < 0) {
 	            return false;
 	        }
 	        return true;
 	    };
 
-		self.loadPeriod = function () {
+		self.loadPeriod = function (date) {
 			ajax.Ajax({
 				url: "Requests/ShiftTradeRequestPeriod",
 				dataType: "json",
@@ -146,7 +146,14 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					    self.now = moment(new Date(data.NowYear, data.NowMonth-1, data.NowDay));
 						setDatePickerRange(data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
 						self.requestedDate(moment(self.now).add('days', data.OpenPeriodRelativeStart));
-					} else {
+						if (date && Object.prototype.toString.call(date) === '[object Date]') {
+							var md = moment(date);
+							if (self.isRequestedDateValid(md)) {
+								self.requestedDate(md);
+							}
+						}
+					}
+					else {
 					    self.setScheduleLoadedReady();
 					    self.isReadyLoaded(true);
 					}
@@ -182,7 +189,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	        var date = moment(self.requestedDateInternal()).add('days', movement);
 	        if (self.isRequestedDateValid(date))
 	            self.requestedDate(date);
-	    };
+		};
 
 		self.nextDate = function () {
 		    self.changeRequestedDate(1);
@@ -313,10 +320,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		SetShiftTradeRequestDate: function (date) {
 			return setShiftTradeRequestDate(date);
 		},
-		OpenAddShiftTradeWindow: function () {
-		    _init();
-		    vm.loadPeriod();
-			_openAddShiftTradeWindow();
+		OpenAddShiftTradeWindow: function (date) {
+			_init();
+		    vm.loadPeriod(date);
+		    _openAddShiftTradeWindow();
 		},
 		HideShiftTradeWindow: function () {
 			_hideShiftTradeWindow();

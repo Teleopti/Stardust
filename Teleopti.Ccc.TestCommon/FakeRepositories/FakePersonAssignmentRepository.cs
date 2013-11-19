@@ -64,6 +64,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
+		public IPersonAssignment LoadAggregate(PersonAssignmentKey id)
+		{
+			throw new NotImplementedException();
+		}
+
 		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
 		{
 			return new Collection<IPersonAssignment>(_personAssignments);
@@ -72,6 +77,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public ICollection<IPersonAssignment> Find(DateOnlyPeriod period, IScenario scenario)
 		{
 			return new Collection<IPersonAssignment>(_personAssignments);
+		}
+
+		public IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

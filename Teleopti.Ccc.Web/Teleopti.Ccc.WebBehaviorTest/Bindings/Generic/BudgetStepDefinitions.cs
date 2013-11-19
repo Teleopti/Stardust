@@ -1,7 +1,8 @@
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -22,11 +23,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			DataMaker.Data().Apply(budgetday);
 		}
 
-		[Given(@"there is absence time for")]
-		public void GivenThereIsAbsenceTimeForTo(Table table)
+		[Given(@"(I) have absence time for")]
+		[Given(@"'?(.*)'? has absence time for")]
+		public void GivenHasAbsenceTimeFor(string userName, Table table)
 		{
-			var absenceTimeConfigurable = table.CreateInstance<AbsenceTimeConfigurable>();
-			DataMaker.Data().ApplyLater(absenceTimeConfigurable);
+			DataMaker.ApplyFromTable<AbsenceTimeConfigurable>(userName, table);
 		}
 	}
 }

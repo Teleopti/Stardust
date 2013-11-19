@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Payroll
 {
-    public class PayrollResult : AggregateRootWithBusinessUnit, IPayrollResult
+    public class PayrollResult : VersionedAggregateRootWithBusinessUnit, IPayrollResult
     {
         private readonly IPerson _owner;
         private readonly DateTime _timestamp;

@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-    public interface IAgentDayScheduleTagRepository : IRepository<IAgentDayScheduleTag>, ILoadAggregateById<IAgentDayScheduleTag>
+	public interface IAgentDayScheduleTagRepository : IRepository<IAgentDayScheduleTag>, ILoadAggregateById<IAgentDayScheduleTag>
     {
         /// <summary>
         /// Finds all agent scheduleday tags for the specified period and scenario.

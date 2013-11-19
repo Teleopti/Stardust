@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	///<summary>
 	/// Repository for PersonAssignment aggregate
 	///</summary>
-	public class PersonAssignmentRepository : Repository<IPersonAssignment>, IPersonAssignmentRepository
+	public class PersonAssignmentRepository : Repository<IPersonAssignment>, IPersonAssignmentRepository, IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>
 	{
 		public PersonAssignmentRepository(IUnitOfWork unitOfWork)
 			: base(unitOfWork)
@@ -32,6 +32,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			: base(currentUnitOfWork)
 		{
 
+		}
+
+		public IPersonAssignment Load(Guid personId, DateOnly date)
+		{
+			throw new NotImplementedException();
 		}
 
 		/// <summary>
@@ -67,6 +72,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var crit = personAssignmentCriteriaLoader(period, scenario);
 			using (PerformanceOutput.ForOperation("Loading personassignments"))
 				return crit.List<IPersonAssignment>();
+		}
+
+		public IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario)
+		{
+			return Session.GetNamedQuery("fetchIdAndVersionPersonAssignment")
+			              .SetEntity("scenario", scenario)
+			              .SetDateTime("start", period.StartDate)
+			              .SetDateTime("end", period.EndDate)
+										.SetResultTransformer(
+											Transformers.AliasToBeanConstructor(typeof(DateScenarioPersonId).GetConstructor(
+											new[]
+												{
+													typeof(Guid),
+													typeof(DateOnly), 
+													typeof(Guid), 
+													typeof(Guid),
+													typeof(int)
+												})))
+			              .List<DateScenarioPersonId>();
 		}
 
 		private ICriteria personAssignmentCriteriaLoader(DateOnlyPeriod period, IScenario scenario)
@@ -114,6 +138,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 
 			return ass;
+		}
+
+		public IPersonAssignment LoadAggregate(PersonAssignmentKey id)
+		{
+			return Session.CreateCriteria(typeof(PersonAssignment))
+						       .SetFetchMode("ShiftLayers", FetchMode.Join)
+						       .Add(Restrictions.Eq("Scenario", id.Scenario))
+						       .Add(Restrictions.Eq("Person", id.Person))
+						       .Add(Restrictions.Eq("Date", id.Date))
+						       .UniqueResult<IPersonAssignment>();
 		}
 	}
 }

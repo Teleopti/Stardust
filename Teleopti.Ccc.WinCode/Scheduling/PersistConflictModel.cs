@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -7,8 +7,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     public class PersistConflictModel
     {
         public PersistConflictModel(IScheduleDictionary scheduleDictionary,
-                                    IEnumerable<IPersistConflict> persistConflicts,
-                                    ICollection<IPersistableScheduleData> modifiedDataResult)
+                                    IEnumerable<PersistConflict> persistConflicts,
+									ICollection<IPersistableScheduleData> modifiedDataResult)
         {
             ScheduleDictionary = scheduleDictionary;
             PersistConflicts = persistConflicts;
@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         }
 
         public IScheduleDictionary ScheduleDictionary { get; private set; }
-        public IEnumerable<IPersistConflict> PersistConflicts { get; private set; }
-        public ICollection<IPersistableScheduleData> ModifiedDataResult { get; private set; }
+        public IEnumerable<PersistConflict> PersistConflicts { get; private set; }
+		public ICollection<IPersistableScheduleData> ModifiedDataResult { get; private set; }
         public IList<PersistConflictData> Data { get; private set; }
     }
 

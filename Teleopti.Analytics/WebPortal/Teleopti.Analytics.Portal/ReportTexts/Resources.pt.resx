@@ -163,7 +163,7 @@
     <value>Data Final:</value>
   </data>
   <data name="ResGrandTotal" xml:space="preserve">
-    <value>Grand Total</value>
+    <value>Total Geral</value>
   </data>
   <data name="ResInterval" xml:space="preserve">
     <value>Intervalo</value>
@@ -184,7 +184,7 @@
     <value>Skill:</value>
   </data>
   <data name="ResTeamNameColon" xml:space="preserve">
-    <value>Time:</value>
+    <value>Equipe:</value>
   </data>
   <data name="ResWorkloadColon" xml:space="preserve">
     <value>Carga de Trabalho:</value>
@@ -214,10 +214,10 @@
     <value>Pós Atendimento Médio (s)</value>
   </data>
   <data name="KpiAverageHandleTime" xml:space="preserve">
-    <value>Tempo Médio de Tratamento (s)</value>
+    <value>Tempo Médio de Atendimento (s)</value>
   </data>
   <data name="KpiAverageTalkTime" xml:space="preserve">
-    <value>Tempo Médio de Atendimento (s)</value>
+    <value>Tempo Falado Médio (s)</value>
   </data>
   <data name="KpiReadiness" xml:space="preserve">
     <value>Disponibilidade (%)</value>
@@ -235,7 +235,7 @@
     <value>Alvo</value>
   </data>
   <data name="ResTeamActual" xml:space="preserve">
-    <value>Real do Time</value>
+    <value>Real da Equipe:</value>
   </data>
   <data name="ResTrend" xml:space="preserve">
     <value>Tendência</value>
@@ -289,7 +289,7 @@
     <value>Tempo Médio de Abandono (s)</value>
   </data>
   <data name="ResDatePeriodColon" xml:space="preserve">
-    <value>Período de Data:</value>
+    <value>Período de Datas:</value>
   </data>
   <data name="ResLongestTimeToAbandonSec" xml:space="preserve">
     <value>Maior Atraso na Fila, Abandonada (s)</value>
@@ -313,19 +313,19 @@
     <value>Totais:</value>
   </data>
   <data name="ResPercent" xml:space="preserve">
-    <value>Porcentagem</value>
+    <value>Percentual</value>
   </data>
   <data name="ResActualACW" xml:space="preserve">
-    <value>Pós Real</value>
+    <value>Pós Atendimento Real</value>
   </data>
   <data name="ResActualATT" xml:space="preserve">
-    <value>TMA Real</value>
+    <value>Tempo Falado Médio Real</value>
   </data>
   <data name="ResACW" xml:space="preserve">
-    <value>Pós Atendimento</value>
+    <value>Tempo de Pós Atendimento</value>
   </data>
   <data name="ResATT" xml:space="preserve">
-    <value>Tempo Médio de Atentimento (TMA)</value>
+    <value>Tempo Falado Médio</value>
   </data>
   <data name="ResCalculatedCalls" xml:space="preserve">
     <value>Chamadas Calculadas</value>
@@ -334,10 +334,10 @@
     <value>Chamadas</value>
   </data>
   <data name="ResForecastedACW" xml:space="preserve">
-    <value>Pós Previsto</value>
+    <value>Pós Atendimento Previsto</value>
   </data>
   <data name="ResForecastedATT" xml:space="preserve">
-    <value>TMA Previsto</value>
+    <value>Tempo Falado Médio Previsto</value>
   </data>
   <data name="ResForecastedCalls" xml:space="preserve">
     <value>Chamadas Previstas</value>
@@ -397,7 +397,7 @@
     <value>Agentes:</value>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
-    <value>Métricas do Agente</value>
+    <value>Métricas de Agente</value>
   </data>
   <data name="ResAdherencePercent" xml:space="preserve">
     <value>Aderência (%)</value>
@@ -466,13 +466,13 @@
     <value>Chamadas Curtas Abandonadas</value>
   </data>
   <data name="ResHandleTime" xml:space="preserve">
-    <value>Tempo de Tratamento</value>
+    <value>Tempo de Atendimento</value>
   </data>
   <data name="ResSpeedOfAnswer" xml:space="preserve">
     <value>Velocidade do Atendimento</value>
   </data>
   <data name="ResTalkTime" xml:space="preserve">
-    <value>Tempo de Atendimento</value>
+    <value>Tempo Falado</value>
   </data>
   <data name="ResTransferredCalls" xml:space="preserve">
     <value>Chamadas Transferidas</value>
@@ -511,13 +511,13 @@
     <value>Chamadas Entrantes Diretas</value>
   </data>
   <data name="ResDirectIncomingCallsTalkTime" xml:space="preserve">
-    <value>Tempo de Atendimento de Chamadas Entrantes Diretas</value>
+    <value>Tempo Falado de Chamadas Entrantes Diretas</value>
   </data>
   <data name="ResDirectOutboundCalls" xml:space="preserve">
     <value>Chamadas Ativas Diretas</value>
   </data>
   <data name="ResDirectOutboundCallsTalkTime" xml:space="preserve">
-    <value>Tempo de Atendimento de Chamadas Ativas Diretas</value>
+    <value>Tempo Falado de Chamadas Ativas Diretas</value>
   </data>
   <data name="ResIdleTime" xml:space="preserve">
     <value>Tempo Livre</value>
@@ -598,10 +598,10 @@
     <value>Tempo Agendado por Atividade</value>
   </data>
   <data name="ResReportTeamMetrics" xml:space="preserve">
-    <value>Métrica de Time</value>
+    <value>Métricas de Equipe</value>
   </data>
   <data name="ResTeamDate" xml:space="preserve">
-    <value>Time / Data</value>
+    <value>Equipe / Data</value>
   </data>
   <data name="ResAnsweredCallsPerReadyHour" xml:space="preserve">
     <value>Chamadas Atendidas / Hora Disponível</value>
@@ -640,7 +640,7 @@
     <value>Preferência por Agente</value>
   </data>
   <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
-    <value>Agentes Agendados por Tempo e Intervalo</value>
+    <value>Agentes Agendados por Intervalo e Equipe</value>
   </data>
   <data name="ResReportImprove" xml:space="preserve">
     <value>MELHORAR</value>
@@ -730,7 +730,7 @@
     <value>Não é possível utilizar no cliente a autenticação pela aplicação quando se está utilizando a autenticação do Windows na aplicação web.</value>
   </data>
   <data name="PleaseUseApplicationLoginInstead" xml:space="preserve">
-    <value>Por favor utilize o login pela aplicação</value>
+    <value>Por favor utilize o login da aplicação</value>
   </data>
   <data name="PossibleSolution" xml:space="preserve">
     <value>Possível solução</value>
@@ -889,7 +889,7 @@
     <value>Cesta de turnos</value>
   </data>
   <data name="ResGroupPageColon" xml:space="preserve">
-    <value>Página do grupo:</value>
+    <value>Página de grupo:</value>
   </data>
   <data name="ResGroupPageGroupColon" xml:space="preserve">
     <value>Grupo:</value>
@@ -922,7 +922,7 @@
     <value>Tempo da Atividade por Agente</value>
   </data>
   <data name="ResOvertimeH" xml:space="preserve">
-    <value>Hora extra (hh:mm)</value>
+    <value>Horas extras (hh:mm)</value>
   </data>
   <data name="ResShiftEndTime" xml:space="preserve">
     <value>Horário de Término do Turno</value>
@@ -977,5 +977,101 @@
   </data>
   <data name="ResShiftStartDateToColon" xml:space="preserve">
     <value>Data Final (início dos turnos):</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Cumpridas</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Cumprimento (%)</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Preferências Prioritárias</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Não Cumpridas</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>Página atual</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Exportar</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Localizar</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Localizar Próximo</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Lozalizar Texto no Relatório</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>Primeira Página</value>
+  </data>
+  <data name="RepViewerInvalidPageNumber" xml:space="preserve">
+    <value>Número de página inválido</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Última Página</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Próximo</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Próxima Página</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>Nenhum resultado encontrado.</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>de</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Configuração de Página</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Largura da Página</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Página Anterior</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Layout de Impressão</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Imprimir</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Recarregar</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Parar Renderização</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Texto não encontrado.</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Total de Páginas</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Página Inteira</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Zoom</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Disponibilidade Por Agente</value>
+  </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>Dias Disponíveis</value>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>Tempo Disponível</value>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>Dias Agendados</value>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>Utilização</value>
   </data>
 </root>

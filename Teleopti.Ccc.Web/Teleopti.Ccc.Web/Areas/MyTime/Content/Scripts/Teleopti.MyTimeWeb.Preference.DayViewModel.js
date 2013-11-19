@@ -48,10 +48,17 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 
 	self.DayOff = ko.observable('');
 	self.Absence = ko.observable('');
+	this.AbsenceContractTime = ko.observable('');
+    this.AbsenceContractTimeMinutes = ko.observable('');
 	self.PersonAssignmentShiftCategory = ko.observable('');
 	self.PersonAssignmentTimeSpan = ko.observable('');
 	self.PersonAssignmentContractTime = ko.observable('');
 	self.ContractTimeMinutes = ko.observable(0);
+
+    self.HasPreferenceCategory = ko.computed(function() {
+        return self.Preference() != undefined && self.Preference() != '';
+    });
+
 	self.tooltipText = ko.computed(function () {
 	    var text = '';
 	    if (self.Extended()) {
@@ -152,7 +159,9 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	};
 
 	this.ReadAbsence = function (data) {
-		self.Absence(data.Absence);
+	    self.Absence(data.Absence);
+	    self.AbsenceContractTimeMinutes(data.AbsenceContractTimeMinutes);
+	    self.AbsenceContractTime(data.AbsenceContractTimeMinutes > 0 ? data.AbsenceContractTime : '');
 	};
 
 	this.ReadPersonAssignment = function (data) {

@@ -8,8 +8,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Meetings;
@@ -53,14 +53,20 @@ namespace Teleopti.Ccc.Win.Scheduling
             IList<IMeeting> modifiedMeetings = new List<IMeeting>();
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
+                var enumerable = personMeetings.ToArray();
+                unitOfWork.Reassociate(_schedulerStateHolder.SchedulingResultState.PersonsInOrganization);
+
                 IMeetingRepository meetingRepository = _repositoryFactory.CreateMeetingRepository(unitOfWork);
-                foreach (IPersonMeeting personMeeting in personMeetings)
+                foreach (IPersonMeeting personMeeting in enumerable)
                 {
-                    var meeting = meetingRepository.Get(personMeeting.BelongsToMeeting.Id.Value);
+                    var meeting = meetingRepository.Get(personMeeting.BelongsToMeeting.Id.GetValueOrDefault());
                     if (meeting == null) // recurrent already deleted
                         continue;
+
+					LazyLoadingManager.Initialize(meeting.Scenario);
+					LazyLoadingManager.Initialize(meeting.Activity);
                     meeting.RemovePerson(personMeeting.Person);
-                    if (meeting.MeetingPersons.Count() == 0)
+                    if (!meeting.MeetingPersons.Any())
                         meetingRepository.Remove(meeting);
                     if (!modifiedMeetings.Contains(meeting)) modifiedMeetings.Add(meeting);
                 }
@@ -95,8 +101,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                var persons = meetingToRemove.MeetingPersons.Select(m => m.Person);
-                unitOfWork.Reassociate(persons);
+                var persons = meetingToRemove.MeetingPersons.Select(m => m.Person).ToArray();
+                unitOfWork.Reassociate(_schedulerStateHolder.SchedulingResultState.PersonsInOrganization);
                 if (!new MeetingParticipantPermittedChecker().ValidatePermittedPersons(persons, meetingToRemove.StartDate, scheduleViewBase, PrincipalAuthorization.Instance()))
                     return;
 				meetingToRemove.Snapshot();
@@ -137,7 +143,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         selectedPersons.Add(schedulePart.Person);
                 }
 
-                if (_schedulerStateHolder.CommonStateHolder.Activities.Count == 0 || selectedPersons.Count == 0) return;
+                if (!_schedulerStateHolder.CommonStateHolder.ActiveActivities.Any() || selectedPersons.Count == 0) return;
 
                 using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
@@ -150,10 +156,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
             else
             {
-                var persons = meeting.MeetingPersons.Select(meetingPerson => meetingPerson.Person).ToList();
                 using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    unitOfWork.Reassociate(persons);
+                    unitOfWork.Reassociate(_schedulerStateHolder.SchedulingResultState.PersonsInOrganization);
 
                     var period  = meeting.MeetingPeriod(meeting.StartDate);
                     var start = period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);
@@ -168,6 +173,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             using (MeetingComposerView meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator()))
             {
+				meetingComposerView.SetInstanceId(_messageBrokerIdentifier.InstanceId);
                 meetingComposerView.ModificationOccurred += meetingComposerView_ModificationOccurred;
                 meetingComposerView.ShowDialog();
                 meetingComposerView.ModificationOccurred -= meetingComposerView_ModificationOccurred;

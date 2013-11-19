@@ -122,7 +122,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        foreach (var data in mappedData)
 	        {
 	            var appliedData = _skillIntervalDataSkillFactorApplier.ApplyFactors(data, skill);
-	            adjustedMapedData.Add(appliedData);
+	            //TODO shall we remove it or not??? ASAD 
+                adjustedMapedData.Add(appliedData);
 	        }
 	        IDictionary<DateOnly, IList<ISkillIntervalData>> intervalData;
 	        activityData.TryGetValue(activity, out intervalData);

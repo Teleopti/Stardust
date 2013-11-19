@@ -154,7 +154,6 @@ ko.bindingHandlers.tooltip = new TooltipBinding();
 ko.bindingHandlers.select2 = {
 	init: function (element, valueAccessor) {
 		var options = valueAccessor();
-        options['escapeMarkup'] = function (m) { return m; };
         options['width'] = 'resolve';
         
 		var observable = options.value;
@@ -188,7 +187,6 @@ ko.bindingHandlers.mytimeDatePicker = {
 			success: function (data) {
 				allBindingsAccessor().datepickerOptions = { autoHide: true, weekStart: data.WeekStart };
 				ko.bindingHandlers.datepicker.init(element, valueAccessor, allBindingsAccessor, viewModel);
-
 				if (!isDisabled) $(element).removeAttr('disabled');
 			}
 		});

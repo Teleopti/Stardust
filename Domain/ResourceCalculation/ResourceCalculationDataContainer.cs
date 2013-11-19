@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
@@ -8,9 +9,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class ResourceCalculationDataContainer : IResourceCalculationDataContainerWithSingleOperation
 	{
 		private readonly IPersonSkillProvider _personSkillProvider;
-		private readonly IDictionary<DateTimePeriod, PeriodResource> _dictionary = new Dictionary<DateTimePeriod, PeriodResource>();
-		private readonly IDictionary<string,IEnumerable<ISkill>> _skills = new Dictionary<string, IEnumerable<ISkill>>();
-		private readonly HashSet<Guid> _activityRequiresSeat = new HashSet<Guid>();
+		private readonly ConcurrentDictionary<DateTimePeriod, PeriodResource> _dictionary = new ConcurrentDictionary<DateTimePeriod, PeriodResource>();
+		private readonly ConcurrentDictionary<string, IEnumerable<ISkill>> _skills = new ConcurrentDictionary<string, IEnumerable<ISkill>>();
+		private readonly ConcurrentDictionary<Guid, bool> _activityRequiresSeat = new ConcurrentDictionary<Guid,bool>();
 		
 		private int _minSkillResolution = 60;
 
@@ -36,13 +37,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void AddResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
 		{
-			PeriodResource resources;
-			if (!_dictionary.TryGetValue(resourceLayer.Period, out resources))
-			{
-				resources = new PeriodResource();
-				_dictionary.Add(resourceLayer.Period, resources);
-			}
-
+			PeriodResource resources = _dictionary.GetOrAdd(resourceLayer.Period, new PeriodResource());
+			
 			var skills = _personSkillProvider.SkillsOnPersonDate(person, personDate);
 			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills).GenerateKey();
 			if (!_skills.ContainsKey(skills.Key))
@@ -55,13 +51,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						_minSkillResolution = minResolution;
 					}
 				}
-				_skills.Add(skills.Key,skills.Skills);
+				_skills.TryAdd(skills.Key,skills.Skills);
 			}
 			if (resourceLayer.RequiresSeat)
 			{
-				_activityRequiresSeat.Add(resourceLayer.PayloadId);
+				_activityRequiresSeat.TryAdd(resourceLayer.PayloadId,true);
 			}
-			resources.AppendResource(key, skills, 1d, resourceLayer.Resource);
+			resources.AppendResource(key, skills, 1d, resourceLayer.Resource, resourceLayer.FractionPeriod);
 		}
 
 		public void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
@@ -75,7 +71,29 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var skills = _personSkillProvider.SkillsOnPersonDate(person, personDate);
 			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills).GenerateKey();
 
-			resources.RemoveResource(key, skills, resourceLayer.Resource);
+			resources.RemoveResource(key, skills, resourceLayer.Resource, resourceLayer.FractionPeriod);
+		}
+
+		public IEnumerable<DateTimePeriod> IntraIntervalResources(ISkill skill, DateTimePeriod period)
+		{
+			var skillKey = skill.Id.GetValueOrDefault();
+			var activityKey = string.Empty;
+			if (skill.Activity != null)
+			{
+				activityKey = skill.Activity.Id.GetValueOrDefault().ToString();
+			}
+
+			var result = new List<DateTimePeriod>();
+			var periodSplit = period.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
+			foreach (var dateTimePeriod in periodSplit)
+			{
+				PeriodResource interval;
+				if (!_dictionary.TryGetValue(dateTimePeriod, out interval)) continue;
+
+				var detail = interval.GetFractionResources(activityKey, skillKey);
+				result.AddRange(detail);
+			}
+			return result;
 		}
 
 		public Tuple<double,double> SkillResources(ISkill skill, DateTimePeriod period)
@@ -102,7 +120,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public double ActivityResourcesWhereSeatRequired(ISkill skill, DateTimePeriod period)
 		{
-			var activityKeys = _activityRequiresSeat.Select(a => a.ToString()).ToArray();
+			var activityKeys = _activityRequiresSeat.Keys.Select(a => a.ToString()).ToArray();
 			var skillKey = skill.Id.GetValueOrDefault();
 
 			double resource = 0;

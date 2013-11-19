@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public bool IsFullyPublished { get; set; }
 
-        public IEnumerable<IPersistableScheduleData> PersistableScheduleDataCollection()
+		public IEnumerable<IPersistableScheduleData> PersistableScheduleDataCollection()
         {
             return PersistableScheduleDataInternalCollection();
         }
@@ -243,11 +243,42 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 	    #region Methods (7)
 
+		public void Swap(IScheduleDay source, bool isDelete)
+		{
+			SchedulePartView view = source.SignificantPartForDisplay();
 
-        public void Merge(IScheduleDay source, bool isDelete)
-        {
-            Merge(source, isDelete, false);
-        }
+			switch (view)
+			{
+
+				case SchedulePartView.DayOff:
+					if (isDelete) DeleteDayOff(); else mergeDayOff(source, false); break;
+
+				case SchedulePartView.ContractDayOff:
+					// do nothing
+					break;
+
+				case SchedulePartView.MainShift:
+					if (isDelete) DeleteMainShift(source); else mergeMainShift(source, false, false);
+					break;
+
+				case SchedulePartView.Absence:
+					// do nothing
+					break;
+
+				case SchedulePartView.FullDayAbsence:
+					// do nothing
+					break;
+
+				default: 
+					Merge(source, isDelete);
+					break;
+			}
+		}
+
+		public void Merge(IScheduleDay source, bool isDelete)
+		{
+			Merge(source, isDelete, false);
+		}
 
         public void Merge(IScheduleDay source, bool isDelete, bool ignoreTimeZoneChanges)
         {
@@ -256,7 +287,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             switch (view)
             {
                 case SchedulePartView.DayOff:
-                    if (isDelete) DeleteDayOff(); else mergeDayOff(source); break;
+                    if (isDelete) DeleteDayOff(); else mergeDayOff(source, true); break;
 
                 case SchedulePartView.ContractDayOff:
                     if (isDelete) DeleteFullDayAbsence(source); else mergeFullDayAbsence(source);
@@ -269,7 +300,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     if (isDelete) DeleteAbsence(false); else mergeAbsence(source); break;
 
                 case SchedulePartView.MainShift:
-                    if (isDelete) DeleteMainShift(source); else mergeMainShift(source, ignoreTimeZoneChanges); break;
+                    if (isDelete) DeleteMainShift(source); else mergeMainShift(source, ignoreTimeZoneChanges, true); break;
 
                 case SchedulePartView.PersonalShift:
                     if (isDelete) DeletePersonalStuff(); else mergePersonalStuff(source); break;
@@ -349,7 +380,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					}
         }
 
-        private void mergeDayOff(IScheduleDay source)
+        private void mergeDayOff(IScheduleDay source, bool deleteAbsence)
         {
             var authorization = PrincipalAuthorization.Instance();
 			if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
@@ -362,12 +393,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             IList<IPersonAbsence> splitList = new List<IPersonAbsence>();
             DateTimePeriod period = source.Period.MovePeriod(diff);
 
+            if (deleteAbsence)
+            {
             //loop absences
             foreach (IPersonAbsence personAbsence in PersonAbsenceCollection())
             {
                 personAbsence.Split(period).ForEach(splitList.Add);
             }
-
             IList<IPersonAbsence> filterList = new List<IPersonAbsence>(ScheduleDataInternalCollection().OfType<IPersonAbsence>());
             foreach (IPersonAbsence data in filterList)
             {
@@ -376,6 +408,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
 
             splitList.ForEach(Add);
+            }
 
 			var thisAss = PersonAssignment(true);
 			thisAss.ClearMainLayers();
@@ -528,7 +561,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         }
 
-        private void mergeMainShift(IScheduleDay source, bool ignoreTimeZoneChanges)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        private void mergeMainShift(IScheduleDay source, bool ignoreTimeZoneChanges, bool splitAbsence)
         {
 					var sourceAssignment = source.PersonAssignment();
 					if (sourceAssignment == null)
@@ -542,7 +576,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					workingCopyOfAssignment.SetShiftCategory(sourceAssignment.ShiftCategory);
 					foreach (var layer in sourceAssignment.MainLayers())
 					{
-						workingCopyOfAssignment.AddMainLayer(layer.Payload, layer.Period.MovePeriod(periodOffset));
+						workingCopyOfAssignment.AssignActivity(layer.Payload, layer.Period.MovePeriod(periodOffset));
 					}
 
 					var period = source.Period.MovePeriod(periodOffset);
@@ -553,7 +587,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 	        var currentAssignment = PersonAssignment(true);
 					currentAssignment.SetMainLayersAndShiftCategoryFrom(workingCopyOfAssignment);
-					SplitAbsences(period);
+					if(splitAbsence) SplitAbsences(period);
 					updateDateOnlyAsPeriod(workingCopyOfAssignment);
         }
 
@@ -716,7 +750,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					if (ass != null && 
 						(DateOnlyAsPeriod.Period().Contains(period.StartDateTime) || ass.Period.Intersect(period) || ass.Period.AdjacentTo(period))) //should not start before day I presume? Fix later - will be handled inside PersonAssignment/AgentDay instead...
 				{
-					ass.AddMainLayer(activity, period);
+					ass.AssignActivity(activity, period);
 					if (ass.ShiftCategory == null)
 					{
 						ass.SetShiftCategory(shiftCategory);
@@ -726,7 +760,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			//TODO create inparameters to check on if to create new personassignment
 			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-					newPersonAssignment.AddMainLayer(activity, period);
+					newPersonAssignment.AssignActivity(activity, period);
 					newPersonAssignment.SetShiftCategory(shiftCategory);
 			Add(newPersonAssignment);
 
@@ -775,7 +809,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         protected override void CloneDerived(Schedule clone)
         {
-            ((ExtractedSchedule)clone).ServiceForSignificantPart = null;
+            var thisClone = ((ExtractedSchedule)clone);
+            thisClone.ServiceForSignificantPart = null;
+            thisClone.ServiceForSignificantPartForDisplay = null;
         }
 
         public void Remove(DeleteOption options)

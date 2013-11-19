@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -12,15 +11,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-    public class ScheduleRange : Schedule, IScheduleRange, IValidateScheduleRange
+    public class ScheduleRange : Schedule, IScheduleRange, IValidateScheduleRange, IUnvalidatedScheduleRangeUpdate
     {
-        private readonly IList<IScheduleData> _scheduleObjectsWithNoPermissions;
+        private IList<IScheduleData> _scheduleObjectsWithNoPermissions;
         private ScheduleRange _snapshot;
         private TimeSpan? _calculatedContractTimeHolder;
         private TimeSpan? _calculatedTargettTimeHolder;
         private int? _calculatedTargetScheduleDaysOff;
         private int? _calculatedScheduleDaysOff;
-        private TimeZoneInfo _timeZone;
         private IEnumerable<DateOnlyPeriod> _availablePeriods;
         private IShiftCategoryFairnessHolder _shiftCategoryFairnessHolder;
 
@@ -158,10 +156,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 		    var authorization = PrincipalAuthorization.Instance();
 
-		    ICollection<IPersistableScheduleData> permittedData = new List<IPersistableScheduleData>();
-            IEnumerable<IPersistableScheduleData> fullData = PersistableScheduleDataInternalCollection();
+			ICollection<IPersistableScheduleData> permittedData = new List<IPersistableScheduleData>();
+			IEnumerable<IPersistableScheduleData> fullData = PersistableScheduleDataInternalCollection();
 
-		    foreach (IPersistableScheduleData persistableScheduleData in fullData)
+			foreach (IPersistableScheduleData persistableScheduleData in fullData)
 		    {
                 var forAuthorization = new PersistableScheduleDataForAuthorization(persistableScheduleData);
 		        if(persistableScheduleData.BelongsToPeriod(part.DateOnlyAsPeriod)
@@ -193,9 +191,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         private class PersistableScheduleDataForAuthorization
         {
-            private readonly IPersistableScheduleData _persistableScheduleData;
+			private readonly IPersistableScheduleData _persistableScheduleData;
 
-            public PersistableScheduleDataForAuthorization(IPersistableScheduleData persistableScheduleData)
+			public PersistableScheduleDataForAuthorization(IPersistableScheduleData persistableScheduleData)
             {
                 _persistableScheduleData = persistableScheduleData;
             }
@@ -268,17 +266,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return _calculatedTargetScheduleDaysOff; }
 			set { _calculatedTargetScheduleDaysOff = value; }
 		}
-
-        public TimeZoneInfo TimeZone
-        {
-            get
-            {
-                if (_timeZone == null)
-                    _timeZone = StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
-                return _timeZone;
-            }
-            set { _timeZone = value; }
-        }
 
 		public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)
 		{
@@ -430,5 +417,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			CalculatedContractTimeHolder = null;
 			CalculatedScheduleDaysOff = null;
 		}
+
+						public bool IsEmpty()
+			{
+				return !PersistableScheduleDataInternalCollection().Any();
+			}
+
+        protected override void CloneDerived(Schedule clone)
+        {
+            var typedClone = (ScheduleRange)clone;
+            typedClone._snapshot = null;
+            typedClone._scheduleObjectsWithNoPermissions = new List<IScheduleData>();
+            typedClone._shiftCategoryFairnessHolder = null;
+        }
     }
 }

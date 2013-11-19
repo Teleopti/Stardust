@@ -47,7 +47,7 @@
             <div class="input-append input-prepend">
                 <button class="btn" data-bind="click: previousWeek"><i class="icon-arrow-left"></i></button>
                 <input data-bind="value: displayDate" type="text" class="span3 text-center" readonly="readonly"/>
-                <button class="btn" data-bind="mytimeDatePicker: selectedDate"><i class="icon-th" ></i></button>
+                <button class="btn moment-datepicker"><i class="icon-th" ></i></button>
                 <button class="btn" data-bind="click: nextWeek"><i class="icon-arrow-right"></i></button>
             </div>
         </form>
@@ -95,7 +95,7 @@
             </div>
             <div 
                 data-bind="css: { 'show-request': textRequestPermission }, attr: { 'class': classForDaySummary },
-	style: { 'background-color': colorForDaySummary, 'color': textColor }, click: $parent.showAddRequestForm"
+                style: { backgroundColor: colorForDaySummary, color: textColor }, click: $parent.showAddRequestForm" 
                 class="weekview-day-summary">
 		        
                 <strong class="fullwidth displayblock" data-bind="text: summaryTitle"></strong>
@@ -108,7 +108,6 @@
                 </div>
                 <div class="holiday-agents weekview-day-show-request pull-right" data-bind="visible: absenceRequestPermission, tooltip: { title: holidayChanceText(), html: true }">
                     <div class="small-circle" data-bind="style: {background: holidayChanceColor()}" >
-                        <div class="small-radial-circle"></div>
                     </div>
                 </div>
 				<div class="overtime-availability-symbol floatright" data-bind="visible: overtimeAvailability().HasOvertimeAvailability, tooltip: { title: textOvertimeAvailabilityText, html: true }">

@@ -864,11 +864,14 @@ SELECT
 	[Minimum]	= o.[Minimum],
 	[Maximum]	= o.[Maximum],
 	[Parent]	= o.[Parent] ,
-	[OrderIndex]= o.[OrderIndex] + s.OrderIndex + 1,
+	[OrderIndex]=
+		CASE WHEN s.Parent IS NULL THEN o.[OrderIndex]
+			ELSE o.[OrderIndex] + s.OrderIndex + 1
+		END,
 	[LayerType]	= 2,
 	[DefinitionSet] = o.DefinitionSet
 FROM dbo.OvertimeShiftActivityLayer o
-INNER JOIN
+LEFT OUTER JOIN
 	(
 	SELECT Parent,MAX(OrderIndex) AS OrderIndex
 	FROM [dbo].[ShiftLayer]
@@ -883,11 +886,15 @@ SELECT
 	[Minimum]	= p.[Minimum],
 	[Maximum]	= p.[Maximum],
 	[Parent]	= p.[Parent] ,
-	[OrderIndex]= p.[OrderIndex] + s.OrderIndex + 1,
+	[OrderIndex]=
+		CASE WHEN s.Parent IS NULL THEN p.[OrderIndex]
+			ELSE p.[OrderIndex] + s.OrderIndex + 1
+		END,
+
 	[LayerType]	= 3,
 	[DefinitionSet] = NULL
 FROM dbo.PersonalShiftActivityLayer p
-INNER JOIN
+LEFT OUTER JOIN
 	(
 	SELECT Parent,MAX(OrderIndex) AS OrderIndex
 	FROM [dbo].[ShiftLayer]
@@ -1148,9 +1155,10 @@ GO
 --Name: Robin Karlsson
 --Date: 2013-08-28
 --Desc: Truncate read model for projected layers to force load of scheduled resources
+--Edit: Erik Sundberg -> Moved this truncate to 389(default) due to bug: 25359
 ---------------- 
-TRUNCATE TABLE [ReadModel].[ScheduleProjectionReadOnly]
-GO
+--TRUNCATE TABLE [ReadModel].[ScheduleProjectionReadOnly]
+--GO
 
 ----------------  
 --Name: tamasb

@@ -14,7 +14,7 @@ using Iesi.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
-    public class Skill : AggregateRootWithBusinessUnit, ISkill, IDeleteTag
+    public class Skill : VersionedAggregateRootWithBusinessUnit, ISkill, IDeleteTag
     {
         private string _name = string.Empty;
         private string _description = string.Empty;

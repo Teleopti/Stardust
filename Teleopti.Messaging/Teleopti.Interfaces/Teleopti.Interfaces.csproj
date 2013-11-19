@@ -126,6 +126,8 @@
     <Compile Include="Domain\IEvent.cs" />
     <Compile Include="Domain\IExtractBudgetGroupPeriods.cs" />
     <Compile Include="Domain\IHasContractDayOffDefinition.cs" />
+    <Compile Include="Domain\ILoadAggregateByTypedId.cs" />
+    <Compile Include="Domain\ILoadAggregateFromBroker.cs" />
     <Compile Include="Domain\ILoggedOnUser.cs" />
     <Compile Include="Domain\IMainShiftLayer.cs" />
     <Compile Include="Domain\IMoveLayerVertical.cs" />
@@ -175,6 +177,7 @@
     <Compile Include="Domain\IJobResultDetail.cs" />
     <Compile Include="Domain\IProjectionProvider.cs" />
     <Compile Include="Domain\IProvideCustomChangeInfo.cs" />
+    <Compile Include="Domain\IProxyForId.cs" />
     <Compile Include="Domain\IRelativeDailyDifferencesByAllSkillsExtractor.cs" />
     <Compile Include="Domain\IReplaceLayerInSchedule.cs" />
     <Compile Include="Domain\IResourceCalculateDelayer.cs" />
@@ -327,14 +330,15 @@
     <Compile Include="Domain\ISwapServiceNew.cs" />
     <Compile Include="Domain\ISystemCheck.cs" />
     <Compile Include="Domain\IExtendedPreferenceTemplate.cs" />
+    <Compile Include="Domain\ITeamBlockTargetValueCalculator.cs" />
     <Compile Include="Domain\IterationOperationOption.cs" />
     <Compile Include="Domain\ITextFormatter.cs" />
     <Compile Include="Domain\ITimeZoneDim.cs" />
     <Compile Include="Domain\ITrueFalseRandomizer.cs" />
-    <Compile Include="Domain\IUnderStaffingData.cs" />
     <Compile Include="Domain\IUniqueSchedulePartExtractor.cs" />
     <Compile Include="Domain\IUnsafePersonProvider.cs" />
     <Compile Include="Domain\IUnsavedDaysInfo.cs" />
+    <Compile Include="Domain\IUnvalidatedScheduleRangeUpdate.cs" />
     <Compile Include="Domain\IUserCulture.cs" />
     <Compile Include="Domain\IUserDetail.cs" />
     <Compile Include="Domain\IUserTimeZone.cs" />
@@ -539,6 +543,7 @@
     <Compile Include="Domain\IWorkTimeMinMaxRestriction.cs" />
     <Compile Include="Domain\IWorkTimeMinMaxRestrictionCreator.cs" />
     <Compile Include="Domain\IWriteSideRepository.cs" />
+    <Compile Include="Domain\IWriteSideRepositoryTypedId.cs" />
     <Compile Include="Domain\MeetingChangedDetail.cs" />
     <Compile Include="Domain\MeetingChangedEntity.cs" />
     <Compile Include="Domain\MinMaxStaffBroken.cs" />
@@ -578,6 +583,7 @@
     <Compile Include="Domain\TimeOfDay.cs" />
     <Compile Include="Domain\TimeZoneInfoExtensions.cs" />
     <Compile Include="Domain\ValidatedRequest.cs" />
+    <Compile Include="Domain\DateScenarioPersonId.cs" />
     <Compile Include="Domain\VisualLayerCollectionExtensions.cs" />
     <Compile Include="Domain\WeekNumber.cs" />
     <Compile Include="Domain\WorkShiftLengthHintOption.cs" />
@@ -733,6 +739,7 @@
     <Compile Include="Domain\WorkTimeDirective.cs" />
     <Compile Include="Infrastructure\IMessageBrokerIdentifier.cs" />
     <Compile Include="Infrastructure\ISessionData.cs" />
+    <Compile Include="Infrastructure\TransactionIsolationLevel.cs" />
     <Compile Include="Infrastructure\IStatelessUnitOfWork.cs" />
     <Compile Include="Infrastructure\IUnitOfWork.cs" />
     <Compile Include="Infrastructure\IUnitOfWorkFactory.cs" />
@@ -787,7 +794,7 @@
     <Compile Include="Messages\Requests\NewAbsenceRequestCreated.cs" />
     <Compile Include="Messages\RaptorDomainMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Domain\UnderStaffingData.cs" />
+    <Compile Include="Domain\UnderstaffingDetails.cs" />
     <Compile Include="Messages\Rta\BusinessUnitInfo.cs" />
     <Compile Include="ReadModel\IScheduleChangedReadModel.cs" />
   </ItemGroup>

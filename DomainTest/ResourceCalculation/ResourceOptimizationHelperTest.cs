@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private MockRepository _mocks;
 		private IOccupiedSeatCalculator _occupiedSeatCalculator;
 		private IPersonSkillProvider _personSkillProvider;
+		private IPeriodDistributionService _periodDistributionService;
 
 		[SetUp]
 		public void Setup()
@@ -28,9 +29,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_occupiedSeatCalculator = _mocks.StrictMock<IOccupiedSeatCalculator>();
 			_personSkillProvider = _mocks.DynamicMock<IPersonSkillProvider>();
+			_periodDistributionService = _mocks.DynamicMock<IPeriodDistributionService>();
 			_target = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator,
 													 new NonBlendSkillCalculator(),
-														 _personSkillProvider,
+														 _personSkillProvider, _periodDistributionService,
 														 new CurrentTeleoptiPrincipal());
 		}
 
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary).Return(skillStaffPeriodDictionary).
 				Repeat.
 				AtLeastOnce();
-           
+		   
 			LastCall.IgnoreArguments();
 			Expect.Call(skill1.DefaultResolution).Return(15).Repeat.AtLeastOnce();
 			Expect.Call(service1.CreateProjection()).Return(visualLayerCollection).Repeat.Any();
@@ -92,9 +94,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 											 visualLayerCollection, service2, service3, skillStaffPeriodDictionary);
 				Expect.Call(skill1.SkillType).Return(skillType).Repeat.AtLeastOnce();
 				Expect.Call(skillType.ForecastSource).Return(ForecastSource.Email).Repeat.AtLeastOnce();
-				Expect.Call(() => _occupiedSeatCalculator.Calculate(new DateOnly(), _mocks.DynamicMock<IResourceCalculationDataContainer>(), new SkillSkillStaffPeriodExtendedDictionary())).IgnoreArguments();
+				Expect.Call(() => _occupiedSeatCalculator.Calculate(new DateOnly(), null, skillStaffPeriodDictionary)).IgnoreArguments();
 				Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
-
+				Expect.Call(()=> _periodDistributionService.CalculateDay(null, skillStaffPeriodDictionary)).IgnoreArguments();
 			}
 
 			using (_mocks.Playback())
@@ -142,10 +144,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var skillStaffPeriods2 = new SkillStaffPeriodDictionary(skill2);
 
 			var skillStaffPeriodDictionary = new SkillSkillStaffPeriodExtendedDictionary
-                                                 {
-                                                     {skill1, skillStaffPeriods},
-                                                     {skill2, skillStaffPeriods2}
-                                                 };
+												 {
+													 {skill1, skillStaffPeriods},
+													 {skill2, skillStaffPeriods2}
+												 };
 			_mocks.ReplayAll();
 
 			var result = _target.CreateSkillSkillStaffDictionaryOnSkills(skillStaffPeriodDictionary, skills, keyPeriod);
@@ -170,14 +172,29 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_mocks.ReplayAll();
 			var skillStaffPeriods = new SkillStaffPeriodDictionary(skill1) { skillStaffPeriod1, skillStaffPeriod2 };
 			var skillStaffPeriodDictionary = new SkillSkillStaffPeriodExtendedDictionary
-                                                 {
-                                                     {skill1, skillStaffPeriods},
-                                                    
-                                                 };
+												 {
+													 {skill1, skillStaffPeriods},
+													
+												 };
 			var result = _target.CreateSkillSkillStaffDictionaryOnSkills(skillStaffPeriodDictionary, skills, keyPeriod);
 			Assert.That(result.Count, Is.EqualTo(1));
 			Assert.That(result[skill1].Count, Is.EqualTo(1));
 			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldNotCrashIfNoSkills()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_stateHolder.SkipResourceCalculation).Return(false).Repeat.Any();
+				Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
+				Expect.Call(_stateHolder.Skills).Return(new List<ISkill>());
+			}
+			using (_mocks.Playback())
+			{
+				_target.ResourceCalculateDate(new DateOnly(2009, 2, 2), true, true);
+			}
 		}
 	}
 }

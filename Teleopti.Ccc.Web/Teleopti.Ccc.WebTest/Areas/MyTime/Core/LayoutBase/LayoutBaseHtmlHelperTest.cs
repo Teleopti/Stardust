@@ -14,18 +14,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.LayoutBase
 		[Test]
 		public void ShouldReturnDirClassAttributeWithValueWhenRtl()
 		{
-			var expectedResult = new MvcHtmlString(" class=\"rtl my-CS\"");
+			var expectedResult = new MvcHtmlString(" class=\"rtl\"");
 			var viewData = new ViewDataDictionary
 			               	{
 			               		{
 			               			"LayoutBase",
 			               			new LayoutBaseViewModel
-			               				{CultureSpecific = new CultureSpecificViewModel {Rtl = true ,LanguageCode = "my-CS"}}
+			               				{CultureSpecific = new CultureSpecificViewModel {Rtl = true }}
 			               			}
 			               	};
 			var target = new LayoutBaseHtmlHelper(new TestHtmlHelperBuilder().CreateHtmlHelper(viewData));
 
-			var result = target.FullDirAndLangClass();
+			var result = target.FullDirClass();
 			result.ToString().Should().Be.EqualTo(expectedResult.ToString());
 		}
 

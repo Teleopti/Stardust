@@ -8,17 +8,17 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 {
     public sealed class ScenarioFactory
     {
-        #region Constructors (1) 
+        #region Constructors (1)
 
         private ScenarioFactory()
         {
         }
 
-        #endregion Constructors 
+        #endregion Constructors
 
-        #region Methods (1) 
+        #region Methods (1)
 
-        // Public Methods (1) 
+        // Public Methods (1)
 
         public static IList<IScenario> CreateScenarioCollection()
         {
@@ -48,6 +48,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             return retList;
         }
 
-        #endregion Methods 
+        #endregion Methods
     }
 }

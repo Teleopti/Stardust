@@ -58,7 +58,15 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	    vm.previousPeriodDate(moment(periodData.PeriodNavigation.PrevPeriod));
 	    vm.setCurrentDate(moment(periodData.Date));
 	    
-	    ko.applyBindings(vm, $('div.navbar')[1]);
+	    ajax.Ajax({
+	    	url: 'UserInfo/Culture',
+	    	dataType: "json",
+	    	type: 'GET',
+	    	success: function (data) {
+	    		$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
+	    		ko.applyBindings(vm, $('div.navbar')[1]);
+	    	}
+	    });
 	}
     
 	function _ajaxForDate(model, options) {

@@ -5,6 +5,7 @@ using System.Linq;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.DayInMonthIndex;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -135,14 +136,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 					//Load (or create) workload days
 					// Here we could split it in smaller chunks so we don't lock the tables too long
 					var skillDays = _skillDayRepository.FindRange(message.TargetPeriod, skill, scenario);
-					skillDays = _skillDayRepository.GetAllSkillDays(message.TargetPeriod, skillDays, skill, scenario, true);
+					skillDays = _skillDayRepository.GetAllSkillDays(message.TargetPeriod, skillDays, skill, scenario,
+					                                                _skillDayRepository.AddRange);
 					var calculator = _forecastClassesCreator.CreateSkillDayCalculator(skill, skillDays.ToList(), message.TargetPeriod);
 
 					var workloadDays =
 						_workloadDayHelper.GetWorkloadDaysFromSkillDays(calculator.SkillDays, workload).OfType<ITaskOwner>().ToList();
 					jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded skill days on " + message.TargetPeriod,
 					                                        DateTime.UtcNow, null));
-					applyVolumes(workload, taskOwnerPeriod, workloadDays);
+                    applyVolumes(workload, taskOwnerPeriod, workloadDays, message.UseDayOfMonth);
 
 					//(Update templates for workload)
 					updateStandardTemplates(workload, statisticHelper, message.TemplatePeriod, message.SmoothingStyle);
@@ -172,18 +174,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 			}
 		}
 
-		private void applyVolumes(IWorkload workload, ITaskOwnerPeriod taskOwnerPeriod, IList<ITaskOwner> workloadDays)
+        private void applyVolumes(IWorkload workload, ITaskOwnerPeriod taskOwnerPeriod, IList<ITaskOwner> workloadDays, bool useDayOfMonth)
 		{
 			//Calculate indexes
 			VolumeYear volumeMonthYear = new MonthOfYear(taskOwnerPeriod, new MonthOfYearCreator());
 			VolumeYear volumeWeekYear = new WeekOfMonth(taskOwnerPeriod, new WeekOfMonthCreator());
 			VolumeYear volumeDayYear = new DayOfWeeks(taskOwnerPeriod, new DaysOfWeekCreator());
+		    var indexes = new List<IVolumeYear> {volumeMonthYear, volumeWeekYear, volumeDayYear};
+            if(useDayOfMonth)
+                indexes.Add(new DayInMonth(taskOwnerPeriod,new DayInMonthCreator()));
 
-			//Apply new volumes to workload days
+            //Apply new volumes to workload days
 			var outliers = _outlierRepository.FindByWorkload(workload);
 			var totalVolume = _forecastClassesCreator.CreateTotalVolume();
-			totalVolume.Create(taskOwnerPeriod, workloadDays,
-							   new List<IVolumeYear> { volumeMonthYear, volumeWeekYear, volumeDayYear }, outliers,
+			totalVolume.Create(taskOwnerPeriod, workloadDays, indexes, outliers,
 							   0, 0, false, workload);
 		}
 

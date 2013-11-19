@@ -143,7 +143,7 @@ AND p.person_id in (SELECT right_id FROM #rights_agents)--bara de man har r"ttig
 AND sc.shift_category_id IN (SELECT id FROM #shift_categories)
 AND f.shift_category_id<>-1 --d≈ finns inget shift
 GROUP BY p.person_id,f.date_date,p.person_name,sc.shift_category_name
-ORDER BY p.person_name, sc.shift_category_name
+ORDER BY  sc.shift_category_name, p.person_name
 
 /*Then Day Off*/
 INSERT #result(person_id,person_name,category_name,category_count,category_type,hide_time_zone,date_date)
@@ -168,7 +168,7 @@ AND p.team_id IN(select right_id from #rights_teams)
 AND p.person_id in (SELECT right_id FROM #rights_agents)--bara de man har r"ttighet p≈
 AND dd.day_off_id in (SELECT id FROM #dayoffs)
 GROUP BY p.person_id,f.date_date,p.person_name,ISNULL(lt.term_language,dd.day_off_name)
-ORDER BY p.person_name, ISNULL(lt.term_language,dd.day_off_name)
+ORDER BY ISNULL(lt.term_language,dd.day_off_name), p.person_name
 
 
 /*Then Full Day Absences*/
@@ -192,7 +192,7 @@ AND p.person_id in (SELECT right_id FROM #rights_agents)--bara de man har r"ttig
 AND da.absence_id IN (SELECT id FROM #absences)
 AND f.absence_id<>-1 --d≈ finns ingen absence
 GROUP BY p.person_id,f.date_date,p.person_name,da.absence_name
-ORDER BY p.person_name, da.absence_name
+ORDER BY da.absence_name, p.person_name
 
 --return RS
 SELECT *

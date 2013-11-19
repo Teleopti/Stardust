@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using log4net;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -16,7 +17,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -33,7 +33,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private IIntradayView _view;
         private ISchedulingResultLoader _schedulingResultLoader;
         private readonly IRepositoryFactory _repositoryFactory;
-        private IMessageBroker _messageBroker;
+		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
+	    private IMessageBroker _messageBroker;
         private string _chartIntradayDescription = string.Empty;
         private DateOnly _intradayDate;
         private IRtaStateHolder _rtaStateHolder;
@@ -42,8 +43,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private readonly bool _realTimeAdherenceEnabled;
         private readonly bool _earlyWarningEnabled;
         private readonly IEventAggregator _eventAggregator;
-        private readonly IScheduleDictionarySaver _scheduleDictionarySaver;
-        private readonly IScheduleRepository _scheduleRepository;
+				private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
         private readonly OnEventStatisticMessageCommand _onEventStatisticMessageCommand;
         private readonly OnEventForecastDataMessageCommand _onEventForecastDataMessageCommand;
         private readonly OnEventScheduleMessageCommand _onEventScheduleMessageCommand;
@@ -56,11 +56,11 @@ namespace Teleopti.Ccc.WinCode.Intraday
             IMessageBroker messageBroker,
             IRtaStateHolder rtaStateHolder,
             IEventAggregator eventAggregator,
-            IScheduleDictionarySaver scheduleDictionarySaver,
-            IScheduleRepository scheduleRepository,
+						IScheduleDifferenceSaver scheduleDictionarySaver,
             IUnitOfWorkFactory unitOfWorkFactory,
             IRepositoryFactory repositoryFactory,
-            OnEventStatisticMessageCommand onEventStatisticMessageCommand,
+					IDifferenceCollectionService<IPersistableScheduleData> differenceService,
+					OnEventStatisticMessageCommand onEventStatisticMessageCommand,
             OnEventForecastDataMessageCommand onEventForecastDataMessageCommand,
             OnEventScheduleMessageCommand onEventScheduleMessageCommand,
             OnEventMeetingMessageCommand onEventMeetingMessageCommand,
@@ -68,14 +68,14 @@ namespace Teleopti.Ccc.WinCode.Intraday
         {
             _eventAggregator = eventAggregator;
             _scheduleDictionarySaver = scheduleDictionarySaver;
-            _scheduleRepository = scheduleRepository;
             _onEventStatisticMessageCommand = onEventStatisticMessageCommand;
             _onEventForecastDataMessageCommand = onEventForecastDataMessageCommand;
             _onEventScheduleMessageCommand = onEventScheduleMessageCommand;
             _onEventMeetingMessageCommand = onEventMeetingMessageCommand;
             _loadStatisticsAndActualHeadsCommand = loadStatisticsAndActualHeadsCommand;
             _repositoryFactory = repositoryFactory;
-            _messageBroker = messageBroker;
+	        _differenceService = differenceService;
+	        _messageBroker = messageBroker;
             _rtaStateHolder = rtaStateHolder;
             _unitOfWorkFactory = unitOfWorkFactory;
             _view = view;
@@ -388,10 +388,11 @@ namespace Teleopti.Ccc.WinCode.Intraday
                     reassociateCommonStateHolder(uow);
                     uow.Reassociate(_schedulingResultLoader.SchedulerState.SchedulingResultState.PersonsInOrganization);
                     uow.Reassociate(MultiplicatorDefinitionSets);
-                    var result = _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository, SchedulerStateHolder.Schedules.DifferenceSinceSnapshot());
+	                foreach (var range in SchedulerStateHolder.Schedules.Values)
+	                {
+		                _scheduleDictionarySaver.SaveChanges(range.DifferenceSinceSnapshot(_differenceService), (IUnvalidatedScheduleRangeUpdate) range);
+	                }
                     uow.PersistAll(this);
-                    if (result != null)
-                        new ScheduleDictionaryModifiedCallback().Callback(SchedulerStateHolder.Schedules, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
                 }
             }
             catch (OptimisticLockException optLockEx)

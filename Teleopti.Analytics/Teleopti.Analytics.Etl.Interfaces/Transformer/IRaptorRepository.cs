@@ -132,6 +132,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         int PersistAgentSkill(DataTable dataTable);
         int FillSkillSetDataMart(IBusinessUnit businessUnit);
         int FillBridgeAgentSkillSetDataMart(IBusinessUnit businessUnit);
+        int FillFactAgentSkillDataMart(IBusinessUnit businessUnit);
 
         //Users
         IList<IPerson> LoadUser();

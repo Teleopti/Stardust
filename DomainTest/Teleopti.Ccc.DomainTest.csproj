@@ -134,6 +134,8 @@
     <Compile Include="AgentInfo\Requests\RequestApprovalServiceSchedulerTest.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestWithinLoadedPeriodSpecificationTest.cs" />
     <Compile Include="Analytics\BaseConfigurationTest.cs" />
+    <Compile Include="ApplicationLayer\AssignActivityCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\FakePersonAssignmentWriteSideRepository.cs" />
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\FakePersonScheduleDayReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\FakePublishEventsFromEventHandlers.cs" />
@@ -152,9 +154,10 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesPersonSkillAddedHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesActivityChangedHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Resources\ScheduledResourcesChangedHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedNotifierTest.cs" />
     <Compile Include="ApplicationLayer\SyncEventsPublisherTest.cs" />
-    <Compile Include="ApplicationLayer\TestWriteSideRepository.cs" />
+    <Compile Include="ApplicationLayer\FakeWriteSideRepository.cs" />
     <Compile Include="Auditing\AuditSettingTest.cs" />
     <Compile Include="Auditing\RevisionTest.cs" />
     <Compile Include="Budgeting\BudgetCalculatorTest.cs" />
@@ -196,6 +199,9 @@
     <Compile Include="Common\PersonProviderTest.cs" />
     <Compile Include="Common\DateOnlyAsDateTimePeriodTest.cs" />
     <Compile Include="Common\PersonsInOrganizationProviderTest.cs" />
+    <Compile Include="Forecasting\DayInMonthIndex\DayInMonthCreatorTest.cs" />
+    <Compile Include="Forecasting\DayInMonthIndex\DayInMonthHelperTest.cs" />
+    <Compile Include="Forecasting\DayInMonthIndex\DayInMonthTest.cs" />
     <Compile Include="Forecasting\DaylightSavingTimeHelperTest.cs" />
     <Compile Include="Forecasting\Export\ExportForecastDataToFileSerializerTest.cs" />
     <Compile Include="Forecasting\Export\ExportSkillToFileCommandModelTest.cs" />
@@ -236,6 +242,7 @@
     <Compile Include="GroupPageCreator\SkillGroupPageTest.cs" />
     <Compile Include="ApplicationLayer\AddFullDayAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\DenormalizeScheduleProjectionTest.cs" />
+    <Compile Include="Helper\VisualLayerCollectionExtensionsTest.cs" />
     <Compile Include="Helper\StaffingCalculatorServiceModelTest.cs" />
     <Compile Include="Helper\GroupPageChangedMessageTest.cs" />
     <Compile Include="Helper\InitialLoadScheduleProjectionTest.cs" />
@@ -324,8 +331,11 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapperTest.cs" />
     <Compile Include="Optimization\StandardDeviationDataTest.cs" />
     <Compile Include="Optimization\TeamBlock\AdvancedPreferencesPersonalSettingsTest.cs" />
+    <Compile Include="Optimization\TeamBlock\DailyTargetValueCalculatorForTeamBlockTest.cs" />
     <Compile Include="Optimization\TeamBlock\LockableBitArrayFactoryTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinderTest.cs" />
+    <Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlockTest.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockTargetValueCalculatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockGeneratorTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockIntradayDecisionMakerTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockIntradayOptimizationServiceTest.cs" />
@@ -372,6 +382,7 @@
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffTest.cs" />
+    <Compile Include="Scheduling\PersonToSingleAgentTeamRootPersonGroupConverterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalGeneratorTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriodTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerFromStorageTest.cs" />
@@ -407,7 +418,6 @@
     <Compile Include="Scheduling\Assignment\PersonalShiftLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\ReplaceLayerInScheduleTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataOpenHourTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculatorTest.cs" />
     <Compile Include="Scheduling\LoadSchedulesForRequestWithoutResourceCalculationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingOptionsTest.cs" />
@@ -1053,7 +1063,6 @@
     <Compile Include="Security\AuthorizationEntities\SiteAuthorizationEntityConverterTest.cs" />
     <Compile Include="Security\AuthorizationEntities\MatrixReportInfoTest.cs" />
     <Compile Include="Security\Matrix\ExternalApplicationFunctionSpecificationTest.cs" />
-    <Compile Include="Security\AuthorizationEntities\SystemRoleApplicationRoleMapperTest.cs" />
     <Compile Include="Security\AuthorizationEntities\SystemRoleTest.cs" />
     <Compile Include="Security\AuthorizationEntities\PermissionInformationTest.cs" />
     <Compile Include="Scheduling\AbsenceLayerTest.cs" />
@@ -1144,7 +1153,7 @@
     <Compile Include="WorkflowControl\ShiftTrades\ShouldShiftTradeBeAutoGrantedSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\TargetTimeFlexibilitySpecificationTest.cs" />
     <Compile Include="WorkflowControl\StaffingThresholdValidatorTest.cs" />
-    <Compile Include="WorkflowControl\UnderStaffingDataTest.cs" />
+    <Compile Include="WorkflowControl\UnderstaffingDetailsTest.cs" />
     <Compile Include="WorkflowControl\ValidatedRequestTest.cs" />
     <Compile Include="WorkflowControl\WorkflowControlSetTest.cs" />
   </ItemGroup>
@@ -1232,6 +1241,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Analyzer\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Forecasting\DayInMonthIndex\DayInMonthSeasonalityData.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

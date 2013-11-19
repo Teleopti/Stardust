@@ -1,12 +1,11 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-    public class PublicNote : AggregateRootWithBusinessUnit, IPublicNote
+    public class PublicNote : VersionedAggregateRootWithBusinessUnit, IPublicNote
     {
         private IPerson _person;
         private IScenario _scenario;

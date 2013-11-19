@@ -84,11 +84,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             if (!VerifySelectedSchedule(ScheduleParts)) return;
 
-
-
-            //Todo, select the period...
             DateTimePeriod addPeriod = DefaultPeriod ?? ScheduleParts[0].Period;
-
 
             IAddOvertimeViewModel dialog1 =
                 ScheduleViewBase.CreateAddOvertimeViewModel(ScheduleParts.FirstOrDefault(), SchedulerStateHolder.CommonStateHolder.ActiveActivities,

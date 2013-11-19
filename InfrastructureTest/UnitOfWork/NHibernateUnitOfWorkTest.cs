@@ -82,21 +82,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 		}
 
-		[Test]
-		public void VerifyCancelQuery()
-		{
-			using (mocks.Record())
-			{
-				Expect.On(session)
-					  .Call(session.BeginTransaction())
-					  .Return(mocks.StrictMock<ITransaction>());
-				session.CancelQuery();
-			}
-			using (mocks.Playback())
-			{
-				uow.CancelQuery();
-			}
-		}
 
 		[Test]
 		[ExpectedException(typeof(DataSourceException))]
@@ -471,7 +456,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		private class TestUnitOfWork : NHibernateUnitOfWork
 		{
 			public TestUnitOfWork(ISession mock, IMessageBroker messageBroker, ISendPushMessageWhenRootAlteredService pushMessageService, IEnumerable<IMessageSender> denormalizers)
-				: base(mock, messageBroker, denormalizers, null, pushMessageService, NHibernateUnitOfWorkFactory.UnbindStatic)
+				: base(mock, messageBroker, denormalizers, null, pushMessageService, NHibernateUnitOfWorkFactory.UnbindStatic, TransactionIsolationLevel.Default)
 			{
 			}
 

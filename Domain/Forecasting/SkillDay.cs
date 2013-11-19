@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     /// Created by: micke
     /// Created date: 18.12.2007
     /// </remarks>
-	public class SkillDay : AggregateRootWithBusinessUnit, ISkillDay, IMaxSeatSkillDay, IPeriodized
+	public class SkillDay : VersionedAggregateRootWithBusinessUnit, ISkillDay, IMaxSeatSkillDay, IPeriodized
     {
         private DateOnly _currentDate;
         private ISkill _skill;
@@ -432,7 +432,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual void MergeSkillDataPeriods(IList<ISkillDataPeriod> list)
         {
             ISkillDataPeriod newSkillDataPeriod = SkillDataPeriod.Merge(list, this);
-            list.ForEach(i => _skillDataPeriodCollection.Remove(i));
+            list.ForEach(i =>
+	            {
+		            _skillDataPeriodCollection.Remove(i);
+	            });
             _skillDataPeriodCollection.Add(newSkillDataPeriod);
             aggregateTaskPeriods();
             recalculateStaff();

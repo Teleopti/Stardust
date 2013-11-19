@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_mock = new MockRepository();
 			_view = _mock.StrictMock<IAgentPreferenceView>();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
-			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
+			_schedulingResultStateHolder = _mock.DynamicMock<ISchedulingResultStateHolder>();
 			_presenter = new AgentPreferencePresenter(_view, _scheduleDay, _schedulingResultStateHolder);
 			_person = _mock.StrictMock<IPerson>();
 			_dateOnly = new DateOnly(2013,1,1);
@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void ShouldInitializePresenter()
 		{
 			Assert.AreEqual(_view, _presenter.View);
-			Assert.AreEqual(_scheduleDay, _presenter.ScheduleDay);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.IAgentPreferenceView.UpdateMustHaveText(System.String)"), Test]
@@ -84,8 +83,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 			Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly).Repeat.AtLeastOnce();
 			Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
-			Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
-			Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+            Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+            Expect.Call(_scheduleRange.ScheduledDayCollection(_dateOnlyPeriod)).Return(new[] { _scheduleDay });
 			Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> {_preferenceRestriction});
 			Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 			Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
@@ -116,8 +115,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly).Repeat.AtLeastOnce();
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
-				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
-				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+                Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+                Expect.Call(_scheduleRange.ScheduledDayCollection(_dateOnlyPeriod)).Return(new[] { _scheduleDay });
 				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
 				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
@@ -156,8 +155,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly).Repeat.AtLeastOnce();
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
-				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
-				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+                Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+                Expect.Call(_scheduleRange.ScheduledDayCollection(_dateOnlyPeriod)).Return(new[] { _scheduleDay });
 				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
 				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
@@ -196,8 +195,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly).Repeat.AtLeastOnce();
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
-				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
-				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+                Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+                Expect.Call(_scheduleRange.ScheduledDayCollection(_dateOnlyPeriod)).Return(new[] { _scheduleDay });
 				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
 				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
@@ -236,8 +235,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly).Repeat.AtLeastOnce();
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
-				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
-				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+                Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+                Expect.Call(_scheduleRange.ScheduledDayCollection(_dateOnlyPeriod)).Return(new[] { _scheduleDay });
 				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
 				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
@@ -273,7 +272,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly).Repeat.AtLeastOnce();
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
 				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
-				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+				Expect.Call(_scheduleRange.ScheduledDayCollection(_dateOnlyPeriod)).Return(new[]{_scheduleDay});
 				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
 				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
@@ -304,7 +303,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (_mock.Playback())
 			{
 				var toExecute = _presenter.CommandToExecute(data, _dayCreator);
-				Assert.AreEqual(AgentPreferenceExecuteCommand.Remove, toExecute);
+				Assert.IsInstanceOf<AgentPreferenceRemoveCommand>(toExecute);
 			}
 		}
 
@@ -328,7 +327,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (_mock.Playback())
 			{
 				var toExecute = _presenter.CommandToExecute(data, _dayCreator);
-				Assert.AreEqual(AgentPreferenceExecuteCommand.Add, toExecute);
+				Assert.IsInstanceOf<AgentPreferenceAddCommand>(toExecute);
 			}
 		}
 
@@ -352,7 +351,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (_mock.Playback())
 			{
 				var toExecute = _presenter.CommandToExecute(data, _dayCreator);
-				Assert.AreEqual(AgentPreferenceExecuteCommand.Edit, toExecute);
+				Assert.IsInstanceOf<AgentPreferenceEditCommand>(toExecute);
 			}
 		}
 
@@ -376,7 +375,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (_mock.Playback())
 			{
 				var toExecute = _presenter.CommandToExecute(data, _dayCreator);
-				Assert.AreEqual(AgentPreferenceExecuteCommand.None, toExecute);
+				Assert.IsNull(toExecute);
 			}
 		}
 
@@ -396,50 +395,18 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-		public void ShouldCallRemoveCommand()
+		public void ShouldRunCommand()
 		{
-			var command = _mock.StrictMock<IAgentPreferenceRemoveCommand>();
+			var command = _mock.StrictMock<IExecutableCommand>();
 			using (_mock.Record())
 			{
-				Expect.Call(() => command.Execute());
+				Expect.Call(command.Execute);
 				updateViewMocks();
 			}
 
 			using (_mock.Playback())
 			{
-				_presenter.Remove(command);
-			}
-		}
-
-		[Test]
-		public void ShouldCallAddCommand()
-		{
-			var command = _mock.StrictMock<IAgentPreferenceAddCommand>();
-			using (_mock.Record())
-			{
-				Expect.Call(() => command.Execute());
-				updateViewMocks();
-			}
-
-			using (_mock.Playback())
-			{
-				_presenter.Add(command);
-			}
-		}
-
-		[Test]
-		public void ShouldCallEditCommand()
-		{
-			var command = _mock.StrictMock<IAgentPreferenceEditCommand>();
-			using (_mock.Record())
-			{
-				Expect.Call(() => command.Execute());
-				updateViewMocks();
-			}
-
-			using (_mock.Playback())
-			{
-				_presenter.Edit(command);
+				_presenter.RunCommand(command);
 			}
 		}
 	}

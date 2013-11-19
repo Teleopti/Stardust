@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	public class TeamScheduleController : Controller
 	{
 		private readonly ITeamScheduleViewModelFactory _teamScheduleViewModelFactory;
-		private readonly IDefaultTeamCalculator _defaultTeamCalculator;
+		private readonly IDefaultTeamProvider _defaultTeamProvider;
 
-		public TeamScheduleController(ITeamScheduleViewModelFactory teamScheduleViewModelFactory, IDefaultTeamCalculator defaultTeamCalculator)
+		public TeamScheduleController(ITeamScheduleViewModelFactory teamScheduleViewModelFactory, IDefaultTeamProvider defaultTeamProvider)
 		{
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
-			_defaultTeamCalculator = defaultTeamCalculator;
+			_defaultTeamProvider = defaultTeamProvider;
 		}
 
 		[EnsureInPortal]
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				date = DateOnly.Today;
 			if (!id.HasValue)
 			{
-				var defaultTeam = _defaultTeamCalculator.Calculate(date.Value);
+				var defaultTeam = _defaultTeamProvider.DefaultTeam(date.Value);
 				if (defaultTeam == null)
 					return View("NoTeamsPartial");
 

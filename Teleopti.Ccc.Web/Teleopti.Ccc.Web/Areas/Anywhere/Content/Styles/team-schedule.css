@@ -31,15 +31,26 @@
 .team-schedule .person
 {
 }
-.team-schedule .person:last-child
-{
-}
-.team-schedule .person-name 
-{
+
+.team-schedule .person-name-column {
 	max-width: 105px !important;
 	min-width: 105px !important;
 	width: 105px !important;
 	overflow: hidden;
+}
+.team-schedule .contract-time-column {
+	max-width: 100px !important;
+	min-width: 100px !important;
+	width: 100px !important;
+}
+.team-schedule .schedule-column {
+	padding-left: 0;
+	padding-right: 0;
+	width: auto;
+}
+
+.team-schedule .person-name 
+{
 }
 .team-schedule tbody tr
 {
@@ -47,13 +58,11 @@
 }
 .team-schedule .schedule
 {
-	padding-left: 0;
-	padding-right: 0;
-	width: auto;
 }
 
 .team-schedule .dayoff 
 {
+	text-align: center;
 	top: -8px;
 	height: 36px;
     background-size: 11px 11px;
@@ -71,10 +80,29 @@
 	background-color: beige;
 }
 
+
+
+
+.team-schedule .shift-menu-background {
+	background: #eeeeee;
+}
+.team-schedule .shift-menu
+{
+}
+
+
+.team-schedule .shift-details .label {
+	text-shadow: none;
+}
+.team-schedule .activity-details {
+	text-shadow: none;
+}
+
 .team-schedule .shift .layer
 {
 	z-index: 10;	
-	height: 20px;
+	height: 22px;
+	text-align: center;
 }
 .team-schedule .shift .layer:first-of-type
 {
@@ -94,6 +122,36 @@
 	   -moz-border-radius: 4px 4px 4px 4px;
 			border-radius: 4px 4px 4px 4px;
 }
+.team-schedule .shift .layer .layer-description {
+	background-color: white;
+	color: #606060;
+	text-shadow: none;
+}
+.team-schedule .dayoff .layer-description {
+	margin: 9px;
+	text-shadow: none;
+}
+.team-schedule .shift .layer .drop {
+    top: 21px;
+}
+.team-schedule .shift .layer .drop .arrow {
+    left: -8px;
+    top: -8px;
+    border-left: 8px solid transparent;
+    border-bottom: 8px solid red;
+    border-right: 8px solid transparent;
+    border-top: 8px solid transparent;
+}
+.team-schedule .shift .layer .drop .circle {
+    top: 4px;
+    left: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 10px;
+}
+
+
 
 .team-schedule .resources td {
     padding-top: 3px;
@@ -101,16 +159,6 @@
 .team-schedule .contract-time 
 {
 	text-align: right;
-	max-width: 100px !important;
-	min-width: 100px !important;
-	width: 100px !important;
-	overflow: hidden;
-}
-.team-schedule .work-time {
-	text-align: right;
-	max-width: 100px !important;
-	min-width: 100px !important;
-	width: 100px !important;
 	overflow: hidden;
 }
 

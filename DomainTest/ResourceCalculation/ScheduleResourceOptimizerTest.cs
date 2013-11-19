@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void VerifyResourceOptimizingOfPhoneActivity()
         {
-
             var activityDivider = new ActivityDivider();
             IDividedActivityData dividedActivityData =
                 activityDivider.DivideActivity(_skillStaffPeriods, _personSkillService, _personAssignmentListContainer.ContainedActivities["Phone"], _resources, _inPeriod);

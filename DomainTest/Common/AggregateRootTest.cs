@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Common
     [TestFixture]
     public class AggregateRootTest
     {
-        private AggregateRootWithBusinessUnit _targetAggregateRootWithBusinessUnit;
+        private VersionedAggregateRootWithBusinessUnit _targetAggregateRootWithBusinessUnit;
 
         /// <summary>
         /// Determines whether this instance [can set id].
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void CanSetId()
         {
             Guid newId = Guid.NewGuid();
-            AggregateRootWithBusinessUnit target = new AggRootWithBusinessUnit();
+			VersionedAggregateRootWithBusinessUnit target = new AggRootWithBusinessUnit();
             ((IEntity) target).SetId(newId);
             Assert.AreEqual(newId, target.Id);
         }
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyBusinessUnitCanBeRead()
         {
-            AggregateRootWithBusinessUnit target = new AggRootWithBusinessUnit();
+			VersionedAggregateRootWithBusinessUnit target = new AggRootWithBusinessUnit();
             Assert.AreSame(BusinessUnitFactory.BusinessUnitUsedInTest, target.BusinessUnit);
         }
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         }
 
 
-        internal class AggRootWithBusinessUnit : AggregateRootWithBusinessUnit, IDeleteTag
+		internal class AggRootWithBusinessUnit : VersionedAggregateRootWithBusinessUnit, IDeleteTag
         {
             private bool _isDeleted;
 
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Common
                 _isDeleted = true;
             }
         }
-        internal class CreatedAndChangedTest : AggregateRootWithBusinessUnit, IDeleteTag
+		internal class CreatedAndChangedTest : VersionedAggregateRootWithBusinessUnit, IDeleteTag
         {
             private bool _isDeleted;
 

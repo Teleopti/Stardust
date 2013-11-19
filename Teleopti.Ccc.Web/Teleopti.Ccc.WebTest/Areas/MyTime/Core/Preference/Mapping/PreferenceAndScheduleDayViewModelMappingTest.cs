@@ -111,10 +111,31 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		}
 
 		[Test]
+		public void ShouldMapAbsenceContractTime()
+		{
+			var stubs = new StubFactory();
+			var absence = stubs.PersonAbsenceStub("Illness");
+
+			var contractTime = TimeSpan.FromHours(8);
+			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
+			projection.Stub(x => x.ContractTime()).Return(contractTime);
+
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.FullDayAbsence, absence);
+
+			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
+
+			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
+
+			result.Absence.Should().Not.Be.Null();
+			result.Absence.AbsenceContractTime.Should().Be(TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture));
+			result.Absence.AbsenceContractTimeMinutes.Should().Be(contractTime.TotalMinutes);
+		}
+
+		[Test]
 		public void ShouldMapShiftCategoryInPersonAssignmentDayViewModel()
 		{
 			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2000,1,1));
-			personAssignment.AddMainLayer(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			personAssignment.AssignActivity(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 			personAssignment.SetShiftCategory(new ShiftCategory("shiftCategory"));
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
 

@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Common
     /// <summary>
     /// Represents an scenario
     /// </summary>
-    public class Scenario : AggregateRootWithBusinessUnit, IScenario, IDeleteTag
+    public class Scenario : VersionedAggregateRootWithBusinessUnit, IScenario, IDeleteTag
     {
         #region Fields
 

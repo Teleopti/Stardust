@@ -79,9 +79,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return retList;
         }
 
-        protected IEnumerable<IPersistableScheduleData> PersistableScheduleDataInternalCollection()
+		protected IEnumerable<IPersistableScheduleData> PersistableScheduleDataInternalCollection()
         {
-            return ScheduleDataInternalCollection().OfType<IPersistableScheduleData>();
+			return ScheduleDataInternalCollection().OfType<IPersistableScheduleData>();
         }
 
         public IScenario Scenario
@@ -100,17 +100,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
                 	var preferenceDay = scheduleData as IPreferenceDay;
 					if (preferenceDay != null)
-						removePotentialUnsavedPrefenceForSameDay(preferenceDay);
+						removePreviousPrefenceForSameDay(preferenceDay);
                 }
             }
         }
 
-    	private void removePotentialUnsavedPrefenceForSameDay(IPreferenceDay preferenceDay)
+    	private void removePreviousPrefenceForSameDay(IPreferenceDay preferenceDay)
     	{
     		var preference =
     			_scheduleDataCollection.OfType<IPreferenceDay>().FirstOrDefault(
-    				p => p.RestrictionDate == preferenceDay.RestrictionDate);
-			if (preference!=null && preferenceDay!=preference && !preference.Id.HasValue)
+                    p => p.RestrictionDate == preferenceDay.RestrictionDate && preferenceDay != p);
+			if (preference!=null)
 			{
 				_scheduleDataCollection.Remove(preference);
 			}

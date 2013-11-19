@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -27,13 +28,14 @@ namespace Teleopti.Interfaces.Domain
 			{
 				while (startTime < layer.Period.EndDateTime)
 				{
-					double startDiff = 0;
-					double endDiff = 0;
-					if (startTime < layer.Period.StartDateTime)
-						startDiff = layer.Period.StartDateTime.Subtract(startTime).TotalMinutes;
-					if (startTime.AddMinutes(minutesSplit) > layer.Period.EndDateTime)
-						endDiff = startTime.AddMinutes(minutesSplit).Subtract(layer.Period.EndDateTime).TotalMinutes;
+					var currentIntervalPeriod = new DateTimePeriod(startTime, startTime.AddMinutes(minutesSplit));
 
+					DateTimePeriod? fractionPeriod = null;
+					if (fractionOfLayerShouldBeIncluded(currentIntervalPeriod, layer))
+					{
+						fractionPeriod = layer.Period.Intersection(currentIntervalPeriod);
+					}
+					
 					var payload = layer.Payload.UnderlyingPayload;
 					var requiresSeat = false;
 					var activity = payload as IActivity;
@@ -44,30 +46,45 @@ namespace Teleopti.Interfaces.Domain
 					yield return
 						new ResourceLayer
 							{
-								Resource = 1d * (1 * ((minutesSplit - startDiff - endDiff) / minutesSplit)),
+								Resource = fractionPeriod.HasValue ? fractionPeriod.Value.ElapsedTime().TotalMinutes / minutesSplit : 1d,
 								PayloadId = payload.Id.GetValueOrDefault(),
 								RequiresSeat = requiresSeat,
-								Period = new DateTimePeriod(startTime, startTime.AddMinutes(minutesSplit))
+								Period = currentIntervalPeriod,
+								FractionPeriod = fractionPeriod
 							};
-					if (startTime.AddMinutes(minutesSplit) >= layer.Period.EndDateTime)
+					if (currentIntervalPeriod.EndDateTime > layer.Period.EndDateTime)
 					{
 						break;
 					}
-					startTime = startTime.AddMinutes(minutesSplit);
+					startTime = currentIntervalPeriod.EndDateTime;
 				}
 			}
 		}
 
-		public static void AddScheduleDayToContainer(this IResourceCalculationDataContainerWithSingleOperation resources, IScheduleDay scheduleDay, int minutesSplit)
+		private static bool fractionOfLayerShouldBeIncluded(DateTimePeriod currentIntervalPeriod, IVisualLayer layer)
 		{
-            if (!scheduleDay.HasProjection()) return;
+			return currentIntervalPeriod.StartDateTime < layer.Period.StartDateTime ||
+			       currentIntervalPeriod.EndDateTime > layer.Period.EndDateTime;
+		}
 
-			var projection = scheduleDay.ProjectionService().CreateProjection();
-			var resourceLayers = projection.ToResourceLayers(minutesSplit);
-			foreach (var resourceLayer in resourceLayers)
-			{
-				resources.AddResources(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, resourceLayer);
-			}
+		public static Task AddScheduleDayToContainer(this IResourceCalculationDataContainerWithSingleOperation resources, IScheduleDay scheduleDay, int minutesSplit)
+		{
+            if (!scheduleDay.HasProjection())
+            {
+	            var emptyTask = new TaskCompletionSource<object>();
+				emptyTask.SetResult(null);
+	            return emptyTask.Task;
+            }
+
+			return Task.Factory.StartNew(() =>
+				{
+					var projection = scheduleDay.ProjectionService().CreateProjection();
+					var resourceLayers = projection.ToResourceLayers(minutesSplit);
+					foreach (var resourceLayer in resourceLayers)
+					{
+						resources.AddResources(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, resourceLayer);
+					}
+				});
 		}
 
 		public static void RemoveScheduleDayFromContainer(this IResourceCalculationDataContainerWithSingleOperation resources, IScheduleDay scheduleDay, int minutesSplit)
@@ -87,6 +104,7 @@ namespace Teleopti.Interfaces.Domain
 	{
 		void AddResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer);
 		void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer);
+		IEnumerable<DateTimePeriod> IntraIntervalResources(ISkill skill, DateTimePeriod period);
 	}
 
 	public interface IResourceCalculationDataContainer

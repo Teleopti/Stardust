@@ -14,13 +14,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IScheduleDay _scheduleDay;
 		private MockRepository _mock;
 		private IOvertimeAvailability _overtimeAvailabilityDay;
+	    private IScheduleDictionary _scheduleDictionary;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_mock = new MockRepository();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
-			_target = new AgentOvertimeAvailabilityRemoveCommand(_scheduleDay);
+			_scheduleDictionary = _mock.DynamicMock<IScheduleDictionary>();
+			_target = new AgentOvertimeAvailabilityRemoveCommand(_scheduleDay,_scheduleDictionary);
 			_overtimeAvailabilityDay = _mock.StrictMock<IOvertimeAvailability>();
 		}
 
@@ -29,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>{_overtimeAvailabilityDay}));
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _overtimeAvailabilityDay }));
 				Expect.Call(() => _scheduleDay.DeleteOvertimeAvailability());
 			}
 

@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return (IPersistableScheduleData) Session.Get(concreteType, id);
         }
 
+			//todo: Fixa lazy-problem utanför! inte ladda andra rötter här inne!
         public IPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id)
         {
             if (typeof(IPersonAssignment).IsAssignableFrom(scheduleDataType))
@@ -214,7 +215,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence)
         {
             IList<IPerson> people = new List<IPerson> {person};
-            ICollection<DateTimePeriod> searchPeriods = _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).AffectedPeriods(person, scenario, period, absence);
+            var personAbsenceRepository = _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork);
+            ICollection<DateTimePeriod> searchPeriods = personAbsenceRepository.AffectedPeriods(person, scenario, period, absence);
             DateTimePeriod optimizedPeriod = searchPeriods.Count>0 ? 
                 new DateTimePeriod(searchPeriods.Min(p => p.StartDateTime), searchPeriods.Max(p => p.EndDateTime).AddDays(1)):
 				new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddDays(1));
@@ -222,28 +224,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	        var timeZone = person.PermissionInformation.DefaultTimeZone();
 	        var longDateOnlyPeriod = optimizedPeriod.ToDateOnlyPeriod(timeZone);
 			longDateOnlyPeriod = new DateOnlyPeriod(longDateOnlyPeriod.StartDate.AddDays(-1),longDateOnlyPeriod.EndDate.AddDays(1));
-            var retDic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(optimizedPeriod),
-                                                               new DifferenceEntityCollectionService
-                                                                   <IPersistableScheduleData>());
+			var retDic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(optimizedPeriod), new DifferenceEntityCollectionService<IPersistableScheduleData>());
 			var personAssignmentRepository = _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork);
-					
-            using(TurnoffPermissionScope.For(retDic))
+
+            using (TurnoffPermissionScope.For(retDic))
             {
-				addPersonAbsences(retDic, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(people, optimizedPeriod, scenario, absence));
-				addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario), true, people);
-				foreach (DateTimePeriod p in searchPeriods)
-				{
-					var longDateOnlyP = new DateOnlyPeriod(new DateOnly(p.StartDateTime.AddDays(-1)), new DateOnly(p.EndDateTime.AddDays(1)));
-					var personAssignments = 
-						_repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(people, longDateOnlyP, scenario);
-					foreach (var personAssignment in personAssignments)
-					{
-						IScheduleRange range = retDic[personAssignment.Person];
-						IScheduleDay scheduleDay = range.ScheduledDay(personAssignment.Date);
-						if(scheduleDay.PersonAssignment(false) == null)
-							addPersonAssignments(retDic, new List<IPersonAssignment>{ personAssignment });
-					}
-				}
+				addPersonAbsences(retDic, personAbsenceRepository.Find(people, optimizedPeriod, scenario));
+                addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario), true, people);
+                var personAssignments = personAssignmentRepository.Find(people, longDateOnlyPeriod, scenario);
+                foreach (var personAssignment in personAssignments)
+                {
+                    IScheduleRange range = retDic[personAssignment.Person];
+                    IScheduleDay scheduleDay = range.ScheduledDay(personAssignment.Date);
+                    if (scheduleDay.PersonAssignment(false) == null)
+                        addPersonAssignments(retDic, new List<IPersonAssignment> {personAssignment});
+                }
             }
 
             return retDic[person];
@@ -260,7 +255,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             if (personsProvider == null) throw new ArgumentNullException("personsProvider");
             if (scheduleDictionaryLoadOptions == null) throw new ArgumentNullException("scheduleDictionaryLoadOptions");
 
-            var scheduleDictionary = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>());
+			var scheduleDictionary = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>());
             IList<IPerson> personsInOrganization = personsProvider.GetPersons();
             
             // ugly to be safe to get all

@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WinCode.Common
         /// Created by: robink
         /// Created date: 2009-09-29
         /// </remarks>
-        CommonStateHolder CommonStateHolder { get; }
+        ICommonStateHolder CommonStateHolder { get; }
 
         void LoadCommonState(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory);
 

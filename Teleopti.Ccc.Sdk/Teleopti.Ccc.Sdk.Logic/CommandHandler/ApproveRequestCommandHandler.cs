@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -18,16 +19,24 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     public class ApproveRequestCommandHandler : IHandleCommand<ApproveRequestCommandDto>
     {
         private readonly IScheduleRepository _scheduleRepository;
-        private readonly IScheduleDictionarySaver _scheduleDictionarySaver;
+				private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
         private readonly ICurrentScenario _scenarioRepository;
         private readonly IPersonRequestCheckAuthorization _authorization;
         private readonly ISwapAndModifyService _swapAndModifyService;
         private readonly IPersonRequestRepository _personRequestRepository;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
     	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
-        private readonly IScheduleDictionaryModifiedCallback _scheduleDictionaryModifiedCallback;
+		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 
-		  public ApproveRequestCommandHandler(IScheduleRepository scheduleRepository, IScheduleDictionarySaver scheduleDictionarySaver, ICurrentScenario scenarioRepository, IPersonRequestCheckAuthorization authorization, ISwapAndModifyService swapAndModifyService, IPersonRequestRepository personRequestRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback)
+	    public ApproveRequestCommandHandler(IScheduleRepository scheduleRepository, 
+																								IScheduleDifferenceSaver scheduleDictionarySaver, 
+																								ICurrentScenario scenarioRepository, 
+																								IPersonRequestCheckAuthorization authorization, 
+																								ISwapAndModifyService swapAndModifyService, 
+																								IPersonRequestRepository personRequestRepository, 
+																								ICurrentUnitOfWorkFactory unitOfWorkFactory, 
+																								IMessageBrokerEnablerFactory messageBrokerEnablerFactory,
+																								IDifferenceCollectionService<IPersistableScheduleData> differenceService)
         {
             _scheduleRepository = scheduleRepository;
             _scheduleDictionarySaver = scheduleDictionarySaver;
@@ -37,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _personRequestRepository = personRequestRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
         	_messageBrokerEnablerFactory = messageBrokerEnablerFactory;
-    	    _scheduleDictionaryModifiedCallback = scheduleDictionaryModifiedCallback;
+					_differenceService = differenceService;
         }
 
         public virtual IRequestApprovalService GetRequestApprovalServiceScheduler(IScheduleDictionary scheduleDictionary,
@@ -74,11 +83,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 {
                     throw new FaultException(e.Message);
                 }
-                var result = _scheduleDictionarySaver.MarkForPersist(uow, _scheduleRepository,
-                                                        scheduleDictionary.DifferenceSinceSnapshot());
-
-                //new ScheduleDictionaryModifiedCallback().Callback(scheduleDictionary, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
-                _scheduleDictionaryModifiedCallback.Callback(scheduleDictionary, result.ModifiedEntities, result.AddedEntities, result.DeletedEntities);
+	            foreach (var range in scheduleDictionary.Values)
+	            {
+		            var diff = range.DifferenceSinceSnapshot(_differenceService);
+		            _scheduleDictionarySaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate) range);
+	            }
 
                 using (_messageBrokerEnablerFactory.NewMessageBrokerEnabler())
                 {
@@ -117,7 +126,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				new ScheduleDictionaryLoadOptions(true, false), 
 				dateonlyPeriod,
                 _scenarioRepository.Current());
-            ((ReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
+            ((IReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
             return scheduleDictionary;
         }
     }

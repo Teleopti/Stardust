@@ -102,7 +102,7 @@ namespace Teleopti.Interfaces.Domain
         ///<summary>
         ///</summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        IList<IShiftCategory> ShiftCategories { get; set; }
+        IEnumerable<IShiftCategory> ShiftCategories { get; set; }
 
 		///<summary>
 		/// If the scheduler is opened in Team Leader Mode

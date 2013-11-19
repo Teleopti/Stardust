@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -39,7 +41,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if (personGroup == null)
 			{
-				return null;
+				//Person does not belong to any group page will be treated as a Single Agent Team
+				var converter = new PersonToSingleAgentTeamRootPersonGroupConverter(new SingleAgentTeamGroupPage());
+				personGroup = converter.Convert(person, dateOnly);
 			}
 
 			var personsInGroup = curentPersonsInGroup(personGroup);
@@ -94,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					return result;
 
 			}
-
+			
 			return null;
 		}
 	}

@@ -3,12 +3,11 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Export
@@ -50,14 +49,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 
             var secondBusinessUnit = mocks.DynamicMock<IBusinessUnit>();
 
-            ReflectionHelper.SetBusinessUnit(targetSkill, secondBusinessUnit);
+            targetSkill.SetBusinessUnit(secondBusinessUnit);
 
             using (mocks.Record())
             {
                 Expect.Call(scenarioRepository.LoadDefaultScenario(secondBusinessUnit)).Return(targetScenario);
                 Expect.Call(skillDayRepository.FindRange(period, targetSkill, targetScenario)).Return(new[] { skillDay });
-                Expect.Call(skillDayRepository.GetAllSkillDays(period, new[] { skillDay }, targetSkill, targetScenario, true)).
-                    Return(new[] { skillDay });
+				Expect.Call(skillDayRepository.GetAllSkillDays(period, new[] { skillDay }, targetSkill, targetScenario, skillDayRepository.AddRange)).
+                    Return(new[] { skillDay }).IgnoreArguments();
             }
             using (mocks.Playback())
             {

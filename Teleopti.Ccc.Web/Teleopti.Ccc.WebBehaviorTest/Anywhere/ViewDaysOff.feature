@@ -27,8 +27,9 @@ Scenario: View day off in team schedule
 	| Field | Value      |
 	| Name  | Day off    |
 	| Date  | 2013-09-27 |
-	When I view schedules for '2013-09-27'
-	Then I should see a day off for 'Pierre Baldi'
+	When I view schedules for 'Team green' on '2013-09-27'
+	And I click description toggle button
+	Then I should see 'Pierre Baldi' with a day off named 'Day off'
 
 Scenario: View day off in person schedule
 	Given I have the role 'Anywhere Team Green'
@@ -37,4 +38,5 @@ Scenario: View day off in person schedule
 	| Name  | Day off    |
 	| Date  | 2013-09-27 |
 	When I view person schedule for 'Pierre Baldi' on '2013-09-27'
-	Then I should see a day off	
+	And I click description toggle button
+	Then I should see a day off named 'Day off'
