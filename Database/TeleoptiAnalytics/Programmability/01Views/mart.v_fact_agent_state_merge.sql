@@ -30,6 +30,7 @@ INNER JOIN mart.dim_interval i
 INNER JOIN mart.bridge_time_zone btz
 	ON btz.date_id = d.date_id
 	AND btz.interval_id = i.interval_id
+	AND dp.time_zone_id = btz.time_zone_id
 GROUP BY
 	btz.local_date_id,
 	person_id,
