@@ -162,7 +162,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             _scheduleControl.ScheduleAppointmentClick +=ScheduleAppointmentClick;
             _scheduleControl.SetupContextMenu +=SetupContextMenu;
             _scheduleControl.DeleteScheduleAppointment += DeleteScheduleItem;
-            _scheduleControl.CopyScheduleAppointment += CopyScheduleAppointment;
             _scheduleControl.Calendar.ContextMenu = new ContextMenu(); //Fake menu so that we can get rid of events on the calander
         }
 
@@ -256,10 +255,10 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 	    /// <param name="scheduleStateHolder">The schedule state holder.</param>
 	    /// <param name="clipHandler">The clip handler.</param>
 	    /// <param name="legendLoader"></param>
-	    public AgentScheduleView(CustomScheduleControl scheduleControl, AgentScheduleStateHolder scheduleStateHolder, ClipHandler<ICustomScheduleAppointment> clipHandler, ILegendLoader legendLoader)
+	    public AgentScheduleView(CustomScheduleControl scheduleControl, AgentScheduleStateHolder scheduleStateHolder, ILegendLoader legendLoader)
              : this()
         {
-            Presenter = new AgentSchedulePresenter(this, scheduleStateHolder, clipHandler);
+            Presenter = new AgentSchedulePresenter(this, scheduleStateHolder);
             _scheduleControl = scheduleControl;
 		    _legendLoader = legendLoader;
         }
@@ -335,23 +334,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         private void DeleteScheduleItem(object sender, CustomScheduleAppointmentDeleteEventArgs e)
         {
             DeleteScheduleAppointments();
-        }
-
-        /// <summary>
-        /// Copies the schedule appointment.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="Teleopti.Ccc.AgentPortalCode.Common.CustomScheduleAppointmentCopyPasteEventArgs"/> instance containing the event data.</param>
-        private void CopyScheduleAppointment(object sender, CustomScheduleAppointmentCopyPasteEventArgs e)
-        {
-            //clear clip handler
-            Presenter.ScheduleClipHandler.Clear();
-            //add clips
-            foreach (ICustomScheduleAppointment scheduleAppointment in _scheduleControl.SelectedScheduleAppointments)
-            {
-                DateTime date = scheduleAppointment.StartTime.Date;
-                Presenter.ScheduleClipHandler.AddClip(scheduleAppointment, scheduleAppointment.AppointmentType, date);
-            }
         }
     }
 }
