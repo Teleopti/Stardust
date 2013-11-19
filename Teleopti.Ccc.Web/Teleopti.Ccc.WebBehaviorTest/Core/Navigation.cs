@@ -277,6 +277,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				new ApplicationStartupTimeout());
 		}
 
+		public static void GotoAnywherePersonScheduleIntradayAbsenceForm(Guid personId, Guid groupId, DateTime date)
+		{
+			GoToWaitForUrlAssert(
+				string.Format("Anywhere#personschedule/{0}/{1}/{2}{3}{4}/addintradayabsence",
+				groupId,
+				personId,
+				date.Year.ToString("0000"),
+				date.Month.ToString("00"),
+				date.Day.ToString("00")),
+				"Anywhere#personschedule",
+				new ApplicationStartupTimeout());
+		}
+
+		public static void GotoAnywherePersonScheduleAssignActivityForm(Guid personId, Guid groupId, DateTime date)
+		{
+			GoToWaitForUrlAssert(
+				string.Format("Anywhere#personschedule/{0}/{1}/{2}{3}{4}/assignactivity",
+				groupId,
+				personId,
+				date.Year.ToString("0000"),
+				date.Month.ToString("00"),
+				date.Day.ToString("00")),
+				"Anywhere#personschedule",
+				new ApplicationStartupTimeout());
+		}
+
 		public static void GotoRequestsShiftTrade(DateTime date)
 		{
 			GoToWaitForCompleted(

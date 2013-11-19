@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		// I click 'add full day absence'
 		// *NOT* I click 'remove' on absence named 'Vacation'
 		[When(@"I click '([a-z|\s]*)'")]
+		[When(@"I initiate '([a-z|\s]*)'")]
 		public void WhenIClickButtonWithClass(CssClass cssClass)
 		{
 			// enforcing button because of :enabled selector.

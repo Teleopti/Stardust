@@ -1,6 +1,6 @@
 ﻿@ignore
 Feature: Add activity
-	In order to assign work to an working agent
+	In order to assign work to a working agent
 	As a team leader
 	I want to add activity to an existing shift
 
@@ -44,7 +44,7 @@ Scenario: View team mates schedules
 	| Team       | Team green |
 	| Start date | 2013-11-18 |
 	When I view person schedules assign activity form for 'Pierre Baldi' and 'Team green' on '2013-11-18'
-	Then I should see schedule for 'John King' in team mates schedules
+	Then I should see schedule for 'John King'
 
 Scenario: Default times today
 	Given I have the role 'Anywhere Team Green'
@@ -85,8 +85,8 @@ Scenario: Assign
 	| Activity   | Phone |
 	| Start time | 11:00 |
 	| End time   | 12:00 |
-	And I click 'apply'
-	Then I should see 'Pierre Baldi' with scheduled activity
+	And I initiate 'apply'
+	Then I should see 'Pierre Baldi' with the scheduled activity
 	| Field      | Value |
 	| Start time | 11:00 |
 	| End time   | 12:00 |
@@ -101,14 +101,14 @@ Scenario: Assign on shift
 	| Activity       | Phone            |
 	| Start time     | 2013-11-19 11:00 |
 	| End time       | 2013-11-19 17:00 |
-	When I view person schedules assign activity form for 'Pierre Baldi' and 'Team green' on '2013-11-18'
+	When I view person schedules assign activity form for 'Pierre Baldi' and 'Team green' on '2013-11-19'
 	And I input these assign activity values
 	| Field      | Value |
 	| Activity   | Lunch |
 	| Start time | 13:00 |
 	| End time   | 14:00 |
-	And I click 'apply'
-	Then I should see 'Pierre Baldi' with scheduled activity
+	And I initiate 'apply'
+	Then I should see 'Pierre Baldi' with the scheduled activity
 	| Field      | Value  |
 	| Start time | 13:00  |
 	| End time   | 14:00  |
@@ -129,8 +129,8 @@ Scenario: Prevent assign outside shift
 	| Activity   | Phone |
 	| Start time | 17:00 |
 	| End time   | 18:00 |
-	And I click 'apply'
-	Then I should the validation error message 'Cannot assing activity outside shift'
+	And I initiate 'apply'
+	Then I should see the validation error 'Cannot assign activity outside shift'
 
 Scenario: Assign after midnight on night shift
 	Given I have the role 'Anywhere Team Green'
@@ -146,8 +146,8 @@ Scenario: Assign after midnight on night shift
 	| Activity   | Lunch |
 	| Start time | 01:00 |
 	| End time   | 02:00 |
-	And I click 'apply'
-	Then I should see 'Pierre Baldi' with scheduled activity
+	And I initiate 'apply'
+	Then I should see 'Pierre Baldi' with the scheduled activity
 	| Field      | Value            |
 	| Start time | 2013-11-20 01:00 |
 	| End time   | 2013-11-20 02:00 |
