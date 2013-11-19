@@ -7181,7 +7181,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void addPreferenceToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			var selectedDay = _scheduleView.SelectedSchedules()[0];
+			var selectedSchedules = _scheduleView.SelectedSchedules();
+			if (selectedSchedules.Count == 0) return;
+
+			var selectedDay = selectedSchedules[0];
 
 			using (var view = new AgentPreferenceView(selectedDay, WorkflowControlSets, _schedulerState.SchedulingResultState))
 			{
@@ -7192,7 +7195,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void addStudentAvailabilityToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			var selectedDay = _scheduleView.SelectedSchedules()[0];
+			var selectedSchedules = _scheduleView.SelectedSchedules();
+			if (selectedSchedules.Count == 0) return;
+
+			var selectedDay = selectedSchedules[0];
+
 			using (var view = new AgentStudentAvailabilityView(selectedDay,_schedulerState.SchedulingResultState))
 			{
 				view.ShowDialog(this);
@@ -7215,7 +7222,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void addOvertimeAvailabilityToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			var selectedDay = _scheduleView.SelectedSchedules()[0];
+			var selectedSchedules = _scheduleView.SelectedSchedules();
+			if (selectedSchedules.Count == 0) return;
+
+			var selectedDay = selectedSchedules[0];
+
 			using (var view = new AgentOvertimeAvailabilityView(selectedDay,_schedulerState.SchedulingResultState ))
 			{
 				view.ShowDialog(this);
