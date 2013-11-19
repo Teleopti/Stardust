@@ -133,7 +133,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void ThenIShouldSeeWithTheScheduledActivity(string personName, Table table)
 		{
 			var scheduledActivity = table.CreateInstance<ScheduledActivityInfo>();
-
 			assertScheduledActivity(personName, scheduledActivity);
 		}
 
