@@ -51,7 +51,6 @@ define([
 				newShift.AddLayers(data);
 				self.Shifts.push(newShift);
 			}
-
 			if (data.DayOff) {
 				data.DayOff.Date = data.Date;
 				var newDayOff = new dayOff(timeline, data.DayOff);

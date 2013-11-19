@@ -59,22 +59,13 @@
 									"></div>
 									<!-- /ko -->
 
-									<!-- ko foreach: DayOffs -->
-									<!-- ko if: OverlapsTimeLine -->
+									<!-- ko if: IsDayOff -->
 									<div
-										class="dayoff absolute"
-										data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }">
+										class="dayoff absolute">
 										<!-- ko if: $root.DisplayDescriptions -->
-										<!-- ko if: $parent.IsShift() && $parent.TimeLineAffectingEndMinute() > StartMinutes()-->
-										<span class="label layer-description floatleft" data-bind="text: DayOffName"></span>
-										<span class="label layer-description floatright" data-bind="text: DayOffName"></span>
-										<!-- /ko -->
-										<!-- ko ifnot: $parent.IsShift() && $parent.TimeLineAffectingEndMinute() > StartMinutes()-->
 										<span class="label layer-description" data-bind="text: DayOffName"></span>
-										<!-- /ko -->
-										<!-- /ko -->
+ 										<!-- /ko -->
 									</div>
-									<!-- /ko -->
 									<!-- /ko -->
 								</div>
 							</td>
