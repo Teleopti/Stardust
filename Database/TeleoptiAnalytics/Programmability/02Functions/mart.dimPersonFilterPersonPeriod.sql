@@ -1,11 +1,11 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[DimPersonLocalized]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
-DROP FUNCTION [mart].[DimPersonLocalized]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[dimPersonFilterPersonPeriod]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION [mart].[dimPersonFilterPersonPeriod]
 GO
 
 
 -- =============================================
 -- Author:		David
--- Create date: 2010-11-08
+-- Create date: 2013-11-17
 -- Description:	Returns a table with Person information where valid_to_date and valid_to_interval_id are:
 -- 1) using an adapted eternity date 2059-12-31 => Max from dim_date. This to make dim_person more "joinable".
 -- 2) converting UTC From+To into each agents localized From+To
@@ -13,13 +13,20 @@ GO
 -- update log
 -----------------------------------------------
 -- When			Who	What
--- 2010-11-09	DJ	Fixing UTC(+h)
+-- 2013-11-19	DJ	Adding valid_from_date_local+valid_to_date_local to dim_person
 -- =============================================
---SELECT * FROM [mart].[DimPersonLocalized]()
-CREATE FUNCTION [mart].[DimPersonLocalized] 
+/*
+set statistics IO on
+set statistics TIME on
+SELECT * FROM [mart].[dimPersonFilterPersonPeriod]('2001-02-01','2014-12-31','47A3D4AA-3CD8-4235-A7EB-9B5E015B2560')
+select * FROM [mart].[PersonCodeToId]('47A3D4AA-3CD8-4235-A7EB-9B5E015B2560','2001-02-01','2015-12-31',null,null)
+SELECT * FROM [mart].[dim_person] WHERE person_code = '47A3D4AA-3CD8-4235-A7EB-9B5E015B2560'
+*/
+CREATE FUNCTION [mart].[dimPersonFilterPersonPeriod] 
 (
 @date_from smalldatetime,
-@date_to smalldatetime
+@date_to smalldatetime,
+@person_code uniqueidentifier
 )
 RETURNS 
 @dim_person_localized TABLE 
@@ -37,7 +44,8 @@ SELECT
 	valid_from_date_local,
 	valid_to_date_local
 FROM mart.dim_person
-WHERE
+WHERE person_code = @person_code
+AND
 --------------
 --Trying to explain the personPeriod filter:
 --@date_from=A
@@ -57,8 +65,6 @@ WHERE
 	OR
 		(@date_to >= valid_from_date_local AND @date_to <= valid_to_date_local)
 )
-
-
 RETURN 
 
 END
