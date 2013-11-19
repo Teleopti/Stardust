@@ -334,6 +334,7 @@
     <Compile Include="Optimization\StandardDeviationDataTest.cs" />
     <Compile Include="Optimization\TeamBlock\AdvancedPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\TeamBlock\DailyTargetValueCalculatorForTeamBlockTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamSelectionValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\LockableBitArrayFactoryTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinderTest.cs" />
     <Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlockTest.cs" />
@@ -1223,7 +1224,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Analyzer\" />
-    <Folder Include="Optimization\TeamBlock\FairnessOptimization\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Forecasting\DayInMonthIndex\DayInMonthSeasonalityData.txt">

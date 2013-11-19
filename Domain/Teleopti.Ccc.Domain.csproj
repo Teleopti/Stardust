@@ -367,6 +367,7 @@
     </Compile>
     <Compile Include="Optimization\TeamBlock\DailyTargetValueCalculatorForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\ConstructTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamSelectionValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\DetermineTeamBlockPriority.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\PriorityDefinition.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockFairnessOptimizer.cs" />
