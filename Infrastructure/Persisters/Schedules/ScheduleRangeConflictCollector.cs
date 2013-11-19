@@ -37,8 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			var persistConflicts = new List<PersistConflict>();
 			foreach (var diffItem in modifiedAndDeletedEntities)
 			{
-				var inMemoryEntity = diffItem.OriginalItem as IPersistableScheduleData;
-				if (inMemoryEntity == null) continue;
+				var inMemoryEntity = diffItem.OriginalItem;
 				var inMemoryVersion = inMemoryEntity as IVersioned;
 				if(inMemoryEntity==null)
 					continue;
@@ -67,18 +66,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 					persistConflicts.Add(makePersistConflict(diffItem, databaseEntity));
 				}
 			}
-
-
-
-			//var conflictingEntities = from e in modifiedAndDeletedEntities
-			//													let inMemoryEntity = e.OriginalItem
-			//													let databaseVersion = uow.DatabaseVersion(inMemoryEntity)
-			//													where inMemoryEntity.Version != databaseVersion
-			//													select e;
-			//var persistConflicts = (from e in conflictingEntities
-			//											let inMemoryEntity = e.OriginalItem
-			//											let databaseEntity = _scheduleRepository.LoadScheduleDataAggregate(inMemoryEntity.GetType(), inMemoryEntity.Id.Value)
-			//											select makePersistConflict(e, databaseEntity)).ToList();
 
 			foreach (var diffItem in differences)
 			{
