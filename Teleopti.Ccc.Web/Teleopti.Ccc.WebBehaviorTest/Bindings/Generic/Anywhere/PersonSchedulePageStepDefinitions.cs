@@ -84,10 +84,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see the add full day absence form with")]
 		public void ThenIShouldSeeTheAddFullDayAbsenceFormWith(Table table)
 		{
-			var fullDayAbsenceFormInfo = table.CreateInstance<FullDayAbsenceFormInfo>();
+			var form = table.CreateInstance<FullDayAbsenceFormInfo>();
+			Browser.Interactions.AssertInputValueUsingJQuery(".full-day-absence-form .start-date", form.StartDate.ToShortDateString(DataMaker.Me().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery(".full-day-absence-form .end-date", form.StartDate.ToShortDateString(DataMaker.Me().Culture));
+		}
 
-			Browser.Interactions.AssertInputValueUsingJQuery(".full-day-absence-form .start-date", fullDayAbsenceFormInfo.StartDate.ToShortDateString(DataMaker.Data().MyCulture));
-			Browser.Interactions.AssertInputValueUsingJQuery(".full-day-absence-form .end-date", fullDayAbsenceFormInfo.StartDate.ToShortDateString(DataMaker.Data().MyCulture));
+		[Then(@"I should see the assign activity form with")]
+		public void ThenIShouldSeeTheAssignActivityFormWith(Table table)
+		{
+			var form = table.CreateInstance<AssignActivityFormInfo>();
+			Browser.Interactions.AssertInputValueUsingJQuery(".assign-activity-form .start-time", form.StartTime.ToShortTimeString(DataMaker.Me().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery(".assign-activity-form .end-time", form.EndTime.ToShortTimeString(DataMaker.Me().Culture));
 		}
 
 		[Then(@"I should see the add full day absence form")]
@@ -105,17 +112,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I input these full day absence values")]
 		public void WhenIInputTheseFullDayAbsenceValues(Table table)
 		{
-			var fullDayAbsenceFormInfo = table.CreateInstance<FullDayAbsenceFormInfo>();
+			var values = table.CreateInstance<FullDayAbsenceFormInfo>();
 
-			if (!string.IsNullOrEmpty(fullDayAbsenceFormInfo.Absence))
-				Browser.Interactions.SelectOptionByTextUsingJQuery(".full-day-absence-form .absence-type", fullDayAbsenceFormInfo.Absence);
+			if (!string.IsNullOrEmpty(values.Absence))
+				Browser.Interactions.SelectOptionByTextUsingJQuery(".full-day-absence-form .absence-type", values.Absence);
 			else
 				// for robustness. cant understand why this is required. the callViewMethodWhenReady should solve it.
 				Browser.Interactions.AssertExists(".full-day-absence-form .absence-type:enabled");
 
-			Browser.Interactions.Javascript(string.Format("test.callViewMethodWhenReady('personschedule', 'setDateFromTest', '{0}');", fullDayAbsenceFormInfo.EndDate));
+			Browser.Interactions.Javascript(string.Format("test.callViewMethodWhenReady('personschedule', 'setDateFromTest', '{0}');", values.EndDate));
 
-			Browser.Interactions.AssertInputValueUsingJQuery(".full-day-absence-form .end-date", fullDayAbsenceFormInfo.EndDate.ToShortDateString(DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertInputValueUsingJQuery(".full-day-absence-form .end-date", values.EndDate.ToShortDateString(DataMaker.Me().Culture));
+		}
+
+		[When(@"I input these assign activity values")]
+		public void WhenIInputTheseAssignActivityValues(Table table)
+		{
+			var values = table.CreateInstance<AssignActivityFormInfo>();
+
+			Browser.Interactions.SelectOptionByTextUsingJQuery(".assign-activity-form .activity-type", values.Activity);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".assign-activity-form .start-time", values.StartTime.ToShortTimeString(DataMaker.Me().Culture));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".assign-activity-form .end-time", values.EndTime.ToShortTimeString(DataMaker.Me().Culture));
 		}
 
 		[Then(@"I should see an absence in the absence list with")]
@@ -209,9 +226,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		public class FullDayAbsenceFormInfo
 		{
+			public string Absence { get; set; }
 			public DateTime StartDate { get; set; }
 			public DateTime EndDate { get; set; }
-			public string Absence { get; set; }
 		}
+
+		public class AssignActivityFormInfo
+		{
+			public string Activity { get; set; }
+			public DateTime StartTime { get; set; }
+			public DateTime EndTime { get; set; }
+		}
+
 	}
 }
