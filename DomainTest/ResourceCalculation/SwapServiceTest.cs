@@ -202,11 +202,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.That(mainShifts.Distinct().Count(),Is.EqualTo(1),"All mainshiftlayers expected to start at the same time");
 		}
 
-		private static DateTimePeriod firstMainShiftPeriodFor(IScheduleDay scheduleDay)
-		{
-			return scheduleDay.PersonAssignment().MainLayers().First().Period;
-		}
-
         [Test, ExpectedException(typeof(ConstraintException))]
         public void VerifyInvalidList()
         {
