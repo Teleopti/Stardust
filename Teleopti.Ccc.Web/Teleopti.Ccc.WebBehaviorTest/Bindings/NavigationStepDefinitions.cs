@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		[Given(@"I view schedules for '([0-9\-\\\/]*)'")]
 		[When(@"I view schedules for '([0-9\-\\\/]*)'")]
-		[When(@"I view team schedules staffing metrics for '([0-9\-\\\/]*)'")]
+		[When(@"I view group schedules staffing metrics for '([0-9\-\\\/]*)'")]
 		public void WhenIViewSchedulesForDate(DateTime date)
 		{
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
@@ -125,8 +125,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			return teamId;
 		}
 
-		[Given(@"I am viewing team schedules staffing metrics for '([0-9\-\\\/]*)' and '(.*)'")]
-		[When(@"I view team schedules staffing metrics for '([0-9\-\\\/]*)' and '(.*)'")]
+		[Given(@"I am viewing group schedules staffing metrics for '([0-9\-\\\/]*)' and '(.*)'")]
+		[When(@"I view group schedules staffing metrics for '([0-9\-\\\/]*)' and '(.*)'")]
 		public void WhenIViewTeamSchedulesStaffingMetricsForDate(DateTime date, string skill)
 		{
 			TestControllerMethods.Logon();
@@ -134,8 +134,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TeamSchedulePageStepDefinitions.SelectSkill(skill);
 		}
 
-		[Given(@"I am viewing team schedules staffing metrics for '(.*)' and '([0-9\-\\\/]*)' and '(.*)'")]
-		[When(@"I view team schedules staffing metrics for '(.*)' and '([0-9\-\\\/]*)' and '(.*)'")]
+		[Given(@"I am viewing group schedules staffing metrics for '(.*)' and '([0-9\-\\\/]*)' and '(.*)'")]
+		[When(@"I view group schedules staffing metrics for '(.*)' and '([0-9\-\\\/]*)' and '(.*)'")]
 		public void WhenIViewTeamSchedulesStaffingMetricsForDateAndTeam(string team, DateTime date, string skill)
 		{
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
@@ -161,22 +161,33 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnywherePersonScheduleFullDayAbsenceForm(personId, date);
 		}
 
-		[When(@"I view person schedules assign activity form for '(.*)' and '(.*)' on '(.*)'")]
-		public void WhenIViewPersonSchedulesAssignActivityFormForAndOn(string name, string team, DateTime date)
+		[When(@"I view person schedules add intraday day absence form for '(.*)' and '(.*)' on '(.*)'")]
+		public void WhenIViewPersonSchedulesAddIntradayDayAbsenceFormForAndOn(string name, string @group, DateTime date)
 		{
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(name).Person.Id.Value;
+			Navigation.GotoAnywherePersonScheduleIntradayAbsenceForm(personId, groupIdByName(@group), date);
+		}
+
+		[When(@"I view person schedules assign activity form for '(.*)' and '(.*)' on '(.*)'")]
+		public void WhenIViewPersonSchedulesAssignActivityFormForAndOn(string name, string @group, DateTime date)
+		{
+			TestControllerMethods.Logon();
+			var personId = DataMaker.Person(name).Person.Id.Value;
+			Navigation.GotoAnywherePersonScheduleAssignActivityForm(personId, groupIdByName(@group), date);
+		}
+
+		private static Guid groupIdByName(string team)
+		{
 			Guid groupid = Guid.Empty;
 			ScenarioUnitOfWorkState.UnitOfWorkAction(uow =>
 				{
-
 					groupid = (from p in new GroupPageRepository(uow).LoadAll()
 					           from g in p.RootGroupCollection
 					           where g.Description.Name.Equals(team)
 					           select g.Id.Value).Single();
-
 				});
-			Navigation.GotoAnywherePersonScheduleAssignActivityForm(personId, groupid, date);
+			return groupid;
 		}
 
 		[When(@"I navigate to the preferences page")]
@@ -185,10 +196,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoPreference();
 		}
 
-		[Given(@"I view team schedule")]
-		[Given(@"I am viewing team schedule")]
-		[Given(@"I am viewing team schedule for today")]
-		[When(@"I view team schedule")]
+		[Given(@"I view group schedule")]
+		[Given(@"I am viewing group schedule")]
+		[Given(@"I am viewing group schedule for today")]
+		[When(@"I view group schedule")]
 		public void WhenIViewTeamSchedule()
 		{
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
@@ -196,7 +207,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoTeamSchedule();
 		}
 
-		[Given(@"I am viewing team schedule for tomorrow")]
+		[Given(@"I am viewing group schedule for tomorrow")]
 		public void GivenIAmViewingTeamScheduleForTomorrow()
 		{
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
@@ -204,8 +215,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoTeamSchedule(DateOnlyForBehaviorTests.TestToday.Date.AddDays(1));
 		}
 
-        [When(@"I view team schedule for '(.*)'")]
-        [Given(@"I am viewing team schedule for '(.*)'")]
+        [When(@"I view group schedule for '(.*)'")]
+        [Given(@"I am viewing group schedule for '(.*)'")]
         public void WhenIViewTeamScheduleFor(DateTime date)
 		{
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
@@ -224,7 +235,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoRequests();
 		}
 
-		[When(@"I navigate to the team schedule")]
+		[When(@"I navigate to the group schedule")]
 		public void WhenINavigateToTheTeamSchedule()
 		{
 			Navigation.GotoTeamSchedule();
