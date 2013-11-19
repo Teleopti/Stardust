@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Rta>
   <!--xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:RtaStates"> Not working for now!!!-->
-  <DefaultStateGroup>Symposium</DefaultStateGroup>
+  <DefaultStateGroup>Ungrouped states</DefaultStateGroup>
+  <RtaState name="Ungrouped states" platformTypeId="00000000-0000-0000-0000-000000000000">
+    <state name="CCC Logged out">CCC Logged out</state>
+  </RtaState>
   <RtaState name="Symposium" platformTypeId="76330CAB-86FC-4FDC-989D-73CA6D5830A5">
     <state name="UNKNOWN">0</state>
     <state name="Logged Out">-1</state>
@@ -26,60 +29,60 @@
     <state name="ACD_ACTIVE">65536</state>
     <state name="NGCC_WALKAWAY">131072</state>
   </RtaState>
-  <RtaState name="Avaya" platformTypeId="7D5FB662-F405-49F4-A4C1-734899693FDA">
+  <RtaState name="Avaya CMS" platformTypeId="7D5FB662-F405-49F4-A4C1-734899693FDA">
     <state name="UNKNOWN">0</state>
-    <state name="UNSTAFF">100</state>
-    <state name="AVAIL">200</state>
-    <state name="AVAIL IN">210</state>
-    <state name="AVAIL OUT">220</state>
-    <state name="ACD">300</state>
-    <state name="ACD IN">310</state>
-    <state name="ACD OUT">320</state>
-    <state name="ACW">400</state>
-    <state name="ACW IN">410</state>
-    <state name="ACW OUT">420</state>
-    <state name="AUX">500</state>
-    <state name="AUX1">501</state>
-    <state name="AUX2">502</state>
-    <state name="AUX3">503</state>
-    <state name="AUX4">504</state>
-    <state name="AUX5">505</state>
-    <state name="AUX6">506</state>
-    <state name="AUX7">507</state>
-    <state name="AUX8">508</state>
-    <state name="AUX9">509</state>
-    <state name="AUX IN">510</state>
-    <state name="AUX1 IN">511</state>
-    <state name="AUX2 IN">512</state>
-    <state name="AUX3 IN">513</state>
-    <state name="AUX4 IN">514</state>
-    <state name="AUX5 IN">515</state>
-    <state name="AUX6 IN">516</state>
-    <state name="AUX7 IN">517</state>
-    <state name="AUX8 IN">518</state>
-    <state name="AUX9 IN">519</state>
-    <state name="AUX OUT">520</state>
-    <state name="AUX1 OUT">521</state>
-    <state name="AUX2 OUT">522</state>
-    <state name="AUX3 OUT">523</state>
-    <state name="AUX4 OUT">524</state>
-    <state name="AUX5 OUT">525</state>
-    <state name="AUX6 OUT">526</state>
-    <state name="AUX7 OUT">527</state>
-    <state name="AUX8 OUT">528</state>
-    <state name="AUX9 OUT">529</state>
-    <state name="DACD">600</state>
-    <state name="DACD IN">610</state>
-    <state name="DACD OUT">620</state>
-    <state name="DACW">700</state>
-    <state name="DACW IN">710</state>
-    <state name="DACW OUT">720</state>
-    <state name="RING">800</state>
-    <state name="RING IN">810</state>
-    <state name="RING OUT">820</state>
-    <state name="OTHER">2200</state>
-    <state name="OTHER IN">2210</state>
-    <state name="OTHER OUT">2220</state>
+    <state name="UNSTAFF">1000</state>
+    <state name="AVAIL">2000</state>
+    <state name="AVAIL IN">2100</state>
+    <state name="AVAIL OUT">2200</state>
+    <state name="ACD">3000</state>
+    <state name="ACD IN">3100</state>
+    <state name="ACD OUT">3200</state>
+    <state name="ACW">4000</state>
+    <state name="ACW IN">4100</state>
+    <state name="ACW OUT">4200</state>
+    <state name="AUX">5000</state>
+    <state name="AUX1">5001</state>
+    <state name="AUX2">5002</state>
+    <state name="AUX3">5003</state>
+    <state name="AUX4">5004</state>
+    <state name="AUX5">5005</state>
+    <state name="AUX6">5006</state>
+    <state name="AUX7">5007</state>
+    <state name="AUX8">5008</state>
+    <state name="AUX9">5009</state>
+    <state name="AUX IN">5100</state>
+    <state name="AUX1 IN">5101</state>
+    <state name="AUX2 IN">5102</state>
+    <state name="AUX3 IN">5103</state>
+    <state name="AUX4 IN">5104</state>
+    <state name="AUX5 IN">5105</state>
+    <state name="AUX6 IN">5106</state>
+    <state name="AUX7 IN">5107</state>
+    <state name="AUX8 IN">5108</state>
+    <state name="AUX9 IN">5109</state>
+    <state name="AUX OUT">5200</state>
+    <state name="AUX1 OUT">5201</state>
+    <state name="AUX2 OUT">5202</state>
+    <state name="AUX3 OUT">5203</state>
+    <state name="AUX4 OUT">5204</state>
+    <state name="AUX5 OUT">5205</state>
+    <state name="AUX6 OUT">5206</state>
+    <state name="AUX7 OUT">5207</state>
+    <state name="AUX8 OUT">5208</state>
+    <state name="AUX9 OUT">5209</state>
+    <state name="DACD">6000</state>
+    <state name="DACD IN">6100</state>
+    <state name="DACD OUT">6200</state>
+    <state name="DACW">7000</state>
+    <state name="DACW IN">7100</state>
+    <state name="DACW OUT">7200</state>
+    <state name="RING">8000</state>
+    <state name="RING IN">8100</state>
+    <state name="RING OUT">8200</state>
+    <state name="OTHER">22000</state>
+    <state name="OTHER IN">22100</state>
+    <state name="OTHER OUT">22200</state>
   </RtaState>
   <RtaState name="Callguide" platformTypeId="6DE6DAE4-D70C-43CA-B79B-C879BF64DE45">
     <state name="ready private">ready private</state>
@@ -110,50 +113,21 @@
     <state name="Resting">7</state>
     <state name="Logged Off">8</state>
   </RtaState>
-  <RtaState name="Solidus" platformTypeId="D811505C-0978-45ba-94AC-BFD044597DEF">
-    <state name="BROADCAST_LOGON">1</state>
-    <state name="BROADCAST_LOGOFF">2</state>
-    <state name="BROADCAST_READY">3</state>
-    <state name="BROADCAST_NOTREADY">4</state>
-    <state name="BROADCAST_EMAILREADY">5</state>
-    <state name="BROADCAST_EMAILNOTREADY">6</state>
-    <state name="BROADCAST_ORIGINATED">7</state>
-    <state name="BROADCAST_DELIVERED">8</state>
-    <state name="BROADCAST_ESTABLISHED">9</state>
-    <state name="BROADCAST_HELD">10</state>
-    <state name="BROADCAST_RETRIEVED">11</state>
-    <state name="BROADCAST_TRANSFERED">12</state>
-    <state name="BROADCAST_CONFERENCED">13</state>
-    <state name="BROADCAST_CONNECTIONCLEARED">14</state> <!--Original State from platform-->
-    <state name="BROADCAST_CONNECTIONCLEARED_NOACW">140</state>
-    <state name="BROADCAST_ONNECTIONCLEARED_ACW">141</state>
-    <state name="BROADCAST_CLERICALENDED">15</state>
-    <state name="BROADCAST_CALLREJECTED">16</state>
-    <state name="BROADCAST_CALLBACKACCEPTED">17</state>
-    <state name="BROADCAST_CALLBACKREJECTED">18</state>
-    <state name="BROADCAST_CALLBACKSTATUS">19</state>
-    <state name="BROADCAST_EMAILREJECT">20</state>
-    <state name="BROADCAST_EMAILDELETE">21</state>
-    <state name="BROADCAST_EMAILREPLY">22</state>
-    <state name="BROADCAST_EMAILINFO">23</state>
-    <state name="BROADCAST_CALLINFORMATION">24</state>
-    <state name="BROADCAST_EMAILREJECT">25</state>
-    <state name="BROADCAST_MEDIASTARTED">26</state>
-    <state name="BROADCAST_MEDIASTOPPED">27</state>
-    <state name="BROADCAST_CSRSTATUS">28</state>
-    <state name="BROADCAST_CAMPAIGNACCEPT">29</state>
-    <state name="BROADCAST_CAMPAIGREJECTED">30</state>
-    <state name="BROADCAST_CAMPAIGNSTATUS">31</state>
-    <state name="BROADCAST_CAMPAIGNINFO">32</state>
-    <state name="BROADCAST_SERVICEGROUP_ADDED">33</state>
-    <state name="BROADCAST_AGENT_SERVICEGROUPS_CHANGED">34</state>
-    <state name="BROADCAST_DATA_COMPLETE">35</state>
-    <state name="BROADCAST_DISCONECT">36</state>
-    <state name="BROADCAST_XFERC_ALLINFORMATION">37</state>
-    <state name="BROADCAST_IPAGENTINFO">38</state>
-    <state name="BROADCAST_CALLINFORMATION_UPDATE">39</state>
-    <state name="BROADCAST_ASSOCIATEDATA_SET">40</state>
-    <state name="BROADCAST_CQCODES">41</state>
+  <RtaState name="Solidus" platformTypeId="C7DC37BC-F851-4FC5-8D1C-33FAA5A9334E">
+    <state name="AcdOnHold">AcdOnHold</state>
+    <state name="AcdTalking">AcdTalking</state>
+    <state name="AcdWrapUp">AcdWrapUp</state>
+    <state name="Alerting">Alerting</state>
+    <state name="Consultation">Consultation</state>
+    <state name="DirectInTalking">DirectInTalking</state>
+    <state name="DirectOnHold">DirectOnHold</state>
+    <state name="DirectOutTalking">DirectOutTalking</state>
+    <state name="EmailHandling">EmailHandling</state>
+    <state name="LoggedOff">LoggedOff</state>
+    <state name="NotReady ()">NotReady ()</state>
+    <state name="ReadyEmail">ReadyEmail</state>
+    <state name="ReadyPhone">ReadyPhone</state>
+    <state name="ReadyPhoneEmail">ReadyPhoneEmail</state>
   </RtaState>
   <RtaState name="Altitude" platformTypeId="A830B213-C281-468a-8964-AD7F7DDA9E8C">
 	<state name="Unknown">Unknown</state>
@@ -532,7 +506,4 @@
     <state name="Busy Other">7</state>
 	<state name="Reserved">8</state>
   </RtaState>
-	<RtaState name="TeleoptiCCC" platformTypeId="00000000-0000-0000-0000-000000000000">
-		<state name="CCC Logged out">CCC Logged out</state>
-	</RtaState>
 </Rta>
