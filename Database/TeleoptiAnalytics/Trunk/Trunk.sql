@@ -419,3 +419,12 @@ BEGIN
 
 END
 GO
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[mart].[dim_person]') AND name = N'IX_dim_person_DimPersonLocalized')
+CREATE NONCLUSTERED INDEX [IX_dim_person_DimPersonLocalized] ON [mart].[dim_person]
+(
+	[valid_from_date_local] ASC,
+	[valid_to_date_local] ASC
+)
+INCLUDE ([person_id])
+GO
+
