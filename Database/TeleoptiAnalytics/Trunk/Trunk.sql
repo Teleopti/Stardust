@@ -353,9 +353,9 @@ BEGIN
 		valid_to_date_id_maxDate int NULL,
 		valid_to_interval_id_maxDate int NULL,
 		valid_from_date_id_local int NULL,
-		valid_from_interval_id_local int NULL,
 		valid_to_date_id_local int NULL,
-		valid_to_interval_id_local int NULL
+		valid_from_date_local smalldatetime NULL,
+		valid_to_date_local smalldatetime NULL
 END
 GO
 
@@ -381,10 +381,8 @@ END
 
 UPDATE dp
 SET
-	valid_from_date_id_local	 = isnull(b1.local_date_id,-1),
-	valid_from_interval_id_local = isnull(b1.local_interval_id,0),
-	valid_to_date_id_local		 = isnull(b2.local_date_id,-2),
-	valid_to_interval_id_local	 = isnull(b2.local_interval_id,0)
+	valid_from_date_id_local	= isnull(b1.local_date_id,-1),
+	valid_to_date_id_local		= isnull(b2.local_date_id,-2)
 FROM mart.dim_person dp
 --From Date	
 LEFT OUTER JOIN mart.bridge_time_zone b1
@@ -400,13 +398,24 @@ LEFT OUTER JOIN mart.bridge_time_zone b2
 	AND dp.valid_to_interval_id_maxDate = b2.interval_id
 GO
 
-IF EXISTS (SELECT name FROM sys.columns WHERE object_id=OBJECT_ID('mart.dim_person') AND name = 'valid_to_date_id_maxDate')
+UPDATE dp
+SET
+	valid_from_date_local=d1.date_date,
+	valid_to_date_local=d2.date_date
+FROM mart.dim_person dp
+INNER JOIN mart.dim_date d1
+	ON dp.valid_from_date_id_local = d1.date_id
+INNER JOIN mart.dim_date d2
+	ON dp.valid_to_date_id_local = d2.date_id
+
+IF EXISTS (SELECT name FROM sys.columns WHERE object_id=OBJECT_ID('mart.dim_person') AND name = 'valid_from_date_id_local')
 BEGIN
 	ALTER TABLE mart.dim_person ALTER COLUMN valid_to_date_id_maxDate int NOT NULL
 	ALTER TABLE mart.dim_person ALTER COLUMN valid_to_interval_id_maxDate int NOT NULL
 	ALTER TABLE mart.dim_person ALTER COLUMN valid_from_date_id_local int NOT NULL
-	ALTER TABLE mart.dim_person ALTER COLUMN valid_from_interval_id_local int NOT NULL
+	ALTER TABLE mart.dim_person ALTER COLUMN valid_from_date_local smalldatetime NOT NULL
 	ALTER TABLE mart.dim_person ALTER COLUMN valid_to_date_id_local int NOT NULL
-	ALTER TABLE mart.dim_person ALTER COLUMN valid_to_interval_id_local int NOT NULL
+	ALTER TABLE mart.dim_person ALTER COLUMN valid_to_date_local smalldatetime NOT NULL
+
 END
 GO

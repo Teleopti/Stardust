@@ -29,7 +29,7 @@ GO
 -- 2012-04-25	DaJo	#19150 - Add Windows credentials to cube
 -- 2013-11-17	DaJo	#25718 - reduce the number of functions on dim_person
 -- =============================================
---EXEC [mart].[etl_dim_person_load] @current_business_unit_code = '928DD0BC-BF40-412E-B970-9B5E015AADEA'
+--EXEC [mart].[etl_dim_person_load] @current_business_unit_code = 'CE238444-059F-4E97-9039-A0A000A30CA4'
 CREATE PROCEDURE [mart].[etl_dim_person_load] 
 @current_business_unit_code uniqueidentifier
 WITH EXECUTE AS OWNER
@@ -103,7 +103,11 @@ INSERT INTO mart.dim_person
 		windows_domain,
 		windows_username,
 		valid_to_date_id_maxDate,
-		valid_to_interval_id_maxDate
+		valid_to_interval_id_maxDate,
+		valid_from_date_id_local,
+		valid_from_date_local,
+		valid_to_date_id_local,
+		valid_to_date_local
 	)
 SELECT
 		person_id					= -1,
@@ -150,7 +154,11 @@ SELECT
 		windows_domain				= 'Not Defined',
 		windows_username			= 'Not Defined',
 		valid_to_date_id_maxDate	= -1,
-		valid_to_interval_id_maxDate= -1
+		valid_to_interval_id_maxDate= -1,
+		valid_from_date_id_local	= -1,
+		valid_from_date_local	= @mindate,
+		valid_to_date_id_local		= -1,
+		valid_to_date_local	= @mindate
 WHERE
 	NOT EXISTS (SELECT d.person_id FROM mart.dim_person d WHERE d.person_id=-1)
 
@@ -332,7 +340,11 @@ INSERT INTO mart.dim_person
 	windows_domain,
 	windows_username,
 	valid_to_date_id_maxDate,
-	valid_to_interval_id_maxDate
+	valid_to_interval_id_maxDate,
+	valid_from_date_id_local,
+	valid_from_date_local,
+	valid_to_date_id_local,
+	valid_to_date_local
 	)
 SELECT
 	person_code				= s.person_code,
@@ -376,7 +388,11 @@ SELECT
 	windows_domain			= s.windows_domain,
 	windows_username		= s.windows_username,
 	valid_to_date_id_maxDate	= -1,
-	valid_to_interval_id_maxDate= -1
+	valid_to_interval_id_maxDate= -1,
+	valid_from_date_id_local	= -1,
+	valid_from_date_local	= @mindate,
+	valid_to_date_id_local		= -1,
+	valid_to_date_local	= @mindate
 FROM
 	Stage.stg_person s
 LEFT JOIN
@@ -425,25 +441,24 @@ WHERE
 --</ToDo>
 
 UPDATE mart.dim_person
-SET
-valid_to_interval_id_maxDate=
-	CASE WHEN valid_to_date_id=-2
-		THEN 0
-		ELSE valid_to_interval_id
-	END,
-valid_to_date_id_maxDate=
-	CASE WHEN valid_to_date_id=-2
-		THEN @maxdateid-1 --seems like bridge_time_zone is missing one day from dim_date
-		ELSE valid_to_date_id
-	END
+SET valid_to_date_id_maxDate=
+CASE WHEN valid_to_date_id=-2
+	THEN @maxdateid-1 --seems like bridge_time_zone is missing one day from dim_date
+	ELSE valid_to_date_id
+END
+
+UPDATE mart.dim_person
+SET valid_to_interval_id_maxDate=
+CASE WHEN valid_to_date_id=-2
+	THEN @maxInterval
+	ELSE valid_to_interval_id
+END
 
 --Use LEFT JOIN in case bridge_time_zone happen to be empty or missing a time zone
 UPDATE dp
 SET
-	valid_from_date_id_local	 = isnull(b1.local_date_id,-1),
-	valid_from_interval_id_local = isnull(b1.local_interval_id,0),
-	valid_to_date_id_local		 = isnull(b2.local_date_id,-2),
-	valid_to_interval_id_local	 = isnull(b2.local_interval_id,0)
+	valid_from_date_id_local	= isnull(b1.local_date_id,-1),
+	valid_to_date_id_local		= isnull(b2.local_date_id,-2)
 FROM mart.dim_person dp
 --From Date	
 LEFT OUTER JOIN mart.bridge_time_zone b1
@@ -458,5 +473,14 @@ LEFT OUTER JOIN mart.bridge_time_zone b2
 	AND dp.valid_to_date_id_maxDate = b2.date_id
 	AND dp.valid_to_interval_id_maxDate = b2.interval_id
 
-GO
+UPDATE dp
+SET
+	valid_from_date_local=d1.date_date,
+	valid_to_date_local=d2.date_date
+FROM mart.dim_person dp
+INNER JOIN mart.dim_date d1
+	ON dp.valid_from_date_id_local = d1.date_id
+INNER JOIN mart.dim_date d2
+	ON dp.valid_to_date_id_local = d2.date_id
 
+GO

@@ -32,41 +32,30 @@ AS
 BEGIN
 
 INSERT INTO @dim_person_localized
-SELECT 
+SELECT
 	person_id,
-	d1.date_date + i1.interval_start as valid_from_date_local,
-	d2.date_date + i2.interval_start as valid_to_date_local
-FROM mart.dim_person localized
---From date
-INNER JOIN mart.dim_date d1
-	ON localized.valid_from_date_id_local = d1.date_id
-INNER JOIN mart.dim_interval i1
-	ON localized.valid_from_interval_id_local = i1.interval_id
-
---To date
-INNER JOIN mart.dim_date d2
-	ON localized.valid_to_date_id_local = d2.date_id
-INNER JOIN mart.dim_interval i2
-	ON localized.valid_to_interval_id_local = i2.interval_id
-WHERE 
+	valid_from_date_local,
+	valid_to_date_local
+FROM mart.dim_person
+WHERE
 --------------
 --Trying to explain the personPeriod filter:
 --@date_from=A
 --@date_to	=B
---personPeriods: 1-4 (personPeriod.valid_from_date, personPeriod.valid_to_date)
+--personPeriods: 1-4 (personPeriod.valid_from_date_local, personPeriod.valid_to_date_local)
 --------------
 (
 --                     A---------------------------------------------------------B		
 --				1------|--------1
-		(@date_from	>= d1.date_date + i1.interval_start AND @date_from <= d2.date_date + i2.interval_start)
+		(@date_from	>= valid_from_date_local AND @date_from <= valid_to_date_local)
 
 	OR
 --                               2-----------------23-------------3            		
-		(d1.date_date + i1.interval_start > @date_from	AND d2.date_date + i2.interval_start < @date_to)
+		(valid_from_date_local > @date_from	AND valid_to_date_local < @date_to)
 
 --                                                                  4-------------|----------4		
 	OR
-		(@date_to >= d1.date_date + i1.interval_start AND @date_to <= d2.date_date + i2.interval_start)
+		(@date_to >= valid_from_date_local AND @date_to <= valid_to_date_local)
 )
 
 
