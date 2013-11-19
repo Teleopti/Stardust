@@ -73,30 +73,23 @@
 {
 }
 
-.person-schedule .dayoff
-{
-	text-align: center;
-	top: -8px;
-	height: 29px;
-	background-size: 11px 11px;
-	background-image: 
-		linear-gradient(135deg,
-		transparent,
-		transparent 7px,
-		rgba(0,0,0,0.2) 8px,
-		transparent 8px,
-		transparent
-		);
-}
-.no-cssgradients .person-schedule .person.selected-person.dayoff 
-{
-	background-color: beige;
-}
-.no-cssgradients .person-schedule .dayoff 
-{
-	background-color: beige;
+	.person-schedule .dayoff {
+		text-align: center;
+		width: 100%;
+		top: -8px;
+		height: 57px;
+		background-size: 11px 11px;
+		background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0,0,0,0.2) 8px, transparent 8px, transparent );
+	}
+
+.person-schedule .dayoff .layer-description {
+	margin-top: 18px;
+	text-shadow: none;
 }
 
+.no-cssgradients .person-schedule .dayoff {
+	background-color: beige;
+}
 
 
 
@@ -144,10 +137,6 @@
 .person-schedule .shift .layer .layer-description {
 	background-color: white;
 	color: #606060;
-	text-shadow: none;
-}
-.person-schedule .dayoff .layer-description {
-	margin: 9px;
 	text-shadow: none;
 }
 .person-schedule .shift .layer .drop {

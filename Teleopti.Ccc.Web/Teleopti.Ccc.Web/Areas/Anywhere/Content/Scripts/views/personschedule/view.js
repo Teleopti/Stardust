@@ -81,18 +81,6 @@ define([
 			}
 		});
 	};
-	var loadGroupPages = function (options) {
-		ajax.ajax({
-			url: 'GroupPage/AvailableGroupPages',
-			data: {
-				date: helpers.Date.ToServer(moment(options.date, "YYYYMMDD")),
-			},
-			success: function (data, textStatus, jqXHR) {
-				personSchedule.SetGroupPages(data);
-				options.success();
-			}
-		});
-	};
 
 	return {
 		initialize: function (options) {
@@ -152,14 +140,7 @@ define([
 				});
 			};
 
-			if (personSchedule.GroupPages().length != 0 && personSchedule.GroupPages()[0].Groups().length != 0) {
-				loadPersonsAndSchedules();
-			} else {
-				loadGroupPages({
-					date: options.date,
-					success: loadPersonsAndSchedules
-				});
-			}
+			loadPersonsAndSchedules();
 
 			subscriptions.subscribePersonSchedule(
 				    options.personid,

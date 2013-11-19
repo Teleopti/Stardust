@@ -251,14 +251,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				new ApplicationStartupTimeout());
 		}
 
-		public static void GotoAnywherePersonSchedule(Guid personId, DateTime date)
+		public static void GotoAnywherePersonSchedule(Guid personId, Guid groupId, DateTime date)
 		{
 			GoToWaitForUrlAssert(
-				string.Format("Anywhere#personschedule/{0}/{1}{2}{3}",
-				personId,
-				date.Year.ToString("0000"),
-				date.Month.ToString("00"),
-				date.Day.ToString("00")),
+				string.Format("Anywhere#personschedule/{0}/{1}/{2}{3}{4}",
+				              groupId,
+				              personId,
+				              date.Year.ToString("0000"),
+				              date.Month.ToString("00"),
+				              date.Day.ToString("00")
+					),
 				"Anywhere#personschedule",
 				new ApplicationStartupTimeout());
 		}

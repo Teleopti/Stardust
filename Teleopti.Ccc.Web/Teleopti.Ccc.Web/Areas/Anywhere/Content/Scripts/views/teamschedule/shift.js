@@ -20,6 +20,8 @@ define([
 
 		this.Layers = ko.observableArray();
 
+		this.PersonId = personid;
+
 		this.IsAnyLayerSelected = function () {
 			return $(self.Layers()).is(function (index) {
 				return this.Selected();

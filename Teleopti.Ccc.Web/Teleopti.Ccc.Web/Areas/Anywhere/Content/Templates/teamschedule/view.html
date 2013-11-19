@@ -169,7 +169,9 @@
 		'data-start-time': StartTime,
 		'data-length-minutes': LengthMinutes(),
 	},
-	click: $root.SelectLayer
+	click: function () {
+		return $root.SelectLayer($data, $parent.PersonId);
+	}
 	">
 		<!-- ko if: IsFullDayAbsence -->
 		<!-- ko if: $root.DisplayDescriptions -->
