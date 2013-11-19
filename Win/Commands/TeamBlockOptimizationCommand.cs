@@ -57,7 +57,6 @@ namespace Teleopti.Ccc.Win.Commands
         private readonly ISchedulerStateHolder _schedulerState;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
         private readonly ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
-        private readonly IStandardDeviationSumCalculator _standardDeviationSumCalculator;
         private readonly ISchedulingResultStateHolder _stateHolder;
         private readonly ITeamBlockClearer _teamBlockCleaner;
         private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
@@ -69,8 +68,9 @@ namespace Teleopti.Ccc.Win.Commands
         private readonly IWorkShiftSelector _workShiftSelector;
         private BackgroundWorker _backgroundWorker;
         private readonly ITeamBlockSchedulingOptions _teamBlockScheudlingOptions;
+	    private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 
-        public TeamBlockOptimizationCommand(IScheduleDayChangeCallback scheduleDayChangeCallback,
+	    public TeamBlockOptimizationCommand(IScheduleDayChangeCallback scheduleDayChangeCallback,
                                             IResourceOptimizationHelper resourceOptimizationHelper,
                                             ISchedulerStateHolder schedulerState, IScheduleDayEquator scheduleDayEquator,
                                             IRestrictionOverLimitDecider restrictionOverLimitDecider,
@@ -96,9 +96,8 @@ namespace Teleopti.Ccc.Win.Commands
                                             ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
                                             ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
                                             ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
-                                            IStandardDeviationSumCalculator standardDeviationSumCalculator,
                                             IRestrictionExtractor restrictionExtractor,
-                                            IMatrixListFactory matrixListFactory, ITeamBlockSchedulingOptions teamBlockScheudlingOptions)
+                                            IMatrixListFactory matrixListFactory, ITeamBlockSchedulingOptions teamBlockScheudlingOptions, IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock)
         {
             _scheduleDayChangeCallback = scheduleDayChangeCallback;
             _resourceOptimizationHelper = resourceOptimizationHelper;
@@ -128,12 +127,12 @@ namespace Teleopti.Ccc.Win.Commands
             _teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
             _teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
             _teamBlockIntradayDecisionMaker = teamBlockIntradayDecisionMaker;
-            _standardDeviationSumCalculator = standardDeviationSumCalculator;
             _restrictionExtractor = restrictionExtractor;
             _matrixListFactory = matrixListFactory;
             _teamBlockScheudlingOptions = teamBlockScheudlingOptions;
+	        _dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
 
-            _stateHolder = _schedulerState.SchedulingResultState;
+	        _stateHolder = _schedulerState.SchedulingResultState;
         }
 
         [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
@@ -267,17 +266,16 @@ namespace Teleopti.Ccc.Win.Commands
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
             var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,_teamBlockScheudlingOptions);
 
-            ITeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService =
-                new TeamBlockIntradayOptimizationService(
-                    teamBlockGenerator,
-                    teamBlockScheduler,
-                    _schedulingOptionsCreator,
-                    _safeRollbackAndResourceCalculation,
-                    _teamBlockIntradayDecisionMaker,
-                    teamBlockRestrictionOverLimitValidator,
-                    _teamBlockCleaner,
-                    _standardDeviationSumCalculator, _teamBlockMaxSeatChecker
-                    );
+	        ITeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService =
+		        new TeamBlockIntradayOptimizationService(
+			        teamBlockGenerator,
+			        teamBlockScheduler,
+			        _schedulingOptionsCreator,
+			        _safeRollbackAndResourceCalculation,
+			        _teamBlockIntradayDecisionMaker,
+			        teamBlockRestrictionOverLimitValidator,
+			        _teamBlockCleaner, _teamBlockMaxSeatChecker, _dailyTargetValueCalculatorForTeamBlock
+			        );
 
             teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
             teamBlockIntradayOptimizationService.Optimize(

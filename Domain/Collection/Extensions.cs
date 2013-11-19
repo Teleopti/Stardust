@@ -38,13 +38,6 @@ namespace Teleopti.Ccc.Domain.Collection
             return source;
         }
 
-			public static bool IsNullOrEmpty<T>(this IEnumerable<T> coll)
-			{
-				if (coll == null)
-					return true;
-				return !coll.Any();
-			}
-
         /// <summary>
         /// Batches the specified IEnumerable into a collection of IEnumerable base on the set batchSize.
         /// </summary>
