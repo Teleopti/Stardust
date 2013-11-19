@@ -16,16 +16,14 @@ namespace Teleopti.Ccc.Win.Commands
     }
     public class FairnessOptimizationCommand : IFairnessOptimizationCommand 
     {
-        private readonly ITeamBlockFairnessOptimizer _teamBlockFairnessOptimizer;
         private readonly IMatrixListFactory _matrixListFactory;
         private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
         private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
         private readonly ITeamBlockSizeClassifier _teamBlockSizeClassifier;
         private readonly IDetermineTeamBlockPriority _determineTeamBlockPriority;
 
-        public FairnessOptimizationCommand(ITeamBlockFairnessOptimizer teamBlockFairnessOptimizer, IMatrixListFactory matrixListFactory, IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockSizeClassifier teamBlockSizeClassifier, IDetermineTeamBlockPriority determineTeamBlockPriority)
+        public FairnessOptimizationCommand(IMatrixListFactory matrixListFactory, IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockSizeClassifier teamBlockSizeClassifier, IDetermineTeamBlockPriority determineTeamBlockPriority)
         {
-            _teamBlockFairnessOptimizer = teamBlockFairnessOptimizer;
             _matrixListFactory = matrixListFactory;
             _groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
             _teamBlockInfoFactory = teamBlockInfoFactory;

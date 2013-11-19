@@ -19,15 +19,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 
     public class DetermineTeamBlockPriority : IDetermineTeamBlockPriority
     {
-        private readonly IPrioritiseAgentByContract _prioritiseAgentByContract;
-        private readonly IPriortiseShiftCategory _priortiseShiftCategory;
+        //private readonly IPrioritiseAgentByContract _prioritiseAgentByContract;
+        //private readonly IPriortiseShiftCategory _priortiseShiftCategory;
         private readonly IDictionary<ITeamBlockInfo, PriorityDefinition> _tbPriorityDictionary;
 
-        public DetermineTeamBlockPriority(IPrioritiseAgentByContract prioritiseAgentByContract,
-                                          IPriortiseShiftCategory priortiseShiftCategory)
+        public DetermineTeamBlockPriority()
         {
-            _prioritiseAgentByContract = prioritiseAgentByContract;
-            _priortiseShiftCategory = priortiseShiftCategory;
+            //_prioritiseAgentByContract = prioritiseAgentByContract;
+            //_priortiseShiftCategory = priortiseShiftCategory;
             _tbPriorityDictionary = new Dictionary<ITeamBlockInfo, PriorityDefinition>();
         }
 
@@ -36,19 +35,22 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             Clear();
             foreach (ITeamBlockInfo teamBlockInfo in teamBlockInfos)
             {
-                extractAgentAndShiftCategoryPriority(teamBlockInfo);
+                IPrioritiseAgentByContract prioritiseAgentByContract = new PrioritiseAgentByContract();
+                IPriortiseShiftCategory priortiseShiftCategory = new PriortiseShiftCategory();
+                extractAgentAndShiftCategoryPriority(teamBlockInfo, prioritiseAgentByContract, priortiseShiftCategory);
+                
                 var priority = new PriorityDefinition
                     {
-                        AgentPriority = _prioritiseAgentByContract.AveragePriority,
-                        ShiftCategoryPriority = _priortiseShiftCategory.AveragePriority
+                        AgentPriority = prioritiseAgentByContract.AveragePriority,
+                        ShiftCategoryPriority = priortiseShiftCategory.AveragePriority
                     };
                 _tbPriorityDictionary.Add(teamBlockInfo, priority);
             }
         }
 
-        private void extractAgentAndShiftCategoryPriority(ITeamBlockInfo teamBlockInfo)
+        private void extractAgentAndShiftCategoryPriority(ITeamBlockInfo teamBlockInfo, IPrioritiseAgentByContract prioritiseAgentByContract, IPriortiseShiftCategory priortiseShiftCategory)
         {
-            _prioritiseAgentByContract.GetPriortiseAgentByStartDate(teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.ToList());
+            prioritiseAgentByContract.GetPriortiseAgentByStartDate(teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.ToList());
             var shiftCategories = new List<IShiftCategory>();
             foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndPeriod(teamBlockInfo.BlockInfo.BlockPeriod)
                 )
@@ -56,11 +58,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
                 foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
                 {
                     var scheduleDay = matrix.GetScheduleDayByKey(day);
-                    if(scheduleDay!=null && scheduleDay.DaySchedulePart()!=null && scheduleDay.DaySchedulePart().GetEditorShift()!= null)
+                    if (scheduleDay != null && scheduleDay.DaySchedulePart() != null && scheduleDay.DaySchedulePart().GetEditorShift() != null)
                         shiftCategories.Add(scheduleDay.DaySchedulePart().GetEditorShift().ShiftCategory);
                 }
             }
-            _priortiseShiftCategory.GetPriortiseShiftCategories(shiftCategories);
+            priortiseShiftCategory.GetPriortiseShiftCategories(shiftCategories);
         }
 
         public IEnumerable<int> HighToLowAgentPriorityList
@@ -91,8 +93,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
         public void Clear()
         {
             _tbPriorityDictionary.Clear();
-            _prioritiseAgentByContract.Clear();
-            _priortiseShiftCategory.Clear();
+            //_prioritiseAgentByContract.Clear();
+            //_priortiseShiftCategory.Clear();
         }
 
         public ITeamBlockInfo BlockOnAgentPriority(int priority)

@@ -1,6 +1,6 @@
 ﻿using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization.Fairness
+namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 {
     public interface IValidateScheduleDays
     {
