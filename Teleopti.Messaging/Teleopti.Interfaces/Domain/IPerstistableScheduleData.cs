@@ -2,7 +2,7 @@
 
 namespace Teleopti.Interfaces.Domain
 {
-	public interface INonversionedPersistableScheduleData : IScheduleData, IAggregateRoot, IChangeInfo, IMainReference
+	public interface IPersistableScheduleData : IScheduleData, IAggregateRoot, IChangeInfo, IMainReference
 	{
 		/// <summary>
 		/// Gets the function path.
@@ -22,17 +22,6 @@ namespace Teleopti.Interfaces.Domain
 		/// Created by: rogerkr
 		/// Created date: 2009-11-30
 		/// </remarks>
-		INonversionedPersistableScheduleData CreateTransient();
-	}
-
-	/// <summary>
-	/// Data in a schedule that also exists in db and is persistable
-	/// </summary>
-	/// <remarks>
-	/// Created by: rogerkr
-	/// Created date: 2008-05-29
-	/// </remarks>
-	public interface IPersistableScheduleData : INonversionedPersistableScheduleData
-	{
+		IPersistableScheduleData CreateTransient();
 	}
 }

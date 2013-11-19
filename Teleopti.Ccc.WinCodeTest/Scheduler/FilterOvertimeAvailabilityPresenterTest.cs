@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             listOfPerson.Add(new Guid() ,person);
             var dateOnlyPeriod = new DateOnlyPeriod(DateOnly.Today,DateOnly.Today);
 
-			var persistableCollection = new List<INonversionedPersistableScheduleData>();
+			var persistableCollection = new List<IPersistableScheduleData>();
             var overtimeAvailability = new OvertimeAvailability(person, DateOnly.Today, TimeSpan.FromHours(17), TimeSpan.FromHours(18));
             persistableCollection.Add(overtimeAvailability);
             using (_mocks.Record())

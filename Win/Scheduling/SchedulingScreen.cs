@@ -6322,19 +6322,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ConflictHandlingResult refreshEntitiesUsingMessageBroker()
 		{
 			var conflictsBuffer = new List<PersistConflict>();
-			var refreshedEntitiesBuffer = new List<INonversionedPersistableScheduleData>();
+			var refreshedEntitiesBuffer = new List<IPersistableScheduleData>();
 			refreshEntitiesUsingMessageBroker(refreshedEntitiesBuffer, conflictsBuffer);
 			var result = handleConflicts(refreshedEntitiesBuffer, conflictsBuffer);
 			return result;
 		}
 
-		private ConflictHandlingResult handleConflicts(IEnumerable<INonversionedPersistableScheduleData> refreshedEntities, IEnumerable<PersistConflict> conflicts)
+		private ConflictHandlingResult handleConflicts(IEnumerable<IPersistableScheduleData> refreshedEntities, IEnumerable<PersistConflict> conflicts)
 		{
-			List<INonversionedPersistableScheduleData> modifiedDataFromConflictResolution;
+			List<IPersistableScheduleData> modifiedDataFromConflictResolution;
 			if (refreshedEntities == null)
-				modifiedDataFromConflictResolution = new List<INonversionedPersistableScheduleData>();
+				modifiedDataFromConflictResolution = new List<IPersistableScheduleData>();
 			else
-				modifiedDataFromConflictResolution = new List<INonversionedPersistableScheduleData>(refreshedEntities);
+				modifiedDataFromConflictResolution = new List<IPersistableScheduleData>(refreshedEntities);
 
 			var result = new ConflictHandlingResult { ConflictsFound = false, DialogResult = PersistConflictDialogResult.None };
 			result.ConflictsFound = conflicts.Any();
@@ -6350,7 +6350,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return result;
 		}
 
-		private PersistConflictDialogResult showPersistConflictView(List<INonversionedPersistableScheduleData> modifiedData, IEnumerable<PersistConflict> conflicts)
+		private PersistConflictDialogResult showPersistConflictView(List<IPersistableScheduleData> modifiedData, IEnumerable<PersistConflict> conflicts)
 		{
 			PersistConflictDialogResult dialogResult;
 			using (var conflictForm = new PersistConflictView(_schedulerState.Schedules, conflicts, modifiedData, _schedulerMessageBrokerHandler))
@@ -6361,7 +6361,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return dialogResult;
 		}
 
-		private void refreshEntitiesUsingMessageBroker(ICollection<INonversionedPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer)
+		private void refreshEntitiesUsingMessageBroker(ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer)
 		{
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{

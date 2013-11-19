@@ -85,12 +85,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment; }
 		}
 
-		public virtual INonversionedPersistableScheduleData CreateTransient()
+		public virtual IPersistableScheduleData CreateTransient()
 		{
 			return NoneEntityClone();
 		}
 
-		public virtual INonversionedPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
+		public virtual IPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
 		{
 			var retObj = (PersonAssignment)NoneEntityClone();
 			retObj._scenario = parameters.Scenario;

@@ -96,13 +96,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
             get { return _tagDate; }
         }
 
-        public virtual INonversionedPersistableScheduleData CreateTransient()
+        public virtual IPersistableScheduleData CreateTransient()
         {
             return NoneEntityClone();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public virtual INonversionedPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
+        public virtual IPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
         {
             var retObj = (AgentDayScheduleTag)NoneEntityClone();
             retObj._scenario = parameters.Scenario;

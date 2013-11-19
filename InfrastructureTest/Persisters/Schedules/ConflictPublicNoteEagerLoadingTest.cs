@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 
-		protected override void Given(ICollection<INonversionedPersistableScheduleData> scheduleDataInDatabaseAtStart)
+		protected override void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart)
 		{
 			scheduleDataInDatabaseAtStart.Add(new PublicNote(Person, date, Scenario, "en notering"));
 		}

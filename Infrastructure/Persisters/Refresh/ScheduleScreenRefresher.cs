@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
             _personRequestRefresher = personRequestRefresher;
         }
 
-        public void Refresh(IScheduleDictionary scheduleDictionary, IEnumerable<IEventMessage> messageQueue, ICollection<INonversionedPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer)
+        public void Refresh(IScheduleDictionary scheduleDictionary, IEnumerable<IEventMessage> messageQueue, ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer)
         {
             _messageQueueUpdater.ReassociateDataForAllPeople();
 

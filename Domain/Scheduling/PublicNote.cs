@@ -131,12 +131,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
             get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment; }
         }
 
-        public virtual INonversionedPersistableScheduleData CreateTransient()
+        public virtual IPersistableScheduleData CreateTransient()
         {
             return NoneEntityClone();
         }
 
-        public virtual INonversionedPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
+        public virtual IPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
         {
             InParameter.NotNull("parameters", parameters);
             var retObj = (PublicNote)NoneEntityClone();

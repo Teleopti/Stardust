@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IPersonRequestRepository _personRequestRepository;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
     	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
-		private readonly IDifferenceCollectionService<INonversionedPersistableScheduleData> _differenceService;
+		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 
 	    public ApproveRequestCommandHandler(IScheduleRepository scheduleRepository, 
 																								IScheduleDifferenceSaver scheduleDictionarySaver, 
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 																								IPersonRequestRepository personRequestRepository, 
 																								ICurrentUnitOfWorkFactory unitOfWorkFactory, 
 																								IMessageBrokerEnablerFactory messageBrokerEnablerFactory,
-																								IDifferenceCollectionService<INonversionedPersistableScheduleData> differenceService)
+																								IDifferenceCollectionService<IPersistableScheduleData> differenceService)
         {
             _scheduleRepository = scheduleRepository;
             _scheduleDictionarySaver = scheduleDictionarySaver;

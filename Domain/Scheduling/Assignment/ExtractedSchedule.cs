@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public bool IsFullyPublished { get; set; }
 
-		public IEnumerable<INonversionedPersistableScheduleData> PersistableScheduleDataCollection()
+		public IEnumerable<IPersistableScheduleData> PersistableScheduleDataCollection()
         {
             return PersistableScheduleDataInternalCollection();
         }

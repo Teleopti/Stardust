@@ -226,7 +226,7 @@ namespace Teleopti.Interfaces.Domain
 				/// Created by: rogerkr
 				/// Created date: 2009-03-10
 				/// </remarks>
-				IEnumerable<INonversionedPersistableScheduleData> PersistableScheduleDataCollection();
+				IEnumerable<IPersistableScheduleData> PersistableScheduleDataCollection();
 
 
 				/// <summary>

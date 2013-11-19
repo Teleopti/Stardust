@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			_lazyLoadingManager = lazyLoadingManager;
 		}
 
-		public IEnumerable<PersistConflict> GetConflicts(IDifferenceCollection<INonversionedPersistableScheduleData> differences, IScheduleParameters scheduleParameters)
+		public IEnumerable<PersistConflict> GetConflicts(IDifferenceCollection<IPersistableScheduleData> differences, IScheduleParameters scheduleParameters)
 		{
 			_reassociateDataForSchedules.ReassociateDataFor(scheduleParameters.Person);
 			var dateOnlyPeriod = scheduleParameters.Period.ToDateOnlyPeriod(scheduleParameters.Person.PermissionInformation.DefaultTimeZone());
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			return persistConflicts;
 		}
 
-		private PersistConflict makePersistConflict(DifferenceCollectionItem<INonversionedPersistableScheduleData> clientVersion, INonversionedPersistableScheduleData databaseVersion)
+		private PersistConflict makePersistConflict(DifferenceCollectionItem<IPersistableScheduleData> clientVersion, IPersistableScheduleData databaseVersion)
 		{
 			if (databaseVersion != null)
 			{

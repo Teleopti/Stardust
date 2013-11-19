@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
             get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction; }
         }
 
-        public virtual INonversionedPersistableScheduleData CreateTransient()
+        public virtual IPersistableScheduleData CreateTransient()
         {
             var ret = (OvertimeAvailability )Clone();
             ret.SetId(null);

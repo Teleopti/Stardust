@@ -5,9 +5,9 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 {
 	public interface IUpdateScheduleDataFromMessages
     {
-		INonversionedPersistableScheduleData DeleteScheduleData(IEventMessage eventMessage);
-		INonversionedPersistableScheduleData UpdateInsertScheduleData(IEventMessage eventMessage);
-		void FillReloadedScheduleData(INonversionedPersistableScheduleData databaseVersionOfEntity);
+		IPersistableScheduleData DeleteScheduleData(IEventMessage eventMessage);
+		IPersistableScheduleData UpdateInsertScheduleData(IEventMessage eventMessage);
+		void FillReloadedScheduleData(IPersistableScheduleData databaseVersionOfEntity);
 		void NotifyMessageQueueSizeChange();
 	}
 }

@@ -91,9 +91,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var dic = MockRepository.GenerateMock<IScheduleDictionary>();
 			var conflicts = new[]
 				{
-					new PersistConflict(new DifferenceCollectionItem<INonversionedPersistableScheduleData>(), MockRepository.GenerateMock<IPersonAssignment>()),
-					new PersistConflict(new DifferenceCollectionItem<INonversionedPersistableScheduleData>(), MockRepository.GenerateMock<IPersonAssignment>()),
-					new PersistConflict(new DifferenceCollectionItem<INonversionedPersistableScheduleData>(), MockRepository.GenerateMock<IPersonAssignment>())
+					new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(), MockRepository.GenerateMock<IPersonAssignment>()),
+					new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(), MockRepository.GenerateMock<IPersonAssignment>()),
+					new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(), MockRepository.GenerateMock<IPersonAssignment>())
 				};
 			scheduleDictionaryPersister.Expect(x => x.Persist(dic)).Return(conflicts);
 			var res = target.TryPersist(dic, null, null, null, out returningConflicts);

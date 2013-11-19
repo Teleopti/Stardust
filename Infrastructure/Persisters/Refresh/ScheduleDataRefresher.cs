@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 
 	    public void Refresh(IScheduleDictionary scheduleDictionary, 
 	                        IEnumerable<IEventMessage> scheduleDataMessages,
-							ICollection<INonversionedPersistableScheduleData> refreshedEntitiesBuffer,
+							ICollection<IPersistableScheduleData> refreshedEntitiesBuffer,
 	                        ICollection<PersistConflict> conflictsBuffer)
 	    {
 	        var myChanges = scheduleDictionary.DifferenceSinceSnapshot();

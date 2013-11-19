@@ -79,9 +79,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return retList;
         }
 
-		protected IEnumerable<INonversionedPersistableScheduleData> PersistableScheduleDataInternalCollection()
+		protected IEnumerable<IPersistableScheduleData> PersistableScheduleDataInternalCollection()
         {
-			return ScheduleDataInternalCollection().OfType<INonversionedPersistableScheduleData>();
+			return ScheduleDataInternalCollection().OfType<IPersistableScheduleData>();
         }
 
         public IScenario Scenario

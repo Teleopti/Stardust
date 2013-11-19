@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private IIntradayView _view;
         private ISchedulingResultLoader _schedulingResultLoader;
         private readonly IRepositoryFactory _repositoryFactory;
-		private readonly IDifferenceCollectionService<INonversionedPersistableScheduleData> _differenceService;
+		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 	    private IMessageBroker _messageBroker;
         private string _chartIntradayDescription = string.Empty;
         private DateOnly _intradayDate;
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 						IScheduleDifferenceSaver scheduleDictionarySaver,
             IUnitOfWorkFactory unitOfWorkFactory,
             IRepositoryFactory repositoryFactory,
-					IDifferenceCollectionService<INonversionedPersistableScheduleData> differenceService,
+					IDifferenceCollectionService<IPersistableScheduleData> differenceService,
 					OnEventStatisticMessageCommand onEventStatisticMessageCommand,
             OnEventForecastDataMessageCommand onEventForecastDataMessageCommand,
             OnEventScheduleMessageCommand onEventScheduleMessageCommand,

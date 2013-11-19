@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
             _dictionary = 
                 new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
-									   new DifferenceEntityCollectionService<INonversionedPersistableScheduleData>());
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
             IList<IPersonAssignment> assignments = new List<IPersonAssignment> {_p1D1.PersonAssignment()};
         	((ScheduleRange)_dictionary[_person1]).AddRange(assignments);
             assignments = new List<IPersonAssignment> {_p2D1.PersonAssignment()};
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
-									   new DifferenceEntityCollectionService<INonversionedPersistableScheduleData>());
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
 			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignment() };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
 			IList<IPersonAbsence> p2absences = new List<IPersonAbsence> { _p2D1.PersonAbsenceCollection()[0] };
@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
-									   new DifferenceEntityCollectionService<INonversionedPersistableScheduleData>());
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
 			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignment() };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
 			IList<IPersonAbsence> p2absences = new List<IPersonAbsence> { _p2D1.PersonAbsenceCollection()[0] };
@@ -343,7 +343,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
-									   new DifferenceEntityCollectionService<INonversionedPersistableScheduleData>());
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
 			IList<IPersonAbsence> p1absences = new List<IPersonAbsence> { _p1D1.PersonAbsenceCollection()[0] };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1absences);
 
@@ -394,7 +394,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
-									   new DifferenceEntityCollectionService<INonversionedPersistableScheduleData>());
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
 			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignment() };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
 			IList<IPersonAbsence> p1absences = new List<IPersonAbsence> { _p1D1.PersonAbsenceCollection()[0] };
@@ -442,7 +442,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
-									   new DifferenceEntityCollectionService<INonversionedPersistableScheduleData>());
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
 			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignment() };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
 			IList<IPersonAssignment> p2assignments = new List<IPersonAssignment> { _p2D1.PersonAssignment() };
@@ -487,7 +487,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
-									   new DifferenceEntityCollectionService<INonversionedPersistableScheduleData>());
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
 			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignment() };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
 			IList<IPersonAssignment> p2assignments = new List<IPersonAssignment> { _p2D1.PersonAssignment() };
