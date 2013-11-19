@@ -247,38 +247,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		#region Methods (7)
 
-		public void Swap(IScheduleDay source, bool isDelete)
-		{
-			SchedulePartView view = source.SignificantPartForDisplay();
-
-			switch (view)
-			{
-
-				case SchedulePartView.DayOff:
-					if (isDelete) DeleteDayOff(); else mergeDayOff(source, false); break;
-
-				case SchedulePartView.ContractDayOff:
-					// do nothing
-					break;
-
-				case SchedulePartView.MainShift:
-					if (isDelete) DeleteMainShift(source); else mergeMainShift(source, false, false);
-					break;
-
-				case SchedulePartView.Absence:
-					// do nothing
-					break;
-
-				case SchedulePartView.FullDayAbsence:
-					// do nothing
-					break;
-
-				default: 
-					Merge(source, isDelete);
-					break;
-			}
-		}
-
 		public void Merge(IScheduleDay source, bool isDelete)
 		{
 			Merge(source, isDelete, false);
