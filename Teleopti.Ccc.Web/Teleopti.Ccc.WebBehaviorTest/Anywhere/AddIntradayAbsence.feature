@@ -70,7 +70,7 @@ Scenario: Prevent selection of confidential if no permission
 	| Modify Absence             | true                     |
 	| View confidential          | false                    |
 	When I view person schedules add intraday day absence form for 'Pierre Baldi' and 'Team green' on '2013-11-15'
-	Then I should not see absence type 'Mental disorder'
+	Then I should not be able to select the absence 'Mental disorder'
 
 Scenario: Default times today
 	Given I have the role 'Anywhere Team Green'
@@ -84,7 +84,6 @@ Scenario: Default times today
 	When I view person schedules add intraday day absence form for 'Pierre Baldi' and 'Team green' on '2013-11-15'
 	Then I should see the add intraday absence form with
 	| Field        | Value   |
-	| Absence type | Illness |
 	| Start time   | 13:20   |
 	| End time     | 17:00   |
 
