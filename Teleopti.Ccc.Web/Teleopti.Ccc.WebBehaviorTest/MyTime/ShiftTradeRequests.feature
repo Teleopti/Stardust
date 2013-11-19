@@ -701,26 +701,6 @@ Scenario: Show shifts in ongoing trades from users in other timezone translated 
 	| Start time	| 03:00 |
 	| End time		| 13:00 |
 
-Scenario: Do not show shifts from other timezones if they start in a different day than mine
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And I am located in Stockholm
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 22:00 |
-	| EndTime               | 2030-01-02 04:00 |
-	| Shift category		| Day	           |
-	And 'OtherAgent' is located in 'Hawaii'	
-	And 'OtherAgent' has a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 22:00 |
-	| EndTime               | 2030-01-02 04:00 |
-	| Shift category		| Day	           |
-	And the current time is '2029-12-27'
-	When I view Add Shift Trade Request for date '2030-01-01'
-	Then I should not see a possible schedule to trade with
-
 Scenario: Navigate to shifttrade with url
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
