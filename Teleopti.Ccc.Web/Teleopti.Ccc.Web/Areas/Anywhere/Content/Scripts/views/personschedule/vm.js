@@ -46,7 +46,7 @@ define([
 
 		this.DayOffs = ko.observableArray();
 		this.Shifts = ko.observableArray();
-		this.GroupPages = ko.observableArray();
+		
 		this.Absences = ko.observableArray();
 		this.PersonsInGroup = ko.observableArray();
 
