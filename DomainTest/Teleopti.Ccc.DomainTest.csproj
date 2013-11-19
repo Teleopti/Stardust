@@ -394,7 +394,9 @@
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockEffectiveRestrcitionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockResctrictionAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamRestrictionAggregatorTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecificationTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\SameShiftCategoryTeamSpecificationTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\SameStartTimeTeamSpecificationTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\ScheduleDaysAvailableForDayOffSpecificationTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftMapperTest.cs" />
@@ -410,10 +412,10 @@
     <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingOptionsTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockRoleModelSelectorTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamBlockSameEndTimeSpecificationTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamBlockSameShiftCategorySpecificationTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamBlockSameShiftSpecificationTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamBlockSameStartTimeSpecificationTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\SameEndTimeTeamSpecificationTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\SameShiftCategoryBlockSpecificationTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\SameShiftBlockSpecificationTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\SameStartTimeBlockSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreatorTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\AdvanceDayOffSchedulingServiceTest.cs" />
@@ -798,7 +800,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\NotOverWritableActivitiesShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\PersonalShiftsShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetToShiftsGeneratorTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\SameOpenHoursInTeamBlockSpecificationTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\SameOpenHoursInTeamBlockSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ShiftCategoryRestrictionShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetSkillActivityCheckerTest.cs" />

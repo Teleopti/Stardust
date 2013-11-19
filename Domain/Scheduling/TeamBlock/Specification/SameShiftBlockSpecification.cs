@@ -1,24 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
+namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 {
-    public interface ITeamBlockSameShiftSpecification
+    public interface ISameShiftBlockSpecification
     {
         bool IsSatisfiedBy(ITeamBlockInfo teamBlockInfo);
     }
 
-    public class TeamBlockSameShiftSpecification : Specification<ITeamBlockInfo>,
-                                                       ITeamBlockSameShiftSpecification
+    public class SameShiftBlockSpecification : Specification<ITeamBlockInfo>,
+                                                       ISameShiftBlockSpecification
     {
         private readonly IValidSampleDayPickerFromTeamBlock _validSampleDayPickerFromTeamBlock;
         private readonly IScheduleDayEquator _scheduleDayEquator;
 
-        public TeamBlockSameShiftSpecification(IValidSampleDayPickerFromTeamBlock validSampleDayPickerFromTeamBlock, IScheduleDayEquator scheduleDayEquator)
+		public SameShiftBlockSpecification(IValidSampleDayPickerFromTeamBlock validSampleDayPickerFromTeamBlock, IScheduleDayEquator scheduleDayEquator)
         {
             _validSampleDayPickerFromTeamBlock = validSampleDayPickerFromTeamBlock;
             _scheduleDayEquator = scheduleDayEquator;

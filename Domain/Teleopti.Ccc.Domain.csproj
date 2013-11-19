@@ -564,9 +564,10 @@
     <Compile Include="Scheduling\TeamBlock\Restriction\SameStartTimeRestriction.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockEffectiveRestrcition.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamRestrictionAggregator.cs" />
-    <Compile Include="Scheduling\TeamBlock\SameOpenHoursInTeamBlockSpecification.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\SameStartTimeTeamSpecification.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\SameOpenHoursInTeamBlockSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\SameShiftCategoryBlockScheduler.cs" />
-    <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\ScheduleDaysAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftLayer.cs" />
     <Compile Include="Scheduling\Assignment\EditableShift.cs" />
     <Compile Include="Scheduling\Assignment\EditorShiftMapper.cs" />
@@ -581,10 +582,10 @@
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockRoleModelSelector.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamBlockSameEndTimeSpecification.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamBlockSameShiftCategorySpecification.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamBlockSameShiftSpecification.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamBlockSameStartTimeSpecification.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\SameEndTimeTeamSpecification.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\SameShiftCategoryBlockSpecification.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\SameShiftBlockSpecification.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\SameStartTimeBlockSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingCompletionChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingOptions.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSingleDayScheduler.cs" />
@@ -966,6 +967,7 @@
     <Compile Include="Scheduling\TeamBlock\TeamDayOffScheduler.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfo.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoFactory.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\SameShiftCategoryTeamSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamScheduling.cs" />
     <Compile Include="Scheduling\TeamBlock\TwoDaysIntervalGenerator.cs" />
     <Compile Include="Scheduling\TeamBlock\ValidatedTeamBlockInfoExtractor.cs" />

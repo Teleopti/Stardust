@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
@@ -10,27 +11,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
     [TestFixture]
     public class TeamBlockSteadyStateValidatorTest
     {
-        [SetUp]
-        public void Setup()
-        {
-            _mock = new MockRepository();
-            _teamBlockSameStartTimeSpecification = _mock.StrictMock<ITeamBlockSameStartTimeSpecification>();
-            _teamBlockSameEndTimeSpecification = _mock.StrictMock<ITeamBlockSameEndTimeSpecification>();
-            _teamBlockSameShiftCategorySpecification = _mock.StrictMock<ITeamBlockSameShiftCategorySpecification>();
-            _teamBlockSameShiftSpecification = _mock.StrictMock<ITeamBlockSameShiftSpecification>();
-            _target = new TeamBlockSteadyStateValidator(_teamBlockSameStartTimeSpecification,
-                                                        _teamBlockSameEndTimeSpecification,
-                                                        _teamBlockSameShiftCategorySpecification,
-                                                        _teamBlockSameShiftSpecification);
-            _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
-            _today = new DateOnly();
-            _matrixList = new List<IScheduleMatrixPro>();
-            _matrixList.Add(_scheduleMatrixPro);
-            _teamInfo = _mock.StrictMock<ITeamInfo>();
-            _blockInfo = new BlockInfo(new DateOnlyPeriod(_today, _today.AddDays(2)));
-            _teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);
-        }
-
         private MockRepository _mock;
         private ITeamBlockSteadyStateValidator _target;
         private ITeamInfo _teamInfo;
@@ -39,136 +19,337 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private IScheduleMatrixPro _scheduleMatrixPro;
         private DateOnly _today;
         private ITeamBlockInfo _teamBlockInfo;
-        private ITeamBlockSameStartTimeSpecification _teamBlockSameStartTimeSpecification;
-        private ITeamBlockSameEndTimeSpecification _teamBlockSameEndTimeSpecification;
-        private ITeamBlockSameShiftCategorySpecification _teamBlockSameShiftCategorySpecification;
-        private ITeamBlockSameShiftSpecification _teamBlockSameShiftSpecification;
+        private ISameStartTimeBlockSpecification _sameStartTimeBlockSpecification;
+		private ISameEndTimeTeamSpecification _sameEndTimeTeamSpecification;
+        private ISameShiftCategoryBlockSpecification _sameShiftCategoryBlockSpecification;
+        private ISameShiftBlockSpecification _sameShiftBlockSpecification;
+	    private ISameStartTimeTeamSpecification _sameStartTimeTeamSpecification;
+	    private ISameShiftCategoryTeamSpecification _sameShiftCategoryTeamSpecification;
+	    private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
+	    private SchedulingOptions _schedulingOptions;
+
+	    [SetUp]
+		public void Setup()
+		{
+			_mock = new MockRepository();
+			_sameStartTimeBlockSpecification = _mock.StrictMock<ISameStartTimeBlockSpecification>();
+			_sameStartTimeTeamSpecification = _mock.StrictMock<ISameStartTimeTeamSpecification>();
+			_sameEndTimeTeamSpecification = _mock.StrictMock<ISameEndTimeTeamSpecification>();
+			_sameShiftCategoryBlockSpecification = _mock.StrictMock<ISameShiftCategoryBlockSpecification>();
+			_sameShiftCategoryTeamSpecification = _mock.StrictMock<ISameShiftCategoryTeamSpecification>();
+			_sameShiftBlockSpecification = _mock.StrictMock<ISameShiftBlockSpecification>();
+			_teamBlockSchedulingOptions = _mock.StrictMock<ITeamBlockSchedulingOptions>();
+		    _target = new TeamBlockSteadyStateValidator(_teamBlockSchedulingOptions, _sameStartTimeBlockSpecification,
+		                                                _sameStartTimeTeamSpecification, _sameEndTimeTeamSpecification,
+		                                                _sameShiftCategoryBlockSpecification,
+		                                                _sameShiftCategoryTeamSpecification, _sameShiftBlockSpecification);
+			_scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
+		    _schedulingOptions = new SchedulingOptions();
+			_today = new DateOnly();
+			_matrixList = new List<IScheduleMatrixPro>();
+			_matrixList.Add(_scheduleMatrixPro);
+			_teamInfo = _mock.StrictMock<ITeamInfo>();
+			_blockInfo = new BlockInfo(new DateOnlyPeriod(_today, _today.AddDays(2)));
+			_teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);
+		}
 
         [Test]
         public void FalseIfSameEndTime()
         {
-            ISchedulingOptions schedulingOptions = new SchedulingOptions {UseTeamBlockSameEndTime = true};
             using (_mock.Record())
             {
-                Expect.Call(_teamBlockSameEndTimeSpecification.IsSatisfiedBy(_teamBlockInfo))
-                      .IgnoreArguments()
-                      .Return(false);
+                Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_sameEndTimeTeamSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(false);
             }
             using (_mock.Playback())
             {
-                Assert.IsFalse(_target.IsBlockInSteadyState(_teamBlockInfo, schedulingOptions));
+                Assert.IsFalse(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
         [Test]
-        public void FalseIfSameShiftCategoryTime()
+        public void FalseIfSameShiftCategoryBlock()
         {
-            ISchedulingOptions schedulingOptions = new SchedulingOptions {UseTeamBlockSameShiftCategory = true};
             using (_mock.Record())
             {
-                Expect.Call(_teamBlockSameShiftSpecification.IsSatisfiedBy(_teamBlockInfo))
-                      .IgnoreArguments()
-                      .Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_sameShiftCategoryBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(false);
             }
             using (_mock.Playback())
             {
-                Assert.IsFalse(_target.IsBlockInSteadyState(_teamBlockInfo, schedulingOptions));
+                Assert.IsFalse(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
         [Test]
-        public void FalseIfSameShiftTime()
+        public void FalseIfSameShiftCategoryTeam()
         {
-            ISchedulingOptions schedulingOptions = new SchedulingOptions {UseTeamBlockSameShift = true};
             using (_mock.Record())
             {
-                Expect.Call(_teamBlockSameShiftCategorySpecification.IsSatisfiedBy(_teamBlockInfo))
-                      .IgnoreArguments()
-                      .Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_sameShiftCategoryTeamSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(false);
             }
             using (_mock.Playback())
             {
-                Assert.IsFalse(_target.IsBlockInSteadyState(_teamBlockInfo, schedulingOptions));
+                Assert.IsFalse(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
         [Test]
-        public void FalseIfSameStartTime()
+        public void FalseIfSameShiftBlock()
         {
-            ISchedulingOptions schedulingOptions = new SchedulingOptions {UseTeamBlockSameStartTime = true};
             using (_mock.Record())
-            {
-                Expect.Call(_teamBlockSameStartTimeSpecification.IsSatisfiedBy(_teamBlockInfo))
-                      .IgnoreArguments()
-                      .Return(false);
+			{
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_sameShiftBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(false);
             }
             using (_mock.Playback())
             {
-                Assert.IsFalse(_target.IsBlockInSteadyState(_teamBlockInfo, schedulingOptions));
+                Assert.IsFalse(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
         [Test]
-        public void TrueIfSameEndTime()
+        public void FalseIfSameStartTimeBlock()
         {
-            ISchedulingOptions schedulingOptions = new SchedulingOptions {UseTeamBlockSameEndTime = true};
             using (_mock.Record())
             {
-                Expect.Call(_teamBlockSameEndTimeSpecification.IsSatisfiedBy(_teamBlockInfo))
-                      .IgnoreArguments()
-                      .Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_sameStartTimeBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(false);
             }
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.IsBlockInSteadyState(_teamBlockInfo, schedulingOptions));
+                Assert.IsFalse(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
         [Test]
-        public void TrueIfSameShiftCategoryTime()
+        public void FalseIfSameStartTimeTeam()
         {
-            ISchedulingOptions schedulingOptions = new SchedulingOptions {UseTeamBlockSameShiftCategory = true};
             using (_mock.Record())
             {
-                Expect.Call(_teamBlockSameShiftSpecification.IsSatisfiedBy(_teamBlockInfo))
-                      .IgnoreArguments()
-                      .Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_sameStartTimeTeamSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(false);
             }
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.IsBlockInSteadyState(_teamBlockInfo, schedulingOptions));
+                Assert.IsFalse(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
         [Test]
-        public void TrueIfSameShiftTime()
+        public void TrueIfSameEndTeam()
         {
-            ISchedulingOptions schedulingOptions = new SchedulingOptions {UseTeamBlockSameShift = true};
             using (_mock.Record())
-            {
-                Expect.Call(_teamBlockSameShiftCategorySpecification.IsSatisfiedBy(_teamBlockInfo))
-                      .IgnoreArguments()
-                      .Return(true);
+			{
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_sameEndTimeTeamSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(true);
             }
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.IsBlockInSteadyState(_teamBlockInfo, schedulingOptions));
+                Assert.IsTrue(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
         [Test]
-        public void TrueIfSameStartTime()
+        public void TrueIfSameShiftCategoryTeam()
         {
-            ISchedulingOptions schedulingOptions = new SchedulingOptions {UseTeamBlockSameStartTime = true};
             using (_mock.Record())
             {
-                Expect.Call(_teamBlockSameStartTimeSpecification.IsSatisfiedBy(_teamBlockInfo))
-                      .IgnoreArguments()
-                      .Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_sameShiftCategoryTeamSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(true);
             }
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.IsBlockInSteadyState(_teamBlockInfo, schedulingOptions));
+                Assert.IsTrue(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
+            }
+        }
+
+        [Test]
+        public void TrueIfSameShiftCategoryBlock()
+        {
+            using (_mock.Record())
+			{
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_sameShiftCategoryBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(true);
+            }
+            using (_mock.Playback())
+            {
+                Assert.IsTrue(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
+            }
+        }
+
+        [Test]
+        public void TrueIfSameShiftBlock()
+        {
+            using (_mock.Record())
+            {
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_sameShiftBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(true);
+            }
+            using (_mock.Playback())
+            {
+                Assert.IsTrue(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
+            }
+        }
+
+        [Test]
+        public void TrueIfSameStartTimeBlock()
+        {
+			using (_mock.Record())
+			{
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_sameStartTimeBlockSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(true);
+            }
+            using (_mock.Playback())
+            {
+                Assert.IsTrue(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
+            }
+        }
+
+        [Test]
+        public void TrueIfSameStartTimeTeam()
+        {
+            using (_mock.Record())
+			{
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_sameStartTimeTeamSpecification.IsSatisfiedBy(_teamBlockInfo)).Return(true);
+            }
+            using (_mock.Playback())
+            {
+                Assert.IsTrue(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
     }

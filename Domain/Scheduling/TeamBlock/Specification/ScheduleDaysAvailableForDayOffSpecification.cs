@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
+namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 {
 	public interface IScheduleDaysAvailableForDayOffSpecification
 	{

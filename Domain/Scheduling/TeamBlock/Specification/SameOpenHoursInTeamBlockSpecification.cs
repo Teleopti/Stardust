@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
+namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 {
     public interface ISameOpenHoursInTeamBlockSpecification
     {
