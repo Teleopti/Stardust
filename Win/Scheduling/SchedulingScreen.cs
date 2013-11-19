@@ -3733,14 +3733,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_undoRedo.CommitBatch();
 
             //TODO this line should be removed or should be under some IF
-		    runFairnessOptimization(selectedPeriod, _selectedPersons, scheduleDays);
+		    runFairnessOptimization(selectedPeriod, _selectedPersons, scheduleDays,schedulingOptions);
 
 		}
 
-	    private void runFairnessOptimization(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IList<IScheduleDay> scheduleDays)
+	    private void runFairnessOptimization(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IList<IScheduleDay> scheduleDays,  ISchedulingOptions schedulingOptions)
 	    {
             var fairnessOptimizationCommand = _container.Resolve<IFairnessOptimizationCommand>();
-            fairnessOptimizationCommand.Execute(selectedPeriod, selectedPersons, scheduleDays, _schedulerState.CommonStateHolder.ShiftCategories.ToList());
+            fairnessOptimizationCommand.Execute(selectedPeriod, selectedPersons, scheduleDays, _schedulerState.CommonStateHolder.ShiftCategories.ToList(),schedulingOptions );
 	    }
 
 

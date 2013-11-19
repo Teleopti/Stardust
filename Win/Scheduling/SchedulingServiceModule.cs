@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Fairness;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -242,13 +243,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void registerFairnessOptimizationService(ContainerBuilder builder)
         {
-            builder.RegisterType<FairnessOptimization>().As<IFairnessOptimization>();
             builder.RegisterType<PriortiseShiftCategory>().As<IPriortiseShiftCategory>();
-            builder.RegisterType<ScheduleDayFinderWithLeastShiftCategory>().As<IScheduleDayFinderWithLeastShiftCategory>();
+            builder.RegisterType<TeamBlockFairnessOptimizer>().As<ITeamBlockFairnessOptimizer>();
             builder.RegisterType<PrioritiseAgentByContract>().As<IPrioritiseAgentByContract>();
             builder.RegisterType<PriortiseWeekDay>().As<IPriortiseWeekDay>();
-            builder.RegisterType<SwapScheduleDays>().As<ISwapScheduleDays>();
-            builder.RegisterType<ValidateScheduleDays>().As<IValidateScheduleDays>();
+            builder.RegisterType<ConstructTeamBlock>().As<IConstructTeamBlock>();
+            builder.RegisterType<DetermineTeamBlockPriority>().As<IDetermineTeamBlockPriority>();
+            builder.RegisterType<TeamBlockSizeClassifier>().As<ITeamBlockSizeClassifier>();
+            builder.RegisterType<TeamBlockWeightExtractor>().As<ITeamBlockWeightExtractor>();
             builder.RegisterType<FairnessOptimizationCommand>().As<IFairnessOptimizationCommand>();
         }
 

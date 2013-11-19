@@ -356,9 +356,9 @@
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
-    <Compile Include="Optimization\Fairness\FairnessOptimization.cs" />
-    <Compile Include="Optimization\Fairness\PrioritiseAgentByContract.cs" />
-    <Compile Include="Optimization\Fairness\PriortiseShiftCategory.cs" />
+    <Compile Include="Optimization\Fairness\FairnessOptimizationOld.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\PrioritiseAgentByContract.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\PriortiseShiftCategory.cs" />
     <Compile Include="Optimization\Fairness\PriortiseWeekDay.cs" />
     <Compile Include="Optimization\Fairness\ScheduleDayFinderWithLeastShiftCategory.cs" />
     <Compile Include="Optimization\Fairness\SwapScheduleDays.cs" />
@@ -367,6 +367,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Optimization\TeamBlock\DailyTargetValueCalculatorForTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\ConstructTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\DetermineTeamBlockPriority.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\PriorityDefinition.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockFairnessOptimizer.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSizeClassifier.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockWeight.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockWeightExtractor.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockTargetValueCalculator.cs" />
     <Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffOptimizerService.cs" />
