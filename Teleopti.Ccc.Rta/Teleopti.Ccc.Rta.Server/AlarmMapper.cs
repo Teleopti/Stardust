@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using MbCache.Core;
 using log4net;
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.Rta.Server
 			Logger.DebugFormat("Trying to get stategroup for StateCode: {0}, PlatformTypeId: {1}, BusinessUntiId: {2}", stateCode, platformTypeId, businessUnitId);
 			var allStateGroups = _databaseReader.StateGroups();
 			List<RtaStateGroupLight> stateGroupsForStateCode;
-            if (allStateGroups.TryGetValue(new Tuple<string, Guid, Guid>(stateCode, platformTypeId, businessUnitId), out stateGroupsForStateCode))
+            if (allStateGroups.TryGetValue(new Tuple<string, Guid, Guid>(stateCode.ToUpper(CultureInfo.InvariantCulture), platformTypeId, businessUnitId), out stateGroupsForStateCode))
 			{
 				var stateGroup = stateGroupsForStateCode.FirstOrDefault();
 				if (stateGroup != null)
