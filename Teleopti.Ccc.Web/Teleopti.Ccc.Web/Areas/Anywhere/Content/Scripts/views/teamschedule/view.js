@@ -10,7 +10,9 @@ define([
 		'views/teamschedule/person',
 		'text!templates/teamschedule/view.html',
 		'resizeevent',
-		'ajax'
+		'shared/current-state',
+		'ajax',
+		'lazy'
 	], function (
 		ko,
 		$,
@@ -22,10 +24,25 @@ define([
 		personViewModel,
 		view,
 		resize,
-		ajax
+		currentState,
+		ajax,
+		lazy
 	) {
 
 		var teamSchedule;
+
+		var setSelectedLayer = function(shifts) {
+			var layers = lazy(shifts)
+				.map(function(x) { return x.Layers(); })
+				.flatten();
+			var layer = lazy(layers)
+				.select(function(x) {
+					if (x.StartTime() == currentState.SelectedLayer().StartTime()) {
+						return x;
+					}
+				});
+			layer.first().Selected(true);
+		};
 
 		var loadSchedules = function(options) {
 			subscriptions.subscribeTeamSchedule(
@@ -43,6 +60,13 @@ define([
 							if (currentPersons[i].Id == schedules[j].PersonId) {
 				    	        schedules[j].Date = dateClone;
 				    	        currentPersons[i].AddData(schedules[j], teamSchedule.TimeLine, teamSchedule.SelectedGroup());
+				    	        if (currentState.SelectedPersonId() == currentPersons[i].Id) {
+					    	        if (currentState.SelectedLayer()) {
+						    	        setSelectedLayer(currentPersons[i].Shifts());
+					    	        } else {
+						    	        
+					    	        }
+				    	        }
 							}
 						}
 					}
@@ -216,6 +240,7 @@ define([
 							loadSchedules({
 								success: function () {
 									teamSchedule.Loading(false);
+									
 									deferred.resolve();
 								}
 							});

@@ -6,7 +6,8 @@ define([
 		'shared/group-page',
         'resources!r',
         'moment',
-		'select2'
+		'select2',
+		'shared/current-state'
     ], function(
         ko,
         navigation,
@@ -15,7 +16,8 @@ define([
 	    groupPageViewModel,
         resources,
         moment,
-	    select2
+	    select2,
+	    currentState
     ) {
 
     	return function () {
@@ -64,12 +66,13 @@ define([
                 self.SelectedDate(self.SelectedDate().add('d', -1));
             };
 
-            this.SelectPerson = function(person) {
-                navigation.GotoPersonSchedule(self.SelectedGroup(), person.Id, self.SelectedDate());
+            this.SelectPerson = function (person) {
+            	currentState.SetSelectedPersonId(person.Id);
+            	navigation.GotoPersonSchedule(self.SelectedGroup(), person.Id, self.SelectedDate());
             };
             
-            this.SelectLayer = function (layer) {
-                var selectedLayers = lazy(self.Persons())
+            this.SelectLayer = function (layer, personId) {
+	            var selectedLayers = lazy(self.Persons())
                     .map(function(x) { return x.Shifts(); })
                     .flatten()
                     .map(function(x) { return x.Layers(); })
@@ -83,6 +86,10 @@ define([
                     x.Selected(false);
                 });
                 layer.Selected(!layer.Selected());
+                currentState.SetSelectedPersonId(personId);
+                if (layer.Selected()) {
+	                currentState.SetSelectedLayer(layer);
+                }
             };
 
 
