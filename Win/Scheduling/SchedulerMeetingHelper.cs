@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Meetings;
@@ -61,6 +62,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                     var meeting = meetingRepository.Get(personMeeting.BelongsToMeeting.Id.GetValueOrDefault());
                     if (meeting == null) // recurrent already deleted
                         continue;
+
+					LazyLoadingManager.Initialize(meeting.Scenario);
+					LazyLoadingManager.Initialize(meeting.Activity);
                     meeting.RemovePerson(personMeeting.Person);
                     if (!meeting.MeetingPersons.Any())
                         meetingRepository.Remove(meeting);
