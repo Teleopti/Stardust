@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.Fairness
 {
-    public interface IFairnessOptimization
+    public interface IFairnessOptimizationOld
     {
         void Execute(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPerson,
                                      IList<IScheduleDay> scheduleDays, IList<IShiftCategory> shiftCategories);
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization.Fairness
                                                        IList<IScheduleDay> scheduleDays);
     }
 
-    public class FairnessOptimization : IFairnessOptimization
+    public class FairnessOptimizationOld : IFairnessOptimizationOld
     {
         private readonly IScheduleDayFinderWithLeastShiftCategory _dayFinderWithLeastShiftCategory;
         private readonly IPrioritiseAgentByContract _prioritiseAgentByContract;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization.Fairness
         private readonly ISwapScheduleDays _swapScheduleDays;
         private readonly IValidateScheduleDays _validateScheduleDays;
 
-        public FairnessOptimization(IPriortiseWeekDay priortizeWeekDay, IPriortiseShiftCategory priortiseShiftCategory,
+        public FairnessOptimizationOld(IPriortiseWeekDay priortizeWeekDay, IPriortiseShiftCategory priortiseShiftCategory,
                                     IPrioritiseAgentByContract prioritiseAgentByContract,
                                     ISwapScheduleDays swapScheduleDays, IValidateScheduleDays validateScheduleDays,
                                     IScheduleDayFinderWithLeastShiftCategory dayFinderWithLeastShiftCategory)

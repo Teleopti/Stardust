@@ -2,20 +2,28 @@
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization.Fairness
+namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 {
     public interface IPrioritiseAgentByContract
     {
         int HigestPriority { get; }
         int LowestPriority { get; }
+        int AveragePriority { get;  }
+        
         IDictionary<int, IPerson> GetPriortiseAgentByName(IList<IPerson> personList);
         IDictionary<int, IPerson> GetPriortiseAgentByStartDate(IList<IPerson> personList);
         IPerson PersonOnPriority(int priority);
+        void Clear();
     }
 
     public class PrioritiseAgentByContract : IPrioritiseAgentByContract
     {
         private Dictionary<int, IPerson> _result = new Dictionary<int, IPerson>();
+
+        public int AveragePriority
+        {
+            get { return (int) _result.Keys.Average(); }
+        }
 
         public IDictionary<int, IPerson> GetPriortiseAgentByName(IList<IPerson> personList)
         {
@@ -62,6 +70,11 @@ namespace Teleopti.Ccc.Domain.Optimization.Fairness
         public IPerson PersonOnPriority(int priority)
         {
             return _result[priority];
+        }
+
+        public void Clear()
+        {
+            _result.Clear();
         }
     }
 }

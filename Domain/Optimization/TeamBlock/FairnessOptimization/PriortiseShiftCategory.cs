@@ -2,20 +2,27 @@
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization.Fairness
+namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 {
     public interface IPriortiseShiftCategory
     {
         int HigestPriority { get; }
         int LowestPriority { get; }
+        int AveragePriority { get; }
         IDictionary<int, IShiftCategory> GetPriortiseShiftCategories(IList<IShiftCategory> shiftCategories);
         IShiftCategory ShiftCategoryOnPriority(int priority);
         int PriorityOfShiftCategory(IShiftCategory shiftCategory);
+        void Clear();
     }
 
     public class PriortiseShiftCategory : IPriortiseShiftCategory
     {
         private readonly IDictionary<int, IShiftCategory> _result = new Dictionary<int, IShiftCategory>();
+
+        public int AveragePriority
+        {
+            get { return (int) _result.Keys.Average(); }
+        }
 
         /// <summary>
         ///     This method will change in future and a test should be written for that
@@ -54,6 +61,11 @@ namespace Teleopti.Ccc.Domain.Optimization.Fairness
                 if (scPair.Value == shiftCategory)
                     return scPair.Key;
             return -1;
+        }
+
+        public void Clear()
+        {
+            _result.Clear();
         }
     }
 }
