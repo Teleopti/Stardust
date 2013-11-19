@@ -592,12 +592,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				uow.Reassociate(_schedulerState.SchedulingResultState.PersonsInOrganization);
 				_schedulerMessageBrokerHandler.HandleMeetingChange(e.ModifiedMeeting, e.Delete);
+				invalidateAfterMeetingChange(e);
 			}
 			if (_scheduleView != null &&
 				_scheduleView.ViewGrid != null)
 			{
 				_scheduleView.ViewGrid.InvalidateRange(_scheduleView.ViewGrid.ViewLayout.VisibleCellsRange);
-			    invalidateAfterMeetingChange(e);
                 RecalculateResources();
 			}
 		}
