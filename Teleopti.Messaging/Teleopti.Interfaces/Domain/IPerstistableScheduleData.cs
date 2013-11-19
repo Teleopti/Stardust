@@ -32,7 +32,7 @@ namespace Teleopti.Interfaces.Domain
 	/// Created by: rogerkr
 	/// Created date: 2008-05-29
 	/// </remarks>
-	public interface IPersistableScheduleData : IVersionedAggregateRoot, INonversionedPersistableScheduleData
+	public interface IPersistableScheduleData : INonversionedPersistableScheduleData
 	{
 	}
 }

@@ -39,6 +39,9 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			{
 				var inMemoryEntity = diffItem.OriginalItem as IPersistableScheduleData;
 				if (inMemoryEntity == null) continue;
+				var inMemoryVersion = inMemoryEntity as IVersioned;
+				if(inMemoryEntity==null)
+					continue;
 
 				int? databaseVersion;
 				var inMemoryEntityAsAssignment = inMemoryEntity as IPersonAssignment;
@@ -58,7 +61,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				{
 					databaseVersion = uow.DatabaseVersion(inMemoryEntity);
 				}
-				if (inMemoryEntity.Version != databaseVersion)
+				if (inMemoryVersion.Version != databaseVersion)
 				{
 					var databaseEntity = _scheduleRepository.LoadScheduleDataAggregate(inMemoryEntity.GetType(), inMemoryEntity.Id.Value);
 					persistConflicts.Add(makePersistConflict(diffItem, databaseEntity));
