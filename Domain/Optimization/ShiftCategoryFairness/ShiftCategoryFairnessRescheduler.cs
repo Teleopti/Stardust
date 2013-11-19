@@ -10,17 +10,14 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 	}
 	public class ShiftCategoryFairnessReScheduler : IShiftCategoryFairnessReScheduler
 	{
-		private readonly IGroupSchedulingService _groupSchedulingService;
 		private readonly IOptimizationPreferences _optimizationPreferences;
 		private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 		private readonly IGroupPersonConsistentChecker _groupPersonConsistentChecker;
 
-		public ShiftCategoryFairnessReScheduler(IGroupSchedulingService groupSchedulingService,
-			IOptimizationPreferences optimizationPreferences, 
+		public ShiftCategoryFairnessReScheduler(IOptimizationPreferences optimizationPreferences, 
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
 			IGroupPersonConsistentChecker groupPersonConsistentChecker)
 		{
-			_groupSchedulingService = groupSchedulingService;
 			_optimizationPreferences = optimizationPreferences;
 			_groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
 			_groupPersonConsistentChecker = groupPersonConsistentChecker;
@@ -38,10 +35,6 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 			{
 				if (!_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(groupPersonToRun, dateOnly, schedulingOptions))
 					return false;
-				if (!_groupSchedulingService.ScheduleOneDayOnOnePerson(dateOnly, person, schedulingOptions, groupPersonToRun, matrixes))
-				{
-					return false;
-				}
 			}
 			return true;
 		}
