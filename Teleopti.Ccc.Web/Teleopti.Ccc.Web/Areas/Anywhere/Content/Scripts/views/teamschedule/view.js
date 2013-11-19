@@ -66,6 +66,7 @@ define([
 					    	        } else {
 						    	        
 					    	        }
+					    	        
 				    	        }
 							}
 						}
@@ -240,7 +241,11 @@ define([
 							loadSchedules({
 								success: function () {
 									teamSchedule.Loading(false);
-									
+									if (currentState.SelectedPersonId()) {
+										$('html, body').animate({
+											scrollTop: $("[data-person-id='" + currentState.SelectedPersonId() + "']").offset().top
+										}, 20);
+									}
 									deferred.resolve();
 								}
 							});
