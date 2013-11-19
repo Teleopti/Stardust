@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		public ShiftTradePersonScheduleViewModel Map(IPersonScheduleDayReadModel scheduleReadModel)
 		{
-			if (scheduleReadModel == null)
+			if (scheduleReadModel == null || scheduleReadModel.Start == null)
 				return null;
 
 			var shiftReadModel = JsonConvert.DeserializeObject<Model>(scheduleReadModel.Model);

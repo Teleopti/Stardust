@@ -2,15 +2,30 @@
 using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 {
 	[TestFixture]
 	public class ShiftTradeScheduleLayerViewModelMapperTest
 	{
+		private TimeZoneInfo _timeZone;
+		private IUserTimeZone _userTimeZone;
+
+		[SetUp]
+		public void Setup()
+		{
+			_timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
+
+		}
+
 		[Test]
 		public void ShouldMapLayerFromReadModelLayer()
 		{
@@ -24,12 +39,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				IsAbsenceConfidential = false
 			};
 
-			var target = new ShiftTradeScheduleLayerViewModelMapper();
+			var target = new ShiftTradeScheduleLayerViewModelMapper(_userTimeZone);
 			var result = target.Map(new[] { readModelLayer });
 
 			var mappedlayer = result.First();
-			mappedlayer.Start.Should().Be.EqualTo(readModelLayer.Start);
-			mappedlayer.End.Should().Be.EqualTo(readModelLayer.End);
+			mappedlayer.Start.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(readModelLayer.Start,_timeZone));
+			mappedlayer.End.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(readModelLayer.End, _timeZone));
 			mappedlayer.LengthInMinutes.Should().Be.EqualTo(readModelLayer.Minutes);
 			mappedlayer.Color.Should().Be.EqualTo(readModelLayer.Color);
 			mappedlayer.IsAbsenceConfidential.Should().Be.EqualTo(readModelLayer.IsAbsenceConfidential);
@@ -46,12 +61,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				Description = "Phone"
 			};
 
-			var target = new ShiftTradeScheduleLayerViewModelMapper();
+			var target = new ShiftTradeScheduleLayerViewModelMapper(_userTimeZone);
 			var result = target.Map(new[] { readModelLayer });
 
 			var expectedTimeString = string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
-			                                       readModelLayer.Start.ToShortTimeString(),
-			                                       readModelLayer.End.ToShortTimeString());
+																TimeZoneHelper.ConvertFromUtc(readModelLayer.Start, _timeZone).ToShortTimeString(),
+			                                       TimeZoneHelper.ConvertFromUtc(readModelLayer.End,_timeZone).ToShortTimeString());
 
 			var mappedlayer = result.First();
 			mappedlayer.TitleHeader.Should().Be.EqualTo(readModelLayer.Description);
@@ -69,12 +84,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				Description = "Phone"
 			};
 
-			var target = new ShiftTradeScheduleLayerViewModelMapper();
+			var target = new ShiftTradeScheduleLayerViewModelMapper(_userTimeZone);
 			var result = target.Map(new[] { readModelLayer });
 
 			var expectedTimeString = string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
-												   readModelLayer.Start.ToShortTimeString(),
-												   readModelLayer.End.ToShortTimeString());
+												   TimeZoneHelper.ConvertFromUtc(readModelLayer.Start, _timeZone).ToShortTimeString(),
+												   TimeZoneHelper.ConvertFromUtc(readModelLayer.End, _timeZone).ToShortTimeString());
 			var mappedlayer = result.First();
 			mappedlayer.TitleHeader.Should().Be.EqualTo(readModelLayer.Description);
 			mappedlayer.TitleTime.Should().Be.EqualTo(expectedTimeString);
