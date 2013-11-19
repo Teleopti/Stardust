@@ -361,6 +361,7 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\PriortiseShiftCategory.cs" />
     <Compile Include="Optimization\Fairness\PriortiseWeekDay.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SwapScheduleDays.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamMemberCountValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\ValidateScheduleDays.cs" />
     <Compile Include="Optimization\StandardDeviationData.cs">
       <SubType>Code</SubType>
