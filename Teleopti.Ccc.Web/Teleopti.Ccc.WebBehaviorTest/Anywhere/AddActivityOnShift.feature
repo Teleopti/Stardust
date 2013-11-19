@@ -43,7 +43,7 @@ Scenario: View team mates schedules
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2013-11-18 |
-	When I view person schedules assign activity form for 'Pierre Baldi' and 'Team green' on '2013-11-18'
+	When I view person schedules assign activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
 	Then I should see schedule for 'John King'
 
 Scenario: Default times today
@@ -55,7 +55,7 @@ Scenario: Default times today
 	| Activity       | Phone            |
 	| Start time     | 2013-11-18 11:00 |
 	| End time       | 2013-11-18 17:00 |
-	When I view person schedules assign activity form for 'Pierre Baldi' and 'Team green' on '2013-11-18'
+	When I view person schedules assign activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
 	Then I should see the assign activity form with
 	| Field      | Value |
 	| Start time | 13:20 |
@@ -70,7 +70,7 @@ Scenario: Default times tomorrow
 	| Activity       | Phone            |
 	| Start time     | 2013-11-19 11:00 |
 	| End time       | 2013-11-19 17:00 |
-	When I view person schedules assign activity form for 'Pierre Baldi' and 'Team green' on '2013-11-19'
+	When I view person schedules assign activity form for 'Pierre Baldi' in 'Team green' on '2013-11-19'
 	Then I should see the assign activity form with
 	| Field      | Value |
 	| Start time | 11:00 |
@@ -79,7 +79,7 @@ Scenario: Default times tomorrow
 # If its easy to assign outside the shift, and having 2 separate layers in a PA
 Scenario: Assign
 	Given I have the role 'Anywhere Team Green'
-	When I view person schedules assign activity form for 'Pierre Baldi' and 'Team green' on '2013-11-18'
+	When I view person schedules assign activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
 	And I input these assign activity values
 	| Field      | Value |
 	| Activity   | Phone |
@@ -101,7 +101,7 @@ Scenario: Assign on shift
 	| Activity       | Phone            |
 	| Start time     | 2013-11-19 11:00 |
 	| End time       | 2013-11-19 17:00 |
-	When I view person schedules assign activity form for 'Pierre Baldi' and 'Team green' on '2013-11-19'
+	When I view person schedules assign activity form for 'Pierre Baldi' in 'Team green' on '2013-11-19'
 	And I input these assign activity values
 	| Field      | Value |
 	| Activity   | Lunch |
@@ -123,7 +123,7 @@ Scenario: Prevent assign outside shift
 	| Activity       | Phone            |
 	| Start time     | 2013-11-19 11:00 |
 	| End time       | 2013-11-19 17:00 |
-	When I view person schedules assign activity form for 'Pierre Baldi' and 'Team green' on '2013-11-18'
+	When I view person schedules assign activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
 	And I input these assign activity values
 	| Field      | Value |
 	| Activity   | Phone |
@@ -140,7 +140,7 @@ Scenario: Assign after midnight on night shift
 	| Activity       | Phone            |
 	| Start time     | 2013-11-19 22:00 |
 	| End time       | 2013-11-20 04:00 |
-	When I view person schedules assign activity form for 'Pierre Baldi' and 'Team green' on '2013-11-19'
+	When I view person schedules assign activity form for 'Pierre Baldi' in 'Team green' on '2013-11-19'
 	And I input these assign activity values
 	| Field      | Value |
 	| Activity   | Lunch |

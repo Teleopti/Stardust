@@ -69,7 +69,7 @@ Scenario: Prevent selection of confidential if no permission
 	| View unpublished schedules | true                     |
 	| Modify Absence             | true                     |
 	| View confidential          | false                    |
-	When I view person schedules add intraday day absence form for 'Pierre Baldi' and 'Team green' on '2013-11-15'
+	When I view person schedules add intraday day absence form for 'Pierre Baldi' in 'Team green' on '2013-11-15'
 	Then I should not be able to select the absence 'Mental disorder'
 
 Scenario: Default times today
@@ -81,7 +81,7 @@ Scenario: Default times today
 	| Activity       | Phone            |
 	| Start time     | 2013-11-15 11:00 |
 	| End time       | 2013-11-15 17:00 |
-	When I view person schedules add intraday day absence form for 'Pierre Baldi' and 'Team green' on '2013-11-15'
+	When I view person schedules add intraday day absence form for 'Pierre Baldi' in 'Team green' on '2013-11-15'
 	Then I should see the add intraday absence form with
 	| Field        | Value   |
 	| Start time   | 13:20   |
@@ -96,7 +96,7 @@ Scenario: Default times tomorrow
 	| Activity       | Phone            |
 	| Start time     | 2013-11-15 11:00 |
 	| End time       | 2013-11-15 17:00 |
-	When I view person schedules add intraday day absence form for 'Pierre Baldi' and 'Team green' on '2013-11-15'
+	When I view person schedules add intraday day absence form for 'Pierre Baldi' in 'Team green' on '2013-11-15'
 	Then I should see the add intraday absence form with
 	| Field        | Value   |
 	| Start time   | 11:00   |
@@ -110,7 +110,7 @@ Scenario: Invalid times
 	| Activity       | Phone            |
 	| Start time     | 2013-11-15 11:00 |
 	| End time       | 2013-11-15 17:00 |
-	When I view person schedules add intraday day absence form for 'Pierre Baldi' and 'Team green' on '2013-11-15'
+	When I view person schedules add intraday day absence form for 'Pierre Baldi' in 'Team green' on '2013-11-15'
 	And I input these intraday absence values
 	| Field      | Value |
 	| Start time | 09:00 |

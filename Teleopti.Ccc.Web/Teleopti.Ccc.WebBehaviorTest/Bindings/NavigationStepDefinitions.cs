@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnywherePersonScheduleFullDayAbsenceForm(personId, date);
 		}
 
-		[When(@"I view person schedules add intraday day absence form for '(.*)' and '(.*)' on '(.*)'")]
+		[When(@"I view person schedules add intraday day absence form for '(.*)' in '(.*)' on '(.*)'")]
 		public void WhenIViewPersonSchedulesAddIntradayDayAbsenceFormForAndOn(string name, string @group, DateTime date)
 		{
 			TestControllerMethods.Logon();
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnywherePersonScheduleIntradayAbsenceForm(personId, groupIdByName(@group), date);
 		}
 
-		[When(@"I view person schedules assign activity form for '(.*)' and '(.*)' on '(.*)'")]
+		[When(@"I view person schedules assign activity form for '(.*)' in '(.*)' on '(.*)'")]
 		public void WhenIViewPersonSchedulesAssignActivityFormForAndOn(string name, string @group, DateTime date)
 		{
 			TestControllerMethods.Logon();
