@@ -143,14 +143,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TeamSchedulePageStepDefinitions.SelectSkill(skill);
 		}
 
-		[When(@"I view person schedule for '(.*)' and '(.*)' on '(.*)'")]
-		public void WhenIViewPersonScheduleForAndOn(string personName, string group, DateTime date)
+		[When(@"I view person schedule for '(.*)' on '(.*)'")]
+		public void WhenIViewPersonScheduleForOn(string person, DateTime date)
 		{
 			TestControllerMethods.Logon();
-			var personId = DataMaker.Person(personName).Person.Id.Value;
-			Navigation.GotoAnywherePersonSchedule(personId, IdForTeam(group), date);
+			var personId = DataMaker.Person(person).Person.Id.Value;
+			Navigation.GotoAnywherePersonSchedule(personId, date);
 		}
-
 
 		[When(@"I view person schedules add full day absence form for '(.*)' on '(.*)'")]
 		public void WhenIViewPersonSchedulesAddFullDayAbsenceFormForPersonOnDate(string name, DateTime date)

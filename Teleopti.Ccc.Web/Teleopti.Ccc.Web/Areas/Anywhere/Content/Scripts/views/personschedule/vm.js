@@ -50,6 +50,10 @@ define([
 		this.Absences = ko.observableArray();
 		this.PersonsInGroup = ko.observableArray();
 
+		this.FormStartPixel = ko.computed(function () {
+			return self.Shifts().length > 0 ? self.Shifts()[self.Shifts().length - 1].ShiftStartPixels() : 0;
+		});
+
 		this.IsShift = ko.computed(function () {
 			return self.Shifts().length > 0;
 		});
@@ -76,6 +80,10 @@ define([
 		this.AddActivityForm = new addActivityFormViewModel();
 		this.AddingActivity = ko.observable(false);
 		
+		this.AddFullDayAbsence = function () {
+			navigation.GotoPersonScheduleAddFullDayAbsenceForm(self.SelectedGroup(), self.Id(), self.Date());
+		};
+
 		this.AddAbsenceForm = new addAbsenceFormViewModel();
 		this.AddingAbsence = ko.observable(false);
 
@@ -93,6 +101,8 @@ define([
 			data.Date = self.Date();
 			data.PersonId = self.Id();
 
+
+			self.SelectedGroup(groupid);
 			self.Name(data.Name);
 			self.Site(data.Site);
 			self.Team(data.Team);
