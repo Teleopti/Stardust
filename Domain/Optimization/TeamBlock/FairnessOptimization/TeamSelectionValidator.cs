@@ -5,7 +5,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 {
-	public class TeamSelectionValidator
+	public interface ITeamSelectionValidator
+	{
+		bool ValidSelection(IList<IPerson> selectedPersonList, DateOnlyPeriod selectedPeriod);
+	}
+
+	public class TeamSelectionValidator : ITeamSelectionValidator
 	{
 		private readonly ITeamInfoFactory _teamInfoFactory;
 		private readonly IList<IScheduleMatrixPro> _scheduleMatrixList;
