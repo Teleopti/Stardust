@@ -64,27 +64,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			effectiveRestriction = combineRestriction(new TeamBlockEffectiveRestrcition(_effectiveRestrictionCreator, groupPerson.GroupMembers, schedulingOptions,
 													  scheduleDictionary), datePointer, matrixList, effectiveRestriction);
 
-			if (_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(schedulingOptions))
+			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(schedulingOptions) ||
+				_teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(schedulingOptions))
 			{
 				effectiveRestriction = combineRestriction(new SameStartTimeRestriction(timeZone), dateOnlyList, matrixesOfFirstPerson, effectiveRestriction);
 			}
-			if (_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(schedulingOptions))
+			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(schedulingOptions) ||
+				_teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(schedulingOptions))
 			{
 				effectiveRestriction = combineRestriction(new SameStartTimeRestriction(timeZone), datePointer, matrixList, effectiveRestriction);
 			}
-			if (_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(schedulingOptions))
+			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(schedulingOptions) ||
+				_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(schedulingOptions))
 			{
 				effectiveRestriction = combineRestriction(new SameShiftRestriction(_scheduleDayEquator), dateOnlyList, matrixesOfFirstPerson, effectiveRestriction);
 			}
-			if (_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(schedulingOptions))
+			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(schedulingOptions) ||
+				_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(schedulingOptions))
 			{
 				effectiveRestriction = combineRestriction(new SameShiftCategoryRestriction(), dateOnlyList, matrixesOfFirstPerson, effectiveRestriction);
 			}
-			if (_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(schedulingOptions))
+			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(schedulingOptions) ||
+				_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(schedulingOptions))
 			{
 				effectiveRestriction = combineRestriction(new SameShiftCategoryRestriction(), datePointer, matrixList, effectiveRestriction);
 			}
-			if (_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(schedulingOptions))
+			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(schedulingOptions) ||
+				_teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(schedulingOptions))
 			{
 				effectiveRestriction = combineRestriction(new SameEndTimeRestriction(timeZone), datePointer, matrixList, effectiveRestriction);
 			}
