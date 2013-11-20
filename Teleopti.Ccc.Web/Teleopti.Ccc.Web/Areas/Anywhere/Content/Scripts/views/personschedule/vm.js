@@ -76,17 +76,8 @@ define([
 
 		this.SelectedGroup = ko.observable();
 
-		//this.DayOffs = ko.observableArray();
-
 		this.Absences = ko.observableArray();
 		
-		//this.WorkTimeMinutes = ko.observable(0);
-
-		//this.WorkTime = ko.computed(function () {
-		//	var time = moment().startOf('day').add('minutes', self.WorkTimeMinutes());
-		//	return time.format("H:mm");
-		//});
-
 		this.TimeLine = new timeLineViewModel(this.PersonsInGroup); 
 		
 		this.Shift = ko.computed(function () {
@@ -137,28 +128,6 @@ define([
 		};
 
 		this.SetData = function (data, groupid) {
-			//data.Date = self.Date();
-			
-			//self.SelectedGroup(groupid);
-			//self.Name(data.Name);
-			//self.Site(data.Site);
-			//self.Team(data.Team);
-			//self.IsDayOff(data.IsDayOff);
-			//self.DayOffName(data.DayOffName);
-
-			//if (data.Layers.length > 0) {
-			//	self.Shift.AddLayers(data);
-			//}
-
-			//if (data.DayOff) {
-			//	data.DayOff.Date = data.Date;
-			//	var newDayOff = new dayOff(self.TimeLine, data.DayOff);
-			//	self.DayOffs.push(newDayOff);
-			//}
-			
-			//self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
-			//self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
-
 			self.Absences([]);
 			var absences = ko.utils.arrayMap(data.PersonAbsences, function (a) {
 				a.PersonId = self.Id();
@@ -177,11 +146,5 @@ define([
 		this.AddFullDayAbsence = function () {
 			navigation.GotoPersonScheduleAddFullDayAbsenceFormWithoutHistory(self.Id(), self.Date());
 		};
-
-		//this.ClearData = function () {
-		//	self.DayOffs([]);
-		//	self.WorkTimeMinutes(0);
-		//	self.ContractTimeMinutes(0);
-		//};
 	};
 });
