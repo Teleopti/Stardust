@@ -92,6 +92,11 @@
 .team-schedule .resources td {
     padding-top: 3px;
 }
+
+.team-schedule .contract-time-title {
+	padding-top: 14px;
+	padding-bottom: 2px;
+}
 .team-schedule .contract-time 
 {
 	text-align: right;
