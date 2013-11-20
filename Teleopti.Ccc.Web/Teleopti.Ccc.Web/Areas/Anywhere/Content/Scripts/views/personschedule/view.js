@@ -111,8 +111,7 @@ define([
 			var date = moment(options.date, 'YYYYMMDD');
 
 			personSchedule.Loading(true);
-
-			personSchedule.Id(options.personid);
+			personSchedule.Id(options.personid != undefined ? options.personid : options.id);
 			personSchedule.Date(date);
 
 			var deferred = $.Deferred();

@@ -80,10 +80,6 @@ define([
 		this.AddActivityForm = new addActivityFormViewModel();
 		this.AddingActivity = ko.observable(false);
 		
-		this.AddFullDayAbsence = function () {
-			navigation.GotoPersonScheduleAddFullDayAbsenceForm(self.SelectedGroup(), self.Id(), self.Date());
-		};
-
 		this.AddAbsenceForm = new addAbsenceFormViewModel();
 		this.AddingAbsence = ko.observable(false);
 
@@ -137,6 +133,11 @@ define([
 			self.AddAbsenceForm.SetData(data, groupid);
 		};
 		
+		this.AddFullDayAbsence = function () {
+			navigation.GotoPersonScheduleAddFullDayAbsenceFormWithoutHistory(self.Id(), self.Date());
+		};
+
+
 		this.ClearData = function () {
 			self.Shifts([]);
 			self.DayOffs([]);
