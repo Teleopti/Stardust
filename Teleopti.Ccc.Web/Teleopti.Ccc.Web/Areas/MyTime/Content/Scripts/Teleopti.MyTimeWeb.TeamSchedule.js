@@ -133,9 +133,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	            }
 	            
 	            vm.dateAndTeamKey.subscribe(function () {
-	                var team = vm.selectedTeam();
-	                if (team === undefined || team == null) return;
-	                _navigateTo(vm.selectedDate().format('YYYY-MM-DD'), team);
+	            	_navigateTo(vm.selectedDate().format('YYYY-MM-DD'), vm.selectedTeam());
 	            });
 	            
                 readyForInteraction();

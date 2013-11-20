@@ -223,3 +223,9 @@ Scenario: Show friendly message when after leaving date
 	And I am viewing team schedule for today
 	When I click the next day button
 	Then I should see a user-friendly message explaining I dont have anything to view
+
+Scenario: Navigate next date without team
+	Given I am an agent in a team with access only to my own data
+	And I view team schedule
+	When I click the next day button
+	Then I should see the next day
