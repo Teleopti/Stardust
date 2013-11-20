@@ -3,8 +3,7 @@
 function checkIfNewReportClicked(e) {
     var target = (e && e.target) || (event && event.srcElement);
     var popupDiv = document.getElementById('divNewPopup');
-    var linkToTriggerPopup = document.getElementById('aNewReport');
-    //var linkToTriggerPopup = document.getElementById('ctl00_ActionBarView1_aNewReport');
+    var linkToTriggerPopup = getServerControl('aNewReport', 'a');
     if (linkToTriggerPopup == null) {
         return;
     }
