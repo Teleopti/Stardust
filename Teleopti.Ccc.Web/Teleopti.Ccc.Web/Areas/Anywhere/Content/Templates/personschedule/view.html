@@ -59,7 +59,8 @@
 							</td>
 							<td class="schedule schedule-column">
 								<div class="relative time-line-for">
-									<!-- ko foreach: Shifts -->
+									<!-- ko if: IsShift -->
+									<!-- ko with: Shift -->
 									<div class="shift" data-bind="
 										template: {
 											name: 'layerTemplate',
@@ -67,13 +68,14 @@
 										}
 									"></div>
 									<!-- /ko -->
+									<!-- /ko -->
 
 									<!-- ko if: IsDayOff -->
 									<div
 										class="dayoff absolute">
 										<!-- ko if: $root.DisplayDescriptions -->
 										<span class="label layer-description" data-bind="text: DayOffName"></span>
- 										<!-- /ko -->
+										<!-- /ko -->
 									</div>
 									<!-- /ko -->
 								</div>

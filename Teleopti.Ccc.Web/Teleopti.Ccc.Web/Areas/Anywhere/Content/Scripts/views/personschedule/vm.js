@@ -45,19 +45,10 @@ define([
 		this.SelectedGroup = ko.observable();
 
 		this.DayOffs = ko.observableArray();
-		this.Shifts = ko.observableArray();
-		
+
 		this.Absences = ko.observableArray();
 		this.PersonsInGroup = ko.observableArray();
-
-		this.FormStartPixel = ko.computed(function () {
-			return self.Shifts().length > 0 ? self.Shifts()[self.Shifts().length - 1].ShiftStartPixels() : 0;
-		});
-
-		this.IsShift = ko.computed(function () {
-			return self.Shifts().length > 0;
-		});
-
+		
 		this.WorkTimeMinutes = ko.observable(0);
 		this.ContractTimeMinutes = ko.observable(0);
 
@@ -70,8 +61,18 @@ define([
 			var time = moment().startOf('day').add('minutes', self.WorkTimeMinutes());
 			return time.format("H:mm");
 		});
-
+		
 		this.TimeLine = new timeLineViewModel(this.PersonsInGroup); //Needs to work with only selected persons layers as well
+		
+		this.Shift = new shiftViewModel(self.TimeLine);
+		
+		this.IsShift = ko.computed(function () {
+			return self.Shift.Layers().length > 0;
+		});
+		
+		this.FormStartPixel = ko.computed(function () {
+			return self.Shift.Layers.length > 0 ? self.Shift.ShiftStartPixels() : 0;
+		});
 
 		this.Resources = resources;
 
@@ -96,8 +97,7 @@ define([
 		this.SetData = function (data, groupid) {
 			data.Date = self.Date();
 			data.PersonId = self.Id();
-
-
+			
 			self.SelectedGroup(groupid);
 			self.Name(data.Name);
 			self.Site(data.Site);
@@ -106,9 +106,7 @@ define([
 			self.DayOffName(data.DayOffName);
 
 			if (data.Layers.length > 0) {
-				var newShift = new shiftViewModel(self.TimeLine);
-				newShift.AddLayers(data);
-				self.Shifts.push(newShift);
+				self.Shift.AddLayers(data);
 			}
 
 			if (data.DayOff) {
@@ -139,7 +137,6 @@ define([
 
 
 		this.ClearData = function () {
-			self.Shifts([]);
 			self.DayOffs([]);
 			self.WorkTimeMinutes(0);
 			self.ContractTimeMinutes(0);
