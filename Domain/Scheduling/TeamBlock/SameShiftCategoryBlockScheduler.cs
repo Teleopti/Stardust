@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					_singleDayScheduler.DayScheduled -= onDayScheduled;
 				}
 
-				allSelectedDaysAreScheduled = selectedBlockDays.All(x => _teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlock(teamBlockInfo, x));
+				allSelectedDaysAreScheduled = selectedBlockDays.All(x => _teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons( teamBlockInfo, x,selectedPersons));
 				if (!allSelectedDaysAreScheduled)
 				{
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, _rollbackService, teamBlockInfo);
