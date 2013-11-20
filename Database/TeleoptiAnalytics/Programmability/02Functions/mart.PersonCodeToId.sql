@@ -24,7 +24,9 @@ RETURNS
 As
 BEGIN 
 	DECLARE @id int
-	
+	--20131120 Reset @date_from in case of night shifts and person_period change
+	SET @date_from = DATEADD(d,-1,@date_from)
+
 	IF @person_code = '00000000-0000-0000-0000-000000000002' --All
 	BEGIN
 		INSERT INTO @ids
