@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,14 +10,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class PersonSkillProvider : IPersonSkillProvider
 	{
-		private readonly IDictionary<IPerson,ICollection<SkillCombination>> _personCombination = new Dictionary<IPerson, ICollection<SkillCombination>>();
+		private readonly ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>> _personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
 
 		public SkillCombination SkillsOnPersonDate(IPerson person, DateOnly date)
 		{
-			ICollection<SkillCombination> foundCombinations;
+			ConcurrentBag<SkillCombination> foundCombinations;
 			if (_personCombination.TryGetValue(person, out foundCombinations))
 			{
-				foreach (var foundCombination in foundCombinations)
+				foreach (var foundCombination in foundCombinations.ToArray())
 				{
 					if (foundCombination.IsValidForDate(date))
 					{
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 			else
 			{
-				_personCombination.Add(person,new Collection<SkillCombination>{combination});
+				_personCombination.TryAdd(person, new ConcurrentBag<SkillCombination> { combination });
 			}
 
 			return combination;
