@@ -998,6 +998,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripMenuItemFindMatching.Visible = true;
 			}
 
+			backgroundWorkerLoadData.WorkerSupportsCancellation = true;
 			backgroundWorkerLoadData.DoWork += backgroundWorkerLoadData_DoWork;
 			backgroundWorkerLoadData.RunWorkerCompleted += backgroundWorkerLoadData_RunWorkerCompleted;
 			backgroundWorkerLoadData.ProgressChanged += backgroundWorkerLoadData_ProgressChanged;
