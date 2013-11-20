@@ -20,7 +20,7 @@ namespace Teleopti.Interfaces.Domain
         ///  Created by: Ola
         ///  Created date: 2008-10-27    
         /// /// </remarks>
-        void ProcessLayers(IVisualLayerCollection layerCollectionFilteredByPeriod);
+        void ProcessLayers(IResourceCalculationDataContainerWithSingleOperation layerCollectionFilteredByPeriod);
 
         /// <summary>
         /// Calculates the standard deviation.

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void MapTo(ISchedulingOptions schedulingOptions, IList<IScheduleTag> scheduleTags, IList<IGroupPageLight> groupPages,IList<IGroupPageLight> groupPagesForTeamBlockPer, IList<IActivity> activityList)
+        public void MapTo(ISchedulingOptions schedulingOptions, IEnumerable<IScheduleTag> scheduleTags, IList<IGroupPageLight> groupPages,IList<IGroupPageLight> groupPagesForTeamBlockPer, IEnumerable<IActivity> activityList)
         {
             if (groupPagesForTeamBlockPer == null) throw new ArgumentNullException("groupPagesForTeamBlockPer");
             foreach (var scheduleTag in scheduleTags)

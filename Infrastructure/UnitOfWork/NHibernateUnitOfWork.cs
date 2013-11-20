@@ -214,11 +214,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			Session.Evict(root);
 		}
 
-		public void CancelQuery()
-		{
-			Session.CancelQuery();
-		}
-
 		public int? DatabaseVersion(IAggregateRoot root)
 		{
 			if (!root.Id.HasValue)

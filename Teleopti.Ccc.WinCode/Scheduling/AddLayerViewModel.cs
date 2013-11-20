@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.WinCode.Common.Commands;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public DateTimePeriodViewModel PeriodViewModel { get; private set; }
 
-        public AddLayerViewModel(IList<T> payloads, DateTimePeriod period, string title, TimeSpan interval)
+        public AddLayerViewModel(IEnumerable<T> payloads, DateTimePeriod period, string title, TimeSpan interval)
         {
             PeriodViewModel = new DateTimePeriodViewModel();
             PeriodViewModel.Start = period.StartDateTime;
@@ -26,13 +27,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             PeriodViewModel.Interval = interval;
             PeriodViewModel.AutoUpdate = false;
             Title = title;
-            _payloads = new ReadOnlyCollection<T>(payloads);
+            _payloads = payloads.ToList().AsReadOnly();
             ShowDetailsToggleCommand = CommandModelFactory.CreateCommandModel(() => { ShowDetails = !ShowDetails; },
                                                                             CommonRoutedCommands.ShowDetails);
             CanOk = true;
         }
 
-        public AddLayerViewModel(IList<T> payloads, ISetupDateTimePeriod setupDateTimePeriod, string title, TimeSpan interval) : this(payloads,setupDateTimePeriod.Period,title,interval)
+        public AddLayerViewModel(IEnumerable<T> payloads, ISetupDateTimePeriod setupDateTimePeriod, string title, TimeSpan interval) : this(payloads,setupDateTimePeriod.Period,title,interval)
         {
             //Todo, set all locks and stuff from ISetupDateTimePeriod
         }

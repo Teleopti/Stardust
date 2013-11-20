@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ScheduleTagging
 
             Assert.AreEqual(guid, _target.Id);
 
-            IPersistableScheduleData data = _target.CreateTransient();
+			var data = _target.CreateTransient();
 
             Assert.IsNull(data.Id);
         }
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ScheduleTagging
 
             var moveToTheseParameters = new AgentDayScheduleTag(_target.Person, _target.TagDate, newScenario, tag);
 
-            IPersistableScheduleData newTag = _target.CloneAndChangeParameters(moveToTheseParameters);
+            var newTag = _target.CloneAndChangeParameters(moveToTheseParameters);
             IAgentDayScheduleTag castedTag = ((IAgentDayScheduleTag)newTag);
             Assert.IsNull(newTag.Id);
             Assert.AreSame(_target.Person, newTag.Person);

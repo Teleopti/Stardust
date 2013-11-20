@@ -82,21 +82,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 		}
 
-		[Test]
-		public void VerifyCancelQuery()
-		{
-			using (mocks.Record())
-			{
-				Expect.On(session)
-					  .Call(session.BeginTransaction())
-					  .Return(mocks.StrictMock<ITransaction>());
-				session.CancelQuery();
-			}
-			using (mocks.Playback())
-			{
-				uow.CancelQuery();
-			}
-		}
 
 		[Test]
 		[ExpectedException(typeof(DataSourceException))]

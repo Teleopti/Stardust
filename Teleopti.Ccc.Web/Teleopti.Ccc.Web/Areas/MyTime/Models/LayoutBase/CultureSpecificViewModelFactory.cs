@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase
 		{
 			var currentUiCulture = CultureInfo.CurrentUICulture;
 			var isRightToLeft = currentUiCulture.TextInfo.IsRightToLeft;
-			var twoLetterIsoLanguageName = currentUiCulture.TwoLetterISOLanguageName;
+			var ietfLanguageTag = currentUiCulture.IetfLanguageTag;
 
-			return new CultureSpecificViewModel { LanguageCode = twoLetterIsoLanguageName, Rtl = isRightToLeft };
+			return new CultureSpecificViewModel { LanguageCode = ietfLanguageTag, Rtl = isRightToLeft };
 		}
 	}
 }

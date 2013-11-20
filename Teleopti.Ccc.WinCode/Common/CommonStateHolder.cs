@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -10,37 +9,22 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Common
 {
-    /// <summary>
-    /// Class for holding winclient common state
-    /// </summary>
-    /// <remarks>
-    /// should be named "repository wrapper" or "read only data" or something later...
-    /// </remarks>
     public class CommonStateHolder:ICommonStateHolder
     {
-        private readonly IList<IAbsence> _absences = new List<IAbsence>();
-        private readonly IList<IActivity> _activities = new List<IActivity>();
-        private readonly IList<IActivity> _activeActivities = new List<IActivity>();
-        private readonly IList<IShiftCategory> _shiftCategories = new List<IShiftCategory>();
-        private readonly IList<IDayOffTemplate> _dayOffs = new List<IDayOffTemplate>();
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        private  IList<IContract> _contracts = new List<IContract>();
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        private ICollection<IContractSchedule> _contractSchedules = new List<IContractSchedule>();
+        private readonly List<IAbsence> _absences = new List<IAbsence>();
+        private readonly List<IActivity> _activities = new List<IActivity>();
+        private readonly List<IShiftCategory> _shiftCategories = new List<IShiftCategory>();
+        private readonly List<IDayOffTemplate> _dayOffs = new List<IDayOffTemplate>();
+        private readonly List<IScheduleTag> _scheduleTags = new List<IScheduleTag>();
 
-        private IList<IScheduleTag> _scheduleTags;
-
-        /// <summary>
-        /// Loads the common state holder.
-        /// </summary>
-        /// <param name="repositoryFactory">The repository factory.</param>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2009-09-29
-        /// </remarks>
         public void LoadCommonStateHolder(IRepositoryFactory repositoryFactory, IUnitOfWork unitOfWork)
         {
+			_absences.Clear();
+			_activities.Clear();
+			_dayOffs.Clear();
+			_scheduleTags.Clear();
+			_shiftCategories.Clear();
+
             using(unitOfWork.DisableFilter(QueryFilter.Deleted))
             {
                 LoadActivity(repositoryFactory.CreateActivityRepository(unitOfWork));
@@ -55,165 +39,97 @@ namespace Teleopti.Ccc.WinCode.Common
 
         private void loadScheduleTags(IScheduleTagRepository scheduleTagRepository)
         {
-            _scheduleTags = (from t in scheduleTagRepository.LoadAll()
-                              orderby t.Description
-                              select t).ToList();
-
-            //add nullen först
+            _scheduleTags.AddRange(scheduleTagRepository.LoadAll().OrderBy(t => t.Description));
             _scheduleTags.Insert(0, NullScheduleTag.Instance);
         }
         
-        public IList<IScheduleTag> ScheduleTags
+        public IEnumerable<IScheduleTag> ScheduleTags
         {
             get { return _scheduleTags; }
         }
 
-        public IList<IScheduleTag> ScheduleTagsNotDeleted
+        public IEnumerable<IScheduleTag> ActiveScheduleTags
         {
             get
             {
-                return _scheduleTags.Where(scheduleTag => !scheduleTag.IsDeleted).ToList();
+				return _scheduleTags.Where(scheduleTag => !scheduleTag.IsDeleted).ToArray();
             }
         }
-        
-        /// <summary>
-        /// Gets the absences.
-        /// </summary>
-        /// <value>The absences.</value>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2007-11-08
-        /// </remarks>
-        public IList<IAbsence> Absences
+
+		public IEnumerable<IAbsence> ActiveAbsences
+		{
+			get
+			{
+				return _absences.Where(a => !((IDeleteTag)a).IsDeleted).ToArray();
+			}
+		}
+
+        public IEnumerable<IAbsence> Absences
         {
             get { return _absences; }
         }
 
-        /// <summary>
-        /// Gets the dayOffs
-        /// </summary>
-        public IList<IDayOffTemplate> DayOffs
+        public IEnumerable<IDayOffTemplate> DayOffs
         {
             get { return _dayOffs; }
         }
 
-        /// <summary>
-        /// Gets the activities.
-        /// </summary>
-        /// <value>The activities.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-15
-        /// </remarks>
-        public IList<IActivity> Activities
+        public IEnumerable<IDayOffTemplate> ActiveDayOffs
+        {
+			get { return _dayOffs.Where(d => !((IDeleteTag)d).IsDeleted).ToArray(); }
+        }
+
+        public IEnumerable<IActivity> Activities
         {
             get { return _activities; }
         }
 
-        /// <summary>
-        /// Gets the shift categories.
-        /// </summary>
-        /// <value>The shift categories.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-16
-        /// </remarks>
-        public IList<IShiftCategory> ShiftCategories
+		public IEnumerable<IShiftCategory> ShiftCategories
         {
             get { return _shiftCategories; }
         }
 
-        public IList<IActivity> ActiveActivities
+		public IEnumerable<IShiftCategory> ActiveShiftCategories
+		{
+			get { return _shiftCategories.Where(s => !((IDeleteTag)s).IsDeleted).ToArray(); }
+		}
+
+		public IEnumerable<IActivity> ActiveActivities
         {
-            get { return _activeActivities; }
+			get { return _activities.Where(a => !a.IsDeleted).ToArray(); }
         }
 
-        /// <summary>
-        /// Loads the absences.
-        /// </summary>
-        /// <param name="absRep">The abs rep.</param>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2007-11-08
-        /// </remarks>
-        private void LoadAbsences(IRepository<IAbsence> absRep)
-        {
-#pragma warning disable 0618
-            ICollection<IAbsence> absList = absRep.LoadAll();
-#pragma warning restore 0618
-            foreach (IAbsence absence in absList)
-            {
-                Absences.Add(absence);
-            }
+	    private void LoadAbsences(IRepository<IAbsence> absRep)
+	    {
+		    _absences.AddRange(absRep.LoadAll());
+		    _absences.Sort(new AbsenceSorter());
+	    }
 
-            ((List<IAbsence>)Absences).Sort(new AbsenceSorter());
-        }
-
-        /// <summary>
-        /// Loads the dayOffs
-        /// </summary>
-        /// <param name="dayOffRep"></param>
         private void LoadDayOffs(IRepository<IDayOffTemplate> dayOffRep)
         {
-            ICollection<IDayOffTemplate> dayOffList = dayOffRep.LoadAll();
-
-            foreach (IDayOffTemplate dayOff in from d in dayOffList orderby d.Description.Name select d)
-            {
-                DayOffs.Add(dayOff);
-            }
+	        _dayOffs.AddRange(dayOffRep.LoadAll());
+         	_dayOffs.Sort(new DayOffTemplateSorter());
         }
 
-        /// <summary>
-        /// Loads the activities.
-        /// </summary>
-        /// <param name="activityRep">The activity rep.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-15
-        /// </remarks>
-        private void LoadActivity(IRepository<IActivity> activityRep)
+	    private void LoadActivity(IRepository<IActivity> activityRep)
+	    {
+		    _activities.AddRange(activityRep.LoadAll());
+		    _activities.Sort(new ActivitySorter());
+	    }
+
+	    private void LoadShiftCategory(IShiftCategoryRepository shiftCategoryRep)
         {
-#pragma warning disable 0618
-            ICollection<IActivity> activityList = activityRep.LoadAll();
-#pragma warning restore 0618
-            foreach (IActivity activity in activityList)
-            {
-                if (!((IDeleteTag)activity).IsDeleted)
-                    ActiveActivities.Add(activity);
-
-                Activities.Add(activity);
-            }
-            ((List<IActivity>)Activities).Sort(new ActivitySorter());
-            ((List<IActivity>)ActiveActivities).Sort(new ActivitySorter());
-        }
-
-        /// <summary>
-        /// Loads the shift category.
-        /// </summary>
-        /// <param name="shiftCategoryRep">The shift category rep.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-11-16
-        /// </remarks>
-        private void LoadShiftCategory(IShiftCategoryRepository shiftCategoryRep)
-        {
-            ICollection<IShiftCategory> shiftCategoryList = shiftCategoryRep.FindAll();
-
-            foreach (IShiftCategory shiftCategory in shiftCategoryList)
-            {
-                    ShiftCategories.Add(shiftCategory);
-            }
-
-            ((List<IShiftCategory>)ShiftCategories).Sort(new ShiftCategorySorter());
+            _shiftCategories.AddRange(shiftCategoryRep.FindAll());
+            _shiftCategories.Sort(new ShiftCategorySorter());
         }
 
         private void LoadContracts(IContractRepository contractRepository)
         {
-            _contracts = new List<IContract>(contractRepository.FindAllContractByDescription());
+            contractRepository.FindAllContractByDescription();
         }
         private void LoadContractSchedules(IContractScheduleRepository contractScheduleRepository)
         {
-            _contractSchedules = contractScheduleRepository.LoadAllAggregate();
+            contractScheduleRepository.LoadAllAggregate();
         }
     }
 }

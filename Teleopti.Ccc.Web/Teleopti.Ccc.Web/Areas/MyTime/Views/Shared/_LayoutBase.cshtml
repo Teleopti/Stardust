@@ -44,6 +44,7 @@
     <script src="@Url.Content("~/Content/jquery/jquery-1.10.2.js")"></script>
     <script src="@Url.Content("~/Content/Scripts/knockout-2.2.1.js")"></script>
 	<script src="@Url.Content("~/Content/moment/moment.js")"></script>
+	<script src="@Url.Content("~/Content/moment/moment.all.min.js")"></script>
     <script src="@Url.Content("~/Content/moment-datepicker/moment-datepicker.js")"></script>
     <script src="@Url.Content("~/Content/moment-datepicker/moment-datepicker-ko.js")"></script>
 	<script src="@Url.Content("~/Content/signals/signals.min.js")"></script>
@@ -127,7 +128,7 @@
 	
 	@RenderSection("head", required: false)
 </head>
-<body @Html.LayoutBase().FullDirAndLangClass()@Html.LayoutBase().FullDirAttribute()>
+<body @Html.LayoutBase().FullDirClass()@Html.LayoutBase().FullDirAttribute()>
 	@RenderSection("header", required: false)
 	@RenderBody()
 	<footer class="col-1"> 

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Win.Optimization
         private IList<IGroupPageLight> _groupPageOnTeams;
         private IList<IGroupPageLight> _groupPageOnCompareWith;
         private IList<IGroupPageLight> _groupPageOnTeamsTeamBlockPer;
-        private IList<IActivity> _availableActivity;
+        private IEnumerable<IActivity> _availableActivity;
         private GroupPageLight _singleAgentEntry;
 
         public IExtraPreferences Preferences { get; private set; }
@@ -27,11 +27,11 @@ namespace Teleopti.Ccc.Win.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Initialize(
             IExtraPreferences extraPreferences,
-			ISchedulerGroupPagesProvider groupPagesProvider, IList<IActivity> availableActivity)
+			ISchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IActivity> availableActivity)
         {
             Preferences = extraPreferences;
 			_groupPageOnTeams = groupPagesProvider.GetGroups(false);
-        	//_eventAggregator = eventAggregator;
+        	
 		    _availableActivity = availableActivity;
 			_groupPageOnCompareWith = groupPagesProvider.GetGroups(false);
 			_groupPageOnTeamsTeamBlockPer  = groupPagesProvider.GetGroups(false);

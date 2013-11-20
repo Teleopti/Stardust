@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				personAssignment.ClearMainLayers();
 				foreach (var newMainLayer in layers)
 				{
-					personAssignment.AddMainLayer(newMainLayer.Payload, newMainLayer.Period);
+					personAssignment.AssignActivity(newMainLayer.Payload, newMainLayer.Period);
 				}
 				return;
 			}

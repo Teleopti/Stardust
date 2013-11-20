@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
@@ -9,10 +10,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		private readonly ConcurrentDictionary<string, PeriodResourceDetail> _resourceDictionary = new ConcurrentDictionary<string, PeriodResourceDetail>();
 		private readonly ConcurrentDictionary<string, ConcurrentDictionary<Guid, double>> _skillEffiencies = new ConcurrentDictionary<string, ConcurrentDictionary<Guid, double>>();
+		private readonly ConcurrentDictionary<string, IList<DateTimePeriod>> _fractionResourcePeriods = new ConcurrentDictionary<string, IList<DateTimePeriod>>(); 
 		
-		public void AppendResource(string key, SkillCombination skillCombination, double heads, double resource)
+		public void AppendResource(string key, SkillCombination skillCombination, double heads, double resource, DateTimePeriod? fractionPeriod)
 		{
 			_resourceDictionary.AddOrUpdate(key, new PeriodResourceDetail(heads, resource), (s, d) => new PeriodResourceDetail(d.Count + heads, d.Resource + resource));
+
+			if (fractionPeriod.HasValue)
+			{
+				_fractionResourcePeriods.AddOrUpdate(key, new List<DateTimePeriod> { fractionPeriod.Value }, (s, d) =>
+					{ 
+						d.Add(fractionPeriod.Value);
+						return d;
+					});
+			}
 
 			foreach (var skillEfficiency in skillCombination.SkillEfficiencies)
 			{
@@ -27,9 +38,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		public void RemoveResource(string key, SkillCombination skillCombination, double resource)
+		public void RemoveResource(string key, SkillCombination skillCombination, double resource, DateTimePeriod? fractionPeriod)
 		{
 			_resourceDictionary.AddOrUpdate(key, new PeriodResourceDetail(0, 0), (s, d) => new PeriodResourceDetail(d.Count - 1, d.Resource - resource));
+
+			if (fractionPeriod.HasValue)
+			{
+				_fractionResourcePeriods.AddOrUpdate(key, new List<DateTimePeriod>(), (s, d) =>
+				{
+					d.Remove(fractionPeriod.Value);
+					return d;
+				});
+			}
 
 			foreach (var skillEfficiency in skillCombination.SkillEfficiencies)
 			{
@@ -67,6 +87,24 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 			}
 			return new PeriodResourceDetail(count, resource);
+		}
+
+		public IEnumerable<DateTimePeriod> GetFractionResources(string activityKey, Guid skillKey)
+		{
+			var result = new List<DateTimePeriod>();
+			var skillKeyString = skillKey.ToString();
+			foreach (var pair in _resourceDictionary)
+			{
+				if ((string.IsNullOrEmpty(activityKey) || pair.Key.StartsWith(activityKey)) && (pair.Key.Contains(skillKeyString)))
+				{
+					IList<DateTimePeriod> fractionPeriods;
+					if (_fractionResourcePeriods.TryGetValue(pair.Key, out fractionPeriods))
+					{
+						result.AddRange(fractionPeriods);
+					}
+				}
+			}
+			return result;
 		}
 
 		public PeriodResourceDetail GetResources(IEnumerable<string> activityKeys, Guid skillKey)

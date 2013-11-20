@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 										 where
 											 pa != null &&
 											 pa.Equals(versionKeyValuePair.Value.Item2)
-										 select (DifferenceCollectionItem<IPersistableScheduleData>?) d
+										 select (DifferenceCollectionItem<IPersistableScheduleData>?)d
 										).SingleOrDefault();
 				}
 				else

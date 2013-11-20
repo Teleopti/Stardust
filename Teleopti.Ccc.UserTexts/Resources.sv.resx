@@ -11358,4 +11358,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="BudgetGroupMissing" xml:space="preserve">
     <value>Det finns ingen budgetgrupp för dig.</value>
   </data>
+  <data name="TryingToResolveUnscheduledDaysDotDotDot" xml:space="preserve">
+    <value>Försöker lösa oschemalagda dagar...</value>
+  </data>
 </root>

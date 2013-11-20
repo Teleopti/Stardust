@@ -143,9 +143,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var part = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2000,1,1));
 			var ass = new PersonAssignment(parameters.Person, parameters.Scenario, new DateOnly(2000, 1, 1));
-			ass.AddMainLayer(new Activity("sdf"), createPeriod(TimeSpan.FromHours(4)));
-			ass.AddMainLayer(new Activity("sdf"), createPeriod(TimeSpan.FromHours(1)));
-			ass.AddMainLayer(new Activity("sdf"), createPeriod(TimeSpan.FromHours(9)));
+			ass.AssignActivity(new Activity("sdf"), createPeriod(TimeSpan.FromHours(4)));
+			ass.AssignActivity(new Activity("sdf"), createPeriod(TimeSpan.FromHours(1)));
+			ass.AssignActivity(new Activity("sdf"), createPeriod(TimeSpan.FromHours(9)));
 			part.Add(ass);
 
 			Assert.AreEqual(new DateTimePeriod(new DateTime(2000, 1, 1, 1, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc)), part.ProjectionService().CreateProjection().Period());

@@ -7,7 +7,6 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Collection
     public class ScheduleDictionary : IScheduleDictionary,
                                         IPermissionCheck
     {
-        private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceCollectionService;
+		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceCollectionService;
         private readonly IScheduleDateTimePeriod _period;
         private readonly IScenario _scenario;
         private readonly IDictionary<IPerson, IScheduleRange> _dictionary;
@@ -51,8 +50,8 @@ namespace Teleopti.Ccc.Domain.Collection
         }
 
         public ScheduleDictionary(IScenario scenario, 
-                                IScheduleDateTimePeriod period, 
-                                IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService)
+                                IScheduleDateTimePeriod period,
+								IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService)
         {
             ModifiedPersonAccounts = new HashSet<IPersonAbsenceAccount>();
             _scenario = scenario;
@@ -62,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Collection
         }
 
         public ScheduleDictionary(IScenario scenario, IScheduleDateTimePeriod period)
-                                    : this(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>())
+			: this(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>())
         {
         }
 
@@ -134,13 +133,13 @@ namespace Teleopti.Ccc.Domain.Collection
         /// Created by: rogerkr
         /// Created date: 2008-06-17
         /// </remarks>
-        public IPersistableScheduleData DeleteFromBroker(Guid id)
+		public IPersistableScheduleData DeleteFromBroker(Guid id)
         {
-            IPersistableScheduleData returnValue = null;
+			IPersistableScheduleData returnValue = null;
 
             foreach (KeyValuePair<IPerson, IScheduleRange> pair in _dictionary)
             {
-                IPersistableScheduleData retVal = ((ScheduleRange)pair.Value).SolveConflictBecauseOfExternalDeletion(id, true);
+				IPersistableScheduleData retVal = ((ScheduleRange)pair.Value).SolveConflictBecauseOfExternalDeletion(id, true);
                 if (retVal != null)
                 {
                     OnPartModified(new ModifyEventArgs(ScheduleModifier.MessageBroker, retVal.Person, retVal.Period, null));
@@ -181,9 +180,9 @@ namespace Teleopti.Ccc.Domain.Collection
         /// Created by: rogerkr
         /// Created date: 2008-05-29
         /// </remarks>
-        public IDifferenceCollection<IPersistableScheduleData> DifferenceSinceSnapshot()
+		public IDifferenceCollection<IPersistableScheduleData> DifferenceSinceSnapshot()
         {
-            DifferenceCollection<IPersistableScheduleData> ret = new DifferenceCollection<IPersistableScheduleData>();
+			DifferenceCollection<IPersistableScheduleData> ret = new DifferenceCollection<IPersistableScheduleData>();
 
             foreach (ScheduleRange range in _dictionary.Values)
             {
@@ -419,10 +418,10 @@ namespace Teleopti.Ccc.Domain.Collection
         /// Created by: rogerkr
         /// Created date: 2008-06-12
         /// </remarks>
-        public IPersistableScheduleData UpdateFromBroker<T>(ILoadAggregateById<T> repository, Guid id) where T : IPersistableScheduleData
+		public IPersistableScheduleData UpdateFromBroker<T>(ILoadAggregateFromBroker<T> repository, Guid id) where T : IPersistableScheduleData
         {
-            IPersistableScheduleData updatedData = repository.LoadAggregate(id);
-            IPersistableScheduleData returnData=null;
+			IPersistableScheduleData updatedData = repository.LoadAggregate(id);
+			IPersistableScheduleData returnData = null;
             if(updatedData!=null)
             {
                 if (updatedData.Scenario!=null && !_scenario.Equals(updatedData.Scenario)) return null;
@@ -441,7 +440,7 @@ namespace Teleopti.Ccc.Domain.Collection
             return returnData;
         }
 
-        public void MeetingUpdateFromBroker<T>(ILoadAggregateById<T> repository, Guid id) where T : IMeeting
+	public void MeetingUpdateFromBroker<T>(ILoadAggregateFromBroker<T> repository, Guid id) where T : IMeeting
         {
             IMeeting updatedData = repository.LoadAggregate(id);
             if (updatedData == null) return;
@@ -610,7 +609,7 @@ namespace Teleopti.Ccc.Domain.Collection
             get { return false; }
         }
 
-        public IDifferenceCollectionService<IPersistableScheduleData> DifferenceCollectionService
+		public IDifferenceCollectionService<IPersistableScheduleData> DifferenceCollectionService
         {
             get { return _differenceCollectionService; }
         }
@@ -704,7 +703,7 @@ namespace Teleopti.Ccc.Domain.Collection
         {
             _editable = true;
         }
-        public ReadOnlyScheduleDictionary(IScenario scenario, IScheduleDateTimePeriod scheduleDateTimePeriod, IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService)
+		public ReadOnlyScheduleDictionary(IScenario scenario, IScheduleDateTimePeriod scheduleDateTimePeriod, IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService)
             : base(scenario, scheduleDateTimePeriod, differenceCollectionService)
         {
         }

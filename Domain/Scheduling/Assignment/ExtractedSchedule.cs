@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public bool IsFullyPublished { get; set; }
 
-        public IEnumerable<IPersistableScheduleData> PersistableScheduleDataCollection()
+		public IEnumerable<IPersistableScheduleData> PersistableScheduleDataCollection()
         {
             return PersistableScheduleDataInternalCollection();
         }
@@ -242,34 +242,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	    }
 
 	    #region Methods (7)
-
-		public void Swap(IScheduleDay source, bool isDelete)
-		{
-			SchedulePartView view = source.SignificantPartForDisplay();
-
-			switch (view)
-			{
-
-				case SchedulePartView.DayOff:
-					if (isDelete) DeleteDayOff(); else mergeDayOff(source, false); break;
-
-				case SchedulePartView.ContractDayOff:
-					// do nothing
-					break;
-
-				case SchedulePartView.MainShift:
-					if (isDelete) DeleteMainShift(source); else mergeMainShift(source, false, false);
-					break;
-
-				case SchedulePartView.Absence:
-					// do nothing
-					break;
-
-				default: 
-					Merge(source, isDelete);
-					break;
-			}
-		}
 
 		public void Merge(IScheduleDay source, bool isDelete)
 		{
@@ -572,7 +544,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					workingCopyOfAssignment.SetShiftCategory(sourceAssignment.ShiftCategory);
 					foreach (var layer in sourceAssignment.MainLayers())
 					{
-						workingCopyOfAssignment.AddMainLayer(layer.Payload, layer.Period.MovePeriod(periodOffset));
+						workingCopyOfAssignment.AssignActivity(layer.Payload, layer.Period.MovePeriod(periodOffset));
 					}
 
 					var period = source.Period.MovePeriod(periodOffset);
@@ -746,7 +718,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					if (ass != null && 
 						(DateOnlyAsPeriod.Period().Contains(period.StartDateTime) || ass.Period.Intersect(period) || ass.Period.AdjacentTo(period))) //should not start before day I presume? Fix later - will be handled inside PersonAssignment/AgentDay instead...
 				{
-					ass.AddMainLayer(activity, period);
+					ass.AssignActivity(activity, period);
 					if (ass.ShiftCategory == null)
 					{
 						ass.SetShiftCategory(shiftCategory);
@@ -756,7 +728,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			//TODO create inparameters to check on if to create new personassignment
 			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-					newPersonAssignment.AddMainLayer(activity, period);
+					newPersonAssignment.AssignActivity(activity, period);
 					newPersonAssignment.SetShiftCategory(shiftCategory);
 			Add(newPersonAssignment);
 

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.TestCommon.TestData
 
 		public static void SetBusinessUnit(this IBelongsToBusinessUnit aggregateRootWithBusinessUnit, IBusinessUnit businessUnit)
 		{
-			var type = typeof(AggregateRootWithBusinessUnit);
+			var type = typeof(VersionedAggregateRootWithBusinessUnit);
 			var privateField = type.GetField("_businessUnit", BindingFlags.NonPublic | BindingFlags.Instance);
 			privateField.SetValue(aggregateRootWithBusinessUnit, businessUnit);
 		}

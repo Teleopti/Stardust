@@ -111,8 +111,6 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			var preferenceNightRestChecker = new PreferenceNightRestChecker();
 			_model.LoadDetails(scheduleMatrixPro, restrictionExtractor, schedulingOptions, effectiveRestrictionExtractor, periodTarget, preferenceNightRestChecker);
 			_useScheduling = schedulingOptions.UseScheduling;
-			//ViewGrid.Refresh();
-			//InitializeGrid();	
 		}
 
 		public override void AddSelectedSchedulesInColumnToList(GridRangeInfo range, int colIndex, ICollection<IScheduleDay> selectedSchedules)
@@ -125,12 +123,18 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 				if (colIndex >= 0)
 				{
 					IScheduleDay schedulePart = ViewGrid.Model[j, colIndex].CellValue as IScheduleDay;
-
 					if (schedulePart != null)
-						selectedSchedules.Add(schedulePart);
+					{
+						selectedSchedules.Add(getNewSchedulePartForPersonToAvoidConflictWithMyself(schedulePart));
+					}
 				}
 
 			}
+		}
+
+		private IScheduleDay getNewSchedulePartForPersonToAvoidConflictWithMyself(IScheduleDay schedulePart)
+		{
+			return Presenter.SchedulerState.Schedules[schedulePart.Person].ScheduledDay(schedulePart.DateOnlyAsPeriod.DateOnly);
 		}
 
 		public override Point GetCellPositionForAgentDay(IEntity person, System.DateTime dayDate)
@@ -165,31 +169,13 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 		public override DateOnly SelectedDateLocal()
 		{
-			//DateOnly tag;
 			var tag = TheGrid[ViewGrid.CurrentCell.RowIndex, ViewGrid.CurrentCell.ColIndex].Tag;
 			if ((tag is DateOnly)) return (DateOnly)tag;
 			return Presenter.SelectedPeriod.DateOnlyPeriod.StartDate;
-
-			//if (ViewGrid.CurrentCell.ColIndex >= (int)ColumnType.StartScheduleColumns)
-			//{
-			//    tag = (DateOnly)ViewGrid.Model[1, ViewGrid.CurrentCell.ColIndex].Tag;
-			//}
-			//else
-			//{
-			//    tag = Presenter.SelectedPeriod.DateOnlyPeriod.StartDate;
-			//}
-
-			//return tag;
 		}
 
 		public override void InvalidateSelectedRows(IEnumerable<IScheduleDay> schedules)
 		{
-			//if (_singleAgentRestrictionPresenter == null)
-			//    return;
-			//AgentInfoHelper agentInfoHelper = _singleAgentRestrictionPresenter.SelectedAgentInfo();
-			//if (agentInfoHelper != null)
-			//    ((RestrictionSummaryPresenter)Presenter).GetNextPeriod(agentInfoHelper);
-
 			if(schedules == null) throw new ArgumentNullException("schedules");
 
 			var personsToReload = new HashSet<IPerson>();
@@ -203,7 +189,6 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 					TheGrid.InvalidateRange(GridRangeInfo.Row(point.X));
 				}
 			}
-			//_singleAgentRestrictionPresenter.Reload(personsToReload);
 		}
 
 		internal override void CellDrawn(object sender, GridDrawCellEventArgs e)
@@ -215,7 +200,6 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 		internal override void CellClick(object sender, GridCellClickEventArgs e)
 		{
-			//handle selection when click on col header
 			if (e.RowIndex == 0)
 				e.Cancel = true;
 		}
@@ -278,8 +262,6 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 			undoRedo.CommitBatch();
 			OnPasteCompleted();
-
-			//InvalidateSelectedRows(new List<IScheduleDay> { Presenter.ClipHandlerSchedule.ClipList[0].ClipValue });
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

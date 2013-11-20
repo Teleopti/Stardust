@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public class PersonAssignment : AggregateRoot, 
+	public class PersonAssignment : VersionedAggregateRoot, 
 									IPersonAssignment,
 									IExportToAnotherScenario
 	{
@@ -275,14 +275,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_shiftLayers.Add(layer);
 		}
 
-		public virtual void AddMainLayer(IActivity activity, DateTimePeriod period)
+		public virtual void AssignActivity(IActivity activity, DateTimePeriod period)
 		{
 			var layer = new MainShiftLayer(activity, period);
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
 			SetDayOff(null);
-		}
 
+			AddEvent(() => new ActivityAssignedEvent
+				{
+					Date = Date,
+					PersonId = Person.Id.Value,
+					ActivityId = activity.Id.Value,
+					StartDateTime = period.StartDateTime,
+					EndDateTime = period.EndDateTime,
+					ScenarioId = Scenario.Id.Value
+				});
+		}
+		
 		public virtual void SetShiftCategory(IShiftCategory shiftCategory)
 		{
 			_shiftCategory = shiftCategory;
@@ -294,7 +304,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			SetShiftCategory(assignment.ShiftCategory);
 			foreach (var mainLayer in assignment.MainLayers())
 			{
-				AddMainLayer(mainLayer.Payload, mainLayer.Period);
+				AssignActivity(mainLayer.Payload, mainLayer.Period);
 			}
 		}
 
@@ -304,6 +314,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			layer.SetParent(this);
 			_shiftLayers.Insert(index,layer);
 			SetDayOff(null);
+
 		}
 
 		public virtual IDayOff DayOff()
@@ -343,7 +354,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			SetShiftCategory(personAssignmentSource.ShiftCategory);
 			foreach (var mainLayer in personAssignmentSource.MainLayers())
 			{
-				AddMainLayer(mainLayer.Payload, mainLayer.Period);
+				AssignActivity(mainLayer.Payload, mainLayer.Period);
 			}
 			foreach (var personalLayer in personAssignmentSource.PersonalLayers())
 			{

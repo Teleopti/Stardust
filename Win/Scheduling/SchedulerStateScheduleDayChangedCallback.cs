@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 var container = ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>.Container();
                 container.RemoveScheduleDayFromContainer(_dayBefore, container.MinSkillResolution);
-                container.AddScheduleDayToContainer(partAfter, container.MinSkillResolution);
+                container.AddScheduleDayToContainer(partAfter, container.MinSkillResolution).Wait();
             }
         }
 

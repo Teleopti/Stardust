@@ -100,6 +100,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			TestControllerMethods.Logon();
 		}
 
+		[Given(@"I am not signed in")]
+		public void GivenIAmNotSignedIn()
+		{
+			// really make sure we'r not signed in by setting an incorrect cookie through the TestController. if required.
+		}
+
 		[Then(@"I should (be|stay) signed in")]
 		public void ThenIShouldBeSignedIn(string beOrStay)
 		{
@@ -116,6 +122,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[Then(@"I should not be signed in")]
 		[Then(@"I should be signed out")]
 		[Then(@"I should be signed out from MobileReports")]
+		[Then(@"I should be redirected to the sign in page")]
 		public void ThenIAmNotSignedIn()
 		{
 			Browser.Interactions.AssertExists("#Username-input");

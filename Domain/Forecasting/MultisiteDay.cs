@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     /// Created date: 18.12.2007
     /// </remarks>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-	public class MultisiteDay : AggregateRootWithBusinessUnit, IMultisiteDay
+	public class MultisiteDay : VersionedAggregateRootWithBusinessUnit, IMultisiteDay
     {
         private IList<IMultisitePeriod> _multisitePeriodCollection = new List<IMultisitePeriod>();
         private TemplateReference _templateReference = new MultisiteDayTemplateReference();

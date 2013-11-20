@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -21,14 +22,14 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         private readonly ISchedulingOptions _schedulingOptions;
     	private readonly IDaysOffPreferences _daysOffPreferences;
-    	private readonly IList<IShiftCategory> _shiftCategories;
+    	private readonly IEnumerable<IShiftCategory> _shiftCategories;
         private readonly bool _backToLegal;
     	private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
     	private readonly IList<IGroupPageLight> _groupPages;
         private readonly IList<IGroupPageLight> _groupPagesForTeamBlockPer;
-        private readonly IList<IScheduleTag> _scheduleTags;
+        private readonly IEnumerable<IScheduleTag> _scheduleTags;
         private readonly string _settingValue;
-        private readonly IList<IActivity> _availableActivity;
+        private readonly IEnumerable<IActivity> _availableActivity;
         private SchedulingOptionsGeneralPersonalSetting _defaultGeneralSettings;
 		private SchedulingOptionsAdvancedPersonalSetting _defaultAdvancedSettings;
         private SchedulingOptionsExtraPersonalSetting _defaultExtraSettings;
@@ -38,9 +39,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private readonly bool _reschedule;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public SchedulingSessionPreferencesDialog(ISchedulingOptions schedulingOptions, IDaysOffPreferences daysOffPreferences, IList<IShiftCategory> shiftCategories,
+        public SchedulingSessionPreferencesDialog(ISchedulingOptions schedulingOptions, IDaysOffPreferences daysOffPreferences, IEnumerable<IShiftCategory> shiftCategories,
             bool reschedule, bool backToLegal, ISchedulerGroupPagesProvider groupPagesProvider,
-            IList<IScheduleTag> scheduleTags, string settingValue, IList<IActivity> availableActivity)
+            IEnumerable<IScheduleTag> scheduleTags, string settingValue, IEnumerable<IActivity> availableActivity)
             : this()
         {
             _schedulingOptions = schedulingOptions;
@@ -55,17 +56,17 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             //add the single agent 
             var singleAgentEntry = new GroupPageLight { Key = "SingleAgentTeam", Name = Resources.SingleAgentTeam };
             _groupPagesForTeamBlockPer.Add(singleAgentEntry);
-            _scheduleTags = scheduleTags;
+			_scheduleTags = addKeepOriginalScheduleTag(scheduleTags);
             _settingValue = settingValue;
 		    _availableActivity = availableActivity;
-
-			addKeepOriginalScheduleTag(_scheduleTags);
         }
 
-	    private void addKeepOriginalScheduleTag(IList<IScheduleTag> scheduleTags)
+	    private IEnumerable<IScheduleTag> addKeepOriginalScheduleTag(IEnumerable<IScheduleTag> scheduleTags)
 	    {
+		    var list = scheduleTags.ToList();
 			var keepOriginalScheduleTag = KeepOriginalScheduleTag.Instance;
-			scheduleTags.Insert(1, keepOriginalScheduleTag);
+			list.Insert(1, keepOriginalScheduleTag);
+		    return list;
 	    }
 
 	    private SchedulingSessionPreferencesDialog()

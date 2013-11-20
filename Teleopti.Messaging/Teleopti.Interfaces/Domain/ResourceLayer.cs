@@ -11,5 +11,7 @@ namespace Teleopti.Interfaces.Domain
 		public Guid PayloadId { get; set; }
 
 		public bool RequiresSeat { get; set; }
+
+		public DateTimePeriod? FractionPeriod { get; set; }
 	}
 }

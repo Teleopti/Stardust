@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			personassignment.ClearMainLayers();
 			foreach (var layer in editableShift.LayerCollection)
 			{
-				personassignment.AddMainLayer(layer.Payload, layer.Period);
+				personassignment.AssignActivity(layer.Payload, layer.Period);
 			}
 			personassignment.SetShiftCategory(editableShift.ShiftCategory);
 		}

@@ -29,16 +29,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public DateTime ScheduledActivityStartTime { get; set; }
 		public DateTime ScheduledActivityEndTime { get; set; }
 
-		// backward compatibility
-		public string LunchActivity { get; set; }
-		public DateTime LunchStartTime { get; set; }
-		public DateTime LunchEndTime { get; set; }
+		// alternative field name prefix "Lunch"
+		public string LunchActivity { get { return ScheduledActivity; } set { ScheduledActivity = value; } }
+		public DateTime LunchStartTime { get { return ScheduledActivityStartTime; } set { ScheduledActivityStartTime = value; } }
+		public DateTime LunchEndTime { get { return ScheduledActivityEndTime; } set { ScheduledActivityEndTime = value; } }
 		
-		public string Overtime { get; set; }
-		public string OvertimeMultiplicatorDefinitionSet { get; set; }
-		public DateTime OvertimeStartTime { get; set; }
-		public DateTime OvertimeEndTime { get; set; }
-
 		// this should not be here. this exists on the ShiftCategoryConfigurable
 		public string ShiftColor { get; set; }	
 
@@ -58,11 +53,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			_assignmentPeriod = new DateTimePeriod(startTimeUtc, endTimeUtc);
 			var scenario = new ScenarioRepository(uow).LoadAll().Single(x => x.Description.Name == Scenario);
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(user, scenario, new DateOnly(StartTime));
-			var mainShift = EditableShiftFactory.CreateEditorShift(activity, _assignmentPeriod, shiftCategory);
-
-			addScheduleActivity(timeZone, mainShift, personAssignment, uow);
-
-			new EditableShiftMapper().SetMainShiftLayers(personAssignment, mainShift);
+			personAssignment.SetShiftCategory(shiftCategory);
+			personAssignment.AssignActivity(activity, _assignmentPeriod);
+			addScheduleActivity(timeZone, personAssignment, uow);
 
 			// simply publish the schedule changed event so that the read model is updated
 			personAssignment.ScheduleChanged();
@@ -70,44 +63,21 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			assignmentRepository.Add(personAssignment);
 		}
 
-		private void addScheduleActivity(TimeZoneInfo timeZone, IEditableShift mainShift, IPersonAssignment personAssignment, IUnitOfWork uow)
+		private void addScheduleActivity(TimeZoneInfo timeZone, IPersonAssignment personAssignment, IUnitOfWork uow)
 		{
-			var scheduledActivityName = ScheduledActivity;
-			var scheduledActivityStartTime = ScheduledActivityStartTime;
-			var scheduledActivityEndTime = ScheduledActivityEndTime;
-
-			if (LunchActivity != null)
-			{
-				scheduledActivityName = LunchActivity;
-				scheduledActivityStartTime = LunchStartTime;
-				scheduledActivityEndTime = LunchEndTime;
-			}
-
-			if (scheduledActivityName == null)
+			if (ScheduledActivity == null)
 				return;
 
-			var scheduledActivity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(scheduledActivityName));
+			var scheduledActivity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ScheduledActivity));
 
-
-			if (Overtime != null)
-			{
-				var multiplicatorDefinitionSet =
-					new MultiplicatorDefinitionSetRepository(uow).LoadAll()
-					                                             .Single(x => x.Name.Equals(OvertimeMultiplicatorDefinitionSet));
-				var overtimeStartTimeUtc = timeZone.SafeConvertTimeToUtc(OvertimeStartTime);
-				var overtimeEndTimeUtc = timeZone.SafeConvertTimeToUtc(OvertimeEndTime);
-				var overtimePeriod = new DateTimePeriod(overtimeStartTimeUtc, overtimeEndTimeUtc);
-				personAssignment.AddOvertimeLayer(scheduledActivity, overtimePeriod, multiplicatorDefinitionSet);
-			}
-
-			var startTimeUtc = timeZone.SafeConvertTimeToUtc(scheduledActivityStartTime);
-			var endTimeUtc = timeZone.SafeConvertTimeToUtc(scheduledActivityEndTime);
+			var startTimeUtc = timeZone.SafeConvertTimeToUtc(ScheduledActivityStartTime);
+			var endTimeUtc = timeZone.SafeConvertTimeToUtc(ScheduledActivityEndTime);
 			var period = new DateTimePeriod(startTimeUtc, endTimeUtc);
 
 			if (ScheduledActivityIsPersonal)
 				personAssignment.AddPersonalLayer(scheduledActivity, period);
 			else
-				mainShift.LayerCollection.Add(new EditableShiftLayer(scheduledActivity, period));
+				personAssignment.AssignActivity(scheduledActivity, period);
 		}
 	}
 }

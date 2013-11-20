@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void MapTo(ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories)
+		public void MapTo(ISchedulingOptions schedulingOptions, IEnumerable<IShiftCategory> shiftCategories)
 		{
 			schedulingOptions.UseMinimumPersons = _useMinStaff;
 			schedulingOptions.UseMaximumPersons = _useMaxStaff;

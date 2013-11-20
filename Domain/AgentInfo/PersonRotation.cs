@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
 {
-    public class PersonRotation : AggregateRootWithBusinessUnit, IPersonRotation, IDeleteTag 
+    public class PersonRotation : VersionedAggregateRootWithBusinessUnit, IPersonRotation, IDeleteTag 
     {
         private readonly IPerson _person;
         private IRotation _rotation;

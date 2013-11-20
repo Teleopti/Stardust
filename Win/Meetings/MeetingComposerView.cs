@@ -87,10 +87,14 @@ namespace Teleopti.Ccc.Win.Meetings
             BackColor = ColorHelper.ControlPanelColor;
         }
 
-		
 		private void toolStripButtonMainSave_Click(object sender, EventArgs e)
 		{
 			SaveValidMeeting();
+		}
+
+		public void SetInstanceId(Guid id)
+		{
+			_meetingComposerPresenter.SetInstanceId(id);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]

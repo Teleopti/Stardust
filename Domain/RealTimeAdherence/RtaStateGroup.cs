@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence
 {
-    public class RtaStateGroup : AggregateRootWithBusinessUnit,
+    public class RtaStateGroup : VersionedAggregateRootWithBusinessUnit,
                                  IRtaStateGroup, IDeleteTag
     {
         private readonly IList<IRtaState> _stateCollection = new List<IRtaState>();

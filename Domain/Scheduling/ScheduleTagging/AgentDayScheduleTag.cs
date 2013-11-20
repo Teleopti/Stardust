@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
 {
-    public class AgentDayScheduleTag : AggregateRootWithBusinessUnit, IAgentDayScheduleTag
+    public class AgentDayScheduleTag : VersionedAggregateRootWithBusinessUnit, IAgentDayScheduleTag
 
     {
         private readonly IPerson _person;

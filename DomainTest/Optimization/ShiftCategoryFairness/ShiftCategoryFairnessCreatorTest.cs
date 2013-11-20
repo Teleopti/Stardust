@@ -49,11 +49,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			IPersonAssignment assignment3 = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
 
 					assignment1.SetShiftCategory(fm);
-					assignment1.AddMainLayer(new Activity("d"), new DateTimePeriod());
+					assignment1.AssignActivity(new Activity("d"), new DateTimePeriod());
 					assignment2.SetShiftCategory(fm);
-					assignment2.AddMainLayer(new Activity("d"), new DateTimePeriod());
+					assignment2.AssignActivity(new Activity("d"), new DateTimePeriod());
 					assignment3.SetShiftCategory(da);
-					assignment3.AddMainLayer(new Activity("d"), new DateTimePeriod());
+					assignment3.AssignActivity(new Activity("d"), new DateTimePeriod());
 
             using (_mockRepository.Record())
             {

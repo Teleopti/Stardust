@@ -52,17 +52,17 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private class DummyScheduleUpdated : IUpdateScheduleDataFromMessages
         {
-            public IPersistableScheduleData DeleteScheduleData(IEventMessage eventMessage)
+			public IPersistableScheduleData DeleteScheduleData(IEventMessage eventMessage)
             {
                 throw new NotImplementedException();
             }
 
-            public IPersistableScheduleData UpdateInsertScheduleData(IEventMessage eventMessage)
+			public IPersistableScheduleData UpdateInsertScheduleData(IEventMessage eventMessage)
             {
                 throw new NotImplementedException();
             }
 
-            public void FillReloadedScheduleData(IPersistableScheduleData databaseVersionOfEntity)
+			public void FillReloadedScheduleData(IPersistableScheduleData databaseVersionOfEntity)
             {
                 var changeInfo = databaseVersionOfEntity as IChangeInfo;
                 if (changeInfo != null)

@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				using (_budgetDayProvider.BatchUpdater())
                 foreach (var budgetDay in _budgetDays)
                 {
-                    budgetDay.Contractors = budgetDay.IsClosed==false ? distributedContractors : 0.0;
+	                budgetDay.Contractors = budgetDay.IsClosed ? 0.0 : distributedContractors;
                 }
                 _contractors = value;
                 TriggerNotifyPropertyChanged("Contractors");
@@ -310,11 +310,11 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             get { return _overtimeHours; }
             set
             {
-                var distributedOvertime = value / _count;
+                var distributedOvertime = value / _openDaysCount;
 				using (_budgetDayProvider.BatchUpdater())
                 foreach (var budgetDay in _budgetDays)
                 {
-                    budgetDay.OvertimeHours = distributedOvertime;
+	                budgetDay.OvertimeHours = budgetDay.IsClosed ? 0.0 : distributedOvertime;
                 }
 
                 _overtimeHours = value;
@@ -327,11 +327,11 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             get { return _studentsHours; }
             set
             {
-                var distributedStudents = value / _count;
+                var distributedStudents = value / _openDaysCount;
 				using (_budgetDayProvider.BatchUpdater())
                 foreach (var budgetDay in _budgetDays)
                 {
-                    budgetDay.StudentsHours = distributedStudents;
+	                budgetDay.StudentsHours = budgetDay.IsClosed ? 0.0 : distributedStudents;
                 }
                 _studentsHours = value;
                 TriggerNotifyPropertyChanged("StudentsHours");

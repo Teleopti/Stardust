@@ -10,10 +10,10 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 
-namespace Teleopti.Ccc.WebBehaviorTest
+namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
 	[Binding]
-	public class ManageRequestStepDefinitions 
+	public class ManageRequestStepDefinitions
 	{
 		[Given(@"I have a requestable absence called (.*)")]
 		public void GivenIHaveARequestableAbsenceCalledVacation(string name)
@@ -28,14 +28,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[When(@"I input absence request values with '(.*)' for date '(.*)'")]
-        public void WhenIInputAbsenceRequestValuesWithForDate(string name, DateTime date)
-        {
+		public void WhenIInputAbsenceRequestValuesWithForDate(string name, DateTime date)
+		{
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-subject", "The cake is a.. Cake!");
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-message", "A message. A very very very short message. Or maybe not.");
 			Browser.Interactions.SelectOptionByTextUsingJQuery("#Request-add-section .request-new-absence", name);
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-datefrom", date.ToShortDateString(DataMaker.Data().MyCulture));
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-dateto", date.ToShortDateString(DataMaker.Data().MyCulture));	
-        }
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-dateto", date.ToShortDateString(DataMaker.Data().MyCulture));
+		}
 
 		[When(@"I input overtime availability with")]
 		public void WhenIInputOvertimeAvailabilityWith(Table table)

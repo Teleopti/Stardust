@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void GetStateGroup_ReturnValidStateGroup()
 		{
 			_databaseReader.Expect(d => d.StateGroups()).Return(_stateGroupDictionary);
-			var result = _target.GetStateGroup(_stateCode, _platFormTypeId, _businessUnitId);
+			var result = _target.GetStateGroup("aux3", _platFormTypeId, _businessUnitId);
 			result.Should().Be.EqualTo(_rtaStateGroup);
 		}
 
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 					IsLogOutState = true
 				};
 			var stateDictionary = new ConcurrentDictionary<Tuple<string,Guid,Guid>, List<RtaStateGroupLight>>();
-			stateDictionary.TryAdd(new Tuple<string, Guid, Guid>("stateCode",_platFormTypeId,_businessUnitId), new List<RtaStateGroupLight> { stateGroup });
+			stateDictionary.TryAdd(new Tuple<string, Guid, Guid>("STATECODE",_platFormTypeId,_businessUnitId), new List<RtaStateGroupLight> { stateGroup });
 
 			_databaseReader.Expect(d => d.StateGroups()).Return(stateDictionary);
 			
@@ -230,8 +230,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				PlatformTypeId = _platFormTypeId,
 				StateGroupId = _stateGroupId
 			};
-            var stateDictionary = new ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>();
-			stateDictionary.TryAdd(new Tuple<string, Guid, Guid>("stateCode",_platFormTypeId,_businessUnitId), new List<RtaStateGroupLight> { stateGroup });
+			var stateDictionary = new ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>();
+			stateDictionary.TryAdd(new Tuple<string, Guid, Guid>("STATECODE",_platFormTypeId,_businessUnitId), new List<RtaStateGroupLight> { stateGroup });
 
 			_databaseReader.Expect(d => d.StateGroups()).Return(stateDictionary);
 			_databaseReader.Expect(d => d.ActivityAlarms()).Return(new ConcurrentDictionary<Tuple<Guid,Guid,Guid>, List<RtaAlarmLight>>());

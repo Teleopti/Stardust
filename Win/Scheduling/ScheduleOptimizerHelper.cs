@@ -20,7 +20,6 @@ using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
@@ -320,11 +319,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 		            fixedStaffSchedulingService.FinderResults.Clear();
 
                 var progressChangeEvent = new TeleoptiProgressChangeMessage(Resources.TryingToResolveUnscheduledDaysDotDotDot);
+                _backgroundWorker.ReportProgress(0, progressChangeEvent );
 		            foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)
 		            {
 		                int iterations = 0;
-
-                    _backgroundWorker.ReportProgress(0, progressChangeEvent );
 		                while (nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix, schedulingOptions, rollbackService) && iterations < 10)
 		                {
                         if (_backgroundWorker.CancellationPending)
@@ -709,9 +707,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             resourceOptimizerPersonOptimized(this, e);
 
             // to make sure we are in legal state before we can do day off optimization
-            IList<IDayOffTemplate> displayList = (from item in _schedulerStateHolder.CommonStateHolder.DayOffs
-                                                  where ((IDeleteTag)item).IsDeleted == false
-                                                  select item).ToList();
+            IList<IDayOffTemplate> displayList = _schedulerStateHolder.CommonStateHolder.ActiveDayOffs.ToList();
             ((List<IDayOffTemplate>)displayList).Sort(new DayOffTemplateSorter());
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
             DaysOffBackToLegalState(matrixContainerList, _backgroundWorker,

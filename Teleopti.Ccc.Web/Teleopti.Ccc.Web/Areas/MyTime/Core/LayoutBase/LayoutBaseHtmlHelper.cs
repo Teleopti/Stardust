@@ -25,10 +25,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 			return new MvcHtmlString(string.Format(" lang=\"{0}\"", layoutBaseViewModel.CultureSpecific.LanguageCode));
 		}
 
-		public MvcHtmlString FullDirAndLangClass()
+		public MvcHtmlString FullDirClass()
 		{
 			var layoutBaseViewModel = (LayoutBaseViewModel)_htmlHelper.ViewData[LayoutBaseViewModelKey];
-			return new MvcHtmlString(layoutBaseViewModel.CultureSpecific.Rtl ? string.Format(" class=\"rtl {0}\"", layoutBaseViewModel.CultureSpecific.LanguageCode) : string.Format(" class=\"{0}\"", layoutBaseViewModel.CultureSpecific.LanguageCode));
+			return new MvcHtmlString(layoutBaseViewModel.CultureSpecific.Rtl ? " class=\"rtl\"" : string.Empty);
 		}
 
 		public MvcHtmlString DatePickerGlobalizationAsJson()

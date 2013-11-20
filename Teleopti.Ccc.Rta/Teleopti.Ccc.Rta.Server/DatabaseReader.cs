@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.Rta.Server
 													StateGroupName = reader.GetString(reader.GetOrdinal("StateGroupName")),
 													BusinessUnitId = reader.GetGuid(reader.GetOrdinal("BusinessUnitId")),
 													PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
-													StateCode = reader.GetString(reader.GetOrdinal("StateCode")),
+													StateCode = reader.GetString(reader.GetOrdinal("StateCode")).ToUpper(CultureInfo.InvariantCulture),
 													StateGroupId = reader.GetGuid(reader.GetOrdinal("StateGroupId")),
 													StateId = reader.GetGuid(reader.GetOrdinal("StateId")),
 													StateName = reader.GetString(reader.GetOrdinal("StateName")),

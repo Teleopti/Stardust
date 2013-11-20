@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence
 {
-    public class StateGroupActivityAlarm : AggregateRootWithBusinessUnit, IStateGroupActivityAlarm
+    public class StateGroupActivityAlarm : VersionedAggregateRootWithBusinessUnit, IStateGroupActivityAlarm
     {
         private readonly IRtaStateGroup _stateGroup;
         private readonly IActivity _activity;

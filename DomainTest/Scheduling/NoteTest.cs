@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
             Assert.AreEqual(guid, _target.Id);
 
-            IPersistableScheduleData data = _target.CreateTransient();
+            var data = _target.CreateTransient();
 
             Assert.IsNull(data.Id);
         }
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
             var moveToTheseParameters = new Note(_target.Person, _target.NoteDate, newScenario, text);
 
-            IPersistableScheduleData newNote = _target.CloneAndChangeParameters(moveToTheseParameters);
+            var newNote = _target.CloneAndChangeParameters(moveToTheseParameters);
             INote castedNote = ((INote) newNote);
             Assert.IsNull(newNote.Id);
             Assert.AreSame(_target.Person, newNote.Person);

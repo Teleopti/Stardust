@@ -79,13 +79,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         IAvailableDataRepository CreateAvailableDataRepository(IUnitOfWork unitOfWork);
 
         /// <summary>
-        /// Creates a system role - application role mapper repository.
-        /// </summary>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <returns></returns>
-        ISystemRoleApplicationRoleMapperRepository CreateSystemRoleApplicationRoleMapperRepository(IUnitOfWork unitOfWork);
-
-        /// <summary>
         /// Creates the matrix repository.
         /// </summary>
         /// <returns></returns>

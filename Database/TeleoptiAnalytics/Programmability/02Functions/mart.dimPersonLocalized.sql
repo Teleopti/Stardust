@@ -31,83 +31,18 @@ RETURNS
 AS
 BEGIN
 
-DECLARE @dim_person_local TABLE (
-	person_id int NOT NULL,
-	[valid_from_date_local] [smalldatetime] NOT NULL,
-	[valid_from_date_id] [int] NOT NULL,
-	[valid_from_interval_id] [int] NOT NULL,
-	[valid_to_date] [smalldatetime] NOT NULL,
-	[valid_to_date_id] [int] NOT NULL,
-	[valid_to_interval_id] [int] NOT NULL,
-	[valid_from_date_id_local] [int] NULL,
-	[valid_from_interval_id_local] [smallint] NULL,
-	[valid_to_date_id_local] [int] NOT NULL,
-	[valid_to_interval_id_local] [smallint] NOT NULL
-)
-
---Declare
-DECLARE @IntervalMinutes AS INT
-
---Init
-SELECT @IntervalMinutes = 1440/Max(interval_id) FROM mart.dim_interval
-
-INSERT INTO @dim_person_local
-SELECT 	dp.person_id,
-	dp.valid_from_date,
-	dp.valid_from_date_id,
-	dp.valid_from_interval_id,
-	dp.valid_to_date,
-	dp.valid_to_date_id,
-	dp.valid_to_interval_id,
-	b1.local_date_id as valid_from_date_id_local,
-	b1.local_interval_id as valid_from_interval_id_local,
-	ISNULL(b2.local_date_id,-2) as valid_to_date_id_local,
-	ISNULL(b2.local_interval_id,0) as valid_to_interval_id_local
-
-FROM
-	mart.DimPersonAdapted() dp  --this one transforms the eternity date to max(date) from table dim_date
---From Date	
-INNER JOIN mart.bridge_time_zone b1
-	ON
-	b1.time_zone_id = dp.time_zone_id
-	AND dp.valid_from_date_id = b1.date_id
-	AND dp.valid_from_interval_id = b1.interval_id
-
---To Date	
-LEFT OUTER JOIN mart.bridge_time_zone b2
-	ON
-	b2.time_zone_id = dp.time_zone_id
-	AND dp.valid_to_date_id = b2.date_id
-	AND dp.valid_to_interval_id = b2.interval_id
-
---
 INSERT INTO @dim_person_localized
-SELECT 
-	localized.person_id,
-	d1.date_date + i1.interval_start as valid_from_date_local,
-	--dateadd(MINUTE,@IntervalMinutes,(d2.date_date + i2.interval_start)) as valid_to_date_local --Adds one intervall
-	d2.date_date + i2.interval_start as valid_to_date_local
-FROM @dim_person_local localized
---From date
-INNER JOIN mart.dim_date d1
-	ON localized.valid_from_date_id_local = d1.date_id
-INNER JOIN mart.dim_interval i1
-	ON localized.valid_from_interval_id_local = i1.interval_id
-
---To date
-INNER JOIN mart.dim_date d2
-	ON localized.valid_to_date_id_local = d2.date_id
-INNER JOIN mart.dim_interval i2
-	ON localized.valid_to_interval_id_local = i2.interval_id
-
---Trim everything outside the period asked for
-DELETE FROM @dim_person_localized
-WHERE NOT
+SELECT
+	person_id,
+	valid_from_date_local,
+	valid_to_date_local
+FROM mart.dim_person
+WHERE
 --------------
 --Trying to explain the personPeriod filter:
 --@date_from=A
 --@date_to	=B
---personPeriods: 1-4 (personPeriod.valid_from_date, personPeriod.valid_to_date)
+--personPeriods: 1-4 (personPeriod.valid_from_date_local, personPeriod.valid_to_date_local)
 --------------
 (
 --                     A---------------------------------------------------------B		

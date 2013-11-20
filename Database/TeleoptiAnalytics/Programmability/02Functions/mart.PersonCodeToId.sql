@@ -54,13 +54,11 @@ BEGIN
 		INSERT INTO @ids
 		SELECT dp.person_id
 			FROM mart.dim_person dp
-			INNER JOIN [mart].[DimPersonLocalized](@date_from,@date_to) dpl
+			INNER JOIN [mart].[dimPersonFilterPersonPeriod](@date_from,@date_to,@person_code) dpl
 			ON		dp.person_id = dpl.person_id
 					AND dpl.valid_from_date_local <= @date_to
 					AND dpl.valid_to_date_local >= @date_from
-			WHERE	dp.person_code = @person_code
-					AND
-					(
+			WHERE	(
 						dp.team_id IN (SELECT id FROM mart.SplitStringInt(@team_set))
 						OR 
 						(
@@ -70,7 +68,6 @@ BEGIN
 						)
 					)
 					AND (dp.site_id = @site_id OR (@site_id < -1 OR @site_id IS NULL))
-
 RETURN
 
 END

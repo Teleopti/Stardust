@@ -15,12 +15,10 @@ using Teleopti.Ccc.AgentPortal.Requests.FormHandler;
 using Teleopti.Ccc.AgentPortal.Requests.ShiftTrade;
 using Teleopti.Ccc.AgentPortalCode.AgentSchedule;
 using Teleopti.Ccc.AgentPortalCode.Common;
-using Teleopti.Ccc.AgentPortalCode.Common.Clipboard;
 using Teleopti.Ccc.AgentPortalCode.Common.Factory;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade;
-using Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
@@ -29,19 +27,9 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 {
-    /// <summary>
-    /// Represent a Conmopost control for Teleopti Schedule
-    /// with Four differnt viewsof day,week,month and Team
-    /// </summary>
-    /// <remarks>
-    /// Created by: Sumedah
-    /// Created date: 2008-08-17
-    /// </remarks>
     public partial class ScheduleControl : BaseUserControl
     {
-        private AgentScheduleView _scheduleView;
-        private ClipHandler<ICustomScheduleAppointment> _scheduleClipHandler;
-        private readonly IToggleButtonState _parent;
+	    private readonly IToggleButtonState _parent;
 	    private readonly ILegendLoader _legendLoader;
 
 	    public CalendarViewType SelectedScheduleView
@@ -49,21 +37,10 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             get { return (CalendarViewType)tabControlAdvMainTab.SelectedIndex; }
         }
 
-        public AgentScheduleView ScheduleView
-        {
-            get { return _scheduleView; }
-            set { _scheduleView = value; }
-        }
+	    public AgentScheduleView ScheduleView { get; set; }
 
-        public event EventHandler<EventArgs> ViewChanged;
+	    public event EventHandler<EventArgs> ViewChanged;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ScheduleControl"/> class.
-        /// </summary>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2008-08-17
-        /// </remarks>
         public ScheduleControl(IToggleButtonState parent, ILegendLoader legendLoader)
         {
 			InitializeComponent();
@@ -75,15 +52,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             InitializeScheduleControl();
         }
 
-        /// <summary>
-        /// Handles the Load event of the AgentPortalMainForm control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// Created by: MuhamadR
-        /// Created date: 2008-03-06
-        /// </remarks>
         private void ScheduleControl_Load(object sender, EventArgs e)
         {
             if (!DesignMode) SetTexts();
@@ -110,15 +78,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             }
         }
 
-        /// <summary>
-        /// Handles the SelectedIndexChanged event of the tabControlAdvMainTab control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2008-03-16
-        /// </remarks>
         private void tabControlAdvMainTab_SelectedIndexChanged(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -276,7 +235,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             if (personRequestDto != null)
             {
                 new PersonRequestFormHandler(this).ShowRequestScreen(personRequestDto);
-                _scheduleView.Refresh();
+                ScheduleView.Refresh();
             }
         }
       
@@ -306,7 +265,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             AbsenceRequestView absenceRequestView = new AbsenceRequestView(period);
             absenceRequestView.StartPosition = FormStartPosition.CenterScreen;
             absenceRequestView.ShowDialog(this);
-            _scheduleView.Refresh();
+            ScheduleView.Refresh();
         }
 
         private void GetAllDayDateTimes(out DateTime startDateTime, out DateTime endDateTime)
@@ -367,7 +326,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             TextRequestView requestScreen = new TextRequestView(period, StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson, SdkServiceHelper.SchedulingService);
             requestScreen.StartPosition = FormStartPosition.CenterScreen;
             requestScreen.ShowDialog(this);
-            _scheduleView.Refresh();
+            ScheduleView.Refresh();
         }
 
         /// <summary>
@@ -472,8 +431,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                                                                     }
                                                                 };
 
-            _scheduleClipHandler = new ClipHandler<ICustomScheduleAppointment>();
-            ScheduleView = new AgentScheduleView(scheduleControlMain, AgentScheduleStateHolder.Instance(), _scheduleClipHandler, _legendLoader);           
+            ScheduleView = new AgentScheduleView(scheduleControlMain, AgentScheduleStateHolder.Instance(), _legendLoader);           
             ScheduleView.InitializeScheduleControl();
             ScheduleView.SetScheduleControlEventHandlers();
             ScheduleView.ScheduleControlHost.AllowAdjustAppointmentsWithMouse = false;
@@ -556,8 +514,8 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                 }
                 else
                 {
-                    startDateTime = _scheduleView.ScheduleControlHost.ClickedDate.Date;
-                    endDateTime = _scheduleView.ScheduleControlHost.ClickedDate.AddDays(1).AddMinutes(-1);
+                    startDateTime = ScheduleView.ScheduleControlHost.ClickedDate.Date;
+                    endDateTime = ScheduleView.ScheduleControlHost.ClickedDate.AddDays(1).AddMinutes(-1);
                 }
             }
         }
@@ -674,7 +632,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 
     	private void CheckCorrectResolutionMenuItem()
     	{
-			switch ((ScheduleResolutionType)_scheduleView.Resolution)
+			switch ((ScheduleResolutionType)ScheduleView.Resolution)
     		{
     			case ScheduleResolutionType.SixtyMinutes:
 					toolStripMenuItem60Mins.Checked = true;

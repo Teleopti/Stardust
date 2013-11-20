@@ -4,7 +4,7 @@ namespace Teleopti.Interfaces.Domain
     /// <summary>
     /// The preference information for one agent and day
     /// </summary>
-    public interface IPreferenceDay: IPersistableScheduleData
+    public interface IPreferenceDay: IPersistableScheduleData, IVersioned
     {
         /// <summary>
         /// Gets the restriction.

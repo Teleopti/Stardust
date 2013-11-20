@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
@@ -72,8 +73,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
                                         }
                                 };
 
-			ReflectionHelper.SetBusinessUnit(_targetSkill, secondBusinessUnit);
-			ReflectionHelper.SetBusinessUnit(skillDay, secondBusinessUnit);
+			_targetSkill.SetBusinessUnit(secondBusinessUnit);
+			skillDay.SetBusinessUnit(secondBusinessUnit);
 
 			using (_mocks.Record())
 			{

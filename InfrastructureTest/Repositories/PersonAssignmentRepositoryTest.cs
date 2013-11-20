@@ -11,8 +11,8 @@ using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override IPersonAssignment CreateAggregateWithCorrectBusinessUnit()
         {
 	        var ass = new PersonAssignment(_dummyAgent, _dummyScenario, new DateOnly(2000, 1, 1));
-	        ass.AddMainLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+	        ass.AssignActivity(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 					ass.SetShiftCategory(_dummyCat);
 					ass.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2000,1,1,2000,1,2));
 	        ass.AddOvertimeLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), _definitionSet);
@@ -120,6 +120,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory.DayOfWeekJusticeValues));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftLayers));
         }
+
+	    [Test]
+	    public void ShouldLoadGraphByKey()
+	    {
+		    IPersonAssignment ass = CreateAggregateWithCorrectBusinessUnit();
+		    PersistAndRemoveFromUnitOfWork(ass);
+
+		    IPersonAssignment loaded = new PersonAssignmentRepository(UnitOfWork).LoadAggregate(new PersonAssignmentKey
+			    {
+				    Date = ass.Date,
+				    Scenario = ass.Scenario,
+				    Person = ass.Person
+			    });
+		    Assert.AreEqual(ass.Id, loaded.Id);
+		    Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory.DayOfWeekJusticeValues));
+		    Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftLayers));
+	    }
 
 			[Test]
 			public void TestFetchDatabaseVersion()
@@ -360,7 +377,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				var bu = new BusinessUnit("wrong bu");
 				PersistAndRemoveFromUnitOfWork(bu);
 				var scenarioWrongBu = new Scenario("wrong");
-				scenarioWrongBu.HackToSetBusinessUnit(bu);
+				scenarioWrongBu.SetBusinessUnit(bu);
 				PersistAndRemoveFromUnitOfWork(scenarioWrongBu);
 				var ass = new PersonAssignment(_dummyAgent, scenarioWrongBu, new DateOnly(2000, 1, 1));
 				PersistAndRemoveFromUnitOfWork(ass);

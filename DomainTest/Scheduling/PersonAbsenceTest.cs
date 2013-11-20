@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
             var moveToTheseParameters = new PersonAbsence(newPer, newScen, new AbsenceLayer(new Absence(), new DateTimePeriod(2000,1,1,2000,12,12)));
 
-            IPersistableScheduleData newDo = ((PersonAbsence)target).CloneAndChangeParameters(moveToTheseParameters);
+            var newDo = ((PersonAbsence)target).CloneAndChangeParameters(moveToTheseParameters);
 
             Assert.IsNull(newDo.Id);
             Assert.AreSame(newPer, newDo.Person);

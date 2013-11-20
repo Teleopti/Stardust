@@ -713,6 +713,8 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.AcceptButton = this.buttonAdvOk;
+			this.CancelButton = this.buttonAdvCancel;
 			this.ClientSize = new System.Drawing.Size(392, 338);
 			this.Controls.Add(this.tableLayoutPanelMain);
 			this.Controls.Add(this.ribbonControlAdv1);

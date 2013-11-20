@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.Portal
 			var cultureSpecificViewModelFactory=new CultureSpecificViewModelFactory();
 			var cultureSpecificViewModel = cultureSpecificViewModelFactory.CreateCutureSpecificViewModel();
 			cultureSpecificViewModel.Rtl.Should().Be.EqualTo(CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft);
-			cultureSpecificViewModel.LanguageCode.Should().Be.EqualTo(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName);
+			cultureSpecificViewModel.LanguageCode.Should().Be.EqualTo(CultureInfo.CurrentUICulture.IetfLanguageTag);
 		}
 	}
 }

@@ -82,6 +82,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().InstancePerLifetimeScope();
             builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>().InstancePerLifetimeScope();
             builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().InstancePerLifetimeScope();
+            builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>().SingleInstance();
 
             builder.RegisterType<NonBlendSkillCalculator>().As<INonBlendSkillCalculator>().InstancePerLifetimeScope();
             builder.RegisterType<RestrictionExtractor>().As<IRestrictionExtractor>().InstancePerDependency();
@@ -228,7 +229,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			registerTeamBlockSchedulingService(builder);
 
             builder.RegisterType<ScheduleOvertimeCommand>().As<IScheduleOvertimeCommand>();
-            builder.RegisterType<ScheduleDayListFactory>().As<IScheduleDayListFactory>();
             builder.RegisterType<OvertimeLengthDecider>().As<IOvertimeLengthDecider>();
             builder.RegisterType<ResourceCalculateDelayer>().As<IResourceCalculateDelayer>();
             builder.RegisterType<OvertimeSkillIntervalData>().As<IOvertimeSkillIntervalData>();

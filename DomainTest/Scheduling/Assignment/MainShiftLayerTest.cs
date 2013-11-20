@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000, 1, 1));
-			ass.AddMainLayer(new Activity("d"), new DateTimePeriod(start, start.AddHours(1)));
+			ass.AssignActivity(new Activity("d"), new DateTimePeriod(start, start.AddHours(1)));
 			var layer2check = ass.MainLayers().Single();
 			layer2check.Parent.Should().Not.Be.Null();
 			var clone = (IMainShiftLayer)layer2check.NoneEntityClone();

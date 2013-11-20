@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Security
     /// Created by: Klas
     /// Created date: 2008-12-03
     /// </remarks>
-    public class License : AggregateRoot, ILicense
+    public class License : VersionedAggregateRoot, ILicense
     {
         #region ILicense Members
         private string _xmlString;
