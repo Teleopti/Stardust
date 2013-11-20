@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Fairness
     //[TestFixture]
     //public class PriortiseShiftCategoryTest
     //{
-    //    private IPriortiseShiftCategory _target;
+    //    private IPriortiseShiftCategoryForTeamBlock _target;
     //    private ShiftCategory _sc4;
     //    private ShiftCategory _sc1;
     //    private ShiftCategory _sc2;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Fairness
     //    [SetUp]
     //    public void Setup()
     //    {
-    //        _target = new PriortiseShiftCategory();
+    //        _target = new PriortiseShiftCategoryForTeamBlock();
     //        _sc1 = ShiftCategoryFactory.CreateShiftCategory("class");
     //        _sc2 = ShiftCategoryFactory.CreateShiftCategory("dump");
     //        _sc3 = ShiftCategoryFactory.CreateShiftCategory("sky");

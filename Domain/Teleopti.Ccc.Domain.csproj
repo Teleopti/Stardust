@@ -357,10 +357,13 @@
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
     <Compile Include="Optimization\Fairness\FairnessOptimizationOld.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\PrioritiseAgentByContract.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\PriortiseShiftCategory.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\PrioritiseAgentForTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\PriortiseShiftCategoryForTeamBlock.cs" />
     <Compile Include="Optimization\Fairness\PriortiseWeekDay.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SelectedAgentPoints.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\ShiftCategoryPoints.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SwapScheduleDays.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockInfoPriorityDefinitionInfo.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\ValidateScheduleDays.cs" />
     <Compile Include="Optimization\StandardDeviationData.cs">
       <SubType>Code</SubType>

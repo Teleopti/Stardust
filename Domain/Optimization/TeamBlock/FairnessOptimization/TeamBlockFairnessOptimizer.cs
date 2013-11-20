@@ -47,20 +47,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 
         private void analyzeListForSwapping(IList<ITeamBlockInfo> teamBlockList, IList<IShiftCategory> shiftCategories)
         {
-            _determineTeamBlockPriority.CalculatePriority(teamBlockList, shiftCategories);
-            foreach (int higherPriority in _determineTeamBlockPriority.HighToLowAgentPriorityList)
+            var teamBlockPriorityDefinition = new TeamBlockPriorityDefinitionInfo( _determineTeamBlockPriority.CalculatePriority(teamBlockList, shiftCategories));
+            foreach (int higherPriority in teamBlockPriorityDefinition.HighToLowAgentPriorityList)
             {
-                foreach (int lowerPriority in _determineTeamBlockPriority.LowToHighAgentPriorityList)
+                foreach (int lowerPriority in teamBlockPriorityDefinition.LowToHighAgentPriorityList)
                 {
-                    ITeamBlockInfo higherPriorityBlock = _determineTeamBlockPriority.BlockOnAgentPriority(higherPriority);
+                    ITeamBlockInfo higherPriorityBlock = teamBlockPriorityDefinition.BlockOnAgentPriority(higherPriority);
                     int lowestShiftCategoryPrioirty =
-                        _determineTeamBlockPriority.GetShiftCategoryPriorityOfBlock(higherPriorityBlock);
+                        teamBlockPriorityDefinition.GetShiftCategoryPriorityOfBlock(higherPriorityBlock);
                     if (
-                        _determineTeamBlockPriority.HighToLowShiftCategoryPriorityList.Any(
+                        teamBlockPriorityDefinition.HighToLowShiftCategoryPriorityList.Any(
                             higherShiftCategoryPriority => higherShiftCategoryPriority > lowestShiftCategoryPrioirty))
                     {
                         ITeamBlockInfo lowestPriorityBlock =
-                            _determineTeamBlockPriority.BlockOnAgentPriority(lowerPriority);
+                            teamBlockPriorityDefinition.BlockOnAgentPriority(lowerPriority);
                         if (validateBlock(higherPriorityBlock, lowestPriorityBlock))
                             swapBlock(higherPriorityBlock, lowestPriorityBlock);
                     }

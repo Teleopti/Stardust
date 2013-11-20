@@ -13,12 +13,12 @@
 //    public class PrioritiseAgentByContractTest
 //    {
 
-//        private IPrioritiseAgentByContract _target; 
+//        private IPrioritiseAgentForTeamBlock _target; 
 
 //        [SetUp]
 //        public void Setup()
 //        {
-//            _target = new PrioritiseAgentByContract();
+//            _target = new PrioritiseAgentForTeamBlock();
 //        }
 
 //        [Test]
