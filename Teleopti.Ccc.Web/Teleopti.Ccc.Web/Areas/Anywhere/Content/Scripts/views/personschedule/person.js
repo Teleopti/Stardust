@@ -15,8 +15,12 @@ define([
 	return function (data) {
 		var self = this;
 
+		
 		this.Id = data.Id;
-		this.Name = data.FirstName + ' ' + data.LastName;
+		this.Name = data.Name ? data.Name : data.FirstName + ' ' + data.LastName;
+
+		this.Site = data.Site ? data.Site : "";
+		this.Team = data.Team ? data.Team : "";
 
 		this.WorkTimeMinutes = ko.observable(0);
 		this.ContractTimeMinutes = ko.observable(0);
@@ -46,7 +50,7 @@ define([
 		};
 
 		this.AddData = function (data, timeline) {
-			if (data.Projection.length > 0) {
+			if (data.Projection ? data.Projection.length > 0 : (data.Layers ? data.Layers.length > 0 : false)) {
 				var newShift = new shift(timeline);
 				newShift.AddLayers(data);
 				self.Shifts.push(newShift);

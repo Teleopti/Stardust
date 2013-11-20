@@ -8,7 +8,8 @@ define([
 		'resizeevent',
 		'views/personschedule/person',
 		'ajax',
-		'navigation'
+		'navigation',
+		'lazy'
 ], function (
 		ko,
 		personScheduleViewModel,
@@ -18,7 +19,8 @@ define([
 	    resize,
 		personViewModel,
 		ajax,
-		navigation
+		navigation,
+		lazy
 	) {
 
 	var personSchedule;
@@ -76,7 +78,7 @@ define([
 				var newItems = ko.utils.arrayMap(people, function (s) {
 					return new personViewModel(s);
 				});
-				personSchedule.SetPersonsInGroup(newItems);
+				personSchedule.AddPersonsToGroup(newItems);
 				options.success();
 			}
 		});
@@ -142,11 +144,39 @@ define([
 			loadPersonsAndSchedules();
 
 			subscriptions.subscribePersonSchedule(
-				    options.personid,
+				    options.personid ? options.personid : options.id,
 				    helpers.Date.ToServer(personSchedule.Date()),
 				    function (data) {
 				    	resize.notify();
-				    	personSchedule.ClearData();
+
+				    	data.Id = options.personid ? options.personid : options.id;
+				    	data.Date = personSchedule.Date();
+					    
+					    var person;
+					    
+					    if (personSchedule.PersonsInGroup().length > 0) {
+					    	var existingPerson = lazy(personSchedule.PersonsInGroup())
+									.select(function (x) {
+										if (x.Id == data.Id) {
+											return x;
+										}
+									});
+					    	person = existingPerson.first();
+						    
+						    if (!person)
+						    	person = new personViewModel(data);
+							else{
+						    	person.ClearData();
+						    }
+						    person.AddData(data, personSchedule.TimeLine);
+							
+					    } else {
+					    	person = new personViewModel(data);
+						    person.AddData(data, personSchedule.TimeLine);
+						    personSchedule.AddPersonsToGroup([person]);
+					    }
+
+				    	//personSchedule.ClearData();
 				    	personSchedule.SetData(data, options.groupid);
 				    	personSchedule.Loading(false);
 				    	deferred.resolve();

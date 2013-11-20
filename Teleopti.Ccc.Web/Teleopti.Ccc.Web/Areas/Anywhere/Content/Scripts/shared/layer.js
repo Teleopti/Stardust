@@ -15,7 +15,6 @@ define([
 	) {
 
 	return function (timeline, data, shift) {
-
 		var self = this;
 
 		var unit = new unitViewModel(timeline, data);
