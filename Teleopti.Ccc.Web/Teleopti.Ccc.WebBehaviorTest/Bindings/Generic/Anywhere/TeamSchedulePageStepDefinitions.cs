@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExistsUsingJQuery(selector, name, scheduleActivity.StartTime);
 			Browser.Interactions.AssertExistsUsingJQuery(selector, name, scheduleActivity.EndTime);
 			if(!string.IsNullOrEmpty(scheduleActivity.TextColor))
-				Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') ~ tr .activity-details[style*='color: {1}']", name, colorNameToCss(scheduleActivity.TextColor));
+				Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') ~ tr .activity-details span[style*='color: {1}']", name, colorNameToCss(scheduleActivity.TextColor));
 		}
 
 		[Then(@"I should see schedule shift details for '(.*)' with")]
