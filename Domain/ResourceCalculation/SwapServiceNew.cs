@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			foreach (var layer in sourceAssignment.MainLayers())
 			{
-				targetAssignment.AddMainLayer(layer.Payload, layer.Period.MovePeriod(periodOffset));
+				targetAssignment.AssignActivity(layer.Payload, layer.Period.MovePeriod(periodOffset));
 			}
 
 			var timeZoneInfo = sourceAssignment.Person.PermissionInformation.DefaultTimeZone();
