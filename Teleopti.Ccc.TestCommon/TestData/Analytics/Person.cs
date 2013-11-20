@@ -21,13 +21,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 	    private readonly int _businessUnitId;
 	    private readonly Guid _businessUnitCode;
 	    private readonly bool _toBeDeleted;
+		/*
 		private readonly int _validToDateIdMax;
 		private readonly int _validToIntervalIdMax;
 		private readonly DateTime _validFromLocal;
 		private readonly DateTime _validToLocal;
 		private readonly int _validFromIdLocal;
 		private readonly int _validToIdLocal;
-
+		*/
 		public int PersonId { get; set; }
 		public IEnumerable<DataRow> Rows { get; set; }
 
@@ -43,12 +44,15 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
             _businessUnitId = businessUnitId;
             _businessUnitCode = businessUnitCode;
             _toBeDeleted = toBeDeleted;
+			/*
+			 * David -> Robin did this to get a green build. You cannot have field variables only assigned to.
 			_validToDateIdMax = validToId;
 			_validToIntervalIdMax = 0;
 			_validFromLocal = validFrom;
 			_validToLocal = validTo;
 			_validFromIdLocal = validFromId;
 			_validToIdLocal = validToId;
+			 */
             PersonId = personId;
 		}
 
