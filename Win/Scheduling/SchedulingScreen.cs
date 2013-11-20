@@ -115,7 +115,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly SkillResultHighlightGridControl _skillResultHighlightGridControl;
 		private DateOnly _currentIntraDayDate;
 		private DockingManager _dockingManager;
-		//private FormAgentInfo _agentInfo;
 		private AgentInfoControl _agentInfoControl;
 		private ShiftCategoryDistributionModel _shiftCategoryDistributionModel;
 		private ScheduleViewBase _scheduleView;
@@ -4877,11 +4876,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 																						cachedNumberOfEachCategoryPerPerson,
                                                                                         allowedSc);
 			_shiftCategoryDistributionModel = new ShiftCategoryDistributionModel(cachedShiftCategoryDistribution,
-																																					 cachedNumberOfEachCategoryPerDate,
-																																					 cachedNumberOfEachCategoryPerPerson,
-																																					 _schedulerState.RequestedPeriod.DateOnlyPeriod,
-																																					 _schedulerState,
-																																					 new PopulationStatisticsCalculator());
+			                                                                     cachedNumberOfEachCategoryPerDate,
+			                                                                     cachedNumberOfEachCategoryPerPerson,
+			                                                                     _schedulerState.RequestedPeriod.DateOnlyPeriod,
+			                                                                     _schedulerState,
+			                                                                     new PopulationStatisticsCalculator());
 			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
 			schedulerSplitters1.InsertShiftCategoryDistributionModel(_shiftCategoryDistributionModel);
 			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
@@ -6504,6 +6503,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 					SplitterManager.ShowResult = false;
 				}
 			}
+
+
 		}
 
 		private void toolStripButtonShrinkage_Click(object sender, EventArgs e)
@@ -6579,10 +6580,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void ToolStripMenuItemSearch_Click(object sender, EventArgs e)
 		{
-			DisplaySearch();
+			displaySearch();
 		}
 
-		public void DisplaySearch()
+		private void displaySearch()
 		{
 			IList<IPerson> persons = new List<IPerson>(SchedulerState.FilteredPersonDictionary.Values);
 
@@ -7162,20 +7163,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 			_showInfoPanel = toolStripButtonShowPropertyPanel.Checked;
 		}
-
-		private void toolStripMenuItemAgentInfo_Click(object sender, EventArgs e)
-		{
-			if (!toolStripButtonShowPropertyPanel.Checked)
-			{
-				toolStripButtonShowPropertyPanel.Checked = true;
-				schedulerSplitters1.ToggelPropertyPanel(false);
-			}
-			_tabInfoPanels.SelectedIndex = 0;
-			_agentInfoControl.SetDefaultSelectedTab();
-
-			updateSelectionInfo(_scheduleView.SelectedSchedules());
-		}
-
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 
