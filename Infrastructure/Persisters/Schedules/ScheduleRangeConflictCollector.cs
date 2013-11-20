@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			{
 				var inMemoryEntity = diffItem.OriginalItem;
 				var inMemoryVersion = inMemoryEntity as IVersioned;
-				if(inMemoryEntity==null)
+				if(inMemoryVersion==null)
 					continue;
 
 				int? databaseVersion;
