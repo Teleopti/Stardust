@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Common
     {
         private DefaultAggregateRoot _defaultAggregateRoot;
         private DatabaseHandler _databaseHandler;
-        private IPerson _convertPerson;
         private ICommandLineArgument _commandLineArgument;
         private ProgramHelper target;
         
@@ -41,14 +40,14 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Common
         [Test]
         public void CanLogOn()
         {
-            target.LogOn(_commandLineArgument, _databaseHandler, _defaultAggregateRoot.BusinessUnit, _convertPerson);
+            target.LogOn(_commandLineArgument, _databaseHandler, _defaultAggregateRoot.BusinessUnit);
             Assert.IsNotNull(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource);
         }
 
         [Test]
         public void CanCreateNew()
         {
-            target.LogOn(_commandLineArgument, _databaseHandler, _defaultAggregateRoot.BusinessUnit, _convertPerson);
+            target.LogOn(_commandLineArgument, _databaseHandler, _defaultAggregateRoot.BusinessUnit);
             target.CreateNewEmptyCcc7(_defaultAggregateRoot);
         }
 
@@ -70,8 +69,6 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Common
 
             _defaultAggregateRoot = defaultDataCreator.Create();
             defaultDataCreator.Save(_defaultAggregateRoot);
-
-            _convertPerson = defaultDataCreator.ConvertPerson;
 
             _databaseHandler = new DatabaseHandler(_commandLineArgument);
         }
