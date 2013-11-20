@@ -44,15 +44,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
             _businessUnitId = businessUnitId;
             _businessUnitCode = businessUnitCode;
             _toBeDeleted = toBeDeleted;
-			/*
-			 * David -> Robin did this to get a green build. You cannot have field variables only assigned to.
-			_validToDateIdMax = validToId;
-			_validToIntervalIdMax = 0;
-			_validFromLocal = validFrom;
-			_validToLocal = validTo;
-			_validFromIdLocal = validFromId;
-			_validToIdLocal = validToId;
-			 */
             PersonId = personId;
 		}
 
