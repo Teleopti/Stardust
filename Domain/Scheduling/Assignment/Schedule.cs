@@ -206,16 +206,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private bool checkData(IScheduleData scheduleData)
         {
             InParameter.NotNull("scheduleData", scheduleData);
-	        var ass = scheduleData as IPersonAssignment;
-					if (ass!=null)
-					{
-						var currentAssignments =
-							ScheduleDataInternalCollection().OfType<IPersonAssignment>().Where(curr => curr.Date == ass.Date);
-						if (currentAssignments.Any())
-						{
-							throw new ArgumentException("scheduleData", "Cannot add multiple assignments on one schedule day.");
-						}
-					}
+	      
             if(!scheduleData.Person.Equals(Person))
                 throw new ArgumentOutOfRangeException("scheduleData", "Trying to add schedule info to incorrect person.");
             if (!scheduleData.BelongsToScenario(Scenario))
