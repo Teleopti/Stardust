@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Input;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Common.UI.OutlookControls.Workspaces;
+using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 
 namespace Teleopti.Ccc.Win.Common
 {
@@ -131,7 +133,8 @@ namespace Teleopti.Ccc.Win.Common
 
         protected override void OnHelpButtonClicked(System.ComponentModel.CancelEventArgs e)
         {
-            ShowHelp(true);
+	        var showLocalHelp = Keyboard.Modifiers == System.Windows.Input.ModifierKeys.Shift;
+			ShowHelp(showLocalHelp);
             base.OnHelpButtonClicked(e);
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
