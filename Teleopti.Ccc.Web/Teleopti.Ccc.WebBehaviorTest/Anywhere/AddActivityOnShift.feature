@@ -28,8 +28,6 @@ Background:
 	| Name  | Lunch  |
 	| Color | Yellow |
 	
-Scenario: Prevent assigning if no permission
-
 Scenario: View form
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for 'Team green' on '2013-11-18'

@@ -38,20 +38,6 @@ Background:
 	| Illness         | Red   | false        |
 	| Vacation        | Blue  | false        |
 	| Mental disorder | Pink  | true         |
-
-
-
-Scenario: Prevent adding if no permission
-	Given I have a role with
-	| Field                      | Value                 |
-	| Name                       | Cannot Modify Absence |
-	| Access to team             | Team green            |
-	| Access to Anywhere         | true                  |
-	| View unpublished schedules | true                  |
-	| Modify Absence             | false                 |
-	When I view schedules for 'Team green' on '2013-11-15'
-	And I select any schedule activity for 'Pierre Baldi'
-	Then I should not see 'add intraday absence' button
 	
 Scenario: View form
 	Given I have the role 'Anywhere Team Green'
