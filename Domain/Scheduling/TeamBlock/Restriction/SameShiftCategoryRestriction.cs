@@ -36,7 +36,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
                         else
                         {
                             if (restriction.ShiftCategory != shiftCategory)
-                                return null;
+								return new EffectiveRestriction(new StartTimeLimitation(),
+													   new EndTimeLimitation(),
+													   new WorkTimeLimitation(), null, null, null,
+													   new List<IActivityRestriction>());
                         }
                     }
                 }

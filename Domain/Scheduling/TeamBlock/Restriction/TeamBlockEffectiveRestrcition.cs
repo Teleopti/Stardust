@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
@@ -37,6 +38,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 														IList<IScheduleMatrixPro> matrixList)
 		{
 			IEffectiveRestriction effectiveRestriction = null;
+			var emptyRestriction = new EffectiveRestriction(new StartTimeLimitation(),
+													 new EndTimeLimitation(),
+													 new WorkTimeLimitation(), null, null, null,
+													 new List<IActivityRestriction>());
 			foreach (DateOnly dateOnly in dateOnlyList)
 			{
 				IEffectiveRestriction restriction =
@@ -44,13 +49,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 																		 dateOnly, _schedulingOptions,
 																		 _scheduleDictionary);
 				if (restriction == null)
-					return null;
+					return emptyRestriction;
 				if (effectiveRestriction != null)
 					effectiveRestriction = effectiveRestriction.Combine(restriction);
 				else
 					effectiveRestriction = restriction;
 				if (effectiveRestriction == null)
-					return null;
+					return emptyRestriction;
 			}
 			return effectiveRestriction;
 		}

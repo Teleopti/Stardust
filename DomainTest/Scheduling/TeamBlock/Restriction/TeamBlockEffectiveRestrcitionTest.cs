@@ -19,22 +19,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
             _date = new DateOnly(2013, 10, 29);
             _schedulingOptions = new SchedulingOptions();
             _effectiveRestrcitionCreator = _mock.StrictMock<IEffectiveRestrictionCreator>();
-            _groupPerson = _mock.StrictMock<IGroupPerson>();
+			_personList = new List<IPerson>();
             _scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
 
-            _target = new TeamBlockEffectiveRestrcition(_effectiveRestrcitionCreator, _groupPerson.GroupMembers,
+			_target = new TeamBlockEffectiveRestrcition(_effectiveRestrcitionCreator, _personList,
                                                         new SchedulingOptions(), _scheduleDictionary);
         }
 
         private MockRepository _mock;
         private IScheduleRestrictionStrategy _target;
         private IEffectiveRestrictionCreator _effectiveRestrcitionCreator;
-        private IGroupPerson _groupPerson;
         private IScheduleDictionary _scheduleDictionary;
         private ISchedulingOptions _schedulingOptions;
         private DateOnly _date;
+	    private List<IPerson> _personList;
 
-        [Test]
+	    [Test]
         public void ReturnExtractedRestriction()
         {
             var restriction = new EffectiveRestriction(new StartTimeLimitation(),
@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
                                                        new WorkTimeLimitation(), null, null, null,
                                                        new List<IActivityRestriction>());
             using (_mock.Record())
-            {
-                Expect.Call(_effectiveRestrcitionCreator.GetEffectiveRestriction(_groupPerson.GroupMembers, _date,
+			{
+				Expect.Call(_effectiveRestrcitionCreator.GetEffectiveRestriction(_personList, _date,
                                                                                  _schedulingOptions, _scheduleDictionary))
                       .IgnoreArguments().Return(restriction);
             }
@@ -74,12 +74,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
                                          new List<IActivityRestriction>());
             using (_mock.Record())
             {
-                IEnumerable<IPerson> personList = new List<IPerson>();
-                Expect.Call(_groupPerson.GroupMembers).Return(personList).Repeat.Twice();
-                Expect.Call(_effectiveRestrcitionCreator.GetEffectiveRestriction(personList, _date,
+				Expect.Call(_effectiveRestrcitionCreator.GetEffectiveRestriction(_personList, _date,
                                                                                  _schedulingOptions, _scheduleDictionary))
                       .IgnoreArguments().Return(restriction1);
-                Expect.Call(_effectiveRestrcitionCreator.GetEffectiveRestriction(personList, _date.AddDays(1),
+				Expect.Call(_effectiveRestrcitionCreator.GetEffectiveRestriction(_personList, _date.AddDays(1),
                                                                                  _schedulingOptions, _scheduleDictionary))
                       .IgnoreArguments().Return(restriction2);
             }
@@ -94,15 +92,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         [Test]
         public void ReturnNullIfRestrictionIsNull()
         {
+
+			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
+													   new EndTimeLimitation(),
+													   new WorkTimeLimitation(), null, null, null,
+													   new List<IActivityRestriction>());
             using (_mock.Record())
-            {
-                Expect.Call(_effectiveRestrcitionCreator.GetEffectiveRestriction(_groupPerson.GroupMembers, _date,
+			{
+				Expect.Call(_effectiveRestrcitionCreator.GetEffectiveRestriction(_personList, _date,
                                                                                  _schedulingOptions, _scheduleDictionary))
                       .IgnoreArguments().Return(null);
             }
             using (_mock.Playback())
             {
-                Assert.IsNull(_target.ExtractRestriction(new List<DateOnly> {_date}, new List<IScheduleMatrixPro>()));
+				Assert.That(_target.ExtractRestriction(new List<DateOnly> { _date }, new List<IScheduleMatrixPro>()), Is.EqualTo(restriction));
             }
         }
     }

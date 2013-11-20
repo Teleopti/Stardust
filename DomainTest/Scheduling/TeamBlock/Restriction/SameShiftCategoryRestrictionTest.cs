@@ -149,6 +149,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
             var personAssignment2 = _mocks.StrictMock<IPersonAssignment>();
             var shiftCategory2 = new ShiftCategory("cat2");
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
+													   new EndTimeLimitation(),
+													   new WorkTimeLimitation(), null, null, null,
+													   new List<IActivityRestriction>());
             using (_mocks.Record())
             {
                 Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly)).Return(_scheduleDayPro1);
@@ -166,12 +170,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
             {
                 var result = _target.ExtractRestriction(dateList, matrixList);
 
-                Assert.IsNull(result);
+	            Assert.That(result, Is.EqualTo(restriction));
             }
         }
 
         [Test]
-        public void ShouldExtractSameShiftCategoryWhenPersonAssignmentIsNull()
+        public void ShouldExtractSameShiftCategoryWhenPersonAssignmentIsEmpty()
         {
             _schedulingOptions.UseTeamBlockSameShiftCategory = true;
             var dateList = new List<DateOnly> { _dateOnly };

@@ -40,7 +40,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
                         else
                         {
                             if (!_scheduleDayEquator.MainShiftBasicEquals(mainShift, restriction.CommonMainShift))
-                                return null;
+								return new EffectiveRestriction(new StartTimeLimitation(),
+													   new EndTimeLimitation(),
+													   new WorkTimeLimitation(), null, null, null,
+													   new List<IActivityRestriction>());
                         }
                     }
                 }

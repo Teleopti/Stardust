@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
                                                         IList<IScheduleMatrixPro> matrixList)
         {
             var startTimeLimitation = new StartTimeLimitation();
+			
             foreach (IScheduleMatrixPro matrix in matrixList)
             {
                 foreach (DateOnly dateOnly in dateOnlyList)
@@ -38,14 +39,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
                         TimePeriod timePeriod = period.Value.TimePeriod(_timeZone);
                         if (startTimeLimitation.StartTime != timePeriod.StartTime ||
                             startTimeLimitation.EndTime != timePeriod.StartTime)
-                            return null;
+							return new EffectiveRestriction(new StartTimeLimitation(),
+													  new EndTimeLimitation(),
+													  new WorkTimeLimitation(), null, null, null,
+													  new List<IActivityRestriction>());
                     }
                 }
             }
-            var restriction = new EffectiveRestriction(startTimeLimitation,
-                                                       new EndTimeLimitation(),
-                                                       new WorkTimeLimitation(), null, null, null,
-                                                       new List<IActivityRestriction>());
+			var restriction = new EffectiveRestriction(startTimeLimitation,
+													   new EndTimeLimitation(),
+													   new WorkTimeLimitation(), null, null, null,
+													   new List<IActivityRestriction>());
             return restriction;
         }
     }
