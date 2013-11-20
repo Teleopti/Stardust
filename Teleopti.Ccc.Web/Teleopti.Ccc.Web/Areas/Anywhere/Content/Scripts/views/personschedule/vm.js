@@ -74,12 +74,9 @@ define([
 			return 0;
 		});
 
-		this.IsDayOff = ko.observable(false);
-		this.DayOffName = ko.observable("");
-		
 		this.SelectedGroup = ko.observable();
 
-		this.DayOffs = ko.observableArray();
+		//this.DayOffs = ko.observableArray();
 
 		this.Absences = ko.observableArray();
 		
@@ -102,6 +99,16 @@ define([
 			if(self.Shift())
 				return self.Shift().Layers().length > 0;
 			return false;
+		});
+		
+		this.DayOff = ko.computed(function () {
+			if (self.SelectedPerson()) {
+				return self.SelectedPerson().DayOffs()[0];
+			}
+			return "";
+		});
+		this.IsDayOff = ko.computed(function () {
+			return self.DayOff();
 		});
 		
 		this.FormStartPixel = ko.computed(function () {

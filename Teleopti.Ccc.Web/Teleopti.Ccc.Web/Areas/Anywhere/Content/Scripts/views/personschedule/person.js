@@ -55,9 +55,19 @@ define([
 				newShift.AddLayers(data);
 				self.Shifts.push(newShift);
 			}
+
+			var newDayOff;
+
 			if (data.DayOff) {
 				data.DayOff.Date = data.Date;
-				var newDayOff = new dayOff(timeline, data.DayOff);
+				newDayOff = new dayOff(timeline, data.DayOff);
+				self.DayOffs.push(newDayOff);
+			}
+			if (data.IsDayOff) {
+				data.DayOff = [];
+				data.DayOff.Date = data.Date;
+				data.DayOff.DayOffName = data.DayOffName;
+				newDayOff = new dayOff(timeline, data.DayOff);
 				self.DayOffs.push(newDayOff);
 			}
 
