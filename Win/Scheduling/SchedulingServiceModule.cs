@@ -243,15 +243,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void registerFairnessOptimizationService(ContainerBuilder builder)
         {
-            builder.RegisterType<PriortiseShiftCategory>().As<IPriortiseShiftCategory>();
+            builder.RegisterType<PriortiseShiftCategoryForTeamBlock>().As<IPriortiseShiftCategoryForTeamBlock>();
             builder.RegisterType<TeamBlockFairnessOptimizer>().As<ITeamBlockFairnessOptimizer>();
-            builder.RegisterType<PrioritiseAgentByContract>().As<IPrioritiseAgentByContract>();
+            builder.RegisterType<PrioritiseAgentForTeamBlock>().As<IPrioritiseAgentForTeamBlock>();
             builder.RegisterType<PriortiseWeekDay>().As<IPriortiseWeekDay>();
             builder.RegisterType<ConstructTeamBlock>().As<IConstructTeamBlock>();
             builder.RegisterType<DetermineTeamBlockPriority>().As<IDetermineTeamBlockPriority>();
             builder.RegisterType<TeamBlockSizeClassifier>().As<ITeamBlockSizeClassifier>();
             builder.RegisterType<TeamBlockWeightExtractor>().As<ITeamBlockWeightExtractor>();
             builder.RegisterType<FairnessOptimizationCommand>().As<IFairnessOptimizationCommand>();
+            builder.RegisterType<SelectedAgentPoints>().As<ISelectedAgentPoints>();
+            builder.RegisterType<ShiftCategoryPoints>().As<IShiftCategoryPoints>();
         }
 
         private static void registerTeamBlockCommon(ContainerBuilder builder)

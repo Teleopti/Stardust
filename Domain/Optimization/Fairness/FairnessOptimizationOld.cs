@@ -20,14 +20,14 @@
 //    public class FairnessOptimizationOld : IFairnessOptimizationOld
 //    {
 //        private readonly IScheduleDayFinderWithLeastShiftCategory _dayFinderWithLeastShiftCategory;
-//        private readonly IPrioritiseAgentByContract _prioritiseAgentByContract;
-//        private readonly IPriortiseShiftCategory _priortiseShiftCategory;
+//        private readonly IPrioritiseAgentForTeamBlock _prioritiseAgentByContract;
+//        private readonly IPriortiseShiftCategoryForTeamBlock _priortiseShiftCategory;
 //        private readonly IPriortiseWeekDay _priortizeWeekDay;
 //        private readonly ISwapScheduleDays _swapScheduleDays;
 //        private readonly IValidateScheduleDays _validateScheduleDays;
 
-//        public FairnessOptimizationOld(IPriortiseWeekDay priortizeWeekDay, IPriortiseShiftCategory priortiseShiftCategory,
-//                                    IPrioritiseAgentByContract prioritiseAgentByContract,
+//        public FairnessOptimizationOld(IPriortiseWeekDay priortizeWeekDay, IPriortiseShiftCategoryForTeamBlock priortiseShiftCategory,
+//                                    IPrioritiseAgentForTeamBlock prioritiseAgentByContract,
 //                                    ISwapScheduleDays swapScheduleDays, IValidateScheduleDays validateScheduleDays,
 //                                    IScheduleDayFinderWithLeastShiftCategory dayFinderWithLeastShiftCategory)
 //        {

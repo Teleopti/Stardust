@@ -4,21 +4,24 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 {
-    public interface IPrioritiseAgentByContract
+    public interface IPrioritiseAgentForTeamBlock
     {
-        int HigestPriority { get; }
-        int LowestPriority { get; }
         int AveragePriority { get;  }
-        
         IDictionary<int, IPerson> GetPriortiseAgentByName(IList<IPerson> personList);
         IDictionary<int, IPerson> GetPriortiseAgentByStartDate(IList<IPerson> personList);
         IPerson PersonOnPriority(int priority);
         void Clear();
     }
 
-    public class PrioritiseAgentByContract : IPrioritiseAgentByContract
+    public class PrioritiseAgentForTeamBlock : IPrioritiseAgentForTeamBlock
     {
+        private readonly ISelectedAgentPoints _selectedAgentPoints;
         private Dictionary<int, IPerson> _result = new Dictionary<int, IPerson>();
+
+        public PrioritiseAgentForTeamBlock(ISelectedAgentPoints selectedAgentPoints)
+        {
+            _selectedAgentPoints = selectedAgentPoints;
+        }
 
         public int AveragePriority
         {
@@ -28,11 +31,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
         public IDictionary<int, IPerson> GetPriortiseAgentByName(IList<IPerson> personList)
         {
             var result = new Dictionary<int, IPerson>();
-            int priorityIndex = 1;
             foreach (IPerson person in personList.OrderByDescending(s => s.Name.FirstName))
             {
-                result.Add(priorityIndex, person);
-                priorityIndex++;
+                result.Add(_selectedAgentPoints.GetPointOfAgent(person), person);
             }
             _result = result;
             return result;
@@ -57,15 +58,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             return GetPriortiseAgentByName(personList);
         }
 
-        public int HigestPriority
-        {
-            get { return _result.Keys.Max(); }
-        }
-
-        public int LowestPriority
-        {
-            get { return _result.Keys.Min(); }
-        }
+        
 
         public IPerson PersonOnPriority(int priority)
         {
