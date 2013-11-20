@@ -100,6 +100,18 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             Assert.IsFalse(_target.HistoryOnly);
         }
 
+		[Test]
+		public void ShouldUnregisterMessageBrokerCallbacks()
+		{
+			_target.UnregisterMessageBrokerEvents();
+
+			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventActualAgentStateMessageHandler));
+			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventForecastDataMessageHandler));
+			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventMeetingMessageHandler));
+			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventScheduleMessageHandler));
+			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventStatisticMessageHandler));
+		}
+
         [Test]
         public void VerifyMultiplicatorDefinitionSetsCanBeRead()
         {
