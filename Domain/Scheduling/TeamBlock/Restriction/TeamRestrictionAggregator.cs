@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 			var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
 			var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList();
-			var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+            var timeZone = TimeZoneGuard.Instance.TimeZone;
 
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
 																			  new EndTimeLimitation(),
