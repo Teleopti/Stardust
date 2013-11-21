@@ -289,10 +289,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				new ApplicationStartupTimeout());
 		}
 
-		public static void GotoAnywherePersonScheduleAssignActivityForm(Guid personId, Guid groupId, DateTime date)
+		public static void GotoAnywherePersonScheduleAddActivityForm(Guid personId, Guid groupId, DateTime date)
 		{
 			GoToWaitForUrlAssert(
-				string.Format("Anywhere#personschedule/{0}/{1}/{2}{3}{4}/assignactivity",
+				string.Format("Anywhere#personschedule/{0}/{1}/{2}{3}{4}/addactivity",
 				groupId,
 				personId,
 				date.Year.ToString("0000"),
