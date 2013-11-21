@@ -1,4 +1,6 @@
 <div class="person-schedule container">
+	
+	<!-- ko if: true -->
 	<div class="row">
 		<div class="span12 page-header">
 			<h1>
@@ -26,6 +28,7 @@
 			</form>
 		</div>
 	</div>
+	<!-- /ko -->
 
 	<div class="row">
 		<div class="span12">
@@ -177,12 +180,6 @@
 
 						<!-- ko if: AddingActivity -->
 						
-						<tr>
-							<td colspan="2" style="background-color: white;" >
-								<br />
-							</td>
-						</tr>
-						
 						<!-- ko foreach: PersonsInGroup -->
 						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.Id() != Id">
 							<td class="person-name person-name-column">
@@ -236,17 +233,17 @@
 			<table class="table absence-list">
 				<tbody data-bind="foreach: Absences">
 					<tr class="absence">
-						<td class="absence-item" data-bind="style: { backgroundColor: BackgroundColor()}">
+						<td class="absence-item" data-bind="style: { backgroundColor: BackgroundColor() }">
 						<td class="absence-item"><span class="absence-name" data-bind="text: Name"></span></td>
 						<td class="absence-item"><i class="icon-step-backward"></i><span data-bind="text: StartTime"></span></td>
 						<td class="absence-item"><i class="icon-minus"></i></td>
 						<td class="absence-item"><span data-bind="text: EndTime"></span><i class="icon-step-forward"></i></td>
 						<td class="absence-item">
 							<!-- ko if: !AboutToRemove() -->
-								<button class="btn remove" data-bind="click: Remove, text: $root.Resources.Remove" />
+							<button class="btn remove" data-bind="click: Remove, text: $root.Resources.Remove" />
 							<!-- /ko -->
 							<!-- ko if: AboutToRemove -->
-								<button class="btn btn-danger confirm-removal" data-bind="enable: !Removing(), click: ConfirmRemoval, text: $root.Resources.ConfirmRemoval" />
+							<button class="btn btn-danger confirm-removal" data-bind="enable: !Removing(), click: ConfirmRemoval, text: $root.Resources.ConfirmRemoval" />
 							<!-- /ko -->
 						</td>
 					</tr>
