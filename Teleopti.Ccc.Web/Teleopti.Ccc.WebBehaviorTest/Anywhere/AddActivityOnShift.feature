@@ -98,7 +98,7 @@ Scenario: Add on shift
 	| End time   | 14:00  |
 	| Color      | Yellow |
 
-# If only addind on shift
+# If only adding on shift
 Scenario: Prevent add outside shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
