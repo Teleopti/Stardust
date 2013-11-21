@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(currentFirstDayTotalTasks, Math.Round(firstWorkloadPeriod.TaskOwnerDayCollection[0].Tasks,2));
             _target.EndUpdate();
 
-            Assert.AreEqual(currentTotalTasks + 50d, firstWorkloadPeriod.Tasks);
+            Assert.AreEqual(currentTotalTasks + 50d, Math.Round(firstWorkloadPeriod.Tasks,2));
             Assert.AreEqual(currentFirstDayTotalTasks, Math.Round(firstWorkloadPeriod.TaskOwnerDayCollection[0].Tasks,2));
         }
 

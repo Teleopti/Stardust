@@ -311,12 +311,17 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return new Dictionary<ISkill, IList<ISkillDay>>();
         }
 
+		public IEnumerable<ISkillDay> LoadSkillDays(IScenario scenario, DateTime lastCheck)
+		{
+			return new ISkillDay[]{};
+		}
+
         public int PersistForecastWorkload(DataTable dataTable)
         {
             return dataTable.Rows.Count;
         }
 
-        public int FillForecastWorkloadDataMart(DateTimePeriod period, IBusinessUnit businessUnit)
+		public int FillForecastWorkloadDataMart(DateTimePeriod period, IBusinessUnit businessUnit, bool isIntraday)
         {
             return 0;
         }

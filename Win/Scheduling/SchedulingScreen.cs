@@ -718,10 +718,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_scheduleView.Presenter.AddPersonalShift();
 						break;
 				}
+				_scheduleView.Presenter.ClipHandlerSchedule.Clear();
+				RecalculateResources();
+				updateShiftEditor();
 			}
-
-			RecalculateResources();
-			updateShiftEditor();
 		}
 
 		private void _editControl_NewClicked(object sender, EventArgs e)
@@ -1449,6 +1449,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_scheduleView.Presenter.ClipHandlerSchedule.AddClip(1, 1, clone);
 						_externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetData("PersistableScheduleData", new int()));
 						pasteDayOff();
+						_scheduleView.Presenter.ClipHandlerSchedule.Clear();
 					}
 				}
 			}

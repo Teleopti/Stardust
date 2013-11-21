@@ -1271,22 +1271,53 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			}
 		}
 
+		public IEnumerable<ISkillDay> LoadSkillDays(IScenario scenario, DateTime lastCheck)
+		{
+			IEnumerable<ISkillDay> skillDayList;
+			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+					SkillDayRepository skillDayRep = new SkillDayRepository(uow);
+					skillDayList = skillDayRep.FindUpdatedSince(scenario, lastCheck);
+
+			}
+
+			var result = new List<ISkillDay>();
+			var groupedBySkill = skillDayList.GroupBy(s => s.Skill);
+			foreach (var item in groupedBySkill)
+			{
+				var skillDays = LoadSkillDays(new DateOnlyPeriod(item.Min(s => s.CurrentDate), item.Max(s => s.CurrentDate)).ToDateTimePeriod(item.Key.TimeZone), new List<ISkill> { item.Key }, scenario);
+				result.AddRange(skillDays[item.Key]);
+			}
+
+			return result;
+		}
+
 		public int PersistForecastWorkload(DataTable dataTable)
 		{
 			HelperFunctions.TruncateTable("stage.etl_stg_forecast_workload_delete", _dataMartConnectionString);
 			return HelperFunctions.BulkInsert(dataTable, "stage.stg_forecast_workload", _dataMartConnectionString);
 		}
-		public int FillForecastWorkloadDataMart(DateTimePeriod period, IBusinessUnit businessUnit)
+		public int FillForecastWorkloadDataMart(DateTimePeriod period, IBusinessUnit businessUnit, bool isIntraday)
 		{
+			var result = 0;
+	
 			//Prepare sql parameters
 			List<SqlParameter> parameterList = new List<SqlParameter>();
 			parameterList.Add(new SqlParameter("start_date", period.StartDateTime.Date));
 			parameterList.Add(new SqlParameter("end_date", period.EndDateTime.Date));
             parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
 
-			return
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_forecast_workload_load", parameterList,
+				if (isIntraday){
+					result = HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_forecast_workload_intraday_load", parameterList,
 												_dataMartConnectionString);
+				}
+				else
+				{
+					result = HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_forecast_workload_load", parameterList,
+												_dataMartConnectionString);
+				}
+			return result;
+
 		}
 
 		public int FillSkillDataMart(IBusinessUnit businessUnit)
