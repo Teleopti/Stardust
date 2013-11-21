@@ -86,3 +86,53 @@ Scenario: Tooltip of a pre-scheduled personal shift
 	| StartTime | 2012-10-19 9:00  |
 	| EndTime   | 2012-10-19 10:00 |
 	| Activity  | Administration   |
+
+Scenario: Feedback from pre-scheduled meeting
+	Given I have a person period with 
+	| Field        | Value      |
+	| Start date   | 2012-10-01 |
+	| Rule set bag | Common     |
+	And I have a pre-scheduled meeting with
+	| Field     | Value            |
+	| StartTime | 2012-10-19 17:00 |
+	| EndTime   | 2012-10-19 18:00 |
+	| Subject   | Meeting subject  |
+	| Location  | Meeting location |
+	When I view preferences for date '2012-10-19'
+	Then I should see preference feedback with
+	| Field           | Value       |
+	| Date            | 2012-10-19  |
+	| EndTime boundry | 18:00-18:00 |
+
+Scenario: Feedback from a pre-scheduled meeting outside of possible shifts
+	Given I have a person period with 
+	| Field        | Value      |
+	| Start date   | 2012-10-01 |
+	| Rule set bag | Common     |
+	And I have a pre-scheduled meeting with
+	| Field     | Value            |
+	| StartTime | 2012-10-19 18:00 |
+	| EndTime   | 2012-10-19 19:00 |
+	| Subject   | Meeting subject  |
+	| Location  | Meeting location |
+	When I view preferences for date '2012-10-19'
+	Then I should see preference feedback with
+	| Field          | Value              |
+	| Date           | 2012-10-19         |
+	| Feedback error | No available shift |
+
+Scenario: Feedback from pre-scheduled personal shift
+	Given I have a person period with 
+	| Field        | Value      |
+	| Start date   | 2012-10-01 |
+	| Rule set bag | Common     |
+	And I have a pre-scheduled personal shift with
+	| Field     | Value            |
+	| StartTime | 2012-10-19 17:00 |
+	| EndTime   | 2012-10-19 18:00 |
+	| Activity  | Administration   |
+	When I view preferences for date '2012-10-19'
+	Then I should see preference feedback with
+	| Field           | Value       |
+	| Date            | 2012-10-19  |
+	| EndTime boundry | 18:00-18:00 |
