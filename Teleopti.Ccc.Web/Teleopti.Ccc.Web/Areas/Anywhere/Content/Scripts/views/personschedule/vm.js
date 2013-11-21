@@ -101,8 +101,9 @@ define([
 		});
 		
 		this.FormStartPixel = ko.computed(function () {
-			if(self.Shift())
-				return self.Shift().Layers.length > 0 ? self.Shift.ShiftStartPixels() : 0;
+			if (self.Shift()) {
+				return self.Shift().Layers().length > 0 ? self.Shift().ShiftStartPixels() : 0;
+			}
 			return 0;
 		});
 
