@@ -97,7 +97,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItemFindMatching = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemViewHistory = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemAgentInfo = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemViewPointTimeZone = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemLoggedOnUserTimeZone = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemSwitchToViewPointOfSelectedAgent = new System.Windows.Forms.ToolStripMenuItem();
@@ -373,7 +372,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(20, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 0;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 8;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -485,7 +484,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripMenuItem3,
             this.toolStripMenuItemFindMatching,
             this.toolStripMenuItemViewHistory,
-            this.toolStripMenuItemAgentInfo,
             this.toolStripMenuItemViewPointTimeZone,
             this.toolStripMenuItemSwitchToViewPointOfSelectedAgent,
             this.toolStripMenuItemSortBy,
@@ -497,7 +495,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.xxExportToolStripMenuItem,
             this.toolStripMenuItemChangeTagRM});
 			this.contextMenuViews.Name = "contextMenuStrip1";
-			this.contextMenuViews.Size = new System.Drawing.Size(305, 644);
+			this.contextMenuViews.Size = new System.Drawing.Size(305, 622);
 			this.contextMenuViews.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuViews_Opening);
 			// 
 			// toolStripMenuItemCut
@@ -685,16 +683,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemViewHistory.Text = "xxViewScheduleHistory";
 			this.toolStripMenuItemViewHistory.Click += new System.EventHandler(this.toolStripMenuItemViewHistory_Click);
 			// 
-			// toolStripMenuItemAgentInfo
-			// 
-			this.toolStripMenuItemAgentInfo.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_AgentInfo2;
-			this.toolStripMenuItemAgentInfo.Name = "toolStripMenuItemAgentInfo";
-			this.SetShortcut(this.toolStripMenuItemAgentInfo, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemAgentInfo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
-			this.toolStripMenuItemAgentInfo.Size = new System.Drawing.Size(304, 22);
-			this.toolStripMenuItemAgentInfo.Text = "xxAgentInfo";
-			this.toolStripMenuItemAgentInfo.Click += new System.EventHandler(this.toolStripMenuItemAgentInfo_Click);
-			// 
 			// toolStripMenuItemViewPointTimeZone
 			// 
 			this.toolStripMenuItemViewPointTimeZone.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -711,7 +699,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemLoggedOnUserTimeZone.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItemLoggedOnUserTimeZone.Name = "toolStripMenuItemLoggedOnUserTimeZone";
 			this.SetShortcut(this.toolStripMenuItemLoggedOnUserTimeZone, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemLoggedOnUserTimeZone.Size = new System.Drawing.Size(110, 22);
+			this.toolStripMenuItemLoggedOnUserTimeZone.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItemLoggedOnUserTimeZone.Text = "qwerty";
 			this.toolStripMenuItemLoggedOnUserTimeZone.Click += new System.EventHandler(this.toolStripMenuItemLoggedOnUserTimeZone_Click);
 			this.toolStripMenuItemLoggedOnUserTimeZone.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemLoggedOnUserTimeZoneMouseUp);
@@ -2275,7 +2263,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripButtonShowPropertyPanel.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_AgentInfo2;
 			this.toolStripButtonShowPropertyPanel.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonShowPropertyPanel.Name = "toolStripButtonShowPropertyPanel";
-			this.SetShortcut(this.toolStripButtonShowPropertyPanel, System.Windows.Forms.Keys.None);
+			this.SetShortcut(this.toolStripButtonShowPropertyPanel, ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I))));
 			this.toolStripButtonShowPropertyPanel.Size = new System.Drawing.Size(82, 20);
 			this.toolStripButtonShowPropertyPanel.Text = "xxInfoPanel";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonShowPropertyPanel, true);
@@ -3346,8 +3334,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPasteSpecial;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemDeleteSpecial;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCutSpecial;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAgentInfo;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSwitchToViewPointOfSelectedAgent;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripResultView;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemDay;

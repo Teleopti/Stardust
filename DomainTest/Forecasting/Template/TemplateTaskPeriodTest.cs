@@ -639,5 +639,35 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
             Assert.AreEqual(15, views[0].Period.ElapsedTime().TotalMinutes);
             Assert.AreEqual(15, views[1].Period.ElapsedTime().TotalMinutes);
         }
+
+		[Test]
+		public void ShouldNotAllowNegativeValuesInTasks()
+		{
+			_target.Tasks = 1;
+			Assert.AreEqual(1, _target.Tasks);
+
+			_target.Tasks = -2;
+			Assert.AreEqual(1, _target.Tasks);
+		}
+
+		[Test]
+		public void ShouldNotAllowNegativeValuesInAverageTaskTime()
+		{
+			_target.AverageTaskTime = TimeSpan.FromHours(1);
+			Assert.AreEqual(TimeSpan.FromHours(1), _target.AverageTaskTime);
+
+			_target.AverageTaskTime = TimeSpan.FromHours(-2);
+			Assert.AreEqual(TimeSpan.FromHours(1), _target.AverageTaskTime);
+		}
+
+		[Test]
+		public void ShouldNotAllowNegativeValuesInAverageAfterTaskTime()
+		{
+			_target.AverageAfterTaskTime = TimeSpan.FromHours(1);
+			Assert.AreEqual(TimeSpan.FromHours(1), _target.AverageAfterTaskTime);
+
+			_target.AverageAfterTaskTime = TimeSpan.FromHours(-2);
+			Assert.AreEqual(TimeSpan.FromHours(1), _target.AverageAfterTaskTime);
+		}
     }
 }

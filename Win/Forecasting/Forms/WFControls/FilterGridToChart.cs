@@ -49,8 +49,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
     		_workingInterval = WorkingInterval.Intraday;
 
     		SimpleTestCharter();
-
-    		CultureInfo currentCulture = Thread.CurrentThread.CurrentUICulture;
+			var currentCulture = Thread.CurrentThread.CurrentUICulture;
     		if (currentCulture.Calendar.AlgorithmType != CalendarAlgorithmType.SolarCalendar)
     		{
     			currentCulture = CultureInfo.GetCultureInfo(1033);
@@ -60,10 +59,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
     			SetChartScale(GridControl.FirstDateTime, GridControl.LastDateTime,
     			              GridControl.ChartResolution);
     			chartControl1.BeginUpdate();
-                if (Enum.IsDefined(typeof(DayOfWeek), GridControl.TemplateIndex))
-                    chartControl1.Text = string.Format(currentCulture,
-                                                       GridControl.GridRowShowInChart + " - " +
-                                                       (DayOfWeek)GridControl.TemplateIndex);
+    			if (Enum.IsDefined(typeof (DayOfWeek), GridControl.TemplateIndex))
+					chartControl1.Text = string.Format(currentCulture,
+									GridControl.GridRowShowInChart + " - " +
+									currentCulture.DateTimeFormat.DayNames[GridControl.TemplateIndex]);
                 else
                     chartControl1.Text = string.Format(currentCulture,
                                                        GridControl.GridRowShowInChart);

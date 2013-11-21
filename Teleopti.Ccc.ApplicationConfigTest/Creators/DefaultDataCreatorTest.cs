@@ -83,13 +83,6 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
         }
 
         [Test]
-        public void CanGetConvertPerson()
-        {
-            _target.Create();
-            Assert.AreEqual(new Name("DatabaseConverter", "DatabaseConverter"), _target.ConvertPerson.Name);    
-        }
-
-        [Test]
         public void VerifyCanSave()
         {
             DefaultAggregateRoot defaultAggregateRoot =  _target.Create();

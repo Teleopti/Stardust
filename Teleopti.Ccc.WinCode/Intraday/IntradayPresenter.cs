@@ -375,6 +375,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _messageBroker.UnregisterEventSubscription(OnEventForecastDataMessageHandler);
             _messageBroker.UnregisterEventSubscription(OnEventScheduleMessageHandler);
             _messageBroker.UnregisterEventSubscription(OnEventStatisticMessageHandler);
+            _messageBroker.UnregisterEventSubscription(OnEventMeetingMessageHandler);
         }
 
         public void Save()

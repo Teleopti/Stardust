@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (person == null)
 				return null;
 			var shiftProjectionCaches = new List<IShiftProjectionCache>();
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
+            var timeZone = TimeZoneInfo.Utc;
 			var personPeriod = person.Period(scheduleDateOnly);
 			var bag = personPeriod.RuleSetBag;
 

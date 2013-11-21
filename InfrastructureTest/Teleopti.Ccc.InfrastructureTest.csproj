@@ -167,6 +167,7 @@
     <Compile Include="Persisters\Requests\DontPersistIfNoPermissionTest.cs" />
     <Compile Include="Persisters\Requests\UpdateNoConflictTest.cs" />
     <Compile Include="Persisters\Requests\RequestPersisterBaseTest.cs" />
+    <Compile Include="Persisters\Schedules\Bug25715.cs" />
     <Compile Include="Persisters\Schedules\ConflictNoteEagerLoadingTest.cs" />
     <Compile Include="Persisters\Schedules\ConflictPersonAbsenceEagerLoadingTest.cs" />
     <Compile Include="Persisters\Schedules\InsertNoConflictTest.cs" />

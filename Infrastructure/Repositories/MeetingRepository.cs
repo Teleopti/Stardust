@@ -121,23 +121,31 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public IMeeting LoadAggregate(Guid id)
         {
             IMeeting meeting = Get(id);
-            if(meeting!=null)
-            {
-                LazyLoadingManager.Initialize(meeting.Activity);
-                LazyLoadingManager.Initialize(meeting.Organizer);
-                LazyLoadingManager.Initialize(meeting.Scenario);
-                foreach (IMeetingPerson person in meeting.MeetingPersons)
-                {
-					LazyLoadingManager.Initialize(person);
-					LazyLoadingManager.Initialize(person.Person);
-                    foreach (IPersonPeriod personPeriod in person.Person.PersonPeriodCollection)
-                    {
-                        LazyLoadingManager.Initialize(personPeriod);
-						LazyLoadingManager.Initialize(personPeriod.Team);
-                    }
-                }
-            }
-            return meeting;
+	        if (meeting != null)
+	        {
+		        if (!LazyLoadingManager.IsInitialized(meeting.Activity))
+			        LazyLoadingManager.Initialize(meeting.Activity);
+		        if (!LazyLoadingManager.IsInitialized(meeting.Organizer))
+			        LazyLoadingManager.Initialize(meeting.Organizer);
+		        if (!LazyLoadingManager.IsInitialized(meeting.Scenario))
+			        LazyLoadingManager.Initialize(meeting.Scenario);
+		        foreach (IMeetingPerson person in meeting.MeetingPersons)
+		        {
+			        LazyLoadingManager.Initialize(person);
+			        if (!LazyLoadingManager.IsInitialized(person.Person))
+			        {
+				        LazyLoadingManager.Initialize(person.Person);
+				        foreach (IPersonPeriod personPeriod in person.Person.PersonPeriodCollection)
+				        {
+					        if (!LazyLoadingManager.IsInitialized(personPeriod))
+						        LazyLoadingManager.Initialize(personPeriod);
+					        if (!LazyLoadingManager.IsInitialized(personPeriod.Team))
+						        LazyLoadingManager.Initialize(personPeriod.Team);
+				        }
+			        }
+		        }
+	        }
+	        return meeting;
         }
 
         

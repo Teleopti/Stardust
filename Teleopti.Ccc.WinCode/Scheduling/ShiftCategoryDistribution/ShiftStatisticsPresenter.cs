@@ -108,7 +108,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		{
 			if (rowIndex <= sortedCategories.Count)
 			{
-				style.CellValue = sortedCategories[rowIndex - 1].Description.ShortName;
+				var categoryDescription = sortedCategories[rowIndex - 1].Description;
+				style.CellValue = categoryDescription.ShortName;
+				style.CellTipText = categoryDescription.Name;
 			}
 			else
 			{

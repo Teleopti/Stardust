@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 	{
 		private MockRepository _mocks;
 		private ShiftCategoryFairnessReScheduler _target;
-		private IGroupSchedulingService _groupSchedService;
 		private OptimizationPreferences _optPrefs;
 		private IGroupPersonBuilderForOptimization _groupPersonBuilder;
 		private IGroupPersonConsistentChecker _groupPersonConsistChecker;
@@ -23,11 +22,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_groupSchedService = _mocks.DynamicMock<IGroupSchedulingService>();
 			_optPrefs = new OptimizationPreferences();
 			_groupPersonBuilder = _mocks.DynamicMock<IGroupPersonBuilderForOptimization>();
 			_groupPersonConsistChecker = _mocks.DynamicMock<IGroupPersonConsistentChecker>();
-			_target = new ShiftCategoryFairnessReScheduler(_groupSchedService,_optPrefs,_groupPersonBuilder,_groupPersonConsistChecker);
+			_target = new ShiftCategoryFairnessReScheduler(_optPrefs,_groupPersonBuilder,_groupPersonConsistChecker);
 		}
 
 		[Test]
@@ -54,8 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 
 			Expect.Call(_groupPersonBuilder.BuildGroupPerson(person, dateOnly)).Return(groupPerson);
 			Expect.Call(_groupPersonConsistChecker.AllPersonsHasSameOrNoneScheduled(groupPerson, dateOnly, null)).IgnoreArguments().Return(true);
-			Expect.Call(_groupSchedService.ScheduleOneDayOnOnePerson(dateOnly, person, null, groupPerson,
-																	 new List<IScheduleMatrixPro>())).IgnoreArguments().Return(false);
+
 			_mocks.ReplayAll();
 			Assert.That(_target.Execute(new List<IPerson> { person }, dateOnly, new List<IScheduleMatrixPro>()), Is.False);
 			_mocks.VerifyAll();
@@ -70,8 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 
 			Expect.Call(_groupPersonBuilder.BuildGroupPerson(person, dateOnly)).Return(groupPerson);
 			Expect.Call(_groupPersonConsistChecker.AllPersonsHasSameOrNoneScheduled(groupPerson, dateOnly, null)).IgnoreArguments().Return(true);
-			Expect.Call(_groupSchedService.ScheduleOneDayOnOnePerson(dateOnly, person, null, groupPerson,
-			                                                         new List<IScheduleMatrixPro>())).IgnoreArguments().Return(true);
+
 			_mocks.ReplayAll();
 			Assert.That(_target.Execute(new List<IPerson> {person}, dateOnly, new List<IScheduleMatrixPro>()),Is.True);
 			_mocks.VerifyAll();

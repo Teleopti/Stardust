@@ -602,6 +602,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             {
                 checkBoxTeamBlockSameShiftCategory.Checked = false ;
                 checkBoxLevellingSameShift.Checked = false;
+                checkBoxTeamBlockSameStartTime.Checked = false;
             }
             
         }

@@ -796,52 +796,30 @@ namespace Teleopti.Ccc.Win.Scheduling
             _backgroundWorker.ReportProgress(1, e);
         }
 
-		public void RemoveShiftCategoryBackToLegalState(
-            IList<IScheduleMatrixPro> matrixList,
-			BackgroundWorker backgroundWorker, IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes )
-        {
-            if (matrixList == null) throw new ArgumentNullException("matrixList");
-            if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
-			if (schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
-            using (PerformanceOutput.ForOperation("ShiftCategoryLimitations"))
-            {
-                if(schedulingOptions.UseGroupScheduling && schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
-                {
-                    var backToLegalStateServicePro =
-                    _container.Resolve<IGroupListShiftCategoryBackToLegalStateService>();
+	    public void RemoveShiftCategoryBackToLegalState(
+		    IList<IScheduleMatrixPro> matrixList,
+		    BackgroundWorker backgroundWorker, IOptimizationPreferences optimizationPreferences,
+		    ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes)
+	    {
+		    if (matrixList == null)
+			    throw new ArgumentNullException("matrixList");
+		    if (backgroundWorker == null)
+			    throw new ArgumentNullException("backgroundWorker");
+		    if (schedulingOptions == null)
+			    throw new ArgumentNullException("schedulingOptions");
+		    using (PerformanceOutput.ForOperation("ShiftCategoryLimitations"))
+		    {
+			    var backToLegalStateServicePro =
+				    _container.Resolve<ISchedulePeriodListShiftCategoryBackToLegalStateService>();
 
-                    if (backgroundWorker.CancellationPending)
-                        return;
-                    var groupOptimizerFindMatrixesForGroup =
-                        new GroupOptimizerFindMatrixesForGroup(_groupPersonBuilderForOptimization, matrixList);
+			    if (backgroundWorker.CancellationPending)
+				    return;
 
-					var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
-					var coherentChecker = new TeamSteadyStateCoherentChecker();
-					var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-					var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
-					var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
-					var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
-                	var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
-					var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, allMatrixes, groupPersonsBuilder, schedulingOptions);
-					var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
-                	var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
-					IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState, _container.Resolve<IGroupPersonFactory>(), _container.Resolve<IGroupPagePerDateHolder>());
+			    backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
+		    }
+	    }
 
-                    backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences, groupOptimizerFindMatrixesForGroup, teamSteadyStateHolder, teamSteadyStateMainShiftScheduler, groupPersonBuilderForOptimization);
-                }else
-                {
-                    var backToLegalStateServicePro =
-                    _container.Resolve<ISchedulePeriodListShiftCategoryBackToLegalStateService>();
-
-                    if (backgroundWorker.CancellationPending)
-                        return;
-
-                    backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
-                }
-            }
-        }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void BlockSchedule(IList<IScheduleDay> allScheduleDays, IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions)
         {
             if (allScheduleDays == null) throw new ArgumentNullException("allScheduleDays");
