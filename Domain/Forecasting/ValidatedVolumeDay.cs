@@ -127,7 +127,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
             set
             {
-                _validatedTasks = value;
+				if(value >= 0)
+					_validatedTasks = value;
             }
         }
 
@@ -169,7 +170,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
             set
             {
-                validatedTaskTime = value;
+				if (value >= TimeSpan.Zero)
+					validatedTaskTime = value;
             }
         }
 
@@ -211,7 +213,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
             set
             {
-                validatedAfterTaskTime = value;
+				if(value >= TimeSpan.Zero)
+					validatedAfterTaskTime = value;
             }
         }
 
@@ -687,20 +690,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         }
 
         /// <summary>
-        /// Adds the absolute value to tasks.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-06-27
-        /// </remarks>
-        public virtual void AddAbsoluteValueToTasks(double value)
-        {
-            _validatedTasks += value;
-        }
-
-        /// <summary>
         /// Adds the percentage to Validated ACW.
         /// </summary>
         /// <param name="percent">The percent.</param>
@@ -726,34 +715,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual void AddPercentageToValidatedTaskTime(Percent percent)
         {
             validatedTaskTime = TimeSpan.FromMilliseconds(validatedTaskTime.Value.TotalMilliseconds * (getValue(percent)));
-        }
-
-        /// <summary>
-        /// Adds the absolute value to Validated Task Time.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-06-27
-        /// </remarks>
-        public virtual void AddAbsoluteValueToValidatedTaskTime(TimeSpan value)
-        {
-            ValidatedAverageTaskTime = ValidatedAverageTaskTime.Add(value);
-        }
-
-        /// <summary>
-        /// Adds the absolute value to Validated Task Time.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-06-27
-        /// </remarks>
-        public virtual void AddAbsoluteValueToValidatedAcw(TimeSpan value)
-        {
-            ValidatedAverageAfterTaskTime = ValidatedAverageAfterTaskTime.Add(value);
         }
 
         #endregion

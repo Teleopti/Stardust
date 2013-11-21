@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             Assert.AreEqual(validatedVolumeDay2, result);
 
-            validatedVolumeDay1.AddAbsoluteValueToTasks(10);
+	        validatedVolumeDay1.ValidatedTasks += 10;
             
             PersistAndRemoveFromUnitOfWork(validatedVolumeDay1);
 
