@@ -115,7 +115,12 @@ namespace Teleopti.Ccc.Win.Meetings
 			get { return null; }
     	}
 
-    	public void SetEndTime(TimeSpan endTime)
+	    public void ResetSelection()
+	    {
+		    buttonAdvOK.Select();
+	    }
+
+	    public void SetEndTime(TimeSpan endTime)
         {
             outlookTimePickerEnd.SetTimeValue(endTime);
         }

@@ -263,6 +263,9 @@ namespace Teleopti.Ccc.Win.Meetings
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
 		private void ChangeView(ViewType viewType)
 		{
+			if (_currentView != null)
+				_currentView.ResetSelection();
+
 			panelContent.Controls.Clear();
 
             toolStripButtonMeetings.Checked = false;
