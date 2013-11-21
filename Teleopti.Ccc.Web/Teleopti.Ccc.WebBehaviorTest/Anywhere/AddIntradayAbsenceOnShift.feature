@@ -13,8 +13,7 @@ Background:
 	| Name                       | Anywhere Team Green |
 	| Access to team             | Team green          |
 	| Access to Anywhere         | true                |
-	| View unpublished schedules | true                |	
-	| View confidential          | true                |
+	| View unpublished schedules | true                |		
 	And 'Pierre Baldi' has a person period with
 	| Field      | Value      |
 	| Team       | Team green |
@@ -37,17 +36,6 @@ Scenario: View form
 	And I click 'add intraday absence'
 	Then I should see the add intraday absence form
 
-Scenario: Prevent selection of confidential if no permission
-	Given I have a role with
-	| Field                      | Value                    |
-	| Name                       | Cannot view confidential |
-	| Access to team             | Team green               |
-	| Access to Anywhere         | true                     |
-	| View unpublished schedules | true                     |
-	| View confidential          | false                    |
-	When I view person schedules add intraday absence form for 'Pierre Baldi' in 'Team green' on '2013-11-15'
-	Then I should not be able to select the absence 'Mental disorder'
-
 Scenario: Default times today
 	Given I have the role 'Anywhere Team Green'
 	And the current time is '2013-11-15 13:20'
@@ -60,7 +48,7 @@ Scenario: Default times today
 	When I view person schedules add intraday absence form for 'Pierre Baldi' in 'Team green' on '2013-11-15'
 	Then I should see the add intraday absence form with
 	| Field        | Value   |
-	| Start time   | 13:20   |
+	| Start time   | 13:30   | 
 	| End time     | 17:00   |
 
 Scenario: Default times tomorrow
@@ -121,6 +109,28 @@ Scenario: Add after midnight on night shift
 	| End time   | 2013-11-16 04:00 |
 	| Color      | Red              |
 
+Scenario: Add cross midnight on night shift
+	Given I have the role 'Anywhere Team Green'
+	And there is a shift category named 'Night'
+	And 'Pierre Baldi' has a shift with
+	| Field          | Value            |
+	| Shift category | Night            |
+	| Activity       | Phone            |
+	| Start time     | 2013-11-15 22:00 |
+	| End time       | 2013-11-16 04:00 |
+	When I view person schedules add intraday absence form for 'Pierre Baldi' in 'Team green' on '2013-11-15'
+	And I input these intraday absence values
+	| Field      | Value   |
+	| Activity   | Illness |
+	| Start time | 23:00   |
+	| End time   | 01:00   |
+	And I initiate 'apply'
+	Then I should see 'Pierre Baldi' with the scheduled activity
+	| Field      | Value            |
+	| Start time | 2013-11-15 23:00 |
+	| End time   | 2013-11-16 01:00 |
+	| Color      | Red              |
+
 Scenario: Adding overlapping of shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
@@ -139,7 +149,7 @@ Scenario: Adding overlapping of shift
 	Then I should see 'Pierre Baldi' with the scheduled activity
 	| Field      | Value            |
 	| Start time | 2013-11-15 16:00 |
-	| End time   | 2013-11-15 18:00 |
+	| End time   | 2013-11-15 17:00 |
 	| Color      | Red              |
 
 Scenario: Prevent adding outside of shift
@@ -156,4 +166,4 @@ Scenario: Prevent adding outside of shift
 	| Absence    | Illness |
 	| Start time | 17:00   |
 	| End time   | 18:00   |
-	Then I should see the validation error 'Cannot add absence outside of shift'
+	Then I should see the validation error 'Please add intraday absence on existing shift'
