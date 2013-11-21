@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.UserTexts;
@@ -701,7 +702,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             IList<IScheduleMatrixPro> matrixList = matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
 
-			OptimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, _container, selectedPeriod);
+			OptimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, _container.Resolve<IRestrictionExtractor>(),_container.Resolve<IOptimizationPreferences >(), selectedPeriod);
 
             var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.DaysOffBackToLegalState + Resources.ThreeDots);
             resourceOptimizerPersonOptimized(this, e);
@@ -795,114 +796,30 @@ namespace Teleopti.Ccc.Win.Scheduling
             _backgroundWorker.ReportProgress(1, e);
         }
 
-		public void RemoveShiftCategoryBackToLegalState(
-            IList<IScheduleMatrixPro> matrixList,
-			BackgroundWorker backgroundWorker, IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes )
-        {
-            if (matrixList == null) throw new ArgumentNullException("matrixList");
-            if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
-			if (schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
-            using (PerformanceOutput.ForOperation("ShiftCategoryLimitations"))
-            {
-                if(schedulingOptions.UseGroupScheduling && schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
-                {
-                    var backToLegalStateServicePro =
-                    _container.Resolve<IGroupListShiftCategoryBackToLegalStateService>();
+	    public void RemoveShiftCategoryBackToLegalState(
+		    IList<IScheduleMatrixPro> matrixList,
+		    BackgroundWorker backgroundWorker, IOptimizationPreferences optimizationPreferences,
+		    ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes)
+	    {
+		    if (matrixList == null)
+			    throw new ArgumentNullException("matrixList");
+		    if (backgroundWorker == null)
+			    throw new ArgumentNullException("backgroundWorker");
+		    if (schedulingOptions == null)
+			    throw new ArgumentNullException("schedulingOptions");
+		    using (PerformanceOutput.ForOperation("ShiftCategoryLimitations"))
+		    {
+			    var backToLegalStateServicePro =
+				    _container.Resolve<ISchedulePeriodListShiftCategoryBackToLegalStateService>();
 
-                    if (backgroundWorker.CancellationPending)
-                        return;
-                    var groupOptimizerFindMatrixesForGroup =
-                        new GroupOptimizerFindMatrixesForGroup(_groupPersonBuilderForOptimization, matrixList);
+			    if (backgroundWorker.CancellationPending)
+				    return;
 
-					var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
-					var coherentChecker = new TeamSteadyStateCoherentChecker();
-					var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-					var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
-					var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
-					var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
-                	var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
-					var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, allMatrixes, groupPersonsBuilder, schedulingOptions);
-					var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
-                	var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
-					IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState, _container.Resolve<IGroupPersonFactory>(), _container.Resolve<IGroupPagePerDateHolder>());
+			    backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
+		    }
+	    }
 
-                    backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences, groupOptimizerFindMatrixesForGroup, teamSteadyStateHolder, teamSteadyStateMainShiftScheduler, groupPersonBuilderForOptimization);
-                }else
-                {
-                    var backToLegalStateServicePro =
-                    _container.Resolve<ISchedulePeriodListShiftCategoryBackToLegalStateService>();
-
-                    if (backgroundWorker.CancellationPending)
-                        return;
-
-                    backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
-                }
-            }
-        }
-
-        public void GroupSchedule(BackgroundWorker backgroundWorker, IList<IScheduleDay> scheduleDays, IList<IScheduleMatrixPro> matrixList, 
-			IList<IScheduleMatrixPro> matrixListAll, ISchedulingOptions schedulingOptions, IGroupPageHelper groupPageHelper, IList<IScheduleMatrixPro> allMatrixes)
-        {
-            if (backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
-
-            var unlockedSchedules = (from scheduleMatrixPro in matrixList
-                                     from scheduleDayPro in scheduleMatrixPro.UnlockedDays
-                                     select scheduleDayPro.DaySchedulePart()).ToList();
-
-            if (!unlockedSchedules.Any()) return;
-
-            _sendEventEvery = schedulingOptions.RefreshRate;
-            _backgroundWorker = backgroundWorker;
-
-            DateOnlyPeriod selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
-
-            IGroupPageDataProvider groupPageDataProvider = _container.Resolve<IGroupScheduleGroupPageDataProvider>();
-            var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
-            groupPagePerDateHolder.GroupPersonGroupPagePerDate = _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(selectedPeriod.DayCollection(),
-                                                                                          groupPageDataProvider,
-																						  schedulingOptions.GroupOnGroupPage);
-
-
-            var selectedPersons = matrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).ToList();
-
-            _allResults.Clear();
-
-            var fixedStaffSchedulingService = _container.Resolve<IFixedStaffSchedulingService>();
-            fixedStaffSchedulingService.ClearFinderResults();
-
-            var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
-            var tagSetter = _container.Resolve<IScheduleTagSetter>();
-            tagSetter.ChangeTagToSet(schedulingOptions.TagToUseOnScheduling);
-            fixedStaffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceforContractDaysOff = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-			_daysOffSchedulingService.Execute(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceforContractDaysOff, schedulingOptions);
-
-			var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
-			var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
-			var teamSteadyStateRunner = new TeamSteadyStateRunner(allMatrixes, targetTimeCalculator);
-			var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, allMatrixes, groupPersonsBuilder, schedulingOptions);
-			var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
-
-			var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
-			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState, _container.Resolve<IGroupPersonFactory>(), _container.Resolve<IGroupPagePerDateHolder>());
-			var coherentChecker = new TeamSteadyStateCoherentChecker();
-			var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
-			var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
-			var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
-			
-            fixedStaffSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
-            groupSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-			groupSchedulingService.Execute(selectedPeriod, matrixList, schedulingOptions, selectedPersons, backgroundWorker, teamSteadyStateHolder, teamSteadyStateMainShiftScheduler, groupPersonBuilderForOptimization);
-			
-            groupSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
-
-            _allResults.AddResults(fixedStaffSchedulingService.FinderResults, DateTime.Now);
-
-            if (schedulingOptions.RotationDaysOnly)
-                schedulePartModifyAndRollbackServiceforContractDaysOff.Rollback();
-        }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void BlockSchedule(IList<IScheduleDay> allScheduleDays, IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions)
         {
             if (allScheduleDays == null) throw new ArgumentNullException("allScheduleDays");

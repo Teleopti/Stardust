@@ -180,6 +180,16 @@ namespace Teleopti.Ccc.DomainTest.Collection
             Assert.IsFalse(_source.IsEmpty());
         }
 
+        [Test]
+        public void VerifyIsAny()
+        {
+            Assert.IsTrue(_target.IsNullOrEmpty());
+			Assert.IsFalse(_source.IsNullOrEmpty());
+
+	        _source = null;
+	        Assert.IsTrue(_source.IsNullOrEmpty());
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void ShouldCopyEnumerable()
         {

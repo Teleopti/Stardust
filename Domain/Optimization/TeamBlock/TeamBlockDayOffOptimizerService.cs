@@ -16,8 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                     DateOnlyPeriod selectedPeriod,
 		                     IList<IPerson> selectedPersons,
 		                     IOptimizationPreferences optimizationPreferences,
-		                     ISchedulePartModifyAndRollbackService rollbackService,
-		                     IDayOffTemplate dayOffTemplate);
+		                     ISchedulePartModifyAndRollbackService rollbackService,ISchedulingOptions schedulingOptions );
 
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	{
 		private readonly ITeamInfoFactory _teamInfoFactory;
 		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
-		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
@@ -39,11 +37,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private readonly ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
 		private bool _cancelMe;
+	    private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 
-		public TeamBlockDayOffOptimizerService(
+	    public TeamBlockDayOffOptimizerService(
 			ITeamInfoFactory teamInfoFactory,
 			ILockableBitArrayFactory lockableBitArrayFactory,
-			ISchedulingOptionsCreator schedulingOptionsCreator,
 			ILockableBitArrayChangesTracker lockableBitArrayChangesTracker,
 			ITeamBlockScheduler teamBlockScheduler,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
@@ -54,12 +52,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamBlockClearer teamBlockClearer,
 			ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
-			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder
-			)
+			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder, ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
 		{
 			_teamInfoFactory = teamInfoFactory;
 			_lockableBitArrayFactory = lockableBitArrayFactory;
-			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_lockableBitArrayChangesTracker = lockableBitArrayChangesTracker;
 			_teamBlockScheduler = teamBlockScheduler;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
@@ -71,6 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 			_teamBlockDaysOffMoveFinder = teamBlockDaysOffMoveFinder;
+	        _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -81,12 +78,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			DateOnlyPeriod selectedPeriod,
 			IList<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
-			ISchedulePartModifyAndRollbackService rollbackService,
-			IDayOffTemplate dayOffTemplate
+			ISchedulePartModifyAndRollbackService rollbackService,ISchedulingOptions schedulingOptions 
 			)
 		{
-			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-			schedulingOptions.DayOffTemplate = dayOffTemplate;
+			
 			// create a list of all teamInfos
 			var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			foreach (var selectedPerson in selectedPersons)
@@ -366,13 +361,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			foreach (DateOnly dateOnly in removedDaysOff)
 			{
-                bool singleAgentTeam = schedulingOptions.GroupOnGroupPageForTeamBlockPer != null &&
-                                           schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key == "SingleAgentTeam";
-
                 ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,
 				                                                                        schedulingOptions
                                                                                             .BlockFinderTypeForAdvanceScheduling, 
-																							singleAgentTeam,
+																							_teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions) ,
 																							allPersonMatrixList);
 				if (teamBlockInfo == null) continue;
 				if (!_teamTeamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, schedulingOptions))

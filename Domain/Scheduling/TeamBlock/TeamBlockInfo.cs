@@ -1,5 +1,3 @@
-
-
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -56,5 +54,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
             return GetHashCode() == other.GetHashCode();
         }
+	}
+
+	public class TeamBlockSingleDayInfo : TeamBlockInfo
+	{
+		public TeamBlockSingleDayInfo(ITeamInfo teamInfo, DateOnly dateOnly)
+			: base(teamInfo, new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly)))
+		{
+		}
 	}
 }

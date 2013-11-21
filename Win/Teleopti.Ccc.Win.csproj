@@ -339,6 +339,7 @@
     </Compile>
     <Compile Include="Commands\GroupPersonBuilderForOptimizationFactory.cs" />
     <Compile Include="Commands\MatrixListFactory.cs" />
+    <Compile Include="Commands\TeamBlockOptimizationCommand.cs" />
     <Compile Include="Common\Configuration\Columns\ColumnCollectionExtensions.cs" />
     <Compile Include="Common\Configuration\SmsSettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -1429,7 +1430,6 @@
     </Compile>
     <Compile Include="Scheduling\ExtendReduceDaysOffHelper.cs" />
     <Compile Include="Scheduling\ExtendReduceTimeHelper.cs" />
-    <Compile Include="Scheduling\GroupDayOffOptimizerHelper.cs" />
     <Compile Include="Scheduling\OptimizerHelperHelper.cs" />
     <Compile Include="Scheduling\PersistConflictView.cs">
       <SubType>Form</SubType>

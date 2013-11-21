@@ -682,8 +682,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                 TimeSpan time = pair.Value;
                 createAndAddItem(listViewSchedulePeriod, pair.Key, DateHelper.HourMinutesString(time.TotalMinutes), 2);
             }
-            //createAndAddItem(listViewSchedulePeriod, "xxOB", DateHelper.HourMinutesString(helper.CurrentShiftAllowanceTime.TotalMinutes), 2);
-            //createAndAddItem(listViewSchedulePeriod, Resources.Overtime, DateHelper.HourMinutesString(helper.CurrentOvertime.TotalMinutes), 2);
 
             listViewSchedulePeriod.Items.Add("");
             createAndAddItem(listViewSchedulePeriod, Resources.FreeSlots, freeSlots.ToString(CultureInfo.CurrentCulture),
@@ -760,12 +758,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             createAndAddItem(listViewPerson, Resources.Email, person.Email ?? "", 2);
             createAndAddItem(listViewPerson, Resources.EmployeeNo, person.EmploymentNumber ?? "", 2);
             createAndAddItem(listViewPerson, Resources.Note, person.Note ?? "", 2);
-            //createAndAddItem(listViewPerson, Resources.Roles, "", 1);
-            // lazy load, do we want to load these one by one?
-            //foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)
-            //{
-            //    createAndAddItem(listViewPerson, applicationRole.Name, "", 2);
-            //}
 
             createAndAddItem(listViewPerson, Resources.WorkflowControlSet,
                              person.WorkflowControlSet != null ? person.WorkflowControlSet.Name : "", 2);
@@ -799,12 +791,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             
         }
 
-        private void FormAgentInfoResizeEnd(object sender, EventArgs e)
-        {
-            if (Width - 270 > 0)
-                listViewPerson.Columns[1].Width = Width - 270;
-        }
-
+       
         private void comboBoxAgentGrouping_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_dataLoaded && _selectedPerson!= null)
