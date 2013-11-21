@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _period = new DateOnlyPeriod(_startDate, _startDate.AddDays(3));
             _scenario = _mocks.StrictMock<IScenario>();
             _rangeProjectionService = _mocks.StrictMock<IRangeProjectionService>();
-            _schedulerStateLoader = _mocks.StrictMock<ISchedulerStateLoader>();
+            _schedulerStateLoader = _mocks.DynamicMock<ISchedulerStateLoader>();
 			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, _timeZone), new List<IPerson> { _person });
 		    _schedulerStateHolder.TimeZoneInfo = _timeZone;
             _meetingSlotFinderService = _mocks.StrictMock<IMeetingSlotFinderService>();
@@ -303,8 +303,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		{
 			using(_mocks.Record())
 			{
-				Expect.Call(() => _view.NotifyMeetingTimeChanged());
-				Expect.Call(() => _view.SetStartTime(new TimeSpan(2000, 1, 1))).IgnoreArguments();
+				Expect.Call(() => _view.RefreshGrid());
 			}
 
 			using(_mocks.Playback())
@@ -332,8 +331,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _view.NotifyMeetingTimeChanged());
-				Expect.Call(() => _view.SetEndTime(new TimeSpan(2000, 1, 1))).IgnoreArguments();
+				Expect.Call(() => _view.RefreshGrid());
 			}
 
 			using (_mocks.Playback())
@@ -361,8 +359,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _view.NotifyMeetingTimeChanged());
-				Expect.Call(() => _view.SetStartTime(new TimeSpan(2000, 1, 1))).IgnoreArguments();
+				Expect.Call(() => _view.RefreshGrid());
 			}
 
 			using (_mocks.Playback())
@@ -390,8 +387,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _view.NotifyMeetingTimeChanged());
-				Expect.Call(() => _view.SetEndTime(new TimeSpan(2000, 1, 1))).IgnoreArguments();
+				Expect.Call(() => _view.RefreshGrid());
 			}
 
 			using (_mocks.Playback())
@@ -411,38 +407,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			using (_mocks.Playback())
 			{
 				_target.OnOutlookTimePickerEndTimeKeyDown(Keys.A, "17:00");
-			}
-		}
-
-		[Test]
-		public void ShouldPositionMeetingOnSelectedStartTimeSelectedIndexChanged()
-		{
-			using (_mocks.Record())
-			{
-				Expect.Call(_view.TimeFocused).Return(true);
-				Expect.Call(() => _view.NotifyMeetingTimeChanged());
-				Expect.Call(() => _view.SetStartTime(new TimeSpan(2000, 1, 1))).IgnoreArguments();
-			}
-
-			using (_mocks.Playback())
-			{
-				_target.OnOutlookTimePickerStartTimeSelectedIndexChanged("07:00");
-			}
-		}
-
-		[Test]
-		public void ShouldPositionMeetingOnSelectedEndTimeSelectedIndexChanged()
-		{
-			using (_mocks.Record())
-			{
-				Expect.Call(_view.TimeFocused).Return(true);
-				Expect.Call(() => _view.NotifyMeetingTimeChanged());
-				Expect.Call(() => _view.SetEndTime(new TimeSpan(2000, 1, 1))).IgnoreArguments();
-			}
-
-			using (_mocks.Playback())
-			{
-				_target.OnOutlookTimePickerEndTimeSelectedIndexChanged("17:00");
 			}
 		}
 
