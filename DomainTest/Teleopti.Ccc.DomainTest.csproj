@@ -258,9 +258,6 @@
     <Compile Include="Infrastructure\PagingDetailTest.cs" />
     <Compile Include="Infrastructure\PagingTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictorTest.cs" />
-    <Compile Include="Optimization\Fairness\PrioritiseAgentByContractTest.cs" />
-    <Compile Include="Optimization\Fairness\PriortiseShiftCategoryTest.cs" />
-    <Compile Include="Optimization\Fairness\PriortiseWeekDayTest.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizationResourceHelperTest.cs" />
     <Compile Include="Optimization\GroupIntradayOptimizerExecuterTest.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettingsTest.cs" />

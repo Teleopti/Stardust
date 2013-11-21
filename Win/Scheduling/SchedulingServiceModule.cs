@@ -3,7 +3,6 @@ using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Optimization.Fairness;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
