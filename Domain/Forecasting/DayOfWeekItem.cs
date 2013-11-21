@@ -132,6 +132,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
             set
             {
+	            if (!(value >= 0)) return;
                 if (_comparisonTasks != 0 && _averageTasks!=0)
                     _taskIndex = (value / _averageTasks) * _taskIndex;
                 
