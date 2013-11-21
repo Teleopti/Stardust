@@ -65,5 +65,14 @@ namespace Teleopti.Ccc.DomainTest.Common
 			Assert.IsTrue(target2.Contains(5));
             Assert.IsFalse(target2.Contains(7));
         }
+
+		[Test]
+		public void ShouldBeTwoDiffentMinMax()
+		{
+			MinMax<int> target1 = new MinMax<int>(1, 1);
+			MinMax<int> target2 = new MinMax<int>(2, 2);
+
+			Assert.That(target1.GetHashCode(), Is.Not.EqualTo(target2.GetHashCode()));
+		}
     }
 }

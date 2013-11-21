@@ -384,7 +384,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 																				 _schedulingOptions, scheduleDictionary)).IgnoreArguments()
 					  .Return(effectiveRestrictionForDayTwo);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
-				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false).Repeat.AtLeastOnce();
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
 				Expect.Call(_scheduleMatrixPro1.ActiveScheduleRange).Return(range1).Repeat.AtLeastOnce();
 				Expect.Call(range1.ScheduledDay(_dateOnly)).Return(scheduleDay1);
