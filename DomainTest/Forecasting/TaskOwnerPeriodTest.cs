@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using System.Reflection;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             target.Add(workloadDay);
 
-            Assert.That(target.Tasks, Is.EqualTo(100));
+	        Assert.That(Math.Round(target.Tasks, 2), Is.EqualTo(100));
         }
 
         /// <summary>
@@ -461,7 +462,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             double numberOfTasks = target.Tasks + 50d;
             target.Tasks = numberOfTasks;
-            Assert.AreEqual(numberOfTasks, target.Tasks);
+            Assert.AreEqual(Math.Round(numberOfTasks, 0), Math.Round(target.Tasks,0));
         }
 
         /// <summary>
@@ -490,7 +491,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             target.Tasks = numberOfTasks;
             target.Release();
 
-            Assert.AreEqual(numberOfTasks, target.Tasks);
+            Assert.AreEqual(Math.Round(numberOfTasks,0), Math.Round(target.Tasks,0));
         }
 
         /// <summary>
@@ -543,7 +544,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             target = new TaskOwnerPeriod(target.CurrentDate, WorkloadDayFactory.GetWorkloadDaysForTest(target.CurrentDate, target.CurrentDate.AddDays(1), _workload).OfType<ITaskOwner>().ToList(), TaskOwnerPeriodType.Other);
 
-            Assert.AreEqual(61d, target.Tasks);
+            Assert.AreEqual(61d, Math.Round(target.Tasks,0));
 
             target.TaskOwnerDayCollection[0].Tasks = 10d;
             target.TaskOwnerDayCollection[1].Tasks = 10d;
@@ -552,7 +553,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             target.TaskOwnerDayCollection[0].AverageAfterTaskTime = TimeSpan.FromSeconds(80);
             target.TaskOwnerDayCollection[1].AverageAfterTaskTime = TimeSpan.FromSeconds(80);
 
-            Assert.AreEqual(20d, target.Tasks);
+            Assert.AreEqual(20d, Math.Round(target.Tasks, 0));
             Assert.AreEqual(40d, Math.Round(target.AverageTaskTime.TotalSeconds,2));
             Assert.AreEqual(80d, Math.Round(target.AverageAfterTaskTime.TotalSeconds,2));
 
@@ -564,7 +565,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             target.TaskOwnerDayCollection[1].Tasks = 20d;
 
-            Assert.AreEqual(30d, target.Tasks);
+            Assert.AreEqual(30d, Math.Round(target.Tasks, 0));
         }
 
         /// <summary>
@@ -611,11 +612,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             
             //Original total tasks for first week should be 213
             target.TaskOwnerDayCollection[0].Tasks -= 20;
-            Assert.AreEqual(193, weekPeriods[0].Tasks);
+            Assert.AreEqual(193, Math.Round(weekPeriods[0].Tasks,0));
 
             //Original total tasks for month should be 945 (=> -20 + 45)
             weekPeriods[0].TaskOwnerDayCollection[0].Tasks += 45;
-            Assert.AreEqual(970, target.Tasks);
+            Assert.AreEqual(970, Math.Round(target.Tasks,0));
         }
 
         /// <summary>
@@ -1134,11 +1135,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             target = new TaskOwnerPeriod(target.CurrentDate,
                                          WorkloadDayFactory.GetWorkloadDaysForTest(target.StartDate, target.EndDate,
                                                       _workload).OfType<ITaskOwner>(), target.TypeOfTaskOwnerPeriod);
-            Assert.AreEqual(945d, target.Tasks);
-            Assert.AreEqual(945d, target.TotalTasks);
+            Assert.AreEqual(945d, Math.Round(target.Tasks, 0));
+            Assert.AreEqual(945d, Math.Round(target.TotalTasks, 0));
             target.CampaignTasks = new Percent(0.2d);
-            Assert.AreEqual(945d, target.Tasks);
-            Assert.AreEqual(1134d, target.TotalTasks);
+            Assert.AreEqual(945d, Math.Round(target.Tasks, 0));
+            Assert.AreEqual(1134d, Math.Round(target.TotalTasks, 0));
         }
 
         [Test]
@@ -1148,8 +1149,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             target = new TaskOwnerPeriod(target.CurrentDate,
                                          WorkloadDayFactory.GetWorkloadDaysForTest(target.StartDate, target.EndDate,
                                                       _workload).OfType<ITaskOwner>(), target.TypeOfTaskOwnerPeriod);
-            Assert.AreEqual(945d, target.Tasks);
-            Assert.AreEqual(945d, target.TotalTasks);
+            Assert.AreEqual(945d, Math.Round(target.Tasks, 0));
+            Assert.AreEqual(945d, Math.Round(target.TotalTasks, 0));
 
             TaskOwnerHelper helper = new TaskOwnerHelper(new List<ITaskOwner>{target});
             helper.BeginUpdate();
@@ -1157,19 +1158,19 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             target.Tasks = 1000d;
             //target.Release();
             helper.EndUpdate();
-            Assert.AreEqual(1000d, target.Tasks);
-            Assert.AreEqual(1000d, target.TotalTasks);
+            Assert.AreEqual(1000d, Math.Round(target.Tasks, 0));
+            Assert.AreEqual(1000d, Math.Round(target.TotalTasks,0));
 
             foreach (var taskOwner in target.TaskOwnerDayCollection)
             {
                 taskOwner.CampaignTasks = new Percent(0.2d);
             }
-            Assert.AreEqual(1000d, target.Tasks);
-            Assert.AreEqual(1200d, target.TotalTasks);
+            Assert.AreEqual(1000d, Math.Round(target.Tasks, 0));
+            Assert.AreEqual(1200d, Math.Round(target.TotalTasks, 0));
             Assert.AreEqual(new Percent(0.2).ToString(), target.CampaignTasks.ToString());
             target.CampaignTasks = new Percent(0.4d);
-            Assert.AreEqual(1000d, target.Tasks);
-            Assert.AreEqual(1400d, target.TotalTasks);
+            Assert.AreEqual(1000d, Math.Round(target.Tasks,0));
+            Assert.AreEqual(1400d, Math.Round(target.TotalTasks,0));
             Assert.AreEqual(new Percent(0.4),target.CampaignTasks);
         }
 
@@ -1477,8 +1478,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                                          target.TaskOwnerDayCollection[9],
                                                          target.TaskOwnerDayCollection[10]
                                                      }, TaskOwnerPeriodType.Other);
-            Assert.AreEqual(91d, partTarget.Tasks);
-            Assert.AreEqual(91d, partTarget.TotalTasks);
+            Assert.AreEqual(91d, Math.Round(partTarget.Tasks,0));
+            Assert.AreEqual(91d, Math.Round(partTarget.TotalTasks,0));
 
             target.TaskOwnerDayCollection[8].AddParent(target);
             target.TaskOwnerDayCollection[8].AddParent(partTarget);
@@ -1495,8 +1496,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             }
             helper.EndUpdate();
 
-            Assert.AreEqual(91d, partTarget.Tasks);
-            Assert.AreEqual(100d, partTarget.TotalTasks);
+            Assert.AreEqual(91d, Math.Round(partTarget.Tasks,0));
+            Assert.AreEqual(100d, Math.Round(partTarget.TotalTasks, 0));
             Assert.AreEqual(new Percent(0.1).ToString(), partTarget.CampaignTasks.ToString());
 
             helper.BeginUpdate();
@@ -1505,9 +1506,33 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 taskOwner.CampaignTasks = new Percent(0.2d);
             }
             helper.EndUpdate();
-            Assert.AreEqual(91d, partTarget.Tasks);
-            Assert.AreEqual(109d, partTarget.TotalTasks);
+            Assert.AreEqual(91d, Math.Round(partTarget.Tasks,0));
+            Assert.AreEqual(109d, Math.Round(partTarget.TotalTasks,0));
             Assert.AreEqual(new Percent(0.2).ToString(), partTarget.CampaignTasks.ToString());
         }
+
+		[Test]
+		public void Tasks_ShouldNotBeRounded_ToZeroDecimals()
+		{
+			var openHours = new List<TimePeriod> {new TimePeriod(new TimeSpan(0), new TimeSpan(1, 0, 0, 0))};
+			var workloadDay = new WorkloadDay();
+			workloadDay.Create(new DateOnly(2007, 8, 1), _workload, openHours);
+			workloadDay.Tasks = 0.5d;
+			target.Add(workloadDay);
+
+			Math.Round(target.Tasks, 9).Should().Be.EqualTo(0.5);
+		}
+
+		[Test]
+		public void TotalTasks_ShouldNotBeRounded_ToZeroDecimals()
+		{
+			var openHours = new List<TimePeriod> { new TimePeriod(new TimeSpan(0), new TimeSpan(1, 0, 0, 0)) };
+			var workloadDay = new WorkloadDay();
+			workloadDay.Create(new DateOnly(2007, 8, 1), _workload, openHours);
+			workloadDay.Tasks = 0.5;
+			target.Add(workloadDay);
+
+			Math.Round(target.TotalTasks, 9).Should().Be.EqualTo(0.5);
+		}
     }
 }
