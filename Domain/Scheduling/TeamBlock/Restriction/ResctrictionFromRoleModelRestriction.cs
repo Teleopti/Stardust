@@ -24,28 +24,45 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			var endTimeLimitation = new EndTimeLimitation();
 			var workTimeLimitation = new WorkTimeLimitation();
 			IShiftCategory shiftCategory = null;
-			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions))
+			IEditableShift mainShift = null;
+			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions) ||
+			    _teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(_schedulingOptions) ||
+			    _teamBlockSchedulingOptions.IsBlockSameStartTimeInTeamBlock(_schedulingOptions) ||
+			    _teamBlockSchedulingOptions.IsTeamSameStartTimeInTeamBlock(_schedulingOptions))
 			{
 				TimeSpan startTime = _shift.WorkShiftStartTime;
 				startTimeLimitation = new StartTimeLimitation(startTime, startTime);
 			}
 
-			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions))
+			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions) ||
+			    _teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(_schedulingOptions))
 			{
 				TimeSpan endTime = _shift.WorkShiftEndTime;
 				endTimeLimitation = new EndTimeLimitation(endTime, endTime);
 			}
 
-			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions))
+			if (_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions) ||
+			    _teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions))
+			{
+				mainShift = _shift.TheMainShift;
+			}
+
+			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions) || 
+				_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)||
+				_teamBlockSchedulingOptions.IsTeamSameShiftCategoryInTeamBlock(_schedulingOptions)||
+				_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions))
 			{
 				shiftCategory = _shift.TheWorkShift.ShiftCategory;
 			}
+
+
 
 			var restriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation,
 													   workTimeLimitation, null, null, null,
 													   new List<IActivityRestriction>())
 			{
-				ShiftCategory = shiftCategory
+				ShiftCategory = shiftCategory,
+				CommonMainShift = mainShift
 			};
 
 			return restriction;
