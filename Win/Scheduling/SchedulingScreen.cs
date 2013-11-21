@@ -1449,6 +1449,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_scheduleView.Presenter.ClipHandlerSchedule.AddClip(1, 1, clone);
 						_externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetData("PersistableScheduleData", new int()));
 						pasteDayOff();
+						_scheduleView.Presenter.ClipHandlerSchedule.Clear();
 					}
 				}
 			}
