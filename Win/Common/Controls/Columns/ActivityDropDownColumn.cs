@@ -44,10 +44,14 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
                 headerRows = 1;
 
             if(e == null)return;
-            if (e.RowIndex == 0 && e.ColIndex > 0)
-            {
-                e.Style.CellValue = _headerText;
-            }
+			if (e.RowIndex == 0 && !string.IsNullOrEmpty(_groupHeaderText))
+			{
+				e.Style.CellValue = _groupHeaderText;
+			}
+			else if (e.RowIndex == 1 && e.ColIndex > 0)
+			{
+				e.Style.CellValue = _headerText;
+			}
 			else if (e.RowIndex >= headerRows && dataItems.Count > 0)
             {
                 TData dataItem = dataItems.ElementAt(e.RowIndex - headerRows);
