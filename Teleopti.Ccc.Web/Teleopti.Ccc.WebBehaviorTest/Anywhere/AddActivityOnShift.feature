@@ -113,7 +113,6 @@ Scenario: Prevent add outside shift
 	| Activity   | Phone |
 	| Start time | 17:00 |
 	| End time   | 18:00 |
-	And I initiate 'apply'
 	Then I should see the validation error 'With Add Activity you cannot create a second shift'
 
 Scenario: Add after midnight on night shift
