@@ -718,10 +718,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_scheduleView.Presenter.AddPersonalShift();
 						break;
 				}
+				_scheduleView.Presenter.ClipHandlerSchedule.Clear();
+				RecalculateResources();
+				updateShiftEditor();
 			}
-
-			RecalculateResources();
-			updateShiftEditor();
 		}
 
 		private void _editControl_NewClicked(object sender, EventArgs e)
