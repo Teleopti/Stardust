@@ -28,6 +28,12 @@ define([
 			return self.Shifts().length > 0;
 		});
 
+		this.IsPersonSelected = ko.computed(function() {
+			return $(self.Shifts()).is(function(index) {
+				return this.IsAnyLayerSelected();
+			});
+		});
+
 		this.ContractTime = ko.computed(function () {
 			var time = moment().startOf('day').add('minutes', self.ContractTimeMinutes());
 			return time.format("H:mm");

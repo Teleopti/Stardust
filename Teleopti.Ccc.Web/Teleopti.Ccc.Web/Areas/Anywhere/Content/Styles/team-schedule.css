@@ -86,10 +86,14 @@
 .team-schedule .shift-menu-background {
 	background: #eeeeee;
 }
+
+.team-schedule .shift-menu-background.person-name-column {
+	border-top: none;
+}
+
 .team-schedule .shift-menu
 {
 }
-
 
 .team-schedule .shift-details .label {
 	text-shadow: none;
