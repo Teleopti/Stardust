@@ -15,10 +15,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
     public class TeamBlockListSwapAnalyzer : ITeamBlockListSwapAnalyzer
     {
         private readonly IDetermineTeamBlockPriority _determineTeamBlockPriority;
+        private readonly ISwapScheduleDays _swapScheduleDays;
+        private IValidateScheduleDays _validateScheduleDay;
 
-        public TeamBlockListSwapAnalyzer(IDetermineTeamBlockPriority determineTeamBlockPriority)
+        public TeamBlockListSwapAnalyzer(IDetermineTeamBlockPriority determineTeamBlockPriority, ISwapScheduleDays swapScheduleDays, IValidateScheduleDays validateScheduleDay)
         {
             _determineTeamBlockPriority = determineTeamBlockPriority;
+            _swapScheduleDays = swapScheduleDays;
+            _validateScheduleDay = validateScheduleDay;
         }
 
         public void AnalyzeTeamBlock(IList<ITeamBlockInfo> teamBlockList, IList<IShiftCategory> shiftCategories)
@@ -46,12 +50,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 
         private void swapBlock(ITeamBlockInfo higherPriorityBlock, ITeamBlockInfo lowestPriorityBlock)
         {
-
+            _swapScheduleDays.Swap(higherPriorityBlock, lowestPriorityBlock);
         }
 
         private bool validateBlock(ITeamBlockInfo higherPriorityBlock, ITeamBlockInfo lowestPriorityBlock)
         {
-            return true;
+            return _validateScheduleDay.Validate(higherPriorityBlock,lowestPriorityBlock)
         }
     }
 }

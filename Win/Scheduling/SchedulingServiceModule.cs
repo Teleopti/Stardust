@@ -254,6 +254,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<SelectedAgentPoints>().As<ISelectedAgentPoints>();
             builder.RegisterType<ShiftCategoryPoints>().As<IShiftCategoryPoints>();
             builder.RegisterType<TeamBlockListSwapAnalyzer>().As<ITeamBlockListSwapAnalyzer>();
+            builder.RegisterType<SwapScheduleDays>().As<ISwapScheduleDays>();
+            builder.RegisterType<ValidateScheduleDays>().As<IValidateScheduleDays>();
         }
 
         private static void registerTeamBlockCommon(ContainerBuilder builder)
