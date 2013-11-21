@@ -209,7 +209,12 @@ namespace Teleopti.Ccc.Win.Meetings
 			get { return _presenter; }
     	}
 
-		public string GetStartTimeText
+	    public void ResetSelection()
+	    {
+			 textBoxExtLocation.Select();
+	    }
+
+	    public string GetStartTimeText
 		{
 			get { return outlookTimePickerStartTime.Text; }
 		}
